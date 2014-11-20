@@ -1,0 +1,2304 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.32
+4 verbose readDependencies using package.json deps
+5 verbose install where, deps [ '/Users/drye/Development/Crossroads/Milacron/crds-angular',
+5 verbose install   [ 'yargs', 'gulp-load-plugins' ] ]
+6 info preinstall crds-angular@0.0.0
+7 verbose readDependencies using package.json deps
+8 verbose already installed skipping yargs@^1.2.5 /Users/drye/Development/Crossroads/Milacron/crds-angular
+9 verbose cache add [ 'gulp-load-plugins@^0.5.2', null ]
+10 verbose cache add name=undefined spec="gulp-load-plugins@^0.5.2" args=["gulp-load-plugins@^0.5.2",null]
+11 verbose parsed url { protocol: null,
+11 verbose parsed url   slashes: null,
+11 verbose parsed url   auth: null,
+11 verbose parsed url   host: null,
+11 verbose parsed url   port: null,
+11 verbose parsed url   hostname: null,
+11 verbose parsed url   hash: null,
+11 verbose parsed url   search: null,
+11 verbose parsed url   query: null,
+11 verbose parsed url   pathname: 'gulp-load-plugins@^0.5.2',
+11 verbose parsed url   path: 'gulp-load-plugins@^0.5.2',
+11 verbose parsed url   href: 'gulp-load-plugins@^0.5.2' }
+12 verbose cache add name="gulp-load-plugins" spec="^0.5.2" args=["gulp-load-plugins","^0.5.2"]
+13 verbose parsed url { protocol: null,
+13 verbose parsed url   slashes: null,
+13 verbose parsed url   auth: null,
+13 verbose parsed url   host: null,
+13 verbose parsed url   port: null,
+13 verbose parsed url   hostname: null,
+13 verbose parsed url   hash: null,
+13 verbose parsed url   search: null,
+13 verbose parsed url   query: null,
+13 verbose parsed url   pathname: '^0.5.2',
+13 verbose parsed url   path: '^0.5.2',
+13 verbose parsed url   href: '^0.5.2' }
+14 verbose addNamed [ 'gulp-load-plugins', '^0.5.2' ]
+15 verbose addNamed [ null, '>=0.5.2-0 <0.6.0-0' ]
+16 silly lockFile 933764e8-gulp-load-plugins-0-5-2 gulp-load-plugins@^0.5.2
+17 verbose lock gulp-load-plugins@^0.5.2 /Users/drye/.npm/933764e8-gulp-load-plugins-0-5-2.lock
+18 silly addNameRange { name: 'gulp-load-plugins',
+18 silly addNameRange   range: '>=0.5.2-0 <0.6.0-0',
+18 silly addNameRange   hasData: false }
+19 verbose request where is /gulp-load-plugins
+20 verbose request registry https://registry.npmjs.org/
+21 verbose request id 6e6d1e76170f1dd9
+22 verbose url raw /gulp-load-plugins
+23 verbose url resolving [ 'https://registry.npmjs.org/', './gulp-load-plugins' ]
+24 verbose url resolved https://registry.npmjs.org/gulp-load-plugins
+25 verbose request where is https://registry.npmjs.org/gulp-load-plugins
+26 info trying registry request attempt 1 at 10:46:26
+27 verbose etag "2F5YFA95F6J8WB4OT1T2MBRON"
+28 http GET https://registry.npmjs.org/gulp-load-plugins
+29 http 200 https://registry.npmjs.org/gulp-load-plugins
+30 silly registry.get cb [ 200,
+30 silly registry.get   { date: 'Thu, 20 Nov 2014 15:46:25 GMT',
+30 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R14B04)',
+30 silly registry.get     etag: '"EE19ELW9ZCHOW98GOWSR72UNR"',
+30 silly registry.get     'content-type': 'application/json',
+30 silly registry.get     'cache-control': 'max-age=60',
+30 silly registry.get     'content-length': '20147',
+30 silly registry.get     'accept-ranges': 'bytes',
+30 silly registry.get     via: '1.1 varnish',
+30 silly registry.get     age: '36',
+30 silly registry.get     'x-served-by': 'cache-iad2125-IAD',
+30 silly registry.get     'x-cache': 'HIT',
+30 silly registry.get     'x-cache-hits': '3',
+30 silly registry.get     'x-timer': 'S1416498385.536363,VS0,VE0',
+30 silly registry.get     vary: 'Accept',
+30 silly registry.get     'keep-alive': 'timeout=10, max=50',
+30 silly registry.get     connection: 'Keep-Alive' } ]
+31 silly addNameRange number 2 { name: 'gulp-load-plugins',
+31 silly addNameRange   range: '>=0.5.2-0 <0.6.0-0',
+31 silly addNameRange   hasData: true }
+32 silly addNameRange versions [ 'gulp-load-plugins',
+32 silly addNameRange   [ '0.2.0',
+32 silly addNameRange     '0.3.0',
+32 silly addNameRange     '0.4.0',
+32 silly addNameRange     '0.5.0',
+32 silly addNameRange     '0.5.1',
+32 silly addNameRange     '0.6.0-beta',
+32 silly addNameRange     '0.5.2',
+32 silly addNameRange     '0.5.3',
+32 silly addNameRange     '0.6.0',
+32 silly addNameRange     '0.7.0',
+32 silly addNameRange     '0.7.1' ] ]
+33 verbose addNamed [ 'gulp-load-plugins', '0.5.3' ]
+34 verbose addNamed [ '0.5.3', '0.5.3' ]
+35 silly lockFile b1d20b0a-gulp-load-plugins-0-5-3 gulp-load-plugins@0.5.3
+36 verbose lock gulp-load-plugins@0.5.3 /Users/drye/.npm/b1d20b0a-gulp-load-plugins-0-5-3.lock
+37 silly lockFile b1d20b0a-gulp-load-plugins-0-5-3 gulp-load-plugins@0.5.3
+38 silly lockFile b1d20b0a-gulp-load-plugins-0-5-3 gulp-load-plugins@0.5.3
+39 silly lockFile 933764e8-gulp-load-plugins-0-5-2 gulp-load-plugins@^0.5.2
+40 silly lockFile 933764e8-gulp-load-plugins-0-5-2 gulp-load-plugins@^0.5.2
+41 silly resolved [ { name: 'gulp-load-plugins',
+41 silly resolved     version: '0.5.3',
+41 silly resolved     description: 'Automatically load any gulp plugins in your package.json',
+41 silly resolved     scripts: { test: 'mocha test.js' },
+41 silly resolved     repository:
+41 silly resolved      { type: 'git',
+41 silly resolved        url: 'https://github.com/jackfranklin/gulp-load-plugins' },
+41 silly resolved     keywords: [ 'gulpfriendly', 'gulp', 'require', 'load', 'plugins' ],
+41 silly resolved     author: { name: 'Jack Franklin' },
+41 silly resolved     contributors: [ [Object], [Object], [Object], [Object], [Object], [Object] ],
+41 silly resolved     license: 'MIT',
+41 silly resolved     dependencies: { 'findup-sync': '^0.1.2', multimatch: '^0.3.0' },
+41 silly resolved     devDependencies:
+41 silly resolved      { jshint: '^2.5.1',
+41 silly resolved        mocha: '^1.18.2',
+41 silly resolved        proxyquire: '^1.0.1',
+41 silly resolved        sinon: '^1.9.1' },
+41 silly resolved     gitHead: 'fc60daf5d4c09a6e120bc003baeb777791c60b22',
+41 silly resolved     bugs: { url: 'https://github.com/jackfranklin/gulp-load-plugins/issues' },
+41 silly resolved     homepage: 'https://github.com/jackfranklin/gulp-load-plugins',
+41 silly resolved     _id: 'gulp-load-plugins@0.5.3',
+41 silly resolved     _shasum: '2f2f7ce35d0b6bf1b2d55921d0de76c9d918d35c',
+41 silly resolved     _from: 'gulp-load-plugins@^0.5.2',
+41 silly resolved     _npmVersion: '1.4.16',
+41 silly resolved     _npmUser: { name: 'jackfranklin', email: 'jack@jackfranklin.net' },
+41 silly resolved     maintainers: [ [Object] ],
+41 silly resolved     dist:
+41 silly resolved      { shasum: '2f2f7ce35d0b6bf1b2d55921d0de76c9d918d35c',
+41 silly resolved        tarball: 'http://registry.npmjs.org/gulp-load-plugins/-/gulp-load-plugins-0.5.3.tgz' },
+41 silly resolved     directories: {},
+41 silly resolved     _resolved: 'https://registry.npmjs.org/gulp-load-plugins/-/gulp-load-plugins-0.5.3.tgz',
+41 silly resolved     readme: 'ERROR: No README data found!' } ]
+42 info install gulp-load-plugins@0.5.3 into /Users/drye/Development/Crossroads/Milacron/crds-angular
+43 info installOne gulp-load-plugins@0.5.3
+44 verbose node_modules/gulp-load-plugins unbuild
+45 verbose tar unpack /Users/drye/.npm/gulp-load-plugins/0.5.3/package.tgz
+46 silly lockFile 958f438a-r-node-modules-gulp-load-plugins tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins
+47 verbose lock tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins /Users/drye/.npm/958f438a-r-node-modules-gulp-load-plugins.lock
+48 silly lockFile 5b05f0f7-p-load-plugins-0-5-3-package-tgz tar:///Users/drye/.npm/gulp-load-plugins/0.5.3/package.tgz
+49 verbose lock tar:///Users/drye/.npm/gulp-load-plugins/0.5.3/package.tgz /Users/drye/.npm/5b05f0f7-p-load-plugins-0-5-3-package-tgz.lock
+50 silly gunzTarPerm modes [ '755', '644' ]
+51 silly gunzTarPerm extractEntry package.json
+52 silly gunzTarPerm extractEntry .npmignore
+53 silly gunzTarPerm extractEntry README.md
+54 silly gunzTarPerm extractEntry index.js
+55 silly gunzTarPerm extractEntry test.js
+56 silly gunzTarPerm extractEntry Makefile
+57 silly gunzTarPerm extractEntry .travis.yml
+58 silly gunzTarPerm extractEntry .tags
+59 silly gunzTarPerm extractEntry .jshintrc
+60 silly gunzTarPerm extractEntry tags
+61 silly gunzTarPerm extractEntry .gitattributes
+62 silly lockFile 958f438a-r-node-modules-gulp-load-plugins tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins
+63 silly lockFile 958f438a-r-node-modules-gulp-load-plugins tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins
+64 silly lockFile 5b05f0f7-p-load-plugins-0-5-3-package-tgz tar:///Users/drye/.npm/gulp-load-plugins/0.5.3/package.tgz
+65 silly lockFile 5b05f0f7-p-load-plugins-0-5-3-package-tgz tar:///Users/drye/.npm/gulp-load-plugins/0.5.3/package.tgz
+66 info preinstall gulp-load-plugins@0.5.3
+67 verbose readDependencies using package.json deps
+68 verbose readDependencies using package.json deps
+69 verbose cache add [ 'findup-sync@^0.1.2', null ]
+70 verbose cache add name=undefined spec="findup-sync@^0.1.2" args=["findup-sync@^0.1.2",null]
+71 verbose parsed url { protocol: null,
+71 verbose parsed url   slashes: null,
+71 verbose parsed url   auth: null,
+71 verbose parsed url   host: null,
+71 verbose parsed url   port: null,
+71 verbose parsed url   hostname: null,
+71 verbose parsed url   hash: null,
+71 verbose parsed url   search: null,
+71 verbose parsed url   query: null,
+71 verbose parsed url   pathname: 'findup-sync@^0.1.2',
+71 verbose parsed url   path: 'findup-sync@^0.1.2',
+71 verbose parsed url   href: 'findup-sync@^0.1.2' }
+72 verbose cache add [ 'multimatch@^0.3.0', null ]
+73 verbose cache add name=undefined spec="multimatch@^0.3.0" args=["multimatch@^0.3.0",null]
+74 verbose parsed url { protocol: null,
+74 verbose parsed url   slashes: null,
+74 verbose parsed url   auth: null,
+74 verbose parsed url   host: null,
+74 verbose parsed url   port: null,
+74 verbose parsed url   hostname: null,
+74 verbose parsed url   hash: null,
+74 verbose parsed url   search: null,
+74 verbose parsed url   query: null,
+74 verbose parsed url   pathname: 'multimatch@^0.3.0',
+74 verbose parsed url   path: 'multimatch@^0.3.0',
+74 verbose parsed url   href: 'multimatch@^0.3.0' }
+75 verbose cache add name="findup-sync" spec="^0.1.2" args=["findup-sync","^0.1.2"]
+76 verbose parsed url { protocol: null,
+76 verbose parsed url   slashes: null,
+76 verbose parsed url   auth: null,
+76 verbose parsed url   host: null,
+76 verbose parsed url   port: null,
+76 verbose parsed url   hostname: null,
+76 verbose parsed url   hash: null,
+76 verbose parsed url   search: null,
+76 verbose parsed url   query: null,
+76 verbose parsed url   pathname: '^0.1.2',
+76 verbose parsed url   path: '^0.1.2',
+76 verbose parsed url   href: '^0.1.2' }
+77 verbose addNamed [ 'findup-sync', '^0.1.2' ]
+78 verbose addNamed [ null, '>=0.1.2-0 <0.2.0-0' ]
+79 silly lockFile 66eef810-findup-sync-0-1-2 findup-sync@^0.1.2
+80 verbose lock findup-sync@^0.1.2 /Users/drye/.npm/66eef810-findup-sync-0-1-2.lock
+81 verbose cache add name="multimatch" spec="^0.3.0" args=["multimatch","^0.3.0"]
+82 verbose parsed url { protocol: null,
+82 verbose parsed url   slashes: null,
+82 verbose parsed url   auth: null,
+82 verbose parsed url   host: null,
+82 verbose parsed url   port: null,
+82 verbose parsed url   hostname: null,
+82 verbose parsed url   hash: null,
+82 verbose parsed url   search: null,
+82 verbose parsed url   query: null,
+82 verbose parsed url   pathname: '^0.3.0',
+82 verbose parsed url   path: '^0.3.0',
+82 verbose parsed url   href: '^0.3.0' }
+83 verbose addNamed [ 'multimatch', '^0.3.0' ]
+84 verbose addNamed [ null, '>=0.3.0-0 <0.4.0-0' ]
+85 silly lockFile cc638d53-multimatch-0-3-0 multimatch@^0.3.0
+86 verbose lock multimatch@^0.3.0 /Users/drye/.npm/cc638d53-multimatch-0-3-0.lock
+87 silly addNameRange { name: 'findup-sync',
+87 silly addNameRange   range: '>=0.1.2-0 <0.2.0-0',
+87 silly addNameRange   hasData: false }
+88 silly addNameRange { name: 'multimatch',
+88 silly addNameRange   range: '>=0.3.0-0 <0.4.0-0',
+88 silly addNameRange   hasData: false }
+89 verbose request where is /findup-sync
+90 verbose request registry https://registry.npmjs.org/
+91 verbose url raw /findup-sync
+92 verbose url resolving [ 'https://registry.npmjs.org/', './findup-sync' ]
+93 verbose url resolved https://registry.npmjs.org/findup-sync
+94 verbose request where is https://registry.npmjs.org/findup-sync
+95 info trying registry request attempt 1 at 10:46:26
+96 verbose etag "4LEKH44R5GDQN14Q3HPISN3QW"
+97 http GET https://registry.npmjs.org/findup-sync
+98 verbose request where is /multimatch
+99 verbose request registry https://registry.npmjs.org/
+100 verbose url raw /multimatch
+101 verbose url resolving [ 'https://registry.npmjs.org/', './multimatch' ]
+102 verbose url resolved https://registry.npmjs.org/multimatch
+103 verbose request where is https://registry.npmjs.org/multimatch
+104 info trying registry request attempt 1 at 10:46:26
+105 verbose etag "4MVZ70STFE4H3RHLMBUCW2RK6"
+106 http GET https://registry.npmjs.org/multimatch
+107 http 304 https://registry.npmjs.org/multimatch
+108 silly registry.get cb [ 304,
+108 silly registry.get   { date: 'Thu, 20 Nov 2014 15:46:25 GMT',
+108 silly registry.get     server: 'Apache',
+108 silly registry.get     via: '1.1 varnish',
+108 silly registry.get     'last-modified': 'Thu, 20 Nov 2014 15:45:41 GMT',
+108 silly registry.get     'cache-control': 'max-age=60',
+108 silly registry.get     etag: '"4MVZ70STFE4H3RHLMBUCW2RK6"',
+108 silly registry.get     age: '44',
+108 silly registry.get     'x-served-by': 'cache-iad2135-IAD',
+108 silly registry.get     'x-cache': 'HIT',
+108 silly registry.get     'x-cache-hits': '2',
+108 silly registry.get     'x-timer': 'S1416498385.738532,VS0,VE0',
+108 silly registry.get     vary: 'Accept',
+108 silly registry.get     'content-length': '0',
+108 silly registry.get     'keep-alive': 'timeout=10, max=50',
+108 silly registry.get     connection: 'Keep-Alive' } ]
+109 verbose etag https://registry.npmjs.org/multimatch from cache
+110 silly addNameRange number 2 { name: 'multimatch',
+110 silly addNameRange   range: '>=0.3.0-0 <0.4.0-0',
+110 silly addNameRange   hasData: true }
+111 silly addNameRange versions [ 'multimatch', [ '0.1.0', '0.2.0', '0.3.0', '1.0.0' ] ]
+112 verbose addNamed [ 'multimatch', '0.3.0' ]
+113 verbose addNamed [ '0.3.0', '0.3.0' ]
+114 silly lockFile f3cda97d-multimatch-0-3-0 multimatch@0.3.0
+115 verbose lock multimatch@0.3.0 /Users/drye/.npm/f3cda97d-multimatch-0-3-0.lock
+116 silly lockFile f3cda97d-multimatch-0-3-0 multimatch@0.3.0
+117 silly lockFile f3cda97d-multimatch-0-3-0 multimatch@0.3.0
+118 silly lockFile cc638d53-multimatch-0-3-0 multimatch@^0.3.0
+119 silly lockFile cc638d53-multimatch-0-3-0 multimatch@^0.3.0
+120 http 304 https://registry.npmjs.org/findup-sync
+121 silly registry.get cb [ 304,
+121 silly registry.get   { date: 'Thu, 20 Nov 2014 15:46:25 GMT',
+121 silly registry.get     server: 'Apache',
+121 silly registry.get     via: '1.1 varnish',
+121 silly registry.get     'last-modified': 'Thu, 20 Nov 2014 15:31:18 GMT',
+121 silly registry.get     'cache-control': 'max-age=60',
+121 silly registry.get     etag: '"4LEKH44R5GDQN14Q3HPISN3QW"',
+121 silly registry.get     age: '37',
+121 silly registry.get     'x-served-by': 'cache-iad2127-IAD',
+121 silly registry.get     'x-cache': 'HIT',
+121 silly registry.get     'x-cache-hits': '289',
+121 silly registry.get     'x-timer': 'S1416498385.929635,VS0,VE0',
+121 silly registry.get     vary: 'Accept',
+121 silly registry.get     'content-length': '0',
+121 silly registry.get     'keep-alive': 'timeout=10, max=50',
+121 silly registry.get     connection: 'Keep-Alive' } ]
+122 verbose etag https://registry.npmjs.org/findup-sync from cache
+123 silly addNameRange number 2 { name: 'findup-sync',
+123 silly addNameRange   range: '>=0.1.2-0 <0.2.0-0',
+123 silly addNameRange   hasData: true }
+124 silly addNameRange versions [ 'findup-sync', [ '0.1.0', '0.1.1', '0.1.2', '0.1.3' ] ]
+125 verbose addNamed [ 'findup-sync', '0.1.3' ]
+126 verbose addNamed [ '0.1.3', '0.1.3' ]
+127 silly lockFile 7d59adfa-findup-sync-0-1-3 findup-sync@0.1.3
+128 verbose lock findup-sync@0.1.3 /Users/drye/.npm/7d59adfa-findup-sync-0-1-3.lock
+129 silly lockFile 7d59adfa-findup-sync-0-1-3 findup-sync@0.1.3
+130 silly lockFile 7d59adfa-findup-sync-0-1-3 findup-sync@0.1.3
+131 silly lockFile 66eef810-findup-sync-0-1-2 findup-sync@^0.1.2
+132 silly lockFile 66eef810-findup-sync-0-1-2 findup-sync@^0.1.2
+133 silly resolved [ { name: 'multimatch',
+133 silly resolved     version: '0.3.0',
+133 silly resolved     description: 'Extends minimatch.match() with support for multiple patterns',
+133 silly resolved     license: 'MIT',
+133 silly resolved     repository: { type: 'git', url: 'git://github.com/sindresorhus/multimatch' },
+133 silly resolved     author:
+133 silly resolved      { name: 'Sindre Sorhus',
+133 silly resolved        email: 'sindresorhus@gmail.com',
+133 silly resolved        url: 'http://sindresorhus.com' },
+133 silly resolved     maintainers: [ [Object] ],
+133 silly resolved     engines: { node: '>=0.10.0' },
+133 silly resolved     scripts: { test: 'mocha' },
+133 silly resolved     files: [ 'index.js' ],
+133 silly resolved     keywords:
+133 silly resolved      [ 'minimatch',
+133 silly resolved        'match',
+133 silly resolved        'matcher',
+133 silly resolved        'pattern',
+133 silly resolved        'patterns',
+133 silly resolved        'glob',
+133 silly resolved        'globs',
+133 silly resolved        'globbing',
+133 silly resolved        'expand',
+133 silly resolved        'wildcard',
+133 silly resolved        'find' ],
+133 silly resolved     dependencies:
+133 silly resolved      { 'array-differ': '^0.1.0',
+133 silly resolved        'array-union': '^0.1.0',
+133 silly resolved        minimatch: '^0.3.0' },
+133 silly resolved     devDependencies: { chai: '^1.9.1', mocha: '*' },
+133 silly resolved     bugs: { url: 'https://github.com/sindresorhus/multimatch/issues' },
+133 silly resolved     homepage: 'https://github.com/sindresorhus/multimatch',
+133 silly resolved     _id: 'multimatch@0.3.0',
+133 silly resolved     _shasum: '603dbc3fe3281d338094a1e1b93a8b5f2be038da',
+133 silly resolved     _from: 'multimatch@^0.3.0',
+133 silly resolved     _npmVersion: '1.4.9',
+133 silly resolved     _npmUser: { name: 'sindresorhus', email: 'sindresorhus@gmail.com' },
+133 silly resolved     dist:
+133 silly resolved      { shasum: '603dbc3fe3281d338094a1e1b93a8b5f2be038da',
+133 silly resolved        tarball: 'http://registry.npmjs.org/multimatch/-/multimatch-0.3.0.tgz' },
+133 silly resolved     directories: {},
+133 silly resolved     _resolved: 'https://registry.npmjs.org/multimatch/-/multimatch-0.3.0.tgz',
+133 silly resolved     readme: 'ERROR: No README data found!' },
+133 silly resolved   { name: 'findup-sync',
+133 silly resolved     description: 'Find the first file matching a given pattern in the current directory or the nearest ancestor directory.',
+133 silly resolved     version: '0.1.3',
+133 silly resolved     homepage: 'https://github.com/cowboy/node-findup-sync',
+133 silly resolved     author: { name: '"Cowboy" Ben Alman', url: 'http://benalman.com/' },
+133 silly resolved     repository:
+133 silly resolved      { type: 'git',
+133 silly resolved        url: 'git://github.com/cowboy/node-findup-sync.git' },
+133 silly resolved     bugs: { url: 'https://github.com/cowboy/node-findup-sync/issues' },
+133 silly resolved     licenses: [ [Object] ],
+133 silly resolved     main: 'lib/findup-sync',
+133 silly resolved     engines: { node: '>= 0.6.0' },
+133 silly resolved     scripts: { test: 'grunt nodeunit' },
+133 silly resolved     dependencies: { glob: '~3.2.9', lodash: '~2.4.1' },
+133 silly resolved     devDependencies:
+133 silly resolved      { grunt: '~0.4.4',
+133 silly resolved        'grunt-contrib-jshint': '~0.9.2',
+133 silly resolved        'grunt-contrib-nodeunit': '~0.3.3' },
+133 silly resolved     keywords: [ 'find', 'glob', 'file' ],
+133 silly resolved     _id: 'findup-sync@0.1.3',
+133 silly resolved     dist:
+133 silly resolved      { shasum: '7f3e7a97b82392c653bf06589bd85190e93c3683',
+133 silly resolved        tarball: 'http://registry.npmjs.org/findup-sync/-/findup-sync-0.1.3.tgz' },
+133 silly resolved     _from: 'findup-sync@^0.1.2',
+133 silly resolved     _npmVersion: '1.4.4',
+133 silly resolved     _npmUser: { name: 'cowboy', email: 'cowboy@rj3.net' },
+133 silly resolved     maintainers: [ [Object] ],
+133 silly resolved     directories: {},
+133 silly resolved     _shasum: '7f3e7a97b82392c653bf06589bd85190e93c3683',
+133 silly resolved     _resolved: 'https://registry.npmjs.org/findup-sync/-/findup-sync-0.1.3.tgz',
+133 silly resolved     readme: 'ERROR: No README data found!' } ]
+134 info install multimatch@0.3.0 into /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins
+135 info install findup-sync@0.1.3 into /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins
+136 info installOne multimatch@0.3.0
+137 info installOne findup-sync@0.1.3
+138 verbose node_modules/gulp-load-plugins/node_modules/multimatch unbuild
+139 verbose node_modules/gulp-load-plugins/node_modules/findup-sync unbuild
+140 verbose tar unpack /Users/drye/.npm/multimatch/0.3.0/package.tgz
+141 silly lockFile 9ca221cb--plugins-node-modules-multimatch tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch
+142 verbose lock tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch /Users/drye/.npm/9ca221cb--plugins-node-modules-multimatch.lock
+143 silly lockFile 082935b0-npm-multimatch-0-3-0-package-tgz tar:///Users/drye/.npm/multimatch/0.3.0/package.tgz
+144 verbose lock tar:///Users/drye/.npm/multimatch/0.3.0/package.tgz /Users/drye/.npm/082935b0-npm-multimatch-0-3-0-package-tgz.lock
+145 verbose tar unpack /Users/drye/.npm/findup-sync/0.1.3/package.tgz
+146 silly lockFile 39b36012-plugins-node-modules-findup-sync tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync
+147 verbose lock tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync /Users/drye/.npm/39b36012-plugins-node-modules-findup-sync.lock
+148 silly lockFile 8fbe3e49-pm-findup-sync-0-1-3-package-tgz tar:///Users/drye/.npm/findup-sync/0.1.3/package.tgz
+149 verbose lock tar:///Users/drye/.npm/findup-sync/0.1.3/package.tgz /Users/drye/.npm/8fbe3e49-pm-findup-sync-0-1-3-package-tgz.lock
+150 silly gunzTarPerm modes [ '755', '644' ]
+151 silly gunzTarPerm modes [ '755', '644' ]
+152 silly gunzTarPerm extractEntry package.json
+153 silly gunzTarPerm extractEntry package.json
+154 silly gunzTarPerm extractEntry index.js
+155 silly gunzTarPerm extractEntry readme.md
+156 silly gunzTarPerm extractEntry .npmignore
+157 silly gunzTarPerm extractEntry README.md
+158 silly gunzTarPerm extractEntry Gruntfile.js
+159 silly gunzTarPerm extractEntry .jshintrc
+160 silly gunzTarPerm extractEntry .travis.yml
+161 silly gunzTarPerm extractEntry LICENSE-MIT
+162 silly lockFile 9ca221cb--plugins-node-modules-multimatch tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch
+163 silly lockFile 9ca221cb--plugins-node-modules-multimatch tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch
+164 silly gunzTarPerm extractEntry lib/findup-sync.js
+165 silly gunzTarPerm extractEntry test/findup-sync_test.js
+166 silly lockFile 082935b0-npm-multimatch-0-3-0-package-tgz tar:///Users/drye/.npm/multimatch/0.3.0/package.tgz
+167 silly lockFile 082935b0-npm-multimatch-0-3-0-package-tgz tar:///Users/drye/.npm/multimatch/0.3.0/package.tgz
+168 info preinstall multimatch@0.3.0
+169 silly gunzTarPerm extractEntry test/fixtures/a/b/bar.txt
+170 silly gunzTarPerm extractEntry test/fixtures/a/foo.txt
+171 verbose readDependencies using package.json deps
+172 verbose readDependencies using package.json deps
+173 silly gunzTarPerm extractEntry test/fixtures/a.txt
+174 silly gunzTarPerm extractEntry test/fixtures/aaa.txt
+175 verbose cache add [ 'array-differ@^0.1.0', null ]
+176 verbose cache add name=undefined spec="array-differ@^0.1.0" args=["array-differ@^0.1.0",null]
+177 verbose parsed url { protocol: null,
+177 verbose parsed url   slashes: null,
+177 verbose parsed url   auth: null,
+177 verbose parsed url   host: null,
+177 verbose parsed url   port: null,
+177 verbose parsed url   hostname: null,
+177 verbose parsed url   hash: null,
+177 verbose parsed url   search: null,
+177 verbose parsed url   query: null,
+177 verbose parsed url   pathname: 'array-differ@^0.1.0',
+177 verbose parsed url   path: 'array-differ@^0.1.0',
+177 verbose parsed url   href: 'array-differ@^0.1.0' }
+178 verbose cache add [ 'array-union@^0.1.0', null ]
+179 verbose cache add name=undefined spec="array-union@^0.1.0" args=["array-union@^0.1.0",null]
+180 verbose parsed url { protocol: null,
+180 verbose parsed url   slashes: null,
+180 verbose parsed url   auth: null,
+180 verbose parsed url   host: null,
+180 verbose parsed url   port: null,
+180 verbose parsed url   hostname: null,
+180 verbose parsed url   hash: null,
+180 verbose parsed url   search: null,
+180 verbose parsed url   query: null,
+180 verbose parsed url   pathname: 'array-union@^0.1.0',
+180 verbose parsed url   path: 'array-union@^0.1.0',
+180 verbose parsed url   href: 'array-union@^0.1.0' }
+181 verbose cache add name="array-differ" spec="^0.1.0" args=["array-differ","^0.1.0"]
+182 verbose parsed url { protocol: null,
+182 verbose parsed url   slashes: null,
+182 verbose parsed url   auth: null,
+182 verbose parsed url   host: null,
+182 verbose parsed url   port: null,
+182 verbose parsed url   hostname: null,
+182 verbose parsed url   hash: null,
+182 verbose parsed url   search: null,
+182 verbose parsed url   query: null,
+182 verbose parsed url   pathname: '^0.1.0',
+182 verbose parsed url   path: '^0.1.0',
+182 verbose parsed url   href: '^0.1.0' }
+183 verbose addNamed [ 'array-differ', '^0.1.0' ]
+184 verbose addNamed [ null, '>=0.1.0-0 <0.2.0-0' ]
+185 silly lockFile 86d8cd57-array-differ-0-1-0 array-differ@^0.1.0
+186 verbose lock array-differ@^0.1.0 /Users/drye/.npm/86d8cd57-array-differ-0-1-0.lock
+187 verbose cache add [ 'minimatch@^0.3.0', null ]
+188 verbose cache add name=undefined spec="minimatch@^0.3.0" args=["minimatch@^0.3.0",null]
+189 verbose parsed url { protocol: null,
+189 verbose parsed url   slashes: null,
+189 verbose parsed url   auth: null,
+189 verbose parsed url   host: null,
+189 verbose parsed url   port: null,
+189 verbose parsed url   hostname: null,
+189 verbose parsed url   hash: null,
+189 verbose parsed url   search: null,
+189 verbose parsed url   query: null,
+189 verbose parsed url   pathname: 'minimatch@^0.3.0',
+189 verbose parsed url   path: 'minimatch@^0.3.0',
+189 verbose parsed url   href: 'minimatch@^0.3.0' }
+190 verbose cache add name="array-union" spec="^0.1.0" args=["array-union","^0.1.0"]
+191 verbose parsed url { protocol: null,
+191 verbose parsed url   slashes: null,
+191 verbose parsed url   auth: null,
+191 verbose parsed url   host: null,
+191 verbose parsed url   port: null,
+191 verbose parsed url   hostname: null,
+191 verbose parsed url   hash: null,
+191 verbose parsed url   search: null,
+191 verbose parsed url   query: null,
+191 verbose parsed url   pathname: '^0.1.0',
+191 verbose parsed url   path: '^0.1.0',
+191 verbose parsed url   href: '^0.1.0' }
+192 verbose addNamed [ 'array-union', '^0.1.0' ]
+193 verbose addNamed [ null, '>=0.1.0-0 <0.2.0-0' ]
+194 silly lockFile 55e87495-array-union-0-1-0 array-union@^0.1.0
+195 verbose lock array-union@^0.1.0 /Users/drye/.npm/55e87495-array-union-0-1-0.lock
+196 verbose cache add name="minimatch" spec="^0.3.0" args=["minimatch","^0.3.0"]
+197 verbose parsed url { protocol: null,
+197 verbose parsed url   slashes: null,
+197 verbose parsed url   auth: null,
+197 verbose parsed url   host: null,
+197 verbose parsed url   port: null,
+197 verbose parsed url   hostname: null,
+197 verbose parsed url   hash: null,
+197 verbose parsed url   search: null,
+197 verbose parsed url   query: null,
+197 verbose parsed url   pathname: '^0.3.0',
+197 verbose parsed url   path: '^0.3.0',
+197 verbose parsed url   href: '^0.3.0' }
+198 verbose addNamed [ 'minimatch', '^0.3.0' ]
+199 verbose addNamed [ null, '>=0.3.0-0 <0.4.0-0' ]
+200 silly lockFile 27a1ef78-minimatch-0-3-0 minimatch@^0.3.0
+201 verbose lock minimatch@^0.3.0 /Users/drye/.npm/27a1ef78-minimatch-0-3-0.lock
+202 silly addNameRange { name: 'array-differ',
+202 silly addNameRange   range: '>=0.1.0-0 <0.2.0-0',
+202 silly addNameRange   hasData: false }
+203 silly addNameRange { name: 'array-union',
+203 silly addNameRange   range: '>=0.1.0-0 <0.2.0-0',
+203 silly addNameRange   hasData: false }
+204 silly addNameRange { name: 'minimatch',
+204 silly addNameRange   range: '>=0.3.0-0 <0.4.0-0',
+204 silly addNameRange   hasData: false }
+205 verbose request where is /minimatch
+206 verbose request registry https://registry.npmjs.org/
+207 verbose url raw /minimatch
+208 verbose url resolving [ 'https://registry.npmjs.org/', './minimatch' ]
+209 verbose url resolved https://registry.npmjs.org/minimatch
+210 verbose request where is https://registry.npmjs.org/minimatch
+211 info trying registry request attempt 1 at 10:46:27
+212 verbose etag "2G1MZ9U2ETSTYCZ2QBLRR57LO"
+213 http GET https://registry.npmjs.org/minimatch
+214 verbose request where is /array-differ
+215 verbose request registry https://registry.npmjs.org/
+216 verbose url raw /array-differ
+217 verbose url resolving [ 'https://registry.npmjs.org/', './array-differ' ]
+218 verbose url resolved https://registry.npmjs.org/array-differ
+219 verbose request where is https://registry.npmjs.org/array-differ
+220 info trying registry request attempt 1 at 10:46:27
+221 verbose etag "3395GVGSGQZRPZQCUR63SR1ZN"
+222 http GET https://registry.npmjs.org/array-differ
+223 verbose request where is /array-union
+224 verbose request registry https://registry.npmjs.org/
+225 verbose url raw /array-union
+226 verbose url resolving [ 'https://registry.npmjs.org/', './array-union' ]
+227 verbose url resolved https://registry.npmjs.org/array-union
+228 verbose request where is https://registry.npmjs.org/array-union
+229 info trying registry request attempt 1 at 10:46:27
+230 verbose etag "24PCQUPHGZQE40NPLGGRZ6OUW"
+231 http GET https://registry.npmjs.org/array-union
+232 silly lockFile 39b36012-plugins-node-modules-findup-sync tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync
+233 silly lockFile 39b36012-plugins-node-modules-findup-sync tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync
+234 silly lockFile 8fbe3e49-pm-findup-sync-0-1-3-package-tgz tar:///Users/drye/.npm/findup-sync/0.1.3/package.tgz
+235 silly lockFile 8fbe3e49-pm-findup-sync-0-1-3-package-tgz tar:///Users/drye/.npm/findup-sync/0.1.3/package.tgz
+236 info preinstall findup-sync@0.1.3
+237 verbose readDependencies using package.json deps
+238 verbose readDependencies using package.json deps
+239 verbose cache add [ 'glob@~3.2.9', null ]
+240 verbose cache add name=undefined spec="glob@~3.2.9" args=["glob@~3.2.9",null]
+241 verbose parsed url { protocol: null,
+241 verbose parsed url   slashes: null,
+241 verbose parsed url   auth: null,
+241 verbose parsed url   host: null,
+241 verbose parsed url   port: null,
+241 verbose parsed url   hostname: null,
+241 verbose parsed url   hash: null,
+241 verbose parsed url   search: null,
+241 verbose parsed url   query: null,
+241 verbose parsed url   pathname: 'glob@~3.2.9',
+241 verbose parsed url   path: 'glob@~3.2.9',
+241 verbose parsed url   href: 'glob@~3.2.9' }
+242 verbose cache add [ 'lodash@~2.4.1', null ]
+243 verbose cache add name=undefined spec="lodash@~2.4.1" args=["lodash@~2.4.1",null]
+244 verbose parsed url { protocol: null,
+244 verbose parsed url   slashes: null,
+244 verbose parsed url   auth: null,
+244 verbose parsed url   host: null,
+244 verbose parsed url   port: null,
+244 verbose parsed url   hostname: null,
+244 verbose parsed url   hash: null,
+244 verbose parsed url   search: null,
+244 verbose parsed url   query: null,
+244 verbose parsed url   pathname: 'lodash@~2.4.1',
+244 verbose parsed url   path: 'lodash@~2.4.1',
+244 verbose parsed url   href: 'lodash@~2.4.1' }
+245 verbose cache add name="glob" spec="~3.2.9" args=["glob","~3.2.9"]
+246 verbose parsed url { protocol: null,
+246 verbose parsed url   slashes: null,
+246 verbose parsed url   auth: null,
+246 verbose parsed url   host: null,
+246 verbose parsed url   port: null,
+246 verbose parsed url   hostname: null,
+246 verbose parsed url   hash: null,
+246 verbose parsed url   search: null,
+246 verbose parsed url   query: null,
+246 verbose parsed url   pathname: '~3.2.9',
+246 verbose parsed url   path: '~3.2.9',
+246 verbose parsed url   href: '~3.2.9' }
+247 verbose addNamed [ 'glob', '~3.2.9' ]
+248 verbose addNamed [ null, '>=3.2.9-0 <3.3.0-0' ]
+249 silly lockFile 200db29c-glob-3-2-9 glob@~3.2.9
+250 verbose lock glob@~3.2.9 /Users/drye/.npm/200db29c-glob-3-2-9.lock
+251 verbose cache add name="lodash" spec="~2.4.1" args=["lodash","~2.4.1"]
+252 verbose parsed url { protocol: null,
+252 verbose parsed url   slashes: null,
+252 verbose parsed url   auth: null,
+252 verbose parsed url   host: null,
+252 verbose parsed url   port: null,
+252 verbose parsed url   hostname: null,
+252 verbose parsed url   hash: null,
+252 verbose parsed url   search: null,
+252 verbose parsed url   query: null,
+252 verbose parsed url   pathname: '~2.4.1',
+252 verbose parsed url   path: '~2.4.1',
+252 verbose parsed url   href: '~2.4.1' }
+253 verbose addNamed [ 'lodash', '~2.4.1' ]
+254 verbose addNamed [ null, '>=2.4.1-0 <2.5.0-0' ]
+255 silly lockFile 257f9ab3-lodash-2-4-1 lodash@~2.4.1
+256 verbose lock lodash@~2.4.1 /Users/drye/.npm/257f9ab3-lodash-2-4-1.lock
+257 silly addNameRange { name: 'glob', range: '>=3.2.9-0 <3.3.0-0', hasData: false }
+258 silly addNameRange { name: 'lodash', range: '>=2.4.1-0 <2.5.0-0', hasData: false }
+259 verbose request where is /glob
+260 verbose request registry https://registry.npmjs.org/
+261 verbose url raw /glob
+262 verbose url resolving [ 'https://registry.npmjs.org/', './glob' ]
+263 verbose url resolved https://registry.npmjs.org/glob
+264 verbose request where is https://registry.npmjs.org/glob
+265 info trying registry request attempt 1 at 10:46:27
+266 verbose etag "2YHQ5V0HO3TB5R5TK1MS77KAT"
+267 http GET https://registry.npmjs.org/glob
+268 verbose request where is /lodash
+269 verbose request registry https://registry.npmjs.org/
+270 verbose url raw /lodash
+271 verbose url resolving [ 'https://registry.npmjs.org/', './lodash' ]
+272 verbose url resolved https://registry.npmjs.org/lodash
+273 verbose request where is https://registry.npmjs.org/lodash
+274 info trying registry request attempt 1 at 10:46:27
+275 verbose etag "3DP2H7IT4FZRQM65DJ8DHHK5O"
+276 http GET https://registry.npmjs.org/lodash
+277 http 200 https://registry.npmjs.org/array-union
+278 silly registry.get cb [ 200,
+278 silly registry.get   { date: 'Thu, 20 Nov 2014 15:46:26 GMT',
+278 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+278 silly registry.get     etag: '"3ID78AESV73ZDOB2QLXBS51XK"',
+278 silly registry.get     'content-type': 'application/json',
+278 silly registry.get     'cache-control': 'max-age=60',
+278 silly registry.get     'content-length': '5036',
+278 silly registry.get     'accept-ranges': 'bytes',
+278 silly registry.get     via: '1.1 varnish',
+278 silly registry.get     age: '5',
+278 silly registry.get     'x-served-by': 'cache-iad2139-IAD',
+278 silly registry.get     'x-cache': 'HIT',
+278 silly registry.get     'x-cache-hits': '1',
+278 silly registry.get     'x-timer': 'S1416498386.053154,VS0,VE0',
+278 silly registry.get     vary: 'Accept',
+278 silly registry.get     'keep-alive': 'timeout=10, max=50',
+278 silly registry.get     connection: 'Keep-Alive' } ]
+279 silly addNameRange number 2 { name: 'array-union',
+279 silly addNameRange   range: '>=0.1.0-0 <0.2.0-0',
+279 silly addNameRange   hasData: true }
+280 silly addNameRange versions [ 'array-union', [ '0.1.0', '1.0.0', '1.0.1' ] ]
+281 verbose addNamed [ 'array-union', '0.1.0' ]
+282 verbose addNamed [ '0.1.0', '0.1.0' ]
+283 silly lockFile 49aa7e80-array-union-0-1-0 array-union@0.1.0
+284 verbose lock array-union@0.1.0 /Users/drye/.npm/49aa7e80-array-union-0-1-0.lock
+285 http 304 https://registry.npmjs.org/minimatch
+286 silly registry.get cb [ 304,
+286 silly registry.get   { date: 'Thu, 20 Nov 2014 15:46:26 GMT',
+286 silly registry.get     server: 'Apache',
+286 silly registry.get     via: '1.1 varnish',
+286 silly registry.get     'last-modified': 'Thu, 20 Nov 2014 15:46:26 GMT',
+286 silly registry.get     'cache-control': 'max-age=60',
+286 silly registry.get     etag: '"2G1MZ9U2ETSTYCZ2QBLRR57LO"',
+286 silly registry.get     age: '9',
+286 silly registry.get     'x-served-by': 'cache-iad2126-IAD',
+286 silly registry.get     'x-cache': 'HIT',
+286 silly registry.get     'x-cache-hits': '1',
+286 silly registry.get     'x-timer': 'S1416498386.055992,VS0,VE0',
+286 silly registry.get     vary: 'Accept',
+286 silly registry.get     'content-length': '0',
+286 silly registry.get     'keep-alive': 'timeout=10, max=50',
+286 silly registry.get     connection: 'Keep-Alive' } ]
+287 verbose etag https://registry.npmjs.org/minimatch from cache
+288 http 304 https://registry.npmjs.org/array-differ
+289 silly registry.get cb [ 304,
+289 silly registry.get   { date: 'Thu, 20 Nov 2014 15:46:26 GMT',
+289 silly registry.get     server: 'Apache',
+289 silly registry.get     via: '1.1 varnish',
+289 silly registry.get     'last-modified': 'Thu, 20 Nov 2014 15:46:26 GMT',
+289 silly registry.get     'cache-control': 'max-age=60',
+289 silly registry.get     etag: '"3395GVGSGQZRPZQCUR63SR1ZN"',
+289 silly registry.get     age: '5',
+289 silly registry.get     'x-served-by': 'cache-iad2120-IAD',
+289 silly registry.get     'x-cache': 'HIT',
+289 silly registry.get     'x-cache-hits': '1',
+289 silly registry.get     'x-timer': 'S1416498386.061266,VS0,VE0',
+289 silly registry.get     vary: 'Accept',
+289 silly registry.get     'content-length': '0',
+289 silly registry.get     'keep-alive': 'timeout=10, max=50',
+289 silly registry.get     connection: 'Keep-Alive' } ]
+290 verbose etag https://registry.npmjs.org/array-differ from cache
+291 silly addNameRange number 2 { name: 'minimatch', range: '>=0.3.0-0 <0.4.0-0', hasData: true }
+292 silly addNameRange versions [ 'minimatch',
+292 silly addNameRange   [ '0.0.1',
+292 silly addNameRange     '0.0.2',
+292 silly addNameRange     '0.0.4',
+292 silly addNameRange     '0.0.5',
+292 silly addNameRange     '0.1.1',
+292 silly addNameRange     '0.1.2',
+292 silly addNameRange     '0.1.3',
+292 silly addNameRange     '0.1.4',
+292 silly addNameRange     '0.1.5',
+292 silly addNameRange     '0.2.0',
+292 silly addNameRange     '0.2.2',
+292 silly addNameRange     '0.2.3',
+292 silly addNameRange     '0.2.4',
+292 silly addNameRange     '0.2.5',
+292 silly addNameRange     '0.2.6',
+292 silly addNameRange     '0.2.7',
+292 silly addNameRange     '0.2.8',
+292 silly addNameRange     '0.2.9',
+292 silly addNameRange     '0.2.10',
+292 silly addNameRange     '0.2.11',
+292 silly addNameRange     '0.2.12',
+292 silly addNameRange     '0.2.13',
+292 silly addNameRange     '0.2.14',
+292 silly addNameRange     '0.3.0',
+292 silly addNameRange     '0.4.0',
+292 silly addNameRange     '1.0.0' ] ]
+293 verbose addNamed [ 'minimatch', '0.3.0' ]
+294 verbose addNamed [ '0.3.0', '0.3.0' ]
+295 silly lockFile fbcfe8c1-minimatch-0-3-0 minimatch@0.3.0
+296 verbose lock minimatch@0.3.0 /Users/drye/.npm/fbcfe8c1-minimatch-0-3-0.lock
+297 silly lockFile 49aa7e80-array-union-0-1-0 array-union@0.1.0
+298 silly lockFile 49aa7e80-array-union-0-1-0 array-union@0.1.0
+299 silly lockFile 55e87495-array-union-0-1-0 array-union@^0.1.0
+300 silly lockFile 55e87495-array-union-0-1-0 array-union@^0.1.0
+301 silly addNameRange number 2 { name: 'array-differ',
+301 silly addNameRange   range: '>=0.1.0-0 <0.2.0-0',
+301 silly addNameRange   hasData: true }
+302 silly addNameRange versions [ 'array-differ', [ '0.1.0', '1.0.0' ] ]
+303 verbose addNamed [ 'array-differ', '0.1.0' ]
+304 verbose addNamed [ '0.1.0', '0.1.0' ]
+305 silly lockFile 7d959674-array-differ-0-1-0 array-differ@0.1.0
+306 verbose lock array-differ@0.1.0 /Users/drye/.npm/7d959674-array-differ-0-1-0.lock
+307 silly lockFile fbcfe8c1-minimatch-0-3-0 minimatch@0.3.0
+308 silly lockFile fbcfe8c1-minimatch-0-3-0 minimatch@0.3.0
+309 silly lockFile 27a1ef78-minimatch-0-3-0 minimatch@^0.3.0
+310 silly lockFile 27a1ef78-minimatch-0-3-0 minimatch@^0.3.0
+311 http 304 https://registry.npmjs.org/lodash
+312 silly registry.get cb [ 304,
+312 silly registry.get   { date: 'Thu, 20 Nov 2014 15:46:26 GMT',
+312 silly registry.get     server: 'Apache',
+312 silly registry.get     via: '1.1 varnish',
+312 silly registry.get     'last-modified': 'Thu, 20 Nov 2014 15:46:26 GMT',
+312 silly registry.get     'cache-control': 'max-age=60',
+312 silly registry.get     etag: '"3DP2H7IT4FZRQM65DJ8DHHK5O"',
+312 silly registry.get     age: '60',
+312 silly registry.get     'x-served-by': 'cache-iad2131-IAD',
+312 silly registry.get     'x-cache': 'HIT',
+312 silly registry.get     'x-cache-hits': '1',
+312 silly registry.get     'x-timer': 'S1416498386.072200,VS0,VE0',
+312 silly registry.get     vary: 'Accept',
+312 silly registry.get     'content-length': '0',
+312 silly registry.get     'keep-alive': 'timeout=10, max=50',
+312 silly registry.get     connection: 'Keep-Alive' } ]
+313 verbose etag https://registry.npmjs.org/lodash from cache
+314 http 304 https://registry.npmjs.org/glob
+315 silly registry.get cb [ 304,
+315 silly registry.get   { date: 'Thu, 20 Nov 2014 15:46:26 GMT',
+315 silly registry.get     server: 'Apache',
+315 silly registry.get     via: '1.1 varnish',
+315 silly registry.get     'last-modified': 'Thu, 20 Nov 2014 15:45:38 GMT',
+315 silly registry.get     'cache-control': 'max-age=60',
+315 silly registry.get     etag: '"2YHQ5V0HO3TB5R5TK1MS77KAT"',
+315 silly registry.get     age: '48',
+315 silly registry.get     'x-served-by': 'cache-iad2126-IAD',
+315 silly registry.get     'x-cache': 'HIT',
+315 silly registry.get     'x-cache-hits': '5',
+315 silly registry.get     'x-timer': 'S1416498386.071259,VS0,VE0',
+315 silly registry.get     vary: 'Accept',
+315 silly registry.get     'content-length': '0',
+315 silly registry.get     'keep-alive': 'timeout=10, max=50',
+315 silly registry.get     connection: 'Keep-Alive' } ]
+316 verbose etag https://registry.npmjs.org/glob from cache
+317 silly lockFile 7d959674-array-differ-0-1-0 array-differ@0.1.0
+318 silly lockFile 7d959674-array-differ-0-1-0 array-differ@0.1.0
+319 silly lockFile 86d8cd57-array-differ-0-1-0 array-differ@^0.1.0
+320 silly lockFile 86d8cd57-array-differ-0-1-0 array-differ@^0.1.0
+321 silly addNameRange number 2 { name: 'lodash', range: '>=2.4.1-0 <2.5.0-0', hasData: true }
+322 silly addNameRange versions [ 'lodash',
+322 silly addNameRange   [ '0.1.0',
+322 silly addNameRange     '0.2.0',
+322 silly addNameRange     '0.2.1',
+322 silly addNameRange     '0.2.2',
+322 silly addNameRange     '0.3.0',
+322 silly addNameRange     '0.3.1',
+322 silly addNameRange     '0.3.2',
+322 silly addNameRange     '0.4.0',
+322 silly addNameRange     '0.4.1',
+322 silly addNameRange     '0.4.2',
+322 silly addNameRange     '0.5.0-rc.1',
+322 silly addNameRange     '0.5.0',
+322 silly addNameRange     '0.5.1',
+322 silly addNameRange     '0.5.2',
+322 silly addNameRange     '0.6.0',
+322 silly addNameRange     '0.6.1',
+322 silly addNameRange     '0.7.0',
+322 silly addNameRange     '0.8.0',
+322 silly addNameRange     '0.8.1',
+322 silly addNameRange     '0.8.2',
+322 silly addNameRange     '0.9.0',
+322 silly addNameRange     '0.9.1',
+322 silly addNameRange     '0.9.2',
+322 silly addNameRange     '0.10.0',
+322 silly addNameRange     '1.0.0-rc.1',
+322 silly addNameRange     '1.0.0-rc.2',
+322 silly addNameRange     '1.0.0-rc.3',
+322 silly addNameRange     '1.0.0',
+322 silly addNameRange     '1.0.1',
+322 silly addNameRange     '1.1.0',
+322 silly addNameRange     '1.1.1',
+322 silly addNameRange     '1.2.0',
+322 silly addNameRange     '1.2.1',
+322 silly addNameRange     '1.3.0',
+322 silly addNameRange     '1.3.1',
+322 silly addNameRange     '2.0.0',
+322 silly addNameRange     '2.1.0',
+322 silly addNameRange     '2.2.0',
+322 silly addNameRange     '2.2.1',
+322 silly addNameRange     '2.3.0',
+322 silly addNameRange     '2.4.0',
+322 silly addNameRange     '2.4.1' ] ]
+323 verbose addNamed [ 'lodash', '2.4.1' ]
+324 verbose addNamed [ '2.4.1', '2.4.1' ]
+325 silly lockFile 8502be2a-lodash-2-4-1 lodash@2.4.1
+326 verbose lock lodash@2.4.1 /Users/drye/.npm/8502be2a-lodash-2-4-1.lock
+327 silly addNameRange number 2 { name: 'glob', range: '>=3.2.9-0 <3.3.0-0', hasData: true }
+328 silly addNameRange versions [ 'glob',
+328 silly addNameRange   [ '1.1.0',
+328 silly addNameRange     '2.0.9',
+328 silly addNameRange     '2.0.8',
+328 silly addNameRange     '2.0.7',
+328 silly addNameRange     '2.1.0',
+328 silly addNameRange     '3.0.0',
+328 silly addNameRange     '3.0.1',
+328 silly addNameRange     '3.1.0',
+328 silly addNameRange     '3.1.1',
+328 silly addNameRange     '3.1.2',
+328 silly addNameRange     '3.1.3',
+328 silly addNameRange     '3.1.4',
+328 silly addNameRange     '3.1.5',
+328 silly addNameRange     '3.1.6',
+328 silly addNameRange     '3.1.7',
+328 silly addNameRange     '3.1.9',
+328 silly addNameRange     '3.1.10',
+328 silly addNameRange     '3.1.11',
+328 silly addNameRange     '3.1.12',
+328 silly addNameRange     '3.1.13',
+328 silly addNameRange     '3.1.14',
+328 silly addNameRange     '3.1.15',
+328 silly addNameRange     '3.1.16',
+328 silly addNameRange     '3.1.17',
+328 silly addNameRange     '3.1.18',
+328 silly addNameRange     '3.1.19',
+328 silly addNameRange     '3.1.20',
+328 silly addNameRange     '3.1.21',
+328 silly addNameRange     '3.2.0',
+328 silly addNameRange     '3.2.1',
+328 silly addNameRange     '3.2.3',
+328 silly addNameRange     '3.2.4',
+328 silly addNameRange     '3.2.5',
+328 silly addNameRange     '3.2.6',
+328 silly addNameRange     '3.2.7',
+328 silly addNameRange     '3.2.8',
+328 silly addNameRange     '3.2.9',
+328 silly addNameRange     '3.2.10',
+328 silly addNameRange     '3.2.11',
+328 silly addNameRange     '4.0.0',
+328 silly addNameRange     '4.0.1',
+328 silly addNameRange     '4.0.2',
+328 silly addNameRange     '4.0.3',
+328 silly addNameRange     '4.0.4',
+328 silly addNameRange     '4.0.5',
+328 silly addNameRange     '4.0.6',
+328 silly addNameRange     '4.1.2-beta',
+328 silly addNameRange     '4.1.2',
+328 silly addNameRange     '4.1.3',
+328 silly addNameRange     '4.1.4',
+328 silly addNameRange     '4.1.5',
+328 silly addNameRange     '4.1.6',
+328 silly addNameRange     '4.2.0' ] ]
+329 verbose addNamed [ 'glob', '3.2.11' ]
+330 verbose addNamed [ '3.2.11', '3.2.11' ]
+331 silly lockFile 3fffafa6-glob-3-2-11 glob@3.2.11
+332 verbose lock glob@3.2.11 /Users/drye/.npm/3fffafa6-glob-3-2-11.lock
+333 silly resolved [ { name: 'array-union',
+333 silly resolved     version: '0.1.0',
+333 silly resolved     description: 'Creates an array of unique values, in order, from the input arrays',
+333 silly resolved     license: 'MIT',
+333 silly resolved     repository:
+333 silly resolved      { type: 'git',
+333 silly resolved        url: 'git://github.com/sindresorhus/array-union' },
+333 silly resolved     author:
+333 silly resolved      { name: 'Sindre Sorhus',
+333 silly resolved        email: 'sindresorhus@gmail.com',
+333 silly resolved        url: 'http://sindresorhus.com' },
+333 silly resolved     engines: { node: '>=0.10.0' },
+333 silly resolved     scripts: { test: 'mocha' },
+333 silly resolved     files: [ 'index.js' ],
+333 silly resolved     keywords:
+333 silly resolved      [ 'array',
+333 silly resolved        'arr',
+333 silly resolved        'set',
+333 silly resolved        'uniq',
+333 silly resolved        'unique',
+333 silly resolved        'duplicate',
+333 silly resolved        'remove',
+333 silly resolved        'union',
+333 silly resolved        'combine',
+333 silly resolved        'merge' ],
+333 silly resolved     dependencies: { 'array-uniq': '^0.1.0' },
+333 silly resolved     devDependencies: { mocha: '*' },
+333 silly resolved     bugs: { url: 'https://github.com/sindresorhus/array-union/issues' },
+333 silly resolved     homepage: 'https://github.com/sindresorhus/array-union',
+333 silly resolved     _id: 'array-union@0.1.0',
+333 silly resolved     _shasum: 'ede98088330665e699e1ebf0227cbc6034e627db',
+333 silly resolved     _from: 'array-union@^0.1.0',
+333 silly resolved     _npmVersion: '1.4.9',
+333 silly resolved     _npmUser: { name: 'sindresorhus', email: 'sindresorhus@gmail.com' },
+333 silly resolved     maintainers: [ [Object] ],
+333 silly resolved     dist:
+333 silly resolved      { shasum: 'ede98088330665e699e1ebf0227cbc6034e627db',
+333 silly resolved        tarball: 'http://registry.npmjs.org/array-union/-/array-union-0.1.0.tgz' },
+333 silly resolved     directories: {},
+333 silly resolved     _resolved: 'https://registry.npmjs.org/array-union/-/array-union-0.1.0.tgz',
+333 silly resolved     readme: 'ERROR: No README data found!' },
+333 silly resolved   { author:
+333 silly resolved      { name: 'Isaac Z. Schlueter',
+333 silly resolved        email: 'i@izs.me',
+333 silly resolved        url: 'http://blog.izs.me' },
+333 silly resolved     name: 'minimatch',
+333 silly resolved     description: 'a glob matcher in javascript',
+333 silly resolved     version: '0.3.0',
+333 silly resolved     repository: { type: 'git', url: 'git://github.com/isaacs/minimatch.git' },
+333 silly resolved     main: 'minimatch.js',
+333 silly resolved     scripts: { test: 'tap test/*.js' },
+333 silly resolved     engines: { node: '*' },
+333 silly resolved     dependencies: { 'lru-cache': '2', sigmund: '~1.0.0' },
+333 silly resolved     devDependencies: { tap: '' },
+333 silly resolved     license:
+333 silly resolved      { type: 'MIT',
+333 silly resolved        url: 'http://github.com/isaacs/minimatch/raw/master/LICENSE' },
+333 silly resolved     bugs: { url: 'https://github.com/isaacs/minimatch/issues' },
+333 silly resolved     homepage: 'https://github.com/isaacs/minimatch',
+333 silly resolved     _id: 'minimatch@0.3.0',
+333 silly resolved     _shasum: '275d8edaac4f1bb3326472089e7949c8394699dd',
+333 silly resolved     _from: 'minimatch@^0.3.0',
+333 silly resolved     _npmVersion: '1.4.10',
+333 silly resolved     _npmUser: { name: 'isaacs', email: 'i@izs.me' },
+333 silly resolved     maintainers: [ [Object] ],
+333 silly resolved     dist:
+333 silly resolved      { shasum: '275d8edaac4f1bb3326472089e7949c8394699dd',
+333 silly resolved        tarball: 'http://registry.npmjs.org/minimatch/-/minimatch-0.3.0.tgz' },
+333 silly resolved     directories: {},
+333 silly resolved     _resolved: 'https://registry.npmjs.org/minimatch/-/minimatch-0.3.0.tgz',
+333 silly resolved     readme: 'ERROR: No README data found!' },
+333 silly resolved   { name: 'array-differ',
+333 silly resolved     version: '0.1.0',
+333 silly resolved     description: 'Create an array with values that are present in the first input array but not additional ones',
+333 silly resolved     license: 'MIT',
+333 silly resolved     repository:
+333 silly resolved      { type: 'git',
+333 silly resolved        url: 'git://github.com/sindresorhus/array-differ' },
+333 silly resolved     author:
+333 silly resolved      { name: 'Sindre Sorhus',
+333 silly resolved        email: 'sindresorhus@gmail.com',
+333 silly resolved        url: 'http://sindresorhus.com' },
+333 silly resolved     engines: { node: '>=0.10.0' },
+333 silly resolved     scripts: { test: 'mocha' },
+333 silly resolved     files: [ 'index.js' ],
+333 silly resolved     keywords: [ 'array', 'difference', 'diff', 'differ', 'filter', 'exclude' ],
+333 silly resolved     devDependencies: { mocha: '*' },
+333 silly resolved     bugs: { url: 'https://github.com/sindresorhus/array-differ/issues' },
+333 silly resolved     homepage: 'https://github.com/sindresorhus/array-differ',
+333 silly resolved     _id: 'array-differ@0.1.0',
+333 silly resolved     _shasum: '12e2c9b706bed47c8b483b57e487473fb0861f3a',
+333 silly resolved     _from: 'array-differ@^0.1.0',
+333 silly resolved     _npmVersion: '1.4.9',
+333 silly resolved     _npmUser: { name: 'sindresorhus', email: 'sindresorhus@gmail.com' },
+333 silly resolved     maintainers: [ [Object] ],
+333 silly resolved     dist:
+333 silly resolved      { shasum: '12e2c9b706bed47c8b483b57e487473fb0861f3a',
+333 silly resolved        tarball: 'http://registry.npmjs.org/array-differ/-/array-differ-0.1.0.tgz' },
+333 silly resolved     directories: {},
+333 silly resolved     _resolved: 'https://registry.npmjs.org/array-differ/-/array-differ-0.1.0.tgz',
+333 silly resolved     readme: 'ERROR: No README data found!' } ]
+334 info install array-union@0.1.0 into /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch
+335 info install minimatch@0.3.0 into /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch
+336 info install array-differ@0.1.0 into /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch
+337 info installOne array-union@0.1.0
+338 info installOne minimatch@0.3.0
+339 info installOne array-differ@0.1.0
+340 silly lockFile 8502be2a-lodash-2-4-1 lodash@2.4.1
+341 silly lockFile 8502be2a-lodash-2-4-1 lodash@2.4.1
+342 verbose node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/array-union unbuild
+343 verbose node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/minimatch unbuild
+344 verbose node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/array-differ unbuild
+345 silly lockFile 257f9ab3-lodash-2-4-1 lodash@~2.4.1
+346 silly lockFile 257f9ab3-lodash-2-4-1 lodash@~2.4.1
+347 silly lockFile 3fffafa6-glob-3-2-11 glob@3.2.11
+348 silly lockFile 3fffafa6-glob-3-2-11 glob@3.2.11
+349 silly lockFile 200db29c-glob-3-2-9 glob@~3.2.9
+350 silly lockFile 200db29c-glob-3-2-9 glob@~3.2.9
+351 verbose tar unpack /Users/drye/.npm/array-union/0.1.0/package.tgz
+352 silly lockFile a390ef66-timatch-node-modules-array-union tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/array-union
+353 verbose lock tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/array-union /Users/drye/.npm/a390ef66-timatch-node-modules-array-union.lock
+354 silly lockFile d2f740b7-pm-array-union-0-1-0-package-tgz tar:///Users/drye/.npm/array-union/0.1.0/package.tgz
+355 verbose lock tar:///Users/drye/.npm/array-union/0.1.0/package.tgz /Users/drye/.npm/d2f740b7-pm-array-union-0-1-0-package-tgz.lock
+356 verbose tar unpack /Users/drye/.npm/minimatch/0.3.0/package.tgz
+357 silly lockFile d6246dab-ultimatch-node-modules-minimatch tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/minimatch
+358 verbose lock tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/minimatch /Users/drye/.npm/d6246dab-ultimatch-node-modules-minimatch.lock
+359 silly lockFile 743e0c59--npm-minimatch-0-3-0-package-tgz tar:///Users/drye/.npm/minimatch/0.3.0/package.tgz
+360 verbose lock tar:///Users/drye/.npm/minimatch/0.3.0/package.tgz /Users/drye/.npm/743e0c59--npm-minimatch-0-3-0-package-tgz.lock
+361 verbose tar unpack /Users/drye/.npm/array-differ/0.1.0/package.tgz
+362 silly lockFile c836a3be-imatch-node-modules-array-differ tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/array-differ
+363 verbose lock tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/array-differ /Users/drye/.npm/c836a3be-imatch-node-modules-array-differ.lock
+364 silly lockFile d2b38869-m-array-differ-0-1-0-package-tgz tar:///Users/drye/.npm/array-differ/0.1.0/package.tgz
+365 verbose lock tar:///Users/drye/.npm/array-differ/0.1.0/package.tgz /Users/drye/.npm/d2b38869-m-array-differ-0-1-0-package-tgz.lock
+366 silly gunzTarPerm modes [ '755', '644' ]
+367 silly gunzTarPerm modes [ '755', '644' ]
+368 silly gunzTarPerm modes [ '755', '644' ]
+369 silly gunzTarPerm extractEntry package.json
+370 silly resolved [ { name: 'lodash',
+370 silly resolved     version: '2.4.1',
+370 silly resolved     description: 'A utility library delivering consistency, customization, performance, & extras.',
+370 silly resolved     homepage: 'http://lodash.com/',
+370 silly resolved     license: 'MIT',
+370 silly resolved     main: 'dist/lodash.js',
+370 silly resolved     keywords:
+370 silly resolved      [ 'amd',
+370 silly resolved        'browser',
+370 silly resolved        'client',
+370 silly resolved        'customize',
+370 silly resolved        'functional',
+370 silly resolved        'server',
+370 silly resolved        'util' ],
+370 silly resolved     author:
+370 silly resolved      { name: 'John-David Dalton',
+370 silly resolved        email: 'john.david.dalton@gmail.com',
+370 silly resolved        url: 'http://allyoucanleet.com/' },
+370 silly resolved     contributors: [ [Object], [Object], [Object], [Object] ],
+370 silly resolved     bugs: { url: 'https://github.com/lodash/lodash/issues' },
+370 silly resolved     repository: { type: 'git', url: 'https://github.com/lodash/lodash.git' },
+370 silly resolved     engines: [ 'node', 'rhino' ],
+370 silly resolved     files:
+370 silly resolved      [ 'LICENSE.txt',
+370 silly resolved        'lodash.js',
+370 silly resolved        'dist/lodash.js',
+370 silly resolved        'dist/lodash.min.js',
+370 silly resolved        'dist/lodash.compat.js',
+370 silly resolved        'dist/lodash.compat.min.js',
+370 silly resolved        'dist/lodash.underscore.js',
+370 silly resolved        'dist/lodash.underscore.min.js' ],
+370 silly resolved     jam: { main: 'dist/lodash.compat.js', include: [Object] },
+370 silly resolved     volo: { type: 'directory', ignore: [Object] },
+370 silly resolved     _id: 'lodash@2.4.1',
+370 silly resolved     dist:
+370 silly resolved      { shasum: '5b7723034dda4d262e5a46fb2c58d7cc22f71420',
+370 silly resolved        tarball: 'http://registry.npmjs.org/lodash/-/lodash-2.4.1.tgz' },
+370 silly resolved     _from: 'lodash@~2.4.1',
+370 silly resolved     _npmVersion: '1.3.14',
+370 silly resolved     _npmUser: { name: 'jdalton', email: 'john.david.dalton@gmail.com' },
+370 silly resolved     maintainers: [ [Object], [Object], [Object], [Object] ],
+370 silly resolved     directories: {},
+370 silly resolved     _shasum: '5b7723034dda4d262e5a46fb2c58d7cc22f71420',
+370 silly resolved     _resolved: 'https://registry.npmjs.org/lodash/-/lodash-2.4.1.tgz',
+370 silly resolved     readme: 'ERROR: No README data found!' },
+370 silly resolved   { author:
+370 silly resolved      { name: 'Isaac Z. Schlueter',
+370 silly resolved        email: 'i@izs.me',
+370 silly resolved        url: 'http://blog.izs.me/' },
+370 silly resolved     name: 'glob',
+370 silly resolved     description: 'a little globber',
+370 silly resolved     version: '3.2.11',
+370 silly resolved     repository: { type: 'git', url: 'git://github.com/isaacs/node-glob.git' },
+370 silly resolved     main: 'glob.js',
+370 silly resolved     engines: { node: '*' },
+370 silly resolved     dependencies: { inherits: '2', minimatch: '0.3' },
+370 silly resolved     devDependencies: { tap: '~0.4.0', mkdirp: '0', rimraf: '1' },
+370 silly resolved     scripts:
+370 silly resolved      { test: 'tap test/*.js',
+370 silly resolved        'test-regen': 'TEST_REGEN=1 node test/00-setup.js' },
+370 silly resolved     license: 'BSD',
+370 silly resolved     gitHead: '73f57e99510582b2024b762305970ebcf9b70aa2',
+370 silly resolved     bugs: { url: 'https://github.com/isaacs/node-glob/issues' },
+370 silly resolved     homepage: 'https://github.com/isaacs/node-glob',
+370 silly resolved     _id: 'glob@3.2.11',
+370 silly resolved     _shasum: '4a973f635b9190f715d10987d5c00fd2815ebe3d',
+370 silly resolved     _from: 'glob@~3.2.9',
+370 silly resolved     _npmVersion: '1.4.10',
+370 silly resolved     _npmUser: { name: 'isaacs', email: 'i@izs.me' },
+370 silly resolved     maintainers: [ [Object] ],
+370 silly resolved     dist:
+370 silly resolved      { shasum: '4a973f635b9190f715d10987d5c00fd2815ebe3d',
+370 silly resolved        tarball: 'http://registry.npmjs.org/glob/-/glob-3.2.11.tgz' },
+370 silly resolved     directories: {},
+370 silly resolved     _resolved: 'https://registry.npmjs.org/glob/-/glob-3.2.11.tgz',
+370 silly resolved     readme: 'ERROR: No README data found!' } ]
+371 info install lodash@2.4.1 into /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync
+372 info install glob@3.2.11 into /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync
+373 info installOne lodash@2.4.1
+374 info installOne glob@3.2.11
+375 silly gunzTarPerm extractEntry package.json
+376 verbose node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/lodash unbuild
+377 verbose node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob unbuild
+378 silly gunzTarPerm extractEntry package.json
+379 silly gunzTarPerm extractEntry .npmignore
+380 silly gunzTarPerm extractEntry README.md
+381 verbose tar unpack /Users/drye/.npm/lodash/2.4.1/package.tgz
+382 silly lockFile bf220475--findup-sync-node-modules-lodash tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/lodash
+383 verbose lock tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/lodash /Users/drye/.npm/bf220475--findup-sync-node-modules-lodash.lock
+384 silly lockFile 0265bcde-rye-npm-lodash-2-4-1-package-tgz tar:///Users/drye/.npm/lodash/2.4.1/package.tgz
+385 verbose lock tar:///Users/drye/.npm/lodash/2.4.1/package.tgz /Users/drye/.npm/0265bcde-rye-npm-lodash-2-4-1-package-tgz.lock
+386 verbose tar unpack /Users/drye/.npm/glob/3.2.11/package.tgz
+387 silly lockFile 93bb55fb-es-findup-sync-node-modules-glob tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob
+388 verbose lock tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob /Users/drye/.npm/93bb55fb-es-findup-sync-node-modules-glob.lock
+389 silly lockFile 97c1f90d-drye-npm-glob-3-2-11-package-tgz tar:///Users/drye/.npm/glob/3.2.11/package.tgz
+390 verbose lock tar:///Users/drye/.npm/glob/3.2.11/package.tgz /Users/drye/.npm/97c1f90d-drye-npm-glob-3-2-11-package-tgz.lock
+391 silly gunzTarPerm extractEntry index.js
+392 silly gunzTarPerm extractEntry readme.md
+393 silly gunzTarPerm extractEntry index.js
+394 silly gunzTarPerm extractEntry readme.md
+395 silly gunzTarPerm modes [ '755', '644' ]
+396 silly gunzTarPerm modes [ '755', '644' ]
+397 silly gunzTarPerm extractEntry package.json
+398 silly gunzTarPerm extractEntry LICENSE
+399 silly gunzTarPerm extractEntry minimatch.js
+400 silly gunzTarPerm extractEntry package.json
+401 silly gunzTarPerm extractEntry README.md
+402 silly gunzTarPerm extractEntry lodash.js
+403 silly gunzTarPerm extractEntry .npmignore
+404 silly gunzTarPerm extractEntry README.md
+405 silly gunzTarPerm extractEntry test/basic.js
+406 silly gunzTarPerm extractEntry LICENSE
+407 silly gunzTarPerm extractEntry glob.js
+408 silly gunzTarPerm extractEntry LICENSE.txt
+409 silly gunzTarPerm extractEntry .travis.yml
+410 silly lockFile c836a3be-imatch-node-modules-array-differ tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/array-differ
+411 silly lockFile c836a3be-imatch-node-modules-array-differ tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/array-differ
+412 silly lockFile a390ef66-timatch-node-modules-array-union tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/array-union
+413 silly lockFile a390ef66-timatch-node-modules-array-union tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/array-union
+414 silly lockFile d2b38869-m-array-differ-0-1-0-package-tgz tar:///Users/drye/.npm/array-differ/0.1.0/package.tgz
+415 silly lockFile d2b38869-m-array-differ-0-1-0-package-tgz tar:///Users/drye/.npm/array-differ/0.1.0/package.tgz
+416 silly lockFile d2f740b7-pm-array-union-0-1-0-package-tgz tar:///Users/drye/.npm/array-union/0.1.0/package.tgz
+417 silly lockFile d2f740b7-pm-array-union-0-1-0-package-tgz tar:///Users/drye/.npm/array-union/0.1.0/package.tgz
+418 silly gunzTarPerm extractEntry test/brace-expand.js
+419 silly gunzTarPerm extractEntry test/caching.js
+420 info preinstall array-differ@0.1.0
+421 info preinstall array-union@0.1.0
+422 verbose readDependencies using package.json deps
+423 verbose readDependencies using package.json deps
+424 verbose readDependencies using package.json deps
+425 silly resolved []
+426 verbose about to build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/array-differ
+427 info build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/array-differ
+428 verbose linkStuff [ false,
+428 verbose linkStuff   false,
+428 verbose linkStuff   false,
+428 verbose linkStuff   '/Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules' ]
+429 info linkStuff array-differ@0.1.0
+430 verbose linkBins array-differ@0.1.0
+431 verbose linkMans array-differ@0.1.0
+432 verbose rebuildBundles array-differ@0.1.0
+433 verbose readDependencies using package.json deps
+434 info install array-differ@0.1.0
+435 verbose cache add [ 'array-uniq@^0.1.0', null ]
+436 verbose cache add name=undefined spec="array-uniq@^0.1.0" args=["array-uniq@^0.1.0",null]
+437 verbose parsed url { protocol: null,
+437 verbose parsed url   slashes: null,
+437 verbose parsed url   auth: null,
+437 verbose parsed url   host: null,
+437 verbose parsed url   port: null,
+437 verbose parsed url   hostname: null,
+437 verbose parsed url   hash: null,
+437 verbose parsed url   search: null,
+437 verbose parsed url   query: null,
+437 verbose parsed url   pathname: 'array-uniq@^0.1.0',
+437 verbose parsed url   path: 'array-uniq@^0.1.0',
+437 verbose parsed url   href: 'array-uniq@^0.1.0' }
+438 info postinstall array-differ@0.1.0
+439 verbose cache add name="array-uniq" spec="^0.1.0" args=["array-uniq","^0.1.0"]
+440 verbose parsed url { protocol: null,
+440 verbose parsed url   slashes: null,
+440 verbose parsed url   auth: null,
+440 verbose parsed url   host: null,
+440 verbose parsed url   port: null,
+440 verbose parsed url   hostname: null,
+440 verbose parsed url   hash: null,
+440 verbose parsed url   search: null,
+440 verbose parsed url   query: null,
+440 verbose parsed url   pathname: '^0.1.0',
+440 verbose parsed url   path: '^0.1.0',
+440 verbose parsed url   href: '^0.1.0' }
+441 verbose addNamed [ 'array-uniq', '^0.1.0' ]
+442 verbose addNamed [ null, '>=0.1.0-0 <0.2.0-0' ]
+443 silly lockFile 7c8c3575-array-uniq-0-1-0 array-uniq@^0.1.0
+444 verbose lock array-uniq@^0.1.0 /Users/drye/.npm/7c8c3575-array-uniq-0-1-0.lock
+445 silly gunzTarPerm extractEntry test/defaults.js
+446 silly gunzTarPerm extractEntry test/extglob-ending-with-state-char.js
+447 silly addNameRange { name: 'array-uniq',
+447 silly addNameRange   range: '>=0.1.0-0 <0.2.0-0',
+447 silly addNameRange   hasData: false }
+448 silly gunzTarPerm extractEntry dist/lodash.compat.js
+449 verbose request where is /array-uniq
+450 verbose request registry https://registry.npmjs.org/
+451 verbose url raw /array-uniq
+452 verbose url resolving [ 'https://registry.npmjs.org/', './array-uniq' ]
+453 verbose url resolved https://registry.npmjs.org/array-uniq
+454 verbose request where is https://registry.npmjs.org/array-uniq
+455 info trying registry request attempt 1 at 10:46:27
+456 verbose etag "F0G07137LIUF7PXUQHYXDS6IF"
+457 http GET https://registry.npmjs.org/array-uniq
+458 silly gunzTarPerm extractEntry examples/g.js
+459 silly gunzTarPerm extractEntry examples/usr-local.js
+460 silly gunzTarPerm extractEntry test/00-setup.js
+461 silly gunzTarPerm extractEntry test/cwd-test.js
+462 silly gunzTarPerm extractEntry test/globstar-match.js
+463 silly gunzTarPerm extractEntry test/mark.js
+464 silly gunzTarPerm extractEntry dist/lodash.compat.min.js
+465 silly gunzTarPerm extractEntry test/stat.js
+466 silly gunzTarPerm extractEntry test/bash-comparison.js
+467 silly gunzTarPerm extractEntry test/pause-resume.js
+468 silly gunzTarPerm extractEntry test/readme-issue.js
+469 silly gunzTarPerm extractEntry dist/lodash.js
+470 silly gunzTarPerm extractEntry test/root-nomount.js
+471 silly gunzTarPerm extractEntry test/root.js
+472 silly gunzTarPerm extractEntry test/new-glob-optional-options.js
+473 silly gunzTarPerm extractEntry test/zz-cleanup.js
+474 silly gunzTarPerm extractEntry test/nocase-nomagic.js
+475 silly gunzTarPerm extractEntry test/bash-results.json
+476 silly lockFile d6246dab-ultimatch-node-modules-minimatch tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/minimatch
+477 silly lockFile d6246dab-ultimatch-node-modules-minimatch tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/minimatch
+478 silly lockFile 743e0c59--npm-minimatch-0-3-0-package-tgz tar:///Users/drye/.npm/minimatch/0.3.0/package.tgz
+479 silly lockFile 743e0c59--npm-minimatch-0-3-0-package-tgz tar:///Users/drye/.npm/minimatch/0.3.0/package.tgz
+480 info preinstall minimatch@0.3.0
+481 verbose readDependencies using package.json deps
+482 verbose readDependencies using package.json deps
+483 silly gunzTarPerm extractEntry dist/lodash.min.js
+484 verbose cache add [ 'lru-cache@2', null ]
+485 verbose cache add name=undefined spec="lru-cache@2" args=["lru-cache@2",null]
+486 verbose parsed url { protocol: null,
+486 verbose parsed url   slashes: null,
+486 verbose parsed url   auth: null,
+486 verbose parsed url   host: null,
+486 verbose parsed url   port: null,
+486 verbose parsed url   hostname: null,
+486 verbose parsed url   hash: null,
+486 verbose parsed url   search: null,
+486 verbose parsed url   query: null,
+486 verbose parsed url   pathname: 'lru-cache@2',
+486 verbose parsed url   path: 'lru-cache@2',
+486 verbose parsed url   href: 'lru-cache@2' }
+487 verbose cache add [ 'sigmund@~1.0.0', null ]
+488 verbose cache add name=undefined spec="sigmund@~1.0.0" args=["sigmund@~1.0.0",null]
+489 verbose parsed url { protocol: null,
+489 verbose parsed url   slashes: null,
+489 verbose parsed url   auth: null,
+489 verbose parsed url   host: null,
+489 verbose parsed url   port: null,
+489 verbose parsed url   hostname: null,
+489 verbose parsed url   hash: null,
+489 verbose parsed url   search: null,
+489 verbose parsed url   query: null,
+489 verbose parsed url   pathname: 'sigmund@~1.0.0',
+489 verbose parsed url   path: 'sigmund@~1.0.0',
+489 verbose parsed url   href: 'sigmund@~1.0.0' }
+490 verbose cache add name="lru-cache" spec="2" args=["lru-cache","2"]
+491 verbose parsed url { protocol: null,
+491 verbose parsed url   slashes: null,
+491 verbose parsed url   auth: null,
+491 verbose parsed url   host: null,
+491 verbose parsed url   port: null,
+491 verbose parsed url   hostname: null,
+491 verbose parsed url   hash: null,
+491 verbose parsed url   search: null,
+491 verbose parsed url   query: null,
+491 verbose parsed url   pathname: '2',
+491 verbose parsed url   path: '2',
+491 verbose parsed url   href: '2' }
+492 verbose addNamed [ 'lru-cache', '2' ]
+493 verbose addNamed [ null, '>=2.0.0-0 <3.0.0-0' ]
+494 silly lockFile b4f9d1ff-lru-cache-2 lru-cache@2
+495 verbose lock lru-cache@2 /Users/drye/.npm/b4f9d1ff-lru-cache-2.lock
+496 verbose cache add name="sigmund" spec="~1.0.0" args=["sigmund","~1.0.0"]
+497 verbose parsed url { protocol: null,
+497 verbose parsed url   slashes: null,
+497 verbose parsed url   auth: null,
+497 verbose parsed url   host: null,
+497 verbose parsed url   port: null,
+497 verbose parsed url   hostname: null,
+497 verbose parsed url   hash: null,
+497 verbose parsed url   search: null,
+497 verbose parsed url   query: null,
+497 verbose parsed url   pathname: '~1.0.0',
+497 verbose parsed url   path: '~1.0.0',
+497 verbose parsed url   href: '~1.0.0' }
+498 verbose addNamed [ 'sigmund', '~1.0.0' ]
+499 verbose addNamed [ null, '>=1.0.0-0 <1.1.0-0' ]
+500 silly lockFile 584a4a05-sigmund-1-0-0 sigmund@~1.0.0
+501 verbose lock sigmund@~1.0.0 /Users/drye/.npm/584a4a05-sigmund-1-0-0.lock
+502 silly addNameRange { name: 'lru-cache',
+502 silly addNameRange   range: '>=2.0.0-0 <3.0.0-0',
+502 silly addNameRange   hasData: false }
+503 silly addNameRange { name: 'sigmund', range: '>=1.0.0-0 <1.1.0-0', hasData: false }
+504 verbose request where is /lru-cache
+505 verbose request registry https://registry.npmjs.org/
+506 verbose url raw /lru-cache
+507 verbose url resolving [ 'https://registry.npmjs.org/', './lru-cache' ]
+508 verbose url resolved https://registry.npmjs.org/lru-cache
+509 verbose request where is https://registry.npmjs.org/lru-cache
+510 info trying registry request attempt 1 at 10:46:27
+511 verbose etag "1TEN3TWU0L2UTX7DLMD1G0DZ2"
+512 http GET https://registry.npmjs.org/lru-cache
+513 verbose request where is /sigmund
+514 verbose request registry https://registry.npmjs.org/
+515 verbose url raw /sigmund
+516 verbose url resolving [ 'https://registry.npmjs.org/', './sigmund' ]
+517 verbose url resolved https://registry.npmjs.org/sigmund
+518 verbose request where is https://registry.npmjs.org/sigmund
+519 info trying registry request attempt 1 at 10:46:27
+520 verbose etag "B3EEO8J1FLHOF1JE91VSLO7DE"
+521 http GET https://registry.npmjs.org/sigmund
+522 silly gunzTarPerm extractEntry dist/lodash.underscore.js
+523 silly gunzTarPerm extractEntry dist/lodash.underscore.min.js
+524 silly lockFile 93bb55fb-es-findup-sync-node-modules-glob tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob
+525 silly lockFile 93bb55fb-es-findup-sync-node-modules-glob tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob
+526 silly lockFile 97c1f90d-drye-npm-glob-3-2-11-package-tgz tar:///Users/drye/.npm/glob/3.2.11/package.tgz
+527 silly lockFile 97c1f90d-drye-npm-glob-3-2-11-package-tgz tar:///Users/drye/.npm/glob/3.2.11/package.tgz
+528 info preinstall glob@3.2.11
+529 verbose readDependencies using package.json deps
+530 verbose readDependencies using package.json deps
+531 verbose cache add [ 'inherits@2', null ]
+532 verbose cache add name=undefined spec="inherits@2" args=["inherits@2",null]
+533 verbose parsed url { protocol: null,
+533 verbose parsed url   slashes: null,
+533 verbose parsed url   auth: null,
+533 verbose parsed url   host: null,
+533 verbose parsed url   port: null,
+533 verbose parsed url   hostname: null,
+533 verbose parsed url   hash: null,
+533 verbose parsed url   search: null,
+533 verbose parsed url   query: null,
+533 verbose parsed url   pathname: 'inherits@2',
+533 verbose parsed url   path: 'inherits@2',
+533 verbose parsed url   href: 'inherits@2' }
+534 verbose cache add [ 'minimatch@0.3', null ]
+535 verbose cache add name=undefined spec="minimatch@0.3" args=["minimatch@0.3",null]
+536 verbose parsed url { protocol: null,
+536 verbose parsed url   slashes: null,
+536 verbose parsed url   auth: null,
+536 verbose parsed url   host: null,
+536 verbose parsed url   port: null,
+536 verbose parsed url   hostname: null,
+536 verbose parsed url   hash: null,
+536 verbose parsed url   search: null,
+536 verbose parsed url   query: null,
+536 verbose parsed url   pathname: 'minimatch@0.3',
+536 verbose parsed url   path: 'minimatch@0.3',
+536 verbose parsed url   href: 'minimatch@0.3' }
+537 verbose cache add name="inherits" spec="2" args=["inherits","2"]
+538 verbose parsed url { protocol: null,
+538 verbose parsed url   slashes: null,
+538 verbose parsed url   auth: null,
+538 verbose parsed url   host: null,
+538 verbose parsed url   port: null,
+538 verbose parsed url   hostname: null,
+538 verbose parsed url   hash: null,
+538 verbose parsed url   search: null,
+538 verbose parsed url   query: null,
+538 verbose parsed url   pathname: '2',
+538 verbose parsed url   path: '2',
+538 verbose parsed url   href: '2' }
+539 verbose addNamed [ 'inherits', '2' ]
+540 verbose addNamed [ null, '>=2.0.0-0 <3.0.0-0' ]
+541 silly lockFile 1f7ff4de-inherits-2 inherits@2
+542 verbose lock inherits@2 /Users/drye/.npm/1f7ff4de-inherits-2.lock
+543 verbose cache add name="minimatch" spec="0.3" args=["minimatch","0.3"]
+544 verbose parsed url { protocol: null,
+544 verbose parsed url   slashes: null,
+544 verbose parsed url   auth: null,
+544 verbose parsed url   host: null,
+544 verbose parsed url   port: null,
+544 verbose parsed url   hostname: null,
+544 verbose parsed url   hash: null,
+544 verbose parsed url   search: null,
+544 verbose parsed url   query: null,
+544 verbose parsed url   pathname: '0.3',
+544 verbose parsed url   path: '0.3',
+544 verbose parsed url   href: '0.3' }
+545 verbose addNamed [ 'minimatch', '0.3' ]
+546 verbose addNamed [ null, '>=0.3.0-0 <0.4.0-0' ]
+547 silly lockFile d43e9cee-minimatch-0-3 minimatch@0.3
+548 verbose lock minimatch@0.3 /Users/drye/.npm/d43e9cee-minimatch-0-3.lock
+549 silly addNameRange { name: 'inherits', range: '>=2.0.0-0 <3.0.0-0', hasData: false }
+550 silly addNameRange { name: 'minimatch',
+550 silly addNameRange   range: '>=0.3.0-0 <0.4.0-0',
+550 silly addNameRange   hasData: false }
+551 verbose request where is /inherits
+552 verbose request registry https://registry.npmjs.org/
+553 verbose url raw /inherits
+554 verbose url resolving [ 'https://registry.npmjs.org/', './inherits' ]
+555 verbose url resolved https://registry.npmjs.org/inherits
+556 verbose request where is https://registry.npmjs.org/inherits
+557 info trying registry request attempt 1 at 10:46:27
+558 verbose etag "4HKEWVWX7W0PKAF3UJZOADCGX"
+559 http GET https://registry.npmjs.org/inherits
+560 verbose registry.get https://registry.npmjs.org/minimatch not expired, no request
+561 silly addNameRange number 2 { name: 'minimatch', range: '>=0.3.0-0 <0.4.0-0', hasData: true }
+562 silly addNameRange versions [ 'minimatch',
+562 silly addNameRange   [ '0.0.1',
+562 silly addNameRange     '0.0.2',
+562 silly addNameRange     '0.0.4',
+562 silly addNameRange     '0.0.5',
+562 silly addNameRange     '0.1.1',
+562 silly addNameRange     '0.1.2',
+562 silly addNameRange     '0.1.3',
+562 silly addNameRange     '0.1.4',
+562 silly addNameRange     '0.1.5',
+562 silly addNameRange     '0.2.0',
+562 silly addNameRange     '0.2.2',
+562 silly addNameRange     '0.2.3',
+562 silly addNameRange     '0.2.4',
+562 silly addNameRange     '0.2.5',
+562 silly addNameRange     '0.2.6',
+562 silly addNameRange     '0.2.7',
+562 silly addNameRange     '0.2.8',
+562 silly addNameRange     '0.2.9',
+562 silly addNameRange     '0.2.10',
+562 silly addNameRange     '0.2.11',
+562 silly addNameRange     '0.2.12',
+562 silly addNameRange     '0.2.13',
+562 silly addNameRange     '0.2.14',
+562 silly addNameRange     '0.3.0',
+562 silly addNameRange     '0.4.0',
+562 silly addNameRange     '1.0.0' ] ]
+563 verbose addNamed [ 'minimatch', '0.3.0' ]
+564 verbose addNamed [ '0.3.0', '0.3.0' ]
+565 silly lockFile fbcfe8c1-minimatch-0-3-0 minimatch@0.3.0
+566 verbose lock minimatch@0.3.0 /Users/drye/.npm/fbcfe8c1-minimatch-0-3-0.lock
+567 silly lockFile fbcfe8c1-minimatch-0-3-0 minimatch@0.3.0
+568 silly lockFile fbcfe8c1-minimatch-0-3-0 minimatch@0.3.0
+569 silly lockFile d43e9cee-minimatch-0-3 minimatch@0.3
+570 silly lockFile d43e9cee-minimatch-0-3 minimatch@0.3
+571 http 304 https://registry.npmjs.org/array-uniq
+572 silly registry.get cb [ 304,
+572 silly registry.get   { date: 'Thu, 20 Nov 2014 15:46:26 GMT',
+572 silly registry.get     server: 'Apache',
+572 silly registry.get     via: '1.1 varnish',
+572 silly registry.get     'last-modified': 'Thu, 20 Nov 2014 15:46:26 GMT',
+572 silly registry.get     'cache-control': 'max-age=60',
+572 silly registry.get     etag: '"F0G07137LIUF7PXUQHYXDS6IF"',
+572 silly registry.get     age: '24',
+572 silly registry.get     'x-served-by': 'cache-iad2147-IAD',
+572 silly registry.get     'x-cache': 'HIT',
+572 silly registry.get     'x-cache-hits': '1',
+572 silly registry.get     'x-timer': 'S1416498386.237301,VS0,VE0',
+572 silly registry.get     vary: 'Accept',
+572 silly registry.get     'content-length': '0',
+572 silly registry.get     'keep-alive': 'timeout=10, max=50',
+572 silly registry.get     connection: 'Keep-Alive' } ]
+573 verbose etag https://registry.npmjs.org/array-uniq from cache
+574 silly addNameRange number 2 { name: 'array-uniq',
+574 silly addNameRange   range: '>=0.1.0-0 <0.2.0-0',
+574 silly addNameRange   hasData: true }
+575 silly addNameRange versions [ 'array-uniq', [ '0.1.0', '0.1.1', '1.0.0', '1.0.1' ] ]
+576 verbose addNamed [ 'array-uniq', '0.1.1' ]
+577 verbose addNamed [ '0.1.1', '0.1.1' ]
+578 silly lockFile 9797327e-array-uniq-0-1-1 array-uniq@0.1.1
+579 verbose lock array-uniq@0.1.1 /Users/drye/.npm/9797327e-array-uniq-0-1-1.lock
+580 silly lockFile 9797327e-array-uniq-0-1-1 array-uniq@0.1.1
+581 silly lockFile 9797327e-array-uniq-0-1-1 array-uniq@0.1.1
+582 silly lockFile 7c8c3575-array-uniq-0-1-0 array-uniq@^0.1.0
+583 silly lockFile 7c8c3575-array-uniq-0-1-0 array-uniq@^0.1.0
+584 silly resolved [ { name: 'array-uniq',
+584 silly resolved     version: '0.1.1',
+584 silly resolved     description: 'Create an array without duplicates',
+584 silly resolved     license: 'MIT',
+584 silly resolved     repository: { type: 'git', url: 'git://github.com/sindresorhus/array-uniq' },
+584 silly resolved     author:
+584 silly resolved      { name: 'Sindre Sorhus',
+584 silly resolved        email: 'sindresorhus@gmail.com',
+584 silly resolved        url: 'http://sindresorhus.com' },
+584 silly resolved     engines: { node: '>=0.10.0' },
+584 silly resolved     scripts: { test: 'mocha' },
+584 silly resolved     files: [ 'index.js' ],
+584 silly resolved     keywords:
+584 silly resolved      [ 'array',
+584 silly resolved        'arr',
+584 silly resolved        'set',
+584 silly resolved        'uniq',
+584 silly resolved        'unique',
+584 silly resolved        'es6',
+584 silly resolved        'duplicate',
+584 silly resolved        'remove' ],
+584 silly resolved     devDependencies: { 'es6-set': '^0.1.0', mocha: '*' },
+584 silly resolved     bugs: { url: 'https://github.com/sindresorhus/array-uniq/issues' },
+584 silly resolved     homepage: 'https://github.com/sindresorhus/array-uniq',
+584 silly resolved     _id: 'array-uniq@0.1.1',
+584 silly resolved     _shasum: '5861f3ed4e4bb6175597a4e078e8aa78ebe958c7',
+584 silly resolved     _from: 'array-uniq@^0.1.0',
+584 silly resolved     _npmVersion: '1.4.9',
+584 silly resolved     _npmUser: { name: 'sindresorhus', email: 'sindresorhus@gmail.com' },
+584 silly resolved     maintainers: [ [Object] ],
+584 silly resolved     dist:
+584 silly resolved      { shasum: '5861f3ed4e4bb6175597a4e078e8aa78ebe958c7',
+584 silly resolved        tarball: 'http://registry.npmjs.org/array-uniq/-/array-uniq-0.1.1.tgz' },
+584 silly resolved     directories: {},
+584 silly resolved     _resolved: 'https://registry.npmjs.org/array-uniq/-/array-uniq-0.1.1.tgz',
+584 silly resolved     readme: 'ERROR: No README data found!' } ]
+585 info install array-uniq@0.1.1 into /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/array-union
+586 info installOne array-uniq@0.1.1
+587 verbose node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/array-union/node_modules/array-uniq unbuild
+588 verbose tar unpack /Users/drye/.npm/array-uniq/0.1.1/package.tgz
+589 silly lockFile 8db0e8c2-ay-union-node-modules-array-uniq tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/array-union/node_modules/array-uniq
+590 verbose lock tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/array-union/node_modules/array-uniq /Users/drye/.npm/8db0e8c2-ay-union-node-modules-array-uniq.lock
+591 silly lockFile 01d9fedd-npm-array-uniq-0-1-1-package-tgz tar:///Users/drye/.npm/array-uniq/0.1.1/package.tgz
+592 verbose lock tar:///Users/drye/.npm/array-uniq/0.1.1/package.tgz /Users/drye/.npm/01d9fedd-npm-array-uniq-0-1-1-package-tgz.lock
+593 silly gunzTarPerm modes [ '755', '644' ]
+594 silly gunzTarPerm extractEntry package.json
+595 silly gunzTarPerm extractEntry index.js
+596 silly gunzTarPerm extractEntry readme.md
+597 silly lockFile 8db0e8c2-ay-union-node-modules-array-uniq tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/array-union/node_modules/array-uniq
+598 silly lockFile 8db0e8c2-ay-union-node-modules-array-uniq tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/array-union/node_modules/array-uniq
+599 silly lockFile 01d9fedd-npm-array-uniq-0-1-1-package-tgz tar:///Users/drye/.npm/array-uniq/0.1.1/package.tgz
+600 silly lockFile 01d9fedd-npm-array-uniq-0-1-1-package-tgz tar:///Users/drye/.npm/array-uniq/0.1.1/package.tgz
+601 info preinstall array-uniq@0.1.1
+602 verbose readDependencies using package.json deps
+603 verbose readDependencies using package.json deps
+604 silly resolved []
+605 verbose about to build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/array-union/node_modules/array-uniq
+606 info build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/array-union/node_modules/array-uniq
+607 verbose linkStuff [ false,
+607 verbose linkStuff   false,
+607 verbose linkStuff   false,
+607 verbose linkStuff   '/Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/array-union/node_modules' ]
+608 info linkStuff array-uniq@0.1.1
+609 verbose linkBins array-uniq@0.1.1
+610 verbose linkMans array-uniq@0.1.1
+611 verbose rebuildBundles array-uniq@0.1.1
+612 info install array-uniq@0.1.1
+613 info postinstall array-uniq@0.1.1
+614 verbose about to build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/array-union
+615 info build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/array-union
+616 verbose linkStuff [ false,
+616 verbose linkStuff   false,
+616 verbose linkStuff   false,
+616 verbose linkStuff   '/Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules' ]
+617 info linkStuff array-union@0.1.0
+618 verbose linkBins array-union@0.1.0
+619 verbose linkMans array-union@0.1.0
+620 verbose rebuildBundles array-union@0.1.0
+621 verbose rebuildBundles [ 'array-uniq' ]
+622 info install array-union@0.1.0
+623 info postinstall array-union@0.1.0
+624 http 304 https://registry.npmjs.org/lru-cache
+625 silly registry.get cb [ 304,
+625 silly registry.get   { date: 'Thu, 20 Nov 2014 15:46:26 GMT',
+625 silly registry.get     server: 'Apache',
+625 silly registry.get     via: '1.1 varnish',
+625 silly registry.get     'last-modified': 'Thu, 20 Nov 2014 15:45:59 GMT',
+625 silly registry.get     'cache-control': 'max-age=60',
+625 silly registry.get     etag: '"1TEN3TWU0L2UTX7DLMD1G0DZ2"',
+625 silly registry.get     age: '27',
+625 silly registry.get     'x-served-by': 'cache-iad2126-IAD',
+625 silly registry.get     'x-cache': 'HIT',
+625 silly registry.get     'x-cache-hits': '2',
+625 silly registry.get     'x-timer': 'S1416498386.278735,VS0,VE0',
+625 silly registry.get     vary: 'Accept',
+625 silly registry.get     'content-length': '0',
+625 silly registry.get     'keep-alive': 'timeout=10, max=50',
+625 silly registry.get     connection: 'Keep-Alive' } ]
+626 verbose etag https://registry.npmjs.org/lru-cache from cache
+627 http 304 https://registry.npmjs.org/sigmund
+628 silly registry.get cb [ 304,
+628 silly registry.get   { date: 'Thu, 20 Nov 2014 15:46:26 GMT',
+628 silly registry.get     server: 'Apache',
+628 silly registry.get     via: '1.1 varnish',
+628 silly registry.get     'last-modified': 'Thu, 20 Nov 2014 15:45:52 GMT',
+628 silly registry.get     'cache-control': 'max-age=60',
+628 silly registry.get     etag: '"B3EEO8J1FLHOF1JE91VSLO7DE"',
+628 silly registry.get     age: '57',
+628 silly registry.get     'x-served-by': 'cache-iad2133-IAD',
+628 silly registry.get     'x-cache': 'HIT',
+628 silly registry.get     'x-cache-hits': '4',
+628 silly registry.get     'x-timer': 'S1416498386.280985,VS0,VE0',
+628 silly registry.get     vary: 'Accept',
+628 silly registry.get     'content-length': '0',
+628 silly registry.get     'keep-alive': 'timeout=10, max=50',
+628 silly registry.get     connection: 'Keep-Alive' } ]
+629 verbose etag https://registry.npmjs.org/sigmund from cache
+630 silly addNameRange number 2 { name: 'lru-cache', range: '>=2.0.0-0 <3.0.0-0', hasData: true }
+631 silly addNameRange versions [ 'lru-cache',
+631 silly addNameRange   [ '1.0.1',
+631 silly addNameRange     '1.0.2',
+631 silly addNameRange     '1.0.3',
+631 silly addNameRange     '1.0.4',
+631 silly addNameRange     '1.0.5',
+631 silly addNameRange     '1.0.6',
+631 silly addNameRange     '1.1.0',
+631 silly addNameRange     '1.1.1',
+631 silly addNameRange     '2.0.0',
+631 silly addNameRange     '2.0.1',
+631 silly addNameRange     '2.0.2',
+631 silly addNameRange     '2.0.3',
+631 silly addNameRange     '2.0.4',
+631 silly addNameRange     '2.1.0',
+631 silly addNameRange     '2.2.0',
+631 silly addNameRange     '2.2.1',
+631 silly addNameRange     '2.2.2',
+631 silly addNameRange     '2.2.4',
+631 silly addNameRange     '2.3.0',
+631 silly addNameRange     '2.3.1',
+631 silly addNameRange     '2.5.0' ] ]
+632 verbose addNamed [ 'lru-cache', '2.5.0' ]
+633 verbose addNamed [ '2.5.0', '2.5.0' ]
+634 silly lockFile 30aa630e-lru-cache-2-5-0 lru-cache@2.5.0
+635 verbose lock lru-cache@2.5.0 /Users/drye/.npm/30aa630e-lru-cache-2-5-0.lock
+636 silly addNameRange number 2 { name: 'sigmund', range: '>=1.0.0-0 <1.1.0-0', hasData: true }
+637 silly addNameRange versions [ 'sigmund', [ '1.0.0' ] ]
+638 verbose addNamed [ 'sigmund', '1.0.0' ]
+639 verbose addNamed [ '1.0.0', '1.0.0' ]
+640 silly lockFile 7b2d1244-sigmund-1-0-0 sigmund@1.0.0
+641 verbose lock sigmund@1.0.0 /Users/drye/.npm/7b2d1244-sigmund-1-0-0.lock
+642 silly lockFile 30aa630e-lru-cache-2-5-0 lru-cache@2.5.0
+643 silly lockFile 30aa630e-lru-cache-2-5-0 lru-cache@2.5.0
+644 silly lockFile 7b2d1244-sigmund-1-0-0 sigmund@1.0.0
+645 silly lockFile 7b2d1244-sigmund-1-0-0 sigmund@1.0.0
+646 silly lockFile b4f9d1ff-lru-cache-2 lru-cache@2
+647 silly lockFile b4f9d1ff-lru-cache-2 lru-cache@2
+648 silly lockFile 584a4a05-sigmund-1-0-0 sigmund@~1.0.0
+649 silly lockFile 584a4a05-sigmund-1-0-0 sigmund@~1.0.0
+650 silly resolved [ { name: 'lru-cache',
+650 silly resolved     description: 'A cache object that deletes the least-recently-used items.',
+650 silly resolved     version: '2.5.0',
+650 silly resolved     author: { name: 'Isaac Z. Schlueter', email: 'i@izs.me' },
+650 silly resolved     scripts: { test: 'tap test --gc' },
+650 silly resolved     main: 'lib/lru-cache.js',
+650 silly resolved     repository:
+650 silly resolved      { type: 'git',
+650 silly resolved        url: 'git://github.com/isaacs/node-lru-cache.git' },
+650 silly resolved     devDependencies: { tap: '', weak: '' },
+650 silly resolved     license:
+650 silly resolved      { type: 'MIT',
+650 silly resolved        url: 'http://github.com/isaacs/node-lru-cache/raw/master/LICENSE' },
+650 silly resolved     bugs: { url: 'https://github.com/isaacs/node-lru-cache/issues' },
+650 silly resolved     homepage: 'https://github.com/isaacs/node-lru-cache',
+650 silly resolved     _id: 'lru-cache@2.5.0',
+650 silly resolved     dist:
+650 silly resolved      { shasum: 'd82388ae9c960becbea0c73bb9eb79b6c6ce9aeb',
+650 silly resolved        tarball: 'http://registry.npmjs.org/lru-cache/-/lru-cache-2.5.0.tgz' },
+650 silly resolved     _from: 'lru-cache@2',
+650 silly resolved     _npmVersion: '1.3.15',
+650 silly resolved     _npmUser: { name: 'isaacs', email: 'i@izs.me' },
+650 silly resolved     maintainers: [ [Object] ],
+650 silly resolved     directories: {},
+650 silly resolved     _shasum: 'd82388ae9c960becbea0c73bb9eb79b6c6ce9aeb',
+650 silly resolved     _resolved: 'https://registry.npmjs.org/lru-cache/-/lru-cache-2.5.0.tgz',
+650 silly resolved     readme: 'ERROR: No README data found!' },
+650 silly resolved   { name: 'sigmund',
+650 silly resolved     version: '1.0.0',
+650 silly resolved     description: 'Quick and dirty signatures for Objects.',
+650 silly resolved     main: 'sigmund.js',
+650 silly resolved     directories: { test: 'test' },
+650 silly resolved     dependencies: {},
+650 silly resolved     devDependencies: { tap: '~0.3.0' },
+650 silly resolved     scripts: { test: 'tap test/*.js', bench: 'node bench.js' },
+650 silly resolved     repository: { type: 'git', url: 'git://github.com/isaacs/sigmund' },
+650 silly resolved     keywords: [ 'object', 'signature', 'key', 'data', 'psychoanalysis' ],
+650 silly resolved     author:
+650 silly resolved      { name: 'Isaac Z. Schlueter',
+650 silly resolved        email: 'i@izs.me',
+650 silly resolved        url: 'http://blog.izs.me/' },
+650 silly resolved     license: 'BSD',
+650 silly resolved     readme: '# sigmund\n\nQuick and dirty signatures for Objects.\n\nThis is like a much faster `deepEquals` comparison, which returns a\nstring key suitable for caches and the like.\n\n## Usage\n\n```javascript\nfunction doSomething (someObj) {\n  var key = sigmund(someObj, maxDepth) // max depth defaults to 10\n  var cached = cache.get(key)\n  if (cached) return cached)\n\n  var result = expensiveCalculation(someObj)\n  cache.set(key, result)\n  return result\n}\n```\n\nThe resulting key will be as unique and reproducible as calling\n`JSON.stringify` or `util.inspect` on the object, but is much faster.\nIn order to achieve this speed, some differences are glossed over.\nFor example, the object `{0:\'foo\'}` will be treated identically to the\narray `[\'foo\']`.\n\nAlso, just as there is no way to summon the soul from the scribblings\nof a cocain-addled psychoanalyst, there is no way to revive the object\nfrom the signature string that sigmund gives you.  In fact, it\'s\nbarely even readable.\n\nAs with `sys.inspect` and `JSON.stringify`, larger objects will\nproduce larger signature strings.\n\nBecause sigmund is a bit less strict than the more thorough\nalternatives, the strings will be shorter, and also there is a\nslightly higher chance for collisions.  For example, these objects\nhave the same signature:\n\n    var obj1 = {a:\'b\',c:/def/,g:[\'h\',\'i\',{j:\'\',k:\'l\'}]}\n    var obj2 = {a:\'b\',c:\'/def/\',g:[\'h\',\'i\',\'{jkl\']}\n\nLike a good Freudian, sigmund is most effective when you already have\nsome understanding of what you\'re looking for.  It can help you help\nyourself, but you must be willing to do some work as well.\n\nCycles are handled, and cyclical objects are silently omitted (though\nthe key is included in the signature output.)\n\nThe second argument is the maximum depth, which defaults to 10,\nbecause that is the maximum object traversal depth covered by most\ninsurance carriers.\n',
+650 silly resolved     _id: 'sigmund@1.0.0',
+650 silly resolved     dist:
+650 silly resolved      { shasum: '66a2b3a749ae8b5fb89efd4fcc01dc94fbe02296',
+650 silly resolved        tarball: 'http://registry.npmjs.org/sigmund/-/sigmund-1.0.0.tgz' },
+650 silly resolved     _npmVersion: '1.1.48',
+650 silly resolved     _npmUser: { name: 'isaacs', email: 'i@izs.me' },
+650 silly resolved     maintainers: [ [Object] ],
+650 silly resolved     _shasum: '66a2b3a749ae8b5fb89efd4fcc01dc94fbe02296',
+650 silly resolved     _from: 'sigmund@~1.0.0',
+650 silly resolved     _resolved: 'https://registry.npmjs.org/sigmund/-/sigmund-1.0.0.tgz',
+650 silly resolved     bugs: { url: 'https://github.com/isaacs/sigmund/issues' },
+650 silly resolved     homepage: 'https://github.com/isaacs/sigmund' } ]
+651 info install lru-cache@2.5.0 into /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/minimatch
+652 info install sigmund@1.0.0 into /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/minimatch
+653 info installOne lru-cache@2.5.0
+654 info installOne sigmund@1.0.0
+655 verbose node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/minimatch/node_modules/lru-cache unbuild
+656 verbose node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/minimatch/node_modules/sigmund unbuild
+657 verbose tar unpack /Users/drye/.npm/lru-cache/2.5.0/package.tgz
+658 silly lockFile 26ef0057-minimatch-node-modules-lru-cache tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/minimatch/node_modules/lru-cache
+659 verbose lock tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/minimatch/node_modules/lru-cache /Users/drye/.npm/26ef0057-minimatch-node-modules-lru-cache.lock
+660 silly lockFile 923ba3be--npm-lru-cache-2-5-0-package-tgz tar:///Users/drye/.npm/lru-cache/2.5.0/package.tgz
+661 verbose lock tar:///Users/drye/.npm/lru-cache/2.5.0/package.tgz /Users/drye/.npm/923ba3be--npm-lru-cache-2-5-0-package-tgz.lock
+662 verbose tar unpack /Users/drye/.npm/sigmund/1.0.0/package.tgz
+663 silly lockFile 89050d6a-s-minimatch-node-modules-sigmund tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/minimatch/node_modules/sigmund
+664 verbose lock tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/minimatch/node_modules/sigmund /Users/drye/.npm/89050d6a-s-minimatch-node-modules-sigmund.lock
+665 silly lockFile 66bc1dee-ye-npm-sigmund-1-0-0-package-tgz tar:///Users/drye/.npm/sigmund/1.0.0/package.tgz
+666 verbose lock tar:///Users/drye/.npm/sigmund/1.0.0/package.tgz /Users/drye/.npm/66bc1dee-ye-npm-sigmund-1-0-0-package-tgz.lock
+667 silly gunzTarPerm modes [ '755', '644' ]
+668 silly gunzTarPerm modes [ '755', '644' ]
+669 silly gunzTarPerm extractEntry package.json
+670 silly gunzTarPerm extractEntry package.json
+671 silly gunzTarPerm extractEntry .npmignore
+672 silly gunzTarPerm extractEntry README.md
+673 silly gunzTarPerm extractEntry README.md
+674 silly gunzTarPerm extractEntry LICENSE
+675 silly gunzTarPerm extractEntry LICENSE
+676 silly gunzTarPerm extractEntry CONTRIBUTORS
+677 silly gunzTarPerm extractEntry bench.js
+678 silly gunzTarPerm extractEntry sigmund.js
+679 silly gunzTarPerm extractEntry lib/lru-cache.js
+680 silly gunzTarPerm extractEntry test/basic.js
+681 silly gunzTarPerm extractEntry test/foreach.js
+682 silly gunzTarPerm extractEntry test/memory-leak.js
+683 silly gunzTarPerm extractEntry test/basic.js
+684 silly lockFile 89050d6a-s-minimatch-node-modules-sigmund tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/minimatch/node_modules/sigmund
+685 silly lockFile 89050d6a-s-minimatch-node-modules-sigmund tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/minimatch/node_modules/sigmund
+686 http 304 https://registry.npmjs.org/inherits
+687 silly registry.get cb [ 304,
+687 silly registry.get   { date: 'Thu, 20 Nov 2014 15:46:26 GMT',
+687 silly registry.get     server: 'Apache',
+687 silly registry.get     via: '1.1 varnish',
+687 silly registry.get     'last-modified': 'Thu, 20 Nov 2014 15:46:04 GMT',
+687 silly registry.get     'cache-control': 'max-age=60',
+687 silly registry.get     etag: '"4HKEWVWX7W0PKAF3UJZOADCGX"',
+687 silly registry.get     age: '23',
+687 silly registry.get     'x-served-by': 'cache-iad2136-IAD',
+687 silly registry.get     'x-cache': 'HIT',
+687 silly registry.get     'x-cache-hits': '4',
+687 silly registry.get     'x-timer': 'S1416498386.303400,VS0,VE0',
+687 silly registry.get     vary: 'Accept',
+687 silly registry.get     'content-length': '0',
+687 silly registry.get     'keep-alive': 'timeout=10, max=50',
+687 silly registry.get     connection: 'Keep-Alive' } ]
+688 verbose etag https://registry.npmjs.org/inherits from cache
+689 silly lockFile 66bc1dee-ye-npm-sigmund-1-0-0-package-tgz tar:///Users/drye/.npm/sigmund/1.0.0/package.tgz
+690 silly lockFile 66bc1dee-ye-npm-sigmund-1-0-0-package-tgz tar:///Users/drye/.npm/sigmund/1.0.0/package.tgz
+691 info preinstall sigmund@1.0.0
+692 silly addNameRange number 2 { name: 'inherits', range: '>=2.0.0-0 <3.0.0-0', hasData: true }
+693 silly addNameRange versions [ 'inherits', [ '1.0.0', '2.0.0', '2.0.1' ] ]
+694 verbose addNamed [ 'inherits', '2.0.1' ]
+695 verbose addNamed [ '2.0.1', '2.0.1' ]
+696 silly lockFile 2b2e8f1b-inherits-2-0-1 inherits@2.0.1
+697 verbose lock inherits@2.0.1 /Users/drye/.npm/2b2e8f1b-inherits-2-0-1.lock
+698 verbose readDependencies using package.json deps
+699 verbose readDependencies using package.json deps
+700 silly resolved []
+701 verbose about to build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/minimatch/node_modules/sigmund
+702 info build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/minimatch/node_modules/sigmund
+703 verbose linkStuff [ false,
+703 verbose linkStuff   false,
+703 verbose linkStuff   false,
+703 verbose linkStuff   '/Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/minimatch/node_modules' ]
+704 info linkStuff sigmund@1.0.0
+705 verbose linkBins sigmund@1.0.0
+706 verbose linkMans sigmund@1.0.0
+707 verbose rebuildBundles sigmund@1.0.0
+708 info install sigmund@1.0.0
+709 info postinstall sigmund@1.0.0
+710 silly lockFile 2b2e8f1b-inherits-2-0-1 inherits@2.0.1
+711 silly lockFile 2b2e8f1b-inherits-2-0-1 inherits@2.0.1
+712 silly lockFile 1f7ff4de-inherits-2 inherits@2
+713 silly lockFile 1f7ff4de-inherits-2 inherits@2
+714 silly resolved [ { author:
+714 silly resolved      { name: 'Isaac Z. Schlueter',
+714 silly resolved        email: 'i@izs.me',
+714 silly resolved        url: 'http://blog.izs.me' },
+714 silly resolved     name: 'minimatch',
+714 silly resolved     description: 'a glob matcher in javascript',
+714 silly resolved     version: '0.3.0',
+714 silly resolved     repository: { type: 'git', url: 'git://github.com/isaacs/minimatch.git' },
+714 silly resolved     main: 'minimatch.js',
+714 silly resolved     scripts: { test: 'tap test/*.js' },
+714 silly resolved     engines: { node: '*' },
+714 silly resolved     dependencies: { 'lru-cache': '2', sigmund: '~1.0.0' },
+714 silly resolved     devDependencies: { tap: '' },
+714 silly resolved     license:
+714 silly resolved      { type: 'MIT',
+714 silly resolved        url: 'http://github.com/isaacs/minimatch/raw/master/LICENSE' },
+714 silly resolved     bugs: { url: 'https://github.com/isaacs/minimatch/issues' },
+714 silly resolved     homepage: 'https://github.com/isaacs/minimatch',
+714 silly resolved     _id: 'minimatch@0.3.0',
+714 silly resolved     _shasum: '275d8edaac4f1bb3326472089e7949c8394699dd',
+714 silly resolved     _from: 'minimatch@0.3',
+714 silly resolved     _npmVersion: '1.4.10',
+714 silly resolved     _npmUser: { name: 'isaacs', email: 'i@izs.me' },
+714 silly resolved     maintainers: [ [Object] ],
+714 silly resolved     dist:
+714 silly resolved      { shasum: '275d8edaac4f1bb3326472089e7949c8394699dd',
+714 silly resolved        tarball: 'http://registry.npmjs.org/minimatch/-/minimatch-0.3.0.tgz' },
+714 silly resolved     directories: {},
+714 silly resolved     _resolved: 'https://registry.npmjs.org/minimatch/-/minimatch-0.3.0.tgz',
+714 silly resolved     readme: 'ERROR: No README data found!' },
+714 silly resolved   { name: 'inherits',
+714 silly resolved     description: 'Browser-friendly inheritance fully compatible with standard node.js inherits()',
+714 silly resolved     version: '2.0.1',
+714 silly resolved     keywords:
+714 silly resolved      [ 'inheritance',
+714 silly resolved        'class',
+714 silly resolved        'klass',
+714 silly resolved        'oop',
+714 silly resolved        'object-oriented',
+714 silly resolved        'inherits',
+714 silly resolved        'browser',
+714 silly resolved        'browserify' ],
+714 silly resolved     main: './inherits.js',
+714 silly resolved     browser: './inherits_browser.js',
+714 silly resolved     repository: { type: 'git', url: 'git://github.com/isaacs/inherits' },
+714 silly resolved     license: 'ISC',
+714 silly resolved     scripts: { test: 'node test' },
+714 silly resolved     readme: 'Browser-friendly inheritance fully compatible with standard node.js\n[inherits](http://nodejs.org/api/util.html#util_util_inherits_constructor_superconstructor).\n\nThis package exports standard `inherits` from node.js `util` module in\nnode environment, but also provides alternative browser-friendly\nimplementation through [browser\nfield](https://gist.github.com/shtylman/4339901). Alternative\nimplementation is a literal copy of standard one located in standalone\nmodule to avoid requiring of `util`. It also has a shim for old\nbrowsers with no `Object.create` support.\n\nWhile keeping you sure you are using standard `inherits`\nimplementation in node.js environment, it allows bundlers such as\n[browserify](https://github.com/substack/node-browserify) to not\ninclude full `util` package to your client code if all you need is\njust `inherits` function. It worth, because browser shim for `util`\npackage is large and `inherits` is often the single function you need\nfrom it.\n\nIt\'s recommended to use this package instead of\n`require(\'util\').inherits` for any code that has chances to be used\nnot only in node.js but in browser too.\n\n## usage\n\n```js\nvar inherits = require(\'inherits\');\n// then use exactly as the standard one\n```\n\n## note on version ~1.0\n\nVersion ~1.0 had completely different motivation and is not compatible\nneither with 2.0 nor with standard node.js `inherits`.\n\nIf you are using version ~1.0 and planning to switch to ~2.0, be\ncareful:\n\n* new version uses `super_` instead of `super` for referencing\n  superclass\n* new version overwrites current prototype while old one preserves any\n  existing fields on it\n',
+714 silly resolved     readmeFilename: 'README.md',
+714 silly resolved     bugs: { url: 'https://github.com/isaacs/inherits/issues' },
+714 silly resolved     _id: 'inherits@2.0.1',
+714 silly resolved     dist:
+714 silly resolved      { shasum: 'b17d08d326b4423e568eff719f91b0b1cbdf69f1',
+714 silly resolved        tarball: 'http://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz' },
+714 silly resolved     _from: 'inherits@2',
+714 silly resolved     _npmVersion: '1.3.8',
+714 silly resolved     _npmUser: { name: 'isaacs', email: 'i@izs.me' },
+714 silly resolved     maintainers: [ [Object] ],
+714 silly resolved     directories: {},
+714 silly resolved     _shasum: 'b17d08d326b4423e568eff719f91b0b1cbdf69f1',
+714 silly resolved     _resolved: 'https://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz',
+714 silly resolved     homepage: 'https://github.com/isaacs/inherits' } ]
+715 info install minimatch@0.3.0 into /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob
+716 info install inherits@2.0.1 into /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob
+717 info installOne minimatch@0.3.0
+718 info installOne inherits@2.0.1
+719 verbose node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/minimatch unbuild
+720 verbose node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/inherits unbuild
+721 verbose tar unpack /Users/drye/.npm/minimatch/0.3.0/package.tgz
+722 silly lockFile 297cdbfb-ules-glob-node-modules-minimatch tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/minimatch
+723 verbose lock tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/minimatch /Users/drye/.npm/297cdbfb-ules-glob-node-modules-minimatch.lock
+724 silly lockFile 743e0c59--npm-minimatch-0-3-0-package-tgz tar:///Users/drye/.npm/minimatch/0.3.0/package.tgz
+725 verbose lock tar:///Users/drye/.npm/minimatch/0.3.0/package.tgz /Users/drye/.npm/743e0c59--npm-minimatch-0-3-0-package-tgz.lock
+726 verbose tar unpack /Users/drye/.npm/inherits/2.0.1/package.tgz
+727 silly lockFile 0b8d9b36-dules-glob-node-modules-inherits tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/inherits
+728 verbose lock tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/inherits /Users/drye/.npm/0b8d9b36-dules-glob-node-modules-inherits.lock
+729 silly lockFile 716ad84f-e-npm-inherits-2-0-1-package-tgz tar:///Users/drye/.npm/inherits/2.0.1/package.tgz
+730 verbose lock tar:///Users/drye/.npm/inherits/2.0.1/package.tgz /Users/drye/.npm/716ad84f-e-npm-inherits-2-0-1-package-tgz.lock
+731 silly gunzTarPerm modes [ '755', '644' ]
+732 silly gunzTarPerm modes [ '755', '644' ]
+733 silly gunzTarPerm extractEntry package.json
+734 silly gunzTarPerm extractEntry package.json
+735 silly gunzTarPerm extractEntry .npmignore
+736 silly gunzTarPerm extractEntry README.md
+737 silly lockFile 26ef0057-minimatch-node-modules-lru-cache tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/minimatch/node_modules/lru-cache
+738 silly lockFile 26ef0057-minimatch-node-modules-lru-cache tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/minimatch/node_modules/lru-cache
+739 silly gunzTarPerm extractEntry README.md
+740 silly gunzTarPerm extractEntry LICENSE
+741 silly lockFile 923ba3be--npm-lru-cache-2-5-0-package-tgz tar:///Users/drye/.npm/lru-cache/2.5.0/package.tgz
+742 silly lockFile 923ba3be--npm-lru-cache-2-5-0-package-tgz tar:///Users/drye/.npm/lru-cache/2.5.0/package.tgz
+743 silly gunzTarPerm extractEntry LICENSE
+744 silly gunzTarPerm extractEntry minimatch.js
+745 info preinstall lru-cache@2.5.0
+746 silly gunzTarPerm extractEntry inherits.js
+747 silly gunzTarPerm extractEntry inherits_browser.js
+748 verbose readDependencies using package.json deps
+749 verbose readDependencies using package.json deps
+750 silly resolved []
+751 verbose about to build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/minimatch/node_modules/lru-cache
+752 info build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/minimatch/node_modules/lru-cache
+753 verbose linkStuff [ false,
+753 verbose linkStuff   false,
+753 verbose linkStuff   false,
+753 verbose linkStuff   '/Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/minimatch/node_modules' ]
+754 info linkStuff lru-cache@2.5.0
+755 verbose linkBins lru-cache@2.5.0
+756 verbose linkMans lru-cache@2.5.0
+757 verbose rebuildBundles lru-cache@2.5.0
+758 info install lru-cache@2.5.0
+759 info postinstall lru-cache@2.5.0
+760 silly gunzTarPerm extractEntry test/basic.js
+761 verbose about to build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/minimatch
+762 info build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules/minimatch
+763 verbose linkStuff [ false,
+763 verbose linkStuff   false,
+763 verbose linkStuff   false,
+763 verbose linkStuff   '/Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch/node_modules' ]
+764 info linkStuff minimatch@0.3.0
+765 verbose linkBins minimatch@0.3.0
+766 verbose linkMans minimatch@0.3.0
+767 verbose rebuildBundles minimatch@0.3.0
+768 verbose rebuildBundles [ 'lru-cache', 'sigmund' ]
+769 info install minimatch@0.3.0
+770 info postinstall minimatch@0.3.0
+771 silly gunzTarPerm extractEntry test.js
+772 verbose about to build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch
+773 info build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/multimatch
+774 verbose linkStuff [ false,
+774 verbose linkStuff   false,
+774 verbose linkStuff   false,
+774 verbose linkStuff   '/Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules' ]
+775 info linkStuff multimatch@0.3.0
+776 verbose linkBins multimatch@0.3.0
+777 verbose linkMans multimatch@0.3.0
+778 verbose rebuildBundles multimatch@0.3.0
+779 verbose rebuildBundles [ 'array-differ', 'array-union', 'minimatch' ]
+780 info install multimatch@0.3.0
+781 info postinstall multimatch@0.3.0
+782 silly gunzTarPerm extractEntry test/brace-expand.js
+783 silly gunzTarPerm extractEntry test/caching.js
+784 silly gunzTarPerm extractEntry test/defaults.js
+785 silly gunzTarPerm extractEntry test/extglob-ending-with-state-char.js
+786 silly lockFile 0b8d9b36-dules-glob-node-modules-inherits tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/inherits
+787 silly lockFile 0b8d9b36-dules-glob-node-modules-inherits tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/inherits
+788 silly lockFile 716ad84f-e-npm-inherits-2-0-1-package-tgz tar:///Users/drye/.npm/inherits/2.0.1/package.tgz
+789 silly lockFile 716ad84f-e-npm-inherits-2-0-1-package-tgz tar:///Users/drye/.npm/inherits/2.0.1/package.tgz
+790 info preinstall inherits@2.0.1
+791 verbose readDependencies using package.json deps
+792 verbose readDependencies using package.json deps
+793 silly resolved []
+794 verbose about to build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/inherits
+795 info build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/inherits
+796 verbose linkStuff [ false,
+796 verbose linkStuff   false,
+796 verbose linkStuff   false,
+796 verbose linkStuff   '/Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules' ]
+797 info linkStuff inherits@2.0.1
+798 verbose linkBins inherits@2.0.1
+799 verbose linkMans inherits@2.0.1
+800 verbose rebuildBundles inherits@2.0.1
+801 info install inherits@2.0.1
+802 info postinstall inherits@2.0.1
+803 silly lockFile bf220475--findup-sync-node-modules-lodash tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/lodash
+804 silly lockFile bf220475--findup-sync-node-modules-lodash tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/lodash
+805 silly lockFile 0265bcde-rye-npm-lodash-2-4-1-package-tgz tar:///Users/drye/.npm/lodash/2.4.1/package.tgz
+806 silly lockFile 0265bcde-rye-npm-lodash-2-4-1-package-tgz tar:///Users/drye/.npm/lodash/2.4.1/package.tgz
+807 info preinstall lodash@2.4.1
+808 verbose readDependencies using package.json deps
+809 verbose readDependencies using package.json deps
+810 silly resolved []
+811 verbose about to build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/lodash
+812 info build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/lodash
+813 verbose linkStuff [ false,
+813 verbose linkStuff   false,
+813 verbose linkStuff   false,
+813 verbose linkStuff   '/Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules' ]
+814 info linkStuff lodash@2.4.1
+815 verbose linkBins lodash@2.4.1
+816 verbose linkMans lodash@2.4.1
+817 verbose rebuildBundles lodash@2.4.1
+818 info install lodash@2.4.1
+819 info postinstall lodash@2.4.1
+820 silly lockFile 297cdbfb-ules-glob-node-modules-minimatch tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/minimatch
+821 silly lockFile 297cdbfb-ules-glob-node-modules-minimatch tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/minimatch
+822 silly lockFile 743e0c59--npm-minimatch-0-3-0-package-tgz tar:///Users/drye/.npm/minimatch/0.3.0/package.tgz
+823 silly lockFile 743e0c59--npm-minimatch-0-3-0-package-tgz tar:///Users/drye/.npm/minimatch/0.3.0/package.tgz
+824 info preinstall minimatch@0.3.0
+825 verbose readDependencies using package.json deps
+826 verbose readDependencies using package.json deps
+827 verbose cache add [ 'lru-cache@2', null ]
+828 verbose cache add name=undefined spec="lru-cache@2" args=["lru-cache@2",null]
+829 verbose parsed url { protocol: null,
+829 verbose parsed url   slashes: null,
+829 verbose parsed url   auth: null,
+829 verbose parsed url   host: null,
+829 verbose parsed url   port: null,
+829 verbose parsed url   hostname: null,
+829 verbose parsed url   hash: null,
+829 verbose parsed url   search: null,
+829 verbose parsed url   query: null,
+829 verbose parsed url   pathname: 'lru-cache@2',
+829 verbose parsed url   path: 'lru-cache@2',
+829 verbose parsed url   href: 'lru-cache@2' }
+830 verbose cache add [ 'sigmund@~1.0.0', null ]
+831 verbose cache add name=undefined spec="sigmund@~1.0.0" args=["sigmund@~1.0.0",null]
+832 verbose parsed url { protocol: null,
+832 verbose parsed url   slashes: null,
+832 verbose parsed url   auth: null,
+832 verbose parsed url   host: null,
+832 verbose parsed url   port: null,
+832 verbose parsed url   hostname: null,
+832 verbose parsed url   hash: null,
+832 verbose parsed url   search: null,
+832 verbose parsed url   query: null,
+832 verbose parsed url   pathname: 'sigmund@~1.0.0',
+832 verbose parsed url   path: 'sigmund@~1.0.0',
+832 verbose parsed url   href: 'sigmund@~1.0.0' }
+833 verbose cache add name="lru-cache" spec="2" args=["lru-cache","2"]
+834 verbose parsed url { protocol: null,
+834 verbose parsed url   slashes: null,
+834 verbose parsed url   auth: null,
+834 verbose parsed url   host: null,
+834 verbose parsed url   port: null,
+834 verbose parsed url   hostname: null,
+834 verbose parsed url   hash: null,
+834 verbose parsed url   search: null,
+834 verbose parsed url   query: null,
+834 verbose parsed url   pathname: '2',
+834 verbose parsed url   path: '2',
+834 verbose parsed url   href: '2' }
+835 verbose addNamed [ 'lru-cache', '2' ]
+836 verbose addNamed [ null, '>=2.0.0-0 <3.0.0-0' ]
+837 silly lockFile b4f9d1ff-lru-cache-2 lru-cache@2
+838 verbose lock lru-cache@2 /Users/drye/.npm/b4f9d1ff-lru-cache-2.lock
+839 verbose cache add name="sigmund" spec="~1.0.0" args=["sigmund","~1.0.0"]
+840 verbose parsed url { protocol: null,
+840 verbose parsed url   slashes: null,
+840 verbose parsed url   auth: null,
+840 verbose parsed url   host: null,
+840 verbose parsed url   port: null,
+840 verbose parsed url   hostname: null,
+840 verbose parsed url   hash: null,
+840 verbose parsed url   search: null,
+840 verbose parsed url   query: null,
+840 verbose parsed url   pathname: '~1.0.0',
+840 verbose parsed url   path: '~1.0.0',
+840 verbose parsed url   href: '~1.0.0' }
+841 verbose addNamed [ 'sigmund', '~1.0.0' ]
+842 verbose addNamed [ null, '>=1.0.0-0 <1.1.0-0' ]
+843 silly lockFile 584a4a05-sigmund-1-0-0 sigmund@~1.0.0
+844 verbose lock sigmund@~1.0.0 /Users/drye/.npm/584a4a05-sigmund-1-0-0.lock
+845 silly addNameRange { name: 'lru-cache',
+845 silly addNameRange   range: '>=2.0.0-0 <3.0.0-0',
+845 silly addNameRange   hasData: false }
+846 silly addNameRange { name: 'sigmund', range: '>=1.0.0-0 <1.1.0-0', hasData: false }
+847 verbose registry.get https://registry.npmjs.org/lru-cache not expired, no request
+848 silly addNameRange number 2 { name: 'lru-cache', range: '>=2.0.0-0 <3.0.0-0', hasData: true }
+849 silly addNameRange versions [ 'lru-cache',
+849 silly addNameRange   [ '1.0.1',
+849 silly addNameRange     '1.0.2',
+849 silly addNameRange     '1.0.3',
+849 silly addNameRange     '1.0.4',
+849 silly addNameRange     '1.0.5',
+849 silly addNameRange     '1.0.6',
+849 silly addNameRange     '1.1.0',
+849 silly addNameRange     '1.1.1',
+849 silly addNameRange     '2.0.0',
+849 silly addNameRange     '2.0.1',
+849 silly addNameRange     '2.0.2',
+849 silly addNameRange     '2.0.3',
+849 silly addNameRange     '2.0.4',
+849 silly addNameRange     '2.1.0',
+849 silly addNameRange     '2.2.0',
+849 silly addNameRange     '2.2.1',
+849 silly addNameRange     '2.2.2',
+849 silly addNameRange     '2.2.4',
+849 silly addNameRange     '2.3.0',
+849 silly addNameRange     '2.3.1',
+849 silly addNameRange     '2.5.0' ] ]
+850 verbose addNamed [ 'lru-cache', '2.5.0' ]
+851 verbose addNamed [ '2.5.0', '2.5.0' ]
+852 silly lockFile 30aa630e-lru-cache-2-5-0 lru-cache@2.5.0
+853 verbose lock lru-cache@2.5.0 /Users/drye/.npm/30aa630e-lru-cache-2-5-0.lock
+854 verbose registry.get https://registry.npmjs.org/sigmund not expired, no request
+855 silly addNameRange number 2 { name: 'sigmund', range: '>=1.0.0-0 <1.1.0-0', hasData: true }
+856 silly addNameRange versions [ 'sigmund', [ '1.0.0' ] ]
+857 verbose addNamed [ 'sigmund', '1.0.0' ]
+858 verbose addNamed [ '1.0.0', '1.0.0' ]
+859 silly lockFile 7b2d1244-sigmund-1-0-0 sigmund@1.0.0
+860 verbose lock sigmund@1.0.0 /Users/drye/.npm/7b2d1244-sigmund-1-0-0.lock
+861 silly lockFile 30aa630e-lru-cache-2-5-0 lru-cache@2.5.0
+862 silly lockFile 30aa630e-lru-cache-2-5-0 lru-cache@2.5.0
+863 silly lockFile b4f9d1ff-lru-cache-2 lru-cache@2
+864 silly lockFile b4f9d1ff-lru-cache-2 lru-cache@2
+865 silly lockFile 7b2d1244-sigmund-1-0-0 sigmund@1.0.0
+866 silly lockFile 7b2d1244-sigmund-1-0-0 sigmund@1.0.0
+867 silly lockFile 584a4a05-sigmund-1-0-0 sigmund@~1.0.0
+868 silly lockFile 584a4a05-sigmund-1-0-0 sigmund@~1.0.0
+869 silly resolved [ { name: 'lru-cache',
+869 silly resolved     description: 'A cache object that deletes the least-recently-used items.',
+869 silly resolved     version: '2.5.0',
+869 silly resolved     author: { name: 'Isaac Z. Schlueter', email: 'i@izs.me' },
+869 silly resolved     scripts: { test: 'tap test --gc' },
+869 silly resolved     main: 'lib/lru-cache.js',
+869 silly resolved     repository:
+869 silly resolved      { type: 'git',
+869 silly resolved        url: 'git://github.com/isaacs/node-lru-cache.git' },
+869 silly resolved     devDependencies: { tap: '', weak: '' },
+869 silly resolved     license:
+869 silly resolved      { type: 'MIT',
+869 silly resolved        url: 'http://github.com/isaacs/node-lru-cache/raw/master/LICENSE' },
+869 silly resolved     bugs: { url: 'https://github.com/isaacs/node-lru-cache/issues' },
+869 silly resolved     homepage: 'https://github.com/isaacs/node-lru-cache',
+869 silly resolved     _id: 'lru-cache@2.5.0',
+869 silly resolved     dist:
+869 silly resolved      { shasum: 'd82388ae9c960becbea0c73bb9eb79b6c6ce9aeb',
+869 silly resolved        tarball: 'http://registry.npmjs.org/lru-cache/-/lru-cache-2.5.0.tgz' },
+869 silly resolved     _from: 'lru-cache@2',
+869 silly resolved     _npmVersion: '1.3.15',
+869 silly resolved     _npmUser: { name: 'isaacs', email: 'i@izs.me' },
+869 silly resolved     maintainers: [ [Object] ],
+869 silly resolved     directories: {},
+869 silly resolved     _shasum: 'd82388ae9c960becbea0c73bb9eb79b6c6ce9aeb',
+869 silly resolved     _resolved: 'https://registry.npmjs.org/lru-cache/-/lru-cache-2.5.0.tgz',
+869 silly resolved     readme: 'ERROR: No README data found!' },
+869 silly resolved   { name: 'sigmund',
+869 silly resolved     version: '1.0.0',
+869 silly resolved     description: 'Quick and dirty signatures for Objects.',
+869 silly resolved     main: 'sigmund.js',
+869 silly resolved     directories: { test: 'test' },
+869 silly resolved     dependencies: {},
+869 silly resolved     devDependencies: { tap: '~0.3.0' },
+869 silly resolved     scripts: { test: 'tap test/*.js', bench: 'node bench.js' },
+869 silly resolved     repository: { type: 'git', url: 'git://github.com/isaacs/sigmund' },
+869 silly resolved     keywords: [ 'object', 'signature', 'key', 'data', 'psychoanalysis' ],
+869 silly resolved     author:
+869 silly resolved      { name: 'Isaac Z. Schlueter',
+869 silly resolved        email: 'i@izs.me',
+869 silly resolved        url: 'http://blog.izs.me/' },
+869 silly resolved     license: 'BSD',
+869 silly resolved     readme: '# sigmund\n\nQuick and dirty signatures for Objects.\n\nThis is like a much faster `deepEquals` comparison, which returns a\nstring key suitable for caches and the like.\n\n## Usage\n\n```javascript\nfunction doSomething (someObj) {\n  var key = sigmund(someObj, maxDepth) // max depth defaults to 10\n  var cached = cache.get(key)\n  if (cached) return cached)\n\n  var result = expensiveCalculation(someObj)\n  cache.set(key, result)\n  return result\n}\n```\n\nThe resulting key will be as unique and reproducible as calling\n`JSON.stringify` or `util.inspect` on the object, but is much faster.\nIn order to achieve this speed, some differences are glossed over.\nFor example, the object `{0:\'foo\'}` will be treated identically to the\narray `[\'foo\']`.\n\nAlso, just as there is no way to summon the soul from the scribblings\nof a cocain-addled psychoanalyst, there is no way to revive the object\nfrom the signature string that sigmund gives you.  In fact, it\'s\nbarely even readable.\n\nAs with `sys.inspect` and `JSON.stringify`, larger objects will\nproduce larger signature strings.\n\nBecause sigmund is a bit less strict than the more thorough\nalternatives, the strings will be shorter, and also there is a\nslightly higher chance for collisions.  For example, these objects\nhave the same signature:\n\n    var obj1 = {a:\'b\',c:/def/,g:[\'h\',\'i\',{j:\'\',k:\'l\'}]}\n    var obj2 = {a:\'b\',c:\'/def/\',g:[\'h\',\'i\',\'{jkl\']}\n\nLike a good Freudian, sigmund is most effective when you already have\nsome understanding of what you\'re looking for.  It can help you help\nyourself, but you must be willing to do some work as well.\n\nCycles are handled, and cyclical objects are silently omitted (though\nthe key is included in the signature output.)\n\nThe second argument is the maximum depth, which defaults to 10,\nbecause that is the maximum object traversal depth covered by most\ninsurance carriers.\n',
+869 silly resolved     _id: 'sigmund@1.0.0',
+869 silly resolved     dist:
+869 silly resolved      { shasum: '66a2b3a749ae8b5fb89efd4fcc01dc94fbe02296',
+869 silly resolved        tarball: 'http://registry.npmjs.org/sigmund/-/sigmund-1.0.0.tgz' },
+869 silly resolved     _npmVersion: '1.1.48',
+869 silly resolved     _npmUser: { name: 'isaacs', email: 'i@izs.me' },
+869 silly resolved     maintainers: [ [Object] ],
+869 silly resolved     _shasum: '66a2b3a749ae8b5fb89efd4fcc01dc94fbe02296',
+869 silly resolved     _from: 'sigmund@~1.0.0',
+869 silly resolved     _resolved: 'https://registry.npmjs.org/sigmund/-/sigmund-1.0.0.tgz',
+869 silly resolved     bugs: { url: 'https://github.com/isaacs/sigmund/issues' },
+869 silly resolved     homepage: 'https://github.com/isaacs/sigmund' } ]
+870 info install lru-cache@2.5.0 into /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/minimatch
+871 info install sigmund@1.0.0 into /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/minimatch
+872 info installOne lru-cache@2.5.0
+873 info installOne sigmund@1.0.0
+874 verbose node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/lru-cache unbuild
+875 verbose node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/sigmund unbuild
+876 verbose tar unpack /Users/drye/.npm/lru-cache/2.5.0/package.tgz
+877 silly lockFile dde18101-minimatch-node-modules-lru-cache tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/lru-cache
+878 verbose lock tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/lru-cache /Users/drye/.npm/dde18101-minimatch-node-modules-lru-cache.lock
+879 silly lockFile 923ba3be--npm-lru-cache-2-5-0-package-tgz tar:///Users/drye/.npm/lru-cache/2.5.0/package.tgz
+880 verbose lock tar:///Users/drye/.npm/lru-cache/2.5.0/package.tgz /Users/drye/.npm/923ba3be--npm-lru-cache-2-5-0-package-tgz.lock
+881 verbose tar unpack /Users/drye/.npm/sigmund/1.0.0/package.tgz
+882 silly lockFile 41b5c131-s-minimatch-node-modules-sigmund tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/sigmund
+883 verbose lock tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/sigmund /Users/drye/.npm/41b5c131-s-minimatch-node-modules-sigmund.lock
+884 silly lockFile 66bc1dee-ye-npm-sigmund-1-0-0-package-tgz tar:///Users/drye/.npm/sigmund/1.0.0/package.tgz
+885 verbose lock tar:///Users/drye/.npm/sigmund/1.0.0/package.tgz /Users/drye/.npm/66bc1dee-ye-npm-sigmund-1-0-0-package-tgz.lock
+886 silly gunzTarPerm modes [ '755', '644' ]
+887 silly gunzTarPerm modes [ '755', '644' ]
+888 silly gunzTarPerm extractEntry package.json
+889 silly gunzTarPerm extractEntry package.json
+890 silly gunzTarPerm extractEntry .npmignore
+891 silly gunzTarPerm extractEntry README.md
+892 silly gunzTarPerm extractEntry README.md
+893 silly gunzTarPerm extractEntry LICENSE
+894 silly gunzTarPerm extractEntry LICENSE
+895 silly gunzTarPerm extractEntry CONTRIBUTORS
+896 silly gunzTarPerm extractEntry bench.js
+897 silly gunzTarPerm extractEntry sigmund.js
+898 silly gunzTarPerm extractEntry lib/lru-cache.js
+899 silly gunzTarPerm extractEntry test/basic.js
+900 silly gunzTarPerm extractEntry test/foreach.js
+901 silly gunzTarPerm extractEntry test/memory-leak.js
+902 silly gunzTarPerm extractEntry test/basic.js
+903 silly lockFile 41b5c131-s-minimatch-node-modules-sigmund tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/sigmund
+904 silly lockFile 41b5c131-s-minimatch-node-modules-sigmund tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/sigmund
+905 silly lockFile 66bc1dee-ye-npm-sigmund-1-0-0-package-tgz tar:///Users/drye/.npm/sigmund/1.0.0/package.tgz
+906 silly lockFile 66bc1dee-ye-npm-sigmund-1-0-0-package-tgz tar:///Users/drye/.npm/sigmund/1.0.0/package.tgz
+907 info preinstall sigmund@1.0.0
+908 verbose readDependencies using package.json deps
+909 verbose readDependencies using package.json deps
+910 silly resolved []
+911 verbose about to build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/sigmund
+912 info build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/sigmund
+913 verbose linkStuff [ false,
+913 verbose linkStuff   false,
+913 verbose linkStuff   false,
+913 verbose linkStuff   '/Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules' ]
+914 info linkStuff sigmund@1.0.0
+915 verbose linkBins sigmund@1.0.0
+916 verbose linkMans sigmund@1.0.0
+917 verbose rebuildBundles sigmund@1.0.0
+918 info install sigmund@1.0.0
+919 info postinstall sigmund@1.0.0
+920 silly lockFile dde18101-minimatch-node-modules-lru-cache tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/lru-cache
+921 silly lockFile dde18101-minimatch-node-modules-lru-cache tar:///Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/lru-cache
+922 silly lockFile 923ba3be--npm-lru-cache-2-5-0-package-tgz tar:///Users/drye/.npm/lru-cache/2.5.0/package.tgz
+923 silly lockFile 923ba3be--npm-lru-cache-2-5-0-package-tgz tar:///Users/drye/.npm/lru-cache/2.5.0/package.tgz
+924 info preinstall lru-cache@2.5.0
+925 verbose readDependencies using package.json deps
+926 verbose readDependencies using package.json deps
+927 silly resolved []
+928 verbose about to build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/lru-cache
+929 info build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/lru-cache
+930 verbose linkStuff [ false,
+930 verbose linkStuff   false,
+930 verbose linkStuff   false,
+930 verbose linkStuff   '/Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules' ]
+931 info linkStuff lru-cache@2.5.0
+932 verbose linkBins lru-cache@2.5.0
+933 verbose linkMans lru-cache@2.5.0
+934 verbose rebuildBundles lru-cache@2.5.0
+935 info install lru-cache@2.5.0
+936 info postinstall lru-cache@2.5.0
+937 verbose about to build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/minimatch
+938 info build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules/minimatch
+939 verbose linkStuff [ false,
+939 verbose linkStuff   false,
+939 verbose linkStuff   false,
+939 verbose linkStuff   '/Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob/node_modules' ]
+940 info linkStuff minimatch@0.3.0
+941 verbose linkBins minimatch@0.3.0
+942 verbose linkMans minimatch@0.3.0
+943 verbose rebuildBundles minimatch@0.3.0
+944 verbose rebuildBundles [ 'lru-cache', 'sigmund' ]
+945 info install minimatch@0.3.0
+946 info postinstall minimatch@0.3.0
+947 verbose about to build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob
+948 info build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules/glob
+949 verbose linkStuff [ false,
+949 verbose linkStuff   false,
+949 verbose linkStuff   false,
+949 verbose linkStuff   '/Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync/node_modules' ]
+950 info linkStuff glob@3.2.11
+951 verbose linkBins glob@3.2.11
+952 verbose linkMans glob@3.2.11
+953 verbose rebuildBundles glob@3.2.11
+954 verbose rebuildBundles [ 'inherits', 'minimatch' ]
+955 info install glob@3.2.11
+956 info postinstall glob@3.2.11
+957 verbose about to build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync
+958 info build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules/findup-sync
+959 verbose linkStuff [ false,
+959 verbose linkStuff   false,
+959 verbose linkStuff   false,
+959 verbose linkStuff   '/Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins/node_modules' ]
+960 info linkStuff findup-sync@0.1.3
+961 verbose linkBins findup-sync@0.1.3
+962 verbose linkMans findup-sync@0.1.3
+963 verbose rebuildBundles findup-sync@0.1.3
+964 verbose rebuildBundles [ 'glob', 'lodash' ]
+965 info install findup-sync@0.1.3
+966 info postinstall findup-sync@0.1.3
+967 verbose about to build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins
+968 info build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp-load-plugins
+969 verbose linkStuff [ false,
+969 verbose linkStuff   false,
+969 verbose linkStuff   false,
+969 verbose linkStuff   '/Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules' ]
+970 info linkStuff gulp-load-plugins@0.5.3
+971 verbose linkBins gulp-load-plugins@0.5.3
+972 verbose linkMans gulp-load-plugins@0.5.3
+973 verbose rebuildBundles gulp-load-plugins@0.5.3
+974 verbose rebuildBundles [ 'findup-sync', 'multimatch' ]
+975 info install gulp-load-plugins@0.5.3
+976 info postinstall gulp-load-plugins@0.5.3
+977 info build /Users/drye/Development/Crossroads/Milacron/crds-angular
+978 verbose linkStuff [ false,
+978 verbose linkStuff   false,
+978 verbose linkStuff   false,
+978 verbose linkStuff   '/Users/drye/Development/Crossroads/Milacron' ]
+979 info linkStuff crds-angular@0.0.0
+980 verbose linkBins crds-angular@0.0.0
+981 verbose linkMans crds-angular@0.0.0
+982 verbose rebuildBundles crds-angular@0.0.0
+983 verbose rebuildBundles [ '.bin', 'gulp', 'gulp-load-plugins', 'yargs' ]
+984 verbose rebuild bundle /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp
+985 info build /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/gulp
+986 info preinstall gulp@3.8.10
+987 verbose linkStuff [ false,
+987 verbose linkStuff   false,
+987 verbose linkStuff   false,
+987 verbose linkStuff   '/Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules' ]
+988 info linkStuff gulp@3.8.10
+989 verbose linkBins gulp@3.8.10
+990 verbose link bins [ { gulp: './bin/gulp.js' },
+990 verbose link bins   '/Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/.bin',
+990 verbose link bins   false ]
+991 verbose linkMans gulp@3.8.10
+992 verbose rebuildBundles gulp@3.8.10
+993 verbose rebuildBundles [ '.bin',
+993 verbose rebuildBundles   'archy',
+993 verbose rebuildBundles   'chalk',
+993 verbose rebuildBundles   'deprecated',
+993 verbose rebuildBundles   'gulp-util',
+993 verbose rebuildBundles   'interpret',
+993 verbose rebuildBundles   'liftoff',
+993 verbose rebuildBundles   'minimist',
+993 verbose rebuildBundles   'orchestrator',
+993 verbose rebuildBundles   'pretty-hrtime',
+993 verbose rebuildBundles   'semver',
+993 verbose rebuildBundles   'tildify',
+993 verbose rebuildBundles   'v8flags',
+993 verbose rebuildBundles   'vinyl-fs' ]
+994 error Error: EACCES, unlink '/Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/.bin/gulp'
+994 error  { [Error: EACCES, unlink '/Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/.bin/gulp']
+994 error   errno: 3,
+994 error   code: 'EACCES',
+994 error   path: '/Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/.bin/gulp' }
+995 error Please try running this command again as root/Administrator.
+996 error System Darwin 14.0.0
+997 error command "node" "/usr/local/bin/npm" "install"
+998 error cwd /Users/drye/Development/Crossroads/Milacron/crds-angular
+999 error node -v v0.10.32
+1000 error npm -v 1.4.28
+1001 error path /Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/.bin/gulp
+1002 error code EACCES
+1003 error errno 3
+1004 error stack Error: EACCES, unlink '/Users/drye/Development/Crossroads/Milacron/crds-angular/node_modules/.bin/gulp'
+1005 verbose exit [ 3, true ]

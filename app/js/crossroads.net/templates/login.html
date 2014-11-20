@@ -1,0 +1,29 @@
+<div class="navbar--login__container">
+  <div class="dd_menu">
+    <div class="primary">
+      <form id="nav_login" role="form" ng-submit="login()">
+        <div class="form-group">
+          <div class="navbar--login__input" ng-class="{'has-error': loginError}">
+            <input class="form-control" type="text" name="userName" id="username_nav" placeholder="Email" autocomplete="off" autocapitalize="off" ng-model="user.username" autofocus>
+          </div>
+          <div class="navbar--login__input" ng-class="{'has-error': loginError}">
+            <input class="form-control" autocomplete="off" type="password" name="password" id="password_nav" placeholder="Password" autocomplete="off" autocapitalize="off" ng-model="user.password">
+            <a class="nav-icon__container" href="/forgotpassword" tabindex="-1">
+              <svg viewBox="0 0 32 32" class="icon icon-question-circle icon-subtle">
+                <use xlink:href="/icons/cr.svg#question-circle"></use>
+              </svg>
+            </a>
+          </div>
+          <div>
+            <div class="text-danger alert alert-danger" ng-if="loginError" role="alert" ><strong>{{loginError[0]}}</strong> {{loginError[1]}}</div>
+          </div>
+          <input type="submit" name="submit_nav" value="{{ processing || 'Login' }}" ng-class="{disabled: processing }" id="submit_nav" class="col-xs-12 btn btn-primary push-half-bottom">
+          <div class="soft-half-bottom" style="font-size: smaller;">
+            <input type="checkbox" name="remember" id="remember_nav" ng-model="checked" ng-init="checked=true">
+            <label class="remember">Stay Logged In</label>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
