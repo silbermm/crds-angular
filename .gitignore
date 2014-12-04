@@ -1,1 +1,5 @@
 packages/
+crds-angular/bin/
+crds-angular/obj/
+crds-angular.test/bin/
+crds-angular.test/obj/
