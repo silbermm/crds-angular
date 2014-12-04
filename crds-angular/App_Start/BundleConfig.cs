@@ -28,7 +28,7 @@ namespace crds_angular
                       "~/Content/site.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/angular")
-              .IncludeDirectory("~/app", "*.js", true));
+              .IncludeDirectory("~/app/", "*.js", true));
         }
     }
 }
