@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Helpers;
 
-namespace ProjectTemplate.Services
+namespace crds_angular.Services
 {
     public class Product
     {

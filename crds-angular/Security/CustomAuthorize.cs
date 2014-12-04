@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 
-namespace ProjectTemplate.Security
+namespace crds_angular.Security
 {
     public class CustomAuthorize : AuthorizeAttribute
     {
