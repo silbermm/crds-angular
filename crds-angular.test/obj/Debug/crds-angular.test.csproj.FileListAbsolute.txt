@@ -1,0 +1,7 @@
+C:\Users\silbermm\Projects\crossroads\crds-angular\crds-angular.test\bin\Debug\crds-angular.test.dll
+C:\Users\silbermm\Projects\crossroads\crds-angular\crds-angular.test\bin\Debug\crds-angular.test.pdb
+C:\Users\silbermm\Projects\crossroads\crds-angular\crds-angular.test\bin\Debug\nunit.framework.dll
+C:\Users\silbermm\Projects\crossroads\crds-angular\crds-angular.test\bin\Debug\nunit.framework.xml
+C:\Users\silbermm\Projects\crossroads\crds-angular\crds-angular.test\obj\Debug\crds-angular.test.csprojResolveAssemblyReference.cache
+C:\Users\silbermm\Projects\crossroads\crds-angular\crds-angular.test\obj\Debug\crds-angular.test.dll
+C:\Users\silbermm\Projects\crossroads\crds-angular\crds-angular.test\obj\Debug\crds-angular.test.pdb
