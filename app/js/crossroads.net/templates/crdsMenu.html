@@ -1,0 +1,140 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 menu__container">
+      <div class="nav" role="navigation">
+        <div class="side-nav col-xs-11 hidden-md hidden-lg hidden-xl" ng-class="{show: menu.isMobileShowing}">
+          <div class="side-nav__search input-group">
+            <input type="text" class="form-control" placeholder="Search">
+            <span class="input-group-addon"><svg viewBox="0 0 32 32" class="icon icon-search3"><use xlink:href="/icons/cr.svg#search3"></use></svg></span>
+          </div>
+          <ul class="side-nav__dropdown list-unstyled" id="mobile-menu">
+            <li class="side-nav__dropdown--item" ng-repeat="heading in menus.headings">
+              <a class="heading__title" ng-click="menu.toggleMenuItem($index)">
+                {{heading.title}}
+                <i class="icon--small icon--dropdown icon--right"></i>
+              </a>
+              <ul class="side-nav__subnav list-unstyled" collapse="menu.collapsed($index)">
+                <li class="side-nav__subnav__item-container col-xs-12">
+          		    <div ng-if="$first">
+                    <div ng-if="!securityContext.loggedIn">
+                			<auth-form></auth-form>
+                    </div>
+          		    </div>
+                </li>
+            		<div ng-if="securityContext.loggedIn">
+                  <li class="side-nav__subnav--item" role="presentation" ng-repeat="item in heading.mobile_items">
+                    <a class="heading__item" role="menuitem" tabindex="-1" href="{{item.link}}">{{item.title}}</a>
+                  </li>
+            		</div>
+            		<div ng-if="$index != 0">
+                  <ul class="side-nav__subnav list-unstyled" collapse="collapsed($index)">
+                    <div ng-if="$first">
+                      <div ng-if="!securityContext.loggedIn">
+                        <li class="side-nav__subnav--item">
+                          <auth-form></auth-form>
+                        </li>
+                      </div>
+            		    </div>
+	                  <div ng-if="securityContext.loggedIn">
+                      <li class="side-nav__subnav--item" role="presentation" ng-repeat="item in heading.mobile_items">
+                        <a class="heading__item" role="menuitem" tabindex="-1" href="{{item.link}}">{{item.title}}</a>
+                      </li>
+    		            </div>
+                    <div ng-if="$index != 0">
+                      <li class="side-nav__subnav--item" role="presentation" ng-repeat="item in heading.mobile_items">
+                        <a class="heading__item" role="menuitem" tabindex="-1" href="{{item.link}}">{{item.title}}</a>
+                      </li>
+                		</div>
+                  </ul>
+                </div>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="navbar-header" ng-class="{show: menu.isMobileShowing}">
+          <button type="button" class="nav__side--toggle navbar-left hidden-md hidden-lg hidden-xl" ng-click="toggleMenuDisplay()" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand logo" href="/"><img src="//crossroads-media.s3.amazonaws.com/images/logo.svg" alt="crossroads" /></a>
+          <ul class="navbar--login list-unstyled">
+      	    <span id="current-user" class="hidden-md hidden-sm hidden-xs">{{securityContext.user.FirstName}}</span>
+      	    <li ng-show="securityContext.loggedIn" class="hidden-md hidden-sm hidden-xs">
+      	      <a href="#" ng-click="logout()">Sign Out</a>
+      	    </li>
+            <li class="hidden-xs hidden-sm" data-toggle="dropdown" ng-hide="securityContext.loggedIn">
+              <button class="btn btn-primary" id="form-toggle" ng-click="toggleDesktopLogin()">
+                <span>Login</span>
+              </button>
+            </li>
+            <li>
+              <ul class="navbar--login__dropdown list-unstyled col-md-3 soft-top soft-sides" role="menu" aria-labelledby="dropdownMenu1" ng-class="{toggleOpen: loginShow}">
+                <li role="presentation">
+                  <auth-form></auth-form>
+                </li>
+              </ul>
+            </li>
+            <li class="navbar--login__mobile visible-xs visible-sm" ng-if="!securityContext.loggedIn">
+              <a class="btn navbar--login__button" href="/myprofile">
+                <i class="icon icon--no_margin icon--user"></i>
+              </a>
+            </li>
+            <li class="navbar--login__mobile visible-xs visible-sm" ng-if="securityContext.loggedIn">
+              <a class="btn navbar--login__button" href="#" ng-click="logout()">
+                <i class="icon icon--no_margin icon--user__filled"></i>
+              </a>
+      	    </li>
+          </ul>
+        </div>
+        <div class="hidden-xs hidden-sm">
+          <ul class="navbar__dropdown list-unstyled">
+            <li class="navbar__dropdown--item" ng-repeat="heading in menus.headings">
+              <a class="navbar--heading__title" data-toggle="dropdown" href="#">
+                {{heading.title}}
+              </a>
+              <ul class="navbar__dropdown--subnav list-unstyled col-sm-12" role="menu" aria-labeledby="dropdownMenu1" ng-if="$first">
+                <li ng-repeat="headingItem in heading.items" ng-class="headingItem.items && 'navbar__dropdown--subnav--item' || 'navbar__dropdown--subnav__list--item'" role="presentation">
+                  <div ng-if="$first">
+                    <div ng-if="!securityContext.loggedIn">
+                      <auth-form></auth-form>
+                    </div>
+                    <div ng-if="securityContext.loggedIn">
+                      <a ng-class="{heading__item: headingItem.items}"  role="menuitem" tabindex="-1" href="{{headingItem.link}}">{{headingItem.title}}</a>
+                      <ul class="navbar__dropdown--subnav__list list-unstyled col-sm-12" role="menu" aria-labeledby="dropdownMenu1" ng-repeat="item in headingItem.items">
+                        <li class="navbar__dropdown--subnav__list--item" role="presentation">
+                          <a role="menuitem" tabindex="-1" href="{{item.link}}">{{item.title}}</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div ng-if="$index != 0">
+                    <a ng-class="{heading__item: headingItem.items}"  role="menuitem" tabindex="-1" href="{{headingItem.link}}">{{headingItem.title}}</a>
+                    <ul class="navbar__dropdown--subnav__list list-unstyled col-sm-12" role="menu" aria-labeledby="dropdownMenu1" ng-repeat="item in headingItem.items">
+                      <li class="navbar__dropdown--subnav__list--item" role="presentation">
+                        <a role="menuitem" tabindex="-1" href="{{item.link}}">{{item.title}}</a>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+              </ul>
+
+              <ul class="navbar__dropdown--subnav list-unstyled col-sm-12" role="menu" aria-labeledby="dropdownMenu1" ng-if="$index != 0">
+                <li ng-repeat="headingItem in heading.items" ng-class="headingItem.items && 'navbar__dropdown--subnav--item' || 'navbar__dropdown--subnav__list--item'" role="presentation">
+                  <a ng-class="{heading__item: headingItem.items}"  role="menuitem" tabindex="-1" href="{{headingItem.link}}">{{headingItem.title}}</a>
+                  <ul class="navbar__dropdown--subnav__list list-unstyled col-sm-12" role="menu" aria-labeledby="dropdownMenu1" ng-repeat="item in headingItem.items">
+                    <li class="navbar__dropdown--subnav__list--item" role="presentation">
+                      <a role="menuitem" tabindex="-1" href="{{item.link}}">{{item.title}}</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

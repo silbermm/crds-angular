@@ -1,0 +1,3 @@
+baseurl: http://localhost:3000
+feedurl: http://localhost:3000
+disqus_shortname: milacroncrossroadsnet
