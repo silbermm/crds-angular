@@ -1,0 +1,16 @@
+﻿home<br />{{main}}<br />
+
+<form name="loginForm" ng-controller="LoginCtrl" ng-submit="login(credentials)" novalidate>
+
+    <label for="username">Username:</label>
+    <input id="username" type="Text" ng-model="credentials.username" />
+
+    <label for="password">Password:</label>
+    <input id="password" type="password" ng-model="credentials.password" />
+
+    <button type="submit">Login</button>
+    
+    <span>isAuthorized: {{credentials.username}}</span>
+
+</form>
+<span>isAuthorized: {{credentials.username}}</span>
