@@ -10,8 +10,14 @@ namespace crds_angular.Controllers.API
 {
     public class ProfileController : ApiController
     {
+        [ResponseType(typeof(Person))]
+        public IHttpActionResult Get(int pageId, int recordId)
+        {
+            return this.BadRequest();
+        }
+
         [ResponseType(typeof (Person))]
-        public IHttpActionResult Get()
+        public IHttpActionResult Get(int pageId)
         {
 
             var contact = crds_angular.Services.MinistryPlatform.GetMyProfile();
