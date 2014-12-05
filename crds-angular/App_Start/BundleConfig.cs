@@ -32,8 +32,13 @@ namespace crds_angular
               .Include("~/Scripts/angular-animate.js")
               .Include("~/Scripts/angular-messages.js")
               .Include("~/Scripts/angular-resourse.js")
-              .Include("~/Scripts/angular-ui-router.js")
-              .IncludeDirectory("~/app/", "*.js", true));
+              .Include("~/Scripts/angular-ui-router.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/modules").IncludeDirectory("~/app/modules","*.js",true));
+
+            bundles.Add(new ScriptBundle("~/bundles/crossroads.net").IncludeDirectory("~/app/crossroads.net", "*.js", true));
+
+            
         }
     }
 }

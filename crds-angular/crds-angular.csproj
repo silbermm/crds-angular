@@ -201,16 +201,22 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\crossroads.net\controller\appController.js" />
+    <Content Include="app\crossroads.net\home\home.html" />
+    <Content Include="app\crossroads.net\home\home_controller.js" />
+    <Content Include="app\crossroads.net\login\login-dialog.html" />
+    <Content Include="app\crossroads.net\login\login.html" />
+    <Content Include="app\crossroads.net\login\login_controller.js" />
+    <Content Include="app\crossroads.net\login\login_directive.js" />
     <Content Include="app\crossroads.net\module.js" />
-    <Content Include="app\crossroads.net\templates\home.html" />
-    <Content Include="app\crossroads.net\templates\login-dialog.html" />
-    <Content Include="app\crossroads.net\templates\login.html" />
-    <Content Include="app\crossroads.net\templates\profile.html" />
-    <Content Include="app\profile\controllers\profileController.js" />
-    <Content Include="app\profile\directives\crdsProfileDirective.js" />
-    <Content Include="app\profile\module.js" />
-    <Content Include="app\profile\services\profile.js" />
-    <Content Include="app\profile\templates\profile_personal.html" />
+    <Content Include="app\modules\profile\profile_directive.js" />
+    <Content Include="app\modules\profile\module.js" />
+    <Content Include="app\crossroads.net\profile\profile.html" />
+    <Content Include="app\modules\profile\profile_service.js" />
+    <Content Include="app\modules\profile\profile_controller.js" />
+    <Content Include="app\modules\profile\profile_personal.html" />
+    <Content Include="app\crossroads.net\routes.js" />
+    <Content Include="app\crossroads.net\services\auth_service.js" />
+    <Content Include="app\crossroads.net\services\session_service.js" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />

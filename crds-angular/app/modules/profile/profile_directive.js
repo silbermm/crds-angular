@@ -4,7 +4,9 @@ angular.module('crdsProfile').directive('crdsProfile', [
         return {
             restrict: 'EA',
             //template: 'Name: {{customer.name}}<br /> Street: {{customer.street}}<br />data: {{data}}'
-            templateUrl: '/app/profile/templates/profile_personal.html'
+            contoller: 'crdsProfileCtrl',
+            controllerAs: 'profile',
+            templateUrl: '/app/modules/profile/profile_personal.html'
         };
     }
 ]);
