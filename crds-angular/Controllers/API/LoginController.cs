@@ -24,7 +24,7 @@ namespace crds_angular.Controllers.API
             var d = new Dictionary<string, object>
             {
                 {"id", 27},
-                {"username", "tmaddox"},
+                {"username", cred.username},
                 {"Email", "tony.maddox@ingagepartners.com"},
                 {"FirstName", "Tony"},
                 {"LastName", "Maddox"},
