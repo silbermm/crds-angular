@@ -1,3 +1,5 @@
-﻿/// <reference path="../../Scripts/angular-route.js" />
-var crdsProfile = angular.module('crdsProfile', []);
+﻿angular.module('crdsProfile', ['ui.router'])
+.config('$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
 
+})
+;

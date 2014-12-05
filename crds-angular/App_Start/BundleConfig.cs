@@ -28,6 +28,10 @@ namespace crds_angular
                       "~/Content/site.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/angular")
+              .Include("~/Scripts/angular.js")
+              .Include("~/Scripts/angular-animate.js")
+              .Include("~/Scripts/angular-messages.js")
+              .Include("~/Scripts/angular-resourse.js")
               .IncludeDirectory("~/app/", "*.js", true));
         }
     }

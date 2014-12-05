@@ -11,10 +11,10 @@ namespace crds_angular.Controllers.API
     public class ProfileController : ApiController
     {
         [ResponseType(typeof (Person))]
-        public IHttpActionResult Get(int id)
+        public IHttpActionResult Get()
         {
 
-            var contact = crds_angular.Services.MinistryPlatform.GetContact();
+            var contact = crds_angular.Services.MinistryPlatform.GetMyProfile();
             var json = DecodeJson(contact);
 
             var p = new Person
@@ -35,26 +35,6 @@ namespace crds_angular.Controllers.API
             };
 
             return this.Ok(p);
-
-            //Mapper.CreateMap<Models.Person, Models.DTO.Person>();
-            //return Mapper.Map<Models.DTO.Person>(p);
-
-            
-            if (id == 1)
-            {
-                return this.NotFound();
-            }
-
-            var d = new Dictionary<string, object>
-            {
-                {"id", 27},
-                {"Email", "tony.maddox@ingagepartners.com"},
-                {"FirstName", "Tony"},
-                {"LastName", "Maddox"},
-                {"ZipCode", "45242"}
-            };
-
-            return this.Ok(contact);
         }
 
         private static dynamic DecodeJson(string json)
@@ -71,7 +51,6 @@ namespace crds_angular.Controllers.API
             //should probably throw error here
             return null;
         }
-
     }
 
     public class Person

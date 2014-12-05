@@ -19,7 +19,7 @@ namespace crds_angular.Services
     {
         private const string TranslationUri = "http://my.crossroads.net/translation/api/getpagerecords/{0}";
 
-        public static string GetContact()
+        public static string GetMyProfile()
         {
             var pageId = 455;
             var url = string.Format(TranslationUri, pageId);

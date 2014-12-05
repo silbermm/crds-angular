@@ -1,4 +1,5 @@
 ﻿angular.module('crdsProfile').factory('Profile', [
+
     '$http', '$q', function ($http, $q) {
         return {
             get: function () {
