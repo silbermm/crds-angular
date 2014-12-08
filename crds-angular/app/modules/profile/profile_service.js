@@ -1,14 +1,5 @@
-﻿angular.module('crdsProfile').factory('Profile', [
+﻿angular.module('crdsProfile').factory('Profile', ['$resource', ProfileService]);
 
-    '$http', '$q', function ($http, $q) {
-        return {
-            get: function () {
-                var deferred = $q.defer();
-                $http.get('/api/profile/5')
-                    .success(deferred.resolve)
-                    .error(deferred.reject);
-                return deferred.promise;
-            }
-        }
-    }
-]);
+function ProfileService($resource){
+    return $resource("/api/profile/:id")
+}
