@@ -49,15 +49,15 @@
 
     </div>
 
-    <div class="row">
-        <div class="col-sm-6" ng-controller="crdsDatePickerCtrl">
+    <div class="row" ng-controller="crdsDatePickerCtrl">
+        <div class="col-sm-6">
             <label class="control-label">Birth Date</label>
-            <p class="input-group">
-                <input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" datepicker-append-to-body="true" ng-model="profile.person.birthDate" is-open="profile.datePickerOpened" datepicker-options="profile.date.dateOptions" ng-required="true" close-text="Close" ng-click="profile.date.open($event)" />
+            <div class="input-group">
+                <input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" datepicker-append-to-body="true" ng-model="profile.person.birthDate" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date,mode)" ng-required="true" close-text="Close" ng-click="open($event)" />
                 <span class="input-group-btn">
-                    <button type="button" class="btn btn-primary" ng-click="profile.date.open($event)"><span class="glyphicon glyphicon-calendar"> </span></button>
+                    <button type="button" class="btn btn-primary" ng-click="open($event)">Add</button>
                 </span>
-            </p>
+            </div>
         </div>
     </div>
 
@@ -86,19 +86,17 @@
         </div>
     </div>
 
-    <!--
-    <div class="row" ng-controller="">
+    <div class="row" ng-controller="crdsDatePickerCtrl">
         <div class="col-sm-6" ng-controller="crdsDatePickerCtrl">
             <label class="control-label">When did you start attending Crossroads?</label></span>
             <p class="input-group">
-                <input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" ng-model="contact.anniversaryDate" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open($event)" />
+                <input type="text" class="form-control" data-datepicker-popup="MM/dd/yyyy" ng-model="profile.person.crossroadsStartDate" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open($event)" />
                 <span class="input-group-btn">
-                    <button type="button" class="btn btn-primary" ng-click="open($event)"><svg viewBox="0 0 32 32" class="icon icon-calendar"><use xlink:href="/icons/cr.svg#calendar"></use></svg></button>
+                    <button type="button" class="btn btn-primary" ng-click="open($event)">Date!</button>
                 </span>
             </p>
         </div>
     </div>
-    -->
 
     <button id="save-personal" ng-click="savePersonal(profile.person)" class="btn btn-primary" data-style="expand-left">
         Save

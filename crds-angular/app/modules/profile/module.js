@@ -1,1 +1,5 @@
-﻿angular.module('crdsProfile', ['ngResource']);
+﻿'use strict';
+(function(){
+    angular.module('crdsProfile', ['ngResource', 'ui.bootstrap']);
+    
+})()
