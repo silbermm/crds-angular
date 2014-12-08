@@ -50,10 +50,10 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-6" ng-controller="crdsDatePickerCtrl">
             <label class="control-label">Birth Date</label>
             <p class="input-group">
-                <input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" datepicker-append-to-body="true" ng-model="profile.person.dateOfBirth" is-open="profile.datePickerOpened" datepicker-options="profile.date.dateOptions" ng-required="true" close-text="Close" ng-click="profile.date.open($event)" />
+                <input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" datepicker-append-to-body="true" ng-model="profile.person.birthDate" is-open="profile.datePickerOpened" datepicker-options="profile.date.dateOptions" ng-required="true" close-text="Close" ng-click="profile.date.open($event)" />
                 <span class="input-group-btn">
                     <button type="button" class="btn btn-primary" ng-click="profile.date.open($event)"><span class="glyphicon glyphicon-calendar"> </span></button>
                 </span>
