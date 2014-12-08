@@ -1,1 +1,1 @@
-﻿angular.module('crdsProfile', []);
+﻿angular.module('crdsProfile', ['ngResource']);

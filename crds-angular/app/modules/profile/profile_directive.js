@@ -1,13 +1,19 @@
-﻿
-angular.module('crdsProfile').directive('crdsProfile', [
-    function() {
-        return {
-            restrict: 'EA',
-            //template: 'Name: {{customer.name}}<br /> Street: {{customer.street}}<br />data: {{data}}'
-            contoller: 'crdsProfileCtrl',
-            controllerAs: 'profile',
-            templateUrl: '/app/modules/profile/profile_personal.html'
-        };
-    }
-]);
-
+﻿angular.module('crdsProfile').directive('crdsProfile', ['$log', crdsProfile]);
+function crdsProfile($log) {
+    return {
+        restrict: 'EA',
+        contoller: 'crdsProfileCtrl as profile',
+        templateUrl: '/app/modules/profile/profile_personal.html',
+        scope: true,
+        link: (function (scope, el, attr) {
+            scope.$watch("person", function (newVal) {
+                if (newVal !== 'undefined') {
+                    $log.debug("person changed!");
+                    $log.debug(newVal);
+                } else {
+                    $log.debug("person is undefined");
+                }
+            });
+        })
+    };
+}
