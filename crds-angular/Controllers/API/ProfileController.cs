@@ -17,6 +17,7 @@ namespace crds_angular.Controllers.API
         }
 
         [ResponseType(typeof (Person))]
+        [Route("api/profile/{pageId}")]
         public IHttpActionResult Get(int pageId)
         {
 
