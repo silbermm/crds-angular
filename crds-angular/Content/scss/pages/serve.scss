@@ -1,0 +1,48 @@
+ .event-group {
+  margin-top: $line-height-computed;
+
+  .list-group-item {
+    @include clearfix;
+    width: 100%;
+
+    .col-sm-2 {
+      @media (min-width: $screen-sm-min) {
+        float: right;
+      }
+    }
+  }
+  .list-group-item-heading {
+    font-weight: normal;
+    font-size: $font-size-base;
+  }
+  .btn {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+
+    @media (min-width: $screen-sm-min) {
+      display: inline-block;
+      width: auto;
+      margin-top: 0px;
+    }
+
+    .icon {
+      margin-left: 3px;
+    }
+  }
+}
+
+.list-group-item-title {
+  background: $gray-lighter;  
+  font-weight: bold;
+}
+
+.serve-signup-form {
+  .checkbox, .radio {
+    margin: 0px;
+  }
+
+  .well {
+    margin-top: $line-height-computed;
+  }
+}

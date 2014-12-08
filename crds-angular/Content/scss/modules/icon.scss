@@ -1,0 +1,136 @@
+%icon {
+  display: inline-block;
+}
+
+.icon {
+  @extend %icon;
+  width: 15px;
+  height: 15px;
+}
+
+.icon-medium {
+  @extend %icon;
+  width: 20px;
+  height: 20px;
+}
+
+.icon-large {
+  @extend %icon;
+  width: 24px;
+  height: 24px;
+}
+
+.icon-xlarge {
+  @extend %icon;
+  width: 32px;
+  height: 32px;
+}
+
+.icon-right {
+  float: right;
+}
+
+.icon-default {
+  fill: $brand-secondary;
+}
+
+.icon-primary {
+  fill: $brand-primary;
+}
+
+.icon-success {
+  fill: $brand-success;
+}
+
+.icon-info {
+  fill: $brand-info;
+}
+
+.icon-warning {
+  fill: $brand-warning;
+}
+
+.icon-danger {
+  fill: $brand-danger;
+}
+
+.icon-subtle {
+  fill: $gray-light;
+  &:hover {
+    fill: $brand-secondary;
+  }
+}
+
+.icon-social-media {
+  fill: $gray-light;
+}
+
+.icon-facebook:hover {
+  fill: #3B5998;
+}
+
+.icon-twitter:hover {
+  fill: #55ACEE;
+}
+
+.icon-mail5:hover {
+  fill: $brand-secondary;
+}
+
+
+/***************************************************************************************
+* Loading Icons
+***************************************************************************************/
+
+@import url("http://fonts.googleapis.com/css?family=Open+Sans:300");
+@import url(http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css);
+
+// Animations
+@keyframes spin {
+    from {transform:rotate(0deg);}
+    to {transform:rotate(360deg);}
+}
+
+.loading {
+  position: relative;
+  width: 100%;
+  min-height: 50px;
+
+  &:after {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    background: transparent;
+    content: url("../icons/crossroads.svg");
+    width: 32px;
+    height: 32px;
+    margin-left: -16px;
+    margin-top: -16px;
+    animation: spin 2400ms linear infinite;
+  }
+}
+
+/***************************************************************************************
+* Example Loading Div
+***************************************************************************************/
+
+.loading-example {
+  min-height: 300px;
+}
+
+/***************************************************************************************
+* SVG Preview Page
+***************************************************************************************/
+
+.snippet-popover {
+  pre {
+    padding: 0px;
+    background: transparent;
+    border: none;
+
+    code {
+      font-size: 12px;
+    }
+  }
+}
