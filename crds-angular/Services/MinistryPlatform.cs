@@ -17,13 +17,25 @@ namespace crds_angular.Services
     }
     public class MinistryPlatform
     {
-        private const string TranslationUri = "http://my.crossroads.net/translation/api/getpagerecords/{0}";
+        private const string TranslationUri = "http://my.crossroads.net/translation/api/";
 
         public static string GetMyProfile()
         {
             var pageId = 455;
-            var url = string.Format(TranslationUri, pageId);
+            var url = string.Format("{0}{1}{2}", TranslationUri, "getpagerecords/", pageId);
 
+            return FetchData(url);
+        }
+
+        public static string GetLookup(int pageId)
+        {
+            var url = string.Format("{0}{1}{2}", TranslationUri, "GetPageLookupRecords/", pageId);
+
+            return FetchData(url);
+        }
+
+        private static string FetchData(string url)
+        {
             using (var client = new HttpClient())
             {
                 //client.BaseAddress = new Uri("url");
@@ -35,7 +47,6 @@ namespace crds_angular.Services
 
                 return result;
             }
-
         }
     }
 }

@@ -184,6 +184,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\API\LoginController.cs" />
+    <Compile Include="Controllers\API\LookupController.cs" />
     <Compile Include="Controllers\API\ProfileController.cs" />
     <Compile Include="Controllers\GatewayController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
