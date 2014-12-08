@@ -1,0 +1,37 @@
+.btn-labeled {
+  //padding-top: 0px;
+  //padding-bottom: 0px;
+  position: relative;
+  padding-right: 52px;
+
+  .btn-label {
+    position: absolute;
+    right: 0px;
+    top: -1px;
+    display: inline-block;
+    padding: 6px 0px;
+    width: 40px;
+    background: rgba(0,0,0,0.15);
+
+    .icon {
+      margin-top: 2px;
+    }
+  }
+}
+
+.btn-gray {
+  color: white;
+  background-color: $gray;
+  border-color: $gray-dark;
+  color: $gray-lighter;
+
+  &:hover {
+    background-color: $brand-primary;
+  }
+}
+
+h2 {
+  .btn {
+    letter-spacing: 0px;
+  }
+}

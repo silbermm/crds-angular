@@ -1,0 +1,11 @@
+.media-list {
+  .col-xs-6:nth-child(6n+1) {
+    clear: left;
+  }
+
+  @media (max-width: 768px) {
+    .col-sm-2:nth-child(2n+1) {
+      clear: left;
+    }
+  }
+}
