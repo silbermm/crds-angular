@@ -11,7 +11,7 @@ namespace crds_angular.Controllers.API
     public class LookupController : ApiController
     {
 
-        [ResponseType(typeof(Dictionary<string, object>))]
+        [ResponseType(typeof(System.Web.Helpers.DynamicJsonArray))]
         [Route("api/lookup/{pageId}")]
         public IHttpActionResult Get(int pageId)
         {
@@ -27,12 +27,8 @@ namespace crds_angular.Controllers.API
             if (obj.GetType() == typeof(System.Web.Helpers.DynamicJsonArray))
             {
                 dynamic[] array = obj;
-                if (array.Length == 1)
-                {
-                    return array[0];
-                }
+                return array;
             }
-            //should probably throw error here
             return null;
         }
     }

@@ -21,15 +21,16 @@ namespace crds_angular.Services
 
         public static string GetMyProfile()
         {
-            var pageId = 455;
-            var url = string.Format("{0}{1}{2}", TranslationUri, "getpagerecords/", pageId);
+            var pageId = 292;
+            var personId = 618590;
+            var url = string.Format("{0}{1}/{2}/{3}", TranslationUri, "getpagerecord", pageId, personId);
 
             return FetchData(url);
         }
 
         public static string GetLookup(int pageId)
         {
-            var url = string.Format("{0}{1}{2}", TranslationUri, "GetPageLookupRecords/", pageId);
+            var url = string.Format("{0}{1}/{2}", TranslationUri, "GetPageLookupRecords", pageId);
 
             return FetchData(url);
         }

@@ -23,7 +23,7 @@ namespace crds_angular.Controllers.API
 
             var contact = crds_angular.Services.MinistryPlatform.GetMyProfile();
             var json = DecodeJson(contact);
-
+            
             var person = new Person
             {
                 Email = json.Email_Address,
@@ -33,10 +33,10 @@ namespace crds_angular.Controllers.API
                 LastName = json.Last_Name,
                 MaidenName = json.Maiden_Name,
                 MobilePhone = json.Mobile_Phone,
-                ServiceProvider = json.Mobile_Carrier,
+                ServiceProvider = json.Mobile_Carrier_Text,
                 BirthDate = json.Date_of_Birth,
-                MaritalStatus = json.Marital_Status,
-                Gender = json.Gender,
+                MaritalStatus = json.Marital_Status_ID_Text,
+                Gender = json.Gender_ID_Text,
                 Employer = json.Employer_Name,
                 CrossroadsStartDate = json.Anniversary_Date
             };
