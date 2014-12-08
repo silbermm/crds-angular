@@ -208,6 +208,7 @@
     <Content Include="app\crossroads.net\login\login_controller.js" />
     <Content Include="app\crossroads.net\login\login_directive.js" />
     <Content Include="app\crossroads.net\module.js" />
+    <Content Include="app\crossroads.net\services\lookup_service.js" />
     <Content Include="app\modules\profile\profile_directive.js" />
     <Content Include="app\modules\profile\module.js" />
     <Content Include="app\crossroads.net\profile\profile.html" />
