@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E8D9D7
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinistryPlatform.Translation", "MinistryPlatform.Translation\MinistryPlatform.Translation.csproj", "{A9376B81-DFAD-487A-A4DF-6C71A2B3C5F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +30,10 @@ Global
 		{368FB290-D986-4CB5-8A29-F3BB9E41030C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{368FB290-D986-4CB5-8A29-F3BB9E41030C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{368FB290-D986-4CB5-8A29-F3BB9E41030C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9376B81-DFAD-487A-A4DF-6C71A2B3C5F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9376B81-DFAD-487A-A4DF-6C71A2B3C5F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9376B81-DFAD-487A-A4DF-6C71A2B3C5F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9376B81-DFAD-487A-A4DF-6C71A2B3C5F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

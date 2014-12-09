@@ -21,7 +21,7 @@ namespace crds_angular.Controllers.API
         public IHttpActionResult Get(int pageId)
         {
 
-            var contact = crds_angular.Services.MinistryPlatform.GetMyProfile();
+            var contact = crds_angular.Services.TranslationService.GetMyProfile();
             var json = DecodeJson(contact);
             
             var person = new Person

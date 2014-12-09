@@ -200,7 +200,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\CustomAuthorize.cs" />
-    <Compile Include="Services\MinistryPlatform.cs" />
+    <Compile Include="Services\TranslationService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1233,6 +1233,12 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MinistryPlatform.Translation\MinistryPlatform.Translation.csproj">
+      <Project>{a9376b81-dfad-487a-a4df-6c71a2b3c5f2}</Project>
+      <Name>MinistryPlatform.Translation</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
