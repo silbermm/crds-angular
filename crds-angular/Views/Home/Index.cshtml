@@ -54,12 +54,33 @@
         <div id="container" hide-on-mobile-menu>
             <div class="container">
                 <div class="row">
-                    <ul>
-                        <li><a ui-sref="home">home</a></li>
-                        <li><a ui-sref="login">login</a></li>
-                        <li><a ui-sref="profile">profile</a></li>
-                    </ul>
-                    <div ui-view></div>
+
+                    <div class="col-md-12">
+
+                        <div class="home" id="home">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <h1 class="home-header brand-font">Welcome</h1>
+                                    <h2 class="tagline subheading">
+                                        Whatever your thoughts on church, whatever<br class="hidden-xs"> your beliefs about God, you are welcome here.
+                                    </h2>
+                                    <a href="/explore" class="btn btn-default btn-lg">Get To Know Us</a>
+                                </div>
+                                <div class="col-sm-4">
+                                    <img class="img-responsive hidden-xs coffee-cup" src="//crossroads-media.s3.amazonaws.com/images/coffee_cup.jpg" alt="Coffee Cup">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <ul>
+                            <li><a ui-sref="home">home</a></li>
+                            <li><a ui-sref="login">login</a></li>
+                            <li><a ui-sref="profile">profile</a></li>
+                        </ul>
+                        <div ui-view></div>
+
+                    </div>
                 </div>
                     
             </div>  <!-- /container -->
