@@ -3,7 +3,7 @@
 
     authService.login = function (credentials) {
         return $http
-            .post('/api/login', credentials)
+            .post('api/login', credentials)
             .then(function (res) {
                 Session.create(res.data.id, res.data.username);
                 return res.data.username;
