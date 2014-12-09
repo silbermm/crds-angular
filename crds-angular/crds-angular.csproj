@@ -254,6 +254,7 @@
     <Content Include="Content\img\coffee_cup.jpg" />
     <Content Include="Content\img\question.svg" />
     <Content Include="Content\img\question_grey.svg" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="sass\.gitignore" />
     <Content Include="sass\helpers\variable-overrides.css">
       <DependentUpon>variable-overrides.scss</DependentUpon>
@@ -268,7 +269,6 @@
       <DependentUpon>main.css</DependentUpon>
     </Content>
     <Content Include="favicon.ico" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\angular-animate.js" />
     <Content Include="Scripts\angular-animate.min.js" />
@@ -356,6 +356,12 @@
     <Content Include="sass\pages\serve.scss" />
     <Content Include="sass\pages\styleguide.scss" />
     <Content Include="sass\pages\thefeed.scss" />
+    <Content Include="sass\main.css.map">
+      <DependentUpon>main.css</DependentUpon>
+    </Content>
+    <Content Include="sass\helpers\variable-overrides.css.map">
+      <DependentUpon>variable-overrides.css</DependentUpon>
+    </Content>
     <Content Include="sass\bootstrap\mixins\_vendor-prefixes.scss" />
     <Content Include="sass\bootstrap\mixins\_text-overflow.scss" />
     <Content Include="sass\bootstrap\mixins\_text-emphasis.scss" />
@@ -429,12 +435,9 @@
     <Content Include="sass\_bootstrap-mincer.scss" />
     <Content Include="sass\_bootstrap-compass.scss" />
     <Content Include="sass\_bootstrap.scss" />
-    <Content Include="sass\main.css.map">
-      <DependentUpon>main.css</DependentUpon>
-    </Content>
-    <Content Include="sass\helpers\variable-overrides.css.map">
-      <DependentUpon>variable-overrides.css</DependentUpon>
-    </Content>
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-dj.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-er.js" />
@@ -1228,9 +1231,6 @@
     <Folder Include="Views\Gateway\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
   </ItemGroup>
