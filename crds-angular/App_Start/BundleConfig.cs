@@ -36,7 +36,7 @@ namespace crds_angular
 
             bundles.Add(new ScriptBundle("~/bundles/crossroads.net").IncludeDirectory("~/app/crossroads.net", "*.js", true));
 
-            
+            BundleTable.EnableOptimizations = false;
         }
     }
 }
