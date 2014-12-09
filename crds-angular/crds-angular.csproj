@@ -212,13 +212,13 @@
     <Content Include="app\crossroads.net\login\login_controller.js" />
     <Content Include="app\crossroads.net\login\login_directive.js" />
     <Content Include="app\crossroads.net\module.js" />
+    <Content Include="app\modules\profile\profile_controller.js" />
     <Content Include="app\modules\profile\profile_date_picker.js" />
     <Content Include="app\modules\profile\profile_lookup_service.js" />
     <Content Include="app\modules\profile\profile_directive.js" />
     <Content Include="app\modules\profile\module.js" />
     <Content Include="app\crossroads.net\profile\profile.html" />
     <Content Include="app\modules\profile\profile_service.js" />
-    <Content Include="app\modules\profile\profile_controller.js" />
     <Content Include="app\modules\profile\profile_personal.html" />
     <Content Include="app\crossroads.net\routes.js" />
     <Content Include="app\crossroads.net\services\auth_service.js" />
