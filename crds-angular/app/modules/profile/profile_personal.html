@@ -66,7 +66,7 @@
             <label for="marital_status">Maritial Status {{ profile.person.maritalStatus }}</label>
             <select class="form-control col-sm-12"
                     ng-model="profile.person.maritalStatus"
-                    ng-options="status.dp_RecordName for status in profile.maritalStatuses track by status.db_RecordName"
+                    ng-options="status.dp_RecordName for status in profile.maritalStatuses track by status.dp_RecordName"
                     >
             </select>
         </div>
