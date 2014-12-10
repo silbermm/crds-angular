@@ -1,8 +1,4 @@
-﻿
-
-
-
-angular.module('crossroads').controller('ProfileCtrl', [
+﻿angular.module('crossroads').controller('ProfileCtrl', [
     '$scope', function($scope) {
         $scope.main = 'ProfileCtrl';
     }

@@ -1,4 +1,4 @@
-﻿angular.module('crossroads').directive('loginDialog', function (AUTH_EVENTS) {
+﻿angular.module('crossroads').directive('loginDialog', ["AUTH_EVENTS", function (AUTH_EVENTS) {
     return {
         restrict: 'A',
         template: '<div ng-if="visible" ng-include="\'/app/crossroads.net/login/login-dialog.html\'">',
@@ -13,4 +13,4 @@
             scope.$on(AUTH_EVENTS.sessionTimeout, showDialog);
         }
     };
-});
+}]);

@@ -15,7 +15,7 @@ namespace crds_angular.Controllers
     {
         public ActionResult Index()
         { 
-            return View();
+            return View("");
         }        
     }
 }
