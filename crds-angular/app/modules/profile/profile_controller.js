@@ -8,5 +8,6 @@
         this.maritalStatuses = Lookup.MaritalStatus.query();
         this.serviceProviders = Lookup.ServiceProviders.query();
         this.countries = Lookup.Countries.query();
+        this.crossroadsLocations = Lookup.CrossroadsLocations.query();
     }
 })()

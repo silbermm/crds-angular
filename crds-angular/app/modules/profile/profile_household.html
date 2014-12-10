@@ -65,7 +65,9 @@
         <hr class="col-sm-12" />
         <div id="Site" class="form-group col-sm-6">
             <label for="provider">Crossroads Location</label>
-            <select class="form-control col-sm-12" ng-model="household.congregationId" ng-options="congregation.dpRecordid as congregation.congregationName for congregation in congregations"></select>
+            <select class="form-control col-sm-12" ng-model="profile.person.household.congregationId" ng-options="congregation.dp_RecordName for congregation in profile.crossroadsLocations track by congregation.dp_RecordName">
+                <option value=""> I do not attend Crossroads </option>
+            </select>
         </div>
     </fieldset>
     <button id="save-household" ng-click="saveHousehold()" class="btn btn-primary" data-style="expand-left">
