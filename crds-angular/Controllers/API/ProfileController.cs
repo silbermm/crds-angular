@@ -22,24 +22,46 @@ namespace crds_angular.Controllers.API
         {
 
             var contact = crds_angular.Services.TranslationService.GetMyProfile();
-            var json = DecodeJson(contact);
-            
+            var contactJson = DecodeJson(contact);
+
+            var householdId = contactJson.Household_ID;
+            var household = crds_angular.Services.TranslationService.GetMyHousehold(householdId);
+            var houseJson = DecodeJson(household);
+
+            var house = new Household
+            {
+                HouseholdPosition = "",
+                Street = "",
+                Street2 = "",
+                City = "",
+                State = "",
+                Zip = "",
+                County = "",
+                Country = houseJson.Country,
+                HomePhone = houseJson.HomePhone,
+                CrossroadsLocation = ""
+            };
+
             var person = new Person
             {
-                Email = json.Email_Address,
-                NickName = json.Nickname,
-                FirstName = json.First_Name,
-                MiddleName = json.Middle_Name,
-                LastName = json.Last_Name,
-                MaidenName = json.Maiden_Name,
-                MobilePhone = json.Mobile_Phone,
-                ServiceProvider = json.Mobile_Carrier_Text,
-                BirthDate = json.Date_of_Birth,
-                MaritalStatus = json.Marital_Status_ID_Text,
-                Gender = json.Gender_ID_Text,
-                Employer = json.Employer_Name,
-                CrossroadsStartDate = json.Anniversary_Date
+                Email = contactJson.Email_Address,
+                NickName = contactJson.Nickname,
+                FirstName = contactJson.First_Name,
+                MiddleName = contactJson.Middle_Name,
+                LastName = contactJson.Last_Name,
+                MaidenName = contactJson.Maiden_Name,
+                MobilePhone = contactJson.Mobile_Phone,
+                ServiceProvider = contactJson.Mobile_Carrier_Text,
+                BirthDate = contactJson.Date_of_Birth,
+                MaritalStatus = contactJson.Marital_Status_ID_Text,
+                Gender = contactJson.Gender_ID_Text,
+                Employer = contactJson.Employer_Name,
+                CrossroadsStartDate = contactJson.Anniversary_Date,
+                Household = house
             };
+
+            
+
 
             return this.Ok(person);
         }
@@ -75,6 +97,21 @@ namespace crds_angular.Controllers.API
         public string Gender { get; set; }
         public string Employer { get; set; }
         public string CrossroadsStartDate { get; set; }
+        public Household Household { get; set; }
+    }
+
+    public class Household
+    {
+        public string HouseholdPosition { get; set; }
+        public string Street { get; set; }
+        public string Street2 { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string Zip { get; set; }
+        public string County { get; set; }
+        public string Country { get; set; }
+        public string HomePhone { get; set; }
+        public string CrossroadsLocation { get; set; }
     }
     
 }

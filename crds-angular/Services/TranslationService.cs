@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-//using System.Threading.Tasks;
 using MinistryPlatform.Translation;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -28,24 +27,16 @@ namespace crds_angular.Services
             return data.ToString();             
         }
 
+        public static string GetMyHousehold(int householdId)
+        {
+            var pageId = 465;
+            var data = MinistryPlatform.Translation.Services.MinistryPlatform.GetMyPageRecord(pageId, householdId);
+            return data.ToString();            
+        }
+
         public static string GetLookup(int pageId)
         {
             return MinistryPlatform.Translation.Services.MinistryPlatform.GetMyPageRecords(pageId).ToString();
-        }
-
-        private static string FetchData(string url)
-        {
-            using (var client = new HttpClient())
-            {
-                //client.BaseAddress = new Uri("url");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                var response = client.GetAsync(url);
-                var result = response.Result.Content.ReadAsStringAsync().Result;
-
-                return result;
-            }
         }
     }
 }
