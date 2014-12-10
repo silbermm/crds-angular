@@ -22,7 +22,7 @@ namespace crds_angular.Services
             return data;             
         }
 
-        public JArray GetLookup(int pageId)
+        public static JArray GetLookup(int pageId)
         {
             var data = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecords(pageId);
             return data;

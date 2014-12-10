@@ -1,4 +1,5 @@
-﻿using System;
+﻿using crds_angular.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -16,7 +17,7 @@ namespace crds_angular.Controllers.API
         public IHttpActionResult Get(int pageId)
         {
             var contact = TranslationService.GetLookup(pageId);
-            var json = DecodeJson(contact);
+            var json = DecodeJson(contact.ToString());
 
             return this.Ok(json);
         }

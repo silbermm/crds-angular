@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using MinistryPlatform.Translation.Helpers;
 using Newtonsoft.Json.Linq;
+using System;
 
 namespace MinistryPlatform.Translation.Services
 {
@@ -31,18 +32,24 @@ namespace MinistryPlatform.Translation.Services
         public static JArray GetRecords(int id)
         {
             var userToken = GetUserToken("tmaddox", "crds1234");
-
-            var platformServiceClient = new PlatformService.PlatformServiceClient();
-            PlatformService.SelectQueryResult result;
-
-            using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
+            try
             {
-                System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + userToken);
-                result = platformServiceClient.GetPageRecords(id, "", "", 0);
+                var platformServiceClient = new PlatformService.PlatformServiceClient();
+                PlatformService.SelectQueryResult result;
 
+                using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
+                {
+                    System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + userToken);
+                    result = platformServiceClient.GetPageRecords(id, "", "", 0);
+
+                }
+                return MPFormatConversion.MPFormatToJson(result);
             }
-            return MPFormatConversion.MPFormatToJson(result);
-
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.ToString());
+            }
+            return new JArray();
             //var httpClient = new HttpClient();
             //var url = string.Format("{0}/GetPageRecords?pageId={1}", PlatformServiceUri, id);
 

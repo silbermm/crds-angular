@@ -22,7 +22,7 @@ namespace crds_angular.Controllers.API
         {
 
             var contact = crds_angular.Services.TranslationService.GetMyProfile();
-            var json = DecodeJson(contact);
+            var json = DecodeJson(contact.ToString());
             
             var person = new Person
             {
