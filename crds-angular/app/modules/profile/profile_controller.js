@@ -1,4 +1,5 @@
-﻿(function () {
+﻿'use strict';
+(function () {
     angular.module("crdsProfile").controller('crdsProfileCtrl', ['Profile', 'Lookup', ProfileController]);
 
     function ProfileController(Profile, Lookup) {

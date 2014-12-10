@@ -24,19 +24,18 @@ namespace crds_angular
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/angular")
+            bundles.Add(new Bundle("~/bundles/angular")
               .Include("~/Scripts/angular.js")
               .Include("~/Scripts/angular-animate.js")
               .Include("~/Scripts/angular-messages.js")
               .Include("~/Scripts/angular-resource.js")
               .Include("~/Scripts/angular-ui-router.js")
               .Include("~/Scripts/angular-ui/ui-bootstrap-tpls.js"));
-
-            bundles.Add(new ScriptBundle("~/bundles/modules").IncludeDirectory("~/app/modules","*.js",true));
-
-            bundles.Add(new ScriptBundle("~/bundles/crossroads.net").IncludeDirectory("~/app/crossroads.net", "*.js", true));
+            bundles.Add(new Bundle("~/bundles/modules").IncludeDirectory("~/app/modules","*.js",true));
+            bundles.Add(new Bundle("~/bundles/crossroads.net").IncludeDirectory("~/app/crossroads.net", "*.js", true));
 
             BundleTable.EnableOptimizations = false;
+           
         }
     }
 }

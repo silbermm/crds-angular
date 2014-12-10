@@ -22,7 +22,7 @@ namespace crds_angular.Services
 
         public static string GetMyProfile()
         {
-            var pageId = 292;
+            var pageId = 455;
             var personId = 618590;
             var data = MinistryPlatform.Translation.Services.MinistryPlatform.GetMyPageRecord(pageId, personId);
             return data.ToString();             
