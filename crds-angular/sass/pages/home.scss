@@ -1,0 +1,22 @@
+/***************************************************************************************
+* Home
+***************************************************************************************/
+
+.home {
+  margin-top: 40px;
+  margin-bottom: 60px;
+}
+.home .home-header {
+  color: $cr-blue;
+}
+.home .tagline {
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+.home .tagline small {
+  font-weight: 300;
+}
+
+.home .coffee-cup {
+  max-width: 300px;
+}
