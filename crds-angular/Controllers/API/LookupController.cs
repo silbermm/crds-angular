@@ -15,7 +15,7 @@ namespace crds_angular.Controllers.API
         [Route("api/lookup/{pageId}")]
         public IHttpActionResult Get(int pageId)
         {
-            var contact = crds_angular.Services.TranslationService.GetLookup(pageId);
+            var contact = TranslationService.GetLookup(pageId);
             var json = DecodeJson(contact);
 
             return this.Ok(json);

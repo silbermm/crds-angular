@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 //using System.Threading.Tasks;
-using MinistryPlatform.Translation;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Helpers;
 
 namespace crds_angular.Services
 {
@@ -16,21 +9,23 @@ namespace crds_angular.Services
     {
         
     }
+
     public class TranslationService
     {
         private const string TranslationUri = "http://my.crossroads.net/translation/api/";
 
-        public static string GetMyProfile()
+        public static JArray GetMyProfile()
         {
             var pageId = 455;
             var personId = 618590;
-            var data = MinistryPlatform.Translation.Services.MinistryPlatform.GetMyPageRecord(pageId, personId);
-            return data.ToString();             
+            var data = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecord(pageId, personId);
+            return data;             
         }
 
-        public static string GetLookup(int pageId)
+        public JArray GetLookup(int pageId)
         {
-            return MinistryPlatform.Translation.Services.MinistryPlatform.GetMyPageRecords(pageId).ToString();
+            var data = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecords(pageId);
+            return data;
         }
 
         private static string FetchData(string url)
