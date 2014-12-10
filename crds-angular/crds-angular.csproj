@@ -211,7 +211,6 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\crossroads.net\controller\appController.js" />
     <Content Include="app\crossroads.net\home\home.html" />
     <Content Include="app\crossroads.net\home\home_controller.js" />
     <Content Include="app\crossroads.net\login\login-dialog.html" />
@@ -1238,6 +1237,7 @@
     <Content Include="Scripts\version.json" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="app\crossroads.net\shared\" />
     <Folder Include="app\modules\services\" />
     <Folder Include="App_Data\" />
     <Folder Include="Content\static\" />

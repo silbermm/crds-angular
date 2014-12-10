@@ -30,9 +30,6 @@
         $scope.currentUser = null;
         $scope.isAuthorized = AuthService.isAuthorized;
         $scope.isLoginPage = false;
-
-        console.log('isLoginPage: ' + $scope.isLoginPage);
-
         $scope.setCurrentUser = function (user) {
             $scope.currentUser = user;
         };
