@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 (function () {
 angular.module("crossroads").config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     
@@ -29,5 +29,5 @@ angular.module("crossroads").config(['$stateProvider', '$urlRouterProvider', fun
 
     $urlRouterProvider.otherwise("/home");
 
-}])
+  }])
 })()

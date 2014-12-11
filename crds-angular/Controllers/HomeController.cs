@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -7,7 +7,6 @@ using System.Web.Mvc;
 using System.Web.Security;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
-using crds_angular.Models;
 
 namespace crds_angular.Controllers
 {
@@ -15,7 +14,7 @@ namespace crds_angular.Controllers
     {
         public ActionResult Index()
         { 
-            return View("");
+            return View("Index");
         }        
     }
 }
