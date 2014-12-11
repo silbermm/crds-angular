@@ -8,20 +8,19 @@
                 .post('api/login', credentials)
                 .then(function (res) {
                     Session.create(res.data.id, res.data.username);
-                    return res.data.username;
+                    return {"id": res.data.id, "username": res.data.username};
                 });
         };
 
         authService.isAuthenticated = function () {
-            return !!Session.userId;
+            return !!Session.authenticated();
         };
 
         authService.isAuthorized = function (authorizedRoles) {
             if (!angular.isArray(authorizedRoles)) {
                 authorizedRoles = [authorizedRoles];
             }
-            return (authService.isAuthenticated() &&
-                authorizedRoles.indexOf(Session.userRole) !== -1);
+            return (authService.isAuthenticated() && authorizedRoles.indexOf(Session.getUserRole()) !== -1);
         };
 
         return authService;

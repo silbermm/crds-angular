@@ -5,12 +5,25 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using MinistryPlatform.Translation.Services;
-
 namespace MinistryPlatform.Translation.Test
 {
     [TestFixture]
     public class TranslationTests
     {
+        [Test]
+        public void ShouldFailLogin()
+        {
+            var obj = AuthenticationService.authenticate("", "");
+            Assert.IsNull(obj, "When not authenticated this should be null");
+        }
+
+        [Test]
+        public void ShouldLogin()
+        {
+            var obj = AuthenticationService.authenticate("tmaddox", "crds1234");
+            Assert.IsNotNull(obj, "When authenticated this should be a JObject");
+        }
+
         //[Test]
         //public void ShouldGetPageRecords()
         //{

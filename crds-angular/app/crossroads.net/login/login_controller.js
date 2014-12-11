@@ -1,16 +1,20 @@
-﻿angular.module('crossroads').controller('LoginCtrl', ['$scope', '$rootScope', 'AUTH_EVENTS', 'AuthService', function ($scope, $rootScope, AUTH_EVENTS, AuthService) {
-    $scope.main = "LoginCtrl";
+﻿'use strict';
+(function () {
+    angular.module('crossroads').controller('LoginCtrl', ['$rootScope', 'AUTH_EVENTS', 'AuthService', LoginController]);
 
-    $scope.credentials = { username: '', password: '' };
-    $scope.isLoginPage = true;
-    console.log('isLoginPage: ' + $scope.isLoginPage);
-
-    $scope.login = function (credentials) {
-        AuthService.login(credentials).then(function (user) {
-            $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-            $scope.setCurrentUser(user);
-        }, function () {
-            $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
-        });
-    };
-}]);
+    function LoginController($rootScope, AUTH_EVENTS, AuthService) {
+        this.main = "LoginCtrl";
+       
+        this.credentials = { username: '', password: '' };
+        this.isLoginPage = true;
+        
+        this.login = function (credentials) {
+            AuthService.login(credentials).then(function (user) {
+                $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+                $scope.setCurrentUser(user);
+            }, function () {
+                $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+            });
+        };
+    }
+})()

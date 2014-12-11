@@ -1,6 +1,6 @@
 ﻿'use strict';
 (function () {
-    angular.module('crossroads', ['crdsProfile', 'ui.router'])
+    angular.module('crossroads', ['crdsProfile', 'ui.router', 'ngCookies'])
     .run(function ($rootScope, AUTH_EVENTS, AuthService) {
         $rootScope.$on('$stateChangeStart', function(event, next) {        
             var requireLogin = next.data.require_login;

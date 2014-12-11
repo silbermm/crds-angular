@@ -28,6 +28,7 @@ namespace crds_angular
               .Include("~/Scripts/angular.js")
               .Include("~/Scripts/angular-animate.js")
               .Include("~/Scripts/angular-messages.js")
+              .Include("~/Scripts/angular-cookies.js")
               .Include("~/Scripts/angular-resource.js")
               .Include("~/Scripts/angular-ui-router.js")
               .Include("~/Scripts/angular-ui/ui-bootstrap-tpls.js"));

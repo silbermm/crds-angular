@@ -1,4 +1,6 @@
-﻿using System;
+﻿using crds_angular.Models;
+using crds_angular.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -10,29 +12,17 @@ namespace crds_angular.Controllers.API
 {
     public class LoginController : ApiController
     {
-        [ResponseType(typeof(Dictionary<string, object>))]
+        [ResponseType(typeof(Person))]
         public IHttpActionResult Post([FromBody]Credentials cred)
         {
-            //var response = new LoginResponse();
-
-            //if (claims != null)
-            //    if (id == 1)
-            //    {
-            //        return this.NotFound();
-            //    }
-
-            var d = new Dictionary<string, object>
+            // try to login 
+            var token = TranslationService.Login(cred.username, cred.password);
+            if (token == null)
             {
-                {"id", 27},
-                {"username", cred.username},
-                {"Email", "tony.maddox@ingagepartners.com"},
-                {"FirstName", "Tony"},
-                {"LastName", "Maddox"},
-                {"ZipCode", "45242"}
-            };
-
-
-            return this.Ok(d);
+                return this.Unauthorized();
+            } 
+            var p = PersonService.getLoggedInUserProfile(token);
+            return this.Ok(p);
         }
     }
 
