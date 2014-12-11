@@ -1238,6 +1238,7 @@
     <Content Include="Scripts\version.json" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="app\crossroads.net\shared\" />
     <Folder Include="app\modules\services\" />
     <Folder Include="App_Data\" />
     <Folder Include="Content\static\" />
@@ -1252,6 +1253,9 @@
       <Project>{cc650d93-731c-4613-b358-fb4c76237455}</Project>
       <Name>MinistryPlatform.Translation</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
