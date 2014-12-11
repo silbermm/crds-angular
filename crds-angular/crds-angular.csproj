@@ -211,6 +211,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\crossroads.net\controller\appController.js" />
     <Content Include="app\crossroads.net\home\home.html" />
     <Content Include="app\crossroads.net\home\home_controller.js" />
     <Content Include="app\crossroads.net\login\login-dialog.html" />
@@ -218,12 +219,16 @@
     <Content Include="app\crossroads.net\login\login_controller.js" />
     <Content Include="app\crossroads.net\login\login_directive.js" />
     <Content Include="app\crossroads.net\module.js" />
+    <Content Include="app\modules\profile\profile-household-directive.js" />
+    <Content Include="app\modules\profile\profile.html" />
     <Content Include="app\modules\profile\profile_controller.js" />
     <Content Include="app\modules\profile\profile_date_picker.js" />
+    <Content Include="app\modules\profile\profile_household.html" />
     <Content Include="app\modules\profile\profile_lookup_service.js" />
     <Content Include="app\modules\profile\profile_directive.js" />
     <Content Include="app\modules\profile\module.js" />
     <Content Include="app\crossroads.net\profile\profile.html" />
+    <Content Include="app\modules\profile\profile_personal_directive.js" />
     <Content Include="app\modules\profile\profile_service.js" />
     <Content Include="app\modules\profile\profile_personal.html" />
     <Content Include="app\crossroads.net\routes.js" />
@@ -1249,9 +1254,12 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MinistryPlatform.Translation\MinistryPlatform.Translation.csproj">
-      <Project>{a9376b81-dfad-487a-a4df-6c71a2b3c5f2}</Project>
+      <Project>{cc650d93-731c-4613-b358-fb4c76237455}</Project>
       <Name>MinistryPlatform.Translation</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

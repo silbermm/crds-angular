@@ -37,8 +37,6 @@ namespace crds_angular.test.controllers
             Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<Person>), result);
             OkNegotiatedContentResult<Person> o = (OkNegotiatedContentResult<Person>) result;
             Assert.IsInstanceOf(typeof(Person), o.Content);
-            
-
         }
     }
 }

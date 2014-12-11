@@ -1,7 +1,12 @@
 using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-//using System.Threading.Tasks;
+using MinistryPlatform.Translation;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Helpers;
+
 
 namespace crds_angular.Services
 {
@@ -14,33 +19,32 @@ namespace crds_angular.Services
     {
         private const string TranslationUri = "http://my.crossroads.net/translation/api/";
 
-        public static JArray GetMyProfile()
+        public static string GetMyProfile()
         {
             var pageId = 455;
             var personId = 618590;
             var data = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecord(pageId, personId);
-            return data;             
+            return data.ToString();             
         }
 
-        public static JArray GetLookup(int pageId)
+        public static string GetMyHousehold(int householdId)
+        {
+            var pageId = 465;
+            var data = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecord(pageId, householdId);
+            return data.ToString();            
+        }
+
+        public static string GetLookup(int pageId)
         {
             var data = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecords(pageId);
-            return data;
+            return data.ToString();
         }
 
-        private static string FetchData(string url)
+        public static string GetMyAddress(int addressId)
         {
-            using (var client = new HttpClient())
-            {
-                //client.BaseAddress = new Uri("url");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                var response = client.GetAsync(url);
-                var result = response.Result.Content.ReadAsStringAsync().Result;
-
-                return result;
-            }
+            var pageId = 468;
+            var data = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecord(pageId, addressId);
+            return data.ToString();
         }
     }
 }
