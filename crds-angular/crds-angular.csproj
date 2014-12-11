@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -211,7 +211,6 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\crossroads.net\controller\appController.js" />
     <Content Include="app\crossroads.net\home\home.html" />
     <Content Include="app\crossroads.net\home\home_controller.js" />
     <Content Include="app\crossroads.net\login\login-dialog.html" />
@@ -1242,6 +1241,7 @@
     <Content Include="Scripts\version.json" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="app\crossroads.net\controller\" />
     <Folder Include="app\crossroads.net\shared\" />
     <Folder Include="app\modules\services\" />
     <Folder Include="App_Data\" />
