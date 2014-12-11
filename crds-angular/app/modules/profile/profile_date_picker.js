@@ -1,8 +1,6 @@
 ﻿'use strict';
 (function(){
-    angular.module('crdsProfile')
-
-    .controller('crdsDatePickerCtrl', function ($scope) {
+    angular.module('crdsProfile').controller('crdsDatePickerCtrl', function ($scope) {
 
         $scope.today = function () {
             $scope.dt = new Date();
