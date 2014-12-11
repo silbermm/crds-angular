@@ -46,7 +46,7 @@ namespace crds_angular.Controllers.API
                 City = addressJson.City,
                 State = addressJson["State/Region"],
                 Zip = addressJson.Postal_Code,
-                Country = addressJson.Country_Code,
+                Country = addressJson.Foreign_Country,
                 County = addressJson.County
             };
 
