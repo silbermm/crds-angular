@@ -23,7 +23,7 @@ namespace crds_angular.test.controllers
         public static void IndexPage()
         {
             var homeController = new crds_angular.Controllers.HomeController();
-            var result = homeController.Index();
+            System.Web.Mvc.ActionResult result = homeController.Index();
 
             result.AssertViewRendered().ForView("Index");
             

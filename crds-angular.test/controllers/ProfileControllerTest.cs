@@ -3,7 +3,8 @@ using NUnit.Framework;
 using crds_angular.Controllers;
 using MvcContrib.TestHelper;
 using crds_angular.Controllers.API;
-using System.Web.Http;
+using System.Web.Http.Results;
+
 
 namespace crds_angular.test.controllers
 {
@@ -17,17 +18,25 @@ namespace crds_angular.test.controllers
         public void SetUp()
         {
             profileController = new ProfileController();
-            profileController.Request = new System.Net.Http.HttpRequestMessage();
-            profileController.Configuration = new HttpConfiguration();
         }
 
         [Test]
         public void GetWithTwoParamsShouldFail()
         {
-            IHttpActionResult result = profileController.Get(0, 0);
-            var msg = profileController.Content.ReadAsAsync<string>();
+            var result = profileController.Get(0, 0);
+            System.Console.WriteLine(result); 
+            Assert.IsInstanceOf(typeof(BadRequestResult), result);
 
-            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
+        }
+
+        [Test]
+        public void GetWithOneParamShouldPass()
+        {
+            var result = profileController.Get(455);
+            System.Console.WriteLine(result.ToString());
+            Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<Person>), result);
+            OkNegotiatedContentResult<Person> o = (OkNegotiatedContentResult<Person>) result;
+            Assert.IsInstanceOf(typeof(Person), o.Content);
             
 
         }
