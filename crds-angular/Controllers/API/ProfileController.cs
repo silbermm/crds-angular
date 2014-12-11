@@ -20,7 +20,6 @@ namespace crds_angular.Controllers.API
         {
 
             var contact = crds_angular.Services.TranslationService.GetMyProfile();
-<<<<<<< HEAD
             var contactJson = DecodeJson(contact);
 
             var householdId = contactJson.Household_ID;
@@ -49,10 +48,6 @@ namespace crds_angular.Controllers.API
                 County = addressJson.County
             };
 
-=======
-            var json = DecodeJson(contact.ToString());
-            
->>>>>>> 4e2d621c72ee6bf0133baa1468960c6119ffe5ac
             var person = new Person
             {
                 Email = contactJson.Email_Address,
