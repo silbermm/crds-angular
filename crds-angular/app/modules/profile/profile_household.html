@@ -20,38 +20,38 @@
     <fieldset class="row">
         <div class="form-group col-sm-6">
             <label for="street">Street</label>
-            <input ng-model="address.addressLine1" type="text" class="form-control" id="street" placeholder="Enter street address">
+            <input ng-model="profile.person.Address.Street" type="text" class="form-control" id="street" placeholder="Enter street address">
         </div>
 
         <div class="form-group col-sm-6">
             <label for="street2">Street 2</label>
-            <input ng-model="address.addressLine2" type="text" class="form-control" id="street2" placeholder="Enter street address (cont.)">
+            <input ng-model="profile.person.Address.Street2" type="text" class="form-control" id="street2" placeholder="Enter street address (cont.)">
         </div>
 
         <div class="form-group col-sm-6">
             <label for="city">City</label>
-            <input ng-model="address.city" type="text" class="form-control" id="city" placeholder="Enter city">
+            <input ng-model="profile.person.Address.City" type="text" class="form-control" id="city" placeholder="Enter city">
         </div>
 
         <div class="form-group col-sm-6">
             <label for="state">State</label>
-            <select ng-model="address.state__Region" ng-options="state.stateAbbreviation as state.stateAbbreviation for state in states" class="form-control col-sm-12"></select>
+            <select class="form-control col-sm-12" ng-model="profile.person.Address.State" ng-options="state.dp_RecordName for state in profile.states track by state.dp_RecordName"></select>
         </div>
 
         <div class="form-group col-sm-6">
             <label for="zip">Zip</label>
-            <input ng-model="address.postalCode" type="text" class="form-control" id="zip" placeholder="Enter zip code">
+            <input ng-model="profile.person.Address.Zip" type="text" class="form-control" id="zip" placeholder="Enter zip code">
         </div>
 
         <div class="form-group col-sm-6">
             <label for="county">County</label>
-            <input ng-model="address.county" type="text" class="form-control" id="county" placeholder="Enter county">
+            <input ng-model="profile.person.Address.County" type="text" class="form-control" id="county" placeholder="Enter county">
         </div>
 
         <div class="form-group col-sm-6">
             <label for="country">Country</label>
             <select class="form-control col-sm-12"
-                    ng-model="profile.person.household.country"
+                    ng-model="profile.person.Address.Country"
                     ng-options="country.dp_RecordName for country in profile.countries track by country.dp_RecordName"></select>
         </div>
 
@@ -59,14 +59,14 @@
 
         <div class="form-group col-sm-6">
             <label for="homephone">Home Phone</label>
-            <input ng-model="household.homePhone" type="text" class="form-control" id="homephone" placeholder="Enter home phone">
+            <input ng-model="profile.person.Household.HomePhone" type="text" class="form-control" id="homephone" placeholder="Enter home phone">
         </div>
 
         <hr class="col-sm-12" />
         <div id="Site" class="form-group col-sm-6">
             <label for="provider">Crossroads Location</label>
-            <select class="form-control col-sm-12" ng-model="profile.person.household.congregationId" ng-options="congregation.dp_RecordName for congregation in profile.crossroadsLocations track by congregation.dp_RecordName">
-                <option value=""> I do not attend Crossroads </option>
+            <select class="form-control col-sm-12" ng-model="profile.person.Household.CrossroadsLocation" ng-options="congregation.dp_RecordID as congregation.dp_RecordName for congregation in profile.crossroadsLocations track by congregation.dp_RecordID">
+                <option value=""> -- Please select a Location -- </option>
             </select>
         </div>
     </fieldset>

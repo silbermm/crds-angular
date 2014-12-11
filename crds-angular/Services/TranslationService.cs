@@ -38,5 +38,12 @@ namespace crds_angular.Services
         {
             return MinistryPlatform.Translation.Services.MinistryPlatform.GetMyPageRecords(pageId).ToString();
         }
+
+        public static string GetMyAddress(int addressId)
+        {
+            var pageId = 468;
+            var data = MinistryPlatform.Translation.Services.MinistryPlatform.GetMyPageRecord(pageId, addressId);
+            return data.ToString();
+        }
     }
 }

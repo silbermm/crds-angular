@@ -28,18 +28,26 @@ namespace crds_angular.Controllers.API
             var household = crds_angular.Services.TranslationService.GetMyHousehold(householdId);
             var houseJson = DecodeJson(household);
 
+            var addressId = houseJson.Address_ID;
+            var addr = crds_angular.Services.TranslationService.GetMyAddress(addressId);
+            var addressJson = DecodeJson(addr);
+
             var house = new Household
             {
-                HouseholdPosition = "",
-                Street = "",
-                Street2 = "",
-                City = "",
-                State = "",
-                Zip = "",
-                County = "",
-                Country = houseJson.Country,
-                HomePhone = houseJson.HomePhone,
-                CrossroadsLocation = ""
+                HouseholdPosition = contactJson.Household_Position_ID_Text,
+                HomePhone = houseJson.Home_Phone,
+                CrossroadsLocation = houseJson.Congregation_ID
+            };
+
+            var address = new Address
+            {
+                Street = addressJson.Address_Line_1,
+                Street2 = addressJson.Address_Line_2,
+                City = addressJson.City,
+                State = addressJson["State/Region"],
+                Zip = addressJson.Postal_Code,
+                Country = addressJson.Country_Code,
+                County = addressJson.County
             };
 
             var person = new Person
@@ -57,11 +65,9 @@ namespace crds_angular.Controllers.API
                 Gender = contactJson.Gender_ID_Text,
                 Employer = contactJson.Employer_Name,
                 CrossroadsStartDate = contactJson.Anniversary_Date,
-                Household = house
+                Household = house,
+                Address = address
             };
-
-            
-
 
             return this.Ok(person);
         }
@@ -98,11 +104,18 @@ namespace crds_angular.Controllers.API
         public string Employer { get; set; }
         public string CrossroadsStartDate { get; set; }
         public Household Household { get; set; }
+        public Address Address { get; set; }
     }
 
     public class Household
     {
         public string HouseholdPosition { get; set; }
+        public string HomePhone { get; set; }
+        public int CrossroadsLocation { get; set; }
+    }
+
+    public class Address
+    {
         public string Street { get; set; }
         public string Street2 { get; set; }
         public string City { get; set; }
@@ -110,8 +123,6 @@ namespace crds_angular.Controllers.API
         public string Zip { get; set; }
         public string County { get; set; }
         public string Country { get; set; }
-        public string HomePhone { get; set; }
-        public string CrossroadsLocation { get; set; }
     }
     
 }
