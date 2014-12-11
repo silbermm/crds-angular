@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="76bd65db-4a7e-404f-b077-8ce6e804f32c" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="03da7764-2d9b-4e7a-b9de-7f61e39877b5" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -19,15 +19,14 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="https://my.crossroads.net/ministryplatformapi/PlatformService.svc" Protocol="http" SourceId="1" />
+    <MetadataSource Address="https://my.crossroads.net/ministryplatformapi/PlatformService.svc?wsdl" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="PlatformService.wsdl" MetadataType="Wsdl" ID="2fd8930b-d4fe-4dfb-baf2-c5928f9e4695" SourceId="1" SourceUrl="https://my.crossroads.net/ministryplatformapi/PlatformService.svc?wsdl" />
-    <MetadataFile FileName="PlatformService.disco" MetadataType="Disco" ID="c25b491e-53f0-4373-8026-6aef519b766c" SourceId="1" SourceUrl="https://my.crossroads.net/ministryplatformapi/PlatformService.svc?disco" />
-    <MetadataFile FileName="PlatformService.xsd" MetadataType="Schema" ID="94bbacaf-ecc4-4be2-a408-7a29054fd5bd" SourceId="1" SourceUrl="https://my.crossroads.net/ministryplatformapi/PlatformService.svc?xsd=xsd0" />
-    <MetadataFile FileName="PlatformService1.xsd" MetadataType="Schema" ID="fba55997-733f-459e-b7dc-dfd6e0eb919a" SourceId="1" SourceUrl="https://my.crossroads.net/ministryplatformapi/PlatformService.svc?xsd=xsd1" />
-    <MetadataFile FileName="PlatformService2.xsd" MetadataType="Schema" ID="981a4894-cb1c-4a90-915c-6b22d8165825" SourceId="1" SourceUrl="https://my.crossroads.net/ministryplatformapi/PlatformService.svc?xsd=xsd2" />
-    <MetadataFile FileName="PlatformService3.xsd" MetadataType="Schema" ID="5bbac76c-f104-4180-b7de-258c91e34222" SourceId="1" SourceUrl="https://my.crossroads.net/ministryplatformapi/PlatformService.svc?xsd=xsd3" />
+    <MetadataFile FileName="PlatformService.wsdl" MetadataType="Wsdl" ID="9c4eab2d-fd73-4bfc-b282-58dfaf68f8bb" SourceId="1" SourceUrl="https://my.crossroads.net/ministryplatformapi/PlatformService.svc?wsdl" />
+    <MetadataFile FileName="PlatformService.xsd" MetadataType="Schema" ID="e5c4c016-ad75-4c6d-8540-9ac043d90e1a" SourceId="1" SourceUrl="https://my.crossroads.net/ministryplatformapi/PlatformService.svc?xsd=xsd0" />
+    <MetadataFile FileName="PlatformService1.xsd" MetadataType="Schema" ID="1593152a-92d9-43d9-8040-4d5e0b5b88dd" SourceId="1" SourceUrl="https://my.crossroads.net/ministryplatformapi/PlatformService.svc?xsd=xsd1" />
+    <MetadataFile FileName="PlatformService2.xsd" MetadataType="Schema" ID="5c35147f-7d89-4706-a710-5f698f67c1cc" SourceId="1" SourceUrl="https://my.crossroads.net/ministryplatformapi/PlatformService.svc?xsd=xsd2" />
+    <MetadataFile FileName="PlatformService3.xsd" MetadataType="Schema" ID="7bd7e0bf-3b5e-4276-84a0-3da6c4828c5a" SourceId="1" SourceUrl="https://my.crossroads.net/ministryplatformapi/PlatformService.svc?xsd=xsd3" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

@@ -22,7 +22,6 @@ angular.module("crossroads").config(['$stateProvider', '$urlRouterProvider', fun
         .state('profile', {
             url: '/profile',
             templateUrl: 'app/crossroads.net/profile/profile.html',
-            controller: 'ProfileCtrl',
             data: {
                 require_login: true
             }
