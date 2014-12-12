@@ -24,6 +24,14 @@ namespace MinistryPlatform.Translation.Test
             Assert.IsNotNull(obj, "When authenticated this should be a JObject");
         }
 
+        [Test]
+        public void ShouldReturnContactId()
+        {
+            var token = AuthenticationService.authenticate("tmaddox", "crds1234");
+            var obj = AuthenticationService.GetContactId(token);
+            Assert.IsNotNull(obj, "Contact ID shouldn't be null");
+        }
+
         //[Test]
         //public void ShouldGetPageRecords()
         //{
