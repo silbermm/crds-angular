@@ -40,5 +40,17 @@ namespace MinistryPlatform.Translation
                 return null;
             }
         }
+
+        //Get ID of currently logged in user
+        public static int GetContactId(string token)
+        {
+            var platformService = new PlatformService.PlatformServiceClient();
+            using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformService.InnerChannel))
+            {
+                System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+                var contactId = platformService.GetCurrentUserInfo();
+                return contactId.ContactId;
+            }
+        }
     }
 }

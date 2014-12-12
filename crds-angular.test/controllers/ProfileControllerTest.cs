@@ -3,6 +3,7 @@ using NUnit.Framework;
 using crds_angular.Controllers;
 using MvcContrib.TestHelper;
 using crds_angular.Controllers.API;
+using crds_angular.Models;
 using System.Web.Http.Results;
 
 
