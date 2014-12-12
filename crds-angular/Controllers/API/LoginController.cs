@@ -12,7 +12,7 @@ namespace crds_angular.Controllers.API
 {
     public class LoginController : ApiController
     {
-        [ResponseType(typeof(Person))]
+        [ResponseType(typeof(LoginReturn))]
         public IHttpActionResult Post([FromBody]Credentials cred)
         {
             // try to login 
@@ -21,9 +21,20 @@ namespace crds_angular.Controllers.API
             {
                 return this.Unauthorized();
             } 
-            //var p = PersonService.getLoggedInUserProfile(token);
-            return this.Ok("{}");
+            var p = PersonService.getLoggedInUserProfile(token);
+            var r = new LoginReturn
+            {
+                userToken = token,
+                userId = p.Id
+            };
+            return this.Ok(r);
         }
+    }
+
+    public class LoginReturn
+    {
+        public string userToken { get; set; }
+        public int userId { get; set; }
     }
 
     public class Credentials

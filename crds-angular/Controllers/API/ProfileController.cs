@@ -3,6 +3,8 @@ using crds_angular.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
+using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 
@@ -20,11 +22,13 @@ namespace crds_angular.Controllers.API
         [Route("api/profile/{pageId}")]
         public IHttpActionResult Get(int pageId)
         {
-            var re = Request;
-            var headers = re.Headers;
-            if (headers.Contains("X-Auth"))
+            
+
+            CookieHeaderValue cookie = Request.Headers.GetCookies("sessionId").FirstOrDefault();
+            if (cookie.ToString() != null)
             {
-                string token = headers.GetValues("X-Auth").First();
+
+                string token = cookie["sessionId"].Value;
                 var person = PersonService.getLoggedInUserProfile(token);
                 if (person == null)
                 {

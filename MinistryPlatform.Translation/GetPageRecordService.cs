@@ -9,16 +9,16 @@ namespace MinistryPlatform.Translation.Services
 {
     public class GetPageRecordService
     {
-        public static JArray GetRecord(int pageId, int recordId)
+        public static JArray GetRecord(int pageId, int recordId, String token)
         {
-            var userToken = GetUserToken("tmaddox", "crds1234");
+            //var userToken = GetUserToken("tmaddox", "crds1234");
 
             var platformServiceClient = new PlatformService.PlatformServiceClient();
             PlatformService.SelectQueryResult result;
 
             using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
             {
-                System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + userToken);
+                System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
 
                 result = platformServiceClient.GetPageRecord(pageId, recordId, false);
 
