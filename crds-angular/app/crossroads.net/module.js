@@ -24,13 +24,13 @@
             notAuthenticated: 'auth-not-authenticated',
             notAuthorized: 'auth-not-authorized'
      })
-    .controller('appCtrl', ['$scope', 'AuthService', function ($scope, AuthService) {
+    .controller('appCtrl', ['$scope', '$rootScope', 'AuthService', function ($scope, $rootScope, AuthService) {
         $scope.main = "appCtrl";
 
-        $scope.currentUser = null;
+        $rootScope.currentUser = null;
         $scope.isAuthorized = AuthService.isAuthorized;
         $scope.isLoginPage = false;
-        $scope.setCurrentUser = function (user) {
+        $rootScope.setCurrentUser = function (user) {
             $scope.currentUser = user;
         };
     }]);

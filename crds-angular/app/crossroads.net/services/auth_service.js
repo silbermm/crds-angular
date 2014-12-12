@@ -1,9 +1,10 @@
 ﻿'use strict';
 (function(){
-    angular.module('crossroads').factory('AuthService', ['$http', 'Session', function ($http, Session) {
+    angular.module('crossroads').factory('AuthService', ['$http', '$scope', 'Session', function ($http, $scope, Session) {
         var authService = {};
 
         authService.login = function (credentials) {
+            console.log("credentials: " + credentials);
             return $http
                 .post('api/login', credentials)
                 .then(function (res) {
