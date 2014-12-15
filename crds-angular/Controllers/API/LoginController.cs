@@ -60,7 +60,7 @@ namespace crds_angular.Controllers.API
             var r = new LoginReturn
             {
                 userToken = token,
-                userId = p.Id
+                userId = p.Contact_Id
             };
             return this.Ok(r);
         }

@@ -11,6 +11,19 @@ namespace MinistryPlatform.Translation.Services
 {
     public class UpdatePageRecordService
     {
+        public static void UpdateRecord(int pageId, Dictionary<string, object> dictionary, String token)
+        {
+
+            var platformServiceClient = new PlatformService.PlatformServiceClient();
+            PlatformService.SelectQueryResult result;
+
+            using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
+            {
+                System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+                platformServiceClient.UpdatePageRecord(pageId, dictionary, false);
+
+            }
+        }
 
         //Platform Service - UpdatePageRecord
         //public static JArray Post(int id, string postData)

@@ -10,5 +10,11 @@
         this.states = Lookup.States.query();
         this.countries = Lookup.Countries.query();
         this.crossroadsLocations = Lookup.CrossroadsLocations.query();
+
+        this.savePersonal = function (profile) {
+            profile.person.$update(function () {
+                //on success give message
+            });
+        }
     }
 })()

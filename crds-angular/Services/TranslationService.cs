@@ -19,18 +19,20 @@ namespace crds_angular.Services
     {
         private const string TranslationUri = "http://my.crossroads.net/translation/api/";
 
+        private static string GetRecord(int pageId, int recordId, string token)
+        {
+            var data = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecord(pageId, recordId, token);
+            return data.ToString();
+        }
+
         public static string GetMyProfile(int personId, string token)
         {
-            var pageId = 455;
-            var data = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecord(pageId, personId, token);
-            return data.ToString();
+            return GetRecord(455,personId,token);
         }
 
         public static string GetMyHousehold(int householdId, string token)
         {
-            var pageId = 465;
-            var data = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecord(pageId, householdId, token);
-            return data.ToString();            
+            return GetRecord(465, householdId, token);         
         }
 
         public static string GetLookup(int pageId)
@@ -41,9 +43,7 @@ namespace crds_angular.Services
 
         public static string GetMyAddress(int addressId, string token)
         {
-            var pageId = 468;
-            var data = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecord(pageId, addressId, token);
-            return data.ToString();
+            return GetRecord(468, addressId, token);
         }
 
         

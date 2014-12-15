@@ -1,14 +1,26 @@
 ﻿using crds_angular.Models;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Reflection;
 
 namespace crds_angular.Services
 {
     public static class PersonService
     {
+
+        public static void setProfile(String token, Person person)
+        {
+            var dictionary = person.GetType()
+                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .Where(p => !p.IsMarkedWith<NotInDictionaryAttribute>())
+                .ToDictionary(prop => prop.Name, prop => prop.GetValue(person, null));
+
+            MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(455, dictionary, token);
+        }
 
         public static Person getLoggedInUserProfile(String token)
         {
@@ -45,24 +57,24 @@ namespace crds_angular.Services
        
             var person = new Person
             {
-                Id = contactId,
-                Email = contactJson.Email_Address,
+                Contact_Id = contactJson.Contact_Id,
+                Email_Address = contactJson.Email_Address,
                 NickName = contactJson.Nickname,
-                FirstName = contactJson.First_Name,
-                MiddleName = contactJson.Middle_Name,
-                LastName = contactJson.Last_Name,
-                MaidenName = contactJson.Maiden_Name,
-                MobilePhone = contactJson.Mobile_Phone,
-                ServiceProvider = contactJson.Mobile_Carrier_Text,
-                BirthDate = contactJson.Date_of_Birth,
-                MaritalStatus = contactJson.Marital_Status_ID_Text,
-                Gender = contactJson.Gender_ID_Text,
-                Employer = contactJson.Employer_Name,
-                CrossroadsStartDate = contactJson.Anniversary_Date,
-                Household = house,
-                Address = address
+                First_Name = contactJson.First_Name,
+                Middle_Name = contactJson.Middle_Name,
+                Last_Name = contactJson.Last_Name,
+                Maiden_Name = contactJson.Maiden_Name,
+                Mobile_Phone = contactJson.Mobile_Phone,
+                Mobile_Carrier = contactJson.Mobile_Carrier,
+                Date_of_Birth = contactJson.Date_of_Birth,
+                Marital_Status_Id = contactJson.Marital_Status_ID,
+                Gender_Id = contactJson.Gender_ID,
+                Employer_Name = contactJson.Employer_Name,
+                Anniversary_Date = contactJson.Anniversary_Date,
+                Address = address,
+                Household = house
             };
-
+            
             return person;
         
         }
