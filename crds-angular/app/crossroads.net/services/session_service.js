@@ -1,8 +1,8 @@
 ﻿"use strict";
 (function () {
-    angular.module('crossroads').service('Session', ['$cookies', SessionService]);
+    angular.module('crossroads').service('Session', ['$cookies', '$cookieStore', SessionService]);
 
-    function SessionService($cookies) {
+    function SessionService($cookies, $cookieStore) {
         this.create = function (sessionId, userId) {
             $cookies.sessionId = sessionId;
             $cookies.userId = userId;
@@ -13,8 +13,8 @@
         }
         
         this.clear = function () {
-            $cookies.sessionId = null;
-            $cookies.userId = null;
+            $cookieStore.remove("sessionId");            
+            $cookieStore.remove("userId");
         }
 
         this.getUserRole = function () {

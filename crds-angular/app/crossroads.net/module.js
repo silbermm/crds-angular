@@ -6,10 +6,11 @@
             var requireLogin = next.data.require_login;
             if (requireLogin) {
                 if (AuthService.isAuthenticated()) {
-                    // user is not allowed
+                    console.log("user is authenticated");
                     $rootScope.$broadcast(AUTH_EVENTS.isAuthenticated);
                 } else {
                     // user is not logged in
+                    console.log("user is not authenticated");
                     event.preventDefault();
                     $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
                 }
@@ -29,7 +30,8 @@
         $scope.main = "appCtrl";
 
         $rootScope.currentUser = null;
-        $scope.isAuthorized = AuthService.isAuthorized;
+        $rootScope.isAuthenticated = AuthService.isAuthenticated();
+        $rootScope.isAuthorized = AuthService.isAuthorized();
         $scope.isLoginPage = false;
         $rootScope.setCurrentUser = function (user) {
             $scope.currentUser = user;

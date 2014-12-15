@@ -17,12 +17,13 @@ namespace crds_angular.Controllers.API
     {
 
         [ResponseType(typeof(LoginReturn))]
+        [HttpGet]
         [Route("api/authenticated")]
         public IHttpActionResult isAuthenticated()
         {
             // try to hit a page with current token and see if we are authenticated
              CookieHeaderValue cookie = Request.Headers.GetCookies("sessionId").FirstOrDefault();
-             if (cookie.ToString() != null)
+             if (cookie != null && (cookie["sessionId"].Value != null || cookie["sessionId"].Value != "" || cookie["sessionId"].Value != "null"))
              {
                  string token = cookie["sessionId"].Value;
                  var person = PersonService.getLoggedInUserProfile(token); 

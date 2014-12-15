@@ -1,6 +1,6 @@
 ﻿'use strict';
 (function(){
-    angular.module('crossroads').factory('AuthService', ['$http', 'Session', function ($http, Session) {
+    angular.module('crossroads').factory('AuthService', ['$http', 'Session', '$rootScope', function ($http, Session, $rootScope) {
 
         var authService = {};
 
@@ -14,6 +14,11 @@
                 });
         };
 
+        authService.logout = function () {
+            Session.clear();
+            $rootScope.isAuthenticated = false;
+        };
+
         authService.isAuthenticated = function () {
             if (Session.authenticated()) {
                 var isAuth = $http.get("api/authenticated").then(function (res) {
@@ -23,7 +28,7 @@
                     Session.clear();
                     return false;
                 });
-                return authObject;
+                return isAuth;
             } else {
                 return false;
             }

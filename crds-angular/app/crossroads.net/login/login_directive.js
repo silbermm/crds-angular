@@ -1,16 +1,22 @@
-﻿angular.module('crossroads').directive('loginDialog', ["AUTH_EVENTS", function (AUTH_EVENTS) {
-    return {
-        restrict: 'A',
-        template: '<div ng-if="visible" ng-include="\'/app/crossroads.net/login/login-dialog.html\'">',
-        link: function (scope) {
-            var showDialog = function () {
-                console.log('not logged in');
-                scope.visible = true;
-            };
+﻿(function(){
+    angular.module('crossroads').directive('loginDialog', ["$log", "AUTH_EVENTS", LoginDialog]);
 
-            scope.visible = false;
-            scope.$on(AUTH_EVENTS.notAuthenticated, showDialog);
-            scope.$on(AUTH_EVENTS.sessionTimeout, showDialog);
-        }
-    };
-}]);
+    function LoginDialog($log, AUTH_EVENTS){
+        return {
+            restrict: 'EA',
+            templateUrl: "app/crossroads.net/login/login_dialog.html",
+            controller: "LoginCtrl",
+            link: function (scope) {
+                $log.debug("in the logindialog directive");
+                var showDialog = function () {
+                    $log.debug('not logged in');
+                    scope.visible = true;
+                };
+
+                scope.visible = false;
+                scope.$on(AUTH_EVENTS.notAuthenticated, showDialog);
+                scope.$on(AUTH_EVENTS.sessionTimeout, showDialog);
+            }
+        };
+    }
+})()
