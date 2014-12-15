@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 
 namespace crds_angular.Models
@@ -21,7 +22,24 @@ namespace crds_angular.Models
         public int? Gender_Id { get; set; }
         public string Employer_Name { get; set; }
         public string Anniversary_Date { get; set; }
-        protected Household Household { get; set; }
-        protected Address Address { get; set; }
+        [NotInDictionary]
+        public Household Household {get; set; }
+        [NotInDictionary]
+        public Address Address {get; set; }
+    }
+
+    public class NotInDictionaryAttribute : Attribute
+    { }
+
+    public static class ExtensionsOfPropertyInfo
+    {
+        public static IEnumerable<T> GetAttributes<T>(this PropertyInfo propertyInfo) where T : Attribute
+        {
+            return propertyInfo.GetCustomAttributes(typeof(T), true).Cast<T>();
+        }
+        public static bool IsMarkedWith<T>(this PropertyInfo propertyInfo) where T : Attribute
+        {
+            return propertyInfo.GetAttributes<T>().Any();
+        }
     }
 }

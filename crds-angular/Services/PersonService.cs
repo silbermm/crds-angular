@@ -16,6 +16,7 @@ namespace crds_angular.Services
         {
             var dictionary = person.GetType()
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .Where(p => !p.IsMarkedWith<NotInDictionaryAttribute>())
                 .ToDictionary(prop => prop.Name, prop => prop.GetValue(person, null));
 
             MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(455, dictionary, token);
@@ -69,9 +70,11 @@ namespace crds_angular.Services
                 Marital_Status_Id = contactJson.Marital_Status_ID,
                 Gender_Id = contactJson.Gender_ID,
                 Employer_Name = contactJson.Employer_Name,
-                Anniversary_Date = contactJson.Anniversary_Date
+                Anniversary_Date = contactJson.Anniversary_Date,
+                Address = address,
+                Household = house
             };
-
+            
             return person;
         
         }
