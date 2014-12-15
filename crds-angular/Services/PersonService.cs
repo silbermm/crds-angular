@@ -53,8 +53,8 @@ namespace crds_angular.Services
        
             var person = new Person
             {
-                Id = contactId,
-                Email = contactJson.Email_Address,
+                Contact_Id = contactJson.Contact_Id,
+                Email_Address = contactJson.Email_Address,
                 NickName = contactJson.Nickname,
                 FirstName = contactJson.First_Name,
                 MiddleName = contactJson.Middle_Name,
