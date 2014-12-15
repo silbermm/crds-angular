@@ -1,30 +1,30 @@
 ﻿"use strict";
 (function () {
-    angular.module('crossroads').service('Session', ['$cookies', '$cookieStore', SessionService]);
+    angular.module('crossroads').service('Session', ['$cookies', '$cookieStore',SessionService]);
 
     function SessionService($cookies, $cookieStore) {
-        this.create = function (sessionId, userId) {
+        this.create = function (sessionId, userId, username) {
+            console.log("creating cookies!");
             $cookies.sessionId = sessionId;
             $cookies.userId = userId;
+            $cookies.username = username;
+
         };
 
-        this.authenticated = function() {
-            return $cookies.sessionId;
-        }
+        this.exists = function (cookieId) {
+            return $cookies[cookieId];
+        };
         
         this.clear = function () {
-            $cookieStore.remove("sessionId");            
+            $cookieStore.remove("sessionId");
             $cookieStore.remove("userId");
-        }
+            $cookieStore.remove("username");
+        };
 
         this.getUserRole = function () {
             return "";
-        }
-
-        this.destroy = function () {
-            $cookies.sessionId = null;
-            $cookies.userId = null;
         };
+
         return this;
     }
 })()

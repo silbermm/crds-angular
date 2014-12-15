@@ -26,7 +26,7 @@ namespace crds_angular.Controllers.API
         {
 
             CookieHeaderValue cookie = Request.Headers.GetCookies("sessionId").FirstOrDefault();
-            if (cookie.ToString() != null)
+            if (cookie != null && (cookie["sessionId"].Value != "null" || cookie["sessionId"].Value != null))
             {
 
                 string token = cookie["sessionId"].Value;

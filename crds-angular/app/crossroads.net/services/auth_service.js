@@ -5,11 +5,13 @@
         var authService = {};
 
         authService.login = function (credentials) {
-            console.log("credentials: " + credentials);
+            console.log("credentials: ");
+            console.log(credentials);
             return $http
                 .post('api/login', credentials)
                 .then(function (res) {
-                    Session.create(res.data.userToken, res.data.userId);
+                    console.log(res);
+                    Session.create(res.data.userToken, res.data.userId, res.data.username);
                     return {"id": res.data.userId};
                 });
         };
@@ -20,9 +22,10 @@
         };
 
         authService.isAuthenticated = function () {
-            if (Session.authenticated()) {
+            if (Session.exists("sessionId")) {
                 var isAuth = $http.get("api/authenticated").then(function (res) {
-                    Session.create(res.data.userToken, res.data.userId);
+                    console.log(res.data);
+                    Session.create(res.data.userToken, res.data.userId, res.data.username);
                     return true;
                 }, function (res) {
                     Session.clear();

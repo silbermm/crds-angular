@@ -1,6 +1,6 @@
 ﻿<ul class="navbar--login list-unstyled">
 
-    <span id="current-user" class="hidden-md hidden-sm hidden-xs" ng-if="!showLoginButton"> aUsername </span>
+    <span id="current-user" class="hidden-md hidden-sm hidden-xs" ng-if="!showLoginButton"> {{username}} </span>
     <li ng-show="!showLoginButton" class="hidden-md hidden-sm hidden-xs">
         <a href="#" ng-click="logout()">Sign Out</a>
     </li>

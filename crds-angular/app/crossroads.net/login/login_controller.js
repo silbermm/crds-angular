@@ -1,8 +1,8 @@
 ﻿'use strict';
 (function () {
-    angular.module('crossroads').controller('LoginCtrl', ['$scope', '$rootScope', 'AUTH_EVENTS', 'AuthService', '$cookieStore', '$state','$log', LoginController]);
+    angular.module('crossroads').controller('LoginCtrl', ['$scope', '$rootScope', 'AUTH_EVENTS', 'AuthService', '$cookieStore', '$state','$log', "Session", LoginController]);
 
-    function LoginController($scope, $rootScope, AUTH_EVENTS, AuthService, $cookieStore, $state, $log) {
+    function LoginController($scope, $rootScope, AUTH_EVENTS, AuthService, $cookieStore, $state, $log, Session) {
 
         $scope.showLoginButton = !$rootScope.isAuthenticated; 
 
@@ -24,11 +24,13 @@
             } else {
                 $scope.processing = true;
                 AuthService.login($scope.credentials).then(function (user) {
-                    $log.debug("got a 200 from the server " + user);
+                    $log.debug("got a 200 from the server ");
+                    $log.debug(user);
                     $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-                    $rootScope.setCurrentUser(user);
+                    $scope.username = Session.exists("username");
                     $scope.processing = false;
                     $scope.loginShow = false;
+                    $scope.showLoginButton = false;
                     $state.go('profile');
                 }, function () {
                     $log.debug("Bad password");
