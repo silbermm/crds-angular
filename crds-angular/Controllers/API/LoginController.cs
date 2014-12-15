@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System.Web.SessionState;
 
 namespace crds_angular.Controllers.API
 {
@@ -15,6 +16,7 @@ namespace crds_angular.Controllers.API
         [ResponseType(typeof(LoginReturn))]
         public IHttpActionResult Post([FromBody]Credentials cred)
         {
+            SessionStateItemCollection Session = new SessionStateItemCollection();
             // try to login 
             var token = TranslationService.Login(cred.username, cred.password);
             if (token == null)
@@ -22,6 +24,7 @@ namespace crds_angular.Controllers.API
                 return this.Unauthorized();
             } 
             var p = PersonService.getLoggedInUserProfile(token);
+            Session["token"] = token;
             var r = new LoginReturn
             {
                 userToken = token,

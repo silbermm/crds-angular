@@ -7,6 +7,7 @@ using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System.Web.SessionState;
 
 namespace crds_angular.Controllers.API
 {
@@ -22,8 +23,8 @@ namespace crds_angular.Controllers.API
         [Route("api/profile/{pageId}")]
         public IHttpActionResult Get(int pageId)
         {
-            
 
+            SessionStateItemCollection Session = new SessionStateItemCollection();
             CookieHeaderValue cookie = Request.Headers.GetCookies("sessionId").FirstOrDefault();
             if (cookie.ToString() != null)
             {
