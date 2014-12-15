@@ -7,7 +7,7 @@
             if (requireLogin) {
                 if (AuthService.isAuthenticated()) {
                     // user is not allowed
-                    $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);
+                    $rootScope.$broadcast(AUTH_EVENTS.isAuthenticated);
                 } else {
                     // user is not logged in
                     event.preventDefault();
@@ -22,6 +22,7 @@
             logoutSuccess: 'auth-logout-success',
             sessionTimeout: 'auth-session-timeout',
             notAuthenticated: 'auth-not-authenticated',
+            isAuthenticated : 'auth-is-authenticated',
             notAuthorized: 'auth-not-authorized'
      })
     .controller('appCtrl', ['$scope', '$rootScope', 'AuthService', function ($scope, $rootScope, AuthService) {

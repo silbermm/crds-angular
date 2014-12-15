@@ -15,7 +15,18 @@
         };
 
         authService.isAuthenticated = function () {
-            return !!Session.authenticated();
+            if (Session.authenticated()) {
+                var isAuth = $http.get("api/authenticated").then(function (res) {
+                    Session.create(res.data.userToken, res.data.userId);
+                    return true;
+                }, function (res) {
+                    Session.clear();
+                    return false;
+                });
+                return authObject;
+            } else {
+                return false;
+            }
         };
 
         authService.isAuthorized = function (authorizedRoles) {

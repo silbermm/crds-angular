@@ -11,6 +11,11 @@
         this.authenticated = function() {
             return $cookies.sessionId;
         }
+        
+        this.clear = function () {
+            $cookies.sessionId = null;
+            $cookies.userId = null;
+        }
 
         this.getUserRole = function () {
             return "";
