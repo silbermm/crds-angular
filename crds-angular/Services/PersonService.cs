@@ -1,14 +1,22 @@
 ﻿using crds_angular.Models;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Reflection;
 
 namespace crds_angular.Services
 {
     public static class PersonService
     {
+
+        public static void setProfile(String token, Person person)
+        {
+            Dictionary<string, dynamic> values = person.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(person, null));
+            MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(455, values, token);
+        }
 
         public static Person getLoggedInUserProfile(String token)
         {
