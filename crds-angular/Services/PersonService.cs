@@ -50,9 +50,9 @@ namespace crds_angular.Services
                 address.Country = addressJson.Foreign_Country;
                 address.County = addressJson.County;
             }
-            catch
+            catch (Exception ex)
             {
-
+                //Console.Write(ex.Message);
             }
        
             var person = new Person

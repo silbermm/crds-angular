@@ -9,6 +9,6 @@ namespace crds_angular.Models
     {
         public string HouseholdPosition { get; set; }
         public string HomePhone { get; set; }
-        public int CrossroadsLocation { get; set; }
+        public int? CrossroadsLocation { get; set; }
     }
 }
