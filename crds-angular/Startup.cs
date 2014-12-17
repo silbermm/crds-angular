@@ -2,6 +2,8 @@
 using Owin;
 
 [assembly: OwinStartupAttribute(typeof(crds_angular.Startup))]
+[assembly: log4net.Config.XmlConfigurator(ConfigFile = "Web.config", Watch = true)]
+
 namespace crds_angular
 {
     public partial class Startup
