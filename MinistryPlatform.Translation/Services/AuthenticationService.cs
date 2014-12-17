@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using MinistryPlatform.Translation.PlatformService;
+using MinistryPlatform.Translation.Services;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,24 @@ namespace MinistryPlatform.Translation
 {
     public class AuthenticationService
     {
+
+        public static Boolean ChangePassword(string token, UserInfo user)
+        {
+            var platformService = new PlatformService.PlatformServiceClient();
+            using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformService.InnerChannel))
+            {
+                System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+                try
+                { 
+                    platformService.UpdateCurrentUserInfo(user);
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    return false;
+                }
+            }
+        }
 
         //get token using logged in user's credentials
         public static String authenticate(string username, string password)

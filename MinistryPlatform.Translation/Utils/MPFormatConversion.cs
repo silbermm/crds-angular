@@ -9,6 +9,19 @@ namespace MinistryPlatform.Translation.Helpers
 {
     public class MPFormatConversion
     {
+        public static Dictionary<string, object> MPFormatToDictionary(PlatformService.SelectQueryResult mpObject)
+        {
+            var ret = new Dictionary<string, object>();
+            foreach(var dataitem in mpObject.Data)
+            {
+                foreach(var mpField in mpObject.Fields)
+                {
+                    ret.Add(mpField.Name, dataitem[mpField.Index]);
+                }
+            }
+            return ret;
+        }
+
         public static JArray MPFormatToJson(PlatformService.SelectQueryResult mpObject)
         {
             //map the reponse into name/value pairs

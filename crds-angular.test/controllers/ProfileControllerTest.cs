@@ -5,6 +5,9 @@ using MvcContrib.TestHelper;
 using crds_angular.Controllers.API;
 using crds_angular.Models;
 using System.Web.Http.Results;
+using System.Web.Http;
+using System.Net.Http;
+
 
 
 namespace crds_angular.test.controllers
@@ -19,6 +22,8 @@ namespace crds_angular.test.controllers
         public void SetUp()
         {
             profileController = new ProfileController();
+            profileController.Request = new HttpRequestMessage();
+            profileController.Configuration = new HttpConfiguration();
         }
 
         [Test]
@@ -31,13 +36,14 @@ namespace crds_angular.test.controllers
         }
 
         [Test]
-        public void GetWithOneParamShouldPass()
+        public void GetWithOneParamShouldBeUnAuthorized()
         {
-            var result = profileController.Get(455);
-            System.Console.WriteLine(result.ToString());
-            Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<Person>), result);
-            OkNegotiatedContentResult<Person> o = (OkNegotiatedContentResult<Person>) result;
-            Assert.IsInstanceOf(typeof(Person), o.Content);
+            
+            IHttpActionResult result = profileController.Get(455);
+            Assert.IsInstanceOf(typeof(UnauthorizedResult), result);
+            //Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<Person>), result);
+            //OkNegotiatedContentResult<Person> o = (OkNegotiatedContentResult<Person>) result;
+            //Assert.IsInstanceOf(typeof(Person), o.Content);
         }
     }
 }
