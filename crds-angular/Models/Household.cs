@@ -7,8 +7,9 @@ namespace crds_angular.Models
 {
     public class Household
     {
-        public string HouseholdPosition { get; set; }
-        public string HomePhone { get; set; }
-        public int? CrossroadsLocation { get; set; }
+        public string Household_ID { get; set; }
+        public string Household_Position { get; set; }
+        public string Home_Phone { get; set; }
+        public int? Congregation_ID { get; set; }
     }
 }

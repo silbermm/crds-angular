@@ -20,6 +20,16 @@ namespace crds_angular.Services
                 .ToDictionary(prop => prop.Name, prop => prop.GetValue(person, null));
 
             MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(455, dictionary, token);
+            MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(465, getHouseholdDictionary(person.Household), token);       
+        }
+
+        private static Dictionary<string, object> getHouseholdDictionary(Household household)
+        {
+            var dictionary = household.GetType()
+                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .Where(p => !p.IsMarkedWith<NotInDictionaryAttribute>())
+                .ToDictionary(prop => prop.Name, prop => prop.GetValue(household, null));
+            return dictionary;
         }
 
         public static Person getLoggedInUserProfile(String token)
@@ -36,9 +46,10 @@ namespace crds_angular.Services
                 var householdId = contactJson.Household_ID;
                 var household = crds_angular.Services.TranslationService.GetMyHousehold(householdId, token);
                 var houseJson = TranslationService.DecodeJson(household);
-                house.HouseholdPosition = contactJson.Household_Position_ID_Text;
-                house.HomePhone = houseJson.Home_Phone;
-                house.CrossroadsLocation = houseJson.Congregation_ID;
+                house.Household_ID = householdId;
+                house.Household_Position = contactJson.Household_Position_ID_Text;
+                house.Home_Phone = houseJson.Home_Phone;
+                house.Congregation_ID = houseJson.Congregation_ID;
                 var addressId = houseJson.Address_ID;
                 var addr = crds_angular.Services.TranslationService.GetMyAddress(addressId, token);
                 var addressJson = TranslationService.DecodeJson(addr);
