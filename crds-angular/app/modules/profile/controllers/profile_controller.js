@@ -12,7 +12,7 @@
         this.crossroadsLocations = Lookup.CrossroadsLocations.query();
 
         this.savePersonal = function (profile) {
-            profile.person.$update(function () {
+            profile.person.$save(function () {
                 //on success give message
             });
         }
