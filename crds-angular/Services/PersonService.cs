@@ -46,10 +46,10 @@ namespace crds_angular.Services
                 var householdId = contactJson.Household_ID;
                 var household = crds_angular.Services.TranslationService.GetMyHousehold(householdId, token);
                 var houseJson = TranslationService.DecodeJson(household);
-                house.Household_ID = householdId;
+                house.Household_ID = householdId.ToString();
                 house.Household_Position = contactJson.Household_Position_ID_Text;
                 house.Home_Phone = houseJson.Home_Phone;
-                house.Congregation_ID = houseJson.Congregation_ID;
+                house.Congregation_ID = houseJson.Congregation_ID.ToString();
                 var addressId = houseJson.Address_ID;
                 var addr = crds_angular.Services.TranslationService.GetMyAddress(addressId, token);
                 var addressJson = TranslationService.DecodeJson(addr);
@@ -64,6 +64,7 @@ namespace crds_angular.Services
             catch (Exception ex)
             {
                 //Console.Write(ex.Message);
+                throw new Exception(ex.Message);
             }
        
             var person = new Person

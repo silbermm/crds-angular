@@ -10,6 +10,6 @@ namespace crds_angular.Models
         public string Household_ID { get; set; }
         public string Household_Position { get; set; }
         public string Home_Phone { get; set; }
-        public int? Congregation_ID { get; set; }
+        public string Congregation_ID { get; set; }
     }
 }

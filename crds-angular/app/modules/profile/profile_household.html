@@ -65,7 +65,8 @@
         <hr class="col-sm-12" />
         <div id="Site" class="form-group col-sm-6">
             <label for="provider">Crossroads Location</label>
-            <select class="form-control col-sm-12" ng-model="profile.person.Household.Congregation_ID" ng-options="congregation.dp_RecordID as congregation.dp_RecordName for congregation in profile.crossroadsLocations track by congregation.dp_RecordID">
+            <select class="form-control col-sm-12" ng-model="profile.person.Household.Congregation_ID"
+                    ng-options="congregation.dp_RecordID as congregation.dp_RecordName for congregation in profile.crossroadsLocations">
                 <option value=""> -- Please select a Location -- </option>
             </select>
         </div>
