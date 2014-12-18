@@ -4,7 +4,7 @@
 
     function ProfileController(Profile, Lookup) {
         this.genders = Lookup.Genders.query();
-        this.person = Profile.get();
+        this.profile = Profile.get();
         this.maritalStatuses = Lookup.MaritalStatus.query();
         this.serviceProviders = Lookup.ServiceProviders.query();
         this.states = Lookup.States.query();

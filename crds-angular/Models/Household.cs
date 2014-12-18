@@ -11,5 +11,6 @@ namespace crds_angular.Models
         public string Household_Position { get; set; }
         public string Home_Phone { get; set; }
         public string Congregation_ID { get; set; }
+        public Address address { get; set; }
     }
 }

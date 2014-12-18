@@ -26,14 +26,14 @@ namespace crds_angular.Controllers.API
              if (cookie != null && (cookie["sessionId"].Value != null || cookie["sessionId"].Value != "" || cookie["sessionId"].Value != "null"))
              {
                  string token = cookie["sessionId"].Value;
-                 var person = PersonService.getLoggedInUserProfile(token); 
-                 if (person == null)
+                 var profile = ProfileService.getLoggedInUserProfile(token); 
+                 if (profile == null)
                  {
                      return this.Unauthorized();
                  }
                  else
                  {
-                     var l = new LoginReturn(token, person.Contact_Id, person.First_Name);
+                     var l = new LoginReturn(token, profile.person.Contact_Id, profile.person.First_Name);
                      return this.Ok(l);
                  }
              }
@@ -56,12 +56,12 @@ namespace crds_angular.Controllers.API
             {
                 return this.Unauthorized();
             } 
-            var p = PersonService.getLoggedInUserProfile(token);
+            var p = ProfileService.getLoggedInUserProfile(token);
             var r = new LoginReturn
             {
                 userToken = token,
-                userId = p.Contact_Id,
-                username = p.First_Name
+                userId = p.person.Contact_Id,
+                username = p.person.First_Name
             };
             return this.Ok(r);
         }
