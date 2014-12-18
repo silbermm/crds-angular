@@ -27,19 +27,10 @@ namespace crds_angular.test.controllers
         }
 
         [Test]
-        public void GetWithTwoParamsShouldFail()
-        {
-            var result = profileController.Get(0, 0);
-            System.Console.WriteLine(result); 
-            Assert.IsInstanceOf(typeof(BadRequestResult), result);
-
-        }
-
-        [Test]
         public void GetWithOneParamShouldBeUnAuthorized()
         {
             
-            IHttpActionResult result = profileController.Get(455);
+            IHttpActionResult result = profileController.GetProfile();
             Assert.IsInstanceOf(typeof(UnauthorizedResult), result);
             //Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<Person>), result);
             //OkNegotiatedContentResult<Person> o = (OkNegotiatedContentResult<Person>) result;

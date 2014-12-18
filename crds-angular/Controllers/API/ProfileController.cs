@@ -14,15 +14,10 @@ namespace crds_angular.Controllers.API
 {
     public class ProfileController : ApiController
     {
-        [ResponseType(typeof(Person))]
-        public IHttpActionResult Get(int pageId, int recordId)
-        {
-            return this.BadRequest();
-        }
 
         [ResponseType(typeof (Person))]
-        [Route("api/profile/{pageId}")]
-        public IHttpActionResult Get(int pageId)
+        [Route("api/profile")]
+        public IHttpActionResult GetProfile()
         {
 
             CookieHeaderValue cookie = Request.Headers.GetCookies("sessionId").FirstOrDefault();
@@ -40,8 +35,7 @@ namespace crds_angular.Controllers.API
             else
             {
                 return this.Unauthorized();
-            }
-            
+            } 
         }
 
         [Route("api/profile")]

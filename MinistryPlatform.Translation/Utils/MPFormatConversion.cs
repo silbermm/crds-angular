@@ -22,6 +22,8 @@ namespace MinistryPlatform.Translation.Helpers
             return ret;
         }
 
+
+
         public static JArray MPFormatToJson(PlatformService.SelectQueryResult mpObject)
         {
             //map the reponse into name/value pairs

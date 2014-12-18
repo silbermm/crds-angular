@@ -84,5 +84,25 @@ namespace MinistryPlatform.Translation.Services
             
         }
 
+        public static Dictionary<string, object> GetRecordsDict(int id, string token)
+        {
+            try
+            {
+                var platformServiceClient = new PlatformService.PlatformServiceClient();
+                PlatformService.SelectQueryResult result;
+
+                using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
+                {
+                    System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+                    result = platformServiceClient.GetPageRecords(id, "", "", 0);
+                }
+                return MPFormatConversion.MPFormatToDictionary(result);
+            }
+            catch
+            {
+                return new Dictionary<string, object>();
+            }
+        }
+
     }
 }
