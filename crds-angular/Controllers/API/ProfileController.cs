@@ -38,8 +38,30 @@ namespace crds_angular.Controllers.API
             } 
         }
 
+        //[Route("api/profile")]
+        //public IHttpActionResult Put([FromBody]Person person)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+
+        //    CookieHeaderValue cookie = Request.Headers.GetCookies("sessionId").FirstOrDefault();
+        //    if (cookie.ToString() != null)
+        //    {
+
+        //        string token = cookie["sessionId"].Value;
+        //        PersonService.setProfile(token, person);
+        //        return this.Ok();
+        //    }
+        //    else
+        //    {
+        //        return this.Unauthorized();
+        //    }
+        //}
+
         [Route("api/profile")]
-        public IHttpActionResult Put([FromBody]Person person)
+        public IHttpActionResult Post([FromBody]Person person)
         {
             if (!ModelState.IsValid)
             {
