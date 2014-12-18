@@ -4,7 +4,7 @@
         return {
             restrict: 'EA',
             contoller: 'crdsProfileCtrl as profile',
-            templateUrl: 'app/modules/profile/profile.html',
+            templateUrl: 'app/modules/profile/templates/profile.html',
             scope: true,
             link: (function (scope, el, attr) {
         
