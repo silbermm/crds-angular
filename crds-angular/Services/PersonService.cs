@@ -14,21 +14,18 @@ namespace crds_angular.Services
 
         public static void setProfile(String token, Person person)
         {
-            var dictionary = person.GetType()
-                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                .Where(p => !p.IsMarkedWith<NotInDictionaryAttribute>())
-                .ToDictionary(prop => prop.Name, prop => prop.GetValue(person, null));
-
+            var dictionary = getDictionary(person);
+               
             MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(455, dictionary, token);
-            MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(465, getHouseholdDictionary(person.Household), token);       
+            MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(465, getDictionary(person.Household), token);       
         }
 
-        private static Dictionary<string, object> getHouseholdDictionary(Household household)
+        private static Dictionary<string, object> getDictionary(Object input)
         {
-            var dictionary = household.GetType()
+            var dictionary = input.GetType()
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                 .Where(p => !p.IsMarkedWith<NotInDictionaryAttribute>())
-                .ToDictionary(prop => prop.Name, prop => prop.GetValue(household, null));
+                .ToDictionary(prop => prop.Name, prop => prop.GetValue(input, null));
             return dictionary;
         }
 
