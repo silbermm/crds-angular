@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Helpers;
+using System.Collections.Generic;
 
 
 namespace crds_angular.Services
@@ -39,6 +40,11 @@ namespace crds_angular.Services
         {
             var data = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecords(pageId, token);
             return data.ToString();
+        }
+
+        public static Dictionary<string, object> GetLookupDict(int pageId, string token)
+        {
+            return MinistryPlatform.Translation.Services.GetPageRecordService.GetRecordsDict(pageId, token);
         }
 
         public static string GetMyAddress(int addressId, string token)
