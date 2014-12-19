@@ -2,6 +2,9 @@
 (function () {
     angular.module("crdsProfile").controller('crdsProfileCtrl', ['Profile', 'Lookup', ProfileController]);
 
+    angular.module("crdsProfile").controller('crdsProfilePersonalCtrl', ['Profile', ProfilePersonalController]);
+    angular.module("crdsProfile").controller('crdsProfileHouseholdCtrl', ['Profile', ProfileHouseholdController]);
+
     function ProfileController(Profile, Lookup) {
         this.genders = Lookup.Genders.query();
         this.profile = Profile.get();
@@ -17,4 +20,13 @@
             });
         }
     }
+
+    function ProfilePersonalController(Profile) {
+        this.personal = Profile.get();
+    }
+
+    function ProfileHouseholdController(Profile) {
+        this.household = Profile.get();
+    }
+
 })()

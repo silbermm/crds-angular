@@ -3,12 +3,9 @@
     function crdsProfile($log) {
         return {
             restrict: 'EA',
-            contoller: 'crdsProfileCtrl as profile',
+            contoller: 'crdsProfileHouseholdCtrl',
             templateUrl: 'app/modules/profile/templates/profile_household.html',
-            scope: true,
-            link: (function (scope, el, attr) {
-
-            })
+            scope: true
         };
     }
 })()

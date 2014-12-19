@@ -31,37 +31,60 @@ namespace crds_angular.Services
             dynamic contactJson;
             int householdId;
             var person = GetPerson(token, out householdId);
-            
-            Household house = new Household();
-            Address address = new Address();
-            try
-            {
-                var household = crds_angular.Services.TranslationService.GetMyHousehold(householdId, token);
-                var houseJson = TranslationService.DecodeJson(household);
-                house.Household_ID = householdId.ToString();
-                house.Home_Phone = houseJson.Home_Phone;
-                house.Congregation_ID = houseJson.Congregation_ID.ToString();
 
-                var addressId = houseJson.Address_ID;
-                var addr = crds_angular.Services.TranslationService.GetMyAddress(addressId, token);
-                var addressJson = TranslationService.DecodeJson(addr);
-                address.Street = addressJson.Address_Line_1;
-                address.Street2 = addressJson.Address_Line_2;
-                address.City = addressJson.City;
-                address.State = addressJson["State/Region"];
-                address.Zip = addressJson.Postal_Code;
-                address.Country = addressJson.Foreign_Country;
-                address.County = addressJson.County;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            Household house = GetHousehold(token, householdId);
 
             var profile = new Profile();
             profile.person = person;
             profile.household = house;
             return profile;        
+        }
+
+        private static Household GetHousehold(String token, int householdId)
+        {
+            
+            
+            try
+            {
+                var myHousehold = crds_angular.Services.TranslationService.GetMyHousehold(householdId, token);
+                var houseJson = TranslationService.DecodeJson(myHousehold);
+
+
+
+
+
+
+                var household = new Household
+                {
+                    Household_ID = householdId.ToString(),
+                    Home_Phone = houseJson.Home_Phone,
+                    Congregation_ID = houseJson.Congregation_ID.ToString(),
+                    address = GetAddress(token, houseJson.Address_ID)
+                };
+                return household;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return null;
+        }
+
+        private static Address GetAddress(String token, int addressId)
+        {
+            var addr = crds_angular.Services.TranslationService.GetMyAddress(addressId, token);
+            var addressJson = TranslationService.DecodeJson(addr);
+            var address = new Address
+            {
+                Street = addressJson.Address_Line_1,
+                Street2 = addressJson.Address_Line_2,
+                City = addressJson.City,
+                State = addressJson["State/Region"],
+                Zip = addressJson.Postal_Code,
+                Country = addressJson.Foreign_Country,
+                County = addressJson.County
+            };
+            return address;
         }
 
         private static Person GetPerson(String token, out int householdId)
