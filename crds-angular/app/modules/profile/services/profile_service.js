@@ -2,10 +2,9 @@
     angular.module('crdsProfile').factory('Profile', ['$resource', ProfileService]);
 
     function ProfileService($resource) {
-        return $resource('api/profile', {
-            update: {
-                method: 'PUT'
-            }
-        });
+        return {
+            Personal: $resource('api/profile'),
+            Account: $resource('api/account')
+        }
     }
 })()

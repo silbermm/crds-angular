@@ -1,10 +1,10 @@
 ﻿<tabset ng-init="set = {}">
     <tab heading="Personal"><crds-profile-personal></crds-profile-personal></tab>
     <tab heading="Household" class="hidden-xs" active="set.showHousehold"><crds-profile-household></crds-profile-household></tab>
-    <tab heading="Account"><ng-include src=" 'profile/templates/profile_account.html' "></ng-include></tab>
-    <tab heading="Giving"><ng-include src=" 'profile/templates/profile_giving.html' "></ng-include></tab>
-    <tab heading="Skills" class="hidden-xs" active="set.showSkills"><ng-include src=" 'profile/templates/profile_skills.html' "></ng-include></tab>
-    <tab heading="History" class="hidden-xs" active="set.showHistory"><ng-include src=" 'profile/templates/profile_history.html' "></ng-include></tab>
+    <tab heading="Account" class="hidden-xs" active="set.showAccount"><crds-profile-account></crds-profile-account></tab>
+    <tab heading="Giving"></tab>
+    <tab heading="Skills" class="hidden-xs" active="set.showSkills"></tab>
+    <tab heading="History" class="hidden-xs" active="set.showHistory"></tab>
     <li role="tab" data-toggle="tab" class="dropdown hidden-md hidden-lg hidden-sm dropdown-toggle" data-toggle="dropdown">
         <a href="#">More <span class="caret"></span></a>
         <ul class="dropdown-menu" role="menu">

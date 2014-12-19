@@ -9,55 +9,40 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.SessionState;
+using crds_angular.Security;
 
 namespace crds_angular.Controllers.API
 {
-    public class ProfileController : ApiController
+    public class ProfileController : CookieAuth
     {
 
         [ResponseType(typeof (Person))]
         [Route("api/profile")]
         public IHttpActionResult GetProfile()
         {
-
-            CookieHeaderValue cookie = Request.Headers.GetCookies("sessionId").FirstOrDefault();
-            if (cookie != null && (cookie["sessionId"].Value != "null" || cookie["sessionId"].Value != null))
-            {
-
-                string token = cookie["sessionId"].Value;
-                var person = PersonService.getLoggedInUserProfile(token);
+            return Authorized(t => {
+                Person person = PersonService.getLoggedInUserProfile(t);
                 if (person == null)
                 {
-                    return this.Unauthorized();
+                    return Unauthorized();
                 }
                 return this.Ok(person);
-            }
-            else
-            {
-                return this.Unauthorized();
-            } 
+            });
         }
 
         [Route("api/profile")]
         public IHttpActionResult Put([FromBody]Person person)
-        {
-            if (!ModelState.IsValid)
+        {  
+            return Authorized(token =>
             {
-                return BadRequest(ModelState);
-            }
-
-            CookieHeaderValue cookie = Request.Headers.GetCookies("sessionId").FirstOrDefault();
-            if (cookie.ToString() != null)
-            {
-
-                string token = cookie["sessionId"].Value;
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
                 PersonService.setProfile(token, person);
                 return this.Ok();
-            }
-            else
-            {
-                return this.Unauthorized();
-            }
+            });
+            
         }
 
        
