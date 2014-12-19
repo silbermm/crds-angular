@@ -53,13 +53,19 @@ namespace crds_angular.Services
 
 
 
-
+                var address = GetAddress(token, houseJson.Address_ID);
                 var household = new Household
                 {
                     Household_ID = householdId.ToString(),
                     Home_Phone = houseJson.Home_Phone,
-                    Congregation_ID = houseJson.Congregation_ID.ToString(),
-                    address = GetAddress(token, houseJson.Address_ID)
+                    Congregation_ID = houseJson.Congregation_ID.ToString()
+                    //Street = address.Street,
+                    //Street2 = address.Street2,
+                    //City = address.City,
+                    //State = address.State,
+                    //Zip = address.Zip,
+                    //Country = address.Country,
+                    //County = address.County
                 };
                 return household;
             }

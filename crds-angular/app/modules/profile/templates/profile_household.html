@@ -1,4 +1,4 @@
-﻿<form role="form" ng-controller="crdsProfileHouseholdCtrl as h">
+﻿<form role="form" ng-controller="crdsProfileCtrl as h">
     <fieldset class="row household-cards">
         <legend class="col-sm-12">Your Household</legend>
         <div ng-repeat="member in family">
@@ -20,58 +20,58 @@
     <fieldset class="row">
         <div class="form-group col-sm-6">
             <label for="street">Street</label>
-            <input ng-model="h.household.address.Street" type="text" class="form-control" id="street" placeholder="Enter street address">
+            <input ng-model="h.profile.household.Street" type="text" class="form-control" id="street" placeholder="Enter street address">
         </div>
 
         <div class="form-group col-sm-6">
             <label for="street2">Street 2</label>
-            <input ng-model="profile.profile.household.address.Street2" type="text" class="form-control" id="street2" placeholder="Enter street address (cont.)">
+            <input ng-model="h.profile.household.Street2" type="text" class="form-control" id="street2" placeholder="Enter street address (cont.)">
         </div>
 
         <div class="form-group col-sm-6">
             <label for="city">City</label>
-            <input ng-model="profile.profile.household.address.City" type="text" class="form-control" id="city" placeholder="Enter city">
+            <input ng-model="h.profile.household.City" type="text" class="form-control" id="city" placeholder="Enter city">
         </div>
 
         <div class="form-group col-sm-6">
             <label for="state">State</label>
-            <select class="form-control col-sm-12" ng-model="profile.profile.household.address.State" ng-options="state.dp_RecordName for state in profile.states track by state.dp_RecordName"></select>
+            <select class="form-control col-sm-12" ng-model="h.profile.household.State" ng-options="state.dp_RecordName for state in h.states track by state.dp_RecordName"></select>
         </div>
 
         <div class="form-group col-sm-6">
             <label for="zip">Zip</label>
-            <input ng-model="profile.profile.household.address.Zip" type="text" class="form-control" id="zip" placeholder="Enter zip code">
+            <input ng-model="h.profile.household.Zip" type="text" class="form-control" id="zip" placeholder="Enter zip code">
         </div>
 
         <div class="form-group col-sm-6">
             <label for="county">County</label>
-            <input ng-model="profile.profile.household.address.County" type="text" class="form-control" id="county" placeholder="Enter county">
+            <input ng-model="h.profile.household.County" type="text" class="form-control" id="county" placeholder="Enter county">
         </div>
 
         <div class="form-group col-sm-6">
             <label for="country">Country</label>
             <select class="form-control col-sm-12"
-                    ng-model="profile.profile.household.address.Country"
-                    ng-options="country.dp_RecordName for country in profile.countries track by country.dp_RecordName"></select>
+                    ng-model="h.profile.household.Country"
+                    ng-options="country.dp_RecordName for country in h.countries track by country.dp_RecordName"></select>
         </div>
 
         <hr class="col-sm-12" />
 
         <div class="form-group col-sm-6">
             <label for="homephone">Home Phone</label>
-            <input ng-model="h.household.household.Home_Phone" type="text" class="form-control" id="homephone" placeholder="Enter home phone">
+            <input ng-model="h.profile.household.Home_Phone" type="text" class="form-control" id="homephone" placeholder="Enter home phone">
         </div>
 
         <hr class="col-sm-12" />
         <div id="Site" class="form-group col-sm-6">
             <label for="provider">Crossroads Location</label>
-            <select class="form-control col-sm-12" ng-model="profile.person.household.Congregation_ID"
-                    ng-options="congregation.dp_RecordID as congregation.dp_RecordName for congregation in profile.crossroadsLocations">
+            <select class="form-control col-sm-12" ng-model="h.profile.household.Congregation_ID"
+                    ng-options="congregation.dp_RecordID as congregation.dp_RecordName for congregation in h.crossroadsLocations">
                 <option value=""> -- Please select a Location -- </option>
             </select>
         </div>
     </fieldset>
-    <button id="save-personal" ng-click="profile.savePersonal(profile)" class="btn btn-primary" data-style="expand-left">
+    <button id="save-personal" ng-click="h.savePersonal(h.profile)" class="btn btn-primary" data-style="expand-left">
         Save
     </button>
 </form>

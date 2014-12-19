@@ -22,7 +22,6 @@ namespace MinistryPlatform.Translation.Services
         /// <returns></returns>
         public static JArray GetRecord(int pageId, int recordId, String token)
         {
-
             var platformServiceClient = new PlatformService.PlatformServiceClient();
             PlatformService.SelectQueryResult result;
 
@@ -33,6 +32,8 @@ namespace MinistryPlatform.Translation.Services
             }
             return MPFormatConversion.MPFormatToJson(result);
         }
+
+        
 
         /// <summary>
         /// Get a specific record by pageId and recordId

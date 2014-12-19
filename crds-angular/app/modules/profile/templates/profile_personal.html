@@ -1,48 +1,48 @@
-﻿<form role="form" ng-controller="crdsProfilePersonalCtrl as p">
+﻿<form role="form" ng-controller="crdsProfileCtrl as p">
     <div class="row">
         <div class="form-group col-sm-6">
             <label for="firstname">Email</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email address" ng-model="p.personal.person.Email_Address">
+            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email address" ng-model="p.profile.person.Email_Address">
         </div>
     </div>
 
     <div class="row">
         <div class="form-group col-sm-6">
             <label for="firstname">First Name</label>
-            <input type="text" class="form-control" id="firstname" placeholder="Enter first name" ng-model="p.personal.person.First_Name">
+            <input type="text" class="form-control" id="firstname" placeholder="Enter first name" ng-model="p.profile.person.First_Name">
         </div>
 
         <div class="form-group col-sm-6">
             <label for="middlename">Middle Name</label>
-            <input type="text" class="form-control" id="middlename" placeholder="Enter middle name" ng-model="personal.profile.person.Middle_Name">
+            <input type="text" class="form-control" id="middlename" placeholder="Enter middle name" ng-model="p.profile.person.Middle_Name">
         </div>
 
         <div class="form-group col-sm-6">
             <label for="lastname">Last Name</label>
-            <input type="text" class="form-control" id="lastname" placeholder="Enter last name" ng-model="personal.profile.person.Last_Name">
+            <input type="text" class="form-control" id="lastname" placeholder="Enter last name" ng-model="p.profile.person.Last_Name">
         </div>
 
         <div class="form-group col-sm-6">
             <label for="maidenname">Maiden Name</label>
-            <input type="text" class="form-control" id="maidenname" placeholder="Enter maiden name" ng-model="personal.profile.person.Maiden_Name">
+            <input type="text" class="form-control" id="maidenname" placeholder="Enter maiden name" ng-model="p.profile.person.Maiden_Name">
         </div>
 
         <div class="form-group col-sm-6">
             <label for="nickname">Nick Name <small class="text-muted">(Example: Rob or Becky)</small></label>
-            <input type="text" class="form-control" id="nickname" placeholder="Enter nick name" ng-model="personal.profile.person.NickName">
+            <input type="text" class="form-control" id="nickname" placeholder="Enter nick name" ng-model="p.profile.person.NickName">
         </div>
     </div>
 
     <div class="row">
         <div class="form-group col-sm-6">
             <label for="nickname">Mobile Phone</label>
-            <input type="text" class="form-control" id="mobile" placeholder="Enter mobile phone" ng-model="personal.profile.person.Mobile_Phone">
+            <input type="text" class="form-control" id="mobile" placeholder="Enter mobile phone" ng-model="p.profile.person.Mobile_Phone">
         </div>
 
         <div class="form-group col-sm-6">
             <label for="provider">Service Provider</label>
-            <select class="form-control col-sm-12" ng-model="personal.profile.person.Mobile_Carrier"
-                    ng-options="providers.dp_RecordID as providers.dp_RecordName for providers in personal.serviceProviders">
+            <select class="form-control col-sm-12" ng-model="p.profile.person.Mobile_Carrier"
+                    ng-options="providers.dp_RecordID as providers.dp_RecordName for providers in p.serviceProviders">
                 <option value=""> -- Choose One -- </option>
             </select>
         </div>
@@ -53,7 +53,7 @@
         <div class="col-sm-6">
             <label class="control-label">Birth Date</label>
             <div class="input-group">
-                <input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" datepicker-append-to-body="true" ng-model="personal.profile.person.Date_of_Birth" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date,mode)" ng-required="true" close-text="Close" ng-click="open($event)" />
+                <input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" datepicker-append-to-body="true" ng-model="p.profile.person.Date_of_Birth" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date,mode)" ng-required="true" close-text="Close" ng-click="open($event)" />
                 <span class="input-group-btn">
                     <button type="button" class="btn btn-primary" ng-click="open($event)">Add</button>
                 </span>
@@ -65,14 +65,14 @@
         <div class="form-group col-sm-6">
             <label for="marital_status">Marital Status</label>
             <select class="form-control col-sm-12"
-                    ng-model="personal.profile.person.Marital_Status_Id"
-                    ng-options="status.dp_RecordID as status.dp_RecordName for status in personal.maritalStatuses"></select>
+                    ng-model="p.profile.person.Marital_Status_Id"
+                    ng-options="status.dp_RecordID as status.dp_RecordName for status in p.maritalStatuses"></select>
         </div>
 
         <div class="form-group col-sm-6">
             <label class="block">Gender</label>
-            <label class="radio-inline" ng-repeat="gender in personal.genders">
-                <input type="radio" id="gender" ng-value="gender.dp_RecordID" ng-model="personal.profile.person.Gender_Id"> {{ gender.dp_RecordName }}
+            <label class="radio-inline" ng-repeat="gender in p.genders">
+                <input type="radio" id="gender" ng-value="gender.dp_RecordID" ng-model="p.profile.person.Gender_Id"> {{ gender.dp_RecordName }}
             </label>
         </div>
     </div>
@@ -80,15 +80,15 @@
     <div class="row">
         <div class="form-group col-sm-6">
             <label for="employer">Employer</label>
-            <input type="text" class="form-control" id="employer" placeholder="Enter employer" ng-model="personal.profile.person.Employer_Name">
+            <input type="text" class="form-control" id="employer" placeholder="Enter employer" ng-model="p.profile.person.Employer_Name">
         </div>
     </div>
 
     <div class="row" ng-controller="crdsDatePickerCtrl">
         <div class="col-sm-6" ng-controller="crdsDatePickerCtrl">
-            <label class="control-label">When did you start attending Crossroads?</label></span>
+            <label class="control-label">When did you start attending Crossroads?</label>
             <p class="input-group">
-                <input type="text" class="form-control" data-datepicker-popup="MM/dd/yyyy" ng-model="personal.profile.person.Anniversary_Date" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open($event)" />
+                <input type="text" class="form-control" data-datepicker-popup="MM/dd/yyyy" ng-model="p.profile.person.Anniversary_Date" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open($event)" />
                 <span class="input-group-btn">
                     <button type="button" class="btn btn-primary" ng-click="open($event)">Date!</button>
                 </span>
@@ -96,7 +96,7 @@
         </div>
     </div>
 
-    <button id="save-personal" ng-click="personal.profile.savePersonal(profile)" class="btn btn-primary" data-style="expand-left">
+    <button id="save-personal" ng-click="p.savePersonal(p.profile)" class="btn btn-primary" data-style="expand-left">
         Save
     </button>
 </form>
