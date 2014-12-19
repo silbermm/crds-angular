@@ -2,6 +2,11 @@
     angular.module('crdsProfile').factory('Profile', ['$resource', ProfileService]);
 
     function ProfileService($resource) {
-        return $resource('api/profile');
+
+        return {
+            Personal: $resource('api/profile'),
+            Account: $resource('api/account')
+        }
+
     }
 })()

@@ -10,10 +10,11 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.SessionState;
 using System.Net.Http.Headers;
+using crds_angular.Security;
 
 namespace crds_angular.Controllers.API
 {
-    public class LoginController : ApiController
+    public class LoginController : CookieAuth
     {
 
         [ResponseType(typeof(LoginReturn))]
@@ -21,28 +22,19 @@ namespace crds_angular.Controllers.API
         [Route("api/authenticated")]
         public IHttpActionResult isAuthenticated()
         {
-            // try to hit a page with current token and see if we are authenticated
-             CookieHeaderValue cookie = Request.Headers.GetCookies("sessionId").FirstOrDefault();
-             if (cookie != null && (cookie["sessionId"].Value != null || cookie["sessionId"].Value != "" || cookie["sessionId"].Value != "null"))
-             {
-                 string token = cookie["sessionId"].Value;
-                 var profile = ProfileService.getLoggedInUserProfile(token); 
-                 if (profile == null)
-                 {
-                     return this.Unauthorized();
-                 }
-                 else
-                 {
-                     var l = new LoginReturn(token, profile.person.Contact_Id, profile.person.First_Name);
-                     return this.Ok(l);
-                 }
-             }
-             else
-             {
-                 return Unauthorized();
-             }
-
-
+            return Authorized(token =>
+            {
+                var person = PersonService.getLoggedInUserProfile(token);
+                if (person == null)
+                {
+                    return this.Unauthorized();
+                }
+                else
+                {
+                    var l = new LoginReturn(token, person.Contact_Id, person.First_Name);
+                    return this.Ok(l);
+                }
+            });
         }
 
         [ResponseType(typeof(LoginReturn))]

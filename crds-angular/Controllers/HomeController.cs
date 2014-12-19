@@ -9,12 +9,13 @@ using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using log4net;
 using log4net.Config;
+using System.Reflection;
 
 namespace crds_angular.Controllers
 {
     public class HomeController : Controller
     {
-        readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        readonly log4net.ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public ActionResult Index()
         {

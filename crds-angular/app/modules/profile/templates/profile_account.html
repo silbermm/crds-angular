@@ -1,0 +1,39 @@
+﻿<form role="form" ng-controller="crdsProfileCtrl as profile">
+
+    <div class="row">
+        <crds-password></crds-password>
+        <div class="form-group col-sm-12">
+            <label class="block">Email Communication</label>
+            <label class="radio-inline" >
+                <input type="radio" name="emailSubscription" value="on" ng-model="profile.account.emailPrefs"> On
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="emailSubscription" value="off" ng-model="profile.account.emailPrefs"> Off
+            </label>
+        </div>
+
+        <div class="form-group col-sm-12">
+            <label class="block">Text Messaging Communication</label>
+            <label class="radio-inline">
+                <input type="radio" name="textSubscription" value="on" ng-model="profile.account.textPrefs"> On
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="textSubscription" value="off" ng-model="profile.account.textPrefs"> Off
+            </label>
+        </div>
+
+        <div class="form-group col-sm-12">
+            <label class="block">Paperless Communication</label>
+            <label class="radio-inline">
+                <input type="radio" name="paperlessSubscription" value="on" ng-model="profile.account.paperPrefs"> On
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="paperlessSubscription" value="off" ng-model="profile.account.paperPrefs"> Off
+            </label>
+        </div>
+
+    </div>
+    <button id="save-account" ng-click="profile.saveAccount()" class="btn btn-primary" data-style="expand-left">
+        Save
+    </button>
+</form>

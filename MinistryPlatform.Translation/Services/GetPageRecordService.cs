@@ -53,7 +53,8 @@ namespace MinistryPlatform.Translation.Services
                 System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
                 result = platformServiceClient.GetPageRecord(pageId, recordId, false);
             }
-            return MPFormatConversion.MPFormatToDictionary(result);
+            Dictionary<string, object> returnVal = MPFormatConversion.MPFormatToDictionary(result);
+            return returnVal;
 
         }
 
