@@ -14,7 +14,8 @@
         this.states = Lookup.States.query();
         this.countries = Lookup.Countries.query();
         this.crossroadsLocations = Lookup.CrossroadsLocations.query();
-        this.account = Profile.Account.get();
+        // this.account = Profile.Account.get();
+        this.household = Profile.Household.get();
 
         this.savePersonal = function (profile) {
 

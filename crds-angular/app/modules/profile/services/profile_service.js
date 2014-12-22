@@ -6,7 +6,7 @@
         return {
             Personal: $resource('api/profile'),
             Account: $resource('api/account'),
-            Household: $resource('api/household')
+            //Household: $resource('api/household')
         }
 
     }

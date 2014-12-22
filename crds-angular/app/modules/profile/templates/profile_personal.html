@@ -1,10 +1,6 @@
 ﻿<form role="form" ng-controller="crdsProfileCtrl as p">
-    <div class="row">
-        <div class="form-group col-sm-6">
-            <label for="firstname">Emailf</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email address" ng-model="p.person.Email_Address">
-        </div>
-    </div>
+    
+    <p class="text-muted push-bottom">Information shared here is kept secure and private. We will not share or sell your information.</p>
 
     <div class="row">
         <div class="form-group col-sm-6">
@@ -28,25 +24,16 @@
         </div>
 
         <div class="form-group col-sm-6">
-            <label for="nickname">Nick Name <small class="text-muted">(Example: Rob or Becky)</small></label>
+            <label for="nickname">Preferred Name <small class="text-muted">(Example: Rob or Becky)</small></label>
             <input type="text" class="form-control" id="nickname" placeholder="Enter nick name" ng-model="p.person.NickName">
         </div>
     </div>
 
     <div class="row">
         <div class="form-group col-sm-6">
-            <label for="nickname">Mobile Phone</label>
-            <input type="text" class="form-control" id="mobile" placeholder="Enter mobile phone" ng-model="p.person.Mobile_Phone">
+            <label for="firstname">Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email address" ng-model="p.person.Email_Address">
         </div>
-
-        <div class="form-group col-sm-6">
-            <label for="provider">Service Provider</label>
-            <select class="form-control col-sm-12" ng-model="p.person.Mobile_Carrier"
-                    ng-options="providers.dp_RecordID as providers.dp_RecordName for providers in p.serviceProviders">
-                <option value=""> -- Choose One -- </option>
-            </select>
-        </div>
-
     </div>
 
     <div class="row" ng-controller="crdsDatePickerCtrl">
@@ -96,6 +83,22 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="form-group col-sm-6">
+            <label for="nickname">Mobile Phone</label>
+            <input type="text" class="form-control" id="mobile" placeholder="Enter mobile phone" ng-model="p.person.Mobile_Phone">
+        </div>
+
+        <div class="form-group col-sm-6">
+            <label for="provider">Service Provider</label>
+            <select class="form-control col-sm-12" ng-model="p.person.Mobile_Carrier"
+                    ng-options="providers.dp_RecordID as providers.dp_RecordName for providers in p.serviceProviders">
+                <option value=""> -- Choose One -- </option>
+            </select>
+        </div>
+
+    </div>
+   
     <button id="save-personal" ng-click="p.savePersonal(p.profile)" class="btn btn-primary" data-style="expand-left">
         Save
     </button>

@@ -27,6 +27,8 @@ namespace crds_angular.Controllers.API
             {
                 var personService = new PersonService();
                 var person = personService.getLoggedInUserProfile(token);
+                var householdService = new HouseholdService();
+                var household = householdService.getLoggedinUserHousehold(token);
                 if (person == null)
                 {
                     Debug.WriteLine("in the login controller");
