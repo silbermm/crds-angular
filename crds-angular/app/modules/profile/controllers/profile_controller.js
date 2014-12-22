@@ -5,8 +5,6 @@
     function ProfileController(Profile, Lookup, $log) {
         this.genders = Lookup.Genders.query();
 
-       // this.profile = Profile.get();
-
         this.person = Profile.Personal.get();
 
         this.maritalStatuses = Lookup.MaritalStatus.query();
@@ -14,14 +12,12 @@
         this.states = Lookup.States.query();
         this.countries = Lookup.Countries.query();
         this.crossroadsLocations = Lookup.CrossroadsLocations.query();
-        // this.account = Profile.Account.get();
-        this.household = Profile.Household.get();
+        this.account = Profile.Account.get();
+       
+        this.savePersonal = function () {
 
-        this.savePersonal = function (profile) {
-
-            //profile.$save(function () {
             $log.debug("profile controller");
-            profile.person.$save(function () {
+            this.person.$save(function () {
 
                 //on success give message
             });

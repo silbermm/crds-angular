@@ -216,7 +216,6 @@
     <Compile Include="Security\CookieAuth.cs" />
     <Compile Include="Security\CustomAuthorize.cs" />
     <Compile Include="Services\AccountService.cs" />
-    <Compile Include="Services\HouseholdService.cs" />
     <Compile Include="Services\MinistryPlatformBaseService.cs" />
     <Compile Include="Services\PersonService.cs" />
     <Compile Include="Services\TranslationService.cs" />
@@ -230,7 +229,6 @@
     <Content Include="app\crossroads.net\login\login_controller.js" />
     <Content Include="app\crossroads.net\login\login_directive.js" />
     <Content Include="app\crossroads.net\module.js" />
-    <Content Include="app\modules\profile\directives\profile-household-directive.js" />
     <Content Include="app\modules\profile\directives\profile_account_directive.js" />
     <Content Include="app\modules\profile\directives\profile_directive.js" />
     <Content Include="app\modules\profile\services\profile_account_service.js" />

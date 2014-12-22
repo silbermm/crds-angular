@@ -16,48 +16,17 @@ namespace crds_angular.Services
         {
             var dictionary = getDictionary(person);
                
-            MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(455, dictionary, token);
-            //MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(465, getDictionary(household), token);       
+            MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(474, dictionary, token);                 
         }
 
 
         public Person getLoggedInUserProfile(String token)
         {
             var contactId = MinistryPlatform.Translation.AuthenticationService.GetContactId(token);
-            JArray contact = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecord(455, contactId, token);
+            JArray contact = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecords(474,  token);
             var contactJson = TranslationService.DecodeJson(contact.ToString());
-
-
-            Household house = new Household();
-            Address address = new Address();
-            try
-            {
-                var householdId = contactJson.Household_ID;
-                var household = crds_angular.Services.TranslationService.GetMyHousehold(householdId, token);
-                var houseJson = TranslationService.DecodeJson(household);
-                house.Household_ID = householdId.ToString();
-                house.Household_Position = contactJson.Household_Position_ID_Text;
-                house.Home_Phone = houseJson.Home_Phone;
-                house.Congregation_ID = houseJson.Congregation_ID.ToString();
-                var addressId = houseJson.Address_ID;
-                var addr = crds_angular.Services.TranslationService.GetMyAddress(addressId, token);
-                var addressJson = TranslationService.DecodeJson(addr);
-                address.Street = addressJson.Address_Line_1;
-                address.Street2 = addressJson.Address_Line_2;
-                address.City = addressJson.City;
-                address.State = addressJson["State/Region"];
-                address.Zip = addressJson.Postal_Code;
-                address.Country = addressJson.Foreign_Country;
-                address.County = addressJson.County;
-                Debug.WriteLine("house and address");
-            }
-            catch (Exception ex)
-            {
-                //Console.Write(ex.Message);
-                throw new Exception(ex.Message);
-            }
-            Debug.WriteLine("person stuff");
-            var person = new Person
+                      
+            var person = new Person            
             {
                 Contact_Id = contactJson.Contact_Id,
                 Email_Address = contactJson.Email_Address,
@@ -67,16 +36,25 @@ namespace crds_angular.Services
                 Last_Name = contactJson.Last_Name,
                 Maiden_Name = contactJson.Maiden_Name,
                 Mobile_Phone = contactJson.Mobile_Phone,
-                Mobile_Carrier = contactJson.Mobile_Carrier,
+                Mobile_Carrier_ID = contactJson.Mobile_Carrier_ID,
                 Date_of_Birth = contactJson.Date_of_Birth,
                 Marital_Status_Id = contactJson.Marital_Status_ID,
                 Gender_Id = contactJson.Gender_ID,
                 Employer_Name = contactJson.Employer_Name,
-                Anniversary_Date = contactJson.Anniversary_Date,              
+                Address_Line_1 = contactJson.Address_Line_1,
+                Address_Line_2 = contactJson.Address_Line_2,
+                City = contactJson.City,
+                State = contactJson.State,
+                Postal_Code = contactJson.Postal_Code,
+                Anniversary_Date = contactJson.Anniversary_Date,
+                Foreign_Country = contactJson.Foreign_Country,
+                County = contactJson.County,
+                Home_Phone = contactJson.Home_Phone,
+                Congregation_ID = contactJson.Congregation_ID
             };
-            
+
             return person;
-        
+
         }
         
 

@@ -91,12 +91,105 @@
 
         <div class="form-group col-sm-6">
             <label for="provider">Service Provider</label>
-            <select class="form-control col-sm-12" ng-model="p.person.Mobile_Carrier"
+            <select class="form-control col-sm-12" ng-model="p.person.Mobile_Carrier_ID"
                     ng-options="providers.dp_RecordID as providers.dp_RecordName for providers in p.serviceProviders">
                 <option value=""> -- Choose One -- </option>
             </select>
         </div>
 
+    </div>
+
+    <div class="row">
+        <fieldset>
+
+            <!----div class="col-sm-12" ng-controller="crdsProfilePersonal"-->
+                <legend>Your Household</legend>
+                <p>
+                    Update information for your household, which includes:<br />
+                    <strong>Tate Lucas</strong>, <strong>Christy Lucas</strong>, <strong>Sadie Lucas</strong>, <strong>Simon Lucas</strong>
+                    <!-- >a href="#" class="btn btn-xs btn-light-gray push-half-left">Add or remove another person</a-->
+                </p>
+
+                <div class="panel panel-default clearfix">
+                    <div class="panel-heading address-panel-heading clearfix" ng-click="isCollapsed = !isCollapsed">
+                        <div class="row">
+                            <a ng-click="isCollapsed = !isCollapsed" href="#" class="address-show" ng-show="isCollapsed">
+                                <svg viewBox="0 0 32 32" class="icon icon-pencil4"><use xlink:href="/icons/cr.svg#pencil4"></use></svg>
+                            </a>
+                            <a ng-click="isCollapsed = !isCollapsed" href="#" class="address-show" ng-show="!isCollapsed">
+                                <svg viewBox="0 0 18 32" class="icon icon-caret-up"><use xlink:href="/icons/cr.svg#caret-up"></use></svg>
+                            </a>
+                            <div class="col-md-7">
+                                <svg viewBox="0 0 32 32" class="icon icon-home"><use xlink:href="/icons/cr.svg#home"></use></svg>3727 Hyde Park Ave, Cincinnati, OH 45209
+                            </div>
+                            <div class="col-md-2"><svg viewBox="0 0 32 32" class="icon icon-phone3"><use xlink:href="/icons/cr.svg#phone3"></use></svg>(513) 258-5827</div>
+                            <div class="col-md-3"><svg viewBox="0 0 32 32" class="icon icon-crossroads"><use xlink:href="/icons/cr.svg#crossroads"></use> </svg>Crossroads Oakley</div>
+                        </div><!--/row-->
+                    </div> <!--/panel-heading-->
+
+                    <div class="address-panel-body panel-body clearfix" collapse="isCollapsed">
+                        <div class="col-sm-12">
+                            <!----form role="form" ng-controller="crdsProfileHousehold"-->
+                                <fieldset class="row">
+                                    <ul class="list-group clearfix">
+                                        <li class="list-group-item clearfix">
+                                            <div class="form-group col-sm-6">
+                                                <label for="street">Street</label>
+                                                <input ng-model="p.person.Address_Line_1" type="text" class="form-control" id="street" placeholder="Enter street address">
+                                            </div>
+
+                                            <div class="form-group col-sm-6">
+                                                <label for="street2">Street 2</label>
+                                                <input ng-model="p.person.Address_Line_2" type="text" class="form-control" id="street2" placeholder="Enter street address (cont.)">
+                                            </div>
+
+                                            <div class="form-group col-sm-6">
+                                                <label for="city">City</label>
+                                                <input ng-model="p.person.City" type="text" class="form-control" id="city" placeholder="Enter city">
+                                            </div>
+
+                                            <div class="form-group col-sm-6">
+                                                <label for="state">State</label>
+                                                <select class="form-control col-sm-12" ng-model="p.person.State" ng-options="state.State_Abbreviation for state in p.states track by state.State_Abbreviation"></select>
+                                            </div>
+                                                                                      
+                                            <div class="form-group col-sm-6">
+                                                <label for="zip">Zip</label>
+                                                <input ng-model="p.person.Postal_Code" type="text" class="form-control" id="zip" placeholder="Enter zip code">
+                                            </div>
+
+                                            <div class="form-group col-sm-6">
+                                                <label for="county">County</label>
+                                                <input ng-model="p.person.County" type="text" class="form-control" id="county" placeholder="Enter county">
+                                            </div>
+
+                                            <div class="form-group col-sm-6">
+                                                <label for="country">Country</label>
+                                                <select ng-model="p.person.Foreign_Country" ng-change="setCountry()" ng-options="country.dp_RecordName for country in p.countries track by country.dp_RecordName" class="form-control col-sm-12"></select>
+                                            </div>
+                                            
+                                        </li>
+                                        <li class="list-group-item clearfix">
+                                            <div class="form-group col-sm-6">
+                                                <label for="homephone">Home Phone</label>
+                                                <input ng-model="p.person.Home_Phone" type="text" class="form-control" id="homephone" placeholder="Enter home phone">
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item clearfix">
+                                            <div id="Site" class="form-group col-sm-6">
+                                                <label for="provider">Crossroads Location</label>
+                                                <select class="form-control col-sm-12" ng-model="p.person.congregationId" ng-options="congregation.dp_RecordID as congregation.dp_RecordName for congregation in p.crossroadsLocations"></select>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </fieldset>
+                            <!----form-->
+                        </div><!--/col-sm-12-->
+                    </div><!--/panel-body-->
+                </div><!--/panel-->
+
+            <!--div--><!--/col-sm-12-->
+        </fieldset>
     </div>
    
     <button id="save-personal" ng-click="p.savePersonal(p.profile)" class="btn btn-primary" data-style="expand-left">
