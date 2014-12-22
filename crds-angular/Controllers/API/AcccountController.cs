@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System.Diagnostics;
 
 namespace crds_angular.Controllers.API
 {
@@ -22,6 +23,7 @@ namespace crds_angular.Controllers.API
                 try
                 {
                     AccountInfo info = AccountService.getAccountInfo(token);
+                    Debug.WriteLine("in the account controller");
                     return Ok(info);
                 }
                 catch (Exception e)

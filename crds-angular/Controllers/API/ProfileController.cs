@@ -10,6 +10,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.SessionState;
 using crds_angular.Security;
+using System.Diagnostics;
 
 namespace crds_angular.Controllers.API
 {
@@ -20,13 +21,15 @@ namespace crds_angular.Controllers.API
         [Route("api/profile")]
         public IHttpActionResult GetProfile()
         {
-
+            
             return Authorized(t => {
-                Person person = PersonService.getLoggedInUserProfile(t);
+                var personService = new PersonService();
+                Person person = personService.getLoggedInUserProfile(t);
                 if (person == null)
                 {
                     return Unauthorized();
                 }
+                Debug.WriteLine ("in the profile controller");
                 return this.Ok(person);
             });
         }
@@ -40,7 +43,8 @@ namespace crds_angular.Controllers.API
                 {
                     return BadRequest(ModelState);
                 }
-                PersonService.setProfile(token, person);
+                var personService = new PersonService();
+                personService.setProfile(token, person);
 
                 return this.Ok();
             });

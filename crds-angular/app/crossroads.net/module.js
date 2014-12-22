@@ -30,7 +30,9 @@
         $scope.main = "appCtrl";
 
         $rootScope.currentUser = null;
+        console.log("in here now");
         $rootScope.isAuthenticated = AuthService.isAuthenticated();
+        console.log("in here now 2");
         $rootScope.isAuthorized = AuthService.isAuthorized();
         $scope.isLoginPage = false;
         $rootScope.setCurrentUser = function (user) {

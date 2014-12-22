@@ -20,14 +20,5 @@ namespace crds_angular.Models.MP
 
         public string DateOfBirth { get; set; }
 
-
-
-        public Prefix Prefix { get; set; }
-        public Suffix Suffix { get; set; }
-
-        public Gender Gender { get; set; }
-
-
-
     }
 }

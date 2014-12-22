@@ -11,7 +11,7 @@ using System.Web.Http.Description;
 using System.Web.SessionState;
 using System.Net.Http.Headers;
 using crds_angular.Security;
-
+using System.Diagnostics;
 namespace crds_angular.Controllers.API
 {
     public class LoginController : CookieAuth
@@ -22,11 +22,14 @@ namespace crds_angular.Controllers.API
         [Route("api/authenticated")]
         public IHttpActionResult isAuthenticated()
         {
+            
             return Authorized(token =>
             {
-                var person = PersonService.getLoggedInUserProfile(token);
+                var personService = new PersonService();
+                var person = personService.getLoggedInUserProfile(token);
                 if (person == null)
                 {
+                    Debug.WriteLine("in the login controller");
                     return this.Unauthorized();
                 }
                 else
@@ -47,13 +50,14 @@ namespace crds_angular.Controllers.API
             if (token == null)
             {
                 return this.Unauthorized();
-            } 
-            var p = ProfileService.getLoggedInUserProfile(token);
+            }
+            var personService = new PersonService();
+            var p = personService.getLoggedInUserProfile(token);
             var r = new LoginReturn
             {
                 userToken = token,
-                userId = p.person.Contact_Id,
-                username = p.person.First_Name
+                userId = p.Contact_Id,
+                username = p.First_Name
             };
             return this.Ok(r);
         }

@@ -6,30 +6,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Reflection;
+using System.Diagnostics;
 
 namespace crds_angular.Services
 {
-    public static class PersonService
+    public class PersonService : MinistryPlatformBaseService       
     {
-
-        public static void setProfile(String token, Person person)
+        public void setProfile(String token, Person person)
         {
             var dictionary = getDictionary(person);
                
             MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(455, dictionary, token);
-            MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(465, getDictionary(person.Household), token);       
+            //MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(465, getDictionary(household), token);       
         }
 
-        private static Dictionary<string, object> getDictionary(Object input)
-        {
-            var dictionary = input.GetType()
-                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                .Where(p => !p.IsMarkedWith<NotInDictionaryAttribute>())
-                .ToDictionary(prop => prop.Name, prop => prop.GetValue(input, null));
-            return dictionary;
-        }
 
-        public static Person getLoggedInUserProfile(String token)
+        public Person getLoggedInUserProfile(String token)
         {
             var contactId = MinistryPlatform.Translation.AuthenticationService.GetContactId(token);
             JArray contact = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecord(455, contactId, token);
@@ -57,13 +49,14 @@ namespace crds_angular.Services
                 address.Zip = addressJson.Postal_Code;
                 address.Country = addressJson.Foreign_Country;
                 address.County = addressJson.County;
+                Debug.WriteLine("house and address");
             }
             catch (Exception ex)
             {
                 //Console.Write(ex.Message);
                 throw new Exception(ex.Message);
             }
-       
+            Debug.WriteLine("person stuff");
             var person = new Person
             {
                 Contact_Id = contactJson.Contact_Id,
@@ -79,9 +72,7 @@ namespace crds_angular.Services
                 Marital_Status_Id = contactJson.Marital_Status_ID,
                 Gender_Id = contactJson.Gender_ID,
                 Employer_Name = contactJson.Employer_Name,
-                Anniversary_Date = contactJson.Anniversary_Date,
-                Address = address,
-                Household = house
+                Anniversary_Date = contactJson.Anniversary_Date,              
             };
             
             return person;
