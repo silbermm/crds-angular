@@ -1,14 +1,14 @@
 ﻿(function () {
-    angular.module("crdsProfile").directive("crdsPassword", ['$log',CrdsPassword]);
+    angular.module("crdsProfile").directive("crdsPassword", ['$log', 'Profile', CrdsPassword]);
 
-    function CrdsPassword($log) {
+    function CrdsPassword($log, Profile) {
         return {
             restrict: 'E',
+            require: '^crdsProfilePage',
             replace: true,
             scope: true,
-            contoller: 'crdsProfileCtrl as profile',
             templateUrl: 'app/modules/profile/templates/profile_password.html',
-            link: (function (scope, el, attr) {
+            link: (function (scope, el, attr, ctrl) {
                 scope.showPassword = false;
 
             })

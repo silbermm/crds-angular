@@ -4,8 +4,7 @@
 
     function ProfileController(Profile, Lookup, $log) {
         var _this = this;
-
-        
+      
         _this.genders = Lookup.Genders.query();
         _this.person = Profile.Personal.get();
         _this.maritalStatuses = Lookup.MaritalStatus.query();
@@ -13,14 +12,8 @@
         _this.states = Lookup.States.query();
         _this.countries = Lookup.Countries.query();
         _this.crossroadsLocations = Lookup.CrossroadsLocations.query();
-        Profile.Account.get(function (acct) {
-            _this.account = new Profile.Account();
-            _this.account.EmailNotifications = acct.EmailNotifications.toString();
-            _this.account.TextNotifications = acct.TextNotifications;
-            _this.account.PaperlessStatements = acct.PaperlessStatements;
-        });
+        _this.account = Profile.Account.get();
         
-
         _this.password = new Profile.Password();
 
         _this.savePersonal = function (profile) {
