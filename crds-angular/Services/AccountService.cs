@@ -16,21 +16,29 @@ namespace crds_angular.Services
     {
         public static bool ChangePassword(string token, string newPassword)
         {
-            var contactId = MinistryPlatform.Translation.AuthenticationService.GetContactId(token);
-            Dictionary<string, object> contact = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecordDict(455, contactId, token); 
-            return AuthenticationService.ChangePassword(token, 
-                (string)contact["Email_Address"], 
-                (string)contact["First_Name"], 
-                (string)contact["Last_Name"],
-                newPassword,
-                (string)contact["Mobile_Phone"]
-            );
+            return AuthenticationService.ChangePassword(token, newPassword);
+            //var contactId = MinistryPlatform.Translation.AuthenticationService.GetContactId(token);
+            //Dictionary<string, object> contact = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecordDict(455, contactId, token); 
+            //return AuthenticationService.ChangePassword(token, 
+            //    (string)contact["Email_Address"], 
+            //    (string)contact["First_Name"], 
+            //    (string)contact["Last_Name"],
+            //    newPassword,
+            //    (string)contact["Mobile_Phone"]
+            //);
         }
 
-        public static Models.Json.Communication SaveCommunicationPrefs(string token, Models.Json.Communication communicationPrefs)
+        public static bool SaveCommunicationPrefs(string token, AccountInfo accountInfo)
         {
-            var contactId = MinistryPlatform.Translation.AuthenticationService.GetContactId(token);
-            return communicationPrefs;
+            try
+            {
+                
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         public static AccountInfo getAccountInfo(string token)

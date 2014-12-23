@@ -21,7 +21,9 @@ namespace crds_angular.Models.Json
             var properties = jsonObject.Properties().ToList();
             return new AccountInfo
             {
-            
+                EmailNotifications = Convert.ToBoolean(jsonObject["EmailNotifications"]),
+                TextNotifications = Convert.ToBoolean(jsonObject["TextNotifications"]),
+                PaperlessStatements = Convert.ToBoolean(jsonObject["PaperlessStatements"])    
             };
         }
 

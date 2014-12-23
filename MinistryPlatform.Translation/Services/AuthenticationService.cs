@@ -3,6 +3,7 @@ using MinistryPlatform.Translation.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -37,13 +38,19 @@ namespace MinistryPlatform.Translation
 
         }
 
+        /// <summary>
+        /// Change a users password
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="newPassword"></param>
+        /// <returns></returns>
         public static Boolean ChangePassword(string token, string newPassword)
         {
             try
             {
-                var record = GetPageRecordService.GetRecordsDict(475, token);
+                var record = GetPageRecordService.GetRecordsDict(Convert.ToInt32(ConfigurationManager.AppSettings["ChangePassword"]), token);
                 record["Password"] = newPassword;
-                UpdatePageRecordService.UpdateRecord(475, record, token);
+                UpdatePageRecordService.UpdateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["ChangePassword"]), record, token);
                 return true;
             }
             catch

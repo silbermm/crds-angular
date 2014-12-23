@@ -50,8 +50,9 @@ namespace crds_angular.Controllers.API
 
         }
 
-        public IHttpActionResult Post([FromBody]Communication communication)
+        public IHttpActionResult Post([FromBody]AccountInfo accountInfo)
         {
+
             return Authorized(token =>
             {
                 return Ok();
