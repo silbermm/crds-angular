@@ -4,7 +4,6 @@
     function CrdsPassword($log, Profile) {
         return {
             restrict: 'E',
-            require: '^crdsProfilePage',
             replace: true,
             scope: true,
             templateUrl: 'app/modules/profile/templates/profile_password.html',

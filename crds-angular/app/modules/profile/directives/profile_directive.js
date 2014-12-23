@@ -11,9 +11,11 @@
 
     function crdsProfilePage($log) {
         return {
-            restrict: 'A',
+            restrict: 'EA',
             transclude: true,
+            replace: true,
             controller: 'crdsProfileCtrl as profile',
+            controllerAs: true,
             template: '<div ng-transclude></div>',
             scope: {},
             link: (function (scope, el, attr) {

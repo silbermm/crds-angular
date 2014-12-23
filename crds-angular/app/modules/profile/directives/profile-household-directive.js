@@ -3,11 +3,11 @@
     function crdsProfile($log) {
         return {
             restrict: 'EA',
-            contoller: 'crdsProfileCtrl as profile',
+            require: '^crdsProfilePage',
             templateUrl: 'app/modules/profile/templates/profile_household.html',
             scope: true,
-            link: (function (scope, el, attr) {
-
+            link: (function (scope, el, attr, ctrl) {
+                $log.debug(scope);
             })
         };
     }
