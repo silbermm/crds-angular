@@ -11,6 +11,7 @@ using System.Web.Http.Routing;
 using System.Net.Http;
 using System.Web.Http.Results;
 using crds_angular.Services;
+using crds_angular.Models.Json;
 
 namespace crds_angular.test.controllers
 {
@@ -35,7 +36,7 @@ namespace crds_angular.test.controllers
         public void ShouldReturnUnauthorized()
         {
             accountController.Request = new HttpRequestMessage();
-            IHttpActionResult result = accountController.UpdatePassword(new Models.Json.NewPassword { password = "whatever" });
+            IHttpActionResult result = accountController.UpdatePassword(new NewPassword { password = "whatever" });
             Assert.IsInstanceOf(typeof(UnauthorizedResult), result);
         }
 
@@ -52,11 +53,11 @@ namespace crds_angular.test.controllers
             accountController.Request = h;
 
             // Make the call...
-            IHttpActionResult result = accountController.UpdatePassword(new Models.Json.NewPassword { password = NEW_PASSWORD });
+            IHttpActionResult result = accountController.UpdatePassword(new NewPassword { password = NEW_PASSWORD });
             //OkNegotiatedContentResult<Object> o = (OkNegotiatedContentResult<Object>)result;
             Assert.IsInstanceOf(typeof(OkResult), result);
 
-            IHttpActionResult result2 = accountController.UpdatePassword(new Models.Json.NewPassword { password = PASSWORD });
+            IHttpActionResult result2 = accountController.UpdatePassword(new NewPassword { password = PASSWORD });
             Assert.IsInstanceOf(typeof(OkResult), result);
 
         }

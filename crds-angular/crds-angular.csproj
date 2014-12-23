@@ -207,13 +207,14 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Crossroads\AccountInfo.cs" />
-    <Compile Include="Models\Household.cs" />
     <Compile Include="Models\Json\AccountInfoSerializer.cs" />
     <Compile Include="Models\Json\Communication.cs" />
     <Compile Include="Models\Json\NewPassword.cs" />
     <Compile Include="Models\MP\Address.cs" />
+    <Compile Include="Models\MP\EmailSMSOptOut.cs" />
     <Compile Include="Models\MP\Household.cs" />
     <Compile Include="Models\MP\Contact.cs" />
+    <Compile Include="Models\MP\MailOptOut.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\CookieAuth.cs" />

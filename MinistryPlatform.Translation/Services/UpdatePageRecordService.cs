@@ -11,6 +11,8 @@ namespace MinistryPlatform.Translation.Services
 {
     public class UpdatePageRecordService
     {
+       
+
         public static void UpdateRecord(int pageId, Dictionary<string, object> dictionary, String token)
         {
             try

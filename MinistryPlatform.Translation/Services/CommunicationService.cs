@@ -26,8 +26,32 @@ namespace MinistryPlatform.Translation.Services
             //return GetPageRecordService.GetRecordsDict(Convert.ToInt32(pageNumber), token);
         }
 
-        public static bool SetPreferences(String token, Dictionary<string,object> prefs){
-            return true;
+        public static bool SetEmailSMSPreferences(String token, Dictionary<string,object> prefs){
+            try
+            {
+                int pId = Convert.ToInt32(ConfigurationManager.AppSettings["MyContact"]);
+                UpdatePageRecordService.UpdateRecord(pId, prefs, token);
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            
         }
+
+        public static bool SetMailPreferences(string token, Dictionary<string,object> prefs){
+            try
+            {
+                int pId = Convert.ToInt32(ConfigurationManager.AppSettings["MyHousehold"]);
+                UpdatePageRecordService.UpdateRecord(pId, prefs, token);
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
     }
 }

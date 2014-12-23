@@ -16,14 +16,19 @@ namespace crds_angular.Controllers.API
 {
     public class AccountController : CookieAuth
     {
+
+        
+
         [ResponseType(typeof (AccountInfo))]
         public IHttpActionResult Get()
         {
+
             return Authorized( token =>
             {
                 try
                 {
-                    AccountInfo info = AccountService.getAccountInfo(token);
+                    AccountService accountService = new AccountService();
+                    AccountInfo info = accountService.getAccountInfo(token);
                     Debug.WriteLine("in the account controller");
                     return Ok(info);
                 }
@@ -43,7 +48,8 @@ namespace crds_angular.Controllers.API
 
             return Authorized(token =>
             {
-                if (AccountService.ChangePassword(token, password.password))
+                AccountService accountService = new AccountService();
+                if (accountService.ChangePassword(token, password.password))
                 {
                     return Ok();
                 }
@@ -57,6 +63,8 @@ namespace crds_angular.Controllers.API
 
             return Authorized(token =>
             {
+                AccountService accountService = new AccountService();
+                accountService.SaveCommunicationPrefs(token, accountInfo);
                 return Ok();
             });
             

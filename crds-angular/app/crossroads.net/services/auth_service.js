@@ -5,12 +5,9 @@
         var authService = {};
 
         authService.login = function (credentials) {
-            console.log("credentials: ");
-            console.log(credentials);
             return $http
                 .post('api/login', credentials)
                 .then(function (res) {
-                    console.log(res);
                     Session.create(res.data.userToken, res.data.userId, res.data.username);
                     return {"id": res.data.userId};
                 });
@@ -29,6 +26,7 @@
                     Session.create(res.data.userToken, res.data.userId, res.data.username);
                     return true;
                 }, function (res) {
+                    $log.debug("authService.isAuthenticated() :: not authenticated!");
                     Session.clear();
                     return false;
                 });
