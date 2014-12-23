@@ -1,38 +1,38 @@
-﻿<form role="form" ng-controller="crdsProfileCtrl as p">
-    
+﻿<form role="form" ng-controller="crdsProfileCtrl as profile">
+
     <p class="text-muted push-bottom">Information shared here is kept secure and private. We will not share or sell your information.</p>
 
     <div class="row">
         <div class="form-group col-sm-6">
             <label for="firstname">First Name</label>
-            <input type="text" class="form-control" id="firstname" placeholder="Enter first name" ng-model="p.person.First_Name">
+            <input type="text" class="form-control" id="firstname" placeholder="Enter first name" ng-model="profile.person.First_Name">
         </div>
 
         <div class="form-group col-sm-6">
             <label for="middlename">Middle Name</label>
-            <input type="text" class="form-control" id="middlename" placeholder="Enter middle name" ng-model="p.person.Middle_Name">
+            <input type="text" class="form-control" id="middlename" placeholder="Enter middle name" ng-model="profile.person.Middle_Name">
         </div>
 
         <div class="form-group col-sm-6">
             <label for="lastname">Last Name</label>
-            <input type="text" class="form-control" id="lastname" placeholder="Enter last name" ng-model="p.person.Last_Name">
+            <input type="text" class="form-control" id="lastname" placeholder="Enter last name" ng-model="profile.person.Last_Name">
         </div>
 
         <div class="form-group col-sm-6">
             <label for="maidenname">Maiden Name</label>
-            <input type="text" class="form-control" id="maidenname" placeholder="Enter maiden name" ng-model="p.person.Maiden_Name">
+            <input type="text" class="form-control" id="maidenname" placeholder="Enter maiden name" ng-model="profile.person.Maiden_Name">
         </div>
 
         <div class="form-group col-sm-6">
             <label for="nickname">Preferred Name <small class="text-muted">(Example: Rob or Becky)</small></label>
-            <input type="text" class="form-control" id="nickname" placeholder="Enter nick name" ng-model="p.person.NickName">
+            <input type="text" class="form-control" id="nickname" placeholder="Enter nick name" ng-model="profile.person.NickName">
         </div>
     </div>
 
     <div class="row">
         <div class="form-group col-sm-6">
             <label for="firstname">Email</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email address" ng-model="p.person.Email_Address">
+            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email address" ng-model="profile.person.Email_Address">
         </div>
     </div>
 
@@ -40,7 +40,7 @@
         <div class="col-sm-6">
             <label class="control-label">Birth Date</label>
             <div class="input-group">
-                <input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" datepicker-append-to-body="true" ng-model="p.person.Date_of_Birth" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date,mode)" ng-required="true" close-text="Close" ng-click="open($event)" />
+                <input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" datepicker-append-to-body="true" ng-model="profile.person.Date_of_Birth" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date,mode)" ng-required="true" close-text="Close" ng-click="open($event)" />
                 <span class="input-group-btn">
                     <button type="button" class="btn btn-primary" ng-click="open($event)">Add</button>
                 </span>
@@ -52,14 +52,14 @@
         <div class="form-group col-sm-6">
             <label for="marital_status">Marital Status</label>
             <select class="form-control col-sm-12"
-                    ng-model="p.person.Marital_Status_Id"
-                    ng-options="status.dp_RecordID as status.dp_RecordName for status in p.maritalStatuses"></select>
+                    ng-model="profile.person.Marital_Status_Id"
+                    ng-options="status.dp_RecordID as status.dp_RecordName for status in profile.maritalStatuses"></select>
         </div>
 
         <div class="form-group col-sm-6">
             <label class="block">Gender</label>
-            <label class="radio-inline" ng-repeat="gender in p.genders">
-                <input type="radio" id="gender" ng-value="gender.dp_RecordID" ng-model="p.person.Gender_Id"> {{ gender.dp_RecordName }}
+            <label class="radio-inline" ng-repeat="gender in profile.genders">
+                <input type="radio" id="gender" ng-value="gender.dp_RecordID" ng-model="profile.person.Gender_Id"> {{ gender.dp_RecordName }}
             </label>
         </div>
     </div>
@@ -67,7 +67,7 @@
     <div class="row">
         <div class="form-group col-sm-6">
             <label for="employer">Employer</label>
-            <input type="text" class="form-control" id="employer" placeholder="Enter employer" ng-model="p.person.Employer_Name">
+            <input type="text" class="form-control" id="employer" placeholder="Enter employer" ng-model="profile.person.Employer_Name">
         </div>
     </div>
 
@@ -75,7 +75,7 @@
         <div class="col-sm-6" ng-controller="crdsDatePickerCtrl">
             <label class="control-label">When did you start attending Crossroads?</label>
             <p class="input-group">
-                <input type="text" class="form-control" data-datepicker-popup="MM/dd/yyyy" ng-model="p.person.Anniversary_Date" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open($event)" />
+                <input type="text" class="form-control" data-datepicker-popup="MM/dd/yyyy" ng-model="profile.person.Anniversary_Date" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open($event)" />
                 <span class="input-group-btn">
                     <button type="button" class="btn btn-primary" ng-click="open($event)">Date!</button>
                 </span>
@@ -86,13 +86,13 @@
     <div class="row">
         <div class="form-group col-sm-6">
             <label for="nickname">Mobile Phone</label>
-            <input type="text" class="form-control" id="mobile" placeholder="Enter mobile phone" ng-model="p.person.Mobile_Phone">
+            <input type="text" class="form-control" id="mobile" placeholder="Enter mobile phone" ng-model="profile.person.Mobile_Phone">
         </div>
 
         <div class="form-group col-sm-6">
             <label for="provider">Service Provider</label>
-            <select class="form-control col-sm-12" ng-model="p.person.Mobile_Carrier_ID"
-                    ng-options="providers.dp_RecordID as providers.dp_RecordName for providers in p.serviceProviders">
+            <select class="form-control col-sm-12" ng-model="profile.person.Mobile_Carrier_ID"
+                    ng-options="providers.dp_RecordID as providers.dp_RecordName for providers in profile.serviceProviders">
                 <option value=""> -- Choose One -- </option>
             </select>
         </div>
@@ -101,8 +101,6 @@
 
     <div class="row">
         <fieldset>
-
-            <div class="col-sm-12" ng-controller="crdsProfileCtrl as p">
                 <legend>Your Household</legend>
                 <p>
                     Update information for your household, which includes:<br />
@@ -129,70 +127,68 @@
 
                     <div class="address-panel-body panel-body clearfix" collapse="isCollapsed">
                         <div class="col-sm-12">
-                            <!----form role="form" ng-controller="crdsProfileHousehold"-->
-                                <fieldset class="row">
-                                    <ul class="list-group clearfix">
-                                        <li class="list-group-item clearfix">
-                                            <div class="form-group col-sm-6">
-                                                <label for="street">Street</label>
-                                                <input ng-model="p.person.Address_Line_1" type="text" class="form-control" id="street" placeholder="Enter street address">
-                                            </div>
+                            <fieldset class="row">
+                                <ul class="list-group clearfix">
+                                    <li class="list-group-item clearfix">
+                                        <div class="form-group col-sm-6">
+                                            <label for="street">Street</label>
+                                            <input ng-model="profile.person.Address_Line_1" type="text" class="form-control" id="street" placeholder="Enter street address">
+                                        </div>
 
-                                            <div class="form-group col-sm-6">
-                                                <label for="street2">Street 2</label>
-                                                <input ng-model="p.person.Address_Line_2" type="text" class="form-control" id="street2" placeholder="Enter street address (cont.)">
-                                            </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="street2">Street 2</label>
+                                            <input ng-model="profile.person.Address_Line_2" type="text" class="form-control" id="street2" placeholder="Enter street address (cont.)">
+                                        </div>
 
-                                            <div class="form-group col-sm-6">
-                                                <label for="city">City</label>
-                                                <input ng-model="p.person.City" type="text" class="form-control" id="city" placeholder="Enter city">
-                                            </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="city">City</label>
+                                            <input ng-model="profile.person.City" type="text" class="form-control" id="city" placeholder="Enter city">
+                                        </div>
 
-                                            <div class="form-group col-sm-6">
-                                                <label for="state">State</label>
-                                                <select class="form-control col-sm-12" ng-model="p.person.State" ng-options="state.State_Abbreviation for state in p.states track by state.State_Abbreviation"></select>
-                                            </div>
-                                                                                      
-                                            <div class="form-group col-sm-6">
-                                                <label for="zip">Zip</label>
-                                                <input ng-model="p.person.Postal_Code" type="text" class="form-control" id="zip" placeholder="Enter zip code">
-                                            </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="state">State</label>
+                                            <select class="form-control col-sm-12" ng-model="profile.person.State" ng-options="state.State_Abbreviation for state in profile.states track by state.State_Abbreviation"></select>
+                                        </div>
 
-                                            <div class="form-group col-sm-6">
-                                                <label for="county">County</label>
-                                                <input ng-model="p.person.County" type="text" class="form-control" id="county" placeholder="Enter county">
-                                            </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="zip">Zip</label>
+                                            <input ng-model="profile.person.Postal_Code" type="text" class="form-control" id="zip" placeholder="Enter zip code">
+                                        </div>
 
-                                            <div class="form-group col-sm-6">
-                                                <label for="country">Country</label>
-                                                <select ng-model="p.person.Foreign_Country" ng-change="setCountry()" ng-options="country.dp_RecordName for country in p.countries track by country.dp_RecordName" class="form-control col-sm-12"></select>
-                                            </div>
-                                            
-                                        </li>
-                                        <li class="list-group-item clearfix">
-                                            <div class="form-group col-sm-6">
-                                                <label for="homephone">Home Phone</label>
-                                                <input ng-model="p.person.Home_Phone" type="text" class="form-control" id="homephone" placeholder="Enter home phone">
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item clearfix">
-                                            <div id="Site" class="form-group col-sm-6">
-                                                <label for="provider">Crossroads Location</label>
-                                                <select class="form-control col-sm-12" ng-model="p.person.congregationId" ng-options="congregation.dp_RecordID as congregation.dp_RecordName for congregation in p.crossroadsLocations"></select>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </fieldset>
+                                        <div class="form-group col-sm-6">
+                                            <label for="county">County</label>
+                                            <input ng-model="profile.person.County" type="text" class="form-control" id="county" placeholder="Enter county">
+                                        </div>
+
+                                        <div class="form-group col-sm-6">
+                                            <label for="country">Country</label>
+                                            <select ng-model="profile.person.Foreign_Country" ng-change="setCountry()" ng-options="country.dp_RecordName for country in profile.countries track by country.dp_RecordName" class="form-control col-sm-12"></select>
+                                        </div>
+
+                                    </li>
+                                    <li class="list-group-item clearfix">
+                                        <div class="form-group col-sm-6">
+                                            <label for="homephone">Home Phone</label>
+                                            <input ng-model="profile.person.Home_Phone" type="text" class="form-control" id="homephone" placeholder="Enter home phone">
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item clearfix">
+                                        <div id="Site" class="form-group col-sm-6">
+                                            <label for="provider">Crossroads Location</label>
+                                            <select class="form-control col-sm-12" ng-model="profile.person.congregationId" ng-options="congregation.dp_RecordID as congregation.dp_RecordName for congregation in profile.crossroadsLocations"></select>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </fieldset>
                             <!----form-->
-                        </div><!--/col-sm-12-->
+                        <!----div--><!--/col-sm-12-->
                     </div><!--/panel-body-->
                 </div><!--/panel-->
-
-            </div><!--/col-sm-12-->
+          
         </fieldset>
     </div>
-   
-    <button id="save-personal" ng-click="p.savePersonal(p.person)" class="btn btn-primary" data-style="expand-left">
+
+    <button id="save-personal" ng-click="profile.savePersonal()" class="btn btn-primary" data-style="expand-left">
         Save
     </button>
 </form>
