@@ -206,9 +206,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Crossroads\AccountInfo.cs" />
-    <Compile Include="Models\Household.cs" />
+    <Compile Include="Models\MP\Address.cs" />
+    <Compile Include="Models\MP\Household.cs" />
     <Compile Include="Models\MP\Contact.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

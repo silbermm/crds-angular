@@ -14,9 +14,13 @@ namespace crds_angular.Services
     {
         public void setProfile(String token, Person person)
         {
-            var dictionary = getDictionary(person);
-               
-            MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(474, dictionary, token);                 
+            var contactDictionary = getDictionary(person.GetContact());
+            var householdDictionary = getDictionary(person.GetHousehold());
+            var addressDictionary = getDictionary(person.GetAddress());
+
+            MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(455, contactDictionary, token);
+            MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(465, householdDictionary, token);
+            MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(468, addressDictionary, token); 
         }
 
 
@@ -50,7 +54,9 @@ namespace crds_angular.Services
                 Foreign_Country = contactJson.Foreign_Country,
                 County = contactJson.County,
                 Home_Phone = contactJson.Home_Phone,
-                Congregation_ID = contactJson.Congregation_ID
+                Congregation_ID = contactJson.Congregation_ID,
+                Household_ID = contactJson.Household_ID,
+                Address_Id = contactJson.Address_ID
             };
 
             return person;
