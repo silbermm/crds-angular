@@ -8,8 +8,6 @@ using System.Web.Http.Results;
 using System.Web.Http;
 using System.Net.Http;
 
-
-
 namespace crds_angular.test.controllers
 {
     [TestFixture]
@@ -32,9 +30,6 @@ namespace crds_angular.test.controllers
             
             IHttpActionResult result = profileController.GetProfile();
             Assert.IsInstanceOf(typeof(UnauthorizedResult), result);
-            //Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<Person>), result);
-            //OkNegotiatedContentResult<Person> o = (OkNegotiatedContentResult<Person>) result;
-            //Assert.IsInstanceOf(typeof(Person), o.Content);
         }
     }
 }
