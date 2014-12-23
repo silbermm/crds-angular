@@ -16,12 +16,10 @@ namespace crds_angular.Controllers.API
 {
     public class ProfileController : CookieAuth
     {
-
         [ResponseType(typeof (Person))]
         [Route("api/profile")]
         public IHttpActionResult GetProfile()
-        {
-            
+        {       
             return Authorized(t => {
                 var personService = new PersonService();
                 Person person = personService.getLoggedInUserProfile(t);
@@ -29,26 +27,8 @@ namespace crds_angular.Controllers.API
                 {
                     return Unauthorized();
                 }
-                Debug.WriteLine ("in the profile controller");
                 return this.Ok(person);
             });
-        }
-
-        [Route("api/profile")]
-        public IHttpActionResult Put([FromBody]Person person)
-        {  
-            return Authorized(token =>
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                var personService = new PersonService();
-                personService.setProfile(token, person);
-
-                return this.Ok();
-            });
-            
         }
 
         [Route("api/profile")]
@@ -59,20 +39,11 @@ namespace crds_angular.Controllers.API
                 return BadRequest(ModelState);
             }
 
-            CookieHeaderValue cookie = Request.Headers.GetCookies("sessionId").FirstOrDefault();
-            if (cookie.ToString() != null)
-            {
-
-                string token = cookie["sessionId"].Value;
+            return Authorized(t => {
                 var personService = new PersonService();
-                personService.setProfile(token, person);
-                Debug.WriteLine(person.Home_Phone);
+                personService.setProfile(t, person);
                 return this.Ok();
-            }
-            else
-            {
-                return this.Unauthorized();
-            }
+            });
 
         }
     }
