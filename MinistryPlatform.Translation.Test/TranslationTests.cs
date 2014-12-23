@@ -43,20 +43,11 @@ namespace MinistryPlatform.Translation.Test
         public void ShouldChangePassword()
         {
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            UserInfo userInfo = new UserInfo
-            {
-                FirstName = FIRSTNAME,
-                LastName = "User",
-                MobilePhone = "513-555-5555",
-                EmailAddress = "testme@test.com",
-                NewPassword = NEW_PASSWORD
-            };
-            var changed = AuthenticationService.ChangePassword(token, userInfo);
+            var changed = AuthenticationService.ChangePassword(token, NEW_PASSWORD);
             Assert.IsTrue(changed);
             var obj = AuthenticationService.authenticate(USERNAME, NEW_PASSWORD);
             Assert.IsNotNull(obj);
-            userInfo.NewPassword = PASSWORD;
-            var changedAgain = AuthenticationService.ChangePassword(token, userInfo);
+            var changedAgain = AuthenticationService.ChangePassword(token, PASSWORD);
             Assert.IsTrue(changedAgain);
         }
 

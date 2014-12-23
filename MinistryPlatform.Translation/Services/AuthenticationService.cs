@@ -12,25 +12,6 @@ namespace MinistryPlatform.Translation
 {
     public class AuthenticationService
     {
-
-        public static Boolean ChangePassword(string token, UserInfo user)
-        {
-            var platformService = new PlatformService.PlatformServiceClient();
-            using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformService.InnerChannel))
-            {
-                System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
-                try
-                { 
-                    platformService.UpdateCurrentUserInfo(user);
-                    return true;
-                }
-                catch (Exception e)
-                {
-                    throw e;
-                }
-            }
-        }
-
         public static Boolean ChangePassword(string token, string emailAddress, string firstName, string lastName, string password, string mobilephone)
         {
             var platformService = new PlatformService.PlatformServiceClient();
@@ -54,6 +35,21 @@ namespace MinistryPlatform.Translation
                 }
             }
 
+        }
+
+        public static Boolean ChangePassword(string token, string newPassword)
+        {
+            try
+            {
+                var record = GetPageRecordService.GetRecordsDict(475, token);
+                record["Password"] = newPassword;
+                UpdatePageRecordService.UpdateRecord(475, record, token);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         //get token using logged in user's credentials
