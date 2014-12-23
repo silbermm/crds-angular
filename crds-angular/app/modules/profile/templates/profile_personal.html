@@ -102,7 +102,7 @@
     <div class="row">
         <fieldset>
 
-            <!----div class="col-sm-12" ng-controller="crdsProfilePersonal"-->
+            <div class="col-sm-12" ng-controller="crdsProfileCtrl as p">
                 <legend>Your Household</legend>
                 <p>
                     Update information for your household, which includes:<br />
@@ -122,7 +122,7 @@
                             <div class="col-md-7">
                                 <svg viewBox="0 0 32 32" class="icon icon-home"><use xlink:href="/icons/cr.svg#home"></use></svg>3727 Hyde Park Ave, Cincinnati, OH 45209
                             </div>
-                            <div class="col-md-2"><svg viewBox="0 0 32 32" class="icon icon-phone3"><use xlink:href="/icons/cr.svg#phone3"></use></svg>(513) 258-5827</div>
+                            <div class="col-md-2"><svg viewBox="0 0 32 32" class="icon icon-phone3"><use xlink:href="/icons/cr.svg#phone3"></use></svg>859-867-5309</div>
                             <div class="col-md-3"><svg viewBox="0 0 32 32" class="icon icon-crossroads"><use xlink:href="/icons/cr.svg#crossroads"></use> </svg>Crossroads Oakley</div>
                         </div><!--/row-->
                     </div> <!--/panel-heading-->
@@ -188,11 +188,11 @@
                     </div><!--/panel-body-->
                 </div><!--/panel-->
 
-            <!--div--><!--/col-sm-12-->
+            </div><!--/col-sm-12-->
         </fieldset>
     </div>
    
-    <button id="save-personal" ng-click="p.savePersonal(p.profile)" class="btn btn-primary" data-style="expand-left">
+    <button id="save-personal" ng-click="p.savePersonal(p.person)" class="btn btn-primary" data-style="expand-left">
         Save
     </button>
 </form>

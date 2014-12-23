@@ -18,8 +18,9 @@
 
             $log.debug("profile controller");
             this.person.$save(function () {
-
-                //on success give message
+                $log.debug("person save successful");
+            }, function () {
+                $log.debug("person save unsuccessful");
             });
         }
 

@@ -66,6 +66,7 @@ namespace crds_angular.Controllers.API
                 string token = cookie["sessionId"].Value;
                 var personService = new PersonService();
                 personService.setProfile(token, person);
+                Debug.WriteLine(person.Home_Phone);
                 return this.Ok();
             }
             else

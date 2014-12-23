@@ -211,7 +211,6 @@
     <Compile Include="Models\Household.cs" />
     <Compile Include="Models\MP\Contact.cs" />
     <Compile Include="Models\Person.cs" />
-    <Compile Include="Models\Profile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\CookieAuth.cs" />
     <Compile Include="Security\CustomAuthorize.cs" />
@@ -231,7 +230,6 @@
     <Content Include="app\crossroads.net\module.js" />
     <Content Include="app\modules\profile\directives\profile_account_directive.js" />
     <Content Include="app\modules\profile\directives\profile_directive.js" />
-    <Content Include="app\modules\profile\services\profile_account_service.js" />
     <Content Include="app\modules\profile\templates\profile_password.html" />
     <Content Include="app\modules\profile\directives\profile_password_directive.js" />
     <Content Include="app\modules\profile\directives\profile_personal_directive.js" />
@@ -246,7 +244,6 @@
     <Content Include="app\modules\profile\services\profile_service.js" />
     <Content Include="app\modules\profile\templates\profile.html" />
     <Content Include="app\modules\profile\templates\profile_account.html" />
-    <Content Include="app\modules\profile\templates\profile_household.html" />
     <Content Include="app\modules\profile\templates\profile_personal.html" />
     <Content Include="Content\icons\arrow-right9.svg" />
     <Content Include="Content\icons\book.svg" />
