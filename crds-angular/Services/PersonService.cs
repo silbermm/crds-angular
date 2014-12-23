@@ -6,56 +6,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Reflection;
+using System.Diagnostics;
 
 namespace crds_angular.Services
 {
-    public static class PersonService
+    public class PersonService : MinistryPlatformBaseService       
     {
-
-        public static void setProfile(String token, Person person)
+        public void setProfile(String token, Person person)
         {
-            var dictionary = person.GetType()
-                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                .Where(p => !p.IsMarkedWith<NotInDictionaryAttribute>())
-                .ToDictionary(prop => prop.Name, prop => prop.GetValue(person, null));
+            var contactDictionary = getDictionary(person.GetContact());
+            var householdDictionary = getDictionary(person.GetHousehold());
+            var addressDictionary = getDictionary(person.GetAddress());
 
-            MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(455, dictionary, token);
+            MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(455, contactDictionary, token);
+            MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(465, householdDictionary, token);
+            MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(468, addressDictionary, token); 
         }
 
-        public static Person getLoggedInUserProfile(String token)
+
+        public Person getLoggedInUserProfile(String token)
         {
             var contactId = MinistryPlatform.Translation.AuthenticationService.GetContactId(token);
-            JArray contact = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecord(455, contactId, token);
+            JArray contact = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecords(474,  token);
             var contactJson = TranslationService.DecodeJson(contact.ToString());
-
-
-            Household house = new Household();
-            Address address = new Address();
-            try
-            {
-                var householdId = contactJson.Household_ID;
-                var household = crds_angular.Services.TranslationService.GetMyHousehold(householdId, token);
-                var houseJson = TranslationService.DecodeJson(household);
-                house.HouseholdPosition = contactJson.Household_Position_ID_Text;
-                house.HomePhone = houseJson.Home_Phone;
-                house.CrossroadsLocation = houseJson.Congregation_ID;
-                var addressId = houseJson.Address_ID;
-                var addr = crds_angular.Services.TranslationService.GetMyAddress(addressId, token);
-                var addressJson = TranslationService.DecodeJson(addr);
-                address.Street = addressJson.Address_Line_1;
-                address.Street2 = addressJson.Address_Line_2;
-                address.City = addressJson.City;
-                address.State = addressJson["State/Region"];
-                address.Zip = addressJson.Postal_Code;
-                address.Country = addressJson.Foreign_Country;
-                address.County = addressJson.County;
-            }
-            catch (Exception ex)
-            {
-                //Console.Write(ex.Message);
-            }
-       
-            var person = new Person
+                      
+            var person = new Person            
             {
                 Contact_Id = contactJson.Contact_Id,
                 Email_Address = contactJson.Email_Address,
@@ -65,18 +40,27 @@ namespace crds_angular.Services
                 Last_Name = contactJson.Last_Name,
                 Maiden_Name = contactJson.Maiden_Name,
                 Mobile_Phone = contactJson.Mobile_Phone,
-                Mobile_Carrier = contactJson.Mobile_Carrier,
+                Mobile_Carrier_ID = contactJson.Mobile_Carrier_ID,
                 Date_of_Birth = contactJson.Date_of_Birth,
                 Marital_Status_Id = contactJson.Marital_Status_ID,
                 Gender_Id = contactJson.Gender_ID,
                 Employer_Name = contactJson.Employer_Name,
+                Address_Line_1 = contactJson.Address_Line_1,
+                Address_Line_2 = contactJson.Address_Line_2,
+                City = contactJson.City,
+                State = contactJson.State,
+                Postal_Code = contactJson.Postal_Code,
                 Anniversary_Date = contactJson.Anniversary_Date,
-                Address = address,
-                Household = house
+                Foreign_Country = contactJson.Foreign_Country,
+                County = contactJson.County,
+                Home_Phone = contactJson.Home_Phone,
+                Congregation_ID = contactJson.Congregation_ID,
+                Household_ID = contactJson.Household_ID,
+                Address_Id = contactJson.Address_ID
             };
-            
+
             return person;
-        
+
         }
         
 

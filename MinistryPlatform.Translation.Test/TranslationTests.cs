@@ -51,6 +51,21 @@ namespace MinistryPlatform.Translation.Test
             Assert.IsTrue(changedAgain);
         }
 
+        [Test]
+        public void Andy()
+        {
+            var pageId = 474;
+            var token = AuthenticationService.authenticate("tmaddox", "crds1234");
+            var recordId = AuthenticationService.GetContactId(token);
+            Assert.IsNotNull(recordId, "Contact ID shouldn't be null"); ;
+
+            var dictionary = new Dictionary<string, object>();
+            dictionary.Add("Contact_ID", recordId);
+            dictionary.Add("Nickname", "Canterbury");
+
+            MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(455, dictionary, token);
+        }
+
         //[Test]
         //public void ShouldGetPageRecords()
         //{

@@ -24,6 +24,7 @@
         authService.isAuthenticated = function () {
             if (Session.exists("sessionId")) {
                 var isAuth = $http.get("api/authenticated").then(function (res) {
+                    console.log ("auth??");
                     console.log(res.data);
                     Session.create(res.data.userToken, res.data.userId, res.data.username);
                     return true;

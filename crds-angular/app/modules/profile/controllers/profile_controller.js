@@ -3,7 +3,8 @@
     angular.module("crdsProfile").controller('crdsProfileCtrl', ['Profile', 'Lookup','$log',  ProfileController]);
 
     function ProfileController(Profile, Lookup, $log) {
-        var _this = this;
+        
+	var _this = this;
       
         _this.initProfile = function () {
             _this.genders = Lookup.Genders.query();
@@ -20,9 +21,13 @@
             _this.password = new Profile.Password();
         }
 
-        _this.savePersonal = function (profile) {
-            profile.person.$save(function () {
-                //on success give message
+	_this.savePersonal = function () {
+
+            $log.debug("profile controller");
+            _this.person.$save(function () {
+                $log.debug("person save successful");
+            }, function () {
+                $log.debug("person save unsuccessful");
             });
         }
 
@@ -49,4 +54,5 @@
             });
         }
     }
+
 })()

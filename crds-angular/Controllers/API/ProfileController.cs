@@ -10,18 +10,19 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.SessionState;
 using crds_angular.Security;
+using System.Diagnostics;
 
 namespace crds_angular.Controllers.API
 {
     public class ProfileController : CookieAuth
     {
-
         [ResponseType(typeof (Person))]
         [Route("api/profile")]
         public IHttpActionResult GetProfile()
-        {
+        {       
             return Authorized(t => {
-                Person person = PersonService.getLoggedInUserProfile(t);
+                var personService = new PersonService();
+                Person person = personService.getLoggedInUserProfile(t);
                 if (person == null)
                 {
                     return Unauthorized();
@@ -31,21 +32,20 @@ namespace crds_angular.Controllers.API
         }
 
         [Route("api/profile")]
-        public IHttpActionResult Put([FromBody]Person person)
-        {  
-            return Authorized(token =>
+        public IHttpActionResult Post([FromBody] Person person)
+        {
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                PersonService.setProfile(token, person);
+                return BadRequest(ModelState);
+            }
+
+            return Authorized(t => {
+                var personService = new PersonService();
+                personService.setProfile(t, person);
                 return this.Ok();
             });
-            
-        }
 
-       
+        }
     }
 
     
