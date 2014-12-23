@@ -1,4 +1,5 @@
 ﻿using crds_angular.Models.Crossroads;
+using crds_angular.Models.Json;
 using crds_angular.Security;
 using crds_angular.Services;
 using System;
@@ -29,6 +30,31 @@ namespace crds_angular.Controllers.API
                     return BadRequest();
                 }
                 
+            });
+            
+        }
+
+        [Route("api/account/password")]
+        [HttpPost]
+        public IHttpActionResult UpdatePassword([FromBody] NewPassword password)
+        {
+
+            return Authorized(token =>
+            {
+                if (AccountService.ChangePassword(token, password.password))
+                {
+                    return Ok();
+                }
+                return BadRequest();
+            });
+
+        }
+
+        public IHttpActionResult Post([FromBody]Communication communication)
+        {
+            return Authorized(token =>
+            {
+                return Ok();
             });
             
         }

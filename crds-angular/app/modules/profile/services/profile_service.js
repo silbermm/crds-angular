@@ -4,7 +4,8 @@
     function ProfileService($resource) {
         return {
             Personal: $resource('api/profile'),
-            Account: $resource('api/account')
+            Account: $resource('api/account'),
+            Password: $resource('api/account/password')
         }
     }
 })()

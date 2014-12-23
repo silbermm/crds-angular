@@ -26,9 +26,34 @@ namespace MinistryPlatform.Translation
                 }
                 catch (Exception e)
                 {
+                    throw e;
+                }
+            }
+        }
+
+        public static Boolean ChangePassword(string token, string emailAddress, string firstName, string lastName, string password, string mobilephone)
+        {
+            var platformService = new PlatformService.PlatformServiceClient();
+            using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformService.InnerChannel))
+            {
+                System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+                try
+                {
+                    UserInfo user = new UserInfo();
+                    user.EmailAddress = emailAddress;
+                    user.FirstName = firstName;
+                    user.LastName = lastName;
+                    user.NewPassword = password;
+                    user.MobilePhone = mobilephone;
+                    platformService.UpdateCurrentUserInfo(user);
+                    return true;
+                }
+                catch (Exception e)
+                {
                     return false;
                 }
             }
+
         }
 
         //get token using logged in user's credentials
