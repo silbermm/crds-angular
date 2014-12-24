@@ -3,6 +3,7 @@ using MinistryPlatform.Translation.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -12,15 +13,20 @@ namespace MinistryPlatform.Translation
 {
     public class AuthenticationService
     {
-
-        public static Boolean ChangePassword(string token, UserInfo user)
+        public static Boolean ChangePassword(string token, string emailAddress, string firstName, string lastName, string password, string mobilephone)
         {
             var platformService = new PlatformService.PlatformServiceClient();
             using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformService.InnerChannel))
             {
                 System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
                 try
-                { 
+                {
+                    UserInfo user = new UserInfo();
+                    user.EmailAddress = emailAddress;
+                    user.FirstName = firstName;
+                    user.LastName = lastName;
+                    user.NewPassword = password;
+                    user.MobilePhone = mobilephone;
                     platformService.UpdateCurrentUserInfo(user);
                     return true;
                 }
@@ -28,6 +34,28 @@ namespace MinistryPlatform.Translation
                 {
                     return false;
                 }
+            }
+
+        }
+
+        /// <summary>
+        /// Change a users password
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="newPassword"></param>
+        /// <returns></returns>
+        public static Boolean ChangePassword(string token, string newPassword)
+        {
+            try
+            {
+                var record = GetPageRecordService.GetRecordsDict(Convert.ToInt32(ConfigurationManager.AppSettings["ChangePassword"]), token);
+                record["Password"] = newPassword;
+                UpdatePageRecordService.UpdateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["ChangePassword"]), record, token);
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
 

@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-angular.module("crossroads").config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+angular.module("crossroads").config(['$stateProvider', '$urlRouterProvider',  function ($stateProvider, $urlRouterProvider) {
     
     $stateProvider
         .state('home', {
@@ -23,7 +23,7 @@ angular.module("crossroads").config(['$stateProvider', '$urlRouterProvider', fun
             url: '/profile',
             templateUrl: 'app/crossroads.net/profile/profile.html',
             data: {
-                require_login: true
+                require_login: true 
             }
         });
 

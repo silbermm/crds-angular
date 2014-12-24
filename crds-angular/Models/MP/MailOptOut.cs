@@ -5,9 +5,9 @@ using System.Web;
 
 namespace crds_angular.Models.MP
 {
-    public class Gender
+    public class MailOptOut
     {
-        public int Id { get; set; }
-        public string Text { get; set; }
+        public int Household_ID { get; set; }
+        public bool Bulk_Mail_Opt_Out { get; set; }
     }
 }

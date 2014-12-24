@@ -20,7 +20,7 @@
 
         $scope.login = function () {            
             if ($scope.credentials.username === '' || $scope.credentials.password === '') {
-               
+                $log.debug("Need to have something in the text boxes!");
             } else {
                 $scope.processing = true;
                 AuthService.login($scope.credentials).then(function (user) {

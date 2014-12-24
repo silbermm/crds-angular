@@ -107,10 +107,12 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="controllers\AccountControllerTest.cs" />
     <Compile Include="controllers\HomeControllerTest.cs" />
     <Compile Include="controllers\ProfileControllerTest.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AccountServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
@@ -131,9 +133,7 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

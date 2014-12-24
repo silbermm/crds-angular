@@ -1,14 +1,11 @@
-﻿using crds_angular.Models.Json;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace crds_angular.Models.Crossroads
+namespace crds_angular.Models.Json
 {
-    [JsonConverter(typeof(AccountInfoSerializer))]
-    public class AccountInfo
+    public class Communication
     {
         public bool EmailNotifications { get; set; }
         public bool TextNotifications { get; set; }

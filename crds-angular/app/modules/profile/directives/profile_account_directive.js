@@ -1,12 +1,13 @@
 ﻿(function () {
-    angular.module("crdsProfile").directive("crdsProfileAccount", ['$log',CrdsAccount]);
-    function CrdsAccount($log){
+    angular.module("crdsProfile").directive("crdsProfileAccount", ['$log','Profile', CrdsAccount]);
+    function CrdsAccount($log, Profile){
         return {
             restrict: 'E',
             replace: true,
-            contoller: 'crdsProfileCtrl as profile',
+            require: "^crdsProfilePage",
             templateUrl: 'app/modules/profile/templates/profile_account.html',
-            link: (function (scope, el, attr) {
+            controllerAs: true,
+            link: (function (scope, el, attr, ctrl) {
                 
             })
         }
