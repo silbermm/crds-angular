@@ -21,6 +21,11 @@
             _this.password = new Profile.Password();
         }
 
+        _this.initSkills = function () {
+            _this.skills = Lookup.Skills.query();
+            _this.person = Profile.Personal.get();
+        }
+
 	_this.savePersonal = function () {
 
             $log.debug("profile controller");

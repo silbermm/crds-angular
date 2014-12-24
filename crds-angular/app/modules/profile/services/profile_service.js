@@ -8,6 +8,7 @@
             Account: $resource('api/account'),
             Password: $resource('api/account/password')
             //Household: $resource('api/household')
+
         }
 
     }

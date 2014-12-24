@@ -86,6 +86,31 @@ namespace MinistryPlatform.Translation.Services
             
         }
 
+        public static List<Dictionary<string, object>> GetSubPageRecords(int subPageId, int recordId, String token)
+        {
+            try
+            {
+                var platformServiceClient = new PlatformService.PlatformServiceClient();
+                PlatformService.SelectQueryResult result;
+
+                using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
+                {
+                    System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+                    result = platformServiceClient.GetSubpageRecords(subPageId, recordId, string.Empty, string.Empty, 0);
+                }
+
+                var returnVal = MPFormatConversion.MPFormatToList(result);
+                return returnVal;
+                //return MPFormatConversion.MPFormatToJson(result);
+                //return "";
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.ToString());
+                return null;
+            }
+        }
+
         public static Dictionary<string, object> GetRecordsDict(int id, string token)
         {
             try

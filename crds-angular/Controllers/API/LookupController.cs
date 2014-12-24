@@ -1,3 +1,4 @@
+using crds_angular.Security;
 using crds_angular.Services;
 using System;
 using System.Collections.Generic;
@@ -10,30 +11,21 @@ using System.Web.Http.Description;
 
 namespace crds_angular.Controllers.API
 {
-    public class LookupController : ApiController
+    public class LookupController : CookieAuth
     {
-
-
         [ResponseType(typeof(System.Web.Helpers.DynamicJsonArray))]
         [Route("api/lookup/{pageId}")]
         public IHttpActionResult Get(int pageId)
         {
-            CookieHeaderValue cookie = Request.Headers.GetCookies("sessionId").FirstOrDefault();
-            if (cookie != null && (cookie["sessionId"].Value != "null" || cookie["sessionId"].Value != null))
-            {
-                string token = cookie["sessionId"].Value;
-                var contact = TranslationService.GetLookup(pageId, token);
+            return Authorized(t => {
+                var contact = TranslationService.GetLookup(pageId, t);
                 var json = DecodeJson(contact.ToString());
 
                 return this.Ok(json);
-            }
-            else
-            {
-                return this.Unauthorized();
-            }
+            });
         }
 
-        private static dynamic DecodeJson(string json)
+        protected static dynamic DecodeJson(string json)
         {
             var obj = System.Web.Helpers.Json.Decode(json);
             if (obj.GetType() == typeof(System.Web.Helpers.DynamicJsonArray))

@@ -43,6 +43,7 @@
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
@@ -63,6 +64,10 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MinistryPlatform.Models\MinistryPlatform.Models.csproj">
+      <Project>{cd41507e-91ac-4c60-96e2-5cac25f49a76}</Project>
+      <Name>MinistryPlatform.Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MinistryPlatform.Translation\MinistryPlatform.Translation.csproj">
       <Project>{cc650d93-731c-4613-b358-fb4c76237455}</Project>
       <Name>MinistryPlatform.Translation</Name>

@@ -1,0 +1,36 @@
+﻿<div>
+    <form role="form" ng-controller="crdsProfileCtrl as profile" ng-init="profile.initSkills()">
+        <fieldset class="row">
+            <legend class="col-sm-12">My Selected Skills</legend>
+            <ul class="col-sm-12 current-skills-list list-inline">
+                <li><div class="label label-primary">Software DeveloperXXX <a href="#"><svg viewBox="0 0 32 32" class="icon icon-trash"><use xlink:href="/icons/cr.svg#trash"></use></svg></a></div></li>
+                <li><div class="label label-primary">Web DesignXXX <a href="#"><svg viewBox="0 0 32 32" class="icon icon-trash"><use xlink:href="/icons/cr.svg#trash"></use></svg></a></div></li>
+                <li><div class="label label-primary">Web DevelopmentXXX <a href="#"><svg viewBox="0 0 32 32" class="icon icon-trash"><use xlink:href="/icons/cr.svg#trash"></use></svg></a></div></li>
+                <li><div class="label label-primary">Photoshop wizardXXX <a href="#"><svg viewBox="0 0 32 32" class="icon icon-trash"><use xlink:href="/icons/cr.svg#trash"></use></svg></a></div></li>
+                <li><div class="label label-primary">AdministrativeXXX <a href="#"><svg viewBox="0 0 32 32" class="icon icon-trash"><use xlink:href="/icons/cr.svg#trash"></use></svg></a></div></li>
+
+                <li ng-repeat="myskill in profile.person.skills">
+                <div class="label label-primary">
+                    {{ myskill.Name }} <a href="#">
+                    <svg viewBox="0 0 32 32" class="icon icon-trash"><use xlink:href="/icons/cr.svg#trash"></use></svg></a>
+                    </div>
+                </li>
+            </ul>
+        </fieldset>
+
+        <fieldset class="row add-skills">
+            <p class="lead col-sm-12">Check off any super powers you may have.</p>
+            <div class="form-group col-sm-12 row" ng-repeat="category in profile.skills">
+                <label class="col-sm-3">{{ category.Name }}</label>
+                <div class="cat-skill-group col-sm-9">
+                    <div class="checkbox" ng-repeat="skill in category.Skills">
+                        <label>
+                            <input type="checkbox"> {{ skill.Name }}
+                        </label>
+                    </div>
+                </div>
+            </div> <!-- /.form-group.col-sm-12 -->
+        </fieldset>
+
+    </form>
+</div>

@@ -202,11 +202,13 @@
     <Compile Include="Controllers\API\LoginController.cs" />
     <Compile Include="Controllers\API\LookupController.cs" />
     <Compile Include="Controllers\API\ProfileController.cs" />
+    <Compile Include="Controllers\API\SkillController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Crossroads\AccountInfo.cs" />
+    <Compile Include="Models\Crossroads\Skill.cs" />
     <Compile Include="Models\Json\AccountInfoSerializer.cs" />
     <Compile Include="Models\Json\Communication.cs" />
     <Compile Include="Models\Json\NewPassword.cs" />
@@ -235,6 +237,7 @@
     <Content Include="app\crossroads.net\module.js" />
     <Content Include="app\modules\profile\directives\profile_account_directive.js" />
     <Content Include="app\modules\profile\directives\profile_directive.js" />
+    <Content Include="app\modules\profile\directives\profile_skills_directive.js" />
     <Content Include="app\modules\profile\templates\profile_password.html" />
     <Content Include="app\modules\profile\directives\profile_password_directive.js" />
     <Content Include="app\modules\profile\directives\profile_personal_directive.js" />
@@ -250,6 +253,7 @@
     <Content Include="app\modules\profile\templates\profile.html" />
     <Content Include="app\modules\profile\templates\profile_account.html" />
     <Content Include="app\modules\profile\templates\profile_personal.html" />
+    <Content Include="app\modules\profile\templates\profile_skills.html" />
     <Content Include="Content\icons\arrow-right9.svg" />
     <Content Include="Content\icons\book.svg" />
     <Content Include="Content\icons\bubble.svg" />
@@ -1288,6 +1292,10 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MinistryPlatform.Models\MinistryPlatform.Models.csproj">
+      <Project>{cd41507e-91ac-4c60-96e2-5cac25f49a76}</Project>
+      <Name>MinistryPlatform.Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MinistryPlatform.Translation\MinistryPlatform.Translation.csproj">
       <Project>{cc650d93-731c-4613-b358-fb4c76237455}</Project>
       <Name>MinistryPlatform.Translation</Name>

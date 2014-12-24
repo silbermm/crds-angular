@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.PlatformService;
+using System.Configuration;
+
 namespace MinistryPlatform.Translation.Test
 {
     [TestFixture]
@@ -90,11 +92,25 @@ namespace MinistryPlatform.Translation.Test
             var pageId = 455;
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
             var recordId = AuthenticationService.GetContactId(token);
-            Assert.IsNotNull(recordId, "Contact ID shouldn't be null");;
+            Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
             Dictionary<string,object> record = GetPageRecordService.GetRecordDict(pageId, recordId,token);
             Assert.IsNotNull(record);
             Assert.IsNotEmpty(record);
             Assert.AreEqual(FIRSTNAME, record["First_Name"]);
+        }
+
+        [Test]
+        public void GetMySkills()
+        {
+            //setup stuff
+            var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);
+            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            var recordId = AuthenticationService.GetContactId(token);
+            Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
+
+            //the good stuff
+            var attributes = GetMyRecords.GetMyAttributes(recordId, token);
+            Assert.IsNotNull(attributes);
         }
 
         //[Test]

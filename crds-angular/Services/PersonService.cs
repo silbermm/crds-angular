@@ -59,7 +59,21 @@ namespace crds_angular.Services
                 Address_Id = contactJson.Address_ID
             };
 
+            person.skills = GetSkills(person.Contact_Id, token);
+
             return person;
+
+        }
+
+        private List<Models.Crossroads.Skill> GetSkills(int recordId, string token)
+        {
+            var attributes = MinistryPlatform.Translation.Services.GetMyRecords.GetMyAttributes(recordId, token);
+
+            //later use auto mapper
+            var skills = AutoMapper.Mapper.Map<List<MinistryPlatform.Models.Attribute>, List<Models.Crossroads.Skill>>(attributes);
+            //List<Destination> listDest = Mapper.Map<Source[], List<Destination>>(sources);
+
+            return skills;
 
         }
         

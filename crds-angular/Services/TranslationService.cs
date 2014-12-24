@@ -36,6 +36,11 @@ namespace crds_angular.Services
             return GetRecord(465, householdId, token);         
         }
 
+        public static string GetMySkills(int personId, string token)
+        {
+            return null;
+        }
+
         public static string GetLookup(int pageId, string token)
         {
             var data = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecords(pageId, token);
