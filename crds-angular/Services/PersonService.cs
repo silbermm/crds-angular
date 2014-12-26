@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Reflection;
 using System.Diagnostics;
+using System.Configuration;
 
 namespace crds_angular.Services
 {
@@ -27,7 +28,8 @@ namespace crds_angular.Services
         public Person getLoggedInUserProfile(String token)
         {
             var contactId = MinistryPlatform.Translation.AuthenticationService.GetContactId(token);
-            JArray contact = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecords(474,  token);
+            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["MyProfile"]);
+            JArray contact = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecords(pageId, token);
             var contactJson = TranslationService.DecodeJson(contact.ToString());
                       
             var person = new Person            
