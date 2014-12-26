@@ -72,7 +72,7 @@ namespace MinistryPlatform.Translation
                     {"grant_type", "password"}
                 });
             var client = new HttpClient();
-            var message = client.PostAsync("https://my.crossroads.net/ministryplatform/oauth/token", userCredentials);
+            var message = client.PostAsync(ConfigurationManager.AppSettings["TokenURL"], userCredentials);
             try
             {
                 var result = message.Result.Content.ReadAsStringAsync().Result;
