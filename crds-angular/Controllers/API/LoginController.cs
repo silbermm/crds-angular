@@ -22,20 +22,27 @@ namespace crds_angular.Controllers.API
         [Route("api/authenticated")]
         public IHttpActionResult isAuthenticated()
         {
-            
+           
             return Authorized(token =>
             {
-                var personService = new PersonService();
-                var person = personService.getLoggedInUserProfile(token);
-               
-                if (person == null)
+                try
+                {
+                    var personService = new PersonService();
+                    var person = personService.getLoggedInUserProfile(token);
+
+                    if (person == null)
+                    {
+                        return this.Unauthorized();
+                    }
+                    else
+                    {
+                        var l = new LoginReturn(token, person.Contact_Id, person.First_Name);
+                        return this.Ok(l);
+                    }
+                }
+                catch (Exception e)
                 {
                     return this.Unauthorized();
-                }
-                else
-                {
-                    var l = new LoginReturn(token, person.Contact_Id, person.First_Name);
-                    return this.Ok(l);
                 }
             });
         }
