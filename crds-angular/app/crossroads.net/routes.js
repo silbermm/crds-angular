@@ -19,13 +19,7 @@ angular.module("crossroads").config(['$stateProvider', '$urlRouterProvider',  fu
                 require_login: false
             }
         })
-        .state('profile', {
-            url: '/profile',
-            templateUrl: 'app/crossroads.net/profile/profile.html',
-            data: {
-                require_login: true 
-            }
-        });
+    ;
 
     $urlRouterProvider.otherwise("/home");
 
