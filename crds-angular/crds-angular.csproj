@@ -241,7 +241,6 @@
     <Content Include="app\modules\profile\controllers\profile_controller.js" />
     <Content Include="app\modules\profile\controllers\profile_date_picker.js" />
     <Content Include="app\modules\profile\module.js" />
-    <Content Include="app\crossroads.net\profile\profile.html" />
     <Content Include="app\crossroads.net\routes.js" />
     <Content Include="app\crossroads.net\services\auth_service.js" />
     <Content Include="app\crossroads.net\services\session_service.js" />
@@ -250,6 +249,8 @@
     <Content Include="app\modules\profile\templates\profile.html" />
     <Content Include="app\modules\profile\templates\profile_account.html" />
     <Content Include="app\modules\profile\templates\profile_personal.html" />
+    <Content Include="app\modules\services\module.js" />
+    <Content Include="app\modules\services\profile_service.js" />
     <Content Include="Content\icons\arrow-right9.svg" />
     <Content Include="Content\icons\book.svg" />
     <Content Include="Content\icons\bubble.svg" />
@@ -1279,7 +1280,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\crossroads.net\shared\" />
-    <Folder Include="app\modules\services\" />
     <Folder Include="App_Data\" />
     <Folder Include="Content\static\" />
   </ItemGroup>

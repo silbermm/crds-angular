@@ -30,7 +30,6 @@ namespace crds_angular.Controllers.API
                
                 if (person == null)
                 {
-                    Debug.WriteLine("in the login controller");
                     return this.Unauthorized();
                 }
                 else
