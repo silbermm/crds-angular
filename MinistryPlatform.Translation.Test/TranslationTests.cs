@@ -100,6 +100,19 @@ namespace MinistryPlatform.Translation.Test
         }
 
         [Test]
+        public void GetAvailableSkills()
+        {
+            var pageId = 277;
+            var token = AuthenticationService.authenticate("tmaddox", "crds1234");
+            //var recordId = AuthenticationService.GetContactId(token);
+            //Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
+            var records = GetPageRecordService.GetRecords(277, token);
+            Assert.IsNotNull(records);
+            //Assert.IsNotEmpty(record);
+            //Assert.AreEqual(FIRSTNAME, record["First_Name"]);
+        }
+
+        [Test]
         public void GetMySkills()
         {
             //setup stuff
@@ -113,14 +126,29 @@ namespace MinistryPlatform.Translation.Test
             Assert.IsNotNull(attributes);
         }
 
-        //[Test]
-        //public void ShouldGetNoPageRecord()
-        //{
-        //    var pageId = 292;
-        //    var recordId = 0;
-        //    var record = MinistryPlatform.Translation.Services.MinistryPlatform.GetMyPageRecord(pageId, recordId);
-        //    Assert.IsNull(record);
+        [Test]
+        public void AddASkill()
+        {
+            //var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);
+            var token = AuthenticationService.authenticate("tmaddox", "crds1234");
+            var recordId = AuthenticationService.GetContactId(token);
+            Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
 
-        //}
+            var attribute = new MinistryPlatform.Models.Attribute();
+            attribute.Start_Date = new DateTime(2013, 7, 1);
+            attribute.Attribute_ID = 71;
+
+            var added = GetMyRecords.CreateAttribute(attribute, recordId, token);
+            Assert.IsTrue(added);
+        }
+
+        [Test]
+        public void DeleteASkill()
+        {
+            var token = AuthenticationService.authenticate("tmaddox", "crds1234");
+
+            var deleted = GetMyRecords.DeleteAttribute(679098, token);
+            Assert.IsTrue(deleted);
+        }
     }
 }

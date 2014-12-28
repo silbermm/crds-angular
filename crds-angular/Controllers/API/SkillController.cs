@@ -25,25 +25,34 @@ namespace crds_angular.Controllers.API
         public IHttpActionResult Get()
         {
             var pageId = 277;
-            return Authorized(t =>
+            return Authorized(token =>
             {
-                var mpObject = TranslationService.GetLookup(pageId, t);
+                var mySkills = GetMySkills(token);
+
+                var mpObject = TranslationService.GetLookup(pageId, token);
                 var attributes = JsonConvert.DeserializeObject<List<MinistryPlatform.Models.Attribute>>(mpObject);
-                var skills = ConvertToSkills(attributes);
+                var skills = ConvertToSkills(attributes, mySkills);
 
                 return this.Ok(skills);
             });
         }
 
-        //public IHttpActionResult Get(int id)
-        //{
-        //    return Authorized(token =>
-        //    {
+        private List<Models.Crossroads.Skill> GetMySkills(string token)
+        {
+                var cookie = Request.Headers.GetCookies("userId").FirstOrDefault();
+                if (cookie != null && (cookie["userId"].Value != "null" || cookie["userId"].Value != null))
+                {
+                    var contactId = int.Parse(cookie["userId"].Value);
 
-        //    });
-        //}
 
-        private List<Models.Crossroads.SkillCategory> ConvertToSkills(List<MinistryPlatform.Models.Attribute> attributes)
+                    var personService = new PersonService();
+                    var skills = personService.getLoggedInUserSkills(contactId, token);
+                    return skills;
+                }
+                return null;
+        }
+
+        private List<Models.Crossroads.SkillCategory> ConvertToSkills(List<MinistryPlatform.Models.Attribute> attributes, List<Models.Crossroads.Skill> mySkills)
         {
             //init our return variable
             var skillCategories = new List<Models.Crossroads.SkillCategory>();
@@ -63,17 +72,27 @@ namespace crds_angular.Controllers.API
                 var skills = new List<Models.Crossroads.Skill>();
                 foreach (var skill in category)
                 {
+                    
                     var s = new Models.Crossroads.Skill
                     {
-                        Id = skill.dp_RecordID,
+                        SkillId = skill.dp_RecordID,
                         Name = skill.Attribute_Name
                     };
+                    var selectedRecordId = mySkills.Where(m => m.Name == skill.Attribute_Name).Select(m => m.SkillId).FirstOrDefault();
+                    if (selectedRecordId != 0)
+                    {
+                        s.Selected = true;
+                        s.RecordId = selectedRecordId;
+                    }
                     skills.Add(s);
                 }
+
                 skillCategory.Skills = skills;
                 skillCategories.Add(skillCategory);
             }
             return skillCategories;
         }
+
+       
     }
 }

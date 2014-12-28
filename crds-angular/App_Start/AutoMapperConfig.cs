@@ -54,7 +54,7 @@ namespace crds_angular.App_Start
                 ;
 
             AutoMapper.Mapper.CreateMap<MinistryPlatform.Models.Attribute, Models.Crossroads.Skill>()
-                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.dp_RecordID))
+                .ForMember(dest => dest.SkillId, opts => opts.MapFrom(src => src.dp_RecordID))
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Attribute_Name));
         }
     }

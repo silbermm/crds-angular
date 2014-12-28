@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Web;
 
@@ -12,7 +13,10 @@ namespace crds_angular.Models.Crossroads
     }
     public class Skill
     {
-        public int Id { get; set; }
+        public int SkillId { get; set; }
+        public int RecordId { get; set; }
         public string Name { get; set; }
+        [DefaultValue(false)]
+        public bool Selected { get; set; }
     }
 }

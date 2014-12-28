@@ -20,14 +20,42 @@ namespace crds_angular.Controllers.API
         [Route("api/profile")]
         public IHttpActionResult GetProfile()
         {       
-            return Authorized(t => {
+            return Authorized(token => {
                 var personService = new PersonService();
-                Person person = personService.getLoggedInUserProfile(t);
+                var person = personService.getLoggedInUserProfile(token);
                 if (person == null)
                 {
                     return Unauthorized();
                 }
                 return this.Ok(person);
+            });
+        }
+
+        [ResponseType(typeof(List<Models.Crossroads.Skill>))]
+        [Route("api/myskills")]
+        public IHttpActionResult GetMySkills()
+        {
+            return Authorized(token =>
+            {
+                var cookie = Request.Headers.GetCookies("userId").FirstOrDefault();
+                if (cookie != null && (cookie["userId"].Value != "null" || cookie["userId"].Value != null))
+                {
+                    Debug.WriteLine("userId");
+                    var contactId = int.Parse(cookie["userId"].Value);
+
+
+                    var personService = new PersonService();
+                    var skills = personService.getLoggedInUserSkills(contactId, token);
+                    if (skills == null)
+                    {
+                        return Unauthorized();
+                    }
+                    return this.Ok(skills);
+                }
+                else
+                {
+                    return this.Unauthorized();
+                }
             });
         }
 

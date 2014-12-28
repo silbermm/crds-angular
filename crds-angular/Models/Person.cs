@@ -37,7 +37,7 @@ namespace crds_angular.Models
         public bool Bulk_Email_Opt_Out { get; set; }
         public bool Bulk_SMS_Opt_Out { get; set; }
         public bool Bulk_Mail_Opt_Out { get; set; }
-        public List<Models.Crossroads.Skill> skills { get; set; }
+        //public List<Models.Crossroads.Skill> skills { get; set; }
 
         public Models.MP.Contact GetContact()
         {

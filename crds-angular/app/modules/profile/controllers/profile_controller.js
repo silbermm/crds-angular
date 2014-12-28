@@ -22,8 +22,32 @@
         }
 
         _this.initSkills = function () {
-            _this.skills = Lookup.Skills.query();
-            _this.person = Profile.Personal.get();
+            _this.skills = Lookup.Skills.query(function () {
+                _this.myskills = function () {
+                    var flat = [];
+                    _this.skills.forEach(function (item) {
+                        flat.push.apply(flat, item.Skills);
+                    })
+                    return flat;
+                };
+            });
+        }
+
+        _this.skillTrashCan = function (skill) {
+            //toggle Selected
+            skill.Selected = !skill.Selected;
+
+            //call function to perform action, which is first?
+            _this.skillChange(skill);
+        }
+
+        _this.skillChange = function (skill) {
+            if (skill.Selected) {
+                alert('add me');
+            }
+            else {
+                alert('delete me!');
+            }
         }
 
 	_this.savePersonal = function () {
