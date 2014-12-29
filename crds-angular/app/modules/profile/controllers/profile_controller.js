@@ -49,7 +49,9 @@
             if (skill.Selected) {
                 newSkill.$save().then(function (data) {
                     console.log("record id: " + data);
+                    console.log("skill: " + newSkill.RecordId);
                 });
+
                 //skill.RecordId = recordId;
             }
             else {
