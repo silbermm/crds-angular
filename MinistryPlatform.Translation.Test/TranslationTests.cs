@@ -136,19 +136,21 @@ namespace MinistryPlatform.Translation.Test
 
         //    var attribute = new MinistryPlatform.Models.Attribute();
         //    attribute.Start_Date = new DateTime(2013, 7, 1);
-        //    attribute.Attribute_ID = 71;
+        //    attribute.Attribute_ID = 75;
 
         //    var added = GetMyRecords.CreateAttribute(attribute, recordId, token);
-        //    Assert.IsTrue(added);
+        //    //Assert.IsInstanceOfType(int,added);
+        //    Assert.IsTrue(added > 0);
+        //    //Assert.IsTrue(added);
         //}
 
-        [Test]
-        public void DeleteASkill()
-        {
-            var token = AuthenticationService.authenticate("tmaddox", "crds1234");
+        //[Test]
+        //public void DeleteASkill()
+        //{
+        //    var token = AuthenticationService.authenticate("tmaddox", "crds1234");
 
-            var deleted = GetMyRecords.DeleteAttribute(679089, token);
-            Assert.IsTrue(deleted);
-        }
+        //    var deleted = GetMyRecords.DeleteAttribute(679089, token);
+        //    Assert.IsTrue(deleted);
+        //}
     }
 }

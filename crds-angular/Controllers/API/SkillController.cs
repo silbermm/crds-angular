@@ -37,7 +37,7 @@ namespace crds_angular.Controllers.API
             });
         }
 
-        [ResponseType(typeof(Models.Crossroads.Skill))]
+        [ResponseType(typeof(int))]
         [Route("api/skill")]
         public IHttpActionResult Post([FromBody] Models.Crossroads.Skill skill)
         {
@@ -51,9 +51,10 @@ namespace crds_angular.Controllers.API
                 {
                     return Unauthorized();
                 }
-                
-                var x = SkillService.Add(skill, contactId, token);
-                return this.Ok(1);
+
+                var returnVal = SkillService.Add(skill, contactId, token);
+                return this.Ok(returnVal );
+                //return this.Ok(x);
             });
         }
 

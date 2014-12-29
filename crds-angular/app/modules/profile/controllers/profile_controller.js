@@ -47,7 +47,10 @@
             newSkill.RecordId = skill.RecordId;
 
             if (skill.Selected) {
-                var skillId = newSkill.$save();
+                newSkill.$save().then(function (data) {
+                    console.log("record id: " + data);
+                });
+                //skill.RecordId = recordId;
             }
             else {
                 var removed = newSkill.$remove({ recordId: newSkill.RecordId });

@@ -33,7 +33,7 @@ namespace MinistryPlatform.Translation.Services
 
         }
 
-        public static bool CreateAttribute(MinistryPlatform.Models.Attribute attribute, int parentRecordId, string token)
+        public static int CreateAttribute(MinistryPlatform.Models.Attribute attribute, int parentRecordId, string token)
         {
             try
             {
@@ -46,9 +46,9 @@ namespace MinistryPlatform.Translation.Services
                     System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
                     attribute.Start_Date = DateTime.Now;
                     var dictionary = getDictionary(attribute);
-                    var returnVal = platformServiceClient.CreateSubpageRecord(subPageId, parentRecordId, dictionary, false);
+                    return platformServiceClient.CreateSubpageRecord(subPageId, parentRecordId, dictionary, false);
                 }
-                return true;
+                //return true;
             }
             catch (Exception e)
             {
