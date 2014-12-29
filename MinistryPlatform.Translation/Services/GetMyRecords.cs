@@ -58,6 +58,7 @@ namespace MinistryPlatform.Translation.Services
 
         public static bool DeleteAttribute(int recordId, string token)
         {
+            // - 12/29 try using page 412 and record id, just like MP 
             try
             {
                 var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);

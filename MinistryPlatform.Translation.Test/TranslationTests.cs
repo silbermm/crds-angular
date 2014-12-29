@@ -127,20 +127,20 @@ namespace MinistryPlatform.Translation.Test
         }
 
         [Test]
-        public void AddASkill()
-        {
-            //var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);
-            var token = AuthenticationService.authenticate("tmaddox", "crds1234");
-            var recordId = AuthenticationService.GetContactId(token);
-            Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
+        //public void AddASkill()
+        //{
+        //    //var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);
+        //    var token = AuthenticationService.authenticate("tmaddox", "crds1234");
+        //    var recordId = AuthenticationService.GetContactId(token);
+        //    Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
 
-            var attribute = new MinistryPlatform.Models.Attribute();
-            attribute.Start_Date = new DateTime(2013, 7, 1);
-            attribute.Attribute_ID = 71;
+        //    var attribute = new MinistryPlatform.Models.Attribute();
+        //    attribute.Start_Date = new DateTime(2013, 7, 1);
+        //    attribute.Attribute_ID = 71;
 
-            var added = GetMyRecords.CreateAttribute(attribute, recordId, token);
-            Assert.IsTrue(added);
-        }
+        //    var added = GetMyRecords.CreateAttribute(attribute, recordId, token);
+        //    Assert.IsTrue(added);
+        //}
 
         //[Test]
         //public void DeleteASkill()
