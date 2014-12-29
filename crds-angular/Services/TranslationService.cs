@@ -18,8 +18,7 @@ namespace crds_angular.Services
 
     public class TranslationService
     {
-        private const string TranslationUri = "http://my.crossroads.net/translation/api/";
-
+        
         private static string GetRecord(int pageId, int recordId, string token)
         {
             var data = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecord(pageId, recordId, token);
