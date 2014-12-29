@@ -48,7 +48,6 @@ namespace MinistryPlatform.Translation.Services
                     var dictionary = getDictionary(attribute);
                     return platformServiceClient.CreateSubpageRecord(subPageId, parentRecordId, dictionary, false);
                 }
-                //return true;
             }
             catch (Exception e)
             {
@@ -58,31 +57,16 @@ namespace MinistryPlatform.Translation.Services
 
         public static bool DeleteAttribute(int recordId, string token)
         {
-            // - 12/29 try using page 412 and record id, just like MP 
             try
             {
-                var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);
+                var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["ContactAttributes"]);
                 var platformServiceClient = new PlatformService.PlatformServiceClient();
                 PlatformService.SelectQueryResult result;
 
                 using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
                 {
                     System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
-
-                    
-
-                    var option = new PlatformService.DeleteOption
-                    {
-                        PageId = 455
-                      
-                    };
-                    var options = new List<PlatformService.DeleteOption>{
-                        option
-                    };
-
-                    platformServiceClient.DeletePageRecord(412, recordId, options.ToArray());
-
-                    //platformServiceClient.DeleteSubpageRecord(subPageId, recordId, options.ToArray());
+                    platformServiceClient.DeletePageRecord(pageId, recordId, null);
                 }
                 return true;
             }

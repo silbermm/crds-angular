@@ -126,31 +126,27 @@ namespace MinistryPlatform.Translation.Test
             Assert.IsNotNull(attributes);
         }
 
-        //[Test]
-        //public void AddASkill()
-        //{
-        //    //var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);
-        //    var token = AuthenticationService.authenticate("tmaddox", "crds1234");
-        //    var recordId = AuthenticationService.GetContactId(token);
-        //    Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
+        [Test]
+        public void UpdateMySkills()
+        {
+            //var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);
+            var token = AuthenticationService.authenticate("tmaddox", "crds1234");
+            var recordId = AuthenticationService.GetContactId(token);
+            Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
 
-        //    var attribute = new MinistryPlatform.Models.Attribute();
-        //    attribute.Start_Date = new DateTime(2013, 7, 1);
-        //    attribute.Attribute_ID = 75;
+            var attribute = new MinistryPlatform.Models.Attribute();
+            attribute.Start_Date = new DateTime(2013, 7, 1);
+            attribute.Attribute_ID = 75;
 
-        //    var added = GetMyRecords.CreateAttribute(attribute, recordId, token);
-        //    //Assert.IsInstanceOfType(int,added);
-        //    Assert.IsTrue(added > 0);
-        //    //Assert.IsTrue(added);
-        //}
+            var added = GetMyRecords.CreateAttribute(attribute, recordId, token);
+            Assert.IsNotNull(added);
+            Assert.IsFalse(added == 0);
+            //Assert.IsTrue(added > 0);
 
-        //[Test]
-        //public void DeleteASkill()
-        //{
-        //    var token = AuthenticationService.authenticate("tmaddox", "crds1234");
+            //now try to delete just added attribute
+            var deleted = GetMyRecords.DeleteAttribute(added, token);
+            Assert.IsTrue(deleted);
 
-        //    var deleted = GetMyRecords.DeleteAttribute(679089, token);
-        //    Assert.IsTrue(deleted);
-        //}
+        }
     }
 }
