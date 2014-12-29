@@ -44,6 +44,7 @@ namespace MinistryPlatform.Translation.Services
                 using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
                 {
                     System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+                    attribute.Start_Date = DateTime.Now;
                     var dictionary = getDictionary(attribute);
                     var returnVal = platformServiceClient.CreateSubpageRecord(subPageId, parentRecordId, dictionary, false);
                 }

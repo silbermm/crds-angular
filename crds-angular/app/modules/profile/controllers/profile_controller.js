@@ -43,7 +43,12 @@
 
         _this.skillChange = function (skill) {
             if (skill.Selected) {
-                alert('add me');
+                //alert('add me');
+                var newSkill = new Lookup.Skills();
+                newSkill.SkillId = skill.SkillId;
+
+                
+                var skillId = newSkill.$save();
             }
             else {
                 alert('delete me!');

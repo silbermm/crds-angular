@@ -7,15 +7,11 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Helpers;
 using System.Collections.Generic;
+using System;
 
 
 namespace crds_angular.Services
 {
-    public class Product
-    {
-        
-    }
-
     public class TranslationService
     {
         private const string TranslationUri = "http://my.crossroads.net/translation/api/";
@@ -62,6 +58,8 @@ namespace crds_angular.Services
         {
             return MinistryPlatform.Translation.AuthenticationService.authenticate(username, password);   
         }
+
+        
 
 
 

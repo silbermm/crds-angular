@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Web;
+using AutoMapper;
 
 namespace crds_angular.Models.Crossroads
 {
@@ -18,5 +19,15 @@ namespace crds_angular.Models.Crossroads
         public string Name { get; set; }
         [DefaultValue(false)]
         public bool Selected { get; set; }
+
+        public MinistryPlatform.Models.Attribute GetAttribute()
+        {
+           //var tmp = Mapper.Map<MinistryPlatform.Models.Attribute>(this);
+            return new MinistryPlatform.Models.Attribute
+            {
+                 Attribute_Name = this.Name,
+                 Attribute_ID = this.SkillId
+            };
+        } 
     }
 }

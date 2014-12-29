@@ -37,19 +37,47 @@ namespace crds_angular.Controllers.API
             });
         }
 
+        [ResponseType(typeof(Models.Crossroads.Skill))]
+        [Route("api/skill")]
+        public IHttpActionResult Post([FromBody] Models.Crossroads.Skill skill)
+        {
+            logger.Debug("Skill Post");
+
+            return Authorized(token =>
+            {
+                //where to get the parent record id from?  i think this is the contact id
+                var contactId = GetUserIdCookie();
+                if (contactId == 0)
+                {
+                    return Unauthorized();
+                }
+                
+                var x = SkillService.Add(skill, contactId, token);
+                return this.Ok(1);
+            });
+        }
+
         private List<Models.Crossroads.Skill> GetMySkills(string token)
         {
-                var cookie = Request.Headers.GetCookies("userId").FirstOrDefault();
-                if (cookie != null && (cookie["userId"].Value != "null" || cookie["userId"].Value != null))
+            var contactId = GetUserIdCookie();
+            if (contactId != 0 )
                 {
-                    var contactId = int.Parse(cookie["userId"].Value);
-
-
-                    var personService = new PersonService();
-                    var skills = personService.getLoggedInUserSkills(contactId, token);
+                var personService = new PersonService();
+                var skills = personService.getLoggedInUserSkills(contactId, token);
                     return skills;
                 }
-                return null;
+            return null;
+        }
+
+        private int GetUserIdCookie()
+        {
+             var cookie = Request.Headers.GetCookies("userId").FirstOrDefault();
+             if (cookie != null && (cookie["userId"].Value != "null" || cookie["userId"].Value != null))
+             {
+                 var contactId = int.Parse(cookie["userId"].Value);
+                 return contactId;
+             }
+             return 0;
         }
 
         private List<Models.Crossroads.SkillCategory> ConvertToSkills(List<MinistryPlatform.Models.Attribute> attributes, List<Models.Crossroads.Skill> mySkills)
