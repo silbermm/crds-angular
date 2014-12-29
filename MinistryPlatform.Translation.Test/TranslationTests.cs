@@ -126,7 +126,7 @@ namespace MinistryPlatform.Translation.Test
             Assert.IsNotNull(attributes);
         }
 
-        [Test]
+        //[Test]
         //public void AddASkill()
         //{
         //    //var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);
