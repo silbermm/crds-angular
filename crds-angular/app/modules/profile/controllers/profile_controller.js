@@ -42,16 +42,15 @@
         }
 
         _this.skillChange = function (skill) {
-            if (skill.Selected) {
-                //alert('add me');
-                var newSkill = new Lookup.Skills();
-                newSkill.SkillId = skill.SkillId;
+            var newSkill = new Lookup.Skills();
+            newSkill.SkillId = skill.SkillId;
+            newSkill.RecordId = skill.RecordId;
 
-                
+            if (skill.Selected) {
                 var skillId = newSkill.$save();
             }
             else {
-                alert('delete me!');
+                var removed = newSkill.$remove({ recordId: newSkill.RecordId });
             }
         }
 

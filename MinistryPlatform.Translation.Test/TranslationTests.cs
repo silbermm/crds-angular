@@ -142,13 +142,13 @@ namespace MinistryPlatform.Translation.Test
         //    Assert.IsTrue(added);
         //}
 
-        //[Test]
-        //public void DeleteASkill()
-        //{
-        //    var token = AuthenticationService.authenticate("tmaddox", "crds1234");
+        [Test]
+        public void DeleteASkill()
+        {
+            var token = AuthenticationService.authenticate("tmaddox", "crds1234");
 
-        //    var deleted = GetMyRecords.DeleteAttribute(679098, token);
-        //    Assert.IsTrue(deleted);
-        //}
+            var deleted = GetMyRecords.DeleteAttribute(679089, token);
+            Assert.IsTrue(deleted);
+        }
     }
 }

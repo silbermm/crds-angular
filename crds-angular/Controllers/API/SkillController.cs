@@ -57,6 +57,33 @@ namespace crds_angular.Controllers.API
             });
         }
 
+        [ResponseType(typeof(bool))]
+        [Route("api/skill/{recordId?}")]
+        [HttpDelete]
+        public IHttpActionResult Delete(int recordId)
+        {
+            logger.Debug("Skill Delete");
+
+            return Authorized(token => 
+            {
+                var contactId = GetUserIdCookie();
+                if (contactId == 0) {
+                    return Unauthorized();
+                }
+
+                if (SkillService.Delete(recordId, token))
+                {
+                    return this.Ok();
+                }
+                else
+                {
+                    //which one is appropriate?
+                    return this.BadRequest();
+                    //return this.NotFound();
+                }
+            });
+        }
+
         private List<Models.Crossroads.Skill> GetMySkills(string token)
         {
             var contactId = GetUserIdCookie();

@@ -69,6 +69,8 @@ namespace MinistryPlatform.Translation.Services
                 {
                     System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
 
+                    
+
                     var option = new PlatformService.DeleteOption
                     {
                         PageId = 455
@@ -78,7 +80,9 @@ namespace MinistryPlatform.Translation.Services
                         option
                     };
 
-                    platformServiceClient.DeleteSubpageRecord(subPageId, recordId, options.ToArray());
+                    platformServiceClient.DeletePageRecord(412, recordId, options.ToArray());
+
+                    //platformServiceClient.DeleteSubpageRecord(subPageId, recordId, options.ToArray());
                 }
                 return true;
             }
