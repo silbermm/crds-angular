@@ -19,6 +19,7 @@
         _this.initAccount = function () {
             _this.account = Profile.Account.get();
             _this.password = new Profile.Password();
+            $log.debug(_this.password);
         }
 
         _this.initSkills = function () {

@@ -235,26 +235,24 @@
     <Content Include="app\crossroads.net\login\login.html" />
     <Content Include="app\crossroads.net\login\login_controller.js" />
     <Content Include="app\crossroads.net\login\login_directive.js" />
-    <Content Include="app\crossroads.net\module.js" />
-    <Content Include="app\modules\profile\directives\profile_account_directive.js" />
-    <Content Include="app\modules\profile\directives\profile_directive.js" />
+    <Content Include="app\crossroads.net\app.js" />
+    <Content Include="app\crossroads.net\routes.js" />
+    <Content Include="app\crossroads.net\services\auth_service.js" />
     <Content Include="app\modules\profile\directives\profile_skills_directive.js" />
     <Content Include="app\modules\profile\templates\profile_password.html" />
     <Content Include="app\modules\profile\directives\profile_password_directive.js" />
-    <Content Include="app\modules\profile\directives\profile_personal_directive.js" />
     <Content Include="app\modules\profile\controllers\profile_controller.js" />
     <Content Include="app\modules\profile\controllers\profile_date_picker.js" />
     <Content Include="app\modules\profile\module.js" />
-    <Content Include="app\crossroads.net\profile\profile.html" />
-    <Content Include="app\crossroads.net\routes.js" />
-    <Content Include="app\crossroads.net\services\auth_service.js" />
     <Content Include="app\crossroads.net\services\session_service.js" />
     <Content Include="app\modules\profile\services\profile_lookup_service.js" />
     <Content Include="app\modules\profile\services\profile_service.js" />
     <Content Include="app\modules\profile\templates\profile.html" />
     <Content Include="app\modules\profile\templates\profile_account.html" />
     <Content Include="app\modules\profile\templates\profile_personal.html" />
+    <Content Include="app\modules\services\module.js" />
     <Content Include="app\modules\profile\templates\profile_skills.html" />
+    <Content Include="app\modules\services\profile_service.js" />
     <Content Include="Content\icons\arrow-right9.svg" />
     <Content Include="Content\icons\book.svg" />
     <Content Include="Content\icons\bubble.svg" />
@@ -490,6 +488,7 @@
     <Content Include="Scripts\angular-ui\ui-bootstrap.min.js.map">
       <DependentUpon>ui-bootstrap.min.js</DependentUpon>
     </Content>
+    <Content Include="Properties\SlowCheetah\SlowCheetah.Transforms.targets" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-dj.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-er.js" />
@@ -1284,10 +1283,12 @@
       <DependentUpon>respond.matchmedia.addListener.min.js</DependentUpon>
     </Content>
     <Content Include="Scripts\underscore.min.map" />
+    <None Include="Web.Integration.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\crossroads.net\shared\" />
-    <Folder Include="app\modules\services\" />
     <Folder Include="App_Data\" />
     <Folder Include="Content\static\" />
   </ItemGroup>
@@ -1311,6 +1312,21 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Integration|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Label="SlowCheetah">
+    <SlowCheetahToolsPath>$([System.IO.Path]::GetFullPath( $(MSBuildProjectDirectory)\..\packages\SlowCheetah.2.5.14\tools\))</SlowCheetahToolsPath>
+    <SlowCheetah_EnableImportFromNuGet Condition=" '$(SlowCheetah_EnableImportFromNuGet)'=='' ">true</SlowCheetah_EnableImportFromNuGet>
+    <SlowCheetah_NuGetImportPath Condition=" '$(SlowCheetah_NuGetImportPath)'=='' ">$([System.IO.Path]::GetFullPath( $(MSBuildProjectDirectory)\Properties\SlowCheetah\SlowCheetah.Transforms.targets ))</SlowCheetah_NuGetImportPath>
+    <SlowCheetahTargets Condition=" '$(SlowCheetah_EnableImportFromNuGet)'=='true' and Exists('$(SlowCheetah_NuGetImportPath)') ">$(SlowCheetah_NuGetImportPath)</SlowCheetahTargets>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
@@ -1344,6 +1360,7 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
   <Import Project="..\packages\AutoMapper.3.3.0\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.0\tools\AutoMapper.targets')" />
+  <Import Project="$(SlowCheetahTargets)" Condition="Exists('$(SlowCheetahTargets)')" Label="SlowCheetah" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
