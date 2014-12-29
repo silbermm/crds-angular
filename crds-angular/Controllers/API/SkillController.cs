@@ -37,7 +37,7 @@ namespace crds_angular.Controllers.API
             });
         }
 
-        [ResponseType(typeof(int))]
+        [ResponseType(typeof(Models.Crossroads.Skill))]
         [Route("api/skill")]
         public IHttpActionResult Post([FromBody] Models.Crossroads.Skill skill)
         {
@@ -45,16 +45,15 @@ namespace crds_angular.Controllers.API
 
             return Authorized(token =>
             {
-                //where to get the parent record id from?  i think this is the contact id
                 var contactId = GetUserIdCookie();
                 if (contactId == 0)
                 {
                     return Unauthorized();
                 }
 
-                var returnVal = SkillService.Add(skill, contactId, token);
-                return this.Ok(returnVal );
-                //return this.Ok(x);
+                var recordId = SkillService.Add(skill, contactId, token);
+                skill.RecordId = recordId;
+                return this.Ok(skill );
             });
         }
 

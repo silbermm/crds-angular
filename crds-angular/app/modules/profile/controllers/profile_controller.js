@@ -1,8 +1,8 @@
 'use strict';
 (function () {
-    angular.module("crdsProfile").controller('crdsProfileCtrl', ['Profile', 'Lookup','$log',  ProfileController]);
+    angular.module("crdsProfile").controller('crdsProfileCtrl', ['Profile', 'Lookup', '$q', '$log',  ProfileController]);
 
-    function ProfileController(Profile, Lookup, $log) {
+    function ProfileController(Profile, Lookup, $q, $log) {
         
 	var _this = this;
       
@@ -47,12 +47,10 @@
             newSkill.RecordId = skill.RecordId;
 
             if (skill.Selected) {
-                newSkill.$save().then(function (data) {
-                    console.log("record id: " + data);
-                    console.log("skill: " + newSkill.RecordId);
+                newSkill.$save(function (data)
+                {
+                    skill.RecordId = data.RecordId;
                 });
-
-                //skill.RecordId = recordId;
             }
             else {
                 var removed = newSkill.$remove({ recordId: newSkill.RecordId });
