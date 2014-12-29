@@ -7,15 +7,11 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Helpers;
 using System.Collections.Generic;
+using System;
 
 
 namespace crds_angular.Services
 {
-    public class Product
-    {
-        
-    }
-
     public class TranslationService
     {
         
@@ -33,6 +29,11 @@ namespace crds_angular.Services
         public static string GetMyHousehold(int householdId, string token)
         {
             return GetRecord(465, householdId, token);         
+        }
+
+        public static string GetMySkills(int personId, string token)
+        {
+            return null;
         }
 
         public static string GetLookup(int pageId, string token)
@@ -56,6 +57,8 @@ namespace crds_angular.Services
         {
             return MinistryPlatform.Translation.AuthenticationService.authenticate(username, password);   
         }
+
+        
 
 
 

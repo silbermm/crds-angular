@@ -52,6 +52,13 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.EmailNotifications,
                           opts => opts.MapFrom(src => src["Bulk_Email_Opt_Out"]))
                 ;
+
+            AutoMapper.Mapper.CreateMap<MinistryPlatform.Models.Attribute, Models.Crossroads.Skill>()
+                .ForMember(dest => dest.SkillId, opts => opts.MapFrom(src => src.dp_RecordID))
+                .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Attribute_Name));
+
+            AutoMapper.Mapper.CreateMap<Models.Crossroads.Skill, MinistryPlatform.Models.Attribute>()
+                .ForMember(dest => dest.Attribute_ID, opts => opts.MapFrom(src => src.SkillId));
         }
     }
 

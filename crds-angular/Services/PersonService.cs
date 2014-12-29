@@ -24,6 +24,11 @@ namespace crds_angular.Services
             MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(468, addressDictionary, token); 
         }
 
+        public List<Models.Crossroads.Skill> getLoggedInUserSkills(int contactId, string token)
+        {
+
+            return GetSkills(contactId, token);
+        }
 
         public Person getLoggedInUserProfile(String token)
         {
@@ -61,7 +66,19 @@ namespace crds_angular.Services
                 Address_Id = contactJson.Address_ID
             };
 
+            
+
             return person;
+
+        }
+
+        private List<Models.Crossroads.Skill> GetSkills(int recordId, string token)
+        {
+            var attributes = MinistryPlatform.Translation.Services.GetMyRecords.GetMyAttributes(recordId, token);
+
+            var skills = AutoMapper.Mapper.Map<List<MinistryPlatform.Models.Attribute>, List<Models.Crossroads.Skill>>(attributes);
+
+            return skills;
 
         }
         

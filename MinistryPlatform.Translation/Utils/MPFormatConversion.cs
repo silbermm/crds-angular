@@ -22,6 +22,23 @@ namespace MinistryPlatform.Translation.Helpers
             return ret;
         }
 
+        public static List<Dictionary<string, object>> MPFormatToList(PlatformService.SelectQueryResult mpObject)
+        {
+            var list = new List<Dictionary<string, object>>();
+
+            
+            foreach (var dataitem in mpObject.Data)
+            {
+                var ret = new Dictionary<string, object>();
+                foreach (var mpField in mpObject.Fields)
+                {
+                    ret.Add(mpField.Name, dataitem[mpField.Index]);
+                }
+                list.Add(ret);
+            }
+            return list;
+        }
+
 
 
         public static JArray MPFormatToJson(PlatformService.SelectQueryResult mpObject)

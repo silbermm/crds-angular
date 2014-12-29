@@ -32,6 +32,10 @@ namespace crds_angular
               .Include("~/Scripts/angular-resource.js")
               .Include("~/Scripts/angular-ui-router.js")
               .Include("~/Scripts/angular-ui/ui-bootstrap-tpls.js"));
+
+            bundles.Add(new Bundle("~/bundles/underscore")
+              .Include("~/Scripts/underscore.js"));
+
             bundles.Add(new Bundle("~/bundles/modules").IncludeDirectory("~/app/modules","*.js",true));
             bundles.Add(new Bundle("~/bundles/crossroads.net").IncludeDirectory("~/app/crossroads.net", "*.js", true));
 

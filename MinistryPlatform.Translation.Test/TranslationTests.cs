@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.PlatformService;
+using System.Configuration;
+
 namespace MinistryPlatform.Translation.Test
 {
     [TestFixture]
@@ -90,21 +92,61 @@ namespace MinistryPlatform.Translation.Test
             var pageId = 455;
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
             var recordId = AuthenticationService.GetContactId(token);
-            Assert.IsNotNull(recordId, "Contact ID shouldn't be null");;
+            Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
             Dictionary<string,object> record = GetPageRecordService.GetRecordDict(pageId, recordId,token);
             Assert.IsNotNull(record);
             Assert.IsNotEmpty(record);
             Assert.AreEqual(FIRSTNAME, record["First_Name"]);
         }
 
-        //[Test]
-        //public void ShouldGetNoPageRecord()
-        //{
-        //    var pageId = 292;
-        //    var recordId = 0;
-        //    var record = MinistryPlatform.Translation.Services.MinistryPlatform.GetMyPageRecord(pageId, recordId);
-        //    Assert.IsNull(record);
+        [Test]
+        public void GetAvailableSkills()
+        {
+            var pageId = 277;
+            var token = AuthenticationService.authenticate("tmaddox", "crds1234");
+            //var recordId = AuthenticationService.GetContactId(token);
+            //Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
+            var records = GetPageRecordService.GetRecords(277, token);
+            Assert.IsNotNull(records);
+            //Assert.IsNotEmpty(record);
+            //Assert.AreEqual(FIRSTNAME, record["First_Name"]);
+        }
 
-        //}
+        [Test]
+        public void GetMySkills()
+        {
+            //setup stuff
+            var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);
+            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            var recordId = AuthenticationService.GetContactId(token);
+            Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
+
+            //the good stuff
+            var attributes = GetMyRecords.GetMyAttributes(recordId, token);
+            Assert.IsNotNull(attributes);
+        }
+
+        [Test]
+        public void UpdateMySkills()
+        {
+            //var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);
+            var token = AuthenticationService.authenticate("tmaddox", "crds1234");
+            var recordId = AuthenticationService.GetContactId(token);
+            Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
+
+            var attribute = new MinistryPlatform.Models.Attribute();
+            attribute.Start_Date = new DateTime(2013, 7, 1);
+            attribute.Attribute_ID = 75;
+
+            var added = GetMyRecords.CreateAttribute(attribute, recordId, token);
+            Assert.IsNotNull(added);
+            Assert.IsFalse(added == 0);
+            //Assert.IsTrue(added > 0);
+
+            //now try to delete just added attribute
+            var deleted = GetMyRecords.DeleteAttribute(added, token);
+            Assert.IsTrue(deleted);
+
+        }
     }
 }
