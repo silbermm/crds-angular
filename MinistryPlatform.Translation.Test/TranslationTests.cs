@@ -57,7 +57,7 @@ namespace MinistryPlatform.Translation.Test
         public void Andy()
         {
             var pageId = 474;
-            var token = AuthenticationService.authenticate("tmaddox", "crds1234");
+            var token = AuthenticationService.authenticate("testme", "changeme");
             var recordId = AuthenticationService.GetContactId(token);
             Assert.IsNotNull(recordId, "Contact ID shouldn't be null"); ;
 
@@ -103,7 +103,7 @@ namespace MinistryPlatform.Translation.Test
         public void GetAvailableSkills()
         {
             var pageId = 277;
-            var token = AuthenticationService.authenticate("tmaddox", "crds1234");
+            var token = AuthenticationService.authenticate("testme", "changeme");
             //var recordId = AuthenticationService.GetContactId(token);
             //Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
             var records = GetPageRecordService.GetRecords(277, token);
@@ -130,7 +130,7 @@ namespace MinistryPlatform.Translation.Test
         public void UpdateMySkills()
         {
             //var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);
-            var token = AuthenticationService.authenticate("tmaddox", "crds1234");
+            var token = AuthenticationService.authenticate("testme", "changeme");
             var recordId = AuthenticationService.GetContactId(token);
             Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
 
