@@ -1,8 +1,8 @@
 ﻿'use strict';
 (function () {
-    angular.module('crossroads').controller('LoginCtrl', ['$scope', '$rootScope', 'AUTH_EVENTS', 'AuthService', '$cookieStore', '$state','$log', "Session", LoginController]);
+    angular.module('crossroads').controller('LoginCtrl', ['$scope', '$rootScope', 'AUTH_EVENTS', 'MESSAGES', 'AuthService', '$cookieStore', '$state','$log', "Session", LoginController]);
 
-    function LoginController($scope, $rootScope, AUTH_EVENTS, AuthService, $cookieStore, $state, $log, Session) {
+    function LoginController($scope, $rootScope, AUTH_EVENTS, MESSAGES, AuthService, $cookieStore, $state, $log, Session) {
 
         $scope.showLoginButton = $rootScope.username === null || $rootScope.username === undefined;
         $scope.loginShow = false;
@@ -32,6 +32,7 @@
                 }, function () {
                     $log.debug("Bad password");    
                     $scope.processing = false;
+                    $rootScope.$emit('notify.warning', MESSAGES.loginFailed);
                 });
             }
         };
