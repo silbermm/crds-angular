@@ -6,7 +6,9 @@
         <ui-view></ui-view>
     </tab>
     <tab heading="Giving"></tab>
-        <tab heading="Skills" class="hidden-xs" active="set.showSkills"><crds-profile-skills></crds-profile-skills></tab>
+    <tab heading="Skills" class="hidden-xs" ui-sref-active="active" ui-sref="profile.skills">
+      <ui-view> </ui-view> 
+    </tab>
     <tab heading="History" class="hidden-xs" active="set.showHistory"></tab>
     <li role="tab" data-toggle="tab" class="dropdown hidden-md hidden-lg hidden-sm dropdown-toggle" data-toggle="dropdown">
         <a href="#">More <span class="caret"></span></a>

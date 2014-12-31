@@ -54,45 +54,49 @@
     
 
         $stateProvider
-            .state('home', {
-                url: '/home',
-                templateUrl: 'app/crossroads.net/home/home.html',
-                controller: 'HomeCtrl',
-                data: {
-                    require_login: false
-                }
-            })
-            .state('login', {
-                url: '/login',
-                templateUrl: 'app/crossroads.net/login/login.html',
-                controller: 'LoginCtrl',
-                data: {
-                    require_login: false
-                }
-            })
-        .state('profile', {
-            url: '/profile',
-            templateUrl: 'app/modules/profile/templates/profile.html',
-            controller: 'crdsProfileCtrl as profile',
-            resolve: {
-                loggedin: checkLoggedin
-            }
-        })
-
-        .state('profile.personal', {
-            url: '/personal',
-            templateUrl: 'app/modules/profile/templates/profile_personal.html',
-            //controller: 'crdsProfileCtrl as profile',
-            resolve: {
-                loggedin: checkLoggedin
-            }
-        })
-        .state("profile.account", {
-            url: '/account',
-            templateUrl: 'app/modules/profile/templates/profile_account.html',
-            //controller: 'crdsProfileCtrl as profile'
-        })
-        ;
+          .state('home', {
+              url: '/home',
+              templateUrl: 'app/crossroads.net/home/home.html',
+              controller: 'HomeCtrl',
+              data: {
+                  require_login: false
+              }
+          })
+          .state('login', {
+              url: '/login',
+              templateUrl: 'app/crossroads.net/login/login.html',
+              controller: 'LoginCtrl',
+              data: {
+                  require_login: false
+              }
+          })
+          .state('profile', {
+              url: '/profile',
+              templateUrl: 'app/modules/profile/templates/profile.html',
+              controller: 'crdsProfileCtrl as profile',
+              resolve: {
+                  loggedin: checkLoggedin
+              }
+          })
+          .state('profile.personal', {
+              url: '/personal',
+              templateUrl: 'app/modules/profile/templates/profile_personal.html',
+              //controller: 'crdsProfileCtrl as profile',
+              //resolve: {
+              //    loggedin: checkLoggedin
+              //}
+          })
+          .state("profile.account", {
+              url: '/account',
+              templateUrl: 'app/modules/profile/templates/profile_account.html',
+              //controller: 'crdsProfileCtrl as profile'
+          })
+          .state("profile.skills", {
+              url: '/skills',
+              templateUrl: 'app/modules/profile/templates/profile_skills.html',
+              //controller: 'crdsProfileCtrl as profile'
+          })
+          ;
 
         $urlRouterProvider.otherwise("/home");
     }])
