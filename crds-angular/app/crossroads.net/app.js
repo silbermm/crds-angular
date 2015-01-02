@@ -43,5 +43,9 @@
         $rootScope.$on('notify.warning', function (event, message) {
             growl.warning(message);
         });
+
+        $rootScope.$on('notify.error', function (event, message) {
+            growl.error(message);
+        });
     }]);
 })()

@@ -18,8 +18,8 @@
         }
 
         $scope.login = function () {            
-            if ($scope.credentials.username === '' || $scope.credentials.password === '') {
-                
+            if (($scope.credentials === undefined) || ($scope.credentials.username === undefined || $scope.credentials.password === undefined)) {
+                $rootScope.$emit('notify.error', MESSAGES.credentialsBlank);
             } else {
                 $scope.processing = true;
                 AuthService.login($scope.credentials).then(function (user) {
@@ -32,7 +32,7 @@
                 }, function () {
                     $log.debug("Bad password");    
                     $scope.processing = false;
-                    $rootScope.$emit('notify.warning', MESSAGES.loginFailed);
+                    $rootScope.$emit('notify.error', MESSAGES.loginFailed);
                 });
             }
         };
