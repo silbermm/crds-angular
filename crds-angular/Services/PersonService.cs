@@ -32,7 +32,12 @@ namespace crds_angular.Services
 
         public Person getLoggedInUserProfile(String token)
         {
+            var eventLog = new EventLog();
+            eventLog.Source = "Crossroads";
+            eventLog.Log = "Application";
+            eventLog.WriteEntry("GetContactId - before: " + token);
             var contactId = MinistryPlatform.Translation.AuthenticationService.GetContactId(token);
+            eventLog.WriteEntry("GetContactId - after: " + contactId);
             var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["MyProfile"]);
             JArray contact = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecords(pageId, token);
             var contactJson = TranslationService.DecodeJson(contact.ToString());
