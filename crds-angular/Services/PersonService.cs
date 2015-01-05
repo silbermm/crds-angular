@@ -39,7 +39,10 @@ namespace crds_angular.Services
             var contactId = MinistryPlatform.Translation.AuthenticationService.GetContactId(token);
             eventLog.WriteEntry("GetContactId - after: " + contactId);
             var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["MyProfile"]);
+
+            eventLog.WriteEntry("GetRecords - before: " + pageId);
             JArray contact = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecords(pageId, token);
+            eventLog.WriteEntry("GetRecords - after: " + contact);
             var contactJson = TranslationService.DecodeJson(contact.ToString());
                       
             var person = new Person            
