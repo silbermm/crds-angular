@@ -59,22 +59,28 @@ namespace crds_angular.Controllers.API
             var eventLog = new EventLog();
             eventLog.Source = "Crossroads";
             eventLog.Log = "Application";
-            eventLog.WriteEntry("Testing...");
+            eventLog.WriteEntry("In the POST...");
             
             // try to login 
+            eventLog.WriteEntry("1. TranslationService.Login - before");
             var token = TranslationService.Login(cred.username, cred.password);
+            eventLog.WriteEntry("1. TranslationService.Login - after ");
             if (token == null)
             {
+                eventLog.WriteEntry("Token NULL");
                 return this.Unauthorized();
             }
             var personService = new PersonService();
+            eventLog.WriteEntry("3. getLoggedInUserProfile - before");
             var p = personService.getLoggedInUserProfile(token);
+            eventLog.WriteEntry("3. getLoggedInUserProfile - after");
             var r = new LoginReturn
             {
                 userToken = token,
                 userId = p.Contact_Id,
                 username = p.First_Name
             };
+            eventLog.WriteEntry("5. OK - before);
             return this.Ok(r);
         }
     }
