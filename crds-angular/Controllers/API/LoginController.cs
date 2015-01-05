@@ -80,7 +80,7 @@ namespace crds_angular.Controllers.API
                 userId = p.Contact_Id,
                 username = p.First_Name
             };
-            eventLog.WriteEntry("5. OK - before);
+            eventLog.WriteEntry("5. OK - before");
             return this.Ok(r);
         }
     }
