@@ -72,7 +72,8 @@ namespace MinistryPlatform.Translation
                     {"grant_type", "password"}
                 });
             var client = new HttpClient();
-            var message = client.PostAsync(ConfigurationManager.AppSettings["TokenURL"], userCredentials);
+            var tokenUrl = ConfigurationManager.AppSettings["TokenURL"];
+            var message = client.PostAsync(tokenUrl, userCredentials);
             try
             {
                 var result = message.Result.Content.ReadAsStringAsync().Result;
