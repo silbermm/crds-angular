@@ -79,8 +79,8 @@ namespace MinistryPlatform.Translation
             var client = new HttpClient();
             var tokenUrl = ConfigurationManager.AppSettings["TokenURL"];
             eventLog.WriteEntry("tokenUrl: " + tokenUrl);
-            eventLog.WriteEntry("userCredentials: " + userCredentials.username);
-            eventLog.WriteEntry("userCredentials: " + userCredentials.password);
+            eventLog.WriteEntry("userCredentials: " + username);
+            eventLog.WriteEntry("userCredentials: " + password);
             var message = client.PostAsync(tokenUrl, userCredentials);
             try
             {
@@ -97,6 +97,8 @@ namespace MinistryPlatform.Translation
                 //var eventLog = new EventLog();
                 
                 eventLog.WriteEntry(ex.Message);
+                eventLog.WriteEntry(ex.StackTrace);
+                eventLog.WriteEntry(ex.InnerException.Message);
                 return null;
             }
         }
