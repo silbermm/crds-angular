@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -83,8 +84,12 @@ namespace MinistryPlatform.Translation
                 var refreshToken = (string)obj["refresh_token"];
                 return token;
             }
-            catch
+            catch (Exception ex)
             {
+                var eventLog = new EventLog();
+                eventLog.Source = "Crossroads";
+                eventLog.Log = "Application";
+                eventLog.WriteEntry(ex.Message);
                 return null;
             }
         }
