@@ -63,6 +63,10 @@ namespace MinistryPlatform.Translation
         //get token using logged in user's credentials
         public static String authenticate(string username, string password)
         {
+            var eventLog = new EventLog();
+            eventLog.Source = "Crossroads";
+            eventLog.Log = "Application";
+
             var userCredentials =
                 new FormUrlEncodedContent(new Dictionary<string, string>
                 {
@@ -74,6 +78,9 @@ namespace MinistryPlatform.Translation
                 });
             var client = new HttpClient();
             var tokenUrl = ConfigurationManager.AppSettings["TokenURL"];
+            eventLog.WriteEntry("tokenUrl: " + tokenUrl);
+            eventLog.WriteEntry("userCredentials: " + userCredentials.username);
+            eventLog.WriteEntry("userCredentials: " + userCredentials.password);
             var message = client.PostAsync(tokenUrl, userCredentials);
             try
             {
@@ -87,9 +94,8 @@ namespace MinistryPlatform.Translation
             }
             catch (Exception ex)
             {
-                var eventLog = new EventLog();
-                eventLog.Source = "Crossroads";
-                eventLog.Log = "Application";
+                //var eventLog = new EventLog();
+                
                 eventLog.WriteEntry(ex.Message);
                 return null;
             }
