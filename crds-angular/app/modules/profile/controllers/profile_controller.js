@@ -58,7 +58,7 @@
             }
         }
 
-	_this.savePersonal = function () {
+	    _this.savePersonal = function () {
 
             $log.debug("profile controller");
             _this.person.$save(function () {
