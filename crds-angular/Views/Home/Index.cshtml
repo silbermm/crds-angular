@@ -8,9 +8,11 @@
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
     <link href="~/sass/main.css" rel="stylesheet" />
+    @Styles.Render("~/bundles/growl-css")
 </head>
 
 <body ng-controller="appCtrl">
+    <div growl class="crossroads-growl"></div>
     <div>
         <header>
             <div class="overlay-container"></div>
@@ -144,6 +146,8 @@
     </div>
 
     @Scripts.Render("~/bundles/underscore")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/angular")
     @Scripts.Render("~/bundles/modules")
     @Scripts.Render("~/bundles/crossroads.net")

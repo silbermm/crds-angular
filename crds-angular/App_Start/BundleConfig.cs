@@ -31,7 +31,11 @@ namespace crds_angular
               .Include("~/Scripts/angular-cookies.js")
               .Include("~/Scripts/angular-resource.js")
               .Include("~/Scripts/angular-ui-router.js")
-              .Include("~/Scripts/angular-ui/ui-bootstrap-tpls.js"));
+              .Include("~/Scripts/angular-ui/ui-bootstrap-tpls.js")
+              .Include("~/Scripts/angular-growl-2/angular-growl.js"));
+
+            bundles.Add(new Bundle("~/bundles/growl-css")
+                .Include("~/Scripts/angular-growl-2/angular-growl.css"));
 
             bundles.Add(new Bundle("~/bundles/underscore")
               .Include("~/Scripts/underscore.js"));

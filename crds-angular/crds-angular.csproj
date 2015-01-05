@@ -307,6 +307,10 @@
     <Content Include="Scripts\angular-cookies.js" />
     <Content Include="Scripts\angular-cookies.min.js" />
     <Content Include="Scripts\angular-csp.css" />
+    <Content Include="Scripts\angular-growl-2\angular-growl.css" />
+    <Content Include="Scripts\angular-growl-2\angular-growl.js" />
+    <Content Include="Scripts\angular-growl-2\angular-growl.min.css" />
+    <Content Include="Scripts\angular-growl-2\angular-growl.min.js" />
     <Content Include="Scripts\angular-loader.js" />
     <Content Include="Scripts\angular-loader.min.js" />
     <Content Include="Scripts\angular-messages.js" />
