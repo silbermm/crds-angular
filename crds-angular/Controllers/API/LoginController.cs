@@ -50,7 +50,16 @@ namespace crds_angular.Controllers.API
         [ResponseType(typeof(LoginReturn))]
         public IHttpActionResult Post([FromBody]Credentials cred)
         {
-            
+            logger.Debug("In the POST");
+
+            if (!EventLog.SourceExists("Crossroads"))
+            {
+                EventLog.CreateEventSource("Crossroads", "CrossroadsLog");
+            }
+            var eventLog = new EventLog();
+            eventLog.Source = "Crossroads";
+            eventLog.Log = "Application";
+            eventLog.WriteEntry("Testing...");
             
             // try to login 
             var token = TranslationService.Login(cred.username, cred.password);
