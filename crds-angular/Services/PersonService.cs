@@ -32,17 +32,13 @@ namespace crds_angular.Services
 
         public Person getLoggedInUserProfile(String token)
         {
-            var eventLog = new EventLog();
-            eventLog.Source = "Crossroads";
-            eventLog.Log = "Application";
-            eventLog.WriteEntry("GetContactId - before: " + token);
             var contactId = MinistryPlatform.Translation.AuthenticationService.GetContactId(token);
-            eventLog.WriteEntry("GetContactId - after: " + contactId);
             var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["MyProfile"]);
-
-            eventLog.WriteEntry("GetRecords - before: " + pageId);
             JArray contact = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecords(pageId, token);
-            eventLog.WriteEntry("GetRecords - after: " + contact);
+            if (contact.Count == 0)
+            {
+                throw new InvalidOperationException("getLoggedInUserProfile - no data returned.");
+            }
             var contactJson = TranslationService.DecodeJson(contact.ToString());
                       
             var person = new Person            
@@ -74,10 +70,7 @@ namespace crds_angular.Services
                 Address_Id = contactJson.Address_ID
             };
 
-            
-
             return person;
-
         }
 
         private List<Models.Crossroads.Skill> GetSkills(int recordId, string token)
