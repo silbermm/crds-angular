@@ -11,7 +11,7 @@
 
         _this.initProfile = function (form) {
             _this.form = form;
-            _this.genders = Lookup.Genders.query();
+            _this.genders = Lookup.Fetch.query({ table: "genders" });
             _this.maritalStatuses = Lookup.MaritalStatus.query();
             _this.serviceProviders = Lookup.ServiceProviders.query();
             _this.states = Lookup.States.query();

@@ -49,5 +49,13 @@ namespace MinistryPlatform.Translation.Test
             var emails = MinistryPlatform.Translation.Services.LookupService.EmailSearch("CRAP@CRAP.com", token);
             Assert.IsEmpty(emails);
         }
+
+        public void ShouldFindDictionaryOfGenders()
+        {
+            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            Assert.IsNotNull(token);
+            Dictionary<string,object> genders = MinistryPlatform.Translation.Services.LookupService.Genders(token);
+            Assert.IsNotEmpty(genders);
+        }
     }
 }

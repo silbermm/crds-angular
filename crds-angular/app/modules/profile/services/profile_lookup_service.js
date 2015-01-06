@@ -3,7 +3,8 @@
 
     function LookupService($resource, Session) {
         return {
-            Genders: $resource("api/lookup/311"),
+            Fetch: $resource("api/lookup/"),
+            Genders: $resource("api/lookup/?table=genders"),
             MaritalStatus: $resource("api/lookup/339"),
             ServiceProviders: $resource("api/lookup/453"),
             States: $resource("api/lookup/452"),

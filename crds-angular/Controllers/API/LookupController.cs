@@ -21,10 +21,28 @@ namespace crds_angular.Controllers.API
                 var contact = TranslationService.GetLookup(pageId, t);
                 var json = DecodeJson(contact.ToString());
 
-                
-
                 return this.Ok(json);
             });
+        }
+
+        [ResponseType(typeof(Dictionary<string,object>))]
+        [Route("api/lookup/{table?}")]
+        [HttpGet]
+        public IHttpActionResult Lookup(string table)
+        {
+            return Authorized(t => {
+                var ret = new Dictionary<string, object>();
+                switch (table) {
+                    case "genders"  :
+                        ret = MinistryPlatform.Translation.Services.LookupService.Genders(t);
+                        break;
+                    default:
+                        break;
+
+                }
+                return Ok(ret);
+                
+            }); 
         }
 
         [HttpGet]
