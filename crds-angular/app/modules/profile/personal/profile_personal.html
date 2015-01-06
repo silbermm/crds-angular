@@ -115,13 +115,15 @@
     <div class="row">
         <div class="form-group col-sm-6" ng-class="{'has-error':personal.mobile.$invalid}">
             <label for="nickname">Mobile Phone</label>
-            <input type="tel"
+            <input type="text"
                    class="form-control" name="mobile" id="mobile"
                    placeholder="Enter mobile phone"
                    ng-model="profile.person.Mobile_Phone"
-                   ng-pattern="/^[0-9+\(\)#\.\s\/ext-]+$/">
+                   ng-pattern="profile.phoneFormat"
+                   ng-model-options="{ debounce : { 'default' : 500, blur : 0 } }"
+                   ng-blur="profile.convertPhone()">
             <ng-messages for="personal.mobile.$error" ng-if="personal.$submitted || personal.$touched">
-                <span ng-message="tel">{{$root.MESSAGES.invalidPhone}}</span>
+                <span ng-message="pattern">{{$root.MESSAGES.invalidPhone}}</span>
             </ng-messages>
         </div>
         <div class="form-group col-sm-6">

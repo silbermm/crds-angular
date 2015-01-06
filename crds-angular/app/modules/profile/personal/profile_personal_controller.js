@@ -5,6 +5,8 @@
     function ProfilePersonalController($rootScope, Profile, Lookup, $log, MESSAGES) {
         var _this = this;
 
+        _this.phoneFormat = /^\(?(\d{3})\)?[\s.-](\d{3})[\s.-](\d{4})$/;
+
         _this.loading = true;
 
         _this.initProfile = function (form) {
@@ -33,6 +35,13 @@
             }, function () {
                 $log.debug("person save unsuccessful");
             });
+        }
+
+        _this.convertPhone = function () {
+            if(_this.form.personal.mobile.$valid) {
+                $log.debug("converting phone number");
+                _this.person.Mobile_Phone = _this.person.Mobile_Phone.replace(_this.phoneFormat, '$1-$2-$3');
+            }
         }
 
     }
