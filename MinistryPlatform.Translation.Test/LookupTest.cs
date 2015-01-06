@@ -36,9 +36,10 @@ namespace MinistryPlatform.Translation.Test
             var contactId = AuthenticationService.GetContactId(token);
             Assert.IsNotNull(contactId);
             var emails = MinistryPlatform.Translation.Services.LookupService.EmailSearch(EMAIL.ToUpper(), token);
-            Assert.IsEmpty(emails);
+            Assert.IsNotEmpty(emails);
         }
 
+        [Test]
         public void ShouldBeEmpty()
         {
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);

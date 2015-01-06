@@ -21,6 +21,8 @@ namespace crds_angular.Controllers.API
                 var contact = TranslationService.GetLookup(pageId, t);
                 var json = DecodeJson(contact.ToString());
 
+                
+
                 return this.Ok(json);
             });
         }
