@@ -1,8 +1,9 @@
 ﻿'use strict';
 (function () {
     angular.module('crossroads', ['crdsProfile', 'ui.router', 'ngCookies', 'angular-growl'])
-    .run(['Session', '$rootScope',function(Session, $rootScope){
+    .run(['Session', '$rootScope', 'MESSAGES', function(Session, $rootScope, MESSAGES){
         $rootScope.username = Session.exists('username');
+        $rootScope.MESSAGES = MESSAGES;
     }])
     .constant('AUTH_EVENTS', {
             loginSuccess: 'auth-login-success',

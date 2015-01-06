@@ -72,7 +72,7 @@
           })
           .state('profile', {
               url: '/profile',
-              templateUrl: 'app/modules/profile/templates/profile.html',
+              templateUrl: 'app/modules/profile/profile.html',
               controller: 'crdsProfileCtrl as profile',
               resolve: {
                   loggedin: checkLoggedin
@@ -80,21 +80,17 @@
           })
           .state('profile.personal', {
               url: '/personal',
-              templateUrl: 'app/modules/profile/templates/profile_personal.html',
-              //controller: 'crdsProfileCtrl as profile',
-              //resolve: {
-              //    loggedin: checkLoggedin
-              //}
+              controller: 'ProfilePersonalController as profile',
+              templateUrl: 'app/modules/profile/personal/profile_personal.html'
           })
           .state("profile.account", {
               url: '/account',
-              templateUrl: 'app/modules/profile/templates/profile_account.html',
-              //controller: 'crdsProfileCtrl as profile'
+              templateUrl: 'app/modules/profile/templates/profile_account.html'
           })
           .state("profile.skills", {
               url: '/skills',
-              templateUrl: 'app/modules/profile/templates/profile_skills.html',
-              //controller: 'crdsProfileCtrl as profile'
+              controller: 'ProfileSkillsController as profile',
+              templateUrl: 'app/modules/profile/skills/profile_skills.html'
           })
           ;
 
