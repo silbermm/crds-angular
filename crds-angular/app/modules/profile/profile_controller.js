@@ -4,7 +4,7 @@
 
     function ProfileController(Profile, Lookup, $q, $log) {
         
-	var _this = this;
+	    var _this = this;
       
        
         
