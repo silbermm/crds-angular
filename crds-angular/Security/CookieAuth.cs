@@ -11,6 +11,7 @@ using System.Diagnostics;
 using log4net;
 using log4net.Config;
 using System.Reflection;
+using crds_angular.Models.Crossroads;
 
 namespace crds_angular.Security
 {
@@ -26,8 +27,23 @@ namespace crds_angular.Security
                 Debug.WriteLine("cookieauth");
                 return doIt(cookie["sessionId"].Value);
             }
-            Debug.WriteLine("I am unauthorized now???");
             return Unauthorized();   
+        }
+
+        protected IHttpActionResult AuthorizedWithCookie(Func<CookieInfo, IHttpActionResult> doIt)
+        {
+            CookieHeaderValue cookie = Request.Headers.GetCookies("sessionId").FirstOrDefault();
+            if (cookie != null && (cookie["sessionId"].Value != "null" || cookie["sessionId"].Value != null))
+            {
+                var c = new CookieInfo
+                {
+                    SessionId = cookie["sessionId"].Value,
+                    UserId = Convert.ToInt32(cookie["userId"].Value),
+                    UserName = cookie["username"].Value
+                };
+                return doIt(c);
+            }
+            return Unauthorized();
         }
 
     }

@@ -25,6 +25,25 @@ namespace crds_angular.Controllers.API
             });
         }
 
+        [HttpGet]
+        [Route("api/lookup/{email?}")]
+        public IHttpActionResult EmailExists(string email)
+        {
+            return AuthorizedWithCookie(t =>
+            {
+                
+                var exists = MinistryPlatform.Translation.Services.LookupService.EmailSearch(email, t.SessionId);
+                if (exists.Count == 0 || Convert.ToInt32(exists["dp_RecordID"]) == t.UserId  )
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            });
+        }
+
         protected static dynamic DecodeJson(string json)
         {
             var obj = System.Web.Helpers.Json.Decode(json);
