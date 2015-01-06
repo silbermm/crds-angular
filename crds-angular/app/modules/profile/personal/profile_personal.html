@@ -115,7 +115,11 @@
     <div class="row">
         <div class="form-group col-sm-6" ng-class="{'has-error':personal.mobile.$invalid}">
             <label for="nickname">Mobile Phone</label>
-            <input type="tel" class="form-control" name="mobile" id="mobile" placeholder="Enter mobile phone" ng-model="profile.person.Mobile_Phone">
+            <input type="tel"
+                   class="form-control" name="mobile" id="mobile"
+                   placeholder="Enter mobile phone"
+                   ng-model="profile.person.Mobile_Phone"
+                   ng-pattern="/^[0-9+\(\)#\.\s\/ext-]+$/">
             <ng-messages for="personal.mobile.$error" ng-if="personal.$submitted || personal.$touched">
                 <span ng-message="tel">{{$root.MESSAGES.invalidPhone}}</span>
             </ng-messages>
