@@ -16,17 +16,10 @@ namespace MinistryPlatform.Translation.Services
             return GetPageRecordService.GetLookupRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Emails"]), email, token);
         }
 
-        public static Dictionary<string, object> Genders(string token)
+        public static List<Dictionary<string, object>> Genders(string token)
         {
-            return GetPageRecordService.GetRecordsDict(Convert.ToInt32(ConfigurationManager.AppSettings["Genders"]), token);
+            return GetPageRecordService.GetLookupRecords(Convert.ToInt32(ConfigurationManager.AppSettings["Genders"]), token);
         }
-
-        //public static string Genders(string token)
-        //{
-        //    var jarray = GetPageRecordService.GetRecords(Convert.ToInt32(ConfigurationManager.AppSettings["Genders"]), token);
-        //    return jarray.ToString(); 
-        //}
-
 
     }
 }

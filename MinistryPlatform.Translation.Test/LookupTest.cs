@@ -50,12 +50,14 @@ namespace MinistryPlatform.Translation.Test
             Assert.IsEmpty(emails);
         }
 
+        [Test]
         public void ShouldFindDictionaryOfGenders()
         {
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
             Assert.IsNotNull(token);
-            Dictionary<string,object> genders = MinistryPlatform.Translation.Services.LookupService.Genders(token);
+            List<Dictionary<string,object>> genders = MinistryPlatform.Translation.Services.LookupService.Genders(token);
             Assert.IsNotEmpty(genders);
+            Assert.AreEqual(genders[0]["dp_RecordName"], "Female");
         }
     }
 }

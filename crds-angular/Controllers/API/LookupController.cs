@@ -25,13 +25,13 @@ namespace crds_angular.Controllers.API
             });
         }
 
-        [ResponseType(typeof(Dictionary<string,object>))]
+        [ResponseType(typeof(List<Dictionary<string,object>>))]
         [Route("api/lookup/{table?}")]
         [HttpGet]
         public IHttpActionResult Lookup(string table)
         {
             return Authorized(t => {
-                var ret = new Dictionary<string, object>();
+                var ret = new List<Dictionary<string, object>>();
                 switch (table) {
                     case "genders"  :
                         ret = MinistryPlatform.Translation.Services.LookupService.Genders(t);
