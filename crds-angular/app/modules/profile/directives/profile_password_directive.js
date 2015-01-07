@@ -6,7 +6,7 @@
             restrict: 'E',
             replace: true,
             scope: true,
-            templateUrl: 'app/modules/profile/templates/profile_password.html',
+            templateUrl: 'app/modules/profile/directives/profile_password.html',
             link: (function (scope, el, attr, ctrl) {
                 scope.showPassword = false;
 

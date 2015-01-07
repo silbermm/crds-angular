@@ -25,6 +25,62 @@ namespace crds_angular.Controllers.API
             });
         }
 
+        [ResponseType(typeof(List<Dictionary<string,object>>))]
+        [Route("api/lookup/{table?}")]
+        [HttpGet]
+        public IHttpActionResult Lookup(string table)
+        {
+            return Authorized(t => {
+                var ret = new List<Dictionary<string, object>>();
+                switch (table) {
+                    case "genders"  :
+                        ret = MinistryPlatform.Translation.Services.LookupService.Genders(t);
+                        break;
+                    case "maritalstatus" :
+                        ret = MinistryPlatform.Translation.Services.LookupService.MaritalStatus(t);
+                        break;
+                    case "serviceproviders" :
+                        ret = MinistryPlatform.Translation.Services.LookupService.ServiceProviders(t);
+                        break;
+                    case "countries" :
+                        ret = MinistryPlatform.Translation.Services.LookupService.Countries(t);
+                        break;
+                    case "states" :
+                        ret = MinistryPlatform.Translation.Services.LookupService.States(t);
+                        break;
+                    case "crossroadslocations" :
+                        ret = MinistryPlatform.Translation.Services.LookupService.CrossroadsLocations(t);
+                        break;
+                    default:
+                        break;
+                }
+                if (ret.Count == 0)
+                {
+                    return this.NotFound();
+                }
+                return Ok(ret);   
+            }); 
+        }
+
+        [HttpGet]
+        [Route("api/lookup/{email?}")]
+        public IHttpActionResult EmailExists(string email)
+        {
+            return AuthorizedWithCookie(t =>
+            {
+                
+                var exists = MinistryPlatform.Translation.Services.LookupService.EmailSearch(email, t.SessionId);
+                if (exists.Count == 0 || Convert.ToInt32(exists["dp_RecordID"]) == t.UserId  )
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            });
+        }
+
         protected static dynamic DecodeJson(string json)
         {
             var obj = System.Web.Helpers.Json.Decode(json);

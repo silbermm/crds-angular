@@ -55,6 +55,20 @@ namespace MinistryPlatform.Translation.Services
             }
             Dictionary<string, object> returnVal = MPFormatConversion.MPFormatToDictionary(result);
             return returnVal;
+        }
+
+        public static Dictionary<string, object> GetLookupRecord(int pageId, string search, String token)
+        {
+            var platformServiceClient = new PlatformService.PlatformServiceClient();
+            PlatformService.SelectQueryResult result;
+
+            using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
+            {
+                System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+                result = platformServiceClient.GetPageLookupRecords(pageId, search, null, 100);
+            }
+            Dictionary<string, object> returnVal = MPFormatConversion.MPFormatToDictionary(result);
+            return returnVal;
 
         }
 
@@ -128,6 +142,27 @@ namespace MinistryPlatform.Translation.Services
             catch
             {
                 return new Dictionary<string, object>();
+            }
+        }
+
+        public static List<Dictionary<string, object>> GetLookupRecords(int id, string token)
+        {
+            try
+            {
+                var platformServiceClient = new PlatformService.PlatformServiceClient();
+                PlatformService.SelectQueryResult result;
+
+                using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
+                {
+                    System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+                    //result = platformServiceClient.GetPageRecords(id, "", "", 0);
+                    result = platformServiceClient.GetPageLookupRecords(id, "", "", 0);
+                }
+                return MPFormatConversion.MPFormatToList(result);
+            }
+            catch
+            {
+                return new List<Dictionary<string,object>>();
             }
         }
 
