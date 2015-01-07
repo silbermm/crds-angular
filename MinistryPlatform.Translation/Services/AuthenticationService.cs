@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -72,7 +73,8 @@ namespace MinistryPlatform.Translation
                     {"grant_type", "password"}
                 });
             var client = new HttpClient();
-            var message = client.PostAsync(ConfigurationManager.AppSettings["TokenURL"], userCredentials);
+            var tokenUrl = ConfigurationManager.AppSettings["TokenURL"];
+            var message = client.PostAsync(tokenUrl, userCredentials);
             try
             {
                 var result = message.Result.Content.ReadAsStringAsync().Result;

@@ -35,6 +35,10 @@ namespace crds_angular.Services
             var contactId = MinistryPlatform.Translation.AuthenticationService.GetContactId(token);
             var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["MyProfile"]);
             JArray contact = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecords(pageId, token);
+            if (contact.Count == 0)
+            {
+                throw new InvalidOperationException("getLoggedInUserProfile - no data returned.");
+            }
             var contactJson = TranslationService.DecodeJson(contact.ToString());
                       
             var person = new Person            
@@ -66,10 +70,7 @@ namespace crds_angular.Services
                 Address_Id = contactJson.Address_ID
             };
 
-            
-
             return person;
-
         }
 
         private List<Models.Crossroads.Skill> GetSkills(int recordId, string token)

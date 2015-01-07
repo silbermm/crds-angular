@@ -252,6 +252,7 @@
     <Content Include="app\modules\profile\services\profile_lookup_service.js" />
     <Content Include="app\modules\profile\services\profile_service.js" />
     <Content Include="app\modules\profile\profile.html" />
+    <Content Include="app\modules\profile\skills\profile_skills_service.js" />
     <Content Include="app\modules\profile\templates\profile_account.html" />
     <Content Include="app\modules\profile\personal\profile_personal.html" />
     <Content Include="app\modules\services\module.js" />
