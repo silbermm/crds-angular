@@ -1,12 +1,12 @@
 ﻿(function () {
-    angular.module("crdsProfile").controller("ProfileSkillsController", ['$rootScope', 'Lookup', '$log', ProfileSkillsController]);
+    angular.module("crdsProfile").controller("ProfileSkillsController", ['$rootScope', 'Skills', '$log', ProfileSkillsController]);
 
-    function ProfileSkillsController($rootScope, Lookup, $log) {
+    function ProfileSkillsController($rootScope, Skills, $log) {
 
         _this = this;
 
         _this.initSkills = function () {
-            _this.skills = Lookup.Skills.query(function () {
+            _this.skills = Skills.query(function () {
                 _this.myskills = function () {
                     var flat = [];
                     _this.skills.forEach(function (item) {
@@ -26,7 +26,7 @@
         }
 
         _this.skillChange = function (skill) {
-            var newSkill = new Lookup.Skills();
+            var newSkill = new Skills();
             newSkill.SkillId = skill.SkillId;
             newSkill.RecordId = skill.RecordId;
 

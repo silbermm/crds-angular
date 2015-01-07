@@ -36,12 +36,29 @@ namespace crds_angular.Controllers.API
                     case "genders"  :
                         ret = MinistryPlatform.Translation.Services.LookupService.Genders(t);
                         break;
+                    case "maritalstatus" :
+                        ret = MinistryPlatform.Translation.Services.LookupService.MaritalStatus(t);
+                        break;
+                    case "serviceproviders" :
+                        ret = MinistryPlatform.Translation.Services.LookupService.ServiceProviders(t);
+                        break;
+                    case "countries" :
+                        ret = MinistryPlatform.Translation.Services.LookupService.Countries(t);
+                        break;
+                    case "states" :
+                        ret = MinistryPlatform.Translation.Services.LookupService.States(t);
+                        break;
+                    case "crossroadslocations" :
+                        ret = MinistryPlatform.Translation.Services.LookupService.CrossroadsLocations(t);
+                        break;
                     default:
                         break;
-
                 }
-                return Ok(ret);
-                
+                if (ret.Count == 0)
+                {
+                    return this.NotFound();
+                }
+                return Ok(ret);   
             }); 
         }
 
