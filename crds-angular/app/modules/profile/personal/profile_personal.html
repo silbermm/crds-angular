@@ -172,7 +172,7 @@
                                 <li class="list-group-item clearfix">
                                     <div class="form-group col-sm-6" ng-class="{'has-error':personal.address.$invalid}">
                                         <label for="street">Street</label>
-                                        <input name="address" ng-model="profile.person.Address_Line_1" type="text" class="form-control" id="street" placeholder="Enter street address" ng-required>
+                                        <input name="address" ng-model="profile.person.Address_Line_1" type="text" class="form-control" id="street" placeholder="Enter street address" required>
                                         <ng-messages for="personal.address.$error" ng-if="personal.$submitted">
                                             <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}}</span>
                                         </ng-messages>
