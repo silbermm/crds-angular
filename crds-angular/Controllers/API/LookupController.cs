@@ -46,7 +46,9 @@ namespace crds_angular.Controllers.API
                         ret = MinistryPlatform.Translation.Services.LookupService.Countries(t);
                         break;
                     case "states" :
-                        ret = MinistryPlatform.Translation.Services.LookupService.States(t);
+                        var json = TranslationService.GetStates(t);
+                        ret = DecodeJson(json);
+                        //ret = MinistryPlatform.Translation.Services.LookupService.States(t);
                         break;
                     case "crossroadslocations" :
                         ret = MinistryPlatform.Translation.Services.LookupService.CrossroadsLocations(t);
@@ -61,6 +63,26 @@ namespace crds_angular.Controllers.API
                 return Ok(ret);   
             }); 
         }
+
+        [ResponseType(typeof(System.Web.Helpers.DynamicJsonArray))]
+        [HttpGet]
+        [Route("api/lookup/{lookup?}")]
+        public IHttpActionResult Get(string lookup)
+        {
+            return Authorized(t =>
+            {
+                if(lookup == "states"){
+                    var states = TranslationService.GetStates(t);
+                    var json = DecodeJson(states.ToString());
+                     return this.Ok(json);
+                }                
+                else 
+                {
+                    return this.BadRequest();
+                }               
+            });
+        }
+
 
         [HttpGet]
         [Route("api/lookup/{email?}")]
