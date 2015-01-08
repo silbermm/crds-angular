@@ -225,8 +225,15 @@
                                 <li class="list-group-item clearfix" ng-class="{'has-error':personal.homephone.$invalid}">
                                     <div class="form-group col-sm-6">
                                         <label for="homephone">Home Phone</label>
-                                        <input name="homephone" ng-model="profile.person.Home_Phone" type="text" class="form-control" id="homephone" ng-pattern="phoneFormat" placeholder="Enter home phone" ng-blur="profile.convertHomePhone()">
-                                        <ng-messages for="personal.homephone.$error" ng-if="personal.$submitted || personal.$touched">
+                                        <input name="homephone"
+                                               ng-model="profile.person.Home_Phone"
+                                               ng-model-options="{ debounce : { 'default' : 1000, blur : 0 } }"
+                                               type="text"
+                                               class="form-control"
+                                               id="homephone" ng-pattern="profile.phoneFormat"
+                                               placeholder="Enter home phone"
+                                               ng-blur="profile.convertHomePhone()">
+                                        <ng-messages for="personal.homephone.$error">
                                             <span ng-message="pattern">{{$root.MESSAGES.invalidPhone}}</span>
                                         </ng-messages>
                                     </div>

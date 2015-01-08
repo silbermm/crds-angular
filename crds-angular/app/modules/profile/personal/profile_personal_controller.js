@@ -41,7 +41,7 @@
         }
 
         _this.convertHomePhone = function () {
-            if (_this.Home_Phone) {
+            if (_this.person.Home_Phone) {
                 if (_this.form.personal.homephone.$valid) {
                     _this.person.Home_Phone = _this.person.Home_Phone.replace(_this.phoneFormat, '$1-$2-$3');
                 }
