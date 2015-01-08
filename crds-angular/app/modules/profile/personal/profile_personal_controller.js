@@ -5,7 +5,7 @@
     function ProfilePersonalController($rootScope, Profile, Lookup, $log, MESSAGES) {
         var _this = this;
 
-        _this.phoneFormat = /^\(?(\d{3})\)?[\s.-](\d{3})[\s.-](\d{4})$/;
+        _this.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
         _this.zipFormat = /^(\d{5}([\-]\d{4})?)$/;
 
       
