@@ -107,7 +107,7 @@
                     <button type="button" class="btn btn-primary" ng-click="open($event)">Date!</button>
                 </span>
             </div>
-            <ng-messages for="personal.anniversarydate.$error" ng-if="personal.$submitted || personal.$touched">
+            <ng-messages for="personal.anniversarydate.$error">
                 <span ng-message="date">{{$root.MESSAGES.invalidData}}</span>
             </ng-messages>
         </div>
