@@ -1,15 +1,14 @@
 ﻿'use strict';
 (function () {
-    angular.module("crdsProfile").controller("ProfilePersonalController", ['$rootScope', 'Profile', 'Lookup', '$log','MESSAGES', ProfilePersonalController]);
+    angular.module("crdsProfile").controller("ProfilePersonalController", ['$rootScope', '$filter', 'Profile', 'Lookup', '$log','MESSAGES', ProfilePersonalController]);
 
-    function ProfilePersonalController($rootScope, Profile, Lookup, $log, MESSAGES) {
+    function ProfilePersonalController($rootScope, $filter, Profile, Lookup, $log, MESSAGES) {
         var _this = this;
 
         _this.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
         _this.zipFormat = /^(\d{5}([\-]\d{4})?)$/;
         _this.dateFormat = /^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/;
 
-      
 
 
         _this.loading = true;
@@ -23,7 +22,8 @@
             _this.countries = Lookup.query({table: "countries"});
             _this.crossroadsLocations = Lookup.query({table: "crossroadslocations"});
             _this.person = Profile.Personal.get(function () {
-                _this.loading = false;                
+                _this.loading = false;
+                _this.person.Anniversary_Date = $filter('date')(new Date(_this.person.Anniversary_Date), 'MM/dd/yyyy');
             });
             
         }

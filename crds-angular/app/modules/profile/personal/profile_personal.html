@@ -50,13 +50,12 @@
     </div>
 
     <div class="row" ng-controller="crdsDatePickerCtrl">
-        <div class="from-group col-sm-6" ng-class="{'has-error':personal.birthdate.$invalid}">
+        <div class="form-group col-sm-6" ng-class="{'has-error':personal.birthdate.$invalid}">
             <label for="birthdate">Birth Date</label>
             <input type="text" name="birthdate" class="form-control"
                     placeholder="MM/DD/YYYY"
                     ng-pattern="profile.dateFormat"
                     ng-model="profile.person.Date_of_Birth"
-                    ng-click="open($event)"
                     required />
             <ng-messages for="personal.birthdate.$error">
                 <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}}</span>
@@ -91,16 +90,16 @@
     </div>
 
     <div class="row" ng-controller="crdsDatePickerCtrl">
-        <div class="col-sm-6" ng-controller="crdsDatePickerCtrl" >
-            <label class="control-label">When did you start attending Crossroads?</label>
-            <div class="input-group" ng-class="{'has-error':personal.anniversarydate.$invalid}">
-                <input type="text" name="anniversarydate" class="form-control" data-datepicker-popup="MM/dd/yyyy" ng-model="profile.person.Anniversary_Date" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" close-text="Close" ng-click="open($event)" />
-                <span class="input-group-btn">
-                    <button type="button" class="btn btn-primary" ng-click="open($event)">Date!</button>
-                </span>
-            </div>
+        <div class="form-group col-sm-6" ng-controller="crdsDatePickerCtrl" ng-class="{'has-error':personal.anniversarydate.$invalid}">
+            <label for="anniversarydate">When did you start attending Crossroads?</label>
+                <input type="text"
+                       name="anniversarydate"
+                       placeholder="MM/DD/YYYY"
+                       class="form-control"
+                       ng-model="profile.person.Anniversary_Date" 
+                       ng-pattern="profile.dateFormat"/>
             <ng-messages for="personal.anniversarydate.$error">
-                <span ng-message="date">{{$root.MESSAGES.invalidData}}</span>
+                <span ng-message="pattern">{{$root.MESSAGES.invalidData}}</span>
             </ng-messages>
         </div>
     </div>
