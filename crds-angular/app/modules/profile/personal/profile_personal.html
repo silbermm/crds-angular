@@ -185,7 +185,7 @@
 
                                     <div class="form-group col-sm-6" ng-class="{'has-error':personal.city.$invalid}">
                                         <label for="city">City</label>
-                                        <input name="city" ng-model="profile.person.City" type="text" class="form-control" id="city" placeholder="Enter city" ng-required>
+                                        <input name="city" ng-model="profile.person.City" type="text" class="form-control" id="city" placeholder="Enter city" required>
                                         <ng-messages for="personal.city.$error" ng-if="personal.$submitted">
                                             <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}}</span>
                                         </ng-messages>
