@@ -227,7 +227,7 @@
                                         <label for="homephone">Home Phone</label>
                                         <input name="homephone"
                                                ng-model="profile.person.Home_Phone"
-                                               ng-model-options="{ debounce : { 'default' : 1000, blur : 0 } }"
+                                               ng-model-options="{ updateOn: 'default blur', debounce: {'default': 500, 'blur': 0} }"
                                                type="text"
                                                class="form-control"
                                                id="homephone" ng-pattern="profile.phoneFormat"
