@@ -297,14 +297,14 @@
     <Content Include="sass\helpers\variable-overrides.min.css">
       <DependentUpon>variable-overrides.css</DependentUpon>
     </Content>
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
     <Content Include="sass\main.css">
       <DependentUpon>main.scss</DependentUpon>
     </Content>
     <Content Include="sass\main.min.css">
       <DependentUpon>main.css</DependentUpon>
     </Content>
-    <Content Include="favicon.ico" />
-    <Content Include="Global.asax" />
     <Content Include="Scripts\angular-animate.js" />
     <Content Include="Scripts\angular-animate.min.js" />
     <Content Include="Scripts\angular-aria.js" />
@@ -366,7 +366,10 @@
     <Content Include="sass\layout\footer.scss" />
     <Content Include="sass\layout\forms.scss" />
     <Content Include="sass\layout\header.scss" />
-    <Content Include="sass\main.scss" />
+    <Content Include="sass\main.css.map">
+      <DependentUpon>main.css</DependentUpon>
+    </Content>
+    <None Include="sass\main.scss" />
     <Content Include="sass\modules\billboard.scss" />
     <Content Include="sass\modules\brandbar.scss" />
     <Content Include="sass\modules\buttons.scss" />
@@ -392,9 +395,6 @@
     <Content Include="sass\pages\serve.scss" />
     <Content Include="sass\pages\styleguide.scss" />
     <Content Include="sass\pages\thefeed.scss" />
-    <Content Include="sass\main.css.map">
-      <DependentUpon>main.css</DependentUpon>
-    </Content>
     <Content Include="sass\helpers\variable-overrides.css.map">
       <DependentUpon>variable-overrides.css</DependentUpon>
     </Content>
@@ -498,6 +498,9 @@
       <DependentUpon>ui-bootstrap.min.js</DependentUpon>
     </Content>
     <Content Include="Properties\SlowCheetah\SlowCheetah.Transforms.targets" />
+    <Content Include="Scripts\angular-growl-2\angular-growl.min.js.map">
+      <DependentUpon>angular-growl.min.js</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-dj.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-er.js" />
@@ -1292,6 +1295,9 @@
       <DependentUpon>respond.matchmedia.addListener.min.js</DependentUpon>
     </Content>
     <Content Include="Scripts\underscore.min.map" />
+    <Content Include="Scripts\underscore.min.js.map">
+      <DependentUpon>underscore.min.js</DependentUpon>
+    </Content>
     <None Include="Web.Integration.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
