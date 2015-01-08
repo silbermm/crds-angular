@@ -43,7 +43,7 @@
                 <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}}</span>
                 <span ng-message="unique">{{$root.MESSAGES.emailInUse}}</span>
             </ng-messages>
-            <ng-messages for="personal.email.$error" ng-if="personal.$submitted || personal.$touched">
+            <ng-messages for="personal.email.$error">
                 <span ng-message="email">{{$root.MESSAGES.invalidEmail}}</span>
             </ng-messages>
         </div>
@@ -105,10 +105,9 @@
                 <input type="text" name="anniversarydate" class="form-control" data-datepicker-popup="MM/dd/yyyy" ng-model="profile.person.Anniversary_Date" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" close-text="Close" ng-click="open($event)" />
                 <span class="input-group-btn">
                     <button type="button" class="btn btn-primary" ng-click="open($event)">Date!</button>
-                </span>        
+                </span>
             </div>
-            <ng-messages for="personal.anniversarydate.$error" ng-if="personal.$submitted">
-                <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}}</span>
+            <ng-messages for="personal.anniversarydate.$error" ng-if="personal.$submitted || personal.$touched">
                 <span ng-message="date">{{$root.MESSAGES.invalidData}}</span>
             </ng-messages>
         </div>
