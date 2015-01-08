@@ -338,9 +338,7 @@
     <Content Include="Scripts\angular-ui\ui-bootstrap.js" />
     <Content Include="Scripts\angular-ui\ui-bootstrap.min.js" />
     <Content Include="Scripts\angular.js" />
-    <Content Include="Scripts\angular.min.js">
-      <DependentUpon>angular.js</DependentUpon>
-    </Content>
+    <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\bootstrap-sprockets.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap\affix.js" />
@@ -474,20 +472,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Scripts\angular-touch.min.js.map" />
-    <Content Include="Scripts\angular-sanitize.min.js.map" />
-    <Content Include="Scripts\angular-route.min.js.map" />
-    <Content Include="Scripts\angular-messages.min.js.map" />
-    <Content Include="Scripts\angular-loader.min.js.map" />
-    <Content Include="Scripts\angular-cookies.min.js.map" />
-    <Content Include="Scripts\angular-aria.min.js.map" />
-    <Content Include="Scripts\angular-animate.min.js.map" />
     <None Include="Properties\PublishProfiles\MPTest01.pubxml" />
     <Content Include="Scripts\angular-ui-router.min.js.map">
       <DependentUpon>angular-ui-router.min.js</DependentUpon>
-    </Content>
-    <Content Include="Scripts\angular.min.js.map">
-      <DependentUpon>angular.min.js</DependentUpon>
     </Content>
     <Content Include="Scripts\angular-ui\ui-bootstrap-tpls.min.js.map">
       <DependentUpon>ui-bootstrap-tpls.min.js</DependentUpon>
@@ -499,8 +486,17 @@
     <Content Include="Scripts\angular-growl-2\angular-growl.min.js.map">
       <DependentUpon>angular-growl.min.js</DependentUpon>
     </Content>
+    <Content Include="Scripts\angular.min.js.map" />
     <Content Include="Scripts\errors.json" />
+    <Content Include="Scripts\angular-touch.min.js.map" />
+    <Content Include="Scripts\angular-sanitize.min.js.map" />
+    <Content Include="Scripts\angular-route.min.js.map" />
     <Content Include="Scripts\angular-resource.min.js.map" />
+    <Content Include="Scripts\angular-messages.min.js.map" />
+    <Content Include="Scripts\angular-loader.min.js.map" />
+    <Content Include="Scripts\angular-cookies.min.js.map" />
+    <Content Include="Scripts\angular-aria.min.js.map" />
+    <Content Include="Scripts\angular-animate.min.js.map" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-dj.js" />
