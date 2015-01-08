@@ -7,6 +7,8 @@
 
         _this.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
         _this.zipFormat = /^(\d{5}([\-]\d{4})?)$/;
+
+        _this.dateFormat = /^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/;
       
         _this.loading = true;
 
@@ -62,11 +64,9 @@
         }
 
         _this.convertHomePhone = function () {
-            if (_this.Home_Phone) {
                 if (_this.form.personal.homephone.$valid) {
                     _this.person.Home_Phone = _this.person.Home_Phone.replace(_this.phoneFormat, '$1-$2-$3');
                 }
-            }
         }
 
         _this.convertPhone = function () {
