@@ -19,7 +19,6 @@
 
         $scope.login = function () {            
             if (($scope.credentials === undefined) || ($scope.credentials.username === undefined || $scope.credentials.password === undefined)) {
-                $rootScope.$emit('notify.error', MESSAGES.credentialsBlank);
                 $scope.pending = true;
             } else {
                 $scope.processing = true;
@@ -34,7 +33,6 @@
                     $log.debug("Bad password");    
                     $scope.processing = false;
                     $scope.loginFailed = true;
-                    $rootScope.$emit('notify.error', MESSAGES.loginFailed);
                 });
             }
         };
