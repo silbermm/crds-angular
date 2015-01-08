@@ -33,6 +33,7 @@
                 }, function () {
                     $log.debug("Bad password");    
                     $scope.processing = false;
+                    $scope.loginFailed = true;
                     $rootScope.$emit('notify.error', MESSAGES.loginFailed);
                 });
             }
