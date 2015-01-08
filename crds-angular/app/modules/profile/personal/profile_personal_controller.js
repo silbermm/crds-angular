@@ -18,11 +18,11 @@
             _this.genders = Lookup.query({ table: "genders" });
             _this.maritalStatuses = Lookup.query({table: "maritalstatus"});
             _this.serviceProviders = Lookup.query({ table: "serviceproviders" });
-            _this.states = Lookup.query({table: "states"});
+            _this.states = Lookup.query({lookup: "states"});
             _this.countries = Lookup.query({table: "countries"});
             _this.crossroadsLocations = Lookup.query({table: "crossroadslocations"});
             _this.person = Profile.Personal.get(function () {
-                _this.loading = false;               
+                _this.loading = false;                
             });
             
         }
