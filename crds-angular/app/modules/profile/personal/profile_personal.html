@@ -203,11 +203,11 @@
 
                                     <div class="form-group col-sm-6" ng-class="{'has-error':personal.zip.$invalid}">
                                         <label for="zip">Zip</label>
-                                        <input name="zip" ng-model="profile.person.Postal_Code" type="text" class="form-control" id="zip" placeholder="Enter zip code" ng-required ng-pattern="profile.zipFormat">
+                                        <input name="zip" ng-model="profile.person.Postal_Code" type="text" class="form-control" id="zip" placeholder="Enter zip code" required ng-pattern="profile.zipFormat">
                                         <ng-messages for="personal.zip.$error" ng-if="personal.$submitted">
                                             <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}}</span>
                                         </ng-messages>
-                                        <ng-messages for="personal.zip.$error" ng-if="personal.$submitted || personal.$touched">
+                                        <ng-messages for="personal.zip.$error">
                                             <span ng-message="pattern">{{$root.MESSAGES.invalidZip}}</span>
                                         </ng-messages>
 
