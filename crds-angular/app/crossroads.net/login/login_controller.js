@@ -20,6 +20,7 @@
         $scope.login = function () {            
             if (($scope.credentials === undefined) || ($scope.credentials.username === undefined || $scope.credentials.password === undefined)) {
                 $rootScope.$emit('notify.error', MESSAGES.credentialsBlank);
+                $scope.pending = true;
             } else {
                 $scope.processing = true;
                 AuthService.login($scope.credentials).then(function (user) {
