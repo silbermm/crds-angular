@@ -21,6 +21,7 @@
                 $log.debug("Save the password first!");
                 _this.password.$save(function () {
                     $log.debug("password saved succesfully!");
+                    $rootScope.$emit('notify.error', $rootScope.MESSAGES.profileUpdated);
                     _this.password.password = null;
                 }, function () {
                     _this.password.password = null;
@@ -35,12 +36,12 @@
                 return
             }
 
-           /* _this.account.$save(function () {
+            _this.account.$save(function () {
                 $log.debug("save successful");
                 
             }, function () {
                 $log.error("save unsuccessful");
-            }); */
+            });
         }
     }
 
