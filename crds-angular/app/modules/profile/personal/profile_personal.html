@@ -50,27 +50,19 @@
     </div>
 
     <div class="row" ng-controller="crdsDatePickerCtrl">
-        <div class="col-sm-6" >
-            <label class="control-label">Birth Date</label>
-            <div class="input-group" ng-class="{'has-error':personal.birthdate.$invalid}">
-                <input type="text" name="birthdate" class="form-control" datepicker-popup="MM/dd/yyyy"
-                       datepicker-append-to-body="true"
-                       ng-model="profile.person.Date_of_Birth"
-                       is-open="opened"
-                       datepicker-options="dateOptions"
-                       date-disabled="disabled(date,mode)"
-                       close-text="Close"
-                       ng-click="open($event)" />
-                <span class="input-group-btn">
-                    <button type="button" class="btn btn-primary" ng-click="open($event)">Add</button>
-                </span>
-                
-            </div>
-            <ng-messages for="personal.birthdate.$error" ng-if="personal.$submitted">
-                <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}}</span> 
+        <div class="from-group col-sm-6" ng-class="{'has-error':personal.birthdate.$invalid}">
+            <label for="birthdate">Birth Date</label>
+            <input type="text" name="birthdate" class="form-control"
+                    placeholder="MM/DD/YYYY"
+                    ng-pattern="profile.dateFormat"
+                    ng-model="profile.person.Date_of_Birth"
+                    ng-click="open($event)"
+                    required />
+            <ng-messages for="personal.birthdate.$error">
+                <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}}</span>
             </ng-messages>
-            <ng-messages for="personal.birthdate.$error" ng-if="personal.$submitted || personal.$touched">
-                <span ng-message="date">{{$root.MESSAGES.invalidData}}</span>
+            <ng-messages for="personal.birthdate.$error">
+                <span ng-message="pattern">{{$root.MESSAGES.invalidData}}</span>
             </ng-messages>
         </div>
     </div>
@@ -228,7 +220,7 @@
                                         <label for="homephone">Home Phone</label>
                                         <input name="homephone"
                                                ng-model="profile.person.Home_Phone"
-                                               ng-model-options="{ updateOn: 'default blur', debounce: {'default': 500, 'blur': 0} }"
+                                               ng-model-options="{ updateOn: 'default blur', debounce: {'default': 300, 'blur': 0} }"
                                                type="text"
                                                class="form-control"
                                                id="homephone" ng-pattern="profile.phoneFormat"
