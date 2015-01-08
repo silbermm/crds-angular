@@ -67,7 +67,9 @@
                 
             </div>
             <ng-messages for="personal.birthdate.$error" ng-if="personal.$submitted">
-                <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}}</span>
+                <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}}</span> 
+            </ng-messages>
+            <ng-messages for="personal.birthdate.$error" ng-if="personal.$submitted || personal.$touched">
                 <span ng-message="date">{{$root.MESSAGES.invalidData}}</span>
             </ng-messages>
         </div>

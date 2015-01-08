@@ -52,10 +52,10 @@ namespace crds_angular.Controllers.API
         {
             logger.Debug("In the POST");
 
-            if (!EventLog.SourceExists("Crossroads"))
-            {
-                EventLog.CreateEventSource("Crossroads", "CrossroadsLog");
-            }
+            //if (!EventLog.SourceExists("Crossroads"))
+            //{
+            //    EventLog.CreateEventSource("Crossroads", "CrossroadsLog");
+            //}
             
             // try to login 
             var token = TranslationService.Login(cred.username, cred.password);
