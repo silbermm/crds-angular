@@ -20,6 +20,7 @@
         $scope.login = function () {            
             if (($scope.credentials === undefined) || ($scope.credentials.username === undefined || $scope.credentials.password === undefined)) {
                 $scope.pending = true;
+                $scope.loginFailed = false;
             } else {
                 $scope.processing = true;
                 AuthService.login($scope.credentials).then(function (user) {
@@ -30,7 +31,8 @@
                     $scope.showLoginButton = false;
                     $state.go('profile.personal');
                 }, function () {
-                    $log.debug("Bad password");    
+                    $log.debug("Bad password");
+                    $scope.pending = false;
                     $scope.processing = false;
                     $scope.loginFailed = true;
                 });
