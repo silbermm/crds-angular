@@ -5,7 +5,7 @@
     function ProfilePersonalController($rootScope, Profile, Lookup, $log, MESSAGES) {
         var _this = this;
 
-        _this.phoneFormat = /^\(?(\d{3})\)?[\s.-](\d{3})[\s.-](\d{4})$/;
+        _this.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
         _this.zipFormat = /^(\d{5}([\-]\d{4})?)$/;
 
       
@@ -18,11 +18,11 @@
             _this.genders = Lookup.query({ table: "genders" });
             _this.maritalStatuses = Lookup.query({table: "maritalstatus"});
             _this.serviceProviders = Lookup.query({ table: "serviceproviders" });
-            _this.states = Lookup.query({table: "states"});
+            _this.states = Lookup.query({lookup: "states"});
             _this.countries = Lookup.query({table: "countries"});
             _this.crossroadsLocations = Lookup.query({table: "crossroadslocations"});
             _this.person = Profile.Personal.get(function () {
-                _this.loading = false;               
+                _this.loading = false;                
             });
             
         }
@@ -41,11 +41,9 @@
         }
 
         _this.convertHomePhone = function () {
-            if (_this.Home_Phone) {
                 if (_this.form.personal.homephone.$valid) {
                     _this.person.Home_Phone = _this.person.Home_Phone.replace(_this.phoneFormat, '$1-$2-$3');
                 }
-            }
         }
 
         _this.convertPhone = function () {

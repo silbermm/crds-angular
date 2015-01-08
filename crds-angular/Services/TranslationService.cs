@@ -37,6 +37,13 @@ namespace crds_angular.Services
             return data.ToString();
         }
 
+        public static string GetStates(string token)
+        {
+            var data = MinistryPlatform.Translation.Services.GetPageRecordService.GetStates(token);
+            return data.ToString();
+        }
+
+
         public static Dictionary<string, object> GetLookupDict(int pageId, string token)
         {
             return MinistryPlatform.Translation.Services.GetPageRecordService.GetRecordsDict(pageId, token);

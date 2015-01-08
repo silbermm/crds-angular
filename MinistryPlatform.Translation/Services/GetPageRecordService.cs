@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using MinistryPlatform.Translation.Helpers;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Configuration;
 
 namespace MinistryPlatform.Translation.Services
 {
@@ -98,6 +99,27 @@ namespace MinistryPlatform.Translation.Services
                 return new JArray();
             }
             
+        }
+
+        public static JArray GetStates(string token)
+        {
+            try
+            {
+                var platformServiceClient = new PlatformService.PlatformServiceClient();
+                PlatformService.SelectQueryResult result;
+
+                using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
+                {
+                    System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+                    result = platformServiceClient.GetPageRecords(Convert.ToInt32(ConfigurationManager.AppSettings["States"]), "", "", 0);
+                }
+                return MPFormatConversion.MPFormatToJson(result);
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.ToString());
+                return new JArray();
+            }
         }
 
         public static List<Dictionary<string, object>> GetSubPageRecords(int subPageId, int recordId, String token)

@@ -50,7 +50,6 @@ namespace crds_angular.Controllers.API
         [ResponseType(typeof(LoginReturn))]
         public IHttpActionResult Post([FromBody]Credentials cred)
         {
-            
             // try to login 
             var token = TranslationService.Login(cred.username, cred.password);
             if (token == null)
