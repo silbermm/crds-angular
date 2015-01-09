@@ -64,6 +64,10 @@
             });
         }
 
+        _this.isDobError = function () {            
+            return (_this.form.personal.birthdate.$touched || _this.form.personal.$submitted) && _this.form.personal.birthdate.$invalid
+        }
+
         _this.convertHomePhone = function () {
                 if (_this.form.personal.homephone.$valid) {
                     _this.person.Home_Phone = _this.person.Home_Phone.replace(_this.phoneFormat, '$1-$2-$3');

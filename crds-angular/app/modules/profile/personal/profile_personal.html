@@ -50,14 +50,14 @@
     </div>
 
     <div class="row" ng-controller="crdsDatePickerCtrl">
-        <div class="form-group col-sm-6" ng-class="{'has-error':personal.birthdate.$invalid}">
+        <div class="form-group col-sm-6" ng-class="{'has-error': profile.isDobError()}">
             <label for="birthdate">Birth Date</label>
             <input type="text" name="birthdate" class="form-control"
                     placeholder="MM/DD/YYYY"
                     ng-pattern="profile.dateFormat"
                     ng-model="profile.person.Date_of_Birth"
                     required />
-            <ng-messages for="personal.birthdate.$error">
+            <ng-messages for="personal.birthdate.$error" ng-if="personal.$submitted || personal.birthdate.$touched">
                 <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}}</span>
             </ng-messages>
             <ng-messages for="personal.birthdate.$error">
