@@ -120,7 +120,7 @@
         </div>
         <div class="form-group col-sm-6" ng-class="{'has-error':personal.serviceprovider.$invalid}">
             <label for="provider">Service Provider</label>
-            <select name="serviceprovider" class="form-control col-sm-12" ng-model="profile.person.Mobile_Carrier_ID"
+            <select name="serviceprovider" class="form-control col-sm-12" ng-model="profile.person.Mobile_Carrier"
                     ng-options="providers.dp_RecordID as providers.dp_RecordName for providers in profile.serviceProviders" ng-required="profile.serviceProviderRequired()">
                 <option value=""> -- Choose One -- </option>
             </select>

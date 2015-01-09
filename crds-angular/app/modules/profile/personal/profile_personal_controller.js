@@ -56,6 +56,7 @@
                 $rootScope.$emit('notify.error', MESSAGES.generalError);
                 return 
             }
+            _this.person["State/Region"] = _this.person.State
             _this.person.$save(function () {
                 $log.debug("person save successful");
             }, function () {

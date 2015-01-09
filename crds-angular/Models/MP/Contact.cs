@@ -37,8 +37,7 @@ namespace crds_angular.Models.MP
         public bool BulkEmailOptOut { get; set; }
 
         public string MobilePhone { get; set; }
-        public int? MobileCarrierId { get; set; }
-        public string MobileCarrier { get; set; }
+        public int? Mobile_Carrier { get; set; }
         public bool MobilePhoneUnlisted { get; set; }
 
         public string CompanyPhone { get; set; }
@@ -90,7 +89,6 @@ namespace crds_angular.Models.MP
         public int? TaskId { get; set; }
         public string TaskAction { get; set; }
         public string Mobile_Phone { get; set; }
-        public int? Mobile_Carrier_ID { get; set; }
         public string Date_of_Birth { get; set; }
         public int? Marital_Status_Id { get; set; }
         public int? Gender_Id { get; set; }
