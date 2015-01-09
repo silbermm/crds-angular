@@ -54,7 +54,7 @@ namespace crds_angular.Controllers.API
                         try
                         {
                             ret = MinistryPlatform.Translation.Services.LookupService.CrossroadsLocations(t);
-                            return this.BadRequest(string.Format("count: {0}", ret.Count));
+                            //return this.BadRequest(string.Format("count: {0}", ret.Count));
                         }
                         catch (Exception e)
                         {
