@@ -16,6 +16,17 @@ namespace MinistryPlatform.Translation.Test
         private const string PASSWORD = "changeme";
         private const string EMAIL = "testme@test.com";
 
+        [Test]
+        public void FindAnAttribute([Values("Dentist", "Social media wizard")] string attributeName)
+        {
+            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            Assert.IsNotNull(token);
+
+            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["Attributes"]);
+
+            var attribute = MinistryPlatform.Translation.Services.GetPageRecordService.GetLookupRecord(pageId, attributeName, token, 1);
+            Assert.IsNotNull(attribute);
+        }
 
         [Test]
         public void ShouldReturnAValidObjectWithUserIdAndEmailAddress()
@@ -115,7 +126,7 @@ namespace MinistryPlatform.Translation.Test
             });
         }
 
-       
+       [Test]
         public void ShouldFindListOfCrossroadsLocations()
         {
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
