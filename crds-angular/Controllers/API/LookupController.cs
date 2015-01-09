@@ -51,15 +51,22 @@ namespace crds_angular.Controllers.API
                         //ret = MinistryPlatform.Translation.Services.LookupService.States(t);
                         break;
                     case "crossroadslocations" :
-                        ret = MinistryPlatform.Translation.Services.LookupService.CrossroadsLocations(t);
+                        try
+                        {
+                            ret = MinistryPlatform.Translation.Services.LookupService.CrossroadsLocations(t);
+                        }
+                        catch (Exception e)
+                        {
+                            return this.BadRequest(e.ToString());
+                        }
+
                         break;
                     default:
                         break;
                 }
                 if (ret.Count == 0)
                 {
-                    return this.BadRequest(ret.ToString());
-                    //return this.NotFound(ret);
+                    return this.NotFound();
                 }
                 return Ok(ret);   
             }); 
