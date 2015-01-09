@@ -58,7 +58,8 @@ namespace crds_angular.Controllers.API
                 }
                 if (ret.Count == 0)
                 {
-                    return this.NotFound();
+                    return this.BadRequest(ret.ToString());
+                    //return this.NotFound(ret);
                 }
                 return Ok(ret);   
             }); 
