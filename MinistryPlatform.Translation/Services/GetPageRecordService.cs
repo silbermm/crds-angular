@@ -170,8 +170,8 @@ namespace MinistryPlatform.Translation.Services
 
         public static List<Dictionary<string, object>> GetLookupRecords(int id, string token)
         {
-            try
-            {
+            //try
+            //{
                 var platformServiceClient = new PlatformService.PlatformServiceClient();
                 PlatformService.SelectQueryResult result;
 
@@ -182,11 +182,11 @@ namespace MinistryPlatform.Translation.Services
                     result = platformServiceClient.GetPageLookupRecords(id, "", "", 0);
                 }
                 return MPFormatConversion.MPFormatToList(result);
-            }
-            catch
-            {
-                return new List<Dictionary<string,object>>();
-            }
+            //}
+            //catch
+            //{
+            //    return new List<Dictionary<string,object>>();
+            //}
         }
 
     }
