@@ -58,7 +58,7 @@ namespace MinistryPlatform.Translation.Services
             return returnVal;
         }
 
-        public static Dictionary<string, object> GetLookupRecord(int pageId, string search, String token)
+        public static Dictionary<string, object> GetLookupRecord(int pageId, string search, String token, int maxNumberOfRecordsToReturn = 100)
         {
             var platformServiceClient = new PlatformService.PlatformServiceClient();
             PlatformService.SelectQueryResult result;
@@ -66,7 +66,8 @@ namespace MinistryPlatform.Translation.Services
             using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
             {
                 System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
-                result = platformServiceClient.GetPageLookupRecords(pageId, search, null, 100);
+                result = platformServiceClient.GetPageLookupRecords(pageId, search, null, maxNumberOfRecordsToReturn);
+                //vat tm = platformServiceClient.GetPageLookupRecords()
             }
             Dictionary<string, object> returnVal = MPFormatConversion.MPFormatToDictionary(result);
             return returnVal;

@@ -23,7 +23,7 @@
                 });
             });
             _this.countries = Lookup.query({ table: "countries" });
-           // _this.crossroadsLocations = Lookup.query({table: "crossroadslocations"});
+            _this.crossroadsLocations = Lookup.query({table: "crossroadslocations"});
             _this.person = Profile.Personal.get(function () {
                 _this.loading = false;
                 _this.person.Anniversary_Date = $filter('date')(new Date(_this.person.Anniversary_Date), 'MM/dd/yyyy');
