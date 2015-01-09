@@ -16,7 +16,7 @@ namespace crds_angular.Models
         public string Maiden_Name { get; set; }
         public string NickName { get; set; }
         public string Mobile_Phone { get; set; }
-        public int? Mobile_Carrier_ID { get; set; }
+        public int? Mobile_Carrier { get; set; }
         public string Date_of_Birth { get; set; }
         public int? Marital_Status_Id { get; set; }
         public int? Gender_Id { get; set; }
@@ -41,7 +41,7 @@ namespace crds_angular.Models
 
         public Models.MP.Contact GetContact()
         {
-            return new Models.MP.Contact
+                return new Models.MP.Contact
             {
                 Contact_Id = this.Contact_Id,
                 Email_Address = this.Email_Address,
@@ -51,7 +51,7 @@ namespace crds_angular.Models
                 Maiden_Name = this.Maiden_Name,
                 NickName = this.NickName,
                 Mobile_Phone = this.Mobile_Phone,
-                Mobile_Carrier_ID = this.Mobile_Carrier_ID,
+                Mobile_Carrier = this.Mobile_Carrier,
                 Date_of_Birth = this.Date_of_Birth,
                 Marital_Status_Id = this.Marital_Status_Id,
                 Gender_Id = this.Gender_Id,
