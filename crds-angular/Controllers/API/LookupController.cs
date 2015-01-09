@@ -48,19 +48,9 @@ namespace crds_angular.Controllers.API
                     case "states" :
                         var json = TranslationService.GetStates(t);
                         ret = DecodeJson(json);
-                        //ret = MinistryPlatform.Translation.Services.LookupService.States(t);
                         break;
                     case "crossroadslocations" :
-                        try
-                        {
-                            ret = MinistryPlatform.Translation.Services.LookupService.CrossroadsLocations(t);
-                            //return this.BadRequest(string.Format("count: {0}", ret.Count));
-                        }
-                        catch (Exception e)
-                        {
-                            return this.BadRequest(e.ToString());
-                        }
-
+                        ret = MinistryPlatform.Translation.Services.LookupService.CrossroadsLocations(t);
                         break;
                     default:
                         break;
