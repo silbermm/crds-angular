@@ -98,12 +98,7 @@ namespace MinistryPlatform.Translation.Test
 
             var attribute = new MinistryPlatform.Models.Attribute();
             attribute.Start_Date = new DateTime(2013, 7, 1);
-<<<<<<< HEAD
             attribute.Attribute_ID = 396;
-=======
-            attribute.Attribute_ID = 397;
->>>>>>> development
-
             var added = GetMyRecords.CreateAttribute(attribute, recordId, token);
             Assert.IsNotNull(added);
             Assert.IsFalse(added == 0);
