@@ -25,7 +25,8 @@
         photoTooSmall: "The photo you attempted to upload was too small.  Please choose another photo.",
         credentialsBlank: "Hold up! Username and password can't be blank",
         loginFailed: "Oops! Login failed. Please try again or use <a>Forgot Password</a>",
-        invalidZip: "Zip code entered does not appear to be valid."
+        invalidZip: "Zip code entered does not appear to be valid.",
+        invalidPassword: "New password is invalid.  It must be at least 6 characters in length."
     }).config(function(growlProvider) {
         growlProvider.globalPosition('top-center');
         growlProvider.globalTimeToLive(6000);
