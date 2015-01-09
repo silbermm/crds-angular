@@ -48,7 +48,6 @@ namespace crds_angular.Controllers.API
                     case "states" :
                         var json = TranslationService.GetStates(t);
                         ret = DecodeJson(json);
-                        //ret = MinistryPlatform.Translation.Services.LookupService.States(t);
                         break;
                     case "crossroadslocations" :
                         ret = MinistryPlatform.Translation.Services.LookupService.CrossroadsLocations(t);
@@ -58,7 +57,7 @@ namespace crds_angular.Controllers.API
                 }
                 if (ret.Count == 0)
                 {
-                    return this.NotFound();
+                    return this.BadRequest(string.Format("table: {0}", table));
                 }
                 return Ok(ret);   
             }); 

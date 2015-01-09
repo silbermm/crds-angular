@@ -133,6 +133,12 @@ namespace MinistryPlatform.Translation.Test
             Assert.IsNotNull(token);
             List<Dictionary<string, object>> CrossroadsLocations = MinistryPlatform.Translation.Services.LookupService.CrossroadsLocations(token);
             Assert.IsNotEmpty(CrossroadsLocations);
+            var clifton = new Dictionary<string, object>();
+            clifton.Add("dp_RecordID", 11);
+            clifton.Add("dp_RecordName", "Clifton");
+
+           ////var list = CrossroadsLocations.ToList();
+            Assert.Contains(clifton, CrossroadsLocations);
             CrossroadsLocations.ForEach(x =>
             {
                 Assert.IsInstanceOf<Dictionary<string, object>>(x);

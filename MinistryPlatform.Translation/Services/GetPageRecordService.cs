@@ -183,9 +183,10 @@ namespace MinistryPlatform.Translation.Services
                 }
                 return MPFormatConversion.MPFormatToList(result);
             }
-            catch
+            catch (Exception e)
             {
-                return new List<Dictionary<string,object>>();
+                throw new ApplicationException(string.Format("pageId: {0}. {1}",id, e.Message));
+                //return new List<Dictionary<string, object>>();
             }
         }
 
