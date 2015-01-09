@@ -66,7 +66,7 @@ namespace crds_angular.Controllers.API
                 }
                 if (ret.Count == 0)
                 {
-                    return this.NotFound();
+                    return this.BadRequest(string.Format("table: {0}", table));
                 }
                 return Ok(ret);   
             }); 
