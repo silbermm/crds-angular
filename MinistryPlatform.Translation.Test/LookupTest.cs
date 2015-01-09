@@ -115,7 +115,7 @@ namespace MinistryPlatform.Translation.Test
             });
         }
 
-       
+       [Test]
         public void ShouldFindListOfCrossroadsLocations()
         {
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
