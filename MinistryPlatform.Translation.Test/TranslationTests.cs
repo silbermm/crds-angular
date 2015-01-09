@@ -102,12 +102,7 @@ namespace MinistryPlatform.Translation.Test
 
             var attribute = new MinistryPlatform.Models.Attribute();
             attribute.Start_Date = new DateTime(2013, 7, 1);
-<<<<<<< HEAD
-            attribute.Attribute_ID = 397;
-
-=======
             attribute.Attribute_ID = Convert.ToInt32(dentist["dp_RecordID"]);
->>>>>>> 2bdcb535746542d8dbca0b2a3fcdd6e2464fcb43
             var added = GetMyRecords.CreateAttribute(attribute, recordId, token);
             Assert.IsNotNull(added);
             Assert.IsFalse(added == 0);
