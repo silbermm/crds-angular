@@ -18,6 +18,7 @@ namespace crds_angular.Services
             var contactDictionary = getDictionary(person.GetContact());
             var householdDictionary = getDictionary(person.GetHousehold());
             var addressDictionary = getDictionary(person.GetAddress());
+            addressDictionary.Add("State/Region", addressDictionary["State"]);
 
             MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(455, contactDictionary, token);
             MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(465, householdDictionary, token);

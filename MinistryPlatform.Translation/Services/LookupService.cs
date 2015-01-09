@@ -43,7 +43,12 @@ namespace MinistryPlatform.Translation.Services
 
         public static List<Dictionary<string, object>> CrossroadsLocations(string token)
         {
-            return GetPageRecordService.GetLookupRecords(Convert.ToInt32(ConfigurationManager.AppSettings["CrossroadsLocations"]), token);
+            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["CrossroadsLocations"]);
+            if (pageId == 0) { throw new Exception("page id not found!"); }
+
+
+            return GetPageRecordService.GetLookupRecords(pageId, token);
+
         }
 
     }
