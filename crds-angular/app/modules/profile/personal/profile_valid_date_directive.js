@@ -9,7 +9,7 @@
             restrict: "A",
             require: 'ngModel',
             link: function(scope, element, attrs, ngModel){
-                ngModel.$validators.validateDate = function (value) {
+                ngModel.$validators.invalidDate = function (value) {
                     if (value === undefined) {
                         return true;
                     }

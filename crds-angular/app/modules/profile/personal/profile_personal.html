@@ -63,6 +63,7 @@
             </ng-messages>
             <ng-messages for="personal.birthdate.$error">
                 <span ng-message="pattern">{{$root.MESSAGES.invalidData}}</span>
+                <span ng-message="invalidDate">{{$root.MESSAGES.invalidData}}</span>
             </ng-messages>
         </div>
     </div>
@@ -102,6 +103,7 @@
                    ng-pattern="profile.dateFormat" />
             <ng-messages for="personal.anniversarydate.$error">
                 <span ng-message="pattern">{{$root.MESSAGES.invalidData}}</span>
+                <span ng-message="invalidDate">{{$root.MESSAGES.invalidData}}</span>
             </ng-messages>
         </div>
     </div>
