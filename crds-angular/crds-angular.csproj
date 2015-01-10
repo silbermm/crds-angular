@@ -242,6 +242,7 @@
     <Content Include="app\modules\profile\directives\profile_skills_directive.js" />
     <Content Include="app\modules\profile\personal\profile_personal_controller.js" />
     <Content Include="app\modules\profile\personal\profile_unique_email_directive.js" />
+    <Content Include="app\modules\profile\personal\profile_valid_date_directive.js" />
     <Content Include="app\modules\profile\skills\profile_skills_controllers.js" />
     <Content Include="app\modules\profile\directives\profile_password.html" />
     <Content Include="app\modules\profile\directives\profile_password_directive.js" />
@@ -1255,6 +1256,10 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />

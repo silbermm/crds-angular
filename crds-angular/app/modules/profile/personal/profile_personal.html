@@ -56,6 +56,7 @@
                     placeholder="MM/DD/YYYY"
                     ng-pattern="profile.dateFormat"
                     ng-model="profile.person.Date_of_Birth"
+                    validate-date   
                     required />
             <ng-messages for="personal.birthdate.$error" ng-if="personal.$submitted || personal.birthdate.$touched">
                 <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}}</span>
@@ -92,12 +93,13 @@
     <div class="row" ng-controller="crdsDatePickerCtrl">
         <div class="form-group col-sm-6" ng-controller="crdsDatePickerCtrl" ng-class="{'has-error':personal.anniversarydate.$invalid}">
             <label for="anniversarydate">When did you start attending Crossroads?</label>
-                <input type="text"
-                       name="anniversarydate"
-                       placeholder="MM/DD/YYYY"
-                       class="form-control"
-                       ng-model="profile.person.Anniversary_Date" 
-                       ng-pattern="profile.dateFormat"/>
+            <input type="text"
+                   name="anniversarydate"
+                   placeholder="MM/DD/YYYY"
+                   class="form-control"
+                   validate-date
+                   ng-model="profile.person.Anniversary_Date"
+                   ng-pattern="profile.dateFormat" />
             <ng-messages for="personal.anniversarydate.$error">
                 <span ng-message="pattern">{{$root.MESSAGES.invalidData}}</span>
             </ng-messages>
