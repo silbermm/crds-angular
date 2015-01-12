@@ -23,9 +23,9 @@ namespace MinistryPlatform.Translation.Services
                 using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
                 {
                     System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
-                    platformServiceClient.UpdatePageRecord(pageId, dictionary, false);
-
+                    platformServiceClient.UpdatePageRecord(pageId, dictionary, false);                    
                 }
+
             }
             catch (Exception e)
             {

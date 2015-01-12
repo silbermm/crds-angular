@@ -7,7 +7,7 @@
 
         _this.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
         _this.zipFormat = /^(\d{5}([\-]\d{4})?)$/;
-        _this.dateFormat = /^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/;
+        _this.dateFormat = /^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.]((19|20)\d\d)$/;
       
 
         _this.loading = true;
@@ -26,8 +26,20 @@
             _this.crossroadsLocations = Lookup.query({table: "crossroadslocations"});
             _this.person = Profile.Personal.get(function () {
                 _this.loading = false;
-                _this.person.Birth_Date = $filter('date')(new Date(_this.person.Birth_Date), 'MM/dd/yyy');
-                _this.person.Anniversary_Date = $filter('date')(new Date(_this.person.Anniversary_Date), 'MM/dd/yyyy');
+
+                if (_this.person.Date_of_Birth !== undefined) {
+                    var newBirthDate = _this.person.Date_of_Birth.replace(_this.dateFormat, "$3 $1 $2");
+                    var mBdate = moment(newBirthDate, "YYYY MM DD");
+                    _this.person.Date_of_Birth = mBdate.format("MM/DD/YYYY");
+                }
+
+                if (_this.person.Anniversary_Date !== undefined) {
+                    var mAdate = moment(new Date(_this.person.Anniversary_Date));
+                    _this.person.Anniversary_Date = mAdate.format("MM/DD/YYYY");
+                }
+
+                
+                //_this.person.Anniversary_Date = $filter('date')(new Date(_this.person.Anniversary_Date), 'MM/dd/yyyy');
                 _this.currentState = _this.person.State;
                 _this.currentCountry = _this.person.Foreign_Country;
             });
