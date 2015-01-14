@@ -237,6 +237,7 @@
     <Content Include="app\crossroads.net\login\login_controller.js" />
     <Content Include="app\crossroads.net\login\login_directive.js" />
     <Content Include="app\crossroads.net\app.js" />
+    <Content Include="app\crossroads.net\register\register_controller.js" />
     <Content Include="app\crossroads.net\routes.js" />
     <Content Include="app\crossroads.net\services\auth_service.js" />
     <Content Include="app\modules\profile\directives\profile_skills_directive.js" />
@@ -1304,7 +1305,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="app\crossroads.net\register\" />
     <Folder Include="app\crossroads.net\shared\" />
     <Folder Include="app\modules\telephone-validator\" />
     <Folder Include="App_Data\" />
