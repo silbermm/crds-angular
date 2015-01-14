@@ -1304,6 +1304,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="app\crossroads.net\register\" />
     <Folder Include="app\crossroads.net\shared\" />
     <Folder Include="app\modules\telephone-validator\" />
     <Folder Include="App_Data\" />

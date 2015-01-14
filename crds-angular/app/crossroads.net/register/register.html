@@ -1,0 +1,22 @@
+﻿<form name="registerForm" ng-controller="RegisterCtrl" ng-submit="register(newuser)" novalidate>
+
+    <label for="firstname">First Name:</label>
+    <input id="firstname" type="text" ng-model="newuser.firstname" required />
+
+    <label for="lastname">Last Name:</label>
+    <input id="lastname" type="text" ng-model="newuser.lastname" required />
+
+    <label for="email">Email:</label>
+    <input id="email" type="email" ng-model="newuser.email" required />
+
+    <label for="password">Password:</label>
+    <input type="password" ng-minlength="6" autocomplete="off" class="form-control" id="password" name="password" ng-model="newuser.password" ng-if="!newuser.showPassword">
+    <input type="password" ng-minlength="6" autocomplete="off" class="form-control" id="password" name="password" ng-model="newuser.password" ng-if="newuser.showPassword" />
+    <span class="input-group-addon">
+        <label>
+            <input type="checkbox" ng-click="newuser.showPassword = !newuser.showPassword"> Show
+        </label>
+    </span>
+    <button type="submit">Login</button>
+
+</form>
