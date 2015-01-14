@@ -4,12 +4,8 @@
 
     function RegisterController($scope, $rootScope, AUTH_EVENTS, MESSAGES, AuthService, $cookieStore, $state, $log, Session) {
 
-        /*$scope.showLoginButton = $rootScope.username === null || $rootScope.username === undefined;
-        $scope.loginShow = false;
-
-        $scope.toggleDesktopLogin = function () {
-            $scope.loginShow = !$scope.loginShow; */
-        }
+        $scope.showRegisterButton = true;
+    };})
 
         //$scope.credentials = { username: '', password: '' };
 
@@ -34,5 +30,5 @@
                 });
             }
         };
-    }*/
-})()
+    }
+})()*/
