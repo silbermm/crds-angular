@@ -10,6 +10,7 @@ using System.Web;
 using System.Runtime.Serialization;
 using MinistryPlatform.Translation.Models;
 using crds_angular.Models.MP;
+using System.Configuration;
 
 namespace crds_angular.Services
 {
@@ -24,7 +25,7 @@ namespace crds_angular.Services
         public bool SaveCommunicationPrefs(string token, AccountInfo accountInfo)
         {
             var contactId = MinistryPlatform.Translation.AuthenticationService.GetContactId(token);
-            var contact = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecordDict(455, contactId, token);
+            var contact = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecordDict(Convert.ToInt32(ConfigurationManager.AppSettings["MyContact"]), contactId, token);
             try
             {                
                 var emailsmsDict = getDictionary(new EmailSMSOptOut
@@ -62,6 +63,18 @@ namespace crds_angular.Services
 
 
        }
+        public static void RegisterPerson()
+        {
+            string token = AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"], ConfigurationManager.AppSettings["ApiPass"]);
+            Dictionary<string, object> contactDictionary = new Dictionary<string, object>();
+            contactDictionary["First_Name"]="Julius";
+            contactDictionary["Last_Name"]="Caesar";
+            contactDictionary["Email_Address"] = "test@test.com";
+            contactDictionary["Company"] = false; // default
+            contactDictionary["Display_Name"] = "Julius";
+
+            int newRecordId = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Contacts"]), contactDictionary, token);
+        }
 
     }
 }

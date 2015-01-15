@@ -1,12 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace crds_angular.test.Services
 {
-    class AccountServiceTest
+    [TestClass]
+    public class testclass
     {
+        [TestMethod]
+        public void TestMethod1()
+        {
+            crds_angular.Services.AccountService.RegisterPerson();
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace MinistryPlatform.Translation.Services
             try
             {
                 var platformServiceClient = new PlatformService.PlatformServiceClient();
-                PlatformService.SelectQueryResult result;
+                //PlatformService.SelectQueryResult result;
 
                 using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
                 {
@@ -34,31 +34,31 @@ namespace MinistryPlatform.Translation.Services
         }
 
   
-        private const string PlatformServiceUri = "https://my.crossroads.net/ministryplatformapi/PlatformService.svc";
+        //private const string PlatformServiceUri = "https://my.crossroads.net/ministryplatformapi/PlatformService.svc";
 
-        //get token using logged in user's credentials
-        private static string GetUserToken(string username, string password)
-        {
-            var userCredentials =
-                new FormUrlEncodedContent(new Dictionary<string, string>
-                {
-                    {"username", username},
-                    {"password", password},
-                    {"client_id", "client"},
-                    {"client_secret", "secret"},
-                    {"grant_type", "password"}
-                });
+        ////get token using logged in user's credentials
+        //private static string GetUserToken(string username, string password)
+        //{
+        //    var userCredentials =
+        //        new FormUrlEncodedContent(new Dictionary<string, string>
+        //        {
+        //            {"username", username},
+        //            {"password", password},
+        //            {"client_id", "client"},
+        //            {"client_secret", "secret"},
+        //            {"grant_type", "password"}
+        //        });
 
-            var client = new HttpClient();
-            var message = client.PostAsync("https://my.crossroads.net/ministryplatform/oauth/token", userCredentials);
-            var result = message.Result.Content.ReadAsStringAsync().Result;
+        //    var client = new HttpClient();
+        //    var message = client.PostAsync("https://my.crossroads.net/ministryplatform/oauth/token", userCredentials);
+        //    var result = message.Result.Content.ReadAsStringAsync().Result;
 
-            var obj = JObject.Parse(result);
-            var token = (string)obj["access_token"];
-            //ignorning refreshToken for now
-            var refreshToken = (string)obj["refresh_token"];
+        //    var obj = JObject.Parse(result);
+        //    var token = (string)obj["access_token"];
+        //    //ignorning refreshToken for now
+        //    var refreshToken = (string)obj["refresh_token"];
 
-            return token;
-        }
+        //    return token;
+        //}
     }
 }

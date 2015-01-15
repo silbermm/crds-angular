@@ -67,6 +67,21 @@ namespace MinistryPlatform.Translation.Test
         }
 
         [Test]
+        public void ShouldCreatePageRecord()
+        {
+            var pageId = 455;
+            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            var recordId = AuthenticationService.GetContactId(token);
+            Dictionary<string, object> record = GetPageRecordService.GetRecordDict(pageId, recordId, token);
+            record["First_Name"] = "Created";
+            record["Email_Address"] = "test@testemail.com";
+            int newRecordId = CreatePageRecordService.CreateRecord(pageId, record, token);
+            Assert.IsNotNull(newRecordId);
+            Assert.AreNotEqual(0, newRecordId);
+            //TODO When DeleteRecord is available cleanup and delete this test record
+        }
+
+        [Test]
         public void GetAvailableSkills()
         {
             var pageId = 277;
