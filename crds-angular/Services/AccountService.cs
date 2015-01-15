@@ -66,6 +66,7 @@ namespace crds_angular.Services
         public static void RegisterPerson()
         {
             string token = AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"], ConfigurationManager.AppSettings["ApiPass"]);
+
             Dictionary<string, object> contactDictionary = new Dictionary<string, object>();
             contactDictionary["First_Name"]="Julius";
             contactDictionary["Last_Name"]="Caesar";
@@ -74,6 +75,18 @@ namespace crds_angular.Services
             contactDictionary["Display_Name"] = "Julius";
 
             int newRecordId = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Contacts"]), contactDictionary, token);
+
+            Dictionary<string, object> userDictionary = new Dictionary<string, object>();
+            userDictionary["First_Name"] = "Julius";
+            userDictionary["Last_Name"] = "Caesar";
+            userDictionary["User_Email"] = "usertest@test.com";
+            userDictionary["Company"] = false; // default
+            userDictionary["Display_Name"] = "Julius";
+            userDictionary["Contact_Id"] = newRecordId;
+            userDictionary["Domain_Id"] = 1;
+            userDictionary["User_Name"] = "usertest@test.com";
+
+            MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Users"]), userDictionary, token);
         }
 
     }

@@ -7,7 +7,7 @@ namespace crds_angular.test.Services
     public class testclass
     {
         [TestMethod]
-        public void TestMethod1()
+        public void shouldRegisterPerson()
         {
             crds_angular.Services.AccountService.RegisterPerson();
         }
