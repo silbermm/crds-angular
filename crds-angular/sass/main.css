@@ -6054,8 +6054,10 @@ header.show .container {
 .remember {
   display: inline;
   margin-bottom: 5px;
-  font-weight: normal;
-  text-transform: lowercase; }
+  font-weight: 400;
+  color: #999;
+  font-size: smaller;
+  line-height: 30px; }
 
 /******************** Mobile ********************/
 .navbar-brand {
@@ -6304,8 +6306,7 @@ header.show .container {
     content: "";
     opacity: 0; }
   .navbar--login .btn {
-    margin-top: 10px;
-    margin-bottom: 15px; }
+    margin: 2px; }
   .navbar--login .dropdown-menu {
     left: calc(100% - 300px);
     width: 300px; }

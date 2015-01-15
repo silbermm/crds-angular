@@ -1,5 +1,5 @@
 ﻿(function(){
-    angular.module('crossroads').directive('RegisterDialog', ["$log", "AUTH_EVENTS", RegisterDialog]);
+    angular.module('crossroads').directive('registerDialog', ["$log", "AUTH_EVENTS", RegisterDialog]);
 
     function RegisterDialog($log, AUTH_EVENTS){
         return {

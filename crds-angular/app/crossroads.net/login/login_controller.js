@@ -3,12 +3,13 @@
     angular.module('crossroads').controller('LoginCtrl', ['$scope', '$rootScope', 'AUTH_EVENTS', 'MESSAGES', 'AuthService', '$cookieStore', '$state','$log', "Session", LoginController]);
 
     function LoginController($scope, $rootScope, AUTH_EVENTS, MESSAGES, AuthService, $cookieStore, $state, $log, Session) {
-
         $scope.showLoginButton = $rootScope.username === null || $rootScope.username === undefined;
         $scope.loginShow = false;
 
         $scope.toggleDesktopLogin = function () {
             $scope.loginShow = !$scope.loginShow;
+            if ($scope.registerShow)
+            $scope.registerShow = !$scope.registerShow;
         }
 
         //$scope.credentials = { username: '', password: '' };
