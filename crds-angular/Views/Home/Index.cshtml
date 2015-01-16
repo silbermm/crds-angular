@@ -55,10 +55,28 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-xs-12 menu__container">
-                            <div class="navbar-header"> 
+                            <div class="navbar-header">
                                 <a class="navbar-brand logo" href="/"><img src="//crossroads-media.s3.amazonaws.com/images/logo.svg" alt="crossroads"></a>
                                 <login-dialog></login-dialog>
-                                <register-dialog></register-dialog>
+                                <ul class="navbar--login list-unstyled">
+                                    <li class="hidden-xs hidden-sm" data-toggle="dropdown" ng-show="showRegisterButton">
+                                        <button class="btn btn-primary" id="form-toggle" ng-click="toggleDesktopRegister()">
+                                            <span>Register</span>
+                                        </button>
+                                    </li>
+
+                                    <li>
+                                        <ul class="navbar--login__dropdown list-unstyled col-md-3 soft-top soft-sides" role="menu" aria-labelledby="dropdownMenu1" ng-class="{toggleOpen: registerShow}">
+                                            <li role="presentation">
+                                                <div class="navbar--register__container">
+                                                    <div class="dd_menu">
+                                                        <register-dialog></register-dialog>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>

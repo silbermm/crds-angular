@@ -1,37 +1,18 @@
-﻿<ul class="navbar--login list-unstyled">
+﻿
+<div class="primary">
+    <form name="registerForm" ng-controller="RegisterCtrl" ng-submit="register(newuser)" novalidate="">
 
-    <li class="hidden-xs hidden-sm" data-toggle="dropdown" ng-show="showRegisterButton">
-        <button class="btn btn-primary" id="form-toggle" ng-click="toggleDesktopRegister()">
-            <span>Register</span>
-        </button>
-    </li>
+        <input class="form-control navbar--login__input" id="firstname" type="text" ng-model="newuser.firstname" required placeholder="First Name" />
 
-    <li>
-        <ul class="navbar--login__dropdown list-unstyled col-md-3 soft-top soft-sides" role="menu" aria-labelledby="dropdownMenu1" ng-class="{toggleOpen: registerShow}">
-            <li role="presentation">
-                <div class="navbar--register__container">
-                    <div class="dd_menu">
-                        <div class="primary">
-                            <form name="registerForm" ng-controller="RegisterCtrl" ng-submit="register(newuser)" novalidate="">
+        <input class="form-control navbar--login__input"  id="lastname" type="text" ng-model="newuser.lastname" placeholder="Last Name" required />
 
-                                <input class="form-control navbar--login__input" id="firstname" type="text" ng-model="newuser.firstname" required placeholder="First Name" />
+        <input class="form-control navbar--login__input" id="email" type="email" ng-model="newuser.email" required placeholder="Email" />
 
-                                <input class="form-control navbar--login__input"  id="lastname" type="text" ng-model="newuser.lastname" placeholder="Last Name" required />
-
-                                <input class="form-control navbar--login__input" id="email" type="email" ng-model="newuser.email" required placeholder="Email" />
-
-                                <input class="form-control navbar--login__input" type="text" id="password" name="password" ng-show="showpassword" ng-model="newuser.password" required placeholder="Password" />
+        <input class="form-control navbar--login__input" type="text" id="password" name="password" ng-show="showpassword" ng-model="newuser.password" required placeholder="Password" />
                                 
-                                <input class="form-control navbar--login__input" type="password" id="password" name="password" ng-hide="showpassword" ng-model="newuser.password" required placeholder="Password" />
-                                <input type="checkbox" ng-model="showpassword" name="showpassword" ng-checked="false"><label class="remember" for="showpassword">Show/Hide</label>
-                                <button style="margin-bottom:20px;" type="submit" class="col-xs-12 btn btn-primary push-half-bottom ">Register</button>
+        <input class="form-control navbar--login__input" type="password" id="password" name="password" ng-hide="showpassword" ng-model="newuser.password" required placeholder="Password" />
+        <input type="checkbox" ng-model="showpassword" name="showpassword" ng-checked="false"><label class="remember" for="showpassword">Show/Hide</label>
+        <button style="margin-bottom:20px;" type="submit" class="col-xs-12 btn btn-primary push-half-bottom ">Register</button>
 
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </li>
-        </ul>
-
-    </li>
-</ul>
+    </form>
+</div>
