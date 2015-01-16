@@ -74,7 +74,7 @@ namespace crds_angular.Services
             contactDictionary["Company"] = false; // default
             contactDictionary["Display_Name"] = "Julius";
 
-            int newRecordId = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Contacts"]), contactDictionary, token);
+            //int newRecordId = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Contacts"]), contactDictionary, token);
 
             Dictionary<string, object> userDictionary = new Dictionary<string, object>();
             userDictionary["First_Name"] = "Julius";
@@ -82,11 +82,21 @@ namespace crds_angular.Services
             userDictionary["User_Email"] = "usertest@test.com";
             userDictionary["Company"] = false; // default
             userDictionary["Display_Name"] = "Julius";
-            userDictionary["Contact_Id"] = newRecordId;
+            //userDictionary["Contact_Id"] = newRecordId;
             userDictionary["Domain_Id"] = 1;
             userDictionary["User_Name"] = "usertest@test.com";
 
-            MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Users"]), userDictionary, token);
+            //MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Users"]), userDictionary, token);
+
+            Dictionary<string, object> participantDictionary = new Dictionary<string, object>();
+
+            int testRecordID = 1066846;
+
+            participantDictionary["Contact_Id"] = testRecordID;
+            participantDictionary["Participant_Type_ID"] = "1"; //TODO Use the correct Participant type ID TBD
+            participantDictionary["Participant_Start_Date"] = new DateTime(2015, 1, 17);
+
+            MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Participants"]), participantDictionary, token);
         }
 
     }
