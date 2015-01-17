@@ -78,7 +78,7 @@ namespace MinistryPlatform.Translation.Test
             int newRecordId = CreatePageRecordService.CreateRecord(pageId, record, token);
             Assert.IsNotNull(newRecordId);
             Assert.AreNotEqual(0, newRecordId);
-            //TODO When DeleteRecord is available cleanup and delete this test record
+            DeletePageRecordService.DeleteRecord(pageId, newRecordId, null, token);
         }
 
         [Test]

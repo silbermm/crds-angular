@@ -63,40 +63,22 @@ namespace crds_angular.Services
 
 
        }
-        public static void RegisterPerson()
+        public static Dictionary<int, int> RegisterPerson(string token, Dictionary<string, object> contactDictionary, Dictionary<string, object> userDictionary, Dictionary<string, object> participantDictionary)
         {
-            string token = AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"], ConfigurationManager.AppSettings["ApiPass"]);
+            int contactsPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Contacts"]);
+            int usersPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Users"]);
+            int participantsPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Participants"]);
 
-            Dictionary<string, object> contactDictionary = new Dictionary<string, object>();
-            contactDictionary["First_Name"]="Julius";
-            contactDictionary["Last_Name"]="Caesar";
-            contactDictionary["Email_Address"] = "test@test.com";
-            contactDictionary["Company"] = false; // default
-            contactDictionary["Display_Name"] = "Julius";
-
-            //int newRecordId = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Contacts"]), contactDictionary, token);
-
-            Dictionary<string, object> userDictionary = new Dictionary<string, object>();
-            userDictionary["First_Name"] = "Julius";
-            userDictionary["Last_Name"] = "Caesar";
-            userDictionary["User_Email"] = "usertest@test.com";
-            userDictionary["Company"] = false; // default
-            userDictionary["Display_Name"] = "Julius";
-            //userDictionary["Contact_Id"] = newRecordId;
-            userDictionary["Domain_Id"] = 1;
-            userDictionary["User_Name"] = "usertest@test.com";
-
-            //MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Users"]), userDictionary, token);
-
-            Dictionary<string, object> participantDictionary = new Dictionary<string, object>();
-
-            int testRecordID = 1066846;
-
-            participantDictionary["Contact_Id"] = testRecordID;
-            participantDictionary["Participant_Type_ID"] = "1"; //TODO Use the correct Participant type ID TBD
-            participantDictionary["Participant_Start_Date"] = new DateTime(2015, 1, 17);
-
-            MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Participants"]), participantDictionary, token);
+            int contactRecordID = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(contactsPageID, contactDictionary, token);
+            userDictionary["Contact_Id"] = contactRecordID;
+            participantDictionary["Contact_Id"] = contactRecordID;
+            int userRecordID = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(usersPageID, userDictionary, token);
+            int participantRecordID = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(participantsPageID, participantDictionary, token);
+            Dictionary<int, int> returnValues = new Dictionary<int, int>();
+            returnValues[contactsPageID] = contactRecordID;
+            returnValues[participantsPageID] = participantRecordID;
+            returnValues[usersPageID] = userRecordID;
+            return returnValues;
         }
 
     }
