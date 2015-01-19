@@ -5123,7 +5123,8 @@ ol.breadcrumb li.active {
   padding-right: 11px; }
 
 .soft-half-bottom {
-  padding-bottom: 11px; }
+  padding-bottom: 11px; 
+  float: right;}
 
 .soft-half-left {
   padding-left: 11px; }

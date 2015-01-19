@@ -10,11 +10,12 @@
         $scope.toggleDesktopLogin = function () {
             $scope.loginShow = !$scope.loginShow;
         }
-
-        //$scope.credentials = { username: '', password: '' };
-
+          
         $scope.logout = function () {
             AuthService.logout();
+            $scope.credentials.username = undefined;
+            $scope.credentials.password = undefined;
+            $scope.showLoginButton = true;
         }
 
         $scope.login = function () {            

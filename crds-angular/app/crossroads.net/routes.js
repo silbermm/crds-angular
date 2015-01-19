@@ -64,7 +64,7 @@
           })
           .state('login', {
               url: '/login',
-              templateUrl: 'app/crossroads.net/login/login.html',
+              templateUrl: 'app/crossroads.net/login/login_form.html',
               controller: 'LoginCtrl',
               data: {
                   require_login: false
