@@ -63,16 +63,42 @@ namespace crds_angular.Services
 
 
        }
-        public static Dictionary<int, int> RegisterPerson(string token, Dictionary<string, object> contactDictionary, Dictionary<string, object> userDictionary, Dictionary<string, object> participantDictionary)
+        public static Dictionary<int, int> RegisterPerson(User newUserData)
         {
+
+            string token = AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"], ConfigurationManager.AppSettings["ApiPass"]);
+
             int contactsPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Contacts"]);
             int usersPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Users"]);
             int participantsPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Participants"]);
 
+            Dictionary<string, object> contactDictionary = new Dictionary<string, object>();
+            contactDictionary["First_Name"] = newUserData.firstName;
+            contactDictionary["Last_Name"] = newUserData.lastName;
+            contactDictionary["Email_Address"] = newUserData.email;
+            contactDictionary["Company"] = false; // default
+            contactDictionary["Display_Name"] = contactDictionary["First_Name"];
+
+            Dictionary<string, object> userDictionary = new Dictionary<string, object>();
+            userDictionary["First_Name"] = newUserData.firstName;
+            userDictionary["Last_Name"] = newUserData.lastName;
+            userDictionary["User_Email"] = newUserData.email;
+            userDictionary["Company"] = false; // default
+            userDictionary["Display_Name"] = userDictionary["First_Name"];
+            userDictionary["Domain_Id"] = 1;
+            userDictionary["User_Name"] = userDictionary["User_Email"];
+
+            Dictionary<string, object> participantDictionary = new Dictionary<string, object>();
+            participantDictionary["Participant_Type_ID"] = "1"; //TODO Use the correct Participant type ID TBD
+            DateTime now = DateTime.Now;
+            participantDictionary["Participant_Start_Date"] = now;
+
             int contactRecordID = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(contactsPageID, contactDictionary, token);
             userDictionary["Contact_Id"] = contactRecordID;
             participantDictionary["Contact_Id"] = contactRecordID;
+
             int userRecordID = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(usersPageID, userDictionary, token);
+
             int participantRecordID = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(participantsPageID, participantDictionary, token);
             Dictionary<int, int> returnValues = new Dictionary<int, int>();
             returnValues[contactsPageID] = contactRecordID;

@@ -5,7 +5,7 @@
 
         return {
             Personal: $resource('api/profile'),
-            Account: $resource('api/account'),
+            Account: $resource('api/account', null, { 'update': { method: 'PUT' } }),
             Password: $resource('api/account/password'),
             //Household: $resource('api/household')
             MySkills: $resource('api/myskills') 

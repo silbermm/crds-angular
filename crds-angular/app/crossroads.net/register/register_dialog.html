@@ -1,6 +1,6 @@
 ﻿
 <div class="primary">
-    <form name="registerForm" ng-controller="RegisterCtrl" ng-submit="register(newuser)" novalidate="">
+    <form name="registerForm" role="form" ng-controller="RegisterCtrl" ng-submit="register(this)" novalidate="">
 
         <input class="form-control navbar--login__input" id="firstname" type="text" ng-model="newuser.firstname" required placeholder="First Name" />
 
@@ -10,11 +10,12 @@
 
         <input id="password"
                class="form-control"
+               ng-model="newuser.password"
                type="password"
                data-toggle="password"
                placeholder="Password" />
         <p class="help-block">Registering signifies that you have read and agreed to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
-        <button style="margin-bottom:20px;" type="submit" class="col-xs-12 btn btn-primary push-half-bottom ">Register</button>
+        <input style="margin-bottom:20px;" type="submit" class="col-xs-12 btn btn-primary push-half-bottom " value="Register" />
 
     </form>
 </div>
