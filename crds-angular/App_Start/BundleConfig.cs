@@ -23,6 +23,7 @@ namespace crds_angular
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
+                      "~/Scripts/bootstrap-show-password.js",
                       "~/Scripts/respond.js"));
 
             bundles.Add(new Bundle("~/bundles/angular")
