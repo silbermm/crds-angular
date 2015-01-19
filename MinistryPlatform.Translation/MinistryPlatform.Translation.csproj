@@ -71,6 +71,7 @@
     <Compile Include="Models\CommunicationPreferences.cs" />
     <Compile Include="Models\Contact.cs" />
     <Compile Include="Services\AuthenticationService.cs" />
+    <Compile Include="Services\DeletePageRecordService.cs" />
     <Compile Include="Services\CreatePageRecordService.cs" />
     <Compile Include="Services\CommunicationService.cs" />
     <Compile Include="Services\GetMyRecords.cs" />
