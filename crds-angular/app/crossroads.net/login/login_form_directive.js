@@ -8,7 +8,7 @@
             controller: "LoginCtrl",
             link: function (scope) {
                 $log.debug("in the loginForm directive");
-                var showForm = function () {
+                var showDialog = function () {
                     $log.debug('not logged in');
                     scope.visible = true;
                 };
