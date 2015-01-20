@@ -351,7 +351,6 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap\affix.js" />
     <Content Include="Scripts\bootstrap\alert.js" />
-    <Content Include="Scripts\bootstrap\bootstrap-show-password.js" />
     <Content Include="Scripts\bootstrap\button.js" />
     <Content Include="Scripts\bootstrap\carousel.js" />
     <Content Include="Scripts\bootstrap\collapse.js" />
