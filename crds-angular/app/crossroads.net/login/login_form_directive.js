@@ -1,14 +1,14 @@
 ﻿(function(){
-    angular.module('crossroads').directive('loginForm', ["$log", "AUTH_EVENTS", LoginDialog]);
+    angular.module('crossroads').directive('loginForm', ["$log", "AUTH_EVENTS", LoginForm]);
 
-    function LoginDialog($log, AUTH_EVENTS){
+    function LoginForm($log, AUTH_EVENTS){
         return {
             restrict: 'EA',
             templateUrl: "app/crossroads.net/login/login_form.html",
             controller: "LoginCtrl",
             link: function (scope) {
                 $log.debug("in the loginForm directive");
-                var showDialog = function () {
+                var showForm = function () {
                     $log.debug('not logged in');
                     scope.visible = true;
                 };

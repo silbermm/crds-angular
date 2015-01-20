@@ -19,7 +19,7 @@
                     $timeout(deferred.resolve, 0);
                     $rootScope.userid = user.userId;
                     $rootScope.username = user.username;
-                // Not Authenticated
+                    // Not Authenticated
                 } else {
                     Session.clear();
                     $rootScope.message = 'You need to log in.';
@@ -57,18 +57,13 @@
           .state('home', {
               url: '/home',
               templateUrl: 'app/crossroads.net/home/home.html',
-              controller: 'HomeCtrl',
-              data: {
-                  require_login: false
-              }
+              controller: 'HomeCtrl'         
           })
           .state('login', {
               url: '/login',
               templateUrl: 'app/crossroads.net/login/login_page.html',
-              controller: 'LoginCtrl',
-              data: {
-                  require_login: false
-              }
+              controller: 'LoginCtrl'
+              
           })
           .state('profile', {
               url: '/profile',
