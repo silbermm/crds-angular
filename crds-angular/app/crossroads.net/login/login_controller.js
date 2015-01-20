@@ -4,20 +4,26 @@
 
     function LoginController($scope, $rootScope, AUTH_EVENTS, MESSAGES, AuthService, $cookieStore, $state, $log, Session) {
 
-        $scope.showLoginButton = $rootScope.username === null || $rootScope.username === undefined;
+
+        $rootScope.showLoginButton = $rootScope.username === null || $rootScope.username === undefined;
+  
         $scope.loginShow = false;
 
         $scope.toggleDesktopLogin = function () {
             $scope.loginShow = !$scope.loginShow;
         }
-
-        //$scope.credentials = { username: '', password: '' };
-
+          
         $scope.logout = function () {
             AuthService.logout();
+            if ($scope.credentials !== undefined) {
+                $scope.credentials.username = undefined;
+                $scope.credentials.password = undefined;
+            }
+            $rootScope.username = null;
+            $rootScope.showLoginButton = true;
         }
 
-        $scope.login = function () {            
+        $scope.login = function () {           
             if (($scope.credentials === undefined) || ($scope.credentials.username === undefined || $scope.credentials.password === undefined)) {
                 $scope.pending = true;
                 $scope.loginFailed = false;
@@ -28,8 +34,7 @@
                     $log.debug(user);
                     $scope.processing = false;
                     $scope.loginShow = false;
-                    $scope.showLoginButton = false;
-                    $state.go('profile.personal');
+                    $rootScope.showLoginButton = false;                    
                 }, function () {
                     $log.debug("Bad password");
                     $scope.pending = false;

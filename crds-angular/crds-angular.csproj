@@ -232,11 +232,11 @@
   <ItemGroup>
     <Content Include="app\crossroads.net\home\home.html" />
     <Content Include="app\crossroads.net\home\home_controller.js" />
-    <Content Include="app\crossroads.net\login\login_dialog.html" />
-    <Content Include="app\crossroads.net\login\login.html" />
+    <Content Include="app\crossroads.net\login\login_form.html" />
     <Content Include="app\crossroads.net\login\login_controller.js" />
-    <Content Include="app\crossroads.net\login\login_directive.js" />
+    <Content Include="app\crossroads.net\login\login_form_directive.js" />
     <Content Include="app\crossroads.net\app.js" />
+    <Content Include="app\crossroads.net\login\login_page.html" />
     <Content Include="app\crossroads.net\routes.js" />
     <Content Include="app\crossroads.net\services\auth_service.js" />
     <Content Include="app\modules\profile\directives\profile_skills_directive.js" />
