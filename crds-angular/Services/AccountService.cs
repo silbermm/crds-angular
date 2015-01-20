@@ -103,6 +103,7 @@ namespace crds_angular.Services
             userDictionary["First_Name"] = newUserData.firstName;
             userDictionary["Last_Name"] = newUserData.lastName;
             userDictionary["User_Email"] = newUserData.email;
+            userDictionary["Password"] = newUserData.password;
             userDictionary["Company"] = false; // default
             userDictionary["Display_Name"] = userDictionary["First_Name"];
             userDictionary["Domain_Id"] = 1;
