@@ -89,7 +89,7 @@ namespace crds_angular.Services
             userDictionary["User_Name"] = userDictionary["User_Email"];
 
             Dictionary<string, object> participantDictionary = new Dictionary<string, object>();
-            participantDictionary["Participant_Type_ID"] = "1"; //TODO Use the correct Participant type ID TBD
+            participantDictionary["Participant_Type_ID"] = "4";
             DateTime now = DateTime.Now;
             participantDictionary["Participant_Start_Date"] = now;
 
