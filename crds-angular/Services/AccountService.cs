@@ -66,13 +66,14 @@ namespace crds_angular.Services
         public static Dictionary<int, int>RegisterPerson(User newUserData)
         {
             //TODO Method is too large, doing too much, refactor out each creation into it's own private method at a minimum
-
+            //TODO Move hardcoded DB IDs for default values out of here
             string token = AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"], ConfigurationManager.AppSettings["ApiPass"]);
 
             int contactsPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Contacts"]);
             int householdsPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Households"]);
             int contactHouseholdsPageID = Convert.ToInt32(ConfigurationManager.AppSettings["ContactHouseholds"]);
             int usersPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Users"]);
+            int usersRolesPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Users_Roles"]);
             int participantsPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Participants"]);
 
             Dictionary<string, object> contactDictionary = new Dictionary<string, object>();
@@ -89,7 +90,6 @@ namespace crds_angular.Services
             householdDictionary["Congregation_ID"] = 5; // Not Site Specific (default value at registration)
             householdDictionary["Household_Source_ID"] = 30; // Unknown (default value at registration)
             int householdRecordID = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(householdsPageID, householdDictionary, token);
-            
 
             Dictionary<string, object> contactHouseholdDictionary = new Dictionary<string, object>();
             contactHouseholdDictionary["Contact_ID"] = contactRecordID;
@@ -98,7 +98,6 @@ namespace crds_angular.Services
             contactHouseholdDictionary["Household_Type_ID"] = 1; // Primary (default value at registration)
             int contactHouseholdRecordID = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(contactHouseholdsPageID, contactHouseholdDictionary, token);
             
-            
             Dictionary<string, object> userDictionary = new Dictionary<string, object>();
             userDictionary["First_Name"] = newUserData.firstName;
             userDictionary["Last_Name"] = newUserData.lastName;
@@ -106,13 +105,17 @@ namespace crds_angular.Services
             userDictionary["Password"] = newUserData.password;
             userDictionary["Company"] = false; // default
             userDictionary["Display_Name"] = userDictionary["First_Name"];
-            userDictionary["Domain_Id"] = 1;
+            userDictionary["Domain_ID"] = 1;
             userDictionary["User_Name"] = userDictionary["User_Email"];
-            userDictionary["Contact_Id"] = contactRecordID;
+            userDictionary["Contact_ID"] = contactRecordID;
             int userRecordID = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(usersPageID, userDictionary, token);
 
+            Dictionary<string, object> userRoleDictionary = new Dictionary<string, object>();
+            userRoleDictionary["Role_ID"] = 39; // All Platform Users (Default value for all users) 
+            int userRoleRecordID = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateSubRecord(usersRolesPageID, userRecordID, userRoleDictionary, token);
+
             Dictionary<string, object> participantDictionary = new Dictionary<string, object>();
-            participantDictionary["Participant_Type_ID"] = "4"; // Guest (default value at registration)
+            participantDictionary["Participant_Type_ID"] = 4; // Guest (default value at registration)
             participantDictionary["Participant_Start_Date"] = DateTime.Now;
             participantDictionary["Contact_Id"] = contactRecordID;
             int participantRecordID = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(participantsPageID, participantDictionary, token);

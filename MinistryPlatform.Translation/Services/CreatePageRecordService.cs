@@ -35,5 +35,29 @@ namespace MinistryPlatform.Translation.Services
 
             return recordId;
         }
+
+        public static int CreateSubRecord(int subPageId, int parentRecordId, Dictionary<string, object> dictionary, String token) {
+
+            int recordId = 0;
+
+            try
+            {
+                var platformServiceClient = new PlatformService.PlatformServiceClient();
+
+
+                using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
+                {
+                    System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+                    recordId = platformServiceClient.CreateSubpageRecord(subPageId, parentRecordId, dictionary, false);
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+            return recordId;
+        }
     }
 }

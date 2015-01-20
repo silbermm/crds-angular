@@ -17,9 +17,9 @@ namespace crds_angular.test.Services
         public void shouldRegisterPerson()
         {
             User newUserData = new User();
-            newUserData.firstName = "Shankar15";
+            newUserData.firstName = "Automated";
             newUserData.lastName = "Test";
-            newUserData.email = "test15@test.com";
+            newUserData.email = "auto02@crossroads.net";
             newUserData.password = "password";
 
             string token = AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"], ConfigurationManager.AppSettings["ApiPass"]);
