@@ -14,7 +14,6 @@ namespace crds_angular.test.Services
     public class testclass
     {
         [Test] //- commented out because we can't yet delete contacts with users.
-        //TODO When DeleteRecord is available cleanup and delete this test record
         public void shouldRegisterPerson()
         {
             User newUserData = new User();
