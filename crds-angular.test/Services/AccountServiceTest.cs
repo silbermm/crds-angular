@@ -4,17 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation;
 using crds_angular.Models.Crossroads;
+using NUnit.Framework;
 
 namespace crds_angular.test.Services
 {
-    [TestClass]
     public class testclass
     {
-        [TestMethod] //- commented out because we can't yet delete contacts with users.
+        [Test] //- commented out because we can't yet delete contacts with users.
         //TODO When DeleteRecord is available cleanup and delete this test record
         public void shouldRegisterPerson()
         {

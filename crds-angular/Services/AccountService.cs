@@ -81,6 +81,7 @@ namespace crds_angular.Services
 
             Dictionary<string, object> userDictionary = new Dictionary<string, object>();
             userDictionary["First_Name"] = newUserData.firstName;
+            userDictionary["Password"] = newUserData.password;
             userDictionary["Last_Name"] = newUserData.lastName;
             userDictionary["User_Email"] = newUserData.email;
             userDictionary["Company"] = false; // default
