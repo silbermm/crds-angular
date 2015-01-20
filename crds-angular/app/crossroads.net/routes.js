@@ -19,7 +19,7 @@
                     $timeout(deferred.resolve, 0);
                     $rootScope.userid = user.userId;
                     $rootScope.username = user.username;
-                    // Not Authenticated
+                // Not Authenticated
                 } else {
                     Session.clear();
                     $rootScope.message = 'You need to log in.';

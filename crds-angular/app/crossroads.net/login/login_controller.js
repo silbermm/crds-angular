@@ -5,7 +5,7 @@
     function LoginController($scope, $rootScope, AUTH_EVENTS, MESSAGES, AuthService, $cookieStore, $state, $log, Session) {
 
 
-       $rootScope.showLoginButton = $rootScope.username === null || $rootScope.username === undefined;
+        $rootScope.showLoginButton = $rootScope.username === null || $rootScope.username === undefined;
   
         $scope.loginShow = false;
 
@@ -26,7 +26,7 @@
         $scope.login = function () {           
             if (($scope.credentials === undefined) || ($scope.credentials.username === undefined || $scope.credentials.password === undefined)) {
                 $scope.pending = true;
-                $scope.loginFailed = false;               
+                $scope.loginFailed = false;
             } else {
                 $scope.processing = true;
                 AuthService.login($scope.credentials).then(function (user) {
