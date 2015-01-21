@@ -68,6 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\MultipleRecordsException.cs" />
     <Compile Include="Models\CommunicationPreferences.cs" />
     <Compile Include="Models\Contact.cs" />
     <Compile Include="Services\AuthenticationService.cs" />
