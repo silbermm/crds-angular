@@ -76,21 +76,23 @@ namespace crds_angular.Services
             int usersRolesPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Users_Roles"]);
             int participantsPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Participants"]);
 
-            Dictionary<string, object> contactDictionary = new Dictionary<string, object>();
-            contactDictionary["First_Name"] = newUserData.firstName;
-            contactDictionary["Last_Name"] = newUserData.lastName;
-            contactDictionary["Email_Address"] = newUserData.email;
-            contactDictionary["Company"] = false; // default
-            contactDictionary["Display_Name"] = contactDictionary["First_Name"];
-            contactDictionary["Household_Position_ID"] = 1; // Head of Household (default value at registration)
-            int contactRecordID = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(contactsPageID, contactDictionary, token);
-            
             Dictionary<string, object> householdDictionary = new Dictionary<string, object>();
             householdDictionary["Household_Name"] = newUserData.lastName;
             householdDictionary["Congregation_ID"] = 5; // Not Site Specific (default value at registration)
             householdDictionary["Household_Source_ID"] = 30; // Unknown (default value at registration)
             int householdRecordID = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(householdsPageID, householdDictionary, token);
 
+            Dictionary<string, object> contactDictionary = new Dictionary<string, object>();
+            contactDictionary["First_Name"] = newUserData.firstName;
+            contactDictionary["Last_Name"] = newUserData.lastName;
+            contactDictionary["Email_Address"] = newUserData.email;
+            contactDictionary["Company"] = false; // default
+            contactDictionary["Display_Name"] = newUserData.lastName + ", " + newUserData.firstName;
+            contactDictionary["Nickname"] = newUserData.firstName;
+            contactDictionary["Household_Position_ID"] = 1; // Head of Household (default value at registration)
+            contactDictionary["Household_ID"] = householdRecordID;
+            int contactRecordID = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(contactsPageID, contactDictionary, token);
+            
             Dictionary<string, object> contactHouseholdDictionary = new Dictionary<string, object>();
             contactHouseholdDictionary["Contact_ID"] = contactRecordID;
             contactHouseholdDictionary["Household_ID"] = householdRecordID;
