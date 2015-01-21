@@ -7,7 +7,7 @@ namespace crds_angular.Models.MP
 {
     public class Address
     {
-        public int Address_ID { get; set; }
+        public int? Address_ID { get; set; }
         public string Address_Line_1 { get; set; }
         public string Address_Line_2 { get; set; }
         public string City { get; set; }
