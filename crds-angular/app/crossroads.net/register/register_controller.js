@@ -29,7 +29,6 @@
                 $scope.processing = false;
                 $scope.loginShow = false;
                 $scope.showLoginButton = false;
-                $state.go('profile.personal');
             }));
 
         }
