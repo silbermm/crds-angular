@@ -57,7 +57,25 @@
                         <div class="col-xs-12 menu__container">
                             <div class="navbar-header">
                                 <a class="navbar-brand logo" href="/"><img src="//crossroads-media.s3.amazonaws.com/images/logo.svg" alt="crossroads"></a>
-                                <login-dialog></login-dialog>
+                                <ul class="navbar--login list-unstyled">
+                                    <li class="hidden-xs hidden-sm" data-toggle="dropdown" ng-show="showLoginButton">
+                                        <button class="btn btn-primary" id="form-toggle" ng-click="toggleDesktopLogin()">
+                                            <span>Login</span>
+                                        </button>
+                                    </li>
+
+                                    <li>
+                                        <ul class="navbar--login__dropdown list-unstyled col-md-3 soft-top soft-sides" role="menu" aria-labelledby="dropdownMenu1" ng-class="{toggleOpen: loginShow}">
+                                            <li role="presentation">
+                                                <div class="navbar--register__container">
+                                                    <div class="dd_menu">
+                                                        <login-form></login-form>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
                                 <ul class="navbar--login list-unstyled">
                                     <li class="hidden-xs hidden-sm" data-toggle="dropdown" ng-show="showRegisterButton">
                                         <button class="btn btn-primary" id="form-toggle" ng-click="toggleDesktopRegister()">
@@ -103,12 +121,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-                        <ul>
-                            <li><a ui-sref="home">home</a></li>
-                            <li><a ui-sref="profile.personal">profile</a></li>
-                        </ul>
                         <div ui-view></div>
 
                     </div>

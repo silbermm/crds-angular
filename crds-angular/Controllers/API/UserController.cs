@@ -14,7 +14,7 @@ namespace crds_angular.Controllers.API
 
                 var returnvalue = AccountService.RegisterPerson(user);
 
-            return this.Ok();
+                return this.Ok(returnvalue);
         }
     }
 }
