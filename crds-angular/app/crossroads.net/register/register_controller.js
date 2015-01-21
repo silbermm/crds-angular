@@ -39,10 +39,9 @@
             $scope.credentials = {};
             $scope.credentials.username = form.newuser.email;
             $scope.credentials.password = form.newuser.password;
-            Users.save(form.newuser).then(
-                login($scope,$log,$rootScope,AuthService)
-                );
-            
+
+            var user = new Users(form.newuser);
+            user.$save(login($scope,$log,$rootScope,AuthService));
 
         }
 
