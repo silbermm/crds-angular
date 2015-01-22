@@ -17,7 +17,6 @@
         }
 
         var _this = this;
-        //var users = User;
 
         $scope.register = function (form) {
             _this.form = form;

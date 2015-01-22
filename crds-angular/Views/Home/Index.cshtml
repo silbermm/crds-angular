@@ -5,20 +5,21 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="crossroads">
 <head>
+    <style>
+        /*
+              Allow angular.js to be loaded in body, hiding cloaked elements until
+              templates compile.  The !important is important given that there may be
+              other selectors that are more specific or come later and might alter display.
+             */
+        [ng\:cloak], [ng-cloak], .ng-cloak {
+            display: none !important;
+        }
+    </style>
+
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
     <link href="~/sass/main.css" rel="stylesheet" />
-    @Styles.Render("~/bundles/growl-css")
-    <style>
-        /* 
-          Allow angular.js to be loaded in body, hiding cloaked elements until 
-          templates compile.  The !important is important given that there may be 
-          other selectors that are more specific or come later and might alter display.  
-         */
-        [ng\:cloak], [ng-cloak], .ng-cloak {
-          display: none !important;
-        }
-    </style>
+    @Styles.Render("~/bundles/growl-css")    
 </head>
 
 <body ng-controller="appCtrl">
@@ -64,6 +65,7 @@
             <div id="menu">
                 <div class="container">
                     <div class="row">
+                        @*TODO refactor this out into it's own directive, that uses the login and registration directives. The new directive should take an argument that is the internal directive (login and/or registration)*@
                         <div class="col-xs-12 menu__container">
                             <div class="navbar-header">
                                 <a class="navbar-brand logo" href="/"><img src="//crossroads-media.s3.amazonaws.com/images/logo.svg" alt="crossroads"></a>
@@ -118,7 +120,7 @@
         <div id="container" hide-on-mobile-menu>
             <div class="container">
                 <div class="row">
-
+                    @* TODO this should be refactored out, this is really the ui-view for the homepage, it shouldn't be on every page.*@
                     <div class="col-md-12">
 
                         <div class="home" id="home">
