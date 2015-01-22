@@ -147,30 +147,36 @@ namespace crds_angular.Services
             return recordId;
         }
 
+        private static int CreateParticipantRecord(string token, int contactRecordID)
+        {
+            int recordId;
+            int participantsPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Participants"]);
+
+            Dictionary<string, object> participantDictionary = new Dictionary<string, object>();
+            participantDictionary["Participant_Type_ID"] = 4; // Guest (default value at registration)
+            participantDictionary["Participant_Start_Date"] = DateTime.Now;
+            participantDictionary["Contact_Id"] = contactRecordID;
+
+            recordId = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(participantsPageID, participantDictionary, token);
+
+            return recordId;
+        }
+
         public static Dictionary<int, int>RegisterPerson(User newUserData)
         {
-            //TODO Method is too large, doing too much, refactor out each creation into it's own private method at a minimum
             //TODO Move hardcoded DB IDs for default values out of here
             string token = AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"], ConfigurationManager.AppSettings["ApiPass"]);
-
-            
-            int participantsPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Participants"]);
 
             int householdRecordID = CreateHouseholdRecord(newUserData,token);
             int contactRecordID = CreateContactRecord(newUserData,token,householdRecordID);
             int contactHouseholdRecordID = CreateContactHouseholdRecord(token,householdRecordID,contactRecordID);
             int userRecordID = CreateUserRecord(newUserData, token, contactRecordID);
             int userRoleRecordID = CreateUserRoleSubRecord(token, userRecordID);
-
-            Dictionary<string, object> participantDictionary = new Dictionary<string, object>();
-            participantDictionary["Participant_Type_ID"] = 4; // Guest (default value at registration)
-            participantDictionary["Participant_Start_Date"] = DateTime.Now;
-            participantDictionary["Contact_Id"] = contactRecordID;
-            int participantRecordID = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(participantsPageID, participantDictionary, token);
+            int participantRecordID = CreateParticipantRecord(token, contactRecordID);
             
             Dictionary<int, int> returnValues = new Dictionary<int, int>();
             returnValues[Convert.ToInt32(ConfigurationManager.AppSettings["Contacts"])] = contactRecordID;
-            returnValues[participantsPageID] = participantRecordID;
+            returnValues[Convert.ToInt32(ConfigurationManager.AppSettings["Participants"])] = participantRecordID;
             returnValues[Convert.ToInt32(ConfigurationManager.AppSettings["Users"])] = userRecordID;
             returnValues[Convert.ToInt32(ConfigurationManager.AppSettings["Households"])] = householdRecordID;
             returnValues[Convert.ToInt32(ConfigurationManager.AppSettings["ContactHouseholds"])] = contactHouseholdRecordID;
