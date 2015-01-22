@@ -26,11 +26,13 @@
         credentialsBlank: "Hold up! Username and password can't be blank",
         loginFailed: "Oops! Login failed. Please try again or use <a>Forgot Password</a>",
         invalidZip: "Zip code entered does not appear to be valid.",
-        invalidPassword: "New password is invalid.  It must be at least 6 characters in length."
+        invalidPassword: "New password is invalid.  It must be at least 6 characters in length.",
+        successfullRegistration:"Well done. You have successfully registered."
     }).config(function(growlProvider) {
         growlProvider.globalPosition('top-center');
         growlProvider.globalTimeToLive(6000);
         growlProvider.globalDisableIcons(true);
+        growlProvider.globalDisableCountDown(true);
     })
     .controller('appCtrl', ['$scope', '$rootScope', 'MESSAGES', 'growl', function ($scope, $rootScope, MESSAGES, growl) {
 
