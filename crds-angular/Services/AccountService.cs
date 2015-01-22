@@ -78,7 +78,8 @@ namespace crds_angular.Services
             return recordId;
         }
 
-        private static int CreateContactRecord(User newUserData, string token, int householdRecordID){
+        private static int CreateContactRecord(User newUserData, string token, int householdRecordID)
+        {
             int recordId;
             int contactsPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Contacts"]);
 
@@ -97,26 +98,35 @@ namespace crds_angular.Services
             return recordId;
         }
 
+        private static int CreateContactHouseholdRecord(User newUserData, string token, int householdRecordID, int contactRecordID)
+        {
+            int recordId;
+            int contactHouseholdsPageID = Convert.ToInt32(ConfigurationManager.AppSettings["ContactHouseholds"]);
+
+            Dictionary<string, object> contactHouseholdDictionary = new Dictionary<string, object>();
+            contactHouseholdDictionary["Contact_ID"] = contactRecordID;
+            contactHouseholdDictionary["Household_ID"] = householdRecordID;
+            contactHouseholdDictionary["Household_Position_ID"] = 1; // Head of Household (default value at registration)
+            contactHouseholdDictionary["Household_Type_ID"] = 1; // Primary (default value at registration)
+
+            recordId = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(contactHouseholdsPageID, contactHouseholdDictionary, token);
+
+            return recordId;
+        }
+
         public static Dictionary<int, int>RegisterPerson(User newUserData)
         {
             //TODO Method is too large, doing too much, refactor out each creation into it's own private method at a minimum
             //TODO Move hardcoded DB IDs for default values out of here
             string token = AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"], ConfigurationManager.AppSettings["ApiPass"]);
 
-            int contactHouseholdsPageID = Convert.ToInt32(ConfigurationManager.AppSettings["ContactHouseholds"]);
             int usersPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Users"]);
             int usersRolesPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Users_Roles"]);
             int participantsPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Participants"]);
 
             int householdRecordID = CreateHouseholdRecord(newUserData,token);
             int contactRecordID = CreateContactRecord(newUserData,token,householdRecordID);
-            
-            Dictionary<string, object> contactHouseholdDictionary = new Dictionary<string, object>();
-            contactHouseholdDictionary["Contact_ID"] = contactRecordID;
-            contactHouseholdDictionary["Household_ID"] = householdRecordID;
-            contactHouseholdDictionary["Household_Position_ID"] = 1; // Head of Household (default value at registration)
-            contactHouseholdDictionary["Household_Type_ID"] = 1; // Primary (default value at registration)
-            int contactHouseholdRecordID = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(contactHouseholdsPageID, contactHouseholdDictionary, token);
+            int contactHouseholdRecordID = CreateContactHouseholdRecord(newUserData,token,householdRecordID,contactRecordID);
             
             Dictionary<string, object> userDictionary = new Dictionary<string, object>();
             userDictionary["First_Name"] = newUserData.firstName;
@@ -145,7 +155,7 @@ namespace crds_angular.Services
             returnValues[participantsPageID] = participantRecordID;
             returnValues[usersPageID] = userRecordID;
             returnValues[Convert.ToInt32(ConfigurationManager.AppSettings["Households"])] = householdRecordID;
-            returnValues[contactHouseholdsPageID] = contactHouseholdRecordID;
+            returnValues[Convert.ToInt32(ConfigurationManager.AppSettings["ContactHouseholds"])] = contactHouseholdRecordID;
             return returnValues;
         }
 
