@@ -56,7 +56,7 @@ namespace MinistryPlatform.Translation.Test
         [Test]
         public void ShouldGetPageRecord()
         {
-            var pageId = 455;
+            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["MyContact"]);
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
             var recordId = AuthenticationService.GetContactId(token);
             Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
@@ -69,7 +69,7 @@ namespace MinistryPlatform.Translation.Test
         [Test]
         public void ShouldCreatePageRecord()
         {
-            var pageId = 455;
+            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["MyContact"]);
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
             var recordId = AuthenticationService.GetContactId(token);
             Dictionary<string, object> record = GetPageRecordService.GetRecordDict(pageId, recordId, token);
@@ -84,9 +84,9 @@ namespace MinistryPlatform.Translation.Test
         [Test]
         public void GetAvailableSkills()
         {
-            var pageId = 277;
+            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["Attributes"]);
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            var records = GetPageRecordService.GetRecords(277, token);
+            var records = GetPageRecordService.GetRecords(pageId, token);
             Assert.IsNotNull(records);
         }
 
@@ -131,7 +131,7 @@ namespace MinistryPlatform.Translation.Test
         [Test]
         public void GetOpportunityResponses()
         {
-            var pageId = 382;
+            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["OpportunityResponses"]);
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
             var records = GetPageRecordService.GetRecords(pageId, token);
             Assert.IsNotNull(records);
