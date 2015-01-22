@@ -70,8 +70,8 @@ namespace crds_angular.Services
 
             Dictionary<string, object> householdDictionary = new Dictionary<string, object>();
             householdDictionary["Household_Name"] = newUserData.lastName;
-            householdDictionary["Congregation_ID"] = 5; // Not Site Specific (default value at registration)
-            householdDictionary["Household_Source_ID"] = 30; // Unknown (default value at registration)
+            householdDictionary["Congregation_ID"] = Convert.ToInt32(ConfigurationManager.AppSettings["Congregation_Default_ID"]);
+            householdDictionary["Household_Source_ID"] = Convert.ToInt32(ConfigurationManager.AppSettings["Household_Default_Source_ID"]);
 
             recordId = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(householdsPageID, householdDictionary, token);
 
@@ -90,7 +90,7 @@ namespace crds_angular.Services
             contactDictionary["Company"] = false; // default
             contactDictionary["Display_Name"] = newUserData.lastName + ", " + newUserData.firstName;
             contactDictionary["Nickname"] = newUserData.firstName;
-            contactDictionary["Household_Position_ID"] = 1; // Head of Household (default value at registration)
+            contactDictionary["Household_Position_ID"] = Convert.ToInt32(ConfigurationManager.AppSettings["Household_Position_Default_ID"]);
             contactDictionary["Household_ID"] = householdRecordID;
 
             recordId = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(contactsPageID, contactDictionary, token);
@@ -106,8 +106,8 @@ namespace crds_angular.Services
             Dictionary<string, object> contactHouseholdDictionary = new Dictionary<string, object>();
             contactHouseholdDictionary["Contact_ID"] = contactRecordID;
             contactHouseholdDictionary["Household_ID"] = householdRecordID;
-            contactHouseholdDictionary["Household_Position_ID"] = 1; // Head of Household (default value at registration)
-            contactHouseholdDictionary["Household_Type_ID"] = 1; // Primary (default value at registration)
+            contactHouseholdDictionary["Household_Position_ID"] = Convert.ToInt32(ConfigurationManager.AppSettings["Household_Position_Default_ID"]);
+            contactHouseholdDictionary["Household_Type_ID"] = Convert.ToInt32(ConfigurationManager.AppSettings["Household_Type_Default_ID"]);
 
             recordId = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(contactHouseholdsPageID, contactHouseholdDictionary, token);
 
@@ -141,7 +141,7 @@ namespace crds_angular.Services
             int usersRolesPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Users_Roles"]);
 
             Dictionary<string, object> userRoleDictionary = new Dictionary<string, object>();
-            userRoleDictionary["Role_ID"] = 39; // All Platform Users (Default value for all users)
+            userRoleDictionary["Role_ID"] = Convert.ToInt32(ConfigurationManager.AppSettings["Role_Default_ID"]);
             recordId = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateSubRecord(usersRolesPageID,userRecordID, userRoleDictionary, token);
 
             return recordId;
@@ -153,7 +153,8 @@ namespace crds_angular.Services
             int participantsPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Participants"]);
 
             Dictionary<string, object> participantDictionary = new Dictionary<string, object>();
-            participantDictionary["Participant_Type_ID"] = 4; // Guest (default value at registration)
+            participantDictionary["Participant_Type_ID"] = Convert.ToInt32(ConfigurationManager.AppSettings["Participant_Type_Default_ID"]);
+
             participantDictionary["Participant_Start_Date"] = DateTime.Now;
             participantDictionary["Contact_Id"] = contactRecordID;
 
@@ -164,7 +165,6 @@ namespace crds_angular.Services
 
         public static Dictionary<int, int>RegisterPerson(User newUserData)
         {
-            //TODO Move hardcoded DB IDs for default values out of here
             string token = AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"], ConfigurationManager.AppSettings["ApiPass"]);
 
             int householdRecordID = CreateHouseholdRecord(newUserData,token);
