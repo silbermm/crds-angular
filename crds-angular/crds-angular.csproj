@@ -238,7 +238,7 @@
     <Content Include="app\crossroads.net\login\login_form.html" />
     <Content Include="app\crossroads.net\login\login_form_directive.js" />
     <Content Include="app\crossroads.net\login\login_page.html" />
-    <Content Include="app\crossroads.net\register\register_dialog.html" />
+    <Content Include="app\crossroads.net\register\register_form.html" />
     <Content Include="app\crossroads.net\register\register_directive.js" />
     <Content Include="app\crossroads.net\login\login_controller.js" />
     <Content Include="app\crossroads.net\app.js" />
