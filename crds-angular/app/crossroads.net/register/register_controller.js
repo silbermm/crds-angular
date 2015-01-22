@@ -31,7 +31,7 @@
                 AuthService.login($scope.credentials).then(function (user) { // TODO Refactor this to a shared location for use here and in login_controller
                     $log.debug("got a 200 from the server ");
                     $log.debug(user);
-                    $scope.loginShow = false;
+                    $scope.registerShow = !$scope.registerShow;
                     $rootScope.showLoginButton = false; //TODO use emit or an event here, avoid using rootscope
                 }, function () {
                     $log.debug("Bad password");

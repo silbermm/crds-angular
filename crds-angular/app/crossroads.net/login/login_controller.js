@@ -11,6 +11,8 @@
 
         $scope.toggleDesktopLogin = function () {
             $scope.loginShow = !$scope.loginShow;
+            if ($scope.registerShow)
+                $scope.registerShow = !$scope.registerShow;
         }
           
         $scope.logout = function () {
