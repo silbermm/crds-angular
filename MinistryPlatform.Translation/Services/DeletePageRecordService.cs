@@ -9,24 +9,25 @@ using Newtonsoft.Json.Linq;
 
 namespace MinistryPlatform.Translation.Services
 {
-    public class UpdatePageRecordService
+    //TODO Refactor boiler plate logic that seems to exist in each service
+    public class DeletePageRecordService
     {
-        public static void UpdateRecord(int pageId, Dictionary<string, object> dictionary, String token)
+        public static int DeleteRecord(int pageId, int recordId, PlatformService.DeleteOption[] deleteOptions, String token)
         {
             try
             {
                 var platformServiceClient = new PlatformService.PlatformServiceClient();
-
                 using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
                 {
                     System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
-                    platformServiceClient.UpdatePageRecord(pageId, dictionary, false);                    
+                    platformServiceClient.DeletePageRecord(pageId, recordId, deleteOptions);
                 }
             }
             catch (Exception e)
             {
                 throw e;
             }
+            return recordId;
         }
     }
 }

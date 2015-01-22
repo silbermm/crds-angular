@@ -5,10 +5,21 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="crossroads">
 <head>
+    <style>
+        /*
+              Allow angular.js to be loaded in body, hiding cloaked elements until
+              templates compile.  The !important is important given that there may be
+              other selectors that are more specific or come later and might alter display.
+             */
+        [ng\:cloak], [ng-cloak], .ng-cloak {
+            display: none !important;
+        }
+    </style>
+
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
     <link href="~/sass/main.css" rel="stylesheet" />
-    @Styles.Render("~/bundles/growl-css")
+    @Styles.Render("~/bundles/growl-css")    
 </head>
 
 <body ng-controller="appCtrl">
@@ -54,35 +65,64 @@
             <div id="menu">
                 <div class="container">
                     <div class="row">
+                        @*TODO refactor this out into it's own directive, that uses the login and registration directives. The new directive should take an argument that is the internal directive (login and/or registration)*@
                         <div class="col-xs-12 menu__container">
-                            <div class="navbar-header"> 
+                            <div class="navbar-header">
                                 <a class="navbar-brand logo" href="/"><img src="//crossroads-media.s3.amazonaws.com/images/logo.svg" alt="crossroads"></a>
                                 <ul class="navbar--login list-unstyled">
-                                    <span id="current-user" class="hidden-md hidden-sm hidden-xs" ng-if="!$root.showLoginButton"> {{$root.username}} </span>
-                                    <li class="hidden-md hidden-sm hidden-xs" ng-show="!$root.showLoginButton">
-                                        <a href="#/home" ng-click="logout()">Sign Out</a>
+                                    <span id="current-user" class=hidden-xs ng-cloak" ng-if="!showLoginButton" ng-cloak> {{$root.username}} </span>
+                                    <li class="hidden-xs ng-cloak" ng-show="!showLoginButton" ng-cloak>
+                                        <a href="#/home" ng-click="logout()" class="ng-cloak">Sign Out</a>
                                     </li>
-                                    <li class="hidden-xs hidden-sm" data-toggle="dropdown" ng-show="$root.showLoginButton">
+                                    <li class="hidden-xs" data-toggle="dropdown" ng-show="showLoginButton">
                                         <button class="btn btn-primary" id="form-toggle" ng-click="toggleDesktopLogin()">
                                             <span>Login</span>
                                         </button>
                                     </li>
+
                                     <li>
                                         <ul class="navbar--login__dropdown list-unstyled col-md-3 soft-top soft-sides" role="menu" aria-labelledby="dropdownMenu1" ng-class="{toggleOpen: loginShow}">
-                                           <login-form></login-form>
+                                            <li role="presentation">
+                                                <div class="navbar--register__container">
+                                                    <div class="dd_menu">
+                                                        <login-form></login-form>
+                                                    </div>
+                                                </div>
+                                            </li>
                                         </ul>
-                                   </li>
-                               </ul>
+                                    </li>
+                                </ul>
+                                <ul class="navbar--login list-unstyled">
+                                    <li class="hidden-xs" data-toggle="dropdown" ng-show="showLoginButton">
+                                        <button class="btn btn-primary" id="form-toggle" ng-click="toggleDesktopRegister()">
+                                            <span>Register</span>
+                                        </button>
+                                    </li>
+
+                                    <li>
+                                        <ul class="navbar--login__dropdown list-unstyled col-md-3 soft-top soft-sides" role="menu" aria-labelledby="dropdownMenu2" ng-class="{toggleOpen: registerShow}">
+                                            <li role="presentation">
+                                                <div class="navbar--register__container">
+                                                    <div class="dd_menu">
+                                                        <register-form></register-form>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
         </header>
         <div id="container" hide-on-mobile-menu>
             <div class="container">
                 <div class="row">
+                    @* TODO this should be refactored out, this is really the ui-view for the homepage, it shouldn't be on every page.*@
                     <div class="col-md-12">
+
                         <div class="home" id="home">
                             <div class="row">
                                 <div class="col-sm-8">
@@ -95,9 +135,10 @@
                                 <div class="col-sm-4">
                                     <img class="img-responsive hidden-xs coffee-cup" src="//crossroads-media.s3.amazonaws.com/images/coffee_cup.jpg" alt="Coffee Cup">
                                 </div>
-                                <div ui-view></div>
                             </div>
                         </div>
+                        <div ui-view></div>
+
                     </div>
                 </div>
                     

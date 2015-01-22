@@ -65,6 +65,14 @@
               controller: 'LoginCtrl'
               
           })
+          .state('register', {
+              url: '/register',
+              templateUrl: 'app/crossroads.net/register/register_form.html',
+              controller: 'RegisterCtrl',
+              data: {
+                  require_login: false
+              }
+          })
           .state('profile', {
               url: '/profile',
               templateUrl: 'app/modules/profile/profile.html',

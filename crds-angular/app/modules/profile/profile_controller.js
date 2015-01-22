@@ -36,7 +36,7 @@
                 return
             }
 
-            _this.account.$save(function () {
+            _this.account.$update(function () {
                 $log.debug("save successful");
                 
             }, function () {

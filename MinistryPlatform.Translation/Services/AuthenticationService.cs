@@ -86,7 +86,7 @@ namespace MinistryPlatform.Translation
                 var refreshToken = (string)obj["refresh_token"];
                 return token;
             }
-            catch
+            catch (Exception e)
             {
                 return null;
             }
