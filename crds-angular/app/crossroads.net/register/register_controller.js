@@ -1,21 +1,7 @@
 ﻿'use strict';
 (function () {
     angular.module('crossroads').controller('RegisterCtrl', ['$scope', '$rootScope', 'AUTH_EVENTS','AuthService', 'MESSAGES', 'Users', '$log', RegisterController]);
-    function login($scope,$log,$rootScope,AuthService) {
-        alert("test");
-        AuthService.login($scope.credentials).then(function (user) {
-            $log.debug("got a 200 from the server ");
-            $log.debug(user);
-            $scope.processing = false;
-            $scope.loginShow = false;
-            $rootScope.showLoginButton = false;
-        }, function () {
-            $log.debug("Bad password");
-            $scope.pending = false;
-            $scope.processing = false;
-            $scope.loginFailed = true;
-        });
-    }
+   
     function RegisterController($scope, $rootScope, AUTH_EVENTS, AuthService, MESSAGES, Users, $log) {
         $log.debug("Inside register controller");
 
@@ -41,7 +27,20 @@
             $scope.credentials.password = form.newuser.password;
 
             var user = new Users(form.newuser);
-            user.$save(login($scope,$log,$rootScope,AuthService));
+            user.$save().then(function () {
+                AuthService.login($scope.credentials).then(function (user) { // TODO Refactor this to a shared location for use here and in login_controller
+                    $log.debug("got a 200 from the server ");
+                    $log.debug(user);
+                    $scope.loginShow = false;
+                    $rootScope.showLoginButton = false; //TODO use emit or an event here, avoid using rootscope
+                }, function () {
+                    $log.debug("Bad password");
+                    $scope.pending = false;
+                    $scope.loginFailed = true;
+                }).then(function () {
+                    $scope.processing = false;
+                })
+            });
 
         }
 

@@ -58,6 +58,10 @@
                             <div class="navbar-header">
                                 <a class="navbar-brand logo" href="/"><img src="//crossroads-media.s3.amazonaws.com/images/logo.svg" alt="crossroads"></a>
                                 <ul class="navbar--login list-unstyled">
+                                    <span id="current-user" class="hidden-md hidden-sm hidden-xs" ng-if="!showLoginButton"> {{$root.username}} </span>
+                                    <li class="hidden-md hidden-sm hidden-xs" ng-show="!showLoginButton">
+                                        <a href="#/home" ng-click="logout()">Sign Out</a>
+                                    </li>
                                     <li class="hidden-xs hidden-sm" data-toggle="dropdown" ng-show="showLoginButton">
                                         <button class="btn btn-primary" id="form-toggle" ng-click="toggleDesktopLogin()">
                                             <span>Login</span>
