@@ -98,7 +98,7 @@ namespace crds_angular.Services
             return recordId;
         }
 
-        private static int CreateContactHouseholdRecord(User newUserData, string token, int householdRecordID, int contactRecordID)
+        private static int CreateContactHouseholdRecord(string token, int householdRecordID, int contactRecordID)
         {
             int recordId;
             int contactHouseholdsPageID = Convert.ToInt32(ConfigurationManager.AppSettings["ContactHouseholds"]);
@@ -114,7 +114,7 @@ namespace crds_angular.Services
             return recordId;
         }
 
-        private static int CreateUserRecord(User newUserData, string token, int householdRecordID, int contactRecordID)
+        private static int CreateUserRecord(User newUserData, string token, int contactRecordID)
         {
             int recordId;
             int usersPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Users"]);
@@ -135,23 +135,32 @@ namespace crds_angular.Services
             return recordId;
         }
 
+        private static int CreateUserRoleSubRecord(string token, int userRecordID)
+        {
+            int recordId;
+            int usersRolesPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Users_Roles"]);
+
+            Dictionary<string, object> userRoleDictionary = new Dictionary<string, object>();
+            userRoleDictionary["Role_ID"] = 39; // All Platform Users (Default value for all users)
+            recordId = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateSubRecord(usersRolesPageID,userRecordID, userRoleDictionary, token);
+
+            return recordId;
+        }
+
         public static Dictionary<int, int>RegisterPerson(User newUserData)
         {
             //TODO Method is too large, doing too much, refactor out each creation into it's own private method at a minimum
             //TODO Move hardcoded DB IDs for default values out of here
             string token = AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"], ConfigurationManager.AppSettings["ApiPass"]);
 
-            int usersRolesPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Users_Roles"]);
+            
             int participantsPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Participants"]);
 
             int householdRecordID = CreateHouseholdRecord(newUserData,token);
             int contactRecordID = CreateContactRecord(newUserData,token,householdRecordID);
-            int contactHouseholdRecordID = CreateContactHouseholdRecord(newUserData,token,householdRecordID,contactRecordID);
-            int userRecordID = CreateUserRecord(newUserData, token, householdRecordID, contactRecordID);
-
-            Dictionary<string, object> userRoleDictionary = new Dictionary<string, object>();
-            userRoleDictionary["Role_ID"] = 39; // All Platform Users (Default value for all users) 
-            int userRoleRecordID = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateSubRecord(usersRolesPageID, userRecordID, userRoleDictionary, token);
+            int contactHouseholdRecordID = CreateContactHouseholdRecord(token,householdRecordID,contactRecordID);
+            int userRecordID = CreateUserRecord(newUserData, token, contactRecordID);
+            int userRoleRecordID = CreateUserRoleSubRecord(token, userRecordID);
 
             Dictionary<string, object> participantDictionary = new Dictionary<string, object>();
             participantDictionary["Participant_Type_ID"] = 4; // Guest (default value at registration)
