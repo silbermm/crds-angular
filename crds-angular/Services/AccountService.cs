@@ -114,20 +114,11 @@ namespace crds_angular.Services
             return recordId;
         }
 
-        public static Dictionary<int, int>RegisterPerson(User newUserData)
+        private static int CreateUserRecord(User newUserData, string token, int householdRecordID, int contactRecordID)
         {
-            //TODO Method is too large, doing too much, refactor out each creation into it's own private method at a minimum
-            //TODO Move hardcoded DB IDs for default values out of here
-            string token = AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"], ConfigurationManager.AppSettings["ApiPass"]);
-
+            int recordId;
             int usersPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Users"]);
-            int usersRolesPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Users_Roles"]);
-            int participantsPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Participants"]);
 
-            int householdRecordID = CreateHouseholdRecord(newUserData,token);
-            int contactRecordID = CreateContactRecord(newUserData,token,householdRecordID);
-            int contactHouseholdRecordID = CreateContactHouseholdRecord(newUserData,token,householdRecordID,contactRecordID);
-            
             Dictionary<string, object> userDictionary = new Dictionary<string, object>();
             userDictionary["First_Name"] = newUserData.firstName;
             userDictionary["Last_Name"] = newUserData.lastName;
@@ -138,7 +129,25 @@ namespace crds_angular.Services
             userDictionary["Domain_ID"] = 1;
             userDictionary["User_Name"] = userDictionary["User_Email"];
             userDictionary["Contact_ID"] = contactRecordID;
-            int userRecordID = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(usersPageID, userDictionary, token);
+
+            recordId = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(usersPageID, userDictionary, token);
+
+            return recordId;
+        }
+
+        public static Dictionary<int, int>RegisterPerson(User newUserData)
+        {
+            //TODO Method is too large, doing too much, refactor out each creation into it's own private method at a minimum
+            //TODO Move hardcoded DB IDs for default values out of here
+            string token = AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"], ConfigurationManager.AppSettings["ApiPass"]);
+
+            int usersRolesPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Users_Roles"]);
+            int participantsPageID = Convert.ToInt32(ConfigurationManager.AppSettings["Participants"]);
+
+            int householdRecordID = CreateHouseholdRecord(newUserData,token);
+            int contactRecordID = CreateContactRecord(newUserData,token,householdRecordID);
+            int contactHouseholdRecordID = CreateContactHouseholdRecord(newUserData,token,householdRecordID,contactRecordID);
+            int userRecordID = CreateUserRecord(newUserData, token, householdRecordID, contactRecordID);
 
             Dictionary<string, object> userRoleDictionary = new Dictionary<string, object>();
             userRoleDictionary["Role_ID"] = 39; // All Platform Users (Default value for all users) 
@@ -153,7 +162,7 @@ namespace crds_angular.Services
             Dictionary<int, int> returnValues = new Dictionary<int, int>();
             returnValues[Convert.ToInt32(ConfigurationManager.AppSettings["Contacts"])] = contactRecordID;
             returnValues[participantsPageID] = participantRecordID;
-            returnValues[usersPageID] = userRecordID;
+            returnValues[Convert.ToInt32(ConfigurationManager.AppSettings["Users"])] = userRecordID;
             returnValues[Convert.ToInt32(ConfigurationManager.AppSettings["Households"])] = householdRecordID;
             returnValues[Convert.ToInt32(ConfigurationManager.AppSettings["ContactHouseholds"])] = contactHouseholdRecordID;
             return returnValues;
