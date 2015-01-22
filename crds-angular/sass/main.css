@@ -6339,7 +6339,8 @@ header.show .container {
 .navbar--login__input {
   margin-bottom: 12px;
   width: 100%;
-  position: relative; }
+  position: relative;
+  float:left; }
 
 .btn.navbar--login__submit {
   color: #fff;

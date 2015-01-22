@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using MinistryPlatform.Translation.Helpers;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
+using System.ServiceModel;
+using System.ServiceModel.Web;
+using MinistryPlatform.Translation.Helpers;
+using MinistryPlatform.Translation.PlatformService;
+using Newtonsoft.Json.Linq;
 
 namespace MinistryPlatform.Translation.Services
 {
@@ -23,12 +25,12 @@ namespace MinistryPlatform.Translation.Services
         /// <returns></returns>
         public static JArray GetRecord(int pageId, int recordId, String token)
         {
-            var platformServiceClient = new PlatformService.PlatformServiceClient();
-            PlatformService.SelectQueryResult result;
+            var platformServiceClient = new PlatformServiceClient();
+            SelectQueryResult result;
 
-            using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
+            using (new OperationContextScope((IClientChannel)platformServiceClient.InnerChannel))
             {
-                System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+                WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
                 result = platformServiceClient.GetPageRecord(pageId, recordId, false);
             }
             return MPFormatConversion.MPFormatToJson(result);
@@ -46,12 +48,12 @@ namespace MinistryPlatform.Translation.Services
         public static Dictionary<string,object> GetRecordDict(int pageId, int recordId, String token)
         {
 
-            var platformServiceClient = new PlatformService.PlatformServiceClient();
-            PlatformService.SelectQueryResult result;
+            var platformServiceClient = new PlatformServiceClient();
+            SelectQueryResult result;
 
-            using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
+            using (new OperationContextScope((IClientChannel)platformServiceClient.InnerChannel))
             {
-                System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+                WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
                 result = platformServiceClient.GetPageRecord(pageId, recordId, false);
             }
             Dictionary<string, object> returnVal = MPFormatConversion.MPFormatToDictionary(result);
@@ -60,12 +62,12 @@ namespace MinistryPlatform.Translation.Services
 
         public static Dictionary<string, object> GetLookupRecord(int pageId, string search, String token, int maxNumberOfRecordsToReturn = 100)
         {
-            var platformServiceClient = new PlatformService.PlatformServiceClient();
-            PlatformService.SelectQueryResult result;
+            var platformServiceClient = new PlatformServiceClient();
+            SelectQueryResult result;
 
-            using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
+            using (new OperationContextScope((IClientChannel)platformServiceClient.InnerChannel))
             {
-                System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+                WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
                 result = platformServiceClient.GetPageLookupRecords(pageId, search, null, maxNumberOfRecordsToReturn);
                 //vat tm = platformServiceClient.GetPageLookupRecords()
             }
@@ -84,19 +86,19 @@ namespace MinistryPlatform.Translation.Services
         {
             try
             {
-                var platformServiceClient = new PlatformService.PlatformServiceClient();
-                PlatformService.SelectQueryResult result;
+                var platformServiceClient = new PlatformServiceClient();
+                SelectQueryResult result;
 
-                using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
+                using (new OperationContextScope((IClientChannel)platformServiceClient.InnerChannel))
                 {
-                    System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+                    WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
                     result = platformServiceClient.GetPageRecords(id, "", "", 0);
                 }
                 return MPFormatConversion.MPFormatToJson(result);
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine(e.ToString());
+                Debug.WriteLine(e.ToString());
                 return new JArray();
             }
             
@@ -106,19 +108,19 @@ namespace MinistryPlatform.Translation.Services
         {
             try
             {
-                var platformServiceClient = new PlatformService.PlatformServiceClient();
-                PlatformService.SelectQueryResult result;
+                var platformServiceClient = new PlatformServiceClient();
+                SelectQueryResult result;
 
-                using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
+                using (new OperationContextScope((IClientChannel)platformServiceClient.InnerChannel))
                 {
-                    System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+                    WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
                     result = platformServiceClient.GetPageRecords(Convert.ToInt32(ConfigurationManager.AppSettings["States"]), "", "", 0);
                 }
                 return MPFormatConversion.MPFormatToJson(result);
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine(e.ToString());
+                Debug.WriteLine(e.ToString());
                 return new JArray();
             }
         }
@@ -127,12 +129,12 @@ namespace MinistryPlatform.Translation.Services
         {
             try
             {
-                var platformServiceClient = new PlatformService.PlatformServiceClient();
-                PlatformService.SelectQueryResult result;
+                var platformServiceClient = new PlatformServiceClient();
+                SelectQueryResult result;
 
-                using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
+                using (new OperationContextScope((IClientChannel)platformServiceClient.InnerChannel))
                 {
-                    System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+                    WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
                     result = platformServiceClient.GetSubpageRecords(subPageId, recordId, string.Empty, string.Empty, 0);
                 }
 
@@ -143,28 +145,28 @@ namespace MinistryPlatform.Translation.Services
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine(e.ToString());
+                Debug.WriteLine(e.ToString());
                 return null;
             }
         }
 
-        public static Dictionary<string, object> GetRecordsDict(int id, string token)
+        public static List<Dictionary<string, object>> GetRecordsDict(int id, string token)
         {
             try
             {
-                var platformServiceClient = new PlatformService.PlatformServiceClient();
-                PlatformService.SelectQueryResult result;
+                var platformServiceClient = new PlatformServiceClient();
+                SelectQueryResult result;
 
-                using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
+                using (new OperationContextScope((IClientChannel)platformServiceClient.InnerChannel))
                 {
-                    System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+                    WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
                     result = platformServiceClient.GetPageRecords(id, "", "", 0);
                 }
-                return MPFormatConversion.MPFormatToDictionary(result);
+                return MPFormatConversion.MPFormatToList(result);
             }
             catch
             {
-                return new Dictionary<string, object>();
+                return new List<Dictionary<string, object>>();
             }
         }
 
@@ -172,12 +174,12 @@ namespace MinistryPlatform.Translation.Services
         {
             try
             {
-                var platformServiceClient = new PlatformService.PlatformServiceClient();
-                PlatformService.SelectQueryResult result;
+                var platformServiceClient = new PlatformServiceClient();
+                SelectQueryResult result;
 
-                using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
+                using (new OperationContextScope((IClientChannel)platformServiceClient.InnerChannel))
                 {
-                    System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+                    WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
                     //result = platformServiceClient.GetPageRecords(id, "", "", 0);
                     result = platformServiceClient.GetPageLookupRecords(id, "", "", 0);
                 }

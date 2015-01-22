@@ -1,14 +1,15 @@
-﻿using MinistryPlatform.Translation.PlatformService;
-using MinistryPlatform.Translation.Services;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
+using System.ServiceModel;
+using System.ServiceModel.Web;
+using MinistryPlatform.Models;
+using MinistryPlatform.Translation.PlatformService;
+using MinistryPlatform.Translation.Services;
+using Newtonsoft.Json.Linq;
+using MinistryPlatform.Translation.Exceptions;
 
 namespace MinistryPlatform.Translation
 {
@@ -16,10 +17,10 @@ namespace MinistryPlatform.Translation
     {
         public static Boolean ChangePassword(string token, string emailAddress, string firstName, string lastName, string password, string mobilephone)
         {
-            var platformService = new PlatformService.PlatformServiceClient();
-            using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformService.InnerChannel))
+            var platformService = new PlatformServiceClient();
+            using (new OperationContextScope((IClientChannel)platformService.InnerChannel))
             {
-                System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+                WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
                 try
                 {
                     UserInfo user = new UserInfo();
@@ -49,7 +50,7 @@ namespace MinistryPlatform.Translation
         {
             try
             {
-                var record = GetPageRecordService.GetRecordsDict(Convert.ToInt32(ConfigurationManager.AppSettings["ChangePassword"]), token);
+                var record = GetPageRecordService.GetRecordsDict(Convert.ToInt32(ConfigurationManager.AppSettings["ChangePassword"]), token).Single();
                 record["Password"] = newPassword;
                 UpdatePageRecordService.UpdateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["ChangePassword"]), record, token);
                 return true;
@@ -94,13 +95,45 @@ namespace MinistryPlatform.Translation
         //Get ID of currently logged in user
         public static int GetContactId(string token)
         {
-            var platformService = new PlatformService.PlatformServiceClient();
-            using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformService.InnerChannel))
+            var platformService = new PlatformServiceClient();
+            using (new OperationContextScope((IClientChannel)platformService.InnerChannel))
             {
-                System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+                WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
                 var contactId = platformService.GetCurrentUserInfo();
                 return contactId.ContactId;
             }
+        }
+
+        //Get Participant IDs of a contact
+        public static Participant GetParticipantRecord(string token)
+        {
+            try
+            {
+                var platformService = new PlatformServiceClient();
+                using (new OperationContextScope(platformService.InnerChannel))
+                {
+                    if (WebOperationContext.Current != null)
+                        WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+                    var results =
+                        GetPageRecordService.GetRecordsDict(
+                            Convert.ToInt32(ConfigurationManager.AppSettings["MyParticipantRecords"]), token);
+                    var participant = new Participant
+                    {
+                        ParticipantId = int.Parse(results.Single()["dp_RecordID"].ToString())
+                    };
+
+                    return participant;
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                if (ex.Message == "Sequence contains more than one element")
+                {
+                    throw new MultipleRecordsException("Multiple Participant records found! Only one participant allowed per Contact.");
+                }
+            }
+
+            return null;
         }
     }
 }

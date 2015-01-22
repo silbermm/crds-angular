@@ -127,5 +127,32 @@ namespace MinistryPlatform.Translation.Test
             Assert.IsTrue(deleted);
 
         }
+
+        [Test]
+        public void GetOpportunityResponses()
+        {
+            var pageId = 382;
+            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            var records = GetPageRecordService.GetRecords(pageId, token);
+            Assert.IsNotNull(records);
+        }
+
+        [Test]
+        public void CreateOpportunityResponse()
+        {
+            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            var opportunityId = 113;
+            var comment = "Test Comment";
+            Assert.DoesNotThrow(() => OpportunityService.RespondToOpportunity(token, opportunityId, comment));
+        }
+
+        [Test]
+        public void GetParticipants()
+        {
+            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            var participants = AuthenticationService.GetParticipantRecord(token);
+
+            Assert.IsNotNull(participants);
+        }
     }
 }

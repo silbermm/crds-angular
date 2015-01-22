@@ -44,7 +44,7 @@ namespace crds_angular.Services
         }
 
 
-        public static Dictionary<string, object> GetLookupDict(int pageId, string token)
+        public static List<Dictionary<string, object>> GetLookupDict(int pageId, string token)
         {
             return MinistryPlatform.Translation.Services.GetPageRecordService.GetRecordsDict(pageId, token);
         }
