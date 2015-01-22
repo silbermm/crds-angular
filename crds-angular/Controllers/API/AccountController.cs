@@ -58,7 +58,7 @@ namespace crds_angular.Controllers.API
 
         }
 
-        public IHttpActionResult Put([FromBody]AccountInfo accountInfo)
+        public IHttpActionResult Post([FromBody]AccountInfo accountInfo)
         {
 
             return Authorized(token =>
