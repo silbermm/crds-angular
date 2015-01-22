@@ -10,7 +10,7 @@ namespace crds_angular.Controllers.API
     public class OpportunityController : CookieAuth
     {
         [ResponseType(typeof (bool))]
-        [Route("api/opportunity/response")]
+        [Route("api/opportunity")]
         public IHttpActionResult Post([FromBody] string stuff)
         {
             logger.Debug("opportunity response Post");
