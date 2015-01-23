@@ -7,7 +7,8 @@
             <label for="firstname">First Name</label>
             <input type="text" name="firstName" class="form-control" id="firstname" placeholder="Enter first name" ng-model="profile.person.First_Name" ng-model-options="{ debounce : { 'default' : 500, blur : 0 } }" required>
             <ng-messages for="personal.firstName.$error" ng-if="personal.$submitted">
-                <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}}</span>
+
+                <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}} </span>
             </ng-messages>
         </div>
 

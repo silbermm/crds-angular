@@ -89,25 +89,25 @@
                   Profile: 'Profile',
                   Lookup: 'Lookup',
                   genders: function(Lookup){
-                      return Lookup.query({ table: "genders" }).$promise
+                      return Lookup.query({ table: "genders" }).$promise;
                   },
                   maritalStatuses: function(Lookup){
-                      return Lookup.query({ table: "maritalstatus" }).$promise
+                      return Lookup.query({ table: "maritalstatus" }).$promise;
                   },
                   serviceProviders: function(Lookup){
-                      return Lookup.query({ table: "serviceproviders" }).$promise
+                      return Lookup.query({ table: "serviceproviders" }).$promise;
                   },
                   states: function(Lookup){
-                      return Lookup.query({ lookup: "states" })
+                      return Lookup.query({ lookup: "states" }).$promise;
                   },
                   countries: function(Lookup){
-                      Lookup.query({ lookup: "countries" })
+                      return Lookup.query({ table: "countries" }).$promise;
                   },
                   crossroadsLocations: function(Lookup){
-                      Lookup.query({ table: "crossroadslocations" })
+                      return Lookup.query({ table: "crossroadslocations" }).$promise;
                   },
                   person: function (Profile) {
-                      Profile.Personal.get().$promise
+                      return Profile.Personal.get().$promise;
                   }
               }
           })

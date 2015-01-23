@@ -13,6 +13,8 @@
         _this.countries = countries;
         _this.crossroadsLocations = crossroadsLocations;
 
+        _this.submitted = false;
+
         _this.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
         _this.zipFormat = /^(\d{5}([\-]\d{4})?)$/;
         _this.dateFormat = /^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.]((19|20)\d\d)$/;
@@ -21,7 +23,7 @@
 
         _this.initProfile = function (form) {
             _this.form = form;
-            //configurePerson();
+            configurePerson();
         }
 
         function configurePerson() {
@@ -35,30 +37,13 @@
                 var mAdate = moment(new Date(_this.person.Anniversary_Date));
                 _this.person.Anniversary_Date = mAdate.format("MM/DD/YYYY");
             }
-
         }
 
-        //_this.stateChanged = function () {
-        //    if (_this.currentState.State_Abbreviation) {
-        //         _this.person.State = _this.currentState.State_Abbreviation;
-        //    }
-        //    $log.debug(_this.person.State);
-        //}
-
-        //_this.countryChanged = function () {
-        //    if (_this.currentCountry.dp_RecordName) {
-        //        _this.person.Foreign_Country = _this.currentCountry.dp_RecordName;
-        //    }
-        //    $log.debug(_this.person.Foreign_Country);            
-        //}
-
         _this.savePersonal = function () {
-
-            $log.debug(_this.person);
-
+            _this.submitted = true;
             if (_this.form.personal.$invalid) {
-                $log.debug("The form is invalid!");
                 $rootScope.$emit('notify.error', MESSAGES.generalError);
+                _this.submitted = false;              
                 return 
             }
             _this.person["State/Region"] = _this.person.State
