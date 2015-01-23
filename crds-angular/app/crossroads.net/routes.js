@@ -84,7 +84,32 @@
           .state('profile.personal', {
               url: '/personal',
               controller: 'ProfilePersonalController as profile',
-              templateUrl: 'app/modules/profile/personal/profile_personal.html'
+              templateUrl: 'app/modules/profile/personal/profile_personal.html',
+              resolve: {
+                  Profile: 'Profile',
+                  Lookup: 'Lookup',
+                  genders: function(Lookup){
+                      return Lookup.query({ table: "genders" }).$promise
+                  },
+                  maritalStatuses: function(Lookup){
+                      return Lookup.query({ table: "maritalstatus" }).$promise
+                  },
+                  serviceProviders: function(Lookup){
+                      return Lookup.query({ table: "serviceproviders" }).$promise
+                  },
+                  states: function(Lookup){
+                      return Lookup.query({ lookup: "states" })
+                  },
+                  countries: function(Lookup){
+                      Lookup.query({ lookup: "countries" })
+                  },
+                  crossroadsLocations: function(Lookup){
+                      Lookup.query({ table: "crossroadslocations" })
+                  },
+                  person: function (Profile) {
+                      Profile.Personal.get().$promise
+                  }
+              }
           })
           .state("profile.account", {
               url: '/account',
