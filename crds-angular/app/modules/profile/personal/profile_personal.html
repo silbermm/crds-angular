@@ -7,7 +7,8 @@
             <label for="firstname">First Name</label>
             <input type="text" name="firstName" class="form-control" id="firstname" placeholder="Enter first name" ng-model="profile.person.First_Name" ng-model-options="{ debounce : { 'default' : 500, blur : 0 } }" required>
             <ng-messages for="personal.firstName.$error" ng-if="personal.$submitted">
-                <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}}</span>
+
+                <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}} </span>
             </ng-messages>
         </div>
 
@@ -189,7 +190,7 @@
 
                                     <div class="form-group col-sm-6" ng-class="{'has-error':personal.state.$invalid}">
                                         <label for="state">State</label>
-                                        <select name="state" class="form-control col-sm-12" ng-model="profile.person.State" ng-change="profile.stateChanged()" ng-options="state.State_Abbreviation as state.State_Abbreviation for state in profile.states" required>
+                                        <select name="state" class="form-control col-sm-12" ng-model="profile.person.State" ng-options="state.State_Abbreviation as state.State_Abbreviation for state in profile.states" required>
                                             <option value=""> -- Choose a State -- </option>
                                         </select>
                                         <div ng-messages for="personal.state.$error" ng-if="personal.$submitted">
@@ -211,7 +212,7 @@
 
                                     <div class="form-group col-sm-6" ng-class="{'has-error':personal.country.$invalid}">
                                         <label for="country">Country</label>
-                                        <select name="country" ng-change="profile.countryChanged()" ng-model="profile.person.Foreign_Country" ng-options="country.dp_RecordName as country.dp_RecordName for country in profile.countries" class="form-control col-sm-12" required>
+                                        <select name="country" ng-model="profile.person.Foreign_Country" ng-options="country.dp_RecordName as country.dp_RecordName for country in profile.countries" class="form-control col-sm-12" required>
                                             <option value=""> -- Choose One -- </option>
                                         </select>
                                         <div ng-messages for="personal.country.$error" ng-if="personal.$submitted">
