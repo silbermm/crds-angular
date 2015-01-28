@@ -158,6 +158,9 @@ namespace crds_angular.Services
 
             return recordId;
         }
+        /*
+         * Not needed as long as the triggers are in place on Ministry Platform
+         */
         private static void UpdateContactRecord(int contactRecordID, int userRecordID, int participantRecordID, string token)
         {
             int recordId;
@@ -179,7 +182,6 @@ namespace crds_angular.Services
             int userRecordID = CreateUserRecord(newUserData, token, contactRecordID);
             int userRoleRecordID = CreateUserRoleSubRecord(token, userRecordID);
             int participantRecordID = CreateParticipantRecord(token, contactRecordID);
-            UpdateContactRecord(contactRecordID, userRecordID, participantRecordID, token);
 
             // TODO Contingent on cascading delete via contact
             Dictionary<int, int> returnValues = new Dictionary<int, int>();
