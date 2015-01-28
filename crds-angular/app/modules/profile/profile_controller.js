@@ -1,13 +1,24 @@
 'use strict';
 (function () {
-    angular.module("crdsProfile").controller('crdsProfileCtrl', ['$rootScope','Profile', 'Lookup', '$q', '$log',  ProfileController]);
+    angular.module("crdsProfile").controller('crdsProfileCtrl', ['$rootScope','Profile', 'Lookup', '$q', '$log','$scope',  ProfileController]);
 
-    function ProfileController($rootScope, Profile, Lookup, $q, $log) {
+    function ProfileController($rootScope, Profile, Lookup, $q, $log, $scope) {
         
-	    var _this = this;
+        var _this = this;
+
+        $scope.pwprocess = function () {
+            $log.debug("pwprocess function launched");
+            if ($scope.pwprocessing == "SHOW") {
+                $scope.pwprocessing = "HIDE";
+                $scope.inputType = 'text';
+            }
+            else {
+                $scope.pwprocessing = "SHOW";
+                $scope.inputType = 'password';
+            }
+            $log.debug($scope.pwprocessing);
+        }
       
-	    
-        
 	    _this.initAccount = function () {
             _this.account = Profile.Account.get();
             _this.password = new Profile.Password();
