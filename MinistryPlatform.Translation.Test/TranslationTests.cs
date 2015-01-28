@@ -147,6 +147,15 @@ namespace MinistryPlatform.Translation.Test
         }
 
         [Test]
+        public void ShouldNotCreateOpportunityResponse()
+        {
+            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            var opportunityId = 1000000000;
+            var comment = "Test Comment";
+            Assert.IsFalse(OpportunityService.RespondToOpportunity(token, opportunityId, comment));
+        }
+
+        [Test]
         public void GetParticipants()
         {
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);

@@ -246,6 +246,10 @@
     <Content Include="app\crossroads.net\routes.js" />
     <Content Include="app\crossroads.net\services\user_service.js" />
     <Content Include="app\crossroads.net\services\auth_service.js" />
+    <Content Include="app\modules\opportunity\module.js" />
+    <Content Include="app\modules\opportunity\opportunity_service.js" />
+    <Content Include="app\modules\opportunity\view\view_opportunities.html" />
+    <Content Include="app\modules\opportunity\view\view_opportunities_controller.js" />
     <Content Include="app\modules\profile\directives\profile_skills_directive.js" />
     <Content Include="app\modules\profile\personal\profile_personal_controller.js" />
     <Content Include="app\modules\profile\personal\profile_unique_email_directive.js" />

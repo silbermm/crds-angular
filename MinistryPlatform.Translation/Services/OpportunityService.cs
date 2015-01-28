@@ -10,7 +10,7 @@ namespace MinistryPlatform.Translation.Services
 {
     public class OpportunityService
     {
-        public static void RespondToOpportunity(string token, int opportunityId, string comments)
+        public static bool RespondToOpportunity(string token, int opportunityId, string comments)
         {
             try
             {
@@ -35,14 +35,25 @@ namespace MinistryPlatform.Translation.Services
                     platformServiceClient.CreatePageRecord(
                         Convert.ToInt32(ConfigurationManager.AppSettings["OpportunityResponses"]), values, true);
                 }
+                return true;
             }
             catch (InvalidOperationException ex)
             {
                 if (ex.Message == "Sequence contains more than one element")
                 {
-                    throw new MultipleRecordsException("Multiple Participant records found! Only one participant allowed per Contact.");
+                    throw new MultipleRecordsException(
+                        "Multiple Participant records found! Only one participant allowed per Contact.");
                 }
+                return false;
 
+            }
+            catch (System.ServiceModel.FaultException ex)
+            {
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
         }
     }
