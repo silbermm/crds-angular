@@ -21,7 +21,7 @@ namespace MinistryPlatform.Translation.Services
                     {"Comments", comments}
                 };
 
-                var recordId = CreatePageRecordService.CreateRecord(pageId, values, token);
+                var recordId = CreatePageRecordService.CreateRecord(pageId, values, token, true);
                 return recordId;
         }
     }
