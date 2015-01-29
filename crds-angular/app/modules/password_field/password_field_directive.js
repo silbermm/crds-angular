@@ -1,5 +1,5 @@
 ﻿(function () {
-    angular.module("password_field").directive("passwordField", ['$log', 'Profile', PasswordField]);
+    angular.module("password_field",[]).directive("passwordField", ['$log', 'Profile', PasswordField]);
 
     function PasswordField($log, Profile) {
         return {
