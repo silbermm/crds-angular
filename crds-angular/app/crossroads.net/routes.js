@@ -2,7 +2,7 @@
 (function () {
     angular.module("crossroads")
 
-    .config(["$stateProvider", "$urlRouterProvider","$httpProvider", function ($stateProvider, $urlRouterProvider, $httpProvider) {
+    .config(["$stateProvider", "$urlRouterProvider","$httpProvider",  function ($stateProvider, $urlRouterProvider, $httpProvider) {
 
         //================================================
         // Check if the user is connected
@@ -14,18 +14,18 @@
 
             // Make an AJAX call to check if the user is logged in
             $http.get("api/authenticated").success(function (user) {
-                // Authenticated                
-                $timeout(deferred.resolve, 0);
-                $rootScope.userid = user.userId;
-                $rootScope.username = user.username;
-            }).error(function(data) {
-                console.log("Clear the session");
-                //Session.clear();
-                $rootScope.message = "You need to log in.";
-                $rootScope.userid = null;
-                $rootScope.username = null;
-                $timeout(function () { deferred.reject(); }, 0);
-                $location.url("/");
+                // Authenticated
+                if (user.userId !== undefined) {
+                    $timeout(deferred.resolve, 0);
+                    $rootScope.userid = user.userId;
+                    $rootScope.username = user.username;
+                // Not Authenticated
+                } else {
+                    Session.clear();
+                    $rootScope.message = "You need to log in.";
+                    $timeout(function () { deferred.reject(); }, 0);
+                    $location.url("/");
+                }
             });
 
             return deferred.promise;

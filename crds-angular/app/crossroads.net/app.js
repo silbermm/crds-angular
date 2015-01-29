@@ -1,11 +1,20 @@
 ﻿"use strict";
 (function () {
     angular.module("crossroads", ["crdsProfile", "crdsOpportunity", "ui.router", "ngCookies", "angular-growl"])
-    .run(["Session", "$rootScope", "MESSAGES", function(Session, $rootScope, MESSAGES){       
+    .run(["Session", "$rootScope", "MESSAGES", "$http", function(Session, $rootScope, MESSAGES, $http){       
         $rootScope.MESSAGES = MESSAGES;
 
-        
-
+        $http.get("api/authenticated").success(function (user) {
+            // Authenticated                 
+            $rootScope.userid = user.userId;
+            $rootScope.username = user.username;
+        }).error(function (data) {
+            console.log("Clear the session");
+            Session.clear();
+            $rootScope.message = "You need to log in.";
+            $rootScope.userid = null;
+            $rootScope.username = null;
+        });
     }])
     .constant("AUTH_EVENTS", {
             loginSuccess: "auth-login-success",
@@ -41,18 +50,7 @@
     })
     .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "growl", "Session","$http", function ($scope, $rootScope, MESSAGES, growl, Session, $http) {
 
-        $http.get("api/authenticated").success(function (user) {
-            // Authenticated                 
-            $rootScope.userid = user.userId;
-            $rootScope.username = user.username;
-        }).error(function (data) {
-            console.log("Clear the session");
-            Session.clear();
-            $rootScope.message = "You need to log in.";
-            $rootScope.userid = null;
-            $rootScope.username = null;            
-        });        
-
+        
         $rootScope.$on("notify.success", function (event, message) {
             growl.success(message);
         });
