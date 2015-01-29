@@ -1,6 +1,5 @@
 ﻿"use strict";
 (function () {
-    angular.module('crossroads').service('Session', ['$cookies', '$cookieStore',SessionService]);
 
     function SessionService($cookies, $cookieStore) {
         this.create = function (sessionId, userId, username) {
@@ -27,4 +26,7 @@
 
         return this;
     }
+
+    angular.module("crossroads").service("Session", ["$cookies", "$cookieStore", SessionService]);
+
 })()
