@@ -150,9 +150,10 @@ namespace MinistryPlatform.Translation.Test
         public void ShouldNotCreateOpportunityResponse()
         {
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            var opportunityId = 1000000000;
-            var comment = "Test Comment";
-            Assert.IsFalse(OpportunityService.RespondToOpportunity(token, opportunityId, comment));
+            const int opportunityId = 1000000000;
+            const string comment = "Test Comment";
+            var recordId = OpportunityService.RespondToOpportunity(token, opportunityId, comment);
+            Assert.AreNotEqual(0,recordId);
         }
 
         [Test]

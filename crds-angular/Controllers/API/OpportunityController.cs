@@ -9,7 +9,7 @@ namespace crds_angular.Controllers.API
 {
     public class OpportunityController : CookieAuth
     {
-        [ResponseType(typeof (bool))]
+        [ResponseType(typeof (int))]
         [Route("api/opportunity/{id}")]
         public IHttpActionResult Post(int id, [FromBody] string stuff)
         {            
@@ -17,8 +17,15 @@ namespace crds_angular.Controllers.API
 
             return Authorized(token =>
             {
-                var opportunity = OpportunityService.RespondToOpportunity(token, id, comments);
-                return opportunity ? (IHttpActionResult)this.Ok() : this.InternalServerError();
+                try
+                {
+                    var opportunityId = OpportunityService.RespondToOpportunity(token, id, comments);
+                    return this.Ok(opportunityId);
+                }
+                catch (Exception ex)
+                {
+                    return this.InternalServerError(ex);
+                }
 
             });
         }
