@@ -79,7 +79,6 @@
     <Compile Include="Services\GetPageRecordService.cs" />
     <Compile Include="Services\LookupService.cs" />
     <Compile Include="Services\OpportunityService.cs" />
-    <Compile Include="Exceptions\ReccordNotFoundException.cs" />
     <Compile Include="Utils\MPFormatConversion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\PlatformService\Reference.cs">
