@@ -11,19 +11,19 @@
             templateUrl: 'app/modules/password_field/password_field.html',
             link: (function (scope, el, attr, ctrl) {
                 //scope.showPassword = false;
-                scope.AAAinputType = 'password';
-                scope.AAApwprocessing = "SHOW";
-                scope.AAApwprocess = function () {
+                scope.inputType = 'password';
+                scope.pwprocessing = "SHOW";
+                scope.pwprocess = function () {
                     $log.debug("pwprocess function launched");
-                    if (scope.AAApwprocessing == "SHOW") {
-                        scope.AAApwprocessing = "HIDE";
-                        scope.AAAinputType = 'text';
+                    if (scope.pwprocessing == "SHOW") {
+                        scope.pwprocessing = "HIDE";
+                        scope.inputType = 'text';
                     }
                     else {
-                        scope.AAApwprocessing = "SHOW";
-                        scope.AAAinputType = 'password';
+                        scope.pwprocessing = "SHOW";
+                        scope.inputType = 'password';
                     }
-                    $log.debug(scope.AAApwprocessing);
+                    $log.debug(scope.pwprocessing);
                 }
             })
         }
