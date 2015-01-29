@@ -9,17 +9,24 @@ namespace crds_angular.Controllers.API
 {
     public class OpportunityController : CookieAuth
     {
-        [ResponseType(typeof (bool))]
-        [Route("api/opportunity")]
-        public IHttpActionResult Post([FromBody] string stuff)
-        {
-            logger.Debug("opportunity response Post");
-            var comments = string.Format("Test {0}", DateTime.Now.ToString(CultureInfo.CurrentCulture));
+        [ResponseType(typeof (int))]
+        [Route("api/opportunity/{id}")]
+        public IHttpActionResult Post(int id, [FromBody] string stuff)
+        {            
+            var comments = string.Format("Request on {0}", DateTime.Now.ToString(CultureInfo.CurrentCulture));
 
             return Authorized(token =>
             {
-                OpportunityService.RespondToOpportunity(token, 113, comments);
-                return this.Ok();
+                try
+                {
+                    var opportunityId = OpportunityService.RespondToOpportunity(token, id, comments);
+                    return this.Ok(opportunityId);
+                }
+                catch (Exception ex)
+                {
+                    return this.InternalServerError(ex);
+                }
+
             });
         }
     }

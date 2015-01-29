@@ -1,6 +1,6 @@
 ﻿'use strict';
 (function () {
-    angular.module('crossroads', ['crdsProfile', 'ui.router', 'ngCookies', 'angular-growl'])
+    angular.module('crossroads', ['crdsProfile', 'crdsOpportunity', 'ui.router', 'ngCookies', 'angular-growl'])
     .run(['Session', '$rootScope', 'MESSAGES', function(Session, $rootScope, MESSAGES){
         $rootScope.username = Session.exists('username');
         $rootScope.MESSAGES = MESSAGES;
@@ -27,7 +27,10 @@
         loginFailed: "Oops! Login failed. Please try again or use <a>Forgot Password</a>",
         invalidZip: "Zip code entered does not appear to be valid.",
         invalidPassword: "New password is invalid.  It must be at least 6 characters in length.",
-        successfullRegistration:"Well done. You have successfully registered."
+        successfullRegistration: "Well done. You have successfully registered.",
+        succesfulResponse: "Thank you for your interest in joining our team. Someone is reviewing your submission and will respond to you shortly",
+        failedResponse: "Something went wrong, please try again. If the problem persists contact the administrator"
+
     }).config(function(growlProvider) {
         growlProvider.globalPosition('top-center');
         growlProvider.globalTimeToLive(6000);

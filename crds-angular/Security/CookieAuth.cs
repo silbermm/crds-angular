@@ -23,8 +23,7 @@ namespace crds_angular.Security
         {
             CookieHeaderValue cookie = Request.Headers.GetCookies("sessionId").FirstOrDefault();
             if (cookie != null && (cookie["sessionId"].Value != "null" || cookie["sessionId"].Value != null))
-            {
-                Debug.WriteLine("cookieauth");
+            {                
                 return doIt(cookie["sessionId"].Value);
             }
             return Unauthorized();   
