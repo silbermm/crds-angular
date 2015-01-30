@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MinistryPlatform.Translation.Services;
 
 namespace MinistryPlatform.Translation.Test
 {

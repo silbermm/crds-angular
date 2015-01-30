@@ -72,12 +72,11 @@
     <Compile Include="Models\CommunicationPreferences.cs" />
     <Compile Include="Models\Contact.cs" />
     <Compile Include="Services\AuthenticationService.cs" />
-    <Compile Include="Services\DeletePageRecordService.cs" />
-    <Compile Include="Services\CreatePageRecordService.cs" />
     <Compile Include="Services\CommunicationService.cs" />
     <Compile Include="Services\GetMyRecords.cs" />
     <Compile Include="Services\GetPageRecordService.cs" />
     <Compile Include="Services\LookupService.cs" />
+    <Compile Include="Services\MinistryPlatformService.cs" />
     <Compile Include="Services\OpportunityService.cs" />
     <Compile Include="Utils\MPFormatConversion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -86,7 +85,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="Services\UpdatePageRecordService.cs" />
     <Compile Include="Utils\PlatformUtils.cs" />
   </ItemGroup>
   <ItemGroup>

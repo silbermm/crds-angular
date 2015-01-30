@@ -24,7 +24,7 @@ namespace crds_angular.Services
         //TODO: Put this logic in the Translation Layer?
         public bool SaveCommunicationPrefs(string token, AccountInfo accountInfo)
         {
-            var contactId = MinistryPlatform.Translation.AuthenticationService.GetContactId(token);
+            var contactId = AuthenticationService.GetContactId(token);
             var contact = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecordDict(Convert.ToInt32(ConfigurationManager.AppSettings["MyContact"]), contactId, token);
             try
             {                
@@ -51,7 +51,7 @@ namespace crds_angular.Services
 
         public AccountInfo getAccountInfo(string token)
         {
-            var contactId = MinistryPlatform.Translation.AuthenticationService.GetContactId(token);
+            var contactId = AuthenticationService.GetContactId(token);
             CommunicationPreferences contact = CommunicationService.GetPreferences(token, contactId);
             var accountInfo = new AccountInfo
             {
@@ -74,7 +74,7 @@ namespace crds_angular.Services
             householdDictionary["Congregation_ID"] = Convert.ToInt32(ConfigurationManager.AppSettings["Congregation_Default_ID"]);
             householdDictionary["Household_Source_ID"] = Convert.ToInt32(ConfigurationManager.AppSettings["Household_Default_Source_ID"]);
 
-            recordId = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Households"]), householdDictionary, token);
+            recordId = MinistryPlatform.Translation.Services.MinistryPlatformService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Households"]), householdDictionary, token);
 
             return recordId;
         }
@@ -93,7 +93,7 @@ namespace crds_angular.Services
             contactDictionary["Household_Position_ID"] = Convert.ToInt32(ConfigurationManager.AppSettings["Household_Position_Default_ID"]);
             contactDictionary["Household_ID"] = householdRecordID;
 
-            recordId = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Contacts"]), contactDictionary, token);
+            recordId = MinistryPlatform.Translation.Services.MinistryPlatformService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Contacts"]), contactDictionary, token);
 
             return recordId;
         }
@@ -108,7 +108,7 @@ namespace crds_angular.Services
             contactHouseholdDictionary["Household_Position_ID"] = Convert.ToInt32(ConfigurationManager.AppSettings["Household_Position_Default_ID"]);
             contactHouseholdDictionary["Household_Type_ID"] = Convert.ToInt32(ConfigurationManager.AppSettings["Household_Type_Default_ID"]);
 
-            recordId = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["ContactHouseholds"]), contactHouseholdDictionary, token);
+            recordId = MinistryPlatform.Translation.Services.MinistryPlatformService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["ContactHouseholds"]), contactHouseholdDictionary, token);
 
             return recordId;
         }
@@ -128,7 +128,7 @@ namespace crds_angular.Services
             userDictionary["User_Name"] = userDictionary["User_Email"];
             userDictionary["Contact_ID"] = contactRecordID;
 
-            recordId = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Users"]), userDictionary, token);
+            recordId = MinistryPlatform.Translation.Services.MinistryPlatformService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Users"]), userDictionary, token);
 
             return recordId;
         }
@@ -139,7 +139,7 @@ namespace crds_angular.Services
 
             Dictionary<string, object> userRoleDictionary = new Dictionary<string, object>();
             userRoleDictionary["Role_ID"] = Convert.ToInt32(ConfigurationManager.AppSettings["Role_Default_ID"]);
-            recordId = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateSubRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Users_Roles"]),userRecordID, userRoleDictionary, token);
+            recordId = MinistryPlatform.Translation.Services.MinistryPlatformService.CreateSubRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Users_Roles"]),userRecordID, userRoleDictionary, token);
 
             return recordId;
         }
@@ -154,7 +154,7 @@ namespace crds_angular.Services
             participantDictionary["Participant_Start_Date"] = DateTime.Now;
             participantDictionary["Contact_Id"] = contactRecordID;
 
-            recordId = MinistryPlatform.Translation.Services.CreatePageRecordService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Participants"]), participantDictionary, token);
+            recordId = MinistryPlatform.Translation.Services.MinistryPlatformService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Participants"]), participantDictionary, token);
 
             return recordId;
         }
@@ -170,7 +170,7 @@ namespace crds_angular.Services
             contactDictionary["User_account"] = userRecordID;
             contactDictionary["Participant_Record"] = participantRecordID;
 
-            MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Contacts"]), contactDictionary, token);
+            MinistryPlatform.Translation.Services.MinistryPlatformService.UpdateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Contacts"]), contactDictionary, token);
         }
         public static Dictionary<int, int>RegisterPerson(User newUserData)
         {

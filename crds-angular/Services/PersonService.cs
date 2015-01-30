@@ -8,6 +8,7 @@ using System.Web;
 using System.Reflection;
 using System.Diagnostics;
 using System.Configuration;
+using MinistryPlatform.Translation.Services;
 
 namespace crds_angular.Services
 {
@@ -20,9 +21,9 @@ namespace crds_angular.Services
             var addressDictionary = getDictionary(person.GetAddress());
             addressDictionary.Add("State/Region", addressDictionary["State"]);
 
-            MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(455, contactDictionary, token);
-            MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(465, householdDictionary, token);
-            MinistryPlatform.Translation.Services.UpdatePageRecordService.UpdateRecord(468, addressDictionary, token); 
+            MinistryPlatform.Translation.Services.MinistryPlatformService.UpdateRecord(455, contactDictionary, token);
+            MinistryPlatform.Translation.Services.MinistryPlatformService.UpdateRecord(465, householdDictionary, token);
+            MinistryPlatform.Translation.Services.MinistryPlatformService.UpdateRecord(468, addressDictionary, token); 
         }
 
         public List<Models.Crossroads.Skill> getLoggedInUserSkills(int contactId, string token)
@@ -33,7 +34,7 @@ namespace crds_angular.Services
 
         public Person getLoggedInUserProfile(String token)
         {
-            var contactId = MinistryPlatform.Translation.AuthenticationService.GetContactId(token);
+            var contactId = AuthenticationService.GetContactId(token);
             var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["MyProfile"]);
             JArray contact = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecords(pageId, token);
             if (contact.Count == 0)

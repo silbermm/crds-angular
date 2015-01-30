@@ -30,7 +30,7 @@ namespace MinistryPlatform.Translation.Services
             try
             {
                 int pId = Convert.ToInt32(ConfigurationManager.AppSettings["MyContact"]);
-                UpdatePageRecordService.UpdateRecord(pId, prefs, token);
+                MinistryPlatformService.UpdateRecord(pId, prefs, token);
                 return true;
             }
             catch (Exception e)
@@ -44,7 +44,7 @@ namespace MinistryPlatform.Translation.Services
             try
             {
                 int pId = Convert.ToInt32(ConfigurationManager.AppSettings["MyHousehold"]);
-                UpdatePageRecordService.UpdateRecord(pId, prefs, token);
+                MinistryPlatformService.UpdateRecord(pId, prefs, token);
                 return true;
             }
             catch (Exception e)

@@ -6,12 +6,11 @@ using System.Net.Http;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using MinistryPlatform.Models;
-using MinistryPlatform.Translation.PlatformService;
-using MinistryPlatform.Translation.Services;
-using Newtonsoft.Json.Linq;
 using MinistryPlatform.Translation.Exceptions;
+using MinistryPlatform.Translation.PlatformService;
+using Newtonsoft.Json.Linq;
 
-namespace MinistryPlatform.Translation
+namespace MinistryPlatform.Translation.Services
 {
     public class AuthenticationService
     {
@@ -52,7 +51,7 @@ namespace MinistryPlatform.Translation
             {
                 var record = GetPageRecordService.GetRecordsDict(Convert.ToInt32(ConfigurationManager.AppSettings["ChangePassword"]), token).Single();
                 record["Password"] = newPassword;
-                UpdatePageRecordService.UpdateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["ChangePassword"]), record, token);
+                MinistryPlatformService.UpdateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["ChangePassword"]), record, token);
                 return true;
             }
             catch

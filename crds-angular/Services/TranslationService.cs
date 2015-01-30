@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Helpers;
 using System.Collections.Generic;
 using System;
+using MinistryPlatform.Translation.Services;
 
 
 namespace crds_angular.Services
@@ -57,7 +58,7 @@ namespace crds_angular.Services
         
         public static string Login(string username, string password)
         {
-            return MinistryPlatform.Translation.AuthenticationService.authenticate(username, password);   
+            return AuthenticationService.authenticate(username, password);   
         }
 
         public static dynamic DecodeJson(string json)

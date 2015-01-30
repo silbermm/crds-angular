@@ -72,10 +72,10 @@ namespace MinistryPlatform.Translation.Test
             Dictionary<string, object> record = GetPageRecordService.GetRecordDict(pageId, recordId, token);
             record["First_Name"] = "Created";
             record["Email_Address"] = "test@testemail.com";
-            int newRecordId = CreatePageRecordService.CreateRecord(pageId, record, token);
+            int newRecordId = MinistryPlatformService.CreateRecord(pageId, record, token);
             Assert.IsNotNull(newRecordId);
             Assert.AreNotEqual(0, newRecordId);
-            DeletePageRecordService.DeleteRecord(pageId, newRecordId, null, token);
+            MinistryPlatformService.DeleteRecord(pageId, newRecordId, null, token);
         }
 
         [Test]
@@ -174,7 +174,7 @@ namespace MinistryPlatform.Translation.Test
             var responseId = OpportunityService.RespondToOpportunity(token, opportunityId, comment);
 
             //Try to delete Response, should fail
-            Assert.Throws<FaultException<ExceptionDetail>>(() => DeletePageRecordService.DeleteRecord(382, responseId, null, token));
+            Assert.Throws<FaultException<ExceptionDetail>>(() => MinistryPlatformService.DeleteRecord(382, responseId, null, token));
             
         }
     }
