@@ -1,13 +1,11 @@
 'use strict';
 (function () {
-    angular.module("crdsProfile").controller('crdsProfileCtrl', ['$rootScope','Profile', 'Lookup', '$q', '$log',  ProfileController]);
+    angular.module("crdsProfile").controller('crdsProfileCtrl', ['$rootScope','Profile', 'Lookup', '$q', '$log','$scope',  ProfileController]);
 
-    function ProfileController($rootScope, Profile, Lookup, $q, $log) {
+    function ProfileController($rootScope, Profile, Lookup, $q, $log, $scope) {
         
-	    var _this = this;
-      
-	    
-        
+        var _this = this;
+
 	    _this.initAccount = function () {
             _this.account = Profile.Account.get();
             _this.password = new Profile.Password();

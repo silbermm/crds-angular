@@ -10,12 +10,10 @@
 
         <div class="soft-half-bottom"><input class="form-control navbar--login__input" id="email" type="email" ng-model="newuser.email" required placeholder="Email" />
         </div>
-
         <div class="input-group soft-half-bottom">
-            <input ng-init="inputType='password'" type="{{inputType}}" class="form-control" id="password" placeholder="Password" ng-model="newuser.password">
-            <a class="input-group-addon btn-primary pointer" ng-click="pwprocess()"><small class="smaller ng-binding" ng-init="pwprocessing='SHOW'">{{pwprocessing}} </small></a>
+            <password-field passwd="newuser.password"></password-field>
         </div>
-                    <p class="small push-half-bottom text-muted">Registering signifies that you have read and agreed to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
-                    <input style="margin-bottom:20px;" type="submit" class="col-xs-12 btn btn-primary push-half-bottom " value="Register" />
-    </form>
+            <p class="small push-half-bottom text-muted">Registering signifies that you have read and agreed to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
+            <input style="margin-bottom:20px;" type="submit" class="col-xs-12 btn btn-primary push-half-bottom " value="Register" />
+</form>
 </div>
