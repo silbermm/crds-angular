@@ -88,7 +88,7 @@
     <div class="row">
         <div class="form-group col-sm-6">
             <label for="employer">Employer</label>
-            <input type="text" class="form-control" id="employer" placeholder="Enter employer" ng-model="profile.person.Employer_Name">
+            <input type="text" class="form-control" name="employer" id="employer" placeholder="Enter employer" ng-model="profile.person.Employer_Name">
         </div>
     </div>
 
@@ -239,7 +239,7 @@
                                 </li>
                                 <li class="list-group-item clearfix">
                                     <div id="Site" class="form-group col-sm-6">
-                                        <label for="provider">Crossroads Location</label>
+                                        <label for="crossroads-location">Crossroads Location</label>
                                         <select class="form-control col-sm-12" ng-model="profile.person.Congregation_ID" ng-options="congregation.dp_RecordID as congregation.dp_RecordName for congregation in profile.crossroadsLocations"></select>
                                     </div>
                                 </li>
