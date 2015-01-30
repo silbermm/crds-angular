@@ -246,6 +246,8 @@
     <Content Include="app\crossroads.net\routes.js" />
     <Content Include="app\crossroads.net\services\user_service.js" />
     <Content Include="app\crossroads.net\services\auth_service.js" />
+    <Content Include="app\modules\password_field\password_field.html" />
+    <Content Include="app\modules\password_field\password_field_directive.js" />
     <Content Include="app\modules\opportunity\module.js" />
     <Content Include="app\modules\opportunity\opportunity_service.js" />
     <Content Include="app\modules\opportunity\view\view_opportunities.html" />
@@ -255,8 +257,6 @@
     <Content Include="app\modules\profile\personal\profile_unique_email_directive.js" />
     <Content Include="app\modules\profile\personal\profile_valid_date_directive.js" />
     <Content Include="app\modules\profile\skills\profile_skills_controllers.js" />
-    <Content Include="app\modules\profile\directives\profile_password.html" />
-    <Content Include="app\modules\profile\directives\profile_password_directive.js" />
     <Content Include="app\modules\profile\profile_controller.js" />
     <Content Include="app\modules\profile\profile_date_picker.js" />
     <Content Include="app\modules\profile\module.js" />
