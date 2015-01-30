@@ -4,8 +4,8 @@
 
     <div class="row">
         <div class="form-group col-sm-6" ng-class="{'has-error':personal.firstName.$invalid}">
-            <label for="first-name">First Name</label>
-            <input type="text" name="first-name" class="form-control" id="first-name" placeholder="Enter first name" ng-model="profile.person.First_Name" ng-model-options="{ debounce : { 'default' : 500, blur : 0 } }" required>
+            <label for="firstname">First Name</label>
+            <input type="text" name="firstName" class="form-control" id="firstname" placeholder="Enter first name" ng-model="profile.person.First_Name" ng-model-options="{ debounce : { 'default' : 500, blur : 0 } }" required>
             <ng-messages for="personal.firstName.$error" ng-if="personal.$submitted">
 
                 <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}} </span>
@@ -13,26 +13,26 @@
         </div>
 
         <div class="form-group col-sm-6">
-            <label for="middle-name">Middle Name</label>
-            <input type="text" class="form-control" name="middle-name" id="middle-name" placeholder="Enter middle name" ng-model="profile.person.Middle_Name">
+            <label for="middlename">Middle Name</label>
+            <input type="text" class="form-control" id="middlename" placeholder="Enter middle name" ng-model="profile.person.Middle_Name">
         </div>
 
         <div class="form-group col-sm-6" ng-class="{'has-error':personal.lastName.$invalid}">
-            <label for="last-name">Last Name</label>
-            <input type="text" class="form-control" id="last-name" name="last-name" placeholder="Enter last name" ng-model="profile.person.Last_Name" ng-model-options="{ debounce : { 'default' : 500, blur : 0 } }" required>
+            <label for="lastname">Last Name</label>
+            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter last name" ng-model="profile.person.Last_Name" ng-model-options="{ debounce : { 'default' : 500, blur : 0 } }" required>
             <ng-messages for="personal.lastName.$error" ng-if="personal.$submitted">
                 <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}}</span>
             </ng-messages>
         </div>
 
         <div class="form-group col-sm-6">
-            <label for="maiden-name">Maiden Name</label>
-            <input type="text" class="form-control" name="maiden-name" id="maiden-name" placeholder="Enter maiden name" ng-model="profile.person.Maiden_Name">
+            <label for="maidenname">Maiden Name</label>
+            <input type="text" class="form-control" id="maidenname" placeholder="Enter maiden name" ng-model="profile.person.Maiden_Name">
         </div>
 
         <div class="form-group col-sm-6">
             <label for="nickname">Preferred Name <small class="text-muted">(Example: Rob or Becky)</small></label>
-            <input type="text" class="form-control" id="nickname" placeholder="Enter nick name" ng-model="profile.person.NickName">
+            <input type="text" name="nickname" class="form-control" id="nickname" placeholder="Enter nick name" ng-model="profile.person.NickName">
         </div>
     </div>
 
@@ -53,7 +53,7 @@
     <div class="row" ng-controller="crdsDatePickerCtrl">
         <div class="form-group col-sm-6" ng-class="{'has-error': profile.isDobError()}">
             <label for="birthdate">Birth Date</label>
-            <input type="text" name="birthdate" class="form-control" id="birthdate"
+            <input type="text" name="birthdate" class="form-control"
                     placeholder="MM/DD/YYYY"
                     ng-pattern="profile.dateFormat"
                     ng-model="profile.person.Date_of_Birth"
@@ -71,16 +71,16 @@
 
     <div class="row">
         <div class="form-group col-sm-6">
-            <label for="marital-status">Marital Status</label>
-            <select class="form-control col-sm-12" id="marital-status" name="marital-status"
+            <label for="marital_status">Marital Status</label>
+            <select class="form-control col-sm-12"
                     ng-model="profile.person.Marital_Status_Id"
                     ng-options="status.dp_RecordID as status.dp_RecordName for status in profile.maritalStatuses"></select>
         </div>
 
         <div class="form-group col-sm-6">
-            <label class="block for="gender">Gender</label>
+            <label class="block">Gender</label>
             <label class="radio-inline" ng-repeat="gender in profile.genders">
-                <input type="radio" name="gender" id="gender-{{gender.dp_RecordName}}" ng-value="gender.dp_RecordID" ng-model="profile.person.Gender_Id"> {{ gender.dp_RecordName }}
+                <input type="radio" id="gender" ng-value="gender.dp_RecordID" ng-model="profile.person.Gender_Id"> {{ gender.dp_RecordName }}
             </label>
         </div>
     </div>
@@ -88,18 +88,17 @@
     <div class="row">
         <div class="form-group col-sm-6">
             <label for="employer">Employer</label>
-            <input type="text" class="form-control" id="employer" placeholder="Enter employer" ng-model="profile.person.Employer_Name">
+            <input type="text" class="form-control" name="employer" id="employer" placeholder="Enter employer" ng-model="profile.person.Employer_Name">
         </div>
     </div>
 
     <div class="row" ng-controller="crdsDatePickerCtrl">
         <div class="form-group col-sm-6" ng-controller="crdsDatePickerCtrl" ng-class="{'has-error':personal.anniversarydate.$invalid}">
-            <label for="anniversary-date">When did you start attending Crossroads?</label>
+            <label for="anniversarydate">When did you start attending Crossroads?</label>
             <input type="text"
-                   name="anniversary-date"
+                   name="anniversarydate"
                    placeholder="MM/DD/YYYY"
                    class="form-control"
-                   id="anniversary-date"
                    validate-date
                    ng-model="profile.person.Anniversary_Date"
                    ng-pattern="profile.dateFormat" />
@@ -112,9 +111,9 @@
 
     <div class="row">
         <div class="form-group col-sm-6" ng-class="{'has-error':personal.mobile.$invalid}">
-            <label for="mobile-phone">Mobile Phone</label>
+            <label for="nickname">Mobile Phone</label>
             <input type="text"
-                   class="form-control" name="mobile-phone" id="mobile-phone"
+                   class="form-control" name="mobile" id="mobile"
                    placeholder="Enter mobile phone"
                    ng-model="profile.person.Mobile_Phone"
                    ng-pattern="profile.phoneFormat"
@@ -125,13 +124,9 @@
             </ng-messages>
         </div>
         <div class="form-group col-sm-6" ng-class="{'has-error':personal.serviceprovider.$invalid}">
-            <label for="service-provider">Service Provider</label>
-            <select name="service-provider" 
-                    class="form-control col-sm-12" 
-                    id="service-provider"
-                    ng-model="profile.person.Mobile_Carrier"
-                    ng-options="providers.dp_RecordID as providers.dp_RecordName for providers in profile.serviceProviders" 
-                    ng-required="profile.serviceProviderRequired()">
+            <label for="provider">Service Provider</label>
+            <select name="serviceprovider" class="form-control col-sm-12" ng-model="profile.person.Mobile_Carrier"
+                    ng-options="providers.dp_RecordID as providers.dp_RecordName for providers in profile.serviceProviders" ng-required="profile.serviceProviderRequired()">
                 <option value=""> -- Choose One -- </option>
             </select>
             <ng-messages for="personal.serviceprovider.$error" ng-if="personal.$submitted">
@@ -173,8 +168,8 @@
                             <ul class="list-group clearfix">
                                 <li class="list-group-item clearfix">
                                     <div class="form-group col-sm-6" ng-class="{'has-error':personal.address.$invalid}">
-                                        <label for="address">Street</label>
-                                        <input name="address" ng-model="profile.person.Address_Line_1" type="text" class="form-control" id="address" placeholder="Enter street address" required>
+                                        <label for="street">Street</label>
+                                        <input name="address" ng-model="profile.person.Address_Line_1" type="text" class="form-control" id="street" placeholder="Enter street address" required>
                                         <ng-messages for="personal.address.$error" ng-if="personal.$submitted">
                                             <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}}</span>
                                         </ng-messages>
@@ -182,7 +177,7 @@
 
                                     <div class="form-group col-sm-6">
                                         <label for="street2">Street 2</label>
-                                        <input ng-model="profile.person.Address_Line_2" type="text" class="form-control" name="street2" id="street2" placeholder="Enter street address (cont.)">
+                                        <input ng-model="profile.person.Address_Line_2" type="text" class="form-control" id="street2" placeholder="Enter street address (cont.)">
                                     </div>
 
                                     <div class="form-group col-sm-6" ng-class="{'has-error':personal.city.$invalid}">
@@ -195,7 +190,7 @@
 
                                     <div class="form-group col-sm-6" ng-class="{'has-error':personal.state.$invalid}">
                                         <label for="state">State</label>
-                                        <select name="state" class="form-control col-sm-12" id="state" ng-model="profile.person.State" ng-options="state.State_Abbreviation as state.State_Abbreviation for state in profile.states" required>
+                                        <select name="state" class="form-control col-sm-12" ng-model="profile.person.State" ng-options="state.State_Abbreviation as state.State_Abbreviation for state in profile.states" required>
                                             <option value=""> -- Choose a State -- </option>
                                         </select>
                                         <div ng-messages for="personal.state.$error" ng-if="personal.$submitted">
@@ -217,7 +212,7 @@
 
                                     <div class="form-group col-sm-6" ng-class="{'has-error':personal.country.$invalid}">
                                         <label for="country">Country</label>
-                                        <select name="country" ng-model="profile.person.Foreign_Country" ng-options="country.dp_RecordName as country.dp_RecordName for country in profile.countries" class="form-control col-sm-12" id="country" required>
+                                        <select name="country" ng-model="profile.person.Foreign_Country" ng-options="country.dp_RecordName as country.dp_RecordName for country in profile.countries" class="form-control col-sm-12" required>
                                             <option value=""> -- Choose One -- </option>
                                         </select>
                                         <div ng-messages for="personal.country.$error" ng-if="personal.$submitted">
@@ -228,14 +223,13 @@
                                 </li>
                                 <li class="list-group-item clearfix" ng-class="{'has-error':personal.homephone.$invalid}">
                                     <div class="form-group col-sm-6">
-                                        <label for="home-phone">Home Phone</label>
-                                        <input name="home-phone"
+                                        <label for="homephone">Home Phone</label>
+                                        <input name="homephone"
                                                ng-model="profile.person.Home_Phone"
                                                ng-model-options="{ updateOn: 'default blur', debounce: {'default': 300, 'blur': 0} }"
                                                type="text"
                                                class="form-control"
-                                               id="home-phone" 
-                                               ng-pattern="profile.phoneFormat"
+                                               id="homephone" ng-pattern="profile.phoneFormat"
                                                placeholder="Enter home phone"
                                                ng-blur="profile.convertHomePhone()">
                                         <ng-messages for="personal.homephone.$error">
@@ -244,9 +238,9 @@
                                     </div>
                                 </li>
                                 <li class="list-group-item clearfix">
-                                    <div id="site" class="form-group col-sm-6">
-                                        <label for="provider">Crossroads Location</label>
-                                        <select class="form-control col-sm-12" id= "site" ng-model="profile.person.Congregation_ID" ng-options="congregation.dp_RecordID as congregation.dp_RecordName for congregation in profile.crossroadsLocations"></select>
+                                    <div id="Site" class="form-group col-sm-6">
+                                        <label for="crossroads-location">Crossroads Location</label>
+                                        <select class="form-control col-sm-12" ng-model="profile.person.Congregation_ID" ng-options="congregation.dp_RecordID as congregation.dp_RecordName for congregation in profile.crossroadsLocations"></select>
                                     </div>
                                 </li>
                             </ul>
