@@ -1,8 +1,8 @@
-﻿'use strict';
+﻿"use strict";
 (function () {
     angular.module("crossroads")
 
-    .config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($stateProvider, $urlRouterProvider, $httpProvider) {
+    .config(["$stateProvider", "$urlRouterProvider","$httpProvider",  function ($stateProvider, $urlRouterProvider, $httpProvider) {
 
         //================================================
         // Check if the user is connected
@@ -13,7 +13,7 @@
             var deferred = $q.defer();
 
             // Make an AJAX call to check if the user is logged in
-            $http.get('api/authenticated').success(function (user) {
+            $http.get("api/authenticated").success(function (user) {
                 // Authenticated
                 if (user.userId !== undefined) {
                     $timeout(deferred.resolve, 0);
@@ -22,9 +22,9 @@
                 // Not Authenticated
                 } else {
                     Session.clear();
-                    $rootScope.message = 'You need to log in.';
+                    $rootScope.message = "You need to log in.";
                     $timeout(function () { deferred.reject(); }, 0);
-                    $location.url('/');
+                    $location.url("/");
                 }
             });
 
@@ -54,40 +54,40 @@
     
 
         $stateProvider
-          .state('home', {
-              url: '/home',
-              templateUrl: 'app/crossroads.net/home/home.html',
-              controller: 'HomeCtrl'         
+          .state("home", {
+              url: "/home",
+              templateUrl: "app/crossroads.net/home/home.html",
+              controller: "HomeCtrl"         
           })
-          .state('login', {
-              url: '/login',
-              templateUrl: 'app/crossroads.net/login/login_page.html',
-              controller: 'LoginCtrl'
+          .state("login", {
+              url: "/login",
+              templateUrl: "app/crossroads.net/login/login_page.html",
+              controller: "LoginCtrl"
               
           })
-          .state('register', {
-              url: '/register',
-              templateUrl: 'app/crossroads.net/register/register_form.html',
-              controller: 'RegisterCtrl',
+          .state("register", {
+              url: "/register",
+              templateUrl: "app/crossroads.net/register/register_form.html",
+              controller: "RegisterCtrl",
               data: {
                   require_login: false
               }
           })
-          .state('profile', {
-              url: '/profile',
-              templateUrl: 'app/modules/profile/profile.html',
-              controller: 'crdsProfileCtrl as profile',
+          .state("profile", {
+              url: "/profile",
+              templateUrl: "app/modules/profile/profile.html",
+              controller: "crdsProfileCtrl as profile",
               resolve: {
                   loggedin: checkLoggedin
               }
           })
-          .state('profile.personal', {
-              url: '/personal',
-              controller: 'ProfilePersonalController as profile',
-              templateUrl: 'app/modules/profile/personal/profile_personal.html',
+          .state("profile.personal", {
+              url: "/personal",
+              controller: "ProfilePersonalController as profile",
+              templateUrl: "app/modules/profile/personal/profile_personal.html",
               resolve: {
-                  Profile: 'Profile',
-                  Lookup: 'Lookup',
+                  Profile: "Profile",
+                  Lookup: "Lookup",
                   genders: function(Lookup){
                       return Lookup.query({ table: "genders" }).$promise;
                   },
@@ -112,13 +112,13 @@
               }
           })
           .state("profile.account", {
-              url: '/account',
-              templateUrl: 'app/modules/profile/templates/profile_account.html'
+              url: "/account",
+              templateUrl: "app/modules/profile/templates/profile_account.html"
           })
           .state("profile.skills", {
-              url: '/skills',
-              controller: 'ProfileSkillsController as profile',
-              templateUrl: 'app/modules/profile/skills/profile_skills.html'
+              url: "/skills",
+              controller: "ProfileSkillsController as profile",
+              templateUrl: "app/modules/profile/skills/profile_skills.html"
           })
           .state("opportunities", {
               url: "/opportunities",

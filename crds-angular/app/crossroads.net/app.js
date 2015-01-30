@@ -1,20 +1,30 @@
-﻿'use strict';
+﻿"use strict";
 (function () {
-    angular.module('crossroads', ['crdsProfile', 'crdsOpportunity', 'ui.router', 'ngCookies', 'angular-growl'])
-    .run(['Session', '$rootScope', 'MESSAGES', function(Session, $rootScope, MESSAGES){
-        $rootScope.username = Session.exists('username');
+    angular.module("crossroads", ["crdsProfile", "crdsOpportunity", "ui.router", "ngCookies", "angular-growl"])
+    .run(["Session", "$rootScope", "MESSAGES", "$http", function(Session, $rootScope, MESSAGES, $http){       
         $rootScope.MESSAGES = MESSAGES;
+
+        $http.get("api/authenticated").success(function (user) {
+            // Authenticated                 
+            $rootScope.userid = user.userId;
+            $rootScope.username = user.username;
+        }).error(function (data) {
+            Session.clear();
+            $rootScope.message = "You need to log in.";
+            $rootScope.userid = null;
+            $rootScope.username = null;
+        });
     }])
-    .constant('AUTH_EVENTS', {
-            loginSuccess: 'auth-login-success',
-            loginFailed: 'auth-login-failed',
-            logoutSuccess: 'auth-logout-success',
-            sessionTimeout: 'auth-session-timeout',
-            notAuthenticated: 'auth-not-authenticated',
-            isAuthenticated : 'auth-is-authenticated',
-            notAuthorized: 'auth-not-authorized'
+    .constant("AUTH_EVENTS", {
+            loginSuccess: "auth-login-success",
+            loginFailed: "auth-login-failed",
+            logoutSuccess: "auth-logout-success",
+            sessionTimeout: "auth-session-timeout",
+            notAuthenticated: "auth-not-authenticated",
+            isAuthenticated : "auth-is-authenticated",
+            notAuthorized: "auth-not-authorized"
     })
-    .constant('MESSAGES', {
+    .constant("MESSAGES", {
         generalError: "Oh No! There was an error, please fix and try again.",
         emailInUse: "This email address is already in use by another account.",
         fieldCanNotBeBlank: "This field can not be blank.",
@@ -32,26 +42,27 @@
         failedResponse: "Something went wrong, please try again. If the problem persists contact the administrator"
 
     }).config(function(growlProvider) {
-        growlProvider.globalPosition('top-center');
+        growlProvider.globalPosition("top-center");
         growlProvider.globalTimeToLive(6000);
         growlProvider.globalDisableIcons(true);
         growlProvider.globalDisableCountDown(true);
     })
-    .controller('appCtrl', ['$scope', '$rootScope', 'MESSAGES', 'growl', function ($scope, $rootScope, MESSAGES, growl) {
+    .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "growl", "Session","$http", function ($scope, $rootScope, MESSAGES, growl, Session, $http) {
 
-        $rootScope.$on('notify.success', function (event, message) {
+        
+        $rootScope.$on("notify.success", function (event, message) {
             growl.success(message);
         });
 
-        $rootScope.$on('notify.info', function (event, message) {
+        $rootScope.$on("notify.info", function (event, message) {
             growl.info(message);
         });
 
-        $rootScope.$on('notify.warning', function (event, message) {
+        $rootScope.$on("notify.warning", function (event, message) {
             growl.warning(message);
         });
 
-        $rootScope.$on('notify.error', function (event, message) {
+        $rootScope.$on("notify.error", function (event, message) {
             growl.error(message);
         });
     }]);
