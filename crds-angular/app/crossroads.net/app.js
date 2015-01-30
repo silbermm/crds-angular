@@ -9,7 +9,6 @@
             $rootScope.userid = user.userId;
             $rootScope.username = user.username;
         }).error(function (data) {
-            console.log("Clear the session");
             Session.clear();
             $rootScope.message = "You need to log in.";
             $rootScope.userid = null;
