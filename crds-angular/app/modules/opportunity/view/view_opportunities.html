@@ -1,0 +1,12 @@
+﻿
+<div class="alert alert-success" role="alert" ng-if="opportunity.created">
+    {{$root.MESSAGES.succesfulResponse}}
+</div>
+
+<div class="alert alert-danger" role="alert" ng-if="opportunity.rejected">
+    {{$root.MESSAGES.failedResponse}}
+</div>
+
+<section>
+    <button class="btn btn-primary" ng-click="opportunity.submitRequest(115)"> Request to Join Kids Club </button>
+</section>

@@ -120,6 +120,14 @@
               controller: 'ProfileSkillsController as profile',
               templateUrl: 'app/modules/profile/skills/profile_skills.html'
           })
+          .state("opportunities", {
+              url: "/opportunities",
+              controller: "ViewOpportunitiesController as opportunity",
+              templateUrl: "app/modules/opportunity/view/view_opportunities.html",
+              resolve: {
+                  loggedin: checkLoggedin
+              }
+          })
           ;
 
         $urlRouterProvider.otherwise("/home");

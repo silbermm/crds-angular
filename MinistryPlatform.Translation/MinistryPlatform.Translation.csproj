@@ -87,6 +87,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Services\UpdatePageRecordService.cs" />
+    <Compile Include="Utils\PlatformUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

@@ -7,7 +7,7 @@
 
         _this.person = person;
         _this.genders = genders;
-        _this.martialStatuses = maritalStatuses;
+        _this.maritalStatuses = maritalStatuses;
         _this.serviceProviders = serviceProviders;
         _this.states = states;
         _this.countries = countries;
