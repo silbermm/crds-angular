@@ -162,5 +162,20 @@ namespace MinistryPlatform.Translation.Test
 
             Assert.IsNotNull(participants);
         }
+
+        [Test]
+        public void ShouldNotDeleteResponse()
+        {
+            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            const int opportunityId = 113;
+            const string comment = "Test Comment";
+
+            //Create a Response to delete
+            var responseId = OpportunityService.RespondToOpportunity(token, opportunityId, comment);
+
+            //Try to delete Response, should fail
+            Assert.Throws<FaultException<ExceptionDetail>>(() => DeletePageRecordService.DeleteRecord(382, responseId, null, token));
+            
+        }
     }
 }
