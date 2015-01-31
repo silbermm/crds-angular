@@ -49,7 +49,7 @@ namespace MinistryPlatform.Translation.Services
         {
             try
             {
-                var record = GetPageRecordService.GetRecordsDict(Convert.ToInt32(ConfigurationManager.AppSettings["ChangePassword"]), token).Single();
+                var record = MinistryPlatformService.GetRecordsDict(Convert.ToInt32(ConfigurationManager.AppSettings["ChangePassword"]), token).Single();
                 record["Password"] = newPassword;
                 MinistryPlatformService.UpdateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["ChangePassword"]), record, token);
                 return true;
@@ -114,7 +114,7 @@ namespace MinistryPlatform.Translation.Services
                     if (WebOperationContext.Current != null)
                         WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
                     var results =
-                        GetPageRecordService.GetRecordsDict(
+                        MinistryPlatformService.GetRecordsDict(
                             Convert.ToInt32(ConfigurationManager.AppSettings["MyParticipantRecords"]), token);
                     var participant = new Participant
                     {

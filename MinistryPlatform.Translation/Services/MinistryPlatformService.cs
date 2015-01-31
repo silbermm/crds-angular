@@ -2,11 +2,66 @@
 using System.Collections.Generic;
 using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Utils;
+using MinistryPlatform.Translation.Helpers;
+using Newtonsoft.Json.Linq;
 
 namespace MinistryPlatform.Translation.Services
 {
     public class MinistryPlatformService
     {
+        public static List<Dictionary<string, object>> GetLookupRecords(int pageId, String token)
+        {
+            SelectQueryResult result = PlatformUtils.Call<SelectQueryResult>(token,
+                platformClient => platformClient.GetPageLookupRecords(pageId, string.Empty, string.Empty, 0));
+            return MPFormatConversion.MPFormatToList(result);
+        }
+
+        public static Dictionary<string, object> GetLookupRecord(int pageId, string search, String token, int maxNumberOfRecordsToReturn = 100)
+        {
+            SelectQueryResult result = PlatformUtils.Call<SelectQueryResult>(token,
+                platformClient => platformClient.GetPageLookupRecords(pageId, search, null, maxNumberOfRecordsToReturn));
+            return MPFormatConversion.MPFormatToDictionary(result);
+        }
+
+        public static SelectQueryResult GetRecords(int pageId, String token)
+        {
+            return PlatformUtils.Call<SelectQueryResult>(token,
+                platformClient => platformClient.GetPageRecords(pageId, string.Empty, string.Empty, 0));
+        }
+
+        public static JArray GetRecordsArr(int pageId, String token)
+        {
+            return MPFormatConversion.MPFormatToJson(GetRecords(pageId, token));
+        }
+
+        public static List<Dictionary<string, object>> GetRecordsDict(int pageId, String token)
+        {
+            return MPFormatConversion.MPFormatToList(GetRecords(pageId, token));
+        }
+
+        public static SelectQueryResult GetRecord(int pageId, int recordId, String token, bool quickadd = false)
+        {
+            return PlatformUtils.Call<SelectQueryResult>(token,
+                platformClient => platformClient.GetPageRecord(pageId, recordId, quickadd));
+        }
+
+        public static JArray GetRecordArr(int pageId, int recordId, String token, bool quickadd = false)
+        {
+            return MPFormatConversion.MPFormatToJson(GetRecord(pageId, recordId, token, quickadd));
+        }
+
+        public static Dictionary<string, object> GetRecordDict(int pageId, int recordId, String token, bool quickadd = false)
+        {
+            return MPFormatConversion.MPFormatToDictionary(GetRecord(pageId, recordId, token, quickadd));
+        }
+
+        public static List<Dictionary<string, object>> GetSubPageRecords(int subPageId, int recordId, String token)
+        {
+            SelectQueryResult result = PlatformUtils.Call<SelectQueryResult>(token,
+                platformClient => platformClient.GetSubpageRecords(subPageId, recordId, string.Empty, string.Empty, 0));
+            return MPFormatConversion.MPFormatToList(result);
+        }
+
         public static int CreateRecord(int pageId, Dictionary<string, object> dictionary, String token,
             bool quickadd = false)
         {

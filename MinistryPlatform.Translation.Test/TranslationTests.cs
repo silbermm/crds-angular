@@ -57,7 +57,7 @@ namespace MinistryPlatform.Translation.Test
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
             var recordId = AuthenticationService.GetContactId(token);
             Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
-            Dictionary<string, object> record = GetPageRecordService.GetRecordDict(pageId, recordId, token);
+            Dictionary<string, object> record = MinistryPlatformService.GetRecordDict(pageId, recordId, token);
             Assert.IsNotNull(record);
             Assert.IsNotEmpty(record);
             Assert.AreEqual(FIRSTNAME, record["First_Name"]);
@@ -69,7 +69,7 @@ namespace MinistryPlatform.Translation.Test
             var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["MyContact"]);
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
             var recordId = AuthenticationService.GetContactId(token);
-            Dictionary<string, object> record = GetPageRecordService.GetRecordDict(pageId, recordId, token);
+            Dictionary<string, object> record = MinistryPlatformService.GetRecordDict(pageId, recordId, token);
             record["First_Name"] = "Created";
             record["Email_Address"] = "test@testemail.com";
             int newRecordId = MinistryPlatformService.CreateRecord(pageId, record, token);
@@ -83,7 +83,7 @@ namespace MinistryPlatform.Translation.Test
         {
             var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["Attributes"]);
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            var records = GetPageRecordService.GetRecords(pageId, token);
+            var records = MinistryPlatformService.GetRecords(pageId, token);
             Assert.IsNotNull(records);
         }
 
@@ -109,7 +109,7 @@ namespace MinistryPlatform.Translation.Test
             Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
 
             var attributePageId = Convert.ToInt32(ConfigurationManager.AppSettings["Attributes"]);
-            var dentist = GetPageRecordService.GetLookupRecord(attributePageId,
+            var dentist = MinistryPlatformService.GetLookupRecord(attributePageId,
                 "Dentist", token, 1);
             Assert.IsNotNull(dentist);
 
@@ -130,7 +130,7 @@ namespace MinistryPlatform.Translation.Test
         {
             var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["OpportunityResponses"]);
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            var records = GetPageRecordService.GetRecords(pageId, token);
+            var records = MinistryPlatformService.GetRecords(pageId, token);
             Assert.IsNotNull(records);
         }
 
@@ -166,6 +166,7 @@ namespace MinistryPlatform.Translation.Test
         [Test]
         public void ShouldNotDeleteResponse()
         {
+            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["OpportunityResponses"]);
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
             const int opportunityId = 113;
             const string comment = "Test Comment";
@@ -174,7 +175,7 @@ namespace MinistryPlatform.Translation.Test
             var responseId = OpportunityService.RespondToOpportunity(token, opportunityId, comment);
 
             //Try to delete Response, should fail
-            Assert.Throws<FaultException<ExceptionDetail>>(() => MinistryPlatformService.DeleteRecord(382, responseId, null, token));
+            Assert.Throws<FaultException<ExceptionDetail>>(() => MinistryPlatformService.DeleteRecord(pageId, responseId, null, token));
             
         }
     }

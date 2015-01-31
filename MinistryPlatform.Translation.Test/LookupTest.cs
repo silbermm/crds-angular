@@ -25,7 +25,7 @@ namespace MinistryPlatform.Translation.Test
 
             var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["Attributes"]);
 
-            var attribute = MinistryPlatform.Translation.Services.GetPageRecordService.GetLookupRecord(pageId, attributeName, token, 1);
+            var attribute = MinistryPlatformService.GetLookupRecord(pageId, attributeName, token, 1);
             Assert.IsNotNull(attribute);
         }
 
@@ -36,7 +36,7 @@ namespace MinistryPlatform.Translation.Test
             Assert.IsNotNull(token);
             var contactId = AuthenticationService.GetContactId(token);
             Assert.IsNotNull(contactId);
-            var emails = MinistryPlatform.Translation.Services.LookupService.EmailSearch(EMAIL, token);
+            var emails = LookupService.EmailSearch(EMAIL, token);
             Assert.IsNotEmpty(emails);
         }
 
@@ -47,7 +47,7 @@ namespace MinistryPlatform.Translation.Test
             Assert.IsNotNull(token);
             var contactId = AuthenticationService.GetContactId(token);
             Assert.IsNotNull(contactId);
-            var emails = MinistryPlatform.Translation.Services.LookupService.EmailSearch(EMAIL.ToUpper(), token);
+            var emails = LookupService.EmailSearch(EMAIL.ToUpper(), token);
             Assert.IsNotEmpty(emails);
         }
 
@@ -58,7 +58,7 @@ namespace MinistryPlatform.Translation.Test
             Assert.IsNotNull(token);
             var contactId = AuthenticationService.GetContactId(token);
             Assert.IsNotNull(contactId);
-            var emails = MinistryPlatform.Translation.Services.LookupService.EmailSearch("CRAP@CRAP.com", token);
+            var emails = LookupService.EmailSearch("CRAP@CRAP.com", token);
             Assert.IsEmpty(emails);
         }
 
@@ -67,7 +67,7 @@ namespace MinistryPlatform.Translation.Test
         {
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
             Assert.IsNotNull(token);
-            List<Dictionary<string,object>> genders = MinistryPlatform.Translation.Services.LookupService.Genders(token);
+            List<Dictionary<string,object>> genders = LookupService.Genders(token);
             Assert.IsNotEmpty(genders);
             genders.ForEach(x =>
             {
@@ -80,7 +80,7 @@ namespace MinistryPlatform.Translation.Test
         {
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
             Assert.IsNotNull(token);
-            List<Dictionary<string, object>> maritalStatus = MinistryPlatform.Translation.Services.LookupService.MaritalStatus(token);
+            List<Dictionary<string, object>> maritalStatus = LookupService.MaritalStatus(token);
             Assert.IsNotEmpty(maritalStatus);
             maritalStatus.ForEach(x =>
             {
@@ -93,7 +93,7 @@ namespace MinistryPlatform.Translation.Test
         {
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
             Assert.IsNotNull(token);
-            List<Dictionary<string, object>> ServiceProviders = MinistryPlatform.Translation.Services.LookupService.ServiceProviders(token);
+            List<Dictionary<string, object>> ServiceProviders = LookupService.ServiceProviders(token);
             Assert.IsNotEmpty(ServiceProviders);
             ServiceProviders.ForEach(x =>
             {
@@ -106,7 +106,7 @@ namespace MinistryPlatform.Translation.Test
         {
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
             Assert.IsNotNull(token);
-            List<Dictionary<string, object>> States = MinistryPlatform.Translation.Services.LookupService.States(token);
+            List<Dictionary<string, object>> States = LookupService.States(token);
             Assert.IsNotEmpty(States);
             States.ForEach(x =>
             {
@@ -119,7 +119,7 @@ namespace MinistryPlatform.Translation.Test
         {
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
             Assert.IsNotNull(token);
-            List<Dictionary<string, object>> Countries = MinistryPlatform.Translation.Services.LookupService.Countries(token);
+            List<Dictionary<string, object>> Countries = LookupService.Countries(token);
             Assert.IsNotEmpty(Countries);
             Countries.ForEach(x =>
             {
@@ -132,7 +132,7 @@ namespace MinistryPlatform.Translation.Test
         {
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
             Assert.IsNotNull(token);
-            List<Dictionary<string, object>> CrossroadsLocations = MinistryPlatform.Translation.Services.LookupService.CrossroadsLocations(token);
+            List<Dictionary<string, object>> CrossroadsLocations = LookupService.CrossroadsLocations(token);
             Assert.IsNotEmpty(CrossroadsLocations);
             var clifton = new Dictionary<string, object>();
             clifton.Add("dp_RecordID", 11);

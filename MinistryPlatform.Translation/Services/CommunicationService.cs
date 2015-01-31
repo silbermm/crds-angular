@@ -15,15 +15,15 @@ namespace MinistryPlatform.Translation.Services
         {
             int pNum = Convert.ToInt32( ConfigurationManager.AppSettings["MyContact"]);
             int hNum = Convert.ToInt32(ConfigurationManager.AppSettings["MyHousehold"]);
-            var profile = GetPageRecordService.GetRecordDict(pNum, userId, token);
-            var household = GetPageRecordService.GetRecordDict(hNum, (int)profile["Household_ID"], token);
+            var profile = MinistryPlatformService.GetRecordDict(pNum, userId, token);
+            var household = MinistryPlatformService.GetRecordDict(hNum, (int)profile["Household_ID"], token);
             return new CommunicationPreferences
             {
                 Bulk_Email_Opt_Out = (bool)profile["Bulk_Email_Opt_Out"],
                 Bulk_Mail_Opt_Out = (bool)household["Bulk_Mail_Opt_Out"],
                 Bulk_SMS_Opt_Out = (bool)profile["Bulk_SMS_Opt_Out"]
             };
-            //return GetPageRecordService.GetRecordsDict(Convert.ToInt32(pageNumber), token);
+            //return MinistryPlatformService.GetRecordsDict(Convert.ToInt32(pageNumber), token);
         }
 
         public static bool SetEmailSMSPreferences(String token, Dictionary<string,object> prefs){

@@ -20,10 +20,10 @@ namespace crds_angular.Services
             var householdDictionary = getDictionary(person.GetHousehold());
             var addressDictionary = getDictionary(person.GetAddress());
             addressDictionary.Add("State/Region", addressDictionary["State"]);
-
-            MinistryPlatform.Translation.Services.MinistryPlatformService.UpdateRecord(455, contactDictionary, token);
-            MinistryPlatform.Translation.Services.MinistryPlatformService.UpdateRecord(465, householdDictionary, token);
-            MinistryPlatform.Translation.Services.MinistryPlatformService.UpdateRecord(468, addressDictionary, token); 
+            
+            MinistryPlatformService.UpdateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["MyContact"]), contactDictionary, token);
+            MinistryPlatformService.UpdateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["MyHousehold"]), householdDictionary, token);
+            MinistryPlatformService.UpdateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["MyAddresses"]), addressDictionary, token); 
         }
 
         public List<Models.Crossroads.Skill> getLoggedInUserSkills(int contactId, string token)
@@ -36,7 +36,7 @@ namespace crds_angular.Services
         {
             var contactId = AuthenticationService.GetContactId(token);
             var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["MyProfile"]);
-            JArray contact = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecords(pageId, token);
+            JArray contact = MinistryPlatformService.GetRecordsArr(pageId, token);
             if (contact.Count == 0)
             {
                 throw new InvalidOperationException("getLoggedInUserProfile - no data returned.");
@@ -77,7 +77,7 @@ namespace crds_angular.Services
 
         private List<Models.Crossroads.Skill> GetSkills(int recordId, string token)
         {
-            var attributes = MinistryPlatform.Translation.Services.GetMyRecords.GetMyAttributes(recordId, token);
+            var attributes = GetMyRecords.GetMyAttributes(recordId, token);
 
             var skills = AutoMapper.Mapper.Map<List<MinistryPlatform.Models.Attribute>, List<Models.Crossroads.Skill>>(attributes);
 
