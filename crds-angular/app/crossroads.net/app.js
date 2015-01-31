@@ -1,7 +1,7 @@
 ﻿"use strict";
 (function () {
-    angular.module("crossroads", ["crdsProfile", "crdsOpportunity", "ui.router", "ngCookies", "angular-growl"])
-    .run(["Session", "$rootScope", "MESSAGES", "$http", function(Session, $rootScope, MESSAGES, $http){       
+    angular.module("crossroads", ["ngResource","crdsProfile", "crdsOpportunity", "crdsCMS.services", "ui.router", "ngCookies", "angular-growl"])
+    .run(["Session", "$rootScope", "MESSAGES", "$http", function (Session, $rootScope, MESSAGES, $http) {
         $rootScope.MESSAGES = MESSAGES;
 
         $http.get("api/authenticated").success(function (user) {
@@ -24,22 +24,23 @@
             isAuthenticated : "auth-is-authenticated",
             notAuthorized: "auth-not-authorized"
     })
+        //TODO I'm not sure if this is the best way, but I didn't want to hard code the IDs in the code...
     .constant("MESSAGES", {
-        generalError: "Oh No! There was an error, please fix and try again.",
-        emailInUse: "This email address is already in use by another account.",
-        fieldCanNotBeBlank: "This field can not be blank.",
-        invalidEmail: "Email address entered does not appear to be valid.",
-        invalidPhone: "Phone number entered does not appear to be valid.",
-        invalidData: "Date entered does not appear to be valid.",
-        profileUpdated: "Great! You successfully updated your profile information",
-        photoTooSmall: "The photo you attempted to upload was too small.  Please choose another photo.",
-        credentialsBlank: "Hold up! Username and password can't be blank",
-        loginFailed: "Oops! Login failed. Please try again or use <a>Forgot Password</a>",
-        invalidZip: "Zip code entered does not appear to be valid.",
-        invalidPassword: "New password is invalid.  It must be at least 6 characters in length.",
-        successfullRegistration: "Well done. You have successfully registered.",
-        succesfulResponse: "Thank you for your interest in joining our team. Someone is reviewing your submission and will respond to you shortly",
-        failedResponse: "Something went wrong, please try again. If the problem persists contact the administrator"
+        generalError: 1,
+        emailInUse: 2,
+        fieldCanNotBeBlank: 3,
+        invalidEmail: 4,
+        invalidPhone: 5,
+        invalidData: 6,
+        profileUpdated: 7,
+        photoTooSmall: 8,
+        credentialsBlank: 9,
+        loginFailed: 10,
+        invalidZip: 11,
+        invalidPassword: 12,
+        successfullRegistration: 13,
+        succesfulResponse: 14,
+        failedResponse: 15
 
     }).config(function(growlProvider) {
         growlProvider.globalPosition("top-center");
@@ -47,23 +48,16 @@
         growlProvider.globalDisableIcons(true);
         growlProvider.globalDisableCountDown(true);
     })
-    .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "growl", "Session","$http", function ($scope, $rootScope, MESSAGES, growl, Session, $http) {
-
-        
-        $rootScope.$on("notify.success", function (event, message) {
-            growl.success(message);
+    .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "growl", "Session", "$http", "Message", function ($scope, $rootScope, MESSAGES, growl, Session, $http, Message) {
+        $rootScope.$on("notify", function (event, id) {
+            var message = Message.get({ id: id }, function () {
+                growl[message.message.type](message.message.message)
+            });
         });
-
-        $rootScope.$on("notify.info", function (event, message) {
-            growl.info(message);
-        });
-
-        $rootScope.$on("notify.warning", function (event, message) {
-            growl.warning(message);
-        });
-
-        $rootScope.$on("notify.error", function (event, message) {
-            growl.error(message);
+        $rootScope.$on("context", function (event, id) {
+            var message = Message.get({ id: id }, function () {
+                return message.message.message;
+            });
         });
     }]);
 })()
