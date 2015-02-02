@@ -48,16 +48,30 @@
         growlProvider.globalDisableIcons(true);
         growlProvider.globalDisableCountDown(true);
     })
-    .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "growl", "Session", "$http", "Message", function ($scope, $rootScope, MESSAGES, growl, Session, $http, Message) {
-        $rootScope.$on("notify", function (event, id) {
-            var message = Message.get({ id: id }, function () {
-                growl[message.message.type](message.message.message)
+    .filter('html', ['$sce', function ($sce) {
+        return function (val) {
+            return $sce.trustAsHtml(val);
+        };
+    }])
+    .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "growl", "Session", "$http", "Message",
+        function ($scope, $rootScope, MESSAGES, growl, Session, $http, Message) {
+
+            var messagesRequest = Message.get("", function () {
+                messagesRequest.messages.unshift(null);//Adding a null so the indexes match the DB
+                //TODO Refactor to not use rootScope, should build an NgTemplate to use with NgMessages
+                $rootScope.messages = messagesRequest.messages; 
             });
-        });
-        $rootScope.$on("context", function (event, id) {
-            var message = Message.get({ id: id }, function () {
-                return message.message.message;
+
+            $rootScope.$on("notify", function (event, id) {
+                var message = Message.get({ id: id }, function () {
+                    growl[message.message.type](message.message.message)
+                });
             });
-        });
-    }]);
+            $rootScope.$on("context", function (event, id) {
+                var message = Message.get({ id: id }, function () {
+                    return message.message.message;
+                });
+            });
+        }
+    ]);
 })()

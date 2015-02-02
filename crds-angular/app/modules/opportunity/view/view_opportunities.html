@@ -1,10 +1,10 @@
 ﻿
 <div class="alert alert-success" role="alert" ng-if="opportunity.created">
-    {{$root.MESSAGES.succesfulResponse}}
+    {{$root.messages[$root.MESSAGES.succesfulResponse].message}}
 </div>
 
 <div class="alert alert-danger" role="alert" ng-if="opportunity.rejected">
-    {{$root.MESSAGES.failedResponse}}
+    {{$root.messages[$root.MESSAGES.failedResponse].message}}
 </div>
 
 <section>
