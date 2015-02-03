@@ -105,7 +105,7 @@
                    ng-pattern="profile.phoneFormat"
                    ng-model-options="{ debounce : { 'default' : 500, blur : 0 } }"
                    ng-blur="profile.convertPhone()">
-            <ng-messages for="personal['mobile-phone'].$error" ng-if="personal.$submitted || personal.$touched">
+            <ng-messages for="personal['mobile-phone'].$error">
                 <!-- TODO Create custom phone validator here so we can use the template instead of the override below -->
                 <span ng-message="pattern"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"</span></span>
             </ng-messages>
@@ -116,8 +116,7 @@
                     ng-options="providers.dp_RecordID as providers.dp_RecordName for providers in profile.serviceProviders" ng-required="profile.serviceProviderRequired()">
                 <option value=""> -- Choose One -- </option>
             </select>
-            <ng-messages for="personal['service-provider'].$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
-
+            <ng-messages for="personal['service-provider'].$error" ng-messages-include="on-submit-messages"></ng-messages>
         </div>
     </div>
 
