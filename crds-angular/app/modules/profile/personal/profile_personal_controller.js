@@ -67,7 +67,7 @@
             }
         };
         _this.serviceProviderRequired = function () {
-            if (_this.person.Mobile_Phone === "undefined" || _this.person.Mobile_Phone === null || _this.person.Mobile_Phone === "") {
+            if (_this.person.Mobile_Phone === "undefined" || _this.person.Mobile_Phone === null || _this.person.Mobile_Phone === "" || this.form.personal["mobile-phone"].$invalid) {
                 return false;
             }
             return true;
