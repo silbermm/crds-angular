@@ -1,10 +1,10 @@
-﻿
+﻿<!-- TODO Can this error handling be updated to utilize ngMessages? -->
 <div class="alert alert-success" role="alert" ng-if="opportunity.created">
-    {{$root.MESSAGES.succesfulResponse}}
+    <span ng-bind-html="$root.messages[$root.MESSAGES.succesfulResponse].message | html"></span>
 </div>
 
 <div class="alert alert-danger" role="alert" ng-if="opportunity.rejected">
-    {{$root.MESSAGES.failedResponse}}
+    <span ng-bind-html="$root.messages[$root.MESSAGES.failedResponse].message | html"></span>
 </div>
 
 <section>

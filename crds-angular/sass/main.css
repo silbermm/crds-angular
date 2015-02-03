@@ -2254,6 +2254,10 @@ textarea.input-lg, .input-group-lg > textarea.form-control, .input-group-lg > te
 .has-error .form-control-feedback {
   color: #a94442; }
 
+.has-error span {
+color: #d9534f;
+}
+
 .has-feedback label ~ .form-control-feedback {
   top: 27px; }
 .has-feedback label.sr-only ~ .form-control-feedback {
