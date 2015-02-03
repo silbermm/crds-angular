@@ -94,7 +94,7 @@
     </div>
 
     <div class="row" ng-controller="crdsDatePickerCtrl">
-        <div class="form-group col-sm-6" ng-controller="crdsDatePickerCtrl" ng-class="{'has-error':personal.anniversarydate.$invalid}">
+        <div class="form-group col-sm-6" ng-controller="crdsDatePickerCtrl" ng-class="{'has-error':personal['anniversary-date'].$invalid}">
             <label for="anniversary-date">When did you start attending Crossroads?</label>
             <input type="text"
                    name="anniversary-date"
@@ -104,7 +104,7 @@
                    validate-date
                    ng-model="profile.person.Anniversary_Date"
                    ng-pattern="profile.dateFormat" />
-            <ng-messages for="personal.anniversarydate.$error">
+            <ng-messages for="personal['anniversary-date'].$error">
                 <span ng-message="pattern">{{$root.MESSAGES.invalidData}}</span>
                 <span ng-message="invalidDate">{{$root.MESSAGES.invalidData}}</span>
             </ng-messages>
@@ -112,7 +112,7 @@
     </div>
 
     <div class="row">
-        <div class="form-group col-sm-6" ng-class="{'has-error':personal.mobile.$invalid}">
+        <div class="form-group col-sm-6" ng-class="{'has-error':personal['mobile-phone'].$invalid}">
             <label for="mobile-phone">Mobile Phone</label>
             <input type="text"
                    class="form-control" name="mobile-phone" id="mobile-phone"
@@ -121,7 +121,7 @@
                    ng-pattern="profile.phoneFormat"
                    ng-model-options="{ debounce : { 'default' : 500, blur : 0 } }"
                    ng-blur="profile.convertPhone()">
-            <ng-messages for="personal.mobile.$error" ng-if="personal.$submitted || personal.$touched">
+            <ng-messages for="personal['mobile-phone'].$error" ng-if="personal.$submitted || personal.$touched">
                 <span ng-message="pattern">{{$root.MESSAGES.invalidPhone}}</span>
             </ng-messages>
         </div>
