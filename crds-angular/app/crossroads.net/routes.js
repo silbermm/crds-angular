@@ -36,21 +36,23 @@
  
         //================================================
         // Add an interceptor for AJAX errors
+        //
+        // Commented out because it is redirecting pages you should have access to without logging in to home
         //================================================
-        $httpProvider.interceptors.push(function ($q, $log, $location) {
-            return {
-                'response': function (response) {
-                    return response
-                },
-                'responseError': function (rejection) {
-                    if(rejection.status == 401){
-                        console.log("user is not authenticated!!!");
-                        $location.url("/");
-                    }
-                    return $q.reject(rejection)
-                }
-            }
-        });
+        //$httpProvider.interceptors.push(function ($q, $log, $location) {
+        //    return {
+        //        'response': function (response) {
+        //            return response
+        //        },
+        //        'responseError': function (rejection) {
+        //            if(rejection.status == 401){
+        //                console.log("user is not authenticated!!!");
+        //                $location.url("/");
+        //            }
+        //            return $q.reject(rejection)
+        //        }
+        //    }
+        //});
     
 
         $stateProvider
