@@ -6,11 +6,8 @@
         <div class="form-group col-sm-6" ng-class="{'has-error':personal.firstName.$invalid}">
             <label for="first-name">First Name</label>
             <input type="text" name="first-name" class="form-control" id="first-name" placeholder="Enter first name" ng-model="profile.person.First_Name" ng-model-options="{ debounce : { 'default' : 500, blur : 0 } }" required>
-            <ng-messages for="personal.firstName.$error" ng-if="personal.$submitted">
-
-                <span ng-message="required">{{$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message}}</span>
-            </ng-messages>
-        </div>
+            <ng-messages for="personal.firstName.$error" ng-if="personal.$submitted" ng-messages-include="error-messages">
+</div>
 
         <div class="form-group col-sm-6">
             <label for="middle-name">Middle Name</label>
@@ -173,8 +170,7 @@
                                     <div class="form-group col-sm-6" ng-class="{'has-error':personal.address.$invalid}">
                                         <label for="address">Street</label>
                                         <input name="address" ng-model="profile.person.Address_Line_1" type="text" class="form-control" id="address" placeholder="Enter street address" required>
-                                        <ng-messages for="personal.address.$error" ng-if="personal.$submitted">
-                                            <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span></span>
+                                        <ng-messages for="personal.address.$error" ng-if="personal.$submitted" ng-messages-include="error-messages">
                                         </ng-messages>
                                     </div>
 
@@ -186,9 +182,7 @@
                                     <div class="form-group col-sm-6" ng-class="{'has-error':personal.city.$invalid}">
                                         <label for="city">City</label>
                                         <input name="city" ng-model="profile.person.City" type="text" class="form-control" id="city" placeholder="Enter city" required>
-                                        <ng-messages for="personal.city.$error" ng-if="personal.$submitted">
-                                            <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message</span></span>
-                                        </ng-messages>
+                                        <ng-messages for="personal.city.$error" ng-if="personal.$submitted" ng-messages-include="error-messages"></ng-messages>
                                     </div>
 
                                     <div class="form-group col-sm-6" ng-class="{'has-error':personal.state.$invalid}">
@@ -196,19 +190,15 @@
                                         <select name="state" id="state" class="form-control col-sm-12" ng-model="profile.person.State" ng-options="state.State_Abbreviation as state.State_Abbreviation for state in profile.states" required>
                                             <option value=""> -- Choose a State -- </option>
                                         </select>
-                                        <div ng-messages for="personal.state.$error" ng-if="personal.$submitted">
-                                            <span ng-message="required">{{$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message}}</span>
-                                        </div>
+                                        <ng-messages for="personal.state.$error" ng-if="personal.$submitted" ng-messages-include="error-messages"></ng-messages>
                                     </div>
 
                                     <div class="form-group col-sm-6" ng-class="{'has-error':personal.zip.$invalid}">
                                         <label for="zip">Zip</label>
                                         <input name="zip" ng-model="profile.person.Postal_Code" type="text" class="form-control" id="zip" placeholder="Enter zip code" required ng-pattern="profile.zipFormat">
-                                        <ng-messages for="personal.zip.$error" ng-if="personal.$submitted">
-                                            <span ng-message="required">{{$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message}}</span>
-                                        </ng-messages>
+                                        <ng-messages for="personal.zip.$error" ng-if="personal.$submitted" ng-messages-include="error-messages"></ng-messages>
                                         <ng-messages for="personal.zip.$error">
-                                            <span ng-message="pattern">{{$root.messages[$root.MESSAGES.invalidZip].message}}</span>
+                                            <span ng-message="pattern"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidZip].message | html"</span></span>
                                         </ng-messages>
 
                                     </div>
@@ -218,9 +208,7 @@
                                         <select name="country" id="country" ng-model="profile.person.Foreign_Country" ng-options="country.dp_RecordName as country.dp_RecordName for country in profile.countries" class="form-control col-sm-12" required>
                                             <option value=""> -- Choose One -- </option>
                                         </select>
-                                        <div ng-messages for="personal.country.$error" ng-if="personal.$submitted">
-                                            <span ng-message="required">{{$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message}}</span>
-                                        </div>
+                                        <ng-messages for="personal.country.$error" ng-if="personal.$submitted" ng-messages-include="error-messages"></ng-messages>
                                     </div>
 
                                 </li>
@@ -236,8 +224,9 @@
                                                ng-pattern="profile.phoneFormat"
                                                placeholder="Enter home phone"
                                                ng-blur="profile.convertHomePhone()">
-                                        <ng-messages for="personal.homephone.$error">
-                                            <span ng-message="pattern">{{$root.messages[$root.MESSAGES.fieldCanNotBeBlank].invalidPhone}}</span>
+                                        <ng-messages for="personal.homephone.$error" ng-messages-include="error-messages">
+                                            <!-- TODO Create custom phone validator here so we can use the template instead of the override below -->
+                                            <span ng-message="pattern"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"</span></span>
                                         </ng-messages>
                                     </div>
                                 </li>

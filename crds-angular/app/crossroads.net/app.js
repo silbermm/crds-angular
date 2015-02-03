@@ -24,7 +24,7 @@
             isAuthenticated : "auth-is-authenticated",
             notAuthorized: "auth-not-authorized"
     })
-        //TODO I'm not sure if this is the best way, but I didn't want to hard code the IDs in the code...
+        //TODO Pull out to service and/or config file
     .constant("MESSAGES", {
         generalError: 1,
         emailInUse: 2,
@@ -58,15 +58,16 @@
 
             var messagesRequest = Message.get("", function () {
                 messagesRequest.messages.unshift(null);//Adding a null so the indexes match the DB
-                //TODO Refactor to not use rootScope, should build an NgTemplate to use with NgMessages
+                //TODO Refactor to not use rootScope, now using ngTemplate w/ ngMessages but also need to pull this out into a service
                 $rootScope.messages = messagesRequest.messages; 
             });
 
+            $rootScope.error_messages = '<div ng-message="required">This field is required</div><div ng-message="minlength">This field is too short</div>';
+
             $rootScope.$on("notify", function (event, id) {
-                var message = Message.get({ id: id }, function () {
-                    growl[message.message.type](message.message.message)
-                });
+                growl[$rootScope.messages[id].type]($rootScope.messages[id].message);
             });
+
             $rootScope.$on("context", function (event, id) {
                 var message = Message.get({ id: id }, function () {
                     return message.message.message;
