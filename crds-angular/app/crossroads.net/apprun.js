@@ -18,7 +18,6 @@
             if (Session.isActive()) {
                 $log.debug("Session is active, check if authenticated");
                 $http.get("api/authenticated").success(function (user) {
-                    // Authenticated                    
                     $log.debug("No need to clear session");
                     $rootScope.userid = user.userId;
                     $rootScope.username = user.username;                    

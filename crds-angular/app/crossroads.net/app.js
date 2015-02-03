@@ -1,7 +1,7 @@
 ﻿"use strict";
 (function () {
 
-    angular.module("crossroads", ["crdsProfile", "crdsOpportunity", "ui.router", "ngCookies", "angular-growl"])
+    angular.module("crossroads", ["crdsProfile", "crdsCMS.services", "crdsOpportunity", "ui.router", "ngCookies", "angular-growl"])
 
     .constant("AUTH_EVENTS", {
             loginSuccess: "auth-login-success",
