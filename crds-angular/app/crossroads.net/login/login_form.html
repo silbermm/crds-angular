@@ -10,8 +10,13 @@
                 </div>
                 <div>
                     <!-- TODO Update to use ngMessages -->
-                    <span ng-show="nav_login.userName.$invalid && pending || nav_login.password.$invalid && pending">{{$root.messages[$root.MESSAGES.credentialsBlank].message}}</span>
-                    <span ng-show="loginFailed">{{$root.messages[$root.MESSAGES.loginFailed].message}}</span>
+                    <span ng-show="nav_login.userName.$invalid && pending || nav_login.password.$invalid && pending">
+                        <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+                    </span>
+                    <!-- need a real validator here for login failure -->
+                    <span ng-show="loginFailed">
+                        <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+                    </span>
                 </div>
                 <input type="submit" name="submit_nav" value="Login" ng-click="login()" ng-class="{disabled: processing }" id="submit_nav" class="col-xs-12 btn btn-primary push-half-bottom">
                 <div class="pull-right">
