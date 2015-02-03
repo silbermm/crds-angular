@@ -1,0 +1,8 @@
+﻿<form name="email_field">
+    <div class="form-group" ng-class="{'has-error': email_field.email.$invalid && email_field.email.$dirty}">
+        <input type="email" ng-model="email" class="form-control" id="email" placeholder="Email" ng-required="true" name="email" ng-model-options="{ updateOn: 'blur'}">
+        <ng-messages>
+            <span ng-show=" email_field.email.$invalid && email_field.email.$dirty"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidEmail].message | html"></span></span>
+        </ng-messages>
+    </div>
+</form>
