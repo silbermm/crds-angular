@@ -3,11 +3,10 @@
     <p class="text-muted push-bottom">Information shared here is kept secure and private. We will not share or sell your information.</p>
 
     <div class="row">
-        <div class="form-group col-sm-6" ng-class="{'has-error':personal.firstName.$invalid}">
+        <div class="form-group col-sm-6" ng-class="{'has-error':personal['first-name'].$invalid}">
             <label for="first-name">First Name</label>
             <input type="text" name="first-name" class="form-control" id="first-name" placeholder="Enter first name" ng-model="profile.person.First_Name" ng-model-options="{ debounce : { 'default' : 500, blur : 0 } }" required>
-            <ng-messages for="personal.firstName.$error" ng-if="personal.$submitted">
-
+            <ng-messages for="personal['first-name'].$error" ng-if="personal.$submitted">
                 <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}} </span>
             </ng-messages>
         </div>
@@ -17,10 +16,10 @@
             <input type="text" name="middle-name" class="form-control" id="middle-name" placeholder="Enter middle name" ng-model="profile.person.Middle_Name">
         </div>
 
-        <div class="form-group col-sm-6" ng-class="{'has-error':personal.lastName.$invalid}">
+        <div class="form-group col-sm-6" ng-class="{'has-error':personal['last-name'].$invalid}">
             <label for="last-name">Last Name</label>
             <input type="text" class="form-control" id="last-name" name="last-name" placeholder="Enter last name" ng-model="profile.person.Last_Name" ng-model-options="{ debounce : { 'default' : 500, blur : 0 } }" required>
-            <ng-messages for="personal.lastName.$error" ng-if="personal.$submitted">
+            <ng-messages for="personal['last-name'].$error" ng-if="personal.$submitted">
                 <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}}</span>
             </ng-messages>
         </div>
@@ -95,7 +94,7 @@
     </div>
 
     <div class="row" ng-controller="crdsDatePickerCtrl">
-        <div class="form-group col-sm-6" ng-controller="crdsDatePickerCtrl" ng-class="{'has-error':personal.anniversarydate.$invalid}">
+        <div class="form-group col-sm-6" ng-controller="crdsDatePickerCtrl" ng-class="{'has-error':personal['anniversary-date'].$invalid}">
             <label for="anniversary-date">When did you start attending Crossroads?</label>
             <input type="text"
                    name="anniversary-date"
@@ -105,7 +104,7 @@
                    validate-date
                    ng-model="profile.person.Anniversary_Date"
                    ng-pattern="profile.dateFormat" />
-            <ng-messages for="personal.anniversarydate.$error">
+            <ng-messages for="personal['anniversary-date'].$error">
                 <span ng-message="pattern">{{$root.MESSAGES.invalidData}}</span>
                 <span ng-message="invalidDate">{{$root.MESSAGES.invalidData}}</span>
             </ng-messages>
@@ -113,7 +112,7 @@
     </div>
 
     <div class="row">
-        <div class="form-group col-sm-6" ng-class="{'has-error':personal.mobile.$invalid}">
+        <div class="form-group col-sm-6" ng-class="{'has-error':personal['mobile-phone'].$invalid}">
             <label for="mobile-phone">Mobile Phone</label>
             <input type="text"
                    class="form-control" name="mobile-phone" id="mobile-phone"
@@ -122,20 +121,20 @@
                    ng-pattern="profile.phoneFormat"
                    ng-model-options="{ debounce : { 'default' : 500, blur : 0 } }"
                    ng-blur="profile.convertPhone()">
-            <ng-messages for="personal.mobile.$error" ng-if="personal.$submitted || personal.$touched">
+            <ng-messages for="personal['mobile-phone'].$error" ng-if="personal.$submitted || personal.$touched">
                 <span ng-message="pattern">{{$root.MESSAGES.invalidPhone}}</span>
             </ng-messages>
         </div>
-        <div class="form-group col-sm-6" ng-class="{'has-error':personal.serviceprovider.$invalid}">
+        <div class="form-group col-sm-6" ng-class="{'has-error':personal['service-provider'].$invalid}">
             <label for="service-provider">Service Provider</label>
             <select name="service-provider" class="form-control col-sm-12" id="service-provider" ng-model="profile.person.Mobile_Carrier"
                     ng-options="providers.dp_RecordID as providers.dp_RecordName for providers in profile.serviceProviders" ng-required="profile.serviceProviderRequired()">
                 <option value=""> -- Choose One -- </option>
             </select>
-            <ng-messages for="personal.serviceprovider.$error" ng-if="personal.$submitted">
+            <ng-messages for="personal['service-provider'].$error" ng-if="personal.$submitted">
                 <div ng-message=" required">{{$root.MESSAGES.fieldCanNotBeBlank}}</div>
             </ng-messages>
-            
+
         </div>
     </div>
 
@@ -224,7 +223,7 @@
                                     </div>
 
                                 </li>
-                                <li class="list-group-item clearfix" ng-class="{'has-error':personal.homephone.$invalid}">
+                                <li class="list-group-item clearfix" ng-class="{'has-error':personal['home-phone'].$invalid}">
                                     <div class="form-group col-sm-6">
                                         <label for="home-phone">Home Phone</label>
                                         <input name="home-phone"
@@ -232,11 +231,11 @@
                                                ng-model-options="{ updateOn: 'default blur', debounce: {'default': 300, 'blur': 0} }"
                                                type="text"
                                                class="form-control"
-                                               id="home-phone" 
+                                               id="home-phone"
                                                ng-pattern="profile.phoneFormat"
                                                placeholder="Enter home phone"
                                                ng-blur="profile.convertHomePhone()">
-                                        <ng-messages for="personal.homephone.$error">
+                                        <ng-messages for="personal['home-phone'].$error">
                                             <span ng-message="pattern">{{$root.MESSAGES.invalidPhone}}</span>
                                         </ng-messages>
                                     </div>
