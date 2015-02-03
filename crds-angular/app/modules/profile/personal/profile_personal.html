@@ -121,7 +121,7 @@
                    ng-pattern="profile.phoneFormat"
                    ng-model-options="{ debounce : { 'default' : 500, blur : 0 } }"
                    ng-blur="profile.convertPhone()">
-            <ng-messages for="personal['mobile-phone'].$error" ng-if="personal.$submitted || personal.$touched">
+            <ng-messages for="personal['mobile-phone'].$error">
                 <span ng-message="pattern">{{$root.MESSAGES.invalidPhone}}</span>
             </ng-messages>
         </div>
