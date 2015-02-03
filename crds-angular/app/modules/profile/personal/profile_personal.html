@@ -3,11 +3,10 @@
     <p class="text-muted push-bottom">Information shared here is kept secure and private. We will not share or sell your information.</p>
 
     <div class="row">
-        <div class="form-group col-sm-6" ng-class="{'has-error':personal.firstName.$invalid}">
+        <div class="form-group col-sm-6" ng-class="{'has-error':personal['first-name'].$invalid}">
             <label for="first-name">First Name</label>
             <input type="text" name="first-name" class="form-control" id="first-name" placeholder="Enter first name" ng-model="profile.person.First_Name" ng-model-options="{ debounce : { 'default' : 500, blur : 0 } }" required>
-            <ng-messages for="personal.firstName.$error" ng-if="personal.$submitted">
-
+            <ng-messages for="personal['first-name'].$error" ng-if="personal.$submitted">
                 <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}} </span>
             </ng-messages>
         </div>
@@ -17,10 +16,10 @@
             <input type="text" name="middle-name" class="form-control" id="middle-name" placeholder="Enter middle name" ng-model="profile.person.Middle_Name">
         </div>
 
-        <div class="form-group col-sm-6" ng-class="{'has-error':personal.lastName.$invalid}">
+        <div class="form-group col-sm-6" ng-class="{'has-error':personal['last-name'].$invalid}">
             <label for="last-name">Last Name</label>
             <input type="text" class="form-control" id="last-name" name="last-name" placeholder="Enter last name" ng-model="profile.person.Last_Name" ng-model-options="{ debounce : { 'default' : 500, blur : 0 } }" required>
-            <ng-messages for="personal.lastName.$error" ng-if="personal.$submitted">
+            <ng-messages for="personal['last-name'].$error" ng-if="personal.$submitted">
                 <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}}</span>
             </ng-messages>
         </div>
