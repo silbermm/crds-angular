@@ -131,7 +131,7 @@
                     ng-options="providers.dp_RecordID as providers.dp_RecordName for providers in profile.serviceProviders" ng-required="profile.serviceProviderRequired()">
                 <option value=""> -- Choose One -- </option>
             </select>
-            <ng-messages for="personal['service-provider'].$error" ng-if="personal.$submitted">
+            <ng-messages for="personal['service-provider'].$error">
                 <div ng-message=" required">{{$root.MESSAGES.fieldCanNotBeBlank}}</div>
             </ng-messages>
 
