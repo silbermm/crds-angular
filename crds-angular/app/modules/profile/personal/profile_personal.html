@@ -223,7 +223,7 @@
                                     </div>
 
                                 </li>
-                                <li class="list-group-item clearfix" ng-class="{'has-error':personal.homephone.$invalid}">
+                                <li class="list-group-item clearfix" ng-class="{'has-error':personal['home-phone'].$invalid}">
                                     <div class="form-group col-sm-6">
                                         <label for="home-phone">Home Phone</label>
                                         <input name="home-phone"
@@ -231,11 +231,11 @@
                                                ng-model-options="{ updateOn: 'default blur', debounce: {'default': 300, 'blur': 0} }"
                                                type="text"
                                                class="form-control"
-                                               id="home-phone" 
+                                               id="home-phone"
                                                ng-pattern="profile.phoneFormat"
                                                placeholder="Enter home phone"
                                                ng-blur="profile.convertHomePhone()">
-                                        <ng-messages for="personal.homephone.$error">
+                                        <ng-messages for="personal['home-phone'].$error">
                                             <span ng-message="pattern">{{$root.MESSAGES.invalidPhone}}</span>
                                         </ng-messages>
                                     </div>
