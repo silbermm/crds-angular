@@ -6,9 +6,7 @@
         <div class="form-group col-sm-6" ng-class="{'has-error':personal['first-name'].$invalid}">
             <label for="first-name">First Name</label>
             <input type="text" name="first-name" class="form-control" id="first-name" placeholder="Enter first name" ng-model="profile.person.First_Name" ng-model-options="{ debounce : { 'default' : 500, blur : 0 } }" required>
-            <ng-messages for="personal['first-name'].$error" ng-if="personal.$submitted">
-                <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}} </span>
-            </ng-messages>
+            <ng-messages for="personal['first-name'].$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages">
         </div>
 
         <div class="form-group col-sm-6">
@@ -19,9 +17,8 @@
         <div class="form-group col-sm-6" ng-class="{'has-error':personal['last-name'].$invalid}">
             <label for="last-name">Last Name</label>
             <input type="text" class="form-control" id="last-name" name="last-name" placeholder="Enter last name" ng-model="profile.person.Last_Name" ng-model-options="{ debounce : { 'default' : 500, blur : 0 } }" required>
-            <ng-messages for="personal['last-name'].$error" ng-if="personal.$submitted">
-                <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}}</span>
-            </ng-messages>
+
+            <ng-messages for="personal['last-name'].$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
         </div>
 
         <div class="form-group col-sm-6">
@@ -39,13 +36,8 @@
         <div class="form-group col-sm-6" ng-class="{'has-error':personal.email.$invalid}">
             <label for="email">Email</label>
             <input type="email" class="form-control" id="email" name="email" placeholder="Enter email address" ng-model="profile.person.Email_Address" ng-model-options="{ debounce : { 'default' : 1000, blur: 0} }"  required unique-email>
-            <ng-messages for="personal.email.$error" ng-if="personal.$submitted">
-                <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}}</span>
-                <span ng-message="unique">{{$root.MESSAGES.emailInUse}}</span>
-            </ng-messages>
-            <ng-messages for="personal.email.$error">
-                <span ng-message="email">{{$root.MESSAGES.invalidEmail}}</span>
-            </ng-messages>
+            <ng-messages for="personal.email.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
+            <ng-messages for="personal.email.$error" ng-messages-include="on-pause-messages"></ng-messages>
         </div>
     </div>
 
@@ -58,13 +50,8 @@
                     ng-model="profile.person.Date_of_Birth"
                     validate-date   
                     required />
-            <ng-messages for="personal.birthdate.$error" ng-if="personal.$submitted || personal.birthdate.$touched">
-                <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}}</span>
-            </ng-messages>
-            <ng-messages for="personal.birthdate.$error">
-                <span ng-message="pattern">{{$root.MESSAGES.invalidData}}</span>
-                <span ng-message="invalidDate">{{$root.MESSAGES.invalidData}}</span>
-            </ng-messages>
+            <ng-messages for="personal.birthdate.$error" ng-if="personal.$submitted || personal.birthdate.$touched" ng-messages-include="on-submit-messages"></ng-messages>
+            <ng-messages for="personal.birthdate.$error" ng-messages-include="on-pause-messages"></ng-messages>
         </div>
     </div>
 
@@ -104,10 +91,7 @@
                    validate-date
                    ng-model="profile.person.Anniversary_Date"
                    ng-pattern="profile.dateFormat" />
-            <ng-messages for="personal['anniversary-date'].$error">
-                <span ng-message="pattern">{{$root.MESSAGES.invalidData}}</span>
-                <span ng-message="invalidDate">{{$root.MESSAGES.invalidData}}</span>
-            </ng-messages>
+            <ng-messages for="personal['anniversary-date'].$error" ng-messages-include="on-pause-messages"></ng-messages>
         </div>
     </div>
 
@@ -122,7 +106,8 @@
                    ng-model-options="{ debounce : { 'default' : 500, blur : 0 } }"
                    ng-blur="profile.convertPhone()">
             <ng-messages for="personal['mobile-phone'].$error">
-                <span ng-message="pattern">{{$root.MESSAGES.invalidPhone}}</span>
+                <!-- TODO Create custom phone validator here so we can use the template instead of the override below -->
+                <span ng-message="pattern"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"</span></span>
             </ng-messages>
         </div>
         <div class="form-group col-sm-6" ng-class="{'has-error':personal['service-provider'].$invalid}">
@@ -131,10 +116,7 @@
                     ng-options="providers.dp_RecordID as providers.dp_RecordName for providers in profile.serviceProviders" ng-required="profile.serviceProviderRequired()">
                 <option value=""> -- Choose One -- </option>
             </select>
-            <ng-messages for="personal['service-provider'].$error">
-                <div ng-message=" required">{{$root.MESSAGES.fieldCanNotBeBlank}}</div>
-            </ng-messages>
-
+            <ng-messages for="personal['service-provider'].$error" ng-messages-include="on-submit-messages"></ng-messages>
         </div>
     </div>
 
@@ -172,8 +154,7 @@
                                     <div class="form-group col-sm-6" ng-class="{'has-error':personal.address.$invalid}">
                                         <label for="address">Street</label>
                                         <input name="address" ng-model="profile.person.Address_Line_1" type="text" class="form-control" id="address" placeholder="Enter street address" required>
-                                        <ng-messages for="personal.address.$error" ng-if="personal.$submitted">
-                                            <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}}</span>
+                                        <ng-messages for="personal.address.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages">
                                         </ng-messages>
                                     </div>
 
@@ -185,9 +166,7 @@
                                     <div class="form-group col-sm-6" ng-class="{'has-error':personal.city.$invalid}">
                                         <label for="city">City</label>
                                         <input name="city" ng-model="profile.person.City" type="text" class="form-control" id="city" placeholder="Enter city" required>
-                                        <ng-messages for="personal.city.$error" ng-if="personal.$submitted">
-                                            <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}}</span>
-                                        </ng-messages>
+                                        <ng-messages for="personal.city.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
                                     </div>
 
                                     <div class="form-group col-sm-6" ng-class="{'has-error':personal.state.$invalid}">
@@ -195,19 +174,16 @@
                                         <select name="state" id="state" class="form-control col-sm-12" ng-model="profile.person.State" ng-options="state.State_Abbreviation as state.State_Abbreviation for state in profile.states" required>
                                             <option value=""> -- Choose a State -- </option>
                                         </select>
-                                        <div ng-messages for="personal.state.$error" ng-if="personal.$submitted">
-                                            <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}}</span>
-                                        </div>
+                                        <ng-messages for="personal.state.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
                                     </div>
 
                                     <div class="form-group col-sm-6" ng-class="{'has-error':personal.zip.$invalid}">
                                         <label for="zip">Zip</label>
                                         <input name="zip" ng-model="profile.person.Postal_Code" type="text" class="form-control" id="zip" placeholder="Enter zip code" required ng-pattern="profile.zipFormat">
-                                        <ng-messages for="personal.zip.$error" ng-if="personal.$submitted">
-                                            <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}}</span>
-                                        </ng-messages>
+                                        <ng-messages for="personal.zip.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
                                         <ng-messages for="personal.zip.$error">
-                                            <span ng-message="pattern">{{$root.MESSAGES.invalidZip}}</span>
+                                            <!-- TODO Create custom phone validator here so we can use the template instead of the override below -->
+                                            <span ng-message="pattern"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidZip].message | html"</span></span>
                                         </ng-messages>
 
                                     </div>
@@ -217,9 +193,7 @@
                                         <select name="country" id="country" ng-model="profile.person.Foreign_Country" ng-options="country.dp_RecordName as country.dp_RecordName for country in profile.countries" class="form-control col-sm-12" required>
                                             <option value=""> -- Choose One -- </option>
                                         </select>
-                                        <div ng-messages for="personal.country.$error" ng-if="personal.$submitted">
-                                            <span ng-message="required">{{$root.MESSAGES.fieldCanNotBeBlank}}</span>
-                                        </div>
+                                        <ng-messages for="personal.country.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
                                     </div>
 
                                 </li>
@@ -235,8 +209,9 @@
                                                ng-pattern="profile.phoneFormat"
                                                placeholder="Enter home phone"
                                                ng-blur="profile.convertHomePhone()">
-                                        <ng-messages for="personal['home-phone'].$error">
-                                            <span ng-message="pattern">{{$root.MESSAGES.invalidPhone}}</span>
+                                        <ng-messages for="personal['home-phone'].$error" ng-messages-include="on-submit-messages">
+                                            <!-- TODO Create custom phone validator here so we can use the template instead of the override below -->
+                                            <span ng-message="pattern"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"</span></span>
                                         </ng-messages>
                                     </div>
                                 </li>

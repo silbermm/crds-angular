@@ -42,7 +42,7 @@
         _this.savePersonal = function () {
             _this.submitted = true;
             if (_this.form.personal.$invalid) {
-                $rootScope.$emit("notify.error", MESSAGES.generalError);
+                $rootScope.$emit('notify', MESSAGES.generalError);
                 _this.submitted = false;              
                 return;
             }

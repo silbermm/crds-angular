@@ -1,0 +1,12 @@
+﻿<ng-form name="email_field">
+    <div class="form-group" ng-class="{'has-error': email_field.email.$error.email}">
+        <input type="email" ng-model="email" class="form-control" id="email" placeholder="Email" ng-required="true" name="email" ng-model-options="{ updateOn: 'blur'}" unique-email>
+        <ng-messages for="email_field.email.$error" ng-if="email_field.$submitted">
+            <span ng-message="required">{{$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message}}</span>
+            <span ng-message="unique">{{$root.messages[$root.MESSAGES.emailInUse].message}}</span>
+        </ng-messages>
+        <ng-messages for="email_field.email.$error">
+            <span ng-message="email"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidEmail].message | html"></span></span>
+        </ng-messages>
+    </div>
+</ng-form>
