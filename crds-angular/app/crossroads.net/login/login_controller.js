@@ -1,11 +1,8 @@
 ﻿'use strict';
 (function () {
-    angular.module('crossroads').controller('LoginCtrl', ['$scope', '$rootScope', 'AUTH_EVENTS', 'MESSAGES', 'AuthService', '$cookieStore', '$state','$log', "Session", LoginController]);
+  
 
-    function LoginController($scope, $rootScope, AUTH_EVENTS, MESSAGES, AuthService, $cookieStore, $state, $log, Session) {
-
-
-        $rootScope.showLoginButton = $rootScope.username === null || $rootScope.username === undefined;
+    function LoginController($scope, $rootScope, AUTH_EVENTS, MESSAGES, AuthService, $cookieStore, $state, $log, Session, $timeout) {
   
         $scope.loginShow = false;
 
@@ -31,12 +28,17 @@
                 $scope.loginFailed = false;
             } else {
                 $scope.processing = true;
-                AuthService.login($scope.credentials).then(function (user) {
-                    $log.debug("got a 200 from the server ");
-                    $log.debug(user);
+                AuthService.login($scope.credentials).then(function (user) {             
                     $scope.processing = false;
                     $scope.loginShow = false;
-                    $rootScope.showLoginButton = false;                    
+                    $timeout(function() {
+                        if (Session.hasRedirectionInfo()) {
+                            var url = Session.exists("redirectUrl");
+                            var params = Session.exists("redirectParams");
+                            Session.removeRedirectRoute();
+                            $state.go(url, params);
+                        }
+                    }, 1000);
                 }, function () {
                     $log.debug("Bad password");
                     $scope.pending = false;
@@ -46,4 +48,6 @@
             }
         };
     }
+
+    angular.module('crossroads').controller('LoginCtrl', ['$scope', '$rootScope', 'AUTH_EVENTS', 'MESSAGES', 'AuthService', '$cookieStore', '$state', '$log', "Session", "$timeout", LoginController]);
 })()
