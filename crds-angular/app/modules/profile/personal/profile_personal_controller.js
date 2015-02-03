@@ -1,6 +1,6 @@
-﻿'use strict';
+﻿"use strict";
 (function () {
-    angular.module("crdsProfile").controller("ProfilePersonalController", ['$rootScope', '$log','MESSAGES', 'genders', 'maritalStatuses', 'serviceProviders', 'states', 'countries', 'crossroadsLocations', 'person', ProfilePersonalController]);
+    angular.module("crdsProfile").controller("ProfilePersonalController", ["$rootScope", "$log","MESSAGES", "genders", "maritalStatuses", "serviceProviders", "states", "countries", "crossroadsLocations", "person", ProfilePersonalController]);
 
     function ProfilePersonalController($rootScope, $log, MESSAGES, genders, maritalStatuses, serviceProviders, states, countries, crossroadsLocations, person) {
         var _this = this;
@@ -24,7 +24,7 @@
         _this.initProfile = function (form) {
             _this.form = form;
             configurePerson();
-        }
+        };
 
         function configurePerson() {
             if (_this.person.Date_of_Birth !== undefined) {
@@ -44,39 +44,34 @@
             if (_this.form.personal.$invalid) {
                 $rootScope.$emit('notify', MESSAGES.generalError);
                 _this.submitted = false;              
-                return 
+                return;
             }
-            _this.person["State/Region"] = _this.person.State
+            _this.person["State/Region"] = _this.person.State;
             _this.person.$save(function () {
                 $log.debug("person save successful");
             }, function () {
                 $log.debug("person save unsuccessful");
             });
-        }
-
+        };
         _this.isDobError = function () {            
-            return (_this.form.personal.birthdate.$touched || _this.form.personal.$submitted) && _this.form.personal.birthdate.$invalid
-        }
-
+            return (_this.form.personal.birthdate.$touched || _this.form.personal.$submitted) && _this.form.personal.birthdate.$invalid;
+        };
         _this.convertHomePhone = function () {
-                if (_this.form.personal.homephone.$valid) {
-                    _this.person.Home_Phone = _this.person.Home_Phone.replace(_this.phoneFormat, '$1-$2-$3');
+            if (_this.form.personal["home-phone"].$valid) {
+                    _this.person.Home_Phone = _this.person.Home_Phone.replace(_this.phoneFormat, "$1-$2-$3");
                 }
-        }
-
-        _this.convertPhone = function () {
-            if(_this.form.personal.mobile.$valid) {                
-                _this.person.Mobile_Phone = _this.person.Mobile_Phone.replace(_this.phoneFormat, '$1-$2-$3');
+        };
+        _this.convertPhone = function() {
+            if (_this.form.personal["mobile-phone"].$valid) {                
+                _this.person.Mobile_Phone = _this.person.Mobile_Phone.replace(_this.phoneFormat, "$1-$2-$3");
             }
-        }
-
+        };
         _this.serviceProviderRequired = function () {
-            if (_this.person.Mobile_Phone === 'undefined' || _this.person.Mobile_Phone === null || _this.person.Mobile_Phone === "") {
+            if (_this.person.Mobile_Phone === "undefined" || _this.person.Mobile_Phone === null || _this.person.Mobile_Phone === "") {
                 return false;
             }
             return true;
-        }
-
+        };
     }
 
-})()
+})();
