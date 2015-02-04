@@ -22,6 +22,9 @@
                 });
             } else if (toState.data !== undefined && toState.data.isProtected) {              
                 clearAndRedirect(event, toState, toParams);
+            } else {
+                //There is no session AND the user is not attempting to go to a protected route
+                //so there is nothing to do
             }
  
         });
