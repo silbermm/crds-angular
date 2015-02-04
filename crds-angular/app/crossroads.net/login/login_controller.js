@@ -19,7 +19,6 @@
                 $scope.credentials.password = undefined;
             }
             $rootScope.username = null;
-            $rootScope.showLoginButton = true;
         }
 
         $scope.login = function () {           
@@ -36,9 +35,9 @@
                             var url = Session.exists("redirectUrl");
                             var params = Session.exists("redirectParams");
                             Session.removeRedirectRoute();
-                            $state.go(url, params);
+                            $state.go(url);
                         }
-                    }, 1000);
+                    }, 500);
                 }, function () {
                     $log.debug("Bad password");
                     $scope.pending = false;
