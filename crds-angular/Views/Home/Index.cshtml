@@ -20,9 +20,17 @@
     <title>Index</title>
     <link href="~/sass/main.css" rel="stylesheet" />
     @Styles.Render("~/bundles/growl-css")
-    <script type="text/ng-template" id="error-messages">
-        <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"</span></span>
-        <span ng-message="pattern"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"</span></span>
+    <script type="text/ng-template" id="on-submit-messages">
+        <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span></span>
+        <span ng-message="pattern"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span></span>
+        <span ng-message="unique"><span ng-bind-html="$root.messages[$root.MESSAGES.emailInUse].message | html"></span></span>
+    </script>
+    <script type="text/ng-template" id="on-pause-messages">     
+        <span ng-message="pattern"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span></span>
+        <span ng-message="invalidDate"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span></span>
+        <span ng-message="email"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidEmail].message | html"></span></span>
+    </script>
+    <script type="text/ng-template" id="on-blur-messages">
     </script>
 </head>
 
