@@ -1,7 +1,7 @@
-﻿<div class="login__container col-md-4" ng-show="$root.showLoginButton">
+﻿<div class="login__container col-md-4" ng-show="$root.username == undefined">
     <login-form></login-form>
 </div>
-<div class="hidden-md hidden-sm hidden-xs" ng-show="!$root.showLoginButton">
+<div class="hidden-md hidden-sm hidden-xs" ng-show="$root.username != undefined">
     <ul> You have successfully logged in. </ul> 
 </div>
    
