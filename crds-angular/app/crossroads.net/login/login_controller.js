@@ -36,7 +36,9 @@
                     $log.debug(user);
                     $scope.processing = false;
                     $scope.loginShow = false;
-                    $rootScope.showLoginButton = false;                    
+                    $scope.loginFailed = false;
+                    $rootScope.showLoginButton = false;
+                    $scope.navlogin.$setPristine();
                 }, function () {
                     $log.debug("Bad password");
                     $scope.pending = false;
