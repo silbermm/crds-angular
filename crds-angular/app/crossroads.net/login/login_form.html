@@ -9,10 +9,10 @@
                     <input required class="form-control" ng-model-options="{updateOn: 'blur'}" autocomplete="off" type="password" name="password" id="password_nav" placeholder="Password" autocapitalize="off" ng-model="credentials.password">    
                 </div>
                 <div>
-                    <!-- TODO Update to use ngMessages -->
+                    
                     <ng-messages for="navlogin['username'].$error" ng-if="navlogin.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
                     <ng-messages for="navlogin['password'].$error" ng-if="navlogin.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
- 
+                    <!-- TODO Update to use ngMessages and a validator -->
                     <span ng-show="loginFailed">
                         <span ng-bind-html="$root.messages[$root.MESSAGES.loginFailed].message | html"></span>
                     </span>
