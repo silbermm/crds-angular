@@ -38,6 +38,9 @@
                             $state.go(url);
                         }
                     }, 500);
+                    $scope.loginFailed = false;
+                    $rootScope.showLoginButton = false;
+                    $scope.navlogin.$setPristine();
                 }, function () {
                     $log.debug("Bad password");
                     $scope.pending = false;
