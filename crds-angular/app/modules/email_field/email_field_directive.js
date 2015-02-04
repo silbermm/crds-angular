@@ -6,12 +6,12 @@
             restrict: 'EA',
             replace: true,
             scope: {
-                email: "=email"
+                email: "=email",
+                submitted: "=submitted"
             },
             templateUrl: 'app/modules/email_field/email_field.html',
             link: (function (scope, el, attr, ctrl) {
-              
-                
+
             })
         }
     }
