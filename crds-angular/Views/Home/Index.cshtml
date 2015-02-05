@@ -22,7 +22,6 @@
     @Styles.Render("~/bundles/growl-css")
     <script type="text/ng-template" id="on-submit-messages">
         <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span></span>
-        <span ng-message="pattern"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span></span>
         <span ng-message="unique"><span ng-bind-html="$root.messages[$root.MESSAGES.emailInUse].message | html"></span></span>
     </script>
     <script type="text/ng-template" id="on-pause-messages">     
@@ -83,11 +82,11 @@
                             <div class="navbar-header">
                                 <a class="navbar-brand logo" href="/"><img src="//crossroads-media.s3.amazonaws.com/images/logo.svg" alt="crossroads"></a>
                                 <ul class="navbar--login list-unstyled">
-                                    <span id="current-user" class=hidden-xs ng-cloak" ng-if="!showLoginButton" ng-cloak> {{$root.username}} </span>
-                                    <li class="hidden-xs ng-cloak" ng-show="!showLoginButton" ng-cloak>
+                                    <span id="current-user" class="hidden-xs" ng-if="$root.username != undefined" ng-cloak> {{$root.username}} </span>
+                                    <li class="hidden-xs ng-cloak" ng-show="$root.username != undefined" ng-cloak>
                                         <a href="#/home" ng-click="logout()" class="ng-cloak">Sign Out</a>
                                     </li>
-                                    <li class="hidden-xs" data-toggle="dropdown" ng-show="showLoginButton">
+                                    <li class="hidden-xs" data-toggle="dropdown" ng-show="$root.username == undefined">
                                         <button class="btn btn-primary" id="form-toggle" ng-click="toggleDesktopLogin()">
                                             <span>Login</span>
                                         </button>
@@ -106,7 +105,7 @@
                                     </li>
                                 </ul>
                                 <ul class="navbar--login list-unstyled">
-                                    <li class="hidden-xs" data-toggle="dropdown" ng-show="showLoginButton">
+                                    <li class="hidden-xs" data-toggle="dropdown" ng-show="$root.username == undefined">
                                         <button class="btn btn-primary" id="form-toggle" ng-click="toggleDesktopRegister()">
                                             <span>Register</span>
                                         </button>

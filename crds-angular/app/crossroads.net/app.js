@@ -1,20 +1,8 @@
 ﻿"use strict";
 (function () {
-    angular.module("crossroads", ["ngResource","crdsProfile", "crdsOpportunity", "crdsCMS.services", "ui.router", "ngCookies", "angular-growl"])
-    .run(["Session", "$rootScope", "MESSAGES", "$http", function (Session, $rootScope, MESSAGES, $http) {
-        $rootScope.MESSAGES = MESSAGES;
 
-        $http.get("api/authenticated").success(function (user) {
-            // Authenticated                 
-            $rootScope.userid = user.userId;
-            $rootScope.username = user.username;
-        }).error(function (data) {
-            Session.clear();
-            $rootScope.message = "You need to log in.";
-            $rootScope.userid = null;
-            $rootScope.username = null;
-        });
-    }])
+    angular.module("crossroads", ["crdsProfile", "crdsCMS.services", "crdsOpportunity", "ui.router", "ngCookies", "angular-growl"])
+
     .constant("AUTH_EVENTS", {
             loginSuccess: "auth-login-success",
             loginFailed: "auth-login-failed",
@@ -42,7 +30,7 @@
         succesfulResponse: 14,
         failedResponse: 15
 
-    }).config(function(growlProvider) {
+    }).config(function (growlProvider) {
         growlProvider.globalPosition("top-center");
         growlProvider.globalTimeToLive(6000);
         growlProvider.globalDisableIcons(true);
