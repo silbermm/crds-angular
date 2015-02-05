@@ -35,9 +35,7 @@
     <div class="row">
         <div class="form-group col-sm-6" ng-class="{'has-error':personal.email.$invalid}">
             <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email address" ng-model="profile.person.Email_Address" ng-model-options="{ debounce : { 'default' : 1000, blur: 0} }"  required unique-email>
-            <ng-messages for="personal.email.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
-            <ng-messages for="personal.email.$error" ng-messages-include="on-pause-messages"></ng-messages>
+            <email-field email="profile.person.Email_Address" submitted="personal.$submitted"></email-field>
         </div>
     </div>
 
