@@ -93,6 +93,7 @@ namespace crds_angular.Controllers.API
         [Route("api/lookup/{email?}")]
         public IHttpActionResult EmailExists(string email)
         {
+            //TODO let's clean this up
             var returnvalue =  AuthorizedWithCookie(t =>
             {
                 

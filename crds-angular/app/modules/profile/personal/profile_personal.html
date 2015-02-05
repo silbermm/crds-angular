@@ -48,8 +48,10 @@
                     ng-model="profile.person.Date_of_Birth"
                     validate-date   
                     required />
-            <ng-messages for="personal.birthdate.$error" ng-if="personal.$submitted || personal.birthdate.$touched" ng-messages-include="on-submit-messages"></ng-messages>
-            <ng-messages for="personal.birthdate.$error" ng-messages-include="on-pause-messages"></ng-messages>
+            <ng-messages for="personal.birthdate.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
+            <ng-messages for="personal.birthdate.$error" ng-messages-include="on-blur-messages">
+                <span ng-message="pattern"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span></span>
+            </ng-messages>
         </div>
     </div>
 
@@ -180,7 +182,7 @@
                                         <input name="zip" ng-model="profile.person.Postal_Code" type="text" class="form-control" id="zip" placeholder="Enter zip code" required ng-pattern="profile.zipFormat">
                                         <ng-messages for="personal.zip.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
                                         <ng-messages for="personal.zip.$error">
-                                            <!-- TODO Create custom phone validator here so we can use the template instead of the override below -->
+                                            <!-- TODO Create custom zip validator here so we can use the template instead of the override below -->
                                             <span ng-message="pattern"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidZip].message | html"</span></span>
                                         </ng-messages>
 
