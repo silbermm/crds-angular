@@ -6,7 +6,7 @@
                     <input required class="form-control" ng-model-options="{updateOn: 'blur'}" type="text" name="username" id="username-nav" placeholder="Email" autocomplete="off" autocapitalize="off" ng-model="credentials.username" autofocus=""> 
                 </div>
                 <div class="navbar--login__input" ng-class="{'has-error': navlogin['password'].$invalid && navlogin['password'].$touched && navlogin['password'].$dirty }">
-                    <input required class="form-control" ng-model-options="{updateOn: 'blur'}" autocomplete="off" type="password" name="password" id="password_nav" placeholder="Password" autocapitalize="off" ng-model="credentials.password">    
+                    <password-field passwd="credentials.password" submitted="navlogin.$submitted"></password-field>
                 </div>
                 <div>
                     

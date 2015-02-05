@@ -21,7 +21,7 @@
         $scope.register = function (form) {
             _this.form = form;
 
-            if (form.newuser == null || form.newuser.email || form.newuser.password || form.newuser.email =="" || form.newuser.password =="") {
+            if (form.newuser == null || form.newuser.email == null || form.newuser.password == null || form.newuser.email =="" || form.newuser.password =="") {
                 $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
                 return;
             }
