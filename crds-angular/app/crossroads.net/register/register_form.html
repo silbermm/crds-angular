@@ -2,18 +2,19 @@
 <div class="primary">
     <form name="registerForm" role="form" ng-submit="register(this)" novalidate="">
 
-        <div class="soft-half-bottom"><input class="form-control navbar--login__input" id="firstname" type="text" ng-model="newuser.firstname" required placeholder="First Name" />
+        <div class="soft-half-bottom"><input class="form-control navbar--login__input" id="firstname" type="text" ng-model="newuser.firstname" required placeholder="First Name"/>
         </div>
 
-        <div class="soft-half-bottom"><input class="form-control navbar--login__input" id="lastname" type="text" ng-model="newuser.lastname" placeholder="Last Name" required />
+        <div class="soft-half-bottom"><input class="form-control navbar--login__input" id="lastname" type="text" ng-model="newuser.lastname" placeholder="Last Name" required/>
         </div>
         <div>
             <email-field email="newuser.email" submitted="registerForm.$submitted"></email-field>
         </div>
         <div class="input-group soft-half-bottom">
-            <password-field passwd="newuser.password"></password-field>
+            <password-field passwd="newuser.password" submitted="registerForm.$submitted"></password-field>
         </div>
-            <p class="small push-half-bottom text-muted">Registering signifies that you have read and agreed to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
-            <input style="margin-bottom:20px;" type="submit" class="col-xs-12 btn btn-primary push-half-bottom " value="Register" />
-</form>
+        <p class="small push-half-bottom text-muted">Registering signifies that you have read and agreed to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+        </p>
+        <input style="margin-bottom: 20px;" type="submit" class="col-xs-12 btn btn-primary push-half-bottom " value="Register"/>
+    </form>
 </div>
