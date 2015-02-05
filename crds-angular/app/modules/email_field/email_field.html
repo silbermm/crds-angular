@@ -11,7 +11,7 @@
         <ng-messages for="email_field.email.$error" ng-if="submitted" ng-messages-include="on-submit-messages"></ng-messages>
         <ng-messages for="email_field.email.$error" ng-messages-include="on-blur-messages">
 
-            <span ng-message="unique"><span ng-bind-html="$root.messages[$root.MESSAGES.emailInUse].message | html"></span>try <a href="#" ng-click="$parent.openLogin()">logging in</a> or use <a href="#">forgot password</span>
+            <span ng-message="unique">try <a href="#" ng-click="$parent.openLogin()">logging in</a> or use <a href="#">forgot password</span>
         </ng-messages>
     </div>
 </ng-form>
