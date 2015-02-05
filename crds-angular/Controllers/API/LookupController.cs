@@ -8,6 +8,12 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Description;
+using MinistryPlatform.Translation.Models;
+using crds_angular.Models.MP;
+using System.Configuration;
+using System.Web.Http.Results;
+using MinistryPlatform.Translation;
+using WebGrease.Css.Ast.Selectors;
 
 namespace crds_angular.Controllers.API
 {
@@ -87,7 +93,7 @@ namespace crds_angular.Controllers.API
         [Route("api/lookup/{email?}")]
         public IHttpActionResult EmailExists(string email)
         {
-            return AuthorizedWithCookie(t =>
+            var returnvalue =  AuthorizedWithCookie(t =>
             {
                 
                 var exists = MinistryPlatform.Translation.Services.LookupService.EmailSearch(email, t.SessionId);
@@ -100,6 +106,25 @@ namespace crds_angular.Controllers.API
                     return BadRequest();
                 }
             });
+            
+            if (returnvalue is UnauthorizedResult)
+            {
+                string token = AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"], ConfigurationManager.AppSettings["ApiPass"]);
+                var exists = MinistryPlatform.Translation.Services.LookupService.EmailSearch(email, token);
+                if (exists.Count == 0)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            else
+            {
+
+                return returnvalue;
+            }
         }
 
         protected static dynamic DecodeJson(string json)
