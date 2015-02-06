@@ -8,12 +8,13 @@ using System.Reflection;
 
 namespace MinistryPlatform.Translation.Services
 {
+    //TODO Should this be called GetAttributes?
     public class GetMyRecords
     {
         public static List<MinistryPlatform.Models.Attribute> GetMyAttributes(int recordId, string token)
         {
             var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);
-            var subPageRecords = Services.GetPageRecordService.GetSubPageRecords(subPageId, recordId, token);
+            var subPageRecords = MinistryPlatformService.GetSubPageRecords(subPageId, recordId, token);
             var attributes = new List<MinistryPlatform.Models.Attribute>();
 
             foreach (var record in subPageRecords) {

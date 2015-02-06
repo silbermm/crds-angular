@@ -31,11 +31,11 @@ namespace crds_angular.test.Services
             clearContactIdDict["User_Account"] = null;
             clearContactIdDict["Participant_Record"] = null;
             clearContactIdDict["Contact_ID"] = newIDs.First().Value;
-            UpdatePageRecordService.UpdateRecord(newIDs.First().Key,clearContactIdDict,token);
+            MinistryPlatformService.UpdateRecord(newIDs.First().Key,clearContactIdDict,token);
 
             foreach (KeyValuePair<int, int> entry in newIDs) // TODO Test cascading delete from contact
             {
-                DeletePageRecordService.DeleteRecord(entry.Key, entry.Value, null, token);
+                MinistryPlatformService.DeleteRecord(entry.Key, entry.Value, null, token);
             }
         }
     }

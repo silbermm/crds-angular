@@ -1,29 +1,24 @@
-using crds_angular.Security;
-using crds_angular.Services;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
+using System.Configuration;
+using System.Web.Helpers;
 using System.Web.Http;
 using System.Web.Http.Description;
-using MinistryPlatform.Translation.Models;
-using crds_angular.Models.MP;
-using System.Configuration;
 using System.Web.Http.Results;
-using MinistryPlatform.Translation;
-using WebGrease.Css.Ast.Selectors;
+using crds_angular.Security;
+using crds_angular.Services;
+using MinistryPlatform.Translation.Services;
 
 namespace crds_angular.Controllers.API
 {
     public class LookupController : CookieAuth
     {
-        [ResponseType(typeof(System.Web.Helpers.DynamicJsonArray))]
+        [ResponseType(typeof (DynamicJsonArray))]
         [Route("api/lookup/{pageId}")]
         public IHttpActionResult Get(int pageId)
         {
-            return Authorized(t => {
+            return Authorized(t =>
+            {
                 var contact = TranslationService.GetLookup(pageId, t);
                 var json = DecodeJson(contact.ToString());
 
@@ -31,32 +26,34 @@ namespace crds_angular.Controllers.API
             });
         }
 
-        [ResponseType(typeof(List<Dictionary<string,object>>))]
+        [ResponseType(typeof (List<Dictionary<string, object>>))]
         [Route("api/lookup/{table?}")]
         [HttpGet]
         public IHttpActionResult Lookup(string table)
         {
-            return Authorized(t => {
+            return Authorized(t =>
+            {
                 var ret = new List<Dictionary<string, object>>();
-                switch (table) {
-                    case "genders"  :
-                        ret = MinistryPlatform.Translation.Services.LookupService.Genders(t);
+                switch (table)
+                {
+                    case "genders":
+                        ret = LookupService.Genders(t);
                         break;
-                    case "maritalstatus" :
-                        ret = MinistryPlatform.Translation.Services.LookupService.MaritalStatus(t);
+                    case "maritalstatus":
+                        ret = LookupService.MaritalStatus(t);
                         break;
-                    case "serviceproviders" :
-                        ret = MinistryPlatform.Translation.Services.LookupService.ServiceProviders(t);
+                    case "serviceproviders":
+                        ret = LookupService.ServiceProviders(t);
                         break;
-                    case "countries" :
-                        ret = MinistryPlatform.Translation.Services.LookupService.Countries(t);
+                    case "countries":
+                        ret = LookupService.Countries(t);
                         break;
-                    case "states" :
+                    case "states":
                         var json = TranslationService.GetStates(t);
                         ret = DecodeJson(json);
                         break;
-                    case "crossroadslocations" :
-                        ret = MinistryPlatform.Translation.Services.LookupService.CrossroadsLocations(t);
+                    case "crossroadslocations":
+                        ret = LookupService.CrossroadsLocations(t);
                         break;
                     default:
                         break;
@@ -65,26 +62,24 @@ namespace crds_angular.Controllers.API
                 {
                     return this.BadRequest(string.Format("table: {0}", table));
                 }
-                return Ok(ret);   
-            }); 
+                return Ok(ret);
+            });
         }
 
-        [ResponseType(typeof(System.Web.Helpers.DynamicJsonArray))]
+        [ResponseType(typeof (DynamicJsonArray))]
         [HttpGet]
         [Route("api/lookup/{lookup?}")]
         public IHttpActionResult Get(string lookup)
         {
             return Authorized(t =>
             {
-                if(lookup == "states"){
+                if (lookup == "states")
+                {
                     var states = TranslationService.GetStates(t);
                     var json = DecodeJson(states.ToString());
-                     return this.Ok(json);
-                }                
-                else 
-                {
-                    return this.BadRequest();
-                }               
+                    return this.Ok(json);
+                }
+                return this.BadRequest();
             });
         }
 
@@ -94,49 +89,36 @@ namespace crds_angular.Controllers.API
         public IHttpActionResult EmailExists(string email)
         {
             //TODO let's clean this up
-            var returnvalue =  AuthorizedWithCookie(t =>
+            var authorizedWithCookie = AuthorizedWithCookie(t =>
             {
-                
-                var exists = MinistryPlatform.Translation.Services.LookupService.EmailSearch(email, t.SessionId);
-                if (exists.Count == 0 || Convert.ToInt32(exists["dp_RecordID"]) == t.UserId  )
+                var exists = LookupService.EmailSearch(email, t.SessionId);
+                if (exists.Count == 0 || Convert.ToInt32(exists["dp_RecordID"]) == t.UserId)
                 {
                     return Ok();
                 }
-                else
-                {
-                    return BadRequest();
-                }
+                return BadRequest();
             });
-            
-            if (returnvalue is UnauthorizedResult)
+
+            if (authorizedWithCookie is UnauthorizedResult)
             {
-                string token = AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"], ConfigurationManager.AppSettings["ApiPass"]);
-                var exists = MinistryPlatform.Translation.Services.LookupService.EmailSearch(email, token);
+                var token = AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"],
+                    ConfigurationManager.AppSettings["ApiPass"]);
+                var exists = LookupService.EmailSearch(email, token);
                 if (exists.Count == 0)
                 {
                     return Ok();
                 }
-                else
-                {
-                    return BadRequest();
-                }
+                return BadRequest();
             }
-            else
-            {
-
-                return returnvalue;
-            }
+            return authorizedWithCookie;
         }
 
         protected static dynamic DecodeJson(string json)
         {
             var obj = System.Web.Helpers.Json.Decode(json);
-            if (obj.GetType() == typeof(System.Web.Helpers.DynamicJsonArray))
-            {
-                dynamic[] array = obj;
-                return array;
-            }
-            return null;
+            if (obj.GetType() != typeof (DynamicJsonArray)) return null;
+            dynamic[] array = obj;
+            return array;
         }
     }
 }

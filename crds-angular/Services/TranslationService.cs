@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Helpers;
 using System.Collections.Generic;
 using System;
+using MinistryPlatform.Translation.Services;
+using System.Configuration;
 
 
 namespace crds_angular.Services
@@ -17,7 +19,7 @@ namespace crds_angular.Services
         
         private static string GetRecord(int pageId, int recordId, string token)
         {
-            var data = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecord(pageId, recordId, token);
+            var data = MinistryPlatformService.GetRecord(pageId, recordId, token);
             return data.ToString();
         }
 
@@ -33,20 +35,20 @@ namespace crds_angular.Services
 
         public static string GetLookup(int pageId, string token)
         {
-            var data = MinistryPlatform.Translation.Services.GetPageRecordService.GetRecords(pageId, token);
+            var data = MinistryPlatformService.GetRecords(pageId, token);
             return data.ToString();
         }
 
         public static string GetStates(string token)
         {
-            var data = MinistryPlatform.Translation.Services.GetPageRecordService.GetStates(token);
+            var data = MinistryPlatformService.GetRecords(Convert.ToInt32(ConfigurationManager.AppSettings["States"]), token);
             return data.ToString();
         }
 
 
         public static List<Dictionary<string, object>> GetLookupDict(int pageId, string token)
         {
-            return MinistryPlatform.Translation.Services.GetPageRecordService.GetRecordsDict(pageId, token);
+            return MinistryPlatformService.GetRecordsDict(pageId, token);
         }
 
         public static string GetMyAddress(int addressId, string token)
@@ -57,7 +59,7 @@ namespace crds_angular.Services
         
         public static string Login(string username, string password)
         {
-            return MinistryPlatform.Translation.AuthenticationService.authenticate(username, password);   
+            return AuthenticationService.authenticate(username, password);   
         }
 
         public static dynamic DecodeJson(string json)
