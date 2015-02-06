@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System;
 using MinistryPlatform.Translation.Services;
 using System.Configuration;
+using MinistryPlatform.Translation.Helpers;
+using MinistryPlatform.Translation.PlatformService;
 
 
 namespace crds_angular.Services
@@ -33,16 +35,18 @@ namespace crds_angular.Services
             return GetRecord(465, householdId, token);         
         }
 
-        public static string GetLookup(int pageId, string token)
+        public static string GetSkills(int pageId, string token)
         {
             var data = MinistryPlatformService.GetRecords(pageId, token);
-            return data.ToString();
+            var json = MPFormatConversion.MPFormatToJson(data);
+            return json.ToString();
         }
 
         public static string GetStates(string token)
         {
-            var data = MinistryPlatformService.GetRecords(Convert.ToInt32(ConfigurationManager.AppSettings["States"]), token);
-            return data.ToString();
+            var mpObject = MinistryPlatformService.GetRecords(Convert.ToInt32(ConfigurationManager.AppSettings["States"]), token);
+            var json = MPFormatConversion.MPFormatToJson(mpObject);
+            return json.ToString();
         }
 
 

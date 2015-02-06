@@ -13,19 +13,6 @@ namespace crds_angular.Controllers.API
 {
     public class LookupController : CookieAuth
     {
-        [ResponseType(typeof (DynamicJsonArray))]
-        [Route("api/lookup/{pageId}")]
-        public IHttpActionResult Get(int pageId)
-        {
-            return Authorized(t =>
-            {
-                var contact = TranslationService.GetLookup(pageId, t);
-                var json = DecodeJson(contact.ToString());
-
-                return this.Ok(json);
-            });
-        }
-
         [ResponseType(typeof (List<Dictionary<string, object>>))]
         [Route("api/lookup/{table?}")]
         [HttpGet]
@@ -77,6 +64,7 @@ namespace crds_angular.Controllers.API
                 {
                     var states = TranslationService.GetStates(t);
                     var json = DecodeJson(states.ToString());
+
                     return this.Ok(json);
                 }
                 return this.BadRequest();

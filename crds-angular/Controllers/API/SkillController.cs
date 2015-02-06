@@ -24,7 +24,7 @@ namespace crds_angular.Controllers.API
             {
                 var mySkills = GetMySkills(token);
 
-                var mpObject = TranslationService.GetLookup(pageId, token);
+                var mpObject = TranslationService.GetSkills(pageId, token);
                 var attributes = JsonConvert.DeserializeObject<List<Attribute>>(mpObject);
                 var skills = ConvertToSkills(attributes, mySkills);
 
