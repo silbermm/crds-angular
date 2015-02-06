@@ -1,9 +1,9 @@
-﻿<form role="form" ng-init="profile.initAccount(this)" name="account_form">
+﻿<form role="form" ng-init="profile.initAccount(this)" name="account_form" novalidate>
 
     <div class="row">
         <div class="form-group col-sm-6">
             <label for="password">Change Password</label>  
-            <password-field passwd="profile.password.password"></password-field>
+            <password-field submitted="account_form.$submitted" passwd="profile.password.password"></password-field>
         </div>
             <div class="form-group col-sm-12">
                 <label class="block">Email Communication</label>

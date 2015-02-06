@@ -9,7 +9,7 @@
                     <ng-messages for="navlogin['username'].$error" ng-if="navlogin.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
                 </div>
                 <div class="navbar--login__input" ng-class="{'has-error': navlogin['password'].$invalid && navlogin['password'].$touched && navlogin['password'].$dirty }">
-                    <input required class="form-control" ng-model-options="{updateOn: 'blur'}" autocomplete="off" type="password" name="password" id="password_nav" placeholder="Password" autocapitalize="off" ng-model="credentials.password">    
+                    <password-field passwd="credentials.password" submitted="navlogin.$submitted"></password-field>
                 </div>
                 <div>
                     <ng-messages for="navlogin['password'].$error" ng-if="navlogin.$submitted" ng-messages-include="on-submit-messages"></ng-messages>

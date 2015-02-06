@@ -20,6 +20,11 @@
 
         $scope.register = function (form) {
             _this.form = form;
+
+            if (form.newuser == null || form.newuser.email == null || form.newuser.password == null || form.newuser.email =="" || form.newuser.password =="") {
+                $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+                return;
+            }
                 
             $scope.credentials = {};
             $scope.credentials.username = form.newuser.email;
@@ -51,6 +56,12 @@
         $scope.toggleDesktopRegister = function () {
             $scope.registerShow = !$scope.registerShow;
             if ($scope.loginShow)
+                $scope.loginShow = !$scope.loginShow;
+        }
+
+        $scope.openLogin = function () {
+            $scope.registerShow = !$scope.registerShow;
+            if (!$scope.loginShow)
                 $scope.loginShow = !$scope.loginShow;
         }
     }

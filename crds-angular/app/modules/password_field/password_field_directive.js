@@ -6,7 +6,8 @@
             restrict: 'EA',
             replace: true,
             scope: {
-                passwd: "=passwd"
+                passwd: "=passwd",
+                submitted: "="
             },
             templateUrl: 'app/modules/password_field/password_field.html',
             link: (function (scope, el, attr, ctrl) {
