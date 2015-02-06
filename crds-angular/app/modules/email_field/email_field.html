@@ -1,11 +1,6 @@
 ﻿<ng-form name="email_field">
     <!--TODO refactor the validation logic below into a shorter method-->
-    <div class="form-group" ng-class="{'has-error':
-         email_field.email.$error.required && submitted  && email_field.email.$dirty ||
-         email_field.email.$error.required && submitted  && !email_field.email.$touched ||
-         email_field.email.$error.required && submitted  && email_field.email.$touched ||
-         email_field.email.$error.unique && email_field.email.$dirty  ||
-         !email_field.email.$error.required && email_field.email.$dirty && !email_field.email.$valid}">
+    <div class="form-group" ng-class="{'has-error': checkEmail()}">
         <input type="email" ng-model="email" class="form-control" id="email" placeholder="Email" ng-required="true" name="email" ng-model-options="{ updateOn: 'blur'}" unique-email>
         
         <ng-messages for="email_field.email.$error" ng-if="submitted" ng-messages-include="on-submit-messages"></ng-messages>
