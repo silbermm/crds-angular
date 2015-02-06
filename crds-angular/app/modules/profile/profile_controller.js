@@ -13,7 +13,12 @@
 
 	    _this.saveAccount = function (form) {
 	        _this.form = form;
-            $log.debug(_this.account.EmailNotifications);
+	        $log.debug(_this.account.EmailNotifications);
+
+	        if (_this.password.password == null || _this.password.password == "") {
+	            $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+	            return;
+	        }
 
             if (_this.password.password) {
                 $log.debug("Save the password first!");
