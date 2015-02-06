@@ -233,6 +233,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\crossroads.net\apprun.js" />
     <Content Include="app\crossroads.net\home\home.html" />
     <Content Include="app\crossroads.net\home\home_controller.js" />
     <Content Include="app\crossroads.net\login\login_form.html" />
@@ -250,6 +251,7 @@
     <Content Include="app\modules\cms\services\message_service.js" />
     <Content Include="app\modules\email_field\email_field.html" />
     <Content Include="app\modules\email_field\email_field_directive.js" />
+    <Content Include="app\modules\email_field\email_field_validation_directive.js" />
     <Content Include="app\modules\password_field\password_field.html" />
     <Content Include="app\modules\password_field\password_field_directive.js" />
     <Content Include="app\modules\opportunity\module.js" />

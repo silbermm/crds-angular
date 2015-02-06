@@ -35,9 +35,7 @@
     <div class="row">
         <div class="form-group col-sm-6" ng-class="{'has-error':personal.email.$invalid}">
             <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email address" ng-model="profile.person.Email_Address" ng-model-options="{ debounce : { 'default' : 1000, blur: 0} }"  required unique-email>
-            <ng-messages for="personal.email.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
-            <ng-messages for="personal.email.$error" ng-messages-include="on-pause-messages"></ng-messages>
+            <email-field email="profile.person.Email_Address" submitted="personal.$submitted"></email-field>
         </div>
     </div>
 
@@ -181,7 +179,7 @@
                                         <input name="zip" ng-model="profile.person.Postal_Code" type="text" class="form-control" id="zip" placeholder="Enter zip code" required ng-pattern="profile.zipFormat">
                                         <ng-messages for="personal.zip.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
                                         <ng-messages for="personal.zip.$error">
-                                            <!-- TODO Create custom phone validator here so we can use the template instead of the override below -->
+                                            <!-- TODO Create custom zip validator here so we can use the template instead of the override below -->
                                             <span ng-message="pattern"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidZip].message | html"</span></span>
                                         </ng-messages>
 
