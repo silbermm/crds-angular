@@ -32,7 +32,7 @@
                     $log.debug(user);
                     $scope.registerShow = !$scope.registerShow;
                     $rootScope.showLoginButton = false; //TODO use emit or an event here, avoid using rootscope
-                    $rootScope.$emit('notify.success', $rootScope.MESSAGES.successfullRegistration);
+                    $rootScope.$emit('notify', $rootScope.MESSAGES.successfullRegistration);
                 }, function () {
                     $log.debug("Bad password");
                     $scope.pending = false;

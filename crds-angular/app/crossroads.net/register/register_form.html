@@ -7,8 +7,8 @@
 
         <div class="soft-half-bottom"><input class="form-control navbar--login__input" id="lastname" type="text" ng-model="newuser.lastname" placeholder="Last Name" required />
         </div>
-
-        <div class="soft-half-bottom"><input class="form-control navbar--login__input" id="email" type="email" ng-model="newuser.email" required placeholder="Email" />
+        <div>
+            <email-field email="newuser.email" submitted="registerForm.$submitted"></email-field>
         </div>
         <div class="input-group soft-half-bottom">
             <password-field passwd="newuser.password"></password-field>

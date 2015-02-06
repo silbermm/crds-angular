@@ -1,16 +1,21 @@
 ﻿<div class="dd_menu">
     <div class="primary">
-        <form id="nav_login" name="nav_login" role="form" ng-submit="login()" class="ng-pristine ng-valid"  novalidate>
+        <form id="navlogin" name="navlogin" role="form" ng-submit="login()" class="ng-pristine ng-valid"  novalidate>
             <div class="form-group">
-                <div class="navbar--login__input" ng-class="{'has-error': loginError}">
-                    <input required class="form-control ng-pristine ng-untouched ng-valid" type="text" name="userName" id="username_nav" placeholder="Email" autocomplete="off" autocapitalize="off" ng-model="credentials.username" autofocus=""> 
+                <div class="navbar--login__input" ng-class="{'has-error': navlogin['username'].$invalid && navlogin['username'].$touched && navlogin['username'].$dirty }">
+                    <input required class="form-control" ng-model-options="{updateOn: 'blur'}" type="text" name="username" id="username-nav" placeholder="Email" autocomplete="off" autocapitalize="off" ng-model="credentials.username" autofocus=""> 
                 </div>
-                <div class="navbar--login__input" ng-class="{'has-error': loginError}">
-                    <input required class="form-control ng-pristine ng-untouched ng-valid" autocomplete="off" type="password" name="password" id="password_nav" placeholder="Password" autocapitalize="off" ng-model="credentials.password">    
+                <div class="navbar--login__input" ng-class="{'has-error': navlogin['password'].$invalid && navlogin['password'].$touched && navlogin['password'].$dirty }">
+                    <input required class="form-control" ng-model-options="{updateOn: 'blur'}" autocomplete="off" type="password" name="password" id="password_nav" placeholder="Password" autocapitalize="off" ng-model="credentials.password">    
                 </div>
                 <div>
-                    <span ng-show="nav_login.userName.$invalid && pending || nav_login.password.$invalid && pending">{{$root.MESSAGES.credentialsBlank}}</span>
-                    <span ng-show="loginFailed">{{$root.MESSAGES.loginFailed}}</span>
+                    
+                    <ng-messages for="navlogin['username'].$error" ng-if="navlogin.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
+                    <ng-messages for="navlogin['password'].$error" ng-if="navlogin.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
+                    <!-- TODO Update to use ngMessages and a validator -->
+                    <span ng-show="loginFailed">
+                        <span ng-bind-html="$root.messages[$root.MESSAGES.loginFailed].message | html"></span>
+                    </span>
                 </div>
                 <input type="submit" name="submit_nav" value="Login" ng-click="login()" ng-class="{disabled: processing }" id="submit_nav" class="col-xs-12 btn btn-primary push-half-bottom">
                 <div class="pull-right">
