@@ -41,6 +41,7 @@
 
         _this.savePersonal = function () {
             _this.submitted = true;
+            $log.debug(_this.form.personal);
             if (_this.form.personal.$invalid) {
                 $rootScope.$emit('notify', MESSAGES.generalError);
                 _this.submitted = false;              

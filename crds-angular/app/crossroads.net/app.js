@@ -12,7 +12,7 @@
             isAuthenticated : "auth-is-authenticated",
             notAuthorized: "auth-not-authorized"
     })
-        //TODO Pull out to service and/or config file
+    //TODO Pull out to service and/or config file
     .constant("MESSAGES", {
         generalError: 1,
         emailInUse: 2,
