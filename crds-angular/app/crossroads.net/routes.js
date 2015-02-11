@@ -107,7 +107,7 @@
                                 return Lookup.query({ table: "serviceproviders" }).$promise;
                             },
                             states: function(Lookup) {
-                                return Lookup.query({ lookup: "states" }).$promise;
+                                return Lookup.query({ table: "states" }).$promise;
                             },
                             countries: function(Lookup) {
                                 return Lookup.query({ table: "countries" }).$promise;

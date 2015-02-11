@@ -36,8 +36,7 @@ namespace crds_angular.Controllers.API
                         ret = LookupService.Countries(t);
                         break;
                     case "states":
-                        var json = TranslationService.GetStates(t);
-                        ret = DecodeJson(json);
+                        ret = LookupService.States(t);                        
                         break;
                     case "crossroadslocations":
                         ret = LookupService.CrossroadsLocations(t);
@@ -52,25 +51,6 @@ namespace crds_angular.Controllers.API
                 return Ok(ret);
             });
         }
-
-        [ResponseType(typeof (DynamicJsonArray))]
-        [HttpGet]
-        [Route("api/lookup/{lookup?}")]
-        public IHttpActionResult Get(string lookup)
-        {
-            return Authorized(t =>
-            {
-                if (lookup == "states")
-                {
-                    var states = TranslationService.GetStates(t);
-                    var json = DecodeJson(states.ToString());
-
-                    return this.Ok(json);
-                }
-                return this.BadRequest();
-            });
-        }
-
 
         [HttpGet]
         [Route("api/lookup/{email?}")]

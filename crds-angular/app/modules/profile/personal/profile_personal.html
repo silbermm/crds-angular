@@ -168,7 +168,7 @@
 
                                     <div class="form-group col-sm-6" ng-class="{'has-error':personal.state.$invalid}">
                                         <label for="state">State</label>
-                                        <select name="state" id="state" class="form-control col-sm-12" ng-model="profile.person.State" ng-options="state.State_Abbreviation as state.State_Abbreviation for state in profile.states" required>
+                                        <select name="state" id="state" class="form-control col-sm-12" ng-model="profile.person.State" ng-options="state.dp_RecordName as state.dp_RecordName for state in profile.states" required>
                                             <option value=""> -- Choose a State -- </option>
                                         </select>
                                         <ng-messages for="personal.state.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
