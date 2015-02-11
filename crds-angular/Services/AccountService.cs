@@ -128,7 +128,7 @@ namespace crds_angular.Services
             userDictionary["User_Name"] = userDictionary["User_Email"];
             userDictionary["Contact_ID"] = contactRecordID;
 
-            recordId = MinistryPlatformService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Users"]), userDictionary, token);
+            recordId = MinistryPlatformService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Users"]), userDictionary, token, true);
 
             return recordId;
         }
