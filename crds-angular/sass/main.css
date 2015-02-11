@@ -1,4 +1,4 @@
-@charset "UTF-8";
+﻿@charset "UTF-8";
 /*! normalize.css v3.0.2 | MIT License | git.io/normalize */
 @import url("http://fonts.googleapis.com/css?family=Open+Sans:300");
 @import url(http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css);
@@ -2529,6 +2529,8 @@ select[multiple].input-lg,
   border-color: #a94442;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); }
+.has-error span {
+color: #d9534f; }
   .has-error .form-control:focus {
     border-color: #843534;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ce8483;
@@ -6856,8 +6858,7 @@ header.show .container {
     content: "";
     opacity: 0; }
   .navbar--login .btn {
-    margin-top: 10px;
-    margin-bottom: 15px; }
+      margin: 2px; }
   .navbar--login .dropdown-menu {
     left: calc(100% - 300px);
     width: 300px; }
