@@ -45,7 +45,6 @@ namespace crds_angular.Services
         public static string GetStates(string token)
         {
             var mpObject = MinistryPlatformService.GetRecords(Convert.ToInt32(ConfigurationManager.AppSettings["States"]), token);
-            //var mpObject = MinistryPlatformService.GetLookupRecords(Convert.ToInt32(ConfigurationManager.AppSettings["States"]),token);
             var json = MPFormatConversion.MPFormatToJson(mpObject);
             return json.ToString();
         }
