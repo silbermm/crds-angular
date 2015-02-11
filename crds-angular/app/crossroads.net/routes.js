@@ -145,9 +145,14 @@
                         resolve: {
                             loggedin: checkLoggedin
                         }
+                    })
+                    .state("content", {
+                        url: "/:urlsegment",
+                        controller: "ContentCtrl",
+                        templateUrl: "app/crossroads.net/content/content.html"
                     });
 
-                $urlRouterProvider.otherwise("/home");
+                $urlRouterProvider.otherwise("/");
             }
         ]);
 
