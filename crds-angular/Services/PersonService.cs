@@ -1,18 +1,14 @@
-﻿using crds_angular.Models;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Reflection;
-using System.Diagnostics;
-using System.Configuration;
+using AutoMapper;
+using crds_angular.Models;
+using crds_angular.Models.Crossroads;
 using MinistryPlatform.Translation.Services;
+using Attribute = MinistryPlatform.Models.Attribute;
 
 namespace crds_angular.Services
 {
-    public class PersonService : MinistryPlatformBaseService       
+    public class PersonService : MinistryPlatformBaseService
     {
         public void setProfile(String token, Person person)
         {
@@ -20,30 +16,38 @@ namespace crds_angular.Services
             var householdDictionary = getDictionary(person.GetHousehold());
             var addressDictionary = getDictionary(person.GetAddress());
             addressDictionary.Add("State/Region", addressDictionary["State"]);
-            
-            MinistryPlatformService.UpdateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["MyContact"]), contactDictionary, token);
-            MinistryPlatformService.UpdateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["MyHousehold"]), householdDictionary, token);
-            MinistryPlatformService.UpdateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["MyAddresses"]), addressDictionary, token); 
+
+            MinistryPlatformService.UpdateRecord(AppSetting("MyContact"), contactDictionary, token);
+
+            if (addressDictionary["Address_ID"] != null)
+            {
+                //address exists, update it
+                MinistryPlatformService.UpdateRecord(AppSetting("MyAddresses"), addressDictionary, token);
+            }
+            else
+            {
+                //address does not exist, create it, then attach to household
+                var addressId = MinistryPlatformService.CreateRecord(AppSetting("MyAddresses"), addressDictionary, token);
+                householdDictionary.Add("Address_ID", addressId);
+            }
+            MinistryPlatformService.UpdateRecord(AppSetting("MyHousehold"), householdDictionary, token);
         }
 
-        public List<Models.Crossroads.Skill> getLoggedInUserSkills(int contactId, string token)
+        public List<Skill> getLoggedInUserSkills(int contactId, string token)
         {
-
             return GetSkills(contactId, token);
         }
 
         public Person getLoggedInUserProfile(String token)
         {
-            var contactId = AuthenticationService.GetContactId(token);
-            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["MyProfile"]);
-            JArray contact = MinistryPlatformService.GetRecordsArr(pageId, token);
+            var contact = MinistryPlatformService.GetRecordsArr(AppSetting("MyProfile"), token);
             if (contact.Count == 0)
             {
                 throw new InvalidOperationException("getLoggedInUserProfile - no data returned.");
             }
             var contactJson = TranslationService.DecodeJson(contact.ToString());
-                      
-            var person = new Person            
+
+            var person = new Person
             {
                 Contact_Id = contactJson.Contact_Id,
                 Email_Address = contactJson.Email_Address,
@@ -75,18 +79,14 @@ namespace crds_angular.Services
             return person;
         }
 
-        private List<Models.Crossroads.Skill> GetSkills(int recordId, string token)
+        private List<Skill> GetSkills(int recordId, string token)
         {
             var attributes = GetMyRecords.GetMyAttributes(recordId, token);
 
-            var skills = AutoMapper.Mapper.Map<List<MinistryPlatform.Models.Attribute>, List<Models.Crossroads.Skill>>(attributes);
+            var skills =
+                Mapper.Map<List<Attribute>, List<Skill>>(attributes);
 
             return skills;
-
         }
-        
-
-        
-
     }
 }

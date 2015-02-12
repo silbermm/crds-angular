@@ -1,9 +1,12 @@
 ﻿'use strict';
 (function () {
-    angular.module('crossroads').controller('RegisterCtrl', ['$scope', '$rootScope', 'AUTH_EVENTS','AuthService', 'MESSAGES', 'Users', '$log', RegisterController]);
+    angular.module('crossroads').controller('RegisterCtrl', ['$scope', '$rootScope', 'AUTH_EVENTS','AuthService', 'MESSAGES', 'User', '$log', RegisterController]);
    
-    function RegisterController($scope, $rootScope, AUTH_EVENTS, AuthService, MESSAGES, Users, $log) {
+    function RegisterController($scope, $rootScope, AUTH_EVENTS, AuthService, MESSAGES, User, $log) {
         $log.debug("Inside register controller");
+        $scope.newuser = User;
+
+        $scope.passwordPrefix = "registration";
 
         $scope.pwprocess = function(){
             if ($scope.pwprocessing =="SHOW") {
@@ -21,6 +24,7 @@
         $scope.register = function (form) {
             _this.form = form;
 
+
             if (form.newuser == null || form.newuser.email == null || form.newuser.password == null || form.newuser.email == "" || form.newuser.password == "" || form.newuser.firstname == null || form.newuser.firstname == '' || form.newuser.lastname == null || form.newuser.lastname =='') {
                 $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
                 return;
@@ -30,8 +34,7 @@
             $scope.credentials.username = form.newuser.email;
             $scope.credentials.password = form.newuser.password;
 
-            var user = new Users(form.newuser);
-            user.$save().then(function () {
+            User.$save().then(function () {
                 AuthService.login($scope.credentials).then(function (user) { // TODO Refactor this to a shared location for use here and in login_controller
                     $log.debug("got a 200 from the server ");
                     $log.debug(user);
@@ -59,7 +62,9 @@
                 $scope.loginShow = !$scope.loginShow;
         }
 
-        $scope.openLogin = function () {
+        $scope.openLogin = function (data) {
+            $scope.credentials.username = User.getEmail();
+            $scope.credentials.password = User.getPassword();
             $scope.registerShow = !$scope.registerShow;
             if (!$scope.loginShow)
                 $scope.loginShow = !$scope.loginShow;
