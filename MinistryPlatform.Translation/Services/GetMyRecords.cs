@@ -9,7 +9,7 @@ using System.Reflection;
 namespace MinistryPlatform.Translation.Services
 {
     //TODO Should this be called GetAttributes?
-    public class GetMyRecords
+    public class GetMyRecords:BaseService
     {
         public static List<MinistryPlatform.Models.Attribute> GetMyAttributes(int recordId, string token)
         {
@@ -60,14 +60,13 @@ namespace MinistryPlatform.Translation.Services
         {
             try
             {
-                var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["ContactAttributes"]);
                 var platformServiceClient = new PlatformService.PlatformServiceClient();
                 PlatformService.SelectQueryResult result;
 
                 using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
                 {
                     System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
-                    platformServiceClient.DeletePageRecord(pageId, recordId, null);
+                    platformServiceClient.DeleteSubpageRecord(AppSettings("MySkills"),recordId,null);
                 }
                 return true;
             }
