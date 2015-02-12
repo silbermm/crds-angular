@@ -88,7 +88,7 @@
                                         <a href="#/home" ng-click="logout()" class="ng-cloak">Sign Out</a>
                                     </li>
                                     <li class="hidden-xs" data-toggle="dropdown" ng-show="$root.username == undefined">
-                                        <button class="btn btn-primary" id="form-toggle" ng-click="toggleDesktopLogin()">
+                                        <button class="btn btn-primary" id="form-toggle" ng-click="toggleDesktopLogin(); passwordPrefix='login-dropdown'">
                                             <span>Login</span>
                                         </button>
                                     </li>
@@ -107,7 +107,7 @@
                                 </ul>
                                 <ul class="navbar--login list-unstyled">
                                     <li class="hidden-xs" data-toggle="dropdown" ng-show="$root.username == undefined">
-                                        <button class="btn btn-primary" id="form-toggle" ng-click="toggleDesktopRegister()">
+                                        <button class="btn btn-primary" id="form-toggle" ng-click="toggleDesktopRegister(); passwordPrefix='registration'">
                                             <span>Register</span>
                                         </button>
                                     </li>

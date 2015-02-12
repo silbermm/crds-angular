@@ -6,6 +6,8 @@
         
         var _this = this;
 
+        _this.passwordPrefix = "account-page";
+
 	    _this.initAccount = function () {
             _this.account = Profile.Account.get();
             _this.password = new Profile.Password();

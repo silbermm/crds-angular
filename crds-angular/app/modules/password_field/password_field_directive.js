@@ -7,15 +7,15 @@
             replace: true,
             scope: {
                 passwd: "=passwd",
-                submitted: "="
+                submitted: "=",
+                prefix: "="
             },
             templateUrl: 'app/modules/password_field/password_field.html',
             link: (function (scope, el, attr, ctrl) {
                 //scope.showPassword = false;
                 scope.inputType = 'password';
                 scope.pwprocessing = "SHOW";
-                scope.pwprocess = function () {
-                    $log.debug("pwprocess function launched");
+                scope.pwprocess = function () {                    
                     if (scope.pwprocessing == "SHOW") {
                         scope.pwprocessing = "HIDE";
                         scope.inputType = 'text';
