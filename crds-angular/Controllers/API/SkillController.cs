@@ -7,7 +7,6 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Models.Crossroads;
 using crds_angular.Services;
-using MinistryPlatform.Translation.Services;
 using Newtonsoft.Json;
 using Attribute = MinistryPlatform.Models.Attribute;
 

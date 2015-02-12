@@ -66,16 +66,25 @@ namespace MinistryPlatform.Translation.Test
         [Test]
         public void ShouldCreatePageRecord()
         {
-            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["MyContact"]);
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            var uid = USERNAME;
+            var pwd = PASSWORD;
+            var token = AuthenticationService.authenticate(uid, pwd);
             var recordId = AuthenticationService.GetContactId(token);
-            Dictionary<string, object> record = MinistryPlatformService.GetRecordDict(pageId, recordId, token);
-            record["First_Name"] = "Created";
-            record["Email_Address"] = "test@testemail.com";
-            int newRecordId = MinistryPlatformService.CreateRecord(pageId, record, token);
+
+            var householdDict = new Dictionary<string, object>
+            {
+                {"Contact_ID", recordId},
+                {"Congregation_ID", 5},
+                {"Household_Name", "API Household"}
+            };
+            var hhPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MyHousehold"]);
+
+            var newRecordId = MinistryPlatformService.CreateRecord(hhPageId, householdDict, token);
             Assert.IsNotNull(newRecordId);
             Assert.AreNotEqual(0, newRecordId);
-            MinistryPlatformService.DeleteRecord(pageId, newRecordId, null, token);
+
+            //TODO: Determine how to clean up after tests
+            //MinistryPlatformService.DeleteRecord(hhPageId, newRecordId, null, adminToken);
         }
 
         [Test]
