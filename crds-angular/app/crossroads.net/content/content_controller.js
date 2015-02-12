@@ -6,7 +6,6 @@ angular.module('crossroads').controller('ContentCtrl', ['$scope','$stateParams',
         if (pageRequest.pages.length > 0) {
             $scope.content = pageRequest.pages[0].content;
         } else {
-            //TODO Set 404 Response Header
             var notFoundRequest = Page.get({ url: "page-not-found" }, function () {
                 if (notFoundRequest.pages.length > 0) {
                     $scope.content = notFoundRequest.pages[0].content;
