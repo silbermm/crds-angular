@@ -1,4 +1,4 @@
-﻿/// <reference path="../content/content_controller.js" />
+﻿/// <reference path="../content/content_controller.js" /> 
 angular.module('crossroads').controller('ContentCtrl', ['$scope','$stateParams','$log','Page', function ($scope, $stateParams, $log, Page) {
     $scope.main = "ContentCtrl";
     $scope.params = $stateParams;
