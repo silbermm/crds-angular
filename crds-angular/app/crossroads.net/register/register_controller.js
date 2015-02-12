@@ -5,6 +5,8 @@
     function RegisterController($scope, $rootScope, AUTH_EVENTS, AuthService, MESSAGES, Users, $log) {
         $log.debug("Inside register controller");
 
+        $scope.passwordPrefix = "registration";
+
         $scope.pwprocess = function(){
             if ($scope.pwprocessing =="SHOW") {
                 $scope.pwprocessing = "HIDE";

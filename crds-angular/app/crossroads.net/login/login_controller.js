@@ -6,6 +6,8 @@
   
         $scope.loginShow = false;
 
+        $scope.passwordPrefix = "login-page";
+
         $scope.toggleDesktopLogin = function () {
             $scope.loginShow = !$scope.loginShow;
             if ($scope.registerShow)
