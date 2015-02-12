@@ -252,6 +252,7 @@
     <Content Include="app\crossroads.net\services\auth_service.js" />
     <Content Include="app\modules\cms\module.js" />
     <Content Include="app\modules\cms\services\message_service.js" />
+    <Content Include="app\modules\cms\services\page_service.js" />
     <Content Include="app\modules\email_field\email_field.html" />
     <Content Include="app\modules\email_field\email_field_directive.js" />
     <Content Include="app\modules\email_field\email_field_validation_directive.js" />
