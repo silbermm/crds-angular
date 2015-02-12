@@ -1,5 +1,4 @@
 ﻿<ng-form name="email_field">
-    <!--TODO refactor the validation logic below into a shorter method-->
     <div class="form-group" ng-class="{'has-error': checkEmail()}">
         <input type="email" ng-model="email" class="form-control" id="email" placeholder="Email" ng-required="true" name="email" ng-model-options="{ updateOn: 'blur'}" unique-email>
         

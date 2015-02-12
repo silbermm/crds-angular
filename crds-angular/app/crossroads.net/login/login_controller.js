@@ -10,6 +10,14 @@
 
         $scope.passwordPrefix = "login-page";
 
+        $scope.checkIfUsernameValid = function() {return (
+             $scope.navlogin.username.$error.required && $scope.navlogin.$submitted &&  $scope.navlogin.username.$dirty ||
+          $scope.navlogin.username.$error.required && $scope.navlogin.$submitted && !$scope.navlogin.username.$touched ||
+          $scope.navlogin.username.$error.required && $scope.navlogin.$submitted && $scope.navlogin.username.$touched ||
+          $scope.navlogin.username.$error.unique &&  $scope.navlogin.username.$dirty ||
+         ! $scope.navlogin.username.$error.required &&  $scope.navlogin.username.$dirty && ! $scope.navlogin.username.$valid)
+        };
+
         $scope.toggleDesktopLogin = function () {
             $scope.loginShow = !$scope.loginShow;
             if ($scope.registerShow) {
@@ -49,10 +57,10 @@
                     $rootScope.showLoginButton = false;
                     $scope.navlogin.$setPristine();
                 }, function () {
-                    $log.debug("Bad password");
                     $scope.pending = false;
                     $scope.processing = false;
                     $scope.loginFailed = true;
+                    $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
                 });
             }
         };
