@@ -133,83 +133,67 @@
         <div id="container" hide-on-mobile-menu>
             <div class="container">
                 <div class="row">
-                    @* TODO this should be refactored out, this is really the ui-view for the homepage, it shouldn't be on every page.*@
                     <div class="col-md-12">
-
-                        <div class="home" id="home">
-                            <div class="row">
-                                <div class="col-sm-8">
-                                    <h1 class="home-header brand-font">Welcome</h1>
-                                    <h2 class="tagline subheading">
-                                        Whatever your thoughts on church, whatever<br class="hidden-xs"> your beliefs about God, you are welcome here.
-                                    </h2>
-                                    <a href="/explore" class="btn btn-default btn-lg">Get To Know Us</a>
-                                </div>
-                                <div class="col-sm-4">
-                                    <img class="img-responsive hidden-xs coffee-cup" src="//crossroads-media.s3.amazonaws.com/images/coffee_cup.jpg" alt="Coffee Cup">
-                                </div>
-                            </div>
-                        </div>
                         <div ui-view></div>
-
                     </div>
                 </div>
-                    
-            </div>  <!-- /container -->
-            <footer>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="col-sm-3">
-                                <img class="img-responsive">
-                            </div>
-                            <div class="col-sm-9">
-                                <h5 class="series-title">
-                                    <strong>
-                                        Current Series
-                                    </strong>
-                                </h5>
-                                <p class="series-description"></p>
-                                <br>
-                                <a href="">View Messages</a>
-                            </div>
-                        </div>
-                        <div class="col-sm-3 open">
-                            <h5><strong>We’re Open.</strong></h5>
-                            3500 Madison Open<br>
-                            Free coffee, free Wi-Fi,
-                            and plenty of couches.<br>
-                            <a href="/oakley">Come on Over.</a>
-                        </div>
-                        <div class="col-sm-3 office">
-                            <h5><strong>Our Office:</strong></h5>
-                            3500 Madison Road<br>
-                            Cincinnati, OH 45209<br>
-                            513.731.7400<br>
-                            <a href="/prayerrequest">Submit a Prayer Request</a>
-                            <br>
-                            <br>
-                            <a href="/servicetimesanddirections">Service Times &amp; Directions</a>
-                            <br>
-                            <br>
-                            <a href="/contact">
-                                Contact Us | <a href="/privacypolicy">Privacy Policy</a>
-                                <br>
-                                <br>
-                                <img src="//crossroads-media.s3.amazonaws.com/images/coc_logo.png" alt="Partner of Church of Cincinnati">
-                        </div>
-                    </div>
-                </div>
-            </footer>
+            </div>
         </div>
 
-    </div>
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="col-sm-3">
+                            <img class="img-responsive">
+                        </div>
+                        <div class="col-sm-9">
+                            <h5 class="series-title">
+                                <strong>
+                                    Current Series
+                                </strong>
+                            </h5>
+                            <p class="series-description"></p>
+                            <br>
+                            <a href="">View Messages</a>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 open">
+                        <h5><strong>We’re Open.</strong></h5>
+                        3500 Madison Open<br>
+                        Free coffee, free Wi-Fi,
+                        and plenty of couches.<br>
+                        <a href="/oakley">Come on Over.</a>
+                    </div>
+                    <div class="col-sm-3 office">
+                        <h5><strong>Our Office:</strong></h5>
+                        3500 Madison Road<br>
+                        Cincinnati, OH 45209<br>
+                        513.731.7400<br>
+                        <a href="/prayerrequest">Submit a Prayer Request</a>
+                        <br>
+                        <br>
+                        <a href="/servicetimesanddirections">Service Times &amp; Directions</a>
+                        <br>
+                        <br>
+                        <a href="/contact">
+                            Contact Us | <a href="/privacypolicy">Privacy Policy</a>
+                            <br>
+                            <br>
+                            <img src="//crossroads-media.s3.amazonaws.com/images/coc_logo.png" alt="Partner of Church of Cincinnati">
+                    </div>
+                </div>
+            </div>
+        </footer>
+                    </div>
 
-    @Scripts.Render("~/bundles/underscore")
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/angular")
-    @Scripts.Render("~/bundles/modules")
-    @Scripts.Render("~/bundles/crossroads.net")
+                </div>
+
+                @Scripts.Render("~/bundles/underscore")
+                @Scripts.Render("~/bundles/jquery")
+                @Scripts.Render("~/bundles/bootstrap")
+                @Scripts.Render("~/bundles/angular")
+                @Scripts.Render("~/bundles/modules")
+                @Scripts.Render("~/bundles/crossroads.net")
 </body>
 </html>
