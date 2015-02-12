@@ -2,14 +2,19 @@
 (function () {
   
 
-    function LoginController($scope, $rootScope, AUTH_EVENTS, MESSAGES, AuthService, $cookieStore, $state, $log, Session, $timeout) {
+    function LoginController($scope, $rootScope, AUTH_EVENTS, MESSAGES, AuthService, $cookieStore, $state, $log, Session, $timeout, User) {
   
         $scope.loginShow = false;
-
+        $scope.credentials = {};
+        $scope.credentials.username = User.getEmail();
+       
         $scope.toggleDesktopLogin = function () {
             $scope.loginShow = !$scope.loginShow;
-            if ($scope.registerShow)
+            if ($scope.registerShow) {
                 $scope.registerShow = !$scope.registerShow;
+                $scope.credentials.username = User.getEmail();
+                $scope.credentials.password = User.getPassword();
+            }
         }
           
         $scope.logout = function () {
@@ -51,5 +56,5 @@
         };
     }
 
-    angular.module('crossroads').controller('LoginCtrl', ['$scope', '$rootScope', 'AUTH_EVENTS', 'MESSAGES', 'AuthService', '$cookieStore', '$state', '$log', "Session", "$timeout", LoginController]);
+    angular.module('crossroads').controller('LoginCtrl', ['$scope', '$rootScope', 'AUTH_EVENTS', 'MESSAGES', 'AuthService', '$cookieStore', '$state', '$log', "Session", "$timeout", "User", LoginController]);
 })()
