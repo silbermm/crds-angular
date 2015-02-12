@@ -1377,7 +1377,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>49380</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:49380/</IISUrl>
+          <IISUrl>http://localhost.crossroads.net/</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost.crossroads.net/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
