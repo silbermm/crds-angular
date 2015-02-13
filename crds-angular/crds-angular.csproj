@@ -235,6 +235,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\crossroads.net\apprun.js" />
+    <Content Include="app\crossroads.net\content\content.html" />
+    <Content Include="app\crossroads.net\content\content_controller.js" />
     <Content Include="app\crossroads.net\home\home.html" />
     <Content Include="app\crossroads.net\home\home_controller.js" />
     <Content Include="app\crossroads.net\login\login_form.html" />
@@ -250,6 +252,7 @@
     <Content Include="app\crossroads.net\services\auth_service.js" />
     <Content Include="app\modules\cms\module.js" />
     <Content Include="app\modules\cms\services\message_service.js" />
+    <Content Include="app\modules\cms\services\page_service.js" />
     <Content Include="app\modules\email_field\email_field.html" />
     <Content Include="app\modules\email_field\email_field_directive.js" />
     <Content Include="app\modules\email_field\email_field_validation_directive.js" />
