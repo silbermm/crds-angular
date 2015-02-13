@@ -5,17 +5,24 @@
     function LoginController($scope, $rootScope, AUTH_EVENTS, MESSAGES, AuthService, $cookieStore, $state, $log, Session, $timeout, User) {
   
         $scope.loginShow = false;
+        $scope.newuser = User;
         $scope.credentials = {};
-        $scope.credentials.username = User.getEmail();
+        $scope.credentials.username = $scope.newuser.email;
 
         $scope.passwordPrefix = "login-page";
+
+        $scope.checkEmail = function() {
+            return ($scope.navlogin.username.$error.required && $scope.navlogin.$submitted && $scope.navlogin.username.$dirty ||
+                $scope.navlogin.username.$error.required && $scope.navlogin.$submitted && !$scope.navlogin.username.$touched ||
+                $scope.navlogin.username.$error.required && $scope.navlogin.$submitted && $scope.navlogin.username.$touched || !$scope.navlogin.username.$error.required && $scope.navlogin.username.$dirty && !$scope.navlogin.username.$valid);
+        }
 
         $scope.toggleDesktopLogin = function () {
             $scope.loginShow = !$scope.loginShow;
             if ($scope.registerShow) {
                 $scope.registerShow = !$scope.registerShow;
-                $scope.credentials.username = User.getEmail();
-                $scope.credentials.password = User.getPassword();
+                $scope.credentials.username = $scope.newuser.email;
+                $scope.credentials.password = $scope.newuser.password;
             }
         }
           
@@ -49,10 +56,10 @@
                     $rootScope.showLoginButton = false;
                     $scope.navlogin.$setPristine();
                 }, function () {
-                    $log.debug("Bad password");
                     $scope.pending = false;
                     $scope.processing = false;
                     $scope.loginFailed = true;
+                    $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
                 });
             }
         };

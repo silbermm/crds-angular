@@ -170,7 +170,7 @@ namespace crds_angular.Services
 
             MinistryPlatformService.UpdateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Contacts"]), contactDictionary, token);
         }
-        public static Dictionary<int, int>RegisterPerson(User newUserData)
+        public static Dictionary<string, string>RegisterPerson(User newUserData)
         {
             string token = AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"], ConfigurationManager.AppSettings["ApiPass"]);
 
@@ -182,12 +182,11 @@ namespace crds_angular.Services
             int participantRecordID = CreateParticipantRecord(token, contactRecordID);
 
             // TODO Contingent on cascading delete via contact
-            Dictionary<int, int> returnValues = new Dictionary<int, int>();
-            returnValues[Convert.ToInt32(ConfigurationManager.AppSettings["Contacts"])] = contactRecordID;
-            returnValues[Convert.ToInt32(ConfigurationManager.AppSettings["Participants"])] = participantRecordID;
-            returnValues[Convert.ToInt32(ConfigurationManager.AppSettings["Users"])] = userRecordID;
-            returnValues[Convert.ToInt32(ConfigurationManager.AppSettings["Households"])] = householdRecordID;
-            returnValues[Convert.ToInt32(ConfigurationManager.AppSettings["ContactHouseholds"])] = contactHouseholdRecordID;
+            Dictionary<string, string> returnValues = new Dictionary<string, string>();
+            returnValues["firstname"] = newUserData.firstName;
+            returnValues["lastname"] = newUserData.lastName;
+            returnValues["email"] = newUserData.email;
+            returnValues["password"] = newUserData.password; //TODO Conisder encrypting the password on the user model
             return returnValues;
         }
 

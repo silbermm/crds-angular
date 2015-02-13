@@ -2,19 +2,18 @@
     <div class="primary">
         <form id="navlogin" name="navlogin" role="form" ng-submit="login()" class="ng-pristine ng-valid"  novalidate>
             <div class="form-group">
-                <div class="navbar--login__input" ng-class="{'has-error': navlogin['username'].$invalid && navlogin['username'].$touched && navlogin['username'].$dirty }">
-                    <input required class="form-control" ng-model-options="{updateOn: 'blur'}" type="text" name="username" id="username-nav" placeholder="Email" autocomplete="off" autocapitalize="off" ng-model="credentials.username" autofocus=""> 
-                </div>
-                <div>
+                <div class="navbar--login__input" ng-class="{'has-error': checkEmail() }">
+                    <input required class="form-control" ng-model-options="{updateOn: 'blur'}" type="email" name="username" id="username-nav" placeholder="Email" autocomplete="off" autocapitalize="off" ng-model="credentials.username" autofocus="">
                     <ng-messages for="navlogin['username'].$error" ng-if="navlogin.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
-                </div>
+                    <ng-messages for="navlogin['username'].$error" ng-show="$root.username == undefined" ng-messages-include="on-blur-messages"></ng-messages>
+</div>
                 <div class="navbar--login__input" ng-class="{'has-error': navlogin['password'].$invalid && navlogin['password'].$touched && navlogin['password'].$dirty }">
                     <password-field passwd="credentials.password" submitted="navlogin.$submitted" prefix="passwordPrefix"></password-field>
                 </div>
                 <div>
                     <ng-messages for="navlogin['password'].$error" ng-if="navlogin.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
                     <!-- TODO Update to use ngMessages and a validator -->
-                    <span ng-show="loginFailed">
+                    <span ng-show="loginFailed" ng-class="{'has-error': loginFailed }">
                         <span ng-bind-html="$root.messages[$root.MESSAGES.loginFailed].message | html"></span>
                     </span>
                 </div>
