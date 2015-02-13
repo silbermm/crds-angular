@@ -8,13 +8,8 @@
 
     function UserService($resource, $log) {
         $log.debug("Inside Users factory");
-
         var User = $resource('api/user');
-
         var newuser = new User();
-
-     //   newuser.email;
-
         return newuser;
     }
 

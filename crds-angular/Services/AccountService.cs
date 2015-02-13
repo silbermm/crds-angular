@@ -183,15 +183,10 @@ namespace crds_angular.Services
 
             // TODO Contingent on cascading delete via contact
             Dictionary<string, string> returnValues = new Dictionary<string, string>();
-            //returnValues[ConfigurationManager.AppSettings["Contacts"].ToString()] = contactRecordID.ToString();
-            //returnValues[ConfigurationManager.AppSettings["Participants"].ToString()] = participantRecordID.ToString();
-            //returnValues[ConfigurationManager.AppSettings["Users"].ToString()] = userRecordID.ToString();
-            //returnValues[ConfigurationManager.AppSettings["Households"].ToString()] = householdRecordID.ToString();
-            //returnValues[ConfigurationManager.AppSettings["ContactHouseholds"].ToString()] = contactHouseholdRecordID.ToString();
             returnValues["firstname"] = newUserData.firstName;
             returnValues["lastname"] = newUserData.lastName;
             returnValues["email"] = newUserData.email;
-            returnValues["password"] = newUserData.password;
+            returnValues["password"] = newUserData.password; //TODO Conisder encrypting the password on the user model
             return returnValues;
         }
 
