@@ -13,11 +13,7 @@
 
         var newuser = new User();
 
-        newuser.setEmail = function (data) { newuser.email = data }
-        newuser.setPassword = function (data){newuser.password = data}
-
-        newuser.getEmail = function () { return newuser.email }
-        newuser.getPassword = function () { return  newuser.password }
+     //   newuser.email;
 
         return newuser;
     }
