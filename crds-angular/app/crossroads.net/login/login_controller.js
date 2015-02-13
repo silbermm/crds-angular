@@ -10,13 +10,21 @@
 
         $scope.passwordPrefix = "login-page";
 
-        $scope.checkIfUsernameValid = function() {return (
-             $scope.navlogin.username.$error.required && $scope.navlogin.$submitted &&  $scope.navlogin.username.$dirty ||
-          $scope.navlogin.username.$error.required && $scope.navlogin.$submitted && !$scope.navlogin.username.$touched ||
-          $scope.navlogin.username.$error.required && $scope.navlogin.$submitted && $scope.navlogin.username.$touched ||
-          $scope.navlogin.username.$error.unique &&  $scope.navlogin.username.$dirty ||
-         ! $scope.navlogin.username.$error.required &&  $scope.navlogin.username.$dirty && ! $scope.navlogin.username.$valid)
-        };
+// CAN BE DELETED IF IT'S DECIDED THAT WE'll use email and not username
+        //$scope.checkIfUsernameValid = function() {
+        //    return (
+        //        $scope.navlogin.username.$error.required && $scope.navlogin.$submitted && $scope.navlogin.username.$dirty ||
+        //            $scope.navlogin.username.$error.required && $scope.navlogin.$submitted && !$scope.navlogin.username.$touched ||
+        //            $scope.navlogin.username.$error.required && $scope.navlogin.$submitted && $scope.navlogin.username.$touched ||
+        //            $scope.navlogin.username.$error.unique && $scope.navlogin.username.$dirty ||
+        //            ! $scope.navlogin.username.$error.required && $scope.navlogin.username.$dirty && ! $scope.navlogin.username.$valid);
+        //}
+
+        $scope.checkEmail = function() {
+            return ($scope.navlogin.username.$error.required && $scope.navlogin.$submitted && $scope.navlogin.username.$dirty ||
+                $scope.navlogin.username.$error.required && $scope.navlogin.$submitted && !$scope.navlogin.username.$touched ||
+                $scope.navlogin.username.$error.required && $scope.navlogin.$submitted && $scope.navlogin.username.$touched || !$scope.navlogin.username.$error.required && $scope.navlogin.username.$dirty && !$scope.navlogin.username.$valid);
+        }
 
         $scope.toggleDesktopLogin = function () {
             $scope.loginShow = !$scope.loginShow;
