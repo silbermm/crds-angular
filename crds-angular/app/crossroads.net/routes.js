@@ -150,12 +150,6 @@
                     url: "/:urlsegment",
                     controller: "ContentCtrl",
                     templateUrl: "app/crossroads.net/content/content.html"
-                    //children: [
-                    //    {
-                    //        name: '404',
-                    //        templateUrl: "app/crossroads.net/content/404.html"
-                    //    }
-                    //]
                 });
                     //Leave the comment below.  Once we have a true 404 page hosted in the same domain, this is how we 
                     //will handle the routing. 
