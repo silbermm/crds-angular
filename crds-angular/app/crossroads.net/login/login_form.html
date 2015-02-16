@@ -3,7 +3,8 @@
         <form id="navlogin" name="navlogin" ng-submit="login()" role="form" novalidate>
             <div class="form-group">
                 <div class="navbar--login__input" ng-class="{'has-error': checkEmail() }">
-                    <input required class="form-control" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }" type="email" name="username" id="username-nav" placeholder="Email" autocomplete="off" autocapitalize="off" ng-model="credentials.username" autofocus="">
+
+                    <input id="{{passwordPrefix}}-email" required class="form-control" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }" type="email" name="username" placeholder="Email" autocomplete="off" autocapitalize="off" ng-model="credentials.username" autofocus="">
                     <ng-messages for="navlogin['username'].$error" ng-if="navlogin.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
                     <ng-messages for="navlogin['username'].$error" ng-show="$root.username == undefined" ng-messages-include="on-blur-messages"></ng-messages>
 </div>
