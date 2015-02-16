@@ -39,6 +39,7 @@
             if (($scope.credentials === undefined) || ($scope.credentials.username === undefined || $scope.credentials.password === undefined)) {
                 $scope.pending = true;
                 $scope.loginFailed = false;
+                $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
             } else {
                 $scope.processing = true;
                 AuthService.login($scope.credentials).then(function (user) {             
