@@ -3,6 +3,8 @@
   
 
     function LoginController($scope, $rootScope, AUTH_EVENTS, MESSAGES, AuthService, $cookieStore, $state, $log, Session, $timeout, User) {
+
+        $log.debug("Inside Login controller");
   
         $scope.loginShow = false;
         $scope.newuser = User;
@@ -35,10 +37,15 @@
             $rootScope.username = null;
         }
 
-        $scope.login = function () {           
+        $scope.login = function () {
+            $log.debug("Called");
+            $log.debug($scope.credentials);
+            $log.debug($scope.navlogin);
             if (($scope.credentials === undefined) || ($scope.credentials.username === undefined || $scope.credentials.password === undefined)) {
                 $scope.pending = true;
                 $scope.loginFailed = false;
+                $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+
             } else {
                 $scope.processing = true;
                 AuthService.login($scope.credentials).then(function (user) {             
