@@ -78,61 +78,62 @@
                 })
                 .state("profile", {
                     url: "/profile",
-                    templateUrl: "app/modules/profile/profile.html",
-                    controller: "crdsProfileCtrl as profile",
-                    data: {
-                        isProtected: true
-                    },
                     resolve: {
                         loggedin: checkLoggedin
-                    }
-                })
-                .state("profile.personal", {
-                    url: "/personal",
-                    controller: "ProfilePersonalController as profile",
-                    templateUrl: "app/modules/profile/personal/profile_personal.html",
+                    },
                     data: {
                         isProtected: true
                     },
-                    resolve: {
-                        Profile: "Profile",
-                        Lookup: "Lookup",
-                        genders: function(Lookup) {
-                            return Lookup.query({ table: "genders" }).$promise;
-                        },
-                        maritalStatuses: function(Lookup) {
-                            return Lookup.query({ table: "maritalstatus" }).$promise;
-                        },
-                        serviceProviders: function(Lookup) {
-                            return Lookup.query({ table: "serviceproviders" }).$promise;
-                        },
-                        states: function(Lookup) {
-                            return Lookup.query({ table: "states" }).$promise;
-                        },
-                        countries: function(Lookup) {
-                            return Lookup.query({ table: "countries" }).$promise;
-                        },
-                        crossroadsLocations: function(Lookup) {
-                            return Lookup.query({ table: "crossroadslocations" }).$promise;
-                        },
-                        person: function(Profile) {
-                            return Profile.Personal.get().$promise;
-                        }
-                    }
-                })
-                .state("profile.account", {
-                    url: "/account",
-                    templateUrl: "app/modules/profile/templates/profile_account.html",
-                    data: {
-                        isProtected: true
-                    }
-                })
-                .state("profile.skills", {
-                    url: "/skills",
-                    controller: "ProfileSkillsController as profile",
-                    templateUrl: "app/modules/profile/skills/profile_skills.html",
-                    data: {
-                        isProtected: true
+                    views : {
+                       "" : {
+                           templateUrl: "app/modules/profile/profile.html",
+                           controller: "crdsProfileCtrl as profile"
+                       },
+                       "personal@profile" : {
+                           controller: "ProfilePersonalController as profile",
+                           templateUrl: "app/modules/profile/personal/profile_personal.html",
+                           data: {
+                               isProtected: true
+                           },
+                           resolve: {
+                               Profile: "Profile",
+                               Lookup: "Lookup",
+                               genders: function(Lookup) {
+                                   return Lookup.query({ table: "genders" }).$promise;
+                               },
+                               maritalStatuses: function(Lookup) {
+                                   return Lookup.query({ table: "maritalstatus" }).$promise;
+                               },
+                               serviceProviders: function(Lookup) {
+                                   return Lookup.query({ table: "serviceproviders" }).$promise;
+                               },
+                               states: function(Lookup) {
+                                   return Lookup.query({ table: "states" }).$promise;
+                               },
+                               countries: function(Lookup) {
+                                   return Lookup.query({ table: "countries" }).$promise;
+                               },
+                               crossroadsLocations: function(Lookup) {
+                                   return Lookup.query({ table: "crossroadslocations" }).$promise;
+                               },
+                               person: function(Profile) {
+                                   return Profile.Personal.get().$promise;
+                               }
+                           }
+                       },
+                       "account@profile" : {               
+                           templateUrl: "app/modules/profile/templates/profile_account.html",
+                           data: {
+                               isProtected: true
+                           }
+                       },
+                       "skills@profile" : {
+                           controller: "ProfileSkillsController as profile",
+                           templateUrl: "app/modules/profile/skills/profile_skills.html",
+                           data: {
+                               isProtected: true
+                           }
+                       }
                     }
                 })
                 .state("opportunities", {
