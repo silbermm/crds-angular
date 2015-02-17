@@ -59,6 +59,11 @@
 
             $stateProvider
                 .state("home", {
+                    url: "/",
+                    templateUrl: "app/crossroads.net/home/home.html",
+                    controller: "HomeCtrl"
+                })
+                .state("homealso", {
                     url: "/home",
                     templateUrl: "app/crossroads.net/home/home.html",
                     controller: "HomeCtrl"
