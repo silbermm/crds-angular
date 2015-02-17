@@ -4,6 +4,8 @@
 
     function LoginController($scope, $rootScope, AUTH_EVENTS, MESSAGES, AuthService, $cookieStore, $state, $log, Session, $timeout, User) {
   
+        $log.debug("Inside Login controller");
+  
         $scope.loginShow = false;
         $scope.newuser = User;
         $scope.credentials = {};
@@ -40,6 +42,7 @@
                 $scope.pending = true;
                 $scope.loginFailed = false;
                 $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+
             } else {
                 $scope.processing = true;
                 AuthService.login($scope.credentials).then(function (user) {             
