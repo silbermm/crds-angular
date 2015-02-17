@@ -1,13 +1,16 @@
 <tabset>
-    <tab heading="Personal" ui-sref="profile.personal" ui-sref-active="active">
-        <ui-view></ui-view>
+    <tab heading="Personal">
+        <span >Personal tab</span>
+        <ui-view name="personal"></ui-view>
     </tab>
-    <tab heading="Account" class="hidden-xs" ui-sref="profile.account" ui-sref-active="active">
-        <ui-view></ui-view>
+    <tab heading="Account" class="hidden-xs">
+        <span >account tab</span>
+        <ui-view name="account"></ui-view>
     </tab>
     <tab heading="Giving"></tab>
-    <tab heading="Skills" class="hidden-xs" ui-sref-active="active" ui-sref="profile.skills">
-      <ui-view> </ui-view> 
+    <tab heading="Skills" class="hidden-xs">
+        <span>Skills Tab</span>
+        <ui-view name="skills"> </ui-view>
     </tab>
     <tab heading="History" class="hidden-xs" active="set.showHistory"></tab>
     <li role="tab" data-toggle="tab" class="dropdown hidden-md hidden-lg hidden-sm dropdown-toggle" data-toggle="dropdown">
