@@ -1,6 +1,6 @@
 ﻿
 <div class="primary">
-    <form name="registerForm" role="form" ng-submit="register(this)" novalidate>
+    <form name="registerForm" role="form" ng-submit="register()" novalidate>
 
         <div class="soft-half-bottom" ng-class="{'has-error':
          registerForm.firstname.$error.required && registerForm.$submitted  && registerForm.firstname.$dirty ||
@@ -23,7 +23,7 @@
         </div>
 
         <div>
-            <email-field email="newuser.email" submitted="registerForm.$submitted"></email-field>
+            <email-field email="newuser.email" submitted="registerForm.$submitted" prefix="passwordPrefix"></email-field>
         </div>
         <div class="input-group soft-half-bottom">
             <password-field passwd="newuser.password" submitted="registerForm.$submitted" prefix="passwordPrefix"></password-field>

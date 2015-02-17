@@ -13,6 +13,7 @@
         _this.countries = countries;
         _this.crossroadsLocations = crossroadsLocations;
 
+        _this.passwordPrefix = "account-page";
         _this.submitted = false;
 
         _this.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;

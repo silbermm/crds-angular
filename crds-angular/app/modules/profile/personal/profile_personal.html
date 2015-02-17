@@ -35,7 +35,7 @@
     <div class="row">
         <div class="form-group col-sm-6" ng-class="{'has-error':personal.email.$invalid}">
             <label for="email">Email</label>
-            <email-field email="profile.person.Email_Address" submitted="personal.$submitted"></email-field>
+            <email-field email="profile.person.Email_Address" submitted="personal.$submitted" prefix="profile.passwordPrefix"></email-field>
         </div>
     </div>
 

@@ -7,7 +7,8 @@
             replace: true,
             scope: {
                 email: "=",
-                submitted: "=submitted"
+                submitted: "=submitted",
+                prefix: "=prefix"
             },
             templateUrl: 'app/modules/email_field/email_field.html',
             link: function (scope, el, attr, ctrl) {
