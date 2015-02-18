@@ -1,5 +1,5 @@
 var angular = require('angular');
-//require('../styles/base.scss');
+require('../styles/main.scss');
 
 angular.module('app', []);
 
