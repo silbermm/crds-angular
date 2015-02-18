@@ -18,7 +18,7 @@
     <script type="text/ng-template" id="on-submit-messages">
         <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
     </script>
-    <script type="text/ng-template" id="on-pause-messages">     
+    <script type="text/ng-template" id="on-pause-messages">
         <span ng-message="pattern"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span></span>
         <span ng-message="invalidDate"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span></span>
         <span ng-message="email"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidEmail].message | html"></span></span>
@@ -182,6 +182,7 @@
         </footer>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular-messages.min.js"></script>
     <script src="build/main.js"></script>
 </body>
 </html>

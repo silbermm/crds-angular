@@ -1,7 +1,7 @@
 var angular = require('angular');
 require('../styles/main.scss');﻿
 
-require('ng-resource');
+require('angular-module-resource');
 require('./profile/module');
 
 "use strict";
@@ -53,7 +53,7 @@ require('./profile/module');
             var messagesRequest = Message.get("", function () {
                 messagesRequest.messages.unshift(null);//Adding a null so the indexes match the DB
                 //TODO Refactor to not use rootScope, now using ngTemplate w/ ngMessages but also need to pull this out into a service
-                $rootScope.messages = messagesRequest.messages; 
+                $rootScope.messages = messagesRequest.messages;
             });
 
             $rootScope.error_messages = '<div ng-message="required">This field is required</div><div ng-message="minlength">This field is too short</div>';
