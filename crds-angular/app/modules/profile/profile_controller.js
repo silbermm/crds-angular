@@ -18,10 +18,6 @@
 
 	    _this.saveAccount = function (form) {
 	        _this.form = form;
-	        $log.debug("EmailNotifications:"+_this.account.EmailNotifications);
-	        $log.debug("_this.account:"+_this.account);
-	        $log.debug(_this.account);
-
 	        if ($scope.required === "true" && (_this.password.password == null || _this.password.password == "")) {
 	           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
 	           return;
@@ -50,9 +46,11 @@
 
             _this.account.$save(function () {
                 $log.debug("save successful");
+                _this.password.password = null;
                 $rootScope.$emit('notify', $rootScope.MESSAGES.profileUpdated);
             }, function () {
                 $log.error("save unsuccessful");
+                _this.password.password = null;
             });
         }
     }
