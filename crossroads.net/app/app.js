@@ -1,8 +1,8 @@
 var angular = require('angular');
 require('../styles/main.scss');﻿
 
-require('angular-module-resource');
 require('./profile/module');
+require('./cms/services/cms_services_module');
 
 "use strict";
 (function () {
