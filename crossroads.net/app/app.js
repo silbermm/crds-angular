@@ -3,11 +3,15 @@ require('../styles/main.scss');﻿
 
 require('./profile/module');
 require('./cms/services/cms_services_module');
+require('./opportunity/module');
+require('angular-cookies');
+
+//require('./services/session_service');
 
 "use strict";
 (function () {
 
-    angular.module("crossroads", ["crdsProfile", "crdsCMS.services", "crdsOpportunity", "ui.router", "ngCookies", "angular-growl"])
+    angular.module("crossroads", ["crdsProfile", "crdsCMS.services", "crdsOpportunity", "ui.router", "ngCookies"])
 
     .constant("AUTH_EVENTS", {
             loginSuccess: "auth-login-success",
@@ -36,19 +40,19 @@ require('./cms/services/cms_services_module');
         succesfulResponse: 14,
         failedResponse: 15
 
-    }).config(function (growlProvider) {
-        growlProvider.globalPosition("top-center");
-        growlProvider.globalTimeToLive(6000);
-        growlProvider.globalDisableIcons(true);
-        growlProvider.globalDisableCountDown(true);
+    // }).config(function (growlProvider) {
+    //     growlProvider.globalPosition("top-center");
+    //     growlProvider.globalTimeToLive(6000);
+    //     growlProvider.globalDisableIcons(true);
+    //     growlProvider.globalDisableCountDown(true);
     })
     .filter('html', ['$sce', function ($sce) {
         return function (val) {
             return $sce.trustAsHtml(val);
         };
     }])
-    .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "growl", "Session", "$http", "Message",
-        function ($scope, $rootScope, MESSAGES, growl, Session, $http, Message) {
+    .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "$http", "Message",
+        function ($scope, $rootScope, MESSAGES, $http, Message) {
 
             var messagesRequest = Message.get("", function () {
                 messagesRequest.messages.unshift(null);//Adding a null so the indexes match the DB
@@ -60,7 +64,7 @@ require('./cms/services/cms_services_module');
 
             $rootScope.$on("notify", function (event, id) {
                 growl[$rootScope.messages[id].type]($rootScope.messages[id].message);
-            });
+           });
 
             $rootScope.$on("context", function (event, id) {
                 var message = Message.get({ id: id }, function () {
@@ -69,4 +73,5 @@ require('./cms/services/cms_services_module');
             });
         }
     ]);
+    require('./register/register_directive');
 })()

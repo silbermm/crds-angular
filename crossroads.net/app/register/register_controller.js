@@ -1,7 +1,8 @@
 ﻿'use strict';
+
 (function () {
     angular.module('crossroads').controller('RegisterCtrl', ['$scope', '$rootScope', 'AUTH_EVENTS','AuthService', 'MESSAGES', 'User', '$log', RegisterController]);
-   
+
     function RegisterController($scope, $rootScope, AUTH_EVENTS, AuthService, MESSAGES, User, $log) {
         $log.debug("Inside register controller");
         $scope.newuser = User;
@@ -26,7 +27,7 @@
                 $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
                 return;
             }
-                
+
             $scope.credentials = {};
             $scope.credentials.username = $scope.newuser.email;
             $scope.credentials.password = $scope.newuser.password;

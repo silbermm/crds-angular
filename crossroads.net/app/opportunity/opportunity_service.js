@@ -1,8 +1,14 @@
-﻿(function () {
+require('angular-module-resource');
+require('angular-ui-router');
+require('angular-bootstrap-npm');
+
+var opportunity_services_module = angular.module("crdsOpportunity", ["ngResource", "ngMessages", "ui.bootstrap", "ui.router"]);
+
+(function () {
 
     function opportunityService($resource) {
         return $resource("api/opportunity/:opportunityId");
     }
-    angular.module("crdsOpportunity").factory("Opportunity", ["$resource", opportunityService]);
+    opportunity_service_module.factory("Opportunity", ["$resource", opportunityService]);
 
 })();
