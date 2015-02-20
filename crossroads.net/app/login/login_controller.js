@@ -40,8 +40,8 @@
         $scope.login = function () {           
             if (($scope.credentials === undefined) || ($scope.credentials.username === undefined || $scope.credentials.password === undefined)) {
                 $scope.pending = true;
-                $scope.loginFailed = false;
-                $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+                $scope.loginFailed = false;              
+                $rootScope.$emit('notify', MESSAGES.generalError);
 
             } else {
                 $scope.processing = true;
@@ -63,7 +63,7 @@
                     $scope.pending = false;
                     $scope.processing = false;
                     $scope.loginFailed = true;
-                    $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+                    $rootScope.$emit('notify', MESSAGES.generalError);
                 });
             }
         };

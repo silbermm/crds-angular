@@ -1,17 +1,20 @@
 var angular = require('angular');
+// var angular = require('./angular.min.js');
+// module.exports = angular;
 require('../styles/main.scss');﻿
 
 require('./profile/module');
 require('./cms/services/cms_services_module');
 require('./opportunity/module');
 require('angular-cookies');
+//require('angular-growl');
 
 //require('./services/session_service');
 
 "use strict";
 (function () {
 
-    angular.module("crossroads", ["crdsProfile", "crdsCMS.services", "crdsOpportunity", "ui.router", "ngCookies"])
+    angular.module("crossroads", ["crdsProfile", "crdsCMS.services", "crdsOpportunity", "ui.router", "growlProvider", "ngCookies"])
 
     .constant("AUTH_EVENTS", {
             loginSuccess: "auth-login-success",
@@ -39,12 +42,11 @@ require('angular-cookies');
         successfullRegistration: 13,
         succesfulResponse: 14,
         failedResponse: 15
-
-    // }).config(function (growlProvider) {
-    //     growlProvider.globalPosition("top-center");
-    //     growlProvider.globalTimeToLive(6000);
-    //     growlProvider.globalDisableIcons(true);
-    //     growlProvider.globalDisableCountDown(true);
+    }).config(function (growlProvider) {
+        growlProvider.globalPosition("top-center");
+        growlProvider.globalTimeToLive(6000);
+        growlProvider.globalDisableIcons(true);
+        growlProvider.globalDisableCountDown(true);
     })
     .filter('html', ['$sce', function ($sce) {
         return function (val) {
@@ -74,5 +76,5 @@ require('angular-cookies');
         }
     ]);
     require('./register/register_directive');
-    require('./login/login_form_directive')
+    require('./login/login_form_directive');
 })()
