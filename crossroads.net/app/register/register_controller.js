@@ -1,5 +1,6 @@
 ﻿'use strict';
-
+require('../services/auth_service');
+require('../services/user_service');
 (function () {
     angular.module('crossroads').controller('RegisterCtrl', ['$scope', '$rootScope', 'AUTH_EVENTS','AuthService', 'MESSAGES', 'User', '$log', RegisterController]);
 

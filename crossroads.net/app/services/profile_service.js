@@ -1,4 +1,5 @@
 ﻿(function(){
+    angular.module("crdsServices", ['ngResource']);
     angular.module('crdsServices').factory('Profile', ['$resource', ProfileService]);
 
     function ProfileService($resource) {
@@ -9,4 +10,6 @@
             Password: $resource('api/account/password')
         }
     }
+    
+
 })()

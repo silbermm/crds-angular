@@ -74,4 +74,5 @@ require('angular-cookies');
         }
     ]);
     require('./register/register_directive');
+    require('./login/login_form_directive')
 })()

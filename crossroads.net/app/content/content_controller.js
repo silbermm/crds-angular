@@ -1,4 +1,5 @@
 ﻿(function() {
+    require('../../app');
     angular.module('crossroads').controller('ContentCtrl', [
         '$scope', '$stateParams', '$log', 'Page', function($scope, $stateParams, $log, Page) {
             $scope.main = "ContentCtrl";

@@ -1,5 +1,5 @@
-(function(){
-
-	angular.module("crdsServices", ['ngResource']);
-
-})()
+// (function(){
+// 
+// 	angular.module("crdsServices", ['ngResource']);
+// 
+// })()

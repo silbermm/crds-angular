@@ -1,7 +1,9 @@
-﻿(function () {
-    angular.module("password_field",[]).directive("passwordField", ['$log', 'Profile', PasswordField]);
+require('./password_field.html');﻿
 
-    function PasswordField($log, Profile) {
+(function () {
+    angular.module("password_field",[]).directive("passwordField", ['$log', PasswordField]);
+
+    function PasswordField($log) {
         return {
             restrict: 'EA',
             replace: true,
@@ -10,7 +12,7 @@
                 submitted: "=",
                 prefix: "="
             },
-            templateUrl: 'app/modules/password_field/password_field.html',
+            templateUrl: 'password_field/password_field.html',
             link: (function (scope, el, attr, ctrl) {
                 //scope.showPassword = false;
                 scope.inputType = 'password';

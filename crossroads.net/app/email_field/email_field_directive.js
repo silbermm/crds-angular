@@ -1,7 +1,9 @@
-﻿(function () {
-    angular.module("email_field",[]).directive("emailField", ['$log', 'Profile', EmailField]);
 
-    function EmailField($log, Profile) {
+require('./email_field.html');
+(function () {
+    angular.module("email_field",[]).directive("emailField", ['$log', EmailField]);
+
+    function EmailField($log) {
         return {
             restrict: 'EA',
             replace: true,
@@ -10,7 +12,7 @@
                 submitted: "=submitted",
                 prefix: "=prefix"
             },
-            templateUrl: 'app/modules/email_field/email_field.html',
+            templateUrl: 'email_field/email_field.html',
             link: function (scope, el, attr, ctrl) {
                 scope.checkEmail = function () {
                     //TODO Put this logic in a method that is globally accessible
