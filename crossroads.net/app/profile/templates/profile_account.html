@@ -3,35 +3,35 @@
     <div class="row">
         <div class="form-group col-sm-6">
             <label for="password">Change Password</label>  
-            <password-field submitted="account_form.$submitted" passwd="profile.password.password" prefix="profile.passwordPrefix"></password-field>
+            <password-field required="false" submitted="account_form.$submitted" passwd="profile.password.password" prefix="profile.passwordPrefix"></password-field>
         </div>
             <div class="form-group col-sm-12">
                 <label class="block">Email Communication</label>
                 <label class="radio-inline">
-                    <input type="radio" value="False" ng-model="profile.account.EmailNotifications"> On
+                    <input type="radio" name="emailCommunicationOn" value="False" ng-model="profile.account.EmailNotifications"> On
                 </label>
                 <label class="radio-inline">
-                    <input type="radio" value="True" ng-model="profile.account.EmailNotifications"> Off
+                    <input type="radio" name="emailCommunicationOff" value="True" ng-model="profile.account.EmailNotifications"> Off
                 </label>
             </div>
 
             <div class="form-group col-sm-12">
                 <label class="block">Text Messaging Communication</label>
                 <label class="radio-inline">
-                    <input type="radio" name="textSubscription" value="False" ng-model="profile.account.TextNotifications"> On
+                    <input type="radio" name="textSubscriptionOn" value="False" ng-model="profile.account.TextNotifications"> On
                 </label>
                 <label class="radio-inline">
-                    <input type="radio" name="textSubscription" value="True" ng-model="profile.account.TextNotifications"> Off
+                    <input type="radio" name="textSubscriptionOff" value="True" ng-model="profile.account.TextNotifications"> Off
                 </label>
             </div>
 
             <div class="form-group col-sm-12">
                 <label class="block">Paperless Statements</label>
                 <label class="radio-inline">
-                    <input type="radio" name="paperlessSubscription" value="True" ng-model="profile.account.PaperlessStatements"> On
+                    <input type="radio" name="paperlessSubscriptionOn" value="True" ng-model="profile.account.PaperlessStatements"> On
                 </label>
                 <label class="radio-inline">
-                    <input type="radio" name="paperlessSubscription" value="False" ng-model="profile.account.PaperlessStatements"> Off
+                    <input type="radio" name="paperlessSubscriptionOff" value="False" ng-model="profile.account.PaperlessStatements"> Off
                 </label>
             </div>
 

@@ -9,7 +9,7 @@
                     <ng-messages for="navlogin['username'].$error" ng-show="$root.username == undefined" ng-messages-include="on-blur-messages"></ng-messages>
 </div>
                 <div class="navbar--login__input" >
-                    <password-field passwd="credentials.password" submitted="navlogin.$submitted" prefix="passwordPrefix"></password-field>
+                    <password-field required="true" passwd="credentials.password" submitted="navlogin.$submitted" prefix="passwordPrefix"></password-field>
                 </div>
                 <div>
                     <ng-messages for="navlogin['password'].$error" ng-if="navlogin.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
