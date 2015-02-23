@@ -25,7 +25,7 @@ require('../services/user_service');
 
 
             if ($scope.newuser == null || $scope.newuser.email == null || $scope.newuser.password == null || $scope.newuser.email == "" || $scope.newuser.password == "" || $scope.newuser.firstname == null || $scope.newuser.firstname == '' || $scope.newuser.lastname == null || $scope.newuser.lastname =='') {
-                $rootScope.$emit('notify', MESSAGES.generalError);
+                $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
                 return;
             }
 
@@ -39,7 +39,7 @@ require('../services/user_service');
                     $log.debug(user);
                     $scope.registerShow = !$scope.registerShow;
                     $rootScope.showLoginButton = false; //TODO use emit or an event here, avoid using rootscope
-                    $rootScope.$emit('notify', MESSAGES.successfullRegistration);
+                    $rootScope.$emit('notify', $rootScope.MESSAGES.successfullRegistration);
                     $scope.registerForm.$setPristine();
                     $scope.newuser = {};
                 }, function () {

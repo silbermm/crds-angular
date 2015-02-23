@@ -44,7 +44,7 @@
             _this.submitted = true;
             $log.debug(_this.form.personal);
             if (_this.form.personal.$invalid) {
-                $rootScope.$emit('notify', MESSAGES.generalError);
+                $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
                 _this.submitted = false;              
                 return;
             }
