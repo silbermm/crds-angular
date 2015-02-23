@@ -1,20 +1,23 @@
-var angular = require('angular');
-// var angular = require('./angular.min.js');
-// module.exports = angular;
-require('../styles/main.scss');﻿
+'use strict';
 
+var angular = require('angular');
+
+require("angular-resource");
+require("angular-sanitize");
+require('angular-messages');
+require('angular-cookies');
+require('angular-growl');
+
+require('../styles/main.scss');
 require('./profile/module');
 require('./cms/services/cms_services_module');
 require('./opportunity/module');
-require('angular-cookies');
-//require('angular-growl');
-
 //require('./services/session_service');
 
 "use strict";
 (function () {
 
-    angular.module("crossroads", ["crdsProfile", "crdsCMS.services", "crdsOpportunity", "ui.router", "growlProvider", "ngCookies"])
+    angular.module("crossroads", ['ngResource', "crdsProfile", "crdsCMS.services", "crdsOpportunity", "ui.router", "ngCookies", "ngMessages", 'angular-growl'])
 
     .constant("AUTH_EVENTS", {
             loginSuccess: "auth-login-success",
@@ -53,8 +56,8 @@ require('angular-cookies');
             return $sce.trustAsHtml(val);
         };
     }])
-    .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "$http", "Message",
-        function ($scope, $rootScope, MESSAGES, $http, Message) {
+    .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "$http", "Message", "growl",
+        function ($scope, $rootScope, MESSAGES, $http, Message, growl) {
 
             var messagesRequest = Message.get("", function () {
                 messagesRequest.messages.unshift(null);//Adding a null so the indexes match the DB
@@ -75,6 +78,9 @@ require('angular-cookies');
             });
         }
     ]);
+    require('./apprun');
+    require('./routes');
     require('./register/register_directive');
-    require('./login/login_form_directive');
+    
+    require('./login');
 })()

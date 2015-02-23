@@ -9,10 +9,7 @@ module.exports = {
     path: './build',
     publicPath: 'www.crossroads.net/',
     filename: '[name].js'
-  },
-  externals: {
-    "angular": "angular"
-  },
+  }, 
   module: {
     loaders: [
       { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},

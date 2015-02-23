@@ -1,4 +1,7 @@
 ﻿'use strict';
 (function() {
-    angular.module('crdsCMS', ['ngResource']);
+
+  var app = require("angular");
+  require("angular-resource");
+  app.module('crdsCMS', ['ngResource']);
 })();
