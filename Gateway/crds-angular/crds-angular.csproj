@@ -234,52 +234,6 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\crossroads.net\apprun.js" />
-    <Content Include="app\crossroads.net\content\content.html" />
-    <Content Include="app\crossroads.net\content\content_controller.js" />
-    <Content Include="app\crossroads.net\home\home.html" />
-    <Content Include="app\crossroads.net\home\home_controller.js" />
-    <Content Include="app\crossroads.net\login\login_form.html" />
-    <Content Include="app\crossroads.net\login\login_form_directive.js" />
-    <Content Include="app\crossroads.net\login\login_page.html" />
-    <Content Include="app\crossroads.net\register\register_form.html" />
-    <Content Include="app\crossroads.net\register\register_directive.js" />
-    <Content Include="app\crossroads.net\login\login_controller.js" />
-    <Content Include="app\crossroads.net\app.js" />
-    <Content Include="app\crossroads.net\register\register_controller.js" />
-    <Content Include="app\crossroads.net\routes.js" />
-    <Content Include="app\crossroads.net\services\user_service.js" />
-    <Content Include="app\crossroads.net\services\auth_service.js" />
-    <Content Include="app\modules\cms\module.js" />
-    <Content Include="app\modules\cms\services\message_service.js" />
-    <Content Include="app\modules\cms\services\page_service.js" />
-    <Content Include="app\modules\email_field\email_field.html" />
-    <Content Include="app\modules\email_field\email_field_directive.js" />
-    <Content Include="app\modules\email_field\email_field_validation_directive.js" />
-    <Content Include="app\modules\password_field\password_field.html" />
-    <Content Include="app\modules\password_field\password_field_directive.js" />
-    <Content Include="app\modules\opportunity\module.js" />
-    <Content Include="app\modules\opportunity\opportunity_service.js" />
-    <Content Include="app\modules\opportunity\view\view_opportunities.html" />
-    <Content Include="app\modules\opportunity\view\view_opportunities_controller.js" />
-    <Content Include="app\modules\profile\directives\profile_skills_directive.js" />
-    <Content Include="app\modules\profile\personal\profile_personal_controller.js" />
-    <Content Include="app\modules\profile\personal\profile_unique_email_directive.js" />
-    <Content Include="app\modules\profile\personal\profile_valid_date_directive.js" />
-    <Content Include="app\modules\profile\skills\profile_skills_controllers.js" />
-    <Content Include="app\modules\profile\profile_controller.js" />
-    <Content Include="app\modules\profile\profile_date_picker.js" />
-    <Content Include="app\modules\profile\module.js" />
-    <Content Include="app\crossroads.net\services\session_service.js" />
-    <Content Include="app\modules\profile\services\profile_lookup_service.js" />
-    <Content Include="app\modules\profile\services\profile_service.js" />
-    <Content Include="app\modules\profile\profile.html" />
-    <Content Include="app\modules\profile\skills\profile_skills_service.js" />
-    <Content Include="app\modules\profile\templates\profile_account.html" />
-    <Content Include="app\modules\profile\personal\profile_personal.html" />
-    <Content Include="app\modules\services\module.js" />
-    <Content Include="app\modules\profile\skills\profile_skills.html" />
-    <Content Include="app\modules\services\profile_service.js" />
     <Content Include="Content\icons\arrow-right9.svg" />
     <Content Include="Content\icons\book.svg" />
     <Content Include="Content\icons\bubble.svg" />
@@ -1325,8 +1279,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="app\crossroads.net\shared\" />
-    <Folder Include="app\modules\telephone-validator\" />
     <Folder Include="App_Data\" />
     <Folder Include="Content\static\" />
   </ItemGroup>
