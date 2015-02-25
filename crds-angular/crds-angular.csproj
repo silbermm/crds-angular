@@ -235,6 +235,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\crossroads.net\apprun.js" />
+    <Content Include="app\crossroads.net\events\atrium-events-oakley.html" />
     <Content Include="app\crossroads.net\content\content.html" />
     <Content Include="app\crossroads.net\content\content_controller.js" />
     <Content Include="app\crossroads.net\home\home.html" />
