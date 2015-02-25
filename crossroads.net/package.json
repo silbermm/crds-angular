@@ -5,7 +5,6 @@
   "main": "app.js",
   "scripts": {
     "build": "webpack --progress --colors",
-    "local" : "API_ENDPOINT=http://localhost:49380 && webpack --progress --colors --watch | webpack-dev-server --progress --colors",
     "start": "webpack -d --progress --colors --watch | webpack-dev-server --progress --colors",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

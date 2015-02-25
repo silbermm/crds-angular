@@ -7,7 +7,7 @@ var endpoint = {
 };
 
 var definePlugin = new webpack.DefinePlugin({
-  __API_ENDPOINT__: JSON.stringify(process.env.API_ENDPOINT || "http://localhost:49380")
+  __API_ENDPOINT__: JSON.stringify(process.env.CRDS_API_ENDPOINT || "http://localhost:49380")
 });
 
 module.exports = {
