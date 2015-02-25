@@ -1,10 +1,14 @@
+@import "../bootstrap/variables.scss";
+@import "../bootstrap/mixins/";
+@import "../helpers/gradient.scss";
+
 /***************************************************************************************
 * Navbar
 ***************************************************************************************/
 
 .navbar-brand {
   float: left;
-  padding: $navbar-padding-vertical $navbar-padding-horizontal 0px $navbar-padding-horizontal; //CHANGE
+  padding: $navbar-padding-vertical $navbar-padding-horizontal 0px $navbar-padding-horizontal; 
   font-size: $font-size-large;
   line-height: $line-height-computed;
 
@@ -119,11 +123,21 @@ header.show .container {
   margin-left: 10px;
 }
 
-.remember{
+.remember, .forgot_password{
   display: inline;
   margin-bottom: 5px;
   font-weight: normal;
-  text-transform: lowercase;
+  color: $gray-light;
+  font-size: smaller;
+  line-height: 30px;
+
+  input {
+    margin-top: 0px;
+  }
+}
+
+.forgot_password {
+  float: right;
 }
 
 /******************** Mobile ********************/
@@ -135,7 +149,7 @@ header.show .container {
 
 .navbar-header{
   width: 100%;
-  padding: 0 13px;
+  padding: 0 10px;
   transform: translatex(0%);
   transition: all 0.563s;
   margin-top: 10px;
@@ -208,7 +222,7 @@ header.show .container {
   transition: all 0.5s;
 }
 
-.side-nav__search {
+.side-nav__search, {
   margin-top: 10px;
   margin-bottom: 10px;
   max-width: 475px;
@@ -415,7 +429,7 @@ header.show .container {
   }
 
   .btn {
-    margin:2px;
+    margin: 0 0 5px 0;
   }
 
   .dropdown-menu {
@@ -488,4 +502,254 @@ header.show .container {
     margin-top: 15px;
   }
 
+}
+
+/***************************************************************************************
+* Crossroads Bootstrap Nav Elements
+***************************************************************************************/
+
+ul.cr-nav {
+  > li {
+    > a {
+      display: inline-block;
+      position: relative;
+      padding: 4px 10px;
+      border-radius: 4px;
+      text-transform: uppercase;
+
+      &:hover, &:active, &.focus {
+        color: #fff;
+        // Tate - got rid of gradient. Don't love it.
+        background: $brand-primary;
+        //@include gradient(#7AA8C2, #4A81A0);
+      }
+    }
+  
+    &.open {
+      > a {
+        color: #fff !important;
+        background: $brand-primary !important;
+      }
+    }
+
+    &.active {
+      a {
+        //Tate - do we want active to look like hover?
+        //color: #fff;
+        //background: $brand-primary;
+        color: $brand-primary;
+        background: transparent;
+      }
+    }
+  }
+}
+
+/***************************************************************************************
+* Snap.js Elements
+***************************************************************************************/
+
+.snap-content {
+  background: white;
+  box-shadow: -1px -1px 10px 0 #000000;
+}
+
+.snap-drawer {
+  display: block !important;
+  visibility: visible !important;
+}
+
+.snap-drawers {
+  background: $gray-darker;
+
+  ul {
+    margin: 0;
+    padding: 0; 
+    list-style: none;
+
+
+    li {
+      margin: 0;
+      padding: 0px;
+      display: block;
+
+      > a {
+        margin: 0;
+        padding: 17px 15px;
+        border-bottom: 1px solid lighten($gray-darker, 10%);
+        display: block;
+        text-decoration: none;
+        box-shadow: inset -7px 0 9px -7px rgba(0, 0, 0, 0.175);
+        text-transform: uppercase;
+        color: $gray-light;
+
+        &:hover {
+          color: $gray-lighter;
+          background: lighten($gray-darker, 3%);
+        }
+      }
+    }
+  }
+
+  ul.dropdown-menu {
+    position: relative;
+    float: none;
+    border-radius: 0px;
+    border: 0px;
+    background: lighten($gray-darker, 8%);
+    box-shadow: none;
+
+    li {
+
+      &:first-child {
+        > a {
+          box-shadow: inset 0 6px 12px rgba(0, 0, 0, 0.175);
+        }
+      }
+
+      > a {
+        border-bottom: 1px solid lighten($gray-darker, 15%);
+        text-transform: none;
+
+        &:hover {
+          background: lighten($gray-darker, 10%);
+        }
+      }
+    }
+  }
+}
+
+.side-nav-login {
+  padding: 10px;
+
+  .forgot_password {
+    a {
+      color: $gray-light;
+
+      &:hover {
+        color: $gray-lighter;
+      }
+    }
+  }
+}
+
+.snap-drawer-search {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  max-width: 475px;
+  padding: 5px 15px;
+}
+
+
+/***************************************************************************************
+* Mega Menu
+***************************************************************************************/
+
+.dropdown-large {
+  position: static !important;
+}
+
+.dropdown-menu-large {
+  margin-left: 16px;
+  margin-right: 16px;
+  padding: 20px 0px;
+  right: 1%;
+}
+
+.dropdown-menu-large > li > ul {
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown-menu-large {
+
+  &.dropdown-menu-featured-row {
+    &:before {
+    @include make-sm-column(3);
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    background: $gray-lighter;
+    content: "";
+    }
+  }
+
+  a.white {
+    background: white;
+
+    &:hover,
+    &:focus {
+      background: white;
+    }
+  }
+
+  > li {
+
+    > ul {
+      > li {
+        list-style: none;
+
+        a {
+          display: block;
+          padding: 3px 20px;
+          clear: both;
+          font-weight: normal;
+          line-height: 1.428571429;
+          color: $gray-dark;
+          white-space: normal;
+
+          &:hover,
+          &:focus {
+            text-decoration: none;
+            background-color: #f5f5f5;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+.dropdown-menu-large {
+  .dropdown-header {
+    //color: $brand-primary;
+    color: $gray-darker;
+    font-size: 15px;
+    font-weight: bold;
+  }
+
+  .disabled {
+    a,
+    > a:hover,
+    > a:focus {
+      color: #999999;
+    }
+
+    a:hover,
+    a:focus {
+      text-decoration: none;
+      background-color: transparent;
+      background-image: none;
+      filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+      cursor: not-allowed;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .dropdown-menu-large {
+    margin-left: 0 ;
+    margin-right: 0 ;
+  }
+  .dropdown-menu-large > li {
+    margin-bottom: 30px;
+  }
+  .dropdown-menu-large > li:last-child {
+    margin-bottom: 0;
+  }
+  .dropdown-menu-large .dropdown-header {
+    padding: 3px 15px !important;
+  }
 }
