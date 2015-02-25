@@ -8,7 +8,7 @@
             scope: {
                 passwd: "=passwd",
                 submitted: "=",
-                prefix: "=",
+                prefix: "=prefix",
                 required: "@required"
             },
             templateUrl: 'app/modules/password_field/password_field.html',
