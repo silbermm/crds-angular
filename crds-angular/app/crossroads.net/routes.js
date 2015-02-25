@@ -152,6 +152,11 @@
                         loggedin: checkLoggedin
                     }
                 })
+                 .state("atrium_events", {
+                     url: "/atrium_events/:location",
+                     controller: "AtriumEventsController",
+                     templateUrl: "app/crossroads.net/events/atrium-events.html"
+                 })
                 .state("content", {
                     url: "/:urlsegment",
                     controller: "ContentCtrl",
