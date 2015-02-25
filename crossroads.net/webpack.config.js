@@ -2,6 +2,13 @@ var webpack = require("webpack");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var path = require("path");
 
+var endpoint = {
+  'url' : 'http://localhost:49380'
+};
+
+var definePlugin = new webpack.DefinePlugin({
+  __API_ENDPOINT__: JSON.stringify(process.env.CRDS_API_ENDPOINT || "http://localhost:49380")
+});
 
 module.exports = {
   entry: './app/app.js',
@@ -22,6 +29,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new ExtractTextPlugin("[name].css")
+    new ExtractTextPlugin("[name].css"),
+    definePlugin
   ]
 };

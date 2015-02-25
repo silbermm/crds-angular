@@ -4,11 +4,11 @@
     function ProfileService($resource) {
 
         return {
-            Personal: $resource('api/profile'),
-            Account: $resource('api/account'),
-            Password: $resource('api/account/password'),
+            Personal: $resource(__API_ENDPOINT__ + 'api/profile'),
+            Account: $resource(__API_ENDPOINT__ + 'api/account'),
+            Password: $resource(__API_ENDPOINT__ + 'api/account/password'),
             //Household: $resource('api/household')
-            MySkills: $resource('api/myskills') 
+            MySkills: $resource(__API_ENDPOINT__ + 'api/myskills') 
 
         }
 

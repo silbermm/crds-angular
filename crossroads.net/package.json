@@ -4,7 +4,7 @@
   "description": "Crossroads Church Web Presence",
   "main": "app.js",
   "scripts": {
-    "build": "webpack --progress --colors --watch",
+    "build": "webpack --progress --colors",
     "start": "webpack -d --progress --colors --watch | webpack-dev-server --progress --colors",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

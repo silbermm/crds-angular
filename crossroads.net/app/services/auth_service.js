@@ -6,7 +6,7 @@ require('./session_service');
 
         authService.login = function (credentials) {
             return $http
-                .post('api/login', credentials)
+                .post(__API_ENDPOINT__ + 'api/login', credentials)
                 .then(function (res) {
                     console.log(res.data);
                     Session.create(res.data.userToken, res.data.userId, res.data.username);

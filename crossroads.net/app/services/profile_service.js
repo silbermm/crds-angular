@@ -5,9 +5,9 @@
     function ProfileService($resource) {
         //TODO This file seems like a near duplicate, should this be removed?
         return {
-            Personal: $resource('api/profile'),
-            Account: $resource('api/account'),
-            Password: $resource('api/account/password')
+            Personal: $resource( __API_ENDPOINT__ +  'api/profile'),
+            Account: $resource(__API_ENDPOINT__ + 'api/account'),
+            Password: $resource(__API_ENDPOINT__ + 'api/account/password')
         }
     }
     

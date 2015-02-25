@@ -58,6 +58,8 @@ require('./opportunity/module');
     }])
     .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "$http", "Message", "growl",
         function ($scope, $rootScope, MESSAGES, $http, Message, growl) {
+  
+          console.log(__API_ENDPOINT__);
 
             var messagesRequest = Message.get("", function () {
                 messagesRequest.messages.unshift(null);//Adding a null so the indexes match the DB
