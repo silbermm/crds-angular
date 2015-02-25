@@ -2,6 +2,9 @@
 
 The client facing website for crossroads church. 
 
+###Getting Started 
+The only thing you'll need to get started in NodeJS. Head over to [http://nodejs.org/](http://nodejs.org) and install based on your operating system. We use npm scripts to run webpack so there are no node modules to install globally. Once you pull down the code, just run `npm i` to install all dependencies locally. 
+
 ###Configuration
 By default webpack inserts `http://localhost:49380` everywhere it finds `__API_ENDPOINT__` in the javascript. This can be changed by creating and setting an environment variable called CRDS_API_ENDPOINT. 
 
