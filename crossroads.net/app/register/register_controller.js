@@ -64,6 +64,7 @@ require('../services/user_service');
         }
 
         $scope.openLogin = function (data) {
+            $scope.passwordPrefix = "login-dropdown";
             $scope.credentials.username = $scope.newuser.email;
             $scope.credentials.password = $scope.newuser.password;
             $scope.registerShow = !$scope.registerShow;
