@@ -153,8 +153,8 @@
                     }
                 })
                  .state("atrium_events", {
-                     url: "/atrium_events/:location",
-                     controller: "AtriumEventsController",
+                     url: "/atrium-events/:location",
+                     controller: "AtriumEventsCtrl",
                      templateUrl: "app/crossroads.net/events/atrium-events.html"
                  })
                 .state("content", {
