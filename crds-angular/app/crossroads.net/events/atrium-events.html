@@ -11,7 +11,7 @@ categories:
 Tate - these are included here because when I included them in the footer scripts, it quit working.
 Whoever brings this into the Ministry Platform project, talk to me :)
 -->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+
 <script src="http://malsup.github.io/jquery.cycle2.js"></script>
 <script src="http://malsup.github.io/jquery.cycle2.scrollVert.js"></script>
 
@@ -136,8 +136,8 @@ Whoever brings this into the Ministry Platform project, talk to me :)
   var marqueeElement = jQuery(".atrium-body");
   var marqueeHeight = jQuery(marqueeElement).height();
   var windowHeight = jQuery(window).height();
-  console.log(marqueeHeight);
-  console.log(windowHeight);
+  console.log("Marquee Height "+marqueeHeight);
+  console.log("Window Height "+windowHeight);
 
   if (marqueeHeight >= windowHeight) {
     $(".atrium-cycle-cell").clone().appendTo( ".cycle-slideshow" );
