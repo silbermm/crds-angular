@@ -7,7 +7,7 @@ var opportunity_services_module = angular.module("crdsOpportunity", ["ngResource
 (function () {
 
     function opportunityService($resource) {
-        return $resource("api/opportunity/:opportunityId");
+        return $resource(__API_ENDPOINT__ + "api/opportunity/:opportunityId");
     }
     opportunity_service_module.factory("Opportunity", ["$resource", opportunityService]);
 

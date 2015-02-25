@@ -2,6 +2,6 @@
     angular.module('crdsProfile').factory('Lookup', ["$resource", "Session", LookupService]);
 
     function LookupService($resource, Session) {
-        return $resource("api/lookup/");
+        return $resource(__API_ENDPOINT__ + "api/lookup/");
     }
 })()
