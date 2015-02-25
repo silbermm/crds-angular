@@ -6866,7 +6866,7 @@ header.show .container {
     content: "";
     opacity: 0; }
   .navbar--login .btn {
-    margin: 0 0 5px 0; }
+    margin: 2px; }
   .navbar--login .dropdown-menu {
     left: calc(100% - 300px);
     width: 300px; }
