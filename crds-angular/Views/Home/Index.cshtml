@@ -139,12 +139,19 @@
                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Crossroads</a>
 
                                             <ul class="dropdown-menu dropdown-menu-large dropdown-menu-featured-row row">
-                                                <li class="col-sm-3">
+                                                <li class="col-sm-3" ng-if="$root.username == undefined">
                                                     <ul>
                                                         <login-form></login-form>
                                                     </ul>
                                                 </li>
-                                                <li class="col-sm-3">
+                                                <li class="col-sm-3" ng-if="$root.username != undefined">
+                                                    <ul>
+                                                        <li class="dropdown-header">My Account</li>
+                                                        <li><a href="">Dashboard</a></li>
+                                                        <li><a ui-sref="profile">Profile</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li class="col-sm-3" ng-if="$root.username ==undefined">
                                                     <ul>
                                                         <li class="dropdown-header">Get Registered</li>
                                                         <li><a href="#">Register</a></li>
@@ -165,7 +172,7 @@
                                                     <ul>
                                                         <li class="dropdown-header">Learn about Crossroads</li>
                                                         <li><a href="#">Blog</a></li>
-                                                        <li><a href="/">Home</a></li>
+                                                        <li><a ui-sref="home">Home</a></li>
                                                         <li><a href="#">Explore Crossroads</a></li>
                                                     </ul>
                                                 </li>
@@ -177,9 +184,10 @@
                                                 <li class="col-sm-3 ">
                                                     <ul>
                                                         <li class="dropdown-header">Serving Opportunities</li>
-                                                        <li><a href="#">Overview</a></li>
+                                                        <li><a href="#">Overview</a></li>                                                        
                                                         <li><a href="#">Community Groups</a></li>
                                                         <li><a href="#">Small Groups</a></li>
+                                                        <li><a ui-sref="opportunities">Kids Club</a></li>
                                                         <li><a href="#">Find A Small Group</a></li>
                                                         <li><a href="#">Start A Small Group</a></li>
                                                         <li><a href="#">Teens</a></li>
