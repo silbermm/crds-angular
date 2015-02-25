@@ -3,7 +3,7 @@
 The client facing website for crossroads church. 
 
 ###Configuration
-By default webpack inserts `http://localhost:49380` every it finds `__API_ENDPOINT__` in the javascript. This can be changed by creating and setting an environment variable called API_ENDPOINT. 
+By default webpack inserts `http://localhost:49380` everywhere it finds `__API_ENDPOINT__` in the javascript. This can be changed by creating and setting an environment variable called API_ENDPOINT. 
 
 For windows users:
 ``` set API_ENDPOINT = http://some-other-url/path-to-api/ ```
