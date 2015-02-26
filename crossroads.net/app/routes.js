@@ -18,7 +18,7 @@
         var deferred = $q.defer();
 
         // Make an AJAX call to check if the user is logged in
-        $http.get("api/authenticated").success(function(user) {
+        $http.get(__API_ENDPOINT__ + "api/authenticated").success(function(user) {
             // Authenticated
             if (user.userId !== undefined) {
                 $timeout(deferred.resolve, 0);

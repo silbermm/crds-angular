@@ -14,7 +14,7 @@
         
         $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams) {           
             if (Session.isActive()) {
-                $http.get("api/authenticated").success(function (user) {
+                $http.get(__API_ENDPOINT__ + "api/authenticated").success(function (user) {
                     $rootScope.userid = user.userId;
                     $rootScope.username = user.username;                    
                 }).error(function (e) {
