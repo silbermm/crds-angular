@@ -13,7 +13,7 @@ var definePlugin = new webpack.DefinePlugin({
 module.exports = {
   entry: './app/app.js',
   output: {
-    path: './build',
+    path: './assets',
     publicPath: 'www.crossroads.net/',
     filename: '[name].js'
   }, 
