@@ -12,8 +12,11 @@ using System.Web.SessionState;
 using System.Net.Http.Headers;
 using crds_angular.Security;
 using System.Diagnostics;
+using System.Web.Http.Cors;
+
 namespace crds_angular.Controllers.API
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*", SupportsCredentials = true)]
     public class LoginController : CookieAuth
     {
 
@@ -47,6 +50,7 @@ namespace crds_angular.Controllers.API
             });
         }
 
+        
         [ResponseType(typeof(LoginReturn))]
         public IHttpActionResult Post([FromBody]Credentials cred)
         {

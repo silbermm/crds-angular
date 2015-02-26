@@ -23,5 +23,7 @@ namespace crds_angular
             AutoMapperConfig.RegisterMappings();
             log4net.Config.XmlConfigurator.Configure(new FileInfo(Server.MapPath("~/Web.config")));
         }
+
+      
     }
 }
