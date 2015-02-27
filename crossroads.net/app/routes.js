@@ -7,6 +7,8 @@
 
   require('./login/login_page.html');
   require('./register/register_form.html');
+  
+  require('./content');
   require('./profile/profile.html');
   //require('./profile/personal/profile_personal.html');
   require('./profile/templates/profile_account.html');
