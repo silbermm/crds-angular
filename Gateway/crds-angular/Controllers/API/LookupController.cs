@@ -11,7 +11,7 @@ using MinistryPlatform.Translation.Services;
 
 namespace crds_angular.Controllers.API
 {
-    public class LookupController : CookieAuth
+    public class LookupController : MPAuth
     {
         [ResponseType(typeof (List<Dictionary<string, object>>))]
         [Route("api/lookup/{table?}")]
@@ -54,13 +54,13 @@ namespace crds_angular.Controllers.API
 
         [HttpGet]
         [Route("api/lookup/{email?}")]
-        public IHttpActionResult EmailExists(string email)
+        public IHttpActionResult EmailExists(string email, int userid = 0)
         {
             //TODO let's clean this up
-            var authorizedWithCookie = AuthorizedWithCookie(t =>
+            var authorizedWithCookie = Authorized(t =>
             {
-                var exists = LookupService.EmailSearch(email, t.SessionId);
-                if (exists.Count == 0 || Convert.ToInt32(exists["dp_RecordID"]) == t.UserId)
+                var exists = LookupService.EmailSearch(email, t);
+                if (exists.Count == 0 || Convert.ToInt32(exists["dp_RecordID"]) == userid)
                 {
                     return Ok();
                 }

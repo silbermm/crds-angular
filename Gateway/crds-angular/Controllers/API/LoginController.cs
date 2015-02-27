@@ -17,7 +17,7 @@ using System.Web.Http.Cors;
 namespace crds_angular.Controllers.API
 {
     [EnableCors(origins: "*", headers: "*", methods: "*", SupportsCredentials = true)]
-    public class LoginController : CookieAuth
+    public class LoginController : MPAuth
     {
 
         [ResponseType(typeof(LoginReturn))]

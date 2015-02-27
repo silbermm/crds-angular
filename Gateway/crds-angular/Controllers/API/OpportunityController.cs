@@ -7,7 +7,7 @@ using MinistryPlatform.Translation.Services;
 
 namespace crds_angular.Controllers.API
 {
-    public class OpportunityController : CookieAuth
+    public class OpportunityController : MPAuth
     {
         [ResponseType(typeof (int))]
         [Route("api/opportunity/{id}")]
