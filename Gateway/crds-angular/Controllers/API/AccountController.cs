@@ -14,7 +14,7 @@ using System.Diagnostics;
 
 namespace crds_angular.Controllers.API
 {
-    public class AccountController : CookieAuth
+    public class AccountController : MPAuth
     {
 
         

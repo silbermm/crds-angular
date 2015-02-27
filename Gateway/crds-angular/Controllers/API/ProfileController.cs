@@ -14,7 +14,7 @@ using System.Diagnostics;
 
 namespace crds_angular.Controllers.API
 {
-    public class ProfileController : CookieAuth
+    public class ProfileController : MPAuth
     {
         [ResponseType(typeof (Person))]
         [Route("api/profile")]

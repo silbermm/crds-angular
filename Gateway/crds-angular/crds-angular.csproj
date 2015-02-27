@@ -231,7 +231,7 @@
     <Compile Include="Models\MP\MailOptOut.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Security\CookieAuth.cs" />
+    <Compile Include="Security\MPAuth.cs" />
     <Compile Include="Security\CustomAuthorize.cs" />
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\MinistryPlatformBaseService.cs" />
