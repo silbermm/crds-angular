@@ -6,6 +6,13 @@
   require('./home');
 
   require('./login/login_page.html');
+  require('./register/register_form.html');
+  require('./profile/profile.html');
+  //require('./profile/personal/profile_personal.html');
+  require('./profile/templates/profile_account.html');
+  require('./profile/skills/profile_skills.html');
+  require('./opportunity/view_opportunities.html');
+  require('./content/content.html');
   var getCookie = require('./utilities/cookies'); 
 
   angular.module("crossroads").config([ "$stateProvider", "$urlRouterProvider", "$httpProvider", function( $stateProvider, $urlRouterProvider, $httpProvider) { 
@@ -68,7 +75,7 @@ $stateProvider
     })
     .state("register", {
         url: "/register",
-        templateUrl: "app/crossroads.net/register/register_form.html",
+        templateUrl: "register/register_form.html",
         controller: "RegisterCtrl"
     })
     .state("profile", {
@@ -81,12 +88,12 @@ $stateProvider
         },
         views : {
            "" : {
-               templateUrl: "app/modules/profile/profile.html",
+               templateUrl: "profile/profile.html",
                controller: "crdsProfileCtrl as profile"
            },
            "personal@profile" : {
                controller: "ProfilePersonalController as profile",
-               templateUrl: "app/modules/profile/personal/profile_personal.html",
+               templateUrl: "personal/profile_personal.html",
                data: {
                    isProtected: true
                },
@@ -117,14 +124,14 @@ $stateProvider
                }
            },
            "account@profile" : {               
-               templateUrl: "app/modules/profile/templates/profile_account.html",
+               templateUrl: "templates/profile_account.html",
                data: {
                    isProtected: true
                }
            },
            "skills@profile" : {
                controller: "ProfileSkillsController as profile",
-               templateUrl: "app/modules/profile/skills/profile_skills.html",
+               templateUrl: "skills/profile_skills.html",
                data: {
                    isProtected: true
                }
@@ -134,7 +141,7 @@ $stateProvider
     .state("opportunities", {
         url: "/opportunities",
         controller: "ViewOpportunitiesController as opportunity",
-        templateUrl: "app/modules/opportunity/view/view_opportunities.html",
+        templateUrl: "opportunity/view_opportunities.html",
         data: {
             isProtected: true
         },
@@ -145,7 +152,7 @@ $stateProvider
     .state("content", {
         url: "/:urlsegment",
         controller: "ContentCtrl",
-        templateUrl: "app/crossroads.net/content/content.html"
+        templateUrl: "content/content.html"
     });
         //Leave the comment below.  Once we have a true 404 page hosted in the same domain, this is how we 
         //will handle the routing. 
