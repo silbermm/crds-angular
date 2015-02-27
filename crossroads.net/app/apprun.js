@@ -1,6 +1,6 @@
 ﻿"use strict";
 (function() {
-
+    var getCookie = require('./utilities/cookies');
     function AppRun(Session, $rootScope, MESSAGES, $http, $log, $state, $timeout) {
         $rootScope.MESSAGES = MESSAGES;
         function clearAndRedirect(event, toState,toParams) {
@@ -14,7 +14,13 @@
         
         $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams) {           
             if (Session.isActive()) {
-                $http.get(__API_ENDPOINT__ + "api/authenticated").success(function (user) {
+              $http({
+                method: "GET",
+                url :__API_ENDPOINT__ + "api/authenticated", 
+                withCredentials: true, 
+                headers: {
+                  'Authorization': getCookie('sessionId')
+                }}).success(function (user) {
                     $rootScope.userid = user.userId;
                     $rootScope.username = user.username;                    
                 }).error(function (e) {

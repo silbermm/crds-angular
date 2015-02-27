@@ -6,9 +6,12 @@
   require('./home');
 
   require('./login/login_page.html');
+  var getCookie = require('./utilities/cookies'); 
 
-  angular.module("crossroads").config([ "$stateProvider", "$urlRouterProvider", "$httpProvider", function($stateProvider, $urlRouterProvider, $httpProvider) { 
+  angular.module("crossroads").config([ "$stateProvider", "$urlRouterProvider", "$httpProvider", function( $stateProvider, $urlRouterProvider, $httpProvider) { 
 
+    $httpProvider.defaults.useXDomain = true; 
+   
     //================================================
     // Check if the user is connected
     //================================================
@@ -18,7 +21,13 @@
         var deferred = $q.defer();
 
         // Make an AJAX call to check if the user is logged in
-        $http.get(__API_ENDPOINT__ + "api/authenticated").success(function(user) {
+        $http({
+          method: "GET",
+          url :__API_ENDPOINT__ + "api/authenticated", 
+          withCredentials: true, 
+          headers: {
+            'Authorization': getCookie('sessionId')
+           }}).success(function(user) {
             // Authenticated
             if (user.userId !== undefined) {
                 $timeout(deferred.resolve, 0);
