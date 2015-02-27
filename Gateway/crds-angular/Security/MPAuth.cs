@@ -21,13 +21,20 @@ namespace crds_angular.Security
 
         protected IHttpActionResult Authorized(Func<string,IHttpActionResult> doIt )
         {
-            var authorized = Request.Headers.GetValues("Authorization").FirstOrDefault();
-            //CookieHeaderValue cookie = Request.Headers.GetCookies("sessionId").FirstOrDefault();
-            if (authorized != null && (authorized != "null" || authorized != ""))
-            {                
-                return doIt(authorized);
+            try
+            {
+                var authorized = Request.Headers.GetValues("Authorization").FirstOrDefault();
+                //CookieHeaderValue cookie = Request.Headers.GetCookies("sessionId").FirstOrDefault();
+                if (authorized != null && (authorized != "null" || authorized != ""))
+                {
+                    return doIt(authorized);
+                }
+                return Unauthorized();
             }
-            return Unauthorized();   
+            catch (System.InvalidOperationException)
+            {
+                return Unauthorized();
+            }
         }
 
 
