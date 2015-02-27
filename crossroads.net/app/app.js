@@ -9,15 +9,15 @@ require('angular-cookies');
 require('angular-growl');
 
 require('../styles/main.scss');
-require('./profile/module');
+require('./profile');
 require('./cms/services/cms_services_module');
-require('./opportunity/module');
+//require('./opportunity/module');
 //require('./services/session_service');
 
 "use strict";
 (function () {
 
-    angular.module("crossroads", ['ngResource', "crdsProfile", "crdsCMS.services", "crdsOpportunity", "ui.router", "ngCookies", "ngMessages", 'angular-growl'])
+    angular.module("crossroads", ['ngResource', "crdsProfile", "crdsCMS.services", "ui.router", "ngCookies", "ngMessages", 'angular-growl'])
 
     .constant("AUTH_EVENTS", {
             loginSuccess: "auth-login-success",

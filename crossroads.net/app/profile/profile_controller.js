@@ -1,8 +1,8 @@
 'use strict';
 (function () {
-    angular.module("crdsProfile").controller('crdsProfileCtrl', ['$rootScope','Profile', 'Lookup', '$q', '$log','$scope',  ProfileController]);
+  
 
-    function ProfileController($rootScope, Profile, Lookup, $q, $log, $scope) {
+module.exports =  function ProfileController($rootScope, Profile, Lookup, $q, $log, $scope) {
     	$log.debug("Inside the ProfileController");
         
         var _this = this;

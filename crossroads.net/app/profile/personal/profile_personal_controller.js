@@ -1,8 +1,6 @@
 ﻿"use strict";
 (function () {
-    angular.module("crdsProfile").controller("ProfilePersonalController", ["$rootScope", "$log","MESSAGES", "genders", "maritalStatuses", "serviceProviders", "states", "countries", "crossroadsLocations", "person", ProfilePersonalController]);
-
-    function ProfilePersonalController($rootScope, $log, MESSAGES, genders, maritalStatuses, serviceProviders, states, countries, crossroadsLocations, person) {
+    module.exports = function($rootScope, $log, MESSAGES, genders, maritalStatuses, serviceProviders, states, countries, crossroadsLocations, person) {
         var _this = this;
 
         _this.person = person;

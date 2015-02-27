@@ -1,8 +1,8 @@
 ﻿(function(){
 
-    angular.module("crdsProfile").directive('uniqueEmail', ['$http', UniqueEmail ]);
     
-    function UniqueEmail($http) {
+    
+    module.exports = function ($http) {
         return {
             restrict: 'A',
             require: 'ngModel',
