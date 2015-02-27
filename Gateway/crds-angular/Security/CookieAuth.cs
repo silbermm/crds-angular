@@ -29,6 +29,16 @@ namespace crds_angular.Security
             return Unauthorized();   
         }
 
+        protected IHttpActionResult HeaderAuthorized(Func<string, IHttpActionResult> doIt)
+        {
+            var authorized = Request.Headers.GetValues("Authorization").FirstOrDefault();
+            if (authorized != null) 
+            {
+                return doIt(authorized);
+            }
+            return Unauthorized();  
+        }
+
         protected IHttpActionResult AuthorizedWithCookie(Func<CookieInfo, IHttpActionResult> doIt)
         {
             CookieHeaderValue cookie = Request.Headers.GetCookies("sessionId").FirstOrDefault();

@@ -26,7 +26,7 @@ namespace crds_angular.Controllers.API
         public IHttpActionResult isAuthenticated()
         {
            
-            return Authorized(token =>
+            return HeaderAuthorized(token =>
             {
                 try
                 {
