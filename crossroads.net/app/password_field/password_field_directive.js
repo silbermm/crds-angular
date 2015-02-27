@@ -10,7 +10,7 @@ require('./password_field.html');﻿
             scope: {
                 passwd: "=passwd",
                 submitted: "=",
-                prefix: "=",
+                prefix: "=prefix",
                 required: "@required"
             },
             templateUrl: 'password_field/password_field.html',
