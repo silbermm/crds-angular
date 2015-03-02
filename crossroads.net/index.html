@@ -245,10 +245,10 @@
                                             <li class="dropdown dropdown-large" dropdown>
                                                 <a href="#" class="dropdown-toggle" dropdown-toggle>My Crossroads</a>
 
-                                                <ul class="dropdown-menu dropdown-menu-large dropdown-menu-featured-row row">
+                                                <ul class="dropdown-menu dropdown-menu-large dropdown-menu-featured-row row" >
                                                     <li class="col-sm-3" ng-if="$root.username == undefined">
                                                         <ul>
-                                                            <login-form></login-form>
+                                                            <login-form  ng-click="prevent($event)"></login-form>
                                                         </ul>
                                                     </li>
                                                     <li class="col-sm-3">
@@ -280,7 +280,7 @@
                                                             <li class="dropdown-header">Learn about Crossroads</li>
                                                             <li><a href="#">Blog</a>
                                                             </li>
-                                                            <li><a href="#">Home</a>
+                                                            <li><a ui-sref="home">Home</a>
                                                             </li>
                                                             <li><a href="#">Explore Crossroads</a>
                                                             </li>
@@ -304,6 +304,7 @@
                                                             </li>
                                                             <li><a href="#">Start A Small Group</a>
                                                             </li>
+                                                            <li><a ui-sref="opportunities">Kids Club</a></li>
                                                             <li><a href="#">Teens</a>
                                                             </li>
                                                             <li><a href="#">Corkboard</a>

@@ -70,6 +70,10 @@ require('./cms/services/cms_services_module');
   
           console.log(__API_ENDPOINT__);
 
+            $scope.prevent = function(evt) {
+                evt.stopPropagation();
+            };
+            
             var messagesRequest = Message.get("", function () {
                 messagesRequest.messages.unshift(null);//Adding a null so the indexes match the DB
                 //TODO Refactor to not use rootScope, now using ngTemplate w/ ngMessages but also need to pull this out into a service
