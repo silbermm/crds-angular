@@ -13,7 +13,7 @@
 
                     return $http({
                       method:"GET", 
-                      url: __API_ENDPOINT__ + 'api/lookup?email=' + encodeURI(email) + '&userid=' + Session.exists("userid"),
+                      url: __API_ENDPOINT__ + 'api/lookup/' + Session.exists('userId')  + '/find/?email=' + encodeURI(email),
                       withCredentials: true,
                       headers: {
                         'Authorization': getCookie('sessionId')

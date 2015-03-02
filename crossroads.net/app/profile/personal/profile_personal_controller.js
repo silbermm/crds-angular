@@ -1,5 +1,7 @@
 ﻿"use strict";
 (function () {
+  
+    var moment = require("moment");
     module.exports = function($rootScope, $log, MESSAGES, genders, maritalStatuses, serviceProviders, states, countries, crossroadsLocations, person) {
         var _this = this;
 

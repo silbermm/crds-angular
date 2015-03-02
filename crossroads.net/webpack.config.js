@@ -14,7 +14,7 @@ module.exports = {
   entry: './app/app.js',
   output: {
     path: './assets',
-    publicPath: 'www.crossroads.net/',
+    publicPath: '/',
     filename: '[name].js'
   }, 
   module: {

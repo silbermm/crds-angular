@@ -3,33 +3,33 @@
     <p class="text-muted push-bottom">Information shared here is kept secure and private. We will not share or sell your information.</p>
 
     <div class="row">
-        <div class="form-group col-sm-6" ng-class="{'has-error':personal['first-name'].$invalid}">
-            <label for="first-name">First Name</label>
-            <input type="text" name="first-name" class="form-control" id="first-name" placeholder="Enter first name" ng-model="profile.person.First_Name" ng-model-options="{ debounce : { 'default' : 500, blur : 0 } }" required>
-            <ng-messages for="personal['first-name'].$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages">
-        </div>
+      <div class="form-group col-sm-6" ng-class="{'has-error':personal['first-name'].$invalid}">
+          <label for="first-name">First Name</label>
+          <input type="text" name="first-name" class="form-control" id="first-name" placeholder="Enter first name" ng-model="profile.person.First_Name" ng-model-options="{ debounce : { 'default' : 500, blur : 0 } }" required>
+          <ng-messages for="personal['first-name'].$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages">
+      </div>
 
-        <div class="form-group col-sm-6">
-            <label for="middle-name">Middle Name</label>
-            <input type="text" name="middle-name" class="form-control" id="middle-name" placeholder="Enter middle name" ng-model="profile.person.Middle_Name">
-        </div>
+      <div class="form-group col-sm-6">
+          <label for="middle-name">Middle Name</label>
+          <input type="text" name="middle-name" class="form-control" id="middle-name" placeholder="Enter middle name" ng-model="profile.person.Middle_Name">
+      </div>
 
-        <div class="form-group col-sm-6" ng-class="{'has-error':personal['last-name'].$invalid}">
-            <label for="last-name">Last Name</label>
-            <input type="text" class="form-control" id="last-name" name="last-name" placeholder="Enter last name" ng-model="profile.person.Last_Name" ng-model-options="{ debounce : { 'default' : 500, blur : 0 } }" required>
+      <div class="form-group col-sm-6" ng-class="{'has-error':personal['last-name'].$invalid}">
+          <label for="last-name">Last Name</label>
+          <input type="text" class="form-control" id="last-name" name="last-name" placeholder="Enter last name" ng-model="profile.person.Last_Name" ng-model-options="{ debounce : { 'default' : 500, blur : 0 } }" required>
 
-            <ng-messages for="personal['last-name'].$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
-        </div>
+          <ng-messages for="personal['last-name'].$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
+      </div>
 
-        <div class="form-group col-sm-6">
-            <label for="maiden-name">Maiden Name</label>
-            <input type="text" name="maiden-name" class="form-control" id="maiden-name" placeholder="Enter maiden name" ng-model="profile.person.Maiden_Name">
-        </div>
+      <div class="form-group col-sm-6">
+          <label for="maiden-name">Maiden Name</label>
+          <input type="text" name="maiden-name" class="form-control" id="maiden-name" placeholder="Enter maiden name" ng-model="profile.person.Maiden_Name">
+      </div>
 
-        <div class="form-group col-sm-6">
-            <label for="nickname">Preferred Name <small class="text-muted">(Example: Rob or Becky)</small></label>
-            <input type="text" name="nickname" class="form-control" id="nickname" placeholder="Enter nick name" ng-model="profile.person.NickName">
-        </div>
+      <div class="form-group col-sm-6">
+          <label for="nickname">Preferred Name <small class="text-muted">(Example: Rob or Becky)</small></label>
+          <input type="text" name="nickname" class="form-control" id="nickname" placeholder="Enter nick name" ng-model="profile.person.NickName">
+      </div>
     </div>
 
     <div class="row">
@@ -104,7 +104,7 @@
                    ng-blur="profile.convertPhone()">
             <ng-messages for="personal['mobile-phone'].$error">
                 <!-- TODO Create custom phone validator here so we can use the template instead of the override below -->
-                <span ng-message="pattern"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"</span></span>
+                <span ng-message="pattern"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span></span>
             </ng-messages>
         </div>
         <div class="form-group col-sm-6" ng-class="{'has-error':personal['service-provider'].$invalid}">
@@ -144,86 +144,84 @@
                 </div> <!--/panel-heading-->
 
                 <div class="address-panel-body panel-body clearfix" collapse="isCollapsed">
-                    <div class="col-sm-12">
-                        <fieldset class="row">
-                            <ul class="list-group clearfix">
-                                <li class="list-group-item clearfix">
-                                    <div class="form-group col-sm-6" ng-class="{'has-error':personal.address.$invalid}">
-                                        <label for="address">Street</label>
-                                        <input name="address" ng-model="profile.person.Address_Line_1" type="text" class="form-control" id="address" placeholder="Enter street address" required>
-                                        <ng-messages for="personal.address.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages">
-                                        </ng-messages>
-                                    </div>
+                  <div class="col-sm-12">
+                      <fieldset class="row">
+                          <ul class="list-group clearfix">
+                              <li class="list-group-item clearfix">
+                                  <div class="form-group col-sm-6" ng-class="{'has-error':personal.address.$invalid}">
+                                      <label for="address">Street</label>
+                                      <input name="address" ng-model="profile.person.Address_Line_1" type="text" class="form-control" id="address" placeholder="Enter street address" required>
+                                      <ng-messages for="personal.address.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages">
+                                      </ng-messages>
+                                  </div>
 
-                                    <div class="form-group col-sm-6">
-                                        <label for="address2">Street 2</label>
-                                        <input ng-model="profile.person.Address_Line_2" type="text" name="address2" class="form-control" id="address2" placeholder="Enter street address (cont.)">
-                                    </div>
+                                  <div class="form-group col-sm-6">
+                                      <label for="address2">Street 2</label>
+                                      <input ng-model="profile.person.Address_Line_2" type="text" name="address2" class="form-control" id="address2" placeholder="Enter street address (cont.)">
+                                  </div>
 
-                                    <div class="form-group col-sm-6" ng-class="{'has-error':personal.city.$invalid}">
-                                        <label for="city">City</label>
-                                        <input name="city" ng-model="profile.person.City" type="text" class="form-control" id="city" placeholder="Enter city" required>
-                                        <ng-messages for="personal.city.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
-                                    </div>
+                                  <div class="form-group col-sm-6" ng-class="{'has-error':personal.city.$invalid}">
+                                      <label for="city">City</label>
+                                      <input name="city" ng-model="profile.person.City" type="text" class="form-control" id="city" placeholder="Enter city" required>
+                                      <ng-messages for="personal.city.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
+                                  </div>
 
-                                    <div class="form-group col-sm-6" ng-class="{'has-error':personal.state.$invalid}">
-                                        <label for="state">State</label>
-                                        <select name="state" id="state" class="form-control col-sm-12" ng-model="profile.person.State" ng-options="state.dp_RecordName as state.dp_RecordName for state in profile.states" required>
-                                            <option value=""> -- Choose a State -- </option>
-                                        </select>
-                                        <ng-messages for="personal.state.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
-                                    </div>
+                                  <div class="form-group col-sm-6" ng-class="{'has-error':personal.state.$invalid}">
+                                      <label for="state">State</label>
+                                      <select name="state" id="state" class="form-control col-sm-12" ng-model="profile.person.State" ng-options="state.dp_RecordName as state.dp_RecordName for state in profile.states" required>
+                                          <option value=""> -- Choose a State -- </option>
+                                      </select>
+                                      <ng-messages for="personal.state.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
+                                  </div>
 
-                                    <div class="form-group col-sm-6" ng-class="{'has-error':personal.zip.$invalid}">
-                                        <label for="zip">Zip</label>
-                                        <input name="zip" ng-model="profile.person.Postal_Code" type="text" class="form-control" id="zip" placeholder="Enter zip code" required ng-pattern="profile.zipFormat">
-                                        <ng-messages for="personal.zip.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
-                                        <ng-messages for="personal.zip.$error">
-                                            <!-- TODO Create custom zip validator here so we can use the template instead of the override below -->
-                                            <span ng-message="pattern"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidZip].message | html"</span></span>
-                                        </ng-messages>
+                                  <div class="form-group col-sm-6" ng-class="{'has-error':personal.zip.$invalid}">
+                                      <label for="zip">Zip</label>
+                                      <input name="zip" ng-model="profile.person.Postal_Code" type="text" class="form-control" id="zip" placeholder="Enter zip code" required ng-pattern="profile.zipFormat">
+                                      <ng-messages for="personal.zip.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
+                                      <ng-messages for="personal.zip.$error">
+                                          <!-- TODO Create custom zip validator here so we can use the template instead of the override below -->
+                                          <span ng-message="pattern"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidZip].message | html"></span></span>
+                                      </ng-messages>
 
-                                    </div>
+                                  </div>
 
-                                    <div class="form-group col-sm-6" ng-class="{'has-error':personal.country.$invalid}">
-                                        <label for="country">Country</label>
-                                        <select name="country" id="country" ng-model="profile.person.Foreign_Country" ng-options="country.dp_RecordName as country.dp_RecordName for country in profile.countries" class="form-control col-sm-12" required>
-                                            <option value=""> -- Choose One -- </option>
-                                        </select>
-                                        <ng-messages for="personal.country.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
-                                    </div>
+                                  <div class="form-group col-sm-6" ng-class="{'has-error':personal.country.$invalid}">
+                                      <label for="country">Country</label>
+                                      <select name="country" id="country" ng-model="profile.person.Foreign_Country" ng-options="country.dp_RecordName as country.dp_RecordName for country in profile.countries" class="form-control col-sm-12" required>
+                                          <option value=""> -- Choose One -- </option>
+                                      </select>
+                                      <ng-messages for="personal.country.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
+                                  </div>
 
-                                </li>
-                                <li class="list-group-item clearfix" ng-class="{'has-error':personal['home-phone'].$invalid}">
-                                    <div class="form-group col-sm-6">
-                                        <label for="home-phone">Home Phone</label>
-                                        <input name="home-phone"
-                                               ng-model="profile.person.Home_Phone"
-                                               ng-model-options="{ updateOn: 'default blur', debounce: {'default': 300, 'blur': 0} }"
-                                               type="text"
-                                               class="form-control"
-                                               id="home-phone"
-                                               ng-pattern="profile.phoneFormat"
-                                               placeholder="Enter home phone"
-                                               ng-blur="profile.convertHomePhone()">
-                                        <ng-messages for="personal['home-phone'].$error" ng-messages-include="on-submit-messages">
-                                            <!-- TODO Create custom phone validator here so we can use the template instead of the override below -->
-                                            <span ng-message="pattern"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"</span></span>
-                                        </ng-messages>
-                                    </div>
-                                </li>
-                                <li class="list-group-item clearfix">
-                                    <div id="Site" class="form-group col-sm-6">
-                                        <label for="crossroads-location">Crossroads Location</label>
-                                        <select name="crossroads-location" id="crossroads-location" class="form-control col-sm-12" ng-model="profile.person.Congregation_ID" ng-options="congregation.dp_RecordID as congregation.dp_RecordName for congregation in profile.crossroadsLocations"></select>
-                                    </div>
-                                </li>
-                            </ul>
-                        </fieldset>
-                        <!----form-->
-                        <!----div--><!--/col-sm-12-->
-                    </div><!--/panel-body-->
-                </div><!--/panel-->
+                              </li>
+                              <li class="list-group-item clearfix" ng-class="{'has-error':personal['home-phone'].$invalid}">
+                                  <div class="form-group col-sm-6">
+                                      <label for="home-phone">Home Phone</label>
+                                      <input name="home-phone"
+                                             ng-model="profile.person.Home_Phone"
+                                             ng-model-options="{ updateOn: 'default blur', debounce: {'default': 300, 'blur': 0} }"
+                                             type="text"
+                                             class="form-control"
+                                             id="home-phone"
+                                             ng-pattern="profile.phoneFormat"
+                                             placeholder="Enter home phone"
+                                             ng-blur="profile.convertHomePhone()">
+                                      <ng-messages for="personal['home-phone'].$error" ng-messages-include="on-submit-messages">
+                                          <!-- TODO Create custom phone validator here so we can use the template instead of the override below -->
+                                          <span ng-message="pattern"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span></span>
+                                      </ng-messages>
+                                  </div>
+                              </li>
+                              <li class="list-group-item clearfix">
+                                  <div id="Site" class="form-group col-sm-6">
+                                      <label for="crossroads-location">Crossroads Location</label>
+                                      <select name="crossroads-location" id="crossroads-location" class="form-control col-sm-12" ng-model="profile.person.Congregation_ID" ng-options="congregation.dp_RecordID as congregation.dp_RecordName for congregation in profile.crossroadsLocations"></select>
+                                  </div>
+                              </li>
+                          </ul>
+                      </fieldset>
+                  </div>
+                </div>
 
         </fieldset>
     </div>
