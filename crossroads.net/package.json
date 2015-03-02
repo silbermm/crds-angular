@@ -1,0 +1,58 @@
+{
+  "name": "crossroads.net",
+  "version": "0.0.1",
+  "description": "Crossroads Church Web Presence",
+  "main": "app.js",
+  "scripts": {
+    "build": "webpack --progress --colors",
+    "start": "webpack -d --progress --colors --watch | webpack-dev-server --progress --colors",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/crdschurch/crds-angular"
+  },
+  "author": "Matt Silbernagel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/crdschurch/crds-angular/issues"
+  },
+  "homepage": "https://github.com/crdschurch/crds-angular",
+  "devDependencies": {
+    "babel-core": "^4.1.1",
+    "babel-loader": "^4.0.0",
+    "css-loader": "^0.9.1",
+    "extract-text-webpack-plugin": "^0.3.8",
+    "file-loader": "^0.8.1",
+    "image-webpack-loader": "^1.2.0",
+    "imagemin": "^3.1.0",
+    "sass-loader": "^0.4.0-beta.1",
+    "style-loader": "^0.8.3",
+    "url-loader": "^0.5.5",
+    "webpack": "^1.5.3",
+    "webpack-dev-server": "^1.7.0"
+  },
+  "dependencies": {
+    "angular": "^1.3.13",
+    "angular-bootstrap-npm": "^0.12.3",
+    "angular-cookies": "^1.3.13",
+    "angular-growl": "^0.1.0",
+    "angular-growl-notifications": "^2.1.1",
+    "angular-messages": "^1.3.13",
+    "angular-module-resource": "^1.2.19",
+    "angular-resource": "^1.3.13",
+    "angular-sanitize": "^1.3.13",
+    "angular-ui-router": "^0.2.13",
+    "ng-cache-loader": "0.0.8",
+    "ng-resource": "^1.3.2",
+    "ngtemplate-loader": "^1.0.0"
+  },
+  "browser": {
+    "angular": "./app/third-party/angular/angular-index.js",
+    "angular-resource": "./node_modules/angular-resource/angular-resource.js",
+    "angular-messages": "./node_modules/angular-messages/angular-messages.js",
+    "angular-sanitize": "./node_modules/angular-sanitize/angular-sanitize.js",
+    "angular-growl-notifications": "./node_modules/angular-growl-notifications/dist/angular-growl-notifications.js",
+    "angular-growl": "./app/third-party/angular/angular-growl.js"
+  }
+}
