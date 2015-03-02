@@ -63,8 +63,8 @@ gulp.task("webpack:build", function(callback) {
 				"NODE_ENV": JSON.stringify("production")
 			}
 		}),
-		new webpack.optimize.DedupePlugin(),
-		new webpack.optimize.UglifyJsPlugin()
+		new webpack.optimize.DedupePlugin()
+		//new webpack.optimize.UglifyJsPlugin()
 	);
 
 	// run webpack
