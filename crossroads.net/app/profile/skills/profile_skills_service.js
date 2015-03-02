@@ -3,7 +3,7 @@
 ﻿(function(){
   
     module.exports = function SkillsService($resource){
-        return $resource("api/skill");
+        return $resource(__API_ENDPOINT__ + "api/skill/:userId");
     }
 
 })()
