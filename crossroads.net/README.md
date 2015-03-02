@@ -3,7 +3,17 @@
 The client facing website for crossroads church. 
 
 ###Getting Started 
-The only thing you'll need to get started is NodeJS. Head over to [http://nodejs.org/](http://nodejs.org) and install based on your operating system. We use npm scripts to run webpack so there are no node modules to install globally. Once you pull down the code, just run `npm i` to install all dependencies locally. 
+The first thing you'll need to get started is NodeJS. Head over to [http://nodejs.org/](http://nodejs.org) and install based on your operating system. Once you pull down the code, just run `npm i` to install all dependencies locally.
+
+We use gulp scripts to build and run webpack so you will also need to install gulp globally.  This is not required, but makes command-line tasks easier later on.  To install gulp globally, use one of the following commands.  Both will install gulp into the NodeJS path, which is presumably already on your OS's execution PATH.
+
+For Windows users (replace the prefix value below with the path to your NodeJS install):
+``` npm set prefix "C:\Program Files\nodejs" ```
+``` npm install -g gulp ```
+
+Mac and Linux (replace the prefix value below with the path to your NodeJS install):
+``` npm set prefix /usr/local/nodejs ```
+``` npm install -g gulp ```
 
 ###Configuration
 By default webpack inserts `http://localhost:49380` everywhere it finds `__API_ENDPOINT__` in the javascript. This can be changed by creating and setting an environment variable called **CRDS_API_ENDPOINT**. 
@@ -14,13 +24,13 @@ For windows users:
 Mac and Linux:
 ``` export CRDS_API_ENDPOINT = http://path-to-api-host/ ```
 
->Keep in mind that this way of setting environment variables will not be persistent, windows users will have to add this variable in system settings and linux/mac users will have to set it in thier .bashrc/.zshrc files for persistence. 
+>Keep in mind that this way of setting environment variables will not be persistent, windows users will have to add this variable in system settings and linux/mac users will have to set it in their .bashrc/.zshrc files for persistence. 
 
 ###Build
-To just build the project, run `npm run build`
+To just build the project, run `gulp build-dev` for a dev build, or `gulp build` for production.
 
 ###Run
-To run the project, run `npm start` and point your browser to `http://localhost:8080`. If you want live reload, use `http://localhost:8080/webpack-dev-server` but keep in mind that the anglar inspector will not work correctly and routes will not show up correctly with live reload. 
+To run the project, run `gulp start` and point your browser to `http://localhost:8080`. If you want live reload, use `http://localhost:8080/webpack-dev-server` but keep in mind that the angular inspector will not work correctly and routes will not show up correctly with live reload. 
 
 ##Mac OS with Gateway code running under VirtualBox Windows Guest
 Follow these instructions in order to setup the application to call Gateway services that are hosted on IIS Express on a Windows VM running under VirtualBox on a Mac.
