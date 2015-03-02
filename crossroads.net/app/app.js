@@ -7,6 +7,7 @@ require("angular-sanitize");
 require('angular-messages');
 require('angular-cookies');
 require('angular-growl');
+require('angular-snap');
 
 require('../styles/main.scss');
 require('./profile');

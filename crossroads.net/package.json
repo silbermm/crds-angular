@@ -55,6 +55,7 @@
     "angular-messages": "./node_modules/angular-messages/angular-messages.js",
     "angular-sanitize": "./node_modules/angular-sanitize/angular-sanitize.js",
     "angular-growl-notifications": "./node_modules/angular-growl-notifications/dist/angular-growl-notifications.js",
-    "angular-growl": "./app/third-party/angular/angular-growl.js"
+    "angular-growl": "./app/third-party/angular/angular-growl.js",
+    "angular-snap": "./node_modules/angular-snap/angular-snap.js"
   }
 }
