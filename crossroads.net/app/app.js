@@ -17,7 +17,7 @@ require('./cms/services/cms_services_module');
 "use strict";
 (function () {
 
-    angular.module("crossroads", ['ngResource', "crdsProfile", "crdsCMS.services", "ui.router", "ngCookies", "ngMessages", 'angular-growl'])
+    angular.module("crossroads", ['ngResource', "crdsProfile", "crdsCMS.services", "ui.router", "ngCookies", "ngMessages", 'angular-growl', 'snap'])
 
     .constant("AUTH_EVENTS", {
             loginSuccess: "auth-login-success",
@@ -50,6 +50,11 @@ require('./cms/services/cms_services_module');
         growlProvider.globalTimeToLive(6000);
         growlProvider.globalDisableIcons(true);
         growlProvider.globalDisableCountDown(true);
+    })
+    .config(function(snapRemoteProvider) {
+        snapRemoteProvider.globalOptions = {
+            disable: 'right'
+        };
     })
     .filter('html', ['$sce', function ($sce) {
         return function (val) {

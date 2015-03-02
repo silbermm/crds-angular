@@ -45,7 +45,8 @@
     "angular-ui-router": "^0.2.13",
     "ng-cache-loader": "0.0.8",
     "ng-resource": "^1.3.2",
-    "ngtemplate-loader": "^1.0.0"
+    "ngtemplate-loader": "^1.0.0",
+    "angular-snap": "*"
   },
   "browser": {
     "angular": "./app/third-party/angular/angular-index.js",
