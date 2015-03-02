@@ -1,7 +1,7 @@
+'use strict()';
 ﻿(function () {
-    angular.module("crdsProfile").controller("ProfileSkillsController", ['$rootScope', 'Skills', '$log', ProfileSkillsController]);
 
-    function ProfileSkillsController($rootScope, Skills, $log) {
+    module.exports = function($rootScope, Skills, $log) {
 
         _this = this;
 

@@ -9,9 +9,13 @@
   require('./register/register_form.html');
   
   require('./content');
+  
+  require('./opportunity');
+  
   require('./profile/profile.html');
+  
   //require('./profile/personal/profile_personal.html');
-  require('./profile/templates/profile_account.html');
+  require('./profile/profile_account.html');
   require('./profile/skills/profile_skills.html');
   require('./opportunity/view_opportunities.html');
   require('./content/content.html');
@@ -20,6 +24,7 @@
   angular.module("crossroads").config([ "$stateProvider", "$urlRouterProvider", "$httpProvider", function( $stateProvider, $urlRouterProvider, $httpProvider) { 
 
     $httpProvider.defaults.useXDomain = true; 
+    $httpProvider.defaults.headers.common['Authorization']= getCookie('sessionId');
    
     //================================================
     // Check if the user is connected
