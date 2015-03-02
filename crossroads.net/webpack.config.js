@@ -14,7 +14,7 @@ module.exports = {
   entry: './app/app.js',
   output: {
     path: './assets',
-    publicPath: '/',
+    publicPath: '/assets/',
     filename: '[name].js'
   }, 
   module: {
