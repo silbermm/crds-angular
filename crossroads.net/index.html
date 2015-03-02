@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="crossroads">
+
 <head>
     <style>
         /*
@@ -7,7 +8,10 @@
               templates compile.  The !important is important given that there may be
               other selectors that are more specific or come later and might alter display.
              */
-        [ng\:cloak], [ng-cloak], .ng-cloak {
+        
+        [ng\:cloak],
+        [ng-cloak],
+        .ng-cloak {
             display: none !important;
         }
     </style>
@@ -32,156 +36,172 @@
 </head>
 
 <body ng-controller="appCtrl">
-    <div growl class="crossroads-growl"></div>
-    <div>
-        <header>
-            <div class="overlay-container"></div>
-            <!-- Brand Bar -->
-            <div class="brandbar-container">
-                <div class='brandbar'>
-                    <span class='b01'></span>
-                    <span class='b02'></span>
-                    <span class='b03'></span>
-                    <span class='b04'></span>
-                    <span class='b05'></span>
-                    <span class='b06'></span>
-                    <span class='b07'></span>
-                    <span class='b08'></span>
-                    <span class='b09'></span>
-                    <span class='b10'></span>
-                    <span class='b11'></span>
-                    <span class='b12'></span>
-                    <span class='b13'></span>
-                    <span class='b14'></span>
+    <div snap-drawer="left" class="hidden">
+        <ng-include src="'templates/nav-mobile.html'"></ng-include>
+    </div>
+    <!--/snap-drawer-->
+    <div snap-content>
+        <div growl class="crossroads-growl"></div>
+        <div>
+            <header>
+                <div class="overlay-container"></div>
+                <!-- Brand Bar -->
+                <div class="brandbar-container">
+                    <div class='brandbar'>
+                        <span class='b01'></span>
+                        <span class='b02'></span>
+                        <span class='b03'></span>
+                        <span class='b04'></span>
+                        <span class='b05'></span>
+                        <span class='b06'></span>
+                        <span class='b07'></span>
+                        <span class='b08'></span>
+                        <span class='b09'></span>
+                        <span class='b10'></span>
+                        <span class='b11'></span>
+                        <span class='b12'></span>
+                        <span class='b13'></span>
+                        <span class='b14'></span>
+                    </div>
+                    <div class='brandbar-second'>
+                        <span class='b01'></span>
+                        <span class='b02'></span>
+                        <span class='b03'></span>
+                        <span class='b04'></span>
+                        <span class='b05'></span>
+                        <span class='b06'></span>
+                        <span class='b07'></span>
+                        <span class='b08'></span>
+                        <span class='b09'></span>
+                        <span class='b10'></span>
+                        <span class='b11'></span>
+                        <span class='b12'></span>
+                        <span class='b13'></span>
+                        <span class='b14'></span>
+                    </div>
                 </div>
-                <div class='brandbar-second'>
-                    <span class='b01'></span>
-                    <span class='b02'></span>
-                    <span class='b03'></span>
-                    <span class='b04'></span>
-                    <span class='b05'></span>
-                    <span class='b06'></span>
-                    <span class='b07'></span>
-                    <span class='b08'></span>
-                    <span class='b09'></span>
-                    <span class='b10'></span>
-                    <span class='b11'></span>
-                    <span class='b12'></span>
-                    <span class='b13'></span>
-                    <span class='b14'></span>
-                </div>
-            </div>
-            <div id="menu">
-                <div class="container">
-                    <div class="row">
-                        <!-- TODO refactor this out into it's own directive, that uses the login and registration directives. The new directive should take an argument that is the internal directive (login and/or registration)* -->
-                        <div class="col-xs-12 menu__container">
-                            <div class="navbar-header">
-                                <a class="navbar-brand logo" href="/"><img src="//crossroads-media.s3.amazonaws.com/images/logo.svg" alt="crossroads"></a>
-                                <ul class="navbar--login list-unstyled">
-                                    <span id="current-user" class="hidden-xs" ng-if="$root.username != undefined" ng-cloak> {{$root.username}} </span>
-                                    <li class="hidden-xs ng-cloak" ng-show="$root.username != undefined" ng-cloak>
-                                        <a href="#/home" ng-click="logout()" class="ng-cloak">Sign Out</a>
-                                    </li>
-                                    <li class="hidden-xs" data-toggle="dropdown" ng-show="$root.username == undefined">
-                                        <button class="btn btn-primary" id="form-toggle" ng-click="toggleDesktopLogin(); passwordPrefix='login-dropdown'">
-                                            <span>Login</span>
+                <div id="menu">
+                    <div class="container">
+                        <div class="row">
+                            <!-- TODO refactor this out into it's own directive, that uses the login and registration directives. The new directive should take an argument that is the internal directive (login and/or registration)* -->
+                            <div class="col-xs-12 menu__container">
+                                <div class="navbar-header">
+                                    <div ng-class="{show: menu.isMobileShowing}">
+                                        <button type="button" class="nav__side--toggle navbar-left hidden-md hidden-lg hidden-xl" snap-toggle="left">
+                                            <span class="sr-only">Toggle navigation</span>
+                                            <span class="icon-bar"></span>
+                                            <span class="icon-bar"></span>
+                                            <span class="icon-bar"></span>
                                         </button>
-                                    </li>
+                                    </div>
+                                    <a class="navbar-brand logo" href="/"><img src="//crossroads-media.s3.amazonaws.com/images/logo.svg" alt="crossroads">
+                                    </a>
+                                    <ul class="navbar--login list-unstyled">
+                                        <span id="current-user" class="hidden-xs" ng-if="$root.username != undefined" ng-cloak> {{$root.username}} </span>
+                                        <li class="hidden-xs ng-cloak" ng-show="$root.username != undefined" ng-cloak>
+                                            <a href="#/home" ng-click="logout()" class="ng-cloak">Sign Out</a>
+                                        </li>
+                                        <li class="hidden-xs" data-toggle="dropdown" ng-show="$root.username == undefined">
+                                            <button class="btn btn-primary" id="form-toggle" ng-click="toggleDesktopLogin(); passwordPrefix='login-dropdown'">
+                                                <span>Login</span>
+                                            </button>
+                                        </li>
 
-                                    <li>
-                                        <ul class="navbar--login__dropdown list-unstyled col-md-3 soft-top soft-sides" role="menu" aria-labelledby="dropdownMenu1" ng-class="{toggleOpen: loginShow}">
-                                            <li role="presentation">
-                                                <div class="navbar--register__container">
-                                                    <div class="dd_menu">
-                                                        <login-form></login-form>
+                                        <li>
+                                            <ul class="navbar--login__dropdown list-unstyled col-md-3 soft-top soft-sides" role="menu" aria-labelledby="dropdownMenu1" ng-class="{toggleOpen: loginShow}">
+                                                <li role="presentation">
+                                                    <div class="navbar--register__container">
+                                                        <div class="dd_menu">
+                                                            <login-form></login-form>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                                <ul class="navbar--login list-unstyled">
-                                    <li class="hidden-xs" data-toggle="dropdown" ng-show="$root.username == undefined">
-                                        <button class="btn btn-primary" id="form-toggle" ng-click="toggleDesktopRegister(); passwordPrefix='registration'">
-                                            <span>Register</span>
-                                        </button>
-                                    </li>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                    <ul class="navbar--login list-unstyled">
+                                        <li class="hidden-xs" data-toggle="dropdown" ng-show="$root.username == undefined">
+                                            <button class="btn btn-primary" id="form-toggle" ng-click="toggleDesktopRegister(); passwordPrefix='registration'">
+                                                <span>Register</span>
+                                            </button>
+                                        </li>
 
-                                    <li>
-                                        <ul class="navbar--login__dropdown list-unstyled col-md-3 soft-top soft-sides" role="menu" aria-labelledby="dropdownMenu2" ng-class="{toggleOpen: registerShow}">
-                                            <li role="presentation">
-                                                <div class="navbar--register__container">
-                                                    <div class="dd_menu">
-                                                        <register-form></register-form>
+                                        <li>
+                                            <ul class="navbar--login__dropdown list-unstyled col-md-3 soft-top soft-sides" role="menu" aria-labelledby="dropdownMenu2" ng-class="{toggleOpen: registerShow}">
+                                                <li role="presentation">
+                                                    <div class="navbar--register__container">
+                                                        <div class="dd_menu">
+                                                            <register-form></register-form>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <ng-include src="'templates/nav.html'"> </ng-include>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </header>
-        <div id="container" hide-on-mobile-menu>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div ui-view></div>
+            </header>
+            <div id="container" hide-on-mobile-menu>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div ui-view></div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <footer>
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="col-sm-3">
-                            <img class="img-responsive">
-                        </div>
-                        <div class="col-sm-9">
-                            <h5 class="series-title">
+            </div>
+            <footer>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="col-sm-3">
+                                <img class="img-responsive">
+                            </div>
+                            <div class="col-sm-9">
+                                <h5 class="series-title">
                                 <strong>
                                     Current Series
                                 </strong>
                             </h5>
-                            <p class="series-description"></p>
-                            <br>
-                            <a href="">View Messages</a>
+                                <p class="series-description"></p>
+                                <br>
+                                <a href="">View Messages</a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm-3 open">
-                        <h5><strong>We’re Open.</strong></h5>
-                        3500 Madison Open<br>
-                        Free coffee, free Wi-Fi,
-                        and plenty of couches.<br>
-                        <a href="/oakley">Come on Over.</a>
-                    </div>
-                    <div class="col-sm-3 office">
-                        <h5><strong>Our Office:</strong></h5>
-                        3500 Madison Road<br>
-                        Cincinnati, OH 45209<br>
-                        513.731.7400<br>
-                        <a href="/prayerrequest">Submit a Prayer Request</a>
-                        <br>
-                        <br>
-                        <a href="/servicetimesanddirections">Service Times &amp; Directions</a>
-                        <br>
-                        <br>
-                        <a href="/contact">
+                        <div class="col-sm-3 open">
+                            <h5><strong>We’re Open.</strong></h5> 3500 Madison Open
+                            <br> Free coffee, free Wi-Fi, and plenty of couches.
+                            <br>
+                            <a href="/oakley">Come on Over.</a>
+                        </div>
+                        <div class="col-sm-3 office">
+                            <h5><strong>Our Office:</strong></h5> 3500 Madison Road
+                            <br> Cincinnati, OH 45209
+                            <br> 513.731.7400
+                            <br>
+                            <a href="/prayerrequest">Submit a Prayer Request</a>
+                            <br>
+                            <br>
+                            <a href="/servicetimesanddirections">Service Times &amp; Directions</a>
+                            <br>
+                            <br>
+                            <a href="/contact">
                             Contact Us | <a href="/privacypolicy">Privacy Policy</a>
                             <br>
                             <br>
                             <img src="//crossroads-media.s3.amazonaws.com/images/coc_logo.png" alt="Partner of Church of Cincinnati">
+                        </div>
                     </div>
                 </div>
-            </div>
-        </footer>
+            </footer>
+        </div>
     </div>
     <script src="assets/main.js"></script>
 </body>
+
 </html>
