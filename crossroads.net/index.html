@@ -251,7 +251,14 @@
                                                             <login-form  ng-click="prevent($event)"></login-form>
                                                         </ul>
                                                     </li>
-                                                    <li class="col-sm-3">
+                                                    <li class="col-sm-3" ng-if="$root.username != undefined">
+                                                      <ul>
+                                                        <li class="dropdown-header">My Account</li>
+                                                        <li><a href="">Dashboard</a></li>
+                                                        <li><a ui-sref="profile">Profile</a></li>
+                                                      </ul>
+                                                    </li>
+                                                    <li class="col-sm-3"  ng-if="$root.username ==undefined">
                                                         <ul>
                                                             <li class="dropdown-header">Get Registered</li>
                                                             <li><a href="#">Register</a>
