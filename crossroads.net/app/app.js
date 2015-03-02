@@ -8,6 +8,8 @@ require('angular-messages');
 require('angular-cookies');
 require('angular-growl');
 require('angular-snap');
+require('./third-party/snap/snap.min.js');
+require('../node_modules/angular-snap/angular-snap.min.css');
 
 require('../styles/main.scss');
 require('./profile');
