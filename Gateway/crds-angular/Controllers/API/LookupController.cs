@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Web.Helpers;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using System.Web.Http.Results;
 using crds_angular.Security;
@@ -11,6 +12,7 @@ using MinistryPlatform.Translation.Services;
 
 namespace crds_angular.Controllers.API
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*", SupportsCredentials = true)]
     public class LookupController : MPAuth
     {
         [ResponseType(typeof (List<Dictionary<string, object>>))]
@@ -53,14 +55,14 @@ namespace crds_angular.Controllers.API
         }
 
         [HttpGet]
-        [Route("api/lookup/{email?}")]
-        public IHttpActionResult EmailExists(string email, int userid = 0)
+        [Route("api/lookup/{userId}/find/{email?}")]
+        public IHttpActionResult EmailExists(int userId, string email)
         {
             //TODO let's clean this up
             var authorizedWithCookie = Authorized(t =>
             {
                 var exists = LookupService.EmailSearch(email, t);
-                if (exists.Count == 0 || Convert.ToInt32(exists["dp_RecordID"]) == userid)
+                if (exists.Count == 0 || Convert.ToInt32(exists["dp_RecordID"]) == userId)
                 {
                     return Ok();
                 }

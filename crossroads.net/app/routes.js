@@ -14,7 +14,7 @@
   
   require('./profile/profile.html');
   
-  //require('./profile/personal/profile_personal.html');
+  require('./profile/personal/profile_personal.html');
   require('./profile/profile_account.html');
   require('./profile/skills/profile_skills.html');
   require('./opportunity/view_opportunities.html');
@@ -131,7 +131,7 @@ $stateProvider
                }
            },
            "account@profile" : {               
-               templateUrl: "templates/profile_account.html",
+               templateUrl: "profile/profile_account.html",
                data: {
                    isProtected: true
                }

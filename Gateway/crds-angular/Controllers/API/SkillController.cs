@@ -15,13 +15,13 @@ namespace crds_angular.Controllers.API
     public class SkillController : LookupController
     {
         [ResponseType(typeof(List<SkillCategory>))]
-        [Route("api/skill")]
-        public IHttpActionResult Get()
+        [Route("api/skill/{userid}")]
+        public IHttpActionResult Get(int userid)
         {
             var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["Attributes"]);
             return Authorized(token =>
             {
-                var mySkills = GetMySkills(token);
+                var mySkills = GetMySkills(token, userid);
 
                 var mpObject = TranslationService.GetSkills(pageId, token);
                 var attributes = JsonConvert.DeserializeObject<List<Attribute>>(mpObject);
@@ -32,35 +32,34 @@ namespace crds_angular.Controllers.API
         }
 
         [ResponseType(typeof(Skill))]
-        [Route("api/skill")]
-        public IHttpActionResult Post([FromBody] Skill skill)
+        [Route("api/skill/{userid}")]
+        public IHttpActionResult Post(int userid, [FromBody] Skill skill)
         {
             logger.Debug("Skill Post");
 
             return Authorized(token =>
             {
-                var contactId = GetUserIdCookie();
-                if (contactId == 0)
+                if (userid == 0)
                 {
                     return Unauthorized();
                 }
 
-                var recordId = SkillService.Add(skill, contactId, token);
+                var recordId = SkillService.Add(skill, userid, token);
                 skill.RecordId = recordId;
                 return this.Ok(skill );
             });
         }
 
         [ResponseType(typeof(bool))]
-        [Route("api/skill/{recordId?}")]
+        [Route("api/skill/{userId}/{recordId?}")]
         [HttpDelete]
-        public IHttpActionResult Delete(int recordId)
+        public IHttpActionResult Delete(int userId, int recordId)
         {
             logger.Debug("Skill Delete");
 
             return Authorized(token => 
             {
-                var contactId = GetUserIdCookie();
+                var contactId = userId;
                 if (contactId == 0) {
                     return Unauthorized();
                 }
@@ -78,9 +77,8 @@ namespace crds_angular.Controllers.API
             });
         }
 
-        private List<Skill> GetMySkills(string token)
+        private List<Skill> GetMySkills(string token, int contactId)
         {
-            var contactId = GetUserIdCookie();
             if (contactId != 0 )
                 {
                 var personService = new PersonService();
