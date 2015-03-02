@@ -9,6 +9,7 @@ require('angular-cookies');
 require('angular-growl');
 require('angular-snap');
 require('./templates/nav.html');
+require('./templates/nav-mobile.html');
 
 require('./third-party/snap/snap.min.js');
 require('../node_modules/angular-snap/angular-snap.min.css');
