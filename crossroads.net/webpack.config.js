@@ -14,7 +14,7 @@ module.exports = {
     entry: './app/app.js',
     output: {
         path: './assets',
-        publicPath: '/',
+        publicPath: '/assets/',
         filename: '[name].js'
     },
     module: {
@@ -48,6 +48,7 @@ module.exports = {
                 test: /\.html$/,
                 loader: "ng-cache?prefix=[dir]"
             }
+
       //{ test: /\.html$/,loader: "ngtemplate?module=myTemplates&relativeTo=^" + (path.resolve(__dirname, 'app/')) + "!html"}
     ]
     },

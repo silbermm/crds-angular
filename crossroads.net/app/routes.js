@@ -30,24 +30,21 @@
     // Check if the user is connected
     //================================================
     var checkLoggedin = function($q, $timeout, $http, $location, $rootScope) {
-        console.log("checkLoggedIn");
-        // Initialize a new promise
+        console.log("CONFIG: checkLoggedIn");
         var deferred = $q.defer();
-
-        // Make an AJAX call to check if the user is logged in
+        $httpProvider.defaults.headers.common['Authorization']= getCookie('sessionId');
         $http({
-          method: "GET",
-          url :__API_ENDPOINT__ + "api/authenticated", 
-          withCredentials: true, 
+          method: 'GET',
+          url: __API_ENDPOINT__ + "api/authenticated",
           headers: {
             'Authorization': getCookie('sessionId')
-           }}).success(function(user) {
+          } 
+        }).success(function(user) {
             // Authenticated
             if (user.userId !== undefined) {
                 $timeout(deferred.resolve, 0);
                 $rootScope.userid = user.userId;
                 $rootScope.username = user.username;
-                // Not Authenticated
             } else {
                 Session.clear();
                 $rootScope.message = "You need to log in.";
@@ -55,13 +52,13 @@
                 $location.url("/");
             }
         }).error(function(e) {
-
+          console.log(e);
+          console.log("ERROR: trying to authenticate");
         });
-
         return deferred.promise;
     };
 
-$stateProvider
+  $stateProvider
     .state("home", {
         url: "/",
         templateUrl: "home/home.html",
@@ -96,7 +93,10 @@ $stateProvider
         views : {
            "" : {
                templateUrl: "profile/profile.html",
-               controller: "crdsProfileCtrl as profile"
+               controller: "crdsProfileCtrl as profile",
+               resolve: {
+                loggedin: checkLoggedin
+              },
            },
            "personal@profile" : {
                controller: "ProfilePersonalController as profile",
@@ -105,9 +105,11 @@ $stateProvider
                    isProtected: true
                },
                resolve: {
+                   loggedin: checkLoggedin,
                    Profile: "Profile",
                    Lookup: "Lookup",
                    genders: function(Lookup) {
+
                        return Lookup.query({ table: "genders" }).$promise;
                    },
                    maritalStatuses: function(Lookup) {

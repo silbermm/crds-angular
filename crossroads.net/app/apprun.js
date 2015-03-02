@@ -3,6 +3,7 @@
     var getCookie = require('./utilities/cookies');
     function AppRun(Session, $rootScope, MESSAGES, $http, $log, $state, $timeout) {
         $rootScope.MESSAGES = MESSAGES;
+
         function clearAndRedirect(event, toState,toParams) {
             Session.clear();
             $rootScope.userid = null;
