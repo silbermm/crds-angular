@@ -62,8 +62,8 @@ gulp.task("webpack:build", function(callback) {
 				// This has effect on the react lib size
 				"NODE_ENV": JSON.stringify("production")
 			}
-		})
-		//new webpack.optimize.DedupePlugin(),
+		}),
+		new webpack.optimize.DedupePlugin()
 		//new webpack.optimize.UglifyJsPlugin()
 	);
 

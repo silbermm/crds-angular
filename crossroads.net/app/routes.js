@@ -33,7 +33,13 @@
         console.log("CONFIG: checkLoggedIn");
         var deferred = $q.defer();
         $httpProvider.defaults.headers.common['Authorization']= getCookie('sessionId');
-        $http.get(__API_ENDPOINT__ + "api/authenticated").success(function(user) {
+        $http({
+          method: 'GET',
+          url: __API_ENDPOINT__ + "api/authenticated",
+          headers: {
+            'Authorization': getCookie('sessionId')
+          } 
+        }).success(function(user) {
             // Authenticated
             if (user.userId !== undefined) {
                 $timeout(deferred.resolve, 0);
