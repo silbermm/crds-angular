@@ -12,6 +12,8 @@ require('../styles/main.scss');
 require('./profile');
 require('./cms/services/cms_services_module');
 
+require('./third-party/angular/angular-growl.css');
+
 "use strict";
 (function () {
 
