@@ -1,9 +1,9 @@
 ﻿"use strict";
 (function () {
 
-    angular.module("crdsProfile").directive("validateDate", ["$log", ValidDateDirective]);
+    var moment = require("moment");
 
-    function ValidDateDirective($log) {
+    module.exports = function($log) {
 
         return {
             restrict: "A",

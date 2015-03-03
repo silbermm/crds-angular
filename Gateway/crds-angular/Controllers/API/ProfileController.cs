@@ -31,34 +31,6 @@ namespace crds_angular.Controllers.API
             });
         }
 
-        [ResponseType(typeof(List<Models.Crossroads.Skill>))]
-        [Route("api/myskills")]
-        public IHttpActionResult GetMySkills()
-        {
-            return Authorized(token =>
-            {
-                var cookie = Request.Headers.GetCookies("userId").FirstOrDefault();
-                if (cookie != null && (cookie["userId"].Value != "null" || cookie["userId"].Value != null))
-                {
-                    Debug.WriteLine("userId");
-                    var contactId = int.Parse(cookie["userId"].Value);
-
-
-                    var personService = new PersonService();
-                    var skills = personService.getLoggedInUserSkills(contactId, token);
-                    if (skills == null)
-                    {
-                        return Unauthorized();
-                    }
-                    return this.Ok(skills);
-                }
-                else
-                {
-                    return this.Unauthorized();
-                }
-            });
-        }
-
         [Route("api/profile")]
         public IHttpActionResult Post([FromBody] Person person)
         {

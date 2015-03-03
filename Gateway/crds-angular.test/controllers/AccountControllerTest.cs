@@ -49,7 +49,7 @@ namespace crds_angular.test.controllers
             
             // Set the cookie in the header
             HttpRequestMessage h = new HttpRequestMessage();
-            h.Headers.Add("Cookie", "sessionId=" + token);
+            h.Headers.Add("Authorization", token);
             accountController.Request = h;
 
             // Make the call...
