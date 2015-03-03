@@ -5,6 +5,10 @@ var webpack = require("webpack");
 var gulpWebpack = require("gulp-webpack");
 var WebpackDevServer = require("webpack-dev-server");
 var webpackConfig = require("./webpack.config.js");
+var svgSprite = require("gulp-svg-sprite");
+var svgSprites = require("gulp-svg-sprites");
+var replace = require("gulp-replace");
+var rename = require("gulp-rename");
 
 // Start the development server
 gulp.task("default", ["webpack-dev-server"]);
@@ -24,8 +28,8 @@ gulp.task("build", ["webpack:build"]);
 gulp.task("start", ["webpack-dev-server"]);
 
 // Run the development server
-gulp.task("webpack-dev-server", function(callback) {
-	// modify some webpack config options
+gulp.task("webpack-dev-server", ["icons-watch"], function(callback) {
+	// Modify some webpack config options
 	var myConfig = Object.create(webpackConfig);
 	myConfig.devtool = "eval";
 	myConfig.debug = true;
@@ -53,7 +57,7 @@ gulp.task("webpack-dev-server", function(callback) {
 	gutil.log("[start]", "Access crossroads.net Live Reload at http://localhost:8080/webpack-dev-server/#");
 });
 
-gulp.task("webpack:build", function(callback) {
+gulp.task("webpack:build", ["icons"], function(callback) {
 	// modify some webpack config options
 	var myConfig = Object.create(webpackConfig);
 	myConfig.plugins = myConfig.plugins.concat(
@@ -63,8 +67,9 @@ gulp.task("webpack:build", function(callback) {
 				"NODE_ENV": JSON.stringify("production")
 			}
 		}),
-		new webpack.optimize.DedupePlugin(),
-		new webpack.optimize.UglifyJsPlugin()
+		new webpack.optimize.DedupePlugin()
+		// Can't currently use this with angular
+		//new webpack.optimize.UglifyJsPlugin()
 	);
 
 	// run webpack
@@ -77,7 +82,7 @@ gulp.task("webpack:build", function(callback) {
 	});
 });
 
-gulp.task("webpack:build-dev", function(callback) {
+gulp.task("webpack:build-dev", ["icons"], function(callback) {
 	// modify some webpack config options
 	var myDevConfig = Object.create(webpackConfig);
 	myDevConfig.devtool = "sourcemap";
@@ -91,4 +96,40 @@ gulp.task("webpack:build-dev", function(callback) {
 		}));
 		callback();
 	});
+});
+
+// Watches for svg icon changes
+gulp.task("icons-watch", function() {
+	gulp.watch("app/icons/*.svg", ["icons"]);
+});
+
+// Builds sprites and previews for svg icons
+gulp.task("icons", ["svg-sprite"], function() {
+    gulp.src('app/icons/generated/css/sprite.css.html')
+      .pipe(replace('background: black;', 'background: black;fill:white;'))
+      .pipe(replace('css/sprites.css', 'generated/css/sprites.css'))
+      .pipe(replace('<li title=".icon-cr">', '<li style="display:none">'))
+      .pipe(replace('class="icon ', 'class="icon icon-large '))
+      .pipe(replace('xlink:href=&quot;#', 'xlink:href=&quot;/icons/cr.svg#'))
+      .pipe(gulp.dest('app/icons'));
+
+    gulp.src('app/icons/generated/defs/svg/sprite.defs.svg').pipe(rename("cr.svg")).pipe(gulp.dest('app/icons'));
+});
+
+
+gulp.task("svg-sprite", function() {
+	var config = {
+		log: "info",
+		mode: {
+			css: {
+				prefix: ".icon-%s",
+				example: true
+			},
+			defs: true
+		}
+	};
+	
+	return gulp.src("./app/icons/*.svg")
+		.pipe(svgSprite(config))
+		.pipe(gulp.dest("./app/icons/generated"));
 });
