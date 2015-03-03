@@ -10,7 +10,7 @@
             require: 'ngModel',
             link: function (scope, element, attrs, ngModel) {
                 ngModel.$asyncValidators.unique = function (email) {
-
+                    var userid = Session.exists('userId') !== undefined ? Session.exists('userId') : 0;
                     return $http({
                       method:"GET", 
                       url: __API_ENDPOINT__ + 'api/lookup/' + Session.exists('userId')  + '/find/?email=' + encodeURI(email),
