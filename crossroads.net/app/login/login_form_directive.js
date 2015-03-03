@@ -5,11 +5,15 @@ require('./login_form.html');
         restrict: 'EA',
         templateUrl: "login/login_form.html",
         controller: "LoginCtrl",
-        link: function (scope) {
+        link: function (scope, elements, attrs) {
           var showForm = function () {
               $log.debug('not logged in');
               scope.visible = true;
           };
+          if(attrs.prefix){
+            scope.passwordPrefix = attrs.prefix;
+          }
+          $log.debug(scope.passwordPrefix);
           scope.visible = false;     
         }
       };
