@@ -6,7 +6,6 @@ var gulpWebpack = require("gulp-webpack");
 var WebpackDevServer = require("webpack-dev-server");
 var webpackConfig = require("./webpack.config.js");
 var svgSprite = require("gulp-svg-sprite");
-var svgSprites = require("gulp-svg-sprites");
 var replace = require("gulp-replace");
 var rename = require("gulp-rename");
 
