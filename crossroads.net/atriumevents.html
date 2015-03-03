@@ -12,9 +12,13 @@ Tate - these are included here because when I included them in the footer script
 Whoever brings this into the Ministry Platform project, talk to me :)
 -->
 
+<!DOCTYPE html>
+<html lang="en" ng-app="atrium-events" ng-controller="EventsController">
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
 <script src="http://malsup.github.io/jquery.cycle2.js"></script>
 <script src="http://malsup.github.io/jquery.cycle2.scrollVert.js"></script>
 
+<body>
 <div class="atrium-event-container">
 
     <div class="table-responsive atrium-body">
@@ -129,10 +133,11 @@ Whoever brings this into the Ministry Platform project, talk to me :)
         </div>
     </div><!--/table-responsive-->
 </div><!--/atrium-event-container-->
-
+<script src="assets/main.js"></script>
+</body>
 
 <script>
-  // This Javascript is right in the template because I wasn't sure where to put custom jQuery
+//Javascript is right in the template because I wasn't sure where to put custom jQuery
   var marqueeElement = jQuery(".atrium-body");
   var marqueeHeight = jQuery(marqueeElement).height();
   var windowHeight = jQuery(window).height();
@@ -143,4 +148,4 @@ Whoever brings this into the Ministry Platform project, talk to me :)
     $(".atrium-cycle-cell").clone().appendTo( ".cycle-slideshow" );
     $("hr.atrium-border").show();
   };
-</script>
+ </script>
