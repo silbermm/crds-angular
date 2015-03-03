@@ -102,7 +102,7 @@ require('./third-party/angular/angular-growl.css');
     function EventsController($scope, $http){
         var authToken;
 
-      $http.get('/auth.py').success(function(data, status, headers) {
+      $http.get('/publicevents/oakley').success(function(data, status, headers) {
         authToken = headers('A-Token');
         $scope.user = data;
       });
