@@ -97,8 +97,8 @@ gulp.task("webpack:build-dev", ["icons"], function(callback) {
 	});
 });
 
-// Watches for svg icon changes
-gulp.task("icons-watch", function() {
+// Watches for svg icon changes - run "icons" once, then watch
+gulp.task("icons-watch", ["icons"], function() {
 	gulp.watch("app/icons/*.svg", ["icons"]);
 });
 
