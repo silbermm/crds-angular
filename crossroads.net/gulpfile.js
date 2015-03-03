@@ -104,15 +104,12 @@ gulp.task("icons-watch", function() {
 
 // Builds sprites and previews for svg icons
 gulp.task("icons", ["svg-sprite"], function() {
-    gulp.src('app/icons/generated/css/sprite.css.html')
-      .pipe(replace('background: black;', 'background: black;fill:white;'))
-      .pipe(replace('css/sprites.css', 'generated/css/sprites.css'))
-      .pipe(replace('<li title=".icon-cr">', '<li style="display:none">'))
-      .pipe(replace('class="icon ', 'class="icon icon-large '))
-      .pipe(replace('xlink:href=&quot;#', 'xlink:href=&quot;/icons/cr.svg#'))
-      .pipe(gulp.dest('app/icons'));
+    gulp.src('build/icons/generated/css/sprite.css.html')
+      .pipe(replace(/svg\/.*\.svg/g, 'cr.css.svg'))
+      .pipe(gulp.dest('./assets'));
 
-    gulp.src('app/icons/generated/defs/svg/sprite.defs.svg').pipe(rename("cr.svg")).pipe(gulp.dest('app/icons'));
+    gulp.src('build/icons/generated/css/svg/sprite.css.svg').pipe(rename("cr.css.svg")).pipe(gulp.dest('./assets'));
+    gulp.src('build/icons/generated/defs/svg/sprite.defs.svg').pipe(rename("cr.svg")).pipe(gulp.dest('./assets'));
 });
 
 
@@ -122,7 +119,8 @@ gulp.task("svg-sprite", function() {
 		mode: {
 			css: {
 				prefix: ".icon-%s",
-				example: true
+				example: true,
+				bust: false
 			},
 			defs: true
 		}
@@ -130,5 +128,5 @@ gulp.task("svg-sprite", function() {
 	
 	return gulp.src("./app/icons/*.svg")
 		.pipe(svgSprite(config))
-		.pipe(gulp.dest("./app/icons/generated"));
+		.pipe(gulp.dest("./build/icons/generated"));
 });
