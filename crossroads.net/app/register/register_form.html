@@ -8,7 +8,7 @@
          registerForm.firstname.$error.required && registerForm.$submitted  && registerForm.firstname.$touched ||
          registerForm.firstname.$error.unique && registerForm.firstname.$dirty  ||
          !registerForm.firstname.$error.required && registerForm.firstname.$dirty && !registerForm.firstname.$valid}">
-            <input class="form-control" id="firstname" name="firstname" type="text" ng-model="newuser.firstname" required placeholder="First Name"/>
+          <input id="{{passwordPrefix}}-firstname" class="form-control" id="firstname" name="firstname" type="text" ng-model="newuser.firstname" required placeholder="First Name"/>
             <ng-messages for="registerForm.firstname.$error" ng-if="registerForm.$submitted " ng-messages-include="on-submit-messages"></ng-messages>
         </div>
 
@@ -18,7 +18,7 @@
          registerForm.lastname.$error.required && registerForm.$submitted  && registerForm.lastname.$touched ||
          registerForm.lastname.$error.unique && registerForm.lastname.$dirty  ||
          !registerForm.lastname.$error.required && registerForm.lastname.$dirty && !registerForm.lastname.$valid}">
-            <input class="form-control" id="lastname" name="lastname" type="text" ng-model="newuser.lastname" required placeholder="Last Name">
+            <input id="{{passwordPrefix}}-lastname" class="form-control" id="lastname" name="lastname" type="text" ng-model="newuser.lastname" required placeholder="Last Name">
             <ng-messages for="registerForm.lastname.$error" ng-if="registerForm.$submitted " ng-messages-include="on-submit-messages"></ng-messages>
         </div>
 

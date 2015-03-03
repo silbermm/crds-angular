@@ -59,7 +59,8 @@ require('./third-party/angular/angular-growl.css');
     })
     .config(function(snapRemoteProvider) {
         snapRemoteProvider.globalOptions = {
-            disable: 'right'
+            disable: 'right',
+            touchToDrag: false
         };
     })
     .filter('html', ['$sce', function ($sce) {
