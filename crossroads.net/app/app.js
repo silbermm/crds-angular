@@ -20,6 +20,7 @@ require('./cms/services/cms_services_module');
 
 require('./third-party/angular/angular-growl.css');
 
+
 "use strict";
 (function () {
 
@@ -96,30 +97,16 @@ require('./third-party/angular/angular-growl.css');
         }
     ]);
 	
-	angular.module('atrium-events',[])
-    .controller('EventsController', EventsController);
+	angular.module('atrium-events',['ngResource'])
+    .controller('EventsController',['$scope','$log', '$http','Events',function ($scope, $log, $http, Events){
 
-    function EventsController($scope, $http){
-        var authToken;
+     $log.debug("EventsController loaded");
+     var eventsContainer = Events.$get();
+     $log.debug(eventsContainer);
+     //$scope.events = eventsContainer.events;
 
-      $http.get('/publicevents/oakley').success(function(data, status, headers) {
-        authToken = headers('A-Token');
-        $scope.user = data;
-      });
-
-      $scope.saveMessage = function(message) {
-        var headers = { 'Authorization': authToken };
-        $scope.status = 'Saving...';
-
-        $http.post('/add-msg.py', message, { headers: headers } ).success(function(response) {
-          $scope.status = '';
-        }).error(function() {
-          $scope.status = 'ERROR!';
-        });
-  };
-
-    }
-	
+    }]);
+	require('./services/events_service.js');
     require('./apprun');
     require('./routes');
     require('./register/register_directive');

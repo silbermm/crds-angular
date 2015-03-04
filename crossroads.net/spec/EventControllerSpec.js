@@ -2,7 +2,7 @@
 
 // testing controller
 describe('EventsController', function() {
-   var $httpBackend, $rootScope, createController, authRequestHandler;
+   var $httpBackend, $rootScope, eventsController;
 
    // Set up the module
    beforeEach(module('atrium-events'));
@@ -13,22 +13,20 @@ describe('EventsController', function() {
        // Set up the mock http service responses
        $httpBackend = $injector.get('$httpBackend');
        // backend definition common for all tests
-       authRequestHandler = $httpBackend.when('GET', '/publicevents/oakley')
+       $httpBackend.when('GET', 'http://silbervm:49380/api/Publicevents/oakley')
                               .respond({events:[
-                                  {"time":"12:00","meridian":"pm","name":"Ewhiz Kids India","location":"B105 War Room"},
-                                  {"time":"12:00","meridian":"pm","name":"Mason - Turner Office Space Use","location":"KC Room 215 4th grade"},
-                                  {"time":"12:00","meridian":"pm","name":"Justice Small Group","location":">Atrium Conference Room - 2<"},
-                                  {"time":"12:10","meridian":"pm","name":"HS Huddle","location":"WAR ROOM"},
-                                  {"time":"12:10","meridian":"pm","name":"Oakley Prayer","location":"Meeting Center Room D"}
-
-                                ]});
+                                  {'time':'12:00','meridian':'pm','name':'Ewhiz Kids India','location':'B105 War Room'},
+                                  {'time':'12:00','meridian':'pm','name':'Mason - Turner Office Space Use','location':'KC Room 215 4th grade'},
+                                  {'time':'12:00','meridian':'pm','name':'Justice Small Group','location':'>Atrium Conference Room - 2<'},
+                                  {'time':'12:10','meridian':'pm','name':'HS Huddle','location':'WAR ROOM'},
+                                  {'time':'12:10','meridian':'pm','name':'Oakley Prayer','location':'Meeting Center Room D'}]});
 
        // Get hold of a scope (i.e. the root scope)
        $rootScope = $injector.get('$rootScope');
        // The $controller service is used to create instances of controllers
        var $controller = $injector.get('$controller');
 
-       createController = function() {
+       eventsController = function() {
          return $controller('EventsController', {'$scope' : $rootScope });
        };
    }));
@@ -39,7 +37,12 @@ describe('EventsController', function() {
      $httpBackend.verifyNoOutstandingRequest();
    });
 
-      it('')
+      it('should place a get call', function(){
+        var controller = eventsController();
+        $httpBackend.expectGET('http://silbervm:49380/api/Publicevents/oakley');
+        $httpBackend.flush();
+        //expect($rootScope.events).toBeDefined();
+      });
 
 
    // it('should fetch authentication token', function() {
