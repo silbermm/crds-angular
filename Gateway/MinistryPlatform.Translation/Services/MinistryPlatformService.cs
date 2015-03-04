@@ -29,14 +29,14 @@ namespace MinistryPlatform.Translation.Services
                 platformClient => platformClient.GetPageRecords(pageId, search, sort, 0));
         }
 
-        public static JArray GetRecordsArr(int pageId, String token)
+        public static JArray GetRecordsArr(int pageId, String token, String search = "", String sort = "")
         {
-            return MPFormatConversion.MPFormatToJson(GetRecords(pageId, token));
+            return MPFormatConversion.MPFormatToJson(GetRecords(pageId, token, search, sort));
         }
 
-        public static List<Dictionary<string, object>> GetRecordsDict(int pageId, String token)
+        public static List<Dictionary<string, object>> GetRecordsDict(int pageId, String token, String search = "", String sort = "")
         {
-            return MPFormatConversion.MPFormatToList(GetRecords(pageId, token));
+            return MPFormatConversion.MPFormatToList(GetRecords(pageId, token, search, sort));
         }
 
         public static SelectQueryResult GetRecord(int pageId, int recordId, String token, bool quickadd = false)
