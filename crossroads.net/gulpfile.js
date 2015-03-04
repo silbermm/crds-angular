@@ -104,11 +104,10 @@ gulp.task("icons-watch", ["icons"], function() {
 
 // Builds sprites and previews for svg icons
 gulp.task("icons", ["svg-sprite"], function() {
-    gulp.src('build/icons/generated/css/sprite.css.html')
-      .pipe(replace(/svg\/.*\.svg/g, 'cr.css.svg'))
+    gulp.src('build/icons/generated/defs/sprite.defs.html')
+	  .pipe(rename("preview-svg.html"))
       .pipe(gulp.dest('./assets'));
 
-    gulp.src('build/icons/generated/css/svg/sprite.css.svg').pipe(rename("cr.css.svg")).pipe(gulp.dest('./assets'));
     gulp.src('build/icons/generated/defs/svg/sprite.defs.svg').pipe(rename("cr.svg")).pipe(gulp.dest('./assets'));
 });
 
@@ -117,14 +116,19 @@ gulp.task("svg-sprite", function() {
 	var config = {
 		log: "info",
 		mode: {
-			css: {
+			defs: {
 				prefix: ".icon-%s",
 				example: true,
+				inline: true,
 				bust: false
-			},
-			defs: true
+			}
 		}
 	};
+	
+	// Override the default template
+	gulp.src("sprite.template.html")
+		.pipe(rename("sprite.html"))
+		.pipe(gulp.dest("./node_modules/gulp-svg-sprite/node_modules/svg-sprite/tmpl/defs"));
 	
 	return gulp.src("./app/icons/*.svg")
 		.pipe(svgSprite(config))
