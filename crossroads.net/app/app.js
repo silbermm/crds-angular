@@ -7,17 +7,23 @@ require("angular-sanitize");
 require('angular-messages');
 require('angular-cookies');
 require('angular-growl');
+require('angular-snap');
+require('./templates/nav.html');
+require('./templates/nav-mobile.html');
+
+require('./third-party/snap/snap.min.js');
+require('../node_modules/angular-snap/angular-snap.min.css');
 
 require('../styles/main.scss');
-require('./profile/module');
+require('./profile');
 require('./cms/services/cms_services_module');
-require('./opportunity/module');
-//require('./services/session_service');
+
+require('./third-party/angular/angular-growl.css');
 
 "use strict";
 (function () {
 
-    angular.module("crossroads", ['ngResource', "crdsProfile", "crdsCMS.services", "crdsOpportunity", "ui.router", "ngCookies", "ngMessages", 'angular-growl'])
+    angular.module("crossroads", ['ngResource', "crdsProfile", "crdsCMS.services", "ui.router", "ngCookies", "ngMessages", 'angular-growl', 'snap'])
 
     .constant("AUTH_EVENTS", {
             loginSuccess: "auth-login-success",
@@ -51,6 +57,11 @@ require('./opportunity/module');
         growlProvider.globalDisableIcons(true);
         growlProvider.globalDisableCountDown(true);
     })
+    .config(function(snapRemoteProvider) {
+        snapRemoteProvider.globalOptions = {
+            disable: 'right'
+        };
+    })
     .filter('html', ['$sce', function ($sce) {
         return function (val) {
             return $sce.trustAsHtml(val);
@@ -61,6 +72,10 @@ require('./opportunity/module');
   
           console.log(__API_ENDPOINT__);
 
+            $scope.prevent = function(evt) {
+                evt.stopPropagation();
+            };
+            
             var messagesRequest = Message.get("", function () {
                 messagesRequest.messages.unshift(null);//Adding a null so the indexes match the DB
                 //TODO Refactor to not use rootScope, now using ngTemplate w/ ngMessages but also need to pull this out into a service

@@ -1,12 +1,12 @@
+'use strict()';
 ﻿(function () {
-    angular.module("crdsProfile").controller("ProfileSkillsController", ['$rootScope', 'Skills', '$log', ProfileSkillsController]);
 
-    function ProfileSkillsController($rootScope, Skills, $log) {
+    module.exports = function($rootScope, Skills, Session, $log) {
 
-        _this = this;
+        var _this = this;
 
         _this.initSkills = function () {
-            _this.skills = Skills.query(function () {
+            _this.skills = Skills.query({userId:Session.exists('userId')}, function () {
                 _this.myskills = function () {
                     var flat = [];
                     _this.skills.forEach(function (item) {
@@ -31,12 +31,12 @@
             newSkill.RecordId = skill.RecordId;
 
             if (skill.Selected) {
-                newSkill.$save(function (data) {
+                newSkill.$save({userId:Session.exists('userId')}, function (data) {
                     skill.RecordId = data.RecordId;
                 });
             }
             else {
-                var removed = newSkill.$remove({ recordId: newSkill.RecordId });
+                var removed = newSkill.$remove({ userId: Session.exists('userId'), recordId: newSkill.RecordId });
             }
         }
     }

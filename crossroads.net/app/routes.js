@@ -6,34 +6,45 @@
   require('./home');
 
   require('./login/login_page.html');
+  require('./register/register_form.html');
+  
+  require('./content');
+  
+  require('./opportunity');
+  
+  require('./profile/profile.html');
+  
+  require('./profile/personal/profile_personal.html');
+  require('./profile/profile_account.html');
+  require('./profile/skills/profile_skills.html');
+  require('./opportunity/view_opportunities.html');
+  require('./content/content.html');
   var getCookie = require('./utilities/cookies'); 
 
   angular.module("crossroads").config([ "$stateProvider", "$urlRouterProvider", "$httpProvider", function( $stateProvider, $urlRouterProvider, $httpProvider) { 
 
     $httpProvider.defaults.useXDomain = true; 
+    $httpProvider.defaults.headers.common['Authorization']= getCookie('sessionId');
    
     //================================================
     // Check if the user is connected
     //================================================
     var checkLoggedin = function($q, $timeout, $http, $location, $rootScope) {
-        console.log("checkLoggedIn");
-        // Initialize a new promise
+        console.log("CONFIG: checkLoggedIn");
         var deferred = $q.defer();
-
-        // Make an AJAX call to check if the user is logged in
+        $httpProvider.defaults.headers.common['Authorization']= getCookie('sessionId');
         $http({
-          method: "GET",
-          url :__API_ENDPOINT__ + "api/authenticated", 
-          withCredentials: true, 
+          method: 'GET',
+          url: __API_ENDPOINT__ + "api/authenticated",
           headers: {
             'Authorization': getCookie('sessionId')
-           }}).success(function(user) {
+          } 
+        }).success(function(user) {
             // Authenticated
             if (user.userId !== undefined) {
                 $timeout(deferred.resolve, 0);
                 $rootScope.userid = user.userId;
                 $rootScope.username = user.username;
-                // Not Authenticated
             } else {
                 Session.clear();
                 $rootScope.message = "You need to log in.";
@@ -41,13 +52,13 @@
                 $location.url("/");
             }
         }).error(function(e) {
-
+          console.log(e);
+          console.log("ERROR: trying to authenticate");
         });
-
         return deferred.promise;
     };
 
-$stateProvider
+  $stateProvider
     .state("home", {
         url: "/",
         templateUrl: "home/home.html",
@@ -68,7 +79,7 @@ $stateProvider
     })
     .state("register", {
         url: "/register",
-        templateUrl: "app/crossroads.net/register/register_form.html",
+        templateUrl: "register/register_form.html",
         controller: "RegisterCtrl"
     })
     .state("profile", {
@@ -81,19 +92,24 @@ $stateProvider
         },
         views : {
            "" : {
-               templateUrl: "app/modules/profile/profile.html",
-               controller: "crdsProfileCtrl as profile"
+               templateUrl: "profile/profile.html",
+               controller: "crdsProfileCtrl as profile",
+               resolve: {
+                loggedin: checkLoggedin
+              },
            },
            "personal@profile" : {
                controller: "ProfilePersonalController as profile",
-               templateUrl: "app/modules/profile/personal/profile_personal.html",
+               templateUrl: "personal/profile_personal.html",
                data: {
                    isProtected: true
                },
                resolve: {
+                   loggedin: checkLoggedin,
                    Profile: "Profile",
                    Lookup: "Lookup",
                    genders: function(Lookup) {
+
                        return Lookup.query({ table: "genders" }).$promise;
                    },
                    maritalStatuses: function(Lookup) {
@@ -117,14 +133,14 @@ $stateProvider
                }
            },
            "account@profile" : {               
-               templateUrl: "app/modules/profile/templates/profile_account.html",
+               templateUrl: "profile/profile_account.html",
                data: {
                    isProtected: true
                }
            },
            "skills@profile" : {
                controller: "ProfileSkillsController as profile",
-               templateUrl: "app/modules/profile/skills/profile_skills.html",
+               templateUrl: "skills/profile_skills.html",
                data: {
                    isProtected: true
                }
@@ -134,7 +150,7 @@ $stateProvider
     .state("opportunities", {
         url: "/opportunities",
         controller: "ViewOpportunitiesController as opportunity",
-        templateUrl: "app/modules/opportunity/view/view_opportunities.html",
+        templateUrl: "opportunity/view_opportunities.html",
         data: {
             isProtected: true
         },
@@ -145,7 +161,7 @@ $stateProvider
     .state("content", {
         url: "/:urlsegment",
         controller: "ContentCtrl",
-        templateUrl: "app/crossroads.net/content/content.html"
+        templateUrl: "content/content.html"
     });
         //Leave the comment below.  Once we have a true 404 page hosted in the same domain, this is how we 
         //will handle the routing. 

@@ -19,9 +19,11 @@ namespace crds_angular.test.controllers
         [SetUp]
         public void SetUp()
         {
-            profileController = new ProfileController();
-            profileController.Request = new HttpRequestMessage();
-            profileController.Configuration = new HttpConfiguration();
+            profileController = new ProfileController
+            {
+                Request = new HttpRequestMessage(),
+                Configuration = new HttpConfiguration()
+            };
         }
 
         [Test]

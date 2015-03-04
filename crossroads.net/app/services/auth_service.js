@@ -1,7 +1,7 @@
 ﻿'use strict';
 require('./session_service');
 (function () {
-    angular.module('crossroads').factory('AuthService', ['$http', 'Session', '$rootScope', function ($http, Session, $rootScope) {
+    angular.module('crossroads').factory('AuthService', ['$http', 'Session', '$rootScope',function ($http, Session, $rootScope) {
         var authService = {};
 
         authService.login = function (credentials) {
@@ -17,7 +17,7 @@ require('./session_service');
 
         authService.logout = function () {
             $rootScope.username = null;
-            Session.clear();
+            Session.clear(); 
         }
 
         authService.isAuthenticated = function () {

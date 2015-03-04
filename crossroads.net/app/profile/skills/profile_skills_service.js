@@ -1,8 +1,9 @@
+'use strict()';
+
 ﻿(function(){
-    angular.module('crdsProfile').factory('Skills', ["$resource", SkillsService]);
-    
-    function SkillsService($resource){
-        return $resource("api/skill");
+  
+    module.exports = function SkillsService($resource){
+        return $resource(__API_ENDPOINT__ + "api/skill/:userId");
     }
 
 })()
