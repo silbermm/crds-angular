@@ -207,6 +207,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\API\AccountController.cs" />
+    <Compile Include="Controllers\API\EventLocationController.cs" />
     <Compile Include="Controllers\API\UserController.cs" />
     <Compile Include="Controllers\API\LoginController.cs" />
     <Compile Include="Controllers\API\LookupController.cs" />
@@ -220,6 +221,7 @@
     <Compile Include="Models\Crossroads\AccountInfo.cs" />
     <Compile Include="Models\Crossroads\CookieInfo.cs" />
     <Compile Include="Models\Crossroads\Skill.cs" />
+    <Compile Include="Models\Crossroads\Event.cs" />
     <Compile Include="Models\Crossroads\User.cs" />
     <Compile Include="Models\Json\AccountInfoSerializer.cs" />
     <Compile Include="Models\Json\Communication.cs" />

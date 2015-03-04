@@ -187,5 +187,16 @@ namespace MinistryPlatform.Translation.Test
             Assert.Throws<FaultException<ExceptionDetail>>(() => MinistryPlatformService.DeleteRecord(pageId, responseId, null, token));
             
         }
+
+        [Test]
+        public void ShouldReturnTodaysEvents()
+        {
+            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["TodaysEventLocationRecords"]);
+            string token = AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"], ConfigurationManager.AppSettings["ApiPass"]);
+
+            var todaysEvents = MinistryPlatformService.GetRecordsDict(pageId, token, ",Mason", "5");
+
+            Assert.IsNotNull(todaysEvents);
+        }
     }
 }
