@@ -102,8 +102,8 @@ require('./third-party/angular/angular-growl.css');
 
      $log.debug("EventsController loaded");
      var eventsContainer = Events.$get();
-     $log.debug(eventsContainer);
-     //$scope.events = eventsContainer.events;
+     $log.debug(angular.toJson(eventsContainer));
+     $scope.events = eventsContainer;
 
     }]);
 	require('./services/events_service.js');
