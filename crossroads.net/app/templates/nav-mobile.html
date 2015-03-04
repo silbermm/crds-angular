@@ -8,94 +8,104 @@
     <li class="dropdown" dropdown>
         <a href="#" class="dropdown-toggle" dropdown-toggle>My Crossroads</a>
         <ul class="dropdown-menu">
-            <li>
+            <li ng-if="$root.username == undefined">
                 <div class="dd_menu side-nav-login clearfix">
-                    <login-form ng-click="prevent($event)"></login-form>
+                    <login-form prefix="mobile-page" ng-click="prevent($event)"></login-form>
                 </div>
+            </li>
+            <li ng-if="$root.username != undefined">
+                <ul>
+                    <li><a href="" snap-close>Dashboard</a>
+                    </li>
+                    <li><a ui-sref="profile" snap-close>Profile</a>
+                    </li>
+                    <li><a href="#/home" ng-click="logout()" class="ng-cloak">Sign Out</a>
+                    </li>
+                </ul>
             </li>
         </ul>
     </li>
     <li class="dropdown" dropdown>
         <a href="#" class="dropdown-toggle" dropdown-toggle>Engage</a>
         <ul class="dropdown-menu">
-            <li><a ui-sref="content({urlsegment:'engage'})">Get Involved (Overview)</a>
+            <li><a ui-sref="content({urlsegment:'engage'})" snap-close>Get Involved (Overview)</a>
             </li>
-            <li><a href="#">Connect</a>
+            <li><a href="#" snap-close>Connect</a>
             </li>
-            <li><a href="#">Corkboard</a>
+            <li><a href="#" snap-close>Corkboard</a>
             </li>
-            <li><a href="#">Reach Out</a>
+            <li><a href="#" snap-close>Reach Out</a>
             </li>
         </ul>
     </li>
     <li class="dropdown" dropdown>
         <a href="#" class="dropdown-toggle" dropdown-toggle>Grow</a>
         <ul class="dropdown-menu">
-            <li><a href="#">Essentials of Growth</a>
+            <li><a href="#" snap-close>Essentials of Growth</a>
             </li>
-            <li><a href="#">Subscribe to the Daily</a>
+            <li><a href="#" snap-close>Subscribe to the Daily</a>
             </li>
-            <li><a href="#">Get in Community</a>
+            <li><a href="#" snap-close>Get in Community</a>
             </li>
-            <li><a href="#">Baptism</a>
+            <li><a href="#" snap-close>Baptism</a>
             </li>
-            <li><a href="#">Parent Resources</a>
+            <li><a href="#" snap-close>Parent Resources</a>
             </li>
         </ul>
     </li>
     <li class="dropdown" dropdown>
         <a href="#" class="dropdown-toggle" dropdown-toggle>About</a>
         <ul class="dropdown-menu">
-            <li><a href="#">Explore Crossroads</a>
+            <li><a href="#" snap-close>Explore Crossroads</a>
             </li>
-            <li><a href="#">Who We Are</a>
+            <li><a href="#" snap-close>Who We Are</a>
             </li>
-            <li><a href="#">Blog</a>
+            <li><a href="#" snap-close>Blog</a>
             </li>
-            <li><a href="#">Service Times &amp; Directions</a>
+            <li><a href="#" snap-close>Service Times &amp; Directions</a>
             </li>
-            <li><a href="#">Pastoral Care</a>
+            <li><a href="#" snap-close>Pastoral Care</a>
             </li>
-            <li><a href="#">Contact Us</a>
+            <li><a href="#" snap-close>Contact Us</a>
             </li>
         </ul>
     </li>
     <li class="dropdown" dropdown>
         <a href="#" class="dropdown-toggle" dropdown-toggle>Give</a>
         <ul class="dropdown-menu">
-            <li><a href="#">Recurring Gift</a>
+            <li><a href="#" snap-close>Recurring Gift</a>
             </li>
-            <li><a href="#">One-time Gift</a>
+            <li><a href="#" snap-close>One-time Gift</a>
             </li>
-            <li><a href="#">Transfer Stock</a>
+            <li><a href="#" snap-close>Transfer Stock</a>
             </li>
-            <li><a href="#">Estate Giving</a>
+            <li><a href="#" snap-close>Estate Giving</a>
             </li>
-            <li><a href="#">Financial Philosophy</a>
+            <li><a href="#" snap-close>Financial Philosophy</a>
             </li>
-            <li><a href="#">Give To Others</a>
+            <li><a href="#" snap-close>Give To Others</a>
             </li>
         </ul>
     </li>
     <li class="dropdown" dropdown>
         <a href="#" class="dropdown-toggle" dropdown-toggle>Media</a>
         <ul class="dropdown-menu">
-            <li><a href="#">Weekend Messages</a>
+            <li><a href="#" snap-close>Weekend Messages</a>
             </li>
-            <li><a href="#">Music</a>
+            <li><a href="#" snap-close>Music</a>
             </li>
-            <li><a href="#">Videos</a>
+            <li><a href="#" snap-close>Videos</a>
             </li>
-            <li><a href="#">Podcast</a>
+            <li><a href="#" snap-close>Podcast</a>
             </li>
         </ul>
     </li>
     <li class="dropdown" dropdown>
         <a href="#" class="dropdown-toggle" dropdown-toggle>Admin</a>
         <ul class="dropdown-menu">
-            <li><a href="#">Admin</a>
+            <li><a href="#" snap-close>Admin</a>
             </li>
-            <li><a href="#">Ministry Platform</a>
+            <li><a href="#" snap-close>Ministry Platform</a>
             </li>
         </ul>
     </li>
