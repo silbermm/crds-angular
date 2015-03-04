@@ -8,8 +8,11 @@ require('./register_controller');
             restrict: 'EA',
             templateUrl: "register/register_form.html",
             controller: "RegisterCtrl",
-            link: function (scope) {
+            link: function (scope, element, attrs) {
                 $log.debug("in the registerform directive");
+                if(attrs.prefix){
+                  scope.passwordPrefix = attrs.prefix;
+                }
                 var showForm = function () {
                     $log.debug('not logged in');
                     scope.visible = true;
