@@ -16,6 +16,7 @@ require('../node_modules/angular-snap/angular-snap.min.css');
 
 require('../styles/main.scss');
 require('./profile');
+require('./events');
 require('./cms/services/cms_services_module');
 
 require('./third-party/angular/angular-growl.css');
@@ -97,18 +98,6 @@ require('./third-party/angular/angular-growl.css');
         }
     ]);
 	
-	// TODO Move into separate events_controller.js
-	angular.module('atrium-events',['ngResource'])
-    .controller('EventsController',['$scope','$log', '$http','Events',function ($scope, $log, $http, Events){
-
-     $log.debug("EventsController loaded");
-	 $scope.data = {};
-	 Events.query({site:$scope.site}, function(response) {
-		 $scope.data.events = response;
-	 });
-     $log.debug("Events returned from service: " + $scope.data);
-    }]);
-	require('./services/events_service.js');
     require('./apprun');
     require('./routes');
     require('./register/register_directive');
