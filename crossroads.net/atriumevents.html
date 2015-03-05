@@ -1,10 +1,10 @@
-﻿---
+﻿<!--
 layout: full_page
 title: Atrium Events Example
 published: true
 permalink: /atrium_events/
 categories:
----
+-->
 
 
 <!--
@@ -19,7 +19,7 @@ Whoever brings this into the Ministry Platform project, talk to me :)
 <script src="http://malsup.github.io/jquery.cycle2.scrollVert.js"></script>
 
 <body>
-<div class="atrium-event-container" ng-controller="EventsController">
+<div class="atrium-event-container" ng-controller="EventsController as controller">
 
     <div class="table-responsive atrium-body">
 
@@ -36,96 +36,14 @@ Whoever brings this into the Ministry Platform project, talk to me :)
             <div class="atrium-cycle-cell">
                 <table class="table atrium-table">
                     <tbody>
-                        <tr>
-                            <td class="first-cell">12:00<span>pm</span></td>
-                            <td class="second-cell">EWhiz Kids India</td>
-                            <td class="third-cell">B105 War Room</td>
+						<tr ng-repeat="event in controller.events">
+                            <td class="first-cell">{{event.time}}<span>{{event.meridian}}</span></td>
+                            <td class="second-cell">{{event.name}}</td>
+                            <td class="third-cell">{{event.location}}</td>
                         </tr>
-                        <tr>
-                            <td class="first-cell">12:00<span>pm</span></td>
-                            <td class="second-cell">Mason - Turner Office Space Use</td>
-                            <td class="third-cell">KC Room 215 4th grade</td>
-                        </tr>
-                        <tr>
-                            <td class="first-cell">12:00<span>pm</span></td>
-                            <td class="second-cell">Justice Small Group</td>
-                            <td class="third-cell">Atrium Conference Room - 2</td>
-                        </tr>
-                        <tr>
-                            <td class="first-cell">12:10<span>pm</span></td>
-                            <td class="second-cell">HS Huddle</td>
-                            <td class="third-cell">WAR ROOM</td>
-                        </tr>
-                        <tr>
-                            <td class="first-cell">12:10<span>pm</span></td>
-                            <td class="second-cell">Oakley Prayer</td>
-                            <td class="third-cell">Meeting Center Room D</td>
-                        </tr>
-                        <tr>
-                            <td class="first-cell">12:30<span>pm</span></td>
-                            <td class="second-cell">IT Daily Staff Prayer</td>
-                            <td class="third-cell">KC Room 121A (Craft Room)</td>
-                        </tr>
-                        <tr>
-                            <td class="first-cell">12:30<span>pm</span></td>
-                            <td class="second-cell">CityLink's 2014 Audit</td>
-                            <td class="third-cell">KC Room 121 Adv. Club (carpeted)</td>
-                        </tr>
-                        <tr>
-                            <td class="first-cell">12:30<span>pm</span></td>
-                            <td class="second-cell">Ocean Business Class</td>
-                            <td class="third-cell">Prayer Room - 2nd Floor East Corner</td>
-                        </tr>
-                        <tr>
-                            <td class="first-cell">12:45<span>pm</span></td>
-                            <td class="second-cell">Florence Daily Prayer</td>
-                            <td class="third-cell">Meeting Center Room C</td>
-                        </tr>
-                        <tr>
-                            <td class="first-cell">12:45<span>pm</span></td>
-                            <td class="second-cell">CO-OP</td>
-                            <td class="third-cell">KC Room 121A (Craft Room)</td>
-                        </tr>
-                        <tr>
-                            <td class="first-cell">1:00<span>pm</span></td>
-                            <td class="second-cell">Smart Sheets Training</td>
-                            <td class="third-cell">Atrium Conference Room - 2</td>
-                        </tr>
-                        <tr>
-                            <td class="first-cell">1:00<span>pm</span></td>
-                            <td class="second-cell">Scott Dill's Huddle</td>
-                            <td class="third-cell">FIREPLACE CONF ROOM</td>
-                        </tr>
-                        <tr>
-                            <td class="first-cell">2:30<span>pm</span></td>
-                            <td class="second-cell">Justice team meeting</td>
-                            <td class="third-cell">Prayer Room - 2nd Floor East Corner</td>
-                        </tr>
-                        <tr>
-                            <td class="first-cell">3:00<span>pm</span></td>
-                            <td class="second-cell">Whiz Kids Evening Program</td>
-                            <td class="third-cell">CHAPEL</td>
-                        </tr>
-                        <tr>
-                            <td class="first-cell">3:00<span>pm</span></td>
-                            <td class="second-cell">Campus Pastors</td>
-                            <td class="third-cell">Meeting Center Room D</td>
-                        </tr>
-                        <tr>
-                            <td class="first-cell">4:00<span>pm</span></td>
-                            <td class="second-cell">Cheryl welcome</td>
-                            <td class="third-cell">FIREPLACE CONF ROOM</td>
-                        </tr>
-                        <tr>
-                            <td class="first-cell">4:15<span>pm</span></td>
-                            <td class="second-cell">India Comms Team</td>
-                            <td class="third-cell">Prayer Room - 2nd Floor East Corner</td>
-                        </tr>
-                        <tr>
-                            <td class="first-cell">4:15<span>pm</span></td>
-                            <td class="second-cell">Huddle (Brad)</td>
-                            <td class="third-cell">KC Room 127</td>
-                        </tr>
+						<tr ng-if="controller.events.length == 0">
+							<td>No Events Scheduled</td>
+						</tr>
                     </tbody>
                 </table>
                 <hr class="atrium-border" />
