@@ -1,0 +1,279 @@
+
+<!DOCTYPE html>
+
+<html lang="en" ng-app="atrium-events">
+  <head>
+	<base href="." />
+        <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+  
+    <title>Atrium Events Example</title>
+  </head>
+
+  <body >
+  <div snap-content>
+    <div growl class="crossroads-growl"></div>
+    <div>
+
+    <style type="text/css">
+
+    .atrium-event-container:after {
+  background: rgba(2,27,40,.6);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  position: fixed;
+  content: "";
+}
+
+
+    .atrium-event-container {
+
+  background: url('http://s3.amazonaws.com/crossroads-media/images/atriumbg.png') no-repeat center center fixed;
+  background-size: cover;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  content: "";
+  z-index: 1;
+  font-family: "HelveticaNeue-Condensed", "Helvetica Neue Condensed", "Helvetica Neue", Helvetica, san-serif;
+
+  &:after {
+    background: rgba(2,27,40,.6);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
+    content: "";
+  }
+
+  .navbar-inverse {
+    background: rgba(2,27,40,.4);
+    margin-bottom: 0px;
+    border-bottom: 0px;
+    height: 4em;
+
+    .atrium-table {
+      //color: $brand-primary;
+      margin-bottom: 0px;
+
+      th {
+        line-height: 1.3;
+      }
+    }
+  }
+}
+
+.cycle-slide {
+  width: 100%;
+}
+
+.atrium-border {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 40px;
+  background: url('http://s3.amazonaws.com/crossroads-media/images/atrium-border.jpg') no-repeat center center;
+  background-size: cover;
+  border: 0px;
+  margin: $line-height-computed 0;
+  padding: 0;
+  display: none;
+}
+
+.atrium-table {
+  color: #fff;
+  font-size: 3.2em;
+  padding-bottom: $line-height-computed;
+  margin-bottom: $line-height-computed;
+
+  > thead > tr > th, tbody > tr > td, tbody > tr > th  {
+    border-top: 0px;
+    border-bottom: 0px;
+    width: 30%;
+    padding: 1.5%;
+    line-height: 1.1em;
+    font-weight: normal;
+  }
+
+  td {
+    padding: 2em 1.5%;
+  }
+
+  td, th {
+    padding: 0px;
+    
+    &.first-cell {
+      width: 14%;
+    }
+
+    &.second-cell, &.third-cell {
+      width: 44%;
+    }
+
+    span {
+      font-size: 60%;
+    }
+  }
+}
+
+.atrium-navbar {
+  height: 4em;
+}
+
+.atrium-body {
+  //margin-top: 4em;
+  z-index: 2;
+  position: relative;
+}
+
+.atrium-marquee {
+  //margin-top: 4em;
+}
+
+.atrium-marquee-on {
+  position: relative;
+  /*
+  position: fixed;
+  //top: 4em;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-top: 0px;
+  */
+  }
+
+  .atrium-table td.second-cell, .atrium-table td.third-cell, .atrium-table th.second-cell, .atrium-table th.third-cell {
+  width: 44%;
+}
+.atrium-table td.first-cell, .atrium-table th.first-cell {
+  width: 14%;
+}
+
+.atrium-table>thead>tr>th, .atrium-table tbody>tr>td, .atrium-table tbody>tr>th {
+  border-top: 0;
+  border-bottom: 0;
+  width: 30%;
+  padding: 1.5%;
+  line-height: 1.1em;
+  font-weight: 400;
+}
+
+.atrium-table td span, .atrium-table th span {
+  font-size: 60%;
+  text-transform: lowercase;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+body {
+  font-weight: 300;
+  font-smoothing: antialiased;
+}
+body {
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 14px;
+  line-height: 1.625;
+  color: #333;
+  background-color: #fff;
+}
+
+*:before, *:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+Pseudo ::after element
+*:before, *:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+    </style>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+<script src="http://malsup.github.io/jquery.cycle2.js"></script>
+<script src="http://malsup.github.io/jquery.cycle2.scrollVert.js"></script>
+
+<div class="atrium-event-container" ng-controller="EventsController">
+
+  <div class="table-responsive atrium-body">
+    
+    <div class="events-scroll"
+    data-cycle-speed="40000"
+    data-cycle-fx="scrollVert"
+    data-cycle-delay="0"
+    data-cycle-loop="0"
+    data-cycle-easing="linear"
+    data-cycle-slides="> div"
+    data-cycle-reverse="true"
+    data-cycle-timeout="200"
+    cycle>
+
+      <div class="atrium-cycle-cell">
+        <table class="table atrium-table">
+        <tbody>
+			<tr ng-repeat="event in data.events" on-last-repeat-cycle>
+				<td class="first-cell">{{event.time}}<span>{{event.meridian}}</span></td>
+				<td class="second-cell">{{event.name}}</td>
+				<td class="third-cell">{{event.location}}</td>
+			</tr>
+			<tr ng-if="data.events.length == 0">
+				<td>No Events Scheduled</td>
+			</tr>
+        </tbody>
+      </table>
+      <hr class="atrium-border" />
+      </div>
+    </div>
+  </div><!--/table-responsive-->
+</div><!--/atrium-event-container-->
+
+<script>
+  function cycleMarquee() {
+	  $('.events-scroll').cycle({
+		speed: 40000,
+		fx: 'scrollVert',
+		delay: 0,
+		loop: 0,
+		easing: 'linear',
+		slides: '> div',
+		reverse: 'true',
+		timeout: '200'
+	  });
+//	  $('.cycle-slideshow').cycle('reinit');
+//	  $('.cycle-slideshow').cycle('resume');
+//	  $('events-scroll').cycle('reinit');
+//	  $('events-scroll').cycle('resume');
+//	  $('events-scroll').cycle();
+  
+	  // This Javascript is right in the template because I wasn't sure where to put custom jQuery
+	  var marqueeElement = jQuery(".atrium-body");
+	  var marqueeHeight = jQuery(marqueeElement).height();
+	  var windowHeight = jQuery(window).height();
+	  console.log(marqueeHeight);
+	  console.log(windowHeight);
+
+	  //if (marqueeHeight >= windowHeight) {
+	//$(".atrium-cycle-cell").clone().appendTo( ".cycle-slideshow" );
+	//$("hr.atrium-border").show();
+	  //};
+  }
+
+</script>
+</div>
+
+    </div><!--/snap-content-->
+	<script src="assets/main.js"></script>
+  </body>
+</html>

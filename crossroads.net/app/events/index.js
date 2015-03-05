@@ -12,3 +12,24 @@ app.controller('EventsController',['$scope','$log', '$http', '$location', 'Event
 
 // Events Service
 app.factory('Events', ['$resource','$log', require('./service/events_service')]);
+
+app.directive("onLastRepeatCycle", function($log) {
+	return function(scope, element, attrs) {
+		if (scope.$last){
+			$log.debug("Last item");
+			window.cycleMarquee();
+		}
+	};	
+});
+
+app.directive("cycle", function($log, $timeout) {
+    return {
+        restrict: 'A',
+		priority: 1001,
+        link: function(scope, element, attrs) {
+           $timeout(function(){
+//               $(element).cycle();
+           }, 0);
+        }
+    };
+});
