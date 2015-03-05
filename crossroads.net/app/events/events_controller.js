@@ -7,10 +7,6 @@
 		$log.debug("EventsController loaded");
 		// Initialize data object, will get populated with response
 		$scope.data = {};
-		Events.query({site:$location.search().site}, function(response) {
-			$log.debug("Received response from events API for site " + $location.search().site);
-			$scope.data.events = response;
-			$log.debug("Events returned from service: " + JSON.stringify($scope.data.events));
-		});
+		$scope.data.events = Events.getDailyEvents($location.search().site);
 	};
 })()

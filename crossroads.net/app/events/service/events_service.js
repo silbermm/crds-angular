@@ -12,6 +12,13 @@
 	 */
 	module.exports = function($resource, $log) {
 		$log.debug("Inside Events factory");
-		return($resource(__API_ENDPOINT__ + 'api/events/:site'));
+		var eventsService = {
+			res: $resource(__API_ENDPOINT__ + 'api/events/:site'),
+			getDailyEvents: function(site) {
+				var events = this.res.query({site:site});
+				return(events);
+			}
+		};
+		return(eventsService);
 	};
 })()
