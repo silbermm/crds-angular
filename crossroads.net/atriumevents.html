@@ -22,7 +22,7 @@ Whoever brings this into the Ministry Platform project, talk to me :)
 <script src="http://malsup.github.io/jquery.cycle2.scrollVert.js"></script>
 
 <body>
-<div class="atrium-event-container" ng-controller="EventsController as controller">
+<div class="atrium-event-container" ng-controller="EventsController">
 
     <div class="table-responsive atrium-body">
 
@@ -39,12 +39,12 @@ Whoever brings this into the Ministry Platform project, talk to me :)
             <div class="atrium-cycle-cell">
                 <table class="table atrium-table">
                     <tbody>
-						<tr ng-repeat="event in controller.events">
+						<tr ng-repeat="event in data.events">
                             <td class="first-cell">{{event.time}}<span>{{event.meridian}}</span></td>
                             <td class="second-cell">{{event.name}}</td>
                             <td class="third-cell">{{event.location}}</td>
                         </tr>
-						<tr ng-if="controller.events.length == 0">
+						<tr ng-if="data.events.length == 0">
 							<td>No Events Scheduled</td>
 						</tr>
                     </tbody>
