@@ -8,14 +8,19 @@ var app = require('angular').module('atrium-events', ['ngResource'], function($l
 });
 
 // Events Controller
-app.controller('EventsController',['$scope','$log', '$http', '$location', 'Events', require('./events_controller')]);
+// TODO Enable this if we eventually use the controller & service on the Atrium Events page
+//app.controller('EventsController',['$scope','$log', '$http', '$location', 'Events', require('./events_controller')]);
 
 // Events Service
-app.factory('Events', ['$resource','$log',require('./service/events_service')]);
+// TODO Enable this if we eventually use the controller & service on the Atrium Events page
+//app.factory('Events', ['$resource','$log',require('./service/events_service')]);
 
 // Atrium events directive to build the contents of the div
-// TODO Figure out a better way to scroll the data, as the jQuery Cycle2 plugin didn't seem to play well with angular page
-app.directive("addEventsData", ['Events', '$log', '$location', '$resource', function(Events, $log, $location, $resource) {
+// TODO Figure out a better way to build this page.  The jQuery Cycle2 plugin wasn't playing well with angular,
+// and the scrolling marquee wasn't working.  As a workaround, we are building the entire contents of the atrium
+// events here, and then manually invoking the Cycle2 plugin to initialize.  We should be able to do something with
+// an ng-repeat, and maybe pure CSS3 animation, then this directive could be removed.
+app.directive("addEventsData", ['$log', '$location', '$resource', function($log, $location, $resource) {
 		return{
 				restrict: 'A',
 				priority: 1001,
