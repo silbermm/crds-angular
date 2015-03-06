@@ -16,9 +16,11 @@ require('../node_modules/angular-snap/angular-snap.min.css');
 
 require('../styles/main.scss');
 require('./profile');
+require('./events');
 require('./cms/services/cms_services_module');
 
 require('./third-party/angular/angular-growl.css');
+
 
 "use strict";
 (function () {
@@ -96,6 +98,7 @@ require('./third-party/angular/angular-growl.css');
             });
         }
     ]);
+	
     require('./apprun');
     require('./routes');
     require('./register/register_directive');
