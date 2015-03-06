@@ -17,12 +17,15 @@ Mac and Linux (replace the prefix value below with the path to your NodeJS insta
 
 ###Configuration
 By default webpack inserts `http://localhost:49380` everywhere it finds `__API_ENDPOINT__` in the javascript. This can be changed by creating and setting an environment variable called **CRDS_API_ENDPOINT**. 
+By default webpack inserts `http://content.crossroads.net` everywhere it finds `__CMS_ENDPOINT__` in the javascript. This can be changed by creating and setting an environment variable called **CRDS_CMS_ENDPOINT**. 
 
 For windows users:
 ``` set CRDS_API_ENDPOINT = http://path-to-api-host/ ```
+``` set CRDS_CMS_ENDPOINT = http://path-to-content-host/ ```
 
 Mac and Linux:
 ``` export CRDS_API_ENDPOINT = http://path-to-api-host/ ```
+``` export CRDS_CMS_ENDPOINT = http://path-to-content-host/ ```
 
 >Keep in mind that this way of setting environment variables will not be persistent, windows users will have to add this variable in system settings and linux/mac users will have to set it in their .bashrc/.zshrc files for persistence. 
 
