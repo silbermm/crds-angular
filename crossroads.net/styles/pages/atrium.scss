@@ -12,7 +12,9 @@
   font-family: "HelveticaNeue-Condensed", "Helvetica Neue Condensed", "Helvetica Neue", Helvetica, san-serif;
 
   &:after {
-    background: rgba(2,27,40,.6);
+    //Removed background, per Tate's comment in Rally:
+	//https://rally1.rallydev.com/#/27593764268d/detail/userstory/24467701533/discussion
+    //background: rgba(2,27,40,.6);
     top: 0;
     bottom: 0;
     left: 0;
