@@ -11,25 +11,60 @@ var app = require('angular').module('atrium-events', ['ngResource'], function($l
 app.controller('EventsController',['$scope','$log', '$http', '$location', 'Events', require('./events_controller')]);
 
 // Events Service
-app.factory('Events', ['$resource','$log', require('./service/events_service')]);
+app.factory('Events', ['$resource','$log',require('./service/events_service')]);
 
-app.directive("onLastRepeatCycle", function($log) {
-	return function(scope, element, attrs) {
-		if (scope.$last){
-			$log.debug("Last item");
-			window.cycleMarquee();
-		}
-	};	
-});
-
-app.directive("cycle", function($log, $timeout) {
-    return {
-        restrict: 'A',
-		priority: 1001,
-        link: function(scope, element, attrs) {
-           $timeout(function(){
-//               $(element).cycle();
-           }, 0);
-        }
-    };
-});
+// Atrium events directive to build the contents of the div
+// TODO Figure out a better way to scroll the data, as the jQuery Cycle2 plugin didn't seem to play well with angular page
+app.directive("addEventsData", ['Events', '$log', '$location', '$resource', function(Events, $log, $location, $resource) {
+		return{
+				restrict: 'A',
+				priority: 1001,
+				link: function(scope, element, attrs) {
+					$log.debug("In addEventsData directive");
+					var evts = $resource(__API_ENDPOINT__ + 'api/events/:site').query({site:$location.search().site}, function(response) {
+						$log.debug("Response: " + response);
+						evts = response;
+						
+						var tbody = $('<tbody>');
+						for(var i = 0; i < evts.length; i++) {
+							$log.debug("Event: " + evts[i]);
+							var row = $('<tr>');
+							var evtTime = $('<td class="first-cell">');
+							var evtMeridian = $('<span>');
+							var evtName = $('<td class="second-cell">');
+							var evtLocation = $('<td class="third-cell">');
+							
+							evtTime.append(evts[i].time);
+							evtMeridian.append(evts[i].meridian)
+							evtTime.append(evtMeridian);
+							evtName.append(evts[i].name);
+							evtLocation.append(evts[i].location);
+							
+							row.append(evtTime);
+							row.append(evtName);
+							row.append(evtLocation);
+							
+							tbody.append(row);
+						}
+						var atriumCycleCell = $('<div class="atrium-cycle-cell">');
+						var atriumTable = $('<table class="table atrium-table">');
+						atriumTable.append(tbody);
+						atriumCycleCell.append(atriumTable);
+						atriumCycleCell.append($('<hr class="atrium-border" />'));
+						element.append(atriumCycleCell);
+						
+						var marqueeElement = jQuery(".atrium-body");
+						var marqueeHeight = jQuery(marqueeElement).height();
+						var windowHeight = jQuery(window).height();
+						$log.debug("Marquee Height: " + marqueeHeight);
+						$log.debug("Window Height: " + windowHeight);
+						if (marqueeHeight >= windowHeight) {
+							$log.debug("Appending clone of div to force scroll");
+							element.append(atriumCycleCell.clone());
+							jQuery('hr.atrium-border').show();
+						};						
+						element.cycle();
+					});
+				}
+	
+}}]);
