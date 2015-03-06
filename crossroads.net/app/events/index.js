@@ -58,15 +58,15 @@ app.directive("addEventsData", ['$log', '$location', '$resource', function($log,
 						atriumCycleCell.append($('<hr class="atrium-border" />'));
 						element.append(atriumCycleCell);
 						
-						var marqueeElement = jQuery(".atrium-body");
-						var marqueeHeight = jQuery(marqueeElement).height();
-						var windowHeight = jQuery(window).height();
+						var marqueeElement = $(".atrium-body");
+						var marqueeHeight = $(marqueeElement).height();
+						var windowHeight = $(window).height();
 						$log.debug("Marquee Height: " + marqueeHeight);
 						$log.debug("Window Height: " + windowHeight);
 						if (marqueeHeight >= windowHeight) {
 							$log.debug("Appending clone of div to force scroll");
 							element.append(atriumCycleCell.clone());
-							jQuery('hr.atrium-border').show();
+							$('hr.atrium-border').show();
 						};						
 						element.cycle();
 					});
