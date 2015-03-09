@@ -23,20 +23,20 @@ namespace MinistryPlatform.Translation.Services
             return MPFormatConversion.MPFormatToDictionary(result);
         }
 
-        public static SelectQueryResult GetRecords(int pageId, String token)
+        public static SelectQueryResult GetRecords(int pageId, String token, String search = "", String sort = "")
         {
             return PlatformUtils.Call<SelectQueryResult>(token,
-                platformClient => platformClient.GetPageRecords(pageId, string.Empty, string.Empty, 0));
+                platformClient => platformClient.GetPageRecords(pageId, search, sort, 0));
         }
 
-        public static JArray GetRecordsArr(int pageId, String token)
+        public static JArray GetRecordsArr(int pageId, String token, String search = "", String sort = "")
         {
-            return MPFormatConversion.MPFormatToJson(GetRecords(pageId, token));
+            return MPFormatConversion.MPFormatToJson(GetRecords(pageId, token, search, sort));
         }
 
-        public static List<Dictionary<string, object>> GetRecordsDict(int pageId, String token)
+        public static List<Dictionary<string, object>> GetRecordsDict(int pageId, String token, String search = "", String sort = "")
         {
-            return MPFormatConversion.MPFormatToList(GetRecords(pageId, token));
+            return MPFormatConversion.MPFormatToList(GetRecords(pageId, token, search, sort));
         }
 
         public static SelectQueryResult GetRecord(int pageId, int recordId, String token, bool quickadd = false)
