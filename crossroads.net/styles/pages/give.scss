@@ -1,0 +1,48 @@
+.give-amount {
+  input, label, .input-group-addon {
+    font-size: 180%;
+    line-height: 1;
+  }
+
+  .form-control {
+    height: 46px;
+    @media (min-width: $screen-sm-min) {
+      max-width: 100px;
+    }
+  }
+
+  .input-group-addon {
+    color: $gray-light;
+    text-shadow: 0 1px 0 #ffffff;
+  }
+}
+
+.give-form {
+  .panel-heading {
+    background: transparent;
+    padding: 10px 8px;
+    cursor: pointer;
+
+    &:hover {
+      background: $gray-lighter;
+    }
+
+    .panel-title {
+      font-weight: 300;
+      font-style: normal;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: $font-size-base;
+      
+      a, a:focus {
+        display: block;
+        color: $gray;
+        text-decoration: none;
+      }
+    }
+  }
+
+  .panel-body {
+    padding: 10px 8px;
+  }
+
+}

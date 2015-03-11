@@ -12,6 +12,8 @@
   
   require('./opportunity');
   
+  require('./give');
+
   require('./profile/profile.html');
   
   require('./profile/personal/profile_personal.html');
@@ -151,6 +153,17 @@
         url: "/opportunities",
         controller: "ViewOpportunitiesController as opportunity",
         templateUrl: "opportunity/view_opportunities.html",
+        data: {
+            isProtected: true
+        },
+        resolve: {
+            loggedin: checkLoggedin
+        }
+    })
+    .state("give", {
+        url: "/give",
+        controller: "GiveCtrl as give",
+        templateUrl: "give/give.html",
         data: {
             isProtected: true
         },

@@ -1,0 +1,34 @@
+<h1>One-Time Gift</h1>
+<p class="subheading">Your generosity fuels the life change we experience around here.</p>
+
+<div class="push-top row">
+  <form class="col-sm-6 give-form">
+    <div class="form-inline form-group give-amount">
+      <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
+      <div class="input-group">
+        <div class="input-group-addon">$</div>
+        <input type="number" class="form-control" min="0"  maxlength="6">
+        <div class="input-group-addon ">.00</div>
+      </div><!--/input-group-->
+    </div><!--/form-inline-->
+
+    <div class="form-group">
+      <select class="form-control">
+        <option>Ministry Fund</option>
+        <option>Game Change Fund</option>
+        <option>Old St. George</option>
+      </select>
+    </div><!--/form-group-->
+
+    <div class="form-group">
+      <accordion>
+        <accordion-group>
+          <accordion-heading>
+            Modify Bank Info ending in 1111 <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+          </accordion-heading>
+          This is just some content to illustrate fancy headings.
+        </accordion-group>
+      </accordion>
+    </div><!--/form-group-->
+  </form><!--/col-sm-6-->
+</div><!--/push-top-->
