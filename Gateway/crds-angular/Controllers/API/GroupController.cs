@@ -21,10 +21,9 @@ namespace crds_angular.Controllers.API
 
         [ResponseType(typeof(GroupDTO))]
         [Route("api/group/{groupId}/contact/{contactId}")]
-        public IHttpActionResult Post(String groupId, String contactId, [FromBody] Contact contact)
+        public IHttpActionResult Post(String groupId, String contactId, [FromBody] ContactDTO contact)
         {
-            throw new NotImplementedException();
-           // _groupService.addContactToGroup();
+           _groupService.addContactToGroup(groupId, contactId);
             return this.Ok();
             
         }
@@ -32,13 +31,10 @@ namespace crds_angular.Controllers.API
         // TODO: implement later
         [ResponseType(typeof(GroupDTO))]
         [Route("api/group/{groupId}/contact")]
-        public IHttpActionResult Post(String groupId, [FromBody] List<Contact> contact)
+        public IHttpActionResult Post(String groupId, [FromBody] List<ContactDTO> contact)
         {
-
-            var g = new GroupDTO();
             throw new NotImplementedException();
             return this.Ok();
-
         }
 
         // TODO: implement later
@@ -78,7 +74,7 @@ namespace crds_angular.Controllers.API
     {
     }
 
-    //public class GroupDTO
-    //{
-    //}
+    public class GroupDTO
+    {
+    }
 }
