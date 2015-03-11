@@ -6,16 +6,25 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Models.MP;
+using MinistryPlatform.Translation.Services;
 
 namespace crds_angular.Controllers.API
 {
     public class GroupController : ApiController
     {
+        IGroupService _groupService;
+
+        public GroupController(IGroupService groupService)
+        {
+            _groupService = groupService;
+        }
+
         [ResponseType(typeof(GroupDTO))]
         [Route("api/group/{groupId}/contact/{contactId}")]
         public IHttpActionResult Post(String groupId, String contactId, [FromBody] Contact contact)
         {
             throw new NotImplementedException();
+            _groupService.addContactToGroup();
             return this.Ok();
             
         }

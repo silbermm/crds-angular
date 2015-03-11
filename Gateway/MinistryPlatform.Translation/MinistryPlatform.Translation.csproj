@@ -82,6 +82,7 @@
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\CommunicationService.cs" />
     <Compile Include="Services\GetMyRecords.cs" />
+    <Compile Include="Services\IGroupService.cs" />
     <Compile Include="Services\LookupService.cs" />
     <Compile Include="Services\MinistryPlatformService.cs" />
     <Compile Include="Services\OpportunityService.cs" />
