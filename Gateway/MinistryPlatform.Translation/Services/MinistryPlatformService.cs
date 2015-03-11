@@ -16,7 +16,8 @@ namespace MinistryPlatform.Translation.Services
             return MPFormatConversion.MPFormatToList(result);
         }
 
-        public static Dictionary<string, object> GetLookupRecord(int pageId, string search, String token, int maxNumberOfRecordsToReturn = 100)
+        public static Dictionary<string, object> GetLookupRecord(int pageId, string search, String token,
+            int maxNumberOfRecordsToReturn = 100)
         {
             SelectQueryResult result = PlatformUtils.Call<SelectQueryResult>(token,
                 platformClient => platformClient.GetPageLookupRecords(pageId, search, null, maxNumberOfRecordsToReturn));
@@ -34,7 +35,8 @@ namespace MinistryPlatform.Translation.Services
             return MPFormatConversion.MPFormatToJson(GetRecords(pageId, token, search, sort));
         }
 
-        public static List<Dictionary<string, object>> GetRecordsDict(int pageId, String token, String search = "", String sort = "")
+        public static List<Dictionary<string, object>> GetRecordsDict(int pageId, String token, String search = "",
+            String sort = "")
         {
             return MPFormatConversion.MPFormatToList(GetRecords(pageId, token, search, sort));
         }
@@ -50,7 +52,8 @@ namespace MinistryPlatform.Translation.Services
             return MPFormatConversion.MPFormatToJson(GetRecord(pageId, recordId, token, quickadd));
         }
 
-        public static Dictionary<string, object> GetRecordDict(int pageId, int recordId, String token, bool quickadd = false)
+        public static Dictionary<string, object> GetRecordDict(int pageId, int recordId, String token,
+            bool quickadd = false)
         {
             return MPFormatConversion.MPFormatToDictionary(GetRecord(pageId, recordId, token, quickadd));
         }
@@ -59,6 +62,14 @@ namespace MinistryPlatform.Translation.Services
         {
             SelectQueryResult result = PlatformUtils.Call<SelectQueryResult>(token,
                 platformClient => platformClient.GetSubpageRecords(subPageId, recordId, string.Empty, string.Empty, 0));
+            return MPFormatConversion.MPFormatToList(result);
+        }
+
+        public static List<Dictionary<string, object>> GetSubpageViewRecords(int viewId, int parentRecordId,
+            string token, string searchString = "", string sort = "", int top = 0)
+        {
+            var result = PlatformUtils.Call<SelectQueryResult>(token,
+                platformClient => platformClient.GetSubpageViewRecords(viewId, parentRecordId, searchString, sort, top));
             return MPFormatConversion.MPFormatToList(result);
         }
 

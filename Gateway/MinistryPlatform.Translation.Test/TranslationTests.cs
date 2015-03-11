@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.ServiceModel;
+using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services;
 using NUnit.Framework;
 using Attribute = MinistryPlatform.Models.Attribute;
@@ -15,6 +16,18 @@ namespace MinistryPlatform.Translation.Test
         private const string PASSWORD = "changeme";
         private const string FIRSTNAME = "Test";
         private const string NEW_PASSWORD = "changemeagain";
+
+        [Test]
+        public void GetMyFamily()
+        {
+            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            //var token = AuthenticationService.authenticate("tmaddox@aol.com", "crds1234");
+            var recordId = AuthenticationService.GetContactId(token);
+            var family = GetMyRecords.GetMyFamily(recordId, token);
+
+            Assert.IsNotNull(family);
+            Assert.IsInstanceOf<List<Contact_Relationship>>(family);
+        }
 
         [Test]
         public void ShouldFailLogin()
