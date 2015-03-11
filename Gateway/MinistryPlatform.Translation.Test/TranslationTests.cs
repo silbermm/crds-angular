@@ -21,7 +21,6 @@ namespace MinistryPlatform.Translation.Test
         public void GetMyFamily()
         {
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            //var token = AuthenticationService.authenticate("tmaddox@aol.com", "crds1234");
             var recordId = AuthenticationService.GetContactId(token);
             var family = GetMyRecords.GetMyFamily(recordId, token);
 
