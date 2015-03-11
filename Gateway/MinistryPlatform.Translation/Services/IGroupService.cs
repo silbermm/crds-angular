@@ -9,7 +9,7 @@ namespace MinistryPlatform.Translation.Services
 {
     public interface IGroupService
     {
-        void addContactToGroup(string contactId, string groupId, string groupRoleId, DateTime startDateTime,
+        void addContactToGroup(String contactId, String groupId, String groupRoleId, DateTime startDateTime,
             DateTime endDateTime, bool employeeRole);
     }
 }

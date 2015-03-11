@@ -24,6 +24,5 @@ namespace crds_angular
             log4net.Config.XmlConfigurator.Configure(new FileInfo(Server.MapPath("~/Web.config")));
         }
 
-      
     }
 }

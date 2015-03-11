@@ -24,7 +24,7 @@ namespace crds_angular.Controllers.API
         public IHttpActionResult Post(String groupId, String contactId, [FromBody] Contact contact)
         {
             throw new NotImplementedException();
-            _groupService.addContactToGroup();
+           // _groupService.addContactToGroup();
             return this.Ok();
             
         }

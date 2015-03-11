@@ -128,6 +128,7 @@
     <Compile Include="controllers\AccountControllerTest.cs" />
     <Compile Include="controllers\HomeControllerTest.cs" />
     <Compile Include="controllers\ProfileControllerTest.cs" />
+    <Compile Include="controllers\GroupControllerTest.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AccountServiceTest.cs" />
