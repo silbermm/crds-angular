@@ -102,6 +102,5 @@ require('./third-party/angular/angular-growl.css');
     require('./apprun');
     require('./routes');
     require('./register/register_directive');
-    
     require('./login');
 })()
