@@ -1,44 +1,81 @@
-﻿using System;
-using crds_angular.Controllers.API;
+﻿using crds_angular.Controllers.API;
 using crds_angular.Models.MP;
 using MinistryPlatform.Translation.Services;
+using Moq;
+using Moq.Matchers;
 using NUnit.Framework;
-using Rhino.Mocks;
-using Rhino.Mocks.Constraints;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Web.Http;
+using System.Web.Http.Controllers;
+using System.Web.Http.Results;
+using System.Net.Http.Headers;
+using System.Web;
+using System.Net.Http;
+using System.Web.Http.Description;
 
 namespace crds_angular.test.controllers
 {
     [TestFixture]
     public class GroupControllerTest
     {
-        //private MockRepository mocks;
-        private IGroupService _groupService;
-        private GroupController controller;
+        private GroupController fixture;
+        private Mock<IGroupService> groupServiceMock;
+        private string authType;
+        private string authToken;
+        private readonly string groupRoleId = ConfigurationManager.AppSettings["Group_Role_Default_ID"];
 
         [SetUp]
         public void SetUp()
         {
-            //mocks = new MockRepository();
-            _groupService = MockRepository.GenerateMock<IGroupService>();
-            controller = new GroupController(_groupService);
+            groupServiceMock = new Mock<IGroupService>();
+            fixture = new GroupController(groupServiceMock.Object);
+
+            authType = "auth_type";
+            authToken = "auth_token";
+            fixture.Request = new HttpRequestMessage();
+            fixture.Request.Headers.Authorization = new AuthenticationHeaderValue(authType, authToken);
+            fixture.RequestContext = new HttpRequestContext();
         }
 
         [Test]
-        public void ShouldUseGroupService()
+        public void testCallGroupServiceIsSuccessful()
         {
-            // Arrange
-            var contact = new ContactDTO();
-            _groupService.Expect(
-                e =>
-                    e.addContactToGroup(Arg<string>.Is.Equal("1"), Arg<string>.Is.Equal("2"), Arg<string>.Is.Anything,
-                        Arg<DateTime>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<bool>.Is.Anything));
+            groupServiceMock.Setup(mocked => mocked.addUserToGroup(authType + " " + authToken, "3", groupRoleId, It.IsAny<DateTime>(), null, false)).Returns(999);
+            
+            IHttpActionResult result = fixture.Post("3");
+            groupServiceMock.Verify(mocked => mocked.addUserToGroup(authType + " " + authToken, "3", groupRoleId, It.IsAny<DateTime>(), null, false));
 
-            // Act
-            controller.Post("1", "2", contact);
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<Dictionary<string, object>>), result);
+            OkNegotiatedContentResult<Dictionary<string, object>> okResult = (OkNegotiatedContentResult<Dictionary<string, object>>)result;
+            Assert.IsNotNull(okResult.Content);
+            Assert.AreEqual(1, okResult.Content.Count);
+            Assert.AreEqual(999, okResult.Content["groupParticipantId"]);
+        }
 
-            // Assert
-            _groupService.Replay();
-            _groupService.VerifyAllExpectations();
+        [Test]
+        public void testCallGroupServiceFails()
+        {
+            Exception ex = new Exception();
+            groupServiceMock.Setup(mocked => mocked.addUserToGroup(authType + " " + authToken, "3", groupRoleId, It.IsAny<DateTime>(), null, false)).Throws(ex);
+
+            IHttpActionResult result = fixture.Post("3");
+            groupServiceMock.Verify(mocked => mocked.addUserToGroup(authType + " " + authToken, "3", groupRoleId, It.IsAny<DateTime>(), null, false));
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf(typeof(BadRequestResult), result);
+        }
+
+        [Test]
+        public void testCallGroupServiceFailsUnauthorized()
+        {
+            fixture.Request.Headers.Authorization = null;
+            IHttpActionResult result = fixture.Post("3");
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf(typeof(UnauthorizedResult), result);
+            groupServiceMock.VerifyAll();
         }
     }
 }

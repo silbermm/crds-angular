@@ -132,8 +132,6 @@
   <ItemGroup>
     <Compile Include="controllers\EventLocationControllerTest.cs" />
     <Compile Include="controllers\AccountControllerTest.cs" />
-    <Compile Include="controllers\GroupControllerTestMoq.cs" />
-    <Compile Include="controllers\GroupControllerTestNSubstitute.cs" />
     <Compile Include="controllers\HomeControllerTest.cs" />
     <Compile Include="controllers\ProfileControllerTest.cs" />
     <Compile Include="controllers\GroupControllerTest.cs" />
