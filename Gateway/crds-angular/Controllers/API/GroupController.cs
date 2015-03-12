@@ -23,7 +23,10 @@ namespace crds_angular.Controllers.API
         [Route("api/group/{groupId}/contact/{contactId}")]
         public IHttpActionResult Post(String groupId, String contactId, [FromBody] ContactDTO contact)
         {
-           _groupService.addContactToGroup(groupId, contactId);
+            //_groupService.addContactToGroup(groupId, contactId);
+            // TODO Need to determine groupRoleId to use, and either put in config or hardcode
+            // TODO Can we get employee role from somewhere?
+           _groupService.addContactToGroup(groupId, contactId, groupRoleId: "1", startDateTime: System.DateTime.Now, endDateTime:null, employeeRole: false);
             return this.Ok();
             
         }
