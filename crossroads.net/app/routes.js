@@ -156,7 +156,7 @@
         }
     })
     .state("community-groups-signup", {
-        url: "/community-groups-signup",
+        url: "/community-groups-signup/:groupId",
         controller: "GroupSignupController",
         templateUrl: "community_groups_signup/group_signup_form.html",
         data: {
