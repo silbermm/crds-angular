@@ -13,12 +13,6 @@ namespace MinistryPlatform.Translation.Services
         readonly private log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly int GroupPageId = Convert.ToInt32(AppSettings("Groups"));
         private readonly int GroupParticipantPageId = Convert.ToInt32(AppSettings("GroupsParticipants"));
-        private AuthenticationService authenticationService;
-
-        public GroupService(AuthenticationService authenticationService)
-        {
-            this.authenticationService = authenticationService;
-        }
 
         public int addUserToGroup(String userToken, String groupId, String groupRoleId, DateTime startDate, DateTime? endDate = null, Boolean? employeeRole = false)
         {

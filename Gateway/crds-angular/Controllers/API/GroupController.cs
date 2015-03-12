@@ -48,7 +48,7 @@ namespace crds_angular.Controllers.API
 
         // TODO: implement later
         [ResponseType(typeof(GroupDTO))]
-        [Route("api/group/{groupId}/users")]
+        [Route("api/group/{groupId}/user")]
         public IHttpActionResult Post(String groupId, [FromBody] List<ContactDTO> contact)
         {
             throw new NotImplementedException();
