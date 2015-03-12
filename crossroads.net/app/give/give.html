@@ -1,34 +1,125 @@
-<h1>One-Time Gift</h1>
-<p class="subheading">Your generosity fuels the life change we experience around here.</p>
+<div>
+    <div class="col-sm-12 col-md-4 col-md-offset-2">
+        <h1>Give</h1>
+        <p class="subheading">Your generosity fuels the life change we experience around here.</p>
 
-<div class="push-top row">
-  <form class="col-sm-6 give-form">
-    <div class="form-inline form-group give-amount">
-      <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
-      <div class="input-group">
-        <div class="input-group-addon">$</div>
-        <input type="number" class="form-control" min="0"  maxlength="6">
-        <div class="input-group-addon ">.00</div>
-      </div><!--/input-group-->
-    </div><!--/form-inline-->
+        <div class="push-top">
+            <form class="give-form">
+                <div class="form-inline form-group give-amount">
+                    <div class="input-group">
+                        <span class="input-group-addon">$</span>
+                        <input type="number" class="form-control" min="0" maxlength="6" ng-model="amount">
+                        <span class="input-group-addon ">.00</span>
+                    </div>
+                    <!--/input-group-->
+                </div>
+                <!--/form-inline-->
 
-    <div class="form-group">
-      <select class="form-control">
-        <option>Ministry Fund</option>
-        <option>Game Change Fund</option>
-        <option>Old St. George</option>
-      </select>
-    </div><!--/form-group-->
+                <div class="form-group">
+                    <select class="form-control">
+                        <option>Ministry Fund</option>
+                        <option>Game Change Fund</option>
+                        <option>Old St. George</option>
+                    </select>
+                </div>
+                <!--/form-group-->
 
-    <div class="form-group">
-      <accordion>
-        <accordion-group>
-          <accordion-heading>
-            Modify Bank Info ending in 1111 <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
-          </accordion-heading>
-          This is just some content to illustrate fancy headings.
-        </accordion-group>
-      </accordion>
-    </div><!--/form-group-->
-  </form><!--/col-sm-6-->
-</div><!--/push-top-->
+                <div class="form-group">
+                    <select class="form-control">
+                        <option>One Time</option>
+                    </select>
+                </div>
+                <!--/form-group-->
+
+                <div class="form-group">
+                    <accordion>
+                        <accordion-group>
+                            <accordion-heading>
+                                Modify Bank Info ending in 1111 <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+                            </accordion-heading>
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-default" ng-model="view" btn-radio="'bank'">Bank Account</button>
+                                <button type="button" class="btn btn-default" ng-model="view" btn-radio="'cc'">Credit Card</button>
+                            </div>
+                            <span>Lock SVG</span>
+                            <section class="bank-section" ng-show="view=='bank'">
+                                <div class="form-group">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="account-type" value="checking" checked>Checking</input>
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="account-type" value="Savings">Savings</input>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="routing" class="wide-label">Routing Number
+                                        <a href="#" class="pull-right" data-toggle="modal">Where?</a>
+                                    </label>
+                                    <input type="text" name="routing" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="account">Account Number</label>
+                                    <input type="text" name="account" class="form-control">
+                                </div>
+                            </section>
+                            <section class="bank-section" ng-show="view=='cc'">
+                                <div class="alert alert-warning" role="alert">
+                                    <p>If it's all the same to you, please use your bank account (credit card companies charge Crossroads a fee for each gift).</p>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cc-number">Credit Card Number</label>
+                                    <input type="tel" name="cc-number" class="form-control" x-autocompletetype="cc-number" autocompletetype="cc-number" autocorrect="off" spellcheck="off" autocapitalize="off">
+                                </div>
+                                <div class="form-group">
+                                    <label for="name-on-card">Name On Card</label>
+                                    <input type="text" name="name-on-card" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="billing-zip-code">Billing Zip Code</label>
+                                    <input type="tel" name="billing-zip-code" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="cvv">CVV</label>
+                                    <input type="tel" name="cvv" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="credit-card-type">Credit Card Type</label>
+                                    Images
+                                </div>
+                                <div class="form-group">
+                                    <label>Card Expiration</label>
+                                    <input type="month" class="form-control">
+                                </div>
+                            </section>
+                        </accordion-group>
+                    </accordion>
+                </div>
+                <!--/form-group-->
+
+                <div class="form-group">
+                    <button class="btn btn-primary">Give ${{amount > 0 ? amount : 0}}</button>
+                </div>
+            </form>
+            <!--/col-sm-6-->
+        </div>
+        <!--/push-top-->
+    </div>
+
+    <div class="col-md-4 col-md-offset-2 push-top visible-md visible-lg">
+        <div class="billboard panel-default">
+            <h3 class="billboard-label">Give</h3>
+            <h2 class="billboard-headline">ABOUT GIVING</h2>
+            <p class="billboard-content">If you have questions about giving, you can check out some <a href="#">answers to frequent questions</a>, read about our <a href="#">financial philosophy</a>, or just <a href="#">drop us a line.</a>
+            </p>
+            <p class="billboard-content">You may also give by <a href="#">stock transfer</a> or <a href="#">estate giving.</a>
+            </p>
+        </div>
+    </div>
+    <!--/billboard-->
+</div>
+
+<div class="visible-sm">
+    <h3>Learn More About Giving</h3>
+    <p>If you have questions about giving, you can check out some answers to frequent questions, read about our financial philosophy, or just drop us a line.</p>
+    <p>You may also give by stock transfer or estate giving.</p>
+</div>
