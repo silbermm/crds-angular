@@ -63,32 +63,30 @@
                                 </div>
                             </section>
                             <section class="bank-section" ng-show="view=='cc'">
-                                <div class="alert alert-warning" role="alert">
-                                    <p>If it's all the same to you, please use your bank account (credit card companies charge Crossroads a fee for each gift).</p>
-                                </div>
-                                <div class="form-group">
-                                    <label for="cc-number">Credit Card Number</label>
-                                    <input type="tel" name="cc-number" class="form-control" x-autocompletetype="cc-number" autocompletetype="cc-number" autocorrect="off" spellcheck="off" autocapitalize="off">
-                                </div>
+                                <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
                                 <div class="form-group">
                                     <label for="name-on-card">Name On Card</label>
                                     <input type="text" name="name-on-card" class="form-control">
                                 </div>
                                 <div class="form-group">
+                                    <label for="cc-number">Credit Card Number</label>
+                                    <input type="tel" name="cc-number" class="form-control" x-autocompletetype="cc-number" autocompletetype="cc-number" autocorrect="off" spellcheck="off" autocapitalize="off">
+                                </div>
+                                <div class="form-group col-md-8 exp">
+                                    <label>Card Expiration</label>
+                                    <input type="month" class="form-control">
+                                </div>
+                                <div class="form-group col-md-4 cvv">
+                                    <label for="cvv">CVV</label>
+                                    <input type="tel" name="cvv" class="form-control">
+                                </div>
+                                <div class="form-group col-md-5 exp">
                                     <label for="billing-zip-code">Billing Zip Code</label>
                                     <input type="tel" name="billing-zip-code" class="form-control">
                                 </div>
                                 <div class="form-group">
-                                    <label for="cvv">CVV</label>
-                                    <input type="tel" name="cvv" class="form-control">
-                                </div>
-                                <div class="form-group">
                                     <label for="credit-card-type">Credit Card Type</label>
-                                    Images
-                                </div>
-                                <div class="form-group">
-                                    <label>Card Expiration</label>
-                                    <input type="month" class="form-control">
+                                    <p>Images to be in CC Number Field</p>
                                 </div>
                             </section>
                         </accordion-group>
