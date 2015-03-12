@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using crds_angular.Models;
 using crds_angular.Models.Crossroads;
+using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services;
 using Attribute = MinistryPlatform.Models.Attribute;
 
@@ -87,6 +89,13 @@ namespace crds_angular.Services
                 Mapper.Map<List<Attribute>, List<Skill>>(attributes);
 
             return skills;
+        }
+
+        public List<FamilyMember> GetMyFamily(int recordId, string token)
+        {
+            var contactRelationships = GetMyRecords.GetMyFamily(recordId, token).ToList();
+            var familyMembers = Mapper.Map<List<Contact_Relationship>, List<FamilyMember>>(contactRelationships);
+            return familyMembers;
         }
     }
 }

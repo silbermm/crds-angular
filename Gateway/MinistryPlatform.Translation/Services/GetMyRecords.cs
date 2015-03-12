@@ -1,50 +1,69 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Configuration;
+using System.Linq;
 using System.Reflection;
+using System.ServiceModel;
+using System.ServiceModel.Web;
+using MinistryPlatform.Models;
+using MinistryPlatform.Translation.PlatformService;
+using Attribute = MinistryPlatform.Models.Attribute;
 
 namespace MinistryPlatform.Translation.Services
 {
-    //TODO Should this be called GetAttributes?
-    public class GetMyRecords:BaseService
+    public class GetMyRecords : BaseService
     {
-        public static List<MinistryPlatform.Models.Attribute> GetMyAttributes(int recordId, string token)
+        public static IEnumerable<Contact_Relationship> GetMyFamily(int contactId, string token)
+        {
+            var viewId = Convert.ToInt32(ConfigurationManager.AppSettings["MyContactFamilyRelationshipViewId"]);
+            var viewRecords = MinistryPlatformService.GetSubpageViewRecords(viewId, contactId, token);
+
+            return viewRecords.Select(viewRecord => new Contact_Relationship
+            {
+                Contact_Id = (int) viewRecord["Contact_ID"],
+                Email_Address = (string) viewRecord["Email_Address"],
+                Last_Name = (string) viewRecord["Last Name"],
+                Preferred_Name = (string)viewRecord["Preferred Name"]
+            }).ToList();
+        }
+
+        public static List<Attribute> GetMyAttributes(int recordId, string token)
         {
             var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);
             var subPageRecords = MinistryPlatformService.GetSubPageRecords(subPageId, recordId, token);
-            var attributes = new List<MinistryPlatform.Models.Attribute>();
+            var attributes = new List<Attribute>();
 
-            foreach (var record in subPageRecords) {
-                var attribute = new MinistryPlatform.Models.Attribute
+            foreach (var record in subPageRecords)
+            {
+                var attribute = new Attribute
                 {
-                    Attribute_Name = (string)record["Attribute_Name"],
-                    Attribute_Type = (string)record["Attribute_Type"],
-                    dp_FileID = (int?)record["dp_FileID"],
-                    dp_RecordID = (int)record["dp_RecordID"],
-                    dp_RecordName = (string)record["dp_RecordName"],
-                    dp_RecordStatus = (int)record["dp_RecordStatus"],
-                    dp_Selected = (int)record["dp_Selected"]
+                    Attribute_Name = (string) record["Attribute_Name"],
+                    Attribute_Type = (string) record["Attribute_Type"],
+                    dp_FileID = (int?) record["dp_FileID"],
+                    dp_RecordID = (int) record["dp_RecordID"],
+                    dp_RecordName = (string) record["dp_RecordName"],
+                    dp_RecordStatus = (int) record["dp_RecordStatus"],
+                    dp_Selected = (int) record["dp_Selected"]
                 };
                 attributes.Add(attribute);
             }
             return attributes;
-
         }
 
-        public static int CreateAttribute(MinistryPlatform.Models.Attribute attribute, int parentRecordId, string token)
+        public static int CreateAttribute(Attribute attribute, int parentRecordId, string token)
         {
             try
             {
                 var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);
-                var platformServiceClient = new PlatformService.PlatformServiceClient();
-                PlatformService.SelectQueryResult result;
+                var platformServiceClient = new PlatformServiceClient();
+                SelectQueryResult result;
 
-                using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
+                using (
+                    new OperationContextScope(
+                        (IClientChannel) platformServiceClient.InnerChannel))
                 {
-                    System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+                    WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization",
+                        "Bearer " + token);
                     attribute.Start_Date = DateTime.Now;
                     var dictionary = getDictionary(attribute);
                     return platformServiceClient.CreateSubpageRecord(subPageId, parentRecordId, dictionary, false);
@@ -60,13 +79,16 @@ namespace MinistryPlatform.Translation.Services
         {
             try
             {
-                var platformServiceClient = new PlatformService.PlatformServiceClient();
-                PlatformService.SelectQueryResult result;
+                var platformServiceClient = new PlatformServiceClient();
+                SelectQueryResult result;
 
-                using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
+                using (
+                    new OperationContextScope(
+                        (IClientChannel) platformServiceClient.InnerChannel))
                 {
-                    System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
-                    platformServiceClient.DeleteSubpageRecord(AppSettings("MySkills"),recordId,null);
+                    WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization",
+                        "Bearer " + token);
+                    platformServiceClient.DeleteSubpageRecord(AppSettings("MySkills"), recordId, null);
                 }
                 return true;
             }
