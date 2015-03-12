@@ -4,21 +4,18 @@
 
   require("./home/home.html");
   require('./home');
-
   require('./login/login_page.html');
   require('./register/register_form.html');
-  
   require('./content');
-  
   require('./opportunity');
-  
+  require('./community_groups_signup')
   require('./profile/profile.html');
-  
   require('./profile/personal/profile_personal.html');
   require('./profile/profile_account.html');
   require('./profile/skills/profile_skills.html');
   require('./opportunity/view_opportunities.html');
   require('./content/content.html');
+  require('./community_groups_signup/group_signup_form.html');
   var getCookie = require('./utilities/cookies'); 
 
   angular.module("crossroads").config([ "$stateProvider", "$urlRouterProvider", "$httpProvider", function( $stateProvider, $urlRouterProvider, $httpProvider) { 
@@ -151,6 +148,17 @@
         url: "/opportunities",
         controller: "ViewOpportunitiesController as opportunity",
         templateUrl: "opportunity/view_opportunities.html",
+        data: {
+            isProtected: true
+        },
+        resolve: {
+            loggedin: checkLoggedin
+        }
+    })
+    .state("community-groups-signup", {
+        url: "/community-groups-signup",
+        controller: "GroupSignupController",
+        templateUrl: "community_groups_signup/group_signup_form.html",
         data: {
             isProtected: true
         },
