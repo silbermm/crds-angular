@@ -41,18 +41,21 @@ namespace MinistryPlatform.Translation.Services
                     //Opportunity_Date = (DateTime) record["Opportunity_Date"],
                     OpportunityId = (int) record["dp_RecordID"],
                     OpportunityName = (string) record["Opportunity_Title"],
-                    EventType = (string) record["Event_Type"],
-                    EventTypeId = (int) record["Event_Type_ID"]
+                    EventTypeId = (int) record["Event_Type"],
                 };
                 //now get all events with type = event type id
+                opportunity.Events = GetEvents(opportunity.EventTypeId, token);
+
                 opportunities.Add(opportunity);
             }
             return opportunities;
         }
 
-        private static List<int> GetEvents(int eventTypeId, string token )
+        private static List<Event> GetEvents(int eventTypeId, string token )
         {
-            
+            //TODO: Get events.
+            var events = new List<Event>();
+            return events;
         }
 
         public static Response GetMyOpportunityResponses(int contactId, int opportunityId, string token)

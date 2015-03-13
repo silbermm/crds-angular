@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Attribute.cs" />
     <Compile Include="Contact_Relationship.cs" />
+    <Compile Include="Event.cs" />
     <Compile Include="Group.cs" />
     <Compile Include="Opportunity.cs" />
     <Compile Include="Participant.cs" />
