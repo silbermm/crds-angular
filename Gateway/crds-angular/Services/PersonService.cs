@@ -4,9 +4,11 @@ using System.Linq;
 using AutoMapper;
 using crds_angular.Models;
 using crds_angular.Models.Crossroads;
+using Microsoft.Ajax.Utilities;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services;
 using Attribute = MinistryPlatform.Models.Attribute;
+using Response = crds_angular.Models.Crossroads.Response;
 
 namespace crds_angular.Services
 {
@@ -96,6 +98,55 @@ namespace crds_angular.Services
             var contactRelationships = GetMyRecords.GetMyFamily(recordId, token).ToList();
             var familyMembers = Mapper.Map<List<Contact_Relationship>, List<FamilyMember>>(contactRelationships);
             return familyMembers;
+        }
+
+        public List<ServingTeam> GetServingOpportunities(int recordId, string token)
+        {
+            var groups = GetMyRecords.GetMyServingTeams(recordId, token);
+            var teams = new List<ServingTeam>();
+            foreach (var group in groups)
+            {
+                var team = new ServingTeam();
+                team.TeamName = group.Group_Name;
+                var opportunities = OpportunityService.GetOpportunitiesForGroup(group.Group_ID, token);
+                foreach (var opp in opportunities)
+                {
+                    var opportunity = new ServingOpportunity();
+                    opportunity.OpportunityName = opp.Opportunity_Name;
+                    opportunity.OpportunityDateTime = opp.Opportunity_Date;
+                    var response = OpportunityService.GetMyOpportunityResponses(recordId, opp.Opportunity_ID, token);
+                    if (response != null)
+                    {
+                        opportunity.RSVP = new ServingRSVP
+                        {
+                            Occurrence = response.Opportunity_Date,
+                            Response = ParseResponseResult(response)
+                        };
+                    }
+
+                    team.Opportunities.Add(opportunity);
+                }
+                teams.Add(team);
+            }
+            return teams;
+        }
+
+        private static Response ParseResponseResult(MinistryPlatform.Models.Response response)
+        {
+            switch (response.Response_Result_ID)
+            {
+                case 1:
+                    //Placed
+                    return Response.Yes;
+                case 2:
+                    //Not Placed
+                    return Response.No;
+                case null:
+                    //Maybe?
+                    return Response.Maybe;
+                default:
+                    throw new ApplicationException("Invalid Opportunity Response Result.");
+            }
         }
     }
 }

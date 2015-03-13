@@ -210,5 +210,16 @@ namespace MinistryPlatform.Translation.Test
 
             Assert.IsNotNull(todaysEvents);
         }
+
+        [Test]
+        public void ShouldReturnMyServingTeams()
+        {
+            //var token = AuthenticationService.authenticate(USERNAME, PASSWORD); 
+            var token = AuthenticationService.authenticate("tmaddox@aol.com", "crds1234");
+            var recordId = AuthenticationService.GetContactId(token);
+            var teams = GetMyRecords.GetMyServingTeams(recordId, token);
+
+            Assert.IsNotNull(teams);
+        }
     }
 }

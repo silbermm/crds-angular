@@ -50,6 +50,23 @@ namespace MinistryPlatform.Translation.Services
             return attributes;
         }
 
+        public static List<Group> GetMyServingTeams(int recordId, string token)
+        {
+            var pageViewId = Convert.ToInt32(ConfigurationManager.AppSettings["MyServingTeams"]);
+            var teams = MinistryPlatformService.GetPageViewRecords(pageViewId, token);
+            var groups = new List<Group>();
+            foreach (var team in teams)
+            {
+                var group = new Group
+                {
+                    Group_ID = (int) team["dp_RecordID"],
+                    Group_Name = (string) team["Group_Name"]
+                };
+                groups.Add(group);
+            }
+            return groups;
+        } 
+
         public static int CreateAttribute(Attribute attribute, int parentRecordId, string token)
         {
             try
