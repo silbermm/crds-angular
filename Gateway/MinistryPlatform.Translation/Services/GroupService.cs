@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,15 +22,17 @@ namespace MinistryPlatform.Translation.Services
             logger.Debug("Adding participant " + participantId + " to group " + groupId);
             var values = new Dictionary<string, object>
             {
-                { "Group_ID", groupId },
                 { "Participant_ID", participantId },
                 { "Group_Role_ID", Convert.ToInt32(groupRoleId) },
                 { "Start_Date", startDate },
                 { "End_Date", endDate},
                 { "Employee_Role", employeeRole }
             };
-            logger.Debug("Data map for group participant: " + values);
-            int groupParticipantId = MinistryPlatformService.CreateSubRecord(GroupParticipantPageId, Convert.ToInt32(groupId), values, userToken);
+
+            // Using the API_User here as opposed to the currently authenticated user, as the currently logged-in user does not 
+            // have permissions to modify a group he is not already a participant of.
+            string apiToken = AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"], ConfigurationManager.AppSettings["ApiPass"]);
+            int groupParticipantId = MinistryPlatformService.CreateSubRecord(GroupParticipantPageId, Convert.ToInt32(groupId), values, apiToken);
 
             logger.Debug("Added participant " + participantId + " to group " + groupId + ": record id: " + groupParticipantId);
             return (groupParticipantId);
