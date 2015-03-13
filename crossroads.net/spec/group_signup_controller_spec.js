@@ -1,8 +1,7 @@
- //require('angular');
 
 // testing controller
 describe('EventsController', function() {
-   var $httpBackend, $rootScope, eventsController;
+   var $httpBackend, scope;
 
    var userGetResponse = {
 
@@ -34,7 +33,7 @@ describe('EventsController', function() {
 
    };
    
-   var endpoint = 'http://silbervm:49380/';
+   
    //var endpoint = JSON.stringify(process.env.CRDS_API_ENDPOINT || "http://localhost:49380/");
 
    // Set up the module
@@ -47,12 +46,12 @@ describe('EventsController', function() {
        $httpBackend = $injector.get('$httpBackend');
        // Get hold of a scope (i.e. the root scope)
        $rootScope = $injector.get('$rootScope');
+       scope = $rootScope.$new();
        // The $controller service is used to create instances of controllers
        var $controller = $injector.get('$controller');
 
-       groupSignupController = function(site) {
-     $rootScope.site = site;
-         return $controller('GroupSignupController', {'$scope' : $rootScope });
+       groupSignupController = function() {
+         return $controller('GroupSignupController', {'$scope' : scope });
        };
    }));
 
@@ -63,17 +62,29 @@ describe('EventsController', function() {
    });
 
       it('should get logged-in person when instantiated', function(){
-       $httpBackend.when('GET', endpoint + 'api/profile')
+       $httpBackend.when('GET', 'http://silbervm:49380/api/profile')
                               .respond(userGetResponse);
 
-        var controller = groupSignupController("1");
-        $httpBackend.expectGET(endpoint + 'api/profile');
+        var controller = groupSignupController();
+        $httpBackend.expectGET('http://silbervm:49380/api/profile');
         $httpBackend.flush();
-        var person = $rootScope.person;
+        var person = scope.person;
         expect(person).toBeDefined();
         expect(person["First_Name"]).toEqual("Shankar");
         expect(person["Last_Name"]).toEqual("Poncelet");
         expect(person["Email_Address"]).toEqual("test@test.com");
+        console.log(scope.person);
+        console.log(scope.signupcalled);
+        //scope.signup():
+
+      });
+
+      it('should signup a person for a community group', function(){
+          // var controller = groupSignupController("1");
+          // $httpBackend.flush();          
+          // console.log(scope);
+          // expect(scope.signup()).toBe(undefined);
+          
 
       });
 });
