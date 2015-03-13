@@ -11,7 +11,7 @@ namespace crds_angular
     {
         public static void RegisterComponents()
         {
-			var container = new UnityContainer();
+            var container = new UnityContainer();
 
             // TODO This is picking up and registering Angular controllers as well, which is Not Good - need to determine how to selectively include/exclude
             // Register defaults - this will allow the container to resolve an interface to an implementation class, by convention.
@@ -22,7 +22,7 @@ namespace crds_angular
             //    WithLifetime.ContainerControlled);
 
             container.RegisterType<IGroupService, GroupService>();
-
+            container.RegisterType<IEventService, EventService>();
 
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
         }

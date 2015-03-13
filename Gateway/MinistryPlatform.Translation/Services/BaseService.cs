@@ -14,5 +14,15 @@ namespace MinistryPlatform.Translation.Services
             }
             return pageId;
         }
+
+        protected static T WithApiLogin<T>(Func<string, T> doIt)
+        {
+            return (doIt(apiLogin()));
+        }
+
+        protected static string apiLogin()
+        {
+            return (AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"], ConfigurationManager.AppSettings["ApiPass"]));
+        }
     }
 }
