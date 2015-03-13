@@ -75,12 +75,12 @@ describe('EventsController', function() {
         expect(person["Email_Address"]).toEqual("test@test.com");
         console.log(scope.person);
         console.log(scope.signupcalled);
-        //scope.signup():
+        scope.signup();
 
       });
 
       it('should signup a person for a community group', function(){
-          // var controller = groupSignupController("1");
+          // var controller = groupSignupController();
           // $httpBackend.flush();          
           // console.log(scope);
           // expect(scope.signup()).toBe(undefined);
