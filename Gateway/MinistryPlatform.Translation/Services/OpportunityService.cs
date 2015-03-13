@@ -38,9 +38,11 @@ namespace MinistryPlatform.Translation.Services
             {
                 var opportunity = new Opportunity
                 {
-                    Opportunity_Date = (DateTime) record["Opportunity_Date"],
-                    Opportunity_ID = (int) record["dp_RecordID"],
-                    Opportunity_Name = (string) record["Opportunity_Title"]
+                    //Opportunity_Date = (DateTime) record["Opportunity_Date"],
+                    OpportunityId = (int) record["dp_RecordID"],
+                    OpportunityName = (string) record["Opportunity_Title"],
+                    EventType = (string) record["Event_Type"],
+                    EventTypeId = (int) record["Event_Type_ID"]
                 };
                 opportunities.Add(opportunity);
             }
@@ -51,14 +53,16 @@ namespace MinistryPlatform.Translation.Services
         {
             var subPageViewId = Convert.ToInt32(ConfigurationManager.AppSettings["ContactOpportunityResponses"]);
             var subpageViewRecords = MinistryPlatformService.GetSubpageViewRecords(subPageViewId, opportunityId, token,
-                ",,,," + contactId).ToList().Single();
+                ",,,," + contactId);
+            var list = subpageViewRecords.ToList();
+            var s = list.Single();
             var response = new Response
             {
-                Opportunity_ID = (int) subpageViewRecords["Opportunity ID"],
-                Participant_ID = (int) subpageViewRecords["Participant ID"],
-                Response_Date = (DateTime) subpageViewRecords["Response Date"],
-                Response_Result_ID = (int?) subpageViewRecords["Response Result ID"],
-                Opportunity_Date = (DateTime) subpageViewRecords["Opportunity Date"]
+                Opportunity_ID = (int) s["Opportunity ID"],
+                Participant_ID = (int) s["Participant ID"],
+                Response_Date = (DateTime) s["Response Date"],
+                Response_Result_ID = (int?) s["Response Result ID"],
+                Opportunity_Date = (DateTime) s["Opportunity Date"]
             };
             return response;
         }

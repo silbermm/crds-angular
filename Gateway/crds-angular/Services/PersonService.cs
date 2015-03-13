@@ -112,9 +112,9 @@ namespace crds_angular.Services
                 foreach (var opp in opportunities)
                 {
                     var opportunity = new ServingOpportunity();
-                    opportunity.OpportunityName = opp.Opportunity_Name;
-                    opportunity.OpportunityDateTime = opp.Opportunity_Date;
-                    var response = OpportunityService.GetMyOpportunityResponses(recordId, opp.Opportunity_ID, token);
+                    opportunity.OpportunityName = opp.OpportunityName;
+                    //opportunity.OpportunityDateTime = opp.Opportunity_Date;
+                    var response = OpportunityService.GetMyOpportunityResponses(recordId, opp.OpportunityId, token);
                     if (response != null)
                     {
                         opportunity.RSVP = new ServingRSVP

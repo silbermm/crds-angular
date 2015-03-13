@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MinistryPlatform.Models
 {
     public class Opportunity
     {
-        public int Opportunity_ID { get; set; }
-        public string Opportunity_Name { get; set; }
-        public DateTime Opportunity_Date { get; set; }
+        public int OpportunityId { get; set; }
+        public string OpportunityName { get; set; }
+        //public DateTime Opportunity_Date { get; set; }
+        public string EventType { get; set; }
+        public int EventTypeId { get; set; }
+        public List<int> EventIds { get; set; } //this will probably become a list of 'events', this where the date will be
         
     }
 }
