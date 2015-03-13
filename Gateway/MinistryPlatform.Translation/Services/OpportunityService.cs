@@ -44,9 +44,15 @@ namespace MinistryPlatform.Translation.Services
                     EventType = (string) record["Event_Type"],
                     EventTypeId = (int) record["Event_Type_ID"]
                 };
+                //now get all events with type = event type id
                 opportunities.Add(opportunity);
             }
             return opportunities;
+        }
+
+        private static List<int> GetEvents(int eventTypeId, string token )
+        {
+            
         }
 
         public static Response GetMyOpportunityResponses(int contactId, int opportunityId, string token)
