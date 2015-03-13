@@ -7,25 +7,27 @@
 
   require('./login/login_page.html');
   require('./register/register_form.html');
-  
+
   require('./content');
-  
+
   require('./opportunity');
-  
+
   require('./profile/profile.html');
-  
+
   require('./profile/personal/profile_personal.html');
   require('./profile/profile_account.html');
   require('./profile/skills/profile_skills.html');
   require('./opportunity/view_opportunities.html');
+  require('./serve');
+  require('./serve/serve.html');
   require('./content/content.html');
-  var getCookie = require('./utilities/cookies'); 
+  var getCookie = require('./utilities/cookies');
 
-  angular.module("crossroads").config([ "$stateProvider", "$urlRouterProvider", "$httpProvider", function( $stateProvider, $urlRouterProvider, $httpProvider) { 
+  angular.module("crossroads").config([ "$stateProvider", "$urlRouterProvider", "$httpProvider", function( $stateProvider, $urlRouterProvider, $httpProvider) {
 
-    $httpProvider.defaults.useXDomain = true; 
+    $httpProvider.defaults.useXDomain = true;
     $httpProvider.defaults.headers.common['Authorization']= getCookie('sessionId');
-   
+
     //================================================
     // Check if the user is connected
     //================================================
@@ -38,7 +40,7 @@
           url: __API_ENDPOINT__ + "api/authenticated",
           headers: {
             'Authorization': getCookie('sessionId')
-          } 
+          }
         }).success(function(user) {
             // Authenticated
             if (user.userId !== undefined) {
@@ -132,7 +134,7 @@
                    }
                }
            },
-           "account@profile" : {               
+           "account@profile" : {
                templateUrl: "profile/profile_account.html",
                data: {
                    isProtected: true
@@ -158,13 +160,18 @@
             loggedin: checkLoggedin
         }
     })
+    .state("serve", {
+      url: "/serve",
+      controller: "ServeController as serve",
+      templateUrl: "serve/serve.html"
+    })
     .state("content", {
         url: "/:urlsegment",
         controller: "ContentCtrl",
         templateUrl: "content/content.html"
     });
-        //Leave the comment below.  Once we have a true 404 page hosted in the same domain, this is how we 
-        //will handle the routing. 
+        //Leave the comment below.  Once we have a true 404 page hosted in the same domain, this is how we
+        //will handle the routing.
         //.state("404", {
         //    templateUrl: __CMS_ENDPOINT__ + "/page-not-found/"
         //});
