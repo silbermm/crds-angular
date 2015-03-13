@@ -1,4 +1,4 @@
-<form>        
+<form name="groupSignupForm" role="form" ng-submit="signup()">        
   <fieldset>
     <legend>People to Sign Up</legend>
     <div class="form-group">
@@ -6,6 +6,6 @@
     <div class="checkbox">
 <!--     checkbox only hidden if only in person listed -->
       <p><label><input type="checkbox" style="visibility:hidden;">{{person["First_Name"]}} {{person["Last_Name"]}} ({{person["Email_Address"]}})</label></p>
-    <div><input type="submit" name="submit_group_signup" value="SIGN UP" id="submit_group_signup" class="btn btn-primary push-half-bottom"></div>
+    <div><input type="submit" name="submit_group_signup" value="Sign Up" id="submit_group_signup" class="btn btn-primary push-half-bottom"></div>
   </fieldset>
 </form>
