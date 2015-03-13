@@ -54,4 +54,20 @@
     .cvv {
         padding-right: 0;
     }
+    .cc-icon {
+        background: no-repeat 99%;
+        background-size: 13%;
+    }
+    .cc-visa {
+        background-image: url(../app/icons/cc_visa.svg);
+    }
+    .cc-mastercard {
+        background-image: url(../app/icons/cc_mastercard.svg);
+    }
+    .cc-discover {
+        background-image: url(../app/icons/cc_discover.svg);
+    }
+    .cc-american-express {
+        background-image: url(../app/icons/cc_american_express.svg);
+    }
 }
