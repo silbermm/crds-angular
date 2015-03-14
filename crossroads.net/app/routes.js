@@ -19,6 +19,9 @@
   require('./profile/skills/profile_skills.html');
   require('./opportunity/view_opportunities.html');
   require('./content/content.html');
+
+  require('./my_serve');
+  
   var getCookie = require('./utilities/cookies'); 
 
   angular.module("crossroads").config([ "$stateProvider", "$urlRouterProvider", "$httpProvider", function( $stateProvider, $urlRouterProvider, $httpProvider) { 
@@ -157,6 +160,13 @@
         resolve: {
             loggedin: checkLoggedin
         }
+    })
+    .state("serve-signup", {
+      url: "/serve-signup",
+      controller: "MyServeController as serve",
+      templateUrl: "my_serve/myserve.html",
+      data: { isProtected: true },
+      resolve: { loggedin: checkLoggedin }
     })
     .state("content", {
         url: "/:urlsegment",
