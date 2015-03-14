@@ -78,5 +78,5 @@ namespace crds_angular.test.controllers
     //        Assert.IsInstanceOf(typeof(UnauthorizedResult), result);
     //        groupServiceMock.VerifyAll();
     //    }
-    //}
+    }
 }
