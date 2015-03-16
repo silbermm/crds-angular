@@ -63,7 +63,7 @@
                                 </div>
                             </section>
                             <section class="bank-section" ng-show="give.view=='cc'">
-                                <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+                                <alert ng-repeat="alert in give.alerts" type="{{alert.type}}" close="give.closeAlert($index)">{{alert.msg}}</alert>
                                 <div class="form-group">
                                     <label for="name-on-card">Name On Card</label>
                                     <input type="text" name="name-on-card" class="form-control">
