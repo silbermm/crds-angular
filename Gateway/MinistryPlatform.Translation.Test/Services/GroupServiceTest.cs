@@ -18,6 +18,8 @@ namespace MinistryPlatform.Translation.Test.Services
         private Mock<IMinistryPlatformService> ministryPlatformService;
         private readonly int GroupsParticipantsPageId = 298;
         private readonly int GroupsPageId = 322;
+        private readonly int GroupsEventsPageId = 302;
+        private readonly int EventsGroupsPageId = 408;
 
         [SetUp]
         public void SetUp()
@@ -106,9 +108,42 @@ namespace MinistryPlatform.Translation.Test.Services
         }
 
         [Test]
+        public void testGetAllEventsForGroupNoGroupFound()
+        {
+            ministryPlatformService.Setup(mocked => mocked.GetSubPageRecords(GroupsEventsPageId, 456, It.IsAny<string>())).Returns((List<Dictionary<string, object>>)null);
+            Assert.IsNull(fixture.getAllEventsForGroup(456));
+
+            ministryPlatformService.VerifyAll();
+        }
+
+        [Test]
         public void testGetAllEventsForGroup()
         {
+            List<Dictionary<string, object>> mpResult = new List<Dictionary<string, object>>();
+            mpResult.Add(new Dictionary<string, object>() {
+                {"dp_RecordID", 987},
+            });
+            mpResult.Add(new Dictionary<string, object>() {
+                {"dp_RecordID", 654},
+            });
+            ministryPlatformService.Setup(mocked => mocked.GetSubPageRecords(GroupsEventsPageId, 456, It.IsAny<string>())).Returns(mpResult);
 
+            ministryPlatformService.Setup(mocked => mocked.GetRecordDict(EventsGroupsPageId, 987, It.IsAny<string>(), false)).Returns(new Dictionary<string, object>()
+            {
+                { "Event_ID", 789 }
+            });
+            ministryPlatformService.Setup(mocked => mocked.GetRecordDict(EventsGroupsPageId, 654, It.IsAny<string>(), false)).Returns(new Dictionary<string, object>()
+            {
+                { "Event_ID", 456 }
+            });
+
+            var events = fixture.getAllEventsForGroup(456);
+            ministryPlatformService.VerifyAll();
+
+            Assert.IsNotNull(events);
+            Assert.AreEqual(2, events.Count);
+            Assert.AreEqual(789, events[0].EventId);
+            Assert.AreEqual(456, events[1].EventId);
         }
 
         [Test]
