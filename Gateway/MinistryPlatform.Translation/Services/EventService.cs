@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MinistryPlatform.Translation.Models;
-using System.Configuration;
 
 namespace MinistryPlatform.Translation.Services
 {
@@ -24,12 +19,22 @@ namespace MinistryPlatform.Translation.Services
                 { "Participation_Status_ID", EventParticipantStatusDefaultID },
             };
 
+            int eventParticipantId = createEventParticipant(eventId, values);
+
+            logger.Debug("Added participant " + participantId + " to event " + eventId + ": record id: " + eventParticipantId);
+            return (eventParticipantId);
+        }
+
+        /**
+         * This method exists solely to wrap the static call to the MinistryPlatformService, to enable unit testing
+         * TODO Refactor the MinistryPlatformService to have dependencies injected, and get rid of static calls
+         */
+        protected virtual int createEventParticipant(int eventId, Dictionary<string, object> values)
+        {
             int eventParticipantId = WithApiLogin<int>(apiToken =>
             {
                 return (MinistryPlatformService.CreateSubRecord(EventParticipantPageId, eventId, values, apiToken));
             });
-
-            logger.Debug("Added participant " + participantId + " to event " + eventId + ": record id: " + eventParticipantId);
             return (eventParticipantId);
         }
     }
