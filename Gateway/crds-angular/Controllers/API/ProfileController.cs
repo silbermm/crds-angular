@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Models;
@@ -16,6 +17,22 @@ namespace crds_angular.Controllers.API
             {
                 var personService = new PersonService();
                 var list = personService.GetMyFamily(contactId, token);
+                if (list == null)
+                {
+                    return Unauthorized();
+                }
+                return this.Ok(list);
+            });
+        }
+
+        [ResponseType(typeof(List<Models.Crossroads.ServingTeam>))]
+        [Route("api/profile/serving/{contactId}")]
+        public IHttpActionResult GetServingTeams(int contactId)
+        {
+            return Authorized(token =>
+            {
+                var personService = new PersonService();
+                var list = personService.GetServingOpportunities(contactId, token);
                 if (list == null)
                 {
                     return Unauthorized();

@@ -75,14 +75,14 @@ namespace MinistryPlatform.Translation.Services
             var subpageViewRecords = MinistryPlatformService.GetSubpageViewRecords(subPageViewId, opportunityId, token,
                 ",,,," + contactId);
             var list = subpageViewRecords.ToList();
-            var s = list.Single();
+            var s = list.SingleOrDefault();
+            if (s == null) return null;
             var response = new Response
             {
                 Opportunity_ID = (int) s["Opportunity ID"],
                 Participant_ID = (int) s["Participant ID"],
                 Response_Date = (DateTime) s["Response Date"],
-                Response_Result_ID = (int?) s["Response Result ID"],
-                Opportunity_Date = (DateTime) s["Opportunity Date"]
+                Response_Result_ID = (int?) s["Response Result ID"]
             };
             return response;
         }

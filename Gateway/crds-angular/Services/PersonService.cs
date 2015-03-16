@@ -8,6 +8,7 @@ using Microsoft.Ajax.Utilities;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services;
 using Attribute = MinistryPlatform.Models.Attribute;
+using Event = MinistryPlatform.Models.Event;
 using Response = crds_angular.Models.Crossroads.Response;
 
 namespace crds_angular.Services
@@ -100,9 +101,9 @@ namespace crds_angular.Services
             return familyMembers;
         }
 
-        public List<ServingTeam> GetServingOpportunities(int recordId, string token)
+        public List<ServingTeam> GetServingOpportunities(int contactId, string token)
         {
-            var groups = GetMyRecords.GetMyServingTeams(recordId, token);
+            var groups = GetMyRecords.GetMyServingTeams(contactId, token);
             var teams = new List<ServingTeam>();
             foreach (var group in groups)
             {
@@ -113,13 +114,14 @@ namespace crds_angular.Services
                 {
                     var opportunity = new ServingOpportunity();
                     opportunity.OpportunityName = opp.OpportunityName;
+                    opportunity.ServeOccurances = ParseEvents(opp.Events);
                     //opportunity.OpportunityDateTime = opp.Opportunity_Date;
-                    var response = OpportunityService.GetMyOpportunityResponses(recordId, opp.OpportunityId, token);
+                    var response = OpportunityService.GetMyOpportunityResponses(contactId, opp.OpportunityId, token);
                     if (response != null)
                     {
-                        opportunity.RSVP = new ServingRSVP
+                        opportunity.Rsvp = new ServingRSVP
                         {
-                            Occurrence = response.Opportunity_Date,
+                            //Occurrence = response.Opportunity_Date,
                             Response = ParseResponseResult(response)
                         };
                     }
@@ -129,6 +131,12 @@ namespace crds_angular.Services
                 teams.Add(team);
             }
             return teams;
+        }
+
+        private static List<ServeOccurance> ParseEvents(IEnumerable<Event> events)
+        {
+            return
+                events.Select(e => new ServeOccurance {Name = e.EventTitle, StarDateTime = e.EventStartDate}).ToList();
         }
 
         private static Response ParseResponseResult(MinistryPlatform.Models.Response response)

@@ -10,6 +10,6 @@ namespace MinistryPlatform.Models
         public bool Closed { get; set; }
         public string Comments { get; set; }
         public int? Response_Result_ID { get; set; }
-        public DateTime Opportunity_Date { get; set; }
+        //public DateTime Opportunity_Date { get; set; }
     }
 }
