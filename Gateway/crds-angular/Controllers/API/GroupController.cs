@@ -13,20 +13,30 @@ using MinistryPlatform.Translation.Exceptions;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Models;
 
+using MinistryPlatform.Translation.PlatformService;
+
 namespace crds_angular.Controllers.API
 {
     public class GroupController : MPAuth
     {
         readonly private log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private IGroupService groupService;
-        private IEventService eventService;
+        // TODO Need to get these injected properly
+        private IGroupService groupService = new GroupService(new MinistryPlatformServiceImpl(new PlatformServiceClient()));
+        // TODO Need to get these injected properly
+        private IEventService eventService = new EventService(new MinistryPlatformServiceImpl(new PlatformServiceClient()));
+
         private readonly int GroupRoleDefaultId = Convert.ToInt32(ConfigurationManager.AppSettings["Group_Role_Default_ID"]);
 
-        public GroupController(IGroupService groupService, IEventService eventService)
-        {
-            this.groupService = groupService;
-            this.eventService = eventService;
-        }
+        //public GroupController()
+        //{
+        //    // Default constructor, used by WebAPI to instantiate.  Dependencies are automatically injected.
+        //}
+
+        //public GroupController(IGroupService groupService, IEventService eventService)
+        //{
+        //    this.groupService = groupService;
+        //    this.eventService = eventService;
+        //}
 
         /**
          * Enroll the currently logged-in user into a Community Group, and also register this user for all events for the CG.
