@@ -324,6 +324,7 @@
             <p>
                 We've created a hierarchy of layouts as follows:
             </p>
+            <h5>NOTE: This does not work in current environment. Will be done in future.</h5>
             <pre>
       <strong>base:</strong> Basic structure, including head elements
         |
@@ -355,7 +356,7 @@
                     <div class="panel panel-default flush-bottom">
                         <div class="panel-heading">100% width</div>
                         <div class="panel-body">
-                            <a href="/one_column">
+                            <a href="#">
                                 <img src="http://crossroads-media.s3.amazonaws.com/images/layouts/one_column_example.png" class="img-responsive" />
                             </a>
                         </div>
@@ -368,7 +369,7 @@
                     <div class="panel panel-default flush-bottom">
                         <div class="panel-heading">100% full screen</div>
                         <div class="panel-body">
-                            <a href="/full_width">
+                            <a href="#">
                                 <img src="http://crossroads-media.s3.amazonaws.com/images/layouts/full_width_example.png" class="img-responsive" />
                             </a>
                         </div>
@@ -381,7 +382,7 @@
                     <div class="panel panel-default flush-bottom">
                         <div class="panel-heading">Left Sidebar</div>
                         <div class="panel-body">
-                            <a href="/left_column">
+                            <a href="#">
                                 <img src="http://crossroads-media.s3.amazonaws.com/images/layouts/left_column_example.png" class="img-responsive" />
                             </a>
                         </div>
@@ -394,7 +395,7 @@
                     <div class="panel panel-default flush-bottom">
                         <div class="panel-heading">Right Sidebar</div>
                         <div class="panel-body">
-                            <a href="/right_column_1">
+                            <a href="#">
                                 <img src="http://crossroads-media.s3.amazonaws.com/images/layouts/right_column_example.png" class="img-responsive" />
                             </a>
                         </div>
@@ -407,7 +408,7 @@
                     <div class="panel panel-default flush-bottom">
                         <div class="panel-heading">No header footer</div>
                         <div class="panel-body">
-                            <a href="/full_page">
+                            <a href="#">
                                 <img src="http://crossroads-media.s3.amazonaws.com/images/layouts/full_page_example.png" class="img-responsive" />
                             </a>
                         </div>
@@ -1360,7 +1361,7 @@
 
                                             <div class="input-group">
                                                 <input type="text" class="form-control" id="exampleInputAmount" placeholder="Password">
-                                                <a class="input-group-addon btn-primary pointer" ng-click="pwprocessing = 'HIDE'"><small class="smaller">{% raw %} {{ pwprocessing || 'SHOW' }} {% endraw %}</small></a>
+                                                <a class="input-group-addon btn-primary pointer" ng-click="pwprocessing = 'HIDE'"><small class="smaller">{{ pwprocessing || 'SHOW' }}</small></a>
 
 
                                             </div>
