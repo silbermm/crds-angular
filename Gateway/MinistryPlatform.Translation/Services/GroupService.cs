@@ -88,7 +88,7 @@ namespace MinistryPlatform.Translation.Services
                 groupDetails.TryGetValue("Target_Size", out gsz);
                 if (gsz != null)
                 {
-                    g.TargetSize = (int)gsz;
+                    g.TargetSize = (short)gsz;
                 }
 
                 object gf = null;
