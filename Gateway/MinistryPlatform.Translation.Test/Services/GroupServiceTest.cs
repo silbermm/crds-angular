@@ -35,7 +35,7 @@ namespace MinistryPlatform.Translation.Test.Services
             {
                 { "Group_ID", 456 },
                 { "Group_Name", "Test Group" },
-                { "Target_Size", 1 },
+                { "Target_Size", (short)1 },
                 { "Group_Is_Full", false },
             };
 
@@ -75,7 +75,7 @@ namespace MinistryPlatform.Translation.Test.Services
             {
                 { "Group_ID", 456 },
                 { "Group_Name", "Test Group" },
-                { "Target_Size", 1 },
+                { "Target_Size", (short)1 },
                 { "Group_Is_Full", true },
             };
 
@@ -153,7 +153,7 @@ namespace MinistryPlatform.Translation.Test.Services
             {
                 { "Group_ID", 456 },
                 { "Group_Name", "Test Group" },
-                { "Target_Size", 5 },
+                { "Target_Size", (short)5 },
                 { "Group_Is_Full", true },
             };
 
