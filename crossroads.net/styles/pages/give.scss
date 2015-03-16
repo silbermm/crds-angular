@@ -1,0 +1,73 @@
+.give-amount {
+    input, label, .input-group-addon {
+        font-size: 180%;
+        line-height: 1;
+    }
+    .form-control {
+        height: 46px;
+        text-align: right;
+        @media (min-width: $screen-sm-min) {
+            max-width: 130px;
+        }
+    }
+    .input-group-addon {
+        color: $gray-light;
+        text-shadow: 0 1px 0 #ffffff;
+    }
+}
+
+.give-form {
+    .panel-heading {
+        background: transparent;
+        padding: 10px 8px;
+        cursor: pointer;
+        &:hover {
+            background: $gray-lighter;
+        }
+        .panel-title {
+            font-weight: 300;
+            font-style: normal;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: $font-size-base;
+            a, a:focus {
+                display: block;
+                color: $gray;
+                text-decoration: none;
+            }
+        }
+    }
+    .panel-body {
+        padding: 10px 8px;
+    }
+    .form-group > .btn {
+        width: 100%;
+    }
+    .wide-label {
+        width: 100%;
+    }
+    .bank-section {
+        margin-top: 10px;
+    }
+    .exp {
+        padding-left: 0;
+    }
+    .account-type > .btn {
+        outline: none;
+    }
+    .cc-icon {
+        background: no-repeat 99%;
+        background-size: auto 30px;
+    }
+    .cc-visa {
+        background-image: url('http://crossroads-media.s3.amazonaws.com/images/cc_visa.svg');
+    }
+    .cc-mastercard {
+        background-image: url('http://crossroads-media.s3.amazonaws.com/images/cc_mastercard.svg');
+    }
+    .cc-discover {
+        background-image: url('http://crossroads-media.s3.amazonaws.com/images/cc_discover.svg');
+    }
+    .cc-american-express {
+        background-image: url('http://crossroads-media.s3.amazonaws.com/images/cc_american_express.svg');
+    }
+}
