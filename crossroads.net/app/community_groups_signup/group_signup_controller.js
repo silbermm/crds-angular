@@ -10,15 +10,13 @@ require('../services/group_service');
           $scope.person = response;
           $log.debug($scope.person);
         });
-        $scope.signupcalled = "Test";
 
         // retrieve group id from stateParams
-        $scope.groupId = $stateParams.groupId;
+        $log.debug($scope.groupId = $stateParams.groupId);
 
         $scope.signup = function(){
-          $log.debug("Signup clicked");
-
-          $scope.signupcalled = true;
+          //Add Person to group
+          Group.save($scope.groupId);
         };
         
     }
