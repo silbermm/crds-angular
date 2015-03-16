@@ -52,7 +52,10 @@ require('./third-party/angular/angular-growl.css');
         invalidPassword: 12,
         successfullRegistration: 13,
         succesfulResponse: 14,
-        failedResponse: 15
+        failedResponse: 15,
+        successfullWaitlistSignup:17,
+        noPeopleSelectedError:18,
+        fullGroupError:19
     }).config(function (growlProvider) {
         growlProvider.globalPosition("top-center");
         growlProvider.globalTimeToLive(6000);

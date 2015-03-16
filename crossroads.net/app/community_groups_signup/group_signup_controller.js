@@ -16,8 +16,11 @@ require('../services/group_service');
 
         $scope.signup = function(){
           //Add Person to group
-          Group.save($scope.groupId);
-        };
-        
+          Group.save().$promise.then(function(response) {
+              $rootScope.$emit('notify', $rootScope.MESSAGES.successfullRegistration);
+          },function(error){
+              $rootScope.$emit('notify', $rootScope.MESSAGES.fullGroupError);
+            });       
+        };        
     }
 })()

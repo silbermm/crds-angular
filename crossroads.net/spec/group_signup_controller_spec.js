@@ -73,7 +73,6 @@ describe('EventsController', function() {
         expect(person["First_Name"]).toEqual("Shankar");
         expect(person["Last_Name"]).toEqual("Poncelet");
         expect(person["Email_Address"]).toEqual("test@test.com");
-        //scope.signup();
 
       });
 
@@ -92,9 +91,6 @@ describe('EventsController', function() {
         scope.signup();                      
         $httpBackend.expectPOST('http://silbervm:49380/api/group/1/user').respond('200');
         $httpBackend.flush();          
-     //      // console.log(scope);
-
-          
 
       });
 });
