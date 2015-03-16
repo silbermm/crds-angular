@@ -18,6 +18,12 @@ namespace MinistryPlatform.Translation.Services
         private readonly int GroupsPageId = Convert.ToInt32(AppSettings("Groups"));
         private readonly int GroupsEventsPageId = Convert.ToInt32(AppSettings("GroupsEvents"));
         private readonly int EventsGroupsPageId = Convert.ToInt32(AppSettings("EventsGroups"));
+        private IMinistryPlatformService ministryPlatformService;
+
+        public GroupService(IMinistryPlatformService ministryPlatformService)
+        {
+            this.ministryPlatformService = ministryPlatformService;
+        }
 
         public int addParticipantToGroup(int participantId, int groupId, int groupRoleId, DateTime startDate, DateTime? endDate = null, Boolean? employeeRole = false)
         {
@@ -41,7 +47,7 @@ namespace MinistryPlatform.Translation.Services
 
             int groupParticipantId = WithApiLogin<int>(apiToken =>
             {
-                return (MinistryPlatformService.CreateSubRecord(GroupsParticipantsPageId, groupId, values, apiToken));
+                return (ministryPlatformService.CreateSubRecord(GroupsParticipantsPageId, groupId, values, apiToken));
             });
 
             // TODO Should we set Group_Is_Full flag here, or will that be done by a trigger?  Pending SPIKE: US1080
@@ -56,7 +62,7 @@ namespace MinistryPlatform.Translation.Services
             return (WithApiLogin<Group>(apiToken =>
             {
                 logger.Debug("Getting group details for group " + groupId);
-                var groupDetails = MinistryPlatformService.GetRecordDict(GroupsPageId, groupId, apiToken);
+                var groupDetails = ministryPlatformService.GetRecordDict(GroupsPageId, groupId, apiToken);
                 if (groupDetails == null)
                 {
                     logger.Debug("No group found for group id " + groupId);
@@ -93,7 +99,7 @@ namespace MinistryPlatform.Translation.Services
                 }
 
                 logger.Debug("Getting participants for group " + groupId);
-                var participants = MinistryPlatformService.GetSubPageRecords(GroupsParticipantsPageId, groupId, apiToken);
+                var participants = ministryPlatformService.GetSubPageRecords(GroupsParticipantsPageId, groupId, apiToken);
                 if (participants != null && participants.Count > 0)
                 {
                     foreach (Dictionary<string, object> p in participants)
@@ -121,7 +127,7 @@ namespace MinistryPlatform.Translation.Services
             string apiToken = apiLogin();
 
             // Get all the Groups->Events sub-page records
-            var mpEvents = MinistryPlatformService.GetSubPageRecords(GroupsEventsPageId, groupId, apiToken);
+            var mpEvents = ministryPlatformService.GetSubPageRecords(GroupsEventsPageId, groupId, apiToken);
             if (mpEvents == null || mpEvents.Count == 0)
             {
                 return (null);
@@ -134,7 +140,7 @@ namespace MinistryPlatform.Translation.Services
                 object recordId = null;
                 if (e.TryGetValue("dp_RecordID", out recordId))
                 {
-                    var eventGroup = MinistryPlatformService.GetRecordDict(EventsGroupsPageId, (int)recordId, apiToken);
+                    var eventGroup = ministryPlatformService.GetRecordDict(EventsGroupsPageId, (int)recordId, apiToken);
                     if (eventGroup == null)
                     {
                         continue;

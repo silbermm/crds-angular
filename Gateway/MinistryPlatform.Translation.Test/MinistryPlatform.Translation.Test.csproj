@@ -74,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LookupTest.cs" />
+    <Compile Include="Services\GroupServiceTest.cs" />
     <Compile Include="Services\EventServiceTest.cs" />
     <Compile Include="TranslationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
