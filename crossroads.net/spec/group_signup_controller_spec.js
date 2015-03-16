@@ -73,17 +73,27 @@ describe('EventsController', function() {
         expect(person["First_Name"]).toEqual("Shankar");
         expect(person["Last_Name"]).toEqual("Poncelet");
         expect(person["Email_Address"]).toEqual("test@test.com");
-        console.log(scope.person);
-        console.log(scope.signupcalled);
-        scope.signup();
+        //scope.signup();
 
       });
 
       it('should signup a person for a community group', function(){
-          // var controller = groupSignupController();
-          // $httpBackend.flush();          
-          // console.log(scope);
-          // expect(scope.signup()).toBe(undefined);
+        $httpBackend.when('GET', 'http://silbervm:49380/api/profile')
+                              .respond(userGetResponse);
+
+        var controller = groupSignupController();
+        $httpBackend.expectGET('http://silbervm:49380/api/profile');
+        $httpBackend.flush();
+
+        expect(scope.signup).toBeDefined();
+
+        $httpBackend.when('POST', 'http://silbervm:49380/api/group/1/user')
+                              .respond("200");
+        scope.signup();                      
+        $httpBackend.expectPOST('http://silbervm:49380/api/group/1/user').respond('200');
+        $httpBackend.flush();          
+     //      // console.log(scope);
+
           
 
       });
