@@ -7,7 +7,7 @@ namespace MinistryPlatform.Models
         public int OpportunityId { get; set; }
         public string OpportunityName { get; set; }
         public string EventType { get; set; }
-        public int EventTypeId { get; set; }
+        //public int EventTypeId { get; set; }
         public List<Event> Events { get; set; }
     }
 }

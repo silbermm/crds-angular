@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using MinistryPlatform.Models;
 
 namespace MinistryPlatform.Translation.Services
@@ -30,8 +29,8 @@ namespace MinistryPlatform.Translation.Services
 
         public static List<Opportunity> GetOpportunitiesForGroup(int groupId, string token)
         {
-            var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["GroupOpportunities"]);
-            var subPageRecords = MinistryPlatformService.GetSubPageRecords(subPageId, groupId, token);
+            var subPageViewId = Convert.ToInt32(ConfigurationManager.AppSettings["GroupOpportunitiesEvents"]);
+            var subPageRecords = MinistryPlatformService.GetSubpageViewRecords(subPageViewId, groupId, token);
             var opportunities = new List<Opportunity>();
 
             foreach (var record in subPageRecords)
@@ -39,15 +38,13 @@ namespace MinistryPlatform.Translation.Services
                 var opportunity = new Opportunity
                 {
                     OpportunityId = (int) record["dp_RecordID"],
-                    OpportunityName = (string) record["Opportunity_Title"],
-                    EventTypeId = (int) record["EventTypeId"],
-                    EventType = (string) record["Event_Type"]
+                    OpportunityName = (string) record["Opportunity Title"],
+                    EventType = (string) record["Event Type"]
                 };
                 //now get all events with type = event type id
                 var events = GetEvents(opportunity.EventType, token);
-
-                //now get all events with type = event type id
-                opportunity.Events = GetEvents(opportunity.EventTypeId, token);
+                opportunity.Events = events;
+                
                 opportunities.Add(opportunity);
             }
             return opportunities;
@@ -56,7 +53,7 @@ namespace MinistryPlatform.Translation.Services
         //public for testing;a better way?
         //should some of this be moved to Event Service?  probably
         //suggestion: make event service to return events.  make this method search for specific type of event, ???
-        public static List<MinistryPlatform.Models.Event> GetEvents(string eventType, string token)
+        public static List<Event> GetEvents(string eventType, string token)
         {
             //this is using the basic Events page, any concern there?
             var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["Events"]);
@@ -70,13 +67,6 @@ namespace MinistryPlatform.Translation.Services
                 EventStartDate = (DateTime) record["Event_Start_Date"],
                 EventEndDate = (DateTime) record["Event_End_Date"]
             }).ToList();
-        }
-
-        private static List<Event> GetEvents(int eventTypeId, string token )
-        {
-            //TODO: Get events.
-            var events = new List<Event>();
-            return events;
         }
 
         public static Response GetMyOpportunityResponses(int contactId, int opportunityId, string token)

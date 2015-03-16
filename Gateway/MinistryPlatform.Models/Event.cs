@@ -4,10 +4,10 @@ namespace MinistryPlatform.Models
 {
     public class Event
     {
+        public int EventID { get; set; }
         public string EventTitle { get; set; }
         public string EventType { get; set; }
         public DateTime EventStartDate { get; set; }
         public DateTime EventEndDate { get; set; }
-        public int Event_ID { get; set; }
     }
 }
