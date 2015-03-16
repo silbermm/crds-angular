@@ -39,44 +39,74 @@ namespace crds_angular.test.controllers
             fixture.RequestContext = new HttpRequestContext();
         }
 
-    //    [Test]
-    //    public void testCallGroupServiceIsSuccessful()
-    //    {
-    //        //groupServiceMock.Setup(mocked => mocked.addParticipantToGroup(authType + " " + authToken, "3", groupRoleId, It.IsAny<DateTime>(), null, false)).Returns(999);
-    //        //eventServiceMock.Setup(mocked => mocked.getUpcomingEventsForCommunityGroup(3));
+        //[Test]
+        //public void testPostParticipantToGroupIsSuccessful()
+        //{
+        //    groupServiceMock.Setup(mocked => mocked.addParticipantToGroup(123, 456, 789, It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<bool>())).Returns(444);
 
-    //        IHttpActionResult result = fixture.Post("3");
-    //        //groupServiceMock.Verify(mocked => mocked.addParticipantToGroup(authType + " " + authToken, "3", groupRoleId, It.IsAny<DateTime>(), null, false));
+        //    List<Event> events = new List<Event>();
+        //    Event e1 = new Event();
+        //    e1.EventId = 101;
+        //    Event e2 = new Event();
+        //    e2.EventId = 202;
+        //    events.Add(e1);
+        //    events.Add(e2);
 
-    //        Assert.IsNotNull(result);
-    //        Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<Dictionary<string, object>>), result);
-    //        OkNegotiatedContentResult<Dictionary<string, object>> okResult = (OkNegotiatedContentResult<Dictionary<string, object>>)result;
-    //        Assert.IsNotNull(okResult.Content);
-    //        Assert.AreEqual(1, okResult.Content.Count);
-    //        Assert.AreEqual(999, okResult.Content["groupParticipantId"]);
-    //    }
+        //    groupServiceMock.Setup(mocked => mocked.getAllEventsForGroup(456)).Returns(events);
 
-    //    [Test]
-    //    public void testCallGroupServiceFails()
-    //    {
-    //        Exception ex = new Exception();
-    //        //groupServiceMock.Setup(mocked => mocked.addParticipantToGroup(authType + " " + authToken, "3", groupRoleId, It.IsAny<DateTime>(), null, false)).Throws(ex);
+        //    eventServiceMock.Setup(mocked => mocked.registerParticipantForEvent(123, e1.EventId)).Returns(1010);
+        //    eventServiceMock.Setup(mocked => mocked.registerParticipantForEvent(123, e2.EventId)).Returns(2020);
 
-    //        IHttpActionResult result = fixture.Post("3");
-    //        //groupServiceMock.Verify(mocked => mocked.addParticipantToGroup(authType + " " + authToken, "3", groupRoleId, It.IsAny<DateTime>(), null, false));
+        //    IHttpActionResult result = fixture.Post("456");
+        //    groupServiceMock.VerifyAll();
+        //    eventServiceMock.VerifyAll();
 
-    //        Assert.IsNotNull(result);
-    //        Assert.IsInstanceOf(typeof(BadRequestResult), result);
-    //    }
+        //    Assert.IsNotNull(result);
+        //    Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<Dictionary<string, object>>), result);
+        //    OkNegotiatedContentResult<Dictionary<string, object>> okResult = (OkNegotiatedContentResult<Dictionary<string, object>>)result;
+        //    Assert.IsNotNull(okResult.Content);
+        //    Assert.AreEqual(1, okResult.Content.Count);
+        //    Assert.AreEqual(999, okResult.Content["groupParticipantId"]);
+        //}
 
-    //    [Test]
-    //    public void testCallGroupServiceFailsUnauthorized()
-    //    {
-    //        fixture.Request.Headers.Authorization = null;
-    //        IHttpActionResult result = fixture.Post("3");
-    //        Assert.IsNotNull(result);
-    //        Assert.IsInstanceOf(typeof(UnauthorizedResult), result);
-    //        groupServiceMock.VerifyAll();
-    //    }
+        //[Test]
+        //public void testCallGroupServiceIsSuccessful()
+        //{
+        //    //groupServiceMock.Setup(mocked => mocked.addParticipantToGroup(authType + " " + authToken, "3", groupRoleId, It.IsAny<DateTime>(), null, false)).Returns(999);
+        //    //eventServiceMock.Setup(mocked => mocked.getUpcomingEventsForCommunityGroup(3));
+
+        //    IHttpActionResult result = fixture.Post("3");
+        //    //groupServiceMock.Verify(mocked => mocked.addParticipantToGroup(authType + " " + authToken, "3", groupRoleId, It.IsAny<DateTime>(), null, false));
+
+        //    Assert.IsNotNull(result);
+        //    Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<Dictionary<string, object>>), result);
+        //    OkNegotiatedContentResult<Dictionary<string, object>> okResult = (OkNegotiatedContentResult<Dictionary<string, object>>)result;
+        //    Assert.IsNotNull(okResult.Content);
+        //    Assert.AreEqual(1, okResult.Content.Count);
+        //    Assert.AreEqual(999, okResult.Content["groupParticipantId"]);
+        //}
+
+        [Test]
+        public void testCallGroupServiceFails()
+        {
+            Exception ex = new Exception();
+            //groupServiceMock.Setup(mocked => mocked.addParticipantToGroup(authType + " " + authToken, "3", groupRoleId, It.IsAny<DateTime>(), null, false)).Throws(ex);
+
+            IHttpActionResult result = fixture.Post("3");
+            //groupServiceMock.Verify(mocked => mocked.addParticipantToGroup(authType + " " + authToken, "3", groupRoleId, It.IsAny<DateTime>(), null, false));
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf(typeof(BadRequestResult), result);
+        }
+
+        [Test]
+        public void testCallGroupServiceFailsUnauthorized()
+        {
+            fixture.Request.Headers.Authorization = null;
+            IHttpActionResult result = fixture.Post("3");
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf(typeof(UnauthorizedResult), result);
+            groupServiceMock.VerifyAll();
+        }
     }
 }

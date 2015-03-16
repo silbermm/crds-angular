@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MinistryPlatform.Translation.Helpers;
 using MinistryPlatform.Translation.PlatformService;
-using MinistryPlatform.Translation.Utils;
-using MinistryPlatform.Translation.Helpers;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
 
 namespace MinistryPlatform.Translation.Services
 {
