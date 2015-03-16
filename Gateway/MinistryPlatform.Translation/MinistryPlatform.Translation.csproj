@@ -89,8 +89,10 @@
     <Compile Include="Services\GroupService.cs" />
     <Compile Include="Services\IEventService.cs" />
     <Compile Include="Services\IGroupService.cs" />
+    <Compile Include="Services\IMinistryPlatformService.cs" />
     <Compile Include="Services\LookupService.cs" />
     <Compile Include="Services\MinistryPlatformService.cs" />
+    <Compile Include="Services\MinistryPlatformServiceImpl.cs" />
     <Compile Include="Services\OpportunityService.cs" />
     <Compile Include="Utils\MPFormatConversion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

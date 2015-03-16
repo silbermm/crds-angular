@@ -6,51 +6,46 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MinistryPlatform.Translation.Services;
+using Moq;
 
 namespace MinistryPlatform.Translation.Test.Services
 {
     [TestFixture]
     public class EventServiceTest
     {
-        private EventServiceTester fixture;
+        private EventService fixture;
+        private Mock<IMinistryPlatformService> ministryPlatformService;
         private const int EventParticipantId = 12345;
-        private readonly int EventParticipantStatusDefaultID = Convert.ToInt32(ConfigurationManager.AppSettings.Get("Event_Participant_Status_Default_ID"));
+        private readonly int EventParticipantPageId = 281;
+        private readonly int EventParticipantStatusDefaultID = 2;
 
         [SetUp]
         public void SetUp()
         {
-            fixture = new EventServiceTester();
-            ((EventServiceTester)fixture).eventParticipantId = EventParticipantId;
+            ministryPlatformService = new Mock<IMinistryPlatformService>();
+            fixture = new EventService(ministryPlatformService.Object);
         }
 
         [Test]
         public void testRegisterParticipantForEvent()
         {
-            fixture.registerParticipantForEvent(123, 456);
+            ministryPlatformService.Setup(mocked => mocked.CreateSubRecord(
+                It.IsAny<int>(), It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(), 
+                It.IsAny<string>(), It.IsAny<Boolean>())).Returns(987);
 
-            var values = ((EventServiceTester)fixture).receivedValues;
-            Assert.IsNotNull(values);
-            Assert.AreEqual(3, values.Count);
-            Assert.AreEqual(123, values["Participant_ID"]);
-            Assert.AreEqual(456, values["Event_ID"]);
-            Assert.AreEqual(EventParticipantStatusDefaultID, values["Participation_Status_ID"]);
-        }
-    }
+            var expectedValues = new Dictionary<string, object>
+            {
+                { "Participant_ID", 123 },
+                { "Event_ID", 456 },
+                { "Participation_Status_ID", EventParticipantStatusDefaultID },
+            };
 
-    /**
-     * This class exists solely for the purpose of "intercepting" the call to createEventParticipant() in order to unit test.
-     */
-    class EventServiceTester : EventService
-    {
-        public int receivedEventId { get; set; }
-        public Dictionary<string, object> receivedValues { get; set; }
-        public int eventParticipantId { get; set; }
+            int eventParticipantId = fixture.registerParticipantForEvent(123, 456);
 
-        protected override int createEventParticipant(int eventId, Dictionary<string, object> values)
-        {
-            receivedEventId = eventId;
-            receivedValues = values;
-            return (eventParticipantId);
+            ministryPlatformService.Verify(mocked => mocked.CreateSubRecord(
+                EventParticipantPageId, 456, expectedValues, It.IsAny<string>(), false));
+
+            Assert.AreEqual(987, eventParticipantId);
         }
     }
 }

@@ -2,6 +2,7 @@ using Microsoft.Practices.Unity;
 using System.Web.Http;
 using Unity.WebApi;
 
+using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services;
 
 
@@ -23,6 +24,8 @@ namespace crds_angular
 
             container.RegisterType<IGroupService, GroupService>();
             container.RegisterType<IEventService, EventService>();
+            container.RegisterType<IMinistryPlatformService, MinistryPlatformServiceImpl>();
+            container.RegisterType<PlatformServiceClient, PlatformServiceClient>();
 
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
         }
