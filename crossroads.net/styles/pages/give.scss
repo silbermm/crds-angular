@@ -51,12 +51,9 @@
     .exp {
         padding-left: 0;
     }
-    .cvv {
-        padding-right: 0;
-    }
     .cc-icon {
         background: no-repeat 99%;
-        background-size: 13%;
+        background-size: auto 30px;
     }
     .cc-visa {
         background-image: url(../app/icons/cc_visa.svg);

@@ -25,7 +25,7 @@
         }
 
         _this.ccCardType = function () {
-            if (_this.ccNumber.length > 3) {
+            if (_this.ccNumber) {
                 if (_this.ccNumber.match(visaRegEx))
                     _this.ccNumberClass = "cc-visa";
                 else if (_this.ccNumber.match(mastercardRegEx))
