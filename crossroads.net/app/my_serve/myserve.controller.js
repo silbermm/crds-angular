@@ -20,13 +20,11 @@
       toggleMin();
       getGroups();
     }
-
     activate();
 
-    $log.debug(vm.groups);
-
-    //////////////////////////////////////////////
-
+    ////////////////////////////
+    // Implementation Details //
+    ////////////////////////////
     function getGroups(){
       vm.groups = ServeOpportunities;
     };
