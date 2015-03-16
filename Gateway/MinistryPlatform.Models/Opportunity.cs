@@ -9,8 +9,8 @@ namespace MinistryPlatform.Models
         public string OpportunityName { get; set; }
         //public DateTime Opportunity_Date { get; set; }
         public string EventType { get; set; }
-        public int EventTypeId { get; set; }
-        public List<int> EventIds { get; set; } //this will probably become a list of 'events', this where the date will be
+        //public int EventTypeId { get; set; }
+        public List<Event> Events { get; set; }
         
     }
 }

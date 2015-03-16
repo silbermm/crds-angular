@@ -11,21 +11,21 @@ namespace MinistryPlatform.Translation.Services
     {
         public static int RespondToOpportunity(string token, int opportunityId, string comments)
         {
-                var participant = AuthenticationService.GetParticipantRecord(token);
-                var participantId = participant.ParticipantId;
-                var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["OpportunityResponses"]);
+            var participant = AuthenticationService.GetParticipantRecord(token);
+            var participantId = participant.ParticipantId;
+            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["OpportunityResponses"]);
 
-                var values = new Dictionary<string, object>
-                {
-                    {"Response_Date", DateTime.Now},
-                    {"Opportunity_ID", opportunityId},
-                    {"Participant_ID", participantId},
-                    {"Closed", false},
-                    {"Comments", comments}
-                };
+            var values = new Dictionary<string, object>
+            {
+                {"Response_Date", DateTime.Now},
+                {"Opportunity_ID", opportunityId},
+                {"Participant_ID", participantId},
+                {"Closed", false},
+                {"Comments", comments}
+            };
 
-                var recordId = MinistryPlatformService.CreateRecord(pageId, values, token, true);
-                return recordId;
+            var recordId = MinistryPlatformService.CreateRecord(pageId, values, token, true);
+            return recordId;
         }
 
         public static List<Opportunity> GetOpportunitiesForGroup(int groupId, string token)
@@ -41,18 +41,32 @@ namespace MinistryPlatform.Translation.Services
                     //Opportunity_Date = (DateTime) record["Opportunity_Date"],
                     OpportunityId = (int) record["dp_RecordID"],
                     OpportunityName = (string) record["Opportunity_Title"],
-                    EventType = (string) record["Event_Type"],
-                    EventTypeId = (int) record["Event_Type_ID"]
+                    EventType = (string) record["Event_Type"]
                 };
                 //now get all events with type = event type id
+                var events = GetEvents(opportunity.EventType, token);
                 opportunities.Add(opportunity);
             }
             return opportunities;
         }
 
-        private static List<int> GetEvents(int eventTypeId, string token )
+        //public for testing;a better way?
+        //should some of this be moved to Event Service?  probably
+        //suggestion: make event service to return events.  make this method search for specific type of event, ???
+        public static List<MinistryPlatform.Models.Event> GetEvents(string eventType, string token)
         {
-            
+            //this is using the basic Events page, any concern there?
+            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["Events"]);
+            var search = ",," + eventType;
+            var records = MinistryPlatformService.GetRecordsDict(pageId, token, search);
+
+            return records.Select(record => new Event
+            {
+                EventTitle = (string) record["Event_Title"],
+                EventType = (string) record["Event_Type"],
+                EventStartDate = (DateTime) record["Event_Start_Date"],
+                EventEndDate = (DateTime) record["Event_End_Date"]
+            }).ToList();
         }
 
         public static Response GetMyOpportunityResponses(int contactId, int opportunityId, string token)
