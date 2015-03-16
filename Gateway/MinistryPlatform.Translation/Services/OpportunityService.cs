@@ -38,27 +38,21 @@ namespace MinistryPlatform.Translation.Services
             {
                 var opportunity = new Opportunity
                 {
-                    //Opportunity_Date = (DateTime) record["Opportunity_Date"],
                     OpportunityId = (int) record["dp_RecordID"],
                     OpportunityName = (string) record["Opportunity_Title"],
-<<<<<<< HEAD
+                    EventTypeId = (int) record["EventTypeId"],
                     EventType = (string) record["Event_Type"]
                 };
                 //now get all events with type = event type id
                 var events = GetEvents(opportunity.EventType, token);
-=======
-                    EventTypeId = (int) record["Event_Type"],
-                };
+
                 //now get all events with type = event type id
                 opportunity.Events = GetEvents(opportunity.EventTypeId, token);
-
->>>>>>> ae18c05b97309e38e47de93528a2575394315cca
                 opportunities.Add(opportunity);
             }
             return opportunities;
         }
 
-<<<<<<< HEAD
         //public for testing;a better way?
         //should some of this be moved to Event Service?  probably
         //suggestion: make event service to return events.  make this method search for specific type of event, ???
@@ -76,13 +70,13 @@ namespace MinistryPlatform.Translation.Services
                 EventStartDate = (DateTime) record["Event_Start_Date"],
                 EventEndDate = (DateTime) record["Event_End_Date"]
             }).ToList();
-=======
+        }
+
         private static List<Event> GetEvents(int eventTypeId, string token )
         {
             //TODO: Get events.
             var events = new List<Event>();
             return events;
->>>>>>> ae18c05b97309e38e47de93528a2575394315cca
         }
 
         public static Response GetMyOpportunityResponses(int contactId, int opportunityId, string token)
