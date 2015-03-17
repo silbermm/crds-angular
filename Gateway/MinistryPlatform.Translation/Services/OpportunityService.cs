@@ -43,9 +43,12 @@ namespace MinistryPlatform.Translation.Services
                     EventType = (string) record["Event Type"]
                 };
                 //now get all events with type = event type id
-                var events = GetEvents(opportunity.EventType, token);
-                opportunity.Events = events;
-                
+                if (opportunity.EventType != null)
+                {
+                    var events = GetEvents(opportunity.EventType, token);
+                    opportunity.Events = events;
+                }
+
                 opportunities.Add(opportunity);
             }
             return opportunities;

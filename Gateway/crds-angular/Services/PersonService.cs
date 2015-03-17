@@ -8,6 +8,7 @@ using crds_angular.Models.Crossroads;
 using Microsoft.Ajax.Utilities;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services;
+using Newtonsoft.Json;
 using Attribute = MinistryPlatform.Models.Attribute;
 using Event = MinistryPlatform.Models.Event;
 using Response = crds_angular.Models.Crossroads.Response;
@@ -114,12 +115,12 @@ namespace crds_angular.Services
             foreach (var team in myTeams)
             {
                 //if team already in servingTeams, just add role
-                if (servingTeams.Any(s => s.Name == team.GroupName))
+                if (servingTeams.Any(s => s.GroupId == team.GroupId))
                 {
                     var tmp = team;
                     //why this?
-                    var s = servingTeams.Single(t => t.Name == tmp.GroupName);
-                    s.Members[0].Roles.Add(new tmRoles{Name = tmp.GroupRole});
+                    var s = servingTeams.Single(t => t.GroupId == tmp.GroupId);
+                    s.Members[0].Roles.Add(new tmRole{Name = tmp.GroupRole});
                 }
                 else
                 {
@@ -128,6 +129,13 @@ namespace crds_angular.Services
 
                     var servingTeam = new tmServingTeam();
                     servingTeam.Name = team.GroupName;
+                    servingTeam.GroupId = team.GroupId;
+
+                    
+
+
+
+
 
                     //if person already in servingTeam, just add role
 
@@ -138,8 +146,9 @@ namespace crds_angular.Services
                     groupMember.Name = loggedInUserProfile.First_Name;
 
 
-                    var role = new tmRoles();
+                    var role = new tmRole();
                     role.Name = team.GroupRole;
+                    groupMember.Roles = new List<tmRole>{role};
 
                     groupMembers.Add(groupMember);
                     servingTeam.Members = groupMembers;
@@ -159,18 +168,18 @@ namespace crds_angular.Services
                 var groups = GetMyRecords.GetMyServingTeams(familyMember.ContactId, token);
                 foreach (var group in groups)
                 {
-                    if (servingTeams.Any(s => s.Name == group.GroupName))
+                    if (servingTeams.Any(s => s.GroupId == group.GroupId))
                     {
                         var tmp = group;
                         //why this?
-                        var s = servingTeams.Single(t => t.Name == tmp.GroupName);
+                        var s = servingTeams.Single(t => t.GroupId == tmp.GroupId);
 
                         //is this person already on team?
                         if (s.Members.Any(x => x.ContactId == familyMember.ContactId))
                         {
                             //found a match
                             var member = s.Members.Single(q => q.ContactId == familyMember.ContactId);
-                            var role = new tmRoles {Name = tmp.GroupRole};
+                            var role = new tmRole {Name = tmp.GroupRole};
                             member.Roles.Add(role);
                         }
                         else
@@ -180,6 +189,10 @@ namespace crds_angular.Services
                             groupMember.ContactId = familyMember.ContactId;
                             groupMember.Name = familyMember.PreferredName;
 
+                            var role = new tmRole();
+                            role.Name = tmp.GroupRole;
+                            groupMember.Roles = new List<tmRole> { role };
+
                             s.Members.Add(groupMember);
                         }
                     }
@@ -187,6 +200,8 @@ namespace crds_angular.Services
                     {
                         var servingTeam = new tmServingTeam();
                         servingTeam.Name = group.GroupName;
+                        servingTeam.GroupId = group.GroupId;
+
                         var groupMembers = new List<TmTeamMember>();
                         var groupMember = new TmTeamMember();
                         groupMember.ContactId = familyMember.ContactId;
@@ -200,6 +215,61 @@ namespace crds_angular.Services
 
             }
             return servingTeams;
+        }
+
+        public List<tmServingTeam> GetEventsStuff(List<tmServingTeam> teams, string token)
+        {
+            var viewId = 623;
+            //var tmp1 = MinistryPlatform.Translation.Services.MinistryPlatformService.GetPageViewRecords(viewId, token);
+
+            var newTeams = new List<tmServingTeam>();
+            foreach (var team in teams)
+            {
+                var newTeam = new tmServingTeam();
+                newTeam = team;
+
+                var opportunities = OpportunityService.GetOpportunitiesForGroup(team.GroupId, token);
+                //var x = opportunities[0].EventType;
+
+                foreach (var opportunity in opportunities)
+                {
+                    if (opportunity.EventType != null)
+                    {
+                        var events = ParseTmEvents(opportunity.Events);
+
+                        //var z = new tmEventType();
+                        ////z.EventId = opportunity
+                        //z.Name = opportunity.EventType;
+
+                        //if (team.EventTypes == null)
+                        //{
+                        //    var q = new List<tmEventType>();
+                        //    q.Add(z);
+                        //    newTeam.EventTypes = q;
+                        //}
+
+                        ////if event type already in list, don't add again
+                        //if (newTeam.EventTypes.Any(e => e.Name == z.Name)) { }
+                        //else { newTeam.EventTypes.Add(z); }
+
+                        if (newTeam.Events == null)
+                        {
+                            newTeam.Events = events;
+                        }
+                        else
+                        {
+                            newTeam.Events.AddRange(events);
+                        }
+
+                    }
+                }
+                newTeams.Add(newTeam);
+            }
+
+
+            Console.Write(newTeams);
+            return newTeams;
+
         }
 
         public List<ServingTeam> GetServingOpportunities(int contactId, string token)
@@ -234,6 +304,14 @@ namespace crds_angular.Services
             return teams;
         }
 
+        private static List<tmServeEvent> ParseTmEvents(IEnumerable<Event> events)
+        {
+            return events.Select(e => new tmServeEvent
+            {
+                Name = e.EventTitle, StarDateTime = e.EventStartDate, DateOnly = e.EventStartDate.Date.ToString(), TimeOnly = e.EventStartDate.TimeOfDay.ToString()
+            }).ToList();
+        }
+
         private static List<ServeOccurance> ParseEvents(IEnumerable<Event> events)
         {
             return
@@ -262,18 +340,57 @@ namespace crds_angular.Services
 
 public class tmServingTeam
 {
+    [JsonProperty(PropertyName = "name")]
     public string Name { get; set; }
+
+    [JsonProperty(PropertyName = "groupId")]
+    public int GroupId { get; set; }
+
+    [JsonProperty(PropertyName = "members")]
     public List<TmTeamMember> Members { get; set; }
+
+    //[JsonProperty(PropertyName = "eventTypes")]
+    //public List<tmEventType> EventTypes { get; set; }
+
+    [JsonProperty(PropertyName = "events")]
+    public List<tmServeEvent> Events { get; set; }
 }
 
 public class TmTeamMember
 {
+    [JsonProperty(PropertyName = "name")]
     public string Name { get; set; }
+
+    [JsonProperty(PropertyName = "contactId")]
     public int ContactId { get; set; }
-    public List<tmRoles> Roles { get; set; }
+
+    [JsonProperty(PropertyName = "roles")]
+    public List<tmRole> Roles { get; set; }
 }
 
-public class tmRoles
+public class tmRole
 {
+    [JsonProperty(PropertyName = "name")]
     public string Name { get; set; }
+}
+
+public class tmEventType
+{
+    [JsonProperty(PropertyName = "name")]
+    public string Name { get; set; }
+
+    [JsonProperty(PropertyName = "eventId")]
+    public int EventId { get; set; }
+}
+
+public class tmServeEvent
+{
+    [JsonProperty(PropertyName = "name")]
+    public string Name { get; set; }
+
+    [JsonProperty(PropertyName = "startDateTime")]
+    public DateTime StarDateTime { get; set; }
+
+    public string DateOnly { get; set; }
+    public string TimeOnly { get; set; }
 }

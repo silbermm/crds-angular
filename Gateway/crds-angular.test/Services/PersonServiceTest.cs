@@ -1,6 +1,8 @@
-﻿using crds_angular.App_Start;
+﻿using System;
+using crds_angular.App_Start;
 using crds_angular.Services;
 using MinistryPlatform.Translation.Services;
+using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace crds_angular.test.Services
@@ -15,6 +17,18 @@ namespace crds_angular.test.Services
         private const string PASSWORD = "crds1234";
 
         [Test]
+        public void EventTypesBigOleTest()
+        {
+            AutoMapperConfig.RegisterMappings();
+            var token = TranslationService.Login(USERNAME, PASSWORD);
+
+            var personService = new PersonService();
+            var stuff = personService.GetMeMyFamilysServingStuff(token);
+            var newstuff = personService.GetEventsStuff(stuff,token);
+
+            Assert.IsNotNull(newstuff);
+        }
+        [Test]
         public void BigOleTest()
         {
             //force AutoMapper to register
@@ -28,6 +42,10 @@ namespace crds_angular.test.Services
             var personService = new PersonService();
             var stuff = personService.GetMeMyFamilysServingStuff(token);
 
+            
+
+            string json = JsonConvert.SerializeObject(stuff);
+            Console.WriteLine(json);
             Assert.IsNotNull(stuff);
         }
 
