@@ -1,5 +1,7 @@
 'use strict';
 
+require('./login_page.html');
+
 var app = require("angular").module('crossroads');
 
 app.controller("LoginCtrl", ["$scope", 

@@ -8,6 +8,7 @@ require('angular-messages');
 require('angular-cookies');
 require('angular-growl');
 require('angular-snap');
+
 require('./templates/nav.html');
 require('./templates/nav-mobile.html');
 
@@ -25,7 +26,7 @@ require('./third-party/angular/angular-growl.css');
 "use strict";
 (function () {
 
-    angular.module("crossroads", ['ngResource', "crdsProfile", "crdsCMS.services", "ui.router", "ngCookies", "ngMessages", 'angular-growl', 'snap'])
+    angular.module("crossroads", ['ngResource', "crossroads.profile", "crdsCMS.services", "ui.router", "ngCookies", "ngMessages", 'angular-growl', 'snap'])
 
     .constant("AUTH_EVENTS", {
             loginSuccess: "auth-login-success",
@@ -100,8 +101,8 @@ require('./third-party/angular/angular-growl.css');
     ]);
 	
     require('./apprun');
+    require('./app.config');
     require('./routes');
-    require('./register/register_directive');
-    
+    require('./register/register_directive');    
     require('./login');
 })()

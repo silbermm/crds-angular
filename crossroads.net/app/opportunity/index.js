@@ -1,5 +1,6 @@
 'use strict()';
 
+require('./view_opportunities.html');
 var app = require("angular").module("crossroads");
 
 
