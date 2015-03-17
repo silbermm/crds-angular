@@ -10,7 +10,6 @@
         }
 
         _this.Growl = function (type, message) {
-            growl.info("GROWL");
             growl[type](message);
         }
     };
