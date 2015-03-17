@@ -50,17 +50,20 @@ namespace MinistryPlatform.Translation.Services
             return attributes;
         }
 
-        public static List<Group> GetMyServingTeams(int recordId, string token)
+        public static List<Group> GetMyServingTeams(int contactId, string token)
         {
             var pageViewId = Convert.ToInt32(ConfigurationManager.AppSettings["MyServingTeams"]);
-            var teams = MinistryPlatformService.GetPageViewRecords(pageViewId, token);
+            pageViewId = 1014;
+            var searchString = ",,,," + contactId;
+            var teams = MinistryPlatformService.GetPageViewRecords(pageViewId, token, searchString);
             var groups = new List<Group>();
             foreach (var team in teams)
             {
                 var group = new Group
                 {
-                    Group_ID = (int) team["dp_RecordID"],
-                    Group_Name = (string) team["Group_Name"]
+                    GroupId = (int) team["Group_ID"],
+                    GroupName = (string) team["Group_Name"],
+                    GroupRole = (string) team["Role_Title"]
                 };
                 groups.Add(group);
             }

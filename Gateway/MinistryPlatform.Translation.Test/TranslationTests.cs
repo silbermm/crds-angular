@@ -12,8 +12,10 @@ namespace MinistryPlatform.Translation.Test
     [TestFixture]
     public class TranslationTests
     {
-        private const string USERNAME = "testme";
-        private const string PASSWORD = "changeme";
+        //private const string USERNAME = "testme";
+        //private const string PASSWORD = "changeme";
+        private const string USERNAME = "tmaddox@aol.com";
+        private const string PASSWORD = "crds1234";
         private const string FIRSTNAME = "Test";
         private const string NEW_PASSWORD = "changemeagain";
 

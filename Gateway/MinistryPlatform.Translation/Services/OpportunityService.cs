@@ -8,6 +8,7 @@ namespace MinistryPlatform.Translation.Services
 {
     public class OpportunityService
     {
+        
         public static int RespondToOpportunity(string token, int opportunityId, string comments)
         {
             var participant = AuthenticationService.GetParticipantRecord(token);

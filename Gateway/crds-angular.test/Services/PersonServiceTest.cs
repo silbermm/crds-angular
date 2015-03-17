@@ -9,10 +9,27 @@ namespace crds_angular.test.Services
     {
         private PersonService _personService = new PersonService();
 
-        private const string USERNAME = "testme";
-        private const string PASSWORD = "changeme";
-        //private const string USERNAME = "tmaddox@aol.com";
-        //private const string PASSWORD = "crds1234";
+        //private const string USERNAME = "testme";
+        //private const string PASSWORD = "changeme";
+        private const string USERNAME = "tmaddox@aol.com";
+        private const string PASSWORD = "crds1234";
+
+        [Test]
+        public void BigOleTest()
+        {
+            //force AutoMapper to register
+            AutoMapperConfig.RegisterMappings();
+
+            var token = TranslationService.Login(USERNAME, PASSWORD);
+
+            var contactId = AuthenticationService.GetContactId(token);
+
+
+            var personService = new PersonService();
+            var stuff = personService.GetMeMyFamilysServingStuff(token);
+
+            Assert.IsNotNull(stuff);
+        }
 
         [Test]
         public void GetServingTeamsForContact()

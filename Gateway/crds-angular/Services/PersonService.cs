@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using AutoMapper;
 using crds_angular.Models;
 using crds_angular.Models.Crossroads;
@@ -101,6 +102,106 @@ namespace crds_angular.Services
             return familyMembers;
         }
 
+        public List<tmServingTeam> GetMeMyFamilysServingStuff(string token)
+        {
+            var personService = new PersonService();
+            //probaby a better way, this is just a test
+            var loggedInUserProfile = personService.getLoggedInUserProfile(token);
+
+            var servingTeams = new List<tmServingTeam>();
+            var myTeams = GetMyRecords.GetMyServingTeams(loggedInUserProfile.Contact_Id, token);
+            
+            foreach (var team in myTeams)
+            {
+                //if team already in servingTeams, just add role
+                if (servingTeams.Any(s => s.Name == team.GroupName))
+                {
+                    var tmp = team;
+                    //why this?
+                    var s = servingTeams.Single(t => t.Name == tmp.GroupName);
+                    s.Members[0].Roles.Add(new tmRoles{Name = tmp.GroupRole});
+                }
+                else
+                {
+
+
+
+                    var servingTeam = new tmServingTeam();
+                    servingTeam.Name = team.GroupName;
+
+                    //if person already in servingTeam, just add role
+
+
+                    var groupMembers = new List<TmTeamMember>();
+                    var groupMember = new TmTeamMember();
+                    groupMember.ContactId = loggedInUserProfile.Contact_Id;
+                    groupMember.Name = loggedInUserProfile.First_Name;
+
+
+                    var role = new tmRoles();
+                    role.Name = team.GroupRole;
+
+                    groupMembers.Add(groupMember);
+                    servingTeam.Members = groupMembers;
+                    servingTeams.Add(servingTeam);
+                }
+
+                //get all catch all roles for team
+            }
+
+            
+
+
+            //now go get family
+            var familyMembers = personService.GetMyFamily(loggedInUserProfile.Contact_Id, token);
+            foreach (var familyMember in familyMembers)
+            {
+                var groups = GetMyRecords.GetMyServingTeams(familyMember.ContactId, token);
+                foreach (var group in groups)
+                {
+                    if (servingTeams.Any(s => s.Name == group.GroupName))
+                    {
+                        var tmp = group;
+                        //why this?
+                        var s = servingTeams.Single(t => t.Name == tmp.GroupName);
+
+                        //is this person already on team?
+                        if (s.Members.Any(x => x.ContactId == familyMember.ContactId))
+                        {
+                            //found a match
+                            var member = s.Members.Single(q => q.ContactId == familyMember.ContactId);
+                            var role = new tmRoles {Name = tmp.GroupRole};
+                            member.Roles.Add(role);
+                        }
+                        else
+                        {
+
+                            var groupMember = new TmTeamMember();
+                            groupMember.ContactId = familyMember.ContactId;
+                            groupMember.Name = familyMember.PreferredName;
+
+                            s.Members.Add(groupMember);
+                        }
+                    }
+                    else
+                    {
+                        var servingTeam = new tmServingTeam();
+                        servingTeam.Name = group.GroupName;
+                        var groupMembers = new List<TmTeamMember>();
+                        var groupMember = new TmTeamMember();
+                        groupMember.ContactId = familyMember.ContactId;
+                        groupMember.Name = familyMember.PreferredName;
+                        groupMembers.Add(groupMember);
+                        servingTeam.Members = groupMembers;
+                        servingTeams.Add(servingTeam);
+                    }
+                    
+                }
+
+            }
+            return servingTeams;
+        }
+
         public List<ServingTeam> GetServingOpportunities(int contactId, string token)
         {
             var groups = GetMyRecords.GetMyServingTeams(contactId, token);
@@ -108,8 +209,8 @@ namespace crds_angular.Services
             foreach (var group in groups)
             {
                 var team = new ServingTeam();
-                team.TeamName = group.Group_Name;
-                var opportunities = OpportunityService.GetOpportunitiesForGroup(group.Group_ID, token);
+                team.TeamName = group.GroupName;
+                var opportunities = OpportunityService.GetOpportunitiesForGroup(group.GroupId, token);
                 foreach (var opp in opportunities)
                 {
                     var opportunity = new ServingOpportunity();
@@ -157,4 +258,22 @@ namespace crds_angular.Services
             }
         }
     }
+}
+
+public class tmServingTeam
+{
+    public string Name { get; set; }
+    public List<TmTeamMember> Members { get; set; }
+}
+
+public class TmTeamMember
+{
+    public string Name { get; set; }
+    public int ContactId { get; set; }
+    public List<tmRoles> Roles { get; set; }
+}
+
+public class tmRoles
+{
+    public string Name { get; set; }
 }
