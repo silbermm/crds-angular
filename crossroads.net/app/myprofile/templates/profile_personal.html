@@ -39,8 +39,8 @@
         <div class="form-group col-sm-6">
             <label for="password">Change Password</label>
             <div class="input-group">
-                <input type="password" class="form-control" id="password" name="password" ng-model="fields.password" ng-if="!showPassword" value="testpassword" />
-                <input type="text" class="form-control" id="password-clear" name="password" ng-model="fields.password" ng-if="showPassword" value="testpassword" />
+                <input type="password" class="form-control" id="password" name="password" ng-model="fields.password" value="testpassword" />
+                <!--<input type="text" class="form-control" id="password-clear" name="password" ng-model="fields.password" ng-if="showPassword" value="testpassword" />-->
                 <span class="input-group-addon">
           <label>
             <input type="checkbox" ng-click="showPassword = !showPassword"> Show
@@ -102,9 +102,7 @@
         <div class="form-group col-sm-6">
             <label for="provider">Service Provider</label>
             <select class="form-control col-sm-12">
-                {% for i in (1..31) %}
-                <option>{{ i }}</option>
-                {% endfor %}
+                <option></option>
             </select>
         </div>
     </div>
