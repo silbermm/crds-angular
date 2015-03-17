@@ -5,7 +5,12 @@ require('../services/group_service');
 
         $log.debug("Inside GroupSignupController");
 		$log.debug("State params: " + JSON.stringify($stateParams));
-		$log.debug("$rootScope.signupPage: " + JSON.stringify($rootScope.signupPage));
+		$log.debug($rootScope.signupPage);
+
+    //flags to control show/hide logic
+    $scope.showContent = true;
+    $scope.showSuccess = false;
+    $scope.showFull = false;
 		
 		$scope.signupPage = $rootScope.signupPage;
 
@@ -22,8 +27,12 @@ require('../services/group_service');
           //Add Person to group
           Group.save().$promise.then(function(response) {
               $rootScope.$emit('notify', $rootScope.MESSAGES.successfullRegistration);
+              $scope.showContent = false;
+              $scope.showSuccess = true;
           },function(error){
               $rootScope.$emit('notify', $rootScope.MESSAGES.fullGroupError);
+              $scope.showContent = false;
+              $scope.showFull = true;
             });       
         };        
     }
