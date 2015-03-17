@@ -16,6 +16,7 @@
 
     require('./styleguide');
     require('./give');
+    require('./myprofile');
 
     require('./profile/personal/profile_personal.html');
     require('./profile/profile_account.html');
@@ -162,6 +163,17 @@
                             isProtected: true
                         }
                     }
+                }
+            })
+            .state("myprofile", {
+                url: "/myprofile",
+                controller: "MyProfileCtrl as myProfile",
+                templateUrl: "myprofile/myprofile.html",
+                data: {
+                    isProtected: true
+                },
+                resolve: {
+                    loggedin: checkLoggedin
                 }
             })
             .state("opportunities", {
