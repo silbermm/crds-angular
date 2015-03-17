@@ -25,11 +25,6 @@ namespace crds_angular.Controllers.API
 
         private readonly int GroupRoleDefaultId = Convert.ToInt32(ConfigurationManager.AppSettings["Group_Role_Default_ID"]);
 
-        //public GroupController()
-        //{
-        //    // Default constructor, used by WebAPI to instantiate.  Dependencies are automatically injected.
-        //}
-
         public GroupController(IGroupService groupService, IEventService eventService)
         {
             this.groupService = groupService;
