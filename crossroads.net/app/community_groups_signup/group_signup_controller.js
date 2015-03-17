@@ -4,6 +4,10 @@ require('../services/group_service');
     module.exports = function GroupSignupController($scope, $rootScope, Profile, Group, $log, $stateParams) {
 
         $log.debug("Inside GroupSignupController");
+		$log.debug("State params: " + JSON.stringify($stateParams));
+		$log.debug("$rootScope.signupPage: " + JSON.stringify($rootScope.signupPage));
+		
+		$scope.signupPage = $rootScope.signupPage;
 
         // Initialize Person data for logged-in user
         Profile.Personal.get(function(response){
