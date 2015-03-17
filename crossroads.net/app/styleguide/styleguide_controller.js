@@ -9,8 +9,9 @@
             $anchorScroll();
         }
 
-        _this.addWarnMessage = function () {
-            growl.addWarnMessage("GROWL");
+        _this.Growl = function (type, message) {
+            growl.info("GROWL");
+            growl[type](message);
         }
     };
 })();
