@@ -26,19 +26,19 @@
 
             <tabset ng-init="set = {}">
                 <tab heading="Personal">
-                    <ng-include src=" 'myprofile/templates/profile_personal.html' "></ng-include>
+                    <ng-include src=" './app/myprofile/templates/profile_personal.html' "></ng-include>
                 </tab>
                 <tab heading="Communications" class="hidden-xs" active="set.showHousehold">
-                    <ng-include src=" 'myprofile/templates/profile_account.html' "></ng-include>
+                    <ng-include src=" './app/myprofile/templates/profile_account.html' "></ng-include>
                 </tab>
                 <tab heading="Giving" class="hidden-xs" active="set.showGiving">
-                    <ng-include src=" 'myprofile/templates/profile_giving.html' "></ng-include>
+                    <ng-include src=" './app/myprofile/templates/profile_giving.html' "></ng-include>
                 </tab>
                 <tab heading="Skills" class="hidden-xs" active="set.showSkills">
-                    <ng-include src=" 'myprofile/templates/profile_skills.html' "></ng-include>
+                    <ng-include src=" './app/myprofile/templates/profile_skills.html' "></ng-include>
                 </tab>
                 <tab heading="History" class="hidden-xs" active="set.showHistory">
-                    <ng-include src=" 'myprofile/templates/profile_history.html' "></ng-include>
+                    <ng-include src=" './app/myprofile/templates/profile_history.html' "></ng-include>
                 </tab>
                 <li role="tab" data-toggle="tab" class="dropdown hidden-md hidden-lg hidden-sm dropdown-toggle" data-toggle="dropdown">
                     <a href="#">More <span class="caret"></span></a>
