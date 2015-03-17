@@ -21,7 +21,7 @@ require('./cms/services/cms_services_module');
 
 require('./third-party/angular/angular-growl.css');
 
-
+var _ = require('lodash');
 "use strict";
 (function () {
 
