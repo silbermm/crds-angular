@@ -7,5 +7,7 @@ var app = require("angular").module('crossroads');
      'Profile',
      'Group',
      '$log',
-     '$stateParams', require('./group_signup_controller')]);
+     '$stateParams', 
+	 'Page',
+	 require('./group_signup_controller')]);
 ;
