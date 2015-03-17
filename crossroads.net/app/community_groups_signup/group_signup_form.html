@@ -1,6 +1,20 @@
 <h2 class="header noPspace" ng-bind-html="signupPage.title | html"></h2>
 <p id="renderedContent" class="noPspace" dir="ltr" ng-bind-html="signupPage.renderedContent | html"></p>
 
+<!--
+Interesting data on the signupPage object is:
+* group: The group ID in MP
+* id: The page ID in CMS
+* uRLSegment: The URLSegment to use when "searching" CMS for this page
+* title: The title of the page (name of the group)
+* content: Some descriptive info about the group (the paragraph below the title on the page)
+* renderedContent: Same as content?
+* success: Content to display after successfully registering
+* full: Content to display when the group is full (not sure if this should be before or after clicking sign up)
+
+Many of these items will need to be added as hidden DIVs on this page, and then shown/hidden appropriately as the user takes action.
+-->
+
 <form name="groupSignupForm" role="form" ng-submit="signup()">        
   <fieldset>
     <legend>People to Sign Up</legend>
