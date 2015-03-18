@@ -45,7 +45,7 @@ namespace MinistryPlatform.Translation.Test.Services
 
             ministryPlatformService.Setup(mocked => mocked.CreateSubRecord(
                 It.IsAny<int>(), It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(),
-                It.IsAny<string>(), It.IsAny<Boolean>())).Returns(987);
+                It.IsAny<string>(), true)).Returns(987);
 
             DateTime startDate = DateTime.Now;
             DateTime endDate = startDate.AddDays(1);
@@ -62,7 +62,7 @@ namespace MinistryPlatform.Translation.Test.Services
             int groupParticipantId = fixture.addParticipantToGroup(123, 456, 789, startDate, endDate, true);
 
             ministryPlatformService.Verify(mocked => mocked.CreateSubRecord(
-                GroupsParticipantsPageId, 456, expectedValues, It.IsAny<string>(), false));
+                GroupsParticipantsPageId, 456, expectedValues, It.IsAny<string>(), true));
 
             Assert.AreEqual(987, groupParticipantId);
 
@@ -95,7 +95,7 @@ namespace MinistryPlatform.Translation.Test.Services
             }
             catch (GroupFullException e)
             {
-                ministryPlatformService.Verify(mocked => mocked.CreateSubRecord(1, 1, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>(), false), Times.Never);
+                ministryPlatformService.Verify(mocked => mocked.CreateSubRecord(1, 1, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>(), true), Times.Never);
                 Assert.NotNull(e.GroupDetails);
                 Assert.AreEqual(456, e.GroupDetails.RecordId);
                 Assert.AreEqual(1, e.GroupDetails.TargetSize);

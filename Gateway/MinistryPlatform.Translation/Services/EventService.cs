@@ -27,7 +27,7 @@ namespace MinistryPlatform.Translation.Services
 
             int eventParticipantId = WithApiLogin<int>(apiToken =>
             {
-                return (ministryPlatformService.CreateSubRecord(EventParticipantPageId, eventId, values, apiToken));
+                return (ministryPlatformService.CreateSubRecord(EventParticipantPageId, eventId, values, apiToken, true));
             });
 
             logger.Debug("Added participant " + participantId + " to event " + eventId + ": record id: " + eventParticipantId);
