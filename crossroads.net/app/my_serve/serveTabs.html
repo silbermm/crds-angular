@@ -1,6 +1,7 @@
 <div class="serve-day-time row push-top">
-  <div class="col-sm-1 serve-time"> {{opportunity.time}} </div><!--/serve-time--> 
- 
+
+  <div class="col-sm-1 serve-time"> {{opportunity.time}} </div><!--/serve-time-->  
+
   <div class="col-sm-11 serve-opp-listings" data-ng-repeat='team in opportunity.servingTeams'>
     <div class="panel panel-default ng-isolate-scope" >
       <div class="panel-heading clearfix">
@@ -15,7 +16,7 @@
           <p class="flush-bottom">Editing sign up for {{currentMember.name}} <span class="text-muted"></span></p>
           <div class="row">
             <div class="col-md-4">
-              <h5>Opportunties</h5>
+              <h5>Opportunities</h5>
               <div class="radio" ng-repeat="role in currentMember.roles">
                 <label>
                   <input type="radio" name="role"  ng-model="roles" value="{{role.name}}">
