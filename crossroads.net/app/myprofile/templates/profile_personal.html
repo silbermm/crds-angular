@@ -4,7 +4,7 @@
 
     <div class="row">
         <div class="form-group col-sm-6">
-            <label for="firstname">First Name</label>
+            <label for="firstname" class="required">First Name</label>
             <input type="text" class="form-control" id="firstname" placeholder="Enter first name" ng-model="contact.firstName">
         </div>
 
@@ -14,7 +14,7 @@
         </div>
 
         <div class="form-group col-sm-6">
-            <label for="lastname">Last Name</label>
+            <label for="lastname" class="required">Last Name</label>
             <input type="text" class="form-control" id="lastname" placeholder="Enter last name" ng-model="contact.lastName">
         </div>
 
@@ -32,7 +32,7 @@
 
     <div class="row">
         <div class="form-group col-sm-6">
-            <label for="firstname">Email</label>
+            <label for="firstname" class="required">Email</label>
             <input type="email" class="form-control" id="email" name="email" placeholder="Enter email address" ng-model="contact.emailAddress">
         </div>
 
@@ -53,7 +53,7 @@
 
     <div class="row">
         <div class="form-group col-sm-6" ng-controller="crdsDatePickerCtrl">
-            <label class="control-label">Birth Date</label>
+            <label class="control-label required">Birth Date</label>
             <input type="text" class="form-control" id="dateOfBirth" placeholder="mm/dd/yyyy" ng-required="true">
         </div>
     </div>
@@ -67,8 +67,13 @@
 
         <div class="form-group col-sm-6">
             <label class="block">Gender</label>
-            <label class="radio-inline" ng-repeat="gender in genders">
-                <input type="radio" id="gender" ng-value="gender.dpRecordid" ng-model="contact.genderId"> {{ gender.dpRecordname }}
+            <!--<label class="radio-inline" ng-repeat="gender in genders">-->
+            <!--<input type="radio" id="gender" ng-value="gender.dpRecordid" ng-model="contact.genderId"> {{ gender.dpRecordname }}-->
+            <label class="radio-inline">
+                <input type="radio" value="male" name="gender">Male
+            </label>
+            <label class="radio-inline">
+                <input type="radio" value="female" name="gender">Female
             </label>
         </div>
     </div>
@@ -94,7 +99,7 @@
             </label>
             <div class="small inline bold">
                 <span ng-show="phoneToggle" class="link-styling" ng-click="phoneToggle = !phoneToggle">Don't have a mobile phone?</span>
-                <span ng-show="!phoneToggle" class="text-muted">Edit your household phone <a href="#homephone" offset="30" du-smooth-scroll ng-click="householdPhoneFocus()">here</a>.</span>
+                <!--<span ng-show="!phoneToggle" class="text-muted">Edit your household phone <a href="#homephone" offset="30" du-smooth-scroll ng-click="householdPhoneFocus()">here</a>.</span>-->
             </div>
             <input type="text" class="form-control" id="mobile" placeholder="Enter mobile phone" ng-model="contact.mobilePhone">
         </div>
@@ -151,7 +156,7 @@
                         <div class="row">
                             <a ng-click="isCollapsed = !isCollapsed" href="#" class="address-show" ng-show="isCollapsed">
                                 <svg viewBox="0 0 32 32" class="icon icon-pencil4">
-                                    <use xlink:href="/icons/cr.svg#pencil4"></use>
+                                    <use xlink:href="#pencil4"></use>
                                 </svg>
                             </a>
                             <a ng-click="isCollapsed = !isCollapsed" href="#" class="address-show" ng-show="!isCollapsed">
@@ -161,16 +166,17 @@
                             </a>
                             <div class="col-md-7">
                                 <svg viewBox="0 0 32 32" class="icon icon-home">
-                                    <use xlink:href="/icons/cr.svg#home"></use>
+                                    <use xlink:href="#home"></use>
                                 </svg>3727 Hyde Park Ave, Cincinnati, OH 45209</div>
                             <div class="col-md-2">
                                 <svg viewBox="0 0 32 32" class="icon icon-phone3">
-                                    <use xlink:href="/icons/cr.svg#phone3"></use>
+                                    <use xlink:href="#phone3"></use>
                                 </svg>(513) 258-5827</div>
                             <div class="col-md-3">
                                 <svg viewBox="0 0 32 32" class="icon icon-crossroads">
-                                    <use xlink:href="/icons/cr.svg#crossroads"></use>
-                                </svg>Crossroads Oakley</div>
+                                    <use xlink:href="#crossroads"></use>
+                                </svg>Crossroads Oakley
+                            </div>
                         </div>
                         <!--/row-->
                     </div>
@@ -183,7 +189,7 @@
                                     <ul class="list-group clearfix">
                                         <li class="list-group-item clearfix">
                                             <div class="form-group col-sm-6">
-                                                <label for="street">Street</label>
+                                                <label for="street" class="required">Street</label>
                                                 <input ng-model="address.addressLine1" type="text" class="form-control" id="street" placeholder="Enter street address">
                                             </div>
 
@@ -193,18 +199,18 @@
                                             </div>
 
                                             <div class="form-group col-sm-6">
-                                                <label for="city">City</label>
+                                                <label for="city" class="required">City</label>
                                                 <input ng-model="address.city" type="text" class="form-control" id="city" placeholder="Enter city">
                                             </div>
 
                                             <div class="form-group col-sm-6">
-                                                <label for="state">State</label>
+                                                <label for="state" class="required">State</label>
                                                 <select ng-model="address.state__Region" ng-options="state.stateAbbreviation as state.stateAbbreviation for state in states" class="form-control col-sm-12">
                                                 </select>
                                             </div>
 
                                             <div class="form-group col-sm-6">
-                                                <label for="zip">Zip</label>
+                                                <label for="zip" class="required">Zip</label>
                                                 <input ng-model="address.postalCode" type="text" class="form-control" id="zip" placeholder="Enter zip code">
                                             </div>
 
@@ -214,7 +220,7 @@
                                             </div>
 
                                             <div class="form-group col-sm-6">
-                                                <label for="country">Country</label>
+                                                <label for="country" class="required">Country</label>
                                                 <select ng-model="countryObj" ng-change="setCountry()" ng-options="country as country.dpRecordname for country in countries track by country.dpRecordname" class="form-control col-sm-12">
                                                 </select>
                                             </div>
