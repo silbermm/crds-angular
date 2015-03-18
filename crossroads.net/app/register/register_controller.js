@@ -42,7 +42,20 @@ require('../services/user_service');
                     $rootScope.$emit('notify', $rootScope.MESSAGES.successfullRegistration);
                     $scope.registerForm.$setPristine();
                     $scope.newuser = {};
-                    $timeout(Session.redirectIfNeeded($state), 500);
+                    $timeout(function() {
+                      if (Session.hasRedirectionInfo()) {
+                          var url = Session.exists("redirectUrl");
+                          var urlSegment = Session.exists("urlSegment");
+                          Session.removeRedirectRoute();
+                          if(urlSegment === undefined){
+                              $state.go(url);
+                          }
+                          else
+                          {
+                              $state.go(url,{urlsegment:urlSegment});
+                          }
+                      }
+                    }, 500);
                 }, function () {
                     $log.debug("Bad password");
                     $scope.pending = false;

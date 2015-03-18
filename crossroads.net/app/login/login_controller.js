@@ -43,7 +43,20 @@
             AuthService.login($scope.credentials).then(function (user) {             
                 $scope.processing = false;
                 $scope.loginShow = false;
-                $timeout(Session.redirectIfNeeded($state), 500);
+                $timeout(function() {
+                  if (Session.hasRedirectionInfo()) {
+                      var url = Session.exists("redirectUrl");
+                      var urlSegment = Session.exists("urlSegment");
+                      Session.removeRedirectRoute();
+                      if(urlSegment === undefined){
+                          $state.go(url);
+                      }
+                      else
+                      {
+                          $state.go(url,{urlsegment:urlSegment});
+                      }
+                  }
+                }, 500);
                 $scope.loginFailed = false;
                 $rootScope.showLoginButton = false;
                 $scope.navlogin.$setPristine();

@@ -34,6 +34,7 @@
             return "";
         };
 
+        //TODO: Get this working to DRY up login_controller and register_controller
         this.redirectIfNeeded = function($state){
             if (self.hasRedirectionInfo()) {
                 var url = self.exists("redirectUrl");
@@ -47,7 +48,6 @@
                     $state.go(url,{urlsegment:urlSegment});
                 }
             }
-
         };
 
         this.addRedirectRoute = function(redirectUrl, urlSegment) {
