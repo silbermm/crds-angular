@@ -38,14 +38,14 @@
         this.redirectIfNeeded = function($state){
             if (self.hasRedirectionInfo()) {
                 var url = self.exists("redirectUrl");
-                var urlSegment = self.exists("urlSegment");
+                var link = self.exists("link");
                 self.removeRedirectRoute();
-                if(urlSegment === undefined){
+                if(link === undefined){
                     $state.go(url);
                 }
                 else
                 {
-                    $state.go(url,{urlsegment:urlSegment});
+                    $state.go(url,{link:link});
                 }
             }
         };
