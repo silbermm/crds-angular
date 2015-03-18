@@ -33,14 +33,14 @@
             return "";
         };
 
-        this.addRedirectRoute = function(redirectUrl, urlSegment) {
+        this.addRedirectRoute = function(redirectUrl, link) {
             $cookies.redirectUrl = redirectUrl;
-            $cookies.urlSegment = urlSegment;
+            $cookies.link = link;
         };
 
         this.removeRedirectRoute = function() {
             $cookieStore.remove("redirectUrl");
-            $cookieStore.remove("urlSegment");
+            $cookieStore.remove("link");
         };
 
         this.hasRedirectionInfo = function() {
