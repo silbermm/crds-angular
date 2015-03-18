@@ -236,6 +236,7 @@
     </Compile>
     <Compile Include="Models\Crossroads\AccountInfo.cs" />
     <Compile Include="Models\Crossroads\CookieInfo.cs" />
+    <Compile Include="Models\Crossroads\FamilyMember.cs" />
     <Compile Include="Models\Crossroads\Skill.cs" />
     <Compile Include="Models\Crossroads\Event.cs" />
     <Compile Include="Models\Crossroads\User.cs" />
