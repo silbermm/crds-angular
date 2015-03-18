@@ -9,5 +9,6 @@ namespace MinistryPlatform.Models
         public string EventType { get; set; }
         //public int EventTypeId { get; set; }
         public List<Event> Events { get; set; }
+        public string RoleTitle { get; set; }
     }
 }

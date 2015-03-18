@@ -40,13 +40,15 @@ namespace MinistryPlatform.Translation.Services
                 {
                     OpportunityId = (int) record["dp_RecordID"],
                     OpportunityName = (string) record["Opportunity Title"],
-                    EventType = (string) record["Event Type"]
+                    EventType = (string) record["Event Type"], RoleTitle = (string) record["Role_Title"]
                 };
                 //now get all events with type = event type id
                 if (opportunity.EventType != null)
                 {
                     var events = GetEvents(opportunity.EventType, token);
-                    opportunity.Events = events;
+                    //is this a good place to sort the events by date/time??? tm 
+                    var sortedEvents = events.OrderBy(o => o.EventStartDate).ToList();
+                    opportunity.Events = sortedEvents;
                 }
 
                 opportunities.Add(opportunity);
@@ -69,7 +71,8 @@ namespace MinistryPlatform.Translation.Services
                 EventTitle = (string) record["Event_Title"],
                 EventType = (string) record["Event_Type"],
                 EventStartDate = (DateTime) record["Event_Start_Date"],
-                EventEndDate = (DateTime) record["Event_End_Date"]
+                EventEndDate = (DateTime) record["Event_End_Date"], 
+                EventID = (int)record["dp_RecordID"]
             }).ToList();
         }
 
