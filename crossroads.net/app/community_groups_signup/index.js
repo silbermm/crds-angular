@@ -2,7 +2,7 @@
 
 var app = require("angular").module('crossroads');
 
-    app.controller('GroupSignupController', ['$scope',
+    app.controller('GroupSignupController', [
      '$rootScope',
      'Profile',
      'Group',

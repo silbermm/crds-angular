@@ -157,7 +157,7 @@
     })
     .state("community-groups-signup", {
         url: "/sign-up/:urlsegment",
-        controller: "GroupSignupController",
+        controller: "GroupSignupController as groupsignup",
         templateUrl: "community_groups_signup/group_signup_form.html",
         data: {
             isProtected: true

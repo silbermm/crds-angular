@@ -1,7 +1,7 @@
-<h2 class="header noPspace" ng-bind-html="signupPage.title | html"></h2>
-<p id="content" class="noPspace" dir="ltr" ng-bind-html="signupPage.content | html" ng-show="showContent"></p>
-<p id="successMessage"  ng-bind-html="signupPage.success | html" ng-show="showSuccess"></p>
-<p id="fullGroupMessage" ng-bind-html="signupPage.full | html" ng-show="showFull"></p>
+<h2 class="header noPspace" ng-bind-html="groupsignup.signupPage.title | html"></h2>
+<p id="content" class="noPspace" dir="ltr" ng-bind-html="groupsignup.signupPage.content | html" ng-show="groupsignup.showContent"></p>
+<p id="successMessage"  ng-bind-html="groupsignup.signupPage.success | html" ng-show="groupsignup.showSuccess"></p>
+<p id="fullGroupMessage" ng-bind-html="groupsignup.signupPage.full | html" ng-show="groupsignup.showFull"></p>
 
 <!--
 Interesting data on the signupPage object is:
@@ -17,14 +17,14 @@ Interesting data on the signupPage object is:
 Many of these items will need to be added as hidden DIVs on this page, and then shown/hidden appropriately as the user takes action.
 -->
 
-<form name="groupSignupForm" role="form" ng-submit="signup()" ng-show="showContent">        
+<form name="groupSignupForm" role="form" ng-submit="groupsignup.signup()" ng-show="groupsignup.showContent">        
   <fieldset>
     <legend>People to Sign Up</legend>
     <div class="form-group">
 
     <div class="checkbox">
 <!--     checkbox only hidden if only in person listed -->
-      <p><label><input type="checkbox" style="visibility:hidden;">{{person["NickName"]}} ({{person["Email_Address"]}})</label></p>
+      <p><label><input type="checkbox" style="visibility:hidden;">{{groupsignup.person["NickName"]}} ({{groupsignup.person["Email_Address"]}})</label></p>
     <div><input type="submit" name="submit_group_signup" value="Sign Up" id="submit_group_signup" class="btn btn-primary push-half-bottom"></div>
   </fieldset>
 </form>
