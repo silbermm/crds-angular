@@ -5,13 +5,9 @@ var _ = require('lodash');
 require('./myserve.html');
 var app = require("angular").module('crossroads');
 
-var MyServeController = require('./myserve.controller');
-app.controller("MyServeController", MyServeController);
-MyServeController.$inject = ['$log', 'ServeOpportunities'];
+app.controller("MyServeController", require('./myserve.controller'));
 
 require('./serveTabs.html');
-var ServeTabsDirective = require('./serveTabs.directive');
-app.directive("serveTabs", ServeTabsDirective);
-ServeTabsDirective.$inject = ['$log'];
+app.directive("serveTabs", require('./serveTabs.directive'));
 
 app.factory("ServeOpportunities", require('../services/serveOpportunities.service'));

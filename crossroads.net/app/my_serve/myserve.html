@@ -3,7 +3,7 @@
 <div class="serve-signup-cont clearfix col-sm-10 soft-ends">
   <div class="serve-day push-bottom" data-ng-repeat="group in serve.groups">
     <h4>{{group.day}}</h4>
-      <serve-tabs opportunity="opp" ng-repeat="opp in group.opportunities">
+      <serve-tabs opportunity="opp" ng-repeat="opp in group.serveTimes">
       </serve-tabs>
   </div><!-- serve day --> 
 </div>

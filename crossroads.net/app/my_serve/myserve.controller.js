@@ -1,6 +1,10 @@
 'use strict()';
 (function(){
-  module.exports = function MyServeController($log, ServeOpportunities){
+  module.exports = MyServeController;
+
+  MyServeController.$inject = ['$log', 'ServeOpportunities', 'Session'];
+    
+  function MyServeController($log, ServeOpportunities, Session){
     
     var vm = this;
 
@@ -26,7 +30,7 @@
     // Implementation Details //
     ////////////////////////////
     function getGroups(){
-      vm.groups = ServeOpportunities;
+      vm.groups = ServeOpportunities.query({'contactId': Session.exists('userId')});
     };
 
     function today() {
