@@ -32,7 +32,7 @@ namespace crds_angular.Controllers.API
                 catch (Exception e)
                 {
                     //var ex = new Exception("Hi Matt");
-                    return this.BadRequest("Hi Matt");
+                    return this.BadRequest(e.Message);
                     //return this.InternalServerError(ex);
                     //return new CustomErrorIHttpActionResult(e.Message, Request);
                 }
