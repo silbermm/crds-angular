@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Web;
 using System.Web.Http;
@@ -17,14 +18,24 @@ namespace crds_angular.Controllers.API
         {
             return Authorized(token =>
             {
-                var personService = new PersonService();
-                var stuff = personService.GetMyFamiliesServingTeams(contactId, token);
-                var list = personService.GetMyFamiliesServingEvents(stuff, token);
-                if (list == null)
+                try
                 {
-                    return Unauthorized();
+                    var personService = new PersonService();
+                    var stuff = personService.GetMyFamiliesServingTeams(contactId, token);
+                    var list = personService.GetMyFamiliesServingEvents(stuff, token);
+                    if (list == null)
+                    {
+                        return Unauthorized();
+                    }
+                    return this.Ok(list);
                 }
-                return this.Ok(list);
+                catch (Exception e)
+                {
+                    //var ex = new Exception("Hi Matt");
+                    return this.BadRequest("Hi Matt");
+                    //return this.InternalServerError(ex);
+                    //return new CustomErrorIHttpActionResult(e.Message, Request);
+                }
             });
 
         }
