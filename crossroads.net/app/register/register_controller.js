@@ -2,9 +2,9 @@
 require('../services/auth_service');
 require('../services/user_service');
 (function () {
-    angular.module('crossroads').controller('RegisterCtrl', ['$scope', '$rootScope', 'AUTH_EVENTS','AuthService', 'MESSAGES', 'User', '$log', RegisterController]);
+    angular.module('crossroads').controller('RegisterCtrl', ['$scope', '$rootScope', 'AUTH_EVENTS','AuthService', 'MESSAGES', 'User', 'Session', '$log','$timeout', '$state', RegisterController]);
 
-    function RegisterController($scope, $rootScope, AUTH_EVENTS, AuthService, MESSAGES, User, $log) {
+    function RegisterController($scope, $rootScope, AUTH_EVENTS, AuthService, MESSAGES, User, Session, $log, $timeout, $state) {
         $log.debug("Inside register controller");
         $scope.newuser = User;
         $scope.passwordPrefix = "registration";
@@ -42,6 +42,7 @@ require('../services/user_service');
                     $rootScope.$emit('notify', $rootScope.MESSAGES.successfullRegistration);
                     $scope.registerForm.$setPristine();
                     $scope.newuser = {};
+                    $timeout(Session.redirectIfNeeded($state), 500);
                 }, function () {
                     $log.debug("Bad password");
                     $scope.pending = false;
