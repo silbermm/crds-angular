@@ -43,7 +43,8 @@
                 <th>Type</th>
             </tr>
         </thead>
-        <tr ng-repeat="givingRecord in givingHistory | DateYearFilter:dateFilter:'donationDate'">
+        <!-- / UX Team removed ng-repeat="givingRecord in givingHistory | DateYearFilter:dateFilter:'donationDate'" from below <tr> -->
+        <tr>
             <td>{{givingRecord.donationDate | date:"MM/dd/yyyy"}}</td>
             <td ng-init="giving.total = giving.total + givingRecord.amount">{{givingRecord.amount | currency:"$"}}</td>
             <td>{{givingRecord.statementTitle}}</td>
