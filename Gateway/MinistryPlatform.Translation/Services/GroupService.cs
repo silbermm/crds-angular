@@ -47,7 +47,7 @@ namespace MinistryPlatform.Translation.Services
 
             int groupParticipantId = WithApiLogin<int>(apiToken =>
             {
-                return (ministryPlatformService.CreateSubRecord(GroupsParticipantsPageId, groupId, values, apiToken));
+                return (ministryPlatformService.CreateSubRecord(GroupsParticipantsPageId, groupId, values, apiToken, true));
             });
 
             // TODO Should we set Group_Is_Full flag here, or will that be done by a trigger?  Pending SPIKE: US1080
@@ -62,7 +62,7 @@ namespace MinistryPlatform.Translation.Services
             return (WithApiLogin<Group>(apiToken =>
             {
                 logger.Debug("Getting group details for group " + groupId);
-                var groupDetails = ministryPlatformService.GetRecordDict(GroupsPageId, groupId, apiToken);
+                var groupDetails = ministryPlatformService.GetRecordDict(GroupsPageId, groupId, apiToken, false);
                 if (groupDetails == null)
                 {
                     logger.Debug("No group found for group id " + groupId);
@@ -140,7 +140,7 @@ namespace MinistryPlatform.Translation.Services
                 object recordId = null;
                 if (e.TryGetValue("dp_RecordID", out recordId))
                 {
-                    var eventGroup = ministryPlatformService.GetRecordDict(EventsGroupsPageId, (int)recordId, apiToken);
+                    var eventGroup = ministryPlatformService.GetRecordDict(EventsGroupsPageId, (int)recordId, apiToken, false);
                     if (eventGroup == null)
                     {
                         continue;

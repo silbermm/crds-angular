@@ -11,8 +11,6 @@ require('../services/group_service');
         vm.showSuccess = false;
         vm.showFull = false;
         
-        vm.signupPage = $rootScope.signupPage;
-
         // Initialize Person data for logged-in user
         Profile.Personal.get(function(response){
             vm.person = response;
