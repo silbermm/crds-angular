@@ -39,8 +39,8 @@ namespace crds_angular.test.Services
             var contactId = AuthenticationService.GetContactId(token);
 
             var personService = new PersonService();
-            var stuff = personService.GetMeMyFamilysServingStuff(contactId,token);
-            var newstuff = personService.GetEventsStuff(stuff,token);
+            var stuff = personService.GetMyFamiliesServingTeams(contactId,token);
+            var newstuff = personService.GetMyFamiliesServingEvents(stuff,token);
 
             Assert.IsNotNull(newstuff);
         }
@@ -56,7 +56,7 @@ namespace crds_angular.test.Services
 
 
             var personService = new PersonService();
-            var stuff = personService.GetMeMyFamilysServingStuff(contactId, token);
+            var stuff = personService.GetMyFamiliesServingTeams(contactId, token);
 
             
 

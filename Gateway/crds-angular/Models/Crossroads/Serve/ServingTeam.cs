@@ -17,8 +17,8 @@ namespace crds_angular.Models.Crossroads.Serve
         //[JsonProperty(PropertyName = "eventTypes")]
         //public List<tmEventType> EventTypes { get; set; }
 
-        [JsonProperty(PropertyName = "events")]
-        public List<ServeEvent> Events { get; set; }
+        //[JsonProperty(PropertyName = "events")]
+        //public List<ServeEvent> Events { get; set; }
 
         public ServingTeam()
         {

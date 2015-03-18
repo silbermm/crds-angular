@@ -117,7 +117,7 @@ namespace crds_angular.Services
             return familyMembers;
         }
 
-        public List<ServingTeam> GetMeMyFamilysServingStuff(int contactId, string token)
+        public List<ServingTeam> GetMyFamiliesServingTeams(int contactId, string token)
         {
             var personService = new PersonService();
             var servingTeams = new List<ServingTeam>();
@@ -205,7 +205,7 @@ namespace crds_angular.Services
             return servingTeam;
         }
 
-        public List<ServingDay> GetEventsStuff(List<ServingTeam> teams, string token)
+        public List<ServingDay> GetMyFamiliesServingEvents(List<ServingTeam> teams, string token)
         {
             var serveDays = new List<ServingDay>();
 

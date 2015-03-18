@@ -12,20 +12,14 @@ namespace crds_angular.Controllers.API
     public class ProfileController : MPAuth
     {
     [ResponseType(typeof(List<ServingDay>))]
-    [Route("api/profile/stuff/{contactId}")]
-        public IHttpActionResult GetSomeStuff(int contactId)
+    [Route("api/profile/familyserve/{contactId}")]
+        public IHttpActionResult GetFamilyServeDays(int contactId)
         {
-            //var personService = new PersonService();
-            //var stuff = personService.GetMeMyFamilysServingStuff(token);
-
-            //var token = TranslationService.Login("tmaddox", "crds1234");
-            //var token =
-            //        "AAEAAHQzsyBskUp5lt-v1AssHzc_THBNL9JtRBGxf7pb-nDwFL-bx6zjOZ-XesOI-8gTIv7ZlDRjYZEWVK_q91TNeAoaP3qaKc_MGlnEz5GmHzAsM0v4mUdgLs7H-As7lBB-hMgit-xc57ofSXU4s9KblBQ5ZcKgbezaFYNcC0DMMetN-pouQ8XgqpTeYxAQWg8FcDa9EvQQwR6zMgCOhSTYNiPMnvefshJTqmJK3LtWi7kgoPrQg-6FKe5SC0kLGb1blbm1Mfsz4QhU9WqvyAIG4-jyN2ZIUJjrqYW52fCSqAY-_zmDAiJNXZqUhFdddV2vi0353pRSc7uzeLSOgyIeSHTIAAAATGlmZXRpbWU9MTgwMCZDbGllbnRJZGVudGlmaWVyPWNsaWVudCZVc2VyPWFiYzRkMDMwLTk3YjktNGY2Yi04NmI3LTMwY2QxMWQxODM3OCZTY29wZT1odHRwJTNBJTJGJTJGd3d3LnRoaW5rbWluaXN0cnkuY29tJTJGZGF0YXBsYXRmb3JtJTJGc2NvcGVzJTJGYWxsJnRzPTE0MjY2OTQ4NTUmdD1Eb3ROZXRPcGVuQXV0aC5PQXV0aDIuQWNjZXNzVG9rZW4";
             return Authorized(token =>
             {
                 var personService = new PersonService();
-                var stuff = personService.GetMeMyFamilysServingStuff(contactId, token);
-                var list = personService.GetEventsStuff(stuff, token);
+                var stuff = personService.GetMyFamiliesServingTeams(contactId, token);
+                var list = personService.GetMyFamiliesServingEvents(stuff, token);
                 if (list == null)
                 {
                     return Unauthorized();
