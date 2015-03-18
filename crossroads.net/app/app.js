@@ -8,12 +8,16 @@ require('angular-messages');
 require('angular-cookies');
 require('angular-growl');
 require('angular-snap');
+require('angular-toggle-switch');
 require('angular-ui-utils');
 require('./templates/nav.html');
 require('./templates/nav-mobile.html');
 
 require('./third-party/snap/snap.min.js');
 require('../node_modules/angular-snap/angular-snap.min.css');
+
+require('../node_modules/angular-toggle-switch/angular-toggle-switch-bootstrap.css');
+require('../node_modules/angular-toggle-switch/angular-toggle-switch.css');
 
 require('../styles/main.scss');
 require('./profile');
@@ -26,7 +30,7 @@ var _ = require('lodash');
 "use strict";
 (function () {
 
-    angular.module("crossroads", ['ngResource', "crdsProfile", "crdsCMS.services", "ui.router", 'ui.utils', "ngCookies", "ngMessages", 'angular-growl', 'snap'])
+    angular.module("crossroads", ['ngResource', "crdsProfile", "crdsCMS.services", "ui.router", 'ui.utils', "ngCookies", "ngMessages", 'angular-growl', 'snap', 'toggle-switch'])
 
     .constant("AUTH_EVENTS", {
             loginSuccess: "auth-login-success",

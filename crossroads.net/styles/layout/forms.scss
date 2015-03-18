@@ -19,3 +19,20 @@
     content: " * ";
     color: $brand-danger;
 }
+
+//Toggle Switches
+.form-group {
+  .toggle-switch {
+    border: 1px solid darken(#cccccc,20%);
+   
+    .switch-left {
+      background: $brand-primary;
+    }
+  }
+}
+
+.toggle-input-group {
+  label {
+    line-height: 1.2;
+  }
+}
