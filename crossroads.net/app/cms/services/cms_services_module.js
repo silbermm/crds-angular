@@ -6,5 +6,5 @@ cms_services_module.factory('Message', function ($resource) {
 });
 
 cms_services_module.factory('Page', function ($resource) {
-    return $resource(__CMS_ENDPOINT__ + '/api/Page/?URLSegment=:url', { url: '@_url' }, { cache: true });
+    return $resource(__CMS_ENDPOINT__ + '/api/Page/?link=:url', { url: '@_url' }, { cache: true });
 });

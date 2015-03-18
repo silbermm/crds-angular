@@ -26,6 +26,14 @@
 
         $httpProvider.defaults.useXDomain = true;
         $httpProvider.defaults.headers.common['Authorization'] = getCookie('sessionId');
+		/*
+	$urlMatcherFactory.type("notUrlEncoded", {
+		encode: valToString,
+		decode: valFromString,
+		is: regexpMatches,
+		pattern: /[^/]+\/[^/]+/
+	});*/
+		
 
         //================================================
         // Check if the user is connected
@@ -190,7 +198,7 @@
                 }
             })
            .state("community-groups-signup", {
-                url: "/sign-up/:urlsegment",
+                url: "{link:notUrlEncoded/sign-up/.*$}",
                 controller: "GroupSignupController as groupsignup",
                 templateUrl: "community_groups_signup/group_signup_form.html",
                 data: {
@@ -201,10 +209,8 @@
                 }
     })
     .state("content", {
-    // This url will match a slash followed by anything (including additional slashes).  There is corresponding 
-    // logic in the controller to extract the leaf (anything after the final slash) to pass to the CMS API.
-    // TODO This can be changed back to "/:urlsegment" if US1044 makes changes to enable page slugs without slashes
-        url: "/{urlsegment:.*$}",
+    // This url will match a slash followed by anything (including additional slashes).
+        url: "{link:/.*$}",
         controller: "ContentCtrl",
         templateUrl: "content/content.html"
             });

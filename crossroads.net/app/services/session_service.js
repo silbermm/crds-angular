@@ -1,4 +1,4 @@
-﻿"use strict";
+"use strict";
 (function () {
 
     function SessionService($cookies, $cookieStore) {
@@ -52,12 +52,12 @@
 
         this.addRedirectRoute = function(redirectUrl, urlSegment) {
             $cookies.redirectUrl = redirectUrl;
-            $cookies.urlSegment = urlSegment;
+            $cookies.link = link;
         };
 
         this.removeRedirectRoute = function() {
             $cookieStore.remove("redirectUrl");
-            $cookieStore.remove("urlSegment");
+            $cookieStore.remove("link");
         };
 
         this.hasRedirectionInfo = function() {
