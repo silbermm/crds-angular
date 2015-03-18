@@ -3,7 +3,6 @@
   module.exports = function LoginController($scope, $rootScope, AUTH_EVENTS, MESSAGES, AuthService, $cookieStore, $state, $log, Session, $timeout, User) {
     
     $log.debug("Inside Login controller");
-   
     $scope.loginShow = false;
     $scope.newuser = User;
     $scope.credentials = {};
@@ -47,9 +46,15 @@
                 $timeout(function() {
                     if (Session.hasRedirectionInfo()) {
                         var url = Session.exists("redirectUrl");
-                        var params = Session.exists("redirectParams");
+                        var urlSegment = Session.exists("urlSegment");
                         Session.removeRedirectRoute();
-                        $state.go(url);
+                        if(urlSegment === undefined){
+                            $state.go(url);
+                        }
+                        else
+                        {
+                            $state.go(url,{urlsegment:urlSegment});
+                        }
                     }
                 }, 500);
                 $scope.loginFailed = false;
