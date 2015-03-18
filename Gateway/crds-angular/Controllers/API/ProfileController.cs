@@ -11,25 +11,26 @@ namespace crds_angular.Controllers.API
     public class ProfileController : MPAuth
     {
     [ResponseType(typeof(List<tmServingTeam>))]
-        [Route("api/profile/stuff")]
-        public IHttpActionResult GetSomeStuff()
+    [Route("api/profile/stuff/{contactId}")]
+        public IHttpActionResult GetSomeStuff(int contactId)
         {
             //var personService = new PersonService();
             //var stuff = personService.GetMeMyFamilysServingStuff(token);
 
-        //var token =
-        //    "AAEAADfUoZ5uMrc-M2oAr-hHZnYr-qkog7TmaQ-u0p9o50GHcfK92ief0psjjj-zp9NlpVIAy2Sq18tVc0iPwBROjFSXXjXETUaXH72QNw3SKzm2OGDla3dcymg0jEOIVbpECZbmV1EdBVtXQGSsMzvhXzoWP6a70y2lXKV1CUdzvFDAPX5ORxxgJwoq5Q67BI5BPBHnuLmb1TXDNkUrLoui5GRxD-rbJ9XRfOQT_cslQaeUgsgm8bfrdoVWo1vyXiQGabcPKpTZegQTBfAfrBakB1bFKPI9AohDEuEFrorc2jtbFhzwTBnHSgcGMpBhwA_I1vZbQbrYSLLCYaRtPAI3Ld3IAAAATGlmZXRpbWU9MTgwMCZDbGllbnRJZGVudGlmaWVyPWNsaWVudCZVc2VyPWFiYzRkMDMwLTk3YjktNGY2Yi04NmI3LTMwY2QxMWQxODM3OCZTY29wZT1odHRwJTNBJTJGJTJGd3d3LnRoaW5rbWluaXN0cnkuY29tJTJGZGF0YXBsYXRmb3JtJTJGc2NvcGVzJTJGYWxsJnRzPTE0MjY2ODM1MzImdD1Eb3ROZXRPcGVuQXV0aC5PQXV0aDIuQWNjZXNzVG9rZW4";
-            return Authorized(token =>
-            {
+            //var token = TranslationService.Login("tmaddox", "crds1234");
+            var token =
+                    "AAEAAAtXCHDSb1YcFWSncg_OY1SlC5e1Kg6eO7Y2MQWFfXklGtlmdCDkMiuEK4kNJsVEKqpg1fqCd-BPLEs10xtAqodvx0CsC94p875FYaJE0e5-opQMzQmQIj9Yle3OUP2ygMNGfZzUoh0flEC4i5dOKJlAhayi-2RRTuVnkiSN_9py8e8rz5zZO1xJgCcNCPm4unN4n78pQJuymoL4WJCxcn_JxSRmWTtF1IIdGV8HOrKyTlaqQ0gGrxFh-E9SH7SSnGXRdBqsZ0JCYGUcyPpYDzyBz5S5VdFNtzIM6-NEOED_QMudHlAyWXoI397jrReWtIr62qFVZNZuBet25uinlBXIAAAATGlmZXRpbWU9MTgwMCZDbGllbnRJZGVudGlmaWVyPWNsaWVudCZVc2VyPWFiYzRkMDMwLTk3YjktNGY2Yi04NmI3LTMwY2QxMWQxODM3OCZTY29wZT1odHRwJTNBJTJGJTJGd3d3LnRoaW5rbWluaXN0cnkuY29tJTJGZGF0YXBsYXRmb3JtJTJGc2NvcGVzJTJGYWxsJnRzPTE0MjY2OTMwMTUmdD1Eb3ROZXRPcGVuQXV0aC5PQXV0aDIuQWNjZXNzVG9rZW4";
+            //return Authorized(token =>
+            //{
                 var personService = new PersonService();
-                var stuff = personService.GetMeMyFamilysServingStuff( token);
+                var stuff = personService.GetMeMyFamilysServingStuff(contactId, token);
                 var list = personService.GetEventsStuff(stuff, token);
                 if (list == null)
                 {
                     return Unauthorized();
                 }
                 return this.Ok(list);
-            });
+            //});
 
         }
 

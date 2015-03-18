@@ -96,77 +96,33 @@ namespace crds_angular.Services
             return skills;
         }
 
-        public List<FamilyMember> GetMyFamily(int recordId, string token)
+        public List<FamilyMember> GetMyFamily(int contactId, string token)
         {
-            var contactRelationships = GetMyRecords.GetMyFamily(recordId, token).ToList();
+            var contactRelationships = GetMyRecords.GetMyFamily(contactId, token).ToList();
             var familyMembers = Mapper.Map<List<Contact_Relationship>, List<FamilyMember>>(contactRelationships);
 
+            //now get info for Contact
             var personService = new PersonService();
-            //probaby a better way, this is just a test
-            var loggedInUserProfile = personService.getLoggedInUserProfile(token);
-            var me = new FamilyMember();
-            me.ContactId = loggedInUserProfile.Contact_Id;
-            me.Email = loggedInUserProfile.Email_Address;
-            me.LastName = loggedInUserProfile.Last_Name;
-            me.PreferredName = "";
+            var myProfile = personService.getLoggedInUserProfile(token);
+            var me = new FamilyMember
+            {
+                ContactId = myProfile.Contact_Id,
+                Email = myProfile.Email_Address,
+                LastName = myProfile.Last_Name,
+                PreferredName = myProfile.NickName ?? myProfile.First_Name
+            };
             familyMembers.Add(me);
 
             return familyMembers;
         }
 
-        public List<tmServingTeam> GetMeMyFamilysServingStuff(string token)
+        public List<tmServingTeam> GetMeMyFamilysServingStuff(int contactId, string token)
         {
             var personService = new PersonService();
-            //probaby a better way, this is just a test
-            var loggedInUserProfile = personService.getLoggedInUserProfile(token);
-
             var servingTeams = new List<tmServingTeam>();
-            var myTeams = GetMyRecords.GetMyServingTeams(loggedInUserProfile.Contact_Id, token);
-
-            foreach (var team in myTeams)
-            {
-                //if team already in servingTeams, just add role
-                if (servingTeams.Any(s => s.GroupId == team.GroupId))
-                {
-                    var tmp = team;
-                    //why this?
-                    var s = servingTeams.Single(t => t.GroupId == tmp.GroupId);
-                    var roleName = string.Format("{0} {1}", tmp.GroupName, tmp.GroupRole);
-                    roleName = tmp.GroupRole;
-                    s.Members[0].Roles.Add(new tmRole { Name = roleName });
-                }
-                else
-                {
-                    var servingTeam = new tmServingTeam();
-                    servingTeam.Name = team.GroupName;
-                    servingTeam.GroupId = team.GroupId;
-
-
-                    //if person already in servingTeam, just add role
-
-
-                    var groupMembers = new List<TmTeamMember>();
-                    var groupMember = new TmTeamMember();
-                    groupMember.ContactId = loggedInUserProfile.Contact_Id;
-                    groupMember.Name = loggedInUserProfile.First_Name;
-
-
-                    var role = new tmRole();
-                    role.Name = string.Format("{0} {1}", team.GroupName, team.GroupRole);
-                    role.Name = team.GroupRole;
-                    groupMember.Roles = new List<tmRole> {role};
-
-                    groupMembers.Add(groupMember);
-                    servingTeam.Members = groupMembers;
-                    servingTeams.Add(servingTeam);
-                }
-
-                //get all catch all roles for team
-            }
-
 
             //now go get family
-            var familyMembers = personService.GetMyFamily(loggedInUserProfile.Contact_Id, token);
+            var familyMembers = personService.GetMyFamily(contactId, token);
             foreach (var familyMember in familyMembers)
             {
                 var groups = GetMyRecords.GetMyServingTeams(familyMember.ContactId, token);
@@ -174,45 +130,26 @@ namespace crds_angular.Services
                 {
                     if (servingTeams.Any(s => s.GroupId == group.GroupId))
                     {
-                        var tmp = group;
-                        //why this?
-                        var s = servingTeams.Single(t => t.GroupId == tmp.GroupId);
+                        var s = servingTeams.Single(t => t.GroupId == group.GroupId);
 
                         //is this person already on team?
                         if (s.Members.Any(x => x.ContactId == familyMember.ContactId))
                         {
-                            //found a match
+                            //person found on team
                             var member = s.Members.Single(q => q.ContactId == familyMember.ContactId);
-                            var roleName = string.Format("{0} {1}", tmp.GroupName, tmp.GroupRole);
-                            roleName = tmp.GroupRole;
+                            var roleName = group.GroupRole;
                             var role = new tmRole {Name = roleName};
                             member.Roles.Add(role);
                         }
                         else
                         {
-                            var groupMember = new TmTeamMember();
-                            groupMember.ContactId = familyMember.ContactId;
-                            groupMember.Name = familyMember.PreferredName;
-
-                            var role = new tmRole();
-                            role.Name = string.Format("{0} {1}", tmp.GroupName, tmp.GroupRole);
-                            role.Name = tmp.GroupRole;
-                            groupMember.Roles = new List<tmRole> {role};
-
-                            s.Members.Add(groupMember);
+                            s.Members.Add(NewTeamMember(familyMember, group));
                         }
                     }
                     else
                     {
-                        var servingTeam = new tmServingTeam();
-                        servingTeam.Name = group.GroupName;
-                        servingTeam.GroupId = group.GroupId;
-
-                        var groupMembers = new List<TmTeamMember>();
-                        var groupMember = new TmTeamMember();
-                        groupMember.ContactId = familyMember.ContactId;
-                        groupMember.Name = familyMember.PreferredName;
-                        groupMembers.Add(groupMember);
+                        var servingTeam = new tmServingTeam {Name = @group.GroupName, GroupId = @group.GroupId};
+                        var groupMembers = new List<TmTeamMember> {NewTeamMember(familyMember, @group)};
                         servingTeam.Members = groupMembers;
                         servingTeams.Add(servingTeam);
                     }
@@ -221,15 +158,42 @@ namespace crds_angular.Services
             return servingTeams;
         }
 
+        private static TmTeamMember NewTeamMember(FamilyMember familyMember, Group group)
+        {
+            var teamMember = new TmTeamMember {ContactId = familyMember.ContactId, Name = familyMember.PreferredName};
+
+            var role = new tmRole {Name = @group.GroupRole};
+            teamMember.Roles = new List<tmRole> {role};
+
+            return teamMember;
+        }
+
+        private static TmTeamMember NewTeamMember(TmTeamMember teamMember, tmRole role)
+        {
+            var newTeamMember2 = new TmTeamMember {Name = teamMember.Name, ContactId = teamMember.ContactId};
+            newTeamMember2.Roles.Add(role);
+
+            return newTeamMember2;
+        }
+
+        private static List<TmTeamMember> NewTeamMembersWithRoles(List<TmTeamMember> teamMembers, string opportunityRoleTitle, tmRole teamRole)
+        {
+            var members = new List<TmTeamMember>();
+            foreach (var teamMember in teamMembers)
+            {
+                foreach (var role in teamMember.Roles)
+                {
+                    if (role.Name == opportunityRoleTitle)
+                    {
+                        members.Add(NewTeamMember(teamMember, teamRole));
+                    }
+                }
+            }
+            return members;
+        }
+
         public List<tmServeDay> GetEventsStuff(List<tmServingTeam> teams, string token)
         {
-            //var viewId = 623;
-            //var tmp1 = MinistryPlatform.Translation.Services.MinistryPlatformService.GetPageViewRecords(viewId, token);
-
-            var newTeams = new List<tmServingTeam2>();
-
-            //var returnServeEvents = new List<tmServeEvent>();
-
             var serveDays = new List<tmServeDay>();
 
             foreach (var team in teams)
@@ -238,256 +202,111 @@ namespace crds_angular.Services
                 newTeam.Name = team.Name;
 
                 var opportunities = OpportunityService.GetOpportunitiesForGroup(team.GroupId, token);
-                //var x = opportunities[0].EventType;
-
-                //how do i know if team member has opportunity?  
-                //assumption one opportunity per role, except for catch all
 
                 foreach (var opportunity in opportunities)
                 {
-                    if (opportunity.EventType != null)
+                    if (opportunity.EventType == null) continue;
+
+                    //hold role for later
+                    var tmpRole = new tmRole {Name = opportunity.OpportunityName + " " + opportunity.RoleTitle};
+
+                    //team events
+                    var events = ParseTmEvents(opportunity.Events);
+
+                    foreach (var e in events)
                     {
-                        //is this where we need to be adding roles???
-                        //roles
-                        var tmpRole = new tmRole();
-                        tmpRole.Name = opportunity.OpportunityName + " " + opportunity.RoleTitle;
-                        
-
-                        
-                        //end roles
-
-
-                        //team events
-                        var events = ParseTmEvents(opportunity.Events);
-
-
-                        var newEventsList = new List<tmServeEvent>();
-
-                        foreach (var e in events)
+                        if (serveDays.Any(r => r.ServeDay == e.DateOnly))
                         {
-                            if (serveDays.Any(r => r.ServeDay == e.DateOnly))
+                            //day already in list
+
+                            //check if time is in list
+                            var serveDay = serveDays.Single(r => r.ServeDay == e.DateOnly);
+                            if ((serveDay.ServeTimes.Any(s => s.ServeTime == e.TimeOnly)))
                             {
-                                //day already in list
-
-                                //check if time is in list
-                                var serveDay = serveDays.Single(r => r.ServeDay == e.DateOnly);
-                                if ((serveDay.ServeTimes != null) &&  (serveDay.ServeTimes.Any(s => s.ServeTime == e.TimeOnly)))
+                                //time in list
+                                var serveTime = serveDay.ServeTimes.Single(s => s.ServeTime == e.TimeOnly);
+                                //is team already in list??
+                                if ((serveTime.ServingTeams != null) &&
+                                    serveTime.ServingTeams.Any(t => t.GroupId == team.GroupId))
                                 {
-                                    //time in list
-                                    var serveTime = serveDay.ServeTimes.Single(s => s.ServeTime == e.TimeOnly);
-                                    if (serveTime.ServingTeams == null)
-                                    {
-                                        serveTime.ServingTeams = new List<tmServingTeam>();
-                                    }
-                                    //is team already in list??
-                                    if ((serveTime.ServingTeams != null) &&
-                                        serveTime.ServingTeams.Any(t => t.GroupId == team.GroupId))
-                                    {
-                                        //team exists
-                                        var existingTeam = serveTime.ServingTeams.Single(t => t.GroupId == team.GroupId);
-                                        foreach (var teamMember in team.Members)
-                                        {
-                                            foreach (var role in teamMember.Roles)
-                                            {
-                                                if (role.Name == opportunity.RoleTitle)
-                                                {
-
-                                                    var newTeamMember2 = new TmTeamMember();
-                                                    newTeamMember2.Name = teamMember.Name;
-                                                    newTeamMember2.ContactId = teamMember.ContactId;
-                                                    if (newTeamMember2.Roles == null)
-                                                    {
-                                                        newTeamMember2.Roles = new List<tmRole>();
-                                                    }
-                                                    newTeamMember2.Roles.Add(tmpRole);
-
-                                                    //need to add this to existing member
-                                                    if ((existingTeam.Members != null) &&
-                                                        (existingTeam.Members.Any(
-                                                            m => m.ContactId == newTeamMember2.ContactId)))
-                                                    {
-                                                        var member =
-                                                            existingTeam.Members.Single(
-                                                                m => m.ContactId == newTeamMember2.ContactId);
-                                                        member.Roles.Add(tmpRole);
-                                                    }
-                                                    else
-                                                    {
-                                                        if (existingTeam.Members == null)
-                                                        {
-                                                            existingTeam.Members = new List<TmTeamMember>();
-                                                        }
-                                                        existingTeam.Members.Add(newTeamMember2);
-                                                    }
-
-                                                }
-                                            }
-                                        }
-
-                                    }
-                                    else
-                                    {
-                                        //team not in list
-                                        //need to add members and roles here!
-                                        if (serveTime.ServingTeams == null)
-                                        {
-                                            serveTime.ServingTeams = new List<tmServingTeam>();
-                                        }
-                                        var team2 = new tmServingTeam();
-                                        team2.Name = team.Name;
-                                        team2.GroupId = team.GroupId;
-                                        team2.Members = new List<TmTeamMember>();
-
-                                        foreach (var teamMember in team.Members)
-                                        {
-                                            foreach (var role in teamMember.Roles)
-                                            {
-                                                if (role.Name == opportunity.RoleTitle)
-                                                {
-
-                                                    var newTeamMember2 = new TmTeamMember();
-                                                    newTeamMember2.Name = teamMember.Name;
-                                                    newTeamMember2.ContactId = teamMember.ContactId;
-                                                    if (newTeamMember2.Roles == null)
-                                                    {
-                                                        newTeamMember2.Roles = new List<tmRole>();
-                                                    }
-                                                    newTeamMember2.Roles.Add(tmpRole);
-                                                    team2.Members.Add(newTeamMember2);
-                                                }
-                                            }
-                                        }
-                                        serveTime.ServingTeams.Add(team2);
-
-                                    }
-                                }
-                                else
-                                {
-                                    //time not in list
-                                    var serveTime = new tmServeTime();
-                                    serveTime.ServeTime = e.TimeOnly;
-
-                                    //need to add members and roles here!
-                                    if (serveTime.ServingTeams == null)
-                                    {
-                                        serveTime.ServingTeams = new List<tmServingTeam>();
-                                    }
-                                    var team2 = new tmServingTeam();
-                                    team2.Name = team.Name;
-                                    team2.GroupId = team.GroupId;
-                                    team2.Members = new List<TmTeamMember>();
-
+                                    //team exists
+                                    var existingTeam = serveTime.ServingTeams.Single(t => t.GroupId == team.GroupId);
                                     foreach (var teamMember in team.Members)
                                     {
                                         foreach (var role in teamMember.Roles)
                                         {
                                             if (role.Name == opportunity.RoleTitle)
                                             {
-
-                                                var newTeamMember2 = new TmTeamMember();
-                                                newTeamMember2.Name = teamMember.Name;
-                                                newTeamMember2.ContactId = teamMember.ContactId;
-                                                if (newTeamMember2.Roles == null)
+                                                //need to add this to existing member
+                                                if ((existingTeam.Members != null) &&
+                                                    (existingTeam.Members.Any(
+                                                        m => m.ContactId == teamMember.ContactId)))
                                                 {
-                                                    newTeamMember2.Roles = new List<tmRole>();
+                                                    var member =
+                                                        existingTeam.Members.Single(
+                                                            m => m.ContactId == teamMember.ContactId);
+                                                    member.Roles.Add(tmpRole);
                                                 }
-                                                newTeamMember2.Roles.Add(tmpRole);
-                                                team2.Members.Add(newTeamMember2);
+                                                else
+                                                {
+                                                    existingTeam.Members.Add(NewTeamMember(teamMember, tmpRole));
+                                                }
                                             }
                                         }
                                     }
-                                    serveTime.ServingTeams.Add(team2);
-
-                                    if (serveDay.ServeTimes == null)
+                                }
+                                else
+                                {
+                                    //team not in list
+                                    var team2 = new tmServingTeam
                                     {
-                                        serveDay.ServeTimes = new List<tmServeTime>();
-                                    }
-                                    serveDay.ServeTimes.Add(serveTime);
+                                        Name = team.Name,
+                                        GroupId = team.GroupId,
+                                        Members = NewTeamMembersWithRoles(team.Members,opportunity.RoleTitle,tmpRole)
+                                    };
+                                    serveTime.ServingTeams.Add(team2);
                                 }
                             }
                             else
                             {
-                                //day not in list add it
-                                var serveDay = new tmServeDay();
-                                serveDay.ServeDay = e.DateOnly;
-                                var serveTime = new tmServeTime();
-                                serveTime.ServeTime = e.TimeOnly;
+                                //time not in list
+                                var serveTime = new tmServeTime {ServeTime = e.TimeOnly};
 
-                                if (serveTime.ServingTeams == null)
+                                //need to add members and roles here!
+                                var team2 = new tmServingTeam
                                 {
-                                    serveTime.ServingTeams = new List<tmServingTeam>();
-                                }
-
-                                //does the team already exists in new list?
-                                //if (serveDays.Any(r => r.ServeDay == e.DateOnly))
-
-
-                                var team2 = new tmServingTeam();
-                                team2.Name = team.Name;
-                                team2.GroupId = team.GroupId;
-                                team2.Members = new List<TmTeamMember>();
-
-                                foreach (var teamMember in team.Members)
-                                {
-                                    foreach (var role in teamMember.Roles)
-                                    {
-                                        if (role.Name == opportunity.RoleTitle)
-                                        {
-
-                                            var newTeamMember2 = new TmTeamMember();
-                                            newTeamMember2.Name = teamMember.Name;
-                                            newTeamMember2.ContactId = teamMember.ContactId;
-                                            if (newTeamMember2.Roles == null)
-                                            {
-                                                newTeamMember2.Roles=new List<tmRole>();
-                                            }
-                                            newTeamMember2.Roles.Add(tmpRole);
-                                            team2.Members.Add(newTeamMember2);
-                                        }
-                                    }
-                                }
+                                    Name = team.Name,
+                                    GroupId = team.GroupId,
+                                    Members = NewTeamMembersWithRoles(team.Members, opportunity.RoleTitle, tmpRole)
+                                };
                                 serveTime.ServingTeams.Add(team2);
-
-                                if (serveDay.ServeTimes == null)
-                                {
-                                    serveDay.ServeTimes = new List<tmServeTime>();
-                                }
                                 serveDay.ServeTimes.Add(serveTime);
-                                serveDays.Add(serveDay);
-
-
-                                //now what?
-                                //do i need to find every team from my list that has event on this day?
-                                //feels like i'm reading database again??
                             }
-
-
-                            //if ((newTeam.Events != null) && (newTeam.Events.Any(w => w.EventId == e.EventId)))
-                            //{
-                                
-                            //}
-                            //else
-                            //{
-
-                            //    newEventsList.Add(e);
-                            //}
                         }
+                        else
+                        {
+                            //day not in list add it
+                            var serveDay = new tmServeDay {ServeDay = e.DateOnly};
+                            var serveTime = new tmServeTime {ServeTime = e.TimeOnly};
 
-                        //if (newTeam.Events == null)
-                        //{
-                        //    newTeam.Events = new List<tmServeEvent>();
-                        //}
+                            var team2 = new tmServingTeam
+                            {
+                                Name = team.Name,
+                                GroupId = team.GroupId,
+                                Members = NewTeamMembersWithRoles(team.Members, opportunity.RoleTitle, tmpRole)
+                            };
+                            serveTime.ServingTeams.Add(team2);
 
-                        //newTeam.Events.AddRange(newEventsList);
-                        //teamEvents end
-                        
+                            if (serveDay.ServeTimes == null)
+                            {
+                                serveDay.ServeTimes = new List<tmServeTime>();
+                            }
+                            serveDay.ServeTimes.Add(serveTime);
+                            serveDays.Add(serveDay);
+                        }
                     }
                 }
-                newTeams.Add(newTeam);
             }
-
-
-            //Console.Write(newTeams);
 
             //might be a better place or way to sort this above instead here
 
@@ -495,19 +314,13 @@ namespace crds_angular.Services
             var sortedServeDays = new List<tmServeDay>();
             foreach (var serveDay in preSortedServeDays)
             {
-                var sortedServeDay = new tmServeDay();
-                sortedServeDay.ServeDay = serveDay.ServeDay;
-
+                var sortedServeDay = new tmServeDay {ServeDay = serveDay.ServeDay};
                 var sortedServeTimes = serveDay.ServeTimes.OrderBy(s => s.ServeTime).ToList();
-
                 sortedServeDay.ServeTimes = sortedServeTimes;
-
                 sortedServeDays.Add(sortedServeDay);
             }
 
-
             return sortedServeDays;
-            //return newTeams;
         }
 
         public List<ServingTeam> GetServingOpportunities(int contactId, string token)
@@ -549,7 +362,8 @@ namespace crds_angular.Services
                 Name = e.EventTitle,
                 StarDateTime = e.EventStartDate,
                 DateOnly = e.EventStartDate.Date.ToString("d"),
-                TimeOnly = e.EventStartDate.TimeOfDay.ToString(), EventId = e.EventID
+                TimeOnly = e.EventStartDate.TimeOfDay.ToString(),
+                EventId = e.EventID
             }).ToList();
         }
 
@@ -595,6 +409,11 @@ public class tmServingTeam
 
     [JsonProperty(PropertyName = "events")]
     public List<tmServeEvent> Events { get; set; }
+
+    public tmServingTeam()
+    {
+        this.Members = new List<TmTeamMember>();
+    }
 }
 
 public class tmServingTeam2
@@ -629,6 +448,11 @@ public class TmTeamMember
 
     [JsonProperty(PropertyName = "roles")]
     public List<tmRole> Roles { get; set; }
+
+    public TmTeamMember()
+    {
+        this.Roles = new List<tmRole>();
+    }
 }
 
 public class tmRole
@@ -663,11 +487,21 @@ public class tmServeEvent
 public class tmServeDay
 {
     public string ServeDay { get; set; }
-    public List<tmServeTime> ServeTimes { get; set; } 
+    public List<tmServeTime> ServeTimes { get; set; }
+
+    public tmServeDay()
+    {
+        this.ServeTimes = new List<tmServeTime>();
+    }
 }
 
 public class tmServeTime
 {
     public string ServeTime { get; set; }
-    public List<tmServingTeam> ServingTeams {get; set; }
+    public List<tmServingTeam> ServingTeams { get; set; }
+
+    public tmServeTime()
+    {
+        this.ServingTeams = new List<tmServingTeam>();
+    }
 }

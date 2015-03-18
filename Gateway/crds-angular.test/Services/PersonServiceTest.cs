@@ -17,13 +17,29 @@ namespace crds_angular.test.Services
         private const string PASSWORD = "crds1234";
 
         [Test]
+        public void TestMyFamily()
+        {
+            //force AutoMapper to register
+            AutoMapperConfig.RegisterMappings();
+
+            var token = TranslationService.Login(USERNAME, PASSWORD);
+            var contactId = AuthenticationService.GetContactId(token);
+
+            var personService = new PersonService();
+            var fam = personService.GetMyFamily( contactId,token);
+
+            Assert.IsNotNull(fam);
+        }
+
+        [Test]
         public void EventTypesBigOleTest()
         {
             AutoMapperConfig.RegisterMappings();
             var token = TranslationService.Login(USERNAME, PASSWORD);
+            var contactId = AuthenticationService.GetContactId(token);
 
             var personService = new PersonService();
-            var stuff = personService.GetMeMyFamilysServingStuff(token);
+            var stuff = personService.GetMeMyFamilysServingStuff(contactId,token);
             var newstuff = personService.GetEventsStuff(stuff,token);
 
             Assert.IsNotNull(newstuff);
@@ -40,7 +56,7 @@ namespace crds_angular.test.Services
 
 
             var personService = new PersonService();
-            var stuff = personService.GetMeMyFamilysServingStuff(token);
+            var stuff = personService.GetMeMyFamilysServingStuff(contactId, token);
 
             
 
