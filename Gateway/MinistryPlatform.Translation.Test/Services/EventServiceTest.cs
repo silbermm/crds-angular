@@ -43,7 +43,7 @@ namespace MinistryPlatform.Translation.Test.Services
             int eventParticipantId = fixture.registerParticipantForEvent(123, 456);
 
             ministryPlatformService.Verify(mocked => mocked.CreateSubRecord(
-                EventParticipantPageId, 456, expectedValues, It.IsAny<string>(), false));
+                EventParticipantPageId, 456, expectedValues, It.IsAny<string>(), true));
 
             Assert.AreEqual(987, eventParticipantId);
         }
