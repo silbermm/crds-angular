@@ -1,0 +1,16 @@
+<h2 class="header noPspace" ng-bind-html="groupwaitlist.waitListPage.title | html"></h2>
+<p id="content" class="noPspace" dir="ltr" ng-bind-html="groupwaitlist.waitListPage.content | html" ng-show="groupwaitlist.showContent"></p>
+<p id="successMessage"  ng-bind-html="groupwaitlist.waitListPage.success | html" ng-show="groupwaitlist.showSuccess"></p>
+<p id="fullGroupMessage" ng-bind-html="groupwaitlist.waitListPage.full | html" ng-show="groupwaitlist.showFull"></p>
+
+<form name="groupWaitListForm" role="form" ng-submit="groupwaitlist.signup()" ng-show="groupwaitlist.showContent">
+  <fieldset>
+    <legend>People to Sign Up for Wait List</legend>
+    <div class="form-group">
+
+    <div class="checkbox">
+<!--     checkbox only hidden if only in person listed -->
+      <p><label><input type="checkbox" style="visibility:hidden;">{{groupwaitlist.person["NickName"]}} ({{groupwaitlist.person["Email_Address"]}})</label></p>
+    <div><input type="submit" name="submit_group_waitlist_signup" value="Sign Up" id="submit_group_waitlist_signup" class="btn btn-primary push-half-bottom"></div>
+  </fieldset>
+</form>
