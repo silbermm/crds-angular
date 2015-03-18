@@ -122,7 +122,7 @@ namespace crds_angular.Services
             var personService = new PersonService();
             var servingTeams = new List<ServingTeam>();
 
-            //now go get family
+            //Go get family
             var familyMembers = personService.GetMyFamily(contactId, token);
             foreach (var familyMember in familyMembers)
             {
@@ -131,26 +131,26 @@ namespace crds_angular.Services
                 {
                     if (servingTeams.Any(s => s.GroupId == group.GroupId))
                     {
-                        var s = servingTeams.Single(t => t.GroupId == group.GroupId);
+                        var servingTeam = servingTeams.Single(t => t.GroupId == group.GroupId);
 
                         //is this person already on team?
-                        if (s.Members.Any(x => x.ContactId == familyMember.ContactId))
+                        var member = servingTeam.Members.SingleOrDefault(m => m.ContactId == familyMember.ContactId);
+                        if (member == null)
                         {
-                            //person found on team
-                            var member = s.Members.Single(q => q.ContactId == familyMember.ContactId);
-                            var roleName = group.GroupRole;
-                            var role = new ServeRole {Name = roleName};
-                            member.Roles.Add(role);
-                        }
-                        else
-                        {
-                            s.Members.Add(NewTeamMember(familyMember, group));
-                        }
+                            member = new TeamMember
+                            {
+                                ContactId = familyMember.ContactId,
+                                Name = familyMember.PreferredName
+                            };
+                            servingTeam.Members.Add(member);
+                        } 
+                        var role = new ServeRole {Name = group.GroupRole};
+                        member.Roles.Add(role);
                     }
                     else
                     {
-                        var servingTeam = new ServingTeam {Name = @group.GroupName, GroupId = @group.GroupId};
-                        var groupMembers = new List<TeamMember> {NewTeamMember(familyMember, @group)};
+                        var servingTeam = new ServingTeam {Name = group.GroupName, GroupId = group.GroupId};
+                        var groupMembers = new List<TeamMember> {NewTeamMember(familyMember, group)};
                         servingTeam.Members = groupMembers;
                         servingTeams.Add(servingTeam);
                     }
