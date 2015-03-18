@@ -36,7 +36,6 @@ var _ = require('lodash');
             notAuthenticated: "auth-not-authenticated",
             isAuthenticated: "auth-is-authenticated",
             notAuthorized: "auth-not-authorized"
-<<<<<<< HEAD
     })
     //TODO Pull out to service and/or config file
     .constant("MESSAGES", {
@@ -74,42 +73,6 @@ var _ = require('lodash');
         return function (val) {
             return $sce.trustAsHtml(val);
         };
-=======
-        })
-        //TODO Pull out to service and/or config file
-        .constant("MESSAGES", {
-            generalError: 1,
-            emailInUse: 2,
-            fieldCanNotBeBlank: 3,
-            invalidEmail: 4,
-            invalidPhone: 5,
-            invalidData: 6,
-            profileUpdated: 7,
-            photoTooSmall: 8,
-            credentialsBlank: 9,
-            loginFailed: 10,
-            invalidZip: 11,
-            invalidPassword: 12,
-            successfullRegistration: 13,
-            succesfulResponse: 14,
-            failedResponse: 15
-        }).config(function (growlProvider) {
-            growlProvider.globalPosition("top-center");
-            growlProvider.globalTimeToLive(6000);
-            growlProvider.globalDisableIcons(true);
-            growlProvider.globalDisableCountDown(true);
-        })
-        .config(function (snapRemoteProvider) {
-            snapRemoteProvider.globalOptions = {
-                disable: 'right',
-                touchToDrag: false
-            };
-        })
-        .filter('html', ['$sce', function ($sce) {
-            return function (val) {
-                return $sce.trustAsHtml(val);
-            };
->>>>>>> development
     }])
         .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "$http", "Message", "growl",
         function ($scope, $rootScope, MESSAGES, $http, Message, growl) {
@@ -145,9 +108,6 @@ var _ = require('lodash');
     require('./apprun');
     require('./routes');
     require('./register/register_directive');
-<<<<<<< HEAD
-=======
 
->>>>>>> development
     require('./login');
 })()

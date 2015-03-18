@@ -2,7 +2,6 @@
 
 (function () {
 
-<<<<<<< HEAD
   require("./home/home.html");
   require('./home');
   require('./login/login_page.html');
@@ -14,103 +13,15 @@
   require('./profile/personal/profile_personal.html');
   require('./profile/profile_account.html');
   require('./profile/skills/profile_skills.html');
+  require('./styleguide');
+  require('./give');
   require('./opportunity/view_opportunities.html');
   require('./content/content.html');
   require('./community_groups_signup/group_signup_form.html');
   var getCookie = require('./utilities/cookies'); 
-=======
-    require("./home/home.html");
-    require('./home');
 
-    require('./login/login_page.html');
-    require('./register/register_form.html');
->>>>>>> development
 
-    require('./content');
-
-    require('./opportunity');
-
-    require('./profile/profile.html');
-
-<<<<<<< HEAD
-                       return Lookup.query({ table: "genders" }).$promise;
-                   },
-                   maritalStatuses: function(Lookup) {
-                       return Lookup.query({ table: "maritalstatus" }).$promise;
-                   },
-                   serviceProviders: function(Lookup) {
-                       return Lookup.query({ table: "serviceproviders" }).$promise;
-                   },
-                   states: function(Lookup) {
-                       return Lookup.query({ table: "states" }).$promise;
-                   },
-                   countries: function(Lookup) {
-                       return Lookup.query({ table: "countries" }).$promise;
-                   },
-                   crossroadsLocations: function(Lookup) {
-                       return Lookup.query({ table: "crossroadslocations" }).$promise;
-                   },
-                   person: function(Profile) {
-                       return Profile.Personal.get().$promise;
-                   }
-               }
-           },
-           "account@profile" : {               
-               templateUrl: "profile/profile_account.html",
-               data: {
-                   isProtected: true
-               }
-           },
-           "skills@profile" : {
-               controller: "ProfileSkillsController as profile",
-               templateUrl: "skills/profile_skills.html",
-               data: {
-                   isProtected: true
-               }
-           }
-        }
-    })
-    .state("opportunities", {
-        url: "/opportunities",
-        controller: "ViewOpportunitiesController as opportunity",
-        templateUrl: "opportunity/view_opportunities.html",
-        data: {
-            isProtected: true
-        },
-        resolve: {
-            loggedin: checkLoggedin
-        }
-    })
-    .state("community-groups-signup", {
-        url: "/sign-up/:urlsegment",
-        controller: "GroupSignupController as groupsignup",
-        templateUrl: "community_groups_signup/group_signup_form.html",
-        data: {
-            isProtected: true
-        },
-        resolve: {
-            loggedin: checkLoggedin
-        }
-    })
-    .state("content", {
-		// This url will match a slash followed by anything (including additional slashes).  There is corresponding 
-		// logic in the controller to extract the leaf (anything after the final slash) to pass to the CMS API.
-		// TODO This can be changed back to "/:urlsegment" if US1044 makes changes to enable page slugs without slashes
-        url: "/{urlsegment:.*$}",
-        controller: "ContentCtrl",
-        templateUrl: "content/content.html"
-    });
-=======
-    require('./styleguide');
-    require('./give');
-
-    require('./profile/personal/profile_personal.html');
-    require('./profile/profile_account.html');
-    require('./profile/skills/profile_skills.html');
-    require('./opportunity/view_opportunities.html');
-    require('./content/content.html');
-    var getCookie = require('./utilities/cookies');
-
+   
     angular.module("crossroads").config(["$stateProvider", "$urlRouterProvider", "$httpProvider", function ($stateProvider, $urlRouterProvider, $httpProvider) {
 
         $httpProvider.defaults.useXDomain = true;
@@ -278,12 +189,25 @@
                     loggedin: checkLoggedin
                 }
             })
-            .state("content", {
-                url: "/:urlsegment",
-                controller: "ContentCtrl",
-                templateUrl: "content/content.html"
+           .state("community-groups-signup", {
+                url: "/sign-up/:urlsegment",
+                controller: "GroupSignupController as groupsignup",
+                templateUrl: "community_groups_signup/group_signup_form.html",
+                data: {
+                    isProtected: true
+                },
+                resolve: {
+                    loggedin: checkLoggedin
+                }
+    })
+    .state("content", {
+    // This url will match a slash followed by anything (including additional slashes).  There is corresponding 
+    // logic in the controller to extract the leaf (anything after the final slash) to pass to the CMS API.
+    // TODO This can be changed back to "/:urlsegment" if US1044 makes changes to enable page slugs without slashes
+        url: "/{urlsegment:.*$}",
+        controller: "ContentCtrl",
+        templateUrl: "content/content.html"
             });
->>>>>>> development
         //Leave the comment below.  Once we have a true 404 page hosted in the same domain, this is how we 
         //will handle the routing. 
         //.state("404", {
