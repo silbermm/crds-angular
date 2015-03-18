@@ -5,11 +5,11 @@ namespace crds_angular.Models.Crossroads
     public class ServingTeam
     {
         public string TeamName { get; set; }
-        public List<ServingOpportunity> Opportunities { get; set; }
+        public List<GroupOpportunity> Opportunities { get; set; }
 
         public ServingTeam()
         {
-            Opportunities = new List<ServingOpportunity>( );
+            Opportunities = new List<GroupOpportunity>( );
         }
     }
 }

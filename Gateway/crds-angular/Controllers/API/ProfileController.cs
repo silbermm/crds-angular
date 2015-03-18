@@ -10,7 +10,7 @@ namespace crds_angular.Controllers.API
 {
     public class ProfileController : MPAuth
     {
-    [ResponseType(typeof(List<tmServingTeam>))]
+    [ResponseType(typeof(List<ServingTeam>))]
     [Route("api/profile/stuff/{contactId}")]
         public IHttpActionResult GetSomeStuff(int contactId)
         {
@@ -19,7 +19,7 @@ namespace crds_angular.Controllers.API
 
             //var token = TranslationService.Login("tmaddox", "crds1234");
             var token =
-                    "AAEAAAtXCHDSb1YcFWSncg_OY1SlC5e1Kg6eO7Y2MQWFfXklGtlmdCDkMiuEK4kNJsVEKqpg1fqCd-BPLEs10xtAqodvx0CsC94p875FYaJE0e5-opQMzQmQIj9Yle3OUP2ygMNGfZzUoh0flEC4i5dOKJlAhayi-2RRTuVnkiSN_9py8e8rz5zZO1xJgCcNCPm4unN4n78pQJuymoL4WJCxcn_JxSRmWTtF1IIdGV8HOrKyTlaqQ0gGrxFh-E9SH7SSnGXRdBqsZ0JCYGUcyPpYDzyBz5S5VdFNtzIM6-NEOED_QMudHlAyWXoI397jrReWtIr62qFVZNZuBet25uinlBXIAAAATGlmZXRpbWU9MTgwMCZDbGllbnRJZGVudGlmaWVyPWNsaWVudCZVc2VyPWFiYzRkMDMwLTk3YjktNGY2Yi04NmI3LTMwY2QxMWQxODM3OCZTY29wZT1odHRwJTNBJTJGJTJGd3d3LnRoaW5rbWluaXN0cnkuY29tJTJGZGF0YXBsYXRmb3JtJTJGc2NvcGVzJTJGYWxsJnRzPTE0MjY2OTMwMTUmdD1Eb3ROZXRPcGVuQXV0aC5PQXV0aDIuQWNjZXNzVG9rZW4";
+                    "AAEAAHQzsyBskUp5lt-v1AssHzc_THBNL9JtRBGxf7pb-nDwFL-bx6zjOZ-XesOI-8gTIv7ZlDRjYZEWVK_q91TNeAoaP3qaKc_MGlnEz5GmHzAsM0v4mUdgLs7H-As7lBB-hMgit-xc57ofSXU4s9KblBQ5ZcKgbezaFYNcC0DMMetN-pouQ8XgqpTeYxAQWg8FcDa9EvQQwR6zMgCOhSTYNiPMnvefshJTqmJK3LtWi7kgoPrQg-6FKe5SC0kLGb1blbm1Mfsz4QhU9WqvyAIG4-jyN2ZIUJjrqYW52fCSqAY-_zmDAiJNXZqUhFdddV2vi0353pRSc7uzeLSOgyIeSHTIAAAATGlmZXRpbWU9MTgwMCZDbGllbnRJZGVudGlmaWVyPWNsaWVudCZVc2VyPWFiYzRkMDMwLTk3YjktNGY2Yi04NmI3LTMwY2QxMWQxODM3OCZTY29wZT1odHRwJTNBJTJGJTJGd3d3LnRoaW5rbWluaXN0cnkuY29tJTJGZGF0YXBsYXRmb3JtJTJGc2NvcGVzJTJGYWxsJnRzPTE0MjY2OTQ4NTUmdD1Eb3ROZXRPcGVuQXV0aC5PQXV0aDIuQWNjZXNzVG9rZW4";
             //return Authorized(token =>
             //{
                 var personService = new PersonService();

@@ -222,7 +222,7 @@
     <Compile Include="Models\Crossroads\CookieInfo.cs" />
     <Compile Include="Models\Crossroads\FamilyMember.cs" />
     <Compile Include="Models\Crossroads\ServeOccurance.cs" />
-    <Compile Include="Models\Crossroads\ServingOpportunity.cs" />
+    <Compile Include="Models\Crossroads\GroupOpportunity.cs" />
     <Compile Include="Models\Crossroads\ServingRSVP.cs" />
     <Compile Include="Models\Crossroads\ServingTeam.cs" />
     <Compile Include="Models\Crossroads\Skill.cs" />

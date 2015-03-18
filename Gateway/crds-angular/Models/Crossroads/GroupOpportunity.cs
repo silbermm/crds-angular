@@ -2,7 +2,7 @@
 
 namespace crds_angular.Models.Crossroads
 {
-    public class ServingOpportunity
+    public class GroupOpportunity
     {
         //should OpportunityName be called Role?  tm 3/16
         public string OpportunityName { get; set; }
