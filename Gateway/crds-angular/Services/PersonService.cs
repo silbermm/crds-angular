@@ -143,7 +143,7 @@ namespace crds_angular.Services
                                 Name = familyMember.PreferredName
                             };
                             servingTeam.Members.Add(member);
-                        } 
+                        }
                         var role = new ServeRole {Name = group.GroupRole};
                         member.Roles.Add(role);
                     }
@@ -177,7 +177,8 @@ namespace crds_angular.Services
             return newTeamMember2;
         }
 
-        private static List<TeamMember> NewTeamMembersWithRoles(List<TeamMember> teamMembers, string opportunityRoleTitle, ServeRole teamRole)
+        private static List<TeamMember> NewTeamMembersWithRoles(List<TeamMember> teamMembers,
+            string opportunityRoleTitle, ServeRole teamRole)
         {
             var members = new List<TeamMember>();
             foreach (var teamMember in teamMembers)
@@ -255,10 +256,25 @@ namespace crds_angular.Services
                                                 (existingTeam.Members.Any(
                                                     m => m.ContactId == teamMember.ContactId)))
                                             {
-                                                var member =
-                                                    existingTeam.Members.Single(
-                                                        m => m.ContactId == teamMember.ContactId);
-                                                member.Roles.Add(tmpRole);
+                                                try
+                                                {
+                                                    var member =
+                                                        existingTeam.Members.Single(
+                                                            m => m.ContactId == teamMember.ContactId);
+                                                    member.Roles.Add(tmpRole);
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    var roleMsg = string.Format("Opportunity Role: {0}",
+                                                        opportunity.RoleTitle);
+                                                    var contactMsg = string.Format("Contact Id: {0}",
+                                                        teamMember.ContactId);
+                                                    var teamMsg = string.Format("Team: {0}", team.Name);
+                                                    var message = string.Format("{0} {1} {2}", roleMsg, contactMsg,
+                                                        teamMsg);
+                                                    throw new ApplicationException(
+                                                        "Duplicate Group Member: " + message, ex);
+                                                }
                                             }
                                             else
                                             {
@@ -269,13 +285,6 @@ namespace crds_angular.Services
                                 }
                                 else
                                 {
-                                    //team not in list
-                                    //var team2 = new ServingTeam
-                                    //{
-                                    //    Name = team.Name,
-                                    //    GroupId = team.GroupId,
-                                    //    Members = NewTeamMembersWithRoles(team.Members,opportunity.RoleTitle,tmpRole)
-                                    //};
                                     serveTime.ServingTeams.Add(NewServingTeam(team, opportunity, tmpRole));
                                 }
                             }
@@ -283,14 +292,6 @@ namespace crds_angular.Services
                             {
                                 //time not in list
                                 var serveTime = new ServingTime {Time = e.TimeOnly};
-
-                                //need to add members and roles here!
-                                //var team2 = new ServingTeam
-                                //{
-                                //    Name = team.Name,
-                                //    GroupId = team.GroupId,
-                                //    Members = NewTeamMembersWithRoles(team.Members, opportunity.RoleTitle, tmpRole)
-                                //};
                                 serveTime.ServingTeams.Add(NewServingTeam(team, opportunity, tmpRole));
                                 serveDay.ServeTimes.Add(serveTime);
                             }
@@ -302,10 +303,6 @@ namespace crds_angular.Services
                             var serveTime = new ServingTime {Time = e.TimeOnly};
                             serveTime.ServingTeams.Add(NewServingTeam(team, opportunity, tmpRole));
 
-                            //if (serveDay.ServeTimes == null)
-                            //{
-                            //    serveDay.ServeTimes = new List<ServingTime>();
-                            //}
                             serveDay.ServeTimes.Add(serveTime);
                             serveDays.Add(serveDay);
                         }
@@ -327,7 +324,6 @@ namespace crds_angular.Services
             return sortedServeDays;
         }
 
-        
 
         public List<Models.Crossroads.ServingTeam> GetServingOpportunities(int contactId, string token)
         {
