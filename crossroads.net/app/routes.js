@@ -22,10 +22,18 @@
 
 
    
-    angular.module("crossroads").config(["$stateProvider", "$urlRouterProvider", "$httpProvider", "$urlMatcherFactory", function ($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory) {
+    angular.module("crossroads").config(["$stateProvider", "$urlRouterProvider", "$httpProvider", function ($stateProvider, $urlRouterProvider, $httpProvider) {
 
         $httpProvider.defaults.useXDomain = true;
         $httpProvider.defaults.headers.common['Authorization'] = getCookie('sessionId');
+		/*
+	$urlMatcherFactory.type("notUrlEncoded", {
+		encode: valToString,
+		decode: valFromString,
+		is: regexpMatches,
+		pattern: /[^/]+\/[^/]+/
+	});*/
+		
 
         //================================================
         // Check if the user is connected
@@ -202,7 +210,7 @@
     })
     .state("content", {
     // This url will match a slash followed by anything (including additional slashes).
-        url: "{link:notUrlEncoded/.*$}",
+        url: "{link:/.*$}",
         controller: "ContentCtrl",
         templateUrl: "content/content.html"
             });
@@ -214,11 +222,4 @@
 
         $urlRouterProvider.otherwise("/");
                     }]);
-					
-	$urlMatcherFactory.type("notUrlEncoded", {
-		encode: valToString,
-		decode: valFromString,
-		is: regexpMatches,
-		pattern: /[^/]+\/[^/]+/
-	});
 })()
