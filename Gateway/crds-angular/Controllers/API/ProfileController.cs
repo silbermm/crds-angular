@@ -17,10 +17,10 @@ namespace crds_angular.Controllers.API
             //var personService = new PersonService();
             //var stuff = personService.GetMeMyFamilysServingStuff(token);
 
-        var token =
-            "AAEAADfUoZ5uMrc-M2oAr-hHZnYr-qkog7TmaQ-u0p9o50GHcfK92ief0psjjj-zp9NlpVIAy2Sq18tVc0iPwBROjFSXXjXETUaXH72QNw3SKzm2OGDla3dcymg0jEOIVbpECZbmV1EdBVtXQGSsMzvhXzoWP6a70y2lXKV1CUdzvFDAPX5ORxxgJwoq5Q67BI5BPBHnuLmb1TXDNkUrLoui5GRxD-rbJ9XRfOQT_cslQaeUgsgm8bfrdoVWo1vyXiQGabcPKpTZegQTBfAfrBakB1bFKPI9AohDEuEFrorc2jtbFhzwTBnHSgcGMpBhwA_I1vZbQbrYSLLCYaRtPAI3Ld3IAAAATGlmZXRpbWU9MTgwMCZDbGllbnRJZGVudGlmaWVyPWNsaWVudCZVc2VyPWFiYzRkMDMwLTk3YjktNGY2Yi04NmI3LTMwY2QxMWQxODM3OCZTY29wZT1odHRwJTNBJTJGJTJGd3d3LnRoaW5rbWluaXN0cnkuY29tJTJGZGF0YXBsYXRmb3JtJTJGc2NvcGVzJTJGYWxsJnRzPTE0MjY2ODM1MzImdD1Eb3ROZXRPcGVuQXV0aC5PQXV0aDIuQWNjZXNzVG9rZW4";
-            //return Authorized(token =>
-            //{
+        //var token =
+        //    "AAEAADfUoZ5uMrc-M2oAr-hHZnYr-qkog7TmaQ-u0p9o50GHcfK92ief0psjjj-zp9NlpVIAy2Sq18tVc0iPwBROjFSXXjXETUaXH72QNw3SKzm2OGDla3dcymg0jEOIVbpECZbmV1EdBVtXQGSsMzvhXzoWP6a70y2lXKV1CUdzvFDAPX5ORxxgJwoq5Q67BI5BPBHnuLmb1TXDNkUrLoui5GRxD-rbJ9XRfOQT_cslQaeUgsgm8bfrdoVWo1vyXiQGabcPKpTZegQTBfAfrBakB1bFKPI9AohDEuEFrorc2jtbFhzwTBnHSgcGMpBhwA_I1vZbQbrYSLLCYaRtPAI3Ld3IAAAATGlmZXRpbWU9MTgwMCZDbGllbnRJZGVudGlmaWVyPWNsaWVudCZVc2VyPWFiYzRkMDMwLTk3YjktNGY2Yi04NmI3LTMwY2QxMWQxODM3OCZTY29wZT1odHRwJTNBJTJGJTJGd3d3LnRoaW5rbWluaXN0cnkuY29tJTJGZGF0YXBsYXRmb3JtJTJGc2NvcGVzJTJGYWxsJnRzPTE0MjY2ODM1MzImdD1Eb3ROZXRPcGVuQXV0aC5PQXV0aDIuQWNjZXNzVG9rZW4";
+            return Authorized(token =>
+            {
                 var personService = new PersonService();
                 var stuff = personService.GetMeMyFamilysServingStuff( token);
                 var list = personService.GetEventsStuff(stuff, token);
@@ -29,7 +29,7 @@ namespace crds_angular.Controllers.API
                     return Unauthorized();
                 }
                 return this.Ok(list);
-            //});
+            });
 
         }
 
