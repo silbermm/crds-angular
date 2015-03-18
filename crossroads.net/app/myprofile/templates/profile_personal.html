@@ -99,7 +99,7 @@
             </label>
             <div class="small inline bold">
                 <span ng-show="phoneToggle" class="link-styling" ng-click="phoneToggle = !phoneToggle">Don't have a mobile phone?</span>
-                <span ng-show="!phoneToggle" class="text-muted">Edit your household phone <a ng-click="myProfile.householdPhoneFocus()">here</a>.</span>
+                <span ng-show="!phoneToggle" class="text-muted">Edit your household phone <a class="pointer" ng-click="myProfile.householdPhoneFocus()">here</a>.</span>
             </div>
             <input type="text" class="form-control" id="mobile" placeholder="Enter mobile phone" ng-model="contact.mobilePhone">
         </div>
@@ -226,7 +226,7 @@
                                             </div>
                                         </li>
                                         <li class="list-group-item clearfix">
-                                            <div class="form-group col-sm-6">
+                                            <div class="form-group col-sm-6" id="homephonecont">
                                                 <label for="homephone">Home Phone</label>
                                                 <input ng-model="household.homePhone" type="text" class="form-control" id="homephone" placeholder="Enter home phone">
                                             </div>

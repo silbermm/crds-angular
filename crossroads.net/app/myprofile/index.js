@@ -1,3 +1,3 @@
 var app = require("angular").module("crossroads");
 require('./myprofile.html');
-app.controller("MyProfileCtrl", ['$scope', require("./myprofile_controller")]);
+app.controller("MyProfileCtrl", ['$scope', '$log', '$location', '$anchorScroll', require("./myprofile_controller")]);
