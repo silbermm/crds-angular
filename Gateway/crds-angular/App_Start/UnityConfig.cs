@@ -26,6 +26,7 @@ namespace crds_angular
             container.RegisterType<IGroupService, GroupService>();
             container.RegisterType<IEventService, EventService>();
             container.RegisterType<IMinistryPlatformService, MinistryPlatformServiceImpl>();
+            container.RegisterType<IAuthenticationService, AuthenticationServiceImpl>();
             container.RegisterType<PlatformServiceClient>(WithLifetime.PerResolve(typeof(PlatformServiceClient)), new InjectionConstructor());
 
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);

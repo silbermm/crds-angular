@@ -22,13 +22,15 @@ namespace crds_angular.Controllers.API
         readonly private log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private IGroupService groupService;
         private IEventService eventService;
+        private IAuthenticationService authenticationService;
 
         private readonly int GroupRoleDefaultId = Convert.ToInt32(ConfigurationManager.AppSettings["Group_Role_Default_ID"]);
 
-        public GroupController(IGroupService groupService, IEventService eventService)
+        public GroupController(IGroupService groupService, IEventService eventService, IAuthenticationService authenticationService)
         {
             this.groupService = groupService;
             this.eventService = eventService;
+            this.authenticationService = authenticationService;
         }
 
         /**
@@ -42,7 +44,7 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
-                    var participant = AuthenticationService.GetParticipantRecord(token);
+                    var participant = authenticationService.GetParticipantRecord(token);
                     int participantId = participant.ParticipantId;
 
                     // First sign this user up for the community group
