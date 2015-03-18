@@ -48,7 +48,13 @@
                         var url = Session.exists("redirectUrl");
                         var urlSegment = Session.exists("urlSegment");
                         Session.removeRedirectRoute();
-                        $state.go(url,{urlsegment:urlSegment});
+                        if(urlSegment === undefined){
+                            $state.go(url);
+                        }
+                        else
+                        {
+                            $state.go(url,{urlsegment:urlSegment});
+                        }
                     }
                 }, 500);
                 $scope.loginFailed = false;
