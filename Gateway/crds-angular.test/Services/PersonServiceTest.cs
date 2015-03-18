@@ -17,7 +17,7 @@ namespace crds_angular.test.Services
         private const string PASSWORD = "crds1234";
 
         [Test]
-        public void TestMyFamily()
+        public void ATestMyFamily()
         {
             //force AutoMapper to register
             AutoMapperConfig.RegisterMappings();
