@@ -6092,6 +6092,13 @@ ol.breadcrumb li.active {
 .dropdown-menu.ng-valid-date .active .text-info {
   color: #fff; }
 
+/***************************************************************************************
+* Label
+***************************************************************************************/
+/* line 161, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/style-overrides.scss */
+label {
+  margin-bottom: 3px; }
+
 /** Add/remove floats **/
 /* line 3, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/utilities.scss */
 .float-right {
