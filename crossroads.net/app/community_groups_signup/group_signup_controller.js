@@ -35,12 +35,9 @@ require('../services/group_service');
             }
         });
 
-        // retrieve group id from stateParams
-        $log.debug($scope.groupId = $stateParams.groupId);
-
         $scope.signup = function(){
             //Add Person to group
-            Group.save().$promise.then(function(response) {
+            Group.save({groupId : $scope.groupId}).$promise.then(function(response) {
                 $rootScope.$emit('notify', $rootScope.MESSAGES.successfullRegistration);
                 $scope.showContent = false;
                 $scope.showSuccess = true;
