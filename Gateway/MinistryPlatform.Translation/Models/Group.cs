@@ -14,14 +14,46 @@ namespace MinistryPlatform.Translation.Models
         private IList<int> participants = new List<int>();
         private Boolean full;
         private Boolean waitList;
-        private int waitListGroupId;
+        private IList<int> waitListGroupId = new List<int>();
 
-        public int RecordId { get { return (recordId); } set { recordId = value; } }
-        public int TargetSize { get { return (targetSize); } set { targetSize = value; } }
-        public string Name { get { return (name); } set { name = value; } }
-        public IList<int> Participants { get { return (participants); } }
-        public Boolean Full { get { return (full); } set { full = value; } }
-        public Boolean WaitList { get { return (waitList); } set { waitList = value; } }
-        public int WaitListGroupId { get { return (waitListGroupId); } set { waitListGroupId = value} }
+        public int RecordId
+        {
+            get { return (recordId); }
+            set { recordId = value; }
+        }
+
+        public int TargetSize
+        {
+            get { return (targetSize); }
+            set { targetSize = value; }
+        }
+
+        public string Name
+        {
+            get { return (name); }
+            set { name = value; }
+        }
+
+        public IList<int> Participants
+        {
+            get { return (participants); }
+        }
+
+        public Boolean Full
+        {
+            get { return (full); }
+            set { full = value; }
+        }
+
+        public Boolean WaitList
+        {
+            get { return (waitList); }
+            set { waitList = value; }
+        }
+
+        public IList<int> WaitListGroupId
+        {
+            get { return (waitListGroupId); }
+        }
     }
 }

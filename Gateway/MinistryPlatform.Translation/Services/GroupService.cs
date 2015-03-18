@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,6 +19,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int GroupsPageId = Convert.ToInt32(AppSettings("Groups"));
         private readonly int GroupsEventsPageId = Convert.ToInt32(AppSettings("GroupsEvents"));
         private readonly int EventsGroupsPageId = Convert.ToInt32(AppSettings("EventsGroups"));
+        private readonly int GroupsSubgroupsPageId = Convert.ToInt32(AppSettings("GroupsSubgroups"));
         private IMinistryPlatformService ministryPlatformService;
 
         public GroupService(IMinistryPlatformService ministryPlatformService)
@@ -97,6 +99,35 @@ namespace MinistryPlatform.Translation.Services
                 {
                     g.Full = (Boolean)gf;
                 }
+
+                object gwl = null;
+                groupDetails.TryGetValue("Enable_Waiting_List", out gwl);
+                if (gwl != null)
+                {
+                    g.WaitList = (Boolean) gwl;
+                }
+
+                if (g.WaitList)
+                {
+                    var waitListGroupId = ministryPlatformService.GetSubPageRecords(GroupsSubgroupsPageId, groupId, apiToken);
+                    //should proabably check for wait list type on the group??  In case more than one returns
+                    if (waitListGroupId != null)
+                    {
+                        foreach (var i in waitListGroupId)
+                        {
+                            object wgt = null;
+                            i.TryGetValue("Group_Type", out wgt);
+                            if (wgt.ToString() == "Wait List")
+                            {
+                                object gd = null;
+                                i.TryGetValue("dp_RecordID", out gd);
+                                g.WaitListGroupId.Add((int) gd);
+                            }
+                        }
+                    }
+
+                }
+                   
 
                 logger.Debug("Getting participants for group " + groupId);
                 var participants = ministryPlatformService.GetSubPageRecords(GroupsParticipantsPageId, groupId, apiToken);
