@@ -1,6 +1,5 @@
 'use strict';
 require('../services/group_service');
-require('../services/group_details_service');
 (function () {
     module.exports = function GroupSignupController($rootScope, Profile, Group, $log, $stateParams, Page) {
         $log.debug("Inside GroupSignupController");
