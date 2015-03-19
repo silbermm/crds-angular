@@ -22,7 +22,7 @@
         this.exists = function (cookieId) {
             return $cookies[cookieId];
         };
-        
+
         this.clear = function () {
             $cookieStore.remove("sessionId");
             $cookieStore.remove("userId");
@@ -50,7 +50,7 @@
             }
         };
 
-        this.addRedirectRoute = function(redirectUrl, urlSegment) {
+        this.addRedirectRoute = function(redirectUrl, link) {
             $cookies.redirectUrl = redirectUrl;
             $cookies.link = link;
         };
