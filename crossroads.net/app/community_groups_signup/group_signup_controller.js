@@ -1,6 +1,5 @@
 'use strict';
 require('../services/group_service');
-require('../services/group_details_service');
 (function () {
     module.exports = function GroupSignupController($rootScope, Profile, Group, $log, $stateParams, Page) {
         $log.debug("Inside GroupSignupController");
@@ -42,7 +41,7 @@ require('../services/group_details_service');
 
         vm.signup = function(){
             //Add Person to group
-            Group.save({groupId : vm.groupId}).$promise.then(function(response) {
+            Group.Participant.save({groupId : vm.groupId}).$promise.then(function(response) {
                 $rootScope.$emit('notify', $rootScope.MESSAGES.successfullRegistration);
                 vm.showContent = false;
                 vm.showSuccess = true;
