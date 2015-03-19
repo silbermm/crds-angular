@@ -15,7 +15,7 @@ namespace crds_angular.Controllers.API
     public class ProfileController : MPAuth
     {
         [ResponseType(typeof (List<ServingDay>))]
-        [Route("api/profile/familyserve")]
+        [Route("api/profile/servesignup")]
         public IHttpActionResult GetFamilyServeDays()
         {
             return Authorized(token =>

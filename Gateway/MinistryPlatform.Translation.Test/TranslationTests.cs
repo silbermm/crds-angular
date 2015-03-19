@@ -23,8 +23,8 @@ namespace MinistryPlatform.Translation.Test
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
             var eventType = "Oakley: Saturday at 4:30";
 
-            var blah = MinistryPlatform.Translation.Services.OpportunityService.GetEvents(eventType, token);
-            Assert.IsNotNull(blah);
+            var events = MinistryPlatform.Translation.Services.OpportunityService.GetEvents(eventType, token);
+            Assert.IsNotNull(events);
         }
 
         [Test]

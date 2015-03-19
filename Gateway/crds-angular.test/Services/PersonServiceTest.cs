@@ -31,40 +31,6 @@ namespace crds_angular.test.Services
             Assert.IsNotNull(fam);
         }
 
-        //[Test]
-        //public void EventTypesBigOleTest()
-        //{
-        //    AutoMapperConfig.RegisterMappings();
-        //    var token = TranslationService.Login(USERNAME, PASSWORD);
-        //    var contactId = AuthenticationService.GetContactId(token);
-
-        //    var personService = new PersonService();
-        //    var stuff = personService.GetMyFamiliesServingTeams(contactId,token);
-        //    var newstuff = personService.GetMyFamiliesServingEvents(stuff,token);
-
-        //    Assert.IsNotNull(newstuff);
-        //}
-        //[Test]
-        //public void BigOleTest()
-        //{
-        //    //force AutoMapper to register
-        //    AutoMapperConfig.RegisterMappings();
-
-        //    var token = TranslationService.Login(USERNAME, PASSWORD);
-
-        //    var contactId = AuthenticationService.GetContactId(token);
-
-
-        //    var personService = new PersonService();
-        //    var stuff = personService.GetMyFamiliesServingTeams(contactId, token);
-
-            
-
-        //    string json = JsonConvert.SerializeObject(stuff);
-        //    Console.WriteLine(json);
-        //    Assert.IsNotNull(stuff);
-        //}
-
         [Test]
         public void GetServingTeamsForContact()
         {
