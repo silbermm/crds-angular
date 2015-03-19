@@ -331,14 +331,14 @@ namespace crds_angular.Services
                     var opportunity = new GroupOpportunity();
                     opportunity.OpportunityName = opp.OpportunityName;
                     opportunity.ServeOccurances = ParseEvents(opp.Events);
-                    var response = OpportunityService.GetMyOpportunityResponses(contactId, opp.OpportunityId, token);
-                    if (response != null)
-                    {
-                        opportunity.Rsvp = new ServingRSVP
-                        {
-                            Response = ParseResponseResult(response)
-                        };
-                    }
+                    //var response = OpportunityService.GetMyOpportunityResponses(contactId, opp.OpportunityId, token);
+                    //if (response != null)
+                    //{
+                    //    opportunity.Rsvp = new ServingRSVP
+                    //    {
+                    //        Response = ParseResponseResult(response)
+                    //    };
+                    //}
 
                     team.Opportunities.Add(opportunity);
                 }
