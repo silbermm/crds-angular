@@ -64,9 +64,7 @@
                      Profile: "Profile",
                      Lookup: "Lookup",
                      genders: function(Lookup) {
-
-<<<<<<< HEAD
-                         return Lookup.query({ table: "genders" }).$promise;
+                      return Lookup.query({ table: "genders" }).$promise;
                      },
                      maritalStatuses: function(Lookup) {
                          return Lookup.query({ table: "maritalstatus" }).$promise;

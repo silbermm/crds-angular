@@ -31,7 +31,7 @@
     // Implementation Details //
     ////////////////////////////
     function getGroups(){
-      vm.groups = ServeOpportunities.query({'contactId': Session.exists('userId')});
+      vm.groups = ServeOpportunities.query();
     };
 
     function today() {
