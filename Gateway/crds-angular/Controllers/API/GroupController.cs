@@ -106,14 +106,23 @@ namespace crds_angular.Controllers.API
 
         }
 
-        // TODO: implement later
-        [ResponseType(typeof(List<ContactDTO>))]
+       
+        [ResponseType(typeof(List<GroupDTO>))]
         [Route("api/group/{groupId}")]
-        public IHttpActionResult Get(String groupId)
+        public IHttpActionResult Get(int groupId)
         {
-            throw new NotImplementedException();
-            return this.Ok();
-
+            Group g = groupService.getGroupDetails(groupId);
+            
+            var group = new GroupDTO()
+            {
+                groupID = g.RecordId,
+                groupFullInd = g.Full,
+                waitListInd = g.WaitList,
+                waitListGroupId = g.WaitListGroupId
+            };
+            
+            return Ok(group);
+        
         }
 
         // TODO: implement later
@@ -135,5 +144,12 @@ namespace crds_angular.Controllers.API
 
     public class GroupDTO
     {
-    }
+        public int groupID { get; set; }
+        public bool groupFullInd { get; set; }
+        public bool waitListInd { get; set; }
+        public IList<int> waitListGroupId { get; set; }
+     }
+    
+
+    
 }

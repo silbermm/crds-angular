@@ -37,7 +37,7 @@ namespace MinistryPlatform.Translation.Services
             {
                 throw (new GroupFullException(g));
             }
-
+             
             var values = new Dictionary<string, object>
             {
                 { "Participant_ID", participantId },
@@ -109,8 +109,8 @@ namespace MinistryPlatform.Translation.Services
 
                 if (g.WaitList)
                 {
-                    var waitListGroupId = ministryPlatformService.GetSubPageRecords(GroupsSubgroupsPageId, groupId, apiToken);
-                    //should proabably check for wait list type on the group??  In case more than one returns
+                    var waitListGroupId = ministryPlatformService.GetSubPageRecords(GroupsSubgroupsPageId, groupId,
+                        apiToken);
                     if (waitListGroupId != null)
                     {
                         foreach (var i in waitListGroupId)
@@ -125,9 +125,11 @@ namespace MinistryPlatform.Translation.Services
                             }
                         }
                     }
-
+                    else
+                    {
+                        logger.Debug("No wait list found for group id " + groupId);
+                    }
                 }
-                   
 
                 logger.Debug("Getting participants for group " + groupId);
                 var participants = ministryPlatformService.GetSubPageRecords(GroupsParticipantsPageId, groupId, apiToken);
