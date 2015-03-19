@@ -2,6 +2,7 @@
 (function () {
 
     function SessionService($cookies, $cookieStore) {
+        var self = this;
         this.create = function (sessionId, userId, username) {
             console.log("creating cookies!");
             $cookies.sessionId = sessionId;
@@ -33,14 +34,30 @@
             return "";
         };
 
-        this.addRedirectRoute = function(redirectUrl, redirectParams) {
+        //TODO: Get this working to DRY up login_controller and register_controller
+        this.redirectIfNeeded = function($state){
+            if (self.hasRedirectionInfo()) {
+                var url = self.exists("redirectUrl");
+                var urlSegment = self.exists("urlSegment");
+                self.removeRedirectRoute();
+                if(urlSegment === undefined){
+                    $state.go(url);
+                }
+                else
+                {
+                    $state.go(url,{urlsegment:urlSegment});
+                }
+            }
+        };
+
+        this.addRedirectRoute = function(redirectUrl, urlSegment) {
             $cookies.redirectUrl = redirectUrl;
-            $cookies.redirectParams = redirectParams;
+            $cookies.urlSegment = urlSegment;
         };
 
         this.removeRedirectRoute = function() {
             $cookieStore.remove("redirectUrl");
-            $cookieStore.remove("redirectParams");
+            $cookieStore.remove("urlSegment");
         };
 
         this.hasRedirectionInfo = function() {
@@ -48,7 +65,7 @@
                 return true;
             }
             return false;
-        }
+        };
 
         return this;
     }

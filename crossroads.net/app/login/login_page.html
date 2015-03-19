@@ -1,7 +1,24 @@
 ﻿<div class="login__container col-md-4" ng-show="$root.username == undefined">
-    <login-form></login-form>
+  <login-form></login-form>
+
+  <div>&nbsp;
+
+    <div class="divider">&nbsp;</div>
+    <div style="height: 2px; background-color: #ede8e8; text-align: center">
+      <span style="background-color: white; position: relative; top: -0.8em; padding: 0 1% 0 1% ">
+        or
+      </span>
+    </div>
+    <div>
+      <p class="text-center" style="
+      padding-top: 2%;"><a href="#/register">Create an account</a></p>   
+    </div> 
+  </div>
 </div>
+
 <div class="hidden-md hidden-sm hidden-xs" ng-show="$root.username != undefined">
-    <ul> You have successfully logged in. </ul> 
+  <ul> You have successfully logged in. </ul> 
 </div>
-   
+
+
+
