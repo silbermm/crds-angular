@@ -75,15 +75,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\GroupFullException.cs" />
     <Compile Include="Exceptions\MultipleRecordsException.cs" />
-    <Compile Include="Models\CommunicationPreferences.cs" />
-    <Compile Include="Models\Contact.cs" />
+    <Compile Include="Services\AuthenticationServiceImpl.cs" />
     <Compile Include="Services\AuthenticationService.cs" />
     <Compile Include="Services\BaseService.cs" />
+    <Compile Include="Services\EventService.cs" />
     <Compile Include="Services\CommunicationService.cs" />
     <Compile Include="Services\GetMyRecords.cs" />
+    <Compile Include="Services\GroupService.cs" />
+    <Compile Include="Services\IAuthenticationService.cs" />
+    <Compile Include="Services\IEventService.cs" />
+    <Compile Include="Services\IGroupService.cs" />
+    <Compile Include="Services\IMinistryPlatformService.cs" />
     <Compile Include="Services\LookupService.cs" />
     <Compile Include="Services\MinistryPlatformService.cs" />
+    <Compile Include="Services\MinistryPlatformServiceImpl.cs" />
     <Compile Include="Services\OpportunityService.cs" />
     <Compile Include="Utils\MPFormatConversion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

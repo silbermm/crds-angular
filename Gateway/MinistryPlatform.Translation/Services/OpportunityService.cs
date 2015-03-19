@@ -72,7 +72,7 @@ namespace MinistryPlatform.Translation.Services
                 EventType = (string) record["Event_Type"],
                 EventStartDate = (DateTime) record["Event_Start_Date"],
                 EventEndDate = (DateTime) record["Event_End_Date"], 
-                EventID = (int)record["dp_RecordID"]
+                EventId = (int)record["dp_RecordID"]
             }).ToList();
         }
 

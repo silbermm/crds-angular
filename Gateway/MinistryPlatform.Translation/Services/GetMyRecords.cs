@@ -53,7 +53,6 @@ namespace MinistryPlatform.Translation.Services
         public static List<Group> GetMyServingTeams(int contactId, string token)
         {
             var pageViewId = Convert.ToInt32(ConfigurationManager.AppSettings["MyServingTeams"]);
-            pageViewId = 1014;
             var searchString = ",,,," + contactId;
             var teams = MinistryPlatformService.GetPageViewRecords(pageViewId, token, searchString);
             var groups = new List<Group>();
@@ -62,7 +61,7 @@ namespace MinistryPlatform.Translation.Services
                 var group = new Group
                 {
                     GroupId = (int) team["Group_ID"],
-                    GroupName = (string) team["Group_Name"],
+                    Name = (string) team["Group_Name"],
                     GroupRole = (string) team["Role_Title"]
                 };
                 groups.Add(group);

@@ -157,6 +157,7 @@ namespace MinistryPlatform.Translation.Test
         }
 
         [Test]
+        [Ignore("we never do this in code, return all responses makes message too big")]
         public void GetOpportunityResponses()
         {
             var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["OpportunityResponses"]);

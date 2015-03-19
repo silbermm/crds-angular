@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attribute.cs" />
+    <Compile Include="CommunicationPreferences.cs" />
     <Compile Include="Contact_Relationship.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="Group.cs" />

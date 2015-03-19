@@ -1,8 +1,6 @@
 @import 'helpers/variable-overrides.scss';
 @import '_bootstrap.scss';
-
 @import 'helpers/style-overrides.scss';
-
 @import 'helpers/gradient.scss';
 @import 'helpers/utilities.scss';
 @import 'base/brand.scss';
@@ -29,6 +27,7 @@
 @import 'pages/blog.scss';
 @import 'pages/dashboard.scss';
 @import 'pages/explore.scss';
+@import 'pages/give.scss';
 @import 'pages/home.scss';
 @import 'pages/media.scss';
 @import 'pages/media_topics.scss';
@@ -36,3 +35,4 @@
 @import 'pages/styleguide.scss';
 @import 'pages/thefeed.scss';
 @import 'pages/errorpage.scss';
+@import 'pages/profile.scss';

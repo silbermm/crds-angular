@@ -146,7 +146,7 @@ namespace crds_angular.Services
                     }
                     else
                     {
-                        servingTeam = new ServingTeam {Name = group.GroupName, GroupId = group.GroupId};
+                        servingTeam = new ServingTeam {Name = group.Name, GroupId = group.GroupId};
                         var groupMembers = new List<TeamMember> {NewTeamMember(familyMember, group)};
                         servingTeam.Members = groupMembers;
                         servingTeams.Add(servingTeam);
@@ -325,7 +325,7 @@ namespace crds_angular.Services
             foreach (var group in groups)
             {
                 var team = new Models.Crossroads.ServingTeam();
-                team.TeamName = group.GroupName;
+                team.TeamName = group.Name;
                 var opportunities = OpportunityService.GetOpportunitiesForGroup(group.GroupId, token);
                 foreach (var opp in opportunities)
                 {
@@ -358,7 +358,7 @@ namespace crds_angular.Services
                 StarDateTime = e.EventStartDate,
                 DateOnly = e.EventStartDate.Date.ToString("d"),
                 TimeOnly = e.EventStartDate.TimeOfDay.ToString(),
-                EventId = e.EventID
+                EventId = e.EventId
             }).ToList();
         }
 
