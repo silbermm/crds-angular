@@ -77,10 +77,6 @@
   <ItemGroup>
     <Compile Include="Exceptions\GroupFullException.cs" />
     <Compile Include="Exceptions\MultipleRecordsException.cs" />
-    <Compile Include="Models\CommunicationPreferences.cs" />
-    <Compile Include="Models\Contact.cs" />
-    <Compile Include="Models\Event.cs" />
-    <Compile Include="Models\Group.cs" />
     <Compile Include="Services\AuthenticationServiceImpl.cs" />
     <Compile Include="Services\AuthenticationService.cs" />
     <Compile Include="Services\BaseService.cs" />
