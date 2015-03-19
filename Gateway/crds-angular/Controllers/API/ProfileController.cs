@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Models;
@@ -8,19 +7,22 @@ using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Security;
 using crds_angular.Services;
+using MinistryPlatform.Translation.Services;
+using ServingTeam = crds_angular.Models.Crossroads.ServingTeam;
 
 namespace crds_angular.Controllers.API
 {
     public class ProfileController : MPAuth
     {
-    [ResponseType(typeof(List<ServingDay>))]
-    [Route("api/profile/familyserve/{contactId}")]
-        public IHttpActionResult GetFamilyServeDays(int contactId)
+        [ResponseType(typeof (List<ServingDay>))]
+        [Route("api/profile/familyserve")]
+        public IHttpActionResult GetFamilyServeDays()
         {
             return Authorized(token =>
             {
                 try
                 {
+                    var contactId = AuthenticationService.GetContactId(token);
                     var personService = new PersonService();
                     var stuff = personService.GetMyFamiliesServingTeams(contactId, token);
                     var list = personService.GetMyFamiliesServingEvents(stuff, token);
@@ -35,15 +37,15 @@ namespace crds_angular.Controllers.API
                     return this.BadRequest(e.Message);
                 }
             });
-
         }
 
         [ResponseType(typeof (List<FamilyMember>))]
-        [Route("api/profile/family/{contactId}")]
-        public IHttpActionResult GetFamily(int contactId)
+        [Route("api/profile/family")]
+        public IHttpActionResult GetFamily()
         {
             return Authorized(token =>
             {
+                var contactId = AuthenticationService.GetContactId(token);
                 var personService = new PersonService();
                 var list = personService.GetMyFamily(contactId, token);
                 if (list == null)
@@ -54,7 +56,7 @@ namespace crds_angular.Controllers.API
             });
         }
 
-        [ResponseType(typeof(List<Models.Crossroads.ServingTeam>))]
+        [ResponseType(typeof (List<ServingTeam>))]
         [Route("api/profile/serving/{contactId}")]
         public IHttpActionResult GetServingTeams(int contactId)
         {

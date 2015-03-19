@@ -56,7 +56,7 @@ namespace crds_angular.test.controllers
             _profileController.Request = h;
 
             // Make the call...
-            var result = _profileController.GetFamily(contactId);
+            var result = _profileController.GetFamily();
             Assert.IsInstanceOf(typeof (OkNegotiatedContentResult<List<FamilyMember>>), result);
         }
     }
