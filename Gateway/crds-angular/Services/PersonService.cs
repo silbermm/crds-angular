@@ -9,7 +9,6 @@ using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services;
 using Attribute = MinistryPlatform.Models.Attribute;
 using Event = MinistryPlatform.Models.Event;
-using Response = crds_angular.Models.Crossroads.Response;
 using ServingTeam = crds_angular.Models.Crossroads.Serve.ServingTeam;
 
 namespace crds_angular.Services
@@ -216,13 +215,15 @@ namespace crds_angular.Services
                     if (opportunity.EventType == null) continue;
 
                     //hold role for later
-                    var serveRole = new ServeRole {Name = opportunity.OpportunityName + " " + opportunity.RoleTitle};
-
+                    var serveRole = new ServeRole {Name = opportunity.OpportunityName + " " + opportunity.RoleTitle, Capacity = opportunity.Capacity};
+                    
                     //team events
                     var events = ParseServingEvents(opportunity.Events);
 
                     foreach (var e in events)
                     {
+                        serveRole.SlotsTaken = OpportunityService.GetOpportunitySignupCount(opportunity.OpportunityId, e.EventId, token);
+
                         var serveDay = serveDays.SingleOrDefault(r => r.Day == e.DateOnly);
                         if (serveDay != null)
                         {
@@ -244,10 +245,10 @@ namespace crds_angular.Services
                                         {
                                             if (role.Name != opportunity.RoleTitle) continue;
 
-                                            TeamMember member2 = null;
+                                            TeamMember member = null;
                                             try
                                             {
-                                                member2 =
+                                                member =
                                                     existingTeam.Members.SingleOrDefault(
                                                         m => m.ContactId == teamMember.ContactId);
                                             }
@@ -263,16 +264,16 @@ namespace crds_angular.Services
                                                 throw new ApplicationException(
                                                     "Duplicate Group Member: " + message, ex);
                                             }
-                                            if (member2 == null)
+                                            if (member == null)
                                             {
-                                                member2 = new TeamMember
+                                                member = new TeamMember
                                                 {
                                                     ContactId = teamMember.ContactId,
                                                     Name = teamMember.Name
                                                 };
-                                                existingTeam.Members.Add(member2);
+                                                existingTeam.Members.Add(member);
                                             }
-                                            member2.Roles.Add(serveRole);
+                                            member.Roles.Add(serveRole);
                                         }
                                     }
                                 }
@@ -317,39 +318,6 @@ namespace crds_angular.Services
             return sortedServeDays;
         }
 
-
-        public List<Models.Crossroads.ServingTeam> GetServingOpportunities(int contactId, string token)
-        {
-            var groups = GetMyRecords.GetMyServingTeams(contactId, token);
-            var teams = new List<Models.Crossroads.ServingTeam>();
-            foreach (var group in groups)
-            {
-                var team = new Models.Crossroads.ServingTeam();
-                team.TeamName = group.Name;
-                var opportunities = OpportunityService.GetOpportunitiesForGroup(group.GroupId, token);
-                foreach (var opp in opportunities)
-                {
-                    var opportunity = new GroupOpportunity();
-                    opportunity.OpportunityName = opp.OpportunityName;
-                    opportunity.ServeOccurances = ParseEvents(opp.Events);
-                    //opportunity.OpportunityDateTime = opp.Opportunity_Date;
-                    var response = OpportunityService.GetMyOpportunityResponses(contactId, opp.OpportunityId, token);
-                    if (response != null)
-                    {
-                        opportunity.Rsvp = new ServingRSVP
-                        {
-                            //Occurrence = response.Opportunity_Date,
-                            Response = ParseResponseResult(response)
-                        };
-                    }
-
-                    team.Opportunities.Add(opportunity);
-                }
-                teams.Add(team);
-            }
-            return teams;
-        }
-
         private static List<ServeEvent> ParseServingEvents(IEnumerable<Event> events)
         {
             return events.Select(e => new ServeEvent
@@ -358,32 +326,8 @@ namespace crds_angular.Services
                 StarDateTime = e.EventStartDate,
                 DateOnly = e.EventStartDate.Date.ToString("d"),
                 TimeOnly = e.EventStartDate.TimeOfDay.ToString(),
-                EventId = e.EventId
+                EventId = e.EventId,
             }).ToList();
-        }
-
-        private static List<ServeOccurance> ParseEvents(IEnumerable<Event> events)
-        {
-            return
-                events.Select(e => new ServeOccurance {Name = e.EventTitle, StarDateTime = e.EventStartDate}).ToList();
-        }
-
-        private static Response ParseResponseResult(MinistryPlatform.Models.Response response)
-        {
-            switch (response.Response_Result_ID)
-            {
-                case 1:
-                    //Placed
-                    return Response.Yes;
-                case 2:
-                    //Not Placed
-                    return Response.No;
-                case null:
-                    //Maybe?
-                    return Response.Maybe;
-                default:
-                    throw new ApplicationException("Invalid Opportunity Response Result.");
-            }
         }
     }
 }
