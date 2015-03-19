@@ -13,6 +13,7 @@
     vm.disabled = disabled;
     vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate']; 
     vm.format = vm.formats[0];
+    vm.groups = [];
     vm.isCollapsed = true;
     vm.open = open; 
     vm.today = today;
@@ -30,7 +31,7 @@
     // Implementation Details //
     ////////////////////////////
     function getGroups(){
-      vm.groups = ServeOpportunities.query({'contactId': Session.exists('userId')});
+      vm.groups = ServeOpportunities.query();
     };
 
     function today() {

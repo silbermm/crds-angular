@@ -62,6 +62,9 @@
     <Reference Include="Microsoft.Web.Mvc">
       <HintPath>..\packages\Mvc2Futures.2.0.50217.0\lib\Microsoft.Web.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.2.1502.0911\lib\net40\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="MvcContrib">
       <HintPath>..\packages\MvcContrib.2.0.95.0\lib\MvcContrib.dll</HintPath>
     </Reference>
@@ -71,6 +74,9 @@
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NSubstitute">
+      <HintPath>..\packages\NSubstitute.1.8.1.0\lib\net45\NSubstitute.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.3.0.0-alpha-3\lib\net45\nunit.framework.dll</HintPath>
@@ -128,9 +134,11 @@
     <Compile Include="controllers\AccountControllerTest.cs" />
     <Compile Include="controllers\HomeControllerTest.cs" />
     <Compile Include="controllers\ProfileControllerTest.cs" />
+    <Compile Include="controllers\GroupControllerTest.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AccountServiceTest.cs" />
+    <Compile Include="Services\PersonServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
@@ -143,6 +151,10 @@
     <ProjectReference Include="..\crds-angular\crds-angular.csproj">
       <Project>{dc3b7edc-2b9a-49f4-a5c8-50ba4c3e2a7b}</Project>
       <Name>crds-angular</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MinistryPlatform.Models\MinistryPlatform.Models.csproj">
+      <Project>{cd41507e-91ac-4c60-96e2-5cac25f49a76}</Project>
+      <Name>MinistryPlatform.Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\MinistryPlatform.Translation\MinistryPlatform.Translation.csproj">
       <Project>{cc650d93-731c-4613-b358-fb4c76237455}</Project>

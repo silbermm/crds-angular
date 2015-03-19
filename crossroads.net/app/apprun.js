@@ -8,12 +8,12 @@
             Session.clear();
             $rootScope.userid = null;
             $rootScope.username = null;
-            Session.addRedirectRoute(toState.name, toParams);
+            Session.addRedirectRoute(toState.name, toParams.urlsegment);
             event.preventDefault();
             $state.go("login");
         }
         
-        $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams) {           
+        $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams) {      
             if (Session.isActive()) {
               $http({
                 method: "GET",
@@ -27,7 +27,7 @@
                 }).error(function (e) {
                     clearAndRedirect(event, toState, toParams);
                 });
-            } else if (toState.data !== undefined && toState.data.isProtected) {              
+            } else if (toState.data !== undefined && toState.data.isProtected) {    
                 clearAndRedirect(event, toState, toParams);
             } else {
                 //There is no session AND the user is not attempting to go to a protected route

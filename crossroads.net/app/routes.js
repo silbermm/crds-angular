@@ -1,10 +1,8 @@
-﻿"use strict";
+"use strict";
 
-(function() {
-
+(function () {
 
   require('./register/register_form.html');
-
   require('./home');
   require('./content');
   require('./opportunity');
@@ -66,8 +64,7 @@
                      Profile: "Profile",
                      Lookup: "Lookup",
                      genders: function(Lookup) {
-
-                         return Lookup.query({ table: "genders" }).$promise;
+                      return Lookup.query({ table: "genders" }).$promise;
                      },
                      maritalStatuses: function(Lookup) {
                          return Lookup.query({ table: "maritalstatus" }).$promise;
@@ -104,6 +101,17 @@
              }
           }
       })
+     .state("myprofile", {
+        url: "/myprofile",
+        controller: "MyProfileCtrl as myProfile",
+        templateUrl: "myprofile/myprofile.html",
+        data: {
+          isProtected: true
+        },
+        resolve: {
+          loggedin: checkLoggedin
+        }
+      })       
       .state("opportunities", {
           url: "/opportunities",
           controller: "ViewOpportunitiesController as opportunity",
@@ -122,16 +130,46 @@
         data: { isProtected: true },
         resolve: { loggedin: checkLoggedin }
       })
-      .state("content", {
-          url: "/:urlsegment",
-          controller: "ContentCtrl",
-          templateUrl: "content/content.html"
-      });
-          //Leave the comment below.  Once we have a true 404 page hosted in the same domain, this is how we
-          //will handle the routing.
-          //.state("404", {
-          //    templateUrl: __CMS_ENDPOINT__ + "/page-not-found/"
-          //});
+      .state("styleguide", {
+        url: "/styleguide",
+        controller: "StyleguideCtrl as styleguide",
+        templateUrl: "styleguide/styleguide.html"
+       })
+      .state("give", {
+        url: "/give",
+        controller: "GiveCtrl as give",
+        templateUrl: "give/give.html",
+        data: {
+          isProtected: true
+        },
+        resolve: {
+          loggedin: checkLoggedin
+        }
+      })
+      .state("community-groups-signup", {
+        url: "/sign-up/:urlsegment",
+        controller: "GroupSignupController as groupsignup",
+        templateUrl: "community_groups_signup/group_signup_form.html",
+        data: {
+          isProtected: true
+        },
+        resolve: {
+          loggedin: checkLoggedin
+        }
+    })
+    .state("content", {
+      // This url will match a slash followed by anything (including additional slashes).  There is corresponding 
+      // logic in the controller to extract the leaf (anything after the final slash) to pass to the CMS API.
+      // TODO This can be changed back to "/:urlsegment" if US1044 makes changes to enable page slugs without slashes
+      url: "/{urlsegment:.*$}",
+      controller: "ContentCtrl",
+      templateUrl: "content/content.html"
+    });
+    //Leave the comment below.  Once we have a true 404 page hosted in the same domain, this is how we 
+    //will handle the routing. 
+    //.state("404", {
+    //    templateUrl: __CMS_ENDPOINT__ + "/page-not-found/"
+    //});
 
     $urlRouterProvider.otherwise("/");
 
