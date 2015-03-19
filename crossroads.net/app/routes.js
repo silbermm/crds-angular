@@ -18,22 +18,23 @@
   require('./opportunity/view_opportunities.html');
   require('./content/content.html');
   require('./community_groups_signup/group_signup_form.html');
-  var getCookie = require('./utilities/cookies'); 
+  var getCookie = require('./utilities/cookies');
 
 
-   
-    angular.module("crossroads").config(["$stateProvider", "$urlRouterProvider", "$httpProvider", function ($stateProvider, $urlRouterProvider, $httpProvider) {
+
+    angular.module("crossroads").config(["$stateProvider", "$urlRouterProvider", "$httpProvider", "$urlMatcherFactoryProvider", function ($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory) {
 
         $httpProvider.defaults.useXDomain = true;
         $httpProvider.defaults.headers.common['Authorization'] = getCookie('sessionId');
-		/*
-	$urlMatcherFactory.type("notUrlEncoded", {
-		encode: valToString,
-		decode: valFromString,
-		is: regexpMatches,
-		pattern: /[^/]+\/[^/]+/
-	});*/
-		
+
+        // This custom type is needed to allow us to NOT URLEncode slashes when using ui-sref
+        // See this post for details: https://github.com/angular-ui/ui-router/issues/1119
+		$urlMatcherFactory.type("contentRouteType", {
+			encode: function(val) { return val != null ? val.toString() : val; },
+			decode: function(val) { return val != null ? val.toString() : val; },
+			is: function(val) { return this.pattern.test(val); },
+			pattern: /[^/.*$]+/
+		});
 
         //================================================
         // Check if the user is connected
@@ -198,7 +199,7 @@
                 }
             })
            .state("community-groups-signup", {
-                url: "{link:notUrlEncoded/sign-up/.*$}",
+                url: "{link:/sign-up/.*$}",
                 controller: "GroupSignupController as groupsignup",
                 templateUrl: "community_groups_signup/group_signup_form.html",
                 data: {
@@ -210,12 +211,12 @@
     })
     .state("content", {
     // This url will match a slash followed by anything (including additional slashes).
-        url: "{link:/.*$}",
+        url: "{link:contentRouteType}",
         controller: "ContentCtrl",
         templateUrl: "content/content.html"
             });
-        //Leave the comment below.  Once we have a true 404 page hosted in the same domain, this is how we 
-        //will handle the routing. 
+        //Leave the comment below.  Once we have a true 404 page hosted in the same domain, this is how we
+        //will handle the routing.
         //.state("404", {
         //    templateUrl: __CMS_ENDPOINT__ + "/page-not-found/"
         //});
