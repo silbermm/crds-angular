@@ -65,6 +65,13 @@ namespace MinistryPlatform.Translation.Services
             return MPFormatConversion.MPFormatToList(result);
         }
 
+        public static List<Dictionary<string, object>> GetPageViewRecords(int viewId, string token, string searchString = "", string sort = "", int top = 0)
+        {
+            var result = PlatformUtils.Call<SelectQueryResult>(token,
+                platformClient => platformClient.GetPageViewRecords(viewId, searchString, sort, top));
+            return MPFormatConversion.MPFormatToList(result);
+        }
+
         public static List<Dictionary<string, object>> GetSubpageViewRecords(int viewId, int parentRecordId,
             string token, string searchString = "", string sort = "", int top = 0)
         {

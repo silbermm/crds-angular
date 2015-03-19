@@ -15,11 +15,11 @@
   require('./profile/skills/profile_skills.html');
   require('./styleguide');
   require('./give');
+  require('./myprofile');
   require('./opportunity/view_opportunities.html');
   require('./content/content.html');
   require('./community_groups_signup/group_signup_form.html');
   var getCookie = require('./utilities/cookies'); 
-
 
    
     angular.module("crossroads").config(["$stateProvider", "$urlRouterProvider", "$httpProvider", function ($stateProvider, $urlRouterProvider, $httpProvider) {
@@ -160,6 +160,17 @@
                             isProtected: true
                         }
                     }
+                }
+            })
+            .state("myprofile", {
+                url: "/myprofile",
+                controller: "MyProfileCtrl as myProfile",
+                templateUrl: "myprofile/myprofile.html",
+                data: {
+                    isProtected: true
+                },
+                resolve: {
+                    loggedin: checkLoggedin
                 }
             })
             .state("opportunities", {

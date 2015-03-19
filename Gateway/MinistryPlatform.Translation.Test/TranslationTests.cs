@@ -18,6 +18,16 @@ namespace MinistryPlatform.Translation.Test
         private const string NEW_PASSWORD = "changemeagain";
 
         [Test]
+        public void GetEventsByType()
+        {
+            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            var eventType = "Oakley: Saturday at 4:30";
+
+            var events = MinistryPlatform.Translation.Services.OpportunityService.GetEvents(eventType, token);
+            Assert.IsNotNull(events);
+        }
+
+        [Test]
         public void GetMyFamily()
         {
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
@@ -147,6 +157,7 @@ namespace MinistryPlatform.Translation.Test
         }
 
         [Test]
+        [Ignore("we never do this in code, return all responses makes message too big")]
         public void GetOpportunityResponses()
         {
             var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["OpportunityResponses"]);
@@ -209,6 +220,16 @@ namespace MinistryPlatform.Translation.Test
             var todaysEvents = MinistryPlatformService.GetRecordsDict(pageId, token, ",Mason", "5");
 
             Assert.IsNotNull(todaysEvents);
+        }
+
+        [Test]
+        public void ShouldReturnMyServingTeams()
+        {
+            var token = AuthenticationService.authenticate(USERNAME, PASSWORD); 
+            var recordId = AuthenticationService.GetContactId(token);
+            var teams = GetMyRecords.GetMyServingTeams(recordId, token);
+
+            Assert.IsNotNull(teams);
         }
     }
 }
