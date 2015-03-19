@@ -44,18 +44,18 @@
                 $scope.processing = false;
                 $scope.loginShow = false;
                 $timeout(function() {
-                    if (Session.hasRedirectionInfo()) {
-                        var url = Session.exists("redirectUrl");
-                        var urlSegment = Session.exists("urlSegment");
-                        Session.removeRedirectRoute();
-                        if(urlSegment === undefined){
-                            $state.go(url);
-                        }
-                        else
-                        {
-                            $state.go(url,{urlsegment:urlSegment});
-                        }
-                    }
+                  if (Session.hasRedirectionInfo()) {
+                      var url = Session.exists("redirectUrl");
+                      var urlSegment = Session.exists("urlSegment");
+                      Session.removeRedirectRoute();
+                      if(urlSegment === undefined){
+                          $state.go(url);
+                      }
+                      else
+                      {
+                          $state.go(url,{urlsegment:urlSegment});
+                      }
+                  }
                 }, 500);
                 $scope.loginFailed = false;
                 $rootScope.showLoginButton = false;
