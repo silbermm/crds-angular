@@ -19,9 +19,10 @@
   require('./opportunity/view_opportunities.html');
   require('./content/content.html');
   require('./community_groups_signup/group_signup_form.html');
+  require('./my_serve');
   var getCookie = require('./utilities/cookies');
 
-   
+
 
     angular.module("crossroads").config(["$stateProvider", "$urlRouterProvider", "$httpProvider", "$urlMatcherFactoryProvider", function ($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory) {
 
@@ -34,7 +35,7 @@
 			encode: function(val) { return val != null ? val.toString() : val; },
 			decode: function(val) { return val != null ? val.toString() : val; },
 			is: function(val) { return this.pattern.test(val); },
-			pattern: /[^/.*$]+/
+            pattern: /^\/.*/
 		});
 
         //================================================
@@ -193,6 +194,13 @@
                 resolve: {
                     loggedin: checkLoggedin
                 }
+            })
+            .state("serve-signup", {
+              url: "/serve-signup",
+              controller: "MyServeController as serve",
+              templateUrl: "my_serve/myserve.html",
+              data: { isProtected: true },
+              resolve: { loggedin: checkLoggedin }
             })
             .state("styleguide", {
                 url: "/styleguide",

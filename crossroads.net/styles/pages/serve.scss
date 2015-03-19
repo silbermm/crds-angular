@@ -1,48 +1,119 @@
- .event-group {
-  margin-top: $line-height-computed;
+.filter-clear {
+  float: right;
+  margin: 7px 0;
+}
 
-  .list-group-item {
-    @include clearfix;
-    width: 100%;
+.filter-group {
+  border-bottom: 1px solid darken($gray-lighter, 20%);
 
-    .col-sm-2 {
+  &:last-of-type {
+    border-bottom: 0px;
+  }
+}
+
+.serve-opp-listings {
+
+  .panel {
+    border-radius: 0px;
+    margin-bottom: $line-height-computed/2;
+    box-shadow: none;
+  
+    .list-unstyled {
+      line-height: 2;
+    }
+  }
+
+  .panel-link {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 3;
+  }
+
+  .panel-heading {
+    border-radius: 0px;
+    font-weight: bold;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+
+    @media (min-width: $screen-sm-min) {
+      padding: 5px 15px;
+    }
+
+    .name-btns {
+      margin: -10px 0;
+      float: left;
+      width: 100%;
+      position: static;
+      z-index: 2;
+
       @media (min-width: $screen-sm-min) {
         float: right;
+        width: auto;
+        position: relative;
+        z-index: 4;
+      }
+
+      a {
+        display: block;
+        float: left;
+        padding: 10px 0;
+        margin: 0 0 0 5px;
+        z-index: 5;
+        position: relative;
+
+        &:first-of-type {
+          margin-left: 0px;
+        }
+
+        &.active {
+
+          span, span:active {
+            background: white;
+            color: $cr-orange;
+            border-color: #ddd;  
+            position: relative;
+            box-shadow: none;
+
+            &:after {
+              display: block;
+              content: "";
+              position: absolute;
+              left: -1px;
+              right: -1px;
+              bottom: -12px;
+              min-height: 15px;
+              background: white;
+              border-right: 1px solid #ddd; 
+              border-left: 1px solid #ddd; 
+              @media (min-width: $screen-sm-min) {
+                bottom: -7px;
+                min-height: 10px;
+              }
+            }
+          }
+        }
       }
     }
   }
-  .list-group-item-heading {
-    font-weight: normal;
-    font-size: $font-size-base;
-  }
-  .btn {
-    display: block;
-    width: 100%;
-    margin-top: 10px;
+}
 
-    @media (min-width: $screen-sm-min) {
-      display: inline-block;
-      width: auto;
-      margin-top: 0px;
-    }
+.serve-save {
+  border-top: 1px solid $gray-lighter;
+  text-align: right;
+}
 
-    .icon {
-      margin-left: 3px;
-    }
+.serve-signup-cont {
+  padding-left: 0;
+  padding-right: 0;
+
+  @media (min-width: $screen-sm-min) {
+    padding-left: 0;
+    padding-right: $grid-gutter-width/2;
   }
 }
 
-.list-group-item-title {
-  background: $gray-lighter;  
-  font-weight: bold;
-}
 
-.serve-signup-form {
-  .checkbox, .radio {
-    margin: 0px;
-  }
-
-  .well {
-    margin-top: $line-height-computed;
-  }
-}
