@@ -54,8 +54,9 @@
 
       function openPanel(members){
         if(scope.currentMember === null){
+          var sessionId = Number(Session.exists("userId"));
           scope.currentMember = _.find(members, function(m){
-            return Number(m.contactId)=== Number(Session.exists("userId"));
+            return Number(m.contactId) === sessionId;
           });
           scope.currentActiveTab = scope.currentMember.name;
         }
