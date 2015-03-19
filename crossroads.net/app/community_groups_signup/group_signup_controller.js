@@ -42,7 +42,7 @@ require('../services/group_details_service');
 
         vm.signup = function(){
             //Add Person to group
-            Group.save({groupId : vm.groupId}).$promise.then(function(response) {
+            Group.Participant.save({groupId : vm.groupId}).$promise.then(function(response) {
                 $rootScope.$emit('notify', $rootScope.MESSAGES.successfullRegistration);
                 vm.showContent = false;
                 vm.showSuccess = true;
