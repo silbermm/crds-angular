@@ -41,7 +41,6 @@ describe('Serve Tabs Directive', function() {
 
   it("should set the current member to the loggedin user", function(){
     var isolated = element.isolateScope();
-    debugger; 
     isolated.openPanel(mockOpportunity.members);
     expect(isolated.currentMember).toBe(mockOpportunity.members[0]);
   });
