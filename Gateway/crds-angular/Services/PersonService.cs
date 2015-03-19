@@ -199,7 +199,6 @@ namespace crds_angular.Services
                 GroupId = team.GroupId,
                 Members = NewTeamMembersWithRoles(team.Members, opportunity.RoleTitle, tmpRole)
             };
-            //var x = servingTeam;
             return servingTeam;
         }
 
@@ -332,13 +331,11 @@ namespace crds_angular.Services
                     var opportunity = new GroupOpportunity();
                     opportunity.OpportunityName = opp.OpportunityName;
                     opportunity.ServeOccurances = ParseEvents(opp.Events);
-                    //opportunity.OpportunityDateTime = opp.Opportunity_Date;
                     var response = OpportunityService.GetMyOpportunityResponses(contactId, opp.OpportunityId, token);
                     if (response != null)
                     {
                         opportunity.Rsvp = new ServingRSVP
                         {
-                            //Occurrence = response.Opportunity_Date,
                             Response = ParseResponseResult(response)
                         };
                     }
