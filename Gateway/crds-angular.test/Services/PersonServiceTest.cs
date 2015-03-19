@@ -11,10 +11,8 @@ namespace crds_angular.test.Services
     {
         private PersonService _personService = new PersonService();
 
-        //private const string USERNAME = "testme";
-        //private const string PASSWORD = "changeme";
-        private const string USERNAME = "tmaddox@aol.com";
-        private const string PASSWORD = "crds1234";
+        private const string USERNAME = "testme";
+        private const string PASSWORD = "changeme";
 
         [Test]
         public void ATestMyFamily()
@@ -31,39 +29,39 @@ namespace crds_angular.test.Services
             Assert.IsNotNull(fam);
         }
 
-        [Test]
-        public void EventTypesBigOleTest()
-        {
-            AutoMapperConfig.RegisterMappings();
-            var token = TranslationService.Login(USERNAME, PASSWORD);
-            var contactId = AuthenticationService.GetContactId(token);
+        //[Test]
+        //public void EventTypesBigOleTest()
+        //{
+        //    AutoMapperConfig.RegisterMappings();
+        //    var token = TranslationService.Login(USERNAME, PASSWORD);
+        //    var contactId = AuthenticationService.GetContactId(token);
 
-            var personService = new PersonService();
-            var stuff = personService.GetMyFamiliesServingTeams(contactId,token);
-            var newstuff = personService.GetMyFamiliesServingEvents(stuff,token);
+        //    var personService = new PersonService();
+        //    var stuff = personService.GetMyFamiliesServingTeams(contactId,token);
+        //    var newstuff = personService.GetMyFamiliesServingEvents(stuff,token);
 
-            Assert.IsNotNull(newstuff);
-        }
-        [Test]
-        public void BigOleTest()
-        {
-            //force AutoMapper to register
-            AutoMapperConfig.RegisterMappings();
+        //    Assert.IsNotNull(newstuff);
+        //}
+        //[Test]
+        //public void BigOleTest()
+        //{
+        //    //force AutoMapper to register
+        //    AutoMapperConfig.RegisterMappings();
 
-            var token = TranslationService.Login(USERNAME, PASSWORD);
+        //    var token = TranslationService.Login(USERNAME, PASSWORD);
 
-            var contactId = AuthenticationService.GetContactId(token);
+        //    var contactId = AuthenticationService.GetContactId(token);
 
 
-            var personService = new PersonService();
-            var stuff = personService.GetMyFamiliesServingTeams(contactId, token);
+        //    var personService = new PersonService();
+        //    var stuff = personService.GetMyFamiliesServingTeams(contactId, token);
 
             
 
-            string json = JsonConvert.SerializeObject(stuff);
-            Console.WriteLine(json);
-            Assert.IsNotNull(stuff);
-        }
+        //    string json = JsonConvert.SerializeObject(stuff);
+        //    Console.WriteLine(json);
+        //    Assert.IsNotNull(stuff);
+        //}
 
         [Test]
         public void GetServingTeamsForContact()

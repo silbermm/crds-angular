@@ -4,6 +4,7 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Models;
+using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Security;
 using crds_angular.Services;
@@ -31,16 +32,13 @@ namespace crds_angular.Controllers.API
                 }
                 catch (Exception e)
                 {
-                    //var ex = new Exception("Hi Matt");
                     return this.BadRequest(e.Message);
-                    //return this.InternalServerError(ex);
-                    //return new CustomErrorIHttpActionResult(e.Message, Request);
                 }
             });
 
         }
 
-        [ResponseType(typeof (Person))]
+        [ResponseType(typeof (List<FamilyMember>))]
         [Route("api/profile/family/{contactId}")]
         public IHttpActionResult GetFamily(int contactId)
         {
