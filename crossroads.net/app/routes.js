@@ -19,6 +19,7 @@
   require('./opportunity/view_opportunities.html');
   require('./content/content.html');
   require('./community_groups_signup/group_signup_form.html');
+  require('./my_serve');
   var getCookie = require('./utilities/cookies');
 
 
@@ -193,6 +194,13 @@
                 resolve: {
                     loggedin: checkLoggedin
                 }
+            })
+            .state("serve-signup", {
+              url: "/serve-signup",
+              controller: "MyServeController as serve",
+              templateUrl: "my_serve/myserve.html",
+              data: { isProtected: true },
+              resolve: { loggedin: checkLoggedin }
             })
             .state("styleguide", {
                 url: "/styleguide",
