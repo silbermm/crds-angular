@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 (function () {
   module.exports = function LoginController($scope, $rootScope, AUTH_EVENTS, MESSAGES, AuthService, $cookieStore, $state, $log, Session, $timeout, User) {
     
