@@ -43,18 +43,18 @@ require('../services/user_service');
                     $scope.registerForm.$setPristine();
                     $scope.newuser = {};
                     $timeout(function() {
-                      if (Session.hasRedirectionInfo()) {
-                          var url = Session.exists("redirectUrl");
-                          var urlSegment = Session.exists("urlSegment");
-                          Session.removeRedirectRoute();
-                          if(urlSegment === undefined){
-                              $state.go(url);
-                          }
-                          else
-                          {
-                              $state.go(url,{urlsegment:urlSegment});
-                          }
-                      }
+                        if (Session.hasRedirectionInfo()) {
+                            var url = Session.exists("redirectUrl");
+                            var link = Session.exists("link");
+                            Session.removeRedirectRoute();
+                            if(link === undefined){
+                                $state.go(url);
+                            }
+                            else
+                            {
+                                $state.go(url,{link:link});
+                            }
+                        }
                     }, 500);
                 }, function () {
                     $log.debug("Bad password");
