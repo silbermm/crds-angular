@@ -22,7 +22,7 @@
   require('./my_serve');
   var getCookie = require('./utilities/cookies');
 
-   
+
 
     angular.module("crossroads").config(["$stateProvider", "$urlRouterProvider", "$httpProvider", "$urlMatcherFactoryProvider", function ($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory) {
 
@@ -35,7 +35,7 @@
 			encode: function(val) { return val != null ? val.toString() : val; },
 			decode: function(val) { return val != null ? val.toString() : val; },
 			is: function(val) { return this.pattern.test(val); },
-			pattern: /[^/.*$]+/
+            pattern: /^\/.*/
 		});
 
         //================================================
