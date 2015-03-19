@@ -1,5 +1,6 @@
 'use strict';
 require('../services/group_service');
+require('../services/group_details_service');
 (function () {
     module.exports = function GroupSignupController($rootScope, Profile, Group, $log, $stateParams, Page) {
         $log.debug("Inside GroupSignupController");
@@ -10,7 +11,9 @@ require('../services/group_service');
         vm.showContent = true;
         vm.showSuccess = false;
         vm.showFull = false;
-        
+        vm.showWaitList = false;
+        vm.showWaitSuccess = false;
+
         vm.signupPage = $rootScope.signupPage;
 
         // Initialize Person data for logged-in user
@@ -18,7 +21,7 @@ require('../services/group_service');
             vm.person = response;
             $log.debug("Person: " + vm.person);
         });
-            
+
         var pageRequest = Page.get({ url: $stateParams.urlsegment }, function() {
             if (pageRequest.pages.length > 0) {
                 vm.signupPage = pageRequest.pages[0];
@@ -47,7 +50,7 @@ require('../services/group_service');
                 $rootScope.$emit('notify', $rootScope.MESSAGES.fullGroupError);
                 vm.showContent = false;
                 vm.showFull = true;
-            });       
-        };        
+            });
+        };
     }
 })()
