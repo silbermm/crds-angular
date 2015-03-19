@@ -1,17 +1,15 @@
-﻿using crds_angular.Controllers.API;
-using MinistryPlatform.Translation.Services;
-using MinistryPlatform.Translation.Models;
-using MinistryPlatform.Models;
-using Moq;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Results;
+using crds_angular.Controllers.API;
+using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Services;
+using Moq;
+using NUnit.Framework;
 
 namespace crds_angular.test.controllers
 {

@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using System.Reflection;
+using log4net;
+using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Exceptions;
-using MinistryPlatform.Translation.Models;
-using MinistryPlatform.Translation.Utils;
+using Group = MinistryPlatform.Models.Group;
 
 namespace MinistryPlatform.Translation.Services
 {
     public class GroupService : BaseService, IGroupService
     {
-        readonly private log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        readonly private ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly int GroupsParticipantsPageId = Convert.ToInt32(AppSettings("GroupsParticipants"));
         private readonly int GroupsPageId = Convert.ToInt32(AppSettings("Groups"));
         private readonly int GroupsEventsPageId = Convert.ToInt32(AppSettings("GroupsEvents"));
