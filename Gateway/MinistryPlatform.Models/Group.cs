@@ -8,7 +8,6 @@ namespace MinistryPlatform.Models
         private IList<int> participants = new List<int>();
 
         public int GroupId { get; set; }
-        //public string GroupName { get; set; }
         public string GroupRole { get; set; }
 
         public int RecordId { get; set; }
