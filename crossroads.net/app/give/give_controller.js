@@ -11,6 +11,8 @@
 
         _this.view = 'bank';
         _this.bankType = 'checking';
+        _this.showMessage = "Where?";
+        _this.showCheckClass = "ng-hide";
 
         _this.alerts = [
             {
@@ -19,6 +21,15 @@
             }
         ]
 
+        _this.toggleCheck = function() {
+            if (_this.showMessage == "Where?") {
+                _this.showMessage = "Close";
+                _this.showCheckClass = "";
+            } else {
+                _this.showMessage = "Where?";
+                _this.showCheckClass = "ng-hide";
+            }
+        }
 
         _this.closeAlert = function (index) {
             _this.alerts.splice(index, 1);
