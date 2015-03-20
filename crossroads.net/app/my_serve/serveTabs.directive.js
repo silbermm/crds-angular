@@ -1,6 +1,8 @@
 "use strict()";
 
 (function(){
+  var moment = require('moment');
+  
   module.exports = ServeTabs;
 
     
@@ -30,9 +32,13 @@
       scope.setActiveTab = setActiveTab;
       scope.signedup = null;
 
-
+      activate();
      ////////////////////////////////////// 
-    
+   
+
+      function activate(){
+      }
+
       function closePanel(){
         scope.isCollapsed = true;
       }
