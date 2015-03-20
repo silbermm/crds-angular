@@ -19,13 +19,24 @@
   require('./opportunity/view_opportunities.html');
   require('./content/content.html');
   require('./community_groups_signup/group_signup_form.html');
-  var getCookie = require('./utilities/cookies'); 
+  require('./my_serve');
+  var getCookie = require('./utilities/cookies');
 
-   
-    angular.module("crossroads").config(["$stateProvider", "$urlRouterProvider", "$httpProvider", function ($stateProvider, $urlRouterProvider, $httpProvider) {
+
+
+    angular.module("crossroads").config(["$stateProvider", "$urlRouterProvider", "$httpProvider", "$urlMatcherFactoryProvider", function ($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory) {
 
         $httpProvider.defaults.useXDomain = true;
         $httpProvider.defaults.headers.common['Authorization'] = getCookie('sessionId');
+
+        // This custom type is needed to allow us to NOT URLEncode slashes when using ui-sref
+        // See this post for details: https://github.com/angular-ui/ui-router/issues/1119
+		$urlMatcherFactory.type("contentRouteType", {
+			encode: function(val) { return val != null ? val.toString() : val; },
+			decode: function(val) { return val != null ? val.toString() : val; },
+			is: function(val) { return this.pattern.test(val); },
+            pattern: /^\/.*/
+		});
 
         //================================================
         // Check if the user is connected
@@ -184,6 +195,13 @@
                     loggedin: checkLoggedin
                 }
             })
+            .state("serve-signup", {
+              url: "/serve-signup",
+              controller: "MyServeController as serve",
+              templateUrl: "my_serve/myserve.html",
+              data: { isProtected: true },
+              resolve: { loggedin: checkLoggedin }
+            })
             .state("styleguide", {
                 url: "/styleguide",
                 controller: "StyleguideCtrl as styleguide",
@@ -201,7 +219,7 @@
                 }
             })
            .state("community-groups-signup", {
-                url: "/sign-up/:urlsegment",
+                url: "{link:/sign-up/.*$}",
                 controller: "GroupSignupController as groupsignup",
                 templateUrl: "community_groups_signup/group_signup_form.html",
                 data: {
@@ -212,15 +230,13 @@
                 }
     })
     .state("content", {
-    // This url will match a slash followed by anything (including additional slashes).  There is corresponding 
-    // logic in the controller to extract the leaf (anything after the final slash) to pass to the CMS API.
-    // TODO This can be changed back to "/:urlsegment" if US1044 makes changes to enable page slugs without slashes
-        url: "/{urlsegment:.*$}",
+    // This url will match a slash followed by anything (including additional slashes).
+        url: "{link:contentRouteType}",
         controller: "ContentCtrl",
         templateUrl: "content/content.html"
             });
-        //Leave the comment below.  Once we have a true 404 page hosted in the same domain, this is how we 
-        //will handle the routing. 
+        //Leave the comment below.  Once we have a true 404 page hosted in the same domain, this is how we
+        //will handle the routing.
         //.state("404", {
         //    templateUrl: __CMS_ENDPOINT__ + "/page-not-found/"
         //});
