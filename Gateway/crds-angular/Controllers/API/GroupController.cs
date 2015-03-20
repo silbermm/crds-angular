@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.Http.ModelBinding;
+using crds_angular.Models.Crossroads;
 using crds_angular.Security;
 using crds_angular.Models.MP;
 using MinistryPlatform.Translation.Exceptions;
@@ -105,21 +106,13 @@ namespace crds_angular.Controllers.API
         }
 
        
-        [ResponseType(typeof(List<GroupDTO>))]
+        [ResponseType(typeof(GroupDetail))]
         [Route("api/group/{groupId}")]
         public IHttpActionResult Get(int groupId)
         {
-            Group g = groupService.getGroupDetails(groupId);
-            
-            var group = new GroupDTO()
-            {
-                groupID = g.RecordId,
-                groupFullInd = g.Full,
-                waitListInd = g.WaitList,
-                waitListGroupId = g.WaitListGroupId
-            };
-            
-            return Ok(group);
+           Group g = groupService.getGroupDetails(groupId);
+           var detail = new GroupDetail();
+           return Ok(detail);
         
         }
 
@@ -142,11 +135,7 @@ namespace crds_angular.Controllers.API
 
     public class GroupDTO
     {
-        public int groupID { get; set; }
-        public bool groupFullInd { get; set; }
-        public bool waitListInd { get; set; }
-        public IList<int> waitListGroupId { get; set; }
-     }
+    }
     
 
     
