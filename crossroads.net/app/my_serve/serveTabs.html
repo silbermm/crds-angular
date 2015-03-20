@@ -1,14 +1,14 @@
 <div class="serve-day-time row push-top">
 
-  <div class="col-sm-1 serve-time"> {{opportunity.time}} </div><!--/serve-time-->  
+  <div class="col-sm-1 serve-time"> {{opportunity.time}} </div><!--/serve-time-->
 
   <div class="col-sm-11 serve-opp-listings" data-ng-repeat='team in opportunity.servingTeams'>
     <div class="panel panel-default ng-isolate-scope" >
       <div class="panel-heading clearfix">
         <a class="panel-link" ng-click="openPanel(team.members)"></a> {{team.name}}
         <div class="name-btns">
-          <a href="" ng-click="setActiveTab(member)" ng-repeat="member in team.members" ng-class="{'active':isActiveTab(member.name) }"><span class="btn btn-default btn-xs"> {{member.name}} </span></a>                
-        </div><!--/pull-right--> 
+          <a href="" ng-click="setActiveTab(member)" ng-repeat="member in team.members" ng-class="{'active':isActiveTab(member.name) }"><span class="btn btn-default btn-xs"> {{member.name}} </span></a>
+        </div><!--/pull-right-->
       </div><!--/panel-heading-->
 
       <div class="panel-collapse collapse" collapse="isCollapsed" style="height: 0px;">
@@ -20,7 +20,7 @@
               <div class="radio" ng-repeat="role in currentMember.roles">
                 <label>
                   <input type="radio" name="role"  ng-model="roles" value="{{role.name}}">
-                  {{role.name}} <span class="badge label-default">3 needed</span>
+                  {{role.name}} <span class="badge label-default">{{ role.capacity - role.slotsTaken }} needed</span>
                 </label>
               </div><!--/radio-->
             </div><!--/col-sm-4-->
@@ -55,7 +55,7 @@
                     <option value="5">From/To</option>
                   </select>
                 </div><!--/form-group-->
-                
+
                 <div ng-show="repeating == 'From/To'">
                   <div class="form-group">
                     <label>From:</label>
@@ -92,6 +92,4 @@
       </div><!--/panel-collapse-->
     </div><!--/panel-->
   </div>
-</div> <!-- serve time --> 
-
-
+</div> <!-- serve time -->
