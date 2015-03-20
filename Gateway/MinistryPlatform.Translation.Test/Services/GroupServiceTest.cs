@@ -20,6 +20,7 @@ namespace MinistryPlatform.Translation.Test.Services
         private readonly int GroupsPageId = 322;
         private readonly int GroupsEventsPageId = 302;
         private readonly int EventsGroupsPageId = 408;
+        private readonly int GroupsSubGroupsPgeId = 299;
 
         [SetUp]
         public void SetUp()
@@ -155,6 +156,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 { "Group_Name", "Test Group" },
                 { "Target_Size", (short)5 },
                 { "Group_Is_Full", true },
+                { "Enable_Waiting_List", true }
             };
 
             ministryPlatformService.Setup(mocked => mocked.GetRecordDict(GroupsPageId, 456, It.IsAny<string>(), false)).Returns(getGroupPageResponse);
@@ -176,6 +178,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(456, g.RecordId);
             Assert.AreEqual(5, g.TargetSize);
             Assert.AreEqual(true, g.Full);
+            Assert.AreEqual(true, g.WaitList);
             Assert.AreEqual("Test Group", g.Name);
             Assert.NotNull(g.Participants);
             Assert.AreEqual(5, g.Participants.Count);
