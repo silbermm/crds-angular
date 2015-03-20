@@ -40,8 +40,12 @@ namespace MinistryPlatform.Translation.Services
                 {
                     OpportunityId = (int) record["dp_RecordID"],
                     OpportunityName = (string) record["Opportunity Title"],
-                    EventType = (string) record["Event Type"], RoleTitle = (string) record["Role_Title"]
+                    EventType = (string) record["Event Type"], 
+                    RoleTitle = (string) record["Role_Title"]
                 };
+                var cap = 0;
+                int.TryParse(record["Maximum_Needed"] != null ? record["Maximum_Needed"].ToString() : "0", out cap);
+                opportunity.Capacity = cap;
                 //now get all events with type = event type id
                 if (opportunity.EventType != null)
                 {
@@ -92,6 +96,15 @@ namespace MinistryPlatform.Translation.Services
                 Response_Result_ID = (int?) s["Response Result ID"]
             };
             return response;
+        }
+
+        public static int GetOpportunitySignupCount(int opportunityId, int eventId, string token)
+        {
+            var subPageViewId = Convert.ToInt32(ConfigurationManager.AppSettings["SignedupToServe"]);
+            var search = ",,," + eventId;
+            var records = MinistryPlatformService.GetSubpageViewRecords(subPageViewId, opportunityId, token, search);
+
+            return records.Count();
         }
     }
 }

@@ -56,22 +56,6 @@ namespace crds_angular.Controllers.API
             });
         }
 
-        [ResponseType(typeof (List<ServingTeam>))]
-        [Route("api/profile/serving/{contactId}")]
-        public IHttpActionResult GetServingTeams(int contactId)
-        {
-            return Authorized(token =>
-            {
-                var personService = new PersonService();
-                var list = personService.GetServingOpportunities(contactId, token);
-                if (list == null)
-                {
-                    return Unauthorized();
-                }
-                return this.Ok(list);
-            });
-        }
-
         [ResponseType(typeof (Person))]
         [Route("api/profile")]
         public IHttpActionResult GetProfile()
