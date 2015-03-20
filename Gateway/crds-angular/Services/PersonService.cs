@@ -198,7 +198,6 @@ namespace crds_angular.Services
                 GroupId = team.GroupId,
                 Members = NewTeamMembersWithRoles(team.Members, opportunity.RoleTitle, tmpRole)
             };
-            //var x = servingTeam;
             return servingTeam;
         }
 
