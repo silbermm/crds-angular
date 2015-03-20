@@ -349,6 +349,7 @@ namespace crds_angular.Services
 
         private static List<ServeEvent> ParseServingEvents(IEnumerable<Event> events)
         {
+            var today = DateTime.Now;
             return events.Select(e => new ServeEvent
             {
                 Name = e.EventTitle,
@@ -356,7 +357,7 @@ namespace crds_angular.Services
                 DateOnly = e.EventStartDate.Date.ToString("d"),
                 TimeOnly = e.EventStartDate.TimeOfDay.ToString(),
                 EventId = e.EventId
-            }).ToList();
+            }).Where(e => e.StarDateTime.Month == today.Month && e.StarDateTime.Year == today.Year).ToList();
         }
 
         private static List<ServeOccurance> ParseEvents(IEnumerable<Event> events)
