@@ -213,16 +213,19 @@ namespace crds_angular.Services
                 foreach (var opportunity in opportunities)
                 {
                     if (opportunity.EventType == null) continue;
-
-                    //hold role for later
-                    var serveRole = new ServeRole {Name = opportunity.OpportunityName + " " + opportunity.RoleTitle, Capacity = opportunity.Capacity};
                     
                     //team events
                     var events = ParseServingEvents(opportunity.Events);
 
                     foreach (var e in events)
                     {
-                        serveRole.SlotsTaken = OpportunityService.GetOpportunitySignupCount(opportunity.OpportunityId, e.EventId, token);
+                        var serveRole = new ServeRole
+                        {
+                            Name = opportunity.OpportunityName + " " + opportunity.RoleTitle,
+                            Capacity = opportunity.Capacity,
+                            SlotsTaken =
+                                OpportunityService.GetOpportunitySignupCount(opportunity.OpportunityId, e.EventId, token)
+                        };
 
                         var serveDay = serveDays.SingleOrDefault(r => r.Day == e.DateOnly);
                         if (serveDay != null)
