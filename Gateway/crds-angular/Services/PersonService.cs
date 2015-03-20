@@ -322,14 +322,15 @@ namespace crds_angular.Services
 
         private static List<ServeEvent> ParseServingEvents(IEnumerable<Event> events)
         {
+            var today = DateTime.Now;
             return events.Select(e => new ServeEvent
             {
                 Name = e.EventTitle,
                 StarDateTime = e.EventStartDate,
                 DateOnly = e.EventStartDate.Date.ToString("d"),
                 TimeOnly = e.EventStartDate.TimeOfDay.ToString(),
-                EventId = e.EventId,
-            }).ToList();
+                EventId = e.EventId
+            }).Where(e => e.StarDateTime.Month == today.Month && e.StarDateTime.Year == today.Year).ToList();
         }
     }
 }
