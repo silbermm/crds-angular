@@ -231,5 +231,16 @@ namespace MinistryPlatform.Translation.Test
 
             Assert.IsNotNull(teams);
         }
+
+        [Test]
+        public void ShouldGetPeopleSignedUp()
+        {
+            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            const int opportunityId = 139;
+            const int eventId = 950107;
+            var response = OpportunityService.GetOpportunitySignupCount(opportunityId, eventId, token);
+
+            Assert.IsNotNull(response);
+        }
     }
 }

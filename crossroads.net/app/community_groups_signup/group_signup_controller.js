@@ -21,14 +21,14 @@ require('../services/group_service');
             $log.debug("Person: " + vm.person);
         });
 
-        var pageRequest = Page.get({ url: $stateParams.urlsegment }, function() {
+        var pageRequest = Page.get({ url: $stateParams.link }, function() {
             if (pageRequest.pages.length > 0) {
                 vm.signupPage = pageRequest.pages[0];
                 // retrieve group id from the CMS page
                 vm.groupId = vm.signupPage.group;
                 $log.debug("Group ID: " + vm.groupId);
             } else {
-				$log.debug("Group page not found for " + $stateParams.urlsegment);
+				$log.debug("Group page not found for " + $stateParams.link);
                 var notFoundRequest = Page.get({ url: "page-not-found" }, function() {
                     if (notFoundRequest.pages.length > 0) {
                         vm.content = notFoundRequest.pages[0].renderedContent;
