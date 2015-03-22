@@ -118,6 +118,7 @@ namespace MinistryPlatform.Translation.Services
                                 object gd = null;
                                 i.TryGetValue("dp_RecordID", out gd);
                                 g.WaitListGroupId.Add((int) gd);
+                                break;
                             }
                         }
                     }

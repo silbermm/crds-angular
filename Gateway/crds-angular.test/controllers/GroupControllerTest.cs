@@ -96,6 +96,12 @@ namespace crds_angular.test.controllers
         }
 
         [Test]
+        public void testGetGroupDetails()
+        {
+            int groupId = 456;
+        }
+
+        [Test]
         public void testCallGroupServiceFailsUnauthorized()
         {
             fixture.Request.Headers.Authorization = null;

@@ -170,6 +170,16 @@ namespace MinistryPlatform.Translation.Test.Services
             }
             ministryPlatformService.Setup(mocked => mocked.GetSubPageRecords(GroupsParticipantsPageId, 456, It.IsAny<string>())).Returns(groupParticipantsPageResponse);
 
+            var groupSubGroupsPageResponse = new List<Dictionary<string, object>>();
+            for (int i = 310; i <= 312; i++)
+            {
+                groupSubGroupsPageResponse.Add(new Dictionary<string, object>()
+                {
+                    { "Wait_List_Group_ID", i},
+                });
+            }
+            ministryPlatformService.Setup(mocked => mocked.GetSubPageRecords(GroupsParticipantsPageId, 299, It.IsAny<string>())).Returns(groupSubGroupsPageResponse);
+
             var g = fixture.getGroupDetails(456);
 
             ministryPlatformService.VerifyAll();
