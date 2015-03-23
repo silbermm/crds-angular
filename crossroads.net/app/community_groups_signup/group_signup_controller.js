@@ -32,7 +32,7 @@ require('../services/group_service');
                 vm.groupDetails = Group.Detail.get({groupId : vm.groupId}).$promise
                 .then(function(response){
                     // This is the case where the group is full and there is a waitlist
-                    if(response.groupFullInd === "True" && response.waitListInd === "True"){
+                    if((response.groupFullInd === "True" && response.waitListInd === "True")  || (response.groupFullInd === true && response.waitListInd === true)){
                         vm.waitListCase = true;
                         vm.showWaitList = true;
                         //append "- WaitList" to title
@@ -40,7 +40,7 @@ require('../services/group_service');
                         //update groupID to waitList ID
                         vm.groupId = response.waitListGroupId;
                         //this is the case where the group is full and there is NO waitlist
-                    }else if(response.groupFullInd === "True" && response.waitListInd === "False"){
+                    }else if((response.groupFullInd === "True" && response.waitListInd === "False") || (response.groupFullInd === true && response.waitListInd === false)){
                         vm.showFull = true;
                         vm.showContent = false;
 
