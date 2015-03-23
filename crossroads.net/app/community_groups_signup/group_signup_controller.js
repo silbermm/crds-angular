@@ -42,15 +42,12 @@ require('../services/group_service');
                         //this is the case where the group is full and there is NO waitlist
                     }else if(response.groupFullInd === "True" && response.waitListInd === "False"){
                         vm.showFull = true;
+                        vm.showContent = false;
 
                     }
-                    $log.debug(response);
-                    $log.debug(vm.signupPage);
-                    $log.debug("NewID:"+vm.groupId);
                 });
                 
             } else {
-				$log.debug("Group page not found for " + $stateParams.link);
                 var notFoundRequest = Page.get({ url: "page-not-found" }, function() {
                     if (notFoundRequest.pages.length > 0) {
                         vm.content = notFoundRequest.pages[0].renderedContent;
