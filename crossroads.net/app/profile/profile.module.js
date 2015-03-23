@@ -11,4 +11,3 @@ require('../email_field/email_field_directive');
 var app = require('angular');
 
 app.module('crossroads.profile', ['ngResource', 'ngMessages', 'ui.bootstrap', 'ui.router', 'password_field','email_field'])
- 
