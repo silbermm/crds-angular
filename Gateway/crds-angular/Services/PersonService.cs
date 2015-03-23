@@ -330,7 +330,7 @@ namespace crds_angular.Services
                 DateOnly = e.EventStartDate.Date.ToString("d"),
                 TimeOnly = e.EventStartDate.TimeOfDay.ToString(),
                 EventId = e.EventId
-            }).Where(e => e.StarDateTime.Month == today.Month && e.StarDateTime.Year == today.Year).ToList();
+            }).Where(e => e.StarDateTime.Month == today.Month && e.StarDateTime.Day >= today.Day && e.StarDateTime.Year == today.Year).ToList();
         }
     }
 }
