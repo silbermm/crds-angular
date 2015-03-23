@@ -7,11 +7,13 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.Http.ModelBinding;
+using crds_angular.Models.Crossroads;
+using crds_angular.Models.Json;
 using crds_angular.Security;
 using crds_angular.Models.MP;
 using MinistryPlatform.Translation.Exceptions;
 using MinistryPlatform.Translation.Services;
-using MinistryPlatform.Translation.PlatformService;
+using MinistryPlatform.Models;
 
 namespace crds_angular.Controllers.API
 {
@@ -93,21 +95,28 @@ namespace crds_angular.Controllers.API
             throw new NotImplementedException();
             return this.Ok();
         }
+        
+        [ResponseType(typeof(GroupDetail))]
+        [Route("api/group/{groupId}")]
+        public IHttpActionResult Get(int groupId)
+        {
+           Group g = groupService.getGroupDetails(groupId);
+           var detail = new GroupDetail();
+           {
+               detail.GroupId = g.GroupId;
+               detail.GroupFullInd = g.Full;
+               detail.WaitListInd = g.WaitList;
+               detail.WaitListGroupId = g.WaitListGroupId;
+           };
+            
+           return Ok(detail);
+        
+        }
 
         // TODO: implement later
         [ResponseType(typeof(ContactDTO))]
         [Route("api/group/{groupId}/user/{userId}")]
         public IHttpActionResult Get(String groupId, String userId)
-        {
-            throw new NotImplementedException();
-            return this.Ok();
-
-        }
-
-        // TODO: implement later
-        [ResponseType(typeof(List<ContactDTO>))]
-        [Route("api/group/{groupId}")]
-        public IHttpActionResult Get(String groupId)
         {
             throw new NotImplementedException();
             return this.Ok();
@@ -134,4 +143,7 @@ namespace crds_angular.Controllers.API
     public class GroupDTO
     {
     }
+    
+
+    
 }

@@ -16,6 +16,7 @@ namespace crds_angular.test.Services
         private const string USERNAME = "tmaddox@aol.com";
         private const string PASSWORD = "crds1234";
 
+        // TODO figure out why testme can not get their profile
         [Test]
         public void ATestMyFamily()
         {

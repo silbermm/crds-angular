@@ -562,13 +562,13 @@
 	C595.781,240.156,596.094,240.781,596.562,241.25z M602.812,249.688c0.312-0.469,0.469-1.094,0.469-1.719
 	c0-1.094-0.312-1.719-1.094-2.344c-0.469-0.312-1.094-0.625-2.188-0.938v6.406C601.25,251.094,602.188,250.625,602.812,249.688z"/>
 <rect x="613.75" y="226.406" fill="#FFFFFF" width="104.688" height="39.062"/>
-<polyline fill="none" stroke="#3B6E8F" stroke-width="3" stroke-miterlimit="10" points="83.594,358.906 83.594,377.344 
+<polyline fill="none" stroke="#3B6E8F" stroke-width="3" stroke-miterlimit="10" points="83.594,358.906 83.594,377.344
 	242.5,377.344 242.5,359.219 242.5,377.344 242.5,359.219 "/>
 <line fill="none" stroke="#3B6E8F" stroke-width="3" stroke-miterlimit="10" x1="162.969" y1="377.344" x2="162.969" y2="412.344"/>
-<polyline fill="none" stroke="#B05C30" stroke-width="3" stroke-miterlimit="10" points="257.031,358.906 257.031,377.344 
+<polyline fill="none" stroke="#B05C30" stroke-width="3" stroke-miterlimit="10" points="257.031,358.906 257.031,377.344
 	458.594,377.344 458.594,359.219 458.594,377.344 458.594,359.219 "/>
 <line fill="none" stroke="#B05C30" stroke-width="3" stroke-miterlimit="10" x1="357.812" y1="377.344" x2="357.812" y2="412.344"/>
-<polyline fill="none" stroke="#113556" stroke-width="3" stroke-miterlimit="10" points="473.125,358.906 473.125,377.344 
+<polyline fill="none" stroke="#113556" stroke-width="3" stroke-miterlimit="10" points="473.125,358.906 473.125,377.344
 	546.406,377.344 546.406,359.219 546.406,377.344 546.406,359.219 "/>
 <line fill="none" stroke="#113556" stroke-width="3" stroke-miterlimit="10" x1="509.688" y1="377.344" x2="509.688" y2="412.344"/>
 <path fill="#3B6E8F" d="M109.375,438.281v8.438h-4.062v-21.094h6.875c2.031,0,3.75,0.625,4.844,1.719
