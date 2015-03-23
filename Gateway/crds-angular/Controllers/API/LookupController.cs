@@ -54,6 +54,7 @@ namespace crds_angular.Controllers.API
             });
         }
 
+        [ResponseType(typeof(Dictionary<string, object>))]
         [HttpGet]
         [Route("api/lookup/{userId}/find/{email?}")]
         public IHttpActionResult EmailExists(int userId, string email)
