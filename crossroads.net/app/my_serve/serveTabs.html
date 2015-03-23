@@ -19,7 +19,7 @@
               <div class="radio" ng-repeat="role in currentMember.roles">
                 <label>
                   <input type="radio" name="role"  ng-model="roles" value="{{role.name}}">
-                  {{role.name}} <span class="badge label-default">{{ role.capacity - role.slotsTaken }} needed</span>
+                  {{role.name}} <span class="badge label-default" ng-show="role.capacity > 0">{{ role.capacity - role.slotsTaken }} needed</span>
                 </label>
               </div><!--/radio-->
             </div><!--/col-sm-4-->
