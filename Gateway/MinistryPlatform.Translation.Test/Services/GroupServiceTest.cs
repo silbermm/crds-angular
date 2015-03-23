@@ -20,7 +20,7 @@ namespace MinistryPlatform.Translation.Test.Services
         private readonly int GroupsPageId = 322;
         private readonly int GroupsEventsPageId = 302;
         private readonly int EventsGroupsPageId = 408;
-        private readonly int GroupsSubGroupsPgeId = 299;
+        private readonly int GroupsSubGroupsPageId = 299;
 
         [SetUp]
         public void SetUp()
@@ -156,7 +156,8 @@ namespace MinistryPlatform.Translation.Test.Services
                 { "Group_Name", "Test Group" },
                 { "Target_Size", (short)5 },
                 { "Group_Is_Full", true },
-                { "Enable_Waiting_List", true }
+                { "Enable_Waiting_List", true },
+                { "dp_RecordID" , 522}
             };
 
             ministryPlatformService.Setup(mocked => mocked.GetRecordDict(GroupsPageId, 456, It.IsAny<string>(), false)).Returns(getGroupPageResponse);
@@ -170,16 +171,17 @@ namespace MinistryPlatform.Translation.Test.Services
             }
             ministryPlatformService.Setup(mocked => mocked.GetSubPageRecords(GroupsParticipantsPageId, 456, It.IsAny<string>())).Returns(groupParticipantsPageResponse);
 
-            var groupSubGroupsPageResponse = new List<Dictionary<string, object>>();
-            for (int i = 310; i <= 312; i++)
-            {
-                groupSubGroupsPageResponse.Add(new Dictionary<string, object>()
-                {
-                    { "Wait_List_Group_ID", i},
-                });
-            }
-            ministryPlatformService.Setup(mocked => mocked.GetSubPageRecords(GroupsParticipantsPageId, 299, It.IsAny<string>())).Returns(groupSubGroupsPageResponse);
+            var GroupsSubGroupsPageResponse = new List<Dictionary<string, object>>();
+            GroupsSubGroupsPageResponse.Add(new Dictionary<string, object>()
+            {  
+                { "Group_Name", "Test Wait List" },
+                { "Group_Type", "Wait List" },
+                { "Group_Type_ID", "20" },
+                { "dp_RecordID", 320 }
+            });
 
+            ministryPlatformService.Setup(mocked => mocked.GetSubPageRecords(GroupsSubGroupsPageId, 456, It.IsAny<string>())).Returns(GroupsSubGroupsPageResponse); 
+                                                   
             var g = fixture.getGroupDetails(456);
 
             ministryPlatformService.VerifyAll();
@@ -197,7 +199,8 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(44, g.Participants[2]);
             Assert.AreEqual(45, g.Participants[3]);
             Assert.AreEqual(46, g.Participants[4]);
-
+            Assert.AreEqual(true, g.WaitList);
+            Assert.AreEqual(320, g.WaitListGroupId);
         }
     }
 }
