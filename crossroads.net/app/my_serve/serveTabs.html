@@ -1,7 +1,8 @@
 <div class="serve-day-time row push-top">
+ 
   <div class="col-sm-1 serve-time"> {{opportunity.time | time}} </div><!--/serve-time-->
-
-  <div class="col-sm-11 serve-opp-listings" data-ng-repeat='team in opportunity.servingTeams'>
+  <div class="col-sm-11 clearfix">
+  <div class="col-sm-12 serve-opp-listings" data-ng-repeat='team in opportunity.servingTeams'>
     <div class="panel panel-default ng-isolate-scope" >
       <div class="panel-heading clearfix">
         <a class="panel-link" ng-click="openPanel(team.members)"></a> {{team.name}}
@@ -90,5 +91,6 @@
         </div><!--/panel-body-->
       </div><!--/panel-collapse-->
     </div><!--/panel-->
+  </div>
   </div>
 </div> <!-- serve time -->
