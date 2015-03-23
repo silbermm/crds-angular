@@ -21,6 +21,7 @@ require('../node_modules/angular-toggle-switch/angular-toggle-switch.css');
 
 require('../styles/main.scss');
 require('./profile');
+require('./filters');
 require('./events');
 require('./cms/services/cms_services_module');
 
@@ -30,7 +31,7 @@ var _ = require('lodash');
 "use strict";
 (function () {
 
-   angular.module("crossroads", ['ngResource', "crossroads.profile", "crdsCMS.services", "ui.router", 'ui.utils', "ngCookies", "ngMessages", 'angular-growl', 'snap', 'toggle-switch'])
+   angular.module("crossroads", ['ngResource', "crossroads.profile", "crossroads.filters", "crdsCMS.services", "ui.router", 'ui.utils', "ngCookies", "ngMessages", 'angular-growl', 'snap', 'toggle-switch'])
 
     .constant("AUTH_EVENTS", {
             loginSuccess: "auth-login-success",
