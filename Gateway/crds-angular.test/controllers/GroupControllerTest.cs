@@ -6,10 +6,13 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Results;
 using crds_angular.Controllers.API;
+using crds_angular.Models.Crossroads;
+using crds_angular.Models.Json;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services;
 using Moq;
 using NUnit.Framework;
+using Event = MinistryPlatform.Models.Event;
 
 namespace crds_angular.test.controllers
 {
@@ -94,6 +97,27 @@ namespace crds_angular.test.controllers
             Assert.IsNotNull(result);
             Assert.IsInstanceOf(typeof(BadRequestResult), result);
         }
+
+        [Test]
+        public void testGetGetGroupDetails()
+        {
+            int groupId = 333;
+            Group g = new Group();
+            g.GroupId = 333;
+            g.GroupRole = "Member";
+            g.Name = "Test Me";
+            g.GroupId = 123456;
+            g.TargetSize = 5;
+            g.WaitList = true;
+            g.WaitListGroupId = 888;
+
+         
+            groupServiceMock.Setup(mocked => mocked.getGroupDetails(groupId)).Returns(g);
+            IHttpActionResult result = fixture.Get(groupId);
+
+            Assert.NotNull(g); 
+            Assert.NotNull(result);
+         }
 
         [Test]
         public void testCallGroupServiceFailsUnauthorized()

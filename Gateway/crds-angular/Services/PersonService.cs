@@ -140,13 +140,13 @@ namespace crds_angular.Services
                             };
                             servingTeam.Members.Add(member);
                         }
-                        var role = new ServeRole {Name = group.GroupRole};
+                        var role = new ServeRole { Name = group.GroupRole };
                         member.Roles.Add(role);
                     }
                     else
                     {
-                        servingTeam = new ServingTeam {Name = group.Name, GroupId = group.GroupId};
-                        var groupMembers = new List<TeamMember> {NewTeamMember(familyMember, group)};
+                        servingTeam = new ServingTeam { Name = group.Name, GroupId = group.GroupId };
+                        var groupMembers = new List<TeamMember> { NewTeamMember(familyMember, group) };
                         servingTeam.Members = groupMembers;
                         servingTeams.Add(servingTeam);
                     }
@@ -157,17 +157,17 @@ namespace crds_angular.Services
 
         private static TeamMember NewTeamMember(FamilyMember familyMember, Group group)
         {
-            var teamMember = new TeamMember {ContactId = familyMember.ContactId, Name = familyMember.PreferredName};
+            var teamMember = new TeamMember { ContactId = familyMember.ContactId, Name = familyMember.PreferredName };
 
-            var role = new ServeRole {Name = @group.GroupRole};
-            teamMember.Roles = new List<ServeRole> {role};
+            var role = new ServeRole { Name = @group.GroupRole };
+            teamMember.Roles = new List<ServeRole> { role };
 
             return teamMember;
         }
 
         private static TeamMember NewTeamMember(TeamMember teamMember, ServeRole role)
         {
-            var newTeamMember2 = new TeamMember {Name = teamMember.Name, ContactId = teamMember.ContactId};
+            var newTeamMember2 = new TeamMember { Name = teamMember.Name, ContactId = teamMember.ContactId };
             newTeamMember2.Roles.Add(role);
 
             return newTeamMember2;
@@ -212,7 +212,7 @@ namespace crds_angular.Services
                 foreach (var opportunity in opportunities)
                 {
                     if (opportunity.EventType == null) continue;
-                    
+
                     //team events
                     var events = ParseServingEvents(opportunity.Events);
 
@@ -287,7 +287,7 @@ namespace crds_angular.Services
                             else
                             {
                                 //time not in list
-                                serveTime = new ServingTime {Time = e.TimeOnly};
+                                serveTime = new ServingTime { Time = e.TimeOnly };
                                 serveTime.ServingTeams.Add(NewServingTeam(team, opportunity, serveRole));
                                 serveDay.ServeTimes.Add(serveTime);
                             }
@@ -295,8 +295,8 @@ namespace crds_angular.Services
                         else
                         {
                             //day not in list add it
-                            serveDay = new ServingDay {Day = e.DateOnly};
-                            var serveTime = new ServingTime {Time = e.TimeOnly};
+                            serveDay = new ServingDay { Day = e.DateOnly };
+                            var serveTime = new ServingTime { Time = e.TimeOnly };
                             serveTime.ServingTeams.Add(NewServingTeam(team, opportunity, serveRole));
 
                             serveDay.ServeTimes.Add(serveTime);
@@ -311,7 +311,7 @@ namespace crds_angular.Services
             var sortedServeDays = new List<ServingDay>();
             foreach (var serveDay in preSortedServeDays)
             {
-                var sortedServeDay = new ServingDay {Day = serveDay.Day};
+                var sortedServeDay = new ServingDay { Day = serveDay.Day };
                 var sortedServeTimes = serveDay.ServeTimes.OrderBy(s => s.Time).ToList();
                 sortedServeDay.ServeTimes = sortedServeTimes;
                 sortedServeDays.Add(sortedServeDay);

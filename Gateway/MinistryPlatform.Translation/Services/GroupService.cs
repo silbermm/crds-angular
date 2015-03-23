@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Linq;
 using log4net;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Exceptions;
@@ -15,6 +16,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int GroupsPageId = Convert.ToInt32(AppSettings("Groups"));
         private readonly int GroupsEventsPageId = Convert.ToInt32(AppSettings("GroupsEvents"));
         private readonly int EventsGroupsPageId = Convert.ToInt32(AppSettings("EventsGroups"));
+        private readonly int GroupsSubgroupsPageId = Convert.ToInt32(AppSettings("GroupsSubgroups"));
         private IMinistryPlatformService ministryPlatformService;
 
         public GroupService(IMinistryPlatformService ministryPlatformService)
@@ -32,7 +34,7 @@ namespace MinistryPlatform.Translation.Services
             {
                 throw (new GroupFullException(g));
             }
-
+             
             var values = new Dictionary<string, object>
             {
                 { "Participant_ID", participantId },
@@ -71,7 +73,7 @@ namespace MinistryPlatform.Translation.Services
                 groupDetails.TryGetValue("Group_ID", out gid);
                 if (gid != null)
                 {
-                    g.RecordId = (int)gid;
+                    g.GroupId = (int)gid;
                 }
 
                 object gn = null;
@@ -93,6 +95,36 @@ namespace MinistryPlatform.Translation.Services
                 if (gf != null)
                 {
                     g.Full = (Boolean)gf;
+                }
+
+                object gwl = null;
+                groupDetails.TryGetValue("Enable_Waiting_List", out gwl);
+                if (gwl != null)
+                {
+                    g.WaitList = (Boolean)gwl;
+                }
+
+                if (g.WaitList)
+                {
+                    var subGroups = ministryPlatformService.GetSubPageRecords(GroupsSubgroupsPageId, groupId,
+                        apiToken);
+                    if (subGroups != null)
+                    {
+                        foreach (var i in subGroups)
+                        {
+                           if (i.ContainsValue("Wait List"))
+                            {
+                               object gd = null;
+                               i.TryGetValue("dp_RecordID", out gd);
+                               g.WaitListGroupId = (int)gd;
+                               break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        logger.Debug("No wait list found for group id " + groupId);
+                    }
                 }
 
                 logger.Debug("Getting participants for group " + groupId);
