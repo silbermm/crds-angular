@@ -8,6 +8,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.Http.ModelBinding;
 using crds_angular.Models.Crossroads;
+using crds_angular.Models.Json;
 using crds_angular.Security;
 using crds_angular.Models.MP;
 using MinistryPlatform.Translation.Exceptions;
@@ -101,6 +102,13 @@ namespace crds_angular.Controllers.API
         {
            Group g = groupService.getGroupDetails(groupId);
            var detail = new GroupDetail();
+           {
+               detail.groupID = g.GroupId;
+               detail.groupFullInd = g.Full;
+               detail.waitListInd = g.WaitList;
+               detail.waitListGroupId = g.WaitListGroupId;
+           };
+            
            return Ok(detail);
         
         }
