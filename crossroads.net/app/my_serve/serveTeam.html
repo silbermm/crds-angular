@@ -1,0 +1,91 @@
+
+<div class="col-sm-12 serve-opp-listings">
+  <div class="panel panel-default ng-isolate-scope" >
+    <div class="panel-heading clearfix">
+      <a class="panel-link" ng-click="openPanel(team.members)"></a> {{team.name}}
+      <div class="name-btns">
+        <a href="" ng-click="setActiveTab(member)" ng-repeat="member in team.members" ng-class="{'active':isActiveTab(member.name) }"><span class="btn btn-default btn-xs"> {{member.name}} </span></a>
+      </div><!--/pull-right-->
+    </div><!--/panel-heading-->
+
+    <div class="panel-collapse collapse" collapse="isCollapsed" style="height: 0px;">
+      <div class="panel-body soft-half-bottom">
+        <p class="flush-bottom">Editing sign up for {{currentMember.name}} <span class="text-muted"></span></p>
+        <div class="row">
+          <div class="col-md-4">
+            <h5>Opportunities</h5>
+            <div class="radio" ng-repeat="role in currentMember.roles">
+              <label>
+                <input type="radio" name="role"  ng-model="roles" value="{{role.name}}">
+                {{role.name}} <span class="badge label-default" ng-show="role.capacity > 0">{{ role.capacity - role.slotsTaken }} needed</span>
+              </label>
+            </div><!--/radio-->
+          </div><!--/col-sm-4-->
+          <div class="col-md-4">
+            <h5>Sign Up</h5>
+            <div class="radio">
+              <label>
+                <input type="radio" name="signup" id="optionsRadios1"  ng-model="signedup" ng-value="isSignedUp(opportunity)">
+                Yes
+              </label>
+            </div><!--/radio-->
+            <div class="radio">
+              <label>
+                <input type="radio" name="signup" id="optionsRadios2" value="2" ng-model="content">
+                No
+              </label>
+            </div><!--/radio-->
+            <div class="radio">
+              <label>
+                <input type="radio" name="signup" id="optionsRadios3" value="3" ng-model="content">
+                Maybe
+              </label>
+            </div><!--/radio-->
+            <div ng-show="content > 0">
+              <div class="form-group">
+                <label>Frequency</label>
+                <select class="form-control" ng-model="repeating">
+                  <option value="1">Once (12/16/14 8:30am)</option>
+                  <option value="2" ng-selected="content == 1">All Future (Sundays 8:30am)</option>
+                  <option value="3">Every Other (Sundays 8:30am)</option>
+                  <option value="4" ng-show="content != 1">This Week (12/16/14 - 12/23/14)</option>
+                  <option value="5">From/To</option>
+                </select>
+              </div><!--/form-group-->
+
+              <div ng-show="repeating == 'From/To'">
+                <div class="form-group">
+                  <label>From:</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                  </div><!--/input-group-->
+                </div><!--/form-group-->
+                <div class="form-group" ng-show="content == 'Yes'">
+                  <label>To:</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                  </div><!--/input-group-->
+                </div><!--/form-group-->
+              </div><!--/ng-show-->
+            </div> <!--/ng-show-->
+          </div><!--/col-sm-4-->
+          <div class="col-sm-12 serve-save soft-half-top">
+            <a href="#" class="pull-left">
+              <svg viewBox="0 0 32 32" class="icon icon-mail5 icon-large icon-subtle" tooltip-placement="right" tooltip="Email Team Leader">
+                <use xlink:href="/icons/cr.svg#mail5"></use>
+              </svg>
+            </a>
+            <button class="btn btn-primary btn-sm" ng-click="closePanel()">Cancel</button>
+            <button class="btn btn-primary btn-sm" ng-click="$emit('notify.success', '<strong>Well done!</strong> You successfully signed up.');">Save</button>
+          </div><!--/col-sm-12-->
+        </div><!--/row-->
+      </div><!--/panel-body-->
+    </div><!--/panel-collapse-->
+  </div><!--/panel-->
+</div>

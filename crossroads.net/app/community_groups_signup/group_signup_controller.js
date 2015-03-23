@@ -12,6 +12,7 @@ require('../services/group_service');
         vm.showFull = false;
         vm.showWaitList = false;
         vm.showWaitSuccess = false;
+        vm.waitListCase = false;
 
         vm.signupPage = $rootScope.signupPage;
 
@@ -27,6 +28,27 @@ require('../services/group_service');
                 // retrieve group id from the CMS page
                 vm.groupId = vm.signupPage.group;
                 $log.debug("Group ID: " + vm.groupId);
+                // Get group details
+                vm.groupDetails = Group.Detail.get({groupId : vm.groupId}).$promise
+                .then(function(response){
+                    // This is the case where the group is full and there is a waitlist
+                    if(response.groupFullInd === "True" && response.waitListInd === "True"){
+                        vm.waitListCase = true;
+                        vm.showWaitList = true;
+                        //append "- WaitList" to title
+                        vm.signupPage.title = vm.signupPage.title + " - Waitlist";
+                        //update groupID to waitList ID
+                        vm.groupId = response.waitListGroupId;
+                        //this is the case where the group is full and there is NO waitlist
+                    }else if(response.groupFullInd === "True" && response.waitListInd === "False"){
+                        vm.showFull = true;
+
+                    }
+                    $log.debug(response);
+                    $log.debug(vm.signupPage);
+                    $log.debug("NewID:"+vm.groupId);
+                });
+                
             } else {
 				$log.debug("Group page not found for " + $stateParams.link);
                 var notFoundRequest = Page.get({ url: "page-not-found" }, function() {
@@ -45,6 +67,8 @@ require('../services/group_service');
                 $rootScope.$emit('notify', $rootScope.MESSAGES.successfullRegistration);
                 vm.showContent = false;
                 vm.showSuccess = true;
+                vm.showWaitList = false;
+                vm.showWaitSuccess= true;
             },function(error){
                 $rootScope.$emit('notify', $rootScope.MESSAGES.fullGroupError);
                 vm.showContent = false;

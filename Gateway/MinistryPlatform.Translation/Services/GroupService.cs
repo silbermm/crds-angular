@@ -73,7 +73,7 @@ namespace MinistryPlatform.Translation.Services
                 groupDetails.TryGetValue("Group_ID", out gid);
                 if (gid != null)
                 {
-                    g.RecordId = (int)gid;
+                    g.GroupId = (int)gid;
                 }
 
                 object gn = null;

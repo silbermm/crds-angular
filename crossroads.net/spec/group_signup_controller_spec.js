@@ -53,7 +53,7 @@ describe('EventsController', function() {
        scope = $rootScope.$new();
        // The $controller service is used to create instances of controllers
        var $controller = $injector.get('$controller');
-       var $stateParams = {"urlsegment" : "test"}
+       var $stateParams = {"link" : "test"}
 
        groupSignupController = function() {
          return $controller('GroupSignupController', {'$scope' : scope, '$stateParams' : $stateParams });
@@ -67,15 +67,15 @@ describe('EventsController', function() {
    });
 
    it('should get logged-in person when instantiated', function(){
-     $httpBackend.when('GET', 'http://silbervm:49380/api/profile')
+     $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] +'api/profile')
      .respond(userGetResponse);
 
-     $httpBackend.when('GET', 'http://content.crossroads.net//api/Page/?URLSegment=test')
+     $httpBackend.when('GET', 'http://content.crossroads.net//api/Page/?link=test')
      .respond(pageGetResponse);
 
      var controller = groupSignupController();
-     $httpBackend.expectGET('http://silbervm:49380/api/profile');
-     $httpBackend.expectGET('http://content.crossroads.net//api/Page/?URLSegment=test');
+     $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +'api/profile');
+     $httpBackend.expectGET('http://content.crossroads.net//api/Page/?link=test');
      $httpBackend.flush();
      var person = controller.person;
      expect(person).toBeDefined();
@@ -86,22 +86,22 @@ describe('EventsController', function() {
    });
 
    it('should signup a person for a community group', function(){
-    $httpBackend.when('GET', 'http://silbervm:49380/api/profile')
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/profile')
     .respond(userGetResponse);
 
-    $httpBackend.when('GET', 'http://content.crossroads.net//api/Page/?URLSegment=test')
+    $httpBackend.when('GET', 'http://content.crossroads.net//api/Page/?link=test')
     .respond(pageGetResponse);
 
     var controller = groupSignupController();
-    $httpBackend.expectGET('http://silbervm:49380/api/profile');
+    $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/profile');
     $httpBackend.flush();
 
     expect(controller.signup).toBeDefined();
 
-    $httpBackend.when('POST', 'http://silbervm:49380/api/group/1/user')
+    $httpBackend.when('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/group/1/user')
     .respond("200");
     controller.signup();                      
-    $httpBackend.expectPOST('http://silbervm:49380/api/group/1/user').respond('200');
+    $httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/group/1/user').respond('200');
     $httpBackend.flush();          
 
   });
