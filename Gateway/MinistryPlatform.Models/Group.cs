@@ -10,7 +10,6 @@ namespace MinistryPlatform.Models
         public int GroupId { get; set; }
         public string GroupRole { get; set; }
 
-        public int RecordId { get; set; }
         public int TargetSize { get; set; }
         public string Name { get; set; }
         public IList<int> Participants { get { return (participants); } }

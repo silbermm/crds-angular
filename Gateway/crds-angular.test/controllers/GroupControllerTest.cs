@@ -106,7 +106,7 @@ namespace crds_angular.test.controllers
             g.GroupId = 333;
             g.GroupRole = "Member";
             g.Name = "Test Me";
-            g.RecordId = 123456;
+            g.GroupId = 123456;
             g.TargetSize = 5;
             g.WaitList = true;
             g.WaitListGroupId = 888;

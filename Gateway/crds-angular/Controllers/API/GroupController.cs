@@ -103,10 +103,10 @@ namespace crds_angular.Controllers.API
            Group g = groupService.getGroupDetails(groupId);
            var detail = new GroupDetail();
            {
-               detail.groupID = g.GroupId;
-               detail.groupFullInd = g.Full;
-               detail.waitListInd = g.WaitList;
-               detail.waitListGroupId = g.WaitListGroupId;
+               detail.GroupId = g.GroupId;
+               detail.GroupFullInd = g.Full;
+               detail.WaitListInd = g.WaitList;
+               detail.WaitListGroupId = g.WaitListGroupId;
            };
             
            return Ok(detail);

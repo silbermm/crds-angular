@@ -98,7 +98,7 @@ namespace MinistryPlatform.Translation.Test.Services
             {
                 ministryPlatformService.Verify(mocked => mocked.CreateSubRecord(1, 1, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>(), true), Times.Never);
                 Assert.NotNull(e.GroupDetails);
-                Assert.AreEqual(456, e.GroupDetails.RecordId);
+                Assert.AreEqual(456, e.GroupDetails.GroupId);
                 Assert.AreEqual(1, e.GroupDetails.TargetSize);
                 Assert.AreEqual(true, e.GroupDetails.Full);
                 Assert.AreEqual("Test Group", e.GroupDetails.Name);
@@ -187,7 +187,7 @@ namespace MinistryPlatform.Translation.Test.Services
             ministryPlatformService.VerifyAll();
 
             Assert.NotNull(g);
-            Assert.AreEqual(456, g.RecordId);
+            Assert.AreEqual(456, g.GroupId);
             Assert.AreEqual(5, g.TargetSize);
             Assert.AreEqual(true, g.Full);
             Assert.AreEqual(true, g.WaitList);

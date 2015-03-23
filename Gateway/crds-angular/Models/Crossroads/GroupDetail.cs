@@ -5,12 +5,19 @@ using Newtonsoft.Json;
 
 namespace crds_angular.Models.Crossroads
 {
-    [JsonConverter(typeof(GroupDetailSerializer))]
+    
     public class GroupDetail
     {
-        public int groupID { get; set; }
-        public bool groupFullInd { get; set; }
-        public bool waitListInd { get; set; }
-        public int waitListGroupId { get; set; }
+        [JsonProperty(PropertyName = "groupId")]
+        public int GroupId { get; set; }
+
+        [JsonProperty(PropertyName = "groupFullInd")]
+        public bool GroupFullInd { get; set; }
+
+        [JsonProperty(PropertyName = "waitListInd")]
+        public bool WaitListInd { get; set; }
+
+        [JsonProperty(PropertyName = "waitListGroupId")]
+        public int WaitListGroupId { get; set; }
     }
 }
