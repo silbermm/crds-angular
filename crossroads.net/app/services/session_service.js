@@ -1,7 +1,8 @@
-﻿"use strict";
+"use strict";
 (function () {
 
     function SessionService($cookies, $cookieStore) {
+        var self = this;
         this.create = function (sessionId, userId, username) {
             console.log("creating cookies!");
             $cookies.sessionId = sessionId;
@@ -21,7 +22,7 @@
         this.exists = function (cookieId) {
             return $cookies[cookieId];
         };
-        
+
         this.clear = function () {
             $cookieStore.remove("sessionId");
             $cookieStore.remove("userId");
@@ -33,14 +34,30 @@
             return "";
         };
 
-        this.addRedirectRoute = function(redirectUrl, urlSegment) {
+        //TODO: Get this working to DRY up login_controller and register_controller
+        this.redirectIfNeeded = function($state){
+            if (self.hasRedirectionInfo()) {
+                var url = self.exists("redirectUrl");
+                var link = self.exists("link");
+                self.removeRedirectRoute();
+                if(link === undefined){
+                    $state.go(url);
+                }
+                else
+                {
+                    $state.go(url,{link:link});
+                }
+            }
+        };
+
+        this.addRedirectRoute = function(redirectUrl, link) {
             $cookies.redirectUrl = redirectUrl;
-            $cookies.urlSegment = urlSegment;
+            $cookies.link = link;
         };
 
         this.removeRedirectRoute = function() {
             $cookieStore.remove("redirectUrl");
-            $cookieStore.remove("urlSegment");
+            $cookieStore.remove("link");
         };
 
         this.hasRedirectionInfo = function() {
@@ -48,7 +65,7 @@
                 return true;
             }
             return false;
-        }
+        };
 
         return this;
     }

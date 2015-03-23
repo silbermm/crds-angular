@@ -11,8 +11,6 @@ using crds_angular.Security;
 using crds_angular.Models.MP;
 using MinistryPlatform.Translation.Exceptions;
 using MinistryPlatform.Translation.Services;
-using MinistryPlatform.Translation.Models;
-
 using MinistryPlatform.Translation.PlatformService;
 
 namespace crds_angular.Controllers.API

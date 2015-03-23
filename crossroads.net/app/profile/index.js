@@ -1,20 +1,10 @@
-'use strict';
 
-require('angular-module-resource');
-require('angular-bootstrap-npm');
-require('angular-ui-router');
-require('angular-messages');
-require('../password_field/password_field_directive');
-require('../email_field/email_field_directive');
+require('./profile.module');
+require('./profile.config');
 
-var getCookie = require('../utilities/cookies'); 
+require('./profile.html')
 
-var app = require('angular').module('crdsProfile', ['ngResource', 'ngMessages', 'ui.bootstrap', 'ui.router', 'password_field','email_field'])
-  .config(['$httpProvider', '$stateProvider', '$urlRouterProvider', function ($httpProvider, $stateProvider, $urlRouterProvider) {
-    $httpProvider.defaults.timeout = 15000;
-    $httpProvider.defaults.useXDomain = true; 
-    $httpProvider.defaults.headers.common['Authorization']= getCookie('sessionId');
-}]);
+var app = require('angular').module('crossroads.profile')
 
 app.controller('crdsProfileCtrl', ['$rootScope','Profile', 'Lookup', '$q', '$log','$scope',  require("./profile_controller")]);
  

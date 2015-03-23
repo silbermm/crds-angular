@@ -8,7 +8,7 @@
             Session.clear();
             $rootScope.userid = null;
             $rootScope.username = null;
-            Session.addRedirectRoute(toState.name, toParams.urlsegment);
+            Session.addRedirectRoute(toState.name, toParams.link);
             event.preventDefault();
             $state.go("login");
         }
