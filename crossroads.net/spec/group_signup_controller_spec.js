@@ -37,6 +37,13 @@ describe('EventsController', function() {
   "group":"1"
 }]};
 
+var groupGetDetailResponse = {
+  "groupID": "1",
+  "groupFullInd": "True",
+  "waitListInd": "True",
+  "waitListGroupId": "1"
+};
+
 
    //var endpoint = JSON.stringify(process.env.CRDS_API_ENDPOINT || "http://localhost:49380/");
 
@@ -73,9 +80,13 @@ describe('EventsController', function() {
      $httpBackend.when('GET', 'http://content.crossroads.net//api/Page/?link=test')
      .respond(pageGetResponse);
 
+     $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] +'api/group/1')
+     .respond(groupGetDetailResponse);
+
      var controller = groupSignupController();
      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +'api/profile');
      $httpBackend.expectGET('http://content.crossroads.net//api/Page/?link=test');
+     $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +'api/group/1');
      $httpBackend.flush();
      var person = controller.person;
      expect(person).toBeDefined();
@@ -92,8 +103,13 @@ describe('EventsController', function() {
     $httpBackend.when('GET', 'http://content.crossroads.net//api/Page/?link=test')
     .respond(pageGetResponse);
 
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] +'api/group/1')
+    .respond(groupGetDetailResponse);
+
     var controller = groupSignupController();
     $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/profile');
+    $httpBackend.expectGET('http://content.crossroads.net//api/Page/?link=test');
+    $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +'api/group/1');
     $httpBackend.flush();
 
     expect(controller.signup).toBeDefined();
