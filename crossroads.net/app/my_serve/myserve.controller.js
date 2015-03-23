@@ -1,5 +1,7 @@
 'use strict()';
 (function(){
+  var moment = require('moment');
+  
   module.exports = MyServeController;
 
   MyServeController.$inject = ['$log', 'ServeOpportunities', 'Session'];
@@ -9,6 +11,7 @@
     var vm = this;
 
     vm.clear = clear; 
+    vm.convertToDate = convertToDate;
     vm.dateOptions = { formatYear: 'yy', startingDay: 1 }; 
     vm.disabled = disabled;
     vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate']; 
@@ -40,6 +43,12 @@
 
     function clear() {
       vm.dt = null;
+    };
+    
+    function convertToDate(date){
+      // date comes in as mm/dd/yyyy, convert to yyyy-mm-dd for moment to handle
+      var d = new Date(date);
+      return d;
     };
     
     function disabled (date, mode) {
