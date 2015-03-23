@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Linq;
 using log4net;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Exceptions;
@@ -100,25 +101,23 @@ namespace MinistryPlatform.Translation.Services
                 groupDetails.TryGetValue("Enable_Waiting_List", out gwl);
                 if (gwl != null)
                 {
-                    g.WaitList = (Boolean) gwl;
+                    g.WaitList = (Boolean)gwl;
                 }
 
                 if (g.WaitList)
                 {
-                    var waitListGroupId = ministryPlatformService.GetSubPageRecords(GroupsSubgroupsPageId, groupId,
+                    var subGroups = ministryPlatformService.GetSubPageRecords(GroupsSubgroupsPageId, groupId,
                         apiToken);
-                    if (waitListGroupId != null)
+                    if (subGroups != null)
                     {
-                        foreach (var i in waitListGroupId)
+                        foreach (var i in subGroups)
                         {
-                            object wgt = null;
-                            i.TryGetValue("Group_Type", out wgt);
-                            if (wgt.ToString() == "Wait List")
+                           if (i.ContainsValue("Wait List"))
                             {
-                                object gd = null;
-                                i.TryGetValue("dp_RecordID", out gd);
-                                g.WaitListGroupId.Add((int) gd);
-                                break;
+                               object gd = null;
+                               i.TryGetValue("dp_RecordID", out gd);
+                               g.WaitListGroupId = (int)gd;
+                               break;
                             }
                         }
                     }
