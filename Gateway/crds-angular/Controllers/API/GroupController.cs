@@ -94,6 +94,16 @@ namespace crds_angular.Controllers.API
             throw new NotImplementedException();
             return this.Ok();
         }
+        
+        [ResponseType(typeof(GroupDetail))]
+        [Route("api/group/{groupId}")]
+        public IHttpActionResult Get(int groupId)
+        {
+           Group g = groupService.getGroupDetails(groupId);
+           var detail = new GroupDetail();
+           return Ok(detail);
+        
+        }
 
         // TODO: implement later
         [ResponseType(typeof(ContactDTO))]
@@ -103,17 +113,6 @@ namespace crds_angular.Controllers.API
             throw new NotImplementedException();
             return this.Ok();
 
-        }
-
-       
-        [ResponseType(typeof(GroupDetail))]
-        [Route("api/group/{groupId}")]
-        public IHttpActionResult Get(int groupId)
-        {
-           Group g = groupService.getGroupDetails(groupId);
-           var detail = new GroupDetail();
-           return Ok(detail);
-        
         }
 
         // TODO: implement later

@@ -96,9 +96,27 @@ namespace crds_angular.test.controllers
         }
 
         [Test]
-        public void testGetGroupDetails()
+        public void testGetGetGroupDetails()
         {
-            int groupId = 456;
+            int groupId = 333;
+            Group g = new Group();
+            g.GroupId = 333;
+            g.GroupRole = "Member";
+            g.Name = "Test Me";
+            g.RecordId = 123456;
+            g.TargetSize = 5;
+            g.WaitList = true;
+            g.WaitListGroupId = 888;
+
+         
+            groupServiceMock.Setup(mocked => mocked.getGroupDetails(groupId)).Returns(g);
+            IHttpActionResult result = fixture.Get(groupId);
+
+            Assert.NotNull(g); 
+            Assert.AreEqual(333, g.GroupId);
+            Assert.AreEqual(123456, g.RecordId);
+            Assert.AreEqual(888, g.WaitListGroupId);
+            Assert.AreEqual(true, g.WaitList);
         }
 
         [Test]
