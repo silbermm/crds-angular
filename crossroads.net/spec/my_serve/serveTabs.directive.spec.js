@@ -25,38 +25,10 @@ describe('Serve Tabs Directive', function() {
     scope.$digest();
   }));
 
-  it("should set signedup to null", function(){
-    var isolated = element.isolateScope();
-    expect(isolated.signedup).toBe(null);
-  });
-
-  it("should handle the current active tab", function(){
-    var isolated = element.isolateScope();
-    expect(isolated.currentActiveTab).toBe(null);
-    
-    expect(
-        isolated.isActiveTab(mockOpportunity.members[0].name)
-    ).toBe(false); 
-  });
-
-  it("should set the current member to the loggedin user", function(){
-    var isolated = element.isolateScope();
-    isolated.openPanel(mockOpportunity.members);
-    expect(isolated.currentMember).toBe(mockOpportunity.members[0]);
-  });
-
-  it("should handle changing the tab", function(){
-     var isolated = element.isolateScope();
-     isolated.setActiveTab(mockOpportunity.members[1]);
-     expect(isolated.currentMember).toBe(mockOpportunity.members[1]);
-     expect(isolated.currentActiveTab).toBe(mockOpportunity.members[1].name);
-  });
-
   describe("markup to be correct", function(){
     it("should have a highlighted tab", function(){
       expect(element.html()).toContain("<div class=\"serve-day-time row push-top\">")
     });
   });
-
   
 });
