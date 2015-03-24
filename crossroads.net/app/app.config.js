@@ -9,7 +9,6 @@
   function AppConfig($httpProvider){
     $httpProvider.defaults.useXDomain = true;
     $httpProvider.defaults.headers.common['Authorization']= getCookie('sessionId');
-    $httpProvider.defaults.headers.common['Access-Control-Allow-Methods']= 'GET';
   }
 
 })();
