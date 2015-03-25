@@ -96,17 +96,18 @@ namespace crds_angular.Controllers.API
             return this.Ok();
         }
         
-        [ResponseType(typeof(GroupDetail))]
+        [ResponseType(typeof(GroupDTO))]
         [Route("api/group/{groupId}")]
         public IHttpActionResult Get(int groupId)
         {
            Group g = groupService.getGroupDetails(groupId);
-           var detail = new GroupDetail();
+           var detail = new GroupDTO();
            {
                detail.GroupId = g.GroupId;
                detail.GroupFullInd = g.Full;
                detail.WaitListInd = g.WaitList;
                detail.WaitListGroupId = g.WaitListGroupId;
+               //detail.ParticipantsArray = g.ParticipantsArray;
            };
             
            return Ok(detail);
@@ -137,10 +138,6 @@ namespace crds_angular.Controllers.API
     }
 
     public class ContactDTO
-    {
-    }
-
-    public class GroupDTO
     {
     }
     
