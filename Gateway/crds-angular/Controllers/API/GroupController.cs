@@ -100,18 +100,26 @@ namespace crds_angular.Controllers.API
         [Route("api/group/{groupId}")]
         public IHttpActionResult Get(int groupId)
         {
-           Group g = groupService.getGroupDetails(groupId);
-           var detail = new GroupDTO();
-           {
-               detail.GroupId = g.GroupId;
-               detail.GroupFullInd = g.Full;
-               detail.WaitListInd = g.WaitList;
-               detail.WaitListGroupId = g.WaitListGroupId;
-               //detail.ParticipantsArray = g.ParticipantsArray;
-           };
-            
-           return Ok(detail);
-        
+            return Authorized(token =>
+            {
+                var participant = authenticationService.GetParticipantRecord(token);
+                int participantId = participant.ParticipantId;
+
+                Group g = groupService.getGroupDetails(groupId);
+                var detail = new GroupDTO();
+                {
+                    detail.GroupId = g.GroupId;
+                    detail.GroupFullInd = g.Full;
+                    detail.WaitListInd = g.WaitList;
+                    detail.WaitListGroupId = g.WaitListGroupId;
+                    detail.UserInGroup = groupService.checkIfUserInGroup(participantId,g.Participants);
+
+                }
+
+
+                return Ok(detail);
+            }
+          );
         }
 
         // TODO: implement later
