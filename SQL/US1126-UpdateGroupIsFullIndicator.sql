@@ -84,3 +84,77 @@ BEGIN
 	CLOSE @Groups_Cursor
 	DEALLOCATE @Groups_Cursor
 END
+GO
+
+IF OBJECT_ID('dbo.crds_tr_Updated_Group_Is_Full', 'TR') IS NULL
+    EXEC('CREATE TRIGGER dbo.crds_tr_Updated_Group_Is_Full ON [dbo].[Groups] AFTER INSERT,UPDATE AS SELECT 1')
+GO
+-- =============================================
+-- Author:      Jim Kriz
+-- Create date: 03/24/2015
+-- Description: Updates Group_Is_Full on a Group when a Group is updated
+-- =============================================
+ALTER TRIGGER [dbo].[crds_tr_Updated_Group_Is_Full]
+   ON  [dbo].[Groups]
+   AFTER INSERT,UPDATE
+AS
+BEGIN
+    -- SET NOCOUNT ON added to prevent extra result sets from
+    -- interfering with SELECT statements.
+    SET NOCOUNT ON;
+    DECLARE @Groups_Cursor CURSOR;
+
+	SET @Groups_Cursor = CURSOR FOR
+        SELECT I.Group_Id, ISNULL(D.Target_Size, 0), ISNULL(I.Target_Size, 0)
+        FROM INSERTED I
+        JOIN DELETED D ON I.Group_Id = D.Group_Id
+
+    DECLARE @Group_Id INT;
+    DECLARE @I_Size INT;
+    DECLARE @D_Size INT;
+    OPEN @Groups_Cursor
+    FETCH NEXT FROM @Groups_Cursor INTO @Group_Id, @I_Size, @D_Size
+    WHILE @@FETCH_STATUS = 0
+	BEGIN
+        IF @I_Size <> @D_Size
+            EXEC [dbo].[crds_Update_Group_Is_Full] @Group_Id = @Group_Id
+        FETCH NEXT FROM @Groups_Cursor INTO @Group_Id, @I_Size, @D_Size
+    END
+    CLOSE @Groups_Cursor
+	DEALLOCATE @Groups_Cursor
+END
+GO
+
+IF OBJECT_ID('dbo.crds_tr_Updated_Participants_Group_Is_Full', 'TR') IS NULL
+    EXEC('CREATE TRIGGER dbo.crds_tr_Updated_Participants_Group_Is_Full ON [dbo].[Group_Participants] AFTER INSERT,UPDATE AS SELECT 1')
+GO
+-- =============================================
+-- Author:      Jim Kriz
+-- Create date: 03/24/2015
+-- Description: Updates Group_Is_Full on a Group when a Group_Participant updated
+-- =============================================
+ALTER TRIGGER [dbo].[crds_tr_Updated_Participants_Group_Is_Full]
+   ON  [dbo].[Group_Participants]
+   AFTER INSERT,DELETE
+AS
+BEGIN
+    -- SET NOCOUNT ON added to prevent extra result sets from
+    -- interfering with SELECT statements.
+    SET NOCOUNT ON;
+    DECLARE @Groups_Cursor CURSOR;
+	SET @Groups_Cursor = CURSOR FOR
+        SELECT DISTINCT I.Group_Id
+		FROM INSERTED I
+        JOIN DELETED D ON I.Group_Id = D.Group_Id
+
+    DECLARE @Group_Id INT;
+    OPEN @Groups_Cursor
+    FETCH NEXT FROM @Groups_Cursor INTO @Group_Id
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+        EXEC [dbo].[crds_Update_Group_Is_Full] @Group_Id = @Group_Id
+        FETCH NEXT FROM @Groups_Cursor INTO @Group_Id
+    END
+    CLOSE @Groups_Cursor
+    DEALLOCATE @Groups_Cursor
+END
