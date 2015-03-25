@@ -105,20 +105,27 @@ BEGIN
     DECLARE @Groups_Cursor CURSOR;
 
 	SET @Groups_Cursor = CURSOR FOR
-        SELECT I.Group_Id, ISNULL(D.Target_Size, 0), ISNULL(I.Target_Size, 0)
+        SELECT
+			I.Group_Id,
+			ISNULL(D.Target_Size, 0),
+			ISNULL(I.Target_Size, 0),
+			ISNULL(I.Group_Is_Full, 0),
+			ISNULL(D.Group_Is_Full, 0)
         FROM INSERTED I
         JOIN DELETED D ON I.Group_Id = D.Group_Id
 
     DECLARE @Group_Id INT;
     DECLARE @I_Size INT;
     DECLARE @D_Size INT;
+	DECLARE @I_Full BIT;
+	DECLARE @D_Full BIT;
     OPEN @Groups_Cursor
-    FETCH NEXT FROM @Groups_Cursor INTO @Group_Id, @I_Size, @D_Size
+    FETCH NEXT FROM @Groups_Cursor INTO @Group_Id, @I_Size, @D_Size, @I_Full, @D_Full
     WHILE @@FETCH_STATUS = 0
 	BEGIN
-        IF @I_Size <> @D_Size
+        IF (@I_Size <> @D_Size) Or (@I_Full <> @D_Full)
             EXEC [dbo].[crds_Update_Group_Is_Full] @Group_Id = @Group_Id
-        FETCH NEXT FROM @Groups_Cursor INTO @Group_Id, @I_Size, @D_Size
+        FETCH NEXT FROM @Groups_Cursor INTO @Group_Id, @I_Size, @D_Size, @I_Full, @D_Full
     END
     CLOSE @Groups_Cursor
 	DEALLOCATE @Groups_Cursor
