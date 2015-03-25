@@ -30,6 +30,7 @@
         filterTimes();
         filterTeams();
         filterFamily();
+        getUniqueMembers();
       }
 
       function filterFamily(){

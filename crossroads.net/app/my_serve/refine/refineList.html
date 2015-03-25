@@ -1,1 +1,95 @@
-<h1> Testing </h1>
+<div class="col-sm-2 gray-lighter clearfix">
+  <a href="#" class="filter-clear">Clear All</a>
+  <h5>Filter Opportunities</h5>
+
+  <div class="push-half-bottom filter-group" data-ng-repeat="member in uniqueMembers">
+    <div class="checkbox">
+      <label>
+        <input type="checkbox"> {{member.name}}
+      </label>
+    </div>
+  </div><!--/push-bottom-->
+
+  <div class="push-half-bottom filter-group">
+    <div class="checkbox">
+      <label>
+        <input type="checkbox"> Kids Club Nursery
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox"> Coffee Team
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox"> Facilities
+      </label>
+    </div>
+  </div><!--/push-bottom-->
+
+  <div class="push-half-bottom filter-group">
+    <div class="checkbox">
+      <label>
+        <input type="checkbox"> Signed up
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox"> Not signed up
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox"> Maybe
+      </label>
+    </div>
+  </div><!--/push-bottom-->
+
+  <div class="push-half-bottom filter-group">
+    <div class="checkbox">
+      <label>
+        <input type="checkbox"> 8:45am
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox"> 10:00am
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox"> 11:45am
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox"> 1:00pm
+      </label>
+    </div>
+  </div><!--/push-bottom-->
+
+  <div class="push-half-bottom filter-group">
+    <div class="form-group">
+      <label>From:</label>
+      <div class="input-group">
+        <input type="text" class="form-control" ng-required="true" close-text="Close" />
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+        </span>
+      </div><!--/input-group-->
+    </div><!--/form-group-->
+
+    <div class="form-group">
+      <label>To:</label>
+      <div class="input-group">
+        <input type="text" class="form-control" close-text="Close" />
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+        </span>
+      </div><!--/input-group-->
+    </div><!--/form-group-->
+  </div><!--/push-bottom-->
+
+
+</div>
