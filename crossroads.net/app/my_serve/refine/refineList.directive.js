@@ -16,44 +16,46 @@
 
     function link(scope, el, attr){
         
-      scope.filterDays = filterDays;
-      scope.filterFamily = filterFamily; 
-      scope.filterTimes = filterTimes;   
+      scope.serveMembers = [];
+      scope.serveTeams = [];
+      scope.times = [];
+      scope.uniqueDays = [];
+
 
       activate();
       //////////////////////////////////
     
       function activate(){
-        filterDays();
         filterTimes();
+        filterTeams();
+        filterFamily();
       }
-
 
       function filterFamily(){
-        var family = _.each(scope.servingDays, function(servingDay){ 
-          _.each(servingDay.serveTimes, function(serveTime){
-            _.each(serveTime.servingTeams, function(serveTeam){
-              _.each(serveTeam.members, function(member){
-                return { name: member.name, contactId: member.contactId }
-              });
-            });
-          }); 
-        }); 
-        return family;
-      }
-
-      function filterDays(){
-        scope.days = _.each(scope.servingDays, function(servingDay){
-          return servingDay;
-        }); 
-      }
-
-      function filterTimes(){
-        scope.times = _.each(scope.days, function(servingTime){
-          return servingTime;
+        _.each(scope.serveTeams, function(serveTeam){
+          _.each(serveTeam.members, function(member){
+            scope.serveMembers.push(member);
+          });
         });
       }
 
+      function filterTeams(){
+        _.each(scope.times, function(serveTime){
+          _.each(serveTime.servingTeams, function(serveTeam){
+            scope.serveTeams.push(serveTeam);
+          });
+        });
+      }
+
+      function filterTimes(){
+        _.each(scope.servingDays, function(servingDay){
+          _.each(servingDay.serveTimes, function(serveTime){
+            scope.times.push(serveTime);
+          });
+        }); 
+      }
+
+      
     }
   }
 
