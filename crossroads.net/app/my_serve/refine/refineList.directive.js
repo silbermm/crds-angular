@@ -15,12 +15,13 @@
     }
 
     function link(scope, el, attr){
-        
+      
+      scope.getUniqueMembers = getUniqueMembers;
       scope.serveMembers = [];
       scope.serveTeams = [];
       scope.times = [];
       scope.uniqueDays = [];
-
+      scope.uniqueMembers = [];
 
       activate();
       //////////////////////////////////
@@ -55,6 +56,23 @@
         }); 
       }
 
+      function getUniqueMembers(){
+        var uniqueMembers = [];
+        _.each(scope.serveMembers, function(member){
+          if (uniqueMembers.length < 1){
+            uniqueMembers.push(member);
+          } else {
+            var el = _.find(uniqueMembers, function(f){
+              return member.contactId === f.contactId;
+            });
+            if(el === undefined) 
+              uniqueMembers.push(member);
+          }
+        });
+        scope.uniqueMembers = _.map(uniqueMembers, function(m){
+          return {name: m.name, contactId: m.contactId};
+        });
+      };
       
     }
   }

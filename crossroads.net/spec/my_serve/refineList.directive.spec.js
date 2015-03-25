@@ -64,6 +64,17 @@ describe('Refine List Directive', function() {
   it("should filter out the family and contain Leslie", function(){
      expect(isolateScope.serveMembers).toContain(mockMatt);
   });
+  
+  it("should filter family to a unique list of contacts", function(){
+    isolateScope.getUniqueMembers();
+    expect(isolateScope.uniqueMembers.length).toBe(2);
+  });
 
+  it("should find the correct members in the unique list", function(){
+    isolateScope.getUniqueMembers();
+    expect(isolateScope.uniqueMembers).toContain({name: "Leslie", contactId: 1670885});
+    expect(isolateScope.uniqueMembers).toContain({name: "Matt", contactId: 1970611 });
+
+  });
 
 }) 
