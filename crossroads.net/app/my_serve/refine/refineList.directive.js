@@ -17,6 +17,7 @@
     function link(scope, el, attr){
       
       scope.getUniqueMembers = getUniqueMembers;
+      scope.resolvedData = [];
       scope.serveMembers = [];
       scope.serveTeams = [];
       scope.times = [];
@@ -27,10 +28,13 @@
       //////////////////////////////////
     
       function activate(){
-        filterTimes();
-        filterTeams();
-        filterFamily();
-        getUniqueMembers();
+        scope.servingDays.$promise.then(function(data) {
+          filterTimes();
+          filterTeams();
+          filterFamily();
+          getUniqueMembers();
+        });
+       
       }
 
       function filterFamily(){
