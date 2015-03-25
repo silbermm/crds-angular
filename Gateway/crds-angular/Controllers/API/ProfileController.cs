@@ -63,7 +63,7 @@ namespace crds_angular.Controllers.API
             return Authorized(token =>
             {
                 var personService = new PersonService();
-                var person = personService.getLoggedInUserProfile(token);
+                var person = personService.GetLoggedInUserProfile(token);
                 if (person == null)
                 {
                     return Unauthorized();

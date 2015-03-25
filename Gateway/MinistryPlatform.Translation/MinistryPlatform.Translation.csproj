@@ -77,9 +77,11 @@
   <ItemGroup>
     <Compile Include="Exceptions\GroupFullException.cs" />
     <Compile Include="Exceptions\MultipleRecordsException.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Services\AuthenticationServiceImpl.cs" />
     <Compile Include="Services\AuthenticationService.cs" />
     <Compile Include="Services\BaseService.cs" />
+    <Compile Include="Services\ContactService.cs" />
     <Compile Include="Services\EventService.cs" />
     <Compile Include="Services\CommunicationService.cs" />
     <Compile Include="Services\GetMyRecords.cs" />

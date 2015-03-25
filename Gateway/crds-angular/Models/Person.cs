@@ -3,60 +3,128 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using MinistryPlatform.Models;
+using Newtonsoft.Json;
 
 namespace crds_angular.Models
 {
     public class Person
     {
-        public int Contact_Id { get; set; }
-        public string Email_Address { get; set; }
-        public string First_Name { get; set; }
-        public string Middle_Name { get; set; }
-        public string Last_Name { get; set; }
-        public string Maiden_Name { get; set; }
-        public string NickName { get; set; }
-        public string Mobile_Phone { get; set; }
-        public int? Mobile_Carrier { get; set; }
-        public string Date_of_Birth { get; set; }
-        public int? Marital_Status_Id { get; set; }
-        public int? Gender_Id { get; set; }
-        public string Employer_Name { get; set; }
-        public string Anniversary_Date { get; set; }
-        public string Address_Line_1 { get; set; }
-        public string Address_Line_2 { get; set; }
-        public string City { get; set; }
-        public string State { get; set; }
-        public string Postal_Code { get; set; }
-        public string Home_Phone { get; set; }
-        public string Foreign_Country { get; set; }
-        public string County { get; set; }
-        public int? Congregation_ID { get; set; }
-        public int Household_ID { get; set; }
-        public string Household_Position_ID { get; set; }
-        public int? Address_Id { get; set; }
-        public bool Bulk_Email_Opt_Out { get; set; }
-        public bool Bulk_SMS_Opt_Out { get; set; }
-        public bool Bulk_Mail_Opt_Out { get; set; }
-        //public List<Models.Crossroads.Skill> skills { get; set; }
+        [JsonProperty(PropertyName = "contactId")]
+        public int ContactId { get; set; }
 
-        public Models.MP.Contact GetContact()
+        [JsonProperty(PropertyName = "emailAddress")]
+        public string EmailAddress { get; set; }
+
+        [JsonProperty(PropertyName = "firstName")]
+        public string FirstName { get; set; }
+
+        [JsonProperty(PropertyName = "middleName")]
+        public string MiddleName { get; set; }
+
+        [JsonProperty(PropertyName = "lastName")]
+        public string LastName { get; set; }
+
+        [JsonProperty(PropertyName = "maidenName")]
+        public string MaidenName { get; set; }
+
+        [JsonProperty(PropertyName = "nickName")]
+        public string NickName { get; set; }
+
+        [JsonProperty(PropertyName = "mobilePhone")]
+        public string MobilePhone { get; set; }
+
+        [JsonProperty(PropertyName = "dateOfBirth")]
+        public string DateOfBirth { get; set; }
+
+        [JsonProperty(PropertyName = "maritalStatusId")]
+        public int? MaritalStatusId { get; set; }
+
+        [JsonProperty(PropertyName = "genderId")]
+        public int? GenderId { get; set; }
+
+        [JsonProperty(PropertyName = "employerName")]
+        public string EmployerName { get; set; }
+
+        [JsonProperty(PropertyName = "anniversaryDate")]
+        public string AnniversaryDate { get; set; }
+
+        [JsonProperty(PropertyName = "addressLine1")]
+        public string AddressLine1 { get; set; }
+
+        [JsonProperty(PropertyName = "addressLine2")]
+        public string AddressLine2 { get; set; }
+
+        [JsonProperty(PropertyName = "city")]
+        public string City { get; set; }
+
+        [JsonProperty(PropertyName = "state")]
+        public string State { get; set; }
+
+        [JsonProperty(PropertyName = "postalCode")]
+        public string PostalCode { get; set; }
+
+        [JsonProperty(PropertyName = "homePhone")]
+        public string HomePhone { get; set; }
+
+        [JsonProperty(PropertyName = "foreignCountry")]
+        public string ForeignCountry { get; set; }
+
+        [JsonProperty(PropertyName = "county")]
+        public string County { get; set; }
+
+        [JsonProperty(PropertyName = "congregationId")]
+        public int? CongregationId { get; set; }
+
+        [JsonProperty(PropertyName = "householdId")]
+        public int HouseholdId { get; set; }
+
+        [JsonProperty(PropertyName = "householdPositionId")]
+        public string HouseholdPositionId { get; set; }
+
+        [JsonProperty(PropertyName = "addressId")]
+        public int? AddressId { get; set; }
+
+        [JsonProperty(PropertyName = "bulkEmailOptOut")]
+        public bool BulkEmailOptOut { get; set; }
+
+        [JsonProperty(PropertyName = "bulkSmsOptOut")]
+        public bool BulkSmsOptOut { get; set; }
+
+        [JsonProperty(PropertyName = "bulkMailOptOut")]
+        public bool BulkMailOptOut { get; set; }
+
+        [JsonProperty(PropertyName = "mobileCarrierId")]
+        public int? MobileCarrierId { get; set; }
+
+        public MyContact GetContact()
         {
-                return new Models.MP.Contact
+                return new MyContact
             {
-                Contact_Id = this.Contact_Id,
-                Email_Address = this.Email_Address,
-                First_Name = this.First_Name,
-                Middle_Name = this.Middle_Name,
-                Last_Name = this.Last_Name,
-                Maiden_Name = this.Maiden_Name,
+                ContactId = this.ContactId,
+                EmailAddress = this.EmailAddress,
+                FirstName = this.FirstName,
+                MiddleName = this.MiddleName,
+                LastName = this.LastName,
+                MaidenName = this.MaidenName,
                 NickName = this.NickName,
-                Mobile_Phone = this.Mobile_Phone,
-                Mobile_Carrier = this.Mobile_Carrier,
-                Date_of_Birth = this.Date_of_Birth,
-                Marital_Status_Id = this.Marital_Status_Id,
-                Gender_Id = this.Gender_Id,
-                Employer_Name = this.Employer_Name,
-                Anniversary_Date = this.Anniversary_Date
+                MobilePhone = this.MobilePhone,
+                MobileCarrierId = this.MobileCarrierId,
+                DateOfBirth = this.DateOfBirth,
+                MaritalStatusId = this.MaritalStatusId,
+                GenderId = this.GenderId,
+                EmployerName = this.EmployerName,
+                AnniversaryDate = this.AnniversaryDate,
+                AddressId = this.AddressId,
+                AddressLine1 = this.AddressLine1,
+                AddressLine2 = this.AddressLine2,
+                City = this.City,
+                State = this.State,
+                PostalCode = this.PostalCode,
+                CongregationId = this.CongregationId,
+                HouseholdId = this.HouseholdId
+                
+
             };
         } 
 
@@ -64,10 +132,10 @@ namespace crds_angular.Models
         {
             return new Models.MP.Household
             {
-                Household_ID = this.Household_ID,
-                Home_Phone = this.Home_Phone,
-                Congregation_ID = this.Congregation_ID,
-                Household_Position_ID = this.Household_Position_ID
+                Household_ID = this.HouseholdId,
+                Home_Phone = this.HomePhone,
+                Congregation_ID = this.CongregationId,
+                Household_Position_ID = this.HouseholdPositionId
             };
         }
 
@@ -75,13 +143,13 @@ namespace crds_angular.Models
         {
             return new Models.MP.Address
             {
-                Address_ID = this.Address_Id,
-                Address_Line_1 = this.Address_Line_1,
-                Address_Line_2 = this.Address_Line_2,
+                Address_ID = this.AddressId,
+                Address_Line_1 = this.AddressLine1,
+                Address_Line_2 = this.AddressLine2,
                 City = this.City,
                 State = this.State,
-                Postal_Code = this.Postal_Code,
-                Foreign_Country = this.Foreign_Country,
+                Postal_Code = this.PostalCode,
+                Foreign_Country = this.ForeignCountry,
                 County = this.County,
             };
         }

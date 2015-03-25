@@ -258,7 +258,6 @@
     <Compile Include="Models\MP\Address.cs" />
     <Compile Include="Models\MP\EmailSMSOptOut.cs" />
     <Compile Include="Models\MP\Household.cs" />
-    <Compile Include="Models\MP\Contact.cs" />
     <Compile Include="Models\MP\MailOptOut.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

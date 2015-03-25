@@ -43,42 +43,45 @@ namespace crds_angular.Services
             return GetSkills(contactId, token);
         }
 
-        public Person getLoggedInUserProfile(String token)
+        public Person GetLoggedInUserProfile(String token)
         {
-            var contact = MinistryPlatformService.GetRecordsArr(AppSetting("MyProfile"), token);
-            if (contact.Count == 0)
-            {
-                throw new InvalidOperationException("getLoggedInUserProfile - no data returned.");
-            }
-            var contactJson = TranslationService.DecodeJson(contact.ToString());
+            //var contact = MinistryPlatformService.GetRecordsArr(AppSetting("MyProfile"), token);
+            //if (contact.Count == 0)
+            //{
+            //    throw new InvalidOperationException("getLoggedInUserProfile - no data returned.");
+            //}
+            //var contactJsonOLD = TranslationService.DecodeJson(contact.ToString());
+
+            var contactSvc = new ContactService();
+            var contactJson = contactSvc.GetMyProfile(token);
 
             var person = new Person
             {
-                Contact_Id = contactJson.Contact_Id,
-                Email_Address = contactJson.Email_Address,
-                NickName = contactJson.Nickname,
-                First_Name = contactJson.First_Name,
-                Middle_Name = contactJson.Middle_Name,
-                Last_Name = contactJson.Last_Name,
-                Maiden_Name = contactJson.Maiden_Name,
-                Mobile_Phone = contactJson.Mobile_Phone,
-                Mobile_Carrier = contactJson.Mobile_Carrier_ID,
-                Date_of_Birth = contactJson.Date_of_Birth,
-                Marital_Status_Id = contactJson.Marital_Status_ID,
-                Gender_Id = contactJson.Gender_ID,
-                Employer_Name = contactJson.Employer_Name,
-                Address_Line_1 = contactJson.Address_Line_1,
-                Address_Line_2 = contactJson.Address_Line_2,
+                ContactId = contactJson.ContactId,
+                EmailAddress = contactJson.EmailAddress,
+                NickName = contactJson.NickName,
+                FirstName = contactJson.FirstName,
+                MiddleName = contactJson.MiddleName,
+                LastName = contactJson.LastName,
+                MaidenName = contactJson.MaidenName,
+                MobilePhone = contactJson.MobilePhone,
+                MobileCarrierId = contactJson.MobileCarrierId,
+                DateOfBirth = contactJson.DateOfBirth,
+                MaritalStatusId = contactJson.MaritalStatusId,
+                GenderId = contactJson.GenderId,
+                EmployerName = contactJson.EmployerName,
+                AddressLine1 = contactJson.AddressLine1,
+                AddressLine2 = contactJson.AddressLine2,
                 City = contactJson.City,
                 State = contactJson.State,
-                Postal_Code = contactJson.Postal_Code,
-                Anniversary_Date = contactJson.Anniversary_Date,
-                Foreign_Country = contactJson.Foreign_Country,
-                County = contactJson.County,
-                Home_Phone = contactJson.Home_Phone,
-                Congregation_ID = contactJson.Congregation_ID,
-                Household_ID = contactJson.Household_ID,
-                Address_Id = contactJson.Address_ID
+                PostalCode = contactJson.PostalCode,
+                AnniversaryDate = contactJson.AnniversaryDate,
+                ForeignCountry = contactJson.ForeignCountry,
+                //County = contactJson.County,
+                HomePhone = contactJson.HomePhone,
+                CongregationId = contactJson.CongregationId,
+                HouseholdId = contactJson.HouseholdId,
+                AddressId = contactJson.AddressId
             };
 
             return person;
@@ -100,14 +103,13 @@ namespace crds_angular.Services
             var familyMembers = Mapper.Map<List<Contact_Relationship>, List<FamilyMember>>(contactRelationships);
 
             //now get info for Contact
-            var personService = new PersonService();
-            var myProfile = personService.getLoggedInUserProfile(token);
+            var myProfile = GetLoggedInUserProfile(token);
             var me = new FamilyMember
             {
-                ContactId = myProfile.Contact_Id,
-                Email = myProfile.Email_Address,
-                LastName = myProfile.Last_Name,
-                PreferredName = myProfile.NickName ?? myProfile.First_Name
+                ContactId = myProfile.ContactId,
+                Email = myProfile.EmailAddress,
+                LastName = myProfile.LastName,
+                PreferredName = myProfile.NickName ?? myProfile.FirstName
             };
             familyMembers.Add(me);
 
@@ -116,11 +118,10 @@ namespace crds_angular.Services
 
         public List<ServingTeam> GetMyFamiliesServingTeams(int contactId, string token)
         {
-            var personService = new PersonService();
             var servingTeams = new List<ServingTeam>();
 
             //Go get family
-            var familyMembers = personService.GetMyFamily(contactId, token);
+            var familyMembers = GetMyFamily(contactId, token);
             foreach (var familyMember in familyMembers)
             {
                 var groups = GetMyRecords.GetMyServingTeams(familyMember.ContactId, token);

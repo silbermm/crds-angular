@@ -31,7 +31,7 @@ namespace crds_angular.Controllers.API
                 try
                 {
                     var personService = new PersonService();
-                    var person = personService.getLoggedInUserProfile(token);
+                    var person = personService.GetLoggedInUserProfile(token);
 
                     if (person == null)
                     {
@@ -39,7 +39,7 @@ namespace crds_angular.Controllers.API
                     }
                     else
                     {
-                        var l = new LoginReturn(token, person.Contact_Id, person.First_Name);
+                        var l = new LoginReturn(token, person.ContactId, person.FirstName);
                         return this.Ok(l);
                     }
                 }
@@ -61,12 +61,12 @@ namespace crds_angular.Controllers.API
                 return this.Unauthorized();
             }
             var personService = new PersonService();
-            var p = personService.getLoggedInUserProfile(token);
+            var p = personService.GetLoggedInUserProfile(token);
             var r = new LoginReturn
             {
                 userToken = token,
-                userId = p.Contact_Id,
-                username = p.First_Name
+                userId = p.ContactId,
+                username = p.FirstName
             };
             return this.Ok(r);
         }
