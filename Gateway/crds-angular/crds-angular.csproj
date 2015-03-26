@@ -248,7 +248,6 @@
     <Compile Include="Models\Crossroads\Serve\ServingTime.cs" />
     <Compile Include="Models\Crossroads\Serve\TeamMember.cs" />
     <Compile Include="Models\Crossroads\ServingRSVP.cs" />
-    <Compile Include="Models\Crossroads\ServingTeam.cs" />
     <Compile Include="Models\Crossroads\Skill.cs" />
     <Compile Include="Models\Crossroads\Event.cs" />
     <Compile Include="Models\Crossroads\User.cs" />
@@ -264,6 +263,8 @@
     <Compile Include="Security\MPAuth.cs" />
     <Compile Include="Security\CustomAuthorize.cs" />
     <Compile Include="Services\AccountService.cs" />
+    <Compile Include="Services\Interfaces\IPersonService.cs" />
+    <Compile Include="Services\Interfaces\ISkillService.cs" />
     <Compile Include="Services\MinistryPlatformBaseService.cs" />
     <Compile Include="Services\PersonService.cs" />
     <Compile Include="Services\SkillService.cs" />

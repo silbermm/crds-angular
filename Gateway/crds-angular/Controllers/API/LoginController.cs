@@ -13,12 +13,20 @@ using System.Net.Http.Headers;
 using crds_angular.Security;
 using System.Diagnostics;
 using System.Web.Http.Cors;
+using crds_angular.Services.Interfaces;
 
 namespace crds_angular.Controllers.API
 {
     [EnableCors(origins: "*", headers: "*", methods: "*", SupportsCredentials = true)]
     public class LoginController : MPAuth
     {
+
+        private IPersonService _personService;
+
+        public LoginController(IPersonService personService)
+        {
+            _personService = personService;
+        }
 
         [ResponseType(typeof(LoginReturn))]
         [HttpGet]
@@ -30,8 +38,8 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
-                    var personService = new PersonService();
-                    var person = personService.GetLoggedInUserProfile(token);
+                    //var personService = new PersonService();
+                    var person = _personService.GetLoggedInUserProfile(token);
 
                     if (person == null)
                     {
@@ -60,8 +68,8 @@ namespace crds_angular.Controllers.API
             {
                 return this.Unauthorized();
             }
-            var personService = new PersonService();
-            var p = personService.GetLoggedInUserProfile(token);
+            //var personService = new PersonService();
+            var p = _personService.GetLoggedInUserProfile(token);
             var r = new LoginReturn
             {
                 userToken = token,

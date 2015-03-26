@@ -27,16 +27,16 @@ namespace MinistryPlatform.Translation.Test
             Assert.IsNotNull(events);
         }
 
-        [Test]
-        public void GetMyFamily()
-        {
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            var recordId = AuthenticationService.GetContactId(token);
-            var family = GetMyRecords.GetMyFamily(recordId, token);
+        //[Test]
+        //public void GetMyFamily()
+        //{
+        //    var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
+        //    var recordId = AuthenticationService.GetContactId(token);
+        //    var family = GetMyRecords.GetMyFamily(recordId, token);
 
-            Assert.IsNotNull(family);
-            Assert.IsInstanceOf<List<Contact_Relationship>>(family);
-        }
+        //    Assert.IsNotNull(family);
+        //    Assert.IsInstanceOf<List<Contact_Relationship>>(family);
+        //}
 
         [Test]
         public void ShouldFailLogin()
@@ -237,25 +237,8 @@ namespace MinistryPlatform.Translation.Test
             Assert.IsNotNull(todaysEvents);
         }
 
-        [Test]
-        public void ShouldReturnMyServingTeams()
-        {
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD); 
-            var recordId = AuthenticationService.GetContactId(token);
-            var teams = GetMyRecords.GetMyServingTeams(recordId, token);
+        
 
-            Assert.IsNotNull(teams);
-        }
-
-        [Test]
-        public void ShouldGetPeopleSignedUp()
-        {
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            const int opportunityId = 139;
-            const int eventId = 950107;
-            var response = OpportunityService.GetOpportunitySignupCount(opportunityId, eventId, token);
-
-            Assert.IsNotNull(response);
-        }
+       
     }
 }

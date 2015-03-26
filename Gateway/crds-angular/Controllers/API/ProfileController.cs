@@ -1,19 +1,32 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Models;
 using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Security;
-using crds_angular.Services;
+using crds_angular.Services.Interfaces;
+using log4net;
 using MinistryPlatform.Translation.Services;
-using ServingTeam = crds_angular.Models.Crossroads.ServingTeam;
+using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Controllers.API
 {
     public class ProfileController : MPAuth
     {
+        private readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private IPersonService _personService;
+        private IAuthenticationService _authenticationService;
+
+        public ProfileController(IPersonService personService, IAuthenticationService authenticationService)
+        {
+            this._personService = personService;
+            this._authenticationService = authenticationService;
+        }
+
+
         [ResponseType(typeof (List<ServingDay>))]
         [Route("api/profile/servesignup")]
         public IHttpActionResult GetFamilyServeDays()
@@ -22,15 +35,14 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
-                    var contactId = AuthenticationService.GetContactId(token);
-                    var personService = new PersonService();
-                    var stuff = personService.GetMyFamiliesServingTeams(contactId, token);
-                    var list = personService.GetMyFamiliesServingEvents(stuff, token);
-                    if (list == null)
+                    var contactId = _authenticationService.GetContactId(token);
+                    var servingTeams = _personService.GetMyFamiliesServingTeams(contactId, token);
+                    var servingDays = _personService.GetMyFamiliesServingDays(servingTeams, token);
+                    if (servingDays == null)
                     {
                         return Unauthorized();
                     }
-                    return this.Ok(list);
+                    return this.Ok(servingDays);
                 }
                 catch (Exception e)
                 {
@@ -46,8 +58,7 @@ namespace crds_angular.Controllers.API
             return Authorized(token =>
             {
                 var contactId = AuthenticationService.GetContactId(token);
-                var personService = new PersonService();
-                var list = personService.GetMyFamily(contactId, token);
+                var list = _personService.GetMyFamily(contactId, token);
                 if (list == null)
                 {
                     return Unauthorized();
@@ -62,8 +73,7 @@ namespace crds_angular.Controllers.API
         {
             return Authorized(token =>
             {
-                var personService = new PersonService();
-                var person = personService.GetLoggedInUserProfile(token);
+                var person = _personService.GetLoggedInUserProfile(token);
                 if (person == null)
                 {
                     return Unauthorized();
@@ -82,8 +92,7 @@ namespace crds_angular.Controllers.API
 
             return Authorized(t =>
             {
-                var personService = new PersonService();
-                personService.setProfile(t, person);
+                _personService.SetProfile(t, person);
                 return this.Ok();
             });
         }

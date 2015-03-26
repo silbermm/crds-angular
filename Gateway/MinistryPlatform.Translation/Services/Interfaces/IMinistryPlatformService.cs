@@ -1,11 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using MinistryPlatform.Translation.PlatformService;
-using MinistryPlatform.Translation.Utils;
-using MinistryPlatform.Translation.Helpers;
 using Newtonsoft.Json.Linq;
 
-namespace MinistryPlatform.Translation.Services
+namespace MinistryPlatform.Translation.Services.Interfaces
 {
     public interface IMinistryPlatformService
     {
@@ -36,5 +35,9 @@ namespace MinistryPlatform.Translation.Services
         int DeleteRecord(int pageId, int recordId, DeleteOption[] deleteOptions, String token);
 
         void UpdateRecord(int pageId, Dictionary<string, object> dictionary, String token);
+
+        List<Dictionary<string, object>> GetSubpageViewRecords(int viewId, int contactId, string token, string searchString="", string sort="", int top=0);
+
+        List<Dictionary<string, object>> GetPageViewRecords(int viewId, string token, string searchString = "", string sort = "", int top = 0);
     }
 }

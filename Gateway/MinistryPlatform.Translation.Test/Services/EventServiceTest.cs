@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MinistryPlatform.Translation.Services;
+using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
 
 namespace MinistryPlatform.Translation.Test.Services

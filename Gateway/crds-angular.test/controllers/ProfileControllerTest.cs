@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web.Http;
+using System.Web.Http.Controllers;
 using System.Web.Http.Results;
-using crds_angular.App_Start;
 using crds_angular.Controllers.API;
-using crds_angular.Models.Crossroads;
-using crds_angular.Services;
-using MinistryPlatform.Translation.Services;
+using crds_angular.Models.Crossroads.Serve;
+using crds_angular.Services.Interfaces;
+using MinistryPlatform.Translation.Services.Interfaces;
+using Moq;
 using NUnit.Framework;
 
 namespace crds_angular.test.controllers
@@ -14,50 +16,134 @@ namespace crds_angular.test.controllers
     [TestFixture]
     public class ProfileControllerTest
     {
-        private ProfileController _profileController;
+        private ProfileController _fixture;
 
-        private const string USERNAME = "testme";
-        private const string PASSWORD = "changeme";
+        private Mock<IPersonService> _personServiceMock;
+        private Mock<IAuthenticationService> _authenticationService;
+
+        private string authType;
+        private string authToken;
 
         [SetUp]
         public void SetUp()
         {
-            _profileController = new ProfileController
+            _personServiceMock = new Mock<IPersonService>();
+            _authenticationService = new Mock<IAuthenticationService>();
+
+            _fixture = new ProfileController(_personServiceMock.Object, _authenticationService.Object);
+
+            authType = "auth_type";
+            authToken = "auth_token";
+            _fixture.Request = new HttpRequestMessage();
+            _fixture.Request.Headers.Authorization = new AuthenticationHeaderValue(authType, authToken);
+            _fixture.RequestContext = new HttpRequestContext();
+        }
+
+        [Test]
+        public void GetFamilyServeSignUpTest()
+        {
+            const int contactId = 123456;
+            var servingTeams = SetUpServingTeams();
+            var servingDays = SetUpServingDays();
+
+            _authenticationService.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Returns(contactId);
+
+            _personServiceMock.Setup(mocked => mocked.GetMyFamiliesServingTeams(contactId, It.IsAny<string>()))
+                .Returns(servingTeams);
+            _personServiceMock.Setup(mocked => mocked.GetMyFamiliesServingDays(servingTeams, It.IsAny<string>()))
+                .Returns(servingDays);
+
+            IHttpActionResult result = _fixture.GetFamilyServeDays();
+
+            Assert.NotNull(result);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<List<ServingDay>>>(result);
+        }
+
+        private List<ServingDay> SetUpServingDays()
+        {
+            var servingTeams = SetUpServingTeams();
+            var servingDays = new List<ServingDay>
             {
-                Request = new HttpRequestMessage(),
-                Configuration = new HttpConfiguration()
+                new ServingDay
+                {
+                    Day = "abc",
+                    ServeTimes =
+                    {
+                        new ServingTime {Time = "08:30:00", ServingTeams = servingTeams},
+                        new ServingTime {Time = "10:00:00", ServingTeams = servingTeams}
+                    }
+                }
             };
+
+            return servingDays;
         }
 
-        [Test]
-        public void GetWithOneParamShouldBeUnAuthorized()
+        private List<ServingTeam> SetUpServingTeams()
         {
-            IHttpActionResult result = _profileController.GetProfile();
-            Assert.IsInstanceOf(typeof (UnauthorizedResult), result);
-        }
-
-        [Test]
-        [Ignore("fails for test user????")]
-        public void GetFamilyForContact()
-        {
-            //force AutoMapper to register
-            AutoMapperConfig.RegisterMappings();
-
-            // First we need to get a session
-            var token = TranslationService.Login(USERNAME, PASSWORD);
-            Assert.IsNotNull(token, "Token should be valid");
-
-            //Need Contact Id for token's Contact
-            var contactId = AuthenticationService.GetContactId(token);
-
-            // Set the token in the header
-            var h = new HttpRequestMessage();
-            h.Headers.Add("Authorization", token);
-            _profileController.Request = h;
-
-            // Make the call...
-            var result = _profileController.GetFamily();
-            Assert.IsInstanceOf(typeof (OkNegotiatedContentResult<List<FamilyMember>>), result);
+            var servingTeams = new List<ServingTeam>
+            {
+                new ServingTeam
+                {
+                    GroupId = 1,
+                    Name = "team-1",
+                    Members = new List<TeamMember>
+                    {
+                        new TeamMember
+                        {
+                            ContactId = 1,
+                            Name = "memeber-1",
+                            Roles =
+                                new List<ServeRole>
+                                {
+                                    new ServeRole {Capacity = 100, Name = "Leader", SlotsTaken = 90},
+                                    new ServeRole {Capacity = 50, Name = "Member", SlotsTaken = 1}
+                                }
+                        },
+                        new TeamMember
+                        {
+                            ContactId = 2,
+                            Name = "memeber-2",
+                            Roles =
+                                new List<ServeRole>
+                                {
+                                    new ServeRole {Capacity = 25, Name = "Admin", SlotsTaken = 0},
+                                    new ServeRole {Capacity = 50, Name = "Member", SlotsTaken = 1}
+                                }
+                        }
+                    }
+                },
+                new ServingTeam
+                {
+                    GroupId = 2,
+                    Name = "team-2",
+                    Members = new List<TeamMember>
+                    {
+                        new TeamMember
+                        {
+                            ContactId = 3,
+                            Name = "memeber-3",
+                            Roles =
+                                new List<ServeRole>
+                                {
+                                    new ServeRole {Capacity = 100, Name = "Leader", SlotsTaken = 90},
+                                    new ServeRole {Capacity = 50, Name = "Member", SlotsTaken = 1}
+                                }
+                        },
+                        new TeamMember
+                        {
+                            ContactId = 2,
+                            Name = "memeber-2",
+                            Roles =
+                                new List<ServeRole>
+                                {
+                                    new ServeRole {Capacity = 25, Name = "Admin", SlotsTaken = 0},
+                                    new ServeRole {Capacity = 50, Name = "Member", SlotsTaken = 1}
+                                }
+                        }
+                    }
+                }
+            };
+            return servingTeams;
         }
     }
 }

@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Linq;
 using log4net;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Exceptions;
-using Group = MinistryPlatform.Models.Group;
+using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
 {
     public class GroupService : BaseService, IGroupService
     {
-        readonly private ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly int GroupsParticipantsPageId = Convert.ToInt32(AppSettings("GroupsParticipants"));
         private readonly int GroupsPageId = Convert.ToInt32(AppSettings("Groups"));
         private readonly int GroupsEventsPageId = Convert.ToInt32(AppSettings("GroupsEvents"));
         private readonly int EventsGroupsPageId = Convert.ToInt32(AppSettings("EventsGroups"));
         private readonly int GroupsSubgroupsPageId = Convert.ToInt32(AppSettings("GroupsSubgroups"));
+        private readonly int GetMyServingTeamsPageId = Convert.ToInt32(AppSettings("MyServingTeams"));
+
         private IMinistryPlatformService ministryPlatformService;
 
         public GroupService(IMinistryPlatformService ministryPlatformService)
@@ -24,7 +25,8 @@ namespace MinistryPlatform.Translation.Services
             this.ministryPlatformService = ministryPlatformService;
         }
 
-        public int addParticipantToGroup(int participantId, int groupId, int groupRoleId, DateTime startDate, DateTime? endDate = null, Boolean? employeeRole = false)
+        public int addParticipantToGroup(int participantId, int groupId, int groupRoleId, DateTime startDate,
+            DateTime? endDate = null, Boolean? employeeRole = false)
         {
             logger.Debug("Adding participant " + participantId + " to group " + groupId);
 
@@ -34,30 +36,34 @@ namespace MinistryPlatform.Translation.Services
             {
                 throw (new GroupFullException(g));
             }
-             
+
             var values = new Dictionary<string, object>
             {
-                { "Participant_ID", participantId },
-                { "Group_Role_ID", groupRoleId },
-                { "Start_Date", startDate },
-                { "End_Date", endDate},
-                { "Employee_Role", employeeRole }
+                {"Participant_ID", participantId},
+                {"Group_Role_ID", groupRoleId},
+                {"Start_Date", startDate},
+                {"End_Date", endDate},
+                {"Employee_Role", employeeRole}
             };
 
-            int groupParticipantId = WithApiLogin<int>(apiToken =>
-            {
-                return (ministryPlatformService.CreateSubRecord(GroupsParticipantsPageId, groupId, values, apiToken, true));
-            });
+            int groupParticipantId =
+                WithApiLogin<int>(
+                    apiToken =>
+                    {
+                        return
+                            (ministryPlatformService.CreateSubRecord(GroupsParticipantsPageId, groupId, values, apiToken,
+                                true));
+                    });
 
             // TODO Should we set Group_Is_Full flag here, or will that be done by a trigger?  Pending SPIKE: US1080
 
-            logger.Debug("Added participant " + participantId + " to group " + groupId + ": record id: " + groupParticipantId);
+            logger.Debug("Added participant " + participantId + " to group " + groupId + ": record id: " +
+                         groupParticipantId);
             return (groupParticipantId);
         }
 
         public Group getGroupDetails(int groupId)
         {
-
             return (WithApiLogin<Group>(apiToken =>
             {
                 logger.Debug("Getting group details for group " + groupId);
@@ -73,35 +79,35 @@ namespace MinistryPlatform.Translation.Services
                 groupDetails.TryGetValue("Group_ID", out gid);
                 if (gid != null)
                 {
-                    g.GroupId = (int)gid;
+                    g.GroupId = (int) gid;
                 }
 
                 object gn = null;
                 groupDetails.TryGetValue("Group_Name", out gn);
                 if (gn != null)
                 {
-                    g.Name = (string)gn;
+                    g.Name = (string) gn;
                 }
 
                 object gsz = null;
                 groupDetails.TryGetValue("Target_Size", out gsz);
                 if (gsz != null)
                 {
-                    g.TargetSize = (short)gsz;
+                    g.TargetSize = (short) gsz;
                 }
 
                 object gf = null;
                 groupDetails.TryGetValue("Group_Is_Full", out gf);
                 if (gf != null)
                 {
-                    g.Full = (Boolean)gf;
+                    g.Full = (Boolean) gf;
                 }
 
                 object gwl = null;
                 groupDetails.TryGetValue("Enable_Waiting_List", out gwl);
                 if (gwl != null)
                 {
-                    g.WaitList = (Boolean)gwl;
+                    g.WaitList = (Boolean) gwl;
                 }
 
                 if (g.WaitList)
@@ -112,12 +118,12 @@ namespace MinistryPlatform.Translation.Services
                     {
                         foreach (var i in subGroups)
                         {
-                           if (i.ContainsValue("Wait List"))
+                            if (i.ContainsValue("Wait List"))
                             {
-                               object gd = null;
-                               i.TryGetValue("dp_RecordID", out gd);
-                               g.WaitListGroupId = (int)gd;
-                               break;
+                                object gd = null;
+                                i.TryGetValue("dp_RecordID", out gd);
+                                g.WaitListGroupId = (int) gd;
+                                break;
                             }
                         }
                     }
@@ -137,7 +143,7 @@ namespace MinistryPlatform.Translation.Services
                         p.TryGetValue("Participant_ID", out pid);
                         if (pid != null)
                         {
-                            g.Participants.Add((int)pid);
+                            g.Participants.Add((int) pid);
                         }
                     }
                 }
@@ -169,7 +175,8 @@ namespace MinistryPlatform.Translation.Services
                 object recordId = null;
                 if (e.TryGetValue("dp_RecordID", out recordId))
                 {
-                    var eventGroup = ministryPlatformService.GetRecordDict(EventsGroupsPageId, (int)recordId, apiToken, false);
+                    var eventGroup = ministryPlatformService.GetRecordDict(EventsGroupsPageId, (int) recordId, apiToken,
+                        false);
                     if (eventGroup == null)
                     {
                         continue;
@@ -179,12 +186,30 @@ namespace MinistryPlatform.Translation.Services
                     if (eventGroup.TryGetValue("Event_ID", out eventId))
                     {
                         Event evt = new Event();
-                        evt.EventId = (int)eventId;
+                        evt.EventId = (int) eventId;
                         events.Add(evt);
                     }
                 }
             }
             return (events);
+        }
+
+        public List<Group> GetMyServingTeams(int contactId, string token)
+        {
+            var searchString = ",,,," + contactId;
+            var teams = ministryPlatformService.GetPageViewRecords(GetMyServingTeamsPageId, token, searchString);
+            var groups = new List<Group>();
+            foreach (var team in teams)
+            {
+                var group = new Group
+                {
+                    GroupId = (int) team["Group_ID"],
+                    Name = (string) team["Group_Name"],
+                    GroupRole = (string) team["Role_Title"]
+                };
+                groups.Add(group);
+            }
+            return groups;
         }
     }
 }

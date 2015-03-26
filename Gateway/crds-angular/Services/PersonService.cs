@@ -5,17 +5,33 @@ using AutoMapper;
 using crds_angular.Models;
 using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Serve;
+using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services;
+using MinistryPlatform.Translation.Services.Interfaces;
 using Attribute = MinistryPlatform.Models.Attribute;
 using Event = MinistryPlatform.Models.Event;
 using ServingTeam = crds_angular.Models.Crossroads.Serve.ServingTeam;
 
 namespace crds_angular.Services
 {
-    public class PersonService : MinistryPlatformBaseService
+    public class PersonService : MinistryPlatformBaseService, IPersonService
     {
-        public void setProfile(String token, Person person)
+        private IGroupService _groupService;
+        private IContactRelationshipService _contactRelationshipService;
+        private IContactService _contactService;
+        private IOpportunityService _opportunityService;
+
+        public PersonService(IGroupService groupService, IContactRelationshipService contactRelationshipService,
+            IContactService contactService, IOpportunityService opportunityService)
+        {
+            this._groupService = groupService;
+            this._contactRelationshipService = contactRelationshipService;
+            this._contactService = contactService;
+            this._opportunityService = opportunityService;
+        }
+
+        public void SetProfile(String token, Person person)
         {
             var contactDictionary = getDictionary(person.GetContact());
             var householdDictionary = getDictionary(person.GetHousehold());
@@ -38,50 +54,41 @@ namespace crds_angular.Services
             MinistryPlatformService.UpdateRecord(AppSetting("MyHousehold"), householdDictionary, token);
         }
 
-        public List<Skill> getLoggedInUserSkills(int contactId, string token)
+        public List<Skill> GetLoggedInUserSkills(int contactId, string token)
         {
             return GetSkills(contactId, token);
         }
 
         public Person GetLoggedInUserProfile(String token)
         {
-            //var contact = MinistryPlatformService.GetRecordsArr(AppSetting("MyProfile"), token);
-            //if (contact.Count == 0)
-            //{
-            //    throw new InvalidOperationException("getLoggedInUserProfile - no data returned.");
-            //}
-            //var contactJsonOLD = TranslationService.DecodeJson(contact.ToString());
-
-            var contactSvc = new ContactService();
-            var contactJson = contactSvc.GetMyProfile(token);
+            var contact = _contactService.GetMyProfile(token);
 
             var person = new Person
             {
-                ContactId = contactJson.ContactId,
-                EmailAddress = contactJson.EmailAddress,
-                NickName = contactJson.NickName,
-                FirstName = contactJson.FirstName,
-                MiddleName = contactJson.MiddleName,
-                LastName = contactJson.LastName,
-                MaidenName = contactJson.MaidenName,
-                MobilePhone = contactJson.MobilePhone,
-                MobileCarrierId = contactJson.MobileCarrierId,
-                DateOfBirth = contactJson.DateOfBirth,
-                MaritalStatusId = contactJson.MaritalStatusId,
-                GenderId = contactJson.GenderId,
-                EmployerName = contactJson.EmployerName,
-                AddressLine1 = contactJson.AddressLine1,
-                AddressLine2 = contactJson.AddressLine2,
-                City = contactJson.City,
-                State = contactJson.State,
-                PostalCode = contactJson.PostalCode,
-                AnniversaryDate = contactJson.AnniversaryDate,
-                ForeignCountry = contactJson.ForeignCountry,
-                //County = contactJson.County,
-                HomePhone = contactJson.HomePhone,
-                CongregationId = contactJson.CongregationId,
-                HouseholdId = contactJson.HouseholdId,
-                AddressId = contactJson.AddressId
+                ContactId = contact.ContactId,
+                EmailAddress = contact.EmailAddress,
+                NickName = contact.NickName,
+                FirstName = contact.FirstName,
+                MiddleName = contact.MiddleName,
+                LastName = contact.LastName,
+                MaidenName = contact.MaidenName,
+                MobilePhone = contact.MobilePhone,
+                MobileCarrierId = contact.MobileCarrierId,
+                DateOfBirth = contact.DateOfBirth,
+                MaritalStatusId = contact.MaritalStatusId,
+                GenderId = contact.GenderId,
+                EmployerName = contact.EmployerName,
+                AddressLine1 = contact.AddressLine1,
+                AddressLine2 = contact.AddressLine2,
+                City = contact.City,
+                State = contact.State,
+                PostalCode = contact.PostalCode,
+                AnniversaryDate = contact.AnniversaryDate,
+                ForeignCountry = contact.ForeignCountry,
+                HomePhone = contact.HomePhone,
+                CongregationId = contact.CongregationId,
+                HouseholdId = contact.HouseholdId,
+                AddressId = contact.AddressId
             };
 
             return person;
@@ -99,7 +106,7 @@ namespace crds_angular.Services
 
         public List<FamilyMember> GetMyFamily(int contactId, string token)
         {
-            var contactRelationships = GetMyRecords.GetMyFamily(contactId, token).ToList();
+            var contactRelationships = _contactRelationshipService.GetMyFamily(contactId, token).ToList();
             var familyMembers = Mapper.Map<List<Contact_Relationship>, List<FamilyMember>>(contactRelationships);
 
             //now get info for Contact
@@ -124,7 +131,7 @@ namespace crds_angular.Services
             var familyMembers = GetMyFamily(contactId, token);
             foreach (var familyMember in familyMembers)
             {
-                var groups = GetMyRecords.GetMyServingTeams(familyMember.ContactId, token);
+                var groups = this._groupService.GetMyServingTeams(familyMember.ContactId, token);
                 foreach (var group in groups)
                 {
                     var servingTeam = servingTeams.SingleOrDefault(t => t.GroupId == group.GroupId);
@@ -141,13 +148,13 @@ namespace crds_angular.Services
                             };
                             servingTeam.Members.Add(member);
                         }
-                        var role = new ServeRole { Name = group.GroupRole };
+                        var role = new ServeRole {Name = group.GroupRole};
                         member.Roles.Add(role);
                     }
                     else
                     {
-                        servingTeam = new ServingTeam { Name = group.Name, GroupId = group.GroupId };
-                        var groupMembers = new List<TeamMember> { NewTeamMember(familyMember, group) };
+                        servingTeam = new ServingTeam {Name = group.Name, GroupId = group.GroupId};
+                        var groupMembers = new List<TeamMember> {NewTeamMember(familyMember, group)};
                         servingTeam.Members = groupMembers;
                         servingTeams.Add(servingTeam);
                     }
@@ -158,17 +165,17 @@ namespace crds_angular.Services
 
         private static TeamMember NewTeamMember(FamilyMember familyMember, Group group)
         {
-            var teamMember = new TeamMember { ContactId = familyMember.ContactId, Name = familyMember.PreferredName };
+            var teamMember = new TeamMember {ContactId = familyMember.ContactId, Name = familyMember.PreferredName};
 
-            var role = new ServeRole { Name = @group.GroupRole };
-            teamMember.Roles = new List<ServeRole> { role };
+            var role = new ServeRole {Name = @group.GroupRole};
+            teamMember.Roles = new List<ServeRole> {role};
 
             return teamMember;
         }
 
         private static TeamMember NewTeamMember(TeamMember teamMember, ServeRole role)
         {
-            var newTeamMember2 = new TeamMember { Name = teamMember.Name, ContactId = teamMember.ContactId };
+            var newTeamMember2 = new TeamMember {Name = teamMember.Name, ContactId = teamMember.ContactId};
             newTeamMember2.Roles.Add(role);
 
             return newTeamMember2;
@@ -202,13 +209,13 @@ namespace crds_angular.Services
             return servingTeam;
         }
 
-        public List<ServingDay> GetMyFamiliesServingEvents(List<ServingTeam> teams, string token)
+        public List<ServingDay> GetMyFamiliesServingDays(List<ServingTeam> teams, string token)
         {
             var serveDays = new List<ServingDay>();
 
             foreach (var team in teams)
             {
-                var opportunities = OpportunityService.GetOpportunitiesForGroup(team.GroupId, token);
+                var opportunities = this._opportunityService.GetOpportunitiesForGroup(team.GroupId, token);
 
                 foreach (var opportunity in opportunities)
                 {
@@ -224,7 +231,8 @@ namespace crds_angular.Services
                             Name = opportunity.OpportunityName + " " + opportunity.RoleTitle,
                             Capacity = opportunity.Capacity,
                             SlotsTaken =
-                                OpportunityService.GetOpportunitySignupCount(opportunity.OpportunityId, e.EventId, token)
+                                this._opportunityService.GetOpportunitySignupCount(opportunity.OpportunityId, e.EventId,
+                                    token)
                         };
 
                         var serveDay = serveDays.SingleOrDefault(r => r.Day == e.DateOnly);
@@ -288,7 +296,7 @@ namespace crds_angular.Services
                             else
                             {
                                 //time not in list
-                                serveTime = new ServingTime { Time = e.TimeOnly };
+                                serveTime = new ServingTime {Time = e.TimeOnly};
                                 serveTime.ServingTeams.Add(NewServingTeam(team, opportunity, serveRole));
                                 serveDay.ServeTimes.Add(serveTime);
                             }
@@ -296,8 +304,8 @@ namespace crds_angular.Services
                         else
                         {
                             //day not in list add it
-                            serveDay = new ServingDay { Day = e.DateOnly };
-                            var serveTime = new ServingTime { Time = e.TimeOnly };
+                            serveDay = new ServingDay {Day = e.DateOnly};
+                            var serveTime = new ServingTime {Time = e.TimeOnly};
                             serveTime.ServingTeams.Add(NewServingTeam(team, opportunity, serveRole));
 
                             serveDay.ServeTimes.Add(serveTime);
@@ -312,7 +320,7 @@ namespace crds_angular.Services
             var sortedServeDays = new List<ServingDay>();
             foreach (var serveDay in preSortedServeDays)
             {
-                var sortedServeDay = new ServingDay { Day = serveDay.Day };
+                var sortedServeDay = new ServingDay {Day = serveDay.Day};
                 var sortedServeTimes = serveDay.ServeTimes.OrderBy(s => s.Time).ToList();
                 sortedServeDay.ServeTimes = sortedServeTimes;
                 sortedServeDays.Add(sortedServeDay);
@@ -331,7 +339,12 @@ namespace crds_angular.Services
                 DateOnly = e.EventStartDate.Date.ToString("d"),
                 TimeOnly = e.EventStartDate.TimeOfDay.ToString(),
                 EventId = e.EventId
-            }).Where(e => e.StarDateTime.Month == today.Month && e.StarDateTime.Day >= today.Day && e.StarDateTime.Year == today.Year).ToList();
+            })
+                .Where(
+                    e =>
+                        e.StarDateTime.Month == today.Month && e.StarDateTime.Day >= today.Day &&
+                        e.StarDateTime.Year == today.Year)
+                .ToList();
         }
     }
 }

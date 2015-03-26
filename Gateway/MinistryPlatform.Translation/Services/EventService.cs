@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
 {

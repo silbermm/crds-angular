@@ -6,13 +6,10 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Results;
 using crds_angular.Controllers.API;
-using crds_angular.Models.Crossroads;
-using crds_angular.Models.Json;
 using MinistryPlatform.Models;
-using MinistryPlatform.Translation.Services;
+using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
-using Event = MinistryPlatform.Models.Event;
 
 namespace crds_angular.test.controllers
 {
@@ -34,7 +31,8 @@ namespace crds_angular.test.controllers
             eventServiceMock = new Mock<IEventService>();
             authenticationServiceMock = new Mock<IAuthenticationService>();
 
-            fixture = new GroupController(groupServiceMock.Object, eventServiceMock.Object, authenticationServiceMock.Object);
+            fixture = new GroupController(groupServiceMock.Object, eventServiceMock.Object,
+                authenticationServiceMock.Object);
 
             authType = "auth_type";
             authToken = "auth_token";
@@ -50,8 +48,13 @@ namespace crds_angular.test.controllers
             int groupParticipantId = 444;
             Participant participant = new Participant();
             participant.ParticipantId = 90210;
-            authenticationServiceMock.Setup(mocked => mocked.GetParticipantRecord(fixture.Request.Headers.Authorization.ToString())).Returns(participant);
-            groupServiceMock.Setup(mocked => mocked.addParticipantToGroup(participant.ParticipantId, groupId, GroupRoleId, It.IsAny<DateTime>(), null, false)).Returns(groupParticipantId);
+            authenticationServiceMock.Setup(
+                mocked => mocked.GetParticipantRecord(fixture.Request.Headers.Authorization.ToString()))
+                .Returns(participant);
+            groupServiceMock.Setup(
+                mocked =>
+                    mocked.addParticipantToGroup(participant.ParticipantId, groupId, GroupRoleId, It.IsAny<DateTime>(),
+                        null, false)).Returns(groupParticipantId);
 
             List<Event> events = new List<Event>();
             Event e1 = new Event();
@@ -63,17 +66,20 @@ namespace crds_angular.test.controllers
 
             groupServiceMock.Setup(mocked => mocked.getAllEventsForGroup(groupId)).Returns(events);
 
-            eventServiceMock.Setup(mocked => mocked.registerParticipantForEvent(participant.ParticipantId, e1.EventId)).Returns(1010);
-            eventServiceMock.Setup(mocked => mocked.registerParticipantForEvent(participant.ParticipantId, e2.EventId)).Returns(2020);
+            eventServiceMock.Setup(mocked => mocked.registerParticipantForEvent(participant.ParticipantId, e1.EventId))
+                .Returns(1010);
+            eventServiceMock.Setup(mocked => mocked.registerParticipantForEvent(participant.ParticipantId, e2.EventId))
+                .Returns(2020);
 
-            IHttpActionResult result = fixture.Post(groupId+"");
+            IHttpActionResult result = fixture.Post(groupId + "");
             authenticationServiceMock.VerifyAll();
             groupServiceMock.VerifyAll();
             eventServiceMock.VerifyAll();
 
             Assert.IsNotNull(result);
-            Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<Dictionary<string, object>>), result);
-            OkNegotiatedContentResult<Dictionary<string, object>> okResult = (OkNegotiatedContentResult<Dictionary<string, object>>)result;
+            Assert.IsInstanceOf(typeof (OkNegotiatedContentResult<Dictionary<string, object>>), result);
+            OkNegotiatedContentResult<Dictionary<string, object>> okResult =
+                (OkNegotiatedContentResult<Dictionary<string, object>>) result;
             Assert.IsNotNull(okResult.Content);
             Assert.AreEqual(4, okResult.Content.Count);
             Assert.AreEqual(groupParticipantId, okResult.Content["groupParticipantId"]);
@@ -87,15 +93,20 @@ namespace crds_angular.test.controllers
             int groupId = 456;
             Participant participant = new Participant();
             participant.ParticipantId = 90210;
-            authenticationServiceMock.Setup(mocked => mocked.GetParticipantRecord(fixture.Request.Headers.Authorization.ToString())).Returns(participant);
-            groupServiceMock.Setup(mocked => mocked.addParticipantToGroup(participant.ParticipantId, groupId, GroupRoleId, It.IsAny<DateTime>(), null, false)).Throws(ex);
+            authenticationServiceMock.Setup(
+                mocked => mocked.GetParticipantRecord(fixture.Request.Headers.Authorization.ToString()))
+                .Returns(participant);
+            groupServiceMock.Setup(
+                mocked =>
+                    mocked.addParticipantToGroup(participant.ParticipantId, groupId, GroupRoleId, It.IsAny<DateTime>(),
+                        null, false)).Throws(ex);
 
-            IHttpActionResult result = fixture.Post(groupId+"");
+            IHttpActionResult result = fixture.Post(groupId + "");
             authenticationServiceMock.VerifyAll();
             groupServiceMock.VerifyAll();
 
             Assert.IsNotNull(result);
-            Assert.IsInstanceOf(typeof(BadRequestResult), result);
+            Assert.IsInstanceOf(typeof (BadRequestResult), result);
         }
 
         [Test]
@@ -111,13 +122,13 @@ namespace crds_angular.test.controllers
             g.WaitList = true;
             g.WaitListGroupId = 888;
 
-         
+
             groupServiceMock.Setup(mocked => mocked.getGroupDetails(groupId)).Returns(g);
             IHttpActionResult result = fixture.Get(groupId);
 
-            Assert.NotNull(g); 
+            Assert.NotNull(g);
             Assert.NotNull(result);
-         }
+        }
 
         [Test]
         public void testCallGroupServiceFailsUnauthorized()
@@ -125,7 +136,7 @@ namespace crds_angular.test.controllers
             fixture.Request.Headers.Authorization = null;
             IHttpActionResult result = fixture.Post("3");
             Assert.IsNotNull(result);
-            Assert.IsInstanceOf(typeof(UnauthorizedResult), result);
+            Assert.IsInstanceOf(typeof (UnauthorizedResult), result);
             groupServiceMock.VerifyAll();
         }
     }

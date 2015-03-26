@@ -1,4 +1,4 @@
-﻿namespace MinistryPlatform.Translation.Services
+﻿namespace MinistryPlatform.Translation.Services.Interfaces
 {
     public interface IEventService
     {

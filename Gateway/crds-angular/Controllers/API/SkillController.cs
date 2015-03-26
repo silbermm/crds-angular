@@ -7,6 +7,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Models.Crossroads;
 using crds_angular.Services;
+using crds_angular.Services.Interfaces;
 using Newtonsoft.Json;
 using Attribute = MinistryPlatform.Models.Attribute;
 
@@ -14,6 +15,15 @@ namespace crds_angular.Controllers.API
 {
     public class SkillController : LookupController
     {
+        private IPersonService _personService;
+        private ISkillService _skillService;
+
+        public SkillController(IPersonService personService, ISkillService skillService)
+        {
+            _personService = personService;
+            _skillService = skillService;
+        }
+
         [ResponseType(typeof(List<SkillCategory>))]
         [Route("api/skill/{userid}")]
         public IHttpActionResult Get(int userid)
@@ -44,7 +54,7 @@ namespace crds_angular.Controllers.API
                     return Unauthorized();
                 }
 
-                var recordId = SkillService.Add(skill, userid, token);
+                var recordId = _skillService.Add(skill, userid, token);
                 skill.RecordId = recordId;
                 return this.Ok(skill );
             });
@@ -64,7 +74,7 @@ namespace crds_angular.Controllers.API
                     return Unauthorized();
                 }
 
-                if (SkillService.Delete(recordId, token))
+                if (_skillService.Delete(recordId, token))
                 {
                     return this.Ok();
                 }
@@ -81,23 +91,23 @@ namespace crds_angular.Controllers.API
         {
             if (contactId != 0 )
                 {
-                var personService = new PersonService();
-                var skills = personService.getLoggedInUserSkills(contactId, token);
+                //var personService = new PersonService();
+                var skills = _personService.GetLoggedInUserSkills(contactId, token);
                     return skills;
                 }
             return null;
         }
 
-        private int GetUserIdCookie()
-        {
-             var cookie = Request.Headers.GetCookies("userId").FirstOrDefault();
-             if (cookie != null && (cookie["userId"].Value != "null" || cookie["userId"].Value != null))
-             {
-                 var contactId = int.Parse(cookie["userId"].Value);
-                 return contactId;
-             }
-             return 0;
-        }
+        //private int GetUserIdCookie()
+        //{
+        //     var cookie = Request.Headers.GetCookies("userId").FirstOrDefault();
+        //     if (cookie != null && (cookie["userId"].Value != "null" || cookie["userId"].Value != null))
+        //     {
+        //         var contactId = int.Parse(cookie["userId"].Value);
+        //         return contactId;
+        //     }
+        //     return 0;
+        //}
 
         private List<SkillCategory> ConvertToSkills(List<Attribute> attributes, List<Skill> mySkills)
         {
