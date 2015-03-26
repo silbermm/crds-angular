@@ -154,13 +154,13 @@ BEGIN
         FROM INSERTED I
         JOIN DELETED D ON I.Group_Id = D.Group_Id
 
-    DECLARE @Group_Id INT;
+    DECLARE @Next_Group_Id INT;
     OPEN @Groups_Cursor
-    FETCH NEXT FROM @Groups_Cursor INTO @Group_Id
+    FETCH NEXT FROM @Groups_Cursor INTO @Next_Group_Id
     WHILE @@FETCH_STATUS = 0
     BEGIN
-        EXEC [dbo].[crds_Update_Group_Is_Full] @Group_Id = @Group_Id
-        FETCH NEXT FROM @Groups_Cursor INTO @Group_Id
+        EXEC [dbo].[crds_Update_Group_Is_Full] @Group_Id = @Next_Group_Id
+        FETCH NEXT FROM @Groups_Cursor INTO @Next_Group_Id
     END
     CLOSE @Groups_Cursor
     DEALLOCATE @Groups_Cursor
