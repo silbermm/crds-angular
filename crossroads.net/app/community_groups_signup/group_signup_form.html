@@ -1,7 +1,7 @@
 <div ng-show="groupsignup.viewReady">
     <h2 class="header noPspace" ng-bind-html="groupsignup.signupPage.title | html"></h2>
     <div ng-show="groupsignup.alreadySignedUp">
-      <h1 style="color:red">You are already signed up.</h1>
+      <div ng-bind-html="groupsignup.signupPage.existingMember | html"></div>
       <h3>Participants</h3>
       <hr>
       <p><label><input type="checkbox" style="visibility:hidden;">{{groupsignup.person["NickName"]}} ({{groupsignup.person["Email_Address"]}})</label></p>
