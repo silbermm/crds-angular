@@ -27,6 +27,7 @@
       //////////////////////////////////
     
       function activate(){
+        debugger;
         filterTimes();
         filterTeams();
         filterFamily();

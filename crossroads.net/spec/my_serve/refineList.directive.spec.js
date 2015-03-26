@@ -15,22 +15,36 @@ describe('Refine List Directive', function() {
 
   var mockServingDays = [{"day":"3/29/2015","serveTimes": mockTimes}];
 
+
   beforeEach(function(){
     module('crossroads');
   });
  
-  beforeEach(inject(function(_$compile_, _$rootScope_){
+  beforeEach(inject(function(_$compile_, _$rootScope_, _$q_){
     $compile = _$compile_;
     $rootScope = _$rootScope_;
+    $q = _$q_;
     scope = $rootScope.$new();
     element = "<refine-list serving-days='servingDays'></refine-list>";
-    scope.servingDays = mockServingDays;
+    scope.servingDays = {};
+    scope.servingDays.$promise = promiseServeDates(mockServingDays);
     element = $compile(element)(scope);
     scope.$digest();
     isolateScope = element.isolateScope();
+   
+  
+    function promiseServeDates(serveDates) {
+      var deferred = $q.defer();
+      debugger;
+      deferred.resolve(serveDates);
+      return deferred.promise;
+    } 
+ 
   }));
 
   it("should have the serve data that was passed in", function(){ 
+    debugger;
+    var servingDays = isolateScope.servingDays;
     expect(isolateScope.servingDays).toBe( mockServingDays );
   });
 
