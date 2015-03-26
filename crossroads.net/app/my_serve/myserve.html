@@ -3,7 +3,8 @@
 <div class="serve-signup-cont clearfix col-sm-10 soft-ends">
   <div class="serve-day push-bottom" data-ng-repeat="group in serve.groups">
     <h4>{{ serve.convertToDate(group.day) | date:'EEEE, MMMM dd, yyyy' }}</h4>
-      <serve-tabs opportunity="opp" ng-repeat="opp in group.serveTimes">
+      <serve-tabs opportunity="opp" ng-repeat="opp in group.serveTimes" tab-index="$index">
       </serve-tabs>
   </div><!-- serve day --> 
 </div>
+<refine-list serving-days="serve.groups"> </refine-list>
