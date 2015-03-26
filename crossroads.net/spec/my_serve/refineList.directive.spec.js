@@ -11,9 +11,10 @@ describe('Refine List Directive', function() {
   var serveTeam10 = [{"name":"KC Oakley Nursery MP","groupId":6329,"members":[{"name":"Leslie","contactId":1670885,"roles":[{"name":"Nursery A - Sunday 10:00 Member","capacity":100,"slotsTaken":1},{"name":"Nursery B - Sunday 10:00 Member","capacity":0,"slotsTaken":0},{"name":"Nursery C - Sunday 10:00 Member","capacity":3,"slotsTaken":1}]},{"name":"Matt","contactId":1970611,"roles":[{"name":"Nursery A - Sunday 10:00 Member","capacity":100,"slotsTaken":1},{"name":"Nursery B - Sunday 10:00 Member","capacity":0,"slotsTaken":0},{"name":"Nursery C - Sunday 10:00 Member","capacity":3,"slotsTaken":1}]}]}];
 
 
-  var mockTimes = [{"time":"08:30:00","servingTeams": serveTeam830 },{"time":"10:00:00","servingTeams": serveTeam10 }];
+  var mockSaturdayTimes = [{"time":"08:30:00","servingTeams": serveTeam830 },{"time":"10:00:00","servingTeams": serveTeam10 }];
+  var mockSundayTimes = [{"time":"08:30:00","servingTeams": serveTeam830 },{"time":"10:00:00","servingTeams": serveTeam10 }];
 
-  var mockServingDays = [{"day":"3/29/2015","serveTimes": mockTimes}];
+  var mockServingDays = [{"day":"3/28/2015", "serveTimes": mockSaturdayTimes}, {"day":"3/29/2015","serveTimes": mockSundayTimes}];
 
 
   beforeEach(function(){
@@ -47,18 +48,29 @@ describe('Refine List Directive', function() {
   });
 
   it("should filter the array of times", function(){
-    expect(isolateScope.times.length).toBe(2);
+    expect(isolateScope.times.length).toBe(4);
   });
 
   it("should have the correct times", function(){
-    //debugger;
     var times = isolateScope.times;
+    expect(isolateScope.times[0].time).toBe("08:30:00");
+    expect(isolateScope.times[1].time).toBe("10:00:00");
+    expect(isolateScope.times[2].time).toBe("08:30:00");
+    expect(isolateScope.times[3].time).toBe("10:00:00");
+  });
+
+  it("should filter times to a unique list of times", function(){
+    expect(isolateScope.uniqueTimes.length).toBe(2);
+  });
+
+  it("should have the correct times in unique list", function(){
+    var times = isolateScope.uniqueTimes;
     expect(isolateScope.times[0].time).toBe("08:30:00");
     expect(isolateScope.times[1].time).toBe("10:00:00");
   });
 
   it("should filter the array of teams", function(){
-    expect(isolateScope.serveTeams.length).toBe(3);
+    expect(isolateScope.serveTeams.length).toBe(6);
   });
 
   it("should have the correct teams", function(){
@@ -66,7 +78,7 @@ describe('Refine List Directive', function() {
   });
 
   it("should filter out the family members", function(){
-    expect(isolateScope.serveMembers.length).toBe(5);
+    expect(isolateScope.serveMembers.length).toBe(10);
   });
 
   it("should filter out the family and contain Leslie", function(){

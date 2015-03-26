@@ -18,6 +18,7 @@
       
       scope.getUniqueMembers = getUniqueMembers;
       scope.getUniqueTeams = getUniqueTeams;
+      scope.getUniqueTimes = getUniqueTimes;
       scope.resolvedData = [];
       scope.serveMembers = [];
       scope.serveTeams = [];
@@ -25,6 +26,7 @@
       scope.uniqueDays = [];
       scope.uniqueMembers = [];
       scope.uniqueTeams = [];
+      scope.uniqueTimes = [];
 
       activate();
       //////////////////////////////////
@@ -36,6 +38,7 @@
           filterFamily();
           getUniqueMembers();
           getUniqueTeams();
+          getUniqueTimes();
         }); 
       }
 
@@ -73,7 +76,13 @@
         scope.uniqueTeams = _.chain(scope.serveTeams).map(function(team){
           return { 'name': team.name, 'groupId': team.groupId };
         }).uniq('groupId').value();
-      } 
+      }
+
+      function getUniqueTimes(){
+        scope.uniqueTimes = _.chain(scope.times).map(function(time) {
+          return {time: time.time};
+        }).uniq("time").value();
+      }  
     }
   }
 
