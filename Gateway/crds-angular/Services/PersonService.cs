@@ -136,7 +136,8 @@ namespace crds_angular.Services
                             member = new TeamMember
                             {
                                 ContactId = familyMember.ContactId,
-                                Name = familyMember.PreferredName
+                                Name = familyMember.PreferredName,
+                                LastName = familyMember.LastName
                             };
                             servingTeam.Members.Add(member);
                         }
@@ -157,7 +158,7 @@ namespace crds_angular.Services
 
         private static TeamMember NewTeamMember(FamilyMember familyMember, Group group)
         {
-            var teamMember = new TeamMember { ContactId = familyMember.ContactId, Name = familyMember.PreferredName };
+            var teamMember = new TeamMember { ContactId = familyMember.ContactId, Name = familyMember.PreferredName, LastName = familyMember.LastName};
 
             var role = new ServeRole { Name = @group.GroupRole };
             teamMember.Roles = new List<ServeRole> { role };
@@ -167,7 +168,7 @@ namespace crds_angular.Services
 
         private static TeamMember NewTeamMember(TeamMember teamMember, ServeRole role)
         {
-            var newTeamMember2 = new TeamMember { Name = teamMember.Name, ContactId = teamMember.ContactId };
+            var newTeamMember2 = new TeamMember { Name = teamMember.Name, LastName = teamMember.LastName, ContactId = teamMember.ContactId };
             newTeamMember2.Roles.Add(role);
 
             return newTeamMember2;
@@ -271,7 +272,8 @@ namespace crds_angular.Services
                                                 member = new TeamMember
                                                 {
                                                     ContactId = teamMember.ContactId,
-                                                    Name = teamMember.Name
+                                                    Name = teamMember.Name,
+                                                    LastName = teamMember.LastName
                                                 };
                                                 existingTeam.Members.Add(member);
                                             }

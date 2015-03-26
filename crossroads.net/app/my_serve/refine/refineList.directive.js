@@ -17,6 +17,7 @@
     function link(scope, el, attr){
       
       scope.getUniqueMembers = getUniqueMembers;
+      scope.resolvedData = [];
       scope.serveMembers = [];
       scope.serveTeams = [];
       scope.times = [];
@@ -27,11 +28,13 @@
       //////////////////////////////////
     
       function activate(){
-        debugger;
-        filterTimes();
-        filterTeams();
-        filterFamily();
-        getUniqueMembers();
+       scope.servingDays.$promise.then(function(data) {
+          filterTimes();
+          filterTeams();
+          filterFamily();
+          getUniqueMembers();
+        });
+       
       }
 
       function filterFamily(){
@@ -72,7 +75,7 @@
           }
         });
         scope.uniqueMembers = _.map(uniqueMembers, function(m){
-          return {name: m.name, contactId: m.contactId};
+          return {name: m.name, lastName: m.lastName, contactId: m.contactId};
         });
       };
       
