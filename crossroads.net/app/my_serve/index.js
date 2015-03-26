@@ -5,6 +5,8 @@ var _ = require('lodash');
 require('./myserve.html');
 var app = require("angular").module('crossroads');
 
+app.factory("filterState", require('./filterState.service.js'));
+
 app.controller("MyServeController", require('./myserve.controller'));
 
 require('./serveTabs.html');
@@ -17,3 +19,4 @@ app.factory("ServeOpportunities", require('../services/serveOpportunities.servic
 
 require('./refine/refineList.html');
 app.directive("refineList", require('./refine/refineList.directive'));
+

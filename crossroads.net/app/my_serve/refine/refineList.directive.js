@@ -3,7 +3,9 @@
 
   module.exports = RefineDirective;
 
-  function RefineDirective(){
+  RefineDirective.$inject = ['filterState']
+
+  function RefineDirective(filterState){
     return {
       restrict: "E",
       replace: true,
@@ -23,6 +25,7 @@
       scope.serveMembers = [];
       scope.serveTeams = [];
       scope.times = [];
+      scope.toggleFamilyMember = toggleFamilyMember;
       scope.uniqueDays = [];
       scope.uniqueMembers = [];
       scope.uniqueTeams = [];
@@ -48,6 +51,14 @@
             scope.serveMembers.push(member);
           });
         });
+      }
+
+      function toggleFamilyMember(member){
+        if(member.selected){
+          filterState.addFamilyMember(member.contactId);
+        } else {
+          filterState.removeFamilyMember(member.contactId);
+        }
       }
 
       function filterTeams(){
