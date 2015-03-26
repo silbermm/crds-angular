@@ -17,12 +17,14 @@
     function link(scope, el, attr){
       
       scope.getUniqueMembers = getUniqueMembers;
+      scope.getUniqueTimes = getUniqueTimes;
       scope.resolvedData = [];
       scope.serveMembers = [];
       scope.serveTeams = [];
       scope.times = [];
       scope.uniqueDays = [];
       scope.uniqueMembers = [];
+      scope.uniqueTimes = [];
 
       activate();
       //////////////////////////////////
@@ -33,6 +35,7 @@
           filterTeams();
           filterFamily();
           getUniqueMembers();
+          getUniqueTimes();
         }); 
       }
 
@@ -76,6 +79,12 @@
         scope.uniqueMembers = _.map(uniqueMembers, function(m){
           return {name: m.name, lastName: m.lastName, contactId: m.contactId};
         });
+      };
+
+      function getUniqueTimes(){
+        scope.uniqueTimes = _.chain(scope.times).map(function(time) {
+          return {time: time.time};
+        }).uniq("time").value();
       };
       
     }
