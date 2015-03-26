@@ -33,8 +33,7 @@
           filterTeams();
           filterFamily();
           getUniqueMembers();
-        });
-       
+        }); 
       }
 
       function filterFamily(){

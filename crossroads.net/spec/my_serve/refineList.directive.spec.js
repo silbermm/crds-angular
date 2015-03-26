@@ -2,9 +2,9 @@ describe('Refine List Directive', function() {
 
   var $compile, $rootScope, element, scope, isolateScope;
 
-  var mockLeslie = {"name":"Leslie","contactId":1670885,"roles":[{"name":"First Grade Room A - Sunday 8:30 Member","capacity":0,"slotsTaken":0},{"name":"First Grade Room B - Sunday 8:30 Member","capacity":0,"slotsTaken":0}]};
+  var mockLeslie = {"name":"Leslie", "lastName": "Silbernagel", "contactId":1670885,"roles":[{"name":"First Grade Room A - Sunday 8:30 Member","capacity":0,"slotsTaken":0},{"name":"First Grade Room B - Sunday 8:30 Member","capacity":0,"slotsTaken":0}]};
 
-  var mockMatt = {"name":"Matt","contactId":1970611,"roles":[{"name":"Nursery A - Sunday 8:30 Member","capacity":100,"slotsTaken":0},{"name":"Nursery B - Sunday 8:30 Member","capacity":10,"slotsTaken":2},{"name":"Nursery C - Sunday 8:30 Member","capacity":0,"slotsTaken":1}]};
+  var mockMatt = {"name":"Matt", "lastName": "Silbernagel", "contactId":1970611,"roles":[{"name":"Nursery A - Sunday 8:30 Member","capacity":100,"slotsTaken":0},{"name":"Nursery B - Sunday 8:30 Member","capacity":10,"slotsTaken":2},{"name":"Nursery C - Sunday 8:30 Member","capacity":0,"slotsTaken":1}]};
 
   var serveTeam830 = [{"name":"KC First Grade Oakley MP","groupId":34911,"members":[mockLeslie]},{"name":"KC Oakley Nursery MP","groupId":6329,"members":[{"name":"Leslie","contactId":1670885,"roles":[{"name":"Nursery A - Sunday 8:30 Member","capacity":100,"slotsTaken":0},{"name":"Nursery B - Sunday 8:30 Member","capacity":10,"slotsTaken":2},{"name":"Nursery C - Sunday 8:30 Member","capacity":0,"slotsTaken":1}]},mockMatt]}]
 
@@ -26,7 +26,7 @@ describe('Refine List Directive', function() {
     $q = _$q_;
     scope = $rootScope.$new();
     element = "<refine-list serving-days='servingDays'></refine-list>";
-    scope.servingDays = {};
+    scope.servingDays = mockServingDays;
     scope.servingDays.$promise = promiseServeDates(mockServingDays);
     element = $compile(element)(scope);
     scope.$digest();
@@ -35,7 +35,6 @@ describe('Refine List Directive', function() {
   
     function promiseServeDates(serveDates) {
       var deferred = $q.defer();
-      debugger;
       deferred.resolve(serveDates);
       return deferred.promise;
     } 
@@ -86,8 +85,8 @@ describe('Refine List Directive', function() {
 
   it("should find the correct members in the unique list", function(){
     isolateScope.getUniqueMembers();
-    expect(isolateScope.uniqueMembers).toContain({name: "Leslie", contactId: 1670885});
-    expect(isolateScope.uniqueMembers).toContain({name: "Matt", contactId: 1970611 });
+    expect(isolateScope.uniqueMembers).toContain({name: "Leslie", lastName: "Silbernagel", contactId: 1670885});
+    expect(isolateScope.uniqueMembers).toContain({name: "Matt", lastName: "Silbernagel", contactId: 1970611 });
 
   });
 
