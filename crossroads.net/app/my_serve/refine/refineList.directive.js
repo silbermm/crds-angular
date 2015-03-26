@@ -17,6 +17,7 @@
     function link(scope, el, attr){
       
       scope.getUniqueMembers = getUniqueMembers;
+      scope.getUniqueTeams = getUniqueTeams;
       scope.getUniqueTimes = getUniqueTimes;
       scope.resolvedData = [];
       scope.serveMembers = [];
@@ -24,6 +25,7 @@
       scope.times = [];
       scope.uniqueDays = [];
       scope.uniqueMembers = [];
+      scope.uniqueTeams = [];
       scope.uniqueTimes = [];
 
       activate();
@@ -35,6 +37,7 @@
           filterTeams();
           filterFamily();
           getUniqueMembers();
+          getUniqueTeams();
           getUniqueTimes();
         }); 
       }
@@ -63,30 +66,23 @@
         }); 
       }
 
-      function getUniqueMembers(){
-        var uniqueMembers = [];
-        _.each(scope.serveMembers, function(member){
-          if (uniqueMembers.length < 1){
-            uniqueMembers.push(member);
-          } else {
-            var el = _.find(uniqueMembers, function(f){
-              return member.contactId === f.contactId;
-            });
-            if(el === undefined) 
-              uniqueMembers.push(member);
-          }
-        });
-        scope.uniqueMembers = _.map(uniqueMembers, function(m){
+      function getUniqueMembers(){ 
+        scope.uniqueMembers = _.chain(scope.serveMembers).map(function(m){
           return {name: m.name, lastName: m.lastName, contactId: m.contactId};
-        });
-      };
+        }).uniq('contactId').value();
+      }
+
+      function getUniqueTeams(){
+        scope.uniqueTeams = _.chain(scope.serveTeams).map(function(team){
+          return { 'name': team.name, 'groupId': team.groupId };
+        }).uniq('groupId').value();
+      }
 
       function getUniqueTimes(){
         scope.uniqueTimes = _.chain(scope.times).map(function(time) {
           return {time: time.time};
         }).uniq("time").value();
-      };
-      
+      }  
     }
   }
 

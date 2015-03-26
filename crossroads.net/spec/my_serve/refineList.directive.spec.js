@@ -101,4 +101,15 @@ describe('Refine List Directive', function() {
 
   });
 
+  it("should filter out unique teams", function(){
+    isolateScope.getUniqueTeams();
+    expect(isolateScope.uniqueTeams.length).toBe(2); 
+  });
+
+  it("should have the correct teams in the unique team list", function(){
+    isolateScope.getUniqueTeams();
+    expect(isolateScope.uniqueTeams).toContain({"name":"KC First Grade Oakley MP","groupId":34911});
+    expect(isolateScope.uniqueTeams).toContain({"name":"KC Oakley Nursery MP","groupId":6329});
+  });
+
 }) 
