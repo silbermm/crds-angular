@@ -152,7 +152,9 @@ BEGIN
     SET @Groups_Cursor = CURSOR FOR
         SELECT DISTINCT I.Group_Id
         FROM INSERTED I
-        JOIN DELETED D ON I.Group_Id = D.Group_Id
+        UNION
+        SELECT DISTINCT D.Group_Id
+        FROM DELETED D
 
     DECLARE @Next_Group_Id INT;
     OPEN @Groups_Cursor
