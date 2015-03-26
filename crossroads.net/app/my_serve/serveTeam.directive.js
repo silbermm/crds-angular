@@ -15,7 +15,9 @@
       templateUrl : "my_serve/serveTeam.html",
       scope : {
         team: '=',
-        opportunity: '='
+        opportunity: '=',
+        teamIndex: '=',
+        tabIndex: '='
       },
       link : link
     };
@@ -29,6 +31,7 @@
       scope.isCollapsed = true;
       scope.isSignedUp = isSignedUp;
       scope.openPanel = openPanel;
+      scope.panelId = getPanelId;
       scope.roles = null;
       scope.setActiveTab = setActiveTab;
       scope.signedup = null;
@@ -44,8 +47,12 @@
         scope.isCollapsed = true;
       }
 
+      function getPanelId(){
+        return "team-panel-" + scope.tabIndex + scope.teamIndex;
+      }
+
       function isActiveTab(memberName){
-        return memberName === scope.currentActiveTab
+        return memberName === scope.currentActiveTab;
       };
 
 
@@ -62,9 +69,7 @@
       function openPanel(members){
         if(scope.currentMember === null){
           var sessionId = Number(Session.exists("userId"));
-          scope.currentMember = _.find(members, function(m){
-            return Number(m.contactId) === sessionId;
-          });
+          scope.currentMember = members[0];
           scope.currentActiveTab = scope.currentMember.name;
         }
         $log.debug("isCollapsed = " + scope.isCollapsed);

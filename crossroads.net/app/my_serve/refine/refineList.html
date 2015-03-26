@@ -5,7 +5,7 @@
   <div class="push-half-bottom filter-group" ng-if="uniqueMembers.length > 1" >
     <div class="checkbox" data-ng-repeat="member in uniqueMembers">
       <label>
-        <input type="checkbox"> {{member.name}}
+        <input type="checkbox"> {{member.name + " " + member.lastName}} 
       </label>
     </div>
   </div><!--/push-bottom-->

@@ -8,6 +8,9 @@ namespace crds_angular.Models.Crossroads.Serve
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
 
+        [JsonProperty(PropertyName = "lastName")]
+        public string LastName { get; set; }
+
         [JsonProperty(PropertyName = "contactId")]
         public int ContactId { get; set; }
 

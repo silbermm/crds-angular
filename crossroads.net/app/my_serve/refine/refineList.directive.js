@@ -75,7 +75,7 @@
           }
         });
         scope.uniqueMembers = _.map(uniqueMembers, function(m){
-          return {name: m.name, contactId: m.contactId};
+          return {name: m.name, lastName: m.lastName, contactId: m.contactId};
         });
       };
       
