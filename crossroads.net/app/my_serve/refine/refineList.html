@@ -10,22 +10,12 @@
     </div>
   </div><!--/push-bottom-->
 
-  <div class="push-half-bottom filter-group">
-    <div class="checkbox">
+  <div class="push-half-bottom filter-group" ng-if="uniqueTeams.length > 1" >
+    <div class="checkbox" data-ng-repeat="team in uniqueTeams">
       <label>
-        <input type="checkbox"> Kids Club Nursery
+        <input type="checkbox"> {{team.name}}
       </label>
-    </div>
-    <div class="checkbox">
-      <label>
-        <input type="checkbox"> Coffee Team
-      </label>
-    </div>
-    <div class="checkbox">
-      <label>
-        <input type="checkbox"> Facilities
-      </label>
-    </div>
+    </div> 
   </div><!--/push-bottom-->
 
   <div class="push-half-bottom filter-group">

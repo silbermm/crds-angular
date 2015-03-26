@@ -42,7 +42,6 @@ describe('Refine List Directive', function() {
   }));
 
   it("should have the serve data that was passed in", function(){ 
-    debugger;
     var servingDays = isolateScope.servingDays;
     expect(isolateScope.servingDays).toBe( mockServingDays );
   });
@@ -88,6 +87,17 @@ describe('Refine List Directive', function() {
     expect(isolateScope.uniqueMembers).toContain({name: "Leslie", lastName: "Silbernagel", contactId: 1670885});
     expect(isolateScope.uniqueMembers).toContain({name: "Matt", lastName: "Silbernagel", contactId: 1970611 });
 
+  });
+
+  it("should filter out unique teams", function(){
+    isolateScope.getUniqueTeams();
+    expect(isolateScope.uniqueTeams.length).toBe(2); 
+  });
+
+  it("should have the correct teams in the unique team list", function(){
+    isolateScope.getUniqueTeams();
+    expect(isolateScope.uniqueTeams).toContain({"name":"KC First Grade Oakley MP","groupId":34911});
+    expect(isolateScope.uniqueTeams).toContain({"name":"KC Oakley Nursery MP","groupId":6329});
   });
 
 }) 
