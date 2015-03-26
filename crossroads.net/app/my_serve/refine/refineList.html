@@ -51,25 +51,10 @@
     </div>
   </div><!--/push-bottom-->
 
-  <div class="push-half-bottom filter-group">
-    <div class="checkbox">
+  <div class="push-half-bottom filter-group" ng-if="uniqueTimes.length > 1" >
+    <div class="checkbox" data-ng-repeat="time in uniqueTimes">
       <label>
-        <input type="checkbox"> 8:45am
-      </label>
-    </div>
-    <div class="checkbox">
-      <label>
-        <input type="checkbox"> 10:00am
-      </label>
-    </div>
-    <div class="checkbox">
-      <label>
-        <input type="checkbox"> 11:45am
-      </label>
-    </div>
-    <div class="checkbox">
-      <label>
-        <input type="checkbox"> 1:00pm
+        <input type="checkbox"> {{ time.time | time }}
       </label>
     </div>
   </div><!--/push-bottom-->
