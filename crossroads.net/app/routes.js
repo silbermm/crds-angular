@@ -31,12 +31,16 @@
 
         // This custom type is needed to allow us to NOT URLEncode slashes when using ui-sref
         // See this post for details: https://github.com/angular-ui/ui-router/issues/1119
-		$urlMatcherFactory.type("contentRouteType", {
-			encode: function(val) { return val != null ? val.toString() : val; },
-			decode: function(val) { return val != null ? val.toString() : val; },
-			is: function(val) { return this.pattern.test(val); },
-            pattern: /^\/.*/
-		});
+        var registerType = function(routeType, urlPattern) {
+            return($urlMatcherFactory.type(routeType, {
+            			encode: function(val) { return val != null ? val.toString() : val; },
+            			decode: function(val) { return val != null ? val.toString() : val; },
+            			is: function(val) { return this.pattern.test(val); },
+                        pattern: urlPattern
+            		}));
+        };
+        registerType("contentRouteType", /^\/.*/);
+        registerType("signupRouteType", /\/sign-up\/.*$/);
 
         //================================================
         // Check if the user is connected
@@ -113,50 +117,10 @@
                         },
                     },
                     "personal@profile": {
-                        controller: "ProfilePersonalController as profile",
                         templateUrl: "personal/profile_personal.html",
                         data: {
                             isProtected: true
                         },
-                        resolve: {
-                            loggedin: checkLoggedin,
-                            Profile: "Profile",
-                            Lookup: "Lookup",
-                            genders: function (Lookup) {
-
-                                return Lookup.query({
-                                    table: "genders"
-                                }).$promise;
-                            },
-                            maritalStatuses: function (Lookup) {
-                                return Lookup.query({
-                                    table: "maritalstatus"
-                                }).$promise;
-                            },
-                            serviceProviders: function (Lookup) {
-                                return Lookup.query({
-                                    table: "serviceproviders"
-                                }).$promise;
-                            },
-                            states: function (Lookup) {
-                                return Lookup.query({
-                                    table: "states"
-                                }).$promise;
-                            },
-                            countries: function (Lookup) {
-                                return Lookup.query({
-                                    table: "countries"
-                                }).$promise;
-                            },
-                            crossroadsLocations: function (Lookup) {
-                                return Lookup.query({
-                                    table: "crossroadslocations"
-                                }).$promise;
-                            },
-                            person: function (Profile) {
-                                return Profile.Personal.get().$promise;
-                            }
-                        }
                     },
                     "account@profile": {
                         templateUrl: "profile/profile_account.html",
@@ -219,7 +183,7 @@
                 }
             })
            .state("community-groups-signup", {
-                url: "{link:/sign-up/.*$}",
+                url: "{link:signupRouteType}",
                 controller: "GroupSignupController as groupsignup",
                 templateUrl: "community_groups_signup/group_signup_form.html",
                 data: {
