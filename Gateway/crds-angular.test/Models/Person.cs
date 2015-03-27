@@ -19,7 +19,7 @@ namespace crds_angular.test.Models
         {
             var contact = _person.GetContact();
             Assert.That(contact, Is.TypeOf<MyContact>());
-            Assert.AreEqual(_person.EmailAddress, contact.EmailAddress);
+            Assert.AreEqual(_person.EmailAddress, contact.Email_Address);
 
         }
 
