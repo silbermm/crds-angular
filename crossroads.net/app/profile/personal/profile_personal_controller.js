@@ -5,13 +5,23 @@
     module.exports = function($rootScope, $log, MESSAGES, ProfileReferenceData) {
         var _this = this;
 
-        _this.person = ProfileReferenceData.person();
-        _this.genders = ProfileReferenceData.genders();
-        _this.maritalStatuses = ProfileReferenceData.maritalStatuses();
-        _this.serviceProviders = ProfileReferenceData.serviceProviders();
-        _this.states = ProfileReferenceData.states();
-        _this.countries = ProfileReferenceData.countries();
-        _this.crossroadsLocations = ProfileReferenceData.crossroadsLocations();
+        _this.ProfileReferenceData = ProfileReferenceData;
+        // _this.ProfileReferenceData.then(function(response) {
+        //     _this.person = response.person;
+        //     _this.genders = response.genders;
+        //     _this.maritalStatuses = response.maritalStatuses;
+        //     _this.serviceProviders = response.serviceProviders;
+        //     _this.states = response.states;
+        //     _this.countries = response.countries;
+        //     _this.crossroadsLocations = response.crossroadsLocations;
+        // });
+        _this.person = {};
+        // _this.genders = [];
+        // _this.maritalStatuses = [];
+        // _this.serviceProviders = [];
+        // _this.states = [];
+        // _this.countries = [];
+        // _this.crossroadsLocations = [];
 
         _this.passwordPrefix = "account-page";
         _this.submitted = false;
@@ -24,10 +34,20 @@
 
         _this.initProfile = function (form) {
             _this.form = form;
-            configurePerson();
+            _this.ProfileReferenceData.then(function(response) {
+                _this.genders = response.genders;
+                _this.maritalStatuses = response.maritalStatuses;
+                _this.serviceProviders = response.serviceProviders;
+                _this.states = response.states;
+                _this.countries = response.countries;
+                _this.crossroadsLocations = response.crossroadsLocations;
+                configurePerson(response.person);
+            });
         };
 
-        function configurePerson() {
+        function configurePerson(person) {
+            _this.person = person;
+
             if (_this.person.Date_of_Birth !== undefined) {
                 var newBirthDate = _this.person.Date_of_Birth.replace(_this.dateFormat, "$3 $1 $2");
                 var mBdate = moment(newBirthDate, "YYYY MM DD");

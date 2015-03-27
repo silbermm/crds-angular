@@ -1,10 +1,10 @@
 'use strict';
 (function() {
     module.exports = factory;
-    factory.$inject = ['Lookup', 'Profile'];
+    factory.$inject = ['Lookup', 'Profile', '$resolve'];
 
-    function factory(Lookup, Profile) {
-        return({
+    function factory(Lookup, Profile, $resolve) {
+        var data = {
             genders: function() {
                 return Lookup.query({
                     table: "genders"
@@ -44,6 +44,22 @@
             person: function() {
                 return Profile.Personal.get().$promise;
             },
-        });
+        };
+
+        // var resolvedData = {
+        //     genders: [],
+        //     maritalStatuses: [],
+        //     serviceProviders: [],
+        //     states: [],
+        //     countries: [],
+        //     crossroadsLocations: [],
+        //     person: {},
+        // };
+        //
+        // $resolve.resolve(data).then(function(result) {
+        //     resolvedData = result;
+        // });
+
+        return($resolve.resolve(data));
     }
 })()
