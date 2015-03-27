@@ -13,5 +13,7 @@ namespace MinistryPlatform.Translation.Services
         IList<Event> getAllEventsForGroup(int groupId);
 
         Group getGroupDetails(int groupId);
+
+        bool checkIfUserInGroup(int participantId, IList<int> participants);
     }
 }

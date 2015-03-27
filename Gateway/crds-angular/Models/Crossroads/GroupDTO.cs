@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using crds_angular.Models.Json;
 using Newtonsoft.Json;
 
@@ -6,7 +7,7 @@ using Newtonsoft.Json;
 namespace crds_angular.Models.Crossroads
 {
     
-    public class GroupDetail
+    public class GroupDTO
     {
         [JsonProperty(PropertyName = "groupId")]
         public int GroupId { get; set; }
@@ -19,5 +20,8 @@ namespace crds_angular.Models.Crossroads
 
         [JsonProperty(PropertyName = "waitListGroupId")]
         public int WaitListGroupId { get; set; }
+
+        [JsonProperty(PropertyName = "userInGroup")]
+        public bool UserInGroup { get; set; }
     }
 }

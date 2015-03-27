@@ -13,6 +13,8 @@ require('../services/group_service');
         vm.showWaitList = false;
         vm.showWaitSuccess = false;
         vm.waitListCase = false;
+        vm.alreadySignedUp = false;
+        vm.viewReady = false;
 
         vm.signupPage = $rootScope.signupPage;
 
@@ -31,6 +33,10 @@ require('../services/group_service');
                 // Get group details
                 vm.groupDetails = Group.Detail.get({groupId : vm.groupId}).$promise
                 .then(function(response){
+                    vm.viewReady = true;
+                    if(response.userInGroup === true){
+                        vm.alreadySignedUp = true;
+                    }
                     // This is the case where the group is full and there is a waitlist
                     if((response.groupFullInd === "True" && response.waitListInd === "True")  || (response.groupFullInd === true && response.waitListInd === true)){
                         vm.waitListCase = true;

@@ -202,5 +202,15 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(true, g.WaitList);
             Assert.AreEqual(320, g.WaitListGroupId);
         }
+
+        [Test]
+        public void testIsUserInGroup()
+        {
+            int participantId = 123;
+            List<int> groupParticipants = new List<int> {1111, 2222, 123};
+            var result = fixture.checkIfUserInGroup(participantId,groupParticipants);
+            Assert.AreEqual(result,true);
+        }
+
     }
 }

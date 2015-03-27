@@ -12,6 +12,7 @@ using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services;
 using Moq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Event = MinistryPlatform.Models.Event;
 
 namespace crds_angular.test.controllers
@@ -99,7 +100,7 @@ namespace crds_angular.test.controllers
         }
 
         [Test]
-        public void testGetGetGroupDetails()
+        public void testGetGroupDetails()
         {
             int groupId = 333;
             Group g = new Group();
@@ -111,12 +112,17 @@ namespace crds_angular.test.controllers
             g.WaitList = true;
             g.WaitListGroupId = 888;
 
-         
+            Participant participant = new Participant();
+            participant.ParticipantId = 90210;
+            authenticationServiceMock.Setup(mocked => mocked.GetParticipantRecord(fixture.Request.Headers.Authorization.ToString())).Returns(participant);
             groupServiceMock.Setup(mocked => mocked.getGroupDetails(groupId)).Returns(g);
+            groupServiceMock.Setup(mocked => mocked.checkIfUserInGroup(It.IsAny<int>(),It.IsAny<List<int>>()));
             IHttpActionResult result = fixture.Get(groupId);
+            Assert.IsNotNull(result);
+            //Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<Dictionary<string, object>>), result);
+            //OkNegotiatedContentResult<Dictionary<string, object>> okResult = (OkNegotiatedContentResult<Dictionary<string, object>>)result;
+            groupServiceMock.VerifyAll();
 
-            Assert.NotNull(g); 
-            Assert.NotNull(result);
          }
 
         [Test]

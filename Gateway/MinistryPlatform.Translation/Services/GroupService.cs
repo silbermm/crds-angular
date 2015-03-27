@@ -186,5 +186,11 @@ namespace MinistryPlatform.Translation.Services
             }
             return (events);
         }
+
+
+        public bool checkIfUserInGroup(int participantId, IList<int> groupParticipants)
+        {
+            return groupParticipants.Contains(participantId);
+        }
     }
 }
