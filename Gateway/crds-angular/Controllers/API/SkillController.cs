@@ -16,12 +16,10 @@ namespace crds_angular.Controllers.API
     public class SkillController : LookupController
     {
         private IPersonService _personService;
-        private ISkillService _skillService;
 
-        public SkillController(IPersonService personService, ISkillService skillService)
+        public SkillController(IPersonService personService)
         {
             _personService = personService;
-            _skillService = skillService;
         }
 
         [ResponseType(typeof(List<SkillCategory>))]
@@ -54,7 +52,7 @@ namespace crds_angular.Controllers.API
                     return Unauthorized();
                 }
 
-                var recordId = _skillService.Add(skill, userid, token);
+                var recordId = SkillService.Add(skill, userid, token);
                 skill.RecordId = recordId;
                 return this.Ok(skill );
             });
@@ -74,7 +72,7 @@ namespace crds_angular.Controllers.API
                     return Unauthorized();
                 }
 
-                if (_skillService.Delete(recordId, token))
+                if (SkillService.Delete(recordId, token))
                 {
                     return this.Ok();
                 }

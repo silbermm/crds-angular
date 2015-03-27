@@ -31,22 +31,7 @@ namespace MinistryPlatform.Translation.Services
         //public for testing;a better way?
         //should some of this be moved to Event Service?  probably
         //suggestion: make event service to return events.  make this method search for specific type of event, ???
-        public static List<Event> GetEvents(string eventType, string token)
-        {
-            //this is using the basic Events page, any concern there?
-            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["Events"]);
-            var search = ",," + eventType;
-            var records = MinistryPlatformService.GetRecordsDict(pageId, token, search);
-
-            return records.Select(record => new Event
-            {
-                EventTitle = (string) record["Event_Title"],
-                EventType = (string) record["Event_Type"],
-                EventStartDate = (DateTime) record["Event_Start_Date"],
-                EventEndDate = (DateTime) record["Event_End_Date"], 
-                EventId = (int)record["dp_RecordID"]
-            }).ToList();
-        }
+        
 
         public static Response GetMyOpportunityResponses(int contactId, int opportunityId, string token)
         {

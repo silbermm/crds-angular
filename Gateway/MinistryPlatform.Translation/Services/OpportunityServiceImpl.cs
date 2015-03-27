@@ -7,12 +7,24 @@ using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
 {
-    public class OpportunityServiceImpl : IOpportunityService
+
+    public class OpportunityServiceImpl : BaseService , IOpportunityService
     {
+        private IMinistryPlatformService _ministryPlatformService;
+        private IEventService _eventService;
+
+        private readonly int _groupOpportunitiesEventsPageViewId = Convert.ToInt32(AppSettings("GroupOpportunitiesEvents"));
+        private readonly int _signedupToServeSubPageViewId = Convert.ToInt32(AppSettings("SignedupToServe"));
+
+        public OpportunityServiceImpl(IMinistryPlatformService ministryPlatformService, IEventService eventService)
+        {
+            this._ministryPlatformService = ministryPlatformService;
+            this._eventService = eventService;
+        }
+
         public  List<Opportunity> GetOpportunitiesForGroup(int groupId, string token)
         {
-            var subPageViewId = Convert.ToInt32(ConfigurationManager.AppSettings["GroupOpportunitiesEvents"]);
-            var subPageRecords = MinistryPlatformService.GetSubpageViewRecords(subPageViewId, groupId, token);
+            var subPageRecords = _ministryPlatformService.GetSubpageViewRecords(_groupOpportunitiesEventsPageViewId, groupId, token);
             var opportunities = new List<Opportunity>();
 
             foreach (var record in subPageRecords)
@@ -30,7 +42,7 @@ namespace MinistryPlatform.Translation.Services
                 //now get all events with type = event type id
                 if (opportunity.EventType != null)
                 {
-                    var events = OpportunityService.GetEvents(opportunity.EventType, token);
+                    var events =_eventService.GetEvents(opportunity.EventType, token);
                     //is this a good place to sort the events by date/time??? tm 
                     var sortedEvents = events.OrderBy(o => o.EventStartDate).ToList();
                     opportunity.Events = sortedEvents;
@@ -41,11 +53,12 @@ namespace MinistryPlatform.Translation.Services
             return opportunities;
         }
 
+        
+
         public  int GetOpportunitySignupCount(int opportunityId, int eventId, string token)
         {
-            var subPageViewId = Convert.ToInt32(ConfigurationManager.AppSettings["SignedupToServe"]);
             var search = ",,," + eventId;
-            var records = MinistryPlatformService.GetSubpageViewRecords(subPageViewId, opportunityId, token, search);
+            var records = _ministryPlatformService.GetSubpageViewRecords(_signedupToServeSubPageViewId, opportunityId, token, search);
 
             return records.Count();
         }

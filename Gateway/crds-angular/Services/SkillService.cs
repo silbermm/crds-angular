@@ -1,29 +1,20 @@
 ﻿using crds_angular.Models.Crossroads;
-using crds_angular.Services.Interfaces;
 using MinistryPlatform.Translation.Services;
-using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Services
 {
-    public class SkillService : ISkillService
+    public class SkillService
     {
 
-        private IGetMyRecords _getMyRecords;
-
-        public SkillService(IGetMyRecords getMyRecords)
+        public static int Add(Skill crSkill, int parentRecordId, string token)
         {
-            _getMyRecords = getMyRecords;
+            var mpAttribute = crSkill.GetAttribute();
+            return GetMyRecords.CreateAttribute(mpAttribute, parentRecordId, token);
         }
 
-        public  int Add(Skill crSkill, int parentRecordId, string token)
+        public static bool Delete(int recordId, string token)
         {
-                var mpAttribute = crSkill.GetAttribute();
-                return  _getMyRecords.CreateAttribute(mpAttribute, parentRecordId, token);
-        }
-
-        public  bool Delete(int recordId, string token)
-        {
-            return _getMyRecords.DeleteAttribute(recordId, token);
+            return GetMyRecords.DeleteAttribute(recordId, token);
         }
     }
 }

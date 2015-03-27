@@ -36,7 +36,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
 
         void UpdateRecord(int pageId, Dictionary<string, object> dictionary, String token);
 
-        List<Dictionary<string, object>> GetSubpageViewRecords(int viewId, int contactId, string token, string searchString="", string sort="", int top=0);
+        List<Dictionary<string, object>> GetSubpageViewRecords(int viewId, int recordId, string token, string searchString="", string sort="", int top=0);
 
         List<Dictionary<string, object>> GetPageViewRecords(int viewId, string token, string searchString = "", string sort = "", int top = 0);
     }

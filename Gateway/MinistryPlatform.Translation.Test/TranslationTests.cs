@@ -17,15 +17,7 @@ namespace MinistryPlatform.Translation.Test
         private const string FIRSTNAME = "Test";
         private const string NEW_PASSWORD = "changemeagain";
 
-        [Test]
-        public void GetEventsByType()
-        {
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            var eventType = "Oakley: Saturday at 4:30";
-
-            var events = MinistryPlatform.Translation.Services.OpportunityService.GetEvents(eventType, token);
-            Assert.IsNotNull(events);
-        }
+        
 
         //[Test]
         //public void GetMyFamily()
