@@ -68,7 +68,6 @@ namespace crds_angular.Controllers.API
             {
                 return this.Unauthorized();
             }
-            //var personService = new PersonService();
             var p = _personService.GetLoggedInUserProfile(token);
             var r = new LoginReturn
             {

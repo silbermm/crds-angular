@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -18,9 +15,7 @@ namespace MinistryPlatform.Translation.Test.Services
         private readonly int _groupOpportunitiesEventsPageViewId = 77;
         private DateTime _today;
 
-        //private Mock<IAuthenticationService> _authenticationServiceMock;
         private Mock<IMinistryPlatformService> _ministryPlatformService;
-        private Mock<IOpportunityService> _opportuntityService;
         private Mock<IEventService> _eventService;
 
         private OpportunityServiceImpl _fixture;
@@ -31,10 +26,8 @@ namespace MinistryPlatform.Translation.Test.Services
             var now = DateTime.Now;
             _today = new DateTime(now.Year, now.Month, now.Day);
             _ministryPlatformService = new Mock<IMinistryPlatformService>();
-            _opportuntityService = new Mock<IOpportunityService>();
             _eventService = new Mock<IEventService>();
 
-            //_authenticationServiceMock = new Mock<IAuthenticationService>();
             _fixture = new OpportunityServiceImpl(_ministryPlatformService.Object, _eventService.Object);
         }
 
@@ -48,7 +41,6 @@ namespace MinistryPlatform.Translation.Test.Services
                     m.GetSubpageViewRecords(_groupOpportunitiesEventsPageViewId, groupId, It.IsAny<string>(), "", "", 0))
                 .Returns(OpportunityResponse());
 
-            //const string eventType = "Hello";
             _eventService.Setup(m => m.GetEvents("Event Type 100", It.IsAny<string>()))
                 .Returns(MockEvents("Event Type 100"));
             _eventService.Setup(m => m.GetEvents("Event Type 200", It.IsAny<string>()))
@@ -95,9 +87,9 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual("Event Type 300", events[1].EventType);
         }
 
-        private new List<Models.Event> MockEvents(string eventType)
+        private new List<Event> MockEvents(string eventType)
         {
-            return new List<Models.Event>
+            return new List<Event>
             {
                 new Event
                 {

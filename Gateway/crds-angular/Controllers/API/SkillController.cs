@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Models.Crossroads;
@@ -22,7 +21,7 @@ namespace crds_angular.Controllers.API
             _personService = personService;
         }
 
-        [ResponseType(typeof(List<SkillCategory>))]
+        [ResponseType(typeof (List<SkillCategory>))]
         [Route("api/skill/{userid}")]
         public IHttpActionResult Get(int userid)
         {
@@ -39,7 +38,7 @@ namespace crds_angular.Controllers.API
             });
         }
 
-        [ResponseType(typeof(Skill))]
+        [ResponseType(typeof (Skill))]
         [Route("api/skill/{userid}")]
         public IHttpActionResult Post(int userid, [FromBody] Skill skill)
         {
@@ -54,21 +53,22 @@ namespace crds_angular.Controllers.API
 
                 var recordId = SkillService.Add(skill, userid, token);
                 skill.RecordId = recordId;
-                return this.Ok(skill );
+                return this.Ok(skill);
             });
         }
 
-        [ResponseType(typeof(bool))]
+        [ResponseType(typeof (bool))]
         [Route("api/skill/{userId}/{recordId?}")]
         [HttpDelete]
         public IHttpActionResult Delete(int userId, int recordId)
         {
             logger.Debug("Skill Delete");
 
-            return Authorized(token => 
+            return Authorized(token =>
             {
                 var contactId = userId;
-                if (contactId == 0) {
+                if (contactId == 0)
+                {
                     return Unauthorized();
                 }
 
@@ -87,25 +87,13 @@ namespace crds_angular.Controllers.API
 
         private List<Skill> GetMySkills(string token, int contactId)
         {
-            if (contactId != 0 )
-                {
-                //var personService = new PersonService();
+            if (contactId != 0)
+            {
                 var skills = _personService.GetLoggedInUserSkills(contactId, token);
-                    return skills;
-                }
+                return skills;
+            }
             return null;
         }
-
-        //private int GetUserIdCookie()
-        //{
-        //     var cookie = Request.Headers.GetCookies("userId").FirstOrDefault();
-        //     if (cookie != null && (cookie["userId"].Value != "null" || cookie["userId"].Value != null))
-        //     {
-        //         var contactId = int.Parse(cookie["userId"].Value);
-        //         return contactId;
-        //     }
-        //     return 0;
-        //}
 
         private List<SkillCategory> ConvertToSkills(List<Attribute> attributes, List<Skill> mySkills)
         {
@@ -115,7 +103,7 @@ namespace crds_angular.Controllers.API
             //filter out attributes that are not skills
             //order the remaining
             //group by category
-            var categories = attributes                
+            var categories = attributes
                 .Where(a => a.Attribute_Category != null && a.Attribute_Type.StartsWith("Skill"))
                 .OrderBy(a => a.Attribute_Category).ThenBy(a => a.Attribute_Name)
                 .GroupBy(g => g.Attribute_Category);
@@ -127,13 +115,13 @@ namespace crds_angular.Controllers.API
                 var skills = new List<Skill>();
                 foreach (var skill in category)
                 {
-                    
                     var s = new Skill
                     {
                         SkillId = skill.dp_RecordID,
                         Name = skill.Attribute_Name
                     };
-                    var selectedRecordId = mySkills.Where(m => m.Name == skill.Attribute_Name).Select(m => m.SkillId).FirstOrDefault();
+                    var selectedRecordId =
+                        mySkills.Where(m => m.Name == skill.Attribute_Name).Select(m => m.SkillId).FirstOrDefault();
                     if (selectedRecordId != 0)
                     {
                         s.Selected = true;
@@ -147,7 +135,5 @@ namespace crds_angular.Controllers.API
             }
             return skillCategories;
         }
-
-       
     }
 }

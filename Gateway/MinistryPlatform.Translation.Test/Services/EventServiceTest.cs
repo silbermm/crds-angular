@@ -49,17 +49,13 @@ namespace MinistryPlatform.Translation.Test.Services
         [Test]
         public void GetEventsByType()
         {
-            //var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            var eventType = "Oakley: Saturday at 4:30";
+            const string eventType = "Oakley: Saturday at 4:30";
 
-            //mock
-            //var records = ministryPlatformService.GetRecordsDict(pageId, token, search);
             var search = ",," + eventType;
             ministryPlatformService.Setup(mock => mock.GetRecordsDict(EventsPageId, It.IsAny<string>(), search, ""))
                 .Returns(MockEventsDictionary());
 
             var events = fixture.GetEvents(eventType, It.IsAny<string>());
-            //var e2 = fixture.GetEvents()
             Assert.IsNotNull(events);
         }
 

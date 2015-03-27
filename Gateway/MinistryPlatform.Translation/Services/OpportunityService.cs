@@ -8,7 +8,6 @@ namespace MinistryPlatform.Translation.Services
 {
     public class OpportunityService
     {
-        
         public static int RespondToOpportunity(string token, int opportunityId, string comments)
         {
             var participant = AuthenticationService.GetParticipantRecord(token);
@@ -27,11 +26,6 @@ namespace MinistryPlatform.Translation.Services
             var recordId = MinistryPlatformService.CreateRecord(pageId, values, token, true);
             return recordId;
         }
-
-        //public for testing;a better way?
-        //should some of this be moved to Event Service?  probably
-        //suggestion: make event service to return events.  make this method search for specific type of event, ???
-        
 
         public static Response GetMyOpportunityResponses(int contactId, int opportunityId, string token)
         {

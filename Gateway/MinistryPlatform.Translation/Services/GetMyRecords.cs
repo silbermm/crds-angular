@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Web;
-using MinistryPlatform.Models;
 using MinistryPlatform.Translation.PlatformService;
 using Attribute = MinistryPlatform.Models.Attribute;
 
@@ -13,20 +12,6 @@ namespace MinistryPlatform.Translation.Services
 {
     public class GetMyRecords : BaseService
     {
-        //public static IEnumerable<Contact_Relationship> GetMyFamily(int contactId, string token)
-        //{
-        //    var viewId = Convert.ToInt32(ConfigurationManager.AppSettings["MyContactFamilyRelationshipViewId"]);
-        //    var viewRecords = MinistryPlatformService.GetSubpageViewRecords(viewId, contactId, token);
-
-        //    return viewRecords.Select(viewRecord => new Contact_Relationship
-        //    {
-        //        Contact_Id = (int) viewRecord["Contact_ID"],
-        //        Email_Address = (string) viewRecord["Email_Address"],
-        //        Last_Name = (string) viewRecord["Last Name"],
-        //        Preferred_Name = (string)viewRecord["Preferred Name"]
-        //    }).ToList();
-        //}
-
         public static List<Attribute> GetMyAttributes(int recordId, string token)
         {
             var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);
@@ -49,25 +34,6 @@ namespace MinistryPlatform.Translation.Services
             }
             return attributes;
         }
-
-        //public static List<Group> GetMyServingTeams(int contactId, string token)
-        //{
-        //    var pageViewId = Convert.ToInt32(ConfigurationManager.AppSettings["MyServingTeams"]);
-        //    var searchString = ",,,," + contactId;
-        //    var teams = MinistryPlatformService.GetPageViewRecords(pageViewId, token, searchString);
-        //    var groups = new List<Group>();
-        //    foreach (var team in teams)
-        //    {
-        //        var group = new Group
-        //        {
-        //            GroupId = (int) team["Group_ID"],
-        //            Name = (string) team["Group_Name"],
-        //            GroupRole = (string) team["Role_Title"]
-        //        };
-        //        groups.Add(group);
-        //    }
-        //    return groups;
-        //} 
 
         public static int CreateAttribute(Attribute attribute, int parentRecordId, string token)
         {
