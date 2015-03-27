@@ -19,5 +19,3 @@ app.factory("ServeOpportunities", require('../services/serveOpportunities.servic
 
 require('./refine/refineList.html');
 app.directive("refineList", require('./refine/refineList.directive'));
-
-

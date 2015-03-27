@@ -9,9 +9,7 @@
       memberIds: [],
       times: [],
       teams:[],
-      serveDaysCopy: [],
       addFamilyMember: function (memberId) {
-        console.log("family member added");
         filterState.memberIds.push(memberId);
       },
       addTeam: function (team) {

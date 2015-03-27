@@ -18,7 +18,7 @@
 
     function link(scope, el, attr){
     
-      scope.familyFilter = familyFilter;
+      scope.applyFamilyFilter = applyFamilyFilter;
       scope.getUniqueMembers = getUniqueMembers;
       scope.getUniqueTeams = getUniqueTeams;
       scope.getUniqueTimes = getUniqueTimes;
@@ -49,6 +49,37 @@
           scope.original = angular.copy(data);
         }); 
       }
+
+      function applyFamilyFilter(){
+        scope.servingDays = angular.copy(scope.original);
+        if(filterState.memberIds.length === 0){
+          console.log("nothing to filter, returning all"); 
+        } else { 
+          var serveDay = [];
+          _.each(scope.servingDays, function(day){
+            var serveTimes = [];
+            _.each(day.serveTimes, function(serveTime){
+              var servingTeams = [];      
+              _.each(serveTime.servingTeams, function(team){
+                var theTeam = team;
+                var members = _.filter(team.members, function(m){
+                  return _.find(filterState.memberIds, function(familyMember){
+                    return familyMember === m.contactId; 
+                  }); 
+                }); 
+                if(members.length > 0) {
+                  theTeam.members = members;
+                  servingTeams.push(theTeam);
+                }
+              });
+              serveTimes.push({time: serveTime.time, 'servingTeams':servingTeams }); 
+            });
+            serveDay.push({day: day.day, serveTimes: serveTimes}); 
+          });
+          scope.servingDays = serveDay;
+        }
+
+      };
 
       function filterFamily(){
         _.each(scope.serveTeams, function(serveTeam){
@@ -123,7 +154,7 @@
         } else {
           filterState.removeFamilyMember(member.contactId);
         }
-        familyFilter();
+        applyFamilyFilter();
       }
 
       function toggleTeam(team){
@@ -133,37 +164,6 @@
           filterState.removeTeam(team.groupId);
         }
       }
-
-    function familyFilter(){
-      scope.servingDays = angular.copy(scope.original);
-      if(filterState.memberIds.length === 0){
-        console.log("nothing to filter, returning all"); 
-      } else { 
-        var serveDay = [];
-        _.each(scope.servingDays, function(day){
-          var serveTimes = [];
-          _.each(day.serveTimes, function(serveTime){
-            var servingTeams = [];      
-            _.each(serveTime.servingTeams, function(team){
-              var theTeam = team;
-              var members = _.filter(team.members, function(m){
-                return _.find(filterState.memberIds, function(familyMember){
-                  return familyMember === m.contactId; 
-                }); 
-              }); 
-              if(members.length > 0) {
-                theTeam.members = members;
-                servingTeams.push(theTeam);
-              }
-            });
-            serveTimes.push({time: serveTime.time, 'servingTeams':servingTeams }); 
-          });
-          serveDay.push({day: day.day, serveTimes: serveTimes}); 
-        });
-        scope.servingDays = serveDay;
-      }
-
-    };
  
       function toggleTime(time){
         if(time.selected){

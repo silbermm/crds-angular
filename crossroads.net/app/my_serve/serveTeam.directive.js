@@ -82,8 +82,8 @@
         scope.isCollapsed = false;
       }
 
-  };
+    };
 
-}
+  }
 
 })();
