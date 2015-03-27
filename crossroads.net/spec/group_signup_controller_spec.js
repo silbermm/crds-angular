@@ -42,18 +42,19 @@ var groupGetDetailResponse = {
   "groupFullInd": "True",
   "waitListInd": "True",
   "waitListGroupId": "1",
-  familiy:[
+  relationships:
+  [
     { "First_Name": "Shankar",
       "Email_Address": "shankx@test.com",
-      "inGroup": true
+      "userInGroup": true,
+      "Participant_ID":"1234"
     },
     { "First_Name": "Luisa",
       "Email_Address": "Luisa@test.com",
-      "inGroup": false
+      "userInGroup": false,
+      "Participant_ID":"1234"
     }
   ]
-  "waitListGroupId": "1",
-  "userInGroup": "false"
 };
 
 
