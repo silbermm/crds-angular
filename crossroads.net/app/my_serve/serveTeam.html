@@ -1,10 +1,9 @@
-
 <div class="col-sm-12 serve-opp-listings" id="{{panelId()}}">
   <div class="panel panel-default ng-isolate-scope" >
     <div class="panel-heading clearfix">
-      <a class="panel-link" ng-click="openPanel(team.members)"></a><span class="team-name">{{team.name}}</span>
+      <a class="panel-link" ng-click="openPanel(team.members)"></a><span class="team-name">{{::team.name}}</span>
       <div class="name-btns">
-        <a href="" ng-click="setActiveTab(member)" ng-repeat="member in team.members" ng-class="{'active':isActiveTab(member.name) }"><span class="btn btn-default btn-xs"> {{member.name}} </span></a>
+        <a href="" ng-click="setActiveTab(member)" ng-repeat="member in team.members" ng-class="{'active':isActiveTab(member.name) }"><span class="btn btn-default btn-xs"> {{::member.name}} </span></a>
       </div><!--/pull-right-->
     </div><!--/panel-heading-->
 
@@ -16,8 +15,8 @@
             <h5>Opportunities</h5>
             <div class="radio" ng-repeat="role in currentMember.roles">
               <label>
-                <input type="radio" name="role"  ng-model="roles" value="{{role.name}}">
-                <span class="opportunity-name">{{role.name}}</span><span class="badge label-default" ng-show="role.capacity > 0">{{ role.capacity - role.slotsTaken }} needed</span>
+                <input type="radio" name="role"  ng-model="roles" value="{{::role.name}}">
+                <span class="opportunity-name">{{::role.name}}</span><span class="badge label-default" ng-show="role.capacity > 0">{{ role.capacity - role.slotsTaken }} needed</span>
               </label>
             </div><!--/radio-->
           </div><!--/col-sm-4-->
