@@ -3,7 +3,9 @@
 
   module.exports = RefineDirective;
 
-  function RefineDirective(){
+  RefineDirective.$inject = ['filterState']
+
+  function RefineDirective(filterState){
     return {
       restrict: "E",
       replace: true,
@@ -23,6 +25,9 @@
       scope.serveMembers = [];
       scope.serveTeams = [];
       scope.times = [];
+      scope.toggleFamilyMember = toggleFamilyMember;
+      scope.toggleTeam = toggleTeam;
+      scope.toggleTime = toggleTime;
       scope.uniqueDays = [];
       scope.uniqueMembers = [];
       scope.uniqueTeams = [];
@@ -39,6 +44,7 @@
           getUniqueMembers();
           getUniqueTeams();
           getUniqueTimes();
+          initCheckBoxes();
         }); 
       }
 
@@ -83,6 +89,55 @@
           return {time: time.time};
         }).uniq("time").value();
       }  
+
+      function initCheckBoxes(){
+        _.each(scope.uniqueMembers, function(member){
+          var found = filterState.findMember(member.contactId);
+          if (found !== undefined)
+          {
+            member.selected = true;
+          }
+        });
+        _.each(scope.uniqueTeams, function(team){
+          var found = filterState.findTeam(team.groupId);
+          if (found !== undefined)
+          {
+            team.selected = true;
+          }
+        });
+        _.each(scope.uniqueTimes, function(time){
+          var found = filterState.findTime(time.time);
+          if (found !== undefined)
+          {
+            time.selected = true;
+          }
+        });
+
+      }
+
+      function toggleFamilyMember(member){
+        if(member.selected){
+          filterState.addFamilyMember(member.contactId);
+        } else {
+          filterState.removeFamilyMember(member.contactId);
+        }
+      }
+
+      function toggleTeam(team){
+        if(team.selected){
+          filterState.addTeam(team.groupId);
+        } else {
+          filterState.removeTeam(team.groupId);
+        }
+      }
+
+      function toggleTime(time){
+        if(time.selected){
+          filterState.addTime(time.time);
+        } else {
+          filterState.removeTime(time.time);
+        }
+      }
     }
   }
 

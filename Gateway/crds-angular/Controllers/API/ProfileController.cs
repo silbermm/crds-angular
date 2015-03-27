@@ -36,8 +36,8 @@ namespace crds_angular.Controllers.API
                 try
                 {
                     var contactId = _authenticationService.GetContactId(token);
-                    var servingTeams = _personService.GetMyFamiliesServingTeams(contactId, token);
-                    var servingDays = _personService.GetMyFamiliesServingDays(servingTeams, token);
+                    var servingTeams = _personService.GetServingTeams(contactId, token);
+                    var servingDays = _personService.GetServingDays(servingTeams, token);
                     if (servingDays == null)
                     {
                         return Unauthorized();
@@ -58,7 +58,7 @@ namespace crds_angular.Controllers.API
             return Authorized(token =>
             {
                 var contactId = AuthenticationService.GetContactId(token);
-                var list = _personService.GetMyFamily(contactId, token);
+                var list = _personService.GetMyImmediateFamily(contactId, token);
                 if (list == null)
                 {
                     return Unauthorized();

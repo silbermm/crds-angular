@@ -1,6 +1,6 @@
 describe('Refine List Directive', function() {
 
-  var $compile, $rootScope, element, scope, isolateScope;
+  var $compile, $rootScope, element, scope, isolateScope, filterState;
 
   var mockLeslie = {"name":"Leslie", "lastName": "Silbernagel", "contactId":1670885,"roles":[{"name":"First Grade Room A - Sunday 8:30 Member","capacity":0,"slotsTaken":0},{"name":"First Grade Room B - Sunday 8:30 Member","capacity":0,"slotsTaken":0}]};
 
@@ -21,10 +21,14 @@ describe('Refine List Directive', function() {
     module('crossroads');
   });
  
-  beforeEach(inject(function(_$compile_, _$rootScope_, _$q_){
+  beforeEach(inject(function(_$compile_, _$rootScope_, _$q_, _filterState_){
     $compile = _$compile_;
     $rootScope = _$rootScope_;
     $q = _$q_;
+    filterState = _filterState_;
+    filterState.addFamilyMember(1670885);
+    filterState.addTeam(34911);
+    filterState.addTime("08:30:00");
     scope = $rootScope.$new();
     element = "<refine-list serving-days='servingDays'></refine-list>";
     scope.servingDays = mockServingDays;
@@ -112,4 +116,33 @@ describe('Refine List Directive', function() {
     expect(isolateScope.uniqueTeams).toContain({"name":"KC Oakley Nursery MP","groupId":6329});
   });
 
+  it("should set selected on correct family member", function() {
+    _.each(isolateScope.uniqueMembers, function(member){
+      if (member.contactId === 1670885){
+        expect(member.selected).toBe(true);
+      } else {
+        expect(member.selected).toBeFalsy();
+      }
+    });
+  });
+
+  it("should set selected on correct team", function() {
+    _.each(isolateScope.uniqueTeams, function(team){
+      if (team.groupId === 34911){
+        expect(team.selected).toBe(true);
+      } else {
+        expect(team.selected).toBeFalsy();
+      }
+    });
+  });
+
+  it("should set selected on correct time", function() {
+    _.each(isolateScope.uniqueTimes, function(time){
+      if (time.time === "08:30:00"){
+        expect(time.selected).toBe(true);
+      } else {
+        expect(time.selected).toBeFalsy();
+      }
+    });
+  })
 }) 

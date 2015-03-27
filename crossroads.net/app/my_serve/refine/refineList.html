@@ -5,7 +5,7 @@
   <div class="push-half-bottom filter-group" ng-if="uniqueMembers.length > 1" >
     <div class="checkbox" data-ng-repeat="member in uniqueMembers">
       <label>
-        <input type="checkbox"> {{member.name + " " + member.lastName}} 
+        <input type="checkbox" ng-model="member.selected" ng-change="toggleFamilyMember(member)"> {{member.name + " " + member.lastName}}
       </label>
     </div>
   </div><!--/push-bottom-->
@@ -13,7 +13,7 @@
   <div class="push-half-bottom filter-group" ng-if="uniqueTeams.length > 1" >
     <div class="checkbox" data-ng-repeat="team in uniqueTeams">
       <label>
-        <input type="checkbox"> {{team.name}}
+        <input type="checkbox" ng-model="team.selected" ng-change="toggleTeam(team)"> {{team.name}}
       </label>
     </div> 
   </div><!--/push-bottom-->
@@ -44,7 +44,7 @@
   <div class="push-half-bottom filter-group" ng-if="uniqueTimes.length > 1" >
     <div class="checkbox" data-ng-repeat="time in uniqueTimes">
       <label>
-        <input type="checkbox"> {{ time.time | time }}
+        <input type="checkbox" ng-model="time.selected" ng-change="toggleTime(time)"> {{ time.time | time }}
       </label>
     </div>
   </div><!--/push-bottom-->

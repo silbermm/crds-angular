@@ -1,6 +1,6 @@
 
 // testing controller
-describe('EventsController', function() {
+describe('GroupSignupController', function() {
  var $httpBackend, scope;
 
  var userGetResponse = {
@@ -41,7 +41,8 @@ var groupGetDetailResponse = {
   "groupID": "1",
   "groupFullInd": "True",
   "waitListInd": "True",
-  "waitListGroupId": "1"
+  "waitListGroupId": "1",
+  "userInGroup": "false"
 };
 
 
@@ -65,15 +66,7 @@ var groupGetDetailResponse = {
        groupSignupController = function() {
          return $controller('GroupSignupController', {'$scope' : scope, '$stateParams' : $stateParams });
        };
-     }));
 
-
-   afterEach(function() {
-     $httpBackend.verifyNoOutstandingExpectation();
-     $httpBackend.verifyNoOutstandingRequest();
-   });
-
-   it('should get logged-in person when instantiated', function(){
      $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] +'api/profile')
      .respond(userGetResponse);
 
@@ -83,11 +76,20 @@ var groupGetDetailResponse = {
      $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] +'api/group/1')
      .respond(groupGetDetailResponse);
 
+     $httpBackend.when('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/group/1/user')
+     .respond("200");
+
+     }));
+
+
+   afterEach(function() {
+     $httpBackend.verifyNoOutstandingExpectation();
+     $httpBackend.verifyNoOutstandingRequest();
+   });
+
+   it('should get logged-in person when instantiated', function(){
      var controller = groupSignupController();
-     $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +'api/profile');
-     $httpBackend.expectGET('http://content.crossroads.net//api/Page/?link=test');
-     $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +'api/group/1');
-     $httpBackend.flush();
+     verifyExpectations();
      var person = controller.person;
      expect(person).toBeDefined();
      expect(person["First_Name"]).toEqual("Shankar");
@@ -97,28 +99,26 @@ var groupGetDetailResponse = {
    });
 
    it('should signup a person for a community group', function(){
-    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/profile')
-    .respond(userGetResponse);
-
-    $httpBackend.when('GET', 'http://content.crossroads.net//api/Page/?link=test')
-    .respond(pageGetResponse);
-
-    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] +'api/group/1')
-    .respond(groupGetDetailResponse);
-
     var controller = groupSignupController();
-    $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/profile');
-    $httpBackend.expectGET('http://content.crossroads.net//api/Page/?link=test');
-    $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +'api/group/1');
-    $httpBackend.flush();
-
-    expect(controller.signup).toBeDefined();
-
-    $httpBackend.when('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/group/1/user')
-    .respond("200");
+    verifyExpectations();
+    var person = controller.person;
+    expect(controller.signup).toBeDefined();  
     controller.signup();                      
     $httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/group/1/user').respond('200');
     $httpBackend.flush();          
 
   });
+
+   it('should set the alreadySignedUp flag to TRUE ', function(){
+    var controller = groupSignupController();
+    verifyExpectations();
+    expect(controller.alreadySignedUp).toEqual(false);      
+  });
+
+   function verifyExpectations(){
+     $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +'api/profile');
+     $httpBackend.expectGET('http://content.crossroads.net//api/Page/?link=test');
+     $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +'api/group/1');
+     $httpBackend.flush();
+   }
  });

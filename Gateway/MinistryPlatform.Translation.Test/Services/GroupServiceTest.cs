@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using MinistryPlatform.Translation.Exceptions;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -19,7 +18,7 @@ namespace MinistryPlatform.Translation.Test.Services
         private readonly int GroupsEventsPageId = 302;
         private readonly int EventsGroupsPageId = 408;
         private readonly int GroupsSubGroupsPageId = 299;
-        
+
         private readonly int GetMyServingTeamsViewId = 1014;
 
         [SetUp]
@@ -226,8 +225,6 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(320, g.WaitListGroupId);
         }
 
-        
-
         [Test]
         public void ShouldReturnMyServingTeams()
         {
@@ -267,6 +264,15 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(2, teams[1].GroupId);
             Assert.AreEqual("group-two", teams[1].Name);
             Assert.AreEqual("group-two-role", teams[1].GroupRole);
+        }
+
+        [Test]
+        public void testIsUserInGroup()
+        {
+            int participantId = 123;
+            List<int> groupParticipants = new List<int> {1111, 2222, 123};
+            var result = fixture.checkIfUserInGroup(participantId, groupParticipants);
+            Assert.AreEqual(result, true);
         }
     }
 }

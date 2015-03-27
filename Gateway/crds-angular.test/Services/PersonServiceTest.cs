@@ -109,7 +109,7 @@ namespace crds_angular.test.Services
             
             _contactService.Setup(mocked => mocked.GetMyProfile(token)).Returns(MockMyContact());
 
-            var familyMembers = _fixture.GetMyFamily(contactId, token);
+            var familyMembers = _fixture.GetMyImmediateFamily(contactId, token);
 
             _contactRelationshipService.VerifyAll();
             _contactService.VerifyAll();
@@ -155,7 +155,7 @@ namespace crds_angular.test.Services
             };
             _contactService.Setup(mocked => mocked.GetMyProfile(token)).Returns(myContact);
 
-            var familyMembers = _fixture.GetMyFamily(contactId, token);
+            var familyMembers = _fixture.GetMyImmediateFamily(contactId, token);
 
             _contactRelationshipService.VerifyAll();
             _contactService.VerifyAll();
@@ -209,7 +209,7 @@ namespace crds_angular.test.Services
             _groupService.Setup(mocked => mocked.GetMyServingTeams(mockFamilyContactId2, token)).Returns(familyMember2Groups);
             _groupService.Setup(mocked => mocked.GetMyServingTeams(contactId, token)).Returns(myGroups);
 
-            var teams = _fixture.GetMyFamiliesServingTeams(contactId,token);
+            var teams = _fixture.GetServingTeams(contactId,token);
 
             _contactRelationshipService.VerifyAll();
             _contactService.VerifyAll();
@@ -305,7 +305,7 @@ namespace crds_angular.test.Services
             _opportunityService.Setup(mocked => mocked.GetOpportunitiesForGroup(2, It.IsAny<string>())).Returns(opportunities);
 
             var teams = new List<ServingTeam> { new ServingTeam { GroupId = 1 }, new ServingTeam { GroupId = 2 } };
-            var servingDays = _fixture.GetMyFamiliesServingDays(teams, It.IsAny<string>());
+            var servingDays = _fixture.GetServingDays(teams, It.IsAny<string>());
 
             _opportunityService.VerifyAll();
 

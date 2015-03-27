@@ -12,8 +12,8 @@ namespace crds_angular.Services.Interfaces
         void SetProfile(String token, Person person);
         List<Skill> GetLoggedInUserSkills(int contactId, string token);
         Person GetLoggedInUserProfile(String token);
-        List<FamilyMember> GetMyFamily(int contactId, string token);
-        List<ServingTeam> GetMyFamiliesServingTeams(int contactId, string token);
-        List<ServingDay> GetMyFamiliesServingDays(List<ServingTeam> teams, string token);
+        List<FamilyMember> GetMyImmediateFamily(int contactId, string token);
+        List<ServingTeam> GetServingTeams(int contactId, string token);
+        List<ServingDay> GetServingDays(List<ServingTeam> teams, string token);
     }
 }

@@ -9,6 +9,7 @@ using Attribute = MinistryPlatform.Models.Attribute;
 namespace MinistryPlatform.Translation.Test
 {
     [TestFixture]
+    [Category("IntegrationTests")]
     public class TranslationTests
     {
         private const string USERNAME = "testme";

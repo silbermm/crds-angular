@@ -234,7 +234,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Crossroads\GroupDetail.cs" />
+    <Compile Include="Models\Crossroads\GroupDTO.cs" />
     <Compile Include="Models\Crossroads\AccountInfo.cs" />
     <Compile Include="Models\Crossroads\CookieInfo.cs" />
     <Compile Include="Models\Crossroads\FamilyMember.cs" />

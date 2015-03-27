@@ -104,7 +104,7 @@ namespace crds_angular.Services
             return skills;
         }
 
-        public List<FamilyMember> GetMyFamily(int contactId, string token)
+        public List<FamilyMember> GetMyImmediateFamily(int contactId, string token)
         {
             var contactRelationships = _contactRelationshipService.GetMyFamily(contactId, token).ToList();
             var familyMembers = Mapper.Map<List<Contact_Relationship>, List<FamilyMember>>(contactRelationships);
@@ -123,12 +123,12 @@ namespace crds_angular.Services
             return familyMembers;
         }
 
-        public List<ServingTeam> GetMyFamiliesServingTeams(int contactId, string token)
+        public List<ServingTeam> GetServingTeams(int contactId, string token)
         {
             var servingTeams = new List<ServingTeam>();
 
             //Go get family
-            var familyMembers = GetMyFamily(contactId, token);
+            var familyMembers = GetMyImmediateFamily(contactId, token);
             foreach (var familyMember in familyMembers)
             {
                 var groups = this._groupService.GetMyServingTeams(familyMember.ContactId, token);
@@ -210,7 +210,7 @@ namespace crds_angular.Services
             return servingTeam;
         }
 
-        public List<ServingDay> GetMyFamiliesServingDays(List<ServingTeam> teams, string token)
+        public List<ServingDay> GetServingDays(List<ServingTeam> teams, string token)
         {
             var serveDays = new List<ServingDay>();
 

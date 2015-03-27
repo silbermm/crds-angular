@@ -97,22 +97,31 @@ namespace crds_angular.Controllers.API
             throw new NotImplementedException();
             return this.Ok();
         }
-
-        [ResponseType(typeof (GroupDetail))]
+        
+        [ResponseType(typeof(GroupDTO))]
         [Route("api/group/{groupId}")]
         public IHttpActionResult Get(int groupId)
         {
-            Group g = groupService.getGroupDetails(groupId);
-            var detail = new GroupDetail();
+            return Authorized(token =>
             {
-                detail.GroupId = g.GroupId;
-                detail.GroupFullInd = g.Full;
-                detail.WaitListInd = g.WaitList;
-                detail.WaitListGroupId = g.WaitListGroupId;
-            }
-            ;
+                var participant = authenticationService.GetParticipantRecord(token);
+                int participantId = participant.ParticipantId;
 
-            return Ok(detail);
+                Group g = groupService.getGroupDetails(groupId);
+                var detail = new GroupDTO();
+                {
+                    detail.GroupId = g.GroupId;
+                    detail.GroupFullInd = g.Full;
+                    detail.WaitListInd = g.WaitList;
+                    detail.WaitListGroupId = g.WaitListGroupId;
+                    detail.UserInGroup = groupService.checkIfUserInGroup(participantId,g.Participants);
+
+                }
+
+
+                return Ok(detail);
+            }
+          );
         }
 
         // TODO: implement later
@@ -137,8 +146,7 @@ namespace crds_angular.Controllers.API
     public class ContactDTO
     {
     }
+    
 
-    public class GroupDTO
-    {
-    }
+    
 }

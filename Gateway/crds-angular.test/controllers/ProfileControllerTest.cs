@@ -48,9 +48,9 @@ namespace crds_angular.test.controllers
 
             _authenticationService.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Returns(contactId);
 
-            _personServiceMock.Setup(mocked => mocked.GetMyFamiliesServingTeams(contactId, It.IsAny<string>()))
+            _personServiceMock.Setup(mocked => mocked.GetServingTeams(contactId, It.IsAny<string>()))
                 .Returns(servingTeams);
-            _personServiceMock.Setup(mocked => mocked.GetMyFamiliesServingDays(servingTeams, It.IsAny<string>()))
+            _personServiceMock.Setup(mocked => mocked.GetServingDays(servingTeams, It.IsAny<string>()))
                 .Returns(servingDays);
 
             IHttpActionResult result = _fixture.GetFamilyServeDays();
