@@ -10,7 +10,11 @@
           var userid = Session.exists('userId') !== undefined ? Session.exists('userId') : 0;
           ngModel.$asyncValidators.unique = function (email) {
             console.log('personal profile unique email');
-            return $http.get(__API_ENDPOINT__ + 'api/lookup/' + userid  + '/find/?email=' +  encodeURI(email))
+                return $http.get(__API_ENDPOINT__ + 'api/lookup/' + userid  + '/find/?email=' +  encodeURI(email), {
+                    headers: {
+                        "X-Use-The-Force": "true"
+                    }
+                })
             .success(function(succ) {
                 User.email = email;
             }).error(function(err) {
