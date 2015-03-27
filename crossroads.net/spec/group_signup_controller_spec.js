@@ -1,6 +1,6 @@
 
 // testing controller
-describe('EventsController', function() {
+describe('GroupSignupController', function() {
  var $httpBackend, scope;
 
  var userGetResponse = {
@@ -41,7 +41,17 @@ var groupGetDetailResponse = {
   "groupID": "1",
   "groupFullInd": "True",
   "waitListInd": "True",
-  "waitListGroupId": "1"
+  "waitListGroupId": "1",
+  familiy:[
+    { "First_Name": "Shankar",
+      "Email_Address": "shankx@test.com",
+      "inGroup": true
+    },
+    { "First_Name": "Luisa",
+      "Email_Address": "Luisa@test.com",
+      "inGroup": false
+    }
+  ]
 };
 
 
