@@ -63,33 +63,33 @@ namespace crds_angular.Services
         {
             var contact = _contactService.GetMyProfile(token);
 
-            var person = new Person
-            {
-                ContactId = contact.ContactId,
-                EmailAddress = contact.EmailAddress,
-                NickName = contact.NickName,
-                FirstName = contact.FirstName,
-                MiddleName = contact.MiddleName,
-                LastName = contact.LastName,
-                MaidenName = contact.MaidenName,
-                MobilePhone = contact.MobilePhone,
-                MobileCarrierId = contact.MobileCarrierId,
-                DateOfBirth = contact.DateOfBirth,
-                MaritalStatusId = contact.MaritalStatusId,
-                GenderId = contact.GenderId,
-                EmployerName = contact.EmployerName,
-                AddressLine1 = contact.AddressLine1,
-                AddressLine2 = contact.AddressLine2,
-                City = contact.City,
-                State = contact.State,
-                PostalCode = contact.PostalCode,
-                AnniversaryDate = contact.AnniversaryDate,
-                ForeignCountry = contact.ForeignCountry,
-                HomePhone = contact.HomePhone,
-                CongregationId = contact.CongregationId,
-                HouseholdId = contact.HouseholdId,
-                AddressId = contact.AddressId
-            };
+            var person = new Person();
+
+            person.ContactId = contact.ContactId;
+            person.EmailAddress = contact.EmailAddress;
+            person.NickName = contact.NickName;
+            person.FirstName = contact.FirstName;
+            person.MiddleName = contact.MiddleName;
+            person.LastName = contact.LastName;
+            person.MaidenName = contact.MaidenName;
+            person.MobilePhone = contact.MobilePhone;
+            person.MobileCarrierId = contact.MobileCarrierId;
+            person.DateOfBirth = contact.DateOfBirth;
+            person.MaritalStatusId = contact.MaritalStatusId;
+            person.GenderId = contact.GenderId;
+            person.EmployerName = contact.EmployerName;
+            person.AddressLine1 = contact.AddressLine1;
+            person.AddressLine2 = contact.AddressLine2;
+            person.City = contact.City;
+            person.State = contact.State;
+            person.PostalCode = contact.PostalCode;
+            person.AnniversaryDate = contact.AnniversaryDate;
+            person.ForeignCountry = contact.ForeignCountry;
+            person.HomePhone = contact.HomePhone;
+            person.CongregationId = contact.CongregationId;
+            person.HouseholdId = contact.HouseholdId;
+            person.AddressId = contact.AddressId;
+            
 
             return person;
         }

@@ -27,33 +27,33 @@ namespace MinistryPlatform.Translation.Services
             }
 
             var myContact = recordsDict[0];
-            var contact = new MyContact
-            {
-                AddressId = myContact["Address_ID"].ToString().ToNullableInt(),
-                AddressLine1 = myContact["Address_Line_1"].ToString(),
-                AddressLine2 = myContact["Address_Line_2"].ToString(),
-                CongregationId = myContact["Congregation_ID"].ToString().ToNullableInt(),
-                HouseholdId = myContact["Household_ID"].ToString().ToInt(),
-                City = myContact["City"].ToString(),
-                State = myContact["State"].ToString(),
-                PostalCode = myContact["Postal_Code"].ToString(),
-                AnniversaryDate = myContact["Anniversary_Date"].ToString().DateToString(),
-                ContactId = myContact["Contact_ID"].ToString().ToInt(),
-                DateOfBirth = myContact["Date_of_Birth"].ToString(),
-                EmailAddress = myContact["Email_Address"].ToString(),
-                EmployerName = myContact["Employer_Name"].ToString(),
-                FirstName = myContact["First_Name"].ToString(),
-                ForeignCountry = myContact["Foreign_Country"].ToString(),
-                GenderId = myContact["Gender_ID"].ToString().ToInt(),
-                HomePhone = myContact["Home_Phone"].ToString(),
-                LastName = myContact["Last_Name"].ToString(),
-                MaidenName = myContact["Maiden_Name"].ToString(),
-                MaritalStatusId = myContact["Marital_Status_ID"].ToString().ToInt(),
-                MiddleName = myContact["Middle_Name"].ToString(),
-                MobileCarrierId = myContact["Mobile_Carrier_ID"].ToString().ToNullableInt(),
-                MobilePhone = myContact["Mobile_Phone"].ToString(),
-                NickName = myContact["Nickname"].ToString()
-            };
+            var contact = new MyContact();
+            contact.AddressId = myContact.ToNullableInt("Address_ID");
+            contact.AddressLine1 = myContact.ToString("Address_Line_1");
+            contact.AddressLine2 = myContact.ToString("Address_Line_2");
+            contact.CongregationId = myContact.ToNullableInt("Congregation_ID");
+            contact.HouseholdId = myContact.ToInt("Household_ID");
+            contact.City = myContact.ToString("City");
+            contact.State = myContact.ToString("State");
+
+            contact.PostalCode = myContact.ToString("Postal_Code");
+            contact.AnniversaryDate = myContact.ToDateAsString("Anniversary_Date");
+            contact.ContactId = myContact.ToInt("Contact_ID");
+            contact.DateOfBirth = myContact.ToDateAsString("Date_of_Birth");
+            contact.EmailAddress = myContact.ToString("Email_Address");
+            contact.EmployerName = myContact.ToString("Employer_Name");
+            contact.FirstName = myContact.ToString("First_Name");
+            contact.ForeignCountry = myContact.ToString("Foreign_Country");
+            contact.GenderId = myContact.ToInt("Gender_ID");
+            contact.HomePhone = myContact.ToString("Home_Phone");
+            contact.LastName = myContact.ToString("Last_Name");
+            contact.MaidenName = myContact.ToString("Maiden_Name");
+            contact.MaritalStatusId = myContact.ToInt("Marital_Status_ID");
+            contact.MiddleName = myContact.ToString("Middle_Name");
+            contact.MobileCarrierId = myContact.ToNullableInt("Mobile_Carrier_ID");
+            contact.MobilePhone = myContact.ToString("Mobile_Phone");
+            contact.NickName = myContact.ToString("Nickname");
+           
 
             return contact;
         }
