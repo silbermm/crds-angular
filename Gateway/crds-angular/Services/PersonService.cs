@@ -78,7 +78,8 @@ namespace crds_angular.Services
                 Home_Phone = contactJson.Home_Phone,
                 Congregation_ID = contactJson.Congregation_ID,
                 Household_ID = contactJson.Household_ID,
-                Address_Id = contactJson.Address_ID
+                Address_Id = contactJson.Address_ID,
+                Participant_Id = contactJson.Participant_ID
             };
 
             return person;
@@ -107,7 +108,8 @@ namespace crds_angular.Services
                 ContactId = myProfile.Contact_Id,
                 Email = myProfile.Email_Address,
                 LastName = myProfile.Last_Name,
-                PreferredName = myProfile.NickName ?? myProfile.First_Name
+                PreferredName = myProfile.NickName ?? myProfile.First_Name,
+                ParticipantId = myProfile.Participant_Id
             };
             familyMembers.Add(me);
 

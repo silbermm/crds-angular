@@ -34,6 +34,7 @@ namespace crds_angular.Models
         public int Household_ID { get; set; }
         public string Household_Position_ID { get; set; }
         public int? Address_Id { get; set; }
+        public int Participant_Id { get; set; }
         public bool Bulk_Email_Opt_Out { get; set; }
         public bool Bulk_SMS_Opt_Out { get; set; }
         public bool Bulk_Mail_Opt_Out { get; set; }

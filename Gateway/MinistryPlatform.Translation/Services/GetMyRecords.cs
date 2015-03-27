@@ -23,7 +23,23 @@ namespace MinistryPlatform.Translation.Services
                 Contact_Id = (int) viewRecord["Contact_ID"],
                 Email_Address = (string) viewRecord["Email_Address"],
                 Last_Name = (string) viewRecord["Last Name"],
-                Preferred_Name = (string)viewRecord["Preferred Name"]
+                Preferred_Name = (string)viewRecord["Preferred Name"],
+                Participant_Id = (int) viewRecord["Participant_ID"]
+            }).ToList();
+        }
+
+        public static IEnumerable<Contact_Relationship> GetMyRelationships(int contactId, string token)
+        {
+            var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MyContactRelationships"]);
+            var subPageRecords = MinistryPlatformService.GetSubPageRecords(subPageId, contactId, token);
+
+            return subPageRecords.Select(subPageRecord => new Contact_Relationship
+            {
+                Contact_Id = (int)subPageRecord["Contact_ID"],
+                Email_Address = (string)subPageRecord["Email_Address"],
+                Last_Name = (string)subPageRecord["Last Name"],
+                Preferred_Name = (string)subPageRecord["Preferred Name"],
+                Participant_Id = (int)subPageRecord["Participant_ID"]
             }).ToList();
         }
 
