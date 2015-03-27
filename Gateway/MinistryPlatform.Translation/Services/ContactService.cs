@@ -9,9 +9,17 @@ namespace MinistryPlatform.Translation.Services
     {
         private readonly int _myProfilePageId = AppSettings("MyProfile");
 
+        private IMinistryPlatformService _ministryPlatformService;
+
+
+        public ContactService(IMinistryPlatformService ministryPlatformService)
+        {
+            this._ministryPlatformService = ministryPlatformService;
+        }
+
         public MyContact GetMyProfile(string token)
         {
-            var recordsDict = MinistryPlatformService.GetRecordsDict(_myProfilePageId, token);
+            var recordsDict = _ministryPlatformService.GetRecordsDict(_myProfilePageId, token);
 
             if (recordsDict.Count > 1)
             {
