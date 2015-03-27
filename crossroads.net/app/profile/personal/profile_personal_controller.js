@@ -1,6 +1,6 @@
 ﻿"use strict";
 (function () {
-  
+
     var moment = require("moment");
     module.exports = function($rootScope, $log, MESSAGES, genders, maritalStatuses, serviceProviders, states, countries, crossroadsLocations, person) {
         var _this = this;
@@ -19,7 +19,7 @@
         _this.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
         _this.zipFormat = /^(\d{5}([\-]\d{4})?)$/;
         _this.dateFormat = /^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.]((19|20)\d\d)$/;
-      
+
         _this.loading = true;
 
         _this.initProfile = function (form) {
@@ -45,7 +45,7 @@
             $log.debug(_this.form.personal);
             if (_this.form.personal.$invalid) {
                 $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-                _this.submitted = false;              
+                _this.submitted = false;
                 return;
             }
             _this.person["State/Region"] = _this.person.State;
@@ -55,7 +55,7 @@
                 $log.debug("person save unsuccessful");
             });
         };
-        _this.isDobError = function () {            
+        _this.isDobError = function () {
             return (_this.form.personal.birthdate.$touched || _this.form.personal.$submitted) && _this.form.personal.birthdate.$invalid;
         };
         _this.convertHomePhone = function () {
@@ -64,7 +64,7 @@
                 }
         };
         _this.convertPhone = function() {
-            if (_this.form.personal["mobile-phone"].$valid) {                
+            if (_this.form.personal["mobile-phone"].$valid) {
                 _this.person.Mobile_Phone = _this.person.Mobile_Phone.replace(_this.phoneFormat, "$1-$2-$3");
             }
         };
