@@ -104,7 +104,7 @@ namespace crds_angular.test.Services
             const string token = "some-string";
             const int contactId = 123456;
 
-            _contactRelationshipService.Setup(mocked => mocked.GetMyFamily(contactId, It.IsAny<string>()))
+            _contactRelationshipService.Setup(mocked => mocked.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>()))
                 .Returns(MockGetMyFamilyResponse());
             
             _contactService.Setup(mocked => mocked.GetMyProfile(token)).Returns(MockMyContact());
@@ -143,7 +143,7 @@ namespace crds_angular.test.Services
             const int contactId = 123456;
 
             //return 0 family members, only testing logic for main contact
-            _contactRelationshipService.Setup(mocked => mocked.GetMyFamily(contactId, It.IsAny<string>()))
+            _contactRelationshipService.Setup(mocked => mocked.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>()))
                 .Returns(new List<Contact_Relationship>());
 
             var myContact = new MyContact
@@ -176,7 +176,7 @@ namespace crds_angular.test.Services
             const string token = "some-string";
             const int contactId = 123456;
 
-            _contactRelationshipService.Setup(mocked => mocked.GetMyFamily(contactId, It.IsAny<string>()))
+            _contactRelationshipService.Setup(mocked => mocked.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>()))
                 .Returns(MockGetMyFamilyResponse());
 
             _contactService.Setup(mocked => mocked.GetMyProfile(token)).Returns(MockMyContact());

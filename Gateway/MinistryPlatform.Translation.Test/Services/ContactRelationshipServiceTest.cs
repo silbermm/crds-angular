@@ -52,7 +52,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 mocked => mocked.GetSubpageViewRecords(GetMyFamilyViewId, contactId, It.IsAny<string>(), "", "", 0))
                 .Returns(getSubpageViewRecordsResponse);
 
-            var family = _fixture.GetMyFamily(contactId, token).ToList();
+            var family = _fixture.GetMyImmediatieFamilyRelationships(contactId, token).ToList();
 
             _ministryPlatformService.VerifyAll();
 

@@ -106,7 +106,7 @@ namespace crds_angular.Services
 
         public List<FamilyMember> GetMyImmediateFamily(int contactId, string token)
         {
-            var contactRelationships = _contactRelationshipService.GetMyFamily(contactId, token).ToList();
+            var contactRelationships = _contactRelationshipService.GetMyImmediatieFamilyRelationships(contactId, token).ToList();
             var familyMembers = Mapper.Map<List<Contact_Relationship>, List<FamilyMember>>(contactRelationships);
 
             //now get info for Contact

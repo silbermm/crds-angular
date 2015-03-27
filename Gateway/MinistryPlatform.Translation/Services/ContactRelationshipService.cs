@@ -19,7 +19,7 @@ namespace MinistryPlatform.Translation.Services
             this._ministryPlatformService = ministryPlatformService;
         }
 
-        public IEnumerable<Contact_Relationship> GetMyFamily(int contactId, string token)
+        public IEnumerable<Contact_Relationship> GetMyImmediatieFamilyRelationships(int contactId, string token)
         {
             var viewRecords = _ministryPlatformService.GetSubpageViewRecords(_getMyFamilyViewId, contactId, token);
 
