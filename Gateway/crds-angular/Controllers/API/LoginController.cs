@@ -13,12 +13,20 @@ using System.Net.Http.Headers;
 using crds_angular.Security;
 using System.Diagnostics;
 using System.Web.Http.Cors;
+using crds_angular.Services.Interfaces;
 
 namespace crds_angular.Controllers.API
 {
     [EnableCors(origins: "*", headers: "*", methods: "*", SupportsCredentials = true)]
     public class LoginController : MPAuth
     {
+
+        private IPersonService _personService;
+
+        public LoginController(IPersonService personService)
+        {
+            _personService = personService;
+        }
 
         [ResponseType(typeof(LoginReturn))]
         [HttpGet]
@@ -30,8 +38,8 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
-                    var personService = new PersonService();
-                    var person = personService.getLoggedInUserProfile(token);
+                    //var personService = new PersonService();
+                    var person = _personService.GetLoggedInUserProfile(token);
 
                     if (person == null)
                     {
@@ -39,7 +47,7 @@ namespace crds_angular.Controllers.API
                     }
                     else
                     {
-                        var l = new LoginReturn(token, person.Contact_Id, person.First_Name);
+                        var l = new LoginReturn(token, person.ContactId, person.FirstName);
                         return this.Ok(l);
                     }
                 }
@@ -60,13 +68,12 @@ namespace crds_angular.Controllers.API
             {
                 return this.Unauthorized();
             }
-            var personService = new PersonService();
-            var p = personService.getLoggedInUserProfile(token);
+            var p = _personService.GetLoggedInUserProfile(token);
             var r = new LoginReturn
             {
                 userToken = token,
-                userId = p.Contact_Id,
-                username = p.First_Name
+                userId = p.ContactId,
+                username = p.FirstName
             };
             return this.Ok(r);
         }

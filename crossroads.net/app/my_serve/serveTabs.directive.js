@@ -14,8 +14,9 @@
       templateUrl : "my_serve/serveTabs.html",
       scope : {
         opportunity: '=',
+        tabIndex: '='
       }
     };
-}
+  }
 
 })();

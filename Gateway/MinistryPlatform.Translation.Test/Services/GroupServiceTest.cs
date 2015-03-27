@@ -1,13 +1,10 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MinistryPlatform.Translation.Exceptions;
 using MinistryPlatform.Translation.Services;
+using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
+using NUnit.Framework;
 
 namespace MinistryPlatform.Translation.Test.Services
 {
@@ -22,6 +19,8 @@ namespace MinistryPlatform.Translation.Test.Services
         private readonly int EventsGroupsPageId = 408;
         private readonly int GroupsSubGroupsPageId = 299;
 
+        private readonly int GetMyServingTeamsViewId = 1014;
+
         [SetUp]
         public void SetUp()
         {
@@ -32,17 +31,20 @@ namespace MinistryPlatform.Translation.Test.Services
         [Test]
         public void testAddParticipantToGroup()
         {
-            var getGroupPageResponse = new Dictionary<string,object>
+            var getGroupPageResponse = new Dictionary<string, object>
             {
-                { "Group_ID", 456 },
-                { "Group_Name", "Test Group" },
-                { "Target_Size", (short)1 },
-                { "Group_Is_Full", false },
+                {"Group_ID", 456},
+                {"Group_Name", "Test Group"},
+                {"Target_Size", (short) 1},
+                {"Group_Is_Full", false},
             };
 
-            ministryPlatformService.Setup(mocked => mocked.GetRecordDict(GroupsPageId, 456, It.IsAny<string>(), false)).Returns(getGroupPageResponse);
+            ministryPlatformService.Setup(mocked => mocked.GetRecordDict(GroupsPageId, 456, It.IsAny<string>(), false))
+                .Returns(getGroupPageResponse);
 
-            ministryPlatformService.Setup(mocked => mocked.GetSubPageRecords(GroupsParticipantsPageId, 456, It.IsAny<string>())).Returns((List<Dictionary<string,object>>)null);
+            ministryPlatformService.Setup(
+                mocked => mocked.GetSubPageRecords(GroupsParticipantsPageId, 456, It.IsAny<string>()))
+                .Returns((List<Dictionary<string, object>>) null);
 
             ministryPlatformService.Setup(mocked => mocked.CreateSubRecord(
                 It.IsAny<int>(), It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(),
@@ -53,11 +55,11 @@ namespace MinistryPlatform.Translation.Test.Services
 
             var expectedValues = new Dictionary<string, object>
             {
-                { "Participant_ID", 123 },
-                { "Group_Role_ID", 789 },
-                { "Start_Date", startDate },
-                { "End_Date", endDate},
-                { "Employee_Role", true }
+                {"Participant_ID", 123},
+                {"Group_Role_ID", 789},
+                {"Start_Date", startDate},
+                {"End_Date", endDate},
+                {"Employee_Role", true}
             };
 
             int groupParticipantId = fixture.addParticipantToGroup(123, 456, 789, startDate, endDate, true);
@@ -66,7 +68,6 @@ namespace MinistryPlatform.Translation.Test.Services
                 GroupsParticipantsPageId, 456, expectedValues, It.IsAny<string>(), true));
 
             Assert.AreEqual(987, groupParticipantId);
-
         }
 
         [Test]
@@ -74,20 +75,23 @@ namespace MinistryPlatform.Translation.Test.Services
         {
             var getGroupPageResponse = new Dictionary<string, object>
             {
-                { "Group_ID", 456 },
-                { "Group_Name", "Test Group" },
-                { "Target_Size", (short)1 },
-                { "Group_Is_Full", true },
+                {"Group_ID", 456},
+                {"Group_Name", "Test Group"},
+                {"Target_Size", (short) 1},
+                {"Group_Is_Full", true},
             };
 
-            ministryPlatformService.Setup(mocked => mocked.GetRecordDict(GroupsPageId, 456, It.IsAny<string>(), false)).Returns(getGroupPageResponse);
+            ministryPlatformService.Setup(mocked => mocked.GetRecordDict(GroupsPageId, 456, It.IsAny<string>(), false))
+                .Returns(getGroupPageResponse);
 
             var groupParticipantsPageResponse = new List<Dictionary<string, object>>();
             groupParticipantsPageResponse.Add(new Dictionary<string, object>()
-                {
-                    { "Participant_ID", 42}
-                });
-            ministryPlatformService.Setup(mocked => mocked.GetSubPageRecords(GroupsParticipantsPageId, 456, It.IsAny<string>())).Returns(groupParticipantsPageResponse);
+            {
+                {"Participant_ID", 42}
+            });
+            ministryPlatformService.Setup(
+                mocked => mocked.GetSubPageRecords(GroupsParticipantsPageId, 456, It.IsAny<string>()))
+                .Returns(groupParticipantsPageResponse);
 
             try
             {
@@ -96,7 +100,10 @@ namespace MinistryPlatform.Translation.Test.Services
             }
             catch (GroupFullException e)
             {
-                ministryPlatformService.Verify(mocked => mocked.CreateSubRecord(1, 1, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>(), true), Times.Never);
+                ministryPlatformService.Verify(
+                    mocked =>
+                        mocked.CreateSubRecord(1, 1, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>(), true),
+                    Times.Never);
                 Assert.NotNull(e.GroupDetails);
                 Assert.AreEqual(456, e.GroupDetails.GroupId);
                 Assert.AreEqual(1, e.GroupDetails.TargetSize);
@@ -111,7 +118,9 @@ namespace MinistryPlatform.Translation.Test.Services
         [Test]
         public void testGetAllEventsForGroupNoGroupFound()
         {
-            ministryPlatformService.Setup(mocked => mocked.GetSubPageRecords(GroupsEventsPageId, 456, It.IsAny<string>())).Returns((List<Dictionary<string, object>>)null);
+            ministryPlatformService.Setup(
+                mocked => mocked.GetSubPageRecords(GroupsEventsPageId, 456, It.IsAny<string>()))
+                .Returns((List<Dictionary<string, object>>) null);
             Assert.IsNull(fixture.getAllEventsForGroup(456));
 
             ministryPlatformService.VerifyAll();
@@ -121,22 +130,29 @@ namespace MinistryPlatform.Translation.Test.Services
         public void testGetAllEventsForGroup()
         {
             List<Dictionary<string, object>> mpResult = new List<Dictionary<string, object>>();
-            mpResult.Add(new Dictionary<string, object>() {
+            mpResult.Add(new Dictionary<string, object>()
+            {
                 {"dp_RecordID", 987},
             });
-            mpResult.Add(new Dictionary<string, object>() {
+            mpResult.Add(new Dictionary<string, object>()
+            {
                 {"dp_RecordID", 654},
             });
-            ministryPlatformService.Setup(mocked => mocked.GetSubPageRecords(GroupsEventsPageId, 456, It.IsAny<string>())).Returns(mpResult);
+            ministryPlatformService.Setup(
+                mocked => mocked.GetSubPageRecords(GroupsEventsPageId, 456, It.IsAny<string>())).Returns(mpResult);
 
-            ministryPlatformService.Setup(mocked => mocked.GetRecordDict(EventsGroupsPageId, 987, It.IsAny<string>(), false)).Returns(new Dictionary<string, object>()
-            {
-                { "Event_ID", 789 }
-            });
-            ministryPlatformService.Setup(mocked => mocked.GetRecordDict(EventsGroupsPageId, 654, It.IsAny<string>(), false)).Returns(new Dictionary<string, object>()
-            {
-                { "Event_ID", 456 }
-            });
+            ministryPlatformService.Setup(
+                mocked => mocked.GetRecordDict(EventsGroupsPageId, 987, It.IsAny<string>(), false))
+                .Returns(new Dictionary<string, object>()
+                {
+                    {"Event_ID", 789}
+                });
+            ministryPlatformService.Setup(
+                mocked => mocked.GetRecordDict(EventsGroupsPageId, 654, It.IsAny<string>(), false))
+                .Returns(new Dictionary<string, object>()
+                {
+                    {"Event_ID", 456}
+                });
 
             var events = fixture.getAllEventsForGroup(456);
             ministryPlatformService.VerifyAll();
@@ -152,36 +168,42 @@ namespace MinistryPlatform.Translation.Test.Services
         {
             var getGroupPageResponse = new Dictionary<string, object>
             {
-                { "Group_ID", 456 },
-                { "Group_Name", "Test Group" },
-                { "Target_Size", (short)5 },
-                { "Group_Is_Full", true },
-                { "Enable_Waiting_List", true },
-                { "dp_RecordID" , 522}
+                {"Group_ID", 456},
+                {"Group_Name", "Test Group"},
+                {"Target_Size", (short) 5},
+                {"Group_Is_Full", true},
+                {"Enable_Waiting_List", true},
+                {"dp_RecordID", 522}
             };
 
-            ministryPlatformService.Setup(mocked => mocked.GetRecordDict(GroupsPageId, 456, It.IsAny<string>(), false)).Returns(getGroupPageResponse);
+            ministryPlatformService.Setup(mocked => mocked.GetRecordDict(GroupsPageId, 456, It.IsAny<string>(), false))
+                .Returns(getGroupPageResponse);
 
             var groupParticipantsPageResponse = new List<Dictionary<string, object>>();
-            for (int i = 42; i <= 46; i++) {
+            for (int i = 42; i <= 46; i++)
+            {
                 groupParticipantsPageResponse.Add(new Dictionary<string, object>()
                 {
-                    { "Participant_ID", i},
+                    {"Participant_ID", i},
                 });
             }
-            ministryPlatformService.Setup(mocked => mocked.GetSubPageRecords(GroupsParticipantsPageId, 456, It.IsAny<string>())).Returns(groupParticipantsPageResponse);
+            ministryPlatformService.Setup(
+                mocked => mocked.GetSubPageRecords(GroupsParticipantsPageId, 456, It.IsAny<string>()))
+                .Returns(groupParticipantsPageResponse);
 
             var GroupsSubGroupsPageResponse = new List<Dictionary<string, object>>();
             GroupsSubGroupsPageResponse.Add(new Dictionary<string, object>()
-            {  
-                { "Group_Name", "Test Wait List" },
-                { "Group_Type", "Wait List" },
-                { "Group_Type_ID", "20" },
-                { "dp_RecordID", 320 }
+            {
+                {"Group_Name", "Test Wait List"},
+                {"Group_Type", "Wait List"},
+                {"Group_Type_ID", "20"},
+                {"dp_RecordID", 320}
             });
 
-            ministryPlatformService.Setup(mocked => mocked.GetSubPageRecords(GroupsSubGroupsPageId, 456, It.IsAny<string>())).Returns(GroupsSubGroupsPageResponse); 
-                                                   
+            ministryPlatformService.Setup(
+                mocked => mocked.GetSubPageRecords(GroupsSubGroupsPageId, 456, It.IsAny<string>()))
+                .Returns(GroupsSubGroupsPageResponse);
+
             var g = fixture.getGroupDetails(456);
 
             ministryPlatformService.VerifyAll();
@@ -204,13 +226,53 @@ namespace MinistryPlatform.Translation.Test.Services
         }
 
         [Test]
+        public void ShouldReturnMyServingTeams()
+        {
+            const int contactId = 123456;
+            const string token = "some-string";
+            var searchString = ",,,," + contactId;
+
+            var getPageViewRecordsResponse = new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>()
+                {
+                    {"Group_ID", 1},
+                    {"Group_Name", "group-one"},
+                    {"Role_Title", "group-one-role"}
+                },
+                new Dictionary<string, object>()
+                {
+                    {"Group_ID", 2},
+                    {"Group_Name", "group-two"},
+                    {"Role_Title", "group-two-role"}
+                }
+            };
+            ministryPlatformService.Setup(
+                mocked => mocked.GetPageViewRecords(GetMyServingTeamsViewId, It.IsAny<string>(), searchString, "", 0))
+                .Returns(getPageViewRecordsResponse);
+
+
+            var teams = fixture.GetMyServingTeams(contactId, token);
+
+            Assert.IsNotNull(teams);
+            Assert.AreEqual(2, teams.Count);
+
+            Assert.AreEqual(1, teams[0].GroupId);
+            Assert.AreEqual("group-one", teams[0].Name);
+            Assert.AreEqual("group-one-role", teams[0].GroupRole);
+
+            Assert.AreEqual(2, teams[1].GroupId);
+            Assert.AreEqual("group-two", teams[1].Name);
+            Assert.AreEqual("group-two-role", teams[1].GroupRole);
+        }
+
+        [Test]
         public void testIsUserInGroup()
         {
             int participantId = 123;
             List<int> groupParticipants = new List<int> {1111, 2222, 123};
-            var result = fixture.checkIfUserInGroup(participantId,groupParticipants);
-            Assert.AreEqual(result,true);
+            var result = fixture.checkIfUserInGroup(participantId, groupParticipants);
+            Assert.AreEqual(result, true);
         }
-
     }
 }
