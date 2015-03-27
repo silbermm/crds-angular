@@ -65,30 +65,30 @@ namespace crds_angular.Services
 
             var person = new Person();
 
-            person.ContactId = contact.ContactId;
-            person.EmailAddress = contact.EmailAddress;
-            person.NickName = contact.NickName;
-            person.FirstName = contact.FirstName;
-            person.MiddleName = contact.MiddleName;
-            person.LastName = contact.LastName;
-            person.MaidenName = contact.MaidenName;
-            person.MobilePhone = contact.MobilePhone;
-            person.MobileCarrierId = contact.MobileCarrierId;
-            person.DateOfBirth = contact.DateOfBirth;
-            person.MaritalStatusId = contact.MaritalStatusId;
-            person.GenderId = contact.GenderId;
-            person.EmployerName = contact.EmployerName;
-            person.AddressLine1 = contact.AddressLine1;
-            person.AddressLine2 = contact.AddressLine2;
+            person.ContactId = contact.Contact_ID;
+            person.EmailAddress = contact.Email_Address;
+            person.NickName = contact.Nickname;
+            person.FirstName = contact.First_Name;
+            person.MiddleName = contact.Middle_Name;
+            person.LastName = contact.Last_Name;
+            person.MaidenName = contact.Maiden_Name;
+            person.MobilePhone = contact.Mobile_Phone;
+            person.MobileCarrierId = contact.Mobile_Carrier_ID;
+            person.DateOfBirth = contact.Date_Of_Birth;
+            person.MaritalStatusId = contact.Marital_Status_ID;
+            person.GenderId = contact.Gender_ID;
+            person.EmployerName = contact.Employer_Name;
+            person.AddressLine1 = contact.Address_Line_1;
+            person.AddressLine2 = contact.Address_Line_2;
             person.City = contact.City;
             person.State = contact.State;
-            person.PostalCode = contact.PostalCode;
-            person.AnniversaryDate = contact.AnniversaryDate;
-            person.ForeignCountry = contact.ForeignCountry;
-            person.HomePhone = contact.HomePhone;
-            person.CongregationId = contact.CongregationId;
-            person.HouseholdId = contact.HouseholdId;
-            person.AddressId = contact.AddressId;
+            person.PostalCode = contact.Postal_Code;
+            person.AnniversaryDate = contact.Anniversary_Date;
+            person.ForeignCountry = contact.Foreign_Country;
+            person.HomePhone = contact.Home_Phone;
+            person.CongregationId = contact.Congregation_ID;
+            person.HouseholdId = contact.Household_ID;
+            person.AddressId = contact.Address_ID;
             
 
             return person;

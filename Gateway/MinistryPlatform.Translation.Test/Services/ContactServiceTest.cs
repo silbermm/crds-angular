@@ -59,8 +59,8 @@ namespace MinistryPlatform.Translation.Test.Services
 
             var myProfile = _fixture.GetMyProfile(It.IsAny<string>());
             Assert.IsNotNull(myProfile);
-            Assert.AreEqual(3, myProfile.ContactId);
-            Assert.AreEqual(100, myProfile.AddressId);
+            Assert.AreEqual(3, myProfile.Contact_ID);
+            Assert.AreEqual(100, myProfile.Address_ID);
         }
     }
 }

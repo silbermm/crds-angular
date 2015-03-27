@@ -41,30 +41,30 @@ namespace crds_angular.test.Services
 
             var myContact = new MyContact
             {
-                ContactId = 123456,
-                EmailAddress = "contact@email.com",
-                LastName = "last-name",
-                NickName = "nickname",
-                FirstName = "first-name",
-                MiddleName = "middle-name",
-                MaidenName = "maiden-name",
-                MobilePhone = "mobile-phone",
-                MobileCarrierId = 999,
-                DateOfBirth = "date-of-birth",
-                MaritalStatusId = 5,
-                GenderId = 2,
-                EmployerName = "employer-name",
-                AddressLine1 = "address-line-1",
-                AddressLine2 = "address-line-2",
+                Contact_ID  =123456,
+                Email_Address = "contact@email.com",
+                Last_Name = "last-name",
+                Nickname = "nickname",
+                First_Name = "first-name",
+                Middle_Name = "middle-name",
+                Maiden_Name = "maiden-name",
+                Mobile_Phone = "mobile-phone",
+                Mobile_Carrier_ID = 999,
+                Date_Of_Birth = "date-of-birth",
+                Marital_Status_ID = 5,
+                Gender_ID = 2,
+                Employer_Name = "employer-name",
+                Address_Line_1 = "address-line-1",
+                Address_Line_2 = "address-line-2",
                 City = "city",
                 State = "state",
-                PostalCode = "postal-code",
-                AnniversaryDate = "anniversary-date",
-                ForeignCountry = "foreign-country",
-                HomePhone = "home-phone",
-                CongregationId = 8,
-                HouseholdId = 7,
-                AddressId = 6
+                Postal_Code = "postal-code",
+                Anniversary_Date = "anniversary-date",
+                Foreign_Country = "foreign-country",
+                Home_Phone = "home-phone",
+                Congregation_ID = 8,
+                Household_ID = 7,
+                Address_ID = 6
             };
             _contactService.Setup(mocked => mocked.GetMyProfile(token)).Returns(myContact);
             
@@ -148,10 +148,10 @@ namespace crds_angular.test.Services
 
             var myContact = new MyContact
             {
-                ContactId = 123456,
-                EmailAddress = "main-contact@email.com",
-                LastName = "main-contact",
-                FirstName = "main-contact-firstname"
+                Contact_ID = 123456,
+                Email_Address = "main-contact@email.com",
+                Last_Name = "main-contact",
+                First_Name = "main-contact-firstname"
             };
             _contactService.Setup(mocked => mocked.GetMyProfile(token)).Returns(myContact);
 
@@ -350,11 +350,11 @@ namespace crds_angular.test.Services
         {
             var myContact = new MyContact
             {
-                ContactId = 123456,
-                EmailAddress = "main-contact@email.com",
-                LastName = "main-contact",
-                NickName = "main-contact-nickname",
-                FirstName = "main-contact-firstname"
+                Contact_ID = 123456,
+                Email_Address = "main-contact@email.com",
+                Last_Name = "main-contact",
+                Nickname = "main-contact-nickname",
+                First_Name = "main-contact-firstname"
             };
             return myContact;
         }
