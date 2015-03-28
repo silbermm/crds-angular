@@ -5,10 +5,10 @@
             <ul class="col-sm-12 current-skills-list list-inline">
                 <li ng-repeat="skill in profile.myskills() | filter: { Selected: true }">
                     <div class="label label-primary">
-                        {{ skill.Name }} 
+                        {{ skill.Name }}
                         <i class="glyphicon glyphicon-trash" ng-click="profile.skillTrashCan(skill)"></i>
                     </div>
-                </li>                
+                </li>
             </ul>
         </fieldset>
 
@@ -17,7 +17,7 @@
             <div class="form-group col-sm-12 row" ng-repeat="category in profile.skills">
                 <label class="col-sm-3">{{ category.Name }}</label>
                 <div class="cat-skill-group col-sm-9">
-                    <div class="checkbox" ng-repeat="skill in category.Skills">
+                    <div ng-repeat="skill in category.Skills">
                         <label>
                             <input type="checkbox" ng-model="skill.Selected" ng-change="profile.skillChange(skill)"> {{ skill.Name }}
                         </label>
