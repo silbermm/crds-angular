@@ -42,7 +42,19 @@ var groupGetDetailResponse = {
   "groupFullInd": "True",
   "waitListInd": "True",
   "waitListGroupId": "1",
-  "userInGroup": "false"
+  relationships:
+  [
+    { "First_Name": "Shankar",
+      "Email_Address": "shankx@test.com",
+      "userInGroup": true,
+      "Participant_ID":"1234"
+    },
+    { "First_Name": "Luisa",
+      "Email_Address": "Luisa@test.com",
+      "userInGroup": false,
+      "Participant_ID":"1234"
+    }
+  ]
 };
 
 

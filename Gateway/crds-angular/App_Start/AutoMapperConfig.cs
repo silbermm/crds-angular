@@ -24,7 +24,8 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.ContactId, opts => opts.MapFrom(src => src.Contact_Id))
                 .ForMember(dest => dest.PreferredName, opts => opts.MapFrom(src => src.Preferred_Name))
                 .ForMember(dest => dest.LastName, opts => opts.MapFrom(src => src.Last_Name))
-                .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email_Address));
+                .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email_Address))
+                .ForMember(dest => dest.ParticipantId, opts => opts.MapFrom(src => src.Participant_Id));
         }
     }
 }
