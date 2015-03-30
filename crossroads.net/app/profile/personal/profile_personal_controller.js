@@ -5,7 +5,7 @@
     module.exports = function($rootScope, $log, MESSAGES, ProfileReferenceData) {
         var _this = this;
 
-        _this.ProfileReferenceData = ProfileReferenceData;
+        _this.ProfileReferenceData = ProfileReferenceData.getInstance();
         _this.person = {};
 
         _this.passwordPrefix = "account-page";
@@ -35,7 +35,7 @@
 
         function configurePerson(person) {
             _this.person = person;
-            
+
             if (_this.person.dateOfBirth !== undefined) {
                 var newBirthDate = _this.person.dateOfBirth.replace(_this.dateFormat, "$3 $1 $2");
                 var mBdate = moment(newBirthDate, "YYYY MM DD");
