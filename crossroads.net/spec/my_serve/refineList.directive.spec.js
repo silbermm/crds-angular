@@ -217,6 +217,8 @@ describe('Refine List Directive', function() {
     isolateScope.clearFilters(); 
     expect(isolateScope.servingDays[0].serveTimes.length).toBe(2);
     expect(isolateScope.servingDays[1].serveTimes.length).toBe(2);
+    expect(isolateScope.servingDays[0].serveTimes[0].servingTeams.length).toBe(2);
+    expect(isolateScope.servingDays[0].serveTimes[1].servingTeams.length).toBe(1);
   });
 
 }); 
