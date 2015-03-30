@@ -33,11 +33,11 @@
         // See this post for details: https://github.com/angular-ui/ui-router/issues/1119
         var registerType = function(routeType, urlPattern) {
             return($urlMatcherFactory.type(routeType, {
-            			encode: function(val) { return val != null ? val.toString() : val; },
-            			decode: function(val) { return val != null ? val.toString() : val; },
-            			is: function(val) { return this.pattern.test(val); },
+                        encode: function(val) { return val != null ? val.toString() : val; },
+                        decode: function(val) { return val != null ? val.toString() : val; },
+                        is: function(val) { return this.pattern.test(val); },
                         pattern: urlPattern
-            		}));
+                    }));
         };
         registerType("contentRouteType", /^\/.*/);
         registerType("signupRouteType", /\/sign-up\/.*$/);

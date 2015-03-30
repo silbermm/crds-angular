@@ -1,24 +1,37 @@
-<h2 class="header noPspace" ng-bind-html="groupsignup.signupPage.title | html"></h2>
-<p id="content" class="noPspace" dir="ltr" ng-bind-html="groupsignup.signupPage.content | html" ng-show="groupsignup.showContent"></p>
-<p id="successMessage" ng-bind-html="groupsignup.signupPage.success | html" ng-show="groupsignup.showSuccess && !groupsignup.waitListCase"></p>
-<p id="fullGroupMessage" ng-bind-html="groupsignup.signupPage.full | html" ng-show="groupsignup.showFull"></p>
-<p id="waitListMessage" ng-bind-html="groupsignup.signupPage.waitList | html" ng-show="groupsignup.showWaitList && groupsignup.waitListCase"></p>
-<p id="waitSuccessMessage" ng-bind-html="groupsignup.signupPage.waitSuccess | html" ng-show="groupsignup.showWaitSuccess && groupsignup.waitListCase"></p>
+<div ng-show="groupsignup.viewReady">
+    <h2 class="header noPspace" ng-bind-html="groupsignup.signupPage.title | html"></h2>
+    <div ng-show="groupsignup.alreadySignedUp">
+      <div ng-bind-html="groupsignup.signupPage.existingMember | html"></div>
+      <h3>Participants</h3>
+      <hr>
+      <p><label><input type="checkbox" style="visibility:hidden;">{{groupsignup.person["NickName"]}} ({{groupsignup.person["Email_Address"]}})</label></p>
+    </div>
 
-<!--
-Interesting data on the signupPage object is:
-* group: The group ID in MP
-* id: The page ID in CMS
-* link: The Link to use when "searching" CMS for this page
-* title: The title of the page (name of the group)
-* content: Some descriptive info about the group (the paragraph below the title on the page)
-* renderedContent: Same as content?
-* success: Content to display after successfully registering
-* full: Content to display when the group is full (not sure if this should be before or after clicking sign up)
-Many of these items will need to be added as hidden DIVs on this page, and then shown/hidden appropriately as the user takes action.
--->
+    <div ng-show="!groupsignup.alreadySignedUp">
+      <p id="content" class="noPspace" dir="ltr" ng-bind-html="groupsignup.signupPage.content | html" ng-show="groupsignup.showContent"></p>
+      <p id="successMessage" ng-bind-html="groupsignup.signupPage.success | html" ng-show="groupsignup.showSuccess && !groupsignup.waitListCase"></p>
+      <p id="fullGroupMessage" ng-bind-html="groupsignup.signupPage.full | html" ng-show="groupsignup.showFull"></p>
+      <p id="waitListMessage" ng-bind-html="groupsignup.signupPage.waitList | html" ng-show="groupsignup.showWaitList && groupsignup.waitListCase"></p>
+      <p id="waitSuccessMessage" ng-bind-html="groupsignup.signupPage.waitSuccess | html" ng-show="groupsignup.showWaitSuccess && groupsignup.waitListCase"></p>
+    </div>
 
-<form name="groupSignupForm" role="form" ng-submit="groupsignup.signup()" ng-show="groupsignup.showContent">
+
+
+
+  <!--
+  Interesting data on the signupPage object is:
+  * group: The group ID in MP
+  * id: The page ID in CMS
+  * link: The Link to use when "searching" CMS for this page
+  * title: The title of the page (name of the group)
+  * content: Some descriptive info about the group (the paragraph below the title on the page)
+  * renderedContent: Same as content?
+  * success: Content to display after successfully registering
+  * full: Content to display when the group is full (not sure if this should be before or after clicking sign up)
+  Many of these items will need to be added as hidden DIVs on this page, and then shown/hidden appropriately as the user takes action.
+  -->
+
+  <form name="groupSignupForm" role="form" ng-submit="groupsignup.signup()" ng-show="groupsignup.showContent">
     <fieldset>
         <legend>People to Sign Up</legend>
         <div class="form-group">
@@ -26,7 +39,7 @@ Many of these items will need to be added as hidden DIVs on this page, and then 
                 <!--     checkbox only hidden if only in person listed -->
                 <p>
                     <label>
-                        <input type="checkbox" style="visibility:hidden;">{{groupsignup.person["NickName"]}} ({{groupsignup.person["Email_Address"]}})</label>
+                        <input type="checkbox" style="visibility:hidden;">{{groupsignup.person["nickName"]}} ({{groupsignup.person["emailAddress"]}})</label>
                     <a href="" ng-click="groupsignup.editProfile()">
                         <svg viewBox="0 0 32 32" class="icon icon-pencil4">
                             <use xlink:href="#pencil4"></use>
@@ -36,15 +49,18 @@ Many of these items will need to be added as hidden DIVs on this page, and then 
                 <div>
                     <input type="submit" name="submit_group_signup" value="Sign Up" id="submit_group_signup" class="btn btn-primary push-half-bottom">
                 </div>
+            </div>
+        </div>
     </fieldset>
-</form>
+  </form>
 
-<script type="text/ng-template" id="editProfile.html">
-    <div class="modal-header">
-            <a type="button" class="close" ng-click="groupsignup.closeModal('close')">x</a>
-        <h4 class="modal-title">Edit Profile</h4>
-    </div>
-    <div class="modal-body">
-        <profile-personal/>
-    </div>
-</script>
+  <script type="text/ng-template" id="editProfile.html">
+      <div class="modal-header">
+          <a type="button" class="close" ng-click="$close()">x</a>
+          <h4 class="modal-title">Edit Profile</h4>
+      </div>
+      <div class="modal-body">
+          <profile-personal person="person"/>
+      </div>
+  </script>
+</div>

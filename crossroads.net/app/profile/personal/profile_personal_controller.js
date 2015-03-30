@@ -6,22 +6,7 @@
         var _this = this;
 
         _this.ProfileReferenceData = ProfileReferenceData;
-        // _this.ProfileReferenceData.then(function(response) {
-        //     _this.person = response.person;
-        //     _this.genders = response.genders;
-        //     _this.maritalStatuses = response.maritalStatuses;
-        //     _this.serviceProviders = response.serviceProviders;
-        //     _this.states = response.states;
-        //     _this.countries = response.countries;
-        //     _this.crossroadsLocations = response.crossroadsLocations;
-        // });
         _this.person = {};
-        // _this.genders = [];
-        // _this.maritalStatuses = [];
-        // _this.serviceProviders = [];
-        // _this.states = [];
-        // _this.countries = [];
-        // _this.crossroadsLocations = [];
 
         _this.passwordPrefix = "account-page";
         _this.submitted = false;
@@ -31,6 +16,7 @@
         _this.dateFormat = /^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.]((19|20)\d\d)$/;
 
         _this.loading = true;
+        _this.viewReady = false;
 
         _this.initProfile = function (form) {
             _this.form = form;
@@ -42,21 +28,23 @@
                 _this.countries = response.countries;
                 _this.crossroadsLocations = response.crossroadsLocations;
                 configurePerson(response.person);
+
+                _this.viewReady = true;
             });
         };
 
         function configurePerson(person) {
             _this.person = person;
 
-            if (_this.person.Date_of_Birth !== undefined) {
-                var newBirthDate = _this.person.Date_of_Birth.replace(_this.dateFormat, "$3 $1 $2");
+            if (_this.person.dateOfBirth !== undefined) {
+                var newBirthDate = _this.person.dateOfBirth.replace(_this.dateFormat, "$3 $1 $2");
                 var mBdate = moment(newBirthDate, "YYYY MM DD");
-                _this.person.Date_of_Birth = mBdate.format("MM/DD/YYYY");
+                _this.person.dateOfBirth = mBdate.format("MM/DD/YYYY");
             }
 
-            if (_this.person.Anniversary_Date !== undefined) {
-                var mAdate = moment(new Date(_this.person.Anniversary_Date));
-                _this.person.Anniversary_Date = mAdate.format("MM/DD/YYYY");
+            if (_this.person.anniversaryDate !== undefined) {
+                var mAdate = moment(new Date(_this.person.anniversaryDate));
+                _this.person.anniversaryDate = mAdate.format("MM/DD/YYYY");
             }
         }
 
@@ -80,16 +68,16 @@
         };
         _this.convertHomePhone = function () {
             if (_this.form.personal["home-phone"].$valid) {
-                    _this.person.Home_Phone = _this.person.Home_Phone.replace(_this.phoneFormat, "$1-$2-$3");
+                    _this.person.homePhone = _this.person.homePhone.replace(_this.phoneFormat, "$1-$2-$3");
                 }
         };
         _this.convertPhone = function() {
             if (_this.form.personal["mobile-phone"].$valid) {
-                _this.person.Mobile_Phone = _this.person.Mobile_Phone.replace(_this.phoneFormat, "$1-$2-$3");
+                _this.person.mobilePhone = _this.person.mobilePhone.replace(_this.phoneFormat, "$1-$2-$3");
             }
         };
         _this.serviceProviderRequired = function () {
-            if (_this.person.Mobile_Phone === "undefined" || _this.person.Mobile_Phone === null || _this.person.Mobile_Phone === "" || this.form.personal["mobile-phone"].$invalid) {
+            if (_this.person.mobilePhone === "undefined" || _this.person.mobilePhone === null || _this.person.mobilePhone === "" || this.form.personal["mobile-phone"].$invalid) {
                 return false;
             }
             return true;

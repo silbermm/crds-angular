@@ -1,3 +1,4 @@
+<section ng-show="profile.viewReady">
 <form role="form" name="personal" ng-init="profile.initProfile(this)" novalidate>
     <p class="text-muted push-bottom">Information shared here is kept secure and private. We will not share or sell your information.</p>
 
@@ -88,14 +89,14 @@
         </div>
         <div class="form-group col-sm-6" ng-class="{'has-error':personal['service-provider'].$invalid}">
             <label for="service-provider">Service Provider</label>
-            <select name="service-provider" class="form-control col-sm-12" id="service-provider" ng-model="profile.person.mobileCarrier" ng-options="providers.dp_RecordID as providers.dp_RecordName for providers in profile.serviceProviders" ng-required="profile.serviceProviderRequired()">
+            <select name="service-provider" class="form-control col-sm-12" id="service-provider" ng-model="profile.person.mobileCarrierId" ng-options="providers.dp_RecordID as providers.dp_RecordName for providers in profile.serviceProviders" ng-required="profile.serviceProviderRequired()">
                 <option value=""> -- Choose One -- </option>
             </select>
             <ng-messages for="personal['service-provider'].$error" ng-messages-include="on-submit-messages"></ng-messages>
         </div>
     </div>
 
-    <div>
+    <div class="row">
         <fieldset>
             <legend>Your Household</legend>
             <p>
@@ -200,7 +201,7 @@
                                 <li class="list-group-item clearfix">
                                     <div id="Site" class="form-group col-sm-6">
                                         <label for="crossroads-location">Crossroads Location</label>
-                                        <select name="crossroads-location" id="crossroads-location" class="form-control col-sm-12" ng-model="profile.person.congregationID" ng-options="congregation.dp_RecordID as congregation.dp_RecordName for congregation in profile.crossroadsLocations"></select>
+                                        <select name="crossroads-location" id="crossroads-location" class="form-control col-sm-12" ng-model="profile.person.congregationId" ng-options="congregation.dp_RecordID as congregation.dp_RecordName for congregation in profile.crossroadsLocations"></select>
                                     </div>
                                 </li>
                             </ul>
@@ -215,3 +216,4 @@
             Save
         </button>
 </form>
+</section>

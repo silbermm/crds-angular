@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.ServiceModel;
-using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services;
 using NUnit.Framework;
 using Attribute = MinistryPlatform.Models.Attribute;
@@ -10,33 +9,13 @@ using Attribute = MinistryPlatform.Models.Attribute;
 namespace MinistryPlatform.Translation.Test
 {
     [TestFixture]
+    [Category("IntegrationTests")]
     public class TranslationTests
     {
         private const string USERNAME = "testme";
         private const string PASSWORD = "changeme";
         private const string FIRSTNAME = "Test";
         private const string NEW_PASSWORD = "changemeagain";
-
-        [Test]
-        public void GetEventsByType()
-        {
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            var eventType = "Oakley: Saturday at 4:30";
-
-            var events = MinistryPlatform.Translation.Services.OpportunityService.GetEvents(eventType, token);
-            Assert.IsNotNull(events);
-        }
-
-        [Test]
-        public void GetMyFamily()
-        {
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            var recordId = AuthenticationService.GetContactId(token);
-            var family = GetMyRecords.GetMyFamily(recordId, token);
-
-            Assert.IsNotNull(family);
-            Assert.IsInstanceOf<List<Contact_Relationship>>(family);
-        }
 
         [Test]
         public void ShouldFailLogin()
@@ -118,12 +97,12 @@ namespace MinistryPlatform.Translation.Test
             var recordId = AuthenticationService.GetContactId(token);
             Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
             var record = MinistryPlatformService.GetSubPageRecords(subGroupPageId, 6717,
-                       token);
+                token);
             Assert.IsNotNull(record);
             Assert.IsNotEmpty(record);
         }
 
-        
+
         [Test]
         public void GetAvailableSkills()
         {
@@ -172,16 +151,6 @@ namespace MinistryPlatform.Translation.Test
         }
 
         [Test]
-        [Ignore("we never do this in code, return all responses makes message too big")]
-        public void GetOpportunityResponses()
-        {
-            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["OpportunityResponses"]);
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            var records = MinistryPlatformService.GetRecords(pageId, token);
-            Assert.IsNotNull(records);
-        }
-
-        [Test]
         public void CreateOpportunityResponse()
         {
             var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
@@ -222,40 +191,20 @@ namespace MinistryPlatform.Translation.Test
             var responseId = OpportunityService.RespondToOpportunity(token, opportunityId, comment);
 
             //Try to delete Response, should fail
-            Assert.Throws<FaultException<ExceptionDetail>>(() => MinistryPlatformService.DeleteRecord(pageId, responseId, null, token));
-            
+            Assert.Throws<FaultException<ExceptionDetail>>(
+                () => MinistryPlatformService.DeleteRecord(pageId, responseId, null, token));
         }
 
         [Test]
         public void ShouldReturnTodaysEvents()
         {
             var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["TodaysEventLocationRecords"]);
-            string token = AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"], ConfigurationManager.AppSettings["ApiPass"]);
+            string token = AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"],
+                ConfigurationManager.AppSettings["ApiPass"]);
 
             var todaysEvents = MinistryPlatformService.GetRecordsDict(pageId, token, ",Mason", "5");
 
             Assert.IsNotNull(todaysEvents);
-        }
-
-        [Test]
-        public void ShouldReturnMyServingTeams()
-        {
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD); 
-            var recordId = AuthenticationService.GetContactId(token);
-            var teams = GetMyRecords.GetMyServingTeams(recordId, token);
-
-            Assert.IsNotNull(teams);
-        }
-
-        [Test]
-        public void ShouldGetPeopleSignedUp()
-        {
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            const int opportunityId = 139;
-            const int eventId = 950107;
-            var response = OpportunityService.GetOpportunitySignupCount(opportunityId, eventId, token);
-
-            Assert.IsNotNull(response);
         }
     }
 }

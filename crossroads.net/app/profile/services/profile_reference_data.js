@@ -3,6 +3,10 @@
     module.exports = factory;
     factory.$inject = ['Lookup', 'Profile', '$resolve'];
 
+    // Return a map of data needed by the profile pages.  The map is
+    // actually a promise, which will be resolved by the Angular UI Router
+    // resolver ($resolve).  This is similar to the behavior implemented by the
+    // resolve property on a UI Router state.
     function factory(Lookup, Profile, $resolve) {
         var data = {
             genders: function() {
@@ -45,20 +49,6 @@
                 return Profile.Personal.get().$promise;
             },
         };
-
-        // var resolvedData = {
-        //     genders: [],
-        //     maritalStatuses: [],
-        //     serviceProviders: [],
-        //     states: [],
-        //     countries: [],
-        //     crossroadsLocations: [],
-        //     person: {},
-        // };
-        //
-        // $resolve.resolve(data).then(function(result) {
-        //     resolvedData = result;
-        // });
 
         return($resolve.resolve(data));
     }

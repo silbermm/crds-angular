@@ -7,7 +7,6 @@ require('../services/group_service');
         var vm = this;
 
         vm.editProfile = editProfile;
-        vm.closeModal = closeModal;
 
         //flags to control show/hide logic
         vm.showContent = true;
@@ -16,13 +15,15 @@ require('../services/group_service');
         vm.showWaitList = false;
         vm.showWaitSuccess = false;
         vm.waitListCase = false;
+        vm.alreadySignedUp = false;
+        vm.viewReady = false;
 
         vm.signupPage = $rootScope.signupPage;
 
         // Initialize Person data for logged-in user
         Profile.Personal.get(function (response) {
             vm.person = response;
-            $log.debug("Person: " + vm.person);
+            $log.debug("Person: " + JSON.stringify(vm.person));
         });
 
         var pageRequest = Page.get({
@@ -38,6 +39,10 @@ require('../services/group_service');
                         groupId: vm.groupId
                     }).$promise
                     .then(function (response) {
+                    vm.viewReady = true;
+                    if(response.userInGroup === true){
+                        vm.alreadySignedUp = true;
+                    }
                         // This is the case where the group is full and there is a waitlist
                         if ((response.groupFullInd === "True" && response.waitListInd === "True") || (response.groupFullInd === true && response.waitListInd === true)) {
                             vm.waitListCase = true;
@@ -83,55 +88,12 @@ require('../services/group_service');
                 vm.showFull = true;
             });
         };
-        
-        function closeModal(result) {
-            console.log("closing modal");
-            modalInstance.close(result);
-        };
 
         function editProfile() {
             var modalInstance = $modal.open({
                 templateUrl: 'editProfile.html',
-                controller: 'ProfilePersonalController',
                 backdrop: true,
-                resolve: {
-                    Profile: "Profile",
-                    Lookup: "Lookup",
-                    genders: function (Lookup) {
-                        return Lookup.query({
-                            table: "genders"
-                        }).$promise;
-                    },
-                    maritalStatuses: function (Lookup) {
-                        return Lookup.query({
-                            table: "maritalstatus"
-                        }).$promise;
-                    },
-                    serviceProviders: function (Lookup) {
-                        return Lookup.query({
-                            table: "serviceproviders"
-                        }).$promise;
-                    },
-                    states: function (Lookup) {
-                        return Lookup.query({
-                            table: "states"
-                        }).$promise;
-                    },
-                    countries: function (Lookup) {
-                        return Lookup.query({
-                            table: "countries"
-                        }).$promise;
-                    },
-                    crossroadsLocations: function (Lookup) {
-                        return Lookup.query({
-                            table: "crossroadslocations"
-                        }).$promise;
-                    },
-                    person: function (Profile) {
-                        return Profile.Personal.get().$promise;
-                    }
-                }
-            })
+            });
         };
     }
 })()

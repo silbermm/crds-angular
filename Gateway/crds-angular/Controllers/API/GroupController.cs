@@ -1,32 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.Http.ModelBinding;
 using crds_angular.Models.Crossroads;
-using crds_angular.Models.Json;
 using crds_angular.Security;
-using crds_angular.Models.MP;
-using MinistryPlatform.Translation.Exceptions;
-using MinistryPlatform.Translation.Services;
+using log4net;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Exceptions;
+using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Controllers.API
 {
     public class GroupController : MPAuth
     {
-        readonly private log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private IGroupService groupService;
         private IEventService eventService;
         private IAuthenticationService authenticationService;
 
-        private readonly int GroupRoleDefaultId = Convert.ToInt32(ConfigurationManager.AppSettings["Group_Role_Default_ID"]);
+        private readonly int GroupRoleDefaultId =
+            Convert.ToInt32(ConfigurationManager.AppSettings["Group_Role_Default_ID"]);
 
-        public GroupController(IGroupService groupService, IEventService eventService, IAuthenticationService authenticationService)
+        public GroupController(IGroupService groupService, IEventService eventService,
+            IAuthenticationService authenticationService)
         {
             this.groupService = groupService;
             this.eventService = eventService;
@@ -36,7 +35,8 @@ namespace crds_angular.Controllers.API
         /**
          * Enroll the currently logged-in user into a Community Group, and also register this user for all events for the CG.
          */
-        [ResponseType(typeof(GroupDTO))]
+
+        [ResponseType(typeof (GroupDTO))]
         [Route("api/group/{groupId}/user")]
         public IHttpActionResult Post(String groupId)
         {
@@ -48,9 +48,11 @@ namespace crds_angular.Controllers.API
                     int participantId = participant.ParticipantId;
 
                     // First sign this user up for the community group
-                    int groupParticipantId = groupService.addParticipantToGroup(participantId, Convert.ToInt32(groupId), GroupRoleDefaultId, DateTime.Now);
+                    int groupParticipantId = groupService.addParticipantToGroup(participantId, Convert.ToInt32(groupId),
+                        GroupRoleDefaultId, DateTime.Now);
                     logger.Debug("Added user - group/participant id = " + groupParticipantId);
-                    var response = new Dictionary<string, object>{
+                    var response = new Dictionary<string, object>
+                    {
                         {"success", true},
                         {"participantId", participantId},
                         {"groupParticipantId", groupParticipantId}
@@ -88,7 +90,7 @@ namespace crds_angular.Controllers.API
         }
 
         // TODO: implement later
-        [ResponseType(typeof(GroupDTO))]
+        [ResponseType(typeof (GroupDTO))]
         [Route("api/group/{groupId}/users")]
         public IHttpActionResult Post(String groupId, [FromBody] List<ContactDTO> contact)
         {
@@ -96,51 +98,52 @@ namespace crds_angular.Controllers.API
             return this.Ok();
         }
         
-        [ResponseType(typeof(GroupDetail))]
+        [ResponseType(typeof(GroupDTO))]
         [Route("api/group/{groupId}")]
         public IHttpActionResult Get(int groupId)
         {
-           Group g = groupService.getGroupDetails(groupId);
-           var detail = new GroupDetail();
-           {
-               detail.GroupId = g.GroupId;
-               detail.GroupFullInd = g.Full;
-               detail.WaitListInd = g.WaitList;
-               detail.WaitListGroupId = g.WaitListGroupId;
-           };
-            
-           return Ok(detail);
-        
+            return Authorized(token =>
+            {
+                var participant = authenticationService.GetParticipantRecord(token);
+                int participantId = participant.ParticipantId;
+
+                Group g = groupService.getGroupDetails(groupId);
+                var detail = new GroupDTO();
+                {
+                    detail.GroupId = g.GroupId;
+                    detail.GroupFullInd = g.Full;
+                    detail.WaitListInd = g.WaitList;
+                    detail.WaitListGroupId = g.WaitListGroupId;
+                    detail.UserInGroup = groupService.checkIfUserInGroup(participantId,g.Participants);
+
+                }
+
+
+                return Ok(detail);
+            }
+          );
         }
 
         // TODO: implement later
-        [ResponseType(typeof(ContactDTO))]
+        [ResponseType(typeof (ContactDTO))]
         [Route("api/group/{groupId}/user/{userId}")]
         public IHttpActionResult Get(String groupId, String userId)
         {
             throw new NotImplementedException();
             return this.Ok();
-
         }
 
         // TODO: implement later
-        [ResponseType(typeof(GroupDTO))]
+        [ResponseType(typeof (GroupDTO))]
         [Route("api/group/{groupId}/user/{userId}")]
         public IHttpActionResult Delete(String groupId, String userId)
         {
             throw new NotImplementedException();
             return this.Ok();
-
         }
-
-
     }
 
     public class ContactDTO
-    {
-    }
-
-    public class GroupDTO
     {
     }
     
