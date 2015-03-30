@@ -56,11 +56,11 @@
 
   <script type="text/ng-template" id="editProfile.html">
       <div class="modal-header">
-          <a type="button" class="close" ng-click="$close()">x</a>
+          <a type="button" class="close" ng-click="groupsignup.modalInstance.close()">x</a>
           <h4 class="modal-title">Edit Profile</h4>
       </div>
       <div class="modal-body">
-          <profile-personal person="person"/>
+          <profile-personal updated-person="groupsignup.person" modal-instance="groupsignup.modalInstance"/>
       </div>
   </script>
 </div>

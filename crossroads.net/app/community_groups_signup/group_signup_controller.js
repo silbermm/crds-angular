@@ -1,7 +1,7 @@
 'use strict';
 require('../services/group_service');
 (function () {
-    module.exports = function GroupSignupController($rootScope, Profile, Group, $log, $stateParams, Page, $modal) {
+    module.exports = function GroupSignupController($rootScope, $scope, Profile, Group, $log, $stateParams, Page, $modal) {
         $log.debug("Inside GroupSignupController");
 
         var vm = this;
@@ -17,6 +17,7 @@ require('../services/group_service');
         vm.waitListCase = false;
         vm.alreadySignedUp = false;
         vm.viewReady = false;
+        vm.modalInstance = {};
 
         vm.signupPage = $rootScope.signupPage;
 
@@ -90,9 +91,12 @@ require('../services/group_service');
         };
 
         function editProfile() {
-            var modalInstance = $modal.open({
+            vm.modalInstance = $modal.open({
                 templateUrl: 'editProfile.html',
                 backdrop: true,
+                // This is needed in order to get our scope
+                // into the modal - by default, it uses $rootScope
+                scope: $scope,
             });
         };
     }

@@ -58,7 +58,11 @@
             }
             _this.person["State/Region"] = _this.person.State;
             _this.person.$save(function () {
+                $rootScope.$emit('notify', $rootScope.MESSAGES.profileUpdated);
                 $log.debug("person save successful");
+                if(_this.modalInstance !== undefined) {
+                    _this.closeModal(true);
+                }
             }, function () {
                 $log.debug("person save unsuccessful");
             });
