@@ -1,8 +1,8 @@
 <h1 class="page-header flush-bottom">Sign Up To Serve</h1>
 <div class="serve-signup-cont clearfix col-sm-10 soft-ends">
-  <div class="serve-day push-bottom" data-ng-repeat="group in serve.groups">
+  <div class="serve-day push-bottom" data-ng-repeat="group in serve.groups" ng-show="group.serveTimes.length > 0">
     <h4>{{::serve.convertToDate(group.day) | date:'EEEE, MMMM dd, yyyy' }}</h4>
-      <serve-tabs opportunity="opp" ng-repeat="opp in group.serveTimes" tab-index="$index" >
+    <serve-tabs opportunity="opp" ng-repeat="opp in group.serveTimes" tab-index="$index" ng-show="opp.servingTeams.length > 0">
       </serve-tabs>
   </div><!-- serve day --> 
 </div>

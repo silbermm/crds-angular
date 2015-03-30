@@ -19,6 +19,7 @@
     function link(scope, el, attr){
     
       scope.applyFamilyFilter = applyFamilyFilter;
+      scope.applyTimeFilter = applyTimeFilter;
       scope.getUniqueMembers = getUniqueMembers;
       scope.getUniqueTeams = getUniqueTeams;
       scope.getUniqueTimes = getUniqueTimes;
@@ -51,10 +52,7 @@
       }
 
       function applyFamilyFilter(){
-        scope.servingDays = angular.copy(scope.original);
-        if(filterState.memberIds.length === 0){
-          console.log("nothing to filter, returning all"); 
-        } else { 
+        if(filterState.memberIds.length > 0){
           var serveDay = [];
           _.each(scope.servingDays, function(day){
             var serveTimes = [];
@@ -79,7 +77,30 @@
           scope.servingDays = serveDay;
         }
 
-      };
+      }
+
+      function applyTimeFilter(){
+        if(filterState.times.length > 0){
+          var serveDay = [];
+          _.each(scope.servingDays, function(day){
+            var times = _.filter(day.serveTimes, function(serveTime){
+              return _.find(filterState.times, function(ftimes){
+                return ftimes === serveTime.time;
+              });
+            });
+            if(times.length > 0) {
+              serveDay.push({day: day.day, serveTimes: times}); 
+            };
+          });
+          scope.servingDays = serveDay;
+        }
+      }
+
+      function filterAll(){
+        scope.servingDays = angular.copy(scope.original);
+        applyFamilyFilter();
+        applyTimeFilter();
+      }
 
       function filterFamily(){
         _.each(scope.serveTeams, function(serveTeam){
@@ -154,7 +175,7 @@
         } else {
           filterState.removeFamilyMember(member.contactId);
         }
-        applyFamilyFilter();
+        filterAll();
       }
 
       function toggleTeam(team){
@@ -171,6 +192,7 @@
         } else {
           filterState.removeTime(time.time);
         }
+        filterAll(); 
       }
     }
   }
