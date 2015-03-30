@@ -19,6 +19,7 @@
     function link(scope, el, attr){
     
       scope.applyFamilyFilter = applyFamilyFilter;
+      scope.applyTeamFilter = applyTeamFilter;
       scope.getUniqueMembers = getUniqueMembers;
       scope.getUniqueTeams = getUniqueTeams;
       scope.getUniqueTimes = getUniqueTimes;
@@ -79,6 +80,30 @@
           scope.servingDays = serveDay;
         }
 
+      };
+
+      function applyTeamFilter(){
+        scope.servingDays = angular.copy(scope.original);
+        if(filterState.teams.length === 0){
+          console.log("nothing to filter, returning all"); 
+        } else { 
+          var serveDay = [];
+          _.each(scope.servingDays, function(day){
+            var serveTimes = [];
+            _.each(day.serveTimes, function(serveTime){
+              var servingTeams = _.filter(serveTime.servingTeams, function(team){
+                return _.find(filterState.teams, function(t){
+                  return team.groupId === t;
+                });
+              });
+              if(servingTeams.length > 0) {
+                serveTimes.push({time: serveTime.time, 'servingTeams':servingTeams }); 
+              }
+            });
+            serveDay.push({day: day.day, serveTimes: serveTimes}); 
+          });
+          scope.servingDays = serveDay;
+        }
       };
 
       function filterFamily(){
@@ -163,6 +188,7 @@
         } else {
           filterState.removeTeam(team.groupId);
         }
+        applyTeamFilter();
       }
  
       function toggleTime(time){

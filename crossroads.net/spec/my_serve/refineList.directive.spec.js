@@ -161,5 +161,14 @@ describe('Refine List Directive', function() {
       //isolateScope.familyFilter();
       //expect(isolateScope.servingDays).toBe(expectedServingDays);
   //});
+
+  it("should filter out only the teams selected", function(){
+    filterState.memberIds = [];
+    filterState.teams = [];
+    filterState.times = [];
+    filterState.addTeam(34911);
+    isolateScope.applyTeamFilter();
+    expect(isolateScope.servingDays[0].serveTimes[0].servingTeams.length).toBe(1);
+  });
   
 }); 
