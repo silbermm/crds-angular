@@ -1,4 +1,4 @@
-﻿<div>
+<div>
     <form role="form" ng-init="profile.initSkills()">
         <fieldset class="row">
             <legend class="col-sm-12">My Selected Skills</legend>
@@ -17,7 +17,7 @@
             <div class="form-group col-sm-12 row" ng-repeat="category in profile.skills">
                 <label class="col-sm-3">{{ category.Name }}</label>
                 <div class="cat-skill-group col-sm-9">
-                    <div ng-repeat="skill in category.Skills">
+                    <div ng-repeat="skill in category.Skills" class="checkbox">
                         <label>
                             <input type="checkbox" ng-model="skill.Selected" ng-change="profile.skillChange(skill)"> {{ skill.Name }}
                         </label>

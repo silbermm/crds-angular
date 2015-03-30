@@ -9444,50 +9444,104 @@ h2 a:hover {
     bottom: 0px; } }
 
 /* line 1, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/serve.scss */
-.event-group {
-  margin-top: 22px; }
-  /* line 4, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/serve.scss */
-  .event-group .list-group-item {
-    width: 100%; }
-    /* line 15, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/bootstrap/mixins/_clearfix.scss */
-    .event-group .list-group-item:before, .event-group .list-group-item:after {
-      content: " ";
-      display: table; }
-    /* line 19, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/bootstrap/mixins/_clearfix.scss */
-    .event-group .list-group-item:after {
-      clear: both; }
-    @media (min-width: 768px) {
-      .event-group .list-group-item .col-sm-2 {
-        float: right; } }
-  /* line 14, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/serve.scss */
-  .event-group .list-group-item-heading {
-    font-weight: normal;
-    font-size: 14px; }
-  /* line 18, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/serve.scss */
-  .event-group .btn {
-    display: block;
-    width: 100%;
-    margin-top: 10px; }
-    @media (min-width: 768px) {
-      .event-group .btn {
-        display: inline-block;
-        width: auto;
-        margin-top: 0px; } }
-    /* line 29, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/serve.scss */
-    .event-group .btn .icon {
-      margin-left: 3px; }
+.filter-clear {
+  float: right;
+  margin: 7px 0; }
 
+/* line 6, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/serve.scss */
+.filter-group {
+  border-bottom: 1px solid #bbbbbb; }
+  /* line 9, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/serve.scss */
+  .filter-group:last-of-type {
+    border-bottom: 0px; }
+
+/* line 16, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/serve.scss */
+.serve-opp-listings .panel, .serve-opp-listings .billboard {
+  border-radius: 0px;
+  margin-bottom: 11px;
+  box-shadow: none; }
+  /* line 21, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/serve.scss */
+  .serve-opp-listings .panel .list-unstyled, .serve-opp-listings .billboard .list-unstyled {
+    line-height: 2; }
+/* line 26, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/serve.scss */
+.serve-opp-listings .panel-link {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 3; }
 /* line 35, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/serve.scss */
-.list-group-item-title {
-  background: #eeeeee;
-  font-weight: bold; }
+.serve-opp-listings .panel-heading {
+  border-radius: 0px;
+  font-weight: bold;
+  cursor: pointer;
+  position: relative;
+  z-index: 1; }
+  @media (min-width: 768px) {
+    .serve-opp-listings .panel-heading {
+      padding: 5px 15px; } }
+  /* line 46, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/serve.scss */
+  .serve-opp-listings .panel-heading .name-btns {
+    margin: -10px 0;
+    float: left;
+    width: 100%;
+    position: static;
+    z-index: 2; }
+    @media (min-width: 768px) {
+      .serve-opp-listings .panel-heading .name-btns {
+        float: right;
+        width: auto;
+        position: relative;
+        z-index: 4; } }
+    /* line 60, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/serve.scss */
+    .serve-opp-listings .panel-heading .name-btns a {
+      display: block;
+      float: left;
+      padding: 10px 0;
+      margin: 0 0 0 5px;
+      z-index: 5;
+      position: relative; }
+      /* line 68, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/serve.scss */
+      .serve-opp-listings .panel-heading .name-btns a:first-of-type {
+        margin-left: 0px; }
+      /* line 74, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/serve.scss */
+      .serve-opp-listings .panel-heading .name-btns a.active span, .serve-opp-listings .panel-heading .name-btns a.active span:active {
+        background: white;
+        color: #b05c30;
+        border-color: #ddd;
+        position: relative;
+        box-shadow: none; }
+        /* line 81, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/serve.scss */
+        .serve-opp-listings .panel-heading .name-btns a.active span:after, .serve-opp-listings .panel-heading .name-btns a.active span:active:after {
+          display: block;
+          content: "";
+          position: absolute;
+          left: -1px;
+          right: -1px;
+          bottom: -12px;
+          min-height: 15px;
+          background: white;
+          border-right: 1px solid #ddd;
+          border-left: 1px solid #ddd; }
+          @media (min-width: 768px) {
+            .serve-opp-listings .panel-heading .name-btns a.active span:after, .serve-opp-listings .panel-heading .name-btns a.active span:active:after {
+              bottom: -7px;
+              min-height: 10px; } }
 
-/* line 41, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/serve.scss */
-.serve-signup-form .checkbox, .serve-signup-form .radio {
-  margin: 0px; }
-/* line 45, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/serve.scss */
-.serve-signup-form .well {
-  margin-top: 22px; }
+/* line 104, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/serve.scss */
+.serve-save {
+  border-top: 1px solid #eeeeee;
+  text-align: right; }
+
+/* line 109, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/serve.scss */
+.serve-signup-cont {
+  padding-left: 0;
+  padding-right: 0; }
+  @media (min-width: 768px) {
+    .serve-signup-cont {
+      padding-left: 0;
+      padding-right: 15px; } }
 
 /***************************************************************************************
 * ScrollFix
