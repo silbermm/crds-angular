@@ -7811,101 +7811,25 @@ ul.cr-nav > li.active a {
   background: transparent; }
 
 /***************************************************************************************
-* Snap.js Elements
-***************************************************************************************/
-/* line 539, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
-.snap-content {
-  background: white;
-  box-shadow: -1px -1px 10px 0 #000000; }
-
-/* line 544, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
-.snap-drawer {
-  display: block !important;
-  visibility: visible !important; }
-
-/* line 549, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
-.snap-drawers {
-  background: #222222; }
-  /* line 552, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
-  .snap-drawers ul {
-    margin: 0;
-    padding: 0;
-    list-style: none; }
-    /* line 558, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
-    .snap-drawers ul li {
-      margin: 0;
-      padding: 0px;
-      display: block; }
-      /* line 563, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
-      .snap-drawers ul li > a {
-        margin: 0;
-        padding: 17px 15px;
-        border-bottom: 1px solid #3c3c3c;
-        display: block;
-        text-decoration: none;
-        box-shadow: inset -7px 0 9px -7px rgba(0, 0, 0, 0.175);
-        text-transform: uppercase;
-        color: #999999; }
-        /* line 573, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
-        .snap-drawers ul li > a:hover {
-          color: #eeeeee;
-          background: #2a2a2a; }
-  /* line 581, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
-  .snap-drawers ul.dropdown-menu {
-    position: relative;
-    float: none;
-    border-radius: 0px;
-    border: 0px;
-    background: #373737;
-    box-shadow: none; }
-    /* line 592, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
-    .snap-drawers ul.dropdown-menu li:first-child > a {
-      box-shadow: inset 0 6px 12px rgba(0, 0, 0, 0.175); }
-    /* line 597, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
-    .snap-drawers ul.dropdown-menu li > a {
-      border-bottom: 1px solid #494949;
-      text-transform: none; }
-      /* line 601, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
-      .snap-drawers ul.dropdown-menu li > a:hover {
-        background: #3c3c3c; }
-
-/* line 609, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
-.side-nav-login {
-  padding: 10px; }
-  /* line 613, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
-  .side-nav-login .forgot_password a {
-    color: #999999; }
-    /* line 616, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
-    .side-nav-login .forgot_password a:hover {
-      color: #eeeeee; }
-
-/* line 623, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
-.snap-drawer-search {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  max-width: 475px;
-  padding: 5px 15px; }
-
-/***************************************************************************************
 * Mega Menu
 ***************************************************************************************/
-/* line 635, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
+/* line 539, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
 .dropdown-large {
   position: static !important; }
 
-/* line 639, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
+/* line 543, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
 .dropdown-menu-large {
   margin-left: 16px;
   margin-right: 16px;
   padding: 20px 0px;
   right: 1%; }
 
-/* line 646, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
+/* line 550, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
 .dropdown-menu-large > li > ul {
   padding: 0;
   margin: 0; }
 
-/* line 654, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
+/* line 558, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
 .dropdown-menu-large.dropdown-menu-featured-row:before {
   position: relative;
   min-height: 1px;
@@ -7922,16 +7846,16 @@ ul.cr-nav > li.active a {
     .dropdown-menu-large.dropdown-menu-featured-row:before {
       float: left;
       width: 25%; } }
-/* line 666, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
+/* line 570, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
 .dropdown-menu-large a.white {
   background: white; }
-  /* line 670, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
+  /* line 574, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
   .dropdown-menu-large a.white:hover, .dropdown-menu-large a.white:focus {
     background: white; }
-/* line 678, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
+/* line 582, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
 .dropdown-menu-large > li > ul > li {
   list-style: none; }
-  /* line 681, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
+  /* line 585, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
   .dropdown-menu-large > li > ul > li a {
     display: block;
     padding: 3px 20px;
@@ -7940,20 +7864,20 @@ ul.cr-nav > li.active a {
     line-height: 1.428571429;
     color: #333333;
     white-space: normal; }
-    /* line 691, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
+    /* line 595, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
     .dropdown-menu-large > li > ul > li a:hover, .dropdown-menu-large > li > ul > li a:focus {
       text-decoration: none;
       background-color: #f5f5f5; }
 
-/* line 704, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
+/* line 608, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
 .dropdown-menu-large .dropdown-header {
   color: #222222;
   font-size: 15px;
   font-weight: bold; }
-/* line 714, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
+/* line 618, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
 .dropdown-menu-large .disabled a, .dropdown-menu-large .disabled > a:hover, .dropdown-menu-large .disabled > a:focus {
   color: #999999; }
-/* line 719, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
+/* line 623, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
 .dropdown-menu-large .disabled a:hover, .dropdown-menu-large .disabled a:focus {
   text-decoration: none;
   background-color: transparent;
@@ -7962,17 +7886,17 @@ ul.cr-nav > li.active a {
   cursor: not-allowed; }
 
 @media (max-width: 768px) {
-  /* line 730, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
+  /* line 634, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
   .dropdown-menu-large {
     margin-left: 0;
     margin-right: 0; }
-  /* line 734, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
+  /* line 638, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
   .dropdown-menu-large > li {
     margin-bottom: 30px; }
-  /* line 737, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
+  /* line 641, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
   .dropdown-menu-large > li:last-child {
     margin-bottom: 0; }
-  /* line 740, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
+  /* line 644, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/modules/nav.scss */
   .dropdown-menu-large .dropdown-header {
     padding: 3px 15px !important; } }
 

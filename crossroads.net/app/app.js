@@ -7,7 +7,6 @@ require("angular-sanitize");
 require('angular-messages');
 require('angular-cookies');
 require('angular-growl');
-require('angular-snap');
 require('angular-toggle-switch');
 require('angular-ui-utils');
 require('./templates/nav.html');
