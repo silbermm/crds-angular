@@ -4,12 +4,13 @@
       <div ng-bind-html="groupsignup.signupPage.existingMember | html"></div>
       <h3>Participants</h3>
       <hr>
-      <p><label><input type="checkbox" style="visibility:hidden;">{{groupsignup.person["NickName"]}} ({{groupsignup.person["Email_Address"]}})</label></p>
+      <p><label><input type="checkbox" style="visibility:hidden;">{{groupsignup.person["nickName"]}} ({{groupsignup.person["emailAddress"]}})</label></p>
     </div>
 
     <div ng-show="!groupsignup.alreadySignedUp">
-      <p id="content" class="noPspace" dir="ltr" ng-bind-html="groupsignup.signupPage.content | html" ng-show="groupsignup.showContent"></p>
-      <p id="successMessage" ng-bind-html="groupsignup.signupPage.success | html" ng-show="groupsignup.showSuccess && !groupsignup.waitListCase"></p>
+      <p id="content" class="noPspace" dir="ltr" ng-bind-html="groupsignup.signupPage.content | html" ng-show="groupsignup.showContent && !groupsignup.waitListCase"></p>
+      <p id="successMessage"  ng-bind-html="groupsignup.signupPage.success | html" ng-show="groupsignup.showSuccess && !groupsignup.waitListCase"></p>
+
       <p id="fullGroupMessage" ng-bind-html="groupsignup.signupPage.full | html" ng-show="groupsignup.showFull"></p>
       <p id="waitListMessage" ng-bind-html="groupsignup.signupPage.waitList | html" ng-show="groupsignup.showWaitList && groupsignup.waitListCase"></p>
       <p id="waitSuccessMessage" ng-bind-html="groupsignup.signupPage.waitSuccess | html" ng-show="groupsignup.showWaitSuccess && groupsignup.waitListCase"></p>
@@ -31,7 +32,7 @@
   Many of these items will need to be added as hidden DIVs on this page, and then shown/hidden appropriately as the user takes action.
   -->
 
-  <form name="groupSignupForm" role="form" ng-submit="groupsignup.signup()" ng-show="groupsignup.showContent">
+  <form name="groupSignupForm" role="form" ng-submit="groupsignup.signup()" ng-show="groupsignup.showContent && !groupsignup.alreadySignedUp">
     <fieldset>
         <legend>People to Sign Up</legend>
         <div class="form-group">
