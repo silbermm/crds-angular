@@ -36,7 +36,7 @@ namespace crds_angular.test.controllers
             authenticationServiceMock = new Mock<IAuthenticationService>();
             contactRelationshipServiceMock = new Mock<IContactRelationshipService>();
             fixture = new GroupController(groupServiceMock.Object, eventServiceMock.Object,
-                authenticationServiceMock.Object, contactRelationshipServiceMock.Object, personServiceMock.Object);
+                authenticationServiceMock.Object, contactRelationshipServiceMock.Object);
 
             authType = "auth_type";
             authToken = "auth_token";

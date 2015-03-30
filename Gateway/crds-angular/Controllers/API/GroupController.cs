@@ -29,19 +29,17 @@ namespace crds_angular.Controllers.API
         private IEventService eventService;
         private IAuthenticationService authenticationService;
         private IContactRelationshipService contactRelationshipService;
-        private IPersonService personService;
-
+       
         private readonly int GroupRoleDefaultId =
             Convert.ToInt32(ConfigurationManager.AppSettings["Group_Role_Default_ID"]);
 
         public GroupController(IGroupService groupService, IEventService eventService,
-            IAuthenticationService authenticationService, IContactRelationshipService contactRelationshipService, IPersonService personService)
+            IAuthenticationService authenticationService, IContactRelationshipService contactRelationshipService)
         {
             this.groupService = groupService;
             this.eventService = eventService;
             this.authenticationService = authenticationService;
             this.contactRelationshipService = contactRelationshipService;
-            this.personService = personService;
         }
 
         /**
