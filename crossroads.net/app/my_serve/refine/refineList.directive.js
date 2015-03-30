@@ -21,6 +21,7 @@
       scope.applyFamilyFilter = applyFamilyFilter;
       scope.applyTeamFilter = applyTeamFilter;
       scope.applyTimeFilter = applyTimeFilter;
+      scope.clearFilters = clearFilters;
       scope.filterAll = filterAll;
       scope.getUniqueMembers = getUniqueMembers;
       scope.getUniqueTeams = getUniqueTeams;
@@ -119,6 +120,20 @@
           scope.servingDays = serveDay;
         }
       };
+
+      function clearFilters(){
+        filterState.clearAll();
+        _.each(scope.uniqueMembers, function(member){
+          member.selected = false;
+        });
+        _.each(scope.uniqueTeams, function(team){
+          team.selected = false;
+        });
+        _.each(scope.uniqueTimes, function(time){
+          time.selected = false;
+        });
+        filterAll();
+      }
 
       function filterAll(){
         scope.servingDays = angular.copy(scope.original);
