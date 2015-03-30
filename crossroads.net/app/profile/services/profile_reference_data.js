@@ -3,10 +3,11 @@
     module.exports = factory;
     factory.$inject = ['Lookup', 'Profile', '$resolve'];
 
-    // Return a map of data needed by the profile pages.  The map is
-    // actually a promise, which will be resolved by the Angular UI Router
-    // resolver ($resolve).  This is similar to the behavior implemented by the
-    // resolve property on a UI Router state.
+    // Return a non-singleton object factory for getting the map of data needed
+    // by the profile pages.  Controllers should use getInstance() to get a
+    // a promise, which will be resolved by the Angular UI Router resolver ($resolve).
+    // This is similar to the behavior implemented by the resolve property on a
+    // UI Router state.
     function factory(Lookup, Profile, $resolve) {
         var data = {
             genders: function() {
@@ -50,6 +51,10 @@
             },
         };
 
-        return($resolve.resolve(data));
+        return({
+            getInstance: function() {
+                return($resolve.resolve(data));
+            }
+        });
     }
 })()
