@@ -23,7 +23,7 @@ describe('Refine List Directive', function() {
   var mockSaturdayTimes = [{"time":"08:30:00","servingTeams": serveTeam830 },{"time":"10:00:00","servingTeams": serveTeam10 }];
   var mockSundayTimes = [{"time":"08:30:00","servingTeams": serveTeam830 },{"time":"10:00:00","servingTeams": serveTeam10 }];
 
-  var mockServingDays = [{"day":"3/28/2015", "serveTimes": mockSaturdayTimes}, {"day":"3/29/2015","serveTimes": mockSundayTimes}];
+  var mockServingDays = [{"day":"3/28/2015", "serveTimes": mockSaturdayTimes}, {"day":"3/29/2015","serveTimes": mockSundayTimes }];
 
 
   beforeEach(function(){
@@ -155,11 +155,31 @@ describe('Refine List Directive', function() {
     });
   });
 
-/*  it("should filter out only days where I and only I  have a team and serving opportunity available", function(){*/
-      //filterState.memberIds = [];
-      //filterState.addFamilyMember(1970611);
-      //isolateScope.familyFilter();
-      //expect(isolateScope.servingDays).toBe(expectedServingDays);
-  //});
-  
+  it("should filter out only days where I and only I  have a team and serving opportunity available", function(){
+      filterState.memberIds = [];
+      filterState.addFamilyMember(1970611);
+      isolateScope.applyFamilyFilter();
+      expect(isolateScope.servingDays[0].serveTimes[0].servingTeams[0].members.length).toBe(1);
+      expect(isolateScope.servingDays[0].serveTimes[0].servingTeams[0].members[0].contactId).toBe(1970611);
+  });
+ 
+  it("should filter out only times when opportunities are available", function(){
+      filterState.times = [];
+      filterState.memberIds = [];
+      filterState.addTime("08:30:00");
+      isolateScope.applyTimeFilter();
+      expect(isolateScope.servingDays[0].serveTimes.length).toBe(1);
+      expect(isolateScope.servingDays[1].serveTimes.length).toBe(1);
+      expect(isolateScope.servingDays[1].serveTimes[0].time).toBe("08:30:00");
+  });
+
+  it("should not filter out times when times are not checked", function(){
+      filterState.times = [];
+      filterState.memberIds = [];
+      isolateScope.applyTimeFilter();
+      expect(isolateScope.servingDays[0].serveTimes.length).toBe(2);
+      expect(isolateScope.servingDays[1].serveTimes.length).toBe(2);
+  });
+
+
 }); 
