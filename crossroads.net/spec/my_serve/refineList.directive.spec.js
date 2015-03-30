@@ -212,6 +212,7 @@ describe('Refine List Directive', function() {
   it("should clear all filters and return to the default list", function(){
     filterState.addFamilyMember(1970611);
     filterState.addTime("08:30:00");
+    filterState.addTeam(34911);
     isolateScope.filterAll(); 
     isolateScope.clearFilters(); 
     expect(isolateScope.servingDays[0].serveTimes.length).toBe(2);
