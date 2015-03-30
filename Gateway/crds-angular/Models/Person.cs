@@ -82,28 +82,28 @@ namespace crds_angular.Models
         {
             return new MyContact
             {
-                ContactId = ContactId,
-                EmailAddress = EmailAddress,
-                FirstName = FirstName,
-                MiddleName = MiddleName,
-                LastName = LastName,
-                MaidenName = MaidenName,
-                NickName = NickName,
-                MobilePhone = MobilePhone,
-                MobileCarrierId = MobileCarrierId,
-                DateOfBirth = DateOfBirth,
-                MaritalStatusId = MaritalStatusId,
-                GenderId = GenderId,
-                EmployerName = EmployerName,
-                AnniversaryDate = AnniversaryDate,
-                AddressId = AddressId,
-                AddressLine1 = AddressLine1,
-                AddressLine2 = AddressLine2,
+                Contact_ID = ContactId,
+                Email_Address = EmailAddress,
+                First_Name = FirstName,
+                Middle_Name = MiddleName,
+                Last_Name = LastName,
+                Maiden_Name = MaidenName,
+                Nickname = NickName,
+                Mobile_Phone = MobilePhone,
+                Mobile_Carrier_ID = MobileCarrierId,
+                Date_Of_Birth = DateOfBirth,
+                Marital_Status_ID = MaritalStatusId,
+                Gender_ID = GenderId,
+                Employer_Name = EmployerName,
+                Anniversary_Date = AnniversaryDate,
+                Address_ID = AddressId,
+                Address_Line_1 = AddressLine1,
+                Address_Line_2 = AddressLine2,
                 City = City,
                 State = State,
-                PostalCode = PostalCode,
-                CongregationId = CongregationId,
-                HouseholdId = HouseholdId
+                Postal_Code = PostalCode,
+                Congregation_ID = CongregationId,
+                Household_ID = HouseholdId
             };
         }
 
