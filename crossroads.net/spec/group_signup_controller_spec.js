@@ -42,6 +42,7 @@ var groupGetDetailResponse = {
   "groupFullInd": "True",
   "waitListInd": "True",
   "waitListGroupId": "1",
+  "userInGroup" : true, 
   relationships:
   [
     { "First_Name": "Shankar",
@@ -87,7 +88,6 @@ var groupGetDetailResponse = {
 
      $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] +'api/group/1')
      .respond(groupGetDetailResponse);
-
      $httpBackend.when('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/group/1/user')
      .respond("200");
 
@@ -122,9 +122,9 @@ var groupGetDetailResponse = {
   });
 
    it('should set the alreadySignedUp flag to TRUE ', function(){
-    var controller = groupSignupController();
+    var controller = groupSignupController();    
     verifyExpectations();
-    expect(controller.alreadySignedUp).toEqual(false);      
+    expect(controller.alreadySignedUp).toEqual(true);  
   });
 
    function verifyExpectations(){
