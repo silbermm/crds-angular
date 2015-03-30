@@ -6,6 +6,9 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Results;
 using crds_angular.Controllers.API;
+using crds_angular.Models;
+using crds_angular.Services;
+using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -20,6 +23,7 @@ namespace crds_angular.test.controllers
         private Mock<IGroupService> groupServiceMock;
         private Mock<IEventService> eventServiceMock;
         private Mock<IAuthenticationService> authenticationServiceMock;
+        private Mock<IContactRelationshipService> contactRelationshipServiceMock; 
         private string authType;
         private string authToken;
         private const int GroupRoleId = 16;
@@ -30,9 +34,9 @@ namespace crds_angular.test.controllers
             groupServiceMock = new Mock<IGroupService>();
             eventServiceMock = new Mock<IEventService>();
             authenticationServiceMock = new Mock<IAuthenticationService>();
-
+            contactRelationshipServiceMock = new Mock<IContactRelationshipService>();
             fixture = new GroupController(groupServiceMock.Object, eventServiceMock.Object,
-                authenticationServiceMock.Object);
+                authenticationServiceMock.Object, contactRelationshipServiceMock.Object, personServiceMock.Object);
 
             authType = "auth_type";
             authToken = "auth_token";
@@ -127,6 +131,7 @@ namespace crds_angular.test.controllers
             authenticationServiceMock.Setup(
                 mocked => mocked.GetParticipantRecord(fixture.Request.Headers.Authorization.ToString()))
                 .Returns(participant);
+
             groupServiceMock.Setup(mocked => mocked.getGroupDetails(groupId)).Returns(g);
             groupServiceMock.Setup(mocked => mocked.checkIfUserInGroup(It.IsAny<int>(), It.IsAny<List<int>>()));
             IHttpActionResult result = fixture.Get(groupId);

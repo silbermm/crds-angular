@@ -17,7 +17,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int GroupsEventsPageId = Convert.ToInt32(AppSettings("GroupsEvents"));
         private readonly int EventsGroupsPageId = Convert.ToInt32(AppSettings("EventsGroups"));
         private readonly int GroupsSubgroupsPageId = Convert.ToInt32(AppSettings("GroupsSubgroups"));
-        private readonly int _getGroupSignupRelations = Convert.ToInt32((AppSettings("GroupSignUpRelations")));
+        private readonly int GroupSignupRelationsPageId = Convert.ToInt32((AppSettings("GroupSignUpRelations")));
         private readonly int GetMyServingTeamsPageId = Convert.ToInt32(AppSettings("MyServingTeams"));
 
         private IMinistryPlatformService ministryPlatformService;
@@ -226,10 +226,16 @@ namespace MinistryPlatform.Translation.Services
             return groupParticipants.Contains(participantId);
         }
 
+        public bool checkIfRelationshipInGroup(int relationshipId, IList<int> currRelationshipsList)
+        {
+            return currRelationshipsList.Contains(relationshipId);
+        }
+
+
         public List<GroupSignupRelationships> GetGroupSignupRelations(int groupType, string token)
         {
-            var relationRecords = ministryPlatformService.GetSubpageViewRecords(_getGroupSignupRelations, groupType, token);
-
+            var relationRecords = ministryPlatformService.GetSubPageRecords(GroupSignupRelationsPageId, groupType, token);
+            
             return relationRecords.Select(relationRecord => new GroupSignupRelationships
             {
                 RelationshipId = (int)relationRecord["Relationship_ID"],

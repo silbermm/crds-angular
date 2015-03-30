@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Reflection;
+using System.ServiceModel;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.Http.ModelBinding;
+using System.Web.Razor.Generator;
+using System.Web.UI.WebControls.WebParts;
 using crds_angular.Models.Crossroads;
 using crds_angular.Security;
+using crds_angular.Services.Interfaces;
 using log4net;
+using log4net.DateFormatter;
+using log4net.Util;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Exceptions;
 using MinistryPlatform.Translation.Services;
@@ -21,17 +28,20 @@ namespace crds_angular.Controllers.API
         private IGroupService groupService;
         private IEventService eventService;
         private IAuthenticationService authenticationService;
-        private IContactRelationshipService _contactRelationshipService;
+        private IContactRelationshipService contactRelationshipService;
+        private IPersonService personService;
 
         private readonly int GroupRoleDefaultId =
             Convert.ToInt32(ConfigurationManager.AppSettings["Group_Role_Default_ID"]);
 
         public GroupController(IGroupService groupService, IEventService eventService,
-            IAuthenticationService authenticationService)
+            IAuthenticationService authenticationService, IContactRelationshipService contactRelationshipService, IPersonService personService)
         {
             this.groupService = groupService;
             this.eventService = eventService;
             this.authenticationService = authenticationService;
+            this.contactRelationshipService = contactRelationshipService;
+            this.personService = personService;
         }
 
         /**
@@ -110,45 +120,54 @@ namespace crds_angular.Controllers.API
             {
                 var participant = authenticationService.GetParticipantRecord(token);
                 int participantId = participant.ParticipantId;
-                var contactId = authenticationService.GetContactId(token); 
-
+                var contactId = authenticationService.GetContactId(token);
+               
                 Group g = groupService.getGroupDetails(groupId);
 
-                var relations = groupService.GetGroupSignupRelations(g.GroupType, token);
-                //return all current relationships indicating if they are a member of the group
-                //the first entry should always be the logged in user
-                var currRelationships = _contactRelationshipService.GetMyCurrentRelationships(contactId, token);
-                if (currRelationships == null)
-                {
-                    //   do something;
-                }
+                var signupRelations = groupService.GetGroupSignupRelations(g.GroupType, token);
+            
+                var currRelationships = contactRelationshipService.GetMyCurrentRelationships(contactId, token);
 
+                Contact_Relationship[] familyToReturn =  null;
+              
                 if (currRelationships != null)
                 {
-                    //foreach (Contact_Relationship p in currRelationships)
-                    //{
-                    //    if (p.Relationship_Id == relations.Contains(RelationshipId)) 
-                    //    {}
-                        //if (pid != null)
-                        //{
-                        //    g.Participants.Add((int)pid);
-                        
-                    //}
+                  familyToReturn =  currRelationships.Where(
+                        c => signupRelations.Select(s => s.RelationshipId).Contains(c.Relationship_Id)).ToArray();
                 }
-
-                //bump thru currRelationships and keep all records where the relationship_Id is equal to relations.relationship_id
-                //articleList.RemoveAll(x => writerIds.Contains(x.WriterId));
-             
+                
                 var detail = new GroupDTO();
                 {
                     detail.GroupId = g.GroupId;
                     detail.GroupFullInd = g.Full;
                     detail.WaitListInd = g.WaitList;
                     detail.WaitListGroupId = g.WaitListGroupId;
-                    detail.UserInGroup = groupService.checkIfUserInGroup(participantId,g.Participants);
 
+                    //the first instance of family must always be the logged in user
+                    var fam = new SignUpFamilyMembers
+                    {
+                        EmailAddress = participant.EmailAddress,
+                        FirstName = participant.PreferredName,
+                        UserInGroup = groupService.checkIfUserInGroup(participantId, g.Participants),
+                        ParticpantId = participantId,
+                    };
+                    detail.SignUpFamilyMembers = new List<SignUpFamilyMembers> {fam};
+
+                    if (familyToReturn != null)
+                    {
+                        foreach (var f in familyToReturn)
+                        {
+                            var fm = new SignUpFamilyMembers
+                            {
+                                EmailAddress = f.Email_Address,
+                                FirstName = f.Preferred_Name,
+                                UserInGroup = groupService.checkIfUserInGroup(f.Participant_Id, g.Participants),
+                                ParticpantId = f.Participant_Id,
+                            };
+                            detail.SignUpFamilyMembers.Add(fm); 
+                        }
+                     }
                 }
-
 
                 return Ok(detail);
             }

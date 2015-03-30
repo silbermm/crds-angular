@@ -18,6 +18,8 @@ namespace MinistryPlatform.Translation.Services.Interfaces
 
         bool checkIfUserInGroup(int participantId, IList<int> participants);
 
+        bool checkIfRelationshipInGroup(int relationshipId, IList<int> currRelationshipList);
+     
         List<GroupSignupRelationships> GetGroupSignupRelations(int groupType, string token); 
     }
 }

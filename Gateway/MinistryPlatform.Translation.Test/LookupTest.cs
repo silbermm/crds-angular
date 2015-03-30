@@ -15,7 +15,7 @@ namespace MinistryPlatform.Translation.Test
 
         private const string USERNAME = "testme";
         private const string PASSWORD = "changeme";
-        private const string EMAIL = "testme@test.com";
+        private const string EMAIL = "donotreply+testme@crossroads.net";
 
         [Test]
         public void FindAnAttribute([Values("Dentist", "Social media wizard")] string attributeName)
