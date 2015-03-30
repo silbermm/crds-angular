@@ -9,11 +9,12 @@
 
     <div ng-show="!groupsignup.alreadySignedUp">
       <p id="content" class="noPspace" dir="ltr" ng-bind-html="groupsignup.signupPage.content | html" ng-show="groupsignup.showContent"></p>
-      <p id="successMessage"  ng-bind-html="groupsignup.signupPage.success | html" ng-show="groupsignup.showSuccess && !groupsignup.waitListCase"></p>
+      <p id="successMessage" ng-bind-html="groupsignup.signupPage.success | html" ng-show="groupsignup.showSuccess && !groupsignup.waitListCase"></p>
       <p id="fullGroupMessage" ng-bind-html="groupsignup.signupPage.full | html" ng-show="groupsignup.showFull"></p>
       <p id="waitListMessage" ng-bind-html="groupsignup.signupPage.waitList | html" ng-show="groupsignup.showWaitList && groupsignup.waitListCase"></p>
       <p id="waitSuccessMessage" ng-bind-html="groupsignup.signupPage.waitSuccess | html" ng-show="groupsignup.showWaitSuccess && groupsignup.waitListCase"></p>
-    
+    </div>
+
 
 
 
@@ -32,14 +33,34 @@
 
   <form name="groupSignupForm" role="form" ng-submit="groupsignup.signup()" ng-show="groupsignup.showContent">
     <fieldset>
-      <legend>People to Sign Up</legend>
-      <div class="form-group">
-
-        <div class="checkbox">
-          <!--     checkbox only hidden if only in person listed -->
-          <p><label><input type="checkbox" style="visibility:hidden;">{{groupsignup.person["NickName"]}} ({{groupsignup.person["Email_Address"]}})</label></p>
-        <div><input type="submit" name="submit_group_signup" value="Sign Up" id="submit_group_signup" class="btn btn-primary push-half-bottom"></div>
+        <legend>People to Sign Up</legend>
+        <div class="form-group">
+            <div class="checkbox">
+                <!--     checkbox only hidden if only in person listed -->
+                <p>
+                    <label>
+                        <input type="checkbox" style="visibility:hidden;">{{groupsignup.person["nickName"]}} ({{groupsignup.person["emailAddress"]}})</label>
+                    <a href="" ng-click="groupsignup.editProfile()">
+                        <svg viewBox="0 0 32 32" class="icon icon-pencil4">
+                            <use xlink:href="#pencil4"></use>
+                        </svg>
+                    </a>
+                </p>
+                <div>
+                    <input type="submit" name="submit_group_signup" value="Sign Up" id="submit_group_signup" class="btn btn-primary push-half-bottom">
+                </div>
+            </div>
+        </div>
     </fieldset>
   </form>
-  </div>
+
+  <script type="text/ng-template" id="editProfile.html">
+      <div class="modal-header">
+          <a type="button" class="close" ng-click="groupsignup.modalInstance.close()">x</a>
+          <h4 class="modal-title">Edit Profile</h4>
+      </div>
+      <div class="modal-body">
+          <profile-personal updated-person="groupsignup.person" modal-instance="groupsignup.modalInstance"/>
+      </div>
+  </script>
 </div>

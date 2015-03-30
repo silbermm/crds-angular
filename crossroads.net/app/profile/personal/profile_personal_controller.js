@@ -1,17 +1,12 @@
-﻿"use strict";
+"use strict";
 (function () {
 
     var moment = require("moment");
-    module.exports = function($rootScope, $log, MESSAGES, genders, maritalStatuses, serviceProviders, states, countries, crossroadsLocations, person) {
+    module.exports = function($rootScope, $log, MESSAGES, ProfileReferenceData) {
         var _this = this;
 
-        _this.person = person;
-        _this.genders = genders;
-        _this.maritalStatuses = maritalStatuses;
-        _this.serviceProviders = serviceProviders;
-        _this.states = states;
-        _this.countries = countries;
-        _this.crossroadsLocations = crossroadsLocations;
+        _this.ProfileReferenceData = ProfileReferenceData;
+        _this.person = {};
 
         _this.passwordPrefix = "account-page";
         _this.submitted = false;
@@ -21,13 +16,26 @@
         _this.dateFormat = /^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.]((19|20)\d\d)$/;
 
         _this.loading = true;
+        _this.viewReady = false;
 
         _this.initProfile = function (form) {
             _this.form = form;
-            configurePerson();
+            _this.ProfileReferenceData.then(function(response) {
+                _this.genders = response.genders;
+                _this.maritalStatuses = response.maritalStatuses;
+                _this.serviceProviders = response.serviceProviders;
+                _this.states = response.states;
+                _this.countries = response.countries;
+                _this.crossroadsLocations = response.crossroadsLocations;
+                configurePerson(response.person);
+
+                _this.viewReady = true;
+            });
         };
 
-        function configurePerson() {
+        function configurePerson(person) {
+            _this.person = person;
+            
             if (_this.person.dateOfBirth !== undefined) {
                 var newBirthDate = _this.person.dateOfBirth.replace(_this.dateFormat, "$3 $1 $2");
                 var mBdate = moment(newBirthDate, "YYYY MM DD");
@@ -50,7 +58,11 @@
             }
             _this.person["State/Region"] = _this.person.State;
             _this.person.$save(function () {
+                $rootScope.$emit('notify', $rootScope.MESSAGES.profileUpdated);
                 $log.debug("person save successful");
+                if(_this.modalInstance !== undefined) {
+                    _this.closeModal(true);
+                }
             }, function () {
                 $log.debug("person save unsuccessful");
             });
