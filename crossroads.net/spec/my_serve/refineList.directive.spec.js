@@ -209,4 +209,16 @@ describe('Refine List Directive', function() {
       expect(isolateScope.servingDays[1].serveTimes.length).toBe(2);
   });
 
+  it("should clear all filters and return to the default list", function(){
+    filterState.addFamilyMember(1970611);
+    filterState.addTime("08:30:00");
+    filterState.addTeam(34911);
+    isolateScope.filterAll(); 
+    isolateScope.clearFilters(); 
+    expect(isolateScope.servingDays[0].serveTimes.length).toBe(2);
+    expect(isolateScope.servingDays[1].serveTimes.length).toBe(2);
+    expect(isolateScope.servingDays[0].serveTimes[0].servingTeams.length).toBe(2);
+    expect(isolateScope.servingDays[0].serveTimes[1].servingTeams.length).toBe(1);
+  });
+
 }); 
