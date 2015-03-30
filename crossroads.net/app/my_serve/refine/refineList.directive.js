@@ -47,6 +47,7 @@
           getUniqueTimes();
           initCheckBoxes();
           scope.original = angular.copy(data);
+          applyFamilyFilter();
         }); 
       }
 
