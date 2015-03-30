@@ -35,7 +35,7 @@
 
         function configurePerson(person) {
             _this.person = person;
-
+            
             if (_this.person.dateOfBirth !== undefined) {
                 var newBirthDate = _this.person.dateOfBirth.replace(_this.dateFormat, "$3 $1 $2");
                 var mBdate = moment(newBirthDate, "YYYY MM DD");
