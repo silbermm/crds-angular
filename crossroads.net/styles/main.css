@@ -6062,40 +6062,39 @@ ol.breadcrumb li.active {
 * Modals
 ***************************************************************************************/
 /* line 99, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/style-overrides.scss */
-.modal-content {
-  border-radius: 0px;
-  border: 0px; }
+.modal-backdrop {
+  height: 100%; }
 
 /***************************************************************************************
 * Date Picker
 ***************************************************************************************/
-/* line 111, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/style-overrides.scss */
+/* line 110, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/style-overrides.scss */
 .dropdown-menu.ng-valid-date thead th .btn-default {
   background: #eeeeee;
   color: #222222;
   border: 1px solid #bbbbbb; }
-/* line 120, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/style-overrides.scss */
+/* line 119, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/style-overrides.scss */
 .dropdown-menu.ng-valid-date .btn-default {
   background: white;
   border: none;
   color: #222222; }
-  /* line 125, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/style-overrides.scss */
+  /* line 124, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/style-overrides.scss */
   .dropdown-menu.ng-valid-date .btn-default:hover {
     background: #eeeeee; }
-  /* line 130, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/style-overrides.scss */
+  /* line 129, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/style-overrides.scss */
   .dropdown-menu.ng-valid-date .btn-default:hover .text-info {
     color: #222222; }
-/* line 141, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/style-overrides.scss */
+/* line 140, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/style-overrides.scss */
 .dropdown-menu.ng-valid-date .active .text-info {
   color: #fff; }
-/* line 151, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/style-overrides.scss */
+/* line 150, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/style-overrides.scss */
 .dropdown-menu.ng-valid-date .active .text-info {
   color: #fff; }
 
 /***************************************************************************************
 * Label
 ***************************************************************************************/
-/* line 161, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/style-overrides.scss */
+/* line 160, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/style-overrides.scss */
 label {
   margin-bottom: 3px; }
 

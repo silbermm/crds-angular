@@ -4,9 +4,9 @@
   
   module.exports = MyServeController;
 
-  MyServeController.$inject = ['$log', 'ServeOpportunities', 'Session'];
+  MyServeController.$inject = ['$log', 'ServeOpportunities', 'Session', 'filterState'];
     
-  function MyServeController($log, ServeOpportunities, Session){
+  function MyServeController($log, ServeOpportunities, Session, filterState){
     
     var vm = this;
 
@@ -53,7 +53,7 @@
     
     function disabled (date, mode) {
       return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-    };
+    }; 
         
     function toggleMin() {
       vm.minDate = vm.minDate ? null : new Date();

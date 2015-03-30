@@ -90,7 +90,7 @@ namespace crds_angular.Models
                 Maiden_Name = MaidenName,
                 Nickname = NickName,
                 Mobile_Phone = MobilePhone,
-                Mobile_Carrier_ID = MobileCarrierId,
+                Mobile_Carrier = MobileCarrierId,
                 Date_Of_Birth = DateOfBirth,
                 Marital_Status_ID = MaritalStatusId,
                 Gender_ID = GenderId,

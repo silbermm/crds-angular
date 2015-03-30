@@ -17,7 +17,9 @@
     }
 
     function link(scope, el, attr){
-      
+    
+      scope.applyFamilyFilter = applyFamilyFilter;
+      scope.applyTimeFilter = applyTimeFilter;
       scope.getUniqueMembers = getUniqueMembers;
       scope.getUniqueTeams = getUniqueTeams;
       scope.getUniqueTimes = getUniqueTimes;
@@ -45,7 +47,60 @@
           getUniqueTeams();
           getUniqueTimes();
           initCheckBoxes();
+          scope.original = angular.copy(data);
+          applyFamilyFilter();
         }); 
+      }
+
+      function applyFamilyFilter(){
+        if(filterState.memberIds.length > 0){
+          var serveDay = [];
+          _.each(scope.servingDays, function(day){
+            var serveTimes = [];
+            _.each(day.serveTimes, function(serveTime){
+              var servingTeams = [];      
+              _.each(serveTime.servingTeams, function(team){
+                var theTeam = team;
+                var members = _.filter(team.members, function(m){
+                  return _.find(filterState.memberIds, function(familyMember){
+                    return familyMember === m.contactId; 
+                  }); 
+                }); 
+                if(members.length > 0) {
+                  theTeam.members = members;
+                  servingTeams.push(theTeam);
+                }
+              });
+              serveTimes.push({time: serveTime.time, 'servingTeams':servingTeams }); 
+            });
+            serveDay.push({day: day.day, serveTimes: serveTimes}); 
+          });
+          scope.servingDays = serveDay;
+        }
+
+      }
+
+      function applyTimeFilter(){
+        if(filterState.times.length > 0){
+          var serveDay = [];
+          _.each(scope.servingDays, function(day){
+            var times = _.filter(day.serveTimes, function(serveTime){
+              return _.find(filterState.times, function(ftimes){
+                return ftimes === serveTime.time;
+              });
+            });
+            if(times.length > 0) {
+              serveDay.push({day: day.day, serveTimes: times}); 
+            };
+          });
+          scope.servingDays = serveDay;
+        }
+      }
+
+      function filterAll(){
+        scope.servingDays = angular.copy(scope.original);
+        applyFamilyFilter();
+        applyTimeFilter();
       }
 
       function filterFamily(){
@@ -121,6 +176,7 @@
         } else {
           filterState.removeFamilyMember(member.contactId);
         }
+        filterAll();
       }
 
       function toggleTeam(team){
@@ -130,13 +186,14 @@
           filterState.removeTeam(team.groupId);
         }
       }
-
+ 
       function toggleTime(time){
         if(time.selected){
           filterState.addTime(time.time);
         } else {
           filterState.removeTime(time.time);
         }
+        filterAll(); 
       }
     }
   }

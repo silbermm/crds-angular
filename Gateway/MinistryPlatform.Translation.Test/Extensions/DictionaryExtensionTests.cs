@@ -107,7 +107,7 @@ namespace MinistryPlatform.Translation.Test.Extensions
         [Test]
         public void StringToDateString_Success()
         {
-            Assert.AreEqual("1/1/2007", _mockDictionary.ToDateAsString("Date_As_String"));
+            Assert.AreEqual("01/01/2007", _mockDictionary.ToDateAsString("Date_As_String"));
         }
     }
 }

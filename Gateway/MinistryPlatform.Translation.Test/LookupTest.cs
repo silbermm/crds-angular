@@ -10,12 +10,13 @@ using MinistryPlatform.Translation.Services;
 namespace MinistryPlatform.Translation.Test
 {
     [TestFixture]
+    [Category("IntegrationTests")]
     public class LookupTest
     {
 
         private const string USERNAME = "testme";
         private const string PASSWORD = "changeme";
-        private const string EMAIL = "testme@test.com";
+        private const string EMAIL = "donotreply+testme@crossroads.net";
 
         [Test]
         public void FindAnAttribute([Values("Dentist", "Social media wizard")] string attributeName)
