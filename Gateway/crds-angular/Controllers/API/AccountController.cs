@@ -11,12 +11,18 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Diagnostics;
+using Crossroads.Utilities.Interfaces;
 
 namespace crds_angular.Controllers.API
 {
     public class AccountController : MPAuth
     {
+        private IConfigurationWrapper _configurationWrapper;
 
+        public AccountController(IConfigurationWrapper configurationWrapper)
+        {
+            this._configurationWrapper = configurationWrapper;
+        }
         
 
         [ResponseType(typeof (AccountInfo))]
@@ -27,7 +33,7 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
-                    AccountService accountService = new AccountService();
+                    AccountService accountService = new AccountService(_configurationWrapper);
                     AccountInfo info = accountService.getAccountInfo(token);
                     Debug.WriteLine("in the account controller");
                     return Ok(info);
@@ -48,7 +54,7 @@ namespace crds_angular.Controllers.API
 
             return Authorized(token =>
             {
-                AccountService accountService = new AccountService();
+                AccountService accountService = new AccountService(_configurationWrapper);
                 if (accountService.ChangePassword(token, password.password))
                 {
                     return Ok();
@@ -63,7 +69,7 @@ namespace crds_angular.Controllers.API
 
             return Authorized(token =>
             {
-                AccountService accountService = new AccountService();
+                AccountService accountService = new AccountService(_configurationWrapper);
                 accountService.SaveCommunicationPrefs(token, accountInfo);
                 return Ok();
             });

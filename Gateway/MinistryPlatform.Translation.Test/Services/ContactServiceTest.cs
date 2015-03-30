@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -10,7 +11,6 @@ namespace MinistryPlatform.Translation.Test.Services
     [TestFixture]
     public class ContactServiceTest
     {
-        private const int MyProfilePageId = 474;
         private Mock<IMinistryPlatformService> _ministryPlatformService;
         private ContactService _fixture;
 
@@ -54,10 +54,14 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Nickname", "nickname"}
                 }
             };
-            _ministryPlatformService.Setup(m => m.GetRecordsDict(MyProfilePageId, It.IsAny<string>(), "", ""))
+
+            _ministryPlatformService.Setup(m => m.GetRecordsDict("MyProfile", It.IsAny<string>(), "", ""))
                 .Returns(dictionaryList);
 
             var myProfile = _fixture.GetMyProfile(It.IsAny<string>());
+
+            _ministryPlatformService.VerifyAll();
+
             Assert.IsNotNull(myProfile);
             Assert.AreEqual(3, myProfile.Contact_ID);
             Assert.AreEqual(100, myProfile.Address_ID);

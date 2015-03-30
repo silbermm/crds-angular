@@ -3,6 +3,7 @@ using MinistryPlatform.Translation.PlatformService;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
@@ -10,10 +11,12 @@ namespace MinistryPlatform.Translation.Services
     public class MinistryPlatformServiceImpl : IMinistryPlatformService
     {
         private PlatformServiceClient platformServiceClient;
+        private IConfigurationWrapper _configurationWrapper;
 
-        public MinistryPlatformServiceImpl(PlatformServiceClient platformServiceClient)
+        public MinistryPlatformServiceImpl(PlatformServiceClient platformServiceClient, IConfigurationWrapper configurationWrapper)
         {
             this.platformServiceClient = platformServiceClient;
+            this._configurationWrapper = configurationWrapper;
         }
 
         public List<Dictionary<string, object>> GetLookupRecords(int pageId, String token)
@@ -46,6 +49,11 @@ namespace MinistryPlatform.Translation.Services
             return MPFormatConversion.MPFormatToList(GetRecords(pageId, token, search, sort));
         }
 
+        public List<Dictionary<string, object>> GetRecordsDict(string pageKey, String token, String search = "", String sort = "")
+        {
+            return MPFormatConversion.MPFormatToList(GetRecords(GetMinistryPlatformId(pageKey), token, search, sort));
+        }
+
         public SelectQueryResult GetRecord(int pageId, int recordId, String token, bool quickadd = false)
         {
             return Call<SelectQueryResult>(token,
@@ -74,6 +82,14 @@ namespace MinistryPlatform.Translation.Services
         {
             var result = Call<SelectQueryResult>(token,
                 platformClient => platformClient.GetSubpageViewRecords(viewId, recordId, searchString, sort, top));
+            return MPFormatConversion.MPFormatToList(result);
+        }
+
+        public List<Dictionary<string, object>> GetSubpageViewRecords(string viewKey, int recordId,
+           string token, string searchString = "", string sort = "", int top = 0)
+        {
+            var result = Call<SelectQueryResult>(token,
+                platformClient => platformClient.GetSubpageViewRecords(GetMinistryPlatformId(viewKey), recordId, searchString, sort, top));
             return MPFormatConversion.MPFormatToList(result);
         }
 
@@ -112,7 +128,10 @@ namespace MinistryPlatform.Translation.Services
             VoidCall(token, platfromClient => platfromClient.UpdatePageRecord(pageId, dictionary, false));
         }
 
-        
+        private int GetMinistryPlatformId(string mpKey)
+        {
+            return _configurationWrapper.GetMinistryPlatformId(mpKey);
+        }
 
         private T Call<T>(String token, Func<PlatformServiceClient, T> ministryPlatformFunc)
         {

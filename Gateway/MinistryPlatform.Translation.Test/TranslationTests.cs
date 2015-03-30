@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.ServiceModel;
+using Crossroads.Utilities.Services;
 using MinistryPlatform.Translation.Services;
 using NUnit.Framework;
 using Attribute = MinistryPlatform.Models.Attribute;
@@ -199,8 +200,10 @@ namespace MinistryPlatform.Translation.Test
         public void ShouldReturnTodaysEvents()
         {
             var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["TodaysEventLocationRecords"]);
-            string token = AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"],
-                ConfigurationManager.AppSettings["ApiPass"]);
+            var configWrapper = new ConfigurationWrapper();
+            var apiUser = configWrapper.GetEnvironmentVarAsString("API_USER");
+            var apiPassword = configWrapper.GetEnvironmentVarAsString("API_PASSWORD");
+            string token = AuthenticationService.authenticate(apiUser, apiPassword);
 
             var todaysEvents = MinistryPlatformService.GetRecordsDict(pageId, token, ",Mason", "5");
 

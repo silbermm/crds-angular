@@ -1,4 +1,5 @@
 ﻿using System;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -11,7 +12,6 @@ namespace MinistryPlatform.Translation.Services
 
         private IMinistryPlatformService _ministryPlatformService;
 
-
         public ContactService(IMinistryPlatformService ministryPlatformService)
         {
             this._ministryPlatformService = ministryPlatformService;
@@ -19,7 +19,7 @@ namespace MinistryPlatform.Translation.Services
 
         public MyContact GetMyProfile(string token)
         {
-            var recordsDict = _ministryPlatformService.GetRecordsDict(_myProfilePageId, token);
+            var recordsDict = _ministryPlatformService.GetRecordsDict("MyProfile", token);
 
             if (recordsDict.Count > 1)
             {
