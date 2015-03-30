@@ -10,6 +10,7 @@ using MinistryPlatform.Translation.Services;
 namespace MinistryPlatform.Translation.Test
 {
     [TestFixture]
+    [Category("IntegrationTests")]
     public class LookupTest
     {
 
