@@ -4,6 +4,7 @@ var app = require("angular").module('crossroads');
 
     app.controller('GroupSignupController', [
      '$rootScope',
+     '$scope',
      'Profile',
      'Group',
      '$log',

@@ -4,7 +4,7 @@
       <div ng-bind-html="groupsignup.signupPage.existingMember | html"></div>
       <h3>Participants</h3>
       <hr>
-      <p><label><input type="checkbox" style="visibility:hidden;">{{groupsignup.person["NickName"]}} ({{groupsignup.person["Email_Address"]}})</label></p>
+      <p><label><input type="checkbox" style="visibility:hidden;">{{groupsignup.person["nickName"]}} ({{groupsignup.person["emailAddress"]}})</label></p>
     </div>
 
     <div ng-show="!groupsignup.alreadySignedUp">
@@ -37,7 +37,7 @@
 
         <div class="checkbox">
           <!--     checkbox only hidden if only in person listed -->
-          <p><label><input type="checkbox" style="visibility:hidden;">{{groupsignup.person["NickName"]}} ({{groupsignup.person["Email_Address"]}})</label></p>
+          <p><label><input type="checkbox" style="visibility:hidden;">{{groupsignup.person["nickName"]}} ({{groupsignup.person["emailAddress"]}})</label></p>
         <div><input type="submit" name="submit_group_signup" value="Sign Up" id="submit_group_signup" class="btn btn-primary push-half-bottom"></div>
     </fieldset>
   </form>
