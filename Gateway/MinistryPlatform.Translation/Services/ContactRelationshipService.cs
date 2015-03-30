@@ -12,6 +12,8 @@ namespace MinistryPlatform.Translation.Services
     {
         private readonly int _getMyFamilyViewId = Convert.ToInt32(AppSettings("MyContactFamilyRelationshipViewId"));
 
+        private readonly int _getMyCurrentRelationships = Convert.ToInt32((AppSettings("MyContactCurrentRelationships")));
+
         private IMinistryPlatformService _ministryPlatformService;
 
         public ContactRelationshipService(IMinistryPlatformService ministryPlatformService)
@@ -31,5 +33,21 @@ namespace MinistryPlatform.Translation.Services
                 Preferred_Name = (string)viewRecord["Preferred Name"]
             }).ToList();
         }
+
+        public IEnumerable<Contact_Relationship> GetMyCurrentRelationships(int contactId, string token)
+        {
+            var viewRecords = _ministryPlatformService.GetSubpageViewRecords(_getMyCurrentRelationships, contactId, token);
+
+            return viewRecords.Select(viewRecord => new Contact_Relationship
+            {
+                Contact_Id = (int)viewRecord["Contact_ID"],
+                Email_Address = (string)viewRecord["Email_Address"],
+                Last_Name = (string)viewRecord["Last Name"],
+                Preferred_Name = (string)viewRecord["Preferred Name"],
+                Participant_Id = (string)viewRecord["Participant_ID"],
+                Relationship_Id = (int)viewRecord["Relationship_ID"]
+            }).ToList();
+        }
+        
     }
 }

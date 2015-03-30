@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using log4net;
 using MinistryPlatform.Models;
@@ -16,6 +17,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int GroupsEventsPageId = Convert.ToInt32(AppSettings("GroupsEvents"));
         private readonly int EventsGroupsPageId = Convert.ToInt32(AppSettings("EventsGroups"));
         private readonly int GroupsSubgroupsPageId = Convert.ToInt32(AppSettings("GroupsSubgroups"));
+        private readonly int _getGroupSignupRelations = Convert.ToInt32((AppSettings("GroupSignUpRelations")));
         private readonly int GetMyServingTeamsPageId = Convert.ToInt32(AppSettings("MyServingTeams"));
 
         private IMinistryPlatformService ministryPlatformService;
@@ -87,6 +89,13 @@ namespace MinistryPlatform.Translation.Services
                 if (gn != null)
                 {
                     g.Name = (string) gn;
+                }
+
+                object gt = null;
+                groupDetails.TryGetValue("Group_Type_ID", out gt);
+                if (gt != null)
+                {
+                    g.GroupType = (int)gt;
                 }
 
                 object gsz = null;
@@ -215,6 +224,18 @@ namespace MinistryPlatform.Translation.Services
         public bool checkIfUserInGroup(int participantId, IList<int> groupParticipants)
         {
             return groupParticipants.Contains(participantId);
+        }
+
+        public List<GroupSignupRelationships> GetGroupSignupRelations(int groupType, string token)
+        {
+            var relationRecords = ministryPlatformService.GetSubpageViewRecords(_getGroupSignupRelations, groupType, token);
+
+            return relationRecords.Select(relationRecord => new GroupSignupRelationships
+            {
+                RelationshipId = (int)relationRecord["Relationship_ID"],
+                RelationshipMinAge = (string)relationRecord["Min_Age"],
+                RelationshipMaxAge = (string)relationRecord["Max_Age"]
+            }).ToList();
         }
     }
 }

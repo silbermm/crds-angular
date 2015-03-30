@@ -10,6 +10,7 @@ using crds_angular.Security;
 using log4net;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Exceptions;
+using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Controllers.API
@@ -20,6 +21,7 @@ namespace crds_angular.Controllers.API
         private IGroupService groupService;
         private IEventService eventService;
         private IAuthenticationService authenticationService;
+        private IContactRelationshipService _contactRelationshipService;
 
         private readonly int GroupRoleDefaultId =
             Convert.ToInt32(ConfigurationManager.AppSettings["Group_Role_Default_ID"]);
@@ -44,9 +46,11 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
+                    //remove the two fields below.  particpant IDs will be passed in 
                     var participant = authenticationService.GetParticipantRecord(token);
                     int participantId = participant.ParticipantId;
 
+                    //always return the loggedin user as the first relationship
                     // First sign this user up for the community group
                     int groupParticipantId = groupService.addParticipantToGroup(participantId, Convert.ToInt32(groupId),
                         GroupRoleDefaultId, DateTime.Now);
@@ -106,8 +110,35 @@ namespace crds_angular.Controllers.API
             {
                 var participant = authenticationService.GetParticipantRecord(token);
                 int participantId = participant.ParticipantId;
+                var contactId = authenticationService.GetContactId(token); 
 
                 Group g = groupService.getGroupDetails(groupId);
+
+                var relations = groupService.GetGroupSignupRelations(g.GroupType, token);
+                //return all current relationships indicating if they are a member of the group
+                //the first entry should always be the logged in user
+                var currRelationships = _contactRelationshipService.GetMyCurrentRelationships(contactId, token);
+                if (currRelationships == null)
+                {
+                    //   do something;
+                }
+
+                if (currRelationships != null)
+                {
+                    //foreach (Contact_Relationship p in currRelationships)
+                    //{
+                    //    if (p.Relationship_Id == relations.Contains(RelationshipId)) 
+                    //    {}
+                        //if (pid != null)
+                        //{
+                        //    g.Participants.Add((int)pid);
+                        
+                    //}
+                }
+
+                //bump thru currRelationships and keep all records where the relationship_Id is equal to relations.relationship_id
+                //articleList.RemoveAll(x => writerIds.Contains(x.WriterId));
+             
                 var detail = new GroupDTO();
                 {
                     detail.GroupId = g.GroupId;
