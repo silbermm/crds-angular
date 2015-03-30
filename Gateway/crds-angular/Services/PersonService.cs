@@ -73,7 +73,7 @@ namespace crds_angular.Services
             person.LastName = contact.Last_Name;
             person.MaidenName = contact.Maiden_Name;
             person.MobilePhone = contact.Mobile_Phone;
-            person.MobileCarrierId = contact.Mobile_Carrier_ID;
+            person.MobileCarrierId = contact.Mobile_Carrier;
             person.DateOfBirth = contact.Date_Of_Birth;
             person.MaritalStatusId = contact.Marital_Status_ID;
             person.GenderId = contact.Gender_ID;

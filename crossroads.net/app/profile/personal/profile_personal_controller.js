@@ -5,7 +5,7 @@
     module.exports = function($rootScope, $log, MESSAGES, ProfileReferenceData) {
         var _this = this;
 
-        _this.ProfileReferenceData = ProfileReferenceData;
+        _this.ProfileReferenceData = ProfileReferenceData.getInstance();
         _this.person = {};
 
         _this.passwordPrefix = "account-page";

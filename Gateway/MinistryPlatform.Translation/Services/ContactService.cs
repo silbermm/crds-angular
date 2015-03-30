@@ -49,7 +49,7 @@ namespace MinistryPlatform.Translation.Services
             contact.Maiden_Name = myContact.ToString("Maiden_Name");
             contact.Marital_Status_ID = myContact.ToInt("Marital_Status_ID");
             contact.Middle_Name = myContact.ToString("Middle_Name");
-            contact.Mobile_Carrier_ID = myContact.ToNullableInt("Mobile_Carrier_ID");
+            contact.Mobile_Carrier = myContact.ToNullableInt("Mobile_Carrier_ID");
             contact.Mobile_Phone = myContact.ToString("Mobile_Phone");
             contact.Nickname = myContact.ToString("Nickname");
 
