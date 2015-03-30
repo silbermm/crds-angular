@@ -1,10 +1,12 @@
 'use strict';
 require('../services/group_service');
 (function () {
-    module.exports = function GroupSignupController($rootScope, $scope, Profile, Group, $log, $stateParams, Page) {
+    module.exports = function GroupSignupController($rootScope, $scope, Profile, Group, $log, $stateParams, Page, $modal) {
         $log.debug("Inside GroupSignupController");
 
         var vm = this;
+
+        vm.editProfile = editProfile;
 
         //flags to control show/hide logic
         vm.showContent = true;
@@ -15,16 +17,19 @@ require('../services/group_service');
         vm.waitListCase = false;
         vm.alreadySignedUp = false;
         vm.viewReady = false;
+        vm.modalInstance = {};
 
         vm.signupPage = $rootScope.signupPage;
 
         // Initialize Person data for logged-in user
-        Profile.Personal.get(function(response){
+        Profile.Personal.get(function (response) {
             vm.person = response;
-            $log.debug("Person: " + vm.person);
+            $log.debug("Person: " + JSON.stringify(vm.person));
         });
 
-        var pageRequest = Page.get({ url: $stateParams.link }, function() {
+        var pageRequest = Page.get({
+            url: $stateParams.link
+        }, function () {
             if (pageRequest.pages.length > 0) {
                 vm.signupPage = pageRequest.pages[0];
                 // retrieve group id from the CMS page
@@ -102,11 +107,21 @@ vm.signup = function(){
                 vm.showContent = false;
                 vm.showSuccess = true;
                 vm.showWaitList = false;
-                vm.showWaitSuccess= true;
-            },function(error){
+                vm.showWaitSuccess = true;
+            }, function (error) {
                 $rootScope.$emit('notify', $rootScope.MESSAGES.fullGroupError);
                 vm.showContent = false;
                 vm.showFull = true;
+            });
+        };
+
+        function editProfile() {
+            vm.modalInstance = $modal.open({
+                templateUrl: 'editProfile.html',
+                backdrop: true,
+                // This is needed in order to get our scope
+                // into the modal - by default, it uses $rootScope
+                scope: $scope,
             });
         };
     }

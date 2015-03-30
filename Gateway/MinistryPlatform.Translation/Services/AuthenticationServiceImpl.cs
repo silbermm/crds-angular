@@ -8,6 +8,7 @@ using System.ServiceModel.Web;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Exceptions;
 using MinistryPlatform.Translation.PlatformService;
+using MinistryPlatform.Translation.Services.Interfaces;
 using Newtonsoft.Json.Linq;
 
 namespace MinistryPlatform.Translation.Services

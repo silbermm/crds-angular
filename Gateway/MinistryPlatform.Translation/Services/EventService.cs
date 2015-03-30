@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
 {
@@ -32,6 +36,23 @@ namespace MinistryPlatform.Translation.Services
 
             logger.Debug("Added participant " + participantId + " to event " + eventId + ": record id: " + eventParticipantId);
             return (eventParticipantId);
+        }
+
+        public List<Event> GetEvents(string eventType, string token)
+        {
+            //this is using the basic Events page, any concern there?
+            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["Events"]);
+            var search = ",," + eventType;
+            var records = ministryPlatformService.GetRecordsDict(pageId, token, search);
+
+            return records.Select(record => new Event
+            {
+                EventTitle = (string)record["Event_Title"],
+                EventType = (string)record["Event_Type"],
+                EventStartDate = (DateTime)record["Event_Start_Date"],
+                EventEndDate = (DateTime)record["Event_End_Date"],
+                EventId = (int)record["dp_RecordID"]
+            }).ToList();
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using crds_angular.Models;
+using MinistryPlatform.Models;
 
 namespace crds_angular.test.Models
 {
@@ -17,8 +18,8 @@ namespace crds_angular.test.Models
         public void ShouldReturnContactType()
         {
             var contact = _person.GetContact();
-            Assert.That(contact, Is.TypeOf<crds_angular.Models.MP.Contact>());
-            Assert.AreEqual(_person.Email_Address, contact.Email_Address);
+            Assert.That(contact, Is.TypeOf<MyContact>());
+            Assert.AreEqual(_person.EmailAddress, contact.Email_Address);
 
         }
 
@@ -27,7 +28,7 @@ namespace crds_angular.test.Models
         {
             var household = _person.GetHousehold();
             Assert.That(household, Is.TypeOf<crds_angular.Models.MP.Household>());
-            Assert.AreEqual(_person.Congregation_ID, household.Congregation_ID);
+            Assert.AreEqual(_person.CongregationId, household.Congregation_ID);
 
         }
 
@@ -36,7 +37,7 @@ namespace crds_angular.test.Models
         {
             var address = _person.GetAddress();
             Assert.That(address, Is.TypeOf<crds_angular.Models.MP.Address>());
-            Assert.AreEqual(_person.Address_Line_1, address.Address_Line_1);
+            Assert.AreEqual(_person.AddressLine1, address.Address_Line_1);
 
         }
 
@@ -44,10 +45,10 @@ namespace crds_angular.test.Models
         public void SetUp()
         {
             _person = new crds_angular.Models.Person();
-            _person.Email_Address = "test@crossroads.net";
-            _person.Last_Name = "Crossroads";
-            _person.Congregation_ID = 6;
-            _person.Address_Line_1 = "1234 Madison Rd";
+            _person.EmailAddress = "test@crossroads.net";
+            _person.LastName = "Crossroads";
+            _person.CongregationId = 6;
+            _person.AddressLine1 = "1234 Madison Rd";
 
         }
     }
