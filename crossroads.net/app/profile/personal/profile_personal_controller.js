@@ -28,15 +28,15 @@
         };
 
         function configurePerson() {
-            if (_this.person.Date_of_Birth !== undefined) {
-                var newBirthDate = _this.person.Date_of_Birth.replace(_this.dateFormat, "$3 $1 $2");
+            if (_this.person.dateOfBirth !== undefined) {
+                var newBirthDate = _this.person.dateOfBirth.replace(_this.dateFormat, "$3 $1 $2");
                 var mBdate = moment(newBirthDate, "YYYY MM DD");
-                _this.person.Date_of_Birth = mBdate.format("MM/DD/YYYY");
+                _this.person.dateOfBirth = mBdate.format("MM/DD/YYYY");
             }
 
-            if (_this.person.Anniversary_Date !== undefined) {
-                var mAdate = moment(new Date(_this.person.Anniversary_Date));
-                _this.person.Anniversary_Date = mAdate.format("MM/DD/YYYY");
+            if (_this.person.anniversaryDate !== undefined) {
+                var mAdate = moment(new Date(_this.person.anniversaryDate));
+                _this.person.anniversaryDate = mAdate.format("MM/DD/YYYY");
             }
         }
 
@@ -60,16 +60,16 @@
         };
         _this.convertHomePhone = function () {
             if (_this.form.personal["home-phone"].$valid) {
-                    _this.person.Home_Phone = _this.person.Home_Phone.replace(_this.phoneFormat, "$1-$2-$3");
+                    _this.person.homePhone = _this.person.homePhone.replace(_this.phoneFormat, "$1-$2-$3");
                 }
         };
         _this.convertPhone = function() {
             if (_this.form.personal["mobile-phone"].$valid) {
-                _this.person.Mobile_Phone = _this.person.Mobile_Phone.replace(_this.phoneFormat, "$1-$2-$3");
+                _this.person.mobilePhone = _this.person.mobilePhone.replace(_this.phoneFormat, "$1-$2-$3");
             }
         };
         _this.serviceProviderRequired = function () {
-            if (_this.person.Mobile_Phone === "undefined" || _this.person.Mobile_Phone === null || _this.person.Mobile_Phone === "" || this.form.personal["mobile-phone"].$invalid) {
+            if (_this.person.mobilePhone === "undefined" || _this.person.mobilePhone === null || _this.person.mobilePhone === "" || this.form.personal["mobile-phone"].$invalid) {
                 return false;
             }
             return true;

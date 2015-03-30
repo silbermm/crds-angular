@@ -21,7 +21,7 @@
         public string Maiden_Name { get; set; }
         public int? Marital_Status_ID { get; set; }
         public string Middle_Name { get; set; }
-        public int? Mobile_Carrier_ID { get; set; }
+        public int? Mobile_Carrier { get; set; }
         public string Mobile_Phone { get; set; }
         public string Nickname { get; set; }
         public string Postal_Code { get; set; }

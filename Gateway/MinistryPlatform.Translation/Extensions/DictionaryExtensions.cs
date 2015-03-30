@@ -62,7 +62,7 @@ namespace MinistryPlatform.Translation.Extensions
             var valid = DateTime.TryParse(input[key].ToString(), out result);
             if (valid)
             {
-                return result.ToString("d");
+                return result.ToString("MM/dd/yyyy");
             }
 
             if (throwExceptionIfFailed)
