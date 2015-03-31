@@ -10,7 +10,7 @@ Prerequisites: A Windows machine, or Windows VM
 2. Install Visual Studio. Instructions on how to install Visual Studio.
 3. Install Node.js: http://nodejs.org/ .
 4. Setup local environment variables.  For staff see the Developer Setup document in the Project Onboarding folder.
-  *Environment Variables on Windows
-    *Control Panel -> System and Security -> System
-	*Advanced System Settings
-	*Environment Variables
+  * Environment Variables on Windows
+    * Control Panel -> System and Security -> System
+	* Advanced System Settings
+	* Environment Variables
