@@ -144,7 +144,7 @@ namespace crds_angular.test.Services
 
             //return 0 family members, only testing logic for main contact
             _contactRelationshipService.Setup(mocked => mocked.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>()))
-                .Returns(new List<Contact_Relationship>());
+                .Returns(new List<ContactRelationship>());
 
             var myContact = new MyContact
             {
@@ -324,18 +324,18 @@ namespace crds_angular.test.Services
 
         }
         
-        private List<Contact_Relationship> MockGetMyFamilyResponse()
+        private List<ContactRelationship> MockGetMyFamilyResponse()
         {
-            var getMyFamilyResponse = new List<Contact_Relationship>
+            var getMyFamilyResponse = new List<ContactRelationship>
             {
-                new Contact_Relationship
+                new ContactRelationship
                 {
                     Contact_Id = 1,
                     Email_Address = "person-one@test.com",
                     Last_Name = "person-one",
                     Preferred_Name = "preferred-name-one"
                 },
-                new Contact_Relationship
+                new ContactRelationship
                 {
                     Contact_Id = 2,
                     Email_Address = "person-two@test.com",

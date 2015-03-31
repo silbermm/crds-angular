@@ -19,11 +19,16 @@ require('../services/group_service');
         vm.viewReady = false;
         vm.modalInstance = {};
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
         vm.testResponse = {
           "groupID": "1",
           "groupFullInd": "True",
           "waitListInd": "True",
           "waitListGroupId": "1",
+<<<<<<< Updated upstream
           relationships:
           [
             { "Nickname": "Shankar",
@@ -43,6 +48,27 @@ require('../services/group_service');
             },
             { "Nickname": "Bob",
               "Email_Address": "bob@test.com",
+=======
+          SignUpFamilyMembers:
+          [
+            { "nickname": "Shankar",
+              "emailAddress": "shankx@test.com",
+              "userInGroup": true,
+              "Participant_ID":"1111"
+            },
+            { "nickname": "Luisa",
+              "emailAddress": "Luisa@test.com",
+              "userInGroup": false,
+              "Participant_ID":"2222"
+            },
+            { "nickname": "John",
+              "emailAddress": "john@test.com",
+              "userInGroup": true,
+              "Participant_ID":"3333"
+            },
+            { "nickname": "Bob",
+              "emailAddress": "bob@test.com",
+>>>>>>> Stashed changes
               "userInGroup": false,
               "Participant_ID":"4444"
             }

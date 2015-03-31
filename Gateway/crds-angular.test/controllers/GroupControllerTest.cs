@@ -12,6 +12,7 @@ using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace crds_angular.test.controllers
@@ -50,7 +51,8 @@ namespace crds_angular.test.controllers
         {
             int groupId = 456;
             int groupParticipantId = 444;
-            List<int> particpantIdToAdd = new List<int> {90201};
+
+            List<int> particpantIdToAdd = new List<int> {90210, 41001};
 
             List<Event> events = new List<Event>();
             Event e1 = new Event();
@@ -59,18 +61,20 @@ namespace crds_angular.test.controllers
             e2.EventId = 202;
             events.Add(e1);
             events.Add(e2);
+            groupServiceMock.Setup(mocked => mocked.getGroupDetails(groupId)).Returns(new Group());
             groupServiceMock.Setup(mocked => mocked.getAllEventsForGroup(groupId)).Returns(events);
+            groupServiceMock.Setup(mocked => mocked.addParticipantToGroup(particpantIdToAdd[0], groupId, It.IsAny<int>(), It.IsAny<DateTime>(), null, It.IsAny<Boolean>())).Returns(123);
+            groupServiceMock.Setup(mocked => mocked.addParticipantToGroup(particpantIdToAdd[1], groupId, It.IsAny<int>(), It.IsAny<DateTime>(), null, It.IsAny<Boolean>())).Returns(456);
 
-            IHttpActionResult result = fixture.Post(groupId, particpantIdToAdd);
+            IHttpActionResult result = fixture.Post(groupId, new PartID { partId = particpantIdToAdd });
 
             authenticationServiceMock.VerifyAll();
             groupServiceMock.VerifyAll();
             eventServiceMock.VerifyAll();
 
             Assert.IsNotNull(result);
-            Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<Dictionary<string, object>>), result);
-            OkNegotiatedContentResult<Dictionary<string, object>> okResult =
-                (OkNegotiatedContentResult<Dictionary<string, object>>)result;
+            Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<List<Dictionary<string, object>>>), result);
+            var okResult = (OkNegotiatedContentResult<List<Dictionary<string, object>>>)result;
             Assert.IsNotNull(okResult.Content);
             Assert.AreEqual(2, okResult.Content.Count);
             
@@ -87,7 +91,7 @@ namespace crds_angular.test.controllers
             int groupId = 456;
             
             List<int> particpantIdToAdd = new List<int> { 90201 };
-            IHttpActionResult result = fixture.Post(groupId, new List<int>());
+            IHttpActionResult result = fixture.Post(groupId, new PartID());
             authenticationServiceMock.VerifyAll();
             groupServiceMock.VerifyAll();
             Assert.IsNotNull(result);
@@ -101,6 +105,7 @@ namespace crds_angular.test.controllers
             int groupId = 333;
             Group g = new Group();
             g.GroupId = 333;
+            g.GroupType = 8;
             g.GroupRole = "Member";
             g.Name = "Test Me";
             g.GroupId = 123456;
@@ -113,6 +118,29 @@ namespace crds_angular.test.controllers
             authenticationServiceMock.Setup(
                 mocked => mocked.GetParticipantRecord(fixture.Request.Headers.Authorization.ToString()))
                 .Returns(participant);
+
+            ContactRelationship signupRelations = new ContactRelationship();
+            signupRelations.Birth_date = new DateTime(1968,01, 01);
+            signupRelations.Contact_Id = 111;
+            signupRelations.Email_Address = " ";
+            signupRelations.Last_Name = "Tester";
+            signupRelations.Participant_Id = participant.ParticipantId;
+            signupRelations.Preferred_Name = "Mister";
+            signupRelations.Relationship_Id = 1;
+
+            var relationRecord = new GroupSignupRelationships
+            {
+                RelationshipId = 1,
+                RelationshipMinAge = "00",
+                RelationshipMaxAge = "100"
+            };
+
+
+            groupServiceMock.Setup(mocked => mocked.GetGroupSignupRelations(g.GroupType)).Returns(new List<GroupSignupRelationships>() { relationRecord });
+
+            //var currRelationships = contactRelationshipService.GetMyCurrentRelationships(contactId, token);
+
+
 
             groupServiceMock.Setup(mocked => mocked.getGroupDetails(groupId)).Returns(g);
             groupServiceMock.Setup(mocked => mocked.checkIfUserInGroup(It.IsAny<int>(), It.IsAny<List<int>>()));
@@ -130,7 +158,7 @@ namespace crds_angular.test.controllers
         public void testCallGroupServiceFailsUnauthorized()
         {
             fixture.Request.Headers.Authorization = null;
-            IHttpActionResult result = fixture.Post(3 , new List<int>());
+            IHttpActionResult result = fixture.Post(3 , new PartID());
             Assert.IsNotNull(result);
             Assert.IsInstanceOf(typeof (UnauthorizedResult), result);
             groupServiceMock.VerifyAll();

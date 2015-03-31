@@ -42,8 +42,8 @@ var groupGetDetailResponse = {
   "groupFullInd": "True",
   "waitListInd": "True",
   "waitListGroupId": "1",
-  "userInGroup" : true, 
-  relationships:
+  "userInGroup" : true,
+  SignUpFamilyMembers:
   [
     { "First_Name": "Shankar",
       "Email_Address": "shankx@test.com",
@@ -114,17 +114,17 @@ var groupGetDetailResponse = {
     var controller = groupSignupController();
     verifyExpectations();
     var person = controller.person;
-    expect(controller.signup).toBeDefined();  
-    controller.signup();                      
+    expect(controller.signup).toBeDefined();
+    controller.signup();
     $httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/group/1/user').respond('200');
-    $httpBackend.flush();          
+    $httpBackend.flush();
 
   });
 
    it('should set the alreadySignedUp flag to TRUE ', function(){
-    var controller = groupSignupController();    
+    var controller = groupSignupController();
     verifyExpectations();
-    expect(controller.alreadySignedUp).toEqual(true);  
+    expect(controller.alreadySignedUp).toEqual(true);
   });
 
    function verifyExpectations(){
