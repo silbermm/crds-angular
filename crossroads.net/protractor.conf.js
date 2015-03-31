@@ -6,6 +6,8 @@ exports.config = {
     browserName: 'firefox'
   }, {
     browserName: 'chrome'
+  },{
+    browserName: 'safari'
   }],
   jasmineNodeOpts: {
     showColors: true,

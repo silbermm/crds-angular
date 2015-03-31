@@ -47,7 +47,7 @@ Windows users can run:
 Mac and Linux users can run:
 ``` npm install -g karma ```
 
-Once karam is installed, just run `karma start crossroads.conf.js` which will open chrome and run the tests. Click the debug button to see the results. Refreshing this page will re-run the tests.
+Once karma is installed, just run `karma start crossroads.conf.js` which will open chrome and run the tests. Click the debug button to see the results. Refreshing this page will re-run the tests.
 
 #### Functional Tests
 We use protractor to run the tests and Jasmine to write the specs. You will need to install protractor globally. 
@@ -63,6 +63,8 @@ Mac and Linux users can run:
 ``` npm install -g protractor ```
 
 Next, update the selenium drivers. `webdriver-manager update --out_dir=node_modules/protractor/selenium`. 
+
+To run tests in safari, you will need to download the safari plugin from (here)[http://selenium-release.storage.googleapis.com/index.html?path=2.45/]
 
 You will now be able to run protractor by typing `protractor protractor.conf.js`. 
 

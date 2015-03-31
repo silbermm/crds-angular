@@ -1,4 +1,5 @@
-var env = require("./environment");
+var env = require("../environment");
+var moment = require('moment');
 
 describe('Crossroads App', function() {
 
@@ -12,12 +13,9 @@ describe('Crossroads App', function() {
     var emailInput = element.all(by.css(".navbar--login")).get(0).element(by.id("login-dropdown-email"));
     var passwordInput = element.all(by.css(".navbar--login")).get(0).element(by.id("login-dropdown-password"));
     var submitBtn = element.all(by.css(".navbar--login")).get(0).all(by.buttonText("Login")).get(1);
-    
-    expect(emailInput.isDisplayed()).toBeTruthy();
-    expect(passwordInput.isDisplayed()).toBeTruthy();
-
-    emailInput.sendKeys("silbermm@ip.com");
-    passwordInput.sendKeys("winter14");
+   
+    emailInput.sendKeys("lakshmi.maramraju@gmail.com");
+    passwordInput.sendKeys("123456");
     submitBtn.click(); 
   });
 
@@ -28,8 +26,20 @@ describe('Crossroads App', function() {
     expect(loginButton.get(0).isDisplayed()).toBeTruthy();
   });
 
-  it('should allow me to login', function() { 
-    expect(element(by.id("current-user")).getText()).toBe("Matthew");  
-  });
+
+  it('should go the serve signup page', function() {  
+    expect(element(by.id("current-user")).getText()).toBe("Laks");  
+    browser.get(env.baseUrl + "/#/serve-signup");
+    expect(element.all(by.css(".page-header")).get(0).getText()).toBe("Sign Up To Serve");
+    var today = moment();
+    element.all(by.css(".serve-day")).then(function(days){
+      expect(days.length).toBeGreaterThan(0);
+      var onPage = days[0].element(by.css('h4')).getText();
+      var onPageDate = moment(onPage, 'EEEE, MMMM dd, yyyy');
+      expect(onPageDate.dayOfYear()).toBeGreaterThan(today.dayOfYear() - 1);
+    });
+  }); 
+
+  
 
 });
