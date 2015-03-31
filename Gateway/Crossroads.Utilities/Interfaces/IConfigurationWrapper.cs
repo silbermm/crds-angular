@@ -7,8 +7,8 @@ namespace Crossroads.Utilities.Interfaces
 {
     public interface IConfigurationWrapper
     {
-        int GetMinistryPlatformId(string mpKey);
-        string GetValue(string key);
+        int GetConfigIntValue(string key);
+        string GetConfigValue(string key);
         string GetEnvironmentVarAsString(string variable);
     }
 }

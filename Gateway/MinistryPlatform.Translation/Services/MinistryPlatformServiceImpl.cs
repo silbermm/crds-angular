@@ -130,7 +130,7 @@ namespace MinistryPlatform.Translation.Services
 
         private int GetMinistryPlatformId(string mpKey)
         {
-            return _configurationWrapper.GetMinistryPlatformId(mpKey);
+            return _configurationWrapper.GetConfigIntValue(mpKey);
         }
 
         private T Call<T>(String token, Func<PlatformServiceClient, T> ministryPlatformFunc)
