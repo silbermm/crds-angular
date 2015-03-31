@@ -43,11 +43,11 @@ namespace MinistryPlatform.Translation.Services
             contact.Employer_Name = myContact.ToString("Employer_Name");
             contact.First_Name = myContact.ToString("First_Name");
             contact.Foreign_Country = myContact.ToString("Foreign_Country");
-            contact.Gender_ID = myContact.ToInt("Gender_ID");
+            contact.Gender_ID = myContact.ToNullableInt("Gender_ID");
             contact.Home_Phone = myContact.ToString("Home_Phone");
             contact.Last_Name = myContact.ToString("Last_Name");
             contact.Maiden_Name = myContact.ToString("Maiden_Name");
-            contact.Marital_Status_ID = myContact.ToInt("Marital_Status_ID");
+            contact.Marital_Status_ID = myContact.ToNullableInt("Marital_Status_ID");
             contact.Middle_Name = myContact.ToString("Middle_Name");
             contact.Mobile_Carrier = myContact.ToNullableInt("Mobile_Carrier_ID");
             contact.Mobile_Phone = myContact.ToString("Mobile_Phone");
