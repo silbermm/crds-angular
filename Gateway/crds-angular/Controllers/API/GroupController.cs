@@ -47,45 +47,50 @@ namespace crds_angular.Controllers.API
          */
 
         [ResponseType(typeof (GroupDTO))]
-        [Route("api/group/{groupId}/user")]
-        public IHttpActionResult Post(String groupId)
+        [Route("api/group/{groupId}/participants")]
+        public IHttpActionResult Post(int groupId, List<int> particpantIdToAdd )
         {
             return Authorized(token =>
             {
                 try
                 {
-                    //remove the two fields below.  particpant IDs will be passed in 
-                    var participant = authenticationService.GetParticipantRecord(token);
-                    int participantId = participant.ParticipantId;
+                    Group g = groupService.getGroupDetails(groupId);
 
-                    //always return the loggedin user as the first relationship
-                    // First sign this user up for the community group
-                    int groupParticipantId = groupService.addParticipantToGroup(participantId, Convert.ToInt32(groupId),
-                        GroupRoleDefaultId, DateTime.Now);
-                    logger.Debug("Added user - group/participant id = " + groupParticipantId);
-                    var response = new Dictionary<string, object>
+                    var participantsToAdd = particpantIdToAdd.Count;
+                    var spaceRemaining = g.TargetSize - g.Participants.Count;
+                    if ((participantsToAdd > spaceRemaining) || (g.Full))
                     {
-                        {"success", true},
-                        {"participantId", participantId},
-                        {"groupParticipantId", groupParticipantId}
-                    };
-                    var enrolledEvents = new List<string>();
-                    response.Add("enrolledEvents", enrolledEvents);
-
-                    // Now see what future events are scheduled for this group, and register the user for those
-                    var events = groupService.getAllEventsForGroup(Convert.ToInt32(groupId));
-                    logger.Debug("Scheduled events for this group: " + events);
-                    if (events != null && events.Count > 0)
-                    {
-                        foreach (var e in events)
-                        {
-                            int eventParticipantId = eventService.registerParticipantForEvent(participantId, e.EventId);
-                            logger.Debug("Added participant " + participantId + " to group event " + e.EventId);
-                            enrolledEvents.Add(Convert.ToString(e.EventId));
-                        }
+                        throw (new GroupFullException(g));
                     }
+                   
+                    var response = new Dictionary<string, object>();
+                    foreach (var p in particpantIdToAdd)
+                    {
+                        // First sign this user up for the community group
+                        int groupParticipantId = groupService.addParticipantToGroup(p, Convert.ToInt32(groupId),
+                            GroupRoleDefaultId, DateTime.Now);
+                        logger.Debug("Added user - group/participant id = " + groupParticipantId);
 
-                    return Ok(response);
+                        response.Add("success", p);
+                  
+                        var enrolledEvents = new List<string>();
+                        response.Add("enrolledEvents", enrolledEvents);
+
+                        // Now see what future events are scheduled for this group, and register the user for those
+                        var events = groupService.getAllEventsForGroup(Convert.ToInt32(groupId));
+                        logger.Debug("Scheduled events for this group: " + events);
+                        if (events != null && events.Count > 0)
+                        {
+                            foreach (var e in events)
+                            {
+                                int eventParticipantId = eventService.registerParticipantForEvent(p, e.EventId);
+                                logger.Debug("Added participant " + p + " to group event " + e.EventId);
+                                enrolledEvents.Add(Convert.ToString(e.EventId));
+                            }
+                        }
+                     }
+                   
+                   return Ok(response);
                 }
                 catch (GroupFullException e)
                 {
@@ -127,7 +132,7 @@ namespace crds_angular.Controllers.API
                 var currRelationships = contactRelationshipService.GetMyCurrentRelationships(contactId, token);
 
                 Contact_Relationship[] familyToReturn =  null;
-              
+                //need to add age check!!
                 if (currRelationships != null)
                 {
                   familyToReturn =  currRelationships.Where(
@@ -173,13 +178,13 @@ namespace crds_angular.Controllers.API
         }
 
         // TODO: implement later
-        [ResponseType(typeof (ContactDTO))]
-        [Route("api/group/{groupId}/user/{userId}")]
-        public IHttpActionResult Get(String groupId, String userId)
-        {
-            throw new NotImplementedException();
-            return this.Ok();
-        }
+        //[ResponseType(typeof (ContactDTO))]
+        //[Route("api/group/{groupId}/user/{userId}")]
+        //public IHttpActionResult Get(String groupId, String userId)
+        //{
+        //    throw new NotImplementedException();
+        //    return this.Ok();
+        //}
 
         // TODO: implement later
         [ResponseType(typeof (GroupDTO))]
