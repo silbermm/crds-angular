@@ -1,9 +1,9 @@
 'use strict';
 
 var app =
-    require("angular").module('crossroads');
-    require('../profile/personal/profile_personal.html');
-    require('../profile');
+require("angular").module('crossroads');
+require('../profile/personal/profile_personal.html');
+require('../profile');
 
 app.controller('GroupSignupController', [
     '$rootScope',
@@ -14,4 +14,5 @@ app.controller('GroupSignupController', [
     '$stateParams',
     'Page',
     '$modal',
-  require('./group_signup_controller')]);;
+    require('./group_signup_controller')]);;
+
