@@ -73,9 +73,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\DictionaryExtensionTests.cs" />
     <Compile Include="LookupTest.cs" />
+    <Compile Include="Services\ContactRelationshipServiceTest.cs" />
+    <Compile Include="Services\ContactServiceTest.cs" />
     <Compile Include="Services\GroupServiceTest.cs" />
     <Compile Include="Services\EventServiceTest.cs" />
+    <Compile Include="Services\OpportunityServiceTest.cs" />
     <Compile Include="TranslationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
