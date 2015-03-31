@@ -21,7 +21,7 @@ namespace MinistryPlatform.Translation.Services
 
         public IEnumerable<Contact_Relationship> GetMyImmediatieFamilyRelationships(int contactId, string token)
         {
-            var viewRecords = _ministryPlatformService.GetSubpageViewRecords(_getMyFamilyViewId, contactId, token);
+            var viewRecords = _ministryPlatformService.GetSubpageViewRecords("MyContactFamilyRelationshipViewId", contactId, token);
 
             return viewRecords.Select(viewRecord => new Contact_Relationship
             {

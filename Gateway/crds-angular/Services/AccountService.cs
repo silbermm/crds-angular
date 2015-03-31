@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using crds_angular.Models.Crossroads;
 using crds_angular.Models.MP;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services;
 
@@ -10,6 +11,12 @@ namespace crds_angular.Services
 {
     public class AccountService : MinistryPlatformBaseService
     {
+        private IConfigurationWrapper _configurationWrapper;
+
+        public AccountService(IConfigurationWrapper configurationWrapper)
+        {
+            this._configurationWrapper = configurationWrapper;
+        }
         public bool ChangePassword(string token, string newPassword)
         {
             return AuthenticationService.ChangePassword(token, newPassword);
@@ -164,9 +171,11 @@ namespace crds_angular.Services
 
             MinistryPlatformService.UpdateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Contacts"]), contactDictionary, token);
         }
-        public static Dictionary<string, string>RegisterPerson(User newUserData)
+        public Dictionary<string, string>RegisterPerson(User newUserData)
         {
-            string token = AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"], ConfigurationManager.AppSettings["ApiPass"]);
+            var apiUser = this._configurationWrapper.GetEnvironmentVarAsString("API_USER");
+            var apiPassword = this._configurationWrapper.GetEnvironmentVarAsString("API_PASSWORD");
+            string token = AuthenticationService.authenticate(apiUser, apiPassword);
 
             int householdRecordID = CreateHouseholdRecord(newUserData,token);
             int contactRecordID = CreateContactRecord(newUserData,token,householdRecordID);

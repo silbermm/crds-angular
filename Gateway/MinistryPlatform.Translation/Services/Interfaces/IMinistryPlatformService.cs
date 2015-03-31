@@ -17,6 +17,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         JArray GetRecordsArr(int pageId, String token, String search = "", String sort = "");
         
         List<Dictionary<string, object>> GetRecordsDict(int pageId, String token, String search = "", String sort = "");
+        List<Dictionary<string, object>> GetRecordsDict(string pageKey, String token, String search = "", String sort = "");
         
         SelectQueryResult GetRecord(int pageId, int recordId, String token, bool quickadd = false);
         
@@ -37,6 +38,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         void UpdateRecord(int pageId, Dictionary<string, object> dictionary, String token);
 
         List<Dictionary<string, object>> GetSubpageViewRecords(int viewId, int recordId, string token, string searchString="", string sort="", int top=0);
+        List<Dictionary<string, object>> GetSubpageViewRecords(string viewKey, int recordId, string token, string searchString = "", string sort = "", int top = 0);
 
         List<Dictionary<string, object>> GetPageViewRecords(int viewId, string token, string searchString = "", string sort = "", int top = 0);
     }

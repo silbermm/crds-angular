@@ -5,21 +5,37 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Models.Crossroads;
 using crds_angular.Security;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Translation.Services;
+using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Controllers.API
 {
     public class EventLocationController : MPAuth
     {
+        private IMinistryPlatformService _ministryPlatformService;
+        private IConfigurationWrapper _configurationWrapper;
+        private IAuthenticationService _authenticationService;
+        
+
+        public EventLocationController(IMinistryPlatformService ministryPlatformService, IConfigurationWrapper configurationWrapper, IAuthenticationService authenticationService)
+        {
+            this._ministryPlatformService = ministryPlatformService;
+            this._configurationWrapper = configurationWrapper;
+            this._authenticationService = authenticationService;
+        }
+
         [ResponseType(typeof(List<Event>))]
         [Route("api/events/{site}")]
         public IHttpActionResult Get(string site)
         {
             //TODO Move logic to service?
-            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["TodaysEventLocationRecords"]);
-            string token = AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"], ConfigurationManager.AppSettings["ApiPass"]);
+            //var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["TodaysEventLocationRecords"]);
+            var apiUser = _configurationWrapper.GetEnvironmentVarAsString("API_USER");
+            var apiPassword = _configurationWrapper.GetEnvironmentVarAsString("API_PASSWORD");
+            string token = _authenticationService.authenticate(apiUser, apiPassword);
 
-            var todaysEvents = MinistryPlatformService.GetRecordsDict(pageId, token, site, "5 asc");//Why 5 you ask... Think Ministry
+            var todaysEvents = _ministryPlatformService.GetRecordsDict("TodaysEventLocationRecords", token, site, "5 asc");//Why 5 you ask... Think Ministry
 
             var events = ConvertToEvents(todaysEvents);
 

@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Web.Helpers;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using System.Web.Http.Results;
 using crds_angular.Security;
-using crds_angular.Services;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Translation.Services;
 
 namespace crds_angular.Controllers.API
@@ -15,6 +14,13 @@ namespace crds_angular.Controllers.API
     [EnableCors(origins: "*", headers: "*", methods: "*", SupportsCredentials = true)]
     public class LookupController : MPAuth
     {
+        private IConfigurationWrapper _configurationWrapper;
+
+        public LookupController(IConfigurationWrapper configurationWrapper)
+        {
+            this._configurationWrapper = configurationWrapper;
+        }
+
         [ResponseType(typeof (List<Dictionary<string, object>>))]
         [Route("api/lookup/{table?}")]
         [HttpGet]
@@ -38,7 +44,7 @@ namespace crds_angular.Controllers.API
                         ret = LookupService.Countries(t);
                         break;
                     case "states":
-                        ret = LookupService.States(t);                        
+                        ret = LookupService.States(t);
                         break;
                     case "crossroadslocations":
                         ret = LookupService.CrossroadsLocations(t);
@@ -54,7 +60,7 @@ namespace crds_angular.Controllers.API
             });
         }
 
-        [ResponseType(typeof(Dictionary<string, object>))]
+        [ResponseType(typeof (Dictionary<string, object>))]
         [HttpGet]
         [Route("api/lookup/{userId}/find/{email?}")]
         public IHttpActionResult EmailExists(int userId, string email)
@@ -72,8 +78,10 @@ namespace crds_angular.Controllers.API
 
             if (authorizedWithCookie is UnauthorizedResult)
             {
-                var token = AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"],
-                    ConfigurationManager.AppSettings["ApiPass"]);
+                var apiUser = _configurationWrapper.GetEnvironmentVarAsString("API_USER");
+                var apiPassword = _configurationWrapper.GetEnvironmentVarAsString("API_PASSWORD");
+
+                var token = AuthenticationService.authenticate(apiUser, apiPassword);
                 var exists = LookupService.EmailSearch(email, token);
                 if (exists.Count == 0)
                 {
