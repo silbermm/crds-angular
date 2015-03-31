@@ -18,66 +18,43 @@ require('../services/group_service');
         vm.alreadySignedUp = false;
         vm.viewReady = false;
         vm.modalInstance = {};
+        vm.response = {};
 
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
-        vm.testResponse = {
-          "groupID": "1",
-          "groupFullInd": "True",
-          "waitListInd": "True",
-          "waitListGroupId": "1",
-<<<<<<< Updated upstream
-          relationships:
-          [
-            { "Nickname": "Shankar",
-              "Email_Address": "shankx@test.com",
-              "userInGroup": true,
-              "Participant_ID":"1111"
-            },
-            { "Nickname": "Luisa",
-              "Email_Address": "Luisa@test.com",
-              "userInGroup": false,
-              "Participant_ID":"2222"
-            },
-            { "Nickname": "John",
-              "Email_Address": "john@test.com",
-              "userInGroup": true,
-              "Participant_ID":"3333"
-            },
-            { "Nickname": "Bob",
-              "Email_Address": "bob@test.com",
-=======
-          SignUpFamilyMembers:
-          [
-            { "nickname": "Shankar",
-              "emailAddress": "shankx@test.com",
-              "userInGroup": true,
-              "Participant_ID":"1111"
-            },
-            { "nickname": "Luisa",
-              "emailAddress": "Luisa@test.com",
-              "userInGroup": false,
-              "Participant_ID":"2222"
-            },
-            { "nickname": "John",
-              "emailAddress": "john@test.com",
-              "userInGroup": true,
-              "Participant_ID":"3333"
-            },
-            { "nickname": "Bob",
-              "emailAddress": "bob@test.com",
->>>>>>> Stashed changes
-              "userInGroup": false,
-              "Participant_ID":"4444"
-            }
-          ]
-        };
+        // vm.testResponse = {
+        //   "groupID": "1",
+        //   "groupFullInd": "True",
+        //   "waitListInd": "True",
+        //   "waitListGroupId": "1",
+ 
+        //   SignUpFamilyMembers:
+        //   [
+        //     { "nickname": "Shankar",
+        //       "emailAddress": "shankx@test.com",
+        //       "userInGroup": true,
+        //       "Participant_ID":"1111"
+        //     },
+        //     { "nickname": "Luisa",
+        //       "emailAddress": "Luisa@test.com",
+        //       "userInGroup": false,
+        //       "Participant_ID":"2222"
+        //     },
+        //     { "nickname": "John",
+        //       "emailAddress": "john@test.com",
+        //       "userInGroup": true,
+        //       "Participant_ID":"3333"
+        //     },
+        //     { "nickname": "Bob",
+        //       "emailAddress": "bob@test.com",
+        //       "userInGroup": false,
+        //       "Participant_ID":"4444"
+        //     }
+        //   ]
+        // };
 
         vm.testSubmit = function(){
             //console.log(vm.testResponse.relationships);
-            var test = hasParticipantID(vm.testResponse.relationships);
+            var test = hasParticipantID(vm.response);
             console.log(test);
         };
 
@@ -101,7 +78,8 @@ require('../services/group_service');
                 vm.groupDetails = Group.Detail.get({groupId : vm.groupId}).$promise
                 .then(function(response){
                     console.log("Call for parent group");
-                    console.log(response);
+                    console.log(response.SignUpFamilyMembers);
+                    vm.response = response.SignUpFamilyMembers;
                     if(response.waitListInd === "False" || response.waitListInd === false)
                         vm.viewReady = true;
                     //if(response.SignUpFamilyMembers[0].userInGroup === true){
@@ -186,12 +164,15 @@ require('../services/group_service');
         };
 
         function hasParticipantID(array){
-                var result = [];
-                for (var i = 0; i < array.length; i++) {
-                    if(array[i]['newAdd'] !== undefined && array[i]['newAdd'] !== "")
-                    result[result.length] = array[i]['newAdd'];
-                    }
-                    return result;
-            };
+            var result = [];
+            if(array.length === 1){
+                result[result.length] = array[0]['participantId'];
+            } 
+            for (var i = 0; i < array.length; i++) {
+                if(array[i]['newAdd'] !== undefined && array[i]['newAdd'] !== "")
+                result[result.length] = array[i]['newAdd'];
+                }
+                return result;
+        };
     }
 })()
