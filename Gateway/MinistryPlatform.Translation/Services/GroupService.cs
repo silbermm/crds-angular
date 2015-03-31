@@ -95,7 +95,7 @@ namespace MinistryPlatform.Translation.Services
                 groupDetails.TryGetValue("Group_Type_ID", out gt);
                 if (gt != null)
                 {
-                    g.GroupType = (int)gt;
+                    g.GroupType = (int) gt;
                 }
 
                 object gsz = null;
@@ -232,16 +232,23 @@ namespace MinistryPlatform.Translation.Services
         }
 
 
-        public List<GroupSignupRelationships> GetGroupSignupRelations(int groupType, string token)
+        public List<GroupSignupRelationships> GetGroupSignupRelations(int groupType)
         {
-            var relationRecords = ministryPlatformService.GetSubPageRecords(GroupSignupRelationsPageId, groupType, token);
-            
-            return relationRecords.Select(relationRecord => new GroupSignupRelationships
-            {
-                RelationshipId = (int)relationRecord["Relationship_ID"],
-                RelationshipMinAge = (string)relationRecord["Min_Age"],
-                RelationshipMaxAge = (string)relationRecord["Max_Age"]
-            }).ToList();
+           var response = WithApiLogin<List<GroupSignupRelationships>>(
+                apiToken =>
+                {
+                    var relationRecords = ministryPlatformService.GetSubPageRecords(GroupSignupRelationsPageId,
+                        groupType, apiToken);
+
+                    return relationRecords.Select(relationRecord => new GroupSignupRelationships
+                    {
+                        RelationshipId = (int) relationRecord["Relationship_ID"],
+                        RelationshipMinAge = (string) relationRecord["Min_Age"],
+                        RelationshipMaxAge = (string) relationRecord["Max_Age"]
+                    }).ToList();
+                });
+            return response;
         }
     }
 }
+

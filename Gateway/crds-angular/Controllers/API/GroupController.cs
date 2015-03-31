@@ -127,7 +127,7 @@ namespace crds_angular.Controllers.API
                
                 Group g = groupService.getGroupDetails(groupId);
 
-                var signupRelations = groupService.GetGroupSignupRelations(g.GroupType, token);
+                var signupRelations = groupService.GetGroupSignupRelations(g.GroupType);
             
                 var currRelationships = contactRelationshipService.GetMyCurrentRelationships(contactId, token);
 
