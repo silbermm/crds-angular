@@ -64,7 +64,7 @@ Mac and Linux users can run:
 
 Next, update the selenium drivers. `webdriver-manager update --out_dir=node_modules/protractor/selenium`. 
 
-To run tests in safari, you will need to download the safari plugin from (here)[http://selenium-release.storage.googleapis.com/index.html?path=2.45/]
+To run tests in safari, you will need to download the safari plugin from (here)[http://selenium-release.storage.googleapis.com/index.html?path=2.45/] and install it.
 
 You will now be able to run protractor by typing `protractor protractor.conf.js`. 
 
