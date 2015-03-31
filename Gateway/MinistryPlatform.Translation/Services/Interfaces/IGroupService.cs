@@ -21,5 +21,10 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         bool checkIfRelationshipInGroup(int relationshipId, IList<int> currRelationshipList);
      
         List<GroupSignupRelationships> GetGroupSignupRelations(int groupType); 
+
+        int CalculateAge(DateTime birthDate, DateTime now);
+
+       // bool CheckAgeForRelationship(IList<ContactRelationship> familyToReturn, string signupRelations);
+
     }
 }

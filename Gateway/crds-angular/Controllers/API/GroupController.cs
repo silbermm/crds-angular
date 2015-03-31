@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -19,6 +20,7 @@ using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Exceptions;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
+using Newtonsoft.Json;
 
 namespace crds_angular.Controllers.API
 {
@@ -48,7 +50,7 @@ namespace crds_angular.Controllers.API
 
         [ResponseType(typeof (GroupDTO))]
         [Route("api/group/{groupId}/participants")]
-        public IHttpActionResult Post(int groupId, List<int> particpantIdToAdd )
+        public IHttpActionResult Post(int groupId, [FromBody] PartID partId )
         {
             return Authorized(token =>
             {
@@ -56,25 +58,26 @@ namespace crds_angular.Controllers.API
                 {
                     Group g = groupService.getGroupDetails(groupId);
 
-                    var participantsToAdd = particpantIdToAdd.Count;
+                    var numParticipantsToAdd = partId.partId.Count;
                     var spaceRemaining = g.TargetSize - g.Participants.Count;
-                    if ((participantsToAdd > spaceRemaining) || (g.Full))
+                    if (((g.TargetSize > 0) && (numParticipantsToAdd > spaceRemaining)) || (g.Full))
                     {
                         throw (new GroupFullException(g));
                     }
                    
-                    var response = new Dictionary<string, object>();
-                    foreach (var p in particpantIdToAdd)
+                    var response = new List<Dictionary<string, object>>();
+                    foreach (var p in partId.partId)
                     {
                         // First sign this user up for the community group
                         int groupParticipantId = groupService.addParticipantToGroup(p, Convert.ToInt32(groupId),
                             GroupRoleDefaultId, DateTime.Now);
                         logger.Debug("Added user - group/participant id = " + groupParticipantId);
 
-                        response.Add("success", p);
+                        var partResponse = new Dictionary<string, object>();
+                        partResponse.Add("success", p);
                   
                         var enrolledEvents = new List<string>();
-                        response.Add("enrolledEvents", enrolledEvents);
+                        partResponse.Add("enrolledEvents", enrolledEvents);
 
                         // Now see what future events are scheduled for this group, and register the user for those
                         var events = groupService.getAllEventsForGroup(Convert.ToInt32(groupId));
@@ -88,7 +91,8 @@ namespace crds_angular.Controllers.API
                                 enrolledEvents.Add(Convert.ToString(e.EventId));
                             }
                         }
-                     }
+                        response.Add(partResponse);
+                    }
                    
                    return Ok(response);
                 }
@@ -131,14 +135,41 @@ namespace crds_angular.Controllers.API
             
                 var currRelationships = contactRelationshipService.GetMyCurrentRelationships(contactId, token);
 
-                Contact_Relationship[] familyToReturn =  null;
-                //need to add age check!!
+                ContactRelationship[] familyToReturn =  null;
+               
                 if (currRelationships != null)
                 {
                   familyToReturn =  currRelationships.Where(
                         c => signupRelations.Select(s => s.RelationshipId).Contains(c.Relationship_Id)).ToArray();
                 }
-                
+
+
+                foreach (var s in signupRelations)
+                {
+                    int maxAge = 100;
+                    int minAge = 0;
+                    if (s.RelationshipMaxAge != null)
+                    {
+                        maxAge = Convert.ToInt32(s.RelationshipMaxAge);
+                    }
+                    if (s.RelationshipMinAge != null)
+                    {
+                        minAge = Convert.ToInt32(s.RelationshipMinAge);
+                    }
+                    foreach (var f in familyToReturn)
+                        {
+                        if (f.Birth_date != null)
+                        {
+                            var participantAge = groupService.CalculateAge(f.Birth_date, DateTime.Now);
+                            if ((maxAge < participantAge) || (participantAge < minAge))
+                            {
+                                //drop record from familyToReturn
+
+                            }
+                        }
+                    }
+                }
+              
                 var detail = new GroupDTO();
                 {
                     detail.GroupId = g.GroupId;
@@ -199,7 +230,11 @@ namespace crds_angular.Controllers.API
     public class ContactDTO
     {
     }
-    
 
-    
+    public class PartID
+    {
+        [JsonProperty(PropertyName = "partId")]
+        public List<int> partId { get; set; }
+    }
+
 }
