@@ -11,17 +11,22 @@
   > li {
     + li:before {
       color: $cr-grey;
+      font-size: 1.6rem;
+      font-weight: 100;
     }
   }
 }
-ol.breadcrumb li {
-  color: $cr-blue;
-  font-weight: 900;
+ol.breadcrumb li:first-child {
+  font-weight: 600;
   text-transform: uppercase;
+  font-size: 1.9rem;
+  vertical-align: middle;
+  font-family: $brand-font-family;
 }
 ol.breadcrumb li.active {
   text-transform: none;
 }
+
 
 /***************************************************************************************
 * Buttons
