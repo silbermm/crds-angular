@@ -13,6 +13,7 @@
       restrict: "EA",
       transclude: true,
       templateUrl : "my_serve/serveTeam.html",
+      replace: true,
       scope : {
         team: '=',
         opportunity: '=',
