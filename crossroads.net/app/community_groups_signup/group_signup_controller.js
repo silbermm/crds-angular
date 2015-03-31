@@ -50,8 +50,9 @@ require('../services/group_service');
         };
 
         vm.testSubmit = function(){
-            console.log(vm.testResponse.relationships);
-
+            //console.log(vm.testResponse.relationships);
+            var test = hasParticipantID(vm.testResponse.relationships);
+            console.log(test);
         };
 
         vm.signupPage = $rootScope.signupPage;
@@ -157,5 +158,14 @@ require('../services/group_service');
                 scope: $scope,
             });
         };
+
+        function hasParticipantID(array){
+                var result = [];
+                for (var i = 0; i < array.length; i++) {
+                    if(array[i]['newAdd'] !== undefined && array[i]['newAdd'] !== "")
+                    result[result.length] = array[i]['newAdd'];
+                    }
+                    return result;
+            };
     }
 })()
