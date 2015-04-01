@@ -20,42 +20,23 @@ require('../services/group_service');
         vm.modalInstance = {};
         vm.response = {};
 
-
-        // vm.testResponse = {
-        //   "groupID": "1",
-        //   "groupFullInd": "True",
-        //   "waitListInd": "True",
-        //   "waitListGroupId": "1",
-
-        //   SignUpFamilyMembers:
-        //   [
-        //     { "nickname": "Shankar",
-        //       "emailAddress": "shankx@test.com",
-        //       "userInGroup": true,
-        //       "Participant_ID":"1111"
-        //     },
-        //     { "nickname": "Luisa",
-        //       "emailAddress": "Luisa@test.com",
-        //       "userInGroup": false,
-        //       "Participant_ID":"2222"
-        //     },
-        //     { "nickname": "John",
-        //       "emailAddress": "john@test.com",
-        //       "userInGroup": true,
-        //       "Participant_ID":"3333"
-        //     },
-        //     { "nickname": "Bob",
-        //       "emailAddress": "bob@test.com",
-        //       "userInGroup": false,
-        //       "Participant_ID":"4444"
-        //     }
-        //   ]
-        // };
-
-        vm.testSubmit = function(){
-            //console.log(vm.testResponse.relationships);
+        vm.signup = function(){
             var test = hasParticipantID(vm.response);
             console.log(test);
+            //Add Person to group
+            Group.Participant.save({
+                groupId: vm.groupId
+            },test).$promise.then(function (response) {
+                $rootScope.$emit('notify', $rootScope.MESSAGES.successfullRegistration);
+                vm.showContent = false;
+                vm.showSuccess = true;
+                vm.showWaitList = false;
+                vm.showWaitSuccess = true;
+            }, function (error) {
+                $rootScope.$emit('notify', $rootScope.MESSAGES.fullGroupError);
+                vm.showContent = false;
+                vm.showFull = true;
+            });
         };
 
         vm.signupPage = $rootScope.signupPage;
@@ -71,6 +52,8 @@ require('../services/group_service');
         }, function () {
             if (pageRequest.pages.length > 0) {
                 vm.signupPage = pageRequest.pages[0];
+                console.log("CMS");
+                console.log(vm.signupPage);
                 // retrieve group id from the CMS page
                 vm.groupId = vm.signupPage.group;
                 $log.debug("Group ID: " + vm.groupId);
@@ -79,12 +62,16 @@ require('../services/group_service');
                 .then(function(response){
                     console.log("Call for parent group");
                     console.log(response.SignUpFamilyMembers);
+                    
+                    console.log("Parent Group Detail");
+                    console.log(response);
+
                     vm.response = response.SignUpFamilyMembers;
                     if(response.waitListInd === "False" || response.waitListInd === false)
                         vm.viewReady = true;
                     //if(response.SignUpFamilyMembers[0].userInGroup === true){
 
-                    if(response.userInGroup === true){
+                    if(allSignedUp(response)){
                         vm.alreadySignedUp = true;
                     }
                     // This is the case where the group is full and there is a waitlist
@@ -102,7 +89,8 @@ require('../services/group_service');
                         .then(function(response){
                             console.log("Call for waitlist group");
                             console.log(response);
-                            if(response.userInGroup === true){
+                            vm.response = response.SignUpFamilyMembers;
+                            if(allSignedUp(response)){
                                 vm.alreadySignedUp = true;
                             }
                             vm.viewReady = true;
@@ -113,8 +101,8 @@ require('../services/group_service');
                         vm.showFull = true;
                         vm.waitListCase = false;
                         vm.showContent = false;
-                        vm.viewReady = true;
                         vm.showWaitList = false;
+                        vm.viewReady = true;
                         //this is the case where the group is NOT full and there IS waitlist
                     }else if((response.groupFullInd === "False" && response.waitListInd === "True") || (response.groupFullInd === false && response.waitListInd === true)){
                         vm.waitListCase = false;
@@ -136,23 +124,6 @@ require('../services/group_service');
 }
 });
 
-        vm.signup = function () {
-            //Add Person to group
-            Group.Participant.save({
-                groupId: vm.groupId
-            }).$promise.then(function (response) {
-                $rootScope.$emit('notify', $rootScope.MESSAGES.successfullRegistration);
-                vm.showContent = false;
-                vm.showSuccess = true;
-                vm.showWaitList = false;
-                vm.showWaitSuccess = true;
-            }, function (error) {
-                $rootScope.$emit('notify', $rootScope.MESSAGES.fullGroupError);
-                vm.showContent = false;
-                vm.showFull = true;
-            });
-        };
-
         function editProfile() {
             vm.modalInstance = $modal.open({
                 templateUrl: 'editProfile.html',
@@ -164,15 +135,39 @@ require('../services/group_service');
         };
 
         function hasParticipantID(array){
-            var result = [];
-            if(array.length === 1){
-                result[result.length] = array[0]['participantId'];
+            var result = {};
+            result.partId =[];
+            if(array.length > 1){
+             for (var i = 0; i < array.length; i++) {
+                 if(array[i]['newAdd'] !== undefined && array[i]['newAdd'] !== "")
+                 result.partId[result.partId.length] = array[i]['newAdd'];
+                 }
+            }else if(array.length === 1){
+                result.partId[result.partId.length] = array[0]['participantId'];
             }
-            for (var i = 0; i < array.length; i++) {
-                if(array[i]['newAdd'] !== undefined && array[i]['newAdd'] !== "")
-                result[result.length] = array[i]['newAdd'];
-                }
                 return result;
+        };
+
+        function allSignedUp(array){
+            var result = false;
+            if(array.SignUpFamilyMembers.length > 1){
+                for(var i = 0; i < array.SignUpFamilyMembers.length; i++){
+                    if(array.SignUpFamilyMembers[i]['userInGroup'] === false){
+                        result = false;
+                        break;
+                    }else{
+                        result = true;
+                    }
+                }
+            }else{
+                if(array.SignUpFamilyMembers[0]['userInGroup'] === false){
+                        result = false;
+                    }else{
+                        result = true;
+                    }
+            }
+            console.log("allSignedUp: "+result);
+            return result;
         };
     }
 })()
