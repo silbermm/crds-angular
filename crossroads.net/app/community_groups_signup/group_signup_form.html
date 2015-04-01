@@ -1,29 +1,38 @@
-<div ng-show="groupsignup.viewReady">
+<!-- <div ng-show="groupsignup.viewReady"> -->
+<div ng-show="true">
   <h2 class="header noPspace" ng-bind-html="groupsignup.signupPage.title | html"></h2>
   <div ng-show="true">
     <div ng-bind-html="groupsignup.signupPage.existingMember | html"></div>
-    <h3>Participants</h3>
+    <legend>People to Sign Up</legend>
+
+    <div ng-show="!groupsignup.alreadySignedUp">
+      <p id="content" class="noPspace" dir="ltr" ng-bind-html="groupsignup.signupPage.content | html" ng-show="groupsignup.showContent"></p>
+      <p id="successMessage" ng-bind-html="groupsignup.signupPage.success | html" ng-show="groupsignup.showSuccess && !groupsignup.waitListCase"></p>
+      <p id="fullGroupMessage" ng-bind-html="groupsignup.signupPage.full | html" ng-show="groupsignup.showFull"></p>
+      <p id="waitListMessage" ng-bind-html="groupsignup.signupPage.waitList | html" ng-show="groupsignup.showWaitList && groupsignup.waitListCase"></p>
+      <p id="waitSuccessMessage" ng-bind-html="groupsignup.signupPage.waitSuccess | html" ng-show="groupsignup.showWaitSuccess && groupsignup.waitListCase"></p>
+    </div>
+
+
+
     <div style="border:3px red solid; padding:10px">
       <form name="myForm" role="form" ng-submit="groupsignup.testSubmit(myForm)">
-        <p style="font-weight:bold" ng-repeat="person in groupsignup.testResponse.relationships as people">
-          <span><input name="input" type="checkbox" ng-checked="person['userInGroup']" ng-disabled="person['userInGroup']" ng-model="person['newAdd']" ng-true-value="'{{person['Participant_ID']}}'" ng-false-value="''">&nbsp;</span>
-          <span>{{person['Nickname']}}</span>
-          <span>({{person['Email_Address']}})</span>
+        <p style="font-weight:bold" ng-repeat="person in groupsignup.response as people">
+          <span ng-show="groupsignup.response.length > 1"><input name="input" type="checkbox" ng-checked="person['userInGroup']" ng-disabled="person['userInGroup']" ng-model="person['newAdd']" ng-true-value="'{{person['participantId']}}'" ng-false-value="''">&nbsp;</span>
+          <span>{{person['firstName']}}</span>
+          <span>({{person['emailAddress']}})</span>
+          <span ng-show="people.indexOf(person) === 0"><a href="" ng-click="groupsignup.editProfile()">
+            <svg viewBox="0 0 32 32" class="icon icon-pencil4">
+              <use xlink:href="#pencil4"></use>
+            </svg>
+          </a></span>
         </p>
         <p><input type="submit" name="submit_group_signup" value="Sign Up" id="submit_group_signup" class="btn btn-primary push-half-bottom"></p>
       </form>
     </div>
-    <hr>
-    <p><label><input type="checkbox" style="visibility:hidden;">{{groupsignup.person["nickName"]}} ({{groupsignup.person["emailAddress"]}})</label></p>
   </div>
 
-  <div ng-show="!groupsignup.alreadySignedUp">
-    <p id="content" class="noPspace" dir="ltr" ng-bind-html="groupsignup.signupPage.content | html" ng-show="groupsignup.showContent"></p>
-    <p id="successMessage" ng-bind-html="groupsignup.signupPage.success | html" ng-show="groupsignup.showSuccess && !groupsignup.waitListCase"></p>
-    <p id="fullGroupMessage" ng-bind-html="groupsignup.signupPage.full | html" ng-show="groupsignup.showFull"></p>
-    <p id="waitListMessage" ng-bind-html="groupsignup.signupPage.waitList | html" ng-show="groupsignup.showWaitList && groupsignup.waitListCase"></p>
-    <p id="waitSuccessMessage" ng-bind-html="groupsignup.signupPage.waitSuccess | html" ng-show="groupsignup.showWaitSuccess && groupsignup.waitListCase"></p>
-  </div>
+
 </div>
 
 
