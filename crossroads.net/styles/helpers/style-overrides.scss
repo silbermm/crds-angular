@@ -69,6 +69,14 @@ ol.breadcrumb li.active {
   }
 }
 
+.btn-ghost {
+    @include button-variant($gray-dark, transparent, $gray-darker);
+}
+
+.btn-ghost.active {
+    @include button-variant(white, $gray-light, $gray-dark);
+}
+
 /***************************************************************************************
 * Badges
 ***************************************************************************************/

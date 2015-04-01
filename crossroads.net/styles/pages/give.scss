@@ -42,36 +42,51 @@
     .form-group > .btn {
         width: 100%;
     }
-    .wide-label {
-        width: 100%;
-    }
-    .bank-section {
-        margin-top: 10px;
-    }
-    .exp {
-        padding-left: 0;
-    }
-    .account-type > .btn {
-        outline: none;
-    }
-    .cc-icon {
-        background: no-repeat 99%;
-        background-size: auto 30px;
-    }
-    .cc-visa {
-        background-image: url('http://crossroads-media.s3.amazonaws.com/images/cc_visa.svg');
-    }
-    .cc-mastercard {
-        background-image: url('http://crossroads-media.s3.amazonaws.com/images/cc_mastercard.svg');
-    }
-    .cc-discover {
-        background-image: url('http://crossroads-media.s3.amazonaws.com/images/cc_discover.svg');
-    }
-    .cc-american-express {
-        background-image: url('http://crossroads-media.s3.amazonaws.com/images/cc_american_express.svg');
-    }
-    .give-check-icon {
-        height: auto;
-        width: auto;
-    }
+}
+
+.wide-label {
+    width: 100%;
+}
+
+.bank-section {
+    margin-top: 10px;
+}
+
+.exp {
+    padding-left: 0;
+}
+
+.account-type > .btn {
+    outline: none !important;
+}
+
+.cc-icon {
+    background: no-repeat 99%;
+    background-size: auto 30px;
+}
+
+.cc-visa {
+    background-image: url('http://crossroads-media.s3.amazonaws.com/images/cc_visa.svg');
+}
+
+.cc-mastercard {
+    background-image: url('http://crossroads-media.s3.amazonaws.com/images/cc_mastercard.svg');
+}
+
+.cc-discover {
+    background-image: url('http://crossroads-media.s3.amazonaws.com/images/cc_discover.svg');
+}
+
+.cc-american-express {
+    background-image: url('http://crossroads-media.s3.amazonaws.com/images/cc_american_express.svg');
+}
+
+.give-check-icon {
+    height: auto;
+    width: auto;
+}
+
+.confirm-cc-icon {
+    height: 12px;
+    width: 20px;
 }

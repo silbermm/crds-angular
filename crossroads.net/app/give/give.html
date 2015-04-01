@@ -6,8 +6,10 @@
 
         <div class="push-top">
             <form class="give-form">
-
                 <div class="form-group">
+                    <p>You are giving ${{give.amount > 0 ? give.amount : 0}} to the {{give.fund}}.
+                        <a href="">Change</a>
+                    </p>
                     <button class="btn btn-primary">Give ${{give.amount > 0 ? give.amount : 0}}</button>
                 </div>
             </form>
