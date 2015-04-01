@@ -10,18 +10,36 @@
   padding-left: 0;
   > li {
     + li:before {
-      color: $cr-grey;
+        content: "";
+        min-height: 20px;
+        min-width: 20px;
+        background-image: url('http://crossroads-media.s3.amazonaws.com/images/arrow-right9.svg');
+        background-position: 0px;
+        display: inline-block;
+        vertical-align: bottom;
+        padding: 0;
+        margin: 0 0 1px;
+        background-size: 18px;
+        background-repeat: no-repeat;
+        opacity: .2;
     }
   }
 }
-ol.breadcrumb li {
-  color: $cr-blue;
-  font-weight: 900;
+ol.breadcrumb li:first-child {
+  font-weight: 600;
   text-transform: uppercase;
+  font-size: 1.9rem;
+  vertical-align: middle;
+  font-family: $brand-font-family;
+
+  a {
+    color: $cr-orange;
+  }
 }
 ol.breadcrumb li.active {
   text-transform: none;
 }
+
 
 /***************************************************************************************
 * Buttons
