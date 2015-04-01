@@ -65,14 +65,15 @@ namespace crds_angular.Controllers.API
                         throw (new GroupFullException(g));
                     }
                    
-                    var response = new List<Dictionary<string, object>>();
+                    var response = new List<Dictionary<string, Object>>();
+                    
                     foreach (var p in partId.partId)
                     {
                         // First sign this user up for the community group
                         int groupParticipantId = groupService.addParticipantToGroup(p, Convert.ToInt32(groupId),
                             GroupRoleDefaultId, DateTime.Now);
                         logger.Debug("Added user - group/participant id = " + groupParticipantId);
-
+                        
                         var partResponse = new Dictionary<string, object>();
                         partResponse.Add("success", p);
                   
@@ -132,44 +133,17 @@ namespace crds_angular.Controllers.API
                 Group g = groupService.getGroupDetails(groupId);
 
                 var signupRelations = groupService.GetGroupSignupRelations(g.GroupType);
-            
+
                 var currRelationships = contactRelationshipService.GetMyCurrentRelationships(contactId, token);
 
-                ContactRelationship[] familyToReturn =  null;
-               
+                ContactRelationship[] familyToReturn = null;
+                
                 if (currRelationships != null)
                 {
                   familyToReturn =  currRelationships.Where(
                         c => signupRelations.Select(s => s.RelationshipId).Contains(c.Relationship_Id)).ToArray();
                 }
 
-
-                foreach (var s in signupRelations)
-                {
-                    int maxAge = 100;
-                    int minAge = 0;
-                    if (s.RelationshipMaxAge != null)
-                    {
-                        maxAge = Convert.ToInt32(s.RelationshipMaxAge);
-                    }
-                    if (s.RelationshipMinAge != null)
-                    {
-                        minAge = Convert.ToInt32(s.RelationshipMinAge);
-                    }
-                    foreach (var f in familyToReturn)
-                        {
-                        if (f.Birth_date != null)
-                        {
-                            var participantAge = groupService.CalculateAge(f.Birth_date, DateTime.Now);
-                            if ((maxAge < participantAge) || (participantAge < minAge))
-                            {
-                                //drop record from familyToReturn
-
-                            }
-                        }
-                    }
-                }
-              
                 var detail = new GroupDTO();
                 {
                     detail.GroupId = g.GroupId;
@@ -209,13 +183,13 @@ namespace crds_angular.Controllers.API
         }
 
         // TODO: implement later
-        //[ResponseType(typeof (ContactDTO))]
-        //[Route("api/group/{groupId}/user/{userId}")]
-        //public IHttpActionResult Get(String groupId, String userId)
-        //{
-        //    throw new NotImplementedException();
-        //    return this.Ok();
-        //}
+        [ResponseType(typeof(ContactDTO))]
+        [Route("api/group/{groupId}/user/{userId}")]
+        public IHttpActionResult Get(String groupId, String userId)
+        {
+            throw new NotImplementedException();
+            return this.Ok();
+        }
 
         // TODO: implement later
         [ResponseType(typeof (GroupDTO))]
@@ -229,12 +203,6 @@ namespace crds_angular.Controllers.API
 
     public class ContactDTO
     {
-    }
-
-    public class PartID
-    {
-        [JsonProperty(PropertyName = "partId")]
-        public List<int> partId { get; set; }
     }
 
 }

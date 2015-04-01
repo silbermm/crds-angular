@@ -70,51 +70,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(987, groupParticipantId);
         }
 
-        [Test]
-        public void testAddParticipantToGroupWhenGroupFull()
-        {
-            var getGroupPageResponse = new Dictionary<string, object>
-            {
-                {"Group_ID", 456},
-                {"Group_Name", "Test Group"},
-                {"Target_Size", (short) 1},
-                {"Group_Is_Full", true},
-            };
-
-            ministryPlatformService.Setup(mocked => mocked.GetRecordDict(GroupsPageId, 456, It.IsAny<string>(), false))
-                .Returns(getGroupPageResponse);
-
-            var groupParticipantsPageResponse = new List<Dictionary<string, object>>();
-            groupParticipantsPageResponse.Add(new Dictionary<string, object>()
-            {
-                {"Participant_ID", 42}
-            });
-            ministryPlatformService.Setup(
-                mocked => mocked.GetSubPageRecords(GroupsParticipantsPageId, 456, It.IsAny<string>()))
-                .Returns(groupParticipantsPageResponse);
-
-            try
-            {
-                fixture.addParticipantToGroup(123, 456, 789, DateTime.Now);
-                Assert.Fail("Expected exception was not thrown");
-            }
-            catch (GroupFullException e)
-            {
-                ministryPlatformService.Verify(
-                    mocked =>
-                        mocked.CreateSubRecord(1, 1, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>(), true),
-                    Times.Never);
-                Assert.NotNull(e.GroupDetails);
-                Assert.AreEqual(456, e.GroupDetails.GroupId);
-                Assert.AreEqual(1, e.GroupDetails.TargetSize);
-                Assert.AreEqual(true, e.GroupDetails.Full);
-                Assert.AreEqual("Test Group", e.GroupDetails.Name);
-                Assert.NotNull(e.GroupDetails.Participants);
-                Assert.AreEqual(1, e.GroupDetails.Participants.Count);
-                Assert.AreEqual(42, e.GroupDetails.Participants[0]);
-            }
-        }
-
+       
         [Test]
         public void testGetAllEventsForGroupNoGroupFound()
         {

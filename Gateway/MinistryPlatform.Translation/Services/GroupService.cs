@@ -33,11 +33,11 @@ namespace MinistryPlatform.Translation.Services
             logger.Debug("Adding participant " + participantId + " to group " + groupId);
 
             // TODO Basing "Full" on Group_Is_Full flag, pending outcome of SPIKE: US1080
-            Group g = getGroupDetails(groupId);
-            if (g.Full)
-            {
-                throw (new GroupFullException(g));
-            }
+            //Group g = getGroupDetails(groupId);
+            //if (g.Full)
+            //{
+            //    throw (new GroupFullException(g));
+            //}
 
             var values = new Dictionary<string, object>
             {
@@ -256,35 +256,7 @@ namespace MinistryPlatform.Translation.Services
             if (now.Month < birthDate.Month || (now.Month == birthDate.Month && now.Day < birthDate.Day)) age--;
             return age;
         }
-
-        //public bool CheckAgeForRelationship(IList<ContactRelationship> familyToReturn, relationships)
-        //{
-        //    foreach (var s in signupRelations)
-        //        {
-        //            int maxAge = 100;
-        //            int minAge = 0;
-                    //if (s.RelationshipMaxAge != null)
-                    //{
-                    //    maxAge = Convert.ToInt32(s.RelationshipMaxAge);
-                    //}
-                    //if (s.RelationshipMinAge != null)
-                    //{
-                    //    minAge = Convert.ToInt32(s.RelationshipMinAge);
-                    //}
-                    //foreach (var f in familyToReturn)
-                    //    {
-                    //    if (f.Birth_date != null)
-                    //    {
-                    //        var participantAge = CalculateAge(f.Birth_date, DateTime.Now);
-                    //        if ((maxAge < participantAge) || (participantAge < minAge))
-                    //        {
-                    //            //return boolean
-                                
-                    //        }
-                    //    }
-                   //}
-              //  }
-        //}
+        
     }
 }
 

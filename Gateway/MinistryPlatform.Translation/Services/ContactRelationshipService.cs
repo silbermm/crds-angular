@@ -27,27 +27,34 @@ namespace MinistryPlatform.Translation.Services
 
             return viewRecords.Select(viewRecord => new ContactRelationship
             {
-                Contact_Id = (int)viewRecord["Contact_ID"],
-                Email_Address = (string)viewRecord["Email_Address"],
-                Last_Name = (string)viewRecord["Last Name"],
-                Preferred_Name = (string)viewRecord["Preferred Name"]
+                Contact_Id = (int) viewRecord["Contact_ID"],
+                Email_Address = (string) viewRecord["Email_Address"],
+                Last_Name = (string) viewRecord["Last Name"],
+                Preferred_Name = (string) viewRecord["Preferred Name"]
             }).ToList();
         }
 
         public IEnumerable<ContactRelationship> GetMyCurrentRelationships(int contactId, string token)
         {
-            var viewRecords = _ministryPlatformService.GetSubpageViewRecords(_getMyCurrentRelationships, contactId, token);
-
-            return viewRecords.Select(viewRecord => new ContactRelationship
+            var viewRecords = _ministryPlatformService.GetSubpageViewRecords(_getMyCurrentRelationships, contactId,
+                token);
+            try
             {
-                Contact_Id = (int)viewRecord["Contact_ID"],
-                Email_Address = (string)viewRecord["Email_Address"],
-                Last_Name = (string)viewRecord["Last Name"],
-                Preferred_Name = (string)viewRecord["Preferred Name"],
-                Participant_Id = (int)viewRecord["Participant_ID"],
-                Relationship_Id = (int)viewRecord["Relationship_ID"]
-            }).ToList();
+
+                return viewRecords.Select(viewRecord => new ContactRelationship
+                {
+                    Contact_Id = (int) viewRecord["Contact_ID"],
+                    Email_Address = (string) viewRecord["Email_Address"],
+                    Last_Name = (string) viewRecord["Last Name"],
+                    Preferred_Name = (string) viewRecord["Preferred Name"],
+                    Participant_Id = (int) viewRecord["Participant_ID"],
+                    Relationship_Id = (int) viewRecord["Relationship_ID"]
+                }).ToList();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
-        
     }
 }
