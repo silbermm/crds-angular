@@ -84,4 +84,14 @@ describe('Filter State Service', function() {
     filterState.addTime("10:00:00");
     expect(filterState.findTime("12:30:00")).not.toBeDefined();
   });
+
+  it("should clear the list of filters", function(){
+    filterState.addTeam("Nursery");
+    filterState.addTime("08:30:00");
+    filterState.addFamilyMember("0123456");
+    filterState.clearAll();
+    expect(filterState.getTeams().length).toBe(0);
+    expect(filterState.getTimes().length).toBe(0);
+    expect(filterState.getFamilyMembers().length).toBe(0);
+  });
 })

@@ -44,57 +44,41 @@
     }
 
     .name-btns {
-      margin: -10px 0;
       float: left;
       width: 100%;
       position: static;
-      z-index: 2;
+      z-index: 4;
+      margin-top: -5px;
+      position: relative;
 
       @media (min-width: $screen-sm-min) {
         float: right;
         width: auto;
-        position: relative;
-        z-index: 4;
       }
 
-      a {
-        display: block;
-        float: left;
-        padding: 10px 0;
-        margin: 0 0 0 5px;
-        z-index: 5;
-        position: relative;
+      .btn {
+        margin: 5px 5px 0 0;
+        display: inline-block;
+        background: darken($gray-lighter, 5%);
+        color: $text-color;
 
-        &:first-of-type {
-          margin-left: 0px;
+        &:hover {
+          background: darken($gray-lighter, 15%);
+          color: $text-color;
+        }
+
+        &:focus {
+          outline: 0;
         }
 
         &.active {
+          background: $brand-secondary;
+          color: #fff;
+          box-shadow: none;
+        }
 
-          span, span:active {
-            background: white;
-            color: $cr-orange;
-            border-color: #ddd;  
-            position: relative;
-            box-shadow: none;
-
-            &:after {
-              display: block;
-              content: "";
-              position: absolute;
-              left: -1px;
-              right: -1px;
-              bottom: -12px;
-              min-height: 15px;
-              background: white;
-              border-right: 1px solid #ddd; 
-              border-left: 1px solid #ddd; 
-              @media (min-width: $screen-sm-min) {
-                bottom: -7px;
-                min-height: 10px;
-              }
-            }
-          }
+        &:last-of-type {
+          margin-right: 0px;
         }
       }
     }

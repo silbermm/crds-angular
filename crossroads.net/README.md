@@ -32,6 +32,44 @@ Mac and Linux:
 ###Build
 To just build the project, run `gulp build-dev` for a dev build, or `gulp build` for production.
 
+###Test
+There are two types of tests available, Unit Tests and Functional Tests. 
+#### Unit Tests
+We use karma as our test runner and Jasmine to write the specs. You will need to install karma globablly to run the tests. 
+
+Unit tests are kept in the (specs)[./specs] folder.
+
+Windows users can run:
+``` npm set prefix "C:\Program Files\nodejs" ```
+
+``` npm install -g karma ```
+
+Mac and Linux users can run:
+``` npm install -g karma ```
+
+Once karma is installed, just run `karma start crossroads.conf.js` which will open chrome and run the tests. Click the debug button to see the results. Refreshing this page will re-run the tests.
+
+#### Functional Tests
+We use protractor to run the tests and Jasmine to write the specs. You will need to install protractor globally. 
+
+Functional Tests are kept in (e2e)[./e2e]
+
+Windows users can run:
+``` npm set prefix "C:\Program Files\nodejs" ```
+
+``` npm install -g protractor ```
+
+Mac and Linux users can run:
+``` npm install -g protractor ```
+
+Next, update the selenium drivers. `webdriver-manager update --out_dir=node_modules/protractor/selenium`. 
+
+To run tests in safari, you will need to download the safari plugin from (here)[http://selenium-release.storage.googleapis.com/index.html?path=2.45/] and install it.
+
+You will now be able to run protractor by typing `protractor protractor.conf.js`. 
+
+
+
 ###Run
 To run the project, run `gulp start` and point your browser to `http://localhost:8080`. If you want live reload, use `http://localhost:8080/webpack-dev-server` but keep in mind that the angular inspector will not work correctly and routes will not show up correctly with live reload. 
 

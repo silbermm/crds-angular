@@ -3,7 +3,7 @@
     <div class="panel-heading clearfix">
       <a class="panel-link" ng-click="openPanel(team.members)"></a><span class="team-name">{{::team.name}}</span>
       <div class="name-btns">
-        <a href="" ng-click="setActiveTab(member)" ng-repeat="member in team.members" ng-class="{'active':isActiveTab(member.name) }"><span class="btn btn-default btn-xs"> {{::member.name}} </span></a>
+        <button type="button" ng-click="setActiveTab(member)" ng-repeat="member in team.members" class="btn btn-xs normal-type" ng-class="{'active':isActiveTab(member.name) }">{{::member.name}}</button> 
       </div><!--/pull-right-->
     </div><!--/panel-heading-->
 
@@ -32,12 +32,6 @@
               <label>
                 <input type="radio" name="signup" id="optionsRadios2" value="2" ng-model="content">
                 No
-              </label>
-            </div><!--/radio-->
-            <div class="radio">
-              <label>
-                <input type="radio" name="signup" id="optionsRadios3" value="3" ng-model="content">
-                Maybe
               </label>
             </div><!--/radio-->
             <div ng-show="content > 0">

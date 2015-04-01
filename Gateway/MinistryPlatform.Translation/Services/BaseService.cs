@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using Crossroads.Utilities.Services;
 
 namespace MinistryPlatform.Translation.Services
 {
@@ -22,7 +23,10 @@ namespace MinistryPlatform.Translation.Services
 
         protected static string apiLogin()
         {
-            return (AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"], ConfigurationManager.AppSettings["ApiPass"]));
+            var configWrapper = new ConfigurationWrapper();
+            var apiUser = configWrapper.GetEnvironmentVarAsString("API_USER");
+            var apiPasword = configWrapper.GetEnvironmentVarAsString("API_PASSWORD");
+            return (AuthenticationService.authenticate(apiUser, apiPasword));
         }
     }
 }

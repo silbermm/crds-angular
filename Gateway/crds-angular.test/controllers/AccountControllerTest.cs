@@ -12,6 +12,8 @@ using System.Net.Http;
 using System.Web.Http.Results;
 using crds_angular.Services;
 using crds_angular.Models.Json;
+using Crossroads.Utilities.Interfaces;
+using Moq;
 
 namespace crds_angular.test.controllers
 {
@@ -20,6 +22,8 @@ namespace crds_angular.test.controllers
     {
         private AccountController accountController;
 
+        private Mock<IConfigurationWrapper> _configurationWrapper;
+
         private const string USERNAME = "testme";
         private const string PASSWORD = "changeme";
         private const string FIRSTNAME = "Test";
@@ -27,8 +31,12 @@ namespace crds_angular.test.controllers
 
         [SetUp]
         public void SetUp()
-        {            
-            accountController = new AccountController();
+        {
+            _configurationWrapper = new Mock<IConfigurationWrapper>();
+            _configurationWrapper.Setup(m => m.GetEnvironmentVarAsString("ApiUser")).Returns("mockApiUser");
+            _configurationWrapper.Setup(m => m.GetEnvironmentVarAsString("ApiPassword")).Returns("mockApiPassword");
+
+            accountController = new AccountController(_configurationWrapper.Object);
             
         }
 

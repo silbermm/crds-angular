@@ -18,6 +18,13 @@
       addTime: function (time) {
         filterState.times.push(time);
       },
+
+      clearAll: function () {
+        filterState.memberIds = [];
+        filterState.times = [];
+        filterState.teams = [];
+      },
+
       findMember: function(memberId){
         return _.find(filterState.memberIds, function(m){
           return memberId === m;

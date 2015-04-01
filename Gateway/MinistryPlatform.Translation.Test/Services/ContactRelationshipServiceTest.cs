@@ -15,7 +15,7 @@ namespace MinistryPlatform.Translation.Test.Services
     {
         private ContactRelationshipService _fixture;
         private Mock<IMinistryPlatformService> _ministryPlatformService;
-        private const int GetMyFamilyViewId = 75;
+        //private const int GetMyFamilyViewId = 75;
 
         [SetUp]
         public void SetUp()
@@ -49,7 +49,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 }
             };
             _ministryPlatformService.Setup(
-                mocked => mocked.GetSubpageViewRecords(GetMyFamilyViewId, contactId, It.IsAny<string>(), "", "", 0))
+                mocked => mocked.GetSubpageViewRecords("MyContactFamilyRelationshipViewId", contactId, It.IsAny<string>(), "", "", 0))
                 .Returns(getSubpageViewRecordsResponse);
 
             var family = _fixture.GetMyImmediatieFamilyRelationships(contactId, token).ToList();

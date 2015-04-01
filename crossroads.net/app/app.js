@@ -7,14 +7,10 @@ require("angular-sanitize");
 require('angular-messages');
 require('angular-cookies');
 require('angular-growl');
-require('angular-snap');
 require('angular-toggle-switch');
 require('angular-ui-utils');
 require('./templates/nav.html');
 require('./templates/nav-mobile.html');
-
-require('./third-party/snap/snap.min.js');
-require('../node_modules/angular-snap/angular-snap.min.css');
 
 require('../node_modules/angular-toggle-switch/angular-toggle-switch-bootstrap.css');
 require('../node_modules/angular-toggle-switch/angular-toggle-switch.css');
@@ -31,7 +27,7 @@ var _ = require('lodash');
 "use strict";
 (function () {
 
-   angular.module("crossroads", ['ngResource', "crossroads.profile", "crossroads.filters", "crdsCMS.services", "ui.router", 'ui.utils', "ngCookies", "ngMessages", 'angular-growl', 'snap', 'toggle-switch'])
+   angular.module("crossroads", ['ngResource', "crossroads.profile", "crossroads.filters", "crdsCMS.services", "ui.router", 'ui.utils', "ngCookies", "ngMessages", 'angular-growl', 'toggle-switch'])
 
     .constant("AUTH_EVENTS", {
             loginSuccess: "auth-login-success",
@@ -67,12 +63,6 @@ var _ = require('lodash');
         growlProvider.globalTimeToLive(6000);
         growlProvider.globalDisableIcons(true);
         growlProvider.globalDisableCountDown(true);
-    })
-    .config(function(snapRemoteProvider) {
-        snapRemoteProvider.globalOptions = {
-            disable: 'right',
-            touchToDrag: false
-        };
     })
     .filter('html', ['$sce', function ($sce) {
         return function (val) {

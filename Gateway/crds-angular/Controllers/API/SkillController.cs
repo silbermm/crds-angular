@@ -5,18 +5,20 @@ using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Models.Crossroads;
+using crds_angular.Security;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
+using Crossroads.Utilities.Interfaces;
 using Newtonsoft.Json;
 using Attribute = MinistryPlatform.Models.Attribute;
 
 namespace crds_angular.Controllers.API
 {
-    public class SkillController : LookupController
+    public class SkillController : MPAuth
     {
         private IPersonService _personService;
 
-        public SkillController(IPersonService personService)
+        public SkillController(IPersonService personService) 
         {
             _personService = personService;
         }

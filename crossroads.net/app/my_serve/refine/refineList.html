@@ -1,5 +1,5 @@
 <div class="col-sm-2 gray-lighter clearfix">
-  <a href="#" class="filter-clear">Clear All</a>
+  <a href="" class="filter-clear" data-ng-click="clearFilters()" >Clear All</a>
   <h5>Filter Opportunities</h5>
 
   <div class="push-half-bottom filter-group" ng-if="uniqueMembers.length > 1" >
@@ -21,22 +21,17 @@
   <div class="push-half-bottom filter-group">
     <div class="checkbox">
       <label>
-        <input type="checkbox"> Signed up Yes
+        <input type="checkbox"> Signed Up Yes
       </label>
     </div>
     <div class="checkbox">
       <label>
-        <input type="checkbox"> Not signed up
+        <input type="checkbox"> Signed Up No
       </label>
     </div>
     <div class="checkbox">
       <label>
-        <input type="checkbox"> Signed up No
-      </label>
-    </div>
-    <div class="checkbox">
-      <label>
-        <input type="checkbox"> Maybe
+        <input type="checkbox"> Not Signed Up
       </label>
     </div>
   </div><!--/push-bottom-->
