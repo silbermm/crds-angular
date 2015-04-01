@@ -15,6 +15,7 @@ namespace MinistryPlatform.Models
         public IList<int> Participants { get { return (participants); } }
         public Boolean Full { get; set; }
         public Boolean WaitList { get; set; } 
-        public int WaitListGroupId { get; set; } 
+        public int WaitListGroupId { get; set; }
+        public string PrimaryContact { get; set; }
     }
 }

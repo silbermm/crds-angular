@@ -21,14 +21,16 @@ namespace crds_angular.Services
         private IContactRelationshipService _contactRelationshipService;
         private IContactService _contactService;
         private IOpportunityService _opportunityService;
+        private IAuthenticationService _authenticationService;
 
         public PersonService(IGroupService groupService, IContactRelationshipService contactRelationshipService,
-            IContactService contactService, IOpportunityService opportunityService)
+            IContactService contactService, IOpportunityService opportunityService, IAuthenticationService authenticationService)
         {
             this._groupService = groupService;
             this._contactRelationshipService = contactRelationshipService;
             this._contactService = contactService;
             this._opportunityService = opportunityService;
+            this._authenticationService = authenticationService;
         }
 
         public void SetProfile(String token, Person person)
@@ -89,7 +91,7 @@ namespace crds_angular.Services
             person.CongregationId = contact.Congregation_ID;
             person.HouseholdId = contact.Household_ID;
             person.AddressId = contact.Address_ID;
-            
+
 
             return person;
         }
@@ -106,7 +108,8 @@ namespace crds_angular.Services
 
         public List<FamilyMember> GetMyImmediateFamily(int contactId, string token)
         {
-            var contactRelationships = _contactRelationshipService.GetMyImmediatieFamilyRelationships(contactId, token).ToList();
+            var contactRelationships =
+                _contactRelationshipService.GetMyImmediatieFamilyRelationships(contactId, token).ToList();
             var familyMembers = Mapper.Map<List<Contact_Relationship>, List<FamilyMember>>(contactRelationships);
 
             //now get info for Contact
@@ -123,15 +126,16 @@ namespace crds_angular.Services
             return familyMembers;
         }
 
-        public List<ServingTeam> GetServingTeams(int contactId, string token)
+        public List<ServingTeam> GetServingTeams( string token)
         {
+            var contactId = _authenticationService.GetContactId(token);
             var servingTeams = new List<ServingTeam>();
 
             //Go get family
             var familyMembers = GetMyImmediateFamily(contactId, token);
             foreach (var familyMember in familyMembers)
             {
-                var groups = this._groupService.GetMyServingTeams(familyMember.ContactId, token);
+                var groups = this._groupService.GetServingTeams(familyMember.ContactId, token);
                 foreach (var group in groups)
                 {
                     var servingTeam = servingTeams.SingleOrDefault(t => t.GroupId == group.GroupId);
@@ -154,7 +158,12 @@ namespace crds_angular.Services
                     }
                     else
                     {
-                        servingTeam = new ServingTeam {Name = group.Name, GroupId = group.GroupId};
+                        servingTeam = new ServingTeam
+                        {
+                            Name = group.Name,
+                            GroupId = group.GroupId,
+                            PrimaryContact = group.PrimaryContact
+                        };
                         var groupMembers = new List<TeamMember> {NewTeamMember(familyMember, group)};
                         servingTeam.Members = groupMembers;
                         servingTeams.Add(servingTeam);
@@ -166,7 +175,12 @@ namespace crds_angular.Services
 
         private static TeamMember NewTeamMember(FamilyMember familyMember, Group group)
         {
-            var teamMember = new TeamMember { ContactId = familyMember.ContactId, Name = familyMember.PreferredName, LastName = familyMember.LastName};
+            var teamMember = new TeamMember
+            {
+                ContactId = familyMember.ContactId,
+                Name = familyMember.PreferredName,
+                LastName = familyMember.LastName
+            };
 
             var role = new ServeRole {Name = @group.GroupRole};
             teamMember.Roles = new List<ServeRole> {role};
@@ -176,7 +190,12 @@ namespace crds_angular.Services
 
         private static TeamMember NewTeamMember(TeamMember teamMember, ServeRole role)
         {
-            var newTeamMember2 = new TeamMember { Name = teamMember.Name, LastName = teamMember.LastName, ContactId = teamMember.ContactId };
+            var newTeamMember2 = new TeamMember
+            {
+                Name = teamMember.Name,
+                LastName = teamMember.LastName,
+                ContactId = teamMember.ContactId
+            };
             newTeamMember2.Roles.Add(role);
 
             return newTeamMember2;
@@ -205,18 +224,22 @@ namespace crds_angular.Services
             {
                 Name = team.Name,
                 GroupId = team.GroupId,
-                Members = NewTeamMembersWithRoles(team.Members, opportunity.RoleTitle, tmpRole)
+                Members = NewTeamMembersWithRoles(team.Members, opportunity.RoleTitle, tmpRole),
+                PrimaryContact = team.PrimaryContact
             };
             return servingTeam;
         }
 
-        public List<ServingDay> GetServingDays(List<ServingTeam> teams, string token)
+        public List<ServingDay> GetServingDays(string token)
         {
+            var servingTeams = GetServingTeams(token);
             var serveDays = new List<ServingDay>();
 
-            foreach (var team in teams)
+            foreach (var team in servingTeams)
             {
                 var opportunities = this._opportunityService.GetOpportunitiesForGroup(team.GroupId, token);
+
+                if (opportunities == null) continue;
 
                 foreach (var opportunity in opportunities)
                 {

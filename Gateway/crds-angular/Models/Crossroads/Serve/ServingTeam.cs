@@ -11,14 +11,11 @@ namespace crds_angular.Models.Crossroads.Serve
         [JsonProperty(PropertyName = "groupId")]
         public int GroupId { get; set; }
 
+        [JsonProperty(PropertyName = "primaryContact")]
+        public string PrimaryContact { get; set; }
+
         [JsonProperty(PropertyName = "members")]
         public List<TeamMember> Members { get; set; }
-
-        //[JsonProperty(PropertyName = "eventTypes")]
-        //public List<tmEventType> EventTypes { get; set; }
-
-        //[JsonProperty(PropertyName = "events")]
-        //public List<ServeEvent> Events { get; set; }
 
         public ServingTeam()
         {

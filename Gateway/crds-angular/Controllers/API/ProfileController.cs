@@ -18,12 +18,10 @@ namespace crds_angular.Controllers.API
     {
         private readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private IPersonService _personService;
-        private IAuthenticationService _authenticationService;
 
-        public ProfileController(IPersonService personService, IAuthenticationService authenticationService)
+        public ProfileController(IPersonService personService)
         {
             this._personService = personService;
-            this._authenticationService = authenticationService;
         }
 
 
@@ -35,9 +33,9 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
-                    var contactId = _authenticationService.GetContactId(token);
-                    var servingTeams = _personService.GetServingTeams(contactId, token);
-                    var servingDays = _personService.GetServingDays(servingTeams, token);
+                    //var contactId = _authenticationService.GetContactId(token);
+                    //var servingTeams = _personService.GetServingTeams(contactId, token);
+                    var servingDays = _personService.GetServingDays( token);
                     if (servingDays == null)
                     {
                         return Unauthorized();
