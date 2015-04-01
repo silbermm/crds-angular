@@ -18,7 +18,8 @@
         team: '=',
         opportunity: '=',
         teamIndex: '=',
-        tabIndex: '='
+        tabIndex: '=',
+        dayIndex: '='
       },
       link : link
     };
@@ -49,7 +50,7 @@
       }
 
       function getPanelId(){
-        return "team-panel-" + scope.tabIndex + scope.teamIndex;
+        return "team-panel-" + scope.dayIndex + scope.tabIndex + scope.teamIndex;
       }
 
       function isActiveTab(memberName){
