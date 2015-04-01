@@ -13,51 +13,24 @@
 
     <div ng-show="groupsignup.showContent">
         <legend>Participants</legend>
-      <form name="myForm" role="form" ng-submit="groupsignup.signup(myForm)">
-        <p ng-repeat="person in groupsignup.response as people">
-          <span ng-show="groupsignup.response.length > 1"><input name="input" type="checkbox" ng-checked="person['userInGroup']" ng-disabled="person['userInGroup']" ng-model="person['newAdd']" ng-true-value="'{{person['participantId']}}'" ng-false-value="''">&nbsp;</span>
+      <form  class="form-group" name="myForm" role="form" ng-submit="groupsignup.signup(myForm)" id="myForm">
+      <p>
+        <div ng-repeat="person in groupsignup.response as people" ng-class="{'has-error':!groupsignup.formValid && !person['userInGroup']}">
+          <span ng-show="groupsignup.response.length > 1">
+          <input name="input" type="checkbox" ng-checked="person['userInGroup']" ng-disabled="person['userInGroup']" ng-model="person['newAdd']" ng-true-value="'{{person['participantId']}}'" ng-false-value="''">&nbsp;</span>
           <span>{{person['firstName']}}</span>
           <span>({{person['emailAddress']}})</span>
+          <span>{{formValid}}</span>
           <span ng-show="people.indexOf(person) === 0"><a href="" ng-click="groupsignup.editProfile()">
             <svg viewBox="0 0 32 32" class="icon icon-pencil4">
               <use xlink:href="#pencil4"></use>
             </svg>
           </a></span>
-        </p>
+        </div>
+      </p>
         <p ng-show="!groupsignup.alreadySignedUp"><input type="submit" name="submit_group_signup" value="Sign Up" id="submit_group_signup" class="btn btn-primary push-half-bottom"></p>
       </form>
     </div>
-
-
-<!-- <form name="groupSignupForm" role="form" ng-submit="groupsignup.signup()" ng-show="groupsignup.showContent">
-  <fieldset>
-    <legend>People to Sign Up</legend>
-    <div class="form-group">
-      <div class="checkbox">
-        <p>
-          <label>
-            <input type="checkbox" style="visibility:hidden;">
-            <element ng-if='groupsignup.person["nickName"] !== undefined && groupsignup.person["nickName"]'>
-              {{groupsignup.person["nickName"]}}
-            </element>
-            <element ng-if='groupsignup.person["nickName"] === undefined || !groupsignup.person["nickName"]'>
-              {{groupsignup.person["firstName"]}}
-            </element>
-            &nbsp;({{groupsignup.person["emailAddress"]}})
-          </label>
-          <a href="" ng-click="groupsignup.editProfile()">
-            <svg viewBox="0 0 32 32" class="icon icon-pencil4">
-              <use xlink:href="#pencil4"></use>
-            </svg>
-          </a>
-        </p>
-        <div>
-          <input type="submit" name="submit_group_signup" value="Sign Up" id="submit_group_signup" class="btn btn-primary push-half-bottom">
-        </div>
-      </div>
-    </div>
-  </fieldset>
-</form> -->
 
   <script type="text/ng-template" id="editProfile.html">
     <div class="modal-header">
@@ -65,7 +38,7 @@
       <h4 class="modal-title">Edit Profile</h4>
     </div>
     <div class="modal-body">
-      <profile-personal updated-person="groupsignup.person" modal-instance="groupsignup.modalInstance"/>
+      <profile-personal updated-person="groupsignup.response[0]" modal-instance="groupsignup.modalInstance"/>
     </div>
   </script>
 </div>

@@ -19,10 +19,23 @@ require('../services/group_service');
         vm.viewReady = false;
         vm.modalInstance = {};
         vm.response = {};
+        vm.formValid = true;
 
-        vm.signup = function(){
+        vm.signup = function(form){
             var test = hasParticipantID(vm.response);
-            console.log(test);
+            var elements = document.getElementsByName("input");
+            var flag = false;
+            for(var i=0; i<elements.length;i++){
+                if(!elements[i].disabled && elements[i].checked){
+                    flag = true;
+                    break;
+                }
+            }
+            vm.formValid = flag;
+            if(!vm.formValid){
+                $rootScope.$emit('notify', $rootScope.MESSAGES.noPeopleSelectedError);
+                return;
+            }
             //Add Person to group
             Group.Participant.save({
                 groupId: vm.groupId
