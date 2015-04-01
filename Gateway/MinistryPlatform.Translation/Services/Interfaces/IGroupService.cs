@@ -14,7 +14,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
 
         Group getGroupDetails(int groupId);
 
-        List<Group> GetMyServingTeams(int contactId, string token);
+        List<Group> GetServingTeams(int contactId, string token);
 
         bool checkIfUserInGroup(int participantId, IList<int> participants);
     }
