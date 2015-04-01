@@ -31,14 +31,7 @@ namespace MinistryPlatform.Translation.Services
             DateTime? endDate = null, Boolean? employeeRole = false)
         {
             logger.Debug("Adding participant " + participantId + " to group " + groupId);
-
-            // TODO Basing "Full" on Group_Is_Full flag, pending outcome of SPIKE: US1080
-            //Group g = getGroupDetails(groupId);
-            //if (g.Full)
-            //{
-            //    throw (new GroupFullException(g));
-            //}
-
+            
             var values = new Dictionary<string, object>
             {
                 {"Participant_ID", participantId},

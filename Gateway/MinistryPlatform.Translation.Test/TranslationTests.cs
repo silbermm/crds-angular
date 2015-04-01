@@ -94,7 +94,6 @@ namespace MinistryPlatform.Translation.Test
             var subGroupPageId = Convert.ToInt32(ConfigurationManager.AppSettings["GroupsSubgroups"]);
              string token = AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"],
                 ConfigurationManager.AppSettings["ApiPass"]);
-            //var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
             var recordId = AuthenticationService.GetContactId(token);
             Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
             var record = MinistryPlatformService.GetSubPageRecords(subGroupPageId, 6717,
