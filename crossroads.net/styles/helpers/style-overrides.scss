@@ -10,9 +10,18 @@
   padding-left: 0;
   > li {
     + li:before {
-      color: $cr-grey;
-      font-size: 1.6rem;
-      font-weight: 100;
+        content: "";
+        min-height: 20px;
+        min-width: 24px;
+        background-image: url('http://crossroads-media.s3.amazonaws.com/images/arrow-right9.svg');
+        background-position: 0px;
+        display: inline-block;
+        vertical-align: bottom;
+        padding: 0;
+        margin: 0 0 1px;
+        background-size: 24px;
+        background-repeat: no-repeat;
+        opacity: .2;
     }
   }
 }
@@ -22,6 +31,10 @@ ol.breadcrumb li:first-child {
   font-size: 1.9rem;
   vertical-align: middle;
   font-family: $brand-font-family;
+
+  a {
+    color: $cr-orange;
+  }
 }
 ol.breadcrumb li.active {
   text-transform: none;
