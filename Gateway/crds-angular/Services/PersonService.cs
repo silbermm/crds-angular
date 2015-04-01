@@ -329,7 +329,7 @@ namespace crds_angular.Services
                         else
                         {
                             //day not in list add it
-                            serveDay = new ServingDay {Day = e.DateOnly};
+                            serveDay = new ServingDay {Day = e.DateOnly, Date = e.StarDateTime};
                             var serveTime = new ServingTime {Time = e.TimeOnly};
                             serveTime.ServingTeams.Add(NewServingTeam(team, opportunity, serveRole));
 
@@ -341,7 +341,7 @@ namespace crds_angular.Services
             }
 
             //sort everything for front end
-            var preSortedServeDays = serveDays.OrderBy(s => s.Day).ToList();
+            var preSortedServeDays = serveDays.OrderBy(s => s.Date).ToList();
             var sortedServeDays = new List<ServingDay>();
             foreach (var serveDay in preSortedServeDays)
             {
