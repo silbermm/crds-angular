@@ -21,13 +21,16 @@ require('./filters');
 require('./events');
 require('./cms/services/cms_services_module');
 
+require('angular-aside');
+
+require('./third-party/angular/angular-aside.min.css');
 require('./third-party/angular/angular-growl.css');
 
 var _ = require('lodash');
 "use strict";
 (function () {
 
-   angular.module("crossroads", ['ngResource', "crossroads.profile", "crossroads.filters", "crdsCMS.services", "ui.router", 'ui.utils', "ngCookies", "ngMessages", 'angular-growl', 'toggle-switch'])
+   angular.module("crossroads", ['ngResource', "crossroads.profile", "crossroads.filters", "crdsCMS.services", "ui.router", 'ui.utils', "ngCookies", "ngMessages", 'angular-growl', 'toggle-switch', 'ngAside'])
 
     .constant("AUTH_EVENTS", {
             loginSuccess: "auth-login-success",
@@ -69,8 +72,8 @@ var _ = require('lodash');
             return $sce.trustAsHtml(val);
         };
     }])
-        .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "$http", "Message", "growl",
-        function ($scope, $rootScope, MESSAGES, $http, Message, growl) {
+        .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "$http", "Message", "growl", "$aside",
+        function ($scope, $rootScope, MESSAGES, $http, Message, growl, $aside) {
 
                 console.log(__API_ENDPOINT__);
 
@@ -97,6 +100,38 @@ var _ = require('lodash');
                         return message.message.message;
                     });
                 });
+
+                //Offcanvas menu
+                $scope.asideState = {
+                  open: false
+                };
+
+                $scope.openAside = function(position, backdrop) {
+                  $scope.asideState = {
+                    open: true,
+                    position: position
+                  };
+
+                  function postClose() {
+                    $scope.asideState.open = false;
+                  }
+
+                  $aside.open({
+                    templateUrl: 'templates/nav-mobile.html',
+                    placement: position,
+                    size: 'sm',
+                    controller: function($scope, $modalInstance) {
+                      $scope.ok = function(e) {
+                        $modalInstance.close();
+                        e.stopPropagation();
+                      };
+                      $scope.cancel = function(e) {
+                        $modalInstance.dismiss();
+                        e.stopPropagation();
+                      };
+                    }
+                  }).result.then(postClose, postClose);
+                }
         }
     ]);
 
