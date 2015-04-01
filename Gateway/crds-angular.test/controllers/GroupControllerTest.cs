@@ -1,19 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Controllers;
+using System.Web.Http.ModelBinding;
 using System.Web.Http.Results;
 using crds_angular.Controllers.API;
 using crds_angular.Models;
+using crds_angular.Models.Crossroads;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Exceptions;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
+using MvcContrib.TestHelper;
 using NSubstitute;
 using NUnit.Framework;
+using Rhino.Mocks;
+using Event = MinistryPlatform.Models.Event;
 
 namespace crds_angular.test.controllers
 {
@@ -24,7 +31,10 @@ namespace crds_angular.test.controllers
         private Mock<IGroupService> groupServiceMock;
         private Mock<IEventService> eventServiceMock;
         private Mock<IAuthenticationService> authenticationServiceMock;
-        private Mock<IContactRelationshipService> contactRelationshipServiceMock; 
+        private Mock<IContactRelationshipService> contactRelationshipServiceMock;
+        private Mock<IMinistryPlatformService> ministryPlatformService;
+        private readonly int GroupsParticipantsPageId = 298;
+        private readonly int GroupsPageId = 322;
         private string authType;
         private string authToken;
         private const int GroupRoleId = 16;
@@ -50,8 +60,7 @@ namespace crds_angular.test.controllers
         public void testPostParticipantToGroupIsSuccessful()
         {
             int groupId = 456;
-            int groupParticipantId = 444;
-
+           
             List<int> particpantIdToAdd = new List<int> {90210, 41001};
 
             List<Event> events = new List<Event>();
@@ -77,23 +86,22 @@ namespace crds_angular.test.controllers
             var okResult = (OkNegotiatedContentResult<List<Dictionary<string, object>>>)result;
             Assert.IsNotNull(okResult.Content);
             Assert.AreEqual(2, okResult.Content.Count);
-            
-            //Assert.AreEqual(groupParticipantId, okResult.Content["groupParticipantId"]);
-            //Assert.AreEqual(p, okResult.Content["participantId"]);
-            
+           
         }
 
         [Test]
-        [Ignore("how do I make this test fail - group needs to be full")]
         public void testPostParticipantToGroupFails()
         {
             Exception ex = new Exception();
             int groupId = 456;
-            
-            List<int> particpantIdToAdd = new List<int> { 90201 };
-            IHttpActionResult result = fixture.Post(groupId, new PartID());
+            List<int> particpantIdToAdd = new List<int> { 90210, 41001 };
+           
+            groupServiceMock.Setup(
+                mocked =>
+                    mocked.addParticipantToGroup(particpantIdToAdd[0], groupId, GroupRoleId, It.IsAny<DateTime>(),
+                        null, false)).Throws(ex);
+            IHttpActionResult result = fixture.Post(groupId, new PartID { partId = particpantIdToAdd });
             authenticationServiceMock.VerifyAll();
-            groupServiceMock.VerifyAll();
             Assert.IsNotNull(result);
             Assert.IsInstanceOf(typeof (BadRequestResult), result);
             
@@ -119,16 +127,7 @@ namespace crds_angular.test.controllers
                 mocked => mocked.GetParticipantRecord(fixture.Request.Headers.Authorization.ToString()))
                 .Returns(participant);
 
-            ContactRelationship signupRelations = new ContactRelationship();
-            signupRelations.Birth_date = new DateTime(1968,01, 01);
-            signupRelations.Contact_Id = 111;
-            signupRelations.Email_Address = " ";
-            signupRelations.Last_Name = "Tester";
-            signupRelations.Participant_Id = participant.ParticipantId;
-            signupRelations.Preferred_Name = "Mister";
-            signupRelations.Relationship_Id = 1;
-
-            var relationRecord = new GroupSignupRelationships
+          var relationRecord = new GroupSignupRelationships
             {
                 RelationshipId = 1,
                 RelationshipMinAge = "00",
@@ -137,17 +136,11 @@ namespace crds_angular.test.controllers
 
 
             groupServiceMock.Setup(mocked => mocked.GetGroupSignupRelations(g.GroupType)).Returns(new List<GroupSignupRelationships>() { relationRecord });
-
-            //var currRelationships = contactRelationshipService.GetMyCurrentRelationships(contactId, token);
-
-
-
             groupServiceMock.Setup(mocked => mocked.getGroupDetails(groupId)).Returns(g);
             groupServiceMock.Setup(mocked => mocked.checkIfUserInGroup(It.IsAny<int>(), It.IsAny<List<int>>()));
             IHttpActionResult result = fixture.Get(groupId);
             Assert.IsNotNull(result);
-            //Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<Dictionary<string, object>>), result);
-            //OkNegotiatedContentResult<Dictionary<string, object>> okResult = (OkNegotiatedContentResult<Dictionary<string, object>>)result;
+            Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<GroupDTO>), result);
             groupServiceMock.VerifyAll();
 
             Assert.NotNull(g);
@@ -163,5 +156,29 @@ namespace crds_angular.test.controllers
             Assert.IsInstanceOf(typeof (UnauthorizedResult), result);
             groupServiceMock.VerifyAll();
         }
-    }
-}
+
+        [Test]
+        public void testAddParticipantToGroupWhenGroupFull()
+        {
+            int groupId = 333;
+            Group g = new Group();
+            g.GroupId = 333;
+            g.GroupType = 8;
+            g.GroupRole = "Member";
+            g.Name = "Test Me";
+            g.TargetSize = 5;
+            g.WaitList = false;
+            g.Full = true;
+            
+            groupServiceMock.Setup(mocked => mocked.getGroupDetails(groupId)).Returns(g);
+            List<int> particpantIdToAdd = new List<int> { 90210, 41001 };
+            
+            IHttpActionResult result = fixture.Post(333, new PartID { partId = particpantIdToAdd });
+           
+            Assert.IsNotNull(result, "Should have returned a HttpResponseMessage");
+          
+           
+            }
+        }
+
+   }

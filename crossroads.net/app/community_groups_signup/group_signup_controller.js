@@ -26,7 +26,7 @@ require('../services/group_service');
         //   "groupFullInd": "True",
         //   "waitListInd": "True",
         //   "waitListGroupId": "1",
- 
+
         //   SignUpFamilyMembers:
         //   [
         //     { "nickname": "Shankar",
@@ -167,7 +167,7 @@ require('../services/group_service');
             var result = [];
             if(array.length === 1){
                 result[result.length] = array[0]['participantId'];
-            } 
+            }
             for (var i = 0; i < array.length; i++) {
                 if(array[i]['newAdd'] !== undefined && array[i]['newAdd'] !== "")
                 result[result.length] = array[i]['newAdd'];
