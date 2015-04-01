@@ -47,14 +47,13 @@
       float: left;
       width: 100%;
       position: static;
-      z-index: 2;
+      z-index: 4;
       margin-top: -5px;
+      position: relative;
 
       @media (min-width: $screen-sm-min) {
         float: right;
         width: auto;
-        position: relative;
-        z-index: 4;
       }
 
       .btn {
