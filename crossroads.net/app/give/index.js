@@ -10,5 +10,8 @@ require('./demo/guest_giver/give-register.html');
 require('./demo/guest_giver/give-logged-in-bank-info.html');
 require('./demo/guest_giver/give-confirm-amount.html');
 require('./demo/guest_giver/give-change-information.html');
+require('./demo/guest_giver/give-logged-in.html');
+require('./demo/guest_giver/give-change-information-logged-in.html');
+require('./demo/guest_giver/give-logged-in-new-giver.html');
 
 app.controller("GiveCtrl", ['$scope', require("./give_controller")]);
