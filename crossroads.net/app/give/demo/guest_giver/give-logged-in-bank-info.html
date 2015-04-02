@@ -11,7 +11,11 @@
                     <button type="button" class="btn btn-ghost" ng-model="give.view" btn-radio="'bank'">Bank Account</button>
                     <button type="button" class="btn btn-ghost" ng-model="give.view" btn-radio="'cc'">Credit Card</button>
                 </div>
-                <span><svg viewBox="0 0 21 32" class="icon icon-lock"><use xlink:href="#lock"></use></svg></span>
+                <span>
+                    <a href="#">
+                        <svg viewBox="0 0 21 32" class="icon icon-lock"><use xlink:href="#lock"></use></svg>
+                    </a>
+                </span>
                 <section class="bank-section" ng-show="give.view=='bank'">
                     <div class="form-group">
                         <label class="radio-inline">
@@ -28,7 +32,7 @@
                     </div>
                     <div class="form-group">
                         <label for="routing" class="wide-label">Routing Number
-                            <a href="" class="pull-right" ng-click="give.toggleCheck()">{{give.showMessage}}</a>
+                            <a href="" class="pull-right weight-normal" ng-click="give.toggleCheck()">{{give.showMessage}}</a>
                         </label>
                         <input type="text" name="routing" class="form-control">
                     </div>
@@ -65,7 +69,7 @@
             </div>
             <!--/form-group-->
 
-            <p>You are giving $125 to the Ministry Fund.
+            <p class="text-muted small">You are giving <strong>$125</strong> to the <strong>Ministry Fund</strong>.
                 <a href="" ui-sref="/demo/guest-giver">Change</a>
             </p>
 

@@ -12,23 +12,39 @@
 
             <!-- Login -->
             <div class="form-group">
-                <h4>Login</h4>
-                <p>Login to have your payment information saved and receive a quarterly statement. If you don't already have an account,
-                    <a href="" ui-sref="/demo/guest-giver/give-register">create an account</a>.
-                </p>
-                <login-form></login-form>
+              <!--Removing for now, don't feel it's needed. Can add back later if client wishes
+              <p class="subheading">Login to have your payment information saved and receive a quarterly statement. If you don't already have an account,
+                  <a href="" ui-sref="/demo/guest-giver/give-register">create an account</a>.
+              </p>
+              -->
+              <div class="row">
+                <div class="col-sm-12">
+                  <login-form></login-form>
+                </div><!--/col-sm-12-->
+              </div><!--/row-->
+
+              <div class="row">
+                <div class="col-sm-12">
+                  <hr>
+                  <div class="text-center or-divider">
+                    <p><span> or </span></p>
+                  </div>
+                  <p class="text-center"><a href="" ui-sref="/demo/guest-giver/give-register">Create an account</a></p>
+                </div><!--/col-sm-12-->
+              </div><!--/row-->
             </div>
             <!--/end Login -->
-
-            <!-- DEMO CONTROLS -->
-            <div class="form-group clearfix">
-                <h6>DEMO CONTROLS</h6>
-                <a href="" ui-sref="/demo/guest-giver/give-confirm-amount" class="btn btn-ghost btn-sm">Continue as "Have Given"</a>
-                <a href="" ui-sref="/demo/guest-giver/give-logged-in-bank-info" class="btn btn-ghost btn-sm">Continue as "New Giver"</a>
-            </div>
-            <!-- END DEMO CONTROLS -->
-
         </div>
         <!--/push-top-->
     </div>
 </div>
+
+
+<!-- DEMO CONTROLS -->
+<br><br><br><br><br>
+<div class="form-group clearfix">
+    <h6>DEMO CONTROLS</h6>
+    <a href="" ui-sref="/demo/guest-giver/give-confirm-amount" class="btn btn-ghost btn-sm">Continue as "Have Given"</a>
+    <a href="" ui-sref="/demo/guest-giver/give-logged-in-bank-info" class="btn btn-ghost btn-sm">Continue as "New Giver"</a>
+</div>
+<!-- END DEMO CONTROLS -->
