@@ -93,8 +93,7 @@ namespace MinistryPlatform.Translation.Test
         public void ShouldGetSubPageRecord()
         {
             var subGroupPageId = Convert.ToInt32(ConfigurationManager.AppSettings["GroupsSubgroups"]);
-             string token = AuthenticationService.authenticate(ConfigurationManager.AppSettings["ApiUser"],
-                ConfigurationManager.AppSettings["ApiPass"]);
+             string token = AuthenticationService.authenticate(USERNAME, PASSWORD);
             var recordId = AuthenticationService.GetContactId(token);
             Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
             var record = MinistryPlatformService.GetSubPageRecords(subGroupPageId, 6717,
