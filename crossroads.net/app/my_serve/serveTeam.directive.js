@@ -5,10 +5,9 @@
 
   module.exports = ServeTeam;
 
+  ServeTeam.$inject = ['$rootScope', '$log', 'Session', '$modal'];
 
-  ServeTeam.$inject = ['$log', 'Session', '$modal'];
-
-  function ServeTeam($log,Session,$modal){
+  function ServeTeam($rootScope,$log,Session,$modal){
     return {
       restrict: "EA",
       transclude: true,
@@ -39,13 +38,23 @@
       scope.signedup = null;
       scope.editProfile = editProfile;
       scope.modalInstance = {};
+      scope.showEdit = false;
 
       activate();
      //////////////////////////////////////
 
-
       function activate(){
       }
+
+      function allowProfileEdit() {
+        var cookieId = Session.exists("userId");
+        if(cookieId !== undefined){
+          scope.showEdit = Number(cookieId) === scope.currentMember.contactId;
+        }
+        else {
+        scope.showEdit = false;
+      }
+      };
 
       function closePanel(){
         scope.isCollapsed = true;
@@ -78,12 +87,14 @@
         }
         $log.debug("isCollapsed = " + scope.isCollapsed);
         scope.isCollapsed = !scope.isCollapsed;
+        allowProfileEdit();
       }
 
       function setActiveTab(member){
         scope.currentActiveTab = member.name;
         scope.currentMember =  member;
         scope.isCollapsed = false;
+        allowProfileEdit();
       }
 
       function editProfile(personToEdit) {
@@ -103,11 +114,11 @@
 
           modalInstance.result.then(function(person){
             personToEdit.name = person.nickName===null?person.firstName:person.nickName;
+            $rootScope.$emit("personUpdated", person);
           }, function(){
             console.log("canceled");
           });
       };
-
     };
 
   }

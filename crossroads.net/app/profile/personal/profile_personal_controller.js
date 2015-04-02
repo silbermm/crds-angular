@@ -57,6 +57,7 @@
                 return;
             }
             _this.person["State/Region"] = _this.person.State;
+            //debugger;
             _this.person.$save(function () {
                 $rootScope.$emit('notify', $rootScope.MESSAGES.profileUpdated);
                 $log.debug("person save successful");

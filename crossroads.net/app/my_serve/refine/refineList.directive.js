@@ -3,9 +3,9 @@
 
   module.exports = RefineDirective;
 
-  RefineDirective.$inject = ['filterState']
+  RefineDirective.$inject = ['$rootScope','filterState']
 
-  function RefineDirective(filterState){
+  function RefineDirective($rootScope, filterState){
     return {
       restrict: "E",
       replace: true,
@@ -17,7 +17,7 @@
     }
 
     function link(scope, el, attr){
-    
+
       scope.applyFamilyFilter = applyFamilyFilter;
       scope.applyTeamFilter = applyTeamFilter;
       scope.applyTimeFilter = applyTimeFilter;
@@ -27,9 +27,7 @@
       scope.getUniqueTeams = getUniqueTeams;
       scope.getUniqueTimes = getUniqueTimes;
       scope.resolvedData = [];
-      scope.serveMembers = [];
-      scope.serveTeams = [];
-      scope.times = [];
+      initServeArrays();
       scope.toggleFamilyMember = toggleFamilyMember;
       scope.toggleTeam = toggleTeam;
       scope.toggleTime = toggleTime;
@@ -39,20 +37,18 @@
       scope.uniqueTimes = [];
 
       activate();
+
+      $rootScope.$on("rerunFilters", function(event, data) {
+        scope.servingDays = data;
+        initServeArrays();
+        filter(data, false);
+      });
       //////////////////////////////////
-    
+
       function activate(){
        scope.servingDays.$promise.then(function(data) {
-          filterTimes();
-          filterTeams();
-          filterFamily();
-          getUniqueMembers();
-          getUniqueTeams();
-          getUniqueTimes();
-          initCheckBoxes();
-          scope.original = angular.copy(data);
-          filterAll();
-        }); 
+         filter(data);
+        });
       }
 
       function applyFamilyFilter(){
@@ -61,22 +57,22 @@
           _.each(scope.servingDays, function(day){
             var serveTimes = [];
             _.each(day.serveTimes, function(serveTime){
-              var servingTeams = [];      
+              var servingTeams = [];
               _.each(serveTime.servingTeams, function(team){
                 var theTeam = team;
                 var members = _.filter(team.members, function(m){
                   return _.find(filterState.memberIds, function(familyMember){
-                    return familyMember === m.contactId; 
-                  }); 
-                }); 
+                    return familyMember === m.contactId;
+                  });
+                });
                 if(members.length > 0) {
                   theTeam.members = members;
                   servingTeams.push(theTeam);
                 }
               });
-              serveTimes.push({time: serveTime.time, 'servingTeams':servingTeams }); 
+              serveTimes.push({time: serveTime.time, 'servingTeams':servingTeams });
             });
-            serveDay.push({day: day.day, serveTimes: serveTimes}); 
+            serveDay.push({day: day.day, serveTimes: serveTimes});
           });
           scope.servingDays = serveDay;
         }
@@ -93,7 +89,7 @@
               });
             });
             if(times.length > 0) {
-              serveDay.push({day: day.day, serveTimes: times}); 
+              serveDay.push({day: day.day, serveTimes: times});
             };
           });
           scope.servingDays = serveDay;
@@ -112,10 +108,10 @@
                 });
               });
               if(servingTeams.length > 0) {
-                serveTimes.push({time: serveTime.time, 'servingTeams':servingTeams }); 
+                serveTimes.push({time: serveTime.time, 'servingTeams':servingTeams });
               }
             });
-            serveDay.push({day: day.day, serveTimes: serveTimes}); 
+            serveDay.push({day: day.day, serveTimes: serveTimes});
           });
           scope.servingDays = serveDay;
         }
@@ -135,8 +131,22 @@
         filterAll();
       }
 
-      function filterAll(){
-        scope.servingDays = angular.copy(scope.original);
+      function filter(data, copyScope = true){
+        filterTimes();
+        filterTeams();
+        filterFamily();
+        getUniqueMembers();
+        getUniqueTeams();
+        getUniqueTimes();
+        initCheckBoxes();
+        scope.original = angular.copy(data);
+        filterAll(copyScope);
+      }
+
+      function filterAll(copyScope = true){
+        if (copyScope) {
+          scope.servingDays = angular.copy(scope.original);
+        }
         applyFamilyFilter();
         applyTeamFilter();
         applyTimeFilter();
@@ -163,10 +173,10 @@
           _.each(servingDay.serveTimes, function(serveTime){
             scope.times.push(serveTime);
           });
-        }); 
+        });
       }
 
-      function getUniqueMembers(){ 
+      function getUniqueMembers(){
         scope.uniqueMembers = _.chain(scope.serveMembers).map(function(m){
           return {name: m.name, lastName: m.lastName, contactId: m.contactId};
         }).uniq('contactId').value();
@@ -184,7 +194,7 @@
         }).uniq("time").sortBy(function(n){
           return n.time;
         }).value();
-      }  
+      }
 
       function initCheckBoxes(){
         _.each(scope.uniqueMembers, function(member){
@@ -211,6 +221,12 @@
 
       }
 
+      function initServeArrays() {
+        scope.serveMembers = [];
+        scope.serveTeams = [];
+        scope.times = [];
+      }
+
       function toggleFamilyMember(member){
         if(member.selected){
           filterState.addFamilyMember(member.contactId);
@@ -228,14 +244,14 @@
         }
         filterAll();
       }
- 
+
       function toggleTime(time){
         if(time.selected){
           filterState.addTime(time.time);
         } else {
           filterState.removeTime(time.time);
         }
-        filterAll(); 
+        filterAll();
       }
     }
   }

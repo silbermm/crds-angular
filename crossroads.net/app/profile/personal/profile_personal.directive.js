@@ -28,6 +28,7 @@
                 controller.updatedPerson.emailAddress = controller.person.emailAddress;
                 controller.updatedPerson.firstName = controller.person.firstName;
                 controller.updatedPerson.nickName = controller.person.nickName;
+                controller.updatedPerson.lastName = controller.person.lastName;
             }
 
             controller.modalInstance.close(controller.updatedPerson);
