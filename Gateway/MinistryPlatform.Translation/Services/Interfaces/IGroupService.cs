@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using MinistryPlatform.Models;
 using Group = MinistryPlatform.Models.Group;
@@ -13,8 +13,8 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         IList<Event> getAllEventsForGroup(int groupId);
 
         Group getGroupDetails(int groupId);
-        
-        List<Group> GetMyServingTeams(int contactId, string token);
+
+        List<Group> GetServingTeams(int contactId, string token);
 
         bool checkIfUserInGroup(int participantId, IList<int> participants);
 

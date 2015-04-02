@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -18,7 +18,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int EventsGroupsPageId = Convert.ToInt32(AppSettings("EventsGroups"));
         private readonly int GroupsSubgroupsPageId = Convert.ToInt32(AppSettings("GroupsSubgroups"));
         private readonly int GroupSignupRelationsPageId = Convert.ToInt32((AppSettings("GroupSignUpRelations")));
-        private readonly int GetMyServingTeamsPageId = Convert.ToInt32(AppSettings("MyServingTeams"));
+        private readonly int GetServingTeamsPageId = Convert.ToInt32(AppSettings("MyServingTeams"));
 
         private IMinistryPlatformService ministryPlatformService;
 
@@ -194,10 +194,10 @@ namespace MinistryPlatform.Translation.Services
             return (events);
         }
 
-        public List<Group> GetMyServingTeams(int contactId, string token)
+        public List<Group> GetServingTeams(int contactId, string token)
         {
             var searchString = ",,,," + contactId;
-            var teams = ministryPlatformService.GetPageViewRecords(GetMyServingTeamsPageId, token, searchString);
+            var teams = ministryPlatformService.GetPageViewRecords(GetServingTeamsPageId, token, searchString);
             var groups = new List<Group>();
             foreach (var team in teams)
             {
@@ -205,7 +205,9 @@ namespace MinistryPlatform.Translation.Services
                 {
                     GroupId = (int) team["Group_ID"],
                     Name = (string) team["Group_Name"],
-                    GroupRole = (string) team["Role_Title"]
+                    GroupRole = (string) team["Role_Title"],
+                    PrimaryContact = (string) team["Primary_Contact"]
+                    
                 };
                 groups.Add(group);
             }

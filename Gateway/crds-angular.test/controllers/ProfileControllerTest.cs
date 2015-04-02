@@ -19,23 +19,21 @@ namespace crds_angular.test.controllers
         private ProfileController _fixture;
 
         private Mock<IPersonService> _personServiceMock;
-        private Mock<IAuthenticationService> _authenticationService;
 
-        private string authType;
-        private string authToken;
+        private string _authType;
+        private string _authToken;
 
         [SetUp]
         public void SetUp()
         {
             _personServiceMock = new Mock<IPersonService>();
-            _authenticationService = new Mock<IAuthenticationService>();
 
-            _fixture = new ProfileController(_personServiceMock.Object, _authenticationService.Object);
+            _fixture = new ProfileController(_personServiceMock.Object);
 
-            authType = "auth_type";
-            authToken = "auth_token";
+            _authType = "auth_type";
+            _authToken = "auth_token";
             _fixture.Request = new HttpRequestMessage();
-            _fixture.Request.Headers.Authorization = new AuthenticationHeaderValue(authType, authToken);
+            _fixture.Request.Headers.Authorization = new AuthenticationHeaderValue(_authType, _authToken);
             _fixture.RequestContext = new HttpRequestContext();
         }
 
@@ -46,11 +44,9 @@ namespace crds_angular.test.controllers
             var servingTeams = SetUpServingTeams();
             var servingDays = SetUpServingDays();
 
-            _authenticationService.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Returns(contactId);
-
-            _personServiceMock.Setup(mocked => mocked.GetServingTeams(contactId, It.IsAny<string>()))
+            _personServiceMock.Setup(mocked => mocked.GetServingTeams( It.IsAny<string>()))
                 .Returns(servingTeams);
-            _personServiceMock.Setup(mocked => mocked.GetServingDays(servingTeams, It.IsAny<string>()))
+            _personServiceMock.Setup(mocked => mocked.GetServingDays( It.IsAny<string>()))
                 .Returns(servingDays);
 
             IHttpActionResult result = _fixture.GetFamilyServeDays();
@@ -86,6 +82,7 @@ namespace crds_angular.test.controllers
                 {
                     GroupId = 1,
                     Name = "team-1",
+                    PrimaryContact = "me@example.com",
                     Members = new List<TeamMember>
                     {
                         new TeamMember
@@ -116,6 +113,7 @@ namespace crds_angular.test.controllers
                 {
                     GroupId = 2,
                     Name = "team-2",
+                    PrimaryContact = "me2@aol.com",
                     Members = new List<TeamMember>
                     {
                         new TeamMember

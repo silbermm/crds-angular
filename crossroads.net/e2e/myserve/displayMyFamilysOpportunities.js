@@ -54,7 +54,7 @@ describe('Crossroads App', function() {
   it("should display the time correctly", function(){
     expect(element(by.id("current-user")).getText()).toBe("Laks");  
     browser.get(env.baseUrl + "/#/serve-signup");
-    var panel = element(by.id("team-panel-00"));
+    var panel = element(by.id("team-panel-000"));
     panel.element(by.css(".btn")).click();
     expect(panel.element(by.css(".panel-collapse")).getAttribute("class")).toMatch("in");
   });

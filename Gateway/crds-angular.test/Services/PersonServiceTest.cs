@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using crds_angular.App_Start;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services;
+using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -16,6 +17,8 @@ namespace crds_angular.test.Services
         private Mock<IGroupService> _groupService;
         private Mock<IContactService> _contactService;
         private Mock<IOpportunityService> _opportunityService;
+        private Mock<IAuthenticationService> _authenticationService;
+        private Mock<IPersonService> _personService;
 
         private PersonService _fixture;
 
@@ -26,22 +29,13 @@ namespace crds_angular.test.Services
             _groupService = new Mock<IGroupService>();
             _contactService = new Mock<IContactService>();
             _opportunityService = new Mock<IOpportunityService>();
+            _authenticationService = new Mock<IAuthenticationService>();
+            _personService = new Mock<IPersonService>();
 
-            _fixture = new PersonService(_groupService.Object, _contactRelationshipService.Object,
-                _contactService.Object, _opportunityService.Object);
-
-            //force AutoMapper to register
-            AutoMapperConfig.RegisterMappings();
-        }
-
-        [Test]
-        public void GetLoggedInUserProfileTest()
-        {
-            const string token = "some-string";
-
+            _authenticationService.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Returns(123456);
             var myContact = new MyContact
             {
-                Contact_ID  =123456,
+                Contact_ID = 123456,
                 Email_Address = "contact@email.com",
                 Last_Name = "last-name",
                 Nickname = "nickname",
@@ -66,13 +60,26 @@ namespace crds_angular.test.Services
                 Household_ID = 7,
                 Address_ID = 6
             };
-            _contactService.Setup(mocked => mocked.GetMyProfile(token)).Returns(myContact);
-            
+            _contactService.Setup(mocked => mocked.GetMyProfile(It.IsAny<string>())).Returns(myContact);
+
+            _fixture = new PersonService(_groupService.Object, _contactRelationshipService.Object,
+                _contactService.Object, _opportunityService.Object, _authenticationService.Object);
+
+            //force AutoMapper to register
+            AutoMapperConfig.RegisterMappings();
+        }
+
+        [Test]
+        public void GetLoggedInUserProfileTest()
+        {
+            const string token = "some-string";
+
+
             var person = _fixture.GetLoggedInUserProfile(token);
 
             Assert.IsNotNull(person);
 
-            Assert.AreEqual(123456,person.ContactId);
+            Assert.AreEqual(123456, person.ContactId);
             Assert.AreEqual("contact@email.com", person.EmailAddress);
             Assert.AreEqual("nickname", person.NickName);
             Assert.AreEqual("first-name", person.FirstName);
@@ -104,15 +111,13 @@ namespace crds_angular.test.Services
             const string token = "some-string";
             const int contactId = 123456;
 
-            _contactRelationshipService.Setup(mocked => mocked.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>()))
+            _contactRelationshipService.Setup(
+                mocked => mocked.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>()))
                 .Returns(MockGetMyFamilyResponse());
-            
-            _contactService.Setup(mocked => mocked.GetMyProfile(token)).Returns(MockMyContact());
 
             var familyMembers = _fixture.GetMyImmediateFamily(contactId, token);
 
             _contactRelationshipService.VerifyAll();
-            _contactService.VerifyAll();
 
             Assert.IsNotNull(familyMembers);
             Assert.AreEqual(3, familyMembers.Count);
@@ -131,9 +136,9 @@ namespace crds_angular.test.Services
 
             familyMember = familyMembers[2];
             Assert.AreEqual(123456, familyMember.ContactId);
-            Assert.AreEqual("main-contact@email.com", familyMember.Email);
-            Assert.AreEqual("main-contact", familyMember.LastName);
-            Assert.AreEqual("main-contact-nickname", familyMember.PreferredName);
+            Assert.AreEqual("contact@email.com", familyMember.Email);
+            Assert.AreEqual("last-name", familyMember.LastName);
+            Assert.AreEqual("nickname", familyMember.PreferredName);
         }
 
         [Test]
@@ -146,28 +151,18 @@ namespace crds_angular.test.Services
             _contactRelationshipService.Setup(mocked => mocked.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>()))
                 .Returns(new List<ContactRelationship>());
 
-            var myContact = new MyContact
-            {
-                Contact_ID = 123456,
-                Email_Address = "main-contact@email.com",
-                Last_Name = "main-contact",
-                First_Name = "main-contact-firstname"
-            };
-            _contactService.Setup(mocked => mocked.GetMyProfile(token)).Returns(myContact);
-
             var familyMembers = _fixture.GetMyImmediateFamily(contactId, token);
 
             _contactRelationshipService.VerifyAll();
-            _contactService.VerifyAll();
 
             Assert.IsNotNull(familyMembers);
             Assert.AreEqual(1, familyMembers.Count);
 
             var familyMember = familyMembers[0];
             Assert.AreEqual(123456, familyMember.ContactId);
-            Assert.AreEqual("main-contact@email.com", familyMember.Email);
-            Assert.AreEqual("main-contact", familyMember.LastName);
-            Assert.AreEqual("main-contact-firstname", familyMember.PreferredName);
+            Assert.AreEqual("contact@email.com", familyMember.Email);
+            Assert.AreEqual("last-name", familyMember.LastName);
+            Assert.AreEqual("nickname", familyMember.PreferredName);
         }
 
         [Test]
@@ -176,10 +171,9 @@ namespace crds_angular.test.Services
             const string token = "some-string";
             const int contactId = 123456;
 
-            _contactRelationshipService.Setup(mocked => mocked.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>()))
+            _contactRelationshipService.Setup(
+                mocked => mocked.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>()))
                 .Returns(MockGetMyFamilyResponse());
-
-            _contactService.Setup(mocked => mocked.GetMyProfile(token)).Returns(MockMyContact());
 
             var familyMember1Groups = new List<Group>
             {
@@ -205,27 +199,28 @@ namespace crds_angular.test.Services
 
             const int mockFamilyContactId1 = 1;
             const int mockFamilyContactId2 = 2;
-            _groupService.Setup(mocked => mocked.GetMyServingTeams(mockFamilyContactId1, token)).Returns(familyMember1Groups);
-            _groupService.Setup(mocked => mocked.GetMyServingTeams(mockFamilyContactId2, token)).Returns(familyMember2Groups);
-            _groupService.Setup(mocked => mocked.GetMyServingTeams(contactId, token)).Returns(myGroups);
+            _groupService.Setup(mocked => mocked.GetServingTeams(mockFamilyContactId1, token))
+                .Returns(familyMember1Groups);
+            _groupService.Setup(mocked => mocked.GetServingTeams(mockFamilyContactId2, token))
+                .Returns(familyMember2Groups);
+            _groupService.Setup(mocked => mocked.GetServingTeams(contactId, token)).Returns(myGroups);
 
-            var teams = _fixture.GetServingTeams(contactId,token);
+            var teams = _fixture.GetServingTeams(token);
 
             _contactRelationshipService.VerifyAll();
-            _contactService.VerifyAll();
             _groupService.VerifyAll();
 
             Assert.IsNotNull(teams);
-            Assert.AreEqual(4,teams.Count);
+            Assert.AreEqual(4, teams.Count);
 
             var team = teams[0];
             Assert.AreEqual(1, team.GroupId);
             Assert.AreEqual("group-1", team.Name);
-            Assert.AreEqual(3,team.Members.Count);
+            Assert.AreEqual(3, team.Members.Count);
             var member = team.Members[0];
-            Assert.AreEqual(1,member.ContactId);
+            Assert.AreEqual(1, member.ContactId);
             Assert.AreEqual("preferred-name-one", member.Name);
-            Assert.AreEqual(1,member.Roles.Count);
+            Assert.AreEqual(1, member.Roles.Count);
 
             team = teams[1];
             Assert.AreEqual(2, team.GroupId);
@@ -251,76 +246,100 @@ namespace crds_angular.test.Services
         [Test]
         public void GetMyFamiliesServingEventsTest()
         {
-            //const string token = "some-string";
-
             var today = DateTime.Now;
-            var startTimeEightThirty= new DateTime(today.Year, today.Month, today.Day, 8, 30,0);
+            var startTimeEightThirty = new DateTime(today.Year, today.Month, today.Day, 8, 30, 0);
             var startTimeTen = new DateTime(today.Year, today.Month, today.Day, 10, 00, 0);
 
-            var eventsList1 = new List<Event> {new Event {
-                EventId = 1,
-                EventStartDate = startTimeEightThirty,
-                EventTitle = "event-1-title",
-                EventType = "event-type-1"
-            },new Event
+            var eventsList1 = new List<Event>
             {
-                EventId = 2,
-                EventStartDate = startTimeTen,
-                EventTitle = "event-2-title",
-                EventType = "event-type-2"
-            }};
+                new Event
+                {
+                    EventId = 1,
+                    EventStartDate = startTimeEightThirty,
+                    EventTitle = "event-1-title",
+                    EventType = "event-type-1"
+                },
+                new Event
+                {
+                    EventId = 2,
+                    EventStartDate = startTimeTen,
+                    EventTitle = "event-2-title",
+                    EventType = "event-type-2"
+                }
+            };
 
-            var eventsList2 = new List<Event> {new Event {
-                EventId = 3,
-                EventStartDate = startTimeEightThirty,
-                EventTitle = "event-3-title",
-                EventType = "event-type-3"
-            },new Event
+            var eventsList2 = new List<Event>
             {
-                EventId = 4,
-                EventStartDate = startTimeTen,
-                EventTitle = "event-4-title",
-                EventType = "event-type-4"
-            }};
+                new Event
+                {
+                    EventId = 3,
+                    EventStartDate = startTimeEightThirty,
+                    EventTitle = "event-3-title",
+                    EventType = "event-type-3"
+                },
+                new Event
+                {
+                    EventId = 4,
+                    EventStartDate = startTimeTen,
+                    EventTitle = "event-4-title",
+                    EventType = "event-type-4"
+                }
+            };
 
 
-            var opportunities = new List<Opportunity>{new Opportunity
+            var opportunities = new List<Opportunity>
             {
-                Capacity = 1,
-                EventType = "event-type-1",
-                Events = eventsList1,
-                OpportunityId = 1,
-                OpportunityName = "opportunity-name-1",
-                RoleTitle = "opportunity-1-role-title"
-            },new Opportunity
-            {
-                Capacity = 2,
-                EventType = "event-type-2",
-                Events = eventsList2,
-                OpportunityId = 2,
-                OpportunityName = "opportunity-name-2",
-                RoleTitle = "opportunity-1-role-title"
-            }};
-            _opportunityService.Setup(mocked => mocked.GetOpportunitiesForGroup(1, It.IsAny<string>())).Returns(opportunities);
-            _opportunityService.Setup(mocked => mocked.GetOpportunitiesForGroup(2, It.IsAny<string>())).Returns(opportunities);
+                new Opportunity
+                {
+                    Capacity = 1,
+                    EventType = "event-type-1",
+                    Events = eventsList1,
+                    OpportunityId = 1,
+                    OpportunityName = "opportunity-name-1",
+                    RoleTitle = "opportunity-1-role-title"
+                },
+                new Opportunity
+                {
+                    Capacity = 2,
+                    EventType = "event-type-2",
+                    Events = eventsList2,
+                    OpportunityId = 2,
+                    OpportunityName = "opportunity-name-2",
+                    RoleTitle = "opportunity-1-role-title"
+                }
+            };
+            _opportunityService.Setup(mocked => mocked.GetOpportunitiesForGroup(It.IsAny<Int32>(), It.IsAny<string>()))
+                .Returns(opportunities);
 
-            var teams = new List<ServingTeam> { new ServingTeam { GroupId = 1 }, new ServingTeam { GroupId = 2 } };
-            var servingDays = _fixture.GetServingDays(teams, It.IsAny<string>());
+            var teams = new List<ServingTeam> {new ServingTeam {GroupId = 1}, new ServingTeam {GroupId = 2}};
+            _personService.Setup(mocked => mocked.GetServingTeams(It.IsAny<string>())).Returns(teams);
+
+            _groupService.Setup(mocked => mocked.GetServingTeams(123456, It.IsAny<string>())).Returns(new List<Group>
+            {
+                new Group {GroupId = 1, Name = "group-1", GroupRole = "group-role-member"},
+                new Group {GroupId = 2, Name = "group-2", GroupRole = "group-role-member"},
+                new Group {GroupId = 2, Name = "group-2", GroupRole = "group-role-leader"},
+                new Group {GroupId = 3, Name = "group-3", GroupRole = "group-role-member"},
+                new Group {GroupId = 4, Name = "group-4", GroupRole = "group-role-member"}
+            });
+
+            var servingDays = _fixture.GetServingDays(It.IsAny<string>());
 
             _opportunityService.VerifyAll();
 
             Assert.IsNotNull(servingDays);
-            Assert.AreEqual(1,servingDays.Count);
+            Assert.AreEqual(1, servingDays.Count);
             var servingDay = servingDays[0];
-            Assert.AreEqual(2,servingDay.ServeTimes.Count);
-            
+            Assert.AreEqual(2, servingDay.ServeTimes.Count);
+
             var servingTime = servingDay.ServeTimes[0];
-            Assert.AreEqual(2,servingTime.ServingTeams.Count);
+            Assert.AreEqual(4, servingTime.ServingTeams.Count);
             Assert.AreEqual("08:30:00", servingTime.Time);
 
             servingTime = servingDay.ServeTimes[1];
-            Assert.AreEqual(2, servingTime.ServingTeams.Count);
+            Assert.AreEqual(4, servingTime.ServingTeams.Count);
             Assert.AreEqual("10:00:00", servingTime.Time);
+        }
 
         }
         

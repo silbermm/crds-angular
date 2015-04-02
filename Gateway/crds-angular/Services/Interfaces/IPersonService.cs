@@ -13,7 +13,7 @@ namespace crds_angular.Services.Interfaces
         List<Skill> GetLoggedInUserSkills(int contactId, string token);
         Person GetLoggedInUserProfile(String token);
         List<FamilyMember> GetMyImmediateFamily(int contactId, string token);
-        List<ServingTeam> GetServingTeams(int contactId, string token);
-        List<ServingDay> GetServingDays(List<ServingTeam> teams, string token);
+        List<ServingTeam> GetServingTeams( string token);
+        List<ServingDay> GetServingDays(string token);
     }
 }

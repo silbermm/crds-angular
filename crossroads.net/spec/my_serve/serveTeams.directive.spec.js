@@ -21,9 +21,10 @@ describe('Serve Teams Directive', function() {
     $compile = _$compile_;
     $rootScope = _$rootScope_;
     scope = $rootScope.$new();
-    element = '<serve-team opportunity="opp" team="team" tab-index="tabIndex" team-index="teamIndex"> </serve-team>';
+    element = '<serve-team opportunity="opp" team="team" tab-index="tabIndex" team-index="teamIndex" day-index="dayIndex"> </serve-team>';
     scope.opp = mockOpportunity;
     scope.team = mockTeam; 
+    scope.dayIndex = 0;
     scope.tabIndex = 0;
     scope.teamIndex = 3;
     element = $compile(element)(scope);
@@ -56,7 +57,7 @@ describe('Serve Teams Directive', function() {
 
   it("should have the correct ID for the panel", function(){
     var isolated = element.isolateScope();
-    expect(isolated.panelId()).toBe("team-panel-03");
+    expect(isolated.panelId()).toBe("team-panel-003");
   });
 
 });

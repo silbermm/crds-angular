@@ -194,13 +194,13 @@ namespace MinistryPlatform.Translation.Test.Services
                 {
                     {"Group_ID", 1},
                     {"Group_Name", "group-one"},
-                    {"Role_Title", "group-one-role"}
+                    {"Role_Title", "group-one-role"}, {"Primary_Contact", "me@aol.com"}
                 },
                 new Dictionary<string, object>()
                 {
                     {"Group_ID", 2},
                     {"Group_Name", "group-two"},
-                    {"Role_Title", "group-two-role"}
+                    {"Role_Title", "group-two-role"}, {"Primary_Contact", "me@aol.com"}
                 }
             };
             ministryPlatformService.Setup(
@@ -208,7 +208,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 .Returns(getPageViewRecordsResponse);
 
 
-            var teams = fixture.GetMyServingTeams(contactId, token);
+            var teams = fixture.GetServingTeams(contactId, token);
 
             Assert.IsNotNull(teams);
             Assert.AreEqual(2, teams.Count);
