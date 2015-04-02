@@ -125,7 +125,9 @@ namespace MinistryPlatform.Translation.Services
                             Convert.ToInt32(ConfigurationManager.AppSettings["MyParticipantRecords"]), token);
                     var participant = new Participant
                     {
-                        ParticipantId = int.Parse(results.Single()["dp_RecordID"].ToString())
+                        ParticipantId = int.Parse(results.Single()["dp_RecordID"].ToString()),
+                        EmailAddress = results.Single()["Email_Address"].ToString(),
+                        PreferredName = results.Single()["Nickname"].ToString()
                     };
 
                     return participant;

@@ -234,11 +234,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Crossroads\PartID.cs" />
     <Compile Include="Models\Crossroads\GroupDTO.cs" />
     <Compile Include="Models\Crossroads\AccountInfo.cs" />
     <Compile Include="Models\Crossroads\CookieInfo.cs" />
     <Compile Include="Models\Crossroads\FamilyMember.cs" />
     <Compile Include="Models\Crossroads\ServeOccurance.cs" />
+    <Compile Include="Models\Crossroads\SignUpFamilyMembers.cs" />
     <Compile Include="Models\Crossroads\GroupOpportunity.cs" />
     <Compile Include="Models\Crossroads\Serve\EventType.cs" />
     <Compile Include="Models\Crossroads\Serve\ServeEvent.cs" />

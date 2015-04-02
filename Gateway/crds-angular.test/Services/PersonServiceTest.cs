@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using crds_angular.App_Start;
 using crds_angular.Models.Crossroads.Serve;
@@ -148,9 +148,8 @@ namespace crds_angular.test.Services
             const int contactId = 123456;
 
             //return 0 family members, only testing logic for main contact
-            _contactRelationshipService.Setup(
-                mocked => mocked.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>()))
-                .Returns(new List<Contact_Relationship>());
+            _contactRelationshipService.Setup(mocked => mocked.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>()))
+                .Returns(new List<ContactRelationship>());
 
             var familyMembers = _fixture.GetMyImmediateFamily(contactId, token);
 
@@ -342,18 +341,20 @@ namespace crds_angular.test.Services
             Assert.AreEqual("10:00:00", servingTime.Time);
         }
 
-        private List<Contact_Relationship> MockGetMyFamilyResponse()
+        }
+        
+        private List<ContactRelationship> MockGetMyFamilyResponse()
         {
-            var getMyFamilyResponse = new List<Contact_Relationship>
+            var getMyFamilyResponse = new List<ContactRelationship>
             {
-                new Contact_Relationship
+                new ContactRelationship
                 {
                     Contact_Id = 1,
                     Email_Address = "person-one@test.com",
                     Last_Name = "person-one",
                     Preferred_Name = "preferred-name-one"
                 },
-                new Contact_Relationship
+                new ContactRelationship
                 {
                     Contact_Id = 2,
                     Email_Address = "person-two@test.com",
