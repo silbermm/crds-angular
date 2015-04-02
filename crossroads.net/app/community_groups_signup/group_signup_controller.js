@@ -6,7 +6,10 @@ require('../services/group_service');
 
         var vm = this;
 
+        // if we don't have the code below, those functions would not be available in the javascript tests
         vm.editProfile = editProfile;
+        vm.allSignedUp = allSignedUp;
+        vm.hasParticipantID = hasParticipantID;
 
         //flags to control show/hide logic
         vm.showContent = true;
