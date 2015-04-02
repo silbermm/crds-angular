@@ -50,8 +50,6 @@ namespace MinistryPlatform.Translation.Services
                                 true));
                     });
 
-            // TODO Should we set Group_Is_Full flag here, or will that be done by a trigger?  Pending SPIKE: US1080
-
             logger.Debug("Added participant " + participantId + " to group " + groupId + ": record id: " +
                          groupParticipantId);
             return (groupParticipantId);

@@ -18,7 +18,7 @@
         <div ng-repeat="person in groupsignup.response as people" ng-class="{'has-error':!groupsignup.formValid && !person['userInGroup']}">
           <span ng-show="groupsignup.response.length > 1">
           <input name="input" type="checkbox" ng-checked="person['userInGroup']" ng-disabled="person['userInGroup']" ng-model="person['newAdd']" ng-true-value="'{{person['participantId']}}'" ng-false-value="''">&nbsp;</span>
-          <span>{{person['firstName']}}</span>
+          <span>{{person['nickName']}}</span>
           <span>({{person['emailAddress']}})</span>
           <span>{{formValid}}</span>
           <span ng-show="people.indexOf(person) === 0"><a href="" ng-click="groupsignup.editProfile()">

@@ -155,7 +155,7 @@ namespace crds_angular.Controllers.API
                     var fam = new SignUpFamilyMembers
                     {
                         EmailAddress = participant.EmailAddress,
-                        FirstName = participant.PreferredName,
+                        PreferredName = participant.PreferredName,
                         UserInGroup = groupService.checkIfUserInGroup(participantId, g.Participants),
                         ParticpantId = participantId,
                     };
@@ -168,7 +168,7 @@ namespace crds_angular.Controllers.API
                             var fm = new SignUpFamilyMembers
                             {
                                 EmailAddress = f.Email_Address,
-                                FirstName = f.Preferred_Name,
+                                PreferredName = f.Preferred_Name,
                                 UserInGroup = groupService.checkIfUserInGroup(f.Participant_Id, g.Participants),
                                 ParticpantId = f.Participant_Id,
                             };

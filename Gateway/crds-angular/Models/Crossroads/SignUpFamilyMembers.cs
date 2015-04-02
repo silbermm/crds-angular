@@ -6,8 +6,8 @@ namespace crds_angular.Models.Crossroads
     public class SignUpFamilyMembers
 
     {
-        [JsonProperty(PropertyName = "firstName")]
-        public string FirstName { get; set; }
+        [JsonProperty(PropertyName = "nickName")]
+        public string PreferredName { get; set; }
 
         [JsonProperty(PropertyName = "emailAddress")]
         public string EmailAddress { get; set; }
