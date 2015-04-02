@@ -28,10 +28,7 @@ require('../services/group_service');
             var test = hasParticipantID(vm.response);
             var flag = false;
             for(var i = 0; i < vm.response.length;i++){
-                console.log(vm.response[i]['newAdd']);
-                if(!vm.response[i]['userInGroup'] && vm.response[i]['newAdd'] !== undefined && vm.response[i]['newAdd'] !== ""){
-                    console.log("Got in");
-                    flag = true;
+                if(!vm.response[i]['userInGroup'] && vm.response[i]['newAdd'] !== undefined && vm.response[i]['newAdd'] !== ""){                    flag = true;
                     break;
                 }
             }
@@ -69,19 +66,12 @@ require('../services/group_service');
         }, function () {
             if (pageRequest.pages.length > 0) {
                 vm.signupPage = pageRequest.pages[0];
-                console.log("CMS");
-                console.log(vm.signupPage);
                 // retrieve group id from the CMS page
                 vm.groupId = vm.signupPage.group;
                 $log.debug("Group ID: " + vm.groupId);
                 // Get group details
                 vm.groupDetails = Group.Detail.get({groupId : vm.groupId}).$promise
                 .then(function(response){
-                    console.log("Call for parent group");
-                    console.log(response.SignUpFamilyMembers);
-                    
-                    console.log("Parent Group Detail");
-                    console.log(response);
 
                     vm.response = response.SignUpFamilyMembers;
                     if(response.waitListInd === "False" || response.waitListInd === false)
@@ -104,8 +94,6 @@ require('../services/group_service');
                         // 2. the user is not yet a member
                         vm.groupDetails = Group.Detail.get({groupId : vm.groupId}).$promise
                         .then(function(response){
-                            console.log("Call for waitlist group");
-                            console.log(response);
                             vm.response = response.SignUpFamilyMembers;
                             if(allSignedUp(response)){
                                 vm.alreadySignedUp = true;
@@ -183,7 +171,6 @@ require('../services/group_service');
                         result = true;
                     }
             }
-            console.log("allSignedUp: "+result);
             return result;
         };
     }
