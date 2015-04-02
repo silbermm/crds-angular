@@ -23,10 +23,11 @@ require('../services/group_service');
 
         vm.signup = function(form){
             var test = hasParticipantID(vm.response);
-            var elements = document.getElementsByName("input");
             var flag = false;
-            for(var i=0; i<elements.length;i++){
-                if(!elements[i].disabled && elements[i].checked){
+            for(var i = 0; i < vm.response.length;i++){
+                console.log(vm.response[i]['newAdd']);
+                if(!vm.response[i]['userInGroup'] && vm.response[i]['newAdd'] !== undefined && vm.response[i]['newAdd'] !== ""){
+                    console.log("Got in");
                     flag = true;
                     break;
                 }

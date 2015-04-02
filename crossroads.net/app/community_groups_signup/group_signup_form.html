@@ -15,7 +15,8 @@
         <legend>Participants</legend>
       <form  class="form-group" name="myForm" role="form" ng-submit="groupsignup.signup(myForm)" id="myForm">
       <p>
-        <div ng-repeat="person in groupsignup.response as people" ng-class="{'has-error':!groupsignup.formValid && !person['userInGroup']}">
+        <div class="checkbox"  ng-repeat="person in groupsignup.response as people" ng-class="{'has-error':!groupsignup.formValid && !person['userInGroup']}">
+          <label>
           <span ng-show="groupsignup.response.length > 1">
           <input name="input" type="checkbox" ng-checked="person['userInGroup']" ng-disabled="person['userInGroup']" ng-model="person['newAdd']" ng-true-value="'{{person['participantId']}}'" ng-false-value="''">&nbsp;</span>
           <span>{{person['nickName']}}</span>
@@ -26,6 +27,7 @@
               <use xlink:href="#pencil4"></use>
             </svg>
           </a></span>
+          </label>
         </div>
       </p>
         <p ng-show="!groupsignup.alreadySignedUp"><input type="submit" name="submit_group_signup" value="Sign Up" id="submit_group_signup" class="btn btn-primary push-half-bottom"></p>

@@ -47,13 +47,14 @@ var groupGetDetailResponse = {
   [
     { "First_Name": "Shankar",
       "Email_Address": "shankx@test.com",
-      "userInGroup": true,
-      "Participant_ID":"1234"
+      "userInGroup": false,
+      "participantId":"1234",
+      "newAdd":"1234"
     },
     { "First_Name": "Luisa",
       "Email_Address": "Luisa@test.com",
-      "userInGroup": false,
-      "Participant_ID":"1234"
+      "userInGroup": true,
+      "participantId":"1234"
     }
   ]
 };
@@ -88,7 +89,7 @@ var groupGetDetailResponse = {
 
      $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] +'api/group/1')
      .respond(groupGetDetailResponse);
-     $httpBackend.when('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/group/1/user')
+     $httpBackend.when('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/group/1/participants')
      .respond("200");
 
      }));
@@ -115,9 +116,10 @@ var groupGetDetailResponse = {
     verifyExpectations();
     var person = controller.person;
     expect(controller.signup).toBeDefined();
+    debugger;
     controller.signup();
-    $httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/group/1/user').respond('200');
-    $httpBackend.flush();
+    $httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/group/1/participants').respond('200');
+    //$httpBackend.flush();
 
   });
 
