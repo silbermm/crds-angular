@@ -6,9 +6,9 @@
   module.exports = ServeTeam;
 
 
-  ServeTeam.$inject = ['$log', 'Session'];
+  ServeTeam.$inject = ['$log', 'Session', '$modal'];
 
-  function ServeTeam($log,Session){
+  function ServeTeam($log,Session,$modal){
     return {
       restrict: "EA",
       transclude: true,
@@ -37,6 +37,8 @@
       scope.roles = null;
       scope.setActiveTab = setActiveTab;
       scope.signedup = null;
+      scope.editProfile = editProfile;
+      scope.modalInstance = {};
 
       activate();
      //////////////////////////////////////
@@ -83,6 +85,28 @@
         scope.currentMember =  member;
         scope.isCollapsed = false;
       }
+
+      function editProfile(personToEdit) {
+        var modalInstance = $modal.open({
+              templateUrl: 'profile/editProfile.html',
+              backdrop: true,
+              controller: "ProfileModalController as modal",
+              // This is needed in order to get our scope
+              // into the modal - by default, it uses $rootScope
+              scope: scope,
+              resolve: {
+                person : function(){
+                  return personToEdit;
+                }
+              }
+          });
+
+          modalInstance.result.then(function(person){
+            personToEdit.name = person.nickName===null?person.firstName:person.nickName;
+          }, function(){
+            console.log("canceled");
+          });
+      };
 
     };
 

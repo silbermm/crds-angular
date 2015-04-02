@@ -98,7 +98,8 @@ var _ = require('lodash');
                     });
                 });
         }
-    ]);
+    ])
+    .directive("emptyToNull", require('./shared/emptyToNull.directive.js'));
 
     require('./apprun');
     require('./app.config');

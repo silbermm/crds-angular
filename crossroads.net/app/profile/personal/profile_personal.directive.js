@@ -30,7 +30,7 @@
                 controller.updatedPerson.nickName = controller.person.nickName;
             }
 
-            controller.modalInstance.close();
+            controller.modalInstance.close(controller.updatedPerson);
         }
     }
 

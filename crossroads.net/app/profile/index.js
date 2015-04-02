@@ -9,6 +9,10 @@ var app = require('angular').module('crossroads.profile')
 
 app.controller('crdsProfileCtrl', ['$rootScope','Profile', 'Lookup', '$q', '$log','$scope',  require("./profile_controller")]);
 
+// Modal
+require("./editProfile.html");
+app.controller('ProfileModalController', require("./profileModalController"));
+
 // Shared Services
 app.factory('Lookup', ["$resource", "Session", require('./services/profile_lookup_service')]);
 app.factory('Profile', ['$resource',require('./services/profile_service')]);

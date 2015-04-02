@@ -9,7 +9,13 @@
 
     <div class="panel-collapse collapse" collapse="isCollapsed" style="height: 0px;">
       <div class="panel-body soft-half-bottom">
-        <p class="flush-bottom">Editing sign up for {{currentMember.name + " " + currentMember.lastName}} <span class="text-muted"></span></p>
+        <p class="flush-bottom">Editing sign up for {{currentMember.name + " " + currentMember.lastName}} <span class="text-muted"></span>
+        <a href="" ng-click="editProfile(currentMember)">
+            <svg viewBox="0 0 32 32" class="icon icon-pencil4">
+                <use xlink:href="#pencil4"></use>
+            </svg>
+        </a>
+      </p>
         <div class="row">
           <div class="col-md-4">
             <h5>Opportunities</h5>
