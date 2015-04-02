@@ -76,7 +76,7 @@ ol.breadcrumb li.active {
 }
 
 .btn-ghost.active {
-    @include button-variant(white, $gray-light, $gray);
+    @include button-variant(white, $gray-light, $gray-light);
 }
 
 /***************************************************************************************
