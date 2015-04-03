@@ -27,23 +27,10 @@
 
     activate();
 
-    $rootScope.$on("personUpdated", function(event, data) {
-      vm.groups = angular.copy(vm.original);
-      _.each(vm.groups, function(group) {
-        _.each(group.serveTimes, function(serveTime) {
-          _.each(serveTime.servingTeams, function(servingTeam) {
-            _.each(servingTeam.members, function(member) {
-              if (member.contactId === data.contactId) {
-                member.name = data.nickName===null?data.firstName:data.nickName;
-                member.nickName = data.nickName;
-                member.lastName = data.lastName;
-                member.emailAddress = data.emailAddress;
-              }
-            })
-          })
-        })
-      })
-      $rootScope.$broadcast("rerunFilters", vm.groups);
+    $rootScope.$on("personUpdated", personUpdateHandler);
+
+    $rootScope.$on("filterDone", function(event, data) {
+      vm.groups = data;
     })
 
     ////////////////////////////
@@ -86,6 +73,26 @@
       $event.stopPropagation();
       vm.opened = true;
     };
+
+    function personUpdateHandler(event, data) {
+      vm.groups = angular.copy(vm.original);
+      _.each(vm.groups, function(group) {
+        _.each(group.serveTimes, function(serveTime) {
+          _.each(serveTime.servingTeams, function(servingTeam) {
+            _.each(servingTeam.members, function(member) {
+              if (member.contactId === data.contactId) {
+                member.name = data.nickName===null?data.firstName:data.nickName;
+                member.nickName = data.nickName;
+                member.lastName = data.lastName;
+                member.emailAddress = data.emailAddress;
+              }
+            })
+          })
+        })
+      })
+      vm.original = angular.copy(vm.groups);
+      $rootScope.$broadcast("rerunFilters", vm.groups);
+    }
 
 
   }
