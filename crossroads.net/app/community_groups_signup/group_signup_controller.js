@@ -41,7 +41,11 @@ require('../services/group_service');
             Group.Participant.save({
                 groupId: vm.groupId
             },test).$promise.then(function (response) {
-                $rootScope.$emit('notify', $rootScope.MESSAGES.successfullRegistration);
+                if(vm.waitListCase){
+                    $rootScope.$emit('notify', $rootScope.MESSAGES.successfullWaitlistSignup);
+                }else{
+                    $rootScope.$emit('notify', $rootScope.MESSAGES.successfullRegistration);
+                }
                 vm.showContent = false;
                 vm.showSuccess = true;
                 vm.showWaitList = false;
