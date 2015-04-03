@@ -28,10 +28,18 @@ require('../services/group_service');
             var test = hasParticipantID(vm.response);
             var flag = false;
             for(var i = 0; i < vm.response.length;i++){
-                if(!vm.response[i]['userInGroup'] && vm.response[i]['newAdd'] !== undefined && vm.response[i]['newAdd'] !== ""){                    flag = true;
+                if(!vm.response[i]['userInGroup'] && vm.response[i]['newAdd'] !== undefined && vm.response[i]['newAdd'] !== ""){
+                    flag = true;
                     break;
                 }
             }
+            if(vm.response.length === 2 && !vm.response[0]['userInGroup'] && vm.response[0]['newAdd'] === undefined){
+                flag = false;
+            }
+            if(vm.response.length === 1){
+                flag = true;
+            }
+
             vm.formValid = flag;
             if(!vm.formValid){
                 $rootScope.$emit('notify', $rootScope.MESSAGES.noPeopleSelectedError);
