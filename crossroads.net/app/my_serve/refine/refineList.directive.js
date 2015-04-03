@@ -11,7 +11,8 @@
       replace: true,
       templateUrl: "refine/refineList.html",
       scope: {
-        "servingDays": "=servingDays"
+        "servingDays": "=servingDays",
+        "original" : "=original"
       },
       link : link
     }
@@ -39,8 +40,10 @@
       activate();
 
       $rootScope.$on("rerunFilters", function(event, data) {
+        // Update the entire data with the new data 
         scope.servingDays = data;
-        initServeArrays();
+        initServeArrays(); 
+         //filterAll(copyScope);
         filter(data, false);
       });
       //////////////////////////////////

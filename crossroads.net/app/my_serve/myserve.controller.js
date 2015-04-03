@@ -19,19 +19,16 @@
     vm.groups = [];
     vm.isCollapsed = true;
     vm.open = open;
+    vm.original = [];
     vm.today = today;
     vm.toggleMin = toggleMin;
     vm.repeating = '2';
 
 
-    function activate(){
-      today();
-      toggleMin();
-      getGroups();
-    }
     activate();
 
     $rootScope.$on("personUpdated", function(event, data) {
+      vm.groups = angular.copy(vm.original);
       _.each(vm.groups, function(group) {
         _.each(group.serveTimes, function(serveTime) {
           _.each(serveTime.servingTeams, function(servingTeam) {
@@ -52,6 +49,12 @@
     ////////////////////////////
     // Implementation Details //
     ////////////////////////////
+    function activate(){
+      today();
+      toggleMin();
+      getGroups();
+    }
+    
     function getGroups(){
       vm.groups = ServeOpportunities.query();
     };
