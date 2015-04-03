@@ -646,22 +646,25 @@ ul.cr-nav {
   }
 }
 
+
 /***************************************************************************************
 * Off Canvas Mobile Menu
 ***************************************************************************************/
 
 .ng-aside .modal-dialog {
   max-width: 80%;
+  padding: 20px 0px;
 
   .modal-content {
     background: $gray-darker;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
 
   ul {
     margin: 0;
     padding: 0;
     list-style: none;
-
 
     li {
       margin: 0;
@@ -670,7 +673,7 @@ ul.cr-nav {
 
       > a {
         margin: 0;
-        padding: 17px 15px;
+        padding: 17px 25px 17px 15px;
         border-bottom: 1px solid lighten($gray-darker, 10%);
         display: block;
         text-decoration: none;
@@ -683,6 +686,21 @@ ul.cr-nav {
           background: lighten($gray-darker, 3%);
         }
       }
+      svg.icon-arrow-right9 {
+        float: right;
+        margin-top: 20px;
+        fill: $gray-light;
+        margin-right: 10px;
+        transition-property: transform;
+        transition-duration: .25s;
+      }
+    }
+    li.dropdown.open {
+      //styles for open menu
+      svg.icon-arrow-right9 {
+        transform: rotate(90deg);
+        fill: $gray-lighter;
+      }
     }
   }
 
@@ -693,6 +711,10 @@ ul.cr-nav {
     border: 0px;
     background: lighten($gray-darker, 8%);
     box-shadow: none;
+    max-height: 0;
+    display: block;
+    transition: max-height .5s linear;
+    overflow: hidden;
 
     li {
 
@@ -712,7 +734,12 @@ ul.cr-nav {
       }
     }
   }
-
+  .open > .dropdown-menu {
+    max-height: 400px; //need to declar height for transition to work
+  }
+  .side-nav-search {
+    padding: 10px;
+  }
   .side-nav-login {
     padding: 10px;
 
@@ -727,10 +754,5 @@ ul.cr-nav {
     }
   }
 
-  .snap-drawer-search {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    max-width: 475px;
-    padding: 5px 15px;
-  }
+
 }
