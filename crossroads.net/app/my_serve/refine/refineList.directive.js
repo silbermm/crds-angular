@@ -12,7 +12,7 @@
       templateUrl: "refine/refineList.html",
       scope: {
         "servingDays": "=servingDays",
-        "original" : "=original"
+        "original" : "=?original"
       },
       link : link
     }
