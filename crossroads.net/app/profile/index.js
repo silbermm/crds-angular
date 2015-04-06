@@ -9,6 +9,10 @@ var app = require('angular').module('crossroads.profile')
 
 app.controller('crdsProfileCtrl', ['$rootScope','Profile', 'Lookup', '$q', '$log','$scope',  require("./profile_controller")]);
 
+// Modal
+require("./editProfile.html");
+app.controller('ProfileModalController', require("./profileModalController"));
+
 // Shared Services
 app.factory('Lookup', ["$resource", "Session", require('./services/profile_lookup_service')]);
 app.factory('Profile', ['$resource',require('./services/profile_service')]);
@@ -16,7 +20,7 @@ app.factory('ProfileReferenceData', ['Lookup', 'Profile', '$resolve', require('.
 
 // Personal
 require("./personal/profile_personal.html");
-app.controller("ProfilePersonalController", ["$rootScope", "$log","MESSAGES", "ProfileReferenceData", require('./personal/profile_personal_controller')]);
+app.controller("ProfilePersonalController", ["$rootScope", "$log","$timeout","MESSAGES", "ProfileReferenceData", require('./personal/profile_personal_controller')]);
 app.directive('uniqueEmail', ['$http', 'Session', 'User', require('./personal/profile_unique_email_directive') ]);
 app.directive("validateDate", ["$log", require('./personal/profile_valid_date_directive')]);
 app.directive('profilePersonal', ["$log", require("./personal/profile_personal.directive")]);

@@ -133,7 +133,8 @@ var _ = require('lodash');
                   }).result.then(postClose, postClose);
                 }
         }
-    ]);
+    ])
+    .directive("emptyToNull", require('./shared/emptyToNull.directive.js'));
 
     require('./apprun');
     require('./app.config');

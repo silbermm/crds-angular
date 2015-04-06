@@ -31,9 +31,10 @@
                     controller.person.nickName == '' ?
                     controller.person.firstName :
                     controller.person.nickName;
+                controller.updatedPerson.lastName = controller.person.lastName;
             }
 
-            controller.modalInstance.close();
+            controller.modalInstance.close(controller.updatedPerson);
         }
     }
 

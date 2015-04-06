@@ -24,7 +24,8 @@ namespace crds_angular.Services
         private IAuthenticationService _authenticationService;
 
         public PersonService(IGroupService groupService, IContactRelationshipService contactRelationshipService,
-            IContactService contactService, IOpportunityService opportunityService, IAuthenticationService authenticationService)
+            IContactService contactService, IOpportunityService opportunityService,
+            IAuthenticationService authenticationService)
         {
             this._groupService = groupService;
             this._contactRelationshipService = contactRelationshipService;
@@ -125,7 +126,7 @@ namespace crds_angular.Services
             return familyMembers;
         }
 
-        public List<ServingTeam> GetServingTeams( string token)
+        public List<ServingTeam> GetServingTeams(string token)
         {
             var contactId = _authenticationService.GetContactId(token);
             var servingTeams = new List<ServingTeam>();
@@ -148,7 +149,8 @@ namespace crds_angular.Services
                             {
                                 ContactId = familyMember.ContactId,
                                 Name = familyMember.PreferredName,
-                                LastName = familyMember.LastName
+                                LastName = familyMember.LastName,
+                                EmailAddress = familyMember.Email
                             };
                             servingTeam.Members.Add(member);
                         }
@@ -178,7 +180,8 @@ namespace crds_angular.Services
             {
                 ContactId = familyMember.ContactId,
                 Name = familyMember.PreferredName,
-                LastName = familyMember.LastName
+                LastName = familyMember.LastName,
+                EmailAddress = familyMember.Email
             };
 
             var role = new ServeRole {Name = @group.GroupRole};
@@ -189,15 +192,16 @@ namespace crds_angular.Services
 
         private static TeamMember NewTeamMember(TeamMember teamMember, ServeRole role)
         {
-            var newTeamMember2 = new TeamMember
+            var newTeamMember = new TeamMember
             {
                 Name = teamMember.Name,
                 LastName = teamMember.LastName,
-                ContactId = teamMember.ContactId
+                ContactId = teamMember.ContactId,
+                EmailAddress = teamMember.EmailAddress
             };
-            newTeamMember2.Roles.Add(role);
+            newTeamMember.Roles.Add(role);
 
-            return newTeamMember2;
+            return newTeamMember;
         }
 
         private static List<TeamMember> NewTeamMembersWithRoles(List<TeamMember> teamMembers,
@@ -304,7 +308,8 @@ namespace crds_angular.Services
                                                 {
                                                     ContactId = teamMember.ContactId,
                                                     Name = teamMember.Name,
-                                                    LastName = teamMember.LastName
+                                                    LastName = teamMember.LastName,
+                                                    EmailAddress = teamMember.EmailAddress
                                                 };
                                                 existingTeam.Members.Add(member);
                                             }

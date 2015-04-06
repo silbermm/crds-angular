@@ -1,4 +1,4 @@
-<section ng-show="profile.viewReady">
+<section ng-show="profile.viewReady" class="email-modal">
 <form role="form" name="personal" ng-init="profile.initProfile(this)" novalidate>
     <p class="text-muted push-bottom">Information shared here is kept secure and private. We will not share or sell your information.</p>
 
@@ -29,7 +29,7 @@
         <div class="form-group col-sm-6">
             <label for="nickname">Preferred Name <small class="text-muted">(Example: Rob or Becky)</small>
             </label>
-            <input type="text" name="nickname" class="form-control" id="nickname" placeholder="Enter nick name" ng-model="profile.person.nickName">
+            <input type="text" name="nickname" class="form-control" id="nickname" placeholder="Enter nick name" ng-model="profile.person.nickName" empty-to-null>
         </div>
     </div>
 
