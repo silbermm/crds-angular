@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
@@ -109,9 +109,8 @@ namespace crds_angular.Services
 
         public List<FamilyMember> GetMyImmediateFamily(int contactId, string token)
         {
-            var contactRelationships =
-                _contactRelationshipService.GetMyImmediatieFamilyRelationships(contactId, token).ToList();
-            var familyMembers = Mapper.Map<List<Contact_Relationship>, List<FamilyMember>>(contactRelationships);
+            var contactRelationships = _contactRelationshipService.GetMyImmediatieFamilyRelationships(contactId, token).ToList();
+            var familyMembers = Mapper.Map<List<ContactRelationship>, List<FamilyMember>>(contactRelationships);
 
             //now get info for Contact
             var myProfile = GetLoggedInUserProfile(token);

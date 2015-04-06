@@ -42,8 +42,37 @@ var groupGetDetailResponse = {
   "groupFullInd": "True",
   "waitListInd": "True",
   "waitListGroupId": "1",
-  "userInGroup": "false"
+  "userInGroup" : true,
+  SignUpFamilyMembers:
+  [
+    { "First_Name": "Shankar",
+      "Email_Address": "shankx@test.com",
+      "userInGroup": false,
+      "participantId":"1234",
+      "newAdd":"1234"
+    },
+    { "First_Name": "Luisa",
+      "Email_Address": "Luisa@test.com",
+      "userInGroup": true,
+      "participantId":"1234"
+    }
+  ]
 };
+
+var successResponse = [
+   {
+       "success": 1897699,
+       "enrolledEvents": [
+           "871912"
+       ]
+   },
+   {
+       "success": 994377,
+       "enrolledEvents": [
+           "871912"
+       ]
+   }
+]
 
 
    //var endpoint = JSON.stringify(process.env.CRDS_API_ENDPOINT || "http://localhost:49380/");
@@ -75,9 +104,8 @@ var groupGetDetailResponse = {
 
      $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] +'api/group/1')
      .respond(groupGetDetailResponse);
-
-     $httpBackend.when('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/group/1/user')
-     .respond("200");
+     $httpBackend.when('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/group/1/participants')
+     .respond(successResponse);
 
      }));
 
@@ -102,17 +130,71 @@ var groupGetDetailResponse = {
     var controller = groupSignupController();
     verifyExpectations();
     var person = controller.person;
-    expect(controller.signup).toBeDefined();  
-    controller.signup();                      
-    $httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/group/1/user').respond('200');
-    $httpBackend.flush();          
+    expect(controller.signup).toBeDefined();
+    controller.signup();
+    $httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/group/1/participants').respond(successResponse);
+    $httpBackend.flush();
 
   });
 
    it('should set the alreadySignedUp flag to TRUE ', function(){
     var controller = groupSignupController();
     verifyExpectations();
-    expect(controller.alreadySignedUp).toEqual(false);      
+    var response = {
+      "groupID": "1",
+      "groupFullInd": "True",
+      "waitListInd": "True",
+      "waitListGroupId": "1",
+      "userInGroup" : true,
+      SignUpFamilyMembers:
+      [
+        { "First_Name": "Shankar",
+          "Email_Address": "shankx@test.com",
+          "userInGroup": true,
+          "participantId":"1234",
+          "newAdd":"1234"
+        },
+        { "First_Name": "Luisa",
+          "Email_Address": "Luisa@test.com",
+          "userInGroup": true,
+          "participantId":"1234"
+        }
+      ]
+    };
+    var test = controller.allSignedUp(response);
+    expect(test).toEqual(true);
+  });
+
+  it('should retun object containing newAdd value(s)', function(){
+    var controller = groupSignupController();
+    verifyExpectations();
+    var response = 
+      [
+        { "First_Name": "Shankar",
+          "Email_Address": "shankx@test.com",
+          "userInGroup": true,
+          "participantId":"1234",
+          "newAdd":"1234"
+        },
+        { "First_Name": "Luisa",
+          "Email_Address": "Luisa@test.com",
+          "userInGroup": false,
+          "participantId":"1234"
+        }
+      ];
+    var result = controller.hasParticipantID(response);
+    expect(result.partId[0]).toEqual("1234");
+
+    response = 
+      [
+        { "First_Name": "Shankar",
+          "Email_Address": "shankx@test.com",
+          "userInGroup": true,
+          "participantId":"2222"
+        }
+      ];
+      result = controller.hasParticipantID(response);
+      expect(result.partId[0]).toEqual("2222");
   });
 
    function verifyExpectations(){

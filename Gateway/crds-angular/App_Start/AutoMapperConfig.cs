@@ -20,11 +20,12 @@ namespace crds_angular.App_Start
             Mapper.CreateMap<Skill, Attribute>()
                 .ForMember(dest => dest.Attribute_ID, opts => opts.MapFrom(src => src.SkillId));
 
-            Mapper.CreateMap<Contact_Relationship, FamilyMember>()
+            Mapper.CreateMap<ContactRelationship, FamilyMember>()
                 .ForMember(dest => dest.ContactId, opts => opts.MapFrom(src => src.Contact_Id))
                 .ForMember(dest => dest.PreferredName, opts => opts.MapFrom(src => src.Preferred_Name))
                 .ForMember(dest => dest.LastName, opts => opts.MapFrom(src => src.Last_Name))
-                .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email_Address));
+                .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email_Address))
+                .ForMember(dest => dest.ParticipantId, opts => opts.MapFrom(src => src.Participant_Id));
         }
     }
 }

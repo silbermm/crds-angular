@@ -1,75 +1,46 @@
+<!-- <div ng-show="groupsignup.viewReady"> -->
 <div ng-show="groupsignup.viewReady">
-    <h2 class="header noPspace" ng-bind-html="groupsignup.signupPage.title | html"></h2>
-    <div ng-show="groupsignup.alreadySignedUp">
-      <div ng-bind-html="groupsignup.signupPage.existingMember | html"></div>
-      <h3>Participants</h3>
-      <hr>
-      <p><label><input type="checkbox" style="visibility:hidden;">{{groupsignup.person["nickName"]}} ({{groupsignup.person["emailAddress"]}})</label></p>
-    </div>
+  <h2 class="header noPspace" ng-bind-html="groupsignup.signupPage.title | html"></h2>
+    <div ng-show="groupsignup.alreadySignedUp" ng-bind-html="groupsignup.signupPage.existingMember | html"></div>
 
-    <div ng-show="!groupsignup.alreadySignedUp">
-      <p id="content" class="noPspace" dir="ltr" ng-bind-html="groupsignup.signupPage.content | html" ng-show="groupsignup.showContent && !groupsignup.waitListCase"></p>
-      <p id="successMessage"  ng-bind-html="groupsignup.signupPage.success | html" ng-show="groupsignup.showSuccess && !groupsignup.waitListCase"></p>
-
+    <div >
+      <p id="content" class="noPspace" dir="ltr" ng-bind-html="groupsignup.signupPage.content | html" ng-show="groupsignup.showContent && !groupsignup.waitListCase && !groupsignup.alreadySignedUp"></p>
+      <p id="successMessage" ng-bind-html="groupsignup.signupPage.success | html" ng-show="groupsignup.showSuccess && !groupsignup.waitListCase"></p>
       <p id="fullGroupMessage" ng-bind-html="groupsignup.signupPage.full | html" ng-show="groupsignup.showFull"></p>
-      <p id="waitListMessage" ng-bind-html="groupsignup.signupPage.waitList | html" ng-show="groupsignup.showWaitList && groupsignup.waitListCase"></p>
+      <p id="waitListMessage" ng-bind-html="groupsignup.signupPage.waitList | html" ng-show="groupsignup.showWaitList && groupsignup.waitListCase && !groupsignup.alreadySignedUp"></p>
       <p id="waitSuccessMessage" ng-bind-html="groupsignup.signupPage.waitSuccess | html" ng-show="groupsignup.showWaitSuccess && groupsignup.waitListCase"></p>
     </div>
 
-
-
-
-  <!--
-  Interesting data on the signupPage object is:
-  * group: The group ID in MP
-  * id: The page ID in CMS
-  * link: The Link to use when "searching" CMS for this page
-  * title: The title of the page (name of the group)
-  * content: Some descriptive info about the group (the paragraph below the title on the page)
-  * renderedContent: Same as content?
-  * success: Content to display after successfully registering
-  * full: Content to display when the group is full (not sure if this should be before or after clicking sign up)
-  Many of these items will need to be added as hidden DIVs on this page, and then shown/hidden appropriately as the user takes action.
-  -->
-
-  <form name="groupSignupForm" role="form" ng-submit="groupsignup.signup()" ng-show="groupsignup.showContent && !groupsignup.alreadySignedUp">
-    <fieldset>
-        <legend>People to Sign Up</legend>
-        <div class="form-group">
-            <div class="checkbox">
-                <!--     checkbox only hidden if only in person listed -->
-                <p>
-                    <label>
-                        <input type="checkbox" style="visibility:hidden;">
-                            <element ng-if='groupsignup.person["nickName"] !== undefined && groupsignup.person["nickName"]'>
-                                {{groupsignup.person["nickName"]}}
-                            </element>
-                            <element ng-if='groupsignup.person["nickName"] === undefined || !groupsignup.person["nickName"]'>
-                                {{groupsignup.person["firstName"]}}
-                            </element>
-                            &nbsp;({{groupsignup.person["emailAddress"]}})
-                    </label>
-                    <a href="" ng-click="groupsignup.editProfile()">
-                        <svg viewBox="0 0 32 32" class="icon icon-pencil4">
-                            <use xlink:href="#pencil4"></use>
-                        </svg>
-                    </a>
-                </p>
-                <div>
-                    <input type="submit" name="submit_group_signup" value="Sign Up" id="submit_group_signup" class="btn btn-primary push-half-bottom">
-                </div>
-            </div>
+    <div ng-show="groupsignup.showContent">
+        <legend>Participants</legend>
+      <form  class="form-group" name="myForm" role="form" ng-submit="groupsignup.signup(myForm)" id="myForm">
+      <p>
+        <div class="checkbox"  ng-repeat="person in groupsignup.response as people" ng-class="{'has-error':!groupsignup.formValid && !person['userInGroup']}">
+          <label>
+          <span ng-show="groupsignup.response.length > 1">
+          <input name="input" type="checkbox" ng-checked="person['userInGroup']" ng-disabled="person['userInGroup']" ng-model="person['newAdd']" ng-true-value="'{{person['participantId']}}'" ng-false-value="''">&nbsp;</span>
+          <span>{{person['nickName']}}</span>
+          <span>({{person['emailAddress']}})</span>
+          <span>{{formValid}}</span>
+          <span ng-show="people.indexOf(person) === 0"><a href="" ng-click="groupsignup.editProfile()">
+            <svg viewBox="0 0 32 32" class="icon icon-pencil4">
+              <use xlink:href="#pencil4"></use>
+            </svg>
+          </a></span>
+          </label>
         </div>
-    </fieldset>
-  </form>
+      </p>
+        <p ng-show="!groupsignup.alreadySignedUp"><input type="submit" name="submit_group_signup" value="Sign Up" id="submit_group_signup" class="btn btn-primary push-half-bottom"></p>
+      </form>
+    </div>
 
   <script type="text/ng-template" id="editProfile.html">
-      <div class="modal-header">
-          <a type="button" class="close" ng-click="groupsignup.modalInstance.close()">x</a>
-          <h4 class="modal-title">Edit Profile</h4>
-      </div>
-      <div class="modal-body">
-          <profile-personal updated-person="groupsignup.person" modal-instance="groupsignup.modalInstance"/>
-      </div>
+    <div class="modal-header">
+      <a type="button" class="close" ng-click="groupsignup.modalInstance.close()">x</a>
+      <h4 class="modal-title">Edit Profile</h4>
+    </div>
+    <div class="modal-body">
+      <profile-personal updated-person="groupsignup.response[0]" modal-instance="groupsignup.modalInstance"/>
+    </div>
   </script>
 </div>

@@ -44,8 +44,9 @@
   <ItemGroup>
     <Compile Include="Attribute.cs" />
     <Compile Include="CommunicationPreferences.cs" />
+    <Compile Include="Group_Signup_Relationships.cs" />
     <Compile Include="MyContact.cs" />
-    <Compile Include="Contact_Relationship.cs" />
+    <Compile Include="ContactRelationship.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="Group.cs" />
     <Compile Include="Opportunity.cs" />

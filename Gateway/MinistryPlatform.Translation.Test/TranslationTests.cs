@@ -90,11 +90,10 @@ namespace MinistryPlatform.Translation.Test
         }
 
         [Test]
-        [Ignore("Must have certain rights to access subpage.  Ask team best way to handle")]
         public void ShouldGetSubPageRecord()
         {
             var subGroupPageId = Convert.ToInt32(ConfigurationManager.AppSettings["GroupsSubgroups"]);
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
+             string token = AuthenticationService.authenticate(USERNAME, PASSWORD);
             var recordId = AuthenticationService.GetContactId(token);
             Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
             var record = MinistryPlatformService.GetSubPageRecords(subGroupPageId, 6717,

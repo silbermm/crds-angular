@@ -1,5 +1,7 @@
 // Bootstrap Overrides
 // --------------------------------------------------
+svg { fill: currentColor;
+}
 
 /***************************************************************************************
 * Breadcrumbs
@@ -85,6 +87,14 @@ ol.breadcrumb li.active {
     padding-top: 4px;
     padding-bottom: 4px;
   }
+}
+
+.btn-ghost {
+    @include button-variant($gray-dark, transparent, lighten($gray-light, 10%));
+}
+
+.btn-ghost.active {
+    @include button-variant(white, $gray-light, $gray-light);
 }
 
 /***************************************************************************************

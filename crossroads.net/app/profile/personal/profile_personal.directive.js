@@ -27,7 +27,10 @@
             if(success) {
                 controller.updatedPerson.emailAddress = controller.person.emailAddress;
                 controller.updatedPerson.firstName = controller.person.firstName;
-                controller.updatedPerson.nickName = controller.person.nickName;
+                controller.updatedPerson.nickName =
+                    controller.person.nickName == '' ?
+                    controller.person.firstName :
+                    controller.person.nickName;
                 controller.updatedPerson.lastName = controller.person.lastName;
             }
 

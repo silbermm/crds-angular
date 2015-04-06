@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using log4net;
 using MinistryPlatform.Models;
@@ -16,6 +17,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int GroupsEventsPageId = Convert.ToInt32(AppSettings("GroupsEvents"));
         private readonly int EventsGroupsPageId = Convert.ToInt32(AppSettings("EventsGroups"));
         private readonly int GroupsSubgroupsPageId = Convert.ToInt32(AppSettings("GroupsSubgroups"));
+        private readonly int GroupSignupRelationsPageId = Convert.ToInt32((AppSettings("GroupSignUpRelations")));
         private readonly int GetServingTeamsPageId = Convert.ToInt32(AppSettings("MyServingTeams"));
 
         private IMinistryPlatformService ministryPlatformService;
@@ -29,14 +31,7 @@ namespace MinistryPlatform.Translation.Services
             DateTime? endDate = null, Boolean? employeeRole = false)
         {
             logger.Debug("Adding participant " + participantId + " to group " + groupId);
-
-            // TODO Basing "Full" on Group_Is_Full flag, pending outcome of SPIKE: US1080
-            Group g = getGroupDetails(groupId);
-            if (g.Full)
-            {
-                throw (new GroupFullException(g));
-            }
-
+            
             var values = new Dictionary<string, object>
             {
                 {"Participant_ID", participantId},
@@ -54,8 +49,6 @@ namespace MinistryPlatform.Translation.Services
                             (ministryPlatformService.CreateSubRecord(GroupsParticipantsPageId, groupId, values, apiToken,
                                 true));
                     });
-
-            // TODO Should we set Group_Is_Full flag here, or will that be done by a trigger?  Pending SPIKE: US1080
 
             logger.Debug("Added participant " + participantId + " to group " + groupId + ": record id: " +
                          groupParticipantId);
@@ -87,6 +80,13 @@ namespace MinistryPlatform.Translation.Services
                 if (gn != null)
                 {
                     g.Name = (string) gn;
+                }
+
+                object gt = null;
+                groupDetails.TryGetValue("Group_Type_ID", out gt);
+                if (gt != null)
+                {
+                    g.GroupType = (int) gt;
                 }
 
                 object gsz = null;
@@ -218,5 +218,38 @@ namespace MinistryPlatform.Translation.Services
         {
             return groupParticipants.Contains(participantId);
         }
+
+        public bool checkIfRelationshipInGroup(int relationshipId, IList<int> currRelationshipsList)
+        {
+            return currRelationshipsList.Contains(relationshipId);
+        }
+
+
+        public List<GroupSignupRelationships> GetGroupSignupRelations(int groupType)
+        {
+           var response = WithApiLogin<List<GroupSignupRelationships>>(
+                apiToken =>
+                {
+                    var relationRecords = ministryPlatformService.GetSubPageRecords(GroupSignupRelationsPageId,
+                        groupType, apiToken);
+
+                    return relationRecords.Select(relationRecord => new GroupSignupRelationships
+                    {
+                        RelationshipId = (int) relationRecord["Relationship_ID"],
+                        RelationshipMinAge = (string) relationRecord["Min_Age"],
+                        RelationshipMaxAge = (string) relationRecord["Max_Age"]
+                    }).ToList();
+                });
+            return response;
+        }
+
+        public int CalculateAge(DateTime birthDate, DateTime now)
+        {
+            int age = now.Year - birthDate.Year;
+            if (now.Month < birthDate.Month || (now.Month == birthDate.Month && now.Day < birthDate.Day)) age--;
+            return age;
+        }
+        
     }
 }
+

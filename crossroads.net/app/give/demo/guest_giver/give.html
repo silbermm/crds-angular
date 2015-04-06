@@ -1,0 +1,39 @@
+<div class="row">
+    <div class="col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+        <h1>Give</h1>
+        <p class="subheading">Your generosity fuels the life change we experience around here.</p>
+        <div class="push-top">
+            <form class="give-form">
+                <div class="form-group">
+                    <div class="form-inline form-group give-amount">
+                        <div class="input-group">
+                            <span class="input-group-addon">$</span>
+                            <input type="tel" class="form-control" min="0" maxlength="6" ng-model="give.amount = '125'" autocomplete="off"></input>
+                            <span class="input-group-addon ">.00</span>
+                        </div>
+                        <!--/input-group-->
+                    </div>
+                    <!--/form-inline-->
+
+                    <div class="form-group">
+                        <select class="form-control">
+                            <option>Ministry Fund</option>
+                            <option>Game Change Fund</option>
+                            <option>Old St. George</option>
+                        </select>
+                    </div>
+                    <!--/form-group-->
+                    <div class="form-group">
+                        <select class="form-control">
+                            <option>One Time</option>
+                        </select>
+                    </div>
+                    <!--/form-group-->
+                    <a ui-sref="/demo/guest-giver/login" class="btn btn-primary">Give $125</a>
+                </div>
+            </form>
+            <!--/col-sm-6-->
+        </div>
+        <!--/push-top-->
+    </div>
+</div>

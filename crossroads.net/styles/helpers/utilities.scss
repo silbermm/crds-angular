@@ -321,6 +321,13 @@
     cursor: pointer;
 }
 
+.or-divider {
+    margin-top: -35px;
+    span {
+        background: #fff; padding: 5px;
+    }
+}
+
 // Empty href attributes for UI Bootstrap
 .nav,
 .pagination,

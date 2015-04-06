@@ -8,18 +8,8 @@
 .brandbar {
 	height: 8px;
 	width: 100%;
-	z-index: 999;
 	position: absolute;
 	transform: translatex(0%);
-	transition: all 0.5s;
-}
-
-.brandbar-second {
-	height: 8px;
-	width: 100%;
-	z-index: 1000000;
-	position: absolute;
-	transform: translatex(-100%);
 	transition: all 0.5s;
 }
 
