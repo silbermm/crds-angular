@@ -2,7 +2,7 @@
 (function () {
 
     var moment = require("moment");
-    module.exports = function($rootScope, $log, MESSAGES, ProfileReferenceData) {
+    module.exports = function($rootScope, $log, $timeout, MESSAGES, ProfileReferenceData) {
         var _this = this;
 
         _this.ProfileReferenceData = ProfileReferenceData.getInstance();
@@ -49,6 +49,7 @@
         }
 
         _this.savePersonal = function () {
+          $timeout(function(){
             _this.submitted = true;
             $log.debug(_this.form.personal);
             if (_this.form.personal.$invalid) {
@@ -67,6 +68,7 @@
             }, function () {
                 $log.debug("person save unsuccessful");
             });
+          }, 550);
         };
         _this.isDobError = function () {
             return (_this.form.personal.birthdate.$touched || _this.form.personal.$submitted) && _this.form.personal.birthdate.$invalid;

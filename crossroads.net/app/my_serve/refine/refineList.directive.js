@@ -12,7 +12,7 @@
       templateUrl: "refine/refineList.html",
       scope: {
         "servingDays": "=servingDays",
-        "original" : "=?original"
+        "original" : "=original"
       },
       link : link
     }
@@ -40,9 +40,9 @@
       activate();
 
       $rootScope.$on("rerunFilters", function(event, data) {
-        // Update the entire data with the new data 
+        // Update the entire data with the new data
         scope.servingDays = data;
-        initServeArrays(); 
+        initServeArrays();
         filter(data, false);
         $rootScope.$emit("filterDone", scope.servingDays);
       });
@@ -68,8 +68,8 @@
                     return familyMember === m.contactId;
                   });
                 });
-                
-                if(members.length > 0) {                              
+
+                if(members.length > 0) {
                   theTeam.members = members;
                   servingTeams.push(theTeam);
                 }
@@ -161,7 +161,7 @@
         }
         applyFamilyFilter();
         applyTeamFilter();
-        applyTimeFilter();      
+        applyTimeFilter();
       }
 
       function filterFamily(){

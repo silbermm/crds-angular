@@ -16,14 +16,14 @@ describe('Serve Teams Directive', function() {
       $provide.value('Session', mockSession);
     });
   });
- 
+
   beforeEach(inject(function(_$compile_, _$rootScope_){
     $compile = _$compile_;
     $rootScope = _$rootScope_;
     scope = $rootScope.$new();
     element = '<serve-team opportunity="opp" team="team" tab-index="tabIndex" team-index="teamIndex" day-index="dayIndex"> </serve-team>';
     scope.opp = mockOpportunity;
-    scope.team = mockTeam; 
+    scope.team = mockTeam;
     scope.dayIndex = 0;
     scope.tabIndex = 0;
     scope.teamIndex = 3;
@@ -38,8 +38,8 @@ describe('Serve Teams Directive', function() {
 
   it("should handle the current active tab", function(){
     var isolated = element.isolateScope();
-    expect(isolated.currentActiveTab).toBe(null); 
-    expect( isolated.isActiveTab(mockTeam[0].members[0])).toBe(false); 
+    expect(isolated.currentActiveTab).toBe(null);
+    expect( isolated.isActiveTab(mockTeam[0].members[0])).toBe(false);
   });
 
   it("should set the current member to the loggedin user", function(){
@@ -58,6 +58,18 @@ describe('Serve Teams Directive', function() {
   it("should have the correct ID for the panel", function(){
     var isolated = element.isolateScope();
     expect(isolated.panelId()).toBe("team-panel-003");
+  });
+
+  it("should show edit button for logged in user", function() {
+    var isolated = element.isolateScope();
+    isolated.setActiveTab(mockTeam[0].members[0]);
+    expect(isolated.showEdit).toBe(true);
+  });
+
+  it("should not show edit button for not logged in user", function() {
+    var isolated = element.isolateScope();
+    isolated.setActiveTab(mockTeam[0].members[1]);
+    expect(isolated.showEdit).toBe(false);
   });
 
 });
