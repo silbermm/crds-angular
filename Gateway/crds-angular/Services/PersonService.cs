@@ -100,6 +100,5 @@ namespace crds_angular.Services
             return skills;
         }
 
-        
     }
 }
