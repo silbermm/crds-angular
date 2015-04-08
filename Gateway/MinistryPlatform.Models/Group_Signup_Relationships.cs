@@ -1,9 +1,12 @@
-﻿namespace MinistryPlatform.Models
+﻿using System;
+using System.Data.SqlTypes;
+
+namespace MinistryPlatform.Models
 {
     public class GroupSignupRelationships
     {
         public int RelationshipId { get; set; }
-        public string RelationshipMinAge { get; set; }
-        public string RelationshipMaxAge { get; set; }
+        public Byte RelationshipMinAge { get; set; }
+        public Byte RelationshipMaxAge { get; set; }
     }
 }

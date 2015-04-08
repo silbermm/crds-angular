@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Reflection;
 using log4net;
@@ -236,8 +237,8 @@ namespace MinistryPlatform.Translation.Services
                     return relationRecords.Select(relationRecord => new GroupSignupRelationships
                     {
                         RelationshipId = (int) relationRecord["Relationship_ID"],
-                        RelationshipMinAge = (string) relationRecord["Min_Age"],
-                        RelationshipMaxAge = (string) relationRecord["Max_Age"]
+                        RelationshipMinAge = (Byte)relationRecord["Min_Age"],
+                        RelationshipMaxAge = (Byte)relationRecord["Max_Age"]
                     }).ToList();
                 });
             return response;
