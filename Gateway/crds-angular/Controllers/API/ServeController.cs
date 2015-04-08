@@ -25,7 +25,7 @@ namespace crds_angular.Controllers.API
             this._authenticationService = authenticationService;
         }
 
-        [ResponseType(typeof(List<ServingDay>))]
+        [ResponseType(typeof (List<ServingDay>))]
         [Route("api/serve/family-serve-days")]
         public IHttpActionResult GetFamilyServeDays()
         {
@@ -47,7 +47,7 @@ namespace crds_angular.Controllers.API
             });
         }
 
-        [ResponseType(typeof(List<FamilyMember>))]
+        [ResponseType(typeof (List<FamilyMember>))]
         [Route("api/serve/family")]
         public IHttpActionResult GetFamily()
         {
@@ -63,5 +63,25 @@ namespace crds_angular.Controllers.API
             });
         }
 
+        [Route("api/serve/save-rsvp")]
+        public IHttpActionResult Post([FromBody] ServeResponseDto serveResponse)
+        {
+            return Authorized(token =>
+            {
+                _serveService.SaveServeResponse(token, serveResponse.ContactId, serveResponse.OpportunityId,
+                    serveResponse.EventTypeId, serveResponse.StartDate, serveResponse.EndDate);
+
+                return this.Ok();
+            });
+        }
+    }
+
+    public class ServeResponseDto
+    {
+        public int EventTypeId { get; set; }
+        public int ContactId { get; set; }
+        public int OpportunityId { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
     }
 }

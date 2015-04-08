@@ -49,6 +49,30 @@ namespace MinistryPlatform.Translation.Extensions
             return result;
         }
 
+        public static DateTime ToDate(this Dictionary<string, object> input, string key, bool throwExceptionIfFailed = false)
+        {
+            var dictVal = DictVal(input, key);
+            if (dictVal == null)
+            {
+                if (throwExceptionIfFailed)
+                {
+                    throw new FormatException(string.Format("'{0}' cannot be converted as DateTime - null value", key));
+                }
+                return new DateTime();
+            }
+
+            DateTime result;
+            var valid = DateTime.TryParse(dictVal.ToString(), out result);
+            if (valid)
+            {
+                return result;
+            }
+
+            if (throwExceptionIfFailed)
+                throw new FormatException(string.Format("'{0}' cannot be converted as DateTime", key));
+            return result;
+        }
+
         public static string ToDateAsString(this Dictionary<string, object> input, string key, bool throwExceptionIfFailed = false)
         {
             var dictVal = DictVal(input, key);
