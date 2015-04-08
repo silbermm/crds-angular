@@ -64,7 +64,7 @@ namespace crds_angular.Controllers.API
         }
 
         [Route("api/serve/save-rsvp")]
-        public IHttpActionResult Post([FromBody] ServeResponseDto serveResponse)
+        public IHttpActionResult SaveRsvp([FromBody] ServeResponseDto serveResponse)
         {
             return Authorized(token =>
             {
@@ -74,14 +74,5 @@ namespace crds_angular.Controllers.API
                 return this.Ok();
             });
         }
-    }
-
-    public class ServeResponseDto
-    {
-        public int EventTypeId { get; set; }
-        public int ContactId { get; set; }
-        public int OpportunityId { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
     }
 }
