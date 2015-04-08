@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-
 using System.Linq;
 using System.Reflection;
 using log4net;
 using MinistryPlatform.Models;
-using MinistryPlatform.Translation.Exceptions;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
 
