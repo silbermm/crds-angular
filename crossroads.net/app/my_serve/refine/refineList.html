@@ -2,6 +2,28 @@
   <a href="" class="filter-clear" data-ng-click="clearFilters()" >Clear All</a>
   <h5>Filter Opportunities</h5>
 
+  <div class="push-half-bottom filter-group">
+    <div class="form-group">
+      <label>From:</label>
+      <div class="input-group">
+        <input type="text" class="form-control" ng-required="true" close-text="Close" />
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+        </span>
+      </div><!--/input-group-->
+    </div><!--/form-group-->
+
+    <div class="form-group">
+      <label>To:</label>
+      <div class="input-group">
+        <input type="text" class="form-control" close-text="Close" />
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+        </span>
+      </div><!--/input-group-->
+    </div><!--/form-group-->
+  </div><!--/push-bottom-->
+
   <div class="push-half-bottom filter-group" ng-if="uniqueMembers.length > 1" >
     <div class="checkbox" data-ng-repeat="member in uniqueMembers">
       <label>
@@ -15,7 +37,7 @@
       <label>
         <input type="checkbox" ng-model="team.selected" ng-change="toggleTeam(team)"> {{team.name}}
       </label>
-    </div> 
+    </div>
   </div><!--/push-bottom-->
 
   <div class="push-half-bottom filter-group">
@@ -44,27 +66,7 @@
     </div>
   </div><!--/push-bottom-->
 
-  <div class="push-half-bottom filter-group">
-    <div class="form-group">
-      <label>From:</label>
-      <div class="input-group">
-        <input type="text" class="form-control" ng-required="true" close-text="Close" />
-        <span class="input-group-btn">
-          <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
-        </span>
-      </div><!--/input-group-->
-    </div><!--/form-group-->
 
-    <div class="form-group">
-      <label>To:</label>
-      <div class="input-group">
-        <input type="text" class="form-control" close-text="Close" />
-        <span class="input-group-btn">
-          <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
-        </span>
-      </div><!--/input-group-->
-    </div><!--/form-group-->
-  </div><!--/push-bottom-->
 
 
 </div>
