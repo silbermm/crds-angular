@@ -119,6 +119,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"dp_RecordID", 100},
                     {"Opportunity Title", "Opportunity 100"},
                     {"Event Type", "Event Type 100"},
+                    {"Event Type ID", 100},
                     {"Role_Title", "Role Title 100"},
                     {"Maximum_Needed", 100}
                 },
@@ -127,6 +128,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"dp_RecordID", 200},
                     {"Opportunity Title", "Opportunity 200"},
                     {"Event Type", "Event Type 200"},
+                    {"Event Type ID", 200},
                     {"Role_Title", "Role Title 200"},
                     {"Maximum_Needed", 200}
                 },
@@ -135,6 +137,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"dp_RecordID", 300},
                     {"Opportunity Title", "Opportunity 300"},
                     {"Event Type", "Event Type 300"},
+                    {"Event Type ID", 300},
                     {"Role_Title", "Role Title 300"},
                     {"Maximum_Needed", null}
                 }
