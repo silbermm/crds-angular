@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -15,6 +14,8 @@ namespace MinistryPlatform.Translation.Services
 
         private readonly int _groupOpportunitiesEventsPageViewId = Convert.ToInt32(AppSettings("GroupOpportunitiesEvents"));
         private readonly int _signedupToServeSubPageViewId = Convert.ToInt32(AppSettings("SignedupToServe"));
+        private readonly int _opportunityPage = Convert.ToInt32(AppSettings("OpportunityPage"));
+        private readonly int _eventPage = Convert.ToInt32(AppSettings("Events"));
 
         public OpportunityServiceImpl(IMinistryPlatformService ministryPlatformService, IEventService eventService)
         {
@@ -61,6 +62,32 @@ namespace MinistryPlatform.Translation.Services
             var records = _ministryPlatformService.GetSubpageViewRecords(_signedupToServeSubPageViewId, opportunityId, token, search);
 
             return records.Count();
+        }
+
+
+        public DateTime GetLastOpportunityDate(int opportunityId, string token)
+        {
+            //First get the event type
+            var opp = _ministryPlatformService.GetRecordDict(_opportunityPage, opportunityId, token);
+            var eventType = opp["Event_Type_ID_Text"];
+            
+            //Now get all the events for this type
+            var searchString = ",," + eventType;
+            var sort = "0";
+            var events = _ministryPlatformService.GetRecordsDict(_eventPage, token, searchString, sort);
+
+            //grab the last one
+            try
+            {
+                var lastEvent = events.Last();
+                var lastEventDate = DateTime.Parse(lastEvent["Event_Start_Date"].ToString());
+
+                return lastEventDate;
+            }
+            catch (InvalidOperationException ex )
+            {
+                throw new Exception("No events found. Cannot return the last event date.");
+            }
         }
     }
 }

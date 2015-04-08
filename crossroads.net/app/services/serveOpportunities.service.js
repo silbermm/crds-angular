@@ -4,6 +4,9 @@
   ServeOpportunities.$inject = ['$resource'];
 
   function ServeOpportunities($resource){
-    return $resource(__API_ENDPOINT__ + 'api/profile/servesignup');
+    return {
+    	ServeDays: $resource(__API_ENDPOINT__ + 'api/profile/servesignup');
+    	LastOpportunityDate: $resource(__API_ENDPOINT__ + 'api/opportunity/getLastOpportunityDate/:id');
+    }
   }  
 })();

@@ -5,9 +5,9 @@
 
   module.exports = ServeTeam;
 
-  ServeTeam.$inject = ['$rootScope', '$log', 'Session', '$modal'];
+  ServeTeam.$inject = ['$rootScope', '$log', 'Session', 'ServeOpportunities', '$modal'];
 
-  function ServeTeam($rootScope,$log,Session,$modal){
+  function ServeTeam($rootScope,$log,Session, ServeOpportunities, $modal){
     return {
       restrict: "EA",
       transclude: true,
@@ -18,7 +18,8 @@
         opportunity: '=',
         teamIndex: '=',
         tabIndex: '=',
-        dayIndex: '='
+        dayIndex: '=',
+        oppServeDate: '='
       },
       link : link
     };
@@ -39,6 +40,12 @@
       scope.editProfile = editProfile;
       scope.modalInstance = {};
       scope.showEdit = false;
+      scope.frequency = [{value:0, text:"Once (12/16/14 8:30am)"}, {value:1, text:"Every Week (Sundays 8:30am)"}, {value:2, text:"Every Other Week (Sundays 8:30am)"}];
+      scope.format = 'MM/dd/yyyy';
+      scope.open = open;
+      scope.getLastDate = getLastDate;
+      scope.dateOptions = {formatYear: 'yy',startingDay: 1};
+      scope.fromDt = scope.oppServeDate;
 
       activate();
      //////////////////////////////////////
@@ -60,6 +67,16 @@
         scope.isCollapsed = true;
       }
 
+      function getLastDate(){
+        if(scope.currentMember === null)
+        {
+          console.log("You did it wrong.");
+          return false;
+        }
+        scope.toDt = ServeOpportunities.LastOpportunityDate({id:currentMember.currentOpportunity.roleId})
+        return true;
+      }
+
       function getPanelId(){
         return "team-panel-" + scope.dayIndex + scope.tabIndex + scope.teamIndex;
       }
@@ -77,6 +94,12 @@
             return m.name === scope.currentMember.name && m.signedup === 'yes';
           });
         }
+      }
+
+      function open($event, opened){
+        $event.preventDefault();
+        $event.stopPropagation();
+        scope[opened] = true;
       }
 
       function openPanel(members){
