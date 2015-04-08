@@ -265,9 +265,11 @@
     <Compile Include="Security\MPAuth.cs" />
     <Compile Include="Security\CustomAuthorize.cs" />
     <Compile Include="Services\AccountService.cs" />
+    <Compile Include="Services\Interfaces\IServeService.cs" />
     <Compile Include="Services\Interfaces\IPersonService.cs" />
     <Compile Include="Services\MinistryPlatformBaseService.cs" />
     <Compile Include="Services\PersonService.cs" />
+    <Compile Include="Services\ServeService.cs" />
     <Compile Include="Services\SkillService.cs" />
     <Compile Include="Services\TranslationService.cs" />
     <Compile Include="Startup.cs" />
