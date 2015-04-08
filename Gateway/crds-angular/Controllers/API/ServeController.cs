@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.Description;
+using crds_angular.Extenstions;
 using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Security;
@@ -69,7 +70,8 @@ namespace crds_angular.Controllers.API
             return Authorized(token =>
             {
                 _serveService.SaveServeResponse(token, serveResponse.ContactId, serveResponse.OpportunityId,
-                    serveResponse.EventTypeId, serveResponse.StartDate, serveResponse.EndDate);
+                    serveResponse.EventTypeId, serveResponse.StartDateUnix.FromUnixTime(),
+                    serveResponse.EndDateUnix.FromUnixTime());
 
                 return this.Ok();
             });
