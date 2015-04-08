@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Results;
@@ -25,6 +21,9 @@ namespace crds_angular.test.controllers
 
         private Mock<IPersonService> _personServiceMock;
         private Mock<IAuthenticationService> _authenticationServiceMock;
+
+        private string _authType;
+        private string _authToken;
 
         [SetUp]
         public void SetUp()
