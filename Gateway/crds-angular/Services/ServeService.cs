@@ -18,8 +18,11 @@ namespace crds_angular.Services
         private IPersonService _personService;
         private IAuthenticationService _authenticationService;
         private IOpportunityService _opportunityService;
+        private IEventService _eventService;
 
-        public ServeService(IGroupService groupService, IContactRelationshipService contactRelationshipService, IPersonService personService, IAuthenticationService authenticationService, IOpportunityService opportunityService)
+        public ServeService(IGroupService groupService, IContactRelationshipService contactRelationshipService,
+            IPersonService personService, IAuthenticationService authenticationService,
+            IOpportunityService opportunityService, IEventService eventService)
         {
             this._groupService = groupService;
             this._contactRelationshipService = contactRelationshipService;
@@ -27,6 +30,7 @@ namespace crds_angular.Services
             //this._contactService = contactService;
             this._opportunityService = opportunityService;
             this._authenticationService = authenticationService;
+            this._eventService = eventService;
         }
 
         public List<FamilyMember> GetMyImmediateFamily(int contactId, string token)
@@ -85,7 +89,8 @@ namespace crds_angular.Services
                             //day already in list
 
                             //check if time is in list
-                            var serveTime = serveDay.ServeTimes.SingleOrDefault(s => s.Time == e.EventStartDate.TimeOfDay.ToString());
+                            var serveTime =
+                                serveDay.ServeTimes.SingleOrDefault(s => s.Time == e.EventStartDate.TimeOfDay.ToString());
                             if (serveTime != null)
                             {
                                 //time in list
@@ -142,7 +147,7 @@ namespace crds_angular.Services
                             else
                             {
                                 //time not in list
-                                serveTime = new ServingTime { Time = e.EventStartDate.TimeOfDay.ToString() };
+                                serveTime = new ServingTime {Time = e.EventStartDate.TimeOfDay.ToString()};
                                 serveTime.ServingTeams.Add(NewServingTeam(team, opportunity, serveRole));
                                 serveDay.ServeTimes.Add(serveTime);
                             }
@@ -157,7 +162,7 @@ namespace crds_angular.Services
                                 EventType = opportunity.EventType,
                                 EventTypeId = opportunity.EventTypeId
                             };
-                            var serveTime = new ServingTime { Time = e.EventStartDate.TimeOfDay.ToString() };
+                            var serveTime = new ServingTime {Time = e.EventStartDate.TimeOfDay.ToString()};
                             serveTime.ServingTeams.Add(NewServingTeam(team, opportunity, serveRole));
 
                             serveDay.ServeTimes.Add(serveTime);
@@ -172,7 +177,12 @@ namespace crds_angular.Services
             var sortedServeDays = new List<ServingDay>();
             foreach (var serveDay in preSortedServeDays)
             {
-                var sortedServeDay = new ServingDay { Day = serveDay.Day, EventType = serveDay.EventType, EventTypeId = serveDay.EventTypeId };
+                var sortedServeDay = new ServingDay
+                {
+                    Day = serveDay.Day,
+                    EventType = serveDay.EventType,
+                    EventTypeId = serveDay.EventTypeId
+                };
                 var sortedServeTimes = serveDay.ServeTimes.OrderBy(s => s.Time).ToList();
                 sortedServeDay.ServeTimes = sortedServeTimes;
                 sortedServeDays.Add(sortedServeDay);
@@ -209,7 +219,7 @@ namespace crds_angular.Services
                             };
                             servingTeam.Members.Add(member);
                         }
-                        var role = new ServeRole { Name = group.GroupRole };
+                        var role = new ServeRole {Name = group.GroupRole};
                         member.Roles.Add(role);
                     }
                     else
@@ -220,7 +230,7 @@ namespace crds_angular.Services
                             GroupId = group.GroupId,
                             PrimaryContact = group.PrimaryContact
                         };
-                        var groupMembers = new List<TeamMember> { NewTeamMember(familyMember, group) };
+                        var groupMembers = new List<TeamMember> {NewTeamMember(familyMember, group)};
                         servingTeam.Members = groupMembers;
                         servingTeams.Add(servingTeam);
                     }
@@ -228,6 +238,30 @@ namespace crds_angular.Services
             }
             return servingTeams;
         }
+
+        public bool SaveServeResponse(string token, 
+            int contactid, 
+            int opportunityId, 
+            int eventTypeId,
+            DateTime startDate,
+            DateTime endDate)
+        {
+            //get participant id for Contact
+            var participant = _authenticationService.GetParticipantRecord(token);
+
+            //get events in range
+            var events = _eventService.GetEventsByTypeForRange(eventTypeId, startDate, endDate, token);
+            foreach (var e in events)
+            {
+                //for each event in range create an event participant & opportunity response
+                _eventService.registerParticipantForEvent(participant.ParticipantId, e.EventId);
+                var comments = string.Empty; //anything of value to put in comments?
+                _opportunityService.RespondToOpportunity(token, opportunityId, comments);
+            }
+
+            return true;
+        }
+
 
         private static TeamMember NewTeamMember(FamilyMember familyMember, Group group)
         {
@@ -239,8 +273,8 @@ namespace crds_angular.Services
                 EmailAddress = familyMember.Email
             };
 
-            var role = new ServeRole { Name = @group.GroupRole };
-            teamMember.Roles = new List<ServeRole> { role };
+            var role = new ServeRole {Name = @group.GroupRole};
+            teamMember.Roles = new List<ServeRole> {role};
 
             return teamMember;
         }
@@ -287,7 +321,7 @@ namespace crds_angular.Services
             };
             return servingTeam;
         }
-        
+
         private static List<Event> ParseServingEvents(IEnumerable<Event> events)
         {
             var today = DateTime.Now;

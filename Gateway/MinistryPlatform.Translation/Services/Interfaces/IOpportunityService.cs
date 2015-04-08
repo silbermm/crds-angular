@@ -7,6 +7,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
     {
         List<Opportunity> GetOpportunitiesForGroup(int groupId, string token);
         int GetOpportunitySignupCount(int opportunityId, int eventId, string token);
-        
+        int RespondToOpportunity(string token, int opportunityId, string comments);
+
     }
 }
