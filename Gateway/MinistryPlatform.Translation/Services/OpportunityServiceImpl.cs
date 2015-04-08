@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
@@ -31,10 +32,11 @@ namespace MinistryPlatform.Translation.Services
             {
                 var opportunity = new Opportunity
                 {
-                    OpportunityId = (int) record["dp_RecordID"],
-                    OpportunityName = (string) record["Opportunity Title"],
-                    EventType = (string) record["Event Type"], 
-                    RoleTitle = (string) record["Role_Title"]
+                    OpportunityId = record.ToInt("dp_RecordID"),
+                    OpportunityName = record.ToString("Opportunity Title"),
+                    EventType = record.ToString("Event Type"),
+                    EventTypeId = record.ToInt("Event Type ID"),
+                    RoleTitle = record.ToString("Role_Title")
                 };
                 var cap = 0;
                 Int32.TryParse(record["Maximum_Needed"] != null ? record["Maximum_Needed"].ToString() : "0", out cap);

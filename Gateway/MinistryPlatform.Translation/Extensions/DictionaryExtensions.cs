@@ -12,6 +12,7 @@ namespace MinistryPlatform.Translation.Extensions
 
         public static int ToInt(this Dictionary<string, object> input, string key, bool throwExceptionIfFailed = false)
         {
+            // TODO: catch  when key does not exist in "input"
             if (input[key] == null)
             {
                 if (throwExceptionIfFailed)

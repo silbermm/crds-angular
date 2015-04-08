@@ -109,7 +109,8 @@ namespace crds_angular.Services
 
         public List<FamilyMember> GetMyImmediateFamily(int contactId, string token)
         {
-            var contactRelationships = _contactRelationshipService.GetMyImmediatieFamilyRelationships(contactId, token).ToList();
+            var contactRelationships =
+                _contactRelationshipService.GetMyImmediatieFamilyRelationships(contactId, token).ToList();
             var familyMembers = Mapper.Map<List<ContactRelationship>, List<FamilyMember>>(contactRelationships);
 
             //now get info for Contact
@@ -257,18 +258,19 @@ namespace crds_angular.Services
                         {
                             Name = opportunity.OpportunityName + " " + opportunity.RoleTitle,
                             Capacity = opportunity.Capacity,
+                            RoleId = opportunity.OpportunityId,
                             SlotsTaken =
                                 this._opportunityService.GetOpportunitySignupCount(opportunity.OpportunityId, e.EventId,
                                     token)
                         };
 
-                        var serveDay = serveDays.SingleOrDefault(r => r.Day == e.DateOnly);
+                        var serveDay = serveDays.SingleOrDefault(r => r.Day == e.EventStartDate.Date.ToString("d"));
                         if (serveDay != null)
                         {
                             //day already in list
 
                             //check if time is in list
-                            var serveTime = serveDay.ServeTimes.SingleOrDefault(s => s.Time == e.TimeOnly);
+                            var serveTime = serveDay.ServeTimes.SingleOrDefault(s => s.Time == e.EventStartDate.TimeOfDay.ToString());
                             if (serveTime != null)
                             {
                                 //time in list
@@ -325,7 +327,7 @@ namespace crds_angular.Services
                             else
                             {
                                 //time not in list
-                                serveTime = new ServingTime {Time = e.TimeOnly};
+                                serveTime = new ServingTime { Time = e.EventStartDate.TimeOfDay.ToString() };
                                 serveTime.ServingTeams.Add(NewServingTeam(team, opportunity, serveRole));
                                 serveDay.ServeTimes.Add(serveTime);
                             }
@@ -333,8 +335,14 @@ namespace crds_angular.Services
                         else
                         {
                             //day not in list add it
-                            serveDay = new ServingDay {Day = e.DateOnly, Date = e.StarDateTime};
-                            var serveTime = new ServingTime {Time = e.TimeOnly};
+                            serveDay = new ServingDay
+                            {
+                                Day = e.EventStartDate.Date.ToString("d"),
+                                Date = e.EventStartDate,
+                                EventType = opportunity.EventType,
+                                EventTypeId = opportunity.EventTypeId
+                            };
+                            var serveTime = new ServingTime { Time = e.EventStartDate.TimeOfDay.ToString() };
                             serveTime.ServingTeams.Add(NewServingTeam(team, opportunity, serveRole));
 
                             serveDay.ServeTimes.Add(serveTime);
@@ -349,7 +357,7 @@ namespace crds_angular.Services
             var sortedServeDays = new List<ServingDay>();
             foreach (var serveDay in preSortedServeDays)
             {
-                var sortedServeDay = new ServingDay {Day = serveDay.Day};
+                var sortedServeDay = new ServingDay {Day = serveDay.Day, EventType = serveDay.EventType, EventTypeId = serveDay.EventTypeId};
                 var sortedServeTimes = serveDay.ServeTimes.OrderBy(s => s.Time).ToList();
                 sortedServeDay.ServeTimes = sortedServeTimes;
                 sortedServeDays.Add(sortedServeDay);
@@ -358,21 +366,22 @@ namespace crds_angular.Services
             return sortedServeDays;
         }
 
-        private static List<ServeEvent> ParseServingEvents(IEnumerable<Event> events)
+        private static List<Event> ParseServingEvents(IEnumerable<Event> events)
         {
             var today = DateTime.Now;
-            return events.Select(e => new ServeEvent
+            return events.Select(e => new Event
             {
-                Name = e.EventTitle,
-                StarDateTime = e.EventStartDate,
-                DateOnly = e.EventStartDate.Date.ToString("d"),
-                TimeOnly = e.EventStartDate.TimeOfDay.ToString(),
-                EventId = e.EventId
+                EventTitle = e.EventTitle,
+                EventStartDate = e.EventStartDate,
+                //DateOnly = e.EventStartDate.Date.ToString("d"),
+                //TimeOnly = e.EventStartDate.TimeOfDay.ToString(),
+                EventId = e.EventId,
+                EventType = e.EventType
             })
                 .Where(
                     e =>
-                        e.StarDateTime.Month == today.Month && e.StarDateTime.Day >= today.Day &&
-                        e.StarDateTime.Year == today.Year)
+                        e.EventStartDate.Month == today.Month && e.EventStartDate.Day >= today.Day &&
+                        e.EventStartDate.Year == today.Year)
                 .ToList();
         }
     }
