@@ -33,9 +33,6 @@ require('../services/group_service');
                     break;
                 }
             }
-            if(vm.response.length === 2 && !vm.response[0]['userInGroup'] && vm.response[0]['newAdd'] === undefined){
-                flag = false;
-            }
             if(vm.response.length === 1){
                 flag = true;
             }
