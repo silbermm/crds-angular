@@ -6,6 +6,7 @@ using System.Reflection;
 using log4net;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Exceptions;
+using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
@@ -229,31 +230,18 @@ namespace MinistryPlatform.Translation.Services
         public List<GroupSignupRelationships> GetGroupSignupRelations(int groupType)
         {
             var response = WithApiLogin<List<GroupSignupRelationships>>(
-                apiToken =>
-                {
-                    var relationRecords = ministryPlatformService.GetSubPageRecords(GroupSignupRelationsPageId,
-                        groupType, apiToken);
-                    var relationRec = new List<GroupSignupRelationships>();
-                    
-                    foreach (var record in relationRecords)
-                    {
-                        var relationRecord = new GroupSignupRelationships
-                        {
-                            RelationshipId = (int) record["Relationship_ID"]
-                        };
-                        var min = 0;
-                        var max = 0;
-                        Int32.TryParse(record["Min_Age"] != null ? record["Min_Age"].ToString() : "0",
-                            out min);
-                        relationRecord.RelationshipMinAge = min;
-                        Int32.TryParse(record["Max_Age"] != null ? record["Max_Age"].ToString() : "100",
-                           out max);
-                        relationRecord.RelationshipMinAge = min;
-                        relationRecord.RelationshipMaxAge = max;
-                        relationRec.Add(relationRecord);
-                    }
-                    return relationRec;
-                });
+                 apiToken =>
+                 {
+                     var relationRecords = ministryPlatformService.GetSubPageRecords(GroupSignupRelationsPageId,
+                         groupType, apiToken);
+
+                     return relationRecords.Select(relationRecord => new GroupSignupRelationships
+                     {
+                         RelationshipId = relationRecord.ToInt("Relationship_ID"),
+                         RelationshipMinAge = relationRecord.ToNullableInt("Min_Age"),
+                         RelationshipMaxAge = relationRecord.ToNullableInt("Max_Age")
+                     }).ToList();
+                 });
             return response;
         }
 
