@@ -9,7 +9,7 @@ namespace crds_angular.Models.Crossroads
         public int ContactId { get; set; }
 
         [JsonProperty(PropertyName = "endDate")]
-        public DateTime EndDate { get; set; }
+        public long EndDateUnix { get; set; }
 
         [JsonProperty(PropertyName = "eventTypeId")]
         public int EventTypeId { get; set; }
@@ -18,6 +18,6 @@ namespace crds_angular.Models.Crossroads
         public int OpportunityId { get; set; }
 
         [JsonProperty(PropertyName = "startDate")]
-        public DateTime StartDate { get; set; }
+        public long StartDateUnix { get; set; }
     }
 }
