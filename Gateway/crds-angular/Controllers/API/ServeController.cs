@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -18,12 +15,13 @@ namespace crds_angular.Controllers.API
     public class ServeController : MPAuth
     {
         private readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private IPersonService _personService;
+        //private IPersonService _personService;
+        private IServeService _serveService;
         private IAuthenticationService _authenticationService;
 
-        public ServeController(IPersonService personService, IAuthenticationService authenticationService)
+        public ServeController(IServeService serveService, IAuthenticationService authenticationService)
         {
-            this._personService = personService;
+            this._serveService = serveService;
             this._authenticationService = authenticationService;
         }
 
@@ -35,7 +33,7 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
-                    var servingDays = _personService.GetServingDays(token);
+                    var servingDays = _serveService.GetServingDays(token);
                     if (servingDays == null)
                     {
                         return Unauthorized();
@@ -56,7 +54,7 @@ namespace crds_angular.Controllers.API
             return Authorized(token =>
             {
                 var contactId = _authenticationService.GetContactId(token);
-                var list = _personService.GetMyImmediateFamily(contactId, token);
+                var list = _serveService.GetMyImmediateFamily(contactId, token);
                 if (list == null)
                 {
                     return Unauthorized();

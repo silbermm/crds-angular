@@ -19,7 +19,8 @@ namespace crds_angular.test.controllers
 
         private ServeController _fixture;
 
-        private Mock<IPersonService> _personServiceMock;
+        //private Mock<IPersonService> _personServiceMock;
+        private Mock<IServeService> _serveServiceMock;
         private Mock<IAuthenticationService> _authenticationServiceMock;
 
         private string _authType;
@@ -28,10 +29,11 @@ namespace crds_angular.test.controllers
         [SetUp]
         public void SetUp()
         {
-            _personServiceMock = new Mock<IPersonService>();
+            //_personServiceMock = new Mock<IPersonService>();
+            _serveServiceMock = new Mock<IServeService>();
             _authenticationServiceMock= new Mock<IAuthenticationService>();
 
-            _fixture = new ServeController(_personServiceMock.Object, _authenticationServiceMock.Object);
+            _fixture = new ServeController(_serveServiceMock.Object, _authenticationServiceMock.Object);
 
             _authType = "auth_type";
             _authToken = "auth_token";
@@ -53,9 +55,9 @@ namespace crds_angular.test.controllers
             var servingTeams = SetUpServingTeams();
             var servingDays = SetUpServingDays();
 
-            _personServiceMock.Setup(mocked => mocked.GetServingTeams(It.IsAny<string>()))
+            _serveServiceMock.Setup(mocked => mocked.GetServingTeams(It.IsAny<string>()))
                 .Returns(servingTeams);
-            _personServiceMock.Setup(mocked => mocked.GetServingDays(It.IsAny<string>()))
+            _serveServiceMock.Setup(mocked => mocked.GetServingDays(It.IsAny<string>()))
                 .Returns(servingDays);
 
             IHttpActionResult result = _fixture.GetFamilyServeDays();
