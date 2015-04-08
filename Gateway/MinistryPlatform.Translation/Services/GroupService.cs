@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
+
 using System.Linq;
 using System.Reflection;
 using log4net;
@@ -228,18 +228,31 @@ namespace MinistryPlatform.Translation.Services
 
         public List<GroupSignupRelationships> GetGroupSignupRelations(int groupType)
         {
-           var response = WithApiLogin<List<GroupSignupRelationships>>(
+            var response = WithApiLogin<List<GroupSignupRelationships>>(
                 apiToken =>
                 {
                     var relationRecords = ministryPlatformService.GetSubPageRecords(GroupSignupRelationsPageId,
                         groupType, apiToken);
-
-                    return relationRecords.Select(relationRecord => new GroupSignupRelationships
+                    var relationRec = new List<GroupSignupRelationships>();
+                    
+                    foreach (var record in relationRecords)
                     {
-                        RelationshipId = (int) relationRecord["Relationship_ID"],
-                        RelationshipMinAge = (Byte)relationRecord["Min_Age"],
-                        RelationshipMaxAge = (Byte)relationRecord["Max_Age"]
-                    }).ToList();
+                        var relationRecord = new GroupSignupRelationships
+                        {
+                            RelationshipId = (int) record["Relationship_ID"]
+                        };
+                        var min = 0;
+                        var max = 0;
+                        Int32.TryParse(record["Min_Age"] != null ? record["Min_Age"].ToString() : "0",
+                            out min);
+                        relationRecord.RelationshipMinAge = min;
+                        Int32.TryParse(record["Max_Age"] != null ? record["Max_Age"].ToString() : "100",
+                           out max);
+                        relationRecord.RelationshipMinAge = min;
+                        relationRecord.RelationshipMaxAge = max;
+                        relationRec.Add(relationRecord);
+                    }
+                    return relationRec;
                 });
             return response;
         }
