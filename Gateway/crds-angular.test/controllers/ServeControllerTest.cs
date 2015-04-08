@@ -41,6 +41,12 @@ namespace crds_angular.test.controllers
         }
 
         [Test]
+        public void SaveFamilySignUp()
+        {
+            
+        }
+
+        [Test]
         public void GetFamilyServeSignUpTest()
         {
             const int contactId = 123456;
