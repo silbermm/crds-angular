@@ -24,7 +24,6 @@
     vm.toggleMin = toggleMin;
     vm.repeating = '2';
 
-
     activate();
 
     $rootScope.$on("personUpdated", personUpdateHandler);
@@ -93,8 +92,6 @@
       vm.original = angular.copy(vm.groups);
       $rootScope.$broadcast("rerunFilters", vm.groups);
     }
-
-
   }
 
 })();

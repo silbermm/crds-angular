@@ -3,9 +3,9 @@
 
   module.exports = RefineDirective;
 
-  RefineDirective.$inject = ['$rootScope','filterState']
+  RefineDirective.$inject = ['$rootScope','filterState', 'screenSize']
 
-  function RefineDirective($rootScope, filterState){
+  function RefineDirective($rootScope, filterState, screenSize){
     return {
       restrict: "E",
       replace: true,
@@ -36,8 +36,13 @@
       scope.uniqueMembers = [];
       scope.uniqueTeams = [];
       scope.uniqueTimes = [];
+      scope.isCollapsed = $rootScope.mobile;
 
       activate();
+        
+    screenSize.on('xs, sm', function(match) {
+        scope.isCollapsed = match;
+    })
 
       $rootScope.$on("rerunFilters", function(event, data) {
         // Update the entire data with the new data
