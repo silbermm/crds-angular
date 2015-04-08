@@ -20,6 +20,7 @@ require('./profile');
 require('./filters');
 require('./events');
 require('./cms/services/cms_services_module');
+require('./give/bank_info_directive');
 
 require('angular-aside');
 
@@ -30,7 +31,7 @@ var _ = require('lodash');
 "use strict";
 (function () {
 
-   angular.module("crossroads", ['ngResource', "crossroads.profile", "crossroads.filters", "crdsCMS.services", "ui.router", 'ui.utils', "ngCookies", "ngMessages", 'angular-growl', 'toggle-switch', 'ngAside'])
+   angular.module("crossroads", ['ngResource', "crossroads.profile", "crossroads.filters", "crdsCMS.services", "ui.router", 'ui.utils', "ngCookies", "ngMessages", 'angular-growl', 'toggle-switch', 'ngAside','bankinfo'])
 
     .constant("AUTH_EVENTS", {
             loginSuccess: "auth-login-success",

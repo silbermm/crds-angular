@@ -2,6 +2,7 @@
     'use strict';
     module.exports = function GiveCtrl($scope, $log, messages, opportunity) {
 
+        console.log("Inside give controller");
         var _this = this;
         //Credit Card RegExs
         var visaRegEx = /^4[0-9]{2}/;
@@ -22,6 +23,7 @@
         ]
 
         _this.toggleCheck = function() {
+          console.log("in here");
             if (_this.showMessage == "Where?") {
                 _this.showMessage = "Close";
                 _this.showCheckClass = "";
