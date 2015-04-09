@@ -1,0 +1,109 @@
+.card-item {
+  margin-bottom: $line-height-computed;
+  background: rgba(214, 224, 226, 0.2);
+  border-radius: 2px;
+  border-left: 5px solid $cr-blue;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 2px 2px 0 rgba(0, 0, 0, 0.12);
+}
+
+.card-left {
+  padding: $line-height-computed/2;
+
+
+  img {
+      width: 100%;
+      background-color: transparent;
+      border-radius: 50%;
+      //margin: 5px;
+      border: 5px solid rgba(214, 224, 226, 0.4);
+      position: relative;
+  }
+}
+
+.card-middle {
+  padding: $line-height-computed/2;
+
+  .card-header {
+    font-size: 20px;
+  }
+
+  .card-header-seperator {
+      height: 2px;
+      width: 26px;
+      background-color: #d9d9d9;
+      margin: 7px 0 7px 0;
+  }
+
+  .card-desc {
+      position: relative;
+      height: 100%;
+      display: block;
+      font-size: 13px;
+      margin-top: 8px;
+
+      a{
+          position: absolute;
+          width: 100%;
+          bottom: 10px;
+          left: 20px;
+      }
+  }
+}
+
+.card-right {
+  background: rgba(214, 224, 226, 0.4);
+  border-radius: 0 0 0 0;
+
+  @media (min-width: 768px) {
+    border-radius: 0 2px 2px 0;
+  }
+
+  border-left: 1px solid $table-border-color;
+
+  // tate - don't feel great about this but I am struggling to figure out why there is a 1px gap to the right of this
+  @media (min-width: 992px) {
+      right: -1px;
+  }
+
+  ul.list-group {
+    margin-bottom: 0px;
+
+
+    li {
+      background: transparent;
+      border-top: 0px;
+      border-right: 0px;
+      border-left: 0px;
+      border-radius: 0px;
+      padding-top: 0px;
+      padding-bottom: 0px;
+      padding-right: 0px;
+      @extend .clearfix;
+      line-height: 33px;
+
+      &:last-child {
+        border-bottom: 0px;
+        @media (min-width: 768px) {
+          border-bottom: 1px solid $table-border-color;
+        }
+
+        .btn {
+          border-bottom-right-radius: 2px;
+        }
+      }
+
+      .btn {
+        float: right;
+        border-radius: 0px;
+        border-bottom-width: 0px;
+        border-bottom-right-radius: 0px;
+      }
+
+      h4 {
+        padding: $line-height-computed/2 0px;
+        margin: 0px;
+      }
+
+    }
+  }
+}

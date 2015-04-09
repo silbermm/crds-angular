@@ -24,6 +24,10 @@ button {
 
 // Headings
 
+.page-header {
+  font-weight: normal;
+}
+
 .subheading {
   font-weight: 400;
   color: #777;
@@ -54,6 +58,10 @@ h6.subheading {
   text-transform: uppercase;
   font-weight: normal;
   letter-spacing: 1px;
+
+  &.bold {
+    font-weight: bold;
+  }
 }
 
 // Brand
