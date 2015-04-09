@@ -12,6 +12,5 @@ namespace crds_angular.Services.Interfaces
         void SetProfile(String token, Person person);
         List<Skill> GetLoggedInUserSkills(int contactId, string token);
         Person GetLoggedInUserProfile(String token);
-        
     }
 }

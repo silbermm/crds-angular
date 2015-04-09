@@ -344,5 +344,10 @@ namespace crds_angular.Services
                         e.EventStartDate.Year == today.Year)
                 .ToList();
         }
+
+        public DateTime GetLastServingDate(int opportunityId, string token)
+        {
+            return _opportunityService.GetLastOpportunityDate(opportunityId, token);
+        }
     }
 }

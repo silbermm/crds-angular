@@ -130,8 +130,8 @@ namespace crds_angular.test.controllers
           var relationRecord = new GroupSignupRelationships
             {
                 RelationshipId = 1,
-                RelationshipMinAge = "00",
-                RelationshipMaxAge = "100"
+                RelationshipMinAge = 00,
+                RelationshipMaxAge = 100
             };
 
 

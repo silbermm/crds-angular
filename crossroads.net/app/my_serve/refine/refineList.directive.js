@@ -3,9 +3,9 @@
 
   module.exports = RefineDirective;
 
-  RefineDirective.$inject = ['$rootScope','filterState']
+  RefineDirective.$inject = ['$rootScope','filterState', 'screenSize']
 
-  function RefineDirective($rootScope, filterState){
+  function RefineDirective($rootScope, filterState, screenSize){
     return {
       restrict: "E",
       replace: true,
@@ -27,8 +27,11 @@
       scope.getUniqueMembers = getUniqueMembers;
       scope.getUniqueTeams = getUniqueTeams;
       scope.getUniqueTimes = getUniqueTimes;
+      scope.isCollapsed = $rootScope.mobile;
+      scope.isFilterSet = isFilterSet;
       scope.resolvedData = [];
       initServeArrays();
+      scope.toggleCollapse = toggleCollapse;
       scope.toggleFamilyMember = toggleFamilyMember;
       scope.toggleTeam = toggleTeam;
       scope.toggleTime = toggleTime;
@@ -38,6 +41,10 @@
       scope.uniqueTimes = [];
 
       activate();
+        
+    screenSize.on('xs, sm', function(match) {
+        scope.isCollapsed = match;
+    })
 
       $rootScope.$on("rerunFilters", function(event, data) {
         // Update the entire data with the new data
@@ -237,6 +244,18 @@
         scope.serveMembers = [];
         scope.serveTeams = [];
         scope.times = [];
+      }
+        
+      function isFilterSet() {
+        return (filterState.memberIds.length >= 1 
+                || filterState.times.length >= 1 
+                || filterState.teams.length >= 1);
+      }
+        
+      function toggleCollapse() {
+        if ($rootScope.mobile) {
+            scope.isCollapsed = !scope.isCollapsed;
+        }
       }
 
       function toggleFamilyMember(member){
