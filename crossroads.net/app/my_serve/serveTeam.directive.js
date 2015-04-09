@@ -69,6 +69,29 @@
         scope.isCollapsed = true;
       }
 
+      function editProfile(personToEdit) {
+        var modalInstance = $modal.open({
+          templateUrl: 'profile/editProfile.html',
+          backdrop: true,
+          controller: "ProfileModalController as modal",
+          // This is needed in order to get our scope
+          // into the modal - by default, it uses $rootScope
+          scope: scope,
+          resolve: {
+            person : function(){
+              return personToEdit;
+            }
+          }
+        });
+
+        modalInstance.result.then(function (person) {
+            personToEdit.name = person.nickName === null ? person.firstName : person.nickName;
+            $rootScope.$emit("personUpdated", person);
+        }, function () {
+            console.log("canceled");
+        });
+      };
+
       function getLastDate(){
         if(scope.currentMember === null)
         {
@@ -117,6 +140,16 @@
         allowProfileEdit();
       }
 
+      function saveRSVP(){
+
+        var saveRsvp = new ServeOpportunities.SaveRsvp();
+        saveRsvp.contactId = scope.currentMember.contactId;
+        saveRsvp.opportunityId = scope.currentMember.currentOpportuntity.roleId;
+        saveRsvp.eventTypeId = null;
+        saveRsvp.endDate = null;
+        saveRsvp.startDate = null;
+      }
+
       function setActiveTab(member){
         scope.currentActiveTab = member.name;
         if (scope.currentMember === null || member === scope.currentMember) {
@@ -127,29 +160,6 @@
         scope.currentMember = member;
         allowProfileEdit();
       }
-
-      function editProfile(personToEdit) {
-        var modalInstance = $modal.open({
-          templateUrl: 'profile/editProfile.html',
-          backdrop: true,
-          controller: "ProfileModalController as modal",
-          // This is needed in order to get our scope
-          // into the modal - by default, it uses $rootScope
-          scope: scope,
-          resolve: {
-            person : function(){
-              return personToEdit;
-            }
-          }
-        });
-
-        modalInstance.result.then(function (person) {
-            personToEdit.name = person.nickName === null ? person.firstName : person.nickName;
-            $rootScope.$emit("personUpdated", person);
-        }, function () {
-            console.log("canceled");
-        });
-      };
 
       function togglePanel() {
           scope.isCollapsed = !scope.isCollapsed;
