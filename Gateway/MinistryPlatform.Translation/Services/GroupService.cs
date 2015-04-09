@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using log4net;
 using MinistryPlatform.Models;
-using MinistryPlatform.Translation.Exceptions;
+using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
@@ -227,19 +227,19 @@ namespace MinistryPlatform.Translation.Services
 
         public List<GroupSignupRelationships> GetGroupSignupRelations(int groupType)
         {
-           var response = WithApiLogin<List<GroupSignupRelationships>>(
-                apiToken =>
-                {
-                    var relationRecords = ministryPlatformService.GetSubPageRecords(GroupSignupRelationsPageId,
-                        groupType, apiToken);
+            var response = WithApiLogin<List<GroupSignupRelationships>>(
+                 apiToken =>
+                 {
+                     var relationRecords = ministryPlatformService.GetSubPageRecords(GroupSignupRelationsPageId,
+                         groupType, apiToken);
 
-                    return relationRecords.Select(relationRecord => new GroupSignupRelationships
-                    {
-                        RelationshipId = (int) relationRecord["Relationship_ID"],
-                        RelationshipMinAge = (string) relationRecord["Min_Age"],
-                        RelationshipMaxAge = (string) relationRecord["Max_Age"]
-                    }).ToList();
-                });
+                     return relationRecords.Select(relationRecord => new GroupSignupRelationships
+                     {
+                         RelationshipId = relationRecord.ToInt("Relationship_ID"),
+                         RelationshipMinAge = relationRecord.ToNullableInt("Min_Age"),
+                         RelationshipMaxAge = relationRecord.ToNullableInt("Max_Age")
+                     }).ToList();
+                 });
             return response;
         }
 

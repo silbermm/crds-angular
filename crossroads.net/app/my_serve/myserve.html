@@ -1,9 +1,9 @@
 <h1 class="page-header flush-bottom">Sign Up To Serve</h1>
-<div class="serve-signup-cont clearfix col-sm-10 soft-ends">
+<refine-list serving-days="serve.groups" original="serve.original"> </refine-list>
+<div class="serve-signup-cont clearfix col-sm-10 col-sm-pull-2 soft-ends">
   <div class="serve-day push-bottom" data-ng-repeat="group in serve.groups" ng-show="group.serveTimes.length > 0" ng-init="serve.dayindex = $index">
     <h4>{{::serve.convertToDate(group.day) | date:'EEEE, MMMM dd, yyyy' }}</h4>
     <serve-tabs opportunity="opp" serve-date="group.day" ng-repeat="opp in group.serveTimes" tab-index="$index" ng-show="opp.servingTeams.length > 0" day-index="$parent.$index">
       </serve-tabs>
   </div><!-- serve day --> 
 </div>
-<refine-list serving-days="serve.groups" original="serve.original"> </refine-list>

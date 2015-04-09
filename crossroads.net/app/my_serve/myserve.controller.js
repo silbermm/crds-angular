@@ -17,13 +17,11 @@
     vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
     vm.format = vm.formats[0];
     vm.groups = [];
-    vm.isCollapsed = true;
     vm.open = open;
     vm.original = [];
     vm.today = today;
     vm.toggleMin = toggleMin;
     vm.repeating = '2';
-
 
     activate();
 
@@ -93,8 +91,6 @@
       vm.original = angular.copy(vm.groups);
       $rootScope.$broadcast("rerunFilters", vm.groups);
     }
-
-
   }
 
 })();
