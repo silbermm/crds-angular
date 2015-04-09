@@ -17,7 +17,6 @@
     vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
     vm.format = vm.formats[0];
     vm.groups = [];
-    vm.isCollapsed = true;
     vm.open = open;
     vm.original = [];
     vm.today = today;
