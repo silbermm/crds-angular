@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using crds_angular.App_Start;
+using crds_angular.Models;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
@@ -22,10 +24,68 @@ namespace crds_angular.test.Services
         private Mock<IContactService> _contactService;
         private Mock<IOpportunityService> _opportunityService;
         private Mock<IAuthenticationService> _authenticationService;
-        //private Mock<IPersonService> _personService;
+        private Mock<IPersonService> _personService;
         private Mock<IServeService> _serveService;
+        private Mock<IEventService> _eventService;
 
         private ServeService _fixture;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _contactRelationshipService = new Mock<IContactRelationshipService>();
+            _groupService = new Mock<IGroupService>();
+            _contactService = new Mock<IContactService>();
+            _opportunityService = new Mock<IOpportunityService>();
+            _authenticationService = new Mock<IAuthenticationService>();
+            _personService = new Mock<IPersonService>();
+            _eventService=new Mock<IEventService>();
+            _serveService = new Mock<IServeService>();
+
+            _authenticationService.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Returns(123456);
+            var myContact = new MyContact
+            {
+                Contact_ID = 123456,
+                Email_Address = "contact@email.com",
+                Last_Name = "last-name",
+                Nickname = "nickname",
+                First_Name = "first-name",
+                Middle_Name = "middle-name",
+                Maiden_Name = "maiden-name",
+                Mobile_Phone = "mobile-phone",
+                Mobile_Carrier = 999,
+                Date_Of_Birth = "date-of-birth",
+                Marital_Status_ID = 5,
+                Gender_ID = 2,
+                Employer_Name = "employer-name",
+                Address_Line_1 = "address-line-1",
+                Address_Line_2 = "address-line-2",
+                City = "city",
+                State = "state",
+                Postal_Code = "postal-code",
+                Anniversary_Date = "anniversary-date",
+                Foreign_Country = "foreign-country",
+                Home_Phone = "home-phone",
+                Congregation_ID = 8,
+                Household_ID = 7,
+                Address_ID = 6
+            };
+            _contactService.Setup(mocked => mocked.GetMyProfile(It.IsAny<string>())).Returns(myContact);
+
+            var person = new Person();
+            person.ContactId = myContact.Contact_ID;
+            person.EmailAddress = myContact.Email_Address;
+            person.LastName = myContact.Last_Name;
+            person.NickName = myContact.Nickname;
+
+            _personService.Setup(m => m.GetLoggedInUserProfile(It.IsAny<string>())).Returns(person);
+
+           // _fixture = new PersonService(_contactService.Object);
+            _fixture = new ServeService( _groupService.Object ,_contactRelationshipService.Object,_personService.Object,_authenticationService.Object,_opportunityService.Object,_eventService.Object);
+
+            //force AutoMapper to register
+            AutoMapperConfig.RegisterMappings();
+        }
 
         [Test]
         public void GetMyFamilyTest()
@@ -164,7 +224,6 @@ namespace crds_angular.test.Services
             Assert.AreEqual(1, team.Members.Count);
         }
 
-
         [Test]
         public void GetMyFamiliesServingEventsTest()
         {
@@ -263,7 +322,41 @@ namespace crds_angular.test.Services
             Assert.AreEqual("10:00:00", servingTime.Time);
         }
 
+        //[Test]
+        //public void GetSomething()
+        //{
+        //    const string token = "some-string";
+        //    const int contactId = 123456;
+        //    const int opportunityId = 1;
+        //    const int eventTypeId = 2;
+        //    var  startDate = new DateTime(2015,4,1);
+        //    var endDate = new DateTime(2015, 4, 30);
 
+        //    //_authenticationService.GetParticipantRecord(token);
+        //    //_eventService.GetEventsByTypeForRange
+        //    //_eventService.registerParticipantForEvent
+        //    //_opportunityService.RespondToOpportunity
+
+        //    _authenticationService.Setup(m => m.GetParticipantRecord(It.IsAny<string>())).Returns(new Participant{ParticipantId = 41018});
+
+        //    var eventList = new List<Event>();
+        //    var e = new Event();
+        //    e.EventEndDate=new DateTime(2015,3,15);
+
+        //    //_eventService.Setup(m => m.GetEventsByTypeForRange(eventTypeId, startDate, endDate, It.IsAny<string>()))
+        //    //    .Returns();
+
+        //    var something = _fixture.SaveServeResponse(token, contactId, opportunityId, eventTypeId, startDate, endDate);
+
+        //    //verify all service calls
+        //    _authenticationService.VerifyAll();
+        //    _eventService.VerifyAll();
+        //    _opportunityService.VerifyAll();
+
+        //    //Assertions
+        //    Assert.IsNotNull(something);
+        //    Assert.IsTrue(something);
+        //}
 
         private List<ContactRelationship> MockGetMyFamilyResponse()
         {
