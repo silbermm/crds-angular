@@ -28,6 +28,7 @@ namespace crds_angular.test.Services
         private Mock<IPersonService> _personService;
         private Mock<IServeService> _serveService;
         private Mock<IEventService> _eventService;
+        private Mock<IParticipantService> _participantService;
 
         private ServeService _fixture;
 
@@ -42,6 +43,7 @@ namespace crds_angular.test.Services
             _personService = new Mock<IPersonService>();
             _eventService=new Mock<IEventService>();
             _serveService = new Mock<IServeService>();
+            _participantService = new Mock<IParticipantService>();
 
             _authenticationService.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Returns(123456);
             var myContact = new MyContact
@@ -82,7 +84,7 @@ namespace crds_angular.test.Services
             _personService.Setup(m => m.GetLoggedInUserProfile(It.IsAny<string>())).Returns(person);
 
            // _fixture = new PersonService(_contactService.Object);
-            _fixture = new ServeService( _groupService.Object ,_contactRelationshipService.Object,_personService.Object,_authenticationService.Object,_opportunityService.Object,_eventService.Object);
+            _fixture = new ServeService( _groupService.Object ,_contactRelationshipService.Object,_personService.Object,_authenticationService.Object,_opportunityService.Object,_eventService.Object, _participantService.Object);
 
             //force AutoMapper to register
             AutoMapperConfig.RegisterMappings();
