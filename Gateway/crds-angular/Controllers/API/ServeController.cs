@@ -82,11 +82,6 @@ namespace crds_angular.Controllers.API
                 catch (Exception exception)
                 {
                     var apiError = new ApiErrorDto("Save RSVP Failed", exception);
-                    //var tmp = new ApiErrorDto();
-                    //tmp.Message = "test";
-                    //var json = JsonConvert.SerializeObject(tmp, Formatting.Indented);
-                    //var resp = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                    //resp.Content = new StringContent(json);
                     throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
                 return this.Ok();
