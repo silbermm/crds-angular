@@ -30,24 +30,24 @@
             <h5>Sign Up</h5>
             <div class="radio">
               <label>
-                <input type="radio" name="signup" id="optionsRadios1"  value="1" ng-model="signedup">
+                <input type="radio" name="signup" id="optionsRadios1"  value="1" ng-model="currentMember.currentOpportuntity.signedup">
                 Yes
               </label>
             </div><!--/radio-->
             <div class="radio">
               <label>
-                <input type="radio" name="signup" id="optionsRadios2" value="2" ng-model="signedup">
+                <input type="radio" name="signup" id="optionsRadios2" value="2" ng-model="currentMember.currentOpportuntity.signedup">
                 No
               </label>
             </div><!--/radio-->
-            <div ng-show="signedup > 0">
+            <div ng-show="currentMember.currentOpportuntity.signedup > 0">
               <div class="form-group">
                 <label>Frequency</label>
-                <select class="form-control" ng-model="repeating" ng-change="getLastDate()" ng-options="f.text for f in frequency">
+                <select class="form-control" ng-model="currentMember.currentOpportuntity.frequency" ng-change="getLastDate()" ng-options="f.text for f in frequency">
                   <option value="">Select a Frequency</option>
                 </select>
               </div><!--/form-group-->
-              <div ng-show="repeating.value > 0">
+              <div ng-show="currentMember.currentOpportuntity.frequency.value > 0">
                 <div class="form-group">
                   <label>From:</label>
                   <div class="input-group">
