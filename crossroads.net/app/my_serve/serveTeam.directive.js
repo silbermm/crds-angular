@@ -91,9 +91,9 @@
 
             function setActiveTab(member) {
                 scope.currentActiveTab = member.name;
-                if (scope.currentMember === null || Object.is(member, scope.currentMember)) {
+                if (scope.currentMember === null || member === scope.currentMember) {
                     scope.togglePanel();
-                } else if (!Object.is(member, scope.currentMember) && scope.isCollapsed) {
+                } else if (member !== scope.currentMember && scope.isCollapsed) {
                     scope.togglePanel();
                 }
                 scope.currentMember = member;
