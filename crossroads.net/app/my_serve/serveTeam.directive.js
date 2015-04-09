@@ -125,91 +125,30 @@
 
       function editProfile(personToEdit) {
         var modalInstance = $modal.open({
-              templateUrl: 'profile/editProfile.html',
-              backdrop: true,
-              controller: "ProfileModalController as modal",
-              // This is needed in order to get our scope
-              // into the modal - by default, it uses $rootScope
-              scope: scope,
-              resolve: {
-                person : function(){
-                  return personToEdit;
-                }
-            };
-
-            function closePanel() {
-                scope.isCollapsed = true;
+          templateUrl: 'profile/editProfile.html',
+          backdrop: true,
+          controller: "ProfileModalController as modal",
+          // This is needed in order to get our scope
+          // into the modal - by default, it uses $rootScope
+          scope: scope,
+          resolve: {
+            person : function(){
+              return personToEdit;
             }
+          }
+        });
 
-            function getPanelId() {
-                return "team-panel-" + scope.dayIndex + scope.tabIndex + scope.teamIndex;
-            }
+        modalInstance.result.then(function (person) {
+            personToEdit.name = person.nickName === null ? person.firstName : person.nickName;
+            $rootScope.$emit("personUpdated", person);
+        }, function () {
+            console.log("canceled");
+        });
+      };
 
-            function isActiveTab(memberName) {
-                return memberName === scope.currentActiveTab;
-            };
-
-
-            function isSignedUp(opportunity) {
-                if (scope.currentMember === undefined) {
-                    return false;
-                } else {
-                    return _.find(opportunity.members, function (m) {
-                        return m.name === scope.currentMember.name && m.signedup === 'yes';
-                    });
-                }
-            }
-
-            function openPanel(members) {
-                if (scope.currentMember === null) {
-                    var sessionId = Number(Session.exists("userId"));
-                    scope.currentMember = members[0];
-                    scope.currentActiveTab = scope.currentMember.name;
-                }
-                $log.debug("isCollapsed = " + scope.isCollapsed);
-                scope.isCollapsed = !scope.isCollapsed;
-                allowProfileEdit();
-            }
-
-            function setActiveTab(member) {
-                scope.currentActiveTab = member.name;
-                if (scope.currentMember === null || member === scope.currentMember) {
-                    scope.togglePanel();
-                } else if (member !== scope.currentMember && scope.isCollapsed) {
-                    scope.togglePanel();
-                }
-                scope.currentMember = member;
-                allowProfileEdit();
-            }
-
-            function editProfile(personToEdit) {
-                var modalInstance = $modal.open({
-                    templateUrl: 'profile/editProfile.html',
-                    backdrop: true,
-                    controller: "ProfileModalController as modal",
-                    // This is needed in order to get our scope
-                    // into the modal - by default, it uses $rootScope
-                    scope: scope,
-                    resolve: {
-                        person: function () {
-                            return personToEdit;
-                        }
-                    }
-                });
-
-                modalInstance.result.then(function (person) {
-                    personToEdit.name = person.nickName === null ? person.firstName : person.nickName;
-                    $rootScope.$emit("personUpdated", person);
-                }, function () {
-                    console.log("canceled");
-                });
-            };
-
-            function togglePanel() {
-                scope.isCollapsed = !scope.isCollapsed;
-            };
-        };
-
-    }
-
+      function togglePanel() {
+          scope.isCollapsed = !scope.isCollapsed;
+      };
+    };
+  }
 })();
