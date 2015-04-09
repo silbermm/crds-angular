@@ -27,8 +27,11 @@
       scope.getUniqueMembers = getUniqueMembers;
       scope.getUniqueTeams = getUniqueTeams;
       scope.getUniqueTimes = getUniqueTimes;
+      scope.isCollapsed = $rootScope.mobile;
+      scope.isFilterSet = isFilterSet;
       scope.resolvedData = [];
       initServeArrays();
+      scope.toggleCollapse = toggleCollapse;
       scope.toggleFamilyMember = toggleFamilyMember;
       scope.toggleTeam = toggleTeam;
       scope.toggleTime = toggleTime;
@@ -36,7 +39,6 @@
       scope.uniqueMembers = [];
       scope.uniqueTeams = [];
       scope.uniqueTimes = [];
-      scope.isCollapsed = $rootScope.mobile;
 
       activate();
         
@@ -242,6 +244,18 @@
         scope.serveMembers = [];
         scope.serveTeams = [];
         scope.times = [];
+      }
+        
+      function isFilterSet() {
+        return (filterState.memberIds.length >= 1 
+                || filterState.times.length >= 1 
+                || filterState.teams.length >= 1);
+      }
+        
+      function toggleCollapse() {
+        if ($rootScope.mobile) {
+            scope.isCollapsed = !scope.isCollapsed;
+        }
       }
 
       function toggleFamilyMember(member){

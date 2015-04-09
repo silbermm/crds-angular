@@ -1,14 +1,15 @@
 <div class="col-sm-2 col-sm-push-10 gray-lighter clearfix">
-    <div class="filter-clear" ng-click="isCollapsed = !isCollapsed" ng-show='$root.mobile'>
-        <svg viewBox="0 0 25 32" class="icon icon-plus" ng-if="!isCollapsed">
-            <use xlink:href="#plus"></use>
-        </svg>
-        <svg viewBox="0 0 25 32" class="icon icon-minus" ng-if="isCollapsed">
-            <use xlink:href="#minus"></use>
-        </svg>
+    <div ng-click="toggleCollapse()">
+        <div class="filter-clear" ng-show='$root.mobile'>
+            <svg viewBox="0 0 25 32" class="icon icon-plus" ng-if="!isCollapsed">
+                <use xlink:href="#plus"></use>
+            </svg>
+            <svg viewBox="0 0 25 32" class="icon icon-minus" ng-if="isCollapsed">
+                <use xlink:href="#minus"></use>
+            </svg>
+        </div>
+        <h5>Filter Opportunities<a href="" data-ng-click="clearFilters()" class="filter-reset" ng-show="isFilterSet()" stop-event> Clear</a></h5>
     </div>
-    <h5>Filter Opportunities</h5>
-    <a href="" data-ng-click="clearFilters()">Clear All</a>
     <div collapse="isCollapsed">
         <div class="push-half-bottom filter-group">
             <div class="form-group">
