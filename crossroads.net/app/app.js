@@ -20,8 +20,8 @@ require('./profile');
 require('./filters');
 require('./events');
 require('./cms/services/cms_services_module');
-require('./give/bankInfo_directive.js');
-require('./give/donationConfirmation_directive.js')
+require('./give/bankInfo.directive.js');
+require('./give/donationConfirmation.directive.js')
 
 require('angular-aside');
 

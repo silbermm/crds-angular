@@ -1,3 +1,4 @@
+
 <div class="form-group">
   <h1>Bank Info</h1>
     <div class="btn-group btn-group-sm account-type form-group" role="group">
@@ -27,11 +28,12 @@
             <label for="routing" class="wide-label">Routing Number
                 <a href="" class="pull-right weight-normal" ng-click="give.toggleCheck()">{{give.showMessage}}</a>
             </label>
-            <input type="text" name="routing" class="form-control">
+            <input type="text" name="routing" class="form-control" ng-maxlength="9" required>
+            <span class="error" ng-show="give.routing.$error.maxlength">Too long!</span>
         </div>
         <div class="form-group">
             <label for="account">Account Number</label>
-            <input type="text" name="account" class="form-control">
+            <input type="text" name="account" class="form-control" ng-maxlength="30" required>
         </div>
     </section>
 </div>

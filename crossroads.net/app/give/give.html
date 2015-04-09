@@ -3,16 +3,14 @@
         <h1>Give</h1>
         <p class="subheading">Your generosity fuels the life change we experience around here.</p>
         <div class="push-top">
-              <form class="give-form">
-                  <div class="form-group">
-                      <donation-details></donation-details>
-
-                      <!--/form-group-->
-                      <a ui-sref="/demo/guest-giver/login" class="btn btn-primary">Give $125</a>
-                  </div>
-              </form>
-              <!--/col-sm-6-->
+            <form class="give-form">
+                <div class="form-group">
+                    <donation-details></donation-details>
+                    <bank-info></bank-info>
+                    <donation-confirmation></donation-confirmation>
+                    <a ui-sref="/demo/guest-giver/login" class="btn btn-primary">Give $125</a>
+                </div>
+            </form>
           </div>
-        <!--/push-top-->
-    </div>
+      </div>
 </div>

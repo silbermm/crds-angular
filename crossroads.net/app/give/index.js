@@ -1,5 +1,4 @@
 require('./give.html');
-require('./account_info.html');
 require('./give.module.js');
 var app = require('angular').module('give')
 
