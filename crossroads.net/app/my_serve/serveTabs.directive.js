@@ -16,7 +16,8 @@
         opportunity: '=',
         tabIndex: '=',
         dayIndex: '=',
-        serveDate: '='
+        serveDate: '=',
+        eventTypeId: '='
       }
     };
   }
