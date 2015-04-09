@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Crossroads.Utilities.Services;
+using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -16,6 +18,7 @@ namespace MinistryPlatform.Translation.Test.Services
         private readonly int EventParticipantPageId = 281;
         private readonly int EventParticipantStatusDefaultID = 2;
         private readonly int EventsPageId = 308;
+        private readonly string EventsWithEventTypeId = "EventsWithEventTypeId";
 
         [SetUp]
         public void SetUp()
@@ -57,6 +60,71 @@ namespace MinistryPlatform.Translation.Test.Services
 
             var events = fixture.GetEvents(eventType, It.IsAny<string>());
             Assert.IsNotNull(events);
+        }
+
+        [Test]
+        public void GetEventsByTypeAndRange()
+        {
+            var eventTypeId = 1;
+            var search = ",," + eventTypeId;
+            ministryPlatformService.Setup(mock => mock.GetPageViewRecords(EventsWithEventTypeId, It.IsAny<string>(), search, "", 0))
+                .Returns(MockEventsDictionaryByEventTypeId());
+
+            var startDate = new DateTime(2015,4,1);
+            var endDate = new DateTime(2015,4,30);
+            var events = fixture.GetEventsByTypeForRange(eventTypeId, startDate, endDate, It.IsAny<string>());
+            Assert.IsNotNull(events);
+            Assert.AreEqual(3,events.Count);
+            Assert.AreEqual("event-title-200", events[0].EventTitle);
+        }
+
+        private List<Dictionary<string, object>> MockEventsDictionaryByEventTypeId()
+        {
+            return new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    {"dp_RecordID", 100},
+                    {"Event Title", "event-title-100"},
+                    {"Event Type", "event-type-100"},
+                    {"Event Start Date", new DateTime(2015, 3, 28, 8, 30, 0)},
+                    {"Event End Date", new DateTime(2015, 3, 28, 8, 30, 0)}
+                },
+                new Dictionary<string, object>
+                {
+                    {"dp_RecordID", 200},
+                    {"Event Title", "event-title-200"},
+                    {"Event Type", "event-type-200"},
+                    {"Event Start Date", new DateTime(2015, 4, 1, 8, 30, 0)},
+                    {"Event End Date", new DateTime(2015, 4, 1, 8, 30, 0)}
+                },
+                new Dictionary<string, object>
+                {
+                    {"dp_RecordID", 300},
+                    {"Event Title", "event-title-300"},
+                    {"Event Type", "event-type-300"},
+                    {"Event Start Date", new DateTime(2015, 4, 2, 8, 30, 0)},
+                    {"Event End Date", new DateTime(2015, 4, 2, 8, 30, 0)}
+                }
+                ,
+                new Dictionary<string, object>
+                {
+                    {"dp_RecordID", 400},
+                    {"Event Title", "event-title-400"},
+                    {"Event Type", "event-type-400"},
+                    {"Event Start Date", new DateTime(2015, 4, 30, 8, 30, 0)},
+                    {"Event End Date", new DateTime(2015, 4, 30, 8, 30, 0)}
+                }
+                ,
+                new Dictionary<string, object>
+                {
+                    {"dp_RecordID", 500},
+                    {"Event Title", "event-title-500"},
+                    {"Event Type", "event-type-500"},
+                    {"Event Start Date", new DateTime(2015, 5, 1, 8, 30, 0)},
+                    {"Event End Date", new DateTime(2015, 5, 1, 8, 30, 0)}
+                }
+            };
         }
 
         private List<Dictionary<string, object>> MockEventsDictionary()

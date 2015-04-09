@@ -13,6 +13,8 @@ namespace MinistryPlatform.Translation.Test.Services
     {
         private readonly int _signedupToServeSubPageViewId = 79;
         private readonly int _groupOpportunitiesEventsPageViewId = 77;
+        private readonly int _opportunityPageId = 348;
+        private readonly int _eventPageId = 308;
         private DateTime _today;
 
         private Mock<IMinistryPlatformService> _ministryPlatformService;
@@ -119,6 +121,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"dp_RecordID", 100},
                     {"Opportunity Title", "Opportunity 100"},
                     {"Event Type", "Event Type 100"},
+                    {"Event Type ID", 100},
                     {"Role_Title", "Role Title 100"},
                     {"Maximum_Needed", 100}
                 },
@@ -127,6 +130,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"dp_RecordID", 200},
                     {"Opportunity Title", "Opportunity 200"},
                     {"Event Type", "Event Type 200"},
+                    {"Event Type ID", 200},
                     {"Role_Title", "Role Title 200"},
                     {"Maximum_Needed", 200}
                 },
@@ -135,6 +139,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"dp_RecordID", 300},
                     {"Opportunity Title", "Opportunity 300"},
                     {"Event Type", "Event Type 300"},
+                    {"Event Type ID", 300},
                     {"Role_Title", "Role Title 300"},
                     {"Maximum_Needed", null}
                 }
@@ -186,6 +191,49 @@ namespace MinistryPlatform.Translation.Test.Services
 
             Assert.IsNotNull(response);
             Assert.AreEqual(3, response);
+        }
+
+        [Test]
+        public void ShouldGetLastEventDate()
+        {
+            const int opportunityId = 145;
+            
+            var expectedEventType = new Dictionary<string, object>
+            {
+                {"Event_Type_ID_Text", "KC Nursery Oakley Sunday 8:30"}
+            };
+            var expectedEvents = new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    {"Event_Start_Date", "10/11/15 08:30am"}
+                }
+            };
+            var expectedLastDate = DateTime.Parse("10/11/15 08:30am");
+
+            _ministryPlatformService.Setup(mock => mock.GetRecordDict(_opportunityPageId, opportunityId, It.IsAny<string>(), false)).Returns(expectedEventType);
+            _ministryPlatformService.Setup(mock => mock.GetRecordsDict(_eventPageId, It.IsAny<string>(), ",,KC Nursery Oakley Sunday 8:30", "0")).Returns(expectedEvents);
+
+            var lastDate = _fixture.GetLastOpportunityDate(opportunityId, It.IsAny<string>());
+            Assert.IsNotNull(lastDate);
+            Assert.AreEqual(expectedLastDate, lastDate);
+        }
+
+        [Test]
+        public void ShouldThrowExceptionGettingLastEventDateWhenNoEvents()
+        {
+            const int opportunityId = 145;
+
+            var expectedEventType = new Dictionary<string, object>
+            {
+                {"Event_Type_ID_Text", "KC Nursery Oakley Sunday 8:30"}
+            };
+            var expectedEvents = new List<Dictionary<string, object>>();
+
+            _ministryPlatformService.Setup(mock => mock.GetRecordDict(_opportunityPageId, opportunityId, It.IsAny<string>(), false)).Returns(expectedEventType);
+            _ministryPlatformService.Setup(mock => mock.GetRecordsDict(_eventPageId, It.IsAny<string>(), ",,KC Nursery Oakley Sunday 8:30", "0")).Returns(expectedEvents);
+
+            Assert.Throws<Exception>(() => _fixture.GetLastOpportunityDate(opportunityId, It.IsAny<string>()));
         }
     }
 }
