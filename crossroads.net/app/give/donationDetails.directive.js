@@ -3,9 +3,9 @@ require('./donation-details.html');﻿
 (function () {
     angular
     .module("donation-details",[])
-    .directive("donationDetails", ['$log', donationDetails]);
+    .directive("donationDetails", ['$log','getPrograms', donationDetails]);
 
-    function donationDetails($log) {
+    function donationDetails($log , getPrograms) {
         var directive = {
           link: link,
           replace: true,
@@ -15,8 +15,8 @@ require('./donation-details.html');﻿
       return directive;
 
       function link(scope, element, attrs) {
-
-        $log.debug("Inside of donationDetails directive");
+        scope.programs = getPrograms.fetchPrograms();
+        console.log(scope);
       }
     }
 })()
