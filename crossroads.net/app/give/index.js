@@ -1,5 +1,6 @@
 var app = require("angular").module("crossroads");
 require('./give.html');
+require('./account_info.html');
 
 /****** DEMO PAGES ******/
 require('./demo/guest_giver/give.html');

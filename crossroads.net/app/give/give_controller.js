@@ -14,7 +14,7 @@
         _this.bankType = 'checking';
         _this.showMessage = "Where?";
         _this.showCheckClass = "ng-hide";
-
+        
         _this.alerts = [
             {
                 type: 'warning',
@@ -23,7 +23,6 @@
         ]
 
         _this.toggleCheck = function() {
-          console.log("in here");
             if (_this.showMessage == "Where?") {
                 _this.showMessage = "Close";
                 _this.showCheckClass = "";
@@ -52,6 +51,7 @@
             } else
                 _this.ccNumberClass = "";
         }
+
     };
 
 })();
