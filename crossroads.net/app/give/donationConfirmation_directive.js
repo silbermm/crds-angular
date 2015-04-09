@@ -1,4 +1,3 @@
-//require('./bank_info.html');﻿
 require('./donation_confirmation.html');
 (function () {
     angular
@@ -15,7 +14,6 @@ require('./donation_confirmation.html');
       return directive;
 
       function link(scope, element, attrs) {
-
         $log.debug("Inside of cnfirm directive");
       }
     }

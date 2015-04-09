@@ -35,8 +35,8 @@ var _ = require('lodash');
 "use strict";
 (function () {
 
-   angular.module("crossroads", ['ngResource', "crossroads.profile", "crossroads.filters", "crdsCMS.services", "ui.router", 'ui.utils', "ngCookies", "ngMessages", 'angular-growl', 'toggle-switch', 'ngAside','give', 'bank-info', 'donation-confirmation'])
-  
+   angular.module("crossroads", ['ngResource', "crossroads.profile", "crossroads.filters", "crdsCMS.services", "ui.router", 'ui.utils', "ngCookies", "ngMessages", 'angular-growl', 'toggle-switch', 'ngAside','give'])
+
     .constant("AUTH_EVENTS", {
             loginSuccess: "auth-login-success",
             loginFailed: "auth-login-failed",

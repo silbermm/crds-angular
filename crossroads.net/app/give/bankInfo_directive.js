@@ -1,5 +1,4 @@
 require('./bank_info.html');
-
 (function () {
     angular
     .module('bank-info',[])
@@ -15,7 +14,6 @@ require('./bank_info.html');
       return directive;
 
       function link(scope, element, attrs) {
-
         $log.debug("Inside of bankInfo directive");
       }
     }
