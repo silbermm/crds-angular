@@ -6,20 +6,12 @@
 
 body {
   font-weight: 300;
-  font-smoothing: antialiased;
 }
 
 // Links
 
 a:hover {
   text-decoration:none;
-}
-
-// Buttons
-
-button {
-  font-smoothing: antialiased;
-  -webkit-font-smoothing: inherit;
 }
 
 // Headings
