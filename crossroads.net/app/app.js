@@ -139,7 +139,8 @@ var _ = require('lodash');
                 }
         }
     ])
-    .directive("emptyToNull", require('./shared/emptyToNull.directive.js'));
+    .directive("emptyToNull", require('./shared/emptyToNull.directive.js'))
+    .directive("stopEvent", require('./shared/stopevent.directive.js'));
 
     require('./apprun');
     require('./app.config');
