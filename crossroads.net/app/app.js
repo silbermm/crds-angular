@@ -27,7 +27,7 @@ require('angular-aside');
 
 require('./third-party/angular/angular-aside.min.css');
 require('./third-party/angular/angular-growl.css');
-require('./give/donationDetails.directive.js');
+require('./give');
 
 
 
@@ -35,10 +35,8 @@ var _ = require('lodash');
 "use strict";
 (function () {
 
-
-   angular.module("crossroads", ['ngResource', "crossroads.profile", "crossroads.filters", "crdsCMS.services", "ui.router", 'ui.utils', "ngCookies", "ngMessages", 'angular-growl', 'toggle-switch', 'ngAside', "donation-details", 'bank-info', 'donation-confirmation'])
-
-
+   angular.module("crossroads", ['ngResource', "crossroads.profile", "crossroads.filters", "crdsCMS.services", "ui.router", 'ui.utils', "ngCookies", "ngMessages", 'angular-growl', 'toggle-switch', 'ngAside','give', 'bank-info', 'donation-confirmation'])
+  
     .constant("AUTH_EVENTS", {
             loginSuccess: "auth-login-success",
             loginFailed: "auth-login-failed",
@@ -148,5 +146,4 @@ var _ = require('lodash');
     require('./routes');
     require('./register/register_directive');
     require('./login');
-//require('./give');
 })()
