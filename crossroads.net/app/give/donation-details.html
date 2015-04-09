@@ -1,17 +1,16 @@
 <div>
-  <div class="form-inline form-group give-amount">
+  <div class="form-inline form-group give-amount" ng-class="{'has-error': !giveForm.amount.$valid }">
     <div class="input-group">
       <span class="input-group-addon">$</span>
-      <input type="tel" class="form-control" min="0" maxlength="6" ng-model="give.amount" autocomplete="off"></input>
+      <input type="text" name="amount" class="form-control" ng-model="give.amount" autocomplete="off" ng-pattern="/^[0-9]{1,6}$/" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }"></input>
       <span class="input-group-addon ">.00</span>
     </div>
+    <ng-messages for="giveForm.amount.$error" ng-messages-include="on-blur-messages"></ng-messages>
   </div>
 
   <div class="form-group">
     <select class="form-control">
-      <option>Ministry Fund</option>
-      <option>Game Change Fund</option>
-      <option>Old St. George</option>
+      <option ng-repeat="program in programs">{{program}}</option>
     </select>
   </div>
 

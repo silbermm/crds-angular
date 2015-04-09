@@ -65,7 +65,8 @@ var _ = require('lodash');
         failedResponse: 15,
         successfullWaitlistSignup:17,
         noPeopleSelectedError:18,
-        fullGroupError:19
+        fullGroupError:19,
+        invalidDonationAmount:22
     }).config(function (growlProvider) {
         growlProvider.globalPosition("top-center");
         growlProvider.globalTimeToLive(6000);
