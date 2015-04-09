@@ -1,8 +1,8 @@
 'use strict';
 
 require('./donationDetails.directive.js');
-require('./donationConfirmation_directive');
-require('./bankInfo_directive');
+require('./donationConfirmation.directive');
+require('./bankInfo.directive');
 
 var app = require('angular');
 
