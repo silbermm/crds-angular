@@ -47,6 +47,7 @@
       scope.signedup = null;
       scope.showEdit = false;
       scope.toDt = null;
+      scope.togglePanel = togglePanel;
 
       activate();
      //////////////////////////////////////
@@ -118,8 +119,12 @@
 
       function setActiveTab(member){
         scope.currentActiveTab = member.name;
-        scope.currentMember =  member;
-        scope.isCollapsed = false;
+        if (scope.currentMember === null || member === scope.currentMember) {
+            scope.togglePanel();
+        } else if (member !== scope.currentMember && scope.isCollapsed) {
+            scope.togglePanel();
+        }
+        scope.currentMember = member;
         allowProfileEdit();
       }
 
