@@ -254,9 +254,13 @@ namespace crds_angular.Services
             foreach (var e in events)
             {
                 //for each event in range create an event participant & opportunity response
-                _eventService.registerParticipantForEvent(participant.ParticipantId, e.EventId);
+                var eventParticipantId = _eventService.registerParticipantForEvent(participant.ParticipantId, e.EventId);
+                if (eventParticipantId <= 0)
+                {
+                    throw new ApplicationException("Adding event participant failed!");
+                }
                 var comments = string.Empty; //anything of value to put in comments?
-                _opportunityService.RespondToOpportunity(token, opportunityId, comments);
+                var y = _opportunityService.RespondToOpportunity(token, opportunityId, comments);
             }
 
             return true;

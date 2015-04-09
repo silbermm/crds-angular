@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using crds_angular.App_Start;
+using crds_angular.Extenstions;
 using crds_angular.Models;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services;
@@ -322,41 +323,95 @@ namespace crds_angular.test.Services
             Assert.AreEqual("10:00:00", servingTime.Time);
         }
 
-        //[Test]
-        //public void GetSomething()
-        //{
-        //    const string token = "some-string";
-        //    const int contactId = 123456;
-        //    const int opportunityId = 1;
-        //    const int eventTypeId = 2;
-        //    var  startDate = new DateTime(2015,4,1);
-        //    var endDate = new DateTime(2015, 4, 30);
+        [Test]
+        public void SaveServeResponseTest()
+        {
+            const string token = "some-string";
+            const int contactId = 123456;
+            const int opportunityId = 1;
+            const int eventTypeId = 2;
+            var  startDate = new DateTime(2015,4,1);
+            var endDate = new DateTime(2015, 4, 30);
+            const int mockParticipantId = 41018;
 
-        //    //_authenticationService.GetParticipantRecord(token);
-        //    //_eventService.GetEventsByTypeForRange
-        //    //_eventService.registerParticipantForEvent
-        //    //_opportunityService.RespondToOpportunity
+            _authenticationService.Setup(m => m.GetParticipantRecord(It.IsAny<string>())).Returns(new Participant { ParticipantId = mockParticipantId });
 
-        //    _authenticationService.Setup(m => m.GetParticipantRecord(It.IsAny<string>())).Returns(new Participant{ParticipantId = 41018});
+            var mockEvents = MockEvents();
+            _eventService.Setup(m => m.GetEventsByTypeForRange(eventTypeId, startDate, endDate, It.IsAny<string>()))
+                .Returns(mockEvents);
+           
+            foreach (var mockEvent in mockEvents)
+            {
+                var e = mockEvent;
+                _eventService.Setup(m => m.registerParticipantForEvent(mockParticipantId, e.EventId)).Returns(e.EventId);
+            }
 
-        //    var eventList = new List<Event>();
-        //    var e = new Event();
-        //    e.EventEndDate=new DateTime(2015,3,15);
+            // Mock _opportunityService.RespondToOpportunity
+            _opportunityService.Setup(m => m.RespondToOpportunity(It.IsAny<string>(), opportunityId, "")).Returns(8888);
 
-        //    //_eventService.Setup(m => m.GetEventsByTypeForRange(eventTypeId, startDate, endDate, It.IsAny<string>()))
-        //    //    .Returns();
+            var saveResponse = _fixture.SaveServeResponse(token, contactId, opportunityId, eventTypeId, startDate, endDate);
 
-        //    var something = _fixture.SaveServeResponse(token, contactId, opportunityId, eventTypeId, startDate, endDate);
+            //verify all service calls
+            _authenticationService.Verify(m => m.GetParticipantRecord(It.IsAny<string>()));
 
-        //    //verify all service calls
-        //    _authenticationService.VerifyAll();
-        //    _eventService.VerifyAll();
-        //    _opportunityService.VerifyAll();
+            _eventService.Verify(m => m.registerParticipantForEvent(mockParticipantId, 2), Times.Exactly(1));
+            _eventService.Verify(m => m.registerParticipantForEvent(mockParticipantId, 3), Times.Exactly(1));
+            _eventService.Verify(m => m.registerParticipantForEvent(mockParticipantId, 4), Times.Exactly(1));
 
-        //    //Assertions
-        //    Assert.IsNotNull(something);
-        //    Assert.IsTrue(something);
-        //}
+            _opportunityService.Verify(m=>m.RespondToOpportunity(It.IsAny<string>(),opportunityId,""),Times.Exactly(3));
+            _opportunityService.VerifyAll();
+
+            //Assertions
+            Assert.IsNotNull(saveResponse);
+            Assert.IsTrue(saveResponse);
+        }
+
+        private List<Event> MockEvents()
+        {
+            
+            var event1 = new Event
+            {
+                EventEndDate = new DateTime(2015, 3, 15),
+                EventStartDate = new DateTime(2015, 3, 15),
+                EventType = "event-type-2",
+                EventId = 1
+            };
+
+            var event2 = new Event
+            {
+                EventEndDate = new DateTime(2015, 4, 1),
+                EventStartDate = new DateTime(2015, 4, 1),
+                EventType = "event-type-2",
+                EventId = 2
+            };
+
+            var event3 = new Event
+            {
+                EventEndDate = new DateTime(2015, 4, 15),
+                EventStartDate = new DateTime(2015, 4, 15),
+                EventType = "event-type-2",
+                EventId = 3
+            };
+
+            var event4 = new Event
+            {
+                EventEndDate = new DateTime(2015, 4, 30),
+                EventStartDate = new DateTime(2015, 4, 30),
+                EventType = "event-type-2",
+                EventId = 4
+            };
+
+            var event5 = new Event
+            {
+                EventEndDate = new DateTime(2015, 5, 1),
+                EventStartDate = new DateTime(2015, 5, 1),
+                EventType = "event-type-2",
+                EventId = 5
+            };
+
+            var eventList = new List<Event> { event2, event3, event4};
+            return eventList;
+        }
 
         private List<ContactRelationship> MockGetMyFamilyResponse()
         {
