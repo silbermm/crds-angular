@@ -116,6 +116,13 @@ namespace MinistryPlatform.Translation.Services
                 platformClient => platformClient.CreatePageRecord(pageId, dictionary, quickadd));
         }
 
+        public int CreateRecord(string pageKey, Dictionary<string, object> dictionary, String token,
+            bool quickadd = false)
+        {
+            return Call<int>(token,
+                platformClient => platformClient.CreatePageRecord(GetMinistryPlatformId(pageKey), dictionary, quickadd));
+        }
+
         public int CreateSubRecord(int subPageId, int parentRecordId, Dictionary<string, object> dictionary,
             String token, bool quickadd = false)
         {
