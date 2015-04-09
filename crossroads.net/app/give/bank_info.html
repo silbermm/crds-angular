@@ -27,12 +27,10 @@
             <label for="routing" class="wide-label">Routing Number
                 <a href="" class="pull-right weight-normal" ng-click="isCollapsed=!isCollapsed">{{give.showMessage}}</a>
             </label>
-            <input type="text" name="routing" class="form-control" ng-maxlength="9">
-            <span class="error" ng-show="give.routing.$error.maxlength">Too long!</span>
-        </div>
+            <input type="text" name="routing" class="form-control" maxlength="9"required>
         <div class="form-group">
             <label for="account">Account Number</label>
-            <input type="text" name="account" class="form-control" ng-maxlength="30" required>
+            <input type="text" name="account" class="form-control" maxlength="30" required>
         </div>
     </section>
 </div>
