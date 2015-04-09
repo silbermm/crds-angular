@@ -243,7 +243,7 @@
     <Compile Include="Models\Crossroads\CookieInfo.cs" />
     <Compile Include="Models\Crossroads\FamilyMember.cs" />
     <Compile Include="Models\Crossroads\ServeOccurance.cs" />
-    <Compile Include="Models\Crossroads\ServeResponseDto.cs" />
+    <Compile Include="Models\Crossroads\Serve\ServeResponseDto.cs" />
     <Compile Include="Models\Crossroads\SignUpFamilyMembers.cs" />
     <Compile Include="Models\Crossroads\GroupOpportunity.cs" />
     <Compile Include="Models\Crossroads\Serve\EventType.cs" />

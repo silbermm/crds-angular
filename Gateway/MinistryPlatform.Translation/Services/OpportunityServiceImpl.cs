@@ -13,16 +13,18 @@ namespace MinistryPlatform.Translation.Services
     {
         private IMinistryPlatformService _ministryPlatformService;
         private IEventService _eventService;
+        private IAuthenticationService _authenticationService;
 
         private readonly int _groupOpportunitiesEventsPageViewId = Convert.ToInt32(AppSettings("GroupOpportunitiesEvents"));
         private readonly int _signedupToServeSubPageViewId = Convert.ToInt32(AppSettings("SignedupToServe"));
         private readonly int _opportunityPage = Convert.ToInt32(AppSettings("OpportunityPage"));
         private readonly int _eventPage = Convert.ToInt32(AppSettings("Events"));
 
-        public OpportunityServiceImpl(IMinistryPlatformService ministryPlatformService, IEventService eventService)
+        public OpportunityServiceImpl(IMinistryPlatformService ministryPlatformService, IEventService eventService, IAuthenticationService authenticationService)
         {
             this._ministryPlatformService = ministryPlatformService;
             this._eventService = eventService;
+            this._authenticationService = authenticationService;
         }
 
         public  List<Opportunity> GetOpportunitiesForGroup(int groupId, string token)
@@ -94,7 +96,7 @@ namespace MinistryPlatform.Translation.Services
 
         public int RespondToOpportunity(string token, int opportunityId, string comments)
         {
-            var participant = AuthenticationService.GetParticipantRecord(token);
+            var participant = _authenticationService.GetParticipantRecord(token);
             var participantId = participant.ParticipantId;
             var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["OpportunityResponses"]);
 

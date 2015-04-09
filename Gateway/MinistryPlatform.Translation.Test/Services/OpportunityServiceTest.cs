@@ -19,6 +19,7 @@ namespace MinistryPlatform.Translation.Test.Services
 
         private Mock<IMinistryPlatformService> _ministryPlatformService;
         private Mock<IEventService> _eventService;
+        private Mock<IAuthenticationService> _authenticationService;
 
         private OpportunityServiceImpl _fixture;
 
@@ -29,8 +30,10 @@ namespace MinistryPlatform.Translation.Test.Services
             _today = new DateTime(now.Year, now.Month, now.Day);
             _ministryPlatformService = new Mock<IMinistryPlatformService>();
             _eventService = new Mock<IEventService>();
+            _authenticationService = new Mock<IAuthenticationService>();
 
-            _fixture = new OpportunityServiceImpl(_ministryPlatformService.Object, _eventService.Object);
+            _fixture = new OpportunityServiceImpl(_ministryPlatformService.Object, _eventService.Object, _authenticationService.Object);
+            
         }
 
         [Test]
@@ -145,6 +148,19 @@ namespace MinistryPlatform.Translation.Test.Services
                 }
             };
             return results;
+        }
+
+        [Test]
+        public void RespondToOpportunityTest()
+        {
+            var opportunityId = 9;
+            var comments = "test-comments";
+
+            _authenticationService.Setup(m => m.GetParticipantRecord(It.IsAny<string>())).Returns(new Participant{ParticipantId = 7777});
+
+
+
+            _fixture.RespondToOpportunity(It.IsAny<string>(), opportunityId, comments);
         }
 
         [Test]
