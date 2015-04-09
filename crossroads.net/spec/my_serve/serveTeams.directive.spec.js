@@ -1,10 +1,14 @@
 describe('Serve Teams Directive', function() {
 
-  var $compile, $rootScope, element, scope, mockSession;
+  var $compile, $rootScope, element, scope, mockSession, mockServeDate, $httpBackend;
 
-  var mockTeam = [{ "name" : "Kids Club Nusery", "members" : [ { "name": "John", "contactId" : 12345678, "roles" : [ {"name": "NuseryA"}, {"name": "NuseryB"}, {"name": "NuseryC"}, {"name": "NuseryD"} ] }, { "name":  "Jane", "contactId": 1234567890, "roles" : [ {"name": "NuseryA"}, {"name": "NuseryB"}, {"name": "NuseryC"}, {"name": "NuseryD"} ], "signedup" : "yes" }, ] }];
+  var mockOpp = {"name": "NuseryA", "roleId": "145"};
+  var mockTeam = [{ "name" : "Kids Club Nusery", "members" : [ { "name": "John", "contactId" : 12345678, "roles" : [ mockOpp, {"name": "NuseryB"}, {"name": "NuseryC"}, {"name": "NuseryD"} ] }, { "name":  "Jane", "contactId": 1234567890, "roles" : [ {"name": "NuseryA"}, {"name": "NuseryB"}, {"name": "NuseryC"}, {"name": "NuseryD"} ], "signedup" : "yes" }, ] }];
 
   var mockOpportunity = { "time": "8:30am", "team": mockTeam  };
+
+  var mockMatt = {"name":"Matt", "lastName": "Silbernagel", "contactId":1970611,"roles":[{"name":"Nursery A - Sunday 8:30 Member","capacity":100,"slotsTaken":0},{"name":"Nursery B - Sunday 8:30 Member","capacity":10,"slotsTaken":2},{"name":"Nursery C - Sunday 8:30 Member","capacity":0,"slotsTaken":1}]};
+
 
 
   beforeEach(function(){
@@ -17,9 +21,13 @@ describe('Serve Teams Directive', function() {
     });
   });
 
-  beforeEach(inject(function(_$compile_, _$rootScope_){
+  beforeEach(inject(function(_$compile_, _$rootScope_, $injector){
     $compile = _$compile_;
     $rootScope = _$rootScope_;
+    $httpBackend = $injector.get('$httpBackend');
+    mockServeDate = $injector.get('ServeOpportunities');    
+    $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({"date": 1444552200});
+    $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/authenticated').respond({userId: 12345678, userToken: "12345", username: "Laks"},{'Authorization': "12345"});
     scope = $rootScope.$new();
     element = '<serve-team opportunity="opp" team="team" tab-index="tabIndex" team-index="teamIndex" day-index="dayIndex"> </serve-team>';
     scope.opp = mockOpportunity;
@@ -31,7 +39,7 @@ describe('Serve Teams Directive', function() {
     scope.$digest();
   }));
 
-  it("should set signedup to null", function(){
+  it("should set signedup to null", function(){    
     var isolated = element.isolateScope();
     expect(isolated.signedup).toBe(null);
   });
@@ -72,4 +80,15 @@ describe('Serve Teams Directive', function() {
     expect(isolated.showEdit).toBe(false);
   });
 
+  /*it("should get the last serving date for an opportunity", function() {   
+    var isolated = element.isolateScope();
+    isolated.openPanel(mockTeam[0].members);
+    expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
+    isolated.currentMember.currentOpportunity = mockTeam[0].members[0].roles[0];
+    isolated.getLastDate();
+    debugger;
+    $httpBackend.flush();
+    expect(isolated.toDt).toBe("10/11/2015");
+  });
+  */
 });

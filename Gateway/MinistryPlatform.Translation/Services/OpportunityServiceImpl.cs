@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
@@ -32,10 +34,11 @@ namespace MinistryPlatform.Translation.Services
             {
                 var opportunity = new Opportunity
                 {
-                    OpportunityId = (int) record["dp_RecordID"],
-                    OpportunityName = (string) record["Opportunity Title"],
-                    EventType = (string) record["Event Type"], 
-                    RoleTitle = (string) record["Role_Title"]
+                    OpportunityId = record.ToInt("dp_RecordID"),
+                    OpportunityName = record.ToString("Opportunity Title"),
+                    EventType = record.ToString("Event Type"),
+                    EventTypeId = record.ToInt("Event Type ID"),
+                    RoleTitle = record.ToString("Role_Title")
                 };
                 var cap = 0;
                 Int32.TryParse(record["Maximum_Needed"] != null ? record["Maximum_Needed"].ToString() : "0", out cap);
@@ -64,13 +67,12 @@ namespace MinistryPlatform.Translation.Services
             return records.Count();
         }
 
-
         public DateTime GetLastOpportunityDate(int opportunityId, string token)
         {
             //First get the event type
             var opp = _ministryPlatformService.GetRecordDict(_opportunityPage, opportunityId, token);
             var eventType = opp["Event_Type_ID_Text"];
-            
+
             //Now get all the events for this type
             var searchString = ",," + eventType;
             var sort = "0";
@@ -84,10 +86,29 @@ namespace MinistryPlatform.Translation.Services
 
                 return lastEventDate;
             }
-            catch (InvalidOperationException ex )
+            catch (InvalidOperationException ex)
             {
                 throw new Exception("No events found. Cannot return the last event date.");
             }
+        }
+
+        public int RespondToOpportunity(string token, int opportunityId, string comments)
+        {
+            var participant = AuthenticationService.GetParticipantRecord(token);
+            var participantId = participant.ParticipantId;
+            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["OpportunityResponses"]);
+
+            var values = new Dictionary<string, object>
+            {
+                {"Response_Date", DateTime.Now},
+                {"Opportunity_ID", opportunityId},
+                {"Participant_ID", participantId},
+                {"Closed", false},
+                {"Comments", comments}
+            };
+
+            var recordId = MinistryPlatformService.CreateRecord(pageId, values, token, true);
+            return recordId;
         }
     }
 }

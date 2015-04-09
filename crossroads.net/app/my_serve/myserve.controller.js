@@ -43,7 +43,7 @@
     }
     
     function getGroups(){
-      vm.groups = ServeOpportunities.query();
+      vm.groups = ServeOpportunities.ServeDays.query();
     };
 
     function today() {

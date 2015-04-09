@@ -29,23 +29,24 @@
       scope.closePanel = closePanel;
       scope.currentActiveTab = null;
       scope.currentMember = null;
+      scope.dateOptions = {formatYear: 'yy',startingDay: 1, showWeeks: 'false'};
+      scope.editProfile = editProfile;
+      scope.frequency = [{value:0, text:"Once (12/16/14 8:30am)"}, {value:1, text:"Every Week (Sundays 8:30am)"}, {value:2, text:"Every Other Week (Sundays 8:30am)"}];
+      scope.fromDt = scope.oppServeDate;
+      scope.format = 'MM/dd/yyyy';
+      scope.getLastDate = getLastDate;
       scope.isActiveTab = isActiveTab;
       scope.isCollapsed = true;
       scope.isSignedUp = isSignedUp;
+      scope.modalInstance = {};
+      scope.open = open;
       scope.openPanel = openPanel;
       scope.panelId = getPanelId;
       scope.roles = null;
       scope.setActiveTab = setActiveTab;
       scope.signedup = null;
-      scope.editProfile = editProfile;
-      scope.modalInstance = {};
       scope.showEdit = false;
-      scope.frequency = [{value:0, text:"Once (12/16/14 8:30am)"}, {value:1, text:"Every Week (Sundays 8:30am)"}, {value:2, text:"Every Other Week (Sundays 8:30am)"}];
-      scope.format = 'MM/dd/yyyy';
-      scope.open = open;
-      scope.getLastDate = getLastDate;
-      scope.dateOptions = {formatYear: 'yy',startingDay: 1};
-      scope.fromDt = scope.oppServeDate;
+      scope.toDt = null;
 
       activate();
      //////////////////////////////////////
@@ -71,10 +72,12 @@
         if(scope.currentMember === null)
         {
           console.log("You did it wrong.");
-          return false;
+        } else {
+          ServeOpportunities.LastOpportunityDate.get({id:scope.currentMember.currentOpportunity.roleId}, function(ret){
+            var toDate = new Date(ret.date * 1000);
+            scope.toDt = (toDate.getMonth() + 1) + "/" + toDate.getDate() + "/" + toDate.getFullYear();
+          });
         }
-        scope.toDt = ServeOpportunities.LastOpportunityDate({id:currentMember.currentOpportunity.roleId})
-        return true;
       }
 
       function getPanelId(){
