@@ -19,10 +19,11 @@ namespace crds_angular.Services
         private IAuthenticationService _authenticationService;
         private IOpportunityService _opportunityService;
         private IEventService _eventService;
+        private IParticipantService _participantService;
 
         public ServeService(IGroupService groupService, IContactRelationshipService contactRelationshipService,
             IPersonService personService, IAuthenticationService authenticationService,
-            IOpportunityService opportunityService, IEventService eventService)
+            IOpportunityService opportunityService, IEventService eventService, IParticipantService participantService)
         {
             this._groupService = groupService;
             this._contactRelationshipService = contactRelationshipService;
@@ -31,6 +32,7 @@ namespace crds_angular.Services
             this._opportunityService = opportunityService;
             this._authenticationService = authenticationService;
             this._eventService = eventService;
+            this._participantService = participantService;
         }
 
         public List<FamilyMember> GetMyImmediateFamily(int contactId, string token)
@@ -247,8 +249,7 @@ namespace crds_angular.Services
             DateTime endDate)
         {
             //get participant id for Contact
-            var participant = _authenticationService.GetParticipantRecord(token);
-
+            var participant = _participantService.GetParticipant(contactid);
             //get events in range
             var events = _eventService.GetEventsByTypeForRange(eventTypeId, startDate, endDate, token);
             foreach (var e in events)
@@ -256,7 +257,7 @@ namespace crds_angular.Services
                 //for each event in range create an event participant & opportunity response
                 _eventService.registerParticipantForEvent(participant.ParticipantId, e.EventId);
                 var comments = string.Empty; //anything of value to put in comments?
-                _opportunityService.RespondToOpportunity(token, opportunityId, comments);
+                _opportunityService.RespondToOpportunity(participant.ParticipantId, opportunityId, comments);
             }
 
             return true;
