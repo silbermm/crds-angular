@@ -257,7 +257,7 @@ namespace crds_angular.Services
                 //for each event in range create an event participant & opportunity response
                 _eventService.registerParticipantForEvent(participant.ParticipantId, e.EventId);
                 var comments = string.Empty; //anything of value to put in comments?
-                _opportunityService.RespondToOpportunity(participant.ParticipantId, opportunityId, comments);
+                _opportunityService.RespondToOpportunity(participant.ParticipantId, opportunityId, comments, e.EventId);
             }
 
             return true;
