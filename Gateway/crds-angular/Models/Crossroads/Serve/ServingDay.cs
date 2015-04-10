@@ -9,7 +9,7 @@ namespace crds_angular.Models.Crossroads.Serve
         [JsonProperty(PropertyName = "day")]
         public string Day { get; set; }
 
-        [JsonProperty(PropertyName = "date")]
+        [JsonIgnore]
         public DateTime Date { get; set; }
 
         [JsonProperty(PropertyName = "eventType")]
