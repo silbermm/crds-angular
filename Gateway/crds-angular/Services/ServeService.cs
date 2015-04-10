@@ -146,6 +146,7 @@ namespace crds_angular.Services
                                 //time not in list
                                 serveTime = new ServingTime {Time = e.EventStartDate.TimeOfDay.ToString()};
                                 serveTime.ServingTeams.Add(NewServingTeam(team, opportunity, serveRole));
+                                
                                 serveDay.ServeTimes.Add(serveTime);
                             }
                         }
@@ -186,6 +187,12 @@ namespace crds_angular.Services
             }
 
             return sortedServeDays;
+        }
+
+        //public for testing
+        public void GetRsvp(int opportunityId, int eventId, int contactId)
+        {
+            
         }
 
         //public for testing
