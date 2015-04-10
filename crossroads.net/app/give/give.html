@@ -2,15 +2,13 @@
     <div class="col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
         <h1>Give</h1>
         <p class="subheading">Your generosity fuels the life change we experience around here.</p>
-        <!-- ^^^ Should this be receieved from CMS? ^^^ -->
-
         <div class="push-top">
-            <form class="give-form">
+            <form class="give-form" novalidate>
                 <div class="form-group">
-                    <p>You are giving ${{give.amount > 0 ? give.amount : 0}} to the {{give.fund}}.
-                        <a href="">Change</a>
-                    </p>
-                    <button class="btn btn-primary">Give ${{give.amount > 0 ? give.amount : 0}}</button>
+                    <donation-details></donation-details>
+
+                    <!--/form-group-->
+                    <a ui-sref="/demo/guest-giver/login" class="btn btn-primary" id="giveButton">GIVE ${{give.amount}}</a>
                 </div>
             </form>
             <!--/col-sm-6-->

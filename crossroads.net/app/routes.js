@@ -174,13 +174,7 @@
             .state("give", {
                 url: "/give",
                 controller: "GiveCtrl as give",
-                templateUrl: "give/give.html",
-                data: {
-                    isProtected: true
-                },
-                resolve: {
-                    loggedin: checkLoggedin
-                }
+                templateUrl: "give/give.html"
             })
            .state("/demo/guest-giver", {
                 url: "/demo/guest-giver",

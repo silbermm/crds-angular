@@ -26,12 +26,15 @@ require('angular-match-media');
 
 require('./third-party/angular/angular-aside.min.css');
 require('./third-party/angular/angular-growl.css');
+require('./give');
+
+
 
 var _ = require('lodash');
 "use strict";
 (function () {
 
-   angular.module("crossroads", ['ngResource', "crossroads.profile", "crossroads.filters", "crdsCMS.services", "ui.router", 'ui.utils', "ngCookies", "ngMessages", 'angular-growl', 'toggle-switch', 'ngAside', 'matchMedia'])
+   angular.module("crossroads", ['ngResource', "crossroads.profile", "crossroads.filters", "crdsCMS.services", "ui.router", 'ui.utils', "ngCookies", "ngMessages", 'angular-growl', 'toggle-switch', 'ngAside', 'matchMedia','give'])
 
     .constant("AUTH_EVENTS", {
             loginSuccess: "auth-login-success",
@@ -61,7 +64,8 @@ var _ = require('lodash');
         failedResponse: 15,
         successfullWaitlistSignup:17,
         noPeopleSelectedError:18,
-        fullGroupError:19
+        fullGroupError:19,
+        invalidDonationAmount:22
     }).config(function (growlProvider) {
         growlProvider.globalPosition("top-center");
         growlProvider.globalTimeToLive(6000);
