@@ -2,7 +2,6 @@
     'use strict';
     module.exports = function GiveCtrl($scope, $log, messages, opportunity) {
 
-        console.log("Inside give controller");
         var _this = this;
         //Credit Card RegExs
         var visaRegEx = /^4[0-9]{2}/;
