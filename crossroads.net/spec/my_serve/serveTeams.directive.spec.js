@@ -17,11 +17,7 @@ describe('Serve Teams Directive', function() {
     $compile = _$compile_;
     $rootScope = _$rootScope_;
     $httpBackend = $injector.get('$httpBackend');
-<<<<<<< HEAD
     mockServeDate = $injector.get('ServeOpportunities');
-=======
-    mockServeDate = $injector.get('ServeOpportunities');    
->>>>>>> US975 Finished unit tests
     scope = $rootScope.$new();
     element = '<serve-team opp-serve-date="serveDate" opportunity="opp" team="team" tab-index="tabIndex" team-index="teamIndex" day-index="dayIndex" event-type-id="eventTypeId" > </serve-team>';
     scope.opp = mockOpportunity;
@@ -70,11 +66,7 @@ describe('Serve Teams Directive', function() {
     expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
     // scope.currentMember.serveRsvp.roleId
     isolated.currentMember.currentOpportunity = mockTeam[0].members[0].roles[0];
-<<<<<<< HEAD
     isolated.currentMember.currentOpportunity.frequency = {value:1, text:"Every Week (Sundays 8:30am)"};
-=======
-    isolated.currentMember.currentOpportunity.frequency = {value:1, text:"Every Week (Sundays 8:30am)"}; 
->>>>>>> US975 Finished unit tests
     $httpBackend.expect('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({'date': '1444552200'});
     isolated.populateDates();
     $httpBackend.flush()
@@ -86,11 +78,7 @@ describe('Serve Teams Directive', function() {
     isolated.openPanel(mockTeam[0].members);
     expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
     isolated.currentMember.currentOpportunity = mockTeam[0].members[0].roles[0];
-<<<<<<< HEAD
     isolated.currentMember.currentOpportunity.frequency = {value:0, text:"Once"};
-=======
-    isolated.currentMember.currentOpportunity.frequency = {value:0, text:"Once"}; 
->>>>>>> US975 Finished unit tests
     isolated.populateDates();
     expect(isolated.currentMember.currentOpportunity.toDt).toBe(isolated.currentMember.currentOpportunity.fromDt);
   });
@@ -111,15 +99,10 @@ describe('Serve Teams Directive', function() {
       contactId: mockTeam[0].members[0].contactId,
       opportunityId: mockOpp.roleId,
       eventTypeId: 100,
-<<<<<<< HEAD
       endDate: dFormated,
       startDate: dFormated,
       signUp: false,
       alternateWeeks: false
-=======
-      endDate: "1444881600",
-      startDate: "1444881600"
->>>>>>> US975 Finished unit tests
     };
     isolated.populateDates();
     $httpBackend.expect('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/save-rsvp', rsvp ).respond(200, '');
