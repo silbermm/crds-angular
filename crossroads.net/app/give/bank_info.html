@@ -1,4 +1,5 @@
-<div class="form-group" name="give">
+<ng-form name="giveForm">
+  <div class="form-group" ng-class="{'has-error': giveForm.routing.$error.invalidRouting &&giveForm.account.$error.invalidAccount && giveForm.$dirty }">
   <h1>Bank Info</h1>
     <div class="btn-group btn-group-sm account-type form-group" role="group">
         <button type="button" class="btn btn-ghost" ng-model="give.view" btn-radio="'bank'">Bank Account</button>
@@ -27,10 +28,14 @@
             <label for="routing" class="wide-label">Routing Number
                 <a href="" class="pull-right weight-normal" ng-click="isCollapsed=!isCollapsed">{{give.showMessage}}</a>
             </label>
-            <input type="text" name="routing" class="form-control" maxlength="9"required>
+            <input type="text" name="routing" class="form-control" ng-model="give.routing" maxlength="9" required ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }" invalid-routing>
+            <ng-messages for="giveForm.routing.$error" ng-show="giveForm.routing.$error.invalidRouting && giveForm.$dirty" ng-messages-include="on-blur-messages"></ng-messages>
+        </div>
         <div class="form-group">
             <label for="account">Account Number</label>
-            <input type="text" name="account" class="form-control" maxlength="30" required>
+            <input type="text" name="account" class="form-control" ng-model="give.account" maxlength="30" required ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }"invalid-account>
+            <ng-messages for="giveForm.account.$error" ng-show="giveForm.account.$error.invalidAccount && giveForm.$dirty" ng-messages-include="on-blur-messages"></ng-messages>
         </div>
     </section>
 </div>
+</ng-form>
