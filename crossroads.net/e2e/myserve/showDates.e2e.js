@@ -16,8 +16,8 @@ describe("My Serve", function() {
     expect(loginButton.get(0).isDisplayed()).toBeTruthy();
     loginButton.get(0).click();
 
-    var emailInput = element.all(by.css(".navbar--login")).get(0).element(by.id("login-dropdown-email"));
-    var passwordInput = element.all(by.css(".navbar--login")).get(0).element(by.id("login-dropdown-password"));
+    var emailInput = element.all(by.model('credentials.username')).get(0);
+    var passwordInput = element.all(by.model("passwd")).get(0);
     var submitBtn = element.all(by.css(".navbar--login")).get(0).all(by.buttonText("Login")).get(1);
 
     emailInput.sendKeys("lakshmi.maramraju@gmail.com");
@@ -40,7 +40,7 @@ describe("My Serve", function() {
     panel.element(by.buttonText('Lux')).click();
     var radioBtn = panel.all(by.model("currentMember.currentOpportunity"));
     expect(radioBtn.isDisplayed()).toBeTruthy();
-    radioBtn.click();
+    radioBtn.get(0).click();
     
     var signedupBtn = panel.all(by.model("currentMember.currentOpportunity.signedup"));
     expect(signedupBtn.isDisplayed()).toBeTruthy();
@@ -50,7 +50,4 @@ describe("My Serve", function() {
     expect(select.isDisplayed()).toBeTruthy();
 
   });
-  
-   
-
 });
