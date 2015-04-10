@@ -121,7 +121,8 @@ namespace MinistryPlatform.Translation.Services
                 {"Participant_ID", participantId},
                 {"Closed", false},
                 {"Comments", comments},
-                {"Event_ID", eventId}
+                {"Event_ID", eventId},
+                {"Response_Result_ID", 1}
             };
 
             int recordId;
