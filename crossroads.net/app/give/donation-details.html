@@ -1,8 +1,8 @@
-<ng-form name="giveForm">
+<ng-form name="giveForm" id="giveForm">
   <div class="form-inline form-group give-amount" ng-class="{'has-error': giveForm.amount.$error.naturalNumber && giveForm.$dirty }">
     <div class="input-group">
       <span class="input-group-addon">$</span>
-      <input type="text" name="amount" class="form-control" ng-model="give.amount" autocomplete="off" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }" natural-number></input>
+      <input type="text" name="amount" id="amount" class="form-control" ng-model="give.amount" autocomplete="off" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }" natural-number></input>
       <span class="input-group-addon ">.00</span>
 <!--       <p>{{giveForm}}</p> -->
     </div>
@@ -11,11 +11,10 @@
   </div>
 
   <div class="form-group">
-    <select class="form-control">
+    <select class="form-control" id="programs">
       <option ng-repeat="program in programs">{{program}}</option>
     </select>
   </div>
-
   <div class="form-group">
     <select class="form-control">
       <option>One Time</option>
