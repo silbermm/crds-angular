@@ -19,7 +19,7 @@ namespace MinistryPlatform.Translation.Services
             this._configurationWrapper = configurationWrapper;
         }
 
-        public List<Dictionary<string, object>> GetLookupRecords(int pageId, String token)
+       public List<Dictionary<string, object>> GetLookupRecords(int pageId, String token)
         {
             SelectQueryResult result = Call<SelectQueryResult>(token,
                 platformClient => platformClient.GetPageLookupRecords(pageId, string.Empty, string.Empty, 0));
@@ -101,6 +101,13 @@ namespace MinistryPlatform.Translation.Services
             return MPFormatConversion.MPFormatToList(result);
         }
 
+        public List<Dictionary<string, object>> GetPageViewRecords(string viewKey, string token, string searchString = "", string sort = "",
+            int top = 0)
+        {
+            var result = Call<SelectQueryResult>(token,
+                platformClient => platformClient.GetPageViewRecords(GetMinistryPlatformId(viewKey), searchString, sort, top));
+            return MPFormatConversion.MPFormatToList(result);
+        }
 
         public int CreateRecord(int pageId, Dictionary<string, object> dictionary, String token,
             bool quickadd = false)

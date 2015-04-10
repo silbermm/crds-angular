@@ -41,5 +41,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         List<Dictionary<string, object>> GetSubpageViewRecords(string viewKey, int recordId, string token, string searchString = "", string sort = "", int top = 0);
 
         List<Dictionary<string, object>> GetPageViewRecords(int viewId, string token, string searchString = "", string sort = "", int top = 0);
+        List<Dictionary<string, object>> GetPageViewRecords(string viewKey, string token, string searchString = "", string sort = "", int top = 0);
+
     }
 }

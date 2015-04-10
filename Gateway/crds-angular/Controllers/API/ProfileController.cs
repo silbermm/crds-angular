@@ -25,46 +25,7 @@ namespace crds_angular.Controllers.API
         }
 
 
-        [ResponseType(typeof (List<ServingDay>))]
-        [Route("api/profile/servesignup")]
-        public IHttpActionResult GetFamilyServeDays()
-        {
-            return Authorized(token =>
-            {
-                try
-                {
-                    //var contactId = _authenticationService.GetContactId(token);
-                    //var servingTeams = _personService.GetServingTeams(contactId, token);
-                    var servingDays = _personService.GetServingDays( token);
-                    if (servingDays == null)
-                    {
-                        return Unauthorized();
-                    }
-                    return this.Ok(servingDays);
-                }
-                catch (Exception e)
-                {
-                    return this.BadRequest(e.Message);
-                }
-            });
-        }
-
-        [ResponseType(typeof (List<FamilyMember>))]
-        [Route("api/profile/family")]
-        public IHttpActionResult GetFamily()
-        {
-            return Authorized(token =>
-            {
-                var contactId = AuthenticationService.GetContactId(token);
-                var list = _personService.GetMyImmediateFamily(contactId, token);
-                if (list == null)
-                {
-                    return Unauthorized();
-                }
-                return this.Ok(list);
-            });
-        }
-
+        
         [ResponseType(typeof (Person))]
         [Route("api/profile")]
         public IHttpActionResult GetProfile()
