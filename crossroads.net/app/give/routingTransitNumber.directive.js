@@ -1,7 +1,7 @@
 ﻿"use strict";
 (function () {
 
-  module.exports = function ($http, Session, User) {
+  module.exports = function () {
 
         return {
             restrict: "A",
