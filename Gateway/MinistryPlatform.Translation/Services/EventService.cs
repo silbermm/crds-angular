@@ -35,17 +35,28 @@ namespace MinistryPlatform.Translation.Services
                 {"Participation_Status_ID", EventParticipantStatusDefaultID},
             };
 
-            int eventParticipantId =
-                WithApiLogin<int>(
-                    apiToken =>
-                    {
-                        return
-                            (ministryPlatformService.CreateSubRecord(EventParticipantPageId, eventId, values, apiToken,
-                                true));
-                    });
+            int eventParticipantId;
+            try
+            {
+                eventParticipantId =
+                    WithApiLogin<int>(
+                        apiToken =>
+                        {
+                            return
+                                (ministryPlatformService.CreateSubRecord(EventParticipantPageId, eventId, values,
+                                    apiToken,
+                                    true));
+                        });
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(
+                    string.Format("registerParticipantForEvent failed.  Participant Id: {0}, Event Id: {1}",
+                        participantId, eventId), ex.InnerException);
+            }
 
-            logger.Debug("Added participant " + participantId + " to event " + eventId + ": record id: " +
-                         eventParticipantId);
+            logger.Debug(string.Format("Added participant {0} to event {1}; record id: {2}", participantId, eventId,
+                eventParticipantId));
             return (eventParticipantId);
         }
 
@@ -68,7 +79,7 @@ namespace MinistryPlatform.Translation.Services
 
         public List<Event> GetEventsByTypeForRange(int eventTypeId, DateTime startDate, DateTime endDate, string token)
         {
-            const string viewKey = "EventsWithEventTypeId"; 
+            const string viewKey = "EventsWithEventTypeId";
             var search = ",," + eventTypeId;
             var eventRecords = ministryPlatformService.GetPageViewRecords(viewKey, token, search);
 
@@ -82,7 +93,9 @@ namespace MinistryPlatform.Translation.Services
             }).ToList();
 
             //now we have a list, filter by date range.
-            var filteredEvents = events.Where(e => e.EventStartDate.Date >= startDate.Date && e.EventStartDate.Date <= endDate.Date).ToList();
+            var filteredEvents =
+                events.Where(e => e.EventStartDate.Date >= startDate.Date && e.EventStartDate.Date <= endDate.Date)
+                    .ToList();
             return filteredEvents;
         }
     }

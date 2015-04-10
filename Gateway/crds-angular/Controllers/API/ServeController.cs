@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.Description;
+using crds_angular.Exceptions.Models;
 using crds_angular.Extenstions;
 using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Serve;
@@ -10,6 +13,7 @@ using crds_angular.Security;
 using crds_angular.Services.Interfaces;
 using log4net;
 using MinistryPlatform.Translation.Services.Interfaces;
+using Newtonsoft.Json;
 
 namespace crds_angular.Controllers.API
 {
@@ -69,10 +73,17 @@ namespace crds_angular.Controllers.API
         {
             return Authorized(token =>
             {
-                _serveService.SaveServeResponse(token, serveResponse.ContactId, serveResponse.OpportunityId,
-                    serveResponse.EventTypeId, serveResponse.StartDateUnix.FromUnixTime(),
-                    serveResponse.EndDateUnix.FromUnixTime());
-
+                try
+                {
+                    _serveService.SaveServeResponse(token, serveResponse.ContactId, serveResponse.OpportunityId,
+                        serveResponse.EventTypeId, serveResponse.StartDateUnix.FromUnixTime(),
+                        serveResponse.EndDateUnix.FromUnixTime());
+                }
+                catch (Exception exception)
+                {
+                    var apiError = new ApiErrorDto("Save RSVP Failed", exception);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
                 return this.Ok();
             });
         }
