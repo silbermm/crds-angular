@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using crds_angular.App_Start;
 using crds_angular.Extenstions;
 using crds_angular.Models;
@@ -83,8 +80,7 @@ namespace crds_angular.test.Services
 
             _personService.Setup(m => m.GetLoggedInUserProfile(It.IsAny<string>())).Returns(person);
 
-           // _fixture = new PersonService(_contactService.Object);
-            _fixture = new ServeService( _groupService.Object ,_contactRelationshipService.Object,_personService.Object,_authenticationService.Object,_opportunityService.Object,_eventService.Object, _participantService.Object);
+           _fixture = new ServeService( _groupService.Object ,_contactRelationshipService.Object,_personService.Object,_authenticationService.Object,_opportunityService.Object,_eventService.Object);
 
             //force AutoMapper to register
             AutoMapperConfig.RegisterMappings();
@@ -270,12 +266,10 @@ namespace crds_angular.test.Services
                 }
             };
 
-
             var opportunities = new List<Opportunity>
             {
                 new Opportunity
                 {
-                    Capacity = 1,
                     EventType = "event-type-1",
                     Events = eventsList1,
                     OpportunityId = 1,
@@ -284,7 +278,6 @@ namespace crds_angular.test.Services
                 },
                 new Opportunity
                 {
-                    Capacity = 2,
                     EventType = "event-type-2",
                     Events = eventsList2,
                     OpportunityId = 2,
@@ -325,6 +318,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual("10:00:00", servingTime.Time);
         }
 
+<<<<<<< HEAD
         [Test]
         public void SaveServeResponseTest()
         {
@@ -413,6 +407,118 @@ namespace crds_angular.test.Services
 
             var eventList = new List<Event> { event2, event3, event4};
             return eventList;
+=======
+        [Test, TestCaseSource("OpportunityCapacityCases")]
+        public void OpportunityCapacityHasMinHasMax(int? min, int? max, int mockSignUpCount, Capacity expectedCapacity)
+        {
+            const int opportunityId = 9999;
+            const int eventId = 1000;
+
+            //mock
+            _opportunityService.Setup(m => m.GetOpportunitySignupCount(opportunityId, eventId, It.IsAny<string>()))
+                .Returns(mockSignUpCount);
+
+           var capacity= _fixture.OpportunityCapacity(max, min, opportunityId, eventId, It.IsAny<string>());
+
+            _opportunityService.VerifyAll();
+
+            Assert.IsNotNull(capacity);
+            Assert.AreEqual(capacity.Available, expectedCapacity.Available);
+            Assert.AreEqual(capacity.BadgeType, expectedCapacity.BadgeType);
+            Assert.AreEqual(capacity.Display, expectedCapacity.Display);
+            Assert.AreEqual(capacity.Maximum, expectedCapacity.Maximum);
+            Assert.AreEqual(capacity.Message, expectedCapacity.Message);
+            Assert.AreEqual(capacity.Minimum, expectedCapacity.Minimum);
+            Assert.AreEqual(capacity.Taken, expectedCapacity.Taken);
+
+        }
+
+        private static readonly object[] OpportunityCapacityCases =
+        {
+            new object[]
+            {
+                10, 20, 0,
+                new Capacity
+                {
+                    Available = 10,
+                    BadgeType = "label-warning",
+                    Display = true,
+                    Maximum = 20,
+                    Message = "10 Needed",
+                    Minimum = 10,
+                    Taken = 0
+                }
+            },
+            new object[]
+            {
+                10, null, 0,
+                new Capacity
+                {
+                    Available = 10,
+                    BadgeType = "label-warning",
+                    Display = true,
+                    Maximum = 10,
+                    Message = "10 Needed",
+                    Minimum = 10,
+                    Taken = 0
+                }
+            },
+            new object[]
+            {
+                null, 20, 0,
+                new Capacity
+                {
+                    Available = 20,
+                    BadgeType = "label-warning",
+                    Display = true,
+                    Maximum = 20,
+                    Message = "20 Needed",
+                    Minimum = 20,
+                    Taken = 0
+                }
+            },
+            new object[]
+            {
+                10, 20, 15,
+                new Capacity
+                {
+                    Available = -5,
+                    BadgeType = "label-default",
+                    Display = true,
+                    Maximum = 20,
+                    Message = "Available",
+                    Minimum = 10,
+                    Taken = 15
+                }
+            },
+            new object[]
+            {
+                10, 20, 20,
+                new Capacity
+                {
+                    Available = -10,
+                    BadgeType = "label-success",
+                    Display = true,
+                    Maximum = 20,
+                    Message = "Full",
+                    Minimum = 10,
+                    Taken = 20
+                }
+            }
+        };
+
+        [Test]
+        public void OpportunityCapacityMinAndMaxNull()
+        {
+            const int opportunityId = 9999;
+            const int eventId = 1000;
+
+            var capacity = _fixture.OpportunityCapacity(null, null, opportunityId, eventId, It.IsAny<string>());
+
+            Assert.IsNotNull(capacity);
+            Assert.AreEqual(capacity.Display, false);
+
+>>>>>>> development
         }
 
         private List<ContactRelationship> MockGetMyFamilyResponse()

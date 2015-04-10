@@ -233,6 +233,7 @@
     <Compile Include="Controllers\API\SkillController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Exceptions\Models\ApiErrorDto.cs" />
+    <Compile Include="Enum\BadgeTypeEnum.cs" />
     <Compile Include="Extenstions\DateTimeExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
