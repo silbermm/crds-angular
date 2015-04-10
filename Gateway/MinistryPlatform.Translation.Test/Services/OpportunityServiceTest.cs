@@ -151,7 +151,7 @@ namespace MinistryPlatform.Translation.Test.Services
         }
 
         [Test]
-        public void RespondToOpportunityTest()
+        public void RespondToOpportunityAsLoggedInUserTest()
         {
             const int opportunityId = 9;
             const string comments = "test-comments";
@@ -172,6 +172,26 @@ namespace MinistryPlatform.Translation.Test.Services
 
             Assert.IsNotNull(responseId);
             Assert.AreEqual(3333, responseId);
+        }
+
+        [Test]
+        public void RespondToOpportunityAsParticipantId()
+        {
+            const string pageKey = "OpportunityResponses";
+            const int participantId = 4444;
+            const int opportunityId = 555;
+            const string comment = "";
+
+            _ministryPlatformService.Setup(
+                m => m.CreateRecord(pageKey, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>(), true))
+                .Returns(4444);
+
+            var responeId = _fixture.RespondToOpportunity(participantId, opportunityId, comment);
+
+            _ministryPlatformService.VerifyAll();
+
+            Assert.IsNotNull(responeId);
+            Assert.AreEqual(4444, responeId);
         }
 
         [Test]
