@@ -1,11 +1,10 @@
-using System;
 using Newtonsoft.Json;
 
-namespace crds_angular.Models.Crossroads
+namespace crds_angular.Models.Crossroads.Serve
 {
     public class ServeResponseDto
     {
-        [JsonProperty(PropertyName = "contactid")]
+        [JsonProperty(PropertyName = "contactId")]
         public int ContactId { get; set; }
 
         [JsonProperty(PropertyName = "endDate")]

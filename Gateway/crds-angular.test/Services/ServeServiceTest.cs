@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using crds_angular.App_Start;
+using crds_angular.Extenstions;
 using crds_angular.Models;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services;
@@ -9,6 +10,7 @@ using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 
 namespace crds_angular.test.Services
 {
@@ -24,6 +26,7 @@ namespace crds_angular.test.Services
         private Mock<IPersonService> _personService;
         private Mock<IServeService> _serveService;
         private Mock<IEventService> _eventService;
+        private Mock<IParticipantService> _participantService;
 
         private ServeService _fixture;
 
@@ -38,6 +41,7 @@ namespace crds_angular.test.Services
             _personService = new Mock<IPersonService>();
             _eventService=new Mock<IEventService>();
             _serveService = new Mock<IServeService>();
+            _participantService = new Mock<IParticipantService>();
 
             _authenticationService.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Returns(123456);
             var myContact = new MyContact
@@ -77,7 +81,9 @@ namespace crds_angular.test.Services
 
             _personService.Setup(m => m.GetLoggedInUserProfile(It.IsAny<string>())).Returns(person);
 
-            _fixture = new ServeService( _groupService.Object ,_contactRelationshipService.Object,_personService.Object,_authenticationService.Object,_opportunityService.Object,_eventService.Object);
+
+           // _fixture = new PersonService(_contactService.Object);
+            _fixture = new ServeService( _groupService.Object ,_contactRelationshipService.Object,_personService.Object,_authenticationService.Object,_opportunityService.Object,_eventService.Object, _participantService.Object);
 
             //force AutoMapper to register
             AutoMapperConfig.RegisterMappings();
@@ -424,7 +430,96 @@ namespace crds_angular.test.Services
 
             Assert.IsNotNull(capacity);
             Assert.AreEqual(capacity.Display, false);
+        }
 
+        [Test]
+        public void SaveServeResponseTest()
+        {
+            const string token = "some-string";
+            const int contactId = 123456;
+            const int opportunityId = 1;
+            const int eventTypeId = 2;
+            var  startDate = new DateTime(2015,4,1);
+            var endDate = new DateTime(2015, 4, 30);
+            const int mockParticipantId = 41018;
+
+            _authenticationService.Setup(m => m.GetParticipantRecord(It.IsAny<string>())).Returns(new Participant { ParticipantId = mockParticipantId });
+
+            var mockEvents = MockEvents();
+            _eventService.Setup(m => m.GetEventsByTypeForRange(eventTypeId, startDate, endDate, It.IsAny<string>()))
+                .Returns(mockEvents);
+           
+            foreach (var mockEvent in mockEvents)
+            {
+                var e = mockEvent;
+                _eventService.Setup(m => m.registerParticipantForEvent(mockParticipantId, e.EventId)).Returns(e.EventId);
+            }
+
+            // Mock _opportunityService.RespondToOpportunity
+            _opportunityService.Setup(m => m.RespondToOpportunity(It.IsAny<string>(), opportunityId, "")).Returns(8888);
+
+            var saveResponse = _fixture.SaveServeResponse(token, contactId, opportunityId, eventTypeId, startDate, endDate);
+
+            //verify all service calls
+            _authenticationService.Verify(m => m.GetParticipantRecord(It.IsAny<string>()));
+
+            _eventService.Verify(m => m.registerParticipantForEvent(mockParticipantId, 2), Times.Exactly(1));
+            _eventService.Verify(m => m.registerParticipantForEvent(mockParticipantId, 3), Times.Exactly(1));
+            _eventService.Verify(m => m.registerParticipantForEvent(mockParticipantId, 4), Times.Exactly(1));
+
+            _opportunityService.Verify(m=>m.RespondToOpportunity(It.IsAny<string>(),opportunityId,""),Times.Exactly(3));
+            _opportunityService.VerifyAll();
+
+            //Assertions
+            Assert.IsNotNull(saveResponse);
+            Assert.IsTrue(saveResponse);
+        }
+
+        private List<Event> MockEvents()
+        {
+            
+            var event1 = new Event
+            {
+                EventEndDate = new DateTime(2015, 3, 15),
+                EventStartDate = new DateTime(2015, 3, 15),
+                EventType = "event-type-2",
+                EventId = 1
+            };
+
+            var event2 = new Event
+            {
+                EventEndDate = new DateTime(2015, 4, 1),
+                EventStartDate = new DateTime(2015, 4, 1),
+                EventType = "event-type-2",
+                EventId = 2
+            };
+
+            var event3 = new Event
+            {
+                EventEndDate = new DateTime(2015, 4, 15),
+                EventStartDate = new DateTime(2015, 4, 15),
+                EventType = "event-type-2",
+                EventId = 3
+            };
+
+            var event4 = new Event
+            {
+                EventEndDate = new DateTime(2015, 4, 30),
+                EventStartDate = new DateTime(2015, 4, 30),
+                EventType = "event-type-2",
+                EventId = 4
+            };
+
+            var event5 = new Event
+            {
+                EventEndDate = new DateTime(2015, 5, 1),
+                EventStartDate = new DateTime(2015, 5, 1),
+                EventType = "event-type-2",
+                EventId = 5
+            };
+
+            var eventList = new List<Event> { event2, event3, event4};
+            return eventList;
         }
 
         private List<ContactRelationship> MockGetMyFamilyResponse()

@@ -13,16 +13,18 @@ namespace MinistryPlatform.Translation.Services
     {
         private IMinistryPlatformService _ministryPlatformService;
         private IEventService _eventService;
+        private IAuthenticationService _authenticationService;
 
         private readonly int _groupOpportunitiesEventsPageViewId = Convert.ToInt32(AppSettings("GroupOpportunitiesEvents"));
         private readonly int _signedupToServeSubPageViewId = Convert.ToInt32(AppSettings("SignedupToServe"));
         private readonly int _opportunityPage = Convert.ToInt32(AppSettings("OpportunityPage"));
         private readonly int _eventPage = Convert.ToInt32(AppSettings("Events"));
 
-        public OpportunityServiceImpl(IMinistryPlatformService ministryPlatformService, IEventService eventService)
+        public OpportunityServiceImpl(IMinistryPlatformService ministryPlatformService, IEventService eventService, IAuthenticationService authenticationService)
         {
             this._ministryPlatformService = ministryPlatformService;
             this._eventService = eventService;
+            this._authenticationService = authenticationService;
         }
 
         public  List<Opportunity> GetOpportunitiesForGroup(int groupId, string token)
@@ -92,9 +94,8 @@ namespace MinistryPlatform.Translation.Services
 
         public int RespondToOpportunity(string token, int opportunityId, string comments)
         {
-            var participant = AuthenticationService.GetParticipantRecord(token);
+            var participant = _authenticationService.GetParticipantRecord(token);
             var participantId = participant.ParticipantId;
-            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["OpportunityResponses"]);
 
             var values = new Dictionary<string, object>
             {
@@ -105,7 +106,36 @@ namespace MinistryPlatform.Translation.Services
                 {"Comments", comments}
             };
 
-            var recordId = MinistryPlatformService.CreateRecord(pageId, values, token, true);
+            var recordId = _ministryPlatformService.CreateRecord("OpportunityResponses", values, token, true);
+            return recordId;
+        }
+
+        public int RespondToOpportunity(int participantId, int opportunityId, string comments, int eventId)
+        {
+            var values = new Dictionary<string, object>
+            {
+                {"Response_Date", DateTime.Now},
+                {"Opportunity_ID", opportunityId},
+                {"Participant_ID", participantId},
+                {"Closed", false},
+                {"Comments", comments},
+                {"Event_ID", eventId},
+                {"Response_Result_ID", 1}
+            };
+
+            int recordId;
+            try
+            {
+                recordId =
+                    WithApiLogin<int>(
+                        apiToken => (_ministryPlatformService.CreateRecord("OpportunityResponses", values, apiToken, true)));
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(
+                    string.Format("RespondToOpportunity failed.  Participant Id: {0}, Opportunity Id: {1}",
+                        participantId, opportunityId), ex.InnerException);
+            }
             return recordId;
         }
     }

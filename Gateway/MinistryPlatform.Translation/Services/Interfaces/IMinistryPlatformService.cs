@@ -29,6 +29,9 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         
         int CreateRecord(int pageId, Dictionary<string, object> dictionary, String token,
             bool quickadd = false);
+
+        int CreateRecord(string pageKey, Dictionary<string, object> dictionary, String token,
+            bool quickadd = false);
         
         int CreateSubRecord(int subPageId, int parentRecordId, Dictionary<string, object> dictionary,
             String token, bool quickadd = false);
