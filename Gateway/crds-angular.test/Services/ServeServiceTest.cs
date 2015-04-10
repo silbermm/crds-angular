@@ -272,7 +272,7 @@ namespace crds_angular.test.Services
             {
                 new Opportunity
                 {
-                    Capacity = 1,
+                    //Capacity = 1,
                     EventType = "event-type-1",
                     Events = eventsList1,
                     OpportunityId = 1,
@@ -281,7 +281,7 @@ namespace crds_angular.test.Services
                 },
                 new Opportunity
                 {
-                    Capacity = 2,
+                    //Capacity = 2,
                     EventType = "event-type-2",
                     Events = eventsList2,
                     OpportunityId = 2,
@@ -357,6 +357,118 @@ namespace crds_angular.test.Services
         //    Assert.IsNotNull(something);
         //    Assert.IsTrue(something);
         //}
+
+        [Test, TestCaseSource("OpportunityCapacityCases")]
+        public void OpportunityCapacityHasMinHasMax(int? min, int? max, int mockSignUpCount, Capacity expectedCapacity)
+        {
+            const int opportunityId = 9999;
+            const int eventId = 1000;
+
+            //mock
+            _opportunityService.Setup(m => m.GetOpportunitySignupCount(opportunityId, eventId, It.IsAny<string>()))
+                .Returns(mockSignUpCount);
+
+           var capacity= _fixture.OpportunityCapacity(max, min, opportunityId, eventId, It.IsAny<string>());
+
+            _opportunityService.VerifyAll();
+
+            Assert.IsNotNull(capacity);
+            Assert.AreEqual(capacity.Available, expectedCapacity.Available);
+            Assert.AreEqual(capacity.BadgeType, expectedCapacity.BadgeType);
+            Assert.AreEqual(capacity.Display, expectedCapacity.Display);
+            Assert.AreEqual(capacity.Maximum, expectedCapacity.Maximum);
+            Assert.AreEqual(capacity.Message, expectedCapacity.Message);
+            Assert.AreEqual(capacity.Minimum, expectedCapacity.Minimum);
+            Assert.AreEqual(capacity.Taken, expectedCapacity.Taken);
+
+        }
+
+        private static readonly object[] OpportunityCapacityCases =
+        {
+            new object[]
+            {
+                10, 20, 0,
+                new Capacity
+                {
+                    Available = 10,
+                    BadgeType = "warning",
+                    Display = true,
+                    Maximum = 20,
+                    Message = "10 Needed",
+                    Minimum = 10,
+                    Taken = 0
+                }
+            },
+            new object[]
+            {
+                10, null, 0,
+                new Capacity
+                {
+                    Available = 10,
+                    BadgeType = "warning",
+                    Display = true,
+                    Maximum = 10,
+                    Message = "10 Needed",
+                    Minimum = 10,
+                    Taken = 0
+                }
+            },
+            new object[]
+            {
+                null, 20, 0,
+                new Capacity
+                {
+                    Available = 20,
+                    BadgeType = "warning",
+                    Display = true,
+                    Maximum = 20,
+                    Message = "20 Needed",
+                    Minimum = 20,
+                    Taken = 0
+                }
+            },
+            new object[]
+            {
+                10, 20, 15,
+                new Capacity
+                {
+                    Available = -5,
+                    BadgeType = "default",
+                    Display = true,
+                    Maximum = 20,
+                    Message = "Available",
+                    Minimum = 10,
+                    Taken = 15
+                }
+            },
+            new object[]
+            {
+                10, 20, 20,
+                new Capacity
+                {
+                    Available = -10,
+                    BadgeType = "success",
+                    Display = true,
+                    Maximum = 20,
+                    Message = "Full",
+                    Minimum = 10,
+                    Taken = 20
+                }
+            }
+        };
+
+        [Test]
+        public void OpportunityCapacityMinAndMaxNull()
+        {
+            const int opportunityId = 9999;
+            const int eventId = 1000;
+
+            var capacity = _fixture.OpportunityCapacity(null, null, opportunityId, eventId, It.IsAny<string>());
+
+            Assert.IsNotNull(capacity);
+            Assert.AreEqual(capacity.Display, false);
+
+        }
 
         private List<ContactRelationship> MockGetMyFamilyResponse()
         {

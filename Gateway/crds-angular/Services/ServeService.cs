@@ -73,14 +73,20 @@ namespace crds_angular.Services
 
                     foreach (var e in events)
                     {
+                        //var capacity = new Capacity();
+                        //capacity.Maximum = int.Parse(opportunity.MaximumNeeded.ToString());
+                        //capacity.Minimum = int.Parse(opportunity.MinimumNeeded.ToString());
+
+                        //capacity.Available = 0;
+                        //capacity.BadgeType = "";
+                        //capacity.Message = "";
+                        //capacity.Taken = 0;
+
                         var serveRole = new ServeRole
                         {
                             Name = opportunity.OpportunityName + " " + opportunity.RoleTitle,
-                            Capacity = opportunity.Capacity,
-                            RoleId = opportunity.OpportunityId,
-                            SlotsTaken =
-                                this._opportunityService.GetOpportunitySignupCount(opportunity.OpportunityId, e.EventId,
-                                    token)
+                            Capacity = this.OpportunityCapacity(opportunity.MaximumNeeded,opportunity.MinimumNeeded,opportunity.OpportunityId,e.EventId,token),
+                            RoleId = opportunity.OpportunityId
                         };
 
                         var serveDay = serveDays.SingleOrDefault(r => r.Day == e.EventStartDate.Date.ToString("d"));
@@ -191,6 +197,67 @@ namespace crds_angular.Services
             return sortedServeDays;
         }
 
+        //public for testing
+        public Capacity OpportunityCapacity(int? max, int? min, int opportunityId, int eventId, string token)
+        {
+            var capacity = new Capacity {Display = true};
+
+            if (max == null && min == null)
+            {
+                capacity.Display = false;
+                return capacity;
+            }
+
+            var signedUp = this._opportunityService.GetOpportunitySignupCount(opportunityId, eventId, token);
+            int calc;
+            if (max == null)
+            {
+                capacity.Minimum = min.GetValueOrDefault();
+
+                //is this valid?? max is null so put min value in max?
+                capacity.Maximum = capacity.Minimum;
+
+                calc = capacity.Minimum - signedUp;
+            }
+            else if (min == null)
+            {
+                capacity.Maximum = max.GetValueOrDefault();
+                //is this valid??
+                capacity.Minimum = capacity.Maximum;
+                calc = capacity.Maximum - signedUp;
+            }
+            else
+            {
+                capacity.Maximum = max.GetValueOrDefault();
+                capacity.Minimum = min.GetValueOrDefault();
+                calc = capacity.Minimum - signedUp;
+            }
+
+            if (signedUp < capacity.Maximum && signedUp < capacity.Minimum)
+            {
+                capacity.Message = string.Format("{0} Needed", calc);
+                capacity.BadgeType = "warning";
+                capacity.Available = calc;
+                capacity.Taken = signedUp;
+            }
+            else if (signedUp < capacity.Maximum && signedUp >= capacity.Minimum)
+            {
+                capacity.Message = "Available";
+                capacity.BadgeType = "default";
+                capacity.Available = calc;
+                capacity.Taken = signedUp;
+            }
+            else if (signedUp >= capacity.Maximum)
+            {
+                capacity.Message = "Full";
+                capacity.BadgeType = "success";
+                capacity.Available = calc;
+                capacity.Taken = signedUp;
+            }
+
+            return capacity;
+        }
+
         public List<ServingTeam> GetServingTeams(string token)
         {
             var contactId = _authenticationService.GetContactId(token);
@@ -239,9 +306,9 @@ namespace crds_angular.Services
             return servingTeams;
         }
 
-        public bool SaveServeResponse(string token, 
-            int contactid, 
-            int opportunityId, 
+        public bool SaveServeResponse(string token,
+            int contactid,
+            int opportunityId,
             int eventTypeId,
             DateTime startDate,
             DateTime endDate)

@@ -38,16 +38,19 @@ namespace MinistryPlatform.Translation.Services
                     OpportunityName = record.ToString("Opportunity Title"),
                     EventType = record.ToString("Event Type"),
                     EventTypeId = record.ToInt("Event Type ID"),
-                    RoleTitle = record.ToString("Role_Title")
+                    RoleTitle = record.ToString("Role_Title"),
+                    MaximumNeeded = record.ToNullableInt("Maximum_Needed"),
+                    MinimumNeeded = record.ToNullableInt("Minimum_Needed")
                 };
-                var cap = 0;
-                Int32.TryParse(record["Maximum_Needed"] != null ? record["Maximum_Needed"].ToString() : "0", out cap);
-                opportunity.Capacity = cap;
+                //var cap = 0;
+                //var minNeeded = record.ToNullableInt("Minimum_Needed");
+                //var maxNeeded = record.ToNullableInt("Maximum_Needed");
+                //Int32.TryParse(record["Maximum_Needed"] != null ? record["Maximum_Needed"].ToString() : "0", out cap);
+                //opportunity.Capacity = cap;
                 //now get all events with type = event type id
                 if (opportunity.EventType != null)
                 {
                     var events =_eventService.GetEvents(opportunity.EventType, token);
-                    //is this a good place to sort the events by date/time??? tm 
                     var sortedEvents = events.OrderBy(o => o.EventStartDate).ToList();
                     opportunity.Events = sortedEvents;
                 }
