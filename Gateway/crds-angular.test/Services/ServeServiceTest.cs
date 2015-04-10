@@ -348,7 +348,7 @@ namespace crds_angular.test.Services
                 new Capacity
                 {
                     Available = 10,
-                    BadgeType = "warning",
+                    BadgeType = "label-warning",
                     Display = true,
                     Maximum = 20,
                     Message = "10 Needed",
@@ -362,7 +362,7 @@ namespace crds_angular.test.Services
                 new Capacity
                 {
                     Available = 10,
-                    BadgeType = "warning",
+                    BadgeType = "label-warning",
                     Display = true,
                     Maximum = 10,
                     Message = "10 Needed",
@@ -376,7 +376,7 @@ namespace crds_angular.test.Services
                 new Capacity
                 {
                     Available = 20,
-                    BadgeType = "warning",
+                    BadgeType = "label-warning",
                     Display = true,
                     Maximum = 20,
                     Message = "20 Needed",
@@ -390,7 +390,7 @@ namespace crds_angular.test.Services
                 new Capacity
                 {
                     Available = -5,
-                    BadgeType = "default",
+                    BadgeType = "label-default",
                     Display = true,
                     Maximum = 20,
                     Message = "Available",
@@ -404,7 +404,7 @@ namespace crds_angular.test.Services
                 new Capacity
                 {
                     Available = -10,
-                    BadgeType = "success",
+                    BadgeType = "label-success",
                     Display = true,
                     Maximum = 20,
                     Message = "Full",

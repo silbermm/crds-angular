@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using crds_angular.Enum;
 using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services.Interfaces;
@@ -226,21 +227,21 @@ namespace crds_angular.Services
             if (signedUp < capacity.Maximum && signedUp < capacity.Minimum)
             {
                 capacity.Message = string.Format("{0} Needed", calc);
-                capacity.BadgeType = "warning";
+                capacity.BadgeType = BadgeType.LabelWarning.ToString();
                 capacity.Available = calc;
                 capacity.Taken = signedUp;
             }
             else if (signedUp < capacity.Maximum && signedUp >= capacity.Minimum)
             {
                 capacity.Message = "Available";
-                capacity.BadgeType = "default";
+                capacity.BadgeType = BadgeType.LabelDefault.ToString();
                 capacity.Available = calc;
                 capacity.Taken = signedUp;
             }
             else if (signedUp >= capacity.Maximum)
             {
                 capacity.Message = "Full";
-                capacity.BadgeType = "success";
+                capacity.BadgeType = BadgeType.LabelSuccess.ToString();
                 capacity.Available = calc;
                 capacity.Taken = signedUp;
             }
