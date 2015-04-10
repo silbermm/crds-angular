@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
@@ -15,6 +16,8 @@ namespace MinistryPlatform.Translation.Services
 
         private readonly int _groupOpportunitiesEventsPageViewId = Convert.ToInt32(AppSettings("GroupOpportunitiesEvents"));
         private readonly int _signedupToServeSubPageViewId = Convert.ToInt32(AppSettings("SignedupToServe"));
+        private readonly int _opportunityPage = Convert.ToInt32(AppSettings("OpportunityPage"));
+        private readonly int _eventPage = Convert.ToInt32(AppSettings("Events"));
 
         public OpportunityServiceImpl(IMinistryPlatformService ministryPlatformService, IEventService eventService)
         {
@@ -31,19 +34,18 @@ namespace MinistryPlatform.Translation.Services
             {
                 var opportunity = new Opportunity
                 {
-                    OpportunityId = (int) record["dp_RecordID"],
-                    OpportunityName = (string) record["Opportunity Title"],
-                    EventType = (string) record["Event Type"], 
-                    RoleTitle = (string) record["Role_Title"]
+                    OpportunityId = record.ToInt("dp_RecordID"),
+                    OpportunityName = record.ToString("Opportunity Title"),
+                    EventType = record.ToString("Event Type"),
+                    EventTypeId = record.ToInt("Event Type ID"),
+                    RoleTitle = record.ToString("Role_Title"),
+                    MaximumNeeded = record.ToNullableInt("Maximum_Needed"),
+                    MinimumNeeded = record.ToNullableInt("Minimum_Needed")
                 };
-                var cap = 0;
-                Int32.TryParse(record["Maximum_Needed"] != null ? record["Maximum_Needed"].ToString() : "0", out cap);
-                opportunity.Capacity = cap;
                 //now get all events with type = event type id
                 if (opportunity.EventType != null)
                 {
                     var events =_eventService.GetEvents(opportunity.EventType, token);
-                    //is this a good place to sort the events by date/time??? tm 
                     var sortedEvents = events.OrderBy(o => o.EventStartDate).ToList();
                     opportunity.Events = sortedEvents;
                 }
@@ -61,6 +63,50 @@ namespace MinistryPlatform.Translation.Services
             var records = _ministryPlatformService.GetSubpageViewRecords(_signedupToServeSubPageViewId, opportunityId, token, search);
 
             return records.Count();
+        }
+
+        public DateTime GetLastOpportunityDate(int opportunityId, string token)
+        {
+            //First get the event type
+            var opp = _ministryPlatformService.GetRecordDict(_opportunityPage, opportunityId, token);
+            var eventType = opp["Event_Type_ID_Text"];
+
+            //Now get all the events for this type
+            var searchString = ",," + eventType;
+            var sort = "0";
+            var events = _ministryPlatformService.GetRecordsDict(_eventPage, token, searchString, sort);
+
+            //grab the last one
+            try
+            {
+                var lastEvent = events.Last();
+                var lastEventDate = DateTime.Parse(lastEvent["Event_Start_Date"].ToString());
+
+                return lastEventDate;
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new Exception("No events found. Cannot return the last event date.");
+            }
+        }
+
+        public int RespondToOpportunity(string token, int opportunityId, string comments)
+        {
+            var participant = AuthenticationService.GetParticipantRecord(token);
+            var participantId = participant.ParticipantId;
+            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["OpportunityResponses"]);
+
+            var values = new Dictionary<string, object>
+            {
+                {"Response_Date", DateTime.Now},
+                {"Opportunity_ID", opportunityId},
+                {"Participant_ID", participantId},
+                {"Closed", false},
+                {"Comments", comments}
+            };
+
+            var recordId = MinistryPlatformService.CreateRecord(pageId, values, token, true);
+            return recordId;
         }
     }
 }

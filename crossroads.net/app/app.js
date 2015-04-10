@@ -24,6 +24,7 @@ require('./give/bankInfo.directive.js');
 require('./give/donationConfirmation.directive.js');
 
 require('angular-aside');
+require('angular-match-media');
 
 require('./third-party/angular/angular-aside.min.css');
 require('./third-party/angular/angular-growl.css');
@@ -35,7 +36,7 @@ var _ = require('lodash');
 "use strict";
 (function () {
 
-   angular.module("crossroads", ['ngResource', "crossroads.profile", "crossroads.filters", "crdsCMS.services", "ui.router", 'ui.utils', "ngCookies", "ngMessages", 'angular-growl', 'toggle-switch', 'ngAside','give'])
+   angular.module("crossroads", ['ngResource', "crossroads.profile", "crossroads.filters", "crdsCMS.services", "ui.router", 'ui.utils', "ngCookies", "ngMessages", 'angular-growl', 'toggle-switch', 'ngAside', 'matchMedia','give'])
 
     .constant("AUTH_EVENTS", {
             loginSuccess: "auth-login-success",
@@ -80,14 +81,18 @@ var _ = require('lodash');
             return $sce.trustAsHtml(val);
         };
     }])
-        .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "$http", "Message", "growl", "$aside",
-        function ($scope, $rootScope, MESSAGES, $http, Message, growl, $aside) {
+        .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "$http", "Message", "growl", "$aside", "screenSize",
+        function ($scope, $rootScope, MESSAGES, $http, Message, growl, $aside, screenSize) {
 
                 console.log(__API_ENDPOINT__);
 
                 $scope.prevent = function (evt) {
                     evt.stopPropagation();
                 };
+            
+                $rootScope.mobile = screenSize.on('xs, sm', function(match){
+                    $rootScope.mobile = match;
+                })
 
                 var messagesRequest = Message.get("", function () {
                     messagesRequest.messages.unshift(null); //Adding a null so the indexes match the DB
@@ -142,7 +147,8 @@ var _ = require('lodash');
                 }
         }
     ])
-    .directive("emptyToNull", require('./shared/emptyToNull.directive.js'));
+    .directive("emptyToNull", require('./shared/emptyToNull.directive.js'))
+    .directive("stopEvent", require('./shared/stopevent.directive.js'));
 
     require('./apprun');
     require('./app.config');

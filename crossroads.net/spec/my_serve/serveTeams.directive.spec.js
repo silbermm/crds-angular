@@ -1,25 +1,24 @@
+var $compile, $rootScope, element, scope, mockSession, mockServeDate, $httpBackend;
+
+var mockOpp = {"name": "NuseryA", "roleId": "145"};
+var mockTeam = [{ "name" : "Kids Club Nusery", "members" : [ { "name": "John", "contactId" : 12345678, "roles" : [ mockOpp, {"name": "NuseryB"}, {"name": "NuseryC"}, {"name": "NuseryD"} ] }, { "name":  "Jane", "contactId": 1234567890, "roles" : [ {"name": "NuseryA"}, {"name": "NuseryB"}, {"name": "NuseryC"}, {"name": "NuseryD"} ], "signedup" : "yes" }, ] }];
+
+var mockOpportunity = { "time": "8:30am", "team": mockTeam  };
+
+var mockMatt = {"name":"Matt", "lastName": "Silbernagel", "contactId":1970611,"roles":[{"name":"Nursery A - Sunday 8:30 Member","capacity":100,"slotsTaken":0},{"name":"Nursery B - Sunday 8:30 Member","capacity":10,"slotsTaken":2},{"name":"Nursery C - Sunday 8:30 Member","capacity":0,"slotsTaken":1}]};
+
 describe('Serve Teams Directive', function() {
 
-  var $compile, $rootScope, element, scope, mockSession;
-
-  var mockTeam = [{ "name" : "Kids Club Nusery", "members" : [ { "name": "John", "contactId" : 12345678, "roles" : [ {"name": "NuseryA"}, {"name": "NuseryB"}, {"name": "NuseryC"}, {"name": "NuseryD"} ] }, { "name":  "Jane", "contactId": 1234567890, "roles" : [ {"name": "NuseryA"}, {"name": "NuseryB"}, {"name": "NuseryC"}, {"name": "NuseryD"} ], "signedup" : "yes" }, ] }];
-
-  var mockOpportunity = { "time": "8:30am", "team": mockTeam  };
-
-
   beforeEach(function(){
-    module('crossroads', function($provide){
-      mockSession= jasmine.createSpyObj('Session', ['exists']);
-      mockSession.exists.and.callFake(function(something){
-        return '12345678';
-      });
-      $provide.value('Session', mockSession);
-    });
+    module('crossroads');
   });
 
-  beforeEach(inject(function(_$compile_, _$rootScope_){
+  beforeEach(inject(function(_$compile_, _$rootScope_, $injector){
     $compile = _$compile_;
     $rootScope = _$rootScope_;
+    $httpBackend = $injector.get('$httpBackend');
+    mockServeDate = $injector.get('ServeOpportunities');    
+    $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({"date": 1444552200});
     scope = $rootScope.$new();
     element = '<serve-team opportunity="opp" team="team" tab-index="tabIndex" team-index="teamIndex" day-index="dayIndex"> </serve-team>';
     scope.opp = mockOpportunity;
@@ -31,7 +30,7 @@ describe('Serve Teams Directive', function() {
     scope.$digest();
   }));
 
-  it("should set signedup to null", function(){
+  it("should set signedup to null", function(){    
     var isolated = element.isolateScope();
     expect(isolated.signedup).toBe(null);
   });
@@ -60,6 +59,43 @@ describe('Serve Teams Directive', function() {
     expect(isolated.panelId()).toBe("team-panel-003");
   });
 
+  it("should get the last serving date for an opportunity", function() {   
+    var isolated = element.isolateScope();
+    isolated.openPanel(mockTeam[0].members);
+    expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
+    isolated.currentMember.currentOpportunity = mockTeam[0].members[0].roles[0];
+    isolated.getLastDate();
+    $httpBackend.flush();
+    expect(isolated.toDt).toBe("10/11/2015");
+  });
+  
+});
+
+describe("Serve Teams Directive Edit", function() {
+  beforeEach(function(){
+    module('crossroads', function($provide){
+      mockSession= jasmine.createSpyObj('Session', ['exists']);
+      mockSession.exists.and.callFake(function(something){
+        return '12345678';
+      });
+      $provide.value('Session', mockSession);
+    });
+  });
+
+  beforeEach(inject(function(_$compile_, _$rootScope_){
+    $compile = _$compile_;
+    $rootScope = _$rootScope_;
+    scope = $rootScope.$new();
+    element = '<serve-team opportunity="opp" team="team" tab-index="tabIndex" team-index="teamIndex" day-index="dayIndex"> </serve-team>';
+    scope.opp = mockOpportunity;
+    scope.team = mockTeam;
+    scope.dayIndex = 0;
+    scope.tabIndex = 0;
+    scope.teamIndex = 3;
+    element = $compile(element)(scope);
+    scope.$digest();
+  }));
+
   it("should show edit button for logged in user", function() {
     var isolated = element.isolateScope();
     isolated.setActiveTab(mockTeam[0].members[0]);
@@ -71,5 +107,4 @@ describe('Serve Teams Directive', function() {
     isolated.setActiveTab(mockTeam[0].members[1]);
     expect(isolated.showEdit).toBe(false);
   });
-
 });

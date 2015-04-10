@@ -4,6 +4,7 @@ var app = require('angular').module('give');
 app.factory("getPrograms", require('./getPrograms.service.js'));
 app.directive('invalidRouting',[require('./routingTransitNumber.directive')]);
 app.directive('invalidAccount',[require('./bankAccountNumber.directive')]);
+app.directive('naturalNumber',[require('./naturalNumber.validation.directive')]);
 
 /****** DEMO PAGES ******/
 require('./demo/guest_giver/give.html');

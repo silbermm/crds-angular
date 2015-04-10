@@ -16,7 +16,6 @@ require('./donation-details.html');﻿
 
       function link(scope, element, attrs) {
         scope.programs = getPrograms.fetchPrograms();
-        console.log(scope);
       }
     }
 })()
