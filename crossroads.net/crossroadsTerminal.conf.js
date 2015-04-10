@@ -17,6 +17,7 @@ module.exports = function(config) {
     files: [
       'assets/main.js',
       'node_modules/angular-mocks/angular-mocks.js',
+      'node_modules/moment/moment.js',
       'spec/**/*.js'
     ],
 

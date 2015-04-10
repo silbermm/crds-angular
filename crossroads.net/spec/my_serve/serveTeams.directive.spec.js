@@ -88,12 +88,17 @@ describe('Serve Teams Directive', function() {
     expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
     isolated.currentMember.currentOpportunity = mockTeam[0].members[0].roles[0];
     isolated.currentMember.currentOpportunity.frequency = {value:0, text:"Once"};  
+
+    var dateArr = "10/15/2015".split("/");
+    var d = moment(dateArr[2] + "-" + dateArr[0] + "-" + dateArr[1]);  
+    var dFormated = d.format('X');
+
     var rsvp = {
       contactId: mockTeam[0].members[0].contactId,
       opportunityId: mockOpp.roleId,
       eventTypeId: 100,
-      endDate: "1444881600",
-      startDate: "1444881600"
+      endDate: dFormated,
+      startDate: dFormated
     };
     isolated.populateDates();
     $httpBackend.expect('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/save-rsvp', rsvp ).respond(200, '');

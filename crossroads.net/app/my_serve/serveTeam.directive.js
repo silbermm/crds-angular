@@ -151,7 +151,6 @@
       }
 
       function parseDate(stringDate){
-        // Date we are parsing looks like this 4/3/2008
         var dateArr = stringDate.split("/");
         var d = moment(dateArr[2] + "-" + dateArr[0] + "-" + dateArr[1]);  
         return d.format('X');
