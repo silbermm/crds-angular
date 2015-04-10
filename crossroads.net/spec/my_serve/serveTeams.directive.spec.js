@@ -18,7 +18,6 @@ describe('Serve Teams Directive', function() {
     $rootScope = _$rootScope_;
     $httpBackend = $injector.get('$httpBackend');
     mockServeDate = $injector.get('ServeOpportunities');    
-    $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({"date": 1444552200});
     scope = $rootScope.$new();
     element = '<serve-team opp-serve-date="serveDate" opportunity="opp" team="team" tab-index="tabIndex" team-index="teamIndex" day-index="dayIndex" event-type-id="eventTypeId" > </serve-team>';
     scope.opp = mockOpportunity;
@@ -67,6 +66,9 @@ describe('Serve Teams Directive', function() {
     expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
     isolated.currentMember.currentOpportunity = mockTeam[0].members[0].roles[0];
     isolated.currentMember.currentOpportunity.frequency = {value:1, text:"Every Week (Sundays 8:30am)"}; 
+    $httpBackend.expect('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({'date': '1444552200'});
+    isolated.populateDates();
+    $httpBackend.flush()
     expect(isolated.currentMember.currentOpportunity.toDt).toBe("10/11/2015");
   });
 
@@ -76,6 +78,7 @@ describe('Serve Teams Directive', function() {
     expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
     isolated.currentMember.currentOpportunity = mockTeam[0].members[0].roles[0];
     isolated.currentMember.currentOpportunity.frequency = {value:0, text:"Once"}; 
+    isolated.populateDates();
     expect(isolated.currentMember.currentOpportunity.toDt).toBe(isolated.currentMember.currentOpportunity.fromDt);
   });
  
@@ -87,11 +90,12 @@ describe('Serve Teams Directive', function() {
     isolated.currentMember.currentOpportunity.frequency = {value:0, text:"Once"};  
     var rsvp = {
       contactId: mockTeam[0].members[0].contactId,
-      opportunityId: mockOpp.opportunityId,
+      opportunityId: mockOpp.roleId,
       eventTypeId: 100,
-      endDate: 1428612209,
-      startDate: 1428612209
+      endDate: "1444881600",
+      startDate: "1444881600"
     };
+    isolated.populateDates();
     $httpBackend.expect('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/save-rsvp', rsvp ).respond(200, '');
     isolated.saveRsvp();
     $httpBackend.flush();

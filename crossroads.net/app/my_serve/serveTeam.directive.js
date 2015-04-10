@@ -158,7 +158,6 @@
       }
 
       function saveRsvp(){
-
         var saveRsvp = new ServeOpportunities.SaveRsvp();
         saveRsvp.contactId = scope.currentMember.contactId;
         saveRsvp.opportunityId = scope.currentMember.currentOpportunity.roleId;
