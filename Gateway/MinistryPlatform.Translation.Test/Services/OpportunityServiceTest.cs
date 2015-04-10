@@ -184,12 +184,13 @@ namespace MinistryPlatform.Translation.Test.Services
             const int participantId = 4444;
             const int opportunityId = 555;
             const string comment = "";
+            const int eventId = 3333;
 
             _ministryPlatformService.Setup(
                 m => m.CreateRecord(pageKey, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>(), true))
                 .Returns(4444);
 
-            var responeId = _fixture.RespondToOpportunity(participantId, opportunityId, comment);
+            var responeId = _fixture.RespondToOpportunity(participantId, opportunityId, comment, eventId);
 
             _ministryPlatformService.VerifyAll();
 
