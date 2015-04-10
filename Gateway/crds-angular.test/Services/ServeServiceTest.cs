@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using crds_angular.App_Start;
 using crds_angular.Models;
 using crds_angular.Models.Crossroads.Serve;
@@ -80,7 +77,6 @@ namespace crds_angular.test.Services
 
             _personService.Setup(m => m.GetLoggedInUserProfile(It.IsAny<string>())).Returns(person);
 
-           // _fixture = new PersonService(_contactService.Object);
             _fixture = new ServeService( _groupService.Object ,_contactRelationshipService.Object,_personService.Object,_authenticationService.Object,_opportunityService.Object,_eventService.Object);
 
             //force AutoMapper to register
@@ -267,12 +263,10 @@ namespace crds_angular.test.Services
                 }
             };
 
-
             var opportunities = new List<Opportunity>
             {
                 new Opportunity
                 {
-                    //Capacity = 1,
                     EventType = "event-type-1",
                     Events = eventsList1,
                     OpportunityId = 1,
@@ -281,7 +275,6 @@ namespace crds_angular.test.Services
                 },
                 new Opportunity
                 {
-                    //Capacity = 2,
                     EventType = "event-type-2",
                     Events = eventsList2,
                     OpportunityId = 2,
@@ -321,42 +314,6 @@ namespace crds_angular.test.Services
             Assert.AreEqual(4, servingTime.ServingTeams.Count);
             Assert.AreEqual("10:00:00", servingTime.Time);
         }
-
-        //[Test]
-        //public void GetSomething()
-        //{
-        //    const string token = "some-string";
-        //    const int contactId = 123456;
-        //    const int opportunityId = 1;
-        //    const int eventTypeId = 2;
-        //    var  startDate = new DateTime(2015,4,1);
-        //    var endDate = new DateTime(2015, 4, 30);
-
-        //    //_authenticationService.GetParticipantRecord(token);
-        //    //_eventService.GetEventsByTypeForRange
-        //    //_eventService.registerParticipantForEvent
-        //    //_opportunityService.RespondToOpportunity
-
-        //    _authenticationService.Setup(m => m.GetParticipantRecord(It.IsAny<string>())).Returns(new Participant{ParticipantId = 41018});
-
-        //    var eventList = new List<Event>();
-        //    var e = new Event();
-        //    e.EventEndDate=new DateTime(2015,3,15);
-
-        //    //_eventService.Setup(m => m.GetEventsByTypeForRange(eventTypeId, startDate, endDate, It.IsAny<string>()))
-        //    //    .Returns();
-
-        //    var something = _fixture.SaveServeResponse(token, contactId, opportunityId, eventTypeId, startDate, endDate);
-
-        //    //verify all service calls
-        //    _authenticationService.VerifyAll();
-        //    _eventService.VerifyAll();
-        //    _opportunityService.VerifyAll();
-
-        //    //Assertions
-        //    Assert.IsNotNull(something);
-        //    Assert.IsTrue(something);
-        //}
 
         [Test, TestCaseSource("OpportunityCapacityCases")]
         public void OpportunityCapacityHasMinHasMax(int? min, int? max, int mockSignUpCount, Capacity expectedCapacity)
