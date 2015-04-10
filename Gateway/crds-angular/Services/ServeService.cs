@@ -27,7 +27,6 @@ namespace crds_angular.Services
             this._groupService = groupService;
             this._contactRelationshipService = contactRelationshipService;
             this._personService = personService;
-            //this._contactService = contactService;
             this._opportunityService = opportunityService;
             this._authenticationService = authenticationService;
             this._eventService = eventService;
@@ -73,15 +72,6 @@ namespace crds_angular.Services
 
                     foreach (var e in events)
                     {
-                        //var capacity = new Capacity();
-                        //capacity.Maximum = int.Parse(opportunity.MaximumNeeded.ToString());
-                        //capacity.Minimum = int.Parse(opportunity.MinimumNeeded.ToString());
-
-                        //capacity.Available = 0;
-                        //capacity.BadgeType = "";
-                        //capacity.Message = "";
-                        //capacity.Taken = 0;
-
                         var serveRole = new ServeRole
                         {
                             Name = opportunity.OpportunityName + " " + opportunity.RoleTitle,
@@ -396,8 +386,6 @@ namespace crds_angular.Services
             {
                 EventTitle = e.EventTitle,
                 EventStartDate = e.EventStartDate,
-                //DateOnly = e.EventStartDate.Date.ToString("d"),
-                //TimeOnly = e.EventStartDate.TimeOfDay.ToString(),
                 EventId = e.EventId,
                 EventType = e.EventType
             })
