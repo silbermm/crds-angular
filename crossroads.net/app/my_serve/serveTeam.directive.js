@@ -172,23 +172,7 @@
       function parseDate(stringDate) {
         var m = moment(stringDate);
 
-        if (!m.isValid()) {
-          var dateArr = stringDate.split("/");
-          var dateStr = dateArr[2] + " " + dateArr[0] + " " + dateArr[1];
-          // https://github.com/moment/moment/issues/1407
-          // moment("2014 04 25", "YYYY MM DD"); // string with format
-          m = moment(dateStr, "YYYY MM DD");
-
-          if (!m.isValid()) {
-            //throw error
-            throw new Error("Parse Date Failed Moment Validation");
-          }
-        }
-        $log.debug('date: ' + m.format('X'));
-        return m.format('X');
-      }
-
-      function saveRsvp() {
+      function saveRsvp(){
         var saveRsvp = new ServeOpportunities.SaveRsvp();
         saveRsvp.contactId = scope.currentMember.contactId;
         saveRsvp.opportunityId = scope.currentMember.serveRsvp.roleId;
