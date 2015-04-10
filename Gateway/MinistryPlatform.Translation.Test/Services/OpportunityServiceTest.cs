@@ -59,7 +59,8 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(3, opportunities.Count);
 
             var opportunity = opportunities[0];
-            Assert.AreEqual(100, opportunity.Capacity);
+            Assert.AreEqual(100,opportunity.MaximumNeeded);
+            Assert.AreEqual(50,opportunity.MinimumNeeded);
             Assert.AreEqual("Event Type 100", opportunity.EventType);
             Assert.AreEqual(2, opportunity.Events.Count);
             Assert.AreEqual(100, opportunity.OpportunityId);
@@ -67,7 +68,8 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual("Role Title 100", opportunity.RoleTitle);
 
             opportunity = opportunities[1];
-            Assert.AreEqual(200, opportunity.Capacity);
+            Assert.AreEqual(200, opportunity.MaximumNeeded);
+            Assert.AreEqual(100, opportunity.MinimumNeeded);
             Assert.AreEqual("Event Type 200", opportunity.EventType);
             Assert.AreEqual(2, opportunity.Events.Count);
             Assert.AreEqual(200, opportunity.OpportunityId);
@@ -75,7 +77,8 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual("Role Title 200", opportunity.RoleTitle);
 
             opportunity = opportunities[2];
-            Assert.AreEqual(0, opportunity.Capacity);
+            Assert.AreEqual(null, opportunity.MaximumNeeded);
+            Assert.AreEqual(null, opportunity.MinimumNeeded);
             Assert.AreEqual("Event Type 300", opportunity.EventType);
             Assert.AreEqual(2, opportunity.Events.Count);
             Assert.AreEqual(300, opportunity.OpportunityId);
@@ -123,7 +126,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Event Type", "Event Type 100"},
                     {"Event Type ID", 100},
                     {"Role_Title", "Role Title 100"},
-                    {"Maximum_Needed", 100}
+                    {"Maximum_Needed", 100}, {"Minimum_Needed", 50}
                 },
                 new Dictionary<string, object>
                 {
@@ -132,7 +135,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Event Type", "Event Type 200"},
                     {"Event Type ID", 200},
                     {"Role_Title", "Role Title 200"},
-                    {"Maximum_Needed", 200}
+                    {"Maximum_Needed", 200}, {"Minimum_Needed", 100}
                 },
                 new Dictionary<string, object>
                 {
@@ -141,7 +144,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Event Type", "Event Type 300"},
                     {"Event Type ID", 300},
                     {"Role_Title", "Role Title 300"},
-                    {"Maximum_Needed", null}
+                    {"Maximum_Needed", null}, {"Minimum_Needed", null}
                 }
             };
             return results;

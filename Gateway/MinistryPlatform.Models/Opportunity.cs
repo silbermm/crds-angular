@@ -10,6 +10,8 @@ namespace MinistryPlatform.Models
         public int EventTypeId { get; set; }
         public List<Event> Events { get; set; }
         public string RoleTitle { get; set; }
-        public int Capacity { get; set; }
+        //public int Capacity { get; set; }
+        public int? MaximumNeeded { get; set; }
+        public int? MinimumNeeded { get; set; }
     }
 }

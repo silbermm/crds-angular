@@ -98,8 +98,8 @@ namespace crds_angular.test.controllers
                             Roles =
                                 new List<ServeRole>
                                 {
-                                    new ServeRole {Capacity = 100, Name = "Leader", SlotsTaken = 90},
-                                    new ServeRole {Capacity = 50, Name = "Member", SlotsTaken = 1}
+                                    new ServeRole {Name = "Leader" , Capacity = new Capacity{Available = 49,BadgeType = "",Display = false,Maximum = 0,Message = "", Minimum = 0}},
+                                    new ServeRole {Name = "Member", Capacity = new Capacity{Available = 49,BadgeType = "",Display = false,Maximum = 0,Message = "", Minimum = 0}}
                                 }
                         },
                         new TeamMember
@@ -109,8 +109,8 @@ namespace crds_angular.test.controllers
                             Roles =
                                 new List<ServeRole>
                                 {
-                                    new ServeRole {Capacity = 25, Name = "Admin", SlotsTaken = 0},
-                                    new ServeRole {Capacity = 50, Name = "Member", SlotsTaken = 1}
+                                    new ServeRole { Name = "Admin", Capacity = new Capacity{Available = 49,BadgeType = "",Display = false,Maximum = 0,Message = "", Minimum = 0}},
+                                    new ServeRole { Name = "Member", Capacity = new Capacity{Available = 49,BadgeType = "",Display = false,Maximum = 0,Message = "", Minimum = 0}}
                                 }
                         }
                     }
@@ -129,8 +129,8 @@ namespace crds_angular.test.controllers
                             Roles =
                                 new List<ServeRole>
                                 {
-                                    new ServeRole {Capacity = 100, Name = "Leader", SlotsTaken = 90},
-                                    new ServeRole {Capacity = 50, Name = "Member", SlotsTaken = 1}
+                                    new ServeRole { Name = "Leader", Capacity = new Capacity{Available = 49,BadgeType = "",Display = false,Maximum = 0,Message = "", Minimum = 0}},
+                                    new ServeRole { Name = "Member", Capacity = new Capacity{Available = 49,BadgeType = "",Display = false,Maximum = 0,Message = "", Minimum = 0}}
                                 }
                         },
                         new TeamMember
@@ -140,8 +140,8 @@ namespace crds_angular.test.controllers
                             Roles =
                                 new List<ServeRole>
                                 {
-                                    new ServeRole {Capacity = 25, Name = "Admin", SlotsTaken = 0},
-                                    new ServeRole {Capacity = 50, Name = "Member", SlotsTaken = 1}
+                                    new ServeRole { Name = "Admin", Capacity = new Capacity{Available = 49,BadgeType = "",Display = false,Maximum = 0,Message = "", Minimum = 0}},
+                                    new ServeRole { Name = "Member", Capacity = new Capacity{Available = 49,BadgeType = "",Display = false,Maximum = 0,Message = "", Minimum = 0}}
                                 }
                         }
                     }
