@@ -194,7 +194,8 @@ namespace crds_angular.Services
         //public for testing
         public void GetRsvp(int opportunityId, int eventId, int contactId)
         {
-            
+            var participantId = _participantService.GetParticipant(contactId);
+            var oppRsp = _opportunityService.GetOpportunityResponse();
         }
 
         //public for testing
@@ -307,14 +308,14 @@ namespace crds_angular.Services
         }
 
         public bool SaveServeResponse(string token,
-            int contactid,
+            int contactId,
             int opportunityId,
             int eventTypeId,
             DateTime startDate,
             DateTime endDate)
         {
             //get participant id for Contact
-            var participant = _participantService.GetParticipant(contactid);
+            var participant = _participantService.GetParticipant(contactId);
             //get events in range
             var events = _eventService.GetEventsByTypeForRange(eventTypeId, startDate, endDate, token);
             foreach (var e in events)
