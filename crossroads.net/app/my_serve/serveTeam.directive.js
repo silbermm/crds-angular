@@ -93,19 +93,19 @@
         if(scope.currentMember !== null){
           scope.currentMember.currentOpportunity.fromDt = scope.oppServeDate;
           switch(scope.currentMember.currentOpportunity.frequency.value) {
-            case null: 
+            case null:
               scope.currentMember.currentOpportunity.fromDt = null;
               scope.currentMember.currentOpportunity.toDT = null;
               break;
-            case 0: 
+            case 0:
               // once...
               scope.currentMember.currentOpportunity.fromDt = scope.oppServeDate;
-              scope.currentMember.currentOpportunity.toDt = scope.oppServeDate; 
+              scope.currentMember.currentOpportunity.toDt = scope.oppServeDate;
               break;
             default:
               // every  or everyother
               ServeOpportunities.LastOpportunityDate.get({id:scope.currentMember.currentOpportunity.roleId}, function(ret){
-                var dateNum = Number(ret.date * 1000); 
+                var dateNum = Number(ret.date * 1000);
                 var toDate = new Date(dateNum);
                 scope.currentMember.currentOpportunity.toDt = (toDate.getMonth() + 1) + "/" + toDate.getDate() + "/" + toDate.getFullYear();
               });
@@ -153,14 +153,14 @@
       function parseDate(stringDate){
         // Date we are parsing looks like this 4/3/2008
         var dateArr = stringDate.split("/");
-        var d = moment(dateArr[2] + "-" + dateArr[0] + "-" + dateArr[1]);  
+        var d = moment(dateArr[2] + "-" + dateArr[0] + "-" + dateArr[1]);
         return d.format('X');
       }
 
       function saveRsvp(){
         var saveRsvp = new ServeOpportunities.SaveRsvp();
         saveRsvp.contactId = scope.currentMember.contactId;
-        saveRsvp.opportunityId = scope.currentMember.currentOpportunity.roleId;
+        saveRsvp.opportunityId = scope.currentMember.ServeRsvp.RoleId;
         saveRsvp.eventTypeId = scope.eventTypeId;
         saveRsvp.endDate = parseDate(scope.currentMember.currentOpportunity.toDt);
         saveRsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);

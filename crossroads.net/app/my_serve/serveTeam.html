@@ -20,8 +20,8 @@
           <div class="col-md-4">
             <h5>Opportunities</h5>
             <div class="radio" ng-repeat="role in currentMember.roles">
-              <label>
-                <input type="radio" name="role"  ng-model="currentMember.currentOpportunity" ng-value="role" value="{{::role.name}}">
+              <label><div>x{{ currentMember.ServeRsvp.RoleId }}x</div>
+               <input type="radio" name="role"  ng-model="currentMember.ServeRsvp.RoleId" ng-value="role.roleId" value="{{::role.name}}">
                 <span class="opportunity-name">{{::role.name}}</span>
                 <span class="label {{ role.capacity.badgeType }}" ng-show="role.capacity.display">{{ role.capacity.message }}</span>
               </label>

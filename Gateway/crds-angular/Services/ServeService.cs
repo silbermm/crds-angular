@@ -140,14 +140,14 @@ namespace crds_angular.Services
                                 }
                                 else
                                 {
-                                    serveTime.ServingTeams.Add(NewServingTeam(team, opportunity, serveRole));
+                                    serveTime.ServingTeams.Add(NewServingTeam(team, opportunity, serveRole, e.EventId));
                                 }
                             }
                             else
                             {
                                 //time not in list
                                 serveTime = new ServingTime {Time = e.EventStartDate.TimeOfDay.ToString()};
-                                serveTime.ServingTeams.Add(NewServingTeam(team, opportunity, serveRole));
+                                serveTime.ServingTeams.Add(NewServingTeam(team, opportunity, serveRole, e.EventId));
                                 
                                 serveDay.ServeTimes.Add(serveTime);
                             }
@@ -163,7 +163,7 @@ namespace crds_angular.Services
                                 EventTypeId = opportunity.EventTypeId
                             };
                             var serveTime = new ServingTime {Time = e.EventStartDate.TimeOfDay.ToString()};
-                            serveTime.ServingTeams.Add(NewServingTeam(team, opportunity, serveRole));
+                            serveTime.ServingTeams.Add(NewServingTeam(team, opportunity, serveRole, e.EventId));
 
                             serveDay.ServeTimes.Add(serveTime);
                             serveDays.Add(serveDay);
@@ -192,10 +192,17 @@ namespace crds_angular.Services
         }
 
         //public for testing
-        public void GetRsvp(int opportunityId, int eventId, int contactId)
+        public ServeRsvp GetRsvp(int opportunityId, int eventId, int contactId)
         {
             var participantId = _participantService.GetParticipant(contactId);
-            var oppRsp = _opportunityService.GetOpportunityResponse();
+
+            //ResponseByOpportunityAndEvent
+            MinistryPlatform.Models.Response response = _opportunityService.GetOpportunityResponse(opportunityId, eventId, participantId);
+
+            if (response == null) return new ServeRsvp();
+
+            var serveRsvp = new ServeRsvp {Attending = true, RoleId = opportunityId};
+            return serveRsvp;
         }
 
         //public for testing
@@ -346,22 +353,23 @@ namespace crds_angular.Services
             return teamMember;
         }
 
-        private static TeamMember NewTeamMember(TeamMember teamMember, ServeRole role)
+        private TeamMember NewTeamMember(TeamMember teamMember, ServeRole role, int eventId)
         {
             var newTeamMember = new TeamMember
             {
                 Name = teamMember.Name,
                 LastName = teamMember.LastName,
                 ContactId = teamMember.ContactId,
-                EmailAddress = teamMember.EmailAddress
+                EmailAddress = teamMember.EmailAddress,
+                ServeRsvp = GetRsvp(role.RoleId,eventId,teamMember.ContactId)
             };
             newTeamMember.Roles.Add(role);
 
             return newTeamMember;
         }
 
-        private static List<TeamMember> NewTeamMembersWithRoles(List<TeamMember> teamMembers,
-            string opportunityRoleTitle, ServeRole teamRole)
+        private List<TeamMember> NewTeamMembersWithRoles(List<TeamMember> teamMembers,
+            string opportunityRoleTitle, ServeRole teamRole, int eventId)
         {
             var members = new List<TeamMember>();
             foreach (var teamMember in teamMembers)
@@ -370,20 +378,20 @@ namespace crds_angular.Services
                 {
                     if (role.Name == opportunityRoleTitle)
                     {
-                        members.Add(NewTeamMember(teamMember, teamRole));
+                        members.Add(NewTeamMember(teamMember, teamRole, eventId));
                     }
                 }
             }
             return members;
         }
 
-        private static ServingTeam NewServingTeam(ServingTeam team, Opportunity opportunity, ServeRole tmpRole)
+        private ServingTeam NewServingTeam(ServingTeam team, Opportunity opportunity, ServeRole serveRole, int eventId)
         {
             var servingTeam = new ServingTeam
             {
                 Name = team.Name,
                 GroupId = team.GroupId,
-                Members = NewTeamMembersWithRoles(team.Members, opportunity.RoleTitle, tmpRole),
+                Members = NewTeamMembersWithRoles(team.Members, opportunity.RoleTitle, serveRole, eventId),
                 PrimaryContact = team.PrimaryContact
             };
             return servingTeam;
