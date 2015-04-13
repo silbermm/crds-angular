@@ -5,7 +5,7 @@ app.factory("getPrograms", require('./getPrograms.service.js'));
 app.directive('invalidRouting',[require('./routingTransitNumber.directive')]);
 app.directive('invalidAccount',[require('./bankAccountNumber.directive')]);
 app.directive('naturalNumber',[require('./naturalNumber.validation.directive')]);
-app.directive('invalidCredit', [require('./creditCardInfo.directive')]);
+app.directive('invalidCredit', [require('./creditCardInfo.validation.directive')]);
 
 /****** DEMO PAGES ******/
 require('./demo/guest_giver/give.html');
