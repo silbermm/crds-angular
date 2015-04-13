@@ -2,7 +2,7 @@ require('./creditCardInfo.html');
 (function () {
     angular
     .module('credit-card-info',[])
-    .directive('creditCardInfo', ['$log', creditCardInfo]);
+    .directive('creditCardInfo', ['$log', bankInfo]);
 
     function bankInfo($log) {
         var directive = {
