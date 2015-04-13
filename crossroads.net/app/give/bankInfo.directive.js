@@ -1,4 +1,4 @@
-require('./bank_info.html');
+require('./bankInfo.html');
 (function () {
     angular
     .module('bank-info',[])
@@ -8,7 +8,7 @@ require('./bank_info.html');
         var directive = {
           link: link,
           replace: true,
-          templateUrl: 'give/bank_info.html',
+          templateUrl: 'give/bankInfo.html',
           restrict: 'EA'
       };
       return directive;

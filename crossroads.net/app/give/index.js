@@ -2,8 +2,8 @@ require('./give.html');
 require('./give.module.js');
 var app = require('angular').module('give');
 app.factory("getPrograms", require('./getPrograms.service.js'));
-app.directive('invalidRouting',[require('./routingTransitNumber.directive')]);
-app.directive('invalidAccount',[require('./bankAccountNumber.directive')]);
+app.directive('invalidRouting',[require('./routingTransitNumber.validation.directive')]);
+app.directive('invalidAccount',[require('./bankAccountNumber.validation.directive')]);
 app.directive('naturalNumber',[require('./naturalNumber.validation.directive')]);
 
 /****** DEMO PAGES ******/
