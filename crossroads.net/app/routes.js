@@ -241,6 +241,10 @@
                 url: "/demo/logged-in-giver/new-giver",
                 templateUrl: "guest_giver/give-logged-in-new-giver.html"
             })
+            .state("/demo/go-trip-giving", {
+                url: "/demo/go-trip-giving",
+                templateUrl: "trip_giving/give.html"
+            })
            .state("community-groups-signup", {
                 url: "{link:signupRouteType}",
                 controller: "GroupSignupController as groupsignup",
