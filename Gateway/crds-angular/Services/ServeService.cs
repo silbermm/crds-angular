@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using AutoMapper;
 using crds_angular.Enum;
@@ -130,9 +131,18 @@ namespace crds_angular.Services
                                                     ContactId = teamMember.ContactId,
                                                     Name = teamMember.Name,
                                                     LastName = teamMember.LastName,
-                                                    EmailAddress = teamMember.EmailAddress
+                                                    EmailAddress = teamMember.EmailAddress,
+                                                    ServeRsvp =
+                                                        GetRsvp(opportunity.OpportunityId, e.EventId,
+                                                            teamMember.ContactId)
                                                 };
                                                 existingTeam.Members.Add(member);
+                                            }
+                                            else
+                                            {
+                                                //does member have rsvp for this role?
+                                                member.ServeRsvp = GetRsvp(opportunity.OpportunityId, e.EventId,
+                                                    member.ContactId);
                                             }
                                             member.Roles.Add(serveRole);
                                         }
@@ -194,12 +204,20 @@ namespace crds_angular.Services
         //public for testing
         public ServeRsvp GetRsvp(int opportunityId, int eventId, int contactId)
         {
-            var participantId = _participantService.GetParticipant(contactId);
+            var participant = _participantService.GetParticipant(contactId);
+
+            if (participant.ParticipantId == 994377)
+            {
+                if (opportunityId == 108)
+                {
+                    Console.WriteLine("STOP");
+                }
+            }
 
             //ResponseByOpportunityAndEvent
-            MinistryPlatform.Models.Response response = _opportunityService.GetOpportunityResponse(opportunityId, eventId, participantId);
+            MinistryPlatform.Models.Response response = _opportunityService.GetOpportunityResponse(opportunityId, eventId, participant);
 
-            if (response == null) return new ServeRsvp();
+            if (response == null || response.Opportunity_ID ==0) return null;
 
             var serveRsvp = new ServeRsvp {Attending = true, RoleId = opportunityId};
             return serveRsvp;

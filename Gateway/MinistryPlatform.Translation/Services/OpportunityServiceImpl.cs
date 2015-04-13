@@ -143,9 +143,9 @@ namespace MinistryPlatform.Translation.Services
             return recordId;
         }
 
-        public Response GetOpportunityResponse(int opportunityId, int eventId, Participant participantId)
+        public Response GetOpportunityResponse(int opportunityId, int eventId, Participant participant)
         {
-            var searchString = string.Format(",{0},{1},{2}", opportunityId, eventId, participantId);
+            var searchString = string.Format(",{0},{1},{2}", opportunityId, eventId, participant.ParticipantId);
             List<Dictionary<string, object>> dictionaryList;
             try
             {
@@ -160,7 +160,7 @@ namespace MinistryPlatform.Translation.Services
                 throw new ApplicationException(
                     string.Format(
                         "GetOpportunityResponse failed.  Participant Id: {0}, Opportunity Id: {1}, Event Id: {2}",
-                        participantId, opportunityId, eventId), ex.InnerException);
+                        participant, opportunityId, eventId), ex.InnerException);
             }
 
             if (dictionaryList.Count == 0)
@@ -180,7 +180,7 @@ namespace MinistryPlatform.Translation.Services
             {
                 throw new ApplicationException(
                     string.Format("RespondToOpportunity failed.  Participant Id: {0}, Opportunity Id: {1}",
-                        participantId, opportunityId), ex.InnerException);
+                        participant, opportunityId), ex.InnerException);
             }
 
 

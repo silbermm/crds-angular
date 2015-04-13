@@ -20,8 +20,8 @@
           <div class="col-md-4">
             <h5>Opportunities</h5>
             <div class="radio" ng-repeat="role in currentMember.roles">
-              <label><div>x{{ currentMember.ServeRsvp.RoleId }}x</div>
-               <input type="radio" name="role"  ng-model="currentMember.ServeRsvp.RoleId" ng-value="role.roleId" value="{{::role.name}}">
+              <label>
+               <input type="radio" name="role"  ng-model="currentMember.serveRsvp.roleId" ng-value="role.roleId" value="{{::role.name}}">
                 <span class="opportunity-name">{{::role.name}}</span>
                 <span class="label {{ role.capacity.badgeType }}" ng-show="role.capacity.display">{{ role.capacity.message }}</span>
               </label>
@@ -31,17 +31,17 @@
             <h5>Sign Up</h5>
             <div class="radio">
               <label>
-                <input type="radio" name="signup" id="optionsRadios1"  value="1" ng-model="currentMember.currentOpportunity.signedup">
+                <input type="radio" name="signup" id="optionsRadios1"  value="1" ng-model="currentMember.serveRsvp.attending" ng-value="1" ng-change="attendingChanged()">
                 Yes
               </label>
             </div><!--/radio-->
             <div class="radio">
               <label>
-                <input type="radio" name="signup" id="optionsRadios2" value="2" ng-model="currentMember.currentOpportunity.signedup">
+                <input type="radio" name="signup" id="optionsRadios2" value="2" ng-model="currentMember.serveRsvp.attending" ng-value="0" ng-change="attendingChanged()">
                 No
               </label>
             </div><!--/radio-->
-            <div ng-show="currentMember.currentOpportunity.signedup > 0">
+            <div ng-show="currentMember.showFrequency">
               <div class="form-group">
                 <label>Frequency</label>
                 <select class="form-control" ng-model="currentMember.currentOpportunity.frequency" ng-change="populateDates()" ng-options="f.text for f in frequency">
