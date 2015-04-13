@@ -11,7 +11,7 @@
 
 
   img {
-      max-width: 90%;
+      max-width: 100%;
       background-color: transparent;
       border-radius: 50%;
       //margin: 5px;
@@ -21,17 +21,11 @@
 }
 
 .card-middle {
-  padding: $line-height-computed/2;
+  padding: $line-height-computed/2 0 0;
 
   .card-header {
     font-size: 20px;
-  }
-
-  .card-header-seperator {
-      height: 2px;
-      width: 26px;
-      background-color: #d9d9d9;
-      margin: 7px 0 7px 0;
+    padding: 0 $line-height-computed/2;
   }
 
   .card-desc {
@@ -50,7 +44,7 @@
   }
 }
 
-.card-right {
+.card-middle {
   background: rgba(214, 224, 226, 0.4);
   border-radius: 0 0 0 0;
 
@@ -68,10 +62,9 @@
   ul.list-group {
     margin-bottom: 0px;
 
-
     li {
       background: transparent;
-      border-top: 0px;
+      //border-top: 0px;
       border-right: 0px;
       border-left: 0px;
       border-radius: 0px;
@@ -80,16 +73,17 @@
       padding-right: 0px;
       @extend .clearfix;
       line-height: 33px;
+      padding-left: $line-height-computed/2;
 
       &:last-child {
-        border-bottom: 0px;
+        //border-bottom: 0px;
 
         .btn {
           border-bottom-right-radius: 2px;
         }
 
-        @media (min-width: 768px) {
-          border-bottom: 1px solid $table-border-color;
+        @media (min-width: $screen-sm-min) {
+          //border-bottom: 1px solid $table-border-color;
 
           .btn {
             border-bottom-right-radius: 0px;
@@ -102,12 +96,53 @@
         border-radius: 0px;
         border-bottom-width: 0px;
         border-bottom-right-radius: 0px;
+        font-size: 1.3rem;
+
+        @media (min-width: $screen-sm-min) {
+            font-size: 1.4rem;
+        }
+
       }
 
       h4 {
         padding: $line-height-computed/2 0px;
         margin: 0px;
       }
+    }
+  }
+}
+
+.go-trip-name {
+  padding-left: 0px;
+
+  p {
+    margin-bottom: 0px;
+    line-height: 1.5;
+    padding: 6px 0;
+    font-size: 1.3rem;
+  }
+}
+
+.go-trip-btn {
+  right: -2px;
+
+  a {
+    text-align: center;
+    vertical-align: middle;
+    @extend .btn;
+    @extend .btn-default;
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    top: 0;
+
+    span {
+      position: absolute;
+      top: 50%;
+      margin-top: -13px;
+      width: 100%;
+      left: 0;
     }
   }
 }
