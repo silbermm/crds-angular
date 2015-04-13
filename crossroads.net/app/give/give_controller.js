@@ -50,6 +50,7 @@
             } else
                 _this.ccNumberClass = "";
         }
+
     };
 
 })();
