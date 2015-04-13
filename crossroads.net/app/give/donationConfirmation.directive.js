@@ -1,4 +1,4 @@
-require('./donation_confirmation.html');
+require('./donationConfirmation.html');
 (function () {
     angular
     .module('donation-confirmation',[])
@@ -8,7 +8,7 @@ require('./donation_confirmation.html');
         var directive = {
           link: link,
           replace: true,
-          templateUrl: 'give/donation_confirmation.html',
+          templateUrl: 'give/donationConfirmation.html',
           restrict: 'EA'
       };
       return directive;
