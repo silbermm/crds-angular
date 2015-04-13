@@ -4,19 +4,21 @@
   border-radius: 2px;
   border-left: 5px solid $cr-blue;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 2px 2px 0 rgba(0, 0, 0, 0.12);
+  overflow: hidden;
 }
 
 .card-left {
-  padding: $line-height-computed/2;
-
+  padding: $line-height-computed/4 $line-height-computed/2;
+  text-align: center;
 
   img {
-      max-width: 100%;
+      max-width: 95%;
       background-color: transparent;
       border-radius: 50%;
       //margin: 5px;
-      border: 5px solid rgba(214, 224, 226, 0.4);
+      border: 3px solid rgba(214, 224, 226, 0.4);
       position: relative;
+      margin: 0 auto;
   }
 }
 
@@ -47,12 +49,13 @@
 .card-middle {
   background: rgba(214, 224, 226, 0.4);
   border-radius: 0 0 0 0;
+  bottom: -1px;
 
   @media (min-width: 768px) {
     border-radius: 0 2px 2px 0;
   }
 
-  border-left: 1px solid $table-border-color;
+  //border-left: 1px solid $table-border-color;
 
   // tate - don't feel great about this but I am struggling to figure out why there is a 1px gap to the right of this
   @media (min-width: 992px) {
@@ -132,10 +135,10 @@
     @extend .btn;
     @extend .btn-default;
     position: absolute;
-    bottom: -1px;
+    bottom: 0;
+    top: -1px;
     left: 0;
     right: 0;
-    top: 0;
 
     span {
       position: absolute;
