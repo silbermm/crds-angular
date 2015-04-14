@@ -151,12 +151,30 @@
       }
 
       function parseDate(stringDate){
-        var dateArr = stringDate.split("/");
-        // https://github.com/moment/moment/issues/1407
-        // moment("2014 04 25", "YYYY MM DD"); // string with format
-        var dateStr = dateArr[2] + " " + dateArr[0] + " " + dateArr[1];
-        var d = moment(dateStr, "YYYY MM DD");
-        return d.format('X');
+        var m = moment(stringDate, "YYYY MM DD");
+        if (m.isValid() == true) {
+
+        }
+        else {
+          var dateArr = stringDate.split("/");
+          var dateStr = dateArr[2] + " " + dateArr[0] + " " + dateArr[1];
+          m = moment(dateStr, "YYYY MM DD");
+
+          if (!m.isValid()) {
+            //throw error
+          }
+        }
+        $log.debug('date: ' + m.format('X'));
+        return m.format('X');
+
+        // var g = f.format('X');
+        //
+        // var dateArr = stringDate.split("/");
+        // // https://github.com/moment/moment/issues/1407
+        // // moment("2014 04 25", "YYYY MM DD"); // string with format
+        // var dateStr = dateArr[2] + " " + dateArr[0] + " " + dateArr[1];
+        // var d = moment(dateStr, "YYYY MM DD");
+        // return d.format('X');
       }
 
       function saveRsvp(){
@@ -166,7 +184,7 @@
         saveRsvp.eventTypeId = scope.eventTypeId;
         saveRsvp.endDate = parseDate(scope.currentMember.currentOpportunity.toDt);
         saveRsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
-        saveRsvp.$save();
+        //saveRsvp.$save();
       }
 
       function setActiveTab(member){
