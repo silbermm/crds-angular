@@ -176,10 +176,17 @@
                 controller: "GiveCtrl as give",
                 templateUrl: "give/give.html"
             })
+           .state("give.amount", {
+                 url: "/amount",
+                 templateUrl: "give/amount.html"
+           })
            .state("give.guest", {
                  url: "/guest",
-                 controller: "GiveCtrl as give",
                  templateUrl: "give/guest.html"
+           })
+           .state("give.thank-you", {
+             url: "/thank-you",
+             templateUrl: "give/thank_you.html"
            })
            .state("demo", {
              //abstract: true,

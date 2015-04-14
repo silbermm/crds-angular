@@ -1,5 +1,7 @@
 require('./give.html');
-require('./guest.html')
+require('./amount.html');
+require('./guest.html');
+require('./thank_you.html');
 require('./give.module.js');
 var app = require('angular').module('give');
 app.factory("getPrograms", require('./getPrograms.service.js'));
