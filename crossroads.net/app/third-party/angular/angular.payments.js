@@ -4,7 +4,7 @@ angular.module('ngPayments', [])
     var verCC, verCVC, verEXP, defaultFormat, isIE;
     isIE = (document.documentMode && document.documentMode < 9); //Don't try to deal with selections on < IE9
     defaultFormat = /(\d{1,4})/g;
-
+    console.log("ngpayments");
     return {
 
       verified: function() {
@@ -97,6 +97,7 @@ angular.module('ngPayments', [])
       }, //luhnCheck
 
       validateCardExpiry: function(month, year) {
+        console.log("validate card");
         var currentTime, expiry, prefix, _ref;
         if (typeof month === 'object' && 'month' in month) {
           _ref = month, month = _ref.month, year = _ref.year;
