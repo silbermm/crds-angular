@@ -18,5 +18,8 @@ namespace crds_angular.Models.Crossroads.Serve
 
         [JsonProperty(PropertyName = "startDate")]
         public long StartDateUnix { get; set; }
+
+        [JsonProperty(PropertyName = "signUp")]
+        public bool SignUp { get; set; }
     }
 }

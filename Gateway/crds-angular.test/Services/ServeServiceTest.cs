@@ -430,6 +430,85 @@ namespace crds_angular.test.Services
 
         }
 
+        [Test]
+        public void RespondToServeOpportunityYes()
+        {
+            var contactId = 8;
+            var opportunityId = 12;
+            var eventTypeId = 3;
+
+            var mockParticipant = new Participant
+            {
+                ParticipantId = 47
+            };
+
+            var mockEvents = new List<Event>
+            {
+                new Event
+                {
+                    EventId = 1
+                },
+                new Event
+                {
+                    EventId = 2
+                }
+            };
+
+            //mock it up
+            _participantService.Setup(m => m.GetParticipant(contactId)).Returns(mockParticipant);
+            _eventService.Setup(m => m.GetEventsByTypeForRange(eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>())).Returns(mockEvents);
+            _eventService.Setup(m => m.registerParticipantForEvent(mockParticipant.ParticipantId, mockEvents[0].EventId));
+            _eventService.Setup(m => m.registerParticipantForEvent(mockParticipant.ParticipantId, mockEvents[1].EventId));
+            _opportunityService.Setup(m => m.RespondToOpportunity(mockParticipant.ParticipantId, opportunityId, It.IsAny<string>(), mockEvents[0].EventId, true));
+            _opportunityService.Setup(m => m.RespondToOpportunity(mockParticipant.ParticipantId, opportunityId, It.IsAny<string>(), mockEvents[1].EventId, true));
+
+            _fixture.SaveServeResponse(It.IsAny<string>(), contactId, opportunityId, eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(), true);
+
+            _participantService.VerifyAll();
+            _eventService.VerifyAll();
+            _opportunityService.VerifyAll();
+        }
+
+        [Test]
+        public void RespondToServeOpportunityNo()
+        {
+            var contactId = 8;
+            var opportunityId = 12;
+            var eventTypeId = 3;
+
+            var mockParticipant = new Participant
+            {
+                ParticipantId = 47
+            };
+
+            var mockEvents = new List<Event>
+            {
+                new Event
+                {
+                    EventId = 1
+                },
+                new Event
+                {
+                    EventId = 2
+                }
+            };
+
+            //mock
+            _participantService.Setup(m => m.GetParticipant(contactId)).Returns(mockParticipant);
+            _eventService.Setup(m => m.GetEventsByTypeForRange(eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>())).Returns(mockEvents);
+            _eventService.Setup(m => m.registerParticipantForEvent(mockParticipant.ParticipantId, mockEvents[0].EventId));
+            _eventService.Setup(m => m.registerParticipantForEvent(mockParticipant.ParticipantId, mockEvents[1].EventId));
+            _opportunityService.Setup(m => m.RespondToOpportunity(mockParticipant.ParticipantId, opportunityId, It.IsAny<string>(), mockEvents[0].EventId, false));
+            _opportunityService.Setup(m => m.RespondToOpportunity(mockParticipant.ParticipantId, opportunityId, It.IsAny<string>(), mockEvents[1].EventId, false));
+
+            _fixture.SaveServeResponse(It.IsAny<string>(), contactId, opportunityId, eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(), false);
+
+            _participantService.VerifyAll();
+            _eventService.Verify(m => m.GetEventsByTypeForRange(eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()), Times.Exactly(1));
+            _eventService.Verify(m => m.registerParticipantForEvent(It.IsAny<int>(), It.IsAny<int>()), Times.Never());
+            _opportunityService.VerifyAll();
+        }
+
         private List<ContactRelationship> MockGetMyFamilyResponse()
         {
             var getMyFamilyResponse = new List<ContactRelationship>

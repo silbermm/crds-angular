@@ -166,7 +166,8 @@
         saveRsvp.eventTypeId = scope.eventTypeId;
         saveRsvp.endDate = parseDate(scope.currentMember.currentOpportunity.toDt);
         saveRsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
-        //saveRsvp.$save();
+        saveRsvp.signUp = scope.currentMember.currentOpportunity.signedup;
+        saveRsvp.$save();
       }
 
       function setActiveTab(member){
