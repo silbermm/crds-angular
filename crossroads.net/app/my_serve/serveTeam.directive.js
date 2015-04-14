@@ -151,13 +151,13 @@
       }
 
       function parseDate(stringDate){
-        var dateArr = stringDate.split("/");
-        // https://github.com/moment/moment/issues/1407
-        // moment("2014 04 25", "YYYY MM DD"); // string with format
-        var dateStr = dateArr[2] + " " + dateArr[0] + " " + dateArr[1];
-        var d = moment(dateStr, "YYYY MM DD");
-        return d.format('X');
-      }
+       var dateArr = stringDate.split("/");
+       // https://github.com/moment/moment/issues/1407
+       // moment("2014 04 25", "YYYY MM DD"); // string with format
+       var dateStr = dateArr[2] + " " + dateArr[0] + " " + dateArr[1];
+       var d = moment(dateStr, "YYYY MM DD");
+       return d.format('X');
+     }
 
       function saveRsvp(){
         var saveRsvp = new ServeOpportunities.SaveRsvp();
