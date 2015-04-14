@@ -176,12 +176,7 @@
                 controller: "GiveCtrl as give",
                 templateUrl: "give/give.html"
             })
-            .state("/give/bank-info", {
-                url: "/give/bank-info",
-                controller: "GiveCtrl as give",
-                templateUrl: "give/account_info.html"
-            })
-           .state("/demo/guest-giver", {
+            .state("/demo/guest-giver", {
                 url: "/demo/guest-giver",
                 templateUrl: "guest_giver/give.html"
             })
