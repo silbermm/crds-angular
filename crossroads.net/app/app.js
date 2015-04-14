@@ -9,7 +9,6 @@ require('angular-cookies');
 require('angular-growl');
 require('angular-toggle-switch');
 require('angular-ui-utils');
-require('angular-ui-router.statehelper');
 require('./templates/nav.html');
 require('./templates/nav-mobile.html');
 
