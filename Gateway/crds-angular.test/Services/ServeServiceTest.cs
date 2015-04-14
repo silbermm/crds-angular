@@ -443,7 +443,7 @@ namespace crds_angular.test.Services
             var endDate = new DateTime(2015, 4, 30);
             const int mockParticipantId = 41018;
 
-            _authenticationService.Setup(m => m.GetParticipantRecord(It.IsAny<string>())).Returns(new Participant { ParticipantId = mockParticipantId });
+            _participantService.Setup(m => m.GetParticipant(contactId)).Returns(new Participant { ParticipantId = mockParticipantId });
 
             var mockEvents = MockEvents();
             _eventService.Setup(m => m.GetEventsByTypeForRange(eventTypeId, startDate, endDate, It.IsAny<string>()))
@@ -453,21 +453,22 @@ namespace crds_angular.test.Services
             {
                 var e = mockEvent;
                 _eventService.Setup(m => m.registerParticipantForEvent(mockParticipantId, e.EventId)).Returns(e.EventId);
+
+                // Mock _opportunityService.RespondToOpportunity
+                _opportunityService.Setup(m => m.RespondToOpportunity(mockParticipantId, opportunityId, "", e.EventId)).Returns(8888);
             }
-
-            // Mock _opportunityService.RespondToOpportunity
-            _opportunityService.Setup(m => m.RespondToOpportunity(It.IsAny<string>(), opportunityId, "")).Returns(8888);
-
+            
             var saveResponse = _fixture.SaveServeResponse(token, contactId, opportunityId, eventTypeId, startDate, endDate);
 
-            //verify all service calls
-            _authenticationService.Verify(m => m.GetParticipantRecord(It.IsAny<string>()));
+            _participantService.VerifyAll();
 
             _eventService.Verify(m => m.registerParticipantForEvent(mockParticipantId, 2), Times.Exactly(1));
             _eventService.Verify(m => m.registerParticipantForEvent(mockParticipantId, 3), Times.Exactly(1));
             _eventService.Verify(m => m.registerParticipantForEvent(mockParticipantId, 4), Times.Exactly(1));
 
-            _opportunityService.Verify(m=>m.RespondToOpportunity(It.IsAny<string>(),opportunityId,""),Times.Exactly(3));
+            _opportunityService.Verify(m => m.RespondToOpportunity(mockParticipantId, opportunityId, "",2), Times.Exactly(1));
+            _opportunityService.Verify(m => m.RespondToOpportunity(mockParticipantId, opportunityId, "",3), Times.Exactly(1));
+            _opportunityService.Verify(m => m.RespondToOpportunity(mockParticipantId, opportunityId, "",4), Times.Exactly(1));
             _opportunityService.VerifyAll();
 
             //Assertions
