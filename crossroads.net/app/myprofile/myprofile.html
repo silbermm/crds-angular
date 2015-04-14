@@ -40,8 +40,8 @@
                 <tab heading="History" class="hidden-xs" active="set.showHistory">
                     <ng-include src=" 'templates/profile_history.html' "></ng-include>
                 </tab>
-                <li role="tab" data-toggle="tab" class="dropdown hidden-md hidden-lg hidden-sm dropdown-toggle" data-toggle="dropdown">
-                    <a href="#">More <span class="caret"></span></a>
+                <li role="tab" class="dropdown hidden-md hidden-lg hidden-sm dropdown-toggle" dropdown is-open="status.isopen">
+                    <a href="" dropdown-toggle ng-disabled="disabled">More <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="#" ng-click="set.showHousehold = true">Communications</a>
                         </li>
