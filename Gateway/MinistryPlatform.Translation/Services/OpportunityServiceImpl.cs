@@ -60,6 +60,49 @@ namespace MinistryPlatform.Translation.Services
             return opportunities;
         }
 
+        public Response GetOpportunityResponse(int opportunityId, int eventId, Participant participant)
+        {
+            var searchString = string.Format(",{0},{1},{2}", opportunityId, eventId, participant.ParticipantId);
+            List<Dictionary<string, object>> dictionaryList;
+            try
+            {
+                dictionaryList =
+                    WithApiLogin<List<Dictionary<string, object>>>(
+                        apiToken =>
+                            (_ministryPlatformService.GetPageViewRecords("ResponseByOpportunityAndEvent", apiToken,
+                                searchString, "", 0)));
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(
+                    string.Format(
+                        "GetOpportunityResponse failed.  Participant Id: {0}, Opportunity Id: {1}, Event Id: {2}",
+                        participant, opportunityId, eventId), ex.InnerException);
+            }
+
+            if (dictionaryList.Count == 0)
+            {
+                return new Response();
+            }
+
+            var response = new Response();
+            try
+            {
+                var dictionary = dictionaryList.First();
+                response.Opportunity_ID = dictionary.ToInt("Opportunity_ID");
+                response.Participant_ID = dictionary.ToInt("Participant_ID");
+                response.Response_Result_ID = dictionary.ToInt("Response_Result_ID");
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new ApplicationException(
+                    string.Format("RespondToOpportunity failed.  Participant Id: {0}, Opportunity Id: {1}",
+                        participant, opportunityId), ex.InnerException);
+            }
+
+
+            return response;
+        }
 
         public int GetOpportunitySignupCount(int opportunityId, int eventId, string token)
         {
@@ -143,48 +186,6 @@ namespace MinistryPlatform.Translation.Services
             return recordId;
         }
 
-        public Response GetOpportunityResponse(int opportunityId, int eventId, Participant participant)
-        {
-            var searchString = string.Format(",{0},{1},{2}", opportunityId, eventId, participant.ParticipantId);
-            List<Dictionary<string, object>> dictionaryList;
-            try
-            {
-                dictionaryList =
-                    WithApiLogin<List<Dictionary<string, object>>>(
-                        apiToken =>
-                            (_ministryPlatformService.GetPageViewRecords("ResponseByOpportunityAndEvent", apiToken,
-                                searchString, "", 0)));
-            }
-            catch (Exception ex)
-            {
-                throw new ApplicationException(
-                    string.Format(
-                        "GetOpportunityResponse failed.  Participant Id: {0}, Opportunity Id: {1}, Event Id: {2}",
-                        participant, opportunityId, eventId), ex.InnerException);
-            }
-
-            if (dictionaryList.Count == 0)
-            {
-                return new Response();
-            }
-
-            var response = new Response();
-            try
-            {
-                var dictionary = dictionaryList.First();
-                response.Opportunity_ID = dictionary.ToInt("Opportunity_ID");
-                response.Participant_ID = dictionary.ToInt("Participant_ID");
-                response.Response_Result_ID = dictionary.ToInt("Response_Result_ID");
-            }
-            catch (InvalidOperationException ex)
-            {
-                throw new ApplicationException(
-                    string.Format("RespondToOpportunity failed.  Participant Id: {0}, Opportunity Id: {1}",
-                        participant, opportunityId), ex.InnerException);
-            }
-
-
-            return response;
-        }
+        
     }
 }

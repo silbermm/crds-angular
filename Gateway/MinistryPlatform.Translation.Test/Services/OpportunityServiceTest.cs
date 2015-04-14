@@ -154,6 +154,49 @@ namespace MinistryPlatform.Translation.Test.Services
         }
 
         [Test]
+        public void GetOpportunityResponseTest()
+        {
+            //ARRANGE
+            const int opportunityId = 2;
+            const int eventId = 3;
+            var participant = new Participant {ParticipantId = 5};
+
+            // mock _ministryPlatformService.GetPageViewRecords
+            const string viewKey = "ResponseByOpportunityAndEvent";
+            var searchString = string.Format(",{0},{1},{2}", opportunityId, eventId, participant.ParticipantId);
+            const string sortString = "";
+            var mockResult = MockDictionaryGetOpportunityResponseTest();
+            _ministryPlatformService.Setup(
+                m => m.GetPageViewRecords(viewKey, It.IsAny<string>(), searchString, sortString, 0)).Returns(mockResult);
+
+            //ACT
+            var response = _fixture.GetOpportunityResponse(opportunityId, eventId, participant);
+
+            //ASSERT
+            _ministryPlatformService.VerifyAll();
+
+            Assert.IsNotNull(response);
+            Assert.AreEqual(2, response.Opportunity_ID);
+            Assert.AreEqual(5, response.Participant_ID);
+            Assert.AreEqual(1, response.Response_Result_ID);
+
+        }
+
+        private List<Dictionary<string, object>> MockDictionaryGetOpportunityResponseTest()
+        {
+            var results = new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    {"Opportunity_ID", 2},
+                    {"Participant_ID", 5},
+                    {"Response_Result_ID", 1}
+                }
+            };
+            return results;
+        }
+
+        [Test]
         public void RespondToOpportunityAsLoggedInUserTest()
         {
             const int opportunityId = 9;

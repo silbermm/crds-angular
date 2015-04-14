@@ -205,17 +205,7 @@ namespace crds_angular.Services
         public ServeRsvp GetRsvp(int opportunityId, int eventId, int contactId)
         {
             var participant = _participantService.GetParticipant(contactId);
-
-            if (participant.ParticipantId == 994377)
-            {
-                if (opportunityId == 108)
-                {
-                    Console.WriteLine("STOP");
-                }
-            }
-
-            //ResponseByOpportunityAndEvent
-            MinistryPlatform.Models.Response response = _opportunityService.GetOpportunityResponse(opportunityId, eventId, participant);
+            var response = _opportunityService.GetOpportunityResponse(opportunityId, eventId, participant);
 
             if (response == null || response.Opportunity_ID ==0) return null;
 
