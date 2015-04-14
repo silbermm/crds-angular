@@ -13,9 +13,10 @@
             <label>Expiration</label>
             <input type="text" name="expDate" class="form-control" ng-model="give.expDate" ui-mask="99/99" placeholder="MM/YY">
         </div>
-        <div class="form-group col-xs-4 col-md-2">
+        <div class="form-group col-xs-4 col-md-2" ng-class="{'has-error': giveForm.cvv.$error.invalidCvv && giveForm.cvv.$dirty }">
             <label for="cvv">CVV</label>
-            <input type="text" name="cvv" class="form-control" ng-model="give.cvv" maxlength="4">
+            <input type="text" name="cvv" class="form-control" ng-model="give.cvv" maxlength="4" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }" invalid-cvv>
+            <ng-messages for="giveForm.cvv.$error" ng-show="giveForm.cvv.$error.invalidCvv && giveForm.cvv.$dirty" ng-messages-include="on-blur-messages"></ng-messages>
         </div>
         <div class="form-group col-xs-4 col-md-3"  ng-class="{'has-error': giveForm.billingZipCode.$error.invalidZip && giveForm.billingZipCode.$dirty }">
             <label for="billingZipCode">Zip Code</label>
