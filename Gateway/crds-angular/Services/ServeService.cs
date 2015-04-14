@@ -304,7 +304,8 @@ namespace crds_angular.Services
             int opportunityId,
             int eventTypeId,
             DateTime startDate,
-            DateTime endDate)
+            DateTime endDate,
+            bool signUp)
         {
             //get participant id for Contact
             var participant = _participantService.GetParticipant(contactid);
@@ -313,9 +314,12 @@ namespace crds_angular.Services
             foreach (var e in events)
             {
                 //for each event in range create an event participant & opportunity response
-                _eventService.registerParticipantForEvent(participant.ParticipantId, e.EventId);
+                if (signUp)
+                {
+                    _eventService.registerParticipantForEvent(participant.ParticipantId, e.EventId);
+                }
                 var comments = string.Empty; //anything of value to put in comments?
-                _opportunityService.RespondToOpportunity(participant.ParticipantId, opportunityId, comments, e.EventId);
+                _opportunityService.RespondToOpportunity(participant.ParticipantId, opportunityId, comments, e.EventId, signUp);
             }
 
             return true;

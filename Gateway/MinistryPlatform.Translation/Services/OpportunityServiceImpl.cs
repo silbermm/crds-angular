@@ -50,7 +50,7 @@ namespace MinistryPlatform.Translation.Services
                 //now get all events with type = event type id
                 if (opportunity.EventType != null)
                 {
-                    var events =_eventService.GetEvents(opportunity.EventType, token);
+                    var events = _eventService.GetEvents(opportunity.EventType, token);
                     var sortedEvents = events.OrderBy(o => o.EventStartDate).ToList();
                     opportunity.Events = sortedEvents;
                 }
@@ -156,11 +156,7 @@ namespace MinistryPlatform.Translation.Services
             return recordId;
         }
 
-<<<<<<< HEAD
         public int RespondToOpportunity(int participantId, int opportunityId, string comments, int eventId, bool response)
-=======
-        public int RespondToOpportunity(int participantId, int opportunityId, string comments, int eventId)
->>>>>>> adding eventid to opportunity response for participant
         {
             var values = new Dictionary<string, object>
             {
@@ -170,7 +166,7 @@ namespace MinistryPlatform.Translation.Services
                 {"Closed", false},
                 {"Comments", comments},
                 {"Event_ID", eventId},
-                {"Response_Result_ID", 1}
+                {"Response_Result_ID", (response) ? 1 : 2}
             };
 
             int recordId;
