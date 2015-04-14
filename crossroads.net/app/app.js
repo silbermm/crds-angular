@@ -26,6 +26,7 @@ require('angular-match-media');
 
 require('./third-party/angular/angular-aside.min.css');
 require('./third-party/angular/angular-growl.css');
+require('./third-party/angular/angular.payments');
 require('./give');
 
 
@@ -34,7 +35,7 @@ var _ = require('lodash');
 "use strict";
 (function () {
 
-   angular.module("crossroads", ['ngResource', "crossroads.profile", "crossroads.filters", "crdsCMS.services", "ui.router", 'ui.utils', "ngCookies", "ngMessages", 'angular-growl', 'toggle-switch', 'ngAside', 'matchMedia','give'])
+   angular.module("crossroads", ['ngResource', "crossroads.profile", "crossroads.filters", "crdsCMS.services", "ui.router", 'ui.utils', "ngCookies", "ngMessages", 'angular-growl', 'toggle-switch', 'ngAside', 'matchMedia','give', 'ngPayments'])
 
     .constant("AUTH_EVENTS", {
             loginSuccess: "auth-login-success",
@@ -80,14 +81,18 @@ var _ = require('lodash');
             return $sce.trustAsHtml(val);
         };
     }])
-        .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "$http", "Message", "growl", "$aside", "screenSize",
-        function ($scope, $rootScope, MESSAGES, $http, Message, growl, $aside, screenSize) {
+        .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "$http", "Message", "growl", "$aside", "screenSize", '$payments',
+        function ($scope, $rootScope, MESSAGES, $http, Message, growl, $aside, screenSize, $payments) {
 
                 console.log(__API_ENDPOINT__);
 
                 $scope.prevent = function (evt) {
                     evt.stopPropagation();
                 };
+
+                // $scope.verified = function () {
+                //     return $payments.verified();
+                // }
 
                 $rootScope.mobile = screenSize.on('xs, sm', function(match){
                     $rootScope.mobile = match;
