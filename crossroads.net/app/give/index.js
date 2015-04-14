@@ -1,4 +1,5 @@
 require('./give.html');
+require('./guest.html')
 require('./give.module.js');
 var app = require('angular').module('give');
 app.factory("getPrograms", require('./getPrograms.service.js'));

@@ -176,56 +176,61 @@
                 controller: "GiveCtrl as give",
                 templateUrl: "give/give.html"
             })
-            .state("/give/bank-info", {
-                url: "/give/bank-info",
-                controller: "GiveCtrl as give",
-                templateUrl: "give/account_info.html"
-            })
-           .state("/demo/guest-giver", {
-                url: "/demo/guest-giver",
+           .state("give.guest", {
+                 url: "/guest",
+                 controller: "GiveCtrl as give",
+                 templateUrl: "give/guest.html"
+           })
+           .state("demo", {
+             //abstract: true,
+             url: '/demo',
+             template: '<p>demo</p>'
+           })
+           .state("demo.guest-giver", {
+                url: "/guest-giver",
                 templateUrl: "guest_giver/give.html"
             })
-           .state("/demo/guest-giver/login", {
-                url: "/demo/guest-giver/login",
+           .state("guest-giver.login", {
+                url: "/login",
                 templateUrl: "guest_giver/give-login.html"
             })
-           .state("/demo/guest-giver/login-guest", {
+           .state("demo.guest-giver.login-guest", {
                 url: "/demo/guest-giver/login-guest",
                 controller: "GiveCtrl as give",
                 templateUrl: "guest_giver/give-login-guest.html"
             })
-            .state("/demo/guest-giver/give-confirmation", {
+            .state("demo.guest-giver.give-confirmation", {
                 url: "/demo/guest-giver/confirmation",
                 templateUrl: "guest_giver/give-confirmation.html"
             })
-            .state("/demo/guest-giver/give-register", {
+            .state("demo.guest-giver.give-register", {
                 url: "/demo/guest-giver/register",
                 templateUrl: "guest_giver/give-register.html"
             })
-            .state("/demo/guest-giver/give-logged-in-bank-info", {
+            .state("demo.guest-giver.give-logged-in-bank-info", {
                 url: "/demo/guest-giver/logged-in-bank-info",
                 controller: "GiveCtrl as give",
                 templateUrl: "guest_giver/give-logged-in-bank-info.html"
             })
-            .state("/demo/guest-giver/give-confirm-amount", {
+            .state("demo.guest-giver.give-confirm-amount", {
                 url: "/demo/guest_giver/give-confirm-amount",
                 templateUrl: "guest_giver/give-confirm-amount.html"
             })
-            .state("/demo/guest-giver/give-change-information", {
+            .state("demo.guest-giver.give-change-information", {
                 url: "/demo/guest_giver/give-change-information",
                 controller: "GiveCtrl as give",
                 templateUrl: "guest_giver/give-change-information.html"
             })
-            .state("/demo/logged-in-giver/existing-giver", {
+            .state("demo.logged-in-giver.existing-giver", {
                 url: "/demo/logged-in-giver/existing-giver",
                 templateUrl: "guest_giver/give-logged-in.html"
             })
-            .state("/demo/logged-in-giver/change-information", {
+            .state("demo.logged-in-giver.change-information", {
                 url: "/demo/logged-in-giver/change-information",
                 controller: "GiveCtrl as give",
                 templateUrl: "guest_giver/give-change-information-logged-in.html"
             })
-            .state("/demo/logged-in-giver/new-giver", {
+            .state("demo.logged-in-giver.new-giver", {
                 url: "/demo/logged-in-giver/new-giver",
                 templateUrl: "guest_giver/give-logged-in-new-giver.html"
             })

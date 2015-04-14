@@ -9,6 +9,7 @@ require('angular-cookies');
 require('angular-growl');
 require('angular-toggle-switch');
 require('angular-ui-utils');
+require('angular-ui-router.statehelper');
 require('./templates/nav.html');
 require('./templates/nav-mobile.html');
 
@@ -36,7 +37,7 @@ var _ = require('lodash');
 "use strict";
 (function () {
 
-   angular.module("crossroads", ['ngResource', "crossroads.profile", "crossroads.filters", "crdsCMS.services", "ui.router", 'ui.utils', "ngCookies", "ngMessages", 'angular-growl', 'toggle-switch', 'ngAside', 'matchMedia','give'])
+   angular.module("crossroads", ['ngResource', "crossroads.profile", "crossroads.filters", "crdsCMS.services", "ui.router", 'ui.router.stateHelper', 'ui.utils', "ngCookies", "ngMessages", 'angular-growl', 'toggle-switch', 'ngAside', 'matchMedia','give'])
 
     .constant("AUTH_EVENTS", {
             loginSuccess: "auth-login-success",
