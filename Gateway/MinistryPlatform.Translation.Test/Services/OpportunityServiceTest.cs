@@ -185,17 +185,18 @@ namespace MinistryPlatform.Translation.Test.Services
             const int opportunityId = 555;
             const string comment = "";
             const int eventId = 3333;
+            const bool response = true;
 
             _ministryPlatformService.Setup(
                 m => m.CreateRecord(pageKey, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>(), true))
                 .Returns(4444);
 
-            var responeId = _fixture.RespondToOpportunity(participantId, opportunityId, comment, eventId);
+            var responseId = _fixture.RespondToOpportunity(participantId, opportunityId, comment, eventId, response);
 
             _ministryPlatformService.VerifyAll();
 
-            Assert.IsNotNull(responeId);
-            Assert.AreEqual(4444, responeId);
+            Assert.IsNotNull(responseId);
+            Assert.AreEqual(4444, responseId);
         }
 
         [Test]

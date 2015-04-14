@@ -110,7 +110,7 @@ namespace MinistryPlatform.Translation.Services
             return recordId;
         }
 
-        public int RespondToOpportunity(int participantId, int opportunityId, string comments, int eventId)
+        public int RespondToOpportunity(int participantId, int opportunityId, string comments, int eventId, bool response)
         {
             var values = new Dictionary<string, object>
             {
@@ -120,7 +120,7 @@ namespace MinistryPlatform.Translation.Services
                 {"Closed", false},
                 {"Comments", comments},
                 {"Event_ID", eventId},
-                {"Response_Result_ID", 1}
+                {"Response_Result_ID", (response) ? 1 : 2}
             };
 
             int recordId;

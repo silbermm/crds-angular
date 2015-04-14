@@ -84,7 +84,7 @@ namespace crds_angular.Controllers.API
                 {
                     _serveService.SaveServeResponse(token, serveResponse.ContactId, serveResponse.OpportunityId,
                         serveResponse.EventTypeId, serveResponse.StartDateUnix.FromUnixTime(),
-                        serveResponse.EndDateUnix.FromUnixTime());
+                        serveResponse.EndDateUnix.FromUnixTime(), serveResponse.SignUp);
                 }
                 catch (Exception exception)
                 {
