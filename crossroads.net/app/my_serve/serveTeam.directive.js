@@ -93,19 +93,19 @@
         if(scope.currentMember !== null){
           scope.currentMember.currentOpportunity.fromDt = scope.oppServeDate;
           switch(scope.currentMember.currentOpportunity.frequency.value) {
-            case null: 
+            case null:
               scope.currentMember.currentOpportunity.fromDt = null;
               scope.currentMember.currentOpportunity.toDT = null;
               break;
-            case 0: 
+            case 0:
               // once...
               scope.currentMember.currentOpportunity.fromDt = scope.oppServeDate;
-              scope.currentMember.currentOpportunity.toDt = scope.oppServeDate; 
+              scope.currentMember.currentOpportunity.toDt = scope.oppServeDate;
               break;
             default:
               // every  or everyother
               ServeOpportunities.LastOpportunityDate.get({id:scope.currentMember.currentOpportunity.roleId}, function(ret){
-                var dateNum = Number(ret.date * 1000); 
+                var dateNum = Number(ret.date * 1000);
                 var toDate = new Date(dateNum);
                 scope.currentMember.currentOpportunity.toDt = (toDate.getMonth() + 1) + "/" + toDate.getDate() + "/" + toDate.getFullYear();
               });
@@ -152,7 +152,10 @@
 
       function parseDate(stringDate){
         var dateArr = stringDate.split("/");
-        var d = moment(dateArr[2] + "-" + dateArr[0] + "-" + dateArr[1]);  
+        // https://github.com/moment/moment/issues/1407
+        // moment("2014 04 25", "YYYY MM DD"); // string with format
+        var dateStr = dateArr[2] + " " + dateArr[0] + " " + dateArr[1];
+        var d = moment(dateStr, "YYYY MM DD");
         return d.format('X');
       }
 
