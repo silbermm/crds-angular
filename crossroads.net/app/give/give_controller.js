@@ -36,10 +36,7 @@
         }
 
         _this.ccCardType = function () {
-          console.log("in ccCardType");
-          console.log(_this.ccNumber);
             if (_this.ccNumber) {
-              console.log("in the process");
                 if (_this.ccNumber.match(visaRegEx))
                     _this.ccNumberClass = "cc-visa";
                 else if (_this.ccNumber.match(mastercardRegEx))

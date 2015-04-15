@@ -27,9 +27,7 @@ require('angular-match-media');
 
 require('./third-party/angular/angular-aside.min.css');
 require('./third-party/angular/angular-growl.css');
-//require('./third-party/angular/angular.payments');
 require('./give');
-
 
 
 var _ = require('lodash');
