@@ -86,7 +86,7 @@
               }
             });
             if(serveTimes.length > 0){
-              serveDay.push({day: day.day, serveTimes: serveTimes});
+              serveDay.push({day: day.day, eventType: day.eventType, eventTypeId: day.eventTypeId, serveTimes: serveTimes});
             }
           });
           if(serveDay.length > 0){
@@ -106,7 +106,7 @@
               });
             });
             if(times.length > 0) {
-              serveDay.push({day: day.day, serveTimes: times});
+              serveDay.push({day: day.day, eventType: day.eventType, eventTypeId: day.eventTypeId, serveTimes: times});
             };
           });
           scope.servingDays = serveDay;
@@ -128,7 +128,7 @@
                 serveTimes.push({time: serveTime.time, 'servingTeams':servingTeams });
               }
             });
-            serveDay.push({day: day.day, serveTimes: serveTimes});
+            serveDay.push({day: day.day, eventType: day.eventType, eventTypeId: day.eventTypeId, serveTimes: serveTimes});
           });
           scope.servingDays = serveDay;
         }

@@ -154,6 +154,127 @@ namespace MinistryPlatform.Translation.Test.Services
         }
 
         [Test]
+        public void GetOpportunityResponseSignUpYesTest()
+        {
+            //ARRANGE
+            const int opportunityId = 2;
+            const int eventId = 3;
+            var participant = new Participant {ParticipantId = 5};
+
+            // mock _ministryPlatformService.GetPageViewRecords
+            const string viewKey = "ResponseByOpportunityAndEvent";
+            var searchString = string.Format(",{0},{1},{2}", opportunityId, eventId, participant.ParticipantId);
+            const string sortString = "";
+            var mockResult = MockDictionaryGetOpportunityResponseSignUpYesTest();
+            _ministryPlatformService.Setup(
+                m => m.GetPageViewRecords(viewKey, It.IsAny<string>(), searchString, sortString, 0)).Returns(mockResult);
+
+            //ACT
+            var response = _fixture.GetOpportunityResponse(opportunityId, eventId, participant);
+
+            //ASSERT
+            _ministryPlatformService.VerifyAll();
+
+            Assert.IsNotNull(response);
+            Assert.AreEqual(2, response.Opportunity_ID);
+            Assert.AreEqual(5, response.Participant_ID);
+            Assert.AreEqual(1, response.Response_Result_ID);
+
+        }
+
+        private List<Dictionary<string, object>> MockDictionaryGetOpportunityResponseSignUpYesTest()
+        {
+            var results = new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    {"Opportunity_ID", 2},
+                    {"Participant_ID", 5},
+                    {"Response_Result_ID", 1}
+                }
+            };
+            return results;
+        }
+
+        [Test]
+        public void GetOpportunityResponseSignUpNoTest()
+        {
+            //ARRANGE
+            const int opportunityId = 77;
+            const int eventId = 3;
+            var participant = new Participant { ParticipantId = 777 };
+
+            // mock _ministryPlatformService.GetPageViewRecords
+            const string viewKey = "ResponseByOpportunityAndEvent";
+            var searchString = string.Format(",{0},{1},{2}", opportunityId, eventId, participant.ParticipantId);
+            const string sortString = "";
+            var mockResult = MockDictionaryGetOpportunityResponseSignUpNoTest();
+            _ministryPlatformService.Setup(
+                m => m.GetPageViewRecords(viewKey, It.IsAny<string>(), searchString, sortString, 0)).Returns(mockResult);
+
+            //ACT
+            var response = _fixture.GetOpportunityResponse(opportunityId, eventId, participant);
+
+            //ASSERT
+            _ministryPlatformService.VerifyAll();
+
+            Assert.IsNotNull(response);
+            Assert.AreEqual(77, response.Opportunity_ID);
+            Assert.AreEqual(777, response.Participant_ID);
+            Assert.AreEqual(2, response.Response_Result_ID);
+
+        }
+
+        private List<Dictionary<string, object>> MockDictionaryGetOpportunityResponseSignUpNoTest()
+        {
+            var results = new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    {"Opportunity_ID", 77},
+                    {"Participant_ID", 777},
+                    {"Response_Result_ID", 2}
+                }
+            };
+            return results;
+        }
+
+        [Test]
+        public void GetOpportunityResponseNoExistingRsvpTest()
+        {
+            //ARRANGE
+            const int opportunityId = 8;
+            const int eventId = 3;
+            var participant = new Participant { ParticipantId = 5 };
+
+            // mock _ministryPlatformService.GetPageViewRecords
+            const string viewKey = "ResponseByOpportunityAndEvent";
+            var searchString = string.Format(",{0},{1},{2}", opportunityId, eventId, participant.ParticipantId);
+            const string sortString = "";
+            var mockResult = MockDictionaryGetOpportunityResponseNoExistingRsvpTest();
+            _ministryPlatformService.Setup(
+                m => m.GetPageViewRecords(viewKey, It.IsAny<string>(), searchString, sortString, 0)).Returns(mockResult);
+
+            //ACT
+            var response = _fixture.GetOpportunityResponse(opportunityId, eventId, participant);
+
+            //ASSERT
+            _ministryPlatformService.VerifyAll();
+
+            Assert.IsNotNull(response);
+            Assert.AreEqual(0, response.Opportunity_ID);
+            Assert.AreEqual(0, response.Participant_ID);
+            Assert.AreEqual(null, response.Response_Result_ID);
+
+        }
+
+        private List<Dictionary<string, object>> MockDictionaryGetOpportunityResponseNoExistingRsvpTest()
+        {
+            var results = new List<Dictionary<string, object>>();
+            return results;
+        }
+
+        [Test]
         public void RespondToOpportunityAsLoggedInUserTest()
         {
             const int opportunityId = 9;
@@ -185,17 +306,18 @@ namespace MinistryPlatform.Translation.Test.Services
             const int opportunityId = 555;
             const string comment = "";
             const int eventId = 3333;
+            const bool response = true;
 
             _ministryPlatformService.Setup(
                 m => m.CreateRecord(pageKey, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>(), true))
                 .Returns(4444);
 
-            var responeId = _fixture.RespondToOpportunity(participantId, opportunityId, comment, eventId);
+            var responseId = _fixture.RespondToOpportunity(participantId, opportunityId, comment, eventId, response);
 
             _ministryPlatformService.VerifyAll();
 
-            Assert.IsNotNull(responeId);
-            Assert.AreEqual(4444, responeId);
+            Assert.IsNotNull(responseId);
+            Assert.AreEqual(4444, responseId);
         }
 
         [Test]
