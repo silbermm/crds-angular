@@ -3,7 +3,7 @@
 <div class="serve-signup-cont clearfix col-sm-10 col-sm-pull-2 soft-ends">
   <div class="serve-day push-bottom" data-ng-repeat="group in serve.groups" ng-show="group.serveTimes.length > 0" ng-init="serve.dayindex = $index">
     <h4>{{::serve.convertToDate(group.day) | date:'EEEE, MMMM dd, yyyy' }}</h4>
-    <serve-tabs opportunity="opp" serve-date="group.day" ng-repeat="opp in group.serveTimes" tab-index="$index" ng-show="opp.servingTeams.length > 0" day-index="$parent.$index" event-type-id="group.eventTypeId" >
+    <serve-tabs opportunity="opp" serve-date="group.day" ng-repeat="opp in group.serveTimes" tab-index="$index" ng-show="opp.servingTeams.length > 0" day-index="$parent.$index" >
       </serve-tabs>
   </div><!-- serve day --> 
 </div>
