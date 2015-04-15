@@ -69,7 +69,8 @@ var _ = require('lodash');
         fullGroupError:19,
         invalidDonationAmount:22,
         invalidAccountNumber:23,
-        invalidRoutingTransit:24
+        invalidRoutingTransit:24,
+        serveSignupSuccess:29
     }).config(function (growlProvider) {
         growlProvider.globalPosition("top-center");
         growlProvider.globalTimeToLive(6000);

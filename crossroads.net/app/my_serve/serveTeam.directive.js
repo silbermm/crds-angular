@@ -26,7 +26,6 @@
     };
 
     function link(scope, el, attr) {
-
       scope.closePanel = closePanel;
       scope.currentActiveTab = null;
       scope.currentMember = null;
@@ -167,7 +166,10 @@
         saveRsvp.endDate = parseDate(scope.currentMember.currentOpportunity.toDt);
         saveRsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
         saveRsvp.signUp = scope.currentMember.currentOpportunity.signedup;
-        saveRsvp.$save();
+        saveRsvp.$save(function(saved){
+          $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess );
+          console.log("saved!"); 
+        });
       }
 
       function setActiveTab(member){
