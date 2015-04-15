@@ -1,7 +1,7 @@
 var $compile, $rootScope, element, scope, mockSession, mockServeDate, $httpBackend;
 
 var mockOpp = {"name": "NuseryA", "roleId": "145"};
-var mockTeam = [{ "name" : "Kids Club Nusery", "members" : [ { "name": "John", "contactId" : 12345678, "roles" : [ mockOpp, {"name": "NuseryB"}, {"name": "NuseryC"}, {"name": "NuseryD"} ] }, { "name":  "Jane", "contactId": 1234567890, "roles" : [ {"name": "NuseryA"}, {"name": "NuseryB"}, {"name": "NuseryC"}, {"name": "NuseryD"} ], "signedup" : "yes" }, ] }];
+var mockTeam = [{ "name" : "Kids Club Nusery", "eventTypeId": 100, "members" : [ { "name": "John", "contactId" : 12345678, "roles" : [ mockOpp, {"name": "NuseryB"}, {"name": "NuseryC"}, {"name": "NuseryD"} ] }, { "name":  "Jane", "contactId": 1234567890, "roles" : [ {"name": "NuseryA"}, {"name": "NuseryB"}, {"name": "NuseryC"}, {"name": "NuseryD"} ], "signedup" : "yes" }, ] }];
 
 var mockOpportunity = { "time": "8:30am", "team": mockTeam  };
 
@@ -21,7 +21,7 @@ describe('Serve Teams Directive', function() {
     scope = $rootScope.$new();
     element = '<serve-team opp-serve-date="serveDate" opportunity="opp" team="team" tab-index="tabIndex" team-index="teamIndex" day-index="dayIndex" event-type-id="eventTypeId" > </serve-team>';
     scope.opp = mockOpportunity;
-    scope.team = mockTeam;
+    scope.team = mockTeam[0];
     scope.dayIndex = 0;
     scope.tabIndex = 0;
     scope.teamIndex = 3;
@@ -88,6 +88,7 @@ describe('Serve Teams Directive', function() {
     expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
     isolated.currentMember.currentOpportunity = mockTeam[0].members[0].roles[0];
     isolated.currentMember.currentOpportunity.frequency = {value:0, text:"Once"};
+    isolated.currentMember.serveRsvp = {roleId: mockOpp.roleId};
 
     var dateArr = "10/15/2015".split("/");
     var d = moment(dateArr[2] + "-" + dateArr[0] + "-" + dateArr[1]);
@@ -98,12 +99,14 @@ describe('Serve Teams Directive', function() {
       opportunityId: mockOpp.roleId,
       eventTypeId: 100,
       endDate: dFormated,
-      startDate: dFormated
+      startDate: dFormated,
+      signUp: false,
+      alternateWeeks: false
     };
     isolated.populateDates();
     $httpBackend.expect('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/save-rsvp', rsvp ).respond(200, '');
     isolated.saveRsvp();
-    // $httpBackend.flush();
+    $httpBackend.flush();
   });
 
 });
