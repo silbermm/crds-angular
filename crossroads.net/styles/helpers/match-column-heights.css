@@ -1,0 +1,72 @@
+/* columns of same height styles */
+/* line 3, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/match-column-heights.scss */
+.row-full-height {
+  height: 100%; }
+
+/* line 6, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/match-column-heights.scss */
+.col-full-height {
+  height: 100%;
+  vertical-align: top; }
+
+/* line 10, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/match-column-heights.scss */
+.row-same-height {
+  display: table;
+  width: 100%;
+  /* fix overflow */
+  table-layout: fixed; }
+
+/* line 16, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/match-column-heights.scss */
+.col-xs-height {
+  display: table-cell;
+  float: none !important; }
+
+@media (min-width: 768px) {
+  /* line 22, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/match-column-heights.scss */
+  .row-sm-same-height {
+    display: table;
+    width: 100%;
+    /* fix overflow */
+    table-layout: fixed; }
+  /* line 28, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/match-column-heights.scss */
+  .col-sm-height {
+    display: table-cell;
+    float: none !important; } }
+
+@media (min-width: 992px) {
+  /* line 34, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/match-column-heights.scss */
+  .row-md-same-height {
+    display: table;
+    width: 100%;
+    /* fix overflow */
+    table-layout: fixed; }
+  /* line 40, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/match-column-heights.scss */
+  .col-md-height {
+    display: table-cell;
+    float: none !important; } }
+
+@media (min-width: 1200px) {
+  /* line 46, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/match-column-heights.scss */
+  .row-lg-same-height {
+    display: table;
+    width: 100%;
+    /* fix overflow */
+    table-layout: fixed; }
+  /* line 52, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/match-column-heights.scss */
+  .col-lg-height {
+    display: table-cell;
+    float: none !important; } }
+
+/* vertical alignment styles */
+/* line 60, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/match-column-heights.scss */
+.col-top {
+  vertical-align: top; }
+
+/* line 63, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/match-column-heights.scss */
+.col-middle {
+  vertical-align: middle; }
+
+/* line 66, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/helpers/match-column-heights.scss */
+.col-bottom {
+  vertical-align: bottom; }
+
+/*# sourceMappingURL=match-column-heights.css.map */
