@@ -22,4 +22,4 @@ require('./demo/guest_giver/give-logged-in.html');
 require('./demo/guest_giver/give-change-information-logged-in.html');
 require('./demo/guest_giver/give-logged-in-new-giver.html');
 
-app.controller("GiveCtrl", ['$scope', require("./give_controller")]);
+app.controller("GiveCtrl", ['$scope', '$state', require("./give_controller")]);

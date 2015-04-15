@@ -1,6 +1,7 @@
 (function () {
     'use strict';
-    module.exports = function GiveCtrl($scope, $log, messages, opportunity) {
+
+    module.exports = function GiveCtrl($scope, $state) {
 
         var _this = this;
         //Credit Card RegExs
@@ -13,6 +14,9 @@
         _this.bankType = 'checking';
         _this.showMessage = "Where?";
         _this.showCheckClass = "ng-hide";
+
+        // TODO Need to figure out a better option to get to the "initial" state
+        $state.go("give.amount");
 
         _this.alerts = [
             {
