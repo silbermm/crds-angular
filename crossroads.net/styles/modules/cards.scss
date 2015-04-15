@@ -32,10 +32,7 @@
     border-radius: 0 2px 2px 0;
   }
 
-  .card-header {
-    font-size: 20px;
-    padding: $line-height-computed/4 $line-height-computed/2;
-  }
+  
 
   .card-desc {
     position: relative;
@@ -74,4 +71,12 @@
       }
     }
   }
+}
+
+.card-header {
+    font-size: 20px;
+}
+
+.card-body {
+    background: rgba(214, 224, 226, 0.4);
 }
