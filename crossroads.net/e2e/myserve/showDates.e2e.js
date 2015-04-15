@@ -41,13 +41,9 @@ describe("My Serve", function() {
     var radioBtn = panel.all(by.model("currentMember.currentOpportunity"));
     expect(radioBtn.isDisplayed()).toBeTruthy();
     radioBtn.get(0).click();
-    
     var signedupBtn = panel.all(by.model("currentMember.currentOpportunity.signedup"));
     expect(signedupBtn.isDisplayed()).toBeTruthy();
-    signedupBtn.get(0).click(); 
-
-    var select = element(by.model("currentMember.currentOpportunity.frequency"));
-    expect(select.isDisplayed()).toBeTruthy();
-
+    signedupBtn.get(0).click();  
+    
   });
 });
