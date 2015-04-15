@@ -25,6 +25,7 @@
     };
 
     function link(scope, el, attr) {
+      scope.attendingChanged = attendingChanged;
       scope.closePanel = closePanel;
       scope.currentActiveTab = null;
       scope.currentMember = null;
@@ -58,12 +59,17 @@
       scope.setActiveTab = setActiveTab;
       scope.signedup = null;
       scope.showEdit = false;
+
       scope.togglePanel = togglePanel;
 
       activate();
       //////////////////////////////////////
 
       function activate() {}
+
+      function attendingChanged() {
+        scope.currentMember.showFrequency = true;
+      }
 
       function allowProfileEdit() {
         var cookieId = Session.exists("userId");
@@ -183,7 +189,7 @@
       function saveRsvp() {
         var saveRsvp = new ServeOpportunities.SaveRsvp();
         saveRsvp.contactId = scope.currentMember.contactId;
-        saveRsvp.opportunityId = scope.currentMember.currentOpportunity.roleId;
+        saveRsvp.opportunityId = scope.currentMember.serveRsvp.roleId;
         saveRsvp.eventTypeId = scope.team.eventTypeId;
         saveRsvp.endDate = parseDate(scope.currentMember.currentOpportunity.toDt);
         saveRsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
@@ -191,7 +197,7 @@
         saveRsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
         saveRsvp.$save(function(saved){
           $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess );
-          console.log("saved!"); 
+          console.log("saved!");
         });
       }
 

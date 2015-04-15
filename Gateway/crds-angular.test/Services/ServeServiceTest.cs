@@ -10,6 +10,7 @@ using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 
 namespace crds_angular.test.Services
 {
@@ -80,7 +81,7 @@ namespace crds_angular.test.Services
 
             _personService.Setup(m => m.GetLoggedInUserProfile(It.IsAny<string>())).Returns(person);
 
-           _fixture = new ServeService( _groupService.Object ,_contactRelationshipService.Object,_personService.Object,_authenticationService.Object,_opportunityService.Object,_eventService.Object, _participantService.Object);
+            _fixture = new ServeService( _groupService.Object ,_contactRelationshipService.Object,_personService.Object,_authenticationService.Object,_opportunityService.Object,_eventService.Object, _participantService.Object);
 
             //force AutoMapper to register
             AutoMapperConfig.RegisterMappings();
@@ -427,12 +428,12 @@ namespace crds_angular.test.Services
 
             Assert.IsNotNull(capacity);
             Assert.AreEqual(capacity.Display, false);
-
         }
 
         [Test]
         public void RespondToServeOpportunityYesEveryWeek()
         {
+
             const int contactId = 8;
             const int opportunityId = 12;
             const int eventTypeId = 3;
@@ -457,6 +458,7 @@ namespace crds_angular.test.Services
             const int eventTypeId = 3;
             const bool signUp = false;
             const bool alternateWeeks = false;
+
 
             SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp);
 
@@ -538,7 +540,6 @@ namespace crds_angular.test.Services
                     EventId = 5
                 },
             };
-
             //mock it up
             _participantService.Setup(m => m.GetParticipant(contactId)).Returns(mockParticipant);
             _eventService.Setup(m => m.GetEventsByTypeForRange(eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>())).Returns(mockEvents);
