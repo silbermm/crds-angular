@@ -157,9 +157,7 @@ namespace crds_angular.Services
                             serveDay = new ServingDay
                             {
                                 Day = e.EventStartDate.Date.ToString("d"),
-                                Date = e.EventStartDate,
-                                EventType = opportunity.EventType,
-                                EventTypeId = opportunity.EventTypeId
+                                Date = e.EventStartDate
                             };
                             var serveTime = new ServingTime {Time = e.EventStartDate.TimeOfDay.ToString()};
                             serveTime.ServingTeams.Add(NewServingTeam(team, opportunity, serveRole));
@@ -178,9 +176,7 @@ namespace crds_angular.Services
             {
                 var sortedServeDay = new ServingDay
                 {
-                    Day = serveDay.Day,
-                    EventType = serveDay.EventType,
-                    EventTypeId = serveDay.EventTypeId
+                    Day = serveDay.Day
                 };
                 var sortedServeTimes = serveDay.ServeTimes.OrderBy(s => s.Time).ToList();
                 sortedServeDay.ServeTimes = sortedServeTimes;
@@ -380,7 +376,7 @@ namespace crds_angular.Services
                 Name = team.Name,
                 GroupId = team.GroupId,
                 Members = NewTeamMembersWithRoles(team.Members, opportunity.RoleTitle, tmpRole),
-                PrimaryContact = team.PrimaryContact
+                PrimaryContact = team.PrimaryContact, EventType = opportunity.EventType, EventTypeId = opportunity.EventTypeId
             };
             return servingTeam;
         }
