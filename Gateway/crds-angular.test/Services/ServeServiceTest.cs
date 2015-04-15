@@ -462,7 +462,7 @@ namespace crds_angular.test.Services
             _opportunityService.Setup(m => m.RespondToOpportunity(mockParticipant.ParticipantId, opportunityId, It.IsAny<string>(), mockEvents[0].EventId, true));
             _opportunityService.Setup(m => m.RespondToOpportunity(mockParticipant.ParticipantId, opportunityId, It.IsAny<string>(), mockEvents[1].EventId, true));
 
-            _fixture.SaveServeResponse(It.IsAny<string>(), contactId, opportunityId, eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(), true);
+            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(), true, false);
 
             _participantService.VerifyAll();
             _eventService.VerifyAll();
@@ -501,7 +501,7 @@ namespace crds_angular.test.Services
             _opportunityService.Setup(m => m.RespondToOpportunity(mockParticipant.ParticipantId, opportunityId, It.IsAny<string>(), mockEvents[0].EventId, false));
             _opportunityService.Setup(m => m.RespondToOpportunity(mockParticipant.ParticipantId, opportunityId, It.IsAny<string>(), mockEvents[1].EventId, false));
 
-            _fixture.SaveServeResponse(It.IsAny<string>(), contactId, opportunityId, eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(), false);
+            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(), false, false);
 
             _participantService.VerifyAll();
             _eventService.Verify(m => m.GetEventsByTypeForRange(eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()), Times.Exactly(1));

@@ -299,27 +299,33 @@ namespace crds_angular.Services
             return servingTeams;
         }
 
-        public bool SaveServeResponse(string token,
+        public bool SaveServeRsvp(string token,
             int contactid,
             int opportunityId,
             int eventTypeId,
             DateTime startDate,
             DateTime endDate,
-            bool signUp)
+            bool signUp, bool alternateWeeks)
         {
             //get participant id for Contact
             var participant = _participantService.GetParticipant(contactid);
             //get events in range
             var events = _eventService.GetEventsByTypeForRange(eventTypeId, startDate, endDate, token);
+            var includeThisWeek = true;
             foreach (var e in events)
             {
-                //for each event in range create an event participant & opportunity response
-                if (signUp)
+                if ((!alternateWeeks) || includeThisWeek)
                 {
-                    _eventService.registerParticipantForEvent(participant.ParticipantId, e.EventId);
+                    //for each event in range create an event participant & opportunity response
+                    if (signUp)
+                    {
+                        _eventService.registerParticipantForEvent(participant.ParticipantId, e.EventId);
+                    }
+                    var comments = string.Empty; //anything of value to put in comments?
+                    _opportunityService.RespondToOpportunity(participant.ParticipantId, opportunityId, comments,
+                        e.EventId, signUp);
                 }
-                var comments = string.Empty; //anything of value to put in comments?
-                _opportunityService.RespondToOpportunity(participant.ParticipantId, opportunityId, comments, e.EventId, signUp);
+                includeThisWeek = !includeThisWeek;
             }
 
             return true;

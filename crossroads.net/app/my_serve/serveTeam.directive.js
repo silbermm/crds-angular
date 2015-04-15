@@ -189,7 +189,8 @@
         saveRsvp.eventTypeId = scope.eventTypeId;
         saveRsvp.endDate = parseDate(scope.currentMember.currentOpportunity.toDt);
         saveRsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
-        saveRsvp.signUp = scope.currentMember.currentOpportunity.signedup;
+        saveRsvp.signUp = (scope.currentMember.currentOpportunity.signedup === "1");
+        saveRsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
         saveRsvp.$save();
       }
 
