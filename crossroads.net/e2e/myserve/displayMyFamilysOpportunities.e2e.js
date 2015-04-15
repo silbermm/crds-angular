@@ -66,8 +66,13 @@ describe('Crossroads App', function() {
     panel.element(by.css(".btn")).click();
     expect(panel.element(by.css(".panel-collapse")).getAttribute("class")).toMatch("in");
 
-    var opp = panel.element(by.css(".radio"));
-    expect(opp.getAttribute('class')).toContain('text-muted');
+    var opp = panel.all(by.css(".radio")).get(0);
+    if(opp.all(by.css(".label")).get(0).textValue === 'Full'){ 
+      console.log("element label was equal to FULL");
+      expect(opp.getAttribute('class')).toContain('text-muted');
+    } else {
+      expect(opp.getAttribute('class')).not.toContain('text-muted');
+    }
   });
 
 
