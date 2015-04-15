@@ -3,8 +3,8 @@ var amountInput = element(by.model('give.amount'));
 
 describe('Give as a guest-giver', function() {
   it('It should contain expected programs in the dropdown', function() {
-    browser.get(env.baseUrl + '/#/give'); 
-    element.all(by.repeater("program in programs")).then(function(rows){
+    browser.get(env.baseUrl + '/#/give/amount'); 
+    element.all(by.options("program for program in programs")).then(function(rows){
         expect(rows[0].evaluate().getText()).toContain("Ministry Fund");
         expect(rows[1].evaluate().getText()).toContain("Game Change Fund");
         expect(rows[2].evaluate().getText()).toContain("Old St. George");
