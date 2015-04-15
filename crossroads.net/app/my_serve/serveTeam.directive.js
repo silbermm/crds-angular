@@ -25,7 +25,6 @@
     };
 
     function link(scope, el, attr) {
-
       scope.attendingChanged = attendingChanged;
       scope.closePanel = closePanel;
       scope.currentActiveTab = null;
@@ -197,7 +196,10 @@
         saveRsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
         saveRsvp.signUp = (scope.currentMember.currentOpportunity.signedup === "1");
         saveRsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
-        saveRsvp.$save();
+        saveRsvp.$save(function(saved){
+          $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess );
+          console.log("saved!");
+        });
       }
 
       function setActiveTab(member) {
