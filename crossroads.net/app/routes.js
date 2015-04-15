@@ -180,9 +180,9 @@
                  url: "/amount",
                  templateUrl: "give/amount.html"
            })
-           .state("give.guest", {
-                 url: "/guest",
-                 templateUrl: "give/guest.html"
+           .state("give.account", {
+                 url: "/account",
+                 templateUrl: "give/account.html"
            })
            .state("give.thank-you", {
              url: "/thank-you",

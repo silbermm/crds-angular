@@ -1,6 +1,6 @@
 require('./give.html');
 require('./amount.html');
-require('./guest.html');
+require('./account.html');
 require('./thank_you.html');
 require('./give.module.js');
 var app = require('angular').module('give');
