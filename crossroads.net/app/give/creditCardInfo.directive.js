@@ -1,4 +1,5 @@
 require('./creditCardInfo.html');
+
 (function () {
     angular
     .module('credit-card-info',[])

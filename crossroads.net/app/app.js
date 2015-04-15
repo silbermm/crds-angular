@@ -7,6 +7,7 @@ require("angular-sanitize");
 require('angular-messages');
 require('angular-cookies');
 require('angular-growl');
+require('angular-payments');
 require('angular-toggle-switch');
 require('angular-ui-utils');
 require('./templates/nav.html');
@@ -26,7 +27,7 @@ require('angular-match-media');
 
 require('./third-party/angular/angular-aside.min.css');
 require('./third-party/angular/angular-growl.css');
-require('./third-party/angular/angular.payments');
+//require('./third-party/angular/angular.payments');
 require('./give');
 
 
@@ -69,6 +70,7 @@ var _ = require('lodash');
         invalidDonationAmount:22,
         invalidAccountNumber:23,
         invalidRoutingTransit:24,
+        invalidCard:25,
         invalidCvv:26
     }).config(function (growlProvider) {
         growlProvider.globalPosition("top-center");
@@ -81,7 +83,7 @@ var _ = require('lodash');
             return $sce.trustAsHtml(val);
         };
     }])
-        .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "$http", "Message", "growl", "$aside", "screenSize", '$payments',
+        .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "$http", "Message", "growl", "$aside", "screenSize", "$payments",
         function ($scope, $rootScope, MESSAGES, $http, Message, growl, $aside, screenSize, $payments) {
 
                 console.log(__API_ENDPOINT__);
@@ -89,10 +91,6 @@ var _ = require('lodash');
                 $scope.prevent = function (evt) {
                     evt.stopPropagation();
                 };
-
-                // $scope.verified = function () {
-                //     return $payments.verified();
-                // }
 
                 $rootScope.mobile = screenSize.on('xs, sm', function(match){
                     $rootScope.mobile = match;

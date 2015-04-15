@@ -4,7 +4,7 @@ angular.module('ngPayments', [])
     var verCC, verCVC, verEXP, defaultFormat, isIE;
     isIE = (document.documentMode && document.documentMode < 9); //Don't try to deal with selections on < IE9
     defaultFormat = /(\d{1,4})/g;
-    console.log("ngpayments");
+
     return {
 
       verified: function() {
@@ -43,26 +43,6 @@ angular.module('ngPayments', [])
         }
       ],
 
-      reFormatCardNumber: function(num) {
-        var card, groups, upperLength, _ref;
-        card = this.cardFromNumber(num);
-        if (!card) {
-          return num;
-        }
-        upperLength = card.length[card.length.length - 1];
-        num = num.replace(/\D/g, '');
-        num = num.slice(0, +upperLength + 1 || 9e9);
-        if (card.format.global) {
-          return (_ref = num.match(card.format)) != null ? _ref.join(' ') : void 0;
-        } else {
-          groups = card.format.exec(num);
-          if (groups != null) {
-            groups.shift();
-          }
-          return groups != null ? groups.join(' ') : void 0;
-        }
-      }, //reFormatCardNumber
-
       cardFromNumber: function(num) {
         var card, _i, _len;
         num = (num + '').replace(/\D/g, '');
@@ -97,7 +77,6 @@ angular.module('ngPayments', [])
       }, //luhnCheck
 
       validateCardExpiry: function(month, year) {
-        console.log("validate card");
         var currentTime, expiry, prefix, _ref;
         if (typeof month === 'object' && 'month' in month) {
           _ref = month, month = _ref.month, year = _ref.year;
@@ -137,27 +116,31 @@ angular.module('ngPayments', [])
         scope: {
           ngModel: '='
         },
-        link: function(scope, elem, attrs) {
+        link: function(scope, elem, attrs, ngModel) {
 
           var expm, expy, card, length, upperLength, cvvLength, ccVerified;
-
           upperLength = 16;
           ccVerified = false;
 
-          scope.$watch('ngModel.number', function(newValue, oldValue) {
+          scope.$watch('ngModel.ccNumber', function(newValue, oldValue) {
+
             if(newValue) {
               card = $payments.cardFromNumber(newValue);
               if(card && card.type) { scope.ngModel.type = card.type; }
               if (card) {
                 upperLength = card.length[card.length.length - 1];
               }
+
               length = newValue.replace(/\D/g, '').length;
               if(length == upperLength) {
-                ccVerified = scope.ngModel.valid = $payments.luhnCheck(newValue.replace(/\D/g, ''));
+                ccVerified = scope.ngModel.ccValid = $payments.luhnCheck(newValue.replace(/\D/g, ''));
               }
+
               if(ccVerified && length != upperLength) {
-                ccVerified = scope.ngModel.valid = false;
+                ccVerified = scope.ngModel.ccValid = false;
               }
+
+              scope.ccVerified = ccVerified;
             }
           }, true);
 
@@ -242,15 +225,6 @@ angular.module('ngPayments', [])
             }
           });
 
-          //Format the card if they paste it in and check it
-          elem.on('paste', function(e) {
-            $timeout(function() {
-              var formatted, value;
-              value = elem.val();
-              var formatted = $payments.reFormatCardNumber(value);
-              elem.val(formatted);
-            });
-          });
         }
     }
   }]);
