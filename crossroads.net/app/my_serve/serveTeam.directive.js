@@ -19,8 +19,7 @@
         teamIndex: '=',
         tabIndex: '=',
         dayIndex: '=',
-        oppServeDate: '=',
-        eventTypeId: '=?'
+        oppServeDate: '='
       },
       link: link
     };
@@ -38,13 +37,13 @@
       scope.editProfile = editProfile;
       scope.frequency = [{
         value: 0,
-        text: "Once (12/16/14 8:30am)"
+        text: "Once"
       }, {
         value: 1,
-        text: "Every Week (Sundays 8:30am)"
+        text: "Every Week"
       }, {
         value: 2,
-        text: "Every Other Week (Sundays 8:30am)"
+        text: "Every Other Week"
       }];
       scope.format = 'MM/dd/yyyy';
       scope.populateDates = populateDates;
@@ -186,7 +185,7 @@
         var saveRsvp = new ServeOpportunities.SaveRsvp();
         saveRsvp.contactId = scope.currentMember.contactId;
         saveRsvp.opportunityId = scope.currentMember.currentOpportunity.roleId;
-        saveRsvp.eventTypeId = scope.eventTypeId;
+        saveRsvp.eventTypeId = scope.team.eventTypeId;
         saveRsvp.endDate = parseDate(scope.currentMember.currentOpportunity.toDt);
         saveRsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
         saveRsvp.signUp = (scope.currentMember.currentOpportunity.signedup === "1");
