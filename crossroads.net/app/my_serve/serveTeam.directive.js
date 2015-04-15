@@ -190,7 +190,6 @@
         var saveRsvp = new ServeOpportunities.SaveRsvp();
         saveRsvp.contactId = scope.currentMember.contactId;
         saveRsvp.opportunityId = scope.currentMember.serveRsvp.roleId;
-        //saveRsvp.opportunityId = scope.currentMember.currentOpportunity.roleId;
         saveRsvp.eventTypeId = scope.team.eventTypeId;
         saveRsvp.endDate = parseDate(scope.currentMember.currentOpportunity.toDt);
         saveRsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
