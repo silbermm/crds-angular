@@ -36,6 +36,7 @@
     "image-webpack-loader": "^1.2.0",
     "imagemin": "^3.1.0",
     "jasmine-core": "^2.2.0",
+    "jasmine-given": "^2.6.2",
     "karma-chrome-launcher": "^0.1.7",
     "karma-env-preprocessor": "^0.1.1",
     "karma-jasmine": "^0.3.5",
@@ -82,6 +83,7 @@
     "angular-growl": "./app/third-party/angular/angular-growl.js",
     "bootstrap-dropdown": "./node_modules/bootstrap/js/dropdown.js",
     "angular-ui-utils": "./app/third-party/angular/ui-utils.min.js",
-    "angular-aside": "./app/third-party/angular/angular-aside.min.js"
+    "angular-aside": "./app/third-party/angular/angular-aside.min.js",
+    "angular-match-media": "./app/third-party/angular/match-media.js"
   }
 }

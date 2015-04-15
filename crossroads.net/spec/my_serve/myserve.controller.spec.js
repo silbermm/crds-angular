@@ -20,7 +20,7 @@ describe('MyServeController', function() {
     beforeEach(inject(function($log, $httpBackend){
       $scope = {};
       controller = $controller('MyServeController', { $scope: $scope });
-      $httpBackend.expectGET( window.__env__['CRDS_API_ENDPOINT'] + 'api/profile/servesignup').respond([ retArray ]);
+      $httpBackend.expectGET( window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/family-serve-days').respond([ retArray ]);
     })); 
 
     it('should get a list of groups', inject(function(ServeOpportunities){ 

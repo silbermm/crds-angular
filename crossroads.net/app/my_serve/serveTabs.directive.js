@@ -15,7 +15,9 @@
       scope : {
         opportunity: '=',
         tabIndex: '=',
-        dayIndex: '='
+        dayIndex: '=',
+        serveDate: '=',
+        eventTypeId: '='
       }
     };
   }

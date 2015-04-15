@@ -29,7 +29,7 @@ describe('Crossroads App', function() {
   });
 
   it('should allow me to login', function() { 
-    expect(element(by.id("current-user")).getText()).toBe("Matthew");  
+    expect(element(by.id("current-user")).getText()).toBe("Matt");  
   });
 
 });

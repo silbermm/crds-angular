@@ -36,6 +36,8 @@ namespace crds_angular
             container.RegisterType<IContactRelationshipService, ContactRelationshipService>();
             container.RegisterType<IOpportunityService, OpportunityServiceImpl>();
             container.RegisterType<IConfigurationWrapper, ConfigurationWrapper>();
+            container.RegisterType<IServeService, ServeService>();
+            container.RegisterType<IParticipantService, ParticipantService>();
 
 
             container.RegisterType<PlatformServiceClient>(WithLifetime.PerResolve(typeof(PlatformServiceClient)), new InjectionConstructor());

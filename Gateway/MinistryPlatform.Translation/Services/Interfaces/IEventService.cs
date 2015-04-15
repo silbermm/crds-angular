@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MinistryPlatform.Models;
 
 namespace MinistryPlatform.Translation.Services.Interfaces
@@ -7,5 +8,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
     {
         int registerParticipantForEvent(int participantId, int eventId);
         List<Event> GetEvents(string eventType, string token);
+        List<Event> GetEventsByTypeForRange(int eventTypeId, DateTime startDate, DateTime endDate, string token);
     }
 }

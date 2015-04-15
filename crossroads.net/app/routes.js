@@ -176,13 +176,12 @@
             .state("give", {
                 url: "/give",
                 controller: "GiveCtrl as give",
-                templateUrl: "give/give.html",
-                data: {
-                    isProtected: true
-                },
-                resolve: {
-                    loggedin: checkLoggedin
-                }
+                templateUrl: "give/give.html"
+            })
+            .state("/give/bank-info", {
+                url: "/give/bank-info",
+                controller: "GiveCtrl as give",
+                templateUrl: "give/account_info.html"
             })
             .state("go_trip_giving", {
                 url: "/go_trip_giving",

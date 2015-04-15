@@ -80,6 +80,7 @@
     <Compile Include="Services\GroupServiceTest.cs" />
     <Compile Include="Services\EventServiceTest.cs" />
     <Compile Include="Services\OpportunityServiceTest.cs" />
+    <Compile Include="Services\ParticipantServiceTest.cs" />
     <Compile Include="TranslationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -92,6 +93,10 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\crds-angular\crds-angular.csproj">
+      <Project>{DC3B7EDC-2B9A-49F4-A5C8-50BA4C3E2A7B}</Project>
+      <Name>crds-angular</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Crossroads.Utilities\Crossroads.Utilities.csproj">
       <Project>{61238A82-D410-4330-BD25-889239FC7873}</Project>
       <Name>Crossroads.Utilities</Name>

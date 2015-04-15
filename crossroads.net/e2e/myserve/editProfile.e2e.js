@@ -41,24 +41,12 @@ describe('Edit profile on myserve page', function() {
     //var profileModal = element(by.css(".email-modal"));
     var email = element(by.id("account-page-email"));
     email.clear();
-    email.sendKeys(changeEmail);
-
-    element(by.id("save-personal")).click();
+    email.sendKeys(changeEmail); 
+    element(by.id("save-personal")).click(); 
     panel.element(by.buttonText('Lux')).click();
-    var currentEmail = panel.element(by.binding("currentMember.emailAddress"));
-    expect(currentEmail.getText()).toBe(changeEmail);
-
-    browser.get(env.baseUrl + "/#/serve-signup");
-    panel.element(by.buttonText('Lux')).click();
-    var currentEmail2 = panel.element(by.binding("currentMember.emailAddress"));
+    var currentEmail2 = panel.all(by.binding("currentMember.emailAddress"));
     expect(currentEmail2.getText()).toBe(changeEmail);
 
-    panel.element(by.css(".edit-btn")).click();
-    email.clear();
-    email.sendKeys(correctEmail);
-    element(by.id("save-personal")).click();
-    panel.element(by.buttonText('Lux')).click();
-    expect(panel.element(by.binding("currentMember.emailAddress")).getText()).toBe(correctEmail);
   });
 
 });

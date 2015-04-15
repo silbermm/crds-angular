@@ -1,6 +1,10 @@
 .filter-clear {
   float: right;
-  margin: 7px 0;
+}
+
+.filter-reset {
+    font-size: $font-size-base;
+    font-weight: normal;
 }
 
 .filter-group {
