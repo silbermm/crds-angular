@@ -141,8 +141,11 @@ namespace crds_angular.Services
                                             else
                                             {
                                                 //does member have rsvp for this role?
-                                                member.ServeRsvp = GetRsvp(opportunity.OpportunityId, e.EventId,
-                                                    member.ContactId);
+                                                if (member.ServeRsvp == null)
+                                                {
+                                                    member.ServeRsvp = GetRsvp(opportunity.OpportunityId, e.EventId,
+                                                        member.ContactId);
+                                                }
                                             }
                                             member.Roles.Add(serveRole);
                                         }
