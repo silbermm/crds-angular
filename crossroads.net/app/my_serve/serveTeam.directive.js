@@ -19,8 +19,7 @@
         teamIndex: '=',
         tabIndex: '=',
         dayIndex: '=',
-        oppServeDate: '=',
-        eventTypeId: '=?'
+        oppServeDate: '='
       },
       link: link
     };
@@ -39,13 +38,13 @@
       scope.editProfile = editProfile;
       scope.frequency = [{
         value: 0,
-        text: "Once (12/16/14 8:30am)"
+        text: "Once"
       }, {
         value: 1,
-        text: "Every Week (Sundays 8:30am)"
+        text: "Every Week"
       }, {
         value: 2,
-        text: "Every Other Week (Sundays 8:30am)"
+        text: "Every Other Week"
       }];
       scope.format = 'MM/dd/yyyy';
       scope.populateDates = populateDates;
@@ -170,19 +169,34 @@
       }
 
       function parseDate(stringDate) {
-        // Date we are parsing looks like this 4/3/2008
-        var dateArr = stringDate.split("/");
-        var d = moment(dateArr[2] + "-" + dateArr[0] + "-" + dateArr[1]);
-        return d.format('X');
+        var m = moment(stringDate);
+
+        if (!m.isValid()) {
+          var dateArr = stringDate.split("/");
+          var dateStr = dateArr[2] + " " + dateArr[0] + " " + dateArr[1];
+          // https://github.com/moment/moment/issues/1407
+          // moment("2014 04 25", "YYYY MM DD"); // string with format
+          m = moment(dateStr, "YYYY MM DD");
+
+          if (!m.isValid()) {
+            //throw error
+            throw new Error("Parse Date Failed Moment Validation");
+          }
+        }
+        $log.debug('date: ' + m.format('X'));
+        return m.format('X');
       }
 
       function saveRsvp() {
         var saveRsvp = new ServeOpportunities.SaveRsvp();
         saveRsvp.contactId = scope.currentMember.contactId;
         saveRsvp.opportunityId = scope.currentMember.serveRsvp.roleId;
-        saveRsvp.eventTypeId = scope.eventTypeId;
+        //saveRsvp.opportunityId = scope.currentMember.currentOpportunity.roleId;
+        saveRsvp.eventTypeId = scope.team.eventTypeId;
         saveRsvp.endDate = parseDate(scope.currentMember.currentOpportunity.toDt);
         saveRsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
+        saveRsvp.signUp = (scope.currentMember.currentOpportunity.signedup === "1");
+        saveRsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
         saveRsvp.$save();
       }
 

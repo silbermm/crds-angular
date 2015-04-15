@@ -6,7 +6,6 @@
 
 body {
   font-weight: 300;
-  font-smoothing: antialiased;
 }
 
 // Links
@@ -15,14 +14,11 @@ a:hover {
   text-decoration:none;
 }
 
-// Buttons
-
-button {
-  font-smoothing: antialiased;
-  -webkit-font-smoothing: inherit;
-}
-
 // Headings
+
+.page-header {
+  font-weight: normal;
+}
 
 .subheading {
   font-weight: 400;
@@ -54,6 +50,10 @@ h6.subheading {
   text-transform: uppercase;
   font-weight: normal;
   letter-spacing: 1px;
+
+  &.bold {
+    font-weight: bold;
+  }
 }
 
 // Brand

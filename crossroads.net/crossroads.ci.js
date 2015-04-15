@@ -18,6 +18,7 @@ module.exports = function(config) {
       './node_modules/phantomjs-polyfill/bind-polyfill.js',
       'assets/main.js',
       'node_modules/angular-mocks/angular-mocks.js',
+      'node_modules/moment/moment.js',
       'spec/**/*.js'
     ],
 

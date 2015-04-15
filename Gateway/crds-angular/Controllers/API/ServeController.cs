@@ -69,15 +69,22 @@ namespace crds_angular.Controllers.API
         }
 
         [Route("api/serve/save-rsvp")]
-        public IHttpActionResult SaveRsvp([FromBody] ServeResponseDto serveResponse)
+        public IHttpActionResult SaveRsvp([FromBody] SaveRsvpDto saveRsvp)
         {
+            //validate request
+            if (saveRsvp.StartDateUnix <= 0)
+            {
+                var dateError = new ApiErrorDto("StartDate Invalid", new InvalidOperationException("Invalid Date"));
+                throw new HttpResponseException(dateError.HttpResponseMessage);
+            }
+
             return Authorized(token =>
             {
                 try
                 {
-                    _serveService.SaveServeResponse(token, serveResponse.ContactId, serveResponse.OpportunityId,
-                        serveResponse.EventTypeId, serveResponse.StartDateUnix.FromUnixTime(),
-                        serveResponse.EndDateUnix.FromUnixTime());
+                    _serveService.SaveServeRsvp(token, saveRsvp.ContactId, saveRsvp.OpportunityId,
+                        saveRsvp.EventTypeId, saveRsvp.StartDateUnix.FromUnixTime(),
+                        saveRsvp.EndDateUnix.FromUnixTime(), saveRsvp.SignUp, saveRsvp.AlternateWeeks);
                 }
                 catch (Exception exception)
                 {

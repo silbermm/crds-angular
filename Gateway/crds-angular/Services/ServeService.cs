@@ -168,9 +168,7 @@ namespace crds_angular.Services
                             serveDay = new ServingDay
                             {
                                 Day = e.EventStartDate.Date.ToString("d"),
-                                Date = e.EventStartDate,
-                                EventType = opportunity.EventType,
-                                EventTypeId = opportunity.EventTypeId
+                                Date = e.EventStartDate
                             };
                             var serveTime = new ServingTime {Time = e.EventStartDate.TimeOfDay.ToString()};
                             serveTime.ServingTeams.Add(NewServingTeam(team, opportunity, serveRole, e.EventId));
@@ -189,9 +187,7 @@ namespace crds_angular.Services
             {
                 var sortedServeDay = new ServingDay
                 {
-                    Day = serveDay.Day,
-                    EventType = serveDay.EventType,
-                    EventTypeId = serveDay.EventTypeId
+                    Day = serveDay.Day
                 };
                 var sortedServeTimes = serveDay.ServeTimes.OrderBy(s => s.Time).ToList();
                 sortedServeDay.ServeTimes = sortedServeTimes;
@@ -322,23 +318,34 @@ namespace crds_angular.Services
             return servingTeams;
         }
 
-        public bool SaveServeResponse(string token,
+
+        public bool SaveServeRsvp(string token,
             int contactId,
             int opportunityId,
             int eventTypeId,
             DateTime startDate,
-            DateTime endDate)
+            DateTime endDate,
+            bool signUp, bool alternateWeeks)
         {
             //get participant id for Contact
             var participant = _participantService.GetParticipant(contactId);
             //get events in range
             var events = _eventService.GetEventsByTypeForRange(eventTypeId, startDate, endDate, token);
+            var includeThisWeek = true;
             foreach (var e in events)
             {
-                //for each event in range create an event participant & opportunity response
-                _eventService.registerParticipantForEvent(participant.ParticipantId, e.EventId);
-                var comments = string.Empty; //anything of value to put in comments?
-                _opportunityService.RespondToOpportunity(participant.ParticipantId, opportunityId, comments, e.EventId);
+                if ((!alternateWeeks) || includeThisWeek)
+                {
+                    //for each event in range create an event participant & opportunity response
+                    if (signUp)
+                    {
+                        _eventService.registerParticipantForEvent(participant.ParticipantId, e.EventId);
+                    }
+                    var comments = string.Empty; //anything of value to put in comments?
+                    _opportunityService.RespondToOpportunity(participant.ParticipantId, opportunityId, comments,
+                        e.EventId, signUp);
+                }
+                includeThisWeek = !includeThisWeek;
             }
 
             return true;
@@ -400,7 +407,7 @@ namespace crds_angular.Services
                 Name = team.Name,
                 GroupId = team.GroupId,
                 Members = NewTeamMembersWithRoles(team.Members, opportunity.RoleTitle, serveRole, eventId),
-                PrimaryContact = team.PrimaryContact
+                PrimaryContact = team.PrimaryContact, EventType = opportunity.EventType, EventTypeId = opportunity.EventTypeId
             };
             return servingTeam;
         }

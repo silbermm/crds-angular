@@ -19,9 +19,9 @@
         <div class="row">
           <div class="col-md-4">
             <h5>Opportunities</h5>
-            <div class="radio" ng-repeat="role in currentMember.roles">
+            <div class="radio" ng-class="{'text-muted': role.capacity.badgeType === 'label-success'}" ng-repeat="role in currentMember.roles">
               <label>
-               <input type="radio" name="role"  ng-model="currentMember.serveRsvp.roleId" ng-value="role.roleId" value="{{::role.name}}">
+               <input type="radio" name="role" ng-disabled="role.capacity.badgeType === 'label-success'" ng-model="currentMember.serveRsvp.roleId" ng-value="role" value="{{::role.name}}">
                 <span class="opportunity-name">{{::role.name}}</span>
                 <span class="label {{ role.capacity.badgeType }}" ng-show="role.capacity.display">{{ role.capacity.message }}</span>
               </label>
