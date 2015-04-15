@@ -68,7 +68,7 @@ var _ = require('lodash');
         invalidDonationAmount:22,
         invalidAccountNumber:23,
         invalidRoutingTransit:24,
-        invalidCvv:26
+        invalidCvv:26,
         serveSignupSuccess:29
     }).config(function (growlProvider) {
         growlProvider.globalPosition("top-center");

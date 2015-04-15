@@ -198,13 +198,6 @@
              url: '/demo',
              template: '<p>demo</p>'
            })
-           .state("demo.guest-giver", {
-                url: "/guest-giver",
-            .state("/give/bank-info", {
-                url: "/give/bank-info",
-                controller: "GiveCtrl as give",
-                templateUrl: "give/account_info.html"
-            })
             .state("go_trip_giving", {
                 url: "/go_trip_giving",
                 controller: "GoTripGivingCtrl as gotripsearch",
