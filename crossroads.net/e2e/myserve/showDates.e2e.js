@@ -44,9 +44,6 @@ describe("My Serve", function() {
     var signedupBtn = panel.all(by.model("currentMember.currentOpportunity.signedup"));
     expect(signedupBtn.isDisplayed()).toBeTruthy();
     signedupBtn.get(0).click();  
-    /*panel.all(by.model("currentMember.currentOpportunity.frequency")).then(function(select){ */
-      //console.log(select);
-      //expect(select.isDisplayed()).toBeTruthy();
-    /*});*/
+    
   });
 });
