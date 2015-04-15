@@ -6,7 +6,7 @@
         <button type="button" class="btn btn-ghost" ng-model="give.view" btn-radio="'cc'">Credit Card</button>
     </div>
     <span>
-        <a href="#">
+        <a href="#/confidentiality-and-security/" target="_blank">
             <svg viewBox="0 0 21 32" class="icon icon-lock"><use xlink:href="#lock"></use></svg>
         </a>
     </span>
@@ -37,5 +37,8 @@
             <ng-messages for="giveForm.account.$error" ng-show="giveForm.account.$error.invalidAccount && giveForm.account.$dirty" ng-messages-include="on-blur-messages"></ng-messages>
         </div>
     </section>
-</div>
+    <section>
+      <credit-card-info></credit-card-info>
+    </section>
+  </div>
 </ng-form>

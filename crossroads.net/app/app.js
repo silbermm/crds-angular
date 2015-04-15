@@ -20,8 +20,6 @@ require('./profile');
 require('./filters');
 require('./events');
 require('./cms/services/cms_services_module');
-require('./give/bankInfo.directive.js');
-require('./give/donationConfirmation.directive.js');
 
 require('angular-aside');
 require('angular-match-media');
@@ -70,6 +68,7 @@ var _ = require('lodash');
         invalidDonationAmount:22,
         invalidAccountNumber:23,
         invalidRoutingTransit:24,
+        invalidCvv:26
         serveSignupSuccess:29
     }).config(function (growlProvider) {
         growlProvider.globalPosition("top-center");
@@ -90,7 +89,7 @@ var _ = require('lodash');
                 $scope.prevent = function (evt) {
                     evt.stopPropagation();
                 };
-            
+
                 $rootScope.mobile = screenSize.on('xs, sm', function(match){
                     $rootScope.mobile = match;
                 })
