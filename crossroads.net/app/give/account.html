@@ -5,6 +5,10 @@
         <a type="button" class="btn btn-ghost" role="button" ui-sref="give.login">Login</a>
         <a type="button" class="btn btn-ghost active" role="button">Give as Guest</a>
     </div>
+    <div>
+        <input type="email" ng-model="give.email" class="form-control" name="email" placeholder="Email" ng-required="true" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500}}" unique-email on-email-not-found="give.onEmailNotFound" on-email-found="give.onEmailFound" validate-unique="false">
+        <div id="existingEmail" growl inline="true" reference="{{give.emailAlreadyRegisteredGrowlDivRef}}" limit-messages="1"></div>
+    </div>
 
     <bank-info></bank-info>
     <donation-confirmation></donation-confirmation>
