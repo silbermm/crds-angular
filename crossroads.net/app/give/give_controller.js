@@ -26,7 +26,7 @@
             }
         ]
 
-        _this.onEmailFound = function() {
+        vm.onEmailFound = function() {
             $rootScope.$emit(
                 'notify'
                 , $rootScope.MESSAGES.donorEmailAlreadyRegistered
@@ -35,7 +35,7 @@
                 );
         }
 
-        _this.onEmailNotFound = function() {
+        vm.onEmailNotFound = function() {
             // There isn't a way to close growl messages in code, outside of the growl
             // directive itself.  To work around this, we'll simply trigger the "click"
             // event on the close button, which has a close handler function.
