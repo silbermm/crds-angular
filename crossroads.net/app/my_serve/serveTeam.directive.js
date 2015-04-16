@@ -181,7 +181,7 @@
         saveRsvp.eventTypeId = scope.team.eventTypeId;
         saveRsvp.endDate = parseDate(scope.currentMember.currentOpportunity.toDt);
         saveRsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
-        saveRsvp.signUp = (scope.currentMember.currentOpportunity.signedup === "1");
+        saveRsvp.signUp = scope.currentMember.serveRsvp.attending;
         saveRsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
         saveRsvp.$save(function(saved){
           $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess );           

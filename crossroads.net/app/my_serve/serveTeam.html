@@ -39,13 +39,13 @@
             <h5>Sign Up</h5>
            <div class="radio" ng-class="{'text-muted': currentMember.serveRsvp.roleId == null}">
              <label>
-               <input ng-disabled="currentMember.serveRsvp.roleId == null" type="radio" name="signup-{{panelId()}}" id="optionsRadios1"  value="true" ng-model="currentMember.serveRsvp.attending" ng-value="true" ng-change="attendingChanged()">
+               <input ng-disabled="currentMember.serveRsvp.roleId == null" type="radio" name="signup-{{panelId()}}" id="optionsRadios1" ng-model="currentMember.serveRsvp.attending" ng-value="true" ng-change="attendingChanged()">
                Yes
              </label>
            </div><!--/radio-->
            <div class="radio" ng-class="{'text-muted': currentMember.serveRsvp.roleId == null}" >
              <label>
-               <input ng-disabled="currentMember.serveRsvp.roleId == null" type="radio" name="signup-{{panelId()}}" id="optionsRadios2" value="false" ng-model="currentMember.serveRsvp.attending" ng-value="false" ng-change="attendingChanged()">
+               <input ng-disabled="currentMember.serveRsvp.roleId == null" type="radio" name="signup-{{panelId()}}" id="optionsRadios2" ng-model="currentMember.serveRsvp.attending" ng-value="false" ng-change="attendingChanged()">
                No
              </label>
            </div><!--/radio-->
