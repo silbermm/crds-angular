@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "my_trip.css",
+  "sources": [
+    "my_trip.scss"
+  ],
+  "sourcesContent": [],
+  "mappings": ";AACA,AAAS;EACD,AAAY;EACZ,AAAc;;AAEtB,AAAS;EACD,AAAY;;EACpB,AAAS,AAAW;IACR,AAAW;;EAEvB,AAAS,AAAW;IACR,AAAY;;AAGxB,AAAS;EACD,AAAa;;AAErB,AAAS;EACD,AAAc",
+  "names": []
+}

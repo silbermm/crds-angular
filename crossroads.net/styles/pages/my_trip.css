@@ -1,0 +1,21 @@
+/* line 2, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/my_trip.scss */
+.my-trip .trip-date {
+  margin-top: -3px;
+  padding-left: 10px; }
+/* line 6, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/my_trip.scss */
+.my-trip .days-left {
+  margin-top: -10px; }
+  /* line 8, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/my_trip.scss */
+  .my-trip .days-left .card-heading {
+    font-size: 30px; }
+  /* line 11, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/my_trip.scss */
+  .my-trip .days-left p {
+    margin-top: -13px; }
+/* line 15, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/my_trip.scss */
+.my-trip .trip-funding {
+  padding-top: 5px; }
+/* line 18, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/my_trip.scss */
+.my-trip h5 {
+  padding-left: 5px; }
+
+/*# sourceMappingURL=my_trip.css.map */
