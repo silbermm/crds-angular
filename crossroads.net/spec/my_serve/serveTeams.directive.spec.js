@@ -1,7 +1,7 @@
 var $compile, $rootScope, element, scope, mockSession, mockServeDate, $httpBackend;
 
 var mockOpp = {"name": "NuseryA", "roleId": "145"};
-var mockTeam = [{ "name" : "Kids Club Nusery", "eventTypeId": 100, "members" : [ { "name": "John", "contactId" : 12345678, "roles" : [ mockOpp, {"name": "NuseryB"}, {"name": "NuseryC"}, {"name": "NuseryD"} ] }, { "name":  "Jane", "contactId": 1234567890, "roles" : [ {"name": "NuseryA"}, {"name": "NuseryB"}, {"name": "NuseryC"}, {"name": "NuseryD"} ], "signedup" : "yes" }, ] }];
+var mockTeam = [{ "name" : "Kids Club Nusery", "eventTypeId": 100, "members" : [ { "name": "John", "contactId" : 12345678, "serveRsvp": {roleId: 145, attending: true}, "roles" : [ mockOpp, {"name": "NuseryB"}, {"name": "NuseryC"}, {"name": "NuseryD"} ] }, { "name":  "Jane", "contactId": 1234567890, "roles" : [ {"name": "NuseryA"}, {"name": "NuseryB"}, {"name": "NuseryC"}, {"name": "NuseryD"} ], "signedup" : "yes" }, ] }];
 
 var mockOpportunity = { "time": "8:30am", "team": mockTeam  };
 
@@ -64,6 +64,7 @@ describe('Serve Teams Directive', function() {
     var isolated = element.isolateScope();
     isolated.openPanel(mockTeam[0].members);
     expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
+    // scope.currentMember.serveRsvp.roleId
     isolated.currentMember.currentOpportunity = mockTeam[0].members[0].roles[0];
     isolated.currentMember.currentOpportunity.frequency = {value:1, text:"Every Week (Sundays 8:30am)"};
     $httpBackend.expect('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({'date': '1444552200'});

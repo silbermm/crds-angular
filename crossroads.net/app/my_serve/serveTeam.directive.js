@@ -120,7 +120,7 @@
             default:
               // every  or everyother
               ServeOpportunities.LastOpportunityDate.get({
-                id: scope.currentMember.currentOpportunity.roleId
+                id: scope.currentMember.serveRsvp.roleId
               }, function(ret) {
                 var dateNum = Number(ret.date * 1000);
                 var toDate = new Date(dateNum);
@@ -139,14 +139,16 @@
         return memberName === scope.currentActiveTab;
       };
 
+      
 
-      function isSignedUp(opportunity) {
-        if (scope.currentMember === undefined) {
-          return false;
+      function isSignedUp(member) {
+        console.log(member.serveRsvp);
+        if(member.serveRsvp !== null && member.serveRsvp !== undefined){
+          if(member.serveRsvp.attending !== null && member.serveRsvp.attending !== undefined)
+            return member.serveRsvp.attending 
+          return false
         } else {
-          return _.find(opportunity.members, function(m) {
-            return m.name === scope.currentMember.name && m.signedup === 'yes';
-          });
+          return false 
         }
       }
 

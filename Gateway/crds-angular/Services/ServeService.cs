@@ -208,7 +208,7 @@ namespace crds_angular.Services
 
             if (response == null || response.Opportunity_ID ==0) return null;
 
-            var serveRsvp = new ServeRsvp {Attending = true, RoleId = opportunityId};
+            var serveRsvp = new ServeRsvp {Attending = (response.Response_Result_ID == 1), RoleId = opportunityId};
             return serveRsvp;
         }
 

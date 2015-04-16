@@ -7,6 +7,7 @@ require("angular-sanitize");
 require('angular-messages');
 require('angular-cookies');
 require('angular-growl');
+require('angular-payments');
 require('angular-toggle-switch');
 require('angular-ui-utils');
 require('./templates/nav.html');
@@ -29,12 +30,11 @@ require('./third-party/angular/angular-growl.css');
 require('./give');
 
 
-
 var _ = require('lodash');
 "use strict";
 (function () {
 
-   angular.module("crossroads", ['ngResource', "crossroads.profile", "crossroads.filters", "crdsCMS.services", "ui.router", 'ui.utils', "ngCookies", "ngMessages", 'angular-growl', 'toggle-switch', 'ngAside', 'matchMedia','give'])
+   angular.module("crossroads", ['ngResource', "crossroads.profile", "crossroads.filters", "crdsCMS.services", "ui.router", 'ui.utils', "ngCookies", "ngMessages", 'angular-growl', 'toggle-switch', 'ngAside', 'matchMedia','give', 'ngPayments'])
 
     .constant("AUTH_EVENTS", {
             loginSuccess: "auth-login-success",
@@ -68,6 +68,7 @@ var _ = require('lodash');
         invalidDonationAmount:22,
         invalidAccountNumber:23,
         invalidRoutingTransit:24,
+        invalidCard:25,
         invalidCvv:26,
         donorEmailAlreadyRegistered:28,
         serveSignupSuccess:29
@@ -83,8 +84,8 @@ var _ = require('lodash');
             return $sce.trustAsHtml(val);
         };
     }])
-        .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "$http", "Message", "growl", "$aside", "screenSize",
-        function ($scope, $rootScope, MESSAGES, $http, Message, growl, $aside, screenSize) {
+        .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "$http", "Message", "growl", "$aside", "screenSize", "$payments",
+        function ($scope, $rootScope, MESSAGES, $http, Message, growl, $aside, screenSize, $payments) {
 
                 console.log(__API_ENDPOINT__);
 
