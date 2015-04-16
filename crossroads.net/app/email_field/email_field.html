@@ -1,6 +1,7 @@
 ﻿<ng-form name="email_field">
     <div class="form-group" ng-class="{'has-error': checkEmail()}">
-        <input type="email" ng-model="email" class="form-control" id="{{prefix}}-email" placeholder="Email" ng-required="true" name="email" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500}}" unique-email>
+        <!-- TODO remove the on-email-* attributes from the following -->
+        <input type="email" ng-model="email" class="form-control" id="{{prefix}}-email" placeholder="Email" ng-required="true" name="email" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500}}" unique-email on-email-not-found="console.log('Not found!')" on-email-found="console.log('Found!')">
 
         <ng-messages for="email_field.email.$error" ng-if="submitted" ng-messages-include="on-submit-messages"></ng-messages>
         <ng-messages for="email_field.email.$error" ng-show="$root.username == undefined" ng-messages-include="on-blur-messages">
