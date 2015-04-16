@@ -10,7 +10,10 @@
           ng-class="{'active':isActiveTab(member.name) }"  
           stop-event>
           {{::member.name}}
-          <serve-icon member="member"></serve-icon> 
+          <span ng-if="member.serveRsvp.attending != null"> 
+            <svg-icon icon="check-circle" ng-show="member.serveRsvp.attending" class="text-success"> </svg-icon>
+            <svg-icon icon="cancel-circle" ng-show="!member.serveRsvp.attending" class="text-danger"> </svg-icon>
+          </span>
         </button>
       </div><!--/pull-right-->
     </div><!--/panel-heading-->

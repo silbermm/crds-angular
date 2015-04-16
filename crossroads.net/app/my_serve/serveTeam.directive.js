@@ -185,6 +185,7 @@
         saveRsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
         saveRsvp.$save(function(saved){
           $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess );           
+          $rootScope.$broadcast('update.member', scope.currentMember); 
         });
       }
 
