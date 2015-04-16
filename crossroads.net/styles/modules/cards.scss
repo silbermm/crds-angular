@@ -1,0 +1,78 @@
+.card-item {
+  margin-bottom: $line-height-computed;
+  background: rgba(214, 224, 226, 0.2);
+  border-radius: 2px;
+  border-left: 5px solid $cr-blue;
+  box-shadow: -1px 2px 2px 0 rgba(0, 0, 0, 0.16), -1px 2px 2px 0 rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+.card-img {
+  padding: $line-height-computed/4 $line-height-computed/2;
+  text-align: center;
+
+  img {
+    max-width: 89%;
+    background-color: transparent;
+    border-radius: 50%;
+    border: 3px solid rgba(214, 224, 226, 0.4);
+    position: relative;
+    margin: 0 auto;
+  }
+}
+
+.card-header {
+  font-size: 2rem;
+}
+
+.card-dark {
+  background: rgba(214, 224, 226, 0.4);
+}
+
+.card-content {
+  padding: 0;
+  border-radius: 0 0 0 0;
+  bottom: -1px;
+  right: -1px;
+
+  @media (min-width: 768px) {
+    border-radius: 0 2px 2px 0;
+  }
+
+  .card-desc {
+    position: relative;
+    height: 100%;
+    display: block;
+    font-size: 13px;
+    margin-top: 8px;
+
+    a {
+      position: absolute;
+      width: 100%;
+      bottom: 10px;
+      left: 20px;
+    }
+  }
+
+  ul.list-group {
+    margin-bottom: 0px;
+
+    li {
+      background: transparent;
+      border-right: 0px;
+      border-left: 0px;
+      border-radius: 0px;
+      padding-top: 0px;
+      padding-bottom: 0px;
+      padding-right: 0px;
+      @extend .clearfix;
+      line-height: 33px;
+      padding-left: $line-height-computed/2;
+
+      h4 {
+        padding: $line-height-computed/2 0px;
+        margin: 0px;
+      }
+    }
+  }
+}
