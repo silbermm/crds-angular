@@ -1,6 +1,6 @@
 (function () {
     'use strict';
-    module.exports = function GiveCtrl($scope, $log, messages, opportunity, $payments ) {
+    module.exports = function GiveCtrl($scope, $log, messages, opportunity) {
 //note - do we need opportunity???
         var _this = this;
         //Credit Card RegExs
