@@ -1,10 +1,30 @@
 
 'use strict';
 (function () {
-//  module.exports = function GroupSignupController( Page, $modal) {
-  module.exports = function GiveCtrl($rootScope, $scope, $state) {
+
+  module.exports = function GiveCtrl($rootScope, $scope, $state, $timeout) {
+
+    if(document.location.hash == "#/give"){
+        $state.go("give.amount");
+    }
+
+        $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+
+            if(toState.name =="give.thank-you" && $scope.giveForm.giveForm.routing.$error.invalidRouting || toState.name =="give.thank-you" && $scope.giveForm.giveForm.account.$error.invalidAccount){
+                $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+                event.preventDefault();
+            }
+
+             if(toState.name =="give.account" && $scope.giveForm.giveForm.amount.$error.naturalNumber){
+                console.log($scope.giveForm.giveForm.amount.$error);
+                $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+                event.preventDefault();
+            }
+
+        });
 
         var vm = this;
+        vm.submitted = false;
         //Credit Card RegExs
         //var visaRegEx = /^4[0-9]{2}/;
         var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$ /;
@@ -20,8 +40,6 @@
         vm.showCheckClass = "ng-hide";
 
         console.log("in the controller");
-        // TODO Need to figure out a better option to get to the "initial" state
-        $state.go("give.amount");
 
         vm.alerts = [
             {
@@ -29,21 +47,6 @@
                 msg: "If it's all the same to you, please use your bank account (credit card companies charge Crossroads a fee for each gift)."
             }
         ]
-
-        vm.submitBankInfo = function() {
-          console.log(giveForm);
-          vm.formValid = true;
-           if (!$scope.giveForm.routing.$error.invalidRouting ) {
-             console.log("set form valid");
-             vm.formValid = true;
-             $state.go("give.thank-you");
-             }
-          if (!vm.formValid) {
-            $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-            console.log("emit it here");
-          return;
-          }
-        };
 
        vm.toggleCheck = function() {
             if (vm.showMessage == "Where?") {
@@ -74,6 +77,14 @@
             } else
                 vm.ccNumberClass = "";
         }
+
+        vm.goToAccount = function(){
+            console.log($scope.giveForm.giveForm.amount.$error.naturalNumber);
+            $timeout(function(){
+                vm.submitted = true;
+                $state.go("give.account");
+            });
+        };
 
     };
 

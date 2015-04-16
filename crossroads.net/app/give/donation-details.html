@@ -1,13 +1,14 @@
 <ng-form name="giveForm">
-  <div class="form-inline form-group give-amount" ng-class="{'has-error': giveForm.amount.$error.naturalNumber && giveForm.$dirty }">
+  <div class="form-inline form-group give-amount" ng-class="{'has-error': giveForm.amount.$error.naturalNumber && giveForm.$dirty || giveForm.amount.$error.required && give.submitted }">
     <div class="input-group">
       <span class="input-group-addon">$</span>
-      <input type="text" name="amount" class="form-control" ng-model="give.amount" autocomplete="off" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }" natural-number></input>
+      <input type="text" name="amount" class="form-control" ng-model="give.amount" autocomplete="off" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 10} }" natural-number required />
       <span class="input-group-addon ">.00</span>
 <!--       <p>{{giveForm}}</p> -->
     </div>
     <ng-messages for="giveForm.amount.$error" ng-show="giveForm.amount.$error.naturalNumber && giveForm.$dirty" 
       ng-messages-include="on-blur-messages"></ng-messages>
+      <ng-messages for="giveForm.amount.$error" ng-if="give.submitted" ng-messages-include="on-submit-messages"></ng-messages>
   </div>
 
   <div class="form-group">
