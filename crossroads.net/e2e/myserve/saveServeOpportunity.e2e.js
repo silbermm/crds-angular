@@ -33,11 +33,11 @@ describe('Serve Page', function() {
     panel.element(by.buttonText("Lux")).click();
     expect(panel.element(by.css(".panel-collapse")).getAttribute("class")).toMatch("in");
     
-    var radioBtn = panel.all(by.model("currentMember.currentOpportunity"));
+    var radioBtn = panel.all(by.model("currentMember.serveRsvp.roleId"));
     expect(radioBtn.isDisplayed()).toBeTruthy();
     radioBtn.get(0).click();
     
-    var signedupBtn = panel.all(by.model("currentMember.currentOpportunity.signedup"));
+    var signedupBtn = panel.all(by.model("currentMember.serveRsvp.attending"));
     expect(signedupBtn.isDisplayed()).toBeTruthy();
     signedupBtn.get(0).click(); 
 

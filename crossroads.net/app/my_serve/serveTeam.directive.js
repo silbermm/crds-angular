@@ -49,7 +49,6 @@
       scope.populateDates = populateDates;
       scope.isActiveTab = isActiveTab;
       scope.isCollapsed = true;
-      scope.isSignedUp = isSignedUp;
       scope.modalInstance = {};
       scope.open = open;
       scope.openPanel = openPanel;
@@ -138,20 +137,7 @@
       function isActiveTab(memberName) {
         return memberName === scope.currentActiveTab;
       };
-
-      
-
-      function isSignedUp(member) {
-        console.log(member.serveRsvp);
-        if(member.serveRsvp !== null && member.serveRsvp !== undefined){
-          if(member.serveRsvp.attending !== null && member.serveRsvp.attending !== undefined)
-            return member.serveRsvp.attending 
-          return false
-        } else {
-          return false 
-        }
-      }
-
+ 
       function open($event, opened) {
         $event.preventDefault();
         $event.stopPropagation();
@@ -198,8 +184,7 @@
         saveRsvp.signUp = (scope.currentMember.currentOpportunity.signedup === "1");
         saveRsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
         saveRsvp.$save(function(saved){
-          $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess );
-          console.log("saved!");
+          $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess );           
         });
       }
 
