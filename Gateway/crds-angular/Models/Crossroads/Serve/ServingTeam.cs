@@ -5,6 +5,12 @@ namespace crds_angular.Models.Crossroads.Serve
 {
     public class ServingTeam
     {
+        [JsonProperty(PropertyName = "eventType")]
+        public string EventType { get; set; }
+
+        [JsonProperty(PropertyName = "eventTypeId")]
+        public int EventTypeId { get; set; }
+
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
 

@@ -11,7 +11,7 @@
   }
 }
 
-.card-left {
+.card-img {
   padding: $line-height-computed/4 $line-height-computed/2;
   text-align: center;
 
@@ -25,9 +25,16 @@
   }
 }
 
-.card-middle {
-  padding: 0;
+.card-header {
+  font-size: 2rem;
+}
+
+.card-dark {
   background: rgba(214, 224, 226, 0.4);
+}
+
+.card-content {
+  padding: 0;
   border-radius: 0 0 0 0;
   bottom: -1px;
   right: -1px;
@@ -35,8 +42,6 @@
   @media (min-width: 768px) {
     border-radius: 0 2px 2px 0;
   }
-
-  
 
   .card-desc {
     position: relative;
@@ -52,7 +57,6 @@
       left: 20px;
     }
   }
-
 
   ul.list-group {
     margin-bottom: 0px;

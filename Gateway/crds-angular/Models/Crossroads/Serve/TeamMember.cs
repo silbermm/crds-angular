@@ -20,6 +20,9 @@ namespace crds_angular.Models.Crossroads.Serve
         [JsonProperty(PropertyName = "roles")]
         public List<ServeRole> Roles { get; set; }
 
+        [JsonProperty(PropertyName = "serveRsvp")]
+        public ServeRsvp ServeRsvp { get; set; }
+
         public TeamMember()
         {
             this.Roles = new List<ServeRole>();
