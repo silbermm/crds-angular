@@ -17,5 +17,7 @@ require('./creditCardInfo.html');
       function link(scope, element, attrs) {
         $log.debug("Inside of creditCardInfo directive");
       }
-    }
+    };
+
+
 })()

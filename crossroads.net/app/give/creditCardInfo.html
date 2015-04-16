@@ -7,16 +7,17 @@
     <div class="form-group" ng-class="{'has-error': !give.ccValid && giveForm.ccNumber.$dirty }" validate-card ng-model="give" >
         <label for="ccNumber">Credit Card Number</label>
         <input type="text" name="ccNumber" class="form-control cc-icon" ng-class="give.ccNumberClass" ng-model="give.ccNumber" maxlength="16" ng-blur="give.ccCardType()" >
+        <span  ng-show="!give.ccValid && giveForm.ccNumber.$dirty" ><span ng-bind-html="$root.messages[$root.MESSAGES.invalidCard].message | html"></span></span>
     </div>
     <div class="row">
         <div class="form-group col-xs-4  col-md-3">
             <label>Expiration</label>
             <input type="text" name="expDate" class="form-control" ng-model="give.expDate" ui-mask="99/99" placeholder="MM/YY">
         </div>
-        <div class="form-group col-xs-4 col-md-2" ng-class="{'has-error': !give.cvcValid && giveForm.cvv.$dirty }" validate-card ng-model="give">
+        <div class="form-group col-xs-4 col-md-2" ng-class="{'has-error': !give.cvcValid && giveForm.cvc.$dirty }" validate-card ng-model="give">
             <label for="cvv">CVV</label>
-            <input type="text" name="cvv" class="form-control" ng-model="give.cvv" maxlength="4" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }" >
-            <ng-messages for="give.cvcValid" ng-show="!give.cvcValid && giveForm.cvv.$dirty" ng-messages-include="on-blur-messages"></ng-messages>
+            <input type="text" name="cvc" class="form-control" ng-model="give.cvc" maxlength="4" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }"  >
+            <span  ng-show="!give.cvcValid && giveForm.cvc.$dirty" ><span ng-bind-html="$root.messages[$root.MESSAGES.invalidCvv].message | html"></span></span>
         </div>
         <div class="form-group col-xs-4 col-md-3"  ng-class="{'has-error': giveForm.billingZipCode.$error.invalidZip && giveForm.billingZipCode.$dirty }">
             <label for="billingZipCode">Zip Code</label>
