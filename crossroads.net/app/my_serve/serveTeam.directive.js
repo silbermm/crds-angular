@@ -120,7 +120,7 @@
             default:
               // every  or everyother
               ServeOpportunities.LastOpportunityDate.get({
-                id: scope.currentMember.currentOpportunity.roleId
+                id: scope.currentMember.serveRsvp.roleId
               }, function(ret) {
                 var dateNum = Number(ret.date * 1000);
                 var toDate = new Date(dateNum);
