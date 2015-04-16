@@ -3,7 +3,14 @@
     <div class="panel-heading clearfix" ng-click="openPanel(team.members)">
       <span class="team-name">{{::team.name}}</span>
       <div class="name-btns">
-        <button type="button" ng-click="setActiveTab(member)" ng-repeat="member in team.members" class="btn btn-xs normal-type" ng-class="{'active':isActiveTab(member.name) }" stop-event>{{::member.name}}</button>
+        <button type="button" 
+          ng-click="setActiveTab(member)" 
+          ng-repeat="member in team.members" 
+          class="btn btn-xs normal-type" 
+          ng-class="{'active':isActiveTab(member.name) }"  
+          stop-event>
+          <serve-icon member="member"></serve-icon> 
+          {{::member.name}}</button>
       </div><!--/pull-right-->
     </div><!--/panel-heading-->
 
