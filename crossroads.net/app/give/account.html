@@ -8,5 +8,8 @@
 
     <bank-info></bank-info>
     <donation-confirmation></donation-confirmation>
-    <a ui-sref="give.thank-you" class="btn btn-primary">GIVE ${{give.amount}}</a>
+    <!-- <a ui-sref="give.thank-you" ng-click="give.submitBankInfo()" class="btn btn-primary">GIVE ${{give.amount}}</a> -->
+    <a ng-click="give.submitBankInfo()" class="btn btn-primary">GIVE ${{give.amount}}</a>
+    <form  class="form-group" name="giveForm" role="form" ng-submit="give.signup(giveForm)" id="giveForm">
+
 </div>
