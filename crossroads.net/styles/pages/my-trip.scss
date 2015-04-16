@@ -1,0 +1,29 @@
+.my-trip {    
+    .trip-date {
+        margin-top: -3px;
+        padding-left: 10px;
+        font-size: 14px;
+    }
+    .trip-funding {
+        padding-top: 5px;
+    }
+    h5 {
+        padding-left: 5px;
+    }
+    .card-header {
+        padding-top: 10px;
+        .card-heading {
+            font-size: 20px;
+        }
+        .days-left {
+            margin-top: -10px;
+            .card-heading {
+                font-size: 30px;
+            }
+            p {
+                margin-top: -13px;
+                font-size: 14px;
+            }
+        }
+    }
+}

@@ -2,9 +2,9 @@
     <div class="row">
         <h1>My Trips</h1>
         <h2 class="subheading">Whether it’s New Orleans or India, we leave our own neighborhoods to be in others.</h2>
-        
-        
-        
+
+
+
         <div class="col-md-12 row">
             <div class="card-item" data-category="view">
                 <!-- card heading -->
@@ -29,18 +29,27 @@
                         <p class="pull-right">$500</p>
                     </div>
                     <div class="clearfix">
-                        <div collapse="!new.donors">
+                        <div collapse="!orleans.donors">
                             <div class="col-sm-12 hard-sides">
                                 <h5>Donors:</h5>
                             </div>
                             <table class="table">
                                 <tbody>
                                     <tr>
-                                        <td scope="row"><a href="">Matt Brewer</a>
+                                        <td scope="row"><a href="" ng-click="matt = !matt">Matt Brewer</a>
                                             <p class="text-muted"><span>4/2/15</span>
                                             </p>
                                         </td>
                                         <td class="text-right"><span>$100.00</span>
+                                        </td>
+                                    </tr>
+                                    <tr collapse="!matt">
+                                        <td colspan="2" style="border: none">
+                                            <textarea class="form-control push-bottom" rows="10"></textarea>
+                                            <div class="pull-right">
+                                                <button class="btn btn-primary" ng-click="matt = !matt">Cancel</button>
+                                                <button class="btn btn-primary">Send Message</button>
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr>
@@ -88,17 +97,17 @@
                             <svg viewBox="0 0 32 32" class="icon icon-xlarge icon-mail5">
                                 <use xlink:href="#mail5"></use>
                             </svg>
-                            <a href="" class="pull-right" ng-click="new.donors = !new.donors" ng-show="!new.donors">Show Donors</a>
-                            <a href="" class="pull-right" ng-click="new.donors = !new.donors" ng-show="new.donors">Hide Donors</a>
+                            <a href="" class="pull-right" ng-click="orleans.donors = !orleans.donors" ng-show="!orleans.donors">Show Donors</a>
+                            <a href="" class="pull-right" ng-click="orleans.donors = !orleans.donors" ng-show="orleans.donors">Hide Donors</a>
                         </div>
                     </div>
                 </div>
 
             </div>
         </div>
-        
-        
-        
+
+
+
 
         <div class="col-md-12 row">
             <div class="card-item" data-category="view">
@@ -124,7 +133,7 @@
                         <p class="pull-right">$1000</p>
                     </div>
                     <div style="clear: both;">
-                        <div collapse="!donors">
+                        <div collapse="!africa.donors">
                             <div class="col-sm-12 hard-sides">
                                 <h5>Donors:</h5>
                             </div>
@@ -167,8 +176,8 @@
                             <svg viewBox="0 0 32 32" class="icon icon-xlarge icon-mail5">
                                 <use xlink:href="#mail5"></use>
                             </svg>
-                            <a href="" class="pull-right" ng-click="donors = !donors" ng-show="!donors">Show Donors</a>
-                            <a href="" class="pull-right" ng-click="donors = !donors" ng-show="donors">Hide Donors</a>
+                            <a href="" class="pull-right" ng-click="africa.donors = !africa.donors" ng-show="!africa.donors">Show Donors</a>
+                            <a href="" class="pull-right" ng-click="africa.donors = !africa.donors" ng-show="africa.donors">Hide Donors</a>
                         </div>
                     </div>
                 </div>
@@ -178,11 +187,11 @@
 
 
 
-        
-        
-        
-        
-                <div class="col-md-12 row">
+
+
+
+
+        <div class="col-md-12 row">
             <div class="card-item" data-category="view">
                 <!-- card heading -->
                 <div class="card-header card-background-dark clearfix">
@@ -206,7 +215,7 @@
                         <p class="pull-right">$3000</p>
                     </div>
                     <div style="clear: both;">
-                        <div collapse="!new.donors">
+                        <div collapse="!india.donors">
                             <div class="col-sm-12 hard-sides">
                                 <h5>Donors:</h5>
                             </div>
@@ -233,8 +242,8 @@
                             <svg viewBox="0 0 32 32" class="icon icon-xlarge icon-mail5">
                                 <use xlink:href="#mail5"></use>
                             </svg>
-                            <a href="" class="pull-right" ng-click="new.donors = !new.donors" ng-show="!new.donors">Show Donors</a>
-                            <a href="" class="pull-right" ng-click="new.donors = !new.donors" ng-show="new.donors">Hide Donors</a>
+                            <a href="" class="pull-right" ng-click="india.donors = !india.donors" ng-show="!india.donors">Show Donors</a>
+                            <a href="" class="pull-right" ng-click="india.donors = !india.donors" ng-show="india.donors">Hide Donors</a>
                         </div>
                     </div>
                 </div>

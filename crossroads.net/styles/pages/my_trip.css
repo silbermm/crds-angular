@@ -17,5 +17,11 @@
 /* line 18, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/my_trip.scss */
 .my-trip h5 {
   padding-left: 5px; }
+/* line 22, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/my_trip.scss */
+.my-trip .card-item .card-header {
+  padding-top: 10px; }
+  /* line 24, /Users/LunarZer0/Documents/crds-angular/crossroads.net/styles/pages/my_trip.scss */
+  .my-trip .card-item .card-header .card-heading {
+    font-size: 20px; }
 
 /*# sourceMappingURL=my_trip.css.map */
