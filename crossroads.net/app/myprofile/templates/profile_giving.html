@@ -1,57 +1,265 @@
-<p>
-    Your history of financial giving to crossroads.</p>
+<div class="profile-giving" ng-controller="ModalDemoCtrl">
 
-<div class="well well-sm">
-    <p class="flush-bottom"><strong>Statements Sent To:</strong>
-    </p>
-<!--
-    <address class="flush-bottom">
-  {{address.addressLine1}}<br>
-  <span ng-show="address.addressLine2">{{address.addressLine2}}<br></span>
-  {{address.city}} {{address.state__Region}}, {{address.postalCode}}
-</address>
--->
-    <p>1234 Magic Kingdom Dr., Orlando, FL 32830</p>
-</div>
+    <div class="row">
+        <div class="col-sm-12">
 
-<hr />
+            <div class="row giving-intro">
+                <div class="col-sm-12">
+                    <p>If you have any questions or need help please contact <a href="">finance@crossroads.net</a>.</p>
+                </div>
+            </div><!--/row-->
 
-<div ng-init="giving=[]; giving.total = 0">
+            <div class="row recurring-gifts">
+                <div class="col-sm-12">
+                    <h3>Recurring Gifts</h3>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    Ministry Fund
+                                    <p class="text-muted"><span>
+                                        <svg viewBox="0 0 160 100" class="icon icon-cc_visa payment-type-icon">
+                                            <use xlink:href="#cc_visa"></use>
+                                        </svg>
+                                        ending in 3459</span>
+                                    </p>
+                                </td>
+                                <td class="text-right">
+                                    <span class="dollar-amount">$100.00</span>
+                                    <p class="text-muted"><span>15th Monthly</span></p>
+                                </td>
+                                <td class="table-actions text-right">
+                                    <a href="" ng-click="open()" >Edit
+                                    <svg viewBox="0 0 32 32" class="icon icon-pencil4">
+                                        <use xlink:href="#pencil4"></use>
+                                    </svg>
+                                    </a>
+                                    <a href="" ng-click="open()">Remove
+                                    <svg viewBox="0 0 25 32" class="icon icon-trash-o">
+                                        <use xlink:href="#trash-o"></use>
+                                    </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Game Change Fund
+                                    <p class="text-muted">
+                                    <span>
+                                    <svg viewBox="0 0 32 32" class="icon icon-library payment-type-icon">
+                                        <use xlink:href="#library"></use>
+                                    </svg>
+                                    ending in 3459</span>
+                                    </p>
+                                </td>
+                                <td class="text-right">
+                                    <span class="dollar-amount">$200.00</span>
+                                    <p class="text-muted"><span>5th Monthly</span></p>
+                                </td>
+                                <td class="table-actions text-right">
+                                    <a href="">Edit
+                                        <svg viewBox="0 0 32 32" class="icon icon-pencil4">
+                                            <use xlink:href="#pencil4"></use>
+                                        </svg>
+                                    </a>
+                                    <a href="">Remove
+                                        <svg viewBox="0 0 25 32" class="icon icon-trash-o">
+                                            <use xlink:href="#trash-o"></use>
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    OSG Fund
+                                    <p class="text-muted">
+                                    <span>
+                                    <svg viewBox="0 0 32 32" class="icon icon-library payment-type-icon">
+                                        <use xlink:href="#library"></use>
+                                    </svg>
+                                    ending in 3459</span>
+                                    </p>
+                                </td>
+                                <td class="text-right">
+                                    <span class="dollar-amount">$300.00</span>
+                                    <p class="text-muted"><span>Tuesdays Weekly</span></p>
+                                </td>
+                                <td class="table-actions text-right">
+                                    <a href="">Edit
+                                        <svg viewBox="0 0 32 32" class="icon icon-pencil4">
+                                            <use xlink:href="#pencil4"></use>
+                                        </svg>
+                                    </a>
+                                    <a href="">Remove
+                                        <svg viewBox="0 0 25 32" class="icon icon-trash-o">
+                                            <use xlink:href="#trash-o"></use>
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <a href="" class="btn btn-primary">Add New</a>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+            </div><!--/row-->
 
-    <form class="form-inline row" role="form">
-        <h4 class="col-xs-6">
-    Giving History
-    </h4>
-        <div class="form-group col-xs-6">
-            <div class="pull-right">
-                <label for="dateFilter" class="control-label">View by year:&nbsp;&nbsp;</label>
-                <select class="form-control" id="dateFilter" ng-change="giving.total = 0" ng-model="dateFilter" ng-options="year for year in years">
-                    <option value="">All</option>
-                </select>
-            </div>
-            <!--/pull-right-->
-        </div>
-        <!--/form-group-->
-    </form>
+            <!--Removing for now until US1148. Need for context of the page while we designed the recurring giving section
+            <div class="row recent-gifts">
+                <div class="col-sm-12">
+                    <h3>Recent Gifts</h3>
+                    <table class="table recent-gifts">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    Ministry Fund
+                                    <p class="text-muted"><span>
+                                        <svg viewBox="0 0 160 100" class="icon icon-cc_visa payment-type-icon">
+                                            <use xlink:href="#cc_visa"></use>
+                                        </svg>
+                                        ending in 3459</span>
+                                    </p>
+                                </td>
+                                <td class="text-right">
+                                    <span class="dollar-amount">$100.00</span>
+                                    <p class="text-muted"><span>12/12/15</span></p>
+                                </td>
 
-    <table class="table table-striped table-responsive">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Amount</th>
-                <th>Fund</th>
-                <th>Type</th>
-            </tr>
-        </thead>
-        <!-- / UX Team removed ng-repeat="givingRecord in givingHistory | DateYearFilter:dateFilter:'donationDate'" from below <tr> -->
-        <tr>
-            <td>{{givingRecord.donationDate | date:"MM/dd/yyyy"}}</td>
-            <td ng-init="giving.total = giving.total + givingRecord.amount">{{givingRecord.amount | currency:"$"}}</td>
-            <td>{{givingRecord.statementTitle}}</td>
-            <td>{{givingRecord.paymentType}}</td>
-        </tr>
-    </table>
-    <hr />
-    <h4>Total: {{giving.total | currency:"$"}}</h4>
-    <br>
-</div>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Game Change Fund
+                                    <p class="text-muted">
+                                    <span>
+                                    <svg viewBox="0 0 32 32" class="icon icon-library payment-type-icon">
+                                        <use xlink:href="#library"></use>
+                                    </svg>
+                                    ending in 3459</span>
+                                    </p>
+                                </td>
+                                <td class="text-right">
+                                    <span class="dollar-amount">$200.00</span>
+                                    <p class="text-muted"><span>12/16/15</span></p>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    OSG Fund
+                                    <p class="text-muted">
+                                        <span>
+                                        <svg viewBox="0 0 34 32" class="icon icon-money payment-type-icon">
+                                            <use xlink:href="#money"></use>
+                                        </svg>
+                                        cash</span>
+                                    </p>
+                                </td>
+                                <td  class="text-right">
+                                    <span class="dollar-amount">$300.00</span>
+                                    <p class="text-muted"><span>12/24/15</span></p>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <a href="" class="btn btn-primary">View All</a>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+            </div>--><!--/row-->
+
+            <!--Removing for now until US1148. Need for context of the page while we designed the recurring giving section
+            <div class="row commitments">
+                <div class="col-sm-12">
+                    <h3>Commitments</h3>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    Ministry Fund
+                                </td>
+                                <td class="text-right">
+                                    <span class="dollar-amount">$100.00</span>
+                                    <p class="text-muted"><span>15th Monthly</span></p>
+                                </td>
+                                <td class="table-actions text-right">
+                                    <a href="">Edit
+                                    <svg viewBox="0 0 32 32" class="icon icon-pencil4">
+                                        <use xlink:href="#pencil4"></use>
+                                    </svg>
+                                    </a>
+                                    <a href="">Remove
+                                    <svg viewBox="0 0 25 32" class="icon icon-trash-o">
+                                        <use xlink:href="#trash-o"></use>
+                                    </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Game Change Fund
+                                </td>
+                                <td class="text-right">
+                                    <span class="dollar-amount">$200.00</span>
+                                    <p class="text-muted"><span>5th Monthly</span></p>
+                                </td>
+                                <td class="table-actions text-right">
+                                    <a href="">Edit
+                                    <svg viewBox="0 0 32 32" class="icon icon-pencil4">
+                                        <use xlink:href="#pencil4"></use>
+                                    </svg>
+                                    </a>
+                                    <a href="">Remove
+                                    <svg viewBox="0 0 25 32" class="icon icon-trash-o">
+                                        <use xlink:href="#trash-o"></use>
+                                    </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    OSG Fund
+                                </td>
+                                <td  class="text-right">
+                                    <span class="dollar-amount">$300.00</span>
+                                    <p class="text-muted"><span>Tuesdays Weekly</span></p>
+                                </td>
+                                <td class="table-actions text-right">
+                                    <a href="">Edit
+                                    <svg viewBox="0 0 32 32" class="icon icon-pencil4">
+                                        <use xlink:href="#pencil4"></use>
+                                    </svg>
+                                    </a>
+                                    <a href="">Remove
+                                    <svg viewBox="0 0 25 32" class="icon icon-trash-o">
+                                        <use xlink:href="#trash-o"></use>
+                                    </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <a href="" class="btn btn-primary">Add New</a>
+                        </div>
+                    </div>
+                </div>
+            </div>--><!--/row-->
+
+        </div><!--/col-sm-12-->
+    </div><!--/row-->
+
+    <ng-include src="'myprofile/templates/profile_giving_edit_modal.html'"></ng-include>
+    <ng-include src="'myprofile/templates/profile_giving_remove_modal.html'"></ng-include>
+
+</div><!--/profile-giving-->
+
+
