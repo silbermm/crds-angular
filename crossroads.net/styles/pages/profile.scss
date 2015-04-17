@@ -61,12 +61,7 @@
     }
 }
 
-// Profile (Body)
-.profile-body {
-    .tab-pane {
-        @extend .panel-body;
-    }
-}
+
 
 // Profile (Household section of Personal tab
 .profile-card {
@@ -260,5 +255,28 @@
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
         color: black;
+    }
+}
+
+
+// Profile (Giving Tab)
+.profile-giving {
+    .table-actions {
+        min-width: 100px;
+        a {
+            display: block;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            padding-left: 8px;
+        }
+    }
+    .dollar-amount {
+        @extend .text-success;
+        font-weight: bold;
+    }
+    .payment-type-icon {
+      vertical-align: middle;
+      height: 15px;
+      width: 17px;
     }
 }

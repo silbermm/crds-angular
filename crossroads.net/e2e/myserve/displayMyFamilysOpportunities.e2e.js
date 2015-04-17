@@ -59,7 +59,21 @@ describe('Crossroads App', function() {
     expect(panel.element(by.css(".panel-collapse")).getAttribute("class")).toMatch("in");
   });
 
+  it("should apply the correct CSS to opportunities", function() {
+    expect(element(by.id("current-user")).getText()).toBe("Laks");
+    browser.get(env.baseUrl + "/#/serve-signup");
+    var panel = element(by.id("team-panel-000"));
+    panel.element(by.css(".btn")).click();
+    expect(panel.element(by.css(".panel-collapse")).getAttribute("class")).toMatch("in");
 
+    var opp = panel.all(by.css(".radio")).get(0);
+    if(opp.all(by.css(".label")).get(0).textValue === 'Full'){ 
+      console.log("element label was equal to FULL");
+      expect(opp.getAttribute('class')).toContain('text-muted');
+    } else {
+      expect(opp.getAttribute('class')).not.toContain('text-muted');
+    }
+  });
 
 
 });

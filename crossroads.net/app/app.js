@@ -70,6 +70,7 @@ var _ = require('lodash');
         invalidRoutingTransit:24,
         invalidCard:25,
         invalidCvv:26
+        serveSignupSuccess:29
     }).config(function (growlProvider) {
         growlProvider.globalPosition("top-center");
         growlProvider.globalTimeToLive(6000);
