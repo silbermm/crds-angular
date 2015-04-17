@@ -22,32 +22,16 @@
   }
 }
 
-.card-middle {
-  padding: $line-height-computed/2 0 0;
-
-  .card-header {
-    font-size: 20px;
-    padding: 0 $line-height-computed/2;
-  }
-
-  .card-desc {
-      position: relative;
-      height: 100%;
-      display: block;
-      font-size: 13px;
-      margin-top: 8px;
-
-      a{
-          position: absolute;
-          width: 100%;
-          bottom: 10px;
-          left: 20px;
-      }
-  }
+.card-header {
+  font-size: 2rem;
 }
 
-.card-middle {
+.card-dark {
   background: rgba(214, 224, 226, 0.4);
+}
+
+.card-content {
+  padding: 0;
   border-radius: 0 0 0 0;
   bottom: -1px;
 
@@ -55,11 +39,12 @@
     border-radius: 0 2px 2px 0;
   }
 
-  //border-left: 1px solid $table-border-color;
-
-  // tate - don't feel great about this but I am struggling to figure out why there is a 1px gap to the right of this
-  @media (min-width: 992px) {
-      right: -1px;
+    a {
+      position: absolute;
+      width: 100%;
+      bottom: 10px;
+      left: 20px;
+    }
   }
 
   ul.list-group {
@@ -67,7 +52,6 @@
 
     li {
       background: transparent;
-      //border-top: 0px;
       border-right: 0px;
       border-left: 0px;
       border-radius: 0px;
@@ -77,35 +61,6 @@
       @extend .clearfix;
       line-height: 33px;
       padding-left: $line-height-computed/2;
-
-      &:last-child {
-        //border-bottom: 0px;
-
-        .btn {
-          border-bottom-right-radius: 2px;
-        }
-
-        @media (min-width: $screen-sm-min) {
-          //border-bottom: 1px solid $table-border-color;
-
-          .btn {
-            border-bottom-right-radius: 0px;
-          }
-        }
-      }
-
-      .btn {
-        float: right;
-        border-radius: 0px;
-        border-bottom-width: 0px;
-        border-bottom-right-radius: 0px;
-        font-size: 1.3rem;
-
-        @media (min-width: $screen-sm-min) {
-            font-size: 1.4rem;
-        }
-
-      }
 
       h4 {
         padding: $line-height-computed/2 0px;

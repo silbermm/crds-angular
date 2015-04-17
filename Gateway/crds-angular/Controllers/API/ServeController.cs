@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -69,10 +69,11 @@ namespace crds_angular.Controllers.API
         }
 
         [Route("api/serve/save-rsvp")]
-        public IHttpActionResult SaveRsvp([FromBody] ServeResponseDto serveResponse)
+
+        public IHttpActionResult SaveRsvp([FromBody] SaveRsvpDto saveRsvp)
         {
             //validate request
-            if (serveResponse.StartDateUnix <= 0)
+            if (saveRsvp.StartDateUnix <= 0)
             {
                 var dateError = new ApiErrorDto("StartDate Invalid", new InvalidOperationException("Invalid Date"));
                 throw new HttpResponseException(dateError.HttpResponseMessage);
@@ -82,9 +83,9 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
-                    _serveService.SaveServeResponse(token, serveResponse.ContactId, serveResponse.OpportunityId,
-                        serveResponse.EventTypeId, serveResponse.StartDateUnix.FromUnixTime(),
-                        serveResponse.EndDateUnix.FromUnixTime(), serveResponse.SignUp);
+                    _serveService.SaveServeRsvp(token, saveRsvp.ContactId, saveRsvp.OpportunityId,
+                        saveRsvp.EventTypeId, saveRsvp.StartDateUnix.FromUnixTime(),
+                        saveRsvp.EndDateUnix.FromUnixTime(), saveRsvp.SignUp, saveRsvp.AlternateWeeks);
                 }
                 catch (Exception exception)
                 {

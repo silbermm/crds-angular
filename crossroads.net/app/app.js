@@ -90,6 +90,10 @@ var _ = require('lodash');
                 $scope.prevent = function (evt) {
                     evt.stopPropagation();
                 };
+            
+                $rootScope.mobile = screenSize.on('xs, sm', function(match){
+                    $rootScope.mobile = match;
+                })
 
                 $rootScope.mobile = screenSize.on('xs, sm', function(match){
                     $rootScope.mobile = match;

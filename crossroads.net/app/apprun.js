@@ -14,7 +14,7 @@
         }
         
         $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams) {      
-            if (Session.isActive()) {
+           if (Session.isActive()) {
               $http({
                 method: "GET",
                 url :__API_ENDPOINT__ + "api/authenticated", 
@@ -32,7 +32,7 @@
             } else {
                 //There is no session AND the user is not attempting to go to a protected route
                 //so there is nothing to do
-            }
+            } 
  
         });
     };

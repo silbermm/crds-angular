@@ -139,16 +139,15 @@
         return memberName === scope.currentActiveTab;
       };
 
-
-
+      
       function isSignedUp(member) {
         console.log(member.serveRsvp);
         if(member.serveRsvp !== null && member.serveRsvp !== undefined){
           if(member.serveRsvp.attending !== null && member.serveRsvp.attending !== undefined)
-            return member.serveRsvp.attending
+            return member.serveRsvp.attending 
           return false
         } else {
-          return false
+          return false 
         }
       }
 

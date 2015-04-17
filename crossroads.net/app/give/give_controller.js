@@ -51,6 +51,7 @@
             } else
                 _this.ccNumberClass = "";
         }
+
     };
 
 })();

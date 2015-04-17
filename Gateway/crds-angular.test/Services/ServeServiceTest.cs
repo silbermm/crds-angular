@@ -479,9 +479,9 @@ namespace crds_angular.test.Services
             const bool signUp = true;
             const bool alternateWeeks = true;
             var expectedEventIds = new List<int> {1, 3, 5};
-
+                
             SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp);
-
+            
             _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(), signUp, alternateWeeks);
 
             _participantService.VerifyAll();
