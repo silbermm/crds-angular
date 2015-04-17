@@ -45,14 +45,14 @@ describe('Crossroads App', function() {
     expect(cvvErrorMessage.isDisplayed()).toBe(false);
   });
 
-  xit('It should display an error message for invalid zip code', function() {
+  it('It should display an error message for invalid zip code', function() {
     var zipInput = element(by.model('give.billingZipCode'));
     zipInput.sendKeys("aaaaaa");
     zipInput.sendKeys(protractor.Key.TAB);
     expect(element(by.model('give.billingZipCode')).getAttribute('class')).toMatch('ng-invalid-invalid-zip');
   });
 
-  xit('It should not display any error messages because all data is valid', function() {
+  it('It should not display any error messages because all data is valid', function() {
     var nameInput = element(by.model('give.nameOnCard'));
     nameInput.sendKeys("Joe F. Smith, Jr");
     nameInput.sendKeys(protractor.Key.TAB);
