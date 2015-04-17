@@ -66,7 +66,11 @@
       activate();
       //////////////////////////////////////
 
-      function activate() {}
+      function activate() {
+        _.each(scope.team.members, function(m) {
+          
+        });
+      }
 
 
       function attendingChanged() {
@@ -214,10 +218,14 @@
       }
  
       function showIcon(member){
-        if(member.serveRsvp !== null && (member.serveRsvp.isSaved || member.serveRsvp.isSaved === undefined)){
-          return true;
-        } else {
+        if(member.serveRsvp === undefined){
           return false;
+        } else {
+          if(member.serveRsvp !== null && (member.serveRsvp.isSaved || member.serveRsvp.isSaved === undefined)){
+            return true;
+          } else {
+            return false;
+          }
         }
       }
 
