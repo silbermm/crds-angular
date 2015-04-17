@@ -112,3 +112,6 @@ Follow these instructions in order to setup the application to call Gateway serv
 4. Note the `IPv4 Address`, most likely `192.168.56.101`
 5. Back on OS X, create a entry in `/etc/hosts` using the VM name as the DNS name, e.g. `192.168.56.101  silbervm`
 6. As described above, add the **CRDS_API_ENDPOINT** environment variable to match the configuration, e.g. `export  CRDS_API_ENDPOINT=http://silbervm:49380/`
+
+###Angular Style Guide
+We will follow the [Crossroads Angular Style Guide](https://github.com/crdschurch/angular-styleguide).
