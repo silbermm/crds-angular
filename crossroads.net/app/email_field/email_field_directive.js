@@ -72,6 +72,10 @@ require('./email_field.html');
 
     function checkUniqueEmail(scope, email, $http, Session, User) {
           var userid = Session.exists('userId') !== undefined ? Session.exists('userId') : 0;
+          // Bail if not set - we are already validating required
+          if(email === undefined || !email) {
+              return(true);
+          }
           return $http.get(__API_ENDPOINT__ + 'api/lookup/' + userid  + '/find/?email=' +  encodeURI(email), {
               headers: {
                   "X-Use-The-Force": "true"

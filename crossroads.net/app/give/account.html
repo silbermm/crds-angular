@@ -1,11 +1,13 @@
-
-<div class="form-group">
-
-    <div class="btn-group btn-group-justified" role="group">
-        <a type="button" class="btn btn-ghost" role="button" ui-sref="give.login">Login</a>
-        <a type="button" class="btn btn-ghost active" role="button">Give as Guest</a>
+<div class="push-top">
+    <div class="form-group">
+        <div class="btn-group btn-group-justified" role="group">
+            <a type="button" class="btn btn-ghost" role="button" ui-sref="give.login">Login</a>
+            <a type="button" class="btn btn-ghost active" role="button">Give as Guest</a>
+        </div>
     </div>
-    <div>
+
+    <div class="form-group">
+        <label>Email</label>
         <email-field
             email="give.email"
             submitted="give.$submitted"
@@ -15,12 +17,11 @@
             validate-unique="false"
             check-unique="true">
         </email-field>
-    <div>
+    </div>
     <div id="existingEmail" growl inline="true" reference="{{give.emailAlreadyRegisteredGrowlDivRef}}" limit-messages="1"></div>
 
     <bank-info></bank-info>
     <donation-confirmation></donation-confirmation>
-    <a ui-sref="give.thank-you" ng-click="give.submitBankInfo()" class="btn btn-primary">GIVE ${{give.amount}}</a>
-    <form  class="form-group" name="giveForm" role="form" ng-submit="give.signup(giveForm)" id="giveForm">
-
+    <a ui-sref="give.thank-you" ng-click="give.submitBankInfo()" class="btn btn-primary form-control">GIVE ${{give.amount}}</a>
+    <form class="form-group" name="giveForm" role="form" ng-submit="give.signup(giveForm)" id="giveForm">
 </div>

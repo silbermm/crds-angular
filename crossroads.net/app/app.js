@@ -77,7 +77,6 @@ var _ = require('lodash');
         growlProvider.globalTimeToLive(6000);
         growlProvider.globalDisableIcons(true);
         growlProvider.globalDisableCountDown(true);
-        growlProvider.globalInlineMessages(true);
     })
     .filter('html', ['$sce', function ($sce) {
         return function (val) {
