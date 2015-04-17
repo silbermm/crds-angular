@@ -3,8 +3,6 @@
         <h1>My Trips</h1>
         <h2 class="subheading">Whether it’s New Orleans or India, we leave our own neighborhoods to be in others.</h2>
 
-
-
         <div class="col-md-12 row">
             <div class="card-item" data-category="view">
                 <!-- card heading -->
@@ -23,7 +21,13 @@
                     <div class="card-header">
                         <p class="flush-bottom text-right bold trip-funding" style="width: 100%">$700</p>
                         <progressbar type="success" max="500" value="700"></progressbar>
-                        <p class="pull-right">$500</p>
+                        <p class="pull-right funding-goal">$500</p>
+                    </div>
+
+                    <div class="col-xs-12">
+                        <div class="addthis_sharing_toolbox pull-left"></div>
+                        <a href="" class="pull-right" ng-click="orleans.donors = !orleans.donors" ng-show="!orleans.donors">Show Donors</a>
+                        <a href="" class="pull-right" ng-click="orleans.donors = !orleans.donors" ng-show="orleans.donors">Hide Donors</a>
                     </div>
                     <div class="clearfix">
                         <div collapse="!orleans.donors">
@@ -84,19 +88,6 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-xs-12">
-                            <svg viewBox="0 0 30 32" class="icon icon-xlarge icon-twitter">
-                                <use xlink:href="#twitter"></use>
-                            </svg>
-                            <svg viewBox="0 0 14 32" class="icon icon-xlarge icon-facebook">
-                                <use xlink:href="#facebook"></use>
-                            </svg>
-                            <svg viewBox="0 0 32 32" class="icon icon-xlarge icon-mail5">
-                                <use xlink:href="#mail5"></use>
-                            </svg>
-                            <a href="" class="pull-right" ng-click="orleans.donors = !orleans.donors" ng-show="!orleans.donors">Show Donors</a>
-                            <a href="" class="pull-right" ng-click="orleans.donors = !orleans.donors" ng-show="orleans.donors">Hide Donors</a>
-                        </div>
                     </div>
                 </div>
 
@@ -124,9 +115,19 @@
                     <div class="card-header">
                         <p class="flush-bottom text-right bold trip-funding" style="width: 60%">$600</p>
                         <progressbar class="progress-striped" max="1000" value="600" type="success"></progressbar>
-                        <p class="pull-right">$1000</p>
+                        <p class="pull-right funding-goal">$1000</p>
                     </div>
-                    <div style="clear: both;">
+
+                    <div class="col-xs-12">
+                        <div class="addthis_sharing_toolbox pull-left"></div>
+                        <a href="" class="pull-right" ng-click="africa.donors = !africa.donors" ng-show="!africa.donors">Show Donors</a>
+                        <a href="" class="pull-right" ng-click="africa.donors = !africa.donors" ng-show="africa.donors">Hide Donors</a>
+                    </div>
+
+                    <div class="clearfix">
+
+
+
                         <div collapse="!africa.donors">
                             <div class="col-sm-12 hard-sides">
                                 <h5>Donors:</h5>
@@ -160,19 +161,6 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-xs-12">
-                            <svg viewBox="0 0 30 32" class="icon icon-xlarge icon-twitter">
-                                <use xlink:href="#twitter"></use>
-                            </svg>
-                            <svg viewBox="0 0 14 32" class="icon icon-xlarge icon-facebook">
-                                <use xlink:href="#facebook"></use>
-                            </svg>
-                            <svg viewBox="0 0 32 32" class="icon icon-xlarge icon-mail5">
-                                <use xlink:href="#mail5"></use>
-                            </svg>
-                            <a href="" class="pull-right" ng-click="africa.donors = !africa.donors" ng-show="!africa.donors">Show Donors</a>
-                            <a href="" class="pull-right" ng-click="africa.donors = !africa.donors" ng-show="africa.donors">Hide Donors</a>
-                        </div>
                     </div>
                 </div>
 
@@ -203,9 +191,14 @@
                     <div class="card-header">
                         <p class="flush-bottom text-right bold trip-funding" style="width: 1%">$10</p>
                         <progressbar class="progress-striped" max="3000" value="10" type="success"></progressbar>
-                        <p class="pull-right">$3000</p>
+                        <p class="pull-right funding-goal">$3000</p>
                     </div>
-                    <div style="clear: both;">
+                    <div class="col-xs-12">
+                        <div class="addthis_sharing_toolbox pull-left"></div>
+                        <a href="" class="pull-right" ng-click="india.donors = !india.donors" ng-show="!india.donors">Show Donors</a>
+                        <a href="" class="pull-right" ng-click="india.donors = !india.donors" ng-show="india.donors">Hide Donors</a>
+                    </div>
+                    <div class="clearfix">
                         <div collapse="!india.donors">
                             <div class="col-sm-12 hard-sides">
                                 <h5>Donors:</h5>
@@ -222,19 +215,6 @@
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>
-                        <div class="col-xs-12">
-                            <svg viewBox="0 0 30 32" class="icon icon-xlarge icon-twitter">
-                                <use xlink:href="#twitter"></use>
-                            </svg>
-                            <svg viewBox="0 0 14 32" class="icon icon-xlarge icon-facebook">
-                                <use xlink:href="#facebook"></use>
-                            </svg>
-                            <svg viewBox="0 0 32 32" class="icon icon-xlarge icon-mail5">
-                                <use xlink:href="#mail5"></use>
-                            </svg>
-                            <a href="" class="pull-right" ng-click="india.donors = !india.donors" ng-show="!india.donors">Show Donors</a>
-                            <a href="" class="pull-right" ng-click="india.donors = !india.donors" ng-show="india.donors">Hide Donors</a>
                         </div>
                     </div>
                 </div>
