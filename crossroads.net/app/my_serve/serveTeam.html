@@ -9,11 +9,11 @@
           class="btn btn-xs normal-type" 
           ng-class="{'active':isActiveTab(member.name) }"  
           stop-event>
-          {{::member.name}}
-          <span ng-if="member.serveRsvp.attending != null"> 
+          {{::member.name}}   
+          <span ng-if="showIcon(member)" > 
             <svg-icon icon="check-circle" ng-show="member.serveRsvp.attending" class="text-success"> </svg-icon>
             <svg-icon icon="cancel-circle" ng-show="!member.serveRsvp.attending" class="text-danger"> </svg-icon>
-          </span>
+          </span> 
         </button>
       </div><!--/pull-right-->
     </div><!--/panel-heading-->
@@ -31,8 +31,8 @@
           <div class="col-md-4">
             <h5>Opportunities</h5>
             <div class="radio" ng-class="{'text-muted': role.capacity.badgeType === 'label-success'}" ng-repeat="role in currentMember.roles">
-              <label>
-                <input type="radio" name="roles-{{panelId()}}" ng-disabled="role.capacity.badgeType === 'label-success'" ng-model="currentMember.serveRsvp.roleId" ng-value="role.roleId">
+              <label> 
+                <input type="radio" name="roles-{{panelId()}}" ng-disabled="role.capacity.badgeType === 'label-success'" ng-model="currentMember.serveRsvp.roleId" ng-value="role.roleId" ng-change="roleChanged()" >
                 <span class="opportunity-name">{{::role.name}}</span>
                 <span class="label {{ role.capacity.badgeType }}" ng-show="role.capacity.display">{{ role.capacity.message }}</span>
               </label>
@@ -42,7 +42,7 @@
             <h5>Sign Up</h5>
            <div class="radio" ng-class="{'text-muted': currentMember.serveRsvp.roleId == null}">
              <label>
-               <input ng-disabled="currentMember.serveRsvp.roleId == null" type="radio" name="signup-{{panelId()}}" id="optionsRadios1" ng-model="currentMember.serveRsvp.attending" ng-value="true" ng-change="attendingChanged()">
+               <input ng-disabled="currentMember.serveRsvp.roleId == null" type="radio" name="signup-{{panelId()}}" id="optionsRadios1" ng-model="currentMember.serveRsvp.attending" ng-value="true" ng-change="attendingChanged()" >
                Yes
              </label>
            </div><!--/radio-->

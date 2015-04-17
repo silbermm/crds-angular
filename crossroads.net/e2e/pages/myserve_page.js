@@ -24,10 +24,36 @@ var MyServePage = (function() {
     signedupBtn.get(0).click(); 
 
     this.firstPanel.all(by.tagName('option')).then(function(options){
-      options[0].click();
+      options[1].click();
     });
     this.firstPanel.element(by.buttonText("Save")).click(); 
   }
+  
+  MyServePage.prototype.rsvpNo = function () {
+    var radioBtn = this.firstPanel.all(by.model("currentMember.serveRsvp.roleId"));
+    expect(radioBtn.isDisplayed()).toBeTruthy();
+    radioBtn.get(0).click();
+    
+    var signedupBtn = this.firstPanel.all(by.model("currentMember.serveRsvp.attending"));
+    expect(signedupBtn.isDisplayed()).toBeTruthy();
+    signedupBtn.get(1).click(); 
+    signedupBtn.get(0).click(); 
+    signedupBtn.get(1).click(); 
+
+    this.firstPanel.all(by.tagName('option')).then(function(options){
+      options[1].click();
+    });
+    this.firstPanel.element(by.buttonText("Save")).click(); 
+
+  }
+
+
+  MyServePage.prototype.personIcon = function (btnText) {
+    var btn = this.firstPanel.element(by.buttonText(btnText));
+    return btn.element(by.css("svg-icon"));
+  }
+
+
   return MyServePage; 
 })();
 

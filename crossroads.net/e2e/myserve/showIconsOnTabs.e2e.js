@@ -24,16 +24,8 @@ describe('My Serve Page', function() {
     myServePage.visitPage();
     myServePage.openFirstPanel(displayName);
     myServePage.rsvp();
-  });
-
-  it("should display a cancel icon for family members that responded NO", function(){
-    expect(loginPage.getCurrentUser()).toBe(displayName);
-    myServePage.visitPage();
-  });
-
-  it("should not display an icon for family members that haven't responded", function(){
-    expect(loginPage.getCurrentUser()).toBe(displayName);
-    myServePage.visitPage();
+    var svg = myServePage.personIcon(displayName);
+    expect(svg.element(by.css('svg.icon-check-circle')).isDisplayed()).toBeTruthy();
   });
 
 });

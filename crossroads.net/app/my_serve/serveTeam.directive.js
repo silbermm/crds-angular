@@ -53,20 +53,34 @@
       scope.open = open;
       scope.openPanel = openPanel;
       scope.panelId = getPanelId;
+      scope.roleChanged = roleChanged;
       scope.roles = null;
       scope.saveRsvp = saveRsvp;
       scope.setActiveTab = setActiveTab;
       scope.signedup = null;
       scope.showEdit = false;
+      scope.showIcon = showIcon;
 
       scope.togglePanel = togglePanel;
 
       activate();
       //////////////////////////////////////
 
-      function activate() {}
+      function activate() {
+       
+      }
+
+      function showIcon(member){
+        if(member.serveRsvp !== null && (member.serveRsvp.isSaved || member.serveRsvp.isSaved === undefined)){
+          return true;
+        } else {
+          return false;
+        }
+      }
+
 
       function attendingChanged() {
+        roleChanged();
         scope.currentMember.showFrequency = true;
       }
 
@@ -101,8 +115,8 @@
           personToEdit.name = person.nickName === null ? person.firstName : person.nickName;
           $rootScope.$emit("personUpdated", person);
         });
-      };
-
+      }; 
+      
       function populateDates() {
         if (scope.currentMember !== null) {
           scope.currentMember.currentOpportunity.fromDt = scope.oppServeDate;
@@ -127,6 +141,14 @@
               });
               break;
           }
+        }
+      }
+
+      function roleChanged(){
+       if(scope.currentMember.serveRsvp === undefined){
+          scope.currentMember.serveRsvp = { isSaved: false }; 
+        } else {
+          scope.currentMember.serveRsvp.isSaved = false; 
         }
       }
 
@@ -186,6 +208,7 @@
         saveRsvp.$save(function(saved){
           $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess );           
           $rootScope.$broadcast('update.member', scope.currentMember); 
+          scope.currentMember.serveRsvp.isSaved = true;
         });
       }
 
