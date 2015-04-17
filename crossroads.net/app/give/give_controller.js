@@ -3,8 +3,8 @@
 
   module.exports = function GiveCtrl($rootScope, $scope, $state, $timeout) {
 
-        $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
-            if(toState.name =="give.thank-you" && $scope.giveForm.giveForm.routing.$error.invalidRouting || toState.name =="give.thank-you" && $scope.giveForm.giveForm.account.$error.invalidAccount){
+        $scope.$on('$stateChangeStart', function (event, toState, toParams) {
+            if(toState.name =="give.thank-you" && $scope.giveForm.giveForm.$error){
                 $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
                 event.preventDefault();
             }
@@ -17,7 +17,8 @@
         });
 
         var vm = this;
-        vm.submitted = false;
+        vm.amountSubmitted = false;
+        vm.bankinfoSubmitted = false;
         //Credit Card RegExs
          var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$ /;
          var mastercardRegEx = /^5[1-5][0-9]/;
@@ -80,9 +81,9 @@
         }
 
         vm.submitBankInfo = function() {
-          console.log(giveForm);
+          vm.bankinfoSubmitted = true;
           vm.formValid = true;
-           if (!$scope.giveForm.routing.$error.invalidRouting ) {
+           if (!$scope.giveForm.giveForm.routing.$error.invalidRouting ) {
              console.log("set form valid");
              vm.formValid = true;
              $state.go("give.thank-you");
@@ -121,13 +122,9 @@
         }
 
         vm.goToAccount = function(){
-            console.log($scope.giveForm.giveForm.amount.$error.naturalNumber);
-            $timeout(function(){
-                vm.submitted = true;
+                vm.amountSubmitted = true;
                 $state.go("give.account");
-            });
         };
-
     };
 
 })();
