@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services;
@@ -153,7 +153,7 @@ namespace MinistryPlatform.Translation.Test.Services
             return results;
         }
 
-        [Test]      
+        [Test]
         public void GetOpportunityResponseSignUpYesTest()
         {
             //ARRANGE
@@ -274,7 +274,7 @@ namespace MinistryPlatform.Translation.Test.Services
             return results;
         }
 
-        [Test]  
+        [Test]
         public void RespondToOpportunityAsLoggedInUserTest()
         {
             const int opportunityId = 9;

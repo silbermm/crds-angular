@@ -5,6 +5,5 @@
     <h4>{{::serve.convertToDate(group.day) | date:'EEEE, MMMM dd, yyyy' }}</h4>
     <serve-tabs opportunity="opp" serve-date="group.day" ng-repeat="opp in group.serveTimes" tab-index="$index" ng-show="opp.servingTeams.length > 0" day-index="$parent.$index" >
       </serve-tabs>
-  </div>
+  </div><!-- serve day --> 
 </div>
-

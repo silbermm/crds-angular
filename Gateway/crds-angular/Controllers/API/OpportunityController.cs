@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Web.Http;
@@ -41,7 +41,6 @@ namespace crds_angular.Controllers.API
 
             });
         }
-
 
         [ResponseType(typeof (Dictionary<string, long>))]
         [Route("api/opportunity/getLastOpportunityDate/{id}")]
