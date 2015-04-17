@@ -21,7 +21,6 @@
         ]
 
         _this.toggleCheck = function() {
-          console.log("in here");
             if (_this.showMessage == "Where?") {
                 _this.showMessage = "Close";
                 _this.showCheckClass = "";
