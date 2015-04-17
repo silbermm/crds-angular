@@ -65,7 +65,6 @@ require('./email_field.html');
             };
         } else if(isTrue(scope.checkUnique, false)) {
             element.bind('blur', function() {
-                //scope.$apply(checkUniqueEmail(scope, element.val(), $http, Session, User));
                 checkUniqueEmail(scope, element.val(), $http, Session, User)
             });
         }
