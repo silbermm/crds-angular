@@ -1,13 +1,12 @@
 (function () {
     'use strict';
-    module.exports = function GiveCtrl($scope, $log, messages, opportunity) {
-
+    module.exports = function GiveCtrl($scope, $log, messages) {
         var _this = this;
         //Credit Card RegExs
-        var visaRegEx = /^4[0-9]{2}/;
-        var mastercardRegEx = /^5[1-5][0-9]/;
-        var discoverRegEx = /^6(?:011|5[0-9]{2})/;
-        var americanExpressRegEx = /^3[47]/;
+         var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$ /;
+         var mastercardRegEx = /^5[1-5][0-9]/;
+         var discoverRegEx = /^6(?:011|5[0-9]{2})/;
+         var americanExpressRegEx = /^3[47][0-9]{13}$/;
 
         _this.view = 'bank';
         _this.bankType = 'checking';
