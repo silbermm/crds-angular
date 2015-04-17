@@ -7,7 +7,7 @@
         restrict: 'A',
         require: 'ngModel',
         scope: {
-            validateUnique: "@",
+            validateUnique: "=",
             onEmailFound: "&",
             onEmailNotFound: "&",
         },

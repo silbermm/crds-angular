@@ -14,6 +14,7 @@
         vm.showCheckClass = "ng-hide";
         vm.email = null;
         vm.emailAlreadyRegisteredGrowlDivRef = 1000;
+        vm.emailPrefix = "give";
 
         console.log("in the controller");
         // TODO Need to figure out a better option to get to the "initial" state
