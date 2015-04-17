@@ -34,16 +34,19 @@
         vm.showCheckClass = "ng-hide";
         vm.email = null;
         vm.emailAlreadyRegisteredGrowlDivRef = 1000;
+        vm.creditCardDiscouragedGrowlDivRef = 1001;
         vm.emailPrefix = "give";
 
         console.log("in the controller");
 
-        vm.alerts = [
-            {
-                type: 'warning',
-                msg: "If it's all the same to you, please use your bank account (credit card companies charge Crossroads a fee for each gift)."
-            }
-        ]
+        vm.initCreditCardBankSection = function() {
+            $rootScope.$emit(
+                'notify'
+                , $rootScope.MESSAGES.creditCardDiscouraged
+                , vm.creditCardDiscouragedGrowlDivRef
+                , -1 // Indicates that this message should not time out
+                );
+        }
 
         vm.onEmailFound = function() {
             $rootScope.$emit(
@@ -89,10 +92,6 @@
                 vm.showMessage = "Where?";
                 vm.showCheckClass = "ng-hide";
             }
-        }
-
-        vm.closeAlert = function (index) {
-            vm.alerts.splice(index, 1);
         }
 
         vm.ccCardType = function () {

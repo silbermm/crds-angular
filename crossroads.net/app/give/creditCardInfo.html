@@ -1,5 +1,5 @@
-<section class="bank-section" ng-show="give.view=='cc'">
-    <alert ng-repeat="alert in give.alerts" type="{{alert.type}}" close="give.closeAlert($index)">{{alert.msg}}</alert>
+<section class="bank-section" ng-show="give.view=='cc'" ng-init="give.initCreditCardBankSection()">
+    <div growl inline="true" reference="{{give.creditCardDiscouragedGrowlDivRef}}" limit-messages="1"></div>
     <div class="form-group">
         <label for="nameOnCard">Name On Card</label>
         <input type="text" name="nameOnCard" class="form-control" ng-model="give.nameOnCard">

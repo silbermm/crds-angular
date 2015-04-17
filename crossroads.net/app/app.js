@@ -71,7 +71,8 @@ var _ = require('lodash');
         invalidCard:25,
         invalidCvv:26,
         donorEmailAlreadyRegistered:28,
-        serveSignupSuccess:29
+        serveSignupSuccess:29,
+        creditCardDiscouraged:36,
     }).config(function (growlProvider) {
         growlProvider.globalPosition("top-center");
         growlProvider.globalTimeToLive(6000);
