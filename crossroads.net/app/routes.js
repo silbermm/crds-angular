@@ -21,7 +21,6 @@
   require('./community_groups_signup/group_signup_form.html');
   require('./my_serve');
   require('./go_trip_giving');
-  require('./mytrips');
   var getCookie = require('./utilities/cookies');
 
 
@@ -192,11 +191,6 @@
                 url: "/go_trip_giving_results",
                 controller: "GoTripGivingCtrl as gotripresults",
                 templateUrl: "go_trip_giving/go_trip_giving_results.html"
-            })
-            .state("mytrips", {
-                url: "/mytrips",
-                controller: "MyTripsCtrl as mytrips",
-                templateUrl: "mytrips/mytrips.html"
             })
            .state("/demo/guest-giver", {
                 url: "/demo/guest-giver",
