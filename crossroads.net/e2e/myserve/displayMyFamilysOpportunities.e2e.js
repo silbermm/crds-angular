@@ -51,7 +51,7 @@ describe('Crossroads App', function() {
     });
   });
 
-  it("should display the time correctly", function(){
+  it("should open the panel when a user is clicked", function(){
     expect(element(by.id("current-user")).getText()).toBe("Laks");  
     browser.get(env.baseUrl + "/#/serve-signup");
     var panel = element(by.id("team-panel-000"));
