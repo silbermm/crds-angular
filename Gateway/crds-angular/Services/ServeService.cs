@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -161,7 +161,6 @@ namespace crds_angular.Services
                                 //time not in list
                                 serveTime = new ServingTime {Time = e.EventStartDate.TimeOfDay.ToString()};
                                 serveTime.ServingTeams.Add(NewServingTeam(team, opportunity, serveRole, e.EventId));
-                                
                                 serveDay.ServeTimes.Add(serveTime);
                             }
                         }
@@ -174,6 +173,7 @@ namespace crds_angular.Services
                                 Date = e.EventStartDate
                             };
                             var serveTime = new ServingTime {Time = e.EventStartDate.TimeOfDay.ToString()};
+
                             serveTime.ServingTeams.Add(NewServingTeam(team, opportunity, serveRole, e.EventId));
 
                             serveDay.ServeTimes.Add(serveTime);
@@ -320,8 +320,6 @@ namespace crds_angular.Services
             }
             return servingTeams;
         }
-
-
         public bool SaveServeRsvp(string token,
             int contactId,
             int opportunityId,
@@ -404,12 +402,15 @@ namespace crds_angular.Services
         }
 
         private ServingTeam NewServingTeam(ServingTeam team, Opportunity opportunity, ServeRole serveRole, int eventId)
+
         {
             var servingTeam = new ServingTeam
             {
                 Name = team.Name,
                 GroupId = team.GroupId,
+
                 Members = NewTeamMembersWithRoles(team.Members, opportunity.RoleTitle, serveRole, eventId),
+
                 PrimaryContact = team.PrimaryContact, EventType = opportunity.EventType, EventTypeId = opportunity.EventTypeId
             };
             return servingTeam;

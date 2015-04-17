@@ -118,7 +118,7 @@
       function isActiveTab(memberName) {
         return memberName === scope.currentActiveTab;
       };
- 
+
       function open($event, opened) {
         $event.preventDefault();
         $event.stopPropagation();

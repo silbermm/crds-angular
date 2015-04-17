@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using crds_angular.App_Start;
 using crds_angular.Extenstions;
