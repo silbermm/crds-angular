@@ -24,7 +24,7 @@
                 <use xlink:href="#crossroads_check"></use>
             </svg>
         </div>
-        <div class="form-group" ng-class="{'has-error': giveForm.routing.$error.invalidRouting && giveForm.routing.$dirty && giveForm.routing.$}">
+        <div class="form-group" ng-class="{'has-error': giveForm.routing.$error.invalidRouting && giveForm.routing.$dirty}">
             <label for="routing" class="wide-label">Routing Number
                 <a href="" class="pull-right weight-normal" ng-click="isCollapsed=!isCollapsed; give.toggleCheck()">{{give.showMessage}}</a>
             </label>

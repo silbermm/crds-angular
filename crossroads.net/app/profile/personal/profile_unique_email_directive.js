@@ -7,7 +7,7 @@
         restrict: 'A',
         require: 'ngModel',
         scope: {
-            validateUnique: "@",
+            validateUnique: "=",
             onEmailFound: "&",
             onEmailNotFound: "&",
         },
@@ -32,36 +32,31 @@
                 })
                 .success(function(data) {
                     // Successful response from this call means we did NOT find a matching email
+                    // which means that the unique email field is valid
                     if(shouldValidateUnique) {
                         ngModel.$setValidity('unique', true);
                         User.email = element.val();
                     }
-                    scope.onEmailNotFound();
 
+                    var onEmailNotFound = scope.onEmailNotFound();
+                    if(angular.isDefined(onEmailNotFound) && angular.isFunction(onEmailNotFound)) {
+                        onEmailNotFound();
+                    }
                 })
                 .error(function(err) {
-                    // Error response from this call means we DID find a matching email
+                    // Error response from this call means we DID find a matching email,
+                    // which means that the unique email field is not valid
                     if(shouldValidateUnique) {
                         ngModel.$setValidity('unique', false);
                         User.email = element.val();
                     }
-                    scope.onEmailFound();
+
+                    var onEmailFound = scope.onEmailFound();
+                    if(angular.isDefined(onEmailFound) && angular.isFunction(onEmailFound)) {
+                        onEmailFound();
+                    }
                 });
             });
-        //   var userid = Session.exists('userId') !== undefined ? Session.exists('userId') : 0;
-        //   ngModel.$asyncValidators.unique = function (email) {
-        //     console.log('personal profile unique email');
-        //         return $http.get(__API_ENDPOINT__ + 'api/lookup/' + userid  + '/find/?email=' +  encodeURI(email), {
-        //             headers: {
-        //                 "X-Use-The-Force": "true"
-        //             }
-        //         })
-        //     .success(function(succ) {
-        //         User.email = email;
-        //     }).error(function(err) {
-        //         User.email = email;
-        //     });
-        //   };
         }
       };
   }

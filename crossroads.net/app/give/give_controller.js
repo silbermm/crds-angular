@@ -1,10 +1,23 @@
-
 'use strict';
 (function () {
-//  module.exports = function GroupSignupController( Page, $modal) {
-  module.exports = function GiveCtrl($rootScope, $scope, $state) {
+
+  module.exports = function GiveCtrl($rootScope, $scope, $state, $timeout) {
+
+        $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+            if(toState.name =="give.thank-you" && $scope.giveForm.giveForm.routing.$error.invalidRouting || toState.name =="give.thank-you" && $scope.giveForm.giveForm.account.$error.invalidAccount){
+                $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+                event.preventDefault();
+            }
+
+             if(toState.name =="give.account" && $scope.giveForm.giveForm.amount.$error.naturalNumber){
+                console.log($scope.giveForm.giveForm.amount.$error);
+                $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+                event.preventDefault();
+            }
+        });
 
         var vm = this;
+        vm.submitted = false;
         //Credit Card RegExs
          var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$ /;
          var mastercardRegEx = /^5[1-5][0-9]/;
@@ -15,17 +28,56 @@
         vm.bankType = 'checking';
         vm.showMessage = "Where?";
         vm.showCheckClass = "ng-hide";
+        vm.email = null;
+        vm.emailAlreadyRegisteredGrowlDivRef = 1000;
+        vm.creditCardDiscouragedGrowlDivRef = 1001;
+        vm.emailPrefix = "give";
 
         console.log("in the controller");
-        // TODO Need to figure out a better option to get to the "initial" state
-        $state.go("give.amount");
 
-        vm.alerts = [
-            {
-                type: 'warning',
-                msg: "If it's all the same to you, please use your bank account (credit card companies charge Crossroads a fee for each gift)."
+        // Invoked from the initial "/give" state to get us to the first page
+        vm.initDefaultState = function() {
+            if($state.is("give")) {
+                $state.go("give.amount");
             }
-        ]
+        }
+
+        // Emits a growl notification encouraging checking/savings account
+        // donations, rather than credit card
+        vm.initCreditCardBankSection = function() {
+            $rootScope.$emit(
+                'notify'
+                , $rootScope.MESSAGES.creditCardDiscouraged
+                , vm.creditCardDiscouragedGrowlDivRef
+                , -1 // Indicates that this message should not time out
+                );
+        }
+
+        // Callback from email-field on guest giver page.  Emits a growl
+        // notification indicating that the email entered may already be a
+        // registered user.
+        vm.onEmailFound = function() {
+            $rootScope.$emit(
+                'notify'
+                , $rootScope.MESSAGES.donorEmailAlreadyRegistered
+                , vm.emailAlreadyRegisteredGrowlDivRef
+                , -1 // Indicates that this message should not time out
+                );
+        }
+
+        // Callback from email-field on guest giver page.  This closes any
+        // growl notification left over from the onEmailFound callback.
+        vm.onEmailNotFound = function() {
+            // There isn't a way to close growl messages in code, outside of the growl
+            // directive itself.  To work around this, we'll simply trigger the "click"
+            // event on the close button, which has a close handler function.
+            var closeButton = document.querySelector("#existingEmail .close");
+            if(closeButton !== undefined) {
+                $timeout(function() {
+                    angular.element(closeButton).triggerHandler("click");
+                }, 0);
+            }
+        }
 
         vm.submitBankInfo = function() {
           console.log(giveForm);
@@ -52,10 +104,6 @@
             }
         }
 
-        vm.closeAlert = function (index) {
-            vm.alerts.splice(index, 1);
-        }
-
         vm.ccCardType = function () {
             if (vm.ccNumber) {
                 if (vm.ccNumber.match(visaRegEx))
@@ -71,6 +119,14 @@
             } else
                 vm.ccNumberClass = "";
         }
+
+        vm.goToAccount = function(){
+            console.log($scope.giveForm.giveForm.amount.$error.naturalNumber);
+            $timeout(function(){
+                vm.submitted = true;
+                $state.go("give.account");
+            });
+        };
 
     };
 

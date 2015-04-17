@@ -4,6 +4,7 @@ require('./login.html');
 require('./account.html');
 require('./thank_you.html');
 require('./give.module.js');
+
 var app = require('angular').module('give');
 app.factory("getPrograms", require('./getPrograms.service.js'));
 app.directive('invalidRouting',[require('./routingTransitNumber.validation.directive')]);
@@ -24,4 +25,5 @@ require('./demo/guest_giver/give-logged-in.html');
 require('./demo/guest_giver/give-change-information-logged-in.html');
 require('./demo/guest_giver/give-logged-in-new-giver.html');
 
-app.controller("GiveCtrl", ['$rootScope','$scope', '$state', require("./give_controller")]);
+
+app.controller("GiveCtrl", ['$rootScope', '$scope', '$state', '$timeout', require("./give_controller")]);

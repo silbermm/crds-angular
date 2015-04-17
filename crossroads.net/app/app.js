@@ -70,7 +70,9 @@ var _ = require('lodash');
         invalidRoutingTransit:24,
         invalidCard:25,
         invalidCvv:26,
-        serveSignupSuccess:29
+        donorEmailAlreadyRegistered:28,
+        serveSignupSuccess:29,
+        creditCardDiscouraged:36,
     }).config(function (growlProvider) {
         growlProvider.globalPosition("top-center");
         growlProvider.globalTimeToLive(6000);
@@ -103,8 +105,16 @@ var _ = require('lodash');
 
                 $rootScope.error_messages = '<div ng-message="required">This field is required</div><div ng-message="minlength">This field is too short</div>';
 
-                $rootScope.$on("notify", function (event, id) {
-                    growl[$rootScope.messages[id].type]($rootScope.messages[id].message);
+                $rootScope.$on("notify", function (event, id, refId, ttl) {
+                    var parms = { };
+                    if(refId !== undefined && refId !== null) {
+                        parms.referenceId = refId;
+                    }
+                    if(ttl !== undefined && ttl !== null) {
+                        parms.ttl = ttl;
+                    }
+
+                    growl[$rootScope.messages[id].type]($rootScope.messages[id].message, parms);
                 });
 
                 $rootScope.$on("context", function (event, id) {
