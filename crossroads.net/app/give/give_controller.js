@@ -1,18 +1,17 @@
 'use strict';
 (function () {
 
-  module.exports = function GiveCtrl($rootScope, $scope, $state, $timeout) {
+  module.exports = function GiveCtrl($rootScope, $scope, $state, $timeout, Session) {
 
         $scope.$on('$stateChangeStart', function (event, toState, toParams) {
             if(toState.name =="give.thank-you" && $scope.giveForm.giveForm.$error){
                 $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-                event.preventDefault();
+                //event.preventDefault();
             }
 
              if(toState.name =="give.account" && $scope.giveForm.giveForm.amount.$error.naturalNumber){
-                console.log($scope.giveForm.giveForm.amount.$error);
                 $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-                event.preventDefault();
+                //event.preventDefault();
             }
         });
 
@@ -36,11 +35,8 @@
 
         console.log("in the controller");
 
-        // Invoked from the initial "/give" state to get us to the first page
-        vm.initDefaultState = function() {
-            if($state.is("give")) {
-                $state.go("give.amount");
-            }
+        if($state.is("give")) {
+            $state.go("give.amount");
         }
 
         // Emits a growl notification encouraging checking/savings account
@@ -82,17 +78,17 @@
 
         vm.submitBankInfo = function() {
           vm.bankinfoSubmitted = true;
-          vm.formValid = true;
-           if (!$scope.giveForm.giveForm.routing.$error.invalidRouting ) {
-             console.log("set form valid");
-             vm.formValid = true;
+          // vm.formValid = true;
+          //  if (!$scope.giveForm.giveForm.routing.$error.invalidRouting ) {
+          //    console.log("set form valid");
+          //    vm.formValid = true;
              $state.go("give.thank-you");
-             }
-          if (!vm.formValid) {
-            $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-            console.log("emit it here");
-          return;
-          }
+          //    }
+          // if (!vm.formValid) {
+          //   $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+          //   console.log("emit it here");
+          // return;
+          //}
         };
 
        vm.toggleCheck = function() {
@@ -125,6 +121,11 @@
                 vm.amountSubmitted = true;
                 $state.go("give.account");
         };
+        
+        vm.goToLogin = function () {
+          Session.addRedirectRoute("give.account", "");
+          $state.go("give.login");
+        }
     };
 
 })();
