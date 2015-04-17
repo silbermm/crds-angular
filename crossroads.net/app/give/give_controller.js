@@ -1,7 +1,6 @@
 (function () {
     'use strict';
-    module.exports = function GiveCtrl($scope, $log, messages, opportunity) {
-//note - do we need opportunity???
+    module.exports = function GiveCtrl($scope, $log, messages) {
         var _this = this;
         //Credit Card RegExs
          var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$ /;
