@@ -3,12 +3,11 @@
 
   module.exports = function GiveCtrl($rootScope, $scope, $state, $timeout) {
 
-    if(document.location.hash == "#/give"){
+    if($state.is("give")) {
         $state.go("give.amount");
     }
 
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
-
             if(toState.name =="give.thank-you" && $scope.giveForm.giveForm.routing.$error.invalidRouting || toState.name =="give.thank-you" && $scope.giveForm.giveForm.account.$error.invalidAccount){
                 $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
                 event.preventDefault();
@@ -19,7 +18,6 @@
                 $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
                 event.preventDefault();
             }
-
         });
 
         var vm = this;
