@@ -1,11 +1,11 @@
 var $compile, $rootScope, element, scope, mockSession, mockServeDate, $httpBackend;
 
 var mockOpp = {"name": "NuseryA", "roleId": "145"};
-var mockTeam = [{ "name" : "Kids Club Nusery", "eventTypeId": 100, "members" : [ { "name": "John", "contactId" : 12345678, "serveRsvp": {roleId: 145, attending: true}, "roles" : [ mockOpp, {"name": "NuseryB"}, {"name": "NuseryC"}, {"name": "NuseryD"} ] }, { "name":  "Jane", "contactId": 1234567890, "roles" : [ {"name": "NuseryA"}, {"name": "NuseryB"}, {"name": "NuseryC"}, {"name": "NuseryD"} ], "signedup" : "yes" }, ] }];
+var mockTeam = [{ "name" : "Kids Club Nusery", "eventTypeId": 100, "members" : [ { "name": "John", "contactId" : 12345678, "serveRsvp": {roleId: 145, attending: true, 'isSaved': true}, "roles" : [ mockOpp, {"name": "NuseryB"}, {"name": "NuseryC"}, {"name": "NuseryD"} ] }, { "name":  "Jane", "contactId": 1234567890, "roles" : [ {"name": "NuseryA"}, {"name": "NuseryB"}, {"name": "NuseryC"}, {"name": "NuseryD"} ], "signedup" : "yes" }, ] }];
 
 var mockOpportunity = { "time": "8:30am", "team": mockTeam  };
 
-var mockMatt = {"name":"Matt", "lastName": "Silbernagel", "contactId":1970611,"roles":[{"name":"Nursery A - Sunday 8:30 Member","capacity":100,"slotsTaken":0},{"name":"Nursery B - Sunday 8:30 Member","capacity":10,"slotsTaken":2},{"name":"Nursery C - Sunday 8:30 Member","capacity":0,"slotsTaken":1}]};
+var mockMatt = {"name":"Matt", "lastName": "Silbernagel", "contactId":1970611, "serveRsvp": {"isSaved": true}, "roles":[{"name":"Nursery A - Sunday 8:30 Member","capacity":100,"slotsTaken":0},{"name":"Nursery B - Sunday 8:30 Member","capacity":10,"slotsTaken":2},{"name":"Nursery C - Sunday 8:30 Member","capacity":0,"slotsTaken":1}]};
 
 describe('Serve Teams Directive', function() {
 
@@ -19,13 +19,12 @@ describe('Serve Teams Directive', function() {
     $httpBackend = $injector.get('$httpBackend');
     mockServeDate = $injector.get('ServeOpportunities');
     scope = $rootScope.$new();
-    element = '<serve-team opp-serve-date="serveDate" opportunity="opp" team="team" tab-index="tabIndex" team-index="teamIndex" day-index="dayIndex" event-type-id="eventTypeId" > </serve-team>';
+    element = '<serve-team opp-serve-date="serveDate" opportunity="opp" team="team" tab-index="tabIndex" team-index="teamIndex" day-index="dayIndex" > </serve-team>';
     scope.opp = mockOpportunity;
     scope.team = mockTeam[0];
     scope.dayIndex = 0;
     scope.tabIndex = 0;
     scope.teamIndex = 3;
-    scope.eventTypeId = 100;
     scope.serveDate = "10/15/2015";
     element = $compile(element)(scope);
     scope.$digest();
