@@ -183,6 +183,7 @@
            })
            .state("give.login", {
                  url: "/login",
+                 controller: "LoginCtrl",
                  templateUrl: "give/login.html"
            })
            .state("give.account", {

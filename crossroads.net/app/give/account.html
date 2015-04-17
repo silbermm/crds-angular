@@ -1,15 +1,18 @@
+<div class="push-top">
+  <form class="give-form" role="form" name="giveForm" novalidate>
+    <div class="form-group">
 
-<div class="form-group">
+        <div class="btn-group btn-group-justified" role="group" ng-show="$root.username === undefined">
+            <a type="button" class="btn btn-ghost" role="button" ui-sref="give.login">Login</a>
+            <a type="button" class="btn btn-ghost active" role="button">Give as Guest</a>
+        </div>
 
-    <div class="btn-group btn-group-justified" role="group">
-        <a type="button" class="btn btn-ghost" role="button" ui-sref="give.login">Login</a>
-        <a type="button" class="btn btn-ghost active" role="button">Give as Guest</a>
+        <bank-info></bank-info>
+        <donation-confirmation></donation-confirmation>
+        <!-- <a ui-sref="give.thank-you" ng-click="give.submitBankInfo()" class="btn btn-primary">GIVE ${{give.amount}}</a> -->
+        <a ng-click="give.submitBankInfo()" class="btn btn-primary">GIVE ${{give.amount}}</a>
+        <form  class="form-group" name="giveForm" role="form" ng-submit="give.signup(giveForm)" id="giveForm">
+
     </div>
-
-    <bank-info></bank-info>
-    <donation-confirmation></donation-confirmation>
-    <!-- <a ui-sref="give.thank-you" ng-click="give.submitBankInfo()" class="btn btn-primary">GIVE ${{give.amount}}</a> -->
-    <a ng-click="give.submitBankInfo()" class="btn btn-primary">GIVE ${{give.amount}}</a>
-    <form  class="form-group" name="giveForm" role="form" ng-submit="give.signup(giveForm)" id="giveForm">
-
+  </form>
 </div>
