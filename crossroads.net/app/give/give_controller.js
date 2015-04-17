@@ -1,7 +1,29 @@
 'use strict';
 (function () {
+
   module.exports = function GiveCtrl($rootScope, $scope, $state, $timeout) {
+
+    if(document.location.hash == "#/give"){
+        $state.go("give.amount");
+    }
+
+        $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+
+            if(toState.name =="give.thank-you" && $scope.giveForm.giveForm.routing.$error.invalidRouting || toState.name =="give.thank-you" && $scope.giveForm.giveForm.account.$error.invalidAccount){
+                $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+                event.preventDefault();
+            }
+
+             if(toState.name =="give.account" && $scope.giveForm.giveForm.amount.$error.naturalNumber){
+                console.log($scope.giveForm.giveForm.amount.$error);
+                $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+                event.preventDefault();
+            }
+
+        });
+
         var vm = this;
+        vm.submitted = false;
         //Credit Card RegExs
          var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$ /;
          var mastercardRegEx = /^5[1-5][0-9]/;
@@ -17,8 +39,6 @@
         vm.emailPrefix = "give";
 
         console.log("in the controller");
-        // TODO Need to figure out a better option to get to the "initial" state
-        $state.go("give.amount");
 
         vm.alerts = [
             {
@@ -92,6 +112,14 @@
             } else
                 vm.ccNumberClass = "";
         }
+
+        vm.goToAccount = function(){
+            console.log($scope.giveForm.giveForm.amount.$error.naturalNumber);
+            $timeout(function(){
+                vm.submitted = true;
+                $state.go("give.account");
+            });
+        };
 
     };
 
