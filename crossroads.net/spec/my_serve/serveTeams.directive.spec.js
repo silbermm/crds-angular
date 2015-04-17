@@ -89,7 +89,7 @@ describe('Serve Teams Directive', function() {
     expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
     isolated.currentMember.currentOpportunity = mockTeam[0].members[0].roles[0];
     isolated.currentMember.currentOpportunity.frequency = {value:0, text:"Once"};
-    isolated.currentMember.serveRsvp = {roleId: mockOpp.roleId};
+    isolated.currentMember.serveRsvp = {roleId: mockOpp.roleId, attending: false};
 
     var dateArr = "10/15/2015".split("/");
     var d = moment(dateArr[2] + "-" + dateArr[0] + "-" + dateArr[1]);
