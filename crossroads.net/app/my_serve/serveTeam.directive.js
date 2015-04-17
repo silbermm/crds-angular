@@ -66,17 +66,7 @@
       activate();
       //////////////////////////////////////
 
-      function activate() {
-       
-      }
-
-      function showIcon(member){
-        if(member.serveRsvp !== null && (member.serveRsvp.isSaved || member.serveRsvp.isSaved === undefined)){
-          return true;
-        } else {
-          return false;
-        }
-      }
+      function activate() {}
 
 
       function attendingChanged() {
@@ -116,7 +106,51 @@
           $rootScope.$emit("personUpdated", person);
         });
       }; 
-      
+ 
+      function getPanelId() {
+        return "team-panel-" + scope.dayIndex + scope.tabIndex + scope.teamIndex;
+      }
+
+      function isActiveTab(memberName) {
+        return memberName === scope.currentActiveTab;
+      };
+ 
+      function open($event, opened) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        scope[opened] = true;
+      }
+
+      function openPanel(members) {
+        if (scope.currentMember === null) {
+          var sessionId = Number(Session.exists("userId"));
+          scope.currentMember = members[0];
+          scope.currentActiveTab = scope.currentMember.name;
+        }
+        $log.debug("isCollapsed = " + scope.isCollapsed);
+        scope.isCollapsed = !scope.isCollapsed;
+        allowProfileEdit();
+      }
+ 
+      function parseDate(stringDate) {
+        var m = moment(stringDate);
+
+        if (!m.isValid()) {
+          var dateArr = stringDate.split("/");
+          var dateStr = dateArr[2] + " " + dateArr[0] + " " + dateArr[1];
+          // https://github.com/moment/moment/issues/1407
+          // moment("2014 04 25", "YYYY MM DD"); // string with format
+          m = moment(dateStr, "YYYY MM DD");
+
+          if (!m.isValid()) {
+            //throw error
+            throw new Error("Parse Date Failed Moment Validation");
+          }
+        }
+        $log.debug('date: ' + m.format('X'));
+        return m.format('X');
+      }
+
       function populateDates() {
         if (scope.currentMember !== null) {
           scope.currentMember.currentOpportunity.fromDt = scope.oppServeDate;
@@ -152,50 +186,6 @@
         }
       }
 
-      function getPanelId() {
-        return "team-panel-" + scope.dayIndex + scope.tabIndex + scope.teamIndex;
-      }
-
-      function isActiveTab(memberName) {
-        return memberName === scope.currentActiveTab;
-      };
- 
-      function open($event, opened) {
-        $event.preventDefault();
-        $event.stopPropagation();
-        scope[opened] = true;
-      }
-
-      function openPanel(members) {
-        if (scope.currentMember === null) {
-          var sessionId = Number(Session.exists("userId"));
-          scope.currentMember = members[0];
-          scope.currentActiveTab = scope.currentMember.name;
-        }
-        $log.debug("isCollapsed = " + scope.isCollapsed);
-        scope.isCollapsed = !scope.isCollapsed;
-        allowProfileEdit();
-      }
-
-      function parseDate(stringDate) {
-        var m = moment(stringDate);
-
-        if (!m.isValid()) {
-          var dateArr = stringDate.split("/");
-          var dateStr = dateArr[2] + " " + dateArr[0] + " " + dateArr[1];
-          // https://github.com/moment/moment/issues/1407
-          // moment("2014 04 25", "YYYY MM DD"); // string with format
-          m = moment(dateStr, "YYYY MM DD");
-
-          if (!m.isValid()) {
-            //throw error
-            throw new Error("Parse Date Failed Moment Validation");
-          }
-        }
-        $log.debug('date: ' + m.format('X'));
-        return m.format('X');
-      }
-
       function saveRsvp() {
         var saveRsvp = new ServeOpportunities.SaveRsvp();
         saveRsvp.contactId = scope.currentMember.contactId;
@@ -222,8 +212,16 @@
         scope.currentMember = member;
         allowProfileEdit();
       }
+ 
+      function showIcon(member){
+        if(member.serveRsvp !== null && (member.serveRsvp.isSaved || member.serveRsvp.isSaved === undefined)){
+          return true;
+        } else {
+          return false;
+        }
+      }
 
-      function togglePanel() {
+     function togglePanel() {
         scope.isCollapsed = !scope.isCollapsed;
       };
     };
