@@ -3,10 +3,6 @@
 
   module.exports = function GiveCtrl($rootScope, $scope, $state, $timeout) {
 
-    if($state.is("give")) {
-        $state.go("give.amount");
-    }
-
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
             if(toState.name =="give.thank-you" && $scope.giveForm.giveForm.routing.$error.invalidRouting || toState.name =="give.thank-you" && $scope.giveForm.giveForm.account.$error.invalidAccount){
                 $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
@@ -39,6 +35,15 @@
 
         console.log("in the controller");
 
+        // Invoked from the initial "/give" state to get us to the first page
+        vm.initDefaultState = function() {
+            if($state.is("give")) {
+                $state.go("give.amount");
+            }
+        }
+
+        // Emits a growl notification encouraging checking/savings account
+        // donations, rather than credit card
         vm.initCreditCardBankSection = function() {
             $rootScope.$emit(
                 'notify'
@@ -48,6 +53,9 @@
                 );
         }
 
+        // Callback from email-field on guest giver page.  Emits a growl
+        // notification indicating that the email entered may already be a
+        // registered user.
         vm.onEmailFound = function() {
             $rootScope.$emit(
                 'notify'
@@ -57,6 +65,8 @@
                 );
         }
 
+        // Callback from email-field on guest giver page.  This closes any
+        // growl notification left over from the onEmailFound callback.
         vm.onEmailNotFound = function() {
             // There isn't a way to close growl messages in code, outside of the growl
             // directive itself.  To work around this, we'll simply trigger the "click"
