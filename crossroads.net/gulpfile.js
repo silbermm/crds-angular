@@ -51,7 +51,7 @@ gulp.task("webpack-dev-server", ["icons-watch"], function(callback) {
 				if(err) throw new gutil.PluginError("webpack-dev-server", err);
 				gutil.log("[start]", "http://localhost:8080/webpack-dev-server/index.html");
 			});
-			
+
 	gutil.log("[start]", "Access crossroads.net at http://localhost:8080/#");
 	gutil.log("[start]", "Access crossroads.net Live Reload at http://localhost:8080/webpack-dev-server/#");
 });
@@ -124,12 +124,12 @@ gulp.task("svg-sprite", function() {
 			}
 		}
 	};
-	
+
 	// Override the default template
 	gulp.src("./config/sprite.template.html")
 		.pipe(rename("sprite.html"))
 		.pipe(gulp.dest("./node_modules/gulp-svg-sprite/node_modules/svg-sprite/tmpl/defs"));
-	
+
 	return gulp.src("./app/icons/*.svg")
 		.pipe(svgSprite(config))
 		.pipe(gulp.dest("./build/icons/generated"));

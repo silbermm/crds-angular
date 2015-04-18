@@ -49,25 +49,32 @@
       scope.populateDates = populateDates;
       scope.isActiveTab = isActiveTab;
       scope.isCollapsed = true;
-      scope.isSignedUp = isSignedUp;
       scope.modalInstance = {};
       scope.open = open;
       scope.openPanel = openPanel;
       scope.panelId = getPanelId;
+      scope.roleChanged = roleChanged;
       scope.roles = null;
       scope.saveRsvp = saveRsvp;
       scope.setActiveTab = setActiveTab;
       scope.signedup = null;
       scope.showEdit = false;
+      scope.showIcon = showIcon;
 
       scope.togglePanel = togglePanel;
 
       activate();
       //////////////////////////////////////
 
-      function activate() {}
+      function activate() {
+        _.each(scope.team.members, function(m) {
+          
+        });
+      }
+
 
       function attendingChanged() {
+        roleChanged();
         scope.currentMember.showFrequency = true;
       }
 
@@ -102,7 +109,51 @@
           personToEdit.name = person.nickName === null ? person.firstName : person.nickName;
           $rootScope.$emit("personUpdated", person);
         });
+      }; 
+ 
+      function getPanelId() {
+        return "team-panel-" + scope.dayIndex + scope.tabIndex + scope.teamIndex;
+      }
+
+      function isActiveTab(memberName) {
+        return memberName === scope.currentActiveTab;
       };
+ 
+      function open($event, opened) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        scope[opened] = true;
+      }
+
+      function openPanel(members) {
+        if (scope.currentMember === null) {
+          var sessionId = Number(Session.exists("userId"));
+          scope.currentMember = members[0];
+          scope.currentActiveTab = scope.currentMember.name;
+        }
+        $log.debug("isCollapsed = " + scope.isCollapsed);
+        scope.isCollapsed = !scope.isCollapsed;
+        allowProfileEdit();
+      }
+ 
+      function parseDate(stringDate) {
+        var m = moment(stringDate);
+
+        if (!m.isValid()) {
+          var dateArr = stringDate.split("/");
+          var dateStr = dateArr[2] + " " + dateArr[0] + " " + dateArr[1];
+          // https://github.com/moment/moment/issues/1407
+          // moment("2014 04 25", "YYYY MM DD"); // string with format
+          m = moment(dateStr, "YYYY MM DD");
+
+          if (!m.isValid()) {
+            //throw error
+            throw new Error("Parse Date Failed Moment Validation");
+          }
+        }
+        $log.debug('date: ' + m.format('X'));
+        return m.format('X');
+      }
 
       function populateDates() {
         if (scope.currentMember !== null) {
@@ -131,61 +182,12 @@
         }
       }
 
-      function getPanelId() {
-        return "team-panel-" + scope.dayIndex + scope.tabIndex + scope.teamIndex;
-      }
-
-      function isActiveTab(memberName) {
-        return memberName === scope.currentActiveTab;
-      };
-
-      
-
-      function isSignedUp(member) {
-        console.log(member.serveRsvp);
-        if(member.serveRsvp !== null && member.serveRsvp !== undefined){
-          if(member.serveRsvp.attending !== null && member.serveRsvp.attending !== undefined)
-            return member.serveRsvp.attending 
-          return false
+      function roleChanged(){
+       if(scope.currentMember.serveRsvp === undefined){
+          scope.currentMember.serveRsvp = { isSaved: false }; 
         } else {
-          return false 
+          scope.currentMember.serveRsvp.isSaved = false; 
         }
-      }
-
-      function open($event, opened) {
-        $event.preventDefault();
-        $event.stopPropagation();
-        scope[opened] = true;
-      }
-
-      function openPanel(members) {
-        if (scope.currentMember === null) {
-          var sessionId = Number(Session.exists("userId"));
-          scope.currentMember = members[0];
-          scope.currentActiveTab = scope.currentMember.name;
-        }
-        $log.debug("isCollapsed = " + scope.isCollapsed);
-        scope.isCollapsed = !scope.isCollapsed;
-        allowProfileEdit();
-      }
-
-      function parseDate(stringDate) {
-        var m = moment(stringDate);
-
-        if (!m.isValid()) {
-          var dateArr = stringDate.split("/");
-          var dateStr = dateArr[2] + " " + dateArr[0] + " " + dateArr[1];
-          // https://github.com/moment/moment/issues/1407
-          // moment("2014 04 25", "YYYY MM DD"); // string with format
-          m = moment(dateStr, "YYYY MM DD");
-
-          if (!m.isValid()) {
-            //throw error
-            throw new Error("Parse Date Failed Moment Validation");
-          }
-        }
-        $log.debug('date: ' + m.format('X'));
-        return m.format('X');
       }
 
       function saveRsvp() {
@@ -195,11 +197,12 @@
         saveRsvp.eventTypeId = scope.team.eventTypeId;
         saveRsvp.endDate = parseDate(scope.currentMember.currentOpportunity.toDt);
         saveRsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
-        saveRsvp.signUp = (scope.currentMember.currentOpportunity.signedup === "1");
+        saveRsvp.signUp = scope.currentMember.serveRsvp.attending;
         saveRsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
         saveRsvp.$save(function(saved){
-          $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess );
-          console.log("saved!");
+          $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess );           
+          $rootScope.$broadcast('update.member', scope.currentMember); 
+          scope.currentMember.serveRsvp.isSaved = true;
         });
       }
 
@@ -213,8 +216,20 @@
         scope.currentMember = member;
         allowProfileEdit();
       }
+ 
+      function showIcon(member){
+        if(member.serveRsvp === undefined){
+          return false;
+        } else {
+          if(member.serveRsvp !== null && (member.serveRsvp.isSaved || member.serveRsvp.isSaved === undefined)){
+            return true;
+          } else {
+            return false;
+          }
+        }
+      }
 
-      function togglePanel() {
+     function togglePanel() {
         scope.isCollapsed = !scope.isCollapsed;
       };
     };

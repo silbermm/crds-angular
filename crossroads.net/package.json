@@ -84,6 +84,7 @@
     "bootstrap-dropdown": "./node_modules/bootstrap/js/dropdown.js",
     "angular-ui-utils": "./app/third-party/angular/ui-utils.min.js",
     "angular-aside": "./app/third-party/angular/angular-aside.min.js",
-    "angular-match-media": "./app/third-party/angular/match-media.js"
+    "angular-match-media": "./app/third-party/angular/match-media.js",
+    "angular-payments": "./app/third-party/angular/angular.payments.js"
   }
 }

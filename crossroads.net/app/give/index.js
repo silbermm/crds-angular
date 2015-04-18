@@ -5,6 +5,7 @@ app.factory("getPrograms", require('./getPrograms.service.js'));
 app.directive('invalidRouting',[require('./routingTransitNumber.validation.directive')]);
 app.directive('invalidAccount',[require('./bankAccountNumber.validation.directive')]);
 app.directive('naturalNumber',[require('./naturalNumber.validation.directive')]);
+app.directive('invalidZip', [require('./zipCode.validation.directive')]);
 
 /****** DEMO PAGES ******/
 require('./demo/guest_giver/give.html');
@@ -18,5 +19,6 @@ require('./demo/guest_giver/give-change-information.html');
 require('./demo/guest_giver/give-logged-in.html');
 require('./demo/guest_giver/give-change-information-logged-in.html');
 require('./demo/guest_giver/give-logged-in-new-giver.html');
+require('./demo/trip_giving/give.html');
 
 app.controller("GiveCtrl", ['$scope', require("./give_controller")]);

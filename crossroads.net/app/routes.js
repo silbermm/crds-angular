@@ -21,7 +21,6 @@
   require('./community_groups_signup/group_signup_form.html');
   require('./my_serve');
   require('./go_trip_giving');
-  require('./mytrips');
   var getCookie = require('./utilities/cookies');
 
 
@@ -193,11 +192,6 @@
                 controller: "GoTripGivingCtrl as gotripresults",
                 templateUrl: "go_trip_giving/go_trip_giving_results.html"
             })
-            .state("mytrips", {
-                url: "/mytrips",
-                controller: "MyTripsCtrl as mytrips",
-                templateUrl: "mytrips/mytrips.html"
-            })
            .state("/demo/guest-giver", {
                 url: "/demo/guest-giver",
                 templateUrl: "guest_giver/give.html"
@@ -245,6 +239,10 @@
             .state("/demo/logged-in-giver/new-giver", {
                 url: "/demo/logged-in-giver/new-giver",
                 templateUrl: "guest_giver/give-logged-in-new-giver.html"
+            })
+            .state("/demo/go-trip-giving", {
+                url: "/demo/go-trip-giving",
+                templateUrl: "trip_giving/give.html"
             })
            .state("community-groups-signup", {
                 url: "{link:signupRouteType}",

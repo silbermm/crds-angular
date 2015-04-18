@@ -57,18 +57,16 @@
         <span ng-message="invalidRouting"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidRoutingTransit].message | html"></span></span>
         <span ng-message="invalidAccount"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidAccountNumber].message | html"></span></span>
         <span ng-message="naturalNumber"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidDonationAmount].message | html"></span></span>
+        <span ng-message="invalidZip"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidZip].message | html"></span></span>
     </script>
     <!-- Google Font Roboto Condensed http://www.google.com/fonts#UsePlace:use/Collection:Roboto+Condensed -->
     <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700' rel='stylesheet' type='text/css'>
     <ng-include src="'assets/cr.svg'"></ng-include>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-
-
 </head>
 
 <body ng-controller="appCtrl" ng-class="asideState.position">
-
         <div growl class="crossroads-growl"></div>
         <div>
             <header>
@@ -214,7 +212,6 @@
         -->
     </div>
     <script src="assets/main.js"></script>
-    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5391d6a6145291c4" async="async"></script>
-
 </body>
+
 </html>

@@ -111,6 +111,9 @@ ol.breadcrumb li.active {
 * Tabs
 ***************************************************************************************/
 
+.nav-tabs {
+  margin-bottom: 15px;
+}
 .nav-tabs > li > a > tab-heading > span {
   line-height: 1.625;
   display: block;
@@ -124,6 +127,11 @@ ol.breadcrumb li.active {
 * Modals
 ***************************************************************************************/
 
+.modal-dialog {
+  .btn {
+    margin-left: 10px;
+  }
+}
 .modal-backdrop {
   height: 100%;
 }
