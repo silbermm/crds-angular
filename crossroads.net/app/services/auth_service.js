@@ -10,6 +10,9 @@ require('./session_service');
                 .then(function (res) {
                     console.log(res.data);
                     Session.create(res.data.userToken, res.data.userId, res.data.username);
+                    // The username from the credentials is really the email address
+                    // In a future story, the contact email address will always be in sync with the user email address.
+                    $rootScope.email = credentials.username;
                     $rootScope.username = res.data.username;
                     return res.data.username;
                 });
@@ -17,7 +20,7 @@ require('./session_service');
 
         authService.logout = function () {
             $rootScope.username = null;
-            Session.clear(); 
+            Session.clear();
             filterState.clearAll();
         }
 
