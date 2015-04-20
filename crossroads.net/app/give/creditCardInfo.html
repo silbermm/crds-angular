@@ -1,4 +1,4 @@
-<section class="bank-section" ng-show="give.view=='cc'" ng-init="give.initCreditCardBankSection()">
+<section class="bank-section" ng-init="give.initCreditCardBankSection()">
     <div growl inline="true" reference="{{give.creditCardDiscouragedGrowlDivRef}}" limit-messages="1"></div>
     <div class="form-group" ng-class="{'has-error': giveForm.nameOnCard.$error.required && give.bankinfoSubmitted}">
         <label for="nameOnCard">Name On Card</label>
