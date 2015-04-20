@@ -32,3 +32,5 @@ node_modules
 
 assets/
 styles/main.css*
+styles/modules/*.css*
+styles/pages/*.css*
