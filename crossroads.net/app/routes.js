@@ -177,6 +177,7 @@
                 controller: "GiveCtrl as give",
                 templateUrl: "give/give.html"
             })
+<<<<<<< HEAD
            .state("give.amount", {
                  url: "/amount",
                  templateUrl: "give/amount.html"
@@ -255,6 +256,10 @@
             .state("/demo/logged-in-giver/new-giver", {
                 url: "/demo/logged-in-giver/new-giver",
                 templateUrl: "guest_giver/give-logged-in-new-giver.html"
+            })
+            .state("/demo/go-trip-giving", {
+                url: "/demo/go-trip-giving",
+                templateUrl: "trip_giving/give.html"
             })
            .state("community-groups-signup", {
                 url: "{link:signupRouteType}",

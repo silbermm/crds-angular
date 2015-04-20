@@ -6,6 +6,8 @@ var LoginPage = (function () {
     this.passwordField = element.all(by.css(".navbar--login")).get(0).element(by.id("login-dropdown-password"));
     this.loginButton = element.all(by.css(".navbar--login")).get(0).all(by.buttonText('Login')).get(0);
     this.submitButton = element.all(by.css(".navbar--login")).get(0).all(by.buttonText("Login")).get(1);
+
+    this.logoutButton = element.all(by.css(".navbar--login")).get(0).all(by.linkText('Sign Out'));
     this.currentUser = element(by.id("current-user")); 
   } 
   
@@ -28,6 +30,11 @@ var LoginPage = (function () {
   LoginPage.prototype.login = function () {
     this.submitButton.click();
   };
+
+  LoginPage.prototype.logout = function() { 
+    this.logoutButton.click(); 
+    expect(this.loginButton.isDisplayed()).toBeTruthy();
+  }
   
   LoginPage.prototype.getCurrentUser = function () { 
     return this.currentUser.getText();

@@ -166,6 +166,7 @@ angular.module('ngPayments', [])
             if(newValue) {
               if(card) {
                 scope.ngModel.cvcValid = $payments.validateCVC(card.cvcLength, newValue.length);
+                ngModel.$validators.cvcValid = true;
               }
             }
           }, true);

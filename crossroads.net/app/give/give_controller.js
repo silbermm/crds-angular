@@ -20,10 +20,10 @@
         vm.amountSubmitted = false;
         vm.bankinfoSubmitted = false;
         //Credit Card RegExs
-         var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$ /;
-         var mastercardRegEx = /^5[1-5][0-9]/;
-         var discoverRegEx = /^6(?:011|5[0-9]{2})/;
-         var americanExpressRegEx = /^3[47][0-9]{13}$/;
+        var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$ /;
+        var mastercardRegEx = /^5[1-5][0-9]/;
+        var discoverRegEx = /^6(?:011|5[0-9]{2})/;
+        var americanExpressRegEx = /^3[47][0-9]{13}$/;
 
         vm.view = 'bank';
         vm.bankType = 'checking';
