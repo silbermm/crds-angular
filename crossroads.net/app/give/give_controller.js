@@ -4,7 +4,7 @@
   module.exports = function GiveCtrl($rootScope, $scope, $state, $timeout) {
 
         $scope.$on('$stateChangeStart', function (event, toState, toParams) {
-            if(toState.name =="give.thank-you" && $scope.giveForm.giveForm.$error){
+            if(toState.name =="give.thank-you" && $scope.giveForm.giveForm.$invalid){
                 $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
                 event.preventDefault();
             }
