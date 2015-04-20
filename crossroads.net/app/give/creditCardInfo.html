@@ -25,7 +25,7 @@
             <input type="text" name="cvc" class="form-control" ng-model="give.cvc" maxlength="4" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }" ng-required="true" >
             <span ng-show="!give.cvcValid && giveForm.cvc.$dirty" ng-bind-html="$root.messages[$root.MESSAGES.invalidCvv].message | html"></span>
             <!-- <ng-messages for="give.cvvValid" ng-show="!give.cvvValid && giveForm.cvv.$dirty" ng-messages-include="on-blur-messages"></ng-messages> -->
-            <ng-messages for="giveForm.cvv.$error" ng-if="give.bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
+            <ng-messages for="giveForm.cvc.$error" ng-if="give.bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
       </div>
       <div class="form-group col-xs-4 col-md-3"  ng-class="{'has-error': giveForm.billingZipCode.$error.invalidZip && giveForm.billingZipCode.$dirty || giveForm.billingZipCode.$error.required && give.bankinfoSubmitted}">
             <label for="billingZipCode">Zip Code</label>
