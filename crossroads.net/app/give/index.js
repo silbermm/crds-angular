@@ -3,7 +3,7 @@ require('./amount.html');
 require('./login.html');
 require('./account.html');
 require('./thank_you.html');
-require('./give.module.js');
+require('./give.module.js'); 
 
 var app = require('angular').module('give');
 app.factory("getPrograms", require('./getPrograms.service.js'));
@@ -27,4 +27,4 @@ require('./demo/guest_giver/give-logged-in-new-giver.html');
 require('./demo/trip_giving/give.html');
 
 
-app.controller("GiveCtrl", ['$rootScope', '$scope', '$state', '$timeout', '$httpProvider', 'Session', 'Profile', require("./give_controller")]);
+app.controller("GiveCtrl", ['$rootScope', '$scope', '$state', '$timeout', '$http', 'Session', 'Profile', require("./give_controller")]);
