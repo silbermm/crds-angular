@@ -19,10 +19,11 @@
             <ng-messages for="giveForm.expDate.$error" ng-show="giveForm.expDate.$error.required" ng-messages-include="on-blur-messages"></ng-messages>
             <ng-messages for="giveForm.expDate.$error" ng-if="give.bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
         </div>
-        <div class="form-group col-xs-4 col-md-2" ng-class="{'has-error': !give.cvcValid && giveForm.cvv.$dirty }" validate-card ng-model="give">
+        <div class="form-group col-xs-4 col-md-2" ng-class="{'has-error': !give.cvvValid && giveForm.cvv.$dirty || giveForm.cvv.$error.required && give.bankinfoSubmitted}" validate-card ng-model="give">
             <label for="cvv">CVV</label>
-            <input type="text" name="cvv" class="form-control" ng-model="give.cvv" maxlength="4" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }" >
-            <ng-messages for="give.cvcValid" ng-show="!give.cvcValid && giveForm.cvv.$dirty" ng-messages-include="on-blur-messages"></ng-messages>
+            <input type="text" name="cvv" class="form-control" ng-model="give.cvv" maxlength="4" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }" ng-required="true" >
+            <ng-messages for="give.cvvValid" ng-show="!give.cvvValid && giveForm.cvv.$dirty" ng-messages-include="on-blur-messages"></ng-messages>
+            <ng-messages for="giveForm.cvv.$error" ng-if="give.bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
         </div>
         <div class="form-group col-xs-4 col-md-3"  ng-class="{'has-error': giveForm.billingZipCode.$error.invalidZip && giveForm.billingZipCode.$dirty }">
             <label for="billingZipCode">Zip Code</label>
@@ -31,5 +32,5 @@
         </div>
     </div>
     
-<!--         {{giveForm.$error}}
- --></section>
+        {{giveForm.cvv.$error}}
+</section>
