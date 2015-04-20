@@ -38,9 +38,11 @@
 
         // Invoked from the initial "/give" state to get us to the first page
         vm.initDefaultState = function() {
-            if($state.is("give")) {
-                $state.go("give.amount");
-            }
+            $scope.$on('$viewContentLoaded', function() {
+                if($state.is("give")) {
+                    $state.go("give.amount");
+                }
+            });
         }
 
         // Emits a growl notification encouraging checking/savings account
