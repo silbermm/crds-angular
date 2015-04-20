@@ -9,6 +9,7 @@
   require('./content');
   require('./opportunity');
   require('./community_groups_signup')
+  require('./mytrips');
   require('./profile/profile.html');
   require('./profile/personal/profile_personal.html');
   require('./profile/profile_account.html');
@@ -148,6 +149,10 @@
                 resolve: {
                     loggedin: checkLoggedin
                 }
+            })
+            .state("mytrips", {
+              url: "/mytrips",
+              templateUrl: "mytrips/mytrips.html"
             })
             .state("opportunities", {
                 url: "/opportunities",
