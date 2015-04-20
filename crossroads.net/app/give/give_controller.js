@@ -1,6 +1,7 @@
 'use strict';
 (function () {
 
+  var getCookie = require('../utilities/cookies'); 
   module.exports = function GiveCtrl($rootScope, $scope, $state, $timeout, $httpProvider, Session, Profile) {
 
         $scope.$on('$stateChangeStart', function (event, toState, toParams) {
