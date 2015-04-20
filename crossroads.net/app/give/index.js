@@ -27,4 +27,4 @@ require('./demo/guest_giver/give-logged-in-new-giver.html');
 require('./demo/trip_giving/give.html');
 
 
-app.controller("GiveCtrl", ['$rootScope', '$scope', '$state', '$timeout', 'Session', 'Profile', require("./give_controller")]);
+app.controller("GiveCtrl", ['$rootScope', '$scope', '$state', '$timeout', '$httpProvider', 'Session', 'Profile', require("./give_controller")]);

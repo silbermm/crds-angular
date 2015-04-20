@@ -1,11 +1,11 @@
 'use strict';
 (function () {
 
-  module.exports = function GiveCtrl($rootScope, $scope, $state, $timeout, Session, Profile) {
+  module.exports = function GiveCtrl($rootScope, $scope, $state, $timeout, $httpProvider, Session, Profile) {
 
         $scope.$on('$stateChangeStart', function (event, toState, toParams) {
            if ($rootScope.username) {
-             debugger;
+             $httpProvider.defaults.headers.common['Authorization']= getCookie('sessionId');
              Profile.Personal.get(function(response) {
                vm.email = response.emailAddress;
              });
