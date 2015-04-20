@@ -1,18 +1,26 @@
 'use strict';
 (function () {
 
-  module.exports = function GiveCtrl($rootScope, $scope, $state, $timeout, Session) {
+  module.exports = function GiveCtrl($rootScope, $scope, $state, $timeout, Session, Profile) {
 
         $scope.$on('$stateChangeStart', function (event, toState, toParams) {
-            if(toState.name =="give.thank-you" && $scope.giveForm.giveForm.$invalid){
+           if ($rootScope.username) {
+             debugger;
+             Profile.Personal.get(function(response) {
+               vm.email = response.emailAddress;
+             });
+           }
+          
+          
+            if (toState.name =="give.thank-you" && $scope.giveForm.giveForm.$invalid){
                 $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-                //event.preventDefault();
+                event.preventDefault();
             }
 
-             if(toState.name =="give.account" && $scope.giveForm.giveForm.amount.$error.naturalNumber){
-                $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-                //event.preventDefault();
-            }
+            //  if(toState.name =="give.account" && $scope.giveForm.giveForm.amount.$error.naturalNumber){
+            //     $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+            //     event.preventDefault();
+            // }
         });
 
         var vm = this;
@@ -113,8 +121,11 @@
         }
 
         vm.goToAccount = function(){
-                vm.amountSubmitted = true;
-                $state.go("give.account");
+            vm.amountSubmitted = true;
+            if($scope.giveForm.giveForm.giveForm.$valid)    
+              $state.go("give.account");
+            else
+              $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
         };
         
         vm.goToLogin = function () {
