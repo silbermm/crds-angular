@@ -13,7 +13,7 @@
         <span ng-show="!give.ccValid && giveForm.ccNumber.$dirty" ng-bind-html="$root.messages[$root.MESSAGES.invalidCard].message | html"></span>
     </div>
     <div class="row">
-        <div class="form-group col-xs-4  col-md-3" ng-class="{'has-error': giveForm.expDate.$error.required && give.bankinfoSubmitted}">cc
+        <div class="form-group col-xs-4  col-md-3" ng-class="{'has-error': giveForm.expDate.$error.required && give.bankinfoSubmitted}">
             <label>Expiration</label>
             <input type="text" name="expDate" class="form-control" ng-model="give.expDate" ui-mask="99/99" placeholder="MM/YY" ng-required="true">
             <ng-messages for="giveForm.expDate.$error" ng-show="giveForm.expDate.$error.required" ng-messages-include="on-blur-messages"></ng-messages>
