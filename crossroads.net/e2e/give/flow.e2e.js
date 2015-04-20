@@ -25,4 +25,14 @@ describe('Giving Flow', function() {
     loginButton.click();
     expect(browser.getCurrentUrl()).toMatch(/\/login/);    
   })
+  
+  it('should be able to login in to give', function () {
+    expect(browser.getCurrentUrl()).toMatch(/\/amount/);
+    element(by.model('give.amount')).sendKeys("1");
+    element(by.binding('give.amount')).click();
+    expect(browser.getCurrentUrl()).toMatch(/\/account/);
+    //select login button
+    //enter information
+    //expect(browser.getCurrentUrl()).toMatch(/\/account/);
+  })
 })

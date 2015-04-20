@@ -1,4 +1,8 @@
-<div class="form-group">
-  <donation-details></donation-details>
-  <a ng-click="give.goToAccount()" class="btn btn-primary">GIVE ${{give.amount}}</a>
+<div class="push-top">
+  <ng-form class="give-form" role="form" name="giveForm" novalidate>
+    <div class="form-group">
+      <donation-details></donation-details>
+      <a ng-click="give.goToAccount()" class="btn btn-primary">GIVE ${{give.amount}}</a>
+    </div>
+  </ng-form>
 </div>
