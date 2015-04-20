@@ -82,8 +82,8 @@
 
         vm.submitBankInfo = function() {
           vm.bankinfoSubmitted = true;
-          vm.formValid = true;
-           if (!$scope.giveForm.giveForm.routing.$error.invalidRouting ) {
+          vm.formValid = false;
+           if ($scope.giveForm.giveForm.$valid ) {
              console.log("set form valid");
              vm.formValid = true;
              $state.go("give.thank-you");
