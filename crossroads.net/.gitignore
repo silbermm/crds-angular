@@ -34,3 +34,5 @@ assets/
 styles/main.css*
 styles/modules/*.css*
 styles/pages/*.css*
+
+.DS_Store

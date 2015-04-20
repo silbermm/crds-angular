@@ -1,55 +1,138 @@
+'use strict';
 (function () {
-    'use strict';
-    module.exports = function GiveCtrl($scope, $log, messages) {
-        var _this = this;
+
+  var getCookie = require('../utilities/cookies'); 
+  module.exports = function GiveCtrl($rootScope, $scope, $state, $timeout, $httpProvider, Session, Profile) {
+
+        $scope.$on('$stateChangeStart', function (event, toState, toParams) {
+           if ($rootScope.username) {
+             $httpProvider.defaults.headers.common['Authorization']= getCookie('sessionId');
+             Profile.Personal.get(function(response) {
+               vm.email = response.emailAddress;
+             });
+           }
+          
+          
+            if (toState.name =="give.thank-you" && $scope.giveForm.giveForm.$invalid){
+                $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+                event.preventDefault();
+            }
+
+            //  if(toState.name =="give.account" && $scope.giveForm.giveForm.amount.$error.naturalNumber){
+            //     $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+            //     event.preventDefault();
+            // }
+        });
+
+        var vm = this;
+        vm.amountSubmitted = false;
+        vm.bankinfoSubmitted = false;
         //Credit Card RegExs
-         var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$ /;
-         var mastercardRegEx = /^5[1-5][0-9]/;
-         var discoverRegEx = /^6(?:011|5[0-9]{2})/;
-         var americanExpressRegEx = /^3[47][0-9]{13}$/;
+        var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$/;
+        var mastercardRegEx = /^5[1-5][0-9]/;
+        var discoverRegEx = /^6(?:011|5[0-9]{2})/;
+        var americanExpressRegEx = /^3[47][0-9]{13}$/;
 
-        _this.view = 'bank';
-        _this.bankType = 'checking';
-        _this.showMessage = "Where?";
-        _this.showCheckClass = "ng-hide";
+        vm.view = 'bank';
+        vm.bankType = 'checking';
+        vm.showMessage = "Where?";
+        vm.showCheckClass = "ng-hide";
+        vm.email = null;
+        vm.emailAlreadyRegisteredGrowlDivRef = 1000;
+        vm.creditCardDiscouragedGrowlDivRef = 1001;
+        vm.emailPrefix = "give";
 
-        _this.alerts = [
-            {
-                type: 'warning',
-                msg: "If it's all the same to you, please use your bank account (credit card companies charge Crossroads a fee for each gift)."
+        console.log("in the controller");
+
+        // Invoked from the initial "/give" state to get us to the first page
+        vm.initDefaultState = function() {
+            $scope.$on('$viewContentLoaded', function() {
+                if($state.is("give")) {
+                    $state.go("give.amount");
+                }
+            });
+        }
+
+        // Emits a growl notification encouraging checking/savings account
+        // donations, rather than credit card
+        vm.initCreditCardBankSection = function() {
+            $rootScope.$emit(
+                'notify'
+                , $rootScope.MESSAGES.creditCardDiscouraged
+                , vm.creditCardDiscouragedGrowlDivRef
+                , -1 // Indicates that this message should not time out
+                );
+        }
+
+        // Callback from email-field on guest giver page.  Emits a growl
+        // notification indicating that the email entered may already be a
+        // registered user.
+        vm.onEmailFound = function() {
+            $rootScope.$emit(
+                'notify'
+                , $rootScope.MESSAGES.donorEmailAlreadyRegistered
+                , vm.emailAlreadyRegisteredGrowlDivRef
+                , -1 // Indicates that this message should not time out
+                );
+        }
+
+        // Callback from email-field on guest giver page.  This closes any
+        // growl notification left over from the onEmailFound callback.
+        vm.onEmailNotFound = function() {
+            // There isn't a way to close growl messages in code, outside of the growl
+            // directive itself.  To work around this, we'll simply trigger the "click"
+            // event on the close button, which has a close handler function.
+            var closeButton = document.querySelector("#existingEmail .close");
+            if(closeButton !== undefined) {
+                $timeout(function() {
+                    angular.element(closeButton).triggerHandler("click");
+                }, 0);
             }
-        ]
+        }
 
-        _this.toggleCheck = function() {
-            if (_this.showMessage == "Where?") {
-                _this.showMessage = "Close";
-                _this.showCheckClass = "";
+        vm.submitBankInfo = function() {
+            vm.bankinfoSubmitted = true;
+            $state.go("give.thank-you");
+        };
+
+       vm.toggleCheck = function() {
+            if (vm.showMessage == "Where?") {
+                vm.showMessage = "Close";
+                vm.showCheckClass = "";
             } else {
-                _this.showMessage = "Where?";
-                _this.showCheckClass = "ng-hide";
+                vm.showMessage = "Where?";
+                vm.showCheckClass = "ng-hide";
             }
         }
 
-        _this.closeAlert = function (index) {
-            _this.alerts.splice(index, 1);
-        }
-
-        _this.ccCardType = function () {
-            if (_this.ccNumber) {
-                if (_this.ccNumber.match(visaRegEx))
-                    _this.ccNumberClass = "cc-visa";
-                else if (_this.ccNumber.match(mastercardRegEx))
-                    _this.ccNumberClass = "cc-mastercard";
-                else if (_this.ccNumber.match(discoverRegEx))
-                    _this.ccNumberClass = "cc-discover";
-                else if (_this.ccNumber.match(americanExpressRegEx))
-                    _this.ccNumberClass = "cc-american-express";
+        vm.ccCardType = function () {
+            if (vm.ccNumber) {
+                if (vm.ccNumber.match(visaRegEx))
+                  vm.ccNumberClass = "cc-visa";
+                else if (vm.ccNumber.match(mastercardRegEx))
+                  vm.ccNumberClass = "cc-mastercard";
+                else if (vm.ccNumber.match(discoverRegEx))
+                  vm.ccNumberClass = "cc-discover";
+                else if (vm.ccNumber.match(americanExpressRegEx))
+                  vm.ccNumberClass = "cc-american-express";
                 else
-                    _this.ccNumberClass = "";
+                  vm.ccNumberClass = "";
             } else
-                _this.ccNumberClass = "";
+                vm.ccNumberClass = "";
         }
 
+        vm.goToAccount = function(){
+            vm.amountSubmitted = true;
+            if($scope.giveForm.giveForm.giveForm.$valid)    
+              $state.go("give.account");
+            else
+              $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+        };
+        
+        vm.goToLogin = function () {
+          Session.addRedirectRoute("give.account", "");
+          $state.go("give.login");
+        }
     };
 
 })();

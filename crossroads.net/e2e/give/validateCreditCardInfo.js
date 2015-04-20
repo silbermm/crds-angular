@@ -3,7 +3,7 @@ var env = require("../environment");
 describe('Crossroads App', function() {
 
   beforeEach(function() {
-    browser.get(env.baseUrl + '/#/give');
+    browser.get(env.baseUrl + '/#/give/account');
     var creditCardButton = element(by.buttonText("Credit Card")).click();
   });
 

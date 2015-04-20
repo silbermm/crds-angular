@@ -1,16 +1,11 @@
-<div class="row">
+<div class="row" ng-init="give.initDefaultState()">
     <div class="col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
         <h1>Give</h1>
         <p class="subheading">Your generosity fuels the life change we experience around here.</p>
         <div class="push-top">
-            <form class="give-form" role="form" name="giveForm" novalidate>
-                <div class="form-group">
-                    <donation-details></donation-details>
-                    <bank-info></bank-info>
-                    <donation-confirmation></donation-confirmation>
-                    <a class="btn btn-primary">GIVE ${{give.amount}}</a>
-                </div>
-            </form>
+            <ng-form class="give-form" role="form" name="giveForm" novalidate>
+              <div ui-view></div>
+            </ng-form>
           </div>
       </div>
 </div>
