@@ -72,7 +72,7 @@ var _ = require('lodash');
         invalidCvv:26,
         donorEmailAlreadyRegistered:28,
         serveSignupSuccess:29,
-        creditCardDiscouraged:36,
+        creditCardDiscouraged:36
     }).config(function (growlProvider) {
         growlProvider.globalPosition("top-center");
         growlProvider.globalTimeToLive(6000);
@@ -159,7 +159,8 @@ var _ = require('lodash');
         }
     ])
     .directive("emptyToNull", require('./shared/emptyToNull.directive.js'))
-    .directive("stopEvent", require('./shared/stopevent.directive.js'));
+    .directive("stopEvent", require('./shared/stopevent.directive.js'))
+    .directive("svgIcon", require('./shared/svgIcon.directive.js'));
 
     require('./apprun');
     require('./app.config');

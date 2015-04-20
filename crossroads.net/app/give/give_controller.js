@@ -4,7 +4,7 @@
   module.exports = function GiveCtrl($rootScope, $scope, $state, $timeout, Session) {
 
         $scope.$on('$stateChangeStart', function (event, toState, toParams) {
-            if(toState.name =="give.thank-you" && $scope.giveForm.giveForm.$error){
+            if(toState.name =="give.thank-you" && $scope.giveForm.giveForm.$invalid){
                 $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
                 //event.preventDefault();
             }
@@ -19,10 +19,10 @@
         vm.amountSubmitted = false;
         vm.bankinfoSubmitted = false;
         //Credit Card RegExs
-         var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$ /;
-         var mastercardRegEx = /^5[1-5][0-9]/;
-         var discoverRegEx = /^6(?:011|5[0-9]{2})/;
-         var americanExpressRegEx = /^3[47][0-9]{13}$/;
+        var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$ /;
+        var mastercardRegEx = /^5[1-5][0-9]/;
+        var discoverRegEx = /^6(?:011|5[0-9]{2})/;
+        var americanExpressRegEx = /^3[47][0-9]{13}$/;
 
         vm.view = 'bank';
         vm.bankType = 'checking';
@@ -35,8 +35,13 @@
 
         console.log("in the controller");
 
-        if($state.is("give")) {
-            $state.go("give.amount");
+        // Invoked from the initial "/give" state to get us to the first page
+        vm.initDefaultState = function() {
+            $scope.$on('$viewContentLoaded', function() {
+                if($state.is("give")) {
+                    $state.go("give.amount");
+                }
+            });
         }
 
         // Emits a growl notification encouraging checking/savings account
@@ -77,18 +82,8 @@
         }
 
         vm.submitBankInfo = function() {
-          vm.bankinfoSubmitted = true;
-          // vm.formValid = true;
-          //  if (!$scope.giveForm.giveForm.routing.$error.invalidRouting ) {
-          //    console.log("set form valid");
-          //    vm.formValid = true;
-             $state.go("give.thank-you");
-          //    }
-          // if (!vm.formValid) {
-          //   $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-          //   console.log("emit it here");
-          // return;
-          //}
+            vm.bankinfoSubmitted = true;
+            $state.go("give.thank-you");
         };
 
        vm.toggleCheck = function() {

@@ -18,7 +18,4 @@
 
   require('./refine/refineList.html');
   app.directive("refineList", require('./refine/refineList.directive'));
-
-  app.directive('serveIcon', require('./serveIcon.directive.js'));
-
 })()

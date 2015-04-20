@@ -209,15 +209,15 @@
                 controller: "GoTripGivingCtrl as gotripresults",
                 templateUrl: "go_trip_giving/go_trip_giving_results.html"
             })
-           .state("/demo/guest-giver", {
+            .state("/demo/guest-giver", {
                 url: "/demo/guest-giver",
                 templateUrl: "guest_giver/give.html"
             })
-           .state("/demo/guest-giver/login", {
+            .state("/demo/guest-giver/login", {
                 url: "/demo/guest-giver/login",
                 templateUrl: "guest_giver/give-login.html"
             })
-           .state("/demo/guest-giver/login-guest", {
+            .state("/demo/guest-giver/login-guest", {
                 url: "/demo/guest-giver/login-guest",
                 controller: "GiveCtrl as give",
                 templateUrl: "guest_giver/give-login-guest.html"
@@ -257,7 +257,11 @@
                 url: "/demo/logged-in-giver/new-giver",
                 templateUrl: "guest_giver/give-logged-in-new-giver.html"
             })
-           .state("community-groups-signup", {
+            .state("/demo/go-trip-giving", {
+                url: "/demo/go-trip-giving",
+                templateUrl: "trip_giving/give.html"
+            })
+            .state("community-groups-signup", {
                 url: "{link:signupRouteType}",
                 controller: "GroupSignupController as groupsignup",
                 templateUrl: "community_groups_signup/group_signup_form.html",
