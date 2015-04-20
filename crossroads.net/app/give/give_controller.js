@@ -81,18 +81,8 @@
         }
 
         vm.submitBankInfo = function() {
-          vm.bankinfoSubmitted = true;
-          vm.formValid = false;
-           if ($scope.giveForm.giveForm.$valid ) {
-             console.log("set form valid");
-             vm.formValid = true;
-             $state.go("give.thank-you");
-             }
-          if (!vm.formValid) {
-            $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-            console.log("emit it here");
-          return;
-          }
+            vm.bankinfoSubmitted = true;
+            $state.go("give.thank-you");
         };
 
        vm.toggleCheck = function() {
