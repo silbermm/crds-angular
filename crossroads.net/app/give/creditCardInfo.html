@@ -8,13 +8,12 @@
     </div>
     <div class="form-group" ng-class="{'has-error': !give.ccValid && giveForm.ccNumber.$dirty ||giveForm.ccNumber.$error.required && give.bankinfoSubmitted }" validate-card ng-model="give" >
         <label for="ccNumber">Credit Card Number</label>
-        <input type="text" name="ccNumber" class="form-control cc-icon" ng-class="give.ccNumberClass" ng-model="give.ccNumber" maxlength="16" ng-blur="give.ccCardType()" ng-required="true" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }" >
+        <input type="text" name="ccNumber" class="form-control cc-icon" ng-class="give.ccNumberClass" ng-model="give.ccNumber" maxlength="16" ng-change="give.ccCardType()" ng-required="true" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }">
         <ng-messages for="giveForm.ccNumber.$error" ng-if="give.bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
-        <!-- <input type="text" name="ccNumber" class="form-control cc-icon" ng-class="give.ccNumberClass" ng-model="give.ccNumber" maxlength="16" ng-blur="give.ccCardType()" > -->
         <span ng-show="!give.ccValid && giveForm.ccNumber.$dirty" ng-bind-html="$root.messages[$root.MESSAGES.invalidCard].message | html"></span>
     </div>
     <div class="row">
-        <div class="form-group col-xs-4  col-md-3" ng-class="{'has-error': giveForm.expDate.$error.required && give.bankinfoSubmitted}">
+        <div class="form-group col-xs-4  col-md-3" ng-class="{'has-error': giveForm.expDate.$error.required && give.bankinfoSubmitted}">cc
             <label>Expiration</label>
             <input type="text" name="expDate" class="form-control" ng-model="give.expDate" ui-mask="99/99" placeholder="MM/YY" ng-required="true">
             <ng-messages for="giveForm.expDate.$error" ng-show="giveForm.expDate.$error.required" ng-messages-include="on-blur-messages"></ng-messages>
@@ -24,8 +23,7 @@
             <label for="cvv">CVV</label>
             <input type="text" name="cvc" class="form-control" ng-model="give.cvc" maxlength="4" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }" ng-required="true" >
             <span ng-show="!give.cvcValid && giveForm.cvc.$dirty" ng-bind-html="$root.messages[$root.MESSAGES.invalidCvv].message | html"></span>
-            <!-- <ng-messages for="give.cvvValid" ng-show="!give.cvvValid && giveForm.cvv.$dirty" ng-messages-include="on-blur-messages"></ng-messages> -->
-            <ng-messages for="giveForm.cvc.$error" ng-if="give.bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
+            <ng-messages for="giveForm.cv.$error" ng-if="give.bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
       </div>
       <div class="form-group col-xs-4 col-md-3"  ng-class="{'has-error': giveForm.billingZipCode.$error.invalidZip && giveForm.billingZipCode.$dirty || giveForm.billingZipCode.$error.required && give.bankinfoSubmitted}">
             <label for="billingZipCode">Zip Code</label>

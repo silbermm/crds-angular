@@ -20,7 +20,7 @@
         vm.amountSubmitted = false;
         vm.bankinfoSubmitted = false;
         //Credit Card RegExs
-        var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$ /;
+        var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$/;
         var mastercardRegEx = /^5[1-5][0-9]/;
         var discoverRegEx = /^6(?:011|5[0-9]{2})/;
         var americanExpressRegEx = /^3[47][0-9]{13}$/;
@@ -35,6 +35,27 @@
         vm.emailPrefix = "give";
 
         console.log("in the controller");
+
+        vm.ccCardType = function () {
+            if (vm.ccNumber) {
+                if (vm.ccNumber.match(visaRegEx))
+                  vm.ccNumberClass = "cc-visa";
+                else if (vm.ccNumber.match(mastercardRegEx))
+                  vm.ccNumberClass = "cc-mastercard";
+                else if (vm.ccNumber.match(discoverRegEx))
+                  vm.ccNumberClass = "cc-discover";
+                else if (vm.ccNumber.match(americanExpressRegEx))
+                  vm.ccNumberClass = "cc-american-express";
+                else
+                  vm.ccNumberClass = "";
+            } else
+                vm.ccNumberClass = "";
+        }
+
+        vm.goToAccount = function(){
+                vm.amountSubmitted = true;
+                $state.go("give.account");
+        };
 
         // Invoked from the initial "/give" state to get us to the first page
         vm.initDefaultState = function() {
@@ -96,27 +117,7 @@
                 vm.showCheckClass = "ng-hide";
             }
         }
-
-        vm.ccCardType = function () {
-            if (vm.ccNumber) {
-                if (vm.ccNumber.match(visaRegEx))
-                  vm.ccNumberClass = "cc-visa";
-                else if (vm.ccNumber.match(mastercardRegEx))
-                  vm.ccNumberClass = "cc-mastercard";
-                else if (vm.ccNumber.match(discoverRegEx))
-                  vm.ccNumberClass = "cc-discover";
-                else if (vm.ccNumber.match(americanExpressRegEx))
-                  vm.ccNumberClass = "cc-american-express";
-                else
-                  vm.ccNumberClass = "";
-            } else
-                vm.ccNumberClass = "";
-        }
-
-        vm.goToAccount = function(){
-                vm.amountSubmitted = true;
-                $state.go("give.account");
-        };
+      
     };
 
 })();
