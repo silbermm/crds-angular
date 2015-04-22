@@ -11,8 +11,8 @@
           stop-event>
           {{::member.name}}
           <span ng-if="showIcon(member)" >
-            <svg-icon icon="check-circle" ng-show="member.serveRsvp.attending" class="text-success"> </svg-icon>
-            <svg-icon icon="cancel-circle" ng-show="!member.serveRsvp.attending" class="text-danger"> </svg-icon>
+            <svg-icon icon="check-circle" ng-show="member.serveRsvp.attending"> </svg-icon>
+            <svg-icon icon="minus-circle" ng-show="!member.serveRsvp.attending"> </svg-icon>
           </span>
         </button>
       </div><!--/pull-right-->
@@ -30,9 +30,9 @@
         <div class="row">
           <div class="col-md-4">
             <h5>Opportunities</h5>
-            <div class="radio" ng-class="{'text-muted': role.capacity.badgeType === 'label-success'}" ng-repeat="role in currentMember.roles">
+            <div class="radio" ng-class="{'text-muted': role.capacity.badgeType === 'label-default'}" ng-repeat="role in currentMember.roles">
               <label>
-                <input type="radio" name="roles-{{panelId()}}" ng-disabled="role.capacity.badgeType === 'label-success'" ng-model="currentMember.serveRsvp.roleId" ng-value="role.roleId" ng-change="roleChanged()" >
+                <input type="radio" name="roles-{{panelId()}}" ng-disabled="role.capacity.badgeType === 'label-default'" ng-model="currentMember.serveRsvp.roleId" ng-value="role.roleId" ng-change="roleChanged()" >
                 <span class="opportunity-name">{{::role.name}}</span>
                 <span class="label {{ role.capacity.badgeType }}" ng-show="role.capacity.display">{{ role.capacity.message }}</span>
               </label>
