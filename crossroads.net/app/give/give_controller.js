@@ -17,33 +17,43 @@
                 $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
                 event.preventDefault();
             }
-
-            //  if(toState.name =="give.account" && $scope.giveForm.giveForm.amount.$error.naturalNumber){
-            //     $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-            //     event.preventDefault();
-            // }
         });
 
         var vm = this;
+        
+        //Credit Card RegExs
+        var americanExpressRegEx = /^3[47][0-9]{13}$/;
+        var discoverRegEx = /^6(?:011|5[0-9]{2})/;
+        var mastercardRegEx = /^5[1-5][0-9]/;
+        var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$/;
+        
         vm.amountSubmitted = false;
         vm.bankinfoSubmitted = false;
-        //Credit Card RegExs
-        var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$/;
-        var mastercardRegEx = /^5[1-5][0-9]/;
-        var discoverRegEx = /^6(?:011|5[0-9]{2})/;
-        var americanExpressRegEx = /^3[47][0-9]{13}$/;
-
-        vm.view = 'bank';
         vm.bankType = 'checking';
-        vm.showMessage = "Where?";
-        vm.showCheckClass = "ng-hide";
+        vm.creditCardDiscouragedGrowlDivRef = 1001;
         vm.email = null;
         vm.emailAlreadyRegisteredGrowlDivRef = 1000;
-        vm.creditCardDiscouragedGrowlDivRef = 1001;
         vm.emailPrefix = "give";
+        vm.showMessage = "Where?";
+        vm.showCheckClass = "ng-hide";
+        vm.view = 'bank';
 
-        console.log("in the controller");
+        vm.accountError = function() {
+            return (vm.bankinfoSubmitted  && $scope.giveForm.giveForm.account.$error.invalidAccount ||
+                $scope.giveForm.giveForm.account.$dirty && $scope.giveForm.giveForm.account.$error.invalidAccount
+                && $scope.giveForm.giveForm.account.$viewValue !== '')
+        };
 
+        vm.blurAccountError = function() {
+            return ($scope.giveForm.giveForm.account.$dirty && $scope.giveForm.giveForm.account.$error.invalidAccount
+                && $scope.giveForm.giveForm.account.$viewValue !=='')
+        }
+
+        vm.blurRoutingError = function() {
+            return ($scope.giveForm.giveForm.routing.$dirty && $scope.giveForm.giveForm.routing.$error.invalidRouting 
+                && $scope.giveForm.giveForm.routing.$viewValue !=='')
+        };  
+       
         // Invoked from the initial "/give" state to get us to the first page
         vm.initDefaultState = function() {
             $scope.$on('$viewContentLoaded', function() {
@@ -90,12 +100,18 @@
             }
         }
 
+        vm.routingError = function() {
+            return (vm.bankinfoSubmitted  && $scope.giveForm.giveForm.routing.$error.invalidRouting ||
+                $scope.giveForm.giveForm.routing.$dirty && $scope.giveForm.giveForm.routing.$error.invalidRouting 
+                && $scope.giveForm.giveForm.routing.$viewValue!== '')
+         };
+
         vm.submitBankInfo = function() {
             vm.bankinfoSubmitted = true;
             $state.go("give.thank-you");
         };
 
-       vm.toggleCheck = function() {
+        vm.toggleCheck = function() {
             if (vm.showMessage == "Where?") {
                 vm.showMessage = "Close";
                 vm.showCheckClass = "";
