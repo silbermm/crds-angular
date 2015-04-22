@@ -2,12 +2,12 @@
   <div class="form-inline form-group give-amount" ng-class="{'has-error': give.amountError()}">
     <div class="input-group">
       <span class="input-group-addon">$</span>
-      <input type="text" name="amount" class="form-control" ng-model="give.amount" autocomplete="off" ng-model-options="{ debounce: 500 }" natural-number required>
+      <input type="text" name="amount" class="form-control" ng-model="give.amount" autocomplete="off" ng-model-options="{ debounce: 500 }" currency-mask required>
       <span class="input-group-addon ">.00</span>
     </div>
     <ng-messages for="giveForm.amount.$error" ng-show="giveForm.amount.$error.naturalNumber && giveForm.$dirty" 
       ng-messages-include="on-blur-messages"></ng-messages>
-      <!-- <ng-messages for="giveForm.amount.$error" ng-if="give.amountSubmitted" ng-messages-include="on-submit-messages"></ng-messages> -->
+      <ng-messages for="giveForm.amount.$error" ng-if="give.amountSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
     </div>
   </div>
 

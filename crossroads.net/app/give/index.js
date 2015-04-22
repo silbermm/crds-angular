@@ -9,7 +9,6 @@ var app = require('angular').module('give');
 app.factory("getPrograms", require('./getPrograms.service.js'));
 app.directive('invalidRouting',[require('./routingTransitNumber.validation.directive')]);
 app.directive('invalidAccount',[require('./bankAccountNumber.validation.directive')]);
-app.directive('naturalNumber',[require('./naturalNumber.validation.directive')]);
 app.directive('invalidZip', [require('./zipCode.validation.directive')]);
 
 /****** DEMO PAGES ******/

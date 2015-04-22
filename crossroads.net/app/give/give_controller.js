@@ -45,8 +45,7 @@
         };
 
         vm.amountError = function() {
-            return (vm.amountSubmitted && $scope.giveForm.giveForm.$invalid ||
-                $scope.giveForm.giveForm.$dirty && $scope.giveForm.giveForm.$error.naturalNumber)
+            return (vm.amountSubmitted && $scope.giveForm.giveForm.$invalid)
         };
 
         vm.billingZipCodeError = function() {
