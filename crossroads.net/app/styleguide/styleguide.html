@@ -67,6 +67,8 @@
             </li>
             <li offset="30"><a ng-click="styleguide.scrollTo('registerpattern')">Register Form</a>
             </li>
+            <li offset="30"><a ng-click="styleguide.scrollTo('modal')">Modal</a>
+            </li>
           </ul>
         </li>
     </ul>
@@ -1439,6 +1441,30 @@
       </div>
       <!--/login-->
 
+      <!-- modal -->
+      <div class="panel panel-default" id="modal">
+        <div class="panel-heading">Modal</div>
+        <div class="panel-body">
+          <div class="col-sm-6 col-sm-offset-3 push-top">
+            <script type="text/ng-template" id="styleModalContent.html">
+              <div class="modal-header">
+                <h3 class="modal-title">I'm a modal and this is my header</h3>
+              </div>
+              <div class="modal-body">
+                I'm the modal body.
+              </div>
+              <div class="modal-footer">
+                I'm the modal footer.
+              </div>
+            </script>
+
+            <button class="btn btn-default" ng-click="styleguide.open()">Open me!</button>
+            <button class="btn btn-default" ng-click="styleguide.open('lg')">Large modal</button>
+            <button class="btn btn-default" ng-click="styleguide.open('sm')">Small modal</button>
+          </div>
+        </div>
+      </div>
+      <!-- /modal -->
 
     </div>
     <!--/the-kitchen-sink-->
