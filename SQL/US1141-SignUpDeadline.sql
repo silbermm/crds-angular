@@ -18,3 +18,19 @@ CREATE TABLE [dbo].[cr_Sign_Up_Deadline](
 ) ON [PRIMARY]
 
 GO
+
+/* Add field to opportunity and make a FK to above table */
+
+ALTER TABLE [dbo].[Opportunities]
+ADD [Serving_Signup_Deadline] [int] NULL
+GO
+
+ALTER TABLE [dbo].[Opportunities]  WITH CHECK ADD  CONSTRAINT [FK_Opportunities_cr_Sign_Up_Deadline] FOREIGN KEY([Serving_Signup_Deadline])
+REFERENCES [dbo].[cr_Sign_Up_Deadline] ([Sign_Up_Deadline_ID])
+GO
+
+ALTER TABLE [dbo].[Opportunities] CHECK CONSTRAINT [FK_Opportunities_cr_Sign_Up_Deadline]
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Number of Days before Event' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Opportunities', @level2type=N'COLUMN',@level2name=N'Serving_Signup_Deadline'
+GO
