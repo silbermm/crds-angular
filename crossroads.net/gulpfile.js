@@ -119,7 +119,7 @@ gulp.task("svg-sprite", function() {
 			defs: {
 				prefix: ".icon-%s",
 				example: {
-					template: "./config/sprite.template.html",
+					template: __dirname + "/config/sprite.template.html",
 				},
 				inline: true,
 				bust: false
