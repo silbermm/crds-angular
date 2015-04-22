@@ -118,7 +118,9 @@ gulp.task("svg-sprite", function() {
 		mode: {
 			defs: {
 				prefix: ".icon-%s",
-				example: true,
+				example: {
+					template: "./config/sprite.template.html",
+				},
 				inline: true,
 				bust: false
 			}
@@ -126,9 +128,9 @@ gulp.task("svg-sprite", function() {
 	};
 
 	// Override the default template
-	gulp.src("./config/sprite.template.html")
-		.pipe(rename("sprite.html"))
-		.pipe(gulp.dest("./node_modules/gulp-svg-sprite/node_modules/svg-sprite/tmpl/defs"));
+	// gulp.src("./config/sprite.template.html")
+	// 	.pipe(rename("sprite.html"))
+	// 	.pipe(gulp.dest("./node_modules/gulp-svg-sprite/node_modules/svg-sprite/tmpl/defs"));
 
 	return gulp.src("./app/icons/*.svg")
 		.pipe(svgSprite(config))
