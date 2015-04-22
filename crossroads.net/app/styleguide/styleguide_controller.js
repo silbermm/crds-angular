@@ -22,5 +22,9 @@
         size: size,
       })
     }
+
+    _this.dynamicTooltip = 'Hello, World!';
+    _this.dynamicTooltipText = 'dynamic';
+    _this.htmlTooltip = 'I\'ve been made <b>bold</b>!';
   }
 })();
