@@ -2,13 +2,6 @@
 
 var angular = require('angular');
 
-require("angular-resource");
-require("angular-sanitize");
-require('angular-messages');
-require('angular-cookies');
-require('angular-growl');
-require('angular-toggle-switch');
-require('angular-ui-utils');
 require('./templates/nav.html');
 require('./templates/nav-mobile.html');
 
@@ -31,13 +24,21 @@ require('./third-party/angular/angular-growl.css');
 require('./give');
 
 
+require('./app.core.module');
 
 var _ = require('lodash');
 "use strict";
 (function () {
 
-   angular.module("crossroads", ['ngResource', "crossroads.profile", "crossroads.filters", "crdsCMS.services", "ui.router", 'ui.utils', "ngCookies", "ngMessages", 'angular-growl', 'toggle-switch', 'ngAside', 'matchMedia','give'])
-
+   angular.module("crossroads", [
+     'crossroads.core',
+     "crossroads.profile", 
+     "crossroads.filters", 
+     "crdsCMS.services",
+     'ngAside', 
+     'matchMedia',
+     'give'
+     ])
     .constant("AUTH_EVENTS", {
             loginSuccess: "auth-login-success",
             loginFailed: "auth-login-failed",
