@@ -6,7 +6,7 @@
       <span class="input-group-addon ">.00</span>
 <!--       <p>{{giveForm}}</p> -->
     </div>
-    <ng-messages for="giveForm.amount.$error" ng-show="giveForm.amount.$error.naturalNumber && giveForm.$dirty" 
+    <ng-messages for="giveForm.amount.$error" ng-show="giveForm.amount.$error.naturalNumber && giveForm.$dirty"
       ng-messages-include="on-blur-messages"></ng-messages>
       <ng-messages for="giveForm.amount.$error" ng-if="give.submitted" ng-messages-include="on-submit-messages"></ng-messages>
   </div>
@@ -14,9 +14,6 @@
   <div class="form-group">
     <select class="form-control" ng-options="program for program in programs" ng-model="give.program"
       required="true" ng-init="give.program = 'Ministry Fund'">
-        <!-- Use to display a placeholder when ng-init is not used -->
-        <!-- <option style="display:none" value="">Select Fund</option> -->
-      <!-- <option ng-repeat="program in programs">{{program}}</option> -->
     </select>
   </div>
   <div class="form-group">
@@ -25,4 +22,3 @@
     </select>
   </div>
 </ng-form>
-
