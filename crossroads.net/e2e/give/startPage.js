@@ -14,8 +14,8 @@ describe('Give as a guest-giver', function() {
   it('It should reflect the amount in the button', function() {
     amountInput.sendKeys("122");
     amountInput.sendKeys(protractor.Key.TAB);
-    amountInput.clear();
-    expect(element(by.binding("give.amount")).getText()).toContain("122");
+    //amountInput.clear();
+    expect(element(by.binding("give.amount")).getText()).toContain("GIVE $122");
   });
 
   it('It should reject invalid entries', function() {
