@@ -20,6 +20,7 @@
   "homepage": "https://github.com/crdschurch/crds-angular",
   "devDependencies": {
     "angular-mocks": "^1.3.14",
+    "autoprefixer-loader": "^1.2.0",
     "babel-core": "^4.1.1",
     "babel-loader": "^4.0.0",
     "css-loader": "^0.9.1",
