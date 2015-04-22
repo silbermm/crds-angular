@@ -49,15 +49,33 @@
                 $scope.giveForm.giveForm.$dirty && $scope.giveForm.giveForm.$error.naturalNumber)
         };
 
+        vm.billingZipCodeError = function() {
+            return (vm.bankinfoSubmitted && $scope.giveForm.giveForm.billingZipCode.$invalid)  
+        };
+
         vm.blurAccountError = function() {
             return ($scope.giveForm.giveForm.account.$dirty && $scope.giveForm.giveForm.account.$error.invalidAccount
                 && $scope.giveForm.giveForm.account.$viewValue !=='')
-        }
+        };
 
+        vm.blurBillingZipCodeError = function() {
+            return ($scope.giveForm.giveForm.billingZipCode.$dirty && $scope.giveForm.giveForm.billingZipCode.$invalid)  
+        };
+        
         vm.blurRoutingError = function() {
             return ($scope.giveForm.giveForm.routing.$dirty && $scope.giveForm.giveForm.routing.$error.invalidRouting 
                 && $scope.giveForm.giveForm.routing.$viewValue !=='')
         };  
+
+        vm.cvvError = function() {
+            return (vm.bankinfoSubmitted && $scope.giveForm.giveForm.cvc.$isEmpty ||
+                $scope.giveForm.giveForm.cvc.$invalid && vm.bankinfoSubmitted ||
+                $scope.giveForm.giveForm.cvc.$invalid && $scope.giveForm.giveForm.cvc.$dirty )  
+        };
+       
+        vm.expDateError = function() {
+            return (vm.bankinfoSubmitted && $scope.giveForm.giveForm.expDate.$invalid)             
+        };
        
         // Invoked from the initial "/give" state to get us to the first page
         vm.initDefaultState = function() {
@@ -78,6 +96,10 @@
                 , -1 // Indicates that this message should not time out
                 );
         }
+
+        vm.nameError = function() {
+            return (vm.bankinfoSubmitted && $scope.giveForm.giveForm.nameOnCard.$invalid)             
+        };
 
         // Callback from email-field on guest giver page.  Emits a growl
         // notification indicating that the email entered may already be a
