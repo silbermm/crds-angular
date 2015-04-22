@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace crds_angular.Enum
 {
@@ -10,6 +11,7 @@ namespace crds_angular.Enum
         public static readonly BadgeType LabelDefault = new BadgeType(1, "label-default");
         public static readonly BadgeType LabelSuccess = new BadgeType(2, "label-success");
         public static readonly BadgeType LabelWarning = new BadgeType(3, "label-warning");
+        public static readonly BadgeType LabelInfo = new BadgeType(4, "label-info");
 
         private BadgeType(int value, String name)
         {
