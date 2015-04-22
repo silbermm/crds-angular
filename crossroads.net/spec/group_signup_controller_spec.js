@@ -99,7 +99,7 @@ var successResponse = [
      $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] +'api/profile')
      .respond(userGetResponse);
 
-     $httpBackend.when('GET', 'http://content.crossroads.net//api/Page/?link=test')
+     $httpBackend.when('GET', window.__env__['CRDS_CMS_ENDPOINT'] +'/api/Page/?link=test')
      .respond(pageGetResponse);
 
      $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] +'api/group/1')
@@ -168,7 +168,7 @@ var successResponse = [
   it('should retun object containing newAdd value(s)', function(){
     var controller = groupSignupController();
     verifyExpectations();
-    var response = 
+    var response =
       [
         { "First_Name": "Shankar",
           "Email_Address": "shankx@test.com",
@@ -185,7 +185,7 @@ var successResponse = [
     var result = controller.hasParticipantID(response);
     expect(result.partId[0]).toEqual("1234");
 
-    response = 
+    response =
       [
         { "First_Name": "Shankar",
           "Email_Address": "shankx@test.com",
@@ -199,7 +199,7 @@ var successResponse = [
 
    function verifyExpectations(){
      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +'api/profile');
-     $httpBackend.expectGET('http://content.crossroads.net//api/Page/?link=test');
+     $httpBackend.expectGET(window.__env__['CRDS_CMS_ENDPOINT'] + '/api/Page/?link=test');
      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +'api/group/1');
      $httpBackend.flush();
    }
