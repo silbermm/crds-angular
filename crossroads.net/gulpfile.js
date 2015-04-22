@@ -127,11 +127,6 @@ gulp.task("svg-sprite", function() {
 		}
 	};
 
-	// Override the default template
-	// gulp.src("./config/sprite.template.html")
-	// 	.pipe(rename("sprite.html"))
-	// 	.pipe(gulp.dest("./node_modules/gulp-svg-sprite/node_modules/svg-sprite/tmpl/defs"));
-
 	return gulp.src("./app/icons/*.svg")
 		.pipe(svgSprite(config))
 		.pipe(gulp.dest("./build/icons/generated"));
