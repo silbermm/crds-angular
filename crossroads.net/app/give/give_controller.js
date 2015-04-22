@@ -39,9 +39,14 @@
         vm.view = 'bank';
 
         vm.accountError = function() {
-            return (vm.bankinfoSubmitted  && $scope.giveForm.giveForm.account.$error.invalidAccount ||
+            return (vm.bankinfoSubmitted && $scope.giveForm.giveForm.account.$error.invalidAccount ||
                 $scope.giveForm.giveForm.account.$dirty && $scope.giveForm.giveForm.account.$error.invalidAccount
                 && $scope.giveForm.giveForm.account.$viewValue !== '')
+        };
+
+        vm.amountError = function() {
+            return (vm.amountSubmitted && $scope.giveForm.giveForm.$invalid ||
+                $scope.giveForm.giveForm.$dirty && $scope.giveForm.giveForm.$error.naturalNumber)
         };
 
         vm.blurAccountError = function() {
