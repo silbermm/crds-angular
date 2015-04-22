@@ -1,0 +1,271 @@
+<div class="row">
+  <div class="col-sm-10 col-sm-offset-1 my-trip">
+    <h1>My Trips</h1>
+    <h2 class="subheading">Whether it’s New Orleans or India, we leave our own neighborhoods to be in others.</h2>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card-item" data-category="view">
+          <!-- card heading -->
+          <div class="card-header card-background-dark clearfix">
+            <div class="row">
+              <div class="col-sm-10 col-xs-8">
+                <div class="card-row card-heading soft-half-left">GO New Orleans</div>
+                <p class="small text-muted trip-date soft-left">July 7 - July 27, 2015</p>
+              </div>
+              <div class="col-sm-2 col-xs-4 text-center hard-right days-left">
+                <div class="card-row card-heading text-danger">35</div>
+                <p>days left</p>
+              </div>
+            </div>
+          </div>
+          <!-- /card heading -->
+
+          <!-- Card Body -->
+          <!-- Progress Bar -->
+          <div class="col-xs-12 col-top">
+            <div class="card-header">
+              <p class="flush-bottom text-right bold trip-funding" style="width: 100%">$700</p>
+              <progressbar type="success" max="500" value="700"></progressbar>
+              <p class="pull-right funding-goal">$500</p>
+            </div>
+          </div>
+          <!-- /progress bar -->
+          <!-- Social Media / Donor toggle -->
+          <div class="col-xs-9">
+            <svg viewBox="0 0 32 32" class="icon icon-facebook6 icon-xlarge icon-facebook">
+              <use xlink:href="#facebook6"></use>
+            </svg>
+            <svg viewBox="0 0 32 32" class="icon icon-twitter6 icon-xlarge icon-twitter">
+              <use xlink:href="#twitter6"></use>
+            </svg>
+            <svg viewBox="0 0 32 32" class="icon icon-mail4 icon-xlarge icon-email">
+              <use xlink:href="#mail4"></use>
+            </svg>
+          </div>
+          <div class="col-xs-3 push-half-top">
+            <a href="" class="pull-right" ng-click="orleans.donors = !orleans.donors" ng-show="!orleans.donors">Show Donors</a>
+            <a href="" class="pull-right" ng-click="orleans.donors = !orleans.donors" ng-show="orleans.donors">Hide Donors</a>
+          </div>
+          <!-- /social media & donor toggle -->
+
+          <!-- donor table -->
+          <div class="clearfix col-xs-12">
+            <div collapse="!orleans.donors">
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td scope="row"><a href="" ng-click="matt = !matt">Matt Brewer</a>
+                      <p class="text-muted"><span>4/2/15</span>
+                      </p>
+                    </td>
+                    <td class="text-right"><span>$100.00</span>
+                    </td>
+                  </tr>
+                  <tr collapse="!matt">
+                    <td colspan="2" style="border: none">
+                      <textarea class="form-control push-bottom" rows="10"></textarea>
+                      <div class="pull-right">
+                        <button class="btn btn-primary" ng-click="matt = !matt">Cancel</button>
+                        <button class="btn btn-primary">Send Message</button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td scope="row"><a href="">Sandi Ritter</a>
+                      <p class="text-muted"><span>3/28/15</span>
+                      </p>
+                    </td>
+                    <td class="text-right"><span>$50.00</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td scope="row"><a href="">Michael Harward</a>
+                      <p class="text-muted"><span>3/22/15</span>
+                      </p>
+                    </td>
+                    <td class="text-right"><span>$150.00</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td scope="row"><a href="">Brian Miller</a>
+                      <p class="text-muted"><span>3/22/15</span>
+                      </p>
+                    </td>
+                    <td class="text-right"><span>$50.00</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td scope="row"><a href="">Tate Lucus 
+                      <svg viewBox="0 0 32 32" class="icon icon-check-circle text-success icon-middle">
+	                     <use xlink:href="#check-circle"></use>
+                      </svg>
+                      </a>
+                      <p class="text-muted"><span>3/13/15</span>
+                      </p>
+                    </td>
+                    <td class="text-right"><span>$50.00</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- /donor table -->
+        </div>
+      </div>
+
+
+      <div class="col-md-12">
+        <div class="card-item" data-category="view">
+          <!-- card heading -->
+          <div class="card-header card-background-dark clearfix">
+            <div class="row">
+              <div class="col-sm-10 col-xs-8">
+                <div class="card-row card-heading soft-half-left">GO South Africa</div>
+                <p class="small text-muted trip-date soft-left">Oct 17 - Oct 27, 2015</p>
+              </div>
+              <div class="col-sm-2 col-xs-4 text-center hard-right days-left">
+                <div class="card-row card-heading text-danger">88</div>
+                <p>days left</p>
+              </div>
+            </div>
+          </div>
+          <!-- /card heading -->
+
+          <!-- Card Body -->
+          <!-- Progress Bar -->
+          <div class="col-xs-12 col-top">
+            <div class="card-header">
+              <p class="flush-bottom text-right bold trip-funding" style="width: 60%">$600</p>
+              <progressbar class="progress-striped" type="success" max="1000" value="600"></progressbar>
+              <p class="pull-right funding-goal">$1000</p>
+            </div>
+          </div>
+          <!-- /progress bar -->
+          <!-- Social Media / Donor toggle -->
+          <div class="col-xs-9">
+            <svg viewBox="0 0 32 32" class="icon icon-facebook6 icon-xlarge icon-facebook">
+              <use xlink:href="#facebook6"></use>
+            </svg>
+            <svg viewBox="0 0 32 32" class="icon icon-twitter6 icon-xlarge icon-twitter">
+              <use xlink:href="#twitter6"></use>
+            </svg>
+            <svg viewBox="0 0 32 32" class="icon icon-mail4 icon-xlarge icon-email">
+              <use xlink:href="#mail4"></use>
+            </svg>
+          </div>
+          <div class="col-xs-3 push-half-top">
+            <a href="" class="pull-right" ng-click="africa.donors = !africa.donors" ng-show="!africa.donors">Show Donors</a>
+            <a href="" class="pull-right" ng-click="africa.donors = !africa.donors" ng-show="africa.donors">Hide Donors</a>
+          </div>
+          <!-- /social media & donor toggle -->
+
+          <!-- donor table -->
+          <div class="clearfix col-xs-12">
+            <div collapse="!africa.donors">
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td scope="row"><a href="">Lakshmi Maramraju</a>
+                      <p class="text-muted"><span>3/2/15</span>
+                      </p>
+                    </td>
+                    <td class="text-right"><span>$100.00</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td scope="row"><a href="">Dan Rye</a>
+                      <p class="text-muted"><span>2/28/15</span>
+                      </p>
+                    </td>
+                    <td class="text-right"><span>$200.00</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td scope="row"><a href="">Matthew Silbernagel</a>
+                      <p class="text-muted"><span>2/2/15</span>
+                      </p>
+                    </td>
+                    <td class="text-right"><span>$300.00</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- /donor table -->
+        </div>
+      </div>
+
+
+      <div class="col-md-12">
+        <div class="card-item" data-category="view">
+          <!-- card heading -->
+          <div class="card-header card-background-dark clearfix">
+            <div class="row">
+              <div class="col-sm-10 col-xs-8">
+                <div class="card-row card-heading soft-half-left">GO India</div>
+                <p class="small text-muted trip-date soft-left">January 17 - January 30, 2016</p>
+              </div>
+              <div class="col-sm-2 col-xs-4 text-center hard-right days-left">
+                <div class="card-row card-heading text-danger">136</div>
+                <p>days left</p>
+              </div>
+            </div>
+          </div>
+          <!-- /card heading -->
+
+          <!-- Card Body -->
+          <!-- Progress Bar -->
+          <div class="col-xs-12 col-top">
+            <div class="card-header">
+              <p class="flush-bottom text-right bold trip-funding" style="width: 1%">$10</p>
+              <progressbar class="progess-striped" type="success" max="3000" value="10"></progressbar>
+              <p class="pull-right funding-goal">$3000</p>
+            </div>
+          </div>
+          <!-- /progress bar -->
+          <!-- Social Media / Donor toggle -->
+          <div class="col-xs-9">
+            <svg viewBox="0 0 32 32" class="icon icon-facebook6 icon-xlarge icon-facebook">
+              <use xlink:href="#facebook6"></use>
+            </svg>
+            <svg viewBox="0 0 32 32" class="icon icon-twitter6 icon-xlarge icon-twitter">
+              <use xlink:href="#twitter6"></use>
+            </svg>
+            <svg viewBox="0 0 32 32" class="icon icon-mail4 icon-xlarge icon-email">
+              <use xlink:href="#mail4"></use>
+            </svg>
+          </div>
+          <div class="col-xs-3 push-half-top">
+            <a href="" class="pull-right" ng-click="india.donors = !india.donors" ng-show="!india.donors">Show Donors</a>
+            <a href="" class="pull-right" ng-click="india.donors = !india.donors" ng-show="india.donors">Hide Donors</a>
+          </div>
+          <!-- /social media & donor toggle -->
+
+          <!-- donor table -->
+          <div class="clearfix col-xs-12">
+            <div collapse="!india.donors">
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td scope="row"><a href="">Andy Canterbury</a>
+                      <p class="text-muted"><span>4/2/15</span>
+                      </p>
+                    </td>
+                    <td class="text-right"><span>$10.00</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- /donor table -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</div>

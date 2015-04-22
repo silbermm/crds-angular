@@ -29,7 +29,7 @@
             $scope.credentials.username = undefined;
             $scope.credentials.password = undefined;
         }
-        $rootScope.username = null;
+        $rootScope.username = undefined;
     }
 
     $scope.login = function () {           

@@ -13,8 +13,6 @@ require('./profile');
 require('./filters');
 require('./events');
 require('./cms/services/cms_services_module');
-require('./give/bankInfo.directive.js');
-require('./give/donationConfirmation.directive.js');
 
 require('angular-aside');
 require('angular-match-media');
@@ -30,6 +28,7 @@ var _ = require('lodash');
 "use strict";
 (function () {
 
+<<<<<<< HEAD
    angular.module("crossroads", [
      'crossroads.core',
      "crossroads.profile", 
@@ -71,7 +70,11 @@ var _ = require('lodash');
         invalidDonationAmount:22,
         invalidAccountNumber:23,
         invalidRoutingTransit:24,
-        serveSignupSuccess:29
+        invalidCard:25,
+        invalidCvv:26,
+        donorEmailAlreadyRegistered:28,
+        serveSignupSuccess:29,
+        creditCardDiscouraged:36
     }).config(function (growlProvider) {
         growlProvider.globalPosition("top-center");
         growlProvider.globalTimeToLive(6000);
@@ -83,15 +86,15 @@ var _ = require('lodash');
             return $sce.trustAsHtml(val);
         };
     }])
-        .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "$http", "Message", "growl", "$aside", "screenSize",
-        function ($scope, $rootScope, MESSAGES, $http, Message, growl, $aside, screenSize) {
+        .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "$http", "Message", "growl", "$aside", "screenSize", "$payments",
+        function ($scope, $rootScope, MESSAGES, $http, Message, growl, $aside, screenSize, $payments) {
 
                 console.log(__API_ENDPOINT__);
 
                 $scope.prevent = function (evt) {
                     evt.stopPropagation();
                 };
-            
+
                 $rootScope.mobile = screenSize.on('xs, sm', function(match){
                     $rootScope.mobile = match;
                 })
@@ -104,8 +107,16 @@ var _ = require('lodash');
 
                 $rootScope.error_messages = '<div ng-message="required">This field is required</div><div ng-message="minlength">This field is too short</div>';
 
-                $rootScope.$on("notify", function (event, id) {
-                    growl[$rootScope.messages[id].type]($rootScope.messages[id].message);
+                $rootScope.$on("notify", function (event, id, refId, ttl) {
+                    var parms = { };
+                    if(refId !== undefined && refId !== null) {
+                        parms.referenceId = refId;
+                    }
+                    if(ttl !== undefined && ttl !== null) {
+                        parms.ttl = ttl;
+                    }
+
+                    growl[$rootScope.messages[id].type]($rootScope.messages[id].message, parms);
                 });
 
                 $rootScope.$on("context", function (event, id) {
@@ -150,7 +161,8 @@ var _ = require('lodash');
         }
     ])
     .directive("emptyToNull", require('./shared/emptyToNull.directive.js'))
-    .directive("stopEvent", require('./shared/stopevent.directive.js'));
+    .directive("stopEvent", require('./shared/stopevent.directive.js'))
+    .directive("svgIcon", require('./shared/svgIcon.directive.js'));
 
     require('./apprun');
     require('./app.config');
