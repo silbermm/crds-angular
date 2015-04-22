@@ -21,17 +21,17 @@ module.exports = {
     module: {
         loaders: [
             {
+                test: /\.scss$/,
+                loader: ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader')
+            },
+            {
                 test: /\.css$/,
-                loader: "style-loader!css-loader"
+                loader: "style-loader!css-loader!autoprefixer-loader?browsers=last 2 version"
             },
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 loader: 'babel-loader'
-            },
-            {
-                test: /\.scss$/,
-                loader: ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader')
             },
             {
                 test: /\.(jpe?g|png|gif|svg)$/i,
