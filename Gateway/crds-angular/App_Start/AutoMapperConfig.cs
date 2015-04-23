@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 using crds_angular.Models.Crossroads;
+using crds_angular.Models.Crossroads.Opportunity;
 using MinistryPlatform.Models;
 
 namespace crds_angular.App_Start
@@ -26,6 +27,20 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.LastName, opts => opts.MapFrom(src => src.Last_Name))
                 .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email_Address))
                 .ForMember(dest => dest.ParticipantId, opts => opts.MapFrom(src => src.Participant_Id));
+
+            Mapper.CreateMap<Group, OpportunityGroup>()
+                .ForMember(dest => dest.GroupId, opts => opts.MapFrom(src => src.GroupId))
+                .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Participants, opts => opts.MapFrom(src => src.Participants));
+
+            Mapper.CreateMap<GroupParticipant, OpportunityGroupParticipant>()
+                .ForMember(dest => dest.ContactId, opts => opts.MapFrom(src => src.ContactId))
+                .ForMember(dest => dest.GroupRoleId, opts => opts.MapFrom(src => src.GroupRoleId))
+                .ForMember(dest => dest.GroupRoleTitle, opts => opts.MapFrom(src => src.GroupRoleTitle))
+                .ForMember(dest => dest.LastName, opts => opts.MapFrom(src => src.LastName))
+                .ForMember(dest => dest.NickName, opts => opts.MapFrom(src => src.NickName))
+                .ForMember(dest => dest.ParticipantId, opts => opts.MapFrom(src => src.ParticipantId));
+
         }
     }
 }
