@@ -34,6 +34,7 @@
         startingDay: 1,
         showWeeks: 'false'
       };
+      scope.displayEmail = displayEmail;
       scope.editProfile = editProfile;
       scope.frequency = [{
         value: 0,
@@ -49,6 +50,7 @@
       scope.populateDates = populateDates;
       scope.isActiveTab = isActiveTab;
       scope.isCollapsed = true;
+      scope.isFormValid = isFormValid;
       scope.modalInstance = {};
       scope.open = open;
       scope.openPanel = openPanel;
@@ -68,7 +70,7 @@
 
       function activate() {
         _.each(scope.team.members, function(m) {
-          
+
         });
       }
 
@@ -91,6 +93,16 @@
         scope.isCollapsed = true;
       }
 
+      function displayEmail(emailAddress) {
+        if (emailAddress == undefined) {
+          return false;
+        }
+        if (emailAddress.length > 0) {
+          return true;
+        }
+        return false;
+      }
+
       function editProfile(personToEdit) {
         var modalInstance = $modal.open({
           templateUrl: 'profile/editProfile.html',
@@ -109,8 +121,8 @@
           personToEdit.name = person.nickName === null ? person.firstName : person.nickName;
           $rootScope.$emit("personUpdated", person);
         });
-      }; 
- 
+      };
+
       function getPanelId() {
         return "team-panel-" + scope.dayIndex + scope.tabIndex + scope.teamIndex;
       }
@@ -118,7 +130,37 @@
       function isActiveTab(memberName) {
         return memberName === scope.currentActiveTab;
       };
- 
+
+      function isFormValid() {
+        var thing = {
+          valid: true,
+          messageStr: ''
+        };
+        thing.valid = true;
+        if (scope.currentMember.serveRsvp == null) {
+          thing.valid = false;
+          thing.messageStr = $rootScope.MESSAGES.selectSignUpAndFrequency;
+        } else if (scope.currentMember.serveRsvp.attending == undefined) {
+          thing.valid = false;
+          thing.messageStr = $rootScope.MESSAGES.selectSignUpAndFrequency;
+        } else if (scope.currentMember.currentOpportunity == null) {
+          thing.valid = false;
+          thing.messageStr = $rootScope.MESSAGES.selectFrequency;
+        }
+        else {
+          var startDate = parseDate(scope.currentMember.currentOpportunity.toDt);
+          var endDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
+
+          if (startDate < endDate) {
+            thing.valid = false;
+            thing.messageStr = $rootScope.MESSAGES.invalidDateRange;
+          }
+        }
+
+
+        return thing;
+      }
+
       function open($event, opened) {
         $event.preventDefault();
         $event.stopPropagation();
@@ -135,7 +177,7 @@
         scope.isCollapsed = !scope.isCollapsed;
         allowProfileEdit();
       }
- 
+
       function parseDate(stringDate) {
         var m = moment(stringDate);
 
@@ -182,15 +224,24 @@
         }
       }
 
-      function roleChanged(){
-       if(scope.currentMember.serveRsvp === undefined){
-          scope.currentMember.serveRsvp = { isSaved: false }; 
+      function roleChanged() {
+        if (scope.currentMember.serveRsvp === undefined) {
+          scope.currentMember.serveRsvp = {
+            isSaved: false
+          };
         } else {
-          scope.currentMember.serveRsvp.isSaved = false; 
+          scope.currentMember.serveRsvp.isSaved = false;
         }
       }
 
       function saveRsvp() {
+        //var invalid = false; //make this a function
+        var validForm = isFormValid();
+        if (validForm.valid == false) {
+          $rootScope.$emit('notify', validForm.messageStr);
+          return;
+        }
+
         var saveRsvp = new ServeOpportunities.SaveRsvp();
         saveRsvp.contactId = scope.currentMember.contactId;
         saveRsvp.opportunityId = scope.currentMember.serveRsvp.roleId;
@@ -199,11 +250,11 @@
         saveRsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
         saveRsvp.signUp = scope.currentMember.serveRsvp.attending;
         saveRsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
-        saveRsvp.$save(function(saved){
-          $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess );           
-          $rootScope.$broadcast('update.member', scope.currentMember); 
-          scope.currentMember.serveRsvp.isSaved = true;
-        });
+        // saveRsvp.$save(function(saved){
+        //   $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess );
+        //   $rootScope.$broadcast('update.member', scope.currentMember);
+        //   scope.currentMember.serveRsvp.isSaved = true;
+        // });
       }
 
       function setActiveTab(member) {
@@ -216,12 +267,12 @@
         scope.currentMember = member;
         allowProfileEdit();
       }
- 
-      function showIcon(member){
-        if(member.serveRsvp === undefined){
+
+      function showIcon(member) {
+        if (member.serveRsvp === undefined) {
           return false;
         } else {
-          if(member.serveRsvp !== null && (member.serveRsvp.isSaved || member.serveRsvp.isSaved === undefined)){
+          if (member.serveRsvp !== null && (member.serveRsvp.isSaved || member.serveRsvp.isSaved === undefined)) {
             return true;
           } else {
             return false;
@@ -229,7 +280,7 @@
         }
       }
 
-     function togglePanel() {
+      function togglePanel() {
         scope.isCollapsed = !scope.isCollapsed;
       };
     };
