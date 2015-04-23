@@ -71,6 +71,16 @@ require('../services/user_service');
         $scope.showRegisterButton = true;
         $scope.registerShow = false;
 
+        $scope.firstnameError = function() {
+            //return ($scope.registerForm.firstnameError.$dirty)             
+        };
+
+        // registerForm.firstname.$error.required && registerForm.$submitted  && registerForm.firstname.$dirty ||
+        //      registerForm.firstname.$error.required && registerForm.$submitted  && !registerForm.firstname.$touched ||
+        //      registerForm.firstname.$error.required && registerForm.$submitted  && registerForm.firstname.$touched ||
+        //      registerForm.firstname.$error.unique && registerForm.firstname.$dirty  ||
+        //      !registerForm.firstname.$error.required && registerForm.firstname.$dirty && !registerForm.firstname.$valid}"
+
         $scope.toggleDesktopRegister = function () {
             $scope.registerShow = !$scope.registerShow;
             if ($scope.loginShow)

@@ -12,32 +12,37 @@ describe('Give as a guest-giver', function() {
   });
 
   it('It should reflect the amount in the button', function() {
-    amountInput.sendKeys("122");
+    amountInput.sendKeys("1224");
     amountInput.sendKeys(protractor.Key.TAB);
-    //amountInput.clear();
-    expect(element(by.binding("give.amount")).getText()).toContain("GIVE $122");
+    expect(element(by.binding("give.amount")).getText()).toContain("GIVE $1,224.00");
   });
 
-  it('It should reject invalid entries', function() {
-    // amountInput.sendKeys("a");
-    // amountInput.sendKeys(protractor.Key.TAB);
-    // expect(amountInput.getAttribute("class")).toContain('ng-invalid-natural-number');
-    // amountInput.clear();
-    // amountInput.sendKeys("0");
-    // amountInput.sendKeys(protractor.Key.TAB);
-    // expect(amountInput.getAttribute("class")).toContain('ng-invalid-natural-number');
-    // amountInput.clear();
-    // amountInput.sendKeys("-1");
-    // amountInput.sendKeys(protractor.Key.TAB);
-    // expect(amountInput.getAttribute("class")).toContain('ng-invalid-natural-number');
-    // amountInput.clear();
-    // amountInput.sendKeys("0.2");
-    // amountInput.sendKeys(protractor.Key.TAB);
-    // expect(amountInput.getAttribute("class")).toContain('ng-invalid-natural-number');
-    // amountInput.clear();
-    // amountInput.sendKeys("2 2 3");
-    // amountInput.sendKeys(protractor.Key.TAB);
-    // expect(amountInput.getAttribute("class")).toContain('ng-invalid-natural-number');
+  it('It should not allow invalid entries', function() {
+    amountInput.clear(); 
+    amountInput.sendKeys("a");
+    amountInput.sendKeys(protractor.Key.TAB);
+    expect(element(by.model("give.amount")).getText()).toBe("");
+    expect(element(by.binding("give.amount")).getText()).toBe("GIVE");
+    amountInput.clear();  
+    amountInput.sendKeys("0");
+    amountInput.sendKeys(protractor.Key.TAB);
+    expect(element(by.model("give.amount")).getText()).toBe("");
+    expect(element(by.binding("give.amount")).getText()).toBe("GIVE");
+    amountInput.clear();
+    amountInput.sendKeys("-");
+    amountInput.sendKeys(protractor.Key.TAB);
+    expect(element(by.model("give.amount")).getText()).toBe("");
+    expect(element(by.binding("give.amount")).getText()).toBe("GIVE");
+    amountInput.clear();
+    amountInput.sendKeys(".");
+    amountInput.sendKeys(protractor.Key.TAB);
+    expect(element(by.model("give.amount")).getText()).toBe("");
+    expect(element(by.binding("give.amount")).getText()).toBe("GIVE");
+    amountInput.clear();
+    amountInput.sendKeys(" ");
+    amountInput.sendKeys(protractor.Key.TAB);
+    expect(element(by.model("give.amount")).getText()).toBe("");
+    expect(element(by.binding("give.amount")).getText()).toBe("GIVE");
   });
 
 });
