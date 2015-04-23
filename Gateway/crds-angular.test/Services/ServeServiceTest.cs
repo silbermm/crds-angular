@@ -393,13 +393,9 @@ namespace crds_angular.test.Services
                 10, 20, 15,
                 new Capacity
                 {
-                    Available = -5,
-                    BadgeType = "label-info",
                     Display = true,
                     Maximum = 20,
-                    Message = "Available",
                     Minimum = 10,
-                    Taken = 15
                 }
             },
             new object[]

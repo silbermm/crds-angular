@@ -255,13 +255,6 @@ namespace crds_angular.Services
                 capacity.Available = calc;
                 capacity.Taken = signedUp;
             }
-            else if (signedUp < capacity.Maximum && signedUp >= capacity.Minimum)
-            {
-                capacity.Message = "Available";
-                capacity.BadgeType = BadgeType.LabelInfo.ToString();
-                capacity.Available = calc;
-                capacity.Taken = signedUp;
-            }
             else if (signedUp >= capacity.Maximum)
             {
                 capacity.Message = "Full";
