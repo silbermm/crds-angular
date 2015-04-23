@@ -1,3 +1,16 @@
 (function(){
-  require('angular').module('crossraods.mptools', []); 
+  
+  require('../third-party/angular/select.css'); 
+  require('angular-ui-select');
+
+  require('./tools.html');
+
+  require('../app.core.module');
+  require('angular');
+
+  require('./mpTools.module');
+  require('./mpTools.config');
+
+  require('./mpTools.service');
+  require('./signup_to_serve');
 })();

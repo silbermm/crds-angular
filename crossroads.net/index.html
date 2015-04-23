@@ -1,24 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="crossroads">
-
-<head>
+  <head>
+    <base href="/"></base> 
     <style>
-        /*
-              Allow angular.js to be loaded in body, hiding cloaked elements until
-              templates compile.  The !important is important given that there may be
-              other selectors that are more specific or come later and might alter display.
-             */
-
+      /* Allow angular.js to be loaded in body, hiding cloaked elements until
+       * templates compile.  The !important is important given that there may be
+       * other selectors that are more specific or come later and might alter display.
+       */
         [ng\:cloak],
         [ng-cloak],
         .ng-cloak {
             display: none !important;
         }
     </style>
-
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
-
     <link rel="apple-touch-icon" sizes="57x57" href="http://crossroads-media.s3.amazonaws.com/images/favicon/apple-touch-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="http://crossroads-media.s3.amazonaws.com/images/favicon/apple-touch-icon-60x60.png">
     <link rel="apple-touch-icon" sizes="72x72" href="http://crossroads-media.s3.amazonaws.com/images/favicon/apple-touch-icon-72x72.png">
@@ -39,8 +35,6 @@
     <meta name="msapplication-TileImage" content="http://crossroads-media.s3.amazonaws.com/images/favicon/mstile-144x144.png">
     <meta name="msapplication-config" content="http://crossroads-media.s3.amazonaws.com/images/favicon/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
-
-
     <link href="assets/main.css" rel="stylesheet" />
     <script type="text/ng-template" id="on-submit-messages">
         <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
@@ -63,13 +57,12 @@
     <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700' rel='stylesheet' type='text/css'>
     <ng-include src="'assets/cr.svg'"></ng-include>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
 </head>
 
 <body ng-controller="appCtrl" ng-class="asideState.position">
         <div growl class="crossroads-growl"></div>
         <div>
-            <header>
+            <header ng-if="!state.current.data.hideMenu">
                 <div class="overlay-container"></div>
                 <!-- Brand Bar -->
                 <div class="brandbar-container">

@@ -23,16 +23,17 @@ require('./give');
 
 
 require('./app.core.module');
+require('./mp_tools');
 
 var _ = require('lodash');
 "use strict";
 (function () {
 
-<<<<<<< HEAD
    angular.module("crossroads", [
      'crossroads.core',
      "crossroads.profile", 
      "crossroads.filters", 
+     'crossroads.mptools',
      "crdsCMS.services",
      'ngAside', 
      'matchMedia',
@@ -86,10 +87,12 @@ var _ = require('lodash');
             return $sce.trustAsHtml(val);
         };
     }])
-        .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "$http", "Message", "growl", "$aside", "screenSize", "$payments",
-        function ($scope, $rootScope, MESSAGES, $http, Message, growl, $aside, screenSize, $payments) {
+    .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "$http", "Message", "growl", "$aside", "screenSize", "$payments", "$state",
+        function ($scope, $rootScope, MESSAGES, $http, Message, growl, $aside, screenSize, $payments, $state) {
 
                 console.log(__API_ENDPOINT__);
+                 
+                $scope.state = $state;
 
                 $scope.prevent = function (evt) {
                     evt.stopPropagation();
@@ -163,6 +166,8 @@ var _ = require('lodash');
     .directive("emptyToNull", require('./shared/emptyToNull.directive.js'))
     .directive("stopEvent", require('./shared/stopevent.directive.js'))
     .directive("svgIcon", require('./shared/svgIcon.directive.js'));
+
+    require('./preloader'); 
 
     require('./apprun');
     require('./app.config');

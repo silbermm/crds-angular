@@ -13,6 +13,7 @@ var definePlugin = new webpack.DefinePlugin({
 
 module.exports = {
     entry: './app/app.js',
+    context: __dirname,
     output: {
         path: './assets',
         publicPath: '/assets/',
