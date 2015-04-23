@@ -36,6 +36,7 @@ module.exports = function(config) {
 
     envPreprocessor: [
       'CRDS_API_ENDPOINT',
+      'CRDS_CMS_ENDPOINT',
     ],
 
 
