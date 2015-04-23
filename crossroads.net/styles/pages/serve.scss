@@ -21,7 +21,7 @@
     border-radius: 0px;
     margin-bottom: $line-height-computed/2;
     box-shadow: none;
-  
+
     .list-unstyled {
       line-height: 2;
     }
@@ -79,10 +79,31 @@
           background: $brand-secondary;
           color: #fff;
           box-shadow: none;
+
+          //Icon colors
+          .icon {
+            color: white;
+          }
+
         }
 
         &:last-of-type {
           margin-right: 0px;
+        }
+
+        .icon {
+          vertical-align: baseline;
+        }
+
+        //Icon colors
+        .icon-check-circle {
+          color: $brand-success;
+
+        }
+
+        .icon-minus-circle {
+          color: $brand-danger;
+          margin-bottom: -3px; //the check icon does not line up with the minus for some reason
         }
       }
     }
@@ -103,5 +124,3 @@
     padding-right: $grid-gutter-width/2;
   }
 }
-
-

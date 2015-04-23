@@ -303,6 +303,10 @@
     display: inline;
 }
 
+.static {
+    position: static;
+}
+
 .center {
     float: none;
     display: inline-block;
@@ -326,6 +330,14 @@
     span {
         background: #fff; padding: 5px;
     }
+}
+
+.relative {
+  position: relative;
+}
+
+.no-borders {
+  border: 0px !important;
 }
 
 // Empty href attributes for UI Bootstrap
