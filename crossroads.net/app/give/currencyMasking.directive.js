@@ -31,10 +31,8 @@ angular.module('currencyMask', []).directive('currencyMask', function () {
           (keycode > 95 && keycode < 112)  || // numpad keys
           (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
           (keycode > 218 && keycode < 223);   // [\]' (in order)
-        console.log(keycode);
         if (isTextInputKey) {
-        	console.log('here');
-          applyFormatting();
+        	applyFormatting();
         }
       });
       ngModelController.$parsers.push(function(value) {

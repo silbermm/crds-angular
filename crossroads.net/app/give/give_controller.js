@@ -5,14 +5,11 @@
   module.exports = function GiveCtrl($rootScope, $scope, $state, $timeout, $httpProvider, Session, Profile) {
 
         $scope.$on('$stateChangeStart', function (event, toState, toParams) {
-           if ($rootScope.username) {
-             $httpProvider.defaults.headers.common['Authorization']= getCookie('sessionId');
-             Profile.Personal.get(function(response) {
-               vm.email = response.emailAddress;
-             });
-           }
-          
-          
+           if ($rootScope.email) {   
+               vm.email = $rootScope.email;
+               //what if email is not found for some reason??
+             }
+                  
             if (toState.name =="give.thank-you" && $scope.giveForm.giveForm.$invalid){
                 $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
                 event.preventDefault();
@@ -163,13 +160,17 @@
                 vm.ccNumberClass = "";
         }
 
-        vm.goToAccount = function(){
+        vm.goToAccount = function() {
             vm.amountSubmitted = true;
-            if($scope.giveForm.giveForm.giveForm.$valid)    
-              $state.go("give.account");
-            else
-              $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-        };
+            if($scope.giveForm.giveForm.giveForm.$valid) {
+                if ($rootScope.username == undefined) {
+                    Session.addRedirectRoute("give.account", "");
+                    $state.go("give.login"); 
+                } else
+                    $state.go("give.account");
+            } else
+               $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+        }
         
         vm.goToLogin = function () {
           Session.addRedirectRoute("give.account", "");
