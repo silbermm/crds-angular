@@ -6,7 +6,7 @@
         <ng-messages for="giveForm.nameOnCard.$error" ng-show="giveForm.nameOnCard.$error.required" ng-messages-include="on-blur-messages"></ng-messages>
         <ng-messages for="giveForm.nameOnCard.$error" ng-if="give.bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
     </div>
-    <div class="form-group" ng-class="{'has-error': !give.ccValid && giveForm.ccNumber.$dirty ||giveForm.ccNumber.$error.required && give.bankinfoSubmitted }" validate-card ng-model="give" >
+    <div class="form-group" ng-class="{'has-error': give.ccNumberError(give.ccValid) }" validate-card ng-model="give" >
         <label for="ccNumber">Credit Card Number</label>
         <input type="text" name="ccNumber" class="form-control cc-icon" ng-class="give.ccNumberClass" ng-model="give.ccNumber" maxlength="16" ng-change="give.ccCardType()" ng-required="true" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }">
         <ng-messages for="giveForm.ccNumber.$error" ng-if="give.bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>

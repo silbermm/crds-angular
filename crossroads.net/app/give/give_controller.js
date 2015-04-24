@@ -24,6 +24,8 @@
         var mastercardRegEx = /^5[1-5][0-9]/;
         var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$/;
         
+        vm.setValidCvc = '';
+        vm.setValidCard = '';
         vm.amountSubmitted = false;
         vm.bankinfoSubmitted = false;
         vm.bankType = 'checking';
@@ -63,12 +65,29 @@
                 && $scope.giveForm.giveForm.routing.$viewValue !=='')
         };  
 
-        vm.cvvError = function() {
-            return (vm.bankinfoSubmitted && $scope.giveForm.giveForm.cvc.$isEmpty ||
-                $scope.giveForm.giveForm.cvc.$invalid && vm.bankinfoSubmitted ||
-                $scope.giveForm.giveForm.cvc.$invalid && $scope.giveForm.giveForm.cvc.$dirty )  
+        vm.ccNumberError = function(ccValid) {
+            if (ccValid == undefined) {
+                vm.setValidCard = true  ;
+            } else {
+                vm.setValidCard = ccValid;
+            }
+           // !give.ccValid && giveForm.ccNumber.$dirty ||giveForm.ccNumber.$error.required && give.bankinfoSubmitted
+            return (vm.bankinfoSubmitted && $scope.giveForm.giveForm.ccNumber.$pristine ||
+                vm.setValidCard && $scope.giveForm.giveForm.ccNumber.$dirty && !vm.bankinfoSubmitted ||
+                !vm.setValidCard || !vm.setValidCard && $scope.giveForm.giveForm.ccNumber.$isEmpty)  
         };
        
+         vm.cvvError = function(cvcValid) {
+            if (cvcValid == undefined) {
+                vm.setValidCvc = true  ;
+            } else {
+                vm.setValidCvc = cvcValid;
+            }
+            
+            return (vm.bankinfoSubmitted && $scope.giveForm.giveForm.cvc.$pristine ||
+                !vm.setValidCvc || !vm.setValidCvc && $scope.giveForm.giveForm.cvc.$isEmpty)  
+        };
+
         vm.expDateError = function() {
             return (vm.bankinfoSubmitted && $scope.giveForm.giveForm.expDate.$invalid)             
         };
@@ -166,10 +185,12 @@
                 if ($rootScope.username == undefined) {
                     Session.addRedirectRoute("give.account", "");
                     $state.go("give.login"); 
-                } else
+                } else {
                     $state.go("give.account");
-            } else
+                }
+            } else {
                $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+            }
         }
         
         vm.goToLogin = function () {
