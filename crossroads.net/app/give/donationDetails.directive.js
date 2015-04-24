@@ -18,7 +18,6 @@ require('./donation-details.html');﻿
       return directive;
 
       function link(scope, element, attrs) {
-        console.log(scope);
         getPrograms.Programs.get({programType: scope.progType}).$promise.then(function(response){
           scope.programs = response;
         });
