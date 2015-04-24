@@ -20,7 +20,6 @@ namespace crds_angular.Controllers.API
             this.programService = programService;
         }
 
-        [ResponseType(typeof (ProgramDTO))]
         [Route("api/programs/{programType}")]
         public IHttpActionResult Get(int programType)
         {

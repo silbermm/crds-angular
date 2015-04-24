@@ -81,6 +81,7 @@
     <Compile Include="Services\EventServiceTest.cs" />
     <Compile Include="Services\OpportunityServiceTest.cs" />
     <Compile Include="Services\ParticipantServiceTest.cs" />
+    <Compile Include="Services\ProgramServiceTest.cs" />
     <Compile Include="TranslationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
