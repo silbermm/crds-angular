@@ -11,6 +11,7 @@ require('./donation-details.html');﻿
           replace: true,
           scope: {
                 progType: "=progtype",
+                give: "="
             },
           templateUrl: 'give/donation-details.html',
           link: link
