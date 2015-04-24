@@ -51,7 +51,7 @@ describe('Signup To Serve Tool', function(){
     beforeEach(inject(function($log, $httpBackend){
       $scope = {};
       controller = $controller('SignupToServeController', { $scope: $scope });
-      $httpBackend.expectGET( window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getGroupParticipantsForOpportunity/2923').respond([ expectedReturn ]);
+      $httpBackend.expectGET( window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getGroupParticipantsForOpportunity/2923').respond(expectedReturn);
     })); 
 
     it("should get the correct query parameters", function(){
@@ -60,9 +60,9 @@ describe('Signup To Serve Tool', function(){
 
     it("should get a list of participants", function(){
       $httpBackend.flush();
-      controller.allParticipants.$promise.then(function(p){
-        expect(p).toBe(expectedReturn);
-      });
+      expect(controller.group.groupId).toBe(expectedReturn.groupId);
+      expect(controller.group.groupName).toBe(expectedReturn.groupName);
+      expect(controller.group.groupParticipants.length).toBe(2);
     });
 
     it("should show the error message", function(){
