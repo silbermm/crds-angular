@@ -191,7 +191,8 @@ namespace MinistryPlatform.Translation.Services
             var opp = _ministryPlatformService.GetRecordDict(_opportunityPage, opportunityId, token);
             var groupId = opp.ToInt("Add_to_Group");
             var groupName = opp.ToString("Add_to_Group_Text");
-            var group = _ministryPlatformService.GetSubpageViewRecords(_groupParticpantsSubPageView, groupId, token);
+            var searchString = ",,,," + opp.ToString("Group_Role_ID");
+            var group = _ministryPlatformService.GetSubpageViewRecords(_groupParticpantsSubPageView, groupId, token, searchString);
             var participants = new List<GroupParticipant>();
             foreach (var groupParticipant in group)
             {

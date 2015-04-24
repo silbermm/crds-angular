@@ -18,6 +18,7 @@ namespace MinistryPlatform.Translation.Test.Services
         private readonly int _opportunityPageId = 348;
         private readonly int _eventPageId = 308;
         private readonly int _groupsParticipants = 298;
+        private readonly int _groupsParticipantsSubPageId = 88;
         private DateTime _today;
 
         private Mock<IMinistryPlatformService> _ministryPlatformService;
@@ -433,24 +434,42 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Event Type ID", 100},
                 {"Role_Title", "Role Title 100"},
                 {"Maximum_Needed", 100}, {"Minimum_Needed", 50},
-                {"Group_ID", 255}
+                {"Add_to_Group", 255},
+                {"Add_to_Group_Text", "Test Group"},
+                {"Group_Role_ID", 1}
+            };
+
+            var expectedParticipants = new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    {"Contact ID", 123},
+                    {"Group Role ID", 1},
+                    {"Role Title", "Boss"},
+                    {"Last Name", "Garfunkel"},
+                    {"Nickname", "Art"},
+                    {"dp_RecordID", 12}
+                },
+                new Dictionary<string, object>
+                {
+                    {"Contact ID", 456},
+                    {"Group Role ID", 1},
+                    {"Role Title", "Boss"},
+                    {"Last Name", "Simon"},
+                    {"Nickname", "Paul"},
+                    {"dp_RecordID", 17}
+                }
             };
 
             _ministryPlatformService.Setup(mock => mock.GetRecordDict(_opportunityPageId, opportunityId, It.IsAny<string>(), false)).Returns(expectedOpportunity);
-            _ministryPlatformService.Setup(mock => mock.GetSubPageRecords(_groupsParticipants, 255, It.IsAny<string>()));
-        }
+            _ministryPlatformService.Setup(mock => mock.GetSubpageViewRecords(_groupsParticipantsSubPageId, 255, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())).Returns(expectedParticipants);
 
-        [Test]
-        public void GarbageIntegrationTest()
-        {
-            var platformClient = new PlatformServiceClient();
-            var mpService = new MinistryPlatformServiceImpl(platformClient, new ConfigurationWrapper());
-            var eventService = new EventService(mpService);
-            var authService = new AuthenticationServiceImpl(platformClient, mpService);
-            var oppService = new OpportunityServiceImpl(mpService, eventService, authService);
+            var output = _fixture.GetGroupParticipantsForOpportunity(opportunityId, It.IsAny<string>());
 
-            var token = authService.authenticate("tmaddox@aol.com", "crds1234");
-            oppService.GetGroupParticipantsForOpportunity(226, token);
+            _ministryPlatformService.VerifyAll();
+            Assert.AreEqual(255, output.GroupId);
+            Assert.AreEqual("Test Group", output.Name);
+            Assert.AreEqual(2, output.Participants.Count);
         }
     }
 }
