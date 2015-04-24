@@ -76,6 +76,7 @@ var _ = require('lodash');
         selectSignUpAndFrequency: 31,
         selectFrequency: 32,
         invalidDateRange: 35,
+        noMembers: 33,
         noServingOpportunities: 34
     }).config(function (growlProvider) {
         growlProvider.globalPosition("top-center");

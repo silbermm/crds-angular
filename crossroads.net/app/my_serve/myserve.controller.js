@@ -14,11 +14,15 @@
     vm.convertToDate = convertToDate;
     vm.dateOptions = { formatYear: 'yy', startingDay: 1 };
     vm.disabled = disabled;
+    vm.filterState = filterState;
     vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
     vm.format = vm.formats[0];
     vm.groups = [];
+    vm.groupsResolved = false;
     vm.open = open;
     vm.original = [];
+    vm.showNoMembersMsg = showNoMembersMsg;
+    vm.showNoOpportunitiesMsg = showNoOpportunitiesMsg;
     vm.today = today;
     vm.toggleMin = toggleMin;
     vm.repeating = '2';
@@ -42,6 +46,9 @@
     
     function getGroups(){
       vm.groups = ServeOpportunities.ServeDays.query();
+      vm.groups.$promise.then(function(){
+        vm.groupsResolved = true; 
+      }); 
     };
 
     function today() {
@@ -60,10 +67,6 @@
 
     function disabled (date, mode) {
       return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-    };
-
-    function toggleMin() {
-      vm.minDate = vm.minDate ? null : new Date();
     };
 
     function open($event) {
@@ -91,6 +94,22 @@
       vm.original = angular.copy(vm.groups);
       $rootScope.$broadcast("rerunFilters", vm.groups);
     }
+   
+    function showNoOpportunitiesMsg(){
+      return vm.groupsResolved && vm.groups.length < 1
+    }
+
+    function showNoMembersMsg(){
+      if(vm.groupsResolved && (vm.groups.length === 1 && vm.groups[0].serveTimes.length < 1) ) {
+        return filterState.memberIds.length > 0 && filterState.teams.length > 0;
+      }
+      return false;
+    }
+
+    function toggleMin() {
+      vm.minDate = vm.minDate ? null : new Date();
+    };
+
   }
 
 })();
