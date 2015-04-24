@@ -9,11 +9,10 @@
     <div class="col-xs-6 col-sm-6 col-md-6">
       <h3> Participant(s) </h3>
      <ui-select multiple ng-model="su2s.participants">
-     <ui-select-match placeholder="Choose a group member...">{{$item.nickname}} {{$item.lastname}} - {{$item.groupRoleTitle}}</ui-select-match>      
+     <ui-select-match placeholder="Click here to choose group members...">{{$item.nickname}} {{$item.lastname}}</ui-select-match>      
       <ui-select-choices repeat="person in su2s.allParticipants | filter: $select.search track by person.participantId">
         <span ng-bind-html="person.nickname | highlight: $select.search" ></span>
         <span ng-bind-html="person.lastname | highlight: $select.search"></span>
-        <div ng-bind-html="person.groupRoleTitle | highlight: $select.search"></div>
       </ui-select-choices>
       </ui-select>
      </div>
