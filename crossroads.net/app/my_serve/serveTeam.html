@@ -3,22 +3,22 @@
     <div class="panel-heading clearfix" ng-click="openPanel(team.members)">
       <span class="team-name">{{::team.name}}</span>
       <div class="name-btns">
-        <button type="button" 
-          ng-click="setActiveTab(member)" 
-          ng-repeat="member in team.members" 
-          class="btn btn-xs normal-type" 
-          ng-class="{'active':isActiveTab(member.name) }"  
+        <button type="button"
+          ng-click="setActiveTab(member)"
+          ng-repeat="member in team.members"
+          class="btn btn-xs normal-type"
+          ng-class="{'active':isActiveTab(member.name) }"
           stop-event>
-          {{::member.name}}   
-          <span ng-if="showIcon(member)" > 
-            <svg-icon icon="check-circle" ng-show="member.serveRsvp.attending" class="text-success"> </svg-icon>
-            <svg-icon icon="cancel-circle" ng-show="!member.serveRsvp.attending" class="text-danger"> </svg-icon>
-          </span> 
+          {{::member.name}}
+          <span ng-if="showIcon(member)" >
+            <svg-icon icon="check-circle" ng-show="member.serveRsvp.attending"> </svg-icon>
+            <svg-icon icon="minus-circle" ng-show="!member.serveRsvp.attending"> </svg-icon>
+          </span>
         </button>
       </div><!--/pull-right-->
     </div><!--/panel-heading-->
 
-    <div class="panel-collapse collapse" collapse="isCollapsed" style="height: 0px;">
+    <div class="panel-collapse collapse" collapse="isCollapsed">
       <div class="panel-body soft-half-bottom">
         <p class="flush-bottom">Editing sign up for {{currentMember.name + " " + currentMember.lastName}} ( <span> {{ currentMember.emailAddress}} </span> )<span class="text-muted"></span>
         <a href="" ng-click="editProfile(currentMember)" ng-show="showEdit" class="edit-btn">
@@ -28,11 +28,11 @@
         </a>
       </p>
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-5">
             <h5>Opportunities</h5>
-            <div class="radio" ng-class="{'text-muted': role.capacity.badgeType === 'label-success'}" ng-repeat="role in currentMember.roles">
-              <label> 
-                <input type="radio" name="roles-{{panelId()}}" ng-disabled="role.capacity.badgeType === 'label-success'" ng-model="currentMember.serveRsvp.roleId" ng-value="role.roleId" ng-change="roleChanged()" >
+            <div class="radio" ng-class="{'text-muted': role.capacity.badgeType === 'label-default'}" ng-repeat="role in currentMember.roles">
+              <label>
+                <input type="radio" name="roles-{{panelId()}}" ng-disabled="role.capacity.badgeType === 'label-default'" ng-model="currentMember.serveRsvp.roleId" ng-value="role.roleId" ng-change="roleChanged()" >
                 <span class="opportunity-name">{{::role.name}}</span>
                 <span class="label {{ role.capacity.badgeType }}" ng-show="role.capacity.display">{{ role.capacity.message }}</span>
               </label>
