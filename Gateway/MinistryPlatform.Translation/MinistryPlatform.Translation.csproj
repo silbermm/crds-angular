@@ -104,12 +104,14 @@
     <Compile Include="Services\Interfaces\IMinistryPlatformService.cs" />
     <Compile Include="Services\Interfaces\IOpportunityService.cs" />
     <Compile Include="Services\Interfaces\IParticipantService.cs" />
+    <Compile Include="Services\Interfaces\IProgramService.cs" />
     <Compile Include="Services\LookupService.cs" />
     <Compile Include="Services\MinistryPlatformService.cs" />
     <Compile Include="Services\MinistryPlatformServiceImpl.cs" />
     <Compile Include="Services\OpportunityService.cs" />
     <Compile Include="Services\OpportunityServiceImpl.cs" />
     <Compile Include="Services\ParticipantService.cs" />
+    <Compile Include="Services\ProgramService.cs" />
     <Compile Include="Utils\MPFormatConversion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\PlatformService\Reference.cs">
