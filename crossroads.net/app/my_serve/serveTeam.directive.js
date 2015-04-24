@@ -250,11 +250,11 @@
         saveRsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
         saveRsvp.signUp = scope.currentMember.serveRsvp.attending;
         saveRsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
-        // saveRsvp.$save(function(saved){
-        //   $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess );
-        //   $rootScope.$broadcast('update.member', scope.currentMember);
-        //   scope.currentMember.serveRsvp.isSaved = true;
-        // });
+        saveRsvp.$save(function(saved){
+          $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess );
+          $rootScope.$broadcast('update.member', scope.currentMember);
+          scope.currentMember.serveRsvp.isSaved = true;
+        });
       }
 
       function setActiveTab(member) {
