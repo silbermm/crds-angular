@@ -75,7 +75,8 @@ var _ = require('lodash');
         creditCardDiscouraged:36,
         selectSignUpAndFrequency: 31,
         selectFrequency: 32,
-        invalidDateRange: 35
+        invalidDateRange: 35,
+        noServingOpportunities: 34
     }).config(function (growlProvider) {
         growlProvider.globalPosition("top-center");
         growlProvider.globalTimeToLive(6000);

@@ -132,33 +132,33 @@
       };
 
       function isFormValid() {
-        var thing = {
+        var validForm = {
           valid: true,
           messageStr: ''
         };
-        thing.valid = true;
+        validForm.valid = true;
         if (scope.currentMember.serveRsvp == null) {
-          thing.valid = false;
-          thing.messageStr = $rootScope.MESSAGES.selectSignUpAndFrequency;
+          validForm.valid = false;
+          validForm.messageStr = $rootScope.MESSAGES.selectSignUpAndFrequency;
         } else if (scope.currentMember.serveRsvp.attending == undefined) {
-          thing.valid = false;
-          thing.messageStr = $rootScope.MESSAGES.selectSignUpAndFrequency;
+          validForm.valid = false;
+          validForm.messageStr = $rootScope.MESSAGES.selectSignUpAndFrequency;
         } else if (scope.currentMember.currentOpportunity == null) {
-          thing.valid = false;
-          thing.messageStr = $rootScope.MESSAGES.selectFrequency;
+          validForm.valid = false;
+          validForm.messageStr = $rootScope.MESSAGES.selectFrequency;
         }
         else {
           var startDate = parseDate(scope.currentMember.currentOpportunity.toDt);
           var endDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
 
           if (startDate < endDate) {
-            thing.valid = false;
-            thing.messageStr = $rootScope.MESSAGES.invalidDateRange;
+            validForm.valid = false;
+            validForm.messageStr = $rootScope.MESSAGES.invalidDateRange;
           }
         }
 
 
-        return thing;
+        return validForm;
       }
 
       function open($event, opened) {
