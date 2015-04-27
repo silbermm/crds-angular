@@ -1,8 +1,11 @@
 'use strict';
 (function () {
 
-  var getCookie = require('../utilities/cookies'); 
-  module.exports = function GiveCtrl($rootScope, $scope, $state, $timeout, $httpProvider, Session, Profile) {
+  module.exports = GiveCtrl;
+
+  GiveCtrl.$inject = ['$rootScope', '$scope', '$state', '$timeout', '$http', 'Session' ];
+    
+  function GiveCtrl($rootScope, $scope, $state, $timeout, $httpProvider, Session) {
 
         $scope.$on('$stateChangeStart', function (event, toState, toParams) {
            if ($rootScope.email) {   
@@ -180,6 +183,11 @@
                 $scope.giveForm.accountForm.routing.$error.invalidRouting && $scope.giveForm.accountForm.routing.$dirty)
         };
 
+        /**
+         * Will stop from going to the thank you page
+         * if form is invalid using the stateChangeStart 
+         * and preventDefault
+         */
         vm.submitBankInfo = function() {
             vm.bankinfoSubmitted = true;
             $state.go("give.thank-you");

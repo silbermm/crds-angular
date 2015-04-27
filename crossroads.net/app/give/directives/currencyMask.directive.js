@@ -1,4 +1,4 @@
-angular.module('currencyMask', []).directive('currencyMask', function () {
+angular.module('crossroads.give').directive('currencyMask', function () {
   return {
     restrict: 'A',
     require: 'ngModel',
