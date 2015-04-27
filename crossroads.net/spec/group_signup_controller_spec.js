@@ -1,6 +1,6 @@
 
 // testing controller
-xdescribe('GroupSignupController', function() {
+describe('GroupSignupController', function() {
  var $httpBackend, scope;
 
  var userGetResponse = {
