@@ -12,7 +12,8 @@
       templateUrl: "refine/refineList.html",
       scope: {
         "servingDays": "=servingDays",
-        "original" : "=?original"
+        "original" : "=?original",
+        "filterBoxes" : "=?filterBoxes"
       },
       link : link
     }
@@ -41,10 +42,10 @@
       scope.uniqueTimes = [];
 
       activate();
-        
-    screenSize.on('xs, sm', function(match) {
+          
+      screenSize.on('xs, sm', function(match) {
         scope.isCollapsed = match;
-    })
+      })
 
       $rootScope.$on("rerunFilters", function(event, data) {
         // Update the entire data with the new data
@@ -53,6 +54,7 @@
         filter(data, false);
         $rootScope.$emit("filterDone", scope.servingDays);
       });
+      
       //////////////////////////////////
 
       function activate(){
