@@ -1,6 +1,7 @@
 'use strict';
 
 var angular = require('angular');
+var stripe = require ('stripe');
 
 require('./templates/nav.html');
 require('./templates/nav-mobile.html');
@@ -16,6 +17,8 @@ require('./cms/services/cms_services_module');
 
 require('angular-aside');
 require('angular-match-media');
+
+require('angular-stripe');
 
 require('./third-party/angular/angular-aside.min.css');
 require('./third-party/angular/angular-growl.css');
