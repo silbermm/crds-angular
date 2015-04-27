@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Crossroads.Utilities.Services;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -15,6 +17,8 @@ namespace MinistryPlatform.Translation.Test.Services
         private readonly int _groupOpportunitiesEventsPageViewId = 77;
         private readonly int _opportunityPageId = 348;
         private readonly int _eventPageId = 308;
+        private readonly int _groupsParticipants = 298;
+        private readonly int _groupsParticipantsSubPageId = 88;
         private DateTime _today;
 
         private Mock<IMinistryPlatformService> _ministryPlatformService;
@@ -415,6 +419,57 @@ namespace MinistryPlatform.Translation.Test.Services
                 .Returns(expectedEvents);
 
             Assert.Throws<Exception>(() => _fixture.GetLastOpportunityDate(opportunityId, It.IsAny<string>()));
+        }
+
+        [Test]
+        public void ShouldReturnGroupParticipantsForOpportunity()
+        {
+            const int opportunityId = 145;
+
+            var expectedOpportunity = new Dictionary<string, object>
+            {
+                {"dp_RecordID", 100},
+                {"Opportunity Title", "Opportunity 100"},
+                {"Event Type", "Event Type 100"},
+                {"Event Type ID", 100},
+                {"Role_Title", "Role Title 100"},
+                {"Maximum_Needed", 100}, {"Minimum_Needed", 50},
+                {"Add_to_Group", 255},
+                {"Add_to_Group_Text", "Test Group"},
+                {"Group_Role_ID", 1}
+            };
+
+            var expectedParticipants = new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    {"Contact ID", 123},
+                    {"Group Role ID", 1},
+                    {"Role Title", "Boss"},
+                    {"Last Name", "Garfunkel"},
+                    {"Nickname", "Art"},
+                    {"dp_RecordID", 12}
+                },
+                new Dictionary<string, object>
+                {
+                    {"Contact ID", 456},
+                    {"Group Role ID", 1},
+                    {"Role Title", "Boss"},
+                    {"Last Name", "Simon"},
+                    {"Nickname", "Paul"},
+                    {"dp_RecordID", 17}
+                }
+            };
+
+            _ministryPlatformService.Setup(mock => mock.GetRecordDict(_opportunityPageId, opportunityId, It.IsAny<string>(), false)).Returns(expectedOpportunity);
+            _ministryPlatformService.Setup(mock => mock.GetSubpageViewRecords(_groupsParticipantsSubPageId, 255, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())).Returns(expectedParticipants);
+
+            var output = _fixture.GetGroupParticipantsForOpportunity(opportunityId, It.IsAny<string>());
+
+            _ministryPlatformService.VerifyAll();
+            Assert.AreEqual(255, output.GroupId);
+            Assert.AreEqual("Test Group", output.Name);
+            Assert.AreEqual(2, output.Participants.Count);
         }
     }
 }

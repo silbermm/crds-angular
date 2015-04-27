@@ -12,5 +12,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         int RespondToOpportunity(string token, int opportunityId, string comments);
         Response GetOpportunityResponse(int opportunityId, int eventId, Participant participant);
         int RespondToOpportunity(int participantId, int opportunityId, string comments, int eventId, bool response);
+        Group GetGroupParticipantsForOpportunity(int id, string token);
     }
 }

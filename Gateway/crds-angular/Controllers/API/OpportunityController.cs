@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Web.Http;
 using System.Web.Http.Description;
+using AutoMapper;
 using crds_angular.Extenstions;
+using crds_angular.Models.Crossroads;
+using crds_angular.Models.Crossroads.Opportunity;
 using crds_angular.Security;
-using crds_angular.Services;
+using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 
@@ -47,6 +50,18 @@ namespace crds_angular.Controllers.API
         public IHttpActionResult GetLastOpportunityDate(int id)
         {
             return Authorized(token => this.Ok(new Dictionary<string, long> { {"date", _opportunityService.GetLastOpportunityDate(id, token).ToUnixTime()}}));
+        }
+
+        [ResponseType(typeof (OpportunityGroup))]
+        [Route("api/opportunity/getGroupParticipantsForOpportunity/{id}")]
+        public IHttpActionResult GetGroupParticipantsForOpportunity(int id)
+        {
+            return Authorized(token =>
+            {
+                var group = _opportunityService.GetGroupParticipantsForOpportunity(id, token);
+                var oppGrp = Mapper.Map<Group, OpportunityGroup>(group);
+                return this.Ok(oppGrp);
+            });
         }
     }
 }

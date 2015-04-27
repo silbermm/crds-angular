@@ -14,14 +14,16 @@
     vm.convertToDate = convertToDate;
     vm.dateOptions = { formatYear: 'yy', startingDay: 1 };
     vm.disabled = disabled;
+    vm.filterState = filterState;
     vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
     vm.format = vm.formats[0];
     vm.groups = [];
+    vm.groupsResolved = false;
     vm.open = open;
     vm.original = [];
+    vm.showNoOpportunitiesMsg = showNoOpportunitiesMsg;
     vm.today = today;
     vm.toggleMin = toggleMin;
-    vm.repeating = '2';
 
     activate();
 
@@ -29,11 +31,12 @@
 
     $rootScope.$on("filterDone", function(event, data) {
       vm.groups = data;
-    })
+    });
 
     ////////////////////////////
     // Implementation Details //
     ////////////////////////////
+
     function activate(){
       today();
       toggleMin();
@@ -42,6 +45,9 @@
     
     function getGroups(){
       vm.groups = ServeOpportunities.ServeDays.query();
+      vm.groups.$promise.then(function(){
+        vm.groupsResolved = true; 
+      }); 
     };
 
     function today() {
@@ -60,10 +66,6 @@
 
     function disabled (date, mode) {
       return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-    };
-
-    function toggleMin() {
-      vm.minDate = vm.minDate ? null : new Date();
     };
 
     function open($event) {
@@ -91,6 +93,21 @@
       vm.original = angular.copy(vm.groups);
       $rootScope.$broadcast("rerunFilters", vm.groups);
     }
+   
+    function showNoOpportunitiesMsg(){
+      return vm.groupsResolved && (vm.groups.length < 1 || totalServeTimesLength() === 0);
+    }
+
+    function totalServeTimesLength(){
+      var len = _.reduce(vm.groups, function(total,n){
+        return total + n.serveTimes.length;
+      }, 0);
+      return len;
+    }
+
+    function toggleMin() {
+      vm.minDate = vm.minDate ? null : new Date();
+    };
   }
 
 })();
