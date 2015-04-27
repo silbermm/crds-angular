@@ -1,0 +1,23 @@
+  <div ng-if="su2s.showError()" class="alert alert-danger" role="alert">
+    <strong>Sorry </strong> You cannot use this tool from that specific page. This tool only supports being called from the record view page.  
+  </div>
+
+  <div class="col-md-12 container-fluid" ng-if="!su2s.showError()">
+    <h2> Opportunity: {{ su2s.params.recordDescription }}  </h2>
+    <h2> Team: {{su2s.group.groupName}} </h2>
+    <hr />
+    <div class="col-xs-6 col-sm-6 col-md-6">
+      <h3> Participant(s) </h3>
+     <ui-select multiple ng-model="su2s.participants">
+     <ui-select-match placeholder="Click here to choose group members...">{{$item.nickname}} {{$item.lastname}}</ui-select-match>      
+      <ui-select-choices repeat="person in su2s.allParticipants | filter: $select.search track by person.participantId">
+        <span ng-bind-html="person.nickname | highlight: $select.search" ></span>
+        <span ng-bind-html="person.lastname | highlight: $select.search"></span>
+      </ui-select-choices>
+      </ui-select>
+     </div>
+     <div class="col-xs-4 col-sm-4 col-md-4">
+
+    </div>
+  </div>
+
