@@ -64,6 +64,8 @@
     "angular-module-resource": "^1.2.19",
     "angular-resource": "^1.3.13",
     "angular-sanitize": "^1.3.13",
+    "_comment_angular-stripe" : "Refer to https://github.com/bendrucker/angular-stripe"
+    "angular-stripe": "^4.2.2",
     "angular-toggle-switch": "^1.2.0",
     "angular-ui-router": "^0.2.13",
     "bootstrap": "3.3.2",
@@ -87,6 +89,7 @@
     "angular-ui-select": "./app/third-party/angular/select.min.js",
     "angular-aside": "./app/third-party/angular/angular-aside.min.js",
     "angular-match-media": "./app/third-party/angular/match-media.js",
+    "_comment_angular-payments" : "Refer to https://github.com/raaspazasu/ngPayments",
     "angular-payments": "./app/third-party/angular/angular.payments.js"
   }
 }
