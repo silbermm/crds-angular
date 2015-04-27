@@ -7,15 +7,21 @@ require('./donation-details.html');﻿
 
     function donationDetails($log , getPrograms) {
         var directive = {
-          link: link,
+          restrict: 'EA',
           replace: true,
+          scope: {
+                progType: "=progtype",
+                give: "="
+            },
           templateUrl: 'give/donation-details.html',
-          restrict: 'EA'
+          link: link
       };
       return directive;
 
       function link(scope, element, attrs) {
-        scope.programs = getPrograms.fetchPrograms();
+        getPrograms.Programs.get({programType: scope.progType}).$promise.then(function(response){
+          scope.programs = response;
+        });
       }
     }
 })()

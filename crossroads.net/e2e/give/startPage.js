@@ -4,10 +4,10 @@ var amountInput = element(by.model('give.amount'));
 describe('Give as a guest-giver', function() {
   it('It should contain expected programs in the dropdown', function() {
     browser.get(env.baseUrl + '/#/give/amount'); 
-    element.all(by.options("program for program in programs")).then(function(rows){
-        expect(rows[0].evaluate().getText()).toContain("Ministry Fund");
-        expect(rows[1].evaluate().getText()).toContain("Game Change Fund");
-        expect(rows[2].evaluate().getText()).toContain("Old St. George");
+    element.all(by.options("program.Name for program in programs track by program.ProgramId")).then(function(rows){
+        expect(rows[1].evaluate().getText()).toContain("Ministry");
+        expect(rows[0].evaluate().getText()).toContain("Gamechange Campaign");
+        expect(rows[2].evaluate().getText()).toContain("Old St George - Clifton");
     });
   });
 
@@ -17,8 +17,9 @@ describe('Give as a guest-giver', function() {
     expect(element(by.binding("give.amount")).getText()).toContain("GIVE $1,224.00");
   });
 
-  it('It should not allow invalid entries', function() {
-    amountInput.clear(); 
+  
+  it('It should reject invalid entries', function() {
+    amountInput.clear();
     amountInput.sendKeys("a");
     amountInput.sendKeys(protractor.Key.TAB);
     expect(amountInput.getAttribute("class")).toContain('ng-invalid-natural-number');

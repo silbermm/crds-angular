@@ -1,10 +1,18 @@
 ﻿"use strict";
 (function() {
     var getCookie = require('./utilities/cookies');
-    function AppRun(Session, $rootScope, MESSAGES, $http, $log, $state, $timeout) {
+    angular.module("crossroads").run( AppRun );
+
+    AppRun.$inject = ["Session", "$rootScope", "MESSAGES", "$http", "$log", "$state", "$timeout", "$location", 'MPTools'];
+
+    function AppRun(Session, $rootScope, MESSAGES, $http, $log, $state, $timeout, $location, MPTools) {
         $rootScope.MESSAGES = MESSAGES;
 
         function clearAndRedirect(event, toState,toParams) {
+            console.log($location.search()); 
+            if($location.search()['ug'] !== undefined){
+              MPTools.setParams($location); 
+            }
             Session.clear();
             $rootScope.userid = null;
             $rootScope.username = null;
@@ -29,12 +37,7 @@
                 });
             } else if (toState.data !== undefined && toState.data.isProtected) {    
                 clearAndRedirect(event, toState, toParams);
-            } else {
-                //There is no session AND the user is not attempting to go to a protected route
-                //so there is nothing to do
             } 
- 
         });
     };
-    angular.module("crossroads").run(["Session", "$rootScope", "MESSAGES", "$http", "$log", "$state", "$timeout", AppRun]);
 })();

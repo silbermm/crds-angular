@@ -2,14 +2,6 @@
 
 var angular = require('angular');
 
-require("angular-resource");
-require("angular-sanitize");
-require('angular-messages');
-require('angular-cookies');
-require('angular-growl');
-require('angular-payments');
-require('angular-toggle-switch');
-require('angular-ui-utils');
 require('./templates/nav.html');
 require('./templates/nav-mobile.html');
 
@@ -30,12 +22,23 @@ require('./third-party/angular/angular-growl.css');
 require('./give');
 
 
+require('./app.core.module');
+require('./mp_tools');
+
 var _ = require('lodash');
 "use strict";
 (function () {
 
-   angular.module("crossroads", ['ngResource', "crossroads.profile", "crossroads.filters", "crdsCMS.services", "ui.router", 'ui.utils', "ngCookies", "ngMessages", 'angular-growl', 'toggle-switch', 'ngAside', 'matchMedia','give', 'ngPayments'])
-
+   angular.module("crossroads", [
+     'crossroads.core',
+     "crossroads.profile", 
+     "crossroads.filters", 
+     'crossroads.mptools',
+     "crdsCMS.services",
+     'ngAside', 
+     'matchMedia',
+     'give'
+     ])
     .constant("AUTH_EVENTS", {
             loginSuccess: "auth-login-success",
             loginFailed: "auth-login-failed",
@@ -84,10 +87,12 @@ var _ = require('lodash');
             return $sce.trustAsHtml(val);
         };
     }])
-        .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "$http", "Message", "growl", "$aside", "screenSize", "$payments",
-        function ($scope, $rootScope, MESSAGES, $http, Message, growl, $aside, screenSize, $payments) {
+    .controller("appCtrl", ["$scope", "$rootScope", "MESSAGES", "$http", "Message", "growl", "$aside", "screenSize", "$payments", "$state",
+        function ($scope, $rootScope, MESSAGES, $http, Message, growl, $aside, screenSize, $payments, $state) {
 
                 console.log(__API_ENDPOINT__);
+                 
+                $scope.stateData = $state.current.data;
 
                 $scope.prevent = function (evt) {
                     evt.stopPropagation();
@@ -161,6 +166,8 @@ var _ = require('lodash');
     .directive("emptyToNull", require('./shared/emptyToNull.directive.js'))
     .directive("stopEvent", require('./shared/stopevent.directive.js'))
     .directive("svgIcon", require('./shared/svgIcon.directive.js'));
+
+    require('./preloader'); 
 
     require('./apprun');
     require('./app.config');

@@ -12,8 +12,8 @@
 
 
   <div class="form-group">
-    <select class="form-control" ng-options="program for program in programs" ng-model="give.program"
-      required="true" ng-init="give.program = 'Ministry Fund'">
+    <select class="form-control" ng-options="program.Name for program in programs track by program.ProgramId" ng-model="give.program" required="true">
+        <option ng-if="programs.length>1" style="display:none" value="">Select Program</option>
     </select>
   </div>
   <div class="form-group">

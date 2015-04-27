@@ -32,6 +32,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Integration|AnyCPU'">
     <OutputPath>bin\Integration\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Demo|AnyCPU'">
+    <OutputPath>bin\Demo\</OutputPath>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -44,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Attribute.cs" />
     <Compile Include="CommunicationPreferences.cs" />
+    <Compile Include="GroupParticipant.cs" />
     <Compile Include="GroupSignupRelationships.cs" />
     <Compile Include="MyContact.cs" />
     <Compile Include="ContactRelationship.cs" />
@@ -51,6 +57,7 @@
     <Compile Include="Group.cs" />
     <Compile Include="Opportunity.cs" />
     <Compile Include="Participant.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Response.cs" />
   </ItemGroup>
