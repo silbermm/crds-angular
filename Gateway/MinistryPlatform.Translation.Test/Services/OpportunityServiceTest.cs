@@ -371,6 +371,50 @@ namespace MinistryPlatform.Translation.Test.Services
         }
 
         [Test]
+        public void ShouldGetAllEventDates()
+        {
+            const int opportunityId = 145;
+
+            var expectedEventType = new Dictionary<string, object>
+            {
+                {"Event_Type_ID_Text", "KC Nursery Oakley Sunday 8:30"}
+            };
+            var expectedEvents = new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    {"Event_Start_Date", "10/11/15 08:30am"}
+                },
+                new Dictionary<string, object>
+                {
+                     {"Event_Start_Date", "10/18/15 08:30am"}
+                }, 
+                new Dictionary<string, object>
+                {
+                     {"Event_Start_Date", "10/25/15 08:30am"}
+                }
+            };
+            var expectedDates = new List<DateTime>
+            {
+                DateTime.Parse("10/11/15 08:30am"),
+                DateTime.Parse("10/18/15 08:30am"),
+                DateTime.Parse("10/25/15 08:30am")
+            };
+
+            _ministryPlatformService.Setup(
+                mock => mock.GetRecordDict(_opportunityPageId, opportunityId, It.IsAny<string>(), false))
+                .Returns(expectedEventType);
+            _ministryPlatformService.Setup(
+                mock => mock.GetRecordsDict(_eventPageId, It.IsAny<string>(), ",,KC Nursery Oakley Sunday 8:30", "0"))
+                .Returns(expectedEvents);
+
+            var dates = _fixture.GetAllOpportunityDates(opportunityId, It.IsAny<string>());
+            Assert.IsNotNull(dates);
+            Assert.AreEqual(3, dates.Count);
+            Assert.AreEqual(expectedDates, dates);
+        }
+
+        [Test]
         public void ShouldGetLastEventDate()
         {
             const int opportunityId = 145;

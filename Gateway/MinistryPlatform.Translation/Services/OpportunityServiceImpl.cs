@@ -113,7 +113,7 @@ namespace MinistryPlatform.Translation.Services
             return records.Count();
         }
 
-        public DateTime GetLastOpportunityDate(int opportunityId, string token)
+        public List<DateTime> GetAllOpportunityDates(int opportunityId, string token)
         {
             //First get the event type
             var opp = _ministryPlatformService.GetRecordDict(_opportunityPage, opportunityId, token);
@@ -124,13 +124,16 @@ namespace MinistryPlatform.Translation.Services
             var sort = "0";
             var events = _ministryPlatformService.GetRecordsDict(_eventPage, token, searchString, sort);
 
+            return events.Select(e => DateTime.Parse(e["Event_Start_Date"].ToString())).ToList();
+        }
+
+        public DateTime GetLastOpportunityDate(int opportunityId, string token)
+        {
+            var events = GetAllOpportunityDates(opportunityId, token);
             //grab the last one
             try
             {
-                var lastEvent = events.Last();
-                var lastEventDate = DateTime.Parse(lastEvent["Event_Start_Date"].ToString());
-
-                return lastEventDate;
+                return events.Last(); ;
             }
             catch (InvalidOperationException ex)
             {
