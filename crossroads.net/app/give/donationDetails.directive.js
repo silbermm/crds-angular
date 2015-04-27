@@ -21,7 +21,7 @@ require('./donation-details.html');﻿
       function link(scope, element, attrs) {
         getPrograms.Programs.get({programType: scope.progType}).$promise.then(function(response){
         scope.programs = response;
-        scope.give.program=scope.programs[0];
+        scope.give.program = scope.programs[0];
         });
 
         
