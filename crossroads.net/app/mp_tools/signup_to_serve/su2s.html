@@ -16,8 +16,60 @@
       </ui-select-choices>
       </ui-select>
      </div>
-     <div class="col-xs-4 col-sm-4 col-md-4">
+     <div class="col-xs-6 col-sm-6 col-md-6">
+      <h3>Sign Up</h3>
+      <div class="radio">
+        <label>
+          <input type="radio" name="signup-{{panelId()}}" id="optionsRadios1" ng-model="su2s.attending" ng-value="true" ng-change="attendingChanged()" >
+          Yes
+        </label>
+      </div>
+      <div class="radio">
+        <label>
+          <input type="radio" name="signup-{{panelId()}}" id="optionsRadios2" ng-model="su2s.attending" ng-value="false" ng-change="attendingChanged()">
+          No
+        </label>
+      </div>
+    </div>
 
+    <div class="col-xs-6 col-sm-6 col-md-6">
+      <div class="form-group">
+        <label>Frequency</label>
+        <select class="form-control" ng-model="su2s.selectedFrequency" ng-change="populateDates()" ng-options="f.text for f in su2s.frequency">
+          <option value="">Select a Frequency</option>
+        </select>
+      </div>
+    </div>
+    <div ng-show="su2s.selectedFrequency.value == 0">
+      <div class="form-group">
+        <label>Date:</label>
+        <div class="input-group">
+          <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="su2s.serveDate" is-open="fromOpened" min-date="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="open($event, 'dateOpened')"><i class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div ng-show="su2s.selectedFrequency.value > 0">
+      <div class="form-group">
+        <label>From:</label>
+        <div class="input-group">
+          <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="su2s.fromDt" is-open="fromOpened" min-date="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="open($event, 'fromOpened')"><i class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>To:</label>
+        <div class="input-group">
+          <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="su2s.toDt" is-open="toOpened" min-date="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="open($event, 'toOpened')"><i class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 
