@@ -1,8 +1,8 @@
-require('./donation-details.html');﻿
+require('../donation-details.html');﻿
 
 (function () {
     angular
-    .module("donation-details",[])
+    .module("crossroads.give")
     .directive("donationDetails", ['$log','getPrograms', donationDetails]);
 
     function donationDetails($log , getPrograms) {

@@ -1,8 +1,8 @@
-require('./creditCardInfo.html');
+require('../creditCardInfo.html');
 
 (function () {
     angular
-    .module('credit-card-info',[])
+    .module('crossroads.give')
     .directive('creditCardInfo', ['$log', bankInfo]);
 
     function bankInfo($log) {

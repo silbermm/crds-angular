@@ -1,25 +1,15 @@
 ﻿
 <div class="primary">
-    <form name="registerForm" role="form" ng-submit="register()" novalidate>
+    <form id="nav_login" name="registerForm" role="form" ng-submit="register()" novalidate>
 
-        <div class="soft-half-bottom" ng-class="{'has-error':
-         registerForm.firstname.$error.required && registerForm.$submitted  && registerForm.firstname.$dirty ||
-         registerForm.firstname.$error.required && registerForm.$submitted  && !registerForm.firstname.$touched ||
-         registerForm.firstname.$error.required && registerForm.$submitted  && registerForm.firstname.$touched ||
-         registerForm.firstname.$error.unique && registerForm.firstname.$dirty  ||
-         !registerForm.firstname.$error.required && registerForm.firstname.$dirty && !registerForm.firstname.$valid}">
-          <input id="{{passwordPrefix}}-firstname" class="form-control" id="firstname" name="firstname" type="text" ng-model="newuser.firstname" required placeholder="First Name"/>
-            <ng-messages for="registerForm.firstname.$error" ng-if="registerForm.$submitted " ng-messages-include="on-submit-messages"></ng-messages>
-        </div>
+        <div class="soft-half-bottom" ng-class="{'has-error': firstnameError() }">
+              <input id="{{passwordPrefix}}-firstname" class="form-control" id="firstname" name="firstname" type="text" ng-model="newuser.firstname" required placeholder="First Name"/>
+                <ng-messages for="registerForm.firstname.$error" ng-if="registerForm.$submitted " ng-messages-include="on-submit-messages"></ng-messages>
+       </div>
 
-        <div class="soft-half-bottom" ng-class="{'has-error':
-         registerForm.lastname.$error.required && registerForm.$submitted  && registerForm.lastname.$dirty ||
-         registerForm.lastname.$error.required && registerForm.$submitted  && !registerForm.lastname.$touched ||
-         registerForm.lastname.$error.required && registerForm.$submitted  && registerForm.lastname.$touched ||
-         registerForm.lastname.$error.unique && registerForm.lastname.$dirty  ||
-         !registerForm.lastname.$error.required && registerForm.lastname.$dirty && !registerForm.lastname.$valid}">
-            <input id="{{passwordPrefix}}-lastname" class="form-control" id="lastname" name="lastname" type="text" ng-model="newuser.lastname" required placeholder="Last Name">
-            <ng-messages for="registerForm.lastname.$error" ng-if="registerForm.$submitted " ng-messages-include="on-submit-messages"></ng-messages>
+        <div class="soft-half-bottom" ng-class="{'has-error': lastnameError() }">
+                <input id="{{passwordPrefix}}-lastname" class="form-control" id="lastname" name="lastname" type="text" ng-model="newuser.lastname" required placeholder="Last Name">
+                <ng-messages for="registerForm.lastname.$error" ng-if="registerForm.$submitted " ng-messages-include="on-submit-messages"></ng-messages>
         </div>
 
         <div>
