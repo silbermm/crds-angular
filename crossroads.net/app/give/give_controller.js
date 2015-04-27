@@ -38,8 +38,8 @@
         vm.view = 'bank';
 
         vm.accountError = function() {
-           return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.account.$error.invalidAccount 
-                && $scope.giveForm.accountForm.$invalid && $scope.giveForm.accountForm.account.$viewValue !=='')
+           return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.account.$error.invalidAccount && $scope.giveForm.accountForm.$invalid  ||
+                 $scope.giveForm.accountForm.account.$error.invalidAccount && $scope.giveForm.accountForm.account.$dirty)
         };
 
         vm.amountError = function() {
@@ -63,6 +63,22 @@
             return ($scope.giveForm.accountForm.routing.$dirty && $scope.giveForm.accountForm.routing.$error.invalidRouting )
         };  
 
+        vm.ccCardType = function () {
+            if (vm.ccNumber) {
+                if (vm.ccNumber.match(visaRegEx))
+                  vm.ccNumberClass = "cc-visa";
+                else if (vm.ccNumber.match(mastercardRegEx))
+                  vm.ccNumberClass = "cc-mastercard";
+                else if (vm.ccNumber.match(discoverRegEx))
+                  vm.ccNumberClass = "cc-discover";
+                else if (vm.ccNumber.match(americanExpressRegEx))
+                  vm.ccNumberClass = "cc-american-express";
+                else
+                  vm.ccNumberClass = "";
+            } else
+                vm.ccNumberClass = "";
+        }
+
         vm.ccNumberError = function(ccValid) {
             if (ccValid == undefined) {
                 vm.setValidCard = false ;
@@ -72,7 +88,7 @@
                     vm.setValidCard && !vm.bankinfoSubmitted || //can be empty on pageload
                     !ccValid && vm.bankinfoSubmitted)  //show error when not valid 
          };
-       
+
          vm.cvvError = function(cvcValid) {
             if (cvcValid == undefined) {
                 vm.setValidCvc = false  ;           
@@ -86,6 +102,25 @@
         vm.expDateError = function() {
             return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.expDate.$invalid)             
         };
+
+        vm.goToAccount = function() {
+            vm.amountSubmitted = true;
+            if($scope.giveForm.amountForm.$valid) {
+                if ($rootScope.username == undefined) {
+                    Session.addRedirectRoute("give.account", "");
+                    $state.go("give.login"); 
+                } else {
+                    $state.go("give.account");
+                }
+            } else {
+               $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+            }
+        }
+        
+        vm.goToLogin = function () {
+          Session.addRedirectRoute("give.account", "");
+          $state.go("give.login");
+        }
        
         // Invoked from the initial "/give" state to get us to the first page
         vm.initDefaultState = function() {
@@ -138,7 +173,8 @@
         }
 
         vm.routingError = function() {
-            return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.routing.$error.invalidRouting&& $scope.giveForm.accountForm.$invalid )
+            return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.routing.$error.invalidRouting && $scope.giveForm.accountForm.$invalid  ||
+                $scope.giveForm.accountForm.routing.$error.invalidRouting && $scope.giveForm.accountForm.routing.$dirty)
         };
 
         vm.submitBankInfo = function() {
@@ -155,41 +191,7 @@
                 vm.showCheckClass = "ng-hide";
             }
         }
-
-        vm.ccCardType = function () {
-            if (vm.ccNumber) {
-                if (vm.ccNumber.match(visaRegEx))
-                  vm.ccNumberClass = "cc-visa";
-                else if (vm.ccNumber.match(mastercardRegEx))
-                  vm.ccNumberClass = "cc-mastercard";
-                else if (vm.ccNumber.match(discoverRegEx))
-                  vm.ccNumberClass = "cc-discover";
-                else if (vm.ccNumber.match(americanExpressRegEx))
-                  vm.ccNumberClass = "cc-american-express";
-                else
-                  vm.ccNumberClass = "";
-            } else
-                vm.ccNumberClass = "";
-        }
-
-        vm.goToAccount = function() {
-            vm.amountSubmitted = true;
-            if($scope.giveForm.amountForm.$valid) {
-                if ($rootScope.username == undefined) {
-                    Session.addRedirectRoute("give.account", "");
-                    $state.go("give.login"); 
-                } else {
-                    $state.go("give.account");
-                }
-            } else {
-               $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-            }
-        }
-        
-        vm.goToLogin = function () {
-          Session.addRedirectRoute("give.account", "");
-          $state.go("give.login");
-        }
+       
     };
 
 })();
