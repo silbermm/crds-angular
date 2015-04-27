@@ -6,7 +6,9 @@
   var app = require("angular").module("crossroads");
   app.config(AppConfig);
 
-  function AppConfig($httpProvider){
+  AppConfig.$inject = ['$httpProvider', '$locationProvider'];
+
+  function AppConfig($httpProvider, $locationProvider){
     $httpProvider.defaults.useXDomain = true;
     $httpProvider.defaults.headers.common['Authorization']= getCookie('sessionId');
   }

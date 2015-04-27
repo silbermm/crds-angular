@@ -13,6 +13,7 @@ namespace MinistryPlatform.Translation.Services
     {
         private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly int GroupsParticipantsPageId = Convert.ToInt32(AppSettings("GroupsParticipants"));
+        private readonly int GroupsParticipantsSubPageId = Convert.ToInt32(AppSettings("GroupsParticipantsSubPage"));
         private readonly int GroupsPageId = Convert.ToInt32(AppSettings("Groups"));
         private readonly int GroupsEventsPageId = Convert.ToInt32(AppSettings("GroupsEvents"));
         private readonly int EventsGroupsPageId = Convert.ToInt32(AppSettings("EventsGroups"));
@@ -134,7 +135,7 @@ namespace MinistryPlatform.Translation.Services
                 }
 
                 logger.Debug("Getting participants for group " + groupId);
-                var participants = ministryPlatformService.GetSubPageRecords(GroupsParticipantsPageId, groupId, apiToken);
+                var participants = ministryPlatformService.GetSubpageViewRecords(GroupsParticipantsSubPageId, groupId, apiToken);
                 if (participants != null && participants.Count > 0)
                 {
                     foreach (Dictionary<string, object> p in participants)
@@ -143,7 +144,15 @@ namespace MinistryPlatform.Translation.Services
                         p.TryGetValue("Participant_ID", out pid);
                         if (pid != null)
                         {
-                            g.Participants.Add((int) pid);
+                            g.Participants.Add(new GroupParticipant
+                            {
+                                ContactId = p.ToInt("Contact_ID"), 
+                                ParticipantId = p.ToInt("Participant_ID"),
+                                GroupRoleId = p.ToInt("Group_Role_ID"),
+                                GroupRoleTitle = p.ToString("Role_Title"),
+                                LastName = p.ToString("Last_Name"),
+                                NickName = p.ToString("Nickname")
+                            });
                         }
                     }
                 }
@@ -214,9 +223,9 @@ namespace MinistryPlatform.Translation.Services
             return groups;
         }
 
-        public bool checkIfUserInGroup(int participantId, IList<int> groupParticipants)
+        public bool checkIfUserInGroup(int participantId, IList<GroupParticipant> groupParticipants)
         {
-            return groupParticipants.Contains(participantId);
+            return groupParticipants.Select(p => p.ParticipantId).Contains(participantId);
         }
 
         public bool checkIfRelationshipInGroup(int relationshipId, IList<int> currRelationshipsList)

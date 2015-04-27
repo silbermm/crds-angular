@@ -137,7 +137,7 @@ namespace crds_angular.test.controllers
 
             groupServiceMock.Setup(mocked => mocked.GetGroupSignupRelations(g.GroupType)).Returns(new List<GroupSignupRelationships>() { relationRecord });
             groupServiceMock.Setup(mocked => mocked.getGroupDetails(groupId)).Returns(g);
-            groupServiceMock.Setup(mocked => mocked.checkIfUserInGroup(It.IsAny<int>(), It.IsAny<List<int>>()));
+            groupServiceMock.Setup(mocked => mocked.checkIfUserInGroup(It.IsAny<int>(), It.IsAny<List<GroupParticipant>>()));
             IHttpActionResult result = fixture.Get(groupId);
             Assert.IsNotNull(result);
             Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<GroupDTO>), result);

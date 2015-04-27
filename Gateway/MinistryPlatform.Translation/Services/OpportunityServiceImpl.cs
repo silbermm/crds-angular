@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
@@ -20,6 +19,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _signedupToServeSubPageViewId = Convert.ToInt32(AppSettings("SignedupToServe"));
         private readonly int _opportunityPage = Convert.ToInt32(AppSettings("OpportunityPage"));
         private readonly int _eventPage = Convert.ToInt32(AppSettings("Events"));
+        private readonly int _groupParticpantsSubPageView = Convert.ToInt32(AppSettings("GroupsParticipantsSubPage"));
 
         public OpportunityServiceImpl(IMinistryPlatformService ministryPlatformService, IEventService eventService,
             IAuthenticationService authenticationService)
@@ -186,6 +186,33 @@ namespace MinistryPlatform.Translation.Services
             return recordId;
         }
 
-        
+        public Group GetGroupParticipantsForOpportunity(int opportunityId, string token)
+        {
+            var opp = _ministryPlatformService.GetRecordDict(_opportunityPage, opportunityId, token);
+            var groupId = opp.ToInt("Add_to_Group");
+            var groupName = opp.ToString("Add_to_Group_Text");
+            var searchString = ",,,," + opp.ToString("Group_Role_ID");
+            var group = _ministryPlatformService.GetSubpageViewRecords(_groupParticpantsSubPageView, groupId, token, searchString);
+            var participants = new List<GroupParticipant>();
+            foreach (var groupParticipant in group)
+            {
+                participants.Add(new GroupParticipant
+                {
+                    ContactId = groupParticipant.ToInt("Contact ID"),
+                    GroupRoleId = groupParticipant.ToInt("Group Role ID"),
+                    GroupRoleTitle = groupParticipant.ToString("Role Title"),
+                    LastName = groupParticipant.ToString("Last Name"),
+                    NickName = groupParticipant.ToString("Nickname"),
+                    ParticipantId = groupParticipant.ToInt("dp_RecordID")
+                });
+            }
+            var retGroup = new Group
+            {
+                GroupId = groupId,
+                Name = groupName,
+                Participants = participants
+            };
+            return retGroup;
+        }
     }
 }
