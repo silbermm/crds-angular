@@ -48,7 +48,8 @@
         };
 
         vm.billingZipCodeError = function() {
-            return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.billingZipCode.$invalid)  
+            return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.billingZipCode.$invalid || 
+                    $scope.giveForm.accountForm.billingZipCode.$dirty && $scope.giveForm.accountForm.billingZipCode.$invalid) 
         };
 
         vm.blurAccountError = function() {
@@ -86,7 +87,8 @@
             
             return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.ccNumber.$pristine || //cannot be blank on submit
                     vm.setValidCard && !vm.bankinfoSubmitted || //can be empty on pageload
-                    !ccValid && vm.bankinfoSubmitted)  //show error when not valid 
+                    !ccValid && vm.bankinfoSubmitted ||
+                    !ccValid && $scope.giveForm.accountForm.ccNumber.$dirty)  //show error when not valid 
          };
 
          vm.cvvError = function(cvcValid) {
@@ -96,7 +98,8 @@
             
             return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.cvc.$pristine || //cannot be blank on submit
                     vm.setValidCvc && !vm.bankinfoSubmitted || //can be empty on pageload
-                    !cvcValid && vm.bankinfoSubmitted)  //show error when not valid
+                    !cvcValid && vm.bankinfoSubmitted ||
+                    !cvcValid && $scope.giveForm.accountForm.cvc.$dirty)  //show error when not valid
         };
 
         vm.expDateError = function() {
