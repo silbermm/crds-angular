@@ -9,7 +9,9 @@ describe('Giving Flow', function() {
   it('should follow full credit crdflow, logging in as user', function () {
     expect(browser.getCurrentUrl()).toMatch(/\/amount/);
     element(by.model('give.amount')).sendKeys("12345");
+    element(by.model('give.program')).sendKeys("Ministry");
     element(by.binding('give.amount')).click();
+    //element(by.model('give.program')).sendKeys("Ministry");
     expect(browser.getCurrentUrl()).toMatch(/\/login/);
     var loginButton = element.all(by.css('.btn')).get(5);
     expect(loginButton.getText()).toBe("LOGIN");
@@ -40,6 +42,7 @@ describe('Giving Flow', function() {
   it('should follow full bank account flow, giving as guest', function () {
     expect(browser.getCurrentUrl()).toMatch(/\/amount/);
     element(by.model('give.amount')).sendKeys("1999");
+    element(by.model('give.program')).sendKeys("Ministry");
     element(by.binding('give.amount')).click();
     expect(browser.getCurrentUrl()).toMatch(/\/login/);
     var giveAsGuestButton = element.all(by.css('.btn')).get(6);
