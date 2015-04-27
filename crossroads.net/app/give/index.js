@@ -11,7 +11,7 @@ app.directive('invalidRouting',[require('./routingTransitNumber.validation.direc
 app.directive('invalidAccount',[require('./bankAccountNumber.validation.directive')]);
 app.directive('naturalNumber',[require('./naturalNumber.validation.directive')]);
 app.directive('invalidZip', [require('./zipCode.validation.directive')]);
-//app.directive('currencyMask', [require('./currencyMask.directive')]);
+//app.directive('currencyMask', [require('./currency.directive')]);
 
 /****** DEMO PAGES ******/
 require('./demo/guest_giver/give.html');

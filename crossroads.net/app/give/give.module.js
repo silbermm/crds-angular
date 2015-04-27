@@ -8,4 +8,4 @@ require('./currencyMask.directive');
 
 var app = require('angular');
 
-app.module('give', ['donation-details', 'bank-info', 'donation-confirmation', 'credit-card-info'])
+app.module('give', ['donation-details', 'bank-info', 'donation-confirmation', 'credit-card-info', 'currencyMask'])

@@ -4,9 +4,7 @@ angular.module('currencyMask', []).directive('currencyMask', function () {
     require: 'ngModel',
     link: function (scope, element, attrs, ngModelController) {
       // Run formatting on keyup
-      var numberWithCommas = function(value, addExtraZero) {
-        if (addExtraZero == undefined)
-          addExtraZero = false
+      var numberWithCommas = function(value) {
         value = value.toString();
         value = value.replace(/[^0-9\.]/g, "");
         var parts = value.split('.');
@@ -14,9 +12,7 @@ angular.module('currencyMask', []).directive('currencyMask', function () {
         if (parts[1] && parts[1].length > 2) {
           parts[1] = parts[1].substring(0, 2);
         }
-        if (addExtraZero && parts[1] && (parts[1].length === 1)) {
-          parts[1] = parts[1] + "0" 
-        }
+        
         return parts.join(".");
       };
       var applyFormatting = function() {
@@ -33,11 +29,7 @@ angular.module('currencyMask', []).directive('currencyMask', function () {
         var keycode = e.keyCode;
         var isTextInputKey = 
           (keycode > 47 && keycode < 58)   || // number keys
-          keycode == 32 || keycode == 8    || // spacebar or backspace
-          (keycode > 64 && keycode < 91)   || // letter keys
-          (keycode > 95 && keycode < 112)  || // numpad keys
-          (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
-          (keycode > 218 && keycode < 223);   // [\]' (in order)
+          (keycode > 95 && keycode < 112) ; // numpad keys
         if (isTextInputKey) {
           applyFormatting();
         }

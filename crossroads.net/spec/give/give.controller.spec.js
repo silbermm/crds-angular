@@ -1,31 +1,52 @@
-describe('GiveCtrl', function() {
+describe('GiveController', function() {
 
   beforeEach(module('crossroads'));
-  
-  var $controller;
+  var $controller, $rootScope, $scope, $state, $timeout, $httpProvider, Session, Profile;
  
     
-  beforeEach(inject(function(_$controller_){
-    $controller = _$controller_;
-          
-  });
+  beforeEach(inject(function($injector){
+    $controller = $injector.get('$controller');
+    $rootScope = $injector.get('$rootScope');  
+    $scope = $rootScope.$new();
+    $state = $injector.get('$state');
+    $timeout = $injector.get('$timeout'); 
+    $httpProvider = $injector.get('$http'); 
+    Session = $injector.get('Session');
+    Profile = $injector.get('Profile');
+  	$controller = $controller('GiveCtrl', { '$rootScope': $rootScope, '$scope': $scope, '$state': $state, '$timeout': $timeout, 
+   		'$httpProvider': $httpProvider, 'Session': Session, 'Profile': Profile });
+  }));
   
-       
-  it('should produce an amount error', function(){ 
-   	var controller = $controller('GiveCtrl', { $scope: $scope });
-   	// give.goToAccount() with null
-    //check state, should still be give/amoumt
-    //form should be invalid     
-  });
-  
-  it('should change state because the amount was valid and prompt for login', function(){ 
-   	var controller = $controller('GiveCtrl', { $scope: $scope });
-   	// give.goToAccount() with  a valid amount
-    //check state, should still be give/login
-    //form should be valid  
+  it('should have the visa credit card class', function(){ 
+    $controller.ccNumber = '4242424242424242';
+    $controller.ccCardType();
+    expect($controller.ccNumberClass).toBe("cc-visa"); 
   });
 
-  
+  it('should have the mastercard credit card class', function(){ 
+    $controller.ccNumber = '5105105105105100';
+    $controller.ccCardType();
+    expect($controller.ccNumberClass).toBe("cc-mastercard"); 
   });
+  
+  it('should have the discover credit card class', function(){ 
+    $controller.ccNumber = '6011111111111117';
+    $controller.ccCardType();
+    expect($controller.ccNumberClass).toBe("cc-discover"); 
+  });
+
+  it('should have the amex credit card class', function(){ 
+    $controller.ccNumber = '378282246310005';
+    $controller.ccCardType();
+    expect($controller.ccNumberClass).toBe("cc-american-express"); 
+  }); 
+ 
+  it('should not a credit card class', function(){ 
+    $controller.ccNumber = '';
+    $controller.ccCardType();
+    expect($controller.ccNumberClass).toBe(""); 
+  }); 
 
 });
+
+  
