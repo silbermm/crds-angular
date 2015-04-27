@@ -43,7 +43,8 @@
         };
 
         vm.amountError = function() {
-            return (vm.amountSubmitted && $scope.giveForm.amountForm.$invalid)
+            return (vm.amountSubmitted && $scope.giveForm.amountForm.$invalid && $scope.giveForm.amountForm.$error.naturalNumber 
+                    || $scope.giveForm.amountForm.$dirty && $scope.giveForm.amountForm.$invalid)
         };
 
         vm.billingZipCodeError = function() {
@@ -173,7 +174,7 @@
 
         vm.goToAccount = function() {
             vm.amountSubmitted = true;
-            if($scope.giveForm.amountForm.giveForm.$valid) {
+            if($scope.giveForm.amountForm.$valid) {
                 if ($rootScope.username == undefined) {
                     Session.addRedirectRoute("give.account", "");
                     $state.go("give.login"); 

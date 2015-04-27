@@ -4,13 +4,20 @@ angular.module('currencyMask', []).directive('currencyMask', function () {
     require: 'ngModel',
     link: function (scope, element, attrs, ngModelController) {
       // Run formatting on keyup
-      var numberWithCommas = function(value) {
-        value = value.replace(/[^0-9]/g, "");
-        value = value.replace(/\d{1,3}(?=(\d{3})+(?!\d))/g, "$&,");
-        if (value < 1){
-        	value = '';
-        }    
-     	return value;
+      var numberWithCommas = function(value, addExtraZero) {
+        if (addExtraZero == undefined)
+          addExtraZero = false
+        value = value.toString();
+        value = value.replace(/[^0-9\.]/g, "");
+        var parts = value.split('.');
+        parts[0] = parts[0].replace(/\d{1,3}(?=(\d{3})+(?!\d))/g, "$&,");
+        if (parts[1] && parts[1].length > 2) {
+          parts[1] = parts[1].substring(0, 2);
+        }
+        if (addExtraZero && parts[1] && (parts[1].length === 1)) {
+          parts[1] = parts[1] + "0" 
+        }
+        return parts.join(".");
       };
       var applyFormatting = function() {
         var value = element.val();
@@ -32,7 +39,7 @@ angular.module('currencyMask', []).directive('currencyMask', function () {
           (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
           (keycode > 218 && keycode < 223);   // [\]' (in order)
         if (isTextInputKey) {
-        	applyFormatting();
+          applyFormatting();
         }
       });
       ngModelController.$parsers.push(function(value) {
