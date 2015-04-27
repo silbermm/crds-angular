@@ -5,11 +5,7 @@
   <div data-ng-show="serve.showNoOpportunitiesMsg()">
     <span ng-bind-html="$root.messages[$root.MESSAGES.noServingOpportunities].message | html"></span>
   </div>
-  
-  <div data-ng-show="serve.showNoMembersMsg()">
-    <span ng-bind-html="$root.messages[$root.MESSAGES.noMembers].message | html"></span>
-  </div>
-
+ 
 
   <div class="serve-day push-bottom" data-ng-repeat="group in serve.groups" ng-show="group.serveTimes.length > 0" ng-init="serve.dayindex = $index">
     <h4>{{::serve.convertToDate(group.day) | date:'EEEE, MMMM dd, yyyy' }}</h4>

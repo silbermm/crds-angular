@@ -21,11 +21,9 @@
     vm.groupsResolved = false;
     vm.open = open;
     vm.original = [];
-    vm.showNoMembersMsg = showNoMembersMsg;
     vm.showNoOpportunitiesMsg = showNoOpportunitiesMsg;
     vm.today = today;
     vm.toggleMin = toggleMin;
-    vm.repeating = '2';
 
     activate();
 
@@ -33,11 +31,12 @@
 
     $rootScope.$on("filterDone", function(event, data) {
       vm.groups = data;
-    })
+    });
 
     ////////////////////////////
     // Implementation Details //
     ////////////////////////////
+
     function activate(){
       today();
       toggleMin();
@@ -96,20 +95,19 @@
     }
    
     function showNoOpportunitiesMsg(){
-      return vm.groupsResolved && vm.groups.length < 1
+      return vm.groupsResolved && (vm.groups.length < 1 || totalServeTimesLength() === 0);
     }
 
-    function showNoMembersMsg(){
-      if(vm.groupsResolved && (vm.groups.length === 1 && vm.groups[0].serveTimes.length < 1) ) {
-        return filterState.memberIds.length > 0 && filterState.teams.length > 0;
-      }
-      return false;
+    function totalServeTimesLength(){
+      var len = _.reduce(vm.groups, function(total,n){
+        return total + n.serveTimes.length;
+      }, 0);
+      return len;
     }
 
     function toggleMin() {
       vm.minDate = vm.minDate ? null : new Date();
     };
-
   }
 
 })();

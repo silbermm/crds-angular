@@ -4,11 +4,12 @@ exports.config = {
   specs: ['e2e/**/*.js'],
   multiCapabilities: [
   //{ browserName: 'firefox'}
-  { browserName: 'chrome'}
+  { browserName: 'firefox'}
   //,{ browserName: 'safari'}
   ],
   jasmineNodeOpts: {
     showColors: true,
     defaultTimeoutInterval: 30000
-  }
+  },
+  getPageTimeout: 60000
 }
