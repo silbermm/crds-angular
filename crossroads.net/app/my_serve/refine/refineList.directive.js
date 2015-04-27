@@ -25,6 +25,7 @@
       scope.clearFilters = clearFilters;
       scope.filterAll = filterAll;
       scope.getUniqueMembers = getUniqueMembers;
+      scope.getUniqueSignUps = getUniqueSignUps;
       scope.getUniqueTeams = getUniqueTeams;
       scope.getUniqueTimes = getUniqueTimes;
       scope.isCollapsed = $rootScope.mobile;
@@ -33,15 +34,17 @@
       initServeArrays();
       scope.toggleCollapse = toggleCollapse;
       scope.toggleFamilyMember = toggleFamilyMember;
+      scope.toggleSignedUp = toggleSignedUp;
       scope.toggleTeam = toggleTeam;
       scope.toggleTime = toggleTime;
       scope.uniqueDays = [];
       scope.uniqueMembers = [];
+      scope.uniqueSignUps = [];
       scope.uniqueTeams = [];
       scope.uniqueTimes = [];
 
       activate();
-        
+
     screenSize.on('xs, sm', function(match) {
         scope.isCollapsed = match;
     })
@@ -94,6 +97,39 @@
           }
         }
 
+      }
+
+      function applySignUpFilter() {
+        if(filterState.memberIds.length > 0){
+          var serveDay = [];
+          _.each(scope.servingDays, function(day){
+            var serveTimes = [];
+            _.each(day.serveTimes, function(serveTime){
+              var servingTeams = [];
+              _.each(serveTime.servingTeams, function(team){
+                var theTeam = team;
+                var members = _.filter(team.members, function(m){
+                  return _.find(filterState.signUps, function(signUp){
+                    return signUp.serveRsvp.id === m.serveRsvp.attending;
+                  });
+                });
+                if(members.length > 0) {
+                  theTeam.members = members;
+                  servingTeams.push(theTeam);
+                }
+              });
+              if(servingTeams.length > 0){
+                serveTimes.push({time: serveTime.time, 'servingTeams':servingTeams });
+              }
+            });
+            if(serveTimes.length > 0){
+              serveDay.push({day: day.day, eventType: day.eventType, eventTypeId: day.eventTypeId, serveTimes: serveTimes});
+            }
+          });
+          if(serveDay.length > 0){
+            scope.servingDays = serveDay;
+          }
+        }
       }
 
       function applyTimeFilter(){
@@ -153,6 +189,7 @@
         filterTeams();
         filterFamily();
         getUniqueMembers();
+        getUniqueSignUps();
         getUniqueTeams();
         getUniqueTimes();
         initCheckBoxes();
@@ -201,6 +238,16 @@
         }).uniq('contactId').value();
       }
 
+      function getUniqueSignUps() {
+        //var signUps = [];
+        var yes = { 'name': 'Yes', 'id': 1, 'selected': false, 'attending': true };
+        var no = { 'name': 'No', 'id': 2, 'selected': false, 'attending': false };
+        var nada = { 'name': 'Nada', 'id': 3, 'selected': false, 'attending': null };
+        scope.uniqueSignUps.push(yes);
+        scope.uniqueSignUps.push(no);
+        scope.uniqueSignUps.push(nada);
+      }
+
       function getUniqueTeams(){
         scope.uniqueTeams = _.chain(scope.serveTeams).map(function(team){
           return { 'name': team.name, 'groupId': team.groupId };
@@ -245,13 +292,13 @@
         scope.serveTeams = [];
         scope.times = [];
       }
-        
+
       function isFilterSet() {
-        return (filterState.memberIds.length >= 1 
-                || filterState.times.length >= 1 
+        return (filterState.memberIds.length >= 1
+                || filterState.times.length >= 1
                 || filterState.teams.length >= 1);
       }
-        
+
       function toggleCollapse() {
         if ($rootScope.mobile) {
             scope.isCollapsed = !scope.isCollapsed;
@@ -265,6 +312,14 @@
           filterState.removeFamilyMember(member.contactId);
         }
         filterAll();
+      }
+
+      function toggleSignedUp(signUp) {
+        if (signUp.selected) {
+          filterState.addSignUp(signUp.id);
+        } else {
+          filterState.removeSignUp(signUp.id);
+        }
       }
 
       function toggleTeam(team){

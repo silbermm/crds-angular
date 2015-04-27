@@ -2,15 +2,19 @@
 (function(){
 
   module.exports = FilterState;
-  
+
   function FilterState(){
 
-    var filterState =  { 
+    var filterState =  {
       memberIds: [],
       times: [],
       teams:[],
+      signUps:[],
       addFamilyMember: function (memberId) {
         filterState.memberIds.push(memberId);
+      },
+      addSignUp: function (signUp) {
+        filterState.signUps.push(signUp);
       },
       addTeam: function (team) {
        filterState.teams.push(team);
@@ -21,6 +25,7 @@
 
       clearAll: function () {
         filterState.memberIds = [];
+        filterState.signUps = [];
         filterState.times = [];
         filterState.teams = [];
       },
@@ -28,6 +33,11 @@
       findMember: function(memberId){
         return _.find(filterState.memberIds, function(m){
           return memberId === m;
+        });
+      },
+      findSignUp: function(signUp) {
+        return _.find(filterState.signUps, function(s){
+          return signUp === s;
         });
       },
       findTeam: function(team){
@@ -42,8 +52,13 @@
       },
       removeFamilyMember: function(memberId){
         filterState.memberIds = _.filter(filterState.memberIds,function(m){
-          return m !== memberId; 
+          return m !== memberId;
         });
+      },
+      removeSignUp: function(signUp) {
+        filterState.signUps = _.filter(filterState.signUps, function(s) {
+          return s !== signUp
+        })
       },
       removeTeam: function(team) {
         filterState.teams = _.filter(filterState.teams,function(t){
@@ -55,9 +70,12 @@
           return t !== time
         });
       },
-      getFamilyMembers: function(){ 
+      getFamilyMembers: function(){
         return filterState.memberIds;
       } ,
+      getSignUps: function() {
+        return filterState.signUps;
+      },
       getTeams: function() {
         return filterState.teams;
       },
@@ -65,7 +83,7 @@
         return filterState.times;
       }
     };
-    return filterState; 
+    return filterState;
   }
 
 })();
