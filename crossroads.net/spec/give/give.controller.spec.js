@@ -18,13 +18,14 @@ describe('GiveCtrl', function() {
     //form should be invalid     
   });
   
-  it('should change state because the amount was valid', function(){ 
+  it('should change state because the amount was valid and prompt for login', function(){ 
    	var controller = $controller('GiveCtrl', { $scope: $scope });
    	// give.goToAccount() with  a valid amount
     //check state, should still be give/login
-    //form should be valid     
+    //form should be valid  
   });
 
+  
   });
 
 });

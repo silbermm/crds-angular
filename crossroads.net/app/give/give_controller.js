@@ -10,7 +10,7 @@
                //what if email is not found for some reason??
              }
                   
-            if (toState.name =="give.thank-you" && $scope.giveForm.giveForm.$invalid){
+            if (toState.name =="give.thank-you" && $scope.giveForm.accountForm.$invalid){
                 $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
                 event.preventDefault();
             }
@@ -38,58 +38,52 @@
         vm.view = 'bank';
 
         vm.accountError = function() {
-            return (vm.bankinfoSubmitted && $scope.giveForm.giveForm.account.$error.invalidAccount ||
-                $scope.giveForm.giveForm.account.$dirty && $scope.giveForm.giveForm.account.$error.invalidAccount
-                && $scope.giveForm.giveForm.account.$viewValue !== '')
+           return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.account.$error.invalidAccount 
+                && $scope.giveForm.accountForm.$invalid && $scope.giveForm.accountForm.account.$viewValue !=='')
         };
 
         vm.amountError = function() {
-            return (vm.amountSubmitted && $scope.giveForm.giveForm.$invalid)
+            return (vm.amountSubmitted && $scope.giveForm.amountForm.$invalid)
         };
 
         vm.billingZipCodeError = function() {
-            return (vm.bankinfoSubmitted && $scope.giveForm.giveForm.billingZipCode.$invalid)  
+            return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.billingZipCode.$invalid)  
         };
 
         vm.blurAccountError = function() {
-            return ($scope.giveForm.giveForm.account.$dirty && $scope.giveForm.giveForm.account.$error.invalidAccount
-                && $scope.giveForm.giveForm.account.$viewValue !=='')
+            return ($scope.giveForm.accountForm.account.$dirty && $scope.giveForm.accountForm.account.$error.invalidAccount)
         };
 
         vm.blurBillingZipCodeError = function() {
-            return ($scope.giveForm.giveForm.billingZipCode.$dirty && $scope.giveForm.giveForm.billingZipCode.$invalid)  
+            return ($scope.giveForm.accountForm.billingZipCode.$dirty && $scope.giveForm.accountForm.billingZipCode.$invalid)  
         };
         
         vm.blurRoutingError = function() {
-            return ($scope.giveForm.giveForm.routing.$dirty && $scope.giveForm.giveForm.routing.$error.invalidRouting 
-                && $scope.giveForm.giveForm.routing.$viewValue !=='')
+            return ($scope.giveForm.accountForm.routing.$dirty && $scope.giveForm.accountForm.routing.$error.invalidRouting )
         };  
 
         vm.ccNumberError = function(ccValid) {
             if (ccValid == undefined) {
-                vm.setValidCard = true  ;
-            } else {
-                vm.setValidCard = ccValid;
+                vm.setValidCard = false ;
             }
-           // !give.ccValid && giveForm.ccNumber.$dirty ||giveForm.ccNumber.$error.required && give.bankinfoSubmitted
-            return (vm.bankinfoSubmitted && $scope.giveForm.giveForm.ccNumber.$pristine ||
-                vm.setValidCard && $scope.giveForm.giveForm.ccNumber.$dirty && !vm.bankinfoSubmitted ||
-                !vm.setValidCard || !vm.setValidCard && $scope.giveForm.giveForm.ccNumber.$isEmpty)  
-        };
+            
+            return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.ccNumber.$pristine || //cannot be blank on submit
+                    vm.setValidCard && !vm.bankinfoSubmitted || //can be empty on pageload
+                    !ccValid && vm.bankinfoSubmitted)  //show error when not valid 
+         };
        
          vm.cvvError = function(cvcValid) {
             if (cvcValid == undefined) {
-                vm.setValidCvc = true  ;
-            } else {
-                vm.setValidCvc = cvcValid;
+                vm.setValidCvc = false  ;           
             }
             
-            return (vm.bankinfoSubmitted && $scope.giveForm.giveForm.cvc.$pristine ||
-                !vm.setValidCvc || !vm.setValidCvc && $scope.giveForm.giveForm.cvc.$isEmpty)  
+            return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.cvc.$pristine || //cannot be blank on submit
+                    vm.setValidCvc && !vm.bankinfoSubmitted || //can be empty on pageload
+                    !cvcValid && vm.bankinfoSubmitted)  //show error when not valid
         };
 
         vm.expDateError = function() {
-            return (vm.bankinfoSubmitted && $scope.giveForm.giveForm.expDate.$invalid)             
+            return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.expDate.$invalid)             
         };
        
         // Invoked from the initial "/give" state to get us to the first page
@@ -112,8 +106,8 @@
                 );
         }
 
-        vm.nameError = function() {
-            return (vm.bankinfoSubmitted && $scope.giveForm.giveForm.nameOnCard.$invalid)             
+        vm.nameError = function() {      
+            return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.nameOnCard.$invalid)             
         };
 
         // Callback from email-field on guest giver page.  Emits a growl
@@ -143,10 +137,8 @@
         }
 
         vm.routingError = function() {
-            return (vm.bankinfoSubmitted  && $scope.giveForm.giveForm.routing.$error.invalidRouting ||
-                $scope.giveForm.giveForm.routing.$dirty && $scope.giveForm.giveForm.routing.$error.invalidRouting 
-                && $scope.giveForm.giveForm.routing.$viewValue!== '')
-         };
+            return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.routing.$error.invalidRouting&& $scope.giveForm.accountForm.$invalid )
+        };
 
         vm.submitBankInfo = function() {
             vm.bankinfoSubmitted = true;
@@ -181,7 +173,7 @@
 
         vm.goToAccount = function() {
             vm.amountSubmitted = true;
-            if($scope.giveForm.giveForm.giveForm.$valid) {
+            if($scope.giveForm.amountForm.giveForm.$valid) {
                 if ($rootScope.username == undefined) {
                     Session.addRedirectRoute("give.account", "");
                     $state.go("give.login"); 

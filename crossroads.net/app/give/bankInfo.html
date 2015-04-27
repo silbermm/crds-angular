@@ -1,64 +1,31 @@
-<ng-form name="giveForm">
-    <div
-        class="form-group"
-        ng-if="$root.username === undefined"
-        ng-class="{'has-error': giveForm.email_field.email.$invalid && give.bankinfoSubmitted }">
-        <label for="email">Email</label>
-        <email-field
-            email="give.email"
-            submitted="give.bankinfoSubmitted"
-            prefix="give.emailPrefix"
-            on-email-not-found="give.onEmailNotFound"
-            on-email-found="give.onEmailFound"
-            validate-unique="false"
-            check-unique="true">
-        </email-field>
+<div class="form-group">
+    <div class="form-group">
+        <label class="radio-inline">
+            <input type="radio" name="account-type" value="checking" checked>Checking</input>
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="account-type" value="Savings">Savings</input>
+        </label>
     </div>
-    <div id="existingEmail" growl inline="true" reference="{{give.emailAlreadyRegisteredGrowlDivRef}}" limit-messages="1"></div>
-
-  <div class="form-group" >
-    <div class="btn-group btn-group-sm account-type form-group" role="group">
-        <button type="button" class="btn btn-ghost" ng-model="give.view" btn-radio="'bank'">Bank Account</button>
-        <button type="button" class="btn btn-ghost" ng-model="give.view" btn-radio="'cc'">Credit Card</button>
+    <div class="form-group row col-md-8 col-md-offset-2" collapse="!isCollapsed" >
+        <svg viewBox="0 0 512 280" class="icon icon-crossroads_check give-check-icon">
+            <use xlink:href="#crossroads_check"></use>
+        </svg>
     </div>
-    <span>
-        <a href="#/confidentiality-and-security/" target="_blank">
-            <svg viewBox="0 0 21 32" class="icon icon-lock"><use xlink:href="#lock"></use></svg>
-        </a>
-    </span>
-    <section class="bank-section" ng-if="give.view=='bank'">
-        <div class="form-group">
-            <label class="radio-inline">
-                <input type="radio" name="account-type" value="checking" checked>Checking</input>
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="account-type" value="Savings">Savings</input>
-            </label>
-        </div>
-        <div class="form-group row col-md-8 col-md-offset-2" collapse="!isCollapsed" >
-            <svg viewBox="0 0 512 280" class="icon icon-crossroads_check give-check-icon">
-                <use xlink:href="#crossroads_check"></use>
-            </svg>
-        </div>
-        <div class="form-group" ng-class="{'has-error': give.routingError() }">
-            <label for="routing" class="wide-label">Routing Number
-                <a href="" class="pull-right weight-normal" ng-click="isCollapsed=!isCollapsed; give.toggleCheck()">{{give.showMessage}}</a>
-            </label>
-            <input type="text" name="routing" class="form-control" ng-model="give.routing" maxlength="9" ng-required='true' ng-model-options="{ updateOn: 'blur'}" invalid-routing>
-            <ng-messages for="giveForm.routing.$error" ng-show="give.blurRoutingError()"  ng-messages-include="on-blur-messages"></ng-messages>
-            <ng-messages for="giveForm.routing.$error" ng-if="give.bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
+    <div class="form-group" ng-class="{'has-error': give.routingError() }">
+        <label for="routing" class="wide-label">Routing Number
+            <a href="" class="pull-right weight-normal" ng-click="isCollapsed=!isCollapsed; give.toggleCheck()">{{give.showMessage}}</a>
+        </label>
+        <input type="text" name="routing" class="form-control" ng-model="routing" maxlength="9" ng-required='true' ng-model-options="{ updateOn: 'blur'}" invalid-routing>
+        <ng-messages for="accountForm.routing.$error" ng-show="give.blurRoutingError()"  ng-messages-include="on-blur-messages"></ng-messages>
+        <ng-messages for="accountForm.routing.$error" ng-if="give.bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
 
-      </div>
-        <div class="form-group" ng-class="{'has-error': give.accountError() }">
-            <label for="account">Account Number</label>
-            <input type="text" name="account" class="form-control" ng-model="give.account" maxlength="30" ng-required='true' ng-model-options="{ updateOn: 'blur'}" invalid-account>
-            <ng-messages for="giveForm.account.$error" ng-show="give.blurAccountError()" ng-messages-include="on-blur-messages"></ng-messages>
-            <ng-messages for="giveForm.account.$error" ng-if="give.bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
+    </div>
+    <div class="form-group" ng-class="{'has-error': give.accountError() }">
+        <label for="account">Account Number</label>
+        <input type="text" name="account" class="form-control" ng-model="account" maxlength="30" ng-required='true' ng-model-options="{ updateOn: 'blur'}" invalid-account>
+        <ng-messages for="accountForm.account.$error" ng-show="give.blurAccountError()" ng-messages-include="on-blur-messages"></ng-messages>
+        <ng-messages for="accountForm.account.$error" ng-if="give.bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
 
-        </div>
-    </section>
-    <section ng-if="give.view=='cc'" >
-      <credit-card-info></credit-card-info>
-    </section>
-  </div>
-</ng-form>
+    </div>
+</div>
