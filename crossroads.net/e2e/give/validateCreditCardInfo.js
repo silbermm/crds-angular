@@ -7,6 +7,20 @@ describe('Crossroads App', function() {
     var creditCardButton = element(by.buttonText("Credit Card")).click();
   });
 
+  it('It should display an error message for an invalid email address', function() {
+    var zipInput = element(by.id('give-email'));
+    zipInput.sendKeys("1234.net");
+    zipInput.sendKeys(protractor.Key.TAB);
+    expect(element(by.id('give-email')).getAttribute('class')).toMatch('ng-invalid-email');
+  });
+
+  it('It should not display an error message for a valid email address', function() {
+    var zipInput = element(by.id('give-email'));
+    zipInput.sendKeys("cross@roads.net");
+    zipInput.sendKeys(protractor.Key.TAB);
+    expect(element(by.id('give-email')).getAttribute('class')).toMatch('ng-valid-email');
+  });
+
   it('It should display an error message for an invalid credit card number', function() {
     var cardInput = element(by.model('give.ccNumber'));
     cardInput.sendKeys("6511000000000000");
@@ -58,13 +72,5 @@ describe('Crossroads App', function() {
     zipInput.sendKeys(protractor.Key.TAB);
     expect(element(by.model('give.billingZipCode')).getAttribute('class')).toMatch('ng-valid-invalid-zip');
   });
-
-  it('It should not display an error message for a valid email address', function() {
-    var zipInput = element(by.id('give-email'));
-    zipInput.sendKeys("tim@kriz.net");
-    zipInput.sendKeys(protractor.Key.TAB);
-   // expect(element(by.id('give-email')).getAttribute('class')).toMatch('ng-valid-email');
-  });
-
 
 });
