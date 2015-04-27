@@ -1,4 +1,4 @@
-require('./bankInfo.html');
+require('../bankInfo.html');
 (function () {
     angular
     .module('bank-info',[])

@@ -15,9 +15,11 @@
         link: function($scope, element, attrs, ngModel) {
           ngModel.$validators.naturalNumber = function(value) {
             var status = true;
+            console.log("in the nat number");
             angular.forEach(REQUIRED_PATTERNS, function(pattern) {
               status = status && pattern.test(value);
             });
+            console.log(status);
             return status;
           };
         }

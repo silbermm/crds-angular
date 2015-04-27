@@ -1,4 +1,4 @@
-require('./donation-details.html');﻿
+require('../donation-details.html');﻿
 
 (function () {
     angular

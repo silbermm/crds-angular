@@ -1,10 +1,10 @@
 'use strict';
 
-require('./donationDetails.directive.js');
-require('./donationConfirmation.directive');
-require('./bankInfo.directive');
-require('./creditCardInfo.directive');
-require('./currencyMask.directive');
+require('./directives/donationDetails.directive.js');
+require('./directives/donationConfirmation.directive');
+require('./directives/bankInfo.directive');
+require('./directives/creditCardInfo.directive');
+require('./directives/currencyMask.directive');
 
 var app = require('angular');
 

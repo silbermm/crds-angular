@@ -1,4 +1,4 @@
-require('./donationConfirmation.html');
+require('../donationConfirmation.html');
 (function () {
     angular
     .module('donation-confirmation',[])

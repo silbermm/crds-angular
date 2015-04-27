@@ -1,4 +1,4 @@
-require('./creditCardInfo.html');
+require('../creditCardInfo.html');
 
 (function () {
     angular
