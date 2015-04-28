@@ -7,7 +7,7 @@ require('./give.module.js');
 
 var app = require('angular').module('crossroads.give');
 app.factory("getPrograms", require('./services/getPrograms.service.js'));
-app.factory('PaymentService', ['$log', '$http', 'stripe', require('./services/stripe.service.js')]);
+app.factory('PaymentService', ['$log', '$http', 'stripe', require('./services/payment_service.js')]);
 
 /****** DEMO PAGES ******/
 require('./demo/guest_giver/give.html');
