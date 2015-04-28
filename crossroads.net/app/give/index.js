@@ -6,12 +6,8 @@ require('./thank_you.html');
 require('./give.module.js'); 
 
 var app = require('angular').module('crossroads.give');
-app.factory("getPrograms", require('./getPrograms.service.js'));
-app.factory('StripeService', ['angularStripe','$log', require('./stripe.service.js')]);
-app.directive('invalidRouting',[require('./routingTransitNumber.validation.directive')]);
-app.directive('invalidAccount',[require('./bankAccountNumber.validation.directive')]);
-app.directive('naturalNumber',[require('./naturalNumber.validation.directive')]);
-app.directive('invalidZip', [require('./zipCode.validation.directive')]);
+app.factory("getPrograms", require('./services/getPrograms.service.js'));
+app.factory('StripeService', ['$log', '$http', 'stripe', require('./stripe.service.js')]);
 
 /****** DEMO PAGES ******/
 require('./demo/guest_giver/give.html');
