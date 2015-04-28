@@ -1,10 +1,12 @@
 'use strict';
-
-require('./donationDetails.directive.js');
-require('./donationConfirmation.directive');
-require('./bankInfo.directive');
-require('./creditCardInfo.directive');
-
 var app = require('angular');
 
-app.module('give', ['donation-details', 'bank-info', 'donation-confirmation', 'credit-card-info'])
+app.module('crossroads.give', [])
+
+require('./directives/donationDetails.directive.js');
+require('./directives/donationConfirmation.directive');
+require('./directives/bankInfo.directive');
+require('./directives/creditCardInfo.directive');
+require('./directives/currencyMask.directive');
+
+

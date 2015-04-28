@@ -1,49 +1,133 @@
 'use strict';
 (function () {
 
-  var getCookie = require('../utilities/cookies'); 
-  module.exports = function GiveCtrl($rootScope, $scope, $state, $timeout, $httpProvider, Session, Profile) {
+  module.exports = GiveCtrl;
+
+  GiveCtrl.$inject = ['$rootScope', '$scope', '$state', '$timeout', '$http', 'Session' ];
+    
+  function GiveCtrl($rootScope, $scope, $state, $timeout, $httpProvider, Session) {
 
         $scope.$on('$stateChangeStart', function (event, toState, toParams) {
-           if ($rootScope.username) {
-             $httpProvider.defaults.headers.common['Authorization']= getCookie('sessionId');
-             Profile.Personal.get(function(response) {
-               vm.email = response.emailAddress;
-             });
-           }
-          
-          
-            if (toState.name =="give.thank-you" && $scope.giveForm.giveForm.$invalid){
+           if ($rootScope.email) {   
+               vm.email = $rootScope.email;
+               //what if email is not found for some reason??
+             }
+                  
+            if (toState.name =="give.thank-you" && $scope.giveForm.accountForm.$invalid){
                 $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
                 event.preventDefault();
             }
-
-            //  if(toState.name =="give.account" && $scope.giveForm.giveForm.amount.$error.naturalNumber){
-            //     $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-            //     event.preventDefault();
-            // }
         });
 
         var vm = this;
+        
+        //Credit Card RegExs
+        var americanExpressRegEx = /^3[47][0-9]{13}$/;
+        var discoverRegEx = /^6(?:011|5[0-9]{2})/;
+        var mastercardRegEx = /^5[1-5][0-9]/;
+        var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$/;
+        
+        vm.setValidCvc = '';
+        vm.setValidCard = '';
         vm.amountSubmitted = false;
         vm.bankinfoSubmitted = false;
-        //Credit Card RegExs
-        var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$/;
-        var mastercardRegEx = /^5[1-5][0-9]/;
-        var discoverRegEx = /^6(?:011|5[0-9]{2})/;
-        var americanExpressRegEx = /^3[47][0-9]{13}$/;
-
-        vm.view = 'bank';
         vm.bankType = 'checking';
-        vm.showMessage = "Where?";
-        vm.showCheckClass = "ng-hide";
+        vm.creditCardDiscouragedGrowlDivRef = 1001;
         vm.email = null;
         vm.emailAlreadyRegisteredGrowlDivRef = 1000;
-        vm.creditCardDiscouragedGrowlDivRef = 1001;
         vm.emailPrefix = "give";
+        vm.showMessage = "Where?";
+        vm.showCheckClass = "ng-hide";
+        vm.view = 'bank';
 
-        console.log("in the controller");
+        vm.accountError = function() {
+           return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.account.$error.invalidAccount && $scope.giveForm.accountForm.$invalid  ||
+                 $scope.giveForm.accountForm.account.$error.invalidAccount && $scope.giveForm.accountForm.account.$dirty)
+        };
 
+        vm.amountError = function() {
+            return (vm.amountSubmitted && $scope.giveForm.amountForm.$invalid && $scope.giveForm.amountForm.$error.naturalNumber 
+                    || $scope.giveForm.amountForm.$dirty && $scope.giveForm.amountForm.$invalid)
+        };
+
+        vm.billingZipCodeError = function() {
+            return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.billingZipCode.$invalid || 
+                    $scope.giveForm.accountForm.billingZipCode.$dirty && $scope.giveForm.accountForm.billingZipCode.$invalid) 
+        };
+
+        vm.blurAccountError = function() {
+            return ($scope.giveForm.accountForm.account.$dirty && $scope.giveForm.accountForm.account.$error.invalidAccount)
+        };
+
+        vm.blurBillingZipCodeError = function() {
+            return ($scope.giveForm.accountForm.billingZipCode.$dirty && $scope.giveForm.accountForm.billingZipCode.$invalid)  
+        };
+        
+        vm.blurRoutingError = function() {
+            return ($scope.giveForm.accountForm.routing.$dirty && $scope.giveForm.accountForm.routing.$error.invalidRouting )
+        };  
+
+        vm.ccCardType = function () {
+            if (vm.ccNumber) {
+                if (vm.ccNumber.match(visaRegEx))
+                  vm.ccNumberClass = "cc-visa";
+                else if (vm.ccNumber.match(mastercardRegEx))
+                  vm.ccNumberClass = "cc-mastercard";
+                else if (vm.ccNumber.match(discoverRegEx))
+                  vm.ccNumberClass = "cc-discover";
+                else if (vm.ccNumber.match(americanExpressRegEx))
+                  vm.ccNumberClass = "cc-american-express";
+                else
+                  vm.ccNumberClass = "";
+            } else
+                vm.ccNumberClass = "";
+        }
+
+        vm.ccNumberError = function(ccValid) {
+            if (ccValid == undefined) {
+                vm.setValidCard = false ;
+            }
+            
+            return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.ccNumber.$pristine || //cannot be blank on submit
+                    vm.setValidCard && !vm.bankinfoSubmitted || //can be empty on pageload
+                    !ccValid && vm.bankinfoSubmitted ||
+                    !ccValid && $scope.giveForm.accountForm.ccNumber.$dirty)  //show error when not valid 
+         };
+
+         vm.cvvError = function(cvcValid) {
+            if (cvcValid == undefined) {
+                vm.setValidCvc = false  ;           
+            }
+            
+            return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.cvc.$pristine || //cannot be blank on submit
+                    vm.setValidCvc && !vm.bankinfoSubmitted || //can be empty on pageload
+                    !cvcValid && vm.bankinfoSubmitted ||
+                    !cvcValid && $scope.giveForm.accountForm.cvc.$dirty)  //show error when not valid
+        };
+
+        vm.expDateError = function() {
+            return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.expDate.$invalid)             
+        };
+
+        vm.goToAccount = function() {
+            vm.amountSubmitted = true;
+            if($scope.giveForm.amountForm.$valid) {
+                if ($rootScope.username == undefined) {
+                    Session.addRedirectRoute("give.account", "");
+                    $state.go("give.login"); 
+                } else {
+                    $state.go("give.account");
+                }
+            } else {
+               $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+            }
+        }
+        
+        vm.goToLogin = function () {
+          Session.addRedirectRoute("give.account", "");
+          $state.go("give.login");
+        }
+       
         // Invoked from the initial "/give" state to get us to the first page
         vm.initDefaultState = function() {
             $scope.$on('$viewContentLoaded', function() {
@@ -63,6 +147,10 @@
                 , -1 // Indicates that this message should not time out
                 );
         }
+
+        vm.nameError = function() {      
+            return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.nameOnCard.$invalid)             
+        };
 
         // Callback from email-field on guest giver page.  Emits a growl
         // notification indicating that the email entered may already be a
@@ -90,12 +178,22 @@
             }
         }
 
+        vm.routingError = function() {
+            return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.routing.$error.invalidRouting && $scope.giveForm.accountForm.$invalid  ||
+                $scope.giveForm.accountForm.routing.$error.invalidRouting && $scope.giveForm.accountForm.routing.$dirty)
+        };
+
+        /**
+         * Will stop from going to the thank you page
+         * if form is invalid using the stateChangeStart 
+         * and preventDefault
+         */
         vm.submitBankInfo = function() {
             vm.bankinfoSubmitted = true;
             $state.go("give.thank-you");
         };
 
-       vm.toggleCheck = function() {
+        vm.toggleCheck = function() {
             if (vm.showMessage == "Where?") {
                 vm.showMessage = "Close";
                 vm.showCheckClass = "";
@@ -104,35 +202,7 @@
                 vm.showCheckClass = "ng-hide";
             }
         }
-
-        vm.ccCardType = function () {
-            if (vm.ccNumber) {
-                if (vm.ccNumber.match(visaRegEx))
-                  vm.ccNumberClass = "cc-visa";
-                else if (vm.ccNumber.match(mastercardRegEx))
-                  vm.ccNumberClass = "cc-mastercard";
-                else if (vm.ccNumber.match(discoverRegEx))
-                  vm.ccNumberClass = "cc-discover";
-                else if (vm.ccNumber.match(americanExpressRegEx))
-                  vm.ccNumberClass = "cc-american-express";
-                else
-                  vm.ccNumberClass = "";
-            } else
-                vm.ccNumberClass = "";
-        }
-
-        vm.goToAccount = function(){
-            vm.amountSubmitted = true;
-            if($scope.giveForm.giveForm.giveForm.$valid)    
-              $state.go("give.account");
-            else
-              $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-        };
-        
-        vm.goToLogin = function () {
-          Session.addRedirectRoute("give.account", "");
-          $state.go("give.login");
-        }
+       
     };
 
 })();

@@ -1,7 +1,7 @@
-require('./donationConfirmation.html');
+require('../donationConfirmation.html');
 (function () {
     angular
-    .module('donation-confirmation',[])
+    .module('crossroads.give')
     .directive('donationConfirmation', ['$log', donationConfirmation]);
 
     function donationConfirmation($log) {
