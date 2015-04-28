@@ -21,10 +21,10 @@ describe ('StripeService', function () {
     return null;
   })
   
-  beforeEach(inject(function(_$injector_, $httpBackend, _StripeService_) {
+  beforeEach(inject(function(_$injector_, $httpBackend, _PaymentService_) {
       var $injector = _$injector_;
 
-      sut = _StripeService_;
+      sut = _PaymentService_;
       httpBackend = $httpBackend;
       stripe = $injector.get('stripe');
     })

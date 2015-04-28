@@ -1,13 +1,13 @@
 (function () {
 
-  module.exports = StripeService;
+  module.exports = PaymentService;
 
-  function StripeService($log, $http, stripe) {
-    var stripe_service = {};
+  function PaymentService($log, $http, stripe) {
+    var payment_service = {};
     
     stripe.setPublishableKey("pk_test_TR1GulD113hGh2RgoLhFqO0M");
     
-    stripe_service.createCustomerWithCard = function(card) {
+    payment_service.createCustomerWithCard = function(card) {
 
       stripe.card.createToken(card)
         .then(function (token) {
@@ -17,11 +17,9 @@
           }
           $http.post(__API_ENDPOINT__ + 'api/donor', donor_request);
         });
-      
-      
     }
     
-    return stripe_service;
+    return payment_service;
   }
 
 })();
