@@ -5,7 +5,7 @@ require('./account.html');
 require('./thank_you.html');
 require('./give.module.js'); 
 
-var app = require('angular').module('give');
+var app = require('angular').module('crossroads.give');
 app.factory("getPrograms", require('./getPrograms.service.js'));
 app.factory('StripeService', ['angularStripe','$log', require('./stripe.service.js')]);
 app.directive('invalidRouting',[require('./routingTransitNumber.validation.directive')]);
@@ -28,4 +28,4 @@ require('./demo/guest_giver/give-logged-in-new-giver.html');
 require('./demo/trip_giving/give.html');
 
 
-app.controller("GiveCtrl", ['$rootScope', '$scope', '$state', '$timeout', '$http', 'Session', 'Profile', require("./give_controller")]);
+app.controller("GiveCtrl",require("./give_controller"));

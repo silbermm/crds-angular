@@ -8,6 +8,27 @@ require('../services/user_service');
         $log.debug("Inside register controller");
         $scope.newuser = User;
         $scope.passwordPrefix = "registration";
+        $scope.registerShow = false; 
+        $scope.showRegisterButton = true;
+       
+        var _this = this;
+
+        $scope.firstnameError = function() {
+            return (($scope.registerForm.firstname.$pristine || $scope.registerForm.firstname.$invalid) && $scope.registerForm.$submitted)             
+        };
+
+        $scope.lastnameError = function() {
+            return (($scope.registerForm.lastname.$pristine || $scope.registerForm.lastname.$invalid) && $scope.registerForm.$submitted)             
+        };   
+
+        $scope.openLogin = function (data) {
+            $scope.passwordPrefix = "login-dropdown";
+            $scope.credentials.username = $scope.newuser.email;
+            $scope.credentials.password = $scope.newuser.password;
+            $scope.registerShow = !$scope.registerShow;
+            if (!$scope.loginShow)
+                $scope.loginShow = !$scope.loginShow;
+        };
 
         $scope.pwprocess = function(){
             if ($scope.pwprocessing =="SHOW") {
@@ -18,11 +39,9 @@ require('../services/user_service');
                 $scope.pwprocessing = "SHOW";
                 $scope.inputType = 'password';
             }
-        }
+        };
 
-        var _this = this;
         $scope.register = function () {
-
 
             if ($scope.newuser == null || $scope.newuser.email == null || $scope.newuser.password == null || $scope.newuser.email == "" || $scope.newuser.password == "" || $scope.newuser.firstname == null || $scope.newuser.firstname == '' || $scope.newuser.lastname == null || $scope.newuser.lastname =='') {
                 $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
@@ -65,25 +84,13 @@ require('../services/user_service');
                 })
             });
 
-        }
-
-
-        $scope.showRegisterButton = true;
-        $scope.registerShow = false;
-
+        };
+      
         $scope.toggleDesktopRegister = function () {
             $scope.registerShow = !$scope.registerShow;
             if ($scope.loginShow)
                 $scope.loginShow = !$scope.loginShow;
-        }
-
-        $scope.openLogin = function (data) {
-            $scope.passwordPrefix = "login-dropdown";
-            $scope.credentials.username = $scope.newuser.email;
-            $scope.credentials.password = $scope.newuser.password;
-            $scope.registerShow = !$scope.registerShow;
-            if (!$scope.loginShow)
-                $scope.loginShow = !$scope.loginShow;
-        }
+        };
+       
     }
 })()
