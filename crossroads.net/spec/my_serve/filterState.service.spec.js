@@ -22,6 +22,46 @@ describe('Filter State Service', function() {
     expect(filterState.getFamilyMembers().length).toBe(1);
   });
 
+  it("should hold the selected rsvp option", function() {
+    filterState.addSignUp({
+      'name': 'Yes',
+      'id': 1,
+      'selected': true,
+      'attending': true
+    });
+    filterState.addSignUp({
+      'name': 'No',
+      'id': 2,
+      'selected': true,
+      'attending': false
+    });
+    expect(filterState.getSignUps().length).toBe(2);
+  })
+
+  it("should remove a selected rsvp option", function() {
+    filterState.addSignUp({
+      'name': 'Yes',
+      'id': 1,
+      'selected': true,
+      'attending': true
+    });
+    filterState.addSignUp({
+      'name': 'No',
+      'id': 2,
+      'selected': true,
+      'attending': false
+    });
+    expect(filterState.getSignUps().length).toBe(2);
+
+    filterState.removeSignUp({
+      'name': 'No',
+      'id': 2,
+      'selected': true,
+      'attending': false
+    });
+    expect(filterState.getSignUps().length).toBe(1);
+  })
+
   it("should hold the selected times", function(){
     filterState.addTime("08:30:00");
     filterState.addTime("10:00:00");

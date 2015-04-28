@@ -38,8 +38,8 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
-                    //var servingDays = _serveService.GetServingDays(token);
-                    var servingDays = MockResponseForFrontEndTesting();
+                    var servingDays = _serveService.GetServingDays(token);
+                    //var servingDays = MockResponseForFrontEndTesting();
                     if (servingDays == null)
                     {
                         return Unauthorized();
