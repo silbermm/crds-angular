@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MinistryPlatform.Models;
 using Newtonsoft.Json;
 
 namespace crds_angular.Models.Crossroads.Serve
@@ -22,6 +23,9 @@ namespace crds_angular.Models.Crossroads.Serve
 
         [JsonProperty(PropertyName = "serveRsvp")]
         public ServeRsvp ServeRsvp { get; set; }
+
+        [JsonIgnore]
+        public Participant Participant { get; set; }
 
         public TeamMember()
         {
