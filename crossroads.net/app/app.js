@@ -37,7 +37,7 @@ var _ = require('lodash');
      "crdsCMS.services",
      'ngAside', 
      'matchMedia',
-     'give'
+     'crossroads.give'
      ])
     .constant("AUTH_EVENTS", {
             loginSuccess: "auth-login-success",
