@@ -1,14 +1,17 @@
 'use strict()';
 (function(){
-  
+  var moment = require('moment');
+
   angular.module('crossroads.mptools').controller('SignupToServeController', SignupToServeController);
 
-  SignupToServeController.$inject = ['$log', '$location', 'MPTools', 'Su2sData'];
+  SignupToServeController.$inject = ['$log', '$location', 'MPTools', 'Su2sData', 'ServeOpportunities', '$window'];
 
-  function SignupToServeController($log, $location, MPTools, Su2sData){
+  function SignupToServeController($log, $location, MPTools, Su2sData, ServeOpportunities, $window){
     var vm = this; 
   
     vm.allParticipants = [];
+    vm.cancel = cancel;
+    vm.eventDates = [];
     vm.frequency = [{
         value: 0,
         text: "Once"
@@ -20,9 +23,9 @@
         text: "Every Other Week"
       }];
     vm.group = {};
-    vm.open = open;
     vm.params = MPTools.getParams();
     vm.populateDates = populateDates;
+    vm.saveRsvp = saveRsvp;
     vm.showError = showError;
     vm.ready = false;
 
@@ -38,38 +41,62 @@
       });
     }
 
-    function open($event, opened) {
-        $event.preventDefault();
-        $event.stopPropagation();
-        vm[opened] = true;
-      }
+    function cancel(){
+      $window.close();
+    }
 
-    function populateDates() {
-        if (vm.currentMember !== null) {
-          vm.currentMember.currentOpportunity.fromDt = vm.oppServeDate;
-          switch (vm.currentMember.currentOpportunity.frequency.value) {
-            case null:
-              vm.currentMember.currentOpportunity.fromDt = null;
-              vm.currentMember.currentOpportunity.toDT = null;
-              break;
-            case 0:
-              // once...
-              vm.currentMember.currentOpportunity.fromDt = vm.oppServeDate;
-              vm.currentMember.currentOpportunity.toDt = vm.oppServeDate;
-              break;
-            default:
-              // every  or everyother
-              ServeOpportunities.LastOpportunityDate.get({
-                id: vm.currentMember.serveRsvp.roleId
-              }, function(ret) {
-                var dateNum = Number(ret.date * 1000);
-                var toDate = new Date(dateNum);
-                vm.currentMember.currentOpportunity.toDt = (toDate.getMonth() + 1) + "/" + toDate.getDate() + "/" + toDate.getFullYear();
-              });
-              break;
-          }
+    function parseDate(stringDate) {
+      var m = moment(stringDate);
+
+      if (!m.isValid()) {
+        var dateArr = stringDate.split("/");
+        var dateStr = dateArr[2] + " " + dateArr[0] + " " + dateArr[1];
+        // https://github.com/moment/moment/issues/1407
+        // moment("2014 04 25", "YYYY MM DD"); // string with format
+        m = moment(dateStr, "YYYY MM DD");
+
+        if (!m.isValid()) {
+          //throw error
+          throw new Error("Parse Date Failed Moment Validation");
         }
       }
+      $log.debug('date: ' + m.format('X'));
+      return m.format('X');
+    }
+
+    function populateDates(){
+      if (vm.selectedFrequency.value === 0){
+        ServeOpportunities.AllOpportunityDates.query({"id": vm.params.recordId}, function(retVal){
+          _.each(retVal, function(d){
+            var dateNum = Number(d * 1000);
+            var dateObj = new Date(dateNum);
+            vm.eventDates.push((dateObj.getMonth() + 1) + "/" + dateObj.getDate() + "/" + dateObj.getFullYear());
+          })
+        });
+      }
+    }
+
+    function saveRsvp(){
+      _.each(vm.participants, function(participant){
+        var saveRsvp = new ServeOpportunities.SaveRsvp();
+        saveRsvp.contactId = participant.contactId;
+        saveRsvp.opportunityId = vm.params.recordId;
+        saveRsvp.eventTypeId = vm.group.eventTypeId;
+        if (vm.selectedFrequency.value === 0){
+          saveRsvp.endDate = parseDate(vm.selectedEvent);
+          saveRsvp.startDate = parseDate(vm.selectedEvent);
+          saveRsvp.alternateWeeks = false;
+        }
+        saveRsvp.signUp = vm.attending;
+        //saveRsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
+        saveRsvp.$save(function(saved){
+          $log.debug("saved!");
+          //$window.close(); uncomment this before done
+        }, function(err){
+          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+        });
+      });
+    }
 
     function showError(){
       return vm.params.selectedCount > 1 || vm.params.recordDescription === undefined;

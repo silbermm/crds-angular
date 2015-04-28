@@ -195,6 +195,7 @@ namespace MinistryPlatform.Translation.Services
             var groupId = opp.ToInt("Add_to_Group");
             var groupName = opp.ToString("Add_to_Group_Text");
             var searchString = ",,,," + opp.ToString("Group_Role_ID");
+            var eventTypeId = opp.ToInt("Event_Type_ID");
             var group = _ministryPlatformService.GetSubpageViewRecords(_groupParticpantsSubPageView, groupId, token, searchString);
             var participants = new List<GroupParticipant>();
             foreach (var groupParticipant in group)
@@ -213,7 +214,8 @@ namespace MinistryPlatform.Translation.Services
             {
                 GroupId = groupId,
                 Name = groupName,
-                Participants = participants
+                Participants = participants,
+                EventTypeId = eventTypeId
             };
             return retGroup;
         }

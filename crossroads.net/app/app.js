@@ -92,7 +92,7 @@ var _ = require('lodash');
 
                 console.log(__API_ENDPOINT__);
                  
-                $scope.stateData = $state.current.data;
+                $scope.state = $state;
 
                 $scope.prevent = function (evt) {
                     evt.stopPropagation();

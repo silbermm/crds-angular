@@ -1,14 +1,14 @@
   <div ng-if="su2s.showError()" class="alert alert-danger" role="alert">
     <strong>Sorry </strong> You cannot use this tool from that specific page. This tool only supports being called from the record view page.  
   </div>
-
+  <ng-form name="su2sForm">
   <div class="col-md-12 container-fluid" ng-if="!su2s.showError()">
     <h2> Opportunity: {{ su2s.params.recordDescription }}  </h2>
     <h2> Team: {{su2s.group.groupName}} </h2>
     <hr />
     <div class="col-xs-6 col-sm-6 col-md-6">
       <h3> Participant(s) </h3>
-     <ui-select multiple ng-model="su2s.participants">
+     <ui-select multiple ng-model="su2s.participants" ng-required>
      <ui-select-match placeholder="Click here to choose group members...">{{$item.nickname}} {{$item.lastname}}</ui-select-match>      
       <ui-select-choices repeat="person in su2s.allParticipants | filter: $select.search track by person.participantId">
         <span ng-bind-html="person.nickname | highlight: $select.search" ></span>
@@ -35,7 +35,7 @@
     <div class="col-xs-6 col-sm-6 col-md-6">
       <div class="form-group">
         <label>Frequency</label>
-        <select class="form-control" ng-model="su2s.selectedFrequency" ng-change="populateDates()" ng-options="f.text for f in su2s.frequency">
+        <select class="form-control" ng-model="su2s.selectedFrequency" ng-change="su2s.populateDates()" ng-options="f.text for f in su2s.frequency" ng-required>
           <option value="">Select a Frequency</option>
         </select>
       </div>
@@ -44,10 +44,9 @@
       <div class="form-group">
         <label>Date:</label>
         <div class="input-group">
-          <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="su2s.serveDate" is-open="fromOpened" min-date="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
-          <span class="input-group-btn">
-            <button type="button" class="btn btn-default" ng-click="open($event, 'dateOpened')"><i class="glyphicon glyphicon-calendar"></i></button>
-          </span>
+          <select class="form-control" ng-model="su2s.selectedEvent" ng-options="d for d in su2s.eventDates" ng-required>
+            <option value="">Select an Event Date</option>
+          </select>
         </div>
       </div>
     </div>
@@ -71,5 +70,9 @@
         </div>
       </div>
     </div>
+    <div class="form-group">
+      <button class="btn btn-primary btn-sm" ng-click="su2s.cancel()">Cancel</button>
+      <button type="submit" class="btn btn-primary btn-sm" ng-click="su2s.saveRsvp()">Save</button>
+    </div>
   </div>
-
+</ng-form>

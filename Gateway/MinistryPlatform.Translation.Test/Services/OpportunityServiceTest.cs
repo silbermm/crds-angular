@@ -480,7 +480,8 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Maximum_Needed", 100}, {"Minimum_Needed", 50},
                 {"Add_to_Group", 255},
                 {"Add_to_Group_Text", "Test Group"},
-                {"Group_Role_ID", 1}
+                {"Group_Role_ID", 1},
+                {"Event_Type_ID", 385}
             };
 
             var expectedParticipants = new List<Dictionary<string, object>>
