@@ -34,10 +34,6 @@ describe('Unit testing donation details directive', function(){
     $rootScope = $injector.get('$rootScope');
        scope = $rootScope.$new();
     $httpBackend = $injector.get('$httpBackend');
-    giveController = function() {
-         return $controller('GiveCtrl', {'$scope' : scope});
-    };
-    var $controller = $injector.get('$controller');
     //This is required to mock the on-blur-messages that are pulled in from the CMS
     $templateCache = $injector.get('$templateCache');
     $templateCache.put('on-blur-messages',
@@ -55,14 +51,16 @@ describe('Unit testing donation details directive', function(){
 
   it('should replace the element with the appropriate content and GET onlineGivingProgramsGetResponse', function(){
     $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +'api/programs/1');
-    var controller = giveController();
-    scope.give = controller;
+    var amount = 122;
+    var program = {"Test":"Program"};
+    var amountSubmitted = true;
+
     //Compile a piece of HTML containing the directive
-    var element = $compile("<donation-details progtype='1' give='give'></donation-details>")(scope);
+    var element = $compile("<donation-details progtype='1' amount='amount' program='program' amountSubmitted='amountSubmitted'></donation-details>")(scope);
 
     // fire all the watches
     scope.$digest();
     // Check that the compiled element contains the templated content
-    expect(element.html()).toContain("program.Name for program in programs track by program.ProgramId");
+     expect(element.html()).toContain("program.Name for program in programs track by program.ProgramId");
   });
 });

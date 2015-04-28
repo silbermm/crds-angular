@@ -45,11 +45,6 @@
                  $scope.giveForm.accountForm.account.$error.invalidAccount && $scope.giveForm.accountForm.account.$dirty)
         };
 
-        vm.amountError = function() {
-            return (vm.amountSubmitted && $scope.giveForm.amountForm.$invalid && $scope.giveForm.amountForm.$error.naturalNumber 
-                    || $scope.giveForm.amountForm.$dirty && $scope.giveForm.amountForm.$invalid)
-        };
-
         vm.billingZipCodeError = function() {
             return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.billingZipCode.$invalid || 
                     $scope.giveForm.accountForm.billingZipCode.$dirty && $scope.giveForm.accountForm.billingZipCode.$invalid) 
