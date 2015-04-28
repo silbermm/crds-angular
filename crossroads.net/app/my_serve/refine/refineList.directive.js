@@ -1,26 +1,27 @@
 'use strict()';
-(function(){
+(function() {
 
   module.exports = RefineDirective;
 
-  RefineDirective.$inject = ['$rootScope','filterState', 'screenSize']
+  RefineDirective.$inject = ['$rootScope', 'filterState', 'screenSize']
 
-  function RefineDirective($rootScope, filterState, screenSize){
+  function RefineDirective($rootScope, filterState, screenSize) {
     return {
       restrict: "E",
       replace: true,
       templateUrl: "refine/refineList.html",
       scope: {
         "servingDays": "=servingDays",
-        "original" : "=?original",
-        "filterBoxes" : "=?filterBoxes"
+        "original": "=?original",
+        "filterBoxes": "=?filterBoxes"
       },
-      link : link
+      link: link
     }
 
-    function link(scope, el, attr){
+    function link(scope, el, attr) {
 
       scope.applyFamilyFilter = applyFamilyFilter;
+      scope.applySignUpFilter = applySignUpFilter;
       scope.applyTeamFilter = applyTeamFilter;
       scope.applyTimeFilter = applyTimeFilter;
       scope.clearFilters = clearFilters;
@@ -60,133 +61,169 @@
 
       //////////////////////////////////
 
-      function activate(){
-       scope.servingDays.$promise.then(function(data) {
-         filter(data);
+      function activate() {
+        scope.servingDays.$promise.then(function(data) {
+          filter(data);
         });
       }
 
-      function applyFamilyFilter(){
-        if(filterState.memberIds.length > 0){
+      function applyFamilyFilter() {
+        if (filterState.memberIds.length > 0) {
           var serveDay = [];
-          _.each(scope.servingDays, function(day){
+          _.each(scope.servingDays, function(day) {
             var serveTimes = [];
-            _.each(day.serveTimes, function(serveTime){
+            _.each(day.serveTimes, function(serveTime) {
               var servingTeams = [];
-              _.each(serveTime.servingTeams, function(team){
+              _.each(serveTime.servingTeams, function(team) {
                 var theTeam = team;
-                var members = _.filter(team.members, function(m){
-                  return _.find(filterState.memberIds, function(familyMember){
+                var members = _.filter(team.members, function(m) {
+                  return _.find(filterState.memberIds, function(familyMember) {
                     return familyMember === m.contactId;
                   });
                 });
 
-                if(members.length > 0) {
+                if (members.length > 0) {
                   theTeam.members = members;
                   servingTeams.push(theTeam);
                 }
               });
-              if(servingTeams.length > 0){
-                serveTimes.push({time: serveTime.time, 'servingTeams':servingTeams });
+              if (servingTeams.length > 0) {
+                serveTimes.push({
+                  time: serveTime.time,
+                  'servingTeams': servingTeams
+                });
               }
             });
-            if(serveTimes.length > 0){
-              serveDay.push({day: day.day, eventType: day.eventType, eventTypeId: day.eventTypeId, serveTimes: serveTimes});
+            if (serveTimes.length > 0) {
+              serveDay.push({
+                day: day.day,
+                eventType: day.eventType,
+                eventTypeId: day.eventTypeId,
+                serveTimes: serveTimes
+              });
             }
           });
-          if(serveDay.length > 0){
+          if (serveDay.length > 0) {
             scope.servingDays = serveDay;
           }
         }
-
       }
 
       function applySignUpFilter() {
-        if(filterState.memberIds.length > 0){
+        if (filterState.signUps.length > 0) {
           var serveDay = [];
-          _.each(scope.servingDays, function(day){
+          _.each(scope.servingDays, function(day) {
             var serveTimes = [];
-            _.each(day.serveTimes, function(serveTime){
+            _.each(day.serveTimes, function(serveTime) {
               var servingTeams = [];
-              _.each(serveTime.servingTeams, function(team){
+              _.each(serveTime.servingTeams, function(team) {
                 var theTeam = team;
-                var members = _.filter(team.members, function(m){
-                  return _.find(filterState.signUps, function(signUp){
-                    return signUp.serveRsvp.id === m.serveRsvp.attending;
+                var members = _.filter(team.members, function(m) {
+                  return _.find(filterState.signUps, function(signUp) {
+                    if ((m.serveRsvp == null) && (signUp.attending == null)) {
+                      return true;
+                    } else {
+                      if (m.serveRsvp != null) {
+                        return signUp.attending === m.serveRsvp.attending;
+                      } else {
+                        return false;
+                      }
+                    }
                   });
                 });
-                if(members.length > 0) {
+                if (members.length > 0) {
                   theTeam.members = members;
                   servingTeams.push(theTeam);
                 }
               });
-              if(servingTeams.length > 0){
-                serveTimes.push({time: serveTime.time, 'servingTeams':servingTeams });
+              if (servingTeams.length > 0) {
+                serveTimes.push({
+                  time: serveTime.time,
+                  'servingTeams': servingTeams
+                });
               }
             });
-            if(serveTimes.length > 0){
-              serveDay.push({day: day.day, eventType: day.eventType, eventTypeId: day.eventTypeId, serveTimes: serveTimes});
+            if (serveTimes.length > 0) {
+              serveDay.push({
+                day: day.day,
+                eventType: day.eventType,
+                eventTypeId: day.eventTypeId,
+                serveTimes: serveTimes
+              });
             }
           });
-          if(serveDay.length > 0){
-            scope.servingDays = serveDay;
-          }
+          //if (serveDay.length > 0) {
+          scope.servingDays = serveDay;
+          //}
         }
       }
 
-      function applyTimeFilter(){
-        if(filterState.times.length > 0){
+      function applyTimeFilter() {
+        if (filterState.times.length > 0) {
           var serveDay = [];
-          _.each(scope.servingDays, function(day){
-            var times = _.filter(day.serveTimes, function(serveTime){
-              return _.find(filterState.times, function(ftimes){
+          _.each(scope.servingDays, function(day) {
+            var times = _.filter(day.serveTimes, function(serveTime) {
+              return _.find(filterState.times, function(ftimes) {
                 return ftimes === serveTime.time;
               });
             });
-            if(times.length > 0) {
-              serveDay.push({day: day.day, eventType: day.eventType, eventTypeId: day.eventTypeId, serveTimes: times});
+            if (times.length > 0) {
+              serveDay.push({
+                day: day.day,
+                eventType: day.eventType,
+                eventTypeId: day.eventTypeId,
+                serveTimes: times
+              });
             };
           });
           scope.servingDays = serveDay;
         }
       }
 
-      function applyTeamFilter(){
-        if(filterState.teams.length > 0){
+      function applyTeamFilter() {
+        if (filterState.teams.length > 0) {
           var serveDay = [];
-          _.each(scope.servingDays, function(day){
+          _.each(scope.servingDays, function(day) {
             var serveTimes = [];
-            _.each(day.serveTimes, function(serveTime){
-              var servingTeams = _.filter(serveTime.servingTeams, function(team){
-                return _.find(filterState.teams, function(t){
+            _.each(day.serveTimes, function(serveTime) {
+              var servingTeams = _.filter(serveTime.servingTeams, function(team) {
+                return _.find(filterState.teams, function(t) {
                   return team.groupId === t;
                 });
               });
-              if(servingTeams.length > 0) {
-                serveTimes.push({time: serveTime.time, 'servingTeams':servingTeams });
+              if (servingTeams.length > 0) {
+                serveTimes.push({
+                  time: serveTime.time,
+                  'servingTeams': servingTeams
+                });
               }
             });
-            serveDay.push({day: day.day, eventType: day.eventType, eventTypeId: day.eventTypeId, serveTimes: serveTimes});
+            serveDay.push({
+              day: day.day,
+              eventType: day.eventType,
+              eventTypeId: day.eventTypeId,
+              serveTimes: serveTimes
+            });
           });
           scope.servingDays = serveDay;
         }
       };
 
-      function clearFilters(){
+      function clearFilters() {
         filterState.clearAll();
-        _.each(scope.uniqueMembers, function(member){
+        _.each(scope.uniqueMembers, function(member) {
           member.selected = false;
         });
-        _.each(scope.uniqueTeams, function(team){
+        _.each(scope.uniqueTeams, function(team) {
           team.selected = false;
         });
-        _.each(scope.uniqueTimes, function(time){
+        _.each(scope.uniqueTimes, function(time) {
           time.selected = false;
         });
         filterAll();
       }
 
-      function filter(data, copyScope = true){
+      function filter(data, copyScope = true) {
         filterTimes();
         filterTeams();
         filterFamily();
@@ -195,94 +232,116 @@
         getUniqueTeams();
         getUniqueTimes();
         initCheckBoxes();
-        if(copyScope){
+        if (copyScope) {
           scope.original = angular.copy(data);
         }
         filterAll(copyScope);
       }
 
-      function filterAll(copyScope = true){
+      function filterAll(copyScope = true) {
         if (copyScope) {
           scope.servingDays = angular.copy(scope.original);
         }
         applyFamilyFilter();
+        applySignUpFilter();
         applyTeamFilter();
         applyTimeFilter();
       }
 
-      function filterFamily(){
-        _.each(scope.serveTeams, function(serveTeam){
-          _.each(serveTeam.members, function(member){
+      function filterFamily() {
+        _.each(scope.serveTeams, function(serveTeam) {
+          _.each(serveTeam.members, function(member) {
             scope.serveMembers.push(member);
           });
         });
       }
 
-      function filterTeams(){
-        _.each(scope.times, function(serveTime){
-          _.each(serveTime.servingTeams, function(serveTeam){
+      function filterTeams() {
+        _.each(scope.times, function(serveTime) {
+          _.each(serveTime.servingTeams, function(serveTeam) {
             scope.serveTeams.push(serveTeam);
           });
         });
       }
 
-      function filterTimes(){
-        _.each(scope.servingDays, function(servingDay){
-          _.each(servingDay.serveTimes, function(serveTime){
+      function filterTimes() {
+        _.each(scope.servingDays, function(servingDay) {
+          _.each(servingDay.serveTimes, function(serveTime) {
             scope.times.push(serveTime);
           });
         });
       }
 
-      function getUniqueMembers(){
-        scope.uniqueMembers = _.chain(scope.serveMembers).map(function(m){
-          return {name: m.name, lastName: m.lastName, contactId: m.contactId};
+      function getUniqueMembers() {
+        scope.uniqueMembers = _.chain(scope.serveMembers).map(function(m) {
+          return {
+            name: m.name,
+            lastName: m.lastName,
+            contactId: m.contactId
+          };
         }).uniq('contactId').value();
       }
 
       function getUniqueSignUps() {
         //var signUps = [];
-        var yes = { 'name': 'Yes', 'id': 1, 'selected': false, 'attending': true };
-        var no = { 'name': 'No', 'id': 2, 'selected': false, 'attending': false };
-        var nada = { 'name': 'Nada', 'id': 3, 'selected': false, 'attending': null };
+        var yes = {
+          'name': 'Yes',
+          'id': 1,
+          'selected': false,
+          'attending': true
+        };
+        var no = {
+          'name': 'No',
+          'id': 2,
+          'selected': false,
+          'attending': false
+        };
+        var nada = {
+          'name': 'Nada',
+          'id': 3,
+          'selected': false,
+          'attending': null
+        };
         scope.uniqueSignUps.push(yes);
         scope.uniqueSignUps.push(no);
         scope.uniqueSignUps.push(nada);
       }
 
-      function getUniqueTeams(){
-        scope.uniqueTeams = _.chain(scope.serveTeams).map(function(team){
-          return { 'name': team.name, 'groupId': team.groupId };
+      function getUniqueTeams() {
+        scope.uniqueTeams = _.chain(scope.serveTeams).map(function(team) {
+          return {
+            'name': team.name,
+            'groupId': team.groupId
+          };
         }).uniq('groupId').value();
       }
 
-      function getUniqueTimes(){
+      function getUniqueTimes() {
         scope.uniqueTimes = _.chain(scope.times).map(function(time) {
-          return {time: time.time};
-        }).uniq("time").sortBy(function(n){
+          return {
+            time: time.time
+          };
+        }).uniq("time").sortBy(function(n) {
           return n.time;
         }).value();
       }
 
-      function initCheckBoxes(){
-        _.each(scope.uniqueMembers, function(member){
+      function initCheckBoxes() {
+        _.each(scope.uniqueMembers, function(member) {
           var found = filterState.findMember(member.contactId);
-          if (found !== undefined)
-          {
+          if (found !== undefined) {
             member.selected = true;
           }
         });
-        _.each(scope.uniqueTeams, function(team){
+        _.each(scope.uniqueTeams, function(team) {
           var found = filterState.findTeam(team.groupId);
-          if (found !== undefined)
-          {
+          if (found !== undefined) {
             team.selected = true;
           }
         });
-        _.each(scope.uniqueTimes, function(time){
+        _.each(scope.uniqueTimes, function(time) {
           var found = filterState.findTime(time.time);
-          if (found !== undefined)
-          {
+          if (found !== undefined) {
             time.selected = true;
           }
         });
@@ -296,19 +355,17 @@
       }
 
       function isFilterSet() {
-        return (filterState.memberIds.length >= 1
-                || filterState.times.length >= 1
-                || filterState.teams.length >= 1);
+        return (filterState.memberIds.length >= 1 || filterState.times.length >= 1 || filterState.teams.length >= 1);
       }
 
       function toggleCollapse() {
         if ($rootScope.mobile) {
-            scope.isCollapsed = !scope.isCollapsed;
+          scope.isCollapsed = !scope.isCollapsed;
         }
       }
 
-      function toggleFamilyMember(member){
-        if(member.selected){
+      function toggleFamilyMember(member) {
+        if (member.selected) {
           filterState.addFamilyMember(member.contactId);
         } else {
           filterState.removeFamilyMember(member.contactId);
@@ -318,14 +375,15 @@
 
       function toggleSignedUp(signUp) {
         if (signUp.selected) {
-          filterState.addSignUp(signUp.id);
+          filterState.addSignUp(signUp);
         } else {
-          filterState.removeSignUp(signUp.id);
+          filterState.removeSignUp(signUp);
         }
+        filterAll();
       }
 
-      function toggleTeam(team){
-        if(team.selected){
+      function toggleTeam(team) {
+        if (team.selected) {
           filterState.addTeam(team.groupId);
         } else {
           filterState.removeTeam(team.groupId);
@@ -333,8 +391,8 @@
         filterAll();
       }
 
-      function toggleTime(time){
-        if(time.selected){
+      function toggleTime(time) {
+        if (time.selected) {
           filterState.addTime(time.time);
         } else {
           filterState.removeTime(time.time);

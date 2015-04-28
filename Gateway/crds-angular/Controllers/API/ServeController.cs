@@ -167,7 +167,7 @@ namespace crds_angular.Controllers.API
                     Members = new List<TeamMember>
                     {
                         TeamMember1(),
-                        TeamMember2NotSignedUp(), TeamMember3()
+                        TeamMember2NotSignedUp()
                     }
                 }
             };
