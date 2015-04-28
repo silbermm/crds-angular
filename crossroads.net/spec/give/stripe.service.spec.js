@@ -1,5 +1,5 @@
 describe ('StripeService', function () {
-  var sut, stripe;
+  var sut, httpBackend, stripe;
 
   beforeEach(function() {
     module('crossroads.give');
@@ -10,8 +10,9 @@ describe ('StripeService', function () {
         card :
           {
             createToken : function(card) {
+              var last4 = card.number.slice(-4);
               return {
-                then : function(callback) {return callback({card: { last4: "1234"}});}
+                then : function(callback) {return callback({id: "tok_test", card: { last4: last4}});}
               }
             } 
           }
@@ -20,29 +21,48 @@ describe ('StripeService', function () {
     return null;
   })
   
-  beforeEach(inject(function(_$injector_, _stripe_) {
+  beforeEach(inject(function(_$injector_, $httpBackend, _StripeService_) {
       var $injector = _$injector_;
-      
-      //$httpBackend = $injector.get('$httpBackend');
+
+      sut = _StripeService_;
+      httpBackend = $httpBackend;
       stripe = $injector.get('stripe');
-      
-      sut = $injector.get('StripeService');
     })
   );
   
-  // afterEach(function() {
-  //   $httpBackend.flush();
-  //   $httpBackend.verifyNoOutstandingExpectation();
-  //   $httpBackend.verifyNoOutstandingRequest();
-  //  });
+  afterEach(function() {
+    httpBackend.flush();
+    httpBackend.verifyNoOutstandingExpectation();
+    httpBackend.verifyNoOutstandingRequest();
+   });
   
-  describe ('createCustomer', function () {
+  describe ('createCustomerWithCard', function() {
     beforeEach(function() {
+      var card = {
+        number : "4242424242424242",
+        exp_month : "12",
+        exp_year : "2016",
+        cvc : "123"
+      };
+      
+      var postData = {
+        tokenId: "tok_test"
+      }
       spyOn(stripe.card, 'createToken').and.callThrough();
-      sut.createCustomer();
+      httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/donor', postData)
+        .respond({
+          id: "12345"
+        });
+      this.result = sut.createCustomerWithCard(card);
     });
-    it('should create a single use token', function () {
+    
+    it('should create a single use token', function() {
       expect(stripe.card.createToken).toHaveBeenCalled();
+    });
+    
+    xit('should create a new customer', function() {
+      expect(this.result).toBeDefined();
+      expect(this.result.id).toEqual("12345");
     });
   });
 });
