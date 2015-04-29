@@ -28,6 +28,8 @@
 
         $httpProvider.defaults.useXDomain = true;
         $httpProvider.defaults.headers.common['Authorization'] = getCookie('sessionId');
+        // This is a dummy header that will always be returned in any 'Allow-Header' from any CORS request. This needs to be here because of IE.
+        $httpProvider.defaults.headers.common["X-Use-The-Force"] = true;
 
         // This custom type is needed to allow us to NOT URLEncode slashes when using ui-sref
         // See this post for details: https://github.com/angular-ui/ui-router/issues/1119
@@ -189,6 +191,11 @@
                  controller: "LoginCtrl",
                  templateUrl: "give/login.html"
            })
+           .state("give.register", {
+                 url: "/register",
+                 controller: "RegisterCtrl",
+                 templateUrl: "give/register.html"
+           })
            .state("give.account", {
                  url: "/account",
                  templateUrl: "give/account.html"
@@ -196,6 +203,11 @@
            .state("give.thank-you", {
              url: "/thank-you",
              templateUrl: "give/thank_you.html"
+           })
+           //Not a child route of give because I did not want to use the parent give template
+           .state("history", {
+             url: "/give/history",
+             templateUrl: "give/history.html"
            })
            .state("demo", {
              //abstract: true,
@@ -281,7 +293,7 @@
        templateUrl: 'mp_tools/tools.html',
        data: {
         hideMenu: true,
-        isProtected: true 
+        isProtected: true
        },
        resolve: {
         loggedin: checkLoggedin

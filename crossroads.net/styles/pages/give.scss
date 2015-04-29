@@ -90,3 +90,66 @@
     height: 12px;
     width: 20px;
 }
+
+// Giving History Styles
+
+.giving-history {
+  @media (min-width: $screen-md-min) {
+    .icon.visible-md {
+      display: inline-block !important;
+    }
+  }
+  @media (min-width: $screen-lg-min) {
+    .icon.visible-lg {
+      display: inline-block !important;
+    }
+  }
+}
+
+.gift-table {
+  border-bottom: 1px solid $table-border-color;
+}
+
+.gift-table, .recent-gifts {
+    .table-actions {
+        min-width: 100px;
+        a {
+            display: block;
+            padding-bottom: 5px;
+            padding-left: 8px;
+
+            .icon {
+              vertical-align: sub;
+            }
+        }
+    }
+    .dollar-amount {
+        @extend .text-success;
+        font-weight: bold;
+    }
+    .payment-type-icon {
+      vertical-align: middle;
+      height: 15px;
+      width: 17px;
+    }
+
+    .pending {
+      @extend .text-muted;
+
+      .dollar-amount {
+        @extend .text-muted;
+      }
+
+      span.label {
+        margin-left: $line-height-computed/4;
+      }
+
+      @media screen {
+        svg {
+          -webkit-filter: grayscale(100%);
+          filter: grayscale(100%);
+          filter: gray;
+        }
+      }
+    }
+}
