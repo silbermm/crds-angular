@@ -1,5 +1,5 @@
 describe ('StripeService', function () {
-  var sut, httpBackend, stripe;
+  var sut, result, httpBackend, stripe;
 
   beforeEach(function() {
     module('crossroads.give');
@@ -36,7 +36,7 @@ describe ('StripeService', function () {
     httpBackend.verifyNoOutstandingRequest();
    });
   
-  describe ('createCustomerWithCard', function() {
+  describe ('createDonorWithCard', function() {
     beforeEach(function() {
       var card = {
         number : "4242424242424242",
@@ -44,25 +44,30 @@ describe ('StripeService', function () {
         exp_year : "2016",
         cvc : "123"
       };
-      
+
       var postData = {
         tokenId: "tok_test"
       }
       spyOn(stripe.card, 'createToken').and.callThrough();
       httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/donor', postData)
         .respond({
-          id: "12345"
+          id: "12345",
+          stripe_customer_id: "cust_test"
         });
-      this.result = sut.createCustomerWithCard(card);
+      sut.createDonorWithCard(card)
+        .then(function(donor) {
+          result = donor;
+        });
     });
     
     it('should create a single use token', function() {
       expect(stripe.card.createToken).toHaveBeenCalled();
     });
     
-    xit('should create a new customer', function() {
-      expect(this.result).toBeDefined();
-      expect(this.result.id).toEqual("12345");
+    it('should create a new donor', function() {
+      expect(result).toBeDefined();
+      expect(result.id).toEqual("12345");
+      expect(result.stripe_customer_id).toEqual("cust_test");
     });
   });
 });

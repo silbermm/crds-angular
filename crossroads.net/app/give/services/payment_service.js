@@ -2,21 +2,32 @@
 
   module.exports = PaymentService;
 
-  function PaymentService($log, $http, stripe) {
-    var payment_service = {};
+  function PaymentService($log, $http, $q, stripe) {
+    var payment_service = {
+      donor : {},
+      createDonorWithCard : createDonorWithCard
+    };
     
     stripe.setPublishableKey(__STRIPE_PUBKEY__);
     
-    payment_service.createCustomerWithCard = function(card) {
-
+    function createDonorWithCard(card) {
+      var def = $q.defer();    
       stripe.card.createToken(card)
         .then(function (token) {
-          console.log('token created for card ending in ', token.card.last4);
           var donor_request = {
             tokenId: token.id
           }
-          $http.post(__API_ENDPOINT__ + 'api/donor', donor_request);
+          $http.post(__API_ENDPOINT__ + 'api/donor', donor_request)
+            .success(function(data) {
+              payment_service.donor = data;
+              def.resolve(data);
+            })
+            .error(function(data) {
+              def.reject(data.message);
+            });
         });
+        
+      return def.promise;
     }
     
     return payment_service;
