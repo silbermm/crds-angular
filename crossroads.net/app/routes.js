@@ -28,6 +28,7 @@
 
         $httpProvider.defaults.useXDomain = true;
         $httpProvider.defaults.headers.common['Authorization'] = getCookie('sessionId');
+        $httpProvider.defaults.headers.common["X-Use-The-Force"] = true;
 
         // This custom type is needed to allow us to NOT URLEncode slashes when using ui-sref
         // See this post for details: https://github.com/angular-ui/ui-router/issues/1119
