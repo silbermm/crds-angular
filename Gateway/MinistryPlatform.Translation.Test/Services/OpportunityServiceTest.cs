@@ -374,6 +374,7 @@ namespace MinistryPlatform.Translation.Test.Services
         public void ShouldGetAllEventDates()
         {
             const int opportunityId = 145;
+            var today = DateTime.Today;
 
             var expectedEventType = new Dictionary<string, object>
             {
@@ -383,22 +384,21 @@ namespace MinistryPlatform.Translation.Test.Services
             {
                 new Dictionary<string, object>
                 {
-                    {"Event_Start_Date", "10/11/15 08:30am"}
+                    {"Event_Start_Date", today.AddDays(-7)}
                 },
                 new Dictionary<string, object>
                 {
-                     {"Event_Start_Date", "10/18/15 08:30am"}
+                     {"Event_Start_Date", today}
                 }, 
                 new Dictionary<string, object>
                 {
-                     {"Event_Start_Date", "10/25/15 08:30am"}
+                     {"Event_Start_Date", today.AddDays(7)}
                 }
             };
             var expectedDates = new List<DateTime>
             {
-                DateTime.Parse("10/11/15 08:30am"),
-                DateTime.Parse("10/18/15 08:30am"),
-                DateTime.Parse("10/25/15 08:30am")
+                today,
+                today.AddDays(7)
             };
 
             _ministryPlatformService.Setup(
@@ -410,7 +410,7 @@ namespace MinistryPlatform.Translation.Test.Services
 
             var dates = _fixture.GetAllOpportunityDates(opportunityId, It.IsAny<string>());
             Assert.IsNotNull(dates);
-            Assert.AreEqual(3, dates.Count);
+            Assert.AreEqual(2, dates.Count);
             Assert.AreEqual(expectedDates, dates);
         }
 
