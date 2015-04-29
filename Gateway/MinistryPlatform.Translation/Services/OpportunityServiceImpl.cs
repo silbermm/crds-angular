@@ -133,7 +133,7 @@ namespace MinistryPlatform.Translation.Services
             //grab the last one
             try
             {
-                return events.Last(); ;
+                return events.Last();
             }
             catch (InvalidOperationException ex)
             {
