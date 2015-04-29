@@ -3,7 +3,8 @@ require('./amount.html');
 require('./login.html');
 require('./account.html');
 require('./thank_you.html');
-require('./give.module.js'); 
+require('./history.html');
+require('./give.module.js');
 
 var app = require('angular').module('crossroads.give');
 app.factory("getPrograms", require('./services/getPrograms.service.js'));

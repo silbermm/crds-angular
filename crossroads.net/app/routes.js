@@ -197,6 +197,11 @@
              url: "/thank-you",
              templateUrl: "give/thank_you.html"
            })
+           //Not a child route of give because I did not want to use the parent give template
+           .state("history", {
+             url: "/give/history",
+             templateUrl: "give/history.html"
+           })
            .state("demo", {
              //abstract: true,
              url: '/demo',
@@ -281,7 +286,7 @@
        templateUrl: 'mp_tools/tools.html',
        data: {
         hideMenu: true,
-        isProtected: true 
+        isProtected: true
        },
        resolve: {
         loggedin: checkLoggedin
