@@ -1,7 +1,7 @@
-require('./bankInfo.html');
+require('../bankInfo.html');
 (function () {
     angular
-    .module('bank-info',[])
+    .module('crossroads.give')
     .directive('bankInfo', ['$log', bankInfo]);
 
     function bankInfo($log) {

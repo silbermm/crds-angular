@@ -47,7 +47,7 @@
     "karma-teamcity-reporter": "^0.1.2",
     "phantomjs-polyfill": "0.0.1",
     "protractor": "^2.0.0",
-    "sass-loader": "^0.4.0-beta.1",
+    "sass-loader": "0.4.2",
     "style-loader": "^0.8.3",
     "svgo": "^0.5.0",
     "url-loader": "^0.5.5",
@@ -84,6 +84,7 @@
     "angular-growl": "./app/third-party/angular/angular-growl.js",
     "bootstrap-dropdown": "./node_modules/bootstrap/js/dropdown.js",
     "angular-ui-utils": "./app/third-party/angular/ui-utils.min.js",
+    "angular-ui-select": "./app/third-party/angular/select.min.js",
     "angular-aside": "./app/third-party/angular/angular-aside.min.js",
     "angular-match-media": "./app/third-party/angular/match-media.js",
     "angular-payments": "./app/third-party/angular/angular.payments.js"

@@ -24,9 +24,7 @@
   require('./go_trip_giving');
   var getCookie = require('./utilities/cookies');
 
-
-
-    angular.module("crossroads").config(["$stateProvider", "$urlRouterProvider", "$httpProvider", "$urlMatcherFactoryProvider", function ($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory) {
+  angular.module("crossroads").config(["$stateProvider", "$urlRouterProvider", "$httpProvider", "$urlMatcherFactoryProvider", "$locationProvider", function ($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory, $locationProvider) {
 
         $httpProvider.defaults.useXDomain = true;
         $httpProvider.defaults.headers.common['Authorization'] = getCookie('sessionId');
@@ -199,6 +197,11 @@
              url: "/thank-you",
              templateUrl: "give/thank_you.html"
            })
+           //Not a child route of give because I did not want to use the parent give template
+           .state("history", {
+             url: "/give/history",
+             templateUrl: "give/history.html"
+           })
            .state("demo", {
              //abstract: true,
              url: '/demo',
@@ -276,6 +279,23 @@
                 resolve: {
                     loggedin: checkLoggedin
                 }
+    })
+    .state("tools", {
+       abstract: true,
+       url: '/mptools',
+       templateUrl: 'mp_tools/tools.html',
+       data: {
+        hideMenu: true,
+        isProtected: true
+       },
+       resolve: {
+        loggedin: checkLoggedin
+       }
+    })
+    .state("tools.su2s", {
+      url: '/su2s',
+      controller: 'SignupToServeController as su2s',
+      templateUrl: 'signup_to_serve/su2s.html'
     })
     .state("content", {
     // This url will match a slash followed by anything (including additional slashes).

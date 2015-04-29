@@ -47,7 +47,7 @@ namespace crds_angular.Controllers.API
                     }
                     else
                     {
-                        var l = new LoginReturn(token, person.ContactId, person.FirstName);
+                        var l = new LoginReturn(token, person.ContactId, person.FirstName, person.EmailAddress);
                         return this.Ok(l);
                     }
                 }
@@ -73,7 +73,8 @@ namespace crds_angular.Controllers.API
             {
                 userToken = token,
                 userId = p.ContactId,
-                username = p.FirstName
+                username = p.FirstName,
+                userEmail = p.EmailAddress
             };
             return this.Ok(r);
         }
@@ -82,7 +83,7 @@ namespace crds_angular.Controllers.API
     public class LoginReturn
     {
         public LoginReturn(){}
-        public LoginReturn(string userToken, int userId, string username){
+        public LoginReturn(string userToken, int userId, string username, string userEmail){
             this.userId = userId;
             this.userToken = userToken;
             this.username = username;
@@ -90,6 +91,7 @@ namespace crds_angular.Controllers.API
         public string userToken { get; set; }
         public int userId { get; set; }
         public string username { get; set; }
+        public string userEmail { get; set;  }
     }
 
     public class Credentials

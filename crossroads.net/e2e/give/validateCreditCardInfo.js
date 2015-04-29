@@ -7,6 +7,20 @@ describe('Crossroads App', function() {
     var creditCardButton = element(by.buttonText("Credit Card")).click();
   });
 
+  it('It should display an error message for an invalid email address', function() {
+    var zipInput = element(by.id('give-email'));
+    zipInput.sendKeys("1234.net");
+    zipInput.sendKeys(protractor.Key.TAB);
+    expect(element(by.id('give-email')).getAttribute('class')).toMatch('ng-invalid-email');
+  });
+
+  it('It should not display an error message for a valid email address', function() {
+    var zipInput = element(by.id('give-email'));
+    zipInput.sendKeys("cross@roads.net");
+    zipInput.sendKeys(protractor.Key.TAB);
+    expect(element(by.id('give-email')).getAttribute('class')).toMatch('ng-valid-email');
+  });
+
   it('It should display an error message for an invalid credit card number', function() {
     var cardInput = element(by.model('give.ccNumber'));
     cardInput.sendKeys("6511000000000000");
@@ -15,7 +29,7 @@ describe('Crossroads App', function() {
     expect(ccNumberErrorMessage.isDisplayed()).toBeTruthy();
   });
 
-  it('It should not display an error message for an invalid credit card number', function() {
+  it('It should not display an error message for a valid credit card number', function() {
     var cardInput = element(by.model('give.ccNumber'));
     cardInput.sendKeys("378282246310005");
     cardInput.sendKeys(protractor.Key.TAB);
@@ -34,7 +48,7 @@ describe('Crossroads App', function() {
     expect(cvvErrorMessage.isDisplayed()).toBeTruthy();
   });
 
-  it('It should display an error message for invalid cvv number', function() {
+  it('It should not display an error message for a valid cvv number', function() {
     //need a valid CCNumber for CVV check
     var cardInput = element(by.model('give.ccNumber'));
     cardInput.sendKeys("378282246310005");
@@ -52,24 +66,9 @@ describe('Crossroads App', function() {
     expect(element(by.model('give.billingZipCode')).getAttribute('class')).toMatch('ng-invalid-invalid-zip');
   });
 
-  it('It should not display any error messages because all data is valid', function() {
-    var nameInput = element(by.model('give.nameOnCard'));
-    nameInput.sendKeys("Joe F. Smith, Jr");
-    nameInput.sendKeys(protractor.Key.TAB);
-    expect(element(by.model('give.nameOnCard')).getAttribute('class')).toMatch('ng-valid');
-
-    var cardInput = element(by.model('give.ccNumber'));
-    cardInput.sendKeys("6011111111111117");
-    cardInput.sendKeys(protractor.Key.TAB);
-    //expect $root.messages[$root.MESSAGES.invalidCard].message to not diplay
-
-    var cvvInput = element(by.model('give.cvc'));
-    cvvInput.sendKeys("123");
-    cvvInput.sendKeys(protractor.Key.TAB);
-    //expect $root.messages[$root.MESSAGES.invalidCvv].message to not display
-
+  it('It should not display an error message for a valid zip code', function() {
     var zipInput = element(by.model('give.billingZipCode'));
-    zipInput.sendKeys("12345-1234");
+    zipInput.sendKeys("45202-1236");
     zipInput.sendKeys(protractor.Key.TAB);
     expect(element(by.model('give.billingZipCode')).getAttribute('class')).toMatch('ng-valid-invalid-zip');
   });

@@ -224,6 +224,7 @@
     <Compile Include="Controllers\API\AccountController.cs" />
     <Compile Include="Controllers\API\EventLocationController.cs" />
     <Compile Include="Controllers\API\GroupController.cs" />
+    <Compile Include="Controllers\API\ProgramController.cs" />
     <Compile Include="Controllers\API\ServeController.cs" />
     <Compile Include="Controllers\API\UserController.cs" />
     <Compile Include="Controllers\API\LoginController.cs" />
@@ -238,11 +239,14 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Crossroads\Opportunity\OpportunityGroup.cs" />
+    <Compile Include="Models\Crossroads\Opportunity\OpportunityGroupParticipant.cs" />
     <Compile Include="Models\Crossroads\PartID.cs" />
     <Compile Include="Models\Crossroads\GroupDTO.cs" />
     <Compile Include="Models\Crossroads\AccountInfo.cs" />
     <Compile Include="Models\Crossroads\CookieInfo.cs" />
     <Compile Include="Models\Crossroads\FamilyMember.cs" />
+    <Compile Include="Models\Crossroads\ProgramDTO.cs" />
     <Compile Include="Models\Crossroads\ServeOccurance.cs" />
     <Compile Include="Models\Crossroads\Serve\SaveRsvpDto.cs" />
     <Compile Include="Models\Crossroads\Serve\ServeRsvp.cs" />

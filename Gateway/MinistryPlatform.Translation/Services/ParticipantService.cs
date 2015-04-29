@@ -24,9 +24,10 @@ namespace MinistryPlatform.Translation.Services
             //var records = new List<Dictionary<string, object>>();
             try
             {
+                var searchStr = contactId.ToString() + ",";
                 var records =
                     WithApiLogin<List<Dictionary<string, object>>>(
-                        apiToken => (_ministryPlatformService.GetPageViewRecords("ParticipantByContactId", apiToken, contactId.ToString(), "")));
+                        apiToken => (_ministryPlatformService.GetPageViewRecords("ParticipantByContactId", apiToken, searchStr, "")));
                 var record = records.Single();
                  participant = new Participant
                 {
@@ -38,7 +39,7 @@ namespace MinistryPlatform.Translation.Services
             catch (Exception ex)
             {
                 throw new ApplicationException(
-                    string.Format("GetParticipant failed.  Contact Id: {0}",contactId), ex.InnerException);
+                    string.Format("GetParticipant failed.  Contact Id: {0}",contactId), ex);
             }
             
 

@@ -1,16 +1,3 @@
-/** Add/remove floats **/
-
-.float-right {
-    float: right;
-}
-
-.float-left {
-    float: left;
-}
-
-.float-none {
-    float: none;
-}
 /** Font weights **/
 
 .weight-light {
@@ -24,6 +11,11 @@
 .weight-semibold {
     font-weight: 600;
 }
+
+.bold {
+    font-weight: bold;
+}
+
 /** Font styles **/
 
 .text-lowercase {
@@ -38,6 +30,7 @@
 .full-width {
     width: 100%;
 }
+
 /** Add/remove margins **/
 
 .push {
@@ -313,16 +306,16 @@
     vertical-align: middle;
 }
 
-.bold {
-    font-weight: bold;
-}
-
 .smaller {
     font-size: 70%;
 }
 
 .pointer {
     cursor: pointer;
+}
+
+.sub {
+  vertical-align: sub;
 }
 
 .or-divider {
@@ -340,6 +333,33 @@
   border: 0px !important;
 }
 
+@media (min-width: $screen-lg-min) {
+  .lg-pull-right {
+    float: right;
+  }
+  .lg-pull-left {
+    float: left;
+  }
+}
+
+@media (min-width: $screen-md-min) {
+  .md-pull-right {
+    float: right;
+  }
+  .md-pull-left {
+    float: left;
+  }
+}
+
+@media (min-width: $screen-sm-min) {
+  .sm-pull-right {
+    float: right;
+  }
+  .sm-pull-left {
+    float: left;
+  }
+}
+
 // Empty href attributes for UI Bootstrap
 .nav,
 .pagination,
@@ -349,17 +369,17 @@
 }
 
 .img-full-width {
-    width: 100%;
-    height: auto;
+  width: 100%;
+  height: auto;
 }
 
 // Style normal text link a link
 .link-styling {
-    color: $link-color;
-    cursor: pointer;
-    &:hover {
-        color: $link-hover-color;
-    }
+  color: $link-color;
+  cursor: pointer;
+  &:hover {
+    color: $link-hover-color;
+  }
 }
 
 // Auto width columns
