@@ -19,7 +19,7 @@ namespace crds_angular.Exceptions.Models
             var errors = new List<string> {exception.Message};
             if (exception.InnerException != null)
             {
-                this.Errors.Add(exception.InnerException.Message);
+                errors.Add(exception.InnerException.Message);
             }
             this.Errors = errors;
         }

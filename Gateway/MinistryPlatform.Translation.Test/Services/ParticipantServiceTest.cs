@@ -30,7 +30,7 @@ namespace MinistryPlatform.Translation.Test.Services
             const int contactId = 99999;
 
             const string viewKey = "ParticipantByContactId";
-            var searchString = contactId.ToString();
+            var searchString = contactId.ToString() + ",";
             var mockDictionaryList = new List<Dictionary<string, object>>
             {
                 new Dictionary<string, object>{

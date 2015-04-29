@@ -45,9 +45,10 @@ namespace crds_angular.Controllers.API
                     }
                     return this.Ok(servingDays);
                 }
-                catch (Exception e)
+                catch (Exception exception)
                 {
-                    return this.BadRequest(e.Message);
+                    var apiError = new ApiErrorDto("Get Family Serve Days Failed", exception);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
             });
         }
