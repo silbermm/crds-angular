@@ -28,6 +28,7 @@
 
         $httpProvider.defaults.useXDomain = true;
         $httpProvider.defaults.headers.common['Authorization'] = getCookie('sessionId');
+        // This is a dummy header that will always be returned in any 'Allow-Header' from any CORS request. This needs to be here because of IE.
         $httpProvider.defaults.headers.common["X-Use-The-Force"] = true;
 
         // This custom type is needed to allow us to NOT URLEncode slashes when using ui-sref
