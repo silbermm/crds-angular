@@ -121,10 +121,10 @@ namespace MinistryPlatform.Translation.Services
 
             //Now get all the events for this type
             var searchString = ",," + eventType;
-            var sort = "0";
-            var events = _ministryPlatformService.GetRecordsDict(_eventPage, token, searchString, sort);
-
-            return events.Select(e => DateTime.Parse(e["Event_Start_Date"].ToString())).Where(eDate => eDate >= DateTime.Today).ToList();
+            var events = _ministryPlatformService.GetRecordsDict(_eventPage, token, searchString);
+            var filteredEvents = events.Select(e => DateTime.Parse(e["Event_Start_Date"].ToString())).Where(eDate => eDate >= DateTime.Today).OrderBy(d => d).ToList();
+            filteredEvents.Sort();
+            return filteredEvents;
         }
 
         public DateTime GetLastOpportunityDate(int opportunityId, string token)
