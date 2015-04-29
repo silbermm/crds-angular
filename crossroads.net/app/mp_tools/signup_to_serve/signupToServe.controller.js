@@ -80,6 +80,13 @@
             vm.eventDates.push((dateObj.getMonth() + 1) + "/" + dateObj.getDate() + "/" + dateObj.getFullYear());
           })
         });
+      } 
+      else {
+        ServeOpportunities.LastOpportunityDate.get({"id": vm.params.recordId}, function(ret) {
+          var dateNum = Number(ret.date * 1000);
+          var toDate = new Date(dateNum);
+          vm.toDt = (toDate.getMonth() + 1) + "/" + toDate.getDate() + "/" + toDate.getFullYear();
+        });
       }
     }
 
