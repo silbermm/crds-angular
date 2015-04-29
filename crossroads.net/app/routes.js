@@ -190,6 +190,11 @@
                  controller: "LoginCtrl",
                  templateUrl: "give/login.html"
            })
+           .state("give.register", {
+                 url: "/register",
+                 controller: "RegisterCtrl",
+                 templateUrl: "give/register.html"
+           })
            .state("give.account", {
                  url: "/account",
                  templateUrl: "give/account.html"
