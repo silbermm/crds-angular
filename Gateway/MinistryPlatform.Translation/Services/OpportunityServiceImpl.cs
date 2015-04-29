@@ -124,7 +124,7 @@ namespace MinistryPlatform.Translation.Services
             var sort = "0";
             var events = _ministryPlatformService.GetRecordsDict(_eventPage, token, searchString, sort);
 
-            return events.Select(e => DateTime.Parse(e["Event_Start_Date"].ToString())).ToList();
+            return events.Select(e => DateTime.Parse(e["Event_Start_Date"].ToString())).Where(eDate => eDate >= DateTime.Today).ToList();
         }
 
         public DateTime GetLastOpportunityDate(int opportunityId, string token)
