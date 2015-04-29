@@ -23,6 +23,7 @@
         text: "Every Other Week"
       }];
     vm.group = {};
+    vm.open = open;
     vm.params = MPTools.getParams();
     vm.populateDates = populateDates;
     vm.saveRsvp = saveRsvp;
@@ -43,6 +44,12 @@
 
     function cancel(){
       $window.close();
+    }
+
+    function open($event, opened) {
+      $event.preventDefault();
+      $event.stopPropagation();
+      vm[opened] = true;
     }
 
     function parseDate(stringDate) {

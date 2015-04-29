@@ -67,18 +67,18 @@
         <div class="form-group">
           <label>From:</label>
           <div class="input-group">
-            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="su2s.fromDt" is-open="fromOpened" min-date="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" close-text="Close" />
+            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="su2s.fromDt" is-open="su2s.fromOpened" min-date="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" close-text="Close" />
             <span class="input-group-btn">
-              <button type="button" class="btn btn-default" ng-click="open($event, 'fromOpened')"><i class="glyphicon glyphicon-calendar"></i></button>
+              <button type="button" class="btn btn-default" ng-click="su2s.open($event, 'fromOpened')"><i class="glyphicon glyphicon-calendar"></i></button>
             </span>
           </div>
         </div>
         <div class="form-group">
           <label>To:</label>
           <div class="input-group">
-            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="su2s.toDt" is-open="toOpened" min-date="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" close-text="Close" />
+            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="su2s.toDt" is-open="su2s.toOpened" min-date="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" close-text="Close" />
             <span class="input-group-btn">
-              <button type="button" class="btn btn-default" ng-click="open($event, 'toOpened')"><i class="glyphicon glyphicon-calendar"></i></button>
+              <button type="button" class="btn btn-default" ng-click="su2s.open($event, 'toOpened')"><i class="glyphicon glyphicon-calendar"></i></button>
             </span>
           </div>
         </div>
