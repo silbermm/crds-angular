@@ -17,15 +17,14 @@ namespace crds_angular.Controllers.API
 {
     public class ServeController : MPAuth
     {
+        private readonly IAuthenticationService _authenticationService;
         private readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        //private IPersonService _personService;
-        private IServeService _serveService;
-        private IAuthenticationService _authenticationService;
+        private readonly IServeService _serveService;
 
         public ServeController(IServeService serveService, IAuthenticationService authenticationService)
         {
-            this._serveService = serveService;
-            this._authenticationService = authenticationService;
+            _serveService = serveService;
+            _authenticationService = authenticationService;
         }
 
         [ResponseType(typeof (List<ServingDay>))]
@@ -41,11 +40,12 @@ namespace crds_angular.Controllers.API
                     {
                         return Unauthorized();
                     }
-                    return this.Ok(servingDays);
+                    return Ok(servingDays);
                 }
-                catch (Exception e)
+                catch (Exception exception)
                 {
-                    return this.BadRequest(e.Message);
+                    var apiError = new ApiErrorDto("Get Family Serve Days Failed", exception);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
             });
         }
@@ -62,7 +62,7 @@ namespace crds_angular.Controllers.API
                 {
                     return Unauthorized();
                 }
-                return this.Ok(list);
+                return Ok(list);
             });
         }
 
@@ -95,7 +95,7 @@ namespace crds_angular.Controllers.API
                     var apiError = new ApiErrorDto("Save RSVP Failed", exception);
                     throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
-                return this.Ok();
+                return Ok();
             });
         }
     }

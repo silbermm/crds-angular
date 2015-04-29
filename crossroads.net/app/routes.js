@@ -189,6 +189,11 @@
                  controller: "LoginCtrl",
                  templateUrl: "give/login.html"
            })
+           .state("give.register", {
+                 url: "/register",
+                 controller: "RegisterCtrl",
+                 templateUrl: "give/register.html"
+           })
            .state("give.account", {
                  url: "/account",
                  templateUrl: "give/account.html"
@@ -196,6 +201,11 @@
            .state("give.thank-you", {
              url: "/thank-you",
              templateUrl: "give/thank_you.html"
+           })
+           //Not a child route of give because I did not want to use the parent give template
+           .state("history", {
+             url: "/give/history",
+             templateUrl: "give/history.html"
            })
            .state("demo", {
              //abstract: true,
@@ -281,7 +291,7 @@
        templateUrl: 'mp_tools/tools.html',
        data: {
         hideMenu: true,
-        isProtected: true 
+        isProtected: true
        },
        resolve: {
         loggedin: checkLoggedin
