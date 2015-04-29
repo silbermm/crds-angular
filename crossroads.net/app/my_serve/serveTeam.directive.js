@@ -36,16 +36,7 @@
       };
       scope.displayEmail = displayEmail;
       scope.editProfile = editProfile;
-      scope.frequency = [{
-        value: 0,
-        text: "Once"
-      }, {
-        value: 1,
-        text: "Every Week"
-      }, {
-        value: 2,
-        text: "Every Other Week"
-      }];
+      scope.frequency = getFrequency();
       scope.format = 'MM/dd/yyyy';
       scope.populateDates = populateDates;
       scope.isActiveTab = isActiveTab;
@@ -122,6 +113,24 @@
           $rootScope.$emit("personUpdated", person);
         });
       };
+
+      function getFrequency() {
+        var dateTime = moment(scope.oppServeDate + " " + scope.opportunity.time);
+         var onceDate = dateTime.format("M/D/YYYY h:ma");
+         var weeklyDay = moment(scope.oppServeDate).format("dddd") + "s";
+         var weeklyTime = dateTime.format("h:ma");
+
+         var onceLabel = "Once " + onceDate
+         var weeklyLabel = weeklyDay + " " + weeklyTime;
+
+        // var formattedDate = scope.oppServeDate;
+        //var formattedTime = moment(scope.opportunity.time).format("h:ma");
+        var once = { value: 0, text: onceLabel };
+        var everyWeek = { value: 1, text: "Every Week " + weeklyLabel };
+        var everyOtherWeek = { value: 2, text: "Every Other Week " + weeklyLabel };
+        var frequency =  [once, everyWeek, everyOtherWeek];
+        return frequency;
+      }
 
       function getPanelId() {
         return "team-panel-" + scope.dayIndex + scope.tabIndex + scope.teamIndex;
