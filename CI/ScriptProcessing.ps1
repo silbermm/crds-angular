@@ -10,17 +10,17 @@ $exitCode = 0
 Get-ChildItem $args | Foreach-Object {
   $hashObj = Get-FileHash $_.FullName -Algorithm MD5
   $hash = $hashObj.hash
-  $output = & C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn\sqlcmd.exe -S mp-int-db.cloudapp.net -b -Q "IF NOT EXISTS(SELECT 1 FROM [MinistryPlatform].[dbo].[cr_Scripts] WHERE [MD5] = '$hash') INSERT INTO [MinistryPlatform].[dbo].[cr_Scripts] ([Name] ,[MD5]) VALUES ('$_','$hash')"
+  $output = & 'C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn\sqlcmd.exe' -S mp-int-db.cloudapp.net -b -Q "IF NOT EXISTS(SELECT 1 FROM [MinistryPlatform].[dbo].[cr_Scripts] WHERE [MD5] = '$hash') INSERT INTO [MinistryPlatform].[dbo].[cr_Scripts] ([Name] ,[MD5]) VALUES ('$_','$hash')"
   if($LASTEXITCODE -ne 0){
 		echo "Error: $output"
 		$exitCode = $LASTEXITCODE
 	} else {
-  	$output = & C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn\sqlcmd.exe -S mp-int-db.cloudapp.net -b -i $_
+  	$output = & 'C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn\sqlcmd.exe' -S mp-int-db.cloudapp.net -b -i $_
 	if($LASTEXITCODE -ne 0){
 		echo "Error: $output"
 		$exitCode = $LASTEXITCODE
 	}
-  	$output = & C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn\sqlcmd.exe -S mp-int-db.cloudapp.net -b -Q "Update [MinistryPlatform].[dbo].[cr_Scripts] set executed=1 where [MD5] = '$hash'"
+  	$output = & 'C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn\sqlcmd.exe' -S mp-int-db.cloudapp.net -b -Q "Update [MinistryPlatform].[dbo].[cr_Scripts] set executed=1 where [MD5] = '$hash'"
 	if($LASTEXITCODE -ne 0){
 		echo "Error: $output"
 		$exitCode = $LASTEXITCODE
