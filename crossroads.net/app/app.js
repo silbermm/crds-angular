@@ -165,6 +165,7 @@ var _ = require('lodash');
     ])
     .directive("emptyToNull", require('./shared/emptyToNull.directive.js'))
     .directive("stopEvent", require('./shared/stopevent.directive.js'))
+    .directive("requireMultiple", require('./shared/requireMultiple.directive.js'))
     .directive("svgIcon", require('./shared/svgIcon.directive.js'));
 
     require('./preloader'); 

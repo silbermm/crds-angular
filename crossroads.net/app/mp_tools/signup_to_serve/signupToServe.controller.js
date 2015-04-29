@@ -76,7 +76,11 @@
       }
     }
 
-    function saveRsvp(){
+    function saveRsvp(isValid){
+      if(!isValid){
+        return ;
+      }
+
       _.each(vm.participants, function(participant){
         var saveRsvp = new ServeOpportunities.SaveRsvp();
         saveRsvp.contactId = participant.contactId;
