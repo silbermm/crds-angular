@@ -18,7 +18,7 @@ describe('Signup To Serve Tool', function(){
      }]
   };
   
-  beforeEach(module('crossroads.mptools'));
+  beforeEach(module('crossroads'));
  
   beforeEach(inject(function(_$location_){
     $location = _$location_
@@ -35,24 +35,27 @@ describe('Signup To Serve Tool', function(){
     });
   }));
 
-  var $controller, $log, mockSu2sResource, $httpBackend, MPTools;
+  var $controller, $log, mockSu2sResource, mockServeResource, $httpBackend, MPTools, $window;
 
-  beforeEach(inject(function(_$controller_, _$log_, _MPTools_, $injector){
+  beforeEach(inject(function(_$controller_, _$log_, _MPTools_, _$window_, $injector){
     $controller = _$controller_;
     $log = _$log_;
+    $window = _$window_;
     MPTools = _MPTools_;
     $httpBackend = $injector.get('$httpBackend');
     mockSu2sResource = $injector.get('Su2sData');
+    mockServeResource = $injector.get('ServeOpportunities');
   }));
 
   describe('Signup To Serve Controller', function(){ 
+    
     var $scope, controller;
 
-    beforeEach(inject(function($log, $httpBackend){
+    beforeEach(function(){
       $scope = {};
       controller = $controller('SignupToServeController', { $scope: $scope });
       $httpBackend.expectGET( window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getGroupParticipantsForOpportunity/2923').respond(expectedReturn);
-    })); 
+    }); 
 
     it("should get the correct query parameters", function(){
       expect(controller.params.userGuid).toBe('c29e64a5-820b-461f-a57c-5831d070d578');

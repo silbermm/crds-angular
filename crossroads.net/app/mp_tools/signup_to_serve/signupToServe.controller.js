@@ -4,9 +4,9 @@
 
   angular.module('crossroads.mptools').controller('SignupToServeController', SignupToServeController);
 
-  SignupToServeController.$inject = ['$log', '$location', 'MPTools', 'Su2sData', 'ServeOpportunities', '$window'];
+  SignupToServeController.$inject = ['$log', '$location', '$window', 'MPTools', 'Su2sData', 'ServeOpportunities' ];
 
-  function SignupToServeController($log, $location, MPTools, Su2sData, ServeOpportunities, $window){
+  function SignupToServeController($log, $location, $window, MPTools, Su2sData, ServeOpportunities){
     var vm = this; 
   
     vm.allParticipants = [];

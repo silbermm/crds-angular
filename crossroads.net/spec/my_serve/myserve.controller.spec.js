@@ -16,7 +16,6 @@ describe('MyServeController', function() {
   describe('Serve Controller', function(){ 
     var $scope, controller;
    
-    //TODO: Need to find a way to get the environment variable!
     beforeEach(inject(function($log, $httpBackend){
       $scope = {};
       controller = $controller('MyServeController', { $scope: $scope });
