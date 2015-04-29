@@ -92,6 +92,8 @@
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\ContactRelationshipService.cs" />
     <Compile Include="Services\ContactService.cs" />
+    <Compile Include="Services\CreatePageRecordService.cs" />
+    <Compile Include="Services\DonorService.cs" />
     <Compile Include="Services\EventService.cs" />
     <Compile Include="Services\CommunicationService.cs" />
     <Compile Include="Services\GetMyRecords.cs" />
@@ -99,6 +101,7 @@
     <Compile Include="Services\Interfaces\IAuthenticationService.cs" />
     <Compile Include="Services\Interfaces\IContactRelationshipService.cs" />
     <Compile Include="Services\Interfaces\IContactService.cs" />
+    <Compile Include="Services\Interfaces\IDonorService.cs" />
     <Compile Include="Services\Interfaces\IEventService.cs" />
     <Compile Include="Services\Interfaces\IGroupService.cs" />
     <Compile Include="Services\Interfaces\IMinistryPlatformService.cs" />
