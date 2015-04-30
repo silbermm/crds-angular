@@ -17,6 +17,8 @@ describe('Signup To Serve Tool', function(){
       nickname: 'Andy',
      }]
   };
+
+  var expectedDates = [1430382600,1430469000,1430555400,1430641800];
   
   beforeEach(module('crossroads'));
  
@@ -55,6 +57,7 @@ describe('Signup To Serve Tool', function(){
       $scope = {};
       controller = $controller('SignupToServeController', { $scope: $scope });
       $httpBackend.expectGET( window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getGroupParticipantsForOpportunity/2923').respond(expectedReturn);
+      $httpBackend.expectGET( window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getAllOpportunityDates/2923').respond(expectedDates);
     }); 
 
     it("should get the correct query parameters", function(){
