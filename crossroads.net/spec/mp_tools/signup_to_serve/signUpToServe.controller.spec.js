@@ -1,36 +1,36 @@
 describe('Signup To Serve Tool', function(){
 
-  var expectedReturn = { 
-    groupId: 23, 
-    groupName: "Kids Club Nursery", 
-    groupParticipants: [ 
+  var expectedReturn = {
+    groupId: 23,
+    groupName: "Kids Club Nursery",
+    groupParticipants: [
      {
-      contactId: 23456, 
-      firstname: "Matt", 
+      contactId: 23456,
+      firstname: "Matt",
       lastname: 'Silbernagel',
       nickname: 'Matt',
      },
      {
-      contactId: 23457, 
-      firstname: "Andy", 
+      contactId: 23457,
+      firstname: "Andy",
       lastname: 'Canterbury',
       nickname: 'Andy',
      }]
   };
-  
+
   beforeEach(module('crossroads'));
- 
+
   beforeEach(inject(function(_$location_){
     $location = _$location_
     spyOn($location, 'search').and.returnValue({
       dg:'8b6242c9-ea32-40f7-97a2-e2bb3524ced2',
-      'ug':'c29e64a5-820b-461f-a57c-5831d070d578', 
+      'ug':'c29e64a5-820b-461f-a57c-5831d070d578',
       pageID:'292',
       recordID:'2923',
       recordDescription: undefined,
-      s:'11467', 
-      sc:'1', 
-      p:0, 
+      s:'11467',
+      sc:'1',
+      p:0,
       v:387
     });
   }));
@@ -47,21 +47,29 @@ describe('Signup To Serve Tool', function(){
     mockServeResource = $injector.get('ServeOpportunities');
   }));
 
-  describe('Signup To Serve Controller', function(){ 
-    
+  describe('Signup To Serve Controller', function(){
+
     var $scope, controller;
 
-    beforeEach(function(){
+    // beforeEach(function(){
+    //   $scope = {};
+    //   controller = $controller('SignupToServeController', { $scope: $scope });
+    //   $httpBackend.expectGET( window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getGroupParticipantsForOpportunity/2923').respond(expectedReturn);
+    // }); 
+
+    it("should get the correct query parameters", function(){
       $scope = {};
       controller = $controller('SignupToServeController', { $scope: $scope });
       $httpBackend.expectGET( window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getGroupParticipantsForOpportunity/2923').respond(expectedReturn);
-    }); 
 
-    it("should get the correct query parameters", function(){
       expect(controller.params.userGuid).toBe('c29e64a5-820b-461f-a57c-5831d070d578');
     });
 
     it("should get a list of participants", function(){
+      $scope = {};
+      controller = $controller('SignupToServeController', { $scope: $scope });
+      $httpBackend.expectGET( window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getGroupParticipantsForOpportunity/2923').respond(expectedReturn);
+
       $httpBackend.flush();
       expect(controller.group.groupId).toBe(expectedReturn.groupId);
       expect(controller.group.groupName).toBe(expectedReturn.groupName);
@@ -69,6 +77,10 @@ describe('Signup To Serve Tool', function(){
     });
 
     it("should show the error message", function(){
+      $scope = {};
+      controller = $controller('SignupToServeController', { $scope: $scope });
+      $httpBackend.expectGET( window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getGroupParticipantsForOpportunity/2923').respond(expectedReturn);
+
       $httpBackend.flush();
       expect(controller.showError()).toBe(true);
     });
