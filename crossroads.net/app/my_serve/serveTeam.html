@@ -53,7 +53,7 @@
              </label>
            </div><!--/radio-->
             <div ng-show="currentMember.showFrequency">
-              <div class="form-group">oppDate: {{ oppServeDate }}
+              <div class="form-group">
                 <label>Frequency</label>
                 <select class="form-control" ng-model="currentMember.currentOpportunity.frequency" ng-change="populateDates()" ng-options="f.text for f in frequency">
                   <option value="">Select a Frequency</option>

@@ -116,20 +116,22 @@
 
       function getFrequency() {
         var dateTime = moment(scope.oppServeDate + " " + scope.opportunity.time);
-         var onceDate = dateTime.format("M/D/YYYY h:ma");
-         var weeklyDay = moment(scope.oppServeDate).format("dddd") + "s";
-         var weeklyTime = dateTime.format("h:ma");
+        var weeklyLabel = moment(scope.oppServeDate).format("dddd") + "s" + " " + dateTime.format("h:ma");
 
-         var onceLabel = "Once " + onceDate
-         var weeklyLabel = weeklyDay + " " + weeklyTime;
+        var once = {
+          value: 0,
+          text: "Once " + dateTime.format("M/D/YYYY h:ma")
+        };
+        var everyWeek = {
+          value: 1,
+          text: "Every Week " + weeklyLabel
+        };
+        var everyOtherWeek = {
+          value: 2,
+          text: "Every Other Week " + weeklyLabel
+        };
 
-        // var formattedDate = scope.oppServeDate;
-        //var formattedTime = moment(scope.opportunity.time).format("h:ma");
-        var once = { value: 0, text: onceLabel };
-        var everyWeek = { value: 1, text: "Every Week " + weeklyLabel };
-        var everyOtherWeek = { value: 2, text: "Every Other Week " + weeklyLabel };
-        var frequency =  [once, everyWeek, everyOtherWeek];
-        return frequency;
+        return [once, everyWeek, everyOtherWeek];
       }
 
       function getPanelId() {
@@ -155,8 +157,7 @@
         } else if (scope.currentMember.currentOpportunity == null) {
           validForm.valid = false;
           validForm.messageStr = $rootScope.MESSAGES.selectFrequency;
-        }
-        else {
+        } else {
           var startDate = parseDate(scope.currentMember.currentOpportunity.toDt);
           var endDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
 
@@ -259,8 +260,8 @@
         saveRsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
         saveRsvp.signUp = scope.currentMember.serveRsvp.attending;
         saveRsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
-        saveRsvp.$save(function(saved){
-          $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess );
+        saveRsvp.$save(function(saved) {
+          $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess);
           $rootScope.$broadcast('update.member', scope.currentMember);
           scope.currentMember.serveRsvp.isSaved = true;
         });
