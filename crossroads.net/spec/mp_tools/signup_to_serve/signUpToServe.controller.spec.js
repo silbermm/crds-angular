@@ -59,12 +59,13 @@ describe('Signup To Serve Tool', function(){
       $httpBackend.expectGET( window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getGroupParticipantsForOpportunity/2923').respond(expectedReturn);
       $httpBackend.expectGET( window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getAllOpportunityDates/2923').respond(expectedDates);
     }); 
-    
+
     it("should get the correct query parameters", function(){
       expect(controller.params.userGuid).toBe('c29e64a5-820b-461f-a57c-5831d070d578');
     });
 
     it("should get a list of participants", function(){
+      $httpBackend.flush();
       expect(controller.group.groupId).toBe(expectedReturn.groupId);
       expect(controller.group.groupName).toBe(expectedReturn.groupName);
       expect(controller.group.groupParticipants.length).toBe(2);
