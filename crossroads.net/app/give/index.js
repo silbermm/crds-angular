@@ -3,6 +3,7 @@ require('./amount.html');
 require('./login.html');
 require('./account.html');
 require('./thank_you.html');
+require('./register.html');
 require('./history.html');
 require('./give.module.js');
 
