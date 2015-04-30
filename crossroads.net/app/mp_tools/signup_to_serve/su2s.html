@@ -53,11 +53,11 @@
           <option value="">Select a Frequency</option>
         </select>
       </div>
-      <div ng-show="su2s.selectedFrequency.value == 0">
+      <div ng-show="su2s.isFrequencyOnce()">
         <div class="form-group">
           <label>Date:</label>
           <div class="input-group">
-            <select class="form-control" ng-model="su2s.selectedEvent" ng-options="d for d in su2s.eventDates" ng-required='su2s.selectedFrequency.value == 0'>
+            <select class="form-control" ng-model="su2s.selectedEvent" ng-options="d for d in su2s.eventDates" ng-required='su2s.isFrequencyOnce()'>
               <option value="">Select an Event Date</option>
             </select>
           </div>

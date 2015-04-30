@@ -24,6 +24,7 @@
         text: "Every Other Week"
       }];
     vm.group = {};
+    vm.isFrequencyOnce = isFrequencyOnce;
     vm.open = open;
     vm.params = MPTools.getParams();
     vm.populateDates = populateDates;
@@ -46,6 +47,11 @@
 
     function cancel(){
       $window.close();
+    }
+
+    function isFrequencyOnce()
+    {
+      return (vm.selectedFrequency == 0)
     }
 
     function open($event, opened) {
