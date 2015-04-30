@@ -405,7 +405,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 mock => mock.GetRecordDict(_opportunityPageId, opportunityId, It.IsAny<string>(), false))
                 .Returns(expectedEventType);
             _ministryPlatformService.Setup(
-                mock => mock.GetRecordsDict(_eventPageId, It.IsAny<string>(), ",,KC Nursery Oakley Sunday 8:30", "0"))
+                mock => mock.GetRecordsDict(_eventPageId, It.IsAny<string>(), ",,KC Nursery Oakley Sunday 8:30", It.IsAny<string>()))
                 .Returns(expectedEvents);
 
             var dates = _fixture.GetAllOpportunityDates(opportunityId, It.IsAny<string>());
@@ -436,7 +436,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 mock => mock.GetRecordDict(_opportunityPageId, opportunityId, It.IsAny<string>(), false))
                 .Returns(expectedEventType);
             _ministryPlatformService.Setup(
-                mock => mock.GetRecordsDict(_eventPageId, It.IsAny<string>(), ",,KC Nursery Oakley Sunday 8:30", "0"))
+                mock => mock.GetRecordsDict(_eventPageId, It.IsAny<string>(), ",,KC Nursery Oakley Sunday 8:30", It.IsAny<string>()))
                 .Returns(expectedEvents);
 
             var lastDate = _fixture.GetLastOpportunityDate(opportunityId, It.IsAny<string>());
@@ -459,7 +459,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 mock => mock.GetRecordDict(_opportunityPageId, opportunityId, It.IsAny<string>(), false))
                 .Returns(expectedEventType);
             _ministryPlatformService.Setup(
-                mock => mock.GetRecordsDict(_eventPageId, It.IsAny<string>(), ",,KC Nursery Oakley Sunday 8:30", "0"))
+                mock => mock.GetRecordsDict(_eventPageId, It.IsAny<string>(), ",,KC Nursery Oakley Sunday 8:30", It.IsAny<string>()))
                 .Returns(expectedEvents);
 
             Assert.Throws<Exception>(() => _fixture.GetLastOpportunityDate(opportunityId, It.IsAny<string>()));
