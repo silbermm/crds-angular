@@ -1,21 +1,6 @@
 <div class="profile-giving" ng-controller="ModalDemoCtrl">
 
   <div class="row">
-    <legend class="col-sm-12">Giving Statements</legend>
-
-    <div class="form-group clearfix toggle-input-group">
-      <div class="col-xs-6">
-        <label class="block">Paperless Giving Statements
-          <br><span class="text-muted small">Giving statements will be emailed to you.</span>
-        </label>
-      </div>
-      <div class="col-xs-6">
-        <toggle-switch ng-model="swithStatus7"></toggle-switch>
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
     <div class="col-sm-12">
 
       <div class="row giving-intro">
@@ -25,10 +10,10 @@
       </div>
       <!--/row-->
 
-      <div class="row recurring-gifts">
+      <div class="row recurring-gifts push-bottom">
         <div class="col-sm-12">
-          <h4>Recurring Gifts</h4>
-          <table class="table">
+          <h3>Recurring Gifts</h3>
+          <table class="table gift-table">
             <tbody>
               <tr>
                 <td>
@@ -123,78 +108,74 @@
               <a href="" class="btn btn-primary">Add New</a>
             </div>
           </div>
-          <hr>
         </div>
-      </div>
-      <!--/row-->
+      </div><!--/row-->
 
+      <div class="row recent-gifts push-bottom">
+          <div class="col-sm-12">
+              <h3>Recent Gifts</h3>
+              <table class="table recent-gifts">
+                  <tbody>
+                      <tr>
+                          <td>
+                              Ministry Fund
+                              <p class="text-muted"><span>
+                                  <svg viewBox="0 0 160 100" class="icon icon-cc_visa payment-type-icon">
+                                      <use xlink:href="#cc_visa"></use>
+                                  </svg>
+                                  ending in 3459</span>
+                              </p>
+                          </td>
+                          <td class="text-right">
+                              <span class="dollar-amount">$100.00</span>
+                              <p class="text-muted"><span>12/12/15</span></p>
+                          </td>
 
-            <div class="row recent-gifts">
-                <div class="col-sm-12">
-                    <h3>Recent Gifts</h3>
-                    <table class="table recent-gifts">
-                        <tbody>
-                            <tr>
-                                <td>
-                                    Ministry Fund
-                                    <p class="text-muted"><span>
-                                        <svg viewBox="0 0 160 100" class="icon icon-cc_visa payment-type-icon">
-                                            <use xlink:href="#cc_visa"></use>
-                                        </svg>
-                                        ending in 3459</span>
-                                    </p>
-                                </td>
-                                <td class="text-right">
-                                    <span class="dollar-amount">$100.00</span>
-                                    <p class="text-muted"><span>12/12/15</span></p>
-                                </td>
+                      </tr>
+                      <tr>
+                          <td>
+                              Game Change Fund
+                              <p class="text-muted">
+                              <span>
+                              <svg viewBox="0 0 32 32" class="icon icon-library payment-type-icon">
+                                  <use xlink:href="#library"></use>
+                              </svg>
+                              ending in 3459</span>
+                              </p>
+                          </td>
+                          <td class="text-right">
+                              <span class="dollar-amount">$200.00</span>
+                              <p class="text-muted"><span>12/16/15</span></p>
+                          </td>
 
-                            </tr>
-                            <tr>
-                                <td>
-                                    Game Change Fund
-                                    <p class="text-muted">
-                                    <span>
-                                    <svg viewBox="0 0 32 32" class="icon icon-library payment-type-icon">
-                                        <use xlink:href="#library"></use>
-                                    </svg>
-                                    ending in 3459</span>
-                                    </p>
-                                </td>
-                                <td class="text-right">
-                                    <span class="dollar-amount">$200.00</span>
-                                    <p class="text-muted"><span>12/16/15</span></p>
-                                </td>
+                      </tr>
+                      <tr>
+                          <td>
+                              OSG Fund
+                              <p class="text-muted">
+                                  <span>
+                                  <svg viewBox="0 0 34 32" class="icon icon-money payment-type-icon">
+                                      <use xlink:href="#money"></use>
+                                  </svg>
+                                  cash</span>
+                              </p>
+                          </td>
+                          <td  class="text-right">
+                              <span class="dollar-amount">$300.00</span>
+                              <p class="text-muted"><span>12/24/15</span></p>
+                          </td>
 
-                            </tr>
-                            <tr>
-                                <td>
-                                    OSG Fund
-                                    <p class="text-muted">
-                                        <span>
-                                        <svg viewBox="0 0 34 32" class="icon icon-money payment-type-icon">
-                                            <use xlink:href="#money"></use>
-                                        </svg>
-                                        cash</span>
-                                    </p>
-                                </td>
-                                <td  class="text-right">
-                                    <span class="dollar-amount">$300.00</span>
-                                    <p class="text-muted"><span>12/24/15</span></p>
-                                </td>
-
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="row">
-                        <div class="col-sm-12 text-center">
-                            <a ui-sref="history" class="btn btn-primary">View All</a>
-                        </div>
-                    </div>
-                    <hr>
-                </div>
-            </div>
-      <!--/row-->
+                      </tr>
+                  </tbody>
+              </table>
+              <div class="row">
+                  <div class="col-sm-12 text-center">
+                      <a ui-sref="history" class="btn btn-primary">View All</a>
+                  </div>
+              </div>
+              <hr>
+          </div>
+      </div><!--/row-->
 
       <!--Removing for now until US1148. Need for context of the page while we designed the recurring giving section
             <div class="row commitments">
