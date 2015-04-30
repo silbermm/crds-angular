@@ -286,6 +286,7 @@
   <ItemGroup>
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Web.common.config" />
     <None Include="Properties\PublishProfiles\MPTest01.pubxml" />
     <Content Include="Properties\SlowCheetah\SlowCheetah.Transforms.targets" />
     <Content Include="Web.config">
