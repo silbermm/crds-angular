@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
 using AutoMapper;
@@ -42,6 +43,19 @@ namespace crds_angular.Controllers.API
                     return this.InternalServerError(ex);
                 }
 
+            });
+        }
+
+        [ResponseType(typeof(List<long>))]
+        [Route("api/opportunity/getAllOpportunityDates/{id}")]
+        public IHttpActionResult GetAllOpportunityDates(int id)
+        {
+            var oppDates = new List<long>();
+            return Authorized(token =>
+            {
+                var opportunities = _opportunityService.GetAllOpportunityDates(id, token);
+                oppDates.AddRange(opportunities.Select(opp => opp.ToUnixTime()));
+                return this.Ok(oppDates);
             });
         }
 
