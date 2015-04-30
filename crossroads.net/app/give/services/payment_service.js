@@ -15,15 +15,15 @@
       stripe.card.createToken(card)
         .then(function (token) {
           var donor_request = {
-            tokenId: token.id
+            stripeTokenId: token.id
           }
           $http.post(__API_ENDPOINT__ + 'api/donor', donor_request)
             .success(function(data) {
               payment_service.donor = data;
               def.resolve(data);
             })
-            .error(function(data) {
-              def.reject(data.message);
+            .error(function(error) {
+              def.reject(error);
             });
         });
         

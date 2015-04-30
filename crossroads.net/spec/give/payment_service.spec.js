@@ -1,5 +1,12 @@
 describe ('StripeService', function () {
-  var sut, result, httpBackend, stripe;
+  var sut, httpBackend, stripe;
+  
+  var card = {
+    number : "4242424242424242",
+    exp_month : "12",
+    exp_year : "2016",
+    cvc : "123"
+  };
 
   beforeEach(function() {
     module('crossroads.give');
@@ -37,18 +44,14 @@ describe ('StripeService', function () {
    });
   
   describe ('createDonorWithCard', function() {
+    var result;
+    
     beforeEach(function() {
-      var card = {
-        number : "4242424242424242",
-        exp_month : "12",
-        exp_year : "2016",
-        cvc : "123"
-      };
-
-      var postData = {
-        tokenId: "tok_test"
-      }
       spyOn(stripe.card, 'createToken').and.callThrough();
+      
+      var postData = {
+        stripeTokenId: "tok_test"
+      }
       httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/donor', postData)
         .respond({
           id: "12345",
@@ -61,7 +64,7 @@ describe ('StripeService', function () {
     });
     
     it('should create a single use token', function() {
-      expect(stripe.card.createToken).toHaveBeenCalled();
+      expect(stripe.card.createToken).toHaveBeenCalledWith(card);
     });
     
     it('should create a new donor', function() {
@@ -70,4 +73,26 @@ describe ('StripeService', function () {
       expect(result.stripe_customer_id).toEqual("cust_test");
     });
   });
+  
+  //TODO: Test error condition from create donor
+  describe('createDonorWithCard Error', function() {
+    it('should return error if there is problem calling donor service', function() {
+      var postData = {
+        stripeTokenId: "tok_test"
+      }
+      httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/donor', postData)
+        .respond(400,{
+          message: "Token not found"
+        } );
+      sut.createDonorWithCard(card)
+        .then(function(donor) {
+          result = donor;
+        }, 
+        function(error) {
+          expect(error).toBeDefined();
+          expect(error.message).toEqual("Token not found");
+        });
+    });
+  });
+  
 });
