@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace crds_angular.Models.Crossroads.Serve
 {
@@ -20,6 +21,7 @@ namespace crds_angular.Models.Crossroads.Serve
         public long StartDateUnix { get; set; }
 
         [JsonProperty(PropertyName = "signUp")]
+        [Required]
         public bool SignUp { get; set; }
 
         [JsonProperty(PropertyName = "alternateWeeks")]

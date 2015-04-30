@@ -11,6 +11,9 @@ namespace crds_angular.Models.Crossroads.Opportunity
         [JsonProperty(PropertyName = "groupName")]
         public string Name { get; set; }
 
+        [JsonProperty(PropertyName = "eventTypeId")]
+        public int EventTypeId { get; set; }
+
         public IList<OpportunityGroupParticipant> Participants { get; set; }
     }
 }
