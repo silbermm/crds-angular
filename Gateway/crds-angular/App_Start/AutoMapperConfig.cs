@@ -31,6 +31,7 @@ namespace crds_angular.App_Start
             Mapper.CreateMap<Group, OpportunityGroup>()
                 .ForMember(dest => dest.GroupId, opts => opts.MapFrom(src => src.GroupId))
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name))
+                .ForMember(dest => dest.EventTypeId, opts => opts.MapFrom(src => src.EventTypeId))
                 .ForMember(dest => dest.Participants, opts => opts.MapFrom(src => src.Participants));
 
             Mapper.CreateMap<GroupParticipant, OpportunityGroupParticipant>()

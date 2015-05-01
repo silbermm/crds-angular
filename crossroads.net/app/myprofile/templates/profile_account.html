@@ -1,6 +1,5 @@
 <form role="form">
     <div class="row">
-
         <div class="col-sm-12">
             <p>Manage your communication preferences.</p>
 
@@ -99,8 +98,24 @@
                 </div>
                 <!--/form-group-->
 
-            </div>
-            <!--/row-->
+            </div><!--/row-->
+
+
+            <div class="row">
+                <legend class="col-sm-12">Giving Statements</legend>
+
+                <div class="form-group clearfix toggle-input-group">
+                  <div class="col-xs-6">
+                    <label class="block">Paperless Giving Statements
+                      <br><span class="text-muted small">Giving statements will be emailed to you.</span>
+                    </label>
+                  </div>
+                  <div class="col-xs-6">
+                    <toggle-switch ng-model="swithStatus7"></toggle-switch>
+                  </div>
+                </div>
+            </div><!--/row-->
+
 
         </div>
         <!--/col-sm-12-->

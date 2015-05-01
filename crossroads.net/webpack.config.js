@@ -8,11 +8,15 @@ var endpoint = {
 
 var definePlugin = new webpack.DefinePlugin({
     __API_ENDPOINT__: JSON.stringify(process.env.CRDS_API_ENDPOINT || "http://mp-int-web.cloudapp.net/gateway/"),
-    __CMS_ENDPOINT__: JSON.stringify(process.env.CRDS_CMS_ENDPOINT || "http://content.crossroads.net/")
+    __CMS_ENDPOINT__: JSON.stringify(process.env.CRDS_CMS_ENDPOINT || "http://content.crossroads.net/"),
+    __STRIPE_PUBKEY__ : JSON.stringify(process.env.CRDS_STRIPE_PUBKEY || "pk_test_TR1GulD113hGh2RgoLhFqO0M")
 });
 
 module.exports = {
     entry: './app/app.js',
+    externals: {
+      stripe: "Stripe"
+    },
     context: __dirname,
     output: {
         path: './assets',
@@ -27,7 +31,10 @@ module.exports = {
             },
             {
                 test: /\.js$/,
-                exclude: /node_modules/,
+                include: [
+                  path.resolve(__dirname, "app"),
+                  path.resolve(__dirname, "node_modules/angular-stripe")
+                ],
                 loader: 'babel-loader'
             },
             {

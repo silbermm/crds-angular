@@ -97,7 +97,7 @@ var _ = require('lodash');
 
                 console.log(__API_ENDPOINT__);
                  
-                $scope.stateData = $state.current.data;
+                $scope.state = $state;
 
                 $scope.prevent = function (evt) {
                     evt.stopPropagation();
@@ -170,6 +170,7 @@ var _ = require('lodash');
     ])
     .directive("emptyToNull", require('./shared/emptyToNull.directive.js'))
     .directive("stopEvent", require('./shared/stopevent.directive.js'))
+    .directive("requireMultiple", require('./shared/requireMultiple.directive.js'))
     .directive("svgIcon", require('./shared/svgIcon.directive.js'));
 
     require('./preloader'); 

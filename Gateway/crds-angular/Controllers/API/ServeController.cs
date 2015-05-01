@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -68,6 +69,12 @@ namespace crds_angular.Controllers.API
         [Route("api/serve/save-rsvp")]
         public IHttpActionResult SaveRsvp([FromBody] SaveRsvpDto saveRsvp)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(val => val.Errors).Aggregate("", (current, err) => current + err.Exception.Message);
+                var dataError = new ApiErrorDto("RSVP Data Invalid", new InvalidOperationException("Invalid RSVP Data" + errors));
+                throw new HttpResponseException(dataError.HttpResponseMessage);
+            }
             //validate request
             if (saveRsvp.StartDateUnix <= 0)
             {

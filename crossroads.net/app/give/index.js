@@ -3,15 +3,13 @@ require('./amount.html');
 require('./login.html');
 require('./account.html');
 require('./thank_you.html');
+require('./register.html');
 require('./history.html');
 require('./give.module.js');
 
 var app = require('angular').module('crossroads.give');
 app.factory("getPrograms", require('./services/getPrograms.service.js'));
-app.directive('invalidRouting',[require('./directives/invalidRouting.validation.directive')]);
-app.directive('invalidAccount',[require('./directives/invalidAccount.validation.directive')]);
-app.directive('naturalNumber',[require('./directives/naturalNumber.validation.directive')]);
-app.directive('invalidZip', [require('./directives/invalidZip.validation.directive')]);
+app.factory('PaymentService', ['$log', '$http', '$q', 'stripe', require('./services/payment_service.js')]);
 
 /****** DEMO PAGES ******/
 require('./demo/guest_giver/give.html');
