@@ -154,6 +154,10 @@
     <Compile Include="Services\ServeServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\crds-angular\Web.common.config">
+      <Link>Web.common.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
