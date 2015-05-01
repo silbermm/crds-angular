@@ -15,6 +15,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'https://js.stripe.com/v2/',
       './node_modules/phantomjs-polyfill/bind-polyfill.js',
       'https://js.stripe.com/v2/',
       'assets/main.js',

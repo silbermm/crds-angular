@@ -4,9 +4,9 @@
 
   module.exports = MyServeController;
 
-  MyServeController.$inject = ['$rootScope', '$log', 'ServeOpportunities', 'Session', 'filterState'];
+  MyServeController.$inject = ['$rootScope', '$log', 'Session', 'filterState', 'Groups'];
 
-  function MyServeController($rootScope, $log, ServeOpportunities, Session, filterState){
+  function MyServeController($rootScope, $log, Session, filterState, Groups){
 
     var vm = this;
 
@@ -17,8 +17,7 @@
     vm.filterState = filterState;
     vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
     vm.format = vm.formats[0];
-    vm.groups = [];
-    vm.groupsResolved = false;
+    vm.groups = Groups;
     vm.open = open;
     vm.original = [];
     vm.showNoOpportunitiesMsg = showNoOpportunitiesMsg;
@@ -40,16 +39,9 @@
     function activate(){
       today();
       toggleMin();
-      getGroups();
+      console.log(Groups);
     }
-    
-    function getGroups(){
-      vm.groups = ServeOpportunities.ServeDays.query();
-      vm.groups.$promise.then(function(){
-        vm.groupsResolved = true; 
-      }); 
-    };
-
+   
     function today() {
       vm.dt = new Date();
     };
@@ -95,7 +87,7 @@
     }
    
     function showNoOpportunitiesMsg(){
-      return vm.groupsResolved && (vm.groups.length < 1 || totalServeTimesLength() === 0);
+      return vm.groups.length < 1 || totalServeTimesLength() === 0;
     }
 
     function totalServeTimesLength(){

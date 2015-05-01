@@ -62,9 +62,10 @@
       //////////////////////////////////
 
       function activate() {
-        scope.servingDays.$promise.then(function(data) {
-          filter(data);
-        });
+        filter(scope.servingDays);
+        /*scope.servingDays.$promise.then(function(data) {*/
+          //filter(data);
+        /*});*/
       }
 
       function applyFamilyFilter() {
