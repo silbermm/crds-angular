@@ -10,10 +10,10 @@ require('../donation-details.html');﻿
           restrict: 'EA',
           replace: true,
           scope: {
-                amount: "=?",
-                program: "=?",
-                amountSubmitted: "=?",
-                programsIn: "=?"
+                amount: "=",
+                program: "=",
+                amountSubmitted: "=",
+                programsIn: "="
 
             },
           templateUrl: 'give/donation-details.html',
