@@ -22,9 +22,10 @@ namespace MinistryPlatform.Translation.Services
         }
 
         
-        public int CreateDonorRecord(int contactId)
+        public int CreateDonorRecord(int contactId, string stripeCustomerId)
         {
             //this assumes that you do not already have a donor record - new giver
+
 
             var values = new Dictionary<string, object>
             {
@@ -32,7 +33,8 @@ namespace MinistryPlatform.Translation.Services
                 {"Statement_Frequency_ID", "1"},//default to quarterly
                 {"Statement_Type_ID", "1"},     //default to individual
                 {"Statement_Method_ID", '2'},   //default to email/online
-                {"Setup_Date", DateTime.Now}    //defaukl to current date/time
+                {"Setup_Date", DateTime.Now},    //default to current date/time
+                {"Stripe_Customer_ID", stripeCustomerId}
             }; 
 
             int donorId;

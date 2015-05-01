@@ -222,6 +222,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\API\AccountController.cs" />
+    <Compile Include="Controllers\API\DonorController.cs" />
     <Compile Include="Controllers\API\EventLocationController.cs" />
     <Compile Include="Controllers\API\GroupController.cs" />
     <Compile Include="Controllers\API\ProgramController.cs" />

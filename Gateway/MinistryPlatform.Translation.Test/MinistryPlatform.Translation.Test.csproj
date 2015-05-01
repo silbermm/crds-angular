@@ -86,6 +86,7 @@
     <Compile Include="LookupTest.cs" />
     <Compile Include="Services\ContactRelationshipServiceTest.cs" />
     <Compile Include="Services\ContactServiceTest.cs" />
+    <Compile Include="Services\DonorServiceTest.cs" />
     <Compile Include="Services\GroupServiceTest.cs" />
     <Compile Include="Services\EventServiceTest.cs" />
     <Compile Include="Services\OpportunityServiceTest.cs" />
