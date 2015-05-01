@@ -15,14 +15,22 @@
                     </div>
                     <!--/form-inline-->
 
-                    <div class="form-group">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" ng-model="ministryShow"> Give to a specific initiative
+                      </label>
+                    </div>
+                    <!--/checkbox-->
+
+                    <div class="form-group" ng-show="ministryShow">
                         <select class="form-control">
-                            <option>Ministry Fund</option>
+                            <option>Choose Initiative</option>
                             <option>Game Change Fund</option>
                             <option>Old St. George</option>
                         </select>
                     </div>
                     <!--/form-group-->
+                    
                     <div class="form-group">
                         <select class="form-control">
                             <option>One Time</option>
@@ -93,7 +101,7 @@
                     </div>
                     <!--/form-group-->
 
-                    <a ui-sref="/demo/guest-giver/give-confirmation" class="btn btn-primary form-control">Give $125</a>
+                    <a ui-sref="/demo/guest-giver/give-confirmation" class="btn btn-primary btn-lg col-xs-12">Give $125</a>
 
                 </div>
             </ng-form>
