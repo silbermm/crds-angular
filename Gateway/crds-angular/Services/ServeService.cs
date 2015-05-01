@@ -2,19 +2,23 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using AutoMapper;
 using crds_angular.Enum;
 using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services.Interfaces;
+using log4net;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Event = MinistryPlatform.Models.Event;
+using Response = MinistryPlatform.Models.Response;
 
 namespace crds_angular.Services
 {
     public class ServeService : MinistryPlatformBaseService, IServeService
     {
+        private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private IGroupService _groupService;
         private IContactRelationshipService _contactRelationshipService;
         private IPersonService _personService;
@@ -36,18 +40,33 @@ namespace crds_angular.Services
             this._participantService = participantService;
         }
 
+        private List<Response> GetParticipantResponses(int participantId)
+        {
+            logger.Debug(string.Format("GetParticipantResponses({0}) ", participantId));
+            var responses = _participantService.GetParticipantResponses(participantId);
+            return responses;
+        }
+
         public List<FamilyMember> GetMyImmediateFamily(int contactId, string token)
         {
+            logger.Debug(string.Format("GetMyImmediatieFamilyRelationships({0}) ", contactId));
             var contactRelationships =
                 _contactRelationshipService.GetMyImmediatieFamilyRelationships(contactId, token).ToList();
             var familyMembers = Mapper.Map<List<ContactRelationship>, List<FamilyMember>>(contactRelationships);
 
             foreach (var familyMember in familyMembers)
             {
+                logger.Debug(string.Format("GetParticipant({0}) ", familyMember.ContactId));
                 familyMember.Participant = _participantService.GetParticipant(familyMember.ContactId);
+
+                //get all responses here????? tm 5/1/2015
+                //logger.Debug(string.Format("GetParticipantResponses({0}) ", familyMember.Participant.ParticipantId));
+                var responses = GetParticipantResponses(familyMember.Participant.ParticipantId);
+                familyMember.Responses = responses;
             }
 
             //now get info for Contact
+            logger.Debug(string.Format("GetLoggedInUserProfile() "));
             var myProfile = _personService.GetLoggedInUserProfile(token);
             var me = new FamilyMember
             {
@@ -57,6 +76,8 @@ namespace crds_angular.Services
                 PreferredName = myProfile.NickName ?? myProfile.FirstName,
                 Participant = _participantService.GetParticipant(myProfile.ContactId)
             };
+            //logger.Debug(string.Format("GetParticipantResponses({0}) ", me.Participant.ParticipantId));
+            me.Responses = GetParticipantResponses(me.Participant.ParticipantId);
             familyMembers.Add(me);
 
             return familyMembers;
@@ -69,6 +90,7 @@ namespace crds_angular.Services
 
             foreach (var team in servingTeams)
             {
+                logger.Debug("GetOpportunitiesForGroup: " + team.GroupId);
                 var opportunities = this._opportunityService.GetOpportunitiesForGroup(team.GroupId, token);
 
                 if (opportunities == null) continue;
@@ -85,7 +107,8 @@ namespace crds_angular.Services
                         var serveRole = new ServeRole
                         {
                             Name = opportunity.OpportunityName + " " + opportunity.RoleTitle,
-                            Capacity = this.OpportunityCapacity(opportunity.MaximumNeeded,opportunity.MinimumNeeded,opportunity.OpportunityId,e.EventId,token),
+                            Capacity =
+                                this.OpportunityCapacity(opportunity, e.EventId, token),
                             RoleId = opportunity.OpportunityId
                         };
 
@@ -139,6 +162,7 @@ namespace crds_angular.Services
                                                     LastName = teamMember.LastName,
                                                     EmailAddress = teamMember.EmailAddress,
                                                     Participant = teamMember.Participant,
+                                                    Responses = teamMember.Responses,
                                                     ServeRsvp =
                                                         GetRsvp(opportunity.OpportunityId, e.EventId,
                                                             teamMember)
@@ -168,7 +192,7 @@ namespace crds_angular.Services
                                 //time not in list
                                 serveTime = new ServingTime {Time = e.EventStartDate.TimeOfDay.ToString()};
                                 serveTime.ServingTeams.Add(NewServingTeam(team, opportunity, serveRole, e.EventId));
-                                
+
                                 serveDay.ServeTimes.Add(serveTime);
                             }
                         }
@@ -210,15 +234,99 @@ namespace crds_angular.Services
         //public for testing
         public ServeRsvp GetRsvp(int opportunityId, int eventId, TeamMember member)
         {
-            var participant = member.Participant;
-            var response = _opportunityService.GetOpportunityResponse(opportunityId, eventId, participant);
+            //var participant = member.Participant;
+            //logger.Debug(string.Format("GetOpportunityResponse({0},{1},{2}) ", opportunityId, eventId,
+            //    participant.ParticipantId));
 
-            if (response == null || response.Opportunity_ID ==0) return null;
+            ServeRsvp fakeReturn;
+            if (member.Responses == null)
+            {
+                fakeReturn = null;
+            }
+            else
+            {
+                var r =
+                    member.Responses.Where(t => t.Opportunity_ID == opportunityId && t.Event_ID == eventId)
+                        .Select(t => t.Response_Result_ID)
+                        .ToList();
+                if (r.Count <= 0)
+                {
+                    fakeReturn = null;
+                }
+                else
+                {
+                    fakeReturn = new ServeRsvp {Attending = (r[0] == 1), RoleId = opportunityId};
+                    //return serveRsvp;
+                }
+            }
 
-            var serveRsvp = new ServeRsvp {Attending = (response.Response_Result_ID == 1), RoleId = opportunityId};
-            return serveRsvp;
+            return fakeReturn;
+
+            //var response = _opportunityService.GetOpportunityResponse(opportunityId, eventId, participant);
+
+            //if (response == null || response.Opportunity_ID == 0) return null;
+
+            //var serveRsvp = new ServeRsvp {Attending = (response.Response_Result_ID == 1), RoleId = opportunityId};
+            //return serveRsvp;
         }
 
+        public Capacity OpportunityCapacity(Opportunity opportunity, int eventId, string token)
+        {
+            var min = opportunity.MinimumNeeded;
+            var max = opportunity.MaximumNeeded;
+            var signedUp = opportunity.Responses.Count(r => r.Event_ID == eventId);
+
+            var capacity = new Capacity { Display = true };
+
+            if (max == null && min == null)
+            {
+                capacity.Display = false;
+                return capacity;
+            }
+
+
+            int calc;
+            if (max == null)
+            {
+                capacity.Minimum = min.GetValueOrDefault();
+
+                //is this valid?? max is null so put min value in max?
+                capacity.Maximum = capacity.Minimum;
+
+                calc = capacity.Minimum - signedUp;
+            }
+            else if (min == null)
+            {
+                capacity.Maximum = max.GetValueOrDefault();
+                //is this valid??
+                capacity.Minimum = capacity.Maximum;
+                calc = capacity.Maximum - signedUp;
+            }
+            else
+            {
+                capacity.Maximum = max.GetValueOrDefault();
+                capacity.Minimum = min.GetValueOrDefault();
+                calc = capacity.Minimum - signedUp;
+            }
+
+            if (signedUp < capacity.Maximum && signedUp < capacity.Minimum)
+            {
+                capacity.Message = string.Format("{0} Needed", calc);
+                capacity.BadgeType = BadgeType.LabelInfo.ToString();
+                capacity.Available = calc;
+                capacity.Taken = signedUp;
+            }
+            else if (signedUp >= capacity.Maximum)
+            {
+                capacity.Message = "Full";
+                capacity.BadgeType = BadgeType.LabelDefault.ToString();
+                capacity.Available = calc;
+                capacity.Taken = signedUp;
+            }
+
+            return capacity;
+        }
+        
         //public for testing
         public Capacity OpportunityCapacity(int? max, int? min, int opportunityId, int eventId, string token)
         {
@@ -230,6 +338,7 @@ namespace crds_angular.Services
                 return capacity;
             }
 
+            logger.Debug(string.Format("GetOpportunitySignupCount({0},{1}) ", opportunityId, eventId));
             var signedUp = this._opportunityService.GetOpportunitySignupCount(opportunityId, eventId, token);
             int calc;
             if (max == null)
@@ -275,6 +384,7 @@ namespace crds_angular.Services
 
         public List<ServingTeam> GetServingTeams(string token)
         {
+            logger.Debug(string.Format("GetContactId() "));
             var contactId = _authenticationService.GetContactId(token);
             var servingTeams = new List<ServingTeam>();
 
@@ -282,6 +392,7 @@ namespace crds_angular.Services
             var familyMembers = GetMyImmediateFamily(contactId, token);
             foreach (var familyMember in familyMembers)
             {
+                logger.Debug(string.Format("GetServingTeams({0}) ", familyMember.ContactId));
                 var groups = this._groupService.GetServingTeams(familyMember.ContactId, token);
                 foreach (var group in groups)
                 {
@@ -297,7 +408,9 @@ namespace crds_angular.Services
                                 ContactId = familyMember.ContactId,
                                 Name = familyMember.PreferredName,
                                 LastName = familyMember.LastName,
-                                EmailAddress = familyMember.Email, Participant = familyMember.Participant
+                                EmailAddress = familyMember.Email,
+                                Participant = familyMember.Participant,
+                                Responses = familyMember.Responses
                             };
                             servingTeam.Members.Add(member);
                         }
@@ -363,7 +476,8 @@ namespace crds_angular.Services
                 Name = familyMember.PreferredName,
                 LastName = familyMember.LastName,
                 EmailAddress = familyMember.Email,
-                Participant = familyMember.Participant
+                Participant = familyMember.Participant,
+                Responses = familyMember.Responses
             };
 
             var role = new ServeRole {Name = @group.GroupRole};
@@ -374,13 +488,25 @@ namespace crds_angular.Services
 
         private TeamMember NewTeamMember(TeamMember teamMember, ServeRole role, int eventId)
         {
+            var tm = new TeamMember();
+            tm.Name = teamMember.Name;
+            tm.LastName = teamMember.LastName;
+            tm.ContactId = teamMember.ContactId;
+            tm.EmailAddress = teamMember.EmailAddress;
+            tm.ServeRsvp = GetRsvp(role.RoleId, eventId, teamMember);
+
+            tm.Participant = teamMember.Participant;
+            tm.Responses = teamMember.Responses;
+
             var newTeamMember = new TeamMember
             {
                 Name = teamMember.Name,
                 LastName = teamMember.LastName,
                 ContactId = teamMember.ContactId,
                 EmailAddress = teamMember.EmailAddress,
-                ServeRsvp = GetRsvp(role.RoleId,eventId,teamMember), Participant = teamMember.Participant
+                ServeRsvp = GetRsvp(role.RoleId, eventId, teamMember),
+                Participant = teamMember.Participant,
+                Responses = teamMember.Responses
             };
             newTeamMember.Roles.Add(role);
 
@@ -411,7 +537,9 @@ namespace crds_angular.Services
                 Name = team.Name,
                 GroupId = team.GroupId,
                 Members = NewTeamMembersWithRoles(team.Members, opportunity.RoleTitle, serveRole, eventId),
-                PrimaryContact = team.PrimaryContact, EventType = opportunity.EventType, EventTypeId = opportunity.EventTypeId
+                PrimaryContact = team.PrimaryContact,
+                EventType = opportunity.EventType,
+                EventTypeId = opportunity.EventTypeId
             };
             return servingTeam;
         }
@@ -435,6 +563,7 @@ namespace crds_angular.Services
 
         public DateTime GetLastServingDate(int opportunityId, string token)
         {
+            logger.Debug(string.Format("GetLastOpportunityDate({0}) ", opportunityId));
             return _opportunityService.GetLastOpportunityDate(opportunityId, token);
         }
     }

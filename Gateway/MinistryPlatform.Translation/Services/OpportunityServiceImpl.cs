@@ -47,6 +47,27 @@ namespace MinistryPlatform.Translation.Services
                     MaximumNeeded = record.ToNullableInt("Maximum_Needed"),
                     MinimumNeeded = record.ToNullableInt("Minimum_Needed")
                 };
+
+                //opportunity responses
+                var records = _ministryPlatformService.GetSubpageViewRecords(_signedupToServeSubPageViewId, opportunity.OpportunityId,
+                token, "");
+                if (records.Count > 0)
+                {
+                    Console.WriteLine("STOP");
+                }
+                var responses = new List<MinistryPlatform.Models.Response>();
+                foreach (var r in records)
+                {
+                    var response = new MinistryPlatform.Models.Response();
+                    response.Event_ID = r.ToInt("Event_ID");
+                    //response.Opportunity_ID = record.ToInt("Opportunity ID");
+                    //response.Participant_ID = record.ToInt("Participant ID");
+                    //response.Response_Result_ID = record.ToInt("Response Result ID");
+                    responses.Add(response);
+                }
+                opportunity.Responses = new List<MinistryPlatform.Models.Response>();
+                opportunity.Responses.AddRange(responses);
+
                 //now get all events with type = event type id
                 if (opportunity.EventType != null)
                 {
