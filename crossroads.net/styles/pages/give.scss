@@ -111,6 +111,7 @@
 }
 
 .gift-table, .recent-gifts {
+    page-break-inside: auto;
     .table-actions {
         min-width: 100px;
         a {
@@ -122,6 +123,10 @@
               vertical-align: sub;
             }
         }
+    }
+    td {
+      page-break-inside: avoid;
+      page-break-after: auto;
     }
     .dollar-amount {
         @extend .text-success;
@@ -152,4 +157,9 @@
         }
       }
     }
+}
+.giving-statement-footer {
+  border-bottom: 2px solid $gray;
+  margin-top: 30px;
+  margin-bottom: 40px;
 }
