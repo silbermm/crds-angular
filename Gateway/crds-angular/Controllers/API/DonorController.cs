@@ -17,22 +17,38 @@ namespace crds_angular.Controllers.API
         private IDonorService donorService;
         private IStripeService stripeService;
         private IAuthenticationService authenticationService;
-       
-        public DonorController(IDonorService donorService, IStripeService stripeService, 
-                                IAuthenticationService authenticationService)
+
+        public DonorController(IDonorService donorService, IStripeService stripeService,
+            IAuthenticationService authenticationService)
         {
             this.donorService = donorService;
             this.stripeService = stripeService;
             this.authenticationService = authenticationService;
-            
+
         }
 
-        [ResponseType(typeof(DonorDTO))]
+        [ResponseType(typeof (DonorDTO))]
         [Route("api/donor")]
-        public IHttpActionResult Post(CreateDonorDTO dto)
+        public IHttpActionResult Post([FromBody] CreateDonorDTO dto)
         {
-            return Ok(new DonorDTO());
-        }
+            return Authorized(token =>
+            {
+                var contactId = authenticationService.GetContactId(token);
+               
+                var customerId = stripeService.createCustomer(dto.stripe_token_id);
 
+                var donorId = donorService.CreateDonorRecord(contactId, customerId);
+
+                var response = new DonorDTO
+                {
+                    id = donorId.ToString(),
+                    stripe_customer_id = customerId
+                };
+
+                return Ok(response);
+            });
+
+
+        }
     }
 }

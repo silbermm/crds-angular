@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
@@ -29,10 +30,10 @@ namespace MinistryPlatform.Translation.Services
 
             var values = new Dictionary<string, object>
             {
-                {"Contact_Id", contactId},
+                {"Contact_ID", contactId},
                 {"Statement_Frequency_ID", "1"},//default to quarterly
                 {"Statement_Type_ID", "1"},     //default to individual
-                {"Statement_Method_ID", '2'},   //default to email/online
+                {"Statement_Method_ID", 2},   //default to email/online
                 {"Setup_Date", DateTime.Now},    //default to current date/time
                 {"Stripe_Customer_ID", stripeCustomerId}
             }; 
@@ -45,10 +46,10 @@ namespace MinistryPlatform.Translation.Services
             }
             catch (Exception e)
             {
-                throw new ApplicationException(string.Format("CreateDonorRecord failed.  Contact Id: {0}", contactId), e);
+               throw new ApplicationException(string.Format("CreateDonorRecord failed.  Contact Id: {0}", contactId), e);
             }
             return donorId;
-        }
         
+        }
     }
 }

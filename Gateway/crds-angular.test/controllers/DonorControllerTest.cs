@@ -14,6 +14,7 @@ using crds_angular.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
 using RestSharp.Authenticators.OAuth;
+using Rhino.Mocks;
 
 namespace crds_angular.test.controllers
 {
@@ -49,10 +50,20 @@ namespace crds_angular.test.controllers
             {
                 stripe_token_id = "tok_test"
             };
+
+           // donorServiceMock.Setup(mocked => mocked.CreateDonorRecord());
+
+
+
             IHttpActionResult result = fixture.Post(createDonorDto);
+            
+            
             Assert.IsNotNull(result);
             Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonorDTO>), result);
             var okResult = (OkNegotiatedContentResult<DonorDTO>)result;
+
+            Assert.AreEqual("123456", okResult.Content.id);
+            Assert.AreEqual("cus_test123456", okResult.Content.stripe_customer_id);
         }
     }
 }
