@@ -128,7 +128,7 @@
         saveRsvp.signUp = vm.attending;
         saveRsvp.alternateWeeks = (vm.selectedFrequency.value === 2);
         saveRsvp.$save(function(saved) {
-          $window.close();
+          //$window.close();
         }, function(err) {
           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
         });
