@@ -91,6 +91,10 @@
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.3.0.0-alpha-3\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp, Version=105.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\RestSharp.105.1.0\lib\net45\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="Rhino.Mocks">
       <HintPath>..\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
     </Reference>
@@ -140,6 +144,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="controllers\DonorControllerTest.cs" />
     <Compile Include="controllers\EventLocationControllerTest.cs" />
     <Compile Include="controllers\AccountControllerTest.cs" />
     <Compile Include="controllers\HomeControllerTest.cs" />
