@@ -41,7 +41,7 @@
     }
 }
 
-.give-login {
+.give-login, .give-register {
   .btn-primary.col-xs-12 {
     @extend .btn-lg;
   }
