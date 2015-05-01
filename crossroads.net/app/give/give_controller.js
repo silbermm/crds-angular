@@ -180,8 +180,8 @@
                 PaymentService.createDonorWithCard({
                   name: vm.nameOnCard,
                   number: vm.ccNumber,
-                  exp_month: vm.expDate,
-                  exp_year: vm.expDate,
+                  exp_month: vm.expDate.substr(0,2),
+                  exp_year: vm.expDate.substr(2,2),
                   cvc: vm.cvc
                 })
                 .then(function() {
