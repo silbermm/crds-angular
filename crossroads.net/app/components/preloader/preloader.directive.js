@@ -8,7 +8,7 @@
     return {
       restrict: 'EA',
       scope: {
-        fullScreen: '=?'
+        fullScreen: '='
       },
       templateUrl: 'preloader/preloader.html',
       link: link
@@ -16,16 +16,13 @@
 
     function link(scope, el, attr){
       
-      scope.isFullScreen: isFullScreen;
-
+      scope.isFullScreen = isFullScreen;
 
       /////////////////////////////////
 
-
       function isFullScreen(){
-        return scope.fullScreen !== undefined || scope.fullScreen !== null;
+        return (scope.fullScreen !== undefined || scope.fullScreen !== null) && scope.fullScreen;
       };
-
 
     };
   }

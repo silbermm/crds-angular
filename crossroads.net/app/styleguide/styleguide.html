@@ -331,9 +331,10 @@
     <hr />
     <div id="preloader">
       <h3>Preloader</h3>
-      <p>Used to indicate the site is waiting for something to load.</p>
+      <p>Used to indicate the site is waiting for something to load. Use <code> &lt;preloader full-screen='false'&gt; &lt;/preloader&gt; </code> to display in an element. When used for a whole page, you just have to make sure all of your data is being resolved in the route. This uses <code> &lt;preloader full-screen='true'&gt; &lt;/preloader&gt; </code>. </p>
+      
       <br>
-      <preloader> </preloader> 
+      <preloader full-screen='false'> </preloader> 
       <div>
         <a ng-click="styleguide.scrollTo('top')">Back to top <i class="fa fa-caret-up"></i></a>
       </div>
