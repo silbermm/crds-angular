@@ -15,7 +15,7 @@
       stripe.card.createToken(card)
         .then(function (token) {
           var donor_request = {
-            stripeTokenId: token.id
+            stripe_token_id: token.id
           }
           $http.post(__API_ENDPOINT__ + 'api/donor', donor_request)
             .success(function(data) {
