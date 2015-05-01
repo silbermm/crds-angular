@@ -186,6 +186,9 @@
                 })
                 .then(function() {
                   $state.go("give.thank-you");
+                },
+                function() {
+                  $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
                 })
              }
           }
