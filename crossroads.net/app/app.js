@@ -31,11 +31,11 @@ var _ = require('lodash');
 
    angular.module("crossroads", [
      'crossroads.core',
-     "crossroads.profile", 
-     "crossroads.filters", 
+     "crossroads.profile",
+     "crossroads.filters",
      'crossroads.mptools',
      "crdsCMS.services",
-     'ngAside', 
+     'ngAside',
      'matchMedia',
      'crossroads.give'
      ])
@@ -96,7 +96,7 @@ var _ = require('lodash');
         function ($scope, $rootScope, MESSAGES, $http, Message, growl, $aside, screenSize, $payments, $state) {
 
                 console.log(__API_ENDPOINT__);
-                 
+
                 $scope.state = $state;
 
                 $scope.prevent = function (evt) {
@@ -171,9 +171,10 @@ var _ = require('lodash');
     .directive("emptyToNull", require('./shared/emptyToNull.directive.js'))
     .directive("stopEvent", require('./shared/stopevent.directive.js'))
     .directive("requireMultiple", require('./shared/requireMultiple.directive.js'))
-    .directive("svgIcon", require('./shared/svgIcon.directive.js'));
+    .directive("svgIcon", require('./shared/svgIcon.directive.js'))
+    .directive("naturalNumber", require('./give/directives/naturalNumber.validation.directive.js'));
 
-    require('./preloader'); 
+    require('./preloader');
 
     require('./apprun');
     require('./app.config');

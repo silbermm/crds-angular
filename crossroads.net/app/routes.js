@@ -180,7 +180,14 @@
             .state("give", {
                 url: "/give",
                 controller: "GiveCtrl as give",
-                templateUrl: "give/give.html"
+                templateUrl: "give/give.html",
+                resolve:{
+                  programList:  function(getPrograms){
+                    return getPrograms.Programs.get({programType: 1}).$promise.then(function(response){
+                      return response;
+                    });
+                  }
+                }
             })
            .state("give.amount", {
                  url: "/amount",

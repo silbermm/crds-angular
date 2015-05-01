@@ -3,33 +3,31 @@ require('../donation-details.html');﻿
 (function () {
     angular
     .module("crossroads.give")
-    .directive("donationDetails", ['$log','getPrograms', donationDetails]);
+    .directive("donationDetails", ['$log', donationDetails]);
 
-    function donationDetails($log , getPrograms) {
+    function donationDetails($log) {
         var directive = {
           restrict: 'EA',
           replace: true,
           scope: {
-                progtype: "=",
-                give: "=",
-                amount: "=",
-                program: "=",
-                amountSubmitted: "="
+                amount: "=?",
+                program: "=?",
+                amountSubmitted: "=?",
+                programsIn: "=?"
+
             },
           templateUrl: 'give/donation-details.html',
           link: link
       };
-      return directive;
 
       function link(scope, element, attrs) {
-        getPrograms.Programs.get({programType: scope.progtype}).$promise.then(function(response){
-        scope.programs = response;
-        scope.program = scope.programs[0];
-        });
+        scope.programs = scope.programsIn;
+        scope.program = scope.programsIn[0];
 
         scope.amountError = function() {
-            return (scope.mountSubmitted && scope.donationDetailsForm.$invalid && scope.donationDetailsForm.$error.naturalNumber || scope.donationDetailsForm.$dirty && scope.donationDetailsForm.$invalid)
+            return (scope.amountSubmitted && scope.donationDetailsForm.amount.$invalid && scope.donationDetailsForm.$error.naturalNumber || scope.donationDetailsForm.$dirty && scope.donationDetailsForm.$invalid)
         };
       }
+      return directive;
     }
 })()
