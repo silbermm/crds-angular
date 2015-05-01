@@ -18,7 +18,13 @@ describe('Signup To Serve Tool', function(){
      }]
   };
 
+  var singleParticipant = [{"participantId":4218214,"contactId":768379,"nickname":"Tony","lastname":"Maddox","groupRoleId":22,"groupRoleTitle":"Leader"}];
   var expectedSingleRSVP = {"alternateWeeks":false, "contactId":768379, "endDate":"1430452800", "eventTypeId":142, "opportunityId":"2923", "signUp":true, "startDate":"1430452800"};
+
+  var multiParticipant = [{"participantId":4218214,"contactId":768379,"nickname":"Tony","lastname":"Maddox","groupRoleId":22,"groupRoleTitle":"Leader"}, 
+    {"participantId":2346790,"contactId":23457890,"nickname":"Andy","lastname":"Canterbury","groupRoleId":22,"groupRoleTitle":"Leader"}];
+  var expectedMultiRSVP1 = {"alternateWeeks":false, "contactId":768379, "endDate":"1430452800", "eventTypeId":142, "opportunityId":"2923", "signUp":true, "startDate":"1430452800"};
+  var expectedMultiRSVP2 = {"alternateWeeks":false, "contactId":23457890, "endDate":"1430452800", "eventTypeId":142, "opportunityId":"2923", "signUp":true, "startDate":"1430452800"};
 
   var expectedDates = [1430382600,1430469000,1430555400,1430641800];
   
@@ -83,7 +89,20 @@ describe('Signup To Serve Tool', function(){
         $httpBackend.flush();
         $httpBackend.expectPOST( window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/save-rsvp', expectedSingleRSVP).respond(201, '');
         controller.group.eventTypeId = 142;
-        controller.participants = [{"participantId":4218214,"contactId":768379,"nickname":"Tony","lastname":"Maddox","groupRoleId":22,"groupRoleTitle":"Leader"}];
+        controller.participants = singleParticipant;
+        controller.selectedFrequency = {"value":0,"text":"Once"};
+        controller.selectedEvent = "5/1/2015";
+        controller.attending = true;
+        controller.saveRsvp(true);
+        $httpBackend.flush();
+      });
+
+      it("should save RSVP for multiple participants", function(){
+        $httpBackend.flush();
+        $httpBackend.expectPOST( window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/save-rsvp', expectedMultiRSVP1).respond(201, '');
+        $httpBackend.expectPOST( window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/save-rsvp', expectedMultiRSVP2).respond(201, '');
+        controller.group.eventTypeId = 142;
+        controller.participants = multiParticipant;
         controller.selectedFrequency = {"value":0,"text":"Once"};
         controller.selectedEvent = "5/1/2015";
         controller.attending = true;
