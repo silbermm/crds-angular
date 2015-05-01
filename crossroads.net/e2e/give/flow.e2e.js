@@ -37,7 +37,7 @@ describe('Giving Flow', function() {
     logoutButton.click();    
   })
   
-  it('should follow full bank account flow, giving as guest', function () {
+  it('should follow full  flow, giving as guest', function () {
     expect(browser.getCurrentUrl()).toMatch(/\/amount/);
     element(by.model('amount')).sendKeys("1999");
     element(by.model('program')).sendKeys("Ministry");
