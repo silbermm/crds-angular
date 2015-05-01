@@ -1,28 +1,35 @@
 'use strict()';
-(function(){
+(function() {
   var moment = require('moment');
 
   angular.module('crossroads.mptools').controller('SignupToServeController', SignupToServeController);
 
-  SignupToServeController.$inject = ['$log', '$location', '$window', 'MPTools', 'Su2sData', 'ServeOpportunities' ];
+  SignupToServeController.$inject = ['$log', '$location', '$window', 'MPTools', 'Su2sData', 'ServeOpportunities'];
 
-  function SignupToServeController($log, $location, $window, MPTools, Su2sData, ServeOpportunities){
-    var vm = this; 
-  
+  function SignupToServeController($log, $location, $window, MPTools, Su2sData, ServeOpportunities) {
+    var vm = this;
+
     vm.allParticipants = [];
     vm.cancel = cancel;
     vm.eventDates = [];
-    vm.frequency = [{
-        value: 0,
-        text: "Once"
-      }, {
-        value: 1,
-        text: "Every Week"
-      }, {
-        value: 2,
-        text: "Every Other Week"
-      }];
+    vm.format = 'MM/dd/yyyy';
+    vm.frequencies = [{
+      value: -1,
+      text: "Select a Frequency"
+    }, {
+      value: 0,
+      text: "Once"
+    }, {
+      value: 1,
+      text: "Every Week"
+    }, {
+      value: 2,
+      text: "Every Other Week"
+    }];
     vm.group = {};
+    vm.isFrequencyOnce = isFrequencyOnce;
+    vm.isFrequencyMoreThanOnce = isFrequencyMoreThanOnce;
+    vm.open = open;
     vm.params = MPTools.getParams();
     vm.populateDates = populateDates;
     vm.saveRsvp = saveRsvp;
@@ -32,17 +39,40 @@
     activate();
 
     ////////////////////////////////////////////
-    
-    function activate(){
-      Su2sData.get({"oppId": vm.params.recordId}, function(g){
+
+    function activate() {
+      Su2sData.get({
+        "oppId": vm.params.recordId
+      }, function(g) {
         vm.group = g;
         vm.allParticipants = g.Participants;
         vm.ready = true;
       });
+      populateDates();
     }
 
-    function cancel(){
+    function cancel() {
       $window.close();
+    }
+
+    function isFrequencyOnce() {
+      if (vm.selectedFrequency) {
+        return (vm.selectedFrequency.value == 0)
+      }
+      return false;
+    }
+
+    function isFrequencyMoreThanOnce() {
+      if (vm.selectedFrequency) {
+        return (vm.selectedFrequency.value > 0)
+      }
+      return false;
+    }
+
+    function open($event, opened) {
+      $event.preventDefault();
+      $event.stopPropagation();
+      vm[opened] = true;
     }
 
     function parseDate(stringDate) {
@@ -64,45 +94,48 @@
       return m.format('X');
     }
 
-    function populateDates(){
-      if (vm.selectedFrequency.value === 0){
-        ServeOpportunities.AllOpportunityDates.query({"id": vm.params.recordId}, function(retVal){
-          _.each(retVal, function(d){
-            var dateNum = Number(d * 1000);
-            var dateObj = new Date(dateNum);
-            vm.eventDates.push((dateObj.getMonth() + 1) + "/" + dateObj.getDate() + "/" + dateObj.getFullYear());
-          })
+    function populateDates() {
+      ServeOpportunities.AllOpportunityDates.query({
+        "id": vm.params.recordId
+      }, function(retVal) {
+        _.each(retVal, function(d) {
+          var dateNum = Number(d * 1000);
+          var dateObj = new Date(dateNum);
+          vm.eventDates.push((dateObj.getMonth() + 1) + "/" + dateObj.getDate() + "/" + dateObj.getFullYear());
         });
-      }
+        vm.fromDt = _.first(vm.eventDates);
+        vm.toDt = _.last(vm.eventDates);
+      });
     }
 
-    function saveRsvp(isValid){
-      if(!isValid){
-        return ;
+    function saveRsvp(isValid) {
+      if (!isValid) {
+        return;
       }
 
-      _.each(vm.participants, function(participant){
+      _.each(vm.participants, function(participant) {
         var saveRsvp = new ServeOpportunities.SaveRsvp();
         saveRsvp.contactId = participant.contactId;
         saveRsvp.opportunityId = vm.params.recordId;
         saveRsvp.eventTypeId = vm.group.eventTypeId;
-        if (vm.selectedFrequency.value === 0){
+        if (vm.selectedFrequency.value === 0) {
           saveRsvp.endDate = parseDate(vm.selectedEvent);
           saveRsvp.startDate = parseDate(vm.selectedEvent);
-          saveRsvp.alternateWeeks = false;
+        } else {
+          saveRsvp.endDate = parseDate(vm.toDt);
+          saveRsvp.startDate = parseDate(vm.fromDt);
         }
         saveRsvp.signUp = vm.attending;
-        //saveRsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
-        saveRsvp.$save(function(saved){
-          $log.debug("saved!");
-          //$window.close(); uncomment this before done
-        }, function(err){
+        saveRsvp.alternateWeeks = (vm.selectedFrequency.value === 2);
+        saveRsvp.$save(function(saved) {
+          $window.close();
+        }, function(err) {
           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
         });
       });
     }
 
-    function showError(){
+    function showError() {
       return vm.params.selectedCount > 1 || vm.params.recordDescription === undefined;
     }
   }
