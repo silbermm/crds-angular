@@ -42,6 +42,11 @@ namespace crds_angular.Services
                 _contactRelationshipService.GetMyImmediatieFamilyRelationships(contactId, token).ToList();
             var familyMembers = Mapper.Map<List<ContactRelationship>, List<FamilyMember>>(contactRelationships);
 
+            foreach (var familyMember in familyMembers)
+            {
+                familyMember.Participant = _participantService.GetParticipant(familyMember.ContactId);
+            }
+
             //now get info for Contact
             var myProfile = _personService.GetLoggedInUserProfile(token);
             var me = new FamilyMember
@@ -49,7 +54,8 @@ namespace crds_angular.Services
                 ContactId = myProfile.ContactId,
                 Email = myProfile.EmailAddress,
                 LastName = myProfile.LastName,
-                PreferredName = myProfile.NickName ?? myProfile.FirstName
+                PreferredName = myProfile.NickName ?? myProfile.FirstName,
+                Participant = _participantService.GetParticipant(myProfile.ContactId)
             };
             familyMembers.Add(me);
 
@@ -132,9 +138,10 @@ namespace crds_angular.Services
                                                     Name = teamMember.Name,
                                                     LastName = teamMember.LastName,
                                                     EmailAddress = teamMember.EmailAddress,
+                                                    Participant = teamMember.Participant,
                                                     ServeRsvp =
                                                         GetRsvp(opportunity.OpportunityId, e.EventId,
-                                                            teamMember.ContactId)
+                                                            teamMember)
                                                 };
                                                 existingTeam.Members.Add(member);
                                             }
@@ -144,7 +151,7 @@ namespace crds_angular.Services
                                                 if (member.ServeRsvp == null)
                                                 {
                                                     member.ServeRsvp = GetRsvp(opportunity.OpportunityId, e.EventId,
-                                                        member.ContactId);
+                                                        member);
                                                 }
                                             }
                                             member.Roles.Add(serveRole);
@@ -201,9 +208,9 @@ namespace crds_angular.Services
         }
 
         //public for testing
-        public ServeRsvp GetRsvp(int opportunityId, int eventId, int contactId)
+        public ServeRsvp GetRsvp(int opportunityId, int eventId, TeamMember member)
         {
-            var participant = _participantService.GetParticipant(contactId);
+            var participant = member.Participant;
             var response = _opportunityService.GetOpportunityResponse(opportunityId, eventId, participant);
 
             if (response == null || response.Opportunity_ID ==0) return null;
@@ -290,7 +297,7 @@ namespace crds_angular.Services
                                 ContactId = familyMember.ContactId,
                                 Name = familyMember.PreferredName,
                                 LastName = familyMember.LastName,
-                                EmailAddress = familyMember.Email
+                                EmailAddress = familyMember.Email, Participant = familyMember.Participant
                             };
                             servingTeam.Members.Add(member);
                         }
@@ -348,14 +355,15 @@ namespace crds_angular.Services
         }
 
 
-        private static TeamMember NewTeamMember(FamilyMember familyMember, Group group)
+        private TeamMember NewTeamMember(FamilyMember familyMember, Group group)
         {
             var teamMember = new TeamMember
             {
                 ContactId = familyMember.ContactId,
                 Name = familyMember.PreferredName,
                 LastName = familyMember.LastName,
-                EmailAddress = familyMember.Email
+                EmailAddress = familyMember.Email,
+                Participant = familyMember.Participant
             };
 
             var role = new ServeRole {Name = @group.GroupRole};
@@ -372,7 +380,7 @@ namespace crds_angular.Services
                 LastName = teamMember.LastName,
                 ContactId = teamMember.ContactId,
                 EmailAddress = teamMember.EmailAddress,
-                ServeRsvp = GetRsvp(role.RoleId,eventId,teamMember.ContactId)
+                ServeRsvp = GetRsvp(role.RoleId,eventId,teamMember), Participant = teamMember.Participant
             };
             newTeamMember.Roles.Add(role);
 

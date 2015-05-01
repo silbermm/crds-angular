@@ -31,7 +31,8 @@ describe('Unit testing donation details directive', function(){
     $compile = _$compile_;
     $rootScope = _$rootScope_;
     $injector = _$injector_;
-
+    $rootScope = $injector.get('$rootScope');
+       scope = $rootScope.$new();
     $httpBackend = $injector.get('$httpBackend');
     //This is required to mock the on-blur-messages that are pulled in from the CMS
     $templateCache = $injector.get('$templateCache');
@@ -50,11 +51,16 @@ describe('Unit testing donation details directive', function(){
 
   it('should replace the element with the appropriate content and GET onlineGivingProgramsGetResponse', function(){
     $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +'api/programs/1');
-    // Compile a piece of HTML containing the directive
-    var element = $compile("<donation-details progtype='1'></donation-details>")($rootScope);
+    var amount = 122;
+    var program = {"Test":"Program"};
+    var amountSubmitted = true;
+
+    //Compile a piece of HTML containing the directive
+    var element = $compile("<donation-details progtype='1' amount='amount' program='program' amountSubmitted='amountSubmitted'></donation-details>")(scope);
+
     // fire all the watches
-    $rootScope.$digest();
+    scope.$digest();
     // Check that the compiled element contains the templated content
-    expect(element.html()).toContain("program.Name for program in programs track by program.ProgramId");
+     expect(element.html()).toContain("program.Name for program in programs track by program.ProgramId");
   });
 });

@@ -10,8 +10,11 @@ require('../donation-details.html');﻿
           restrict: 'EA',
           replace: true,
           scope: {
-                progType: "=progtype",
-                give: "="
+                progtype: "=",
+                give: "=",
+                amount: "=",
+                program: "=",
+                amountSubmitted: "="
             },
           templateUrl: 'give/donation-details.html',
           link: link
@@ -19,9 +22,14 @@ require('../donation-details.html');﻿
       return directive;
 
       function link(scope, element, attrs) {
-        getPrograms.Programs.get({programType: scope.progType}).$promise.then(function(response){
-          scope.programs = response;
+        getPrograms.Programs.get({programType: scope.progtype}).$promise.then(function(response){
+        scope.programs = response;
+        scope.program = scope.programs[0];
         });
+
+        scope.amountError = function() {
+            return (scope.mountSubmitted && scope.donationDetailsForm.$invalid && scope.donationDetailsForm.$error.naturalNumber || scope.donationDetailsForm.$dirty && scope.donationDetailsForm.$invalid)
+        };
       }
     }
 })()

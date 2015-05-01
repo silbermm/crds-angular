@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
+using System.Linq;
 using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -13,21 +12,19 @@ using crds_angular.Security;
 using crds_angular.Services.Interfaces;
 using log4net;
 using MinistryPlatform.Translation.Services.Interfaces;
-using Newtonsoft.Json;
 
 namespace crds_angular.Controllers.API
 {
     public class ServeController : MPAuth
     {
+        private readonly IAuthenticationService _authenticationService;
         private readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        //private IPersonService _personService;
-        private IServeService _serveService;
-        private IAuthenticationService _authenticationService;
+        private readonly IServeService _serveService;
 
         public ServeController(IServeService serveService, IAuthenticationService authenticationService)
         {
-            this._serveService = serveService;
-            this._authenticationService = authenticationService;
+            _serveService = serveService;
+            _authenticationService = authenticationService;
         }
 
         [ResponseType(typeof (List<ServingDay>))]
@@ -43,11 +40,12 @@ namespace crds_angular.Controllers.API
                     {
                         return Unauthorized();
                     }
-                    return this.Ok(servingDays);
+                    return Ok(servingDays);
                 }
-                catch (Exception e)
+                catch (Exception exception)
                 {
-                    return this.BadRequest(e.Message);
+                    var apiError = new ApiErrorDto("Get Family Serve Days Failed", exception);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
             });
         }
@@ -64,13 +62,19 @@ namespace crds_angular.Controllers.API
                 {
                     return Unauthorized();
                 }
-                return this.Ok(list);
+                return Ok(list);
             });
         }
 
         [Route("api/serve/save-rsvp")]
         public IHttpActionResult SaveRsvp([FromBody] SaveRsvpDto saveRsvp)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(val => val.Errors).Aggregate("", (current, err) => current + err.Exception.Message);
+                var dataError = new ApiErrorDto("RSVP Data Invalid", new InvalidOperationException("Invalid RSVP Data" + errors));
+                throw new HttpResponseException(dataError.HttpResponseMessage);
+            }
             //validate request
             if (saveRsvp.StartDateUnix <= 0)
             {
@@ -91,7 +95,7 @@ namespace crds_angular.Controllers.API
                     var apiError = new ApiErrorDto("Save RSVP Failed", exception);
                     throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
-                return this.Ok();
+                return Ok();
             });
         }
     }

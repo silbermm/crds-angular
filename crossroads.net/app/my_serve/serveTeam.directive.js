@@ -36,16 +36,7 @@
       };
       scope.displayEmail = displayEmail;
       scope.editProfile = editProfile;
-      scope.frequency = [{
-        value: 0,
-        text: "Once"
-      }, {
-        value: 1,
-        text: "Every Week"
-      }, {
-        value: 2,
-        text: "Every Other Week"
-      }];
+      scope.frequency = getFrequency();
       scope.format = 'MM/dd/yyyy';
       scope.populateDates = populateDates;
       scope.isActiveTab = isActiveTab;
@@ -123,6 +114,26 @@
         });
       };
 
+      function getFrequency() {
+        var dateTime = moment(scope.oppServeDate + " " + scope.opportunity.time);
+        var weeklyLabel = moment(scope.oppServeDate).format("dddd") + "s" + " " + dateTime.format("h:ma");
+
+        var once = {
+          value: 0,
+          text: "Once " + dateTime.format("M/D/YYYY h:ma")
+        };
+        var everyWeek = {
+          value: 1,
+          text: "Every Week " + weeklyLabel
+        };
+        var everyOtherWeek = {
+          value: 2,
+          text: "Every Other Week " + weeklyLabel
+        };
+
+        return [once, everyWeek, everyOtherWeek];
+      }
+
       function getPanelId() {
         return "team-panel-" + scope.dayIndex + scope.tabIndex + scope.teamIndex;
       }
@@ -146,8 +157,7 @@
         } else if (scope.currentMember.currentOpportunity == null) {
           validForm.valid = false;
           validForm.messageStr = $rootScope.MESSAGES.selectFrequency;
-        }
-        else {
+        } else {
           var startDate = parseDate(scope.currentMember.currentOpportunity.toDt);
           var endDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
 
@@ -250,8 +260,8 @@
         saveRsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
         saveRsvp.signUp = scope.currentMember.serveRsvp.attending;
         saveRsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
-        saveRsvp.$save(function(saved){
-          $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess );
+        saveRsvp.$save(function(saved) {
+          $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess);
           $rootScope.$broadcast('update.member', scope.currentMember);
           scope.currentMember.serveRsvp.isSaved = true;
         });
