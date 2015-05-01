@@ -62,7 +62,7 @@
 <body ng-controller="appController as app" ng-class="app.asideState.position">
         <div growl class="crossroads-growl"></div>
         <div>
-            <header ng-if="!app.state.current.data.hideMenu">
+            <header ng-if="!state.current.data.hideMenu">
                 <div class="overlay-container"></div>
                 <!-- Brand Bar -->
                 <div class="brandbar-container">
@@ -205,6 +205,7 @@
         </footer>
         -->
     </div>
-    <script src="assets/main.js"></script>
 </body>
+<script src="https://js.stripe.com/v2/"></script>
+<script src="assets/main.js"></script>
 </html>

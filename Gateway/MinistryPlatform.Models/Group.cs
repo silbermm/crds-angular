@@ -15,6 +15,7 @@ namespace MinistryPlatform.Models
         public Boolean WaitList { get; set; } 
         public int WaitListGroupId { get; set; }
         public string PrimaryContact { get; set; }
+        public int EventTypeId { get; set; }
 
         public Group()
         {

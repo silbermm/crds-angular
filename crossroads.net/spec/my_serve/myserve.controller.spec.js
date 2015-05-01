@@ -19,7 +19,6 @@ describe('MyServeController', function() {
 
   describe('Serve Controller', function(){
     var $scope, controller;
-
     beforeEach(inject(function($log, $httpBackend){
       $scope = {};
       $scope.groups = retArray;

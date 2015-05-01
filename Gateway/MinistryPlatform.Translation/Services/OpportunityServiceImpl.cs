@@ -113,7 +113,7 @@ namespace MinistryPlatform.Translation.Services
             return records.Count();
         }
 
-        public DateTime GetLastOpportunityDate(int opportunityId, string token)
+        public List<DateTime> GetAllOpportunityDates(int opportunityId, string token)
         {
             //First get the event type
             var opp = _ministryPlatformService.GetRecordDict(_opportunityPage, opportunityId, token);
@@ -121,16 +121,19 @@ namespace MinistryPlatform.Translation.Services
 
             //Now get all the events for this type
             var searchString = ",," + eventType;
-            var sort = "0";
-            var events = _ministryPlatformService.GetRecordsDict(_eventPage, token, searchString, sort);
+            var events = _ministryPlatformService.GetRecordsDict(_eventPage, token, searchString);
+            var filteredEvents = events.Select(e => DateTime.Parse(e["Event_Start_Date"].ToString())).Where(eDate => eDate >= DateTime.Today).OrderBy(d => d).ToList();
+            filteredEvents.Sort();
+            return filteredEvents;
+        }
 
+        public DateTime GetLastOpportunityDate(int opportunityId, string token)
+        {
+            var events = GetAllOpportunityDates(opportunityId, token);
             //grab the last one
             try
             {
-                var lastEvent = events.Last();
-                var lastEventDate = DateTime.Parse(lastEvent["Event_Start_Date"].ToString());
-
-                return lastEventDate;
+                return events.Last();
             }
             catch (InvalidOperationException ex)
             {
@@ -192,6 +195,7 @@ namespace MinistryPlatform.Translation.Services
             var groupId = opp.ToInt("Add_to_Group");
             var groupName = opp.ToString("Add_to_Group_Text");
             var searchString = ",,,," + opp.ToString("Group_Role_ID");
+            var eventTypeId = opp.ToInt("Event_Type_ID");
             var group = _ministryPlatformService.GetSubpageViewRecords(_groupParticpantsSubPageView, groupId, token, searchString);
             var participants = new List<GroupParticipant>();
             foreach (var groupParticipant in group)
@@ -210,7 +214,8 @@ namespace MinistryPlatform.Translation.Services
             {
                 GroupId = groupId,
                 Name = groupName,
-                Participants = participants
+                Participants = participants,
+                EventTypeId = eventTypeId
             };
             return retGroup;
         }
