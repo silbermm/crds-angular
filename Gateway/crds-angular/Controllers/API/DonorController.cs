@@ -15,10 +15,10 @@ namespace crds_angular.Controllers.API
     public class DonorController : MPAuth
     {
         private IDonorService donorService;
-        private IStripeService stripeService;
+        private IPaymentService stripeService;
         private IAuthenticationService authenticationService;
 
-        public DonorController(IDonorService donorService, IStripeService stripeService,
+        public DonorController(IDonorService donorService, IPaymentService stripeService,
             IAuthenticationService authenticationService)
         {
             this.donorService = donorService;

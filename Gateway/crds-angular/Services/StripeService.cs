@@ -9,7 +9,7 @@ using RestSharp;
 
 namespace crds_angular.Services
 {
-    public class StripeService : IStripeService
+    public class StripeService : IPaymentService
     {
         public string createCustomer(string token)
         {

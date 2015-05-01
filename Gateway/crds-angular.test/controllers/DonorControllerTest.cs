@@ -22,7 +22,7 @@ namespace crds_angular.test.controllers
     {
         private DonorController fixture;
         private Mock<IDonorService> donorServiceMock;
-        private Mock<IStripeService> stripeServiceMock;
+        private Mock<IPaymentService> stripeServiceMock;
         private Mock<IAuthenticationService> authenticationServiceMock;
         private string authType;
         private string authToken;
@@ -31,7 +31,7 @@ namespace crds_angular.test.controllers
         public void SetUp()
         {
             donorServiceMock = new Mock<IDonorService>();
-            stripeServiceMock = new Mock<IStripeService>();
+            stripeServiceMock = new Mock<IPaymentService>();
             authenticationServiceMock = new Mock<IAuthenticationService>();
             fixture = new DonorController(donorServiceMock.Object, stripeServiceMock.Object,
                 authenticationServiceMock.Object);
