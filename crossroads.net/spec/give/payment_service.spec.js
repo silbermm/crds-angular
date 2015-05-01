@@ -1,4 +1,4 @@
-describe ('StripeService', function () {
+describe ('PaymentService', function () {
   var sut, httpBackend, stripe;
   
   var card = {

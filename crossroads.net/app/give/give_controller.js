@@ -3,20 +3,15 @@
 
   module.exports = GiveCtrl;
 
-  GiveCtrl.$inject = ['$rootScope', '$scope', '$state', '$timeout', '$http', 'Session' ];
+  GiveCtrl.$inject = ['$rootScope', '$scope', '$state', '$timeout', '$http', 'Session', 'PaymentService' ];
     
-  function GiveCtrl($rootScope, $scope, $state, $timeout, $httpProvider, Session) {
+  function GiveCtrl($rootScope, $scope, $state, $timeout, $httpProvider, Session, PaymentService) {
 
         $scope.$on('$stateChangeStart', function (event, toState, toParams) {
            if ($rootScope.email) {   
                vm.email = $rootScope.email;
                //what if email is not found for some reason??
              }
-                  
-            if (toState.name =="give.thank-you" && $scope.giveForm.accountForm.$invalid){
-                $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-                event.preventDefault();
-            }
         });
 
         var vm = this;
@@ -183,14 +178,25 @@
                 $scope.giveForm.accountForm.routing.$error.invalidRouting && $scope.giveForm.accountForm.routing.$dirty)
         };
 
-        /**
-         * Will stop from going to the thank you page
-         * if form is invalid using the stateChangeStart 
-         * and preventDefault
-         */
         vm.submitBankInfo = function() {
             vm.bankinfoSubmitted = true;
-            $state.go("give.thank-you");
+            if ($scope.giveForm.accountForm.$valid) {
+              if (PaymentService.donor.id === undefined) {
+                PaymentService.createDonorWithCard({
+                  name: vm.nameOnCard,
+                  number: vm.ccNumber,
+                  exp_month: vm.expDate,
+                  exp_year: vm.expDate,
+                  cvc: vm.cvc
+                })
+                .then(function() {
+                  $state.go("give.thank-you");
+                })
+             }
+          }
+          else {
+            $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+          }
         };
 
         vm.toggleCheck = function() {
