@@ -7,7 +7,26 @@
   function preloader(){
     return {
       restrict: 'EA',
-      templateUrl: 'preloader/preloader.html'
+      scope: {
+        fullScreen: '=?'
+      },
+      templateUrl: 'preloader/preloader.html',
+      link: link
     }
+
+    function link(scope, el, attr){
+      
+      scope.isFullScreen: isFullScreen;
+
+
+      /////////////////////////////////
+
+
+      function isFullScreen(){
+        return scope.fullScreen !== undefined || scope.fullScreen !== null;
+      };
+
+
+    };
   }
 })();
