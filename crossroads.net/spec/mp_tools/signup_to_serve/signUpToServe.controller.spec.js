@@ -19,7 +19,7 @@ describe('Signup To Serve Tool', function(){
   };
 
   var singleParticipant = [{"participantId":4218214,"contactId":768379,"nickname":"Tony","lastname":"Maddox","groupRoleId":22,"groupRoleTitle":"Leader"}];
-  var expectedSingleRSVP = {"alternateWeeks":false, "contactId":768379, "endDate":"1430452800", "eventTypeId":142, "opportunityId":"2923", "signUp":true, "startDate":"1430452800"};
+  var expectedSingleRSVP = {"contactId":768379, "opportunityId":"2923", "eventTypeId":142, "endDate":"1430452800", "startDate":"1430452800", "signUp":true, "alternateWeeks":false};
 
   var multiParticipant = [{"participantId":4218214,"contactId":768379,"nickname":"Tony","lastname":"Maddox","groupRoleId":22,"groupRoleTitle":"Leader"}, 
     {"participantId":2346790,"contactId":23457890,"nickname":"Andy","lastname":"Canterbury","groupRoleId":22,"groupRoleTitle":"Leader"}];

@@ -16,6 +16,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       './node_modules/phantomjs-polyfill/bind-polyfill.js',
+      'https://js.stripe.com/v2/',
       'assets/main.js',
       'node_modules/angular-mocks/angular-mocks.js',
       'node_modules/moment/moment.js',
