@@ -162,7 +162,7 @@
                     isProtected: true
                 },
                 resolve: {
-                    loggedin: checkLoggedin
+                  loggedin: checkLoggedin
                 }
             })
             .state("serve-signup", {
@@ -170,7 +170,13 @@
               controller: "MyServeController as serve",
               templateUrl: "my_serve/myserve.html",
               data: { isProtected: true },
-              resolve: { loggedin: checkLoggedin }
+              resolve: { 
+                ServeOpportunities: 'ServeOpportunities',
+                Groups: function(ServeOpportunities){
+                  return ServeOpportunities.ServeDays.query().$promise;
+                },
+                loggedin: checkLoggedin 
+              }
             })
             .state("styleguide", {
                 url: "/styleguide",

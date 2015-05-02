@@ -59,7 +59,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 </head>
 
-<body ng-controller="appCtrl" ng-class="asideState.position">
+<body ng-controller="appController as app" ng-class="app.asideState.position">
         <div growl class="crossroads-growl"></div>
         <div>
             <header ng-if="!state.current.data.hideMenu">
@@ -152,7 +152,8 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12">
-                            <div ui-view></div>
+                          <preloader ng-if="app.resolving" full-screen='true'> </preloader>
+                          <div ui-view ng-if="!app.resolving"></div>
                         </div>
                     </div>
                 </div>
