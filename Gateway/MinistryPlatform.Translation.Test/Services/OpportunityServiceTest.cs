@@ -57,6 +57,15 @@ namespace MinistryPlatform.Translation.Test.Services
             _eventService.Setup(m => m.GetEvents("Event Type 300", It.IsAny<string>()))
                 .Returns(MockEvents("Event Type 300"));
 
+
+            //var records = _ministryPlatformService.GetSubpageViewRecords(_signedupToServeSubPageViewId, opportunity.OpportunityId,
+            //    token, "");
+            _ministryPlatformService.Setup(
+                m =>
+                    m.GetSubpageViewRecords(_signedupToServeSubPageViewId, It.IsAny<int>(), It.IsAny<string>(),
+                        It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())).Returns(new List<Dictionary<string, object>>());
+            
+
             var opportunities = _fixture.GetOpportunitiesForGroup(groupId, It.IsAny<string>());
 
             _ministryPlatformService.VerifyAll();

@@ -43,8 +43,7 @@ namespace crds_angular.Services
         private List<Response> GetParticipantResponses(int participantId)
         {
             logger.Debug(string.Format("GetParticipantResponses({0}) ", participantId));
-            var responses = _participantService.GetParticipantResponses(participantId);
-            return responses;
+            return _participantService.GetParticipantResponses(participantId);
         }
 
         public List<FamilyMember> GetMyImmediateFamily(int contactId, string token)
@@ -58,9 +57,6 @@ namespace crds_angular.Services
             {
                 logger.Debug(string.Format("GetParticipant({0}) ", familyMember.ContactId));
                 familyMember.Participant = _participantService.GetParticipant(familyMember.ContactId);
-
-                //get all responses here????? tm 5/1/2015
-                //logger.Debug(string.Format("GetParticipantResponses({0}) ", familyMember.Participant.ParticipantId));
                 var responses = GetParticipantResponses(familyMember.Participant.ParticipantId);
                 familyMember.Responses = responses;
             }
@@ -76,7 +72,6 @@ namespace crds_angular.Services
                 PreferredName = myProfile.NickName ?? myProfile.FirstName,
                 Participant = _participantService.GetParticipant(myProfile.ContactId)
             };
-            //logger.Debug(string.Format("GetParticipantResponses({0}) ", me.Participant.ParticipantId));
             me.Responses = GetParticipantResponses(me.Participant.ParticipantId);
             familyMembers.Add(me);
 
@@ -234,102 +229,24 @@ namespace crds_angular.Services
         //public for testing
         public ServeRsvp GetRsvp(int opportunityId, int eventId, TeamMember member)
         {
-            //var participant = member.Participant;
-            //logger.Debug(string.Format("GetOpportunityResponse({0},{1},{2}) ", opportunityId, eventId,
-            //    participant.ParticipantId));
-
-            ServeRsvp fakeReturn;
             if (member.Responses == null)
             {
-                fakeReturn = null;
+                return null;
             }
-            else
-            {
-                var r =
-                    member.Responses.Where(t => t.Opportunity_ID == opportunityId && t.Event_ID == eventId)
-                        .Select(t => t.Response_Result_ID)
-                        .ToList();
-                if (r.Count <= 0)
-                {
-                    fakeReturn = null;
-                }
-                else
-                {
-                    fakeReturn = new ServeRsvp {Attending = (r[0] == 1), RoleId = opportunityId};
-                    //return serveRsvp;
-                }
-            }
-
-            return fakeReturn;
-
-            //var response = _opportunityService.GetOpportunityResponse(opportunityId, eventId, participant);
-
-            //if (response == null || response.Opportunity_ID == 0) return null;
-
-            //var serveRsvp = new ServeRsvp {Attending = (response.Response_Result_ID == 1), RoleId = opportunityId};
-            //return serveRsvp;
+            var r =
+                member.Responses.Where(t => t.Opportunity_ID == opportunityId && t.Event_ID == eventId)
+                    .Select(t => t.Response_Result_ID)
+                    .ToList();
+            return r.Count <= 0 ? null : new ServeRsvp {Attending = (r[0] == 1), RoleId = opportunityId};
         }
 
+        //public for testing
         public Capacity OpportunityCapacity(Opportunity opportunity, int eventId, string token)
         {
             var min = opportunity.MinimumNeeded;
             var max = opportunity.MaximumNeeded;
             var signedUp = opportunity.Responses.Count(r => r.Event_ID == eventId);
 
-            var capacity = new Capacity { Display = true };
-
-            if (max == null && min == null)
-            {
-                capacity.Display = false;
-                return capacity;
-            }
-
-
-            int calc;
-            if (max == null)
-            {
-                capacity.Minimum = min.GetValueOrDefault();
-
-                //is this valid?? max is null so put min value in max?
-                capacity.Maximum = capacity.Minimum;
-
-                calc = capacity.Minimum - signedUp;
-            }
-            else if (min == null)
-            {
-                capacity.Maximum = max.GetValueOrDefault();
-                //is this valid??
-                capacity.Minimum = capacity.Maximum;
-                calc = capacity.Maximum - signedUp;
-            }
-            else
-            {
-                capacity.Maximum = max.GetValueOrDefault();
-                capacity.Minimum = min.GetValueOrDefault();
-                calc = capacity.Minimum - signedUp;
-            }
-
-            if (signedUp < capacity.Maximum && signedUp < capacity.Minimum)
-            {
-                capacity.Message = string.Format("{0} Needed", calc);
-                capacity.BadgeType = BadgeType.LabelInfo.ToString();
-                capacity.Available = calc;
-                capacity.Taken = signedUp;
-            }
-            else if (signedUp >= capacity.Maximum)
-            {
-                capacity.Message = "Full";
-                capacity.BadgeType = BadgeType.LabelDefault.ToString();
-                capacity.Available = calc;
-                capacity.Taken = signedUp;
-            }
-
-            return capacity;
-        }
-        
-        //public for testing
-        public Capacity OpportunityCapacity(int? max, int? min, int opportunityId, int eventId, string token)
-        {
             var capacity = new Capacity {Display = true};
 
             if (max == null && min == null)
@@ -338,8 +255,7 @@ namespace crds_angular.Services
                 return capacity;
             }
 
-            logger.Debug(string.Format("GetOpportunitySignupCount({0},{1}) ", opportunityId, eventId));
-            var signedUp = this._opportunityService.GetOpportunitySignupCount(opportunityId, eventId, token);
+
             int calc;
             if (max == null)
             {
@@ -381,6 +297,61 @@ namespace crds_angular.Services
 
             return capacity;
         }
+
+        ////public for testing
+        //public Capacity OpportunityCapacity(int? max, int? min, int opportunityId, int eventId, string token)
+        //{
+        //    var capacity = new Capacity {Display = true};
+
+        //    if (max == null && min == null)
+        //    {
+        //        capacity.Display = false;
+        //        return capacity;
+        //    }
+
+        //    logger.Debug(string.Format("GetOpportunitySignupCount({0},{1}) ", opportunityId, eventId));
+        //    var signedUp = this._opportunityService.GetOpportunitySignupCount(opportunityId, eventId, token);
+        //    int calc;
+        //    if (max == null)
+        //    {
+        //        capacity.Minimum = min.GetValueOrDefault();
+
+        //        //is this valid?? max is null so put min value in max?
+        //        capacity.Maximum = capacity.Minimum;
+
+        //        calc = capacity.Minimum - signedUp;
+        //    }
+        //    else if (min == null)
+        //    {
+        //        capacity.Maximum = max.GetValueOrDefault();
+        //        //is this valid??
+        //        capacity.Minimum = capacity.Maximum;
+        //        calc = capacity.Maximum - signedUp;
+        //    }
+        //    else
+        //    {
+        //        capacity.Maximum = max.GetValueOrDefault();
+        //        capacity.Minimum = min.GetValueOrDefault();
+        //        calc = capacity.Minimum - signedUp;
+        //    }
+
+        //    if (signedUp < capacity.Maximum && signedUp < capacity.Minimum)
+        //    {
+        //        capacity.Message = string.Format("{0} Needed", calc);
+        //        capacity.BadgeType = BadgeType.LabelInfo.ToString();
+        //        capacity.Available = calc;
+        //        capacity.Taken = signedUp;
+        //    }
+        //    else if (signedUp >= capacity.Maximum)
+        //    {
+        //        capacity.Message = "Full";
+        //        capacity.BadgeType = BadgeType.LabelDefault.ToString();
+        //        capacity.Available = calc;
+        //        capacity.Taken = signedUp;
+        //    }
+
+        //    return capacity;
+        //}
 
         public List<ServingTeam> GetServingTeams(string token)
         {
@@ -434,7 +405,6 @@ namespace crds_angular.Services
             return servingTeams;
         }
 
-
         public bool SaveServeRsvp(string token,
             int contactId,
             int opportunityId,
@@ -466,7 +436,6 @@ namespace crds_angular.Services
 
             return true;
         }
-
 
         private TeamMember NewTeamMember(FamilyMember familyMember, Group group)
         {
