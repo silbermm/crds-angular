@@ -10,7 +10,7 @@ namespace crds_angular.test.Services
     class PaymentServiceTest
     {
         [Test]
-        public void testCreateCustomer()
+        public void TestCreateCustomer()
         {
             
         }

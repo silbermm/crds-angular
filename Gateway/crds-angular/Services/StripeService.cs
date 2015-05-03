@@ -6,19 +6,25 @@ using System.Net;
 using System.Web;
 using crds_angular.Models;
 using crds_angular.Services.Interfaces;
+using Crossroads.Utilities.Interfaces;
+using Crossroads.Utilities.Services;
 using RestSharp;
 
 namespace crds_angular.Services
 {
     public class StripeService : IPaymentService
     {
+        private ConfigurationWrapper _configurationWrapper;
+
         public string createCustomer(string token)
         {
-            var client = new RestClient(ConfigurationManager.AppSettings["PaymentClient"]);
-           
-            // TODO: read from environment variable e.g. MP login info
-            client.Authenticator = new HttpBasicAuthenticator("sk_test_13Lo24dJijtpqzZwOZDbOL7C", null);
+            _configurationWrapper = new ConfigurationWrapper();
 
+            var client = new RestClient(ConfigurationManager.AppSettings["PaymentClient"])
+            {
+                Authenticator = new HttpBasicAuthenticator(_configurationWrapper.GetEnvironmentVarAsString("Stripe_Test_Auth_Token"), null)
+            };
+            
             var request = new RestRequest("customers", Method.POST);
             request.AddParameter("description", "testing customers"); // adds to POST or URL querystring based on Method
             request.AddParameter("source", token);
