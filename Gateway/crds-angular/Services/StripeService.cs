@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -13,8 +14,8 @@ namespace crds_angular.Services
     {
         public string createCustomer(string token)
         {
-            // TODO: read from configuration
-            var client = new RestClient("https://api.stripe.com/v1");
+            var client = new RestClient(ConfigurationManager.AppSettings["PaymentClient"]);
+           
             // TODO: read from environment variable e.g. MP login info
             client.Authenticator = new HttpBasicAuthenticator("sk_test_13Lo24dJijtpqzZwOZDbOL7C", null);
 
