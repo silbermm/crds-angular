@@ -73,8 +73,7 @@ describe ('PaymentService', function () {
       expect(result.stripe_customer_id).toEqual("cust_test");
     });
   });
-  
-  //TODO: Test error condition from create donor
+   
   describe('createDonorWithCard Error', function() {
     it('should return error if there is problem calling donor service', function() {
       var postData = {
@@ -93,6 +92,21 @@ describe ('PaymentService', function () {
           expect(error.message).toEqual("Token not found");
         });
     });
+  });
+
+  describe('donateToProgram', function(){
+
+    var postData = {
+        programId: "Program",
+        amount: "1234",
+        donor_id: "Donor"
+      }
+
+    httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/donation', postData)
+        .respond({
+          id: "12345",
+          stripe_customer_id: "cust_test"
+        });
   });
   
 });

@@ -184,7 +184,7 @@
                   exp_year: vm.expDate.substr(2,2),
                   cvc: vm.cvc
                 })
-                .then(function() {
+                .then(function(donor) {
                   $state.go("give.thank-you");
                 },
                 function() {
