@@ -50,7 +50,7 @@ describe ('PaymentService', function () {
       spyOn(stripe.card, 'createToken').and.callThrough();
       
       var postData = {
-        stripeTokenId: "tok_test"
+        stripe_token_id: "tok_test"
       }
       httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/donor', postData)
         .respond({
@@ -78,7 +78,7 @@ describe ('PaymentService', function () {
   describe('createDonorWithCard Error', function() {
     it('should return error if there is problem calling donor service', function() {
       var postData = {
-        stripeTokenId: "tok_test"
+        stripe_token_id: "tok_test"
       }
       httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/donor', postData)
         .respond(400,{

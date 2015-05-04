@@ -126,6 +126,10 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="RestSharp, Version=105.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\RestSharp.105.1.0\lib\net45\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -222,6 +226,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\API\AccountController.cs" />
+    <Compile Include="Controllers\API\DonorController.cs" />
     <Compile Include="Controllers\API\EventLocationController.cs" />
     <Compile Include="Controllers\API\GroupController.cs" />
     <Compile Include="Controllers\API\ProgramController.cs" />
@@ -239,6 +244,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Crossroads\CreateDonorDTO.cs" />
+    <Compile Include="Models\Crossroads\DonorDTO.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityGroup.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityGroupParticipant.cs" />
     <Compile Include="Models\Crossroads\PartID.cs" />
@@ -276,10 +283,14 @@
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\Interfaces\IServeService.cs" />
     <Compile Include="Services\Interfaces\IPersonService.cs" />
+    <Compile Include="Services\Interfaces\IPaymentService.cs" />
     <Compile Include="Services\MinistryPlatformBaseService.cs" />
     <Compile Include="Services\PersonService.cs" />
     <Compile Include="Services\ServeService.cs" />
     <Compile Include="Services\SkillService.cs" />
+    <Compile Include="Services\StripeCustomer.cs" />
+    <Compile Include="Services\StripeException.cs" />
+    <Compile Include="Services\StripeService.cs" />
     <Compile Include="Services\TranslationService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
