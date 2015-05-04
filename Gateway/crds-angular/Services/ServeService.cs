@@ -298,61 +298,6 @@ namespace crds_angular.Services
             return capacity;
         }
 
-        ////public for testing
-        //public Capacity OpportunityCapacity(int? max, int? min, int opportunityId, int eventId, string token)
-        //{
-        //    var capacity = new Capacity {Display = true};
-
-        //    if (max == null && min == null)
-        //    {
-        //        capacity.Display = false;
-        //        return capacity;
-        //    }
-
-        //    logger.Debug(string.Format("GetOpportunitySignupCount({0},{1}) ", opportunityId, eventId));
-        //    var signedUp = this._opportunityService.GetOpportunitySignupCount(opportunityId, eventId, token);
-        //    int calc;
-        //    if (max == null)
-        //    {
-        //        capacity.Minimum = min.GetValueOrDefault();
-
-        //        //is this valid?? max is null so put min value in max?
-        //        capacity.Maximum = capacity.Minimum;
-
-        //        calc = capacity.Minimum - signedUp;
-        //    }
-        //    else if (min == null)
-        //    {
-        //        capacity.Maximum = max.GetValueOrDefault();
-        //        //is this valid??
-        //        capacity.Minimum = capacity.Maximum;
-        //        calc = capacity.Maximum - signedUp;
-        //    }
-        //    else
-        //    {
-        //        capacity.Maximum = max.GetValueOrDefault();
-        //        capacity.Minimum = min.GetValueOrDefault();
-        //        calc = capacity.Minimum - signedUp;
-        //    }
-
-        //    if (signedUp < capacity.Maximum && signedUp < capacity.Minimum)
-        //    {
-        //        capacity.Message = string.Format("{0} Needed", calc);
-        //        capacity.BadgeType = BadgeType.LabelInfo.ToString();
-        //        capacity.Available = calc;
-        //        capacity.Taken = signedUp;
-        //    }
-        //    else if (signedUp >= capacity.Maximum)
-        //    {
-        //        capacity.Message = "Full";
-        //        capacity.BadgeType = BadgeType.LabelDefault.ToString();
-        //        capacity.Available = calc;
-        //        capacity.Taken = signedUp;
-        //    }
-
-        //    return capacity;
-        //}
-
         public List<ServingTeam> GetServingTeams(string token)
         {
             logger.Debug(string.Format("GetContactId() "));

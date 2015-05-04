@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using crds_angular.App_Start;
-using crds_angular.Extenstions;
 using crds_angular.Models;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services;
@@ -10,8 +9,6 @@ using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
-using Rhino.Mocks;
 
 namespace crds_angular.test.Services
 {
@@ -354,10 +351,6 @@ namespace crds_angular.test.Services
             opportunity.MinimumNeeded = min;
             opportunity.OpportunityId = opportunityId;
             opportunity.Responses = mockResponses;
-
-            //mock
-            //_opportunityService.Setup(m => m.GetOpportunitySignupCount(opportunityId, eventId, It.IsAny<string>()))
-            //    .Returns(mockSignUpCount);
 
             var capacity = _fixture.OpportunityCapacity(opportunity, eventId, It.IsAny<string>());
 

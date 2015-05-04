@@ -60,9 +60,6 @@ namespace MinistryPlatform.Translation.Services
                 {
                     var response = new MinistryPlatform.Models.Response();
                     response.Event_ID = r.ToInt("Event_ID");
-                    //response.Opportunity_ID = record.ToInt("Opportunity ID");
-                    //response.Participant_ID = record.ToInt("Participant ID");
-                    //response.Response_Result_ID = record.ToInt("Response Result ID");
                     responses.Add(response);
                 }
                 opportunity.Responses = new List<MinistryPlatform.Models.Response>();
