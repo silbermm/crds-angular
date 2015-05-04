@@ -39,9 +39,12 @@
     .panel-body {
         padding: 10px 8px;
     }
-    .form-group > a.btn {
-        width: 100%;
-    }
+}
+
+.give-login, .give-register {
+  .btn-primary.col-xs-12 {
+    @extend .btn-lg;
+  }
 }
 
 .wide-label {
