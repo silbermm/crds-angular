@@ -22,7 +22,7 @@ namespace crds_angular.Services
 
             var client = new RestClient(ConfigurationManager.AppSettings["PaymentClient"])
             {
-                Authenticator = new HttpBasicAuthenticator(_configurationWrapper.GetEnvironmentVarAsString("Stripe_Test_Auth_Token"), null)
+                Authenticator = new HttpBasicAuthenticator(_configurationWrapper.GetEnvironmentVarAsString("STRIPE_TEST_AUTH_TOKEN"), null)
             };
             
             var request = new RestRequest("customers", Method.POST);

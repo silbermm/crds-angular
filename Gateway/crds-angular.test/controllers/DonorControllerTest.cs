@@ -46,31 +46,27 @@ namespace crds_angular.test.controllers
         [Test]
         public void TestPostToSuccessfullyCreateDonor()
         {
-            CreateDonorDTO createDonorDto = new CreateDonorDTO
+            var contactId = 8675309;
+            var stripeCustomerId = "cus_test123456";
+            var donorId = 394256;
+            authenticationServiceMock.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Returns(contactId);
+
+            stripeServiceMock.Setup(mocked => mocked.createCustomer(It.IsAny<string>())).Returns(stripeCustomerId);
+
+            var createDonorDto = new CreateDonorDTO
             {
                 stripe_token_id = "tok_test"
             };
 
-            const string stripeTokenId = "tok_test";
-            const string stripeCustomerId = "cus_test123456";
-
-            stripeServiceMock.Setup(mocked => mocked.createCustomer(stripeTokenId)).Returns(stripeCustomerId);
-            //var customerId = stripeServiceMock.createCustomer(dto.stripe_token_id);
-
-            const int contactId = 996996;
-            const int donorId = 252525;
-            
-
+          
             donorServiceMock.Setup(mocked => mocked.CreateDonorRecord(contactId, stripeCustomerId)).Returns(donorId);
            
             IHttpActionResult result = fixture.Post(createDonorDto);
             
-            
             Assert.IsNotNull(result);
             Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonorDTO>), result);
             var okResult = (OkNegotiatedContentResult<DonorDTO>)result;
-
-            //Assert.AreEqual("123456", okResult.Content.id);
+            Assert.AreEqual("394256", okResult.Content.id);
             Assert.AreEqual("cus_test123456", okResult.Content.stripe_customer_id);
         }
     }
