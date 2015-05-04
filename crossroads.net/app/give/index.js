@@ -27,3 +27,4 @@ require('./demo/trip_giving/give.html');
 
 
 app.controller("GiveCtrl",require("./give_controller"));
+app.directive("naturalNumber", require('./directives/naturalNumber.validation.directive.js'));
