@@ -39,7 +39,8 @@ namespace crds_angular
             container.RegisterType<IServeService, ServeService>();
             container.RegisterType<IParticipantService, ParticipantService>();
             container.RegisterType<IProgramService, ProgramService>();
-
+            container.RegisterType<IDonorService, DonorService>();
+            container.RegisterType<IPaymentService, StripeService>();
 
             container.RegisterType<PlatformServiceClient>(WithLifetime.PerResolve(typeof(PlatformServiceClient)), new InjectionConstructor());
 
