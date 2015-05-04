@@ -20,7 +20,7 @@ namespace crds_angular.Services
         {
             _configurationWrapper = new ConfigurationWrapper();
 
-            var client = new RestClient(ConfigurationManager.AppSettings["PaymentClient"])
+            var client = new RestClient(_configurationWrapper.GetConfigValue("PaymentClient"))
             {
                 Authenticator = new HttpBasicAuthenticator(_configurationWrapper.GetEnvironmentVarAsString("STRIPE_TEST_AUTH_TOKEN"), null)
             };

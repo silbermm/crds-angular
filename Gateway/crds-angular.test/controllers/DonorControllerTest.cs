@@ -51,7 +51,6 @@ namespace crds_angular.test.controllers
                 stripe_token_id = "tok_test"
             };
 
-          
             donorServiceMock.Setup(mocked => mocked.CreateDonorRecord(contactId, stripeCustomerId)).Returns(donorId);
            
             IHttpActionResult result = fixture.Post(createDonorDto);
