@@ -1,41 +1,54 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
+using System.Configuration;
 using crds_angular.Services;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using crds_angular.Services.Interfaces;
+using Crossroads.Utilities.Interfaces;
+using MinistryPlatform.Translation.Services.Interfaces;
+using Moq;
+using NSubstitute;
+using NSubstitute.Core;
 using NUnit.Framework;
-using Assert = NUnit.Framework.Assert;
-using StringAssert = NUnit.Framework.StringAssert;
+using RestSharp;
 
 namespace crds_angular.test.Services
 {
     class StripeServiceTest
     {
-        StripeService stripeService; 
+        private Mock<IPaymentService> _stripeServiceMock;
+        private Mock<IConfigurationWrapper> _configurationWrapper;
+        private StripeService _fixture  ;
 
         [SetUp]
         public void Setup()
         {
-            stripeService = new StripeService();
+           _stripeServiceMock = new Mock<IPaymentService>();
+           _configurationWrapper = new Mock<IConfigurationWrapper>();
+           _fixture = new StripeService();
+           var stripeCustomerId = "cus_crds1234";
         }
 
         [Test]
-        [NUnit.Framework.Ignore("Need to mock out stripe api")]
         public void shouldCallCreateCustomer()
         {
-            string customerId = stripeService.createCustomer("tok_15xfdqEldv5NE53suo6XXxZY");
-            Assert.NotNull(customerId); 
-            StringAssert.StartsWith("cus_", customerId);
+            var client = new RestClient(ConfigurationManager.AppSettings["PaymentClient"])
+            {
+                Authenticator =
+                    new HttpBasicAuthenticator(
+                        (_configurationWrapper.Setup(m => m.GetEnvironmentVarAsString("STRIPE_TEST_AUTH_TOKEN"))
+                            .Returns("MockTestToken")).ToString(), null)
+            };
+            //need to fix this
+            var stripeCustomer = _fixture.createCustomer(It.IsAny<string>());
+            Assert.NotNull(stripeCustomer);
+            StringAssert.StartsWith("cus_", stripeCustomer);
         }
 
         [Test]
         public void shouldThrowExceptionWhenTokenIsInvalid()
         {
-            Assert.Throws<StripeException>(() => stripeService.createCustomer("tok_is_bad"));
+           Assert.Throws<StripeException>(() => _fixture.createCustomer("tok_is_bad"));
         }
 
     }
-}
+
+  }
