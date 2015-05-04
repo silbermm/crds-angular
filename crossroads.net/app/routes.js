@@ -189,6 +189,8 @@
                 templateUrl: "give/give.html",
                 resolve:{
                   programList:  function(getPrograms){
+                    // TODO The number one relates to the programType in MP. At some point we should fetch
+                    // that number from MP based in human readable input here.
                     return getPrograms.Programs.get({programType: 1}).$promise;
                   }
                 }
