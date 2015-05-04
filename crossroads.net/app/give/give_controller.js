@@ -192,6 +192,10 @@
                           $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
                         })
                    }
+                   else {
+                    console.log("error");
+                    $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
+                   }
                 }  
                 else  {
                   $state.go("give.thank-you");      
@@ -199,7 +203,7 @@
             }        
             else {
                 $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-          }
+            }
         };
 
         vm.toggleCheck = function() {
