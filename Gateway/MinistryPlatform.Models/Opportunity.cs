@@ -13,5 +13,6 @@ namespace MinistryPlatform.Models
         //public int Capacity { get; set; }
         public int? MaximumNeeded { get; set; }
         public int? MinimumNeeded { get; set; }
+        public List<Response> Responses { get; set; }
     }
 }
