@@ -11,5 +11,3 @@ require('./directives/donationConfirmation.directive');
 require('./directives/bankInfo.directive');
 require('./directives/creditCardInfo.directive');
 require('./directives/currencyMask.directive');
-
-
