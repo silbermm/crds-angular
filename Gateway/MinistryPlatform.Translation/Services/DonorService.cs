@@ -27,7 +27,6 @@ namespace MinistryPlatform.Translation.Services
         {
             //this assumes that you do not already have a donor record - new giver
 
-
             var values = new Dictionary<string, object>
             {
                 {"Contact_ID", contactId},

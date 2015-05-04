@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Results;
@@ -13,8 +8,6 @@ using MinistryPlatform.Translation.Services.Interfaces;
 using crds_angular.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
-using RestSharp.Authenticators.OAuth;
-using Rhino.Mocks;
 
 namespace crds_angular.test.controllers
 {
@@ -22,7 +15,7 @@ namespace crds_angular.test.controllers
     {
         private DonorController fixture;
         private Mock<IDonorService> donorServiceMock;
-        private Mock<IStripeService> stripeServiceMock;
+        private Mock<IPaymentService> stripeServiceMock;
         private Mock<IAuthenticationService> authenticationServiceMock;
         private string authType;
         private string authToken;
@@ -31,7 +24,7 @@ namespace crds_angular.test.controllers
         public void SetUp()
         {
             donorServiceMock = new Mock<IDonorService>();
-            stripeServiceMock = new Mock<IStripeService>();
+            stripeServiceMock = new Mock<IPaymentService>();
             authenticationServiceMock = new Mock<IAuthenticationService>();
             fixture = new DonorController(donorServiceMock.Object, stripeServiceMock.Object,
                 authenticationServiceMock.Object);
@@ -46,23 +39,26 @@ namespace crds_angular.test.controllers
         [Test]
         public void TestPostToSuccessfullyCreateDonor()
         {
-            CreateDonorDTO createDonorDto = new CreateDonorDTO
+            var contactId = 8675309;
+            var stripeCustomerId = "cus_test123456";
+            var donorId = 394256;
+            authenticationServiceMock.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Returns(contactId);
+
+            stripeServiceMock.Setup(mocked => mocked.createCustomer(It.IsAny<string>())).Returns(stripeCustomerId);
+
+            var createDonorDto = new CreateDonorDTO
             {
                 stripe_token_id = "tok_test"
             };
 
-           // donorServiceMock.Setup(mocked => mocked.CreateDonorRecord());
-
-
-
+            donorServiceMock.Setup(mocked => mocked.CreateDonorRecord(contactId, stripeCustomerId)).Returns(donorId);
+           
             IHttpActionResult result = fixture.Post(createDonorDto);
-            
             
             Assert.IsNotNull(result);
             Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonorDTO>), result);
             var okResult = (OkNegotiatedContentResult<DonorDTO>)result;
-
-            Assert.AreEqual("123456", okResult.Content.id);
+            Assert.AreEqual("394256", okResult.Content.id);
             Assert.AreEqual("cus_test123456", okResult.Content.stripe_customer_id);
         }
     }

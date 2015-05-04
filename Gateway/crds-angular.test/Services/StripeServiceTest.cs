@@ -1,41 +1,45 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
+using System.Configuration;
+using System.Net;
 using crds_angular.Services;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using crds_angular.Services.Interfaces;
+using Crossroads.Utilities.Interfaces;
+using MinistryPlatform.Translation.Services.Interfaces;
+using Moq;
+using NSubstitute;
+using NSubstitute.Core;
 using NUnit.Framework;
-using Assert = NUnit.Framework.Assert;
-using StringAssert = NUnit.Framework.StringAssert;
+using RestSharp;
 
 namespace crds_angular.test.Services
 {
     class StripeServiceTest
     {
-        StripeService stripeService; 
+        private Mock<IConfigurationWrapper> _configurationWrapper;
+        private Mock<IRestClient> _restClientMock;
+        private StripeService _fixture  ;
 
         [SetUp]
         public void Setup()
         {
-            stripeService = new StripeService();
+           _configurationWrapper = new Mock<IConfigurationWrapper>();
+           _restClientMock = new Mock<IRestClient>();
+           _fixture = new StripeService();
         }
 
-        [Test]
-        [NUnit.Framework.Ignore("Need to mock out stripe api")]
-        public void shouldCallCreateCustomer()
-        {
-            string customerId = stripeService.createCustomer("tok_15xfdqEldv5NE53suo6XXxZY");
-            Assert.NotNull(customerId); 
-            StringAssert.StartsWith("cus_", customerId);
-        }
-
-        [Test]
+       [Test]
         public void shouldThrowExceptionWhenTokenIsInvalid()
         {
-            Assert.Throws<StripeException>(() => stripeService.createCustomer("tok_is_bad"));
+            var mockStripeResponse = new RestResponse<StripeService>();
+            mockStripeResponse.StatusCode = HttpStatusCode.BadRequest;
+            var request = new RestRequest("customers", Method.POST);
+            request.AddParameter("description", "testing customers");
+            request.AddParameter("source", It.IsAny<string>());
+            _restClientMock.Setup(mock => mock.Execute<StripeService>(request)).Returns(mockStripeResponse);
+
+            Assert.Throws<StripeException>(() => _fixture.createCustomer("tok_is_bad"));
         }
 
     }
-}
+
+  }

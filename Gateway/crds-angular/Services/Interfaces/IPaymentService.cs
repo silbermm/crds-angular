@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace crds_angular.Services.Interfaces
 {
-    public interface IStripeService
+    public interface IPaymentService
     {
         string createCustomer(string token);
     }
