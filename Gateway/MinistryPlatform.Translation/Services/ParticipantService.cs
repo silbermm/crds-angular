@@ -9,7 +9,7 @@ using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
 {
-    public class ParticipantService: BaseService , IParticipantService
+    public class ParticipantService : BaseService, IParticipantService
     {
         private IMinistryPlatformService _ministryPlatformService;
 
@@ -27,9 +27,11 @@ namespace MinistryPlatform.Translation.Services
                 var searchStr = contactId.ToString() + ",";
                 var records =
                     WithApiLogin<List<Dictionary<string, object>>>(
-                        apiToken => (_ministryPlatformService.GetPageViewRecords("ParticipantByContactId", apiToken, searchStr, "")));
+                        apiToken =>
+                            (_ministryPlatformService.GetPageViewRecords("ParticipantByContactId", apiToken, searchStr,
+                                "")));
                 var record = records.Single();
-                 participant = new Participant
+                participant = new Participant
                 {
                     ParticipantId = record.ToInt("dp_RecordID"),
                     EmailAddress = record.ToString("Email Address"),
@@ -39,11 +41,35 @@ namespace MinistryPlatform.Translation.Services
             catch (Exception ex)
             {
                 throw new ApplicationException(
-                    string.Format("GetParticipant failed.  Contact Id: {0}",contactId), ex);
+                    string.Format("GetParticipant failed.  Contact Id: {0}", contactId), ex);
             }
-            
+
 
             return participant;
+        }
+
+        public List<Response> GetParticipantResponses(int participantId)
+        {
+            try
+            {
+                var records =
+                    WithApiLogin<List<Dictionary<string, object>>>(
+                        apiToken =>
+                            (_ministryPlatformService.GetSubpageViewRecords("ParticipantResponsesWithEventId",
+                                participantId, apiToken, "", "")));
+                return records.Select(viewRecord => new Response
+                {
+                    Opportunity_ID = viewRecord.ToInt("Opportunity ID"),
+                    Participant_ID = viewRecord.ToInt("Participant ID"),
+                    Response_Result_ID = viewRecord.ToInt("Response Result ID"),
+                    Event_ID = viewRecord.ToInt("Event ID")
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(
+                    string.Format("GetParticipantResponses failed.  Participant Id: {0}", participantId), ex);
+            }
         }
     }
 }

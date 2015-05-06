@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using crds_angular.Exceptions.Models;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
 using crds_angular.test.controllers;
@@ -33,19 +34,27 @@ namespace crds_angular.Controllers.API
         {
             return Authorized(token =>
             {
-                var contactId = authenticationService.GetContactId(token);
-               
-                var customerId = stripeService.createCustomer(dto.stripe_token_id);
-
-                var donorId = donorService.CreateDonorRecord(contactId, customerId);
-
-                var response = new DonorDTO
+                try
                 {
-                    id = donorId.ToString(),
-                    stripe_customer_id = customerId
-                };
+                    var contactId = authenticationService.GetContactId(token);
 
-                return Ok(response);
+                    var customerId = stripeService.createCustomer(dto.stripe_token_id);
+
+                    var donorId = donorService.CreateDonorRecord(contactId, customerId);
+
+                    var response = new DonorDTO
+                    {
+                        id = donorId.ToString(),
+                        stripe_customer_id = customerId
+                    };
+
+                    return Ok(response);
+                }
+                catch (Exception exception)
+                {
+                    var apiError = new ApiErrorDto("Donor Post Failed", exception);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
             });
 
 

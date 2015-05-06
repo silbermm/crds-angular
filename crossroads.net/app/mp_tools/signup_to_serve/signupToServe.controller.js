@@ -14,9 +14,6 @@
     vm.eventDates = [];
     vm.format = 'MM/dd/yyyy';
     vm.frequencies = [{
-      value: -1,
-      text: "Select a Frequency"
-    }, {
       value: 0,
       text: "Once"
     }, {
