@@ -188,7 +188,7 @@
                     console.log("Code touched");
                     PaymentService.donateToProgram(vm.program.ProgramId, vm.amount, donor.id)
                         .then(function(confirmation){
-                            vm.programList.forEach(function(program){
+                            vm.programsInput.forEach(function(program){
                                 if (program.ProgramId === confirmation.program_id){
                                     vm.program_name = program.Name;
                                     return;
