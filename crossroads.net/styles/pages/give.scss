@@ -14,7 +14,15 @@
         color: $gray-light;
         text-shadow: 0 1px 0 #ffffff;
     }
+
+    &.has-error {
+      .input-group-addon {
+        color: darken($brand-danger, 10%);
+      }
+    }
 }
+
+
 
 .give-form {
     .panel-heading {

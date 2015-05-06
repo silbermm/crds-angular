@@ -24,7 +24,7 @@
 .form-group {
   .toggle-switch {
     border: 1px solid darken(#cccccc,20%);
-   
+
     .switch-left {
       background: $brand-primary;
     }
@@ -37,7 +37,14 @@
   }
 }
 
-.input-group-btn:last-child>.btn, 
+.input-group-btn:last-child>.btn,
 .input-group-btn:last-child>.btn-group {
   margin-left: 0px;
+}
+
+.has-error {
+  .input-group-addon {
+    background-color: #f2dede;
+    color: darken($brand-danger, 10%);
+  }
 }
