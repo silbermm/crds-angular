@@ -14,6 +14,8 @@ namespace MinistryPlatform.Translation.Services
             log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly int donorPageId = Convert.ToInt32(AppSettings("Donors"));
+        private readonly int donationPageId = Convert.ToInt32((AppSettings("Donations")));
+        private readonly int donationDistributionPageId = Convert.ToInt32(AppSettings("Distributions"));
         
         private IMinistryPlatformService ministryPlatformService;
 
@@ -49,6 +51,53 @@ namespace MinistryPlatform.Translation.Services
             }
             return donorId;
         
+        }
+
+        public int CreateDonationRecord(int donorId, int donationAmt, DateTime donationDate, int paymentTypeId)
+        {
+            var values = new Dictionary<string, object>
+            {
+                {"Donor_ID", donorId},
+                {"Donation_Amount", donationAmt},
+                {"Donation_Date", DateTime.Now},
+                {"Payment_Type_ID", paymentTypeId}
+            };
+
+            int donationId;
+
+            try
+            {
+                donationId = WithApiLogin<int>(apiToken => (ministryPlatformService.CreateRecord(donationPageId, values, apiToken, true)));
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException(string.Format("CreateDonationRecord failed.  Donor Id: {0}", donorId), e);
+            }
+
+            return donationId;
+        }
+
+        public int CreateDonationDistributionRecord(int donationId, int donationAmt, string program)
+        {
+            var values = new Dictionary<string, object>
+            {
+                {"Donation_ID", donationId},
+                {"Amount", donationAmt},
+                {"Program_ID", program}
+            };
+
+            int donationDistributionId;
+
+            try
+            {
+                donationDistributionId = WithApiLogin<int>(apiToken => (ministryPlatformService.CreateRecord(donationDistributionPageId, values, apiToken, true)));
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException(string.Format("CreateDonationDistributionRecord failed.  Donation Id: {0}", donationId), e);
+            }
+
+            return donationDistributionId;
         }
     }
 }
