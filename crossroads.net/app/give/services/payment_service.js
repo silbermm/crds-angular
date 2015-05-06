@@ -43,8 +43,16 @@
         "amount" : amount,
         "donor_id" : donor_id
       };
-
-      $http.post(__API_ENDPOINT__ + 'api/donation', donation_request)
+      $http({
+        method: "POST",
+        url: __API_ENDPOINT__ + 'api/donation',
+        data: donation_request,
+        headers: {
+              'Authorization': getCookie('sessionId')
+            }
+      })
+      // ;
+      // $http.post(__API_ENDPOINT__ + 'api/donation', donation_request)
         .success(function(data){
           payment_service.donation = data;
           def.resolve(data);
