@@ -158,19 +158,7 @@
       }
     }
 }
-.giving-statement-footer {
-  margin-top: 30px;
-  margin-bottom: 10px;
-  .logo {
-    width: 140px;
-    margin: 0;
-    font-size: initial;
-    line-height: initial;
-  }
-  .giving-statement-bottom {
-    border-bottom: 2px solid $gray;
-  }
-}
+
 
 @media print {
   .giving-history {
@@ -178,12 +166,34 @@
     margin-right: 30px;
     .gift-table {
       tbody > tr > td {
-        padding-top: 2px;
-        padding-bottom: 2px;
+        padding-top: 3px;
+        padding-bottom: 3px;
       }
     }
     small {
-      font-size: 8px;
+      font-size: 10px;
+      display: block;
+    }
+    address {
+      margin-bottom: 0;
+    }
+  }
+  .giving-statement-footer {
+    margin-top: 50px;
+    margin-bottom: 20px;
+    position: relative;
+    border-bottom: 2px solid $gray;
+    .logo {
+      width: 140px;
+      margin: 0;
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+    }
+    .statement-address {
+      position: absolute;
+      bottom: 0;
+      right: 0;
     }
   }
 }
