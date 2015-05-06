@@ -60,23 +60,23 @@ namespace MinistryPlatform.Translation.Services
                 var searchStr = contactId.ToString() + ",";
                 var records =
                     WithApiLogin<List<Dictionary<string, object>>>(
-                        apiToken => (ministryPlatformService.GetPageViewRecords("ParticipantByContactId", apiToken, searchStr, "")));
+                        apiToken => (ministryPlatformService.GetPageViewRecords("DonorByContactId", apiToken, searchStr, "")));
                 var record = records.Single();
                 donor = new Donor()
                 {
                     DonorId = record.ToInt("dp_RecordID"),
-                    StripeCustomerId = record.ToString("Stripe_Customer_ID"),
-                    ContactId = record.ToInt("ContactId"),
-                    StatementFreq = record.ToString("StatementFreq"),
-                    StatementType = record.ToString("StatementType"),
-                    StatementMethod = record.ToString("StatementMethod"),
-                    SetupDate = record.ToDate("SetupDate")
+                    StripeCustomerId = record.ToString("Stripe Customer ID"),
+                    ContactId = record.ToInt("Contact ID"),
+                    StatementFreq = record.ToString("Statement Frequency"),
+                    StatementType = record.ToString("Statement Type"),
+                    StatementMethod = record.ToString("Statement Method"),
+                    SetupDate = record.ToDate("Setup Date")
                 };
             }
             catch (Exception ex)
             {
                 throw new ApplicationException(
-                    string.Format("GetParticipant failed.  Contact Id: {0}", contactId), ex);
+                    string.Format("CreateDonorRecord failed.  Contact Id: {0}", contactId), ex);
             }
 
             return donor;
