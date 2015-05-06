@@ -1,4 +1,5 @@
-﻿using MinistryPlatform.Models;
+﻿using System.Collections.Generic;
+using MinistryPlatform.Models;
 
 namespace crds_angular.Models.Crossroads
 {
@@ -10,5 +11,6 @@ namespace crds_angular.Models.Crossroads
         public string Email { get; set; }
         public int ParticipantId { get; set; }
         public Participant Participant { get; set; }
+        public List<MinistryPlatform.Models.Response> Responses { get; set; }
     }
 }

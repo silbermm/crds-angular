@@ -46,7 +46,8 @@
 
       <div class="form-group">
         <label>Frequency</label>
-        <select class="form-control" ng-model="su2s.selectedFrequency" ng-options="f.text for f in su2s.frequencies" ng-init="su2s.selectedFrequency = su2s.frequencies[0]" name="selectedFrequency" ng-required='true'>
+        <select class="form-control" ng-model="su2s.selectedFrequency" ng-options="f.text for f in su2s.frequencies track by f.value" name="selectedFrequency" ng-required='true'>
+          <option value="">Select a Frequency</option>
         </select>
       </div>
       <div ng-show="su2s.isFrequencyOnce()">
