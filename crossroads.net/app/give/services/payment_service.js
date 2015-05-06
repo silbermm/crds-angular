@@ -5,7 +5,9 @@
   function PaymentService($log, $http, $q, stripe) {
     var payment_service = {
       donor : {},
-      createDonorWithCard : createDonorWithCard
+      donation : {},
+      createDonorWithCard : createDonorWithCard,
+      donateToProgram : donateToProgram
     };
     
     stripe.setPublishableKey(__STRIPE_PUBKEY__);
@@ -31,7 +33,21 @@
     }
 
     function donateToProgram(program_id, amount, donor_id){
-      
+      var def = $q.defer();
+      var donation_request = {
+        "program_id" : program_id,
+        "amount" : amount,
+        "donor_id" : donor_id
+      };
+
+      $http.post(__API_ENDPOINT__ + 'api/donation', donation_request)
+        .success(function(data){
+          payment_service.donation = data;
+          def.resolve(data);
+
+        });
+
+      return def.promise;
 
     }
     

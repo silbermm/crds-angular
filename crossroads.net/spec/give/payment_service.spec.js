@@ -95,18 +95,26 @@ describe ('PaymentService', function () {
   });
 
   describe('donateToProgram', function(){
+    it('should successfully create a donation', function(){
 
     var postData = {
-        programId: "Program",
+        program_id: "Program",
         amount: "1234",
         donor_id: "Donor"
       }
 
     httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/donation', postData)
         .respond({
-          id: "12345",
-          stripe_customer_id: "cust_test"
+          amount: "1234",
+          program_id: "Program"
         });
+
+    sut.donateToProgram("Program", "1234", "Donor")
+      .then(function(confirmation){
+        expect(confirmation.program_id).toEqual("Program");
+        expect(confirmation.amount).toEqual("1234");
+      });
+    });
   });
   
 });
