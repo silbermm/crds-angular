@@ -72,7 +72,12 @@ namespace crds_angular.Controllers.API
                 var donationDistributionId = donorService.CreateDonationDistributionRecord(donationId, dto.amount,
                     dto.program_id);
 
-                var response =  "you did it";                                                            
+                DonorDTO response = new DonorDTO
+                {
+                    id = dto.donor_id.ToString(),
+                    stripe_customer_id = "cus123456789"
+                };
+
                 return Ok(response);
             });
 
