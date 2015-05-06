@@ -67,10 +67,10 @@ namespace crds_angular.Controllers.API
         {
             return Authorized(token =>
             {
-                var donationId = donorService.CreateDonationRecord(dto.donationAmt, dto.donorId);
+                var donationId = donorService.CreateDonationRecord(dto.amount, dto.donor_id);
 
-                var donationDistributionId = donorService.CreateDonationDistributionRecord(donationId, dto.donationAmt,
-                    dto.programId);
+                var donationDistributionId = donorService.CreateDonationDistributionRecord(donationId, dto.amount,
+                    dto.program_id);
 
                 var response =  "you did it";                                                            
                 return Ok(response);
