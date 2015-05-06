@@ -53,14 +53,14 @@ namespace MinistryPlatform.Translation.Services
         
         }
 
-        public int CreateDonationRecord(int donorId, int donationAmt, DateTime donationDate, int paymentTypeId)
+        public int CreateDonationRecord(int donationAmt, int donorId)
         {
             var values = new Dictionary<string, object>
             {
                 {"Donor_ID", donorId},
                 {"Donation_Amount", donationAmt},
-                {"Donation_Date", DateTime.Now},
-                {"Payment_Type_ID", paymentTypeId}
+                {"Payment_Type_ID", 4}, //hardcoded as credit card until ACH stories are worked
+                {"Donation_Date", DateTime.Now}
             };
 
             int donationId;
@@ -77,13 +77,13 @@ namespace MinistryPlatform.Translation.Services
             return donationId;
         }
 
-        public int CreateDonationDistributionRecord(int donationId, int donationAmt, string program)
+        public int CreateDonationDistributionRecord(int donationId, int donationAmt, int programId)
         {
             var values = new Dictionary<string, object>
             {
                 {"Donation_ID", donationId},
                 {"Amount", donationAmt},
-                {"Program_ID", program}
+                {"Program_ID", programId}
             };
 
             int donationDistributionId;

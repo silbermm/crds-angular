@@ -7,7 +7,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
     public interface IDonorService
     {
         int CreateDonorRecord(int contactId, string stripeCustomerId);
-        int CreateDonationRecord(int contactId, int donationAmt, DateTime donationDate, int paymentType);
-        int CreateDonationDistributionRecord(int donationId, int donationAmt, string program);
+        int CreateDonationRecord(int donationAmt, int donorId);
+        int CreateDonationDistributionRecord(int donationId, int donationAmt, int programId);
     }
 }

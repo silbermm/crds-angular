@@ -244,6 +244,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Crossroads\CreateDonationDTO.cs" />
     <Compile Include="Models\Crossroads\CreateDonorDTO.cs" />
     <Compile Include="Models\Crossroads\DonorDTO.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityGroup.cs" />

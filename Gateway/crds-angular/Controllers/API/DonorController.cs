@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System.Web.Http.Results;
 using crds_angular.Exceptions.Models;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
@@ -57,6 +58,23 @@ namespace crds_angular.Controllers.API
                 }
             });
 
+
+        }
+
+        [ResponseType(typeof (DonorDTO))]
+        [Route("api/donation")]
+        public IHttpActionResult Post([FromBody] CreateDonationDTO dto)
+        {
+            return Authorized(token =>
+            {
+                var donationId = donorService.CreateDonationRecord(dto.donationAmt, dto.donorId);
+
+                var donationDistributionId = donorService.CreateDonationDistributionRecord(donationId, dto.donationAmt,
+                    dto.programId);
+
+                var response =  "you did it";                                                            
+                return Ok(response);
+            });
 
         }
     }
