@@ -67,18 +67,29 @@ namespace crds_angular.Controllers.API
         {
             return Authorized(token =>
             {
-                var donationId = donorService.CreateDonationRecord(dto.amount, dto.donor_id);
-
-                var donationDistributionId = donorService.CreateDonationDistributionRecord(donationId, dto.amount,
-                    dto.program_id);
-
-                DonorDTO response = new DonorDTO
+                try
                 {
-                    id = dto.donor_id.ToString(),
-                    stripe_customer_id = "cus123456789"
-                };
+                    var donationId = donorService.CreateDonationRecord(dto.amount, dto.donor_id);
 
-                return Ok(response);
+                    var donationDistributionId = donorService.CreateDonationDistributionRecord(donationId, dto.amount,
+                        dto.program_id);
+
+                    //TODO don't forget to fix this up
+                    DonorDTO response = new DonorDTO
+                    {
+                        id = dto.donor_id.ToString(),
+                        stripe_customer_id = "cus123456789"
+                    };
+
+                    return Ok(response);
+
+                }
+                catch (Exception exception)
+                {
+                    var apiError = new ApiErrorDto("Donation Post Failed", exception);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+           
             });
 
         }
