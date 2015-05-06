@@ -159,7 +159,31 @@
     }
 }
 .giving-statement-footer {
-  border-bottom: 2px solid $gray;
   margin-top: 30px;
-  margin-bottom: 40px;
+  margin-bottom: 10px;
+  .logo {
+    width: 140px;
+    margin: 0;
+    font-size: initial;
+    line-height: initial;
+  }
+  .giving-statement-bottom {
+    border-bottom: 2px solid $gray;
+  }
+}
+
+@media print {
+  .giving-history {
+    margin-left: 30px;
+    margin-right: 30px;
+    .gift-table {
+      tbody > tr > td {
+        padding-top: 2px;
+        padding-bottom: 2px;
+      }
+    }
+    small {
+      font-size: 8px;
+    }
+  }
 }
