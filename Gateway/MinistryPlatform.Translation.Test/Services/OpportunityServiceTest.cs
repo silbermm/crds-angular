@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ServiceModel;
 using Crossroads.Utilities.Services;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.PlatformService;
@@ -38,6 +39,53 @@ namespace MinistryPlatform.Translation.Test.Services
 
             _fixture = new OpportunityServiceImpl(_ministryPlatformService.Object, _eventService.Object,
                 _authenticationService.Object);
+        }
+
+        [Test]
+        public void CreateOpportunityResponse()
+        {
+            const int opportunityId = 113;
+            const string comment = "Test Comment";
+
+            const int mockParticipantId = 7777;
+            _authenticationService.Setup(m => m.GetParticipantRecord(It.IsAny<string>()))
+                .Returns(new Participant { ParticipantId = mockParticipantId });
+
+            const string opportunityResponsePageKey = "OpportunityResponses";
+            _ministryPlatformService.Setup(
+                m => m.CreateRecord(opportunityResponsePageKey, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>(), true))
+                .Returns(3333);
+            
+            Assert.DoesNotThrow(() => _fixture.RespondToOpportunity(It.IsAny<string>(), opportunityId, comment));
+
+            _authenticationService.VerifyAll();
+            _ministryPlatformService.VerifyAll();
+        }
+
+        [Test]
+        public void ShouldNotCreateOpportunityResponse()
+        {
+            const int opportunityId = 10000000;
+            const string comment = "Fail Test Comment";
+            const int mockParticipantId = 7777;
+            _authenticationService.Setup(m => m.GetParticipantRecord(It.IsAny<string>()))
+                .Returns(new Participant { ParticipantId = mockParticipantId });
+
+            const string opportunityResponsePageKey = "OpportunityResponses";
+            var exceptionDetail = new System.ServiceModel.ExceptionDetail(new Exception("The creator of this fault did not specify a Reason."));
+            var faultException = new FaultException<ExceptionDetail>(exceptionDetail);
+            
+            _ministryPlatformService.Setup(
+                m =>
+                    m.CreateRecord(opportunityResponsePageKey, It.IsAny<Dictionary<string, object>>(),
+                        It.IsAny<string>(), true))
+                .Throws(faultException);
+
+            Assert.Throws<FaultException<ExceptionDetail>>(
+                () => _fixture.RespondToOpportunity(It.IsAny<string>(), opportunityId, comment));
+
+            _authenticationService.VerifyAll();
+            _ministryPlatformService.VerifyAll();
         }
 
         [Test]
