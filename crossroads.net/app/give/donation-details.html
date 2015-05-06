@@ -1,5 +1,5 @@
 <ng-form name="donationDetailsForm">
-  <div class="form-inline form-group give-amount" ng-class="{'has-error': amountError()}">
+  <div class="form-inline form-group give-amount form-group-xl form-group-xl" ng-class="{'has-error': amountError()}">
     <div class="input-group">
       <span class="input-group-addon">$</span>
       <input type="text" name="amount" class="form-control" ng-model="amount" autocomplete="off" ng-model-options="{ debounce: 500 }" natural-number currency-mask required>
