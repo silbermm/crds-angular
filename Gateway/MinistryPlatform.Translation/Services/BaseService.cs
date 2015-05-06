@@ -16,7 +16,7 @@ namespace MinistryPlatform.Translation.Services
             return pageId;
         }
 
-        protected static T WithApiLogin<T>(Func<string, T> doIt)
+        protected static T          WithApiLogin<T>(Func<string, T> doIt)
         {
             return (doIt(apiLogin()));
         }
