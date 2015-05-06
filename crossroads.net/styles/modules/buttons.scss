@@ -3,10 +3,11 @@
   //padding-bottom: 0px;
   position: relative;
   padding-right: 52px;
+  overflow: hidden;
 
   .btn-label {
     position: absolute;
-    right: 0px;
+    right: -1px;
     top: -1px;
     display: inline-block;
     padding: 4px 0px 0px;
@@ -17,16 +18,55 @@
       margin-top: 6px;
     }
   }
+
+  &.btn-lg {
+    .btn-label {
+      height: 45px;
+
+      .icon {
+        margin-top: 10px;
+      }
+    }
+  }
+
+  &.btn-sm {
+    padding-right: 42px;
+
+    .btn-label {
+      height: 30px;
+      width: 30px;
+
+      .icon {
+        margin-top: 3px;
+      }
+    }
+  }
+
+  &.btn-xs {
+    padding-right: 30px;
+
+    .btn-label {
+      height: 24px;
+      width: 24px;
+
+      .icon {
+        margin-top: 0px;
+        max-width: 12px;
+        height: auto;
+      }
+    }
+  }
 }
 
 .btn-gray {
   color: white;
   background-color: $gray;
-  border-color: $gray-dark;
+  border-color: $gray;
   color: $gray-lighter;
 
   &:hover {
     background-color: $brand-primary;
+    border-color: $brand-primary;
   }
 }
 
