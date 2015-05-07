@@ -1,0 +1,38 @@
+.corkboard-need, .btn-label.corkboard-need {
+  background: $brand-primary;
+}
+
+.corkboard-event, .btn-label.corkboard-event {
+  background: $brand-info;
+}
+
+.corkboard-job, .btn-label.corkboard-job {
+  background: $brand-success;
+}
+
+.corkboard-item, .btn-label.corkboard-item {
+  background: $brand-secondary;
+}
+
+
+.btn-labeled {
+  &:hover {
+    .btn-label {
+      &.corkboard-need {
+        background: darken($brand-primary, 5%);
+      }
+
+      &.corkboard-event {
+        background: darken($brand-info, 5%);
+      }
+
+      &.corkboard-job {
+        background: darken($brand-success, 5%);
+      }
+
+      &.corkboard-item {
+        background: darken($brand-secondary, 5%);
+      }
+    }
+  }
+}
