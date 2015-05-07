@@ -24,7 +24,7 @@ namespace crds_angular.test.Services
         {
            _configurationWrapper = new Mock<IConfigurationWrapper>();
            _restClientMock = new Mock<IRestClient>();
-           _fixture = new StripeService();
+           _fixture = new StripeService(_restClientMock.Object);
         }
 
        [Test]
@@ -35,7 +35,7 @@ namespace crds_angular.test.Services
             var request = new RestRequest("customers", Method.POST);
             request.AddParameter("description", "testing customers");
             request.AddParameter("source", It.IsAny<string>());
-            _restClientMock.Setup(mock => mock.Execute<StripeService>(request)).Returns(mockStripeResponse);
+            _restClientMock.Setup(mock => mock.Execute(request)).Returns(mockStripeResponse);
 
             Assert.Throws<StripeException>(() => _fixture.createCustomer("tok_is_bad"));
         }
