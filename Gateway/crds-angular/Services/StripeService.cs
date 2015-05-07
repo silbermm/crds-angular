@@ -7,22 +7,20 @@ namespace crds_angular.Services
 {
     public class StripeService : IPaymentService
     {
-        private ConfigurationWrapper _configurationWrapper;
+        private IRestClient stripeRestClient;
+
+        public StripeService(IRestClient stripeRestClient)
+        {
+            this.stripeRestClient = stripeRestClient;
+        }
 
         public string createCustomer(string token)
         {
-            _configurationWrapper = new ConfigurationWrapper();
-
-            var client = new RestClient(_configurationWrapper.GetConfigValue("PaymentClient"))
-            {
-                Authenticator = new HttpBasicAuthenticator(_configurationWrapper.GetEnvironmentVarAsString("STRIPE_AUTH_TOKEN"), null)
-            };
-            
             var request = new RestRequest("customers", Method.POST);
             request.AddParameter("description", "testing customers"); // adds to POST or URL querystring based on Method
             request.AddParameter("source", token);
- 
-            RestResponse<StripeCustomer> response = (RestResponse<StripeCustomer>) client.Execute<StripeCustomer>(request);
+
+            RestResponse<StripeCustomer> response = (RestResponse<StripeCustomer>)stripeRestClient.Execute<StripeCustomer>(request);
             if (response.StatusCode == HttpStatusCode.BadRequest)
             {
                 // TODO: deserialize content into StripeError and return message in StripeException
@@ -36,14 +34,8 @@ namespace crds_angular.Services
 
         public string chargeCustomer(string customer_token, int amount, string donor_id)
         {
-             _configurationWrapper = new ConfigurationWrapper();
-
-            var client = new RestClient(_configurationWrapper.GetConfigValue("PaymentClient"))
-            {
-                Authenticator = new HttpBasicAuthenticator(_configurationWrapper.GetEnvironmentVarAsString("STRIPE_AUTH_TOKEN"), null)
-            };
             var getCustomerRequest = new RestRequest("customers/"+customer_token, Method.GET);
-            RestResponse<StripeCustomer> getCustomerResponse = (RestResponse<StripeCustomer>) client.Execute<StripeCustomer>(getCustomerRequest);
+            RestResponse<StripeCustomer> getCustomerResponse = (RestResponse<StripeCustomer>)stripeRestClient.Execute<StripeCustomer>(getCustomerRequest);
             if (getCustomerResponse.StatusCode == HttpStatusCode.BadRequest)
             {
                 // TODO: deserialize content into StripeError and return message in StripeException
@@ -57,7 +49,7 @@ namespace crds_angular.Services
             chargeRequest.AddParameter("customer", getCustomerResponse.Data.id);
             chargeRequest.AddParameter("description", "Logged-in giver, donor_id# "+ donor_id);
 
-            RestResponse<StripeCharge> chargeResponse = (RestResponse<StripeCharge>)client.Execute<StripeCharge>(chargeRequest);
+            RestResponse<StripeCharge> chargeResponse = (RestResponse<StripeCharge>)stripeRestClient.Execute<StripeCharge>(chargeRequest);
             if (chargeResponse.StatusCode == HttpStatusCode.BadRequest)
             {
                 // TODO: deserialize content into StripeError and return message in StripeException
