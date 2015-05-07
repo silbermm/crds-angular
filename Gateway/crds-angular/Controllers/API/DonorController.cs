@@ -80,7 +80,9 @@ namespace crds_angular.Controllers.API
                         id = dto.donor_id.ToString(),
                         stripe_customer_id = "cus123456789"
                     };
-
+                    //amt
+                    //program
+                    //donor email - is this avialable, only if this is easy
                     return Ok(response);
 
                 }
