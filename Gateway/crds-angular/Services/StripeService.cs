@@ -20,7 +20,7 @@ namespace crds_angular.Services
             request.AddParameter("description", "testing customers"); // adds to POST or URL querystring based on Method
             request.AddParameter("source", token);
 
-            RestResponse<StripeCustomer> response = (RestResponse<StripeCustomer>)stripeRestClient.Execute<StripeCustomer>(request);
+            IRestResponse<StripeCustomer> response = (IRestResponse<StripeCustomer>)stripeRestClient.Execute<StripeCustomer>(request);
             if (response.StatusCode == HttpStatusCode.BadRequest)
             {
                 // TODO: deserialize content into StripeError and return message in StripeException
