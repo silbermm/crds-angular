@@ -111,6 +111,7 @@
 }
 
 .gift-table, .recent-gifts {
+    page-break-inside: auto;
     .table-actions {
         min-width: 100px;
         a {
@@ -122,6 +123,10 @@
               vertical-align: sub;
             }
         }
+    }
+    td {
+      page-break-inside: avoid;
+      page-break-after: auto;
     }
     .dollar-amount {
         @extend .text-success;
@@ -152,4 +157,43 @@
         }
       }
     }
+}
+
+
+@media print {
+  .giving-history {
+    margin-left: 30px;
+    margin-right: 30px;
+    .gift-table {
+      tbody > tr > td {
+        padding-top: 3px;
+        padding-bottom: 3px;
+      }
+    }
+    small {
+      font-size: 10px;
+      display: block;
+    }
+    address {
+      margin-bottom: 0;
+    }
+  }
+  .giving-statement-footer {
+    margin-top: 50px;
+    margin-bottom: 20px;
+    position: relative;
+    border-bottom: 2px solid $gray;
+    .logo {
+      width: 140px;
+      margin: 0;
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+    }
+    .statement-address {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+  }
 }
