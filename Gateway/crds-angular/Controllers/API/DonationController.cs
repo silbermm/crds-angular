@@ -40,33 +40,26 @@ namespace crds_angular.Controllers.API
                     var donor = donorService.GetDonorRecord(contactId);
                     var charge_id = stripeService.chargeCustomer(donor.StripeCustomerId, dto.amount,
                         (donor.DonorId).ToString());
-                    var donationId = donorService.CreateDonationRecord(dto.amount, donor.DonorId);
+                    var donationId = donorService.CreateDonationAndDistributionRecord(dto.amount, donor.DonorId, dto.program_id, charge_id, DateTime.Now);
 
-                    var donationDistributionId = donorService.CreateDonationDistributionRecord(donationId, dto.amount,
-                        dto.program_id);
-                    
-
-                var response = new DonationDTO()
-                {
-                    program_id = dto.program_id,
-                    amount = dto.amount,
-                    charge_id = charge_id
-
-                };
-                //amt
-                //program
-                //donor email - is this avialable, only if this is easy
-                return Ok(response);
-
+                    var response = new DonationDTO()
+                    {
+                        program_id = dto.program_id,
+                        amount = dto.amount,
+                        charge_id = charge_id
+                    };
+                    //amt
+                    //program
+                    //donor email - is this avialable, only if this is easy
+                    return Ok(response);
                 }
-                catch (Exception exception)
-                {
-                    var apiError = new ApiErrorDto("Donation Post Failed", exception);
-                    throw new HttpResponseException(apiError.HttpResponseMessage);
-                }
+                    catch (Exception exception)
+                    {
+                        var apiError = new ApiErrorDto("Donation Post Failed", exception);
+                        throw new HttpResponseException(apiError.HttpResponseMessage);
+                    }
                 
-            });
-            
+             });
         }
     }
     
