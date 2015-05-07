@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.ServiceModel;
 using Crossroads.Utilities.Services;
 using MinistryPlatform.Translation.Services;
 using NUnit.Framework;
@@ -150,25 +149,7 @@ namespace MinistryPlatform.Translation.Test
             Assert.IsTrue(deleted);
         }
 
-        [Test]
-        public void CreateOpportunityResponse()
-        {
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            const int opportunityId = 113;
-            const string comment = "Test Comment";
-            Assert.DoesNotThrow(() => OpportunityService.RespondToOpportunity(token, opportunityId, comment));
-        }
-
-        [Test]
-        public void ShouldNotCreateOpportunityResponse()
-        {
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            const int opportunityId = 10000000;
-            const string comment = "Fail Test Comment";
-
-            Assert.Throws<FaultException<ExceptionDetail>>(
-                () => OpportunityService.RespondToOpportunity(token, opportunityId, comment));
-        }
+        
 
         [Test]
         public void GetParticipants()
@@ -178,23 +159,7 @@ namespace MinistryPlatform.Translation.Test
 
             Assert.IsNotNull(participants);
         }
-
-        [Test]
-        public void ShouldNotDeleteResponse()
-        {
-            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["OpportunityResponses"]);
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            const int opportunityId = 113;
-            const string comment = "Test Comment";
-
-            //Create a Response to delete
-            var responseId = OpportunityService.RespondToOpportunity(token, opportunityId, comment);
-
-            //Try to delete Response, should fail
-            Assert.Throws<FaultException<ExceptionDetail>>(
-                () => MinistryPlatformService.DeleteRecord(pageId, responseId, null, token));
-        }
-
+        
         [Test]
         public void ShouldReturnTodaysEvents()
         {

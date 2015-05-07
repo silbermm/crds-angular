@@ -20,6 +20,18 @@
     color: $brand-danger;
 }
 
+// form group large sizing
+
+.form-group-lg {
+  input, label, .input-group-addon {
+      font-size: 180%;
+      line-height: 1;
+  }
+  .form-control {
+    line-height: 1;
+  }
+}
+
 //Toggle Switches
 .form-group {
   .toggle-switch {
@@ -42,9 +54,12 @@
   margin-left: 0px;
 }
 
-.has-error {
-  .input-group-addon {
-    background-color: #f2dede;
-    color: darken($brand-danger, 10%);
+.form-group {
+  .has-error {
+    .input-group-addon {
+      background-color: $state-danger-bg;
+      color: $state-danger-text;
+      text-shadow: none;
+    }
   }
 }
