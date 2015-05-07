@@ -53,6 +53,7 @@
     <Compile Include="CommunicationPreferences.cs" />
     <Compile Include="Donor.cs" />
     <Compile Include="GroupParticipant.cs" />
+    <Compile Include="GroupServingParticipant.cs" />
     <Compile Include="GroupSignupRelationships.cs" />
     <Compile Include="MyContact.cs" />
     <Compile Include="ContactRelationship.cs" />
