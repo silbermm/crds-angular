@@ -35,7 +35,7 @@ namespace crds_angular.Services
         public string chargeCustomer(string customer_token, int amount, string donor_id)
         {
             var getCustomerRequest = new RestRequest("customers/"+customer_token, Method.GET);
-            RestResponse<StripeCustomer> getCustomerResponse = (RestResponse<StripeCustomer>)stripeRestClient.Execute<StripeCustomer>(getCustomerRequest);
+            IRestResponse<StripeCustomer> getCustomerResponse = (IRestResponse<StripeCustomer>)stripeRestClient.Execute<StripeCustomer>(getCustomerRequest);
             if (getCustomerResponse.StatusCode == HttpStatusCode.BadRequest)
             {
                 // TODO: deserialize content into StripeError and return message in StripeException
@@ -43,13 +43,14 @@ namespace crds_angular.Services
             } 
 
             var chargeRequest = new RestRequest("charges", Method.POST);
+            // Stripe wants this amount in cents, not dollars, so let's multiply by 100...
             chargeRequest.AddParameter("amount", amount * 100 );
             chargeRequest.AddParameter("currency", "usd");
             chargeRequest.AddParameter("source", getCustomerResponse.Data.default_source);
             chargeRequest.AddParameter("customer", getCustomerResponse.Data.id);
             chargeRequest.AddParameter("description", "Logged-in giver, donor_id# "+ donor_id);
 
-            RestResponse<StripeCharge> chargeResponse = (RestResponse<StripeCharge>)stripeRestClient.Execute<StripeCharge>(chargeRequest);
+            IRestResponse<StripeCharge> chargeResponse = (IRestResponse<StripeCharge>)stripeRestClient.Execute<StripeCharge>(chargeRequest);
             if (chargeResponse.StatusCode == HttpStatusCode.BadRequest)
             {
                 // TODO: deserialize content into StripeError and return message in StripeException
