@@ -122,8 +122,7 @@ namespace crds_angular.test.Services
 
         private bool parameterMatches(string name, object value, List<Parameter> parms)
         {
-            var parm = parms.Find(p => p.Name.Equals(name));
-            return (parm != null && parm.Value.Equals(value));
+            return(parms.Find(p => p.Name.Equals(name) && p.Value.Equals(value)) != null);
         }
 
     }
