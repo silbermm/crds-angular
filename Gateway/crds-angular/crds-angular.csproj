@@ -316,6 +316,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Unity.config" />
     <None Include="Web.Demo.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
