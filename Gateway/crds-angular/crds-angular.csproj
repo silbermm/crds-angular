@@ -226,6 +226,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\API\AccountController.cs" />
+    <Compile Include="Controllers\API\DonationController.cs" />
     <Compile Include="Controllers\API\DonorController.cs" />
     <Compile Include="Controllers\API\EventLocationController.cs" />
     <Compile Include="Controllers\API\GroupController.cs" />
@@ -246,6 +247,7 @@
     </Compile>
     <Compile Include="Models\Crossroads\CreateDonationDTO.cs" />
     <Compile Include="Models\Crossroads\CreateDonorDTO.cs" />
+    <Compile Include="Models\Crossroads\DonationDTO .cs" />
     <Compile Include="Models\Crossroads\DonorDTO.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityGroup.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityGroupParticipant.cs" />

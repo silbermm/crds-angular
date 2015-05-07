@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services.Interfaces;
 
@@ -52,7 +53,7 @@ namespace MinistryPlatform.Translation.Services
             return donorId;
         
         }
-
+        
         public int CreateDonationRecord(int donationAmt, int donorId)
         {
             var values = new Dictionary<string, object>
@@ -77,7 +78,7 @@ namespace MinistryPlatform.Translation.Services
             return donationId;
         }
 
-        public int CreateDonationDistributionRecord(int donationId, int donationAmt, int programId)
+        public int CreateDonationDistributionRecord(int donationId, int donationAmt, string programId)
         {
             var values = new Dictionary<string, object>
             {
@@ -90,14 +91,49 @@ namespace MinistryPlatform.Translation.Services
 
             try
             {
-                donationDistributionId = WithApiLogin<int>(apiToken => (ministryPlatformService.CreateRecord(donationDistributionPageId, values, apiToken, true)));
+                donationDistributionId =
+                    WithApiLogin<int>(
+                        apiToken =>
+                            (ministryPlatformService.CreateRecord(donationDistributionPageId, values, apiToken, true)));
             }
             catch (Exception e)
             {
-                throw new ApplicationException(string.Format("CreateDonationDistributionRecord failed.  Donation Id: {0}", donationId), e);
+                throw new ApplicationException(
+                    string.Format("CreateDonationDistributionRecord failed.  Donation Id: {0}", donationId), e);
             }
 
             return donationDistributionId;
+        }
+
+        public Donor GetDonorRecord(int contactId)
+        {
+            Donor donor;
+            try
+            {
+                var searchStr = contactId.ToString() + ",";
+                var records =
+                    WithApiLogin<List<Dictionary<string, object>>>(
+                        apiToken => (ministryPlatformService.GetPageViewRecords("DonorByContactId", apiToken, searchStr, "")));
+                var record = records.Single();
+                donor = new Donor()
+                {
+                    DonorId = record.ToInt("dp_RecordID"),
+                    StripeCustomerId = record.ToString("Stripe Customer ID"),
+                    ContactId = record.ToInt("Contact ID"),
+                    StatementFreq = record.ToString("Statement Frequency"),
+                    StatementType = record.ToString("Statement Type"),
+                    StatementMethod = record.ToString("Statement Method"),
+                    SetupDate = record.ToDate("Setup Date")
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(
+                    string.Format("GetDonorRecord failed.  Contact Id: {0}", contactId), ex);
+            }
+
+            return donor;
+
         }
     }
 }

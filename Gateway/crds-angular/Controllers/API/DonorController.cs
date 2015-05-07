@@ -60,40 +60,45 @@ namespace crds_angular.Controllers.API
 
 
         }
-
-        [ResponseType(typeof (DonorDTO))]
-        [Route("api/donation")]
-        public IHttpActionResult Post([FromBody] CreateDonationDTO dto)
-        {
-            return Authorized(token =>
-            {
-                try
-                {
-                    var donationId = donorService.CreateDonationRecord(dto.amount, dto.donor_id);
-
-                    var donationDistributionId = donorService.CreateDonationDistributionRecord(donationId, dto.amount,
-                        dto.program_id);
-
-                    //TODO don't forget to fix this up
-                    DonorDTO response = new DonorDTO
-                    {
-                        id = dto.donor_id.ToString(),
-                        stripe_customer_id = "cus123456789"
-                    };
-                    //amt
-                    //program
-                    //donor email - is this avialable, only if this is easy
-                    return Ok(response);
-
-                }
-                catch (Exception exception)
-                {
-                    var apiError = new ApiErrorDto("Donation Post Failed", exception);
-                    throw new HttpResponseException(apiError.HttpResponseMessage);
-                }
-           
-            });
-
-        }
     }
 }
+
+//<<<<<<< HEAD
+//        [ResponseType(typeof (DonorDTO))]
+//        [Route("api/donation")]
+//        public IHttpActionResult Post([FromBody] CreateDonationDTO dto)
+//        {
+//            return Authorized(token =>
+//            {
+//                try
+//                {
+//                    var donationId = donorService.CreateDonationRecord(dto.amount, dto.donor_id);
+
+//                    var donationDistributionId = donorService.CreateDonationDistributionRecord(donationId, dto.amount,
+//                        dto.program_id);
+
+//                    //TODO don't forget to fix this up
+//                    DonorDTO response = new DonorDTO
+//                    {
+//                        id = dto.donor_id.ToString(),
+//                        stripe_customer_id = "cus123456789"
+//                    };
+//                    //amt
+//                    //program
+//                    //donor email - is this avialable, only if this is easy
+//                    return Ok(response);
+
+//                }
+//                catch (Exception exception)
+//                {
+//                    var apiError = new ApiErrorDto("Donation Post Failed", exception);
+//                    throw new HttpResponseException(apiError.HttpResponseMessage);
+//                }
+           
+//            });
+
+//        }
+//=======
+//>>>>>>> feature/US1253-CreateTransactionWithStripe
+   // }
+//}
