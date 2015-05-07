@@ -15,31 +15,33 @@ namespace crds_angular.test.Services
 {
     class StripeServiceTest
     {
-        private Mock<IConfigurationWrapper> _configurationWrapper;
-        private Mock<IRestClient> _restClientMock;
-        private StripeService _fixture  ;
+        private Mock<IRestClient> restClient;
+        private StripeService fixture;
 
         [SetUp]
         public void Setup()
         {
-           _configurationWrapper = new Mock<IConfigurationWrapper>();
-           _restClientMock = new Mock<IRestClient>();
-           _fixture = new StripeService();
+            restClient = new Mock<IRestClient>(MockBehavior.Strict);
+            fixture = new StripeService(restClient.Object);
         }
 
-       [Test]
+        [Test]
         public void shouldThrowExceptionWhenTokenIsInvalid()
         {
-            var mockStripeResponse = new RestResponse<StripeService>();
-            mockStripeResponse.StatusCode = HttpStatusCode.BadRequest;
+            var stripeResponse = new Mock<IRestResponse<StripeCustomer>>();
+            stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.BadRequest);
+
             var request = new RestRequest("customers", Method.POST);
             request.AddParameter("description", "testing customers");
-            request.AddParameter("source", It.IsAny<string>());
-            _restClientMock.Setup(mock => mock.Execute<StripeService>(request)).Returns(mockStripeResponse);
+            request.AddParameter("source", "src");
+            restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<RestRequest>())).Returns(stripeResponse.Object);
 
-            Assert.Throws<StripeException>(() => _fixture.createCustomer("tok_is_bad"));
+            Assert.Throws<StripeException>(() => fixture.createCustomer("tok_is_bad"));
+
+
+
         }
 
     }
 
-  }
+}
