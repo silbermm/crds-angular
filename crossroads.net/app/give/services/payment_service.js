@@ -50,10 +50,7 @@
         headers: {
               'Authorization': getCookie('sessionId')
             }
-      })
-      // ;
-      // $http.post(__API_ENDPOINT__ + 'api/donation', donation_request)
-        .success(function(data){
+      }).success(function(data){
           payment_service.donation = data;
           def.resolve(data);
 

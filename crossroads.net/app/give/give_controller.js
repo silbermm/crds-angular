@@ -185,7 +185,6 @@
                   cvc: vm.cvc
                 })
                 .then(function(donor) {
-                    console.log("Code touched");
                     PaymentService.donateToProgram(vm.program.ProgramId, vm.amount, donor.id)
                         .then(function(confirmation){
                             vm.programsInput.forEach(function(program){
