@@ -40,6 +40,14 @@ namespace crds_angular.test.Services
             Assert.Throws<StripeException>(() => _fixture.createCustomer("tok_is_bad"));
         }
 
+        [Test]
+        public void shouldChargeCustomer()
+        {
+            string charge_id_from_stripe;
+            charge_id_from_stripe = _fixture.chargeCustomer("cus_6CGTdtrh0pSsLj", -300, "tonorteststring");
+
+        }
+
     }
 
   }
