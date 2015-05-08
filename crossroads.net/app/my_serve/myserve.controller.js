@@ -4,9 +4,9 @@
 
   module.exports = MyServeController;
 
-  MyServeController.$inject = ['$rootScope', '$log', 'Session', 'filterState', 'Groups'];
+  MyServeController.$inject = ['$rootScope', '$log', 'filterState', 'Groups'];
 
-  function MyServeController($rootScope, $log, Session, filterState, Groups){
+  function MyServeController($rootScope, $log, filterState, Groups){
 
     var vm = this;
 
@@ -21,7 +21,7 @@
     vm.open = open;
     vm.original = [];
     vm.showNoOpportunitiesMsg = showNoOpportunitiesMsg;
-    vm.today = today;
+    //vm.today = today;
     vm.toggleMin = toggleMin;
 
     activate();
@@ -39,7 +39,6 @@
     function activate(){
       today();
       toggleMin();
-      console.log(Groups);
     }
    
     function today() {

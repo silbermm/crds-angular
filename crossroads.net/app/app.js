@@ -94,7 +94,7 @@ var _ = require('lodash');
     .directive("requireMultiple", require('./shared/requireMultiple.directive.js'))
 
     require('./app.controller');
-    require('./apprun');
+    require('./app.run');
     require('./app.config');
     require('./routes');
     require('./register/register_directive');
