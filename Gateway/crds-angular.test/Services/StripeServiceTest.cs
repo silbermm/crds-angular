@@ -10,34 +10,120 @@ using NSubstitute;
 using NSubstitute.Core;
 using NUnit.Framework;
 using RestSharp;
+using System.Collections.Generic;
 
 namespace crds_angular.test.Services
 {
     class StripeServiceTest
     {
-        private Mock<IConfigurationWrapper> _configurationWrapper;
-        private Mock<IRestClient> _restClientMock;
-        private StripeService _fixture  ;
+        private Mock<IRestClient> restClient;
+        private StripeService fixture;
 
         [SetUp]
         public void Setup()
         {
-           _configurationWrapper = new Mock<IConfigurationWrapper>();
-           _restClientMock = new Mock<IRestClient>();
-           _fixture = new StripeService();
+            restClient = new Mock<IRestClient>(MockBehavior.Strict);
+            fixture = new StripeService(restClient.Object);
         }
 
-       [Test]
+        [Test]
         public void shouldThrowExceptionWhenTokenIsInvalid()
         {
-            var mockStripeResponse = new RestResponse<StripeService>();
-            mockStripeResponse.StatusCode = HttpStatusCode.BadRequest;
-            var request = new RestRequest("customers", Method.POST);
-            request.AddParameter("description", "testing customers");
-            request.AddParameter("source", It.IsAny<string>());
-            _restClientMock.Setup(mock => mock.Execute<StripeService>(request)).Returns(mockStripeResponse);
+            var stripeResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
+            stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.BadRequest).Verifiable();
 
-            Assert.Throws<StripeException>(() => _fixture.createCustomer("tok_is_bad"));
+            restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
+
+            Assert.Throws<StripeException>(() => fixture.createCustomer("token"));
+
+            restClient.Verify(mocked => mocked.Execute<StripeCustomer>(
+                It.Is<RestRequest>(o =>
+                    o.Method == Method.POST
+                    && o.Resource.Equals("customers")
+                    && parameterMatches("description", "testing customers", o.Parameters)
+                    && parameterMatches("source", "token", o.Parameters)
+                    )));
+            restClient.VerifyAll();
+            stripeResponse.VerifyAll();
+        }
+
+        [Test]
+        public void shouldReturnSuccessfulCustomerId()
+        {
+            var customer = new StripeCustomer();
+            customer.id = "12345";
+
+            var stripeResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
+            stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.Data).Returns(customer).Verifiable();
+
+            restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
+
+            var response = fixture.createCustomer("token");
+            restClient.Verify(mocked => mocked.Execute<StripeCustomer>(
+                It.Is<IRestRequest>(o =>
+                    o.Method == Method.POST
+                    && o.Resource.Equals("customers")
+                    && parameterMatches("description", "testing customers", o.Parameters)
+                    && parameterMatches("source", "token", o.Parameters)
+                    )));
+            restClient.VerifyAll();
+            stripeResponse.VerifyAll();
+
+            Assert.AreEqual("12345", response);
+        }
+
+        [Test]
+        public void shouldChargeCustomer()
+        {
+            var customer = new StripeCustomer();
+            customer.id = "12345";
+            customer.default_source = "some card";
+
+            var getCustomerResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
+            getCustomerResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            getCustomerResponse.SetupGet(mocked => mocked.Data).Returns(customer).Verifiable();
+
+            restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(getCustomerResponse.Object);
+
+            var charge = new StripeCharge();
+            charge.id = "90210";
+
+            var chargeResponse = new Mock<IRestResponse<StripeCharge>>(MockBehavior.Strict);
+            chargeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            chargeResponse.SetupGet(mocked => mocked.Data).Returns(charge).Verifiable();
+
+            restClient.Setup(mocked => mocked.Execute<StripeCharge>(It.IsAny<IRestRequest>())).Returns(chargeResponse.Object);
+
+            var response = fixture.chargeCustomer("cust_token", 9090, "donor98765");
+
+            restClient.Verify(mocked => mocked.Execute<StripeCustomer>(
+                It.Is<IRestRequest>(o =>
+                    o.Method == Method.GET
+                    && o.Resource.Equals("customers/cust_token"))));
+
+            restClient.Verify(mocked => mocked.Execute<StripeCharge>(
+                It.Is<IRestRequest>(o =>
+                    o.Method == Method.POST
+                    && o.Resource.Equals("charges")
+                    && parameterMatches("amount", 9090 * 100, o.Parameters)
+                    && parameterMatches("currency", "usd", o.Parameters)
+                    && parameterMatches("source", "some card", o.Parameters)
+                    && parameterMatches("customer", "12345", o.Parameters)
+                    && parameterMatches("description", "Logged-in giver, donor_id# donor98765", o.Parameters)
+                    )));
+
+            restClient.VerifyAll();
+            getCustomerResponse.VerifyAll();
+            chargeResponse.VerifyAll();
+
+            Assert.AreEqual("90210", response);
+        }
+
+        private bool parameterMatches(string name, object value, List<Parameter> parms)
+        {
+            var parm = parms.Find(p => p.Name.Equals(name));
+            return (parm != null && parm.Value.Equals(value));
         }
 
         [Test]
@@ -50,4 +136,4 @@ namespace crds_angular.test.Services
 
     }
 
-  }
+}
