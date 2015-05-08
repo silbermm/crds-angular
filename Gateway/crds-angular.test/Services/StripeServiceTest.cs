@@ -31,7 +31,7 @@ namespace crds_angular.test.Services
         {
             var stripeResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
             stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.BadRequest).Verifiable();
-
+            stripeResponse.SetupGet(mocked => mocked.Content).Returns("{error: {message:'Bad Request'}}").Verifiable();
             restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
 
             Assert.Throws<StripeException>(() => fixture.createCustomer("token"));
@@ -123,6 +123,59 @@ namespace crds_angular.test.Services
         private bool parameterMatches(string name, object value, List<Parameter> parms)
         {
             return(parms.Find(p => p.Name.Equals(name) && p.Value.Equals(value)) != null);
+        }
+
+        [Test]
+        public void shouldNotChargeCustomerIfCustomerLookupFails()
+        {
+            var getCustomerResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
+            getCustomerResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.BadRequest).Verifiable();
+            getCustomerResponse.SetupGet(mocked => mocked.Content).Returns("{error: {message:'Bad Request'}}").Verifiable();
+            restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(getCustomerResponse.Object);
+            try
+            {
+                fixture.chargeCustomer("token", 123, "donorid");
+                Assert.Fail("Should have thrown exception");
+            }
+            catch (StripeException e)
+            {
+                Assert.AreEqual("Could not charge customer because customer lookup failed", e.Message);
+                Assert.IsNotNull(e.error);
+                Assert.AreEqual("Bad Request", e.error.message);
+            }
+
+        }
+
+        [Test]
+        public void shouldNotChargeCustomerIfAmountIsInvalid()
+        {
+            var customer = new StripeCustomer();
+            customer.id = "12345";
+            customer.default_source = "some card";
+            
+            var getCustomerResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
+            getCustomerResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            getCustomerResponse.SetupGet(mocked => mocked.Data).Returns(customer).Verifiable();
+            restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(getCustomerResponse.Object);
+
+
+            var chargeResponse = new Mock<IRestResponse<StripeCharge>>(MockBehavior.Strict);
+            chargeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.BadRequest).Verifiable();
+            chargeResponse.SetupGet(mocked => mocked.Content).Returns("{error: {message:'Invalid Integer Amount'}}").Verifiable();
+
+            restClient.Setup(mocked => mocked.Execute<StripeCharge>(It.IsAny<IRestRequest>())).Returns(chargeResponse.Object);
+            try
+            {
+                fixture.chargeCustomer("token", -900, "donorid");
+                Assert.Fail("Should have thrown exception");
+            }
+            catch (StripeException e)
+            {
+                Assert.AreEqual("Invalid charge request", e.Message);
+                Assert.IsNotNull(e.error);
+                Assert.AreEqual("Invalid Integer Amount", e.error.message);
+            }
+
         }
 
     }
