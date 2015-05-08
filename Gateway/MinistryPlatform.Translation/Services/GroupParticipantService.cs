@@ -14,12 +14,12 @@ namespace MinistryPlatform.Translation.Services
 {
     public class GroupParticipantService : IGroupParticipantService
     {
-        private IDbConnection _mpDbConnection;
+        //private IDbConnection _mpDbConnection;
 
-        public GroupParticipantService(IDbConnection mpDbConnection)
-        {
-            this._mpDbConnection = mpDbConnection;
-        }
+        //public GroupParticipantService(IDbConnection mpDbConnection)
+        //{
+        //    this._mpDbConnection = mpDbConnection;
+        //}
         public List<GroupServingParticipant> GetServingParticipants()
         {
             var user = Environment.GetEnvironmentVariable("MP_API_DB_USER");
@@ -36,13 +36,16 @@ namespace MinistryPlatform.Translation.Services
                 iconn.Open();
                 const string query =
                     "SELECT * FROM MinistryPlatform.dbo.vw_crds_Serving_Participants v WHERE v.Participant_ID IN ( 994377, 1446320, 1446324, 2057353 ) ";
-                IDbCommand icommand = new SqlCommand(query);
+                IDbCommand icommand = new SqlCommand(query, (SqlConnection) iconn);
                 var reader = icommand.ExecuteReader();
                 var groupServingParticipants = new List<GroupServingParticipant>();
                 while (reader.Read())
                 {
                     var participant = new GroupServingParticipant();
-
+                    participant.ContactId = reader.GetInt32(reader.GetOrdinal("Contact_ID"));
+                    participant.EventType = reader.GetString(reader.GetOrdinal("Event_Type"));
+                    participant.EventTypeId = reader.GetInt32(reader.GetOrdinal("Event_Type_ID"));
+                    participant.GroupRoleId = reader.GetInt32(reader.GetOrdinal("Group_Role_ID"));
                     participant.DomainId = reader.GetInt32(reader.GetOrdinal("Domain_ID"));
                     participant.EventId = reader.GetInt32(reader.GetOrdinal("Event_ID"));
                     participant.EventStartDateTime = (DateTime) reader["Event_Start_Date"];

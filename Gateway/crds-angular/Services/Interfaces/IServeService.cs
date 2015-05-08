@@ -12,6 +12,9 @@ namespace crds_angular.Services.Interfaces
         DateTime GetLastServingDate(int opportunityId, string token);
         List<ServingTeam> GetServingTeams(string token);
         List<ServingDay> GetServingDays(string token);
+
+        List<ServingDay> GetServingDaysFaster(string token); 
+
         bool SaveServeRsvp(string token, int contactid, int opportunityId, int eventTypeId, DateTime startDate,
             DateTime endDate, bool signUp, bool alternateWeeks);
     }

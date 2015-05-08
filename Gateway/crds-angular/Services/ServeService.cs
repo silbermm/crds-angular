@@ -98,6 +98,8 @@ namespace crds_angular.Services
 
         public List<ServingDay> GetServingDaysFaster(string token)
         {
+            //token doesn't seem to be needed? Can we remove? 
+
             //needs to accept an array/list of partiticpant ids as parm
 
             var servingParticipants = _groupParticipantService.GetServingParticipants();

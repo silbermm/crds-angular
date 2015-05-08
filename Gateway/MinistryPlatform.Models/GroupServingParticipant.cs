@@ -4,12 +4,16 @@ namespace MinistryPlatform.Models
 {
     public class GroupServingParticipant
     {
+        public int ContactId { get; set; }
         public int DomainId { get; set; }
+        public string EventType { get; set; }
+        public int EventTypeId { get; set; }
         public int EventId { get; set; }
         public DateTime EventStartDateTime { get; set; }
         public string EventTitle { get; set; }
         public int GroupId { get; set; }
         public string GroupName { get; set; }
+        public int GroupRoleId { get; set; }
         public string GroupPrimaryContactEmail { get; set; }
         public int OpportunityId { get; set; }
         public int OpportunityMaximumNeeded { get; set; }
