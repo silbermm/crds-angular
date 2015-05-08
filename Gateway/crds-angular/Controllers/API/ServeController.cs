@@ -50,19 +50,23 @@ namespace crds_angular.Controllers.API
             });
         }
 
-        [ResponseType(typeof (List<FamilyMember>))]
-        [Route("api/serve/family")]
-        public IHttpActionResult GetFamily()
+        [ResponseType(typeof (List<FamilyMemberDto>))]
+        [Route("api/serve/family/{contactId}")]
+        public IHttpActionResult GetFamily(int contactId)
         {
             return Authorized(token =>
             {
-                var contactId = _authenticationService.GetContactId(token);
-                var list = _serveService.GetMyImmediateFamily(contactId, token);
-                if (list == null)
+                try
                 {
-                    return Unauthorized();
+                    var list = _serveService.GetImmediateFamilyParticipants(contactId, token);
+                    return Ok(list);
                 }
-                return Ok(list);
+                catch (Exception ex)
+                {
+                    var apiError = new ApiErrorDto("Save RSVP Failed", ex);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+                
             });
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -26,10 +27,12 @@ namespace crds_angular.Services
         private IOpportunityService _opportunityService;
         private IEventService _eventService;
         private IParticipantService _participantService;
+        private IGroupParticipantService _groupParticipantService;
 
         public ServeService(IGroupService groupService, IContactRelationshipService contactRelationshipService,
             IPersonService personService, IAuthenticationService authenticationService,
-            IOpportunityService opportunityService, IEventService eventService, IParticipantService participantService)
+            IOpportunityService opportunityService, IEventService eventService, IParticipantService participantService,
+            IGroupParticipantService groupParticipantService)
         {
             this._groupService = groupService;
             this._contactRelationshipService = contactRelationshipService;
@@ -38,12 +41,27 @@ namespace crds_angular.Services
             this._authenticationService = authenticationService;
             this._eventService = eventService;
             this._participantService = participantService;
+            this._groupParticipantService = groupParticipantService;
         }
 
         private List<Response> GetParticipantResponses(int participantId)
         {
             logger.Debug(string.Format("GetParticipantResponses({0}) ", participantId));
             return _participantService.GetParticipantResponses(participantId);
+        }
+
+        public List<FamilyMemberDto> GetImmediateFamilyParticipants(int contactId, string token)
+        {
+            var contactRelationships =
+                _contactRelationshipService.GetMyImmediatieFamilyRelationships(contactId, token).ToList();
+            return contactRelationships.Select(contact => new FamilyMemberDto
+            {
+                ContactId = contact.Contact_Id,
+                Email = contact.Email_Address,
+                LastName = contact.Last_Name,
+                ParticipantId = contact.Participant_Id,
+                PreferredName = contact.Preferred_Name
+            }).ToList();
         }
 
         public List<FamilyMember> GetMyImmediateFamily(int contactId, string token)
@@ -76,6 +94,123 @@ namespace crds_angular.Services
             familyMembers.Add(me);
 
             return familyMembers;
+        }
+
+        public List<ServingDay> GetServingDaysFaster(string token)
+        {
+            //needs to accept an array/list of partiticpant ids as parm
+
+            var servingParticipants = _groupParticipantService.GetServingParticipants();
+            //does this need to be sorted?
+
+            var servingDays = new List<ServingDay>();
+
+            foreach (var record in servingParticipants)
+            {
+                //list.Any(cus => cus.FirstName == "John");
+                var day = servingDays.SingleOrDefault(d => d.Date == record.EventStartDateTime);
+                if (day != null)
+                {
+                    //this day already in list
+
+                    var time =
+                        day.ServeTimes.SingleOrDefault(t => t.Time == record.EventStartDateTime.TimeOfDay.ToString());
+                    if (time != null)
+                    {
+                        //this time already in collection
+
+                        var team = time.ServingTeams.SingleOrDefault(t => t.GroupId == record.GroupId);
+                        if (team != null)
+                        {
+                            //team already in collection
+                            var member = team.Members.SingleOrDefault(m => m.ContactId == record.ContactId);
+                            if (member != null)
+                            {
+                                //member already on team
+                                //TO-DO figure out how to do capacity
+                                member.Roles.Add(new ServeRole { Capacity = null, Name = record.OpportunityRoleTitle, RoleId = record.GroupRoleId });
+                            }
+                            else
+                            {
+                                team.Members.Add(TeamMemberFaster(record));
+                            }
+                        }
+                        else
+                        {
+                            time.ServingTeams.Add(ServingTeamFaster(record));
+                        }
+                    }
+                    else
+                    {
+                        //var servingTime = new ServingTime();
+                        //servingTime.Time = record.EventStartDateTime.TimeOfDay.ToString();
+                        //servingTime.ServingTeams = null;
+
+
+                        day.ServeTimes.Add(ServingTimeFaster(record));
+
+                    }
+                }
+                else
+                {
+                    //new day for the list
+
+                    // new day
+                    var servingDay = new ServingDay();
+                    servingDay.Day = record.EventStartDateTime.Date.ToString("d");
+                    servingDay.Date = record.EventStartDateTime;
+                    servingDay.ServeTimes = new List<ServingTime> { ServingTimeFaster(record) };
+
+                    servingDays.Add(servingDay);
+
+                }
+                
+            }
+
+            return servingDays;
+        }
+
+        private static ServingTime ServingTimeFaster(GroupServingParticipant record)
+        {
+            var servingTime = new ServingTime();
+            servingTime.ServingTeams = new List<ServingTeam> {ServingTeamFaster(record)};
+            servingTime.Time = record.EventStartDateTime.TimeOfDay.ToString();
+            return servingTime;
+        }
+
+        private static ServingTeam ServingTeamFaster(GroupServingParticipant record)
+        {
+            var servingTeam = new ServingTeam();
+            servingTeam.EventType = record.EventType;
+            servingTeam.EventTypeId = record.EventTypeId;
+            servingTeam.GroupId = record.GroupId;
+            servingTeam.Members = new List<TeamMember> {TeamMemberFaster(record)};
+            servingTeam.Name = record.GroupName;
+            servingTeam.PrimaryContact = record.GroupPrimaryContactEmail;
+            return servingTeam;
+        }
+
+        private static TeamMember TeamMemberFaster(GroupServingParticipant record)
+        {
+// new team member
+            var member = new TeamMember();
+            member.ContactId = record.ContactId;
+            member.EmailAddress = record.ParticipantEmail;
+            member.LastName = record.ParticipantLastName;
+            member.Name = record.ParticipantNickname;
+            member.Participant = new Participant {ParticipantId = record.ParticipantId};
+            //member.Responses = null;  //don't think we need this
+
+            ////TO-DO figure out how to do capacity
+            member.Roles = new List<ServeRole>
+            {
+                new ServeRole {Capacity = null, Name = record.OpportunityRoleTitle, RoleId = record.GroupRoleId}
+            };
+            if (record.Rsvp != null)
+            {
+                member.ServeRsvp = new ServeRsvp {Attending = (bool) record.Rsvp, RoleId = record.GroupRoleId};
+            }
+            return member;
         }
 
         public List<ServingDay> GetServingDays(string token)

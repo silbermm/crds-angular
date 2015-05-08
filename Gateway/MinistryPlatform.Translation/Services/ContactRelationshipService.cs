@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
@@ -23,14 +24,16 @@ namespace MinistryPlatform.Translation.Services
 
         public IEnumerable<ContactRelationship> GetMyImmediatieFamilyRelationships(int contactId, string token)
         {
-            var viewRecords = _ministryPlatformService.GetSubpageViewRecords("MyContactFamilyRelationshipViewId", contactId, token);
+            var viewRecords = _ministryPlatformService.GetSubpageViewRecords("MyContactFamilyRelationshipViewId",
+                contactId, token);
 
             return viewRecords.Select(viewRecord => new ContactRelationship
             {
-                Contact_Id = (int) viewRecord["Contact_ID"],
-                Email_Address = (string) viewRecord["Email_Address"],
-                Last_Name = (string) viewRecord["Last Name"],
-                Preferred_Name = (string) viewRecord["Preferred Name"]
+                Contact_Id = viewRecord.ToInt("Contact_ID"),
+                Email_Address = viewRecord.ToString("Email_Address"),
+                Last_Name = viewRecord.ToString("Last Name"),
+                Preferred_Name = viewRecord.ToString("Preferred Name"),
+                Participant_Id = viewRecord.ToInt("Participant_ID")
             }).ToList();
         }
 
@@ -40,7 +43,6 @@ namespace MinistryPlatform.Translation.Services
                 token);
             try
             {
-
                 return viewRecords.Select(viewRecord => new ContactRelationship
                 {
                     Contact_Id = (int) viewRecord["Contact_ID"],
