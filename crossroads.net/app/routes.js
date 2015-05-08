@@ -22,6 +22,7 @@
   require('./community_groups_signup/group_signup_form.html');
   require('./my_serve');
   require('./go_trip_giving');
+  require('./corkboard');
   var getCookie = require('./utilities/cookies');
 
   angular.module("crossroads").config(["$stateProvider", "$urlRouterProvider", "$httpProvider", "$urlMatcherFactoryProvider", "$locationProvider", function ($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory, $locationProvider) {
@@ -154,6 +155,10 @@
               url: "/mytrips",
               templateUrl: "mytrips/mytrips.html"
             })
+            .state("corkboard", {
+              url: "/corkboard",
+              templateUrl: "corkboard/corkboard-listings.html"
+            })
             .state("opportunities", {
                 url: "/opportunities",
                 controller: "ViewOpportunitiesController as opportunity",
@@ -170,12 +175,12 @@
               controller: "MyServeController as serve",
               templateUrl: "my_serve/myserve.html",
               data: { isProtected: true },
-              resolve: { 
+              resolve: {
                 ServeOpportunities: 'ServeOpportunities',
                 Groups: function(ServeOpportunities){
                   return ServeOpportunities.ServeDays.query().$promise;
                 },
-                loggedin: checkLoggedin 
+                loggedin: checkLoggedin
               }
             })
             .state("styleguide", {
