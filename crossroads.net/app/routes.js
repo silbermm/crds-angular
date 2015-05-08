@@ -159,6 +159,10 @@
               url: "/corkboard",
               templateUrl: "corkboard/corkboard-listings.html"
             })
+            .state("corkboard-create", {
+              url: "/corkboard/create",
+              templateUrl: "corkboard-create.html"
+            })
             .state("opportunities", {
                 url: "/opportunities",
                 controller: "ViewOpportunitiesController as opportunity",
