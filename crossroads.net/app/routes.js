@@ -161,7 +161,7 @@
             })
             .state("corkboard-create", {
               url: "/corkboard/create",
-              templateUrl: "corkboard-create.html"
+              templateUrl: "corkboard/corkboard-create.html"
             })
             .state("opportunities", {
                 url: "/opportunities",
