@@ -1,14 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
-using System.Web.Script.Serialization;
+﻿using crds_angular.Exceptions;
+using crds_angular.Models.Crossroads;
 using crds_angular.Services.Interfaces;
-using Crossroads.Utilities.Services;
 using Newtonsoft.Json;
 using RestSharp;
+using System.Net;
 
 namespace crds_angular.Services
 {
@@ -32,9 +27,8 @@ namespace crds_angular.Services
                 (IRestResponse<StripeCustomer>)stripeRestClient.Execute<StripeCustomer>(request);
             if (response.StatusCode == HttpStatusCode.BadRequest)
             {
-                JavaScriptSerializer serializer = new JavaScriptSerializer();
-                Content content = serializer.Deserialize<Content>(response.Content);
-                throw new StripeException("Customer creation failed", content.error);
+                Content content = JsonConvert.DeserializeObject<Content>(response.Content);
+                throw new StripeException("Customer creation failed", content.error.type, content.error.message, content.error.code);
             }
 
             return response.Data.id;
@@ -50,9 +44,8 @@ namespace crds_angular.Services
                 (IRestResponse<StripeCustomer>)stripeRestClient.Execute<StripeCustomer>(getCustomerRequest);
             if (getCustomerResponse.StatusCode == HttpStatusCode.BadRequest)
             {
-                JavaScriptSerializer serializer = new JavaScriptSerializer();
-                Content content = serializer.Deserialize<Content>(getCustomerResponse.Content);
-                throw new StripeException("Could not charge customer because customer lookup failed", content.error);
+                Content content = JsonConvert.DeserializeObject<Content>(getCustomerResponse.Content);
+                throw new StripeException("Could not charge customer because customer lookup failed", content.error.type, content.error.message, content.error.code);
             }
 
             var chargeRequest = new RestRequest("charges", Method.POST);
@@ -66,19 +59,12 @@ namespace crds_angular.Services
                 (IRestResponse<StripeCharge>)stripeRestClient.Execute<StripeCharge>(chargeRequest);
             if (chargeResponse.StatusCode == HttpStatusCode.BadRequest)
             {
-                JavaScriptSerializer serializer = new JavaScriptSerializer();
-                Content content = serializer.Deserialize<Content>(chargeResponse.Content);
-                throw new StripeException("Invalid charge request", content.error);
+                Content content = JsonConvert.DeserializeObject<Content>(chargeResponse.Content);
+                throw new StripeException("Invalid charge request", content.error.type, content.error.message, content.error.code);
             }
 
             return chargeResponse.Data.id;
         }
-    }
-
-    public class StripeCharge
-    {
-        public string id { get; set; }
-
     }
 
     public class Error

@@ -50,10 +50,11 @@
         headers: {
               'Authorization': getCookie('sessionId')
             }
-      }).success(function(data){
+        }).success(function(data){
           payment_service.donation = data;
           def.resolve(data);
-
+        }).error(function(error) {
+          def.reject(error);
         });
 
       return def.promise;

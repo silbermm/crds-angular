@@ -1,16 +1,11 @@
-﻿using System;
-using System.Configuration;
-using System.Net;
+﻿using crds_angular.Exceptions;
+using crds_angular.Models.Crossroads;
 using crds_angular.Services;
-using crds_angular.Services.Interfaces;
-using Crossroads.Utilities.Interfaces;
-using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
-using NSubstitute;
-using NSubstitute.Core;
 using NUnit.Framework;
 using RestSharp;
 using System.Collections.Generic;
+using System.Net;
 
 namespace crds_angular.test.Services
 {
@@ -130,7 +125,7 @@ namespace crds_angular.test.Services
         {
             var getCustomerResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
             getCustomerResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.BadRequest).Verifiable();
-            getCustomerResponse.SetupGet(mocked => mocked.Content).Returns("{error: {message:'Bad Request'}}").Verifiable();
+            getCustomerResponse.SetupGet(mocked => mocked.Content).Returns("{error: {type: 'Error Type', message:'Bad Request'}}").Verifiable();
             restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(getCustomerResponse.Object);
             try
             {
@@ -140,8 +135,8 @@ namespace crds_angular.test.Services
             catch (StripeException e)
             {
                 Assert.AreEqual("Could not charge customer because customer lookup failed", e.Message);
-                Assert.IsNotNull(e.error);
-                Assert.AreEqual("Bad Request", e.error.message);
+                Assert.AreEqual("Error Type", e.type);
+                Assert.AreEqual("Bad Request", e.detailMessage);
             }
 
         }
@@ -172,8 +167,8 @@ namespace crds_angular.test.Services
             catch (StripeException e)
             {
                 Assert.AreEqual("Invalid charge request", e.Message);
-                Assert.IsNotNull(e.error);
-                Assert.AreEqual("Invalid Integer Amount", e.error.message);
+                Assert.IsNotNull(e.detailMessage);
+                Assert.AreEqual("Invalid Integer Amount", e.detailMessage);
             }
 
         }

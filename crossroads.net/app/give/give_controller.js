@@ -187,12 +187,8 @@
                 .then(function(donor) {
                     PaymentService.donateToProgram(vm.program.ProgramId, vm.amount, donor.id)
                         .then(function(confirmation){
-                            vm.programsInput.forEach(function(program){
-                                if (program.ProgramId === confirmation.program_id){
-                                    vm.program_name = program.Name;
-                                    return;
-                                }
-                            });
+                            vm.program_name = _.result(_.find(vm.programsInput, 
+                              {'ProgramId': confirmation.program_id}), 'Name');
                             vm.amount = confirmation.amount;
                             $state.go("give.thank-you");
                         });

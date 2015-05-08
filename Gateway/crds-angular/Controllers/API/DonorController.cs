@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System.Web.Http.Results;
 using crds_angular.Exceptions.Models;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
@@ -40,7 +41,7 @@ namespace crds_angular.Controllers.API
 
                     var customerId = stripeService.createCustomer(dto.stripe_token_id);
 
-                    var donorId = donorService.CreateDonorRecord(contactId, customerId);
+                    var donorId = donorService.CreateDonorRecord(contactId, customerId, DateTime.Now);
 
                     var response = new DonorDTO
                     {
@@ -59,6 +60,6 @@ namespace crds_angular.Controllers.API
 
 
         }
-
     }
 }
+
