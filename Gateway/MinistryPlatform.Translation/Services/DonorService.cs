@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services.Interfaces;
 
@@ -49,6 +50,37 @@ namespace MinistryPlatform.Translation.Services
             }
             return donorId;
         
+        }
+
+        public Donor GetDonorRecord(int contactId)
+        {
+            Donor donor;
+            try
+            {
+                var searchStr = contactId.ToString() + ",";
+                var records =
+                    WithApiLogin<List<Dictionary<string, object>>>(
+                        apiToken => (ministryPlatformService.GetPageViewRecords("DonorByContactId", apiToken, searchStr, "")));
+                var record = records.Single();
+                donor = new Donor()
+                {
+                    DonorId = record.ToInt("dp_RecordID"),
+                    StripeCustomerId = record.ToString("Stripe Customer ID"),
+                    ContactId = record.ToInt("Contact ID"),
+                    StatementFreq = record.ToString("Statement Frequency"),
+                    StatementType = record.ToString("Statement Type"),
+                    StatementMethod = record.ToString("Statement Method"),
+                    SetupDate = record.ToDate("Setup Date")
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(
+                    string.Format("CreateDonorRecord failed.  Contact Id: {0}", contactId), ex);
+            }
+
+            return donor;
+
         }
     }
 }
