@@ -1,4 +1,4 @@
-namespace crds_angular.Services
+namespace crds_angular.Models.Crossroads
 {
     public class StripeCustomer
     {

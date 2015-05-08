@@ -11,6 +11,9 @@ using NSubstitute.Core;
 using NUnit.Framework;
 using RestSharp;
 using System.Collections.Generic;
+using crds_angular.Exceptions;
+using crds_angular.Models;
+using crds_angular.Models.Crossroads;
 
 namespace crds_angular.test.Services
 {
@@ -141,8 +144,8 @@ namespace crds_angular.test.Services
             catch (StripeException e)
             {
                 Assert.AreEqual("Could not charge customer because customer lookup failed", e.Message);
-                Assert.IsNotNull(e.error);
-                Assert.AreEqual("Bad Request", e.error.message);
+                Assert.IsNotNull(e.type);
+                Assert.AreEqual("Bad Request", e.detailMessage);
             }
 
         }
@@ -173,8 +176,8 @@ namespace crds_angular.test.Services
             catch (StripeException e)
             {
                 Assert.AreEqual("Invalid charge request", e.Message);
-                Assert.IsNotNull(e.error);
-                Assert.AreEqual("Invalid Integer Amount", e.error.message);
+                Assert.IsNotNull(e.detailMessage);
+                Assert.AreEqual("Invalid Integer Amount", e.detailMessage);
             }
 
         }

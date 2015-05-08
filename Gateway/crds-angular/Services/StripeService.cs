@@ -5,6 +5,9 @@ using System.Net;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Web.Script.Serialization;
+using crds_angular.Exceptions;
+using crds_angular.Models;
+using crds_angular.Models.Crossroads;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Services;
 using Newtonsoft.Json;
@@ -34,7 +37,7 @@ namespace crds_angular.Services
             {
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
                 Content content = serializer.Deserialize<Content>(response.Content);
-                throw new StripeException("Customer creation failed", content.error);
+                throw new StripeException("Customer creation failed", content.error.type, content.error.message, content.error.code);
             }
 
             return response.Data.id;
@@ -52,7 +55,7 @@ namespace crds_angular.Services
             {
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
                 Content content = serializer.Deserialize<Content>(getCustomerResponse.Content);
-                throw new StripeException("Could not charge customer because customer lookup failed", content.error);
+                throw new StripeException("Could not charge customer because customer lookup failed", content.error.type, content.error.message, content.error.code);
             }
 
             var chargeRequest = new RestRequest("charges", Method.POST);
@@ -68,17 +71,11 @@ namespace crds_angular.Services
             {
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
                 Content content = serializer.Deserialize<Content>(chargeResponse.Content);
-                throw new StripeException("Invalid charge request", content.error);
+                throw new StripeException("Invalid charge request", content.error.type, content.error.message, content.error.code);
             }
 
             return chargeResponse.Data.id;
         }
-    }
-
-    public class StripeCharge
-    {
-        public string id { get; set; }
-
     }
 
     public class Error
