@@ -23,6 +23,7 @@
   require('./my_serve');
   require('./go_trip_giving');
   require('./corkboard');
+
   var getCookie = require('./utilities/cookies');
 
   angular.module("crossroads").config(["$stateProvider", "$urlRouterProvider", "$httpProvider", "$urlMatcherFactoryProvider", "$locationProvider", function ($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory, $locationProvider) {
@@ -158,6 +159,10 @@
             .state("corkboard", {
               url: "/corkboard",
               templateUrl: "corkboard/corkboard-listings.html"
+            })
+            .state("corkboard-detail", {
+              url: "/corkboard/detail",
+              templateUrl: "corkboard/corkboard-listing-detail.html"
             })
             .state("opportunities", {
                 url: "/opportunities",

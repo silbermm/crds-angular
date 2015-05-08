@@ -89,3 +89,16 @@
     }
   }
 }
+
+.corkboard-header {
+  position: relative;
+  .page-header {
+    padding-right: 50px;
+  }
+  .card-img {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    max-width: 50px;
+  }
+}
