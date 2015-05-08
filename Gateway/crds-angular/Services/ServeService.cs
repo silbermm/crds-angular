@@ -130,7 +130,7 @@ namespace crds_angular.Services
                             {
                                 //member already on team
                                 //TO-DO figure out how to do capacity
-                                member.Roles.Add(new ServeRole { Capacity = null, Name = record.OpportunityRoleTitle, RoleId = record.GroupRoleId });
+                                member.Roles.Add(new ServeRole { Capacity = null, Name = record.OpportunityTitle + " " + record.OpportunityRoleTitle, RoleId = record.GroupRoleId });
                             }
                             else
                             {
@@ -206,7 +206,7 @@ namespace crds_angular.Services
             ////TO-DO figure out how to do capacity
             member.Roles = new List<ServeRole>
             {
-                new ServeRole {Capacity = null, Name = record.OpportunityRoleTitle, RoleId = record.GroupRoleId}
+                new ServeRole {Capacity = null, Name = record.OpportunityTitle + " " + record.OpportunityRoleTitle, RoleId = record.GroupRoleId}
             };
             if (record.Rsvp != null)
             {
