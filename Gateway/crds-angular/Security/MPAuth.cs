@@ -20,38 +20,25 @@ namespace crds_angular.Security
         protected readonly log4net.ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         /// <summary>
-        /// Ensure that a user is authenticated before executing the given labmda expression.  The expression will
+        /// Ensure that a user is authenticated before executing the given lambda expression.  The expression will
         /// have a reference to the user's authentication token (the value of the "Authorization" cookie).  If
         /// the user is not authenticated, an UnauthorizedResult will be returned.
         /// </summary>
-        /// <param name="doIt">A labmda expression to execute if the user is authenticated</param>
+        /// <param name="doIt">A lambda expression to execute if the user is authenticated</param>
         /// <returns>An IHttpActionResult from the "doIt" expression, or UnauthorizedResult if the user is not authenticated.</returns>
         protected IHttpActionResult Authorized(Func<string,IHttpActionResult> doIt )
         {
-            try
-            {
-                var authorized = Request.Headers.GetValues("Authorization").FirstOrDefault();
-                //CookieHeaderValue cookie = Request.Headers.GetCookies("sessionId").FirstOrDefault();
-                if (authorized != null && (authorized != "null" || authorized != ""))
-                {
-                    return doIt(authorized);
-                }
-                return Unauthorized();
-            }
-            catch (System.InvalidOperationException)
-            {
-                return Unauthorized();
-            }
+            return (Authorized(doIt, () => { return (Unauthorized()); }));
         }
 
         /// <summary>
-        /// Execute the labmda expression "actionWhenAuthorized" if the user is authenticated, or execute the expression
+        /// Execute the lambda expression "actionWhenAuthorized" if the user is authenticated, or execute the expression
         /// "actionWhenNotAuthorized" if the user is not authenticated.  If authenticated, the "actionWhenAuthorized"
         /// expression will have a reference to the user's authentication token (the value of the "Authorization" cookie).
         /// </summary>
-        /// <param name="actionWhenAuthorized">A labmda expression to execute if the user is authenticated</param>
-        /// <param name="actionWhenNotAuthorized">A labmda expression to execute if the user is NOT authenticated</param>
-        /// <returns>An IHttpActionResult from the labmda expression that was executed.</returns>
+        /// <param name="actionWhenAuthorized">A lambda expression to execute if the user is authenticated</param>
+        /// <param name="actionWhenNotAuthorized">A lambda expression to execute if the user is NOT authenticated</param>
+        /// <returns>An IHttpActionResult from the lambda expression that was executed.</returns>
         protected IHttpActionResult Authorized(Func<string, IHttpActionResult> actionWhenAuthorized, Func<IHttpActionResult> actionWhenNotAuthorized)
         {
             try
