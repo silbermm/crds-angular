@@ -7,6 +7,7 @@ using System.Web.Http.Results;
 using crds_angular.Controllers.API;
 using MinistryPlatform.Translation.Services.Interfaces;
 using crds_angular.Services.Interfaces;
+using MinistryPlatform.Models;
 using Moq;
 using NUnit.Framework;
 
@@ -14,7 +15,7 @@ namespace crds_angular.test.controllers
 {
     class DonationControllerTest
     {
-        private DonorController fixture;
+        private DonationController fixture;
         private Mock<IDonorService> donorServiceMock;
         private Mock<IPaymentService> stripeServiceMock;
         private Mock<IAuthenticationService> authenticationServiceMock;
@@ -27,7 +28,7 @@ namespace crds_angular.test.controllers
             donorServiceMock = new Mock<IDonorService>();
             stripeServiceMock = new Mock<IPaymentService>();
             authenticationServiceMock = new Mock<IAuthenticationService>();
-            fixture = new DonorController(donorServiceMock.Object, stripeServiceMock.Object,
+            fixture = new DonationController(donorServiceMock.Object, stripeServiceMock.Object,
                 authenticationServiceMock.Object);
 
             authType = "auth_type";
@@ -40,6 +41,7 @@ namespace crds_angular.test.controllers
         [Test]
         public void testPostToCreateDonationAndDistribution()
         {
+            var contactId = 999999;
             var donorId = 394256;
             var amount = 25368;
             var donationId = 6186818;
@@ -54,14 +56,42 @@ namespace crds_angular.test.controllers
                 donor_id = 394256
             };
 
-            donorServiceMock.Setup(mocked => mocked.CreateDonationAndDistributionRecord(amount, donorId, program_id, charge_id, DateTime.Now)).Returns(donationId);
-            //TODO fix this up when changes for US1253 are merged in
-            //IHttpActionResult result = fixture.Post(createDonationDTO);
+            var donor = new Donor
+            {
+                ContactId = contactId,
+                DonorId = 424242,
+                SetupDate = new DateTime(),
+                StatementFreq = "1",
+                StatementMethod = "2",
+                StatementType = "3",
+                StripeCustomerId = "cus_test1234567"
+            };
 
-            //Assert.IsNotNull(result);
-            //Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonorDTO>), result);
-            //var okResult = (OkNegotiatedContentResult<DonorDTO>)result;
-            //Assert.AreEqual(6186818, donationId);
+            authenticationServiceMock.Setup(mocked => mocked.GetContactId(authType + " " + authToken)).Returns(contactId);
+            
+            donorServiceMock.Setup(mocked => mocked.GetDonorRecord(contactId))
+                .Returns(donor);
+
+            stripeServiceMock.Setup(
+                mocked => mocked.chargeCustomer(donor.StripeCustomerId, createDonationDTO.amount, donor.DonorId.ToString()))
+                .Returns(charge_id);
+
+            donorServiceMock.Setup(mocked => mocked.
+                CreateDonationAndDistributionRecord(createDonationDTO.amount, donor.DonorId, 
+                    createDonationDTO.program_id, charge_id, It.IsAny<DateTime>()))
+                    .Returns(donationId);
+            
+            IHttpActionResult result = fixture.Post(createDonationDTO);
+
+            authenticationServiceMock.VerifyAll();
+            donorServiceMock.VerifyAll();
+            stripeServiceMock.VerifyAll();
+            donorServiceMock.VerifyAll();
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonationDTO>), result);
+            var okResult = (OkNegotiatedContentResult<DonationDTO>)result;
+            Assert.AreEqual(6186818, donationId);
             
         }
     }
