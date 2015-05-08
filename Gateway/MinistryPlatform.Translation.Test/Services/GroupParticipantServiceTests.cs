@@ -24,7 +24,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _mpDbConnectionMock = new Mock<IDbConnection>();
             _mpDbCommandMock = new Mock<IDbCommand>();
             _mpDataReaderMock = new Mock<IDataReader>();
-            _fixture = new GroupParticipantService(_mpDbConnectionMock.Object);
+            //_fixture = new GroupParticipantService(_mpDbConnectionMock.Object);
         }
         [Test]
         public void GetServingParticipantsTest()

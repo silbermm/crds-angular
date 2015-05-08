@@ -1,3 +1,4 @@
+using System.Data;
 using Microsoft.Practices.Unity;
 using System.Web.Http;
 using Unity.WebApi;
@@ -41,6 +42,7 @@ namespace crds_angular
             container.RegisterType<IProgramService, ProgramService>();
             container.RegisterType<IDonorService, DonorService>();
             container.RegisterType<IPaymentService, StripeService>();
+            container.RegisterType<IGroupParticipantService, GroupParticipantService>();
 
             container.RegisterType<PlatformServiceClient>(WithLifetime.PerResolve(typeof(PlatformServiceClient)), new InjectionConstructor());
 

@@ -35,7 +35,7 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
-                    var servingDays = _serveService.GetServingDays(token);
+                    var servingDays = _serveService.GetServingDaysFaster(token);
                     if (servingDays == null)
                     {
                         return Unauthorized();

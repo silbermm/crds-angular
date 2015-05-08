@@ -24,6 +24,7 @@ namespace crds_angular.test.Services
         private Mock<IServeService> _serveService;
         private Mock<IEventService> _eventService;
         private Mock<IParticipantService> _participantService;
+        private Mock<IGroupParticipantService> _groupParticipantService;
 
         private ServeService _fixture;
 
@@ -39,6 +40,7 @@ namespace crds_angular.test.Services
             _eventService = new Mock<IEventService>();
             _serveService = new Mock<IServeService>();
             _participantService = new Mock<IParticipantService>();
+            _groupParticipantService = new Mock<IGroupParticipantService>();
 
             _authenticationService.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Returns(123456);
             var myContact = new MyContact
@@ -80,7 +82,8 @@ namespace crds_angular.test.Services
 
             _fixture = new ServeService(_groupService.Object, _contactRelationshipService.Object, _personService.Object,
                 _authenticationService.Object, _opportunityService.Object, _eventService.Object,
-                _participantService.Object);
+                _participantService.Object, _groupParticipantService.Object);
+             
 
             //force AutoMapper to register
             AutoMapperConfig.RegisterMappings();
@@ -558,6 +561,47 @@ namespace crds_angular.test.Services
                 (m =>
                     m.RespondToOpportunity(47, opportunityId, It.IsAny<string>(), It.IsIn<int>(expectedEventIds), signUp)),
                 Times.Exactly(3));
+        }
+
+        [Test]
+        public void GetServingDaysFaster()
+        {
+            var servingParticipants = new List<GroupServingParticipant>
+            {
+                new GroupServingParticipant
+                {
+                    ContactId = 2,
+                    DomainId = 1,
+                    EventId = 3,
+                    EventStartDateTime = DateTime.Now,
+                    EventTitle = "Serving Event",
+                    EventType = "Event Type",
+                    EventTypeId = 4,
+                    GroupId = 5,
+                    GroupName = "Group",
+                    GroupPrimaryContactEmail = "group@leader.com",
+                    GroupRoleId = 6,
+                    OpportunityId = 7,
+                    OpportunityMaximumNeeded = 10,
+                    OpportunityMinimumNeeded = 5,
+                    OpportunityRoleTitle = "Member",
+                    OpportunityShiftEnd = TimeSpan.Parse("8:30"),
+                    OpportunityShiftStart = TimeSpan.Parse("10:30"),
+                    OpportunitySignUpDeadline = 7,
+                    OpportunityTitle = "Serving",
+                    ParticipantEmail = "partici@pants.com",
+                    ParticipantId = 8,
+                    ParticipantLastName = "McServer",
+                    ParticipantNickname = "Servy",
+                    Rsvp = true
+                }
+            };
+
+            _groupParticipantService.Setup(m => m.GetServingParticipants()).Returns(servingParticipants);
+
+            var servingDays = _fixture.GetServingDaysFaster(It.IsAny<string>());
+
+            Assert.NotNull(servingDays);
         }
 
         private void SetUpRSVPMocks(int contactId, int eventTypeId, int opportunityId, bool signUp)
