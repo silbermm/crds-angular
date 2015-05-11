@@ -27,6 +27,14 @@ namespace crds_angular.Controllers.API
             _authenticationService = authenticationService;
         }
 
+        [Route("api/serve/testlist/{parms}")]
+        public IHttpActionResult Get(string parms)
+        {
+            var array = parms.Split(Convert.ToChar(","));
+
+            return this.Ok();
+        }
+
         [ResponseType(typeof (List<ServingDay>))]
         [Route("api/serve/family-serve-days")]
         public IHttpActionResult GetFamilyServeDays()
@@ -100,6 +108,29 @@ namespace crds_angular.Controllers.API
                     throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
                 return Ok();
+            });
+        }
+
+        [ResponseType(typeof(Capacity))]
+        [Route("api/serve/opp-capacity")]
+        public IHttpActionResult GetOpportunityCapacity(int id, int eventId, int minNeeded, int maxNeeded)
+        {
+            return Authorized(token =>
+            {
+                try
+                {
+                    var oppCapacity = _serveService.OpportunityCapacity(id, eventId, minNeeded, maxNeeded, token);
+                    if (oppCapacity == null)
+                    {
+                        return Unauthorized();
+                    }
+                    return Ok(oppCapacity);
+                }
+                catch (Exception exception)
+                {
+                    var apiError = new ApiErrorDto("Get Opportunity Capacity Failed", exception);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
             });
         }
     }

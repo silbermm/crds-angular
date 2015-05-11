@@ -122,6 +122,22 @@ namespace MinistryPlatform.Translation.Services
             return response;
         }
 
+        public List<Response> GetOpportunityResponses(int opportunityId, string token)
+        {
+            var records = _ministryPlatformService.GetSubpageViewRecords(_signedupToServeSubPageViewId, opportunityId,
+            token, "");
+
+            var responses = new List<Response>();
+            foreach (var r in records)
+            {
+                var response = new Response();
+                response.Event_ID = r.ToInt("Event_ID");
+                responses.Add(response);
+            }
+
+            return responses;
+        }
+
         public int GetOpportunitySignupCount(int opportunityId, int eventId, string token)
         {
             var search = ",,," + eventId;

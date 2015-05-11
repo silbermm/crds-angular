@@ -35,7 +35,7 @@ namespace MinistryPlatform.Translation.Services
             {
                 iconn.Open();
                 const string query =
-                    "SELECT * FROM MinistryPlatform.dbo.vw_crds_Serving_Participants v WHERE v.Participant_ID IN ( 994377, 1446320, 1446324, 2057353 ) ";
+                    "SELECT * FROM MinistryPlatform.dbo.vw_crds_Serving_Participants v WHERE v.Participant_ID IN ( 994377, 1446320, 1446324, 2057353 ) ORDER BY Event_Start_Date, Group_Name, Contact_ID";
                 IDbCommand icommand = new SqlCommand(query, (SqlConnection) iconn);
                 var reader = icommand.ExecuteReader();
                 var groupServingParticipants = new List<GroupServingParticipant>();
