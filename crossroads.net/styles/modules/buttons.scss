@@ -24,12 +24,6 @@
     }
   }
 
-  &.btn-gray {
-    &:hover {
-      background: darken($gray, 10%);
-    }
-  }
-
   &.btn-lg {
 
     .btn-label {
@@ -71,15 +65,7 @@
 }
 
 .btn-gray {
-  color: white;
-  background-color: $gray;
-  border-color: $gray;
-  color: $gray-lighter;
-
-  &:hover {
-    background-color: $brand-primary;
-    border-color: $brand-primary;
-  }
+  @include button-variant($btn-default-color, $gray, $gray);
 }
 
 h2 {

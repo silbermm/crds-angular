@@ -226,6 +226,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\API\AccountController.cs" />
+    <Compile Include="Controllers\API\DonationController.cs" />
     <Compile Include="Controllers\API\DonorController.cs" />
     <Compile Include="Controllers\API\EventLocationController.cs" />
     <Compile Include="Controllers\API\GroupController.cs" />
@@ -240,11 +241,14 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Exceptions\Models\ApiErrorDto.cs" />
     <Compile Include="Enum\BadgeTypeEnum.cs" />
+    <Compile Include="Exceptions\StripeException.cs" />
     <Compile Include="Extenstions\DateTimeExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Crossroads\CreateDonationDTO.cs" />
     <Compile Include="Models\Crossroads\CreateDonorDTO.cs" />
+    <Compile Include="Models\Crossroads\DonationDTO .cs" />
     <Compile Include="Models\Crossroads\DonorDTO.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityGroup.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityGroupParticipant.cs" />
@@ -268,6 +272,8 @@
     <Compile Include="Models\Crossroads\ServingRSVP.cs" />
     <Compile Include="Models\Crossroads\Skill.cs" />
     <Compile Include="Models\Crossroads\Event.cs" />
+    <Compile Include="Models\Crossroads\StripeCharge.cs" />
+    <Compile Include="Models\Crossroads\StripeCustomer.cs" />
     <Compile Include="Models\Crossroads\User.cs" />
     <Compile Include="Models\Json\AccountInfoSerializer.cs" />
     <Compile Include="Models\Json\Communication.cs" />
@@ -288,8 +294,6 @@
     <Compile Include="Services\PersonService.cs" />
     <Compile Include="Services\ServeService.cs" />
     <Compile Include="Services\SkillService.cs" />
-    <Compile Include="Services\StripeCustomer.cs" />
-    <Compile Include="Services\StripeException.cs" />
     <Compile Include="Services\StripeService.cs" />
     <Compile Include="Services\TranslationService.cs" />
     <Compile Include="Startup.cs" />
@@ -315,6 +319,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Unity.config" />
     <None Include="Web.Demo.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
