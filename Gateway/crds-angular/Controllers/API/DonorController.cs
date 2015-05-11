@@ -18,16 +18,17 @@ namespace crds_angular.Controllers.API
     public class DonorController : MPAuth
     {
         private MPInterfaces.IDonorService mpDonorService;
+        private IDonorService gatewayDonorService;
         private IPaymentService stripeService;
         private MPInterfaces.IAuthenticationService authenticationService;
 
         public DonorController(MPInterfaces.IDonorService mpDonorService, IPaymentService stripeService,
-            MPInterfaces.IAuthenticationService authenticationService)
+            MPInterfaces.IAuthenticationService authenticationService, IDonorService gatewayDonorService)
         {
             this.mpDonorService = mpDonorService;
             this.stripeService = stripeService;
             this.authenticationService = authenticationService;
-
+            this.gatewayDonorService = gatewayDonorService;
         }
 
         [ResponseType(typeof(DonorDTO))]
@@ -39,11 +40,17 @@ namespace crds_angular.Controllers.API
 
         private IHttpActionResult createDonorForUnauthenticatedUser(CreateDonorDTO dto)
         {
-            // 1) Get Donor from MP
-            //       contact_id, donor_id, email_address, stripe_cust_id
-            // 2) If we get donor with stripe_id, return
+            var donor = gatewayDonorService.getDonorForEmail(dto.email_address);
 
-            return (null);
+            donor = gatewayDonorService.createDonor(donor, dto.email_address, dto.stripe_token_id, DateTime.Now);
+
+            var response = new DonorDTO
+            {
+                id = donor.DonorId.ToString(),
+                stripe_customer_id = donor.StripeCustomerId,
+            };
+
+            return Ok(response);
         }
 
         private IHttpActionResult createDonorForAuthenticatedUser(String authToken, CreateDonorDTO dto)

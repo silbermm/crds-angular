@@ -7,8 +7,6 @@ namespace crds_angular.Services.Interfaces
     {
         Donor getDonorForEmail(string emailAddress);
 
-        void updateDonor(int donorId, string paymentProcessorId);
-
-        int createDonor(Donor existingDonor, string emailAddress, string paymentProcessorToken, DateTime setupDate);
+        Donor createDonor(Donor existingDonor, string emailAddress, string paymentProcessorToken, DateTime setupDate);
     }
 }
