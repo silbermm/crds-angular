@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using Crossroads.Utilities.Interfaces;
+using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -92,6 +93,84 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(response, expectedDonationDistributionId);
         }
 
-       
+        [Test]
+        public void TestGetPossibleGuestDonorContact()
+        {
+            var donorId = 1234567;
+            var stripeCustomerId = "cus_431234";
+            var contactId = 565656;
+            var email = "cross@crossroads.net";
+            var guestDonorPageViewId = "PossibleGuestDonorContact";
+            var expectedDonorValues = new List<Dictionary<string, object>>();
+            expectedDonorValues.Add(new Dictionary<string, object>
+            {
+                {"dp_RecordID", donorId},
+                {"Stripe_Customer_ID", stripeCustomerId},
+                {"Contact_ID", contactId},
+                {"Email_Address", email}
+            });
+            var donor = new Donor()
+            {
+                DonorId = donorId,
+                StripeCustomerId = stripeCustomerId,
+                ContactId = contactId,
+                Email = email
+            };
+
+            _ministryPlatformService.Setup(mocked => mocked.GetPageViewRecords(
+              guestDonorPageViewId, It.IsAny<string>(),
+              It.IsAny<string>(),  "",0)).Returns(expectedDonorValues);
+
+            var response = _fixture.GetPossibleGuestDonorContact(email);
+
+            _ministryPlatformService.Verify(mocked => mocked.GetPageViewRecords(guestDonorPageViewId,It.IsAny<string>(), ","+email,"", 0));
+
+            _ministryPlatformService.VerifyAll();
+            Assert.AreEqual(response.DonorId, donor.DonorId);
+            Assert.AreEqual(response.ContactId, donor.ContactId);
+            Assert.AreEqual(response.Email, donor.Email);
+            Assert.AreEqual(response.StripeCustomerId, donor.StripeCustomerId);
+        }
+
+
+        [Test]
+        public void TestGetDonor()
+        {
+            var donorId = 1234567;
+            var stripeCustomerId = "cus_431234";
+            var contactId = 565656;
+            var email = "cross@crossroads.net";
+            var guestDonorPageViewId = "DonorByContactId";
+            var expectedDonorValues = new List<Dictionary<string, object>>();
+            expectedDonorValues.Add(new Dictionary<string, object>
+            {
+                {"dp_RecordID", donorId},
+                {"Stripe_Customer_ID", stripeCustomerId},
+                {"Contact_ID", contactId},
+                {"Email_Address", email}
+            });
+            var donor = new Donor()
+            {
+                DonorId = donorId,
+                StripeCustomerId = stripeCustomerId,
+                ContactId = contactId,
+                Email = email
+            };
+
+            _ministryPlatformService.Setup(mocked => mocked.GetPageViewRecords(
+                guestDonorPageViewId, It.IsAny<string>(),
+                It.IsAny<string>(), "", 0)).Returns(expectedDonorValues);
+
+            var response = _fixture.GetDonorRecord(contactId);
+
+            _ministryPlatformService.Verify(
+                mocked => mocked.GetPageViewRecords(guestDonorPageViewId, It.IsAny<string>(), contactId+",", "", 0));
+
+            _ministryPlatformService.VerifyAll();
+            Assert.AreEqual(response.DonorId, donor.DonorId);
+            Assert.AreEqual(response.ContactId, donor.ContactId);
+            Assert.AreEqual(response.Email, donor.Email);
+            Assert.AreEqual(response.StripeCustomerId, donor.StripeCustomerId);
+        }
     }
 }

@@ -34,7 +34,7 @@ namespace crds_angular.Controllers.API
         [Route("api/donor")]
         public IHttpActionResult Get(string email="")
         {
-            return (Authorized(token => getDonorForAuthenticatedUser(token), () => getDonorForUnauthenticatedUser(email)));
+            return (Authorized(token => GetDonorForAuthenticatedUser(token), () => GetDonorForUnauthenticatedUser(email)));
         }
 
         [ResponseType(typeof (DonorDTO))]
@@ -69,7 +69,7 @@ namespace crds_angular.Controllers.API
 
         }
 
-        private IHttpActionResult getDonorForAuthenticatedUser(string token)
+        private IHttpActionResult GetDonorForAuthenticatedUser(string token)
         {
             try
             {
@@ -91,7 +91,7 @@ namespace crds_angular.Controllers.API
             }
         }
 
-        private IHttpActionResult getDonorForUnauthenticatedUser(string email)
+        private IHttpActionResult GetDonorForUnauthenticatedUser(string email)
         {
             try
             {

@@ -120,12 +120,9 @@ namespace MinistryPlatform.Translation.Services
                 donor = new Donor()
                 {
                     DonorId = record.ToInt("dp_RecordID"),
-                    StripeCustomerId = record.ToString("Stripe Customer ID"),
-                    ContactId = record.ToInt("Contact ID"),
-                    StatementFreq = record.ToString("Statement Frequency"),
-                    StatementType = record.ToString("Statement Type"),
-                    StatementMethod = record.ToString("Statement Method"),
-                    SetupDate = record.ToDate("Setup Date")
+                    StripeCustomerId = record.ToString("Stripe_Customer_ID"),
+                    ContactId = record.ToInt("Contact_ID"),
+                    Email = record.ToString("Email_Address")
                 };
             }
             catch (Exception ex)
