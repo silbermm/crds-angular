@@ -67,6 +67,9 @@
 .btn-gray {
   @include button-variant($btn-default-color, $gray, $gray);
 }
+.btn-gray-light {
+  @include button-variant($gray, #f1f1f1, $gray-lighter);
+}
 
 h2 {
   .btn {
