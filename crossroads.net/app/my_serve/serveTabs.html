@@ -3,7 +3,7 @@
   <div class="col-sm-1 serve-time"> {{opportunity.time | time}} </div><!--/serve-time-->
 
   <div class="col-sm-11 clearfix">
-    <serve-team team="team" opportunity="opportunity" opp-serve-date="serveDate" data-ng-repeat='team in opportunity.servingTeams' day-index="dayIndex" tab-index="tabIndex" team-index="$index" >
+    <serve-team team="team" opportunity="opportunity" opp-serve-date="serveDate" data-ng-repeat='team in opportunity.servingTeams'>
     </serve-team>
   </div>
 </div> <!-- serve time -->

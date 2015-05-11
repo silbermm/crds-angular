@@ -4,23 +4,26 @@
 
   module.exports = MyServeController;
 
-  MyServeController.$inject = ['$rootScope', '$log', 'filterState', 'Groups'];
+  MyServeController.$inject = ['$rootScope', '$log', '$timeout', 'filterState', 'Groups'];
 
-  function MyServeController($rootScope, $log, filterState, Groups){
+  function MyServeController($rootScope, $log, $timeout, filterState, Groups){
 
     var vm = this;
 
     vm.clear = clear;
     vm.convertToDate = convertToDate;
+    vm.currentLimit = 2;
     vm.dateOptions = { formatYear: 'yy', startingDay: 1 };
     vm.disabled = disabled;
     vm.filterState = filterState;
     vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
     vm.format = vm.formats[0];
     vm.groups = Groups;
+    vm.addLimit = addLimit;
     vm.open = open;
     vm.original = [];
     vm.showNoOpportunitiesMsg = showNoOpportunitiesMsg;
+    vm.loading = true;
     //vm.today = today;
     vm.toggleMin = toggleMin;
 
@@ -32,13 +35,19 @@
       vm.groups = data;
     });
 
+    $timeout(function(){
+      vm.loading = false;
+      vm.currentLimit = 1000;    
+    }, 1000);
+
+
     ////////////////////////////
     // Implementation Details //
     ////////////////////////////
 
     function activate(){
-      today();
-      toggleMin();
+      //today();
+      //toggleMin();
     }
    
     function today() {
@@ -58,6 +67,14 @@
     function disabled (date, mode) {
       return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
     };
+
+    function addLimit() {
+      if(vm.currentLimit === vm.groups.length){
+        console.log('limit to data reached'); 
+      } else {
+        vm.currentLimit += 2; 
+      }
+    }
 
     function open($event) {
       $event.preventDefault();

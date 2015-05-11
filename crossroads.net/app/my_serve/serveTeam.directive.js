@@ -16,9 +16,6 @@
       scope: {
         team: '=',
         opportunity: '=',
-        teamIndex: '=',
-        tabIndex: '=',
-        dayIndex: '=',
         oppServeDate: '='
       },
       link: link
@@ -45,7 +42,6 @@
       scope.modalInstance = {};
       scope.open = open;
       scope.openPanel = openPanel;
-      scope.panelId = getPanelId;
       scope.roleChanged = roleChanged;
       scope.roles = null;
       scope.saveRsvp = saveRsvp;
@@ -124,10 +120,6 @@
         };
 
         return [once, everyWeek, everyOtherWeek];
-      }
-
-      function getPanelId() {
-        return "team-panel-" + scope.dayIndex + scope.tabIndex + scope.teamIndex;
       }
 
       function isActiveTab(memberName) {
