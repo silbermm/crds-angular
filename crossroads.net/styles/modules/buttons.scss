@@ -81,31 +81,23 @@ h2 {
 
 // Table buttons
 
+// Table buttons
+
 .table-btn {
   @extend .btn;
   @extend .btn-default;
+  @extend .row-full-height;
+  display: block;
   text-align: center;
   vertical-align: middle;
-  position: absolute;
-  top: -1px;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  float: right;
   border-radius: 0px;
   border-bottom-width: 0px;
   border-bottom-right-radius: 0px;
   font-size: 1.3rem;
+  min-height: 31px;
+  width: 100%;
 
   @media (min-width: $screen-sm-min) {
     font-size: 1.4rem;
-  }
-
-  span {
-    position: absolute;
-    top: 50%;
-    margin-top: -12px;
-    width: 100%;
-    left: 0;
   }
 }
