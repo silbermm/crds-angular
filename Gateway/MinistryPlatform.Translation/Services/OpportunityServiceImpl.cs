@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using log4net;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -9,6 +11,7 @@ namespace MinistryPlatform.Translation.Services
 {
     public class OpportunityServiceImpl : BaseService, IOpportunityService
     {
+        private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private IMinistryPlatformService _ministryPlatformService;
         private IEventService _eventService;
         private IAuthenticationService _authenticationService;
@@ -47,6 +50,21 @@ namespace MinistryPlatform.Translation.Services
                     MaximumNeeded = record.ToNullableInt("Maximum_Needed"),
                     MinimumNeeded = record.ToNullableInt("Minimum_Needed")
                 };
+
+                //opportunity responses
+                var records = _ministryPlatformService.GetSubpageViewRecords(_signedupToServeSubPageViewId, opportunity.OpportunityId,
+                token, "");
+                
+                var responses = new List<MinistryPlatform.Models.Response>();
+                foreach (var r in records)
+                {
+                    var response = new MinistryPlatform.Models.Response();
+                    response.Event_ID = r.ToInt("Event_ID");
+                    responses.Add(response);
+                }
+                opportunity.Responses = new List<MinistryPlatform.Models.Response>();
+                opportunity.Responses.AddRange(responses);
+
                 //now get all events with type = event type id
                 if (opportunity.EventType != null)
                 {
@@ -121,10 +139,10 @@ namespace MinistryPlatform.Translation.Services
 
             //Now get all the events for this type
             var searchString = ",," + eventType;
-            var sort = "0";
-            var events = _ministryPlatformService.GetRecordsDict(_eventPage, token, searchString, sort);
-
-            return events.Select(e => DateTime.Parse(e["Event_Start_Date"].ToString())).Where(eDate => eDate >= DateTime.Today).ToList();
+            var events = _ministryPlatformService.GetRecordsDict(_eventPage, token, searchString);
+            var filteredEvents = events.Select(e => DateTime.Parse(e["Event_Start_Date"].ToString())).Where(eDate => eDate >= DateTime.Today).OrderBy(d => d).ToList();
+            filteredEvents.Sort();
+            return filteredEvents;
         }
 
         public DateTime GetLastOpportunityDate(int opportunityId, string token)

@@ -22,6 +22,7 @@
   require('./community_groups_signup/group_signup_form.html');
   require('./my_serve');
   require('./go_trip_giving');
+  require('./corkboard');
   var getCookie = require('./utilities/cookies');
 
   angular.module("crossroads").config(["$stateProvider", "$urlRouterProvider", "$httpProvider", "$urlMatcherFactoryProvider", "$locationProvider", function ($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory, $locationProvider) {
@@ -154,6 +155,10 @@
               url: "/mytrips",
               templateUrl: "mytrips/mytrips.html"
             })
+            .state("corkboard", {
+              url: "/corkboard",
+              templateUrl: "corkboard/corkboard-listings.html"
+            })
             .state("opportunities", {
                 url: "/opportunities",
                 controller: "ViewOpportunitiesController as opportunity",
@@ -162,7 +167,7 @@
                     isProtected: true
                 },
                 resolve: {
-                    loggedin: checkLoggedin
+                  loggedin: checkLoggedin
                 }
             })
             .state("serve-signup", {
@@ -170,7 +175,13 @@
               controller: "MyServeController as serve",
               templateUrl: "my_serve/myserve.html",
               data: { isProtected: true },
-              resolve: { loggedin: checkLoggedin }
+              resolve: {
+                ServeOpportunities: 'ServeOpportunities',
+                Groups: function(ServeOpportunities){
+                  return ServeOpportunities.ServeDays.query().$promise;
+                },
+                loggedin: checkLoggedin
+              }
             })
             .state("styleguide", {
                 url: "/styleguide",
@@ -180,7 +191,14 @@
             .state("give", {
                 url: "/give",
                 controller: "GiveCtrl as give",
-                templateUrl: "give/give.html"
+                templateUrl: "give/give.html",
+                resolve:{
+                  programList:  function(getPrograms){
+                    // TODO The number one relates to the programType in MP. At some point we should fetch
+                    // that number from MP based in human readable input here.
+                    return getPrograms.Programs.get({programType: 1}).$promise;
+                  }
+                }
             })
            .state("give.amount", {
                  url: "/amount",

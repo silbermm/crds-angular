@@ -4,7 +4,7 @@ describe('Crossroads App', function() {
 
   beforeEach(function() {
     browser.get(env.baseUrl + '/#/give/account');
-    var creditCardButton = element(by.buttonText("Bank Account")).click();
+    var creditCardButton = element(by.buttonText("")).click();
   });
 
   

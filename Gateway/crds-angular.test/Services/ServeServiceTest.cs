@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using crds_angular.App_Start;
-using crds_angular.Extenstions;
 using crds_angular.Models;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services;
@@ -10,14 +9,12 @@ using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace crds_angular.test.Services
 {
     [TestFixture]
     public class ServeServiceTest
     {
-
         private Mock<IContactRelationshipService> _contactRelationshipService;
         private Mock<IGroupService> _groupService;
         private Mock<IContactService> _contactService;
@@ -39,7 +36,7 @@ namespace crds_angular.test.Services
             _opportunityService = new Mock<IOpportunityService>();
             _authenticationService = new Mock<IAuthenticationService>();
             _personService = new Mock<IPersonService>();
-            _eventService=new Mock<IEventService>();
+            _eventService = new Mock<IEventService>();
             _serveService = new Mock<IServeService>();
             _participantService = new Mock<IParticipantService>();
 
@@ -81,7 +78,9 @@ namespace crds_angular.test.Services
 
             _personService.Setup(m => m.GetLoggedInUserProfile(It.IsAny<string>())).Returns(person);
 
-            _fixture = new ServeService( _groupService.Object ,_contactRelationshipService.Object,_personService.Object,_authenticationService.Object,_opportunityService.Object,_eventService.Object, _participantService.Object);
+            _fixture = new ServeService(_groupService.Object, _contactRelationshipService.Object, _personService.Object,
+                _authenticationService.Object, _opportunityService.Object, _eventService.Object,
+                _participantService.Object);
 
             //force AutoMapper to register
             AutoMapperConfig.RegisterMappings();
@@ -97,9 +96,13 @@ namespace crds_angular.test.Services
                 mocked => mocked.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>()))
                 .Returns(MockGetMyFamilyResponse());
 
+            _participantService.Setup(m => m.GetParticipant(It.IsAny<int>()))
+                .Returns(new Participant {ParticipantId = 1});
+
             var familyMembers = _fixture.GetMyImmediateFamily(contactId, token);
 
             _contactRelationshipService.VerifyAll();
+            _participantService.VerifyAll();
 
             Assert.IsNotNull(familyMembers);
             Assert.AreEqual(3, familyMembers.Count);
@@ -130,12 +133,17 @@ namespace crds_angular.test.Services
             const int contactId = 123456;
 
             //return 0 family members, only testing logic for main contact
-            _contactRelationshipService.Setup(mocked => mocked.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>()))
+            _contactRelationshipService.Setup(
+                mocked => mocked.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>()))
                 .Returns(new List<ContactRelationship>());
+
+            _participantService.Setup(m => m.GetParticipant(It.IsAny<int>()))
+                .Returns(new Participant {ParticipantId = 1});
 
             var familyMembers = _fixture.GetMyImmediateFamily(contactId, token);
 
             _contactRelationshipService.VerifyAll();
+            _participantService.VerifyAll();
 
             Assert.IsNotNull(familyMembers);
             Assert.AreEqual(1, familyMembers.Count);
@@ -187,10 +195,14 @@ namespace crds_angular.test.Services
                 .Returns(familyMember2Groups);
             _groupService.Setup(mocked => mocked.GetServingTeams(contactId, token)).Returns(myGroups);
 
+            _participantService.Setup(m => m.GetParticipant(It.IsAny<int>()))
+                .Returns(new Participant {ParticipantId = 1});
+
             var teams = _fixture.GetServingTeams(token);
 
             _contactRelationshipService.VerifyAll();
             _groupService.VerifyAll();
+            _participantService.VerifyAll();
 
             Assert.IsNotNull(teams);
             Assert.AreEqual(4, teams.Count);
@@ -275,7 +287,8 @@ namespace crds_angular.test.Services
                     Events = eventsList1,
                     OpportunityId = 1,
                     OpportunityName = "opportunity-name-1",
-                    RoleTitle = "opportunity-1-role-title"
+                    RoleTitle = "opportunity-1-role-title",
+                    Responses = new List<Response> {new Response {Event_ID = 1}, new Response {Event_ID = 2}}
                 },
                 new Opportunity
                 {
@@ -283,14 +296,15 @@ namespace crds_angular.test.Services
                     Events = eventsList2,
                     OpportunityId = 2,
                     OpportunityName = "opportunity-name-2",
-                    RoleTitle = "opportunity-1-role-title"
+                    RoleTitle = "opportunity-2-role-title",
+                    Responses = new List<Response> {new Response {Event_ID = 3}, new Response {Event_ID = 4}}
                 }
             };
             _opportunityService.Setup(mocked => mocked.GetOpportunitiesForGroup(It.IsAny<Int32>(), It.IsAny<string>()))
                 .Returns(opportunities);
 
-            var teams = new List<ServingTeam> { new ServingTeam { GroupId = 1 }, new ServingTeam { GroupId = 2 } };
-            _serveService.Setup(mocked => mocked.GetServingTeams(It.IsAny<string>())).Returns(teams);
+            var teams = new List<ServingTeam> {new ServingTeam {GroupId = 1}, new ServingTeam {GroupId = 2}};
+            //_serveService.Setup(mocked => mocked.GetServingTeams(It.IsAny<string>())).Returns(teams);
 
             _groupService.Setup(mocked => mocked.GetServingTeams(123456, It.IsAny<string>())).Returns(new List<Group>
             {
@@ -301,9 +315,15 @@ namespace crds_angular.test.Services
                 new Group {GroupId = 4, Name = "group-4", GroupRole = "group-role-member"}
             });
 
+            _participantService.Setup(m => m.GetParticipant(It.IsAny<int>()))
+                .Returns(new Participant {ParticipantId = 1});
+
             var servingDays = _fixture.GetServingDays(It.IsAny<string>());
 
             _opportunityService.VerifyAll();
+            _serveService.VerifyAll();
+            _groupService.VerifyAll();
+            _participantService.VerifyAll();
 
             Assert.IsNotNull(servingDays);
             Assert.AreEqual(1, servingDays.Count);
@@ -320,18 +340,21 @@ namespace crds_angular.test.Services
         }
 
         [Test, TestCaseSource("OpportunityCapacityCases")]
-        public void OpportunityCapacityHasMinHasMax(int? min, int? max, int mockSignUpCount, Capacity expectedCapacity)
+        public void OpportunityCapacityHasMinHasMax(int? min, int? max, List<Response> mockResponses,
+            Capacity expectedCapacity)
         {
             const int opportunityId = 9999;
             const int eventId = 1000;
 
-            //mock
-            _opportunityService.Setup(m => m.GetOpportunitySignupCount(opportunityId, eventId, It.IsAny<string>()))
-                .Returns(mockSignUpCount);
+            var opportunity = new Opportunity();
+            opportunity.MaximumNeeded = max;
+            opportunity.MinimumNeeded = min;
+            opportunity.OpportunityId = opportunityId;
+            opportunity.Responses = mockResponses;
 
-           var capacity= _fixture.OpportunityCapacity(max, min, opportunityId, eventId, It.IsAny<string>());
+            var capacity = _fixture.OpportunityCapacity(opportunity, eventId, It.IsAny<string>());
 
-            _opportunityService.VerifyAll();
+            //_opportunityService.VerifyAll();
 
             Assert.IsNotNull(capacity);
             Assert.AreEqual(capacity.Available, expectedCapacity.Available);
@@ -341,14 +364,13 @@ namespace crds_angular.test.Services
             Assert.AreEqual(capacity.Message, expectedCapacity.Message);
             Assert.AreEqual(capacity.Minimum, expectedCapacity.Minimum);
             Assert.AreEqual(capacity.Taken, expectedCapacity.Taken);
-
         }
 
         private static readonly object[] OpportunityCapacityCases =
         {
             new object[]
             {
-                10, 20, 0,
+                10, 20, new List<Response>(),
                 new Capacity
                 {
                     Available = 10,
@@ -362,7 +384,7 @@ namespace crds_angular.test.Services
             },
             new object[]
             {
-                10, null, 0,
+                10, null, new List<Response>(),
                 new Capacity
                 {
                     Available = 10,
@@ -376,7 +398,7 @@ namespace crds_angular.test.Services
             },
             new object[]
             {
-                null, 20, 0,
+                null, 20, new List<Response>(),
                 new Capacity
                 {
                     Available = 20,
@@ -390,7 +412,7 @@ namespace crds_angular.test.Services
             },
             new object[]
             {
-                10, 20, 15,
+                10, 20, MockFifteenResponses(),
                 new Capacity
                 {
                     Display = true,
@@ -400,7 +422,7 @@ namespace crds_angular.test.Services
             },
             new object[]
             {
-                10, 20, 20,
+                10, 20, MockTwentyResponses(),
                 new Capacity
                 {
                     Available = -10,
@@ -420,7 +442,13 @@ namespace crds_angular.test.Services
             const int opportunityId = 9999;
             const int eventId = 1000;
 
-            var capacity = _fixture.OpportunityCapacity(null, null, opportunityId, eventId, It.IsAny<string>());
+            var opportunity = new Opportunity();
+            opportunity.MaximumNeeded = null;
+            opportunity.MinimumNeeded = null;
+            opportunity.OpportunityId = opportunityId;
+            opportunity.Responses = new List<Response>();
+
+            var capacity = _fixture.OpportunityCapacity(opportunity, eventId, It.IsAny<string>());
 
             Assert.IsNotNull(capacity);
             Assert.AreEqual(capacity.Display, false);
@@ -429,7 +457,6 @@ namespace crds_angular.test.Services
         [Test]
         public void RespondToServeOpportunityYesEveryWeek()
         {
-
             const int contactId = 8;
             const int opportunityId = 12;
             const int eventTypeId = 3;
@@ -438,12 +465,18 @@ namespace crds_angular.test.Services
 
             SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp);
 
-            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(), signUp, alternateWeeks);
+            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, eventTypeId, It.IsAny<DateTime>(),
+                It.IsAny<DateTime>(), signUp, alternateWeeks);
 
             _participantService.VerifyAll();
-            _eventService.Verify(m => m.GetEventsByTypeForRange(eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()), Times.Exactly(1));
+            _eventService.Verify(
+                m =>
+                    m.GetEventsByTypeForRange(eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(),
+                        It.IsAny<string>()), Times.Exactly(1));
             _eventService.Verify(m => m.registerParticipantForEvent(47, It.IsAny<int>()), Times.Exactly(5));
-            _opportunityService.Verify((m => m.RespondToOpportunity(47, opportunityId, It.IsAny<string>(), It.IsAny<int>(), signUp)), Times.Exactly(5));
+            _opportunityService.Verify(
+                (m => m.RespondToOpportunity(47, opportunityId, It.IsAny<string>(), It.IsAny<int>(), signUp)),
+                Times.Exactly(5));
         }
 
         [Test]
@@ -458,11 +491,17 @@ namespace crds_angular.test.Services
 
             SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp);
 
-            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(), signUp, alternateWeeks);
+            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, eventTypeId, It.IsAny<DateTime>(),
+                It.IsAny<DateTime>(), signUp, alternateWeeks);
 
             _participantService.VerifyAll();
-            _eventService.Verify(m => m.GetEventsByTypeForRange(eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()), Times.Exactly(1));
-            _opportunityService.Verify((m => m.RespondToOpportunity(47, opportunityId, It.IsAny<string>(), It.IsAny<int>(), signUp)), Times.Exactly(5));
+            _eventService.Verify(
+                m =>
+                    m.GetEventsByTypeForRange(eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(),
+                        It.IsAny<string>()), Times.Exactly(1));
+            _opportunityService.Verify(
+                (m => m.RespondToOpportunity(47, opportunityId, It.IsAny<string>(), It.IsAny<int>(), signUp)),
+                Times.Exactly(5));
             _eventService.Verify(m => m.registerParticipantForEvent(47, It.IsAny<int>()), Times.Never());
         }
 
@@ -475,15 +514,23 @@ namespace crds_angular.test.Services
             const bool signUp = true;
             const bool alternateWeeks = true;
             var expectedEventIds = new List<int> {1, 3, 5};
-                
+
             SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp);
-            
-            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(), signUp, alternateWeeks);
+
+            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, eventTypeId, It.IsAny<DateTime>(),
+                It.IsAny<DateTime>(), signUp, alternateWeeks);
 
             _participantService.VerifyAll();
-            _eventService.Verify(m => m.GetEventsByTypeForRange(eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()), Times.Exactly(1));
-            _eventService.Verify(m => m.registerParticipantForEvent(47, It.IsIn<int>(expectedEventIds)), Times.Exactly(3));
-            _opportunityService.Verify((m => m.RespondToOpportunity(47, opportunityId, It.IsAny<string>(), It.IsIn<int>(expectedEventIds), signUp)), Times.Exactly(3));
+            _eventService.Verify(
+                m =>
+                    m.GetEventsByTypeForRange(eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(),
+                        It.IsAny<string>()), Times.Exactly(1));
+            _eventService.Verify(m => m.registerParticipantForEvent(47, It.IsIn<int>(expectedEventIds)),
+                Times.Exactly(3));
+            _opportunityService.Verify(
+                (m =>
+                    m.RespondToOpportunity(47, opportunityId, It.IsAny<string>(), It.IsIn<int>(expectedEventIds), signUp)),
+                Times.Exactly(3));
         }
 
         [Test]
@@ -494,16 +541,23 @@ namespace crds_angular.test.Services
             const int eventTypeId = 3;
             const bool signUp = false;
             const bool alternateWeeks = true;
-            var expectedEventIds = new List<int> { 1, 3, 5 };
+            var expectedEventIds = new List<int> {1, 3, 5};
 
             SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp);
 
-            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(), signUp, alternateWeeks);
+            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, eventTypeId, It.IsAny<DateTime>(),
+                It.IsAny<DateTime>(), signUp, alternateWeeks);
 
             _participantService.VerifyAll();
-            _eventService.Verify(m => m.GetEventsByTypeForRange(eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()), Times.Exactly(1));
+            _eventService.Verify(
+                m =>
+                    m.GetEventsByTypeForRange(eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(),
+                        It.IsAny<string>()), Times.Exactly(1));
             _eventService.Verify(m => m.registerParticipantForEvent(47, It.IsAny<int>()), Times.Never());
-            _opportunityService.Verify((m => m.RespondToOpportunity(47, opportunityId, It.IsAny<string>(), It.IsIn<int>(expectedEventIds), signUp)), Times.Exactly(3));
+            _opportunityService.Verify(
+                (m =>
+                    m.RespondToOpportunity(47, opportunityId, It.IsAny<string>(), It.IsIn<int>(expectedEventIds), signUp)),
+                Times.Exactly(3));
         }
 
         private void SetUpRSVPMocks(int contactId, int eventTypeId, int opportunityId, bool signUp)
@@ -538,11 +592,17 @@ namespace crds_angular.test.Services
             };
             //mock it up
             _participantService.Setup(m => m.GetParticipant(contactId)).Returns(mockParticipant);
-            _eventService.Setup(m => m.GetEventsByTypeForRange(eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>())).Returns(mockEvents);
+            _eventService.Setup(
+                m =>
+                    m.GetEventsByTypeForRange(eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(),
+                        It.IsAny<string>())).Returns(mockEvents);
             foreach (var mockEvent in mockEvents)
             {
                 _eventService.Setup(m => m.registerParticipantForEvent(mockParticipant.ParticipantId, mockEvent.EventId));
-                _opportunityService.Setup(m => m.RespondToOpportunity(mockParticipant.ParticipantId, opportunityId, It.IsAny<string>(), mockEvent.EventId, signUp));
+                _opportunityService.Setup(
+                    m =>
+                        m.RespondToOpportunity(mockParticipant.ParticipantId, opportunityId, It.IsAny<string>(),
+                            mockEvent.EventId, signUp));
             }
         }
 
@@ -567,6 +627,26 @@ namespace crds_angular.test.Services
                 }
             };
             return getMyFamilyResponse;
+        }
+
+        private static List<Response> MockTwentyResponses()
+        {
+            var responses = new List<Response>();
+            for (var i = 0; i < 20; i++)
+            {
+                responses.Add(new Response { Event_ID = 1000 });
+            }
+            return responses;
+        }
+
+        private static List<Response> MockFifteenResponses()
+        {
+            var responses = new List<Response>();
+            for (var i = 0; i < 15; i++)
+            {
+                responses.Add(new Response { Event_ID = 1000 });
+            }
+            return responses;
         }
     }
 }

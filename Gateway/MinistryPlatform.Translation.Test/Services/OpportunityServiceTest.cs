@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ServiceModel;
 using Crossroads.Utilities.Services;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.PlatformService;
@@ -41,6 +42,53 @@ namespace MinistryPlatform.Translation.Test.Services
         }
 
         [Test]
+        public void CreateOpportunityResponse()
+        {
+            const int opportunityId = 113;
+            const string comment = "Test Comment";
+
+            const int mockParticipantId = 7777;
+            _authenticationService.Setup(m => m.GetParticipantRecord(It.IsAny<string>()))
+                .Returns(new Participant { ParticipantId = mockParticipantId });
+
+            const string opportunityResponsePageKey = "OpportunityResponses";
+            _ministryPlatformService.Setup(
+                m => m.CreateRecord(opportunityResponsePageKey, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>(), true))
+                .Returns(3333);
+            
+            Assert.DoesNotThrow(() => _fixture.RespondToOpportunity(It.IsAny<string>(), opportunityId, comment));
+
+            _authenticationService.VerifyAll();
+            _ministryPlatformService.VerifyAll();
+        }
+
+        [Test]
+        public void ShouldNotCreateOpportunityResponse()
+        {
+            const int opportunityId = 10000000;
+            const string comment = "Fail Test Comment";
+            const int mockParticipantId = 7777;
+            _authenticationService.Setup(m => m.GetParticipantRecord(It.IsAny<string>()))
+                .Returns(new Participant { ParticipantId = mockParticipantId });
+
+            const string opportunityResponsePageKey = "OpportunityResponses";
+            var exceptionDetail = new System.ServiceModel.ExceptionDetail(new Exception("The creator of this fault did not specify a Reason."));
+            var faultException = new FaultException<ExceptionDetail>(exceptionDetail);
+            
+            _ministryPlatformService.Setup(
+                m =>
+                    m.CreateRecord(opportunityResponsePageKey, It.IsAny<Dictionary<string, object>>(),
+                        It.IsAny<string>(), true))
+                .Throws(faultException);
+
+            Assert.Throws<FaultException<ExceptionDetail>>(
+                () => _fixture.RespondToOpportunity(It.IsAny<string>(), opportunityId, comment));
+
+            _authenticationService.VerifyAll();
+            _ministryPlatformService.VerifyAll();
+        }
+
+        [Test]
         public void GetOpportunitiesForGroupTest()
         {
             const int groupId = 1;
@@ -56,6 +104,12 @@ namespace MinistryPlatform.Translation.Test.Services
                 .Returns(MockEvents("Event Type 200"));
             _eventService.Setup(m => m.GetEvents("Event Type 300", It.IsAny<string>()))
                 .Returns(MockEvents("Event Type 300"));
+
+            _ministryPlatformService.Setup(
+                m =>
+                    m.GetSubpageViewRecords(_signedupToServeSubPageViewId, It.IsAny<int>(), It.IsAny<string>(),
+                        It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())).Returns(new List<Dictionary<string, object>>());
+            
 
             var opportunities = _fixture.GetOpportunitiesForGroup(groupId, It.IsAny<string>());
 
@@ -405,7 +459,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 mock => mock.GetRecordDict(_opportunityPageId, opportunityId, It.IsAny<string>(), false))
                 .Returns(expectedEventType);
             _ministryPlatformService.Setup(
-                mock => mock.GetRecordsDict(_eventPageId, It.IsAny<string>(), ",,KC Nursery Oakley Sunday 8:30", "0"))
+                mock => mock.GetRecordsDict(_eventPageId, It.IsAny<string>(), ",,KC Nursery Oakley Sunday 8:30", It.IsAny<string>()))
                 .Returns(expectedEvents);
 
             var dates = _fixture.GetAllOpportunityDates(opportunityId, It.IsAny<string>());
@@ -436,7 +490,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 mock => mock.GetRecordDict(_opportunityPageId, opportunityId, It.IsAny<string>(), false))
                 .Returns(expectedEventType);
             _ministryPlatformService.Setup(
-                mock => mock.GetRecordsDict(_eventPageId, It.IsAny<string>(), ",,KC Nursery Oakley Sunday 8:30", "0"))
+                mock => mock.GetRecordsDict(_eventPageId, It.IsAny<string>(), ",,KC Nursery Oakley Sunday 8:30", It.IsAny<string>()))
                 .Returns(expectedEvents);
 
             var lastDate = _fixture.GetLastOpportunityDate(opportunityId, It.IsAny<string>());
@@ -459,7 +513,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 mock => mock.GetRecordDict(_opportunityPageId, opportunityId, It.IsAny<string>(), false))
                 .Returns(expectedEventType);
             _ministryPlatformService.Setup(
-                mock => mock.GetRecordsDict(_eventPageId, It.IsAny<string>(), ",,KC Nursery Oakley Sunday 8:30", "0"))
+                mock => mock.GetRecordsDict(_eventPageId, It.IsAny<string>(), ",,KC Nursery Oakley Sunday 8:30", It.IsAny<string>()))
                 .Returns(expectedEvents);
 
             Assert.Throws<Exception>(() => _fixture.GetLastOpportunityDate(opportunityId, It.IsAny<string>()));

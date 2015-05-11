@@ -27,9 +27,13 @@ namespace crds_angular.Models.Crossroads.Serve
         [JsonIgnore]
         public Participant Participant { get; set; }
 
+        [JsonIgnore]
+        public List<MinistryPlatform.Models.Response> Responses { get; set; }
+
         public TeamMember()
         {
             this.Roles = new List<ServeRole>();
+            this.Responses = new List<MinistryPlatform.Models.Response>();
         }
     }
 }

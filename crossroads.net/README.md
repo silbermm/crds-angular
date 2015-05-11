@@ -17,17 +17,21 @@ Mac and Linux (replace the prefix value below with the path to your NodeJS insta
 
 ###Configuration
 By default webpack inserts `http://localhost:49380` everywhere it finds `__API_ENDPOINT__` in the javascript. This can be changed by creating and setting an environment variable called **CRDS_API_ENDPOINT**. 
-By default webpack inserts `http://content.crossroads.net` everywhere it finds `__CMS_ENDPOINT__` in the javascript. This can be changed by creating and setting an environment variable called **CRDS_CMS_ENDPOINT**. 
+By default webpack inserts `http://content.crossroads.net` everywhere it finds `__CMS_ENDPOINT__` in the javascript. This can be changed by creating and setting an environment variable called **CRDS_CMS_ENDPOINT**. By default webpack inserts Crossroads Stripe Publishable Key as `pk_test_TR1GulD113hGh2RgoLhFqO0M` everywhere it find `__STRIPE_PUBKEY__` in the javascript. This can be changed by creating and setting an environment variable called **CRDS_STRIPE_PUBKEY**.
 
 For windows users:
+
 ``` set CRDS_API_ENDPOINT = http://path-to-api-host/ ```
 ``` set CRDS_CMS_ENDPOINT = http://path-to-content-host/ ```
+``` set CRDS_STRIPE_PUBKEY = <obtain from Stripe site>```
 
 Mac and Linux:
+
 ``` export CRDS_API_ENDPOINT = http://path-to-api-host/ ```
 ``` export CRDS_CMS_ENDPOINT = http://path-to-content-host/ ```
+``` export CRDS_STRIPE_PUBKEY = <obtain from Stripe site>```
 
->Keep in mind that this way of setting environment variables will not be persistent, windows users will have to add this variable in system settings and linux/mac users will have to set it in their .bashrc/.zshrc files for persistence. 
+**Keep in mind that this way of setting environment variables will not be persistent, windows users will have to add this variable in system settings and linux/mac users will have to set it in their .bashrc/.zshrc files for persistence.**
 
 ###Build
 To just build the project, run `gulp build-dev` for a dev build, or `gulp build` for production.
