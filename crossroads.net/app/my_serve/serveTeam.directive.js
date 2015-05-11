@@ -22,6 +22,9 @@
     };
 
     function link(scope, el, attr) {
+
+      console.log(scope.team);
+
       scope.attendingChanged = attendingChanged;
       scope.closePanel = closePanel;
       scope.currentActiveTab = null;

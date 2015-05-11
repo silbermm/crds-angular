@@ -20,7 +20,9 @@
 
     <div class="panel-collapse collapse" collapse="isCollapsed">
       <div class="panel-body soft-half-bottom">
-        <p class="flush-bottom">Editing sign up for {{::currentMember.name}} {{::currentMember.lastName}} <span ng-show="displayEmail(currentMember.emailAddress)">( <span> {{ ::currentMember.emailAddress}} </span> )</span><span class="text-muted"></span>
+        <p class="flush-bottom">Editing sign up for {{currentMember.name}} {{currentMember.lastName}} 
+        <span ng-show="displayEmail(currentMember.emailAddress)">( <span> {{ currentMember.emailAddress}} </span> )</span>
+        <span class="text-muted"></span>
         <a href="" ng-click="editProfile(currentMember)" ng-show="showEdit" class="edit-btn">
             <svg viewBox="0 0 32 32" class="icon icon-pencil4">
                 <use xlink:href="#pencil4"></use>
@@ -32,7 +34,7 @@
             <h5>Opportunities</h5>
             <div class="radio" ng-class="{'text-muted': role.capacity.badgeType === 'label-default'}" ng-repeat="role in currentMember.roles">
               <label>
-                <input type="radio" ng-disabled="role.capacity.badgeType === 'label-default'" ng-model="currentMember.serveRsvp.roleId" ng-value="role.roleId" ng-change="roleChanged()" >
+                <input type="radio" ng-disabled="role.capacity.badgeType === 'label-default'" ng-model="currentMember.serveRsvp.roleId" ng-value="role.roleId" ng-change="roleChanged()" name="{{team.$$hashKey}}">
                 <span class="opportunity-name">{{::role.name}}</span>
                 <span class="label {{ ::role.capacity.badgeType }}" ng-show="role.capacity.display">{{ ::role.capacity.message }}</span>
               </label>
