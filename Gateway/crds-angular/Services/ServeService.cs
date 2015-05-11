@@ -184,7 +184,7 @@ namespace crds_angular.Services
             return new ServeRole
             {
                 Name = record.OpportunityTitle + " " + record.OpportunityRoleTitle,
-                RoleId = record.GroupRoleId,
+                RoleId = record.OpportunityId,
                 Minimum = record.OpportunityMinimumNeeded,
                 Maximum = record.OpportunityMaximumNeeded
             };
