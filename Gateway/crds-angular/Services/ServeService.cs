@@ -106,6 +106,7 @@ namespace crds_angular.Services
             //does this need to be sorted?
 
             var servingDays = new List<ServingDay>();
+            var dayIndex = 0;
 
             foreach (var record in servingParticipants)
             {
@@ -139,7 +140,8 @@ namespace crds_angular.Services
                         }
                         else
                         {
-                            time.ServingTeams.Add(ServingTeamFaster(record));
+                            var count = time.ServingTeams.Count();
+                            time.ServingTeams.Add(ServingTeamFaster(record, count));
                         }
                     }
                     else
@@ -148,7 +150,7 @@ namespace crds_angular.Services
                         //servingTime.Time = record.EventStartDateTime.TimeOfDay.ToString();
                         //servingTime.ServingTeams = null;
 
-
+                        var count = day.ServeTimes.Count();
                         day.ServeTimes.Add(ServingTimeFaster(record));
 
                     }
@@ -159,6 +161,8 @@ namespace crds_angular.Services
 
                     // new day
                     var servingDay = new ServingDay();
+                    dayIndex = dayIndex + 1;
+                    servingDay.Index = dayIndex;
                     servingDay.Day = record.EventStartDateTime.Date.ToString("d");
                     servingDay.Date = record.EventStartDateTime;
                     servingDay.ServeTimes = new List<ServingTime> { ServingTimeFaster(record) };
@@ -175,14 +179,15 @@ namespace crds_angular.Services
         private static ServingTime ServingTimeFaster(GroupServingParticipant record)
         {
             var servingTime = new ServingTime();
-            servingTime.ServingTeams = new List<ServingTeam> {ServingTeamFaster(record)};
+            servingTime.ServingTeams = new List<ServingTeam> {ServingTeamFaster(record,0)};
             servingTime.Time = record.EventStartDateTime.TimeOfDay.ToString();
             return servingTime;
         }
 
-        private static ServingTeam ServingTeamFaster(GroupServingParticipant record)
+        private static ServingTeam ServingTeamFaster(GroupServingParticipant record, int index)
         {
             var servingTeam = new ServingTeam();
+            servingTeam.Index = index + 1;
             servingTeam.EventType = record.EventType;
             servingTeam.EventTypeId = record.EventTypeId;
             servingTeam.GroupId = record.GroupId;
