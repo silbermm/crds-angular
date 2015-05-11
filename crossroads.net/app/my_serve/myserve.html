@@ -7,7 +7,7 @@
   </div>
  
 
-  <div class="serve-day push-bottom" data-ng-repeat="group in serve.groups" ng-show="group.serveTimes.length > 0" ng-init="serve.dayindex = $index">
+  <div class="serve-day push-bottom" data-ng-repeat="group in serve.groups track by $index" ng-show="group.serveTimes.length > 0" ng-init="serve.dayindex = $index">
     <h4>{{::serve.convertToDate(group.day) | date:'EEEE, MMMM dd, yyyy' }}</h4>
     <serve-tabs opportunity="opp" serve-date="group.day" ng-repeat="opp in group.serveTimes" tab-index="$index" ng-show="opp.servingTeams.length > 0" day-index="$parent.$index" >
       </serve-tabs>

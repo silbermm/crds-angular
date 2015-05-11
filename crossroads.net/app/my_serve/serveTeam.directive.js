@@ -55,17 +55,9 @@
       scope.showIcon = showIcon;
 
       scope.togglePanel = togglePanel;
-
-      activate();
       //////////////////////////////////////
 
-      function activate() {
-        _.each(scope.team.members, function(m) {
-
-        });
-      }
-
-
+      
       function attendingChanged() {
         roleChanged();
         scope.currentMember.showFrequency = true;

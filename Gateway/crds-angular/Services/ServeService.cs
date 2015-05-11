@@ -106,11 +106,13 @@ namespace crds_angular.Services
             //does this need to be sorted?
 
             var servingDays = new List<ServingDay>();
+            var dayIndex = 0;
 
             foreach (var record in servingParticipants)
             {
                 //list.Any(cus => cus.FirstName == "John");
-                var day = servingDays.SingleOrDefault(d => d.Date == record.EventStartDateTime);
+                var eventDateOnly = record.EventStartDateTime.Date.ToString("d");
+                var day = servingDays.SingleOrDefault(d => d.Day == eventDateOnly);
                 if (day != null)
                 {
                     //this day already in list
@@ -128,7 +130,7 @@ namespace crds_angular.Services
                             var member = team.Members.SingleOrDefault(m => m.ContactId == record.ContactId);
                             if (member == null)
                             {
-                                team.Members.Add(TeamMemberFaster(record, token));
+                                team.Members.Add(TeamMemberFaster(record));
                             }
                             else
                             {
@@ -138,7 +140,8 @@ namespace crds_angular.Services
                         }
                         else
                         {
-                            time.ServingTeams.Add(ServingTeamFaster(record, token));
+                            var count = time.ServingTeams.Count();
+                            time.ServingTeams.Add(ServingTeamFaster(record, count));
                         }
                     }
                     else
@@ -146,9 +149,8 @@ namespace crds_angular.Services
                         //var servingTime = new ServingTime();
                         //servingTime.Time = record.EventStartDateTime.TimeOfDay.ToString();
                         //servingTime.ServingTeams = null;
-
-
-                        day.ServeTimes.Add(ServingTimeFaster(record, token));
+                        var count = day.ServeTimes.Count();
+                        day.ServeTimes.Add(ServingTimeFaster(record));
 
                     }
                 }
@@ -158,15 +160,21 @@ namespace crds_angular.Services
 
                     // new day
                     var servingDay = new ServingDay();
+                    dayIndex = dayIndex + 1;
+                    servingDay.Index = dayIndex;
                     servingDay.Day = record.EventStartDateTime.Date.ToString("d");
                     servingDay.Date = record.EventStartDateTime;
-                    servingDay.ServeTimes = new List<ServingTime> { ServingTimeFaster(record, token) };
+                    servingDay.ServeTimes = new List<ServingTime> { ServingTimeFaster(record) };
 
                     servingDays.Add(servingDay);
 
                 }
                 
             }
+
+            //var tmp = new List<ServingDay>();
+            //tmp.Add(servingDays[0]);
+            //return tmp;
 
             return servingDays;
         }
@@ -182,27 +190,28 @@ namespace crds_angular.Services
             };
         }
 
-        private ServingTime ServingTimeFaster(GroupServingParticipant record, string token)
+        private ServingTime ServingTimeFaster(GroupServingParticipant record)
         {
             var servingTime = new ServingTime();
-            servingTime.ServingTeams = new List<ServingTeam> {ServingTeamFaster(record, token)};
+            servingTime.ServingTeams = new List<ServingTeam> {ServingTeamFaster(record,0)};
             servingTime.Time = record.EventStartDateTime.TimeOfDay.ToString();
             return servingTime;
         }
 
-        private ServingTeam ServingTeamFaster(GroupServingParticipant record, string token)
+        private ServingTeam ServingTeamFaster(GroupServingParticipant record, int index)
         {
             var servingTeam = new ServingTeam();
+            servingTeam.Index = index + 1;
             servingTeam.EventType = record.EventType;
             servingTeam.EventTypeId = record.EventTypeId;
             servingTeam.GroupId = record.GroupId;
-            servingTeam.Members = new List<TeamMember> {TeamMemberFaster(record, token)};
+            servingTeam.Members = new List<TeamMember> {TeamMemberFaster(record)};
             servingTeam.Name = record.GroupName;
             servingTeam.PrimaryContact = record.GroupPrimaryContactEmail;
             return servingTeam;
         }
 
-        private TeamMember TeamMemberFaster(GroupServingParticipant record, string token)
+        private TeamMember TeamMemberFaster(GroupServingParticipant record)
         {
             // new team member
             var member = new TeamMember();

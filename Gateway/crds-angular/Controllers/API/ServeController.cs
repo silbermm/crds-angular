@@ -27,6 +27,14 @@ namespace crds_angular.Controllers.API
             _authenticationService = authenticationService;
         }
 
+        [Route("api/serve/testlist/{parms}")]
+        public IHttpActionResult Get(string parms)
+        {
+            var array = parms.Split(Convert.ToChar(","));
+
+            return this.Ok();
+        }
+
         [ResponseType(typeof (List<ServingDay>))]
         [Route("api/serve/family-serve-days")]
         public IHttpActionResult GetFamilyServeDays()
