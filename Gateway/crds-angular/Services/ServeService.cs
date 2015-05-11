@@ -184,7 +184,7 @@ namespace crds_angular.Services
             return new ServeRole
             {
                 Name = record.OpportunityTitle + " " + record.OpportunityRoleTitle,
-                RoleId = record.GroupRoleId,
+                RoleId = record.OpportunityId,
                 Minimum = record.OpportunityMinimumNeeded,
                 Maximum = record.OpportunityMaximumNeeded
             };
@@ -193,6 +193,7 @@ namespace crds_angular.Services
         private ServingTime ServingTimeFaster(GroupServingParticipant record)
         {
             var servingTime = new ServingTime();
+            servingTime.Index = record.RowNumber;
             servingTime.ServingTeams = new List<ServingTeam> {ServingTeamFaster(record,0)};
             servingTime.Time = record.EventStartDateTime.TimeOfDay.ToString();
             return servingTime;
@@ -201,7 +202,7 @@ namespace crds_angular.Services
         private ServingTeam ServingTeamFaster(GroupServingParticipant record, int index)
         {
             var servingTeam = new ServingTeam();
-            servingTeam.Index = index + 1;
+            servingTeam.Index = record.RowNumber;
             servingTeam.EventType = record.EventType;
             servingTeam.EventTypeId = record.EventTypeId;
             servingTeam.GroupId = record.GroupId;
@@ -217,6 +218,7 @@ namespace crds_angular.Services
             var member = new TeamMember();
             member.ContactId = record.ContactId;
             member.EmailAddress = record.ParticipantEmail;
+            member.Index = record.RowNumber;
             member.LastName = record.ParticipantLastName;
             member.Name = record.ParticipantNickname;
             member.Participant = new Participant {ParticipantId = record.ParticipantId};

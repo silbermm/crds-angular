@@ -1,17 +1,17 @@
 <h1 class="page-header flush-bottom">Sign Up To Serve</h1>
 <refine-list serving-days="serve.groups" original="serve.original" > </refine-list>
 <div class="serve-signup-cont clearfix col-sm-10 col-sm-pull-2 soft-ends" >
- 
+
   <div data-ng-show="serve.showNoOpportunitiesMsg()">
     <span ng-bind-html="$root.messages[$root.MESSAGES.noServingOpportunities].message | html"></span>
   </div>
- 
-  <div class="serve-day push-bottom" data-ng-repeat="group in serve.groups | limitTo: serve.currentLimit" ng-show="group.serveTimes.length > 0">
+
+  <div class="serve-day push-bottom" data-ng-repeat="group in serve.groups track by group.index" ng-show="group.serveTimes.length > 0">
     <h4>{{::serve.convertToDate(group.day) | date:'EEEE, MMMM dd, yyyy' }}</h4>
-    <serve-tabs opportunity="opp" serve-date="group.day" ng-repeat="opp in group.serveTimes" ng-show="opp.servingTeams.length > 0" >
+    <serve-tabs opportunity="opp" serve-date="group.day" ng-repeat="opp in group.serveTimes track by opp.index" ng-show="opp.servingTeams.length > 0" >
       </serve-tabs>
   </div><!-- serve day -->
-    
+
   <preloader full-screen="false" ng-show="serve.loading"> </preloader>
 
 </div>

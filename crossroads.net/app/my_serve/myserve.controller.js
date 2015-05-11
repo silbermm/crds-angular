@@ -35,10 +35,10 @@
       vm.groups = data;
     });
 
-    $timeout(function(){
-      vm.loading = false;
-      vm.currentLimit = 1000;    
-    }, 1000);
+    // $timeout(function(){
+    //   vm.loading = false;
+    //   vm.currentLimit = 1000;
+    // }, 1000);
 
 
     ////////////////////////////
@@ -49,7 +49,7 @@
       //today();
       //toggleMin();
     }
-   
+
     function today() {
       vm.dt = new Date();
     };
@@ -70,9 +70,9 @@
 
     function addLimit() {
       if(vm.currentLimit === vm.groups.length){
-        console.log('limit to data reached'); 
+        console.log('limit to data reached');
       } else {
-        vm.currentLimit += 2; 
+        vm.currentLimit += 2;
       }
     }
 
@@ -101,7 +101,7 @@
       vm.original = angular.copy(vm.groups);
       $rootScope.$broadcast("rerunFilters", vm.groups);
     }
-   
+
     function showNoOpportunitiesMsg(){
       return vm.groups.length < 1 || totalServeTimesLength() === 0;
     }
