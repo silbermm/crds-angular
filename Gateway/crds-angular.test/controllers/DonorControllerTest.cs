@@ -5,9 +5,12 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Results;
 using crds_angular.Controllers.API;
+using crds_angular.Models.Crossroads;
 using MinistryPlatform.Translation.Services.Interfaces;
 using crds_angular.Services.Interfaces;
+using MinistryPlatform.Models;
 using Moq;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace crds_angular.test.controllers
@@ -20,6 +23,17 @@ namespace crds_angular.test.controllers
         private Mock<IAuthenticationService> authenticationServiceMock;
         private string authType;
         private string authToken;
+        private static int contactId = 8675309;
+        private static string stripeCustomerId = "cus_test123456";
+        private static string email = "automatedtest@crossroads.net";
+        private static int donorId = 394256;
+        private Donor donor = new Donor()
+        {
+            DonorId = 1,
+            StripeCustomerId = "1",
+            ContactId = 1,
+            Email = "1"
+        };
 
         [SetUp]
         public void SetUp()
@@ -40,9 +54,6 @@ namespace crds_angular.test.controllers
         [Test]
         public void TestPostToSuccessfullyCreateDonor()
         {
-            var contactId = 8675309;
-            var stripeCustomerId = "cus_test123456";
-            var donorId = 394256;
             authenticationServiceMock.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Returns(contactId);
 
             stripeServiceMock.Setup(mocked => mocked.createCustomer(It.IsAny<string>())).Returns(stripeCustomerId);
@@ -59,8 +70,23 @@ namespace crds_angular.test.controllers
             Assert.IsNotNull(result);
             Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonorDTO>), result);
             var okResult = (OkNegotiatedContentResult<DonorDTO>)result;
-            Assert.AreEqual("394256", okResult.Content.id);
-            Assert.AreEqual("cus_test123456", okResult.Content.stripe_customer_id);
+            Assert.AreEqual(donorId, okResult.Content.id);
+            Assert.AreEqual(stripeCustomerId, okResult.Content.stripe_customer_id);
+        }
+
+        [Test]
+        public void TestGetSuccessGetDonorAuthenticated()
+        {
+            Donor donor = new Donor();
+            donor.DonorId = 1;
+            authenticationServiceMock.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Returns(contactId);
+            donorServiceMock.Setup(mocked => mocked.GetPossibleGuestDonorContact("foo").Returns(new Donor()));
+            IHttpActionResult result = fixture.Get();
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonorDTO>), result);
+            var okResult = (OkNegotiatedContentResult<DonorDTO>)result;
+            Assert.AreEqual(donorId, okResult.Content.id);
+            Assert.AreEqual(stripeCustomerId, okResult.Content.stripe_customer_id);
         }
     }
 }

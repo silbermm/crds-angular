@@ -36,7 +36,7 @@ namespace crds_angular.Services
         }
 
 
-        public string chargeCustomer(string customer_token, int amount, string donor_id)
+        public string chargeCustomer(string customer_token, int amount, int donor_id)
         {
 
             var getCustomerRequest = new RestRequest("customers/" + customer_token, Method.GET);

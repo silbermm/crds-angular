@@ -11,5 +11,6 @@ namespace MinistryPlatform.Models
         public string StatementMethod { get; set; }
         public DateTime SetupDate { get; set; }
         public string StripeCustomerId { get; set; }
+        public string Email { get; set; }
     }
 }
