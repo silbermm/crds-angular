@@ -137,5 +137,15 @@ namespace MinistryPlatform.Translation.Services
             return donor;
 
         }
+
+        public Donor GetPossibleGuestDonorContact(string emailAddress)
+        {
+            return (null);
+        }
+
+        public int UpdatePaymentProcessorCustomerId(int donorId, string paymentProcessorCustomerId)
+        {
+            return (0);
+        }
     }
 }

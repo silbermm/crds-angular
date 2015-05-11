@@ -16,7 +16,7 @@ namespace crds_angular.test.controllers
     class DonationControllerTest
     {
         private DonationController fixture;
-        private Mock<IDonorService> donorServiceMock;
+        private Mock<MinistryPlatform.Translation.Services.Interfaces.IDonorService> donorServiceMock;
         private Mock<IPaymentService> stripeServiceMock;
         private Mock<IAuthenticationService> authenticationServiceMock;
         private string authType;
@@ -25,7 +25,7 @@ namespace crds_angular.test.controllers
         [SetUp]
         public void SetUp()
         {
-            donorServiceMock = new Mock<IDonorService>();
+            donorServiceMock = new Mock<MinistryPlatform.Translation.Services.Interfaces.IDonorService>();
             stripeServiceMock = new Mock<IPaymentService>();
             authenticationServiceMock = new Mock<IAuthenticationService>();
             fixture = new DonationController(donorServiceMock.Object, stripeServiceMock.Object,

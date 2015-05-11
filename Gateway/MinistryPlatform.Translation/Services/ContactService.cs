@@ -55,5 +55,10 @@ namespace MinistryPlatform.Translation.Services
 
             return contact;
         }
+
+        public int CreateContactForGuestGiver(string emailAddress, string displayName)
+        {
+            return (0);
+        }
     }
 }

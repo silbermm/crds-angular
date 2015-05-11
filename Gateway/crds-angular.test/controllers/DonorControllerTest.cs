@@ -1,21 +1,22 @@
-﻿using System;
+﻿using crds_angular.Controllers.API;
+using crds_angular.Models.Crossroads;
+using crds_angular.Services.Interfaces;
+using MinistryPlatform.Translation.Services.Interfaces;
+using Moq;
+using NUnit.Framework;
+using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Results;
-using crds_angular.Controllers.API;
-using MinistryPlatform.Translation.Services.Interfaces;
-using crds_angular.Services.Interfaces;
-using Moq;
-using NUnit.Framework;
 
 namespace crds_angular.test.controllers
 {
     class DonorControllerTest
     {
         private DonorController fixture;
-        private Mock<IDonorService> donorServiceMock;
+        private Mock<MinistryPlatform.Translation.Services.Interfaces.IDonorService> donorServiceMock;
         private Mock<IPaymentService> stripeServiceMock;
         private Mock<IAuthenticationService> authenticationServiceMock;
         private string authType;
@@ -24,7 +25,7 @@ namespace crds_angular.test.controllers
         [SetUp]
         public void SetUp()
         {
-            donorServiceMock = new Mock<IDonorService>();
+            donorServiceMock = new Mock<MinistryPlatform.Translation.Services.Interfaces.IDonorService>();
             stripeServiceMock = new Mock<IPaymentService>();
             authenticationServiceMock = new Mock<IAuthenticationService>();
             fixture = new DonorController(donorServiceMock.Object, stripeServiceMock.Object,
