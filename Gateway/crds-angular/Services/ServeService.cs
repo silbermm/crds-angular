@@ -126,20 +126,19 @@ namespace crds_angular.Services
                         {
                             //team already in collection
                             var member = team.Members.SingleOrDefault(m => m.ContactId == record.ContactId);
-                            if (member != null)
+                            if (member == null)
                             {
-                                //member already on team
-                                //TO-DO figure out how to do capacity
-                                member.Roles.Add(new ServeRole { Capacity = null, Name = record.OpportunityTitle + " " + record.OpportunityRoleTitle, RoleId = record.GroupRoleId });
+                                team.Members.Add(TeamMemberFaster(record, token));
                             }
                             else
                             {
-                                team.Members.Add(TeamMemberFaster(record));
+                                member.Roles.Add(AddServingRole(record));
                             }
+
                         }
                         else
                         {
-                            time.ServingTeams.Add(ServingTeamFaster(record));
+                            time.ServingTeams.Add(ServingTeamFaster(record, token));
                         }
                     }
                     else
@@ -149,7 +148,7 @@ namespace crds_angular.Services
                         //servingTime.ServingTeams = null;
 
 
-                        day.ServeTimes.Add(ServingTimeFaster(record));
+                        day.ServeTimes.Add(ServingTimeFaster(record, token));
 
                     }
                 }
@@ -161,7 +160,7 @@ namespace crds_angular.Services
                     var servingDay = new ServingDay();
                     servingDay.Day = record.EventStartDateTime.Date.ToString("d");
                     servingDay.Date = record.EventStartDateTime;
-                    servingDay.ServeTimes = new List<ServingTime> { ServingTimeFaster(record) };
+                    servingDay.ServeTimes = new List<ServingTime> { ServingTimeFaster(record, token) };
 
                     servingDays.Add(servingDay);
 
@@ -172,29 +171,40 @@ namespace crds_angular.Services
             return servingDays;
         }
 
-        private static ServingTime ServingTimeFaster(GroupServingParticipant record)
+        private ServeRole AddServingRole(GroupServingParticipant record)
+        {
+            return new ServeRole
+            {
+                Name = record.OpportunityTitle + " " + record.OpportunityRoleTitle,
+                RoleId = record.GroupRoleId,
+                Minimum = record.OpportunityMinimumNeeded,
+                Maximum = record.OpportunityMaximumNeeded
+            };
+        }
+
+        private ServingTime ServingTimeFaster(GroupServingParticipant record, string token)
         {
             var servingTime = new ServingTime();
-            servingTime.ServingTeams = new List<ServingTeam> {ServingTeamFaster(record)};
+            servingTime.ServingTeams = new List<ServingTeam> {ServingTeamFaster(record, token)};
             servingTime.Time = record.EventStartDateTime.TimeOfDay.ToString();
             return servingTime;
         }
 
-        private static ServingTeam ServingTeamFaster(GroupServingParticipant record)
+        private ServingTeam ServingTeamFaster(GroupServingParticipant record, string token)
         {
             var servingTeam = new ServingTeam();
             servingTeam.EventType = record.EventType;
             servingTeam.EventTypeId = record.EventTypeId;
             servingTeam.GroupId = record.GroupId;
-            servingTeam.Members = new List<TeamMember> {TeamMemberFaster(record)};
+            servingTeam.Members = new List<TeamMember> {TeamMemberFaster(record, token)};
             servingTeam.Name = record.GroupName;
             servingTeam.PrimaryContact = record.GroupPrimaryContactEmail;
             return servingTeam;
         }
 
-        private static TeamMember TeamMemberFaster(GroupServingParticipant record)
+        private TeamMember TeamMemberFaster(GroupServingParticipant record, string token)
         {
-// new team member
+            // new team member
             var member = new TeamMember();
             member.ContactId = record.ContactId;
             member.EmailAddress = record.ParticipantEmail;
@@ -203,11 +213,8 @@ namespace crds_angular.Services
             member.Participant = new Participant {ParticipantId = record.ParticipantId};
             //member.Responses = null;  //don't think we need this
 
-            ////TO-DO figure out how to do capacity
-            member.Roles = new List<ServeRole>
-            {
-                new ServeRole {Capacity = null, Name = record.OpportunityTitle + " " + record.OpportunityRoleTitle, RoleId = record.GroupRoleId}
-            };
+            member.Roles.Add(AddServingRole(record));
+            
             if (record.Rsvp != null)
             {
                 member.ServeRsvp = new ServeRsvp {Attending = (bool) record.Rsvp, RoleId = record.GroupRoleId};
@@ -239,8 +246,8 @@ namespace crds_angular.Services
                         var serveRole = new ServeRole
                         {
                             Name = opportunity.OpportunityName + " " + opportunity.RoleTitle,
-                            Capacity =
-                                this.OpportunityCapacity(opportunity, e.EventId, token),
+                            //Capacity =
+                               // this.OpportunityCapacity(opportunity, e.EventId, token),
                             RoleId = opportunity.OpportunityId
                         };
 
@@ -375,6 +382,63 @@ namespace crds_angular.Services
                     .Select(t => t.Response_Result_ID)
                     .ToList();
             return r.Count <= 0 ? null : new ServeRsvp {Attending = (r[0] == 1), RoleId = opportunityId};
+        }
+
+        public Capacity OpportunityCapacity(int opportunityId, int eventId, int? minNeeded, int? maxNeeded, string token)
+        {
+            var opportunity = _opportunityService.GetOpportunityResponses(opportunityId, token);
+            var min = minNeeded;
+            var max = maxNeeded;
+            var signedUp = opportunity.Count(r => r.Event_ID == eventId);
+
+            var capacity = new Capacity { Display = true };
+
+            if (max == null && min == null)
+            {
+                capacity.Display = false;
+                return capacity;
+            }
+
+            int calc;
+            if (max == null)
+            {
+                capacity.Minimum = min.GetValueOrDefault();
+
+                //is this valid?? max is null so put min value in max?
+                capacity.Maximum = capacity.Minimum;
+
+                calc = capacity.Minimum - signedUp;
+            }
+            else if (min == null)
+            {
+                capacity.Maximum = max.GetValueOrDefault();
+                //is this valid??
+                capacity.Minimum = capacity.Maximum;
+                calc = capacity.Maximum - signedUp;
+            }
+            else
+            {
+                capacity.Maximum = max.GetValueOrDefault();
+                capacity.Minimum = min.GetValueOrDefault();
+                calc = capacity.Minimum - signedUp;
+            }
+
+            if (signedUp < capacity.Maximum && signedUp < capacity.Minimum)
+            {
+                capacity.Message = string.Format("{0} Needed", calc);
+                capacity.BadgeType = BadgeType.LabelInfo.ToString();
+                capacity.Available = calc;
+                capacity.Taken = signedUp;
+            }
+            else if (signedUp >= capacity.Maximum)
+            {
+                capacity.Message = "Full";
+                capacity.BadgeType = BadgeType.LabelDefault.ToString();
+                capacity.Available = calc;
+                capacity.Taken = signedUp;
+            }
+
+            return capacity;
         }
 
         //public for testing

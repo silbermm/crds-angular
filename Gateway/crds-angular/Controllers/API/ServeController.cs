@@ -102,5 +102,28 @@ namespace crds_angular.Controllers.API
                 return Ok();
             });
         }
+
+        [ResponseType(typeof(Capacity))]
+        [Route("api/serve/opp-capacity")]
+        public IHttpActionResult GetOpportunityCapacity(int id, int eventId, int minNeeded, int maxNeeded)
+        {
+            return Authorized(token =>
+            {
+                try
+                {
+                    var oppCapacity = _serveService.OpportunityCapacity(id, eventId, minNeeded, maxNeeded, token);
+                    if (oppCapacity == null)
+                    {
+                        return Unauthorized();
+                    }
+                    return Ok(oppCapacity);
+                }
+                catch (Exception exception)
+                {
+                    var apiError = new ApiErrorDto("Get Opportunity Capacity Failed", exception);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+            });
+        }
     }
 }
