@@ -246,6 +246,7 @@
     </Compile>
     <Compile Include="Models\Crossroads\CreateDonorDTO.cs" />
     <Compile Include="Models\Crossroads\DonorDTO.cs" />
+    <Compile Include="Models\Crossroads\Opportunity\OpportunityCapacityDto.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityGroup.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityGroupParticipant.cs" />
     <Compile Include="Models\Crossroads\PartID.cs" />

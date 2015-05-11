@@ -7,6 +7,7 @@ using System.Web.Http.Description;
 using crds_angular.Exceptions.Models;
 using crds_angular.Extenstions;
 using crds_angular.Models.Crossroads;
+using crds_angular.Models.Crossroads.Opportunity;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
@@ -113,13 +114,13 @@ namespace crds_angular.Controllers.API
 
         [ResponseType(typeof(Capacity))]
         [Route("api/serve/opp-capacity")]
-        public IHttpActionResult GetOpportunityCapacity(int id, int eventId, int minNeeded, int maxNeeded)
+        public IHttpActionResult GetOpportunityCapacity([FromUri] OpportunityCapacityDto oppCap)
         {
             return Authorized(token =>
             {
                 try
                 {
-                    var oppCapacity = _serveService.OpportunityCapacity(id, eventId, minNeeded, maxNeeded, token);
+                    var oppCapacity = _serveService.OpportunityCapacity(oppCap.Id, oppCap.EventId, oppCap.Min, oppCap.Max, token);
                     if (oppCapacity == null)
                     {
                         return Unauthorized();
