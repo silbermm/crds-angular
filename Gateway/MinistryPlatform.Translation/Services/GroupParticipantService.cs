@@ -35,7 +35,7 @@ namespace MinistryPlatform.Translation.Services
             {
                 iconn.Open();
                 const string query =
-                    "SELECT * FROM MinistryPlatform.dbo.vw_crds_Serving_Participants v WHERE v.Participant_ID IN ( 994377, 1446320, 1446324, 2057353 ) ORDER BY Event_Start_Date, Group_Name, Contact_ID";
+                    "SELECT *, Row_Number() Over ( Order By v.Event_Start_Date ) As AndyC FROM MinistryPlatform.dbo.vw_crds_Serving_Participants v WHERE v.Participant_ID IN ( 994377, 1446320, 1446324, 2057353 ) ORDER BY Event_Start_Date, Group_Name, Contact_ID";
                 IDbCommand icommand = new SqlCommand(query, (SqlConnection) iconn);
                 var reader = icommand.ExecuteReader();
                 var groupServingParticipants = new List<GroupServingParticipant>();
@@ -64,6 +64,8 @@ namespace MinistryPlatform.Translation.Services
                     participant.ParticipantEmail = reader.GetString(reader.GetOrdinal("Email_Address"));
                     participant.ParticipantId = reader.GetInt32(reader.GetOrdinal("Participant_ID"));
                     participant.ParticipantLastName = reader.GetString(reader.GetOrdinal("Last_Name"));
+                    //participant.RowNumber = (int)reader[reader.GetOrdinal("RowNumber")];
+                    participant.RowNumber = reader.GetInt64(reader.GetOrdinal("AndyC"));
                     participant.Rsvp = getNullableBool(reader, "Rsvp");
                     groupServingParticipants.Add(participant);
                 }

@@ -27,6 +27,7 @@ namespace MinistryPlatform.Models
         public string ParticipantEmail { get; set; }
         public int ParticipantId { get; set; }
         public string ParticipantLastName { get; set; }
+        public long RowNumber { get; set; }
         public bool? Rsvp { get; set; }
     }
 }

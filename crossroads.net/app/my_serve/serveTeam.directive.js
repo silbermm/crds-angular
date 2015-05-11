@@ -49,11 +49,12 @@
       scope.signedup = null;
       scope.showEdit = false;
       scope.showIcon = showIcon;
+      scope.andy = false;
 
       scope.togglePanel = togglePanel;
       //////////////////////////////////////
 
-      
+
       function attendingChanged() {
         roleChanged();
         scope.currentMember.showFrequency = true;
@@ -158,7 +159,8 @@
       function open($event, opened) {
         $event.preventDefault();
         $event.stopPropagation();
-        scope[opened] = true;
+        scope.andy = !scope.andy;
+        //scope[opened] = !scope[opened];
       }
 
       function openPanel(members) {
