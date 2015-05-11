@@ -1,4 +1,4 @@
-<div class="col-sm-12 serve-opp-listings" id="{{panelId()}}">
+<div class="col-sm-12 serve-opp-listings" >
   <div class="panel panel-default ng-isolate-scope">
     <div class="panel-heading clearfix" ng-click="openPanel(team.members)">
       <span class="team-name">{{::team.name}}</span>
@@ -20,7 +20,7 @@
 
     <div class="panel-collapse collapse" collapse="isCollapsed">
       <div class="panel-body soft-half-bottom">
-        <p class="flush-bottom">Editing sign up for {{currentMember.name + " " + currentMember.lastName}} <span ng-show="displayEmail(currentMember.emailAddress)">( <span> {{ currentMember.emailAddress}} </span> )</span><span class="text-muted"></span>
+        <p class="flush-bottom">Editing sign up for {{::currentMember.name}} {{::currentMember.lastName}} <span ng-show="displayEmail(currentMember.emailAddress)">( <span> {{ ::currentMember.emailAddress}} </span> )</span><span class="text-muted"></span>
         <a href="" ng-click="editProfile(currentMember)" ng-show="showEdit" class="edit-btn">
             <svg viewBox="0 0 32 32" class="icon icon-pencil4">
                 <use xlink:href="#pencil4"></use>
@@ -32,9 +32,9 @@
             <h5>Opportunities</h5>
             <div class="radio" ng-class="{'text-muted': role.capacity.badgeType === 'label-default'}" ng-repeat="role in currentMember.roles">
               <label>
-                <input type="radio" name="roles-{{panelId()}}" ng-disabled="role.capacity.badgeType === 'label-default'" ng-model="currentMember.serveRsvp.roleId" ng-value="role.roleId" ng-change="roleChanged()" >
+                <input type="radio" ng-disabled="role.capacity.badgeType === 'label-default'" ng-model="currentMember.serveRsvp.roleId" ng-value="role.roleId" ng-change="roleChanged()" >
                 <span class="opportunity-name">{{::role.name}}</span>
-                <span class="label {{ role.capacity.badgeType }}" ng-show="role.capacity.display">{{ role.capacity.message }}</span>
+                <span class="label {{ ::role.capacity.badgeType }}" ng-show="role.capacity.display">{{ ::role.capacity.message }}</span>
               </label>
             </div><!--/radio-->
           </div><!--/col-sm-4-->
@@ -42,13 +42,13 @@
             <h5>Sign Up</h5>
            <div class="radio" ng-class="{'text-muted': currentMember.serveRsvp.roleId == null}">
              <label>
-               <input ng-disabled="currentMember.serveRsvp.roleId == null" type="radio" name="signup-{{panelId()}}" id="optionsRadios1" ng-model="currentMember.serveRsvp.attending" ng-value="true" ng-change="attendingChanged()" >
+               <input ng-disabled="currentMember.serveRsvp.roleId == null" type="radio" id="optionsRadios1" ng-model="currentMember.serveRsvp.attending" ng-value="true" ng-change="attendingChanged()" >
                Yes
              </label>
            </div><!--/radio-->
            <div class="radio" ng-class="{'text-muted': currentMember.serveRsvp.roleId == null}" >
              <label>
-               <input ng-disabled="currentMember.serveRsvp.roleId == null" type="radio" name="signup-{{panelId()}}" id="optionsRadios2" ng-model="currentMember.serveRsvp.attending" ng-value="false" ng-change="attendingChanged()">
+               <input ng-disabled="currentMember.serveRsvp.roleId == null" type="radio" id="optionsRadios2" ng-model="currentMember.serveRsvp.attending" ng-value="false" ng-change="attendingChanged()">
                No
              </label>
            </div><!--/radio-->
@@ -63,7 +63,7 @@
                 <div class="form-group">
                   <label>From:</label>
                   <div class="input-group">
-                    <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="currentMember.currentOpportunity.fromDt" is-open="fromOpened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                    <input type="text" class="form-control" datepicker-popup="{{::format}}" ng-model="currentMember.currentOpportunity.fromDt" is-open="fromOpened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
                     <span class="input-group-btn">
                       <button type="button" class="btn btn-default" ng-click="open($event, 'fromOpened')"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
@@ -72,7 +72,7 @@
                 <div class="form-group">
                   <label>To:</label>
                   <div class="input-group">
-                    <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="currentMember.currentOpportunity.toDt" is-open="toOpened" min-date="minDate" max-date="'2050-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                    <input type="text" class="form-control" datepicker-popup="{{::format}}" ng-model="currentMember.currentOpportunity.toDt" is-open="toOpened" min-date="minDate" max-date="'2050-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
                     <span class="input-group-btn">
                       <button type="button" class="btn btn-default" ng-click="open($event, 'toOpened')"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
@@ -82,7 +82,7 @@
             </div> <!--/ng-show-->
           </div><!--/col-sm-4-->
           <div class="col-sm-12 serve-save soft-half-top">
-            <a href="mailto:{{ team.primaryContact }}" class="pull-left">
+            <a href="mailto:{{ ::team.primaryContact }}" class="pull-left">
               <svg viewBox="0 0 32 32" class="icon icon-mail5 icon-large icon-subtle" tooltip-placement="right" tooltip="Email Team Leader">
                 <use xlink:href="#mail5"></use>
               </svg>
