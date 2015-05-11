@@ -157,10 +157,12 @@
             })
             .state("corkboard", {
               url: "/corkboard",
+              controller: "CorkboardCtrl as corkboard",
               templateUrl: "corkboard/corkboard-listings.html"
             })
             .state("corkboard-create", {
               url: "/corkboard/create",
+              controller: "CorkboardCtrl as corkboard",
               templateUrl: "corkboard/corkboard-create.html"
             })
             .state("opportunities", {

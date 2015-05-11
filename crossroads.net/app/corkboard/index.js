@@ -9,4 +9,4 @@ require('./forms/post-event.html');
 require('./forms/post-job.html');
 require('./forms/post-need.html');
 
-app.controller("CorkboardCtrl", ['$scope', require("./corkboard_controller")]);
+app.controller("CorkboardCtrl", ['$scope', require("./corkboard.controller")]);
