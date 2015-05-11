@@ -11,7 +11,6 @@ using MinistryPlatform.Translation.Services.Interfaces;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
 using Moq;
-using NSubstitute;
 using NUnit.Framework;
 
 namespace crds_angular.test.controllers
