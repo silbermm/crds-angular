@@ -64,9 +64,9 @@
               <div ng-show="currentMember.currentOpportunity.frequency.value > 0">
                 <div class="form-group">
                   <label>From:</label>
-                  <div class="input-group">fromOpened{{andy}}
-                    <span class="form-control" ng-if="!andy">{{currentMember.currentOpportunity.fromDt}}</span>
-                    <input type="text" ng-if="andy" class="form-control" datepicker-popup="{{format}}" ng-model="currentMember.currentOpportunity.fromDt" is-open="andy" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions"  ng-required="true" close-text="Close" />
+                  <div class="input-group">fromOpened{{fromOpened}}
+                    <span class="form-control" ng-if="!fromOpened">{{currentMember.currentOpportunity.fromDt | date:'MM/dd/yyyy'}}</span>
+                    <input type="text" ng-if="fromOpened" class="form-control" datepicker-popup="{{::format}}" ng-model="currentMember.currentOpportunity.fromDt" is-open="fromOpened" datepicker-options="dateOptions"  ng-required="true" close-text="Close" ng-change="fromOpened = !fromOpened" />
                     <span class="input-group-btn">
                       <button type="button" class="btn btn-default" ng-click="open($event, 'fromOpened')"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
@@ -76,7 +76,7 @@
                   <label>To:</label>
                   <div class="input-group">
                     <span class="form-control" ng-if="!toOpened">{{currentMember.currentOpportunity.toDt}}</span>
-                    <input type="text" ng-if="toOpened" class="form-control" datepicker-popup="{{format}}" ng-model="currentMember.currentOpportunity.toDt" is-open="toOpened" min-date="minDate" max-date="'2050-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                    <input type="text" ng-if="toOpened" class="form-control" datepicker-popup="{{::format}}" ng-model="currentMember.currentOpportunity.toDt" is-open="toOpened" min-date="minDate" max-date="'2050-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
                     <span class="input-group-btn">
                       <button type="button" class="btn btn-default" ng-click="open($event, 'toOpened')"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>

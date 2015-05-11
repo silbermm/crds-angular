@@ -162,8 +162,7 @@
       function open($event, opened) {
         $event.preventDefault();
         $event.stopPropagation();
-        scope.andy = !scope.andy;
-        //scope[opened] = !scope[opened];
+        scope[opened] = !scope[opened];
       }
 
       function openPanel(members) {
