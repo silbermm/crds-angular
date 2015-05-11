@@ -111,7 +111,8 @@ namespace crds_angular.Services
             foreach (var record in servingParticipants)
             {
                 //list.Any(cus => cus.FirstName == "John");
-                var day = servingDays.SingleOrDefault(d => d.Date == record.EventStartDateTime);
+                var eventDateOnly = record.EventStartDateTime.Date.ToString("d");
+                var day = servingDays.SingleOrDefault(d => d.Day == eventDateOnly);
                 if (day != null)
                 {
                     //this day already in list
@@ -172,6 +173,10 @@ namespace crds_angular.Services
                 }
                 
             }
+
+            //var tmp = new List<ServingDay>();
+            //tmp.Add(servingDays[0]);
+            //return tmp;
 
             return servingDays;
         }
