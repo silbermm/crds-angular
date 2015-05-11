@@ -91,14 +91,29 @@
 }
 
 .corkboard-header {
-  position: relative;
+  //position: relative;
   .page-header {
-    padding-right: 50px;
+    //padding-right: 50px;
   }
   .card-img {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    max-width: 50px;
+    //position: absolute;
+    //top: 0px;
+    //right: 0px;
+    width: 60px;
   }
+}
+.corkboard-actions {
+  .btn {
+    display: block;
+    margin-top: 5px;
+    @media (min-width: $screen-sm-min) {
+      display: inline-block;
+    }
+  }
+}
+.corkboard-sharing {
+  text-align: center;
+    @media (min-width: $screen-sm-min) {
+      text-align: left;
+    }
 }

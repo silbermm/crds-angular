@@ -162,6 +162,7 @@
             })
             .state("corkboard-detail", {
               url: "/corkboard/detail",
+              controller: "CorkboardCtrl as corkboard",
               templateUrl: "corkboard/corkboard-listing-detail.html"
             })
             .state("opportunities", {
