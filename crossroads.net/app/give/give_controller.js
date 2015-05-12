@@ -176,29 +176,30 @@
         vm.submitBankInfo = function() {
             vm.bankinfoSubmitted = true;
             if ($scope.giveForm.accountForm.$valid) {
-              PaymentService.donor.get($scope.accountForm.email_field.email);
-              alert(PaymentService.donor);
-              if (PaymentService.donor.id === undefined) {
-                PaymentService.createDonorWithCard({
-                  name: vm.nameOnCard,
-                  number: vm.ccNumber,
-                  exp_month: vm.expDate.substr(0,2),
-                  exp_year: vm.expDate.substr(2,2),
-                  cvc: vm.cvc
-                })
-                .then(function(donor) {
-                    PaymentService.donateToProgram(vm.program.ProgramId, vm.amount, donor.id)
-                        .then(function(confirmation){
-                            vm.program_name = _.result(_.find(vm.programsInput,
-                              {'ProgramId': confirmation.program_id}), 'Name');
-                            vm.amount = confirmation.amount;
-                            $state.go("give.thank-you");
-                        });
-                },
-                function() {
-                  $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
-                });
-             }
+              var donorRequest = PaymentService.donor.get({email: $scope.give.email},function(){
+                $scope.donor = donorRequest;
+                if ($scope.donor === undefined || $scope.donor.id === undefined) {
+                    PaymentService.createDonorWithCard({
+                      name: vm.nameOnCard,
+                      number: vm.ccNumber,
+                      exp_month: vm.expDate.substr(0,2),
+                      exp_year: vm.expDate.substr(2,2),
+                      cvc: vm.cvc
+                    })
+                    .then(function(donor) {
+                        PaymentService.donateToProgram(vm.program.ProgramId, vm.amount, donor.id)
+                            .then(function(confirmation){
+                                vm.program_name = _.result(_.find(vm.programsInput,
+                                  {'ProgramId': confirmation.program_id}), 'Name');
+                                vm.amount = confirmation.amount;
+                                $state.go("give.thank-you");
+                            });
+                    },
+                    function() {
+                      $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
+                    });
+                 }
+              });
           }
           else {
             $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);

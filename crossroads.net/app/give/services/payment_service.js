@@ -2,24 +2,21 @@
 
   var getCookie = require('../../utilities/cookies');
 
-  var donor = $resource(__API_ENDPOINT__ + 'api/donor/:email',{@email});
+        
+  
 
   module.exports = PaymentService;
 
-  function PaymentService($log, $http, $q, stripe) {
+  function PaymentService($log, $http, $resource, $q, stripe) {
     var payment_service = {
-      donor : getDonor,
+      donor : $resource(__API_ENDPOINT__ + 'api/donor/?email=:email',{email: '@_email'}),
       donation : {},
       createDonorWithCard : createDonorWithCard,
       donateToProgram : donateToProgram
     };
 
     stripe.setPublishableKey(__STRIPE_PUBKEY__);
-
-    function getDonor(email="") {
-      return donor.get(email);
-    }
-    s
+    
     function createDonorWithCard(card) {
       var def = $q.defer();
       stripe.card.createToken(card)
@@ -39,7 +36,7 @@
               def.reject(error);
             });
         });
-      return def.promise;
+       return def.promise;
     }
 
     function donateToProgram(program_id, amount, donor_id){
