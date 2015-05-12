@@ -161,14 +161,25 @@
               controller: "CorkboardCtrl as corkboard",
               templateUrl: "corkboard/corkboard-listings.html"
             })
-            .state("corkboard-create", {
-              url: "/corkboard/create",
+            .state("corkboard.need", {
+              url: "/create/need",
               controller: "CorkboardCtrl as corkboard",
-              templateUrl: "corkboard/corkboard-create.html"
+              templateUrl: "forms/post-need.html"
             })
-            .state("corkboard-detail", {
-              url: "/corkboard/detail",
-              controller: "CorkboardCtrl as corkboard",
+            .state("corkboard.give", {
+              url: "/create/give",
+              templateUrl: "forms/give-something.html"
+            })
+            .state("corkboard.event", {
+              url: "/create/event",
+              templateUrl: "forms/post-event.html"
+            })
+            .state("corkboard.job", {
+              url: "/create/job",
+              templateUrl: "forms/post-job.html"
+            })
+            .state("corkboard.detail", {
+              url: "/detail",
               templateUrl: "corkboard/corkboard-listing-detail.html"
             })
             .state("opportunities", {
