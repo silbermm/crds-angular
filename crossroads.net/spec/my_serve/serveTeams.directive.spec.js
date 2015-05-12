@@ -54,11 +54,6 @@ describe('Serve Teams Directive', function() {
      expect(isolated.currentActiveTab).toBe(mockTeam[0].members[1].name);
   });
 
-  it("should have the correct ID for the panel", function(){
-    var isolated = element.isolateScope();
-    expect(isolated.panelId()).toBe("team-panel-003");
-  });
-
   it("should get the last serving date for an opportunity", function() {
     var isolated = element.isolateScope();
     isolated.openPanel(mockTeam[0].members);
