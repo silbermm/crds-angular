@@ -176,34 +176,31 @@
         vm.submitBankInfo = function() {
             vm.bankinfoSubmitted = true;
             if ($scope.giveForm.accountForm.$valid) {
-                if ($scope.give.view == "cc") {
-                   if (PaymentService.donor.id === undefined) {
-                        PaymentService.createDonorWithCard({
-                          name: vm.nameOnCard,
-                          number: vm.ccNumber,
-                          exp_month: vm.expDate.substr(0,2),
-                          exp_year: vm.expDate.substr(2,2),
-                          cvc: vm.cvc
-                        })
-                        .then(function() {
-                          $state.go("give.thank-you");
-                        },
-                        function() {
-                          $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
-                        })
-                   }
-                   else {
-                    console.log("error");
-                    $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
-                   }
-                }  
-                else  {
-                  $state.go("give.thank-you");      
-                }             
-            }        
-            else {
-                $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-            }
+              if (PaymentService.donor.id === undefined) {
+                PaymentService.createDonorWithCard({
+                  name: vm.nameOnCard,
+                  number: vm.ccNumber,
+                  exp_month: vm.expDate.substr(0,2),
+                  exp_year: vm.expDate.substr(2,2),
+                  cvc: vm.cvc
+                })
+                .then(function(donor) {
+                    PaymentService.donateToProgram(vm.program.ProgramId, vm.amount, donor.id)
+                        .then(function(confirmation){
+                            vm.program_name = _.result(_.find(vm.programsInput, 
+                              {'ProgramId': confirmation.program_id}), 'Name');
+                            vm.amount = confirmation.amount;
+                            $state.go("give.thank-you");
+                        });
+                },
+                function() {
+                  $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
+                });
+             }
+          }
+          else {
+            $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+          }
         };
 
         vm.toggleCheck = function() {

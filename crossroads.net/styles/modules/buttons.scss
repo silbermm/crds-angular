@@ -3,31 +3,72 @@
   //padding-bottom: 0px;
   position: relative;
   padding-right: 52px;
+  overflow: hidden;
+  border: none;
 
   .btn-label {
     position: absolute;
     right: 0px;
-    top: -1px;
+    top: 0px;
     display: inline-block;
-    padding: 6px 0px;
+    padding: 4px 0px 0px;
     width: 40px;
     background: rgba(0,0,0,0.15);
+    overflow: hidden;
+    border-top-right-radius: $border-radius-base;
+    border-bottom-right-radius: $border-radius-base;
 
     .icon {
-      margin-top: 2px;
+      margin-top: 6px;
+      color: #fff;
+    }
+  }
+
+  &.btn-lg {
+
+    .btn-label {
+      height: 45px;
+
+      .icon {
+        margin-top: 10px;
+      }
+    }
+  }
+
+  &.btn-sm {
+    padding-right: 42px;
+
+    .btn-label {
+      height: 30px;
+      width: 30px;
+
+      .icon {
+        margin-top: 3px;
+      }
+    }
+  }
+
+  &.btn-xs {
+    padding-right: 30px;
+
+    .btn-label {
+      height: 24px;
+      width: 24px;
+
+      .icon {
+        margin-top: 0px;
+        max-width: 12px;
+        height: auto;
+      }
     }
   }
 }
 
 .btn-gray {
-  color: white;
-  background-color: $gray;
-  border-color: $gray-dark;
-  color: $gray-lighter;
-
-  &:hover {
-    background-color: $brand-primary;
-  }
+  @include button-variant($btn-default-color, $gray, $gray);
+}
+.btn-gray-light {
+  @include button-variant($gray, #f1f1f1, $gray-lighter);
 }
 
 h2 {
@@ -43,31 +84,23 @@ h2 {
 
 // Table buttons
 
+// Table buttons
+
 .table-btn {
   @extend .btn;
   @extend .btn-default;
+  @extend .row-full-height;
+  display: block;
   text-align: center;
   vertical-align: middle;
-  position: absolute;
-  top: -1px;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  float: right;
   border-radius: 0px;
   border-bottom-width: 0px;
   border-bottom-right-radius: 0px;
   font-size: 1.3rem;
+  min-height: 31px;
+  width: 100%;
 
   @media (min-width: $screen-sm-min) {
     font-size: 1.4rem;
-  }
-
-  span {
-    position: absolute;
-    top: 50%;
-    margin-top: -12px;
-    width: 100%;
-    left: 0;
   }
 }

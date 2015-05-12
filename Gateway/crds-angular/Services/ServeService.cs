@@ -101,8 +101,7 @@ namespace crds_angular.Services
                         }
                         else
                         {
-                            var count = time.ServingTeams.Count();
-                            time.ServingTeams.Add(NewServingTeam(record, count));
+                            time.ServingTeams.Add(NewServingTeam(record));
                         }
                     }
                     else
@@ -232,12 +231,12 @@ namespace crds_angular.Services
             return new ServingTime
             {
                 Index = record.RowNumber,
-                ServingTeams = new List<ServingTeam> {NewServingTeam(record, 0)},
+                ServingTeams = new List<ServingTeam> {NewServingTeam(record)},
                 Time = record.EventStartDateTime.TimeOfDay.ToString()
             };
         }
 
-        private ServingTeam NewServingTeam(GroupServingParticipant record, int index)
+        private ServingTeam NewServingTeam(GroupServingParticipant record)
         {
             return new ServingTeam
             {
@@ -286,63 +285,6 @@ namespace crds_angular.Services
                     .Select(t => t.Response_Result_ID)
                     .ToList();
             return r.Count <= 0 ? null : new ServeRsvp {Attending = (r[0] == 1), RoleId = opportunityId};
-        }
-
-        //public for testing
-        public Capacity OpportunityCapacity(Opportunity opportunity, int eventId, string token)
-        {
-            var min = opportunity.MinimumNeeded;
-            var max = opportunity.MaximumNeeded;
-            var signedUp = opportunity.Responses.Count(r => r.Event_ID == eventId);
-
-            var capacity = new Capacity {Display = true};
-
-            if (max == null && min == null)
-            {
-                capacity.Display = false;
-                return capacity;
-            }
-
-            int calc;
-            if (max == null)
-            {
-                capacity.Minimum = min.GetValueOrDefault();
-
-                //is this valid?? max is null so put min value in max?
-                capacity.Maximum = capacity.Minimum;
-
-                calc = capacity.Minimum - signedUp;
-            }
-            else if (min == null)
-            {
-                capacity.Maximum = max.GetValueOrDefault();
-                //is this valid??
-                capacity.Minimum = capacity.Maximum;
-                calc = capacity.Maximum - signedUp;
-            }
-            else
-            {
-                capacity.Maximum = max.GetValueOrDefault();
-                capacity.Minimum = min.GetValueOrDefault();
-                calc = capacity.Minimum - signedUp;
-            }
-
-            if (signedUp < capacity.Maximum && signedUp < capacity.Minimum)
-            {
-                capacity.Message = string.Format("{0} Needed", calc);
-                capacity.BadgeType = BadgeType.LabelInfo.ToString();
-                capacity.Available = calc;
-                capacity.Taken = signedUp;
-            }
-            else if (signedUp >= capacity.Maximum)
-            {
-                capacity.Message = "Full";
-                capacity.BadgeType = BadgeType.LabelDefault.ToString();
-                capacity.Available = calc;
-                capacity.Taken = signedUp;
-            }
-
-            return capacity;
         }
     }
 }

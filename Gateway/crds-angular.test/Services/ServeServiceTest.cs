@@ -91,125 +91,163 @@ namespace crds_angular.test.Services
         [Test]
         public void GetMyFamiliesServingEventsTest()
         {
-            var today = DateTime.Now;
-            var startTimeEightThirty = new DateTime(today.Year, today.Month, today.Day, 8, 30, 0);
-            var startTimeTen = new DateTime(today.Year, today.Month, today.Day, 10, 00, 0);
-
-            var eventsList1 = new List<Event>
-            {
-                new Event
-                {
-                    EventId = 1,
-                    EventStartDate = startTimeEightThirty,
-                    EventTitle = "event-1-title",
-                    EventType = "event-type-1"
-                },
-                new Event
-                {
-                    EventId = 2,
-                    EventStartDate = startTimeTen,
-                    EventTitle = "event-2-title",
-                    EventType = "event-type-2"
-                }
-            };
-
-            var eventsList2 = new List<Event>
-            {
-                new Event
-                {
-                    EventId = 3,
-                    EventStartDate = startTimeEightThirty,
-                    EventTitle = "event-3-title",
-                    EventType = "event-type-3"
-                },
-                new Event
-                {
-                    EventId = 4,
-                    EventStartDate = startTimeTen,
-                    EventTitle = "event-4-title",
-                    EventType = "event-type-4"
-                }
-            };
-
-            var opportunities = new List<Opportunity>
-            {
-                new Opportunity
-                {
-                    EventType = "event-type-1",
-                    Events = eventsList1,
-                    OpportunityId = 1,
-                    OpportunityName = "opportunity-name-1",
-                    RoleTitle = "opportunity-1-role-title",
-                    Responses = new List<Response> {new Response {Event_ID = 1}, new Response {Event_ID = 2}}
-                },
-                new Opportunity
-                {
-                    EventType = "event-type-2",
-                    Events = eventsList2,
-                    OpportunityId = 2,
-                    OpportunityName = "opportunity-name-2",
-                    RoleTitle = "opportunity-2-role-title",
-                    Responses = new List<Response> {new Response {Event_ID = 3}, new Response {Event_ID = 4}}
-                }
-            };
-            _opportunityService.Setup(mocked => mocked.GetOpportunitiesForGroup(It.IsAny<Int32>(), It.IsAny<string>()))
-                .Returns(opportunities);
-
-            _groupService.Setup(mocked => mocked.GetServingTeams(123456, It.IsAny<string>())).Returns(new List<Group>
-            {
-                new Group {GroupId = 1, Name = "group-1", GroupRole = "group-role-member"},
-                new Group {GroupId = 2, Name = "group-2", GroupRole = "group-role-member"},
-                new Group {GroupId = 2, Name = "group-2", GroupRole = "group-role-leader"},
-                new Group {GroupId = 3, Name = "group-3", GroupRole = "group-role-member"},
-                new Group {GroupId = 4, Name = "group-4", GroupRole = "group-role-member"}
-            });
-
-            //mock this
-            //_contactRelationshipService.GetMyImmediatieFamilyRelationships(contactId, token).ToList();
             var contactId = 123456;
+
+            _contactRelationshipService.Setup(m => m.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>())).Returns(MockContactRelationships());
+
+            _participantService.Setup(m => m.GetParticipant(It.IsAny<int>()))
+                .Returns(new Participant {ParticipantId = 1});
+
+            _groupParticipantService.Setup(g => g.GetServingParticipants(It.IsAny<List<int>>())).Returns(MockGroupServingParticipants());
+
+            var servingDays = _fixture.GetServingDays(It.IsAny<string>(),contactId);
+
+            _contactRelationshipService.VerifyAll();
+            _groupParticipantService.Verify();
+            _serveService.VerifyAll();
+            _groupService.VerifyAll();
+            _participantService.VerifyAll();
+
+            Assert.IsNotNull(servingDays);
+            Assert.AreEqual(2, servingDays.Count);
+            var servingDay = servingDays[0];
+            Assert.AreEqual(2, servingDay.ServeTimes.Count);
+
+            var servingTime = servingDay.ServeTimes[0];
+            Assert.AreEqual(1, servingTime.ServingTeams.Count);
+
+            servingTime = servingDay.ServeTimes[1];
+            Assert.AreEqual(1, servingTime.ServingTeams.Count);
+        }
+
+        private static List<GroupServingParticipant> MockGroupServingParticipants()
+        {
+            var servingParticipants = new List<GroupServingParticipant>
+            {
+                new GroupServingParticipant
+                {
+                    ContactId = 2,
+                    DomainId = 1,
+                    EventId = 3,
+                    EventStartDateTime = DateTime.Now,
+                    EventTitle = "Serving Event",
+                    EventType = "Event Type",
+                    EventTypeId = 4,
+                    GroupId = 5,
+                    GroupName = "Group",
+                    GroupPrimaryContactEmail = "group@leader.com",
+                    GroupRoleId = 6,
+                    OpportunityId = 7,
+                    OpportunityMaximumNeeded = 10,
+                    OpportunityMinimumNeeded = 5,
+                    OpportunityRoleTitle = "Member",
+                    OpportunityShiftEnd = TimeSpan.Parse("8:30"),
+                    OpportunityShiftStart = TimeSpan.Parse("10:30"),
+                    OpportunitySignUpDeadline = 7,
+                    OpportunityTitle = "Serving",
+                    ParticipantEmail = "partici@pants.com",
+                    ParticipantId = 8,
+                    ParticipantLastName = "McServer",
+                    ParticipantNickname = "Servy",
+                    Rsvp = true
+                },
+                new GroupServingParticipant
+                {
+                    ContactId = 2,
+                    DomainId = 1,
+                    EventId = 3,
+                    EventStartDateTime = DateTime.Now.AddHours(4),
+                    EventTitle = "Serving Event",
+                    EventType = "Event Type",
+                    EventTypeId = 4,
+                    GroupId = 5,
+                    GroupName = "Group",
+                    GroupPrimaryContactEmail = "group@leader.com",
+                    GroupRoleId = 6,
+                    OpportunityId = 7,
+                    OpportunityMaximumNeeded = 10,
+                    OpportunityMinimumNeeded = 5,
+                    OpportunityRoleTitle = "Member",
+                    OpportunityShiftEnd = TimeSpan.Parse("8:30"),
+                    OpportunityShiftStart = TimeSpan.Parse("10:30"),
+                    OpportunitySignUpDeadline = 7,
+                    OpportunityTitle = "Serving",
+                    ParticipantEmail = "partici@pants.com",
+                    ParticipantId = 8,
+                    ParticipantLastName = "McServer",
+                    ParticipantNickname = "Servy",
+                    Rsvp = true
+                },
+                new GroupServingParticipant
+                {
+                    ContactId = 2,
+                    DomainId = 1,
+                    EventId = 3,
+                    EventStartDateTime = DateTime.Now.AddDays(1),
+                    EventTitle = "Serving Event",
+                    EventType = "Event Type",
+                    EventTypeId = 4,
+                    GroupId = 5,
+                    GroupName = "Group",
+                    GroupPrimaryContactEmail = "group@leader.com",
+                    GroupRoleId = 6,
+                    OpportunityId = 7,
+                    OpportunityMaximumNeeded = 10,
+                    OpportunityMinimumNeeded = 5,
+                    OpportunityRoleTitle = "Member",
+                    OpportunityShiftEnd = TimeSpan.Parse("8:30"),
+                    OpportunityShiftStart = TimeSpan.Parse("10:30"),
+                    OpportunitySignUpDeadline = 7,
+                    OpportunityTitle = "Serving",
+                    ParticipantEmail = "partici@pants.com",
+                    ParticipantId = 8,
+                    ParticipantLastName = "McServer",
+                    ParticipantNickname = "Servy",
+                    Rsvp = true
+                },
+                new GroupServingParticipant
+                {
+                    ContactId = 2,
+                    DomainId = 1,
+                    EventId = 3,
+                    EventStartDateTime = DateTime.Now.AddDays(1).AddHours(4),
+                    EventTitle = "Serving Event",
+                    EventType = "Event Type",
+                    EventTypeId = 4,
+                    GroupId = 5,
+                    GroupName = "Group",
+                    GroupPrimaryContactEmail = "group@leader.com",
+                    GroupRoleId = 6,
+                    OpportunityId = 7,
+                    OpportunityMaximumNeeded = 10,
+                    OpportunityMinimumNeeded = 5,
+                    OpportunityRoleTitle = "Member",
+                    OpportunityShiftEnd = TimeSpan.Parse("8:30"),
+                    OpportunityShiftStart = TimeSpan.Parse("10:30"),
+                    OpportunitySignUpDeadline = 7,
+                    OpportunityTitle = "Serving",
+                    ParticipantEmail = "partici@pants.com",
+                    ParticipantId = 8,
+                    ParticipantLastName = "McServer",
+                    ParticipantNickname = "Servy",
+                    Rsvp = true
+                }
+            };
+            return servingParticipants;
+        }
+
+        private static List<ContactRelationship> MockContactRelationships()
+        {
             var mockRelationships = new List<ContactRelationship>();
             var mockRelationship1 = new ContactRelationship();
-            mockRelationship1.Contact_Id = 123456;
+            mockRelationship1.Contact_Id = 1111111;
             mockRelationship1.Participant_Id = 1;
             var mockRelationship2 = new ContactRelationship();
             mockRelationship2.Contact_Id = 123456;
             mockRelationship2.Participant_Id = 2;
             mockRelationships.Add(mockRelationship1);
             mockRelationships.Add(mockRelationship2);
-
-            _contactRelationshipService.Setup(m => m.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>())).Returns(mockRelationships);
-
-
-            //mock this
-            //_participantService.GetParticipant(contactId);
-
-            _participantService.Setup(m => m.GetParticipant(It.IsAny<int>()))
-                .Returns(new Participant {ParticipantId = 1});
-
-            //mock this
-            //_groupParticipantService.GetServingParticipants(participants);
-
-            //var contactId = 123456;
-            var servingDays = _fixture.GetServingDays(It.IsAny<string>(),contactId);
-
-            _contactRelationshipService.VerifyAll();
-            _opportunityService.VerifyAll();
-            _serveService.VerifyAll();
-            _groupService.VerifyAll();
-            _participantService.VerifyAll();
-
-            Assert.IsNotNull(servingDays);
-            Assert.AreEqual(1, servingDays.Count);
-            var servingDay = servingDays[0];
-            Assert.AreEqual(2, servingDay.ServeTimes.Count);
-
-            var servingTime = servingDay.ServeTimes[0];
-            Assert.AreEqual(4, servingTime.ServingTeams.Count);
-            Assert.AreEqual("08:30:00", servingTime.Time);
-
-            servingTime = servingDay.ServeTimes[1];
-            Assert.AreEqual(4, servingTime.ServingTeams.Count);
-            Assert.AreEqual("10:00:00", servingTime.Time);
+            return mockRelationships;
         }
 
         [Test, TestCaseSource("OpportunityCapacityCases")]
@@ -435,48 +473,6 @@ namespace crds_angular.test.Services
                 (m =>
                     m.RespondToOpportunity(47, opportunityId, It.IsAny<string>(), It.IsIn<int>(expectedEventIds), signUp)),
                 Times.Exactly(3));
-        }
-
-        [Test]
-        public void GetServingDaysTest()
-        {
-            var servingParticipants = new List<GroupServingParticipant>
-            {
-                new GroupServingParticipant
-                {
-                    ContactId = 2,
-                    DomainId = 1,
-                    EventId = 3,
-                    EventStartDateTime = DateTime.Now,
-                    EventTitle = "Serving Event",
-                    EventType = "Event Type",
-                    EventTypeId = 4,
-                    GroupId = 5,
-                    GroupName = "Group",
-                    GroupPrimaryContactEmail = "group@leader.com",
-                    GroupRoleId = 6,
-                    OpportunityId = 7,
-                    OpportunityMaximumNeeded = 10,
-                    OpportunityMinimumNeeded = 5,
-                    OpportunityRoleTitle = "Member",
-                    OpportunityShiftEnd = TimeSpan.Parse("8:30"),
-                    OpportunityShiftStart = TimeSpan.Parse("10:30"),
-                    OpportunitySignUpDeadline = 7,
-                    OpportunityTitle = "Serving",
-                    ParticipantEmail = "partici@pants.com",
-                    ParticipantId = 8,
-                    ParticipantLastName = "McServer",
-                    ParticipantNickname = "Servy",
-                    Rsvp = true
-                }
-            };
-             
-            _groupParticipantService.Setup(m => m.GetServingParticipants(It.IsAny<List<int>>())).Returns(servingParticipants);
-
-            var contactId = 123456;
-            var servingDays = _fixture.GetServingDays(It.IsAny<string>(), contactId);
-
-            Assert.NotNull(servingDays);
         }
 
         private void SetUpRSVPMocks(int contactId, int eventTypeId, int opportunityId, bool signUp)
