@@ -333,9 +333,18 @@
   border: 0px !important;
 }
 
+.pull-right {
+  &.btn {
+    margin-left: 5px;
+  }
+}
+
 @media (min-width: $screen-lg-min) {
   .lg-pull-right {
     float: right;
+    &.btn {
+        margin-left: 5px;
+    }
   }
   .lg-pull-left {
     float: left;
@@ -345,6 +354,9 @@
 @media (min-width: $screen-md-min) {
   .md-pull-right {
     float: right;
+    &.btn {
+        margin-left: 5px;
+    }
   }
   .md-pull-left {
     float: left;
@@ -354,6 +366,9 @@
 @media (min-width: $screen-sm-min) {
   .sm-pull-right {
     float: right;
+    &.btn {
+        margin-left: 5px;
+    }
   }
   .sm-pull-left {
     float: left;
