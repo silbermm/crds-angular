@@ -1,4 +1,4 @@
-<div class="col-sm-12 serve-opp-listings" >
+<div class="col-sm-12 serve-opp-listings">
   <div class="panel panel-default ng-isolate-scope">
     <div class="panel-heading clearfix" ng-click="openPanel(team.members)">
       <span class="team-name">{{::team.name}}</span>
@@ -56,29 +56,28 @@
            </div><!--/radio-->
             <div ng-show="currentMember.showFrequency">
               <div class="form-group">
-                <label>Frequency</label>
+                <label>Frequency </label>
                 <select class="form-control" ng-model="currentMember.currentOpportunity.frequency" ng-change="populateDates()" ng-options="f.text for f in frequency">
                   <option value="">Select a Frequency</option>
                 </select>
               </div><!--/form-group-->
-              <div ng-show="currentMember.currentOpportunity.frequency.value > 0">
+              <div ng-if="currentMember.currentOpportunity.frequency.value > 0">
                 <div class="form-group">
-                  <label>From:</label>
-                  <div class="input-group">fromOpened{{fromOpened}}
-                    <span class="form-control" ng-if="!fromOpened">{{currentMember.currentOpportunity.fromDt | date:'MM/dd/yyyy'}}</span>
-                    <input type="text" ng-if="fromOpened" class="form-control" datepicker-popup="{{::format}}" ng-model="currentMember.currentOpportunity.fromDt" is-open="fromOpened" datepicker-options="dateOptions"  ng-required="true" close-text="Close" ng-change="fromOpened = !fromOpened" />
+                  <label>From: </label>
+
+                  <div class="input-group">
+                    <input type="text" class="form-control" datepicker-popup="{{::format}}" ng-model="currentMember.currentOpportunity.fromDt" is-open="$parent.datePickers.fromOpened" datepicker-options="dateOptions"  ng-required="true" close-text="Close" />
                     <span class="input-group-btn">
-                      <button type="button" class="btn btn-default" ng-click="open($event, 'fromOpened')"><i class="glyphicon glyphicon-calendar"></i></button>
+                      <button type="button" class="btn btn-default" ng-click="openFromDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                   </div><!--/input-group-->
                 </div><!--/form-group-->
                 <div class="form-group">
                   <label>To:</label>
                   <div class="input-group">
-                    <span class="form-control" ng-if="!toOpened">{{currentMember.currentOpportunity.toDt}}</span>
-                    <input type="text" ng-if="toOpened" class="form-control" datepicker-popup="{{::format}}" ng-model="currentMember.currentOpportunity.toDt" is-open="toOpened" min-date="minDate" max-date="'2050-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                    <input type="text" class="form-control" datepicker-popup="{{::format}}" ng-model="currentMember.currentOpportunity.toDt" is-open="$parent.datePickers.toOpened" min-date="minDate" max-date="'2050-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
                     <span class="input-group-btn">
-                      <button type="button" class="btn btn-default" ng-click="open($event, 'toOpened')"><i class="glyphicon glyphicon-calendar"></i></button>
+                      <button type="button" class="btn btn-default" ng-click="openToDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                   </div><!--/input-group-->
                 </div><!--/form-group-->

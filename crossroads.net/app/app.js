@@ -21,8 +21,6 @@ require('./third-party/angular/angular-aside.min.css');
 require('./third-party/angular/angular-growl.css');
 require('./give');
 
-require('ng-infinite-scroll');
-
 require('./app.core.module');
 require('./components/components.module');
 require('./mp_tools');
@@ -40,8 +38,7 @@ var _ = require('lodash');
      'crossroads.give',
      "crdsCMS.services",
      'ngAside', 
-     'matchMedia',
-     'infinite-scroll'
+     'matchMedia'
      ])
     .constant("AUTH_EVENTS", {
       loginSuccess: "auth-login-success",
