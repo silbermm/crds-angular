@@ -61,7 +61,7 @@ namespace crds_angular.test.Services
         {
             mpContactService.Setup(mocked => mocked.CreateContactForGuestGiver("me@here.com", DonorService.GUEST_GIVER_DISPLAY_NAME)).Returns(123);
             paymentService.Setup(mocked => mocked.createCustomer("stripe_token")).Returns("stripe_cust_id");
-            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(123, "stripe_cust_id", It.IsAny<DateTime>())).Returns(456);
+            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(123, "stripe_cust_id", It.IsAny<DateTime>(), 3, 1, 4)).Returns(456);
 
             var response = fixture.CreateDonor(null, "me@here.com", "stripe_token", DateTime.Now);
 
@@ -84,7 +84,7 @@ namespace crds_angular.test.Services
             };
 
             paymentService.Setup(mocked => mocked.createCustomer("stripe_token")).Returns("stripe_cust_id");
-            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(12345, "stripe_cust_id", It.IsAny<DateTime>())).Returns(456);
+            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(12345, "stripe_cust_id", It.IsAny<DateTime>(), 3, 1, 4)).Returns(456);
 
             var response = fixture.CreateDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
 

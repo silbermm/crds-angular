@@ -15,6 +15,10 @@ namespace crds_angular.Services
 
         public const string GUEST_GIVER_DISPLAY_NAME = "Guest Giver";
 
+        public const int STATEMENT_FREQUENCY_NEVER = 3;
+        public const int STATEMENT_TYPE_INDIVIDUAL = 1;
+        public const int STATEMENT_METHOD_NONE = 4;
+
         public DonorService(IDonorService mpDonorService, IContactService mpContactService, crds_angular.Services.Interfaces.IPaymentService paymentService)
         {
             this.mpDonorService = mpDonorService;
@@ -34,7 +38,8 @@ namespace crds_angular.Services
             {
                 donor.ContactId = mpContactService.CreateContactForGuestGiver(emailAddress, GUEST_GIVER_DISPLAY_NAME);
                 donor.StripeCustomerId = paymentService.createCustomer(paymentProcessorToken);
-                donor.DonorId = mpDonorService.CreateDonorRecord(donor.ContactId, donor.StripeCustomerId, setupDate);
+                donor.DonorId = mpDonorService.CreateDonorRecord(donor.ContactId, donor.StripeCustomerId, setupDate, 
+                    STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE);
             } else if(String.IsNullOrWhiteSpace(existingDonor.StripeCustomerId)) {
                 donor.ContactId = existingDonor.ContactId;
                 donor.StripeCustomerId = paymentService.createCustomer(paymentProcessorToken);
@@ -44,7 +49,8 @@ namespace crds_angular.Services
                 }
                 else
                 {
-                    donor.DonorId = mpDonorService.CreateDonorRecord(existingDonor.ContactId, donor.StripeCustomerId, setupDate);
+                    donor.DonorId = mpDonorService.CreateDonorRecord(existingDonor.ContactId, donor.StripeCustomerId, setupDate,
+                        STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE);
                 }
             } else {
                 donor.ContactId = existingDonor.ContactId;
