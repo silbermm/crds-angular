@@ -5,9 +5,9 @@
 
   module.exports = ServeTeam;
 
-  ServeTeam.$inject = ['$rootScope', '$log', 'Session', 'ServeOpportunities', '$modal'];
+  ServeTeam.$inject = ['$rootScope', '$log', 'Session', 'ServeOpportunities', 'Capacity', '$modal'];
 
-  function ServeTeam($rootScope, $log, Session, ServeOpportunities, $modal) {
+  function ServeTeam($rootScope, $log, Session, ServeOpportunities, Capacity, $modal) {
     return {
       restrict: "EA",
       transclude: true,
@@ -172,7 +172,9 @@
           scope.currentMember = members[0];
           scope.currentActiveTab = scope.currentMember.name;
         }
-        $log.debug("isCollapsed = " + scope.isCollapsed);
+        _.each(scope.currentMember.roles, function(r){ 
+          r.capacity = Capacity.get({id: r.roleId, eventId: scope.team.eventId, min: r.minimum, max: r.maximum});
+        });
         scope.isCollapsed = !scope.isCollapsed;
         allowProfileEdit();
       }
@@ -264,6 +266,9 @@
           scope.togglePanel();
         }
         scope.currentMember = member;
+        _.each(scope.currentMember.roles, function(r){ 
+          r.capacity = Capacity.get({id: r.roleId, eventId: scope.team.eventId, min: r.minimum, max: r.maximum});
+        });
         allowProfileEdit();
       }
 
