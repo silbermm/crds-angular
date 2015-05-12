@@ -23,8 +23,6 @@
 
     function link(scope, el, attr) {
 
-      console.log(scope.team);
-
       scope.attendingChanged = attendingChanged;
       scope.closePanel = closePanel;
       scope.currentActiveTab = null;
@@ -34,6 +32,7 @@
         startingDay: 1,
         showWeeks: 'false'
       };
+      scope.datePickers = {fromOpened : false, toOpened: false };
       scope.displayEmail = displayEmail;
       scope.editProfile = editProfile;
       scope.frequency = getFrequency();
@@ -43,7 +42,8 @@
       scope.isCollapsed = true;
       scope.isFormValid = isFormValid;
       scope.modalInstance = {};
-      scope.open = open;
+      scope.openFromDate = openFromDate;
+      scope.openToDate = openToDate;
       scope.openPanel = openPanel;
       scope.roleChanged = roleChanged;
       scope.roles = null;
@@ -151,14 +151,19 @@
             validForm.messageStr = $rootScope.MESSAGES.invalidDateRange;
           }
         }
-
         return validForm;
       }
 
-      function open($event, opened) {
+      function openFromDate($event) {
         $event.preventDefault();
         $event.stopPropagation();
-        scope[opened] = !scope[opened];
+        scope.datePickers.fromOpened = true;
+      }
+      
+      function openToDate($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        scope.datePickers.toOpened = true;
       }
 
       function openPanel(members) {

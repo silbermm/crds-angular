@@ -202,7 +202,10 @@ namespace crds_angular.test.Services
             opportunity.OpportunityId = opportunityId;
             opportunity.Responses = mockResponses;
 
-            var capacity = _fixture.OpportunityCapacity(opportunity, eventId, It.IsAny<string>());
+            _opportunityService.Setup(m => m.GetOpportunityResponses(opportunityId, It.IsAny<string>()))
+                .Returns(opportunity.Responses);
+
+            var capacity = _fixture.OpportunityCapacity(opportunityId, eventId, min, max, It.IsAny<string>());
 
             Assert.IsNotNull(capacity);
             Assert.AreEqual(capacity.Available, expectedCapacity.Available);
@@ -296,7 +299,10 @@ namespace crds_angular.test.Services
             opportunity.OpportunityId = opportunityId;
             opportunity.Responses = new List<Response>();
 
-            var capacity = _fixture.OpportunityCapacity(opportunity, eventId, It.IsAny<string>());
+            _opportunityService.Setup(m => m.GetOpportunityResponses(opportunityId, It.IsAny<string>()))
+                .Returns(opportunity.Responses);
+
+            var capacity = _fixture.OpportunityCapacity(opportunityId, eventId, opportunity.MinimumNeeded, opportunity.MaximumNeeded, It.IsAny<string>());
 
             Assert.IsNotNull(capacity);
             Assert.AreEqual(capacity.Display, false);
