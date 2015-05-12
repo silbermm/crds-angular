@@ -55,7 +55,6 @@
       scope.togglePanel = togglePanel;
       //////////////////////////////////////
 
-
       function attendingChanged() {
         roleChanged();
         scope.currentMember.showFrequency = true;
