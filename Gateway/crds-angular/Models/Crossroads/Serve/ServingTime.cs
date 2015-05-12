@@ -5,6 +5,9 @@ namespace crds_angular.Models.Crossroads.Serve
 {
     public class ServingTime
     {
+        [JsonProperty(PropertyName = "index")]
+        public long Index { get; set; }
+
         [JsonProperty(PropertyName = "time")]
         public string Time { get; set; }
 

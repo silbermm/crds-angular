@@ -169,9 +169,7 @@
                 url: "/opportunities",
                 controller: "ViewOpportunitiesController as opportunity",
                 templateUrl: "opportunity/view_opportunities.html",
-                data: {
-                    isProtected: true
-                },
+                data: { isProtected: true },
                 resolve: {
                   loggedin: checkLoggedin
                 }
@@ -182,11 +180,11 @@
               templateUrl: "my_serve/myserve.html",
               data: { isProtected: true },
               resolve: {
+                loggedin: checkLoggedin,
                 ServeOpportunities: 'ServeOpportunities',
                 Groups: function(ServeOpportunities){
-                  return ServeOpportunities.ServeDays.query().$promise;
-                },
-                loggedin: checkLoggedin
+                  return ServeOpportunities.ServeDays.query({id: getCookie('userId')} ).$promise;
+                }
               }
             })
             .state("styleguide", {
@@ -341,5 +339,5 @@
         //});
 
         $urlRouterProvider.otherwise("/");
-                    }]);
+    }]);
 })()

@@ -101,12 +101,14 @@
     <Compile Include="Services\EventService.cs" />
     <Compile Include="Services\CommunicationService.cs" />
     <Compile Include="Services\GetMyRecords.cs" />
+    <Compile Include="Services\GroupParticipantService.cs" />
     <Compile Include="Services\GroupService.cs" />
     <Compile Include="Services\Interfaces\IAuthenticationService.cs" />
     <Compile Include="Services\Interfaces\IContactRelationshipService.cs" />
     <Compile Include="Services\Interfaces\IContactService.cs" />
     <Compile Include="Services\Interfaces\IDonorService.cs" />
     <Compile Include="Services\Interfaces\IEventService.cs" />
+    <Compile Include="Services\Interfaces\IGroupParticipantService.cs" />
     <Compile Include="Services\Interfaces\IGroupService.cs" />
     <Compile Include="Services\Interfaces\IMinistryPlatformService.cs" />
     <Compile Include="Services\Interfaces\IOpportunityService.cs" />
@@ -119,6 +121,7 @@
     <Compile Include="Services\OpportunityServiceImpl.cs" />
     <Compile Include="Services\ParticipantService.cs" />
     <Compile Include="Services\ProgramService.cs" />
+    <Compile Include="Utils\DbConnectionNameTypeConverter.cs" />
     <Compile Include="Utils\MPFormatConversion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\PlatformService\Reference.cs">

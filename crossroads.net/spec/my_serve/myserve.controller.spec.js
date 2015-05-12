@@ -25,13 +25,6 @@ describe('MyServeController', function() {
       controller = $controller('MyServeController', { $scope: $scope });
     }));
 
-    it('should default to todays date', function(){
-      var today = new Date();
-      expect(controller.dt.getDate()).toBe(today.getDate());
-      expect(controller.dt.getDay()).toBe(today.getDay());
-      expect(controller.dt.getFullYear()).toBe(today.getFullYear());
-    });
-
     it('should show the opportunities message', function(){
       controller.groups = []; 
       expect(controller.showNoOpportunitiesMsg()).toBe(true);
