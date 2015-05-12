@@ -57,7 +57,10 @@ namespace crds_angular.Controllers.API
                 var apiError = new ApiErrorDto(msg, e);
                 throw new HttpResponseException(apiError.HttpResponseMessage);
             }
-            int existingDonorId = donor == null ? 0 : donor.DonorId;
+            int existingDonorId = 
+                (donor == null) ? 
+                    0 : 
+                    donor.DonorId;
 
             try
             {
@@ -78,8 +81,11 @@ namespace crds_angular.Controllers.API
             };
 
             // HTTP StatusCode should be 201 (Created) if we created a donor, or 200 (Ok) if returning an existing donor
-            var statusCode = existingDonorId == donor.DonorId ? HttpStatusCode.OK : HttpStatusCode.Created;
-            return(ResponseMessage(Request.CreateResponse<DonorDTO>(statusCode, responseBody)));
+            var statusCode =
+                (existingDonorId == donor.DonorId) ?
+                    HttpStatusCode.OK :
+                    HttpStatusCode.Created;
+            return (ResponseMessage(Request.CreateResponse<DonorDTO>(statusCode, responseBody)));
         }
 
         private IHttpActionResult CreateDonorForAuthenticatedUser(String authToken, CreateDonorDTO dto)
