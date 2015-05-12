@@ -11,9 +11,16 @@ namespace MinistryPlatform.Translation.Services
 {
     public class GroupParticipantService : IGroupParticipantService
     {
+        private IDbConnection _dbConnection;
+
+        public GroupParticipantService(IDbConnection dbConnection)
+        {
+            this._dbConnection = dbConnection;
+        }
         public List<GroupServingParticipant> GetServingParticipants(List<int> participants)
         {
-            var connection = DbConnection();
+            //var connection = DbConnection();
+            var connection = _dbConnection;
             try
             {
                 connection.Open();
@@ -91,13 +98,9 @@ namespace MinistryPlatform.Translation.Services
 
         private static IDbConnection DbConnection()
         {
-            var user = Environment.GetEnvironmentVariable("MP_API_DB_USER");
-            var password = Environment.GetEnvironmentVariable("MP_API_DB_PASSWORD");
             var mpConnectionString =
-                ConfigurationManager.ConnectionStrings["MinistryPlatformDatabaseSource"].ToString()
-                    .Replace("%MP_DB_USER%", user)
-                    .Replace("%MP_DB_PASSWORD%", password);
-
+                Environment.ExpandEnvironmentVariables(
+                    ConfigurationManager.ConnectionStrings["MinistryPlatformDatabase"].ConnectionString);
             IDbConnection connection = new SqlConnection(mpConnectionString);
             return connection;
         }

@@ -121,6 +121,7 @@
     <Compile Include="Services\OpportunityServiceImpl.cs" />
     <Compile Include="Services\ParticipantService.cs" />
     <Compile Include="Services\ProgramService.cs" />
+    <Compile Include="Utils\DbConnectionNameTypeConverter.cs" />
     <Compile Include="Utils\MPFormatConversion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\PlatformService\Reference.cs">
