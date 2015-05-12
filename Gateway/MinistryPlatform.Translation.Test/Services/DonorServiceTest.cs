@@ -146,8 +146,7 @@ namespace MinistryPlatform.Translation.Test.Services
             {
                 {"dp_RecordID", donorId},
                 {"Stripe_Customer_ID", stripeCustomerId},
-                {"Contact_ID", contactId},
-                {"Email_Address", email}
+                {"Contact_ID", contactId}
             });
             var donor = new Donor()
             {
@@ -169,7 +168,6 @@ namespace MinistryPlatform.Translation.Test.Services
             _ministryPlatformService.VerifyAll();
             Assert.AreEqual(response.DonorId, donor.DonorId);
             Assert.AreEqual(response.ContactId, donor.ContactId);
-            Assert.AreEqual(response.Email, donor.Email);
             Assert.AreEqual(response.StripeCustomerId, donor.StripeCustomerId);
         }
     }

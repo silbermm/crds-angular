@@ -121,8 +121,7 @@ namespace MinistryPlatform.Translation.Services
                 {
                     DonorId = record.ToInt("dp_RecordID"),
                     StripeCustomerId = record.ToString("Stripe_Customer_ID"),
-                    ContactId = record.ToInt("Contact_ID"),
-                    Email = record.ToString("Email_Address")
+                    ContactId = record.ToInt("Contact_ID")
                 };
             }
             catch (Exception ex)
