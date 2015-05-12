@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 
@@ -14,30 +11,16 @@ namespace MinistryPlatform.Translation.Services
 {
     public class GroupParticipantService : IGroupParticipantService
     {
-        //private IDbConnection _mpDbConnection;
-
-        //public GroupParticipantService(IDbConnection mpDbConnection)
-        //{
-        //    this._mpDbConnection = mpDbConnection;
-        //}
-        public List<GroupServingParticipant> GetServingParticipants()
+        public List<GroupServingParticipant> GetServingParticipants(List<int> participants)
         {
-            var user = Environment.GetEnvironmentVariable("MP_API_DB_USER");
-            var password = Environment.GetEnvironmentVariable("MP_API_DB_PASSWORD");
-            var mpConnectionString =
-                ConfigurationManager.ConnectionStrings["MinistryPlatformDatabaseSource"].ToString()
-                    .Replace("%MP_DB_USER%", user)
-                    .Replace("%MP_DB_PASSWORD%", password);
-
-            IDbConnection iconn = new SqlConnection(mpConnectionString);
-
+            var connection = DbConnection();
             try
             {
-                iconn.Open();
-                const string query =
-                    "SELECT *, Row_Number() Over ( Order By v.Event_Start_Date ) As AndyC FROM MinistryPlatform.dbo.vw_crds_Serving_Participants v WHERE v.Participant_ID IN ( 994377, 1446320, 1446324, 2057353 ) ORDER BY Event_Start_Date, Group_Name, Contact_ID";
-                IDbCommand icommand = new SqlCommand(query, (SqlConnection) iconn);
-                var reader = icommand.ExecuteReader();
+                connection.Open();
+
+                var command = CreateSqlCommand(participants);
+                command.Connection = connection;
+                var reader = command.ExecuteReader();
                 var groupServingParticipants = new List<GroupServingParticipant>();
                 while (reader.Read())
                 {
@@ -57,124 +40,97 @@ namespace MinistryPlatform.Translation.Services
                     participant.OpportunityMaximumNeeded = Convert.ToInt16(reader["Maximum_Needed"]);
                     participant.OpportunityMinimumNeeded = Convert.ToInt16(reader["Minimum_Needed"]);
                     participant.OpportunityRoleTitle = reader.GetString(reader.GetOrdinal("Role_Title"));
-                    participant.OpportunityShiftEnd = implGetTimeSpan(reader, "Shift_End");
-                    participant.OpportunityShiftStart = implGetTimeSpan(reader, "Shift_Start");
+                    participant.OpportunityShiftEnd = GetTimeSpan(reader, "Shift_End");
+                    participant.OpportunityShiftStart = GetTimeSpan(reader, "Shift_Start");
                     participant.OpportunityTitle = reader.GetString(reader.GetOrdinal("Opportunity_Title"));
                     participant.ParticipantNickname = reader.GetString(reader.GetOrdinal("Nickname"));
-                    participant.ParticipantEmail = reader.GetString(reader.GetOrdinal("Email_Address"));
+                    participant.ParticipantEmail = SafeString(reader, "Email_Address");
                     participant.ParticipantId = reader.GetInt32(reader.GetOrdinal("Participant_ID"));
                     participant.ParticipantLastName = reader.GetString(reader.GetOrdinal("Last_Name"));
-                    //participant.RowNumber = (int)reader[reader.GetOrdinal("RowNumber")];
-                    participant.RowNumber = reader.GetInt64(reader.GetOrdinal("AndyC"));
-                    participant.Rsvp = getNullableBool(reader, "Rsvp");
+                    participant.RowNumber = reader.GetInt64(reader.GetOrdinal("RowNumber"));
+                    participant.Rsvp = GetRsvp(reader, "Rsvp");
                     groupServingParticipants.Add(participant);
                 }
                 return groupServingParticipants;
             }
             finally
             {
-                iconn.Close();
+                connection.Close();
             }
-            
-
-            //var conn = new SqlConnection(mpConnection);
-            //SqlDataReader rdr = null;
-            //try
-            //{
-            //    conn.Open();
-            //    var command =
-            //        new SqlCommand(
-            //            "SELECT * FROM MinistryPlatform.dbo.vw_crds_Serving_Participants v WHERE v.Participant_ID IN ( 994377, 1446320, 1446324, 2057353 ) ",
-            //            conn);
-
-            //    rdr = command.ExecuteReader();
-
-            //    var list = new List<GroupServingParticipant>();
-            //    while (rdr.Read())
-            //    {
-            //        //Console.WriteLine(rdr[0]);
-            //        var s = new GroupServingParticipant();
-            //        s.DomainId = rdr.GetInt32(rdr.GetOrdinal("Domain_ID"));
-            //        s.EventId = rdr.GetInt32(rdr.GetOrdinal("Event_ID"));
-            //        s.EventStartDateTime = (DateTime) rdr["Event_Start_Date"];
-            //        s.EventTitle = rdr.GetString(rdr.GetOrdinal("Event_Title"));
-            //        s.GroupId = rdr.GetInt32(rdr.GetOrdinal("Group_ID"));
-            //        s.GroupName = rdr.GetString(rdr.GetOrdinal("Group_Name"));
-            //        s.GroupPrimaryContactEmail = rdr.GetString(rdr.GetOrdinal("Primary_Contact_Email"));
-            //        s.OpportunityId = rdr.GetInt32(rdr.GetOrdinal("Opportunity_ID"));
-            //        s.OpportunityMaximumNeeded = Convert.ToInt16(rdr["Maximum_Needed"]);
-            //        s.OpportunityMinimumNeeded = Convert.ToInt16(rdr["Minimum_Needed"]);
-            //        s.OpportunityRoleTitle = rdr.GetString(rdr.GetOrdinal("Role_Title"));
-            //        s.OpportunityShiftEnd = rdr.GetTimeSpan(rdr.GetOrdinal("Shift_End"));
-            //        s.OpportunityShiftStart = rdr.GetTimeSpan(rdr.GetOrdinal("Shift_Start"));
-            //        //s.OpportunitySignUpDeadline = rdr.GetInt32(rdr.GetOrdinal("Sign_Up_Deadline_ID"));
-            //        s.OpportunityTitle = rdr.GetString(rdr.GetOrdinal("Opportunity_Title"));
-            //        s.ParticipantNickname = rdr.GetString(rdr.GetOrdinal("Nickname"));
-            //        s.ParticipantEmail = rdr.GetString(rdr.GetOrdinal("Email_Address"));
-            //        s.ParticipantId = rdr.GetInt32(rdr.GetOrdinal("Participant_ID"));
-            //        s.ParticipantLastName = rdr.GetString(rdr.GetOrdinal("Last_Name"));
-            //        //bool? nullBoolean = null;
-            //        //bool? result = rdr.IsDBNull(rdr.GetOrdinal("Rsvp")) ? nullBoolean : (bool)rdr["Rsvp"];
-            //        //var thisThing = rdr.GetInt32(rdr.GetOrdinal("Rsvp"));
-            //        //var rsvp = Rsvp(rdr);
-            //        s.Rsvp = Rsvp(rdr);
-            //        list.Add(s);
-            //    }
-            //    return list;
-            //}
-            //finally
-            //{
-            //    // close the reader
-            //    if (rdr != null)
-            //    {
-            //        rdr.Close();
-            //    }
-
-            //    // 5. Close the connection
-            //    if (conn != null)
-            //    {
-            //        conn.Close();
-            //    }
-            //}
         }
 
-        private static bool? Rsvp(SqlDataReader rdr)
+        private IDbCommand CreateSqlCommand(IEnumerable<int> participants)
         {
+            var sb = new StringBuilder();
+            var i = 1;
+            var query =
+                @"SELECT *, 
+                        Row_Number() Over ( Order By v.Event_Start_Date ) As RowNumber 
+                    FROM MinistryPlatform.dbo.vw_crds_Serving_Participants v 
+                    WHERE v.Participant_ID IN ( @participants ) 
+                    ORDER BY Event_Start_Date, Group_Name, Contact_ID";
+
+            IDbCommand command = new SqlCommand();
+            command.CommandType = CommandType.Text;
+
+            foreach (var participant in participants)
+            {
+                sb.Append("@ParticipantId" + i + ",");
+
+                var c = new SqlParameter("@ParticipantId" + i, participant) {DbType = DbType.Int32};
+                command.Parameters.Add(c);
+                i++;
+            }
+
+            var tmp = sb.Remove(sb.Length - 1, 1);
+            query = query.Replace("@participants", tmp.ToString());
+            command.CommandText = query;
+
+            return command;
+        }
+
+        private static IDbConnection DbConnection()
+        {
+            var user = Environment.GetEnvironmentVariable("MP_API_DB_USER");
+            var password = Environment.GetEnvironmentVariable("MP_API_DB_PASSWORD");
+            var mpConnectionString =
+                ConfigurationManager.ConnectionStrings["MinistryPlatformDatabaseSource"].ToString()
+                    .Replace("%MP_DB_USER%", user)
+                    .Replace("%MP_DB_PASSWORD%", password);
+
+            IDbConnection connection = new SqlConnection(mpConnectionString);
+            return connection;
+        }
+
+        private static bool? GetRsvp(IDataRecord record, string columnName)
+        {
+            var ordinal = record.GetOrdinal(columnName);
             bool? rsvp = false;
-            if (rdr.IsDBNull(rdr.GetOrdinal("Rsvp")))
+            if (record.IsDBNull(ordinal))
             {
                 rsvp = null;
             }
-            else if (rdr.GetInt32(rdr.GetOrdinal("Rsvp")) == 1)
+            else if (record.GetInt32(ordinal) == 1)
             {
                 rsvp = true;
             }
             return rsvp;
         }
 
-        private static bool? getNullableBool(IDataReader rdr, string columnName)
+        private static TimeSpan GetTimeSpan(IDataRecord record, string columnName)
         {
-            var ordinal = rdr.GetOrdinal(columnName);
-            bool? rsvp = false;
-            if (rdr.IsDBNull(ordinal))
-            {
-                rsvp = null;
-            }
-            else if (rdr.GetInt32(ordinal) == 1)
-            {
-                rsvp = true;
-            }
-            return rsvp;
-        }
-
-        private static TimeSpan implGetTimeSpan(IDataReader dr, string columnName)
-        {
-            var columnIndex = dr.GetOrdinal(columnName);
-            var reader = dr as SqlDataReader;
+            var columnIndex = record.GetOrdinal(columnName);
+            var reader = record as SqlDataReader;
             if (reader == null) throw new Exception("The DataReader is not a SqlDataReader");
 
             var myTimeSpan = reader.GetTimeSpan(columnIndex);
             return myTimeSpan;
+        }
+
+        private string SafeString(IDataRecord record, string fieldName)
+        {
+            var ordinal = record.GetOrdinal(fieldName);
+            return !record.IsDBNull(ordinal) ? record.GetString(ordinal) : null;
         }
     }
 }

@@ -50,12 +50,12 @@ namespace crds_angular.test.controllers
             var servingTeams = SetUpServingTeams();
             var servingDays = SetUpServingDays();
 
-            _serveServiceMock.Setup(mocked => mocked.GetServingTeams(It.IsAny<string>()))
-                .Returns(servingTeams);
-            _serveServiceMock.Setup(mocked => mocked.GetServingDays(It.IsAny<string>()))
+            //_serveServiceMock.Setup(mocked => mocked.GetServingTeams(It.IsAny<string>()))
+            //    .Returns(servingTeams);
+            _serveServiceMock.Setup(mocked => mocked.GetServingDays(It.IsAny<string>(),contactId))
                 .Returns(servingDays);
 
-            IHttpActionResult result = _fixture.GetFamilyServeDays();
+            IHttpActionResult result = _fixture.GetFamilyServeDays(contactId);
 
             Assert.NotNull(result);
             Assert.IsInstanceOf<OkNegotiatedContentResult<List<ServingDay>>>(result);

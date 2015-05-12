@@ -168,11 +168,11 @@
               controller: "MyServeController as serve",
               templateUrl: "my_serve/myserve.html",
               data: { isProtected: true },
-              resolve: { 
+              resolve: {
                 loggedin: checkLoggedin,
                 ServeOpportunities: 'ServeOpportunities',
                 Groups: function(ServeOpportunities){
-                  return ServeOpportunities.ServeDays.query().$promise;
+                  return ServeOpportunities.ServeDays.query({id: getCookie('userId')} ).$promise;
                 }
               }
             })

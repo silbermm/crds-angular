@@ -80,163 +80,12 @@ namespace crds_angular.test.Services
 
             _personService.Setup(m => m.GetLoggedInUserProfile(It.IsAny<string>())).Returns(person);
 
-            _fixture = new ServeService(_groupService.Object, _contactRelationshipService.Object, _personService.Object,
-                _authenticationService.Object, _opportunityService.Object, _eventService.Object,
+            _fixture = new ServeService(_contactRelationshipService.Object, 
+                _opportunityService.Object, _eventService.Object,
                 _participantService.Object, _groupParticipantService.Object);
-             
 
             //force AutoMapper to register
             AutoMapperConfig.RegisterMappings();
-        }
-
-        [Test]
-        public void GetMyFamilyTest()
-        {
-            const string token = "some-string";
-            const int contactId = 123456;
-
-            _contactRelationshipService.Setup(
-                mocked => mocked.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>()))
-                .Returns(MockGetMyFamilyResponse());
-
-            _participantService.Setup(m => m.GetParticipant(It.IsAny<int>()))
-                .Returns(new Participant {ParticipantId = 1});
-
-            var familyMembers = _fixture.GetMyImmediateFamily(contactId, token);
-
-            _contactRelationshipService.VerifyAll();
-            _participantService.VerifyAll();
-
-            Assert.IsNotNull(familyMembers);
-            Assert.AreEqual(3, familyMembers.Count);
-
-            var familyMember = familyMembers[0];
-            Assert.AreEqual(1, familyMember.ContactId);
-            Assert.AreEqual("person-one@test.com", familyMember.Email);
-            Assert.AreEqual("person-one", familyMember.LastName);
-            Assert.AreEqual("preferred-name-one", familyMember.PreferredName);
-
-            familyMember = familyMembers[1];
-            Assert.AreEqual(2, familyMember.ContactId);
-            Assert.AreEqual("person-two@test.com", familyMember.Email);
-            Assert.AreEqual("person-two", familyMember.LastName);
-            Assert.AreEqual("preferred-name-two", familyMember.PreferredName);
-
-            familyMember = familyMembers[2];
-            Assert.AreEqual(123456, familyMember.ContactId);
-            Assert.AreEqual("contact@email.com", familyMember.Email);
-            Assert.AreEqual("last-name", familyMember.LastName);
-            Assert.AreEqual("nickname", familyMember.PreferredName);
-        }
-
-        [Test]
-        public void GetMyFamilyNoNicknameTest()
-        {
-            const string token = "some-string";
-            const int contactId = 123456;
-
-            //return 0 family members, only testing logic for main contact
-            _contactRelationshipService.Setup(
-                mocked => mocked.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>()))
-                .Returns(new List<ContactRelationship>());
-
-            _participantService.Setup(m => m.GetParticipant(It.IsAny<int>()))
-                .Returns(new Participant {ParticipantId = 1});
-
-            var familyMembers = _fixture.GetMyImmediateFamily(contactId, token);
-
-            _contactRelationshipService.VerifyAll();
-            _participantService.VerifyAll();
-
-            Assert.IsNotNull(familyMembers);
-            Assert.AreEqual(1, familyMembers.Count);
-
-            var familyMember = familyMembers[0];
-            Assert.AreEqual(123456, familyMember.ContactId);
-            Assert.AreEqual("contact@email.com", familyMember.Email);
-            Assert.AreEqual("last-name", familyMember.LastName);
-            Assert.AreEqual("nickname", familyMember.PreferredName);
-        }
-
-        [Test]
-        public void GetMyFamiliesServingTeamsTest()
-        {
-            const string token = "some-string";
-            const int contactId = 123456;
-
-            _contactRelationshipService.Setup(
-                mocked => mocked.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>()))
-                .Returns(MockGetMyFamilyResponse());
-
-            var familyMember1Groups = new List<Group>
-            {
-                new Group {GroupId = 1, Name = "group-1", GroupRole = "group-role-member"},
-                new Group {GroupId = 2, Name = "group-2", GroupRole = "group-role-member"},
-                new Group {GroupId = 2, Name = "group-2", GroupRole = "group-role-leader"},
-                new Group {GroupId = 3, Name = "group-3", GroupRole = "group-role-member"},
-                new Group {GroupId = 4, Name = "group-4", GroupRole = "group-role-member"}
-            };
-
-            var familyMember2Groups = new List<Group>
-            {
-                new Group {GroupId = 1, Name = "group-1", GroupRole = "group-role-member"},
-                new Group {GroupId = 2, Name = "group-2", GroupRole = "group-role-member"}
-            };
-
-            var myGroups = new List<Group>
-            {
-                new Group {GroupId = 1, Name = "group-1", GroupRole = "group-role-member"},
-                new Group {GroupId = 2, Name = "group-2", GroupRole = "group-role-member"},
-                new Group {GroupId = 3, Name = "group-3", GroupRole = "group-role-leader"}
-            };
-
-            const int mockFamilyContactId1 = 1;
-            const int mockFamilyContactId2 = 2;
-            _groupService.Setup(mocked => mocked.GetServingTeams(mockFamilyContactId1, token))
-                .Returns(familyMember1Groups);
-            _groupService.Setup(mocked => mocked.GetServingTeams(mockFamilyContactId2, token))
-                .Returns(familyMember2Groups);
-            _groupService.Setup(mocked => mocked.GetServingTeams(contactId, token)).Returns(myGroups);
-
-            _participantService.Setup(m => m.GetParticipant(It.IsAny<int>()))
-                .Returns(new Participant {ParticipantId = 1});
-
-            var teams = _fixture.GetServingTeams(token);
-
-            _contactRelationshipService.VerifyAll();
-            _groupService.VerifyAll();
-            _participantService.VerifyAll();
-
-            Assert.IsNotNull(teams);
-            Assert.AreEqual(4, teams.Count);
-
-            var team = teams[0];
-            Assert.AreEqual(1, team.GroupId);
-            Assert.AreEqual("group-1", team.Name);
-            Assert.AreEqual(3, team.Members.Count);
-            var member = team.Members[0];
-            Assert.AreEqual(1, member.ContactId);
-            Assert.AreEqual("preferred-name-one", member.Name);
-            Assert.AreEqual(1, member.Roles.Count);
-
-            team = teams[1];
-            Assert.AreEqual(2, team.GroupId);
-            Assert.AreEqual("group-2", team.Name);
-            Assert.AreEqual(3, team.Members.Count);
-            member = team.Members[0];
-            Assert.AreEqual(1, member.ContactId);
-            Assert.AreEqual("preferred-name-one", member.Name);
-            Assert.AreEqual(2, member.Roles.Count);
-
-            team = teams[2];
-            Assert.AreEqual(3, team.GroupId);
-            Assert.AreEqual("group-3", team.Name);
-            Assert.AreEqual(2, team.Members.Count);
-
-            team = teams[3];
-            Assert.AreEqual(4, team.GroupId);
-            Assert.AreEqual("group-4", team.Name);
-            Assert.AreEqual(1, team.Members.Count);
         }
 
         [Test]
@@ -306,9 +155,6 @@ namespace crds_angular.test.Services
             _opportunityService.Setup(mocked => mocked.GetOpportunitiesForGroup(It.IsAny<Int32>(), It.IsAny<string>()))
                 .Returns(opportunities);
 
-            var teams = new List<ServingTeam> {new ServingTeam {GroupId = 1}, new ServingTeam {GroupId = 2}};
-            //_serveService.Setup(mocked => mocked.GetServingTeams(It.IsAny<string>())).Returns(teams);
-
             _groupService.Setup(mocked => mocked.GetServingTeams(123456, It.IsAny<string>())).Returns(new List<Group>
             {
                 new Group {GroupId = 1, Name = "group-1", GroupRole = "group-role-member"},
@@ -321,7 +167,8 @@ namespace crds_angular.test.Services
             _participantService.Setup(m => m.GetParticipant(It.IsAny<int>()))
                 .Returns(new Participant {ParticipantId = 1});
 
-            var servingDays = _fixture.GetServingDays(It.IsAny<string>());
+            var contactId = 123456;
+            var servingDays = _fixture.GetServingDays(It.IsAny<string>(),contactId);
 
             _opportunityService.VerifyAll();
             _serveService.VerifyAll();
@@ -356,8 +203,6 @@ namespace crds_angular.test.Services
             opportunity.Responses = mockResponses;
 
             var capacity = _fixture.OpportunityCapacity(opportunity, eventId, It.IsAny<string>());
-
-            //_opportunityService.VerifyAll();
 
             Assert.IsNotNull(capacity);
             Assert.AreEqual(capacity.Available, expectedCapacity.Available);
@@ -564,7 +409,7 @@ namespace crds_angular.test.Services
         }
 
         [Test]
-        public void GetServingDaysFaster()
+        public void GetServingDaysTest()
         {
             var servingParticipants = new List<GroupServingParticipant>
             {
@@ -596,10 +441,11 @@ namespace crds_angular.test.Services
                     Rsvp = true
                 }
             };
+             
+            _groupParticipantService.Setup(m => m.GetServingParticipants(It.IsAny<List<int>>())).Returns(servingParticipants);
 
-            _groupParticipantService.Setup(m => m.GetServingParticipants()).Returns(servingParticipants);
-
-            var servingDays = _fixture.GetServingDaysFaster(It.IsAny<string>());
+            var contactId = 123456;
+            var servingDays = _fixture.GetServingDays(It.IsAny<string>(), contactId);
 
             Assert.NotNull(servingDays);
         }
@@ -678,7 +524,7 @@ namespace crds_angular.test.Services
             var responses = new List<Response>();
             for (var i = 0; i < 20; i++)
             {
-                responses.Add(new Response { Event_ID = 1000 });
+                responses.Add(new Response {Event_ID = 1000});
             }
             return responses;
         }
@@ -688,7 +534,7 @@ namespace crds_angular.test.Services
             var responses = new List<Response>();
             for (var i = 0; i < 15; i++)
             {
-                responses.Add(new Response { Event_ID = 1000 });
+                responses.Add(new Response {Event_ID = 1000});
             }
             return responses;
         }

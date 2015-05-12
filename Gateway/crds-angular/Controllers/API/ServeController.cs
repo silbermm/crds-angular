@@ -37,18 +37,14 @@ namespace crds_angular.Controllers.API
         }
 
         [ResponseType(typeof (List<ServingDay>))]
-        [Route("api/serve/family-serve-days")]
-        public IHttpActionResult GetFamilyServeDays()
+        [Route("api/serve/family-serve-days/{contactId}")]
+        public IHttpActionResult GetFamilyServeDays(int contactId)
         {
             return Authorized(token =>
             {
                 try
                 {
-                    var servingDays = _serveService.GetServingDaysFaster(token);
-                    if (servingDays == null)
-                    {
-                        return Unauthorized();
-                    }
+                    var servingDays = _serveService.GetServingDays(token, contactId);
                     return Ok(servingDays);
                 }
                 catch (Exception exception)
