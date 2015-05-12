@@ -6,9 +6,9 @@
     <span ng-bind-html="$root.messages[$root.MESSAGES.noServingOpportunities].message | html"></span>
   </div>
 
-  <div class="serve-day push-bottom" data-ng-repeat="group in serve.groups track by group.index" ng-show="group.serveTimes.length > 0">
+  <div class="serve-day push-bottom" data-ng-repeat="group in serve.groups" ng-show="group.serveTimes.length > 0">
     <h4>{{::serve.convertToDate(group.day) | date:'EEEE, MMMM dd, yyyy' }}</h4>
-    <serve-tabs opportunity="opp" serve-date="group.day" ng-repeat="opp in group.serveTimes track by opp.index" ng-show="opp.servingTeams.length > 0" >
+    <serve-tabs opportunity="opp" serve-date="group.day" ng-repeat="opp in group.serveTimes" ng-show="opp.servingTeams.length > 0" >
       </serve-tabs>
   </div><!-- serve day -->
 </div>
