@@ -2,8 +2,8 @@
 
   var getCookie = require('../../utilities/cookies');
 
-        
-  
+
+
 
   module.exports = PaymentService;
 
@@ -16,7 +16,7 @@
     };
 
     stripe.setPublishableKey(__STRIPE_PUBKEY__);
-    
+
     function createDonorWithCard(card) {
       var def = $q.defer();
       stripe.card.createToken(card)

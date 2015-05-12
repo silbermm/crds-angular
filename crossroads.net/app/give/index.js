@@ -31,4 +31,3 @@ app.directive("naturalNumber", require('./directives/naturalNumber.validation.di
 app.directive("invalidRouting", require('./directives/invalidRouting.validation.directive.js'));
 app.directive("invalidAccount", require('./directives/invalidAccount.validation.directive.js'));
 app.directive("invalidZip", require('./directives/invalidZip.validation.directive.js'));
-
