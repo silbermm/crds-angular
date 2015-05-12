@@ -142,14 +142,38 @@ namespace MinistryPlatform.Translation.Services
 
         }
 
-        public Donor GetPossibleGuestDonorContact(string emailAddress)
+        public Donor GetPossibleGuestDonorContact(string email)
         {
-            return (null);
+            // TODO - This whole method should be replaced with the same from US1252 when merging
+            Donor donor;
+            try
+            {
+                var searchStr = "," + email;
+                var records =
+                    WithApiLogin<List<Dictionary<string, object>>>(
+                        apiToken => (ministryPlatformService.GetPageViewRecords("PossibleGuestDonorContact", apiToken, searchStr, "")));
+                var record = records.First();
+                donor = new Donor()
+                {
+                    DonorId = record.ToInt("dp_RecordID"),
+                    StripeCustomerId = record.ToString("Stripe_Customer_ID"),
+                    ContactId = record.ToInt("Contact_ID"),
+                    //Email = record.ToString("Email_Address")
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(
+                    string.Format("GetPossibleGuestDonorContact failed. Email: {0}", email), ex);
+            }
+
+            return donor;
         }
 
         public int UpdatePaymentProcessorCustomerId(int donorId, string paymentProcessorCustomerId)
         {
-            return (0);
+            // TODO Update with implementation calling MP
+            return (donorId);
         }
     }
 }
