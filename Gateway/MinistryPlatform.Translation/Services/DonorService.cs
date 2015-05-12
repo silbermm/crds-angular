@@ -119,7 +119,7 @@ namespace MinistryPlatform.Translation.Services
                     var record = records.First();
                     donor = new Donor()
                     {
-                        DonorId = record.ToInt("dp_RecordID"),
+                        DonorId = record.ToInt("Donor_Record"),
                         StripeCustomerId = record.ToString("Stripe_Customer_ID"),
                         ContactId = record.ToInt("Contact_ID")
                     };
@@ -143,6 +143,10 @@ namespace MinistryPlatform.Translation.Services
             Donor donor;
             try
             {
+                if (email.Equals(String.Empty))
+                {
+                    return null;
+                }
                 var searchStr =  "," + email;
                 var records =
                     WithApiLogin<List<Dictionary<string, object>>>(

@@ -31,7 +31,7 @@ namespace crds_angular.Controllers.API
         }
 
         [ResponseType(typeof (DonorDTO))]
-        [Route("api/donor")]
+        [Route("api/donor/{email?}")]
         public IHttpActionResult Get(string email="")
         {
             return (Authorized(token => GetDonorForAuthenticatedUser(token), () => GetDonorForUnauthenticatedUser(email)));
@@ -96,14 +96,20 @@ namespace crds_angular.Controllers.API
             try
             {
                 var donor = donorService.GetPossibleGuestDonorContact(email);
-
-                var response = new DonorDTO
+                if (donor == null)
                 {
-                    id = donor.DonorId,
-                    stripe_customer_id = donor.StripeCustomerId
-                };
+                    return NotFound();
+                }
+                else
+                {
+                    var response = new DonorDTO
+                    {
+                        id = donor.DonorId,
+                        stripe_customer_id = donor.StripeCustomerId
+                    };
 
-                return Ok(response);
+                    return Ok(response); 
+                }
             }
             catch (Exception exception)
             {
