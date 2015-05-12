@@ -29,7 +29,7 @@ namespace crds_angular.test.Services
         {
             var donor = new Donor();
             mpDonorService.Setup(mocked => mocked.GetPossibleGuestDonorContact("me@here.com")).Returns(donor);
-            var response = fixture.getDonorForEmail("me@here.com");
+            var response = fixture.GetDonorForEmail("me@here.com");
 
             mpDonorService.VerifyAll();
             Assert.AreSame(donor, response);
@@ -45,7 +45,7 @@ namespace crds_angular.test.Services
                 StripeCustomerId = "stripe_cust_id"
             };
 
-            var response = fixture.createDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
+            var response = fixture.CreateDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
 
             mpDonorService.VerifyAll();
             mpContactService.VerifyAll();
@@ -59,11 +59,11 @@ namespace crds_angular.test.Services
         [Test]
         public void shouldCreateNewContactAndDonor()
         {
-            mpContactService.Setup(mocked => mocked.CreateContactForGuestGiver("me@here.com", "Guest Giver")).Returns(123);
+            mpContactService.Setup(mocked => mocked.CreateContactForGuestGiver("me@here.com", DonorService.GUEST_GIVER_DISPLAY_NAME)).Returns(123);
             paymentService.Setup(mocked => mocked.createCustomer("stripe_token")).Returns("stripe_cust_id");
             mpDonorService.Setup(mocked => mocked.CreateDonorRecord(123, "stripe_cust_id", It.IsAny<DateTime>())).Returns(456);
 
-            var response = fixture.createDonor(null, "me@here.com", "stripe_token", DateTime.Now);
+            var response = fixture.CreateDonor(null, "me@here.com", "stripe_token", DateTime.Now);
 
             mpDonorService.VerifyAll();
             mpContactService.VerifyAll();
@@ -86,7 +86,7 @@ namespace crds_angular.test.Services
             paymentService.Setup(mocked => mocked.createCustomer("stripe_token")).Returns("stripe_cust_id");
             mpDonorService.Setup(mocked => mocked.CreateDonorRecord(12345, "stripe_cust_id", It.IsAny<DateTime>())).Returns(456);
 
-            var response = fixture.createDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
+            var response = fixture.CreateDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
 
             mpDonorService.VerifyAll();
             mpContactService.VerifyAll();
@@ -109,7 +109,7 @@ namespace crds_angular.test.Services
             paymentService.Setup(mocked => mocked.createCustomer("stripe_token")).Returns("stripe_cust_id");
             mpDonorService.Setup(mocked => mocked.UpdatePaymentProcessorCustomerId(456, "stripe_cust_id")).Returns(456);
 
-            var response = fixture.createDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
+            var response = fixture.CreateDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
 
             mpDonorService.VerifyAll();
             mpContactService.VerifyAll();

@@ -13,7 +13,7 @@ namespace crds_angular.Services
         private IContactService mpContactService;
         private crds_angular.Services.Interfaces.IPaymentService paymentService;
 
-        private const string GUEST_GIVER_DISPLAY_NAME = "Guest Giver";
+        public const string GUEST_GIVER_DISPLAY_NAME = "Guest Giver";
 
         public DonorService(IDonorService mpDonorService, IContactService mpContactService, crds_angular.Services.Interfaces.IPaymentService paymentService)
         {
@@ -22,12 +22,12 @@ namespace crds_angular.Services
             this.paymentService = paymentService;
         }
 
-        public Donor getDonorForEmail(string emailAddress)
+        public Donor GetDonorForEmail(string emailAddress)
         {
             return (mpDonorService.GetPossibleGuestDonorContact(emailAddress));
         }
 
-        public Donor createDonor(Donor existingDonor, string emailAddress, string paymentProcessorToken, DateTime setupDate)
+        public Donor CreateDonor(Donor existingDonor, string emailAddress, string paymentProcessorToken, DateTime setupDate)
         {
             var donor = new Donor();
             if (existingDonor == null)

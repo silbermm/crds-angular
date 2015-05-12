@@ -35,25 +35,28 @@ namespace crds_angular.Controllers.API
         [Route("api/donor")]
         public IHttpActionResult Post([FromBody] CreateDonorDTO dto)
         {
-            return (Authorized(token => createDonorForAuthenticatedUser(token, dto), () => createDonorForUnauthenticatedUser(dto)));
+            return (Authorized(token => CreateDonorForAuthenticatedUser(token, dto), () => CreateDonorForUnauthenticatedUser(dto)));
         }
 
-        private IHttpActionResult createDonorForUnauthenticatedUser(CreateDonorDTO dto)
+        private IHttpActionResult CreateDonorForUnauthenticatedUser(CreateDonorDTO dto)
         {
-            var donor = gatewayDonorService.getDonorForEmail(dto.email_address);
+            var donor = gatewayDonorService.GetDonorForEmail(dto.email_address);
+            int existingDonorId = donor == null ? 0 : donor.DonorId;
 
-            donor = gatewayDonorService.createDonor(donor, dto.email_address, dto.stripe_token_id, DateTime.Now);
+            donor = gatewayDonorService.CreateDonor(donor, dto.email_address, dto.stripe_token_id, DateTime.Now);
 
-            var response = new DonorDTO
+            var responseBody = new DonorDTO
             {
                 id = donor.DonorId.ToString(),
                 stripe_customer_id = donor.StripeCustomerId,
             };
 
-            return Ok(response);
+            // HTTP StatusCode should be 201 (Created) if we created a donor, or 200 (Ok) if returning an existing donor
+            var statusCode = existingDonorId == donor.DonorId ? HttpStatusCode.OK : HttpStatusCode.Created;
+            return(ResponseMessage(Request.CreateResponse<DonorDTO>(statusCode, responseBody)));
         }
 
-        private IHttpActionResult createDonorForAuthenticatedUser(String authToken, CreateDonorDTO dto)
+        private IHttpActionResult CreateDonorForAuthenticatedUser(String authToken, CreateDonorDTO dto)
         {
             try
             {
