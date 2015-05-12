@@ -164,12 +164,35 @@ namespace crds_angular.test.Services
                 new Group {GroupId = 4, Name = "group-4", GroupRole = "group-role-member"}
             });
 
+            //mock this
+            //_contactRelationshipService.GetMyImmediatieFamilyRelationships(contactId, token).ToList();
+            var contactId = 123456;
+            var mockRelationships = new List<ContactRelationship>();
+            var mockRelationship1 = new ContactRelationship();
+            mockRelationship1.Contact_Id = 123456;
+            mockRelationship1.Participant_Id = 1;
+            var mockRelationship2 = new ContactRelationship();
+            mockRelationship2.Contact_Id = 123456;
+            mockRelationship2.Participant_Id = 2;
+            mockRelationships.Add(mockRelationship1);
+            mockRelationships.Add(mockRelationship2);
+
+            _contactRelationshipService.Setup(m => m.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>())).Returns(mockRelationships);
+
+
+            //mock this
+            //_participantService.GetParticipant(contactId);
+
             _participantService.Setup(m => m.GetParticipant(It.IsAny<int>()))
                 .Returns(new Participant {ParticipantId = 1});
 
-            var contactId = 123456;
+            //mock this
+            //_groupParticipantService.GetServingParticipants(participants);
+
+            //var contactId = 123456;
             var servingDays = _fixture.GetServingDays(It.IsAny<string>(),contactId);
 
+            _contactRelationshipService.VerifyAll();
             _opportunityService.VerifyAll();
             _serveService.VerifyAll();
             _groupService.VerifyAll();

@@ -6,14 +6,14 @@ namespace crds_angular.Models.Crossroads.Serve
 {
     public class ServingDay
     {
-        [JsonProperty(PropertyName = "index")]
-        public int Index { get; set; }
+        [JsonIgnore]
+        public DateTime Date { get; set; }
 
         [JsonProperty(PropertyName = "day")]
         public string Day { get; set; }
 
-        [JsonIgnore]
-        public DateTime Date { get; set; }
+        [JsonProperty(PropertyName = "index")]
+        public int Index { get; set; }
 
         [JsonProperty(PropertyName = "serveTimes")]
         public List<ServingTime> ServeTimes { get; set; }

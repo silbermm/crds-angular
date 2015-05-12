@@ -34,7 +34,7 @@ namespace crds_angular.test.controllers
             _serveServiceMock = new Mock<IServeService>();
             _authenticationServiceMock= new Mock<IAuthenticationService>();
 
-            _fixture = new ServeController(_serveServiceMock.Object, _authenticationServiceMock.Object);
+            _fixture = new ServeController(_serveServiceMock.Object);
 
             _authType = "auth_type";
             _authToken = "auth_token";
@@ -47,7 +47,7 @@ namespace crds_angular.test.controllers
         public void GetFamilyServeSignUpTest()
         {
             const int contactId = 123456;
-            var servingTeams = SetUpServingTeams();
+            //var servingTeams = SetUpServingTeams();
             var servingDays = SetUpServingDays();
 
             //_serveServiceMock.Setup(mocked => mocked.GetServingTeams(It.IsAny<string>()))

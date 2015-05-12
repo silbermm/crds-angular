@@ -18,14 +18,11 @@ namespace crds_angular.Controllers.API
 {
     public class ServeController : MPAuth
     {
-        private readonly IAuthenticationService _authenticationService;
-        private readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly IServeService _serveService;
 
-        public ServeController(IServeService serveService, IAuthenticationService authenticationService)
+        public ServeController(IServeService serveService)
         {
             _serveService = serveService;
-            _authenticationService = authenticationService;
         }
 
         [ResponseType(typeof (List<ServingDay>))]

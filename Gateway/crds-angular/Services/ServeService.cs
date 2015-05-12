@@ -242,6 +242,7 @@ namespace crds_angular.Services
             return new ServingTeam
             {
                 Index = record.RowNumber,
+                EventId = record.EventId,
                 EventType = record.EventType,
                 EventTypeId = record.EventTypeId,
                 GroupId = record.GroupId,
