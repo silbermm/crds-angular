@@ -52,11 +52,8 @@
       scope.signedup = null;
       scope.showEdit = false;
       scope.showIcon = showIcon;
-      scope.andy = false;
-
       scope.togglePanel = togglePanel;
       //////////////////////////////////////
-
 
       function attendingChanged() {
         roleChanged();
@@ -154,7 +151,6 @@
             validForm.messageStr = $rootScope.MESSAGES.invalidDateRange;
           }
         }
-
 
         return validForm;
       }

@@ -23,8 +23,6 @@
     vm.open = open;
     vm.original = [];
     vm.showNoOpportunitiesMsg = showNoOpportunitiesMsg;
-    vm.loading = true;
-    //vm.today = today;
     vm.toggleMin = toggleMin;
 
     activate();
@@ -35,19 +33,11 @@
       vm.groups = data;
     });
 
-    // $timeout(function(){
-    //   vm.loading = false;
-    //   vm.currentLimit = 1000;
-    // }, 1000);
-
-
     ////////////////////////////
     // Implementation Details //
     ////////////////////////////
 
     function activate(){
-      //today();
-      //toggleMin();
     }
 
     function today() {
