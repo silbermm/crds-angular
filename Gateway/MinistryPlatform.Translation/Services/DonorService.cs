@@ -17,7 +17,10 @@ namespace MinistryPlatform.Translation.Services
         private readonly int donorPageId = Convert.ToInt32(AppSettings("Donors"));
         private readonly int donationPageId = Convert.ToInt32((AppSettings("Donations")));
         private readonly int donationDistributionPageId = Convert.ToInt32(AppSettings("Distributions"));
-        
+
+        public const string DONOR_RECORD_ID = "dp_RecordID";
+        public const string DONOR_STRIPE_CUST_ID = "Stripe_Customer_ID";
+
         private IMinistryPlatformService ministryPlatformService;
 
         public DonorService(IMinistryPlatformService ministryPlatformService)
@@ -25,8 +28,8 @@ namespace MinistryPlatform.Translation.Services
             this.ministryPlatformService = ministryPlatformService;
         }
 
-        
-        public int CreateDonorRecord(int contactId, string stripeCustomerId, DateTime setupTime, 
+
+        public int CreateDonorRecord(int contactId, string stripeCustomerId, DateTime setupTime,
             int? statementFrequencyId = 1, // default to quarterly
             int? statementTypeId = 1, //default to individual
             int? statementMethodId = 2 // default to email/online
@@ -42,23 +45,23 @@ namespace MinistryPlatform.Translation.Services
                 {"Statement_Method_ID", statementMethodId},
                 {"Setup_Date", setupTime},    //default to current date/time
                 {"Stripe_Customer_ID", stripeCustomerId}
-            }; 
+            };
 
             int donorId;
 
             try
             {
-              donorId = WithApiLogin<int>(apiToken =>
-              {
-                  return (ministryPlatformService.CreateRecord(donorPageId, values, apiToken, true));
-              });
+                donorId = WithApiLogin<int>(apiToken =>
+                {
+                    return (ministryPlatformService.CreateRecord(donorPageId, values, apiToken, true));
+                });
             }
             catch (Exception e)
             {
-               throw new ApplicationException(string.Format("CreateDonorRecord failed.  Contact Id: {0}", contactId), e);
+                throw new ApplicationException(string.Format("CreateDonorRecord failed.  Contact Id: {0}", contactId), e);
             }
             return donorId;
-        
+
         }
 
         public int CreateDonationAndDistributionRecord(int donationAmt, int donorId, string programId, string charge_id, DateTime setupTime)
@@ -83,7 +86,7 @@ namespace MinistryPlatform.Translation.Services
                 throw new ApplicationException(string.Format("CreateDonationRecord failed.  Donor Id: {0}", donorId), e);
             }
 
-          
+
             var distributionValues = new Dictionary<string, object>
             {
                 {"Donation_ID", donationId},
@@ -123,8 +126,8 @@ namespace MinistryPlatform.Translation.Services
                 //var record = records.Single();
                 donor = new Donor()
                 {
-                    DonorId = record.ToInt("dp_RecordID"),
-                    StripeCustomerId = record.ToString("Stripe Customer ID"),
+                    DonorId = record.ToInt(DONOR_RECORD_ID),
+                    StripeCustomerId = record.ToString(DONOR_STRIPE_CUST_ID),
                     ContactId = record.ToInt("Contact ID"),
                     StatementFreq = record.ToString("Statement Frequency"),
                     StatementType = record.ToString("Statement Type"),
@@ -155,8 +158,8 @@ namespace MinistryPlatform.Translation.Services
                 var record = records.First();
                 donor = new Donor()
                 {
-                    DonorId = record.ToInt("dp_RecordID"),
-                    StripeCustomerId = record.ToString("Stripe_Customer_ID"),
+                    DonorId = record.ToInt(DONOR_RECORD_ID),
+                    StripeCustomerId = record.ToString(DONOR_STRIPE_CUST_ID),
                     ContactId = record.ToInt("Contact_ID"),
                     //Email = record.ToString("Email_Address")
                 };
@@ -172,7 +175,21 @@ namespace MinistryPlatform.Translation.Services
 
         public int UpdatePaymentProcessorCustomerId(int donorId, string paymentProcessorCustomerId)
         {
-            // TODO Update with implementation calling MP
+            var parms = new Dictionary<string, object> {
+                { DONOR_RECORD_ID, donorId },
+                { DONOR_STRIPE_CUST_ID, paymentProcessorCustomerId },
+            };
+
+            try
+            {
+                ministryPlatformService.UpdateRecord(donorPageId, parms, apiLogin());
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException(
+                    string.Format("UpdatePaymentProcessorCustomerId failed. donorId: {0}, paymentProcessorCustomerId: {1}", donorId, paymentProcessorCustomerId), e);
+            }
+
             return (donorId);
         }
     }

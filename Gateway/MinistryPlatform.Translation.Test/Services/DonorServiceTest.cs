@@ -121,6 +121,40 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(response, expectedDonationDistributionId);
         }
 
+        [Test]
+        public void shouldUpdatePaymentProcessorCustomerId()
+        {
+            _ministryPlatformService.Setup(mocked => mocked.UpdateRecord(299, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>()));
+
+            var response = _fixture.UpdatePaymentProcessorCustomerId(123, "456");
+
+            _ministryPlatformService.Verify(mocked => mocked.UpdateRecord(
+                299,
+                It.Is<Dictionary<string, object>>(
+                    d => ((int)d[DonorService.DONOR_RECORD_ID]) == 123
+                        && ((string)d[DonorService.DONOR_STRIPE_CUST_ID]).Equals("456")),
+                It.IsAny<string>()));
+            Assert.AreEqual(123, response);
+        }
+
+        [Test]
+        public void shouldThrowApplicationExceptionWhenMinistryPlatformUpdateFails()
+        {
+            var ex = new Exception("Oh no!!!");
+            _ministryPlatformService.Setup(mocked => mocked.UpdateRecord(299, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>())).Throws(ex);
+
+            try
+            {
+                _fixture.UpdatePaymentProcessorCustomerId(123, "456");
+                Assert.Fail("Expected exception was not thrown");
+            }
+            catch (Exception e)
+            {
+                Assert.IsInstanceOf(typeof(ApplicationException), e);
+                Assert.AreSame(ex, e.InnerException);
+            }
+        }
+
        
     }
 }
