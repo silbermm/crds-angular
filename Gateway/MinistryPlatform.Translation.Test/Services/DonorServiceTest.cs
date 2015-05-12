@@ -37,7 +37,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Statement_Type_ID", "1"},     //default to individual
                 {"Statement_Method_ID", 2},   //default to email/online
                 {"Setup_Date", setupDate},    //default to current date/time
-                {"Stripe_Customer_ID", "cus_crds123456"}    
+                {"Stripe_Customer_ID", "cus_crds123456"}
             };
 
            _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
@@ -47,9 +47,9 @@ namespace MinistryPlatform.Translation.Test.Services
            var response = _fixture.CreateDonorRecord(888888, "cus_crds123456", setupDate);
 
            _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donorPageId, expectedValues, It.IsAny<string>(), true));
-          
+
             Assert.AreEqual(response, expectedDonorId);
-  
+
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace MinistryPlatform.Translation.Test.Services
             var expectedDonationDistributionId = 231231;
             var donationPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Donations"]);
             var donationDistributionPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Distributions"]);
-            
+
 
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
               It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(),
@@ -83,7 +83,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Donation_Date", setupDate},
                 {"Transaction_code", charge_id}
             };
-            
+
             var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, donorId, programId, charge_id, setupDate);
 
             _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donationPageId, expectedDonationValues, It.IsAny<string>(), true));
@@ -144,7 +144,7 @@ namespace MinistryPlatform.Translation.Test.Services
             var expectedDonorValues = new List<Dictionary<string, object>>();
             expectedDonorValues.Add(new Dictionary<string, object>
             {
-                {"dp_RecordID", donorId},
+                {"Donor_Record", donorId},
                 {"Stripe_Customer_ID", stripeCustomerId},
                 {"Contact_ID", contactId}
             });
