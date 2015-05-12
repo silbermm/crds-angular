@@ -160,6 +160,70 @@ namespace crds_angular.test.controllers
             Assert.AreEqual("90210", responseDto.id);
             Assert.AreEqual("jenny_ive_got_your_number", responseDto.stripe_customer_id);
         }
+
+        [Test]
+        public void shouldThrowExceptionWhenDonorLookupFails()
+        {
+            fixture.Request.Headers.Authorization = null;
+
+            var createDonorDto = new CreateDonorDTO
+            {
+                stripe_token_id = "tok_test",
+                email_address = "me@here.com"
+            };
+
+            var lookupException = new Exception("Danger, Will Robinson!");
+
+            donorService.Setup(mocked => mocked.GetDonorForEmail(createDonorDto.email_address)).Throws(lookupException);
+
+            try {
+                fixture.Post(createDonorDto);
+                Assert.Fail("Expected exception was not thrown");
+            } catch(Exception e) {
+                Assert.AreEqual(typeof(HttpResponseException), e.GetType());
+            }
+
+            donorService.VerifyAll();
+
+        }
+
+        [Test]
+        public void shouldThrowExceptionWhenDonorCreationFails()
+        {
+            fixture.Request.Headers.Authorization = null;
+
+            var createDonorDto = new CreateDonorDTO
+            {
+                stripe_token_id = "tok_test",
+                email_address = "me@here.com"
+            };
+
+            var lookupDonor = new Donor
+            {
+                ContactId = 8675309,
+                DonorId = 90210,
+                StripeCustomerId = "jenny_ive_got_your_number"
+            };
+
+            var createException = new Exception("Danger, Will Robinson!");
+
+            donorService.Setup(mocked => mocked.GetDonorForEmail(createDonorDto.email_address)).Returns(lookupDonor);
+            donorService.Setup(mocked => mocked.CreateDonor(It.Is<Donor>(d => d == lookupDonor), createDonorDto.email_address, createDonorDto.stripe_token_id, It.IsAny<DateTime>())).Throws(createException);
+
+            try
+            {
+                fixture.Post(createDonorDto);
+                Assert.Fail("Expected exception was not thrown");
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual(typeof(HttpResponseException), e.GetType());
+            }
+
+            donorService.VerifyAll();
+        }
+
+
     
     }
 }

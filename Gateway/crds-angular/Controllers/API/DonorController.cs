@@ -12,6 +12,8 @@ using crds_angular.Services.Interfaces;
 using crds_angular.test.controllers;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 using crds_angular.Models.Crossroads;
+using MinistryPlatform.Models;
+using log4net;
 
 namespace crds_angular.Controllers.API
 {
@@ -21,6 +23,8 @@ namespace crds_angular.Controllers.API
         private IDonorService gatewayDonorService;
         private IPaymentService stripeService;
         private MPInterfaces.IAuthenticationService authenticationService;
+
+        private static readonly ILog logger = LogManager.GetLogger(typeof(DonorController));
 
         public DonorController(MPInterfaces.IDonorService mpDonorService, IPaymentService stripeService,
             MPInterfaces.IAuthenticationService authenticationService, IDonorService gatewayDonorService)
@@ -40,10 +44,31 @@ namespace crds_angular.Controllers.API
 
         private IHttpActionResult CreateDonorForUnauthenticatedUser(CreateDonorDTO dto)
         {
-            var donor = gatewayDonorService.GetDonorForEmail(dto.email_address);
+            Donor donor;
+            try
+            {
+                donor = gatewayDonorService.GetDonorForEmail(dto.email_address);
+            }
+            catch (Exception e)
+            {
+                var msg = "Error getting donor for email " + dto.email_address;
+                logger.Error(msg, e);
+                var apiError = new ApiErrorDto(msg, e);
+                throw new HttpResponseException(apiError.HttpResponseMessage);
+            }
             int existingDonorId = donor == null ? 0 : donor.DonorId;
 
-            donor = gatewayDonorService.CreateDonor(donor, dto.email_address, dto.stripe_token_id, DateTime.Now);
+            try
+            {
+                donor = gatewayDonorService.CreateDonor(donor, dto.email_address, dto.stripe_token_id, DateTime.Now);
+            }
+            catch (Exception e)
+            {
+                var msg = "Error creating donor for email " + dto.email_address;
+                logger.Error(msg, e);
+                var apiError = new ApiErrorDto(msg, e);
+                throw new HttpResponseException(apiError.HttpResponseMessage);
+            }
 
             var responseBody = new DonorDTO
             {
