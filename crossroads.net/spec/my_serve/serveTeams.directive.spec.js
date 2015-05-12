@@ -43,25 +43,32 @@ describe('Serve Teams Directive', function() {
 
   it("should set the current member to the loggedin user", function(){
     var isolated = element.isolateScope();
+    //$httpBackend.expect('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity?id=145').respond(200);
     isolated.openPanel(mockTeam[0].members);
+    //$httpBackend.flush();
     expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
   });
 
   it("should handle changing the tab", function(){
-     var isolated = element.isolateScope();
-     isolated.setActiveTab(mockTeam[0].members[1]);
-     expect(isolated.currentMember).toBe(mockTeam[0].members[1]);
-     expect(isolated.currentActiveTab).toBe(mockTeam[0].members[1].name);
+    var isolated = element.isolateScope();
+    //$httpBackend.expect('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity?id=145').respond(200);
+    isolated.setActiveTab(mockTeam[0].members[1]);
+    //$httpBackend.flush();
+    expect(isolated.currentMember).toBe(mockTeam[0].members[1]);
+    expect(isolated.currentActiveTab).toBe(mockTeam[0].members[1].name);
   });
 
   it("should get the last serving date for an opportunity", function() {
     var isolated = element.isolateScope();
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity?id=145').respond(200, {});
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity').respond(200, {});
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({'date': '1444552200'});
     isolated.openPanel(mockTeam[0].members);
     expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
+    $httpBackend.flush();
     // scope.currentMember.serveRsvp.roleId
     isolated.currentMember.currentOpportunity = mockTeam[0].members[0].roles[0];
     isolated.currentMember.currentOpportunity.frequency = {value:1, text:"Every Week (Sundays 8:30am)"};
-    $httpBackend.expect('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({'date': '1444552200'});
     isolated.populateDates();
     $httpBackend.flush()
     expect(isolated.currentMember.currentOpportunity.toDt).toBe("10/11/2015");
@@ -69,7 +76,11 @@ describe('Serve Teams Directive', function() {
 
   it("should set the end date to the current opportunity when selecting 'once'", function(){
     var isolated = element.isolateScope();
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity?id=145').respond(200, {});
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity').respond(200, {});
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({'date': '1444552200'});
     isolated.openPanel(mockTeam[0].members);
+    $httpBackend.flush();
     expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
     isolated.currentMember.currentOpportunity = mockTeam[0].members[0].roles[0];
     isolated.currentMember.currentOpportunity.frequency = {value:0, text:"Once"};
@@ -79,7 +90,13 @@ describe('Serve Teams Directive', function() {
 
   it("should save the response of one time rsvping", function(){
     var isolated = element.isolateScope();
+
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity?id=145').respond(200, {});
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity').respond(200, {});
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({'date': '1444552200'});
+    $httpBackend.when('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/save-rsvp', rsvp ).respond(200, '');
     isolated.openPanel(mockTeam[0].members);
+    $httpBackend.flush();
     expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
     isolated.currentMember.currentOpportunity = mockTeam[0].members[0].roles[0];
     isolated.currentMember.currentOpportunity.frequency = {value:0, text:"Once"};
@@ -99,7 +116,6 @@ describe('Serve Teams Directive', function() {
       alternateWeeks: false
     };
     isolated.populateDates();
-    $httpBackend.expect('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/save-rsvp', rsvp ).respond(200, '');
     isolated.saveRsvp();
     $httpBackend.flush();
   });

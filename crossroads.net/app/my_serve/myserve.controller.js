@@ -10,18 +10,14 @@
 
     var vm = this;
 
-    vm.clear = clear;
     vm.convertToDate = convertToDate;
     vm.dateOptions = { formatYear: 'yy', startingDay: 1 };
-    vm.disabled = disabled;
     vm.filterState = filterState;
     vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
     vm.format = vm.formats[0];
     vm.groups = Groups;
-    vm.open = open;
     vm.original = [];
     vm.showNoOpportunitiesMsg = showNoOpportunitiesMsg;
-    vm.toggleMin = toggleMin;
 
     activate();
 
