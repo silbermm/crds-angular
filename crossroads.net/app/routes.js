@@ -165,6 +165,7 @@
               url: "/corkboard/create",
               controller: "CorkboardCtrl as corkboard",
               templateUrl: "corkboard/corkboard-create.html"
+            })
             .state("corkboard-detail", {
               url: "/corkboard/detail",
               controller: "CorkboardCtrl as corkboard",
