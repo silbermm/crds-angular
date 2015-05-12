@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
@@ -19,7 +18,6 @@ namespace MinistryPlatform.Translation.Services
         }
         public List<GroupServingParticipant> GetServingParticipants(List<int> participants)
         {
-            //var connection = DbConnection();
             var connection = _dbConnection;
             try
             {
@@ -95,16 +93,7 @@ namespace MinistryPlatform.Translation.Services
 
             return command;
         }
-
-        private static IDbConnection DbConnection()
-        {
-            var mpConnectionString =
-                Environment.ExpandEnvironmentVariables(
-                    ConfigurationManager.ConnectionStrings["MinistryPlatformDatabase"].ConnectionString);
-            IDbConnection connection = new SqlConnection(mpConnectionString);
-            return connection;
-        }
-
+        
         private static bool? GetRsvp(IDataRecord record, string columnName)
         {
             var ordinal = record.GetOrdinal(columnName);
