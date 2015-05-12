@@ -114,15 +114,20 @@ namespace MinistryPlatform.Translation.Services
                 var records =
                     WithApiLogin<List<Dictionary<string, object>>>(
                         apiToken => (ministryPlatformService.GetPageViewRecords("DonorByContactId", apiToken, searchStr, "")));
-                var record = records.First();
-                //I changed this because my contact has multiple donor records.  Need to change back 
-                //var record = records.Single();
-                donor = new Donor()
+                if (records.Count > 0)
                 {
-                    DonorId = record.ToInt("dp_RecordID"),
-                    StripeCustomerId = record.ToString("Stripe_Customer_ID"),
-                    ContactId = record.ToInt("Contact_ID")
-                };
+                    var record = records.First();
+                    donor = new Donor()
+                    {
+                        DonorId = record.ToInt("dp_RecordID"),
+                        StripeCustomerId = record.ToString("Stripe_Customer_ID"),
+                        ContactId = record.ToInt("Contact_ID")
+                    };
+                }
+                else
+                {
+                    return null;
+                }
             }
             catch (Exception ex)
             {
@@ -142,14 +147,21 @@ namespace MinistryPlatform.Translation.Services
                 var records =
                     WithApiLogin<List<Dictionary<string, object>>>(
                         apiToken => (ministryPlatformService.GetPageViewRecords("PossibleGuestDonorContact", apiToken, searchStr, "")));
-                var record = records.First();
-                donor = new Donor()
+                if (records.Count > 0)
                 {
-                    DonorId = record.ToInt("dp_RecordID"),
-                    StripeCustomerId = record.ToString("Stripe_Customer_ID"),
-                    ContactId = record.ToInt("Contact_ID"),
-                    Email = record.ToString("Email_Address")
-                };
+                    var record = records.First();
+                    donor = new Donor()
+                    {
+                        DonorId = record.ToInt("dp_RecordID"),
+                        StripeCustomerId = record.ToString("Stripe_Customer_ID"),
+                        ContactId = record.ToInt("Contact_ID"),
+                        Email = record.ToString("Email_Address")
+                    };
+                }
+                else
+                {
+                    return null;
+                }
             }
             catch (Exception ex)
             {

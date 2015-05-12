@@ -176,6 +176,8 @@
         vm.submitBankInfo = function() {
             vm.bankinfoSubmitted = true;
             if ($scope.giveForm.accountForm.$valid) {
+              PaymentService.donor.get($scope.accountForm.email_field.email);
+              alert(PaymentService.donor);
               if (PaymentService.donor.id === undefined) {
                 PaymentService.createDonorWithCard({
                   name: vm.nameOnCard,
@@ -187,7 +189,7 @@
                 .then(function(donor) {
                     PaymentService.donateToProgram(vm.program.ProgramId, vm.amount, donor.id)
                         .then(function(confirmation){
-                            vm.program_name = _.result(_.find(vm.programsInput, 
+                            vm.program_name = _.result(_.find(vm.programsInput,
                               {'ProgramId': confirmation.program_id}), 'Name');
                             vm.amount = confirmation.amount;
                             $state.go("give.thank-you");
