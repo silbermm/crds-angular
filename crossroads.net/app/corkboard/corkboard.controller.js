@@ -8,6 +8,7 @@
     vm.mstep = 15;
     vm.isMeridian = true;
     vm.myTime = Date.now();
+    vm.view = "corkboard-listings.html";
 
     vm.openDatePicker = openDatePicker;
 
