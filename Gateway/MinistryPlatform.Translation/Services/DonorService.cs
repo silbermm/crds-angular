@@ -18,7 +18,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int donationPageId = Convert.ToInt32((AppSettings("Donations")));
         private readonly int donationDistributionPageId = Convert.ToInt32(AppSettings("Distributions"));
 
-        public const string DONOR_RECORD_ID = "dp_RecordID";
+        public const string DONOR_RECORD_ID = "Donor_Record";
         public const string DONOR_STRIPE_CUST_ID = "Stripe_Customer_ID";
 
         private IMinistryPlatformService ministryPlatformService;
@@ -126,7 +126,7 @@ namespace MinistryPlatform.Translation.Services
                 //var record = records.Single();
                 donor = new Donor()
                 {
-                    DonorId = record.ToInt(DONOR_RECORD_ID),
+                    DonorId = record.ToInt("dp_RecordID"),
                     StripeCustomerId = record.ToString(DONOR_STRIPE_CUST_ID),
                     ContactId = record.ToInt("Contact ID"),
                     StatementFreq = record.ToString("Statement Frequency"),
@@ -155,6 +155,11 @@ namespace MinistryPlatform.Translation.Services
                 var records =
                     WithApiLogin<List<Dictionary<string, object>>>(
                         apiToken => (ministryPlatformService.GetPageViewRecords("PossibleGuestDonorContact", apiToken, searchStr, "")));
+                if (records == null || records.Count <= 0)
+                {
+                    return (null);
+                }
+
                 var record = records.First();
                 donor = new Donor()
                 {
@@ -176,7 +181,7 @@ namespace MinistryPlatform.Translation.Services
         public int UpdatePaymentProcessorCustomerId(int donorId, string paymentProcessorCustomerId)
         {
             var parms = new Dictionary<string, object> {
-                { DONOR_RECORD_ID, donorId },
+                { "dp_RecordID", donorId },
                 { DONOR_STRIPE_CUST_ID, paymentProcessorCustomerId },
             };
 
