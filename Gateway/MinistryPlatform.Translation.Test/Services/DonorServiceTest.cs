@@ -32,8 +32,8 @@ namespace MinistryPlatform.Translation.Test.Services
             var expectedValues = new Dictionary<string, object>
             {
                 {"Contact_ID", 888888},
-                {"Statement_Frequency_ID", "1"},//default to quarterly
-                {"Statement_Type_ID", "1"},     //default to individual
+                {"Statement_Frequency_ID", 1},//default to quarterly
+                {"Statement_Type_ID", 1},     //default to individual
                 {"Statement_Method_ID", 2},   //default to email/online
                 {"Setup_Date", setupDate},    //default to current date/time
                 {"Stripe_Customer_ID", "cus_crds123456"}    
@@ -49,6 +49,35 @@ namespace MinistryPlatform.Translation.Test.Services
           
             Assert.AreEqual(response, expectedDonorId);
   
+        }
+
+        [Test]
+        public void CreateDonorRecordWithNonDefaultValuesTest()
+        {
+            var donorPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Donors"]);
+            var expectedDonorId = 585858;
+            var setupDate = DateTime.Now;
+
+            var expectedValues = new Dictionary<string, object>
+            {
+                {"Contact_ID", 888888},
+                {"Statement_Frequency_ID", 5},//default to quarterly
+                {"Statement_Type_ID", 6},     //default to individual
+                {"Statement_Method_ID", 7},   //default to email/online
+                {"Setup_Date", setupDate},    //default to current date/time
+                {"Stripe_Customer_ID", "cus_crds123456"}    
+            };
+
+            _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
+               It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(),
+               It.IsAny<string>(), true)).Returns(expectedDonorId);
+
+            var response = _fixture.CreateDonorRecord(888888, "cus_crds123456", setupDate, 5, 6, 7);
+
+            _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donorPageId, expectedValues, It.IsAny<string>(), true));
+
+            Assert.AreEqual(response, expectedDonorId);
+
         }
 
         [Test]
