@@ -114,24 +114,63 @@ namespace MinistryPlatform.Translation.Services
                 var records =
                     WithApiLogin<List<Dictionary<string, object>>>(
                         apiToken => (ministryPlatformService.GetPageViewRecords("DonorByContactId", apiToken, searchStr, "")));
-                var record = records.First();
-                //I changed this because my contact has multiple donor records.  Need to change back 
-                //var record = records.Single();
-                donor = new Donor()
+                if (records.Count > 0)
                 {
-                    DonorId = record.ToInt("dp_RecordID"),
-                    StripeCustomerId = record.ToString("Stripe Customer ID"),
-                    ContactId = record.ToInt("Contact ID"),
-                    StatementFreq = record.ToString("Statement Frequency"),
-                    StatementType = record.ToString("Statement Type"),
-                    StatementMethod = record.ToString("Statement Method"),
-                    SetupDate = record.ToDate("Setup Date")
-                };
+                    var record = records.First();
+                    donor = new Donor()
+                    {
+                        DonorId = record.ToInt("Donor_Record"),
+                        StripeCustomerId = record.ToString("Stripe_Customer_ID"),
+                        ContactId = record.ToInt("Contact_ID")
+                    };
+                }
+                else
+                {
+                    return null;
+                }
             }
             catch (Exception ex)
             {
                 throw new ApplicationException(
                     string.Format("GetDonorRecord failed.  Contact Id: {0}", contactId), ex);
+            }
+
+            return donor;
+
+        }
+        public Donor GetPossibleGuestDonorContact(string email)
+        {
+            Donor donor;
+            try
+            {
+                if (email.Equals(String.Empty))
+                {
+                    return null;
+                }
+                var searchStr =  "," + email;
+                var records =
+                    WithApiLogin<List<Dictionary<string, object>>>(
+                        apiToken => (ministryPlatformService.GetPageViewRecords("PossibleGuestDonorContact", apiToken, searchStr, "")));
+                if (records.Count > 0)
+                {
+                    var record = records.First();
+                    donor = new Donor()
+                    {
+                        DonorId = record.ToInt("dp_RecordID"),
+                        StripeCustomerId = record.ToString("Stripe_Customer_ID"),
+                        ContactId = record.ToInt("Contact_ID"),
+                        Email = record.ToString("Email_Address")
+                    };
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(
+                    string.Format("GetPossibleGuestDonorContact failed. Email: {0}", email), ex);
             }
 
             return donor;
