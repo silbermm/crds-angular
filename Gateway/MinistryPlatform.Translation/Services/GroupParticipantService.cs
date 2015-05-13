@@ -72,7 +72,7 @@ namespace MinistryPlatform.Translation.Services
             var i = 1;
 
             var fromDate = from == 0 ? DateTime.Today : from.FromUnixTime();
-            var toDate = to == 0 ? DateTime.Today : to.FromUnixTime();
+            var toDate = to == 0 ? DateTime.Today.AddDays(28) : to.FromUnixTime();
                
 
             var query =
@@ -89,7 +89,6 @@ namespace MinistryPlatform.Translation.Services
             foreach (var participant in participants)
             {
                 sb.Append("@ParticipantId" + i + ",");
-
                 var c = new SqlParameter("@ParticipantId" + i, participant) {DbType = DbType.Int32};
                 command.Parameters.Add(c);
                 i++;
