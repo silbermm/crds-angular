@@ -24,6 +24,7 @@ namespace crds_angular.test.Services
         private Mock<IServeService> _serveService;
         private Mock<IEventService> _eventService;
         private Mock<IParticipantService> _participantService;
+        private Mock<IGroupParticipantService> _groupParticipantService;
 
         private ServeService _fixture;
 
@@ -39,6 +40,7 @@ namespace crds_angular.test.Services
             _eventService = new Mock<IEventService>();
             _serveService = new Mock<IServeService>();
             _participantService = new Mock<IParticipantService>();
+            _groupParticipantService = new Mock<IGroupParticipantService>();
 
             _authenticationService.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Returns(123456);
             var myContact = new MyContact
@@ -78,265 +80,174 @@ namespace crds_angular.test.Services
 
             _personService.Setup(m => m.GetLoggedInUserProfile(It.IsAny<string>())).Returns(person);
 
-            _fixture = new ServeService(_groupService.Object, _contactRelationshipService.Object, _personService.Object,
-                _authenticationService.Object, _opportunityService.Object, _eventService.Object,
-                _participantService.Object);
+            _fixture = new ServeService(_contactRelationshipService.Object,
+                _opportunityService.Object, _eventService.Object,
+                _participantService.Object, _groupParticipantService.Object);
 
             //force AutoMapper to register
             AutoMapperConfig.RegisterMappings();
         }
 
         [Test]
-        public void GetMyFamilyTest()
-        {
-            const string token = "some-string";
-            const int contactId = 123456;
-
-            _contactRelationshipService.Setup(
-                mocked => mocked.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>()))
-                .Returns(MockGetMyFamilyResponse());
-
-            _participantService.Setup(m => m.GetParticipant(It.IsAny<int>()))
-                .Returns(new Participant {ParticipantId = 1});
-
-            var familyMembers = _fixture.GetMyImmediateFamily(contactId, token);
-
-            _contactRelationshipService.VerifyAll();
-            _participantService.VerifyAll();
-
-            Assert.IsNotNull(familyMembers);
-            Assert.AreEqual(3, familyMembers.Count);
-
-            var familyMember = familyMembers[0];
-            Assert.AreEqual(1, familyMember.ContactId);
-            Assert.AreEqual("person-one@test.com", familyMember.Email);
-            Assert.AreEqual("person-one", familyMember.LastName);
-            Assert.AreEqual("preferred-name-one", familyMember.PreferredName);
-
-            familyMember = familyMembers[1];
-            Assert.AreEqual(2, familyMember.ContactId);
-            Assert.AreEqual("person-two@test.com", familyMember.Email);
-            Assert.AreEqual("person-two", familyMember.LastName);
-            Assert.AreEqual("preferred-name-two", familyMember.PreferredName);
-
-            familyMember = familyMembers[2];
-            Assert.AreEqual(123456, familyMember.ContactId);
-            Assert.AreEqual("contact@email.com", familyMember.Email);
-            Assert.AreEqual("last-name", familyMember.LastName);
-            Assert.AreEqual("nickname", familyMember.PreferredName);
-        }
-
-        [Test]
-        public void GetMyFamilyNoNicknameTest()
-        {
-            const string token = "some-string";
-            const int contactId = 123456;
-
-            //return 0 family members, only testing logic for main contact
-            _contactRelationshipService.Setup(
-                mocked => mocked.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>()))
-                .Returns(new List<ContactRelationship>());
-
-            _participantService.Setup(m => m.GetParticipant(It.IsAny<int>()))
-                .Returns(new Participant {ParticipantId = 1});
-
-            var familyMembers = _fixture.GetMyImmediateFamily(contactId, token);
-
-            _contactRelationshipService.VerifyAll();
-            _participantService.VerifyAll();
-
-            Assert.IsNotNull(familyMembers);
-            Assert.AreEqual(1, familyMembers.Count);
-
-            var familyMember = familyMembers[0];
-            Assert.AreEqual(123456, familyMember.ContactId);
-            Assert.AreEqual("contact@email.com", familyMember.Email);
-            Assert.AreEqual("last-name", familyMember.LastName);
-            Assert.AreEqual("nickname", familyMember.PreferredName);
-        }
-
-        [Test]
-        public void GetMyFamiliesServingTeamsTest()
-        {
-            const string token = "some-string";
-            const int contactId = 123456;
-
-            _contactRelationshipService.Setup(
-                mocked => mocked.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>()))
-                .Returns(MockGetMyFamilyResponse());
-
-            var familyMember1Groups = new List<Group>
-            {
-                new Group {GroupId = 1, Name = "group-1", GroupRole = "group-role-member"},
-                new Group {GroupId = 2, Name = "group-2", GroupRole = "group-role-member"},
-                new Group {GroupId = 2, Name = "group-2", GroupRole = "group-role-leader"},
-                new Group {GroupId = 3, Name = "group-3", GroupRole = "group-role-member"},
-                new Group {GroupId = 4, Name = "group-4", GroupRole = "group-role-member"}
-            };
-
-            var familyMember2Groups = new List<Group>
-            {
-                new Group {GroupId = 1, Name = "group-1", GroupRole = "group-role-member"},
-                new Group {GroupId = 2, Name = "group-2", GroupRole = "group-role-member"}
-            };
-
-            var myGroups = new List<Group>
-            {
-                new Group {GroupId = 1, Name = "group-1", GroupRole = "group-role-member"},
-                new Group {GroupId = 2, Name = "group-2", GroupRole = "group-role-member"},
-                new Group {GroupId = 3, Name = "group-3", GroupRole = "group-role-leader"}
-            };
-
-            const int mockFamilyContactId1 = 1;
-            const int mockFamilyContactId2 = 2;
-            _groupService.Setup(mocked => mocked.GetServingTeams(mockFamilyContactId1, token))
-                .Returns(familyMember1Groups);
-            _groupService.Setup(mocked => mocked.GetServingTeams(mockFamilyContactId2, token))
-                .Returns(familyMember2Groups);
-            _groupService.Setup(mocked => mocked.GetServingTeams(contactId, token)).Returns(myGroups);
-
-            _participantService.Setup(m => m.GetParticipant(It.IsAny<int>()))
-                .Returns(new Participant {ParticipantId = 1});
-
-            var teams = _fixture.GetServingTeams(token);
-
-            _contactRelationshipService.VerifyAll();
-            _groupService.VerifyAll();
-            _participantService.VerifyAll();
-
-            Assert.IsNotNull(teams);
-            Assert.AreEqual(4, teams.Count);
-
-            var team = teams[0];
-            Assert.AreEqual(1, team.GroupId);
-            Assert.AreEqual("group-1", team.Name);
-            Assert.AreEqual(3, team.Members.Count);
-            var member = team.Members[0];
-            Assert.AreEqual(1, member.ContactId);
-            Assert.AreEqual("preferred-name-one", member.Name);
-            Assert.AreEqual(1, member.Roles.Count);
-
-            team = teams[1];
-            Assert.AreEqual(2, team.GroupId);
-            Assert.AreEqual("group-2", team.Name);
-            Assert.AreEqual(3, team.Members.Count);
-            member = team.Members[0];
-            Assert.AreEqual(1, member.ContactId);
-            Assert.AreEqual("preferred-name-one", member.Name);
-            Assert.AreEqual(2, member.Roles.Count);
-
-            team = teams[2];
-            Assert.AreEqual(3, team.GroupId);
-            Assert.AreEqual("group-3", team.Name);
-            Assert.AreEqual(2, team.Members.Count);
-
-            team = teams[3];
-            Assert.AreEqual(4, team.GroupId);
-            Assert.AreEqual("group-4", team.Name);
-            Assert.AreEqual(1, team.Members.Count);
-        }
-
-        [Test]
         public void GetMyFamiliesServingEventsTest()
         {
-            var today = DateTime.Now;
-            var startTimeEightThirty = new DateTime(today.Year, today.Month, today.Day, 8, 30, 0);
-            var startTimeTen = new DateTime(today.Year, today.Month, today.Day, 10, 00, 0);
+            var contactId = 123456;
 
-            var eventsList1 = new List<Event>
-            {
-                new Event
-                {
-                    EventId = 1,
-                    EventStartDate = startTimeEightThirty,
-                    EventTitle = "event-1-title",
-                    EventType = "event-type-1"
-                },
-                new Event
-                {
-                    EventId = 2,
-                    EventStartDate = startTimeTen,
-                    EventTitle = "event-2-title",
-                    EventType = "event-type-2"
-                }
-            };
-
-            var eventsList2 = new List<Event>
-            {
-                new Event
-                {
-                    EventId = 3,
-                    EventStartDate = startTimeEightThirty,
-                    EventTitle = "event-3-title",
-                    EventType = "event-type-3"
-                },
-                new Event
-                {
-                    EventId = 4,
-                    EventStartDate = startTimeTen,
-                    EventTitle = "event-4-title",
-                    EventType = "event-type-4"
-                }
-            };
-
-            var opportunities = new List<Opportunity>
-            {
-                new Opportunity
-                {
-                    EventType = "event-type-1",
-                    Events = eventsList1,
-                    OpportunityId = 1,
-                    OpportunityName = "opportunity-name-1",
-                    RoleTitle = "opportunity-1-role-title",
-                    Responses = new List<Response> {new Response {Event_ID = 1}, new Response {Event_ID = 2}}
-                },
-                new Opportunity
-                {
-                    EventType = "event-type-2",
-                    Events = eventsList2,
-                    OpportunityId = 2,
-                    OpportunityName = "opportunity-name-2",
-                    RoleTitle = "opportunity-2-role-title",
-                    Responses = new List<Response> {new Response {Event_ID = 3}, new Response {Event_ID = 4}}
-                }
-            };
-            _opportunityService.Setup(mocked => mocked.GetOpportunitiesForGroup(It.IsAny<Int32>(), It.IsAny<string>()))
-                .Returns(opportunities);
-
-            var teams = new List<ServingTeam> {new ServingTeam {GroupId = 1}, new ServingTeam {GroupId = 2}};
-            //_serveService.Setup(mocked => mocked.GetServingTeams(It.IsAny<string>())).Returns(teams);
-
-            _groupService.Setup(mocked => mocked.GetServingTeams(123456, It.IsAny<string>())).Returns(new List<Group>
-            {
-                new Group {GroupId = 1, Name = "group-1", GroupRole = "group-role-member"},
-                new Group {GroupId = 2, Name = "group-2", GroupRole = "group-role-member"},
-                new Group {GroupId = 2, Name = "group-2", GroupRole = "group-role-leader"},
-                new Group {GroupId = 3, Name = "group-3", GroupRole = "group-role-member"},
-                new Group {GroupId = 4, Name = "group-4", GroupRole = "group-role-member"}
-            });
+            _contactRelationshipService.Setup(m => m.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>())).Returns(MockContactRelationships());
 
             _participantService.Setup(m => m.GetParticipant(It.IsAny<int>()))
-                .Returns(new Participant {ParticipantId = 1});
+                .Returns(new Participant { ParticipantId = 1 });
 
-            var servingDays = _fixture.GetServingDays(It.IsAny<string>());
+            _groupParticipantService.Setup(g => g.GetServingParticipants(It.IsAny<List<int>>())).Returns(MockGroupServingParticipants());
 
-            _opportunityService.VerifyAll();
+            var servingDays = _fixture.GetServingDays(It.IsAny<string>(), contactId);
+
+            _contactRelationshipService.VerifyAll();
+            _groupParticipantService.Verify();
             _serveService.VerifyAll();
             _groupService.VerifyAll();
             _participantService.VerifyAll();
 
             Assert.IsNotNull(servingDays);
-            Assert.AreEqual(1, servingDays.Count);
+            Assert.AreEqual(2, servingDays.Count);
             var servingDay = servingDays[0];
             Assert.AreEqual(2, servingDay.ServeTimes.Count);
 
             var servingTime = servingDay.ServeTimes[0];
-            Assert.AreEqual(4, servingTime.ServingTeams.Count);
-            Assert.AreEqual("08:30:00", servingTime.Time);
+            Assert.AreEqual(1, servingTime.ServingTeams.Count);
 
             servingTime = servingDay.ServeTimes[1];
-            Assert.AreEqual(4, servingTime.ServingTeams.Count);
-            Assert.AreEqual("10:00:00", servingTime.Time);
+            Assert.AreEqual(1, servingTime.ServingTeams.Count);
+        }
+
+        private static List<GroupServingParticipant> MockGroupServingParticipants()
+        {
+            var servingParticipants = new List<GroupServingParticipant>
+            {
+                new GroupServingParticipant
+                {
+                    ContactId = 2,
+                    DomainId = 1,
+                    EventId = 3,
+                    EventStartDateTime = DateTime.Now,
+                    EventTitle = "Serving Event",
+                    EventType = "Event Type",
+                    EventTypeId = 4,
+                    GroupId = 5,
+                    GroupName = "Group",
+                    GroupPrimaryContactEmail = "group@leader.com",
+                    GroupRoleId = 6,
+                    OpportunityId = 7,
+                    OpportunityMaximumNeeded = 10,
+                    OpportunityMinimumNeeded = 5,
+                    OpportunityRoleTitle = "Member",
+                    OpportunityShiftEnd = TimeSpan.Parse("8:30"),
+                    OpportunityShiftStart = TimeSpan.Parse("10:30"),
+                    OpportunitySignUpDeadline = 7,
+                    OpportunityTitle = "Serving",
+                    ParticipantEmail = "partici@pants.com",
+                    ParticipantId = 8,
+                    ParticipantLastName = "McServer",
+                    ParticipantNickname = "Servy",
+                    Rsvp = true
+                },
+                new GroupServingParticipant
+                {
+                    ContactId = 2,
+                    DomainId = 1,
+                    EventId = 3,
+                    EventStartDateTime = DateTime.Now.AddHours(4),
+                    EventTitle = "Serving Event",
+                    EventType = "Event Type",
+                    EventTypeId = 4,
+                    GroupId = 5,
+                    GroupName = "Group",
+                    GroupPrimaryContactEmail = "group@leader.com",
+                    GroupRoleId = 6,
+                    OpportunityId = 7,
+                    OpportunityMaximumNeeded = 10,
+                    OpportunityMinimumNeeded = 5,
+                    OpportunityRoleTitle = "Member",
+                    OpportunityShiftEnd = TimeSpan.Parse("8:30"),
+                    OpportunityShiftStart = TimeSpan.Parse("10:30"),
+                    OpportunitySignUpDeadline = 7,
+                    OpportunityTitle = "Serving",
+                    ParticipantEmail = "partici@pants.com",
+                    ParticipantId = 8,
+                    ParticipantLastName = "McServer",
+                    ParticipantNickname = "Servy",
+                    Rsvp = true
+                },
+                new GroupServingParticipant
+                {
+                    ContactId = 2,
+                    DomainId = 1,
+                    EventId = 3,
+                    EventStartDateTime = DateTime.Now.AddDays(1),
+                    EventTitle = "Serving Event",
+                    EventType = "Event Type",
+                    EventTypeId = 4,
+                    GroupId = 5,
+                    GroupName = "Group",
+                    GroupPrimaryContactEmail = "group@leader.com",
+                    GroupRoleId = 6,
+                    OpportunityId = 7,
+                    OpportunityMaximumNeeded = 10,
+                    OpportunityMinimumNeeded = 5,
+                    OpportunityRoleTitle = "Member",
+                    OpportunityShiftEnd = TimeSpan.Parse("8:30"),
+                    OpportunityShiftStart = TimeSpan.Parse("10:30"),
+                    OpportunitySignUpDeadline = 7,
+                    OpportunityTitle = "Serving",
+                    ParticipantEmail = "partici@pants.com",
+                    ParticipantId = 8,
+                    ParticipantLastName = "McServer",
+                    ParticipantNickname = "Servy",
+                    Rsvp = true
+                },
+                new GroupServingParticipant
+                {
+                    ContactId = 2,
+                    DomainId = 1,
+                    EventId = 3,
+                    EventStartDateTime = DateTime.Now.AddDays(1).AddHours(4),
+                    EventTitle = "Serving Event",
+                    EventType = "Event Type",
+                    EventTypeId = 4,
+                    GroupId = 5,
+                    GroupName = "Group",
+                    GroupPrimaryContactEmail = "group@leader.com",
+                    GroupRoleId = 6,
+                    OpportunityId = 7,
+                    OpportunityMaximumNeeded = 10,
+                    OpportunityMinimumNeeded = 5,
+                    OpportunityRoleTitle = "Member",
+                    OpportunityShiftEnd = TimeSpan.Parse("8:30"),
+                    OpportunityShiftStart = TimeSpan.Parse("10:30"),
+                    OpportunitySignUpDeadline = 7,
+                    OpportunityTitle = "Serving",
+                    ParticipantEmail = "partici@pants.com",
+                    ParticipantId = 8,
+                    ParticipantLastName = "McServer",
+                    ParticipantNickname = "Servy",
+                    Rsvp = true
+                }
+            };
+            return servingParticipants;
+        }
+
+        private static List<ContactRelationship> MockContactRelationships()
+        {
+            var mockRelationships = new List<ContactRelationship>();
+            var mockRelationship1 = new ContactRelationship();
+            mockRelationship1.Contact_Id = 1111111;
+            mockRelationship1.Participant_Id = 1;
+            var mockRelationship2 = new ContactRelationship();
+            mockRelationship2.Contact_Id = 123456;
+            mockRelationship2.Participant_Id = 2;
+            mockRelationships.Add(mockRelationship1);
+            mockRelationships.Add(mockRelationship2);
+            return mockRelationships;
         }
 
         [Test, TestCaseSource("OpportunityCapacityCases")]
@@ -352,9 +263,10 @@ namespace crds_angular.test.Services
             opportunity.OpportunityId = opportunityId;
             opportunity.Responses = mockResponses;
 
-            var capacity = _fixture.OpportunityCapacity(opportunity, eventId, It.IsAny<string>());
+            _opportunityService.Setup(m => m.GetOpportunityResponses(opportunityId, It.IsAny<string>()))
+                .Returns(opportunity.Responses);
 
-            //_opportunityService.VerifyAll();
+            var capacity = _fixture.OpportunityCapacity(opportunityId, eventId, min, max, It.IsAny<string>());
 
             Assert.IsNotNull(capacity);
             Assert.AreEqual(capacity.Available, expectedCapacity.Available);
@@ -448,7 +360,10 @@ namespace crds_angular.test.Services
             opportunity.OpportunityId = opportunityId;
             opportunity.Responses = new List<Response>();
 
-            var capacity = _fixture.OpportunityCapacity(opportunity, eventId, It.IsAny<string>());
+            _opportunityService.Setup(m => m.GetOpportunityResponses(opportunityId, It.IsAny<string>()))
+                .Returns(opportunity.Responses);
+
+            var capacity = _fixture.OpportunityCapacity(opportunityId, eventId, opportunity.MinimumNeeded, opportunity.MaximumNeeded, It.IsAny<string>());
 
             Assert.IsNotNull(capacity);
             Assert.AreEqual(capacity.Display, false);
@@ -513,7 +428,7 @@ namespace crds_angular.test.Services
             const int eventTypeId = 3;
             const bool signUp = true;
             const bool alternateWeeks = true;
-            var expectedEventIds = new List<int> {1, 3, 5};
+            var expectedEventIds = new List<int> { 1, 3, 5 };
 
             SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp);
 
@@ -541,7 +456,7 @@ namespace crds_angular.test.Services
             const int eventTypeId = 3;
             const bool signUp = false;
             const bool alternateWeeks = true;
-            var expectedEventIds = new List<int> {1, 3, 5};
+            var expectedEventIds = new List<int> { 1, 3, 5 };
 
             SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp);
 

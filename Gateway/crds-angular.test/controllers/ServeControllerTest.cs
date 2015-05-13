@@ -34,7 +34,7 @@ namespace crds_angular.test.controllers
             _serveServiceMock = new Mock<IServeService>();
             _authenticationServiceMock= new Mock<IAuthenticationService>();
 
-            _fixture = new ServeController(_serveServiceMock.Object, _authenticationServiceMock.Object);
+            _fixture = new ServeController(_serveServiceMock.Object);
 
             _authType = "auth_type";
             _authToken = "auth_token";
@@ -47,15 +47,15 @@ namespace crds_angular.test.controllers
         public void GetFamilyServeSignUpTest()
         {
             const int contactId = 123456;
-            var servingTeams = SetUpServingTeams();
+            //var servingTeams = SetUpServingTeams();
             var servingDays = SetUpServingDays();
 
-            _serveServiceMock.Setup(mocked => mocked.GetServingTeams(It.IsAny<string>()))
-                .Returns(servingTeams);
-            _serveServiceMock.Setup(mocked => mocked.GetServingDays(It.IsAny<string>()))
+            //_serveServiceMock.Setup(mocked => mocked.GetServingTeams(It.IsAny<string>()))
+            //    .Returns(servingTeams);
+            _serveServiceMock.Setup(mocked => mocked.GetServingDays(It.IsAny<string>(),contactId))
                 .Returns(servingDays);
 
-            IHttpActionResult result = _fixture.GetFamilyServeDays();
+            IHttpActionResult result = _fixture.GetFamilyServeDays(contactId);
 
             Assert.NotNull(result);
             Assert.IsInstanceOf<OkNegotiatedContentResult<List<ServingDay>>>(result);
@@ -98,8 +98,8 @@ namespace crds_angular.test.controllers
                             Roles =
                                 new List<ServeRole>
                                 {
-                                    new ServeRole {Name = "Leader" , Capacity = new Capacity{Available = 49,BadgeType = "",Display = false,Maximum = 0,Message = "", Minimum = 0}},
-                                    new ServeRole {Name = "Member", Capacity = new Capacity{Available = 49,BadgeType = "",Display = false,Maximum = 0,Message = "", Minimum = 0}}
+                                    new ServeRole {Name = "Leader" },
+                                    new ServeRole {Name = "Member"}
                                 }
                         },
                         new TeamMember
@@ -109,8 +109,8 @@ namespace crds_angular.test.controllers
                             Roles =
                                 new List<ServeRole>
                                 {
-                                    new ServeRole { Name = "Admin", Capacity = new Capacity{Available = 49,BadgeType = "",Display = false,Maximum = 0,Message = "", Minimum = 0}},
-                                    new ServeRole { Name = "Member", Capacity = new Capacity{Available = 49,BadgeType = "",Display = false,Maximum = 0,Message = "", Minimum = 0}}
+                                    new ServeRole { Name = "Admin"},
+                                    new ServeRole { Name = "Member"}
                                 }
                         }
                     }
@@ -129,8 +129,8 @@ namespace crds_angular.test.controllers
                             Roles =
                                 new List<ServeRole>
                                 {
-                                    new ServeRole { Name = "Leader", Capacity = new Capacity{Available = 49,BadgeType = "",Display = false,Maximum = 0,Message = "", Minimum = 0}},
-                                    new ServeRole { Name = "Member", Capacity = new Capacity{Available = 49,BadgeType = "",Display = false,Maximum = 0,Message = "", Minimum = 0}}
+                                    new ServeRole { Name = "Leader"},
+                                    new ServeRole { Name = "Member"}
                                 }
                         },
                         new TeamMember
@@ -140,8 +140,8 @@ namespace crds_angular.test.controllers
                             Roles =
                                 new List<ServeRole>
                                 {
-                                    new ServeRole { Name = "Admin", Capacity = new Capacity{Available = 49,BadgeType = "",Display = false,Maximum = 0,Message = "", Minimum = 0}},
-                                    new ServeRole { Name = "Member", Capacity = new Capacity{Available = 49,BadgeType = "",Display = false,Maximum = 0,Message = "", Minimum = 0}}
+                                    new ServeRole { Name = "Admin"},
+                                    new ServeRole { Name = "Member"}
                                 }
                         }
                     }

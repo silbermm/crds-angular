@@ -5,6 +5,7 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Results;
 using crds_angular.Controllers.API;
+using crds_angular.Models.Crossroads;
 using MinistryPlatform.Translation.Services.Interfaces;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
@@ -73,7 +74,7 @@ namespace crds_angular.test.controllers
                 .Returns(donor);
 
             stripeServiceMock.Setup(
-                mocked => mocked.chargeCustomer(donor.StripeCustomerId, createDonationDTO.amount, donor.DonorId.ToString()))
+                mocked => mocked.chargeCustomer(donor.StripeCustomerId, createDonationDTO.amount, donor.DonorId))
                 .Returns(charge_id);
 
             donorServiceMock.Setup(mocked => mocked.

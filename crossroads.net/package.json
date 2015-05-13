@@ -88,7 +88,7 @@
     "angular-ui-select": "./app/third-party/angular/select.min.js",
     "angular-aside": "./app/third-party/angular/angular-aside.min.js",
     "angular-match-media": "./app/third-party/angular/match-media.js",
-    "_comment_angular-payments" : "Refer to https://github.com/raaspazasu/ngPayments",
+    "_comment_angular-payments": "Refer to https://github.com/raaspazasu/ngPayments",
     "angular-payments": "./app/third-party/angular/angular.payments.js"
   }
 }

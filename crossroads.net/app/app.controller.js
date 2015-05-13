@@ -37,7 +37,9 @@
     });
 
     $scope.$on('$stateChangeError', function(event,toState, toParams, fromState, fromParams){
-      
+      //TODO: put the 'toState' in the session if we want to redirect to that page 
+      vm.resolving = false;
+      $state.go('content', {link:'/server-error/'});
     });
 
 

@@ -7,10 +7,10 @@ namespace crds_angular.Services.Interfaces
 {
     public interface IServeService
     {
-        List<FamilyMember> GetMyImmediateFamily(int contactId, string token);
-        List<ServingTeam> GetServingTeams(string token);
-        List<ServingDay> GetServingDays(string token);
+        List<FamilyMemberDto> GetImmediateFamilyParticipants(int contactId, string token);
         DateTime GetLastServingDate(int opportunityId, string token);
+        List<ServingDay> GetServingDays(string token, int contactId);
+        Capacity OpportunityCapacity(int opportunityId, int eventId, int? minNeeded, int? maxNeeded, string token);
         bool SaveServeRsvp(string token, int contactid, int opportunityId, int eventTypeId, DateTime startDate,
             DateTime endDate, bool signUp, bool alternateWeeks);
     }

@@ -18,6 +18,9 @@ namespace crds_angular.Models.Crossroads.Serve
         [JsonProperty(PropertyName = "emailAddress")]
         public string EmailAddress { get; set; }
 
+    [JsonProperty(PropertyName = "index")]
+        public long Index { get; set; }
+
         [JsonProperty(PropertyName = "roles")]
         public List<ServeRole> Roles { get; set; }
 

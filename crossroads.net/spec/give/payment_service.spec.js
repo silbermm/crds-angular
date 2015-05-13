@@ -20,13 +20,13 @@ describe ('PaymentService', function () {
               var last4 = card.number.slice(-4);
               return {
                 then : function(callback) {return callback({id: "tok_test", card: { last4: last4}});}
-              }
+              };
             }
           }
       });
     });
     return null;
-  })
+  });
 
   beforeEach(inject(function(_$injector_, $httpBackend, _PaymentService_) {
       var $injector = _$injector_;
@@ -52,7 +52,7 @@ describe ('PaymentService', function () {
       var postData = {
         stripe_token_id: "tok_test",
         email_address: "me@here.com"
-      }
+      };
       httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/donor', postData)
         .respond({
           id: "12345",
@@ -79,7 +79,7 @@ describe ('PaymentService', function () {
     it('should return error if there is problem calling donor service', function() {
       var postData = {
         stripe_token_id: "tok_test"
-      }
+      };
       httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/donor', postData)
         .respond(400,{
           message: "Token not found"
@@ -102,7 +102,7 @@ describe ('PaymentService', function () {
         program_id: "Program",
         amount: "1234",
         donor_id: "Donor"
-      }
+      };
 
     httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/donation', postData)
         .respond({

@@ -1,4 +1,4 @@
-namespace crds_angular.test.controllers
+namespace crds_angular.Models.Crossroads
 {
     public class CreateDonorDTO
     {

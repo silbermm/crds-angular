@@ -12,6 +12,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         DateTime GetLastOpportunityDate(int opportunityId, string token);
         int RespondToOpportunity(string token, int opportunityId, string comments);
         Response GetOpportunityResponse(int opportunityId, int eventId, Participant participant);
+        List<Response> GetOpportunityResponses(int opportunityId, string token);
         int RespondToOpportunity(int participantId, int opportunityId, string comments, int eventId, bool response);
         Group GetGroupParticipantsForOpportunity(int id, string token);
     }
