@@ -121,8 +121,8 @@ namespace crds_angular.test.Services
                 DonorId = 456,
             };
 
-            paymentService.Setup(mocked => mocked.createCustomer("stripe_token")).Returns("processor_ID");
-            mpDonorService.Setup(mocked => mocked.UpdatePaymentProcessorCustomerId(456, "processor_ID")).Returns(456);
+            paymentService.Setup(mocked => mocked.createCustomer("stripe_token")).Returns("processor_id");
+            mpDonorService.Setup(mocked => mocked.UpdatePaymentProcessorCustomerId(456, "processor_id")).Returns(456);
 
             var response = fixture.CreateDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
 
@@ -132,7 +132,7 @@ namespace crds_angular.test.Services
 
             Assert.AreEqual(12345, response.ContactId);
             Assert.AreEqual(456, response.DonorId);
-            Assert.AreEqual("processor_ID", response.ProcessorId);
+            Assert.AreEqual("processor_id", response.ProcessorId);
         }
     }
 }
