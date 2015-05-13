@@ -16,8 +16,8 @@ namespace MinistryPlatform.Models
         public int GroupRoleId { get; set; }
         public string GroupPrimaryContactEmail { get; set; }
         public int OpportunityId { get; set; }
-        public int OpportunityMaximumNeeded { get; set; }
-        public int OpportunityMinimumNeeded { get; set; }
+        public int? OpportunityMaximumNeeded { get; set; }
+        public int? OpportunityMinimumNeeded { get; set; }
         public string OpportunityRoleTitle { get; set; }
         public TimeSpan OpportunityShiftEnd { get; set; }
         public TimeSpan OpportunityShiftStart { get; set; }
