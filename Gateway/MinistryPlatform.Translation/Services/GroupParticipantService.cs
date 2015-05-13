@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Security.Cryptography;
 using System.Text;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
+using Crossroads.Utilities.Extensions;
 
 namespace MinistryPlatform.Translation.Services
 {
@@ -16,14 +18,14 @@ namespace MinistryPlatform.Translation.Services
         {
             this._dbConnection = dbConnection;
         }
-        public List<GroupServingParticipant> GetServingParticipants(List<int> participants)
+        public List<GroupServingParticipant> GetServingParticipants(List<int> participants, long from , long to)
         {
             var connection = _dbConnection;
             try
             {
                 connection.Open();
 
-                var command = CreateSqlCommand(participants);
+                var command = CreateSqlCommand(participants, from, to);
                 command.Connection = connection;
                 var reader = command.ExecuteReader();
                 var groupServingParticipants = new List<GroupServingParticipant>();
@@ -64,15 +66,21 @@ namespace MinistryPlatform.Translation.Services
             }
         }
 
-        private IDbCommand CreateSqlCommand(IEnumerable<int> participants)
+        private IDbCommand CreateSqlCommand(IEnumerable<int> participants, long from, long to)
         {
             var sb = new StringBuilder();
             var i = 1;
+
+            var fromDate = from == 0 ? DateTime.Today : from.FromUnixTime();
+            var toDate = to == 0 ? DateTime.Today : to.FromUnixTime();
+               
+
             var query =
                 @"SELECT *, 
                         Row_Number() Over ( Order By v.Event_Start_Date ) As RowNumber 
                     FROM MinistryPlatform.dbo.vw_crds_Serving_Participants v 
                     WHERE v.Participant_ID IN ( @participants ) 
+                    AND Event_Start_Date between @from and @to
                     ORDER BY Event_Start_Date, Group_Name, Contact_ID";
 
             IDbCommand command = new SqlCommand();
@@ -87,9 +95,13 @@ namespace MinistryPlatform.Translation.Services
                 i++;
             }
 
+            command.Parameters.Add(new SqlParameter("@from", fromDate) {DbType = DbType.DateTime});
+            command.Parameters.Add(new SqlParameter("@to", toDate) { DbType = DbType.DateTime });
+
             var tmp = sb.Remove(sb.Length - 1, 1);
             query = query.Replace("@participants", tmp.ToString());
             command.CommandText = query;
+            
 
             return command;
         }
