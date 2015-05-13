@@ -105,3 +105,26 @@ h2 {
     font-size: 1.4rem;
   }
 }
+
+
+.btn-checkbox-toggle {
+  @extend .col-xs-12;
+  text-align: left;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  color: $input-color;
+  font-weight: normal;
+  border: 1px solid $input-group-addon-border-color;
+  background: white;
+  height: $input-height-base;
+
+  &:hover {
+    color: $text-color;
+    background: $gray-lighter;
+  }
+
+  label {
+    width: 100%;
+    display: block;
+  }
+}
