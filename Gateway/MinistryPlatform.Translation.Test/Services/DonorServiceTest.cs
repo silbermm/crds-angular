@@ -207,7 +207,7 @@ namespace MinistryPlatform.Translation.Test.Services
             var expectedDonorValues = new List<Dictionary<string, object>>();
             expectedDonorValues.Add(new Dictionary<string, object>
             {
-                {"dp_RecordID", donorId},
+                {"Donor_ID", donorId},
                 {"Stripe_Customer_ID", stripeCustomerId},
                 {"Contact_ID", contactId}
             });
