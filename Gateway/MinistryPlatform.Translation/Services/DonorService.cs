@@ -150,7 +150,7 @@ namespace MinistryPlatform.Translation.Services
             Donor donor;
             try
             {
-                if (email.Equals(String.Empty))
+                if (String.IsNullOrWhiteSpace(email))
                 {
                     return null;
                 }
