@@ -64,7 +64,7 @@ namespace crds_angular.test.controllers
                 StatementFreq = "1",
                 StatementMethod = "2",
                 StatementType = "3",
-                StripeCustomerId = "cus_test1234567"
+                processorId = "cus_test1234567"
             };
 
             authenticationServiceMock.Setup(mocked => mocked.GetContactId(authType + " " + authToken)).Returns(contactId);
@@ -73,7 +73,7 @@ namespace crds_angular.test.controllers
                 .Returns(donor);
 
             stripeServiceMock.Setup(
-                mocked => mocked.chargeCustomer(donor.StripeCustomerId, createDonationDTO.amount, donor.DonorId))
+                mocked => mocked.chargeCustomer(donor.processorId, createDonationDTO.amount, donor.DonorId))
                 .Returns(charge_id);
 
             donorServiceMock.Setup(mocked => mocked.
@@ -119,13 +119,13 @@ namespace crds_angular.test.controllers
                 StatementFreq = "1",
                 StatementMethod = "2",
                 StatementType = "3",
-                StripeCustomerId = "cus_test1234567"
+                processorId = "cus_test1234567"
             };
 
             fixture.Request.Headers.Authorization = null;
             gatewayDonorServiceMock.Setup(mocked => mocked.GetDonorForEmail(createDonationDTO.email_address)).Returns(donor);
             stripeServiceMock.Setup(
-    mocked => mocked.chargeCustomer(donor.StripeCustomerId, createDonationDTO.amount, donor.DonorId))
+    mocked => mocked.chargeCustomer(donor.processorId, createDonationDTO.amount, donor.DonorId))
     .Returns(charge_id);
 
             donorServiceMock.Setup(mocked => mocked.

@@ -42,25 +42,25 @@ namespace crds_angular.Services
             if (existingDonor == null)
             {
                 donor.ContactId = mpContactService.CreateContactForGuestGiver(emailAddress, GUEST_GIVER_DISPLAY_NAME);
-                donor.StripeCustomerId = paymentService.createCustomer(paymentProcessorToken);
-                donor.DonorId = mpDonorService.CreateDonorRecord(donor.ContactId, donor.StripeCustomerId, setupDate, 
+                donor.processorId = paymentService.createCustomer(paymentProcessorToken);
+                donor.DonorId = mpDonorService.CreateDonorRecord(donor.ContactId, donor.processorId, setupDate, 
                     STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE);
-            } else if(String.IsNullOrWhiteSpace(existingDonor.StripeCustomerId)) {
+            } else if(String.IsNullOrWhiteSpace(existingDonor.processorId)) {
                 donor.ContactId = existingDonor.ContactId;
-                donor.StripeCustomerId = paymentService.createCustomer(paymentProcessorToken);
+                donor.processorId = paymentService.createCustomer(paymentProcessorToken);
                 if (existingDonor.DonorId > 0)
                 {
-                    donor.DonorId = mpDonorService.UpdatePaymentProcessorCustomerId(existingDonor.DonorId, donor.StripeCustomerId);
+                    donor.DonorId = mpDonorService.UpdatePaymentProcessorCustomerId(existingDonor.DonorId, donor.processorId);
                 }
                 else
                 {
-                    donor.DonorId = mpDonorService.CreateDonorRecord(existingDonor.ContactId, donor.StripeCustomerId, setupDate,
+                    donor.DonorId = mpDonorService.CreateDonorRecord(existingDonor.ContactId, donor.processorId, setupDate,
                         STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE);
                 }
             } else {
                 donor.ContactId = existingDonor.ContactId;
                 donor.DonorId = existingDonor.DonorId;
-                donor.StripeCustomerId = existingDonor.StripeCustomerId;
+                donor.processorId = existingDonor.processorId;
             }
 
             return (donor);
