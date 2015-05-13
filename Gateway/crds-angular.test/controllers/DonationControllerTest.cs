@@ -125,7 +125,7 @@ namespace crds_angular.test.controllers
             fixture.Request.Headers.Authorization = null;
             gatewayDonorServiceMock.Setup(mocked => mocked.GetDonorForEmail(createDonationDTO.email_address)).Returns(donor);
             stripeServiceMock.Setup(
-    mocked => mocked.chargeCustomer(donor.StripeCustomerId, createDonationDTO.amount, donor.DonorId.ToString()))
+    mocked => mocked.chargeCustomer(donor.StripeCustomerId, createDonationDTO.amount, donor.DonorId))
     .Returns(charge_id);
 
             donorServiceMock.Setup(mocked => mocked.
