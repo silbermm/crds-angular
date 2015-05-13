@@ -57,7 +57,7 @@ namespace crds_angular.test.Services
             {
                 ContactId = 12345,
                 DonorId = 67890,
-                processorId = "processor_id"
+                processorId = "Processor_ID"
             };
 
             var response = fixture.CreateDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
@@ -75,8 +75,8 @@ namespace crds_angular.test.Services
         public void shouldCreateNewContactAndDonor()
         {
             mpContactService.Setup(mocked => mocked.CreateContactForGuestGiver("me@here.com", GUEST_GIVER_DISPLAY_NAME)).Returns(123);
-            paymentService.Setup(mocked => mocked.createCustomer("stripe_token")).Returns("processor_id");
-            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(123, "processor_id", It.IsAny<DateTime>(), STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE)).Returns(456);
+            paymentService.Setup(mocked => mocked.createCustomer("stripe_token")).Returns("Processor_ID");
+            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(123, "Processor_ID", It.IsAny<DateTime>(), STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE)).Returns(456);
 
             var response = fixture.CreateDonor(null, "me@here.com", "stripe_token", DateTime.Now);
 
@@ -86,7 +86,7 @@ namespace crds_angular.test.Services
 
             Assert.AreEqual(123, response.ContactId);
             Assert.AreEqual(456, response.DonorId);
-            Assert.AreEqual("processor_id", response.processorId);
+            Assert.AreEqual("Processor_ID", response.processorId);
         }
 
         [Test]
@@ -98,8 +98,8 @@ namespace crds_angular.test.Services
                 DonorId = 0,
             };
 
-            paymentService.Setup(mocked => mocked.createCustomer("stripe_token")).Returns("processor_id");
-            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(12345, "processor_id", It.IsAny<DateTime>(), STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE)).Returns(456);
+            paymentService.Setup(mocked => mocked.createCustomer("stripe_token")).Returns("Processor_ID");
+            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(12345, "Processor_ID", It.IsAny<DateTime>(), STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE)).Returns(456);
 
             var response = fixture.CreateDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
 
@@ -109,7 +109,7 @@ namespace crds_angular.test.Services
 
             Assert.AreEqual(12345, response.ContactId);
             Assert.AreEqual(456, response.DonorId);
-            Assert.AreEqual("processor_id", response.processorId);
+            Assert.AreEqual("Processor_ID", response.processorId);
         }
 
         [Test]
@@ -121,8 +121,8 @@ namespace crds_angular.test.Services
                 DonorId = 456,
             };
 
-            paymentService.Setup(mocked => mocked.createCustomer("stripe_token")).Returns("processor_id");
-            mpDonorService.Setup(mocked => mocked.UpdatePaymentProcessorCustomerId(456, "processor_id")).Returns(456);
+            paymentService.Setup(mocked => mocked.createCustomer("stripe_token")).Returns("Processor_ID");
+            mpDonorService.Setup(mocked => mocked.UpdatePaymentProcessorCustomerId(456, "Processor_ID")).Returns(456);
 
             var response = fixture.CreateDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
 
@@ -132,7 +132,7 @@ namespace crds_angular.test.Services
 
             Assert.AreEqual(12345, response.ContactId);
             Assert.AreEqual(456, response.DonorId);
-            Assert.AreEqual("processor_id", response.processorId);
+            Assert.AreEqual("Processor_ID", response.processorId);
         }
     }
 }

@@ -81,7 +81,7 @@ namespace crds_angular.test.controllers
             Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonorDTO>), result);
             var okResult = (OkNegotiatedContentResult<DonorDTO>)result;
             Assert.AreEqual(donorId, okResult.Content.id);
-            Assert.AreEqual(processorId, okResult.Content.processor_id);
+            Assert.AreEqual(processorId, okResult.Content.Processor_ID);
         }
 
         [Test]
@@ -94,7 +94,7 @@ namespace crds_angular.test.controllers
             Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonorDTO>), result);
             var okResult = (OkNegotiatedContentResult<DonorDTO>)result;
             Assert.AreEqual(donorId, okResult.Content.id);
-            Assert.AreEqual(processorId, okResult.Content.processor_id);
+            Assert.AreEqual(processorId, okResult.Content.Processor_ID);
         }
 
         [Test]
@@ -107,7 +107,7 @@ namespace crds_angular.test.controllers
             Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonorDTO>), result);
             var okResult = (OkNegotiatedContentResult<DonorDTO>)result;
             Assert.AreEqual(donorId, okResult.Content.id);
-            Assert.AreEqual(processorId, okResult.Content.processor_id);
+            Assert.AreEqual(processorId, okResult.Content.Processor_ID);
         }
 
         [Test]
@@ -151,7 +151,7 @@ namespace crds_angular.test.controllers
             Assert.IsInstanceOf(typeof(ObjectContent<DonorDTO>), content);
             var responseDto = (DonorDTO)((ObjectContent)content).Value;
             Assert.AreEqual(394256, responseDto.id);
-            Assert.AreEqual("jenny_ive_got_your_number", responseDto.processor_id);
+            Assert.AreEqual("jenny_ive_got_your_number", responseDto.Processor_ID);
         }
 
         [Test]
@@ -195,7 +195,7 @@ namespace crds_angular.test.controllers
             Assert.IsInstanceOf(typeof(ObjectContent<DonorDTO>), content);
             var responseDto = (DonorDTO)((ObjectContent)content).Value;
             Assert.AreEqual(90210, responseDto.id);
-            Assert.AreEqual("jenny_ive_got_your_number", responseDto.processor_id);
+            Assert.AreEqual("jenny_ive_got_your_number", responseDto.Processor_ID);
         }
 
         [Test]

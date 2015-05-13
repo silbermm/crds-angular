@@ -19,7 +19,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int donationDistributionPageId = Convert.ToInt32(AppSettings("Distributions"));
 
         public const string DONOR_RECORD_ID = "Donor_Record";
-        public const string DONOR_processor_id = "processor_id";
+        public const string DONOR_PROCESSOR_ID = "Processor_ID";
 
         private IMinistryPlatformService ministryPlatformService;
 
@@ -44,7 +44,7 @@ namespace MinistryPlatform.Translation.Services
                 {"Statement_Type_ID", statementTypeId}, 
                 {"Statement_Method_ID", statementMethodId},
                 {"Setup_Date", setupTime},    //default to current date/time
-                {"processor_id", processorId}
+                {"Processor_ID", processorId}
             };
 
             int donorId;
@@ -127,7 +127,7 @@ namespace MinistryPlatform.Translation.Services
                     donor = new Donor()
                     {
                         DonorId = record.ToInt("Donor_ID"),
-                        processorId = record.ToString(DONOR_processor_id),
+                        processorId = record.ToString(DONOR_PROCESSOR_ID),
                         ContactId = record.ToInt("Contact_ID")
                     };
                 }
@@ -165,7 +165,7 @@ namespace MinistryPlatform.Translation.Services
                     {
                         
                         DonorId = record.ToInt(DONOR_RECORD_ID),
-                        processorId = record.ToString(DONOR_processor_id),
+                        processorId = record.ToString(DONOR_PROCESSOR_ID),
                         ContactId = record.ToInt("Contact_ID"),
                         Email = record.ToString("Email_Address")
                     };
@@ -189,7 +189,7 @@ namespace MinistryPlatform.Translation.Services
         {
             var parms = new Dictionary<string, object> {
                 { "dp_RecordID", donorId },
-                { DONOR_processor_id, paymentProcessorCustomerId },
+                { DONOR_PROCESSOR_ID, paymentProcessorCustomerId },
             };
 
             try
