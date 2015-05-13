@@ -3,12 +3,15 @@ using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
+using System.Collections.Generic;
+using System.Configuration;
 
 namespace MinistryPlatform.Translation.Services
 {
     public class ContactService : BaseService, IContactService
     {
         private readonly int _myProfilePageId = AppSettings("MyProfile");
+        private readonly int contactsPageId = AppSettings("Contacts");
 
         private IMinistryPlatformService _ministryPlatformService;
 
@@ -54,6 +57,29 @@ namespace MinistryPlatform.Translation.Services
             contact.Nickname = myContact.ToString("Nickname");
 
             return contact;
+        }
+
+        public int CreateContactForGuestGiver(string emailAddress, string displayName)
+        {
+            var contactDictionary = new Dictionary<string, object>();
+            contactDictionary["Email_Address"] = emailAddress;
+            contactDictionary["Company"] = false; // default
+            contactDictionary["Display_Name"] = displayName;
+            contactDictionary["Nickname"] = displayName;
+            contactDictionary["Household_Position_ID"] = Convert.ToInt32(ConfigurationManager.AppSettings["Household_Position_Default_ID"]);
+
+            try
+            {
+                var contactId = WithApiLogin<int>(apiToken =>
+                    _ministryPlatformService.CreateRecord(contactsPageId, contactDictionary, apiToken)
+                );
+                return (contactId);
+            }
+            catch (Exception e)
+            {
+                throw (new ApplicationException(String.Format("Error creating contact for guest giver, emailAddress: {0} displayName: {1}", emailAddress, displayName), e));
+            }
+
         }
     }
 }
