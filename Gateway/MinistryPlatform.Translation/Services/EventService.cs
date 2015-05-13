@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
+using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
@@ -58,6 +59,39 @@ namespace MinistryPlatform.Translation.Services
             logger.Debug(string.Format("Added participant {0} to event {1}; record id: {2}", participantId, eventId,
                 eventParticipantId));
             return (eventParticipantId);
+        }
+
+        public int unRegisterParticipantForEvent(int participantId, int eventId)
+        {
+            logger.Debug("Removing participant " + participantId + " from event " + eventId);
+            
+            // go get record id to delete
+            var recordId = GetEventParticipantRecordId(eventId, participantId);
+
+
+            int eventParticipantId;
+            try
+            {
+                eventParticipantId =
+                    WithApiLogin<int>(
+                        apiToken => (ministryPlatformService.DeleteRecord(EventParticipantPageId, recordId, null, apiToken)));
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(
+                    string.Format("unRegisterParticipantForEvent failed.  Participant Id: {0}, Event Id: {1}",
+                        participantId, eventId), ex.InnerException);
+            }
+
+            logger.Debug(string.Format("Removed participant {0} from event {1}; record id: {2}", participantId, eventId,
+                eventParticipantId));
+            return (eventParticipantId);
+        }
+
+        private int GetEventParticipantRecordId(int eventId, int participantId)
+        {
+            ministryPlatformService.GetRecordsDict(EventParticipantPageId, apiLogin(), "");
+            throw new NotImplementedException();
         }
 
         public List<Event> GetEvents(string eventType, string token)
