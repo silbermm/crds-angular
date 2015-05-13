@@ -50,14 +50,15 @@ describe ('PaymentService', function () {
       spyOn(stripe.card, 'createToken').and.callThrough();
 
       var postData = {
-        stripe_token_id: "tok_test"
+        stripe_token_id: "tok_test",
+        email_address: "me@here.com"
       };
       httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/donor', postData)
         .respond({
           id: "12345",
           stripe_customer_id: "cust_test"
         });
-      sut.createDonorWithCard(card)
+      sut.createDonorWithCard(card, "me@here.com")
         .then(function(donor) {
           result = donor;
         });

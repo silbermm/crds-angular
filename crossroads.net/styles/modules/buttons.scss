@@ -89,18 +89,19 @@ h2 {
 .table-btn {
   @extend .btn;
   @extend .btn-default;
-  @extend .row-full-height;
+  @extend .col-full-height;
+  @extend .push-half-bottom;
   display: block;
   text-align: center;
   vertical-align: middle;
-  border-radius: 0px;
   border-bottom-width: 0px;
-  border-bottom-right-radius: 0px;
   font-size: 1.3rem;
   min-height: 31px;
   width: 100%;
 
   @media (min-width: $screen-sm-min) {
+    margin-bottom: 0;
+    border-radius: 0px;
     font-size: 1.4rem;
   }
 }

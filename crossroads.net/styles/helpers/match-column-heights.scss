@@ -18,7 +18,7 @@
   float: none !important;
 }
 
-@media (min-width: 768px) {
+@media (min-width: $screen-sm-min) {
   .row-sm-same-height {
     display: table;
     width: 100%;
@@ -30,7 +30,8 @@
     float: none !important;
   }
 }
-@media (min-width: 992px) {
+
+@media (min-width: $screen-md-min) {
   .row-md-same-height {
     display: table;
     width: 100%;
@@ -42,7 +43,8 @@
     float: none !important;
   }
 }
-@media (min-width: 1200px) {
+
+@media (min-width: $screen-lg-min) {
   .row-lg-same-height {
     display: table;
     width: 100%;
