@@ -188,7 +188,7 @@
                   cvc: vm.cvc
                 }, vm.email)
                 .then(function(donor) {
-                    PaymentService.donateToProgram(vm.program.ProgramId, vm.amount, donor.id)
+                    PaymentService.donateToProgram(vm.program.ProgramId, vm.amount, donor.id, vm.email)
                         .then(function(confirmation){
                             vm.program_name = _.result(_.find(vm.programsInput,
                               {'ProgramId': confirmation.program_id}), 'Name');
