@@ -42,12 +42,13 @@
        return def.promise;
     }
 
-    function donateToProgram(program_id, amount, donor_id){
+    function donateToProgram(program_id, amount, donor_id, email_address){
       var def = $q.defer();
       var donation_request = {
         "program_id" : program_id,
         "amount" : amount,
-        "donor_id" : donor_id
+        "donor_id" : donor_id,
+        "email_address": email_address
       };
       $http({
         method: "POST",
