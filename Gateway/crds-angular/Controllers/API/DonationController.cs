@@ -7,6 +7,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Exceptions;
 using crds_angular.Exceptions.Models;
+using crds_angular.Models.Crossroads;
 using crds_angular.Security;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
@@ -44,7 +45,7 @@ namespace crds_angular.Controllers.API
             try{
                 var contactId = authenticationService.GetContactId(token);
                 var donor = mpDonorService.GetDonorRecord(contactId);
-                var charge_id = stripeService.chargeCustomer(donor.StripeCustomerId, dto.amount,(donor.DonorId).ToString());
+                var charge_id = stripeService.chargeCustomer(donor.StripeCustomerId, dto.amount,donor.DonorId);
                 var donationId = mpDonorService.CreateDonationAndDistributionRecord(dto.amount, donor.DonorId, dto.program_id, charge_id, DateTime.Now);
 
                 var response = new DonationDTO()
@@ -73,7 +74,7 @@ namespace crds_angular.Controllers.API
             try
             {
                 var donor = gatewayDonorService.GetDonorForEmail(dto.email_address);
-                var charge_id = stripeService.chargeCustomer(donor.StripeCustomerId, dto.amount, (donor.DonorId).ToString());
+                var charge_id = stripeService.chargeCustomer(donor.StripeCustomerId, dto.amount, donor.DonorId);
                 var donationId = mpDonorService.CreateDonationAndDistributionRecord(dto.amount, donor.DonorId, dto.program_id, charge_id, DateTime.Now);
 
                 var response = new DonationDTO()
