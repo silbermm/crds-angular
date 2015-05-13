@@ -7,6 +7,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.Http.Results;
 using crds_angular.Exceptions.Models;
+using crds_angular.Models.Crossroads;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
 using crds_angular.test.controllers;
@@ -37,6 +38,13 @@ namespace crds_angular.Controllers.API
         }
 
         [ResponseType(typeof(DonorDTO))]
+        [Route("api/donor/{email?}")]
+        public IHttpActionResult Get(string email="")
+        {
+            return (Authorized(token => GetDonorForAuthenticatedUser(token), () => GetDonorForUnauthenticatedUser(email)));
+        }
+
+        [ResponseType(typeof (DonorDTO))]
         [Route("api/donor")]
         public IHttpActionResult Post([FromBody] CreateDonorDTO dto)
         {
@@ -76,7 +84,7 @@ namespace crds_angular.Controllers.API
 
             var responseBody = new DonorDTO
             {
-                id = donor.DonorId.ToString(),
+                id = donor.DonorId,
                 stripe_customer_id = donor.StripeCustomerId,
             };
 
@@ -100,7 +108,7 @@ namespace crds_angular.Controllers.API
 
                 var response = new DonorDTO
                 {
-                    id = donorId.ToString(),
+                    id = donorId,
                     stripe_customer_id = customerId
                 };
 
@@ -109,6 +117,55 @@ namespace crds_angular.Controllers.API
             catch (Exception exception)
             {
                 var apiError = new ApiErrorDto("Donor Post Failed", exception);
+                throw new HttpResponseException(apiError.HttpResponseMessage);
+            }
+        }
+
+        private IHttpActionResult GetDonorForAuthenticatedUser(string token)
+        {
+            try
+            {
+                var contactId = authenticationService.GetContactId(token);
+                var donor = mpDonorService.GetDonorRecord(contactId);
+
+                var response = new DonorDTO
+                {
+                    id = donor.DonorId,
+                    stripe_customer_id = donor.StripeCustomerId
+                };
+
+                return Ok(response);
+            }
+            catch (Exception exception)
+            {
+                var apiError = new ApiErrorDto("Donor Get Failed", exception);
+                throw new HttpResponseException(apiError.HttpResponseMessage);
+            }
+        }
+
+        private IHttpActionResult GetDonorForUnauthenticatedUser(string email)
+        {
+            try
+            {
+                var donor = mpDonorService.GetPossibleGuestDonorContact(email);
+                if (donor == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    var response = new DonorDTO
+                    {
+                        id = donor.DonorId,
+                        stripe_customer_id = donor.StripeCustomerId
+                    };
+
+                    return Ok(response); 
+                }
+            }
+            catch (Exception exception)
+            {
+                var apiError = new ApiErrorDto("Donor Get Failed", exception);
                 throw new HttpResponseException(apiError.HttpResponseMessage);
             }
         }

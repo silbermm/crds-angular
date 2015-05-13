@@ -121,19 +121,20 @@ namespace MinistryPlatform.Translation.Services
                 var records =
                     WithApiLogin<List<Dictionary<string, object>>>(
                         apiToken => (ministryPlatformService.GetPageViewRecords("DonorByContactId", apiToken, searchStr, "")));
-                var record = records.First();
-                //I changed this because my contact has multiple donor records.  Need to change back 
-                //var record = records.Single();
-                donor = new Donor()
+                if (records.Count > 0)
                 {
-                    DonorId = record.ToInt("dp_RecordID"),
-                    StripeCustomerId = record.ToString(DONOR_STRIPE_CUST_ID),
-                    ContactId = record.ToInt("Contact ID"),
-                    StatementFreq = record.ToString("Statement Frequency"),
-                    StatementType = record.ToString("Statement Type"),
-                    StatementMethod = record.ToString("Statement Method"),
-                    SetupDate = record.ToDate("Setup Date")
-                };
+                    var record = records.First();
+                    donor = new Donor()
+                    {
+                        DonorId = record.ToInt("Donor_Record"),
+                        StripeCustomerId = record.ToString(DONOR_STRIPE_CUST_ID),
+                        ContactId = record.ToInt("Contact_ID")
+                    };
+                }
+                else
+                {
+                    return null;
+                }
             }
             catch (Exception ex)
             {
@@ -144,30 +145,34 @@ namespace MinistryPlatform.Translation.Services
             return donor;
 
         }
-
         public Donor GetPossibleGuestDonorContact(string email)
         {
-            // TODO - This whole method should be replaced with the same from US1252 when merging
             Donor donor;
             try
             {
-                var searchStr = "," + email;
+                if (email.Equals(String.Empty))
+                {
+                    return null;
+                }
+                var searchStr =  "," + email;
                 var records =
                     WithApiLogin<List<Dictionary<string, object>>>(
                         apiToken => (ministryPlatformService.GetPageViewRecords("PossibleGuestDonorContact", apiToken, searchStr, "")));
-                if (records == null || records.Count <= 0)
+                if (records.Count > 0)
                 {
-                    return (null);
+                    var record = records.First();
+                    donor = new Donor()
+                    {
+                        DonorId = record.ToInt("dp_RecordID"),
+                        StripeCustomerId = record.ToString("Stripe_Customer_ID"),
+                        ContactId = record.ToInt("Contact_ID"),
+                        Email = record.ToString("Email_Address")
+                    };
                 }
-
-                var record = records.First();
-                donor = new Donor()
+                else
                 {
-                    DonorId = record.ToInt(DONOR_RECORD_ID),
-                    StripeCustomerId = record.ToString(DONOR_STRIPE_CUST_ID),
-                    ContactId = record.ToInt("Contact_ID"),
-                    //Email = record.ToString("Email_Address")
-                };
+                    return null;
+                }
             }
             catch (Exception ex)
             {
@@ -176,6 +181,7 @@ namespace MinistryPlatform.Translation.Services
             }
 
             return donor;
+
         }
 
         public int UpdatePaymentProcessorCustomerId(int donorId, string paymentProcessorCustomerId)

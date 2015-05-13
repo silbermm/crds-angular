@@ -1,7 +1,8 @@
-﻿using Moq;
-using NUnit.Framework;
-using crds_angular.Services;
+﻿using crds_angular.Services;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
+using Moq;
+using NUnit.Framework;
 using System;
 
 namespace crds_angular.test.Services
@@ -13,6 +14,13 @@ namespace crds_angular.test.Services
         private Mock<MinistryPlatform.Translation.Services.Interfaces.IDonorService> mpDonorService;
         private Mock<MinistryPlatform.Translation.Services.Interfaces.IContactService> mpContactService;
         private Mock<crds_angular.Services.Interfaces.IPaymentService> paymentService;
+        private Mock<IConfigurationWrapper> configurationWrapper;
+
+        private const string GUEST_GIVER_DISPLAY_NAME = "Guest Giver";
+
+        private const int STATEMENT_FREQUENCY_NEVER = 9;
+        private const int STATEMENT_TYPE_INDIVIDUAL = 8;
+        private const int STATEMENT_METHOD_NONE = 7;
 
         [SetUp]
         public void SetUp()
@@ -21,7 +29,14 @@ namespace crds_angular.test.Services
             mpContactService = new Mock<MinistryPlatform.Translation.Services.Interfaces.IContactService>(MockBehavior.Strict);
             paymentService = new Mock<crds_angular.Services.Interfaces.IPaymentService>(MockBehavior.Strict);
 
-            fixture = new DonorService(mpDonorService.Object, mpContactService.Object, paymentService.Object);
+            configurationWrapper = new Mock<IConfigurationWrapper>();
+            configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("DonorStatementFrequencyNever")).Returns(STATEMENT_FREQUENCY_NEVER);
+            configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("DonorStatementTypeIndividual")).Returns(STATEMENT_TYPE_INDIVIDUAL);
+            configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("DonorStatementMethodNone")).Returns(STATEMENT_METHOD_NONE);
+            configurationWrapper.Setup(mocked => mocked.GetConfigValue("GuestGiverContactDisplayName")).Returns(GUEST_GIVER_DISPLAY_NAME);
+
+            fixture = new DonorService(mpDonorService.Object, mpContactService.Object, paymentService.Object, configurationWrapper.Object);
+
         }
 
         [Test]
@@ -59,9 +74,9 @@ namespace crds_angular.test.Services
         [Test]
         public void shouldCreateNewContactAndDonor()
         {
-            mpContactService.Setup(mocked => mocked.CreateContactForGuestGiver("me@here.com", DonorService.GUEST_GIVER_DISPLAY_NAME)).Returns(123);
+            mpContactService.Setup(mocked => mocked.CreateContactForGuestGiver("me@here.com", GUEST_GIVER_DISPLAY_NAME)).Returns(123);
             paymentService.Setup(mocked => mocked.createCustomer("stripe_token")).Returns("stripe_cust_id");
-            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(123, "stripe_cust_id", It.IsAny<DateTime>(), 3, 1, 4)).Returns(456);
+            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(123, "stripe_cust_id", It.IsAny<DateTime>(), STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE)).Returns(456);
 
             var response = fixture.CreateDonor(null, "me@here.com", "stripe_token", DateTime.Now);
 
@@ -84,7 +99,7 @@ namespace crds_angular.test.Services
             };
 
             paymentService.Setup(mocked => mocked.createCustomer("stripe_token")).Returns("stripe_cust_id");
-            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(12345, "stripe_cust_id", It.IsAny<DateTime>(), 3, 1, 4)).Returns(456);
+            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(12345, "stripe_cust_id", It.IsAny<DateTime>(), STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE)).Returns(456);
 
             var response = fixture.CreateDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
 

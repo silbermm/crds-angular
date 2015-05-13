@@ -9,7 +9,7 @@ require('./give.module.js');
 require('./give.config.js');
 var app = require('angular').module('crossroads.give');
 app.factory("getPrograms", require('./services/getPrograms.service.js'));
-app.factory('PaymentService', ['$log', '$http', '$q', 'stripe', require('./services/payment_service.js')]);
+require('./services/payment_service.js')
 
 /****** DEMO PAGES ******/
 require('./demo/guest_giver/give.html');
@@ -31,4 +31,3 @@ app.directive("naturalNumber", require('./directives/naturalNumber.validation.di
 app.directive("invalidRouting", require('./directives/invalidRouting.validation.directive.js'));
 app.directive("invalidAccount", require('./directives/invalidAccount.validation.directive.js'));
 app.directive("invalidZip", require('./directives/invalidZip.validation.directive.js'));
-

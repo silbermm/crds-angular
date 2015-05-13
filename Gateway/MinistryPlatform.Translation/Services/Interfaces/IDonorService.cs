@@ -13,7 +13,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
             );
         int CreateDonationAndDistributionRecord(int donationAmt, int donorId, string programId, string charge_id, DateTime setupDate);
         Donor GetDonorRecord(int contactId);
-        Donor GetPossibleGuestDonorContact(string emailAddress);
+        Donor GetPossibleGuestDonorContact(string email);
         int UpdatePaymentProcessorCustomerId(int donorId, string paymentProcessorCustomerId);
     }
 }

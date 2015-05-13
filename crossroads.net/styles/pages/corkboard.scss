@@ -86,6 +86,35 @@
       height: auto;
       display: block;
       margin: 0 auto;
+      max-height: 50px;
     }
   }
+}
+
+.corkboard-header {
+  //position: relative;
+  .page-header {
+    //padding-right: 50px;
+  }
+  .card-img {
+    //position: absolute;
+    //top: 0px;
+    //right: 0px;
+    width: 60px;
+  }
+}
+.corkboard-actions {
+  .btn {
+    display: block;
+    margin-top: 5px;
+    @media (min-width: $screen-sm-min) {
+      display: inline-block;
+    }
+  }
+}
+.corkboard-sharing {
+  text-align: center;
+    @media (min-width: $screen-sm-min) {
+      text-align: left;
+    }
 }

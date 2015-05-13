@@ -1,9 +1,7 @@
-﻿using MinistryPlatform.Models;
+﻿using Crossroads.Utilities.Interfaces;
+using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace crds_angular.Services
 {
@@ -12,18 +10,25 @@ namespace crds_angular.Services
         private IDonorService mpDonorService;
         private IContactService mpContactService;
         private crds_angular.Services.Interfaces.IPaymentService paymentService;
+        private IConfigurationWrapper configurationWrapper;
 
-        public const string GUEST_GIVER_DISPLAY_NAME = "Guest Giver";
+        private readonly string GUEST_GIVER_DISPLAY_NAME;
 
-        public const int STATEMENT_FREQUENCY_NEVER = 3;
-        public const int STATEMENT_TYPE_INDIVIDUAL = 1;
-        public const int STATEMENT_METHOD_NONE = 4;
+        private readonly int STATEMENT_FREQUENCY_NEVER;
+        private readonly int STATEMENT_TYPE_INDIVIDUAL;
+        private readonly int STATEMENT_METHOD_NONE;
 
-        public DonorService(IDonorService mpDonorService, IContactService mpContactService, crds_angular.Services.Interfaces.IPaymentService paymentService)
+        public DonorService(IDonorService mpDonorService, IContactService mpContactService, crds_angular.Services.Interfaces.IPaymentService paymentService, IConfigurationWrapper configurationWrapper)
         {
             this.mpDonorService = mpDonorService;
             this.mpContactService = mpContactService;
             this.paymentService = paymentService;
+            this.configurationWrapper = configurationWrapper;
+
+            GUEST_GIVER_DISPLAY_NAME = configurationWrapper.GetConfigValue("GuestGiverContactDisplayName");
+            STATEMENT_FREQUENCY_NEVER = configurationWrapper.GetConfigIntValue("DonorStatementFrequencyNever");
+            STATEMENT_TYPE_INDIVIDUAL = configurationWrapper.GetConfigIntValue("DonorStatementTypeIndividual");
+            STATEMENT_METHOD_NONE = configurationWrapper.GetConfigIntValue("DonorStatementMethodNone");
         }
 
         public Donor GetDonorForEmail(string emailAddress)

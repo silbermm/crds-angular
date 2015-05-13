@@ -9,6 +9,6 @@ namespace crds_angular.Services.Interfaces
     public interface IPaymentService
     {
         string createCustomer(string token);
-        string chargeCustomer(string customer_token, int amount, string donor_id);
+        string chargeCustomer(string customer_token, int amount, int donor_id);
     }
 }

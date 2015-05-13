@@ -1,12 +1,13 @@
 (function () {
 
   var getCookie = require('../../utilities/cookies');
+  angular.module('crossroads.give').factory('PaymentService',PaymentService);
 
-  module.exports = PaymentService;
+  PaymentService.$inject = ['$log', '$http', '$resource','$q', 'stripe'];
 
-  function PaymentService($log, $http, $q, stripe) {
+  function PaymentService($log, $http, $resource, $q, stripe) {
     var payment_service = {
-      donor : {},
+      donor : $resource(__API_ENDPOINT__ + 'api/donor/?email=:email',{email: '@_email'}),
       donation : {},
       createDonorWithCard : createDonorWithCard,
       donateToProgram : donateToProgram
@@ -38,7 +39,7 @@
               def.reject(error);
             });
         });
-      return def.promise;
+       return def.promise;
     }
 
     function donateToProgram(program_id, amount, donor_id, email_address){

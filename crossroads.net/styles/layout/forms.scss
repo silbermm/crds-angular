@@ -63,3 +63,11 @@
     }
   }
 }
+
+.form-horizontal {
+  .form-group {
+    input[type=file] {
+      padding-top: 7px;
+    }
+  }
+}

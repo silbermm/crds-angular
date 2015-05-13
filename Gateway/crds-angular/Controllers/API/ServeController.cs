@@ -7,6 +7,7 @@ using System.Web.Http.Description;
 using crds_angular.Exceptions.Models;
 using crds_angular.Extenstions;
 using crds_angular.Models.Crossroads;
+using crds_angular.Models.Crossroads.Opportunity;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
@@ -17,29 +18,22 @@ namespace crds_angular.Controllers.API
 {
     public class ServeController : MPAuth
     {
-        private readonly IAuthenticationService _authenticationService;
-        private readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly IServeService _serveService;
 
-        public ServeController(IServeService serveService, IAuthenticationService authenticationService)
+        public ServeController(IServeService serveService)
         {
             _serveService = serveService;
-            _authenticationService = authenticationService;
         }
 
         [ResponseType(typeof (List<ServingDay>))]
-        [Route("api/serve/family-serve-days")]
-        public IHttpActionResult GetFamilyServeDays()
+        [Route("api/serve/family-serve-days/{contactId}")]
+        public IHttpActionResult GetFamilyServeDays(int contactId)
         {
             return Authorized(token =>
             {
                 try
                 {
-                    var servingDays = _serveService.GetServingDays(token);
-                    if (servingDays == null)
-                    {
-                        return Unauthorized();
-                    }
+                    var servingDays = _serveService.GetServingDays(token, contactId);
                     return Ok(servingDays);
                 }
                 catch (Exception exception)
@@ -50,19 +44,23 @@ namespace crds_angular.Controllers.API
             });
         }
 
-        [ResponseType(typeof (List<FamilyMember>))]
-        [Route("api/serve/family")]
-        public IHttpActionResult GetFamily()
+        [ResponseType(typeof (List<FamilyMemberDto>))]
+        [Route("api/serve/family/{contactId}")]
+        public IHttpActionResult GetFamily(int contactId)
         {
             return Authorized(token =>
             {
-                var contactId = _authenticationService.GetContactId(token);
-                var list = _serveService.GetMyImmediateFamily(contactId, token);
-                if (list == null)
+                try
                 {
-                    return Unauthorized();
+                    var list = _serveService.GetImmediateFamilyParticipants(contactId, token);
+                    return Ok(list);
                 }
-                return Ok(list);
+                catch (Exception ex)
+                {
+                    var apiError = new ApiErrorDto("Save RSVP Failed", ex);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+                
             });
         }
 
@@ -96,6 +94,29 @@ namespace crds_angular.Controllers.API
                     throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
                 return Ok();
+            });
+        }
+
+        [ResponseType(typeof(Capacity))]
+        [Route("api/serve/opp-capacity")]
+        public IHttpActionResult GetOpportunityCapacity([FromUri] OpportunityCapacityDto oppCap)
+        {
+            return Authorized(token =>
+            {
+                try
+                {
+                    var oppCapacity = _serveService.OpportunityCapacity(oppCap.Id, oppCap.EventId, oppCap.Min, oppCap.Max, token);
+                    if (oppCapacity == null)
+                    {
+                        return Unauthorized();
+                    }
+                    return Ok(oppCapacity);
+                }
+                catch (Exception exception)
+                {
+                    var apiError = new ApiErrorDto("Get Opportunity Capacity Failed", exception);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
             });
         }
     }

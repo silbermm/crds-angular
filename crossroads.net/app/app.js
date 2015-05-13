@@ -21,7 +21,6 @@ require('./third-party/angular/angular-aside.min.css');
 require('./third-party/angular/angular-growl.css');
 require('./give');
 
-
 require('./app.core.module');
 require('./components/components.module');
 require('./mp_tools');
@@ -94,7 +93,7 @@ var _ = require('lodash');
     .directive("requireMultiple", require('./shared/requireMultiple.directive.js'))
 
     require('./app.controller');
-    require('./apprun');
+    require('./app.run');
     require('./app.config');
     require('./routes');
     require('./register/register_directive');
