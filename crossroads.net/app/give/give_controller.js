@@ -176,9 +176,18 @@
         vm.submitBankInfo = function() {
             vm.bankinfoSubmitted = true;
             if ($scope.giveForm.accountForm.$valid) {
-              var donorRequest = PaymentService.donor.get({email: $scope.give.email},function(){
-                $scope.donor = donorRequest;
-                if ($scope.donor === undefined || $scope.donor.id === undefined) {
+             PaymentService.donor.get({email: $scope.give.email})
+             .$promise
+              .then(function(donor){
+                    PaymentService.donateToProgram(vm.program.ProgramId, vm.amount, donor.id)
+                            .then(function(confirmation){
+                                vm.program_name = _.result(_.find(vm.programsInput,
+                                  {'ProgramId': confirmation.program_id}), 'Name');
+                                vm.amount = confirmation.amount;
+                                $state.go("give.thank-you");
+                            });
+                        },
+                function(error){          
                     PaymentService.createDonorWithCard({
                       name: vm.nameOnCard,
                       number: vm.ccNumber,
@@ -198,7 +207,7 @@
                     function() {
                       $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
                     });
-                 }
+             
               });
           }
           else {
