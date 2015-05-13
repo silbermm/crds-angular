@@ -33,8 +33,8 @@ namespace MinistryPlatform.Translation.Test.Services
             var expectedValues = new Dictionary<string, object>
             {
                 {"Contact_ID", 888888},
-                {"Statement_Frequency_ID", "1"},//default to quarterly
-                {"Statement_Type_ID", "1"},     //default to individual
+                {"Statement_Frequency_ID", 1},//default to quarterly
+                {"Statement_Type_ID", 1},     //default to individual
                 {"Statement_Method_ID", 2},   //default to email/online
                 {"Setup_Date", setupDate},    //default to current date/time
                 {"Stripe_Customer_ID", "cus_crds123456"}
@@ -47,6 +47,35 @@ namespace MinistryPlatform.Translation.Test.Services
            var response = _fixture.CreateDonorRecord(888888, "cus_crds123456", setupDate);
 
            _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donorPageId, expectedValues, It.IsAny<string>(), true));
+
+            Assert.AreEqual(response, expectedDonorId);
+
+        }
+
+        [Test]
+        public void CreateDonorRecordWithNonDefaultValuesTest()
+        {
+            var donorPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Donors"]);
+            var expectedDonorId = 585858;
+            var setupDate = DateTime.Now;
+
+            var expectedValues = new Dictionary<string, object>
+            {
+                {"Contact_ID", 888888},
+                {"Statement_Frequency_ID", 5},//default to quarterly
+                {"Statement_Type_ID", 6},     //default to individual
+                {"Statement_Method_ID", 7},   //default to email/online
+                {"Setup_Date", setupDate},    //default to current date/time
+                {"Stripe_Customer_ID", "cus_crds123456"}    
+            };
+
+            _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
+               It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(),
+               It.IsAny<string>(), true)).Returns(expectedDonorId);
+
+            var response = _fixture.CreateDonorRecord(888888, "cus_crds123456", setupDate, 5, 6, 7);
+
+            _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donorPageId, expectedValues, It.IsAny<string>(), true));
 
             Assert.AreEqual(response, expectedDonorId);
 
@@ -91,6 +120,40 @@ namespace MinistryPlatform.Translation.Test.Services
             _ministryPlatformService.VerifyAll();
             Assert.IsNotNull(response);
             Assert.AreEqual(response, expectedDonationDistributionId);
+        }
+
+        [Test]
+        public void shouldUpdatePaymentProcessorCustomerId()
+        {
+            _ministryPlatformService.Setup(mocked => mocked.UpdateRecord(299, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>()));
+
+            var response = _fixture.UpdatePaymentProcessorCustomerId(123, "456");
+
+            _ministryPlatformService.Verify(mocked => mocked.UpdateRecord(
+                299,
+                It.Is<Dictionary<string, object>>(
+                    d => ((int)d["dp_RecordID"]) == 123
+                        && ((string)d[DonorService.DONOR_STRIPE_CUST_ID]).Equals("456")),
+                It.IsAny<string>()));
+            Assert.AreEqual(123, response);
+        }
+
+        [Test]
+        public void shouldThrowApplicationExceptionWhenMinistryPlatformUpdateFails()
+        {
+            var ex = new Exception("Oh no!!!");
+            _ministryPlatformService.Setup(mocked => mocked.UpdateRecord(299, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>())).Throws(ex);
+
+            try
+            {
+                _fixture.UpdatePaymentProcessorCustomerId(123, "456");
+                Assert.Fail("Expected exception was not thrown");
+            }
+            catch (Exception e)
+            {
+                Assert.IsInstanceOf(typeof(ApplicationException), e);
+                Assert.AreSame(ex, e.InnerException);
+            }
         }
 
         [Test]

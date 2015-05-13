@@ -18,11 +18,11 @@ namespace crds_angular.Controllers.API
 {
     public class DonationController : MPAuth
     {
-        private IDonorService donorService;
+        private MinistryPlatform.Translation.Services.Interfaces.IDonorService donorService;
         private IPaymentService stripeService;
         private IAuthenticationService authenticationService;
 
-        public DonationController(IDonorService donorService, IPaymentService stripeService,
+        public DonationController(MinistryPlatform.Translation.Services.Interfaces.IDonorService donorService, IPaymentService stripeService,
             IAuthenticationService authenticationService)
         {
             this.donorService = donorService;

@@ -187,14 +187,17 @@
                                 $state.go("give.thank-you");
                             });
                         },
-                function(error){          
+                function(error){
+                    // The vm.email below is only required for guest giver, however, there
+                    // is no harm in sending it for an authenticated user as well,
+                    // so we'll keep it simple and send it in all cases.          
                     PaymentService.createDonorWithCard({
                       name: vm.nameOnCard,
                       number: vm.ccNumber,
                       exp_month: vm.expDate.substr(0,2),
                       exp_year: vm.expDate.substr(2,2),
                       cvc: vm.cvc
-                    })
+                    }, vm.email)
                     .then(function(donor) {
                         PaymentService.donateToProgram(vm.program.ProgramId, vm.amount, donor.id)
                             .then(function(confirmation){
