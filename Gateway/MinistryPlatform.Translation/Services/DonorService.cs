@@ -127,7 +127,6 @@ namespace MinistryPlatform.Translation.Services
                     donor = new Donor()
                     {
                         DonorId = record.ToInt("Donor_ID"),
-                        StripeCustomerId = record.ToString("Stripe_Customer_ID"),
                         StripeCustomerId = record.ToString(DONOR_STRIPE_CUST_ID),
                         ContactId = record.ToInt("Contact_ID")
                     };

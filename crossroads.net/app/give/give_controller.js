@@ -195,8 +195,8 @@
                     number: vm.ccNumber,
                     exp_month: vm.expDate.substr(0,2),
                     exp_year: vm.expDate.substr(2,2),
-                    cvc: vm.cvc
-                  })
+                    cvc: vm.cvc                    
+                  }, vm.email)
                   .then(function(donor) {
                     PaymentService.donateToProgram(vm.program.ProgramId, vm.amount, donor.id)
                       .then(function(confirmation){
