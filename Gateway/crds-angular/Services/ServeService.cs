@@ -268,7 +268,7 @@ namespace crds_angular.Services
 
             if (record.Rsvp != null)
             {
-                member.ServeRsvp = new ServeRsvp {Attending = (bool) record.Rsvp, RoleId = record.GroupRoleId};
+                member.ServeRsvp = new ServeRsvp {Attending = (bool) record.Rsvp, RoleId = record.OpportunityId};
             }
             return member;
         }
