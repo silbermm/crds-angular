@@ -119,7 +119,7 @@ namespace MinistryPlatform.Translation.Services
                     var record = records.First();
                     donor = new Donor()
                     {
-                        DonorId = record.ToInt("Donor_Record"),
+                        DonorId = record.ToInt("Donor_ID"),
                         StripeCustomerId = record.ToString("Stripe_Customer_ID"),
                         ContactId = record.ToInt("Contact_ID")
                     };
@@ -156,7 +156,7 @@ namespace MinistryPlatform.Translation.Services
                     var record = records.First();
                     donor = new Donor()
                     {
-                        DonorId = record.ToInt("dp_RecordID"),
+                        DonorId = record.ToInt("Donor_Record"),
                         StripeCustomerId = record.ToString("Stripe_Customer_ID"),
                         ContactId = record.ToInt("Contact_ID"),
                         Email = record.ToString("Email_Address")
