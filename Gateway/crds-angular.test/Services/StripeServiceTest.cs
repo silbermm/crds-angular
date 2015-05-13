@@ -35,7 +35,7 @@ namespace crds_angular.test.Services
                 It.Is<RestRequest>(o =>
                     o.Method == Method.POST
                     && o.Resource.Equals("customers")
-                    && parameterMatches("description", "Crossroads Donor #N/A", o.Parameters)
+                    && parameterMatches("description", "Crossroads Donor #pending", o.Parameters)
                     && parameterMatches("source", "token", o.Parameters)
                     )));
             restClient.VerifyAll();
@@ -59,7 +59,7 @@ namespace crds_angular.test.Services
                 It.Is<IRestRequest>(o =>
                     o.Method == Method.POST
                     && o.Resource.Equals("customers")
-                    && parameterMatches("description", "Crossroads Donor #N/A", o.Parameters)
+                    && parameterMatches("description", "Crossroads Donor #pending", o.Parameters)
                     && parameterMatches("source", "token", o.Parameters)
                     )));
             restClient.VerifyAll();

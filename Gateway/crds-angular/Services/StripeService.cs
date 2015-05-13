@@ -22,7 +22,7 @@ namespace crds_angular.Services
         {
 
             var request = new RestRequest("customers", Method.POST);
-            request.AddParameter("description", string.Format(STRIPE_CUSTOMER_DESCRIPTION, "N/A")); // adds to POST or URL querystring based on Method
+            request.AddParameter("description", string.Format(STRIPE_CUSTOMER_DESCRIPTION, "pending")); // adds to POST or URL querystring based on Method
             request.AddParameter("source", token);
 
             IRestResponse<StripeCustomer> response =
