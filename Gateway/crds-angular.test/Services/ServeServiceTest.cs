@@ -80,7 +80,7 @@ namespace crds_angular.test.Services
 
             _personService.Setup(m => m.GetLoggedInUserProfile(It.IsAny<string>())).Returns(person);
 
-            _fixture = new ServeService(_contactRelationshipService.Object, 
+            _fixture = new ServeService(_contactRelationshipService.Object,
                 _opportunityService.Object, _eventService.Object,
                 _participantService.Object, _groupParticipantService.Object);
 
@@ -96,12 +96,11 @@ namespace crds_angular.test.Services
             _contactRelationshipService.Setup(m => m.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>())).Returns(MockContactRelationships());
 
             _participantService.Setup(m => m.GetParticipant(It.IsAny<int>()))
-                .Returns(new Participant {ParticipantId = 1});
+                .Returns(new Participant { ParticipantId = 1 });
 
             _groupParticipantService.Setup(g => g.GetServingParticipants(It.IsAny<List<int>>(),It.IsAny<long>(), It.IsAny<long>())).Returns(MockGroupServingParticipants());
 
             var servingDays = _fixture.GetServingDays(It.IsAny<string>(), contactId, It.IsAny<long>(), It.IsAny<long>());
-
             _contactRelationshipService.VerifyAll();
             _groupParticipantService.Verify();
             _serveService.VerifyAll();
@@ -429,7 +428,7 @@ namespace crds_angular.test.Services
             const int eventTypeId = 3;
             const bool signUp = true;
             const bool alternateWeeks = true;
-            var expectedEventIds = new List<int> {1, 3, 5};
+            var expectedEventIds = new List<int> { 1, 3, 5 };
 
             SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp);
 
@@ -457,7 +456,7 @@ namespace crds_angular.test.Services
             const int eventTypeId = 3;
             const bool signUp = false;
             const bool alternateWeeks = true;
-            var expectedEventIds = new List<int> {1, 3, 5};
+            var expectedEventIds = new List<int> { 1, 3, 5 };
 
             SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp);
 
@@ -550,7 +549,7 @@ namespace crds_angular.test.Services
             var responses = new List<Response>();
             for (var i = 0; i < 20; i++)
             {
-                responses.Add(new Response {Event_ID = 1000});
+                responses.Add(new Response { Event_ID = 1000 });
             }
             return responses;
         }
@@ -560,7 +559,7 @@ namespace crds_angular.test.Services
             var responses = new List<Response>();
             for (var i = 0; i < 15; i++)
             {
-                responses.Add(new Response {Event_ID = 1000});
+                responses.Add(new Response { Event_ID = 1000 });
             }
             return responses;
         }
