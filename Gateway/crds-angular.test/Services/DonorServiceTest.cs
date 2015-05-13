@@ -57,7 +57,7 @@ namespace crds_angular.test.Services
             {
                 ContactId = 12345,
                 DonorId = 67890,
-                processorId = "Processor_ID"
+                ProcessorId = "Processor_ID"
             };
 
             var response = fixture.CreateDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
@@ -68,7 +68,7 @@ namespace crds_angular.test.Services
 
             Assert.AreEqual(donor.ContactId, response.ContactId);
             Assert.AreEqual(donor.DonorId, response.DonorId);
-            Assert.AreEqual(donor.processorId, response.processorId);
+            Assert.AreEqual(donor.ProcessorId, response.ProcessorId);
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace crds_angular.test.Services
 
             Assert.AreEqual(123, response.ContactId);
             Assert.AreEqual(456, response.DonorId);
-            Assert.AreEqual("Processor_ID", response.processorId);
+            Assert.AreEqual("Processor_ID", response.ProcessorId);
         }
 
         [Test]
@@ -109,7 +109,7 @@ namespace crds_angular.test.Services
 
             Assert.AreEqual(12345, response.ContactId);
             Assert.AreEqual(456, response.DonorId);
-            Assert.AreEqual("Processor_ID", response.processorId);
+            Assert.AreEqual("Processor_ID", response.ProcessorId);
         }
 
         [Test]
@@ -132,7 +132,7 @@ namespace crds_angular.test.Services
 
             Assert.AreEqual(12345, response.ContactId);
             Assert.AreEqual(456, response.DonorId);
-            Assert.AreEqual("Processor_ID", response.processorId);
+            Assert.AreEqual("Processor_ID", response.ProcessorId);
         }
     }
 }

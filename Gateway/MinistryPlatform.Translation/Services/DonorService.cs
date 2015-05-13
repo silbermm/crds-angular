@@ -127,7 +127,7 @@ namespace MinistryPlatform.Translation.Services
                     donor = new Donor()
                     {
                         DonorId = record.ToInt("Donor_ID"),
-                        processorId = record.ToString(DONOR_PROCESSOR_ID),
+                        ProcessorId = record.ToString(DONOR_PROCESSOR_ID),
                         ContactId = record.ToInt("Contact_ID")
                     };
                 }
@@ -165,7 +165,7 @@ namespace MinistryPlatform.Translation.Services
                     {
                         
                         DonorId = record.ToInt(DONOR_RECORD_ID),
-                        processorId = record.ToString(DONOR_PROCESSOR_ID),
+                        ProcessorId = record.ToString(DONOR_PROCESSOR_ID),
                         ContactId = record.ToInt("Contact_ID"),
                         Email = record.ToString("Email_Address")
                     };

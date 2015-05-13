@@ -35,7 +35,7 @@ namespace crds_angular.test.controllers
         private Donor donor = new Donor()
         {
             DonorId = donorId,
-            processorId = processorId,
+            ProcessorId = processorId,
             ContactId = contactId,
             Email = email
         };
@@ -125,14 +125,14 @@ namespace crds_angular.test.controllers
             {
                 ContactId = 8675309,
                 DonorId = 0,
-                processorId = null
+                ProcessorId = null
             };
 
             var createDonor = new Donor
             {
                 ContactId = 8675309,
                 DonorId = 394256,
-                processorId = "jenny_ive_got_your_number"
+                ProcessorId = "jenny_ive_got_your_number"
             };
 
             donorService.Setup(mocked => mocked.GetDonorForEmail(createDonorDto.email_address)).Returns(lookupDonor);
@@ -169,14 +169,14 @@ namespace crds_angular.test.controllers
             {
                 ContactId = 8675309,
                 DonorId = 90210,
-                processorId = "jenny_ive_got_your_number"
+                ProcessorId = "jenny_ive_got_your_number"
             };
 
             var createDonor = new Donor
             {
                 ContactId = 8675309,
                 DonorId = 90210,
-                processorId = "jenny_ive_got_your_number"
+                ProcessorId = "jenny_ive_got_your_number"
             };
 
             donorService.Setup(mocked => mocked.GetDonorForEmail(createDonorDto.email_address)).Returns(lookupDonor);
@@ -239,7 +239,7 @@ namespace crds_angular.test.controllers
             {
                 ContactId = 8675309,
                 DonorId = 90210,
-                processorId = "jenny_ive_got_your_number"
+                ProcessorId = "jenny_ive_got_your_number"
             };
 
             var createException = new Exception("Danger, Will Robinson!");

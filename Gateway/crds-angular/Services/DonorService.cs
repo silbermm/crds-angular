@@ -42,25 +42,25 @@ namespace crds_angular.Services
             if (existingDonor == null)
             {
                 donor.ContactId = mpContactService.CreateContactForGuestGiver(emailAddress, GUEST_GIVER_DISPLAY_NAME);
-                donor.processorId = paymentService.createCustomer(paymentProcessorToken);
-                donor.DonorId = mpDonorService.CreateDonorRecord(donor.ContactId, donor.processorId, setupDate, 
+                donor.ProcessorId = paymentService.createCustomer(paymentProcessorToken);
+                donor.DonorId = mpDonorService.CreateDonorRecord(donor.ContactId, donor.ProcessorId, setupDate, 
                     STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE);
-            } else if(String.IsNullOrWhiteSpace(existingDonor.processorId)) {
+            } else if(String.IsNullOrWhiteSpace(existingDonor.ProcessorId)) {
                 donor.ContactId = existingDonor.ContactId;
-                donor.processorId = paymentService.createCustomer(paymentProcessorToken);
+                donor.ProcessorId = paymentService.createCustomer(paymentProcessorToken);
                 if (existingDonor.DonorId > 0)
                 {
-                    donor.DonorId = mpDonorService.UpdatePaymentProcessorCustomerId(existingDonor.DonorId, donor.processorId);
+                    donor.DonorId = mpDonorService.UpdatePaymentProcessorCustomerId(existingDonor.DonorId, donor.ProcessorId);
                 }
                 else
                 {
-                    donor.DonorId = mpDonorService.CreateDonorRecord(existingDonor.ContactId, donor.processorId, setupDate,
+                    donor.DonorId = mpDonorService.CreateDonorRecord(existingDonor.ContactId, donor.ProcessorId, setupDate,
                         STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE);
                 }
             } else {
                 donor.ContactId = existingDonor.ContactId;
                 donor.DonorId = existingDonor.DonorId;
-                donor.processorId = existingDonor.processorId;
+                donor.ProcessorId = existingDonor.ProcessorId;
             }
 
             return (donor);

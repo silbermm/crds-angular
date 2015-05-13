@@ -160,7 +160,7 @@ namespace MinistryPlatform.Translation.Test.Services
         public void TestGetPossibleGuestDonorContact()
         {
             var donorId = 1234567;
-            var processorId = "cus_431234";
+            var ProcessorId = "cus_431234";
             var contactId = 565656;
             var email = "cross@crossroads.net";
             var guestDonorPageViewId = "PossibleGuestDonorContact";
@@ -168,14 +168,14 @@ namespace MinistryPlatform.Translation.Test.Services
             expectedDonorValues.Add(new Dictionary<string, object>
             {
                 {"Donor_Record", donorId},
-                {"Processor_ID", processorId},
+                {"Processor_ID", ProcessorId},
                 {"Contact_ID", contactId},
                 {"Email_Address", email}
             });
             var donor = new Donor()
             {
                 DonorId = donorId,
-                processorId = processorId,
+                ProcessorId = ProcessorId,
                 ContactId = contactId,
                 Email = email
             };
@@ -192,7 +192,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(response.DonorId, donor.DonorId);
             Assert.AreEqual(response.ContactId, donor.ContactId);
             Assert.AreEqual(response.Email, donor.Email);
-            Assert.AreEqual(response.processorId, donor.processorId);
+            Assert.AreEqual(response.ProcessorId, donor.ProcessorId);
         }
 
 
@@ -200,7 +200,7 @@ namespace MinistryPlatform.Translation.Test.Services
         public void TestGetDonor()
         {
             var donorId = 1234567;
-            var processorId = "cus_431234";
+            var ProcessorId = "cus_431234";
             var contactId = 565656;
             var email = "cross@crossroads.net";
             var guestDonorPageViewId = "DonorByContactId";
@@ -208,13 +208,13 @@ namespace MinistryPlatform.Translation.Test.Services
             expectedDonorValues.Add(new Dictionary<string, object>
             {
                 {"Donor_ID", donorId},
-                {"Processor_ID", processorId},
+                {"Processor_ID", ProcessorId},
                 {"Contact_ID", contactId}
             });
             var donor = new Donor()
             {
                 DonorId = donorId,
-                processorId = processorId,
+                ProcessorId = ProcessorId,
                 ContactId = contactId,
                 Email = email
             };
@@ -231,7 +231,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _ministryPlatformService.VerifyAll();
             Assert.AreEqual(response.DonorId, donor.DonorId);
             Assert.AreEqual(response.ContactId, donor.ContactId);
-            Assert.AreEqual(response.processorId, donor.processorId);
+            Assert.AreEqual(response.ProcessorId, donor.ProcessorId);
         }
     }
 }

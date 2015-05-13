@@ -85,7 +85,7 @@ namespace crds_angular.Controllers.API
             var responseBody = new DonorDTO
             {
                 id = donor.DonorId,
-                Processor_ID = donor.processorId,
+                Processor_ID = donor.ProcessorId,
             };
 
             // HTTP StatusCode should be 201 (Created) if we created a donor, or 200 (Ok) if returning an existing donor
@@ -131,7 +131,7 @@ namespace crds_angular.Controllers.API
                 var response = new DonorDTO
                 {
                     id = donor.DonorId,
-                    Processor_ID = donor.processorId
+                    Processor_ID = donor.ProcessorId
                 };
 
                 return Ok(response);
@@ -157,7 +157,7 @@ namespace crds_angular.Controllers.API
                     var response = new DonorDTO
                     {
                         id = donor.DonorId,
-                        Processor_ID = donor.processorId
+                        Processor_ID = donor.ProcessorId
                     };
 
                     return Ok(response); 
