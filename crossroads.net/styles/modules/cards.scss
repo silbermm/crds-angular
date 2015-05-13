@@ -23,6 +23,14 @@
 
 .card-header {
   font-size: 2rem;
+
+   a {
+     color: $text-color;
+
+     &:hover {
+       color: $link-color;
+     }
+   }
 }
 
 .card-dark {
