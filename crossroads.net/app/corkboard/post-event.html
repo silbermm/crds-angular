@@ -26,8 +26,8 @@
     </div>
     <div class="form-group">
       <label for="time" class="col-sm-3 control-label text-left">Event Time</label>
-      <div class="col-sm-9">
-        <timepicker ng-model="corkboard.myTime" hour-step="corkboard.hstep" minute-step="corkboard.mstep" show-meridian="corkboard.isMeridian"></timepicker>
+      <div class="col-sm-9 timepicker">
+        <timepicker ng-model="corkboard.myTime" ng-class="timepicker" hour-step="corkboard.hstep" minute-step="corkboard.mstep" show-meridian="corkboard.isMeridian"></timepicker>
       </div>
     </div>
     <div class="form-group">

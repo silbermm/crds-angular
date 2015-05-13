@@ -181,8 +181,8 @@
               controller: "CorkboardCtrl as corkboard",
               templateUrl: "corkboard/post-job.html"
             })
-            .state("corkboard.detail", {
-              url: "/detail",
+            .state("corkboard-detail", {
+              url: "/corkboard/detail",
               templateUrl: "corkboard/corkboard-listing-detail.html"
             })
             .state("opportunities", {
