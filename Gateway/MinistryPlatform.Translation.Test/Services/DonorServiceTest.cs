@@ -94,6 +94,7 @@ namespace MinistryPlatform.Translation.Test.Services
             var expectedDonationDistributionId = 231231;
             var donationPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Donations"]);
             var donationDistributionPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Distributions"]);
+            var registeredDonor = true;
 
 
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
@@ -110,10 +111,11 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Donation_Amount", donationAmt},
                 {"Payment_Type_ID", 4}, //hardcoded as credit card until ACH stories are worked
                 {"Donation_Date", setupDate},
-                {"Transaction_code", charge_id}
+                {"Transaction_code", charge_id},
+                {"Registered_Donor", registeredDonor}
             };
 
-            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, donorId, programId, charge_id, setupDate);
+            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, donorId, programId, charge_id, setupDate, registeredDonor);
 
             _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donationPageId, expectedDonationValues, It.IsAny<string>(), true));
 
@@ -233,5 +235,6 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(response.ContactId, donor.ContactId);
             Assert.AreEqual(response.StripeCustomerId, donor.StripeCustomerId);
         }
+
     }
 }

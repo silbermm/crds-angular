@@ -78,7 +78,7 @@ namespace crds_angular.test.controllers
 
             donorServiceMock.Setup(mocked => mocked.
                 CreateDonationAndDistributionRecord(createDonationDTO.amount, donor.DonorId, 
-                    createDonationDTO.program_id, charge_id, It.IsAny<DateTime>()))
+                    createDonationDTO.program_id, charge_id, It.IsAny<DateTime>(), true))
                     .Returns(donationId);
             
             IHttpActionResult result = fixture.Post(createDonationDTO);
@@ -130,7 +130,7 @@ namespace crds_angular.test.controllers
 
             donorServiceMock.Setup(mocked => mocked.
                 CreateDonationAndDistributionRecord(createDonationDTO.amount, donor.DonorId,
-                    createDonationDTO.program_id, charge_id, It.IsAny<DateTime>()))
+                    createDonationDTO.program_id, charge_id, It.IsAny<DateTime>(), false))
                     .Returns(donationId);
 
             IHttpActionResult result = fixture.Post(createDonationDTO);
