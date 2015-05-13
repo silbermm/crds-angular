@@ -5,9 +5,9 @@
 
   module.exports = ServeTeam;
 
-  ServeTeam.$inject = ['$rootScope', '$log', 'Session', 'ServeOpportunities', '$modal'];
+  ServeTeam.$inject = ['$rootScope', '$log', 'Session', 'ServeOpportunities', 'Capacity', '$modal'];
 
-  function ServeTeam($rootScope, $log, Session, ServeOpportunities, $modal) {
+  function ServeTeam($rootScope, $log, Session, ServeOpportunities, Capacity, $modal) {
     return {
       restrict: "EA",
       transclude: true,
@@ -16,15 +16,13 @@
       scope: {
         team: '=',
         opportunity: '=',
-        teamIndex: '=',
-        tabIndex: '=',
-        dayIndex: '=',
         oppServeDate: '='
       },
       link: link
     };
 
     function link(scope, el, attr) {
+
       scope.attendingChanged = attendingChanged;
       scope.closePanel = closePanel;
       scope.currentActiveTab = null;
@@ -34,6 +32,7 @@
         startingDay: 1,
         showWeeks: 'false'
       };
+      scope.datePickers = {fromOpened : false, toOpened: false };
       scope.displayEmail = displayEmail;
       scope.editProfile = editProfile;
       scope.frequency = getFrequency();
@@ -43,9 +42,9 @@
       scope.isCollapsed = true;
       scope.isFormValid = isFormValid;
       scope.modalInstance = {};
-      scope.open = open;
+      scope.openFromDate = openFromDate;
+      scope.openToDate = openToDate;
       scope.openPanel = openPanel;
-      scope.panelId = getPanelId;
       scope.roleChanged = roleChanged;
       scope.roles = null;
       scope.saveRsvp = saveRsvp;
@@ -53,18 +52,8 @@
       scope.signedup = null;
       scope.showEdit = false;
       scope.showIcon = showIcon;
-
       scope.togglePanel = togglePanel;
-
-      activate();
       //////////////////////////////////////
-
-      function activate() {
-        _.each(scope.team.members, function(m) {
-
-        });
-      }
-
 
       function attendingChanged() {
         roleChanged();
@@ -134,10 +123,6 @@
         return [once, everyWeek, everyOtherWeek];
       }
 
-      function getPanelId() {
-        return "team-panel-" + scope.dayIndex + scope.tabIndex + scope.teamIndex;
-      }
-
       function isActiveTab(memberName) {
         return memberName === scope.currentActiveTab;
       };
@@ -166,15 +151,19 @@
             validForm.messageStr = $rootScope.MESSAGES.invalidDateRange;
           }
         }
-
-
         return validForm;
       }
 
-      function open($event, opened) {
+      function openFromDate($event) {
         $event.preventDefault();
         $event.stopPropagation();
-        scope[opened] = true;
+        scope.datePickers.fromOpened = true;
+      }
+      
+      function openToDate($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        scope.datePickers.toOpened = true;
       }
 
       function openPanel(members) {
@@ -183,7 +172,9 @@
           scope.currentMember = members[0];
           scope.currentActiveTab = scope.currentMember.name;
         }
-        $log.debug("isCollapsed = " + scope.isCollapsed);
+        _.each(scope.currentMember.roles, function(r){ 
+          r.capacity = Capacity.get({id: r.roleId, eventId: scope.team.eventId, min: r.minimum, max: r.maximum});
+        });
         scope.isCollapsed = !scope.isCollapsed;
         allowProfileEdit();
       }
@@ -275,6 +266,9 @@
           scope.togglePanel();
         }
         scope.currentMember = member;
+        _.each(scope.currentMember.roles, function(r){ 
+          r.capacity = Capacity.get({id: r.roleId, eventId: scope.team.eventId, min: r.minimum, max: r.maximum});
+        });
         allowProfileEdit();
       }
 

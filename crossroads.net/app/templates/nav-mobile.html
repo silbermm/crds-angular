@@ -15,7 +15,7 @@
         <ul class="dropdown-menu">
             <li ng-if="$root.username == undefined">
                 <div class="dd_menu side-nav-login clearfix">
-                    <login-form prefix="mobile-page" ng-click="prevent($event)"></login-form>
+                    <login-form prefix="mobile-page" ng-click="app.prevent($event)"></login-form>
                 </div>
             </li>
             <li ng-if="$root.username != undefined">

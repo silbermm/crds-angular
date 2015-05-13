@@ -9,5 +9,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         int CreateDonorRecord(int contactId, string stripeCustomerId, DateTime setupDate);
         int CreateDonationAndDistributionRecord(int donationAmt, int donorId, string programId, string charge_id, DateTime setupDate);
         Donor GetDonorRecord(int contactId);
+        Donor GetPossibleGuestDonorContact(string email);
     }
 }

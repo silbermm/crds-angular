@@ -7,7 +7,7 @@
                 <ul class="dropdown-menu dropdown-menu-large dropdown-menu-featured-row row">
                     <li class="col-sm-3" ng-if="$root.username == undefined">
                         <ul>
-                            <login-form prefix="menu" ng-click="prevent($event)"></login-form>
+                            <login-form prefix="menu" ng-click="app.prevent($event)"></login-form>
                         </ul>
                     </li>
                     <li class="col-sm-3" ng-if="$root.username != undefined">
