@@ -15,6 +15,7 @@ namespace crds_angular.test.Services
         private Mock<MinistryPlatform.Translation.Services.Interfaces.IContactService> mpContactService;
         private Mock<crds_angular.Services.Interfaces.IPaymentService> paymentService;
         private Mock<IConfigurationWrapper> configurationWrapper;
+        private Mock<MinistryPlatform.Translation.Services.Interfaces.IAuthenticationService> authenticationService;
 
         private const string GUEST_GIVER_DISPLAY_NAME = "Guest Giver";
 
@@ -28,6 +29,7 @@ namespace crds_angular.test.Services
             mpDonorService = new Mock<MinistryPlatform.Translation.Services.Interfaces.IDonorService>(MockBehavior.Strict);
             mpContactService = new Mock<MinistryPlatform.Translation.Services.Interfaces.IContactService>(MockBehavior.Strict);
             paymentService = new Mock<crds_angular.Services.Interfaces.IPaymentService>(MockBehavior.Strict);
+            authenticationService = new Mock<MinistryPlatform.Translation.Services.Interfaces.IAuthenticationService>(MockBehavior.Strict);
 
             configurationWrapper = new Mock<IConfigurationWrapper>();
             configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("DonorStatementFrequencyNever")).Returns(STATEMENT_FREQUENCY_NEVER);
@@ -35,7 +37,7 @@ namespace crds_angular.test.Services
             configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("DonorStatementMethodNone")).Returns(STATEMENT_METHOD_NONE);
             configurationWrapper.Setup(mocked => mocked.GetConfigValue("GuestGiverContactDisplayName")).Returns(GUEST_GIVER_DISPLAY_NAME);
 
-            fixture = new DonorService(mpDonorService.Object, mpContactService.Object, paymentService.Object, configurationWrapper.Object);
+            fixture = new DonorService(mpDonorService.Object, mpContactService.Object, paymentService.Object, configurationWrapper.Object, authenticationService.Object);
 
         }
 
@@ -47,6 +49,20 @@ namespace crds_angular.test.Services
             var response = fixture.GetDonorForEmail("me@here.com");
 
             mpDonorService.VerifyAll();
+            Assert.AreSame(donor, response);
+        }
+
+        [Test]
+        public void shouldGetDonorForAuthenticatedUser()
+        {
+            var donor = new Donor();
+            authenticationService.Setup(mocked => mocked.GetContactId("authToken")).Returns(123);
+            mpDonorService.Setup(mocked => mocked.GetDonorRecord(123)).Returns(donor);
+            var response = fixture.GetDonorForAuthenticatedUser("authToken");
+
+            authenticationService.VerifyAll();
+            mpDonorService.VerifyAll();
+
             Assert.AreSame(donor, response);
         }
 
@@ -77,6 +93,7 @@ namespace crds_angular.test.Services
             mpContactService.Setup(mocked => mocked.CreateContactForGuestGiver("me@here.com", GUEST_GIVER_DISPLAY_NAME)).Returns(123);
             paymentService.Setup(mocked => mocked.createCustomer("stripe_token")).Returns("stripe_cust_id");
             mpDonorService.Setup(mocked => mocked.CreateDonorRecord(123, "stripe_cust_id", It.IsAny<DateTime>(), STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE)).Returns(456);
+            paymentService.Setup(mocked => mocked.updateCustomerDescription("stripe_cust_id", 456)).Returns("456");
 
             var response = fixture.CreateDonor(null, "me@here.com", "stripe_token", DateTime.Now);
 
@@ -100,6 +117,7 @@ namespace crds_angular.test.Services
 
             paymentService.Setup(mocked => mocked.createCustomer("stripe_token")).Returns("stripe_cust_id");
             mpDonorService.Setup(mocked => mocked.CreateDonorRecord(12345, "stripe_cust_id", It.IsAny<DateTime>(), STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE)).Returns(456);
+            paymentService.Setup(mocked => mocked.updateCustomerDescription("stripe_cust_id", 456)).Returns("456");
 
             var response = fixture.CreateDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
 
@@ -123,6 +141,7 @@ namespace crds_angular.test.Services
 
             paymentService.Setup(mocked => mocked.createCustomer("stripe_token")).Returns("stripe_cust_id");
             mpDonorService.Setup(mocked => mocked.UpdatePaymentProcessorCustomerId(456, "stripe_cust_id")).Returns(456);
+            paymentService.Setup(mocked => mocked.updateCustomerDescription("stripe_cust_id", 456)).Returns("456");
 
             var response = fixture.CreateDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
 

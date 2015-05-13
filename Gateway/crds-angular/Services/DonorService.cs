@@ -11,6 +11,7 @@ namespace crds_angular.Services
         private IContactService mpContactService;
         private crds_angular.Services.Interfaces.IPaymentService paymentService;
         private IConfigurationWrapper configurationWrapper;
+        private IAuthenticationService authenticationService;
 
         private readonly string GUEST_GIVER_DISPLAY_NAME;
 
@@ -18,12 +19,15 @@ namespace crds_angular.Services
         private readonly int STATEMENT_TYPE_INDIVIDUAL;
         private readonly int STATEMENT_METHOD_NONE;
 
-        public DonorService(IDonorService mpDonorService, IContactService mpContactService, crds_angular.Services.Interfaces.IPaymentService paymentService, IConfigurationWrapper configurationWrapper)
+        public DonorService(IDonorService mpDonorService, IContactService mpContactService,
+            crds_angular.Services.Interfaces.IPaymentService paymentService, IConfigurationWrapper configurationWrapper,
+            IAuthenticationService authenticationService)
         {
             this.mpDonorService = mpDonorService;
             this.mpContactService = mpContactService;
             this.paymentService = paymentService;
             this.configurationWrapper = configurationWrapper;
+            this.authenticationService = authenticationService;
 
             GUEST_GIVER_DISPLAY_NAME = configurationWrapper.GetConfigValue("GuestGiverContactDisplayName");
             STATEMENT_FREQUENCY_NEVER = configurationWrapper.GetConfigIntValue("DonorStatementFrequencyNever");
@@ -36,6 +40,12 @@ namespace crds_angular.Services
             return (mpDonorService.GetPossibleGuestDonorContact(emailAddress));
         }
 
+        public Donor GetDonorForAuthenticatedUser(string authToken)
+        {
+            var contactId = authenticationService.GetContactId(authToken);
+            return (mpDonorService.GetDonorRecord(contactId));
+        }
+
         public Donor CreateDonor(Donor existingDonor, string emailAddress, string paymentProcessorToken, DateTime setupDate)
         {
             var donor = new Donor();
@@ -45,6 +55,7 @@ namespace crds_angular.Services
                 donor.StripeCustomerId = paymentService.createCustomer(paymentProcessorToken);
                 donor.DonorId = mpDonorService.CreateDonorRecord(donor.ContactId, donor.StripeCustomerId, setupDate, 
                     STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE);
+                paymentService.updateCustomerDescription(donor.StripeCustomerId, donor.DonorId);
             } else if(String.IsNullOrWhiteSpace(existingDonor.StripeCustomerId)) {
                 donor.ContactId = existingDonor.ContactId;
                 donor.StripeCustomerId = paymentService.createCustomer(paymentProcessorToken);
@@ -57,7 +68,10 @@ namespace crds_angular.Services
                     donor.DonorId = mpDonorService.CreateDonorRecord(existingDonor.ContactId, donor.StripeCustomerId, setupDate,
                         STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE);
                 }
-            } else {
+                paymentService.updateCustomerDescription(donor.StripeCustomerId, donor.DonorId);
+            }
+            else
+            {
                 donor.ContactId = existingDonor.ContactId;
                 donor.DonorId = existingDonor.DonorId;
                 donor.StripeCustomerId = existingDonor.StripeCustomerId;
