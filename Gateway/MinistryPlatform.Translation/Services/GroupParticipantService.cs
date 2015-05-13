@@ -42,8 +42,8 @@ namespace MinistryPlatform.Translation.Services
                     participant.GroupName = reader.GetString(reader.GetOrdinal("Group_Name"));
                     participant.GroupPrimaryContactEmail = reader.GetString(reader.GetOrdinal("Primary_Contact_Email"));
                     participant.OpportunityId = reader.GetInt32(reader.GetOrdinal("Opportunity_ID"));
-                    participant.OpportunityMaximumNeeded = Convert.ToInt16(reader["Maximum_Needed"]);
-                    participant.OpportunityMinimumNeeded = Convert.ToInt16(reader["Minimum_Needed"]);
+                    participant.OpportunityMaximumNeeded = SafeInt(reader, "Maximum_Needed");
+                    participant.OpportunityMinimumNeeded = SafeInt(reader, "Minimum_Needed");
                     participant.OpportunityRoleTitle = reader.GetString(reader.GetOrdinal("Role_Title"));
                     participant.OpportunityShiftEnd = GetTimeSpan(reader, "Shift_End");
                     participant.OpportunityShiftStart = GetTimeSpan(reader, "Shift_Start");
@@ -123,6 +123,12 @@ namespace MinistryPlatform.Translation.Services
         {
             var ordinal = record.GetOrdinal(fieldName);
             return !record.IsDBNull(ordinal) ? record.GetString(ordinal) : null;
+        }
+
+        private int? SafeInt(IDataRecord record, string fieldName)
+        {
+            var ordinal = record.GetOrdinal(fieldName);
+            return !record.IsDBNull(ordinal) ? record.GetInt16(ordinal) : (int?) null;
         }
     }
 }
