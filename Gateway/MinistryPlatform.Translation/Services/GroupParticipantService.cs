@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
+using System.Linq;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Crossroads.Utilities.Extensions;
@@ -66,45 +67,38 @@ namespace MinistryPlatform.Translation.Services
             }
         }
 
-        private IDbCommand CreateSqlCommand(IEnumerable<int> participants, long from, long to)
+        private IDbCommand CreateSqlCommand(IReadOnlyList<int> participants, long from, long to)
         {
-            var sb = new StringBuilder();
-            var i = 1;
 
             var fromDate = from == 0 ? DateTime.Today : from.FromUnixTime();
             var toDate = to == 0 ? DateTime.Today.AddDays(28) : to.FromUnixTime();
-               
-
-            var query =
-                @"SELECT *, 
+             
+            const string query = @"SELECT *, 
                         Row_Number() Over ( Order By v.Event_Start_Date ) As RowNumber 
                     FROM MinistryPlatform.dbo.vw_crds_Serving_Participants v 
-                    WHERE v.Participant_ID IN ( @participants ) 
+                    WHERE v.Participant_ID IN ( {0} ) 
                     AND Event_Start_Date between @from and @to
                     ORDER BY Event_Start_Date, Group_Name, Contact_ID";
 
-            IDbCommand command = new SqlCommand();
-            command.CommandType = CommandType.Text;
+            var parmNames = participants.Select((s, i) => "@participant" + i.ToString()).ToArray();
+            var parms = string.Join(",", parmNames);
 
-            foreach (var participant in participants)
+            using (IDbCommand command = new SqlCommand(string.Format(query, parms)))
             {
-                sb.Append("@ParticipantId" + i + ",");
-                var c = new SqlParameter("@ParticipantId" + i, participant) {DbType = DbType.Int32};
-                command.Parameters.Add(c);
-                i++;
+
+                command.Parameters.Add(new SqlParameter("@from", fromDate) {DbType = DbType.DateTime});
+                command.Parameters.Add(new SqlParameter("@to", toDate) { DbType = DbType.DateTime });
+
+                command.CommandType = CommandType.Text;
+                for (var i = 0; i < parmNames.Length; i++)
+                {
+                    var sqlParameter = new SqlParameter(parmNames[i], participants[i]);
+                    command.Parameters.Add(sqlParameter);
+                }
+                return command;
             }
-
-            command.Parameters.Add(new SqlParameter("@from", fromDate) {DbType = DbType.DateTime});
-            command.Parameters.Add(new SqlParameter("@to", toDate) { DbType = DbType.DateTime });
-
-            var tmp = sb.Remove(sb.Length - 1, 1);
-            query = query.Replace("@participants", tmp.ToString());
-            command.CommandText = query;
-            
-
-            return command;
         }
-        
+
         private static bool? GetRsvp(IDataRecord record, string columnName)
         {
             var ordinal = record.GetOrdinal(columnName);
