@@ -23,13 +23,13 @@ namespace crds_angular.test.controllers
         private string authType;
         private string authToken;
         private static int contactId = 8675309;
-        private static string stripeCustomerId = "cus_test123456";
+        private static string processorId = "cus_test123456";
         private static string email = "automatedtest@crossroads.net";
         private static int donorId = 394256;
         private Donor donor = new Donor()
         {
             DonorId = donorId,
-            StripeCustomerId = stripeCustomerId,
+            ProcessorId = processorId,
             ContactId = contactId,
             Email = email
         };
@@ -68,7 +68,7 @@ namespace crds_angular.test.controllers
             Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonorDTO>), result);
             var okResult = (OkNegotiatedContentResult<DonorDTO>)result;
             Assert.AreEqual(donorId, okResult.Content.id);
-            Assert.AreEqual(stripeCustomerId, okResult.Content.stripe_customer_id);
+            Assert.AreEqual(processorId, okResult.Content.Processor_ID);
         }
 
         [Test]
@@ -80,7 +80,7 @@ namespace crds_angular.test.controllers
             Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonorDTO>), result);
             var okResult = (OkNegotiatedContentResult<DonorDTO>)result;
             Assert.AreEqual(donorId, okResult.Content.id);
-            Assert.AreEqual(stripeCustomerId, okResult.Content.stripe_customer_id);
+            Assert.AreEqual(processorId, okResult.Content.Processor_ID);
         }
 
         [Test]
@@ -93,7 +93,7 @@ namespace crds_angular.test.controllers
             Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonorDTO>), result);
             var okResult = (OkNegotiatedContentResult<DonorDTO>)result;
             Assert.AreEqual(donorId, okResult.Content.id);
-            Assert.AreEqual(stripeCustomerId, okResult.Content.stripe_customer_id);
+            Assert.AreEqual(processorId, okResult.Content.Processor_ID);
         }
 
         [Test]
@@ -111,14 +111,14 @@ namespace crds_angular.test.controllers
             {
                 ContactId = 8675309,
                 DonorId = 0,
-                StripeCustomerId = null
+                ProcessorId = null
             };
 
             var createDonor = new Donor
             {
                 ContactId = 8675309,
                 DonorId = 394256,
-                StripeCustomerId = "jenny_ive_got_your_number"
+                ProcessorId = "jenny_ive_got_your_number"
             };
 
             donorService.Setup(mocked => mocked.GetDonorForEmail(createDonorDto.email_address)).Returns(lookupDonor);
@@ -137,7 +137,7 @@ namespace crds_angular.test.controllers
             Assert.IsInstanceOf(typeof(ObjectContent<DonorDTO>), content);
             var responseDto = (DonorDTO)((ObjectContent)content).Value;
             Assert.AreEqual(394256, responseDto.id);
-            Assert.AreEqual("jenny_ive_got_your_number", responseDto.stripe_customer_id);
+            Assert.AreEqual("jenny_ive_got_your_number", responseDto.Processor_ID);
         }
 
         [Test]
@@ -155,14 +155,14 @@ namespace crds_angular.test.controllers
             {
                 ContactId = 8675309,
                 DonorId = 90210,
-                StripeCustomerId = "jenny_ive_got_your_number"
+                ProcessorId = "jenny_ive_got_your_number"
             };
 
             var createDonor = new Donor
             {
                 ContactId = 8675309,
                 DonorId = 90210,
-                StripeCustomerId = "jenny_ive_got_your_number"
+                ProcessorId = "jenny_ive_got_your_number"
             };
 
             donorService.Setup(mocked => mocked.GetDonorForEmail(createDonorDto.email_address)).Returns(lookupDonor);
@@ -181,7 +181,7 @@ namespace crds_angular.test.controllers
             Assert.IsInstanceOf(typeof(ObjectContent<DonorDTO>), content);
             var responseDto = (DonorDTO)((ObjectContent)content).Value;
             Assert.AreEqual(90210, responseDto.id);
-            Assert.AreEqual("jenny_ive_got_your_number", responseDto.stripe_customer_id);
+            Assert.AreEqual("jenny_ive_got_your_number", responseDto.Processor_ID);
         }
 
         [Test]
@@ -225,7 +225,7 @@ namespace crds_angular.test.controllers
             {
                 ContactId = 8675309,
                 DonorId = 90210,
-                StripeCustomerId = "jenny_ive_got_your_number"
+                ProcessorId = "jenny_ive_got_your_number"
             };
 
             var createException = new Exception("Danger, Will Robinson!");

@@ -72,7 +72,7 @@ namespace crds_angular.Controllers.API
             var responseBody = new DonorDTO
             {
                 id = donor.DonorId,
-                stripe_customer_id = donor.StripeCustomerId,
+                Processor_ID = donor.ProcessorId,
             };
 
             // HTTP StatusCode should be 201 (Created) if we created a donor, or 200 (Ok) if returning an existing donor
@@ -93,7 +93,7 @@ namespace crds_angular.Controllers.API
                 var response = new DonorDTO
                 {
                     id = donor.DonorId,
-                    stripe_customer_id = donor.StripeCustomerId
+                    Processor_ID = donor.ProcessorId
                 };
 
                 return Ok(response);
@@ -111,13 +111,20 @@ namespace crds_angular.Controllers.API
             {
                 var donor = gatewayDonorService.GetDonorForAuthenticatedUser(token);
 
-                var response = new DonorDTO
+                if (donor == null)
                 {
-                    id = donor.DonorId,
-                    stripe_customer_id = donor.StripeCustomerId
-                };
+                    return (NotFound());
+                }
+                else
+                {
+                    var response = new DonorDTO
+                    {
+                        id = donor.DonorId,
+                        Processor_ID = donor.ProcessorId
+                    };
 
-                return Ok(response);
+                    return Ok(response);
+                }
             }
             catch (Exception exception)
             {
@@ -140,7 +147,7 @@ namespace crds_angular.Controllers.API
                     var response = new DonorDTO
                     {
                         id = donor.DonorId,
-                        stripe_customer_id = donor.StripeCustomerId
+                        Processor_ID = donor.ProcessorId
                     };
 
                     return Ok(response); 

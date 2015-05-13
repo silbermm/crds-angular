@@ -52,29 +52,30 @@ namespace crds_angular.Services
             if (existingDonor == null)
             {
                 donor.ContactId = mpContactService.CreateContactForGuestGiver(emailAddress, GUEST_GIVER_DISPLAY_NAME);
-                donor.StripeCustomerId = paymentService.createCustomer(paymentProcessorToken);
-                donor.DonorId = mpDonorService.CreateDonorRecord(donor.ContactId, donor.StripeCustomerId, setupDate, 
+                donor.ProcessorId = paymentService.createCustomer(paymentProcessorToken);
+                donor.DonorId = mpDonorService.CreateDonorRecord(donor.ContactId, donor.ProcessorId, setupDate, 
                     STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE);
-                paymentService.updateCustomerDescription(donor.StripeCustomerId, donor.DonorId);
-            } else if(String.IsNullOrWhiteSpace(existingDonor.StripeCustomerId)) {
+                paymentService.updateCustomerDescription(donor.ProcessorId, donor.DonorId);
+            } else if(String.IsNullOrWhiteSpace(existingDonor.ProcessorId)) {
+
                 donor.ContactId = existingDonor.ContactId;
-                donor.StripeCustomerId = paymentService.createCustomer(paymentProcessorToken);
+                donor.ProcessorId = paymentService.createCustomer(paymentProcessorToken);
                 if (existingDonor.DonorId > 0)
                 {
-                    donor.DonorId = mpDonorService.UpdatePaymentProcessorCustomerId(existingDonor.DonorId, donor.StripeCustomerId);
+                    donor.DonorId = mpDonorService.UpdatePaymentProcessorCustomerId(existingDonor.DonorId, donor.ProcessorId);
                 }
                 else
                 {
-                    donor.DonorId = mpDonorService.CreateDonorRecord(existingDonor.ContactId, donor.StripeCustomerId, setupDate,
+                    donor.DonorId = mpDonorService.CreateDonorRecord(existingDonor.ContactId, donor.ProcessorId, setupDate,
                         STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE);
                 }
-                paymentService.updateCustomerDescription(donor.StripeCustomerId, donor.DonorId);
+                paymentService.updateCustomerDescription(donor.ProcessorId, donor.DonorId);
             }
             else
             {
                 donor.ContactId = existingDonor.ContactId;
                 donor.DonorId = existingDonor.DonorId;
-                donor.StripeCustomerId = existingDonor.StripeCustomerId;
+                donor.ProcessorId = existingDonor.ProcessorId;
             }
 
             return (donor);
