@@ -38,14 +38,14 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Contact_ID", 123456},
                     {"Email_Address", "person-one@email.com"},
                     {"Preferred Name", "person-one"},
-                    {"Last Name", "person-one"}
+                    {"Last Name", "person-one"}, {"Participant_ID", 654321}
                 },
                 new Dictionary<string, object>()
                 {
                     {"Contact_ID", 222222},
                     {"Email_Address", "person-two@email.com"},
                     {"Preferred Name", "person-two"},
-                    {"Last Name", "person-two"}
+                    {"Last Name", "person-two"}, {"Participant_ID", 3333333}
                 }
             };
             _ministryPlatformService.Setup(

@@ -5,6 +5,8 @@
   require('./myserve.html');
   var app = require("angular").module('crossroads');
 
+  require("./capacity.service");
+
   app.factory("filterState", require('./filterState.service.js'));
   app.controller("MyServeController", require('./myserve.controller'));
 

@@ -158,20 +158,38 @@
             })
             .state("corkboard", {
               url: "/corkboard",
+              controller: "CorkboardCtrl as corkboard",
               templateUrl: "corkboard/corkboard-listings.html"
+            })
+            .state("corkboard-create-need", {
+              url: "/corkboard/create/need",
+              controller: "CorkboardCtrl as corkboard",
+              templateUrl: "corkboard/post-need.html"
+            })
+            .state("corkboard-create-give", {
+              url: "/corkboard/create/give",
+              controller: "CorkboardCtrl as corkboard",
+              templateUrl: "corkboard/give-something.html"
+            })
+            .state("corkboard-create-event", {
+              url: "/corkboard/create/event",
+              controller: "CorkboardCtrl as corkboard",
+              templateUrl: "corkboard/post-event.html"
+            })
+            .state("corkboard-create-job", {
+              url: "/corkboard/create/job",
+              controller: "CorkboardCtrl as corkboard",
+              templateUrl: "corkboard/post-job.html"
             })
             .state("corkboard-detail", {
               url: "/corkboard/detail",
-              controller: "CorkboardCtrl as corkboard",
               templateUrl: "corkboard/corkboard-listing-detail.html"
             })
             .state("opportunities", {
                 url: "/opportunities",
                 controller: "ViewOpportunitiesController as opportunity",
                 templateUrl: "opportunity/view_opportunities.html",
-                data: {
-                    isProtected: true
-                },
+                data: { isProtected: true },
                 resolve: {
                   loggedin: checkLoggedin
                 }
@@ -182,11 +200,11 @@
               templateUrl: "my_serve/myserve.html",
               data: { isProtected: true },
               resolve: {
+                loggedin: checkLoggedin,
                 ServeOpportunities: 'ServeOpportunities',
                 Groups: function(ServeOpportunities){
-                  return ServeOpportunities.ServeDays.query().$promise;
-                },
-                loggedin: checkLoggedin
+                  return ServeOpportunities.ServeDays.query({id: getCookie('userId')} ).$promise;
+                }
               }
             })
             .state("styleguide", {
@@ -341,5 +359,5 @@
         //});
 
         $urlRouterProvider.otherwise("/");
-                    }]);
+    }]);
 })()

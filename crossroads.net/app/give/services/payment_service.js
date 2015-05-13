@@ -7,7 +7,12 @@
 
   function PaymentService($log, $http, $resource, $q, stripe) {
     var payment_service = {
-      donor : $resource(__API_ENDPOINT__ + 'api/donor/?email=:email',{email: '@_email'}),
+      donor : $resource(__API_ENDPOINT__ + 'api/donor/?email=:email',{email: '@_email'}, {
+        get: {
+          method : 'GET',
+          headers: {'Authorization': getCookie('sessionId')}
+        }
+      }),
       donation : {},
       createDonorWithCard : createDonorWithCard,
       donateToProgram : donateToProgram

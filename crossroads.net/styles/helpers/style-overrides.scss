@@ -139,14 +139,18 @@ ol.breadcrumb li.active {
 * Date Picker
 ***************************************************************************************/
 
-.dropdown-menu.ng-valid-date {
-  thead {
-    th {
-      .btn-default {
-        // @extend .btn-primary;
-        background: $gray-lighter;
-        color: $gray-darker;
-        border: 1px solid darken($gray-lighter, 20%);
+.dropdown-menu.ng-valid-date, .dropdown-menu.ng-valid-date-disabled {
+  table {
+    outline: none;
+    
+    thead {
+      th {
+        .btn-default {
+          // @extend .btn-primary;
+          background: white;
+          color: $gray-darker;
+          border: 1px solid white;
+        }
       }
     }
   }
@@ -166,14 +170,20 @@ ol.breadcrumb li.active {
       }
     }
   }
+  
+    .btn-default.active {
+    background: $gray;
+    border: $gray;
+    color: white;
 
-  .btn-info, .btn-danger, .btn-success {
-    @extend .btn-primary;
-  }
+    &:hover {
+      background: $gray-light;
+    }
 
-  .active {
-    .text-info {
-      color: #fff;
+    &:hover {
+      .text-info {
+        color: white;
+      }
     }
   }
 
@@ -183,7 +193,17 @@ ol.breadcrumb li.active {
 
   .active {
     .text-info {
-      color: #fff;
+      color: $gray-darker;
+    }
+  }
+
+  .btn-info, .btn-danger, .btn-success {
+    @extend .btn-primary;
+  }
+
+  .active {
+    .text-info {
+      color: white;
     }
   }
 }
