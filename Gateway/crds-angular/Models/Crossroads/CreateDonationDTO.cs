@@ -7,5 +7,6 @@ namespace crds_angular.test.controllers
         public string program_id { get; set; }
         public int amount { get; set; }
         public int donor_id { get; set; }
+        public string email_address { get; set; }
     }
 }
