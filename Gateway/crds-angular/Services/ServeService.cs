@@ -63,11 +63,11 @@ namespace crds_angular.Services
             return _opportunityService.GetLastOpportunityDate(opportunityId, token);
         }
 
-        public List<ServingDay> GetServingDays(string token, int contactId)
+        public List<ServingDay> GetServingDays(string token, int contactId, long from, long to)
         {
             var family = GetImmediateFamilyParticipants(contactId, token);
             var participants = family.OrderBy(f => f.ParticipantId).Select(f => f.ParticipantId).ToList();
-            var servingParticipants = _groupParticipantService.GetServingParticipants(participants);
+            var servingParticipants = _groupParticipantService.GetServingParticipants(participants, from , to);
             var servingDays = new List<ServingDay>();
             var dayIndex = 0;
 
@@ -268,7 +268,7 @@ namespace crds_angular.Services
 
             if (record.Rsvp != null)
             {
-                member.ServeRsvp = new ServeRsvp { Attending = (bool)record.Rsvp, RoleId = record.GroupRoleId };
+                member.ServeRsvp = new ServeRsvp {Attending = (bool) record.Rsvp, RoleId = record.OpportunityId};
             }
             return member;
         }

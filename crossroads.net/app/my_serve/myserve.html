@@ -9,6 +9,9 @@
   <div class="serve-day push-bottom" data-ng-repeat="group in serve.groups" ng-show="group.serveTimes.length > 0">
     <h4>{{::serve.convertToDate(group.day) | date:'EEEE, MMMM dd, yyyy' }}</h4>
     <serve-tabs opportunity="opp" serve-date="group.day" ng-repeat="opp in group.serveTimes" ng-show="opp.servingTeams.length > 0" >
-      </serve-tabs>
+    </serve-tabs>
   </div><!-- serve day -->
+
+  <button class="btn btn-block btn-primary" ng-click="serve.loadNextMonth()" ng-disabled="serve.loadMore"> {{serve.loadText}} </button>
+
 </div>

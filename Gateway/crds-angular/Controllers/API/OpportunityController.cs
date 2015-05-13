@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
 using AutoMapper;
-using crds_angular.Extenstions;
+using Crossroads.Utilities.Extensions;
 using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Opportunity;
 using crds_angular.Security;
