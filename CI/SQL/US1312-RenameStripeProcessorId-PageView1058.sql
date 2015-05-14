@@ -21,7 +21,7 @@ INSERT INTO [dbo].[dp_Page_Views]
            ,'Contact_ID_Table.[Contact_ID],Donors.[Donor_ID], Donors.[Processor_ID], Statement_Frequency_ID_Table.[Statement_Frequency]
            , Statement_Type_ID_Table.[Statement_Type], Statement_Method_ID_Table.[Statement_Method], Donors.[Setup_Date]'
            ,'User_Account is NULL'
-           ,'Donors.[Donor_ID] <> 0'
+           ,'Donors.[Donor_ID]'
            ,NULL
            ,NULL)
 GO
