@@ -48,6 +48,7 @@
       scope.roleChanged = roleChanged;
       scope.roles = null;
       scope.saveRsvp = saveRsvp;
+      scope.selectedRole = null;
       scope.setActiveTab = setActiveTab;
       scope.signedup = null;
       scope.showEdit = false;
@@ -74,7 +75,7 @@
       }
 
       function displayEmail(emailAddress) {
-        if (emailAddress == undefined) {
+        if (emailAddress === undefined) {
           return false;
         }
         if (emailAddress.length > 0) {
@@ -136,7 +137,7 @@
         if (scope.currentMember.serveRsvp == null) {
           validForm.valid = false;
           validForm.messageStr = $rootScope.MESSAGES.selectSignUpAndFrequency;
-        } else if (scope.currentMember.serveRsvp.attending == undefined) {
+        } else if (scope.currentMember.serveRsvp.attending === undefined) {
           validForm.valid = false;
           validForm.messageStr = $rootScope.MESSAGES.selectSignUpAndFrequency;
         } else if (scope.currentMember.currentOpportunity == null) {
@@ -159,7 +160,7 @@
         $event.stopPropagation();
         scope.datePickers.fromOpened = true;
       }
-      
+
       function openToDate($event) {
         $event.preventDefault();
         $event.stopPropagation();
@@ -172,7 +173,7 @@
           scope.currentMember = members[0];
           scope.currentActiveTab = scope.currentMember.name;
         }
-        _.each(scope.currentMember.roles, function(r){ 
+        _.each(scope.currentMember.roles, function(r){
           r.capacity = Capacity.get({id: r.roleId, eventId: scope.team.eventId, min: r.minimum, max: r.maximum});
         });
         scope.isCollapsed = !scope.isCollapsed;
@@ -225,7 +226,8 @@
         }
       }
 
-      function roleChanged() {
+      function roleChanged(selectedRole) {
+        scope.selectedRole = selectedRole;
         if (scope.currentMember.serveRsvp === undefined) {
           scope.currentMember.serveRsvp = {
             isSaved: false
@@ -243,15 +245,15 @@
           return;
         }
 
-        var saveRsvp = new ServeOpportunities.SaveRsvp();
-        saveRsvp.contactId = scope.currentMember.contactId;
-        saveRsvp.opportunityId = scope.currentMember.serveRsvp.roleId;
-        saveRsvp.eventTypeId = scope.team.eventTypeId;
-        saveRsvp.endDate = parseDate(scope.currentMember.currentOpportunity.toDt);
-        saveRsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
-        saveRsvp.signUp = scope.currentMember.serveRsvp.attending;
-        saveRsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
-        saveRsvp.$save(function(saved) {
+        var rsvp = new ServeOpportunities.SaveRsvp();
+        rsvp.contactId = scope.currentMember.contactId;
+        rsvp.opportunityId = scope.currentMember.serveRsvp.roleId;
+        rsvp.eventTypeId = scope.team.eventTypeId;
+        rsvp.endDate = parseDate(scope.currentMember.currentOpportunity.toDt);
+        rsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
+        rsvp.signUp = scope.currentMember.serveRsvp.attending;
+        rsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
+        rsvp.$save(function(saved) {
           $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess);
           $rootScope.$broadcast('update.member', scope.currentMember);
           scope.currentMember.serveRsvp.isSaved = true;
@@ -266,16 +268,19 @@
           scope.togglePanel();
         }
         scope.currentMember = member;
-        _.each(scope.currentMember.roles, function(r){ 
+        _.each(scope.currentMember.roles, function(r){
           r.capacity = Capacity.get({id: r.roleId, eventId: scope.team.eventId, min: r.minimum, max: r.maximum});
         });
         allowProfileEdit();
       }
 
       function showIcon(member) {
-        if (member.serveRsvp === undefined) {
+        if (member.serveRsvp === undefined || member.serveRsvp === null) {
           return false;
         } else {
+          scope.selectedRole = _.find(member.roles, function(r) {
+            return r.roleId === member.serveRsvp.roleId;
+          })
           if (member.serveRsvp !== null && (member.serveRsvp.isSaved || member.serveRsvp.isSaved === undefined)) {
             return true;
           } else {
