@@ -11,6 +11,8 @@ namespace crds_angular.Services
     {
         private IRestClient stripeRestClient;
 
+        private const string STRIPE_CUSTOMER_DESCRIPTION = "Crossroads Donor #{0}";
+
         public StripeService(IRestClient stripeRestClient)
         {
             this.stripeRestClient = stripeRestClient;
@@ -20,7 +22,7 @@ namespace crds_angular.Services
         {
 
             var request = new RestRequest("customers", Method.POST);
-            request.AddParameter("description", "testing customers"); // adds to POST or URL querystring based on Method
+            request.AddParameter("description", string.Format(STRIPE_CUSTOMER_DESCRIPTION, "pending")); // adds to POST or URL querystring based on Method
             request.AddParameter("source", token);
 
             IRestResponse<StripeCustomer> response =
@@ -33,6 +35,22 @@ namespace crds_angular.Services
 
             return response.Data.id;
 
+        }
+
+        public string updateCustomerDescription(string customer_token, int donor_id)
+        {
+            var request = new RestRequest("customers/" + customer_token, Method.POST);
+            request.AddParameter("description", string.Format(STRIPE_CUSTOMER_DESCRIPTION, donor_id));
+
+            IRestResponse<StripeCustomer> response =
+                (IRestResponse<StripeCustomer>)stripeRestClient.Execute<StripeCustomer>(request);
+            if (response.StatusCode == HttpStatusCode.BadRequest)
+            {
+                Content content = JsonConvert.DeserializeObject<Content>(response.Content);
+                throw new StripeException("Customer update failed", content.error.type, content.error.message, content.error.code);
+            }
+
+            return (response.Data.id);
         }
 
 

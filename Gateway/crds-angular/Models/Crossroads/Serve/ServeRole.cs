@@ -11,10 +11,10 @@ namespace crds_angular.Models.Crossroads.Serve
         public int RoleId { get; set; }
 
         [JsonProperty(PropertyName = "maximum")]
-        public int Maximum { get; set; }
+        public int? Maximum { get; set; }
 
         [JsonProperty(PropertyName = "minimum")]
-        public int Minimum { get; set; }
+        public int? Minimum { get; set; }
 
         [JsonProperty(PropertyName = "shiftEndTime")]
         public string ShiftEndTime { get; set; }

@@ -48,6 +48,7 @@
       scope.roleChanged = roleChanged;
       scope.roles = null;
       scope.saveRsvp = saveRsvp;
+      scope.selectedRole = null;
       scope.setActiveTab = setActiveTab;
       scope.signedup = null;
       scope.showEdit = false;
@@ -159,7 +160,7 @@
         $event.stopPropagation();
         scope.datePickers.fromOpened = true;
       }
-      
+
       function openToDate($event) {
         $event.preventDefault();
         $event.stopPropagation();
@@ -172,7 +173,7 @@
           scope.currentMember = members[0];
           scope.currentActiveTab = scope.currentMember.name;
         }
-        _.each(scope.currentMember.roles, function(r){ 
+        _.each(scope.currentMember.roles, function(r){
           r.capacity = Capacity.get({id: r.roleId, eventId: scope.team.eventId, min: r.minimum, max: r.maximum});
         });
         scope.isCollapsed = !scope.isCollapsed;
@@ -225,7 +226,8 @@
         }
       }
 
-      function roleChanged() {
+      function roleChanged(selectedRole) {
+        scope.selectedRole = selectedRole;
         if (scope.currentMember.serveRsvp === undefined) {
           scope.currentMember.serveRsvp = {
             isSaved: false
@@ -266,7 +268,7 @@
           scope.togglePanel();
         }
         scope.currentMember = member;
-        _.each(scope.currentMember.roles, function(r){ 
+        _.each(scope.currentMember.roles, function(r){
           r.capacity = Capacity.get({id: r.roleId, eventId: scope.team.eventId, min: r.minimum, max: r.maximum});
         });
         allowProfileEdit();
@@ -276,6 +278,9 @@
         if (member.serveRsvp === undefined) {
           return false;
         } else {
+          scope.selectedRole = _.find(scope.currentMember.roles, function(r) {
+            return r.roleId === member.serveRsvp.roleId;
+          })
           if (member.serveRsvp !== null && (member.serveRsvp.isSaved || member.serveRsvp.isSaved === undefined)) {
             return true;
           } else {
