@@ -35,7 +35,7 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
-                    var opportunityId = OpportunityService.RespondToOpportunity(token, id, comments);
+                    var opportunityId = _opportunityService.RespondToOpportunity(token, id, comments);
                     return this.Ok(opportunityId);
                 }
                 catch (Exception ex)
