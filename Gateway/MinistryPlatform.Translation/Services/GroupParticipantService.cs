@@ -44,6 +44,7 @@ namespace MinistryPlatform.Translation.Services
                     participant.EventId = reader.GetInt32(reader.GetOrdinal("Event_ID"));
                     participant.EventStartDateTime = (DateTime) reader["Event_Start_Date"];
                     participant.EventTitle = reader.GetString(reader.GetOrdinal("Event_Title"));
+                    participant.Room = SafeString(reader,"Room");
                     participant.GroupId = reader.GetInt32(reader.GetOrdinal("Group_ID"));
                     participant.GroupName = reader.GetString(reader.GetOrdinal("Group_Name"));
                     participant.GroupPrimaryContactEmail = reader.GetString(reader.GetOrdinal("Primary_Contact_Email"));
