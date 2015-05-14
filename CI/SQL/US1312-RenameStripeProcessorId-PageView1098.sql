@@ -21,7 +21,7 @@ INSERT INTO [dbo].[dp_Page_Views]
            ,'Possible Guest Donor'
            ,292
            ,'Returns contacts without a user record'
-           ,'Contacts.Contact_ID, Email_Address, Donor_Record, Donor_Record_Table.Stripe_Customer_ID'
+           ,'Contacts.Contact_ID, Email_Address, Donor_Record, Donor_Record_Table.Processor_ID'
            ,'User_Account is NULL'
            ,NULL
            ,NULL
