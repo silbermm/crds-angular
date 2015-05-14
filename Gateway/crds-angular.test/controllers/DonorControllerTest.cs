@@ -13,29 +13,23 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Hosting;
 using System.Web.Http.Results;
-using crds_angular.Models.Crossroads;
-using crds_angular.Services;
-using MinistryPlatform.Models;
 
 namespace crds_angular.test.controllers
 {
     class DonorControllerTest
     {
         private DonorController fixture;
-        private Mock<MinistryPlatform.Translation.Services.Interfaces.IDonorService> mpDonorServiceMock;
-        private Mock<IPaymentService> stripeServiceMock;
-        private Mock<IAuthenticationService> authenticationServiceMock;
         private Mock<crds_angular.Services.Interfaces.IDonorService> donorService;
         private string authType;
         private string authToken;
         private static int contactId = 8675309;
-        private static string stripeCustomerId = "cus_test123456";
+        private static string processorId = "cus_test123456";
         private static string email = "automatedtest@crossroads.net";
         private static int donorId = 394256;
         private Donor donor = new Donor()
         {
             DonorId = donorId,
-            StripeCustomerId = stripeCustomerId,
+            ProcessorId = processorId,
             ContactId = contactId,
             Email = email
         };
@@ -43,12 +37,8 @@ namespace crds_angular.test.controllers
         [SetUp]
         public void SetUp()
         {
-            mpDonorServiceMock = new Mock<MinistryPlatform.Translation.Services.Interfaces.IDonorService>();
-            stripeServiceMock = new Mock<IPaymentService>();
-            authenticationServiceMock = new Mock<IAuthenticationService>();
             donorService = new Mock<crds_angular.Services.Interfaces.IDonorService>();
-            fixture = new DonorController(mpDonorServiceMock.Object, stripeServiceMock.Object,
-                authenticationServiceMock.Object, donorService.Object);
+            fixture = new DonorController(donorService.Object);
 
             authType = "auth_type";
             authToken = "auth_token";
@@ -64,50 +54,46 @@ namespace crds_angular.test.controllers
         [Test]
         public void shouldPostToSuccessfullyCreateAuthenticatedDonor()
         {
-            authenticationServiceMock.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Returns(contactId);
-
-            stripeServiceMock.Setup(mocked => mocked.createCustomer(It.IsAny<string>())).Returns(stripeCustomerId);
-
             var createDonorDto = new CreateDonorDTO
             {
                 stripe_token_id = "tok_test"
             };
 
-            mpDonorServiceMock.Setup(mocked => mocked.CreateDonorRecord(contactId, stripeCustomerId, It.IsAny<DateTime>(), 1, 1, 2)).Returns(donorId);
-           
+            donorService.Setup(mocked => mocked.GetDonorForAuthenticatedUser(It.IsAny<string>())).Returns((Donor)null);
+            donorService.Setup(mocked => mocked.CreateDonor(null, string.Empty, "tok_test", It.IsAny<DateTime>())).Returns(donor);
+
             IHttpActionResult result = fixture.Post(createDonorDto);
             
             Assert.IsNotNull(result);
             Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonorDTO>), result);
             var okResult = (OkNegotiatedContentResult<DonorDTO>)result;
             Assert.AreEqual(donorId, okResult.Content.id);
-            Assert.AreEqual(stripeCustomerId, okResult.Content.stripe_customer_id);
+            Assert.AreEqual(processorId, okResult.Content.Processor_ID);
         }
 
         [Test]
         public void TestGetSuccessGetDonorAuthenticated()
         {
-            authenticationServiceMock.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Returns(contactId);
-            mpDonorServiceMock.Setup(mocked => mocked.GetDonorRecord(contactId)).Returns(donor);
+            donorService.Setup(mocked => mocked.GetDonorForAuthenticatedUser(It.IsAny<string>())).Returns(donor);
             IHttpActionResult result = fixture.Get();
             Assert.IsNotNull(result);
             Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonorDTO>), result);
             var okResult = (OkNegotiatedContentResult<DonorDTO>)result;
             Assert.AreEqual(donorId, okResult.Content.id);
-            Assert.AreEqual(stripeCustomerId, okResult.Content.stripe_customer_id);
+            Assert.AreEqual(processorId, okResult.Content.Processor_ID);
         }
 
         [Test]
         public void TestGetSuccessGetDonorUnauthenticated()
         {
             fixture.Request.Headers.Authorization = null;
-            mpDonorServiceMock.Setup(mocked => mocked.GetPossibleGuestDonorContact(email)).Returns(donor);
+            donorService.Setup(mocked => mocked.GetDonorForEmail(email)).Returns(donor);
             IHttpActionResult result = fixture.Get(email);
             Assert.IsNotNull(result);
             Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonorDTO>), result);
             var okResult = (OkNegotiatedContentResult<DonorDTO>)result;
             Assert.AreEqual(donorId, okResult.Content.id);
-            Assert.AreEqual(stripeCustomerId, okResult.Content.stripe_customer_id);
+            Assert.AreEqual(processorId, okResult.Content.Processor_ID);
         }
 
         [Test]
@@ -125,14 +111,14 @@ namespace crds_angular.test.controllers
             {
                 ContactId = 8675309,
                 DonorId = 0,
-                StripeCustomerId = null
+                ProcessorId = null
             };
 
             var createDonor = new Donor
             {
                 ContactId = 8675309,
                 DonorId = 394256,
-                StripeCustomerId = "jenny_ive_got_your_number"
+                ProcessorId = "jenny_ive_got_your_number"
             };
 
             donorService.Setup(mocked => mocked.GetDonorForEmail(createDonorDto.email_address)).Returns(lookupDonor);
@@ -151,7 +137,7 @@ namespace crds_angular.test.controllers
             Assert.IsInstanceOf(typeof(ObjectContent<DonorDTO>), content);
             var responseDto = (DonorDTO)((ObjectContent)content).Value;
             Assert.AreEqual(394256, responseDto.id);
-            Assert.AreEqual("jenny_ive_got_your_number", responseDto.stripe_customer_id);
+            Assert.AreEqual("jenny_ive_got_your_number", responseDto.Processor_ID);
         }
 
         [Test]
@@ -169,14 +155,14 @@ namespace crds_angular.test.controllers
             {
                 ContactId = 8675309,
                 DonorId = 90210,
-                StripeCustomerId = "jenny_ive_got_your_number"
+                ProcessorId = "jenny_ive_got_your_number"
             };
 
             var createDonor = new Donor
             {
                 ContactId = 8675309,
                 DonorId = 90210,
-                StripeCustomerId = "jenny_ive_got_your_number"
+                ProcessorId = "jenny_ive_got_your_number"
             };
 
             donorService.Setup(mocked => mocked.GetDonorForEmail(createDonorDto.email_address)).Returns(lookupDonor);
@@ -195,7 +181,7 @@ namespace crds_angular.test.controllers
             Assert.IsInstanceOf(typeof(ObjectContent<DonorDTO>), content);
             var responseDto = (DonorDTO)((ObjectContent)content).Value;
             Assert.AreEqual(90210, responseDto.id);
-            Assert.AreEqual("jenny_ive_got_your_number", responseDto.stripe_customer_id);
+            Assert.AreEqual("jenny_ive_got_your_number", responseDto.Processor_ID);
         }
 
         [Test]
@@ -239,7 +225,7 @@ namespace crds_angular.test.controllers
             {
                 ContactId = 8675309,
                 DonorId = 90210,
-                StripeCustomerId = "jenny_ive_got_your_number"
+                ProcessorId = "jenny_ive_got_your_number"
             };
 
             var createException = new Exception("Danger, Will Robinson!");

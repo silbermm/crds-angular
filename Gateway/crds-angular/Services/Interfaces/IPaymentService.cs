@@ -10,5 +10,6 @@ namespace crds_angular.Services.Interfaces
     {
         string createCustomer(string token);
         string chargeCustomer(string customer_token, int amount, int donor_id);
+        string updateCustomerDescription(string customer_token, int donor_id);
     }
 }

@@ -4,9 +4,9 @@
 
   module.exports = MyServeController;
 
-  MyServeController.$inject = ['$rootScope', '$log', '$timeout', 'filterState', 'Groups'];
+  MyServeController.$inject = ['$rootScope', '$log', 'filterState', 'Session', 'ServeOpportunities', 'Groups'];
 
-  function MyServeController($rootScope, $log, $timeout, filterState, Groups){
+  function MyServeController($rootScope, $log, filterState, Session, ServeOpportunities, Groups){
 
     var vm = this;
 
@@ -16,6 +16,9 @@
     vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
     vm.format = vm.formats[0];
     vm.groups = Groups;
+    vm.loadMore = false;
+    vm.loadNextMonth = loadNextMonth;
+    vm.loadText = "Load More";
     vm.original = [];
     vm.showNoOpportunitiesMsg = showNoOpportunitiesMsg;
 
@@ -41,6 +44,34 @@
       return d;
     };
 
+    function loadNextMonth() {
+      vm.loadMore = true;
+      vm.loadText = "Loading...";
+      var lastDate = vm.groups[vm.groups.length -1].day;
+      var date = new Date(lastDate);
+      date.setDate(date.getDate() + 1); 
+      var newDate = new Date(lastDate);
+      newDate.setDate(newDate.getDate() + 28);
+      ServeOpportunities.ServeDays.query({ 
+        id: Session.exists('userId'), 
+        from: date.getTime()/1000, 
+        to: newDate.getTime()/1000 
+      }, function(more){
+        if(more.length === 0){
+          $rootScope.$emit('notify', $rootScope.MESSAGES.serveSignupMoreError);
+        } else {
+          _.each(more, function(m){
+            vm.groups.push(m);
+          });
+        }
+        vm.loadMore = false;
+        vm.loadText = "Load More";
+      }, function(e){
+        console.log(e);
+        vm.loadMore = false;  
+        vm.loadText = "Load More";
+      });
+    };
    
     function personUpdateHandler(event, data) {
       vm.groups = angular.copy(vm.original);

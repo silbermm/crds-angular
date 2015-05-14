@@ -7,7 +7,12 @@
 
   function PaymentService($log, $http, $resource, $q, stripe) {
     var payment_service = {
-      donor : $resource(__API_ENDPOINT__ + 'api/donor/?email=:email',{email: '@_email'}),
+      donor : $resource(__API_ENDPOINT__ + 'api/donor/?email=:email',{email: '@_email'}, {
+        get: {
+          method : 'GET',
+          headers: {'Authorization': getCookie('sessionId')}
+        }
+      }),
       donation : {},
       createDonorWithCard : createDonorWithCard,
       donateToProgram : donateToProgram
@@ -42,12 +47,13 @@
        return def.promise;
     }
 
-    function donateToProgram(program_id, amount, donor_id){
+    function donateToProgram(program_id, amount, donor_id, email_address){
       var def = $q.defer();
       var donation_request = {
         "program_id" : program_id,
         "amount" : amount,
-        "donor_id" : donor_id
+        "donor_id" : donor_id,
+        "email_address": email_address
       };
       $http({
         method: "POST",

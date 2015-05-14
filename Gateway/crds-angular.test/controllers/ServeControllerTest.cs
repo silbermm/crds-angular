@@ -52,7 +52,7 @@ namespace crds_angular.test.controllers
 
             //_serveServiceMock.Setup(mocked => mocked.GetServingTeams(It.IsAny<string>()))
             //    .Returns(servingTeams);
-            _serveServiceMock.Setup(mocked => mocked.GetServingDays(It.IsAny<string>(),contactId))
+            _serveServiceMock.Setup(mocked => mocked.GetServingDays(It.IsAny<string>(),contactId, It.IsAny<long>(), It.IsAny<long>()))
                 .Returns(servingDays);
 
             IHttpActionResult result = _fixture.GetFamilyServeDays(contactId);
