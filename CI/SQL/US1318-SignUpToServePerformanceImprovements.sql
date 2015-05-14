@@ -11,7 +11,7 @@ GO
 CREATE VIEW [dbo].[vw_crds_Serving_Participants]
 AS
 SELECT        g.Group_ID, gp.Participant_ID, c.Email_Address, c.Display_Name, c.Nickname, c.Last_Name, gp.Domain_ID, g.Group_Name, g.Group_Type_ID, 
-                         groupContact.Email_Address AS Primary_Contact_Email, o.Opportunity_ID, o.Opportunity_Title, o.Minimum_Needed, o.Maximum_Needed, o.Shift_Start, o.Shift_End, 
+                         groupContact.Email_Address AS Primary_Contact_Email, o.Opportunity_ID, o.Opportunity_Title, o.Minimum_Needed, o.Maximum_Needed, o.Room, o.Shift_Start, o.Shift_End, 
                          o.Sign_Up_Deadline_ID, gr.Role_Title, e.Event_ID, e.Event_Title, e.Event_Start_Date,
                              (SELECT        TOP (1) Response_Result_ID
                                FROM            dbo.Responses AS r

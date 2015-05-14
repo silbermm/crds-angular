@@ -39,7 +39,14 @@
                 <span class="label {{ ::role.capacity.badgeType }}" ng-show="role.capacity.display">{{ ::role.capacity.message }}</span>
               </label>
             </div><!--/radio-->
-            <div ng-show="selectedRole">Shift Time: {{ selectedRole.shiftStartTime }} - {{ selectedRole.shiftEndTime }}</div>
+            <div ng-show="selectedRole">
+              <h5 class="flush-bottom"> Shift Time </h5> 
+              <p>{{ selectedRole.shiftStartTime }} - {{ selectedRole.shiftEndTime }} </p>
+            </div>
+            <div ng-show="selectedRole.room"> 
+              <h5 class="flush-bottom"> Location </h5>
+              <p> {{ selectedRole.room }} </p>
+            </div>
           </div><!--/col-sm-4-->
           <div class="col-md-4">
             <h5>Sign Up</h5>

@@ -275,10 +275,10 @@
       }
 
       function showIcon(member) {
-        if (member.serveRsvp === undefined) {
+        if (member.serveRsvp === undefined || member.serveRsvp === null) {
           return false;
         } else {
-          scope.selectedRole = _.find(scope.currentMember.roles, function(r) {
+          scope.selectedRole = _.find(member.roles, function(r) {
             return r.roleId === member.serveRsvp.roleId;
           })
           if (member.serveRsvp !== null && (member.serveRsvp.isSaved || member.serveRsvp.isSaved === undefined)) {
