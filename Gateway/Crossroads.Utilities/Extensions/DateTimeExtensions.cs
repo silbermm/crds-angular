@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace crds_angular.Extenstions
+namespace Crossroads.Utilities.Extensions
 {
     public static class DateTimeExtensions
     {

@@ -4,8 +4,9 @@ using System.Linq;
 using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System.Web.Http.Routing.Constraints;
 using crds_angular.Exceptions.Models;
-using crds_angular.Extenstions;
+using Crossroads.Utilities.Extensions;
 using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Opportunity;
 using crds_angular.Models.Crossroads.Serve;
@@ -25,15 +26,23 @@ namespace crds_angular.Controllers.API
             _serveService = serveService;
         }
 
+        /// <summary>
+        /// Gets the opportunities for a volunteer and his/her family
+        /// Accepts optional parameters from and to that specify the date range to fetch
+        /// </summary>
+        /// <param name="contactId">The volunteers contactId</param>
+        /// <param name="from">Optional- The starting date</param>
+        /// <param name="to">Optional- The end date</param>
+        /// <returns></returns>
         [ResponseType(typeof (List<ServingDay>))]
         [Route("api/serve/family-serve-days/{contactId}")]
-        public IHttpActionResult GetFamilyServeDays(int contactId)
+        public IHttpActionResult GetFamilyServeDays(int contactId, long from = 0, long to = 0)
         {
             return Authorized(token =>
             {
                 try
                 {
-                    var servingDays = _serveService.GetServingDays(token, contactId);
+                    var servingDays = _serveService.GetServingDays(token, contactId, from, to);
                     return Ok(servingDays);
                 }
                 catch (Exception exception)

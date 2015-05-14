@@ -33,11 +33,11 @@ namespace MinistryPlatform.Translation.Test.Services
             var expectedValues = new Dictionary<string, object>
             {
                 {"Contact_ID", 888888},
-                {"Statement_Frequency_ID", "1"},//default to quarterly
-                {"Statement_Type_ID", "1"},     //default to individual
+                {"Statement_Frequency_ID", 1},//default to quarterly
+                {"Statement_Type_ID", 1},     //default to individual
                 {"Statement_Method_ID", 2},   //default to email/online
                 {"Setup_Date", setupDate},    //default to current date/time
-                {"Stripe_Customer_ID", "cus_crds123456"}
+                {"Processor_ID", "cus_crds123456"}
             };
 
            _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
@@ -47,6 +47,35 @@ namespace MinistryPlatform.Translation.Test.Services
            var response = _fixture.CreateDonorRecord(888888, "cus_crds123456", setupDate);
 
            _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donorPageId, expectedValues, It.IsAny<string>(), true));
+
+            Assert.AreEqual(response, expectedDonorId);
+
+        }
+
+        [Test]
+        public void CreateDonorRecordWithNonDefaultValuesTest()
+        {
+            var donorPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Donors"]);
+            var expectedDonorId = 585858;
+            var setupDate = DateTime.Now;
+
+            var expectedValues = new Dictionary<string, object>
+            {
+                {"Contact_ID", 888888},
+                {"Statement_Frequency_ID", 5},//default to quarterly
+                {"Statement_Type_ID", 6},     //default to individual
+                {"Statement_Method_ID", 7},   //default to email/online
+                {"Setup_Date", setupDate},    //default to current date/time
+                {"Processor_ID", "cus_crds123456"}    
+            };
+
+            _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
+               It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(),
+               It.IsAny<string>(), true)).Returns(expectedDonorId);
+
+            var response = _fixture.CreateDonorRecord(888888, "cus_crds123456", setupDate, 5, 6, 7);
+
+            _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donorPageId, expectedValues, It.IsAny<string>(), true));
 
             Assert.AreEqual(response, expectedDonorId);
 
@@ -94,25 +123,59 @@ namespace MinistryPlatform.Translation.Test.Services
         }
 
         [Test]
+        public void shouldUpdatePaymentProcessorCustomerId()
+        {
+            _ministryPlatformService.Setup(mocked => mocked.UpdateRecord(299, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>()));
+
+            var response = _fixture.UpdatePaymentProcessorCustomerId(123, "456");
+
+            _ministryPlatformService.Verify(mocked => mocked.UpdateRecord(
+                299,
+                It.Is<Dictionary<string, object>>(
+                    d => ((int)d["dp_RecordID"]) == 123
+                        && ((string)d[DonorService.DONOR_PROCESSOR_ID]).Equals("456")),
+                It.IsAny<string>()));
+            Assert.AreEqual(123, response);
+        }
+
+        [Test]
+        public void shouldThrowApplicationExceptionWhenMinistryPlatformUpdateFails()
+        {
+            var ex = new Exception("Oh no!!!");
+            _ministryPlatformService.Setup(mocked => mocked.UpdateRecord(299, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>())).Throws(ex);
+
+            try
+            {
+                _fixture.UpdatePaymentProcessorCustomerId(123, "456");
+                Assert.Fail("Expected exception was not thrown");
+            }
+            catch (Exception e)
+            {
+                Assert.IsInstanceOf(typeof(ApplicationException), e);
+                Assert.AreSame(ex, e.InnerException);
+            }
+        }
+
+        [Test]
         public void TestGetPossibleGuestDonorContact()
         {
             var donorId = 1234567;
-            var stripeCustomerId = "cus_431234";
+            var processorId = "cus_431234";
             var contactId = 565656;
             var email = "cross@crossroads.net";
             var guestDonorPageViewId = "PossibleGuestDonorContact";
             var expectedDonorValues = new List<Dictionary<string, object>>();
             expectedDonorValues.Add(new Dictionary<string, object>
             {
-                {"dp_RecordID", donorId},
-                {"Stripe_Customer_ID", stripeCustomerId},
+                {"Donor_Record", donorId},
+                {"Processor_ID", processorId},
                 {"Contact_ID", contactId},
                 {"Email_Address", email}
             });
             var donor = new Donor()
             {
                 DonorId = donorId,
-                StripeCustomerId = stripeCustomerId,
+                ProcessorId = processorId,
                 ContactId = contactId,
                 Email = email
             };
@@ -129,7 +192,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(response.DonorId, donor.DonorId);
             Assert.AreEqual(response.ContactId, donor.ContactId);
             Assert.AreEqual(response.Email, donor.Email);
-            Assert.AreEqual(response.StripeCustomerId, donor.StripeCustomerId);
+            Assert.AreEqual(response.ProcessorId, donor.ProcessorId);
         }
 
 
@@ -137,21 +200,21 @@ namespace MinistryPlatform.Translation.Test.Services
         public void TestGetDonor()
         {
             var donorId = 1234567;
-            var stripeCustomerId = "cus_431234";
+            var processorId = "cus_431234";
             var contactId = 565656;
             var email = "cross@crossroads.net";
             var guestDonorPageViewId = "DonorByContactId";
             var expectedDonorValues = new List<Dictionary<string, object>>();
             expectedDonorValues.Add(new Dictionary<string, object>
             {
-                {"Donor_Record", donorId},
-                {"Stripe_Customer_ID", stripeCustomerId},
+                {"Donor_ID", donorId},
+                {"Processor_ID", processorId},
                 {"Contact_ID", contactId}
             });
             var donor = new Donor()
             {
                 DonorId = donorId,
-                StripeCustomerId = stripeCustomerId,
+                ProcessorId = processorId,
                 ContactId = contactId,
                 Email = email
             };
@@ -168,7 +231,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _ministryPlatformService.VerifyAll();
             Assert.AreEqual(response.DonorId, donor.DonorId);
             Assert.AreEqual(response.ContactId, donor.ContactId);
-            Assert.AreEqual(response.StripeCustomerId, donor.StripeCustomerId);
+            Assert.AreEqual(response.ProcessorId, donor.ProcessorId);
         }
     }
 }

@@ -63,11 +63,11 @@ namespace crds_angular.Services
             return _opportunityService.GetLastOpportunityDate(opportunityId, token);
         }
 
-        public List<ServingDay> GetServingDays(string token, int contactId)
+        public List<ServingDay> GetServingDays(string token, int contactId, long from, long to)
         {
             var family = GetImmediateFamilyParticipants(contactId, token);
             var participants = family.OrderBy(f => f.ParticipantId).Select(f => f.ParticipantId).ToList();
-            var servingParticipants = _groupParticipantService.GetServingParticipants(participants);
+            var servingParticipants = _groupParticipantService.GetServingParticipants(participants, from , to);
             var servingDays = new List<ServingDay>();
             var dayIndex = 0;
 
@@ -117,7 +117,7 @@ namespace crds_angular.Services
                     servingDay.Index = dayIndex;
                     servingDay.Day = record.EventStartDateTime.Date.ToString("d");
                     servingDay.Date = record.EventStartDateTime;
-                    servingDay.ServeTimes = new List<ServingTime> {NewServingTime(record)};
+                    servingDay.ServeTimes = new List<ServingTime> { NewServingTime(record) };
 
                     servingDays.Add(servingDay);
                 }
@@ -133,7 +133,7 @@ namespace crds_angular.Services
             var max = maxNeeded;
             var signedUp = opportunity.Count(r => r.Event_ID == eventId);
 
-            var capacity = new Capacity {Display = true};
+            var capacity = new Capacity { Display = true };
 
             if (max == null && min == null)
             {
@@ -231,7 +231,7 @@ namespace crds_angular.Services
             return new ServingTime
             {
                 Index = record.RowNumber,
-                ServingTeams = new List<ServingTeam> {NewServingTeam(record)},
+                ServingTeams = new List<ServingTeam> { NewServingTeam(record) },
                 Time = record.EventStartDateTime.TimeOfDay.ToString()
             };
         }
@@ -245,7 +245,7 @@ namespace crds_angular.Services
                 EventType = record.EventType,
                 EventTypeId = record.EventTypeId,
                 GroupId = record.GroupId,
-                Members = new List<TeamMember> {NewTeamMember(record)},
+                Members = new List<TeamMember> { NewTeamMember(record) },
                 Name = record.GroupName,
                 PrimaryContact = record.GroupPrimaryContactEmail
             };
@@ -261,14 +261,14 @@ namespace crds_angular.Services
                 Index = record.RowNumber,
                 LastName = record.ParticipantLastName,
                 Name = record.ParticipantNickname,
-                Participant = new Participant {ParticipantId = record.ParticipantId}
+                Participant = new Participant { ParticipantId = record.ParticipantId }
             };
 
             member.Roles.Add(NewServingRole(record));
 
             if (record.Rsvp != null)
             {
-                member.ServeRsvp = new ServeRsvp {Attending = (bool) record.Rsvp, RoleId = record.GroupRoleId};
+                member.ServeRsvp = new ServeRsvp {Attending = (bool) record.Rsvp, RoleId = record.OpportunityId};
             }
             return member;
         }
@@ -284,7 +284,7 @@ namespace crds_angular.Services
                 member.Responses.Where(t => t.Opportunity_ID == opportunityId && t.Event_ID == eventId)
                     .Select(t => t.Response_Result_ID)
                     .ToList();
-            return r.Count <= 0 ? null : new ServeRsvp {Attending = (r[0] == 1), RoleId = opportunityId};
+            return r.Count <= 0 ? null : new ServeRsvp { Attending = (r[0] == 1), RoleId = opportunityId };
         }
     }
 }

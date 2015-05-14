@@ -242,7 +242,6 @@
     <Compile Include="Exceptions\Models\ApiErrorDto.cs" />
     <Compile Include="Enum\BadgeTypeEnum.cs" />
     <Compile Include="Exceptions\StripeException.cs" />
-    <Compile Include="Extenstions\DateTimeExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -288,6 +287,8 @@
     <Compile Include="Security\MPAuth.cs" />
     <Compile Include="Security\CustomAuthorize.cs" />
     <Compile Include="Services\AccountService.cs" />
+    <Compile Include="Services\DonorService.cs" />
+    <Compile Include="Services\Interfaces\IDonorService.cs" />
     <Compile Include="Services\Interfaces\IServeService.cs" />
     <Compile Include="Services\Interfaces\IPersonService.cs" />
     <Compile Include="Services\Interfaces\IPaymentService.cs" />

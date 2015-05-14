@@ -116,5 +116,42 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.IsNull(myProfile.Mobile_Carrier);
         }
 
+        [Test]
+        public void shouldCreateContactForGuestGiver()
+        {
+            _ministryPlatformService.Setup(mocked => mocked.CreateRecord(292, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>(), false)).Returns(123);
+
+            var contactId = _fixture.CreateContactForGuestGiver("me@here.com", "display name");
+
+            _ministryPlatformService.Verify(mocked => mocked.CreateRecord(292, It.Is<Dictionary<string, object>>(d =>
+                d["Email_Address"].Equals("me@here.com")
+                && d["Company"].Equals(false)
+                && d["Display_Name"].Equals("display name")
+                && d["Nickname"].Equals("display name")
+                && d["Household_Position_ID"].Equals(1)
+                ), It.IsAny<string>(), false));
+
+            Assert.AreEqual(123, contactId);
+        }
+
+        [Test]
+        public void shouldThrowApplicationExceptionWhenGuestGiverCreationFails()
+        {
+            Exception ex = new Exception("Danger, Will Robinson!");
+            _ministryPlatformService.Setup(mocked => mocked.CreateRecord(292, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>(), false)).Throws(ex);
+
+            try
+            {
+                _fixture.CreateContactForGuestGiver("me@here.com", "display");
+                Assert.Fail("Expected exception was not thrown");
+            }
+            catch (Exception e)
+            {
+                Assert.IsInstanceOf(typeof(ApplicationException), e);
+                Assert.AreSame(ex, e.InnerException);
+            }
+
+        }
+
     }
 }
