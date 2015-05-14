@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Security.Cryptography;
-using System.Text;
 using System.Linq;
+using Crossroads.Utilities.Extensions;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
-using Crossroads.Utilities.Extensions;
 
 namespace MinistryPlatform.Translation.Services
 {
@@ -19,7 +17,8 @@ namespace MinistryPlatform.Translation.Services
         {
             this._dbConnection = dbConnection;
         }
-        public List<GroupServingParticipant> GetServingParticipants(List<int> participants, long from , long to)
+
+        public List<GroupServingParticipant> GetServingParticipants(List<int> participants, long from, long to)
         {
             var connection = _dbConnection;
             try
@@ -32,8 +31,10 @@ namespace MinistryPlatform.Translation.Services
                 var reader = command.ExecuteReader();
                 var endTime = DateTime.Now;
                 var groupServingParticipants = new List<GroupServingParticipant>();
+                var rowNumber = 0;
                 while (reader.Read())
                 {
+                    rowNumber = rowNumber + 1;
                     var participant = new GroupServingParticipant();
                     participant.ContactId = reader.GetInt32(reader.GetOrdinal("Contact_ID"));
                     participant.EventType = reader.GetString(reader.GetOrdinal("Event_Type"));
@@ -57,11 +58,15 @@ namespace MinistryPlatform.Translation.Services
                     participant.ParticipantEmail = SafeString(reader, "Email_Address");
                     participant.ParticipantId = reader.GetInt32(reader.GetOrdinal("Participant_ID"));
                     participant.ParticipantLastName = reader.GetString(reader.GetOrdinal("Last_Name"));
-                    participant.RowNumber = reader.GetInt64(reader.GetOrdinal("RowNumber"));
+                    participant.RowNumber = rowNumber;
                     participant.Rsvp = GetRsvp(reader, "Rsvp");
                     groupServingParticipants.Add(participant);
                 }
-                return groupServingParticipants;
+                return
+                    groupServingParticipants.OrderBy(g => g.EventStartDateTime)
+                        .ThenBy(g => g.GroupName)
+                        .ThenBy(g => g.ContactId)
+                        .ToList();
             }
             finally
             {
@@ -69,32 +74,32 @@ namespace MinistryPlatform.Translation.Services
             }
         }
 
-        private IDbCommand CreateSqlCommand(IReadOnlyList<int> participants, long from, long to)
+        private static IDbCommand CreateSqlCommand(IReadOnlyList<int> participants, long from, long to)
         {
-
             var fromDate = from == 0 ? DateTime.Today : from.FromUnixTime();
-            var toDate = to == 0 ? DateTime.Today.AddDays(28) : to.FromUnixTime();
-             
-            const string query = @"SELECT *, 
-                        Row_Number() Over ( Order By v.Event_Start_Date ) As RowNumber 
+            var toDate = to == 0 ? DateTime.Today.AddDays(29) : to.FromUnixTime();
+
+            const string query = @"SELECT *
                     FROM MinistryPlatform.dbo.vw_crds_Serving_Participants v 
-                    WHERE v.Participant_ID IN ( {0} ) 
-                    AND Event_Start_Date between @from and @to
-                    ORDER BY Event_Start_Date, Group_Name, Contact_ID";
+                    WHERE ( {0} ) 
+                    AND Event_Start_Date >= @from 
+                    AND Event_Start_Date <= @to";
 
-            var parmNames = participants.Select((s, i) => "@participant" + i.ToString()).ToArray();
-            var parms = string.Join(",", parmNames);
+            var participantSqlParameters = participants.Select((s, i) => "@participant" + i.ToString()).ToArray();
+            var participantParameters =
+                participants.Select((s, i) => string.Format("(v.Participant_ID = @participant{0})", i)).ToList();
+            var participantWhere = string.Join(" OR ", participantParameters);
 
-            using (IDbCommand command = new SqlCommand(string.Format(query, parms)))
+            using (IDbCommand command = new SqlCommand(string.Format(query, participantWhere)))
             {
-
                 command.Parameters.Add(new SqlParameter("@from", fromDate) {DbType = DbType.DateTime});
-                command.Parameters.Add(new SqlParameter("@to", toDate) { DbType = DbType.DateTime });
+                command.Parameters.Add(new SqlParameter("@to", toDate) {DbType = DbType.DateTime});
 
+                //Add values to each participant parameter
                 command.CommandType = CommandType.Text;
-                for (var i = 0; i < parmNames.Length; i++)
+                for (var i = 0; i < participantParameters.Count; i++)
                 {
-                    var sqlParameter = new SqlParameter(parmNames[i], participants[i]);
+                    var sqlParameter = new SqlParameter(participantSqlParameters[i], participants[i]);
                     command.Parameters.Add(sqlParameter);
                 }
                 return command;
@@ -126,13 +131,13 @@ namespace MinistryPlatform.Translation.Services
             return myTimeSpan;
         }
 
-        private string SafeString(IDataRecord record, string fieldName)
+        private static string SafeString(IDataRecord record, string fieldName)
         {
             var ordinal = record.GetOrdinal(fieldName);
             return !record.IsDBNull(ordinal) ? record.GetString(ordinal) : null;
         }
 
-        private int? SafeInt(IDataRecord record, string fieldName)
+        private static int? SafeInt(IDataRecord record, string fieldName)
         {
             var ordinal = record.GetOrdinal(fieldName);
             return !record.IsDBNull(ordinal) ? record.GetInt16(ordinal) : (int?) null;
