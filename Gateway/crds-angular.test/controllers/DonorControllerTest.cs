@@ -13,18 +13,12 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Hosting;
 using System.Web.Http.Results;
-using crds_angular.Models.Crossroads;
-using crds_angular.Services;
-using MinistryPlatform.Models;
 
 namespace crds_angular.test.controllers
 {
     class DonorControllerTest
     {
         private DonorController fixture;
-        private Mock<MinistryPlatform.Translation.Services.Interfaces.IDonorService> mpDonorServiceMock;
-        private Mock<IPaymentService> stripeServiceMock;
-        private Mock<IAuthenticationService> authenticationServiceMock;
         private Mock<crds_angular.Services.Interfaces.IDonorService> donorService;
         private string authType;
         private string authToken;
@@ -43,12 +37,8 @@ namespace crds_angular.test.controllers
         [SetUp]
         public void SetUp()
         {
-            mpDonorServiceMock = new Mock<MinistryPlatform.Translation.Services.Interfaces.IDonorService>();
-            stripeServiceMock = new Mock<IPaymentService>();
-            authenticationServiceMock = new Mock<IAuthenticationService>();
             donorService = new Mock<crds_angular.Services.Interfaces.IDonorService>();
-            fixture = new DonorController(mpDonorServiceMock.Object, stripeServiceMock.Object,
-                authenticationServiceMock.Object, donorService.Object);
+            fixture = new DonorController(donorService.Object);
 
             authType = "auth_type";
             authToken = "auth_token";
@@ -64,17 +54,14 @@ namespace crds_angular.test.controllers
         [Test]
         public void shouldPostToSuccessfullyCreateAuthenticatedDonor()
         {
-            authenticationServiceMock.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Returns(contactId);
-
-            stripeServiceMock.Setup(mocked => mocked.createCustomer(It.IsAny<string>())).Returns(processorId);
-
             var createDonorDto = new CreateDonorDTO
             {
                 stripe_token_id = "tok_test"
             };
 
-            mpDonorServiceMock.Setup(mocked => mocked.CreateDonorRecord(contactId, processorId, It.IsAny<DateTime>(), 1, 1, 2)).Returns(donorId);
-           
+            donorService.Setup(mocked => mocked.GetDonorForAuthenticatedUser(It.IsAny<string>())).Returns((Donor)null);
+            donorService.Setup(mocked => mocked.CreateDonor(null, string.Empty, "tok_test", It.IsAny<DateTime>())).Returns(donor);
+
             IHttpActionResult result = fixture.Post(createDonorDto);
             
             Assert.IsNotNull(result);
@@ -87,8 +74,7 @@ namespace crds_angular.test.controllers
         [Test]
         public void TestGetSuccessGetDonorAuthenticated()
         {
-            authenticationServiceMock.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Returns(contactId);
-            mpDonorServiceMock.Setup(mocked => mocked.GetDonorRecord(contactId)).Returns(donor);
+            donorService.Setup(mocked => mocked.GetDonorForAuthenticatedUser(It.IsAny<string>())).Returns(donor);
             IHttpActionResult result = fixture.Get();
             Assert.IsNotNull(result);
             Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonorDTO>), result);
@@ -101,7 +87,7 @@ namespace crds_angular.test.controllers
         public void TestGetSuccessGetDonorUnauthenticated()
         {
             fixture.Request.Headers.Authorization = null;
-            mpDonorServiceMock.Setup(mocked => mocked.GetPossibleGuestDonorContact(email)).Returns(donor);
+            donorService.Setup(mocked => mocked.GetDonorForEmail(email)).Returns(donor);
             IHttpActionResult result = fixture.Get(email);
             Assert.IsNotNull(result);
             Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonorDTO>), result);
