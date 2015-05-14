@@ -75,7 +75,7 @@
       }
 
       function displayEmail(emailAddress) {
-        if (emailAddress == undefined) {
+        if (emailAddress === undefined) {
           return false;
         }
         if (emailAddress.length > 0) {
@@ -137,7 +137,7 @@
         if (scope.currentMember.serveRsvp == null) {
           validForm.valid = false;
           validForm.messageStr = $rootScope.MESSAGES.selectSignUpAndFrequency;
-        } else if (scope.currentMember.serveRsvp.attending == undefined) {
+        } else if (scope.currentMember.serveRsvp.attending === undefined) {
           validForm.valid = false;
           validForm.messageStr = $rootScope.MESSAGES.selectSignUpAndFrequency;
         } else if (scope.currentMember.currentOpportunity == null) {
@@ -245,15 +245,15 @@
           return;
         }
 
-        var saveRsvp = new ServeOpportunities.SaveRsvp();
-        saveRsvp.contactId = scope.currentMember.contactId;
-        saveRsvp.opportunityId = scope.currentMember.serveRsvp.roleId;
-        saveRsvp.eventTypeId = scope.team.eventTypeId;
-        saveRsvp.endDate = parseDate(scope.currentMember.currentOpportunity.toDt);
-        saveRsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
-        saveRsvp.signUp = scope.currentMember.serveRsvp.attending;
-        saveRsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
-        saveRsvp.$save(function(saved) {
+        var rsvp = new ServeOpportunities.SaveRsvp();
+        rsvp.contactId = scope.currentMember.contactId;
+        rsvp.opportunityId = scope.currentMember.serveRsvp.roleId;
+        rsvp.eventTypeId = scope.team.eventTypeId;
+        rsvp.endDate = parseDate(scope.currentMember.currentOpportunity.toDt);
+        rsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
+        rsvp.signUp = scope.currentMember.serveRsvp.attending;
+        rsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
+        rsvp.$save(function(saved) {
           $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess);
           $rootScope.$broadcast('update.member', scope.currentMember);
           scope.currentMember.serveRsvp.isSaved = true;
