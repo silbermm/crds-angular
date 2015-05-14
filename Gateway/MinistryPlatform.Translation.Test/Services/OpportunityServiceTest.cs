@@ -246,6 +246,7 @@ namespace MinistryPlatform.Translation.Test.Services
             {
                 new Dictionary<string, object>
                 {
+                    {"dp_RecordID", 7},
                     {"Opportunity_ID", 2},
                     {"Participant_ID", 5},
                     {"Response_Result_ID", 1}
@@ -289,6 +290,7 @@ namespace MinistryPlatform.Translation.Test.Services
             {
                 new Dictionary<string, object>
                 {
+                    {"dp_RecordID", 7},
                     {"Opportunity_ID", 77},
                     {"Participant_ID", 777},
                     {"Response_Result_ID", 2}
@@ -366,6 +368,8 @@ namespace MinistryPlatform.Translation.Test.Services
             const int eventId = 3333;
             const bool response = true;
 
+            _ministryPlatformService.Setup(
+                m => m.GetPageViewRecords("ResponseByOpportunityAndEvent", It.IsAny<string>(), It.IsAny<string>(), "", 0)).Returns(new List<Dictionary<string, object>>());
             _ministryPlatformService.Setup(
                 m => m.CreateRecord(pageKey, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>(), true))
                 .Returns(4444);
@@ -569,6 +573,35 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(255, output.GroupId);
             Assert.AreEqual("Test Group", output.Name);
             Assert.AreEqual(2, output.Participants.Count);
+        }
+
+        [Test]
+        public void ShouldChangeRSVPFromYesToNo()
+        {
+            const int opportunityId = 9;
+            const int eventId = 9234;
+            const string comments = "test-comments";
+            const int mockParticipantId = 7777;
+            const int pageId = 382;
+
+
+            // mock _ministryPlatformService.GetPageViewRecords
+            const string viewKey = "ResponseByOpportunityAndEvent";
+            var searchString = string.Format(",{0},{1},{2}", opportunityId, eventId, mockParticipantId);
+            const string sortString = "";
+            var mockResult = MockDictionaryGetOpportunityResponseSignUpYesTest();
+            _ministryPlatformService.Setup(
+                m => m.GetPageViewRecords(viewKey, It.IsAny<string>(), searchString, sortString, 0)).Returns(mockResult);
+
+            _ministryPlatformService.Setup(
+                m => m.UpdateRecord(pageId, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>()));
+
+            var responseId = _fixture.RespondToOpportunity(mockParticipantId, opportunityId, comments, eventId, false);
+
+            _ministryPlatformService.VerifyAll();
+
+            Assert.IsNotNull(responseId);
+            Assert.AreEqual(7, responseId);
         }
     }
 }

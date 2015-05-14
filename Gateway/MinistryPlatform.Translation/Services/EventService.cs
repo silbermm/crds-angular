@@ -85,7 +85,7 @@ namespace MinistryPlatform.Translation.Services
             return (eventParticipantId);
         }
 
-        private int GetEventParticipantRecordId(int eventId, int participantId)
+        public int GetEventParticipantRecordId(int eventId, int participantId)
         {
             var search = "," + eventId + "," + participantId;
             var participants = ministryPlatformService.GetPageViewRecords("EventParticipantByEventIdAndParticipantId", apiLogin(), search).Single();

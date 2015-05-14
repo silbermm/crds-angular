@@ -227,7 +227,7 @@ namespace MinistryPlatform.Translation.Services
                     recordId =
                         WithApiLogin<int>(
                             apiToken =>
-                                (_ministryPlatformService.CreateRecord("OpportunityResponses", values, apiToken)));
+                                (_ministryPlatformService.CreateRecord("OpportunityResponses", values, apiToken, true)));
                 }
             }
             catch (Exception ex)
