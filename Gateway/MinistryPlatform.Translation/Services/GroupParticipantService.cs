@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Security.Cryptography;
 using System.Text;
+using System.Linq;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
+using Crossroads.Utilities.Extensions;
 
 namespace MinistryPlatform.Translation.Services
 {
@@ -16,14 +19,14 @@ namespace MinistryPlatform.Translation.Services
         {
             this._dbConnection = dbConnection;
         }
-        public List<GroupServingParticipant> GetServingParticipants(List<int> participants)
+        public List<GroupServingParticipant> GetServingParticipants(List<int> participants, long from , long to)
         {
             var connection = _dbConnection;
             try
             {
                 connection.Open();
 
-                var command = CreateSqlCommand(participants);
+                var command = CreateSqlCommand(participants, from, to);
                 command.Connection = connection;
                 var reader = command.ExecuteReader();
                 var groupServingParticipants = new List<GroupServingParticipant>();
@@ -42,8 +45,8 @@ namespace MinistryPlatform.Translation.Services
                     participant.GroupName = reader.GetString(reader.GetOrdinal("Group_Name"));
                     participant.GroupPrimaryContactEmail = reader.GetString(reader.GetOrdinal("Primary_Contact_Email"));
                     participant.OpportunityId = reader.GetInt32(reader.GetOrdinal("Opportunity_ID"));
-                    participant.OpportunityMaximumNeeded = Convert.ToInt16(reader["Maximum_Needed"]);
-                    participant.OpportunityMinimumNeeded = Convert.ToInt16(reader["Minimum_Needed"]);
+                    participant.OpportunityMaximumNeeded = SafeInt(reader, "Maximum_Needed");
+                    participant.OpportunityMinimumNeeded = SafeInt(reader, "Minimum_Needed");
                     participant.OpportunityRoleTitle = reader.GetString(reader.GetOrdinal("Role_Title"));
                     participant.OpportunityShiftEnd = GetTimeSpan(reader, "Shift_End");
                     participant.OpportunityShiftStart = GetTimeSpan(reader, "Shift_Start");
@@ -64,36 +67,38 @@ namespace MinistryPlatform.Translation.Services
             }
         }
 
-        private IDbCommand CreateSqlCommand(IEnumerable<int> participants)
+        private IDbCommand CreateSqlCommand(IReadOnlyList<int> participants, long from, long to)
         {
-            var sb = new StringBuilder();
-            var i = 1;
-            var query =
-                @"SELECT *, 
+
+            var fromDate = from == 0 ? DateTime.Today : from.FromUnixTime();
+            var toDate = to == 0 ? DateTime.Today.AddDays(28) : to.FromUnixTime();
+             
+            const string query = @"SELECT *, 
                         Row_Number() Over ( Order By v.Event_Start_Date ) As RowNumber 
                     FROM MinistryPlatform.dbo.vw_crds_Serving_Participants v 
-                    WHERE v.Participant_ID IN ( @participants ) 
+                    WHERE v.Participant_ID IN ( {0} ) 
+                    AND Event_Start_Date between @from and @to
                     ORDER BY Event_Start_Date, Group_Name, Contact_ID";
 
-            IDbCommand command = new SqlCommand();
-            command.CommandType = CommandType.Text;
+            var parmNames = participants.Select((s, i) => "@participant" + i.ToString()).ToArray();
+            var parms = string.Join(",", parmNames);
 
-            foreach (var participant in participants)
+            using (IDbCommand command = new SqlCommand(string.Format(query, parms)))
             {
-                sb.Append("@ParticipantId" + i + ",");
 
-                var c = new SqlParameter("@ParticipantId" + i, participant) {DbType = DbType.Int32};
-                command.Parameters.Add(c);
-                i++;
+                command.Parameters.Add(new SqlParameter("@from", fromDate) {DbType = DbType.DateTime});
+                command.Parameters.Add(new SqlParameter("@to", toDate) { DbType = DbType.DateTime });
+
+                command.CommandType = CommandType.Text;
+                for (var i = 0; i < parmNames.Length; i++)
+                {
+                    var sqlParameter = new SqlParameter(parmNames[i], participants[i]);
+                    command.Parameters.Add(sqlParameter);
+                }
+                return command;
             }
-
-            var tmp = sb.Remove(sb.Length - 1, 1);
-            query = query.Replace("@participants", tmp.ToString());
-            command.CommandText = query;
-
-            return command;
         }
-        
+
         private static bool? GetRsvp(IDataRecord record, string columnName)
         {
             var ordinal = record.GetOrdinal(columnName);
@@ -123,6 +128,12 @@ namespace MinistryPlatform.Translation.Services
         {
             var ordinal = record.GetOrdinal(fieldName);
             return !record.IsDBNull(ordinal) ? record.GetString(ordinal) : null;
+        }
+
+        private int? SafeInt(IDataRecord record, string fieldName)
+        {
+            var ordinal = record.GetOrdinal(fieldName);
+            return !record.IsDBNull(ordinal) ? record.GetInt16(ordinal) : (int?) null;
         }
     }
 }

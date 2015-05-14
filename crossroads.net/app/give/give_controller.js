@@ -175,10 +175,10 @@
         vm.submitBankInfo = function() {
             vm.bankinfoSubmitted = true;
             if ($scope.giveForm.accountForm.$valid) {
-              PaymentService.donor.get({email: $scope.give.email})             
+              PaymentService.donor.get({email: $scope.give.email})
              .$promise
               .then(function(donor){
-                  PaymentService.donateToProgram(vm.program.ProgramId, vm.amount, donor.id)
+                  PaymentService.donateToProgram(vm.program.ProgramId, vm.amount, donor.id, vm.email)
                     .then(function(confirmation){
                         vm.program_name = _.result(_.find(vm.programsInput,
                           {'ProgramId': confirmation.program_id}), 'Name');
@@ -186,19 +186,19 @@
                         $state.go("give.thank-you");
                     });
                 },
-                function(error){    
+                function(error){
                   // The vm.email below is only required for guest giver, however, there
                   // is no harm in sending it for an authenticated user as well,
-                  // so we'll keep it simple and send it in all cases.       
+                  // so we'll keep it simple and send it in all cases.
                   PaymentService.createDonorWithCard({
                     name: vm.nameOnCard,
                     number: vm.ccNumber,
                     exp_month: vm.expDate.substr(0,2),
                     exp_year: vm.expDate.substr(2,2),
-                    cvc: vm.cvc                    
+                    cvc: vm.cvc
                   }, vm.email)
                   .then(function(donor) {
-                    PaymentService.donateToProgram(vm.program.ProgramId, vm.amount, donor.id)
+                    PaymentService.donateToProgram(vm.program.ProgramId, vm.amount, donor.id, vm.email)
                       .then(function(confirmation){
                           vm.program_name = _.result(_.find(vm.programsInput,
                             {'ProgramId': confirmation.program_id}), 'Name');
@@ -209,7 +209,7 @@
                   function() {
                     $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
                   });
-             
+
                 });
             }
             else {
