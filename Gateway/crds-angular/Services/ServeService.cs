@@ -206,6 +206,11 @@ namespace crds_angular.Services
                     {
                         _eventService.registerParticipantForEvent(participant.ParticipantId, e.EventId);
                     }
+                    else
+                    {
+                        //if there is already a participant, remove it because they've changed to "No"
+                        _eventService.unRegisterParticipantForEvent(participant.ParticipantId, e.EventId);
+                    }
                     var comments = string.Empty; //anything of value to put in comments?
                     _opportunityService.RespondToOpportunity(participant.ParticipantId, opportunityId, comments,
                         e.EventId, signUp);
