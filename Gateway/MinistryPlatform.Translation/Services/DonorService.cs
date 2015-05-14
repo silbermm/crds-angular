@@ -112,7 +112,7 @@ namespace MinistryPlatform.Translation.Services
             return donationDistributionId;
         }
 
-        public ContactDonor GetDonorRecord(int contactId)
+        public ContactDonor GetContactDonor(int contactId)
         {
             ContactDonor donor;
             try
@@ -147,7 +147,7 @@ namespace MinistryPlatform.Translation.Services
             return donor;
 
         }
-        public ContactDonor GetPossibleGuestDonorContact(string email)
+        public ContactDonor GetPossibleGuestContactDonor(string email)
         {
             ContactDonor donor;
             try

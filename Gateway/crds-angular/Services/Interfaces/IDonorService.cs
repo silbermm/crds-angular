@@ -5,10 +5,10 @@ namespace crds_angular.Services.Interfaces
 {
     public interface IDonorService
     {
-        ContactDonor GetDonorForEmail(string emailAddress);
+        ContactDonor GetContactDonorForEmail(string emailAddress);
 
-        ContactDonor GetDonorForAuthenticatedUser(string authToken);
+        ContactDonor GetContactDonorForAuthenticatedUser(string authToken);
 
-        ContactDonor CreateOrUpdateDonor(ContactDonor existingDonor, string emailAddress, string paymentProcessorToken, DateTime setupDate);
+        ContactDonor CreateOrUpdateContactDonor(ContactDonor existingDonor, string emailAddress, string paymentProcessorToken, DateTime setupDate);
     }
 }

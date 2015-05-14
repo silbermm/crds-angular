@@ -184,7 +184,7 @@ namespace MinistryPlatform.Translation.Test.Services
               guestDonorPageViewId, It.IsAny<string>(),
               It.IsAny<string>(),  "",0)).Returns(expectedDonorValues);
 
-            var response = _fixture.GetPossibleGuestDonorContact(email);
+            var response = _fixture.GetPossibleGuestContactDonor(email);
 
             _ministryPlatformService.Verify(mocked => mocked.GetPageViewRecords(guestDonorPageViewId,It.IsAny<string>(), ","+email,"", 0));
 
@@ -223,7 +223,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 guestDonorPageViewId, It.IsAny<string>(),
                 It.IsAny<string>(), "", 0)).Returns(expectedDonorValues);
 
-            var response = _fixture.GetDonorRecord(contactId);
+            var response = _fixture.GetContactDonor(contactId);
 
             _ministryPlatformService.Verify(
                 mocked => mocked.GetPageViewRecords(guestDonorPageViewId, It.IsAny<string>(), contactId+",", "", 0));
@@ -244,7 +244,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 guestDonorPageViewId, It.IsAny<string>(),
                 It.IsAny<string>(), "", 0)).Returns((List<Dictionary<string, object>>)null);
 
-            var response = _fixture.GetDonorRecord(contactId);
+            var response = _fixture.GetContactDonor(contactId);
 
             _ministryPlatformService.Verify(
                 mocked => mocked.GetPageViewRecords(guestDonorPageViewId, It.IsAny<string>(), contactId + ",", "", 0));

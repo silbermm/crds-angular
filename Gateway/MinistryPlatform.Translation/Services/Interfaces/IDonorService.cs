@@ -12,8 +12,8 @@ namespace MinistryPlatform.Translation.Services.Interfaces
             int? statementMethodId = 2 // default to email/online
             );
         int CreateDonationAndDistributionRecord(int donationAmt, int donorId, string programId, string charge_id, DateTime setupDate);
-        ContactDonor GetDonorRecord(int contactId);
-        ContactDonor GetPossibleGuestDonorContact(string email);
+        ContactDonor GetContactDonor(int contactId);
+        ContactDonor GetPossibleGuestContactDonor(string email);
         int UpdatePaymentProcessorCustomerId(int donorId, string paymentProcessorCustomerId);
     }
 }

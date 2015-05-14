@@ -59,8 +59,8 @@ namespace crds_angular.test.controllers
                 stripe_token_id = "tok_test"
             };
 
-            donorService.Setup(mocked => mocked.GetDonorForAuthenticatedUser(It.IsAny<string>())).Returns((ContactDonor)null);
-            donorService.Setup(mocked => mocked.CreateOrUpdateDonor(null, string.Empty, "tok_test", It.IsAny<DateTime>())).Returns(donor);
+            donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(It.IsAny<string>())).Returns((ContactDonor)null);
+            donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(null, string.Empty, "tok_test", It.IsAny<DateTime>())).Returns(donor);
 
             IHttpActionResult result = fixture.Post(createDonorDto);
             
@@ -74,7 +74,7 @@ namespace crds_angular.test.controllers
         [Test]
         public void TestGetSuccessGetDonorAuthenticated()
         {
-            donorService.Setup(mocked => mocked.GetDonorForAuthenticatedUser(It.IsAny<string>())).Returns(donor);
+            donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(It.IsAny<string>())).Returns(donor);
             IHttpActionResult result = fixture.Get();
             Assert.IsNotNull(result);
             Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonorDTO>), result);
@@ -87,7 +87,7 @@ namespace crds_angular.test.controllers
         public void TestGetSuccessGetDonorUnauthenticated()
         {
             fixture.Request.Headers.Authorization = null;
-            donorService.Setup(mocked => mocked.GetDonorForEmail(email)).Returns(donor);
+            donorService.Setup(mocked => mocked.GetContactDonorForEmail(email)).Returns(donor);
             IHttpActionResult result = fixture.Get(email);
             Assert.IsNotNull(result);
             Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonorDTO>), result);
@@ -121,8 +121,8 @@ namespace crds_angular.test.controllers
                 ProcessorId = "jenny_ive_got_your_number"
             };
 
-            donorService.Setup(mocked => mocked.GetDonorForEmail(createDonorDto.email_address)).Returns(lookupDonor);
-            donorService.Setup(mocked => mocked.CreateOrUpdateDonor(It.Is<ContactDonor>(d => d == lookupDonor), createDonorDto.email_address, createDonorDto.stripe_token_id, It.IsAny<DateTime>())).Returns(createDonor);
+            donorService.Setup(mocked => mocked.GetContactDonorForEmail(createDonorDto.email_address)).Returns(lookupDonor);
+            donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(It.Is<ContactDonor>(d => d == lookupDonor), createDonorDto.email_address, createDonorDto.stripe_token_id, It.IsAny<DateTime>())).Returns(createDonor);
 
             IHttpActionResult result = fixture.Post(createDonorDto);
 
@@ -165,8 +165,8 @@ namespace crds_angular.test.controllers
                 ProcessorId = "jenny_ive_got_your_number"
             };
 
-            donorService.Setup(mocked => mocked.GetDonorForEmail(createDonorDto.email_address)).Returns(lookupDonor);
-            donorService.Setup(mocked => mocked.CreateOrUpdateDonor(It.Is<ContactDonor>(d => d == lookupDonor), createDonorDto.email_address, createDonorDto.stripe_token_id, It.IsAny<DateTime>())).Returns(createDonor);
+            donorService.Setup(mocked => mocked.GetContactDonorForEmail(createDonorDto.email_address)).Returns(lookupDonor);
+            donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(It.Is<ContactDonor>(d => d == lookupDonor), createDonorDto.email_address, createDonorDto.stripe_token_id, It.IsAny<DateTime>())).Returns(createDonor);
 
             IHttpActionResult result = fixture.Post(createDonorDto);
 
@@ -197,7 +197,7 @@ namespace crds_angular.test.controllers
 
             var lookupException = new Exception("Danger, Will Robinson!");
 
-            donorService.Setup(mocked => mocked.GetDonorForEmail(createDonorDto.email_address)).Throws(lookupException);
+            donorService.Setup(mocked => mocked.GetContactDonorForEmail(createDonorDto.email_address)).Throws(lookupException);
 
             try {
                 fixture.Post(createDonorDto);
@@ -230,8 +230,8 @@ namespace crds_angular.test.controllers
 
             var createException = new Exception("Danger, Will Robinson!");
 
-            donorService.Setup(mocked => mocked.GetDonorForEmail(createDonorDto.email_address)).Returns(lookupDonor);
-            donorService.Setup(mocked => mocked.CreateOrUpdateDonor(It.Is<ContactDonor>(d => d == lookupDonor), createDonorDto.email_address, createDonorDto.stripe_token_id, It.IsAny<DateTime>())).Throws(createException);
+            donorService.Setup(mocked => mocked.GetContactDonorForEmail(createDonorDto.email_address)).Returns(lookupDonor);
+            donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(It.Is<ContactDonor>(d => d == lookupDonor), createDonorDto.email_address, createDonorDto.stripe_token_id, It.IsAny<DateTime>())).Throws(createException);
 
             try
             {

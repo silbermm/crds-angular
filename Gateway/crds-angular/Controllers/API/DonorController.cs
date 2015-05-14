@@ -43,7 +43,7 @@ namespace crds_angular.Controllers.API
             ContactDonor donor;
             try
             {
-                donor = gatewayDonorService.GetDonorForEmail(dto.email_address);
+                donor = gatewayDonorService.GetContactDonorForEmail(dto.email_address);
             }
             catch (Exception e)
             {
@@ -59,7 +59,7 @@ namespace crds_angular.Controllers.API
 
             try
             {
-                donor = gatewayDonorService.CreateOrUpdateDonor(donor, dto.email_address, dto.stripe_token_id, DateTime.Now);
+                donor = gatewayDonorService.CreateOrUpdateContactDonor(donor, dto.email_address, dto.stripe_token_id, DateTime.Now);
             }
             catch (Exception e)
             {
@@ -87,8 +87,8 @@ namespace crds_angular.Controllers.API
         {
             try
             {
-                var donor = gatewayDonorService.GetDonorForAuthenticatedUser(authToken);
-                donor = gatewayDonorService.CreateOrUpdateDonor(donor, string.Empty, dto.stripe_token_id, DateTime.Now);
+                var donor = gatewayDonorService.GetContactDonorForAuthenticatedUser(authToken);
+                donor = gatewayDonorService.CreateOrUpdateContactDonor(donor, string.Empty, dto.stripe_token_id, DateTime.Now);
 
                 var response = new DonorDTO
                 {
@@ -109,7 +109,7 @@ namespace crds_angular.Controllers.API
         {
             try
             {
-                var donor = gatewayDonorService.GetDonorForAuthenticatedUser(token);
+                var donor = gatewayDonorService.GetContactDonorForAuthenticatedUser(token);
 
                 if (donor == null)
                 {
@@ -137,7 +137,7 @@ namespace crds_angular.Controllers.API
         {
             try
             {
-                var donor = gatewayDonorService.GetDonorForEmail(email);
+                var donor = gatewayDonorService.GetContactDonorForEmail(email);
                 if (donor == null)
                 {
                     return NotFound();

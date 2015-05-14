@@ -35,15 +35,15 @@ namespace crds_angular.Services
             STATEMENT_METHOD_NONE = configurationWrapper.GetConfigIntValue("DonorStatementMethodNone");
         }
 
-        public ContactDonor GetDonorForEmail(string emailAddress)
+        public ContactDonor GetContactDonorForEmail(string emailAddress)
         {
-            return (mpDonorService.GetPossibleGuestDonorContact(emailAddress));
+            return (mpDonorService.GetPossibleGuestContactDonor(emailAddress));
         }
 
-        public ContactDonor GetDonorForAuthenticatedUser(string authToken)
+        public ContactDonor GetContactDonorForAuthenticatedUser(string authToken)
         {
             var contactId = authenticationService.GetContactId(authToken);
-            return (mpDonorService.GetDonorRecord(contactId));
+            return (mpDonorService.GetContactDonor(contactId));
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace crds_angular.Services
         /// <param name="paymentProcessorToken">The one-time-use token given by the payment processor.</param>
         /// <param name="setupDate">The date when the Donor is marked as setup - normally would be today's date.</param>
         /// <returns></returns>
-        public ContactDonor CreateOrUpdateDonor(ContactDonor contactDonor, string emailAddress, string paymentProcessorToken, DateTime setupDate)
+        public ContactDonor CreateOrUpdateContactDonor(ContactDonor contactDonor, string emailAddress, string paymentProcessorToken, DateTime setupDate)
         {
             var contactDonorResponse = new ContactDonor();
             if (contactDonor == null || !contactDonor.ExistingContact)
