@@ -44,7 +44,7 @@ namespace crds_angular.test.Services
         [Test]
         public void shouldGetDonorForEmail()
         {
-            var donor = new Donor();
+            var donor = new ContactDonor();
             mpDonorService.Setup(mocked => mocked.GetPossibleGuestDonorContact("me@here.com")).Returns(donor);
             var response = fixture.GetDonorForEmail("me@here.com");
 
@@ -55,7 +55,7 @@ namespace crds_angular.test.Services
         [Test]
         public void shouldGetDonorForAuthenticatedUser()
         {
-            var donor = new Donor();
+            var donor = new ContactDonor();
             authenticationService.Setup(mocked => mocked.GetContactId("authToken")).Returns(123);
             mpDonorService.Setup(mocked => mocked.GetDonorRecord(123)).Returns(donor);
             var response = fixture.GetDonorForAuthenticatedUser("authToken");
@@ -69,14 +69,14 @@ namespace crds_angular.test.Services
         [Test]
         public void shouldReturnExistingDonorWithExistingStripeId()
         {
-            var donor = new Donor
+            var donor = new ContactDonor
             {
                 ContactId = 12345,
                 DonorId = 67890,
                 ProcessorId = "Processor_ID"
             };
 
-            var response = fixture.CreateDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
+            var response = fixture.CreateOrUpdateDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
 
             mpDonorService.VerifyAll();
             mpContactService.VerifyAll();
@@ -95,7 +95,7 @@ namespace crds_angular.test.Services
             mpDonorService.Setup(mocked => mocked.CreateDonorRecord(123, "processor_id", It.IsAny<DateTime>(), STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE)).Returns(456);
             paymentService.Setup(mocked => mocked.updateCustomerDescription("processor_id", 456)).Returns("456");
 
-            var response = fixture.CreateDonor(null, "me@here.com", "stripe_token", DateTime.Now);
+            var response = fixture.CreateOrUpdateDonor(null, "me@here.com", "stripe_token", DateTime.Now);
 
             mpDonorService.VerifyAll();
             mpContactService.VerifyAll();
@@ -109,7 +109,7 @@ namespace crds_angular.test.Services
         [Test]
         public void shouldCreateNewDonorForExistingContact()
         {
-            var donor = new Donor
+            var donor = new ContactDonor
             {
                 ContactId = 12345,
                 DonorId = 0,
@@ -119,7 +119,7 @@ namespace crds_angular.test.Services
             mpDonorService.Setup(mocked => mocked.CreateDonorRecord(12345, "processor_id", It.IsAny<DateTime>(), STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE)).Returns(456);
             paymentService.Setup(mocked => mocked.updateCustomerDescription("processor_id", 456)).Returns("456");
 
-            var response = fixture.CreateDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
+            var response = fixture.CreateOrUpdateDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
 
             mpDonorService.VerifyAll();
             mpContactService.VerifyAll();
@@ -133,7 +133,7 @@ namespace crds_angular.test.Services
         [Test]
         public void shouldUpdateExistingDonorForExistingContact()
         {
-            var donor = new Donor
+            var donor = new ContactDonor
             {
                 ContactId = 12345,
                 DonorId = 456,
@@ -143,7 +143,7 @@ namespace crds_angular.test.Services
             mpDonorService.Setup(mocked => mocked.UpdatePaymentProcessorCustomerId(456, "processor_id")).Returns(456);
             paymentService.Setup(mocked => mocked.updateCustomerDescription("processor_id", 456)).Returns("456");
 
-            var response = fixture.CreateDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
+            var response = fixture.CreateOrUpdateDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
 
             mpDonorService.VerifyAll();
             mpContactService.VerifyAll();

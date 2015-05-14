@@ -40,7 +40,7 @@ namespace crds_angular.Controllers.API
 
         private IHttpActionResult CreateDonorForUnauthenticatedUser(CreateDonorDTO dto)
         {
-            Donor donor;
+            ContactDonor donor;
             try
             {
                 donor = gatewayDonorService.GetDonorForEmail(dto.email_address);
@@ -59,7 +59,7 @@ namespace crds_angular.Controllers.API
 
             try
             {
-                donor = gatewayDonorService.CreateDonor(donor, dto.email_address, dto.stripe_token_id, DateTime.Now);
+                donor = gatewayDonorService.CreateOrUpdateDonor(donor, dto.email_address, dto.stripe_token_id, DateTime.Now);
             }
             catch (Exception e)
             {
@@ -88,7 +88,7 @@ namespace crds_angular.Controllers.API
             try
             {
                 var donor = gatewayDonorService.GetDonorForAuthenticatedUser(authToken);
-                donor = gatewayDonorService.CreateDonor(donor, string.Empty, dto.stripe_token_id, DateTime.Now);
+                donor = gatewayDonorService.CreateOrUpdateDonor(donor, string.Empty, dto.stripe_token_id, DateTime.Now);
 
                 var response = new DonorDTO
                 {

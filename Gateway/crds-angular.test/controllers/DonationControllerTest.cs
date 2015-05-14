@@ -56,7 +56,7 @@ namespace crds_angular.test.controllers
                 donor_id = 394256
             };
 
-            var donor = new Donor
+            var donor = new ContactDonor
             {
                 ContactId = contactId,
                 DonorId = 424242,
@@ -111,7 +111,7 @@ namespace crds_angular.test.controllers
                 email_address = "test@test.com"
             };
 
-            var donor = new Donor
+            var donor = new ContactDonor
             {
                 ContactId = contactId,
                 DonorId = 424242,
