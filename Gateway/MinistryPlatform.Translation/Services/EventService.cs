@@ -14,7 +14,8 @@ namespace MinistryPlatform.Translation.Services
         private readonly log4net.ILog logger =
             log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private readonly int EventParticipantPageId = Convert.ToInt32(AppSettings("EventsParticipants"));
+        private readonly int EventParticipantSubPageId = Convert.ToInt32(AppSettings("EventsParticipants"));
+        private readonly int EventParticipantPageId = Convert.ToInt32(AppSettings("EventParticipant"));
 
         private readonly int EventParticipantStatusDefaultID =
             Convert.ToInt32(AppSettings("Event_Participant_Status_Default_ID"));
@@ -44,7 +45,7 @@ namespace MinistryPlatform.Translation.Services
                         apiToken =>
                         {
                             return
-                                (ministryPlatformService.CreateSubRecord(EventParticipantPageId, eventId, values,
+                                (ministryPlatformService.CreateSubRecord(EventParticipantSubPageId, eventId, values,
                                     apiToken,
                                     true));
                         });
@@ -65,16 +66,12 @@ namespace MinistryPlatform.Translation.Services
         {
             logger.Debug("Removing participant " + participantId + " from event " + eventId);
             
-            // go get record id to delete
-            var recordId = GetEventParticipantRecordId(eventId, participantId);
-
-
             int eventParticipantId;
             try
             {
-                eventParticipantId =
-                    WithApiLogin<int>(
-                        apiToken => (ministryPlatformService.DeleteRecord(EventParticipantPageId, recordId, null, apiToken)));
+                // go get record id to delete
+                var recordId = GetEventParticipantRecordId(eventId, participantId);
+                eventParticipantId = ministryPlatformService.DeleteRecord(EventParticipantPageId, recordId, null, apiLogin());
             }
             catch (Exception ex)
             {
@@ -90,8 +87,9 @@ namespace MinistryPlatform.Translation.Services
 
         private int GetEventParticipantRecordId(int eventId, int participantId)
         {
-            ministryPlatformService.GetRecordsDict(EventParticipantPageId, apiLogin(), "");
-            throw new NotImplementedException();
+            var search = "," + eventId + "," + participantId;
+            var participants = ministryPlatformService.GetPageViewRecords("EventParticipantByEventIdAndParticipantId", apiLogin(), search).Single();
+            return (int) participants["Event_Participant_ID"];
         }
 
         public List<Event> GetEvents(string eventType, string token)
