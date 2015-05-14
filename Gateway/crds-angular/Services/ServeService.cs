@@ -222,6 +222,7 @@ namespace crds_angular.Services
             {
                 Name = record.OpportunityTitle + " " + record.OpportunityRoleTitle,
                 RoleId = record.OpportunityId,
+                Room = record.Room,
                 Minimum = record.OpportunityMinimumNeeded,
                 Maximum = record.OpportunityMaximumNeeded,
                 ShiftEndTime = record.OpportunityShiftEnd.FormatAsString(),
