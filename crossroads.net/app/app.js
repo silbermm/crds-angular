@@ -76,6 +76,7 @@ var _ = require('lodash');
       invalidCvv:26,
       donorEmailAlreadyRegistered:28,
       serveSignupSuccess:29,
+      serveSignupMoreError:30,
       creditCardDiscouraged:36,
       selectSignUpAndFrequency: 31,
       selectFrequency: 32,
