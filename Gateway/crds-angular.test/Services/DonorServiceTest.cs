@@ -50,6 +50,7 @@ namespace crds_angular.test.Services
 
             mpDonorService.VerifyAll();
             Assert.AreSame(donor, response);
+            Assert.IsFalse(response.RegisteredUser);
         }
 
         [Test]
@@ -64,6 +65,7 @@ namespace crds_angular.test.Services
             mpDonorService.VerifyAll();
 
             Assert.AreSame(donor, response);
+            Assert.IsTrue(response.RegisteredUser);
         }
 
         [Test]
@@ -73,7 +75,8 @@ namespace crds_angular.test.Services
             {
                 ContactId = 12345,
                 DonorId = 67890,
-                ProcessorId = "Processor_ID"
+                ProcessorId = "Processor_ID",
+                RegisteredUser = true
             };
 
             var response = fixture.CreateOrUpdateContactDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
@@ -85,6 +88,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual(donor.ContactId, response.ContactId);
             Assert.AreEqual(donor.DonorId, response.DonorId);
             Assert.AreEqual(donor.ProcessorId, response.ProcessorId);
+            Assert.AreEqual(donor.RegisteredUser, response.RegisteredUser);
         }
 
         [Test]
@@ -104,6 +108,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual(123, response.ContactId);
             Assert.AreEqual(456, response.DonorId);
             Assert.AreEqual("processor_id", response.ProcessorId);
+            Assert.IsFalse(response.RegisteredUser);
         }
 
         [Test]
@@ -128,6 +133,32 @@ namespace crds_angular.test.Services
             Assert.AreEqual(12345, response.ContactId);
             Assert.AreEqual(456, response.DonorId);
             Assert.AreEqual("processor_id", response.ProcessorId);
+        }
+
+        [Test]
+        public void shouldCreateNewDonorForExistingRegisteredContact()
+        {
+            var donor = new ContactDonor
+            {
+                ContactId = 12345,
+                DonorId = 0,
+                RegisteredUser = true
+            };
+
+            paymentService.Setup(mocked => mocked.createCustomer("stripe_token")).Returns("processor_id");
+            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(12345, "processor_id", It.IsAny<DateTime>(), 1, 1, 2)).Returns(456);
+            paymentService.Setup(mocked => mocked.updateCustomerDescription("processor_id", 456)).Returns("456");
+
+            var response = fixture.CreateOrUpdateContactDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
+
+            mpDonorService.VerifyAll();
+            mpContactService.VerifyAll();
+            paymentService.VerifyAll();
+
+            Assert.AreEqual(12345, response.ContactId);
+            Assert.AreEqual(456, response.DonorId);
+            Assert.AreEqual("processor_id", response.ProcessorId);
+            Assert.AreEqual(donor.RegisteredUser, response.RegisteredUser);
         }
 
         [Test]
