@@ -35,7 +35,7 @@ namespace crds_angular.test.Services
                 It.Is<RestRequest>(o =>
                     o.Method == Method.POST
                     && o.Resource.Equals("customers")
-                    && parameterMatches("description", "testing customers", o.Parameters)
+                    && parameterMatches("description", "Crossroads Donor #pending", o.Parameters)
                     && parameterMatches("source", "token", o.Parameters)
                     )));
             restClient.VerifyAll();
@@ -59,13 +59,60 @@ namespace crds_angular.test.Services
                 It.Is<IRestRequest>(o =>
                     o.Method == Method.POST
                     && o.Resource.Equals("customers")
-                    && parameterMatches("description", "testing customers", o.Parameters)
+                    && parameterMatches("description", "Crossroads Donor #pending", o.Parameters)
                     && parameterMatches("source", "token", o.Parameters)
                     )));
             restClient.VerifyAll();
             stripeResponse.VerifyAll();
 
             Assert.AreEqual("12345", response);
+        }
+
+        [Test]
+        public void shouldUpdateCustomerDescription()
+        {
+            var customer = new StripeCustomer();
+            customer.id = "12345";
+
+            var stripeResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
+            stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.Data).Returns(customer).Verifiable();
+
+            restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
+
+            var response = fixture.updateCustomerDescription("token", 102030);
+            restClient.Verify(mocked => mocked.Execute<StripeCustomer>(
+                It.Is<IRestRequest>(o =>
+                    o.Method == Method.POST
+                    && o.Resource.Equals("customers/token")
+                    && parameterMatches("description", "Crossroads Donor #102030", o.Parameters)
+                    )));
+            restClient.VerifyAll();
+            stripeResponse.VerifyAll();
+
+            Assert.AreEqual("12345", response);
+        }
+
+        [Test]
+        public void shouldThrowExceptionWhenCustomerUpdateFails()
+        {
+            var stripeResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
+            stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.BadRequest).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.Content).Returns("{error: {message:'Invalid Request'}}").Verifiable();
+
+            restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
+
+            try
+            {
+                fixture.updateCustomerDescription("token", 102030);
+                Assert.Fail("Expected exception was not thrown");
+            }
+            catch (StripeException e)
+            {
+                Assert.AreEqual("Customer update failed", e.Message);
+                Assert.IsNotNull(e.detailMessage);
+                Assert.AreEqual("Invalid Request", e.detailMessage);
+            }
         }
 
         [Test]

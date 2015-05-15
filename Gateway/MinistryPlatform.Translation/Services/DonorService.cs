@@ -19,7 +19,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int donationDistributionPageId = Convert.ToInt32(AppSettings("Distributions"));
 
         public const string DONOR_RECORD_ID = "Donor_Record";
-        public const string DONOR_STRIPE_CUST_ID = "Stripe_Customer_ID";
+        public const string DONOR_PROCESSOR_ID = "Processor_ID";
 
         private IMinistryPlatformService ministryPlatformService;
 
@@ -29,7 +29,7 @@ namespace MinistryPlatform.Translation.Services
         }
 
 
-        public int CreateDonorRecord(int contactId, string stripeCustomerId, DateTime setupTime,
+        public int CreateDonorRecord(int contactId, string processorId, DateTime setupTime,
             int? statementFrequencyId = 1, // default to quarterly
             int? statementTypeId = 1, //default to individual
             int? statementMethodId = 2 // default to email/online
@@ -44,7 +44,7 @@ namespace MinistryPlatform.Translation.Services
                 {"Statement_Type_ID", statementTypeId}, 
                 {"Statement_Method_ID", statementMethodId},
                 {"Setup_Date", setupTime},    //default to current date/time
-                {"Stripe_Customer_ID", stripeCustomerId}
+                {"Processor_ID", processorId}
             };
 
             int donorId;
@@ -112,28 +112,32 @@ namespace MinistryPlatform.Translation.Services
             return donationDistributionId;
         }
 
-        public Donor GetDonorRecord(int contactId)
+        public ContactDonor GetContactDonor(int contactId)
         {
-            Donor donor;
+            ContactDonor donor;
             try
             {
                 var searchStr = contactId.ToString() + ",";
                 var records =
                     WithApiLogin<List<Dictionary<string, object>>>(
                         apiToken => (ministryPlatformService.GetPageViewRecords("DonorByContactId", apiToken, searchStr, "")));
-                if (records.Count > 0)
+                if (records != null && records.Count > 0)
                 {
                     var record = records.First();
-                    donor = new Donor()
+                    donor = new ContactDonor()
                     {
-                        DonorId = record.ToInt("dp_RecordID"),
-                        StripeCustomerId = record.ToString(DONOR_STRIPE_CUST_ID),
-                        ContactId = record.ToInt("Contact_ID")
+                        DonorId = record.ToInt("Donor_ID"),
+                        ProcessorId = record.ToString(DONOR_PROCESSOR_ID),
+                        ContactId = record.ToInt("Contact_ID"),
+                        RegisteredUser = true
                     };
                 }
                 else
                 {
-                    return null;
+                    donor = new ContactDonor {
+                        ContactId = contactId,
+                        RegisteredUser = true
+                    };
                 }
             }
             catch (Exception ex)
@@ -145,12 +149,12 @@ namespace MinistryPlatform.Translation.Services
             return donor;
 
         }
-        public Donor GetPossibleGuestDonorContact(string email)
+        public ContactDonor GetPossibleGuestContactDonor(string email)
         {
-            Donor donor;
+            ContactDonor donor;
             try
             {
-                if (email.Equals(String.Empty))
+                if (String.IsNullOrWhiteSpace(email))
                 {
                     return null;
                 }
@@ -158,15 +162,17 @@ namespace MinistryPlatform.Translation.Services
                 var records =
                     WithApiLogin<List<Dictionary<string, object>>>(
                         apiToken => (ministryPlatformService.GetPageViewRecords("PossibleGuestDonorContact", apiToken, searchStr, "")));
-                if (records.Count > 0)
+                if (records != null && records.Count > 0)
                 {
                     var record = records.First();
-                    donor = new Donor()
+                    donor = new ContactDonor()
                     {
+                        
                         DonorId = record.ToInt(DONOR_RECORD_ID),
-                        StripeCustomerId = record.ToString(DONOR_STRIPE_CUST_ID),
+                        ProcessorId = record.ToString(DONOR_PROCESSOR_ID),
                         ContactId = record.ToInt("Contact_ID"),
-                        Email = record.ToString("Email_Address")
+                        Email = record.ToString("Email_Address"),
+                        RegisteredUser = false
                     };
                 }
                 else
@@ -188,7 +194,7 @@ namespace MinistryPlatform.Translation.Services
         {
             var parms = new Dictionary<string, object> {
                 { "dp_RecordID", donorId },
-                { DONOR_STRIPE_CUST_ID, paymentProcessorCustomerId },
+                { DONOR_PROCESSOR_ID, paymentProcessorCustomerId },
             };
 
             try

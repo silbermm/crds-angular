@@ -1,39 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using System.Web.Http.Description;
-using System.Web.Http.Results;
-using crds_angular.Exceptions.Models;
+﻿using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
 using crds_angular.test.controllers;
-using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
-using crds_angular.Models.Crossroads;
-using MinistryPlatform.Models;
 using log4net;
-using crds_angular.Services;
+using MinistryPlatform.Models;
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace crds_angular.Controllers.API
 {
     public class DonorController : MPAuth
     {
-        private MPInterfaces.IDonorService mpDonorService;
         private IDonorService gatewayDonorService;
-        private IPaymentService stripeService;
-        private MPInterfaces.IAuthenticationService authenticationService;
 
         private static readonly ILog logger = LogManager.GetLogger(typeof(DonorController));
 
-        public DonorController(MPInterfaces.IDonorService mpDonorService, IPaymentService stripeService,
-            MPInterfaces.IAuthenticationService authenticationService, IDonorService gatewayDonorService)
+        public DonorController(IDonorService gatewayDonorService)
         {
-            this.mpDonorService = mpDonorService;
-            this.stripeService = stripeService;
-            this.authenticationService = authenticationService;
             this.gatewayDonorService = gatewayDonorService;
         }
 
@@ -53,10 +40,10 @@ namespace crds_angular.Controllers.API
 
         private IHttpActionResult CreateDonorForUnauthenticatedUser(CreateDonorDTO dto)
         {
-            Donor donor;
+            ContactDonor donor;
             try
             {
-                donor = gatewayDonorService.GetDonorForEmail(dto.email_address);
+                donor = gatewayDonorService.GetContactDonorForEmail(dto.email_address);
             }
             catch (Exception e)
             {
@@ -72,7 +59,7 @@ namespace crds_angular.Controllers.API
 
             try
             {
-                donor = gatewayDonorService.CreateDonor(donor, dto.email_address, dto.stripe_token_id, DateTime.Now);
+                donor = gatewayDonorService.CreateOrUpdateContactDonor(donor, dto.email_address, dto.stripe_token_id, DateTime.Now);
             }
             catch (Exception e)
             {
@@ -85,7 +72,7 @@ namespace crds_angular.Controllers.API
             var responseBody = new DonorDTO
             {
                 id = donor.DonorId,
-                stripe_customer_id = donor.StripeCustomerId,
+                Processor_ID = donor.ProcessorId,
             };
 
             // HTTP StatusCode should be 201 (Created) if we created a donor, or 200 (Ok) if returning an existing donor
@@ -100,16 +87,13 @@ namespace crds_angular.Controllers.API
         {
             try
             {
-                var contactId = authenticationService.GetContactId(authToken);
-
-                var customerId = stripeService.createCustomer(dto.stripe_token_id);
-
-                var donorId = mpDonorService.CreateDonorRecord(contactId, customerId, DateTime.Now);
+                var donor = gatewayDonorService.GetContactDonorForAuthenticatedUser(authToken);
+                donor = gatewayDonorService.CreateOrUpdateContactDonor(donor, string.Empty, dto.stripe_token_id, DateTime.Now);
 
                 var response = new DonorDTO
                 {
-                    id = donorId,
-                    stripe_customer_id = customerId
+                    id = donor.DonorId,
+                    Processor_ID = donor.ProcessorId
                 };
 
                 return Ok(response);
@@ -125,16 +109,22 @@ namespace crds_angular.Controllers.API
         {
             try
             {
-                var contactId = authenticationService.GetContactId(token);
-                var donor = mpDonorService.GetDonorRecord(contactId);
+                var donor = gatewayDonorService.GetContactDonorForAuthenticatedUser(token);
 
-                var response = new DonorDTO
+                if (donor == null)
                 {
-                    id = donor.DonorId,
-                    stripe_customer_id = donor.StripeCustomerId
-                };
+                    return (NotFound());
+                }
+                else
+                {
+                    var response = new DonorDTO
+                    {
+                        id = donor.DonorId,
+                        Processor_ID = donor.ProcessorId
+                    };
 
-                return Ok(response);
+                    return Ok(response);
+                }
             }
             catch (Exception exception)
             {
@@ -147,7 +137,7 @@ namespace crds_angular.Controllers.API
         {
             try
             {
-                var donor = mpDonorService.GetPossibleGuestDonorContact(email);
+                var donor = gatewayDonorService.GetContactDonorForEmail(email);
                 if (donor == null)
                 {
                     return NotFound();
@@ -157,7 +147,7 @@ namespace crds_angular.Controllers.API
                     var response = new DonorDTO
                     {
                         id = donor.DonorId,
-                        stripe_customer_id = donor.StripeCustomerId
+                        Processor_ID = donor.ProcessorId
                     };
 
                     return Ok(response); 
