@@ -81,11 +81,7 @@ h2 {
   text-transform: none;
 }
 
-
 // Table buttons
-
-// Table buttons
-
 .table-btn {
   @extend .btn;
   @extend .btn-default;
@@ -106,25 +102,9 @@ h2 {
   }
 }
 
-
 .btn-checkbox-toggle {
-  @extend .col-xs-12;
+  @include button-variant($gray, #ffffff, $input-group-addon-border-color);
   text-align: left;
   font-family: $font-family-base;
   font-size: $font-size-base;
-  color: $input-color;
-  font-weight: normal;
-  border: 1px solid $input-group-addon-border-color;
-  background: white;
-  height: $input-height-base;
-
-  &:hover {
-    color: $text-color;
-    background: $gray-lighter;
-  }
-
-  label {
-    width: 100%;
-    display: block;
-  }
 }
