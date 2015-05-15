@@ -85,10 +85,19 @@ namespace crds_angular.Services
                 }
                 else
                 {
-                    contactDonorResponse.DonorId = mpDonorService.CreateDonorRecord(contactDonor.ContactId, contactDonorResponse.ProcessorId, setupDate,
-                        STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE);
+                    if (contactDonor.RegisteredUser)
+                    {
+                        contactDonorResponse.DonorId = mpDonorService.CreateDonorRecord(contactDonor.ContactId, contactDonorResponse.ProcessorId, setupDate);
+                    }
+                    else
+                    {
+                        contactDonorResponse.DonorId = mpDonorService.CreateDonorRecord(contactDonor.ContactId, contactDonorResponse.ProcessorId, setupDate,
+                            STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE);
+                    }
                 }
                 paymentService.updateCustomerDescription(contactDonorResponse.ProcessorId, contactDonorResponse.DonorId);
+
+                contactDonorResponse.RegisteredUser = contactDonor.RegisteredUser;
             }
             else
             {

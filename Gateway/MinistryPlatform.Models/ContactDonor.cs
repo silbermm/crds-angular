@@ -19,6 +19,7 @@ namespace MinistryPlatform.Models
         public DateTime SetupDate { get; set; }
         public string ProcessorId { get; set; }
         public string Email { get; set; }
+        public bool RegisteredUser;
 
         /// <summary>
         /// Returns true if this ContactDonor represents an existing MP Contact, false if not.

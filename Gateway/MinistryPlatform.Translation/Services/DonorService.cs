@@ -128,13 +128,15 @@ namespace MinistryPlatform.Translation.Services
                     {
                         DonorId = record.ToInt("Donor_ID"),
                         ProcessorId = record.ToString(DONOR_PROCESSOR_ID),
-                        ContactId = record.ToInt("Contact_ID")
+                        ContactId = record.ToInt("Contact_ID"),
+                        RegisteredUser = true
                     };
                 }
                 else
                 {
                     donor = new ContactDonor {
-                        ContactId = contactId
+                        ContactId = contactId,
+                        RegisteredUser = true
                     };
                 }
             }
@@ -169,7 +171,8 @@ namespace MinistryPlatform.Translation.Services
                         DonorId = record.ToInt(DONOR_RECORD_ID),
                         ProcessorId = record.ToString(DONOR_PROCESSOR_ID),
                         ContactId = record.ToInt("Contact_ID"),
-                        Email = record.ToString("Email_Address")
+                        Email = record.ToString("Email_Address"),
+                        RegisteredUser = false
                     };
                 }
                 else
