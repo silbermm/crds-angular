@@ -65,7 +65,6 @@ namespace crds_angular.test.Services
             mpDonorService.VerifyAll();
 
             Assert.AreSame(donor, response);
-            Assert.IsTrue(response.RegisteredUser);
         }
 
         [Test]
