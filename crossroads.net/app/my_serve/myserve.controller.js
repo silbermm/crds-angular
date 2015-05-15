@@ -57,12 +57,17 @@
         from: date.getTime()/1000, 
         to: newDate.getTime()/1000 
       }, function(more){
-        _.each(more, function(m){
-          vm.groups.push(m);
-        });
+        if(more.length === 0){
+          $rootScope.$emit('notify', $rootScope.MESSAGES.serveSignupMoreError);
+        } else {
+          _.each(more, function(m){
+            vm.groups.push(m);
+          });
+        }
         vm.loadMore = false;
         vm.loadText = "Load More";
-      }, function(){
+      }, function(e){
+        console.log(e);
         vm.loadMore = false;  
         vm.loadText = "Load More";
       });

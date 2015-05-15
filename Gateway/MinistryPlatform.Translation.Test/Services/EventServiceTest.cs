@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Crossroads.Utilities.Services;
 using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services;
@@ -155,6 +156,35 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Event_Start_Date", new DateTime(2015, 3, 28, 8, 30, 0)},
                     {"Event_End_Date", new DateTime(2015, 3, 28, 8, 30, 0)}
                 }
+            };
+        }
+
+        [Test]
+        public void GetEventParticipant()
+        {
+            const int eventId = 1234;
+            const int participantId = 5678;
+            const string pageKey = "EventParticipantByEventIdAndParticipantId";
+            var mockEventParticipants = MockEventParticipantsByEventIdAndParticipantId();
+
+            ministryPlatformService.Setup(m => m.GetPageViewRecords(pageKey, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())).Returns(mockEventParticipants);
+
+            var participant = fixture.GetEventParticipantRecordId(eventId, participantId);
+            
+            ministryPlatformService.VerifyAll();
+            Assert.IsNotNull(participant);
+            Assert.AreEqual(8634, participant);
+        }
+
+        private List<Dictionary<string, object>> MockEventParticipantsByEventIdAndParticipantId()
+        {
+            return new List<Dictionary<string, object>>{
+                new Dictionary<string, object>
+                {
+                    {"Event_Participant_ID", 8634},
+                    {"Event_ID", 93},
+                    {"Participant_ID", 134}
+                }    
             };
         }
     }
