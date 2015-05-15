@@ -2,6 +2,12 @@
 (function () {
   module.exports = function ($scope, $location, $anchorScroll, growl, $modal) {
     var _this = this;
+    
+    _this.time = Date.now();
+    _this.hstep = 1;
+    _this.mstep = 15;
+    _this.isMeridian = true;
+    _this.openDatePicker = openDatePicker;
 
     _this.scrollTo = function (id) {
       $location.hash(id);
@@ -26,5 +32,12 @@
     _this.dynamicTooltip = 'Hello, World!';
     _this.dynamicTooltipText = 'dynamic';
     _this.htmlTooltip = 'I\'ve been made <b>bold</b>!';
+
+    function openDatePicker($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+
+      _this.opened = true;
+    }
   }
 })();

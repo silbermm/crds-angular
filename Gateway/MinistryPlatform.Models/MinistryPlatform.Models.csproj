@@ -51,9 +51,9 @@
   <ItemGroup>
     <Compile Include="Attribute.cs" />
     <Compile Include="CommunicationPreferences.cs" />
+    <Compile Include="ContactDonor.cs" />
     <Compile Include="DonationDistribution.cs" />
     <Compile Include="Donation.cs" />
-    <Compile Include="Donor.cs" />
     <Compile Include="GroupParticipant.cs" />
     <Compile Include="GroupServingParticipant.cs" />
     <Compile Include="GroupSignupRelationships.cs" />

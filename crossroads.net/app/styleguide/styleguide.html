@@ -616,6 +616,19 @@
                 <input type="file" id="exampleInputFile">
                 <p class="help-block">Example block-level help text here.</p>
               </div>
+              <div class="form-group timepicker">
+                <label>Time Picker</label>
+                <timepicker ng-model="styleguide.time" ng-class="timepicker" hour-step="styleguide.hstep" minute-step="styleguide.mstep" show-meridian="styleguide.isMeridian"></timepicker>
+              </div>
+              <div class="form-group">
+                <label for="date">Date Picker</label>
+                  <p class="input-group datepicker">
+                    <input type="text" class="form-control" placeholder="dd/mm/yyyy" datepicker-popup="dd/MM/yyyy" ng-model="styleguide.dt" ng-required="true" close-text="Close" is-open="styleguide.opened" />
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-default" ng-click="styleguide.openDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                  </p>
+              </div>
               <div class="checkbox">
                 <label>
                   <input type="checkbox">Check me out</label>
@@ -689,7 +702,8 @@
             <button type="button" class="btn btn-lg btn-gray">Gray</button>
             <button type="button" class="btn btn-lg btn-gray-light">Gray Light</button>
 
-            <button type="button" class="btn btn-lg btn-primary btn-labeled">Label<span class="btn-label"><svg viewBox="0 0 32 32" class="icon icon-checkmark"><use xlink:href="#checkmark"></use></svg></span></button>
+            <button type="button" class="btn btn-lg btn-primary btn-labeled">Label<span class="btn-label"><svg viewBox="0 0 32 32" class="icon icon-checkmark"><use xlink:href="#checkmark"></use></svg></span>
+            </button>
             <button type="button" class="btn btn-lg btn-link">Link</button>
           </p>
           <p>
@@ -700,7 +714,8 @@
             <button type="button" class="btn btn-warning">Warning</button>
             <button type="button" class="btn btn-danger">Danger</button>
             <button type="button" class="btn btn-gray">Gray</button>
-            <button type="button" class="btn btn-primary btn-labeled">Label<span class="btn-label"><svg viewBox="0 0 32 32" class="icon icon-checkmark"><use xlink:href="#checkmark"></use></svg></span></button>
+            <button type="button" class="btn btn-primary btn-labeled">Label<span class="btn-label"><svg viewBox="0 0 32 32" class="icon icon-checkmark"><use xlink:href="#checkmark"></use></svg></span>
+            </button>
             <button type="button" class="btn btn-link">Link</button>
           </p>
           <p>
@@ -711,7 +726,8 @@
             <button type="button" class="btn btn-sm btn-warning">Warning</button>
             <button type="button" class="btn btn-sm btn-danger">Danger</button>
             <button type="button" class="btn btn-sm btn-gray">Gray</button>
-            <button type="button" class="btn btn-sm btn-primary btn-labeled">Label<span class="btn-label"><svg viewBox="0 0 32 32" class="icon icon-checkmark"><use xlink:href="#checkmark"></use></svg></span></button>
+            <button type="button" class="btn btn-sm btn-primary btn-labeled">Label<span class="btn-label"><svg viewBox="0 0 32 32" class="icon icon-checkmark"><use xlink:href="#checkmark"></use></svg></span>
+            </button>
             <button type="button" class="btn btn-sm btn-link">Link</button>
           </p>
           <p>
@@ -722,7 +738,8 @@
             <button type="button" class="btn btn-xs btn-warning">Warning</button>
             <button type="button" class="btn btn-xs btn-danger">Danger</button>
             <button type="button" class="btn btn-xs btn-gray">Gray</button>
-            <button type="button" class="btn btn-xs btn-primary btn-labeled">Label<span class="btn-label"><svg viewBox="0 0 32 32" class="icon icon-checkmark"><use xlink:href="#checkmark"></use></svg></span></button>
+            <button type="button" class="btn btn-xs btn-primary btn-labeled">Label<span class="btn-label"><svg viewBox="0 0 32 32" class="icon icon-checkmark"><use xlink:href="#checkmark"></use></svg></span>
+            </button>
             <button type="button" class="btn btn-xs btn-link">Link</button>
           </p>
           <p>
@@ -751,24 +768,24 @@
           <h4>Table Button</h4>
           <ul class="list-group">
             <li class="list-group-item hard-sides hard-ends row-same-height">
-                <div class="col-xs-9 col-sm-10 col-xs-height col-top">
-                  <p class="push-half-top">
-                    Table button example
-                  </p>
-                </div>
-                <div class="col-xs-3 col-sm-2 hard-right col-xs-height">
-                  <a href="/#/demo/go-trip-giving" class="table-btn"><span>Table Button</span></a>
-                </div>
+              <div class="col-xs-9 col-sm-10 col-xs-height col-top">
+                <p class="push-half-top">
+                  Table button example
+                </p>
+              </div>
+              <div class="col-xs-3 col-sm-2 hard-right col-xs-height">
+                <a href="/#/demo/go-trip-giving" class="table-btn"><span>Table Button</span></a>
+              </div>
             </li>
             <li class="list-group-item hard-sides hard-ends row-same-height">
-                <div class="col-xs-9 col-sm-10 col-xs-height col-top">
-                  <p class="push-half-top">
-                    Table button example
-                  </p>
-                </div>
-                <div class="col-xs-3 col-sm-2 hard-right col-xs-height">
-                  <a href="/#/demo/go-trip-giving" class="table-btn"><span>Table Button</span></a>
-                </div>
+              <div class="col-xs-9 col-sm-10 col-xs-height col-top">
+                <p class="push-half-top">
+                  Table button example
+                </p>
+              </div>
+              <div class="col-xs-3 col-sm-2 hard-right col-xs-height">
+                <a href="/#/demo/go-trip-giving" class="table-btn"><span>Table Button</span></a>
+              </div>
             </li>
           </ul>
         </div>
@@ -1544,36 +1561,42 @@
           <div class="card-item clearfix row-same-height" data-category="view">
             <div class="col-sm-3 col-xs-4 card-img mobile-hard-left col-xs-height">
               <img class="card-img-show" src="http://lorempixel.com/250/250/?random=331"> </div>
-              <div class="col-sm-9 col-xs-8 card-content card-dark col-xs-height col-top">
+            <div class="col-sm-9 col-xs-8 card-content card-dark col-xs-height col-top">
               <div class="card-row card-header go-trip-card-header"> Profile Card Name </div>
               <ul class="list-group">
                 <li class="list-group-item hard-left row-same-height">
                   <div class="go-trip-name col-xs-9 col-sm-10 col-xs-height col-top">
                     <p> List Item </p>
-                  </div><!--/go-trip-name-->
+                  </div>
+                  <!--/go-trip-name-->
                   <div class="go-trip-btn col-xs-3 col-sm-2 hard-right col-xs-height">
                     <a href="/#/demo/go-trip-giving" class="table-btn"><span>Button</span></a>
-                  </div><!--/go-trip-btn-->
+                  </div>
+                  <!--/go-trip-btn-->
                 </li>
                 <li class="list-group-item hard-left row-same-height">
                   <div class=" go-trip-name col-xs-12 col-xs-height col-top">
                     <h4 class="small-heading flush-left inline">SHARE:</h4>
-                      <svg viewBox="0 0 30 32" class="icon icon-twitter icon-inline icon-bottom">
-                          <use xlink:href="#twitter"></use>
-                      </svg>
-                      <svg viewBox="0 0 14 32" class="icon icon-facebook icon-inline icon-bottom">
-                        <use xlink:href="#facebook"></use>
-                      </svg>
-                      <svg viewBox="0 0 32 32" class="icon icon-mail5 icon-inline icon-bottom">
-                        <use xlink:href="#mail5"></use>
-                      </svg>
+                    <svg viewBox="0 0 30 32" class="icon icon-twitter icon-inline icon-bottom">
+                      <use xlink:href="#twitter"></use>
+                    </svg>
+                    <svg viewBox="0 0 14 32" class="icon icon-facebook icon-inline icon-bottom">
+                      <use xlink:href="#facebook"></use>
+                    </svg>
+                    <svg viewBox="0 0 32 32" class="icon icon-mail5 icon-inline icon-bottom">
+                      <use xlink:href="#mail5"></use>
+                    </svg>
                   </div>
                 </li>
               </ul>
-            </div><!--/card-img-->
-          </div><!--/card-item-->
-        </div><!--/panel-body-->
-      </div><!--/panel-->
+            </div>
+            <!--/card-img-->
+          </div>
+          <!--/card-item-->
+        </div>
+        <!--/panel-body-->
+      </div>
+      <!--/panel-->
       <!-- /cards -->
 
     </div>

@@ -6,6 +6,7 @@ using crds_angular.Enum;
 using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services.Interfaces;
+using Crossroads.Utilities.Extensions;
 using log4net;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -67,7 +68,7 @@ namespace crds_angular.Services
         {
             var family = GetImmediateFamilyParticipants(contactId, token);
             var participants = family.OrderBy(f => f.ParticipantId).Select(f => f.ParticipantId).ToList();
-            var servingParticipants = _groupParticipantService.GetServingParticipants(participants, from , to);
+            var servingParticipants = _groupParticipantService.GetServingParticipants(participants, from, to);
             var servingDays = new List<ServingDay>();
             var dayIndex = 0;
 
@@ -117,7 +118,7 @@ namespace crds_angular.Services
                     servingDay.Index = dayIndex;
                     servingDay.Day = record.EventStartDateTime.Date.ToString("d");
                     servingDay.Date = record.EventStartDateTime;
-                    servingDay.ServeTimes = new List<ServingTime> { NewServingTime(record) };
+                    servingDay.ServeTimes = new List<ServingTime> {NewServingTime(record)};
 
                     servingDays.Add(servingDay);
                 }
@@ -133,7 +134,7 @@ namespace crds_angular.Services
             var max = maxNeeded;
             var signedUp = opportunity.Count(r => r.Event_ID == eventId);
 
-            var capacity = new Capacity { Display = true };
+            var capacity = new Capacity {Display = true};
 
             if (max == null && min == null)
             {
@@ -205,6 +206,11 @@ namespace crds_angular.Services
                     {
                         _eventService.registerParticipantForEvent(participant.ParticipantId, e.EventId);
                     }
+                    else
+                    {
+                        //if there is already a participant, remove it because they've changed to "No"
+                        _eventService.unRegisterParticipantForEvent(participant.ParticipantId, e.EventId);
+                    }
                     var comments = string.Empty; //anything of value to put in comments?
                     _opportunityService.RespondToOpportunity(participant.ParticipantId, opportunityId, comments,
                         e.EventId, signUp);
@@ -221,8 +227,11 @@ namespace crds_angular.Services
             {
                 Name = record.OpportunityTitle + " " + record.OpportunityRoleTitle,
                 RoleId = record.OpportunityId,
+                Room = record.Room,
                 Minimum = record.OpportunityMinimumNeeded,
-                Maximum = record.OpportunityMaximumNeeded
+                Maximum = record.OpportunityMaximumNeeded,
+                ShiftEndTime = record.OpportunityShiftEnd.FormatAsString(),
+                ShiftStartTime = record.OpportunityShiftStart.FormatAsString()
             };
         }
 
@@ -231,7 +240,7 @@ namespace crds_angular.Services
             return new ServingTime
             {
                 Index = record.RowNumber,
-                ServingTeams = new List<ServingTeam> { NewServingTeam(record) },
+                ServingTeams = new List<ServingTeam> {NewServingTeam(record)},
                 Time = record.EventStartDateTime.TimeOfDay.ToString()
             };
         }
@@ -245,7 +254,7 @@ namespace crds_angular.Services
                 EventType = record.EventType,
                 EventTypeId = record.EventTypeId,
                 GroupId = record.GroupId,
-                Members = new List<TeamMember> { NewTeamMember(record) },
+                Members = new List<TeamMember> {NewTeamMember(record)},
                 Name = record.GroupName,
                 PrimaryContact = record.GroupPrimaryContactEmail
             };
@@ -261,7 +270,7 @@ namespace crds_angular.Services
                 Index = record.RowNumber,
                 LastName = record.ParticipantLastName,
                 Name = record.ParticipantNickname,
-                Participant = new Participant { ParticipantId = record.ParticipantId }
+                Participant = new Participant {ParticipantId = record.ParticipantId}
             };
 
             member.Roles.Add(NewServingRole(record));
@@ -284,7 +293,7 @@ namespace crds_angular.Services
                 member.Responses.Where(t => t.Opportunity_ID == opportunityId && t.Event_ID == eventId)
                     .Select(t => t.Response_Result_ID)
                     .ToList();
-            return r.Count <= 0 ? null : new ServeRsvp { Attending = (r[0] == 1), RoleId = opportunityId };
+            return r.Count <= 0 ? null : new ServeRsvp {Attending = (r[0] == 1), RoleId = opportunityId};
         }
     }
 }

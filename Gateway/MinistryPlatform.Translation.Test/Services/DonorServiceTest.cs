@@ -94,7 +94,6 @@ namespace MinistryPlatform.Translation.Test.Services
             var expectedDonationDistributionId = 231231;
             var donationPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Donations"]);
             var donationDistributionPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Distributions"]);
-            var registeredDonor = true;
 
 
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
@@ -111,11 +110,10 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Donation_Amount", donationAmt},
                 {"Payment_Type_ID", 4}, //hardcoded as credit card until ACH stories are worked
                 {"Donation_Date", setupDate},
-                {"Transaction_code", charge_id},
-                {"Registered_Donor", registeredDonor}
+                {"Transaction_code", charge_id}
             };
 
-            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, donorId, programId, charge_id, setupDate, registeredDonor);
+            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, donorId, programId, charge_id, setupDate);
 
             _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donationPageId, expectedDonationValues, It.IsAny<string>(), true));
 
@@ -174,7 +172,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Contact_ID", contactId},
                 {"Email_Address", email}
             });
-            var donor = new Donor()
+            var donor = new ContactDonor()
             {
                 DonorId = donorId,
                 ProcessorId = processorId,
@@ -186,7 +184,7 @@ namespace MinistryPlatform.Translation.Test.Services
               guestDonorPageViewId, It.IsAny<string>(),
               It.IsAny<string>(),  "",0)).Returns(expectedDonorValues);
 
-            var response = _fixture.GetPossibleGuestDonorContact(email);
+            var response = _fixture.GetPossibleGuestContactDonor(email);
 
             _ministryPlatformService.Verify(mocked => mocked.GetPageViewRecords(guestDonorPageViewId,It.IsAny<string>(), ","+email,"", 0));
 
@@ -213,7 +211,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Processor_ID", processorId},
                 {"Contact_ID", contactId}
             });
-            var donor = new Donor()
+            var donor = new ContactDonor()
             {
                 DonorId = donorId,
                 ProcessorId = processorId,
@@ -225,7 +223,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 guestDonorPageViewId, It.IsAny<string>(),
                 It.IsAny<string>(), "", 0)).Returns(expectedDonorValues);
 
-            var response = _fixture.GetDonorRecord(contactId);
+            var response = _fixture.GetContactDonor(contactId);
 
             _ministryPlatformService.Verify(
                 mocked => mocked.GetPageViewRecords(guestDonorPageViewId, It.IsAny<string>(), contactId+",", "", 0));
@@ -234,6 +232,28 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(response.DonorId, donor.DonorId);
             Assert.AreEqual(response.ContactId, donor.ContactId);
             Assert.AreEqual(response.ProcessorId, donor.ProcessorId);
+        }
+
+        [Test]
+        public void TestGetDonorNoExistingDonor()
+        {
+            var contactId = 565656;
+            var guestDonorPageViewId = "DonorByContactId";
+
+            _ministryPlatformService.Setup(mocked => mocked.GetPageViewRecords(
+                guestDonorPageViewId, It.IsAny<string>(),
+                It.IsAny<string>(), "", 0)).Returns((List<Dictionary<string, object>>)null);
+
+            var response = _fixture.GetContactDonor(contactId);
+
+            _ministryPlatformService.Verify(
+                mocked => mocked.GetPageViewRecords(guestDonorPageViewId, It.IsAny<string>(), contactId + ",", "", 0));
+
+            _ministryPlatformService.VerifyAll();
+            Assert.IsNotNull(response);
+            Assert.AreEqual(contactId, response.ContactId);
+            Assert.AreEqual(0, response.DonorId);
+            Assert.IsNull(response.ProcessorId);
         }
 
     }

@@ -113,28 +113,32 @@ namespace MinistryPlatform.Translation.Services
             return donationDistributionId;
         }
 
-        public Donor GetDonorRecord(int contactId)
+        public ContactDonor GetContactDonor(int contactId)
         {
-            Donor donor;
+            ContactDonor donor;
             try
             {
                 var searchStr = contactId.ToString() + ",";
                 var records =
                     WithApiLogin<List<Dictionary<string, object>>>(
                         apiToken => (ministryPlatformService.GetPageViewRecords("DonorByContactId", apiToken, searchStr, "")));
-                if (records.Count > 0)
+                if (records != null && records.Count > 0)
                 {
                     var record = records.First();
-                    donor = new Donor()
+                    donor = new ContactDonor()
                     {
                         DonorId = record.ToInt("Donor_ID"),
                         ProcessorId = record.ToString(DONOR_PROCESSOR_ID),
-                        ContactId = record.ToInt("Contact_ID")
+                        ContactId = record.ToInt("Contact_ID"),
+                        RegisteredUser = true
                     };
                 }
                 else
                 {
-                    return null;
+                    donor = new ContactDonor {
+                        ContactId = contactId,
+                        RegisteredUser = true
+                    };
                 }
             }
             catch (Exception ex)
@@ -146,9 +150,9 @@ namespace MinistryPlatform.Translation.Services
             return donor;
 
         }
-        public Donor GetPossibleGuestDonorContact(string email)
+        public ContactDonor GetPossibleGuestContactDonor(string email)
         {
-            Donor donor;
+            ContactDonor donor;
             try
             {
                 if (String.IsNullOrWhiteSpace(email))
@@ -159,16 +163,17 @@ namespace MinistryPlatform.Translation.Services
                 var records =
                     WithApiLogin<List<Dictionary<string, object>>>(
                         apiToken => (ministryPlatformService.GetPageViewRecords("PossibleGuestDonorContact", apiToken, searchStr, "")));
-                if (records.Count > 0)
+                if (records != null && records.Count > 0)
                 {
                     var record = records.First();
-                    donor = new Donor()
+                    donor = new ContactDonor()
                     {
                         
                         DonorId = record.ToInt(DONOR_RECORD_ID),
                         ProcessorId = record.ToString(DONOR_PROCESSOR_ID),
                         ContactId = record.ToInt("Contact_ID"),
-                        Email = record.ToString("Email_Address")
+                        Email = record.ToString("Email_Address"),
+                        RegisteredUser = false
                     };
                 }
                 else
