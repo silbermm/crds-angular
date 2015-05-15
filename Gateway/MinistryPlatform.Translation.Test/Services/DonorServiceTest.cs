@@ -113,9 +113,9 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Transaction_code", charge_id}
             };
 
-            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, donorId, programId, charge_id, setupDate);
+            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, donorId, programId, charge_id, setupDate, true);
 
-            _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donationPageId, expectedDonationValues, It.IsAny<string>(), true));
+            _ministryPlatformService.Verify(mocked => mocked.CreateRecord(It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(), It.IsAny<string>(), true));
 
             _ministryPlatformService.VerifyAll();
             Assert.IsNotNull(response);
