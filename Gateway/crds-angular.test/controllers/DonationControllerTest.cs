@@ -56,7 +56,7 @@ namespace crds_angular.test.controllers
                 donor_id = 394256
             };
 
-            var donor = new Donor
+            var donor = new ContactDonor
             {
                 ContactId = contactId,
                 DonorId = 424242,
@@ -69,7 +69,7 @@ namespace crds_angular.test.controllers
 
             authenticationServiceMock.Setup(mocked => mocked.GetContactId(authType + " " + authToken)).Returns(contactId);
             
-            donorServiceMock.Setup(mocked => mocked.GetDonorRecord(contactId))
+            donorServiceMock.Setup(mocked => mocked.GetContactDonor(contactId))
                 .Returns(donor);
 
             stripeServiceMock.Setup(
@@ -78,7 +78,7 @@ namespace crds_angular.test.controllers
 
             donorServiceMock.Setup(mocked => mocked.
                 CreateDonationAndDistributionRecord(createDonationDTO.amount, donor.DonorId, 
-                    createDonationDTO.program_id, charge_id, It.IsAny<DateTime>()))
+                    createDonationDTO.program_id, charge_id, It.IsAny<DateTime>(), true))
                     .Returns(donationId);
             
             IHttpActionResult result = fixture.Post(createDonationDTO);
@@ -111,7 +111,7 @@ namespace crds_angular.test.controllers
                 email_address = "test@test.com"
             };
 
-            var donor = new Donor
+            var donor = new ContactDonor
             {
                 ContactId = contactId,
                 DonorId = 424242,
@@ -123,14 +123,14 @@ namespace crds_angular.test.controllers
             };
 
             fixture.Request.Headers.Authorization = null;
-            gatewayDonorServiceMock.Setup(mocked => mocked.GetDonorForEmail(createDonationDTO.email_address)).Returns(donor);
+            gatewayDonorServiceMock.Setup(mocked => mocked.GetContactDonorForEmail(createDonationDTO.email_address)).Returns(donor);
             stripeServiceMock.Setup(
     mocked => mocked.chargeCustomer(donor.ProcessorId, createDonationDTO.amount, donor.DonorId))
     .Returns(charge_id);
 
             donorServiceMock.Setup(mocked => mocked.
                 CreateDonationAndDistributionRecord(createDonationDTO.amount, donor.DonorId,
-                    createDonationDTO.program_id, charge_id, It.IsAny<DateTime>()))
+                    createDonationDTO.program_id, charge_id, It.IsAny<DateTime>(), false))
                     .Returns(donationId);
 
             IHttpActionResult result = fixture.Post(createDonationDTO);
