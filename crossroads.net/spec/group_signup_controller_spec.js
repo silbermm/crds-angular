@@ -104,8 +104,6 @@ var successResponse = [
 
      $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] +'api/group/1')
      .respond(groupGetDetailResponse);
-     $httpBackend.when('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/group/1/participants')
-     .respond(successResponse);
 
      }));
 
@@ -116,6 +114,9 @@ var successResponse = [
    });
 
    it('should get logged-in person when instantiated', function(){
+     $httpBackend.when('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/group/1/participants')
+     .respond(successResponse);
+
      var controller = groupSignupController();
      verifyExpectations();
      var person = controller.person;
@@ -127,6 +128,9 @@ var successResponse = [
    });
 
    it('should signup a person for a community group', function(){
+     $httpBackend.when('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/group/1/participants')
+     .respond(successResponse);
+
     var controller = groupSignupController();
     verifyExpectations();
     var person = controller.person;
@@ -137,7 +141,46 @@ var successResponse = [
 
   });
 
+  it('should give error when signing up and group is full', function(){
+    $httpBackend.when('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/group/1/participants')
+    .respond(function() {
+    return [422, {}, {}];
+    });
+
+   var controller = groupSignupController();
+   verifyExpectations();
+   var person = controller.person;
+   expect(controller.signup).toBeDefined();
+   controller.signup();
+   $httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/group/1/participants');
+   $httpBackend.flush();
+   expect(controller.showFull).toEqual(true);
+   expect(controller.showContent).toEqual(false);
+
+ });
+
+ it('should give error when signing up and group is full', function(){
+   $httpBackend.when('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/group/1/participants')
+   .respond(function() {
+   return [400, {}, {}];
+   });
+
+  var controller = groupSignupController();
+  verifyExpectations();
+  var person = controller.person;
+  expect(controller.signup).toBeDefined();
+  controller.signup();
+  $httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/group/1/participants');
+  $httpBackend.flush();
+  expect(controller.showFull).toEqual(false);
+  expect(controller.showContent).toEqual(true);
+
+});
+
    it('should set the alreadySignedUp flag to TRUE ', function(){
+     $httpBackend.when('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/group/1/participants')
+     .respond(successResponse);
+
     var controller = groupSignupController();
     verifyExpectations();
     var response = {
@@ -166,6 +209,9 @@ var successResponse = [
   });
 
   it('should retun object containing newAdd value(s)', function(){
+    $httpBackend.when('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/group/1/participants')
+    .respond(successResponse);
+
     var controller = groupSignupController();
     verifyExpectations();
     var response =
