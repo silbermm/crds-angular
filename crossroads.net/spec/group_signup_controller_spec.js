@@ -159,7 +159,7 @@ var successResponse = [
 
  });
 
- it('should give error when signing up and group is full', function(){
+ it('should give error when signing up and HTTP error is returned', function(){
    $httpBackend.when('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/group/1/participants')
    .respond(function() {
    return [400, {}, {}];
