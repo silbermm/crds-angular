@@ -29,7 +29,6 @@
         filterState.times = [];
         filterState.teams = [];
       },
-
       findMember: function(memberId){
         return _.find(filterState.memberIds, function(m){
           return memberId === m;
@@ -49,6 +48,12 @@
         return _.find(filterState.times, function(t){
           return time === t;
         });
+      },
+      isActive: function(){
+        return filterState.memberIds.length > 0 || 
+          filterState.times.length > 0 ||
+          filterState.teams.length > 0 ||
+          filterState.signUps.length > 0
       },
       removeFamilyMember: function(memberId){
         filterState.memberIds = _.filter(filterState.memberIds,function(m){

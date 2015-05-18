@@ -14,7 +14,6 @@ namespace crds_angular.test.Services
     internal class PersonServiceTest
     {
         private Mock<IContactRelationshipService> _contactRelationshipService;
-        private Mock<IGroupService> _groupService;
         private Mock<IContactService> _contactService;
         private Mock<IOpportunityService> _opportunityService;
         private Mock<IAuthenticationService> _authenticationService;
@@ -26,7 +25,6 @@ namespace crds_angular.test.Services
         public void SetUp()
         {
             _contactRelationshipService = new Mock<IContactRelationshipService>();
-            _groupService = new Mock<IGroupService>();
             _contactService = new Mock<IContactService>();
             _opportunityService = new Mock<IOpportunityService>();
             _authenticationService = new Mock<IAuthenticationService>();

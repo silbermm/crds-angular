@@ -56,9 +56,18 @@ require('../services/group_service');
 				vm.showWaitList = false;
 				vm.showWaitSuccess = true;
 			}, function(error) {
-				$rootScope.$emit('notify', $rootScope.MESSAGES.fullGroupError);
-				vm.showContent = false;
-				vm.showFull = true;
+				// 422 indicates an HTTP "Unprocessable Entity", in this case meaning Group is Full
+				// http://tools.ietf.org/html/rfc4918#section-11.2
+				if(error.status == 422) {
+					$rootScope.$emit('notify', $rootScope.MESSAGES.fullGroupError);
+					vm.showFull = true;
+					vm.showContent = false;
+				} else {
+					$rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+					vm.showFull = false;
+					vm.showContent = true;
+				}
+
 			});
 		};
 

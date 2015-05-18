@@ -289,7 +289,9 @@
     <Compile Include="Security\CustomAuthorize.cs" />
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\DonorService.cs" />
+    <Compile Include="Services\GroupService.cs" />
     <Compile Include="Services\Interfaces\IDonorService.cs" />
+    <Compile Include="Services\Interfaces\IGroupService.cs" />
     <Compile Include="Services\Interfaces\IServeService.cs" />
     <Compile Include="Services\Interfaces\IPersonService.cs" />
     <Compile Include="Services\Interfaces\IPaymentService.cs" />
