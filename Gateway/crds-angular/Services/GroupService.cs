@@ -34,7 +34,7 @@ namespace crds_angular.Services
             this._eventService = eventService;
             this._contactRelationshipService = contactRelationshipService;
 
-            this.GroupRoleDefaultId = Convert.ToInt32(configurationWrapper.GetConfigIntValue("Group_Role_Default_ID"));
+            this.GroupRoleDefaultId = Convert.ToInt32(_configurationWrapper.GetConfigIntValue("Group_Role_Default_ID"));
         }
 
         public void addParticipantsToGroup(int groupId, List<int> participantIds)
