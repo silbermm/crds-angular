@@ -36,7 +36,6 @@
     ////////////////////////////
 
     function activate(){
-      console.log(filterState.isActive());
     }
 
     
