@@ -20,6 +20,7 @@
     vm.loadNextMonth = loadNextMonth;
     vm.loadText = "Load More";
     vm.original = [];
+    vm.showButton = showButton;
     vm.showNoOpportunitiesMsg = showNoOpportunitiesMsg;
 
     activate();
@@ -45,32 +46,34 @@
     };
 
     function loadNextMonth() {
-      vm.loadMore = true;
-      vm.loadText = "Loading...";
-      var lastDate = vm.groups[vm.groups.length -1].day;
-      var date = new Date(lastDate);
-      date.setDate(date.getDate() + 1); 
-      var newDate = new Date(lastDate);
-      newDate.setDate(newDate.getDate() + 28);
-      ServeOpportunities.ServeDays.query({ 
-        id: Session.exists('userId'), 
-        from: date.getTime()/1000, 
-        to: newDate.getTime()/1000 
-      }, function(more){
-        if(more.length === 0){
-          $rootScope.$emit('notify', $rootScope.MESSAGES.serveSignupMoreError);
-        } else {
-          _.each(more, function(m){
-            vm.groups.push(m);
-          });
-        }
-        vm.loadMore = false;
-        vm.loadText = "Load More";
-      }, function(e){
-        console.log(e);
-        vm.loadMore = false;  
-        vm.loadText = "Load More";
-      });
+      if(vm.groups[0].day !== undefined){ 
+        vm.loadMore = true;
+        vm.loadText = "Loading..."
+        var lastDate = vm.groups[vm.groups.length -1].day;
+        var date = new Date(lastDate);
+        date.setDate(date.getDate() + 1); 
+        var newDate = new Date(lastDate);
+        newDate.setDate(newDate.getDate() + 28);
+        ServeOpportunities.ServeDays.query({ 
+          id: Session.exists('userId'), 
+          from: date.getTime()/1000, 
+          to: newDate.getTime()/1000 
+        }, function(more){
+          if(more.length === 0){
+            $rootScope.$emit('notify', $rootScope.MESSAGES.serveSignupMoreError);
+          } else {
+            _.each(more, function(m){
+              vm.groups.push(m);
+            });
+          }
+          vm.loadMore = false;
+          vm.loadText = "Load More";
+        }, function(e){
+          console.log(e);
+          vm.loadMore = false;  
+          vm.loadText = "Load More";
+        });
+      }
     };
    
     function personUpdateHandler(event, data) {
@@ -91,6 +94,14 @@
       })
       vm.original = angular.copy(vm.groups);
       $rootScope.$broadcast("rerunFilters", vm.groups);
+    }
+
+    function showButton(){
+      if (showNoOpportunitiesMsg()){
+        return false;
+      } else { 
+        return !filterState.isActive();
+      }
     }
 
     function showNoOpportunitiesMsg(){

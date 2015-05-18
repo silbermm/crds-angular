@@ -46,8 +46,7 @@ namespace crds_angular.Controllers.API
                 var contactId = authenticationService.GetContactId(token);
                 var donor = mpDonorService.GetContactDonor(contactId);
                 var charge_id = stripeService.chargeCustomer(donor.ProcessorId, dto.amount,donor.DonorId);
-                var donationId = mpDonorService.CreateDonationAndDistributionRecord(dto.amount, donor.DonorId, dto.program_id, charge_id, DateTime.Now);
-
+                var donationId = mpDonorService.CreateDonationAndDistributionRecord(dto.amount, donor.DonorId, dto.program_id, charge_id, DateTime.Now, true);
                 var response = new DonationDTO()
                     {
                         program_id = dto.program_id,
@@ -75,7 +74,7 @@ namespace crds_angular.Controllers.API
             {
                 var donor = gatewayDonorService.GetContactDonorForEmail(dto.email_address);
                 var charge_id = stripeService.chargeCustomer(donor.ProcessorId, dto.amount, donor.DonorId);
-                var donationId = mpDonorService.CreateDonationAndDistributionRecord(dto.amount, donor.DonorId, dto.program_id, charge_id, DateTime.Now);
+                var donationId = mpDonorService.CreateDonationAndDistributionRecord(dto.amount, donor.DonorId, dto.program_id, charge_id, DateTime.Now, false);
 
                 var response = new DonationDTO()
                 {

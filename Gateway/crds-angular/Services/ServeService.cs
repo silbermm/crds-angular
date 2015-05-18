@@ -98,6 +98,7 @@ namespace crds_angular.Services
                             else
                             {
                                 member.Roles.Add(NewServingRole(record));
+                                member.ServeRsvp = NewServeRsvp(record);
                             }
                         }
                         else
@@ -275,11 +276,13 @@ namespace crds_angular.Services
 
             member.Roles.Add(NewServingRole(record));
 
-            if (record.Rsvp != null)
-            {
-                member.ServeRsvp = new ServeRsvp {Attending = (bool) record.Rsvp, RoleId = record.OpportunityId};
-            }
+            member.ServeRsvp = NewServeRsvp(record);
             return member;
+        }
+
+        private ServeRsvp NewServeRsvp(GroupServingParticipant record)
+        {
+            return record.Rsvp != null ? new ServeRsvp { Attending = (bool)record.Rsvp, RoleId = record.OpportunityId } : null;
         }
 
         //public for testing
