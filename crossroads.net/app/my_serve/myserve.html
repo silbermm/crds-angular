@@ -1,4 +1,4 @@
-<h1 class="page-header flush-bottom">Sign Up To Serve</h1>
+<h1 class="page-header flush-bottom">Sign Up To Serve </h1>
 <refine-list serving-days="serve.groups" original="serve.original" > </refine-list>
 <div class="serve-signup-cont clearfix col-sm-10 col-sm-pull-2 soft-ends" >
 
@@ -12,6 +12,6 @@
     </serve-tabs>
   </div><!-- serve day -->
 
-  <button class="btn btn-block btn-primary" ng-click="serve.loadNextMonth()" ng-disabled="serve.loadMore"> {{serve.loadText}} </button>
+  <button class="btn btn-block btn-primary" ng-show="serve.showButton()"  ng-click="serve.loadNextMonth()" ng-disabled="serve.loadMore"> {{serve.loadText}} </button>
 
 </div>
