@@ -98,7 +98,11 @@ namespace crds_angular.Services
                             else
                             {
                                 member.Roles.Add(NewServingRole(record));
-                                member.ServeRsvp = NewServeRsvp(record);
+                                //if we have already found rsvp, skip
+                                if (member.ServeRsvp == null)
+                                {
+                                    member.ServeRsvp = NewServeRsvp(record);
+                                }
                             }
                         }
                         else
