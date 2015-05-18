@@ -27,8 +27,6 @@ namespace crds_angular.test.controllers
         private GroupController fixture;
         private Mock<crds_angular.Services.Interfaces.IGroupService> groupServiceMock;
         private Mock<IAuthenticationService> authenticationServiceMock;
-        private readonly int GroupsParticipantsPageId = 298;
-        private readonly int GroupsPageId = 322;
         private string authType;
         private string authToken;
         private const int GroupRoleId = 16;
@@ -51,8 +49,8 @@ namespace crds_angular.test.controllers
         public void testPostParticipantToGroupIsSuccessful()
         {
             int groupId = 456;
-           
-            List<int> particpantIdToAdd = new List<int> {90210, 41001};
+
+            List<int> particpantIdToAdd = new List<int> { 90210, 41001 };
 
             List<Event> events = new List<Event>();
             Event e1 = new Event();
@@ -71,7 +69,7 @@ namespace crds_angular.test.controllers
                     {"abc", "def"}
                 },
             };
-            groupServiceMock.Setup(mocked => mocked.addParticipantsToGroup(groupId, particpantIdToAdd)).Returns(participantsAdded);
+            groupServiceMock.Setup(mocked => mocked.addParticipantsToGroup(groupId, particpantIdToAdd));
 
             IHttpActionResult result = fixture.Post(groupId, new PartID { partId = particpantIdToAdd });
 
@@ -79,11 +77,7 @@ namespace crds_angular.test.controllers
             groupServiceMock.VerifyAll();
 
             Assert.IsNotNull(result);
-            Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<List<Dictionary<string, object>>>), result);
-            var okResult = (OkNegotiatedContentResult<List<Dictionary<string, object>>>)result;
-            Assert.IsNotNull(okResult.Content);
-            Assert.AreEqual(2, okResult.Content.Count);
-           
+            Assert.IsInstanceOf(typeof(OkResult), result);
         }
 
         [Test]
@@ -98,7 +92,7 @@ namespace crds_angular.test.controllers
             IHttpActionResult result = fixture.Post(groupId, new PartID { partId = particpantIdToAdd });
             authenticationServiceMock.VerifyAll();
             Assert.IsNotNull(result);
-            Assert.IsInstanceOf(typeof (BadRequestResult), result);
+            Assert.IsInstanceOf(typeof(BadRequestResult), result);
         }
 
         [Test]
@@ -125,20 +119,18 @@ namespace crds_angular.test.controllers
 
             authenticationServiceMock.Setup(mocked => mocked.GetContactId(fixture.Request.Headers.Authorization.ToString())).Returns(contactId);
 
-          var relationRecord = new GroupSignupRelationships
+            var relationRecord = new GroupSignupRelationships
+              {
+                  RelationshipId = 1,
+                  RelationshipMinAge = 00,
+                  RelationshipMaxAge = 100
+              };
+
+            var groupDto = new GroupDTO
             {
-                RelationshipId = 1,
-                RelationshipMinAge = 00,
-                RelationshipMaxAge = 100
             };
 
-            // TODO Add more stuff to this test
-          var groupDto = new GroupDTO
-          {
-
-          };
-
-          groupServiceMock.Setup(mocked => mocked.getGroupDetails(groupId, contactId, participant, fixture.Request.Headers.Authorization.ToString())).Returns(groupDto);
+            groupServiceMock.Setup(mocked => mocked.getGroupDetails(groupId, contactId, participant, fixture.Request.Headers.Authorization.ToString())).Returns(groupDto);
 
 
             IHttpActionResult result = fixture.Get(groupId);
@@ -156,9 +148,9 @@ namespace crds_angular.test.controllers
         public void testCallGroupServiceFailsUnauthorized()
         {
             fixture.Request.Headers.Authorization = null;
-            IHttpActionResult result = fixture.Post(3 , new PartID());
+            IHttpActionResult result = fixture.Post(3, new PartID());
             Assert.IsNotNull(result);
-            Assert.IsInstanceOf(typeof (UnauthorizedResult), result);
+            Assert.IsInstanceOf(typeof(UnauthorizedResult), result);
             groupServiceMock.VerifyAll();
         }
 
@@ -179,12 +171,18 @@ namespace crds_angular.test.controllers
             var groupFull = new GroupFullException(g);
             groupServiceMock.Setup(mocked => mocked.addParticipantsToGroup(groupId, particpantIdToAdd)).Throws(groupFull);
 
-            IHttpActionResult result = fixture.Post(333, new PartID { partId = particpantIdToAdd });
-            Assert.IsInstanceOf(typeof(InvalidModelStateResult), result);
-
-            var errors = ((InvalidModelStateResult)result).ModelState;
-            Assert.AreEqual("GroupIsFull", errors["error"].Errors[0].ErrorMessage);
+            try
+            {
+                fixture.Post(333, new PartID { partId = particpantIdToAdd });
+                Assert.Fail("Expected exception was not thrown");
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual(typeof(HttpResponseException), e.GetType());
+                var ex = (HttpResponseException)e;
+                Assert.IsNotNull(ex.Response);
+                Assert.AreEqual(HttpStatusCode.Conflict, ex.Response.StatusCode);
             }
         }
-
+      }
    }

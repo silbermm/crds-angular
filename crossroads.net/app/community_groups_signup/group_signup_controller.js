@@ -56,9 +56,18 @@ require('../services/group_service');
 				vm.showWaitList = false;
 				vm.showWaitSuccess = true;
 			}, function(error) {
-				$rootScope.$emit('notify', $rootScope.MESSAGES.fullGroupError);
-				vm.showContent = false;
-				vm.showFull = true;
+				// 409 indicates an HTTP "Conflict", in this case meaning Group is Full
+				// http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.10
+				if(error.status == 409) {
+					$rootScope.$emit('notify', $rootScope.MESSAGES.fullGroupError);
+					vm.showFull = true;
+					vm.showContent = false;
+				} else {
+					$rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+					vm.showFull = false;
+					vm.showContent = true;
+				}
+
 			});
 		};
 

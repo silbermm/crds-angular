@@ -21,6 +21,8 @@ using MinistryPlatform.Translation.Exceptions;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Newtonsoft.Json;
+using crds_angular.Exceptions.Models;
+using System.Net;
 
 namespace crds_angular.Controllers.API
 {
@@ -52,15 +54,18 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
-                    var response = groupService.addParticipantsToGroup(groupId, partId.partId);
-                    logger.Debug(String.Format("Response for adding participants {0} to group {1}: {2}", partId.partId, groupId, response));
-                    return (Ok(response));
+                    groupService.addParticipantsToGroup(groupId, partId.partId);
+                    logger.Debug(String.Format("Successfully added participants {0} to group {1}", partId.partId, groupId));
+                    return (Ok());
                 }
                 catch (GroupFullException e)
                 {
-                    var response = new ModelStateDictionary();
-                    response.AddModelError("error", "GroupIsFull");
-                    return (BadRequest(response));
+                    var responseMessage = new ApiErrorDto("Group Is Full", e).HttpResponseMessage;
+
+                    // Using HTTP Status code 409/Conflict to indicate Group Is Full
+                    // http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.10
+                    responseMessage.StatusCode = HttpStatusCode.Conflict;
+                    throw new HttpResponseException(responseMessage);
                 }
                 catch (Exception e)
                 {
@@ -76,7 +81,6 @@ namespace crds_angular.Controllers.API
         public IHttpActionResult Post(String groupId, [FromBody] List<ContactDTO> contact)
         {
             throw new NotImplementedException();
-            return this.Ok();
         }
         
         [ResponseType(typeof(GroupDTO))]
@@ -101,7 +105,6 @@ namespace crds_angular.Controllers.API
         public IHttpActionResult Get(String groupId, String userId)
         {
             throw new NotImplementedException();
-            return this.Ok();
         }
 
         // TODO: implement later
@@ -110,7 +113,6 @@ namespace crds_angular.Controllers.API
         public IHttpActionResult Delete(String groupId, String userId)
         {
             throw new NotImplementedException();
-            return this.Ok();
         }
     }
 

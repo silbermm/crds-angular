@@ -37,9 +37,21 @@ namespace crds_angular.Services
             this.GroupRoleDefaultId = Convert.ToInt32(configurationWrapper.GetConfigIntValue("Group_Role_Default_ID"));
         }
 
-        public List<Dictionary<string, object>> addParticipantsToGroup(int groupId, List<int> participantIds)
+        public void addParticipantsToGroup(int groupId, List<int> participantIds)
         {
-            Group g = _mpGroupService.getGroupDetails(groupId);
+            Group g;
+
+            try
+            {
+                g = _mpGroupService.getGroupDetails(groupId);
+
+            }
+            catch (Exception e)
+            {
+                var message = String.Format("Could not retrieve group details for group {0}: {1}", groupId, e.Message);
+                logger.Error(message, e);
+                throw (new ApplicationException(message, e));
+            }
 
             var numParticipantsToAdd = participantIds.Count;
             var spaceRemaining = g.TargetSize - g.Participants.Count;
@@ -50,20 +62,12 @@ namespace crds_angular.Services
 
             try
             {
-                var response = new List<Dictionary<string, Object>>();
-
                 foreach (var p in participantIds)
                 {
                     // First sign this user up for the community group
                     int groupParticipantId = _mpGroupService.addParticipantToGroup(p, Convert.ToInt32(groupId),
                         GroupRoleDefaultId, DateTime.Now);
                     logger.Debug("Added user - group/participant id = " + groupParticipantId);
-
-                    var partResponse = new Dictionary<string, object>();
-                    partResponse.Add("success", p);
-
-                    var enrolledEvents = new List<string>();
-                    partResponse.Add("enrolledEvents", enrolledEvents);
 
                     // Now see what future events are scheduled for this group, and register the user for those
                     var events = _mpGroupService.getAllEventsForGroup(Convert.ToInt32(groupId));
@@ -74,13 +78,11 @@ namespace crds_angular.Services
                         {
                             int eventParticipantId = _eventService.registerParticipantForEvent(p, e.EventId);
                             logger.Debug("Added participant " + p + " to group event " + e.EventId);
-                            enrolledEvents.Add(Convert.ToString(e.EventId));
                         }
                     }
-                    response.Add(partResponse);
                 }
 
-                return (response);
+                return;
             }
             catch (Exception e)
             {
