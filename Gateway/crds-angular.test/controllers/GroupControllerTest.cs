@@ -181,7 +181,7 @@ namespace crds_angular.test.controllers
                 Assert.AreEqual(typeof(HttpResponseException), e.GetType());
                 var ex = (HttpResponseException)e;
                 Assert.IsNotNull(ex.Response);
-                Assert.AreEqual(HttpStatusCode.Conflict, ex.Response.StatusCode);
+                Assert.AreEqual((HttpStatusCode)422, ex.Response.StatusCode);
             }
         }
       }

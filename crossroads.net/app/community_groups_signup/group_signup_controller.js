@@ -56,9 +56,9 @@ require('../services/group_service');
 				vm.showWaitList = false;
 				vm.showWaitSuccess = true;
 			}, function(error) {
-				// 409 indicates an HTTP "Conflict", in this case meaning Group is Full
-				// http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.10
-				if(error.status == 409) {
+				// 422 indicates an HTTP "Unprocessable Entity", in this case meaning Group is Full
+				// http://tools.ietf.org/html/rfc4918#section-11.2
+				if(error.status == 422) {
 					$rootScope.$emit('notify', $rootScope.MESSAGES.fullGroupError);
 					vm.showFull = true;
 					vm.showContent = false;

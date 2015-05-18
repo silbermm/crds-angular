@@ -144,7 +144,7 @@ var successResponse = [
   it('should give error when signing up and group is full', function(){
     $httpBackend.when('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/group/1/participants')
     .respond(function() {
-    return [409, {}, {}];
+    return [422, {}, {}];
     });
 
    var controller = groupSignupController();
@@ -162,7 +162,7 @@ var successResponse = [
  it('should give error when signing up and group is full', function(){
    $httpBackend.when('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/group/1/participants')
    .respond(function() {
-   return [200, {}, {}];
+   return [400, {}, {}];
    });
 
   var controller = groupSignupController();

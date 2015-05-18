@@ -62,9 +62,9 @@ namespace crds_angular.Controllers.API
                 {
                     var responseMessage = new ApiErrorDto("Group Is Full", e).HttpResponseMessage;
 
-                    // Using HTTP Status code 409/Conflict to indicate Group Is Full
-                    // http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.10
-                    responseMessage.StatusCode = HttpStatusCode.Conflict;
+                    // Using HTTP Status code 422/Unprocessable Entity to indicate Group Is Full
+                    // http://tools.ietf.org/html/rfc4918#section-11.2
+                    responseMessage.StatusCode = (HttpStatusCode)422;
                     throw new HttpResponseException(responseMessage);
                 }
                 catch (Exception e)
