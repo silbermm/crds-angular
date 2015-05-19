@@ -131,7 +131,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _ministryPlatformService.Verify(mocked => mocked.UpdateRecord(
                 299,
                 It.Is<Dictionary<string, object>>(
-                    d => ((int)d["dp_RecordID"]) == 123
+                    d => ((int)d["Donor_ID"]) == 123
                         && ((string)d[DonorService.DONOR_PROCESSOR_ID]).Equals("456")),
                 It.IsAny<string>()));
             Assert.AreEqual(123, response);

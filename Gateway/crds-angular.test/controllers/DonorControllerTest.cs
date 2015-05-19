@@ -84,6 +84,21 @@ namespace crds_angular.test.controllers
         }
 
         [Test]
+        public void TestGetGetDonorAuthenticatedNoPaymentProcessor()
+        {
+            var contactDonor = new ContactDonor
+            {
+                ContactId = 1,
+                DonorId = 2,
+                ProcessorId = null
+            };
+            donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(It.IsAny<string>())).Returns(contactDonor);
+            IHttpActionResult result = fixture.Get();
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf(typeof(NotFoundResult), result);
+        }
+
+        [Test]
         public void TestGetSuccessGetDonorUnauthenticated()
         {
             fixture.Request.Headers.Authorization = null;
@@ -94,6 +109,22 @@ namespace crds_angular.test.controllers
             var okResult = (OkNegotiatedContentResult<DonorDTO>)result;
             Assert.AreEqual(donorId, okResult.Content.id);
             Assert.AreEqual(processorId, okResult.Content.Processor_ID);
+        }
+
+        [Test]
+        public void TestGetGetDonorUnauthenticatedNoPaymentProcessor()
+        {
+            fixture.Request.Headers.Authorization = null;
+            var contactDonor = new ContactDonor
+            {
+                ContactId = 1,
+                DonorId = 2,
+                ProcessorId = null
+            };
+            donorService.Setup(mocked => mocked.GetContactDonorForEmail(email)).Returns(contactDonor);
+            IHttpActionResult result = fixture.Get(email);
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf(typeof(NotFoundResult), result);
         }
 
         [Test]

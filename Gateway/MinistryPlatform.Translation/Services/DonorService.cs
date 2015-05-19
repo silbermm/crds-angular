@@ -194,7 +194,7 @@ namespace MinistryPlatform.Translation.Services
         public int UpdatePaymentProcessorCustomerId(int donorId, string paymentProcessorCustomerId)
         {
             var parms = new Dictionary<string, object> {
-                { "dp_RecordID", donorId },
+                { "Donor_ID", donorId },
                 { DONOR_PROCESSOR_ID, paymentProcessorCustomerId },
             };
 
