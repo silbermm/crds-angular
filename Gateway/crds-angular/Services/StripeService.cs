@@ -71,7 +71,7 @@ namespace crds_angular.Services
             chargeRequest.AddParameter("currency", "usd");
             chargeRequest.AddParameter("source", getCustomerResponse.Data.default_source);
             chargeRequest.AddParameter("customer", getCustomerResponse.Data.id);
-            chargeRequest.AddParameter("description", "Logged-in giver, donor_id# " + donor_id);
+            chargeRequest.AddParameter("description", "Donor ID #" + donor_id);
 
             IRestResponse<StripeCharge> chargeResponse =
                 (IRestResponse<StripeCharge>)stripeRestClient.Execute<StripeCharge>(chargeRequest);

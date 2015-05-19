@@ -111,7 +111,7 @@ namespace crds_angular.Controllers.API
             {
                 var donor = gatewayDonorService.GetContactDonorForAuthenticatedUser(token);
 
-                if (donor == null)
+                if (donor == null || !donor.HasPaymentProcessorRecord)
                 {
                     return (NotFound());
                 }
@@ -138,7 +138,7 @@ namespace crds_angular.Controllers.API
             try
             {
                 var donor = gatewayDonorService.GetContactDonorForEmail(email);
-                if (donor == null)
+                if (donor == null || !donor.HasPaymentProcessorRecord)
                 {
                     return NotFound();
                 }
