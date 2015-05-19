@@ -4,7 +4,7 @@
     <p class="subheading">Your generosity fuels the life change we experience around here.</p>
     <div class="push-top">
       <form class="give-form">
-        <div class="form-inline form-group give-amount form-group-xl">
+        <div class="form-inline form-group give-amount form-group-lg">
           <div class="input-group">
             <span class="input-group-addon">$</span>
             <input type="tel" class="form-control" min="0" maxlength="6" ng-model="give.amount = '125'" autocomplete="off"></input>
@@ -14,10 +14,8 @@
         </div>
         <!--/form-inline-->
 
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" ng-model="ministryShow"> Give to a specific initiative
-          </label>
+        <div class="form-group clearfix">
+          <label class="btn btn-block btn-checkbox-toggle"><input type="checkbox" ng-model="ministryShow" />&nbsp;&nbsp; Give to a specific initiative</label>
         </div>
         <!--/checkbox-->
 

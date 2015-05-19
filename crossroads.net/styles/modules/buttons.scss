@@ -81,11 +81,7 @@ h2 {
   text-transform: none;
 }
 
-
 // Table buttons
-
-// Table buttons
-
 .table-btn {
   @extend .btn;
   @extend .btn-default;
@@ -104,4 +100,11 @@ h2 {
     border-radius: 0px;
     font-size: 1.4rem;
   }
+}
+
+.btn-checkbox-toggle {
+  @include button-variant($gray, #ffffff, $input-group-addon-border-color);
+  text-align: left;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
 }

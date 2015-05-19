@@ -50,10 +50,8 @@ ol.breadcrumb li.active {
 .btn {
   font-family: $brand-font-family;
   font-size: 16px;
-  padding: 3px 8px;
   font-style: normal;
   font-weight: 400;
-
   .icon {
     fill: #fff;
   }
@@ -142,7 +140,7 @@ ol.breadcrumb li.active {
 .dropdown-menu.ng-valid-date, .dropdown-menu.ng-valid-date-disabled {
   table {
     outline: none;
-    
+
     thead {
       th {
         .btn-default {
@@ -170,7 +168,7 @@ ol.breadcrumb li.active {
       }
     }
   }
-  
+
     .btn-default.active {
     background: $gray;
     border: $gray;

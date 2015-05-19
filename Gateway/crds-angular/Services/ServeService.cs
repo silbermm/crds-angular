@@ -98,6 +98,11 @@ namespace crds_angular.Services
                             else
                             {
                                 member.Roles.Add(NewServingRole(record));
+                                //if we have already found rsvp, skip
+                                if (member.ServeRsvp == null)
+                                {
+                                    member.ServeRsvp = NewServeRsvp(record);
+                                }
                             }
                         }
                         else
@@ -206,6 +211,11 @@ namespace crds_angular.Services
                     {
                         _eventService.registerParticipantForEvent(participant.ParticipantId, e.EventId);
                     }
+                    else
+                    {
+                        //if there is already a participant, remove it because they've changed to "No"
+                        _eventService.unRegisterParticipantForEvent(participant.ParticipantId, e.EventId);
+                    }
                     var comments = string.Empty; //anything of value to put in comments?
                     _opportunityService.RespondToOpportunity(participant.ParticipantId, opportunityId, comments,
                         e.EventId, signUp);
@@ -270,11 +280,13 @@ namespace crds_angular.Services
 
             member.Roles.Add(NewServingRole(record));
 
-            if (record.Rsvp != null)
-            {
-                member.ServeRsvp = new ServeRsvp {Attending = (bool) record.Rsvp, RoleId = record.OpportunityId};
-            }
+            member.ServeRsvp = NewServeRsvp(record);
             return member;
+        }
+
+        private ServeRsvp NewServeRsvp(GroupServingParticipant record)
+        {
+            return record.Rsvp != null ? new ServeRsvp { Attending = (bool)record.Rsvp, RoleId = record.OpportunityId } : null;
         }
 
         //public for testing

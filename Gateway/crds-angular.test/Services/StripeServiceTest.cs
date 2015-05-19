@@ -152,7 +152,7 @@ namespace crds_angular.test.Services
                     && parameterMatches("currency", "usd", o.Parameters)
                     && parameterMatches("source", "some card", o.Parameters)
                     && parameterMatches("customer", "12345", o.Parameters)
-                    && parameterMatches("description", "Logged-in giver, donor_id# 98765", o.Parameters)
+                    && parameterMatches("description", "Donor ID #98765", o.Parameters)
                     )));
 
             restClient.VerifyAll();

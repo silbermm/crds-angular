@@ -23,6 +23,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _opportunityPage = Convert.ToInt32(AppSettings("OpportunityPage"));
         private readonly int _eventPage = Convert.ToInt32(AppSettings("Events"));
         private readonly int _groupParticpantsSubPageView = Convert.ToInt32(AppSettings("GroupsParticipantsSubPage"));
+        private readonly int _opportunityResponses = Convert.ToInt32(AppSettings("OpportunityResponses"));
 
         public OpportunityServiceImpl(IMinistryPlatformService ministryPlatformService, IEventService eventService,
             IAuthenticationService authenticationService)
@@ -107,6 +108,7 @@ namespace MinistryPlatform.Translation.Services
             try
             {
                 var dictionary = dictionaryList.First();
+                response.Response_ID = dictionary.ToInt("dp_RecordID");
                 response.Opportunity_ID = dictionary.ToInt("Opportunity_ID");
                 response.Participant_ID = dictionary.ToInt("Participant_ID");
                 response.Response_Result_ID = dictionary.ToInt("Response_Result_ID");
@@ -195,6 +197,8 @@ namespace MinistryPlatform.Translation.Services
 
         public int RespondToOpportunity(int participantId, int opportunityId, string comments, int eventId, bool response)
         {
+            var participant = new Participant {ParticipantId = participantId};
+            
             var values = new Dictionary<string, object>
             {
                 {"Response_Date", DateTime.Now},
@@ -206,13 +210,25 @@ namespace MinistryPlatform.Translation.Services
                 {"Response_Result_ID", (response) ? 1 : 2}
             };
 
+            //Go see if there are existing responses for this opportunity that we are updating
             int recordId;
+
             try
             {
-                recordId =
-                    WithApiLogin<int>(
-                        apiToken =>
-                            (_ministryPlatformService.CreateRecord("OpportunityResponses", values, apiToken, true)));
+                var prevResponse = GetOpportunityResponse(opportunityId, eventId, participant);
+                if (prevResponse.Response_ID != 0)
+                {
+                    recordId = prevResponse.Response_ID;
+                    values.Add("Response_ID", recordId);
+                    _ministryPlatformService.UpdateRecord(_opportunityResponses, values, apiLogin());
+                }
+                else
+                {
+                    recordId =
+                        WithApiLogin<int>(
+                            apiToken =>
+                                (_ministryPlatformService.CreateRecord("OpportunityResponses", values, apiToken, true)));
+                }
             }
             catch (Exception ex)
             {

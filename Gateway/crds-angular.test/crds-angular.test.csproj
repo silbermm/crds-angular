@@ -155,6 +155,7 @@
     <Compile Include="Security\MPAuthTest.cs" />
     <Compile Include="Services\AccountServiceTest.cs" />
     <Compile Include="Services\DonorServiceTest.cs" />
+    <Compile Include="Services\GroupServiceTest.cs" />
     <Compile Include="Services\PersonServiceTest.cs" />
     <Compile Include="Services\ServeServiceTest.cs" />
     <Compile Include="Services\StripeServiceTest.cs" />
