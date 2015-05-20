@@ -1,6 +1,8 @@
 'use strict()';
 (function() {
 
+  var moment = require('moment');
+
   module.exports = RefineDirective;
 
   RefineDirective.$inject = ['$rootScope', 'filterState', 'screenSize']
@@ -25,13 +27,24 @@
       scope.applyTeamFilter = applyTeamFilter;
       scope.applyTimeFilter = applyTimeFilter;
       scope.clearFilters = clearFilters;
+      scope.dateOptions = {
+        formatYear: 'yy',
+        startingDay: 1,
+        showWeeks: 'false'
+      };
+      scope.datePickers = {fromOpened : false, toOpened: false };
       scope.filterAll = filterAll;
+      scope.filterFromDate = null;
+      scope.format = 'MM/dd/yyyy';
       scope.getUniqueMembers = getUniqueMembers;
       scope.getUniqueSignUps = getUniqueSignUps;
       scope.getUniqueTeams = getUniqueTeams;
       scope.getUniqueTimes = getUniqueTimes;
       scope.isCollapsed = $rootScope.mobile;
       scope.isFilterSet = isFilterSet;
+      scope.openFromDate = openFromDate;
+      scope.openToDate = openToDate;
+      scope.readyFilterByDate = readyFilterByDate;
       scope.resolvedData = [];
       initServeArrays();
       scope.toggleCollapse = toggleCollapse;
@@ -357,6 +370,30 @@
 
       function isFilterSet() {
         return (filterState.memberIds.length >= 1 || filterState.times.length >= 1 || filterState.teams.length >= 1);
+      }
+
+      function openFromDate($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        scope.datePickers.fromOpened = true;
+      }
+
+      function openToDate($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        scope.datePickers.toOpened = true;
+      }
+
+      function readyFilterByDate() {
+        console.log('readyFilterByDate');
+        var fromDate = moment(scope.filterFromDate);
+        if (scope.filterFromDate !== undefined && fromDate.isValid()){
+          console.log('fromDate Valid: ' + scope.filterFromDate);
+        }
+        else {
+          console.log('from date INVALID! ' + scope.filterFromDate);
+        }
+        //var m = moment("2011-10-10T10:20:90");
       }
 
       function toggleCollapse() {
