@@ -273,6 +273,10 @@
                 controller: "GoTripGivingCtrl as gotripresults",
                 templateUrl: "go_trip_giving/go_trip_giving_results.html"
             })
+            .state("/demo/404", {
+                url: "/demo/404",
+                templateUrl: "errors/404.html"
+            })
             .state("/demo/guest-giver", {
                 url: "/demo/guest-giver",
                 templateUrl: "guest_giver/give.html"
