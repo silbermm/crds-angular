@@ -25,7 +25,7 @@ require('../donation-details.html');﻿
         scope.program = scope.programsIn[0];
 
         scope.amountError = function() {
-            return (scope.amountSubmitted && scope.donationDetailsForm.amount.$invalid && scope.donationDetailsForm.$error.naturalNumber || scope.donationDetailsForm.$dirty && scope.donationDetailsForm.$invalid)
+            return (scope.amountSubmitted && scope.donationDetailsForm.amount.$invalid && scope.donationDetailsForm.$error.naturalNumber || scope.donationDetailsForm.$dirty && scope.donationDetailsForm.amount.$invalid)
         };
       }
       return directive;

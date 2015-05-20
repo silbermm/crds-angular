@@ -82,7 +82,8 @@ var _ = require('lodash');
       selectFrequency: 32,
       invalidDateRange: 35,
       noMembers: 33,
-      noServingOpportunities: 34
+      noServingOpportunities: 34,
+      noInitiativeSelected: 16
     }).config(function (growlProvider) {
       growlProvider.globalPosition("top-center");
       growlProvider.globalTimeToLive(6000);
