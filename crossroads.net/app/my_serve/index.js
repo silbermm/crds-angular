@@ -20,4 +20,7 @@
 
   require('./refine/refineList.html');
   app.directive("refineList", require('./refine/refineList.directive'));
+
+
+  require('./refine/multipleDates.validation');
 })()

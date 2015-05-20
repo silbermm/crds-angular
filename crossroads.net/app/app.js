@@ -66,6 +66,7 @@ var _ = require('lodash');
       successfullRegistration: 13,
       succesfulResponse: 14,
       failedResponse: 15,
+      fromDateToLarge: 37,
       successfullWaitlistSignup:17,
       noPeopleSelectedError:18,
       fullGroupError:19,
@@ -82,7 +83,8 @@ var _ = require('lodash');
       selectFrequency: 32,
       invalidDateRange: 35,
       noMembers: 33,
-      noServingOpportunities: 34
+      noServingOpportunities: 34,
+      toDateToSmall: 38
     }).config(function (growlProvider) {
       growlProvider.globalPosition("top-center");
       growlProvider.globalTimeToLive(6000);

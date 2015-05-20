@@ -11,34 +11,44 @@
         <h5>Filter Opportunities<a href="" data-ng-click="clearFilters()" class="filter-reset" ng-show="isFilterSet()" stop-event> Clear</a></h5>
     </div>
     <div collapse="isCollapsed">
+      <form name='filterdates'>
         <div class="push-half-bottom filter-group">
-            <div class="form-group">
-                <label>From:</label>
-                <div class="input-group">
-                    <input id="filterFromDate" type="text" class="form-control" datepicker-popup="{{::format}}" ng-required="true" close-text="Close" ng-model="filterFromDate" ng-change="readyFilterByDate()" is-open="datePickers.fromOpened" datepicker-options="dateOptions" />
-                    <span class="input-group-btn">
-          <button type="button" class="btn btn-default" ng-click="openFromDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-        </span>
-                </div>
-                <!--/input-group-->
+          <pre>{{filterdates.fromdate.$error}}</pre>
+          <div class="form-group" ng-class="{'has-error': filterdates.fromdate.$error.required}" >
+            <label>From:</label>
+            <div class="input-group">
+              <input name="fromdate" type="text" class="form-control" datepicker-popup="{{format}}" ng-required="true" close-text="Close" ng-model="filterFromDate" ng-change="readyFilterByDate()" is-open="datePickers.fromOpened" datepicker-options="dateOptions" multiple-dates to-date="{{filterToDate}}" />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="openFromDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
             </div>
-            <!--/form-group-->
+            <!--/input-group-->
+            <span ng-messages="filterdates.fromdate.$error" >
+              <span ng-message="fromDate"> The from date is in an error state </span> 
+            </span> 
+            <!-- <span ng-show="fromDateError" ng-bind-html="$root.messages[$root.MESSAGES.fromDateToLarge].message | html"> </span> -->
+          </div>
+          <!--/form-group-->
 
-            <div class="form-group">
-                <label>To:</label>
-                <div class="input-group">
-                    <input id="filterToDate" type="text" class="form-control" datepicker-popup="{{::format}}" ng-required="true" close-text="Close" ng-model="filterToDate" ng-change="readyFilterByDate()" is-open="datePickers.toOpened" datepicker-options="dateOptions" />
-                    <span class="input-group-btn">
-          <button type="button" class="btn btn-default" ng-click="openToDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-        </span>
-                </div>
-                <!--/input-group-->
+          <div class="form-group" ng-class="{'has-error': filterdates.$errors}">
+            <label>To:</label>
+            <div class="input-group">
+              <input name="todate" type="text" class="form-control" datepicker-popup="{{::format}}" ng-required="true" close-text="Close" ng-model="filterToDate" ng-change="readyFilterByDate()" is-open="datePickers.toOpened" datepicker-options="dateOptions" multiple-dates from-date="{{filterFromDate}}" />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="openToDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
             </div>
-            <!--/form-group-->
+            <!--/input-group-->
+            <span ng-messages="filterdates.todate.$error" >
+              <span ng-message="toDate"> The to date is in an error state </span> 
+            </span> 
+            <!--<span ng-show="toDateError" ng-bind-html="$root.messages[$root.MESSAGES.toDateToSmall].message | html"> </span>-->
+          </div>
+          <!--/form-group-->
         </div>
         <!--/push-bottom-->
-
-        <div class="push-half-bottom filter-group" ng-if="uniqueMembers.length > 1">
+      </form>
+      <div class="push-half-bottom filter-group" ng-if="uniqueMembers.length > 1">
             <div class="checkbox" data-ng-repeat="member in uniqueMembers">
                 <label>
                     <input type="checkbox" ng-model="member.selected" ng-change="toggleFamilyMember(member)"> {{member.name + " " + member.lastName}}

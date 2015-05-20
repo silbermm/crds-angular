@@ -28,14 +28,16 @@
       scope.applyTimeFilter = applyTimeFilter;
       scope.clearFilters = clearFilters;
       scope.dateOptions = {
-        formatYear: 'yy',
+        formatYear: 'yy',  
         startingDay: 1,
         showWeeks: 'false'
       };
-      scope.datePickers = {fromOpened : false, toOpened: false };
+      scope.datePickers = { fromOpened : false, toOpened: false };
       scope.filterAll = filterAll;
       scope.filterFromDate = null;
+      scope.filterToDate = null;
       scope.format = 'MM/dd/yyyy';
+      scope.fromDateError = false;
       scope.getUniqueMembers = getUniqueMembers;
       scope.getUniqueSignUps = getUniqueSignUps;
       scope.getUniqueTeams = getUniqueTeams;
@@ -45,8 +47,7 @@
       scope.openFromDate = openFromDate;
       scope.openToDate = openToDate;
       scope.readyFilterByDate = readyFilterByDate;
-      scope.resolvedData = [];
-      initServeArrays();
+      scope.toDateError = false;
       scope.toggleCollapse = toggleCollapse;
       scope.toggleFamilyMember = toggleFamilyMember;
       scope.toggleSignedUp = toggleSignedUp;
@@ -75,10 +76,8 @@
       //////////////////////////////////
 
       function activate() {
+        initServeArrays();
         filter(scope.servingDays);
-        /*scope.servingDays.$promise.then(function(data) {*/
-          //filter(data);
-        /*});*/
       }
 
       function applyFamilyFilter() {
@@ -166,9 +165,7 @@
               });
             }
           });
-          //if (serveDay.length > 0) {
           scope.servingDays = serveDay;
-          //}
         }
       }
 
@@ -359,7 +356,6 @@
             time.selected = true;
           }
         });
-
       }
 
       function initServeArrays() {
@@ -385,15 +381,36 @@
       }
 
       function readyFilterByDate() {
-        console.log('readyFilterByDate');
-        var fromDate = moment(scope.filterFromDate);
-        if (scope.filterFromDate !== undefined && fromDate.isValid()){
-          console.log('fromDate Valid: ' + scope.filterFromDate);
+        scope.toDateError = false;
+        var now = moment(); 
+        var toDate = moment(scope.filterToDate);
+
+        if(toDate.unix() < now.unix()) {
+          scope.toDateError = true; 
+        } else {
+          scope.toDateError = false;
         }
-        else {
-          console.log('from date INVALID! ' + scope.filterFromDate);
+
+        if (scope.filterToDate !== undefined && toDate.isValid()){ 
+          var fromDate = moment(scope.filterFromDate);
+          if (scope.filterFromDate === undefined || scope.filterFromDate === null){ 
+            scope.filterFromDate = now.format('MM/DD/YYYY');  
+          } else if (!fromDate.isValid()) {
+            return false; 
+          } else {
+            now = fromDate;
+          } 
+          
+          if ( now.unix() > toDate.unix() ){
+            scope.fromDateError = true; 
+            return false;
+          } else {
+            scope.fromDateError = false; 
+          } 
+          $rootScope.$emit("filterByDates", {'fromDate': fromDate, 'toDate': toDate});
+        } else {
+          scope.toDateError = true;
         }
-        //var m = moment("2011-10-10T10:20:90");
       }
 
       function toggleCollapse() {
@@ -439,6 +456,5 @@
       }
     }
   }
-
 
 })()
