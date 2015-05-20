@@ -18,7 +18,7 @@
         <!--/checkbox-->
   <div class="form-group" ng-show="ministryShow" ng-class="{'has-error': donationDetailsForm.initiative && amountSubmitted}">
     <select class="form-control" ng-options="program.Name for program in programs.slice(1) track by program.ProgramId" ng-model="program" name="initiative" initiative-required>
-      <option ng-if="programs.length>1" style="display:none" value="">Choose Initiative</option>
+      <option value="">Choose Initiative</option>
     </select>
     <ng-messages for="donationDetailsForm.initiative.$error" ng-show="donationDetailsForm.initiative.$error.initiativeRequired && amountSubmitted"
       ng-messages-include="on-submit-messages"></ng-messages>
