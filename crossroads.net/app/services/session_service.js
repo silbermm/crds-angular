@@ -2,7 +2,7 @@
 (function () {
 
   angular.module("crossroads").service("Session",SessionService);
-  
+
   SessionService.$inject = ['$log','$cookies', '$cookieStore'];
 
   function SessionService($log, $cookies, $cookieStore) {
@@ -15,7 +15,7 @@
     };
 
     /*
-     * This formats the family as a comma seperated string before storing in the 
+     * This formats the family as a comma seperated string before storing in the
      * cookie called 'family'
      *
      * @param family - an array of participant ids
@@ -31,7 +31,7 @@
     this.getFamilyMembers = function () {
       if(this.exists('family')){
         return _.map($cookies.family.split(","), function(strFam){
-          return Number(strFam);  
+          return Number(strFam);
         });
       }
       return [];
@@ -50,6 +50,9 @@
     };
 
     this.clear = function () {
+      // TODO Added to debug/research US1403 - should remove after issue is resolved
+      console.log("US1403: clearing session in session_service");
+
       $cookieStore.remove("sessionId");
       $cookieStore.remove("userId");
       $cookieStore.remove("username");
@@ -63,7 +66,13 @@
 
     //TODO: Get this working to DRY up login_controller and register_controller
     this.redirectIfNeeded = function($state){
+      // TODO Added to debug/research US1403 - should remove after issue is resolved
+      console.log("US1403: redirectIfNeeded session_service");
+
       if (self.hasRedirectionInfo()) {
+        // TODO Added to debug/research US1403 - should remove after issue is resolved
+        console.log("US1403: redirectIfNeeded session_service - has redirect info");
+
         var url = self.exists("redirectUrl");
         var link = self.exists("link");
         self.removeRedirectRoute();

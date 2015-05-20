@@ -1,7 +1,7 @@
 'use strict';
 (function () {
   module.exports = function LoginController($scope, $rootScope, AUTH_EVENTS, MESSAGES, AuthService, $cookieStore, $state, $log, Session, $timeout, User) {
-    
+
     $log.debug("Inside Login controller");
     $scope.loginShow = false;
     $scope.newuser = User;
@@ -22,25 +22,29 @@
             $scope.credentials.password = $scope.newuser.password;
         }
     }
-      
+
     $scope.logout = function () {
+        // TODO Added to debug/research US1403 - should remove after issue is resolved
+        console.log("US1403: logging out user in login_controller");
         AuthService.logout();
         if ($scope.credentials !== undefined) {
+            // TODO Added to debug/research US1403 - should remove after issue is resolved
+            console.log("US1403: clearing credentials defined in login_controller");
             $scope.credentials.username = undefined;
             $scope.credentials.password = undefined;
         }
         $rootScope.username = undefined;
     }
 
-    $scope.login = function () {           
+    $scope.login = function () {
         if (($scope.credentials === undefined) || ($scope.credentials.username === undefined || $scope.credentials.password === undefined)) {
             $scope.pending = true;
-            $scope.loginFailed = false;              
+            $scope.loginFailed = false;
             $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
 
         } else {
             $scope.processing = true;
-            AuthService.login($scope.credentials).then(function (user) {             
+            AuthService.login($scope.credentials).then(function (user) {
                 $scope.processing = false;
                 $scope.loginShow = false;
                 $timeout(function() {

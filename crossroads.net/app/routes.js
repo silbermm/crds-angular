@@ -50,7 +50,8 @@
         // Check if the user is connected
         //================================================
         var checkLoggedin = function ($q, $timeout, $http, $location, $rootScope) {
-            console.log("CONFIG: checkLoggedIn");
+            // TODO Added to debug/research US1403 - should remove after issue is resolved
+            console.log("US1403: checkLoggedIn");
             var deferred = $q.defer();
             $httpProvider.defaults.headers.common['Authorization'] = getCookie('sessionId');
             $http({
@@ -60,12 +61,18 @@
                     'Authorization': getCookie('sessionId')
                 }
             }).success(function (user) {
+                // TODO Added to debug/research US1403 - should remove after issue is resolved
+                console.log("US1403: checkLoggedIn success");
                 // Authenticated
                 if (user.userId !== undefined) {
+                    // TODO Added to debug/research US1403 - should remove after issue is resolved
+                    console.log("US1403: checkLoggedIn success with user");
                     $timeout(deferred.resolve, 0);
                     $rootScope.userid = user.userId;
                     $rootScope.username = user.username;
                 } else {
+                    // TODO Added to debug/research US1403 - should remove after issue is resolved
+                    console.log("US1403: checkLoggedIn success, undefined user");
                     Session.clear();
                     $rootScope.message = "You need to log in.";
                     $timeout(function () {
