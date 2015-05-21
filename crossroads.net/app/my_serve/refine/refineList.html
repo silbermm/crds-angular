@@ -13,34 +13,50 @@
     <div collapse="isCollapsed">
       <form name='filterdates'>
         <div class="push-half-bottom filter-group">
-          <pre>{{filterdates.fromdate.$error}}</pre>
-          <div class="form-group" ng-class="{'has-error': filterdates.fromdate.$error.required}" >
+          <div class="form-group" ng-class="{'has-error': isFromError()}" >
             <label>From:</label>
             <div class="input-group">
-              <input name="fromdate" type="text" class="form-control" datepicker-popup="{{format}}" ng-required="true" close-text="Close" ng-model="filterFromDate" ng-change="readyFilterByDate()" is-open="datePickers.fromOpened" datepicker-options="dateOptions" multiple-dates to-date="{{filterToDate}}" />
+              <input name="fromdate" type="text" class="form-control" datepicker-popup="{{format}}" ng-required="true" close-text="Close" ng-model="filterFromDate" ng-change="readyFilterByDate()" is-open="datePickers.fromOpened" datepicker-options="dateOptions" />
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="openFromDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
               </span>
             </div>
             <!--/input-group-->
-            <span ng-messages="filterdates.fromdate.$error" >
-              <span ng-message="fromDate"> The from date is in an error state </span> 
+            <span ng-messages="filterdates.fromdate.$error" ng-show="isFromError()">
+              <span ng-message="fromDateToLarge" > 
+                <span ng-bind-html="$root.messages[$root.MESSAGES.fromDateToLarge].message | html"></span> 
+              </span> 
+              <span ng-message="required">
+                <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+              </span> 
+              <span ng-message="date">
+                <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
+              </span> 
             </span> 
             <!-- <span ng-show="fromDateError" ng-bind-html="$root.messages[$root.MESSAGES.fromDateToLarge].message | html"> </span> -->
           </div>
           <!--/form-group-->
 
-          <div class="form-group" ng-class="{'has-error': filterdates.$errors}">
+          <div class="form-group" ng-class="{'has-error': isToError()}">
             <label>To:</label>
             <div class="input-group">
-              <input name="todate" type="text" class="form-control" datepicker-popup="{{::format}}" ng-required="true" close-text="Close" ng-model="filterToDate" ng-change="readyFilterByDate()" is-open="datePickers.toOpened" datepicker-options="dateOptions" multiple-dates from-date="{{filterFromDate}}" />
+              <input name="todate" type="text" class="form-control" datepicker-popup="{{::format}}" ng-required="true" close-text="Close" ng-model="filterToDate" ng-change="readyFilterByDate()" is-open="datePickers.toOpened" datepicker-options="dateOptions" />
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="openToDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
               </span>
             </div>
             <!--/input-group-->
-            <span ng-messages="filterdates.todate.$error" >
-              <span ng-message="toDate"> The to date is in an error state </span> 
+            <span ng-messages="filterdates.todate.$error" ng-show="isToError()" >
+              <span ng-message="fromDate"> 
+                <span ng-bind-html="$root.messages[$root.MESSAGES.toDateToSmall].message | html"> </span>-
+              </span> 
+              <span ng-message="required">
+                <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+              </span> 
+              <span ng-message="date">
+                <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
+              </span> 
+
             </span> 
             <!--<span ng-show="toDateError" ng-bind-html="$root.messages[$root.MESSAGES.toDateToSmall].message | html"> </span>-->
           </div>
