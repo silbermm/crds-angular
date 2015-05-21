@@ -33,7 +33,6 @@
                 <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
               </span> 
             </span> 
-            <!-- <span ng-show="fromDateError" ng-bind-html="$root.messages[$root.MESSAGES.fromDateToLarge].message | html"> </span> -->
           </div>
           <!--/form-group-->
 
@@ -48,7 +47,7 @@
             <!--/input-group-->
             <span ng-messages="filterdates.todate.$error" ng-show="isToError()" >
               <span ng-message="fromDate"> 
-                <span ng-bind-html="$root.messages[$root.MESSAGES.toDateToSmall].message | html"> </span>-
+                <span ng-bind-html="$root.messages[$root.MESSAGES.toDateToSmall].message | html"> </span>
               </span> 
               <span ng-message="required">
                 <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>

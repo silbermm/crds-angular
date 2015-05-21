@@ -385,9 +385,7 @@
 
       function isToError(){
         return scope.filterdates.todate.$dirty && (
-          scope.filterdates.todate.$error.fromDate ||
-          scope.filterdates.todate.$error.required ||
-          scope.filterdates.todate.$error.date);
+          scope.filterdates.todate.$error.fromDate || scope.filterdates.todate.$error.required || scope.filterdates.todate.$error.date);
       }
 
       function openFromDate($event) {
@@ -404,6 +402,8 @@
 
       function readyFilterByDate() {
 
+        scope.filterdates.todate.$dirty = true;
+        
         var todayAt12am = new Date();
         todayAt12am.setHours(0,0,0,0);
         var now = moment(todayAt12am); 
@@ -417,6 +417,7 @@
         }
 
         if (scope.filterToDate !== undefined && toDate.isValid()){ 
+          scope.filterdates.fromdate.$dirty = true;
           var fromDate = moment(scope.filterFromDate);
           if (scope.filterFromDate === undefined || scope.filterFromDate === null){ 
             scope.filterFromDate = now.format('MM/DD/YYYY');  
