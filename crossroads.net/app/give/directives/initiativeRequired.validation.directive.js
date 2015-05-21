@@ -6,7 +6,7 @@
         require: 'ngModel',
         link: function($scope, element, attrs, ngModel) {
            ngModel.$validators.initiativeRequired = function(value) {
-            if(value == undefined){
+            if(value == ''){
               return false;
             }else{
               return true;
