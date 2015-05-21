@@ -1,6 +1,7 @@
 # Executes database restore of the MinistryPlatform database
 # Parameters:
 #   -DBServer servername_or_ip   The database server, defaults to mp-int-db (optional)
+#   -DBName databaseName         The database to backup (optional, defaults to MinistryPlatform)
 #   -BackupPath path_on_server   The directory on the DB server to read the backup file from (required)
 #   -DBUser user                 The SQLServer user to login to the DBServer (optional, defaults to environment variable MP_TARGET_DB_USER)
 #   -DBPassword password         The SQLServer password to login to the DBServer (optional, defaults to environment variable MP_TARGET_DB_PASSWORD)
@@ -62,6 +63,7 @@ ALTER DATABASE [$DBName] SET ONLINE;
 
 $command = $connection.CreateCommand();
 $command.CommandText = "$restoreSql";
+$command.CommandTimeout = 600000;
 
 $exitCode = 0;
 $exitMessage = "Success";
