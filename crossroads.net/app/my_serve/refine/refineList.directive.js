@@ -421,15 +421,13 @@
           var fromDate = moment(scope.filterFromDate);
           if (scope.filterFromDate === undefined || scope.filterFromDate === null){ 
             scope.filterFromDate = now.format('MM/DD/YYYY');  
+            scope.fromDate = now;
           } else if (!fromDate.isValid()) {
             scope.filterdates.fromdate.$error.date = true;
             return false; 
-          } else {
-            scope.filterdates.fromdate.$error.date = false;
-            now = fromDate;
           } 
-          
-          if ( now.unix() > toDate.unix() ){
+
+          if ( fromDate.unix() > toDate.unix() ){
             scope.filterdates.fromdate.$error.fromDateToLarge = true;
             return false;
           } else {
