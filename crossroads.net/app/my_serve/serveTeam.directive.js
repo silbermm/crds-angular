@@ -23,7 +23,7 @@
 
     function link(scope, el, attr) {
 
-      scope.attendingChanged = attendingChanged;
+      // scope.attendingChanged = attendingChanged;
       scope.closePanel = closePanel;
       scope.currentActiveTab = null;
       scope.currentMember = null;
@@ -56,10 +56,10 @@
       scope.togglePanel = togglePanel;
       //////////////////////////////////////
 
-      function attendingChanged() {
-        roleChanged();
-        scope.currentMember.showFrequency = true;
-      }
+      // function attendingChanged() {
+      //   roleChanged();
+      //   scope.currentMember.showFrequency = true;
+      // }
 
       function allowProfileEdit() {
         var cookieId = Session.exists("userId");
@@ -137,9 +137,9 @@
         if (scope.currentMember.serveRsvp == null) {
           validForm.valid = false;
           validForm.messageStr = $rootScope.MESSAGES.selectSignUpAndFrequency;
-        } else if (scope.currentMember.serveRsvp.attending === undefined) {
-          validForm.valid = false;
-          validForm.messageStr = $rootScope.MESSAGES.selectSignUpAndFrequency;
+        // } else if (scope.currentMember.serveRsvp.attending === undefined) {
+        //   validForm.valid = false;
+        //   validForm.messageStr = $rootScope.MESSAGES.selectSignUpAndFrequency;
         } else if (scope.currentMember.currentOpportunity == null) {
           validForm.valid = false;
           validForm.messageStr = $rootScope.MESSAGES.selectFrequency;
@@ -235,6 +235,7 @@
         } else {
           scope.currentMember.serveRsvp.isSaved = false;
         }
+        scope.currentMember.showFrequency = true;
       }
 
       function saveRsvp() {
@@ -251,7 +252,12 @@
         rsvp.eventTypeId = scope.team.eventTypeId;
         rsvp.endDate = parseDate(scope.currentMember.currentOpportunity.toDt);
         rsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
-        rsvp.signUp = scope.currentMember.serveRsvp.attending;
+        if (scope.currentMember.serveRsvp.roleId!==0) {
+          rsvp.signUp = true;
+        }
+        else {
+          rsvp.signUp = false;
+        }
         rsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
         rsvp.$save(function(saved) {
           $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess);

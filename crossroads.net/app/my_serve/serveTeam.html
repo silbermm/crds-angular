@@ -31,7 +31,7 @@
       </p>
         <div class="row">
           <div class="col-md-5">
-            <h5>Opportunities</h5>
+            <h5>Sign Up</h5>
             <div class="radio" ng-class="{'text-muted': role.capacity.badgeType === 'label-default'}" ng-repeat="role in currentMember.roles">
               <label>
                 <input type="radio" ng-disabled="role.capacity.badgeType === 'label-default'" ng-model="currentMember.serveRsvp.roleId" ng-value="role.roleId" ng-change="roleChanged(role)" name="{{team.$$hashKey}}">
@@ -39,32 +39,25 @@
                 <span class="label {{ ::role.capacity.badgeType }}" ng-show="role.capacity.display">{{ ::role.capacity.message }}</span>
               </label>
             </div><!--/radio-->
+            <div class="radio">
+              <label>
+                <input type="radio" ng-model="currentMember.serveRsvp.roleId" ng-value="0" ng-change="roleChanged(role)" name="">
+                <span class="opportunity-name">No</span>
+              </label>
+            </div><!--/radio-->
             <div ng-show="selectedRole">
-              <h5 class="flush-bottom"> Shift Time </h5> 
+              <h5 class="flush-bottom"> Shift Time </h5>
               <p>{{ selectedRole.shiftStartTime }} - {{ selectedRole.shiftEndTime }} </p>
             </div>
-            <div ng-show="selectedRole.room"> 
+            <div ng-show="selectedRole.room">
               <h5 class="flush-bottom"> Location </h5>
               <p> {{ selectedRole.room }} </p>
             </div>
           </div><!--/col-sm-4-->
           <div class="col-md-4">
-            <h5>Sign Up</h5>
-           <div class="radio" ng-class="{'text-muted': currentMember.serveRsvp.roleId == null}">
-             <label>
-               <input ng-disabled="currentMember.serveRsvp.roleId == null" type="radio" id="optionsRadios1" ng-model="currentMember.serveRsvp.attending" ng-value="true" ng-change="attendingChanged()" >
-               Yes
-             </label>
-           </div><!--/radio-->
-           <div class="radio" ng-class="{'text-muted': currentMember.serveRsvp.roleId == null}" >
-             <label>
-               <input ng-disabled="currentMember.serveRsvp.roleId == null" type="radio" id="optionsRadios2" ng-model="currentMember.serveRsvp.attending" ng-value="false" ng-change="attendingChanged()">
-               No
-             </label>
-           </div><!--/radio-->
             <div ng-show="currentMember.showFrequency">
               <div class="form-group">
-                <label>Frequency </label>
+                <h5>Frequency </h5>
                 <select class="form-control" ng-model="currentMember.currentOpportunity.frequency" ng-change="populateDates()" ng-options="f.text for f in frequency">
                   <option value="">Select a Frequency</option>
                 </select>
