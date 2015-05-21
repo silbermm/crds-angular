@@ -8,7 +8,7 @@
 param (
     [string]$DBServer = "mp-int-db.cloudapp.net",
     [string]$path = $(throw "-path is required."),
-    [string]$SQLcmd = "'C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn\sqlcmd.exe'"
+    [string]$SQLcmd = "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn\sqlcmd.exe"
  )
 
 $exitCode = 0
@@ -22,7 +22,7 @@ Get-ChildItem $path | Foreach-Object {
 		echo "Error: $output"
 		$exitCode = $LASTEXITCODE
 	} elseif($output -eq "(1 rows affected)"){#If a new script was stored then run it
-		$output = & $SQLcmd -S $DBServer -b -i $path\$_
+		$output = & $SQLcmd -I -S $DBServer -b -i $path\$_
 		if($LASTEXITCODE -ne 0){
 			echo "File: $_"
 			echo "Error: $output"
