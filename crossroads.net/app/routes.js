@@ -273,14 +273,6 @@
                 controller: "GoTripGivingCtrl as gotripresults",
                 templateUrl: "go_trip_giving/go_trip_giving_results.html"
             })
-            .state("/demo/404", {
-                url: "/demo/404",
-                templateUrl: "errors/404.html"
-            })
-            .state("/demo/500", {
-                url: "/demo/500",
-                templateUrl: "errors/500.html"
-            })
             .state("/demo/guest-giver", {
                 url: "/demo/guest-giver",
                 templateUrl: "guest_giver/give.html"
@@ -343,7 +335,15 @@
                 resolve: {
                     loggedin: checkLoggedin
                 }
-    })
+            })
+            .state("errors/404", {
+                url: "/errors/404",
+                templateUrl: "errors/404.html"
+            })
+            .state("errors/500", {
+                url: "/errors/500",
+                templateUrl: "errors/500.html"
+            })
     .state("tools", {
        abstract: true,
        url: '/mptools',
