@@ -24,6 +24,8 @@ require('./demo/guest_giver/give-logged-in.html');
 require('./demo/guest_giver/give-change-information-logged-in.html');
 require('./demo/guest_giver/give-logged-in-new-giver.html');
 require('./demo/trip_giving/give.html');
+require('./demo/errors/404.html');
+require('./demo/errors/500.html');
 
 
 app.controller("GiveCtrl",require("./give_controller"));
@@ -31,3 +33,4 @@ app.directive("naturalNumber", require('./directives/naturalNumber.validation.di
 app.directive("invalidRouting", require('./directives/invalidRouting.validation.directive.js'));
 app.directive("invalidAccount", require('./directives/invalidAccount.validation.directive.js'));
 app.directive("invalidZip", require('./directives/invalidZip.validation.directive.js'));
+app.directive("initiativeRequired", require('./directives/initiativeRequired.validation.directive.js'));
