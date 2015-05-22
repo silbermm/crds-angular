@@ -27,7 +27,6 @@
       scope.applyTeamFilter = applyTeamFilter;
       scope.applyTimeFilter = applyTimeFilter;
       scope.clearFilters = clearFilters;
-      scope.dateFiltered = false;
       scope.dateOptions = {
         formatYear: 'yy',  
         startingDay: 1,
@@ -234,11 +233,21 @@
         _.each(scope.uniqueTimes, function(time) {
           time.selected = false;
         });
-        scope.dateFiltered = false;
+        
+        // If we are removing the date filter, we need to reset
+        // the data to the original values
+        if(filterState.setDate){
+          filterState.setDate(false);
+          var now = moment();
+          now.hour(0);
+          var amonth = moment().add(29, 'days');
+          amonth.hour(23);
+          $rootScope.$emit("filterByDates", {'fromDate': now.unix(), 'toDate': amonth.unix() });
+        }
+
         scope.filterToDate = undefined;
         scope.filterFromDate = undefined;
-        scope.filterdates.fromdate.$dirty = false;
-        scope.filterdates.todate.$dirty = false;
+        scope.filterdates.$setPristine(); 
         filterAll();
       }
 
@@ -373,7 +382,7 @@
       }
 
       function isFilterSet() {
-        return (filterState.memberIds.length >= 1 || filterState.times.length >= 1 || filterState.teams.length >= 1 || scope.dateFiltered);
+        return filterState.isActive(); 
       }
 
       function isFromError(){
@@ -401,42 +410,47 @@
       }
 
       function readyFilterByDate() {
-
-        scope.filterdates.todate.$dirty = true;
-        
-        var todayAt12am = new Date();
-        todayAt12am.setHours(0,0,0,0);
-        var now = moment(todayAt12am); 
+        var now = moment();
+        now.hour(0);
         var toDate = moment(scope.filterToDate);
+        toDate.hour(23);
 
-        if(toDate.unix() < now.unix()) {
+        if((toDate.date() - now.date() ) < 0) {
           scope.filterdates.todate.$error.fromDate = true;
+          $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
           return false;
         } else {
           scope.filterdates.todate.$error.fromDate = false;
         }
 
         if (scope.filterToDate !== undefined && toDate.isValid()){ 
-          scope.filterdates.fromdate.$dirty = true;
           var fromDate = moment(scope.filterFromDate);
-          if (scope.filterFromDate === undefined || scope.filterFromDate === null){ 
+          if (fromDate.isBefore(now, 'days')) {
+            fromDate = now;
+          }
+          if (!scope.filterFromDate){ 
             scope.filterFromDate = now.format('MM/DD/YYYY');  
-            scope.fromDate = now;
+            fromDate = now;
           } else if (!fromDate.isValid()) {
             scope.filterdates.fromdate.$error.date = true;
+            $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
             return false; 
           } 
 
-          if ( fromDate.unix() > toDate.unix() ){
+          if ( fromDate.diff(toDate, 'days') > 0 ){
             scope.filterdates.fromdate.$error.fromDateToLarge = true;
+            $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
             return false;
           } else {
             scope.filterdates.fromdate.$error.fromDateToLarge = false;
           } 
           $rootScope.$emit("filterByDates", {'fromDate': fromDate, 'toDate': toDate});
-          scope.dateFiltered = true;           
+          filterState.setDate(true);
+          return true;
         } else {
           scope.filterdates.todate.$error.date = true;
+          $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
+          return false;
         }
       }
 
