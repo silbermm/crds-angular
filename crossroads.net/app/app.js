@@ -66,6 +66,7 @@ var _ = require('lodash');
       successfullRegistration: 13,
       succesfulResponse: 14,
       failedResponse: 15,
+      fromDateToLarge: 37,
       successfullWaitlistSignup:17,
       noPeopleSelectedError:18,
       fullGroupError:19,
@@ -82,7 +83,9 @@ var _ = require('lodash');
       selectFrequency: 32,
       invalidDateRange: 35,
       noMembers: 33,
-      noServingOpportunities: 34
+      noServingOpportunities: 34,
+      toDateToSmall: 38,
+      noInitiativeSelected: 16
     }).config(function (growlProvider) {
       growlProvider.globalPosition("top-center");
       growlProvider.globalTimeToLive(6000);
@@ -92,6 +95,7 @@ var _ = require('lodash');
     .directive("emptyToNull", require('./shared/emptyToNull.directive.js'))
     .directive("stopEvent", require('./shared/stopevent.directive.js'))
     .directive("requireMultiple", require('./shared/requireMultiple.directive.js'))
+    .directive("autofocus", require('./shared/autofocus.directive.js'));
 
     require('./app.controller');
     require('./app.run');

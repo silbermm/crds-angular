@@ -25,8 +25,13 @@ require('../donation-details.html');﻿
         scope.program = scope.programsIn[0];
 
         scope.amountError = function() {
-            return (scope.amountSubmitted && scope.donationDetailsForm.amount.$invalid && scope.donationDetailsForm.$error.naturalNumber || scope.donationDetailsForm.$dirty && scope.donationDetailsForm.$invalid)
+            return (scope.amountSubmitted && scope.donationDetailsForm.amount.$invalid && scope.donationDetailsForm.$error.naturalNumber || scope.donationDetailsForm.$dirty && scope.donationDetailsForm.amount.$invalid && scope.amountSubmitted)
         };
+
+         scope.setProgramList = function(){
+          console.log("fired");
+          scope.ministryShow ? scope.program = '' : scope.program = scope.programs[0];
+        }
       }
       return directive;
     }
