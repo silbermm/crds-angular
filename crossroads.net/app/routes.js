@@ -198,7 +198,11 @@
                 templateUrl: "opportunity/view_opportunities.html",
                 data: { isProtected: true },
                 resolve: {
-                  loggedin: checkLoggedin
+                  loggedin: checkLoggedin,
+                  ServeOpportunities: 'ServeOpportunities',
+                  Participants: function(ServeOpportunities){
+                    return ServeOpportunities.QualifiedServers.query({groupId: 27705, contactId: getCookie('userId')}).$promise;
+                  }
                 }
             })
             .state("serve-signup", {

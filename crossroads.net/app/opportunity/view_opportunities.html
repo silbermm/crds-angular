@@ -1,12 +1,41 @@
-﻿<!-- TODO Can this error handling be updated to utilize ngMessages? -->
+
+<!-- TODO Can this error handling be updated to utilize ngMessages? -->
 <div class="alert alert-success" role="alert" ng-if="opportunity.created">
-    <span ng-bind-html="$root.messages[$root.MESSAGES.succesfulResponse].message | html"></span>
+  <span ng-bind-html="$root.messages[$root.MESSAGES.succesfulResponse].message | html"></span>
 </div>
 
 <div class="alert alert-danger" role="alert" ng-if="opportunity.rejected">
-    <span ng-bind-html="$root.messages[$root.MESSAGES.failedResponse].message | html"></span>
+  <span ng-bind-html="$root.messages[$root.MESSAGES.failedResponse].message | html"></span>
 </div>
 
-<section>
-    <button class="btn btn-primary" ng-click="opportunity.submitRequest(115)"> Request to Join Kids Club </button>
-</section>
+
+
+<div>
+  <legend>Participants</legend>
+  <form class="form-group" name="myForm" role="form" ng-submit="opportunity.save(myForm)" id="myForm">
+    <p>
+      <div class="checkbox" ng-repeat="participant in opportunity.participants as people" ng-class="{'has-error':!groupsignup.formValid && !person['userInGroup']}">
+        <label>
+          <span ng-show="opportunity.participants.length > 1">
+            <input name="input" type="checkbox" ng-checked="participant.memberOfGroup" ng-disabled="participant.memberOfGroup" ng-model="participant.add">&nbsp;</span>
+          <span>{{ participant.preferredName }}</span>
+          <span ng-show="opportunity.displayEmail(participant.email)">({{ participant.email }})</span>
+          <span>{{formValid}}</span>
+          <span ng-show="participant.loggedInUser">zzzz
+            <a href="" ng-click="groupsignup.editProfile()">
+              <svg viewBox="0 0 32 32" class="icon icon-pencil4">
+                <use xlink:href="#pencil4"></use>
+              </svg>
+            </a>
+          </span>
+        </label>
+      </div>
+    </p>
+    <!-- <section>
+      <button class="btn btn-primary" ng-click="opportunity.submitRequest(115)"> Request to Join Kids Club </button>
+    </section> -->
+    <p >
+      <input type="submit" name="submit_group_signup" value="Request to Join Kids Club" id="submit_group_signup" class="btn btn-primary push-half-bottom">
+    </p>
+  </form>
+</div>
