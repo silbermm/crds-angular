@@ -31,6 +31,7 @@
     $rootScope.$on("filterByDates", function(event, data) {
       loadOpportunitiesByDate(data.fromDate, data.toDate).then(function(opps){
         vm.groups = opps;    
+        vm.original = opps;
       },function(err){
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
       });
