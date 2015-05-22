@@ -107,12 +107,13 @@
                     Session.addRedirectRoute("give.account", "");
                     $state.go("give.login");
                 } else {
-                    PaymentService.donor.get()
-                    .success(function(donor){
+                    PaymentService.donor.get({email: $scope.give.email})
+                    .$promise
+                    .then(function(donor){
                       vm.donor = donor;
                       $state.go("give.confirm");
-                    })
-                    .error(function(){
+                    },
+                    function(error){
                       //  create donor record
                       $state.go("give.account");
                     });
