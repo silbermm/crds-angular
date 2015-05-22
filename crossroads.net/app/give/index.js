@@ -25,6 +25,7 @@ require('./demo/guest_giver/give-change-information-logged-in.html');
 require('./demo/guest_giver/give-logged-in-new-giver.html');
 require('./demo/trip_giving/give.html');
 require('./demo/errors/404.html');
+require('./demo/errors/500.html');
 
 
 app.controller("GiveCtrl",require("./give_controller"));

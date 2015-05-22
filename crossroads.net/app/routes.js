@@ -277,6 +277,10 @@
                 url: "/demo/404",
                 templateUrl: "errors/404.html"
             })
+            .state("/demo/500", {
+                url: "/demo/500",
+                templateUrl: "errors/500.html"
+            })
             .state("/demo/guest-giver", {
                 url: "/demo/guest-giver",
                 templateUrl: "guest_giver/give.html"
