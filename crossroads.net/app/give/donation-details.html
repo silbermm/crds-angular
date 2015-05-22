@@ -8,7 +8,7 @@
       <span class="input-group-addon ">.00</span>
     </div>
 
-    <ng-messages for="donationDetailsForm.amount.$error" ng-show="donationDetailsForm.amount.$error.naturalNumber && donationDetailsForm.$dirty"
+    <ng-messages for="donationDetailsForm.amount.$error" ng-show="donationDetailsForm.amount.$error.naturalNumber && donationDetailsForm.$dirty && amountSubmitted"
       ng-messages-include="on-blur-messages"></ng-messages>
       <ng-messages for="donationDetailsForm.amount.$error" ng-if="amountSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
   </div>
@@ -17,7 +17,7 @@
     </label>
   </div>
         <!--/checkbox-->
-  <div class="form-group" ng-show="ministryShow" ng-class="{'has-error': donationDetailsForm.initiative && amountSubmitted}">
+  <div class="form-group" ng-show="ministryShow" ng-class="{'has-error': donationDetailsForm.initiative.$error.initiativeRequired && amountSubmitted}">
     <select class="form-control" ng-options="program.Name for program in programs.slice(1) track by program.ProgramId" ng-model="program" name="initiative" initiative-required>
       <option value="">Choose Initiative</option>
     </select>
