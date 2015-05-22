@@ -2,9 +2,9 @@
   'use strict';
   module.exports = GiveCtrl;
 
-  GiveCtrl.$inject = ['$rootScope', '$scope', '$state', '$timeout', '$http', 'Session', 'PaymentService','programList'];
+  GiveCtrl.$inject = ['$rootScope', '$scope', '$state', '$timeout', 'Session', 'PaymentService','programList'];
 
-  function GiveCtrl($rootScope, $scope, $state, $timeout, $httpProvider, Session, PaymentService, programList) {
+  function GiveCtrl($rootScope, $scope, $state, $timeout, Session, PaymentService, programList) {
 
         $scope.$on('$stateChangeStart', function (event, toState, toParams) {
            if ($rootScope.email) {
@@ -33,6 +33,8 @@
         vm.showCheckClass = "ng-hide";
         vm.view = 'bank';
         vm.programsInput = programList;
+        
+        vm.donor = {};
 
         vm.accountError = function() {
           return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.account.$error.invalidAccount && $scope.giveForm.accountForm.$invalid  ||
@@ -105,7 +107,15 @@
                     Session.addRedirectRoute("give.account", "");
                     $state.go("give.login");
                 } else {
-                    $state.go("give.account");
+                    PaymentService.donor.get()
+                    .success(function(donor){
+                      vm.donor = donor;
+                      $state.go("give.confirm");
+                    })
+                    .error(function(){
+                      //  create donor record
+                      $state.go("give.account");
+                    });
                 }
             } else {
                $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
