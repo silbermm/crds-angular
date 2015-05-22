@@ -161,16 +161,14 @@
 
       function isFormValid() {
         var validForm = {
-          valid: true,
-          messageStr: ''
+          valid: true
         };
-        validForm.valid = true;
         if (scope.currentMember.serveRsvp === null) {
           validForm.valid = false;
           scope.formErrors.role = true;
           scope.formErrors.signup = true;
         } else {
-          if (scope.currentMember.serveRsvp.roleId === null){
+          if (scope.currentMember.serveRsvp.roleId === null || scope.currentMember.serveRsvp.roleId === undefined){
             validForm.valid = false;
             scope.formErrors.role = true;
           }
@@ -305,14 +303,12 @@
       }
 
       function saveRsvp() {
-        //var invalid = false; //make this a function
         var validForm = isFormValid();
-        
-        if (validForm.valid == false) {
+ 
+        if (!validForm.valid) {
           $rootScope.$emit('notify',$rootScope.MESSAGES.generalError);
-          return;
+          return false;
         }
-
         var rsvp = new ServeOpportunities.SaveRsvp();
         rsvp.contactId = scope.currentMember.contactId;
         rsvp.opportunityId = scope.currentMember.serveRsvp.roleId;
@@ -325,6 +321,10 @@
           $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess);
           $rootScope.$broadcast('update.member', scope.currentMember);
           scope.currentMember.serveRsvp.isSaved = true;
+          return true;
+        }, function(err){
+          $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
+          return false; 
         });
       }
 
