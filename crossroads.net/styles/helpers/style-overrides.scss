@@ -78,13 +78,7 @@ ol.breadcrumb li.active {
   border-radius: 6px;
 }
 
-//Our button styles seem to make the height not match text input in button groups. Adding 2px of vertical padding to fix this.
-.input-group-btn {
-  > .btn {
-    padding-top: 4px;
-    padding-bottom: 4px;
-  }
-}
+
 
 .btn-ghost {
     @include button-variant($gray-dark, transparent, lighten($gray-light, 10%));
