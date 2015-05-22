@@ -2,19 +2,19 @@
 # Parameters:
 #   -DBServer servername_or_ip   The database server, defaults to mp-int-db (optional)
 #   -DBName databaseName         The database to backup (optional, defaults to MinistryPlatform)
-#   -BackupPath path_on_server   The directory on the DB server to read the backup file from (required)
+#   -BackupFile path_on_server   The backup file on the DBServer (required)
 #   -DBUser user                 The SQLServer user to login to the DBServer (optional, defaults to environment variable MP_TARGET_DB_USER)
 #   -DBPassword password         The SQLServer password to login to the DBServer (optional, defaults to environment variable MP_TARGET_DB_PASSWORD)
 
 Param (
   [string]$DBServer = "mp-int-db.cloudapp.net", # default to mp-int-db
   [string]$DBName = "MinistryPlatform", # default to MinistryPlatform
-  [string]$BackupFile = $(throw "-BackupFile (destination on server for backup files) is required."),
+  [string]$BackupFile = $(throw "-BackupFile (backup file on the DBServer) is required."),
   [string]$DBUser = $(Get-ChildItem Env:MP_TARGET_DB_USER).Value, # Default to environment variable
   [string]$DBPassword = $(Get-ChildItem Env:MP_TARGET_DB_PASSWORD).Value # Default to environment variable
 )
 
-$connectionString = "Server=$DBServer;uid=$DBUser; pwd=$DBPassword;Database=$DBName;Integrated Security=False;";
+$connectionString = "Server=$DBServer;uid=$DBUser;pwd=$DBPassword;Database=master;Integrated Security=False;";
 
 $connection = New-Object System.Data.SqlClient.SqlConnection;
 $connection.ConnectionString = $connectionString;
