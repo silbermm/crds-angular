@@ -105,8 +105,8 @@
         scope.isCollapsed = true;
       }
 
-      function displayEmail(emailAddress) {
-        if (emailAddress === undefined || emailAddress === null ) {
+      function displayEmail(emailAddress) { 
+        if (!emailAddress) {
           return false;
         }
         if (emailAddress.length > 0) {
