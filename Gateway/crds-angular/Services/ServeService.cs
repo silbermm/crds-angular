@@ -221,7 +221,7 @@ namespace crds_angular.Services
                         }
                         catch (ApplicationException ex)
                         {
-                            logger.Debug("there is no need to remove the event participant because there is not one");
+                            logger.Debug(ex.Message + ": There is no need to remove the event participant because there is not one.");
                         }
                     }
                     var comments = string.Empty; //anything of value to put in comments?
