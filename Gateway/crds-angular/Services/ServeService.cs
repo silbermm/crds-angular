@@ -8,6 +8,7 @@ using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Extensions;
 using log4net;
+using log4net.Repository.Hierarchy;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 
@@ -213,8 +214,15 @@ namespace crds_angular.Services
                     }
                     else
                     {
-                        //if there is already a participant, remove it because they've changed to "No"
-                        _eventService.unRegisterParticipantForEvent(participant.ParticipantId, e.EventId);
+                        try
+                        {
+                            //if there is already a participant, remove it because they've changed to "No"
+                            _eventService.unRegisterParticipantForEvent(participant.ParticipantId, e.EventId);
+                        }
+                        catch (ApplicationException ex)
+                        {
+                            logger.Debug(ex.Message + ": There is no need to remove the event participant because there is not one.");
+                        }
                     }
                     var comments = string.Empty; //anything of value to put in comments?
                     _opportunityService.RespondToOpportunity(participant.ParticipantId, opportunityId, comments,

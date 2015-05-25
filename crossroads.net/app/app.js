@@ -4,6 +4,8 @@ var angular = require('angular');
 
 require('./templates/nav.html');
 require('./templates/nav-mobile.html');
+require('./templates/404.html');
+require('./templates/500.html');
 
 require('../node_modules/angular-toggle-switch/angular-toggle-switch-bootstrap.css');
 require('../node_modules/angular-toggle-switch/angular-toggle-switch.css');
@@ -31,13 +33,13 @@ var _ = require('lodash');
 
    angular.module("crossroads", [
      'crossroads.core',
-     "crossroads.profile", 
-     "crossroads.filters", 
+     "crossroads.profile",
+     "crossroads.filters",
      'crossroads.mptools',
      'crossroads.components',
      'crossroads.give',
      "crdsCMS.services",
-     'ngAside', 
+     'ngAside',
      'matchMedia'
      ])
     .constant("AUTH_EVENTS", {

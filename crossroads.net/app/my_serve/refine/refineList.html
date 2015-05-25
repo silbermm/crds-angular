@@ -1,68 +1,97 @@
 <div class="col-sm-2 col-sm-push-10 gray-lighter clearfix">
-    <div ng-click="toggleCollapse()">
-        <div class="filter-clear" ng-show='$root.mobile'>
-            <svg viewBox="0 0 25 32" class="icon icon-plus" ng-show="isCollapsed">
-                <use xlink:href="#plus"></use>
-            </svg>
-            <svg viewBox="0 0 25 32" class="icon icon-minus" ng-show="!isCollapsed">
-                <use xlink:href="#minus"></use>
-            </svg>
-        </div>
-        <h5>Filter Opportunities<a href="" data-ng-click="clearFilters()" class="filter-reset" ng-show="isFilterSet()" stop-event> Clear</a></h5>
+  <div ng-click="toggleCollapse()">
+    <div class="filter-clear" ng-show='$root.mobile'>
+      <svg viewBox="0 0 25 32" class="icon icon-plus" ng-show="isCollapsed">
+        <use xlink:href="#plus"></use>
+      </svg>
+      <svg viewBox="0 0 25 32" class="icon icon-minus" ng-show="!isCollapsed">
+        <use xlink:href="#minus"></use>
+      </svg>
     </div>
-    <div collapse="isCollapsed">
-      <form name='filterdates'>
-        <div class="push-half-bottom filter-group">
-          <div class="form-group" ng-class="{'has-error': isFromError()}" >
-            <label>From:</label>
-            <div class="input-group">
-              <input name="fromdate" type="text" class="form-control" datepicker-popup="{{format}}" ng-required="true" close-text="Close" ng-model="filterFromDate" ng-change="readyFilterByDate()" is-open="datePickers.fromOpened" datepicker-options="dateOptions" />
-              <span class="input-group-btn">
-                <button type="button" class="btn btn-default" ng-click="openFromDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-              </span>
-            </div>
-            <!--/input-group-->
-            <span ng-messages="filterdates.fromdate.$error" ng-show="isFromError()">
-              <span ng-message="fromDateToLarge" > 
-                <span ng-bind-html="$root.messages[$root.MESSAGES.fromDateToLarge].message | html"></span> 
-              </span> 
-              <span ng-message="required">
-                <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
-              </span> 
-              <span ng-message="date">
-                <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
-              </span> 
-            </span> 
-          </div>
-          <!--/form-group-->
+    <h5>Filter Opportunities
+      <a href="" data-ng-click="clearFilters()" class="filter-reset" ng-show="isFilterSet()" stop-event> Clear</a>
+    </h5>
+  </div>
 
-          <div class="form-group" ng-class="{'has-error': isToError()}">
-            <label>To:</label>
-            <div class="input-group">
-              <input name="todate" type="text" class="form-control" datepicker-popup="{{::format}}" ng-required="true" close-text="Close" ng-model="filterToDate" ng-change="readyFilterByDate()" is-open="datePickers.toOpened" datepicker-options="dateOptions" />
-              <span class="input-group-btn">
-                <button type="button" class="btn btn-default" ng-click="openToDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-              </span>
-            </div>
-            <!--/input-group-->
-            <span ng-messages="filterdates.todate.$error" ng-show="isToError()" >
-              <span ng-message="fromDate"> 
-                <span ng-bind-html="$root.messages[$root.MESSAGES.toDateToSmall].message | html"> </span>
-              </span> 
-              <span ng-message="required">
-                <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
-              </span> 
-              <span ng-message="date">
-                <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
-              </span> 
+  <div collapse="isCollapsed">
+    <form name='filterdates'>
+      <div class="push-half-bottom filter-group">
 
-            </span> 
-            <!--<span ng-show="toDateError" ng-bind-html="$root.messages[$root.MESSAGES.toDateToSmall].message | html"> </span>-->
+        <!-- From -->  
+        <div class="form-group" ng-class="{'has-error': isFromError()}" >
+          <label>From:</label>
+          <div class="input-group">
+            <input name="fromdate" type="text" 
+                   class="form-control" 
+                   datepicker-popup="{{format}}" 
+                   ng-required="true" 
+                   close-text="Close" 
+                   ng-model="filterFromDate" 
+                   ng-model-options="{ updateOn: 'blur' }"
+                   ng-change="readyFilterByDate()" 
+                   is-open="datePickers.fromOpened" 
+                   datepicker-options="dateOptions" />
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default" ng-click="openFromDate($event)">
+                <i class="glyphicon glyphicon-calendar"></i>
+              </button>
+            </span>
           </div>
-          <!--/form-group-->
+          <!--/input-group-->
+          <span ng-messages="filterdates.fromdate.$error" ng-show="isFromError()">
+            <span ng-message="fromDateToLarge" > 
+              <span ng-bind-html="$root.messages[$root.MESSAGES.fromDateToLarge].message | html"></span> 
+            </span> 
+            <span ng-message="required">
+              <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            </span> 
+            <span ng-message="date">
+              <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
+            </span> 
+          </span> 
         </div>
-        <!--/push-bottom-->
+        <!--/form-group--> 
+        <!-- /From -->
+
+        <div class="form-group" ng-class="{'has-error': isToError()}">
+          <label>To:</label>
+          <div class="input-group">
+            <input name="todate" 
+                   type="text" 
+                   class="form-control" 
+                   datepicker-popup="{{::format}}" 
+                   ng-model-options="{ updateOn: 'change blur' }"
+                   ng-required="true" 
+                   close-text="Close" 
+                   ng-model="filterToDate" 
+                   ng-change="readyFilterByDate()" 
+                   is-open="datePickers.toOpened" 
+                   datepicker-options="dateOptions" />
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default" ng-click="openToDate($event)">
+                <i class="glyphicon glyphicon-calendar"></i>
+              </button>
+            </span>
+          </div>
+          <!--/input-group-->
+          <span ng-messages="filterdates.todate.$error" ng-show="isToError()" >
+            <span ng-message="fromDate"> 
+              <span ng-bind-html="$root.messages[$root.MESSAGES.toDateToSmall].message | html"> </span>
+            </span> 
+            <span ng-message="required">
+              <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            </span> 
+            <span ng-message="date">
+              <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
+            </span> 
+          </span> 
+        </div>
+        <!--/form-group-->
+       </div>
+       <!--/push-bottom-->
       </form>
+      
+      
       <div class="push-half-bottom filter-group" ng-if="uniqueMembers.length > 1">
             <div class="checkbox" data-ng-repeat="member in uniqueMembers">
                 <label>
