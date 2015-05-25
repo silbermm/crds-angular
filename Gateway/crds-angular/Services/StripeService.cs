@@ -1,4 +1,5 @@
-﻿using crds_angular.Exceptions;
+﻿using System.Linq;
+using crds_angular.Exceptions;
 using crds_angular.Models.Crossroads;
 using crds_angular.Services.Interfaces;
 using Newtonsoft.Json;
@@ -51,6 +52,25 @@ namespace crds_angular.Services
             }
 
             return (response.Data.id);
+        }
+
+        public DefaultSource getDefaultSource(string customer_token)
+        {
+            DefaultSource default_source = new DefaultSource();
+            
+            var getCustomerRequest = new RestRequest("customers/" + customer_token, Method.GET);
+
+            IRestResponse<StripeCustomer> getCustomerResponse =
+                (IRestResponse<StripeCustomer>)stripeRestClient.Execute<StripeCustomer>(getCustomerRequest);
+            if (getCustomerResponse.StatusCode == HttpStatusCode.BadRequest)
+            {
+                Content content = JsonConvert.DeserializeObject<Content>(getCustomerResponse.Content);
+                throw new StripeException("Could not charge customer because customer lookup failed", content.error.type, content.error.message, content.error.code);
+            }
+
+            default_source.brand = getCustomerResponse.Data.sources.data[0].brand;
+            default_source.last4 = getCustomerResponse.Data.sources.data[0].last4;
+            return default_source;
         }
 
 

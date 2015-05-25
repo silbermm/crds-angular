@@ -90,7 +90,6 @@ describe('Serve Teams Directive', function() {
 
   it("should save the response of one time rsvping", function(){
     var isolated = element.isolateScope();
-
     $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity?id=145').respond(200, {});
     $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity').respond(200, {});
     $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({'date': '1444552200'});
@@ -119,6 +118,101 @@ describe('Serve Teams Directive', function() {
     isolated.saveRsvp();
     $httpBackend.flush();
   });
+
+  it("should not allow a save if opportunity is not choosen", function(){
+    var isolated = element.isolateScope();
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity?id=145').respond(200, {});
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity').respond(200, {});
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({'date': '1444552200'});
+    isolated.openPanel(mockTeam[0].members);
+    $httpBackend.flush(); 
+    expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
+    // set the opportuntity selected to null
+    isolated.currentMember.serveRsvp.roleId = null;
+    expect(isolated.saveRsvp()).toBe(false);
+  });
+
+  it("should not allow a save if rsvp is not choosen", function(){
+    var isolated = element.isolateScope();
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity?id=145').respond(200, {});
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity').respond(200, {});
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({'date': '1444552200'});
+    isolated.openPanel(mockTeam[0].members);
+    $httpBackend.flush(); 
+    expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
+    // set the rsvp attending to null
+    isolated.currentMember.serveRsvp.attending = undefined;
+    expect(isolated.saveRsvp()).toBe(false);
+  });
+
+  it("should not allow a save if frequency is not choosen", function(){
+    var isolated = element.isolateScope();
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity?id=145').respond(200, {});
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity').respond(200, {});
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({'date': '1444552200'});
+    isolated.openPanel(mockTeam[0].members);
+    $httpBackend.flush(); 
+    expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
+    // set the frequency to null
+    isolated.currentMember.currentOpportunity.frequency = null;
+    expect(isolated.saveRsvp()).toBe(false);
+  });
+
+  it("should not allow a save if to date is not choosen", function(){
+    var isolated = element.isolateScope();
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity?id=145').respond(200, {});
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity').respond(200, {});
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({'date': '1444552200'});
+    isolated.openPanel(mockTeam[0].members);
+    $httpBackend.flush(); 
+    expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
+    // set the todate to null
+    isolated.currentMember.currentOpportunity.toDt = null;
+    expect(isolated.saveRsvp()).toBe(false);
+    
+    // set the todate to a 'non' date
+    isolated.currentMember.currentOpportunity.toDt = 'abcd';
+    expect(isolated.saveRsvp()).toBe(false);
+
+  });
+
+  it("should not allow a save if from date is not choosen", function(){
+    var isolated = element.isolateScope();
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity?id=145').respond(200, {});
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity').respond(200, {});
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({'date': '1444552200'});
+    isolated.openPanel(mockTeam[0].members);
+    $httpBackend.flush(); 
+    expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
+    // set the todate to null
+    isolated.currentMember.currentOpportunity.fromDt = null;
+    expect(isolated.saveRsvp()).toBe(false);
+    
+    // set the todate to a 'non' date
+    isolated.currentMember.currentOpportunity.fromDt = 'abcd';
+    expect(isolated.saveRsvp()).toBe(false);
+  });
+
+  it("should not allow a save when the to date if before the from date", function(){
+    var isolated = element.isolateScope();
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity?id=145').respond(200, {});
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity').respond(200, {});
+    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({'date': '1444552200'});
+    isolated.openPanel(mockTeam[0].members);
+    $httpBackend.flush(); 
+    expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
+ 
+    isolated.currentMember.currentOpportunity = mockTeam[0].members[0].roles[0];
+    isolated.currentMember.currentOpportunity.frequency = {value:0, text:"Once"};
+    isolated.currentMember.serveRsvp = {roleId: mockOpp.roleId, attending: false};
+
+    isolated.populateDates();
+     
+    // set the todate to before from date
+    isolated.currentMember.currentOpportunity.toDt -= 1000000; 
+    expect(isolated.saveRsvp()).toBe(false);
+  });
+
 
 });
 

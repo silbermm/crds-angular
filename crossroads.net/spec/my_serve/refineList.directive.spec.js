@@ -431,7 +431,8 @@ describe('Refine List Directive', function() {
     isolateScope.filterToDate = new Date();
     isolateScope.filterToDate.setDate(isolateScope.filterToDate.getDate() -1);
     isolateScope.filterFromDate = new Date();
-    isolateScope.readyFilterByDate();
+    var ret = isolateScope.readyFilterByDate();
+    expect(ret).toBe(false);
     expect(isolateScope.filterdates.todate.$error.fromDate).toBe(true);
   });
 
