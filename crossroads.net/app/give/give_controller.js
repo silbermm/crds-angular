@@ -33,6 +33,14 @@
         vm.showCheckClass = "ng-hide";
         vm.view = 'bank';
         vm.programsInput = programList;
+        vm.last4 = '';
+        vm.brand ='';
+
+        var brandCode = [];
+        brandCode['Visa'] = "#cc_visa";
+        brandCode['MasterCard'] = '#cc_mastercard';
+        brandCode['American Express'] = '#cc_american_express';
+        brandCode['Discover'] = '#cc_discover';
         
         vm.donor = {};
 
@@ -111,6 +119,8 @@
                     .$promise
                     .then(function(donor){
                       vm.donor = donor;
+                      vm.last4 = donor.last4;
+                      vm.brand = brandCode[donor.brand];
                       $state.go("give.confirm");
                     },
                     function(error){
