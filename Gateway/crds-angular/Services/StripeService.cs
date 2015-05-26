@@ -65,11 +65,20 @@ namespace crds_angular.Services
             if (getCustomerResponse.StatusCode == HttpStatusCode.BadRequest)
             {
                 Content content = JsonConvert.DeserializeObject<Content>(getCustomerResponse.Content);
-                throw new StripeException("Could not charge customer because customer lookup failed", content.error.type, content.error.message, content.error.code);
+                throw new StripeException("Could not get default source information because customer lookup failed", content.error.type, content.error.message, content.error.code);
             }
-
-            default_source.brand = getCustomerResponse.Data.sources.data[0].brand;
-            default_source.last4 = getCustomerResponse.Data.sources.data[0].last4;
+            var default_source_id = getCustomerResponse.Data.default_source;
+            var sources = getCustomerResponse.Data.sources.data;
+            foreach (var source in sources)
+            {
+                if (source.id == default_source_id)
+                {
+                    default_source.brand = source.brand;
+                    default_source.last4 = source.last4;
+                    break;
+                }   
+            }
+            
             return default_source;
         }
 
