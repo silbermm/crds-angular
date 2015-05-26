@@ -447,10 +447,12 @@
           $rootScope.$emit("filterByDates", {'fromDate': fromDate, 'toDate': toDate});
           filterState.setDate(true);
           return true;
-        } else {
+        } else if (isToError()) {
           scope.filterdates.todate.$error.date = true;
           $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
           return false;
+        } else {
+          return false;  
         }
       }
 
