@@ -91,18 +91,17 @@ $updateSql = @"
 -- The API password
 DECLARE @apiPassword varchar(30) = 'xrds8253%%(';
 -- The internal server name, if accessible at a different URL internally versus externally
-DECLARE @internalServerName varchar = 'MP-DEMO-WEB';
+DECLARE @internalServerName varchar(75) = 'MP-INT-WEB';
 -- The external server name
-DECLARE @externalServerName varchar = 'mp-demo-web.crossroads.net';
+DECLARE @externalServerName varchar(75) = 'adminint.crossroads.net';
 -- The name of the site
-DECLARE @applicationTitle varchar = 'Crossroads Demo';
+DECLARE @applicationTitle varchar(30) = 'Crossroads Integration';
 -- The user which will be logging in to the MP database from the ministryplatform and ministryplatformapi apps
-DECLARE @dbLoginUser varchar = 'MP-INT-DB\MPUser';
+DECLARE @dbLoginUser varchar(50) = 'MP-INT-DB\MPUser';
 -- The user which will be running the Windows scheduled tasks from the WEB server
-DECLARE @scheduledTasksUser varchar = 'MP-DEMO-WEB\MPAdmin';
+DECLARE @scheduledTasksUser varchar(50) = 'MP-INT-WEB\MPAdmin';
 -- The domain GUID - set this to NEWID() when setting up a new domain, but use a previous value for an existing domain
 --DECLARE @domainGuid = NEWID();
--- This is DEMO
 DECLARE @domainGuid UNIQUEIDENTIFIER = CAST('0FDE7F32-37E3-4E0B-B020-622E0EBD6BF0' AS UNIQUEIDENTIFIER);
 
 USE $DBName;
