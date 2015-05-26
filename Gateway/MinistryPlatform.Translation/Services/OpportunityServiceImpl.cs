@@ -195,7 +195,7 @@ namespace MinistryPlatform.Translation.Services
                     {"Closed", false},
                     {"Comments", comments}
                 };
-                _ministryPlatformService.CreateRecord("OpportunityResponses", values, apiLogin(), true);
+                var returnVal = _ministryPlatformService.CreateRecord("OpportunityResponses", values, apiLogin(), true);
             }
         }
 
