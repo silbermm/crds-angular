@@ -65,7 +65,7 @@ namespace MinistryPlatform.Translation.Services
         public int unRegisterParticipantForEvent(int participantId, int eventId)
         {
             logger.Debug("Removing participant " + participantId + " from event " + eventId);
-            
+                       
             int eventParticipantId;
             try
             {

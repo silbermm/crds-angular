@@ -1,7 +1,11 @@
+USE [MinistryPlatform]
+GO
+SET IDENTITY_INSERT [dbo].[dp_Page_Views] ON
 GO
 DELETE FROM [dbo].[dp_Page_Views]
 WHERE Page_View_ID = 1058
 GO
+
 
 INSERT INTO [dbo].[dp_Page_Views]
            (Page_View_ID

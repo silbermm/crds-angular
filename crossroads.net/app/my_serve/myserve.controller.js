@@ -11,10 +11,7 @@
     var vm = this;
 
     vm.convertToDate = convertToDate;
-    vm.dateOptions = { formatYear: 'yy', startingDay: 1 };
     vm.filterState = filterState;
-    vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-    vm.format = vm.formats[0];
     vm.groups = Groups;
     vm.loadMore = false;
     vm.loadNextMonth = loadNextMonth;
@@ -31,6 +28,15 @@
       vm.groups = data;
     });
 
+    $rootScope.$on("filterByDates", function(event, data) {
+      loadOpportunitiesByDate(data.fromDate, data.toDate).then(function(opps){
+        vm.groups = opps;    
+        vm.original = opps;
+      },function(err){
+        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+      });
+    });
+
     ////////////////////////////
     // Implementation Details //
     ////////////////////////////
@@ -45,20 +51,32 @@
       return d;
     };
 
+    /**
+     * This function will fetch a new set of serve opportunities between two dates
+     * The dates passed in should be in epoch formatted in milliseconds
+     * @param fromDate the epoch formatted beginning date
+     * @param toDate the epoch formated end date
+     * @returns a promise
+     */
+    function loadOpportunitiesByDate(fromDate, toDate){
+      return ServeOpportunities.ServeDays.query({ 
+        id: Session.exists('userId'), 
+        from: fromDate/1000, 
+        to: toDate/1000 
+      }).$promise;
+    }
+
     function loadNextMonth() {
       if(vm.groups[0].day !== undefined){ 
         vm.loadMore = true;
         vm.loadText = "Loading..."
-        var lastDate = vm.groups[vm.groups.length -1].day;
-        var date = new Date(lastDate);
-        date.setDate(date.getDate() + 1); 
+          
+        var lastDate = new Date(vm.groups[vm.groups.length -1].day);
+        lastDate.setDate(lastDate.getDate() + 1); 
         var newDate = new Date(lastDate);
         newDate.setDate(newDate.getDate() + 28);
-        ServeOpportunities.ServeDays.query({ 
-          id: Session.exists('userId'), 
-          from: date.getTime()/1000, 
-          to: newDate.getTime()/1000 
-        }, function(more){
+          
+        loadOpportunitiesByDate(lastDate.getTime(), newDate.getTime()).then(function(more){
           if(more.length === 0){
             $rootScope.$emit('notify', $rootScope.MESSAGES.serveSignupMoreError);
           } else {
@@ -69,7 +87,6 @@
           vm.loadMore = false;
           vm.loadText = "Load More";
         }, function(e){
-          console.log(e);
           vm.loadMore = false;  
           vm.loadText = "Load More";
         });
