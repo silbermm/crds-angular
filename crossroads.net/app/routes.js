@@ -249,6 +249,10 @@
                  url: "/account",
                  templateUrl: "give/account.html"
            })
+           .state("give.change", {
+                 url: "/change",
+                 templateUrl: "give/change.html"
+           })
            .state("give.thank-you", {
              url: "/thank-you",
              templateUrl: "give/thank_you.html"

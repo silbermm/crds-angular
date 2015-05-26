@@ -2,6 +2,7 @@ require('./give.html');
 require('./amount.html');
 require('./login.html');
 require('./account.html');
+require('./change.html');
 require('./thank_you.html');
 require('./register.html');
 require('./history.html');
