@@ -26,7 +26,7 @@
 
     function save(form) {
       var save = new ServeOpportunities.SaveQualifiedServers();
-      save.opportunityId = 27705;
+      save.opportunityId = 115;
       //just get participants that have checkbox checkLoggedin
       save.participants = _.pluck(_.filter(vm.participants, {
         add: true
