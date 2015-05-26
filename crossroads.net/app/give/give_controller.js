@@ -199,13 +199,7 @@
               PaymentService.donor.get({email: $scope.give.email})
              .$promise
               .then(function(donor){
-                  PaymentService.donateToProgram(vm.program.ProgramId, vm.amount, donor.id, vm.email)
-                    .then(function(confirmation){
-                        vm.program_name = _.result(_.find(vm.programsInput,
-                          {'ProgramId': confirmation.program_id}), 'Name');
-                        vm.amount = confirmation.amount;
-                        $state.go("give.thank-you");
-                    });
+                vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email);
                 },
                 function(error){
                   // The vm.email below is only required for guest giver, however, there
@@ -219,13 +213,7 @@
                     cvc: vm.cvc
                   }, vm.email)
                   .then(function(donor) {
-                    PaymentService.donateToProgram(vm.program.ProgramId, vm.amount, donor.id, vm.email)
-                      .then(function(confirmation){
-                          vm.program_name = _.result(_.find(vm.programsInput,
-                            {'ProgramId': confirmation.program_id}), 'Name');
-                          vm.amount = confirmation.amount;
-                          $state.go("give.thank-you");
-                      });
+                    vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email);
                   },
                   function() {
                     $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
@@ -236,6 +224,17 @@
             else {
               $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
             }
+        };
+
+        vm.donate = function(programId, amount, donorId, email){
+          PaymentService.donateToProgram(programId, amount, donorId, email)
+            .then(function(confirmation){
+              vm.program_name = _.result(_.find(vm.programsInput,
+              {'ProgramId': confirmation.program_id}), 'Name');
+              vm.amount = confirmation.amount;
+              $state.go("give.thank-you");
+            });
+
         };
 
         vm.toggleCheck = function() {
