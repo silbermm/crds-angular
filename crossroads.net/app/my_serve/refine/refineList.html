@@ -14,7 +14,7 @@
   </div>
 
   <div collapse="isCollapsed">
-    <form name='filterdates'>
+    <form name='filterdates' ng-submit="readyFilterByDate()">
       <div class="push-half-bottom filter-group">
 
         <!-- From -->  
@@ -87,6 +87,7 @@
           </span> 
         </div>
         <!--/form-group-->
+        <input type="submit" style="display:none"> </input>
        </div>
        <!--/push-bottom-->
       </form>
