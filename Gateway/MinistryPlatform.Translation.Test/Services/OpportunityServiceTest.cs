@@ -546,19 +546,19 @@ namespace MinistryPlatform.Translation.Test.Services
             {
                 new Dictionary<string, object>
                 {
-                    {"Contact ID", 123},
-                    {"Group Role ID", 1},
-                    {"Role Title", "Boss"},
-                    {"Last Name", "Garfunkel"},
+                    {"Contact_ID", 123},
+                    {"Group_Role_ID", 1},
+                    {"Role_Title", "Boss"},
+                    {"Last_Name", "Garfunkel"},
                     {"Nickname", "Art"},
                     {"dp_RecordID", 12}
                 },
                 new Dictionary<string, object>
                 {
-                    {"Contact ID", 456},
-                    {"Group Role ID", 1},
-                    {"Role Title", "Boss"},
-                    {"Last Name", "Simon"},
+                    {"Contact_ID", 456},
+                    {"Group_Role_ID", 1},
+                    {"Role_Title", "Boss"},
+                    {"Last_Name", "Simon"},
                     {"Nickname", "Paul"},
                     {"dp_RecordID", 17}
                 }
