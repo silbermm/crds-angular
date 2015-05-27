@@ -31,7 +31,7 @@ describe('GiveController', function() {
           },
           _success: true
         },
-        setSuccess(success) {
+        setSuccess: function(success) {
           this.$promise._success = success;
         }
       };
