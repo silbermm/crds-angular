@@ -28,7 +28,7 @@
         vm.brand ='';
         vm.creditCardDiscouragedGrowlDivRef = 1001;
         vm.donor = {};
-        vm.donorError = false;;
+        vm.donorError = false;
         vm.email = null;
         vm.emailAlreadyRegisteredGrowlDivRef = 1000;
         vm.emailPrefix = "give";
@@ -53,7 +53,7 @@
         vm.transitionForLoggedInUserBasedOnExistingDonor = function(event, toState){
           if(toState.name == "give.account" && $rootScope.username && !vm.donorError ) {
             event.preventDefault();
-            PaymentService.donor().get({email: vm.email})
+            PaymentService.donor().get({email: $scope.give.email})
             .$promise
             .then(function(donor){
               vm.donor = donor;

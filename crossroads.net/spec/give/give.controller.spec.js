@@ -58,7 +58,6 @@ describe('GiveController', function() {
       controller.brand = "";
       controller.donor = {};
       controller.donorError = false;
-      controller.email = "";
       controller.last4 = "";
     })
   );
