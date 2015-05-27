@@ -16,22 +16,7 @@
                vm.email = $rootScope.email;
                //what if email is not found for some reason??
              }
-              // debugger;
-             if(toState.name == "give.account" && $rootScope.username && !vm.donorError ) {
-                event.preventDefault();
-                PaymentService.donor().get({email: $scope.give.email})
-                  .$promise
-                  .then(function(donor){
-                    vm.donor = donor;
-                    vm.last4 = donor.last4;
-                    vm.brand = brandCode[donor.brand];
-                    $state.go("give.confirm");
-                  },function(error){
-                      //  create donor record
-                      vm.donorError = true;
-                      $state.go("give.account");
-                    });
-             }
+             vm.transitionForLoggedInUserBasedOnExistingDonor(event,toState,vm);
         });
 
         var vm = this;
@@ -56,7 +41,7 @@
         vm.programsInput = programList;
         vm.last4 = '';
         vm.brand ='';
-        vm.donorError = false;
+        vm.donorError = false;;
 
         var brandCode = [];
         brandCode['Visa'] = "#cc_visa";
@@ -65,6 +50,24 @@
         brandCode['Discover'] = '#cc_discover';
         
         vm.donor = {};
+
+        vm.transitionForLoggedInUserBasedOnExistingDonor = function(event,toState, controller){
+          if(toState.name == "give.account" && $rootScope.username && !controller.donorError ) {
+            event.preventDefault();
+            PaymentService.donor().get({email: $scope.give.email})
+            .$promise
+            .then(function(donor){
+              controller.donor = donor;
+              controller.last4 = donor.last4;
+              controller.brand = brandCode[donor.brand];
+              $state.go("give.confirm");
+            },function(error){
+            //  create donor record
+              controller.donorError = true;
+              $state.go("give.account");
+            });
+          }
+        }
 
         vm.accountError = function() {
           return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.account.$error.invalidAccount && $scope.giveForm.accountForm.$invalid  ||
@@ -131,7 +134,6 @@
         };
 
         vm.goToAccount = function() {
-          // debugger;
             vm.amountSubmitted = true;
             if($scope.giveForm.amountForm.$valid) {
                 if ($rootScope.username === undefined) {

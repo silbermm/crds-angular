@@ -14,30 +14,23 @@ describe('GiveController', function() {
       httpBackend = $httpBackend;
       Session = $injector.get('Session');
       
-      // mockPaymentService = {
-      //   donor: {
-      //     get: function(email) {
-      //       getDeferred = $q.defer();
-      //       return {$promise: getDeferred.promise};
-      //     }
-      //   }
-      // };
-      
       mockPaymentService = {
-        donor: {
-          get: function(x, successCb, failureCb) {
-            successCallback = successCb;
-          }
+          donor: function(){ return {
+            get: function(x, successCb, failureCb) {
+              successCallback = successCb;
+              return mockGetResponse;
+            }
+          };
         }
       };
       
       mockGetResponse = 
         {Processor_ID: "123456"};
 
-      spyOn(mockPaymentService.donor, "get").and.callThrough();
+      spyOn(mockPaymentService.donor(), "get").and.callThrough();
       
       controller = $controller('GiveCtrl', 
-        { '$rootScope': $rootScope, 
+        { '$rootScope': $rootScope,
           '$scope': $scope, 
           '$state': $state, 
           '$timeout': $timeout,
@@ -81,23 +74,79 @@ describe('GiveController', function() {
     });
   });
 
-  describe('vm.confirmDonation emits message in case of exception', function(){
-    it('calls vm.donate', function(){
-      function DonationException(message) {
-        this.message = message;
-        this.name = "DonationException";
-      };
-      controller.donate = jasmine.createSpy("donate() spy");
-
-      controller.donate.and.callFake(function(){
-        throw 'DonationException';
-      });
-
-      expect(controller.donate).toThrow('DonationException');
-      controller.confirmDonation;
-      expect(controller.donate).toHaveBeenCalled();
+  describe('vm.confirmDonation() emits message in case of exception', function(){
+    it('calls vm.donate with missing params', function(){
+      spyOn($rootScope, "$emit");
+      controller.confirmDonation();
+      expect($rootScope.$emit).toHaveBeenCalledWith("notify", 15);
     });
   });
+
+  describe('checks logic of transitionForLoggedInUserBasedOnExistingDonor', function(){
+
+    mockEvent = {
+      preventDefault : function(){}
+    };
+
+    mockToState = {
+      name : "give.account"
+    };
+
+    it('Giver not logged-in', function(){
+
+      mockController = {
+        donorError : false,
+        donor : {},
+        last4 : "1234",
+        brand : "#cc-discover"
+      }
+
+    $rootScope.username = undefined;
+
+    spyOn($state, "go");
+    spyOn(mockEvent, "preventDefault");
+
+    controller.transitionForLoggedInUserBasedOnExistingDonor(mockEvent,mockToState,mockController);
+    expect($state.go).not.toHaveBeenCalled();
+    expect(mockEvent.preventDefault).not.toHaveBeenCalled();
+
+
+
+    });
+
+    it('Giver logged-in without existing donor', function(){
+
+      mockController = {
+        donorError : false,
+        donor : {},
+        last4 : "1234",
+        brand : "#cc-discover"
+      }
+
+      $rootScope.username = "Shankar";
+
+    spyOn($state, "go");
+    spyOn(mockEvent, "preventDefault");
+
+    controller.transitionForLoggedInUserBasedOnExistingDonor(mockEvent,mockToState,mockController);
+    expect($state.go).toHaveBeenCalledWith("give.account");
+    expect(mockEvent.preventDefault).not.toHaveBeenCalled();
+
+
+
+    });
+
+    it('Giver not logged-in', function(){
+
+    });
+
+
+
+
+
+  });
+
+
   
   // describe('Amount to Login/Account/Confirm state transition', function() {
   //   beforeEach(function() {
