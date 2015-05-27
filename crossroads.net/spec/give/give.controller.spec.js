@@ -80,6 +80,24 @@ describe('GiveController', function() {
       expect(controller.ccNumberClass).toBe("");
     });
   });
+
+  describe('vm.confirmDonation emits message in case of exception', function(){
+    it('calls vm.donate', function(){
+      function DonationException(message) {
+        this.message = message;
+        this.name = "DonationException";
+      };
+      controller.donate = jasmine.createSpy("donate() spy");
+
+      controller.donate.and.callFake(function(){
+        throw 'DonationException';
+      });
+
+      expect(controller.donate).toThrow('DonationException');
+      controller.confirmDonation;
+      expect(controller.donate).toHaveBeenCalled();
+    });
+  });
   
   // describe('Amount to Login/Account/Confirm state transition', function() {
   //   beforeEach(function() {
