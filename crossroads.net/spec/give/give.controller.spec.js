@@ -135,6 +135,9 @@ describe('GiveController', function() {
       spyOn(mockEvent, "preventDefault");
       spyOn(mockPaymentService, "donor").and.callThrough();
       mockPaymentServiceGetPromise.setSuccess(false);
+      $scope.give = {
+        email: "test@test.com"
+      };
 
       controller.transitionForLoggedInUserBasedOnExistingDonor(mockEvent, mockToState);
 
@@ -151,6 +154,9 @@ describe('GiveController', function() {
       spyOn(mockEvent, "preventDefault");
       spyOn(mockPaymentService, "donor").and.callThrough();
       mockPaymentServiceGetPromise.setSuccess(true);
+      $scope.give = {
+        email: "test@test.com"
+      };
 
       controller.transitionForLoggedInUserBasedOnExistingDonor(mockEvent, mockToState);
 
