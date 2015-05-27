@@ -1,7 +1,7 @@
 describe('GiveController', function() {
 
   beforeEach(module('crossroads'));
-  var controller, $rootScope, $scope, $state, $timeout, $q, httpBackend, Session, mockPaymentService, mockGetResponse, programList;
+  var controller, $rootScope, $scope, $state, $timeout, $q, httpBackend, Session, mockPaymentService, mockGetResponse, programList, mockPaymentServiceGetPromise;
 
 
   beforeEach(
@@ -13,34 +13,56 @@ describe('GiveController', function() {
       $q = _$q_;
       httpBackend = $httpBackend;
       Session = $injector.get('Session');
-      
-      mockPaymentService = {
-          donor: function(){ return {
-            get: function(x, successCb, failureCb) {
-              successCallback = successCb;
-              return mockGetResponse;
+
+      mockGetResponse = {
+        Processor_ID: "123456",
+        last4: "9876",
+        brand: "Visa"
+      };
+
+      mockPaymentServiceGetPromise = {
+        $promise: {
+          then: function(successCallback, errorCallback) {
+            if(this._success) {
+              successCallback(mockGetResponse);
+            } else {
+              errorCallback();
             }
-          };
+          },
+          _success: true
+        },
+        setSuccess(success) {
+          this.$promise._success = success;
         }
       };
-      
-      mockGetResponse = 
-        {Processor_ID: "123456"};
 
-      spyOn(mockPaymentService.donor(), "get").and.callThrough();
-      
-      controller = $controller('GiveCtrl', 
+      mockPaymentService = {
+          donor: function(){ return {
+            get: function(parms) {
+              return(mockPaymentServiceGetPromise);
+            }
+          };
+        },
+      };
+
+      controller = $controller('GiveCtrl',
         { '$rootScope': $rootScope,
-          '$scope': $scope, 
-          '$state': $state, 
+          '$scope': $scope,
+          '$state': $state,
           '$timeout': $timeout,
-          'Session': Session, 
-          'PaymentService': mockPaymentService, 
-          'programList':programList 
+          'Session': Session,
+          'PaymentService': mockPaymentService,
+          'programList':programList
         });
+
+      controller.brand = "";
+      controller.donor = {};
+      controller.donorError = false;
+      controller.email = "";
+      controller.last4 = "";
     })
   );
-  
+
   describe('Credit Card type checking', function() {
 
     it('should have the visa credit card class', function(){
@@ -82,79 +104,75 @@ describe('GiveController', function() {
     });
   });
 
-  describe('checks logic of transitionForLoggedInUserBasedOnExistingDonor', function(){
+  describe('function transitionForLoggedInUserBasedOnExistingDonor', function(){
 
-    mockEvent = {
+    var mockEvent = {
       preventDefault : function(){}
     };
 
-    mockToState = {
+    var mockToState = {
       name : "give.account"
     };
 
-    it('Giver not logged-in', function(){
+    it('should not perform any transitions for an unauthenticated user', function(){
+      $rootScope.username = undefined;
 
-      mockController = {
-        donorError : false,
-        donor : {},
-        last4 : "1234",
-        brand : "#cc-discover"
-      }
+      spyOn($state, "go");
+      spyOn(mockEvent, "preventDefault");
+      spyOn(mockPaymentService, "donor").and.callThrough();
 
-    $rootScope.username = undefined;
+      controller.transitionForLoggedInUserBasedOnExistingDonor(mockEvent, mockToState);
 
-    spyOn($state, "go");
-    spyOn(mockEvent, "preventDefault");
-
-    controller.transitionForLoggedInUserBasedOnExistingDonor(mockEvent,mockToState,mockController);
-    expect($state.go).not.toHaveBeenCalled();
-    expect(mockEvent.preventDefault).not.toHaveBeenCalled();
-
-
-
+      expect($state.go).not.toHaveBeenCalled();
+      expect(mockEvent.preventDefault).not.toHaveBeenCalled();
+      expect(mockPaymentService.donor).not.toHaveBeenCalled();
+      expect(controller.donorError).toBeFalsy();
     });
 
-    it('Giver logged-in without existing donor', function(){
-
-      mockController = {
-        donorError : false,
-        donor : {},
-        last4 : "1234",
-        brand : "#cc-discover"
-      }
-
+    it('should transition to give.account for a logged-in Giver without an existing donor', function(){
       $rootScope.username = "Shankar";
 
-    spyOn($state, "go");
-    spyOn(mockEvent, "preventDefault");
+      spyOn($state, "go");
+      spyOn(mockEvent, "preventDefault");
+      spyOn(mockPaymentService, "donor").and.callThrough();
+      mockPaymentServiceGetPromise.setSuccess(false);
 
-    controller.transitionForLoggedInUserBasedOnExistingDonor(mockEvent,mockToState,mockController);
-    expect($state.go).toHaveBeenCalledWith("give.account");
-    expect(mockEvent.preventDefault).not.toHaveBeenCalled();
+      controller.transitionForLoggedInUserBasedOnExistingDonor(mockEvent, mockToState);
 
-
-
+      expect($state.go).toHaveBeenCalledWith("give.account");
+      expect(mockEvent.preventDefault).toHaveBeenCalled();
+      expect(mockPaymentService.donor).toHaveBeenCalled();
+      expect(controller.donorError).toBeTruthy();
     });
 
-    it('Giver not logged-in', function(){
+    it('should transition to give.confirm for a logged-in Giver with an existing donor', function(){
+      $rootScope.username = "Shankar";
 
+      spyOn($state, "go");
+      spyOn(mockEvent, "preventDefault");
+      spyOn(mockPaymentService, "donor").and.callThrough();
+      mockPaymentServiceGetPromise.setSuccess(true);
+
+      controller.transitionForLoggedInUserBasedOnExistingDonor(mockEvent, mockToState);
+
+      expect($state.go).toHaveBeenCalledWith("give.confirm");
+      expect(mockEvent.preventDefault).toHaveBeenCalled();
+      expect(mockPaymentService.donor).toHaveBeenCalled();
+      expect(controller.donorError).toBeFalsy();
+      expect(controller.last4).toBe("9876");
+      expect(controller.brand).toBe("#cc_visa");
     });
-
-
-
-
-
   });
 
 
-  
+
   // describe('Amount to Login/Account/Confirm state transition', function() {
   //   beforeEach(function() {
   //     //getDeferred.resolve(mockGetResponse);
   //     successCallback(mockGetResponse);
   //     $rootScope.$apply();
   //   });
-  //   
+  //
   //   it('should fill in donor when going to Account state', function() {
   //     $scope.giveForm = { amountForm : {$valid : true}};
   //     $rootScope.username = "Tester";

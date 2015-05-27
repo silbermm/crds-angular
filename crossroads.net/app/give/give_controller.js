@@ -16,54 +16,53 @@
                vm.email = $rootScope.email;
                //what if email is not found for some reason??
              }
-             vm.transitionForLoggedInUserBasedOnExistingDonor(event,toState,vm);
+             vm.transitionForLoggedInUserBasedOnExistingDonor(event,toState);
         });
 
         var vm = this;
+        vm.setValidCvc = '';
+        vm.setValidCard = '';
+        vm.amountSubmitted = false;
+        vm.bankinfoSubmitted = false;
+        vm.bankType = 'checking';
+        vm.brand ='';
+        vm.creditCardDiscouragedGrowlDivRef = 1001;
+        vm.donor = {};
+        vm.donorError = false;;
+        vm.email = null;
+        vm.emailAlreadyRegisteredGrowlDivRef = 1000;
+        vm.emailPrefix = "give";
+        vm.last4 = '';
+        vm.showMessage = "Where?";
+        vm.showCheckClass = "ng-hide";
+        vm.view = 'bank';
+        vm.programsInput = programList;
+
         //Credit Card RegExs
         var americanExpressRegEx = /^3[47][0-9]{13}$/;
         var discoverRegEx = /^6(?:011|5[0-9]{2})/;
         var mastercardRegEx = /^5[1-5][0-9]/;
         var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$/;
 
-        vm.setValidCvc = '';
-        vm.setValidCard = '';
-        vm.amountSubmitted = false;
-        vm.bankinfoSubmitted = false;
-        vm.bankType = 'checking';
-        vm.creditCardDiscouragedGrowlDivRef = 1001;
-        vm.email = null;
-        vm.emailAlreadyRegisteredGrowlDivRef = 1000;
-        vm.emailPrefix = "give";
-        vm.showMessage = "Where?";
-        vm.showCheckClass = "ng-hide";
-        vm.view = 'bank';
-        vm.programsInput = programList;
-        vm.last4 = '';
-        vm.brand ='';
-        vm.donorError = false;;
-
         var brandCode = [];
         brandCode['Visa'] = "#cc_visa";
         brandCode['MasterCard'] = '#cc_mastercard';
         brandCode['American Express'] = '#cc_american_express';
         brandCode['Discover'] = '#cc_discover';
-        
-        vm.donor = {};
 
-        vm.transitionForLoggedInUserBasedOnExistingDonor = function(event,toState, controller){
-          if(toState.name == "give.account" && $rootScope.username && !controller.donorError ) {
+        vm.transitionForLoggedInUserBasedOnExistingDonor = function(event, toState){
+          if(toState.name == "give.account" && $rootScope.username && !vm.donorError ) {
             event.preventDefault();
-            PaymentService.donor().get({email: $scope.give.email})
+            PaymentService.donor().get({email: vm.email})
             .$promise
             .then(function(donor){
-              controller.donor = donor;
-              controller.last4 = donor.last4;
-              controller.brand = brandCode[donor.brand];
+              vm.donor = donor;
+              vm.last4 = donor.last4;
+              vm.brand = brandCode[donor.brand];
               $state.go("give.confirm");
             },function(error){
             //  create donor record
-              controller.donorError = true;
+              vm.donorError = true;
               $state.go("give.account");
             });
           }
@@ -157,7 +156,7 @@
           {
             $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
           }
-          
+
         };
 
         vm.goToLogin = function () {
