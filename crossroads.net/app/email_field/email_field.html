@@ -1,6 +1,6 @@
 ﻿<ng-form name="email_field">
     <div class="form-group" ng-class="{'has-error': checkEmail()}">
-        <input type="email" ng-model="email" class="form-control" id="{{prefix}}-email" placeholder="Email" ng-required="true" name="email" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500}}">
+        <input type="email" ng-model="email" class="form-control" id="{{prefix}}-email" placeholder="Email" ng-required="true" name="email" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500}}" autofocus>
 
         <ng-messages for="email_field.email.$error" ng-if="submitted" ng-messages-include="on-submit-messages"></ng-messages>
         <ng-messages for="email_field.email.$error" ng-show="$root.username == undefined" ng-messages-include="on-blur-messages">

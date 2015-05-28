@@ -4,10 +4,10 @@ var amountInput = element(by.model('amount'));
 describe('Give as a guest-giver', function() {
   it('It should contain expected programs in the dropdown', function() {
     browser.get(env.baseUrl + '/#/give/amount');
-    element.all(by.options("program.Name for program in programs track by program.ProgramId")).then(function(rows){
-        expect(rows[1].evaluate().getText()).toContain("Gamechange Campaign");
-        expect(rows[0].evaluate().getText()).toContain("Ministry");
-        expect(rows[2].evaluate().getText()).toContain("Old St George - Clifton");
+    element.all(by.options("program.Name for program in programs.slice(1) track by program.ProgramId")).then(function(rows){
+        expect(rows[0].evaluate().getInnerHtml()).toContain("Choose Initiative");
+        expect(rows[1].evaluate().getInnerHtml()).toContain("Game Change Campaign");
+        expect(rows[2].evaluate().getInnerHtml()).toContain("Old St George Building");
     });
   });
 

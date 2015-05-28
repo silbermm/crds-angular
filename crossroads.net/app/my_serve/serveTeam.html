@@ -18,6 +18,7 @@
       </div><!--/pull-right-->
     </div><!--/panel-heading-->
 
+    <!-- TODO: Pull this out into it's own directive so that each form doesn't share scope? -->
     <div class="panel-collapse collapse" collapse="isCollapsed">
       <div class="panel-body soft-half-bottom">
         <p class="flush-bottom">Editing sign up for {{currentMember.name}} {{currentMember.lastName}}
@@ -31,13 +32,16 @@
       </p>
         <div class="row">
           <div class="col-md-5">
-            <h5>Sign Up</h5>
-            <div class="radio" ng-class="{'text-muted': role.capacity.badgeType === 'label-default'}" ng-repeat="role in currentMember.roles">
+           <h5>Opportunities</h5>
+            <div class="radio" ng-class="{'text-muted': role.capacity.badgeType === 'label-default', 'has-error': formErrors.role}" ng-repeat="role in currentMember.roles"  >
               <label>
                 <input type="radio" ng-disabled="role.capacity.badgeType === 'label-default'" ng-model="currentMember.serveRsvp.roleId" ng-value="role.roleId" ng-change="roleChanged(role)" name="{{team.$$hashKey}}">
                 <span class="opportunity-name">{{::role.name}}</span>
                 <span class="label {{ ::role.capacity.badgeType }}" ng-show="role.capacity.display">{{ ::role.capacity.message }}</span>
               </label>
+              <div ng-show="formErrors.role"> 
+                <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+              </div>
             </div><!--/radio-->
             <div class="radio">
               <label>
@@ -58,29 +62,42 @@
             <div ng-show="currentMember.showFrequency">
               <div class="form-group">
                 <h5>Frequency </h5>
+
                 <select class="form-control" ng-model="currentMember.currentOpportunity.frequency" ng-change="populateDates()" ng-options="f.text for f in frequency">
                   <option value="">Select a Frequency</option>
                 </select>
+                <div ng-show="formErrors.frequency"> 
+                  <span ng-bind-html="$root.messages[$root.MESSAGES.selectFrequency].message | html"></span>
+                </div>
               </div><!--/form-group-->
               <div ng-if="currentMember.currentOpportunity.frequency.value > 0">
-                <div class="form-group">
+                <div class="form-group" ng-class="{'has-error': formErrors.from || formErrors.dateRange}">
                   <label>From: </label>
 
                   <div class="input-group">
-                    <input type="text" class="form-control" datepicker-popup="{{::format}}" ng-model="currentMember.currentOpportunity.fromDt" is-open="$parent.datePickers.fromOpened" datepicker-options="dateOptions"  ng-required="true" close-text="Close" />
+                    <input type="text" class="form-control" datepicker-popup="{{::format}}" ng-model="currentMember.currentOpportunity.fromDt" is-open="$parent.datePickers.fromOpened" datepicker-options="dateOptions"  ng-required="true" close-text="Close" ng-change="changeFromDate()" />
                     <span class="input-group-btn">
                       <button type="button" class="btn btn-default" ng-click="openFromDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                   </div><!--/input-group-->
+                  <div ng-show="formErrors.from"> 
+                    <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
+                  </div>
                 </div><!--/form-group-->
-                <div class="form-group">
+                <div class="form-group" ng-class="{'has-error': formErrors.to || formErrors.dateRange}" >
                   <label>To:</label>
                   <div class="input-group">
-                    <input type="text" class="form-control" datepicker-popup="{{::format}}" ng-model="currentMember.currentOpportunity.toDt" is-open="$parent.datePickers.toOpened" min-date="minDate" max-date="'2050-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                    <input type="text" class="form-control" datepicker-popup="{{::format}}" ng-model="currentMember.currentOpportunity.toDt" is-open="$parent.datePickers.toOpened" min-date="minDate" max-date="'2050-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-change="changeToDate()" />
                     <span class="input-group-btn">
                       <button type="button" class="btn btn-default" ng-click="openToDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                   </div><!--/input-group-->
+                  <div ng-show="formErrors.to"> 
+                    <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
+                  </div>
+                  <div ng-show="formErrors.dateRange"> 
+                    <span ng-bind-html="$root.messages[$root.MESSAGES.invalidDateRange].message | html"></span>
+                  </div>
                 </div><!--/form-group-->
               </div><!--/ng-show-->
             </div> <!--/ng-show-->
@@ -97,5 +114,6 @@
         </div><!--/row-->
       </div><!--/panel-body-->
     </div><!--/panel-collapse-->
+
   </div><!--/panel-->
 </div>

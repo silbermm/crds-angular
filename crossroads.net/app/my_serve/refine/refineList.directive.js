@@ -1,6 +1,8 @@
 'use strict()';
 (function() {
 
+  var moment = require('moment');
+
   module.exports = RefineDirective;
 
   RefineDirective.$inject = ['$rootScope', 'filterState', 'screenSize']
@@ -13,7 +15,8 @@
       scope: {
         "servingDays": "=servingDays",
         "original": "=?original",
-        "filterBoxes": "=?filterBoxes"
+        "filterBoxes": "=?filterBoxes",
+        "lastDate": "=lastDate"
       },
       link: link
     }
@@ -25,15 +28,28 @@
       scope.applyTeamFilter = applyTeamFilter;
       scope.applyTimeFilter = applyTimeFilter;
       scope.clearFilters = clearFilters;
+      scope.dateOptions = {
+        formatYear: 'yy',  
+        startingDay: 1,
+        showWeeks: 'false'
+      };
+      scope.datePickers = { fromOpened : false, toOpened: false };
       scope.filterAll = filterAll;
+      scope.filterFromDate = formatDate(new Date());
+      scope.format = 'MM/dd/yyyy';
+      scope.fromDateError = false;
       scope.getUniqueMembers = getUniqueMembers;
       scope.getUniqueSignUps = getUniqueSignUps;
       scope.getUniqueTeams = getUniqueTeams;
       scope.getUniqueTimes = getUniqueTimes;
       scope.isCollapsed = $rootScope.mobile;
       scope.isFilterSet = isFilterSet;
-      scope.resolvedData = [];
-      initServeArrays();
+      scope.isFromError = isFromError;
+      scope.isToError = isToError;
+      scope.openFromDate = openFromDate;
+      scope.openToDate = openToDate;
+      scope.readyFilterByDate = readyFilterByDate;
+      scope.toDateError = false;
       scope.toggleCollapse = toggleCollapse;
       scope.toggleFamilyMember = toggleFamilyMember;
       scope.toggleSignedUp = toggleSignedUp;
@@ -62,10 +78,8 @@
       //////////////////////////////////
 
       function activate() {
+        initServeArrays();
         filter(scope.servingDays);
-        /*scope.servingDays.$promise.then(function(data) {*/
-          //filter(data);
-        /*});*/
       }
 
       function applyFamilyFilter() {
@@ -153,9 +167,7 @@
               });
             }
           });
-          //if (serveDay.length > 0) {
           scope.servingDays = serveDay;
-          //}
         }
       }
 
@@ -346,7 +358,6 @@
             time.selected = true;
           }
         });
-
       }
 
       function initServeArrays() {
@@ -356,7 +367,90 @@
       }
 
       function isFilterSet() {
-        return (filterState.memberIds.length >= 1 || filterState.times.length >= 1 || filterState.teams.length >= 1);
+        return filterState.isActive(); 
+      }
+
+      function isFromError(){
+        return scope.filterdates.fromdate.$dirty && ( 
+          scope.filterdates.fromdate.$error.fromDateToLarge ||
+          scope.filterdates.fromdate.$error.date ||
+          scope.filterdates.fromdate.$error.required);
+      }
+
+      function isToError(){
+        return scope.filterdates.todate.$dirty && (
+          scope.filterdates.todate.$error.fromDate || scope.filterdates.todate.$error.required || scope.filterdates.todate.$error.date);
+      }
+
+      function openFromDate($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        scope.datePickers.fromOpened = true;
+      }
+
+      function openToDate($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        scope.datePickers.toOpened = true;
+      }
+
+      /**
+       * Takes a javascript date and returns a 
+       * string formated MM/DD/YYYY
+       * @param date - Javascript Date
+       * @param days to add - How many days to add to the original date passed in
+       * @return string formatted in the way we want to display
+       */
+      function formatDate(date, days=0){
+        var d = moment(date);
+        d.add(days, 'd');
+        return d.format('MM/DD/YYYY');
+      }
+
+      function readyFilterByDate() {
+        var now = moment();
+        now.hour(0);
+        var toDate = moment(scope.lastDate);
+        toDate.hour(23);
+
+        if( now.unix() > toDate.unix() ) {
+          scope.filterdates.todate.$error.fromDate = true;
+          $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
+          return false;
+        } else {
+          scope.filterdates.todate.$error.fromDate = false;
+        }
+
+        if (scope.lastDate !== undefined && toDate.isValid()){ 
+          var fromDate = moment(scope.filterFromDate);
+          if (fromDate.isBefore(now, 'days')) {
+            fromDate = now;
+          }
+          if (!scope.filterFromDate){ 
+            scope.filterFromDate = now.format('MM/DD/YYYY');  
+            fromDate = now;
+          } else if (!fromDate.isValid()) {
+            scope.filterdates.fromdate.$error.date = true;
+            $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
+            return false; 
+          } 
+
+          if ( fromDate.isAfter(toDate, 'days' )){
+            scope.filterdates.fromdate.$error.fromDateToLarge = true;
+            $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
+            return false;
+          } else {
+            scope.filterdates.fromdate.$error.fromDateToLarge = false;
+          } 
+          $rootScope.$emit("filterByDates", {'fromDate': fromDate, 'toDate': toDate});
+          return true;
+        } else if (isToError()) {
+          scope.filterdates.todate.$error.date = true;
+          $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
+          return false;
+        } else {
+          return false;  
+        }
       }
 
       function toggleCollapse() {
@@ -402,6 +496,5 @@
       }
     }
   }
-
 
 })()

@@ -335,7 +335,15 @@
                 resolve: {
                     loggedin: checkLoggedin
                 }
-    })
+            })
+            .state("errors/404", {
+                url: "/errors/404",
+                templateUrl: "errors/404.html"
+            })
+            .state("errors/500", {
+                url: "/errors/500",
+                templateUrl: "errors/500.html"
+            })
     .state("tools", {
        abstract: true,
        url: '/mptools',
