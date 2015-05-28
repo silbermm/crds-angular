@@ -245,6 +245,10 @@
                  controller: "RegisterCtrl",
                  templateUrl: "give/register.html"
            })
+           .state("give.confirm", {
+                url: "/confirm",
+                templateUrl: "give/confirm.html"
+           })
            .state("give.account", {
                  url: "/account",
                  templateUrl: "give/account.html"

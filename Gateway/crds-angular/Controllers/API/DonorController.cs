@@ -8,6 +8,7 @@ using MinistryPlatform.Models;
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Web.Http;
 using System.Web.Http.Description;
 
@@ -16,12 +17,14 @@ namespace crds_angular.Controllers.API
     public class DonorController : MPAuth
     {
         private IDonorService gatewayDonorService;
+        private IPaymentService stripePaymentService;
 
         private static readonly ILog logger = LogManager.GetLogger(typeof(DonorController));
 
-        public DonorController(IDonorService gatewayDonorService)
+        public DonorController(IDonorService gatewayDonorService, IPaymentService stripePaymentService)
         {
             this.gatewayDonorService = gatewayDonorService;
+            this.stripePaymentService = stripePaymentService;
         }
 
         [ResponseType(typeof(DonorDTO))]
@@ -117,10 +120,15 @@ namespace crds_angular.Controllers.API
                 }
                 else
                 {
+                    var default_source = stripePaymentService.getDefaultSource(donor.ProcessorId);
+
                     var response = new DonorDTO
                     {
                         id = donor.DonorId,
-                        Processor_ID = donor.ProcessorId
+                        Processor_ID = donor.ProcessorId,
+                        brand = default_source.brand,
+                        last4 = default_source.last4
+
                     };
 
                     return Ok(response);

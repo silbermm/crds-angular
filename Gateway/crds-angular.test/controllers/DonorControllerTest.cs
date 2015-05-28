@@ -6,6 +6,7 @@ using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -20,12 +21,15 @@ namespace crds_angular.test.controllers
     {
         private DonorController fixture;
         private Mock<crds_angular.Services.Interfaces.IDonorService> donorService;
+        private Mock<IPaymentService> paymentService;
         private string authType;
         private string authToken;
         private static int contactId = 8675309;
         private static string processorId = "cus_test123456";
         private static string email = "automatedtest@crossroads.net";
-        private static int donorId = 394256;
+        private static int donorId  = 394256;
+        private static string last4 = "1234";
+        private static string brand = "Visa";
         private ContactDonor donor = new ContactDonor()
         {
             DonorId = donorId,
@@ -38,7 +42,8 @@ namespace crds_angular.test.controllers
         public void SetUp()
         {
             donorService = new Mock<crds_angular.Services.Interfaces.IDonorService>();
-            fixture = new DonorController(donorService.Object);
+            paymentService = new Mock<IPaymentService>();
+            fixture = new DonorController(donorService.Object,paymentService.Object);
 
             authType = "auth_type";
             authToken = "auth_token";
@@ -63,7 +68,7 @@ namespace crds_angular.test.controllers
             donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(null, string.Empty, "tok_test", It.IsAny<DateTime>())).Returns(donor);
 
             IHttpActionResult result = fixture.Post(createDonorDto);
-            
+
             Assert.IsNotNull(result);
             Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonorDTO>), result);
             var okResult = (OkNegotiatedContentResult<DonorDTO>)result;
@@ -74,13 +79,29 @@ namespace crds_angular.test.controllers
         [Test]
         public void TestGetSuccessGetDonorAuthenticated()
         {
-            donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(It.IsAny<string>())).Returns(donor);
+            var contactDonor = new ContactDonor
+            {
+                ContactId = 1,
+                DonorId = 394256,
+                ProcessorId = processorId
+            };
+
+            var default_source = new DefaultSource()
+            {
+                last4 = "1234",
+                brand = "Visa"
+
+            };
+            donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(It.IsAny<string>())).Returns(contactDonor);
+            paymentService.Setup(mocked => mocked.getDefaultSource(It.IsAny<string>())).Returns(default_source);
             IHttpActionResult result = fixture.Get();
             Assert.IsNotNull(result);
             Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonorDTO>), result);
             var okResult = (OkNegotiatedContentResult<DonorDTO>)result;
             Assert.AreEqual(donorId, okResult.Content.id);
             Assert.AreEqual(processorId, okResult.Content.Processor_ID);
+            Assert.AreEqual(brand, okResult.Content.brand);
+            Assert.AreEqual(last4, okResult.Content.last4);
         }
 
         [Test]
@@ -230,10 +251,13 @@ namespace crds_angular.test.controllers
 
             donorService.Setup(mocked => mocked.GetContactDonorForEmail(createDonorDto.email_address)).Throws(lookupException);
 
-            try {
+            try
+            {
                 fixture.Post(createDonorDto);
                 Assert.Fail("Expected exception was not thrown");
-            } catch(Exception e) {
+            }
+            catch (Exception e)
+            {
                 Assert.AreEqual(typeof(HttpResponseException), e.GetType());
             }
 
@@ -278,6 +302,6 @@ namespace crds_angular.test.controllers
         }
 
 
-    
+
     }
 }
