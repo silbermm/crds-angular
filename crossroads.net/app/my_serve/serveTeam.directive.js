@@ -317,13 +317,13 @@
         var rsvp = new ServeOpportunities.SaveRsvp();
         rsvp.contactId = scope.currentMember.contactId;
         rsvp.opportunityId = scope.currentMember.serveRsvp.roleId;
+        rsvp.opportunityIds = scope.currentMember.roles;
         rsvp.eventTypeId = scope.team.eventTypeId;
         rsvp.endDate = parseDate(scope.currentMember.currentOpportunity.toDt);
         rsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
         if (scope.currentMember.serveRsvp.roleId!==0) {
           rsvp.signUp = true;
-        }
-        else {
+        } else {
           rsvp.signUp = false;
         }
         rsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
