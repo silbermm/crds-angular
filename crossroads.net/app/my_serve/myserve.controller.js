@@ -13,13 +13,14 @@
     vm.convertToDate = convertToDate;
     vm.filterState = filterState;
     vm.groups = Groups;
+    vm.lastDate = null;
     vm.loadMore = false;
     vm.loadNextMonth = loadNextMonth;
     vm.loadText = "Load More";
     vm.original = [];
     vm.showButton = showButton;
     vm.showNoOpportunitiesMsg = showNoOpportunitiesMsg;
-
+    
     activate();
 
     $rootScope.$on("personUpdated", personUpdateHandler);
@@ -42,14 +43,34 @@
     ////////////////////////////
 
     function activate(){
+      vm.lastDate = formatDate(new Date(), 28);
     }
 
-    
+    function addOneMonth(date){
+      var d = angular.copy(date);
+      d.setDate(date.getDate() + 28);
+      return d;
+    }
+ 
     function convertToDate(date){
       // date comes in as mm/dd/yyyy, convert to yyyy-mm-dd for moment to handle
       var d = new Date(date);
       return d;
     };
+
+    /**
+     * Takes a javascript date and returns a 
+     * string formated MM/DD/YYYY
+     * @param date - Javascript Date
+     * @param days to add - How many days to add to the original date passed in
+     * @return string formatted in the way we want to display
+     */
+    function formatDate(date, days=0){
+      var d = moment(date);
+      d.add(days, 'd');
+      return d.format('MM/DD/YYYY');
+    }
+
 
     /**
      * This function will fetch a new set of serve opportunities between two dates
@@ -73,13 +94,14 @@
           
         var lastDate = new Date(vm.groups[vm.groups.length -1].day);
         lastDate.setDate(lastDate.getDate() + 1); 
-        var newDate = new Date(lastDate);
-        newDate.setDate(newDate.getDate() + 28);
+
+        var newDate = addOneMonth(new Date(lastDate));
           
         loadOpportunitiesByDate(lastDate.getTime(), newDate.getTime()).then(function(more){
           if(more.length === 0){
             $rootScope.$emit('notify', $rootScope.MESSAGES.serveSignupMoreError);
           } else {
+            vm.lastDate = formatDate(newDate); 
             _.each(more, function(m){
               vm.groups.push(m);
             });
@@ -87,6 +109,7 @@
           vm.loadMore = false;
           vm.loadText = "Load More";
         }, function(e){
+          // error 
           vm.loadMore = false;  
           vm.loadText = "Load More";
         });

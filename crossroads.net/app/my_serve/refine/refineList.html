@@ -1,22 +1,22 @@
 <div class="col-sm-2 col-sm-push-10 gray-lighter clearfix">
-  <div ng-click="toggleCollapse()">
-    <div class="filter-clear" ng-show='$root.mobile'>
-      <svg viewBox="0 0 25 32" class="icon icon-plus" ng-show="isCollapsed">
-        <use xlink:href="#plus"></use>
-      </svg>
-      <svg viewBox="0 0 25 32" class="icon icon-minus" ng-show="!isCollapsed">
-        <use xlink:href="#minus"></use>
-      </svg>
+
+  <div collapse="isCollapsed"> 
+    
+    <div ng-click="toggleCollapse()">
+      <div class="filter-clear" ng-show='$root.mobile'>
+        <svg viewBox="0 0 25 32" class="icon icon-plus" ng-show="isCollapsed">
+          <use xlink:href="#plus"></use>
+        </svg>
+        <svg viewBox="0 0 25 32" class="icon icon-minus" ng-show="!isCollapsed">
+          <use xlink:href="#minus"></use>
+        </svg>
+      </div>
+      <h5> Date Range </h5>
     </div>
-    <h5>Filter Opportunities
-      <a href="" data-ng-click="clearFilters()" class="filter-reset" ng-show="isFilterSet()" stop-event> Clear</a>
-    </h5>
-  </div>
 
-  <div collapse="isCollapsed">
-    <form name='filterdates' ng-submit="readyFilterByDate()">
+
+    <form name='filterdates' ng-submit="readyFilterByDate()">        
       <div class="push-half-bottom filter-group">
-
         <!-- From -->  
         <div class="form-group" ng-class="{'has-error': isFromError()}" >
           <label>From:</label>
@@ -27,8 +27,6 @@
                    ng-required="true" 
                    close-text="Close" 
                    ng-model="filterFromDate" 
-                   ng-model-options="{ updateOn: 'blur' }"
-                   ng-change="readyFilterByDate()" 
                    is-open="datePickers.fromOpened" 
                    datepicker-options="dateOptions" />
             <span class="input-group-btn">
@@ -60,11 +58,9 @@
                    type="text" 
                    class="form-control" 
                    datepicker-popup="{{::format}}" 
-                   ng-model-options="{ updateOn: 'change blur' }"
                    ng-required="true" 
                    close-text="Close" 
-                   ng-model="filterToDate" 
-                   ng-change="readyFilterByDate()" 
+                   ng-model="lastDate" 
                    is-open="datePickers.toOpened" 
                    datepicker-options="dateOptions" />
             <span class="input-group-btn">
@@ -87,12 +83,25 @@
           </span> 
         </div>
         <!--/form-group-->
-        <input type="submit" style="display:none"> </input>
+        <button type="submit" class="btn btn-primary btn-block"> Apply </input>
        </div>
        <!--/push-bottom-->
-      </form>
-      
-      
+    </form>
+ 
+    <div ng-click="toggleCollapse()">
+      <div class="filter-clear" ng-show='$root.mobile'>
+        <svg viewBox="0 0 25 32" class="icon icon-plus" ng-show="isCollapsed">
+          <use xlink:href="#plus"></use>
+        </svg>
+        <svg viewBox="0 0 25 32" class="icon icon-minus" ng-show="!isCollapsed">
+          <use xlink:href="#minus"></use>
+        </svg>
+      </div>
+      <h5>Filter Opportunities
+        <a href="" data-ng-click="clearFilters()" class="filter-reset" ng-show="isFilterSet()" stop-event> Clear</a>
+      </h5>
+    </div>
+ 
       <div class="push-half-bottom filter-group" ng-if="uniqueMembers.length > 1">
             <div class="checkbox" data-ng-repeat="member in uniqueMembers">
                 <label>
