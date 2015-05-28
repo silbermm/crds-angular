@@ -13,7 +13,7 @@ require('../donation-details.html');﻿
                 amount: "=",
                 program: "=",
                 amountSubmitted: "=",
-                programsIn: "="
+                programsIn: "=" 
 
             },
           templateUrl: 'give/donation-details.html',
@@ -21,11 +21,18 @@ require('../donation-details.html');﻿
       };
 
       function link(scope, element, attrs) {
+        console.log(scope.amount);
         scope.programs = scope.programsIn;
         scope.program = scope.programsIn[0];
+        if (scope.amount != undefined) {
+          scope.donationDetailsForm.amount = scope.amount;
+        };  
 
         scope.amountError = function() {
-            return (scope.amountSubmitted && scope.donationDetailsForm.amount.$invalid && scope.donationDetailsForm.$error.naturalNumber || scope.donationDetailsForm.$dirty && scope.donationDetailsForm.amount.$invalid && scope.amountSubmitted)
+            return (scope.amountSubmitted && scope.donationDetailsForm.amount.$invalid 
+              && scope.donationDetailsForm.$error.naturalNumber 
+              || scope.donationDetailsForm.$dirty 
+              && scope.donationDetailsForm.amount.$invalid && scope.amountSubmitted)
         };
 
          scope.setProgramList = function(){
