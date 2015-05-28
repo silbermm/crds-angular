@@ -10,7 +10,6 @@
       times: [],
       teams:[],
       signUps:[],
-      date: false,
       addFamilyMember: function (memberId) {
         filterState.memberIds.push(memberId);
       },
@@ -22,13 +21,7 @@
       },
       addTime: function (time) {
         filterState.times.push(time);
-      },
-      setDate: function (to) {
-        filterState.date = to;
-      },
-      isDateSet: function (){
-        return filterState.date;
-      },
+      }, 
       clearAll: function () {
         filterState.memberIds = [];
         filterState.signUps = [];
@@ -59,8 +52,7 @@
         return filterState.memberIds.length > 0 || 
           filterState.times.length > 0 ||
           filterState.teams.length > 0 ||
-          filterState.signUps.length > 0 || 
-          filterState.date
+          filterState.signUps.length > 0; 
       },
       removeFamilyMember: function(memberId){
         filterState.memberIds = _.filter(filterState.memberIds,function(m){
