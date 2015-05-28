@@ -1,13 +1,12 @@
-
 "use strict";
 
 (function() {
 
   module.exports = VolunteerController;
 
-  VolunteerController.$inject = ['$log', '$filter', 'MESSAGES', 'Session', 'Opportunity', 'ServeOpportunities', 'Page', 'CmsInfo'];
+  VolunteerController.$inject = ['$log', '$filter', 'MESSAGES', 'Session', 'Opportunity', 'ServeOpportunities', 'CmsInfo'];
 
-  function VolunteerController($log, $filter, MESSAGES, Session, Opportunity, ServeOpportunities, Page, CmsInfo) {
+  function VolunteerController($log, $filter, MESSAGES, Session, Opportunity, ServeOpportunities, CmsInfo) {
     $log.debug("Inside VolunteerController");
     var vm = this;
 
@@ -15,7 +14,9 @@
     vm.displayEmail = displayEmail;
     vm.save = save;
     vm.showContent = true;
-    getParticipants(vm.pageInfo.group);
+    vm.viewReady = false;
+
+    init();
 
     function displayEmail(emailAddress) {
       if (emailAddress === null || emailAddress === undefined) {
@@ -27,22 +28,26 @@
       return false;
     }
 
-    function getParticipants(groupId){
+    function init() {
       ServeOpportunities.QualifiedServers.query({
-        groupId: groupId,
-        contactId: Session.exists('userId')
-      }).$promise
-      .then(function(response) {vm.participants = response;});
+          groupId: vm.pageInfo.group,
+          contactId: Session.exists('userId')
+        }).$promise
+        .then(function(response) {
+          vm.participants = response;
+          vm.viewReady = true;
+        });
     }
 
     function pageInfo(cmsInfo) {
       // TODO need to check that we have data before assign
+      // can we check for 404 on route?  and assume we have a page?
       return cmsInfo.pages[0];
     }
 
     function save(form) {
       var save = new ServeOpportunities.SaveQualifiedServers();
-      save.opportunityId = 115;
+      save.opportunityId = vm.pageInfo.opportunity;
       //just get participants that have checkbox checkLoggedin
       save.participants = _.pluck(_.filter(vm.participants, {
         add: true
