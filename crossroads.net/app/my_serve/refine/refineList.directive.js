@@ -415,7 +415,7 @@
         var toDate = moment(scope.filterToDate);
         toDate.hour(23);
 
-        if((toDate.date() - now.date() ) < 0) {
+        if( now.unix() > toDate.unix() ) {
           scope.filterdates.todate.$error.fromDate = true;
           $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
           return false;
@@ -447,10 +447,12 @@
           $rootScope.$emit("filterByDates", {'fromDate': fromDate, 'toDate': toDate});
           filterState.setDate(true);
           return true;
-        } else {
+        } else if (isToError()) {
           scope.filterdates.todate.$error.date = true;
           $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
           return false;
+        } else {
+          return false;  
         }
       }
 
