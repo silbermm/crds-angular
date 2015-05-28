@@ -66,16 +66,6 @@ namespace crds_angular.Services
 
             relationships.AddRange(family.OrderBy(o=>o.PreferredName));
 
-            //var me = _participantService.GetParticipant(contactId);
-            //var myParticipant = new FamilyMember
-            //{
-            //    ContactId = contactId,
-            //    Email = me.EmailAddress,
-            //    LoggedInUser = true,
-            //    ParticipantId = me.ParticipantId, PreferredName = me.PreferredName
-            //};
-
-            //relationships.Add(myParticipant);
             return relationships;
         }
 

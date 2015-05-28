@@ -23,6 +23,7 @@
   require('./my_serve');
   require('./go_trip_giving');
   require('./corkboard');
+  require('./volunteer_signup');
 
   var getCookie = require('./utilities/cookies');
 
@@ -45,6 +46,7 @@
         };
         registerType("contentRouteType", /^\/.*/);
         registerType("signupRouteType", /\/sign-up\/.*$/);
+        registerType("volunteerRouteType", /\/volunteer-sign-up\/.*$/);
 
         //================================================
         // Check if the user is connected
@@ -339,6 +341,23 @@
                 resolve: {
                     loggedin: checkLoggedin
                 }
+            })
+            .state("volunteer-request", {
+              url: "{link:volunteerRouteType}",
+              controller: "VolunteerController as volunteer",
+              templateUrl: "volunteer_signup/volunteer_signup_form.html",
+              data: { isProtected: true },
+              resolve: {
+                loggedin: checkLoggedin,
+                Page: 'Page',
+                CmsInfo: function(Page, $stateParams){
+                  return Page.get( {url: $stateParams.link} ).$promise;
+                }
+                // ServeOpportunities: 'ServeOpportunities',
+                // Participants: function(ServeOpportunities, $stateParams){
+                //   return ServeOpportunities.QualifiedServers.query({groupId: 27705, contactId: getCookie('userId')}).$promise;
+                // }
+              }
             })
             .state("errors/404", {
                 url: "/errors/404",
