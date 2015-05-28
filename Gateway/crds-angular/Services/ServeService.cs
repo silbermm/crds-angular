@@ -196,7 +196,8 @@ namespace crds_angular.Services
             int eventTypeId,
             DateTime startDate,
             DateTime endDate,
-            bool signUp, bool alternateWeeks)
+            bool signUp, 
+            bool alternateWeeks)
         {
             //get participant id for Contact
             var participant = _participantService.GetParticipant(contactId);
@@ -211,6 +212,9 @@ namespace crds_angular.Services
                     if (signUp)
                     {
                         _eventService.registerParticipantForEvent(participant.ParticipantId, e.EventId);
+                        var comments = string.Empty; //anything of value to put in comments?
+                        _opportunityService.RespondToOpportunity(participant.ParticipantId, opportunityId, comments,
+                            e.EventId, true);
                     }
                     else
                     {
@@ -223,10 +227,9 @@ namespace crds_angular.Services
                         {
                             logger.Debug(ex.Message + ": There is no need to remove the event participant because there is not one.");
                         }
+                        // get all opportunities for this 
                     }
-                    var comments = string.Empty; //anything of value to put in comments?
-                    _opportunityService.RespondToOpportunity(participant.ParticipantId, opportunityId, comments,
-                        e.EventId, signUp);
+                    
                 }
                 includeThisWeek = !includeThisWeek;
             }
