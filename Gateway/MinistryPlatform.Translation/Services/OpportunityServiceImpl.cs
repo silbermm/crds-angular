@@ -210,7 +210,7 @@ namespace MinistryPlatform.Translation.Services
             return recordId;
         }
 
-        public Boolean DeleteResponseToOpportunities(int participantId, int opportunityId, int eventId)
+        public int DeleteResponseToOpportunities(int participantId, int opportunityId, int eventId)
         {
             var participant = new Participant { ParticipantId = participantId };
 
@@ -219,9 +219,10 @@ namespace MinistryPlatform.Translation.Services
                 var prevResponse = GetOpportunityResponse(opportunityId, eventId, participant);
                 if (prevResponse.Response_ID != 0)
                 {
-                    _ministryPlatformService.DeleteRecord(_opportunityResponses, prevResponse.Response_ID, null, apiLogin());  
+                    _ministryPlatformService.DeleteRecord(_opportunityResponses, prevResponse.Response_ID, null, apiLogin());
+                    return prevResponse.Response_ID;
                 }
-                return true;
+                return 0;
             }
             catch (Exception ex)
             {
@@ -248,7 +249,7 @@ namespace MinistryPlatform.Translation.Services
             };
 
             //Go see if there are existing responses for this opportunity that we are updating
-            int recordId;
+            int recordId = 0;
 
             try
             {
@@ -261,10 +262,7 @@ namespace MinistryPlatform.Translation.Services
                 }
                 else
                 {
-                    recordId =
-                        WithApiLogin(
-                            apiToken =>
-                                (_ministryPlatformService.CreateRecord("OpportunityResponses", values, apiToken, true)));
+                    WithApiLogin(apiToken => (_ministryPlatformService.CreateRecord("OpportunityResponses", values, apiToken, true)));
                 }
             }
             catch (Exception ex)

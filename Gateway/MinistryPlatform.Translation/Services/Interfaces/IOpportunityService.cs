@@ -12,7 +12,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         List<DateTime> GetAllOpportunityDates(int id, string token);
         Group GetGroupParticipantsForOpportunity(int id, string token);
         DateTime GetLastOpportunityDate(int opportunityId, string token);
-        Boolean DeleteResponseToOpportunities(int participantId, int opportunityId, int eventId);
+        int DeleteResponseToOpportunities(int participantId, int opportunityId, int eventId);
         int RespondToOpportunity(string token, int opportunityId, string comments);
         Response GetMyOpportunityResponses(int contactId, int opportunityId, string token);
         Response GetOpportunityResponse(int opportunityId, int eventId, Participant participant);
