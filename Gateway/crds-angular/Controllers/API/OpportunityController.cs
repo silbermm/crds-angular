@@ -5,30 +5,29 @@ using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
 using AutoMapper;
-using Crossroads.Utilities.Extensions;
-using crds_angular.Models.Crossroads;
+using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads.Opportunity;
 using crds_angular.Security;
+using Crossroads.Utilities.Extensions;
 using MinistryPlatform.Models;
-using MinistryPlatform.Translation.Services;
+using MinistryPlatform.Models.DTO;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Controllers.API
 {
     public class OpportunityController : MPAuth
     {
-
-        private IOpportunityService _opportunityService;
+        private readonly IOpportunityService _opportunityService;
 
         public OpportunityController(IOpportunityService opportunityService)
         {
-            this._opportunityService = opportunityService;
+            _opportunityService = opportunityService;
         }
 
         [ResponseType(typeof (int))]
         [Route("api/opportunity/{id}")]
         public IHttpActionResult Post(int id, [FromBody] string stuff)
-        {            
+        {
             var comments = string.Format("Request on {0}", DateTime.Now.ToString(CultureInfo.CurrentCulture));
 
             return Authorized(token =>
@@ -36,17 +35,44 @@ namespace crds_angular.Controllers.API
                 try
                 {
                     var opportunityId = _opportunityService.RespondToOpportunity(token, id, comments);
-                    return this.Ok(opportunityId);
+                    return Ok(opportunityId);
                 }
                 catch (Exception ex)
                 {
-                    return this.InternalServerError(ex);
+                    return InternalServerError(ex);
                 }
-
             });
         }
 
-        [ResponseType(typeof(List<long>))]
+        [ResponseType(typeof (int))]
+        [Route("api/opportunity/save-qualified-server")]
+        public IHttpActionResult Post([FromBody] RespondToOpportunityDto opportunityResponse)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(val => val.Errors)
+                    .Aggregate("", (current, err) => current + err.Exception.Message);
+                var dataError = new ApiErrorDto("POST Data Invalid",
+                    new InvalidOperationException("Invalid POST Data" + errors));
+                throw new HttpResponseException(dataError.HttpResponseMessage);
+            }
+
+            try
+            {
+                if (opportunityResponse.Participants.Count > 0)
+                {
+                    _opportunityService.RespondToOpportunity(opportunityResponse);
+                }
+            }
+            catch (Exception exception)
+            {
+                var apiError = new ApiErrorDto("Opportunity POST failed", exception);
+                throw new HttpResponseException(apiError.HttpResponseMessage);
+            }
+            return Ok();
+        }
+
+        [ResponseType(typeof (List<long>))]
         [Route("api/opportunity/getAllOpportunityDates/{id}")]
         public IHttpActionResult GetAllOpportunityDates(int id)
         {
@@ -55,7 +81,7 @@ namespace crds_angular.Controllers.API
             {
                 var opportunities = _opportunityService.GetAllOpportunityDates(id, token);
                 oppDates.AddRange(opportunities.Select(opp => opp.ToUnixTime()));
-                return this.Ok(oppDates);
+                return Ok(oppDates);
             });
         }
 
@@ -63,7 +89,13 @@ namespace crds_angular.Controllers.API
         [Route("api/opportunity/getLastOpportunityDate/{id}")]
         public IHttpActionResult GetLastOpportunityDate(int id)
         {
-            return Authorized(token => this.Ok(new Dictionary<string, long> { {"date", _opportunityService.GetLastOpportunityDate(id, token).ToUnixTime()}}));
+            return
+                Authorized(
+                    token =>
+                        Ok(new Dictionary<string, long>
+                        {
+                            {"date", _opportunityService.GetLastOpportunityDate(id, token).ToUnixTime()}
+                        }));
         }
 
         [ResponseType(typeof (OpportunityGroup))]
@@ -74,7 +106,7 @@ namespace crds_angular.Controllers.API
             {
                 var group = _opportunityService.GetGroupParticipantsForOpportunity(id, token);
                 var oppGrp = Mapper.Map<Group, OpportunityGroup>(group);
-                return this.Ok(oppGrp);
+                return Ok(oppGrp);
             });
         }
     }

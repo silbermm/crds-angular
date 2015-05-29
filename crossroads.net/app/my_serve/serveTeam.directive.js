@@ -181,7 +181,11 @@
             //scope.formErrors.signup = true;
           /*} */
           
-          if (scope.currentMember.currentOpportunity === undefined || scope.currentMember.currentOpportunity === null || scope.currentMember.currentOpportunity.frequency === null ||  scope.currentMember.currentOpportunity.frequency === undefined ) {
+          if ( (scope.currentMember.currentOpportunity === undefined || 
+                scope.currentMember.currentOpportunity === null || 
+                scope.currentMember.currentOpportunity.frequency === null ||  
+                scope.currentMember.currentOpportunity.frequency === undefined) && scope.currentMember.showFrequency 
+              ) {
             validForm.valid = false;
             scope.formErrors.frequency = true;
           } 

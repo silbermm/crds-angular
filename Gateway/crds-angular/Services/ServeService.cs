@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using crds_angular.Enum;
-using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Extensions;
@@ -11,6 +10,7 @@ using log4net;
 using log4net.Repository.Hierarchy;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
+using IGroupService = MinistryPlatform.Translation.Services.Interfaces.IGroupService;
 
 namespace crds_angular.Services
 {
@@ -19,43 +19,53 @@ namespace crds_angular.Services
         private readonly IContactRelationshipService _contactRelationshipService;
         private readonly IEventService _eventService;
         private readonly IGroupParticipantService _groupParticipantService;
+        private readonly IGroupService _groupService;
         private readonly IOpportunityService _opportunityService;
         private readonly IParticipantService _participantService;
         private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public ServeService(IContactRelationshipService contactRelationshipService,
             IOpportunityService opportunityService, IEventService eventService, IParticipantService participantService,
-            IGroupParticipantService groupParticipantService)
+            IGroupParticipantService groupParticipantService, IGroupService groupService)
         {
             _contactRelationshipService = contactRelationshipService;
             _opportunityService = opportunityService;
             _eventService = eventService;
             _participantService = participantService;
             _groupParticipantService = groupParticipantService;
+            _groupService = groupService;
         }
 
-        public List<FamilyMemberDto> GetImmediateFamilyParticipants(int contactId, string token)
+        public List<FamilyMember> GetImmediateFamilyParticipants(int contactId, string token)
         {
+            var relationships = new List<FamilyMember>();
+            // get for contact Id
+            var me = _participantService.GetParticipant(contactId);
+            var myParticipant = new FamilyMember
+            {
+                ContactId = contactId,
+                Email = me.EmailAddress,
+                LoggedInUser = true,
+                ParticipantId = me.ParticipantId,
+                PreferredName = me.PreferredName
+            };
+            relationships.Add(myParticipant);
+
+            // get family for contact Id
             var contactRelationships =
                 _contactRelationshipService.GetMyImmediatieFamilyRelationships(contactId, token).ToList();
-            var relationships = contactRelationships.Select(contact => new FamilyMemberDto
+            var family = contactRelationships.Select(contact => new FamilyMember
             {
                 ContactId = contact.Contact_Id,
                 Email = contact.Email_Address,
                 LastName = contact.Last_Name,
+                LoggedInUser = false,
                 ParticipantId = contact.Participant_Id,
                 PreferredName = contact.Preferred_Name
             }).ToList();
 
-            var me = _participantService.GetParticipant(contactId);
-            var myParticipant = new FamilyMemberDto
-            {
-                ContactId = contactId,
-                Email = me.EmailAddress,
-                ParticipantId = me.ParticipantId
-            };
+            relationships.AddRange(family.OrderBy(o=>o.PreferredName));
 
-            relationships.Add(myParticipant);
             return relationships;
         }
 
@@ -63,6 +73,29 @@ namespace crds_angular.Services
         {
             logger.Debug(string.Format("GetLastOpportunityDate({0}) ", opportunityId));
             return _opportunityService.GetLastOpportunityDate(opportunityId, token);
+        }
+
+        public List<QualifiedServerDto> GetQualifiedServers(int groupId, int contactId, string token)
+        {
+            var qualifiedServers = new List<QualifiedServerDto>();
+            var immediateFamilyParticipants = GetImmediateFamilyParticipants(contactId, token);
+
+            foreach (var participant in immediateFamilyParticipants)
+            {
+                var membership = _groupService.ParticipantGroupMember(groupId, participant.ParticipantId);
+                var opportunityResponse = _opportunityService.GetMyOpportunityResponses(participant.ContactId,115, token);
+                var qualifiedServer = new QualifiedServerDto();
+                qualifiedServer.ContactId = participant.ContactId;
+                qualifiedServer.Email = participant.Email;
+                qualifiedServer.LastName = participant.LastName;
+                qualifiedServer.LoggedInUser = participant.LoggedInUser;
+                qualifiedServer.MemberOfGroup = membership;
+                qualifiedServer.Pending = opportunityResponse != null;
+                qualifiedServer.ParticipantId = participant.ParticipantId;
+                qualifiedServer.PreferredName = participant.PreferredName;
+                qualifiedServers.Add(qualifiedServer);
+            }
+            return qualifiedServers;
         }
 
         public List<ServingDay> GetServingDays(string token, int contactId, long from, long to)

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ServiceModel;
-using Crossroads.Utilities.Services;
 using MinistryPlatform.Models;
-using MinistryPlatform.Translation.PlatformService;
+using MinistryPlatform.Models.DTO;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -109,7 +108,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 .Returns(new Participant { ParticipantId = mockParticipantId });
 
             const string opportunityResponsePageKey = "OpportunityResponses";
-            var exceptionDetail = new System.ServiceModel.ExceptionDetail(new Exception("The creator of this fault did not specify a Reason."));
+            var exceptionDetail = new ExceptionDetail(new Exception("The creator of this fault did not specify a Reason."));
             var faultException = new FaultException<ExceptionDetail>(exceptionDetail);
             
             _ministryPlatformService.Setup(
@@ -369,6 +368,27 @@ namespace MinistryPlatform.Translation.Test.Services
         {
             var results = new List<Dictionary<string, object>>();
             return results;
+        }
+
+        [Test]
+        public void RespondToOpportunityForMultipleParticipants()
+        {
+            const string pageKey = "OpportunityResponses";
+            var p1 = new Dictionary<string, object>
+                {
+                    {"Response_Date", It.IsAny<DateTime>()},
+                    {"Opportunity_ID", 1},
+                    {"Participant_ID", 100},
+                    {"Closed", false},
+                    {"Comments", It.IsAny<string>()}
+                };
+            var token = It.IsAny<string>();
+            _ministryPlatformService.Setup(m => m.CreateRecord(pageKey, p1, token, true)).Returns(27);
+
+            var dto = new RespondToOpportunityDto {OpportunityId = 1, Participants = new List<int> {100, 200, 300}};
+            Assert.DoesNotThrow(() => _fixture.RespondToOpportunity(dto));
+
+            _ministryPlatformService.Verify(m=>m.CreateRecord(It.IsAny<string>(),It.IsAny<Dictionary<string,object>>(),It.IsAny<string>(),true),Times.Exactly(3));
         }
 
         [Test]
