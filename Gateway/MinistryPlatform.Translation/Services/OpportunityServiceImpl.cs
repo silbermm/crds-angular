@@ -296,10 +296,10 @@ namespace MinistryPlatform.Translation.Services
             {
                 participants.Add(new GroupParticipant
                 {
-                    ContactId = groupParticipant.ToInt("Contact ID"),
-                    GroupRoleId = groupParticipant.ToInt("Group Role ID"),
-                    GroupRoleTitle = groupParticipant.ToString("Role Title"),
-                    LastName = groupParticipant.ToString("Last Name"),
+                    ContactId = groupParticipant.ToInt("Contact_ID"),
+                    GroupRoleId = groupParticipant.ToInt("Group_Role_ID"),
+                    GroupRoleTitle = groupParticipant.ToString("Role_Title"),
+                    LastName = groupParticipant.ToString("Last_Name"),
                     NickName = groupParticipant.ToString("Nickname"),
                     ParticipantId = groupParticipant.ToInt("dp_RecordID")
                 });

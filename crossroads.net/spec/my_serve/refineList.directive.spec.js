@@ -428,8 +428,8 @@ describe('Refine List Directive', function() {
   });
 
   it("should have an error when the 'TO' date is prior to the 'FROM' date", function(){
-    isolateScope.filterToDate = new Date();
-    isolateScope.filterToDate.setDate(isolateScope.filterToDate.getDate() -1);
+    isolateScope.lastDate = new Date();
+    isolateScope.lastDate.setDate(isolateScope.lastDate.getDate() -1);
     isolateScope.filterFromDate = new Date();
     var ret = isolateScope.readyFilterByDate();
     expect(ret).toBe(false);
