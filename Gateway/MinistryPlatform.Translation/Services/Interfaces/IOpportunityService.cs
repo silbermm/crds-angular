@@ -19,6 +19,5 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         int GetOpportunitySignupCount(int opportunityId, int eventId, string token);
         void RespondToOpportunity(RespondToOpportunityDto opportunityResponse);
         int RespondToOpportunity(int participantId, int opportunityId, string comments, int eventId, bool response);
-        int RespondToOpportunity(string token, int opportunityId, string comments);
     }
 }
