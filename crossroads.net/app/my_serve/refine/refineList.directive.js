@@ -29,7 +29,7 @@
       scope.applyTimeFilter = applyTimeFilter;
       scope.clearFilters = clearFilters;
       scope.dateOptions = {
-        formatYear: 'yy',  
+        formatYear: 'yy',
         startingDay: 1,
         showWeeks: 'false'
       };
@@ -367,11 +367,11 @@
       }
 
       function isFilterSet() {
-        return filterState.isActive(); 
+        return filterState.isActive();
       }
 
       function isFromError(){
-        return scope.filterdates.fromdate.$dirty && ( 
+        return scope.filterdates.fromdate.$dirty && (
           scope.filterdates.fromdate.$error.fromDateToLarge ||
           scope.filterdates.fromdate.$error.date ||
           scope.filterdates.fromdate.$error.required);
@@ -395,7 +395,7 @@
       }
 
       /**
-       * Takes a javascript date and returns a 
+       * Takes a javascript date and returns a
        * string formated MM/DD/YYYY
        * @param date - Javascript Date
        * @param days to add - How many days to add to the original date passed in
@@ -421,19 +421,21 @@
           scope.filterdates.todate.$error.fromDate = false;
         }
 
-        if (scope.lastDate !== undefined && toDate.isValid()){ 
+        if (scope.lastDate !== undefined && toDate.isValid()){
+          if (scope.filterFromDate === undefined) {
+            scope.filterdates.fromdate.$error.date = true;
+            $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
+            return false;
+          }
           var fromDate = moment(scope.filterFromDate);
           if (fromDate.isBefore(now, 'days')) {
             fromDate = now;
           }
-          if (!scope.filterFromDate){ 
-            scope.filterFromDate = now.format('MM/DD/YYYY');  
-            fromDate = now;
-          } else if (!fromDate.isValid()) {
+          if (!fromDate.isValid()) {
             scope.filterdates.fromdate.$error.date = true;
             $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
-            return false; 
-          } 
+            return false;
+          }
 
           if ( fromDate.isAfter(toDate, 'days' )){
             scope.filterdates.fromdate.$error.fromDateToLarge = true;
@@ -441,7 +443,7 @@
             return false;
           } else {
             scope.filterdates.fromdate.$error.fromDateToLarge = false;
-          } 
+          }
           $rootScope.$emit("filterByDates", {'fromDate': fromDate, 'toDate': toDate});
           return true;
         } else if (isToError()) {
@@ -449,7 +451,7 @@
           $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
           return false;
         } else {
-          return false;  
+          return false;
         }
       }
 
