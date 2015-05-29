@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="D97gYGMwY+wPAdV67CODwti7axs=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="KoO+PrHVAy1twGVgGjp062ja800=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="basicHttpBinding" name="BasicHttpBinding_PlatformService">
       <properties>
@@ -112,10 +112,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="BasicHttpBinding_PlatformService" contract="PlatformService.PlatformService" bindingType="basicHttpBinding" address="https://my.crossroads.net/ministryplatformapi/PlatformService.svc/soap/oauth" bindingConfiguration="BasicHttpBinding_PlatformService">
+    <endpoint name="BasicHttpBinding_PlatformService" contract="PlatformService.PlatformService" bindingType="basicHttpBinding" address="https://adminint.crossroads.net/ministryplatformapi/PlatformService.svc/soap/oauth" bindingConfiguration="BasicHttpBinding_PlatformService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>https://my.crossroads.net/ministryplatformapi/PlatformService.svc/soap/oauth</serializedValue>
+          <serializedValue>https://adminint.crossroads.net/ministryplatformapi/PlatformService.svc/soap/oauth</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

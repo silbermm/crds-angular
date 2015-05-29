@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Reflection;
-using log4net;
 using MinistryPlatform.Models;
+using MinistryPlatform.Models.DTO;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
 
@@ -11,26 +11,44 @@ namespace MinistryPlatform.Translation.Services
 {
     public class OpportunityServiceImpl : BaseService, IOpportunityService
     {
-        private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private IMinistryPlatformService _ministryPlatformService;
-        private IEventService _eventService;
-        private IAuthenticationService _authenticationService;
+        private readonly IAuthenticationService _authenticationService;
+        private readonly int _eventPage = Convert.ToInt32(AppSettings("Events"));
+        private readonly IEventService _eventService;
 
         private readonly int _groupOpportunitiesEventsPageViewId =
             Convert.ToInt32(AppSettings("GroupOpportunitiesEvents"));
 
-        private readonly int _signedupToServeSubPageViewId = Convert.ToInt32(AppSettings("SignedupToServe"));
-        private readonly int _opportunityPage = Convert.ToInt32(AppSettings("OpportunityPage"));
-        private readonly int _eventPage = Convert.ToInt32(AppSettings("Events"));
         private readonly int _groupParticpantsSubPageView = Convert.ToInt32(AppSettings("GroupsParticipantsSubPage"));
+        private readonly IMinistryPlatformService _ministryPlatformService;
+        private readonly int _opportunityPage = Convert.ToInt32(AppSettings("OpportunityPage"));
         private readonly int _opportunityResponses = Convert.ToInt32(AppSettings("OpportunityResponses"));
+        private readonly int _signedupToServeSubPageViewId = Convert.ToInt32(AppSettings("SignedupToServe"));
+        private readonly int _contactOpportunityResponses = Convert.ToInt32(AppSettings("ContactOpportunityResponses"));
 
         public OpportunityServiceImpl(IMinistryPlatformService ministryPlatformService, IEventService eventService,
             IAuthenticationService authenticationService)
         {
-            this._ministryPlatformService = ministryPlatformService;
-            this._eventService = eventService;
-            this._authenticationService = authenticationService;
+            _ministryPlatformService = ministryPlatformService;
+            _eventService = eventService;
+            _authenticationService = authenticationService;
+        }
+
+        public Response GetMyOpportunityResponses(int contactId, int opportunityId, string token)
+        {
+            var searchString = ",,,," + contactId;
+            var subpageViewRecords = MinistryPlatformService.GetSubpageViewRecords(_contactOpportunityResponses,
+                opportunityId, token, searchString);
+            var list = subpageViewRecords.ToList();
+            var s = list.SingleOrDefault();
+            if (s == null) return null;
+            var response = new Response
+            {
+                Opportunity_ID = (int) s["Opportunity ID"],
+                Participant_ID = (int) s["Participant ID"],
+                Response_Date = (DateTime) s["Response Date"],
+                Response_Result_ID = (int?) s["Response Result ID"]
+            };
+            return response;
         }
 
         public Opportunity GetOpportunityById(int opportunityId, string token)
@@ -55,52 +73,6 @@ namespace MinistryPlatform.Translation.Services
             return opportunity;
         }
 
-        //public List<Opportunity> GetOpportunitiesForGroup(int groupId, string token)
-        //{
-        //    var subPageRecords = _ministryPlatformService.GetSubpageViewRecords(_groupOpportunitiesEventsPageViewId,
-        //        groupId, token);
-        //    var opportunities = new List<Opportunity>();
-
-        //    foreach (var record in subPageRecords)
-        //    {
-        //        var opportunity = new Opportunity
-        //        {
-        //            OpportunityId = record.ToInt("dp_RecordID"),
-        //            OpportunityName = record.ToString("Opportunity Title"),
-        //            EventType = record.ToString("Event Type"),
-        //            EventTypeId = record.ToInt("Event Type ID"),
-        //            RoleTitle = record.ToString("Role_Title"),
-        //            MaximumNeeded = record.ToNullableInt("Maximum_Needed"),
-        //            MinimumNeeded = record.ToNullableInt("Minimum_Needed")
-        //        };
-
-        //        //opportunity responses
-        //        var records = _ministryPlatformService.GetSubpageViewRecords(_signedupToServeSubPageViewId, opportunity.OpportunityId,
-        //        token, "");
-                
-        //        var responses = new List<MinistryPlatform.Models.Response>();
-        //        foreach (var r in records)
-        //        {
-        //            var response = new MinistryPlatform.Models.Response();
-        //            response.Event_ID = r.ToInt("Event_ID");
-        //            responses.Add(response);
-        //        }
-        //        opportunity.Responses = new List<MinistryPlatform.Models.Response>();
-        //        opportunity.Responses.AddRange(responses);
-
-        //        //now get all events with type = event type id
-        //        if (opportunity.EventType != null)
-        //        {
-        //            var events = _eventService.GetEvents(opportunity.EventType, token);
-        //            var sortedEvents = events.OrderBy(o => o.EventStartDate).ToList();
-        //            opportunity.Events = sortedEvents;
-        //        }
-
-        //        opportunities.Add(opportunity);
-        //    }
-        //    return opportunities;
-        //}
-
         public Response GetOpportunityResponse(int opportunityId, int eventId, Participant participant)
         {
             var searchString = string.Format(",{0},{1},{2}", opportunityId, eventId, participant.ParticipantId);
@@ -108,7 +80,7 @@ namespace MinistryPlatform.Translation.Services
             try
             {
                 dictionaryList =
-                    WithApiLogin<List<Dictionary<string, object>>>(
+                    WithApiLogin(
                         apiToken =>
                             (_ministryPlatformService.GetPageViewRecords("ResponseByOpportunityAndEvent", apiToken,
                                 searchString, "", 0)));
@@ -149,7 +121,7 @@ namespace MinistryPlatform.Translation.Services
         public List<Response> GetOpportunityResponses(int opportunityId, string token)
         {
             var records = _ministryPlatformService.GetSubpageViewRecords(_signedupToServeSubPageViewId, opportunityId,
-            token, "");
+                token, "");
 
             var responses = new List<Response>();
             foreach (var r in records)
@@ -180,7 +152,11 @@ namespace MinistryPlatform.Translation.Services
             //Now get all the events for this type
             var searchString = ",," + eventType;
             var events = _ministryPlatformService.GetRecordsDict(_eventPage, token, searchString);
-            var filteredEvents = events.Select(e => DateTime.Parse(e["Event_Start_Date"].ToString())).Where(eDate => eDate >= DateTime.Today).OrderBy(d => d).ToList();
+            var filteredEvents =
+                events.Select(e => DateTime.Parse(e["Event_Start_Date"].ToString()))
+                    .Where(eDate => eDate >= DateTime.Today)
+                    .OrderBy(d => d)
+                    .ToList();
             filteredEvents.Sort();
             return filteredEvents;
         }
@@ -196,6 +172,23 @@ namespace MinistryPlatform.Translation.Services
             catch (InvalidOperationException ex)
             {
                 throw new Exception("No events found. Cannot return the last event date.");
+            }
+        }
+
+        public void RespondToOpportunity(RespondToOpportunityDto opportunityResponse)
+        {
+            foreach (var participant in opportunityResponse.Participants)
+            {
+                var comments = string.Format("Request on {0}", DateTime.Now.ToString(CultureInfo.CurrentCulture));
+                var values = new Dictionary<string, object>
+                {
+                    {"Response_Date", DateTime.Now},
+                    {"Opportunity_ID", opportunityResponse.OpportunityId},
+                    {"Participant_ID", participant},
+                    {"Closed", false},
+                    {"Comments", comments}
+                };
+                _ministryPlatformService.CreateRecord("OpportunityResponses", values, apiLogin(), true);
             }
         }
 
@@ -217,10 +210,32 @@ namespace MinistryPlatform.Translation.Services
             return recordId;
         }
 
+        public Boolean DeleteResponseToOpportunities(int participantId, int opportunityId, int eventId)
+        {
+            var participant = new Participant { ParticipantId = participantId };
+
+            try
+            {
+                var prevResponse = GetOpportunityResponse(opportunityId, eventId, participant);
+                if (prevResponse.Response_ID != 0)
+                {
+                    _ministryPlatformService.DeleteRecord(_opportunityResponses, prevResponse.Response_ID, null, apiLogin());  
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(
+                    string.Format("Delete Response failed.  Participant Id: {0}, Opportunity Id: {1}",
+                        participantId, opportunityId), ex.InnerException);
+            }
+
+        }
+
         public int RespondToOpportunity(int participantId, int opportunityId, string comments, int eventId, bool response)
         {
             var participant = new Participant {ParticipantId = participantId};
-            
+
             var values = new Dictionary<string, object>
             {
                 {"Response_Date", DateTime.Now},
@@ -247,7 +262,7 @@ namespace MinistryPlatform.Translation.Services
                 else
                 {
                     recordId =
-                        WithApiLogin<int>(
+                        WithApiLogin(
                             apiToken =>
                                 (_ministryPlatformService.CreateRecord("OpportunityResponses", values, apiToken, true)));
                 }
@@ -268,7 +283,8 @@ namespace MinistryPlatform.Translation.Services
             var groupName = opp.ToString("Add_to_Group_Text");
             var searchString = ",,,," + opp.ToString("Group_Role_ID");
             var eventTypeId = opp.ToInt("Event_Type_ID");
-            var group = _ministryPlatformService.GetSubpageViewRecords(_groupParticpantsSubPageView, groupId, token, searchString);
+            var group = _ministryPlatformService.GetSubpageViewRecords(_groupParticpantsSubPageView, groupId, token,
+                searchString);
             var participants = new List<GroupParticipant>();
             foreach (var groupParticipant in group)
             {

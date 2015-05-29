@@ -15,7 +15,8 @@
       scope: {
         "servingDays": "=servingDays",
         "original": "=?original",
-        "filterBoxes": "=?filterBoxes"
+        "filterBoxes": "=?filterBoxes",
+        "lastDate": "=lastDate"
       },
       link: link
     }
@@ -28,14 +29,13 @@
       scope.applyTimeFilter = applyTimeFilter;
       scope.clearFilters = clearFilters;
       scope.dateOptions = {
-        formatYear: 'yy',  
+        formatYear: 'yy',
         startingDay: 1,
         showWeeks: 'false'
       };
       scope.datePickers = { fromOpened : false, toOpened: false };
       scope.filterAll = filterAll;
-      scope.filterFromDate = null;
-      scope.filterToDate = null;
+      scope.filterFromDate = formatDate(new Date());
       scope.format = 'MM/dd/yyyy';
       scope.fromDateError = false;
       scope.getUniqueMembers = getUniqueMembers;
@@ -233,21 +233,6 @@
         _.each(scope.uniqueTimes, function(time) {
           time.selected = false;
         });
-        
-        // If we are removing the date filter, we need to reset
-        // the data to the original values
-        if(filterState.setDate){
-          filterState.setDate(false);
-          var now = moment();
-          now.hour(0);
-          var amonth = moment().add(29, 'days');
-          amonth.hour(23);
-          $rootScope.$emit("filterByDates", {'fromDate': now.unix(), 'toDate': amonth.unix() });
-        }
-
-        scope.filterToDate = undefined;
-        scope.filterFromDate = undefined;
-        scope.filterdates.$setPristine(); 
         filterAll();
       }
 
@@ -382,11 +367,11 @@
       }
 
       function isFilterSet() {
-        return filterState.isActive(); 
+        return filterState.isActive();
       }
 
       function isFromError(){
-        return scope.filterdates.fromdate.$dirty && ( 
+        return scope.filterdates.fromdate.$dirty && (
           scope.filterdates.fromdate.$error.fromDateToLarge ||
           scope.filterdates.fromdate.$error.date ||
           scope.filterdates.fromdate.$error.required);
@@ -409,10 +394,23 @@
         scope.datePickers.toOpened = true;
       }
 
+      /**
+       * Takes a javascript date and returns a
+       * string formated MM/DD/YYYY
+       * @param date - Javascript Date
+       * @param days to add - How many days to add to the original date passed in
+       * @return string formatted in the way we want to display
+       */
+      function formatDate(date, days=0){
+        var d = moment(date);
+        d.add(days, 'd');
+        return d.format('MM/DD/YYYY');
+      }
+
       function readyFilterByDate() {
         var now = moment();
         now.hour(0);
-        var toDate = moment(scope.filterToDate);
+        var toDate = moment(scope.lastDate);
         toDate.hour(23);
 
         if( now.unix() > toDate.unix() ) {
@@ -423,36 +421,37 @@
           scope.filterdates.todate.$error.fromDate = false;
         }
 
-        if (scope.filterToDate !== undefined && toDate.isValid()){ 
+        if (scope.lastDate !== undefined && toDate.isValid()){
+          if (scope.filterFromDate === undefined) {
+            scope.filterdates.fromdate.$error.date = true;
+            $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
+            return false;
+          }
           var fromDate = moment(scope.filterFromDate);
           if (fromDate.isBefore(now, 'days')) {
             fromDate = now;
           }
-          if (!scope.filterFromDate){ 
-            scope.filterFromDate = now.format('MM/DD/YYYY');  
-            fromDate = now;
-          } else if (!fromDate.isValid()) {
+          if (!fromDate.isValid()) {
             scope.filterdates.fromdate.$error.date = true;
             $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
-            return false; 
-          } 
+            return false;
+          }
 
-          if ( fromDate.diff(toDate, 'days') > 0 ){
+          if ( fromDate.isAfter(toDate, 'days' )){
             scope.filterdates.fromdate.$error.fromDateToLarge = true;
             $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
             return false;
           } else {
             scope.filterdates.fromdate.$error.fromDateToLarge = false;
-          } 
+          }
           $rootScope.$emit("filterByDates", {'fromDate': fromDate, 'toDate': toDate});
-          filterState.setDate(true);
           return true;
         } else if (isToError()) {
           scope.filterdates.todate.$error.date = true;
           $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
           return false;
         } else {
-          return false;  
+          return false;
         }
       }
 

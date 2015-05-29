@@ -22,9 +22,6 @@
 
     function link(scope, el, attr) {
 
-      scope.attendingChanged = attendingChanged;
-      scope.changeFromDate = changeFromDate;
-      scope.changeToDate = changeToDate;
       scope.closePanel = closePanel;
       scope.currentActiveTab = null;
       scope.currentMember = null;
@@ -64,12 +61,6 @@
       scope.showIcon = showIcon;
       scope.togglePanel = togglePanel;
       //////////////////////////////////////
-
-      function attendingChanged() {
-        scope.formErrors.signup = false;
-        roleChanged();
-        scope.currentMember.showFrequency = true;
-      }
 
       function allowProfileEdit() {
         var cookieId = Session.exists("userId");
@@ -163,22 +154,19 @@
         var validForm = {
           valid: true
         };
-        if (scope.currentMember.serveRsvp === null) {
+        validForm.valid = true;
+        if (scope.currentMember.serveRsvp == null) {
           validForm.valid = false;
-          scope.formErrors.role = true;
-          scope.formErrors.signup = true;
+          scope.formErrors.role = true;   
+        } else if (!scope.currentMember.serveRsvp.roleId || scope.currentMember.currentOpportunity == null) {
+          validForm.valid = false;
+          scope.formErrors.frequency = true;
         } else {
-          if (scope.currentMember.serveRsvp.roleId === null || scope.currentMember.serveRsvp.roleId === undefined){
-            validForm.valid = false;
-            scope.formErrors.role = true;
-          }
-          
-          if (scope.currentMember.serveRsvp.attending === undefined) {
-            validForm.valid = false;
-            scope.formErrors.signup = true;
-          } 
-          
-          if (scope.currentMember.currentOpportunity === undefined || scope.currentMember.currentOpportunity === null || scope.currentMember.currentOpportunity.frequency === null ||  scope.currentMember.currentOpportunity.frequency === undefined ) {
+          if ( (scope.currentMember.currentOpportunity === undefined || 
+                scope.currentMember.currentOpportunity === null || 
+                scope.currentMember.currentOpportunity.frequency === null ||  
+                scope.currentMember.currentOpportunity.frequency === undefined) && scope.currentMember.showFrequency 
+           ) {
             validForm.valid = false;
             scope.formErrors.frequency = true;
           } 
@@ -253,7 +241,6 @@
           m = moment(dateStr, "YYYY MM DD");
 
           if (!m.isValid()) {
-            //throw error
             throw new Error("Parse Date Failed Moment Validation");
           }
         }
@@ -291,6 +278,7 @@
       }
 
       function roleChanged(selectedRole) {
+        console.log(selectedRole);
         scope.formErrors.role = false;
         scope.selectedRole = selectedRole;
         if (scope.currentMember.serveRsvp === undefined) {
@@ -300,6 +288,12 @@
         } else {
           scope.currentMember.serveRsvp.isSaved = false;
         }
+        if (scope.selectedRole === undefined) {
+          scope.currentMember.serveRsvp.attending = false ;
+        } else {
+          scope.currentMember.serveRsvp.attending = true;
+        }
+        scope.currentMember.showFrequency = true;
       }
 
       function saveRsvp() {
@@ -312,14 +306,18 @@
         var rsvp = new ServeOpportunities.SaveRsvp();
         rsvp.contactId = scope.currentMember.contactId;
         rsvp.opportunityId = scope.currentMember.serveRsvp.roleId;
+        rsvp.opportunityIds = _.map(scope.currentMember.roles, function(role){ return role.roleId; });;
         rsvp.eventTypeId = scope.team.eventTypeId;
         rsvp.endDate = parseDate(scope.currentMember.currentOpportunity.toDt);
         rsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
-        rsvp.signUp = scope.currentMember.serveRsvp.attending;
+        if (scope.currentMember.serveRsvp.roleId !==0 ) {
+          rsvp.signUp = true;
+        } else {
+          rsvp.signUp = false;
+        }
         rsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
         rsvp.$save(function(saved) {
           $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess);
-          $rootScope.$broadcast('update.member', scope.currentMember);
           scope.currentMember.serveRsvp.isSaved = true;
           return true;
         }, function(err){
@@ -356,7 +354,7 @@
         } else {
           scope.selectedRole = _.find(member.roles, function(r) {
             return r.roleId === member.serveRsvp.roleId;
-          })
+          });
           if (member.serveRsvp !== null && (member.serveRsvp.isSaved || member.serveRsvp.isSaved === undefined)) {
             return true;
           } else {

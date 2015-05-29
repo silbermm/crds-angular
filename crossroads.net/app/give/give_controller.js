@@ -2,37 +2,71 @@
   'use strict';
   module.exports = GiveCtrl;
 
-  GiveCtrl.$inject = ['$rootScope', '$scope', '$state', '$timeout', '$http', 'Session', 'PaymentService','programList'];
+  GiveCtrl.$inject = ['$rootScope', '$scope', '$state', '$timeout', 'Session', 'PaymentService','programList'];
 
-  function GiveCtrl($rootScope, $scope, $state, $timeout, $httpProvider, Session, PaymentService, programList) {
+  function DonationException(message) {
+    this.message = message;
+    this.name = "DonationException";
+  };
+
+  function GiveCtrl($rootScope, $scope, $state, $timeout, Session, PaymentService, programList) {
 
         $scope.$on('$stateChangeStart', function (event, toState, toParams) {
            if ($rootScope.email) {
                vm.email = $rootScope.email;
                //what if email is not found for some reason??
              }
+             vm.transitionForLoggedInUserBasedOnExistingDonor(event,toState);
         });
 
         var vm = this;
+        vm.setValidCvc = '';
+        vm.setValidCard = '';
+        vm.amountSubmitted = false;
+        vm.bankinfoSubmitted = false;
+        vm.bankType = 'checking';
+        vm.brand ='';
+        vm.creditCardDiscouragedGrowlDivRef = 1001;
+        vm.donor = {};
+        vm.donorError = false;
+        vm.email = null;
+        vm.emailAlreadyRegisteredGrowlDivRef = 1000;
+        vm.emailPrefix = "give";
+        vm.last4 = '';
+        vm.showMessage = "Where?";
+        vm.showCheckClass = "ng-hide";
+        vm.view = 'bank';
+        vm.programsInput = programList;
+
         //Credit Card RegExs
         var americanExpressRegEx = /^3[47][0-9]{13}$/;
         var discoverRegEx = /^6(?:011|5[0-9]{2})/;
         var mastercardRegEx = /^5[1-5][0-9]/;
         var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$/;
 
-        vm.setValidCvc = '';
-        vm.setValidCard = '';
-        vm.amountSubmitted = false;
-        vm.bankinfoSubmitted = false;
-        vm.bankType = 'checking';
-        vm.creditCardDiscouragedGrowlDivRef = 1001;
-        vm.email = null;
-        vm.emailAlreadyRegisteredGrowlDivRef = 1000;
-        vm.emailPrefix = "give";
-        vm.showMessage = "Where?";
-        vm.showCheckClass = "ng-hide";
-        vm.view = 'bank';
-        vm.programsInput = programList;
+        var brandCode = [];
+        brandCode['Visa'] = "#cc_visa";
+        brandCode['MasterCard'] = '#cc_mastercard';
+        brandCode['American Express'] = '#cc_american_express';
+        brandCode['Discover'] = '#cc_discover';
+
+        vm.transitionForLoggedInUserBasedOnExistingDonor = function(event, toState){
+          if(toState.name == "give.account" && $rootScope.username && !vm.donorError ) {
+            event.preventDefault();
+            PaymentService.donor().get({email: $scope.give.email})
+            .$promise
+            .then(function(donor){
+              vm.donor = donor;
+              vm.last4 = donor.last4;
+              vm.brand = brandCode[donor.brand];
+              $state.go("give.confirm");
+            },function(error){
+            //  create donor record
+              vm.donorError = true;
+              $state.go("give.account");
+            });
+          }
+        }
 
         vm.accountError = function() {
           return (vm.bankinfoSubmitted && $scope.giveForm.accountForm.account.$error.invalidAccount && $scope.giveForm.accountForm.$invalid  ||
@@ -112,6 +146,19 @@
             }
         };
 
+        vm.confirmDonation = function(){
+          try
+          {
+            vm.donate(vm.program.ProgramId, vm.amount, vm.donor.id, vm.email);
+            $state.go("give.thank-you");
+          }
+          catch(DonationException)
+          {
+            $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
+          }
+
+        };
+
         vm.goToLogin = function () {
           Session.addRedirectRoute("give.account", "");
           $state.go("give.login");
@@ -175,16 +222,11 @@
         vm.submitBankInfo = function() {
             vm.bankinfoSubmitted = true;
             if ($scope.giveForm.accountForm.$valid) {
-              PaymentService.donor.get({email: $scope.give.email})
+              PaymentService.donor().get({email: $scope.give.email})
              .$promise
               .then(function(donor){
-                  PaymentService.donateToProgram(vm.program.ProgramId, vm.amount, donor.id, vm.email)
-                    .then(function(confirmation){
-                        vm.program_name = _.result(_.find(vm.programsInput,
-                          {'ProgramId': confirmation.program_id}), 'Name');
-                        vm.amount = confirmation.amount;
-                        $state.go("give.thank-you");
-                    });
+                vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email);
+                $state.go("give.thank-you");
                 },
                 function(error){
                   // The vm.email below is only required for guest giver, however, there
@@ -198,13 +240,8 @@
                     cvc: vm.cvc
                   }, vm.email)
                   .then(function(donor) {
-                    PaymentService.donateToProgram(vm.program.ProgramId, vm.amount, donor.id, vm.email)
-                      .then(function(confirmation){
-                          vm.program_name = _.result(_.find(vm.programsInput,
-                            {'ProgramId': confirmation.program_id}), 'Name');
-                          vm.amount = confirmation.amount;
-                          $state.go("give.thank-you");
-                      });
+                    vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email);
+                    $state.go("give.thank-you");
                   },
                   function() {
                     $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
@@ -215,6 +252,18 @@
             else {
               $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
             }
+        };
+
+        vm.donate = function(programId, amount, donorId, email){
+          PaymentService.donateToProgram(programId, amount, donorId, email)
+            .then(function(confirmation){
+              vm.program_name = _.result(_.find(vm.programsInput,
+              {'ProgramId': confirmation.program_id}), 'Name');
+              vm.amount = confirmation.amount;
+            },
+            function(reason){
+              throw new DonationException("Failed: " + reason);
+            });
         };
 
         vm.toggleCheck = function() {
