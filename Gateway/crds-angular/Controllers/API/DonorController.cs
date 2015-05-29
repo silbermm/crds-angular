@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Web.Http;
 using System.Web.Http.Description;
+using crds_angular.Exceptions;
 
 namespace crds_angular.Controllers.API
 {
@@ -126,9 +127,11 @@ namespace crds_angular.Controllers.API
                     {
                         id = donor.DonorId,
                         Processor_ID = donor.ProcessorId,
-                        brand = default_source.brand,
-                        last4 = default_source.last4
-
+                        default_source = new DefaultSourceDTO
+                        {
+                            brand = default_source.brand,
+                            last4 = default_source.last4
+                        }
                     };
 
                     return Ok(response);
@@ -166,6 +169,46 @@ namespace crds_angular.Controllers.API
                 var apiError = new ApiErrorDto("Donor Get Failed", exception);
                 throw new HttpResponseException(apiError.HttpResponseMessage);
             }
+        }
+
+        [ResponseType(typeof (DonorDTO))]
+        [Route("api/donor")]
+        public IHttpActionResult Put([FromBody] UpdateDonorDTO dto)
+        {
+            //lookupdonor with auth token and get cust ID for donor
+            return Authorized(token =>
+            {
+                ContactDonor contactDonor;
+     
+                try
+                {
+                    contactDonor = gatewayDonorService.GetContactDonorForAuthenticatedUser(token);
+
+                    //Post apistripe/customer/{custID}/sources pass in the dto.stripe_token_id
+                    //Post apistripe/customer with the default_source set to the source_id created above (like description)
+                    stripePaymentService.updateCustomerDefaultSource(contactDonor.ProcessorId, dto.stripe_token_id);
+                }
+                catch (StripeException stripeException)
+                {
+                    var apiError = new ApiErrorDto("Error calling payment processor:"+ stripeException.Message, stripeException);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+                catch (ApplicationException applicationException)
+                {
+                    var apiError = new ApiErrorDto("Error calling Ministry Platform" + applicationException.Message, applicationException);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+                //return donor
+                var donor = new DonorDTO
+                {
+                    id = contactDonor.DonorId,
+                    Processor_ID = contactDonor.ProcessorId              
+                };
+
+                return Ok(donor);
+            });
+            
+
         }
     }
 }

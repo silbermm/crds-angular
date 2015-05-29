@@ -2,6 +2,9 @@
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using System;
+using System.Web.Http.Results;
+using crds_angular.Models.Crossroads;
+using crds_angular.test.controllers;
 
 namespace crds_angular.Services
 {
@@ -105,6 +108,13 @@ namespace crds_angular.Services
             }
 
             return (contactDonorResponse);
+        }
+
+        public void UpdateCustomerSource (string stripe_token_id)
+        {
+            var customer = paymentService.updateCustomer(stripe_token_id);
+            //paymentService.updateCustomerDefaultSource(customer_token, card_id);
+            return;
         }
     }
 }

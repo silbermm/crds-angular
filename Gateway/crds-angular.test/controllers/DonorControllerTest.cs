@@ -86,11 +86,10 @@ namespace crds_angular.test.controllers
                 ProcessorId = processorId
             };
 
-            var default_source = new DefaultSource()
+            var default_source = new SourceData
             {
                 last4 = "1234",
                 brand = "Visa"
-
             };
             donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(It.IsAny<string>())).Returns(contactDonor);
             paymentService.Setup(mocked => mocked.getDefaultSource(It.IsAny<string>())).Returns(default_source);
@@ -100,8 +99,8 @@ namespace crds_angular.test.controllers
             var okResult = (OkNegotiatedContentResult<DonorDTO>)result;
             Assert.AreEqual(donorId, okResult.Content.id);
             Assert.AreEqual(processorId, okResult.Content.Processor_ID);
-            Assert.AreEqual(brand, okResult.Content.brand);
-            Assert.AreEqual(last4, okResult.Content.last4);
+            Assert.AreEqual(brand, okResult.Content.default_source.brand);
+            Assert.AreEqual(last4, okResult.Content.default_source.last4);
         }
 
         [Test]
