@@ -13,7 +13,7 @@
   <h2 class="header noPspace" ng-bind-html="volunteer.pageInfo.title | html"></h2>
   <div>
     <p id="content" class="noPspace" dir="ltr" ng-bind-html="volunteer.pageInfo.content | html" ng-show="volunteer.showContent"></p>
-    <p id="fullGroupMessage" ng-bind-html="volunteer.pageInfo.existingMember | html" ng-show="volunteer.showAllSignedUp"></p>
+    <p id="existingMemberMessage" ng-bind-html="volunteer.pageInfo.existingMember | html" ng-show="volunteer.showAllSignedUp"></p>
     <p id="successMessage" ng-bind-html="volunteer.pageInfo.success | html" ng-show="volunteer.showSuccess"></p>
   </div>
 
@@ -22,7 +22,8 @@
     <form class="form-group" name="myForm" role="form" ng-submit="volunteer.save(myForm)" id="myForm">
       <p>
         <div class="checkbox" ng-repeat="participant in volunteer.participants as people">
-<label>            <span ng-show="volunteer.participants.length > 1">
+          <label>
+            <span ng-show="volunteer.participants.length > 1">
               <input name="input" type="checkbox" ng-checked="volunteer.disableCheckbox(participant)" ng-disabled="volunteer.disableCheckbox(participant)" ng-model="participant.add">
             </span>
             <span ng-class="{'text-muted':volunteer.disableCheckbox(participant)}">
@@ -30,7 +31,7 @@
               <span ng-show="volunteer.displayEmail(participant.email)">({{ participant.email }})</span>
             </span>
             <span ng-show="participant.loggedInUser">
-              <a href="" ng-click="volunteer.editProfile()">
+              <a href="" ng-click="volunteer.editProfile(participant)">
                 <svg viewBox="0 0 32 32" class="icon icon-pencil4">
                   <use xlink:href="#pencil4"></use>
                 </svg>

@@ -28,7 +28,7 @@
 
     function allSignedUp() {
       var signupCount = 0;
-      _.each(vm.participants, function(p){
+      _.each(vm.participants, function(p) {
         if (p.memberOfGroup || p.pending) {
           signupCount = signupCount + 1;
         }
@@ -66,31 +66,25 @@
       return false;
     }
 
-    function editProfile() {
-			vm.modalInstance = $modal.open({
-				templateUrl: 'profile/editProfile.html',
-				backdrop: true,
+    function editProfile(personToEdit) {
+      vm.modalInstance = $modal.open({
+        templateUrl: 'profile/editProfile.html',
+        backdrop: true,
         controller: "ProfileModalController as modal",
-				// This is needed in order to get our scope
-				// into the modal - by default, it uses $rootScope
-				scope: $scope,
-			});
-		}
-
-    // function editProfile(personToEdit) {
-    //   var modalInstance = $modal.open({
-    //     templateUrl: 'profile/editProfile.html',
-    //     backdrop: true,
-    //     controller: "ProfileModalController as modal",
-    //     // This is needed in order to get our scope
-    //     // into the modal - by default, it uses $rootScope
-    //     scope: scope,
-    //     resolve: {
-    //       person: function() {
-    //         return personToEdit;
-    //       }
-    //     }
-    //   });
+        // This is needed in order to get our scope
+        // into the modal - by default, it uses $rootScope
+        scope: $scope,
+        resolve: {
+          person: function() {
+            return personToEdit;
+          }
+        }
+      });
+      vm.modalInstance.result.then(function(person) {
+        personToEdit.preferredName = person.nickName === null ? person.firstName : person.nickName;
+        $rootScope.$emit("personUpdated", person);
+      });
+    }
 
     function init() {
       ServeOpportunities.QualifiedServers.query({
@@ -105,8 +99,6 @@
     }
 
     function pageInfo(cmsInfo) {
-      // TODO need to check that we have data before assign
-      // can we check for 404 on route?  and assume we have a page?
       return cmsInfo.pages[0];
     }
 
