@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using crds_angular.Enum;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services.Interfaces;
@@ -9,6 +10,7 @@ using Crossroads.Utilities.Extensions;
 using log4net;
 using log4net.Repository.Hierarchy;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using IGroupService = MinistryPlatform.Translation.Services.Interfaces.IGroupService;
 
@@ -16,6 +18,7 @@ namespace crds_angular.Services
 {
     public class ServeService : MinistryPlatformBaseService, IServeService
     {
+        private readonly IContactService _contactService;
         private readonly IContactRelationshipService _contactRelationshipService;
         private readonly IEventService _eventService;
         private readonly IGroupParticipantService _groupParticipantService;
@@ -24,10 +27,11 @@ namespace crds_angular.Services
         private readonly IParticipantService _participantService;
         private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public ServeService(IContactRelationshipService contactRelationshipService,
+        public ServeService(IContactService contactService, IContactRelationshipService contactRelationshipService,
             IOpportunityService opportunityService, IEventService eventService, IParticipantService participantService,
             IGroupParticipantService groupParticipantService, IGroupService groupService)
         {
+            _contactService = contactService;
             _contactRelationshipService = contactRelationshipService;
             _opportunityService = opportunityService;
             _eventService = eventService;
@@ -238,6 +242,8 @@ namespace crds_angular.Services
             //get events in range
             var events = _eventService.GetEventsByTypeForRange(eventTypeId, startDate, endDate, token);
             var includeThisWeek = true;
+            var templateId = AppSetting("RsvpYesTemplate");
+
             foreach (var e in events)
             {
                 if ((!alternateWeeks) || includeThisWeek)
@@ -261,6 +267,8 @@ namespace crds_angular.Services
                     {
                         try
                         {
+                            templateId = AppSetting("RsvpNoTemplate");
+                            opportunityId = opportunityIds.First();
                             //if there is already a participant, remove it because they've changed to "No"
                             _eventService.unRegisterParticipantForEvent(participant.ParticipantId, e.EventId);
                         }
@@ -283,7 +291,51 @@ namespace crds_angular.Services
                 includeThisWeek = !includeThisWeek;
             }
 
+            //Send Confirmation Email Asynchronously
+            var thread = new Thread(() => SendRSVPConfirmation(contactId, opportunityId, startDate, endDate, templateId, token));
+            thread.Start();
+
             return true;
+        }
+
+        private void SendRSVPConfirmation(int contactId, int opportunityId, DateTime startDate, DateTime endDate, int templateId, string token)
+        {
+            var template = CommunicationService.GetTemplate(templateId, token);
+
+            //Go get Opportunity deets
+            var opp = _opportunityService.GetOpportunityById(opportunityId, token);
+
+            //Go get from/to contact info
+            var fromEmail = _contactService.GetContactEmail(opp.GroupContactId);
+            var toEmail = _contactService.GetContactEmail(contactId);
+
+            var comm = new Communication
+            {
+                AuthorUserId = 5,
+                DomainId = 1,
+                EmailBody = template.Body,
+                EmailSubject = template.Subject,
+                FromContactId = opp.GroupContactId,
+                FromEmailAddress = fromEmail,
+                ReplyContactId = opp.GroupContactId,
+                ReplyToEmailAddress = fromEmail,
+                ToContactId = contactId,
+                ToEmailAddress = toEmail
+            };
+
+            var mergeData = new Dictionary<string, object>
+            {
+                {"Opportunity_Name", opp.OpportunityName},
+                {"Start_Date", startDate.ToShortDateString()},
+                {"End_Date", endDate.ToShortDateString()},
+                {"Shift_Start", opp.ShiftStart.FormatAsString()},
+                {"Shift_End", opp.ShiftEnd.FormatAsString()},
+                {"Room", opp.Room},
+                {"Group_Contact", opp.GroupContactName},
+                {"Group_Name", opp.GroupName}
+            };
+
+            CommunicationService.SendMessage(comm, mergeData, token);
         }
 
         private ServeRole NewServingRole(GroupServingParticipant record)
