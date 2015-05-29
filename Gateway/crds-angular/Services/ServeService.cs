@@ -268,6 +268,7 @@ namespace crds_angular.Services
                         try
                         {
                             templateId = AppSetting("RsvpNoTemplate");
+                            opportunityId = opportunityIds.First();
                             //if there is already a participant, remove it because they've changed to "No"
                             _eventService.unRegisterParticipantForEvent(participant.ParticipantId, e.EventId);
                         }
