@@ -313,7 +313,15 @@ namespace crds_angular.Services
 
         private ServeRsvp NewServeRsvp(GroupServingParticipant record)
         {
-            return record.Rsvp != null ? new ServeRsvp { Attending = (bool)record.Rsvp, RoleId = record.OpportunityId } : null;
+            if (record.Rsvp != null && !((bool) record.Rsvp))
+            {
+                return new ServeRsvp { Attending = false, RoleId = 0};
+            }
+            else if (record.Rsvp != null && ((bool) record.Rsvp))
+            {
+                return new ServeRsvp {Attending = (bool) record.Rsvp, RoleId = record.OpportunityId};
+            }
+            return null;
         }
 
         //public for testing
