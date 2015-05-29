@@ -19,7 +19,6 @@ namespace MinistryPlatform.Translation.Services
             Convert.ToInt32(AppSettings("GroupOpportunitiesEvents"));
 
         private readonly int _groupParticpantsSubPageView = Convert.ToInt32(AppSettings("GroupsParticipantsSubPage"));
-        //private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly IMinistryPlatformService _ministryPlatformService;
         private readonly int _opportunityPage = Convert.ToInt32(AppSettings("OpportunityPage"));
         private readonly int _opportunityResponses = Convert.ToInt32(AppSettings("OpportunityResponses"));
@@ -36,7 +35,6 @@ namespace MinistryPlatform.Translation.Services
 
         public Response GetMyOpportunityResponses(int contactId, int opportunityId, string token)
         {
-            //var subPageViewId = Convert.ToInt32(ConfigurationManager.AppSettings["ContactOpportunityResponses"]);
             var searchString = ",,,," + contactId;
             var subpageViewRecords = MinistryPlatformService.GetSubpageViewRecords(_contactOpportunityResponses,
                 opportunityId, token, searchString);
@@ -215,7 +213,7 @@ namespace MinistryPlatform.Translation.Services
                     {"Closed", false},
                     {"Comments", comments}
                 };
-                var returnVal = _ministryPlatformService.CreateRecord("OpportunityResponses", values, apiLogin(), true);
+                _ministryPlatformService.CreateRecord("OpportunityResponses", values, apiLogin(), true);
             }
         }
 
