@@ -6,7 +6,8 @@ namespace MinistryPlatform.Translation.Services.Interfaces
 {
     public interface IOpportunityService
     {
-        List<Opportunity> GetOpportunitiesForGroup(int groupId, string token);
+        Opportunity GetOpportunityById(int opportunityId, string token);
+        //List<Opportunity> GetOpportunitiesForGroup(int groupId, string token);
         int GetOpportunitySignupCount(int opportunityId, int eventId, string token);
         List<DateTime> GetAllOpportunityDates(int id, string token);
         DateTime GetLastOpportunityDate(int opportunityId, string token);

@@ -89,69 +89,69 @@ namespace MinistryPlatform.Translation.Test.Services
         }
 
         [Test]
-        public void GetOpportunitiesForGroupTest()
-        {
-            const int groupId = 1;
+        //public void GetOpportunitiesForGroupTest()
+        //{
+        //    const int groupId = 1;
 
-            _ministryPlatformService.Setup(
-                m =>
-                    m.GetSubpageViewRecords(_groupOpportunitiesEventsPageViewId, groupId, It.IsAny<string>(), "", "", 0))
-                .Returns(OpportunityResponse());
+        //    _ministryPlatformService.Setup(
+        //        m =>
+        //            m.GetSubpageViewRecords(_groupOpportunitiesEventsPageViewId, groupId, It.IsAny<string>(), "", "", 0))
+        //        .Returns(OpportunityResponse());
 
-            _eventService.Setup(m => m.GetEvents("Event Type 100", It.IsAny<string>()))
-                .Returns(MockEvents("Event Type 100"));
-            _eventService.Setup(m => m.GetEvents("Event Type 200", It.IsAny<string>()))
-                .Returns(MockEvents("Event Type 200"));
-            _eventService.Setup(m => m.GetEvents("Event Type 300", It.IsAny<string>()))
-                .Returns(MockEvents("Event Type 300"));
+        //    _eventService.Setup(m => m.GetEvents("Event Type 100", It.IsAny<string>()))
+        //        .Returns(MockEvents("Event Type 100"));
+        //    _eventService.Setup(m => m.GetEvents("Event Type 200", It.IsAny<string>()))
+        //        .Returns(MockEvents("Event Type 200"));
+        //    _eventService.Setup(m => m.GetEvents("Event Type 300", It.IsAny<string>()))
+        //        .Returns(MockEvents("Event Type 300"));
 
-            _ministryPlatformService.Setup(
-                m =>
-                    m.GetSubpageViewRecords(_signedupToServeSubPageViewId, It.IsAny<int>(), It.IsAny<string>(),
-                        It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())).Returns(new List<Dictionary<string, object>>());
+        //    _ministryPlatformService.Setup(
+        //        m =>
+        //            m.GetSubpageViewRecords(_signedupToServeSubPageViewId, It.IsAny<int>(), It.IsAny<string>(),
+        //                It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())).Returns(new List<Dictionary<string, object>>());
             
 
-            var opportunities = _fixture.GetOpportunitiesForGroup(groupId, It.IsAny<string>());
+        //    var opportunities = _fixture.GetOpportunitiesForGroup(groupId, It.IsAny<string>());
 
-            _ministryPlatformService.VerifyAll();
-            _eventService.VerifyAll();
+        //    _ministryPlatformService.VerifyAll();
+        //    _eventService.VerifyAll();
 
-            Assert.IsNotNull(opportunities);
-            Assert.AreEqual(3, opportunities.Count);
+        //    Assert.IsNotNull(opportunities);
+        //    Assert.AreEqual(3, opportunities.Count);
 
-            var opportunity = opportunities[0];
-            Assert.AreEqual(100,opportunity.MaximumNeeded);
-            Assert.AreEqual(50,opportunity.MinimumNeeded);
-            Assert.AreEqual("Event Type 100", opportunity.EventType);
-            Assert.AreEqual(2, opportunity.Events.Count);
-            Assert.AreEqual(100, opportunity.OpportunityId);
-            Assert.AreEqual("Opportunity 100", opportunity.OpportunityName);
-            Assert.AreEqual("Role Title 100", opportunity.RoleTitle);
+        //    var opportunity = opportunities[0];
+        //    Assert.AreEqual(100,opportunity.MaximumNeeded);
+        //    Assert.AreEqual(50,opportunity.MinimumNeeded);
+        //    Assert.AreEqual("Event Type 100", opportunity.EventType);
+        //    Assert.AreEqual(2, opportunity.Events.Count);
+        //    Assert.AreEqual(100, opportunity.OpportunityId);
+        //    Assert.AreEqual("Opportunity 100", opportunity.OpportunityName);
+        //    Assert.AreEqual("Role Title 100", opportunity.RoleTitle);
 
-            opportunity = opportunities[1];
-            Assert.AreEqual(200, opportunity.MaximumNeeded);
-            Assert.AreEqual(100, opportunity.MinimumNeeded);
-            Assert.AreEqual("Event Type 200", opportunity.EventType);
-            Assert.AreEqual(2, opportunity.Events.Count);
-            Assert.AreEqual(200, opportunity.OpportunityId);
-            Assert.AreEqual("Opportunity 200", opportunity.OpportunityName);
-            Assert.AreEqual("Role Title 200", opportunity.RoleTitle);
+        //    opportunity = opportunities[1];
+        //    Assert.AreEqual(200, opportunity.MaximumNeeded);
+        //    Assert.AreEqual(100, opportunity.MinimumNeeded);
+        //    Assert.AreEqual("Event Type 200", opportunity.EventType);
+        //    Assert.AreEqual(2, opportunity.Events.Count);
+        //    Assert.AreEqual(200, opportunity.OpportunityId);
+        //    Assert.AreEqual("Opportunity 200", opportunity.OpportunityName);
+        //    Assert.AreEqual("Role Title 200", opportunity.RoleTitle);
 
-            opportunity = opportunities[2];
-            Assert.AreEqual(null, opportunity.MaximumNeeded);
-            Assert.AreEqual(null, opportunity.MinimumNeeded);
-            Assert.AreEqual("Event Type 300", opportunity.EventType);
-            Assert.AreEqual(2, opportunity.Events.Count);
-            Assert.AreEqual(300, opportunity.OpportunityId);
-            Assert.AreEqual("Opportunity 300", opportunity.OpportunityName);
-            Assert.AreEqual("Role Title 300", opportunity.RoleTitle);
-            var events = opportunity.Events;
-            Assert.AreEqual(2, events[1].EventId);
-            Assert.AreEqual("event-title-2", events[1].EventTitle);
-            Assert.AreEqual(_today, events[1].EventStartDate);
-            Assert.AreEqual(_today, events[1].EventEndDate);
-            Assert.AreEqual("Event Type 300", events[1].EventType);
-        }
+        //    opportunity = opportunities[2];
+        //    Assert.AreEqual(null, opportunity.MaximumNeeded);
+        //    Assert.AreEqual(null, opportunity.MinimumNeeded);
+        //    Assert.AreEqual("Event Type 300", opportunity.EventType);
+        //    Assert.AreEqual(2, opportunity.Events.Count);
+        //    Assert.AreEqual(300, opportunity.OpportunityId);
+        //    Assert.AreEqual("Opportunity 300", opportunity.OpportunityName);
+        //    Assert.AreEqual("Role Title 300", opportunity.RoleTitle);
+        //    var events = opportunity.Events;
+        //    Assert.AreEqual(2, events[1].EventId);
+        //    Assert.AreEqual("event-title-2", events[1].EventTitle);
+        //    Assert.AreEqual(_today, events[1].EventStartDate);
+        //    Assert.AreEqual(_today, events[1].EventEndDate);
+        //    Assert.AreEqual("Event Type 300", events[1].EventType);
+        //}
 
         private new List<Event> MockEvents(string eventType)
         {
