@@ -163,19 +163,18 @@
         validForm.valid = true;
         if (scope.currentMember.serveRsvp == null) {
           validForm.valid = false;
-          validForm.messageStr = $rootScope.MESSAGES.selectSignUpAndFrequency;
+          scope.formErrors.role = true;   
           // } else if (scope.currentMember.serveRsvp.attending === undefined) {
           //   validForm.valid = false;
           //   validForm.messageStr = $rootScope.MESSAGES.selectSignUpAndFrequency;
         } else if (scope.currentMember.currentOpportunity == null) {
           validForm.valid = false;
-          scope.formErrors.role = true;
-          scope.formErrors.signup = true;
+          scope.formErrors.frequency = true;
         } else {
-          if (scope.currentMember.serveRsvp.roleId === null || scope.currentMember.serveRsvp.roleId === undefined){
-            validForm.valid = false;
-            scope.formErrors.role = true;
-          }
+          /*if (scope.currentMember.serveRsvp.roleId === null || scope.currentMember.serveRsvp.roleId === undefined){*/
+            //validForm.valid = false;
+            //scope.formErrors.role = true;
+          //}
           
           /*if (scope.currentMember.serveRsvp.attending === undefined) {*/
             //validForm.valid = false;
@@ -295,6 +294,7 @@
       }
 
       function roleChanged(selectedRole) {
+        console.log(selectedRole);
         scope.formErrors.role = false;
         scope.selectedRole = selectedRole;
         if (scope.currentMember.serveRsvp === undefined) {
@@ -303,6 +303,11 @@
           };
         } else {
           scope.currentMember.serveRsvp.isSaved = false;
+        }
+        if (scope.selectedRole === undefined) {
+          scope.currentMember.serveRsvp.attending = false ;
+        } else {
+          scope.currentMember.serveRsvp.attending = true;
         }
         scope.currentMember.showFrequency = true;
       }
@@ -321,7 +326,7 @@
         rsvp.eventTypeId = scope.team.eventTypeId;
         rsvp.endDate = parseDate(scope.currentMember.currentOpportunity.toDt);
         rsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
-        if (scope.currentMember.serveRsvp.roleId!==0) {
+        if (scope.currentMember.serveRsvp.roleId !==0 ) {
           rsvp.signUp = true;
         } else {
           rsvp.signUp = false;
@@ -329,7 +334,7 @@
         rsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
         rsvp.$save(function(saved) {
           $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess);
-          $rootScope.$broadcast('update.member', scope.currentMember);
+          //$rootScope.$broadcast('update.member', scope.currentMember);
           scope.currentMember.serveRsvp.isSaved = true;
           return true;
         }, function(err){
@@ -366,7 +371,7 @@
         } else {
           scope.selectedRole = _.find(member.roles, function(r) {
             return r.roleId === member.serveRsvp.roleId;
-          })
+          });
           if (member.serveRsvp !== null && (member.serveRsvp.isSaved || member.serveRsvp.isSaved === undefined)) {
             return true;
           } else {

@@ -33,21 +33,21 @@
         <div class="row">
           <div class="col-md-5">
            <h5>Opportunities</h5>
-            <div class="radio" ng-class="{'text-muted': role.capacity.badgeType === 'label-default', 'has-error': formErrors.role}" ng-repeat="role in currentMember.roles"  >
+            <div class="radio" ng-class="{'text-muted': role.capacity.badgeType === 'label-default', 'has-error': formErrors.role}"  >
+              <div ng-repeat="role in currentMember.roles">
               <label>
                 <input type="radio" ng-disabled="role.capacity.badgeType === 'label-default'" ng-model="currentMember.serveRsvp.roleId" ng-value="role.roleId" ng-change="roleChanged(role)" name="{{team.$$hashKey}}">
                 <span class="opportunity-name">{{::role.name}}</span>
                 <span class="label {{ ::role.capacity.badgeType }}" ng-show="role.capacity.display">{{ ::role.capacity.message }}</span>
               </label>
-              <div ng-show="formErrors.role"> 
-                <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
               </div>
-            </div><!--/radio-->
-            <div class="radio">
               <label>
                 <input type="radio" ng-model="currentMember.serveRsvp.roleId" ng-value="0" ng-change="roleChanged(role)" name="">
                 <span class="opportunity-name">No</span>
               </label>
+              <div ng-show="formErrors.role"> 
+                <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+              </div>
             </div><!--/radio-->
             <div ng-show="selectedRole">
               <h5 class="flush-bottom"> Shift Time </h5>
@@ -60,9 +60,8 @@
           </div><!--/col-sm-4-->
           <div class="col-md-4">
             <div ng-show="currentMember.showFrequency">
-              <div class="form-group">
+              <div class="form-group" ng-class="{'has-error': formErrors.frequency}" >
                 <h5>Frequency </h5>
-
                 <select class="form-control" ng-model="currentMember.currentOpportunity.frequency" ng-change="populateDates()" ng-options="f.text for f in frequency">
                   <option value="">Select a Frequency</option>
                 </select>
@@ -73,7 +72,6 @@
               <div ng-if="currentMember.currentOpportunity.frequency.value > 0">
                 <div class="form-group" ng-class="{'has-error': formErrors.from || formErrors.dateRange}">
                   <label>From: </label>
-
                   <div class="input-group">
                     <input type="text" class="form-control" datepicker-popup="{{::format}}" ng-model="currentMember.currentOpportunity.fromDt" is-open="$parent.datePickers.fromOpened" datepicker-options="dateOptions"  ng-required="true" close-text="Close" ng-change="changeFromDate()" />
                     <span class="input-group-btn">
