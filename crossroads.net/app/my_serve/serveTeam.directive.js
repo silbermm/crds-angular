@@ -22,7 +22,6 @@
 
     function link(scope, el, attr) {
 
-      // scope.attendingChanged = attendingChanged;
       scope.closePanel = closePanel;
       scope.currentActiveTab = null;
       scope.currentMember = null;
@@ -63,11 +62,6 @@
       scope.togglePanel = togglePanel;
       //////////////////////////////////////
 
-      // function attendingChanged() {
-      //   roleChanged();
-      //   scope.currentMember.showFrequency = true;
-      // }
-      
       function allowProfileEdit() {
         var cookieId = Session.exists("userId");
         if (cookieId !== undefined) {
@@ -164,28 +158,15 @@
         if (scope.currentMember.serveRsvp == null) {
           validForm.valid = false;
           scope.formErrors.role = true;   
-          // } else if (scope.currentMember.serveRsvp.attending === undefined) {
-          //   validForm.valid = false;
-          //   validForm.messageStr = $rootScope.MESSAGES.selectSignUpAndFrequency;
         } else if (scope.currentMember.currentOpportunity == null) {
           validForm.valid = false;
           scope.formErrors.frequency = true;
         } else {
-          /*if (scope.currentMember.serveRsvp.roleId === null || scope.currentMember.serveRsvp.roleId === undefined){*/
-            //validForm.valid = false;
-            //scope.formErrors.role = true;
-          //}
-          
-          /*if (scope.currentMember.serveRsvp.attending === undefined) {*/
-            //validForm.valid = false;
-            //scope.formErrors.signup = true;
-          /*} */
-          
           if ( (scope.currentMember.currentOpportunity === undefined || 
                 scope.currentMember.currentOpportunity === null || 
                 scope.currentMember.currentOpportunity.frequency === null ||  
                 scope.currentMember.currentOpportunity.frequency === undefined) && scope.currentMember.showFrequency 
-              ) {
+           ) {
             validForm.valid = false;
             scope.formErrors.frequency = true;
           } 
@@ -260,7 +241,6 @@
           m = moment(dateStr, "YYYY MM DD");
 
           if (!m.isValid()) {
-            //throw error
             throw new Error("Parse Date Failed Moment Validation");
           }
         }
@@ -338,7 +318,6 @@
         rsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
         rsvp.$save(function(saved) {
           $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess);
-          //$rootScope.$broadcast('update.member', scope.currentMember);
           scope.currentMember.serveRsvp.isSaved = true;
           return true;
         }, function(err){
