@@ -5,6 +5,12 @@ require('../creditCardInfo.html');
     .module('crossroads.give')
     .directive('creditCardInfo', ['$log', bankInfo]);
 
+    //Credit Card RegExs
+    var americanExpressRegEx = /^3[47][0-9]{13}$/;
+    var discoverRegEx = /^6(?:011|5[0-9]{2})/;
+    var mastercardRegEx = /^5[1-5][0-9]/;
+    var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$/;
+
     function bankInfo($log) {
         var directive = {
           restrict: 'EA',
@@ -36,7 +42,7 @@ require('../creditCardInfo.html');
         scope.blurBillingZipCodeError = function() {
           return (scope.creditCardForm.billingZipCode.$dirty && scope.creditCardForm.billingZipCode.$invalid);
         };
-           
+
         scope.ccCardType = function () {
             if (scope.ccNumber) {
                 if (scope.ccNumber.match(visaRegEx))
@@ -94,7 +100,7 @@ require('../creditCardInfo.html');
             return (scope.bankinfoSubmitted && scope.creditCardForm.nameOnCard.$invalid);
         };
 
-       
+
       }
     };
 
