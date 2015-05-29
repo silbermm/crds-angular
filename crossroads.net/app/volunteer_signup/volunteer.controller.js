@@ -68,13 +68,29 @@
 
     function editProfile() {
 			vm.modalInstance = $modal.open({
-				templateUrl: 'editProfile.html',
+				templateUrl: 'profile/editProfile.html',
 				backdrop: true,
+        controller: "ProfileModalController as modal",
 				// This is needed in order to get our scope
 				// into the modal - by default, it uses $rootScope
 				scope: $scope,
 			});
 		}
+
+    // function editProfile(personToEdit) {
+    //   var modalInstance = $modal.open({
+    //     templateUrl: 'profile/editProfile.html',
+    //     backdrop: true,
+    //     controller: "ProfileModalController as modal",
+    //     // This is needed in order to get our scope
+    //     // into the modal - by default, it uses $rootScope
+    //     scope: scope,
+    //     resolve: {
+    //       person: function() {
+    //         return personToEdit;
+    //       }
+    //     }
+    //   });
 
     function init() {
       ServeOpportunities.QualifiedServers.query({

@@ -22,8 +22,7 @@
     <form class="form-group" name="myForm" role="form" ng-submit="volunteer.save(myForm)" id="myForm">
       <p>
         <div class="checkbox" ng-repeat="participant in volunteer.participants as people">
-          <label>
-            <span ng-show="volunteer.participants.length > 1">
+<label>            <span ng-show="volunteer.participants.length > 1">
               <input name="input" type="checkbox" ng-checked="volunteer.disableCheckbox(participant)" ng-disabled="volunteer.disableCheckbox(participant)" ng-model="participant.add">
             </span>
             <span ng-class="{'text-muted':volunteer.disableCheckbox(participant)}">
@@ -46,14 +45,5 @@
       </p>
     </form>
   </div>
-  <script type="text/ng-template" id="editProfile.html">
-    <div class="modal-header">
-      <a type="button" class="close" ng-click="volunteer.modalInstance.close()">x</a>
-      <h4 class="modal-title">Edit Profile</h4>
-    </div>
-    <div class="modal-body">
-      <profile-personal updated-person="volunteer.response[0]" modal-instance="volunteer.modalInstance"/>
-    </div>
-  </script>
 </div>
 <!-- viewReady -->
