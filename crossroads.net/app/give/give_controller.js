@@ -2,14 +2,14 @@
   'use strict';
   module.exports = GiveCtrl;
 
-  GiveCtrl.$inject = ['$rootScope', '$scope', '$state', '$timeout', 'Session', 'PaymentService','programList'];
+  GiveCtrl.$inject = ['$rootScope', '$scope', '$state', '$timeout', 'Session', 'PaymentService','programList', 'GiveTransferService'];
 
   function DonationException(message) {
     this.message = message;
     this.name = "DonationException";
   };
 
-  function GiveCtrl($rootScope, $scope, $state, $timeout, Session, PaymentService, programList) {
+  function GiveCtrl($rootScope, $scope, $state, $timeout, Session, PaymentService, programList, GiveTransferService) {
 
         $scope.$on('$stateChangeStart', function (event, toState, toParams) {
            if ($rootScope.email) {
@@ -37,6 +37,7 @@
         vm.showCheckClass = "ng-hide";
         vm.view = 'bank';
         vm.programsInput = programList;
+        vm.dto = GiveTransferService;
 
         //Credit Card RegExs
         var americanExpressRegEx = /^3[47][0-9]{13}$/;
@@ -49,6 +50,11 @@
         brandCode['MasterCard'] = '#cc_mastercard';
         brandCode['American Express'] = '#cc_american_express';
         brandCode['Discover'] = '#cc_discover';
+
+        vm.change = function(amount){
+          vm.dto.amount = amount;
+          $state.go('give.change');
+        };
 
         vm.transitionForLoggedInUserBasedOnExistingDonor = function(event, toState){
           if(toState.name == "give.account" && $rootScope.username && !vm.donorError ) {
