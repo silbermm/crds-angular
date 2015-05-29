@@ -1,5 +1,6 @@
-<donation-details ng-init="give = give.dto"amount="give.amount" program="give.program" 
+<donation-details ng-init="give = give.dto" amount="give.amount" program="give.program" 
 				  amount-submitted="give.amountSubmitted" programs-in="give.programsInput">
 </donation-details>
 <bank-credit-card-details></bank-credit-card-details>
 <a ng-click="give.submitChangedBankInfo()" class="btn btn-primary btn-lg col-xs-12">GIVE {{give.amount | currency}}</a>
+

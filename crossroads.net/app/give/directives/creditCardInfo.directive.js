@@ -31,6 +31,8 @@ require('../creditCardInfo.html');
       function link(scope, element, attrs) {
         $log.debug("Inside of creditCardInfo directive");
 
+        scope.creditCard = scope;
+
         scope.creditCardDiscouragedGrowlDivRef = 1001;
 
         scope.billingZipCodeError = function() {
