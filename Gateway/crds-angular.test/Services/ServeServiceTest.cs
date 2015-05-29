@@ -377,7 +377,7 @@ namespace crds_angular.test.Services
 
             SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp);
 
-            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, eventTypeId, It.IsAny<DateTime>(),
+            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, It.IsAny<List<int>>(), eventTypeId, It.IsAny<DateTime>(),
                 It.IsAny<DateTime>(), signUp, alternateWeeks);
 
             _participantService.VerifyAll();
@@ -399,11 +399,12 @@ namespace crds_angular.test.Services
             const int eventTypeId = 3;
             const bool signUp = false;
             const bool alternateWeeks = false;
+            var oppIds = new List<int>();
 
 
             SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp);
 
-            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, eventTypeId, It.IsAny<DateTime>(),
+            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, oppIds, eventTypeId, It.IsAny<DateTime>(),
                 It.IsAny<DateTime>(), signUp, alternateWeeks);
 
             _participantService.VerifyAll();
@@ -429,7 +430,7 @@ namespace crds_angular.test.Services
 
             SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp);
 
-            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, eventTypeId, It.IsAny<DateTime>(),
+            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, It.IsAny<List<int>>(), eventTypeId, It.IsAny<DateTime>(),
                 It.IsAny<DateTime>(), signUp, alternateWeeks);
 
             _participantService.VerifyAll();
@@ -457,7 +458,7 @@ namespace crds_angular.test.Services
 
             SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp);
 
-            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, eventTypeId, It.IsAny<DateTime>(),
+            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, It.IsAny<List<int>>(), eventTypeId, It.IsAny<DateTime>(),
                 It.IsAny<DateTime>(), signUp, alternateWeeks);
 
             _participantService.VerifyAll();

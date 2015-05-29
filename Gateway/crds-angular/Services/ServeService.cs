@@ -193,6 +193,7 @@ namespace crds_angular.Services
         public bool SaveServeRsvp(string token,
             int contactId,
             int opportunityId,
+            List<int> opportunityIds, 
             int eventTypeId,
             DateTime startDate,
             DateTime endDate,
@@ -209,9 +210,16 @@ namespace crds_angular.Services
                 if ((!alternateWeeks) || includeThisWeek)
                 {
                     //for each event in range create an event participant & opportunity response
-                    if (signUp)
+                    if (signUp)                    
                     {
                         _eventService.registerParticipantForEvent(participant.ParticipantId, e.EventId);
+
+                        // Make sure we are only rsvping for 1 opportunity by removing all existing responses
+                        foreach( var oid in opportunityIds)
+                        {
+                            _opportunityService.DeleteResponseToOpportunities(participant.ParticipantId, oid, e.EventId);
+                        }
+
                         var comments = string.Empty; //anything of value to put in comments?
                         _opportunityService.RespondToOpportunity(participant.ParticipantId, opportunityId, comments,
                             e.EventId, true);
@@ -227,7 +235,15 @@ namespace crds_angular.Services
                         {
                             logger.Debug(ex.Message + ": There is no need to remove the event participant because there is not one.");
                         }
-                        // get all opportunities for this 
+
+                        // Responding no means that we are saying no to all opportunities for this group for this event
+                        foreach (var oid in opportunityIds)
+                        {
+                            var comments = string.Empty; //anything of value to put in comments?
+                            _opportunityService.RespondToOpportunity(participant.ParticipantId, oid, comments,
+                                e.EventId, false);
+                        }
+                        
                     }
                     
                 }
