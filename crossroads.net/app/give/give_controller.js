@@ -55,6 +55,8 @@
               vm.donor = donor;
               vm.last4 = donor.last4;
               vm.brand = brandCode[donor.brand];
+              vm.expYear =  donor.exp_year;
+              vm.exp_month = donor.exp_month;
               $state.go("give.confirm");
             },function(error){
             //  create donor record
@@ -91,10 +93,11 @@
 
         };
 
-        vm.goToChange = function(amount) {
-          vm.dto.amount = amount;
+        vm.goToChange = function() {
+         // vm.dto.amount = amount;
           $state.go("give.change")
         };
+
 
         vm.goToLogin = function () {
           Session.addRedirectRoute("give.account", "");
@@ -138,8 +141,7 @@
 
         vm.submitBankInfo = function() {
             vm.bankinfoSubmitted = true;
-           // $rootScope.$digest();
-            if ($scope.giveForm.$valid) {
+             if ($scope.giveForm.$valid) {
               PaymentService.donor().get({email: $scope.give.email})
              .$promise
               .then(function(donor){
@@ -166,6 +168,33 @@
                   });
 
                 });
+            }
+            else {
+                  // The vm.email below is only required for gu
+              $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+            }
+        };
+
+        vm.submitChangedBankInfo = function() {
+          console.log("shit fire");
+            vm.bankinfoSubmitted = true;
+             if ($scope.giveForm.$valid) {
+              PaymentService.updateDonorWithCard(
+                donor.id,
+                {
+                  name: vm.nameOnCard,
+                  number: vm.ccNumber,
+                  exp_month: vm.expDate.substr(0,2),
+                  exp_year: vm.expDate.substr(2,2),
+                  cvc: vm.cvc
+                })
+              .then(function(donor) {
+                vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email);
+                $state.go("give.thank-you");
+              }),
+              function() {
+                $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
+              };     
             }
             else {
               $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
