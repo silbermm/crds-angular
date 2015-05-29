@@ -243,6 +243,8 @@ namespace crds_angular.Services
             var events = _eventService.GetEventsByTypeForRange(eventTypeId, startDate, endDate, token);
             var includeThisWeek = true;
             var templateId = AppSetting("RsvpYesTemplate");
+            var deletedRSVPS = new List<int>();
+            var prevOpp = 0;
 
             foreach (var e in events)
             {
@@ -256,7 +258,26 @@ namespace crds_angular.Services
                         // Make sure we are only rsvping for 1 opportunity by removing all existing responses
                         foreach( var oid in opportunityIds)
                         {
-                            _opportunityService.DeleteResponseToOpportunities(participant.ParticipantId, oid, e.EventId);
+                            var deletedResponse = _opportunityService.DeleteResponseToOpportunities(participant.ParticipantId, oid, e.EventId);
+                            if (deletedResponse != 0)
+                            {
+                                deletedRSVPS.Add(deletedResponse);
+                            }
+                        }
+
+                        if (deletedRSVPS.Count > 0)
+                        {
+                            templateId = AppSetting("RsvpChangeTemplate");
+                            if (opportunityIds.Count == deletedRSVPS.Count)
+                            {
+                                //Changed from NO to YES. 
+                                prevOpp = 0;
+                            }
+                            else
+                            {
+                                //Changed yes to yes
+                                prevOpp = deletedRSVPS.First();
+                            }
                         }
 
                         var comments = string.Empty; //anything of value to put in comments?
@@ -267,7 +288,7 @@ namespace crds_angular.Services
                     {
                         try
                         {
-                            templateId = AppSetting("RsvpNoTemplate");
+                            templateId = AppSetting("RsvpChangeTemplate");
                             opportunityId = opportunityIds.First();
                             //if there is already a participant, remove it because they've changed to "No"
                             _eventService.unRegisterParticipantForEvent(participant.ParticipantId, e.EventId);
@@ -275,14 +296,19 @@ namespace crds_angular.Services
                         catch (ApplicationException ex)
                         {
                             logger.Debug(ex.Message + ": There is no need to remove the event participant because there is not one.");
+                            templateId = AppSetting("RsvpNoTemplate");
                         }
 
                         // Responding no means that we are saying no to all opportunities for this group for this event
                         foreach (var oid in opportunityIds)
                         {
                             var comments = string.Empty; //anything of value to put in comments?
-                            _opportunityService.RespondToOpportunity(participant.ParticipantId, oid, comments,
+                            var updatedOpp = _opportunityService.RespondToOpportunity(participant.ParticipantId, oid, comments,
                                 e.EventId, false);
+                            if (updatedOpp > 0)
+                            {
+                                prevOpp = updatedOpp;
+                            }
                         }
                         
                     }
@@ -292,18 +318,29 @@ namespace crds_angular.Services
             }
 
             //Send Confirmation Email Asynchronously
-            var thread = new Thread(() => SendRSVPConfirmation(contactId, opportunityId, startDate, endDate, templateId, token));
+            var thread = new Thread(() => SendRSVPConfirmation(contactId, opportunityId, prevOpp, startDate, endDate, templateId, token));
             thread.Start();
 
             return true;
         }
 
-        private void SendRSVPConfirmation(int contactId, int opportunityId, DateTime startDate, DateTime endDate, int templateId, string token)
+        private void SendRSVPConfirmation(int contactId, int opportunityId, int prevOppId, DateTime startDate, DateTime endDate, int templateId, string token)
         {
             var template = CommunicationService.GetTemplate(templateId, token);
 
             //Go get Opportunity deets
             var opp = _opportunityService.GetOpportunityById(opportunityId, token);
+
+            //Go get Previous Opportunity deets
+            var prevOpp = new Opportunity();
+            if (prevOppId > 0)
+            {
+                prevOpp = _opportunityService.GetOpportunityById(opportunityId, token);
+            }
+            else
+            {
+                prevOpp.OpportunityName = "No";
+            }
 
             //Go get from/to contact info
             var fromEmail = _contactService.GetContactEmail(opp.GroupContactId);
@@ -330,9 +367,10 @@ namespace crds_angular.Services
                 {"End_Date", endDate.ToShortDateString()},
                 {"Shift_Start", opp.ShiftStart.FormatAsString()},
                 {"Shift_End", opp.ShiftEnd.FormatAsString()},
-                {"Room", opp.Room},
+                {"Room", opp.Room ?? string.Empty},
                 {"Group_Contact", opp.GroupContactName},
-                {"Group_Name", opp.GroupName}
+                {"Group_Name", opp.GroupName},
+                {"Previous_Opportunity_Name", prevOpp.OpportunityName}
             };
 
             CommunicationService.SendMessage(comm, mergeData, token);
