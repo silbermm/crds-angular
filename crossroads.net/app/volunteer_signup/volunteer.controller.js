@@ -4,19 +4,47 @@
 
   module.exports = VolunteerController;
 
-  VolunteerController.$inject = ['$log', '$filter', 'MESSAGES', 'Session', 'Opportunity', 'ServeOpportunities', 'CmsInfo'];
+  VolunteerController.$inject = ['$rootScope', '$scope', '$log', '$filter', 'MESSAGES', 'Session', 'Opportunity', 'ServeOpportunities', 'CmsInfo', '$modal'];
 
-  function VolunteerController($log, $filter, MESSAGES, Session, Opportunity, ServeOpportunities, CmsInfo) {
+  function VolunteerController($rootScope, $scope, $log, $filter, MESSAGES, Session, Opportunity, ServeOpportunities, CmsInfo, $modal) {
     $log.debug("Inside VolunteerController");
     var vm = this;
 
-    vm.pageInfo = pageInfo(CmsInfo);
+    vm.allSignedUp = allSignedUp;
+    vm.disableCheckbox = disableCheckbox;
     vm.displayEmail = displayEmail;
+    vm.displayPendingFlag = displayPendingFlag;
+    vm.editProfile = editProfile;
+    vm.modalInstance = {};
+    vm.pageInfo = pageInfo(CmsInfo);
+    vm.participants = null;
     vm.save = save;
+    vm.showAllSignedUp = false;
     vm.showContent = true;
+    vm.showSuccess = false;
     vm.viewReady = false;
 
     init();
+
+    function allSignedUp() {
+      var signupCount = 0;
+      _.each(vm.participants, function(p){
+        if (p.memberOfGroup || p.pending) {
+          signupCount = signupCount + 1;
+        }
+      });
+      if (signupCount === vm.participants.length) {
+        vm.showAllSignedUp = true;
+        vm.showContent = false;
+      }
+    }
+
+    function disableCheckbox(participant) {
+      if (participant.memberOfGroup || participant.pending) {
+        return true;
+      }
+      return false;
+    }
 
     function displayEmail(emailAddress) {
       if (emailAddress === null || emailAddress === undefined) {
@@ -28,6 +56,26 @@
       return false;
     }
 
+    function displayPendingFlag(participant) {
+      if (participant.memberOfGroup) {
+        return false;
+      }
+      if (participant.pending) {
+        return true;
+      }
+      return false;
+    }
+
+    function editProfile() {
+			vm.modalInstance = $modal.open({
+				templateUrl: 'editProfile.html',
+				backdrop: true,
+				// This is needed in order to get our scope
+				// into the modal - by default, it uses $rootScope
+				scope: $scope,
+			});
+		}
+
     function init() {
       ServeOpportunities.QualifiedServers.query({
           groupId: vm.pageInfo.group,
@@ -35,6 +83,7 @@
         }).$promise
         .then(function(response) {
           vm.participants = response;
+          allSignedUp();
           vm.viewReady = true;
         });
     }
@@ -53,8 +102,16 @@
         add: true
       }), 'participantId');
 
+      $log.debug(save.participants.length);
+      if (save.participants.length < 1) {
+        $rootScope.$emit('notify', $rootScope.MESSAGES.noPeopleSelectedError);
+        return;
+      }
+
       save.$save().then(function() {
         vm.created = true;
+        vm.showContent = false;
+        vm.showSuccess = true;
       }, function() {
         vm.rejected = true;
       });

@@ -1,4 +1,3 @@
-
 <!-- TODO Can this error handling be updated to utilize ngMessages? -->
 <div class="alert alert-success" role="alert" ng-if="volunteer.created">
   <span ng-bind-html="$root.messages[$root.MESSAGES.succesfulResponse].message | html"></span>
@@ -8,43 +7,53 @@
   <span ng-bind-html="$root.messages[$root.MESSAGES.failedResponse].message | html"></span>
 </div>
 
-<div ng-show="volunteer.viewReady">
-<h2 class="header noPspace" ng-bind-html="volunteer.pageInfo.title | html"></h2>
-<div >
-  <p id="content" class="noPspace" dir="ltr" ng-bind-html="volunteer.pageInfo.content | html" ng-show="volunteer.showContent"></p>
-  <p id="successMessage" ng-bind-html="volunteer.signupPage.success | html" ng-show="groupsignup.showSuccess && !groupsignup.waitListCase"></p>
-  <p id="fullGroupMessage" ng-bind-html="volunteer.signupPage.full | html" ng-show="groupsignup.showFull"></p>
-  <p id="waitListMessage" ng-bind-html="volunteer.signupPage.waitList | html" ng-show="groupsignup.showWaitList && groupsignup.waitListCase && !groupsignup.alreadySignedUp"></p>
-  <p id="waitSuccessMessage" ng-bind-html="volunteer.signupPage.waitSuccess | html" ng-show="groupsignup.showWaitSuccess && groupsignup.waitListCase"></p>
-</div>
+<preloader full-screen='true' ng-show="!volunteer.viewReady"> </preloader>
 
-<div>
-  <legend>Participants</legend>
-  <form class="form-group" name="myForm" role="form" ng-submit="volunteer.save(myForm)" id="myForm">
-    <p>
-      <div class="checkbox" ng-repeat="participant in volunteer.participants as people" ng-class="{'has-error':!groupsignup.formValid && !person['userInGroup']}">
-        <label>
-          <span ng-show="volunteer.participants.length > 1">
-            <input name="input" type="checkbox" ng-checked="participant.memberOfGroup" ng-disabled="participant.memberOfGroup" ng-model="participant.add">&nbsp;</span>
-          <span>{{ participant.preferredName }}</span>
-          <span ng-show="volunteer.displayEmail(participant.email)">({{ participant.email }})</span>
-          <span>{{formValid}}</span>
-          <span ng-show="participant.loggedInUser">
-            <a href="" ng-click="groupsignup.editProfile()">
-              <svg viewBox="0 0 32 32" class="icon icon-pencil4">
-                <use xlink:href="#pencil4"></use>
-              </svg>
-            </a>
-          </span>
-        </label>
-      </div>
-    </p>
-    <!-- <section>
-      <button class="btn btn-primary" ng-click="opportunity.submitRequest(115)"> Request to Join Kids Club </button>
-    </section> -->
-    <p >
-      <input type="submit" name="submit_group_signup" value="Request to Join Kids Club" id="submit_group_signup" class="btn btn-primary push-half-bottom">
-    </p>
-  </form>
+<div ng-show="volunteer.viewReady">
+  <h2 class="header noPspace" ng-bind-html="volunteer.pageInfo.title | html"></h2>
+  <div>
+    <p id="content" class="noPspace" dir="ltr" ng-bind-html="volunteer.pageInfo.content | html" ng-show="volunteer.showContent"></p>
+    <p id="fullGroupMessage" ng-bind-html="volunteer.pageInfo.existingMember | html" ng-show="volunteer.showAllSignedUp"></p>
+    <p id="successMessage" ng-bind-html="volunteer.pageInfo.success | html" ng-show="volunteer.showSuccess"></p>
+  </div>
+
+  <div ng-show="volunteer.showContent">
+    <legend>Participants</legend>
+    <form class="form-group" name="myForm" role="form" ng-submit="volunteer.save(myForm)" id="myForm">
+      <p>
+        <div class="checkbox" ng-repeat="participant in volunteer.participants as people">
+          <label>
+            <span ng-show="volunteer.participants.length > 1">
+              <input name="input" type="checkbox" ng-checked="volunteer.disableCheckbox(participant)" ng-disabled="volunteer.disableCheckbox(participant)" ng-model="participant.add">
+            </span>
+            <span ng-class="{'text-muted':volunteer.disableCheckbox(participant)}">
+              <span>{{ participant.preferredName }}</span>
+              <span ng-show="volunteer.displayEmail(participant.email)">({{ participant.email }})</span>
+            </span>
+            <span ng-show="participant.loggedInUser">
+              <a href="" ng-click="volunteer.editProfile()">
+                <svg viewBox="0 0 32 32" class="icon icon-pencil4">
+                  <use xlink:href="#pencil4"></use>
+                </svg>
+              </a>
+            </span>
+            <span ng-show="volunteer.displayPendingFlag(participant)" class="text-danger"> - pending</span>
+          </label>
+        </div>
+      </p>
+      <p>
+        <input type="submit" name="submit_group_signup" value="Request to Join {{ volunteer.pageInfo.title }}" id="submit_group_signup" class="btn btn-primary push-half-bottom">
+      </p>
+    </form>
+  </div>
+  <script type="text/ng-template" id="editProfile.html">
+    <div class="modal-header">
+      <a type="button" class="close" ng-click="volunteer.modalInstance.close()">x</a>
+      <h4 class="modal-title">Edit Profile</h4>
+    </div>
+    <div class="modal-body">
+      <profile-personal updated-person="volunteer.response[0]" modal-instance="volunteer.modalInstance"/>
+    </div>
+  </script>
 </div>
-</div> <!-- viewReady -->
+<!-- viewReady -->

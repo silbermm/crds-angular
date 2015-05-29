@@ -7,7 +7,6 @@
   require('./login/login_page.html');
   require('./register/register_form.html');
   require('./content');
-  require('./opportunity');
   require('./community_groups_signup')
   require('./mytrips');
   require('./profile/profile.html');
@@ -17,7 +16,6 @@
   require('./styleguide');
   require('./give');
   require('./myprofile');
-  require('./opportunity/view_opportunities.html');
   require('./content/content.html');
   require('./community_groups_signup/group_signup_form.html');
   require('./my_serve');
@@ -194,19 +192,6 @@
               url: "/corkboard/detail",
               templateUrl: "corkboard/corkboard-listing-detail.html"
             })
-            .state("opportunities", {
-                url: "/opportunities",
-                controller: "ViewOpportunitiesController as opportunity",
-                templateUrl: "opportunity/view_opportunities.html",
-                data: { isProtected: true },
-                resolve: {
-                  loggedin: checkLoggedin,
-                  ServeOpportunities: 'ServeOpportunities',
-                  Participants: function(ServeOpportunities){
-                    return ServeOpportunities.QualifiedServers.query({groupId: 27705, contactId: getCookie('userId')}).$promise;
-                  }
-                }
-            })
             .state("serve-signup", {
               url: "/serve-signup",
               controller: "MyServeController as serve",
@@ -353,10 +338,6 @@
                 CmsInfo: function(Page, $stateParams){
                   return Page.get( {url: $stateParams.link} ).$promise;
                 }
-                // ServeOpportunities: 'ServeOpportunities',
-                // Participants: function(ServeOpportunities, $stateParams){
-                //   return ServeOpportunities.QualifiedServers.query({groupId: 27705, contactId: getCookie('userId')}).$promise;
-                // }
               }
             })
             .state("errors/404", {

@@ -82,12 +82,15 @@ namespace crds_angular.Services
 
             foreach (var participant in immediateFamilyParticipants)
             {
+                var membership = _groupService.ParticipantGroupMember(groupId, participant.ParticipantId);
+                var opportunityResponse = _opportunityService.GetMyOpportunityResponses(participant.ContactId,115, token);
                 var qualifiedServer = new QualifiedServerDto();
                 qualifiedServer.ContactId = participant.ContactId;
                 qualifiedServer.Email = participant.Email;
                 qualifiedServer.LastName = participant.LastName;
                 qualifiedServer.LoggedInUser = participant.LoggedInUser;
-                qualifiedServer.MemberOfGroup = _groupService.ParticipantGroupMember(groupId, participant.ParticipantId); 
+                qualifiedServer.MemberOfGroup = membership;
+                qualifiedServer.Pending = opportunityResponse != null;
                 qualifiedServer.ParticipantId = participant.ParticipantId;
                 qualifiedServer.PreferredName = participant.PreferredName;
                 qualifiedServers.Add(qualifiedServer);

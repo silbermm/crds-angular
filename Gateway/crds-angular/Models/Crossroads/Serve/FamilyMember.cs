@@ -45,6 +45,9 @@ namespace crds_angular.Models.Crossroads.Serve
 
         [JsonProperty(PropertyName = "memberOfGroup")]
         public bool MemberOfGroup { get; set; }
+
+        [JsonProperty(PropertyName = "pending")]
+        public bool Pending { get; set; }
     }
 
     

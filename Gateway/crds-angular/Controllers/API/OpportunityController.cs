@@ -59,7 +59,10 @@ namespace crds_angular.Controllers.API
 
             try
             {
-                _opportunityService.RespondToOpportunity(opportunityResponse);
+                if (opportunityResponse.Participants.Count > 0)
+                {
+                    _opportunityService.RespondToOpportunity(opportunityResponse);
+                }
             }
             catch (Exception exception)
             {
