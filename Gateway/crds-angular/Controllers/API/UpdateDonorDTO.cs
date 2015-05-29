@@ -5,9 +5,9 @@ using System.Text;
 
 namespace crds_angular.Controllers.API
 {
-    class UpdateDonorDTO
+    public class UpdateDonorDTO
     {
-        string stripe_token_id { get; set; }
-        string donor_id { get; set; }
+        public string stripe_token_id { get; set; }
+        public string donor_id { get; set; }
     }
 }

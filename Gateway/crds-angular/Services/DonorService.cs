@@ -110,11 +110,11 @@ namespace crds_angular.Services
             return (contactDonorResponse);
         }
 
-        public UpdateCustomerSource (string stripe_token_id)
+        public void UpdateCustomerSource (string stripe_token_id)
         {
             var customer = paymentService.updateCustomer(stripe_token_id);
-            paymentService.updateCustomerDefaultSource(customer_token, card_id);
-            return ();
+            //paymentService.updateCustomerDefaultSource(customer_token, card_id);
+            return;
         }
     }
 }

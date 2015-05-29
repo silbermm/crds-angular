@@ -72,10 +72,10 @@ namespace crds_angular.Services
             return (response.Data.id);
         }
 
-        public string updateCustomerDefaultSource(string customer_token, int card_id)
+        public string updateCustomerDefaultSource(string customerToken, string sourceToken)
         {
-            var request = new RestRequest("customers/" + customer_token, Method.POST);
-            request.AddParameter("default_source", card_id);
+            var request = new RestRequest("customers/" + customerToken, Method.POST);
+            request.AddParameter("default_source", sourceToken);
 
             IRestResponse<StripeCustomer> response =
                 (IRestResponse<StripeCustomer>)stripeRestClient.Execute<StripeCustomer>(request);
@@ -88,9 +88,9 @@ namespace crds_angular.Services
             return (response.Data.id);
         }
 
-        public DefaultSource getDefaultSource(string customer_token)
+        public SourceData getDefaultSource(string customer_token)
         {
-            DefaultSource default_source = new DefaultSource();
+            SourceData default_source = new SourceData();
             
             var getCustomerRequest = new RestRequest("customers/" + customer_token, Method.GET);
 
