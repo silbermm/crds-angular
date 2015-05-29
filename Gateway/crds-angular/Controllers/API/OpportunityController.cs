@@ -7,10 +7,10 @@ using System.Web.Http.Description;
 using AutoMapper;
 using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads.Opportunity;
-using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Security;
 using Crossroads.Utilities.Extensions;
 using MinistryPlatform.Models;
+using MinistryPlatform.Models.DTO;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Controllers.API
@@ -46,14 +46,14 @@ namespace crds_angular.Controllers.API
 
         [ResponseType(typeof (int))]
         [Route("api/opportunity/save-qualified-server")]
-        public IHttpActionResult Post([FromBody] MinistryPlatform.Models.DTO.RespondToOpportunityDto opportunityResponse)
+        public IHttpActionResult Post([FromBody] RespondToOpportunityDto opportunityResponse)
         {
-            //return Ok();
-            //opportunityResponse = null;
             if (!ModelState.IsValid)
             {
-                var errors = ModelState.Values.SelectMany(val => val.Errors).Aggregate("", (current, err) => current + err.Exception.Message);
-                var dataError = new ApiErrorDto("POST Data Invalid", new InvalidOperationException("Invalid POST Data" + errors));
+                var errors = ModelState.Values.SelectMany(val => val.Errors)
+                    .Aggregate("", (current, err) => current + err.Exception.Message);
+                var dataError = new ApiErrorDto("POST Data Invalid",
+                    new InvalidOperationException("Invalid POST Data" + errors));
                 throw new HttpResponseException(dataError.HttpResponseMessage);
             }
 

@@ -346,19 +346,12 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Comments", It.IsAny<string>()}
                 };
             var token = It.IsAny<string>();
-            //mock this
-            //_ministryPlatformService.CreateRecord("OpportunityResponses", values, apiLogin(), true);
             _ministryPlatformService.Setup(m => m.CreateRecord(pageKey, p1, token, true)).Returns(27);
-            //_ministryPlatformService.Setup(m => m.CreateRecord(pageKey, p1, token, true)).Returns(It.IsAny<int>());
-            //_ministryPlatformService.Setup(m => m.CreateRecord(pageKey, p1, token, true)).Returns(It.IsAny<int>());
 
             var dto = new RespondToOpportunityDto {OpportunityId = 1, Participants = new List<int> {100, 200, 300}};
             Assert.DoesNotThrow(() => _fixture.RespondToOpportunity(dto));
 
             _ministryPlatformService.Verify(m=>m.CreateRecord(It.IsAny<string>(),It.IsAny<Dictionary<string,object>>(),It.IsAny<string>(),true),Times.Exactly(3));
-
-
-
         }
 
         [Test]
