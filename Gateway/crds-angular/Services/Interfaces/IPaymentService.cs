@@ -11,6 +11,8 @@ namespace crds_angular.Services.Interfaces
         string createCustomer(string token);
         string chargeCustomer(string customer_token, int amount, int donor_id);
         string updateCustomerDescription(string customer_token, int donor_id);
+        string updateCustomer(string customer_token);
+        string updateCustomerDefaultSource(string customer_token, int card_id);
         DefaultSource getDefaultSource(string customer_token);
     }
 

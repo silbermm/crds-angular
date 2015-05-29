@@ -167,6 +167,18 @@ namespace crds_angular.Controllers.API
                 throw new HttpResponseException(apiError.HttpResponseMessage);
             }
         }
+
+        [ResponseType(typeof (DonorDTO))]
+        [Route("api/donor")]
+        public IHttpActionResult Put([FromBody] UpdateDonorDTO dto)
+        {
+            //lookupdonor with auth token and get cust ID for donor
+            var donor = gatewayDonorService.GetContactDonorForAuthenticatedUser(token);
+           
+            //Post apistripe/customer/{custID}/sources pass in the dto.stripe_token_id
+            //Post apistripe/customer with the default_source set to the source_id creted above (like description)
+            //return donor
+        }
     }
 }
 

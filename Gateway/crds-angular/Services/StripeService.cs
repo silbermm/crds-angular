@@ -38,6 +38,24 @@ namespace crds_angular.Services
 
         }
 
+        public string updateCustomer(string token)
+        {
+
+            var request = new RestRequest("customers", Method.POST);
+            request.AddParameter("source", token);
+
+            IRestResponse<StripeCustomer> response =
+                (IRestResponse<StripeCustomer>)stripeRestClient.Execute<StripeCustomer>(request);
+            if (response.StatusCode == HttpStatusCode.BadRequest)
+            {
+                Content content = JsonConvert.DeserializeObject<Content>(response.Content);
+                throw new StripeException("Customer update to add source failed", content.error.type, content.error.message, content.error.code);
+            }
+
+            return response.Data.id;
+
+        }
+
         public string updateCustomerDescription(string customer_token, int donor_id)
         {
             var request = new RestRequest("customers/" + customer_token, Method.POST);
@@ -49,6 +67,22 @@ namespace crds_angular.Services
             {
                 Content content = JsonConvert.DeserializeObject<Content>(response.Content);
                 throw new StripeException("Customer update failed", content.error.type, content.error.message, content.error.code);
+            }
+
+            return (response.Data.id);
+        }
+
+        public string updateCustomerDefaultSource(string customer_token, int card_id)
+        {
+            var request = new RestRequest("customers/" + customer_token, Method.POST);
+            request.AddParameter("default_source", card_id);
+
+            IRestResponse<StripeCustomer> response =
+                (IRestResponse<StripeCustomer>)stripeRestClient.Execute<StripeCustomer>(request);
+            if (response.StatusCode == HttpStatusCode.BadRequest)
+            {
+                Content content = JsonConvert.DeserializeObject<Content>(response.Content);
+                throw new StripeException("Customer update of default source failed", content.error.type, content.error.message, content.error.code);
             }
 
             return (response.Data.id);
