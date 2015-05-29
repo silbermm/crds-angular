@@ -44,19 +44,21 @@ require('../creditCardInfo.html');
         };
 
         scope.ccCardType = function () {
-            if (scope.ccNumber) {
-                if (scope.ccNumber.match(visaRegEx))
+            var ccNumber = scope.creditCardForm.ccNumber;
+            if (ccNumber && ccNumber.$modelValue) {
+                ccNumber = ccNumber.$modelValue;
+                if (ccNumber.match(visaRegEx))
                   scope.ccNumberClass = "cc-visa";
-                else if (scope.ccNumber.match(mastercardRegEx))
+                else if (ccNumber.match(mastercardRegEx))
                   scope.ccNumberClass = "cc-mastercard";
-                else if (scope.ccNumber.match(discoverRegEx))
+                else if (ccNumber.match(discoverRegEx))
                   scope.ccNumberClass = "cc-discover";
-                else if (scope.ccNumber.match(americanExpressRegEx))
+                else if (ccNumber.match(americanExpressRegEx))
                   scope.ccNumberClass = "cc-american-express";
                 else
                   scope.ccNumberClass = "";
             } else
-                scope.ccNumberClass = "";
+              scope.ccNumberClass = "";
         };
 
         scope.ccNumberError = function(ccValid) {
