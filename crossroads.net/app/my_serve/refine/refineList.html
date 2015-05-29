@@ -1,7 +1,7 @@
 <div class="col-sm-2 col-sm-push-10 gray-lighter clearfix">
 
-  <div collapse="isCollapsed"> 
-    
+  <div collapse="isCollapsed">
+
     <div ng-click="toggleCollapse()">
       <div class="filter-clear" ng-show='$root.mobile'>
         <svg viewBox="0 0 25 32" class="icon icon-plus" ng-show="isCollapsed">
@@ -15,19 +15,19 @@
     </div>
 
 
-    <form name='filterdates' ng-submit="readyFilterByDate()">        
+    <form name='filterdates' ng-submit="readyFilterByDate()" novalidate>        
       <div class="push-half-bottom filter-group">
-        <!-- From -->  
+        <!-- From -->
         <div class="form-group" ng-class="{'has-error': isFromError()}" >
           <label>From:</label>
           <div class="input-group">
-            <input name="fromdate" type="text" 
-                   class="form-control" 
-                   datepicker-popup="{{format}}" 
-                   ng-required="true" 
-                   close-text="Close" 
-                   ng-model="filterFromDate" 
-                   is-open="datePickers.fromOpened" 
+            <input name="fromdate" type="text"
+                   class="form-control"
+                   datepicker-popup="{{format}}"
+                   ng-required="true"
+                   close-text="Close"
+                   ng-model="filterFromDate"
+                   is-open="datePickers.fromOpened"
                    datepicker-options="dateOptions" />
             <span class="input-group-btn">
               <button type="button" class="btn btn-default" ng-click="openFromDate($event)">
@@ -37,31 +37,31 @@
           </div>
           <!--/input-group-->
           <span ng-messages="filterdates.fromdate.$error" ng-show="isFromError()">
-            <span ng-message="fromDateToLarge" > 
-              <span ng-bind-html="$root.messages[$root.MESSAGES.fromDateToLarge].message | html"></span> 
-            </span> 
+            <span ng-message="fromDateToLarge" >
+              <span ng-bind-html="$root.messages[$root.MESSAGES.fromDateToLarge].message | html"></span>
+            </span>
             <span ng-message="required">
               <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
-            </span> 
+            </span>
             <span ng-message="date">
               <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
-            </span> 
-          </span> 
+            </span>
+          </span>
         </div>
-        <!--/form-group--> 
+        <!--/form-group-->
         <!-- /From -->
 
         <div class="form-group" ng-class="{'has-error': isToError()}">
           <label>To:</label>
           <div class="input-group">
-            <input name="todate" 
-                   type="text" 
-                   class="form-control" 
-                   datepicker-popup="{{::format}}" 
-                   ng-required="true" 
-                   close-text="Close" 
-                   ng-model="lastDate" 
-                   is-open="datePickers.toOpened" 
+            <input name="todate"
+                   type="text"
+                   class="form-control"
+                   datepicker-popup="{{::format}}"
+                   ng-required="true"
+                   close-text="Close"
+                   ng-model="lastDate"
+                   is-open="datePickers.toOpened"
                    datepicker-options="dateOptions" />
             <span class="input-group-btn">
               <button type="button" class="btn btn-default" ng-click="openToDate($event)">
@@ -71,23 +71,23 @@
           </div>
           <!--/input-group-->
           <span ng-messages="filterdates.todate.$error" ng-show="isToError()" >
-            <span ng-message="fromDate"> 
+            <span ng-message="fromDate">
               <span ng-bind-html="$root.messages[$root.MESSAGES.toDateToSmall].message | html"> </span>
-            </span> 
+            </span>
             <span ng-message="required">
               <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
-            </span> 
+            </span>
             <span ng-message="date">
               <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
-            </span> 
-          </span> 
+            </span>
+          </span>
         </div>
         <!--/form-group-->
         <button type="submit" class="btn btn-primary btn-block"> Apply </input>
        </div>
        <!--/push-bottom-->
     </form>
- 
+
     <div ng-click="toggleCollapse()">
       <div class="filter-clear" ng-show='$root.mobile'>
         <svg viewBox="0 0 25 32" class="icon icon-plus" ng-show="isCollapsed">
@@ -101,7 +101,7 @@
         <a href="" data-ng-click="clearFilters()" class="filter-reset" ng-show="isFilterSet()" stop-event> Clear</a>
       </h5>
     </div>
- 
+
       <div class="push-half-bottom filter-group" ng-if="uniqueMembers.length > 1">
             <div class="checkbox" data-ng-repeat="member in uniqueMembers">
                 <label>
