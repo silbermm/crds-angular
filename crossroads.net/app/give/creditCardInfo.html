@@ -1,4 +1,4 @@
-<ng-form name="creditCardForm" validate-card ng-model>
+<ng-form name="creditCardForm">
     <section class="bank-section" ng-init="initCreditCardBankSection()">
         <div growl inline="true" reference="{{creditCardDiscouragedGrowlDivRef}}" limit-messages="1"></div>
         <div class="form-group" ng-class="{'has-error': nameError() }">
@@ -9,7 +9,7 @@
         </div>
         <div class="form-group" ng-class="{'has-error': ccNumberError(ccValid) }">
             <label for="ccNumber">Credit Card Number</label>
-            <input type="text" name="ccNumber" class="form-control cc-icon" ng-class="ccNumberClass" ng-model="ccNumber" maxlength="16" ng-change="ccCardType()" ng-required="true" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }">
+            <input type="text" name="ccNumber" class="form-control cc-icon" ng-class="ccNumberClass" validate-card ng-model="ccNumber" maxlength="16" ng-change="ccCardType()" ng-required="true" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }">
             <ng-messages for="creditCardForm.ccNumber.$error" ng-if="bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
             <span ng-show="!ccValid && creditCardForm.ccNumber.$dirty" ng-bind-html="$root.messages[$root.MESSAGES.invalidCard].message | html"></span>
         </div>
