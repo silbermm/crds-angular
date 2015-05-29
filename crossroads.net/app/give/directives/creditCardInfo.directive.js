@@ -8,14 +8,14 @@ require('../creditCardInfo.html');
     function bankInfo($log) {
         var directive = {
           restrict: 'EA',
-          replace: true,
+          //replace: true,
           scope: {
               nameOnCard: "=",
               ccNumber: "=",
               expDate: "=",
               cvc: "=",
               billingZipCode: "=",
-              validForm: "="
+              bankinfoSubmitted: "="
             },
           templateUrl: 'give/creditCardInfo.html',
           link: link
@@ -25,59 +25,58 @@ require('../creditCardInfo.html');
       function link(scope, element, attrs) {
         $log.debug("Inside of creditCardInfo directive");
 
+        scope.creditCardDiscouragedGrowlDivRef = 1001;
+
         scope.billingZipCodeError = function() {
-          return (vm.bankinfoSubmitted && $scope.creditCardForm.billingZipCode.$invalid ||
-            $scope.creditCardForm.billingZipCode.$dirty && $scope.creditCardForm.billingZipCode.$invalid);
+          console.log("in");
+          return (scope.bankinfoSubmitted && scope.creditCardForm.billingZipCode.$invalid ||
+            scope.creditCardForm.billingZipCode.$dirty && scope.creditCardForm.billingZipCode.$invalid);
         };
 
         scope.blurBillingZipCodeError = function() {
-          return ($scope.creditCardForm.billingZipCode.$dirty && $scope.creditCardForm.billingZipCode.$invalid);
+          return (scope.creditCardForm.billingZipCode.$dirty && scope.creditCardForm.billingZipCode.$invalid);
         };
-       
-        scope.blurRoutingError = function() {
-          return ($scope.creditCardForm.routing.$dirty && $scope.creditCardForm.routing.$error.invalidRouting );
-        };
-
+           
         scope.ccCardType = function () {
-            if (vm.ccNumber) {
-                if (vm.ccNumber.match(visaRegEx))
-                  vm.ccNumberClass = "cc-visa";
-                else if (vm.ccNumber.match(mastercardRegEx))
-                  vm.ccNumberClass = "cc-mastercard";
-                else if (vm.ccNumber.match(discoverRegEx))
-                  vm.ccNumberClass = "cc-discover";
-                else if (vm.ccNumber.match(americanExpressRegEx))
-                  vm.ccNumberClass = "cc-american-express";
+            if (scope.ccNumber) {
+                if (scope.ccNumber.match(visaRegEx))
+                  scope.ccNumberClass = "cc-visa";
+                else if (scope.ccNumber.match(mastercardRegEx))
+                  scope.ccNumberClass = "cc-mastercard";
+                else if (scope.ccNumber.match(discoverRegEx))
+                  scope.ccNumberClass = "cc-discover";
+                else if (scope.ccNumber.match(americanExpressRegEx))
+                  scope.ccNumberClass = "cc-american-express";
                 else
-                  vm.ccNumberClass = "";
+                  scope.ccNumberClass = "";
             } else
-                vm.ccNumberClass = "";
+                scope.ccNumberClass = "";
         };
 
         scope.ccNumberError = function(ccValid) {
             if (ccValid === undefined) {
-                vm.setValidCard = false ;
+                scope.setValidCard = false ;
             }
 
-            return (vm.bankinfoSubmitted && $scope.creditCardForm.ccNumber.$pristine || //cannot be blank on submit
-                    vm.setValidCard && !vm.bankinfoSubmitted || //can be empty on pageload
-                    !ccValid && vm.bankinfoSubmitted ||
-                    !ccValid && $scope.creditCardForm.ccNumber.$dirty);  //show error when not valid
+            return (scope.bankinfoSubmitted && scope.creditCardForm.ccNumber.$pristine || //cannot be blank on submit
+                    scope.setValidCard && !scope.bankinfoSubmitted || //can be empty on pageload
+                    !ccValid && scope.bankinfoSubmitted ||
+                    !ccValid && scope.creditCardForm.ccNumber.$dirty);  //show error when not valid
          };
 
          scope.cvvError = function(cvcValid) {
             if (cvcValid === undefined) {
-                vm.setValidCvc = false  ;
+                scope.setValidCvc = false  ;
             }
 
-            return (vm.bankinfoSubmitted && $scope.creditCardForm.cvc.$pristine || //cannot be blank on submit
-                    vm.setValidCvc && !vm.bankinfoSubmitted || //can be empty on pageload
-                    !cvcValid && vm.bankinfoSubmitted ||
-                    !cvcValid && $scope.creditCardForm.cvc.$dirty);  //show error when not valid
+            return (scope.bankinfoSubmitted && scope.creditCardForm.cvc.$pristine || //cannot be blank on submit
+                    scope.setValidCvc && !scope.bankinfoSubmitted || //can be empty on pageload
+                    !cvcValid && scope.bankinfoSubmitted ||
+                    !cvcValid && scope.creditCardForm.cvc.$dirty);  //show error when not valid
         };
 
         scope.expDateError = function() {
-            return (vm.bankinfoSubmitted && $scope.creditCardForm.expDate.$invalid);
+            return (scope.bankinfoSubmitted && scope.creditCardForm.expDate.$invalid);
         };
 
          // Emits a growl notification encouraging checking/savings account
@@ -86,13 +85,13 @@ require('../creditCardInfo.html');
             $rootScope.$emit(
                 'notify',
                 $rootScope.MESSAGES.creditCardDiscouraged,
-                vm.creditCardDiscouragedGrowlDivRef,
+                scope.creditCardDiscouragedGrowlDivRef,
                 -1 // Indicates that this message should not time out
                 );
         };
 
         scope.nameError = function() {
-            return (vm.bankinfoSubmitted && $scope.creditCardForm.nameOnCard.$invalid);
+            return (scope.bankinfoSubmitted && scope.creditCardForm.nameOnCard.$invalid);
         };
 
        

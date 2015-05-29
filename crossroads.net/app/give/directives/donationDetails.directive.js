@@ -29,6 +29,7 @@ require('../donation-details.html');﻿
         };  
 
         scope.amountError = function() {
+          console.log('here');
             return (scope.amountSubmitted && scope.donationDetailsForm.amount.$invalid 
               && scope.donationDetailsForm.$error.naturalNumber 
               || scope.donationDetailsForm.$dirty 

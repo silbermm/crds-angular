@@ -34,6 +34,10 @@ require('../bankInfo.html');
                 $scope.bankAccountForm.routing.$error.invalidRouting && $scope.bankAccountForm.routing.$dirty);
         };
 
+         scope.blurRoutingError = function() {
+          return ($scope.creditCardForm.routing.$dirty && $scope.creditCardForm.routing.$error.invalidRouting );
+        };
+
         scope.toggleCheck = function() {
             if (vm.showMessage == "Where?") {
                 vm.showMessage = "Close";

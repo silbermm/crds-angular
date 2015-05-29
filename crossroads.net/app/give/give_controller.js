@@ -22,7 +22,7 @@
         var vm = this;
         vm.amountSubmitted = false;
         vm.bankinfoSubmitted = false;
-        vm.creditCardDiscouragedGrowlDivRef = 1001;
+       
         vm.donor = {};
         vm.donorError = false;
         vm.email = null;
@@ -137,6 +137,7 @@
         
         vm.submitBankInfo = function() {
             vm.bankinfoSubmitted = true;
+           // $rootScope.$digest();
             if ($scope.giveForm.$valid) {
               PaymentService.donor().get({email: $scope.give.email})
              .$promise
