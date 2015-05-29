@@ -1,6 +1,6 @@
 <ng-form name="creditCardForm" ng-model="creditCard" validate-card>
-    <section class="bank-section" ng-init="initCreditCardBankSection()">
-        <div growl inline="true" reference="{{creditCardDiscouragedGrowlDivRef}}" limit-messages="1"></div>
+    <section class="bank-section">
+        <div growl inline="true" reference="1001" limit-messages="1"></div>
         <div class="form-group" ng-class="{'has-error': nameError() }">
             <label for="nameOnCard">Name On Card</label>
             <input type="text" name="nameOnCard" class="form-control" ng-model="creditCard.nameOnCard" ng-required="true" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }">
