@@ -226,10 +226,12 @@ namespace crds_angular.Services
         public bool SaveServeRsvp(string token,
             int contactId,
             int opportunityId,
+            List<int> opportunityIds, 
             int eventTypeId,
             DateTime startDate,
             DateTime endDate,
-            bool signUp, bool alternateWeeks)
+            bool signUp, 
+            bool alternateWeeks)
         {
             //get participant id for Contact
             var participant = _participantService.GetParticipant(contactId);
@@ -241,9 +243,19 @@ namespace crds_angular.Services
                 if ((!alternateWeeks) || includeThisWeek)
                 {
                     //for each event in range create an event participant & opportunity response
-                    if (signUp)
+                    if (signUp)                    
                     {
                         _eventService.registerParticipantForEvent(participant.ParticipantId, e.EventId);
+
+                        // Make sure we are only rsvping for 1 opportunity by removing all existing responses
+                        foreach( var oid in opportunityIds)
+                        {
+                            _opportunityService.DeleteResponseToOpportunities(participant.ParticipantId, oid, e.EventId);
+                        }
+
+                        var comments = string.Empty; //anything of value to put in comments?
+                        _opportunityService.RespondToOpportunity(participant.ParticipantId, opportunityId, comments,
+                            e.EventId, true);
                     }
                     else
                     {
@@ -256,10 +268,17 @@ namespace crds_angular.Services
                         {
                             logger.Debug(ex.Message + ": There is no need to remove the event participant because there is not one.");
                         }
+
+                        // Responding no means that we are saying no to all opportunities for this group for this event
+                        foreach (var oid in opportunityIds)
+                        {
+                            var comments = string.Empty; //anything of value to put in comments?
+                            _opportunityService.RespondToOpportunity(participant.ParticipantId, oid, comments,
+                                e.EventId, false);
+                        }
+                        
                     }
-                    var comments = string.Empty; //anything of value to put in comments?
-                    _opportunityService.RespondToOpportunity(participant.ParticipantId, opportunityId, comments,
-                        e.EventId, signUp);
+                    
                 }
                 includeThisWeek = !includeThisWeek;
             }
@@ -327,9 +346,15 @@ namespace crds_angular.Services
 
         private ServeRsvp NewServeRsvp(GroupServingParticipant record)
         {
-            return record.Rsvp != null
-                ? new ServeRsvp {Attending = (bool) record.Rsvp, RoleId = record.OpportunityId}
-                : null;
+            if (record.Rsvp != null && !((bool) record.Rsvp))
+            {
+                return new ServeRsvp { Attending = false, RoleId = 0};
+            }
+            else if (record.Rsvp != null && ((bool) record.Rsvp))
+            {
+                return new ServeRsvp {Attending = (bool) record.Rsvp, RoleId = record.OpportunityId};
+            }
+            return null;
         }
 
         //public for testing

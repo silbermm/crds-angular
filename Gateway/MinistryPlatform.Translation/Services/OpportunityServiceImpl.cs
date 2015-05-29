@@ -235,8 +235,29 @@ namespace MinistryPlatform.Translation.Services
             return recordId;
         }
 
-        public int RespondToOpportunity(int participantId, int opportunityId, string comments, int eventId,
-            bool response)
+        public Boolean DeleteResponseToOpportunities(int participantId, int opportunityId, int eventId)
+        {
+            var participant = new Participant { ParticipantId = participantId };
+
+            try
+            {
+                var prevResponse = GetOpportunityResponse(opportunityId, eventId, participant);
+                if (prevResponse.Response_ID != 0)
+                {
+                    _ministryPlatformService.DeleteRecord(_opportunityResponses, prevResponse.Response_ID, null, apiLogin());  
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(
+                    string.Format("Delete Response failed.  Participant Id: {0}, Opportunity Id: {1}",
+                        participantId, opportunityId), ex.InnerException);
+            }
+
+        }
+
+        public int RespondToOpportunity(int participantId, int opportunityId, string comments, int eventId, bool response)
         {
             var participant = new Participant {ParticipantId = participantId};
 

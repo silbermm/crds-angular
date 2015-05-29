@@ -113,7 +113,7 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
-                    _serveService.SaveServeRsvp(token, saveRsvp.ContactId, saveRsvp.OpportunityId,
+                    _serveService.SaveServeRsvp(token, saveRsvp.ContactId, saveRsvp.OpportunityId, saveRsvp.OpportunityIds,
                         saveRsvp.EventTypeId, saveRsvp.StartDateUnix.FromUnixTime(),
                         saveRsvp.EndDateUnix.FromUnixTime(), saveRsvp.SignUp, saveRsvp.AlternateWeeks);
                 }

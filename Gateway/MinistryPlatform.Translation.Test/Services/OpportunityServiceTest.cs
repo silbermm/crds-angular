@@ -13,12 +13,12 @@ namespace MinistryPlatform.Translation.Test.Services
     [TestFixture]
     public class OpportunityServiceTest
     {
-        private readonly int _signedupToServeSubPageViewId = 79;
-        private readonly int _groupOpportunitiesEventsPageViewId = 77;
-        private readonly int _opportunityPageId = 348;
-        private readonly int _eventPageId = 308;
-        private readonly int _groupsParticipants = 298;
-        private readonly int _groupsParticipantsSubPageId = 88;
+        private const int _signedupToServeSubPageViewId = 79;
+        private const int _groupOpportunitiesEventsPageViewId = 77;
+        private const int _opportunityPageId = 348;
+        private const int _eventPageId = 308;
+        private const int _groupsParticipants = 298;
+        private const int _groupsParticipantsSubPageId = 88;
         private DateTime _today;
 
         private Mock<IMinistryPlatformService> _ministryPlatformService;
@@ -59,6 +59,43 @@ namespace MinistryPlatform.Translation.Test.Services
 
             _authenticationService.VerifyAll();
             _ministryPlatformService.VerifyAll();
+        }
+
+        [Test]
+        public void DeleteOpportunityResponse()
+        {
+            const int opportunityId = 113;
+            const int mockParticipantId = 7777;
+            //_authenticationService.Setup(m => m.GetParticipantRecord(It.IsAny<string>()))
+            //    .Returns(new Participant { ParticipantId = mockParticipantId });
+
+            const int responseResultId = 1234567;
+            const int responseId = 1234;
+
+            List<Dictionary<string, object>> responses = new List<Dictionary<string, object>>();
+            Dictionary<string, object> response = new Dictionary<string, object>
+            {
+                {"dp_RecordID", responseId},
+                {"Opportunity_ID", opportunityId},
+                {"Participant_ID", mockParticipantId},
+                {"Response_Result_ID", responseResultId}
+            };
+            responses.Add(response);
+
+            const int opportunityResponsePageKey = 315;
+            _ministryPlatformService.Setup(
+                m => m.DeleteRecord(It.IsAny<int>(), responseId, null, It.IsAny<string>()))
+                .Returns(1);
+
+            _ministryPlatformService.Setup(
+                m =>
+                    m.GetPageViewRecords("ResponseByOpportunityAndEvent", It.IsAny<string>(), It.IsAny<string>(), "", 0))
+                .Returns(responses);
+
+            Assert.DoesNotThrow(() => _fixture.DeleteResponseToOpportunities(mockParticipantId, opportunityId, 1));
+
+            _ministryPlatformService.VerifyAll();
+
         }
 
         [Test]
