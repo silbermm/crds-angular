@@ -175,18 +175,18 @@ namespace crds_angular.Controllers.API
         [Route("api/donor")]
         public IHttpActionResult Put([FromBody] UpdateDonorDTO dto)
         {
-            //lookupdonor with auth token and get cust ID for donor
             return Authorized(token =>
             {
                 ContactDonor contactDonor;
+                SourceData sourceData;
      
                 try
                 {
                     contactDonor = gatewayDonorService.GetContactDonorForAuthenticatedUser(token);
 
                     //Post apistripe/customer/{custID}/sources pass in the dto.stripe_token_id
-                    //Post apistripe/customer with the default_source set to the source_id created above (like description)
-                    stripePaymentService.updateCustomerDefaultSource(contactDonor.ProcessorId, dto.stripe_token_id);
+                    sourceData = stripePaymentService.updateCustomerSource(contactDonor.ProcessorId, dto.stripe_token_id);
+
                 }
                 catch (StripeException stripeException)
                 {
@@ -202,7 +202,12 @@ namespace crds_angular.Controllers.API
                 var donor = new DonorDTO
                 {
                     id = contactDonor.DonorId,
-                    Processor_ID = contactDonor.ProcessorId              
+                    Processor_ID = contactDonor.ProcessorId,
+                    default_source = new DefaultSourceDTO
+                    {
+                        brand = sourceData.brand,
+                        last4 = sourceData.last4
+                    }
                 };
 
                 return Ok(donor);

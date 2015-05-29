@@ -34,7 +34,6 @@ require('../creditCardInfo.html');
         scope.creditCardDiscouragedGrowlDivRef = 1001;
 
         scope.billingZipCodeError = function() {
-          console.log("in");
           return (scope.bankinfoSubmitted && scope.creditCardForm.billingZipCode.$invalid ||
             scope.creditCardForm.billingZipCode.$dirty && scope.creditCardForm.billingZipCode.$invalid);
         };

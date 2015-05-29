@@ -38,11 +38,12 @@ namespace crds_angular.Services
 
         }
 
-        public string updateCustomer(string token)
+        public SourceData updateCustomerSource(string customerToken, string cardToken)
         {
+            SourceData defaultSource = new SourceData();
 
-            var request = new RestRequest("customers", Method.POST);
-            request.AddParameter("source", token);
+            var request = new RestRequest("customers/" + customerToken, Method.POST);
+            request.AddParameter("source", cardToken);
 
             IRestResponse<StripeCustomer> response =
                 (IRestResponse<StripeCustomer>)stripeRestClient.Execute<StripeCustomer>(request);
@@ -51,8 +52,18 @@ namespace crds_angular.Services
                 Content content = JsonConvert.DeserializeObject<Content>(response.Content);
                 throw new StripeException("Customer update to add source failed", content.error.type, content.error.message, content.error.code);
             }
+            var defaultSourceId = response.Data.default_source;
+            var sources = response.Data.sources.data;
+            foreach (var source in sources)
+            {
+                if (source.id == defaultSourceId)
+                {
+                    defaultSource.brand = source.brand;
+                    defaultSource.last4 = source.last4;
+                }
+            }
 
-            return response.Data.id;
+            return defaultSource;
 
         }
 
@@ -67,22 +78,6 @@ namespace crds_angular.Services
             {
                 Content content = JsonConvert.DeserializeObject<Content>(response.Content);
                 throw new StripeException("Customer update failed", content.error.type, content.error.message, content.error.code);
-            }
-
-            return (response.Data.id);
-        }
-
-        public string updateCustomerDefaultSource(string customerToken, string sourceToken)
-        {
-            var request = new RestRequest("customers/" + customerToken, Method.POST);
-            request.AddParameter("default_source", sourceToken);
-
-            IRestResponse<StripeCustomer> response =
-                (IRestResponse<StripeCustomer>)stripeRestClient.Execute<StripeCustomer>(request);
-            if (response.StatusCode == HttpStatusCode.BadRequest)
-            {
-                Content content = JsonConvert.DeserializeObject<Content>(response.Content);
-                throw new StripeException("Customer update of default source failed", content.error.type, content.error.message, content.error.code);
             }
 
             return (response.Data.id);
@@ -109,7 +104,6 @@ namespace crds_angular.Services
                 {
                     default_source.brand = source.brand;
                     default_source.last4 = source.last4;
-                    break;
                 }   
             }
             

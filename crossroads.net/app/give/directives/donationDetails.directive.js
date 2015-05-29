@@ -29,7 +29,6 @@ require('../donation-details.html');﻿
         };  
 
         scope.amountError = function() {
-          console.log('here');
             return (scope.amountSubmitted && scope.donationDetailsForm.amount.$invalid 
               && scope.donationDetailsForm.$error.naturalNumber 
               || scope.donationDetailsForm.$dirty 
@@ -37,7 +36,6 @@ require('../donation-details.html');﻿
         };
 
          scope.setProgramList = function(){
-          console.log("fired");
           scope.ministryShow ? scope.program = '' : scope.program = scope.programs[0];
         }
       }

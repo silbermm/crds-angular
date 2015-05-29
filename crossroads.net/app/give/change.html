@@ -2,11 +2,4 @@
 				  amount-submitted="give.amountSubmitted" programs-in="give.programsInput">
 </donation-details>
 <bank-credit-card-details></bank-credit-card-details>
-<a ng-click="give.submitBankInfo()" class="btn btn-primary btn-lg col-xs-12">GIVE {{give.amount | currency}}</a>
-{{give.amount}}
-{{give.program}}
-{{give.nameOnCard}}
-{{give.ccNumber}}
-{{give.expDate}}
-{{give.cvc}}
-{{give.billingZipCode}}
+<a ng-click="give.submitChangedBankInfo()" class="btn btn-primary btn-lg col-xs-12">GIVE {{give.amount | currency}}</a>
