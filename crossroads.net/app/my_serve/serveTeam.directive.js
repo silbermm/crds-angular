@@ -177,10 +177,10 @@
             scope.formErrors.role = true;
           }
           
-          if (scope.currentMember.serveRsvp.attending === undefined) {
-            validForm.valid = false;
-            scope.formErrors.signup = true;
-          } 
+          /*if (scope.currentMember.serveRsvp.attending === undefined) {*/
+            //validForm.valid = false;
+            //scope.formErrors.signup = true;
+          /*} */
           
           if (scope.currentMember.currentOpportunity === undefined || scope.currentMember.currentOpportunity === null || scope.currentMember.currentOpportunity.frequency === null ||  scope.currentMember.currentOpportunity.frequency === undefined ) {
             validForm.valid = false;
@@ -317,7 +317,7 @@
         var rsvp = new ServeOpportunities.SaveRsvp();
         rsvp.contactId = scope.currentMember.contactId;
         rsvp.opportunityId = scope.currentMember.serveRsvp.roleId;
-        rsvp.opportunityIds = scope.currentMember.roles;
+        rsvp.opportunityIds = _.map(scope.currentMember.roles, function(role){ return role.roleId; });;
         rsvp.eventTypeId = scope.team.eventTypeId;
         rsvp.endDate = parseDate(scope.currentMember.currentOpportunity.toDt);
         rsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
