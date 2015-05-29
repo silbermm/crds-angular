@@ -1,6 +1,7 @@
 require('./give.html');
 require('./amount.html');
 require('./login.html');
+require('./confirm.html');
 require('./account.html');
 require('./thank_you.html');
 require('./register.html');

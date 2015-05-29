@@ -7,18 +7,22 @@
 
   function PaymentService($log, $http, $resource, $q, stripe) {
     var payment_service = {
-      donor : $resource(__API_ENDPOINT__ + 'api/donor/?email=:email',{email: '@_email'}, {
-        get: {
-          method : 'GET',
-          headers: {'Authorization': getCookie('sessionId')}
-        }
-      }),
+      donor : getDonor,
       donation : {},
       createDonorWithCard : createDonorWithCard,
       donateToProgram : donateToProgram
     };
 
     stripe.setPublishableKey(__STRIPE_PUBKEY__);
+
+    function getDonor(){
+      return $resource(__API_ENDPOINT__ + 'api/donor/?email=:email',{email: '@_email'}, {
+        get: {
+          method : 'GET',
+          headers: {'Authorization': getCookie('sessionId')}
+        }
+      });
+    }
 
     function createDonorWithCard(card, email) {
       var def = $q.defer();
