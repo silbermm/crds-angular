@@ -158,7 +158,7 @@
         if (scope.currentMember.serveRsvp == null) {
           validForm.valid = false;
           scope.formErrors.role = true;   
-        } else if (scope.currentMember.currentOpportunity == null) {
+        } else if (!scope.currentMember.serveRsvp.roleId || scope.currentMember.currentOpportunity == null) {
           validForm.valid = false;
           scope.formErrors.frequency = true;
         } else {
