@@ -18,11 +18,11 @@
              }
              vm.transitionForLoggedInUserBasedOnExistingDonor(event,toState);
         });
-        
+
         var vm = this;
         vm.amountSubmitted = false;
         vm.bankinfoSubmitted = false;
-       
+
         vm.donor = {};
         vm.donorError = false;
         vm.email = null;
@@ -33,12 +33,6 @@
         vm.showCheckClass = "ng-hide";
         vm.view = 'bank';
         vm.programsInput = programList;
-
-        //Credit Card RegExs
-        var americanExpressRegEx = /^3[47][0-9]{13}$/;
-        var discoverRegEx = /^6(?:011|5[0-9]{2})/;
-        var mastercardRegEx = /^5[1-5][0-9]/;
-        var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$/;
 
         var brandCode = [];
         brandCode['Visa'] = "#cc_visa";
@@ -63,7 +57,7 @@
             });
           }
         }
-             
+
         vm.goToAccount = function() {
             vm.amountSubmitted = true;
             if($scope.giveForm.amountForm.$valid) {
@@ -108,7 +102,7 @@
                 }
             });
         };
-       
+
         // Callback from email-field on guest giver page.  Emits a growl
         // notification indicating that the email entered may already be a
         // registered user.
@@ -134,7 +128,7 @@
                 }, 0);
             }
         };
-        
+
         vm.submitBankInfo = function() {
             vm.bankinfoSubmitted = true;
            // $rootScope.$digest();
@@ -182,7 +176,7 @@
               throw new DonationException("Failed: " + reason);
             });
         };
-        
+
     }
 
 })();
