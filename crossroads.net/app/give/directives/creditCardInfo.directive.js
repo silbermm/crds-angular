@@ -3,7 +3,7 @@ require('../creditCardInfo.html');
 (function () {
     angular
     .module('crossroads.give')
-    .directive('creditCardInfo', ['$log', bankInfo]);
+    .directive('creditCardInfo', ['$log', '$rootScope', bankInfo]);
 
     //Credit Card RegExs
     var americanExpressRegEx = /^3[47][0-9]{13}$/;
@@ -11,7 +11,7 @@ require('../creditCardInfo.html');
     var mastercardRegEx = /^5[1-5][0-9]/;
     var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$/;
 
-    function bankInfo($log) {
+    function bankInfo($log, $rootScope, growl) {
         var directive = {
           restrict: 'EA',
           //replace: true,
@@ -33,7 +33,14 @@ require('../creditCardInfo.html');
 
         scope.creditCard = scope;
 
-        scope.creditCardDiscouragedGrowlDivRef = 1001;
+        // Emits a growl notification encouraging checking/savings account
+        // donations, rather than credit card
+        $rootScope.$emit(
+            'notify',
+            $rootScope.MESSAGES.creditCardDiscouraged,
+            1001,
+            -1 // Indicates that this message should not time out
+            );
 
         scope.billingZipCodeError = function() {
           return (scope.bankinfoSubmitted && scope.creditCardForm.billingZipCode.$invalid ||
@@ -86,17 +93,6 @@ require('../creditCardInfo.html');
 
         scope.expDateError = function() {
             return (scope.bankinfoSubmitted && scope.creditCardForm.expDate.$invalid);
-        };
-
-         // Emits a growl notification encouraging checking/savings account
-        // donations, rather than credit card
-        scope.initCreditCardBankSection = function() {
-            $rootScope.$emit(
-                'notify',
-                $rootScope.MESSAGES.creditCardDiscouraged,
-                scope.creditCardDiscouragedGrowlDivRef,
-                -1 // Indicates that this message should not time out
-                );
         };
 
         scope.nameError = function() {
