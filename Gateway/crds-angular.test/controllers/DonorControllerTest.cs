@@ -30,6 +30,8 @@ namespace crds_angular.test.controllers
         private static int donorId  = 394256;
         private static string last4 = "1234";
         private static string brand = "Visa";
+        private static string name = "Automated Test";
+        private static string address_zip = "45454";
         private ContactDonor donor = new ContactDonor()
         {
             DonorId = donorId,
@@ -89,7 +91,9 @@ namespace crds_angular.test.controllers
             var default_source = new SourceData
             {
                 last4 = "1234",
-                brand = "Visa"
+                brand = "Visa",
+                name = "Automated Test",
+                address_zip = "45454"
             };
             donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(It.IsAny<string>())).Returns(contactDonor);
             paymentService.Setup(mocked => mocked.getDefaultSource(It.IsAny<string>())).Returns(default_source);
@@ -101,6 +105,8 @@ namespace crds_angular.test.controllers
             Assert.AreEqual(processorId, okResult.Content.Processor_ID);
             Assert.AreEqual(brand, okResult.Content.default_source.brand);
             Assert.AreEqual(last4, okResult.Content.default_source.last4);
+            Assert.AreEqual(name, okResult.Content.default_source.name);
+            Assert.AreEqual(address_zip, okResult.Content.default_source.address_zip);
         }
 
         [Test]

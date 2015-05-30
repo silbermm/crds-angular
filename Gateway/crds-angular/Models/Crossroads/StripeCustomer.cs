@@ -36,7 +36,7 @@ namespace crds_angular.Models.Crossroads
         public object address_line2 { get; set; }
         public object address_city { get; set; }
         public object address_state { get; set; }
-        public object address_zip { get; set; }
+        public string address_zip { get; set; }
         public object address_country { get; set; }
         public string cvc_check { get; set; }
         public object address_line1_check { get; set; }

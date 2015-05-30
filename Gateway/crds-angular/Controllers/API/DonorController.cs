@@ -130,7 +130,9 @@ namespace crds_angular.Controllers.API
                         default_source = new DefaultSourceDTO
                         {
                             brand = default_source.brand,
-                            last4 = default_source.last4
+                            last4 = default_source.last4,
+                            name = default_source.name,
+                            address_zip = default_source.address_zip
                         }
                     };
 

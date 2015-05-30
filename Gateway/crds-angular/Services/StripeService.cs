@@ -104,6 +104,8 @@ namespace crds_angular.Services
                 {
                     default_source.brand = source.brand;
                     default_source.last4 = source.last4;
+                    default_source.name = source.name;
+                    default_source.address_zip = source.address_zip;
                 }   
             }
             
