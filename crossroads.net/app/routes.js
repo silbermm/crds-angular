@@ -7,7 +7,6 @@
   require('./login/login_page.html');
   require('./register/register_form.html');
   require('./content');
-  require('./opportunity');
   require('./community_groups_signup')
   require('./mytrips');
   require('./profile/profile.html');
@@ -17,12 +16,12 @@
   require('./styleguide');
   require('./give');
   require('./myprofile');
-  require('./opportunity/view_opportunities.html');
   require('./content/content.html');
   require('./community_groups_signup/group_signup_form.html');
   require('./my_serve');
   require('./go_trip_giving');
   require('./corkboard');
+  require('./volunteer_signup');
 
   var getCookie = require('./utilities/cookies');
 
@@ -45,6 +44,7 @@
         };
         registerType("contentRouteType", /^\/.*/);
         registerType("signupRouteType", /\/sign-up\/.*$/);
+        registerType("volunteerRouteType", /\/volunteer-sign-up\/.*$/);
 
         //================================================
         // Check if the user is connected
@@ -191,15 +191,6 @@
             .state("corkboard-detail", {
               url: "/corkboard/detail",
               templateUrl: "corkboard/corkboard-listing-detail.html"
-            })
-            .state("opportunities", {
-                url: "/opportunities",
-                controller: "ViewOpportunitiesController as opportunity",
-                templateUrl: "opportunity/view_opportunities.html",
-                data: { isProtected: true },
-                resolve: {
-                  loggedin: checkLoggedin
-                }
             })
             .state("serve-signup", {
               url: "/serve-signup",
@@ -350,6 +341,19 @@
                 resolve: {
                     loggedin: checkLoggedin
                 }
+            })
+            .state("volunteer-request", {
+              url: "{link:volunteerRouteType}",
+              controller: "VolunteerController as volunteer",
+              templateUrl: "volunteer_signup/volunteer_signup_form.html",
+              data: { isProtected: true },
+              resolve: {
+                loggedin: checkLoggedin,
+                Page: 'Page',
+                CmsInfo: function(Page, $stateParams){
+                  return Page.get( {url: $stateParams.link} ).$promise;
+                }
+              }
             })
             .state("errors/404", {
                 url: "/errors/404",

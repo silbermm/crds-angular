@@ -53,7 +53,7 @@ namespace crds_angular.Controllers.API
             });
         }
 
-        [ResponseType(typeof (List<FamilyMemberDto>))]
+        [ResponseType(typeof (List<FamilyMember>))]
         [Route("api/serve/family/{contactId}")]
         public IHttpActionResult GetFamily(int contactId)
         {
@@ -70,6 +70,26 @@ namespace crds_angular.Controllers.API
                     throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
                 
+            });
+        }
+
+        [ResponseType(typeof(List<QualifiedServerDto>))]
+        [Route("api/serve/qualifiedservers/{groupId}/{contactId}")]
+        public IHttpActionResult GetQualifiedServers(int groupId, int contactId)
+        {
+            return Authorized(token =>
+            {
+                try
+                {
+                    var list = _serveService.GetQualifiedServers(groupId,contactId, token);
+                    return Ok(list);
+                }
+                catch (Exception ex)
+                {
+                    var apiError = new ApiErrorDto("Save RSVP Failed", ex);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+
             });
         }
 
@@ -93,7 +113,7 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
-                    _serveService.SaveServeRsvp(token, saveRsvp.ContactId, saveRsvp.OpportunityId,
+                    _serveService.SaveServeRsvp(token, saveRsvp.ContactId, saveRsvp.OpportunityId, saveRsvp.OpportunityIds,
                         saveRsvp.EventTypeId, saveRsvp.StartDateUnix.FromUnixTime(),
                         saveRsvp.EndDateUnix.FromUnixTime(), saveRsvp.SignUp, saveRsvp.AlternateWeeks);
                 }

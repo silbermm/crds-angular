@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ServiceModel;
-using Crossroads.Utilities.Services;
 using MinistryPlatform.Models;
-using MinistryPlatform.Translation.PlatformService;
+using MinistryPlatform.Models.DTO;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -14,12 +13,12 @@ namespace MinistryPlatform.Translation.Test.Services
     [TestFixture]
     public class OpportunityServiceTest
     {
-        private readonly int _signedupToServeSubPageViewId = 79;
-        private readonly int _groupOpportunitiesEventsPageViewId = 77;
-        private readonly int _opportunityPageId = 348;
-        private readonly int _eventPageId = 308;
-        private readonly int _groupsParticipants = 298;
-        private readonly int _groupsParticipantsSubPageId = 88;
+        private const int _signedupToServeSubPageViewId = 79;
+        private const int _groupOpportunitiesEventsPageViewId = 77;
+        private const int _opportunityPageId = 348;
+        private const int _eventPageId = 308;
+        private const int _groupsParticipants = 298;
+        private const int _groupsParticipantsSubPageId = 88;
         private DateTime _today;
 
         private Mock<IMinistryPlatformService> _ministryPlatformService;
@@ -63,6 +62,43 @@ namespace MinistryPlatform.Translation.Test.Services
         }
 
         [Test]
+        public void DeleteOpportunityResponse()
+        {
+            const int opportunityId = 113;
+            const int mockParticipantId = 7777;
+            //_authenticationService.Setup(m => m.GetParticipantRecord(It.IsAny<string>()))
+            //    .Returns(new Participant { ParticipantId = mockParticipantId });
+
+            const int responseResultId = 1234567;
+            const int responseId = 1234;
+
+            List<Dictionary<string, object>> responses = new List<Dictionary<string, object>>();
+            Dictionary<string, object> response = new Dictionary<string, object>
+            {
+                {"dp_RecordID", responseId},
+                {"Opportunity_ID", opportunityId},
+                {"Participant_ID", mockParticipantId},
+                {"Response_Result_ID", responseResultId}
+            };
+            responses.Add(response);
+
+            const int opportunityResponsePageKey = 315;
+            _ministryPlatformService.Setup(
+                m => m.DeleteRecord(It.IsAny<int>(), responseId, null, It.IsAny<string>()))
+                .Returns(1);
+
+            _ministryPlatformService.Setup(
+                m =>
+                    m.GetPageViewRecords("ResponseByOpportunityAndEvent", It.IsAny<string>(), It.IsAny<string>(), "", 0))
+                .Returns(responses);
+
+            Assert.DoesNotThrow(() => _fixture.DeleteResponseToOpportunities(mockParticipantId, opportunityId, 1));
+
+            _ministryPlatformService.VerifyAll();
+
+        }
+
+        [Test]
         public void ShouldNotCreateOpportunityResponse()
         {
             const int opportunityId = 10000000;
@@ -72,7 +108,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 .Returns(new Participant { ParticipantId = mockParticipantId });
 
             const string opportunityResponsePageKey = "OpportunityResponses";
-            var exceptionDetail = new System.ServiceModel.ExceptionDetail(new Exception("The creator of this fault did not specify a Reason."));
+            var exceptionDetail = new ExceptionDetail(new Exception("The creator of this fault did not specify a Reason."));
             var faultException = new FaultException<ExceptionDetail>(exceptionDetail);
             
             _ministryPlatformService.Setup(
@@ -86,129 +122,6 @@ namespace MinistryPlatform.Translation.Test.Services
 
             _authenticationService.VerifyAll();
             _ministryPlatformService.VerifyAll();
-        }
-
-        [Test]
-        public void GetOpportunitiesForGroupTest()
-        {
-            const int groupId = 1;
-
-            _ministryPlatformService.Setup(
-                m =>
-                    m.GetSubpageViewRecords(_groupOpportunitiesEventsPageViewId, groupId, It.IsAny<string>(), "", "", 0))
-                .Returns(OpportunityResponse());
-
-            _eventService.Setup(m => m.GetEvents("Event Type 100", It.IsAny<string>()))
-                .Returns(MockEvents("Event Type 100"));
-            _eventService.Setup(m => m.GetEvents("Event Type 200", It.IsAny<string>()))
-                .Returns(MockEvents("Event Type 200"));
-            _eventService.Setup(m => m.GetEvents("Event Type 300", It.IsAny<string>()))
-                .Returns(MockEvents("Event Type 300"));
-
-            _ministryPlatformService.Setup(
-                m =>
-                    m.GetSubpageViewRecords(_signedupToServeSubPageViewId, It.IsAny<int>(), It.IsAny<string>(),
-                        It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())).Returns(new List<Dictionary<string, object>>());
-            
-
-            var opportunities = _fixture.GetOpportunitiesForGroup(groupId, It.IsAny<string>());
-
-            _ministryPlatformService.VerifyAll();
-            _eventService.VerifyAll();
-
-            Assert.IsNotNull(opportunities);
-            Assert.AreEqual(3, opportunities.Count);
-
-            var opportunity = opportunities[0];
-            Assert.AreEqual(100,opportunity.MaximumNeeded);
-            Assert.AreEqual(50,opportunity.MinimumNeeded);
-            Assert.AreEqual("Event Type 100", opportunity.EventType);
-            Assert.AreEqual(2, opportunity.Events.Count);
-            Assert.AreEqual(100, opportunity.OpportunityId);
-            Assert.AreEqual("Opportunity 100", opportunity.OpportunityName);
-            Assert.AreEqual("Role Title 100", opportunity.RoleTitle);
-
-            opportunity = opportunities[1];
-            Assert.AreEqual(200, opportunity.MaximumNeeded);
-            Assert.AreEqual(100, opportunity.MinimumNeeded);
-            Assert.AreEqual("Event Type 200", opportunity.EventType);
-            Assert.AreEqual(2, opportunity.Events.Count);
-            Assert.AreEqual(200, opportunity.OpportunityId);
-            Assert.AreEqual("Opportunity 200", opportunity.OpportunityName);
-            Assert.AreEqual("Role Title 200", opportunity.RoleTitle);
-
-            opportunity = opportunities[2];
-            Assert.AreEqual(null, opportunity.MaximumNeeded);
-            Assert.AreEqual(null, opportunity.MinimumNeeded);
-            Assert.AreEqual("Event Type 300", opportunity.EventType);
-            Assert.AreEqual(2, opportunity.Events.Count);
-            Assert.AreEqual(300, opportunity.OpportunityId);
-            Assert.AreEqual("Opportunity 300", opportunity.OpportunityName);
-            Assert.AreEqual("Role Title 300", opportunity.RoleTitle);
-            var events = opportunity.Events;
-            Assert.AreEqual(2, events[1].EventId);
-            Assert.AreEqual("event-title-2", events[1].EventTitle);
-            Assert.AreEqual(_today, events[1].EventStartDate);
-            Assert.AreEqual(_today, events[1].EventEndDate);
-            Assert.AreEqual("Event Type 300", events[1].EventType);
-        }
-
-        private new List<Event> MockEvents(string eventType)
-        {
-            return new List<Event>
-            {
-                new Event
-                {
-                    EventTitle = "event-title-1",
-                    EventType = eventType,
-                    EventStartDate = _today,
-                    EventEndDate = _today,
-                    EventId = 1
-                },
-                new Event
-                {
-                    EventTitle = "event-title-2",
-                    EventType = eventType,
-                    EventStartDate = _today,
-                    EventEndDate = _today,
-                    EventId = 2
-                }
-            };
-        }
-
-        private List<Dictionary<string, object>> OpportunityResponse()
-        {
-            var results = new List<Dictionary<string, object>>
-            {
-                new Dictionary<string, object>
-                {
-                    {"dp_RecordID", 100},
-                    {"Opportunity Title", "Opportunity 100"},
-                    {"Event Type", "Event Type 100"},
-                    {"Event Type ID", 100},
-                    {"Role_Title", "Role Title 100"},
-                    {"Maximum_Needed", 100}, {"Minimum_Needed", 50}
-                },
-                new Dictionary<string, object>
-                {
-                    {"dp_RecordID", 200},
-                    {"Opportunity Title", "Opportunity 200"},
-                    {"Event Type", "Event Type 200"},
-                    {"Event Type ID", 200},
-                    {"Role_Title", "Role Title 200"},
-                    {"Maximum_Needed", 200}, {"Minimum_Needed", 100}
-                },
-                new Dictionary<string, object>
-                {
-                    {"dp_RecordID", 300},
-                    {"Opportunity Title", "Opportunity 300"},
-                    {"Event Type", "Event Type 300"},
-                    {"Event Type ID", 300},
-                    {"Role_Title", "Role Title 300"},
-                    {"Maximum_Needed", null}, {"Minimum_Needed", null}
-                }
-            };
-            return results;
         }
 
         [Test]
@@ -332,6 +245,27 @@ namespace MinistryPlatform.Translation.Test.Services
         {
             var results = new List<Dictionary<string, object>>();
             return results;
+        }
+
+        [Test]
+        public void RespondToOpportunityForMultipleParticipants()
+        {
+            const string pageKey = "OpportunityResponses";
+            var p1 = new Dictionary<string, object>
+                {
+                    {"Response_Date", It.IsAny<DateTime>()},
+                    {"Opportunity_ID", 1},
+                    {"Participant_ID", 100},
+                    {"Closed", false},
+                    {"Comments", It.IsAny<string>()}
+                };
+            var token = It.IsAny<string>();
+            _ministryPlatformService.Setup(m => m.CreateRecord(pageKey, p1, token, true)).Returns(27);
+
+            var dto = new RespondToOpportunityDto {OpportunityId = 1, Participants = new List<int> {100, 200, 300}};
+            Assert.DoesNotThrow(() => _fixture.RespondToOpportunity(dto));
+
+            _ministryPlatformService.Verify(m=>m.CreateRecord(It.IsAny<string>(),It.IsAny<Dictionary<string,object>>(),It.IsAny<string>(),true),Times.Exactly(3));
         }
 
         [Test]

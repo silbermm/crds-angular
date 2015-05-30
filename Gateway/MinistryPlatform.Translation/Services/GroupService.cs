@@ -20,6 +20,8 @@ namespace MinistryPlatform.Translation.Services
         private readonly int GroupsSubgroupsPageId = Convert.ToInt32(AppSettings("GroupsSubgroups"));
         private readonly int GroupSignupRelationsPageId = Convert.ToInt32((AppSettings("GroupSignUpRelations")));
         private readonly int GetServingTeamsPageId = Convert.ToInt32(AppSettings("MyServingTeams"));
+        private readonly int GroupParticipantQualifiedServerPageView =
+            Convert.ToInt32(AppSettings("GroupsParticipantsQualifiedServerPageView"));
 
         private IMinistryPlatformService ministryPlatformService;
 
@@ -201,6 +203,13 @@ namespace MinistryPlatform.Translation.Services
                 }
             }
             return (events);
+        }
+
+        public bool ParticipantGroupMember(int groupId, int participantId)
+        {
+            var searchString = string.Format(",{0},,{1}",groupId,participantId);
+            var teams = ministryPlatformService.GetPageViewRecords(GroupParticipantQualifiedServerPageView, apiLogin(), searchString);
+            return teams.Count != 0;
         }
 
         public List<Group> GetServingTeams(int contactId, string token)
