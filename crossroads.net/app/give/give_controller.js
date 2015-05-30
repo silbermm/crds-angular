@@ -53,8 +53,8 @@
             .$promise
             .then(function(donor){
               vm.donor = donor;
-              vm.last4 = donor.last4;
-              vm.brand = brandCode[donor.brand];
+              vm.last4 = donor.default_source.last4;
+              vm.brand = brandCode[donor.default_source.brand];
               vm.expYear =  donor.exp_year;
               vm.exp_month = donor.exp_month;
               $state.go("give.confirm");
