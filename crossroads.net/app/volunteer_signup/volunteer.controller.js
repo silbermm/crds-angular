@@ -4,9 +4,9 @@
 
   module.exports = VolunteerController;
 
-  VolunteerController.$inject = ['$rootScope', '$scope', '$log', '$filter', 'MESSAGES', 'Session', 'Opportunity', 'ServeOpportunities', 'CmsInfo', '$modal'];
+  VolunteerController.$inject = ['$rootScope', '$scope', '$log', '$filter', 'MESSAGES', 'Session', '$state', 'Opportunity', 'ServeOpportunities', 'CmsInfo', '$modal'];
 
-  function VolunteerController($rootScope, $scope, $log, $filter, MESSAGES, Session, Opportunity, ServeOpportunities, CmsInfo, $modal) {
+  function VolunteerController($rootScope, $scope, $log, $filter, MESSAGES, Session, $state, Opportunity, ServeOpportunities, CmsInfo, $modal) {
     $log.debug("Inside VolunteerController");
     var vm = this;
 
@@ -24,7 +24,22 @@
     vm.showSuccess = false;
     vm.viewReady = false;
 
-    init();
+    activate();
+
+    ///////////////////////////////////////////
+
+    function activate() {
+      ServeOpportunities.QualifiedServers.query({
+          groupId: vm.pageInfo.group,
+          contactId: Session.exists('userId')
+        }, function(response) {
+          vm.participants = response;
+          allSignedUp();
+          vm.viewReady = true;
+        }, function(err){
+          $state.go('content', {link:'/server-error/'});
+        });
+    }
 
     function allSignedUp() {
       var signupCount = 0;
@@ -86,18 +101,7 @@
       });
     }
 
-    function init() {
-      ServeOpportunities.QualifiedServers.query({
-          groupId: vm.pageInfo.group,
-          contactId: Session.exists('userId')
-        }).$promise
-        .then(function(response) {
-          vm.participants = response;
-          allSignedUp();
-          vm.viewReady = true;
-        });
-    }
-
+    
     function pageInfo(cmsInfo) {
       return cmsInfo.pages[0];
     }
