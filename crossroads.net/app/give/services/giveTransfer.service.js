@@ -6,7 +6,8 @@
         console.log("Inside Give GiveTransferService");
         var transferObject = {
           amount : '',
-          donor : ''
+          donor : '',
+          email : ''
         }
 
         return transferObject;

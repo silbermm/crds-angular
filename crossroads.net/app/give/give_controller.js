@@ -93,9 +93,10 @@
 
         };
 
-        vm.goToChange = function(amount, donor) {
+        vm.goToChange = function(amount, donor, email) {
           vm.dto.amount = amount;
           vm.dto.donor = donor;
+          vm.dto.email = email;
           $state.go("give.change")
         };
 
