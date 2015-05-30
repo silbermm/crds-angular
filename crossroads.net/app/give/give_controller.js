@@ -93,8 +93,9 @@
 
         };
 
-        vm.goToChange = function() {
-         // vm.dto.amount = amount;
+        vm.goToChange = function(amount, donor) {
+          vm.dto.amount = amount;
+          vm.dto.donor = donor;
           $state.go("give.change")
         };
 
@@ -174,13 +175,13 @@
               $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
             }
         };
-
+;
         vm.submitChangedBankInfo = function() {
           console.log("shit fire");
             vm.bankinfoSubmitted = true;
              if ($scope.giveForm.$valid) {
               PaymentService.updateDonorWithCard(
-                donor.id,
+                vm.dto.donor.id,
                 {
                   name: vm.nameOnCard,
                   number: vm.ccNumber,
@@ -189,7 +190,7 @@
                   cvc: vm.cvc
                 })
               .then(function(donor) {
-                vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email);
+                vm.donate(vm.program.ProgramId, vm.dto.amount, donor.id, vm.email);
                 $state.go("give.thank-you");
               }),
               function() {

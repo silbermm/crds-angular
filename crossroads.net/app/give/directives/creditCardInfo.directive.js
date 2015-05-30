@@ -21,7 +21,8 @@ require('../creditCardInfo.html');
               expDate: "=",
               cvc: "=",
               billingZipCode: "=",
-              bankinfoSubmitted: "="
+              bankinfoSubmitted: "=",
+              donor: "="
             },
           templateUrl: 'give/creditCardInfo.html',
           link: link

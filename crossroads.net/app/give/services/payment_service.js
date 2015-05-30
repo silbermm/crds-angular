@@ -10,6 +10,7 @@
       donor : getDonor,
       donation : {},
       createDonorWithCard : createDonorWithCard,
+      updateDonorWithCard :updateDonorWithCard,
       donateToProgram : donateToProgram
     };
 
@@ -51,11 +52,11 @@
        return def.promise;
     }
 
-    function updateDonorWithCard(donorId, card) {
+    function updateDonorWithCard(donorId, card){
       var def = $q.defer();
       stripe.card.createToken(card)
         .then(function (token) {
-          var donor_request = { stripe_token_id: token.id }
+          var donor_request = { "stripe_token_id": token.id }
           $http({
             method: "PUT",
             url: __API_ENDPOINT__ + 'api/donor',
