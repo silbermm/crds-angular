@@ -313,7 +313,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _ministryPlatformService.VerifyAll();
 
             Assert.IsNotNull(responseId);
-            Assert.AreEqual(4444, responseId);
+            Assert.AreEqual(0, responseId);
         }
 
         [Test]
