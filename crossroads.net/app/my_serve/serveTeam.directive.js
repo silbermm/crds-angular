@@ -265,8 +265,9 @@
             default:
               // every  or everyother
               scope.formErrors.frequency = false;
+              var roleId =  (scope.currentMember.serveRsvp.roleId === 0) ? scope.currentMember.roles[0].roleId : scope.currentMember.serveRsvp.roleId;
               ServeOpportunities.LastOpportunityDate.get({
-                id: scope.currentMember.serveRsvp.roleId
+                id: roleId
               }, function(ret) {
                 var dateNum = Number(ret.date * 1000);
                 var toDate = new Date(dateNum);
