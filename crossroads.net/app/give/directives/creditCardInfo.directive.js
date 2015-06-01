@@ -21,7 +21,8 @@ require('../creditCardInfo.html');
               expDate: "=",
               cvc: "=",
               billingZipCode: "=",
-              bankinfoSubmitted: "="
+              bankinfoSubmitted: "=",
+              defaultSource: "="
             },
           templateUrl: 'give/creditCardInfo.html',
           link: link
@@ -32,6 +33,23 @@ require('../creditCardInfo.html');
         $log.debug("Inside of creditCardInfo directive");
 
         scope.creditCard = scope;
+
+        if(!scope.defaultSource) {
+          scope.defaultCardInfo = {};
+        } else if(scope.defaultSource.last4) {
+          scope.creditCard.nameOnCard = "";
+          scope.creditCard.ccNumber = "";
+          scope.creditCard.expDate = "";
+          scope.creditCard.cvc = "";
+          scope.creditCard.billingZipCode = "";
+          scope.defaultCardInfo = {
+            billingZipCode: scope.defaultSource.address_zip,
+            cvc: "XXX",
+            expDate: "12/19",
+            nameOnCard: scope.defaultSource.name,
+            maskedCard: "XXXXXXXXXXX" + scope.defaultSource.last4
+          };
+        }
 
         // Emits a growl notification encouraging checking/savings account
         // donations, rather than credit card
