@@ -155,11 +155,12 @@
                   // is no harm in sending it for an authenticated user as well,
                   // so we'll keep it simple and send it in all cases.
                   PaymentService.createDonorWithCard({
-                    name: vm.nameOnCard,
-                    number: vm.ccNumber,
+                    name: vm.dto.donor.default_source.name,
+                    number: vm.dto.donor.default_source.last4,
                     exp_month: vm.expDate.substr(0,2),
                     exp_year: vm.expDate.substr(2,2),
-                    cvc: vm.cvc
+                    cvc: vm.cvc,
+                    address_zip: vm.dto.donor.default_source.address_zip
                   }, vm.email)
                   .then(function(donor) {
                     vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email);
@@ -188,7 +189,8 @@
                   number: vm.dto.donor.default_source.last4,
                   exp_month: vm.expDate.substr(0,2),
                   exp_year: vm.expDate.substr(2,2),
-                  cvc: vm.cvc
+                  cvc: vm.cvc,
+                  address_zip: vm.billingZipCode
                 })
               .then(function(donor) {
                 vm.donate(vm.program.ProgramId, vm.dto.amount, donor.id, vm.email);
