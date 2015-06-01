@@ -58,8 +58,8 @@ namespace MinistryPlatform.Translation.Services
 
         public static void SendMessage(Communication communication, Dictionary<string, object> mergeData, string token)
         {
-            var communicationId = AddCommunication(communication, token);
-            AddCommunicationMessage(communication, communicationId, mergeData, token);
+            var communicationId = AddCommunication(communication, apiLogin());
+            AddCommunicationMessage(communication, communicationId, mergeData, apiLogin());
         }
 
         private static int AddCommunication(Communication communication, string token)
@@ -96,7 +96,7 @@ namespace MinistryPlatform.Translation.Services
 
         public static MessageTemplate GetTemplate(int templateId, string token)
         {
-            var pageRecords = MinistryPlatformService.GetRecordDict(MessagePageId, templateId, token);
+            var pageRecords = MinistryPlatformService.GetRecordDict(MessagePageId, templateId, apiLogin());
 
             if (pageRecords == null)
             {
