@@ -261,7 +261,7 @@ namespace crds_angular.Services
                             var deletedResponse = _opportunityService.DeleteResponseToOpportunities(participant.ParticipantId, oid, e.EventId);
                             if (deletedResponse != 0)
                             {
-                                deletedRSVPS.Add(deletedResponse);
+                                deletedRSVPS.Add(oid);
                             }
                         }
 
@@ -326,7 +326,7 @@ namespace crds_angular.Services
 
         private void SendRSVPConfirmation(int contactId, int opportunityId, int prevOppId, DateTime startDate, DateTime endDate, int templateId, string token)
         {
-            var template = CommunicationService.GetTemplate(templateId);
+                var template = CommunicationService.GetTemplate(templateId);
 
             //Go get Opportunity deets
             var opp = _opportunityService.GetOpportunityById(opportunityId, token);
@@ -335,11 +335,11 @@ namespace crds_angular.Services
             var prevOpp = new Opportunity();
             if (prevOppId > 0)
             {
-                prevOpp = _opportunityService.GetOpportunityById(opportunityId, token);
+                prevOpp = _opportunityService.GetOpportunityById(prevOppId, token);
             }
             else
             {
-                prevOpp.OpportunityName = "No";
+                prevOpp.OpportunityName = "Not Available";
             }
 
             //Go get from/to contact info
