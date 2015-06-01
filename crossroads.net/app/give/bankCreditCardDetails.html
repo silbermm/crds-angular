@@ -15,6 +15,7 @@
      </section>
 
     <section ng-if="give.view=='cc'" >
-      <credit-card-info cvc="give.cvc" exp-date="give.expDate" cc-number="give.ccNumber" billing-zip-code="give.billingZipCode" bankinfo-submitted="give.bankinfoSubmitted" name-on-card="give.nameOnCard" donor="give.donor" email="give.email"></credit-card-info>
+      <credit-card-info ng-init="give.dto" cvc=give.cvc exp-date="give.expDate" cc-number="give.dto.donor.default_source.last4" billing-zip-code="give.dto.donor.default_source.address_zip" bankinfo-submitted="give.bankinfoSubmitted" name-on-card="give.dto.donor.default_source.name" donor="give.donor" email="give.email"></credit-card-info>
     </section>
 </div>
+

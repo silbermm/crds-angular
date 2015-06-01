@@ -184,8 +184,8 @@
               PaymentService.updateDonorWithCard(
                 vm.dto.donor.id,
                 {
-                  name: vm.nameOnCard,
-                  number: vm.ccNumber,
+                  name: vm.dto.donor.default_source.name,
+                  number: vm.dto.donor.default_source.last4,
                   exp_month: vm.expDate.substr(0,2),
                   exp_year: vm.expDate.substr(2,2),
                   cvc: vm.cvc
