@@ -42,16 +42,19 @@ require('../creditCardInfo.html');
           scope.creditCard.expDate = "";
           scope.creditCard.cvc = "";
           scope.creditCard.billingZipCode = "";
+          var exp_month = scope.defaultSource.exp_date.substr(0,2);
+          var exp_year = scope.defaultSource.exp_date.substr(2,2);
+          var fmt_exp = exp_month.concat('/', exp_year);
           scope.defaultCardInfo = {
             billingZipCode: scope.defaultSource.address_zip,
             cvc: "XXX",
-            expDate: "12/19",
+            expDate: fmt_exp,
             nameOnCard: scope.defaultSource.name,
             maskedCard: "XXXXXXXXXXX" + scope.defaultSource.last4
           };
         }
-
-        // Emits a growl notification encouraging checking/savings account
+         // console.log (expDate);
+         // Emits a growl notification encouraging checking/savings account
         // donations, rather than credit card
         $rootScope.$emit(
             'notify',

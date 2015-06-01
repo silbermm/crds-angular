@@ -157,8 +157,8 @@
                   PaymentService.createDonorWithCard({
                     name: vm.dto.donor.default_source.name,
                     number: vm.dto.donor.default_source.last4,
-                    exp_month: vm.expDate.substr(0,2),
-                    exp_year: vm.expDate.substr(2,2),
+                    exp_month: vm.dto.donor.default_source.exp_date.substr(0,2),
+                    exp_year: vm.dto.donor.default_source.exp_date.substr(2,2),
                     cvc: vm.cvc,
                     address_zip: vm.dto.donor.default_source.address_zip
                   }, vm.email)
@@ -187,8 +187,9 @@
                 {
                   name: vm.dto.donor.default_source.name,
                   number: vm.dto.donor.default_source.last4,
-                  exp_month: vm.expDate.substr(0,2),
-                  exp_year: vm.expDate.substr(2,2),
+                  // exp_month: vm.expDate.substr(0,2),
+                  // exp_year: vm.expDate.substr(2,2),
+                  expDate: vm.dto.donor.default_source.exp_date,
                   cvc: vm.cvc,
                   address_zip: vm.dto.donor.default_source.address_zip
                 })
