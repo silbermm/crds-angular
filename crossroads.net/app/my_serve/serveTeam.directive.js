@@ -1,5 +1,4 @@
 "use strict()";
-
 (function() {
   var moment = require('moment');
 
@@ -23,7 +22,6 @@
 
     function link(scope, el, attr) {
 
-      scope.attendingChanged = attendingChanged;
       scope.closePanel = closePanel;
       scope.currentActiveTab = null;
       scope.currentMember = null;
@@ -37,6 +35,14 @@
       scope.editProfile = editProfile;
       scope.frequency = getFrequency();
       scope.format = 'MM/dd/yyyy';
+      scope.formErrors = {
+        role: false,
+        signup: false,
+        frequency: false,
+        from: false,
+        to: false,
+        dateRange: false
+      };
       scope.populateDates = populateDates;
       scope.isActiveTab = isActiveTab;
       scope.isCollapsed = true;
@@ -56,11 +62,6 @@
       scope.togglePanel = togglePanel;
       //////////////////////////////////////
 
-      function attendingChanged() {
-        roleChanged();
-        scope.currentMember.showFrequency = true;
-      }
-
       function allowProfileEdit() {
         var cookieId = Session.exists("userId");
         if (cookieId !== undefined) {
@@ -70,12 +71,33 @@
         }
       };
 
+      function changeFromDate() {
+        if(scope.currentMember.currentOpportunity !== undefined && scope.currentMember.currentOpportunity.fromDt !== undefined){
+          var m = moment( scope.currentMember.currentOpportunity.fromDt );
+          if(m.isValid()){
+            scope.formErrors.dateRange = false;
+            scope.formErrors.from = false;
+          }
+        }
+      }
+      
+      function changeToDate() {
+        if(scope.currentMember.currentOpportunity !== undefined && scope.currentMember.currentOpportunity.toDt !== undefined){
+          var m = moment( scope.currentMember.currentOpportunity.toDt );
+          if(m.isValid()){
+            scope.formErrors.dateRange = false;
+            scope.formErrors.to = false;
+          }
+        }
+
+      }
+
       function closePanel() {
         scope.isCollapsed = true;
       }
 
-      function displayEmail(emailAddress) {
-        if (emailAddress === undefined) {
+      function displayEmail(emailAddress) { 
+        if (!emailAddress) {
           return false;
         }
         if (emailAddress.length > 0) {
@@ -130,26 +152,54 @@
 
       function isFormValid() {
         var validForm = {
-          valid: true,
-          messageStr: ''
+          valid: true
         };
         validForm.valid = true;
         if (scope.currentMember.serveRsvp == null) {
           validForm.valid = false;
-          validForm.messageStr = $rootScope.MESSAGES.selectSignUpAndFrequency;
-        } else if (scope.currentMember.serveRsvp.attending === undefined) {
+          scope.formErrors.role = true;   
+        } else if (scope.currentMember.serveRsvp.roleId === undefined || scope.currentMember.serveRsvp.roleId === null || scope.currentMember.currentOpportunity === null) {
           validForm.valid = false;
-          validForm.messageStr = $rootScope.MESSAGES.selectSignUpAndFrequency;
-        } else if (scope.currentMember.currentOpportunity == null) {
-          validForm.valid = false;
-          validForm.messageStr = $rootScope.MESSAGES.selectFrequency;
+          scope.formErrors.frequency = true;
         } else {
-          var startDate = parseDate(scope.currentMember.currentOpportunity.toDt);
-          var endDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
-
-          if (startDate < endDate) {
+          if ( (scope.currentMember.currentOpportunity === undefined || 
+                scope.currentMember.currentOpportunity === null || 
+                scope.currentMember.currentOpportunity.frequency === null ||  
+                scope.currentMember.currentOpportunity.frequency === undefined) && scope.currentMember.showFrequency 
+           ) {
             validForm.valid = false;
-            validForm.messageStr = $rootScope.MESSAGES.invalidDateRange;
+            scope.formErrors.frequency = true;
+          } 
+
+          if(scope.currentMember.currentOpportunity !== undefined && scope.currentMember.currentOpportunity.toDt === undefined){
+            validForm.valid = false;
+            scope.formErrors.to = true; 
+          } 
+
+          if(scope.currentMember.currentOpportunity !== undefined && scope.currentMember.currentOpportunity.fromDt === undefined){
+            validForm.valid = false;
+            scope.formErrors.from = true; 
+          }
+
+          if(validForm.valid) {
+            try {
+              var startDate = parseDate(scope.currentMember.currentOpportunity.toDt);
+            } catch(ex) {
+              validForm.valid = false;
+              scope.formErrors.from = true; 
+            }
+
+            try { 
+              var endDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
+            } catch(ex) {
+              validForm.valid = false;
+              scope.formErrors.to = true; 
+            }
+
+            if (startDate < endDate) {
+              validForm.valid = false;
+              scope.formErrors.dateRange = true; 
+            }
           }
         }
         return validForm;
@@ -191,7 +241,6 @@
           m = moment(dateStr, "YYYY MM DD");
 
           if (!m.isValid()) {
-            //throw error
             throw new Error("Parse Date Failed Moment Validation");
           }
         }
@@ -209,13 +258,16 @@
               break;
             case 0:
               // once...
+              scope.formErrors.frequency = false;
               scope.currentMember.currentOpportunity.fromDt = scope.oppServeDate;
               scope.currentMember.currentOpportunity.toDt = scope.oppServeDate;
               break;
             default:
               // every  or everyother
+              scope.formErrors.frequency = false;
+              var roleId =  (scope.currentMember.serveRsvp.roleId === 0) ? scope.currentMember.roles[0].roleId : scope.currentMember.serveRsvp.roleId;
               ServeOpportunities.LastOpportunityDate.get({
-                id: scope.currentMember.serveRsvp.roleId
+                id: roleId
               }, function(ret) {
                 var dateNum = Number(ret.date * 1000);
                 var toDate = new Date(dateNum);
@@ -227,6 +279,8 @@
       }
 
       function roleChanged(selectedRole) {
+        console.log(selectedRole);
+        scope.formErrors.role = false;
         scope.selectedRole = selectedRole;
         if (scope.currentMember.serveRsvp === undefined) {
           scope.currentMember.serveRsvp = {
@@ -235,32 +289,53 @@
         } else {
           scope.currentMember.serveRsvp.isSaved = false;
         }
+        if (scope.selectedRole === undefined) {
+          scope.currentMember.serveRsvp.attending = false ;
+        } else {
+          scope.currentMember.serveRsvp.attending = true;
+        }
+        scope.currentMember.showFrequency = true;
       }
 
       function saveRsvp() {
-        //var invalid = false; //make this a function
         var validForm = isFormValid();
-        if (validForm.valid == false) {
-          $rootScope.$emit('notify', validForm.messageStr);
-          return;
+ 
+        if (!validForm.valid) {
+          $rootScope.$emit('notify',$rootScope.MESSAGES.generalError);
+          return false;
         }
-
         var rsvp = new ServeOpportunities.SaveRsvp();
         rsvp.contactId = scope.currentMember.contactId;
         rsvp.opportunityId = scope.currentMember.serveRsvp.roleId;
+        rsvp.opportunityIds = _.map(scope.currentMember.roles, function(role){ return role.roleId; });;
         rsvp.eventTypeId = scope.team.eventTypeId;
         rsvp.endDate = parseDate(scope.currentMember.currentOpportunity.toDt);
         rsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
-        rsvp.signUp = scope.currentMember.serveRsvp.attending;
+        if (scope.currentMember.serveRsvp.roleId !==0 ) {
+          rsvp.signUp = true;
+        } else {
+          rsvp.signUp = false;
+        }
         rsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
         rsvp.$save(function(saved) {
           $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess);
-          $rootScope.$broadcast('update.member', scope.currentMember);
           scope.currentMember.serveRsvp.isSaved = true;
+          return true;
+        }, function(err){
+          $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
+          return false; 
         });
       }
 
       function setActiveTab(member) {
+        // Reset form errors 
+        scope.formErrors = {
+          role: false,
+          signup: false,
+          frequency: false,
+          from: false,
+          to: false
+        };
         scope.currentActiveTab = member.name;
         if (scope.currentMember === null || member === scope.currentMember) {
           scope.togglePanel();
@@ -280,7 +355,7 @@
         } else {
           scope.selectedRole = _.find(member.roles, function(r) {
             return r.roleId === member.serveRsvp.roleId;
-          })
+          });
           if (member.serveRsvp !== null && (member.serveRsvp.isSaved || member.serveRsvp.isSaved === undefined)) {
             return true;
           } else {

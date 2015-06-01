@@ -20,6 +20,15 @@ namespace MinistryPlatform.Translation.Services
             this._ministryPlatformService = ministryPlatformService;
         }
 
+        public string GetContactEmail(int contactId)
+        {
+            var recordsDict = _ministryPlatformService.GetRecordDict(contactsPageId, contactId, apiLogin());
+
+            var contactEmail = recordsDict["Email_Address"].ToString();
+
+            return contactEmail;
+        }
+        
         public MyContact GetMyProfile(string token)
         {
             var recordsDict = _ministryPlatformService.GetRecordsDict("MyProfile", token);
@@ -29,33 +38,40 @@ namespace MinistryPlatform.Translation.Services
                 throw  new ApplicationException("GetMyProfile returned multiple records");
             }
 
-            var myContact = recordsDict[0];
-            var contact = new MyContact();
-            contact.Address_ID = myContact.ToNullableInt("Address_ID");
-            contact.Address_Line_1 = myContact.ToString("Address_Line_1");
-            contact.Address_Line_2 = myContact.ToString("Address_Line_2");
-            contact.Congregation_ID = myContact.ToNullableInt("Congregation_ID");
-            contact.Household_ID = myContact.ToInt("Household_ID");
-            contact.City = myContact.ToString("City");
-            contact.State = myContact.ToString("State");
-            contact.Postal_Code = myContact.ToString("Postal_Code");
-            contact.Anniversary_Date = myContact.ToDateAsString("Anniversary_Date");
-            contact.Contact_ID = myContact.ToInt("Contact_ID");
-            contact.Date_Of_Birth = myContact.ToDateAsString("Date_of_Birth");
-            contact.Email_Address = myContact.ToString("Email_Address");
-            contact.Employer_Name = myContact.ToString("Employer_Name");
-            contact.First_Name = myContact.ToString("First_Name");
-            contact.Foreign_Country = myContact.ToString("Foreign_Country");
-            contact.Gender_ID = myContact.ToNullableInt("Gender_ID");
-            contact.Home_Phone = myContact.ToString("Home_Phone");
-            contact.Last_Name = myContact.ToString("Last_Name");
-            contact.Maiden_Name = myContact.ToString("Maiden_Name");
-            contact.Marital_Status_ID = myContact.ToNullableInt("Marital_Status_ID");
-            contact.Middle_Name = myContact.ToString("Middle_Name");
-            contact.Mobile_Carrier = myContact.ToNullableInt("Mobile_Carrier_ID");
-            contact.Mobile_Phone = myContact.ToString("Mobile_Phone");
-            contact.Nickname = myContact.ToString("Nickname");
-
+            var contact = ParseProfileRecord(recordsDict[0]);
+            
+            return contact;
+        }
+        
+        private static MyContact ParseProfileRecord(Dictionary<string, object> recordsDict)
+        {
+            var contact = new MyContact
+            {
+                Address_ID = recordsDict.ToNullableInt("Address_ID"),
+                Address_Line_1 = recordsDict.ToString("Address_Line_1"),
+                Address_Line_2 = recordsDict.ToString("Address_Line_2"),
+                Congregation_ID = recordsDict.ToNullableInt("Congregation_ID"),
+                Household_ID = recordsDict.ToInt("Household_ID"),
+                City = recordsDict.ToString("City"),
+                State = recordsDict.ToString("State"),
+                Postal_Code = recordsDict.ToString("Postal_Code"),
+                Anniversary_Date = recordsDict.ToDateAsString("Anniversary_Date"),
+                Contact_ID = recordsDict.ToInt("Contact_ID"),
+                Date_Of_Birth = recordsDict.ToDateAsString("Date_of_Birth"),
+                Email_Address = recordsDict.ToString("Email_Address"),
+                Employer_Name = recordsDict.ToString("Employer_Name"),
+                First_Name = recordsDict.ToString("First_Name"),
+                Foreign_Country = recordsDict.ToString("Foreign_Country"),
+                Gender_ID = recordsDict.ToNullableInt("Gender_ID"),
+                Home_Phone = recordsDict.ToString("Home_Phone"),
+                Last_Name = recordsDict.ToString("Last_Name"),
+                Maiden_Name = recordsDict.ToString("Maiden_Name"),
+                Marital_Status_ID = recordsDict.ToNullableInt("Marital_Status_ID"),
+                Middle_Name = recordsDict.ToString("Middle_Name"),
+                Mobile_Carrier = recordsDict.ToNullableInt("Mobile_Carrier_ID"),
+                Mobile_Phone = recordsDict.ToString("Mobile_Phone"),
+                Nickname = recordsDict.ToString("Nickname")
+            };
             return contact;
         }
 

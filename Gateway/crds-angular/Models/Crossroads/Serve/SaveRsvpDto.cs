@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
@@ -13,9 +14,12 @@ namespace crds_angular.Models.Crossroads.Serve
 
         [JsonProperty(PropertyName = "eventTypeId")]
         public int EventTypeId { get; set; }
-
+        
         [JsonProperty(PropertyName = "opportunityId")]
         public int OpportunityId { get; set; }
+
+        [JsonProperty(PropertyName = "opportunityIds")]
+        public List<int> OpportunityIds { get; set; }
 
         [JsonProperty(PropertyName = "startDate")]
         public long StartDateUnix { get; set; }

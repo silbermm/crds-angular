@@ -251,5 +251,37 @@ namespace MinistryPlatform.Translation.Test.Services
             var result = fixture.checkIfUserInGroup(participantId, groupParticipants);
             Assert.AreEqual(result, true);
         }
+
+        [Test]
+        public void ParticipantIsGroupMember()
+        {
+            const int groupId = 1;
+            const int participantId = 1000;
+
+            var mockResponse = new List<Dictionary<string, object>> {new Dictionary<string, object>() {{"field1", 7}}};
+            ministryPlatformService.Setup(
+                m => m.GetPageViewRecords(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), 0)).Returns(mockResponse);
+
+            var result = fixture.ParticipantGroupMember(groupId, participantId);
+            Assert.AreEqual(result, true);
+
+            ministryPlatformService.VerifyAll();
+        }
+
+        [Test]
+        public void ParticipantIsNotGroupMember()
+        {
+            const int groupId = 2;
+            const int participantId = 2000;
+
+            var mockResponse = new List<Dictionary<string, object>>();
+            ministryPlatformService.Setup(
+                m => m.GetPageViewRecords(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), 0)).Returns(mockResponse);
+
+            var result = fixture.ParticipantGroupMember(groupId, participantId);
+            Assert.AreEqual(result, false);
+
+            ministryPlatformService.VerifyAll();
+        }
     }
 }

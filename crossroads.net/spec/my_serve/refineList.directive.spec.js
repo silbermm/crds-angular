@@ -419,4 +419,21 @@ describe('Refine List Directive', function() {
     expect(isolateScope.servingDays[0].serveTimes[1].servingTeams.length).toBe(1);
   });
 
+  it("should set the filter active when there are dates applied", function(){
+    isolateScope.filterToDate = new Date();
+    isolateScope.filterToDate.setDate(isolateScope.filterToDate.getDate() + 1);
+    isolateScope.filterFromDate = new Date();
+    isolateScope.readyFilterByDate();
+    expect(isolateScope.isFilterSet()).toBe(true);
+  });
+
+  it("should have an error when the 'TO' date is prior to the 'FROM' date", function(){
+    isolateScope.lastDate = new Date();
+    isolateScope.lastDate.setDate(isolateScope.lastDate.getDate() -1);
+    isolateScope.filterFromDate = new Date();
+    var ret = isolateScope.readyFilterByDate();
+    expect(ret).toBe(false);
+    expect(isolateScope.filterdates.todate.$error.fromDate).toBe(true);
+  });
+
 });
