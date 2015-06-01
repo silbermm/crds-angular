@@ -326,7 +326,7 @@ namespace crds_angular.Services
 
         private void SendRSVPConfirmation(int contactId, int opportunityId, int prevOppId, DateTime startDate, DateTime endDate, int templateId, string token)
         {
-            var template = CommunicationService.GetTemplate(templateId, token);
+            var template = CommunicationService.GetTemplate(templateId);
 
             //Go get Opportunity deets
             var opp = _opportunityService.GetOpportunityById(opportunityId, token);
@@ -373,7 +373,7 @@ namespace crds_angular.Services
                 {"Previous_Opportunity_Name", prevOpp.OpportunityName}
             };
 
-            CommunicationService.SendMessage(comm, mergeData, token);
+            CommunicationService.SendMessage(comm, mergeData);
         }
 
         private ServeRole NewServingRole(GroupServingParticipant record)
