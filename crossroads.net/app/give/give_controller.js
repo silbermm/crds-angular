@@ -190,10 +190,10 @@
                   exp_month: vm.expDate.substr(0,2),
                   exp_year: vm.expDate.substr(2,2),
                   cvc: vm.cvc,
-                  address_zip: vm.billingZipCode
+                  address_zip: vm.dto.donor.default_source.address_zip
                 })
               .then(function(donor) {
-                vm.donate(vm.program.ProgramId, vm.dto.amount, donor.id, vm.email);
+                vm.donate(vm.program.ProgramId, vm.dto.amount, donor.id, vm.email, vm.dto.donor.default_source.address_zip);
                 $state.go("give.thank-you");
               }),
               function() {
