@@ -16,7 +16,7 @@
         <div class="row">
             <div class="form-group col-xs-4  col-md-3" ng-class="{'has-error': expDateError() }">
                 <label>Expiration</label>
-                <input type="text" name="expDate" class="form-control" ng-model="creditCard.expDate" ui-mask="99/99" ng-required="true" placeholder="{{defaultCardInfo.expDate}}">
+                <input type="text" name="expDate" class="form-control" ng-model="creditCard.expDate" ui-mask="99/99" ng-required="true" model-view-value="true" placeholder="{{defaultCardInfo.expDate}}">
                 <ng-messages for="creditCardForm.expDate.$error" ng-show="creditCardForm.expDate.$error.required" ng-messages-include="on-blur-messages"></ng-messages>
                 <ng-messages for="creditCardForm.expDate.$error" ng-if="bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
             </div>

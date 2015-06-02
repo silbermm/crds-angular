@@ -45,6 +45,7 @@ require('../creditCardInfo.html');
           var exp_month = scope.defaultSource.exp_date.substr(0,2);
           var exp_year = scope.defaultSource.exp_date.substr(2,2);
           var fmt_exp = exp_month.concat('/', exp_year);
+          console.log(fmt_exp);
           scope.defaultCardInfo = {
             billingZipCode: scope.defaultSource.address_zip,
             cvc: "XXX",

@@ -179,8 +179,7 @@
         };
 ;
         vm.submitChangedBankInfo = function() {
-          console.log("shit fire");
-            vm.bankinfoSubmitted = true;
+          vm.bankinfoSubmitted = true;
              if ($scope.giveForm.$valid) {
               PaymentService.updateDonorWithCard(
                 vm.dto.donor.id,
