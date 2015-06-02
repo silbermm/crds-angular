@@ -22,7 +22,7 @@
         var vm = this;
         vm.amountSubmitted = false;
         vm.bankinfoSubmitted = false;
-
+        vm.changeAccountInfo = false;
         vm.donor = {};
         vm.donorError = false;
         vm.email = null;
@@ -97,6 +97,7 @@
           vm.dto.amount = amount;
           vm.dto.donor = donor;
           vm.dto.email = email;
+          vm.changeAccountInfo = true;
           $state.go("give.change")
         };
 
@@ -177,32 +178,40 @@
               $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
             }
         };
-;
+
         vm.submitChangedBankInfo = function() {
-          vm.bankinfoSubmitted = true;
-             if ($scope.giveForm.$valid) {
-              PaymentService.updateDonorWithCard(
-                vm.dto.donor.id,
-                {
-                  name: vm.dto.donor.default_source.name,
-                  number: vm.dto.donor.default_source.last4,
-                  // exp_month: vm.expDate.substr(0,2),
-                  // exp_year: vm.expDate.substr(2,2),
-                  expDate: vm.dto.donor.default_source.exp_date,
-                  cvc: vm.cvc,
-                  address_zip: vm.dto.donor.default_source.address_zip
-                })
-              .then(function(donor) {
-                vm.donate(vm.program.ProgramId, vm.dto.amount, donor.id, vm.email, vm.dto.donor.default_source.address_zip);
-                $state.go("give.thank-you");
-              }),
-              function() {
-                $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
-              };     
-            }
-            else {
-              $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-            }
+            vm.bankinfoSubmitted = true;
+            if(vm.changeAccountInfo) {
+              // If true, it means we changed the bank info, so we'll
+              // need to update it at the payment processor
+              if ($scope.giveForm.$valid) {
+               PaymentService.updateDonorWithCard(
+                 vm.dto.donor.id,
+                 {
+                   name: vm.dto.donor.default_source.name,
+                   number: vm.dto.donor.default_source.last4,
+                   exp_month: vm.expDate.substr(0,2),
+                   exp_year: vm.expDate.substr(2,2),
+                   cvc: vm.cvc,
+                   address_zip: vm.billingZipCode
+                 })
+               .then(function(donor) {
+                 vm.donate(vm.program.ProgramId, vm.dto.amount, donor.id, vm.email);
+                 $state.go("give.thank-you");
+               }),
+               function() {
+                 $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
+               };
+             }
+             else {
+               $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+             }
+           } else {
+             // If false, it means we did not change the bank info, so we'll
+             // simply make the payment using the existing info
+             vm.donate(vm.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.email);
+             $state.go("give.thank-you");
+           }
         };
 
         vm.donate = function(programId, amount, donorId, email){
