@@ -22,7 +22,8 @@ require('../creditCardInfo.html');
               cvc: "=",
               billingZipCode: "=",
               bankinfoSubmitted: "=",
-              defaultSource: "="
+              defaultSource: "=",
+              changeAccountInfo: "@",
             },
           templateUrl: 'give/creditCardInfo.html',
           link: link
@@ -34,23 +35,6 @@ require('../creditCardInfo.html');
 
         scope.creditCard = scope;
 
-        if(!scope.defaultSource) {
-          scope.defaultCardInfo = {};
-        } else if(scope.defaultSource.last4) {
-          scope.creditCard.nameOnCard = "";
-          scope.creditCard.ccNumber = "";
-          scope.creditCard.expDate = "";
-          scope.creditCard.cvc = "";
-          scope.creditCard.billingZipCode = "";
-          scope.defaultCardInfo = {
-            billingZipCode: scope.defaultSource.address_zip,
-            cvc: "XXX",
-            expDate: "12/19",
-            nameOnCard: scope.defaultSource.name,
-            maskedCard: "XXXXXXXXXXX" + scope.defaultSource.last4
-          };
-        }
-
         // Emits a growl notification encouraging checking/savings account
         // donations, rather than credit card
         $rootScope.$emit(
@@ -61,11 +45,19 @@ require('../creditCardInfo.html');
             );
 
         scope.billingZipCodeError = function() {
+          if(scope.useExistingAccountInfo()) {
+            return(false);
+          }
+
           return (scope.bankinfoSubmitted && scope.creditCardForm.billingZipCode.$invalid ||
             scope.creditCardForm.billingZipCode.$dirty && scope.creditCardForm.billingZipCode.$invalid);
         };
 
         scope.blurBillingZipCodeError = function() {
+          if(scope.useExistingAccountInfo()) {
+            return(false);
+          }
+
           return (scope.creditCardForm.billingZipCode.$dirty && scope.creditCardForm.billingZipCode.$invalid);
         };
 
@@ -73,23 +65,48 @@ require('../creditCardInfo.html');
             var ccNumber = scope.creditCardForm.ccNumber;
             if (ccNumber && ccNumber.$modelValue) {
                 ccNumber = ccNumber.$modelValue;
-                if (ccNumber.match(visaRegEx))
-                  scope.ccNumberClass = "cc-visa";
-                else if (ccNumber.match(mastercardRegEx))
-                  scope.ccNumberClass = "cc-mastercard";
-                else if (ccNumber.match(discoverRegEx))
-                  scope.ccNumberClass = "cc-discover";
-                else if (ccNumber.match(americanExpressRegEx))
-                  scope.ccNumberClass = "cc-american-express";
-                else
-                  scope.ccNumberClass = "";
-            } else
+              if (ccNumber.match(visaRegEx))
+                scope.ccNumberClass = "cc-visa";
+              else if (ccNumber.match(mastercardRegEx))
+                scope.ccNumberClass = "cc-mastercard";
+              else if (ccNumber.match(discoverRegEx))
+                scope.ccNumberClass = "cc-discover";
+              else if (ccNumber.match(americanExpressRegEx))
+                scope.ccNumberClass = "cc-american-express";
+              else
+                scope.ccNumberClass = "";
+            } else if(scope.defaultCardInfo.brand) {
+              if (scope.defaultCardInfo.brand == "Visa") {
+                scope.ccNumberClass = "cc-visa";
+              }
+              else if (scope.defaultCardInfo.brand == "MasterCard") {
+                scope.ccNumberClass = "cc-mastercard";
+              }
+              else if (scope.defaultCardInfo.brand == "Discover") {
+                scope.ccNumberClass = "cc-discover";
+              }
+              else if (scope.defaultCardInfo.brand == "American Express") {
+                scope.ccNumberClass = "cc-american-express";
+              }
+              else {
+                scope.ccNumberClass = "";
+              }
+            } else {
               scope.ccNumberClass = "";
+            }
         };
+
+        scope.useExistingAccountInfo = function() {
+          return(scope.changeAccountInfo && scope.creditCardForm.$pristine);
+        }
 
         scope.ccNumberError = function(ccValid) {
             if (ccValid === undefined) {
                 scope.setValidCard = false ;
+            }
+
+            if(scope.useExistingAccountInfo()) {
+              return(false);
             }
 
             return (scope.bankinfoSubmitted && scope.creditCardForm.ccNumber.$pristine || //cannot be blank on submit
@@ -103,6 +120,10 @@ require('../creditCardInfo.html');
                 scope.setValidCvc = false  ;
             }
 
+            if(scope.useExistingAccountInfo()) {
+              return(false);
+            }
+
             return (scope.bankinfoSubmitted && scope.creditCardForm.cvc.$pristine || //cannot be blank on submit
                     scope.setValidCvc && !scope.bankinfoSubmitted || //can be empty on pageload
                     !cvcValid && scope.bankinfoSubmitted ||
@@ -110,14 +131,41 @@ require('../creditCardInfo.html');
         };
 
         scope.expDateError = function() {
+          if(scope.useExistingAccountInfo()) {
+            return(false);
+          }
+
             return (scope.bankinfoSubmitted && scope.creditCardForm.expDate.$invalid);
         };
 
         scope.nameError = function() {
+          if(scope.useExistingAccountInfo()) {
+            return(false);
+          }
+
             return (scope.bankinfoSubmitted && scope.creditCardForm.nameOnCard.$invalid);
         };
 
+        if(!scope.defaultSource) {
+          scope.defaultCardInfo = {};
+        } else if(scope.defaultSource.last4) {
+          scope.creditCard.nameOnCard = "";
+          scope.creditCard.ccNumber = "";
+          scope.creditCard.expDate = "";
+          scope.creditCard.cvc = "";
+          scope.creditCard.billingZipCode = "";
+          scope.defaultCardInfo = {
+            billingZipCode: scope.defaultSource.address_zip,
+            brand: scope.defaultSource.brand,
+            cvc: "XXX",
+            // TODO Hard-coding expDate - should get this from the scope.defaultSource
+            expDate: "12/19",
+            nameOnCard: scope.defaultSource.name,
+            maskedCard: "XXXXXXXXXXX" + scope.defaultSource.last4
+          };
 
+          scope.ccCardType();
+        }
       }
     };
 

@@ -3,32 +3,32 @@
         <div growl inline="true" reference="1001" limit-messages="1"></div>
         <div class="form-group" ng-class="{'has-error': nameError() }">
             <label for="nameOnCard">Name On Card</label>
-            <input type="text" name="nameOnCard" class="form-control" ng-model="creditCard.nameOnCard" ng-required="true" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }" placeholder="{{defaultCardInfo.nameOnCard}}">
+            <input type="text" name="nameOnCard" class="form-control" ng-model="creditCard.nameOnCard" ng-required="!useExistingAccountInfo()" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }" placeholder="{{defaultCardInfo.nameOnCard}}">
             <ng-messages for="creditCardForm.nameOnCard.$error" ng-show="creditCardForm.nameOnCard.$error.required" ng-messages-include="on-blur-messages"></ng-messages>
             <ng-messages for="creditCardForm.nameOnCard.$error" ng-if="bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
         </div>
         <div class="form-group" ng-class="{'has-error': ccNumberError(creditCard.ccValid) }">
             <label for="ccNumber">Credit Card Number</label>
-            <input type="text" name="ccNumber" class="form-control cc-icon" ng-class="ccNumberClass" ng-model="creditCard.ccNumber" maxlength="16" ng-change="ccCardType()" ng-required="true" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }" placeholder="{{defaultCardInfo.maskedCard}}">
+            <input type="text" name="ccNumber" class="form-control cc-icon" ng-class="ccNumberClass" ng-model="creditCard.ccNumber" maxlength="16" ng-change="ccCardType()" ng-required="!useExistingAccountInfo()" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }" placeholder="{{defaultCardInfo.maskedCard}}">
             <ng-messages for="creditCardForm.ccNumber.$error" ng-if="bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
             <span ng-show="!creditCard.ccValid && creditCardForm.ccNumber.$dirty" ng-bind-html="$root.messages[$root.MESSAGES.invalidCard].message | html"></span>
         </div>
         <div class="row">
             <div class="form-group col-xs-4  col-md-3" ng-class="{'has-error': expDateError() }">
                 <label>Expiration</label>
-                <input type="text" name="expDate" class="form-control" ng-model="creditCard.expDate" ui-mask="99/99" placeholder="{{defaultCardInfo.expDate}}" ng-required="true" placeholder="1212">
+                <input type="text" name="expDate" class="form-control" ng-model="creditCard.expDate" ui-mask="99/99" placeholder="{{defaultCardInfo.expDate}}" ng-required="!useExistingAccountInfo()" placeholder="1212">
                 <ng-messages for="creditCardForm.expDate.$error" ng-show="creditCardForm.expDate.$error.required" ng-messages-include="on-blur-messages"></ng-messages>
                 <ng-messages for="creditCardForm.expDate.$error" ng-if="bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
             </div>
             <div class="form-group col-xs-4 col-md-2" ng-class="{'has-error': cvvError(cvcValid) }">
                 <label for="cvv">CVV</label>
-                <input type="text" name="cvc" class="form-control" ng-model="creditCard.cvc" maxlength="4" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }" ng-required="true" placeholder="{{defaultCardInfo.cvc}}">
+                <input type="text" name="cvc" class="form-control" ng-model="creditCard.cvc" maxlength="4" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }" ng-required="!useExistingAccountInfo()" placeholder="{{defaultCardInfo.cvc}}">
                 <span ng-show="!cvcValid && creditCardForm.cvc.$dirty" ng-bind-html="$root.messages[$root.MESSAGES.invalidCvv].message | html"></span>
                 <ng-messages for="creditCardForm.cvc.$error" ng-if="bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
           </div>
           <div class="form-group col-xs-4 col-md-3"  ng-class="{'has-error': billingZipCodeError() }">
                 <label for="billingZipCode">Zip Code</label>
-                <input type="text" name="billingZipCode" class="form-control" ng-model="creditCard.billingZipCode" maxlength="10" ng-model-options="{ updateOn: 'blur'}" invalid-zip ng-required="true" placeholder="{{defaultCardInfo.billingZipCode}}">
+                <input type="text" name="billingZipCode" class="form-control" ng-model="creditCard.billingZipCode" maxlength="10" ng-model-options="{ updateOn: 'blur'}" invalid-zip ng-required="!useExistingAccountInfo()" placeholder="{{defaultCardInfo.billingZipCode}}">
                 <ng-messages for="creditCardForm.billingZipCode.$error" ng-show="blurBillingZipCodeError()" ng-messages-include="on-blur-messages"></ng-messages>
                 <ng-messages for="creditCardForm.billingZipCode.$error" ng-if="billingZipCodeError()" ng-messages-include="on-submit-messages"></ng-messages>
             </div>
