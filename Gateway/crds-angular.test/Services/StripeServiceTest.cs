@@ -239,7 +239,9 @@ namespace crds_angular.test.Services
                         last4 = "8585",
                         brand = "Visa",
                         address_zip = "45454" ,
-                        id = "platinum card"
+                        id = "platinum card",
+                        exp_month = "01",
+                        exp_year = "2020"
                     }
                         
                 }
