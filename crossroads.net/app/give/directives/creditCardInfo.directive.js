@@ -35,27 +35,7 @@ require('../creditCardInfo.html');
 
         scope.creditCard = scope;
 
-        if(!scope.defaultSource) {
-          scope.defaultCardInfo = {};
-        } else if(scope.defaultSource.last4) {
-          scope.creditCard.nameOnCard = "";
-          scope.creditCard.ccNumber = "";
-          scope.creditCard.expDate = "";
-          scope.creditCard.cvc = "";
-          scope.creditCard.billingZipCode = "";
-          var exp_month = scope.defaultSource.exp_date.substr(0,2);
-          var exp_year = scope.defaultSource.exp_date.substr(2,2);
-          var fmt_exp = exp_month.concat('/', exp_year);
-          console.log(fmt_exp);
-          scope.defaultCardInfo = {
-            billingZipCode: scope.defaultSource.address_zip,
-            cvc: "XXX",
-            expDate: fmt_exp,
-            nameOnCard: scope.defaultSource.name,
-            maskedCard: "XXXXXXXXXXX" + scope.defaultSource.last4
-          };
-        }
-    
+           
          // Emits a growl notification encouraging checking/savings account
         // donations, rather than credit card
         $rootScope.$emit(
@@ -96,17 +76,17 @@ require('../creditCardInfo.html');
                 scope.ccNumberClass = "cc-american-express";
               else
                 scope.ccNumberClass = "";
-            } else if(scope.defaultCardInfo.brand) {
-              if (scope.defaultCardInfo.brand == "Visa") {
+            } else if(scope.defaultCardPlaceholderValues.brand) {
+              if (scope.defaultCardPlaceholderValues.brand == "Visa") {
                 scope.ccNumberClass = "cc-visa";
               }
-              else if (scope.defaultCardInfo.brand == "MasterCard") {
+              else if (scope.defaultCardPlaceholderValues.brand == "MasterCard") {
                 scope.ccNumberClass = "cc-mastercard";
               }
-              else if (scope.defaultCardInfo.brand == "Discover") {
+              else if (scope.defaultCardPlaceholderValues.brand == "Discover") {
                 scope.ccNumberClass = "cc-discover";
               }
-              else if (scope.defaultCardInfo.brand == "American Express") {
+              else if (scope.defaultCardPlaceholderValues.brand == "American Express") {
                 scope.ccNumberClass = "cc-american-express";
               }
               else {
@@ -168,19 +148,19 @@ require('../creditCardInfo.html');
         };
 
         if(!scope.defaultSource) {
-          scope.defaultCardInfo = {};
+          scope.defaultCardPlaceholderValues = {expDate: "MM/YY"};
         } else if(scope.defaultSource.last4) {
           scope.creditCard.nameOnCard = "";
           scope.creditCard.ccNumber = "";
           scope.creditCard.expDate = "";
           scope.creditCard.cvc = "";
           scope.creditCard.billingZipCode = "";
-          scope.defaultCardInfo = {
+          var exp_fmt = scope.defaultSource.exp_date.substr(0,2).concat('/', scope.defaultSource.exp_date.substr(2,2));
+          scope.defaultCardPlaceholderValues = {
             billingZipCode: scope.defaultSource.address_zip,
             brand: scope.defaultSource.brand,
             cvc: "XXX",
-            // TODO Hard-coding expDate - should get this from the scope.defaultSource
-            expDate: "12/19",
+            expDate: exp_fmt,
             nameOnCard: scope.defaultSource.name,
             maskedCard: "XXXXXXXXXXX" + scope.defaultSource.last4
           };
