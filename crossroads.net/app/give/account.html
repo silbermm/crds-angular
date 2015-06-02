@@ -27,5 +27,8 @@
 	    <bank-credit-card-details></bank-credit-card-details>
 	</ng-form>
     <donation-confirmation></donation-confirmation>
-    <a ng-click="give.submitBankInfo()" class="btn btn-primary btn-lg col-xs-12">GIVE {{give.amount | currency}}</a>
+    <button ng-click="give.submitBankInfo()" ng-class="{disabled: give.processing}" class="btn btn-primary btn-lg col-xs-12">
+      <span ng-if="give.processing">Giving...</span>
+      <span ng-if="!give.processing">GIVE {{give.amount | currency}}</span>
+    </button>
  </div>
