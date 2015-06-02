@@ -46,7 +46,6 @@
         vm.ready = true;
       });
       populateDates();
-      //console.log(vm.params);
     }
 
     function cancel() {
