@@ -46,6 +46,7 @@
         vm.ready = true;
       });
       populateDates();
+      //console.log(vm.params);
     }
 
     function cancel() {
@@ -133,7 +134,7 @@
     }
 
     function showError() {
-      return vm.params.selectedCount > 1 || vm.params.recordDescription === undefined;
+      return vm.params.selectedCount > 1 || vm.params.recordDescription === undefined || vm.params.recordId === "-1";
     }
   }
 
