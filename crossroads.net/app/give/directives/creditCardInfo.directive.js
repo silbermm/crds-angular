@@ -3,7 +3,7 @@ require('../creditCardInfo.html');
 (function () {
     angular
     .module('crossroads.give')
-    .directive('creditCardInfo', ['$log', '$rootScope', bankInfo]);
+    .directive('creditCardInfo', ['$log', '$rootScope', '$timeout', bankInfo]);
 
     //Credit Card RegExs
     var americanExpressRegEx = /^3[47][0-9]{13}$/;
@@ -11,7 +11,7 @@ require('../creditCardInfo.html');
     var mastercardRegEx = /^5[1-5][0-9]/;
     var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$/;
 
-    function bankInfo($log, $rootScope, growl) {
+    function bankInfo($log, $rootScope, $timeout, growl) {
         var directive = {
           restrict: 'EA',
           //replace: true,
@@ -147,10 +147,23 @@ require('../creditCardInfo.html');
             return (scope.bankinfoSubmitted && scope.creditCardForm.nameOnCard.$invalid);
         };
 
+        // This function swaps the expDate field with the current value placeholder
+        // for the expDate field with the "MM/YY" placeholder.  This works around
+        // an issue with using ui-mask and a placeholder value, otherwise we'd
+        // simply use a dynamic placeholder.
+        scope.swapCreditCardExpDateFields = function() {
+          if(scope.changeAccountInfo) {
+            scope.creditCardForm.$setDirty();
+            $timeout(function() {
+              var e = document.getElementsByName("expDate")[0];
+              e.focus();
+            });
+          }
+        }
+
         scope.resetDefaultCardPlaceholderValues = function() {
           scope.defaultCardPlaceholderValues = {
             expDate: "MM/YY",
-            expDateMask: "99/99"
           };
         }
 
@@ -166,10 +179,7 @@ require('../creditCardInfo.html');
             billingZipCode: scope.defaultSource.address_zip,
             brand: scope.defaultSource.brand,
             cvc: "XXX",
-            // TODO set this to the real exp_date if we can workaround the ui-mask/placeholder issue
-            // expDate: scope.defaultSource.exp_date.replace(/^(..)(..).*$/, "$1/$2"),
-            expDate: "MM/YY",
-            expDateMask: "99/99",
+            expDate: scope.defaultSource.exp_date.replace(/^(..)(..).*$/, "$1/$2"),
             nameOnCard: scope.defaultSource.name,
             maskedCard: "XXXXXXXXXXX" + scope.defaultSource.last4
           };
