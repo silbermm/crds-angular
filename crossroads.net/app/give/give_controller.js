@@ -112,10 +112,11 @@
 
         };
 
-        vm.goToChange = function(amount, donor, email) {
+        vm.goToChange = function(amount, donor, email, program) {
           vm.dto.amount = amount;
           vm.dto.donor = donor;
           vm.dto.email = email;
+          vm.dto.program = program;
           vm.changeAccountInfo = true;
           $state.go("give.change")
         };
