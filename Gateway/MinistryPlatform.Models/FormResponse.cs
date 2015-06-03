@@ -1,0 +1,26 @@
+﻿using System.Collections.Generic;
+
+namespace MinistryPlatform.Models
+{
+    public class FormResponse
+    {
+        public int FormId { get; set; }
+        public int ContactId { get; set; }
+        public int OpportunityId { get; set; }
+        public int OpportunityResponseId { get; set; }
+        public List<FormAnswer> FormAnswers { get; set; }
+
+        public FormResponse()
+        {
+            FormAnswers = new List<FormAnswer>();
+        }
+    }
+
+    public class FormAnswer
+    {
+        public int Field { get; set; }
+        public int FormResponseId { get; set; }
+        public string Response { get; set; }
+        public int OpportunityResponse { get; set; }
+    }
+}
