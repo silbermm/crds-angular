@@ -18,7 +18,6 @@ module.exports = {
     },
     externals: {
       stripe: "Stripe",
-      lodash: "_",
       angular: "angular"
     },
     context: __dirname,

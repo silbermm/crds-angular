@@ -14,7 +14,6 @@ var definePlugin = new webpack.DefinePlugin({
 
 module.exports = {
     entry: {
-        //main: './app/app.js',
         dependencies: "./app/dependencies.js"
     },
     externals: {

@@ -4,9 +4,11 @@ require('angular');
 require('../node_modules/angular-toggle-switch/angular-toggle-switch-bootstrap.css');
 require('../node_modules/angular-toggle-switch/angular-toggle-switch.css');
 
+
 require('angular-aside');
 require('angular-match-media');
 
+require('./third-party/angular/select.css');
 require('./third-party/angular/angular-aside.min.css');
 require('./third-party/angular/angular-growl.css');
 require('angular-ui-select');
