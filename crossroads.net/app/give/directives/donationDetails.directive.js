@@ -20,7 +20,6 @@ require('../donation-details.html');﻿
       };
 
       function link(scope, element, attrs) {
-        console.log(scope.amount);
         scope.programs = scope.programsIn;
         if(!scope.program || !scope.program.ProgramId) {
           scope.program = scope.programsIn[0];

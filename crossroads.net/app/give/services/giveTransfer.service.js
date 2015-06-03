@@ -9,6 +9,7 @@
           donor : '',
           email : '',
           program : '',
+          view : '',
         }
 
         return transferObject;

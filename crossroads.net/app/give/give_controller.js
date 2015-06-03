@@ -46,10 +46,10 @@
         vm.last4 = '';
         vm.showMessage = "Where?";
         vm.showCheckClass = "ng-hide";
-        vm.view = 'bank';
         vm.processing = false;
         vm.programsInput = programList;
         vm.dto = GiveTransferService;
+        vm.dto.view = 'bank';
 
         var brandCode = [];
         brandCode['Visa'] = "#cc_visa";
@@ -112,11 +112,12 @@
 
         };
 
-        vm.goToChange = function(amount, donor, email, program) {
+        vm.goToChange = function(amount, donor, email, program, view) {
           vm.dto.amount = amount;
           vm.dto.donor = donor;
           vm.dto.email = email;
           vm.dto.program = program;
+          vm.dto.view = view;
           vm.changeAccountInfo = true;
           $state.go("give.change")
         };
