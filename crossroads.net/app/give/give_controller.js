@@ -253,7 +253,7 @@
                   // The vm.email below is only required for guest giver, however, there
                   // is no harm in sending it for an authenticated user as well,
                   // so we'll keep it simple and send it in all cases.
-                  if (vm.give.view = "cc") {
+                  if (vm.view == "cc") {
                     PaymentService.createDonorWithCard({
                       name: vm.nameOnCard,
                       number: vm.ccNumber,
@@ -269,9 +269,9 @@
                     vm.processing = false;
                     $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
                   });
-                };
+                 };
 
-                  if (vm.give.view = "bank") {
+                 if (vm.view == "bank") {
                     PaymentService.createDonorWithBankAcct({
                        country: 'US',
                        currency: 'USD',
