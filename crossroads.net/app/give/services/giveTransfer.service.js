@@ -3,7 +3,6 @@
 
 
     function GiveTransferService() {
-        console.log("Inside Give GiveTransferService");
         var transferObject = {
           amount : '',
           donor : '',
