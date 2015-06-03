@@ -246,6 +246,9 @@ namespace crds_angular.Services
             var deletedRSVPS = new List<int>();
             var prevOpp = 0;
 
+            // Get the group contact using any of the opportunities
+            var opportunity = _opportunityService.GetOpportunityById(opportunityIds.FirstOrDefault(), token);
+
             foreach (var e in events)
             {
                 if ((!alternateWeeks) || includeThisWeek)
@@ -289,7 +292,7 @@ namespace crds_angular.Services
                         try
                         {
                             templateId = AppSetting("RsvpChangeTemplate");
-                            opportunityId = opportunityIds.First();
+                            //opportunityId = opportunityIds.First();
                             //if there is already a participant, remove it because they've changed to "No"
                             _eventService.unRegisterParticipantForEvent(participant.ParticipantId, e.EventId);
                         }
@@ -307,7 +310,7 @@ namespace crds_angular.Services
                                 e.EventId, false);
                             if (updatedOpp > 0)
                             {
-                                prevOpp = updatedOpp;
+                                prevOpp = oid;
                             }
                         }
                         
@@ -318,21 +321,31 @@ namespace crds_angular.Services
             }
 
             //Send Confirmation Email Asynchronously
-            var thread = new Thread(() => SendRSVPConfirmation(contactId, opportunityId, prevOpp, startDate, endDate, templateId, token));
+            var thread = new Thread(() => SendRSVPConfirmation(contactId, opportunityId, prevOpp, opportunity.GroupName, opportunity.GroupContactId, startDate, endDate, templateId, token));
             thread.Start();
 
             return true;
         }
 
-        private void SendRSVPConfirmation(int contactId, int opportunityId, int prevOppId, DateTime startDate, DateTime endDate, int templateId, string token)
+        private void SendRSVPConfirmation(int contactId, int opportunityId, int prevOppId, String groupName, int groupContactId, DateTime startDate, DateTime endDate, int templateId, string token)
         {
-                var template = CommunicationService.GetTemplate(templateId);
+            var opp = new Opportunity();
+            var prevOpp = new Opportunity();
+
+            var template = CommunicationService.GetTemplate(templateId);
 
             //Go get Opportunity deets
-            var opp = _opportunityService.GetOpportunityById(opportunityId, token);
+            if (opportunityId == 0)
+            {
+                opp.OpportunityName = "Not Available";
+            }
+            else
+            {
+                opp = _opportunityService.GetOpportunityById(opportunityId, token);
+            }      
 
             //Go get Previous Opportunity deets
-            var prevOpp = new Opportunity();
+           
             if (prevOppId > 0)
             {
                 prevOpp = _opportunityService.GetOpportunityById(prevOppId, token);
@@ -343,7 +356,7 @@ namespace crds_angular.Services
             }
 
             //Go get from/to contact info
-            var fromEmail = _contactService.GetContactEmail(opp.GroupContactId);
+            var fromEmail = _contactService.GetContactEmail(groupContactId);
             var toEmail = _contactService.GetContactEmail(contactId);
 
             var comm = new Communication
@@ -352,9 +365,9 @@ namespace crds_angular.Services
                 DomainId = 1,
                 EmailBody = template.Body,
                 EmailSubject = template.Subject,
-                FromContactId = opp.GroupContactId,
+                FromContactId = groupContactId,
                 FromEmailAddress = fromEmail,
-                ReplyContactId = opp.GroupContactId,
+                ReplyContactId = groupContactId,
                 ReplyToEmailAddress = fromEmail,
                 ToContactId = contactId,
                 ToEmailAddress = toEmail
@@ -369,7 +382,7 @@ namespace crds_angular.Services
                 {"Shift_End", opp.ShiftEnd.FormatAsString()},
                 {"Room", opp.Room ?? string.Empty},
                 {"Group_Contact", opp.GroupContactName},
-                {"Group_Name", opp.GroupName},
+                {"Group_Name",groupName},
                 {"Previous_Opportunity_Name", prevOpp.OpportunityName}
             };
 

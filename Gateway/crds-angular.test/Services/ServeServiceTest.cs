@@ -454,6 +454,7 @@ namespace crds_angular.test.Services
                 Times.Exactly(3));
         }
 
+ 
         [Test]
         public void RespondToServeOpportunityNoForEveryOtherWeek()
         {
@@ -476,6 +477,7 @@ namespace crds_angular.test.Services
                     m.GetEventsByTypeForRange(eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(),
                         It.IsAny<string>()), Times.Exactly(1));
             _eventService.Verify(m => m.registerParticipantForEvent(47, It.IsAny<int>()), Times.Never());
+
             _opportunityService.Verify(
                 (m =>
                     m.RespondToOpportunity(47, It.IsInRange(1,5, Range.Inclusive), It.IsAny<string>(), It.IsIn<int>(expectedEventIds), signUp)),
