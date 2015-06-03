@@ -70,7 +70,7 @@
           if(toState.name == "give.account" && $rootScope.username && !vm.donorError ) {
             vm.processing = true;
             event.preventDefault();
-            PaymentService.donor().get({email: $scope.give.email})
+            P.donor().get({email: $scope.give.email})
             .$promise
             .then(function(donor){
               vm.donor = donor;
@@ -253,13 +253,14 @@
                   // The vm.email below is only required for guest giver, however, there
                   // is no harm in sending it for an authenticated user as well,
                   // so we'll keep it simple and send it in all cases.
-                  PaymentService.createDonorWithCard({
-                    name: vm.nameOnCard,
-                    number: vm.ccNumber,
-                    exp_month: vm.expDate.substr(0,2),
-                    exp_year: vm.expDate.substr(2,2),
-                    cvc: vm.cvc
-                  }, vm.email)
+                  if (vm.give.view = "cc") {
+                    PaymentService.createDonorWithCard({
+                      name: vm.nameOnCard,
+                      number: vm.ccNumber,
+                      exp_month: vm.expDate.substr(0,2),
+                      exp_year: vm.expDate.substr(2,2),
+                      cvc: vm.cvc
+                    }, vm.email)
                   .then(function(donor) {
                     vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email);
                     $state.go("give.thank-you");
@@ -268,6 +269,25 @@
                     vm.processing = false;
                     $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
                   });
+                };
+
+                  if (vm.give.view = "bank") {
+                    PaymentService.createDonorWithBankAcct({
+                       country: 'US',
+                       currency: 'USD',
+                       routing_number: vm.routing_number,
+                       account_number: vm.account
+                    }, vm.email)
+                  .then(function(donor) {
+                    vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email);
+                    $state.go("give.thank-you");
+                  },
+                  function() {
+                    vm.processing = false;
+                    $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
+                  });
+                };
+
 
                 });
             }
