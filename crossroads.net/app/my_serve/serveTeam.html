@@ -1,4 +1,4 @@
-<div class="col-sm-12 serve-opp-listings">
+<div class="col-sm-12 serve-opp-listings mobile-hard-sides">
   <div class="panel panel-default ng-isolate-scope">
     <div class="panel-heading clearfix" ng-click="openPanel(team.members)">
       <span class="team-name">{{::team.name}}</span>
@@ -6,7 +6,7 @@
         <button type="button"
           ng-click="setActiveTab(member)"
           ng-repeat="member in team.members"
-          class="btn btn-xs normal-type"
+          class="btn btn normal-type"
           ng-class="{'active':isActiveTab(member.name) }"
           stop-event>
           {{::member.name}}
@@ -45,7 +45,7 @@
                 <input type="radio" ng-model="currentMember.serveRsvp.roleId" ng-value="0" ng-change="roleChanged(role)" name="">
                 <span class="opportunity-name">Not Available</span>
               </label>
-              <div ng-show="formErrors.role"> 
+              <div ng-show="formErrors.role">
                 <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
               </div>
             </div><!--/radio-->
@@ -65,7 +65,7 @@
                 <select class="form-control" ng-model="currentMember.currentOpportunity.frequency" ng-change="populateDates()" ng-options="f.text for f in frequency">
                   <option value="">Select a Frequency</option>
                 </select>
-                <div ng-show="formErrors.frequency"> 
+                <div ng-show="formErrors.frequency">
                   <span ng-bind-html="$root.messages[$root.MESSAGES.selectFrequency].message | html"></span>
                 </div>
               </div><!--/form-group-->
@@ -75,10 +75,10 @@
                   <div class="input-group">
                     <input type="text" class="form-control" datepicker-popup="{{::format}}" ng-model="currentMember.currentOpportunity.fromDt" is-open="$parent.datePickers.fromOpened" datepicker-options="dateOptions"  ng-required="true" close-text="Close" ng-change="changeFromDate()" />
                     <span class="input-group-btn">
-                      <button type="button" class="btn btn-default" ng-click="openFromDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                      <button type="button" class="btn btn-gray-light btn-bordered" ng-click="openFromDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                   </div><!--/input-group-->
-                  <div ng-show="formErrors.from"> 
+                  <div ng-show="formErrors.from">
                     <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
                   </div>
                 </div><!--/form-group-->
@@ -87,13 +87,13 @@
                   <div class="input-group">
                     <input type="text" class="form-control" datepicker-popup="{{::format}}" ng-model="currentMember.currentOpportunity.toDt" is-open="$parent.datePickers.toOpened" min-date="minDate" max-date="'2050-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-change="changeToDate()" />
                     <span class="input-group-btn">
-                      <button type="button" class="btn btn-default" ng-click="openToDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                      <button type="button" class="btn btn-gray-light btn-bordered" ng-click="openToDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                   </div><!--/input-group-->
-                  <div ng-show="formErrors.to"> 
+                  <div ng-show="formErrors.to">
                     <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
                   </div>
-                  <div ng-show="formErrors.dateRange"> 
+                  <div ng-show="formErrors.dateRange">
                     <span ng-bind-html="$root.messages[$root.MESSAGES.invalidDateRange].message | html"></span>
                   </div>
                 </div><!--/form-group-->
@@ -102,12 +102,12 @@
           </div><!--/col-sm-4-->
           <div class="col-sm-12 serve-save soft-half-top">
             <a href="mailto:{{ ::team.primaryContact }}" class="pull-left">
-              <svg viewBox="0 0 32 32" class="icon icon-mail5 icon-large icon-subtle" tooltip-placement="right" tooltip="Email Team Leader">
+              <svg viewBox="0 0 32 32" class="icon icon-mail5 icon-xlarge icon-subtle" tooltip-placement="right" tooltip="Email Team Leader">
                 <use xlink:href="#mail5"></use>
               </svg>
             </a>
-            <button class="btn btn-primary btn-sm" ng-click="closePanel()">Cancel</button>
-            <button class="btn btn-primary btn-sm" ng-click="saveRsvp()">Save</button>
+            <button class="btn btn-gray-light" ng-click="closePanel()">Cancel</button>
+            <button class="btn btn-primary" ng-click="saveRsvp()">Save</button>
           </div><!--/col-sm-12-->
         </div><!--/row-->
       </div><!--/panel-body-->
