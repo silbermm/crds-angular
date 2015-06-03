@@ -146,15 +146,19 @@ require('../creditCardInfo.html');
             return (scope.bankinfoSubmitted && scope.creditCardForm.nameOnCard.$invalid);
         };
 
+        scope.resetDefaultCardPlaceholderValues = function() {
+          scope.defaultCardPlaceholderValues = { expDate: "MM/YY" };
+        }
+
         if(!scope.defaultSource) {
-          scope.defaultCardInfo = {};
+          scope.resetDefaultCardPlaceholderValues();
         } else if(scope.defaultSource.last4) {
           scope.creditCard.nameOnCard = "";
           scope.creditCard.ccNumber = "";
           scope.creditCard.expDate = "";
           scope.creditCard.cvc = "";
           scope.creditCard.billingZipCode = "";
-          scope.defaultCardInfo = {
+          scope.defaultCardPlaceholderValues = {
             billingZipCode: scope.defaultSource.address_zip,
             brand: scope.defaultSource.brand,
             cvc: "XXX",

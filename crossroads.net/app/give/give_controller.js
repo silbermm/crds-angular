@@ -181,7 +181,7 @@
 
         vm.submitChangedBankInfo = function() {
             vm.bankinfoSubmitted = true;
-            if(vm.changeAccountInfo) {
+            if($scope.giveForm.$dirty) {
               // If true, it means we changed the bank info, so we'll
               // need to update it at the payment processor
               if ($scope.giveForm.$valid) {
