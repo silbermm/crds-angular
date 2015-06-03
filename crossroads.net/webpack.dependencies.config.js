@@ -14,18 +14,18 @@ var definePlugin = new webpack.DefinePlugin({
 
 module.exports = {
     entry: {
-        main: './app/app.js'
+        //main: './app/app.js',
+        dependencies: "./app/dependencies.js"
     },
     externals: {
-      stripe: "Stripe",
-      lodash: "_",
-      angular: "angular"
+      stripe: "Stripe"
     },
     context: __dirname,
     output: {
         path: './assets',
         publicPath: '/assets/',
-        filename: '[name].js'
+        filename: '[name].js',
+        sourceMapFilename: '[name].js.map'
     },
     module: {
         loaders: [
@@ -61,8 +61,6 @@ module.exports = {
                 test: /\.html$/,
                 loader: "ng-cache?prefix=[dir]"
             }
-
-      //{ test: /\.html$/,loader: "ngtemplate?module=myTemplates&relativeTo=^" + (path.resolve(__dirname, 'app/')) + "!html"}
     ]
     },
     plugins: [

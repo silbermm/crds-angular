@@ -1,7 +1,6 @@
 (function(){
   
-  require('../third-party/angular/select.css'); 
-  require('angular-ui-select');
+  require('../third-party/angular/select.css');
 
   require('./tools.html');
 

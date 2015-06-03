@@ -1,5 +1,4 @@
 'use strict';
-require('angular-module-resource');
 
 // Define atrium-events module
 var app = require('angular').module('atrium-events', ['ngResource'], function($locationProvider) {

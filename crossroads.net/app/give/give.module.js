@@ -1,10 +1,9 @@
 'use strict';
-var app = require('angular');
 var stripe = require ('stripe');
 
 require('angular-stripe');
 require('../app.core.module')
-app.module('crossroads.give', ['angular-stripe','crossroads.core']);
+angular.module('crossroads.give', ['angular-stripe','crossroads.core']);
 
 require('./directives/donationDetails.directive.js');
 require('./directives/donationConfirmation.directive');

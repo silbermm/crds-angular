@@ -1,14 +1,9 @@
 'use strict';
 
-var angular = require('angular');
-
 require('./templates/nav.html');
 require('./templates/nav-mobile.html');
 require('./templates/404.html');
 require('./templates/500.html');
-
-require('../node_modules/angular-toggle-switch/angular-toggle-switch-bootstrap.css');
-require('../node_modules/angular-toggle-switch/angular-toggle-switch.css');
 
 require('../styles/main.scss');
 require('./profile');
@@ -16,18 +11,12 @@ require('./filters');
 require('./events');
 require('./cms/services/cms_services_module');
 
-require('angular-aside');
-require('angular-match-media');
-
-require('./third-party/angular/angular-aside.min.css');
-require('./third-party/angular/angular-growl.css');
 require('./give');
 
 require('./app.core.module');
 require('./components/components.module');
 require('./mp_tools');
 
-var _ = require('lodash');
 "use strict";
 (function () {
 
