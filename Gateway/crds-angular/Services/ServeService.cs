@@ -261,7 +261,7 @@ namespace crds_angular.Services
                             var deletedResponse = _opportunityService.DeleteResponseToOpportunities(participant.ParticipantId, oid, e.EventId);
                             if (deletedResponse != 0)
                             {
-                                deletedRSVPS.Add(deletedResponse);
+                                deletedRSVPS.Add(oid);
                             }
                         }
 
@@ -335,15 +335,15 @@ namespace crds_angular.Services
             var prevOpp = new Opportunity();
             if (prevOppId > 0)
             {
-                prevOpp = _opportunityService.GetOpportunityById(opportunityId, token);
+                prevOpp = _opportunityService.GetOpportunityById(prevOppId, token);
             }
             else
             {
-                prevOpp.OpportunityName = "No";
+                prevOpp.OpportunityName = "Not Available";
             }
 
             //Go get from/to contact info
-            var fromEmail = _contactService.GetContactEmail(opp.GroupContactId);
+            var fromEmail = _contactService.GetContactById(opp.GroupContactId);
             var toEmail = _contactService.GetContactEmail(contactId);
 
             var comm = new Communication
@@ -353,9 +353,9 @@ namespace crds_angular.Services
                 EmailBody = template.Body,
                 EmailSubject = template.Subject,
                 FromContactId = opp.GroupContactId,
-                FromEmailAddress = fromEmail,
+                FromEmailAddress = fromEmail.Email_Address,
                 ReplyContactId = opp.GroupContactId,
-                ReplyToEmailAddress = fromEmail,
+                ReplyToEmailAddress = fromEmail.Email_Address,
                 ToContactId = contactId,
                 ToEmailAddress = toEmail
             };
@@ -368,7 +368,7 @@ namespace crds_angular.Services
                 {"Shift_Start", opp.ShiftStart.FormatAsString()},
                 {"Shift_End", opp.ShiftEnd.FormatAsString()},
                 {"Room", opp.Room ?? string.Empty},
-                {"Group_Contact", opp.GroupContactName},
+                {"Group_Contact", fromEmail.Nickname + " " + fromEmail.Last_Name},
                 {"Group_Name", opp.GroupName},
                 {"Previous_Opportunity_Name", prevOpp.OpportunityName}
             };
