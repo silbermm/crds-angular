@@ -32,28 +32,9 @@ gulp.task("start", ["webpack-dev-server"]);
 
 // Run the development server
 gulp.task("webpack-dev-server", ["icons-watch"], function(callback) {
-	// Modify some webpack config options
+	webPackConfigs.forEach(function(element, index) {
 
-	//function configureDevelopmentOptions(config) {
-	//	var options = Object.create(config);
-	//	options.devtool = "eval";
-	//	options.debug = true;
-	//	options.output.path = "/";
-	//	// Build app to assets - watch for changes
-	//	gulp.src("app/**/**")
-	//		.pipe(watch("app/**/**"))
-	//		.pipe(gulpWebpack(options))
-	//		.pipe(gulp.dest("./assets"));
-	//	return options;
-	//}
-
-
-
-	//var mainConfig = configureDevelopmentOptions(webpackConfig);
-	//var dependenciesConfig = configureDevelopmentOptions(webpackDependenciesConfig);
-
-	//var configs = [Object.create(webpackConfig), Object.create(webpackDependenciesConfig)];
-	webPackConfigs.forEach(function(element) {
+		// Modify some webpack config options
 		element.devtool = "eval";
 		element.debug = true;
 		element.output.path = "/";
@@ -93,9 +74,19 @@ gulp.task("webpack:build", ["icons"], function(callback) {
 				}
 			}),
 			new webpack.optimize.DedupePlugin()
-			// Can't currently use this with angular
+			// Can't currently use this with our angular code
+			// This is probably due to not fully following $inject or inline annotation, or using a plugin like ngMinPlugin
 			//new webpack.optimize.UglifyJsPlugin()
 		);
+
+		// TODO: Remove once we fully support Uglification for all JS files
+		if (element.entry.dependencies) {
+			gutil.log("[start]", "adding additional plugins for " +  JSON.stringify(element.entry.dependencies));
+
+			element.plugins = element.plugins.concat(
+				new webpack.optimize.UglifyJsPlugin()
+			);
+		}
 	});
 
 	// run webpack
