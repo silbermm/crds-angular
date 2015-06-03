@@ -22,6 +22,7 @@
   require('./go_trip_giving');
   require('./corkboard');
   require('./volunteer_signup');
+  require('./volunteer_application');
 
   var getCookie = require('./utilities/cookies');
 
@@ -45,6 +46,7 @@
         registerType("contentRouteType", /^\/.*/);
         registerType("signupRouteType", /\/sign-up\/.*$/);
         registerType("volunteerRouteType", /\/volunteer-sign-up\/.*$/);
+        registerType("volunteerApplicationRouteType", /\/volunteer-application\/.*$/);
 
         //================================================
         // Check if the user is connected
@@ -335,6 +337,19 @@
               url: "{link:volunteerRouteType}",
               controller: "VolunteerController as volunteer",
               templateUrl: "volunteer_signup/volunteer_signup_form.html",
+              data: { isProtected: true },
+              resolve: {
+                loggedin: checkLoggedin,
+                Page: 'Page',
+                CmsInfo: function(Page, $stateParams){
+                  return Page.get( {url: $stateParams.link} ).$promise;
+                }
+              }
+            })
+            .state("volunteer-thing", {
+              url: "{link:volunteerApplicationRouteType}",
+              controller: "VolunteerApplicationController as volunteer",
+              templateUrl: "volunteer_application/volunteer_application_form.html",
               data: { isProtected: true },
               resolve: {
                 loggedin: checkLoggedin,

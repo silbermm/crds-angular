@@ -1,0 +1,50 @@
+<!-- TODO Can this error handling be updated to utilize ngMessages? -->
+<div class="alert alert-success" role="alert" ng-if="volunteer.created">
+  <span ng-bind-html="$root.messages[$root.MESSAGES.succesfulResponse].message | html"></span>
+</div>
+
+<div class="alert alert-danger" role="alert" ng-if="volunteer.rejected">
+  <span ng-bind-html="$root.messages[$root.MESSAGES.failedResponse].message | html"></span>
+</div>
+
+<preloader full-screen='true' ng-show="!volunteer.viewReady"> </preloader>
+
+<div ng-show="volunteer.viewReady">
+  <h2 class="header noPspace" ng-bind-html="volunteer.pageInfo.title | html"></h2>
+  <div>
+    <p id="content" class="noPspace" dir="ltr" ng-bind-html="volunteer.pageInfo.content | html" ng-show="volunteer.showContent"></p>
+    <p id="existingMemberMessage" ng-bind-html="volunteer.pageInfo.existingMember | html" ng-show="volunteer.showAllSignedUp"></p>
+    <p id="successMessage" ng-bind-html="volunteer.pageInfo.success | html" ng-show="volunteer.showSuccess"></p>
+  </div>
+
+  <div ng-show="volunteer.showContent">
+    <legend>Participants</legend>
+    <form class="form-group" name="myForm" role="form" ng-submit="volunteer.save(myForm)" id="myForm">
+      <p>
+        <div class="checkbox" ng-repeat="participant in volunteer.participants as people">
+          <label>
+            <span> 
+              <input name="input" type="checkbox" ng-checked="volunteer.disableCheckbox(participant)" ng-disabled="volunteer.disableCheckbox(participant)" ng-model="participant.add">
+            </span>
+            <span ng-class="{'text-muted':volunteer.disableCheckbox(participant)}">
+              <span>{{ participant.preferredName }}</span>
+              <span ng-show="volunteer.displayEmail(participant.email)">({{ participant.email }})</span>
+            </span>
+            <span ng-show="participant.loggedInUser">
+              <a href="" ng-click="volunteer.editProfile(participant)">
+                <svg viewBox="0 0 32 32" class="icon icon-pencil4">
+                  <use xlink:href="#pencil4"></use>
+                </svg>
+              </a>
+            </span>
+            <span ng-show="volunteer.displayPendingFlag(participant)" class="text-danger"> - pending</span>
+          </label>
+        </div>
+      </p>
+      <p>
+        <input type="submit" name="submit_group_signup" value="Request to Join {{ volunteer.pageInfo.title }}" id="submit_group_signup" class="btn btn-primary push-half-bottom">
+      </p>
+    </form>
+  </div>
+</div>
+<!-- viewReady -->
