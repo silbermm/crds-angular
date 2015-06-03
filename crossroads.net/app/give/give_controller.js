@@ -49,7 +49,6 @@
         vm.processing = false;
         vm.programsInput = programList;
         vm.dto = GiveTransferService;
-        vm.dto.view = 'bank';
 
         var brandCode = [];
         brandCode['Visa'] = "#cc_visa";
@@ -209,6 +208,7 @@
               // If dirty, it means we changed the bank info, so we'll
               // need to update it at the payment processor
               if ($scope.giveForm.$valid) {
+               vm.processing = true;
                PaymentService.updateDonorWithCard(
                  vm.dto.donor.id,
                  {
@@ -220,7 +220,7 @@
                    address_zip: vm.billingZipCode
                  })
                .then(function(donor) {
-                 vm.donate(vm.program.ProgramId, vm.dto.amount, donor.id, vm.email);
+                 vm.donate(vm.dto.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.dto.email);
                  $state.go("give.thank-you");
                }),
                function() {
@@ -233,7 +233,8 @@
            } else {
              // If pristine, it means we did not change the bank info, so we'll
              // simply make the payment using the existing info
-             vm.donate(vm.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.email);
+             vm.processing = true;
+             vm.donate(vm.dto.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.dto.email);
              $state.go("give.thank-you");
            }
         };
@@ -241,9 +242,9 @@
         vm.donate = function(programId, amount, donorId, email){
           PaymentService.donateToProgram(programId, amount, donorId, email)
             .then(function(confirmation){
-              vm.program_name = _.result(_.find(vm.programsInput,
-              {'ProgramId': confirmation.program_id}), 'Name');
               vm.amount = confirmation.amount;
+              vm.program = _.find(vm.programsInput, {'ProgramId': programId});
+              vm.program_name = vm.program.Name
             },
             function(reason){
               throw new DonationException("Failed: " + reason);
