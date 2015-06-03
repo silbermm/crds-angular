@@ -35,7 +35,8 @@ require('../creditCardInfo.html');
 
         scope.creditCard = scope;
 
-        // Emits a growl notification encouraging checking/savings account
+           
+         // Emits a growl notification encouraging checking/savings account
         // donations, rather than credit card
         $rootScope.$emit(
             'notify',
@@ -75,17 +76,17 @@ require('../creditCardInfo.html');
                 scope.ccNumberClass = "cc-american-express";
               else
                 scope.ccNumberClass = "";
-            } else if(scope.defaultCardInfo.brand) {
-              if (scope.defaultCardInfo.brand == "Visa") {
+            } else if(scope.defaultCardPlaceholderValues.brand) {
+              if (scope.defaultCardPlaceholderValues.brand == "Visa") {
                 scope.ccNumberClass = "cc-visa";
               }
-              else if (scope.defaultCardInfo.brand == "MasterCard") {
+              else if (scope.defaultCardPlaceholderValues.brand == "MasterCard") {
                 scope.ccNumberClass = "cc-mastercard";
               }
-              else if (scope.defaultCardInfo.brand == "Discover") {
+              else if (scope.defaultCardPlaceholderValues.brand == "Discover") {
                 scope.ccNumberClass = "cc-discover";
               }
-              else if (scope.defaultCardInfo.brand == "American Express") {
+              else if (scope.defaultCardPlaceholderValues.brand == "American Express") {
                 scope.ccNumberClass = "cc-american-express";
               }
               else {
@@ -158,12 +159,12 @@ require('../creditCardInfo.html');
           scope.creditCard.expDate = "";
           scope.creditCard.cvc = "";
           scope.creditCard.billingZipCode = "";
+          var exp_fmt = scope.defaultSource.exp_date.substr(0,2).concat('/', scope.defaultSource.exp_date.substr(2,2));
           scope.defaultCardPlaceholderValues = {
             billingZipCode: scope.defaultSource.address_zip,
             brand: scope.defaultSource.brand,
             cvc: "XXX",
-            // TODO Hard-coding expDate - should get this from the scope.defaultSource
-            expDate: "12/19",
+            expDate: exp_fmt,
             nameOnCard: scope.defaultSource.name,
             maskedCard: "XXXXXXXXXXX" + scope.defaultSource.last4
           };

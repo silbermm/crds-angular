@@ -12,11 +12,26 @@
   function GiveCtrl($rootScope, $scope, $state, $timeout, Session, PaymentService, programList, GiveTransferService) {
 
         $scope.$on('$stateChangeStart', function (event, toState, toParams) {
+           // vm.processing is used to set state and text on the "Give" button
+           // Make sure to set the processing state to true whenever a state change begins
+           vm.processing = true;
            if ($rootScope.email) {
                vm.email = $rootScope.email;
                //what if email is not found for some reason??
              }
              vm.transitionForLoggedInUserBasedOnExistingDonor(event,toState);
+        });
+
+        $scope.$on('$stateChangeSuccess', function (event, toState, toParams) {
+          // vm.processing is used to set state and text on the "Give" button
+          // Make sure to reset the processing state to false whenever state change succeeds.
+          vm.processing = false;
+        });
+
+        $scope.$on('$stateChangeError', function (event, toState, toParams) {
+          // vm.processing is used to set state and text on the "Give" button
+          // Make sure to reset the processing state to false whenever state change fails.
+          vm.processing = false;
         });
 
         var vm = this;
@@ -32,6 +47,7 @@
         vm.showMessage = "Where?";
         vm.showCheckClass = "ng-hide";
         vm.view = 'bank';
+        vm.processing = false;
         vm.programsInput = programList;
         vm.dto = GiveTransferService;
 
@@ -48,6 +64,7 @@
 
         vm.transitionForLoggedInUserBasedOnExistingDonor = function(event, toState){
           if(toState.name == "give.account" && $rootScope.username && !vm.donorError ) {
+            vm.processing = true;
             event.preventDefault();
             PaymentService.donor().get({email: $scope.give.email})
             .$promise
@@ -69,6 +86,7 @@
         vm.goToAccount = function() {
             vm.amountSubmitted = true;
             if($scope.giveForm.amountForm.$valid) {
+                vm.processing = true;
                 if ($rootScope.username === undefined) {
                     Session.addRedirectRoute("give.account", "");
                     $state.go("give.login");
@@ -83,6 +101,7 @@
         vm.confirmDonation = function(){
           try
           {
+            vm.processing = true;
             vm.donate(vm.program.ProgramId, vm.amount, vm.donor.id, vm.email);
             $state.go("give.thank-you");
           }
@@ -103,6 +122,7 @@
 
 
         vm.goToLogin = function () {
+          vm.processing = true;
           Session.addRedirectRoute("give.account", "");
           $state.go("give.login");
         };
@@ -144,7 +164,8 @@
 
         vm.submitBankInfo = function() {
             vm.bankinfoSubmitted = true;
-             if ($scope.giveForm.$valid) {
+            if ($scope.giveForm.accountForm.$valid) {
+              vm.processing = true;
               PaymentService.donor().get({email: $scope.give.email})
              .$promise
               .then(function(donor){
@@ -158,8 +179,8 @@
                   PaymentService.createDonorWithCard({
                     name: vm.dto.donor.default_source.name,
                     number: vm.dto.donor.default_source.last4,
-                    exp_month: vm.expDate.substr(0,2),
-                    exp_year: vm.expDate.substr(2,2),
+                    exp_month: vm.dto.donor.default_source.exp_date.substr(0,2),
+                    exp_year: vm.dto.donor.default_source.exp_date.substr(2,2),
                     cvc: vm.cvc,
                     address_zip: vm.dto.donor.default_source.address_zip
                   }, vm.email)
@@ -168,6 +189,7 @@
                     $state.go("give.thank-you");
                   },
                   function() {
+                    vm.processing = false;
                     $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
                   });
 
@@ -181,8 +203,8 @@
 
         vm.submitChangedBankInfo = function() {
             vm.bankinfoSubmitted = true;
-            if($scope.giveForm.$dirty) {
-              // If true, it means we changed the bank info, so we'll
+            if($scope.giveForm.creditCardForm.$dirty) {
+              // If dirty, it means we changed the bank info, so we'll
               // need to update it at the payment processor
               if ($scope.giveForm.$valid) {
                PaymentService.updateDonorWithCard(
@@ -190,8 +212,8 @@
                  {
                    name: vm.dto.donor.default_source.name,
                    number: vm.dto.donor.default_source.last4,
-                   exp_month: vm.expDate.substr(0,2),
-                   exp_year: vm.expDate.substr(2,2),
+                   exp_month: vm.dto.donor.default_source.exp_date.substr(0,2),
+                   exp_year: vm.dto.donor.default_source.exp_date.substr(2,2),
                    cvc: vm.cvc,
                    address_zip: vm.billingZipCode
                  })
@@ -207,7 +229,7 @@
                $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
              }
            } else {
-             // If false, it means we did not change the bank info, so we'll
+             // If pristine, it means we did not change the bank info, so we'll
              // simply make the payment using the existing info
              vm.donate(vm.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.email);
              $state.go("give.thank-you");

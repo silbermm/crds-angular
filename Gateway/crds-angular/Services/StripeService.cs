@@ -62,6 +62,8 @@ namespace crds_angular.Services
                     defaultSource.last4 = source.last4;
                     defaultSource.name = source.name;
                     defaultSource.address_zip = source.address_zip;
+                    defaultSource.exp_month = source.exp_month;
+                    defaultSource.exp_year = source.exp_year.Substring(2,2);
                 }
             }
 
@@ -108,6 +110,8 @@ namespace crds_angular.Services
                     default_source.last4 = source.last4;
                     default_source.name = source.name;
                     default_source.address_zip = source.address_zip;
+                    default_source.exp_month = source.exp_month.PadLeft(2,'0');
+                    default_source.exp_year = source.exp_year.Substring(2,2);
                 }   
             }
             

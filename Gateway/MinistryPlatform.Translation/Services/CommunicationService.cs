@@ -38,7 +38,7 @@ namespace MinistryPlatform.Translation.Services
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
             
         }
@@ -52,14 +52,14 @@ namespace MinistryPlatform.Translation.Services
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
         }
 
-        public static void SendMessage(Communication communication, Dictionary<string, object> mergeData, string token)
+        public static void SendMessage(Communication communication, Dictionary<string, object> mergeData)
         {
-            var communicationId = AddCommunication(communication, token);
-            AddCommunicationMessage(communication, communicationId, mergeData, token);
+            var communicationId = AddCommunication(communication, apiLogin());
+            AddCommunicationMessage(communication, communicationId, mergeData, apiLogin());
         }
 
         private static int AddCommunication(Communication communication, string token)
@@ -94,9 +94,9 @@ namespace MinistryPlatform.Translation.Services
             MinistryPlatformService.CreateSubRecord(RecipientsSubPageId, communicationId, dictionary, token);
         }
 
-        public static MessageTemplate GetTemplate(int templateId, string token)
+        public static MessageTemplate GetTemplate(int templateId)
         {
-            var pageRecords = MinistryPlatformService.GetRecordDict(MessagePageId, templateId, token);
+            var pageRecords = MinistryPlatformService.GetRecordDict(MessagePageId, templateId, apiLogin());
 
             if (pageRecords == null)
             {

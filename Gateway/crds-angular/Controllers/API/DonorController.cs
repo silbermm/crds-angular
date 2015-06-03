@@ -131,8 +131,9 @@ namespace crds_angular.Controllers.API
                             brand = default_source.brand,
                             last4 = default_source.last4,
                             name = default_source.name,
-                            address_zip = default_source.address_zip
-                        }
+                            address_zip = default_source.address_zip,
+                            exp_date = default_source.exp_month + default_source.exp_year
+                         }
                     };
 
                     return Ok(response);
@@ -209,8 +210,8 @@ namespace crds_angular.Controllers.API
                         brand = sourceData.brand,
                         last4 = sourceData.last4,
                         name = sourceData.name,
-                        address_zip = sourceData.address_zip
-
+                        address_zip = sourceData.address_zip,
+                        exp_date = sourceData.exp_month + sourceData.exp_year
                     }
                 };
 

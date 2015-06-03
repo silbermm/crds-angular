@@ -27,8 +27,8 @@ namespace crds_angular.Models.Crossroads
         public string last4 { get; set; }
         public string brand { get; set; }
         public string funding { get; set; }
-        public int exp_month { get; set; }
-        public int exp_year { get; set; }
+        public string exp_month { get; set; }
+        public string exp_year { get; set; }
         public string fingerprint { get; set; }
         public string country { get; set; }
         public string name { get; set; }
