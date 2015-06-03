@@ -3,7 +3,7 @@
   
 
 
-  require('angular').module('crossroads.core', [
+  angular.module('crossroads.core', [
     'ngResource',
     'ngSanitize',
     'ngPayments',

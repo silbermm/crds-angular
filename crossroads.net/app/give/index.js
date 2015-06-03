@@ -8,7 +8,7 @@ require('./register.html');
 require('./history.html');
 require('./give.module.js');
 require('./give.config.js');
-var app = require('angular').module('crossroads.give');
+var app = angular.module('crossroads.give');
 app.factory("getPrograms", require('./services/getPrograms.service.js'));
 require('./services/payment_service.js')
 

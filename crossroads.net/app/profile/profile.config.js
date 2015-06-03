@@ -2,7 +2,7 @@
 (function(){
  
   var getCookie = require('../utilities/cookies'); 
-  var app = require('angular').module('crossroads.profile');
+  var app = angular.module('crossroads.profile');
   app.config(config);
 
   function config($httpProvider){

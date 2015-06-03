@@ -5,7 +5,7 @@
   require('./tools.html');
 
   require('../app.core.module');
-  require('angular');
+  //require('angular');
 
   require('./mpTools.module');
   require('./mpTools.config');

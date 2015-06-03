@@ -3,7 +3,7 @@
 
   var getCookie = require('./utilities/cookies');
 
-  var app = require("angular").module("crossroads");
+  var app = angular.module("crossroads");
   app.config(AppConfig);
 
   AppConfig.$inject = ['$httpProvider', '$locationProvider'];

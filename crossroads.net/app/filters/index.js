@@ -1,6 +1,6 @@
 (function(){
    
-  var app = require('angular').module('crossroads.filters', []);
+  var app = angular.module('crossroads.filters', []);
   app.filter('time', require('./time.filter'));
     
   require('./html.filter');
