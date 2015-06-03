@@ -75,7 +75,7 @@
                   <div class="input-group">
                     <input type="text" class="form-control" datepicker-popup="{{::format}}" ng-model="currentMember.currentOpportunity.fromDt" is-open="$parent.datePickers.fromOpened" datepicker-options="dateOptions"  ng-required="true" close-text="Close" ng-change="changeFromDate()" />
                     <span class="input-group-btn">
-                      <button type="button" class="btn btn-gray-light btn-bordered" ng-click="openFromDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                      <button type="button" class="btn btn-gray-light" ng-click="openFromDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                   </div><!--/input-group-->
                   <div ng-show="formErrors.from">
@@ -87,7 +87,7 @@
                   <div class="input-group">
                     <input type="text" class="form-control" datepicker-popup="{{::format}}" ng-model="currentMember.currentOpportunity.toDt" is-open="$parent.datePickers.toOpened" min-date="minDate" max-date="'2050-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-change="changeToDate()" />
                     <span class="input-group-btn">
-                      <button type="button" class="btn btn-gray-light btn-bordered" ng-click="openToDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                      <button type="button" class="btn btn-gray-light" ng-click="openToDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                   </div><!--/input-group-->
                   <div ng-show="formErrors.to">

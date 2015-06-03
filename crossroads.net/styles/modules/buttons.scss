@@ -89,8 +89,10 @@
 
 .btn-gray-light {
   @include button-variant($gray, #f1f1f1, $gray-lighter);
+}
 
-  &.btn-bordered {
+.input-group-btn {
+  .btn {
     border: 1px solid $input-border;
     border-left: 0px;
   }
