@@ -35,7 +35,7 @@ require('../creditCardInfo.html');
 
         scope.creditCard = scope;
 
-           
+
          // Emits a growl notification encouraging checking/savings account
         // donations, rather than credit card
         $rootScope.$emit(
@@ -148,7 +148,10 @@ require('../creditCardInfo.html');
         };
 
         scope.resetDefaultCardPlaceholderValues = function() {
-          scope.defaultCardPlaceholderValues = { expDate: "MM/YY" };
+          scope.defaultCardPlaceholderValues = {
+            expDate: "MM/YY",
+            expDateMask: "99/99"
+          };
         }
 
         if(!scope.defaultSource) {
@@ -159,12 +162,14 @@ require('../creditCardInfo.html');
           scope.creditCard.expDate = "";
           scope.creditCard.cvc = "";
           scope.creditCard.billingZipCode = "";
-          var exp_fmt = scope.defaultSource.exp_date.substr(0,2).concat('/', scope.defaultSource.exp_date.substr(2,2));
           scope.defaultCardPlaceholderValues = {
             billingZipCode: scope.defaultSource.address_zip,
             brand: scope.defaultSource.brand,
             cvc: "XXX",
-            expDate: exp_fmt,
+            // TODO set this to the real exp_date if we can workaround the ui-mask/placeholder issue
+            // expDate: scope.defaultSource.exp_date.replace(/^(..)(..).*$/, "$1/$2"),
+            expDate: "MM/YY",
+            expDateMask: "99/99",
             nameOnCard: scope.defaultSource.name,
             maskedCard: "XXXXXXXXXXX" + scope.defaultSource.last4
           };
