@@ -35,50 +35,34 @@
 }
 
 .icon-default {
-  fill: $brand-secondary;
+  color: $brand-secondary;
 }
 
 .icon-primary {
-  fill: $brand-primary;
+  color: $brand-primary;
 }
 
 .icon-success {
-  fill: $brand-success;
+  color: $brand-success;
 }
 
 .icon-info {
-  fill: $brand-info;
+  color: $brand-info;
 }
 
 .icon-warning {
-  fill: $brand-warning;
+  color: $brand-warning;
 }
 
 .icon-danger {
-  fill: $brand-danger;
+  color: $brand-danger;
 }
 
 .icon-subtle {
-  fill: $gray-light;
+  color: $gray-light;
   &:hover {
-    fill: $brand-secondary;
+    color: $brand-secondary;
   }
-}
-
-.icon-social-media {
-  fill: $gray-light;
-}
-
-.icon-facebook:hover {
-  fill: #3B5998;
-}
-
-.icon-twitter:hover {
-  fill: #55ACEE;
-}
-
-.icon-mail5:hover {
-  fill: $brand-secondary;
 }
 
 .serve-opp-listings .icon-check-circle,
@@ -94,6 +78,19 @@
 .btn .icon {
   vertical-align: inherit;
 }
+
+/***************************************************************************************
+* Heading Icons
+***************************************************************************************/
+
+h1 .icon,
+h2 .icon,
+h3 .icon,
+h4 .icon,
+h5 .icon {
+  vertical-align: sub;
+}
+
 
 /***************************************************************************************
 * Loading Icons
@@ -135,6 +132,7 @@
 .loading-example {
   min-height: 300px;
 }
+
 /***************************************************************************************
 * SVG Preview Page
 ***************************************************************************************/

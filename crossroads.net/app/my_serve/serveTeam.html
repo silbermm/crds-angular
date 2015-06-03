@@ -61,7 +61,11 @@
           <div class="col-md-4">
             <div ng-show="currentMember.showFrequency">
               <div class="form-group" ng-class="{'has-error': formErrors.frequency}" >
-                <h5>Frequency </h5>
+                <h5>How Often?
+                  <svg viewBox="0 0 32 32" class="icon icon-question-circle icon-subtle pointer" popover="You can use the frequency dropdown to sign up for one opportunity or to sign up on an ongoing basis, either weekly or every other week." popover-placement="right" popover-append-to-body="true">
+                    <use xlink:href="#question-circle"></use>
+                  </svg>
+                </h5>
                 <select class="form-control" ng-model="currentMember.currentOpportunity.frequency" ng-change="populateDates()" ng-options="f.text for f in frequency">
                   <option value="">Select a Frequency</option>
                 </select>
