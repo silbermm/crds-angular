@@ -40,7 +40,8 @@
       scope.getUniqueSignUps = getUniqueSignUps;
       scope.getUniqueTeams = getUniqueTeams;
       scope.getUniqueTimes = getUniqueTimes;
-      scope.isCollapsed = $rootScope.mobile;
+      scope.isDateCollapsed = $rootScope.mobile;
+      scope.isFilterCollapsed = $rootScope.mobile;
       scope.isFilterSet = isFilterSet;
       scope.isFromError = isFromError;
       scope.isToError = isToError;
@@ -48,7 +49,8 @@
       scope.openToDate = openToDate;
       scope.readyFilterByDate = readyFilterByDate;
       scope.toDateError = false;
-      scope.toggleCollapse = toggleCollapse;
+      scope.toggleDateCollapse = toggleDateCollapse;
+      scope.toggleFilterCollapse = toggleFilterCollapse;
       scope.toggleFamilyMember = toggleFamilyMember;
       scope.toggleSignedUp = toggleSignedUp;
       scope.toggleTeam = toggleTeam;
@@ -60,10 +62,6 @@
       scope.uniqueTimes = [];
 
       activate();
-
-      screenSize.on('xs, sm', function(match) {
-        scope.isCollapsed = match;
-      })
 
       $rootScope.$on("rerunFilters", function(event, data) {
         // Update the entire data with the new data
@@ -453,9 +451,15 @@
         }
       }
 
-      function toggleCollapse() {
+      function toggleFilterCollapse() {
         if ($rootScope.mobile) {
-          scope.isCollapsed = !scope.isCollapsed;
+          scope.isFilterCollapsed = !scope.isFilterCollapsed;
+        }
+      }
+      
+      function toggleDateCollapse() {
+        if ($rootScope.mobile) {
+          scope.isDateCollapsed = !scope.isDateCollapsed;
         }
       }
 
