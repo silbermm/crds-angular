@@ -20,9 +20,7 @@ namespace MinistryPlatform.Models
         public string ProcessorId { get; set; }
         public string Email { get; set; }
         public bool RegisteredUser {get; set; }
-        public string Brand { get; set; }
-        public string Last4 { get; set; }
-
+  
         /// <summary>
         /// Returns true if this ContactDonor represents an existing MP Contact, false if not.
         /// </summary>

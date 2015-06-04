@@ -16,8 +16,10 @@ describe('GiveController', function() {
 
       mockGetResponse = {
         Processor_ID: "123456",
-        last4: "9876",
-        brand: "Visa"
+        default_source :  {
+            brand : "Visa",
+            last4  :"9876"
+        }
       };
 
       mockPaymentServiceGetPromise = {
@@ -61,39 +63,6 @@ describe('GiveController', function() {
       controller.last4 = "";
     })
   );
-
-  describe('Credit Card type checking', function() {
-
-    it('should have the visa credit card class', function(){
-      controller.ccNumber = '4242424242424242';
-      controller.ccCardType();
-      expect(controller.ccNumberClass).toBe("cc-visa");
-    });
-
-    it('should have the mastercard credit card class', function(){
-      controller.ccNumber = '5105105105105100';
-      controller.ccCardType();
-      expect(controller.ccNumberClass).toBe("cc-mastercard");
-    });
-
-    it('should have the discover credit card class', function(){
-      controller.ccNumber = '6011111111111117';
-      controller.ccCardType();
-      expect(controller.ccNumberClass).toBe("cc-discover");
-    });
-
-    it('should have the amex credit card class', function(){
-      controller.ccNumber = '378282246310005';
-      controller.ccCardType();
-      expect(controller.ccNumberClass).toBe("cc-american-express");
-    });
-
-    it('should not a credit card class', function(){
-      controller.ccNumber = '';
-      controller.ccCardType();
-      expect(controller.ccNumberClass).toBe("");
-    });
-  });
 
   describe('vm.confirmDonation() emits message in case of exception', function(){
     it('calls vm.donate with missing params', function(){
@@ -164,8 +133,8 @@ describe('GiveController', function() {
       expect(mockEvent.preventDefault).toHaveBeenCalled();
       expect(mockPaymentService.donor).toHaveBeenCalled();
       expect(controller.donorError).toBeFalsy();
-      expect(controller.last4).toBe("9876");
-      expect(controller.brand).toBe("#cc_visa");
+      expect(controller.donor.default_source.last4).toBe("9876");
+      expect(controller.donor.default_source.brand).toBe("Visa");
     });
   });
 

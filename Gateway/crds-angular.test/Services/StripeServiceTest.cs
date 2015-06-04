@@ -5,7 +5,9 @@ using Moq;
 using NUnit.Framework;
 using RestSharp;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
+using crds_angular.Services.Interfaces;
 
 namespace crds_angular.test.Services
 {
@@ -218,6 +220,53 @@ namespace crds_angular.test.Services
                 Assert.AreEqual("Invalid Integer Amount", e.detailMessage);
             }
 
+        }
+
+        [Test]
+        public void ShouldUpdateCustomerSource()
+        {
+            var customer = new StripeCustomer();
+            customer.id = "cus_test0618";
+            customer.default_source = "platinum card";
+           
+            customer.sources = new Sources()
+            {
+                data = new List<SourceData>()
+                {
+                    new SourceData()
+                    {
+                        name = "Automated Test",
+                        last4 = "8585",
+                        brand = "Visa",
+                        address_zip = "45454" ,
+                        id = "platinum card",
+                        exp_month = "01",
+                        exp_year = "2020"
+                    }
+                        
+                }
+            };
+
+            var stripeResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
+            stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.Data).Returns(customer).Verifiable();
+
+            restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
+
+            var defaultSource = fixture.updateCustomerSource("customerToken", "cardToken");
+            restClient.Verify(mocked => mocked.Execute<StripeCustomer>(
+                It.Is<IRestRequest>(o =>
+                    o.Method == Method.POST
+                    && o.Resource.Equals("customers/customerToken")
+                    && parameterMatches("source", "cardToken",o.Parameters)
+                    )));
+            restClient.VerifyAll();
+            stripeResponse.VerifyAll();
+           
+            Assert.AreEqual("Automated Test",  defaultSource.name);  
+            Assert.AreEqual("Visa", defaultSource.brand);
+            Assert.AreEqual("8585", defaultSource.last4);
+            Assert.AreEqual("45454", defaultSource.address_zip);
         }
 
     }

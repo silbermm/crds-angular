@@ -38,6 +38,39 @@ namespace crds_angular.Services
 
         }
 
+        public SourceData updateCustomerSource(string customerToken, string cardToken)
+        {
+            SourceData defaultSource = new SourceData();
+
+            var request = new RestRequest("customers/" + customerToken, Method.POST);
+            request.AddParameter("source", cardToken);
+
+            IRestResponse<StripeCustomer> response =
+                (IRestResponse<StripeCustomer>)stripeRestClient.Execute<StripeCustomer>(request);
+            if (response.StatusCode == HttpStatusCode.BadRequest)
+            {
+                Content content = JsonConvert.DeserializeObject<Content>(response.Content);
+                throw new StripeException("Customer update to add source failed", content.error.type, content.error.message, content.error.code);
+            }
+            var defaultSourceId = response.Data.default_source;
+            var sources = response.Data.sources.data;
+            foreach (var source in sources)
+            {
+                if (source.id == defaultSourceId)
+                {
+                    defaultSource.brand = source.brand;
+                    defaultSource.last4 = source.last4;
+                    defaultSource.name = source.name;
+                    defaultSource.address_zip = source.address_zip;
+                    defaultSource.exp_month = source.exp_month;
+                    defaultSource.exp_year = source.exp_year.Substring(2,2);
+                }
+            }
+
+            return defaultSource;
+
+        }
+
         public string updateCustomerDescription(string customer_token, int donor_id)
         {
             var request = new RestRequest("customers/" + customer_token, Method.POST);
@@ -54,9 +87,9 @@ namespace crds_angular.Services
             return (response.Data.id);
         }
 
-        public DefaultSource getDefaultSource(string customer_token)
+        public SourceData getDefaultSource(string customer_token)
         {
-            DefaultSource default_source = new DefaultSource();
+            SourceData default_source = new SourceData();
             
             var getCustomerRequest = new RestRequest("customers/" + customer_token, Method.GET);
 
@@ -75,7 +108,10 @@ namespace crds_angular.Services
                 {
                     default_source.brand = source.brand;
                     default_source.last4 = source.last4;
-                    break;
+                    default_source.name = source.name;
+                    default_source.address_zip = source.address_zip;
+                    default_source.exp_month = source.exp_month.PadLeft(2,'0');
+                    default_source.exp_year = source.exp_year.Substring(2,2);
                 }   
             }
             

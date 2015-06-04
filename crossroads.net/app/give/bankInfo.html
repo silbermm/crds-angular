@@ -1,31 +1,33 @@
-<div class="form-group">
-    <div class="form-group">
-        <label class="radio-inline">
-            <input type="radio" name="account-type" value="checking" checked>Checking</input>
-        </label>
-        <label class="radio-inline">
-            <input type="radio" name="account-type" value="Savings">Savings</input>
-        </label>
-    </div>
-    <div class="form-group row col-md-8 col-md-offset-2" collapse="!isCollapsed" >
-        <svg viewBox="0 0 512 280" class="icon icon-crossroads_check give-check-icon">
-            <use xlink:href="#crossroads_check"></use>
-        </svg>
-    </div>
-    <div class="form-group" ng-class="{'has-error': give.routingError() }">
-        <label for="routing" class="wide-label">Routing Number
-            <a href="" class="pull-right weight-normal" ng-click="isCollapsed=!isCollapsed; give.toggleCheck()">{{give.showMessage}}</a>
-        </label>
-        <input type="text" name="routing" class="form-control" ng-model="routing" maxlength="9" ng-required='true' ng-model-options="{ updateOn: 'blur'}" invalid-routing>
-        <ng-messages for="accountForm.routing.$error" ng-show="give.blurRoutingError()"  ng-messages-include="on-blur-messages"></ng-messages>
-        <ng-messages for="accountForm.routing.$error" ng-if="give.bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
+<ng-form name="bankAccountForm"  ng-model="bankAccount">
+     <section class="bank-section">
+        <div class="form-group">
+            <label class="radio-inline">
+                <input type="radio" name="account-type" value="checking" checked>Checking</input>
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="account-type" value="Savings">Savings</input>
+            </label>
+        </div>
+        <div class="form-group row col-md-8 col-md-offset-2" collapse="!isCollapsed" >
+            <svg viewBox="0 0 512 280" class="icon icon-crossroads_check give-check-icon">
+                <use xlink:href="#crossroads_check"></use>
+            </svg>
+        </div>
+        <div class="form-group" ng-class="{'has-error': routingError() }">
+            <label for="routing" class="wide-label">Routing Number
+                <a href="" class="pull-right weight-normal" ng-click="isCollapsed=!isCollapsed; give.toggleCheck()">{{give.showMessage}}</a>
+            </label>
+            <input type="text" name="routing" class="form-control" ng-model="bankAccount.routing" maxlength="9" ng-required='true' ng-model-options="{ updateOn: 'blur'}" invalid-routing>
+            <ng-messages for="bankAccountForm.routing.$error" ng-show="blurRoutingError()"  ng-messages-include="on-blur-messages"></ng-messages>
+            <ng-messages for="bankAccountForm.routing.$error" ng-if="bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
 
-    </div>
-    <div class="form-group" ng-class="{'has-error': give.accountError() }">
-        <label for="account">Account Number</label>
-        <input type="text" name="account" class="form-control" ng-model="account" maxlength="30" ng-required='true' ng-model-options="{ updateOn: 'blur'}" invalid-account>
-        <ng-messages for="accountForm.account.$error" ng-show="give.blurAccountError()" ng-messages-include="on-blur-messages"></ng-messages>
-        <ng-messages for="accountForm.account.$error" ng-if="give.bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
+        </div>
+        <div class="form-group" ng-class="{'has-error': accountError() }">
+            <label for="account">Account Number</label>
+            <input type="text" name="account" class="form-control" ng-model="bankAccount.account" maxlength="30" ng-required='true' ng-model-options="{ updateOn: 'blur'}" invalid-account>
+            <ng-messages for="bankAccountForm.account.$error" ng-show="blurAccountError()" ng-messages-include="on-blur-messages"></ng-messages>
+            <ng-messages for="bankAccountForm.account.$error" ng-if="bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
 
-    </div>
-</div>
+        </div>
+ </section>
+</ng-form>    
