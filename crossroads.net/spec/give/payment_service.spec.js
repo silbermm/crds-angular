@@ -7,7 +7,7 @@ describe ('PaymentService', function () {
     exp_year : "2016",
     cvc : "123"
   };
-
+  
   beforeEach(function() {
     module('crossroads.give');
 
@@ -117,5 +117,64 @@ describe ('PaymentService', function () {
       });
     });
   });
+
+  describe ('updateDonorWithCard', function() {
+     var result;
+
+     var card = {
+        number : "5555555555554444",
+        exp_month : "06",
+        exp_year : "2020",
+        cvc : "987"
+      };
+
+    beforeEach(function() {
+      spyOn(stripe.card, 'createToken').and.callThrough();
+
+      var putData = {
+        stripe_token_id: "tok_test"
+      };
+      httpBackend.expectPUT(window.__env__['CRDS_API_ENDPOINT'] +'api/donor', putData)
+        .respond({
+          id: "12345",
+          stripe_customer_id: "cust_test"
+        });
+      sut.updateDonorWithCard('12345', card)
+        .then(function(donor) {
+          result = donor;
+        });
+    });
+
+     it('should create a single use token', function() {
+      expect(stripe.card.createToken).toHaveBeenCalledWith(card);
+    });
+
+    it('should update the existing donor', function() {
+      expect(result).toBeDefined();
+      expect(result.id).toEqual("12345");
+      expect(result.stripe_customer_id).toEqual("cust_test");
+    });
+  });
+
+  describe('createDonorWithCard Error', function() {
+    it('should return error if there is problem calling donor service', function() {
+      var putData = {
+        stripe_token_id: "tok_test"
+      };
+      httpBackend.expectPUT(window.__env__['CRDS_API_ENDPOINT'] +'api/donor', putData)
+        .respond(400,{
+          message: "Token not found"
+        } );
+      sut.updateDonorWithCard('12345',card)
+        .then(function(donor) {
+          result = donor;
+        },
+        function(error) {
+          expect(error).toBeDefined();
+          expect(error.message).toEqual("Token not found");
+        });
+    });
+  });
+
 
 });
