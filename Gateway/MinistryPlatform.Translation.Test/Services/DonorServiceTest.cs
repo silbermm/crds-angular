@@ -6,6 +6,7 @@ using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
+using Newtonsoft.Json.Bson;
 using NUnit.Framework;
 
 namespace MinistryPlatform.Translation.Test.Services
@@ -252,6 +253,12 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(contactId, response.ContactId);
             Assert.AreEqual(0, response.DonorId);
             Assert.IsNull(response.ProcessorId);
+        }
+
+        [Test]
+        public void TestSendConfirmationEmail()
+        {
+            _fixture.SendConfirmationEmail();
         }
 
     }

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
-using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
@@ -210,5 +208,14 @@ namespace MinistryPlatform.Translation.Services
 
             return (donorId);
         }
+
+
+        public void SendConfirmationEmail()
+        {
+
+            var templateId = AppSetting("OneTimeGuestGiveTemplate");
+            throw new NotImplementedException();
+        }
     }
+
 }
