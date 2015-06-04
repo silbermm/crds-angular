@@ -24,6 +24,7 @@
     "babel-core": "^4.1.1",
     "babel-loader": "^4.0.0",
     "css-loader": "^0.9.1",
+    "expose-loader": "^0.7.0",
     "extract-text-webpack-plugin": "^0.3.8",
     "file-loader": "^0.8.1",
     "gulp": "^3.8.11",

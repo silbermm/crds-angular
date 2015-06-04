@@ -4,7 +4,6 @@ require('angular');
 require('../node_modules/angular-toggle-switch/angular-toggle-switch-bootstrap.css');
 require('../node_modules/angular-toggle-switch/angular-toggle-switch.css');
 
-
 require('angular-aside');
 require('angular-match-media');
 
@@ -28,3 +27,6 @@ require('angular-bootstrap-npm');
 require('angular-ui-router');
 
 require('lodash');
+
+// require and export moment on global scope
+require('expose?moment!moment');

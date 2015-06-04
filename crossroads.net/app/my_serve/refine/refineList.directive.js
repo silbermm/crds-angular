@@ -1,8 +1,6 @@
 'use strict()';
 (function() {
 
-  var moment = require('moment');
-
   module.exports = RefineDirective;
 
   RefineDirective.$inject = ['$rootScope', 'filterState', 'screenSize']

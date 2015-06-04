@@ -1,6 +1,5 @@
 'use strict()';
 (function(){
-  var moment = require('moment');
 
   module.exports = MyServeController;
 
