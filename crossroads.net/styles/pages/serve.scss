@@ -42,9 +42,15 @@
     cursor: pointer;
     position: relative;
     z-index: 1;
+    padding: 0 $padding-base-horizontal/2 $padding-base-vertical;
+    border-bottom: none;
 
     @media (min-width: $screen-sm-min) {
-      padding: 5px 15px;
+      padding: $padding-base-vertical/2  $padding-base-horizontal/2 $padding-base-vertical/2 $padding-base-horizontal;
+    }
+
+    .team-name {
+      line-height: 2.5;
     }
 
     .name-btns {
@@ -108,10 +114,14 @@
       }
     }
   }
+
+  .panel-heading + .panel-collapse > .panel-body {
+    border-top: 1px solid $panel-inner-border;
+  }
 }
 
 .serve-save {
-  border-top: 1px solid $gray-lighter;
+  border-top: 1px solid $panel-inner-border;
   text-align: right;
 }
 
