@@ -33,13 +33,11 @@ require('../bankInfo.html');
         };
 
         scope.routingError = function() {
-           console.log("in here");
             return (scope.bankinfoSubmitted && scope.bankAccountForm.routing.$error.invalidRouting && scope.bankAccountForm.$invalid  ||
                 scope.bankAccountForm.routing.$error.invalidRouting && scope.bankAccountForm.routing.$dirty);
         };
 
          scope.blurRoutingError = function() {
-           console.log("in here ii");
           return (scope.bankAccountForm.routing.$dirty && scope.bankAccountForm.routing.$error.invalidRouting );
         };
 
