@@ -10,10 +10,10 @@ require('../bankInfo.html');
           replace: true,
           scope: {
               routing: "=",
-              account: "="              
+              account: "="
             },
           templateUrl: 'give/bankInfo.html',
-          linl: link
+          link: link
       };
       return directive;
 
