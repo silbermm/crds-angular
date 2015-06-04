@@ -121,7 +121,7 @@
           vm.dto.email = email;
           vm.dto.program = program;
           vm.dto.view = view;
-          vm.changeAccountInfo = true;
+          vm.dto.changeAccountInfo = true;
           $state.go("give.change")
         };
 
