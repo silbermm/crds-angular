@@ -73,6 +73,23 @@ namespace MinistryPlatform.Translation.Services
             return opportunity;
         }
 
+        public Response GetOpportunityResponse(int contactId, int opportunityId)
+        {
+            var searchString = ",,,," + contactId;
+            var subpageViewRecords = MinistryPlatformService.GetSubpageViewRecords(_contactOpportunityResponses,
+                opportunityId, apiLogin(), searchString);
+            var record = subpageViewRecords.ToList().SingleOrDefault();
+            if (record == null) return null;
+
+            var response = new Response();
+            response.Response_ID = record.ToInt("dp_RecordID");
+            response.Opportunity_ID = record.ToInt("Opportunity ID");
+            response.Participant_ID = record.ToInt("Participant ID");
+            response.Response_Date = record.ToDate("Response Date");
+            response.Response_Result_ID = record.ToNullableInt("Response Result ID");
+            return response;
+        }
+
         public Response GetOpportunityResponse(int opportunityId, int eventId, Participant participant)
         {
             var searchString = string.Format(",{0},{1},{2}", opportunityId, eventId, participant.ParticipantId);

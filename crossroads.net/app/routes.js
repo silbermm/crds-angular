@@ -46,7 +46,7 @@
         registerType("contentRouteType", /^\/.*/);
         registerType("signupRouteType", /\/sign-up\/.*$/);
         registerType("volunteerRouteType", /\/volunteer-sign-up\/.*$/);
-        registerType("volunteerApplicationRouteType", /\/volunteer-application\/.*$/);
+        //registerType("volunteerApplicationRouteType", /\/volunteer-application\/.*$/);
 
         //================================================
         // Check if the user is connected
@@ -347,7 +347,8 @@
               }
             })
             .state("volunteer-thing", {
-              url: "{link:volunteerApplicationRouteType}",
+              // url: "{link:volunteerApplicationRouteType}:id",
+              url: "/volunteer-application/:appType/:id",
               controller: "VolunteerApplicationController as volunteer",
               templateUrl: "volunteer_application/volunteer_application_form.html",
               data: { isProtected: true },
@@ -355,7 +356,8 @@
                 loggedin: checkLoggedin,
                 Page: 'Page',
                 CmsInfo: function(Page, $stateParams){
-                  return Page.get( {url: $stateParams.link} ).$promise;
+                  var path = '/volunteer-application/'+$stateParams.appType+'/';
+                  return Page.get( {url: path} ).$promise;
                 }
               }
             })

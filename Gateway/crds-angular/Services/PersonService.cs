@@ -12,19 +12,11 @@ namespace crds_angular.Services
 {
     public class PersonService : MinistryPlatformBaseService, IPersonService
     {
-        //private IGroupService _groupService;
-        //private IContactRelationshipService _contactRelationshipService;
         private IContactService _contactService;
-        //private IOpportunityService _opportunityService;
-        //private IAuthenticationService _authenticationService;
 
         public PersonService(IContactService contactService)
         {
-            //this._groupService = groupService;
-            //this._contactRelationshipService = contactRelationshipService;
             this._contactService = contactService;
-            //this._opportunityService = opportunityService;
-            //this._authenticationService = authenticationService;
         }
 
         public void SetProfile(String token, Person person)
@@ -85,6 +77,7 @@ namespace crds_angular.Services
             person.CongregationId = contact.Congregation_ID;
             person.HouseholdId = contact.Household_ID;
             person.AddressId = contact.Address_ID;
+            person.Age = contact.Age;
 
 
             return person;

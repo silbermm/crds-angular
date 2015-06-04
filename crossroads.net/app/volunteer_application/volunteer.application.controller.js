@@ -2,15 +2,19 @@
 
 (function() {
 
+  var moment = require('moment');
+
   module.exports = VolunteerApplicationController;
 
-  VolunteerApplicationController.$inject = ['$rootScope', '$scope', '$log', '$filter', 'MESSAGES', 'Session', '$state', 'Opportunity', 'ServeOpportunities', 'CmsInfo', '$modal'];
+  VolunteerApplicationController.$inject = ['$rootScope', '$scope', '$log', '$filter', 'MESSAGES', 'Session', '$stateParams', 'Profile', 'CmsInfo', '$modal', 'Opportunity'];
 
-  function VolunteerApplicationController($rootScope, $scope, $log, $filter, MESSAGES, Session, $state, Opportunity, ServeOpportunities, CmsInfo, $modal) {
+  function VolunteerApplicationController($rootScope, $scope, $log, $filter, MESSAGES, Session, $stateParams, Profile, CmsInfo, $modal, Opportunity) {
     $log.debug("Inside VolunteerApplicationController");
     var vm = this;
 
     vm.allSignedUp = allSignedUp;
+    vm.allowSubmission = true;
+    vm.contactId = $stateParams.id;
     vm.disableCheckbox = disableCheckbox;
     vm.displayEmail = displayEmail;
     vm.displayPendingFlag = displayPendingFlag;
@@ -19,7 +23,9 @@
     vm.pageInfo = pageInfo(CmsInfo);
     vm.participants = null;
     vm.save = save;
+    vm.showAdult = false;
     vm.showAllSignedUp = false;
+    vm.showChild = false;
     vm.showContent = true;
     vm.showSuccess = false;
     vm.viewReady = false;
@@ -29,16 +35,53 @@
     ///////////////////////////////////////////
 
     function activate() {
-      ServeOpportunities.QualifiedServers.query({
-          groupId: vm.pageInfo.group,
-          contactId: Session.exists('userId')
-        }, function(response) {
-          vm.participants = response;
-          allSignedUp();
-          vm.viewReady = true;
-        }, function(err){
-          $state.go('content', {link:'/server-error/'});
+
+
+      // $log.debug('contact id: '+vm.contactId);
+      // $log.debug('state: ' + $stateParams);
+      //does this person have a valid response?
+      Opportunity.GetResponse.get({
+          id: vm.pageInfo.opportunity,
+          contactId: vm.contactId
+        }).$promise
+        .then(function(response) {
+          $log.debug("Opportunity Response");
+          var tmp = response;
+          var id = response.responseId;
+          vm.allowSubmission = ((response !== null) && ((response.responseId !== undefined)));
+          $log.debug('allowSubmission: '+vm.allowSubmission);
         });
+
+      // Initialize Person data for logged-in user
+      Profile.Personal.get(function(response) {
+        vm.person = response;
+        $log.debug("Person: " + JSON.stringify(vm.person));
+        // vm.age = moment(vm.person.dateOfBirth, "MM/DD/YYYY").fromNow().split(" ")[0];
+        //vm.age = moment().diff(moment(vm.person.dateOfBirth, 'MM/DD/YYYY'), 'years')
+        //$log.debug('age: '+vm.age);
+
+        if (vm.person.age >= 16) {
+          vm.showAdult = true;
+        } else if ((vm.person.age >= 14) && (vm.person.age <= 15)) {
+          vm.showChild = true;
+        } else {
+          vm.showError = true;
+        }
+        $log.debug('showAdult: '+vm.showAdult);
+      });
+
+      // ServeOpportunities.QualifiedServers.query({
+      //     groupId: vm.pageInfo.group,
+      //     contactId: Session.exists('userId')
+      //   }, function(response) {
+      //     vm.participants = response;
+      //     allSignedUp();
+      //     vm.viewReady = true;
+      //   }, function(err){
+      //     $state.go('content', {link:'/server-error/'});
+      //   });
+
+      vm.viewReady = true;
     }
 
     function allSignedUp() {

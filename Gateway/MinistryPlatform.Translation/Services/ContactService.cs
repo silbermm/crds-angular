@@ -1,10 +1,9 @@
 ﻿using System;
-using Crossroads.Utilities.Interfaces;
+using System.Collections.Generic;
+using System.Configuration;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
-using System.Collections.Generic;
-using System.Configuration;
 
 namespace MinistryPlatform.Translation.Services
 {
@@ -70,7 +69,8 @@ namespace MinistryPlatform.Translation.Services
                 Middle_Name = recordsDict.ToString("Middle_Name"),
                 Mobile_Carrier = recordsDict.ToNullableInt("Mobile_Carrier_ID"),
                 Mobile_Phone = recordsDict.ToString("Mobile_Phone"),
-                Nickname = recordsDict.ToString("Nickname")
+                Nickname = recordsDict.ToString("Nickname"),
+                Age = recordsDict.ToInt("Age")
             };
             return contact;
         }
