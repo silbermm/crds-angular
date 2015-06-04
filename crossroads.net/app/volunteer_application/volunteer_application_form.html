@@ -17,12 +17,13 @@
     <div>
       <p id="content" class="noPspace" dir="ltr" ng-bind-html="volunteer.pageInfo.content | html" ng-show="volunteer.showContent"></p>
       <p id="existingMemberMessage" ng-bind-html="volunteer.pageInfo.existingMember | html" ng-show="volunteer.showAllSignedUp"></p>
+      <p id="existingMemberMessage" ng-bind-html="volunteer.pageInfo.existingMember | html" ng-show="volunteer.showAllSignedUp"></p>
       <p id="successMessage" ng-bind-html="volunteer.pageInfo.success | html" ng-show="volunteer.showSuccess"></p>
 
     </div>
 
-    <div ng-show="volunteer.allowSubmission && volunteer.showContent" ng-if="volunteer.showAdult">
-      <div id="adult-application">
+    <div ng-show="volunteer.showContent" >
+      <div id="adult-application" ng-if="volunteer.show('adult')">
         <form class="ng-pristine ng-valid-date ng-invalid ng-invalid-required ng-valid-time ng-valid-date-disabled ng-valid-maxlength" _lpchecked="1">
           <fieldset class="push-bottom">
             <legend>General Info</legend>
@@ -42,7 +43,7 @@
 
               <div class="form-group col-sm-6">
                 <label class="control-label" for="middleName">Middle Name</label>
-                <input type="text" class="form-control" id="middleName" placeholder="Enter middle name" ng-model="volunteer.person.middleName" disabled="true">>
+                <input type="text" class="form-control" id="middleName" placeholder="Enter middle name" ng-model="volunteer.person.middleName" disabled="true">
                 <span ng-show="false">Please provide a valid value.</span>
               </div>
 
@@ -51,139 +52,133 @@
                 <input type="text" class="form-control" id="previousName" placeholder="Enter Maiden Name">
                 <span ng-show="false">Please provide a valid value.</span>
               </div>
-
-              <div class="form-group col-sm-6">
-                <label class="control-label" for="nameTag">Name for Name Tag</label>
-                <input type="text" class="form-control" id="nameTag" placeholder="Enter preferred name">
-                <span ng-show="false">Please provide a valid value.</span>
-              </div>
             </div>
 
-            <div class="row">
-              <div class="form-group col-sm-6">
-                <label class="control-label" for="email">Email</label>
-                <input type="text" class="form-control" id="email" placeholder="Email" ng-model="volunteer.person.emailAddress" disabled="true">
-                <span ng-show="false">Please provide a valid value.</span>
-              </div>
-            </div>
-
-
-            <div class="row">
-              <div class="form-group col-sm-6">
-                <label class="control-label" for="birthDate">Date of Birth</label>
-                <input type="text" class="form-control" id="birthDate" placeholder="mm/dd/yyyy" ng-model="volunteer.person.dateOfBirth" disabled="true">
-                <span ng-show="false">Please provide a valid value.</span>
-              </div>
-            </div>
-
-            <div class="row">
-
-              <div class="form-group col-sm-6">
-                <label class="block">Marital Status</label>
-                <select class="form-control col-sm-12" name="maritalStatus" ng-model="volunteer.person.maritalStatusId" disabled="true">
-                  <option></option>
-                  <option value="1">Single</option>
-                  <option value="3">Divorced</option>
-                  <option value="6">Separated</option>
-                  <option value="4">Widowed</option>
-                  <option value="2">Married</option>
-                </select>
+              <div class="row">
+                <div class="form-group col-sm-6">
+                  <label class="control-label" for="email">Email</label>
+                  <input type="text" class="form-control" id="email" placeholder="Email" ng-model="volunteer.person.emailAddress" disabled="true">
+                  <span ng-show="false">Please provide a valid value.</span>
+                </div>
               </div>
 
-              <div class="form-group col-sm-6">
-                <label class="block">Gender</label>
-                <label class="radio-inline">
-                  <input type="radio" name="gender" id="gender-male" value="1" ng-model="volunteer.person.genderId" disabled="true">Male
 
-                </label>
-                <label class="radio-inline">
-                  <input type="radio" name="gender" id="gender-female" value="2" ng-model="volunteer.person.genderId" disabled="true">Female
-                </label>
+              <div class="row">
+                <div class="form-group col-sm-6">
+                  <label class="control-label" for="birthDate">Date of Birth</label>
+                  <input type="text" class="form-control" id="birthDate" placeholder="mm/dd/yyyy" ng-model="volunteer.person.dateOfBirth" disabled="true">
+                  <span ng-show="false">Please provide a valid value.</span>
+                </div>
               </div>
-            </div>
 
-            <div class="row">
-              <div class="form-group col-sm-6">
-                <label class="block">Site where you attend service</label>
-                <label class="radio-inline">
-                  <input type="radio" value="oakley" name="siteAttend">Oakley
-                </label>
-                <label class="radio-inline">
-                  <input type="radio" value="florence" name="siteAttend">Florence
-                </label>
-                <label class="radio-inline">
-                  <input type="radio" value="west side" name="siteAttend">West Side
-                </label>
-                <label class="radio-inline">
-                  <input type="radio" value="mason" name="siteAttend">Mason
-                </label>
-                <label class="radio-inline">
-                  <input type="radio" value="clifton" name="siteAttend">Clifton
-                </label>
-              </div>
-            </div>
+              <div class="row">
 
-            <div class="row">
-              <div class="form-group col-sm-6">
-                <label class="control-label" for="attending">How long have you been attending Crossroads?</label>
-                <input type="text" class="form-control" id="attending" placeholder="How long have you been attending crossroads?">
-                <span ng-show="false">Please provide a valid value.</span>
+                <div class="form-group col-sm-6">
+                  <label class="block">Marital Status</label>
+                  <select class="form-control col-sm-12" name="maritalStatus" ng-model="volunteer.person.maritalStatusId" disabled="true">
+                    <option></option>
+                    <option value="1">Single</option>
+                    <option value="3">Divorced</option>
+                    <option value="6">Separated</option>
+                    <option value="4">Widowed</option>
+                    <option value="2">Married</option>
+                  </select>
+                </div>
+
+                <div class="form-group col-sm-6">
+                  <label class="block">Gender</label>
+                  <label class="radio-inline">
+                    <input type="radio" name="gender" id="gender-male" value="1" ng-model="volunteer.person.genderId" disabled="true">Male
+
+                  </label>
+                  <label class="radio-inline">
+                    <input type="radio" name="gender" id="gender-female" value="2" ng-model="volunteer.person.genderId" disabled="true">Female
+                  </label>
+                </div>
               </div>
-              <div class="form-group col-sm-6">
-                <label class="control-label" for="serviceAttend">What Service do you attend?</label>
-                <input type="text" class="form-control" id="serviceAttend" placeholder="What Service do you attend?">
-                <span ng-show="false">Please provide a valid value.</span>
+
+              <div class="row">
+                <div class="form-group col-sm-6">
+                  <label class="block">Site where you attend service</label>
+                  <label class="radio-inline">
+                    <input type="radio" value="oakley" name="siteAttend">Oakley
+                  </label>
+                  <label class="radio-inline">
+                    <input type="radio" value="florence" name="siteAttend">Florence
+                  </label>
+                  <label class="radio-inline">
+                    <input type="radio" value="west side" name="siteAttend">West Side
+                  </label>
+                  <label class="radio-inline">
+                    <input type="radio" value="mason" name="siteAttend">Mason
+                  </label>
+                  <label class="radio-inline">
+                    <input type="radio" value="clifton" name="siteAttend">Clifton
+                  </label>
+                </div>
               </div>
-            </div>
+
+              <div class="row">
+                <div class="form-group col-sm-6">
+                  <label class="control-label" for="attending">How long have you been attending Crossroads?</label>
+                  <input type="text" class="form-control" id="attending" placeholder="How long have you been attending crossroads?">
+                  <span ng-show="false">Please provide a valid value.</span>
+                </div>
+                <div class="form-group col-sm-6">
+                  <label class="control-label" for="serviceAttend">What Service do you attend?</label>
+                  <input type="text" class="form-control" id="serviceAttend" placeholder="What Service do you attend?">
+                  <span ng-show="false">Please provide a valid value.</span>
+                </div>
+              </div>
 
 
-            <div class="row">
-              <div class="form-group col-sm-6">
-                <label class="control-label" for="streetAddress">Street Address</label>
-                <input type="text" class="form-control" id="streetAddress" placeholder="Street Address" ng-model="volunteer.person.addressLine1" disabled="true">
-                <span ng-show="false">Please provide a valid value.</span>
+              <div class="row">
+                <div class="form-group col-sm-6">
+                  <label class="control-label" for="streetAddress">Street Address</label>
+                  <input type="text" class="form-control" id="streetAddress" placeholder="Street Address" ng-model="volunteer.person.addressLine1" disabled="true">
+                  <span ng-show="false">Please provide a valid value.</span>
+                </div>
+                <div class="form-group col-sm-6">
+                  <label class="control-label" for="city">City</label>
+                  <input type="text" class="form-control" id="city" placeholder="City" ng-model="volunteer.person.city" disabled="true">
+                  <span ng-show="false">Please provide a valid value.</span>
+                </div>
+                <div class="form-group col-sm-6">
+                  <label class="control-label" for="state">State</label>
+                  <input type="text" class="form-control" id="state" placeholder="State" ng-model="volunteer.person.state" disabled="true">
+                  <span ng-show="false">Please provide a valid value.</span>
+                </div>
+                <div class="form-group col-sm-6">
+                  <label class="control-label" for="zip">Zip</label>
+                  <input type="text" class="form-control" id="zip" placeholder="Zip" ng-model="volunteer.person.zip" disabled="true">
+                  <span ng-show="false">Please provide a valid value.</span>
+                </div>
+                <div class="form-group col-sm-6">
+                  <label class="control-label" for="cellPhone">Cell Phone</label>
+                  <input type="text" class="form-control" id="cellPhone" placeholder="CellPhone" ng-model="volunteer.person.mobilePhone" disabled="true">
+                  <span ng-show="false">Please provide a valid value.</span>
+                </div>
+                <div class="form-group col-sm-6">
+                  <label class="control-label" for="homePhone">Home Phone</label>
+                  <input type="text" class="form-control" id="homePhone" placeholder="Home Phone" ng-model="volunteer.person.homePhone" disabled="true">
+                  <span ng-show="false">Please provide a valid value.</span>
+                </div>
+                <div class="form-group col-sm-6">
+                  <label class="control-label" for="spouseName">Spouse Name</label>
+                  <input type="text" class="form-control" id="spouseName" placeholder="Spouse Name">
+                  <span ng-show="false">Please provide a valid value.</span>
+                </div>
+                <div class="form-group col-sm-6">
+                  <label class="block">Spouse Gender</label>
+                  <label class="radio-inline">
+                    <input type="radio" value="male" name="spouseGender">Male
+                  </label>
+                  <label class="radio-inline">
+                    <input type="radio" value="female" name="spouseGender">Female
+                  </label>
+                </div>
               </div>
-              <div class="form-group col-sm-6">
-                <label class="control-label" for="city">City</label>
-                <input type="text" class="form-control" id="city" placeholder="City" ng-model="volunteer.person.city" disabled="true">
-                <span ng-show="false">Please provide a valid value.</span>
-              </div>
-              <div class="form-group col-sm-6">
-                <label class="control-label" for="state">State</label>
-                <input type="text" class="form-control" id="state" placeholder="State" ng-model="volunteer.person.state" disabled="true">
-                <span ng-show="false">Please provide a valid value.</span>
-              </div>
-              <div class="form-group col-sm-6">
-                <label class="control-label" for="zip">Zip</label>
-                <input type="text" class="form-control" id="zip" placeholder="Zip" ng-model="volunteer.person.zip" disabled="true">
-                <span ng-show="false">Please provide a valid value.</span>
-              </div>
-              <div class="form-group col-sm-6">
-                <label class="control-label" for="cellPhone">Cell Phone</label>
-                <input type="text" class="form-control" id="cellPhone" placeholder="CellPhone" ng-model="volunteer.person.mobilePhone" disabled="true">
-                <span ng-show="false">Please provide a valid value.</span>
-              </div>
-              <div class="form-group col-sm-6">
-                <label class="control-label" for="homePhone">Home Phone</label>
-                <input type="text" class="form-control" id="homePhone" placeholder="Home Phone" ng-model="volunteer.person.homePhone" disabled="true">
-                <span ng-show="false">Please provide a valid value.</span>
-              </div>
-              <div class="form-group col-sm-6">
-                <label class="control-label" for="spouseName">Spouse Name</label>
-                <input type="text" class="form-control" id="spouseName" placeholder="Spouse Name">
-                <span ng-show="false">Please provide a valid value.</span>
-              </div>
-              <div class="form-group col-sm-6">
-                <label class="block">Spouse Gender</label>
-                <label class="radio-inline">
-                  <input type="radio" value="male" name="spouseGender">Male
-                </label>
-                <label class="radio-inline">
-                  <input type="radio" value="female" name="spouseGender">Female
-                </label>
-              </div>
-            </div>
-            <!--/row-->
+              <!--/row-->
           </fieldset>
 
           <fieldset class="push-bottom">
@@ -598,21 +593,28 @@
           </fieldset>
           <input type="submit" name="submit" value="Submit" id="submit" class="btn btn-primary push-half-bottom">
         </form>
-        </div>
+
         <!-- adult-application -->
-      </div>
-      
-      <div ng-show="volunteer.allowSubmission && volunteer.showContent" ng-if="volunteer.showChild">
-        Child Application
-      </div>
 
-      <div ng-show="volunteer.allowSubmission && volunteer.showContent" ng-if="volunteer.showError">
-        Age Error
-      </div>
 
-      <div ng-show="volunteer.showContent" ng-if="!volunteer.allowSubmission">
-        <p id="notEligible" ng-bind-html="volunteer.pageInfo.noExistingResponse | html"></p>
-      </div>
+
+
+      <!-- viewReady -->
     </div>
-    <!-- viewReady -->
+
+    <div ng-if="volunteer.show('child')">
+      Child Application
+    </div>
+
+    <div ng-if="volunteer.show('age-error')">
+      Age Error
+    </div>
+
+    <div ng-if="volunteer.show('no-response')">
+      <p id="notEligible" ng-bind-html="volunteer.pageInfo.noExistingResponse | html"></p>
+    </div>
+
+    <div ng-if="volunteer.show('denied')">
+      <p>You're not allowed to see this application.  GET THIS FROM CMS</p>
+    </div>
   </div>
