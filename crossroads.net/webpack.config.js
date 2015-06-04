@@ -7,8 +7,8 @@ var endpoint = {
 };
 
 var definePlugin = new webpack.DefinePlugin({
-    __API_ENDPOINT__: JSON.stringify(process.env.CRDS_API_ENDPOINT || "http://mp-int-web.cloudapp.net/gateway/"),
-    __CMS_ENDPOINT__: JSON.stringify(process.env.CRDS_CMS_ENDPOINT || "http://content.crossroads.net/"),
+    __API_ENDPOINT__: JSON.stringify(process.env.CRDS_API_ENDPOINT || "http://gatewayint.crossroads.net/gateway/"),
+    __CMS_ENDPOINT__: JSON.stringify(process.env.CRDS_CMS_ENDPOINT || "http://contentint.crossroads.net/"),
     __STRIPE_PUBKEY__ : JSON.stringify(process.env.CRDS_STRIPE_PUBKEY || "pk_test_TR1GulD113hGh2RgoLhFqO0M")
 });
 

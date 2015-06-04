@@ -326,7 +326,7 @@ namespace crds_angular.Services
 
         private void SendRSVPConfirmation(int contactId, int opportunityId, int prevOppId, DateTime startDate, DateTime endDate, int templateId, string token)
         {
-                var template = CommunicationService.GetTemplate(templateId);
+            var template = CommunicationService.GetTemplate(templateId);
 
             //Go get Opportunity deets
             var opp = _opportunityService.GetOpportunityById(opportunityId, token);
@@ -343,7 +343,7 @@ namespace crds_angular.Services
             }
 
             //Go get from/to contact info
-            var fromEmail = _contactService.GetContactEmail(opp.GroupContactId);
+            var fromEmail = _contactService.GetContactById(opp.GroupContactId);
             var toEmail = _contactService.GetContactEmail(contactId);
 
             var comm = new Communication
@@ -353,9 +353,9 @@ namespace crds_angular.Services
                 EmailBody = template.Body,
                 EmailSubject = template.Subject,
                 FromContactId = opp.GroupContactId,
-                FromEmailAddress = fromEmail,
+                FromEmailAddress = fromEmail.Email_Address,
                 ReplyContactId = opp.GroupContactId,
-                ReplyToEmailAddress = fromEmail,
+                ReplyToEmailAddress = fromEmail.Email_Address,
                 ToContactId = contactId,
                 ToEmailAddress = toEmail
             };
@@ -368,7 +368,7 @@ namespace crds_angular.Services
                 {"Shift_Start", opp.ShiftStart.FormatAsString()},
                 {"Shift_End", opp.ShiftEnd.FormatAsString()},
                 {"Room", opp.Room ?? string.Empty},
-                {"Group_Contact", opp.GroupContactName},
+                {"Group_Contact", fromEmail.Nickname + " " + fromEmail.Last_Name},
                 {"Group_Name", opp.GroupName},
                 {"Previous_Opportunity_Name", prevOpp.OpportunityName}
             };
