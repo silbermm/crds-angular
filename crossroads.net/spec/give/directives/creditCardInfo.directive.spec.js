@@ -19,17 +19,17 @@ describe('Credit Card Info Directive', function() {
       + '<span ng-message="naturalNumber">Not a valid number</span>'
       + '<span ng-message="invalidZip">Invalid zip</span>');
 
-    var templateString = "\
-      <credit-card-info \
-        cvc='data.cvc' \
-        exp-date='data.expDate' \
-        cc-number='data.ccNumber' \
-        billing-zip-code='data.billingZipCode' \
-        bankinfo-submitted='data.bankinfoSubmitted' \
-        name-on-card='data.nameOnCard' \
-        default-source='data.defaultSource' \
-        change-account-info='false'> \
-      </credit-card-info>";
+    var templateString =
+      "<credit-card-info "
+      +  "cvc='data.cvc' "
+      +  "exp-date='data.expDate' "
+      +  "cc-number='data.ccNumber' "
+      +  "billing-zip-code='data.billingZipCode' "
+      +  "bankinfo-submitted='data.bankinfoSubmitted' "
+      +  "name-on-card='data.nameOnCard' "
+      +  "default-source='data.defaultSource' "
+      +  "change-account-info='false'> "
+      +  "</credit-card-info>";
 
     scope = $rootScope.$new();
     scope.data = {
