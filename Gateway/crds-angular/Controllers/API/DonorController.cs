@@ -10,6 +10,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using crds_angular.Exceptions;
 
 namespace crds_angular.Controllers.API
 {
@@ -125,9 +126,14 @@ namespace crds_angular.Controllers.API
                     {
                         id = donor.DonorId,
                         Processor_ID = donor.ProcessorId,
-                        brand = default_source.brand,
-                        last4 = default_source.last4
-
+                        default_source = new DefaultSourceDTO
+                        {
+                            brand = default_source.brand,
+                            last4 = default_source.last4,
+                            name = default_source.name,
+                            address_zip = default_source.address_zip,
+                            exp_date = default_source.exp_month + default_source.exp_year
+                         }
                     };
 
                     return Ok(response);
@@ -165,6 +171,54 @@ namespace crds_angular.Controllers.API
                 var apiError = new ApiErrorDto("Donor Get Failed", exception);
                 throw new HttpResponseException(apiError.HttpResponseMessage);
             }
+        }
+
+        [ResponseType(typeof (DonorDTO))]
+        [Route("api/donor")]
+        public IHttpActionResult Put([FromBody] UpdateDonorDTO dto)
+        {
+            return Authorized(token =>
+            {
+                ContactDonor contactDonor;
+                SourceData sourceData;
+     
+                try
+                {
+                    contactDonor = gatewayDonorService.GetContactDonorForAuthenticatedUser(token);
+
+                    //Post apistripe/customer/{custID}/sources pass in the dto.stripe_token_id
+                    sourceData = stripePaymentService.updateCustomerSource(contactDonor.ProcessorId, dto.stripe_token_id);
+
+                }
+                catch (StripeException stripeException)
+                {
+                    var apiError = new ApiErrorDto("Error calling payment processor:"+ stripeException.Message, stripeException);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+                catch (ApplicationException applicationException)
+                {
+                    var apiError = new ApiErrorDto("Error calling Ministry Platform" + applicationException.Message, applicationException);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+                //return donor
+                var donor = new DonorDTO
+                {
+                    id = contactDonor.DonorId,
+                    Processor_ID = contactDonor.ProcessorId,
+                    default_source = new DefaultSourceDTO
+                    {
+                        brand = sourceData.brand,
+                        last4 = sourceData.last4,
+                        name = sourceData.name,
+                        address_zip = sourceData.address_zip,
+                        exp_date = sourceData.exp_month + sourceData.exp_year
+                    }
+                };
+
+                return Ok(donor);
+            });
+            
+
         }
     }
 }

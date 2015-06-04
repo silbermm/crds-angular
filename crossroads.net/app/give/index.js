@@ -3,6 +3,7 @@ require('./amount.html');
 require('./login.html');
 require('./confirm.html');
 require('./account.html');
+require('./change.html');
 require('./thank_you.html');
 require('./register.html');
 require('./history.html');
@@ -10,7 +11,8 @@ require('./give.module.js');
 require('./give.config.js');
 var app = require('angular').module('crossroads.give');
 app.factory("getPrograms", require('./services/getPrograms.service.js'));
-require('./services/payment_service.js')
+require('./services/payment_service.js');
+require('./services/giveTransfer.service.js');
 
 /****** DEMO PAGES ******/
 require('./demo/guest_giver/give.html');
