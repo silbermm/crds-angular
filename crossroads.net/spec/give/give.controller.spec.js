@@ -39,12 +39,13 @@ describe('GiveController', function() {
       };
 
       mockPaymentService = {
-          donor: function(){ return {
+        donor: function(){ return {
             get: function(parms) {
               return(mockPaymentServiceGetPromise);
             }
           };
         },
+        donateToProgram: function() {},
       };
 
       controller = $controller('GiveCtrl',
@@ -61,6 +62,11 @@ describe('GiveController', function() {
       controller.donor = {};
       controller.donorError = false;
       controller.last4 = "";
+      controller.programsInput = [
+        {ProgramId: 1, Name: "Crossroads"},
+        {ProgramId: 2, Name: "Game Change"},
+        {ProgramId: 3, Name: "Fuel"},
+      ];
     })
   );
 
@@ -138,7 +144,73 @@ describe('GiveController', function() {
     });
   });
 
+  describe('function goToChange', function() {
+    it('should populate dto with appropriate values when going to the change page', function() {
+      controller.dto = {};
+      controller.goToChange(123, "donor", "test@here.com", "program", "view");
+      expect(controller.dto.amount).toBe(123);
+      expect(controller.dto.donor).toBe("donor");
+      expect(controller.dto.email).toBe("test@here.com");
+      expect(controller.dto.program).toBe("program");
+      expect(controller.dto.view).toBe("view");
+      expect(controller.dto.changeAccountInfo).toBeTruthy();
+    });
+  });
 
+  describe('function donate', function() {
+    var callback = {
+      onSuccess: function() { }
+    };
+
+    it('should call success callback if donation is successful', function() {
+      spyOn(mockPaymentService, 'donateToProgram').and.callFake(function(programId, amount, donorId, email) {
+        console.log("In mock donateToProgram");
+        var deferred = $q.defer();
+        deferred.resolve({ amount: amount, });
+        return deferred.promise;
+      });
+
+      spyOn(callback, 'onSuccess');
+
+      controller.donate(1, 123, "2", "test@here.com", callback.onSuccess);
+      $rootScope.$apply();
+
+      expect(controller.amount).toBe(123);
+      expect(controller.program).toBeDefined();
+      expect(controller.program_name).toBe("Crossroads");
+      expect(callback.onSuccess).toHaveBeenCalled();
+    });
+
+    it('should not call success callback if donation fails', function() {
+      spyOn(mockPaymentService, 'donateToProgram').and.callFake(function(programId, amount, donorId, email) {
+        console.log("In mock donateToProgram");
+        var deferred = $q.defer();
+        deferred.reject("Uh oh!");
+        return deferred.promise;
+      });
+
+      spyOn(callback, 'onSuccess');
+
+      controller.amount = undefined;
+      controller.program = undefined;
+      controller.program_name = undefined;
+
+      controller.donate(1, 123, "2", "test@here.com", callback.onSuccess);
+      try {
+        $rootScope.$apply();
+        fail("Expected exception was not thrown");
+      } catch(err) {
+        expect(err.message).toBeDefined();
+        expect(err.message).toMatch(/Uh oh!/);
+        expect(err.name).toBe("DonationException");
+      }
+
+      expect(controller.amount).toBeUndefined();
+      expect(controller.program).toBeUndefined();
+      expect(controller.program_name).toBeUndefined();
+      expect(callback.onSuccess).not.toHaveBeenCalled();
+    });
+  });
 
   // describe('Amount to Login/Account/Confirm state transition', function() {
   //   beforeEach(function() {
