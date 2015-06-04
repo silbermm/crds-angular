@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 
@@ -20,6 +21,7 @@ namespace MinistryPlatform.Translation.Services
             var responseId = CreateFormResponse(form.FormId, form.ContactId, form.OpportunityId, form.OpportunityResponseId);
             foreach (var answer in form.FormAnswers)
             {
+                answer.FormResponseId = responseId;
                 CreateFormAnswer(answer);
             }
             return responseId;
@@ -29,9 +31,10 @@ namespace MinistryPlatform.Translation.Services
         {
             var formResponse = new Dictionary<string, object>
             {
-                {"Form", formId},
-                {"Contact", contactId},
-                {"Opportunity", opportunityId},
+                {"Form_ID", formId},
+                {"Response_Date", DateTime.Today},
+                {"Contact_ID", contactId},
+                {"Opportunity_ID", opportunityId},
                 {"Opportunity_Response", opportunityResponseId}
             };
 
@@ -44,8 +47,8 @@ namespace MinistryPlatform.Translation.Services
 
             var formAnswer = new Dictionary<string, object>
             {
-                {"FormResponse", answer.FormResponseId},
-                {"Field", answer.Field},
+                {"Form_Response_ID", answer.FormResponseId},
+                {"Form_Field_ID", answer.Field},
                 {"Response", answer.Response},
                 {"Opportunity_Response", answer.OpportunityResponse}
             };
