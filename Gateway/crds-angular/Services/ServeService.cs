@@ -268,8 +268,8 @@ namespace crds_angular.Services
                         var response = signUp
                             ? HandleYesRsvp(participant, e, opportunityId, opportunityIds, token)
                             : HandleNoRsvp(participant, e, opportunityIds, token);
-                        if (response.ToNullableOpportunity("previousOpportunity") != null)
-                            previousOpportunity = response.ToNullableOpportunity("previousOpportunity");
+                        if (response.ToNullableObject<Opportunity>("previousOpportunity") != null)
+                            previousOpportunity = response.ToNullableObject<Opportunity>("previousOpportunity");
                         templateId = (templateId != AppSetting("RsvpChangeTemplate"))
                             ? response.ToInt("templateId")
                             : templateId;
@@ -310,12 +310,6 @@ namespace crds_angular.Services
                     //prevOppId = deletedRSVPS.First();
                     previousOpportunity = _opportunityService.GetOpportunityById(deletedRSVPS.First(), token);                                      
                 }
-                //else
-                //{
-                //     //Changed from NO to YES. 
-                //     prevOppId = 0; 
-                //}
-
             }
             var comments = string.Empty; //anything of value to put in comments?
             _opportunityService.RespondToOpportunity(participant.ParticipantId, opportunityId, comments,
@@ -400,65 +394,6 @@ namespace crds_angular.Services
             }; 
         }
     
-        //private void SendRSVPConfirmation(int contactId, int opportunityId, Opportunity prevOpportunity, Opportunity opportunity, DateTime startDate, DateTime endDate, int templateId, string token)
-        //{
-
-        //    var opp = new Opportunity();
-        //    var prevOpp = new Opportunity();
-        //    var template = _communicationService.GetTemplate(templateId);
-
-        //    //Go get from/to contact info
-        //    var fromEmail = _contactService.GetContactById(groupContactId);
-        //    var toEmail = _contactService.GetContactEmail(contactId);
-
-        //    if (opportunityId != 0)
-        //    {
-        //        opp = _opportunityService.GetOpportunityById(opportunityId, token);
-        //    }
-
-        //    if (prevOppId > 0)
-        //    {
-        //        prevOpp = _opportunityService.GetOpportunityById(prevOppId, token);
-        //    }
-
-        //    var comm = new Communication
-        //    {
-        //        AuthorUserId = 5,
-        //        DomainId = 1,
-        //        EmailBody = template.Body,
-        //        EmailSubject = template.Subject,
-
-        //        FromContactId = groupContactId,
-        //        FromEmailAddress = fromEmail.Email_Address,
-        //        ReplyContactId = groupContactId,
-        //        ReplyToEmailAddress = fromEmail.Email_Address,
-        //        ToContactId = contactId,
-        //        ToEmailAddress = toEmail
-        //    };
-
-        //    var mergeData = new Dictionary<string, object>
-        //    {
-        //        {"Opportunity_Name", opportunityId == 0 ? "Not Available" : opp.OpportunityName},
-        //        {"Start_Date", startDate.ToShortDateString()},
-        //        {"End_Date", endDate.ToShortDateString()},
-        //        {"Shift_Start", opp.ShiftStart.FormatAsString() ?? string.Empty},
-        //        {"Shift_End", opp.ShiftEnd.FormatAsString() ?? string.Empty},
-        //        {"Room", opp.Room ?? string.Empty},
-        //        {"Group_Contact", fromEmail.Nickname + " " + fromEmail.Last_Name},
-        //        {"Group_Name", groupName},
-        //        {"Previous_Opportunity_Name", prevOppId > 0 ? prevOpp.OpportunityName : @"Not Available"}
-        //    };
-
-        //    try
-        //    {
-        //        _communicationService.SendMessage(comm, mergeData);
-        //    }
-        //    catch (MinistryPlatform.Translation.Exceptions.TemplateParseException ex)
-        //    {
-        //        logger.Debug(string.Format("Sending email to {0} failed due to a template parsing error: {1}", contactId, ex.Message));
-        //    }
-        //}
-
         private ServeRole NewServingRole(GroupServingParticipant record)
         {
             return new ServeRole

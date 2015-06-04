@@ -33,16 +33,17 @@ namespace MinistryPlatform.Translation.Extensions
             return result;
         }
 
-        public static Opportunity ToNullableOpportunity(this Dictionary<string, object> input, string key,
-            bool throwExceptionIfFailed = false)
+        public static T ToNullableObject<T>(this Dictionary<string, object> input, string key,
+            bool throwExceptionIfFailed = false) where T:class 
         {
             var dictVal = DictVal(input, key);
             if (dictVal == null)
                 return null;
 
-            if (dictVal.GetType() == typeof (Opportunity))
+            var val = dictVal as T;
+            if (val != null)
             {
-                return (Opportunity) dictVal;
+                return val;
             }
             else
             {
