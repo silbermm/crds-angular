@@ -164,7 +164,6 @@ describe('GiveController', function() {
 
     it('should call success callback if donation is successful', function() {
       spyOn(mockPaymentService, 'donateToProgram').and.callFake(function(programId, amount, donorId, email) {
-        console.log("In mock donateToProgram");
         var deferred = $q.defer();
         deferred.resolve({ amount: amount, });
         return deferred.promise;
@@ -173,6 +172,7 @@ describe('GiveController', function() {
       spyOn(callback, 'onSuccess');
 
       controller.donate(1, 123, "2", "test@here.com", callback.onSuccess);
+      // This resolves the promise above
       $rootScope.$apply();
 
       expect(controller.amount).toBe(123);
@@ -183,7 +183,6 @@ describe('GiveController', function() {
 
     it('should not call success callback if donation fails', function() {
       spyOn(mockPaymentService, 'donateToProgram').and.callFake(function(programId, amount, donorId, email) {
-        console.log("In mock donateToProgram");
         var deferred = $q.defer();
         deferred.reject("Uh oh!");
         return deferred.promise;
@@ -197,6 +196,7 @@ describe('GiveController', function() {
 
       controller.donate(1, 123, "2", "test@here.com", callback.onSuccess);
       try {
+        // This resolves the promise above
         $rootScope.$apply();
         fail("Expected exception was not thrown");
       } catch(err) {
