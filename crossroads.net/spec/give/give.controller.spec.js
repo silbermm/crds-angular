@@ -211,23 +211,4 @@ describe('GiveController', function() {
       expect(callback.onSuccess).not.toHaveBeenCalled();
     });
   });
-
-  // describe('Amount to Login/Account/Confirm state transition', function() {
-  //   beforeEach(function() {
-  //     //getDeferred.resolve(mockGetResponse);
-  //     successCallback(mockGetResponse);
-  //     $rootScope.$apply();
-  //   });
-  //
-  //   it('should fill in donor when going to Account state', function() {
-  //     $scope.giveForm = { amountForm : {$valid : true}};
-  //     $rootScope.username = "Tester";
-  //     $scope.give = {email: ''};
-  //     controller.goToAccount();
-  //     expect(mockPaymentService.donor.get).toHaveBeenCalled();
-  //     expect(controller.donor.Processor_ID).toBe("123456");
-  //     expect($state.$current.name).toBe("give.confirm");
-  //   });
-  // });
-
 });
