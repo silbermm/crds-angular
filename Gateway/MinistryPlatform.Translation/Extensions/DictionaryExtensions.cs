@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MinistryPlatform.Models;
 
 namespace MinistryPlatform.Translation.Extensions
 {
@@ -30,6 +31,28 @@ namespace MinistryPlatform.Translation.Extensions
             if (throwExceptionIfFailed)
                 throw new FormatException(string.Format("'{0}' cannot be converted as int", key));
             return result;
+        }
+
+        public static Opportunity ToNullableOpportunity(this Dictionary<string, object> input, string key,
+            bool throwExceptionIfFailed = false)
+        {
+            var dictVal = DictVal(input, key);
+            if (dictVal == null)
+                return null;
+
+            if (dictVal.GetType() == typeof (Opportunity))
+            {
+                return (Opportunity) dictVal;
+            }
+            else
+            {
+                if (throwExceptionIfFailed)
+                {
+                    throw new FormatException(string.Format("'{0}' cannot be converted to Opportunity", key));
+                }
+            }
+            return null;
+
         }
 
         public static int? ToNullableInt(this Dictionary<string, object> input, string key, bool throwExceptionIfFailed = false)
