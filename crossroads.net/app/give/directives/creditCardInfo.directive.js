@@ -3,7 +3,7 @@ require('../creditCardInfo.html');
 (function () {
     angular
     .module('crossroads.give')
-    .directive('creditCardInfo', ['$log', '$rootScope', '$timeout', bankInfo]);
+    .directive('creditCardInfo', ['$log', '$rootScope', '$timeout']);
 
     //Credit Card RegExs
     var americanExpressRegEx = /^3[47][0-9]{13}$/;
@@ -11,7 +11,7 @@ require('../creditCardInfo.html');
     var mastercardRegEx = /^5[1-5][0-9]/;
     var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$/;
 
-    function bankInfo($log, $rootScope, $timeout, growl) {
+    function bankInfo($log, $rootScope, $timeout) {
         var directive = {
           restrict: 'EA',
           //replace: true,
@@ -23,7 +23,7 @@ require('../creditCardInfo.html');
               billingZipCode: "=",
               bankinfoSubmitted: "=",
               defaultSource: "=",
-              changeAccountInfo: "@",
+              changeAccountInfo: "=",
             },
           templateUrl: 'give/creditCardInfo.html',
           link: link
@@ -35,8 +35,7 @@ require('../creditCardInfo.html');
 
         scope.creditCard = scope;
 
-
-         // Emits a growl notification encouraging checking/savings account
+        // Emits a growl notification encouraging checking/savings account
         // donations, rather than credit card
         $rootScope.$emit(
             'notify',
@@ -155,7 +154,8 @@ require('../creditCardInfo.html');
           if(scope.changeAccountInfo) {
             scope.creditCardForm.$setDirty();
             $timeout(function() {
-              var e = document.getElementsByName("expDate")[0];
+              // The third field is the expDate
+              var e = element.find('input')[2];
               e.focus();
             });
           }
