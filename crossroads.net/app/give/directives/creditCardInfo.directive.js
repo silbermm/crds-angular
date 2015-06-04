@@ -3,7 +3,7 @@ require('../creditCardInfo.html');
 (function () {
     angular
     .module('crossroads.give')
-    .directive('creditCardInfo', ['$log', '$rootScope', '$timeout']);
+    .directive('creditCardInfo', ['$log', '$rootScope', '$timeout', creditCardInfo]);
 
     //Credit Card RegExs
     var americanExpressRegEx = /^3[47][0-9]{13}$/;
@@ -11,7 +11,7 @@ require('../creditCardInfo.html');
     var mastercardRegEx = /^5[1-5][0-9]/;
     var visaRegEx = /^4[0-9]{12}(?:[0-9]{3})?$/;
 
-    function bankInfo($log, $rootScope, $timeout) {
+    function creditCardInfo($log, $rootScope, $timeout) {
         var directive = {
           restrict: 'EA',
           //replace: true,
