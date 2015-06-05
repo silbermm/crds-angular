@@ -11,3 +11,9 @@ app.factory("Opportunity", ["$resource", "Session", require('../services/opportu
 // app.factory("Opportunity", ["$resource", "Session", require('./opportunity_service')]);
 // app.factory("ServeOpportunities", require('../services/serveOpportunities.service'));
 // app.factory('Profile', ['$resource',require('./services/profile_service')]);
+
+require('./kc_adult_application/kidsClubAdultApplication.template.html');
+app.directive("kidsClubAdultApplication", require('./kc_adult_application/kidsClubAdultApplication.directive'));
+
+require('./kc_child_application/kidsClubChildApplication.template.html');
+app.directive("kidsClubChildApplication", require('./kc_child_application/kidsClubChildApplication.directive'));
