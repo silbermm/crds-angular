@@ -7,12 +7,13 @@ describe ('PaymentService', function () {
     exp_year : "2016",
     cvc : "123"
   };
-  
-  var bank = {
-    account_number: "1234567890",
-    routing_number: "111122223"
-  }
-  
+  var bankAccount = {
+    country: 'US',
+    currency: 'USD',
+    routing_number: '110000000',
+    account_number: '000123456789'
+  };
+
   beforeEach(function() {
     module('crossroads.give');
 
@@ -32,7 +33,7 @@ describe ('PaymentService', function () {
           {
             createToken : function(bank) {
               return {
-                then: function(callback) { return callback({id: "tok_test"})}
+                then: function(callback) { return callback({id: "tok_bank"})}
               }
             }
           }
@@ -115,7 +116,7 @@ describe ('PaymentService', function () {
       spyOn(stripe.bankAccount, 'createToken').and.callThrough();
       
       var postData = {
-        stripe_token_id: "tok_test",
+        stripe_token_id: "tok_bank",
         email_address: "me@here.com"
       };
       httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor', postData)
@@ -123,14 +124,14 @@ describe ('PaymentService', function () {
           id: "12345",
           stripe_customer_id: "cust_test"
         });
-      sut.createDonorWithBankAcct(bank, "me@here.com")
+      sut.createDonorWithBankAcct(bankAccount, "me@here.com")
         .then(function(donor){
           result = donor;
         });
     });
     
     it('should create a single use token', function() {
-      expect(stripe.bankAccount.createToken).toHaveBeenCalledWith(bank);
+      expect(stripe.bankAccount.createToken).toHaveBeenCalledWith(bankAccount);
     });
     
     it('should create a new donor', function() {
