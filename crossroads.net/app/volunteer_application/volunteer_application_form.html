@@ -620,12 +620,6 @@
               <input type="text" class="form-control" id="middleName" placeholder="Enter middle name" ng-model="volunteer.person.middleName" disabled="true">
               <span ng-show="false">Please provide a valid value.</span>
             </div>
-
-            <!-- <div class="form-group col-sm-6">
-              <label class="control-label" for="previousName">Previous Name/Maiden Name</label>
-              <input type="text" class="form-control" id="previousName" placeholder="Enter Maiden Name">
-              <span ng-show="false">Please provide a valid value.</span>
-            </div> -->
           </div>
 
             <div class="row">
@@ -642,32 +636,6 @@
                 <label class="control-label" for="birthDate">Date of Birth</label>
                 <input type="text" class="form-control" id="birthDate" placeholder="mm/dd/yyyy" ng-model="volunteer.person.dateOfBirth" disabled="true">
                 <span ng-show="false">Please provide a valid value.</span>
-              </div>
-            </div>
-
-            <div class="row">
-
-              <div class="form-group col-sm-6">
-                <label class="block">Marital Status</label>
-                <select class="form-control col-sm-12" name="maritalStatus" ng-model="volunteer.person.maritalStatusId" disabled="true">
-                  <option></option>
-                  <option value="1">Single</option>
-                  <option value="3">Divorced</option>
-                  <option value="6">Separated</option>
-                  <option value="4">Widowed</option>
-                  <option value="2">Married</option>
-                </select>
-              </div>
-
-              <div class="form-group col-sm-6">
-                <label class="block">Gender</label>
-                <label class="radio-inline">
-                  <input type="radio" name="gender" id="gender-male" value="1" ng-model="volunteer.person.genderId" disabled="true">Male
-
-                </label>
-                <label class="radio-inline">
-                  <input type="radio" name="gender" id="gender-female" value="2" ng-model="volunteer.person.genderId" disabled="true">Female
-                </label>
               </div>
             </div>
 
@@ -737,86 +705,22 @@
                 <input type="text" class="form-control" id="homePhone" placeholder="Home Phone" ng-model="volunteer.person.homePhone" disabled="true">
                 <span ng-show="false">Please provide a valid value.</span>
               </div>
-              <div class="form-group col-sm-6">
-                <label class="control-label" for="spouseName">Spouse Name</label>
-                <input type="text" class="form-control" id="spouseName" placeholder="Spouse Name">
-                <span ng-show="false">Please provide a valid value.</span>
-              </div>
-              <div class="form-group col-sm-6">
-                <label class="block">Spouse Gender</label>
-                <label class="radio-inline">
-                  <input type="radio" value="male" name="spouseGender">Male
-                </label>
-                <label class="radio-inline">
-                  <input type="radio" value="female" name="spouseGender">Female
-                </label>
-              </div>
+
             </div>
             <!--/row-->
         </fieldset>
 
         <fieldset class="push-bottom">
-          <legend>Employer</legend>
+          <legend>School</legend>
           <div class="row">
             <div class="form-group col-sm-6">
-              <label class="control-label" for="companyName">Company Name</label>
-              <input type="text" class="form-control" id="companyName" placeholder="Company Name">
+              <label class="control-label" for="school">School</label>
+              <input type="text" class="form-control" id="school" placeholder="Enter school">
               <span ng-show="false">Please provide a valid value.</span>
             </div>
             <div class="form-group col-sm-6">
-              <label class="control-label" for="position">Position</label>
-              <input type="text" class="form-control" id="position" placeholder="Position">
-              <span ng-show="false">Please provide a valid value.</span>
-            </div>
-            <div class="form-group col-sm-6">
-              <label class="control-label" for="workPhone">Work Phone (If you can receive calls at this number)</label>
-              <input type="text" class="form-control" id="workPhone" placeholder="Work Phone">
-              <span ng-show="false">Please provide a valid value.</span>
-            </div>
-          </div>
-        </fieldset>
-
-        <fieldset class="push-bottom">
-          <legend>Children's Name and Birthdays</legend>
-          <div class="row">
-            <div class="form-group col-sm-6">
-              <label class="control-label" for="childName-1">Name</label>
-              <input type="text" class="form-control" id="childName-1" placeholder="Name">
-              <span ng-show="false">Please provide a valid value.</span>
-            </div>
-            <div class="form-group col-sm-6">
-              <label class="control-label" for="childDob-1">Birthday</label>
-              <input type="text" class="form-control" id="childDob-1" placeholder="Birthday">
-              <span ng-show="false">Please provide a valid value.</span>
-            </div>
-            <div class="form-group col-sm-6">
-              <label class="control-label" for="childName-2">Name</label>
-              <input type="text" class="form-control" id="childName-2" placeholder="Name">
-              <span ng-show="false">Please provide a valid value.</span>
-            </div>
-            <div class="form-group col-sm-6">
-              <label class="control-label" for="childDob-2">Birthday</label>
-              <input type="text" class="form-control" id="childDob-2" placeholder="Birthday">
-              <span ng-show="false">Please provide a valid value.</span>
-            </div>
-            <div class="form-group col-sm-6">
-              <label class="control-label" for="childName-3">Name</label>
-              <input type="text" class="form-control" id="childName-3" placeholder="Name">
-              <span ng-show="false">Please provide a valid value.</span>
-            </div>
-            <div class="form-group col-sm-6">
-              <label class="control-label" for="childDob-3">Birthday</label>
-              <input type="text" class="form-control" id="childDob-3" placeholder="Birthday">
-              <span ng-show="false">Please provide a valid value.</span>
-            </div>
-            <div class="form-group col-sm-6">
-              <label class="control-label" for="childName-4">Name</label>
-              <input type="text" class="form-control" id="childName-4" placeholder="Name">
-              <span ng-show="false">Please provide a valid value.</span>
-            </div>
-            <div class="form-group col-sm-6">
-              <label class="control-label" for="childDob-4">Birthday</label>
-              <input type="text" class="form-control" id="childDob-4" placeholder="Birthday">
+              <label class="control-label" for="grade">Grade</label>
+              <input type="text" class="form-control" id="grade" placeholder="Enter grade">
               <span ng-show="false">Please provide a valid value.</span>
             </div>
           </div>
@@ -825,60 +729,6 @@
         <fieldset class="push-bottom">
           <legend>About You</legend>
           <div class="row">
-            <div class="form-group col-sm-12">
-              <label class="block">Have you ever been arrested, convicted of or pleaded no contest to any crime?</label>
-              <label class="radio-inline">
-                <input type="radio" value="no" name="crime">No
-              </label>
-              <label class="radio-inline">
-                <input type="radio" value="yes" name="crime">Yes
-              </label>
-            </div>
-            <div class="form-group col-sm-12">
-              <label class="block">Have you ever been concerned that you may have an addiction to drugs, alcohol, pornography, or other addiction; or has anyone suggested that you do?</label>
-              <label class="radio-inline">
-                <input type="radio" value="no" name="addiction">No
-              </label>
-              <label class="radio-inline">
-                <input type="radio" value="yes" name="addiction">Yes
-              </label>
-            </div>
-            <div class="form-group col-sm-12">
-              <label class="block">Have you ever been accused, alleged, investigated, charged or convicted of any act of neglecting,a busing, exploiting or molesting any child?</label>
-              <label class="radio-inline">
-                <input type="radio" value="no" name="neglect">No
-              </label>
-              <label class="radio-inline">
-                <input type="radio" value="yes" name="neglect">Yes
-              </label>
-            </div>
-            <div class="form-group col-sm-12">
-              <label class="block">Have you ever been a victim of any form of abuse?</label>
-              <label class="radio-inline">
-                <input type="radio" value="no" name="victimOfAbuse">No
-              </label>
-              <label class="radio-inline">
-                <input type="radio" value="yes" name="victimOfAbuse">Yes
-              </label>
-            </div>
-            <div class="form-group col-sm-12">
-              <label class="block">Have you ever been treated for or diagnosed with a psychiatric disorder?</label>
-              <label class="radio-inline">
-                <input type="radio" value="no" name="psychiatricDisorder">No
-              </label>
-              <label class="radio-inline">
-                <input type="radio" value="yes" name="psychiatricDisorder">Yes
-              </label>
-            </div>
-            <div class="form-group col-sm-12">
-              <label class="block">Currently, or in the past year, have you been sexually active outside of marriage?</label>
-              <label class="radio-inline">
-                <input type="radio" value="no" name="sexuallyActive">No
-              </label>
-              <label class="radio-inline">
-                <input type="radio" value="yes" name="sexuallyActive">Yes
-              </label>
-            </div>
             <div class="form-group col-sm-12">
               <label class="block">We're all in different places in our journey. And that's okay. But we ask that those who work in kindergarten through 5th grade be Christ-followers. There are opportunitites regardless of your spiritual orientation.</label>
 
@@ -965,47 +815,12 @@
           </div>
 
           <div class="row">
-            <div class="form-group col-sm-12">
-              <label>What areas most interest you? (Check all that apply)</label>
 
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox">Serving in a Classroom</label>
-              </div>
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox">Welcoming New Familites and showing them to their room</label>
-              </div>
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox">One-on-one helper with a kid who has special needs</label>
-              </div>
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox">Tech (Provide tech and systems support)</label>
-              </div>
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox">Prepping the rooms (set up props, activities, etc on thursday and/or friday mornings)</label>
-              </div>
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox">Administrative tasks (Data entry, filing, mailing, etc)</label>
-              </div>
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox">Shopping for supplies</label>
-              </div>
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox">Creating the weekend experience (Write Lessons or songs, brainstorm acitivites, etc)</label>
-              </div>
-            </div>
             <div class="form-group col-sm-12">
-              <label>Want to serve directly with kids? What age do you prefer? (check all that apply)</label>
+              <label>What age kids do you prefer to serve with?</label>
               <div class="checkbox">
                 <label>
-                  <input type="checkbox">Birth - 2 years old</label>
+                  <input type="checkbox">1 - 2 years old</label>
               </div>
               <div class="checkbox">
                 <label>
@@ -1020,7 +835,9 @@
 
         <fieldset class="push-bottom">
           <legend>Personal References</legend>
-          <p class="help-text">List three adults (18 or older) you have know for at least one yaer, who are not rleated to you and have a definite knowledge of your character and ability to work with kids and students (e.g. pastor, close firend, teacher, and/or employer).</p>
+          <p class="help-text">List two adults you have known for at least one year, who are not rleated to you and have a definite knowledge of your character and ability to work wtih kids (e.g. pastor, close friend, and/or teacher)</p>
+
+          <p class="push-bottom">Reference #1</span>
           <div class="form-group col-sm-6">
             <label class="control-label" for="referenceName-1">Name</label>
             <input type="text" class="form-control" id="referenceName-1" placeholder="Name">
@@ -1063,6 +880,7 @@
           </div>
 
           <!-- Reference #2 -->
+          <p class="push-bottom">Reference #2</span>
           <div class="form-group col-sm-6">
             <label class="control-label" for="referenceName-2">Name</label>
             <input type="text" class="form-control" id="referenceName-2" placeholder="Name">
@@ -1104,47 +922,7 @@
             <span ng-show="false">Please provide a valid value.</span>
           </div>
 
-          <!-- Reference #3 -->
-          <div class="form-group col-sm-6">
-            <label class="control-label" for="referenceName-3">Name</label>
-            <input type="text" class="form-control" id="referenceName-3" placeholder="Name">
-            <span ng-show="false">Please provide a valid value.</span>
-          </div>
-          <div class="form-group col-sm-6">
-            <label class="control-label" for="referenceTimeKnown-3">Length of time known</label>
-            <input type="text" class="form-control" id="referenceTimeKnown-3" placeholder="Length of time known">
-            <span ng-show="false">Please provide a valid value.</span>
-          </div>
-          <div class="form-group col-sm-6">
-            <label class="control-label" for="referenceHomePhone-3">Home Phone</label>
-            <input type="text" class="form-control" id="referenceHomePhone-3" placeholder="Home Phone">
-            <span ng-show="false">Please provide a valid value.</span>
-          </div>
-          <div class="form-group col-sm-6">
-            <label class="control-label" for="referenceMobilePhone-3">Mobile Phone</label>
-            <input type="text" class="form-control" id="referenceMobilePhone-3" placeholder="Mobile Phone">
-            <span ng-show="false">Please provide a valid value.</span>
-          </div>
-          <div class="form-group col-sm-6">
-            <label class="control-label" for="referenceWorkPhone-3">Work Phone</label>
-            <input type="text" class="form-control" id="referenceWorkPhone-3" placeholder="Work Phone">
-            <span ng-show="false">Please provide a valid value.</span>
-          </div>
-          <div class="form-group col-sm-6">
-            <label class="control-label" for="referenceEmail-3">Email</label>
-            <input type="text" class="form-control" id="referenceEmail-3" placeholder="Email">
-            <span ng-show="false">Please provide a valid value.</span>
-          </div>
-          <div class="form-group col-sm-6">
-            <label class="control-label" for="referenceAssociation-3">Nature of Association</label>
-            <input type="text" class="form-control" id="referenceAssociation-3" placeholder="Nature of Association">
-            <span ng-show="false">Please provide a valid value.</span>
-          </div>
-          <div class="form-group col-sm-6">
-            <label class="control-label" for="referenceOccupation-3">Occupation</label>
-            <input type="text" class="form-control" id="referenceOccupation-3" placeholder="Occupation">
-            <span ng-show="false">Please provide a valid value.</span>
-          </div>
+
           <p class="help-text">Okay, here's some formal stuff. We don't really talk like this, but we couldn't figure out how to say all this in kid-friendly language. So put your glasses on, read it and agree to it, please The information contained in this application
             is true. I authorize any reference or church listed here to give you any information (including opinions) that they may have regarding my character and fitness for working with kids. By agreeing to this form, I also consent to a complete
             criminal background check now an din the future. I understand my involvement with Crossroads Kids' Club is influenced by the information provided by all these sources. I release from liability for damages any person or organizations identified
