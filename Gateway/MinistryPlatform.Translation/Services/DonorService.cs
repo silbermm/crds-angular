@@ -214,7 +214,22 @@ namespace MinistryPlatform.Translation.Services
         {
 
             var templateId = AppSetting("OneTimeGuestGiveTemplate");
-            throw new NotImplementedException();
+
+            var template = CommunicationService.GetTemplate(templateId);
+
+            var comm = new Communication
+            {
+                AuthorUserId = 5,
+                DomainId = 1,
+                EmailBody = template.Body,
+                EmailSubject = template.Subject,
+                //FromContactId = opp.GroupContactId,
+                //FromEmailAddress = fromEmail.Email_Address,
+                //ReplyContactId = opp.GroupContactId,
+                //ReplyToEmailAddress = fromEmail.Email_Address,
+                //ToContactId = contactId,
+                //ToEmailAddress = toEmail
+            };
         }
     }
 
