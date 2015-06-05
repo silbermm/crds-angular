@@ -73,8 +73,7 @@ namespace MinistryPlatform.Translation.Services
         public void SendMessage(Communication communication, Dictionary<string, object> mergeData)
         {
             var communicationId = AddCommunication(communication, apiLogin());
-            var thread = new Thread(() => AddCommunicationMessage(communication, communicationId, mergeData, apiLogin()));
-            thread.Start();
+            AddCommunicationMessage(communication, communicationId, mergeData, apiLogin());
         }
 
         private int AddCommunication(Communication communication, string token)
