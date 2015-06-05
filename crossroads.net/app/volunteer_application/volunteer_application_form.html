@@ -22,8 +22,8 @@
 
     </div>
 
-    <div ng-show="volunteer.showContent" >
-      <div id="adult-application" ng-if="volunteer.show('adult')">
+
+      <div id="adult-application" ng-if="volunteer.showBlock('adult')">
         <form class="ng-pristine ng-valid-date ng-invalid ng-invalid-required ng-valid-time ng-valid-date-disabled ng-valid-maxlength" _lpchecked="1">
           <fieldset class="push-bottom">
             <legend>General Info</legend>
@@ -595,9 +595,9 @@
         </form>
 
         <!-- adult-application -->
-    </div>
 
-    <div ng-if="volunteer.show('child')">
+
+    <div ng-if="volunteer.showBlock('child')">
       <form class="ng-pristine ng-valid-date ng-invalid ng-invalid-required ng-valid-time ng-valid-date-disabled ng-valid-maxlength" _lpchecked="1">
         <fieldset class="push-bottom">
           <legend>General Info</legend>
@@ -947,15 +947,15 @@
       </form>
     </div>
 
-    <div ng-if="volunteer.show('age-error')">
+    <div ng-if="volunteer.showBlock('age-error')">
       Age Error
     </div>
 
-    <div ng-if="volunteer.show('no-response')">
+    <div ng-if="volunteer.showBlock('no-response')">
       <p id="notEligible" ng-bind-html="volunteer.pageInfo.noExistingResponse | html"></p>
     </div>
 
-    <div ng-if="volunteer.show('denied')">
+    <div ng-if="volunteer.showBlock('denied')">
       <p>You're not allowed to see this application.  GET THIS FROM CMS</p>
     </div>
   </div>

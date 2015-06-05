@@ -12,27 +12,18 @@
     $log.debug("Inside VolunteerApplicationController");
     var vm = this;
 
-    vm.allSignedUp = allSignedUp;
-    //vm.allowSubmission = true;
     vm.contactId = $stateParams.id;
-    vm.disableCheckbox = disableCheckbox;
-    vm.displayEmail = displayEmail;
-    vm.displayPendingFlag = displayPendingFlag;
-    vm.editProfile = editProfile;
-    vm.modalInstance = {};
-
+    vm.opportunityResponse = opportunityResponse;
     vm.pageInfo = pageInfo(CmsInfo);
-    vm.participants = null;
+    vm.personalInfo = personalInfo;
     vm.save = save;
     vm.showAccessDenied = false;
     vm.showAdult = false;
-    vm.showAllSignedUp = false;
     vm.showChild = false;
     vm.showContent = true;
     vm.showInvalidResponse = false;
     vm.showSuccess = false;
-    vm.show = show;
-    vm.validResponse = false;
+    vm.showBlock = showBlock;
     vm.viewReady = false;
 
     activate();
@@ -47,125 +38,52 @@
       } else {
         vm.showAccessDenied = false;
 
-        Opportunity.GetResponse.get({
-            //id: 116,
-            id: vm.pageInfo.opportunity,
-            contactId: vm.contactId
-          }).$promise
-          .then(function(response) {
-            $log.debug("Opportunity Response");
-            vm.showInvalidResponse = ((response == null) || ((response.responseId == undefined)));
-            $log.debug('showInvalidResponse: ' + vm.showInvalidResponse);
-          });
+        opportunityResponse();
 
-        // Initialize Person data for logged-in user
-        Profile.Personal.get(function(response) {
-          vm.person = response;
-          $log.debug("Person: " + JSON.stringify(vm.person));
+          personalInfo();
 
-          if (vm.person.age >= 16) {
-            vm.showAdult = true;
-          } else if ((vm.person.age >= 14) && (vm.person.age <= 15)) {
-            vm.showChild = true;
-          } else {
-            vm.showError = true;
-          }
-          $log.debug('showAdult: ' + vm.showAdult);
-        });
+
       }
       vm.viewReady = true;
     }
 
-    function allSignedUp() {
-      var signupCount = 0;
-      _.each(vm.participants, function(p) {
-        if (p.memberOfGroup || p.pending) {
-          signupCount = signupCount + 1;
-        }
-      });
-      if (signupCount === vm.participants.length) {
-        vm.showAllSignedUp = true;
-        vm.showContent = false;
-      }
+    function opportunityResponse() {
+      Opportunity.GetResponse.get({
+          id: vm.pageInfo.opportunity,
+          contactId: vm.contactId
+        }).$promise
+        .then(function(response) {
+          vm.showInvalidResponse = ((response == null) || ((response.responseId == undefined)));
+        });
     }
-
-    function disableCheckbox(participant) {
-      if (participant.memberOfGroup || participant.pending) {
-        return true;
-      }
-      return false;
-    }
-
-    function displayEmail(emailAddress) {
-      if (emailAddress === null || emailAddress === undefined) {
-        return false;
-      }
-      if (emailAddress.length > 0) {
-        return true;
-      }
-      return false;
-    }
-
-    function displayPendingFlag(participant) {
-      if (participant.memberOfGroup) {
-        return false;
-      }
-      if (participant.pending) {
-        return true;
-      }
-      return false;
-    }
-
-    function editProfile(personToEdit) {
-      vm.modalInstance = $modal.open({
-        templateUrl: 'profile/editProfile.html',
-        backdrop: true,
-        controller: "ProfileModalController as modal",
-        // This is needed in order to get our scope
-        // into the modal - by default, it uses $rootScope
-        scope: $scope,
-        resolve: {
-          person: function() {
-            return personToEdit;
-          }
-        }
-      });
-      vm.modalInstance.result.then(function(person) {
-        personToEdit.preferredName = person.nickName === null ? person.firstName : person.nickName;
-        $rootScope.$emit("personUpdated", person);
-      });
-    }
-
 
     function pageInfo(cmsInfo) {
       return cmsInfo.pages[0];
     }
 
-    function save(form) {
-      var save = new ServeOpportunities.SaveQualifiedServers();
-      save.opportunityId = vm.pageInfo.opportunity;
-      //just get participants that have checkbox checkLoggedin
-      save.participants = _.pluck(_.filter(vm.participants, {
-        add: true
-      }), 'participantId');
+    function personalInfo() {
+      // Initialize Person data for logged-in user
+      Profile.Personal.get(function(response) {
+        vm.person = response;
+        $log.debug("Person: " + JSON.stringify(vm.person));
 
-      $log.debug(save.participants.length);
-      if (save.participants.length < 1) {
-        $rootScope.$emit('notify', $rootScope.MESSAGES.noPeopleSelectedError);
-        return;
-      }
-
-      save.$save().then(function() {
-        vm.created = true;
-        vm.showContent = false;
-        vm.showSuccess = true;
-      }, function() {
-        vm.rejected = true;
+        if (vm.person.age >= 16) {
+          vm.showAdult = true;
+        } else if ((vm.person.age >= 14) && (vm.person.age <= 15)) {
+          vm.showChild = true;
+        } else {
+          vm.showError = true;
+        }
+        $log.debug('showAdult: ' + vm.showAdult);
       });
     }
 
-    function show(block) {
-      switch (block) {
+    function save(form) {
+
+    }
+
+    function showBlock(blockName) {
+      switch (blockName) {
         case 'adult':
           return vm.showAdult && !vm.showInvalidResponse;
           break;
