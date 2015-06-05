@@ -248,6 +248,7 @@
     </Compile>
     <Compile Include="Models\Crossroads\CreateDonationDTO.cs" />
     <Compile Include="Models\Crossroads\CreateDonorDTO.cs" />
+    <Compile Include="Models\Crossroads\DefaultSourceDTO.cs" />
     <Compile Include="Models\Crossroads\DonationDTO .cs" />
     <Compile Include="Models\Crossroads\DonorDTO.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityCapacityDto.cs" />
