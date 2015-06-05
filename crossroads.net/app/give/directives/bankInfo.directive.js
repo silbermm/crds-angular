@@ -10,7 +10,7 @@ require('../bankInfo.html');
           replace: true,
           scope: {
               account: "=", 
-              bankinfoSubmitted: "=",
+              bankinfoSubmitted: "=?",
               routing: "="             
             },
           templateUrl: 'give/bankInfo.html',
