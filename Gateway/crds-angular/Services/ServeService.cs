@@ -10,6 +10,8 @@ using Crossroads.Utilities.Extensions;
 using log4net;
 using log4net.Repository.Hierarchy;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Exceptions;
+using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using IGroupService = MinistryPlatform.Translation.Services.Interfaces.IGroupService;
@@ -25,11 +27,13 @@ namespace crds_angular.Services
         private readonly IGroupService _groupService;
         private readonly IOpportunityService _opportunityService;
         private readonly IParticipantService _participantService;
+        private readonly ICommunicationService _communicationService;        
+
         private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public ServeService(IContactService contactService, IContactRelationshipService contactRelationshipService,
             IOpportunityService opportunityService, IEventService eventService, IParticipantService participantService,
-            IGroupParticipantService groupParticipantService, IGroupService groupService)
+            IGroupParticipantService groupParticipantService, IGroupService groupService, ICommunicationService communicationService)
         {
             _contactService = contactService;
             _contactRelationshipService = contactRelationshipService;
@@ -38,6 +42,7 @@ namespace crds_angular.Services
             _participantService = participantService;
             _groupParticipantService = groupParticipantService;
             _groupService = groupService;
+            _communicationService = communicationService;            
         }
 
         public List<FamilyMember> GetImmediateFamilyParticipants(int contactId, string token)
@@ -242,140 +247,153 @@ namespace crds_angular.Services
             //get events in range
             var events = _eventService.GetEventsByTypeForRange(eventTypeId, startDate, endDate, token);
             var includeThisWeek = true;
-            var templateId = AppSetting("RsvpYesTemplate");
-            var deletedRSVPS = new List<int>();
-            var prevOpp = 0;
 
-            foreach (var e in events)
+            Opportunity previousOpportunity = null;
+            int templateId = signUp ? AppSetting("RsvpYesTemplate") : AppSetting("RsvpNoTemplate");
+
+            // Get the opportunity using any of the opportunities
+            var opportunity = (opportunityId > 0) ? _opportunityService.GetOpportunityById(opportunityId, token)  : _opportunityService.GetOpportunityById(opportunityIds.FirstOrDefault(), token);
+            var groupContact = _contactService.GetContactById(opportunity.GroupContactId);
+
+            // Who are we sending the email to?
+            var toContact = _contactService.GetContactById(contactId);
+            //Dictionary<string,object> response = null;
+            try
             {
-                if ((!alternateWeeks) || includeThisWeek)
+                
+                foreach (var e in events)
                 {
-                    //for each event in range create an event participant & opportunity response
-                    if (signUp)                    
+                    if ((!alternateWeeks) || includeThisWeek)
                     {
-                        _eventService.registerParticipantForEvent(participant.ParticipantId, e.EventId);
-
-                        // Make sure we are only rsvping for 1 opportunity by removing all existing responses
-                        foreach( var oid in opportunityIds)
-                        {
-                            var deletedResponse = _opportunityService.DeleteResponseToOpportunities(participant.ParticipantId, oid, e.EventId);
-                            if (deletedResponse != 0)
-                            {
-                                deletedRSVPS.Add(oid);
-                            }
-                        }
-
-                        if (deletedRSVPS.Count > 0)
-                        {
-                            templateId = AppSetting("RsvpChangeTemplate");
-                            if (opportunityIds.Count == deletedRSVPS.Count)
-                            {
-                                //Changed from NO to YES. 
-                                prevOpp = 0;
-                            }
-                            else
-                            {
-                                //Changed yes to yes
-                                prevOpp = deletedRSVPS.First();
-                            }
-                        }
-
-                        var comments = string.Empty; //anything of value to put in comments?
-                        _opportunityService.RespondToOpportunity(participant.ParticipantId, opportunityId, comments,
-                            e.EventId, true);
+                        var response = signUp
+                            ? HandleYesRsvp(participant, e, opportunityId, opportunityIds, token)
+                            : HandleNoRsvp(participant, e, opportunityIds, token);
+                        if (response.ToNullableObject<Opportunity>("previousOpportunity") != null)
+                            previousOpportunity = response.ToNullableObject<Opportunity>("previousOpportunity");
+                        templateId = (templateId != AppSetting("RsvpChangeTemplate"))
+                            ? response.ToInt("templateId")
+                            : templateId;
                     }
-                    else
-                    {
-                        try
-                        {
-                            templateId = AppSetting("RsvpChangeTemplate");
-                            opportunityId = opportunityIds.First();
-                            //if there is already a participant, remove it because they've changed to "No"
-                            _eventService.unRegisterParticipantForEvent(participant.ParticipantId, e.EventId);
-                        }
-                        catch (ApplicationException ex)
-                        {
-                            logger.Debug(ex.Message + ": There is no need to remove the event participant because there is not one.");
-                            templateId = AppSetting("RsvpNoTemplate");
-                        }
-
-                        // Responding no means that we are saying no to all opportunities for this group for this event
-                        foreach (var oid in opportunityIds)
-                        {
-                            var comments = string.Empty; //anything of value to put in comments?
-                            var updatedOpp = _opportunityService.RespondToOpportunity(participant.ParticipantId, oid, comments,
-                                e.EventId, false);
-                            if (updatedOpp > 0)
-                            {
-                                prevOpp = updatedOpp;
-                            }
-                        }
-                        
-                    }
-                    
+                    includeThisWeek = !includeThisWeek;
                 }
-                includeThisWeek = !includeThisWeek;
             }
-
-            //Send Confirmation Email Asynchronously
-            var thread = new Thread(() => SendRSVPConfirmation(contactId, opportunityId, prevOpp, startDate, endDate, templateId, token));
-            thread.Start();
-
+            catch (Exception e)
+            {
+                return false;
+            }
+            var mergeData = SetupMergeData(contactId, opportunityId, previousOpportunity, opportunity, startDate, endDate, groupContact);
+            var communication = SetupCommunication(templateId, groupContact, toContact);
+            _communicationService.SendMessage(communication, mergeData);
+            //SendRSVPConfirmation(contactId, opportunityId, prevOpp, opportunity, startDate, endDate,templateId,token);            
             return true;
         }
 
-        private void SendRSVPConfirmation(int contactId, int opportunityId, int prevOppId, DateTime startDate, DateTime endDate, int templateId, string token)
+        private Dictionary<string, object> HandleYesRsvp(Participant participant, Event e, int opportunityId, IReadOnlyCollection<int> opportunityIds, String token )
         {
-                var template = CommunicationService.GetTemplate(templateId);
+            var templateId = AppSetting("RsvpYesTemplate");
+            var deletedRSVPS = new List<int>();
+            Opportunity previousOpportunity = null;
 
-            //Go get Opportunity deets
-            var opp = _opportunityService.GetOpportunityById(opportunityId, token);
+            //Try to register this user for the event
+            _eventService.registerParticipantForEvent(participant.ParticipantId, e.EventId);
+            
+            // Make sure we are only rsvping for 1 opportunity by removing all existing responses
+            deletedRSVPS.AddRange(from oid in opportunityIds
+                let deletedResponse = _opportunityService.DeleteResponseToOpportunities(participant.ParticipantId, oid, e.EventId) where deletedResponse != 0 select oid);
 
-            //Go get Previous Opportunity deets
-            var prevOpp = new Opportunity();
-            if (prevOppId > 0)
+            if (deletedRSVPS.Count > 0) 
             {
-                prevOpp = _opportunityService.GetOpportunityById(prevOppId, token);
+                templateId = AppSetting("RsvpChangeTemplate");
+                if (opportunityIds.Count != deletedRSVPS.Count)
+                {
+                    //Changed yes to yes
+                    //prevOppId = deletedRSVPS.First();
+                    previousOpportunity = _opportunityService.GetOpportunityById(deletedRSVPS.First(), token);                                      
+                }
             }
-            else
+            var comments = string.Empty; //anything of value to put in comments?
+            _opportunityService.RespondToOpportunity(participant.ParticipantId, opportunityId, comments,
+                e.EventId, true);
+            return new Dictionary<string, object>()
             {
-                prevOpp.OpportunityName = "Not Available";
+                {"templateId", templateId},
+                {"previousOpportunity", previousOpportunity},
+                {"rsvp", true}
+            };
+        }
+
+        private Dictionary<string, object> HandleNoRsvp(Participant participant, Event e, List<int> opportunityIds, string token )
+        {
+            var templateId = AppSetting("RsvpNoTemplate");
+            Opportunity previousOpportunity = null;
+
+            try
+            {
+                templateId = AppSetting("RsvpChangeTemplate");
+                //opportunityId = opportunityIds.First();
+                _eventService.unRegisterParticipantForEvent(participant.ParticipantId, e.EventId);
+            }
+            catch (ApplicationException ex)
+            {
+                logger.Debug(ex.Message + ": There is no need to remove the event participant because there is not one.");
+                templateId = AppSetting("RsvpNoTemplate");
             }
 
-            //Go get from/to contact info
-            var fromEmail = _contactService.GetContactEmail(opp.GroupContactId);
-            var toEmail = _contactService.GetContactEmail(contactId);
+            // Responding no means that we are saying no to all opportunities for this group for this event            
+            foreach (var oid in opportunityIds)
+            {
+                var comments = string.Empty; //anything of value to put in comments?
+                var updatedOpp = _opportunityService.RespondToOpportunity(participant.ParticipantId, oid, comments,
+                    e.EventId, false);
+                if (updatedOpp > 0)
+                {
+                    previousOpportunity = _opportunityService.GetOpportunityById(oid, token);
+                }
+            }
+            return new Dictionary<string, object>()
+            {
+                {"templateId", templateId},
+                {"previousOpportunity", previousOpportunity},
+                {"rsvp", false}
+            };
+        }
 
-            var comm = new Communication
+        private Communication SetupCommunication(int templateId, MyContact groupContact, MyContact toContact)
+        {
+            var template = _communicationService.GetTemplate(templateId);
+            return new Communication
             {
                 AuthorUserId = 5,
                 DomainId = 1,
                 EmailBody = template.Body,
                 EmailSubject = template.Subject,
-                FromContactId = opp.GroupContactId,
-                FromEmailAddress = fromEmail,
-                ReplyContactId = opp.GroupContactId,
-                ReplyToEmailAddress = fromEmail,
-                ToContactId = contactId,
-                ToEmailAddress = toEmail
-            };
-
-            var mergeData = new Dictionary<string, object>
-            {
-                {"Opportunity_Name", opp.OpportunityName},
-                {"Start_Date", startDate.ToShortDateString()},
-                {"End_Date", endDate.ToShortDateString()},
-                {"Shift_Start", opp.ShiftStart.FormatAsString()},
-                {"Shift_End", opp.ShiftEnd.FormatAsString()},
-                {"Room", opp.Room ?? string.Empty},
-                {"Group_Contact", opp.GroupContactName},
-                {"Group_Name", opp.GroupName},
-                {"Previous_Opportunity_Name", prevOpp.OpportunityName}
-            };
-
-            CommunicationService.SendMessage(comm, mergeData);
+                FromContactId = groupContact.Contact_ID,
+                FromEmailAddress = groupContact.Email_Address,
+                ReplyContactId = groupContact.Contact_ID,
+                ReplyToEmailAddress = groupContact.Email_Address,
+                ToContactId = toContact.Contact_ID,
+                ToEmailAddress = toContact.Email_Address
+            };   
         }
 
+        private Dictionary<string, object> SetupMergeData(int contactId, int opportunityId,
+            Opportunity previousOpportunity, Opportunity currentOpportunity, DateTime startDate, DateTime endDate, 
+            MyContact groupContact)
+        {
+            return new Dictionary<string, object>
+            {
+                {"Opportunity_Name", opportunityId == 0 ? "Not Available" : currentOpportunity.OpportunityName},
+                {"Start_Date", startDate.ToShortDateString()},
+                {"End_Date", endDate.ToShortDateString()},
+                {"Shift_Start", currentOpportunity.ShiftStart.FormatAsString() ?? string.Empty},
+                {"Shift_End", currentOpportunity.ShiftEnd.FormatAsString() ?? string.Empty},
+                {"Room", currentOpportunity.Room ?? string.Empty},
+                {"Group_Contact", groupContact.Nickname + " " + groupContact.Last_Name},
+                {"Group_Name", currentOpportunity.GroupName},
+                {"Previous_Opportunity_Name", previousOpportunity != null ? previousOpportunity.OpportunityName : @"Not Available"}
+            }; 
+        }
+    
         private ServeRole NewServingRole(GroupServingParticipant record)
         {
             return new ServeRole

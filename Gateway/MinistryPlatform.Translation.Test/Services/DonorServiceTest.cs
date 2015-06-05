@@ -86,7 +86,6 @@ namespace MinistryPlatform.Translation.Test.Services
         {
             var donationAmt = 676767;
             var donorId = 1234567;
-            var donationId = 7654321;
             var programId = "3";
             var setupDate = DateTime.Now;
             var charge_id = "ch_crds1234567";

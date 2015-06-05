@@ -128,11 +128,11 @@
 
       function getFrequency() {
         var dateTime = moment(scope.oppServeDate + " " + scope.opportunity.time);
-        var weeklyLabel = moment(scope.oppServeDate).format("dddd") + "s" + " " + dateTime.format("hh:mma");
+        var weeklyLabel = moment(scope.oppServeDate).format("dddd") + "s" + " " + dateTime.format("h:mma");
 
         var once = {
           value: 0,
-          text: "Once " + dateTime.format("M/D/YYYY hh:mma")
+          text: "Once " + dateTime.format("M/D/YYYY h:mma")
         };
         var everyWeek = {
           value: 1,

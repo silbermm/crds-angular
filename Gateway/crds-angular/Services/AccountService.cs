@@ -3,19 +3,23 @@ using System.Collections.Generic;
 using System.Configuration;
 using crds_angular.Models.Crossroads;
 using crds_angular.Models.MP;
+using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services;
+using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Services
 {
-    public class AccountService : MinistryPlatformBaseService
+    public class AccountService : MinistryPlatformBaseService, IAccountService
     {
         private IConfigurationWrapper _configurationWrapper;
+        private ICommunicationService _communicationService;
 
-        public AccountService(IConfigurationWrapper configurationWrapper)
+        public AccountService(IConfigurationWrapper configurationWrapper, ICommunicationService communicationService)
         {
             this._configurationWrapper = configurationWrapper;
+            this._communicationService = _communicationService;
         }
         public bool ChangePassword(string token, string newPassword)
         {
@@ -40,8 +44,8 @@ namespace crds_angular.Services
                     Household_ID = (int)contact["Household_ID"],
                     Bulk_Mail_Opt_Out = accountInfo.PaperlessStatements 
                 });
-                CommunicationService.SetEmailSMSPreferences(token, emailsmsDict);
-                CommunicationService.SetMailPreferences(token, mailDict);
+                _communicationService.SetEmailSMSPreferences(token, emailsmsDict);
+                _communicationService.SetMailPreferences(token, mailDict);
                 return true;
             }
             catch (Exception e)
@@ -53,7 +57,7 @@ namespace crds_angular.Services
         public AccountInfo getAccountInfo(string token)
         {
             var contactId = AuthenticationService.GetContactId(token);
-            CommunicationPreferences contact = CommunicationService.GetPreferences(token, contactId);
+            CommunicationPreferences contact = _communicationService.GetPreferences(token, contactId);
             var accountInfo = new AccountInfo
             {
                 EmailNotifications = contact.Bulk_Email_Opt_Out,

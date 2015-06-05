@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Reflection;
+using log4net;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -11,6 +13,7 @@ namespace MinistryPlatform.Translation.Services
     {
         private readonly int _myProfilePageId = AppSettings("MyProfile");
         private readonly int contactsPageId = AppSettings("Contacts");
+        private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private IMinistryPlatformService _ministryPlatformService;
 
@@ -21,11 +24,45 @@ namespace MinistryPlatform.Translation.Services
 
         public string GetContactEmail(int contactId)
         {
+            try
+            {
+                var recordsDict = _ministryPlatformService.GetRecordDict(contactsPageId, contactId, apiLogin());
+
+                var contactEmail = recordsDict["Email_Address"].ToString();
+
+                return contactEmail;
+            }
+            catch (NullReferenceException ex)
+            {
+                logger.Debug(String.Format("Trying to email address of {0} failed", contactId));
+                return string.Empty;
+
+            } 
+        }
+
+        public MyContact GetContactById(int contactId)
+        {
             var recordsDict = _ministryPlatformService.GetRecordDict(contactsPageId, contactId, apiLogin());
 
-            var contactEmail = recordsDict["Email_Address"].ToString();
-
-            return contactEmail;
+            var contact = new MyContact
+            {
+                Household_ID = recordsDict.ToInt("Household_ID"),
+                Anniversary_Date = recordsDict.ToDateAsString("Anniversary_Date"),
+                Contact_ID = recordsDict.ToInt("Contact_ID"),
+                Date_Of_Birth = recordsDict.ToDateAsString("Date_of_Birth"),
+                Email_Address = recordsDict.ToString("Email_Address"),
+                Employer_Name = recordsDict.ToString("Employer_Name"),
+                First_Name = recordsDict.ToString("First_Name"),
+                Gender_ID = recordsDict.ToNullableInt("Gender_ID"),
+                Last_Name = recordsDict.ToString("Last_Name"),
+                Maiden_Name = recordsDict.ToString("Maiden_Name"),
+                Marital_Status_ID = recordsDict.ToNullableInt("Marital_Status_ID"),
+                Middle_Name = recordsDict.ToString("Middle_Name"),
+                Mobile_Carrier = recordsDict.ToNullableInt("Mobile_Carrier"),
+                Mobile_Phone = recordsDict.ToString("Mobile_Phone"),
+                Nickname = recordsDict.ToString("Nickname")
+            };
+            return contact;
         }
         
         public MyContact GetMyProfile(string token)

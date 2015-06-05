@@ -6,6 +6,11 @@ require('./templates/nav.html');
 require('./templates/nav-mobile.html');
 require('./templates/404.html');
 require('./templates/500.html');
+require('./templates/footer.html');
+require('./templates/header.html');
+require('./templates/brand-bar.html');
+require('./templates/favicons.html');
+require('./templates/head.html');
 
 require('../node_modules/angular-toggle-switch/angular-toggle-switch-bootstrap.css');
 require('../node_modules/angular-toggle-switch/angular-toggle-switch.css');

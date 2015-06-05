@@ -2,19 +2,27 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Reflection;
+using System.Threading;
+using log4net;
+using log4net.Repository.Hierarchy;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Exceptions;
+using MinistryPlatform.Translation.Services.Interfaces;
 using Newtonsoft.Json;
 
 namespace MinistryPlatform.Translation.Services
 {
-    public class CommunicationService : BaseService
-    {
-        private static readonly int MessagePageId = Convert.ToInt32(AppSettings("MessagesPageId"));
-        private static readonly int RecipientsSubPageId = Convert.ToInt32(AppSettings("RecipientsSubpageId"));
-        private static readonly int CommunicationStatusId = Convert.ToInt32(AppSettings("CommunicationStatusId"));
-        private static readonly int ActionStatusId = Convert.ToInt32(AppSettings("ActionStatusId"));
+    public class CommunicationService : BaseService, ICommunicationService
 
-        public static CommunicationPreferences GetPreferences(String token, int userId)
+    {
+        private readonly int MessagePageId = Convert.ToInt32(AppSettings("MessagesPageId"));
+        private readonly int RecipientsSubPageId = Convert.ToInt32(AppSettings("RecipientsSubpageId"));
+        private readonly int CommunicationStatusId = Convert.ToInt32(AppSettings("CommunicationStatusId"));
+        private readonly int ActionStatusId = Convert.ToInt32(AppSettings("ActionStatusId"));
+        private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+        public CommunicationPreferences GetPreferences(String token, int userId)
         {
             int pNum = Convert.ToInt32( ConfigurationManager.AppSettings["MyContact"]);
             int hNum = Convert.ToInt32(ConfigurationManager.AppSettings["MyHousehold"]);
@@ -29,7 +37,7 @@ namespace MinistryPlatform.Translation.Services
             //return MinistryPlatformService.GetRecordsDict(Convert.ToInt32(pageNumber), token);
         }
 
-        public static bool SetEmailSMSPreferences(String token, Dictionary<string,object> prefs){
+        public bool SetEmailSMSPreferences(String token, Dictionary<string,object> prefs){
             try
             {
                 int pId = Convert.ToInt32(ConfigurationManager.AppSettings["MyContact"]);
@@ -43,7 +51,7 @@ namespace MinistryPlatform.Translation.Services
             
         }
 
-        public static bool SetMailPreferences(string token, Dictionary<string,object> prefs){
+        public bool SetMailPreferences(string token, Dictionary<string,object> prefs){
             try
             {
                 int pId = Convert.ToInt32(ConfigurationManager.AppSettings["MyHousehold"]);
@@ -56,13 +64,19 @@ namespace MinistryPlatform.Translation.Services
             }
         }
 
-        public static void SendMessage(Communication communication, Dictionary<string, object> mergeData)
+        /// <summary>
+        /// Creates the correct record in MP so that the mail service can pick it up and send 
+        /// it during the scheduled run
+        /// </summary>
+        /// <param name="communication">The message properties </param>
+        /// <param name="mergeData">A dictionary of varible names and their values that MP will place in the template</param>
+        public void SendMessage(Communication communication, Dictionary<string, object> mergeData)
         {
             var communicationId = AddCommunication(communication, apiLogin());
             AddCommunicationMessage(communication, communicationId, mergeData, apiLogin());
         }
 
-        private static int AddCommunication(Communication communication, string token)
+        private int AddCommunication(Communication communication, string token)
         {
             var dictionary = new Dictionary<string, object>
             {
@@ -78,7 +92,7 @@ namespace MinistryPlatform.Translation.Services
             return communicationId;
         }
 
-        private static void AddCommunicationMessage(Communication communication, int communicationId, Dictionary<string, object> mergeData, string token)
+        private void AddCommunicationMessage(Communication communication, int communicationId, Dictionary<string, object> mergeData, string token)
         {
             var dictionary = new Dictionary<string, object>
             {
@@ -94,7 +108,7 @@ namespace MinistryPlatform.Translation.Services
             MinistryPlatformService.CreateSubRecord(RecipientsSubPageId, communicationId, dictionary, token);
         }
 
-        public static MessageTemplate GetTemplate(int templateId)
+        public MessageTemplate GetTemplate(int templateId)
         {
             var pageRecords = MinistryPlatformService.GetRecordDict(MessagePageId, templateId, apiLogin());
 
@@ -112,9 +126,18 @@ namespace MinistryPlatform.Translation.Services
             return template;
         }
 
-        public static string ParseTemplateBody(string templateBody, Dictionary<string, object> record)
+        public string ParseTemplateBody(string templateBody, Dictionary<string, object> record)
         {
-            return record.Aggregate(templateBody, (current, field) => current.Replace("[" + field.Key + "]", field.Value.ToString()));
+            try
+            {
+                return record.Aggregate(templateBody,
+                    (current, field) => current.Replace("[" + field.Key + "]", field.Value.ToString()));
+            }
+            catch (Exception ex)
+            {
+                logger.Debug(string.Format("Failed to parse the template"));
+                throw new TemplateParseException("Failed to parse the template", ex);
+            }
         }
     }
 }

@@ -71,7 +71,9 @@
             </li>
             <li offset="30"><a ng-click="styleguide.scrollTo('modal')">Modal</a>
             </li>
-            <li offset="30"><a ng-click="styleguide.scrollTo('modal')">Tool Tips</a>
+            <li offset="30"><a ng-click="styleguide.scrollTo('modal')">Tooltips</a>
+            </li>
+            <li offset="30"><a ng-click="styleguide.scrollTo('popovers')">Popovers & Info Icons</a>
             </li>
             <li offset="30"><a ng-click="styleguide.scrollTo('cards')">Cards</a>
             </li>
@@ -627,7 +629,7 @@
                   <p class="input-group datepicker">
                     <input type="text" class="form-control" placeholder="dd/mm/yyyy" datepicker-popup="dd/MM/yyyy" ng-model="styleguide.dt" ng-required="true" close-text="Close" is-open="styleguide.opened" />
                     <span class="input-group-btn">
-                      <button type="button" class="btn btn-default" ng-click="styleguide.openDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                      <button type="button" class="btn btn-gray-light" ng-click="styleguide.openDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                   </p>
               </div>
@@ -1140,7 +1142,11 @@
         <div class="panel-heading">Labels and Badges
         </div>
         <div class="panel-body">
-          <h3><span class="label label-default">Default</span>&nbsp;<span class="label label-success">Success</span>&nbsp;<span class="label label-warning">Warning</span>&nbsp;<span class="label label-danger">Danger</span>&nbsp;<span class="label label-info">Info</span></h3>
+          <span class="label label-default">Default</span>
+          <span class="label label-success">Success</span>
+          <span class="label label-warning">Warning</span>
+          <span class="label label-danger">Danger</span>
+          <span class="label label-info">Info</span>
           <p class="lead"><a href="#">Inbox <span class="badge">42</span></a>
           </p>
         </div>
@@ -1538,7 +1544,7 @@
 
       <!-- tooltips -->
       <div class="panel panel-default" id="tooltip">
-        <div class="panel-heading">Tool Tips</div>
+        <div class="panel-heading">Tooltips</div>
         <div class="panel-body">
           <div class="form-group">
             <label>Dynamic Tooltip Text</label>
@@ -1570,6 +1576,33 @@
         </div>
       </div>
       <!-- /tooltips -->
+
+      <!-- popovers -->
+      <div class="panel panel-default" id="popovers">
+        <div class="panel-heading">Popovers & Info Icons</div>
+        <div class="panel-body">
+          <button popover-placement="top" popover="On the Top!" class="btn btn-default push-half-right">Example</button>
+          <button popover="I have a title!" popover-title="The title." class="btn btn-default">Popover with Title</button>
+          <hr />
+          <h5 class="push-top flush-bottom">Info Icon Pattern</h5>
+          <p>Popover on desktop, collapsable well on mobile</p>
+          <label>Label
+            <svg viewBox="0 0 32 32" class="icon icon-question-circle icon-subtle pointer hidden-xs visible-sm-inline visible-md-inline visible-lg-inline" popover="Additional info content. Pellentesque dynamic, sit amet venenatis urna cursus eget nunc scelerisque viverra mauris, in aliquam." popover-placement="right" popover-append-to-body="true" popover-trigger="focus">
+              <use xlink:href="#question-circle"></use>
+            </svg>
+            <svg viewBox="0 0 32 32" class="icon icon-question-circle icon-subtle pointer visible-xs-inline" ng-click="infoCollapsed = !infoCollapsed">
+              <use xlink:href="#question-circle"></use>
+            </svg>
+          </label>
+          <div collapse="!infoCollapsed">
+            <div class="well well-sm">Additional info content. Pellentesque dynamic, sit amet venenatis urna cursus eget nunc scelerisque viverra mauris, in aliquam.</div>
+          </div>
+          <select class="form-control">
+            <option value="">Select a value</option>
+          </select>
+        </div>
+      </div>
+      <!-- /popovers -->
 
       <!-- cards -->
       <div class="panel panel-default" id="cards">
