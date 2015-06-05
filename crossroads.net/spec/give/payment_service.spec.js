@@ -7,7 +7,13 @@ describe ('PaymentService', function () {
     exp_year : "2016",
     cvc : "123"
   };
-  
+  var bankAccount = {
+    country: 'US',
+    currency: 'USD',
+    routing_number: '110000000',
+    account_number: '000123456789'
+  };
+
   beforeEach(function() {
     module('crossroads.give');
 
@@ -73,6 +79,34 @@ describe ('PaymentService', function () {
       expect(result.id).toEqual("12345");
       expect(result.stripe_customer_id).toEqual("cust_test");
     });
+  });
+
+  describe ('createDonorWithBankAccount', function() {
+    module(function($provide) {
+      $provide.value('stripe', {
+        setPublishableKey: function() {},
+        bankAccount :
+          {
+            createToken : function(bankAccount) {
+                return {
+                then : function(callback) {return callback({id: "tok_bank"});}
+              };
+            }
+          }
+      });
+    })
+    return null;
+
+    var result;
+
+    beforeEach(function() {
+      spyOn(stripe.bankAccount, 'createToken').and.callThrough();
+    });
+
+    it('should create a single use token', function() {
+      expect(stripe.bankAccount.createToken).toHaveBeenCalledWith(bankAccount);
+    });
+
   });
 
   describe('createDonorWithCard Error', function() {
