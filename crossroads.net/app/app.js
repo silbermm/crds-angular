@@ -10,6 +10,7 @@ require('./templates/footer.html');
 require('./templates/header.html');
 require('./templates/brand-bar.html');
 require('./templates/favicons.html');
+require('./templates/head.html');
 
 require('../node_modules/angular-toggle-switch/angular-toggle-switch-bootstrap.css');
 require('../node_modules/angular-toggle-switch/angular-toggle-switch.css');

@@ -177,8 +177,10 @@
               PaymentService.donor().get({email: $scope.give.email})
              .$promise
               .then(function(donor){
-                vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email);
-                $state.go("give.thank-you");
+                vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email, function() {
+                  $state.go("give.thank-you");
+                });
+
                 },
                 function(error){
                   // The vm.email below is only required for guest giver, however, there
@@ -193,8 +195,9 @@
                       cvc: vm.cvc
                     }, vm.email)
                   .then(function(donor) {
-                    vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email);
-                    $state.go("give.thank-you");
+                    vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email, function() {
+                      $state.go("give.thank-you");
+                    });
                   },
                   function() {
                     vm.processing = false;
@@ -243,7 +246,7 @@
                    exp_month: vm.dto.donor.default_source.exp_date.substr(0,2),
                    exp_year: vm.dto.donor.default_source.exp_date.substr(2,2),
                    cvc: vm.cvc,
-                   address_zip: vm.billingZipCode
+                   address_zip: vm.dto.donor.default_source.address_zip
                  })
                .then(function(donor) {
                  vm.donate(vm.dto.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.dto.email, function() {

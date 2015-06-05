@@ -39,12 +39,14 @@ describe('GiveController', function() {
       };
 
       mockPaymentService = {
-          donor: function(){ return {
+        donor: function(){ return {
             get: function(parms) {
               return(mockPaymentServiceGetPromise);
             }
           };
         },
+        donateToProgram: function() {},
+        updateDonorWithCard: function() {},
       };
 
       controller = $controller('GiveCtrl',
@@ -61,6 +63,11 @@ describe('GiveController', function() {
       controller.donor = {};
       controller.donorError = false;
       controller.last4 = "";
+      controller.programsInput = [
+        {ProgramId: 1, Name: "Crossroads"},
+        {ProgramId: 2, Name: "Game Change"},
+        {ProgramId: 3, Name: "Fuel"},
+      ];
     })
   );
 
@@ -69,6 +76,65 @@ describe('GiveController', function() {
       spyOn($rootScope, "$emit");
       controller.confirmDonation();
       expect($rootScope.$emit).toHaveBeenCalledWith("notify", 15);
+    });
+  });
+
+  describe('function submitChangedBankInfo', function() {
+    var controllerGiveForm = {
+      creditCardForm: {
+        $dirty: true,
+      },
+      $valid: true,
+    };
+
+    var controllerDto = {
+      amount: 987,
+      program: {
+        ProgramId: 1,
+      },
+      email: 'tim@kriz.net',
+      donor: {
+        id: 654,
+        default_source: {
+          name: 'Tim Startsgiving',
+          last4: '98765',
+          exp_date: '1213',
+          address_zip: '90210',
+        }
+      }
+    };
+
+    var controllerCvc = '987';
+
+    it('should call updateDonorWithCard with proper values when changing card info', function() {
+      $scope.giveForm = controllerGiveForm;
+      controller.dto = controllerDto;
+      controller.cvc = controllerCvc;
+
+      spyOn(mockPaymentService, 'updateDonorWithCard').and.callFake(function(donorId, donor) {
+        var deferred = $q.defer();
+        deferred.resolve(donor);
+        return deferred.promise;
+      });
+
+      spyOn(controller, 'donate');
+
+      controller.submitChangedBankInfo();
+      // This resolves the promise above
+      $rootScope.$apply();
+
+      expect(controller.donate).toHaveBeenCalled();
+      expect(mockPaymentService.updateDonorWithCard).toHaveBeenCalledWith(
+        controllerDto.donor.id,
+        {
+          name: controllerDto.donor.default_source.name,
+          number: controllerDto.donor.default_source.last4,
+          exp_month: controllerDto.donor.default_source.exp_date.substr(0,2),
+          exp_year: controllerDto.donor.default_source.exp_date.substr(2,2),
+          cvc: controllerCvc,
+          address_zip: controllerDto.donor.default_source.address_zip
+        }
+      );
     });
   });
 
@@ -138,24 +204,71 @@ describe('GiveController', function() {
     });
   });
 
+  describe('function goToChange', function() {
+    it('should populate dto with appropriate values when going to the change page', function() {
+      controller.dto = {};
+      controller.goToChange(123, "donor", "test@here.com", "program", "view");
+      expect(controller.dto.amount).toBe(123);
+      expect(controller.dto.donor).toBe("donor");
+      expect(controller.dto.email).toBe("test@here.com");
+      expect(controller.dto.program).toBe("program");
+      expect(controller.dto.view).toBe("view");
+      expect(controller.dto.changeAccountInfo).toBeTruthy();
+    });
+  });
 
+  describe('function donate', function() {
+    var callback = {
+      onSuccess: function() { }
+    };
 
-  // describe('Amount to Login/Account/Confirm state transition', function() {
-  //   beforeEach(function() {
-  //     //getDeferred.resolve(mockGetResponse);
-  //     successCallback(mockGetResponse);
-  //     $rootScope.$apply();
-  //   });
-  //
-  //   it('should fill in donor when going to Account state', function() {
-  //     $scope.giveForm = { amountForm : {$valid : true}};
-  //     $rootScope.username = "Tester";
-  //     $scope.give = {email: ''};
-  //     controller.goToAccount();
-  //     expect(mockPaymentService.donor.get).toHaveBeenCalled();
-  //     expect(controller.donor.Processor_ID).toBe("123456");
-  //     expect($state.$current.name).toBe("give.confirm");
-  //   });
-  // });
+    it('should call success callback if donation is successful', function() {
+      spyOn(mockPaymentService, 'donateToProgram').and.callFake(function(programId, amount, donorId, email) {
+        var deferred = $q.defer();
+        deferred.resolve({ amount: amount, });
+        return deferred.promise;
+      });
 
+      spyOn(callback, 'onSuccess');
+
+      controller.donate(1, 123, "2", "test@here.com", callback.onSuccess);
+      // This resolves the promise above
+      $rootScope.$apply();
+
+      expect(controller.amount).toBe(123);
+      expect(controller.program).toBeDefined();
+      expect(controller.program_name).toBe("Crossroads");
+      expect(callback.onSuccess).toHaveBeenCalled();
+    });
+
+    it('should not call success callback if donation fails', function() {
+      spyOn(mockPaymentService, 'donateToProgram').and.callFake(function(programId, amount, donorId, email) {
+        var deferred = $q.defer();
+        deferred.reject("Uh oh!");
+        return deferred.promise;
+      });
+
+      spyOn(callback, 'onSuccess');
+
+      controller.amount = undefined;
+      controller.program = undefined;
+      controller.program_name = undefined;
+
+      controller.donate(1, 123, "2", "test@here.com", callback.onSuccess);
+      try {
+        // This resolves the promise above
+        $rootScope.$apply();
+        fail("Expected exception was not thrown");
+      } catch(err) {
+        expect(err.message).toBeDefined();
+        expect(err.message).toMatch(/Uh oh!/);
+        expect(err.name).toBe("DonationException");
+      }
+
+      expect(controller.amount).toBeUndefined();
+      expect(controller.program).toBeUndefined();
+      expect(controller.program_name).toBeUndefined();
+      expect(callback.onSuccess).not.toHaveBeenCalled();
+    });
+  });
 });
