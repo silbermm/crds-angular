@@ -2,7 +2,7 @@
 
 (function(){
 
-  module.exports = KidsClubCStudentApplication;
+  module.exports = KidsClubStudentApplication;
 
   KidsClubStudentApplication.$inject = ['$log'];
 
