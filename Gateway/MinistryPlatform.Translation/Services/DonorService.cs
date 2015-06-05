@@ -20,10 +20,13 @@ namespace MinistryPlatform.Translation.Services
         public const string DONOR_PROCESSOR_ID = "Processor_ID";
 
         private IMinistryPlatformService ministryPlatformService;
+        private IProgramService programService;
+        private ICommunicationService communicationService;
 
-        public DonorService(IMinistryPlatformService ministryPlatformService)
+        public DonorService(IMinistryPlatformService ministryPlatformService, IProgramService programService, ICommunicationService communicationService)
         {
             this.ministryPlatformService = ministryPlatformService;
+            this.programService = programService;
         }
 
 
@@ -210,12 +213,16 @@ namespace MinistryPlatform.Translation.Services
         }
 
 
-        public void SendConfirmationEmail()
+        public void SendConfirmationEmail(int programId, int donorId)
         {
+            var program = programService.GetProgramById(programId);
+            int communicationTemplateId = program.CommunicationTemplateId;
 
-            var templateId = AppSetting("OneTimeGuestGiveTemplate");
+            //var templateId = AppSetting("OneTimeGuestGiveTemplate");
 
-            var template = CommunicationService.GetTemplate(templateId);
+            MessageTemplate template = communicationService.GetTemplate(communicationTemplateId);
+
+            ContactDonor contact = GetEmailViaDonorId(donorId);
 
             var comm = new Communication
             {
@@ -223,13 +230,39 @@ namespace MinistryPlatform.Translation.Services
                 DomainId = 1,
                 EmailBody = template.Body,
                 EmailSubject = template.Subject,
-                //FromContactId = opp.GroupContactId,
-                //FromEmailAddress = fromEmail.Email_Address,
-                //ReplyContactId = opp.GroupContactId,
-                //ReplyToEmailAddress = fromEmail.Email_Address,
-                //ToContactId = contactId,
-                //ToEmailAddress = toEmail
+                FromContactId = 5,
+                FromEmailAddress = "finance@crossroads.net",
+                ReplyContactId = 5,
+                ReplyToEmailAddress = "finance@crossroads.net",
+                ToContactId = contact.ContactId,
+                ToEmailAddress = contact.Email
             };
+        }
+
+        public ContactDonor GetEmailViaDonorId(int donorId)
+        {
+            ContactDonor donor = null;
+            try
+            {
+                var searchStr = "," + donorId.ToString();
+                var records =
+                    WithApiLogin<List<Dictionary<string, object>>>(
+                        apiToken => (ministryPlatformService.GetPageViewRecords("DonorByContactId", apiToken, searchStr, "")));
+                if (records != null && records.Count > 0)
+                {
+                    var record = records.First();
+
+                    donor.Email = record.ToString("Email");
+                    donor.ContactId = record.ToInt("Contact_ID");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(
+                    string.Format("GetEmailViaDonorId failed.  Donor Id: {0}", donorId), ex);
+            }
+
+            return donor;
         }
     }
 
