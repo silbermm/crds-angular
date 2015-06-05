@@ -8,6 +8,11 @@ describe ('PaymentService', function () {
     cvc : "123"
   };
   
+  var bank = {
+    account_number: "1234567890",
+    routing_number: "111122223"
+  }
+  
   beforeEach(function() {
     module('crossroads.give');
 
@@ -21,6 +26,14 @@ describe ('PaymentService', function () {
               return {
                 then : function(callback) {return callback({id: "tok_test", card: { last4: last4}});}
               };
+            }
+          },
+        bankAccount :
+          {
+            createToken : function(bank) {
+              return {
+                then: function(callback) { return callback({id: "tok_test"})}
+              }
             }
           }
       });
@@ -94,7 +107,39 @@ describe ('PaymentService', function () {
         });
     });
   });
-
+  
+  describe('createDonorWithBankAcct', function() {
+    var result;
+    
+    beforeEach(function() {
+      spyOn(stripe.bankAccount, 'createToken').and.callThrough();
+      
+      var postData = {
+        stripe_token_id: "tok_test",
+        email_address: "me@here.com"
+      };
+      httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor', postData)
+        .respond({
+          id: "12345",
+          stripe_customer_id: "cust_test"
+        });
+      sut.createDonorWithBankAcct(bank, "me@here.com")
+        .then(function(donor){
+          result = donor;
+        });
+    });
+    
+    it('should create a single use token', function() {
+      expect(stripe.bankAccount.createToken).toHaveBeenCalledWith(bank);
+    });
+    
+    it('should create a new donor', function() {
+      expect(result).toBeDefined();
+      expect(result.id).toEqual("12345");
+      expect(result.stripe_customer_id).toEqual("cust_test");
+    });
+  });
+  
   describe('donateToProgram', function(){
     it('should successfully create a donation', function(){
 
