@@ -357,6 +357,10 @@
                 CmsInfo: function(Page, $stateParams){
                   var path = '/volunteer-application/'+$stateParams.appType+'/';
                   return Page.get( {url: path} ).$promise;
+                },
+                Profile: 'Profile',
+                Contact: function(Profile){
+                  return Profile.Personal.get().$promise;
                 }
               }
             })

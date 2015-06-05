@@ -5,19 +5,19 @@
 
       <div class="form-group col-sm-6">
         <label for="firstname" class="control-label required">First Name</label>
-        <input type="text" class="form-control" id="firstName" placeholder="Enter first name" ng-model="volunteer.person.firstName" disabled="true">
+        <input type="text" class="form-control" id="firstName" placeholder="Enter first name" ng-value="volunteer.person.firstName" disabled="true">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
 
       <div class="form-group col-sm-6">
         <label class="control-label required" for="lastName">Last Name</label>
-        <input type="text" class="form-control" id="lastName" placeholder="Enter last name" ng-model="volunteer.person.lastName" disabled="true">
+        <input type="text" class="form-control" id="lastName" placeholder="Enter last name" ng-value="volunteer.person.lastName" disabled="true">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
 
       <div class="form-group col-sm-6">
         <label class="control-label" for="middleName">Middle Name</label>
-        <input type="text" class="form-control" id="middleName" placeholder="Enter middle name" ng-model="volunteer.person.middleName" disabled="true">
+        <input type="text" class="form-control" id="middleName" placeholder="Enter middle name" ng-value="volunteer.person.middleName" disabled="true">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
     </div>
@@ -25,7 +25,13 @@
       <div class="row">
         <div class="form-group col-sm-6">
           <label class="control-label" for="email">Email</label>
-          <input type="text" class="form-control" id="email" placeholder="Email" ng-model="volunteer.person.emailAddress" disabled="true">
+          <input type="text" class="form-control" id="email" placeholder="Email" ng-value="volunteer.person.emailAddress" disabled="true">
+          <span ng-show="false">Please provide a valid value.</span>
+        </div>
+
+        <div class="form-group col-sm-6">
+          <label class="control-label" for="nameTag">Name For Name Tag</label>
+          <input type="text" class="form-control" id="nameTag" placeholder="Enter name for name tag">
           <span ng-show="false">Please provide a valid value.</span>
         </div>
       </div>
@@ -34,8 +40,19 @@
       <div class="row">
         <div class="form-group col-sm-6">
           <label class="control-label" for="birthDate">Date of Birth</label>
-          <input type="text" class="form-control" id="birthDate" placeholder="mm/dd/yyyy" ng-model="volunteer.person.dateOfBirth" disabled="true">
+          <input type="text" class="form-control" id="birthDate" placeholder="mm/dd/yyyy" ng-value="volunteer.person.dateOfBirth" disabled="true">
           <span ng-show="false">Please provide a valid value.</span>
+        </div>
+
+        <div class="form-group col-sm-6">
+          <label class="block">Gender</label>
+          <label class="radio-inline">
+            <input type="radio" name="gender" id="gender-male" value="1" ng-value="volunteer.person.genderId" disabled="true">Male
+
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="gender" id="gender-female" value="2" ng-value="volunteer.person.genderId" disabled="true">Female
+          </label>
         </div>
       </div>
 
@@ -77,32 +94,32 @@
       <div class="row">
         <div class="form-group col-sm-6">
           <label class="control-label" for="streetAddress">Street Address</label>
-          <input type="text" class="form-control" id="streetAddress" placeholder="Street Address" ng-model="volunteer.person.addressLine1" disabled="true">
+          <input type="text" class="form-control" id="streetAddress" placeholder="Street Address" ng-value="volunteer.person.addressLine1" disabled="true">
           <span ng-show="false">Please provide a valid value.</span>
         </div>
         <div class="form-group col-sm-6">
           <label class="control-label" for="city">City</label>
-          <input type="text" class="form-control" id="city" placeholder="City" ng-model="volunteer.person.city" disabled="true">
+          <input type="text" class="form-control" id="city" placeholder="City" ng-value="volunteer.person.city" disabled="true">
           <span ng-show="false">Please provide a valid value.</span>
         </div>
         <div class="form-group col-sm-6">
           <label class="control-label" for="state">State</label>
-          <input type="text" class="form-control" id="state" placeholder="State" ng-model="volunteer.person.state" disabled="true">
+          <input type="text" class="form-control" id="state" placeholder="State" ng-value="volunteer.person.state" disabled="true">
           <span ng-show="false">Please provide a valid value.</span>
         </div>
         <div class="form-group col-sm-6">
           <label class="control-label" for="zip">Zip</label>
-          <input type="text" class="form-control" id="zip" placeholder="Zip" ng-model="volunteer.person.zip" disabled="true">
+          <input type="text" class="form-control" id="zip" placeholder="Zip" ng-value="volunteer.person.zip" disabled="true">
           <span ng-show="false">Please provide a valid value.</span>
         </div>
         <div class="form-group col-sm-6">
           <label class="control-label" for="cellPhone">Cell Phone</label>
-          <input type="text" class="form-control" id="cellPhone" placeholder="CellPhone" ng-model="volunteer.person.mobilePhone" disabled="true">
+          <input type="text" class="form-control" id="cellPhone" placeholder="CellPhone" ng-value="volunteer.person.mobilePhone" disabled="true">
           <span ng-show="false">Please provide a valid value.</span>
         </div>
         <div class="form-group col-sm-6">
           <label class="control-label" for="homePhone">Home Phone</label>
-          <input type="text" class="form-control" id="homePhone" placeholder="Home Phone" ng-model="volunteer.person.homePhone" disabled="true">
+          <input type="text" class="form-control" id="homePhone" placeholder="Home Phone" ng-value="volunteer.person.homePhone" disabled="true">
           <span ng-show="false">Please provide a valid value.</span>
         </div>
 
@@ -156,8 +173,8 @@
     </div>
     <div class="row">
       <div class="form-group col-sm-8">
-        <label class="control-label" for="promptedApplication">What prompted you to fill out an application and check us out?</label>
-        <input type="text" class="form-control" id="promptedApplication" placeholder="What prompted you to fill out an application and check us out?">
+        <label class="control-label" for="promptedApplication">Why do you want to serve?</label>
+        <input type="text" class="form-control" id="promptedApplication" placeholder="Why do you want to serve?">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
     </div>
@@ -329,16 +346,31 @@
       by me in this application, and waive my right to inspect any written material from contact with them or from the criminal background check. I have carefully read the forgoing release and know the contents thereof and I agree to this release
       as my own free act. This is a legally binding agreement which I have read and understand.</p>
     <div class="form-group col-sm-6">
-      <label class="block">Agree</label>
+      <label class="block">Parent/Guaridan Consent</label>
       <label class="radio-inline">
-        <input type="radio" value="signature" name="gender">Yes
+        <input type="radio" value="signature" name="parentSignature">Yes
       </label>
       <label class="radio-inline">
-        <input type="radio" value="signature" name="gender">No
+        <input type="radio" value="signature" name="parentSignature">No
       </label>
     </div>
     <div class="form-group col-sm-6">
-      <label class="control-label" for="signatureDate">Date</label>
+      <label class="control-label" for="parentSignatureDate">Date</label>
+      <input type="text" class="form-control" id="signatureDate" placeholder="Date">
+      <span ng-show="false">Please provide a valid value.</span>
+    </div>
+
+    <div class="form-group col-sm-6">
+      <label class="block">Student Agreement</label>
+      <label class="radio-inline">
+        <input type="radio" value="signature" name="studentSignature">Yes
+      </label>
+      <label class="radio-inline">
+        <input type="radio" value="signature" name="studentSignature">No
+      </label>
+    </div>
+    <div class="form-group col-sm-6">
+      <label class="control-label" for="studentSignatureDate">Date</label>
       <input type="text" class="form-control" id="signatureDate" placeholder="Date">
       <span ng-show="false">Please provide a valid value.</span>
     </div>

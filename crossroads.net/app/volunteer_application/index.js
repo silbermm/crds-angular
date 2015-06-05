@@ -15,5 +15,5 @@ app.factory("Opportunity", ["$resource", "Session", require('../services/opportu
 require('./kc_adult_application/kidsClubAdultApplication.template.html');
 app.directive("kidsClubAdultApplication", require('./kc_adult_application/kidsClubAdultApplication.directive'));
 
-require('./kc_child_application/kidsClubChildApplication.template.html');
-app.directive("kidsClubChildApplication", require('./kc_child_application/kidsClubChildApplication.directive'));
+require('./kc_student_application/kidsClubStudentApplication.template.html');
+app.directive("kidsClubStudentApplication", require('./kc_student_application/kidsClubStudentApplication.directive'));

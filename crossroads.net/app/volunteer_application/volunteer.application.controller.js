@@ -6,22 +6,21 @@
 
   module.exports = VolunteerApplicationController;
 
-  VolunteerApplicationController.$inject = ['$rootScope', '$scope', '$log', '$filter', 'MESSAGES', 'Session', '$stateParams', 'Profile', 'CmsInfo', '$modal', 'Opportunity'];
+  VolunteerApplicationController.$inject = ['$scope', '$log', 'MESSAGES', 'Session', '$stateParams', 'CmsInfo', 'Opportunity', 'Contact'];
 
-  function VolunteerApplicationController($rootScope, $scope, $log, $filter, MESSAGES, Session, $stateParams, Profile, CmsInfo, $modal, Opportunity) {
+  function VolunteerApplicationController($scope, $log, MESSAGES, Session, $stateParams, CmsInfo, Opportunity, Contact) {
     $log.debug("Inside VolunteerApplicationController");
     var vm = this;
 
     vm.contactId = $stateParams.id;
-    vm.opportunityResponse = opportunityResponse;
     vm.pageInfo = pageInfo(CmsInfo);
-    vm.personalInfo = personalInfo;
+    vm.person = Contact;
     vm.save = save;
     vm.showAccessDenied = false;
     vm.showAdult = false;
-    vm.showChild = false;
     vm.showContent = true;
     vm.showInvalidResponse = false;
+    vm.showStudent = false;
     vm.showSuccess = false;
     vm.showBlock = showBlock;
     vm.viewReady = false;
@@ -38,9 +37,21 @@
       } else {
         vm.showAccessDenied = false;
         opportunityResponse();
-        personalInfo();
+        applicationVersion();
       }
       vm.viewReady = true;
+    }
+
+    function applicationVersion() {
+      $log.debug("Person: " + JSON.stringify(vm.person));
+
+      if (vm.person.age >= 16) {
+        vm.showAdult = true;
+      } else if ((vm.person.age >= 14) && (vm.person.age <= 15)) {
+        vm.showStudent = true;
+      } else {
+        vm.showError = true;
+      }
     }
 
     function opportunityResponse() {
@@ -57,23 +68,6 @@
       return cmsInfo.pages[0];
     }
 
-    function personalInfo() {
-      // Initialize Person data for logged-in user
-      Profile.Personal.get(function(response) {
-        vm.person = response;
-        $log.debug("Person: " + JSON.stringify(vm.person));
-
-        if (vm.person.age >= 16) {
-          vm.showAdult = true;
-        } else if ((vm.person.age >= 14) && (vm.person.age <= 15)) {
-          vm.showChild = true;
-        } else {
-          vm.showError = true;
-        }
-        $log.debug('showAdult: ' + vm.showAdult);
-      });
-    }
-
     function save(form) {
 
     }
@@ -83,8 +77,8 @@
         case 'adult':
           return vm.showAdult && !vm.showInvalidResponse;
           break;
-        case 'child':
-          return vm.showChild && !vm.showInvalidResponse;
+        case 'student':
+          return vm.showStudent && !vm.showInvalidResponse;
           break;
         case 'no-response':
           return vm.showInvalidResponse;
