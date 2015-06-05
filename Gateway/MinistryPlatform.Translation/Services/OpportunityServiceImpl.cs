@@ -76,7 +76,7 @@ namespace MinistryPlatform.Translation.Services
         public Response GetOpportunityResponse(int contactId, int opportunityId)
         {
             var searchString = ",,,," + contactId;
-            var subpageViewRecords = MinistryPlatformService.GetSubpageViewRecords(_contactOpportunityResponses,
+            var subpageViewRecords = _ministryPlatformService.GetSubpageViewRecords(_contactOpportunityResponses,
                 opportunityId, apiLogin(), searchString);
             var record = subpageViewRecords.ToList().SingleOrDefault();
             if (record == null) return null;
