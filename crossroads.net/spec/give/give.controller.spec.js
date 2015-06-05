@@ -46,6 +46,7 @@ describe('GiveController', function() {
           };
         },
         donateToProgram: function() {},
+        updateDonorWithCard: function() {},
       };
 
       controller = $controller('GiveCtrl',
@@ -75,6 +76,65 @@ describe('GiveController', function() {
       spyOn($rootScope, "$emit");
       controller.confirmDonation();
       expect($rootScope.$emit).toHaveBeenCalledWith("notify", 15);
+    });
+  });
+
+  describe('function submitChangedBankInfo', function() {
+    var controllerGiveForm = {
+      creditCardForm: {
+        $dirty: true,
+      },
+      $valid: true,
+    };
+
+    var controllerDto = {
+      amount: 987,
+      program: {
+        ProgramId: 1,
+      },
+      email: 'tim@kriz.net',
+      donor: {
+        id: 654,
+        default_source: {
+          name: 'Tim Startsgiving',
+          last4: '98765',
+          exp_date: '1213',
+          address_zip: '90210',
+        }
+      }
+    };
+
+    var controllerCvc = '987';
+
+    it('should call updateDonorWithCard with proper values when changing card info', function() {
+      $scope.giveForm = controllerGiveForm;
+      controller.dto = controllerDto;
+      controller.cvc = controllerCvc;
+
+      spyOn(mockPaymentService, 'updateDonorWithCard').and.callFake(function(donorId, donor) {
+        var deferred = $q.defer();
+        deferred.resolve(donor);
+        return deferred.promise;
+      });
+
+      spyOn(controller, 'donate');
+
+      controller.submitChangedBankInfo();
+      // This resolves the promise above
+      $rootScope.$apply();
+
+      expect(controller.donate).toHaveBeenCalled();
+      expect(mockPaymentService.updateDonorWithCard).toHaveBeenCalledWith(
+        controllerDto.donor.id,
+        {
+          name: controllerDto.donor.default_source.name,
+          number: controllerDto.donor.default_source.last4,
+          exp_month: controllerDto.donor.default_source.exp_date.substr(0,2),
+          exp_year: controllerDto.donor.default_source.exp_date.substr(2,2),
+          cvc: controllerCvc,
+          address_zip: controllerDto.donor.default_source.address_zip
+        }
+      );
     });
   });
 
