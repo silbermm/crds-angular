@@ -46,7 +46,7 @@
     //////////////////////////
     /////// $ROOTSCOPE ///////
     //////////////////////////
-    $rootScope.mobile = screenSize.on('xs', 'sm', function(match){ $rootScope.mobile = match; });
+    $rootScope.mobile = screenSize.on('xs, sm', function(match){ $rootScope.mobile = match; });
 
     $rootScope.$on("notify", function (event, id, refId, ttl) {
       var parms = { };

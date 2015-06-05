@@ -16,6 +16,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'https://js.stripe.com/v2/',
+      'assets/dependencies.js',
       'assets/main.js',
       'node_modules/angular-mocks/angular-mocks.js',
       'node_modules/moment/moment.js',
