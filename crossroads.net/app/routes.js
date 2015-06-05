@@ -346,8 +346,7 @@
                 }
               }
             })
-            .state("volunteer-thing", {
-              // url: "{link:volunteerApplicationRouteType}:id",
+            .state("volunteer-application", {
               url: "/volunteer-application/:appType/:id",
               controller: "VolunteerApplicationController as volunteer",
               templateUrl: "volunteer_application/volunteer_application_form.html",

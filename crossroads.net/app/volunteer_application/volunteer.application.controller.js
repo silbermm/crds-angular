@@ -37,12 +37,8 @@
         vm.showAccessDenied = true;
       } else {
         vm.showAccessDenied = false;
-
         opportunityResponse();
-
-          personalInfo();
-
-
+        personalInfo();
       }
       vm.viewReady = true;
     }
