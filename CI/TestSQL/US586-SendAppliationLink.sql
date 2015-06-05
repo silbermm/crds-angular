@@ -19,7 +19,7 @@ INSERT INTO [dbo].[dp_Communications]
      VALUES
            (5
            ,'Kids\' Club Application'
-           ,'Hello there, <br /><br /> Thank you for your continued interest in serving. There\'s additional information we would like to gather from you in order to help us learn more about you. <br /> <br /> Please go to http://demo.crossroads.net/volunteer-application/kids-club/[Contact_ID] to fill out the application. <br /> <br /> If you are filling out this application on behalf of your child who\'s between the ages of 10 and 13, invite your child to join you and complete the application together. <br /><br /> Thank you,'
+           ,'Hello there, <br /><br /> Thank you for your continued interest in serving. There\'s additional information we would like to gather from you in order to help us learn more about you. <br /> <br /> Please go to http://int.crossroads.net/volunteer-application/kids-club/[Contact_ID] to fill out the application. <br /> <br /> If you are filling out this application on behalf of your child who\'s between the ages of 10 and 13, invite your child to join you and complete the application together. <br /><br /> Thank you,'
            ,1
            ,GETDATE()
            ,NULL
