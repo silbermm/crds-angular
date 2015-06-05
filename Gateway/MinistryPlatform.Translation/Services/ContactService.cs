@@ -5,6 +5,9 @@ using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Reflection;
+using log4net;
+using log4net.Repository.Hierarchy;
 
 namespace MinistryPlatform.Translation.Services
 {
@@ -12,6 +15,7 @@ namespace MinistryPlatform.Translation.Services
     {
         private readonly int _myProfilePageId = AppSettings("MyProfile");
         private readonly int contactsPageId = AppSettings("Contacts");
+        private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private IMinistryPlatformService _ministryPlatformService;
 
@@ -22,11 +26,20 @@ namespace MinistryPlatform.Translation.Services
 
         public string GetContactEmail(int contactId)
         {
-            var recordsDict = _ministryPlatformService.GetRecordDict(contactsPageId, contactId, apiLogin());
+            try
+            {
+                var recordsDict = _ministryPlatformService.GetRecordDict(contactsPageId, contactId, apiLogin());
 
-            var contactEmail = recordsDict["Email_Address"].ToString();
+                var contactEmail = recordsDict["Email_Address"].ToString();
 
-            return contactEmail;
+                return contactEmail;
+            }
+            catch (NullReferenceException ex)
+            {
+                logger.Debug(String.Format("Trying to email address of {0} failed", contactId));
+                return string.Empty;
+
+            } 
         }
 
         public MyContact GetContactById(int contactId)
