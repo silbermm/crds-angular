@@ -58,7 +58,7 @@
       Opportunity.GetResponse.get({
           id: vm.pageInfo.opportunity,
           contactId: vm.contactId
-        }).$promise
+        })
         .then(function(response) {
           vm.showInvalidResponse = ((response == null) || ((response.responseId == undefined)));
         });

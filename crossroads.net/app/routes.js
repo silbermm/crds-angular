@@ -46,7 +46,6 @@
         registerType("contentRouteType", /^\/.*/);
         registerType("signupRouteType", /\/sign-up\/.*$/);
         registerType("volunteerRouteType", /\/volunteer-sign-up\/.*$/);
-        //registerType("volunteerApplicationRouteType", /\/volunteer-application\/.*$/);
 
         //================================================
         // Check if the user is connected
