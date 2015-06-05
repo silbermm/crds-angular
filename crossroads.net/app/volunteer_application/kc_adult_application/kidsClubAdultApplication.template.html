@@ -30,13 +30,13 @@
 
       <div class="row">
         <div class="form-group col-sm-6">
-          <label class="control-label" for="email">Email</label>
+          <label class="control-label required" for="email">Email</label>
           <input type="text" class="form-control" id="email" placeholder="Email" ng-value="volunteer.person.emailAddress" disabled="true">
           <span ng-show="false">Please provide a valid value.</span>
         </div>
 
         <div class="form-group col-sm-6">
-          <label class="control-label" for="nameTag">Name For Name Tag</label>
+          <label class="control-label required" for="nameTag">Name For Name Tag</label>
           <input type="text" class="form-control" id="nameTag" placeholder="Enter name for name tag">
           <span ng-show="false">Please provide a valid value.</span>
         </div>
@@ -45,13 +45,13 @@
 
       <div class="row">
         <div class="form-group col-sm-6">
-          <label class="control-label" for="birthDate">Date of Birth</label>
+          <label class="control-label required" for="birthDate">Date of Birth</label>
           <input type="text" class="form-control" id="birthDate" placeholder="mm/dd/yyyy" ng-value="volunteer.person.dateOfBirth" disabled="true">
           <span ng-show="false">Please provide a valid value.</span>
         </div>
 
         <div class="form-group col-sm-6">
-          <label class="block">Gender</label>
+          <label class="block required">Gender</label>
           <label class="radio-inline">
             <input type="radio" name="gender" id="gender-male" value="1" ng-value="volunteer.person.genderId" disabled="true">Male
 
@@ -65,7 +65,7 @@
       <div class="row">
 
         <div class="form-group col-sm-6">
-          <label class="block">Marital Status</label>
+          <label class="block required">Marital Status</label>
           <select class="form-control col-sm-12" name="maritalStatus" ng-value="volunteer.person.maritalStatusId" disabled="true">
             <option></option>
             <option value="1">Single</option>
@@ -98,7 +98,7 @@
 
       <div class="row">
         <div class="form-group col-sm-6">
-          <label class="block">Site where you attend service</label>
+          <label class="block required">Site where you attend service</label>
           <label class="radio-inline">
             <input type="radio" value="oakley" name="siteAttend">Oakley
           </label>
@@ -119,12 +119,12 @@
 
       <div class="row">
         <div class="form-group col-sm-6">
-          <label class="control-label" for="attending">How long have you been attending Crossroads?</label>
+          <label class="control-label required" for="attending">How long have you been attending Crossroads?</label>
           <input type="text" class="form-control" id="attending" placeholder="How long have you been attending crossroads?">
           <span ng-show="false">Please provide a valid value.</span>
         </div>
         <div class="form-group col-sm-6">
-          <label class="control-label" for="serviceAttend">What Service do you attend?</label>
+          <label class="control-label required" for="serviceAttend">What Service do you attend?</label>
           <input type="text" class="form-control" id="serviceAttend" placeholder="What Service do you attend?">
           <span ng-show="false">Please provide a valid value.</span>
         </div>
@@ -133,22 +133,22 @@
 
       <div class="row">
         <div class="form-group col-sm-6">
-          <label class="control-label" for="streetAddress">Street Address</label>
+          <label class="control-label required" for="streetAddress">Street Address</label>
           <input type="text" class="form-control" id="streetAddress" placeholder="Street Address" ng-value="volunteer.person.addressLine1" disabled="true">
           <span ng-show="false">Please provide a valid value.</span>
         </div>
         <div class="form-group col-sm-6">
-          <label class="control-label" for="city">City</label>
+          <label class="control-label required" for="city">City</label>
           <input type="text" class="form-control" id="city" placeholder="City" ng-value="volunteer.person.city" disabled="true">
           <span ng-show="false">Please provide a valid value.</span>
         </div>
         <div class="form-group col-sm-6">
-          <label class="control-label" for="state">State</label>
+          <label class="control-label required" for="state">State</label>
           <input type="text" class="form-control" id="state" placeholder="State" ng-value="volunteer.person.state" disabled="true">
           <span ng-show="false">Please provide a valid value.</span>
         </div>
         <div class="form-group col-sm-6">
-          <label class="control-label" for="zip">Zip</label>
+          <label class="control-label required" for="zip">Zip</label>
           <input type="text" class="form-control" id="zip" placeholder="Zip" ng-value="volunteer.person.zip" disabled="true">
           <span ng-show="false">Please provide a valid value.</span>
         </div>
@@ -171,12 +171,12 @@
     <legend>Employer</legend>
     <div class="row">
       <div class="form-group col-sm-6">
-        <label class="control-label" for="companyName">Company Name</label>
+        <label class="control-label required" for="companyName">Company Name</label>
         <input type="text" class="form-control" id="companyName" placeholder="Company Name">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
       <div class="form-group col-sm-6">
-        <label class="control-label" for="position">Position</label>
+        <label class="control-label required" for="position">Position</label>
         <input type="text" class="form-control" id="position" placeholder="Position">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
@@ -238,7 +238,7 @@
     <legend>About You</legend>
     <div class="row">
       <div class="form-group col-sm-12">
-        <label class="block">Have you ever been arrested, convicted of or pleaded no contest to any crime?</label>
+        <label class="block required">Have you ever been arrested, convicted of or pleaded no contest to any crime?</label>
         <label class="radio-inline">
           <input type="radio" value="no" name="crime">No
         </label>
@@ -247,7 +247,7 @@
         </label>
       </div>
       <div class="form-group col-sm-12">
-        <label class="block">Have you ever been concerned that you may have an addiction to drugs, alcohol, pornography, or other addiction; or has anyone suggested that you do?</label>
+        <label class="block required">Have you ever been concerned that you may have an addiction to drugs, alcohol, pornography, or other addiction; or has anyone suggested that you do?</label>
         <label class="radio-inline">
           <input type="radio" value="no" name="addiction">No
         </label>
@@ -256,7 +256,7 @@
         </label>
       </div>
       <div class="form-group col-sm-12">
-        <label class="block">Have you ever been accused, alleged, investigated, charged or convicted of any act of neglecting,abusing, exploiting or molesting any child?</label>
+        <label class="block required">Have you ever been accused, alleged, investigated, charged or convicted of any act of neglecting,abusing, exploiting or molesting any child?</label>
         <label class="radio-inline">
           <input type="radio" value="no" name="neglect">No
         </label>
@@ -265,7 +265,7 @@
         </label>
       </div>
       <div class="form-group col-sm-12">
-        <label class="block">Have you ever been treated for or diagnosed with a psychiatric disorder?</label>
+        <label class="block required">Have you ever been treated for or diagnosed with a psychiatric disorder?</label>
         <label class="radio-inline">
           <input type="radio" value="no" name="psychiatricDisorder">No
         </label>
@@ -274,7 +274,7 @@
         </label>
       </div>
       <div class="form-group col-sm-12">
-        <label class="block">Currently, or in the past year, have you been sexually active outside of marriage?</label>
+        <label class="block required">Currently, or in the past year, have you been sexually active outside of marriage?</label>
         <label class="radio-inline">
           <input type="radio" value="no" name="sexuallyActive">No
         </label>
@@ -283,7 +283,7 @@
         </label>
       </div>
       <div class="form-group col-sm-12">
-        <label class="block">We're all in different places in our journey. And that's okay. But we ask that those who work in kindergarten through 5th grade be Christ-followers. There are opportunitites regardless of your spiritual orientation.</label>
+        <label class="block required">We're all in different places in our journey. And that's okay. But we ask that those who work in kindergarten through 5th grade be Christ-followers. There are opportunitites regardless of your spiritual orientation.</label>
 
         <div class="checkbox">
           <label>
@@ -302,7 +302,7 @@
     </div>
     <div class="row">
       <div class="form-group col-sm-8">
-        <label class="control-label" for="explainFaith">Please Explain</label>
+        <label class="control-label required" for="explainFaith">Please Explain</label>
         <input type="text" class="form-control" id="explainFaith" placeholder="Please Explain">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
@@ -340,7 +340,7 @@
       </div>
 
       <div class="form-group col-sm-6">
-        <label class="block">Site name</label>
+        <label class="block required">Site name</label>
         <label class="radio-inline">
           <input type="radio" value="oakley" name="siteAttend">Oakley
         </label>
@@ -361,7 +361,7 @@
 
     <div class="row">
       <div class="form-group col-sm-6">
-        <label class="control-label" for="serveServiceTimes">During</label>
+        <label class="control-label required" for="serveServiceTimes">During</label>
         <input type="text" class="form-control" id="serveServiceTimes" placeholder="Service Times">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
@@ -405,7 +405,7 @@
         </div>
       </div>
       <div class="form-group col-sm-12">
-        <label>Want to serve directly with kids? What age do you prefer? (check all that apply)</label>
+        <label class="required">Want to serve directly with kids? What age do you prefer? (check all that apply)</label>
         <div class="checkbox">
           <label>
             <input type="checkbox">Birth - 2 years old</label>
@@ -425,12 +425,12 @@
     <legend>Personal References</legend>
     <p class="help-text">List three adults (18 or older) you have know for at least one yaer, who are not rleated to you and have a definite knowledge of your character and ability to work with kids and students (e.g. pastor, close firend, teacher, and/or employer).</p>
     <div class="form-group col-sm-6">
-      <label class="control-label" for="referenceName-1">Name</label>
+      <label class="control-label required" for="referenceName-1">Name</label>
       <input type="text" class="form-control" id="referenceName-1" placeholder="Name">
       <span ng-show="false">Please provide a valid value.</span>
     </div>
     <div class="form-group col-sm-6">
-      <label class="control-label" for="referenceTimeKnown-1">Length of time known</label>
+      <label class="control-label required" for="referenceTimeKnown-1">Length of time known</label>
       <input type="text" class="form-control" id="referenceTimeKnown-1" placeholder="Length of time known">
       <span ng-show="false">Please provide a valid value.</span>
     </div>
@@ -450,29 +450,29 @@
       <span ng-show="false">Please provide a valid value.</span>
     </div>
     <div class="form-group col-sm-6">
-      <label class="control-label" for="referenceEmail-1">Email</label>
+      <label class="control-label required" for="referenceEmail-1">Email</label>
       <input type="text" class="form-control" id="referenceEmail-1" placeholder="Email">
       <span ng-show="false">Please provide a valid value.</span>
     </div>
     <div class="form-group col-sm-6">
-      <label class="control-label" for="referenceAssociation-1">Nature of Association</label>
+      <label class="control-label required" for="referenceAssociation-1">Nature of Association</label>
       <input type="text" class="form-control" id="referenceAssociation-1" placeholder="Nature of Association">
       <span ng-show="false">Please provide a valid value.</span>
     </div>
     <div class="form-group col-sm-6">
-      <label class="control-label" for="referenceOccupation-1">Occupation</label>
+      <label class="control-label required" for="referenceOccupation-1">Occupation</label>
       <input type="text" class="form-control" id="referenceOccupation-1" placeholder="Occupation">
       <span ng-show="false">Please provide a valid value.</span>
     </div>
 
     <!-- Reference #2 -->
     <div class="form-group col-sm-6">
-      <label class="control-label" for="referenceName-2">Name</label>
+      <label class="control-label required" for="referenceName-2">Name</label>
       <input type="text" class="form-control" id="referenceName-2" placeholder="Name">
       <span ng-show="false">Please provide a valid value.</span>
     </div>
     <div class="form-group col-sm-6">
-      <label class="control-label" for="referenceTimeKnown-2">Length of time known</label>
+      <label class="control-label required" for="referenceTimeKnown-2">Length of time known</label>
       <input type="text" class="form-control" id="referenceTimeKnown-2" placeholder="Length of time known">
       <span ng-show="false">Please provide a valid value.</span>
     </div>
@@ -492,29 +492,29 @@
       <span ng-show="false">Please provide a valid value.</span>
     </div>
     <div class="form-group col-sm-6">
-      <label class="control-label" for="referenceEmail-2">Email</label>
+      <label class="control-label required" for="referenceEmail-2">Email</label>
       <input type="text" class="form-control" id="referenceEmail-2" placeholder="Email">
       <span ng-show="false">Please provide a valid value.</span>
     </div>
     <div class="form-group col-sm-6">
-      <label class="control-label" for="referenceAssociation-2">Nature of Association</label>
+      <label class="control-label required" for="referenceAssociation-2">Nature of Association</label>
       <input type="text" class="form-control" id="referenceAssociation-2" placeholder="Nature of Association">
       <span ng-show="false">Please provide a valid value.</span>
     </div>
     <div class="form-group col-sm-6">
-      <label class="control-label" for="referenceOccupation-2">Occupation</label>
+      <label class="control-label required" for="referenceOccupation-2">Occupation</label>
       <input type="text" class="form-control" id="referenceOccupation-2" placeholder="Occupation">
       <span ng-show="false">Please provide a valid value.</span>
     </div>
 
     <!-- Reference #3 -->
     <div class="form-group col-sm-6">
-      <label class="control-label" for="referenceName-3">Name</label>
+      <label class="control-label required" for="referenceName-3">Name</label>
       <input type="text" class="form-control" id="referenceName-3" placeholder="Name">
       <span ng-show="false">Please provide a valid value.</span>
     </div>
     <div class="form-group col-sm-6">
-      <label class="control-label" for="referenceTimeKnown-3">Length of time known</label>
+      <label class="control-label required" for="referenceTimeKnown-3">Length of time known</label>
       <input type="text" class="form-control" id="referenceTimeKnown-3" placeholder="Length of time known">
       <span ng-show="false">Please provide a valid value.</span>
     </div>
@@ -534,17 +534,17 @@
       <span ng-show="false">Please provide a valid value.</span>
     </div>
     <div class="form-group col-sm-6">
-      <label class="control-label" for="referenceEmail-3">Email</label>
+      <label class="control-label required" for="referenceEmail-3">Email</label>
       <input type="text" class="form-control" id="referenceEmail-3" placeholder="Email">
       <span ng-show="false">Please provide a valid value.</span>
     </div>
     <div class="form-group col-sm-6">
-      <label class="control-label" for="referenceAssociation-3">Nature of Association</label>
+      <label class="control-label required" for="referenceAssociation-3">Nature of Association</label>
       <input type="text" class="form-control" id="referenceAssociation-3" placeholder="Nature of Association">
       <span ng-show="false">Please provide a valid value.</span>
     </div>
     <div class="form-group col-sm-6">
-      <label class="control-label" for="referenceOccupation-3">Occupation</label>
+      <label class="control-label required" for="referenceOccupation-3">Occupation</label>
       <input type="text" class="form-control" id="referenceOccupation-3" placeholder="Occupation">
       <span ng-show="false">Please provide a valid value.</span>
     </div>
@@ -554,7 +554,7 @@
       by me in this application, and waive my right to inspect any written material from contact with them or from the criminal background check. I have carefully read the forgoing release and know the contents thereof and I agree to this release
       as my own free act. This is a legally binding agreement which I have read and understand.</p>
     <div class="form-group col-sm-6">
-      <label class="block">Agree</label>
+      <label class="block required">Agree</label>
       <label class="radio-inline">
         <input type="radio" value="signature" name="gender">Yes
       </label>
@@ -563,7 +563,7 @@
       </label>
     </div>
     <div class="form-group col-sm-6">
-      <label class="control-label" for="signatureDate">Date</label>
+      <label class="control-label required" for="signatureDate">Date</label>
       <input type="text" class="form-control" id="signatureDate" placeholder="Date">
       <span ng-show="false">Please provide a valid value.</span>
     </div>
