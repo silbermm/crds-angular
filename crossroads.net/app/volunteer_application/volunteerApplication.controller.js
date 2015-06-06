@@ -15,6 +15,11 @@
     vm.contactId = $stateParams.id;
     vm.pageInfo = pageInfo(CmsInfo);
     vm.person = Contact;
+    // responseCheck, need a better way to handle
+    // we display form before OpportunityReponse is
+    // returned.  When it returns false, form is hidden
+    // and proper message display, but view flashes
+    vm.responseCheck = false;
     vm.save = save;
     vm.showAccessDenied = false;
     vm.showAdult = false;
@@ -58,8 +63,9 @@
       Opportunity.GetResponse.get({
           id: vm.pageInfo.opportunity,
           contactId: vm.contactId
-        })
+        }).$promise
         .then(function(response) {
+          vm.responseCheck = true;
           vm.showInvalidResponse = ((response == null) || ((response.responseId == undefined)));
         });
     }
@@ -75,18 +81,23 @@
     function showBlock(blockName) {
       switch (blockName) {
         case 'adult':
-          return vm.showAdult && !vm.showInvalidResponse;
+          vm.showContent = true;
+          return vm.showAdult && !vm.showInvalidResponse && vm.responseCheck;
           break;
         case 'student':
-          return vm.showStudent && !vm.showInvalidResponse;
+          vm.showContent = true;
+          return vm.showStudent && !vm.showInvalidResponse && vm.responseCheck;
           break;
         case 'no-response':
+          vm.showContent = false;
           return vm.showInvalidResponse;
           break;
         case 'denied':
+          vm.showContent = false;
           return vm.showAccessDenied;
           break;
         case 'age-error':
+          vm.showContent = false;
           return vm.showError;
           break;
         default:

@@ -359,7 +359,7 @@
             .state("volunteer-application", {
               url: "/volunteer-application/:appType/:id",
               controller: "VolunteerApplicationController as volunteer",
-              templateUrl: "volunteer_application/volunteer_application_form.html",
+              templateUrl: "volunteer_application/volunteerApplicationForm.html",
               data: { isProtected: true },
               resolve: {
                 loggedin: checkLoggedin,
