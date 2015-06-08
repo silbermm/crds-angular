@@ -2,7 +2,6 @@
 var stripe = require ('stripe');
 
 require('angular-stripe');
-require('../app.core.module')
 angular.module('crossroads.give', ['angular-stripe','crossroads.core']);
 
 require('./directives/donationDetails.directive');

@@ -1,10 +1,7 @@
 'use strict()';
 (function(){
-  
-
 
   angular.module('crossroads.core', [
-    'crossroads.auth',
     'ngResource',
     'ngSanitize',
     'ngPayments',

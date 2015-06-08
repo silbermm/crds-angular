@@ -1,5 +1,5 @@
 ﻿(function () {
-    angular.module('crossroads.auth').
+    angular.module('crossroads.core').
         factory('User', ['$resource','$log', UserService]);
 
     //By declaring api/user a resource, angular provides us with helpful verbs to perform CRUD operations. (save/update)

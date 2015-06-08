@@ -1,8 +1,6 @@
 (function(){
   require('./tools.html');
 
-  require('../app.core.module');
-
   require('./mpTools.module');
   require('./mpTools.config');
 

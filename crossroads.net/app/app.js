@@ -18,7 +18,6 @@ require('./cms/services/cms_services_module');
 
 require('./give');
 
-require('./app.core.module');
 require('./components/components.module');
 require('./mp_tools');
 
@@ -26,7 +25,6 @@ require('./mp_tools');
 (function () {
 
    angular.module("crossroads", [
-     'crossroads.auth',
      'crossroads.core',
      "crossroads.profile",
      "crossroads.filters",
