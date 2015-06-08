@@ -1,7 +1,7 @@
 require('./register_form.html');
 require('./register_controller');
 (function(){
-    angular.module('crossroads').directive('registerForm', ["$log", "AUTH_EVENTS", RegisterForm]);
+    angular.module('crossroads.auth').directive('registerForm', ["$log", "AUTH_EVENTS", RegisterForm]);
 
     function RegisterForm($log, AUTH_EVENTS){
         return {

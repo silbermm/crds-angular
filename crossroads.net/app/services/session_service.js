@@ -1,7 +1,7 @@
 "use strict";
 (function () {
 
-  angular.module("crossroads").service("Session",SessionService);
+  angular.module("crossroads.auth").service("Session",SessionService);
 
   SessionService.$inject = ['$log','$cookies', '$cookieStore'];
 

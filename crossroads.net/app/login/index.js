@@ -2,7 +2,7 @@
 
 require('./login_page.html');
 
-var app = angular.module('crossroads');
+var app = angular.module('crossroads.auth', []);
 
 app.controller("LoginCtrl", ["$scope", 
     '$rootScope',

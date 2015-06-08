@@ -7,26 +7,24 @@ var endpoint = {
 };
 
 var definePlugin = new webpack.DefinePlugin({
-    __API_ENDPOINT__: JSON.stringify(process.env.CRDS_API_ENDPOINT || "http://gatewayint.crossroads.net/gateway/"),
-    __CMS_ENDPOINT__: JSON.stringify(process.env.CRDS_CMS_ENDPOINT || "http://contentint.crossroads.net/"),
+    __API_ENDPOINT__: JSON.stringify(process.env.CRDS_API_ENDPOINT || "http://mp-int-web.cloudapp.net/gateway/"),
+    __CMS_ENDPOINT__: JSON.stringify(process.env.CRDS_CMS_ENDPOINT || "http://content.crossroads.net/"),
     __STRIPE_PUBKEY__ : JSON.stringify(process.env.CRDS_STRIPE_PUBKEY || "pk_test_TR1GulD113hGh2RgoLhFqO0M")
 });
 
 module.exports = {
     entry: {
-        main: './app/app.js'
+        core: "./app/core.js"
     },
     externals: {
-      stripe: "Stripe",
-      angular: "angular",
-      moment: "moment"
-
+      stripe: "Stripe"
     },
     context: __dirname,
     output: {
         path: './assets',
         publicPath: '/assets/',
-        filename: '[name].js'
+        filename: '[name].js',
+        sourceMapFilename: '[name].js.map'
     },
     module: {
         loaders: [
@@ -62,8 +60,6 @@ module.exports = {
                 test: /\.html$/,
                 loader: "ng-cache?prefix=[dir]"
             }
-
-      //{ test: /\.html$/,loader: "ngtemplate?module=myTemplates&relativeTo=^" + (path.resolve(__dirname, 'app/')) + "!html"}
     ]
     },
     plugins: [

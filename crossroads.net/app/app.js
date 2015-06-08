@@ -26,6 +26,7 @@ require('./mp_tools');
 (function () {
 
    angular.module("crossroads", [
+     'crossroads.auth',
      'crossroads.core',
      "crossroads.profile",
      "crossroads.filters",
@@ -97,6 +98,4 @@ require('./mp_tools');
     require('./app.run');
     require('./app.config');
     require('./routes');
-    require('./register/register_directive');
-    require('./login');
 })()

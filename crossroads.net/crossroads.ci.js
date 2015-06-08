@@ -18,6 +18,7 @@ module.exports = function(config) {
       'https://js.stripe.com/v2/',
       './node_modules/phantomjs-polyfill/bind-polyfill.js',
       'assets/dependencies.js',
+      'assets/core.js',
       'assets/main.js',
       'node_modules/angular-mocks/angular-mocks.js',
       'node_modules/moment/moment.js',

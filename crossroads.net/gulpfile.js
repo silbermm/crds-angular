@@ -5,12 +5,13 @@ var webpack = require("webpack");
 var gulpWebpack = require("gulp-webpack");
 var WebpackDevServer = require("webpack-dev-server");
 var webpackConfig = require("./webpack.config.js");
+var webpackCoreConfig = require("./webpack.core.config.js");
 var webpackDependenciesConfig = require("./webpack.dependencies.config.js");
 var svgSprite = require("gulp-svg-sprite");
 var replace = require("gulp-replace");
 var rename = require("gulp-rename");
 
-var webPackConfigs = [Object.create(webpackConfig), Object.create(webpackDependenciesConfig)];
+var webPackConfigs = [Object.create(webpackConfig), Object.create(webpackCoreConfig), Object.create(webpackDependenciesConfig)];
 
 // Start the development server
 gulp.task("default", ["webpack-dev-server"]);
