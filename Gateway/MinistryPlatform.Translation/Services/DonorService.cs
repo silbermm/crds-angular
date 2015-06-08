@@ -113,6 +113,16 @@ namespace MinistryPlatform.Translation.Services
                     string.Format("CreateDonationDistributionRecord failed.  Donation Id: {0}", donationId), e);
             }
 
+            try
+            {
+                SendConfirmationEmail(Convert.ToInt32(programId), donorId, donationAmt, setupTime);
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException(
+                    string.Format("Sending of Confirmation Email failed for Donation Id: {0}", donationId), e);
+            }
+
             return donationDistributionId;
         }
 
@@ -218,9 +228,8 @@ namespace MinistryPlatform.Translation.Services
         public void SendConfirmationEmail(int programId, int donorId, int donationAmount, DateTime setupDate)
         {
             var program = programService.GetProgramById(programId);
-            int communicationTemplateId = program.CommunicationTemplateId;
-
-            //var templateId = AppSetting("OneTimeGuestGiveTemplate");
+            //If the communcations admin does not link a message to the program, the default template will be used.
+            int communicationTemplateId = program.CommunicationTemplateId == 0 ? AppSetting("DefaultGiveConfirmationEmailTemplate") : program.CommunicationTemplateId;
 
             MessageTemplate template = communicationService.GetTemplate(communicationTemplateId);
 
