@@ -49,6 +49,9 @@
         vm.processing = false;
         vm.programsInput = programList;
         vm.dto = GiveTransferService;
+        if (!vm.dto.view ){
+          vm.dto.view = "bank";
+        };
 
         var brandCode = [];
         brandCode['Visa'] = "#cc_visa";
@@ -183,14 +186,14 @@
                   // The vm.email below is only required for guest giver, however, there
                   // is no harm in sending it for an authenticated user as well,
                   // so we'll keep it simple and send it in all cases.
-                  PaymentService.createDonorWithCard({
-                    name: vm.dto.donor.default_source.name,
-                    number: vm.dto.donor.default_source.last4,
-                    exp_month: vm.dto.donor.default_source.exp_date.substr(0,2),
-                    exp_year: vm.dto.donor.default_source.exp_date.substr(2,2),
-                    cvc: vm.cvc,
-                    address_zip: vm.dto.donor.default_source.address_zip
-                  }, vm.email)
+                  if (vm.dto.view == "cc") {
+                    PaymentService.createDonorWithCard({
+                      name: vm.dto.donor.default_source.name,
+                      number: vm.dto.donor.default_source.last4,
+                      exp_month: vm.dto.donor.default_source.exp_date.substr(0,2),
+                      exp_year: vm.dto.donor.default_source.exp_date.substr(2,2),
+                      cvc: vm.cvc
+                    }, vm.email)
                   .then(function(donor) {
                     vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email, function() {
                       $state.go("give.thank-you");
@@ -200,6 +203,25 @@
                     vm.processing = false;
                     $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
                   });
+                 };
+
+                 if (vm.dto.view == "bank") {
+                    PaymentService.createDonorWithBankAcct({
+                       country: 'US',
+                       currency: 'USD',
+                       routing_number: vm.dto.routing,
+                       account_number: vm.dto.account
+                    }, vm.email)
+                  .then(function(donor) {
+                    vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email);
+                    $state.go("give.thank-you");
+                  },
+                  function() {
+                    vm.processing = false;
+                    $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
+                  });
+                };
+
 
                 });
             }
