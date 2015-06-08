@@ -170,6 +170,21 @@
               controller: "MediaCtrl as media",
               templateUrl: "media/view-all.html"
             })
+            .state("media-music", {
+              url: "/media/music",
+              controller: "MediaCtrl as media",
+              templateUrl: "media/view-all-music.html"
+            })
+            .state("media-messages", {
+              url: "/media/messages",
+              controller: "MediaCtrl as media",
+              templateUrl: "media/view-all-messages.html"
+            })
+            .state("media-other", {
+              url: "/media/other",
+              controller: "MediaCtrl as media",
+              templateUrl: "media/view-all-other.html"
+            })
             .state("corkboard", {
               url: "/corkboard",
               controller: "CorkboardCtrl as corkboard",
