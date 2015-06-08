@@ -80,13 +80,13 @@ gulp.task("webpack:build", ["icons"], function(callback) {
 		);
 
 		// TODO: Remove once we fully support Uglification for all JS files
-		if (element.entry.dependencies) {
-			gutil.log("[start]", "adding additional plugins for " +  JSON.stringify(element.entry.dependencies));
-
-			element.plugins = element.plugins.concat(
-				new webpack.optimize.UglifyJsPlugin()
-			);
-		}
+		//if (element.entry.dependencies) {
+		//	gutil.log("[start]", "adding additional plugins for " +  JSON.stringify(element.entry.dependencies));
+        //
+		//	element.plugins = element.plugins.concat(
+		//		new webpack.optimize.UglifyJsPlugin()
+		//	);
+		//}
 	});
 
 	// run webpack
