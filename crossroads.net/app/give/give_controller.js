@@ -188,10 +188,10 @@
                   // so we'll keep it simple and send it in all cases.
                   if (vm.dto.view == "cc") {
                     PaymentService.createDonorWithCard({
-                      name: vm.nameOnCard,
-                      number: vm.ccNumber,
-                      exp_month: vm.expDate.substr(0,2),
-                      exp_year: vm.expDate.substr(2,2),
+                      name: vm.dto.donor.default_source.name,
+                      number: vm.dto.donor.default_source.last4,
+                      exp_month: vm.dto.donor.default_source.exp_date.substr(0,2),
+                      exp_year: vm.dto.donor.default_source.exp_date.substr(2,2),
                       cvc: vm.cvc
                     }, vm.email)
                   .then(function(donor) {
