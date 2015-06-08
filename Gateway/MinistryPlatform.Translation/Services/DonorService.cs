@@ -104,6 +104,7 @@ namespace MinistryPlatform.Translation.Services
                     WithApiLogin<int>(
                         apiToken =>
                             (ministryPlatformService.CreateRecord(donationDistributionPageId, distributionValues, apiToken, true)));
+                SendConfirmationEmail(Convert.ToInt32(programId),donorId,donationAmt,setupTime);
             }
             catch (Exception e)
             {
@@ -213,7 +214,7 @@ namespace MinistryPlatform.Translation.Services
         }
 
 
-        public void SendConfirmationEmail(int programId, int donorId)
+        public void SendConfirmationEmail(int programId, int donorId, int donationAmount, DateTime setupDate)
         {
             var program = programService.GetProgramById(programId);
             int communicationTemplateId = program.CommunicationTemplateId;
@@ -237,6 +238,16 @@ namespace MinistryPlatform.Translation.Services
                 ToContactId = contact.ContactId,
                 ToEmailAddress = contact.Email
             };
+
+            var mergeData = new Dictionary<string, object>
+            {
+                {"Program_Name", program.Name},
+                {"Donation_Amount", donationAmount},
+                {"Donation_Date", setupDate},
+                {"Payment_Method", "Credit Card"} //TODO hard-coded until ACH story 
+            };
+ 
+            communicationService.SendMessage(comm, mergeData);
         }
 
         public ContactDonor GetEmailViaDonorId(int donorId)
