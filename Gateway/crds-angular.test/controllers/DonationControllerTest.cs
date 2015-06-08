@@ -53,7 +53,8 @@ namespace crds_angular.test.controllers
             {
                 program_id = "3", //crossroads
                 amount = 86868,
-                donor_id = 394256
+                donor_id = 394256,
+                pymt_type = "4"
             };
 
             var donor = new ContactDonor
