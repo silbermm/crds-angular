@@ -146,8 +146,8 @@
   <fieldset class="push-bottom">
     <legend>About You</legend>
     <div class="row">
-      <div class="form-group col-sm-12 required">
-        <label class="block">Tell us where you are</label>
+      <div class="form-group col-sm-12">
+        <label class="block required">Tell us where you are</label>
 
         <div class="checkbox">
           <label>
@@ -252,128 +252,153 @@
 
   <fieldset class="push-bottom">
     <legend>Personal References</legend>
-    <p class="help-text">List two adults you have known for at least one year, who are not rleated to you and have a definite knowledge of your character and ability to work wtih kids (e.g. pastor, close friend, and/or teacher)</p>
+    <div class="row">
+      <p class="help-text col-sm-12">List two adults you have known for at least one year, who are not rleated to you and have a definite knowledge of your character and ability to work wtih kids (e.g. pastor, close friend, and/or teacher)</p>
 
-    <p class="push-bottom">Reference #1</span>
-    <div class="form-group col-sm-6">
-      <label class="control-label required" for="referenceName-1">Name</label>
-      <input type="text" class="form-control" id="referenceName-1" placeholder="Name">
-      <span ng-show="false">Please provide a valid value.</span>
-    </div>
-    <div class="form-group col-sm-6">
-      <label class="control-label required" for="referenceTimeKnown-1">Length of time known</label>
-      <input type="text" class="form-control" id="referenceTimeKnown-1" placeholder="Length of time known">
-      <span ng-show="false">Please provide a valid value.</span>
-    </div>
-    <div class="form-group col-sm-6">
-      <label class="control-label" for="referenceHomePhone-1">Home Phone</label>
-      <input type="text" class="form-control" id="referenceHomePhone-1" placeholder="Home Phone">
-      <span ng-show="false">Please provide a valid value.</span>
-    </div>
-    <div class="form-group col-sm-6">
-      <label class="control-label" for="referenceMobilePhone-1">Mobile Phone</label>
-      <input type="text" class="form-control" id="referenceMobilePhone-1" placeholder="Mobile Phone">
-      <span ng-show="false">Please provide a valid value.</span>
-    </div>
-    <div class="form-group col-sm-6">
-      <label class="control-label" for="referenceWorkPhone-1">Work Phone</label>
-      <input type="text" class="form-control" id="referenceWorkPhone-1" placeholder="Work Phone">
-      <span ng-show="false">Please provide a valid value.</span>
-    </div>
-    <div class="form-group col-sm-6">
-      <label class="control-label required" for="referenceEmail-1">Email</label>
-      <input type="text" class="form-control" id="referenceEmail-1" placeholder="Email">
-      <span ng-show="false">Please provide a valid value.</span>
-    </div>
-    <div class="form-group col-sm-6">
-      <label class="control-label required" for="referenceAssociation-1">Nature of Association</label>
-      <input type="text" class="form-control" id="referenceAssociation-1" placeholder="Nature of Association">
-      <span ng-show="false">Please provide a valid value.</span>
-    </div>
-    <div class="form-group col-sm-6">
-      <label class="control-label required" for="referenceOccupation-1">Occupation</label>
-      <input type="text" class="form-control" id="referenceOccupation-1" placeholder="Occupation">
-      <span ng-show="false">Please provide a valid value.</span>
-    </div>
+      <h4 class="col-sm-12">First Reference</h4>
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="referenceName-1">Name</label>
+        <input type="text" class="form-control" id="referenceName-1" placeholder="Name">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="referenceTimeKnown-1">Length of time known</label>
+        <input type="text" class="form-control" id="referenceTimeKnown-1" placeholder="Length of time known">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+      <div class="form-group col-sm-6">
+        <label class="control-label" for="referenceHomePhone-1">Home Phone</label>
+        <input type="text" class="form-control" id="referenceHomePhone-1" placeholder="Home Phone">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+      <div class="form-group col-sm-6">
+        <label class="control-label" for="referenceMobilePhone-1">Mobile Phone</label>
+        <input type="text" class="form-control" id="referenceMobilePhone-1" placeholder="Mobile Phone">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+      <div class="form-group col-sm-6">
+        <label class="control-label" for="referenceWorkPhone-1">Work Phone</label>
+        <input type="text" class="form-control" id="referenceWorkPhone-1" placeholder="Work Phone">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="referenceEmail-1">Email</label>
+        <input type="text" class="form-control" id="referenceEmail-1" placeholder="Email">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="referenceAssociation-1">Nature of Association</label>
+        <input type="text" class="form-control" id="referenceAssociation-1" placeholder="Nature of Association">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="referenceOccupation-1">Occupation</label>
+        <input type="text" class="form-control" id="referenceOccupation-1" placeholder="Occupation">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+    </div><!--/row-->
 
-    <!-- Reference #2 -->
-    <p class="push-bottom">Reference #2</span>
-    <div class="form-group col-sm-6">
-      <label class="control-label required" for="referenceName-2">Name</label>
-      <input type="text" class="form-control" id="referenceName-2" placeholder="Name">
-      <span ng-show="false">Please provide a valid value.</span>
-    </div>
-    <div class="form-group col-sm-6">
-      <label class="control-label required" for="referenceTimeKnown-2">Length of time known</label>
-      <input type="text" class="form-control" id="referenceTimeKnown-2" placeholder="Length of time known">
-      <span ng-show="false">Please provide a valid value.</span>
-    </div>
-    <div class="form-group col-sm-6">
-      <label class="control-label" for="referenceHomePhone-2">Home Phone</label>
-      <input type="text" class="form-control" id="referenceHomePhone-2" placeholder="Home Phone">
-      <span ng-show="false">Please provide a valid value.</span>
-    </div>
-    <div class="form-group col-sm-6">
-      <label class="control-label" for="referenceMobilePhone-2">Mobile Phone</label>
-      <input type="text" class="form-control" id="referenceMobilePhone-2" placeholder="Mobile Phone">
-      <span ng-show="false">Please provide a valid value.</span>
-    </div>
-    <div class="form-group col-sm-6">
-      <label class="control-label" for="referenceWorkPhone-2">Work Phone</label>
-      <input type="text" class="form-control" id="referenceWorkPhone-2" placeholder="Work Phone">
-      <span ng-show="false">Please provide a valid value.</span>
-    </div>
-    <div class="form-group col-sm-6">
-      <label class="control-label required" for="referenceEmail-2">Email</label>
-      <input type="text" class="form-control" id="referenceEmail-2" placeholder="Email">
-      <span ng-show="false">Please provide a valid value.</span>
-    </div>
-    <div class="form-group col-sm-6">
-      <label class="control-label required" for="referenceAssociation-2">Nature of Association</label>
-      <input type="text" class="form-control" id="referenceAssociation-2" placeholder="Nature of Association">
-      <span ng-show="false">Please provide a valid value.</span>
-    </div>
-    <div class="form-group col-sm-6">
-      <label class="control-label required" for="referenceOccupation-2">Occupation</label>
-      <input type="text" class="form-control" id="referenceOccupation-2" placeholder="Occupation">
-      <span ng-show="false">Please provide a valid value.</span>
-    </div>
+    <hr />
 
+    <div class="row">
+      <!-- Reference #2 -->
+      <h4 class="col-sm-12">Second Reference</h4>
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="referenceName-2">Name</label>
+        <input type="text" class="form-control" id="referenceName-2" placeholder="Name">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="referenceTimeKnown-2">Length of time known</label>
+        <input type="text" class="form-control" id="referenceTimeKnown-2" placeholder="Length of time known">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+      <div class="form-group col-sm-6">
+        <label class="control-label" for="referenceHomePhone-2">Home Phone</label>
+        <input type="text" class="form-control" id="referenceHomePhone-2" placeholder="Home Phone">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+      <div class="form-group col-sm-6">
+        <label class="control-label" for="referenceMobilePhone-2">Mobile Phone</label>
+        <input type="text" class="form-control" id="referenceMobilePhone-2" placeholder="Mobile Phone">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+      <div class="form-group col-sm-6">
+        <label class="control-label" for="referenceWorkPhone-2">Work Phone</label>
+        <input type="text" class="form-control" id="referenceWorkPhone-2" placeholder="Work Phone">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="referenceEmail-2">Email</label>
+        <input type="text" class="form-control" id="referenceEmail-2" placeholder="Email">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="referenceAssociation-2">Nature of Association</label>
+        <input type="text" class="form-control" id="referenceAssociation-2" placeholder="Nature of Association">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="referenceOccupation-2">Occupation</label>
+        <input type="text" class="form-control" id="referenceOccupation-2" placeholder="Occupation">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+    </div><!--/row-->
 
-    <p class="help-text">Okay, here's some formal stuff. We don't really talk like this, but we couldn't figure out how to say all this in kid-friendly language. So put your glasses on, read it and agree to it, please The information contained in this application
-      is true. I authorize any reference or church listed here to give you any information (including opinions) that they may have regarding my character and fitness for working with kids. By agreeing to this form, I also consent to a complete
-      criminal background check now an din the future. I understand my involvement with Crossroads Kids' Club is influenced by the information provided by all these sources. I release from liability for damages any person or organizations identified
-      by me in this application, and waive my right to inspect any written material from contact with them or from the criminal background check. I have carefully read the forgoing release and know the contents thereof and I agree to this release
-      as my own free act. This is a legally binding agreement which I have read and understand.</p>
-    <div class="form-group col-sm-6">
-      <label class="block required">Parent/Guaridan Consent</label>
-      <label class="radio-inline">
-        <input type="radio" value="signature" name="parentSignature">Yes
-      </label>
-      <label class="radio-inline">
-        <input type="radio" value="signature" name="parentSignature">No
-      </label>
-    </div>
-    <div class="form-group col-sm-6">
-      <label class="control-label required" for="parentSignatureDate">Date</label>
-      <input type="text" class="form-control" id="signatureDate" placeholder="Date">
-      <span ng-show="false">Please provide a valid value.</span>
-    </div>
+    <hr />
 
-    <div class="form-group col-sm-6">
-      <label class="block required">Student Agreement</label>
-      <label class="radio-inline">
-        <input type="radio" value="signature" name="studentSignature">Yes
-      </label>
-      <label class="radio-inline">
-        <input type="radio" value="signature" name="studentSignature">No
-      </label>
+    <div class="row">
+      <p class="help-text col-sm-12">Okay, here's some formal stuff. We don't really talk like this, but we couldn't figure out how to say all this in kid-friendly language. So put your glasses on, read it and agree to it, please The information contained in this application
+        is true. I authorize any reference or church listed here to give you any information (including opinions) that they may have regarding my character and fitness for working with kids. By agreeing to this form, I also consent to a complete
+        criminal background check now an din the future. I understand my involvement with Crossroads Kids' Club is influenced by the information provided by all these sources. I release from liability for damages any person or organizations identified
+        by me in this application, and waive my right to inspect any written material from contact with them or from the criminal background check. I have carefully read the forgoing release and know the contents thereof and I agree to this release
+        as my own free act. This is a legally binding agreement which I have read and understand.</p>
+      <div class="form-group col-sm-6">
+        <label class="block required">Parent/Guaridan Consent</label>
+        <label class="radio-inline">
+          <input type="radio" value="signature" name="parentSignature">Yes
+        </label>
+        <label class="radio-inline">
+          <input type="radio" value="signature" name="parentSignature">No
+        </label>
+      </div>
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="parentSignatureDate">Date</label>
+        <div class="input-group">
+          <input name="parentSignatureDate" type="text" id="parentSignatureDate" class="form-control" datepicker-popup="{{format}}" ng-required="true" close-text="Close" ng-model="parentSignatureDate" is-open="datePickers.signatureDate" datepicker-options="dateOptions" />
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-gray-light" ng-click="openFromDate($event)">
+              <i class="glyphicon glyphicon-calendar"></i>
+            </button>
+          </span>
+        </div>
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+
     </div>
-    <div class="form-group col-sm-6">
-      <label class="control-label required" for="studentSignatureDate">Date</label>
-      <input type="text" class="form-control" id="signatureDate" placeholder="Date">
-      <span ng-show="false">Please provide a valid value.</span>
-    </div>
+    <div class="row">
+      <div class="form-group col-sm-6">
+        <label class="block required">Student Agreement</label>
+        <label class="radio-inline">
+          <input type="radio" value="signature" name="studentSignature">Yes
+        </label>
+        <label class="radio-inline">
+          <input type="radio" value="signature" name="studentSignature">No
+        </label>
+      </div>
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="studentSignatureDate">Date</label>
+        <div class="input-group">
+          <input name="studentSignatureDate" type="text" id="studentSignatureDate" class="form-control" datepicker-popup="{{format}}" ng-required="true" close-text="Close" ng-model="studentSignatureDate" is-open="datePickers.signatureDate" datepicker-options="dateOptions" />
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-gray-light" ng-click="openFromDate($event)">
+              <i class="glyphicon glyphicon-calendar"></i>
+            </button>
+          </span>
+        </div>
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+    </div><!--/row-->
   </fieldset>
   <input type="submit" name="submit" value="Submit" id="submit" class="btn btn-primary push-half-bottom">
 </form>
