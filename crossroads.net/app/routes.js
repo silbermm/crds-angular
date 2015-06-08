@@ -15,6 +15,7 @@
   require('./profile/skills/profile_skills.html');
   require('./styleguide');
   require('./give');
+  require('./media');
   require('./myprofile');
   require('./content/content.html');
   require('./community_groups_signup/group_signup_form.html');
@@ -163,6 +164,11 @@
             .state("mytrips", {
               url: "/mytrips",
               templateUrl: "mytrips/mytrips.html"
+            })
+            .state("media", {
+              url: "/media",
+              controller: "MediaCtrl as media",
+              templateUrl: "media/view-all.html"
             })
             .state("corkboard", {
               url: "/corkboard",
