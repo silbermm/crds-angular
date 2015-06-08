@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -64,13 +65,23 @@ namespace MinistryPlatform.Translation.Services
 
         }
 
-        public int CreateDonationAndDistributionRecord(int donationAmt, int donorId, string programId, string charge_id, DateTime setupTime, bool registeredDonor)
+        public int CreateDonationAndDistributionRecord(int donationAmt, int donorId, string programId, string charge_id, string pymt_type, DateTime setupTime, bool registeredDonor)
         {
+            string pymt_id;
+            if (pymt_type == "cc")
+            {
+                pymt_id = "4";
+            }
+            else
+            {
+                pymt_id = "5";
+            } 
+
             var donationValues = new Dictionary<string, object>
             {
                 {"Donor_ID", donorId},
                 {"Donation_Amount", donationAmt},
-                {"Payment_Type_ID", 4}, //hardcoded as credit card until ACH stories are worked
+                {"Payment_Type_ID", pymt_id},
                 {"Donation_Date", setupTime},
                 {"Transaction_code", charge_id},
                 {"Registered_Donor", registeredDonor}

@@ -89,6 +89,7 @@ namespace MinistryPlatform.Translation.Test.Services
             var programId = "3";
             var setupDate = DateTime.Now;
             var charge_id = "ch_crds1234567";
+            var pymt_type = "cc";
             var expectedDonationId = 321321;
             var expectedDonationDistributionId = 231231;
             var donationPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Donations"]);
@@ -111,7 +112,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Registered_Donor", true}
             };
 
-            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, donorId, programId, charge_id, setupDate, true);
+            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, donorId, programId, charge_id, pymt_type, setupDate, true);
 
             _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donationPageId, expectedDonationValues, It.IsAny<string>(), true));
 

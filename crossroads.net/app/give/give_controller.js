@@ -107,7 +107,7 @@
           try
           {
             vm.processing = true;
-            vm.donate(vm.program.ProgramId, vm.amount, vm.donor.id, vm.email, function() {
+            vm.donate(vm.program.ProgramId, vm.amount, vm.donor.id, vm.email, vm.dto.view, function() {
               $state.go("give.thank-you");
             });
           }
@@ -177,7 +177,7 @@
               PaymentService.donor().get({email: $scope.give.email})
              .$promise
               .then(function(donor){
-                vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email, function() {
+                vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email, vm.dto.view, function() {
                   $state.go("give.thank-you");
                 });
 
@@ -195,7 +195,7 @@
                       cvc: vm.cvc
                     }, vm.email)
                   .then(function(donor) {
-                    vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email, function() {
+                    vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email, vm.dto.view, function() {
                       $state.go("give.thank-you");
                     });
                   },
@@ -213,8 +213,9 @@
                        account_number: vm.dto.account
                     }, vm.email)
                   .then(function(donor) {
-                    vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email);
-                    $state.go("give.thank-you");
+                    vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email, vm.dto.view, function() {
+                     $state.go("give.thank-you");
+                    });
                   },
                   function() {
                     vm.processing = false;
@@ -249,7 +250,7 @@
                    address_zip: vm.dto.donor.default_source.address_zip
                  })
                .then(function(donor) {
-                 vm.donate(vm.dto.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.dto.email, function() {
+                 vm.donate(vm.dto.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.dto.email, vm.dto.view, function() {
                    $state.go("give.thank-you");
                  });
                }),
@@ -264,14 +265,14 @@
              // If pristine, it means we did not change the bank info, so we'll
              // simply make the payment using the existing info
              vm.processing = true;
-             vm.donate(vm.dto.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.dto.email, function() {
+             vm.donate(vm.dto.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.dto.email, vm.dto.view, function() {
                $state.go("give.thank-you");
              });
            }
         };
 
-        vm.donate = function(programId, amount, donorId, email, onSuccess){
-          PaymentService.donateToProgram(programId, amount, donorId, email)
+        vm.donate = function(programId, amount, donorId, email, pymtType, onSuccess){
+          PaymentService.donateToProgram(programId, amount, donorId, email, pymtType)
             .then(function(confirmation){
               vm.amount = confirmation.amount;
               vm.program = _.find(vm.programsInput, {'ProgramId': programId});

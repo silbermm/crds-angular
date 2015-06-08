@@ -73,12 +73,12 @@ namespace crds_angular.test.controllers
                 .Returns(donor);
 
             stripeServiceMock.Setup(
-                mocked => mocked.chargeCustomer(donor.ProcessorId, createDonationDTO.amount, donor.DonorId))
+                mocked => mocked.chargeCustomer(donor.ProcessorId, createDonationDTO.amount, donor.DonorId, createDonationDTO.pymt_type))
                 .Returns(charge_id);
 
             donorServiceMock.Setup(mocked => mocked.
-                CreateDonationAndDistributionRecord(createDonationDTO.amount, donor.DonorId, 
-                    createDonationDTO.program_id, charge_id, It.IsAny<DateTime>(), true))
+                CreateDonationAndDistributionRecord(createDonationDTO.amount, donor.DonorId,
+                    createDonationDTO.program_id, createDonationDTO.pymt_type, charge_id, It.IsAny<DateTime>(), true))
                     .Returns(donationId);
             
             IHttpActionResult result = fixture.Post(createDonationDTO);
@@ -125,12 +125,12 @@ namespace crds_angular.test.controllers
             fixture.Request.Headers.Authorization = null;
             gatewayDonorServiceMock.Setup(mocked => mocked.GetContactDonorForEmail(createDonationDTO.email_address)).Returns(donor);
             stripeServiceMock.Setup(
-    mocked => mocked.chargeCustomer(donor.ProcessorId, createDonationDTO.amount, donor.DonorId))
+    mocked => mocked.chargeCustomer(donor.ProcessorId, createDonationDTO.amount, donor.DonorId, createDonationDTO.pymt_type))
     .Returns(charge_id);
 
             donorServiceMock.Setup(mocked => mocked.
                 CreateDonationAndDistributionRecord(createDonationDTO.amount, donor.DonorId,
-                    createDonationDTO.program_id, charge_id, It.IsAny<DateTime>(), false))
+                    createDonationDTO.program_id, charge_id, createDonationDTO.pymt_type, It.IsAny<DateTime>(), false))
                     .Returns(donationId);
 
             IHttpActionResult result = fixture.Post(createDonationDTO);

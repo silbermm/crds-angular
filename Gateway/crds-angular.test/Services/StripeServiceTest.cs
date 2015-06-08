@@ -139,7 +139,7 @@ namespace crds_angular.test.Services
 
             restClient.Setup(mocked => mocked.Execute<StripeCharge>(It.IsAny<IRestRequest>())).Returns(chargeResponse.Object);
 
-            var response = fixture.chargeCustomer("cust_token", 9090, 98765);
+            var response = fixture.chargeCustomer("cust_token", 9090, 98765, "cc");
 
             restClient.Verify(mocked => mocked.Execute<StripeCustomer>(
                 It.Is<IRestRequest>(o =>
@@ -178,7 +178,7 @@ namespace crds_angular.test.Services
             restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(getCustomerResponse.Object);
             try
             {
-                fixture.chargeCustomer("token", 123, 98765);
+                fixture.chargeCustomer("token", 123, 98765, "cc");
                 Assert.Fail("Should have thrown exception");
             }
             catch (StripeException e)
@@ -210,7 +210,7 @@ namespace crds_angular.test.Services
             restClient.Setup(mocked => mocked.Execute<StripeCharge>(It.IsAny<IRestRequest>())).Returns(chargeResponse.Object);
             try
             {
-                fixture.chargeCustomer("token", -900, 98765);
+                fixture.chargeCustomer("token", -900, 98765, "cc");
                 Assert.Fail("Should have thrown exception");
             }
             catch (StripeException e)

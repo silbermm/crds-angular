@@ -102,13 +102,14 @@
        return def.promise;
     }
 
-    function donateToProgram(program_id, amount, donor_id, email_address){
+    function donateToProgram(program_id, amount, donor_id, email_address, pymt_type){
       var def = $q.defer();
       var donation_request = {
         "program_id" : program_id,
         "amount" : amount,
         "donor_id" : donor_id,
-        "email_address": email_address
+        "email_address": email_address,
+        "pymt_type": pymt_type
       };
       $http({
         method: "POST",

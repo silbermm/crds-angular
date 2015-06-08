@@ -41,7 +41,7 @@ namespace crds_angular.Services
         public SourceData updateCustomerSource(string customerToken, string cardToken)
         {
             SourceData defaultSource = new SourceData();
-
+            //TODO this is HIGHLY coupled with credit card, needs to change
             var request = new RestRequest("customers/" + customerToken, Method.POST);
             request.AddParameter("source", cardToken);
 
@@ -90,7 +90,7 @@ namespace crds_angular.Services
         public SourceData getDefaultSource(string customer_token)
         {
             SourceData default_source = new SourceData();
-            
+            //TODO: this is highly coupled with credit card, needs to eb changed
             var getCustomerRequest = new RestRequest("customers/" + customer_token, Method.GET);
 
             IRestResponse<StripeCustomer> getCustomerResponse =
@@ -119,23 +119,24 @@ namespace crds_angular.Services
         }
 
 
-        public string chargeCustomer(string customer_token, int amount, int donor_id)
+        public string chargeCustomer(string customer_token, int amount, int donor_id, string pymt_type)
         {
-
-            var getCustomerRequest = new RestRequest("customers/" + customer_token, Method.GET);
-            IRestResponse<StripeCustomer> getCustomerResponse =
-                (IRestResponse<StripeCustomer>)stripeRestClient.Execute<StripeCustomer>(getCustomerRequest);
-            if (getCustomerResponse.StatusCode == HttpStatusCode.BadRequest)
-            {
-                Content content = JsonConvert.DeserializeObject<Content>(getCustomerResponse.Content);
-                throw new StripeException("Could not charge customer because customer lookup failed", content.error.type, content.error.message, content.error.code);
-            }
+            //TODO - do we need to get the customer?  Only when using the default source?
+            //var getCustomerRequest = new RestRequest("customers/" + customer_token, Method.GET);
+            //IRestResponse<StripeCustomer> getCustomerResponse =
+            //    (IRestResponse<StripeCustomer>)stripeRestClient.Execute<StripeCustomer>(getCustomerRequest);
+            //if (getCustomerResponse.StatusCode == HttpStatusCode.BadRequest)
+            //{
+            //    Content content = JsonConvert.DeserializeObject<Content>(getCustomerResponse.Content);
+            //    throw new StripeException("Could not charge customer because customer lookup failed", content.error.type, content.error.message, content.error.code);
+            //}
 
             var chargeRequest = new RestRequest("charges", Method.POST);
             chargeRequest.AddParameter("amount", amount * 100);
             chargeRequest.AddParameter("currency", "usd");
-            chargeRequest.AddParameter("source", getCustomerResponse.Data.default_source);
-            chargeRequest.AddParameter("customer", getCustomerResponse.Data.id);
+           // chargeRequest.AddParameter("source", getCustomerResponse.Data.default_source);
+            //chargeRequest.AddParameter("customer", getCustomerResponse.Data.id);
+            chargeRequest.AddParameter("customer", customer_token);
             chargeRequest.AddParameter("description", "Donor ID #" + donor_id);
 
             IRestResponse<StripeCharge> chargeResponse =
