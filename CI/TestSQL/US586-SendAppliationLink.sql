@@ -32,3 +32,8 @@ INSERT INTO [dbo].[dp_Communications]
            ,1
            ,NULL)
 GO
+
+UPDATE [dbo].[dp_Sub_Pages]
+SET [Default_Field_List] = 'Attribute_ID_Table_Attribute_Type_ID_Table.Attribute_Type,Attribute_ID_Table.Attribute_Name,Group_Attributes.Start_Date,Group_Attributes.End_Date, Group_Attributes.[Order]'
+WHERE [Sub_Page_ID] = 303
+GO
