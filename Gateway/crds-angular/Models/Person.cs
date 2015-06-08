@@ -15,6 +15,9 @@ namespace crds_angular.Models
         [JsonProperty(PropertyName = "addressLine2")]
         public string AddressLine2 { get; set; }
 
+        [JsonProperty(PropertyName = "age")]
+        public int Age { get; set; }
+
         [JsonProperty(PropertyName = "anniversaryDate")]
         public string AnniversaryDate { get; set; }
 
