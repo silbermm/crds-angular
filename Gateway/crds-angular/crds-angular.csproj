@@ -254,6 +254,7 @@
     <Compile Include="Models\Crossroads\Opportunity\OpportunityCapacityDto.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityGroup.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityGroupParticipant.cs" />
+    <Compile Include="Models\Crossroads\Opportunity\OpportunityResponseDto.cs" />
     <Compile Include="Models\Crossroads\PartID.cs" />
     <Compile Include="Models\Crossroads\GroupDTO.cs" />
     <Compile Include="Models\Crossroads\AccountInfo.cs" />
@@ -292,6 +293,7 @@
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\DonorService.cs" />
     <Compile Include="Services\GroupService.cs" />
+    <Compile Include="Services\Interfaces\IAccountService.cs" />
     <Compile Include="Services\Interfaces\IDonorService.cs" />
     <Compile Include="Services\Interfaces\IGroupService.cs" />
     <Compile Include="Services\Interfaces\IServeService.cs" />

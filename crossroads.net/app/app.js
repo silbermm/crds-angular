@@ -8,6 +8,7 @@ require('./templates/footer.html');
 require('./templates/header.html');
 require('./templates/brand-bar.html');
 require('./templates/favicons.html');
+require('./templates/head.html');
 
 require('../styles/main.scss');
 require('./profile');

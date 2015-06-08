@@ -3,6 +3,7 @@ using AutoMapper;
 using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Opportunity;
 using MinistryPlatform.Models;
+using Response = MinistryPlatform.Models.Response;
 
 namespace crds_angular.App_Start
 {
@@ -34,6 +35,17 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.LastName, opts => opts.MapFrom(src => src.LastName))
                 .ForMember(dest => dest.NickName, opts => opts.MapFrom(src => src.NickName))
                 .ForMember(dest => dest.ParticipantId, opts => opts.MapFrom(src => src.ParticipantId));
+
+            Mapper.CreateMap<Response, OpportunityResponseDto>()
+                .ForMember(dest => dest.Closed, opts => opts.MapFrom(src => src.Closed))
+                .ForMember(dest => dest.Comments, opts => opts.MapFrom(src => src.Comments))
+                .ForMember(dest => dest.EventId, opts => opts.MapFrom(src => src.Event_ID))
+                .ForMember(dest => dest.OpportunityId, opts => opts.MapFrom(src => src.Opportunity_ID))
+                .ForMember(dest => dest.ParticipantId, opts => opts.MapFrom(src => src.Participant_ID))
+                .ForMember(dest => dest.ResponseDate, opts => opts.MapFrom(src => src.Response_Date))
+                .ForMember(dest => dest.ResponseId, opts => opts.MapFrom(src => src.Response_ID))
+                .ForMember(dest => dest.ResponseResultId, opts => opts.MapFrom(src => src.Response_Result_ID));
+
 
         }
     }

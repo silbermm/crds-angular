@@ -22,6 +22,7 @@
   require('./go_trip_giving');
   require('./corkboard');
   require('./volunteer_signup');
+  require('./volunteer_application');
 
   var getCookie = require('./utilities/cookies');
 
@@ -352,6 +353,24 @@
                 Page: 'Page',
                 CmsInfo: function(Page, $stateParams){
                   return Page.get( {url: $stateParams.link} ).$promise;
+                }
+              }
+            })
+            .state("volunteer-application", {
+              url: "/volunteer-application/:appType/:id",
+              controller: "VolunteerApplicationController as volunteer",
+              templateUrl: "volunteer_application/volunteerApplicationForm.html",
+              data: { isProtected: true },
+              resolve: {
+                loggedin: checkLoggedin,
+                Page: 'Page',
+                CmsInfo: function(Page, $stateParams){
+                  var path = '/volunteer-application/'+$stateParams.appType+'/';
+                  return Page.get( {url: path} ).$promise;
+                },
+                Profile: 'Profile',
+                Contact: function(Profile){
+                  return Profile.Personal.get().$promise;
                 }
               }
             })

@@ -109,5 +109,22 @@ namespace crds_angular.Controllers.API
                 return Ok(oppGrp);
             });
         }
+
+        [ResponseType(typeof (OpportunityResponseDto))]
+        [Route("api/opportunity/getResponseForOpportunity/{id}/{contactId}")]
+        public IHttpActionResult GetResponseForOpportunity(int id, int contactId)
+        {
+            try
+            {
+                var response = _opportunityService.GetOpportunityResponse(contactId, id);
+                var mapped = Mapper.Map<Response, OpportunityResponseDto>(response);
+                return Ok(mapped);
+            }
+            catch (Exception exception)
+            {
+                var apiError = new ApiErrorDto("Get Response For Opportunity", exception);
+                throw new HttpResponseException(apiError.HttpResponseMessage);
+            }
+        }
     }
 }
