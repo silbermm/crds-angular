@@ -1,0 +1,31 @@
+<div class="form-group" >
+    <div class="btn-group btn-group-sm account-type form-group" role="group">
+        <button type="button" class="btn btn-ghost" ng-model="give.dto.view" btn-radio="'bank'">Bank Account</button>
+        <button type="button" class="btn btn-ghost" ng-model="give.dto.view" btn-radio="'cc'">Credit Card</button>
+    </div>
+
+    <span>
+  <a ui-sref="content({link:'/confidentiality-and-security/'})" target="_blank">
+            <svg viewBox="0 0 21 32" class="icon icon-lock"><use xlink:href="#lock"></use></svg>
+        </a>
+    </span>
+
+    <section class="bank-section" ng-if="give.dto.view=='bank'">
+    	<bank-info></bank-info>
+     </section>
+
+    <section ng-if="give.dto.view=='cc'" >
+      <credit-card-info ng-init="give.dto" 
+                        cvc="give.cvc" 
+                        exp-date="give.dto.donor.default_source.exp_date" 
+                        cc-number="give.dto.donor.default_source.last4" 
+                        billing-zip-code="give.dto.donor.default_source.address_zip" 
+                        bankinfo-submitted="give.bankinfoSubmitted" 
+                        name-on-card="give.dto.donor.default_source.name" 
+                        donor="give.donor" 
+                        default-source="give.dto.donor.default_source" 
+                        change-account-info="give.dto.changeAccountInfo" 
+                        email="give.email">
+      </credit-card-info>
+    </section>
+</div>

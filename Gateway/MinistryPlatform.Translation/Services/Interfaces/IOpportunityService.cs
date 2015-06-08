@@ -15,6 +15,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         int DeleteResponseToOpportunities(int participantId, int opportunityId, int eventId);
         int RespondToOpportunity(string token, int opportunityId, string comments);
         Response GetMyOpportunityResponses(int contactId, int opportunityId, string token);
+        Response GetOpportunityResponse(int contactId, int opportunityId);
         Response GetOpportunityResponse(int opportunityId, int eventId, Participant participant);
         List<Response> GetOpportunityResponses(int opportunityId, string token);
         void RespondToOpportunity(RespondToOpportunityDto opportunityResponse);

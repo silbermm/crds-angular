@@ -1,36 +1,27 @@
 <div class="col-sm-2 col-sm-push-10 gray-lighter clearfix">
 
-  <div collapse="isCollapsed">
-
-    <div ng-click="toggleCollapse()">
-      <div class="filter-clear" ng-show='$root.mobile'>
-        <svg viewBox="0 0 25 32" class="icon icon-plus" ng-show="isCollapsed">
-          <use xlink:href="#plus"></use>
-        </svg>
-        <svg viewBox="0 0 25 32" class="icon icon-minus" ng-show="!isCollapsed">
-          <use xlink:href="#minus"></use>
-        </svg>
-      </div>
-      <h5> Date Range </h5>
+  <div ng-click="toggleDateCollapse()">
+    <div class="filter-clear" ng-show='$root.mobile'>
+      <svg viewBox="0 0 25 32" class="icon icon-plus" ng-show="isDateCollapsed">
+        <use xlink:href="#plus"></use>
+      </svg>
+      <svg viewBox="0 0 25 32" class="icon icon-minus" ng-show="!isDateCollapsed">
+        <use xlink:href="#minus"></use>
+      </svg>
     </div>
+    <h5> Date Range </h5>
+  </div>
 
-
-    <form name='filterdates' ng-submit="readyFilterByDate()" novalidate>        
+  <div collapse="isDateCollapsed">
+    <form name='filterdates' ng-submit="readyFilterByDate()" novalidate>
       <div class="push-half-bottom filter-group">
         <!-- From -->
-        <div class="form-group" ng-class="{'has-error': isFromError()}" >
+        <div class="form-group" ng-class="{'has-error': isFromError()}">
           <label>From:</label>
           <div class="input-group">
-            <input name="fromdate" type="text"
-                   class="form-control"
-                   datepicker-popup="{{format}}"
-                   ng-required="true"
-                   close-text="Close"
-                   ng-model="filterFromDate"
-                   is-open="datePickers.fromOpened"
-                   datepicker-options="dateOptions" />
+            <input name="fromdate" type="text" class="form-control" datepicker-popup="{{format}}" ng-required="true" close-text="Close" ng-model="filterFromDate" is-open="datePickers.fromOpened" datepicker-options="dateOptions" />
             <span class="input-group-btn">
-              <button type="button" class="btn btn-default" ng-click="openFromDate($event)">
+              <button type="button" class="btn btn-gray-light" ng-click="openFromDate($event)">
                 <i class="glyphicon glyphicon-calendar"></i>
               </button>
             </span>
@@ -39,13 +30,13 @@
           <span ng-messages="filterdates.fromdate.$error" ng-show="isFromError()">
             <span ng-message="fromDateToLarge" >
               <span ng-bind-html="$root.messages[$root.MESSAGES.fromDateToLarge].message | html"></span>
-            </span>
-            <span ng-message="required">
+          </span>
+          <span ng-message="required">
               <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
-            </span>
-            <span ng-message="date">
+          </span>
+          <span ng-message="date">
               <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
-            </span>
+          </span>
           </span>
         </div>
         <!--/form-group-->
@@ -54,98 +45,92 @@
         <div class="form-group" ng-class="{'has-error': isToError()}">
           <label>To:</label>
           <div class="input-group">
-            <input name="todate"
-                   type="text"
-                   class="form-control"
-                   datepicker-popup="{{::format}}"
-                   ng-required="true"
-                   close-text="Close"
-                   ng-model="lastDate"
-                   is-open="datePickers.toOpened"
-                   datepicker-options="dateOptions" />
+            <input name="todate" type="text" class="form-control" datepicker-popup="{{::format}}" ng-required="true" close-text="Close" ng-model="lastDate" is-open="datePickers.toOpened" datepicker-options="dateOptions" />
             <span class="input-group-btn">
-              <button type="button" class="btn btn-default" ng-click="openToDate($event)">
+              <button type="button" class="btn btn-gray-light" ng-click="openToDate($event)">
                 <i class="glyphicon glyphicon-calendar"></i>
               </button>
             </span>
           </div>
           <!--/input-group-->
-          <span ng-messages="filterdates.todate.$error" ng-show="isToError()" >
+          <span ng-messages="filterdates.todate.$error" ng-show="isToError()">
             <span ng-message="fromDate">
               <span ng-bind-html="$root.messages[$root.MESSAGES.toDateToSmall].message | html"> </span>
-            </span>
-            <span ng-message="required">
+          </span>
+          <span ng-message="required">
               <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
-            </span>
-            <span ng-message="date">
+          </span>
+          <span ng-message="date">
               <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
-            </span>
+          </span>
           </span>
         </div>
         <!--/form-group-->
         <button type="submit" class="btn btn-primary btn-block"> Apply </input>
-       </div>
-       <!--/push-bottom-->
-    </form>
-
-    <div ng-click="toggleCollapse()">
-      <div class="filter-clear" ng-show='$root.mobile'>
-        <svg viewBox="0 0 25 32" class="icon icon-plus" ng-show="isCollapsed">
-          <use xlink:href="#plus"></use>
-        </svg>
-        <svg viewBox="0 0 25 32" class="icon icon-minus" ng-show="!isCollapsed">
-          <use xlink:href="#minus"></use>
-        </svg>
       </div>
-      <h5>Filter Opportunities
+      <!--/push-bottom-->
+    </form>
+  </div>
+
+  <div ng-click="toggleFilterCollapse()">
+    <div class="filter-clear" ng-show='$root.mobile'>
+      <svg viewBox="0 0 25 32" class="icon icon-plus" ng-show="isFilterCollapsed">
+        <use xlink:href="#plus"></use>
+      </svg>
+      <svg viewBox="0 0 25 32" class="icon icon-minus" ng-show="!isFilterCollapsed">
+        <use xlink:href="#minus"></use>
+      </svg>
+    </div>
+    <h5>Filter Opportunities
         <a href="" data-ng-click="clearFilters()" class="filter-reset" ng-show="isFilterSet()" stop-event> Clear</a>
       </h5>
+  </div>
+
+  <div collapse="isFilterCollapsed">
+    <div class="push-half-bottom filter-group" ng-if="uniqueMembers.length > 1">
+      <div class="checkbox" data-ng-repeat="member in uniqueMembers">
+        <label>
+          <input type="checkbox" ng-model="member.selected" ng-change="toggleFamilyMember(member)"> {{member.name + " " + member.lastName}}
+        </label>
+      </div>
     </div>
+    <!--/push-bottom-->
 
-      <div class="push-half-bottom filter-group" ng-if="uniqueMembers.length > 1">
-            <div class="checkbox" data-ng-repeat="member in uniqueMembers">
-                <label>
-                    <input type="checkbox" ng-model="member.selected" ng-change="toggleFamilyMember(member)"> {{member.name + " " + member.lastName}}
-                </label>
-            </div>
-        </div>
-        <!--/push-bottom-->
-
-        <div class="push-half-bottom filter-group" ng-if="uniqueTeams.length > 1">
-            <div class="checkbox" data-ng-repeat="team in uniqueTeams">
-                <label>
-                    <input type="checkbox" ng-model="team.selected" ng-change="toggleTeam(team)"> {{team.name}}
-                </label>
-            </div>
-        </div>
-        <!--/push-bottom-->
-
-        <div class="push-half-bottom filter-group">
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" ng-model="uniqueSignUps[0].selected" ng-change="toggleSignedUp(uniqueSignUps[0])"> <span> Confirmed </span>
-                </label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" ng-model="uniqueSignUps[1].selected" ng-change="toggleSignedUp(uniqueSignUps[1])"> Declined
-                </label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" ng-model="uniqueSignUps[2].selected" ng-change="toggleSignedUp(uniqueSignUps[2])"> Unconfirmed
-                </label>
-            </div>
-        </div>
-        <!--/push-bottom-->
-
-        <div class="push-half-bottom filter-group" ng-if="uniqueTimes.length > 1">
-            <div class="checkbox" data-ng-repeat="time in uniqueTimes">
-                <label>
-                    <input type="checkbox" ng-model="time.selected" ng-change="toggleTime(time)"> {{ time.time | time }}
-                </label>
-            </div>
-        </div>
-        <!--/push-bottom-->
+    <div class="push-half-bottom filter-group" ng-if="uniqueTeams.length > 1">
+      <div class="checkbox" data-ng-repeat="team in uniqueTeams">
+        <label>
+          <input type="checkbox" ng-model="team.selected" ng-change="toggleTeam(team)"> {{team.name}}
+        </label>
+      </div>
     </div>
+    <!--/push-bottom-->
+
+    <div class="push-half-bottom filter-group">
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" ng-model="uniqueSignUps[0].selected" ng-change="toggleSignedUp(uniqueSignUps[0])"> <span> Confirmed </span>
+        </label>
+      </div>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" ng-model="uniqueSignUps[1].selected" ng-change="toggleSignedUp(uniqueSignUps[1])"> Declined
+        </label>
+      </div>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" ng-model="uniqueSignUps[2].selected" ng-change="toggleSignedUp(uniqueSignUps[2])"> Unconfirmed
+        </label>
+      </div>
+    </div>
+    <!--/push-bottom-->
+
+    <div class="push-half-bottom filter-group" ng-if="uniqueTimes.length > 1">
+      <div class="checkbox" data-ng-repeat="time in uniqueTimes">
+        <label>
+          <input type="checkbox" ng-model="time.selected" ng-change="toggleTime(time)"> {{ time.time | time }}
+        </label>
+      </div>
+    </div>
+    <!--/push-bottom-->
+  </div>
 </div>

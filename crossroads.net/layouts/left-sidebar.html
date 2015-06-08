@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="crossroads">
+
+<head>
+  <ng-include src="'templates/head.html'"> </ng-include>
+  <link href="../assets/main.css" rel="stylesheet" />
+</head>
+
+<body ng-controller="appController as app" ng-class="app.asideState.position">
+  <div growl class="crossroads-growl">
+  </div>
+
+  <div>
+
+    <ng-include src="'templates/header.html'"></ng-include>
+
+    <div class="container main">
+        <div class="row">
+            <div class="col-md-4">
+              <div class="list-group">
+                <a href="#" class="list-group-item active">Link</a>
+                <a href="#" class="list-group-item">Link</a>
+                <a href="#" class="list-group-item">Link</a>
+                <a href="#" class="list-group-item">Link</a>
+                <a href="#" class="list-group-item">Link</a>
+                <a href="#" class="list-group-item">Link</a>
+                <a href="#" class="list-group-item">Link</a>
+                <a href="#" class="list-group-item">Link</a>
+              </div>
+
+            </div>
+            <div class="col-md-8">
+
+              <div class="jumbotron">
+                <h1>Left Sidebar Layout</h1>
+                <p>This is an example of the left sidebar screen template. This template contains the common header and footer and is contained within a fixed width wrapper. The main page copy is on the right and sidebar content on the left.</p>
+              </div><!--/jumbotron-->
+
+            </div>
+        </div>
+    </div><!--/container-->
+
+    <ng-include src="'templates/footer.html'"></ng-include>
+
+  </div>
+
+</body>
+
+  <script src="https://js.stripe.com/v2/"></script>
+  <script src="../assets/main.js"></script>
+
+</html>

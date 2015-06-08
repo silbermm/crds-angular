@@ -22,6 +22,7 @@
   require('./go_trip_giving');
   require('./corkboard');
   require('./volunteer_signup');
+  require('./volunteer_application');
 
   var getCookie = require('./utilities/cookies');
 
@@ -244,6 +245,17 @@
                  url: "/account",
                  templateUrl: "give/account.html"
            })
+           .state("give.change", {
+                 url: "/change",
+                 templateUrl: "give/change.html",
+                 resolve:{
+                 programList:  function(getPrograms){
+                   // TODO The number one relates to the programType in MP. At some point we should fetch
+                   // that number from MP based in human readable input here.
+                   return getPrograms.Programs.get({programType: 1}).$promise;
+                 }
+               }
+           })
            .state("give.thank-you", {
              url: "/thank-you",
              templateUrl: "give/thank_you.html"
@@ -341,6 +353,24 @@
                 Page: 'Page',
                 CmsInfo: function(Page, $stateParams){
                   return Page.get( {url: $stateParams.link} ).$promise;
+                }
+              }
+            })
+            .state("volunteer-application", {
+              url: "/volunteer-application/:appType/:id",
+              controller: "VolunteerApplicationController as volunteer",
+              templateUrl: "volunteer_application/volunteerApplicationForm.html",
+              data: { isProtected: true },
+              resolve: {
+                loggedin: checkLoggedin,
+                Page: 'Page',
+                CmsInfo: function(Page, $stateParams){
+                  var path = '/volunteer-application/'+$stateParams.appType+'/';
+                  return Page.get( {url: path} ).$promise;
+                },
+                Profile: 'Profile',
+                Contact: function(Profile){
+                  return Profile.Personal.get().$promise;
                 }
               }
             })

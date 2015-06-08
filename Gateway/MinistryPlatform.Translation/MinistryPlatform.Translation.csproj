@@ -90,6 +90,7 @@
   <ItemGroup>
     <Compile Include="Exceptions\GroupFullException.cs" />
     <Compile Include="Exceptions\MultipleRecordsException.cs" />
+    <Compile Include="Exceptions\TemplateParseException.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Services\AuthenticationServiceImpl.cs" />
     <Compile Include="Services\AuthenticationService.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Services\GroupParticipantService.cs" />
     <Compile Include="Services\GroupService.cs" />
     <Compile Include="Services\Interfaces\IAuthenticationService.cs" />
+    <Compile Include="Services\Interfaces\ICommunicationService.cs" />
     <Compile Include="Services\Interfaces\IContactRelationshipService.cs" />
     <Compile Include="Services\Interfaces\IContactService.cs" />
     <Compile Include="Services\Interfaces\IDonorService.cs" />
@@ -117,6 +119,7 @@
     <Compile Include="Services\Interfaces\IParticipantService.cs" />
     <Compile Include="Services\Interfaces\IProgramService.cs" />
     <Compile Include="Services\LookupService.cs" />
+    <Compile Include="Services\MessageInfo.cs" />
     <Compile Include="Services\MinistryPlatformService.cs" />
     <Compile Include="Services\MinistryPlatformServiceImpl.cs" />
     <Compile Include="Services\OpportunityService.cs" />

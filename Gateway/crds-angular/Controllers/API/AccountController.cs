@@ -11,17 +11,18 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Diagnostics;
+using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Interfaces;
 
 namespace crds_angular.Controllers.API
 {
     public class AccountController : MPAuth
-    {
-        private IConfigurationWrapper _configurationWrapper;
+    {      
+        private readonly IAccountService _accountService;
 
-        public AccountController(IConfigurationWrapper configurationWrapper)
+        public AccountController(IAccountService accountService)
         {
-            this._configurationWrapper = configurationWrapper;
+            _accountService = accountService;
         }
         
 
@@ -33,8 +34,7 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
-                    AccountService accountService = new AccountService(_configurationWrapper);
-                    AccountInfo info = accountService.getAccountInfo(token);
+                    AccountInfo info = _accountService.getAccountInfo(token);
                     Debug.WriteLine("in the account controller");
                     return Ok(info);
                 }
@@ -54,8 +54,8 @@ namespace crds_angular.Controllers.API
 
             return Authorized(token =>
             {
-                AccountService accountService = new AccountService(_configurationWrapper);
-                if (accountService.ChangePassword(token, password.password))
+     
+                if (_accountService.ChangePassword(token, password.password))
                 {
                     return Ok();
                 }
@@ -68,9 +68,8 @@ namespace crds_angular.Controllers.API
         {
 
             return Authorized(token =>
-            {
-                AccountService accountService = new AccountService(_configurationWrapper);
-                accountService.SaveCommunicationPrefs(token, accountInfo);
+            {   
+                _accountService.SaveCommunicationPrefs(token, accountInfo);
                 return Ok();
             });
             
