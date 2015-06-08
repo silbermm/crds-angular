@@ -27,6 +27,7 @@ namespace MinistryPlatform.Translation.Services
         {
             this.ministryPlatformService = ministryPlatformService;
             this.programService = programService;
+            this.communicationService = communicationService;
         }
 
 
@@ -252,7 +253,7 @@ namespace MinistryPlatform.Translation.Services
 
         public ContactDonor GetEmailViaDonorId(int donorId)
         {
-            ContactDonor donor = null;
+            ContactDonor donor = new ContactDonor();
             try
             {
                 var searchStr = "," + donorId.ToString();
