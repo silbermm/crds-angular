@@ -1,0 +1,379 @@
+<form class="ng-pristine ng-valid-date ng-invalid ng-invalid-required ng-valid-time ng-valid-date-disabled ng-valid-maxlength" _lpchecked="1">
+  <fieldset class="push-bottom">
+    <legend>General Info</legend>
+    <div class="row">
+
+      <div class="form-group col-sm-6">
+        <label for="firstname" class="control-label required">First Name</label>
+        <input type="text" class="form-control" id="firstName" placeholder="Enter first name" ng-value="volunteer.person.firstName" disabled="true">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="lastName">Last Name</label>
+        <input type="text" class="form-control" id="lastName" placeholder="Enter last name" ng-value="volunteer.person.lastName" disabled="true">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+
+      <div class="form-group col-sm-6">
+        <label class="control-label" for="middleName">Middle Name</label>
+        <input type="text" class="form-control" id="middleName" placeholder="Enter middle name" ng-value="volunteer.person.middleName" disabled="true">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+    </div>
+
+      <div class="row">
+        <div class="form-group col-sm-6">
+          <label class="control-label required" for="email">Email</label>
+          <input type="text" class="form-control" id="email" placeholder="Email" ng-value="volunteer.person.emailAddress" disabled="true">
+          <span ng-show="false">Please provide a valid value.</span>
+        </div>
+
+        <div class="form-group col-sm-6">
+          <label class="control-label required" for="nameTag">Name For Name Tag</label>
+          <input type="text" class="form-control" id="nameTag" placeholder="Enter name for name tag">
+          <span ng-show="false">Please provide a valid value.</span>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="form-group col-sm-6">
+          <label class="control-label required" for="birthDate">Date of Birth</label>
+          <input type="text" class="form-control" id="birthDate" placeholder="mm/dd/yyyy" ng-value="volunteer.person.dateOfBirth" disabled="true">
+          <span ng-show="false">Please provide a valid value.</span>
+        </div>
+
+        <div class="form-group col-sm-6">
+          <label class="block required">Gender</label>
+          <label class="radio-inline">
+            <input type="radio" name="gender" id="gender-male" value="1" ng-value="volunteer.person.genderId" disabled="true">Male
+
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="gender" id="gender-female" value="2" ng-value="volunteer.person.genderId" disabled="true">Female
+          </label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-sm-6">
+          <label class="block required">Site where you attend service</label>
+          <label class="radio-inline">
+            <input type="radio" value="oakley" name="siteAttend">Oakley
+          </label>
+          <label class="radio-inline">
+            <input type="radio" value="florence" name="siteAttend">Florence
+          </label>
+          <label class="radio-inline">
+            <input type="radio" value="west side" name="siteAttend">West Side
+          </label>
+          <label class="radio-inline">
+            <input type="radio" value="mason" name="siteAttend">Mason
+          </label>
+          <label class="radio-inline">
+            <input type="radio" value="clifton" name="siteAttend">Clifton
+          </label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-sm-6">
+          <label class="control-label required" for="attending">How long have you been attending Crossroads?</label>
+          <input type="text" class="form-control" id="attending" placeholder="How long have you been attending crossroads?">
+          <span ng-show="false">Please provide a valid value.</span>
+        </div>
+        <div class="form-group col-sm-6">
+          <label class="control-label required" for="serviceAttend">What Service do you attend?</label>
+          <input type="text" class="form-control" id="serviceAttend" placeholder="What Service do you attend?">
+          <span ng-show="false">Please provide a valid value.</span>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="form-group col-sm-6">
+          <label class="control-label required" for="streetAddress">Street Address</label>
+          <input type="text" class="form-control" id="streetAddress" placeholder="Street Address" ng-value="volunteer.person.addressLine1" disabled="true">
+          <span ng-show="false">Please provide a valid value.</span>
+        </div>
+        <div class="form-group col-sm-6">
+          <label class="control-label required" for="city">City</label>
+          <input type="text" class="form-control" id="city" placeholder="City" ng-value="volunteer.person.city" disabled="true">
+          <span ng-show="false">Please provide a valid value.</span>
+        </div>
+        <div class="form-group col-sm-6">
+          <label class="control-label required" for="state">State</label>
+          <input type="text" class="form-control" id="state" placeholder="State" ng-value="volunteer.person.state" disabled="true">
+          <span ng-show="false">Please provide a valid value.</span>
+        </div>
+        <div class="form-group col-sm-6">
+          <label class="control-label required" for="zip">Zip</label>
+          <input type="text" class="form-control" id="zip" placeholder="Zip" ng-value="volunteer.person.zip" disabled="true">
+          <span ng-show="false">Please provide a valid value.</span>
+        </div>
+        <div class="form-group col-sm-6">
+          <label class="control-label" for="cellPhone">Cell Phone</label>
+          <input type="text" class="form-control" id="cellPhone" placeholder="CellPhone" ng-value="volunteer.person.mobilePhone" disabled="true">
+          <span ng-show="false">Please provide a valid value.</span>
+        </div>
+        <div class="form-group col-sm-6">
+          <label class="control-label" for="homePhone">Home Phone</label>
+          <input type="text" class="form-control" id="homePhone" placeholder="Home Phone" ng-value="volunteer.person.homePhone" disabled="true">
+          <span ng-show="false">Please provide a valid value.</span>
+        </div>
+
+      </div>
+      <!--/row-->
+  </fieldset>
+
+  <fieldset class="push-bottom">
+    <legend>School</legend>
+    <div class="row">
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="school">School</label>
+        <input type="text" class="form-control" id="school" placeholder="Enter school">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="grade">Grade</label>
+        <input type="text" class="form-control" id="grade" placeholder="Enter grade">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset class="push-bottom">
+    <legend>About You</legend>
+    <div class="row">
+      <div class="form-group col-sm-12 required">
+        <label class="block">Tell us where you are</label>
+
+        <div class="checkbox">
+          <label>
+            <input type="checkbox">I'm exploring my faith</label>
+        </div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox">I'm not sure</label>
+        </div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox">I'm a Christ-follower</label>
+        </div>
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-sm-8">
+        <label class="control-label required" for="explainFaith">Please Explain</label>
+        <input type="text" class="form-control" id="explainFaith" placeholder="Please Explain">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-sm-8">
+        <label class="control-label required" for="promptedApplication">Why do you want to serve?</label>
+        <input type="text" class="form-control" id="promptedApplication" placeholder="Why do you want to serve?">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-sm-8">
+        <label class="control-label" for="specialSkills">Any special talents, abilities, skills or experiences that may be helpful? (Juggling, fire eating, acting, or making weird noises with your armpit count.)</label>
+        <input type="text" class="form-control" id="specialSkills" placeholder="Special talents...">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset class="push-bottom">
+    <legend>Serving Opportunities</legend>
+    <div class="row">
+      <div class="col-sm-12">
+        <label>What is your availability?</label>
+
+        <div class="checkbox">
+          <label>
+            <input type="checkbox">During the Week</label>
+        </div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox">Weekend Services At</label>
+        </div>
+      </div>
+
+      <div class="form-group col-sm-6">
+        <label class="block required">Site name</label>
+        <label class="radio-inline">
+          <input type="radio" value="oakley" name="siteAttend">Oakley
+        </label>
+        <label class="radio-inline">
+          <input type="radio" value="florence" name="siteAttend">Florence
+        </label>
+        <label class="radio-inline">
+          <input type="radio" value="west side" name="siteAttend">West Side
+        </label>
+        <label class="radio-inline">
+          <input type="radio" value="mason" name="siteAttend">Mason
+        </label>
+        <label class="radio-inline">
+          <input type="radio" value="clifton" name="siteAttend">Clifton
+        </label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="serveServiceTimes">During</label>
+        <input type="text" class="form-control" id="serveServiceTimes" placeholder="Service Times">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+    </div>
+
+    <div class="row">
+
+      <div class="form-group col-sm-12">
+        <label class="required">What age kids do you prefer to serve with?</label>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox">1 - 2 years old</label>
+        </div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox">3-year olds - Pre-K</label>
+        </div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox">Kinder - 5th Grade</label>
+        </div>
+      </div>
+  </fieldset>
+
+  <fieldset class="push-bottom">
+    <legend>Personal References</legend>
+    <p class="help-text">List two adults you have known for at least one year, who are not rleated to you and have a definite knowledge of your character and ability to work wtih kids (e.g. pastor, close friend, and/or teacher)</p>
+
+    <p class="push-bottom">Reference #1</span>
+    <div class="form-group col-sm-6">
+      <label class="control-label required" for="referenceName-1">Name</label>
+      <input type="text" class="form-control" id="referenceName-1" placeholder="Name">
+      <span ng-show="false">Please provide a valid value.</span>
+    </div>
+    <div class="form-group col-sm-6">
+      <label class="control-label required" for="referenceTimeKnown-1">Length of time known</label>
+      <input type="text" class="form-control" id="referenceTimeKnown-1" placeholder="Length of time known">
+      <span ng-show="false">Please provide a valid value.</span>
+    </div>
+    <div class="form-group col-sm-6">
+      <label class="control-label" for="referenceHomePhone-1">Home Phone</label>
+      <input type="text" class="form-control" id="referenceHomePhone-1" placeholder="Home Phone">
+      <span ng-show="false">Please provide a valid value.</span>
+    </div>
+    <div class="form-group col-sm-6">
+      <label class="control-label" for="referenceMobilePhone-1">Mobile Phone</label>
+      <input type="text" class="form-control" id="referenceMobilePhone-1" placeholder="Mobile Phone">
+      <span ng-show="false">Please provide a valid value.</span>
+    </div>
+    <div class="form-group col-sm-6">
+      <label class="control-label" for="referenceWorkPhone-1">Work Phone</label>
+      <input type="text" class="form-control" id="referenceWorkPhone-1" placeholder="Work Phone">
+      <span ng-show="false">Please provide a valid value.</span>
+    </div>
+    <div class="form-group col-sm-6">
+      <label class="control-label required" for="referenceEmail-1">Email</label>
+      <input type="text" class="form-control" id="referenceEmail-1" placeholder="Email">
+      <span ng-show="false">Please provide a valid value.</span>
+    </div>
+    <div class="form-group col-sm-6">
+      <label class="control-label required" for="referenceAssociation-1">Nature of Association</label>
+      <input type="text" class="form-control" id="referenceAssociation-1" placeholder="Nature of Association">
+      <span ng-show="false">Please provide a valid value.</span>
+    </div>
+    <div class="form-group col-sm-6">
+      <label class="control-label required" for="referenceOccupation-1">Occupation</label>
+      <input type="text" class="form-control" id="referenceOccupation-1" placeholder="Occupation">
+      <span ng-show="false">Please provide a valid value.</span>
+    </div>
+
+    <!-- Reference #2 -->
+    <p class="push-bottom">Reference #2</span>
+    <div class="form-group col-sm-6">
+      <label class="control-label required" for="referenceName-2">Name</label>
+      <input type="text" class="form-control" id="referenceName-2" placeholder="Name">
+      <span ng-show="false">Please provide a valid value.</span>
+    </div>
+    <div class="form-group col-sm-6">
+      <label class="control-label required" for="referenceTimeKnown-2">Length of time known</label>
+      <input type="text" class="form-control" id="referenceTimeKnown-2" placeholder="Length of time known">
+      <span ng-show="false">Please provide a valid value.</span>
+    </div>
+    <div class="form-group col-sm-6">
+      <label class="control-label" for="referenceHomePhone-2">Home Phone</label>
+      <input type="text" class="form-control" id="referenceHomePhone-2" placeholder="Home Phone">
+      <span ng-show="false">Please provide a valid value.</span>
+    </div>
+    <div class="form-group col-sm-6">
+      <label class="control-label" for="referenceMobilePhone-2">Mobile Phone</label>
+      <input type="text" class="form-control" id="referenceMobilePhone-2" placeholder="Mobile Phone">
+      <span ng-show="false">Please provide a valid value.</span>
+    </div>
+    <div class="form-group col-sm-6">
+      <label class="control-label" for="referenceWorkPhone-2">Work Phone</label>
+      <input type="text" class="form-control" id="referenceWorkPhone-2" placeholder="Work Phone">
+      <span ng-show="false">Please provide a valid value.</span>
+    </div>
+    <div class="form-group col-sm-6">
+      <label class="control-label required" for="referenceEmail-2">Email</label>
+      <input type="text" class="form-control" id="referenceEmail-2" placeholder="Email">
+      <span ng-show="false">Please provide a valid value.</span>
+    </div>
+    <div class="form-group col-sm-6">
+      <label class="control-label required" for="referenceAssociation-2">Nature of Association</label>
+      <input type="text" class="form-control" id="referenceAssociation-2" placeholder="Nature of Association">
+      <span ng-show="false">Please provide a valid value.</span>
+    </div>
+    <div class="form-group col-sm-6">
+      <label class="control-label required" for="referenceOccupation-2">Occupation</label>
+      <input type="text" class="form-control" id="referenceOccupation-2" placeholder="Occupation">
+      <span ng-show="false">Please provide a valid value.</span>
+    </div>
+
+
+    <p class="help-text">Okay, here's some formal stuff. We don't really talk like this, but we couldn't figure out how to say all this in kid-friendly language. So put your glasses on, read it and agree to it, please The information contained in this application
+      is true. I authorize any reference or church listed here to give you any information (including opinions) that they may have regarding my character and fitness for working with kids. By agreeing to this form, I also consent to a complete
+      criminal background check now an din the future. I understand my involvement with Crossroads Kids' Club is influenced by the information provided by all these sources. I release from liability for damages any person or organizations identified
+      by me in this application, and waive my right to inspect any written material from contact with them or from the criminal background check. I have carefully read the forgoing release and know the contents thereof and I agree to this release
+      as my own free act. This is a legally binding agreement which I have read and understand.</p>
+    <div class="form-group col-sm-6">
+      <label class="block required">Parent/Guaridan Consent</label>
+      <label class="radio-inline">
+        <input type="radio" value="signature" name="parentSignature">Yes
+      </label>
+      <label class="radio-inline">
+        <input type="radio" value="signature" name="parentSignature">No
+      </label>
+    </div>
+    <div class="form-group col-sm-6">
+      <label class="control-label required" for="parentSignatureDate">Date</label>
+      <input type="text" class="form-control" id="signatureDate" placeholder="Date">
+      <span ng-show="false">Please provide a valid value.</span>
+    </div>
+
+    <div class="form-group col-sm-6">
+      <label class="block required">Student Agreement</label>
+      <label class="radio-inline">
+        <input type="radio" value="signature" name="studentSignature">Yes
+      </label>
+      <label class="radio-inline">
+        <input type="radio" value="signature" name="studentSignature">No
+      </label>
+    </div>
+    <div class="form-group col-sm-6">
+      <label class="control-label required" for="studentSignatureDate">Date</label>
+      <input type="text" class="form-control" id="signatureDate" placeholder="Date">
+      <span ng-show="false">Please provide a valid value.</span>
+    </div>
+  </fieldset>
+  <input type="submit" name="submit" value="Submit" id="submit" class="btn btn-primary push-half-bottom">
+</form>
