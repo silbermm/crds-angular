@@ -3,7 +3,7 @@
     <form id="nav_login" name="registerForm" role="form" ng-submit="register()" novalidate>
 
         <div class="soft-half-bottom" ng-class="{'has-error': firstnameError() }">
-              <input id="{{passwordPrefix}}-firstname" class="form-control" id="firstname" name="firstname" type="text" ng-model="newuser.firstname" required placeholder="First Name"/>
+              <input id="{{passwordPrefix}}-firstname" class="form-control" id="firstname" name="firstname" type="text" ng-model="newuser.firstname" required placeholder="First Name" autofocus/>
                 <ng-messages for="registerForm.firstname.$error" ng-if="registerForm.$submitted " ng-messages-include="on-submit-messages"></ng-messages>
        </div>
 

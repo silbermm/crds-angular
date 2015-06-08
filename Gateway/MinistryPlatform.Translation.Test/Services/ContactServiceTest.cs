@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -51,7 +50,8 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Middle_Name", "middle-name"},
                     {"Mobile_Carrier_ID", 2},
                     {"Mobile_Phone", "513-555-9876"},
-                    {"Nickname", "nickname"}
+                    {"Nickname", "nickname"},
+                    {"Age", 30}
                 }
             };
 
@@ -97,7 +97,8 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Middle_Name", "middle-name"},
                     {"Mobile_Carrier_ID", null},
                     {"Mobile_Phone", "513-555-9876"},
-                    {"Nickname", "nickname"}
+                    {"Nickname", "nickname"},
+                    {"Age", 30}
                 }
             };
 
@@ -119,7 +120,9 @@ namespace MinistryPlatform.Translation.Test.Services
         [Test]
         public void shouldCreateContactForGuestGiver()
         {
-            _ministryPlatformService.Setup(mocked => mocked.CreateRecord(292, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>(), false)).Returns(123);
+            _ministryPlatformService.Setup(
+                mocked => mocked.CreateRecord(292, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>(), false))
+                .Returns(123);
 
             var contactId = _fixture.CreateContactForGuestGiver("me@here.com", "display name");
 
@@ -138,7 +141,9 @@ namespace MinistryPlatform.Translation.Test.Services
         public void shouldThrowApplicationExceptionWhenGuestGiverCreationFails()
         {
             Exception ex = new Exception("Danger, Will Robinson!");
-            _ministryPlatformService.Setup(mocked => mocked.CreateRecord(292, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>(), false)).Throws(ex);
+            _ministryPlatformService.Setup(
+                mocked => mocked.CreateRecord(292, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>(), false))
+                .Throws(ex);
 
             try
             {
@@ -147,11 +152,9 @@ namespace MinistryPlatform.Translation.Test.Services
             }
             catch (Exception e)
             {
-                Assert.IsInstanceOf(typeof(ApplicationException), e);
+                Assert.IsInstanceOf(typeof (ApplicationException), e);
                 Assert.AreSame(ex, e.InnerException);
             }
-
         }
-
     }
 }
