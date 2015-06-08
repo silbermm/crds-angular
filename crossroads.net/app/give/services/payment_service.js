@@ -6,13 +6,14 @@
   PaymentService.$inject = ['$log', '$http', '$resource','$q', 'stripe'];
 
   function PaymentService($log, $http, $resource, $q, stripe) {
-    var payment_service = {
-      donor : getDonor,
-      donation : {},
-      createDonorWithCard : createDonorWithCard,
+    var payment_service = { 
       createDonorWithBankAcct : createDonorWithBankAcct,
-      updateDonorWithCard :updateDonorWithCard,
-      donateToProgram : donateToProgram
+      createDonorWithCard : createDonorWithCard,
+      donateToProgram : donateToProgram,
+      donation : {},
+      donor : getDonor,
+      updateDonorWithCard :updateDonorWithCard
+      
     };
 
     stripe.setPublishableKey(__STRIPE_PUBKEY__);
