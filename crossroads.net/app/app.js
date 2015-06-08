@@ -14,7 +14,6 @@ require('../styles/main.scss');
 require('./profile');
 require('./filters');
 require('./events');
-require('./cms/services/cms_services_module');
 
 require('./give');
 
@@ -31,7 +30,6 @@ require('./mp_tools');
      'crossroads.mptools',
      'crossroads.components',
      'crossroads.give',
-     "crdsCMS.services",
      'ngAside',
      'matchMedia'
      ])
