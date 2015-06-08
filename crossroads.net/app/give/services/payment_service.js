@@ -26,38 +26,31 @@
       });
     }
 
-    // email_address is only needed for a guest giver, and Authorization
-    // header is only needed for an authenticated non-guest giver.  However,
-    // to keep things simple, we'll always send both, and the proper path in
-    // the DonorController Gateway will be followed based on the absence
-    // or presence of a non-blank Authorization header.
-    function createDonor(token, email) {
-      var def = $q.defer();
-      var donor_request = { stripe_token_id: token.id, email_address: email }
-      $http({
-        method: "POST",
-        url: __API_ENDPOINT__ + 'api/donor',
-        headers: {
-          'Authorization': getCookie('sessionId')
-        },
-        data: donor_request
-        }).success(function(data) {
-          payment_service.donor = data;
-          def.resolve(data);
-        }).error(function(error) {
-          def.reject(error);
-        });
-      return def;
-    }
-
     function createDonorWithCard(card, email) {
-      var def;
+      var def = $q.defer();
       stripe.card.createToken(card)
         .then(function (token) {
-          def = createDonor(token, email);
-          return def.promise;
+          // Below, email_address is only needed for a guest giver, and Authorization
+          // header is only needed for an authenticated non-guest giver.  However,
+          // to keep things simple, we'll always send both, and the proper path in
+          // the DonorController Gateway will be followed based on the absence
+          // or presence of a non-blank Authorization header.
+          var donor_request = { stripe_token_id: token.id, email_address: email }
+          $http({
+            method: "POST",
+            url: __API_ENDPOINT__ + 'api/donor',
+            headers: {
+              'Authorization': getCookie('sessionId')
+            },
+            data: donor_request
+            }).success(function(data) {
+              payment_service.donor = data;
+              def.resolve(data);
+            }).error(function(error) {
+              def.reject(error);
+            });
         });
-
+       return def.promise;
     }
 
     function updateDonorWithCard(donorId, card){
@@ -83,13 +76,30 @@
     }
 
     function createDonorWithBankAcct(bank, email) {
-      var def;
+      var def = $q.defer();
       stripe.bankAccount.createToken(bank)
         .then(function (token) {
-          def = createDonor(token, email);
-          return def.promise;
+          // Below, email_address is only needed for a guest giver, and Authorization
+          // header is only needed for an authenticated non-guest giver.  However,
+          // to keep things simple, we'll always send both, and the proper path in
+          // the DonorController Gateway will be followed based on the absence
+          // or presence of a non-blank Authorization header.
+          var donor_request = { stripe_token_id: token.id, email_address: email }
+          $http({
+            method: "POST",
+            url: __API_ENDPOINT__ + 'api/donor',
+            headers: {
+              'Authorization': getCookie('sessionId')
+            },
+            data: donor_request
+            }).success(function(data) {
+              payment_service.donor = data;
+              def.resolve(data);
+            }).error(function(error) {
+              def.reject(error);
+            });
         });
-
+       return def.promise;
     }
 
     function donateToProgram(program_id, amount, donor_id, email_address){
@@ -120,6 +130,5 @@
 
     return payment_service;
   }
-
 
 })();
