@@ -42,7 +42,7 @@ namespace crds_angular.Services
         public SourceData updateCustomerSource(string customerToken, string cardToken)
         {
             SourceData defaultSource = new SourceData();
-            //TODO this is HIGHLY coupled with credit card, needs to change
+            
             var request = new RestRequest("customers/" + customerToken, Method.POST);
             request.AddParameter("source", cardToken);
 
@@ -56,29 +56,7 @@ namespace crds_angular.Services
             var defaultSourceId = response.Data.default_source;
             var sources = response.Data.sources.data;
             defaultSource = SetDefaultSource(sources, defaultSourceId);
-            //foreach (var source in sources)
-            //{
-            //    if (source.id == defaultSourceId)
-            //    {
-            //        defaultSource.@object = source.@object;
-            //        if (source.@object == "bank_account")
-            //        {
-            //            defaultSource.routing_number = source.routing_number;
-            //        }
-            //        else
-            //        {
-            //            defaultSource.brand = source.brand;
-            //            defaultSource.name = source.name;
-            //            defaultSource.address_zip = source.address_zip;
-            //            defaultSource.exp_month = source.exp_month.PadLeft(2, '0');
-            //            defaultSource.exp_year = source.exp_year.Substring(2, 2);
-            //        }
-
-            //        defaultSource.last4 = source.last4;
-
-            //    }
-            //}
-
+            
             return defaultSource;
 
         }
@@ -102,7 +80,7 @@ namespace crds_angular.Services
         public SourceData getDefaultSource(string customer_token)
         {
             SourceData defaultSource = new SourceData();
-            //TODO: this is highly coupled with credit card, needs to eb changed
+         
             var getCustomerRequest = new RestRequest("customers/" + customer_token, Method.GET);
 
             IRestResponse<StripeCustomer> getCustomerResponse =
@@ -115,28 +93,6 @@ namespace crds_angular.Services
             var defaultSourceId = getCustomerResponse.Data.default_source;
             var sources = getCustomerResponse.Data.sources.data;
             defaultSource = SetDefaultSource(sources, defaultSourceId);
-            //foreach (var source in sources)
-            //{
-            //    if (source.id == defaultSourceId)
-            //    {
-            //        defaultSource.@object = source.@object;
-            //        if (source.@object == "bank_account")
-            //        {
-            //            defaultSource.routing_number = source.routing_number;
-            //        }
-            //        else
-            //        {
-            //            defaultSource.brand = source.brand;
-            //            defaultSource.name = source.name;
-            //            defaultSource.address_zip = source.address_zip;
-            //            defaultSource.exp_month = source.exp_month.PadLeft(2, '0');
-            //            defaultSource.exp_year = source.exp_year.Substring(2, 2);
-            //        }
-
-            //        defaultSource.last4 = source.last4;
-                   
-            //    }   
-            //}
             
             return defaultSource;
         }
@@ -164,7 +120,6 @@ namespace crds_angular.Services
                     }
 
                     defaultSource.last4 = source.last4;
-
                 }
             }
 
@@ -173,7 +128,7 @@ namespace crds_angular.Services
 
         public string chargeCustomer(string customer_token, int amount, int donor_id, string pymt_type)
         {
-            //TODO - do we need to get the customer?  Only when using the default source?
+            //TODO - do we need to get the customer?  Only when using the default source?  Nope...
             //var getCustomerRequest = new RestRequest("customers/" + customer_token, Method.GET);
             //IRestResponse<StripeCustomer> getCustomerResponse =
             //    (IRestResponse<StripeCustomer>)stripeRestClient.Execute<StripeCustomer>(getCustomerRequest);
@@ -186,8 +141,6 @@ namespace crds_angular.Services
             var chargeRequest = new RestRequest("charges", Method.POST);
             chargeRequest.AddParameter("amount", amount * 100);
             chargeRequest.AddParameter("currency", "usd");
-           // chargeRequest.AddParameter("source", getCustomerResponse.Data.default_source);
-            //chargeRequest.AddParameter("customer", getCustomerResponse.Data.id);
             chargeRequest.AddParameter("customer", customer_token);
             chargeRequest.AddParameter("description", "Donor ID #" + donor_id);
 
