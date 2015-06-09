@@ -14,7 +14,7 @@ var definePlugin = new webpack.DefinePlugin({
 
 module.exports = {
     entry: {
-        dependencies: "./app/dependencies.js"
+        dependencies: "./dependencies/dependencies.js"
     },
     externals: {
       stripe: "Stripe"
@@ -35,7 +35,7 @@ module.exports = {
             {
                 test: /\.js$/,
                 include: [
-                  path.resolve(__dirname, "app"),
+                  path.resolve(__dirname, "dependencies"),
                   path.resolve(__dirname, "node_modules/angular-stripe")
                 ],
                 loader: 'babel-loader'
