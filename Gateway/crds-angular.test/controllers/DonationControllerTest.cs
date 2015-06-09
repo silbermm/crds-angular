@@ -53,8 +53,7 @@ namespace crds_angular.test.controllers
             {
                 program_id = "3", //crossroads
                 amount = 86868,
-                donor_id = 394256,
-                pymt_type = "4"
+                donor_id = 394256
             };
 
             var donor = new ContactDonor
@@ -69,7 +68,7 @@ namespace crds_angular.test.controllers
             };
 
             authenticationServiceMock.Setup(mocked => mocked.GetContactId(authType + " " + authToken)).Returns(contactId);
-            
+
             donorServiceMock.Setup(mocked => mocked.GetContactDonor(contactId))
                 .Returns(donor);
 
@@ -79,9 +78,9 @@ namespace crds_angular.test.controllers
 
             donorServiceMock.Setup(mocked => mocked.
                 CreateDonationAndDistributionRecord(createDonationDTO.amount, donor.DonorId,
-                    createDonationDTO.program_id, createDonationDTO.pymt_type, charge_id, It.IsAny<DateTime>(), true))
+                    createDonationDTO.program_id, charge_id, createDonationDTO.pymt_type, It.IsAny<DateTime>(), true))
                     .Returns(donationId);
-            
+
             IHttpActionResult result = fixture.Post(createDonationDTO);
 
             authenticationServiceMock.VerifyAll();
@@ -93,7 +92,7 @@ namespace crds_angular.test.controllers
             Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonationDTO>), result);
             var okResult = (OkNegotiatedContentResult<DonationDTO>)result;
             Assert.AreEqual(6186818, donationId);
-            
+
         }
 
         [Test]
@@ -125,9 +124,10 @@ namespace crds_angular.test.controllers
 
             fixture.Request.Headers.Authorization = null;
             gatewayDonorServiceMock.Setup(mocked => mocked.GetContactDonorForEmail(createDonationDTO.email_address)).Returns(donor);
+            
             stripeServiceMock.Setup(
-    mocked => mocked.chargeCustomer(donor.ProcessorId, createDonationDTO.amount, donor.DonorId, createDonationDTO.pymt_type))
-    .Returns(charge_id);
+              mocked => mocked.chargeCustomer(donor.ProcessorId, createDonationDTO.amount, donor.DonorId, createDonationDTO.pymt_type))
+             .Returns(charge_id);
 
             donorServiceMock.Setup(mocked => mocked.
                 CreateDonationAndDistributionRecord(createDonationDTO.amount, donor.DonorId,
