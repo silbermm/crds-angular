@@ -149,10 +149,10 @@ namespace MinistryPlatform.Translation.Test.Services
 
 
             var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, donorId, programId, charge_id, setupDate, true);
+
+            // Explicitly verify each expectation...
             _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>(), It.IsAny<Dictionary<string, object>>()));
             _programService.Verify(mocked => mocked.GetProgramById(3));
-            // Explicitly verify each expectation...
-           
             _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donationPageId, expectedDonationValues, It.IsAny<string>(), true));
 
             _ministryPlatformService.VerifyAll();
