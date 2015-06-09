@@ -1,7 +1,7 @@
 
 require('./email_field.html');
 (function () {
-    angular.module("email_field",[]).directive("emailField", ['$log', '$http', 'Session', 'User', EmailField]);
+    angular.module("crossroads.core").directive("emailField", ['$log', '$http', 'Session', 'User', EmailField]);
 
     function EmailField($log, $http, Session, User) {
         return {

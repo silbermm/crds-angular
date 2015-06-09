@@ -1,12 +1,8 @@
 "use strict";
 
 (function () {
-
-  require("./home/home.html");
-  require('./home');
   require('./login/login_page.html');
   require('./register/register_form.html');
-  require('./content');
   require('./community_groups_signup')
   require('./mytrips');
   require('./profile/profile.html');
@@ -16,15 +12,12 @@
   require('./styleguide');
   require('./give');
   require('./myprofile');
-  require('./content/content.html');
   require('./community_groups_signup/group_signup_form.html');
   require('./my_serve');
   require('./go_trip_giving');
   require('./corkboard');
   require('./volunteer_signup');
   require('./volunteer_application');
-
-  var getCookie = require('./utilities/cookies');
 
   angular.module("crossroads").config(["$stateProvider", "$urlRouterProvider", "$httpProvider", "$urlMatcherFactoryProvider", "$locationProvider", function ($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory, $locationProvider) {
 

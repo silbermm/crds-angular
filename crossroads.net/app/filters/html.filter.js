@@ -1,7 +1,7 @@
 'use strict()';
 (function(){
 
-  angular.module('crossroads.filters').filter('html', HtmlFilter);
+  angular.module('crossroads.core').filter('html', HtmlFilter);
 
   HtmlFilter.$inject = ['$sce'];
 

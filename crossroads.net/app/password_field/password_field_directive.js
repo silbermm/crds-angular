@@ -1,7 +1,7 @@
 require('./password_field.html');﻿
 
 (function () {
-    angular.module("password_field",[]).directive("passwordField", ['$log', PasswordField]);
+    angular.module("crossroads.core").directive("passwordField", ['$log', PasswordField]);
 
     function PasswordField($log) {
         return {

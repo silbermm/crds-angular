@@ -1,6 +1,5 @@
 ﻿"use strict";
 (function() {
-    var getCookie = require('./utilities/cookies');
     angular.module("crossroads").run( AppRun );
 
     AppRun.$inject = ["Session", "$rootScope", "MESSAGES", "$http", "$log", "$state", "$timeout", "$location", 'MPTools'];

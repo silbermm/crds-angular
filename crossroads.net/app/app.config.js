@@ -1,8 +1,6 @@
 'use strict()';
 (function(){
 
-  var getCookie = require('./utilities/cookies');
-
   var app = angular.module("crossroads");
   app.config(AppConfig);
 

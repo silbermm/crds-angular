@@ -14,6 +14,16 @@ require('./templates/head.html');
 
 require('./app.core.module')
 require('./login');
+require('./home');
 require('./register/register_directive');
 require('./cms/services/cms_services_module');
 
+require('./components/svgIcon.directive');
+require('./components/preloader');
+require('./content');
+require('./email_field/email_field_directive');
+require('./password_field/password_field_directive');
+require('./filters');
+
+// require and export getCookie on global scope
+require('expose?getCookie!./utilities/cookies.js');

@@ -1,6 +1,5 @@
 (function () {
 
-  var getCookie = require('../../utilities/cookies');
   angular.module('crossroads.give').factory('PaymentService',PaymentService);
 
   PaymentService.$inject = ['$log', '$http', '$resource','$q', 'stripe'];

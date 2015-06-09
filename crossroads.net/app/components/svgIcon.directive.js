@@ -1,6 +1,6 @@
 (function(){
   
-  angular.module('crossroads.components').directive('svgIcon', SvgIcon);
+  angular.module('crossroads.core').directive('svgIcon', SvgIcon);
 
   SvgIcon.$inject = [];
 

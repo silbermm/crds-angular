@@ -1,6 +1,6 @@
 'use strict()';
 (function(){
-  angular.module('crossroads.components').directive("preloader", preloader);
+  angular.module('crossroads.core').directive("preloader", preloader);
 
   preloader.$inject = [];
 
