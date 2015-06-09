@@ -1,7 +1,7 @@
 ﻿'use strict';
 require('./session_service');
 (function () {
-    angular.module('crossroads.core').factory('AuthService', ['$http', 'Session', '$rootScope', 'filterState',function ($http, Session, $rootScope, filterState) {
+    angular.module('crossroads.core').factory('AuthService', ['$http', 'Session', '$rootScope', 'AUTH_EVENTS', function ($http, Session, $rootScope, AUTH_EVENTS) {
         var authService = {};
 
         authService.login = function (credentials) {
@@ -23,7 +23,7 @@ require('./session_service');
             console.log("US1403: logging out user in auth_service");
             $rootScope.username = null;
             Session.clear();
-            filterState.clearAll();
+            $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
         }
 
         authService.isAuthenticated = function () {
