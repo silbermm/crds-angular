@@ -1,0 +1,11 @@
+(function(){
+  module.exports = VolunteerService;
+
+  VolunteerService.$inject = ['$resource'];
+
+  function VolunteerService($resource){
+    return {
+    	SaveStudent: $resource(__API_ENDPOINT__ + 'api/volunteer-application/student')
+    }
+  }
+})();

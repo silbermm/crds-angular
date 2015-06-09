@@ -66,7 +66,11 @@
         }).$promise
         .then(function(response) {
           vm.responseCheck = true;
-          vm.showInvalidResponse = ((response == null) || ((response.responseId == undefined)));
+          if ((response !== null) && (response.responseId !== undefined)) {
+            vm.responseId = response.responseId;
+          } else {
+            vm.showInvalidResponse = ((response == null) || ((response.responseId == undefined)));
+          }
         });
     }
 

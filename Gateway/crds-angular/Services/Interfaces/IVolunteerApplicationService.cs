@@ -8,6 +8,7 @@ namespace crds_angular.Services.Interfaces
 {
     public interface IVolunteerApplicationService
     {
-        bool Save(VolunteerApplicationDto application);
+        //bool Save(VolunteerApplicationDto application);
+        bool SaveStudent(StudentApplicationDto application);
     }
 }

@@ -1,4 +1,4 @@
-<form class="ng-pristine ng-valid-date ng-invalid ng-invalid-required ng-valid-time ng-valid-date-disabled ng-valid-maxlength" _lpchecked="1">
+<form>
   <fieldset class="push-bottom">
     <legend>General Info</legend>
     <div class="row">
@@ -17,7 +17,7 @@
 
       <div class="form-group col-sm-6">
         <label class="control-label" for="middleName">Middle Name</label>
-        <input type="text" class="form-control" id="middleName" placeholder="Enter middle name" ng-value="volunteer.person.middleName" disabled="true">
+        <input type="text" class="form-control" id="middleName" placeholder="Enter middle name" ng-value="volunteer.person.middleName.substring(0,1)" disabled="true">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
     </div>
@@ -31,7 +31,7 @@
 
         <div class="form-group col-sm-6">
           <label class="control-label required" for="nameTag">Name For Name Tag</label>
-          <input type="text" class="form-control" id="nameTag" placeholder="Enter name for name tag">
+          <input type="text" class="form-control" id="nameTag" placeholder="Enter name for name tag" ng-model="kcStudentApplication.nameTag">
           <span ng-show="false">Please provide a valid value.</span>
         </div>
       </div>
@@ -47,11 +47,11 @@
         <div class="form-group col-sm-6">
           <label class="block required">Gender</label>
           <label class="radio-inline">
-            <input type="radio" name="gender" id="gender-male" value="1" ng-value="volunteer.person.genderId" disabled="true">Male
+            <input type="radio" name="gender" id="gender-male" value="1" ng-model="volunteer.person.genderId" disabled="true">Male
 
           </label>
           <label class="radio-inline">
-            <input type="radio" name="gender" id="gender-female" value="2" ng-value="volunteer.person.genderId" disabled="true">Female
+            <input type="radio" name="gender" id="gender-female" value="2" ng-model="volunteer.person.genderId" disabled="true">Female
           </label>
         </div>
       </div>
@@ -60,19 +60,19 @@
         <div class="form-group col-sm-6">
           <label class="block required">Site where you attend service</label>
           <label class="radio-inline">
-            <input type="radio" value="oakley" name="siteAttend">Oakley
+            <input type="radio" value="oakley" name="siteAttend" ng-model="kcStudentApplication.site">Oakley
           </label>
           <label class="radio-inline">
-            <input type="radio" value="florence" name="siteAttend">Florence
+            <input type="radio" value="florence" name="siteAttend" ng-model="kcStudentApplication.site">Florence
           </label>
           <label class="radio-inline">
-            <input type="radio" value="west side" name="siteAttend">West Side
+            <input type="radio" value="west side" name="siteAttend" ng-model="kcStudentApplication.site">West Side
           </label>
           <label class="radio-inline">
-            <input type="radio" value="mason" name="siteAttend">Mason
+            <input type="radio" value="mason" name="siteAttend" ng-model="kcStudentApplication.site">Mason
           </label>
           <label class="radio-inline">
-            <input type="radio" value="clifton" name="siteAttend">Clifton
+            <input type="radio" value="clifton" name="siteAttend" ng-model="kcStudentApplication.site">Clifton
           </label>
         </div>
       </div>
@@ -132,7 +132,7 @@
     <div class="row">
       <div class="form-group col-sm-6">
         <label class="control-label required" for="school">School</label>
-        <input type="text" class="form-control" id="school" placeholder="Enter school">
+        <input type="text" class="form-control" id="school" placeholder="Enter school" ng-model="kcStudentApplication.school">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
       <div class="form-group col-sm-6">
@@ -257,7 +257,7 @@
     <p class="push-bottom">Reference #1</span>
     <div class="form-group col-sm-6">
       <label class="control-label required" for="referenceName-1">Name</label>
-      <input type="text" class="form-control" id="referenceName-1" placeholder="Name">
+      <input type="text" class="form-control" id="referenceName-1" placeholder="Name" ng-model="kcStudentApplication.referenceName1">
       <span ng-show="false">Please provide a valid value.</span>
     </div>
     <div class="form-group col-sm-6">
@@ -376,4 +376,7 @@
     </div>
   </fieldset>
   <input type="submit" name="submit" value="Submit" id="submit" class="btn btn-primary push-half-bottom">
+  <button id="save-form" ng-click="kcStudentApplication.save()" class="btn btn-primary" data-style="expand-left">
+      Save Button
+  </button>
 </form>

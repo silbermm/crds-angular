@@ -11,6 +11,10 @@
     return {
       restrict: "EA",
       templateUrl : "kc_student_application/kidsClubStudentApplication.template.html",
+      controller: "KidsClubStudentApplicationController as kcStudentApplication",
+      scope: {
+          volunteer: '=volunteer'
+      },
       link: link
     };
 

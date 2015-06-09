@@ -27,25 +27,25 @@ namespace MinistryPlatform.Translation.Test.Services
 
             _mockAnswer1 = new FormAnswer
             {
-                Field = 375,
+                FieldId = 375,
                 FormResponseId = responseId,
-                OpportunityResponse = 7329,
+                OpportunityResponseId = 7329,
                 Response = "Test Last Name"
             };
 
             _mockAnswer2 = new FormAnswer
             {
-                Field = 376,
+                FieldId = 376,
                 FormResponseId = responseId,
-                OpportunityResponse = 7329,
+                OpportunityResponseId = 7329,
                 Response = "Test First Name"
             };
 
             _mockAnswer3 = new FormAnswer
             {
-                Field = 377,
+                FieldId = 377,
                 FormResponseId = responseId,
-                OpportunityResponse = 7329,
+                OpportunityResponseId = 7329,
                 Response = "Test Middle Initial"
             };
 
@@ -79,25 +79,25 @@ namespace MinistryPlatform.Translation.Test.Services
             var expectedAnswerDict1 = new Dictionary<string, object>
             {
                 {"Form_Response_ID", _mockAnswer1.FormResponseId},
-                {"Form_Field_ID", _mockAnswer1.Field},
+                {"Form_Field_ID", _mockAnswer1.FieldId},
                 {"Response", _mockAnswer1.Response},
-                {"Opportunity_Response", _mockAnswer1.OpportunityResponse}
+                {"Opportunity_Response", _mockAnswer1.OpportunityResponseId}
             };
 
             var expectedAnswerDict2 = new Dictionary<string, object>
             {
                 {"Form_Response_ID", _mockAnswer2.FormResponseId},
-                {"Form_Field_ID", _mockAnswer2.Field},
+                {"Form_Field_ID", _mockAnswer2.FieldId},
                 {"Response", _mockAnswer2.Response},
-                {"Opportunity_Response", _mockAnswer2.OpportunityResponse}
+                {"Opportunity_Response", _mockAnswer2.OpportunityResponseId}
             };
 
             var expectedAnswerDict3 = new Dictionary<string, object>
             {
                 {"Form_Response_ID", _mockAnswer3.FormResponseId},
-                {"Form_Field_ID", _mockAnswer3.Field},
+                {"Form_Field_ID", _mockAnswer3.FieldId},
                 {"Response", _mockAnswer3.Response},
-                {"Opportunity_Response", _mockAnswer3.OpportunityResponse}
+                {"Opportunity_Response", _mockAnswer3.OpportunityResponseId}
             };
 
             _ministryPlatformService.Setup(m => m.CreateRecord(formResponsePageId, expectedResponseDict, It.IsAny<string>(), true)).Returns(responseId);

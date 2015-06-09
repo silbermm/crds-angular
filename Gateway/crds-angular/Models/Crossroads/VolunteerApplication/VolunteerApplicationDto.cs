@@ -1,26 +1,132 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
 namespace crds_angular.Models.Crossroads.VolunteerApplication
 {
+    public class MinistryPlatformFieldAttribute : Attribute
+    {
+        public int Id;
+        public string Label;
+    }
+
     public class VolunteerApplicationDto
+    {
+        [JsonProperty(PropertyName = "contactId")]
+        [Required]
+        public int ContactId { get; set; }
+
+        [JsonProperty(PropertyName = "formId")]
+        [Required]
+        public int FormId { get; set; }
+
+        [JsonProperty(PropertyName = "opportunityId")]
+        [Required]
+        public int OpportunityId { get; set; }
+
+        [JsonProperty(PropertyName = "responseOpportunityId")]
+        [Required]
+        public int ResponseOpportunityId { get; set; }
+
+        //[JsonProperty(PropertyName = "answers")]
+        //[Required]
+        //public Fields FormResponses { get; set; }
+    }
+
+    public class AdultApplicationDto : VolunteerApplicationDto
+    {
+        [JsonProperty(PropertyName = "answers")]
+        [Required]
+        public Fields FormResponses { get; set; }
+    }
+
+    public enum Gender
+    {
+        None, Male = 1, Female = 2
+    }
+
+    enum B
+    {
+        None,
+        Cat = 1,
+        Dog = 2
+    };
+
+    public class StudentApplicationDto : VolunteerApplicationDto
+    {
+        [JsonProperty(PropertyName = "firstName")]
+        [Required]
+        public CustomField FirstName { get; set; }
+
+        [JsonProperty(PropertyName = "lastName")]
+        [Required]
+        public CustomField LastName { get; set; }
+
+        [JsonProperty(PropertyName = "middleInitial")]
+        [Required]
+        public CustomField MiddleInitial { get; set; }
+
+        [JsonProperty(PropertyName = "email")]
+        [Required]
+        public CustomField Email { get; set; }
+
+        [JsonProperty(PropertyName = "nameForNameTag")]
+        [Required]
+        public CustomField NameForNameTag { get; set; }
+
+        [JsonProperty(PropertyName = "birthDate")]
+        [Required]
+        public CustomField BirthDate { get; set; }
+
+        private CustomField _gender;
+        [JsonProperty(PropertyName = "gender")]
+        [Required]
+        public CustomField Gender { get; set; }
+
+        [JsonProperty(PropertyName = "site")]
+        [Required]
+        public CustomField SiteAttend { get; set; }
+
+        [JsonProperty(PropertyName = "school")]
+        [Required]
+        public CustomField School { get; set; }
+
+    }
+
+    public class CustomField
+    {
+        public int CrossroadsId { get; set; }
+        public string Value { get; set; }
+
+        public int FormFieldId
+        {
+            get
+            {
+                //call MP to get ID
+                return 1;
+            }
+        }
+    }
+
+
+    public class Fields
     {
         [JsonProperty(PropertyName = "howLongAttending")]
         [Required]
-        public string HowLongAttending { get; set; }
+        public CustomField HowLongAttending { get; set; }
 
         [JsonProperty(PropertyName = "siteYouAttend")]
-        public string SiteYouAttend { get; set; }
+        public CustomField SiteYouAttend { get; set; }
 
         [JsonProperty(PropertyName = "whatServiceDoYouAttend")]
-        public string WhatServiceDoYouAttend { get; set; }
+        public CustomField WhatServiceDoYouAttend { get; set; }
 
         [JsonProperty(PropertyName = "previousName")]
-        public string PreviousName { get; set; }
+        public CustomField PreviousName { get; set; }
 
         [JsonProperty(PropertyName = "nameForNameTag")]
-        public string NameForNameTag { get; set; }
+        public CustomField NameForNameTag { get; set; }
 
         [JsonProperty(PropertyName = "employer")]
         public string Employer { get; set; }
@@ -44,45 +150,58 @@ namespace crds_angular.Models.Crossroads.VolunteerApplication
         public List<Child> Children { get; set; }
 
         [JsonProperty(PropertyName = "everBeenArrest")]
+        [MinistryPlatformField(Id = 36)]
         public string EverBeenArrest { get; set; }
 
         [JsonProperty(PropertyName = "addictionConcern")]
+        [MinistryPlatformField(Id = 38)]
         public string AddictionConcern { get; set; }
 
-       [JsonProperty(PropertyName = "neglectingChild")]
+        [JsonProperty(PropertyName = "neglectingChild")]
         public string NeglectingChild { get; set; }
 
         [JsonProperty(PropertyName = "psychiatricDisorder")]
+        [MinistryPlatformField(Id = 41)]
         public string PsychiatricDisorder { get; set; }
 
         [JsonProperty(PropertyName = "sexuallyActiveOutsideMarriage")]
+        [MinistryPlatformField(Id = 44)]
         public string SexuallyActiveOutsideMarriage { get; set; }
 
         [JsonProperty(PropertyName = "spiritualOrientation")]
+        [MinistryPlatformField(Id = 47)]
         public string SpiritualOrientation { get; set; }
 
         [JsonProperty(PropertyName = "spiritualOrientationExplain")]
+        [MinistryPlatformField(Id = 48)]
         public string SpiritualOrientationExplain { get; set; }
 
         [JsonProperty(PropertyName = "whatPromptedApplication")]
+        [MinistryPlatformField(Id = 50)]
         public string WhatPromptedApplication { get; set; }
 
         [JsonProperty(PropertyName = "specialTalents")]
+        [MinistryPlatformField(Id = 51)]
         public string SpecialTalents { get; set; }
 
         [JsonProperty(PropertyName = "availabilityWeek")]
+        [MinistryPlatformField(Id = 54)]
         public string AvailabilityWeek { get; set; }
 
         [JsonProperty(PropertyName = "availabilityWeekend")]
+        [MinistryPlatformField(Id = 55)]
         public string AvailabilityWeekend { get; set; }
 
         [JsonProperty(PropertyName = "availabilitySiteName")]
+        [MinistryPlatformField(Id = 56)]
         public string AvailabilitySiteName { get; set; }
 
         [JsonProperty(PropertyName = "availabilityServiceTimes")]
+        [MinistryPlatformField(Id = 58)]
         public string AvailabilityServiceTimes { get; set; }
 
         [JsonProperty(PropertyName = "areaOfInterestServingInClassroom")]
+        [MinistryPlatformField(Id = 60)]
         public string AreaOfInterestServingInClassroom { get; set; }
 
         [JsonProperty(PropertyName = "areaOfInterestWelcomingNewFamilies")]
@@ -126,42 +245,41 @@ namespace crds_angular.Models.Crossroads.VolunteerApplication
 
         [JsonProperty(PropertyName = "agreeDate")]
         public string AgreeDate { get; set; }
+    }
 
+    public class Child
+    {
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
 
-        public class Child
-        {
-            [JsonProperty(PropertyName = "name")]
-            public string Name { get; set; }
+        [JsonProperty(PropertyName = "birthdate")]
+        public string Birthdate { get; set; }
+    }
 
-            [JsonProperty(PropertyName = "birthdate")]
-            public string Birthdate { get; set; }
-        }
+    public class Reference
+    {
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
 
-        public class Reference
-        {
-            [JsonProperty(PropertyName = "name")]
-            public string Name { get; set; }
+        [JsonProperty(PropertyName = "lengthOfTimeKnown")]
+        public string LengthOfTimeKnown { get; set; }
 
-            [JsonProperty(PropertyName = "lengthOfTimeKnown")]
-            public string LengthOfTimeKnown { get; set; }
+        [JsonProperty(PropertyName = "homePhone")]
+        public string HomePhone { get; set; }
 
-            [JsonProperty(PropertyName = "homePhone")]
-            public string HomePhone { get; set; }
+        [JsonProperty(PropertyName = "siteYouAttend")]
+        public string MobilPhone { get; set; }
 
-            [JsonProperty(PropertyName = "siteYouAttend")]
-            public string MobilPhone { get; set; }
+        [JsonProperty(PropertyName = "siteYouAttend")]
+        public string WorkPhone { get; set; }
 
-            [JsonProperty(PropertyName = "siteYouAttend")]
-            public string WorkPhone { get; set; }
+        [JsonProperty(PropertyName = "siteYouAttend")]
+        public string Email { get; set; }
 
-            [JsonProperty(PropertyName = "siteYouAttend")]
-            public string Email { get; set; }
+        [JsonProperty(PropertyName = "siteYouAttend")]
+        public string NatureOfAssociation { get; set; }
 
-            [JsonProperty(PropertyName = "siteYouAttend")]
-            public string NatureOfAssociation { get; set; }
-
-            [JsonProperty(PropertyName = "siteYouAttend")]
-            public string Occupation { get; set; }
-        }
+        [JsonProperty(PropertyName = "siteYouAttend")]
+        public string Occupation { get; set; }
     }
 }
