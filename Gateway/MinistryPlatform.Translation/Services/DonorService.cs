@@ -105,7 +105,6 @@ namespace MinistryPlatform.Translation.Services
                     WithApiLogin<int>(
                         apiToken =>
                             (ministryPlatformService.CreateRecord(donationDistributionPageId, distributionValues, apiToken, true)));
-                SendConfirmationEmail(Convert.ToInt32(programId),donorId,donationAmt,setupTime);
             }
             catch (Exception e)
             {
@@ -242,9 +241,9 @@ namespace MinistryPlatform.Translation.Services
                 EmailBody = template.Body,
                 EmailSubject = template.Subject,
                 FromContactId = 5,
-                FromEmailAddress = "finance@crossroads.net",
+                FromEmailAddress = "giving@crossroads.net",
                 ReplyContactId = 5,
-                ReplyToEmailAddress = "finance@crossroads.net",
+                ReplyToEmailAddress = "giving@crossroads.net",
                 ToContactId = contact.ContactId,
                 ToEmailAddress = contact.Email
             };
