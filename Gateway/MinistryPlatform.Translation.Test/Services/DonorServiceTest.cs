@@ -90,16 +90,35 @@ namespace MinistryPlatform.Translation.Test.Services
             var setupDate = DateTime.Now;
             var charge_id = "ch_crds1234567";
             var pymt_type = "cc";
+            var registeredDonor = "yes";
             var expectedDonationId = 321321;
             var expectedDonationDistributionId = 231231;
             var donationPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Donations"]);
+            var donationDistPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Distributions"]);
+
+            var mockDonationValues = new Dictionary<string, object>
+            {
+                {"Donor_ID", donorId},
+                {"Donation_Amount", donationAmt},
+                {"Payment_Type_ID", "4"},
+                {"Donation_Date", setupDate},
+                {"Transaction_code", charge_id},
+                {"Registered_Donor", registeredDonor}
+            };
+
+            var mockDistributionValues = new Dictionary<string, object>
+            {
+                {"Donation_ID", 321321},
+                {"Amount", donationAmt},
+                {"Program_ID", programId}
+            };
 
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
-              It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(),
+              donationPageId, mockDonationValues,
               It.IsAny<string>(), true)).Returns(expectedDonationId);
 
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
-              It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(),
+              donationDistPageId, mockDistributionValues,
               It.IsAny<string>(), true)).Returns(expectedDonationDistributionId);
 
             var expectedDonationValues = new Dictionary<string, object>
@@ -114,9 +133,9 @@ namespace MinistryPlatform.Translation.Test.Services
 
             var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, donorId, programId, charge_id, pymt_type, setupDate, true);
 
-            _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donationPageId, expectedDonationValues, It.IsAny<string>(), true));
+           _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donationPageId, expectedDonationValues, It.IsAny<string>(), true));
 
-            _ministryPlatformService.VerifyAll();
+           _ministryPlatformService.VerifyAll();
             Assert.IsNotNull(response);
             Assert.AreEqual(response, expectedDonationDistributionId);
         }

@@ -79,7 +79,7 @@ namespace crds_angular.test.controllers
         }
 
         [Test]
-        public void TestGetSuccessGetDonorAuthenticatedReturnDefaultCard()
+        public void TestGetSuccessGetDonorAuthenticated()
         {
             var contactDonor = new ContactDonor
             {
