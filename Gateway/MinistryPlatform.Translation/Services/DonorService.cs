@@ -67,16 +67,8 @@ namespace MinistryPlatform.Translation.Services
 
         public int CreateDonationAndDistributionRecord(int donationAmt, int donorId, string programId, string charge_id, string pymt_type, DateTime setupTime, bool registeredDonor)
         {
-            string pymt_id;
-            if (pymt_type == "cc")
-            {
-                pymt_id = "4";
-            }
-            else
-            {
-                pymt_id = "5";
-            } 
-
+            var pymt_id = (pymt_type == "bank") ? "4" : "5";
+            
             var donationValues = new Dictionary<string, object>
             {
                 {"Donor_ID", donorId},

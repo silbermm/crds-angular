@@ -127,9 +127,9 @@ namespace crds_angular.test.Services
             customer.id = "12345";
             customer.default_source = "some card";
 
-            var getCustomerResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
-            getCustomerResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
-            getCustomerResponse.SetupGet(mocked => mocked.Data).Returns(customer).Verifiable();
+            //var getCustomerResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
+            //getCustomerResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            //getCustomerResponse.SetupGet(mocked => mocked.Data).Returns(customer).Verifiable();
 
             //restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(getCustomerResponse.Object);
 
