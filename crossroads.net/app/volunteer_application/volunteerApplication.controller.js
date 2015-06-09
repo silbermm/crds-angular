@@ -15,6 +15,7 @@
     vm.contactId = $stateParams.id;
     vm.pageInfo = pageInfo(CmsInfo);
     vm.person = Contact;
+    vm.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
     // responseCheck, need a better way to handle
     // we display form before OpportunityReponse is
     // returned.  When it returns false, form is hidden
@@ -57,6 +58,10 @@
       } else {
         vm.showError = true;
       }
+    }
+
+    function fieldHasError(form, formField){
+       
     }
 
     function opportunityResponse() {
