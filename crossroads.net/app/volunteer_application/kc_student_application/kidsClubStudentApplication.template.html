@@ -80,12 +80,12 @@
       <div class="row">
         <div class="form-group col-sm-6">
           <label class="control-label required" for="attending">How long have you been attending Crossroads?</label>
-          <input type="text" class="form-control" id="attending" placeholder="How long have you been attending crossroads?">
+          <input type="text" class="form-control" id="attending" ng-model="kcStudentApplication.attending" placeholder="How long have you been attending crossroads?">
           <span ng-show="false">Please provide a valid value.</span>
         </div>
         <div class="form-group col-sm-6">
           <label class="control-label required" for="serviceAttend">What Service do you attend?</label>
-          <input type="text" class="form-control" id="serviceAttend" placeholder="What Service do you attend?">
+          <input type="text" class="form-control" id="serviceAttend" ng-model="kcStudentApplication.service" placeholder="What Service do you attend?">
           <span ng-show="false">Please provide a valid value.</span>
         </div>
       </div>
@@ -122,7 +122,6 @@
           <input type="text" class="form-control" id="homePhone" placeholder="Home Phone" ng-value="volunteer.person.homePhone" disabled="true">
           <span ng-show="false">Please provide a valid value.</span>
         </div>
-
       </div>
       <!--/row-->
   </fieldset>
@@ -137,7 +136,7 @@
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label required" for="grade">Grade</label>
-        <input type="text" class="form-control" id="grade" placeholder="Enter grade">
+        <input type="text" class="form-control" id="grade" ng-model="kcStudentApplication.grade" placeholder="Enter grade">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
     </div>
@@ -149,17 +148,17 @@
       <div class="form-group col-sm-12">
         <label class="block required">Tell us where you are</label>
 
-        <div class="checkbox">
+        <div class="radio-inline">
           <label>
-            <input type="checkbox">I'm exploring my faith</label>
+            <input type="radio" ng-model="kcStudentApplication.whereYouAre">I'm exploring my faith</label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox">I'm not sure</label>
+            <input type="radio" ng-model="kcStudentApplication.whereYouAre">I'm not sure</label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox">I'm a Christ-follower</label>
+            <input type="radio" ng-model="kcStudentApplication.whereYouAre">I'm a Christ-follower</label>
         </div>
 
       </div>
@@ -167,21 +166,21 @@
     <div class="row">
       <div class="form-group col-sm-8">
         <label class="control-label required" for="explainFaith">Please Explain</label>
-        <input type="text" class="form-control" id="explainFaith" placeholder="Please Explain">
+        <input type="text" class="form-control" id="explainFaith" ng-model="kcStudentApplication.explainFaith" placeholder="Please Explain">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
     </div>
     <div class="row">
       <div class="form-group col-sm-8">
         <label class="control-label required" for="promptedApplication">Why do you want to serve?</label>
-        <input type="text" class="form-control" id="promptedApplication" placeholder="Why do you want to serve?">
+        <input type="text" class="form-control" id="promptedApplication" ng-model="kcStudentApplication.whyServe" placeholder="Why do you want to serve?">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
     </div>
     <div class="row">
       <div class="form-group col-sm-8">
         <label class="control-label" for="specialSkills">Any special talents, abilities, skills or experiences that may be helpful? (Juggling, fire eating, acting, or making weird noises with your armpit count.)</label>
-        <input type="text" class="form-control" id="specialSkills" placeholder="Special talents...">
+        <input type="text" class="form-control" id="specialSkills" ng-model="kcStudentApplication.specialTalents" placeholder="Special talents...">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
     </div>
@@ -195,30 +194,30 @@
 
         <div class="checkbox">
           <label>
-            <input type="checkbox">During the Week</label>
+            <input type="checkbox" ng-model="kcStudentApplication.availabilityDuringWeek">During the Week</label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox">Weekend Services At</label>
+            <input type="checkbox" ng-model="kcStudentApplication.availabilityDuringWeekend">Weekend Services At</label>
         </div>
       </div>
 
       <div class="form-group col-sm-6">
         <label class="block required">Site name</label>
         <label class="radio-inline">
-          <input type="radio" value="oakley" name="siteAttend">Oakley
+          <input type="radio" value="oakley" name="siteAttend" ng-model="kcStudentApplication.serveSite">Oakley
         </label>
         <label class="radio-inline">
-          <input type="radio" value="florence" name="siteAttend">Florence
+          <input type="radio" value="florence" name="siteAttend" ng-model="kcStudentApplication.serveSite">Florence
         </label>
         <label class="radio-inline">
-          <input type="radio" value="west side" name="siteAttend">West Side
+          <input type="radio" value="west side" name="siteAttend" ng-model="kcStudentApplication.serveSite">West Side
         </label>
         <label class="radio-inline">
-          <input type="radio" value="mason" name="siteAttend">Mason
+          <input type="radio" value="mason" name="siteAttend" ng-model="kcStudentApplication.serveSite">Mason
         </label>
         <label class="radio-inline">
-          <input type="radio" value="clifton" name="siteAttend">Clifton
+          <input type="radio" value="clifton" name="siteAttend" ng-model="kcStudentApplication.serveSite">Clifton
         </label>
       </div>
     </div>
@@ -226,7 +225,7 @@
     <div class="row">
       <div class="form-group col-sm-6">
         <label class="control-label required" for="serveServiceTimes">During</label>
-        <input type="text" class="form-control" id="serveServiceTimes" placeholder="Service Times">
+        <input type="text" class="form-control" id="serveServiceTimes" ng-model="kcStudentApplication.serveServiceTimes" placeholder="Service Times">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
     </div>
@@ -237,15 +236,15 @@
         <label class="required">What age kids do you prefer to serve with?</label>
         <div class="checkbox">
           <label>
-            <input type="checkbox">1 - 2 years old</label>
+            <input type="checkbox" ng-model="kcStudentApplication.serveAgeKids">1 - 2 years old</label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox">3-year olds - Pre-K</label>
+            <input type="checkbox" ng-model="kcStudentApplication.serveAgeKids">3-year olds - Pre-K</label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox">Kinder - 5th Grade</label>
+            <input type="checkbox" ng-model="kcStudentApplication.serveAgeKids">Kinder - 5th Grade</label>
         </div>
       </div>
   </fieldset>
@@ -258,42 +257,42 @@
       <h4 class="col-sm-12">First Reference</h4>
       <div class="form-group col-sm-6">
         <label class="control-label required" for="referenceName-1">Name</label>
-        <input type="text" class="form-control" id="referenceName-1" placeholder="Name">
+        <input type="text" class="form-control" id="referenceName-1" ng-model="kcStudentApplication.reference1.name" placeholder="Name">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label required" for="referenceTimeKnown-1">Length of time known</label>
-        <input type="text" class="form-control" id="referenceTimeKnown-1" placeholder="Length of time known">
+        <input type="text" class="form-control" id="referenceTimeKnown-1" ng-model="kcStudentApplication.reference1.timeKnown" placeholder="Length of time known">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label" for="referenceHomePhone-1">Home Phone</label>
-        <input type="text" class="form-control" id="referenceHomePhone-1" placeholder="Home Phone">
+        <input type="text" class="form-control" id="referenceHomePhone-1" ng-model="kcStudentApplication.reference1.homePhone" placeholder="Home Phone">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label" for="referenceMobilePhone-1">Mobile Phone</label>
-        <input type="text" class="form-control" id="referenceMobilePhone-1" placeholder="Mobile Phone">
+        <input type="text" class="form-control" id="referenceMobilePhone-1" ng-model="kcStudentApplication.reference1.mobilePhone" placeholder="Mobile Phone">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label" for="referenceWorkPhone-1">Work Phone</label>
-        <input type="text" class="form-control" id="referenceWorkPhone-1" placeholder="Work Phone">
+        <input type="text" class="form-control" id="referenceWorkPhone-1" ng-model="kcStudentApplication.reference1.workPhone" placeholder="Work Phone">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label required" for="referenceEmail-1">Email</label>
-        <input type="text" class="form-control" id="referenceEmail-1" placeholder="Email">
+        <input type="text" class="form-control" id="referenceEmail-1" ng-model="kcStudentApplication.reference1.email" placeholder="Email">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label required" for="referenceAssociation-1">Nature of Association</label>
-        <input type="text" class="form-control" id="referenceAssociation-1" placeholder="Nature of Association">
+        <input type="text" class="form-control" id="referenceAssociation-1" ng-model="kcStudentApplication.reference1.association" placeholder="Nature of Association">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label required" for="referenceOccupation-1">Occupation</label>
-        <input type="text" class="form-control" id="referenceOccupation-1" placeholder="Occupation">
+        <input type="text" class="form-control" id="referenceOccupation-1" ng-model="kcStudentApplication.reference1.occupation" placeholder="Occupation">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
     </div><!--/row-->
@@ -304,42 +303,42 @@
       <h4 class="col-sm-12">Second Reference</h4>
       <div class="form-group col-sm-6">
         <label class="control-label required" for="referenceName-2">Name</label>
-        <input type="text" class="form-control" id="referenceName-2" placeholder="Name">
+        <input type="text" class="form-control" id="referenceName-2" ng-model="kcStudentApplication.reference2.name" placeholder="Name">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label required" for="referenceTimeKnown-2">Length of time known</label>
-        <input type="text" class="form-control" id="referenceTimeKnown-2" placeholder="Length of time known">
+        <input type="text" class="form-control" id="referenceTimeKnown-2" ng-model="kcStudentApplication.reference2.timeKnown" placeholder="Length of time known">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label" for="referenceHomePhone-2">Home Phone</label>
-        <input type="text" class="form-control" id="referenceHomePhone-2" placeholder="Home Phone">
+        <input type="text" class="form-control" id="referenceHomePhone-2" ng-model="kcStudentApplication.reference2.homePhone" placeholder="Home Phone">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label" for="referenceMobilePhone-2">Mobile Phone</label>
-        <input type="text" class="form-control" id="referenceMobilePhone-2" placeholder="Mobile Phone">
+        <input type="text" class="form-control" id="referenceMobilePhone-2" ng-model="kcStudentApplication.reference2.mobilePhone" placeholder="Mobile Phone">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label" for="referenceWorkPhone-2">Work Phone</label>
-        <input type="text" class="form-control" id="referenceWorkPhone-2" placeholder="Work Phone">
+        <input type="text" class="form-control" id="referenceWorkPhone-2" ng-model="kcStudentApplication.reference2.workPhone" placeholder="Work Phone">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label required" for="referenceEmail-2">Email</label>
-        <input type="text" class="form-control" id="referenceEmail-2" placeholder="Email">
+        <input type="text" class="form-control" id="referenceEmail-2" ng-model="kcStudentApplication.reference2.email" placeholder="Email">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label required" for="referenceAssociation-2">Nature of Association</label>
-        <input type="text" class="form-control" id="referenceAssociation-2" placeholder="Nature of Association">
+        <input type="text" class="form-control" id="referenceAssociation-2" ng-model="kcStudentApplication.reference2.Association" placeholder="Nature of Association">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label required" for="referenceOccupation-2">Occupation</label>
-        <input type="text" class="form-control" id="referenceOccupation-2" placeholder="Occupation">
+        <input type="text" class="form-control" id="referenceOccupation-2" ng-model="kcStudentApplication.reference2.occupation" placeholder="Occupation">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
     </div><!--/row-->
@@ -355,16 +354,16 @@
       <div class="form-group col-sm-6">
         <label class="block required">Parent/Guaridan Consent</label>
         <label class="radio-inline">
-          <input type="radio" value="signature" name="parentSignature">Yes
+          <input type="radio" value="signature" name="parentSignature" ng-model="kcStudentApplication.parentSignature">Yes
         </label>
         <label class="radio-inline">
-          <input type="radio" value="signature" name="parentSignature">No
+          <input type="radio" value="signature" name="parentSignature" ng-model="kcStudentApplication.parentSignature">No
         </label>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label required" for="parentSignatureDate">Date</label>
         <div class="input-group">
-          <input name="parentSignatureDate" type="text" id="parentSignatureDate" class="form-control" datepicker-popup="{{format}}" ng-required="true" close-text="Close" ng-model="parentSignatureDate" is-open="datePickers.signatureDate" datepicker-options="dateOptions" />
+          <input name="parentSignatureDate" type="text" id="parentSignatureDate" class="form-control" datepicker-popup="{{format}}" ng-required="true" close-text="Close" ng-model="kcStudentApplication.parentSignatureDate" is-open="datePickers.signatureDate" datepicker-options="dateOptions" />
           <span class="input-group-btn">
             <button type="button" class="btn btn-gray-light" ng-click="openFromDate($event)">
               <i class="glyphicon glyphicon-calendar"></i>
@@ -379,16 +378,16 @@
       <div class="form-group col-sm-6">
         <label class="block required">Student Agreement</label>
         <label class="radio-inline">
-          <input type="radio" value="signature" name="studentSignature">Yes
+          <input type="radio" value="signature" name="studentSignature" ng-model="kcStudentApplication.studentSignature">Yes
         </label>
         <label class="radio-inline">
-          <input type="radio" value="signature" name="studentSignature">No
+          <input type="radio" value="signature" name="studentSignature" ng-model="kcStudentApplication.studentSignature">No
         </label>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label required" for="studentSignatureDate">Date</label>
         <div class="input-group">
-          <input name="studentSignatureDate" type="text" id="studentSignatureDate" class="form-control" datepicker-popup="{{format}}" ng-required="true" close-text="Close" ng-model="studentSignatureDate" is-open="datePickers.signatureDate" datepicker-options="dateOptions" />
+          <input name="studentSignatureDate" type="text" id="studentSignatureDate" class="form-control" datepicker-popup="{{format}}" ng-required="true" close-text="Close" ng-model="kcStudentApplication.studentSignatureDate" is-open="datePickers.signatureDate" datepicker-options="dateOptions" />
           <span class="input-group-btn">
             <button type="button" class="btn btn-gray-light" ng-click="openFromDate($event)">
               <i class="glyphicon glyphicon-calendar"></i>
