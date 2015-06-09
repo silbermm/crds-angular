@@ -121,20 +121,26 @@ namespace crds_angular.Controllers.API
                 else
                 {
                     var default_source = stripePaymentService.getDefaultSource(donor.ProcessorId);
-
-                    var response = new DonorDTO
+                   
+                    var response = new DonorDTO()   
                     {
                         id = donor.DonorId,
                         Processor_ID = donor.ProcessorId,
                         default_source = new DefaultSourceDTO
                         {
-                            type = default_source.@object,
-                            last4 = default_source.last4,
-                            name = default_source.name,
-                            brand = default_source.brand,
-                            routing = default_source.routing_number,
-                            address_zip = default_source.address_zip,
-                            exp_date = default_source.exp_month + default_source.exp_year
+                            credit_card = new CreditCardDTO
+                            {
+                               last4 = default_source.last4,
+                                name = default_source.name,
+                                brand = default_source.brand,
+                                address_zip = default_source.address_zip,
+                                exp_date = default_source.exp_month + default_source.exp_year
+                            },
+                            bank_account = new BankAccountDTO
+                            {
+                               last4 = default_source.last4,
+                               routing = default_source.routing_number
+                            }
                          }
                     };
 
@@ -209,13 +215,19 @@ namespace crds_angular.Controllers.API
                     Processor_ID = contactDonor.ProcessorId,
                     default_source = new DefaultSourceDTO
                     {
-                        type = sourceData.@object,
-                        brand = sourceData.brand,
-                        last4 = sourceData.last4,
-                        name = sourceData.name,
-                        routing = sourceData.routing_number,
-                        address_zip = sourceData.address_zip,
-                        exp_date = sourceData.exp_month + sourceData.exp_year
+                        credit_card = new CreditCardDTO
+                        {
+                            brand = sourceData.brand,
+                            last4 = sourceData.last4,
+                            name = sourceData.name,
+                            address_zip = sourceData.address_zip,
+                            exp_date = sourceData.exp_month + sourceData.exp_year
+                        },
+                        bank_account = new BankAccountDTO
+                        {
+                            last4 = sourceData.last4,
+                            routing = sourceData.routing_number
+                        }
                     }
                 };
 

@@ -167,21 +167,21 @@ require('../creditCardInfo.html');
           };
         }
 
-        if(!scope.defaultSource) {
+        if(!scope.defaultSource.credit_card) {
           scope.resetDefaultCardPlaceholderValues();
-        } else if(scope.defaultSource.last4) {
+        } else if(scope.defaultSource.credit_card.last4) {
           scope.creditCard.nameOnCard = "";
           scope.creditCard.ccNumber = "";
           scope.creditCard.expDate = "";
           scope.creditCard.cvc = "";
           scope.creditCard.billingZipCode = "";
           scope.defaultCardPlaceholderValues = {
-            billingZipCode: scope.defaultSource.address_zip,
-            brand: scope.defaultSource.brand,
+            billingZipCode: scope.defaultSource.credit_card.address_zip,
+            brand: scope.defaultSource.credit_card.brand,
             cvc: "XXX",
-            expDate: scope.defaultSource.exp_date.replace(/^(..)(..).*$/, "$1/$2"),
-            nameOnCard: scope.defaultSource.name,
-            maskedCard: "XXXXXXXXXXX" + scope.defaultSource.last4
+            expDate: scope.defaultSource.credit_card.exp_date.replace(/^(..)(..).*$/, "$1/$2"),
+            nameOnCard: scope.defaultSource.credit_card.name,
+            maskedCard: "XXXXXXXXXXX" + scope.defaultSource.credit_card.last4
           };
 
           scope.ccCardType();
