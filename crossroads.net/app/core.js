@@ -25,6 +25,11 @@ require('./email_field/email_field_directive');
 require('./password_field/password_field_directive');
 require('./filters');
 
+require('./app.config');
+require('./app.controller');
+require('./app.run');
+require('./routes');
+
 require('./errors');
 
 // require and export getCookie on global scope

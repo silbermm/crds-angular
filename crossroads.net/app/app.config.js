@@ -1,7 +1,7 @@
 'use strict()';
 (function(){
 
-  var app = angular.module("crossroads");
+  var app = angular.module("crossroads.core");
   app.config(AppConfig);
 
   AppConfig.$inject = ['$httpProvider', '$locationProvider'];

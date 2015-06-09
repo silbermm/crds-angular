@@ -1,19 +1,17 @@
 ﻿"use strict";
 (function() {
-    angular.module("crossroads").run( AppRun );
+    angular.module("crossroads.core").run( AppRun );
 
-    AppRun.$inject = ["Session", "$rootScope", "MESSAGES", "$http", "$log", "$state", "$timeout", "$location", 'MPTools'];
+    AppRun.$inject = ["Session", "$rootScope", "MESSAGES", "$http", "$log", "$state", "$timeout", "$location"];
 
-    function AppRun(Session, $rootScope, MESSAGES, $http, $log, $state, $timeout, $location, MPTools) {
+    function AppRun(Session, $rootScope, MESSAGES, $http, $log, $state, $timeout, $location) {
         $rootScope.MESSAGES = MESSAGES;
 
         function clearAndRedirect(event, toState,toParams) {
             // TODO Added to debug/research US1403 - should remove after issue is resolved
             console.log("US1403: clearAndRedirect to " + toState.name + " in app.run");
             console.log($location.search());
-            if($location.search()['ug'] !== undefined){
-              MPTools.setParams($location);
-            }
+
             Session.clear();
             $rootScope.userid = null;
             $rootScope.username = null;

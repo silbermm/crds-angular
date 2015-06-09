@@ -1,25 +1,8 @@
 "use strict";
 
 (function () {
-  require('./login/login_page.html');
-  require('./register/register_form.html');
-  require('./community_groups_signup')
-  require('./mytrips');
-  require('./profile/profile.html');
-  require('./profile/personal/profile_personal.html');
-  require('./profile/profile_account.html');
-  require('./profile/skills/profile_skills.html');
-  require('./styleguide');
-  require('./give');
-  require('./myprofile');
-  require('./community_groups_signup/group_signup_form.html');
-  require('./my_serve');
-  require('./go_trip_giving');
-  require('./corkboard');
-  require('./volunteer_signup');
-  require('./volunteer_application');
 
-  angular.module("crossroads").config(["$stateProvider", "$urlRouterProvider", "$httpProvider", "$urlMatcherFactoryProvider", "$locationProvider", function ($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory, $locationProvider) {
+  angular.module("crossroads.core").config(["$stateProvider", "$urlRouterProvider", "$httpProvider", "$urlMatcherFactoryProvider", "$locationProvider", function ($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory, $locationProvider) {
 
         $httpProvider.defaults.useXDomain = true;
         $httpProvider.defaults.headers.common['Authorization'] = getCookie('sessionId');

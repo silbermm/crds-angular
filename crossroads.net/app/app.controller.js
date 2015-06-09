@@ -1,7 +1,7 @@
 'use strict()';
 (function(){
 
-  angular.module("crossroads").controller('appController', AppController);
+  angular.module("crossroads.core").controller('appController', AppController);
 
   AppController.$inject = [
     "$scope",

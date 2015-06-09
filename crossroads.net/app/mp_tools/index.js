@@ -6,5 +6,6 @@
 
   require('./mpTools.service');
   require('./signup_to_serve');
+  require('./mpTools.run');
 
 })();
