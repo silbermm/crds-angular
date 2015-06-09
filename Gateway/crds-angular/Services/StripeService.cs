@@ -42,7 +42,7 @@ namespace crds_angular.Services
         public SourceData updateCustomerSource(string customerToken, string cardToken)
         {
             SourceData defaultSource = new SourceData();
-            
+
             var request = new RestRequest("customers/" + customerToken, Method.POST);
             request.AddParameter("source", cardToken);
 

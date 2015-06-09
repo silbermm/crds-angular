@@ -2,7 +2,7 @@
 
 namespace crds_angular.Models.Crossroads
 {
-   public class DefaultSourceDTO
+    public class DefaultSourceDTO
     {
         public CreditCardDTO credit_card { get; set; }
         public BankAccountDTO bank_account { get; set; }

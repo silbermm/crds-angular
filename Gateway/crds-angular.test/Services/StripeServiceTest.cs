@@ -5,12 +5,8 @@ using Moq;
 using NUnit.Framework;
 using RestSharp;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Net;
-using crds_angular.Services.Interfaces;
-using log4net.Config;
-using Rhino.Mocks.Impl.Invocation.Specifications;
+
 
 namespace crds_angular.test.Services
 {
@@ -127,12 +123,6 @@ namespace crds_angular.test.Services
             customer.id = "12345";
             customer.default_source = "some card";
 
-            //var getCustomerResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
-            //getCustomerResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
-            //getCustomerResponse.SetupGet(mocked => mocked.Data).Returns(customer).Verifiable();
-
-            //restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(getCustomerResponse.Object);
-
             var charge = new StripeCharge();
             charge.id = "90210";
 
@@ -144,24 +134,17 @@ namespace crds_angular.test.Services
 
             var response = fixture.chargeCustomer("cust_token", 9090, 98765, "cc");
 
-            //restClient.Verify(mocked => mocked.Execute<StripeCustomer>(
-            //    It.Is<IRestRequest>(o =>
-            //        o.Method == Method.GET
-            //        && o.Resource.Equals("customers/cust_token"))));
-
             restClient.Verify(mocked => mocked.Execute<StripeCharge>(
                 It.Is<IRestRequest>(o =>
                     o.Method == Method.POST
                     && o.Resource.Equals("charges")
                     && parameterMatches("amount", 9090 * 100, o.Parameters)
                     && parameterMatches("currency", "usd", o.Parameters)
-                        //  && parameterMatches("source", "some card", o.Parameters)
                     && parameterMatches("customer", "cust_token", o.Parameters)
                     && parameterMatches("description", "Donor ID #98765", o.Parameters)
                     )));
 
             restClient.VerifyAll();
-           // getCustomerResponse.VerifyAll();
             chargeResponse.VerifyAll();
 
             Assert.AreEqual("90210", response);

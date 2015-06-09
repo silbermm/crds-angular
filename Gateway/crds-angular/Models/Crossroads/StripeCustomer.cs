@@ -49,7 +49,7 @@ namespace crds_angular.Models.Crossroads
         public string routing_number { get; set; }
         public string bank_name { get; set; }
     }
-   
+
     public class Sources
     {
         public string @object { get; set; }

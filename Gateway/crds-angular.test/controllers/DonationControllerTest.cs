@@ -101,8 +101,7 @@ namespace crds_angular.test.controllers
             var contactId = 999999;
             var donationId = 6186818;
             var charge_id = "ch_crdscharge86868";
-
-
+            
             var createDonationDTO = new CreateDonationDTO
             {
                 program_id = "3", //crossroads
@@ -126,8 +125,8 @@ namespace crds_angular.test.controllers
             gatewayDonorServiceMock.Setup(mocked => mocked.GetContactDonorForEmail(createDonationDTO.email_address)).Returns(donor);
             
             stripeServiceMock.Setup(
-              mocked => mocked.chargeCustomer(donor.ProcessorId, createDonationDTO.amount, donor.DonorId, createDonationDTO.pymt_type))
-             .Returns(charge_id);
+                mocked => mocked.chargeCustomer(donor.ProcessorId, createDonationDTO.amount, donor.DonorId, createDonationDTO.pymt_type)).
+                Returns(charge_id);
 
             donorServiceMock.Setup(mocked => mocked.
                 CreateDonationAndDistributionRecord(createDonationDTO.amount, donor.DonorId,
