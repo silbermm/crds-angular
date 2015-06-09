@@ -17,8 +17,10 @@ describe('GiveController', function() {
       mockGetResponse = {
         Processor_ID: "123456",
         default_source :  {
+          credit_card : {
             brand : "Visa",
             last4  :"9876"
+          }
         }
       };
 
@@ -199,8 +201,8 @@ describe('GiveController', function() {
       expect(mockEvent.preventDefault).toHaveBeenCalled();
       expect(mockPaymentService.donor).toHaveBeenCalled();
       expect(controller.donorError).toBeFalsy();
-      expect(controller.donor.default_source.last4).toBe("9876");
-      expect(controller.donor.default_source.brand).toBe("Visa");
+      expect(controller.donor.default_source.credit_card.last4).toBe("9876");
+      expect(controller.donor.default_source.credit_card.brand).toBe("Visa");
     });
   });
 
