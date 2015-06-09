@@ -295,11 +295,5 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.IsNull(response.ProcessorId);
         }
 
-        //[Test]
-        //public void TestSendConfirmationEmail()
-        //{
-        //    _fixture.SendConfirmationEmail(3);
-        //}
-
     }
 }
