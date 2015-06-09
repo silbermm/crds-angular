@@ -90,35 +90,16 @@ namespace MinistryPlatform.Translation.Test.Services
             var setupDate = DateTime.Now;
             var charge_id = "ch_crds1234567";
             var pymt_type = "cc";
-            var registeredDonor = "true";
             var expectedDonationId = 321321;
             var expectedDonationDistributionId = 231231;
             var donationPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Donations"]);
-            var donationDistPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Distributions"]);
-
-            var mockDonationValues = new Dictionary<string, object>
-            {
-                {"Donor_ID", donorId},
-                {"Donation_Amount", donationAmt},
-                {"Payment_Type_ID", "4"},
-                {"Donation_Date", It.IsAny<DateTime>()},
-                {"Transaction_code", charge_id},
-                {"Registered_Donor", true}
-            };
-
-            var mockDistributionValues = new Dictionary<string, object>
-            {
-                {"Donation_ID", 321321},
-                {"Amount", donationAmt},
-                {"Program_ID", programId}
-            };
 
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
-              donationPageId, mockDonationValues,
+              It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(),
               It.IsAny<string>(), true)).Returns(expectedDonationId);
 
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
-              donationDistPageId, mockDistributionValues,
+              It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(),
               It.IsAny<string>(), true)).Returns(expectedDonationDistributionId);
 
             var expectedDonationValues = new Dictionary<string, object>
@@ -126,18 +107,18 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Donor_ID", donorId},
                 {"Donation_Amount", donationAmt},
                 {"Payment_Type_ID", "4"}, //hardcoded as credit card until ACH stories are worked
-                {"Donation_Date", It.IsAny<DateTime>()},
+                {"Donation_Date", setupDate},
                 {"Transaction_code", charge_id},
                 {"Registered_Donor", true}
             };
 
             var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, donorId, programId, charge_id, pymt_type, setupDate, true);
 
-           _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donationPageId, expectedDonationValues, It.IsAny<string>(), true));
+            _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donationPageId, expectedDonationValues, It.IsAny<string>(), true));
 
-           //_ministryPlatformService.VerifyAll();
-          // Assert.IsNotNull(response);
-           // Assert.AreEqual(response, expectedDonationDistributionId);
+            _ministryPlatformService.VerifyAll();
+            Assert.IsNotNull(response);
+            Assert.AreEqual(response, expectedDonationDistributionId);
         }
 
         [Test]
