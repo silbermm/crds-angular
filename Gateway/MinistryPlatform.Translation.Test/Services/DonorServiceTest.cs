@@ -6,6 +6,7 @@ using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
+using Newtonsoft.Json.Bson;
 using NUnit.Framework;
 
 namespace MinistryPlatform.Translation.Test.Services
@@ -14,13 +15,17 @@ namespace MinistryPlatform.Translation.Test.Services
     public class DonorServiceTest
     {
         private Mock<IMinistryPlatformService> _ministryPlatformService;
+        private Mock<IProgramService> _programService;
+        private Mock<ICommunicationService> _communicationService;
         private DonorService _fixture;
 
         [SetUp]
         public void SetUp()
         {
             _ministryPlatformService = new Mock<IMinistryPlatformService>();
-            _fixture = new DonorService(_ministryPlatformService.Object);
+            _programService = new Mock<IProgramService>();
+            _communicationService = new Mock<ICommunicationService>();
+            _fixture = new DonorService(_ministryPlatformService.Object, _programService.Object,_communicationService.Object);
         }
 
         [Test]
@@ -91,6 +96,9 @@ namespace MinistryPlatform.Translation.Test.Services
             var charge_id = "ch_crds1234567";
             var expectedDonationId = 321321;
             var expectedDonationDistributionId = 231231;
+            const string viewKey = "DonorByContactId";
+            const string sortString = "";
+            var searchString = "," + donorId;
             var donationPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Donations"]);
 
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
@@ -100,6 +108,8 @@ namespace MinistryPlatform.Translation.Test.Services
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
               It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(),
               It.IsAny<string>(), true)).Returns(expectedDonationDistributionId);
+
+            _communicationService.Setup(mocked => mocked.SendMessage(It.IsAny<Communication>(), It.IsAny<Dictionary<string, object>>()));
 
             var expectedDonationValues = new Dictionary<string, object>
             {
@@ -111,11 +121,43 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Registered_Donor", true}
             };
 
+            var programServiceResponse = new Program
+            {
+                CommunicationTemplateId = 1234,
+                ProgramId = 3,
+                Name = "Crossroads"
+            };
+
+            _programService.Setup(mocked => mocked.GetProgramById(It.IsAny<int>())).Returns(programServiceResponse);
+
+            var dictList = new List<Dictionary<string, object>>();
+            dictList.Add(new Dictionary<string, object>()
+            {
+                {"Email","test@test.com"},
+                {"Contact_ID","1234"}
+            });
+
+
+            _ministryPlatformService.Setup(mocked => mocked.GetPageViewRecords(viewKey, It.IsAny<string>(), searchString, sortString, 0)).Returns(dictList);
+
+            var getTemplateResponse = new MessageTemplate()
+            {
+                Body = "Test Body Content",
+                Subject = "Test Email Subject Line"
+            };
+            _communicationService.Setup(mocked => mocked.GetTemplate(It.IsAny<int>())).Returns(getTemplateResponse);
+
+
             var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, donorId, programId, charge_id, setupDate, true);
 
+            // Explicitly verify each expectation...
+            _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>(), It.IsAny<Dictionary<string, object>>()));
+            _programService.Verify(mocked => mocked.GetProgramById(3));
             _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donationPageId, expectedDonationValues, It.IsAny<string>(), true));
 
             _ministryPlatformService.VerifyAll();
+            _programService.VerifyAll();
+            _communicationService.VerifyAll();
             Assert.IsNotNull(response);
             Assert.AreEqual(response, expectedDonationDistributionId);
         }
