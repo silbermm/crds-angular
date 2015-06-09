@@ -7,7 +7,13 @@ describe ('PaymentService', function () {
     exp_year : "2016",
     cvc : "123"
   };
-  
+  var bankAccount = {
+    country: 'US',
+    currency: 'USD',
+    routing_number: '110000000',
+    account_number: '000123456789'
+  };
+
   beforeEach(function() {
     module('crossroads.give');
 
@@ -21,6 +27,14 @@ describe ('PaymentService', function () {
               return {
                 then : function(callback) {return callback({id: "tok_test", card: { last4: last4}});}
               };
+            }
+          },
+        bankAccount :
+          {
+            createToken : function(bank) {
+              return {
+                then: function(callback) { return callback({id: "tok_bank"})}
+              }
             }
           }
       });
@@ -94,7 +108,62 @@ describe ('PaymentService', function () {
         });
     });
   });
+  
+  describe('createDonorWithBankAcct', function() {
+    var result;
+    
+    beforeEach(function() {
+      spyOn(stripe.bankAccount, 'createToken').and.callThrough();
+      
+      var postData = {
+        stripe_token_id: "tok_bank",
+        email_address: "me@here.com"
+      };
+      httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor', postData)
+        .respond({
+          id: "12345",
+          stripe_customer_id: "cust_test"
+        });
+      sut.createDonorWithBankAcct(bankAccount, "me@here.com")
+        .then(function(donor){
+          result = donor;
+        });
+    });
 
+    it('should create a single use token', function() {
+      expect(stripe.bankAccount.createToken).toHaveBeenCalledWith(bankAccount);
+    });
+    
+    it('should create a new donor', function() {
+      expect(result).toBeDefined();
+      expect(result.id).toEqual("12345");
+      expect(result.stripe_customer_id).toEqual("cust_test");
+    });
+  });
+  
+  describe('createDonorWithBankAcct Error', function(){
+    it('should return error if there is a problem calling donor service', function(){
+      var postData = {
+        stripe_token_id: "tok_bank",
+        email_address: "me@here.com"
+      };
+      httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT']+'api/donor', postData)
+        .respond(400,
+          {
+            message: "Token not found"
+          }
+        );
+      sut.createDonorWithBankAcct(bankAccount, "me@here.com")
+        .then(function(donor) {
+          result = donor;
+        },
+        function(error) {
+          expect(error).toBeDefined();
+          expect(error.message).toEqual("Token not found");
+        });
+    });
+  });
+  
   describe('donateToProgram', function(){
     it('should successfully create a donation', function(){
 
@@ -156,7 +225,7 @@ describe ('PaymentService', function () {
     });
   });
 
-  describe('createDonorWithCard Error', function() {
+  describe('updateDonorWithCard Error', function() {
     it('should return error if there is problem calling donor service', function() {
       var putData = {
         stripe_token_id: "tok_test"
