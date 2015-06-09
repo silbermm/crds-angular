@@ -10,7 +10,9 @@
     'ngCookies',
     'ngMessages',
     'angular-growl',
-    'toggle-switch'
+    'toggle-switch',
+    'ngAside',
+    'matchMedia'
     ])
     .constant("AUTH_EVENTS", {
       loginSuccess: "auth-login-success",

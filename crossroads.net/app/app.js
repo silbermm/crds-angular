@@ -12,9 +12,7 @@ require('./mp_tools');
      'crossroads.core',
      "crossroads.profile",
      'crossroads.mptools',
-     'crossroads.give',
-     'ngAside',
-     'matchMedia'
+     'crossroads.give'
      ])
 
     require('./community_groups_signup')
