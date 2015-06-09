@@ -2,6 +2,9 @@
 {
     public class DefaultSourceDTO
     {
+
+        public string type { get; set; }
+        public string routing { get; set; }
         public string last4 { get; set; }
         public string brand { get; set; }
         public string name { get; set; }

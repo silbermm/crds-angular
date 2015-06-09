@@ -128,9 +128,11 @@ namespace crds_angular.Controllers.API
                         Processor_ID = donor.ProcessorId,
                         default_source = new DefaultSourceDTO
                         {
-                            brand = default_source.brand,
+                            type = default_source.@object,
                             last4 = default_source.last4,
                             name = default_source.name,
+                            brand = default_source.brand,
+                            routing = default_source.routing_number,
                             address_zip = default_source.address_zip,
                             exp_date = default_source.exp_month + default_source.exp_year
                          }
@@ -207,9 +209,11 @@ namespace crds_angular.Controllers.API
                     Processor_ID = contactDonor.ProcessorId,
                     default_source = new DefaultSourceDTO
                     {
+                        type = sourceData.@object,
                         brand = sourceData.brand,
                         last4 = sourceData.last4,
                         name = sourceData.name,
+                        routing = sourceData.routing_number,
                         address_zip = sourceData.address_zip,
                         exp_date = sourceData.exp_month + sourceData.exp_year
                     }

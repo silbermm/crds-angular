@@ -75,8 +75,8 @@
 
         };
 
-        vm.donate = function(programId, amount, donorId, email, onSuccess){
-          PaymentService.donateToProgram(programId, amount, donorId, email)
+        vm.donate = function(programId, amount, donorId, email, pymtType, onSuccess){
+          PaymentService.donateToProgram(programId, amount, donorId, email, pymtType)
             .then(function(confirmation){
               vm.amount = confirmation.amount;
               vm.program = _.find(vm.programsInput, {'ProgramId': programId});

@@ -12,6 +12,7 @@
       donateToProgram : donateToProgram,
       donation : {},
       donor : getDonor,
+      updateDonorWithBank: updateDonorWithBank,
       updateDonorWithCard :updateDonorWithCard
       
     };
@@ -57,6 +58,28 @@
     function updateDonorWithCard(donorId, card){
       var def = $q.defer();
       stripe.card.createToken(card)
+        .then(function (token) {
+          var donor_request = { "stripe_token_id": token.id }
+          $http({
+            method: "PUT",
+            url: __API_ENDPOINT__ + 'api/donor',
+            headers: {
+              'Authorization': getCookie('sessionId')
+            },
+            data: donor_request
+            }).success(function(data) {
+              payment_service.donor = data;
+              def.resolve(data);
+            }).error(function(error) {
+              def.reject(error);
+            });
+        });
+       return def.promise;
+    }
+
+     function updateDonorWithBank(donorId, bank){
+      var def = $q.defer();
+      stripe.bankAccount.createToken(bank)
         .then(function (token) {
           var donor_request = { "stripe_token_id": token.id }
           $http({
