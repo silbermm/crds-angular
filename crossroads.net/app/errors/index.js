@@ -1,2 +1,2 @@
-require('404.html');
-require('500.html');
+require('./404.html');
+require('./500.html');
