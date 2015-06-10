@@ -67,7 +67,7 @@ namespace MinistryPlatform.Translation.Services
 
         }
 
-        public int CreateDonationAndDistributionRecord(int donationAmt, int donorId, string programId, string charge_id, string pymt_type, DateTime setupTime, bool registeredDonor)
+        public int CreateDonationAndDistributionRecord(int donationAmt, int donorId, string programId, string charge_id, string pymt_type, string processorId, DateTime setupTime, bool registeredDonor)
         {
             var pymt_id = (pymt_type == "bank") ? "5" : "4";
             
@@ -78,7 +78,8 @@ namespace MinistryPlatform.Translation.Services
                 {"Payment_Type_ID", pymt_id},
                 {"Donation_Date", setupTime},
                 {"Transaction_code", charge_id},
-                {"Registered_Donor", registeredDonor}
+                {"Registered_Donor", registeredDonor},
+                {"Processor_ID", processorId }
             };
 
             int donationId;
