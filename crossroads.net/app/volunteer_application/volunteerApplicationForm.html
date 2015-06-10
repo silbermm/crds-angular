@@ -18,7 +18,7 @@
     </div>
 
     <div id="adult-application" ng-if="volunteer.showBlock('adult')">
-      <kids-club-adult-application></kids-club-adult-application>
+      <kids-club-adult-application volunteer="volunteer.person"></kids-club-adult-application>
     </div>
 
     <div ng-if="volunteer.showBlock('student')">
