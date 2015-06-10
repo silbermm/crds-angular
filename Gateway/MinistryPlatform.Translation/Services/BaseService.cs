@@ -28,5 +28,15 @@ namespace MinistryPlatform.Translation.Services
             var apiPasword = configWrapper.GetEnvironmentVarAsString("API_PASSWORD");
             return (AuthenticationService.authenticate(apiUser, apiPasword));
         }
+
+        protected static int AppSetting(string key)
+        {
+            int value;
+            if (!int.TryParse(ConfigurationManager.AppSettings[key], out value))
+            {
+                throw new InvalidOperationException(string.Format("Invalid Page Key: {0}", key));
+            }
+            return value;
+        }
     }
 }

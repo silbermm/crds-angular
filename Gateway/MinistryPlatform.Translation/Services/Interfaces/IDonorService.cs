@@ -16,5 +16,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         ContactDonor GetContactDonor(int contactId);
         ContactDonor GetPossibleGuestContactDonor(string email);
         int UpdatePaymentProcessorCustomerId(int donorId, string paymentProcessorCustomerId);
+        void SendConfirmationEmail(int programId, int donorId, int donationAmount, DateTime setupDate);
+        ContactDonor GetEmailViaDonorId(int donorId);
     }
 }

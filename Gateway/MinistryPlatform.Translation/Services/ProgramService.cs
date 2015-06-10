@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MinistryPlatform.Translation.Services.Interfaces;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Extensions;
 
 namespace MinistryPlatform.Translation.Services
 {
@@ -12,6 +13,7 @@ namespace MinistryPlatform.Translation.Services
     {
         private IMinistryPlatformService ministryPlatformService;
         private readonly int _onlineGivingProgramsPageViewId = Convert.ToInt32(AppSettings("OnlineGivingProgramsPageViewId"));
+        private readonly int programsPageId = AppSettings("Programs");
 
         public ProgramService(IMinistryPlatformService ministryPlatformService)
         {
@@ -41,6 +43,19 @@ namespace MinistryPlatform.Translation.Services
             }
 
             return programList;
+        }
+
+        public Program GetProgramById(int programId)
+        {
+            var recordsDict = ministryPlatformService.GetRecordDict(programsPageId, programId, apiLogin());
+
+            var program = new Program
+            {
+                CommunicationTemplateId = recordsDict.ToInt("Communication_ID"),
+                ProgramId = recordsDict.ToInt("Program_ID"),
+                Name = recordsDict.ToString("Program_Name")
+            };
+            return program;
         }
     }
 }
