@@ -4,11 +4,6 @@
 
   angular.module("crossroads").config(["$stateProvider", "$urlRouterProvider", "$httpProvider", "$urlMatcherFactoryProvider", "$locationProvider", function ($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory, $locationProvider) {
 
-        $httpProvider.defaults.useXDomain = true;
-        $httpProvider.defaults.headers.common['Authorization'] = crds_utilities.getCookie('sessionId');
-        // This is a dummy header that will always be returned in any 'Allow-Header' from any CORS request. This needs to be here because of IE.
-        $httpProvider.defaults.headers.common["X-Use-The-Force"] = true;
-
         // This custom type is needed to allow us to NOT URLEncode slashes when using ui-sref
         // See this post for details: https://github.com/angular-ui/ui-router/issues/1119
         var registerType = function(routeType, urlPattern) {
