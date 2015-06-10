@@ -28,7 +28,6 @@ require('./filters');
 require('./app.config');
 require('./app.controller');
 require('./app.run');
-require('./routes');
 
 require('./errors');
 

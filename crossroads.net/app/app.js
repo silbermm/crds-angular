@@ -14,6 +14,7 @@ require('./mp_tools');
      'crossroads.mptools',
      'crossroads.give'
      ])
+    require('./routes');
 
     require('./community_groups_signup')
     require('./mytrips');
