@@ -10,7 +10,7 @@ GO
 
 CREATE TABLE [dbo].[cr_Onboarding_Statuses](
 	[Onboarding_Status_ID] [int] IDENTITY(1,1) NOT NULL,
-	[Onboarding_Status] [int] NOT NULL,
+	[Onboarding_Status] [nvarchar](50) NOT NULL,
  CONSTRAINT [PK_cr_Onboarding_Status] PRIMARY KEY CLUSTERED 
 (
 	[Onboarding_Status_ID] ASC
@@ -71,3 +71,65 @@ REFERENCES [dbo].[cr_Onboarding_Statuses] ([Onboarding_Status_ID])
 ALTER TABLE [dbo].[Response_Attributes] CHECK CONSTRAINT [FK_Response_Attributes_cr_Onboarding_Statuses]
 GO
 
+/****** Add Lookup Table to MP Page ******/
+INSERT INTO [dbo].[dp_Pages]
+           ([Display_Name]
+           ,[Singular_Name]
+           ,[Description]
+           ,[View_Order]
+           ,[Table_Name]
+           ,[Primary_Key]
+           ,[Default_Field_List]
+           ,[Selected_Record_Expression]
+           ,[Display_Copy])
+     VALUES
+           ('Onboarding Statuses'
+           ,'Onboarding Status'
+           ,'Status of an Onboarding Step'
+           ,305
+           ,'cr_Onboarding_Statuses'
+           ,'Onboarding_Status_ID'
+           ,'Onboarding_Status'
+           ,'Onboarding_Status'
+           ,0)
+GO
+
+INSERT INTO [dbo].[dp_Page_Section_Pages]
+           ([Page_ID]
+           ,[Page_Section_ID])
+     VALUES
+           (SCOPE_IDENTITY()
+           ,11)
+GO
+
+INSERT INTO [dbo].[dp_Sub_Pages]
+           ([Display_Name]
+           ,[Singular_Name]
+           ,[Page_ID]
+           ,[View_Order]
+           ,[Link_To_Page_ID]
+           ,[Link_From_Field_Name]
+           ,[Select_To_Page_ID]
+           ,[Select_From_Field_Name]
+           ,[Primary_Table]
+           ,[Primary_Key]
+           ,[Default_Field_List]
+           ,[Selected_Record_Expression]
+           ,[Filter_Key]
+           ,[Relation_Type_ID])
+     VALUES
+           ('Onboarding'
+           ,'Onboarding'
+           ,382
+           ,6
+           ,277
+           ,'Attribute_ID'
+           ,277
+           ,'Response_Attributes.Attribute_ID'
+           ,'Response_Attributes'
+           ,'Response_Attribute_ID'
+           ,'Attribute_ID_Table.Attribute_Name'
+           ,'Attribute_ID_Table.Attribute_Name'
+           ,'Response_ID'
+           ,2)
+GO
