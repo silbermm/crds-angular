@@ -4,19 +4,10 @@
 
   angular.module("crossroads").config(["$stateProvider", "$urlRouterProvider", "$httpProvider", "$urlMatcherFactoryProvider", "$locationProvider", function ($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory, $locationProvider) {
 
-        // This custom type is needed to allow us to NOT URLEncode slashes when using ui-sref
-        // See this post for details: https://github.com/angular-ui/ui-router/issues/1119
-        var registerType = function(routeType, urlPattern) {
-            return($urlMatcherFactory.type(routeType, {
-                        encode: function(val) { return val != null ? val.toString() : val; },
-                        decode: function(val) { return val != null ? val.toString() : val; },
-                        is: function(val) { return this.pattern.test(val); },
-                        pattern: urlPattern
-                    }));
-        };
-        registerType("contentRouteType", /^\/.*/);
-        registerType("signupRouteType", /\/sign-up\/.*$/);
-        registerType("volunteerRouteType", /\/volunteer-sign-up\/.*$/);
+
+      crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, "contentRouteType", /^\/.*/);
+      crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, "signupRouteType", /\/sign-up\/.*$/);
+      crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, "volunteerRouteType", /\/volunteer-sign-up\/.*$/);
 
         //================================================
         // Check if the user is connected

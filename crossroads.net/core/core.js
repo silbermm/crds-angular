@@ -33,4 +33,4 @@ require('./errors');
 
 // require and export crds_utilities on global scope
 // TODO: Change name of file
-require('expose?crds_utilities!./utilities/cookies.js');
+require('expose?crds_utilities!./crds_utilities.js');
