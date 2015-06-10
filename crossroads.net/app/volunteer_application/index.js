@@ -16,7 +16,8 @@ require('./kc_adult_application/kidsClubAdultApplication.template.html');
 require('./kc_adult_application/kidsClubAdultApplication.directive');
 
 require('./kc_student_application/kidsClubStudentApplication.template.html');
-app.controller("KidsClubStudentApplicationController", require('./kc_student_application/kidsClubStudentApplication.controller'));
+require('./kc_student_application/kidsClubStudentApplication.controller' );
+
 app.directive("kidsClubStudentApplication", require('./kc_student_application/kidsClubStudentApplication.directive'));
 app.factory("VolunteerService", ["$resource", require('./volunteerService')]);
 

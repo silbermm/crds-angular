@@ -13,14 +13,13 @@
       templateUrl : "kc_student_application/kidsClubStudentApplication.template.html",
       controller: "KidsClubStudentApplicationController as kcStudentApplication",
       scope: {
-          volunteer: '=volunteer'
+          volunteer: '=volunteer',
+          contactId: '=contactId',
+          pageInfo: '=pageInfo',
+          responseId: '=responseId'
       },
-      link: link
+      bindToController: true
     };
-
-    function link(scope, el, attr) {
-      $log.debug('Kids-Club-Student-Application directive');
-    }
   }
 
 })();

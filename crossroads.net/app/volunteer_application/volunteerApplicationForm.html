@@ -22,7 +22,7 @@
     </div>
 
     <div ng-if="volunteer.showBlock('student')">
-      <kids-club-student-application volunteer="volunteer"></kids-club-student-application>
+      <kids-club-student-application volunteer="volunteer.person" contact-id="volunteer.contactId" page-info="volunteer.pageInfo" response-id="volunteer.responseId"  ></kids-club-student-application>
     </div>
 
     <div ng-if="volunteer.showBlock('age-error')">
