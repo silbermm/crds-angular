@@ -88,12 +88,15 @@ namespace crds_angular.test.controllers
                 ProcessorId = processorId
             };
 
-            var default_source = new SourceData
+            var default_source = new DefaultSourceDTO();
             {
-                last4 = "1234",
-                brand = "Visa",
-                name = "Automated Test",
-                address_zip = "45454"
+                new CreditCardDTO()
+                {
+                    last4 = "1234",
+                    brand = "Visa",
+                    name = "Automated Test",
+                    address_zip = "45454"
+                };
             };
             
             donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(It.IsAny<string>())).Returns(contactDonor);

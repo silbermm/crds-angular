@@ -267,10 +267,16 @@
             .$promise
             .then(function(donor){
               vm.donor = donor;
-              vm.last4 = donor.default_source.credit_card.last4;
-              vm.brand = brandCode[donor.default_source.credit_card.brand];
-              vm.expYear =  donor.exp_year;
-              vm.exp_month = donor.exp_month;
+              if (vm.donor.default_source.credit_card){
+                vm.last4 = donor.default_source.credit_card.last4;
+                vm.brand = brandCode[donor.default_source.credit_card.brand];
+                vm.expYear =  donor.exp_year;
+                vm.exp_month = donor.exp_month;
+              } else {
+                vm.routing = donor.default_source.bank_account.routing;
+                vm.account = donor.default_source.bank_account.acct_last4
+                vm.brand = 'bank';
+              };
               $state.go("give.confirm");
             },function(error){
             //  create donor record

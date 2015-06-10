@@ -39,9 +39,9 @@ namespace crds_angular.Services
 
         }
 
-        public SourceData updateCustomerSource(string customerToken, string cardToken)
+        public DefaultSourceDTO updateCustomerSource(string customerToken, string cardToken)
         {
-            SourceData defaultSource = new SourceData();
+            DefaultSourceDTO defaultSource = new DefaultSourceDTO();
 
             var request = new RestRequest("customers/" + customerToken, Method.POST);
             request.AddParameter("source", cardToken);
@@ -77,9 +77,9 @@ namespace crds_angular.Services
             return (response.Data.id);
         }
 
-        public SourceData getDefaultSource(string customer_token)
+        public DefaultSourceDTO getDefaultSource(string customer_token)
         {
-            SourceData defaultSource = new SourceData();
+            DefaultSourceDTO defaultSource = new DefaultSourceDTO();
          
             var getCustomerRequest = new RestRequest("customers/" + customer_token, Method.GET);
 
@@ -93,13 +93,13 @@ namespace crds_angular.Services
             var defaultSourceId = getCustomerResponse.Data.default_source;
             var sources = getCustomerResponse.Data.sources.data;
             defaultSource = SetDefaultSource(sources, defaultSourceId);
-            
+
             return defaultSource;
         }
 
-        public SourceData SetDefaultSource(List<SourceData>sources, string defaultSourceId )
+        public DefaultSourceDTO SetDefaultSource(List<SourceData>sources, string defaultSourceId )
         {
-            SourceData defaultSource = new SourceData();
+            DefaultSourceDTO defaultSource = new DefaultSourceDTO();
 
             foreach (var source in sources)
             {
@@ -107,17 +107,18 @@ namespace crds_angular.Services
                 {
                    if (source.@object == "bank_account")
                     {
-                        defaultSource.routing_number = source.routing_number;
-                        defaultSource.last4 = source.last4;
+                        defaultSource.bank_account.routing = source.routing_number;
+                        defaultSource.bank_account.last4 = source.last4;
                     }
                     else
                     {
-                        defaultSource.brand = source.brand;
-                        defaultSource.last4 = source.last4;
-                        defaultSource.name = source.name;
-                        defaultSource.address_zip = source.address_zip;
-                        defaultSource.exp_month = source.exp_month.PadLeft(2, '0');
-                        defaultSource.exp_year = source.exp_year.Substring(2, 2);
+                        defaultSource.credit_card.brand = source.brand;
+                        defaultSource.credit_card.last4 = source.last4;
+                        defaultSource.credit_card.name = source.name;
+                        defaultSource.credit_card.address_zip = source.address_zip;
+                        defaultSource.credit_card.exp_date = source.exp_month.PadLeft(2, '0') +
+                                                             source.exp_year.Substring(2, 2);
+
                     }
                 }
             }
