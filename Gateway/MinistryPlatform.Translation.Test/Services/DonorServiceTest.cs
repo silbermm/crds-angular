@@ -94,6 +94,8 @@ namespace MinistryPlatform.Translation.Test.Services
             var programId = "3";
             var setupDate = DateTime.Now;
             var charge_id = "ch_crds1234567";
+            var processorId = "cus_8675309";
+            var pymt_type = "cc";
             var expectedDonationId = 321321;
             var expectedDonationDistributionId = 231231;
             const string viewKey = "DonorByContactId";
@@ -115,10 +117,11 @@ namespace MinistryPlatform.Translation.Test.Services
             {
                 {"Donor_ID", donorId},
                 {"Donation_Amount", donationAmt},
-                {"Payment_Type_ID", 4}, //hardcoded as credit card until ACH stories are worked
+                {"Payment_Type_ID", "4"}, //hardcoded as credit card until ACH stories are worked
                 {"Donation_Date", setupDate},
                 {"Transaction_code", charge_id},
-                {"Registered_Donor", true}
+                {"Registered_Donor", true}, 
+                {"Processor_ID", processorId}
             };
 
             var programServiceResponse = new Program
@@ -148,7 +151,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _communicationService.Setup(mocked => mocked.GetTemplate(It.IsAny<int>())).Returns(getTemplateResponse);
 
 
-            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, donorId, programId, charge_id, setupDate, true);
+            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, donorId, programId, charge_id, pymt_type, processorId, setupDate, true);
 
             // Explicitly verify each expectation...
             _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>(), It.IsAny<Dictionary<string, object>>()));

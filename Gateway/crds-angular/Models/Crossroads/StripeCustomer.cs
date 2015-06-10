@@ -44,6 +44,10 @@ namespace crds_angular.Models.Crossroads
         public string dynamic_last4 { get; set; }
         public Metadata2 metadata { get; set; }
         public string customer { get; set; }
+        public string currency { get; set; }
+        public string status { get; set; }
+        public string routing_number { get; set; }
+        public string bank_name { get; set; }
     }
 
     public class Sources

@@ -23,6 +23,7 @@ require('./mp_tools');
     require('./profile/skills/profile_skills.html');
     require('./styleguide');
     require('./give');
+    require('./media');
     require('./myprofile');
     require('./community_groups_signup/group_signup_form.html');
     require('./my_serve');

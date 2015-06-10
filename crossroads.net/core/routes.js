@@ -140,6 +140,31 @@
               url: "/mytrips",
               templateUrl: "mytrips/mytrips.html"
             })
+            .state("media", {
+              url: "/media",
+              controller: "MediaCtrl as media",
+              templateUrl: "media/view-all.html"
+            })
+            .state("media-music", {
+              url: "/media/music",
+              controller: "MediaCtrl as media",
+              templateUrl: "media/view-all-music.html"
+            })
+            .state("media-messages", {
+              url: "/media/messages",
+              controller: "MediaCtrl as media",
+              templateUrl: "media/view-all-messages.html"
+            })
+            .state("media-videos", {
+              url: "/media/videos",
+              controller: "MediaCtrl as media",
+              templateUrl: "media/view-all-videos.html"
+            })
+            .state("media-series-single", {
+              url: "/media/series/single",
+              controller: "MediaCtrl as media",
+              templateUrl: "media/series-single.html"
+            })
             .state("corkboard", {
               url: "/corkboard",
               controller: "CorkboardCtrl as corkboard",
