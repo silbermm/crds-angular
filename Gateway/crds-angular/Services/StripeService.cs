@@ -127,16 +127,6 @@ namespace crds_angular.Services
 
         public string chargeCustomer(string customer_token, int amount, int donor_id, string pymt_type)
         {
-            //TODO - do we need to get the customer?  Only when using the default source?  Nope...
-            //var getCustomerRequest = new RestRequest("customers/" + customer_token, Method.GET);
-            //IRestResponse<StripeCustomer> getCustomerResponse =
-            //    (IRestResponse<StripeCustomer>)stripeRestClient.Execute<StripeCustomer>(getCustomerRequest);
-            //if (getCustomerResponse.StatusCode == HttpStatusCode.BadRequest)
-            //{
-            //    Content content = JsonConvert.DeserializeObject<Content>(getCustomerResponse.Content);
-            //    throw new StripeException("Could not charge customer because customer lookup failed", content.error.type, content.error.message, content.error.code);
-            //}
-
             var chargeRequest = new RestRequest("charges", Method.POST);
             chargeRequest.AddParameter("amount", amount * 100);
             chargeRequest.AddParameter("currency", "usd");

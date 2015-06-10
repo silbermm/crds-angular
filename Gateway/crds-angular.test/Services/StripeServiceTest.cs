@@ -154,28 +154,7 @@ namespace crds_angular.test.Services
         {
             return(parms.Find(p => p.Name.Equals(name) && p.Value.Equals(value)) != null);
         }
-        [Ignore("Do we even need to lookup the customer??  The code in stripeservice has been commented out for now")]
-        [Test]
-        public void shouldNotChargeCustomerIfCustomerLookupFails()
-        {
-            var getCustomerResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
-            getCustomerResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.BadRequest).Verifiable();
-            getCustomerResponse.SetupGet(mocked => mocked.Content).Returns("{error: {type: 'Error Type', message:'Bad Request'}}").Verifiable();
-            restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(getCustomerResponse.Object);
-            try
-            {
-                fixture.chargeCustomer("token", 123, 98765, "cc");
-                Assert.Fail("Should have thrown exception");
-            }
-            catch (StripeException e)
-            {
-                Assert.AreEqual("Could not charge customer because customer lookup failed", e.Message);
-                Assert.AreEqual("Error Type", e.type);
-                Assert.AreEqual("Bad Request", e.detailMessage);
-            }
-
-        }
-
+        
         [Test]
         public void shouldNotChargeCustomerIfAmountIsInvalid()
         {

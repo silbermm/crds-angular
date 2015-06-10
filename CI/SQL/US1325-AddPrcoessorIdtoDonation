@@ -1,0 +1,7 @@
+USE [MinistryPlatform]
+GO
+
+ALTER TABLE [dbo].[Donations]
+  add  Processor_ID  int  null
+    
+GO
