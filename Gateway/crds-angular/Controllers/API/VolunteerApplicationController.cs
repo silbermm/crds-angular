@@ -25,7 +25,7 @@ namespace crds_angular.Controllers.API
         {
             if (!ModelState.IsValid)
             {
-                var errors = ModelState.Values.SelectMany(val => val.Errors).Aggregate("", (current, err) => current + err.ErrorMessage);
+                var errors = ModelState.Values.SelectMany(val => val.Errors).Aggregate("", (current, err) => current + err.ErrorMessage + " ");
                 var dataError = new ApiErrorDto("SaveStudent Data Invalid", new InvalidOperationException("Invalid SaveStudent Data" + errors));
                 throw new HttpResponseException(dataError.HttpResponseMessage);
             }

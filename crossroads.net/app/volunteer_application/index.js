@@ -5,6 +5,10 @@ require("./volunteerApplicationForm.html");
 require('../profile/personal/profile_personal.html');
 require('../profile');
 
+
+
+//constant isn't working, figure out why??????????????
+// require('./studentConstants');
 app.controller("VolunteerApplicationController", require("./volunteerApplication.controller"));
 app.factory("Opportunity", ["$resource", "Session", require('../services/opportunity_service')]);
 
@@ -25,5 +29,50 @@ app.constant("studentFields", {
   "birthDate": 317,
   "gender": 315,
   "site": 313,
-  "school": 326
+  "howLongAttending": 314,
+  "serviceAttend": 0,
+  "streetAddress": 319,
+  "city": 320,
+  "state": 321,
+  "zip": 322,
+  "mobilePhone": 323,
+  "homePhone": 324,
+  "school": 326,
+  "grade": 327,
+  "whereYouAre": 330,
+  "explainFaith": 331,
+  "whyServe": 332,
+  "specialTalents": 333,
+  "availabilityDuringWeek": 0,
+  "availabilityDuringWeekend": 0,
+  "serveSite": 338,
+  "serveServiceTimes": 340,
+  "serveAgeKids1to2": 0,
+  "serveAgeKids3toPreK": 0,
+  "serveAgeKidsKto5Grade": 0,
+  "reference1Name": 346,
+  "reference1timeKnown": 347,
+  "reference1homePhone": 349,
+  "reference1mobilePhone": 350,
+  "reference1workPhone": 351,
+  "reference1email": 352,
+  "reference1association": 353,
+  "reference1occupation": 354,
+  "reference2Name": 355,
+  "reference2timeKnown": 356,
+  "reference2homePhone": 358,
+  "reference2mobilePhone": 359,
+  "reference2workPhone": 360,
+  "reference2email": 361,
+  "reference2association": 362,
+  "reference2occupation": 363,
+  "parentLastName": 366,
+  "parentFirstName": 367,
+  "parentHomePhone": 368,
+  "parentMobilePhone": 369,
+  "parentEmail": 370,
+  "parentSignature": 371,
+  "parentSignatureDate": 372,
+  "studentSignature": 373,
+  "studentSignatureDate": 374
 });

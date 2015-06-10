@@ -16,114 +16,114 @@
       </div>
 
       <div class="form-group col-sm-6">
-        <label class="control-label" for="middleName">Middle Name</label>
-        <input type="text" class="form-control" id="middleName" placeholder="Enter middle name" ng-value="volunteer.person.middleName.substring(0,1)" disabled="true">
+        <label class="control-label" for="middleInitial">Middle Initial</label>
+        <input type="text" class="form-control" id="middleInitial" placeholder="Enter middle initial" ng-value="volunteer.person.middleName.substring(0,1)" disabled="true">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
     </div>
 
-      <div class="row">
-        <div class="form-group col-sm-6">
-          <label class="control-label required" for="email">Email</label>
-          <input type="text" class="form-control" id="email" placeholder="Email" ng-value="volunteer.person.emailAddress" disabled="true">
-          <span ng-show="false">Please provide a valid value.</span>
-        </div>
-
-        <div class="form-group col-sm-6">
-          <label class="control-label required" for="nameTag">Name For Name Tag</label>
-          <input type="text" class="form-control" id="nameTag" placeholder="Enter name for name tag" ng-model="kcStudentApplication.nameTag">
-          <span ng-show="false">Please provide a valid value.</span>
-        </div>
+    <div class="row">
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="email">Email</label>
+        <input type="text" class="form-control" id="email" placeholder="Email" ng-value="volunteer.person.emailAddress" disabled="true">
+        <span ng-show="false">Please provide a valid value.</span>
       </div>
 
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="nameTag">Name For Name Tag</label>
+        <input type="text" class="form-control" id="nameTag" placeholder="Enter name for name tag" ng-model="kcStudentApplication.nameTag">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+    </div>
 
-      <div class="row">
-        <div class="form-group col-sm-6">
-          <label class="control-label required" for="birthDate">Date of Birth</label>
-          <input type="text" class="form-control" id="birthDate" placeholder="mm/dd/yyyy" ng-value="volunteer.person.dateOfBirth" disabled="true">
-          <span ng-show="false">Please provide a valid value.</span>
-        </div>
 
-        <div class="form-group col-sm-6">
-          <label class="block required">Gender</label>
-          <label class="radio-inline">
-            <input type="radio" name="gender" id="gender-male" value="1" ng-model="volunteer.person.genderId" disabled="true">Male
-
-          </label>
-          <label class="radio-inline">
-            <input type="radio" name="gender" id="gender-female" value="2" ng-model="volunteer.person.genderId" disabled="true">Female
-          </label>
-        </div>
+    <div class="row">
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="birthDate">Date of Birth</label>
+        <input type="text" class="form-control" id="birthDate" placeholder="mm/dd/yyyy" ng-value="volunteer.person.dateOfBirth" disabled="true">
+        <span ng-show="false">Please provide a valid value.</span>
       </div>
 
-      <div class="row">
-        <div class="form-group col-sm-6">
-          <label class="block required">Site where you attend service</label>
-          <label class="radio-inline">
-            <input type="radio" value="oakley" name="siteAttend" ng-model="kcStudentApplication.site">Oakley
-          </label>
-          <label class="radio-inline">
-            <input type="radio" value="florence" name="siteAttend" ng-model="kcStudentApplication.site">Florence
-          </label>
-          <label class="radio-inline">
-            <input type="radio" value="west side" name="siteAttend" ng-model="kcStudentApplication.site">West Side
-          </label>
-          <label class="radio-inline">
-            <input type="radio" value="mason" name="siteAttend" ng-model="kcStudentApplication.site">Mason
-          </label>
-          <label class="radio-inline">
-            <input type="radio" value="clifton" name="siteAttend" ng-model="kcStudentApplication.site">Clifton
-          </label>
-        </div>
-      </div>
+      <div class="form-group col-sm-6">
+        <label class="block required">Gender</label>
+        <label class="radio-inline">
+          <input type="radio" name="gender" id="gender-male" value="1" ng-model="volunteer.person.genderId" disabled="true">Male
 
-      <div class="row">
-        <div class="form-group col-sm-6">
-          <label class="control-label required" for="attending">How long have you been attending Crossroads?</label>
-          <input type="text" class="form-control" id="attending" ng-model="kcStudentApplication.attending" placeholder="How long have you been attending crossroads?">
-          <span ng-show="false">Please provide a valid value.</span>
-        </div>
-        <div class="form-group col-sm-6">
-          <label class="control-label required" for="serviceAttend">What Service do you attend?</label>
-          <input type="text" class="form-control" id="serviceAttend" ng-model="kcStudentApplication.service" placeholder="What Service do you attend?">
-          <span ng-show="false">Please provide a valid value.</span>
-        </div>
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="gender" id="gender-female" value="2" ng-model="volunteer.person.genderId" disabled="true">Female
+        </label>
       </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-sm-6">
+        <label class="block required">Site where you attend service</label>
+        <label class="radio-inline">
+          <input type="radio" value="oakley" name="siteAttend" ng-model="kcStudentApplication.site">Oakley
+        </label>
+        <label class="radio-inline">
+          <input type="radio" value="florence" name="siteAttend" ng-model="kcStudentApplication.site">Florence
+        </label>
+        <label class="radio-inline">
+          <input type="radio" value="west side" name="siteAttend" ng-model="kcStudentApplication.site">West Side
+        </label>
+        <label class="radio-inline">
+          <input type="radio" value="mason" name="siteAttend" ng-model="kcStudentApplication.site">Mason
+        </label>
+        <label class="radio-inline">
+          <input type="radio" value="clifton" name="siteAttend" ng-model="kcStudentApplication.site">Clifton
+        </label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="attending">How long have you been attending Crossroads?</label>
+        <input type="text" class="form-control" id="attending" ng-model="kcStudentApplication.howLongAttending" placeholder="How long have you been attending crossroads?">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="serviceAttend">What Service do you attend?</label>
+        <input type="text" class="form-control" id="serviceAttend" ng-model="kcStudentApplication.serviceAttend" placeholder="What Service do you attend?">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+    </div>
 
 
-      <div class="row">
-        <div class="form-group col-sm-6">
-          <label class="control-label required" for="streetAddress">Street Address</label>
-          <input type="text" class="form-control" id="streetAddress" placeholder="Street Address" ng-value="volunteer.person.addressLine1" disabled="true">
-          <span ng-show="false">Please provide a valid value.</span>
-        </div>
-        <div class="form-group col-sm-6">
-          <label class="control-label required" for="city">City</label>
-          <input type="text" class="form-control" id="city" placeholder="City" ng-value="volunteer.person.city" disabled="true">
-          <span ng-show="false">Please provide a valid value.</span>
-        </div>
-        <div class="form-group col-sm-6">
-          <label class="control-label required" for="state">State</label>
-          <input type="text" class="form-control" id="state" placeholder="State" ng-value="volunteer.person.state" disabled="true">
-          <span ng-show="false">Please provide a valid value.</span>
-        </div>
-        <div class="form-group col-sm-6">
-          <label class="control-label required" for="zip">Zip</label>
-          <input type="text" class="form-control" id="zip" placeholder="Zip" ng-value="volunteer.person.postalCode" disabled="true">
-          <span ng-show="false">Please provide a valid value.</span>
-        </div>
-        <div class="form-group col-sm-6">
-          <label class="control-label" for="cellPhone">Cell Phone</label>
-          <input type="text" class="form-control" id="cellPhone" placeholder="CellPhone" ng-value="volunteer.person.mobilePhone" disabled="true">
-          <span ng-show="false">Please provide a valid value.</span>
-        </div>
-        <div class="form-group col-sm-6">
-          <label class="control-label" for="homePhone">Home Phone</label>
-          <input type="text" class="form-control" id="homePhone" placeholder="Home Phone" ng-value="volunteer.person.homePhone" disabled="true">
-          <span ng-show="false">Please provide a valid value.</span>
-        </div>
+    <div class="row">
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="streetAddress">Street Address</label>
+        <input type="text" class="form-control" id="streetAddress" placeholder="Street Address" ng-value="volunteer.person.addressLine1" disabled="true">
+        <span ng-show="false">Please provide a valid value.</span>
       </div>
-      <!--/row-->
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="city">City</label>
+        <input type="text" class="form-control" id="city" placeholder="City" ng-value="volunteer.person.city" disabled="true">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="state">State</label>
+        <input type="text" class="form-control" id="state" placeholder="State" ng-value="volunteer.person.state" disabled="true">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="zip">Zip</label>
+        <input type="text" class="form-control" id="zip" placeholder="Zip" ng-value="volunteer.person.postalCode" disabled="true">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+      <div class="form-group col-sm-6">
+        <label class="control-label" for="cellPhone">Cell Phone</label>
+        <input type="text" class="form-control" id="cellPhone" placeholder="CellPhone" ng-value="volunteer.person.mobilePhone" disabled="true">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+      <div class="form-group col-sm-6">
+        <label class="control-label" for="homePhone">Home Phone</label>
+        <input type="text" class="form-control" id="homePhone" placeholder="Home Phone" ng-value="volunteer.person.homePhone" disabled="true">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+    </div>
+    <!--/row-->
   </fieldset>
 
   <fieldset class="push-bottom">
@@ -147,20 +147,15 @@
     <div class="row">
       <div class="form-group col-sm-12">
         <label class="block required">Tell us where you are</label>
-
-        <div class="radio-inline">
-          <label>
-            <input type="radio" ng-model="kcStudentApplication.whereYouAre">I'm exploring my faith</label>
-        </div>
-        <div class="checkbox">
-          <label>
-            <input type="radio" ng-model="kcStudentApplication.whereYouAre">I'm not sure</label>
-        </div>
-        <div class="checkbox">
-          <label>
-            <input type="radio" ng-model="kcStudentApplication.whereYouAre">I'm a Christ-follower</label>
-        </div>
-
+        <label class="radio-inline">
+          <input type="radio" value="I'm exploring my faith" ng-model="kcStudentApplication.whereYouAre">I'm exploring my faith
+        </label>
+        <label class="radio-inline">
+          <input type="radio" value="I'm not sure" ng-model="kcStudentApplication.whereYouAre">I'm not sure
+        </label>
+        <label class="radio-inline">
+          <input type="radio" value="I'm a Christ-follower" ng-model="kcStudentApplication.whereYouAre">I'm a Christ-follower
+        </label>
       </div>
     </div>
     <div class="row">
@@ -236,15 +231,15 @@
         <label class="required">What age kids do you prefer to serve with?</label>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcStudentApplication.serveAgeKids">1 - 2 years old</label>
+            <input type="checkbox" ng-model="kcStudentApplication.serveAgeKids.age1to2">1 - 2 years old</label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcStudentApplication.serveAgeKids">3-year olds - Pre-K</label>
+            <input type="checkbox" ng-model="kcStudentApplication.serveAgeKids.age3toPreK">3-year olds - Pre-K</label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcStudentApplication.serveAgeKids">Kinder - 5th Grade</label>
+            <input type="checkbox" ng-model="kcStudentApplication.serveAgeKids.Kto5Grade">Kinder - 5th Grade</label>
         </div>
       </div>
   </fieldset>
@@ -295,7 +290,8 @@
         <input type="text" class="form-control" id="referenceOccupation-1" ng-model="kcStudentApplication.reference1.occupation" placeholder="Occupation">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
-    </div><!--/row-->
+    </div>
+    <!--/row-->
     <hr />
 
     <div class="row">
@@ -341,16 +337,47 @@
         <input type="text" class="form-control" id="referenceOccupation-2" ng-model="kcStudentApplication.reference2.occupation" placeholder="Occupation">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
-    </div><!--/row-->
+    </div>
+    <!--/row-->
 
     <hr />
 
     <div class="row">
-      <p class="help-text col-sm-12">Okay, here's some formal stuff. We don't really talk like this, but we couldn't figure out how to say all this in kid-friendly language. So put your glasses on, read it and agree to it, please The information contained in this application
-        is true. I authorize any reference or church listed here to give you any information (including opinions) that they may have regarding my character and fitness for working with kids. By agreeing to this form, I also consent to a complete
-        criminal background check now an din the future. I understand my involvement with Crossroads Kids' Club is influenced by the information provided by all these sources. I release from liability for damages any person or organizations identified
-        by me in this application, and waive my right to inspect any written material from contact with them or from the criminal background check. I have carefully read the forgoing release and know the contents thereof and I agree to this release
-        as my own free act. This is a legally binding agreement which I have read and understand.</p>
+      <p class="help-text col-sm-12">Okay, here's some formal stuff. We don't really talk like this, but we couldn't figure out how to say all this in kid-friendly language. So put your glasses on, read it and agree to it, please. The information contained in this application is true.
+        I authorize any reference or church listed here to give you any information (including opinions) that they may have regarding my character and fitness for working with kids. By agreeing to this form, I also consent to a complete criminal background
+        check now an din the future. I understand my involvement with Crossroads Kids' Club is influenced by the information provided by all these sources. I release from liability for damages any person or organizations identified by me in this application,
+        and waive my right to inspect any written material from contact with them or from the criminal background check. I have carefully read the forgoing release and know the contents thereof and I agree to this release as my own free act. This is a
+        legally binding agreement which I have read and understand.</p>
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="parentLastName">Last Name</label>
+        <input type="text" class="form-control" id="parentLastName" ng-model="kcStudentApplication.parent.lastName" placeholder="Enter Parent Last Name">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="parentFirstName">First Name</label>
+        <input type="text" class="form-control" id="parentFirstName" ng-model="kcStudentApplication.parent.firstName" placeholder="Enter Parent First Name">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="parentHomePhone">Home Phone</label>
+        <input type="text" class="form-control" id="parentHomePhone" ng-model="kcStudentApplication.parent.homePhone" placeholder="Enter Parent Home Phone">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="parentMobilePhone">Mobile Phone</label>
+        <input type="text" class="form-control" id="parentMobilePhone" ng-model="kcStudentApplication.parent.mobilePhone" placeholder="Enter Parent Mobile Phone">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+
+      <div class="form-group col-sm-6">
+        <label class="control-label required" for="parentEmail">Email</label>
+        <input type="text" class="form-control" id="parentEmail" ng-model="kcStudentApplication.parent.email" placeholder="Enter Parent Email">
+        <span ng-show="false">Please provide a valid value.</span>
+      </div>
+
       <div class="form-group col-sm-6">
         <label class="block required">Parent/Guaridan Consent</label>
         <label class="radio-inline">
@@ -363,7 +390,8 @@
       <div class="form-group col-sm-6">
         <label class="control-label required" for="parentSignatureDate">Date</label>
         <div class="input-group">
-          <input name="parentSignatureDate" type="text" id="parentSignatureDate" class="form-control" datepicker-popup="{{format}}" ng-required="true" close-text="Close" ng-model="kcStudentApplication.parentSignatureDate" is-open="datePickers.signatureDate" datepicker-options="dateOptions" />
+          <input name="parentSignatureDate" type="text" id="parentSignatureDate" class="form-control" datepicker-popup="{{format}}" ng-required="true" close-text="Close" ng-model="kcStudentApplication.parentSignatureDate" is-open="datePickers.signatureDate" datepicker-options="dateOptions"
+          />
           <span class="input-group-btn">
             <button type="button" class="btn btn-gray-light" ng-click="openFromDate($event)">
               <i class="glyphicon glyphicon-calendar"></i>
@@ -387,7 +415,8 @@
       <div class="form-group col-sm-6">
         <label class="control-label required" for="studentSignatureDate">Date</label>
         <div class="input-group">
-          <input name="studentSignatureDate" type="text" id="studentSignatureDate" class="form-control" datepicker-popup="{{format}}" ng-required="true" close-text="Close" ng-model="kcStudentApplication.studentSignatureDate" is-open="datePickers.signatureDate" datepicker-options="dateOptions" />
+          <input name="studentSignatureDate" type="text" id="studentSignatureDate" class="form-control" datepicker-popup="{{format}}" ng-required="true" close-text="Close" ng-model="kcStudentApplication.studentSignatureDate" is-open="datePickers.signatureDate"
+          datepicker-options="dateOptions" />
           <span class="input-group-btn">
             <button type="button" class="btn btn-gray-light" ng-click="openFromDate($event)">
               <i class="glyphicon glyphicon-calendar"></i>
@@ -396,10 +425,12 @@
         </div>
         <span ng-show="false">Please provide a valid value.</span>
       </div>
-    </div><!--/row-->
+    </div>
+    <!--/row-->
   </fieldset>
   <input type="submit" name="submit" value="Submit" id="submit" class="btn btn-primary push-half-bottom">
   <button id="save-form" ng-click="kcStudentApplication.save()" class="btn btn-primary" data-style="expand-left">
-      Save Button
+    Save Button
   </button>
+  <button ng-click="kcStudentApplication.checkIt()"></button>
 </form>
