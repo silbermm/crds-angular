@@ -92,27 +92,27 @@
       };
 
       student.streetAddress = {
-        Value: vm.streetAddress,
+        Value: $scope.volunteer.person.addressLine1,
         CrossroadsId: studentFields.streetAddress
       };
 
       student.city = {
-        Value: vm.city,
+        Value: $scope.volunteer.person.city,
         CrossroadsId: studentFields.city
       };
 
       student.state = {
-        Value: vm.state,
+        Value: $scope.volunteer.person.state,
         CrossroadsId: studentFields.state
       };
 
       student.zip = {
-        Value: vm.zip,
+        Value: $scope.volunteer.person.postalCode,
         CrossroadsId: studentFields.zip
       };
 
       student.mobilePhone = {
-        Value: vm.mobilePhone,
+        Value: $scope.volunteer.person.mobilePhone,
         CrossroadsId: studentFields.mobilePhone
       };
 
@@ -161,9 +161,29 @@
         CrossroadsId: studentFields.availabilityDuringWeekend
       };
 
-      student.serveSite = {
-        Value: vm.serveSite,
-        CrossroadsId: studentFields.serveSite
+      student.availabilityOakley = {
+        Value: vm.availabilityOakley,
+        CrossroadsId: studentFields.availabilityOakley
+      };
+
+      student.availabilityFlorence = {
+        Value: vm.availabilityFlorence,
+        CrossroadsId: studentFields.availabilityFlorence
+      };
+
+      student.availabilityWestSide = {
+        Value: vm.availabilityWestSide,
+        CrossroadsId: studentFields.availabilityWestSide
+      };
+
+      student.availabilityMason = {
+        Value: vm.availabilityMason,
+        CrossroadsId: studentFields.availabilityMason
+      };
+
+      student.availabilityClifton = {
+        Value: vm.availabilityClifton,
+        CrossroadsId: studentFields.availabilityClifton
       };
 
       student.serveServiceTimes = {
