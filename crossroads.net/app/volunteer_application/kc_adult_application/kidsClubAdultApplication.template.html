@@ -1,4 +1,4 @@
-<form>
+<form name="adult" ng-submit="save()" novalidate>
   <fieldset class="push-bottom">
     <legend>General Info</legend>
     <div class="row">
@@ -35,13 +35,14 @@
           <span ng-show="false">Please provide a valid value.</span>
         </div>
 
-        <div class="form-group col-sm-6">
-          <label class="control-label required" for="nameTag">Name For Name Tag</label>
-          <input type="text" class="form-control" id="nameTag" placeholder="Enter name for name tag">
-          <span ng-show="false">Please provide a valid value.</span>
+        <div class="form-group col-sm-6" ng-class="{'has-error': adult.nameTag.$invalid && adult.$submitted}">
+          <label class="control-label required" for="nameTag" >Name For Name Tag</label>
+          <input type="text" class="form-control" id="nameTag" name="nameTag" placeholder="Enter name for name tag" ng-model="volunteer.person.nameTag" required>
+          <ng-messages for="adult.nameTag.$error" ng-if="adult.$submitted && adult.nameTag.$invalid" >
+            <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span></span>
+          </ng-messages>
         </div>
       </div>
-
 
       <div class="row">
         <div class="form-group col-sm-6">
@@ -118,10 +119,12 @@
       </div>
 
       <div class="row">
-        <div class="form-group col-sm-6">
+        <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.attending.$invalid}" >
           <label class="control-label required" for="attending">How long have you been attending Crossroads?</label>
-          <input type="text" class="form-control" id="attending" placeholder="How long have you been attending crossroads?">
-          <span ng-show="false">Please provide a valid value.</span>
+          <input type="text" class="form-control" ng-model="voluteer.person.attending" id="attending" placeholder="How long have you been attending crossroads?" required name="attending">
+          <ng-messages for="adult.attending.$error" ng-if="adult.$submitted && adult.attending.$invalid" >
+            <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span></span>
+          </ng-messages>
         </div>
         <div class="form-group col-sm-6">
           <label class="control-label required" for="serviceAttend">What Service do you attend?</label>
@@ -170,20 +173,26 @@
   <fieldset class="push-bottom">
     <legend>Employer</legend>
     <div class="row">
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.companyName.$invalid && adult.$submitted}">
         <label class="control-label required" for="companyName">Company Name</label>
-        <input type="text" class="form-control" id="companyName" placeholder="Company Name">
-        <span ng-show="false">Please provide a valid value.</span>
+        <input type="text" class="form-control" id="companyName" name="companyName" placeholder="Company Name" ng-model="volunteer.person.company" required>
+        <ng-messages for="adult.companyName.$error" ng-if="adult.$submitted && adult.companyName.$invalid" >
+          <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span></span>
+        </ng-messages>
       </div>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.companyPosition.$invalid && adult.$submitted}" >
         <label class="control-label required" for="position">Position</label>
-        <input type="text" class="form-control" id="position" placeholder="Position">
-        <span ng-show="false">Please provide a valid value.</span>
+        <input type="text" class="form-control" id="position" placeholder="Position" name="companyPosition" required>
+        <ng-messages for="adult.companyPosition.$error" ng-if="adult.$submitted && adult.companyPosition.$invalid" >
+          <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span></span>
+        </ng-messages>
       </div>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.workPhone.$invalid}" >
         <label class="control-label" for="workPhone">Work Phone (If you can receive calls at this number)</label>
-        <input type="text" class="form-control" id="workPhone" placeholder="Work Phone">
-        <span ng-show="false">Please provide a valid value.</span>
+        <input type="text" class="form-control" id="workPhone" placeholder="123-456-7890" name="workPhone" ng-pattern="volunteer.phoneFormat" ng-model="volunteer.person.workPhone" ng-model-options="{ updateOn: 'blur' }" > 
+        <ng-messages for="adult.workPhone.$error" ng-if="adult.$submitted && adult.workPhone.$invalid" >
+          <span ng-message="pattern"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span></span>
+        </ng-messages>
       </div>
     </div>
   </fieldset>
@@ -193,43 +202,122 @@
     <div class="row">
       <div class="form-group col-sm-6">
         <label class="control-label" for="childName-1">Name</label>
-        <input type="text" class="form-control" id="childName-1" placeholder="Name">
-        <span ng-show="false">Please provide a valid value.</span>
+        <input type="text" 
+               class="form-control" 
+               id="childName-1" 
+               placeholder="Name" 
+               name="child1" ng-model="volunteer.person.child1.name">
       </div>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.childDob1.$invalid }">
         <label class="control-label" for="childDob-1">Birthday</label>
-        <input type="text" class="form-control" id="childDob-1" placeholder="Birthday">
-        <span ng-show="false">Please provide a valid value.</span>
+        <div class="input-group" >
+          <input type="text" 
+                 id="childDob-1" 
+                 class="form-control" 
+                 name="childDob1" 
+                 placeholder="Birthday" 
+                 datepicker-popup="{{::format}}" 
+                 ng-model="voluteer.person.child1.dob" 
+                 is-open="datePickers.childDob1" 
+                 datepicker-options="dateOptions"  
+                 ng-model="voluteer.person.child1.dob" 
+                 close-text="Close"  />
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-gray-light" ng-click="open('childDob1', $event)">
+              <i class="glyphicon glyphicon-calendar"></i>
+            </button>
+          </span>
+        </div>
+        <ng-messages for="adult.childDob1.$error" ng-if="adult.childDob1.$invalid">
+          <span ng-message="date"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span></span>
+        </ng-messages>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label" for="childName-2">Name</label>
         <input type="text" class="form-control" id="childName-2" placeholder="Name">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.childDob2.$invalid }">
         <label class="control-label" for="childDob-2">Birthday</label>
-        <input type="text" class="form-control" id="childDob-2" placeholder="Birthday">
-        <span ng-show="false">Please provide a valid value.</span>
+        <div class="input-group" >
+          <input type="text" 
+                 id="childDob-2" 
+                 class="form-control" 
+                 name="childDob2" 
+                 placeholder="Birthday" 
+                 datepicker-popup="{{::format}}" 
+                 ng-model="voluteer.person.child2.dob" 
+                 is-open="datePickers.childDob2" 
+                 datepicker-options="dateOptions"  
+                 ng-model="voluteer.person.child2.dob" 
+                 close-text="Close"  />
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-gray-light" ng-click="open('childDob2', $event)">
+              <i class="glyphicon glyphicon-calendar"></i>
+            </button>
+          </span>
+        </div>
+        <ng-messages for="adult.childDob2.$error" ng-if="adult.childDob2.$invalid">
+          <span ng-message="date"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span></span>
+        </ng-messages>
       </div>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" >
         <label class="control-label" for="childName-3">Name</label>
         <input type="text" class="form-control" id="childName-3" placeholder="Name">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.childDob3.$invalid }">
         <label class="control-label" for="childDob-3">Birthday</label>
-        <input type="text" class="form-control" id="childDob-3" placeholder="Birthday">
-        <span ng-show="false">Please provide a valid value.</span>
+        <div class="input-group" >
+          <input type="text" 
+                 id="childDob-3" 
+                 class="form-control" 
+                 name="childDob3" 
+                 placeholder="Birthday" 
+                 datepicker-popup="{{::format}}" 
+                 ng-model="voluteer.person.child3.dob" 
+                 is-open="datePickers.childDob3" 
+                 datepicker-options="dateOptions"  
+                 ng-model="voluteer.person.child3.dob" 
+                 close-text="Close"  />
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-gray-light" ng-click="open('childDob3', $event)">
+              <i class="glyphicon glyphicon-calendar"></i>
+            </button>
+          </span>
+        </div>
+        <ng-messages for="adult.childDob3.$error" ng-if="adult.childDob3.$invalid">
+          <span ng-message="date"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span></span>
+        </ng-messages>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label" for="childName-4">Name</label>
         <input type="text" class="form-control" id="childName-4" placeholder="Name">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.childDob4.$invalid }">
         <label class="control-label" for="childDob-4">Birthday</label>
-        <input type="text" class="form-control" id="childDob-4" placeholder="Birthday">
-        <span ng-show="false">Please provide a valid value.</span>
+        <div class="input-group" >
+          <input type="text" 
+                 id="childDob-4" 
+                 class="form-control" 
+                 name="childDob4" 
+                 placeholder="Birthday" 
+                 datepicker-popup="{{::format}}" 
+                 ng-model="voluteer.person.child4.dob" 
+                 is-open="datePickers.childDob4" 
+                 datepicker-options="dateOptions"  
+                 ng-model="voluteer.person.child4.dob" 
+                 close-text="Close"  />
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-gray-light" ng-click="open('childDob4', $event)">
+              <i class="glyphicon glyphicon-calendar"></i>
+            </button>
+          </span>
+        </div>
+        <ng-messages for="adult.childDob4.$error" ng-if="adult.childDob4.$invalid">
+          <span ng-message="date"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span></span>
+        </ng-messages>
       </div>
     </div>
   </fieldset>
@@ -237,74 +325,122 @@
   <fieldset class="push-bottom">
     <legend>About You</legend>
     <div class="row">
-      <div class="form-group col-sm-12">
+
+      <div class="form-group col-sm-12" ng-class="{'has-error': adult.$submitted && adult.crime.$invalid }" >
         <label class="block required">Have you ever been arrested, convicted of or pleaded no contest to any crime?</label>
         <label class="radio-inline">
-          <input type="radio" value="no" name="crime">No
+          <input type="radio" value="no" name="crime" ng-model="volunteer.person.crime" required>No
         </label>
         <label class="radio-inline">
-          <input type="radio" value="yes" name="crime">Yes
+          <input type="radio" value="yes" name="crime" ng-model="volunteer.person.crime" required>Yes
         </label>
+        <ng-messages for="adult.crime.$error" ng-if="adult.$submitted && adult.crime.$invalid" >
+          <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span></span>
+        </ng-messages>
       </div>
-      <div class="form-group col-sm-12">
+
+      <div class="form-group col-sm-12" ng-class="{'has-error': adult.$submitted && adult.addiction.$invalid }">
         <label class="block required">Have you ever been concerned that you may have an addiction to drugs, alcohol, pornography, or other addiction; or has anyone suggested that you do?</label>
         <label class="radio-inline">
-          <input type="radio" value="no" name="addiction">No
+          <input type="radio" value="no" name="addiction" ng-model="volunteer.person.addiction" required>No
         </label>
         <label class="radio-inline">
-          <input type="radio" value="yes" name="addiction">Yes
+          <input type="radio" value="yes" name="addiction" ng-model="volunteer.person.addiction" required>Yes
         </label>
+        <ng-messages for="adult.addiction.$error" ng-if="adult.$submitted && adult.addiction.$invalid" >
+          <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span></span>
+        </ng-messages>
       </div>
-      <div class="form-group col-sm-12">
+
+      <div class="form-group col-sm-12" ng-class="{'has-error': adult.$submitted && adult.neglect.$invalid}" >
         <label class="block required">Have you ever been accused, alleged, investigated, charged or convicted of any act of neglecting,abusing, exploiting or molesting any child?</label>
         <label class="radio-inline">
-          <input type="radio" value="no" name="neglect">No
+          <input type="radio" value="no" name="neglect" ng-model="volunteer.person.neglect" required >No
         </label>
         <label class="radio-inline">
-          <input type="radio" value="yes" name="neglect">Yes
+          <input type="radio" value="yes" name="neglect" ng-model="volunteer.person.neglect" required >Yes
         </label>
+        <ng-messages for="adult.neglect.$error" ng-if="adult.$submitted && adult.neglect.$invalid" >
+          <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span></span>
+        </ng-messages>
       </div>
-      <div class="form-group col-sm-12">
+
+      <div class="form-group col-sm-12" ng-class="{'has-error': adult.$submitted && adult.psychiatricDisorder.$invalid}" >
         <label class="block required">Have you ever been treated for or diagnosed with a psychiatric disorder?</label>
         <label class="radio-inline">
-          <input type="radio" value="no" name="psychiatricDisorder">No
+          <input type="radio" value="no" name="psychiatricDisorder" ng-model="volunteer.person.psychiatricDisorder" required >No
         </label>
         <label class="radio-inline">
-          <input type="radio" value="yes" name="psychiatricDisorder">Yes
+          <input type="radio" value="yes" name="psychiatricDisorder" ng-model="volunteer.person.psychiatricDisorder" required>Yes
         </label>
+        <ng-messages for="adult.psychiatricDisorder.$error" ng-if="adult.$submitted && adult.psychiatricDisorder.$invalid" >
+          <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span></span>
+        </ng-messages>
       </div>
-      <div class="form-group col-sm-12">
+
+      <div class="form-group col-sm-12" ng-class="{'has-error':adult.$submitted && adult.sexuallyActive.$invalid}" >
         <label class="block required">Currently, or in the past year, have you been sexually active outside of marriage?</label>
         <label class="radio-inline">
-          <input type="radio" value="no" name="sexuallyActive">No
+          <input type="radio" value="no" name="sexuallyActive" ng-model="volunteer.person.sexualyActive" required >No
         </label>
         <label class="radio-inline">
-          <input type="radio" value="yes" name="sexuallyActive">Yes
+          <input type="radio" value="yes" name="sexuallyActive" ng-model="volunteer.person.sexualyActive" required >Yes
         </label>
+        <ng-messages for="adult.sexuallyActive.$error" ng-if="adult.$submitted && adult.sexuallyActive.$invalid" >
+          <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span></span>
+        </ng-messages>
       </div>
-      <div class="form-group col-sm-12">
+
+      <div class="form-group col-sm-12" ng-class="{'has-error': adult.$submitted && adult.religion.$invalid}" >
         <label class="block required">We're all in different places in our journey. And that's okay. But we ask that those who work in kindergarten through 5th grade be Christ-followers. There are opportunitites regardless of your spiritual orientation.</label>
 
         <div class="checkbox">
           <label>
-            <input type="checkbox">I'm exploring my faith</label>
+            <input type="checkbox" 
+                   name="religion" 
+                   value="1" 
+                   ng-model="volunteer.person.exploring" 
+                   ng-required="!religionSelected()"/> 
+            I'm exploring my faith 
+          </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox">I'm not sure</label>
+            <input type="checkbox" 
+                   name="religion"
+                   value="1"
+                   ng-model="volunteer.person.unsure"
+                   ng-required="!religionSelected()"/>
+            I'm not sure
+          </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox">I'm a Christ-follower</label>
+            <input type="checkbox"
+                   name="religion"
+                   value="1"
+                   ng-model="volunteer.person.christ"
+                   ng-required="!religionSelected()"/>
+            I'm a Christ-follower
+          </label>
         </div>
-
+        <ng-messages for="adult.religion.$error" ng-if="adult.$submitted && adult.religion.$invalid" >
+          <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span></span>
+        </ng-messages>
       </div>
     </div>
     <div class="row">
-      <div class="form-group col-sm-8">
+      <div class="form-group col-sm-8" ng-class="{'has-error': adult.$submitted && adult.explainFaith.$invalid }" >
         <label class="control-label required" for="explainFaith">Please Explain</label>
-        <input type="text" class="form-control" id="explainFaith" placeholder="Please Explain">
-        <span ng-show="false">Please provide a valid value.</span>
+        <textarea class="form-control" 
+               id="explainFaith" 
+               name="explainFaith" 
+               placeholder="Please Explain"
+               ng-model="volunteer.person.explainFaith">
+        </textarea>
+        <ng-messages for="adult.explainFaith.$error" ng-if="adult.$submitted && adult.explainFaith.$invalid" >
+          <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span></span>
+        </ng-messages>
       </div>
     </div>
     <div class="row">
