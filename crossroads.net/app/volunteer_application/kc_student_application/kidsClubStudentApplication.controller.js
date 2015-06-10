@@ -13,10 +13,7 @@
     vm.reference1 = {};
     vm.reference2 = {};
     vm.serveAgeKids = {};
-
     vm.save = save;
-    vm.checkIt = checkIt;
-    //vm.school = "my school";
 
     activate();
 
@@ -24,10 +21,6 @@
 
     function activate() {
 
-    }
-
-    function checkIt() {
-      $log.debug('constant: ' + studentFields.firstName);
     }
 
     function save() {
@@ -332,9 +325,7 @@
         Value: vm.studentSignatureDate,
         CrossroadsId: studentFields.studentSignatureDate
       };
-
-
-
+      
       student.$save(function(saved) {
         //need to inject rootScope
         //$rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess);
