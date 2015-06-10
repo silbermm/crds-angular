@@ -9,6 +9,11 @@ IF OBJECT_ID('dbo.crds_Update_Distribution_With_Congregation_Id', 'p') IS NULL
 	EXEC('CREATE PROCEDURE dbo.crds_Update_Distribution_With_Congregation_Id AS SELECT 1')
 GO
 
+-- =============================================
+-- Author:		Matt Brewer
+-- Create date: 6/10/2015
+-- Description:	Refresh Congregation_Ids on Distributions after data migrations
+-- =============================================
 ALTER PROCEDURE [dbo].[crds_Update_Distribution_With_Congregation_Id]
 AS
 BEGIN
@@ -32,7 +37,8 @@ BEGIN
 	DECLARE @Household_Congregation_Id INT;
 	FETCH NEXT FROM @Distribution_Cursor INTO @Household_Congregation_Id
 	WHILE @@FETCH_STATUS = 0
-	BEGIN		
+	BEGIN
+		-- Set to 'No Site Specified' if Household has no Congregation		
 		IF @Household_Congregation_Id IS NULL
 			SET @Household_Congregation_Id = 5;
 
