@@ -23,6 +23,7 @@
   require('./corkboard');
   require('./volunteer_signup');
   require('./volunteer_application');
+  require('./search');
 
   var getCookie = require('./utilities/cookies');
 
@@ -342,6 +343,11 @@
                 resolve: {
                     loggedin: checkLoggedin
                 }
+            })
+            .state("search", {
+              url: "/search-results",
+              controller: "SearchCtrl as search",
+              templateUrl: "search/search-results.html"
             })
             .state("volunteer-request", {
               url: "{link:volunteerRouteType}",

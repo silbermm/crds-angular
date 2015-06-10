@@ -1,0 +1,49 @@
+.search-title {
+  font-family: $brand-font-family;
+  font-weight: 700;
+  font-size: 24px;
+  @extend .search-link;
+}
+
+.search-suggested-links {
+  font-family: $brand-font-family;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.search-link {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  display: block;
+}
+
+.search-media-title {
+  font-family: $brand-font-family;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.search-media-subtitle {
+  @extend .search-media-title;
+  color: $gray-light;
+}
+
+.search-media-date {
+  font-family: $brand-font-family;
+  font-size: 14px;
+  color: $gray-light;
+}
+
+.card-item {
+  p {
+    line-height: 18px;
+  }
+}
+
+.search-media-image {
+  padding-top: 5px;
+  padding-bottom: 10px;
+}
