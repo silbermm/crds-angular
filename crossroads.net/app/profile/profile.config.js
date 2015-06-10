@@ -7,7 +7,7 @@
   function config($httpProvider){
     $httpProvider.defaults.timeout = 15000;
     $httpProvider.defaults.useXDomain = true; 
-    $httpProvider.defaults.headers.common['Authorization']= getCookie('sessionId');
+    $httpProvider.defaults.headers.common['Authorization']= crds_utilities.getCookie('sessionId');
   };
   
 })()

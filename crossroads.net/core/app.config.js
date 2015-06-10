@@ -8,7 +8,8 @@
 
   function AppConfig($httpProvider, $locationProvider){
     $httpProvider.defaults.useXDomain = true;
-    $httpProvider.defaults.headers.common['Authorization']= getCookie('sessionId');
+    // TODO: Do we need to reference differently here?
+    $httpProvider.defaults.headers.common['Authorization']= crds_utilities.getCookie('sessionId');
   }
 
 })();

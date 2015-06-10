@@ -31,5 +31,6 @@ require('./app.run');
 
 require('./errors');
 
-// require and export getCookie on global scope
-require('expose?getCookie!./utilities/cookies.js');
+// require and export crds_utilities on global scope
+// TODO: Change name of file
+require('expose?crds_utilities!./utilities/cookies.js');

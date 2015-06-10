@@ -29,7 +29,8 @@
                 url :__API_ENDPOINT__ + "api/authenticated",
                 withCredentials: true,
                 headers: {
-                  'Authorization': getCookie('sessionId')
+                    // TODO: Do we need to reference differently here?
+                  'Authorization': crds_utilities.getCookie('sessionId')
                 }}).success(function (user) {
                     // TODO Added to debug/research US1403 - should remove after issue is resolved
                     console.log("US1403: stateChangeStart event handler, successful call to api/authenticated in app.run");
