@@ -102,9 +102,9 @@
 }
 
 .media-search {
-  
+
   margin-bottom: 0;
-  
+
   @media only screen and (max-width:  $screen-sm-min){
     margin-bottom: $line-height-computed !important;
   }
@@ -120,12 +120,6 @@
   .icon {
     height: 18px;
     width: 18px;
-  }
-}
-
-.media-index {
-  .media-search {
-    margin-top: $line-height-computed/2;
   }
 }
 
