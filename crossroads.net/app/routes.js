@@ -180,10 +180,10 @@
               controller: "MediaCtrl as media",
               templateUrl: "media/view-all-messages.html"
             })
-            .state("media-other", {
-              url: "/media/other",
+            .state("media-videos", {
+              url: "/media/videos",
               controller: "MediaCtrl as media",
-              templateUrl: "media/view-all-other.html"
+              templateUrl: "media/view-all-videos.html"
             })
             .state("corkboard", {
               url: "/corkboard",

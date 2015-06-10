@@ -1,42 +1,17 @@
 <div class="col-sm-12">
   <div class="row media-index">
     <div class="col-sm-7 push-bottom">
-      <h1 class="flush-top push-bottom">Message Series
-        <div class="btn-group" dropdown is-open="musicisopen">
-          <button type="button" class="btn btn-primary dropdown-toggle btn-xs" dropdown-toggle ng-disabled="disabled">
-            Subscribe on iTunes <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="http://feeds.feedburner.com/crossroads/AudioMessages">Weekend Message Audio</a></li>
-            <li><a href="http://feeds.feedburner.com/crossroads/VideoMessages">Weekend Message Video</a></li>
-          </ul>
-        </div>
-
+      <h1 class="flush-top push-bottom">Series
+        <ng-include src="'media/itunes-btn-messages.html'"> </ng-include>
       </h1>
     </div><!--/col-sm-8-->
-    <div class="media-search col-sm-5 clearfix pull-right">
-    <div class="row">
 
-      <div class="col-xs-6 col-sm-6 col-md-7 pull-right">
-        <div class="input-group input-group-sm col-xs-12">
-          <input type="text" class="form-control" placeholder="Search Media">
-          <span class="input-group-btn">
-            <button class="btn btn-gray-light" type="button">
-              <svg viewBox="0 0 32 32" class="icon icon-search3 icon-medium">
-                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#search3"></use>
-              </svg>
-            </button>
-          </span>
-        </div><!--/input-group input-group-sm col-xs-12-->
-      </div><!--/col-xs-6-->
+    <ng-include src="'media/media-search.html'"> </ng-include>
 
-    </div><!--/row-->
-  </div><!--/media-search col-sm-4 clearfix-->
   </div> <!--/row-->
 
   <div class="row">
     <ul class="media-list">
-
 
         <li class="col-sm-2 col-xs-6">
           <a href="/like-a-boss/">
@@ -279,31 +254,5 @@
     </ul>
   </div>
 
-  <div class="col-sm-12 media-pagination">
-    <nav class="text-center">
-      <ul class="pagination">
-        <li>
-          <a href="" aria-label="Previous">
-            <svg viewBox="0 0 32 32" class="icon icon-arrow-left9">
-              <use xlink:href="#arrow-left9"></use>
-            </svg>
-          </a>
-        </li>
-        <li class="active"><a href="">1</a></li>
-        <li><a href="">2</a></li>
-        <li><a href="">3</a></li>
-        <li><a href="">4</a></li>
-        <li><a href="">5</a></li>
-        <li><a href="">...</a></li>
-        <li>
-          <a href="" aria-label="Next">
-          <svg viewBox="0 0 32 32" class="icon icon-arrow-right9">
-            <use xlink:href="#arrow-right9"></use>
-          </svg>
-          </a>
-        </li>
-      </ul>
-    </nav>
-  </div><!--/media-pagination-->
 
 </div>
