@@ -1,10 +1,9 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
-using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
@@ -22,10 +21,14 @@ namespace MinistryPlatform.Translation.Services
         public const string DONOR_PROCESSOR_ID = "Processor_ID";
 
         private IMinistryPlatformService ministryPlatformService;
+        private IProgramService programService;
+        private ICommunicationService communicationService;
 
-        public DonorService(IMinistryPlatformService ministryPlatformService)
+        public DonorService(IMinistryPlatformService ministryPlatformService, IProgramService programService, ICommunicationService communicationService)
         {
             this.ministryPlatformService = ministryPlatformService;
+            this.programService = programService;
+            this.communicationService = communicationService;
         }
 
 
@@ -64,13 +67,15 @@ namespace MinistryPlatform.Translation.Services
 
         }
 
-        public int CreateDonationAndDistributionRecord(int donationAmt, int donorId, string programId, string charge_id, DateTime setupTime, bool registeredDonor)
+        public int CreateDonationAndDistributionRecord(int donationAmt, int donorId, string programId, string charge_id, string pymt_type, DateTime setupTime, bool registeredDonor)
         {
+            var pymt_id = (pymt_type == "bank") ? "5" : "4";
+            
             var donationValues = new Dictionary<string, object>
             {
                 {"Donor_ID", donorId},
                 {"Donation_Amount", donationAmt},
-                {"Payment_Type_ID", 4}, //hardcoded as credit card until ACH stories are worked
+                {"Payment_Type_ID", pymt_id},
                 {"Donation_Date", setupTime},
                 {"Transaction_code", charge_id},
                 {"Registered_Donor", registeredDonor}
@@ -108,6 +113,16 @@ namespace MinistryPlatform.Translation.Services
             {
                 throw new ApplicationException(
                     string.Format("CreateDonationDistributionRecord failed.  Donation Id: {0}", donationId), e);
+            }
+
+            try
+            {
+                SendConfirmationEmail(Convert.ToInt32(programId), donorId, donationAmt, setupTime);
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException(
+                    string.Format("Sending of Confirmation Email failed for Donation Id: {0}", donationId), e);
             }
 
             return donationDistributionId;
@@ -210,5 +225,68 @@ namespace MinistryPlatform.Translation.Services
 
             return (donorId);
         }
+
+
+        public void SendConfirmationEmail(int programId, int donorId, int donationAmount, DateTime setupDate)
+        {
+            var program = programService.GetProgramById(programId);
+            //If the communcations admin does not link a message to the program, the default template will be used.
+            int communicationTemplateId = program.CommunicationTemplateId == 0 ? AppSetting("DefaultGiveConfirmationEmailTemplate") : program.CommunicationTemplateId;
+
+            MessageTemplate template = communicationService.GetTemplate(communicationTemplateId);
+
+            ContactDonor contact = GetEmailViaDonorId(donorId);
+
+            var comm = new Communication
+            {
+                AuthorUserId = 5,
+                DomainId = 1,
+                EmailBody = template.Body,
+                EmailSubject = template.Subject,
+                FromContactId = 5,
+                FromEmailAddress = "giving@crossroads.net",
+                ReplyContactId = 5,
+                ReplyToEmailAddress = "giving@crossroads.net",
+                ToContactId = contact.ContactId,
+                ToEmailAddress = contact.Email
+            };
+
+            var mergeData = new Dictionary<string, object>
+            {
+                {"Program_Name", program.Name},
+                {"Donation_Amount", donationAmount},
+                {"Donation_Date", setupDate},
+                {"Payment_Method", "Credit Card"} //TODO hard-coded until ACH story 
+            };
+ 
+            communicationService.SendMessage(comm, mergeData);
+        }
+
+        public ContactDonor GetEmailViaDonorId(int donorId)
+        {
+            ContactDonor donor = new ContactDonor();
+            try
+            {
+                var searchStr = "," + donorId.ToString();
+                var records =
+                    WithApiLogin<List<Dictionary<string, object>>>(
+                        apiToken => (ministryPlatformService.GetPageViewRecords("DonorByContactId", apiToken, searchStr, "")));
+                if (records != null && records.Count > 0)
+                {
+                    var record = records.First();
+
+                    donor.Email = record.ToString("Email");
+                    donor.ContactId = record.ToInt("Contact_ID");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(
+                    string.Format("GetEmailViaDonorId failed.  Donor Id: {0}", donorId), ex);
+            }
+
+            return donor;
+        }
     }
+
 }

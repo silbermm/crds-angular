@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using crds_angular.Exceptions;
 using crds_angular.Models.Crossroads;
 using crds_angular.Services.Interfaces;
@@ -54,19 +55,8 @@ namespace crds_angular.Services
             }
             var defaultSourceId = response.Data.default_source;
             var sources = response.Data.sources.data;
-            foreach (var source in sources)
-            {
-                if (source.id == defaultSourceId)
-                {
-                    defaultSource.brand = source.brand;
-                    defaultSource.last4 = source.last4;
-                    defaultSource.name = source.name;
-                    defaultSource.address_zip = source.address_zip;
-                    defaultSource.exp_month = source.exp_month;
-                    defaultSource.exp_year = source.exp_year.Substring(2,2);
-                }
-            }
-
+            defaultSource = SetDefaultSource(sources, defaultSourceId);
+            
             return defaultSource;
 
         }
@@ -89,8 +79,8 @@ namespace crds_angular.Services
 
         public SourceData getDefaultSource(string customer_token)
         {
-            SourceData default_source = new SourceData();
-            
+            SourceData defaultSource = new SourceData();
+         
             var getCustomerRequest = new RestRequest("customers/" + customer_token, Method.GET);
 
             IRestResponse<StripeCustomer> getCustomerResponse =
@@ -100,42 +90,47 @@ namespace crds_angular.Services
                 Content content = JsonConvert.DeserializeObject<Content>(getCustomerResponse.Content);
                 throw new StripeException("Could not get default source information because customer lookup failed", content.error.type, content.error.message, content.error.code);
             }
-            var default_source_id = getCustomerResponse.Data.default_source;
+            var defaultSourceId = getCustomerResponse.Data.default_source;
             var sources = getCustomerResponse.Data.sources.data;
-            foreach (var source in sources)
-            {
-                if (source.id == default_source_id)
-                {
-                    default_source.brand = source.brand;
-                    default_source.last4 = source.last4;
-                    default_source.name = source.name;
-                    default_source.address_zip = source.address_zip;
-                    default_source.exp_month = source.exp_month.PadLeft(2,'0');
-                    default_source.exp_year = source.exp_year.Substring(2,2);
-                }   
-            }
+            defaultSource = SetDefaultSource(sources, defaultSourceId);
             
-            return default_source;
+            return defaultSource;
         }
 
-
-        public string chargeCustomer(string customer_token, int amount, int donor_id)
+        public SourceData SetDefaultSource(List<SourceData>sources, string defaultSourceId )
         {
+            SourceData defaultSource = new SourceData();
 
-            var getCustomerRequest = new RestRequest("customers/" + customer_token, Method.GET);
-            IRestResponse<StripeCustomer> getCustomerResponse =
-                (IRestResponse<StripeCustomer>)stripeRestClient.Execute<StripeCustomer>(getCustomerRequest);
-            if (getCustomerResponse.StatusCode == HttpStatusCode.BadRequest)
+            foreach (var source in sources)
             {
-                Content content = JsonConvert.DeserializeObject<Content>(getCustomerResponse.Content);
-                throw new StripeException("Could not charge customer because customer lookup failed", content.error.type, content.error.message, content.error.code);
+                if (source.id == defaultSourceId)
+                {
+                   if (source.@object == "bank_account")
+                    {
+                        defaultSource.routing_number = source.routing_number;
+                        defaultSource.last4 = source.last4;
+                    }
+                    else
+                    {
+                        defaultSource.brand = source.brand;
+                        defaultSource.last4 = source.last4;
+                        defaultSource.name = source.name;
+                        defaultSource.address_zip = source.address_zip;
+                        defaultSource.exp_month = source.exp_month.PadLeft(2, '0');
+                        defaultSource.exp_year = source.exp_year.Substring(2, 2);
+                    }
+                }
             }
 
+            return defaultSource;
+        }
+
+        public string chargeCustomer(string customer_token, int amount, int donor_id, string pymt_type)
+        {
             var chargeRequest = new RestRequest("charges", Method.POST);
             chargeRequest.AddParameter("amount", amount * 100);
             chargeRequest.AddParameter("currency", "usd");
-            chargeRequest.AddParameter("source", getCustomerResponse.Data.default_source);
-            chargeRequest.AddParameter("customer", getCustomerResponse.Data.id);
+            chargeRequest.AddParameter("customer", customer_token);
             chargeRequest.AddParameter("description", "Donor ID #" + donor_id);
 
             IRestResponse<StripeCharge> chargeResponse =
