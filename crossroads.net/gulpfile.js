@@ -81,13 +81,14 @@ gulp.task("webpack:build", ["icons"], function(callback) {
 		);
 
 		// TODO: Remove once we fully support Uglification for all JS files
-		if (element.entry.dependencies) {
-			gutil.log("[start]", "adding additional plugins for " +  JSON.stringify(element.entry.dependencies));
-
-			element.plugins = element.plugins.concat(
-				new webpack.optimize.UglifyJsPlugin()
-			);
-		}
+		// This caused an issue with the #/give/ page showing an A with an accent character between GIVE and $100 in the button. Commenting out again.
+		//if (element.entry.dependencies) {
+		//	gutil.log("[start]", "adding additional plugins for " +  JSON.stringify(element.entry.dependencies));
+        //
+		//	element.plugins = element.plugins.concat(
+		//		new webpack.optimize.UglifyJsPlugin()
+		//	);
+		//}
 	});
 
 	// run webpack
