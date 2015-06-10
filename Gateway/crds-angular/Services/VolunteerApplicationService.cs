@@ -82,7 +82,13 @@ namespace crds_angular.Services
             formResponse.FormAnswers.Add(SetCustomField(application.SpecialTalents, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityDuringWeek, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityDuringWeekend, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.ServeSite, opportunityResponseId));
+            //formResponse.FormAnswers.Add(SetCustomField(application.ServeSite, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityOakley, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityFlorence, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityWestSide, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityMason, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityClifton, opportunityResponseId));
+
             formResponse.FormAnswers.Add(SetCustomField(application.ServeServiceTimes, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.ServeAgeKids1To2, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.ServeAgeKids3ToPreK, opportunityResponseId));
