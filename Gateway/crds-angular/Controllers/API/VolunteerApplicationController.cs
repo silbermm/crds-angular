@@ -20,6 +20,28 @@ namespace crds_angular.Controllers.API
             _volunteerApplicationService = volunteerApplicationService;
         }
 
+        [Route("api/volunteer-application/adult")]
+        public IHttpActionResult SaveAdult([FromBody] AdultApplicationDto application)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(val => val.Errors).Aggregate("", (current, err) => current + err.ErrorMessage + " ");
+                var dataError = new ApiErrorDto("SaveAdult Data Invalid", new InvalidOperationException("Invalid SaveAdult Data" + errors));
+                throw new HttpResponseException(dataError.HttpResponseMessage);
+            }
+
+            try
+            {
+                _volunteerApplicationService.SaveAdult(application);
+            }
+            catch (Exception exception)
+            {
+                var apiError = new ApiErrorDto("Volunteer Application POST Failed", exception);
+                throw new HttpResponseException(apiError.HttpResponseMessage);
+            }
+            return Ok();
+        }
+
         [Route("api/volunteer-application/student")]
         public IHttpActionResult SaveStudent([FromBody] StudentApplicationDto application)
         {
@@ -41,30 +63,5 @@ namespace crds_angular.Controllers.API
             }
             return Ok();
         }
-
-        //[Route("api/volunteer-application")]
-        //public IHttpActionResult Post([FromBody] VolunteerApplicationDto application)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        var errors = ModelState.Values.SelectMany(val => val.Errors).Aggregate("", (current, err) => current + err.Exception.Message);
-        //        var dataError = new ApiErrorDto("RSVP Data Invalid", new InvalidOperationException("Invalid POST Data" + errors));
-        //        throw new HttpResponseException(dataError.HttpResponseMessage);
-        //    }
-
-        //    return Authorized(token =>
-        //    {
-        //        try
-        //        {
-        //            _volunteerApplicationService.Save(application);
-        //        }
-        //        catch (Exception exception)
-        //        {
-        //            var apiError = new ApiErrorDto("Volunteer Application POST Failed", exception);
-        //            throw new HttpResponseException(apiError.HttpResponseMessage);
-        //        }
-        //        return Ok();
-        //    });
-        //}
     }
 }
