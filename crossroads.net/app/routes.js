@@ -185,6 +185,11 @@
               controller: "MediaCtrl as media",
               templateUrl: "media/view-all-videos.html"
             })
+            .state("media-series-single", {
+              url: "/media/series/single",
+              controller: "MediaCtrl as media",
+              templateUrl: "media/series-single.html"
+            })
             .state("corkboard", {
               url: "/corkboard",
               controller: "CorkboardCtrl as corkboard",
