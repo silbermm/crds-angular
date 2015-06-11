@@ -35,7 +35,7 @@
           <span ng-show="false">Please provide a valid value.</span>
         </div>
 
-        <div class="form-group col-sm-6" ng-class="{'has-error': adult.nameTag.$invalid && adult.$submitted}">
+        <div class="form-group col-sm-6" ng-class="{'has-error': adult.nametag.$invalid && adult.$submitted}">
           <label class="control-label required" for="nameTag" >Name For Name Tag</label>
           <input type="text" class="form-control" id="nameTag" name="nameTag" placeholder="Enter name for name tag" ng-model="volunteer.nameTag" required>
           <ng-messages for="adult.nameTag.$error" ng-if="adult.$submitted && adult.nameTag.$invalid" >

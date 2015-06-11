@@ -4,9 +4,9 @@
 
   module.exports = KidsClubStudentApplication;
 
-  KidsClubStudentApplication.$inject = ['$log'];
+  KidsClubStudentApplication.$inject = ['$log', '$rootScope'];
 
-  function KidsClubStudentApplication($log) {
+  function KidsClubStudentApplication($log, $rootScope) {
 
     return {
       restrict: "EA",

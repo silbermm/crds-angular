@@ -1,19 +1,31 @@
 "use strict";
 
+var moment = require("moment");
+
 (function() {
 
   angular.module("crossroads").controller("KidsClubStudentApplicationController", KidsClubStudentApplicationController);
  
-  KidsClubStudentApplicationController.$inject = ['$log', 'VolunteerService', 'studentFields'];
+  KidsClubStudentApplicationController.$inject = ['$log', '$rootScope', 'VolunteerService', 'studentFields'];
 
-  function KidsClubStudentApplicationController($log, VolunteerService, studentFields) {
+  function KidsClubStudentApplicationController($log, $rootScope, VolunteerService, studentFields) {
     $log.debug("Inside Kids-Club-Student-Application-Controller");
     var vm = this;
 
+    vm.availabilitySelected = availabilitySelected;
+    vm.dateOptions = {
+      formatYear: 'yy',
+      startingDay: 1,
+      showWeeks: 'false'
+    };
+    vm.gradeLevelSelected = gradeLevelSelected;
+    vm.locationSelected = locationSelected;
+    vm.parentSignatureDate = moment().format('MM/DD/YYYY');
     vm.reference1 = {};
     vm.reference2 = {};
-    vm.serveAgeKids = {};
     vm.save = save;
+    vm.serveAgeKids = {};
+    vm.studentSignatureDate = moment().format('MM/DD/YYYY');
 
     activate();
 
@@ -23,10 +35,55 @@
 
     }
 
-    function save() {
+    /**
+     * Checks if one of the availabilities has been selected and returns
+     * true if it has, false otherwise
+     */
+    function availabilitySelected(){
+      if (vm.availabilityDuringWeek || vm.availabilityDuringWeekend)
+        return true;
+      return false;
+    }
+
+    /**
+     * Checks if one of the grade levels has been selected and
+     * returns true if has, false otherwise
+     */
+    function gradeLevelSelected(){
+      if (vm.serveAgeKids && (
+          vm.serveAgeKids.age1to2 ||
+          vm.serveAgeKids.age3toPreK || 
+          vm.serveAgeKids.Kto5Grade) )
+        return true;
+      return false;
+    }
+
+    /**
+     * Checks if one of the availability locations has been selected and returns
+     * true if it has, false otherwise
+     */
+    function locationSelected(){
+      if (vm.availabilityOakley
+          || vm.availabilityFlorence
+          || vm.availabilityWestSide
+          || vm.availabilityMason
+          || vm.availabilityClifton)
+        return true;
+      return false;
+    }
+
+    // Passing in the form object to determine if the
+    // form is valid. Is there a better way to do this?
+    function save(form) {
       $log.debug('you tried to save');
       $log.debug('school: ' + vm.school);
       $log.debug('something from parent: ' + vm.contactId );
+
+      if(form.student.$invalid){
+        $log.error("please fill out all required fields correctly");
+        $rootScope.$emit('notify',$rootScope.MESSAGES.generalError);
+        return false;
+      }
 
       var student = new VolunteerService.SaveStudent();
       student.contactId = vm.contactId;
@@ -334,6 +391,8 @@
         //$rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
         return false;
       });
+
+      return true;
     }
 
 

@@ -60,6 +60,17 @@ describe("KidsClub Student Application Controller", function() {
     version: "15"
   };
 
+  var mockForm = {
+    student: {
+      $invalid: true,
+      $name: "student",
+      $pending: undefined,
+      $pristine: true,
+      $submitted: true,
+      $valid: false
+    }
+ }; 
+
   beforeEach(module('crossroads'));
   
   beforeEach(inject(function(_$rootScope_, _$controller_){
@@ -78,6 +89,40 @@ describe("KidsClub Student Application Controller", function() {
     expect(controller.reference1).toBeDefined();  
   });
 
-  
+  it("should not allow a save if there are errors", function(){
+    expect(controller.save(mockForm)).toBe(false);
+  });
+
+  //TODO: 
+  it("should save the form when there are no errors", function(){
+   
+  });
+
+ it("should be false when checking if availability has been selected", function(){
+    expect(controller.availabilitySelected()).toBe(false); 
+  });
+
+  it("should be true if an availability has been selected", function(){
+    controller.availabilityDuringWeek = "week";
+    expect(controller.availabilitySelected()).toBe(true); 
+  });
+
+  it("should be false when checking if gradeLevel has been selected", function(){
+    expect(controller.gradeLevelSelected()).toBe(false);
+  });
+
+  it("should be true when gradeLevel has been selected", function(){
+    controller.serveAgeKids.age1to2 = "some string";
+    expect(controller.gradeLevelSelected()).toBe(true);
+  });
+
+  it("should be false when checking if location has been selected", function(){
+    expect(controller.locationSelected()).toBe(false);
+  });
+
+  it("should be true when a location has been selected", function(){
+    controller.availabilityFlorence = "some value";
+    expect(controller.locationSelected()).toBe(true);
+  });  
 
 });

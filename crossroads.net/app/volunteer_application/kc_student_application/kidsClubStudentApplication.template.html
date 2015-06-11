@@ -1,4 +1,4 @@
-<form name="student" novalidate>
+<form name="student" ng-submit="kcStudentApplication.save(this)" novalidate>
   <fieldset class="push-bottom">
     <legend>General Info</legend>
     <div class="row">
@@ -167,15 +167,33 @@
   <fieldset class="push-bottom">
     <legend>School</legend>
     <div class="row">
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.school.$invalid && student.$submitted}">
         <label class="control-label required" for="school">School</label>
-        <input type="text" class="form-control" id="school" placeholder="Enter school" ng-model="kcStudentApplication.school">
-        <span ng-show="false">Please provide a valid value.</span>
+        <input type="text" 
+               class="form-control" 
+               id="school"
+               name="school"
+               placeholder="Enter school" 
+               ng-model="kcStudentApplication.school"
+               required>
+        <ng-messages for="student.school.$error" ng-if="student.$submitted && student.school.$invalid" >
+          <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span></span>
+        </ng-messages>
       </div>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.grade.$invalid && student.$submitted}">
         <label class="control-label required" for="grade">Grade</label>
-        <input type="text" class="form-control" id="grade" ng-model="kcStudentApplication.grade" placeholder="Enter grade">
-        <span ng-show="false">Please provide a valid value.</span>
+        <input type="text" 
+               class="form-control" 
+               id="grade" 
+               name="grade"
+               ng-model="kcStudentApplication.grade" 
+               placeholder="Enter grade"
+               required>
+         <ng-messages for="student.grade.$error" ng-if="student.$submitted && student.grade.$invalid" >
+          <span ng-message="required">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+        </ng-messages>
       </div>
     </div>
   </fieldset>
@@ -183,31 +201,65 @@
   <fieldset class="push-bottom">
     <legend>About You</legend>
     <div class="row">
-      <div class="form-group col-sm-12">
-        <label class="block required">Tell us where you are</label>
+      <div class="form-group col-sm-12" ng-class="{'has-error': student.religion.$invalid && student.$submitted}">
+        <label class="control-label block required">Tell us where you are</label>
         <label class="radio-inline">
-          <input type="radio" value="I'm exploring my faith" ng-model="kcStudentApplication.whereYouAre">I'm exploring my faith
+          <input type="radio" 
+                 value="I'm exploring my faith" 
+                 name="religion" ng-model="kcStudentApplication.whereYouAre" required>I'm exploring my faith
         </label>
         <label class="radio-inline">
-          <input type="radio" value="I'm not sure" ng-model="kcStudentApplication.whereYouAre">I'm not sure
+          <input type="radio" 
+                 value="I'm not sure" 
+                 name="religion"
+                 ng-model="kcStudentApplication.whereYouAre" required>I'm not sure
         </label>
         <label class="radio-inline">
-          <input type="radio" value="I'm a Christ-follower" ng-model="kcStudentApplication.whereYouAre">I'm a Christ-follower
+          <input type="radio" 
+                 value="I'm a Christ-follower"
+                 name="religion"
+                 ng-model="kcStudentApplication.whereYouAre" required>I'm a Christ-follower
         </label>
+        <ng-messages for="student.religion.$error" ng-if="student.$submitted && student.religion.$invalid" >
+          <span ng-message="required">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+        </ng-messages>
       </div>
     </div>
     <div class="row">
-      <div class="form-group col-sm-8">
+      <div class="form-group col-sm-8" ng-class="{'has-error': student.explainFaith.$invalid && student.$submitted}">
         <label class="control-label required" for="explainFaith">Please Explain</label>
-        <input type="text" class="form-control" id="explainFaith" ng-model="kcStudentApplication.explainFaith" placeholder="Please Explain">
-        <span ng-show="false">Please provide a valid value.</span>
+        <textarea class="form-control" 
+                  id="explainFaith" 
+                  name="explainFaith"
+                  ng-model="kcStudentApplication.explainFaith" 
+                  placeholder="Please Explain"
+                  required>
+        </textarea>
+        <ng-messages for="student.explainFaith.$error" ng-if="student.$submitted && student.explainFaith.$invalid" >
+          <span ng-message="required">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+        </ng-messages>
       </div>
     </div>
     <div class="row">
-      <div class="form-group col-sm-8">
+      <div class="form-group col-sm-8" ng-class="{'has-error': student.prompted.$invalid && student.$submitted}">
         <label class="control-label required" for="promptedApplication">Why do you want to serve?</label>
-        <input type="text" class="form-control" id="promptedApplication" ng-model="kcStudentApplication.whyServe" placeholder="Why do you want to serve?">
-        <span ng-show="false">Please provide a valid value.</span>
+        <input type="text" 
+               class="form-control" 
+               id="promptedApplication" 
+               name="prompted"
+               ng-model="kcStudentApplication.whyServe" 
+               placeholder="Why do you want to serve?"
+               required>
+        <ng-messages for="student.prompted.$error" ng-if="student.$submitted && student.prompted.$invalid" >
+          <span ng-message="required">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+        </ng-messages>
+
       </div>
     </div>
     <div class="row">
@@ -222,68 +274,147 @@
   <fieldset class="push-bottom">
     <legend>Serving Opportunities</legend>
     <div class="row">
-      <div class="col-sm-12">
-        <label>What is your availability?</label>
+      <div class="col-sm-12" ng-class="{'has-error': student.$submitted && student.availability.$invalid }">
+        <label class="block required control-label">What is your availability?</label>
 
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcStudentApplication.availabilityDuringWeek">During the Week</label>
+            <input type="checkbox" 
+                   name="availability"
+                   ng-model="kcStudentApplication.availabilityDuringWeek"
+                   ng-required="!kcStudentApplication.availabilitySelected()">
+            During the Week
+          </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcStudentApplication.availabilityDuringWeekend">Weekend Services At</label>
+            <input type="checkbox" 
+                   name="availability"
+                   ng-model="kcStudentApplication.availabilityDuringWeekend"
+                   ng-required="!kcStudentApplication.availabilitySelected()">
+            Weekend Services
+          </label>
         </div>
+        <ng-messages for="student.availability.$error" ng-if="student.$submitted && student.availability.$invalid" >
+          <span ng-message="required">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+        </ng-messages>
       </div>
 
-      <div class="form-group col-sm-6">
-        <label class="block required">Site name</label>
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.availabilitySite.$invalid }">
+        <label class="block required control-label" >Site name</label>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcStudentApplication.availabilityOakley">Oakley</label>
+            <input type="checkbox" 
+                   name="availabilitySite"
+                   value="oakley"
+                   ng-model="kcStudentApplication.availabilityOakley"
+                   ng-required="!kcStudentApplication.locationSelected()">
+            Oakley
+          </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcStudentApplication.availabilityFlorence">Florence</label>
+            <input type="checkbox"
+                   value="florence"
+                   name="availabilitySite"
+                   ng-model="kcStudentApplication.availabilityFlorence"
+                   ng-required="!kcStudentApplication.locationSelected()">
+            Florence
+          </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcStudentApplication.availabilityWestSide">West Side</label>
+            <input type="checkbox"
+                   value="west side"
+                   name="availabilitySite"
+                   ng-model="kcStudentApplication.availabilityWestSide"
+                   ng-required="!kcStudentApplication.locationSelected()">
+            West Side
+          </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcStudentApplication.availabilityMason">Mason</label>
+            <input type="checkbox"
+                   value="mason"
+                   name="availabilitySite"
+                   ng-model="kcStudentApplication.availabilityMason"
+                   ng-required="!kcStudentApplication.locationSelected()">
+            Mason
+          </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcStudentApplication.availabilityClifton">Clifton</label>
+            <input type="checkbox"
+                   value="clifton"
+                   name="availabilitySite"
+                   ng-model="kcStudentApplication.availabilityClifton"
+                   ng-required="!kcStudentApplication.locationSelected()">
+            Clifton
+          </label>
         </div>
+        <ng-messages for="student.availabilitySite.$error" ng-if="student.$submitted && student.availabilitySite.$invalid" >
+          <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span></span>
+        </ng-messages>
       </div>
     </div>
 
     <div class="row">
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.serveServiceTimes.$invalid }">
         <label class="control-label required" for="serveServiceTimes">During</label>
-        <input type="text" class="form-control" id="serveServiceTimes" ng-model="kcStudentApplication.serveServiceTimes" placeholder="Service Times">
-        <span ng-show="false">Please provide a valid value.</span>
+        <input type="text" 
+               class="form-control" 
+               id="serveServiceTimes" 
+               name="serveServiceTimes"
+               ng-model="kcStudentApplication.serveServiceTimes" 
+               placeholder="Service Times"
+               required>
+        <ng-messages for="student.serveServiceTimes.$error" ng-if="student.$submitted && student.serveServiceTimes.$invalid" >
+          <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span></span>
+        </ng-messages>
       </div>
     </div>
 
     <div class="row">
 
-      <div class="form-group col-sm-12">
-        <label class="required">What age kids do you prefer to serve with?</label>
+      <div class="form-group col-sm-12" ng-class="{'has-error': student.$submitted && student.serveAge.$invalid }">
+        <label class="control-label required">What age kids do you prefer to serve with?</label>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcStudentApplication.serveAgeKids.age1to2">1 - 2 years old</label>
+            <input type="checkbox" 
+                   value="1"
+                   name="serveAge"
+                   ng-model="kcStudentApplication.serveAgeKids.age1to2"
+                   ng-required="!kcStudentApplication.gradeLevelSelected()">
+            1 - 2 years old
+          </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcStudentApplication.serveAgeKids.age3toPreK">3-year olds - Pre-K</label>
+            <input type="checkbox" 
+                   value="2"
+                   name="serveAge"
+                   ng-model="kcStudentApplication.serveAgeKids.age3toPreK"
+                   ng-required="!kcStudentApplication.gradeLevelSelected()">
+            3-year olds - Pre-K
+          </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcStudentApplication.serveAgeKids.Kto5Grade">Kinder - 5th Grade</label>
+            <input type="checkbox"
+                   value="3"
+                   name="serveAge"
+                   ng-model="kcStudentApplication.serveAgeKids.Kto5Grade"
+                   ng-required="!kcStudentApplication.gradeLevelSelected()">
+            Kinder - 5th Grade
+          </label>
         </div>
+        <ng-messages for="student.serveAge.$error" ng-if="student.$submitted && student.serveAge.$invalid" >
+          <span ng-message="required">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+        </ng-messages>
       </div>
   </fieldset>
 
@@ -293,45 +424,95 @@
       <p class="help-text col-sm-12">List two adults you have known for at least one year, who are not rleated to you and have a definite knowledge of your character and ability to work wtih kids (e.g. pastor, close friend, and/or teacher)</p>
 
       <h4 class="col-sm-12">First Reference</h4>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.referenceName1.$invalid }">
         <label class="control-label required" for="referenceName-1">Name</label>
-        <input type="text" class="form-control" id="referenceName-1" ng-model="kcStudentApplication.reference1.name" placeholder="Name">
-        <span ng-show="false">Please provide a valid value.</span>
+        <input type="text" 
+               class="form-control" 
+               id="referenceName-1"
+               name="referenceName1"
+               ng-model="kcStudentApplication.reference1.name" 
+               placeholder="Name"
+               required>
+        <ng-messages for="student.referenceName1.$error" ng-if="student.$submitted && student.referenceName1.$invalid" >
+          <span ng-message="required">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+        </ng-messages>
       </div>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.referenceTime1.$invalid }">
         <label class="control-label required" for="referenceTimeKnown-1">Length of time known</label>
-        <input type="text" class="form-control" id="referenceTimeKnown-1" ng-model="kcStudentApplication.reference1.timeKnown" placeholder="Length of time known">
-        <span ng-show="false">Please provide a valid value.</span>
+        <input type="text" 
+               class="form-control" 
+               id="referenceTimeKnown-1"
+               name="referenceTime1"
+               ng-model="kcStudentApplication.reference1.timeKnown" 
+               placeholder="Length of time known"
+               required>
+         <ng-messages for="student.referenceTime1.$error" ng-if="student.$submitted && student.referenceTime1.$invalid" >
+          <span ng-message="required">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+        </ng-messages>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label" for="referenceHomePhone-1">Home Phone</label>
         <input type="text" class="form-control" id="referenceHomePhone-1" ng-model="kcStudentApplication.reference1.homePhone" placeholder="Home Phone">
-        <span ng-show="false">Please provide a valid value.</span>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label" for="referenceMobilePhone-1">Mobile Phone</label>
         <input type="text" class="form-control" id="referenceMobilePhone-1" ng-model="kcStudentApplication.reference1.mobilePhone" placeholder="Mobile Phone">
-        <span ng-show="false">Please provide a valid value.</span>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label" for="referenceWorkPhone-1">Work Phone</label>
         <input type="text" class="form-control" id="referenceWorkPhone-1" ng-model="kcStudentApplication.reference1.workPhone" placeholder="Work Phone">
-        <span ng-show="false">Please provide a valid value.</span>
       </div>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.referenceEmail1.$invalid }">
         <label class="control-label required" for="referenceEmail-1">Email</label>
-        <input type="text" class="form-control" id="referenceEmail-1" ng-model="kcStudentApplication.reference1.email" placeholder="Email">
-        <span ng-show="false">Please provide a valid value.</span>
+        <input type="email" 
+               class="form-control" 
+               id="referenceEmail-1" 
+               name="referenceEmail1"
+               ng-model="kcStudentApplication.reference1.email" 
+               placeholder="Email"
+               required>
+        <ng-messages for="student.referenceEmail1.$error" ng-if="student.$submitted && student.referenceEmail1.$invalid" >
+          <span ng-message="required">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+          <span ng-message="email">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidEmail].message | html"></span>
+          </span>
+        </ng-messages>
       </div>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.referenceAssociation1.$invalid }">
         <label class="control-label required" for="referenceAssociation-1">Nature of Association</label>
-        <input type="text" class="form-control" id="referenceAssociation-1" ng-model="kcStudentApplication.reference1.association" placeholder="Nature of Association">
-        <span ng-show="false">Please provide a valid value.</span>
+        <input type="text" 
+               class="form-control" 
+               id="referenceAssociation-1" 
+               name="referenceAssociation1"
+               ng-model="kcStudentApplication.reference1.association" 
+               placeholder="Nature of Association"
+               required>
+        <ng-messages for="student.referenceAssociation1.$error" ng-if="student.$submitted && student.referenceAssociation1.$invalid" >
+          <span ng-message="required">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+        </ng-messages>
       </div>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.referenceOccupation1.$invalid }">
         <label class="control-label required" for="referenceOccupation-1">Occupation</label>
-        <input type="text" class="form-control" id="referenceOccupation-1" ng-model="kcStudentApplication.reference1.occupation" placeholder="Occupation">
-        <span ng-show="false">Please provide a valid value.</span>
+        <input type="text" 
+               class="form-control" 
+               id="referenceOccupation-1"
+               name="referenceOccupation1"
+               ng-model="kcStudentApplication.reference1.occupation" 
+               placeholder="Occupation"
+               required>
+        <ng-messages for="student.referenceOccupation1.$error" ng-if="student.$submitted && student.referenceOccupation1.$invalid" >
+          <span ng-message="required">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+        </ng-messages>
       </div>
     </div>
     <!--/row-->
@@ -340,47 +521,96 @@
     <div class="row">
       <!-- Reference #2 -->
       <h4 class="col-sm-12">Second Reference</h4>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.referenceName2.$invalid }">
         <label class="control-label required" for="referenceName-2">Name</label>
-        <input type="text" class="form-control" id="referenceName-2" ng-model="kcStudentApplication.reference2.name" placeholder="Name">
-        <span ng-show="false">Please provide a valid value.</span>
+        <input type="text" 
+               class="form-control" 
+               id="referenceName-2"
+               name="referenceName2"
+               ng-model="kcStudentApplication.reference2.name" 
+               placeholder="Name"
+               required>
+        <ng-messages for="student.referenceName2.$error" ng-if="student.$submitted && student.referenceName2.$invalid" >
+          <span ng-message="required">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+        </ng-messages>
       </div>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.referenceTime2.$invalid }">
         <label class="control-label required" for="referenceTimeKnown-2">Length of time known</label>
-        <input type="text" class="form-control" id="referenceTimeKnown-2" ng-model="kcStudentApplication.reference2.timeKnown" placeholder="Length of time known">
-        <span ng-show="false">Please provide a valid value.</span>
+        <input type="text" 
+               class="form-control" 
+               id="referenceTimeKnown-2"
+               name="referenceTime2"
+               ng-model="kcStudentApplication.reference2.timeKnown" 
+               placeholder="Length of time known"
+               required>
+         <ng-messages for="student.referenceTime2.$error" ng-if="student.$submitted && student.referenceTime2.$invalid" >
+          <span ng-message="required">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+        </ng-messages>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label" for="referenceHomePhone-2">Home Phone</label>
         <input type="text" class="form-control" id="referenceHomePhone-2" ng-model="kcStudentApplication.reference2.homePhone" placeholder="Home Phone">
-        <span ng-show="false">Please provide a valid value.</span>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label" for="referenceMobilePhone-2">Mobile Phone</label>
         <input type="text" class="form-control" id="referenceMobilePhone-2" ng-model="kcStudentApplication.reference2.mobilePhone" placeholder="Mobile Phone">
-        <span ng-show="false">Please provide a valid value.</span>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label" for="referenceWorkPhone-2">Work Phone</label>
         <input type="text" class="form-control" id="referenceWorkPhone-2" ng-model="kcStudentApplication.reference2.workPhone" placeholder="Work Phone">
-        <span ng-show="false">Please provide a valid value.</span>
       </div>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.referenceEmail2.$invalid }">
         <label class="control-label required" for="referenceEmail-2">Email</label>
-        <input type="text" class="form-control" id="referenceEmail-2" ng-model="kcStudentApplication.reference2.email" placeholder="Email">
-        <span ng-show="false">Please provide a valid value.</span>
+        <input type="email" 
+               class="form-control" 
+               id="referenceEmail-2" 
+               name="referenceEmail2"
+               ng-model="kcStudentApplication.reference2.email" 
+               placeholder="Email"
+               required>
+        <ng-messages for="student.referenceEmail2.$error" ng-if="student.$submitted && student.referenceEmail2.$invalid" >
+          <span ng-message="required">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+          <span ng-message="email">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidEmail].message | html"></span>
+          </span>
+        </ng-messages>
       </div>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.referenceAssociation2.$invalid }">
         <label class="control-label required" for="referenceAssociation-2">Nature of Association</label>
-        <input type="text" class="form-control" id="referenceAssociation-2" ng-model="kcStudentApplication.reference2.association" placeholder="Nature of Association">
-        <span ng-show="false">Please provide a valid value.</span>
+        <input type="text" 
+               class="form-control" 
+               id="referenceAssociation-2" 
+               name="referenceAssociation2"
+               ng-model="kcStudentApplication.reference2.association" 
+               placeholder="Nature of Association"
+               required>
+        <ng-messages for="student.referenceAssociation2.$error" ng-if="student.$submitted && student.referenceAssociation2.$invalid" >
+          <span ng-message="required">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+        </ng-messages>
       </div>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.referenceOccupation2.$invalid }">
         <label class="control-label required" for="referenceOccupation-2">Occupation</label>
-        <input type="text" class="form-control" id="referenceOccupation-2" ng-model="kcStudentApplication.reference2.occupation" placeholder="Occupation">
-        <span ng-show="false">Please provide a valid value.</span>
-      </div>
-    </div>
+        <input type="text" 
+               class="form-control" 
+               id="referenceOccupation-2"
+               name="referenceOccupation2"
+               ng-model="kcStudentApplication.reference2.occupation" 
+               placeholder="Occupation"
+               required>
+        <ng-messages for="student.referenceOccupation2.$error" ng-if="student.$submitted && student.referenceOccupation2.$invalid" >
+          <span ng-message="required">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+        </ng-messages>
+      </div>    </div>
     <!--/row-->
 
     <hr />
@@ -391,89 +621,156 @@
         check now an din the future. I understand my involvement with Crossroads Kids' Club is influenced by the information provided by all these sources. I release from liability for damages any person or organizations identified by me in this application,
         and waive my right to inspect any written material from contact with them or from the criminal background check. I have carefully read the forgoing release and know the contents thereof and I agree to this release as my own free act. This is a
         legally binding agreement which I have read and understand.</p>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.parentLastName.$invalid }" >
         <label class="control-label required" for="parentLastName">Last Name</label>
-        <input type="text" class="form-control" id="parentLastName" ng-model="kcStudentApplication.parent.lastName" placeholder="Enter Parent Last Name">
-        <span ng-show="false">Please provide a valid value.</span>
-      </div>
-
-      <div class="form-group col-sm-6">
-        <label class="control-label required" for="parentFirstName">First Name</label>
-        <input type="text" class="form-control" id="parentFirstName" ng-model="kcStudentApplication.parent.firstName" placeholder="Enter Parent First Name">
-        <span ng-show="false">Please provide a valid value.</span>
-      </div>
-
-      <div class="form-group col-sm-6">
-        <label class="control-label required" for="parentHomePhone">Home Phone</label>
-        <input type="text" class="form-control" id="parentHomePhone" ng-model="kcStudentApplication.parent.homePhone" placeholder="Enter Parent Home Phone">
-        <span ng-show="false">Please provide a valid value.</span>
-      </div>
-
-      <div class="form-group col-sm-6">
-        <label class="control-label required" for="parentMobilePhone">Mobile Phone</label>
-        <input type="text" class="form-control" id="parentMobilePhone" ng-model="kcStudentApplication.parent.mobilePhone" placeholder="Enter Parent Mobile Phone">
-        <span ng-show="false">Please provide a valid value.</span>
-      </div>
-
-      <div class="form-group col-sm-6">
-        <label class="control-label required" for="parentEmail">Email</label>
-        <input type="text" class="form-control" id="parentEmail" ng-model="kcStudentApplication.parent.email" placeholder="Enter Parent Email">
-        <span ng-show="false">Please provide a valid value.</span>
-      </div>
-
-      <div class="form-group col-sm-6">
-        <label class="block required">Parent/Guaridan Consent</label>
-        <label class="radio-inline">
-          <input type="radio" value="Yes" name="parentSignature" ng-model="kcStudentApplication.parentSignature">Yes
-        </label>
-        <label class="radio-inline">
-          <input type="radio" value="No" name="parentSignature" ng-model="kcStudentApplication.parentSignature">No
-        </label>
-      </div>
-      <div class="form-group col-sm-6">
-        <label class="control-label required" for="parentSignatureDate">Date</label>
-        <div class="input-group">
-          <input name="parentSignatureDate" type="text" id="parentSignatureDate" class="form-control" datepicker-popup="{{format}}" ng-required="true" close-text="Close" ng-model="kcStudentApplication.parentSignatureDate" is-open="datePickers.signatureDate" datepicker-options="dateOptions"
-          />
-          <span class="input-group-btn">
-            <button type="button" class="btn btn-gray-light" ng-click="openFromDate($event)">
-              <i class="glyphicon glyphicon-calendar"></i>
-            </button>
+        <input type="text" 
+               class="form-control" 
+               id="parentLastName" 
+               name="parentLastName"
+               ng-model="kcStudentApplication.parent.lastName" 
+               placeholder="Enter Parent Last Name"
+               required>
+        <ng-messages for="student.parentLastName.$error" ng-if="student.$submitted && student.parentLastName.$invalid" >
+          <span ng-message="required">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
-        </div>
-        <span ng-show="false">Please provide a valid value.</span>
+        </ng-messages>
+      </div>
+
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.parentFirstName.$invalid }">
+        <label class="control-label required" for="parentFirstName">First Name</label>
+        <input type="text" 
+               class="form-control" 
+               id="parentFirstName" 
+               name="parentFirstName"
+               ng-model="kcStudentApplication.parent.firstName" 
+               placeholder="Enter Parent First Name"
+               required>
+        <ng-messages for="student.parentFirstName.$error" ng-if="student.$submitted && student.parentFirstName.$invalid" >
+          <span ng-message="required">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+        </ng-messages>
+      </div>
+
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.parentHomePhone.$invalid }">
+        <label class="control-label required" for="parentHomePhone">Home Phone</label>
+        <input type="text" 
+               class="form-control" 
+               id="parentHomePhone" 
+               name="parentHomePhone"
+               ng-model="kcStudentApplication.parent.homePhone" 
+               placeholder="Enter Parent Home Phone"
+               required>
+        <ng-messages for="student.parentHomePhone.$error" ng-if="student.$submitted && student.parentHomePhone.$invalid" >
+          <span ng-message="required">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+        </ng-messages>
+      </div>
+
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.parentMobilePhone.$invalid }">
+        <label class="control-label required" for="parentMobilePhone">Mobile Phone</label>
+        <input type="text" 
+               class="form-control" 
+               id="parentMobilePhone" 
+               name="parentMobilePhone"
+               ng-model="kcStudentApplication.parent.mobilePhone" 
+               placeholder="Enter Parent Mobile Phone"
+               required>
+        <ng-messages for="student.parentMobilePhone.$error" ng-if="student.$submitted && student.parentMobilePhone.$invalid" >
+          <span ng-message="required">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+        </ng-messages>
+      </div>
+
+      <div class="form-group col-sm-12" ng-class="{'has-error': student.$submitted && student.parentEmail.$invalid }">
+        <label class="control-label required" for="parentEmail">Email</label>
+        <input type="email" 
+               class="form-control" 
+               id="parentEmail" 
+               name="parentEmail"
+               ng-model="kcStudentApplication.parent.email" 
+               placeholder="Enter Parent Email"
+               required>
+        <ng-messages for="student.parentEmail.$error" ng-if="student.$submitted && student.parentEmail.$invalid" >
+          <span ng-message="required">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+
+           <span ng-message="email">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidEmail].message | html"></span>
+          </span>
+        </ng-messages>
+      </div>
+
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.parentSignature.$invalid }">
+        <label class="block required control-label">Parent/Guaridan Consent</label>
+        <label class="radio-inline">
+          <input type="radio" 
+                 value="Yes" 
+                 name="parentSignature" 
+                 ng-model="kcStudentApplication.parentSignature"
+                 required>
+          Yes
+        </label>
+        <label class="radio-inline">
+          <input type="radio" 
+                 value="No" 
+                 name="parentSignature" 
+                 ng-model="kcStudentApplication.parentSignature"
+                 required>
+          No
+        </label>
+      </div>
+
+      <div class="form-group col-sm-6">
+        <label class="control-label" for="parentSignatureDate">Date</label>
+        <input name="parentSignatureDate" 
+               type="text" 
+               id="parentSignatureDate" 
+               class="form-control" 
+               ng-model="kcStudentApplication.parentSignatureDate"
+               disabled>
       </div>
 
     </div>
-    <div class="row">
-      <div class="form-group col-sm-6">
+
+    <div class="row" >
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.studentSignature.$invalid }">
         <label class="block required">Student Agreement</label>
         <label class="radio-inline">
-          <input type="radio" value="Yes" name="studentSignature" ng-model="kcStudentApplication.studentSignature">Yes
+          <input type="radio" 
+                 value="Yes" 
+                 name="studentSignature" 
+                 ng-model="kcStudentApplication.studentSignature"
+                 required>
+          Yes
         </label>
         <label class="radio-inline">
-          <input type="radio" value="No" name="studentSignature" ng-model="kcStudentApplication.studentSignature">No
+          <input type="radio" 
+                 value="No" 
+                 name="studentSignature" 
+                 ng-model="kcStudentApplication.studentSignature"
+                 required>
+          No
         </label>
       </div>
       <div class="form-group col-sm-6">
-        <label class="control-label required" for="studentSignatureDate">Date</label>
-        <div class="input-group">
-          <input name="studentSignatureDate" type="text" id="studentSignatureDate" class="form-control" datepicker-popup="{{format}}" ng-required="true" close-text="Close" ng-model="kcStudentApplication.studentSignatureDate" is-open="datePickers.signatureDate"
-          datepicker-options="dateOptions" />
-          <span class="input-group-btn">
-            <button type="button" class="btn btn-gray-light" ng-click="openFromDate($event)">
-              <i class="glyphicon glyphicon-calendar"></i>
-            </button>
-          </span>
-        </div>
-        <span ng-show="false">Please provide a valid value.</span>
+        <label class="control-label" for="studentSignatureDate">Date</label>
+        <input name="studentSignatureDate" 
+               type="text" 
+               id="studentSignatureDate" 
+               class="form-control" 
+               ng-model="kcStudentApplication.studentSignatureDate" 
+               disabled/>
       </div>
     </div>
     <!--/row-->
   </fieldset>
   <input type="submit" name="submit" value="Submit" id="submit" class="btn btn-primary push-half-bottom">
-  <button id="save-form" ng-click="kcStudentApplication.save()" class="btn btn-primary" data-style="expand-left">
-    Save Button
-  </button>
-  <button ng-click="kcStudentApplication.checkIt()"></button>
+  <!--<button id="save-form" ng-click="kcstudentapplication.save()" class="btn btn-primary" data-style="expand-left">-->
+    <!--Save Button-->
+  <!--</button>-->
 </form>

@@ -59,6 +59,9 @@
         vm.showError = true;
       }
     }
+      
+    
+
 
     function fieldHasError(form, formField){
        
