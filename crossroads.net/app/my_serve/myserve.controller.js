@@ -1,12 +1,11 @@
 'use strict()';
 (function(){
-  var moment = require('moment');
 
   module.exports = MyServeController;
 
-  MyServeController.$inject = ['$rootScope', '$log', 'filterState', 'Session', 'ServeOpportunities', 'Groups'];
+  MyServeController.$inject = ['$rootScope', '$log', 'filterState', 'Session', 'ServeOpportunities', 'Groups', 'AUTH_EVENTS'];
 
-  function MyServeController($rootScope, $log, filterState, Session, ServeOpportunities, Groups){
+  function MyServeController($rootScope, $log, filterState, Session, ServeOpportunities, Groups, AUTH_EVENTS){
 
     var vm = this;
 
@@ -36,6 +35,10 @@
       },function(err){
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
       });
+    });
+
+    $rootScope.$on(AUTH_EVENTS.logoutSuccess, function(event, data) {
+      vm.filterState.clearAll();
     });
 
     ////////////////////////////
