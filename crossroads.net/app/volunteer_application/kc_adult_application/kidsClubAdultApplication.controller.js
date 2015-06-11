@@ -2,7 +2,7 @@
 
 (function() {
 
-  module.exports = KidsClubAdultApplicationController;
+  angular.module("crossroads").controller("KidsClubAdultApplicationController", KidsClubAdultApplicationController);
 
   KidsClubAdultApplicationController.$inject = ['$scope', '$log', 'VolunteerService', 'adultFields'];
 

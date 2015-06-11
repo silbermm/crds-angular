@@ -13,6 +13,7 @@ app.controller("VolunteerApplicationController", require("./volunteerApplication
 app.factory("Opportunity", ["$resource", "Session", require('../services/opportunity_service')]);
 
 require('./kc_adult_application/kidsClubAdultApplication.template.html');
+require('./kc_adult_application/kidsClubAdultApplication.controller');
 require('./kc_adult_application/kidsClubAdultApplication.directive');
 
 require('./kc_student_application/kidsClubStudentApplication.template.html');
