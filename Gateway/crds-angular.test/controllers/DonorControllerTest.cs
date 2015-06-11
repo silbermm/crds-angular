@@ -88,7 +88,7 @@ namespace crds_angular.test.controllers
                 ProcessorId = processorId
             };
 
-            var default_source = new SourceData()
+            var default_source = new SourceData
             {
                 last4 = "1234",
                 brand = "Visa",

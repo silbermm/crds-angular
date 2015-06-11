@@ -130,16 +130,16 @@ namespace crds_angular.Controllers.API
                         {
                             credit_card = new CreditCardDTO
                             {
-                               last4 = default_source.last4,
-                               name = default_source.name,
-                               brand = default_source.brand,
-                               address_zip = default_source.address_zip,
-                               exp_date = default_source.exp_month + default_source.exp_year
+                              last4 = default_source.last4,
+                              name = default_source.name,
+                              brand = default_source.brand,
+                              address_zip = default_source.address_zip,
+                              exp_date = default_source.exp_month + default_source.exp_year
                             },
                             bank_account = new BankAccountDTO
                             {
-                               last4 = default_source.bank_last4,
-                               routing = default_source.routing_number
+                              last4 = default_source.bank_last4,
+                              routing = default_source.routing_number
                             }
                          }
                     };
@@ -188,14 +188,14 @@ namespace crds_angular.Controllers.API
             return Authorized(token =>
             {
                 ContactDonor contactDonor;
-                SourceData defaultSource;
+                SourceData sourceData;
      
                 try
                 {
                     contactDonor = gatewayDonorService.GetContactDonorForAuthenticatedUser(token);
 
                     //Post apistripe/customer/{custID}/sources pass in the dto.stripe_token_id
-                    defaultSource = stripePaymentService.updateCustomerSource(contactDonor.ProcessorId, dto.stripe_token_id);
+                    sourceData = stripePaymentService.updateCustomerSource(contactDonor.ProcessorId, dto.stripe_token_id);
 
                 }
                 catch (StripeException stripeException)
@@ -217,16 +217,16 @@ namespace crds_angular.Controllers.API
                     {
                         credit_card = new CreditCardDTO
                         {
-                            brand = defaultSource.brand,
-                            last4 = defaultSource.last4,
-                            name = defaultSource.name,
-                            address_zip = defaultSource.address_zip,
-                            exp_date = defaultSource.exp_month + defaultSource.exp_year
+                            brand = sourceData.brand,
+                            last4 = sourceData.last4,
+                            name = sourceData.name,
+                            address_zip = sourceData.address_zip,
+                            exp_date = sourceData.exp_month + sourceData.exp_year
                         },
                         bank_account = new BankAccountDTO
                         {
-                            last4 = defaultSource.bank_last4,
-                            routing = defaultSource.routing_number
+                            last4 = sourceData.bank_last4,
+                            routing = sourceData.routing_number
                         }
                     }
                 };

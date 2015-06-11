@@ -97,7 +97,7 @@ namespace crds_angular.Services
             return defaultSource;
         }
 
-        public SourceData SetDefaultSource(List<SourceData> sources, string defaultSourceId)
+        public SourceData SetDefaultSource(List<SourceData>sources, string defaultSourceId)
         {
             SourceData defaultSource = new SourceData();
 
