@@ -29,7 +29,6 @@
                 url :__API_ENDPOINT__ + "api/authenticated",
                 withCredentials: true,
                 headers: {
-                    // TODO: Do we need to reference differently here?
                   'Authorization': crds_utilities.getCookie('sessionId')
                 }}).success(function (user) {
                     // TODO Added to debug/research US1403 - should remove after issue is resolved

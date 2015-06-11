@@ -25,12 +25,11 @@ require('./email_field/email_field_directive');
 require('./password_field/password_field_directive');
 require('./filters');
 
-require('./app.config');
-require('./app.controller');
-require('./app.run');
+require('./core.config');
+require('./core.controller');
+require('./core.run');
 
 require('./errors');
 
 // require and export crds_utilities on global scope
-// TODO: Change name of file
 require('expose?crds_utilities!./crds_utilities.js');

@@ -1,9 +1,9 @@
 'use strict()';
 (function(){
 
-  angular.module("crossroads.core").controller('appController', AppController);
+  angular.module("crossroads.core").controller('coreController', CoreController);
 
-  AppController.$inject = [
+  CoreController.$inject = [
     "$scope",
     "$rootScope", 
     "MESSAGES", 
@@ -13,7 +13,7 @@
     "screenSize", 
     "$state"];
 
-  function AppController($scope, $rootScope, MESSAGES, Message, growl, $aside, screenSize, $state) {
+  function CoreController($scope, $rootScope, MESSAGES, Message, growl, $aside, screenSize, $state) {
     
     var vm = this;
                 

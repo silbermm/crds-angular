@@ -40,7 +40,6 @@ var checkLoggedin = function ($q, $timeout, $http, $location, $rootScope) {
     method: 'GET',
     url: __API_ENDPOINT__ + "api/authenticated",
     headers: {
-      // TODO: Can we access this here or do we need to use instance method?
       'Authorization': getCookie('sessionId')
     }
   }).success(function (user) {
