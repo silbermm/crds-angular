@@ -18,11 +18,11 @@
     </div>
 
     <div id="adult-application" ng-if="volunteer.showBlock('adult')">
-      <kids-club-adult-application volunteer="volunteer.person"></kids-club-adult-application>
+      <kids-club-adult-application volunteer="volunteer.person" contact-id="volunteer.contactId" opportunity-id="volunteer.pageInfo.opportunity" response-id="volunteer.responseId"></kids-club-adult-application>
     </div>
 
     <div ng-if="volunteer.showBlock('student')">
-      <kids-club-student-application volunteer="volunteer.person" contact-id="volunteer.contactId" page-info="volunteer.pageInfo" response-id="volunteer.responseId"  ></kids-club-student-application>
+      <kids-club-student-application volunteer="volunteer.person" contact-id="volunteer.contactId" page-info="volunteer.pageInfo" response-id="volunteer.responseId"></kids-club-student-application>
     </div>
 
     <div ng-if="volunteer.showBlock('age-error')">
