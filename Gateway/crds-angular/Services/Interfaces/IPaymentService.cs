@@ -12,7 +12,7 @@ namespace crds_angular.Services.Interfaces
         string createCustomer(string token);
         string chargeCustomer(string customer_token, int amount, int donor_id, string pymt_type);
         string updateCustomerDescription(string customer_token, int donor_id);
-        DefaultSourceDTO updateCustomerSource(string customerToken, string cardToken);
-        DefaultSourceDTO getDefaultSource(string customer_token);
+        SourceData updateCustomerSource(string customerToken, string cardToken);
+        SourceData getDefaultSource(string customer_token);
     }
 }

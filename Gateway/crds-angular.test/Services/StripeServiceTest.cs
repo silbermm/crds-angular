@@ -228,10 +228,10 @@ namespace crds_angular.test.Services
             restClient.VerifyAll();
             stripeResponse.VerifyAll();
            
-            Assert.AreEqual("Automated Test",  defaultSource.credit_card.name);  
-            Assert.AreEqual("Visa", defaultSource.credit_card.brand);
-            Assert.AreEqual("8585", defaultSource.credit_card.last4);
-            Assert.AreEqual("45454", defaultSource.credit_card.address_zip);
+            Assert.AreEqual("Automated Test",  defaultSource.name);  
+            Assert.AreEqual("Visa", defaultSource.brand);
+            Assert.AreEqual("8585", defaultSource.last4);
+            Assert.AreEqual("45454", defaultSource.address_zip);
         }
 
     }

@@ -130,16 +130,16 @@ namespace crds_angular.Controllers.API
                         {
                             credit_card = new CreditCardDTO
                             {
-                               last4 = default_source.credit_card.last4,
-                               name = default_source.credit_card.name,
-                               brand = default_source.credit_card.brand,
-                               address_zip = default_source.credit_card.address_zip,
-                               exp_date = default_source.credit_card.exp_date
+                               last4 = default_source.last4,
+                               name = default_source.name,
+                               brand = default_source.brand,
+                               address_zip = default_source.address_zip,
+                               exp_date = default_source.exp_month + default_source.exp_year
                             },
                             bank_account = new BankAccountDTO
                             {
-                               last4 = default_source.bank_account.last4,
-                               routing = default_source.bank_account.routing
+                               last4 = default_source.bank_last4,
+                               routing = default_source.routing_number
                             }
                          }
                     };
@@ -188,7 +188,7 @@ namespace crds_angular.Controllers.API
             return Authorized(token =>
             {
                 ContactDonor contactDonor;
-                DefaultSourceDTO defaultSource;
+                SourceData defaultSource;
      
                 try
                 {
@@ -217,16 +217,16 @@ namespace crds_angular.Controllers.API
                     {
                         credit_card = new CreditCardDTO
                         {
-                            brand = defaultSource.credit_card.brand,
-                            last4 = defaultSource.credit_card.last4,
-                            name = defaultSource.credit_card.name,
-                            address_zip = defaultSource.credit_card.address_zip,
-                            exp_date = defaultSource.credit_card.exp_date
+                            brand = defaultSource.brand,
+                            last4 = defaultSource.last4,
+                            name = defaultSource.name,
+                            address_zip = defaultSource.address_zip,
+                            exp_date = defaultSource.exp_month + defaultSource.exp_year
                         },
                         bank_account = new BankAccountDTO
                         {
-                            last4 = defaultSource.bank_account.last4,
-                            routing = defaultSource.bank_account.routing
+                            last4 = defaultSource.bank_last4,
+                            routing = defaultSource.routing_number
                         }
                     }
                 };
