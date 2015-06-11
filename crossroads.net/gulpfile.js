@@ -5,9 +5,13 @@ var webpack = require("webpack");
 var gulpWebpack = require("gulp-webpack");
 var WebpackDevServer = require("webpack-dev-server");
 var webpackConfig = require("./webpack.config.js");
+var webpackCoreConfig = require("./webpack.core.config.js");
+var webpackDependenciesConfig = require("./webpack.dependencies.config.js");
 var svgSprite = require("gulp-svg-sprite");
 var replace = require("gulp-replace");
 var rename = require("gulp-rename");
+
+var webPackConfigs = [Object.create(webpackConfig), Object.create(webpackCoreConfig), Object.create(webpackDependenciesConfig)];
 
 // Start the development server
 gulp.task("default", ["webpack-dev-server"]);
@@ -26,21 +30,23 @@ gulp.task("build", ["webpack:build"]);
 // For convenience, an "alias" to webpack-dev-server
 gulp.task("start", ["webpack-dev-server"]);
 
+
 // Run the development server
 gulp.task("webpack-dev-server", ["icons-watch"], function(callback) {
-	// Modify some webpack config options
-	var myConfig = Object.create(webpackConfig);
-	myConfig.devtool = "eval";
-	myConfig.debug = true;
-	myConfig.output.path = "/";
+	webPackConfigs.forEach(function(element, index) {
 
-	// Build app to assets - watch for changes
-	gulp.src("app/**/**")
-		.pipe(watch("app/**/**"))
-		.pipe(gulpWebpack(myConfig))
-		.pipe(gulp.dest("./assets"));
+		// Modify some webpack config options
+		element.devtool = "eval";
+		element.debug = true;
+		element.output.path = "/";
+		// Build app to assets - watch for changes
+		gulp.src("app/**/**")
+			.pipe(watch("app/**/**"))
+			.pipe(gulpWebpack(element))
+			.pipe(gulp.dest("./assets"));
+	});
 
-	new WebpackDevServer(webpack(myConfig), {
+	new WebpackDevServer(webpack(webPackConfigs), {
 			publicPath: "/assets/",
 			quiet: false,
 			watchDelay: 300,
@@ -57,22 +63,36 @@ gulp.task("webpack-dev-server", ["icons-watch"], function(callback) {
 });
 
 gulp.task("webpack:build", ["icons"], function(callback) {
-	// modify some webpack config options
-	var myConfig = Object.create(webpackConfig);
-	myConfig.plugins = myConfig.plugins.concat(
-		new webpack.DefinePlugin({
-			"process.env": {
-				// This has effect on the react lib size
-				"NODE_ENV": JSON.stringify("production")
-			}
-		}),
-		new webpack.optimize.DedupePlugin()
-		// Can't currently use this with angular
-		//new webpack.optimize.UglifyJsPlugin()
-	);
+
+	//var configs = [Object.create(webpackConfig), Object.create(webpackDependenciesConfig)];
+	webPackConfigs.forEach(function(element) {
+		// modify some webpack config options
+		element.plugins = element.plugins.concat(
+			new webpack.DefinePlugin({
+				"process.env": {
+					// This has effect on the react lib size
+					"NODE_ENV": JSON.stringify("production")
+				}
+			}),
+			new webpack.optimize.DedupePlugin()
+			// Can't currently use this with our angular code
+			// This is probably due to not fully following $inject or inline annotation, or using a plugin like ngMinPlugin
+			//new webpack.optimize.UglifyJsPlugin()
+		);
+
+		// TODO: Remove once we fully support Uglification for all JS files
+		// This caused an issue with the #/give/ page showing an A with an accent character between GIVE and $100 in the button. Commenting out again.
+		//if (element.entry.dependencies) {
+		//	gutil.log("[start]", "adding additional plugins for " +  JSON.stringify(element.entry.dependencies));
+        //
+		//	element.plugins = element.plugins.concat(
+		//		new webpack.optimize.UglifyJsPlugin()
+		//	);
+		//}
+	});
 
 	// run webpack
-	webpack(myConfig, function(err, stats) {
+	webpack(webPackConfigs, function(err, stats) {
 		if(err) throw new gutil.PluginError("webpack:build", err);
 		gutil.log("[webpack:build]", stats.toString({
 			colors: true
@@ -82,13 +102,16 @@ gulp.task("webpack:build", ["icons"], function(callback) {
 });
 
 gulp.task("webpack:build-dev", ["icons"], function(callback) {
-	// modify some webpack config options
-	var myDevConfig = Object.create(webpackConfig);
-	myDevConfig.devtool = "sourcemap";
-	myDevConfig.debug = true;
+
+	//var configs = [Object.create(webpackConfig), Object.create(webpackDependenciesConfig)];
+	webPackConfigs.forEach(function(element) {
+		// modify some webpack config options
+		element.devtool = "sourcemap";
+		element.debug = true;
+	});
 
 	// run webpack
-	webpack(myDevConfig).run(function(err, stats) {
+	webpack(webPackConfigs).run(function(err, stats) {
 		if(err) throw new gutil.PluginError("webpack:build-dev", err);
 		gutil.log("[webpack:build-dev]", stats.toString({
 			colors: true

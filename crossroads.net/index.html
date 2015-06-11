@@ -3,10 +3,10 @@
 
 <head>
   <ng-include src="'templates/head.html'"> </ng-include>
-  <link href="assets/main.css" rel="stylesheet" />
+  <link href="assets/core.css" rel="stylesheet" />
 </head>
 
-<body ng-controller="appController as app" ng-class="app.asideState.position">
+<body ng-controller="coreController as app" ng-class="app.asideState.position">
   <div growl class="crossroads-growl">
   </div>
 
@@ -29,8 +29,8 @@
   </div>
 
 </body>
-
 <script src="https://js.stripe.com/v2/"></script>
+<script src="assets/dependencies.js"></script>
+<script src="assets/core.js"></script>
 <script src="assets/main.js"></script>
-
 </html>

@@ -1,8 +1,7 @@
 'use strict';
-require('angular-module-resource');
 
 // Define atrium-events module
-var app = require('angular').module('atrium-events', ['ngResource'], function($locationProvider) {
+var app = angular.module('atrium-events', ['ngResource'], function($locationProvider) {
 	// This is needed in order to be able to use the $location.search() to get the query parameters
 	$locationProvider.html5Mode(true);
 });
