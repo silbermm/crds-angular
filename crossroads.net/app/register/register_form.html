@@ -3,7 +3,7 @@
     <form id="nav_login" name="registerForm" role="form" ng-submit="register()" novalidate>
 
         <div class="soft-half-bottom" ng-class="{'has-error': firstnameError() }">
-              <input id="{{passwordPrefix}}-firstname" class="form-control" id="firstname" name="firstname" type="text" ng-model="newuser.firstname" required placeholder="First Name" autofocus/>
+              <input id="{{passwordPrefix}}-firstname" class="form-control" id="firstname" name="firstname" type="text" ng-model="newuser.firstname" required placeholder="First Name" autofocus>
                 <ng-messages for="registerForm.firstname.$error" ng-if="registerForm.$submitted " ng-messages-include="on-submit-messages"></ng-messages>
        </div>
 
@@ -12,9 +12,9 @@
                 <ng-messages for="registerForm.lastname.$error" ng-if="registerForm.$submitted " ng-messages-include="on-submit-messages"></ng-messages>
         </div>
 
-        <div>
-            <email-field email="newuser.email" submitted="registerForm.$submitted" prefix="passwordPrefix"></email-field>
-        </div>
+        <span>
+            <email-field email="newuser.email" submitted="registerForm.$submitted" prefix="passwordPrefix" focused="false"></email-field>
+        </span>
         <div class="input-group soft-half-bottom col-xs-12">
             <password-field required="true" passwd="newuser.password" submitted="registerForm.$submitted" prefix="passwordPrefix"></password-field>
         </div>
