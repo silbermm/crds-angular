@@ -11,8 +11,9 @@
     return {
       restrict: "EA",
       templateUrl : "kc_adult_application/kidsClubAdultApplication.template.html",
+      controller: "KidsClubAdultApplicationController as kcAdultApplication",
       scope: {
-        volunteer: "=volunteer" 
+        volunteer: "=volunteer"
       },
       link: link
     };
@@ -36,10 +37,10 @@
       scope.open = open;
       scope.religionSelected = religionSelected;
       scope.save = save;
-      
+
 
       //////////////////////////////////////
-      
+
       /**
        * Checks if one of the availabilities has been selected and returns
        * true if it has, false otherwise
@@ -51,7 +52,7 @@
       }
 
       /**
-       * Checks if one of the grade levels has been selected and 
+       * Checks if one of the grade levels has been selected and
        * returns true if has, false otherwise
        */
       function gradeLevelSelected(){
@@ -67,7 +68,7 @@
        * true if it has, false otherwise
        */
       function locationSelected(){
-        if (scope.volunteer.availabilityOakley 
+        if (scope.volunteer.availabilityOakley
             || scope.volunteer.availabilityFlorence
             || scope.volunteer.availabilityWestside
             || scope.volunteer.availabilityMason
@@ -88,15 +89,15 @@
       }
 
       /**
-       * Attempt to save the form response 
+       * Attempt to save the form response
        */
       function save(){
         $log.debug("saving");
         if(scope.adult.$invalid){
-          $log.error("please fill out all required fields correctly"); 
+          $log.error("please fill out all required fields correctly");
           $rootScope.$emit('notify',$rootScope.MESSAGES.generalError);
           return false;
-        } 
+        }
         $log.debug("Thank you for filling out the form");
         return true;
       }

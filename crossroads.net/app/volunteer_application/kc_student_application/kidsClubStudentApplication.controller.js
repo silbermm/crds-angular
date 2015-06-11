@@ -325,7 +325,7 @@
         Value: vm.studentSignatureDate,
         CrossroadsId: studentFields.studentSignatureDate
       };
-      
+
       student.$save(function(saved) {
         //need to inject rootScope
         //$rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess);

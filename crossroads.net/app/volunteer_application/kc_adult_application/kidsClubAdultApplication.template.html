@@ -23,7 +23,7 @@
 
       <div class="form-group col-sm-6">
         <label class="control-label" for="previousName">Previous Name/Maiden Name</label>
-        <input type="text" class="form-control" id="previousName" placeholder="Enter Maiden Name">
+        <input type="text" class="form-control" id="previousName" ng-model="kcAdultApplication.previousName" placeholder="Enter Maiden Name">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
     </div>
@@ -131,9 +131,9 @@
         </div>
         <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.serviceAttend.$invalid}" >
           <label class="control-label required" for="serviceAttend">What Service do you attend?</label>
-          <input type="text" 
-                 class="form-control" 
-                 id="serviceAttend" 
+          <input type="text"
+                 class="form-control"
+                 id="serviceAttend"
                  name="serviceAttend"
                  ng-model="volunteer.serviceAttend"
                  placeholder="What Service do you attend?"
@@ -195,12 +195,12 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.companyPosition.$invalid && adult.$submitted}" >
         <label class="control-label required" for="position">Position</label>
-        <input type="text" 
-               class="form-control" 
-               id="position" 
+        <input type="text"
+               class="form-control"
+               id="position"
                name="companyPosition"
                ng-model="volunteer.companyPerson"
-               placeholder="Position"  
+               placeholder="Position"
                required>
         <ng-messages for="adult.companyPosition.$error" ng-if="adult.$submitted && adult.companyPosition.$invalid" >
           <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span></span>
@@ -208,7 +208,7 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.workPhone.$invalid}" >
         <label class="control-label" for="workPhone">Work Phone (If you can receive calls at this number)</label>
-        <input type="text" class="form-control" id="workPhone" placeholder="123-456-7890" name="workPhone" ng-pattern="volunteer.phoneFormat" ng-model="volunteer.workPhone" ng-model-options="{ updateOn: 'blur' }" > 
+        <input type="text" class="form-control" id="workPhone" placeholder="123-456-7890" name="workPhone" ng-pattern="volunteer.phoneFormat" ng-model="volunteer.workPhone" ng-model-options="{ updateOn: 'blur' }" >
         <ng-messages for="adult.workPhone.$error" ng-if="adult.$submitted && adult.workPhone.$invalid" >
           <span ng-message="pattern"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span></span>
         </ng-messages>
@@ -221,25 +221,25 @@
     <div class="row">
       <div class="form-group col-sm-6">
         <label class="control-label" for="childName-1">Name</label>
-        <input type="text" 
-               class="form-control" 
-               id="childName-1" 
-               placeholder="Name" 
+        <input type="text"
+               class="form-control"
+               id="childName-1"
+               placeholder="Name"
                name="child1" ng-model="volunteer.child1.name">
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.childDob1.$invalid }">
         <label class="control-label" for="childDob-1">Birthday</label>
         <div class="input-group" >
-          <input type="text" 
-                 id="childDob-1" 
-                 class="form-control" 
-                 name="childDob1" 
-                 placeholder="Birthday" 
-                 datepicker-popup="{{::format}}" 
-                 ng-model="voluteer.person.child1.dob" 
-                 is-open="datePickers.childDob1" 
-                 datepicker-options="dateOptions"  
-                 ng-model="voluteer.person.child1.dob" 
+          <input type="text"
+                 id="childDob-1"
+                 class="form-control"
+                 name="childDob1"
+                 placeholder="Birthday"
+                 datepicker-popup="{{::format}}"
+                 ng-model="voluteer.person.child1.dob"
+                 is-open="datePickers.childDob1"
+                 datepicker-options="dateOptions"
+                 ng-model="voluteer.person.child1.dob"
                  close-text="Close"  />
           <span class="input-group-btn">
             <button type="button" class="btn btn-gray-light" ng-click="open('childDob1', $event)">
@@ -259,16 +259,16 @@
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.childDob2.$invalid }">
         <label class="control-label" for="childDob-2">Birthday</label>
         <div class="input-group" >
-          <input type="text" 
-                 id="childDob-2" 
-                 class="form-control" 
-                 name="childDob2" 
-                 placeholder="Birthday" 
-                 datepicker-popup="{{::format}}" 
-                 ng-model="voluteer.person.child2.dob" 
-                 is-open="datePickers.childDob2" 
-                 datepicker-options="dateOptions"  
-                 ng-model="voluteer.person.child2.dob" 
+          <input type="text"
+                 id="childDob-2"
+                 class="form-control"
+                 name="childDob2"
+                 placeholder="Birthday"
+                 datepicker-popup="{{::format}}"
+                 ng-model="voluteer.person.child2.dob"
+                 is-open="datePickers.childDob2"
+                 datepicker-options="dateOptions"
+                 ng-model="voluteer.person.child2.dob"
                  close-text="Close"  />
           <span class="input-group-btn">
             <button type="button" class="btn btn-gray-light" ng-click="open('childDob2', $event)">
@@ -288,16 +288,16 @@
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.childDob3.$invalid }">
         <label class="control-label" for="childDob-3">Birthday</label>
         <div class="input-group" >
-          <input type="text" 
-                 id="childDob-3" 
-                 class="form-control" 
-                 name="childDob3" 
-                 placeholder="Birthday" 
-                 datepicker-popup="{{::format}}" 
-                 ng-model="voluteer.person.child3.dob" 
-                 is-open="datePickers.childDob3" 
-                 datepicker-options="dateOptions"  
-                 ng-model="voluteer.person.child3.dob" 
+          <input type="text"
+                 id="childDob-3"
+                 class="form-control"
+                 name="childDob3"
+                 placeholder="Birthday"
+                 datepicker-popup="{{::format}}"
+                 ng-model="voluteer.person.child3.dob"
+                 is-open="datePickers.childDob3"
+                 datepicker-options="dateOptions"
+                 ng-model="voluteer.person.child3.dob"
                  close-text="Close"  />
           <span class="input-group-btn">
             <button type="button" class="btn btn-gray-light" ng-click="open('childDob3', $event)">
@@ -317,16 +317,16 @@
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.childDob4.$invalid }">
         <label class="control-label" for="childDob-4">Birthday</label>
         <div class="input-group" >
-          <input type="text" 
-                 id="childDob-4" 
-                 class="form-control" 
-                 name="childDob4" 
-                 placeholder="Birthday" 
-                 datepicker-popup="{{::format}}" 
-                 ng-model="voluteer.person.child4.dob" 
-                 is-open="datePickers.childDob4" 
-                 datepicker-options="dateOptions"  
-                 ng-model="voluteer.person.child4.dob" 
+          <input type="text"
+                 id="childDob-4"
+                 class="form-control"
+                 name="childDob4"
+                 placeholder="Birthday"
+                 datepicker-popup="{{::format}}"
+                 ng-model="voluteer.person.child4.dob"
+                 is-open="datePickers.childDob4"
+                 datepicker-options="dateOptions"
+                 ng-model="voluteer.person.child4.dob"
                  close-text="Close"  />
           <span class="input-group-btn">
             <button type="button" class="btn btn-gray-light" ng-click="open('childDob4', $event)">
@@ -415,17 +415,17 @@
 
         <div class="checkbox">
           <label>
-            <input type="checkbox" 
-                   name="religion" 
-                   value="1" 
-                   ng-model="volunteer.exploring" 
-                   ng-required="!religionSelected()"/> 
-            I'm exploring my faith 
+            <input type="checkbox"
+                   name="religion"
+                   value="1"
+                   ng-model="volunteer.exploring"
+                   ng-required="!religionSelected()"/>
+            I'm exploring my faith
           </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" 
+            <input type="checkbox"
                    name="religion"
                    value="1"
                    ng-model="volunteer.unsure"
@@ -451,9 +451,9 @@
     <div class="row">
       <div class="form-group col-sm-8" ng-class="{'has-error': adult.$submitted && adult.explainFaith.$invalid }" >
         <label class="control-label required" for="explainFaith">Please Explain</label>
-        <textarea class="form-control" 
-               id="explainFaith" 
-               name="explainFaith" 
+        <textarea class="form-control"
+               id="explainFaith"
+               name="explainFaith"
                placeholder="Please Explain"
                ng-model="volunteer.explainFaith"
                required >
@@ -486,18 +486,18 @@
       <div class="form-group col-sm-12" ng-class="{'has-error': adult.$submitted && adult.availability.$invalid }" >
         <label class="block required control-label">What is your availability?</label>
         <div class="checkbox">
-          <label> 
-            <input type="checkbox" 
-                   name="availability" 
+          <label>
+            <input type="checkbox"
+                   name="availability"
                    ng-model="volunteer.availabilityWeek"
                    ng-required="!availabilitySelected()">
             During the Week
           </label>
         </div>
         <div class="checkbox">
-          <label> 
-            <input type="checkbox" 
-                   name="availability" 
+          <label>
+            <input type="checkbox"
+                   name="availability"
                    ng-model="volunteer.availabilityWeekend"
                    ng-required="!availabilitySelected()">
             Weekend Services
@@ -512,17 +512,17 @@
         <label class="block required control-label">Site name</label>
         <div class="checkbox">
           <label>
-            <input type="checkbox" 
-                   value="oakley" 
+            <input type="checkbox"
+                   value="oakley"
                    name="availabilitySite"
                    ng-model="volunteer.availabilityOakley"
                    ng-required="!locationSelected()">Oakley<label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" 
-                   value="florence" 
-                   name="availabilitySite" 
+            <input type="checkbox"
+                   value="florence"
+                   name="availabilitySite"
                    ng-model="volunteer.availabilityFlorence"
                    ng-required="!locationSelected()">
             Florence
@@ -530,9 +530,9 @@
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" 
-                   value="west side" 
-                   name="availabilitySite" 
+            <input type="checkbox"
+                   value="west side"
+                   name="availabilitySite"
                    ng-model="volunteer.availabilityWestside"
                    ng-required="!locationSelected()">
             West Side
@@ -540,9 +540,9 @@
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" 
-                   value="mason" 
-                   name="availabilitySite" 
+            <input type="checkbox"
+                   value="mason"
+                   name="availabilitySite"
                    ng-model="volunteer.availabilityMason"
                    ng-required="!locationSelected()">
             Mason
@@ -550,9 +550,9 @@
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" 
-                   value="clifton" 
-                   name="availabilitySite" 
+            <input type="checkbox"
+                   value="clifton"
+                   name="availabilitySite"
                    ng-model="volunteer.availabilityClifton"
                    ng-required="!locationSelected()">
             Clifton
@@ -567,12 +567,12 @@
     <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.serveServiceTimes.$invalid}" >
         <label class="control-label required" for="serveServiceTimes">During</label>
-        <input type="text" 
-               class="form-control" 
-               id="serveServiceTimes" 
+        <input type="text"
+               class="form-control"
+               id="serveServiceTimes"
                name="serveServiceTimes"
-               placeholder="Service Times" 
-               ng-model="volunteer.serveServiceTimes" 
+               placeholder="Service Times"
+               ng-model="volunteer.serveServiceTimes"
                required >
         <ng-messages for="adult.serveServiceTimes.$error" ng-if="adult.$submitted && adult.serveServiceTimes.$invalid" >
           <span ng-message="required">
@@ -623,7 +623,7 @@
         <label class="required control-label">Want to serve directly with kids? What age do you prefer? (check all that apply)</label>
         <div class="checkbox">
           <label>
-            <input type="checkbox" 
+            <input type="checkbox"
                    name="gradeLevel"
                    ng-model="volunteer.birthToTwo"
                    ng-required="!gradeLevelSelected()"
@@ -633,7 +633,7 @@
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" 
+            <input type="checkbox"
                    name="gradeLevel"
                    ng-model="volunteer.threeToPreK"
                    ng-required="!gradeLevelSelected()">
@@ -666,10 +666,10 @@
       <h4 class="col-sm-12">First Reference</h4>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceName1.$invalid}" >
         <label class="control-label required" for="referenceName-1">Name</label>
-        <input type="text" 
-               class="form-control" 
-               id="referenceName-1" 
-               name="referenceName1" 
+        <input type="text"
+               class="form-control"
+               id="referenceName-1"
+               name="referenceName1"
                ng-model="volunteer.referenceName1"
                placeholder="Name"
                required>
@@ -682,10 +682,10 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceTimeKnown1.$invalid}" >
         <label class="control-label required" for="referenceTimeKnown-1">Length of time known</label>
-        <input type="text" 
-               class="form-control" 
+        <input type="text"
+               class="form-control"
                name="referenceTimeKnown1"
-               id="referenceTimeKnown-1" 
+               id="referenceTimeKnown-1"
                ng-model="volunteer.referenceTimeKnown1"
                placeholder="Length of time known"
                required>
@@ -697,8 +697,8 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceHomePhone1.$invalid}">
         <label class="control-label" for="referenceHomePhone-1">Home Phone</label>
-        <input type="text" 
-               class="form-control" 
+        <input type="text"
+               class="form-control"
                id="referenceHomePhone1"
                name="referenceHomePhone1"
                ng-model="volunteer.referenceHomePhone1"
@@ -710,9 +710,9 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceMobilePhone1.$invalid}">
         <label class="control-label" for="referenceMobilePhone-1">Mobile Phone</label>
-        <input type="text" 
-               class="form-control" 
-               id="referenceMobilePhone-1" 
+        <input type="text"
+               class="form-control"
+               id="referenceMobilePhone-1"
                name="referenceMobilePhone1"
                ng-model="volunteer.referenceMobilePhone1"
                ng-pattern="volunteer.phoneFormat"
@@ -723,9 +723,9 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceWorkPhone1.$invalid}">
         <label class="control-label" for="referenceWorkPhone-1">Work Phone</label>
-        <input type="text" 
-               class="form-control" 
-               id="referenceWorkPhone-1" 
+        <input type="text"
+               class="form-control"
+               id="referenceWorkPhone-1"
                name="referenceWorkPhone1"
                ng-pattern="volunteer.phoneFormat"
                ng-model="volunteer.referenceWorkPhone1"
@@ -737,9 +737,9 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceEmail1.$invalid}" >
         <label class="control-label required" for="referenceEmail-1">Email</label>
-        <input type="email" 
-               class="form-control" 
-               id="referenceEmail-1" 
+        <input type="email"
+               class="form-control"
+               id="referenceEmail-1"
                name="referenceEmail1"
                ng-model="volunteer.referenceEmail1"
                placeholder="Email"
@@ -756,9 +756,9 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceAssociation1.$invalid}" >
         <label class="control-label required" for="referenceAssociation-1">Nature of Association</label>
-        <input type="text" 
-               class="form-control" 
-               id="referenceAssociation-1" 
+        <input type="text"
+               class="form-control"
+               id="referenceAssociation-1"
                name="referenceAssociation1"
                ng-model="volunteer.referenceAssociation1"
                placeholder="Nature of Association"
@@ -772,10 +772,10 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceOccupation1.$invalid}">
         <label class="control-label required" for="referenceOccupation-1">Occupation</label>
-        <input type="text" 
-               class="form-control" 
-               id="referenceOccupation-1" 
-               name="referenceOccupation1" 
+        <input type="text"
+               class="form-control"
+               id="referenceOccupation-1"
+               name="referenceOccupation1"
                ng-model="volunteer.referenceOccupation1"
                placeholder="Occupation"
                required>
@@ -794,10 +794,10 @@
       <h4 class="col-sm-12">Second Reference</h4>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceName2.$invalid}" >
         <label class="control-label required" for="referenceName-2">Name</label>
-        <input type="text" 
-               class="form-control" 
-               id="referenceName-2" 
-               name="referenceName2" 
+        <input type="text"
+               class="form-control"
+               id="referenceName-2"
+               name="referenceName2"
                ng-model="volunteer.referenceName2"
                placeholder="Name"
                required>
@@ -810,10 +810,10 @@
 
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceTimeKnown2.$invalid}" >
         <label class="control-label required" for="referenceTimeKnown-2">Length of time known</label>
-        <input type="text" 
-               class="form-control" 
+        <input type="text"
+               class="form-control"
                name="referenceTimeKnown2"
-               id="referenceTimeKnown-2" 
+               id="referenceTimeKnown-2"
                ng-model="volunteer.referenceTimeKnown2"
                placeholder="Length of time known"
                required>
@@ -826,8 +826,8 @@
 
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceHomePhone2.$invalid}">
         <label class="control-label" for="referenceHomePhone-2">Home Phone</label>
-        <input type="text" 
-               class="form-control" 
+        <input type="text"
+               class="form-control"
                id="referenceHomePhone2"
                name="referenceHomePhone2"
                ng-model="volunteer.referenceHomePhone2"
@@ -839,9 +839,9 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceMobilePhone2.$invalid}">
         <label class="control-label" for="referenceMobilePhone-2">Mobile Phone</label>
-        <input type="text" 
-               class="form-control" 
-               id="referenceMobilePhone-2" 
+        <input type="text"
+               class="form-control"
+               id="referenceMobilePhone-2"
                name="referenceMobilePhone2"
                ng-model="volunteer.referenceMobilePhone2"
                ng-pattern="volunteer.phoneFormat"
@@ -853,9 +853,9 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceWorkPhone2.$invalid}">
         <label class="control-label" for="referenceWorkPhone-2">Work Phone</label>
-        <input type="text" 
-               class="form-control" 
-               id="referenceWorkPhone-2" 
+        <input type="text"
+               class="form-control"
+               id="referenceWorkPhone-2"
                name="referenceWorkPhone2"
                ng-pattern="volunteer.phoneFormat"
                ng-model="volunteer.referenceWorkPhone2"
@@ -866,9 +866,9 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceEmail2.$invalid}" >
         <label class="control-label required" for="referenceEmail-2">Email</label>
-        <input type="email" 
-               class="form-control" 
-               id="referenceEmail-2" 
+        <input type="email"
+               class="form-control"
+               id="referenceEmail-2"
                name="referenceEmail2"
                ng-model="volunteer.referenceEmail2"
                placeholder="Email"
@@ -885,9 +885,9 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceAssociation2.$invalid}" >
         <label class="control-label required" for="referenceAssociation-2">Nature of Association</label>
-        <input type="text" 
-               class="form-control" 
-               id="referenceAssociation-2" 
+        <input type="text"
+               class="form-control"
+               id="referenceAssociation-2"
                name="referenceAssociation2"
                ng-model="volunteer.referenceAssociation2"
                placeholder="Nature of Association"
@@ -901,10 +901,10 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceOccupation2.$invalid}">
         <label class="control-label required" for="referenceOccupation-2">Occupation</label>
-        <input type="text" 
-               class="form-control" 
-               id="referenceOccupation-2" 
-               name="referenceOccupation2" 
+        <input type="text"
+               class="form-control"
+               id="referenceOccupation-2"
+               name="referenceOccupation2"
                ng-model="volunteer.referenceOccupation2"
                placeholder="Occupation"
                required>
@@ -923,10 +923,10 @@
       <h4 class="col-sm-13">Third Reference</h4>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceName3.$invalid}" >
         <label class="control-label required" for="referenceName-3">Name</label>
-        <input type="text" 
-               class="form-control" 
-               id="referenceName-3" 
-               name="referenceName3" 
+        <input type="text"
+               class="form-control"
+               id="referenceName-3"
+               name="referenceName3"
                ng-model="volunteer.referenceName3"
                placeholder="Name"
                required>
@@ -939,10 +939,10 @@
 
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceTimeKnown3.$invalid}" >
         <label class="control-label required" for="referenceTimeKnown-3">Length of time known</label>
-        <input type="text" 
-               class="form-control" 
+        <input type="text"
+               class="form-control"
                name="referenceTimeKnown3"
-               id="referenceTimeKnown-3" 
+               id="referenceTimeKnown-3"
                ng-model="volunteer.referenceTimeKnown3"
                placeholder="Length of time known"
                required>
@@ -955,8 +955,8 @@
 
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceHomePhone3.$invalid}">
         <label class="control-label" for="referenceHomePhone-3">Home Phone</label>
-        <input type="text" 
-               class="form-control" 
+        <input type="text"
+               class="form-control"
                id="referenceHomePhone3"
                name="referenceHomePhone3"
                ng-pattern="volunteer.phoneFormat"
@@ -968,9 +968,9 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceMobilePhone3.$invalid}">
         <label class="control-label" for="referenceMobilePhone-3">Mobile Phone</label>
-        <input type="text" 
-               class="form-control" 
-               id="referenceMobilePhone-3" 
+        <input type="text"
+               class="form-control"
+               id="referenceMobilePhone-3"
                name="referenceMobilePhone3"
                ng-pattern="volunteer.phoneFormat"
                ng-model="volunteer.referenceMobilePhone3"
@@ -981,9 +981,9 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceWorkPhone3.$invalid}">
         <label class="control-label" for="referenceWorkPhone-3">Work Phone</label>
-        <input type="text" 
-               class="form-control" 
-               id="referenceWorkPhone-3" 
+        <input type="text"
+               class="form-control"
+               id="referenceWorkPhone-3"
                name="referenceWorkPhone3"
                ng-model="volunteer.referenceWorkPhone3"
                ng-pattern="volunteer.phoneFormat"
@@ -994,9 +994,9 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceEmail3.$invalid}" >
         <label class="control-label required" for="referenceEmail-3">Email</label>
-        <input type="email" 
-               class="form-control" 
-               id="referenceEmail-3" 
+        <input type="email"
+               class="form-control"
+               id="referenceEmail-3"
                name="referenceEmail3"
                ng-model="volunteer.referenceEmail3"
                placeholder="Email"
@@ -1013,9 +1013,9 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceAssociation3.$invalid}" >
         <label class="control-label required" for="referenceAssociation-3">Nature of Association</label>
-        <input type="text" 
-               class="form-control" 
-               id="referenceAssociation-3" 
+        <input type="text"
+               class="form-control"
+               id="referenceAssociation-3"
                name="referenceAssociation3"
                ng-model="volunteer.referenceAssociation3"
                placeholder="Nature of Association"
@@ -1029,10 +1029,10 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceOccupation3.$invalid}">
         <label class="control-label required" for="referenceOccupation-3">Occupation</label>
-        <input type="text" 
-               class="form-control" 
-               id="referenceOccupation-3" 
-               name="referenceOccupation3" 
+        <input type="text"
+               class="form-control"
+               id="referenceOccupation-3"
+               name="referenceOccupation3"
                ng-model="volunteer.referenceOccupation3"
                placeholder="Occupation"
                required>
@@ -1071,15 +1071,15 @@
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.signatureDate.$invalid}" >
         <label class="control-label required" for="signatureDate">Date</label>
         <div class="input-group">
-          <input type="text" 
+          <input type="text"
                  name="signatureDate"
-                 id="signatureDate" 
-                 class="form-control" 
-                 datepicker-popup="{{::format}}" 
-                 ng-required="true" 
-                 close-text="Close" 
-                 ng-model="signatureDate" 
-                 is-open="datePickers.signatureDate" 
+                 id="signatureDate"
+                 class="form-control"
+                 datepicker-popup="{{::format}}"
+                 ng-required="true"
+                 close-text="Close"
+                 ng-model="signatureDate"
+                 is-open="datePickers.signatureDate"
                  datepicker-options="dateOptions">
           <span class="input-group-btn">
             <button type="button" class="btn btn-gray-light" ng-click="open('signatureDate', $event)">
@@ -1094,7 +1094,7 @@
           <span ng-message="date">
             <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
           </span>
-        </ng-messages> 
+        </ng-messages>
       </div>
     </div><!--/row-->
   </fieldset>
