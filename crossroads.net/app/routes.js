@@ -4,51 +4,9 @@
 
   angular.module("crossroads").config(["$stateProvider", "$urlRouterProvider", "$httpProvider", "$urlMatcherFactoryProvider", "$locationProvider", function ($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory, $locationProvider) {
 
-
-      crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, "contentRouteType", /^\/.*/);
-      crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, "signupRouteType", /\/sign-up\/.*$/);
-      crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, "volunteerRouteType", /\/volunteer-sign-up\/.*$/);
-
-        //================================================
-        // Check if the user is connected
-        //================================================
-        var checkLoggedin = function ($q, $timeout, $http, $location, $rootScope) {
-            // TODO Added to debug/research US1403 - should remove after issue is resolved
-            console.log("US1403: checkLoggedIn");
-            var deferred = $q.defer();
-            $httpProvider.defaults.headers.common['Authorization'] = crds_utilities.getCookie('sessionId');
-            $http({
-                method: 'GET',
-                url: __API_ENDPOINT__ + "api/authenticated",
-                headers: {
-                    'Authorization': crds_utilities.getCookie('sessionId')
-                }
-            }).success(function (user) {
-                // TODO Added to debug/research US1403 - should remove after issue is resolved
-                console.log("US1403: checkLoggedIn success");
-                // Authenticated
-                if (user.userId !== undefined) {
-                    // TODO Added to debug/research US1403 - should remove after issue is resolved
-                    console.log("US1403: checkLoggedIn success with user");
-                    $timeout(deferred.resolve, 0);
-                    $rootScope.userid = user.userId;
-                    $rootScope.username = user.username;
-                } else {
-                    // TODO Added to debug/research US1403 - should remove after issue is resolved
-                    console.log("US1403: checkLoggedIn success, undefined user");
-                    Session.clear();
-                    $rootScope.message = "You need to log in.";
-                    $timeout(function () {
-                        deferred.reject();
-                    }, 0);
-                    $location.url("/");
-                }
-            }).error(function (e) {
-                console.log(e);
-                console.log("ERROR: trying to authenticate");
-            });
-            return deferred.promise;
-        };
+        crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, "contentRouteType", /^\/.*/);
+        crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, "signupRouteType", /\/sign-up\/.*$/);
+        crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, "volunteerRouteType", /\/volunteer-sign-up\/.*$/);
 
         $stateProvider
             .state("home", {
@@ -77,7 +35,7 @@
             .state("profile", {
                 url: "/profile",
                 resolve: {
-                    loggedin: checkLoggedin
+                    loggedin: crds_utilities.checkLoggedin
                 },
                 data: {
                     isProtected: true
@@ -87,7 +45,7 @@
                         templateUrl: "profile/profile.html",
                         controller: "crdsProfileCtrl as profile",
                         resolve: {
-                            loggedin: checkLoggedin
+                            loggedin: crds_utilities.checkLoggedin
                         },
                     },
                     "personal@profile": {
@@ -119,7 +77,7 @@
                     isProtected: true
                 },
                 resolve: {
-                    loggedin: checkLoggedin
+                    loggedin: crds_utilities.checkLoggedin
                 }
             })
             .state("mytrips", {
@@ -186,7 +144,7 @@
               templateUrl: "my_serve/myserve.html",
               data: { isProtected: true },
               resolve: {
-                loggedin: checkLoggedin,
+                loggedin: crds_utilities.checkLoggedin,
                 ServeOpportunities: 'ServeOpportunities',
                 Groups: function(ServeOpportunities){
                   return ServeOpportunities.ServeDays.query({id: crds_utilities.getCookie('userId')} ).$promise;
@@ -327,7 +285,7 @@
                     isProtected: true
                 },
                 resolve: {
-                    loggedin: checkLoggedin
+                    loggedin: crds_utilities.checkLoggedin
                 }
             })
             .state("volunteer-request", {
@@ -336,7 +294,7 @@
               templateUrl: "volunteer_signup/volunteer_signup_form.html",
               data: { isProtected: true },
               resolve: {
-                loggedin: checkLoggedin,
+                loggedin: crds_utilities.checkLoggedin,
                 Page: 'Page',
                 CmsInfo: function(Page, $stateParams){
                   return Page.get( {url: $stateParams.link} ).$promise;
@@ -349,7 +307,7 @@
               templateUrl: "volunteer_application/volunteerApplicationForm.html",
               data: { isProtected: true },
               resolve: {
-                loggedin: checkLoggedin,
+                loggedin: crds_utilities.checkLoggedin,
                 Page: 'Page',
                 CmsInfo: function(Page, $stateParams){
                   var path = '/volunteer-application/'+$stateParams.appType+'/';
@@ -378,7 +336,7 @@
         isProtected: true
        },
        resolve: {
-        loggedin: checkLoggedin
+        loggedin: crds_utilities.checkLoggedin
        }
     })
     .state("tools.su2s", {
