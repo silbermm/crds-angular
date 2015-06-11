@@ -2,11 +2,11 @@
 
 (function() {
 
-  module.exports = KidsClubStudentApplicationController;
+  angular.module("crossroads").controller("KidsClubStudentApplicationController", KidsClubStudentApplicationController);
+ 
+  KidsClubStudentApplicationController.$inject = ['$log', 'VolunteerService', 'studentFields'];
 
-  KidsClubStudentApplicationController.$inject = ['$scope', '$log', 'VolunteerService', 'studentFields'];
-
-  function KidsClubStudentApplicationController($scope, $log, VolunteerService, studentFields) {
+  function KidsClubStudentApplicationController($log, VolunteerService, studentFields) {
     $log.debug("Inside Kids-Club-Student-Application-Controller");
     var vm = this;
 
@@ -26,31 +26,31 @@
     function save() {
       $log.debug('you tried to save');
       $log.debug('school: ' + vm.school);
-      $log.debug('something from parent: ' + $scope.volunteer.contactId);
+      $log.debug('something from parent: ' + vm.contactId );
 
       var student = new VolunteerService.SaveStudent();
-      student.contactId = $scope.volunteer.contactId;
+      student.contactId = vm.contactId;
       student.formId = 16; // get this from CMS in pageInfo
-      student.opportunityId = $scope.volunteer.pageInfo.opportunity;
-      student.responseOpportunityId = $scope.volunteer.responseId;
+      student.opportunityId = vm.pageInfo.opportunity;
+      student.responseOpportunityId = vm.responseId;
 
       student.firstName = {
-        Value: $scope.volunteer.person.firstName,
+        Value: vm.volunteer.firstName,
         CrossroadsId: studentFields.firstName
       };
 
       student.lastName = {
-        Value: $scope.volunteer.person.lastName,
+        Value:vm.volunteer.lastName,
         CrossroadsId: studentFields.lastName
       };
 
       student.middleInitial = {
-        Value: $scope.volunteer.person.middleName.substring(0, 1),
+        Value: vm.volunteer.middleName.substring(0, 1),
         CrossroadsId: studentFields.middleInitial
       };
 
       student.email = {
-        Value: $scope.volunteer.person.emailAddress,
+        Value: vm.volunteer.emailAddress,
         CrossroadsId: studentFields.email
       };
 
@@ -60,12 +60,12 @@
       };
 
       student.birthDate = {
-        Value: $scope.volunteer.person.dateOfBirth,
+        Value: vm.volunteer.dateOfBirth,
         CrossroadsId: studentFields.birthDate
       };
 
       student.gender = {
-        Value: $scope.volunteer.person.genderId,
+        Value: vm.volunteer.genderId,
         CrossroadsId: studentFields.gender
       };
 
@@ -85,27 +85,27 @@
       };
 
       student.streetAddress = {
-        Value: $scope.volunteer.person.addressLine1,
+        Value: vm.volunteer.addressLine1,
         CrossroadsId: studentFields.streetAddress
       };
 
       student.city = {
-        Value: $scope.volunteer.person.city,
+        Value: vm.volunteer.city,
         CrossroadsId: studentFields.city
       };
 
       student.state = {
-        Value: $scope.volunteer.person.state,
+        Value: vm.volunteer.state,
         CrossroadsId: studentFields.state
       };
 
       student.zip = {
-        Value: $scope.volunteer.person.postalCode,
+        Value: vm.volunteer.postalCode,
         CrossroadsId: studentFields.zip
       };
 
       student.mobilePhone = {
-        Value: $scope.volunteer.person.mobilePhone,
+        Value: vm.volunteer.mobilePhone,
         CrossroadsId: studentFields.mobilePhone
       };
 

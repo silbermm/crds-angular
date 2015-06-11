@@ -2,7 +2,7 @@
 
 (function(){
 
-  angular.module('crossroads').directive("kidsClubAdultApplication", KidsClubAppliation);
+  angular.module('crossroads').directive("kidsClubAdultApplication", KidsClubAdultApplication);
 
   KidsClubAdultApplication.$inject = ['$log', '$rootScope'];
 
