@@ -271,6 +271,7 @@
               vm.brand = brandCode[donor.default_source.credit_card.brand];
               vm.expYear =  donor.exp_year;
               vm.exp_month = donor.exp_month;
+              vm.dto.view = "cc";
               $state.go("give.confirm");
             },function(error){
             //  create donor record
