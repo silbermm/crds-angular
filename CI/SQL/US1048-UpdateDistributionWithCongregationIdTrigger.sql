@@ -33,6 +33,10 @@ BEGIN
 		JOIN [dbo].[Households] h ON h.household_id = c.household_id
 		JOIN INSERTED ON INSERTED.Donation_Distribution_ID = dd.Donation_Distribution_ID;
 
+	-- Set to 'No Site Specified' if Household has no Congregation		
+	IF @Congregation_Id IS NULL
+		SET @Congregation_Id = 5;
+
 	UPDATE [dbo].[Donation_Distributions]
 		SET Congregation_ID = @Congregation_Id
 		WHERE Donation_Distribution_ID = @Distribution_Id;
