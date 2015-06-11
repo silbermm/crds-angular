@@ -3,7 +3,7 @@
 (function() {
 
   angular.module("crossroads").controller("KidsClubStudentApplicationController", KidsClubStudentApplicationController);
- 
+
   KidsClubStudentApplicationController.$inject = ['$log', 'VolunteerService', 'studentFields'];
 
   function KidsClubStudentApplicationController($log, VolunteerService, studentFields) {

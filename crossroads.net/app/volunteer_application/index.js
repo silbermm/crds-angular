@@ -5,8 +5,6 @@ require("./volunteerApplicationForm.html");
 require('../profile/personal/profile_personal.html');
 require('../profile');
 
-
-
 //constant isn't working, figure out why??????????????
 // require('./studentConstants');
 app.controller("VolunteerApplicationController", require("./volunteerApplication.controller"));
@@ -118,7 +116,7 @@ app.constant("adultFields", {
   "child4Birthdate": 407,
   "everBeenArrest": 409,
   "addictionConcern":411,
-  "neglectingChild": 413,
+  "neglectingChild": 503,
   "psychiatricDisorder":415,
   "sexuallyActiveOutsideMarriage":417,
   "spiritualOrientation":421,
@@ -167,7 +165,7 @@ app.constant("adultFields", {
   "reference3workPhone": 460,
   "reference3email": 461,
   "reference3association": 462,
-  "reference3occupation": 63,
+  "reference3occupation": 463,
   "agree": 465,
   "agreeDate":502
 });

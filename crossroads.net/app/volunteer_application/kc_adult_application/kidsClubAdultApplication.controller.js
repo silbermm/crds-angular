@@ -4,20 +4,20 @@
 
   angular.module("crossroads").controller("KidsClubAdultApplicationController", KidsClubAdultApplicationController);
 
-  KidsClubAdultApplicationController.$inject = ['$scope', '$log', 'VolunteerService', 'adultFields'];
+  KidsClubAdultApplicationController.$inject = ['$rootScope', '$scope', '$log', 'VolunteerService', 'adultFields'];
 
-  function KidsClubAdultApplicationController($scope, $log, VolunteerService, adultFields) {
+  function KidsClubAdultApplicationController($rootScope, $scope, $log, VolunteerService, adultFields) {
     $log.debug("Inside Kids-Club-Adult-Application-Controller");
     var vm = this;
 
     // vm.reference1 = {};
     // vm.reference2 = {};
-    // vm.serveAgeKids = {};
     vm.save = save;
+
 
     function save() {
       $log.debug('you tried to save');
-      $log.debug('school: ' + vm.school);
+      $log.debug('nameTag: ' + $scope.volunteer.nameTag);
       $log.debug('something from parent: ' + $scope.volunteer.contactId);
 
       $log.debug("saving");
@@ -31,436 +31,437 @@
       //return true;
 
       var adult = new VolunteerService.SaveAdult();
-      adult.contactId = $scope.volunteer.contactId;
-      adult.formId = 16; // get this from CMS in pageInfo
-      adult.opportunityId = $scope.volunteer.pageInfo.opportunity;
-      adult.responseOpportunityId = $scope.volunteer.responseId;
+      adult.contactId = $scope.contactId;
+      adult.formId = 17; // get this from CMS in pageInfo
+      adult.opportunityId = $scope.opportunityId;
+      adult.responseOpportunityId = $scope.responseId;
 
       adult.firstName = {
-        Value: $scope.volunteer.person.firstName,
+        Value: $scope.volunteer.firstName,
         CrossroadsId: adultFields.firstName
       };
 
       adult.lastName = {
-        Value: $scope.volunteer.person.lastName,
+        Value: $scope.volunteer.lastName,
         CrossroadsId: adultFields.lastName
       };
 
       adult.middleInitial = {
-        Value: $scope.volunteer.person.middleName.substring(0, 1),
+        Value: $scope.volunteer.middleName.substring(0, 1),
         CrossroadsId: adultFields.middleInitial
       };
 
       adult.previousName = {
-        Value: vm.previousName,
+        Value: $scope.volunteer.previousName,
         CrossroadsId: adultFields.previousName
       };
 
       adult.email = {
-        Value: $scope.volunteer.person.emailAddress,
+        Value: $scope.volunteer.emailAddress,
         CrossroadsId: adultFields.email
       };
 
       adult.nameForNameTag = {
-        Value: vm.nameTag,
+        Value: $scope.volunteer.nameTag,
         CrossroadsId: adultFields.nameForNameTag
       };
 
       adult.birthDate = {
-        Value: $scope.volunteer.person.dateOfBirth,
+        Value: $scope.volunteer.dateOfBirth,
         CrossroadsId: adultFields.birthDate
       };
 
       adult.gender = {
-        Value: $scope.volunteer.person.genderId,
+        Value: $scope.volunteer.genderId,
         CrossroadsId: adultFields.gender
       };
 
       adult.maritalStatus = {
-        Value: vm.maritalStatus,
+        Value: $scope.volunteer.maritalStatusId,
         CrossroadsId: adultFields.maritalStatus
       };
 
       adult.spouseName = {
-        Value: vm.spouseName,
+        Value: $scope.volunteer.spouseName,
         CrossroadsId: adultFields.spouseName
       };
 
       adult.spouseGender = {
-        Value: vm.spouseGender,
+        Value: $scope.volunteer.spouseGender,
         CrossroadsId: adultFields.spouseGender
       };
 
-      adult.site = {
-        Value: vm.site,
+      adult.siteYouAttend = {
+        Value: $scope.volunteer.siteAttend,
         CrossroadsId: adultFields.site
       };
 
       adult.howLongAttending = {
-        Value: vm.howLongAttending,
+        Value: $scope.volunteer.attending,
         CrossroadsId: adultFields.howLongAttending
       };
 
       adult.serviceAttend = {
-        Value: vm.serviceAttend,
+        Value: $scope.volunteer.serviceAttend,
         CrossroadsId: adultFields.serviceAttend
       };
 
       adult.streetAddress = {
-        Value: $scope.volunteer.person.addressLine1,
+        Value: $scope.volunteer.addressLine1,
         CrossroadsId: adultFields.streetAddress
       };
 
       adult.city = {
-        Value: $scope.volunteer.person.city,
+        Value: $scope.volunteer.city,
         CrossroadsId: adultFields.city
       };
 
       adult.state = {
-        Value: $scope.volunteer.person.state,
+        Value: $scope.volunteer.state,
         CrossroadsId: adultFields.state
       };
 
       adult.zip = {
-        Value: $scope.volunteer.person.postalCode,
+        Value: $scope.volunteer.postalCode,
         CrossroadsId: adultFields.zip
       };
 
       adult.mobilePhone = {
-        Value: $scope.volunteer.person.mobilePhone,
+        Value: $scope.volunteer.mobilePhone,
         CrossroadsId: adultFields.mobilePhone
       };
 
       adult.homePhone = {
-        Value: vm.homePhone,
+        Value: $scope.volunteer.homePhone,
         CrossroadsId: adultFields.homePhone
       };
 
       adult.companyName = {
-        Value: vm.companyName,
+        Value: $scope.volunteer.company,
         CrossroadsId: adultFields.companyName
       };
 
       adult.position = {
-        Value: vm.position,
+        Value: $scope.volunteer.position,
         CrossroadsId: adultFields.position
       };
 
       adult.workPhone = {
-        Value: vm.workPhone,
+        Value: $scope.volunteer.workPhone,
         CrossroadsId: adultFields.workPhone
       };
 
       adult.child1Name = {
-        Value: vm.child1Name,
+        Value: $scope.volunteer.child1.name,
         CrossroadsId: adultFields.child1Name
       };
 
       adult.child1Birthdate = {
-        Value: vm.child1Birthdate,
+        Value: $scope.volunteer.child1.dob,
         CrossroadsId: adultFields.child1Birthdate
       };
 
       adult.child2Name = {
-        Value: vm.child2Name,
+        Value: $scope.volunteer.child2.name,
         CrossroadsId: adultFields.child2Name
       };
 
       adult.child2Birthdate = {
-        Value: vm.child2Birthdate,
+        Value: $scope.volunteer.child2.dob,
         CrossroadsId: adultFields.child2Birthdate
       };
 
       adult.child3Name = {
-        Value: vm.child3Name,
+        Value: $scope.volunteer.child3.name,
         CrossroadsId: adultFields.child3Name
       };
 
       adult.child3Birthdate = {
-        Value: vm.child3Birthdate,
+        Value: $scope.volunteer.child3.dob,
         CrossroadsId: adultFields.child3Birthdate
       };
 
       adult.child4Name = {
-        Value: vm.child4Name,
+        Value: $scope.volunteer.child4.name,
         CrossroadsId: adultFields.child4Name
       };
 
       adult.child4Birthdate = {
-        Value: vm.child4Birthdate,
+        Value: $scope.volunteer.child4.dob,
         CrossroadsId: adultFields.child4Birthdate
       };
 
       adult.everBeenArrest = {
-        Value: vm.everBeenArrest,
+        Value: $scope.volunteer.crime,
         CrossroadsId: adultFields.everBeenArrest
       };
 
       adult.addictionConcern = {
-        Value: vm.addictionConcern,
+        Value: $scope.volunteer.addiction,
         CrossroadsId: adultFields.addictionConcern
       };
 
       adult.neglectingChild = {
-        Value: vm.neglectingChild,
+        Value: $scope.volunteer.neglect,
         CrossroadsId: adultFields.neglectingChild
       };
 
       adult.psychiatricDisorder = {
-        Value: vm.psychiatricDisorder,
+        Value: $scope.volunteer.psychiatricDisorder,
         CrossroadsId: adultFields.psychiatricDisorder
       };
 
       adult.sexuallyActiveOutsideMarriage = {
-        Value: vm.sexuallyActiveOutsideMarriage,
+        Value: $scope.volunteer.sexualyActive,
         CrossroadsId: adultFields.sexuallyActiveOutsideMarriage
       };
 
       adult.spiritualOrientation = {
-        Value: vm.spiritualOrientation,
+        //currently checkboxes make radio buttons
+        Value: $scope.volunteer.spiritualOrientation,
         CrossroadsId: adultFields.spiritualOrientation
       };
 
       adult.spiritualOrientationExplain = {
-        Value: vm.spiritualOrientationExplain,
+        Value: $scope.volunteer.explainFaith,
         CrossroadsId: adultFields.spiritualOrientationExplain
       };
 
       adult.whatPromptedApplication = {
-        Value: vm.whatPromptedApplication,
+        Value: $scope.volunteer.whatPromptedApplication,
         CrossroadsId: adultFields.whatPromptedApplication
       };
 
       adult.specialTalents = {
-        Value: vm.specialTalents,
+        Value: $scope.volunteer.specialTalents,
         CrossroadsId: adultFields.specialTalents
       };
 
       adult.availabilityWeek = {
-        Value: vm.availabilityWeek,
+        Value: $scope.volunteer.availabilityWeek,
         CrossroadsId: adultFields.availabilityWeek
       };
 
       adult.availabilityWeekend = {
-        Value: vm.availabilityWeekend,
+        Value: $scope.volunteer.availabilityWeekend,
         CrossroadsId: adultFields.availabilityWeekend
       };
 
       adult.availabilityOakley = {
-        Value: vm.availabilityOakley,
+        Value: $scope.volunteer.availabilityOakley,
         CrossroadsId: adultFields.availabilityOakley
       };
 
       adult.availabilityFlorence = {
-        Value: vm.availabilityFlorence,
+        Value: $scope.volunteer.availabilityFlorence,
         CrossroadsId: adultFields.availabilityFlorence
       };
 
       adult.availabilityWestSide = {
-        Value: vm.availabilityWestSide,
+        Value: $scope.volunteer.availabilityWestSide,
         CrossroadsId: adultFields.availabilityWestSide
       };
 
       adult.availabilityMason = {
-        Value: vm.availabilityMason,
+        Value: $scope.volunteer.availabilityMason,
         CrossroadsId: adultFields.availabilityMason
       };
 
       adult.availabilityClifton = {
-        Value: vm.availabilityClifton,
+        Value: $scope.volunteer.availabilityClifton,
         CrossroadsId: adultFields.availabilityClifton
       };
 
       adult.availabilityServiceTimes = {
-        Value: vm.availabilityServiceTimes,
+        Value: $scope.volunteer.serveServiceTimes,
         CrossroadsId: adultFields.availabilityServiceTimes
       };
 
       adult.areaOfInterestServingInClassroom = {
-        Value: vm.areaOfInterestServingInClassroom,
+        Value: $scope.volunteer.areaOfInterestServingInClassroom,
         CrossroadsId: adultFields.areaOfInterestServingInClassroom
       };
 
       adult.areaOfInterestWelcomingNewFamilies = {
-        Value: vm.serveAgeKids.areaOfInterestWelcomingNewFamilies,
+        Value: $scope.volunteer.areaOfInterestWelcomingNewFamilies,
         CrossroadsId: adultFields.areaOfInterestWelcomingNewFamilies
       };
 
       adult.areaOfInterestHelpSpecialNeeds = {
-        Value: vm.areaOfInterestHelpSpecialNeeds,
+        Value: $scope.volunteer.areaOfInterestHelpSpecialNeeds,
         CrossroadsId: adultFields.areaOfInterestHelpSpecialNeeds
       };
 
       adult.areaOfInterestTech = {
-        Value: vm.areaOfInterestTech,
+        Value: $scope.volunteer.areaOfInterestTech,
         CrossroadsId: adultFields.areaOfInterestTech
       };
 
       adult.areaOfInterestRoomPrep = {
-        Value: vm.serveAgeKids.areaOfInterestRoomPrep,
+        Value: $scope.volunteer.areaOfInterestRoomPrep,
         CrossroadsId: adultFields.areaOfInterestRoomPrep
       };
 
       adult.areaOfInterestAdminTasks = {
-        Value: vm.areaOfInterestAdminTasks,
+        Value: $scope.volunteer.areaOfInterestAdminTasks,
         CrossroadsId: adultFields.areaOfInterestAdminTasks
       };
 
       adult.areaOfInterestShoppingForSupplies = {
-        Value: vm.areaOfInterestShoppingForSupplies,
+        Value: $scope.volunteer.areaOfInterestShoppingForSupplies,
         CrossroadsId: adultFields.areaOfInterestShoppingForSupplies
       };
 
       adult.areaOfInterestCreatingWeekendExperience = {
-        Value: vm.serveAgeKids.areaOfInterestCreatingWeekendExperience,
+        Value: $scope.volunteer.areaOfInterestCreatingWeekendExperience,
         CrossroadsId: adultFields.areaOfInterestCreatingWeekendExperience
       };
 
       adult.whatAgeBirthToTwo = {
-        Value: vm.whatAgeBirthToTwo,
+        Value: $scope.volunteer.birthToTwo,
         CrossroadsId: adultFields.whatAgeBirthToTwo
       };
 
       adult.whatAgeThreeToPreK = {
-        Value: vm.whatAgeThreeToPreK,
+        Value: $scope.volunteer.threeToPreK,
         CrossroadsId: adultFields.whatAgeThreeToPreK
       };
 
       adult.whatAgeKToFifth = {
-        Value: vm.whatAgeKToFifth,
+        Value: $scope.volunteer.kToFifth,
         CrossroadsId: adultFields.whatAgeKToFifth
       };
 
       // reference 1
       adult.reference1Name = {
-        Value: vm.reference1.name,
+        Value: $scope.volunteer.referenceName1,
         CrossroadsId: adultFields.reference1Name
       };
 
       adult.reference1timeKnown = {
-        Value: vm.reference1.timeKnown,
+        Value: $scope.volunteer.referenceTimeKnown1,
         CrossroadsId: adultFields.reference1timeKnown
       };
 
       adult.reference1homePhone = {
-        Value: vm.reference1.homePhone,
+        Value: $scope.volunteer.referenceHomePhone1,
         CrossroadsId: adultFields.reference1homePhone
       };
 
       adult.reference1mobilePhone = {
-        Value: vm.reference1.mobilePhone,
+        Value: $scope.volunteer.referenceMobilePhone1,
         CrossroadsId: adultFields.reference1mobilePhone
       };
 
       adult.reference1workPhone = {
-        Value: vm.reference1.workPhone,
+        Value: $scope.volunteer.referenceWorkPhone1,
         CrossroadsId: adultFields.reference1workPhone
       };
 
       adult.reference1email = {
-        Value: vm.reference1.email,
+        Value: $scope.volunteer.referenceEmail1,
         CrossroadsId: adultFields.reference1email
       };
 
       adult.reference1association = {
-        Value: vm.reference1.association,
+        Value: $scope.volunteer.referenceAssociation1,
         CrossroadsId: adultFields.reference1association
       };
 
       adult.reference1occupation = {
-        Value: vm.reference1.occupation,
+        Value: $scope.volunteer.referenceOccupation1,
         CrossroadsId: adultFields.reference1occupation
       };
 
       // reference 2
       adult.reference2Name = {
-        Value: vm.reference2.name,
+        Value: $scope.volunteer.referenceName2,
         CrossroadsId: adultFields.reference2Name
       };
 
       adult.reference2timeKnown = {
-        Value: vm.reference2.timeKnown,
+        Value: $scope.volunteer.referenceTimeKnown2,
         CrossroadsId: adultFields.reference2timeKnown
       };
 
       adult.reference2homePhone = {
-        Value: vm.reference2.homePhone,
+        Value: $scope.volunteer.referenceHomePhone2,
         CrossroadsId: adultFields.reference2homePhone
       };
 
       adult.reference2mobilePhone = {
-        Value: vm.reference2.mobilePhone,
+        Value: $scope.volunteer.referenceMobilePhone2,
         CrossroadsId: adultFields.reference2mobilePhone
       };
 
       adult.reference2workPhone = {
-        Value: vm.reference2.workPhone,
+        Value: $scope.volunteer.referenceWorkPhone2,
         CrossroadsId: adultFields.reference2workPhone
       };
 
       adult.reference2email = {
-        Value: vm.reference2.email,
+        Value: $scope.volunteer.referenceEmail2,
         CrossroadsId: adultFields.reference2email
       };
 
       adult.reference2association = {
-        Value: vm.reference2.association,
+        Value: $scope.volunteer.referenceAssociation2,
         CrossroadsId: adultFields.reference2association
       };
 
       adult.reference2occupation = {
-        Value: vm.reference2.occupation,
+        Value: $scope.volunteer.referenceOccupation2,
         CrossroadsId: adultFields.reference2occupation
       };
 
       // reference 3
       adult.reference3Name = {
-        Value: vm.reference3.name,
+        Value: $scope.volunteer.referenceName3,
         CrossroadsId: adultFields.reference3Name
       };
 
       adult.reference3timeKnown = {
-        Value: vm.reference3.timeKnown,
+        Value: $scope.volunteer.referenceTimeKnown3,
         CrossroadsId: adultFields.reference3timeKnown
       };
 
       adult.reference3homePhone = {
-        Value: vm.reference3.homePhone,
+        Value: $scope.volunteer.referenceHomePhone3,
         CrossroadsId: adultFields.reference3homePhone
       };
 
       adult.reference3mobilePhone = {
-        Value: vm.reference3.mobilePhone,
+        Value: $scope.volunteer.referenceMobilePhone3,
         CrossroadsId: adultFields.reference3mobilePhone
       };
 
       adult.reference3workPhone = {
-        Value: vm.reference3.workPhone,
+        Value: $scope.volunteer.referenceWorkPhone3,
         CrossroadsId: adultFields.reference3workPhone
       };
 
       adult.reference3email = {
-        Value: vm.reference3.email,
+        Value: $scope.volunteer.referenceEmail3,
         CrossroadsId: adultFields.reference3email
       };
 
       adult.reference3association = {
-        Value: vm.reference3.association,
+        Value: $scope.volunteer.referenceAssociation3,
         CrossroadsId: adultFields.reference3association
       };
 
       adult.reference3occupation = {
-        Value: vm.reference3.occupation,
+        Value: $scope.volunteer.referenceOccupation3,
         CrossroadsId: adultFields.reference3occupation
       };
 
       adult.agree = {
-        Value: vm.agree,
+        Value: $scope.volunteer.signatureAgree,
         CrossroadsId: adultFields.agree
       };
 
       adult.agreeDate = {
-        Value: vm.agreeDate,
+        Value: $scope.volunteer.signatureDate,
         CrossroadsId: adultFields.agreeDate
       };
 

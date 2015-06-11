@@ -53,8 +53,8 @@ namespace crds_angular.Models.Crossroads.VolunteerApplication
         [JsonProperty(PropertyName = "howLongAttending")]
         [Required]
         public CustomField HowLongAttending { get; set; }
-        
-        [JsonProperty(PropertyName = "whatServiceDoYouAttend")]
+
+        [JsonProperty(PropertyName = "serviceAttend")]
         [Required]
         public CustomField WhatServiceDoYouAttend { get; set; }
 

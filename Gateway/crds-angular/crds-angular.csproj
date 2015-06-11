@@ -284,6 +284,7 @@
     <Compile Include="Models\Crossroads\VolunteerApplication\ChildDto.cs" />
     <Compile Include="Models\Crossroads\VolunteerApplication\CustomField.cs" />
     <Compile Include="Models\Crossroads\VolunteerApplication\Gender.cs" />
+    <Compile Include="Models\Crossroads\VolunteerApplication\MaritalStatus.cs" />
     <Compile Include="Models\Crossroads\VolunteerApplication\StudentApplicationDto.cs" />
     <Compile Include="Models\Crossroads\VolunteerApplication\VolunteerApplicationDto.cs" />
     <Compile Include="Models\Json\AccountInfoSerializer.cs" />

@@ -35,7 +35,7 @@ namespace crds_angular.Services
             formResponse.FormAnswers.Add(SetCustomField(application.Email, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.BirthDate, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(TranslateGender(application.Gender), opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.MaritalStatus, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(TranslateMaritalStatus(application.MaritalStatus), opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.SpouseName, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.SpouseGender, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.SiteYouAttend, opportunityResponseId));
@@ -215,6 +215,30 @@ namespace crds_angular.Services
                     break;
             }
             return gender;
+        }
+
+        private static CustomField TranslateMaritalStatus(CustomField maritalStatus)
+        {
+            switch (maritalStatus.Value)
+            {
+                case "1":
+                    maritalStatus.Value = MaritalStatus.Single.ToString();
+                    break;
+                case "2":
+                    maritalStatus.Value = MaritalStatus.Married.ToString();
+                    break;
+                case "3":
+                    maritalStatus.Value = MaritalStatus.Divorced.ToString();
+                    break;
+                case "4":
+                    maritalStatus.Value = MaritalStatus.Widowed.ToString();
+                    break;
+                case "6":
+                    maritalStatus.Value = MaritalStatus.Seperated.ToString();
+                    break;
+
+            }
+            return maritalStatus;
         }
 
 

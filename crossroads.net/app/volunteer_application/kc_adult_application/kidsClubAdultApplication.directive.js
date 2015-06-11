@@ -13,7 +13,10 @@
       templateUrl : "kc_adult_application/kidsClubAdultApplication.template.html",
       controller: "KidsClubAdultApplicationController as kcAdultApplication",
       scope: {
-        volunteer: "=volunteer"
+        volunteer: "=volunteer",
+        contactId: '=contactId',
+        opportunityId: '=opportunityId',
+        responseId: '=responseId'
       },
       link: link
     };
@@ -38,6 +41,14 @@
       scope.religionSelected = religionSelected;
       scope.save = save;
 
+      scope.volunteer.areaOfInterestServingInClassroom = false;
+scope.volunteer.areaOfInterestWelcomingNewFamilies=false;
+scope.volunteer.areaOfInterestHelpSpecialNeeds=false;
+scope.volunteer.areaOfInterestTech=false;
+scope.volunteer.areaOfInterestRoomPrep=false;
+scope.volunteer.areaOfInterestAdminTasks=false;
+scope.volunteer.areaOfInterestShoppingForSupplies=false;
+scope.volunteer.areaOfInterestCreatingWeekendExperience=false;
 
       //////////////////////////////////////
 

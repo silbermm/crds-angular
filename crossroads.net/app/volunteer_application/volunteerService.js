@@ -5,7 +5,8 @@
 
   function VolunteerService($resource){
     return {
-    	SaveStudent: $resource(__API_ENDPOINT__ + 'api/volunteer-application/student')
+    	SaveStudent: $resource(__API_ENDPOINT__ + 'api/volunteer-application/student'),
+      SaveAdult: $resource(__API_ENDPOINT__ + 'api/volunteer-application/adult')
     }
   }
 })();
