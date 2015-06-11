@@ -1,9 +1,9 @@
 <div class="nav" role="navigation">
-    <div class="hidden-xs hidden-sm">
+    <div class="hidden-xs hidden-sm row">
+      <div class="col-sm-9">
         <ul class="nav nav-pills cr-nav">
             <li class="dropdown dropdown-large" dropdown>
                 <a href="#" class="dropdown-toggle" dropdown-toggle>My Crossroads</a>
-
                 <ul class="dropdown-menu dropdown-menu-large dropdown-menu-featured-row row">
                     <li class="col-sm-3" ng-if="$root.username == undefined">
                         <ul>
@@ -414,5 +414,18 @@
                 </ul>
             </li>
         </ul>
+        </div>
+        <div class="col-sm-3">
+        <!-- search box -->
+          <form>
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="What can we help you find?">
+              <span class="input-group-btn">
+                <button class="btn btn-primary">Search</button>
+              </span>
+            </div>
+          </form>
+        <!-- /search box -->
+      </div>
     </div>
 </div>
