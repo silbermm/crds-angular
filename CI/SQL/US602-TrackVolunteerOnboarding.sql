@@ -128,7 +128,7 @@ INSERT INTO [dbo].[dp_Sub_Pages]
            ,'Response_Attributes.Attribute_ID'
            ,'Response_Attributes'
            ,'Response_Attribute_ID'
-           ,'Attribute_ID_Table.Attribute_Name'
+           ,'Attribute_ID_Table.[Attribute_Name] AS Step, Attribute_ID_Table.[Description] AS [Description] , Response_Attributes.[Start_Date] AS [Start Date] , Response_Attributes.[End_Date] AS [End Date], Onboarding_Status_ID_Table.[Onboarding_Status] AS [Onboarding Status] , Response_Attributes.[Notes] AS [Notes] , [dp_Updated].[Date_Time] AS [Date Updated] , [dp_Updated].[User_Name] AS [Updated By]'
            ,'Attribute_ID_Table.Attribute_Name'
            ,'Response_ID'
            ,2)
