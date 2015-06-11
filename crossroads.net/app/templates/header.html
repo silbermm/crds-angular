@@ -2,8 +2,7 @@
     <div class="overlay-container"></div>
     <!-- Brand Bar -->
     <ng-include src="'templates/brand-bar.html'"></ng-include>
-
-
+  
     <div id="menu">
         <div class="container">
             <div class="row">
@@ -19,7 +18,7 @@
                             </button>
                         </div>
                         <a class="navbar-brand logo" href="/"><img src="//crossroads-media.s3.amazonaws.com/images/logo.svg" alt="crossroads">
-                        </a>
+                        </a> 
                         <ul class="navbar--login list-unstyled">
                             <span id="current-user" class="hidden-xs" ng-if="$root.username != undefined" ng-cloak> {{$root.username}} </span>
                             <li class="hidden-xs ng-cloak" ng-show="$root.username != undefined" ng-cloak>
@@ -63,6 +62,22 @@
                                 </ul>
                             </li>
                         </ul>
+                        <!-- search box -->
+                        <div class="col-xs-3 pull-right site-search">
+                          <form>
+                            <div class="input-group">
+                              <input type="text" class="form-control" placeholder="What can we help you find?">
+                              <span class="input-group-btn">
+                                <button class="btn btn-gray-light">
+                                  <svg viewBox="0 0 32 32" class="icon icon-search3">
+                                    <use xlink:href="#search3"></use>
+                                  </svg>
+                                </button>
+                              </span>
+                            </div>
+                          </form>
+                      </div>
+                      <!-- /search box --> 
                     </div>
                     <ng-include src="'templates/nav.html'"> </ng-include>
                 </div>

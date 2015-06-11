@@ -32,10 +32,6 @@
 // Builds on top of the `.nav` components with it's own modifier class to make
 // the nav the full height of the horizontal nav (above 768px).
 
-.nav-search {
-  z-index: -1;
-}
-
 .navbar-nav {
   margin: ($navbar-padding-vertical / 2) (-$navbar-padding-horizontal);
 
