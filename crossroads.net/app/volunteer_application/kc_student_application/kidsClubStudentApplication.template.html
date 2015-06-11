@@ -1,23 +1,27 @@
-<form>
+<form name="student" novalidate>
   <fieldset class="push-bottom">
     <legend>General Info</legend>
     <div class="row">
 
       <div class="form-group col-sm-6">
         <label for="firstname" class="control-label required">First Name</label>
-        <input type="text" class="form-control" id="firstName" placeholder="Enter first name" ng-value="volunteer.person.firstName" disabled="true">
-        <span ng-show="false">Please provide a valid value.</span>
+        <input type="text" 
+               class="form-control" 
+               id="firstName" 
+               placeholder="Enter first name" 
+               ng-value="kcStudentApplication.volunteer.firstName" 
+               disabled="true">
       </div>
 
       <div class="form-group col-sm-6">
         <label class="control-label required" for="lastName">Last Name</label>
-        <input type="text" class="form-control" id="lastName" placeholder="Enter last name" ng-value="volunteer.person.lastName" disabled="true">
+        <input type="text" class="form-control" id="lastName" placeholder="Enter last name" ng-value="kcStudentApplication.volunteer.lastName" disabled="true">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
 
       <div class="form-group col-sm-6">
         <label class="control-label" for="middleInitial">Middle Initial</label>
-        <input type="text" class="form-control" id="middleInitial" placeholder="Enter middle initial" ng-value="volunteer.person.middleName.substring(0,1)" disabled="true">
+        <input type="text" class="form-control" id="middleInitial" placeholder="Enter middle initial" ng-value="kcStudentApplication.volunteer.middleName.substring(0,1)" disabled="true">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
     </div>
@@ -25,14 +29,23 @@
     <div class="row">
       <div class="form-group col-sm-6">
         <label class="control-label required" for="email">Email</label>
-        <input type="text" class="form-control" id="email" placeholder="Email" ng-value="volunteer.person.emailAddress" disabled="true">
-        <span ng-show="false">Please provide a valid value.</span>
+        <input type="text" class="form-control" id="email" placeholder="Email" ng-value="kcStudentApplication.volunteer.emailAddress" disabled="true">
       </div>
 
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.nameTag.$invalid && student.$submitted}">
         <label class="control-label required" for="nameTag">Name For Name Tag</label>
-        <input type="text" class="form-control" id="nameTag" placeholder="Enter name for name tag" ng-model="kcStudentApplication.nameTag">
-        <span ng-show="false">Please provide a valid value.</span>
+        <input type="text" 
+               class="form-control" 
+               id="nameTag" 
+               name="nameTag"
+               placeholder="Enter name for name tag" 
+               ng-model="kcStudentApplication.nameTag"
+               required>
+        <ng-messages for="student.nameTag.$error" ng-if="student.$submitted && student.nameTag.$invalid" >
+            <span ng-message="required">
+              <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            </span>
+        </ng-messages>
       </div>
     </div>
 
@@ -40,88 +53,113 @@
     <div class="row">
       <div class="form-group col-sm-6">
         <label class="control-label required" for="birthDate">Date of Birth</label>
-        <input type="text" class="form-control" id="birthDate" placeholder="mm/dd/yyyy" ng-value="volunteer.person.dateOfBirth" disabled="true">
+        <input type="text" class="form-control" id="birthDate" placeholder="mm/dd/yyyy" ng-value="kcStudentApplication.volunteer.dateOfBirth" disabled="true">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
 
       <div class="form-group col-sm-6">
         <label class="block required">Gender</label>
         <label class="radio-inline">
-          <input type="radio" name="gender" id="gender-male" value="1" ng-model="volunteer.person.genderId" disabled="true">Male
+          <input type="radio" name="gender" id="gender-male" value="1" ng-model="kcStudentApplication.volunteer.genderId" disabled="true">Male
 
         </label>
         <label class="radio-inline">
-          <input type="radio" name="gender" id="gender-female" value="2" ng-model="volunteer.person.genderId" disabled="true">Female
+          <input type="radio" name="gender" id="gender-female" value="2" ng-model="kcStudentApplication.volunteer.genderId" disabled="true">Female
         </label>
       </div>
     </div>
 
     <div class="row">
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.siteAttend.$invalid}">
         <label class="block required">Site where you attend service</label>
         <label class="radio-inline">
-          <input type="radio" value="oakley" name="siteAttend" ng-model="kcStudentApplication.site">Oakley
+          <input type="radio" value="oakley" name="siteAttend" ng-model="kcStudentApplication.site" required>Oakley
         </label>
         <label class="radio-inline">
-          <input type="radio" value="florence" name="siteAttend" ng-model="kcStudentApplication.site">Florence
+          <input type="radio" value="florence" name="siteAttend" ng-model="kcStudentApplication.site" required>Florence
         </label>
         <label class="radio-inline">
-          <input type="radio" value="west side" name="siteAttend" ng-model="kcStudentApplication.site">West Side
+          <input type="radio" value="west side" name="siteAttend" ng-model="kcStudentApplication.site" required>West Side
         </label>
         <label class="radio-inline">
-          <input type="radio" value="mason" name="siteAttend" ng-model="kcStudentApplication.site">Mason
+          <input type="radio" value="mason" name="siteAttend" ng-model="kcStudentApplication.site" required>Mason
         </label>
         <label class="radio-inline">
-          <input type="radio" value="clifton" name="siteAttend" ng-model="kcStudentApplication.site">Clifton
+          <input type="radio" value="clifton" name="siteAttend" ng-model="kcStudentApplication.site" required>Clifton
         </label>
+        <ng-messages for="student.siteAttend.$error" ng-if="student.$submitted && student.siteAttend.$invalid" >
+          <span ng-message="required">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+        </ng-messages>
       </div>
     </div>
 
     <div class="row">
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.attending.$invalid}">
         <label class="control-label required" for="attending">How long have you been attending Crossroads?</label>
-        <input type="text" class="form-control" id="attending" ng-model="kcStudentApplication.howLongAttending" placeholder="How long have you been attending crossroads?">
-        <span ng-show="false">Please provide a valid value.</span>
+        <input type="text" 
+               class="form-control" 
+               id="attending" 
+               name="attending"
+               ng-model="kcStudentApplication.howLongAttending" 
+               placeholder="How long have you been attending crossroads?"
+               required>
+        <ng-messages for="student.attending.$error" ng-if="student.$submitted && student.attending.$invalid" >
+          <span ng-message="required">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+        </ng-messages>
       </div>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.serviceAttend.$invalid}">
         <label class="control-label required" for="serviceAttend">What Service do you attend?</label>
-        <input type="text" class="form-control" id="serviceAttend" ng-model="kcStudentApplication.serviceAttend" placeholder="What Service do you attend?">
-        <span ng-show="false">Please provide a valid value.</span>
+        <input type="text" 
+               class="form-control" 
+               id="serviceAttend"
+               name="serviceAttend"
+               ng-model="kcStudentApplication.serviceAttend" 
+               placeholder="What Service do you attend?"
+               required>
+        <ng-messages for="student.serviceAttend.$error" ng-if="student.$submitted && student.serviceAttend.$invalid" >
+          <span ng-message="required">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+        </ng-messages>
+ 
       </div>
     </div>
-
 
     <div class="row">
       <div class="form-group col-sm-6">
         <label class="control-label required" for="streetAddress">Street Address</label>
-        <input type="text" class="form-control" id="streetAddress" placeholder="Street Address" ng-value="volunteer.person.addressLine1" disabled="true">
+        <input type="text" class="form-control" id="streetAddress" placeholder="Street Address" ng-value="kcStudentApplication.volunteer.addressLine1" disabled="true">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label required" for="city">City</label>
-        <input type="text" class="form-control" id="city" placeholder="City" ng-value="volunteer.person.city" disabled="true">
+        <input type="text" class="form-control" id="city" placeholder="City" ng-value="kcStudentApplication.volunteer.city" disabled="true">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label required" for="state">State</label>
-        <input type="text" class="form-control" id="state" placeholder="State" ng-value="volunteer.person.state" disabled="true">
+        <input type="text" class="form-control" id="state" placeholder="State" ng-value="kcStudentApplication.volunteer.state" disabled="true">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label required" for="zip">Zip</label>
-        <input type="text" class="form-control" id="zip" placeholder="Zip" ng-value="volunteer.person.postalCode" disabled="true">
+        <input type="text" class="form-control" id="zip" placeholder="Zip" ng-value="kcStudentApplication.volunteer.postalCode" disabled="true">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label" for="cellPhone">Cell Phone</label>
-        <input type="text" class="form-control" id="cellPhone" placeholder="CellPhone" ng-value="volunteer.person.mobilePhone" disabled="true">
+        <input type="text" class="form-control" id="cellPhone" placeholder="CellPhone" ng-value="kcStudentApplication.volunteer.mobilePhone" disabled="true">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label" for="homePhone">Home Phone</label>
-        <input type="text" class="form-control" id="homePhone" placeholder="Home Phone" ng-value="volunteer.person.homePhone" disabled="true">
+        <input type="text" class="form-control" id="homePhone" placeholder="Home Phone" ng-value="kcStudentApplication.volunteer.homePhone" disabled="true">
         <span ng-show="false">Please provide a valid value.</span>
-      </div>
+        
     </div>
     <!--/row-->
   </fieldset>
