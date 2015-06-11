@@ -1,4 +1,4 @@
-describe('AppController', function() {
+describe('CoreController', function() {
 
   beforeEach(module('crossroads'));
 
@@ -10,7 +10,7 @@ describe('AppController', function() {
     MESSAGES = _MESSAGES_;
     $aside = _$aside_;
     $scope = {};
-    controller = $controller("appController", {$scope: $scope});
+    controller = $controller("coreController", {$scope: $scope});
   }));
 
 });

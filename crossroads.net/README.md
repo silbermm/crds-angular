@@ -39,19 +39,19 @@ To just build the project, run `gulp build-dev` for a dev build, or `gulp build`
 ###Test
 There are two types of tests available, Unit Tests and Functional Tests. 
 #### Unit Tests
-We use karma as our test runner and Jasmine to write the specs. You will need to install karma globablly to run the tests. 
+We use karma as our test runner and Jasmine to write the specs. You will need to install karma-cli globablly to run the tests. 
 
 Unit tests are kept in the (specs)[./specs] folder.
 
 Windows users can run:
 ``` npm set prefix "C:\Program Files\nodejs" ```
 
-``` npm install -g karma ```
+``` npm install -g karma-cli ```
 
 Mac and Linux users can run:
-``` npm install -g karma ```
+``` npm install -g karma-cli ```
 
-Once karma is installed, just run `karma start crossroads.conf.js` which will open chrome and run the tests. Click the debug button to see the results. Refreshing this page will re-run the tests.
+Once karma-cli is installed, just run `karma start crossroads.conf.js` which will open chrome and run the tests. Click the debug button to see the results. Refreshing this page will re-run the tests.
 
 #### Functional Tests
 We use protractor to run the tests and Jasmine to write the specs. You will need to install protractor globally. 
@@ -79,6 +79,18 @@ To run the project, run `gulp start` and point your browser to `http://localhost
 
 ##Mac OS with Gateway code running under VirtualBox Windows Guest
 Follow these instructions in order to setup the application to call Gateway services that are hosted on IIS Express on a Windows VM running under VirtualBox on a Mac.
+
+###Configuring the corkboard application
+Clone the crds-corkboard github repo to your local machine
+
+##Create the symbolic link (Windows)
+1. Open a command prompt with administrator access
+2. Change to the `PATH_TO_CRDS_ANGULAR_REPO/crossroads.net` folder
+3. Run the following command to create a symbolic link `mklink /D corkboard PATH_TO_CRDS_CORKBOARD_REPO/website`
+
+##Start the webpack processes
+1. Run gulp in the `PATH_TO_CRDS_CORKBOARD_REPO/website` folder
+2. Run gulp in the `PATH_TO_CRDS_ANGULAR_REPO/crossroads.net` folder
 
 ###Create a VirtualBox Host-Only Network
 1. Open VirtualBox
@@ -123,3 +135,4 @@ Follow these instructions in order to setup the application to call Gateway serv
 
 ##Angular Style Guide
 We will follow the [Crossroads Angular Style Guide](https://github.com/crdschurch/angular-styleguide).
+

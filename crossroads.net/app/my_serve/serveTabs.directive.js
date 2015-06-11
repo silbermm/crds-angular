@@ -1,7 +1,6 @@
 "use strict()";
 
 (function(){
-  var moment = require('moment');
 
   module.exports = ServeTabs;
 

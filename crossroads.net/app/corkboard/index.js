@@ -1,6 +1,6 @@
 'use strict';
 
-var app = require("angular").module('crossroads');
+var app = angular.module('crossroads');
 
 require('./corkboard-listings.html');
 require('./corkboard-listing-detail.html');
