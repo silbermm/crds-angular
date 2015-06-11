@@ -421,3 +421,12 @@
         width: auto;
     }
 }
+
+// Vertical Align
+// Note: if the element is blurry, try putting transform-style: preserve-3d; on the parent
+// Reference: http://zerosixthree.se/vertical-align-anything-with-just-3-lines-of-css/
+@mixin vertical-align {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}

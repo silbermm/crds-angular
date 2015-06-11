@@ -109,6 +109,11 @@
               controller: "MediaCtrl as media",
               templateUrl: "media/series-single.html"
             })
+            .state("media-series-single-lo-res", {
+              url: "/media/series/single/lores",
+              controller: "MediaCtrl as media",
+              templateUrl: "media/series-single-lo-res.html"
+            })
             .state("serve-signup", {
               url: "/serve-signup",
               controller: "MyServeController as serve",
