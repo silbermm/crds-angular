@@ -12,7 +12,7 @@ UPDATE [dbo].[dp_Pages]
 ,Program_ID_Table.Statement_Title
 ,Pledge_ID_Table_Pledge_Campaign_ID_Table.Campaign_Name
 ,Donation_Distributions.Donation_ID
-,Congregation_ID_Table.Congregation_Name AS [Site]
+,Congregation_ID_Table.Congregation_Name AS [Congregation]
 ,Donation_ID_Table.Donor_ID
 ,Donation_ID_Table_Batch_ID_Table.Batch_ID
 ,Pledge_ID_Table.Pledge_ID'
