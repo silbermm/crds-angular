@@ -1,14 +1,13 @@
 'use strict()';
 (function(){
  
-  var getCookie = require('../utilities/cookies'); 
-  var app = require('angular').module('crossroads.profile');
+  var app = angular.module('crossroads.profile');
   app.config(config);
 
   function config($httpProvider){
     $httpProvider.defaults.timeout = 15000;
     $httpProvider.defaults.useXDomain = true; 
-    $httpProvider.defaults.headers.common['Authorization']= getCookie('sessionId');
+    $httpProvider.defaults.headers.common['Authorization']= crds_utilities.getCookie('sessionId');
   };
   
 })()

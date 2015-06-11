@@ -2,92 +2,11 @@
 
 (function () {
 
-  require("./home/home.html");
-  require('./home');
-  require('./login/login_page.html');
-  require('./register/register_form.html');
-  require('./content');
-  require('./community_groups_signup')
-  require('./mytrips');
-  require('./profile/profile.html');
-  require('./profile/personal/profile_personal.html');
-  require('./profile/profile_account.html');
-  require('./profile/skills/profile_skills.html');
-  require('./styleguide');
-  require('./give');
-  require('./media');
-  require('./myprofile');
-  require('./content/content.html');
-  require('./community_groups_signup/group_signup_form.html');
-  require('./my_serve');
-  require('./go_trip_giving');
-  require('./corkboard');
-  require('./volunteer_signup');
-  require('./volunteer_application');
-
-  var getCookie = require('./utilities/cookies');
-
   angular.module("crossroads").config(["$stateProvider", "$urlRouterProvider", "$httpProvider", "$urlMatcherFactoryProvider", "$locationProvider", function ($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory, $locationProvider) {
 
-        $httpProvider.defaults.useXDomain = true;
-        $httpProvider.defaults.headers.common['Authorization'] = getCookie('sessionId');
-        // This is a dummy header that will always be returned in any 'Allow-Header' from any CORS request. This needs to be here because of IE.
-        $httpProvider.defaults.headers.common["X-Use-The-Force"] = true;
-
-        // This custom type is needed to allow us to NOT URLEncode slashes when using ui-sref
-        // See this post for details: https://github.com/angular-ui/ui-router/issues/1119
-        var registerType = function(routeType, urlPattern) {
-            return($urlMatcherFactory.type(routeType, {
-                        encode: function(val) { return val != null ? val.toString() : val; },
-                        decode: function(val) { return val != null ? val.toString() : val; },
-                        is: function(val) { return this.pattern.test(val); },
-                        pattern: urlPattern
-                    }));
-        };
-        registerType("contentRouteType", /^\/.*/);
-        registerType("signupRouteType", /\/sign-up\/.*$/);
-        registerType("volunteerRouteType", /\/volunteer-sign-up\/.*$/);
-
-        //================================================
-        // Check if the user is connected
-        //================================================
-        var checkLoggedin = function ($q, $timeout, $http, $location, $rootScope) {
-            // TODO Added to debug/research US1403 - should remove after issue is resolved
-            console.log("US1403: checkLoggedIn");
-            var deferred = $q.defer();
-            $httpProvider.defaults.headers.common['Authorization'] = getCookie('sessionId');
-            $http({
-                method: 'GET',
-                url: __API_ENDPOINT__ + "api/authenticated",
-                headers: {
-                    'Authorization': getCookie('sessionId')
-                }
-            }).success(function (user) {
-                // TODO Added to debug/research US1403 - should remove after issue is resolved
-                console.log("US1403: checkLoggedIn success");
-                // Authenticated
-                if (user.userId !== undefined) {
-                    // TODO Added to debug/research US1403 - should remove after issue is resolved
-                    console.log("US1403: checkLoggedIn success with user");
-                    $timeout(deferred.resolve, 0);
-                    $rootScope.userid = user.userId;
-                    $rootScope.username = user.username;
-                } else {
-                    // TODO Added to debug/research US1403 - should remove after issue is resolved
-                    console.log("US1403: checkLoggedIn success, undefined user");
-                    Session.clear();
-                    $rootScope.message = "You need to log in.";
-                    $timeout(function () {
-                        deferred.reject();
-                    }, 0);
-                    $location.url("/");
-                }
-            }).error(function (e) {
-                console.log(e);
-                console.log("ERROR: trying to authenticate");
-            });
-            return deferred.promise;
-        };
+        crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, "contentRouteType", /^\/.*/);
+        crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, "signupRouteType", /\/sign-up\/.*$/);
+        crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, "volunteerRouteType", /\/volunteer-sign-up\/.*$/);
 
         $stateProvider
             .state("home", {
@@ -116,7 +35,7 @@
             .state("profile", {
                 url: "/profile",
                 resolve: {
-                    loggedin: checkLoggedin
+                    loggedin: crds_utilities.checkLoggedin
                 },
                 data: {
                     isProtected: true
@@ -126,7 +45,7 @@
                         templateUrl: "profile/profile.html",
                         controller: "crdsProfileCtrl as profile",
                         resolve: {
-                            loggedin: checkLoggedin
+                            loggedin: crds_utilities.checkLoggedin
                         },
                     },
                     "personal@profile": {
@@ -158,7 +77,7 @@
                     isProtected: true
                 },
                 resolve: {
-                    loggedin: checkLoggedin
+                    loggedin: crds_utilities.checkLoggedin
                 }
             })
             .state("mytrips", {
@@ -225,10 +144,10 @@
               templateUrl: "my_serve/myserve.html",
               data: { isProtected: true },
               resolve: {
-                loggedin: checkLoggedin,
+                loggedin: crds_utilities.checkLoggedin,
                 ServeOpportunities: 'ServeOpportunities',
                 Groups: function(ServeOpportunities){
-                  return ServeOpportunities.ServeDays.query({id: getCookie('userId')} ).$promise;
+                  return ServeOpportunities.ServeDays.query({id: crds_utilities.getCookie('userId')} ).$promise;
                 }
               }
             })
@@ -366,7 +285,7 @@
                     isProtected: true
                 },
                 resolve: {
-                    loggedin: checkLoggedin
+                    loggedin: crds_utilities.checkLoggedin
                 }
             })
             .state("volunteer-request", {
@@ -375,7 +294,7 @@
               templateUrl: "volunteer_signup/volunteer_signup_form.html",
               data: { isProtected: true },
               resolve: {
-                loggedin: checkLoggedin,
+                loggedin: crds_utilities.checkLoggedin,
                 Page: 'Page',
                 CmsInfo: function(Page, $stateParams){
                   return Page.get( {url: $stateParams.link} ).$promise;
@@ -388,7 +307,7 @@
               templateUrl: "volunteer_application/volunteerApplicationForm.html",
               data: { isProtected: true },
               resolve: {
-                loggedin: checkLoggedin,
+                loggedin: crds_utilities.checkLoggedin,
                 Page: 'Page',
                 CmsInfo: function(Page, $stateParams){
                   var path = '/volunteer-application/'+$stateParams.appType+'/';
@@ -417,7 +336,7 @@
         isProtected: true
        },
        resolve: {
-        loggedin: checkLoggedin
+        loggedin: crds_utilities.checkLoggedin
        }
     })
     .state("tools.su2s", {
