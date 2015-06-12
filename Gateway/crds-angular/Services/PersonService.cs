@@ -47,6 +47,40 @@ namespace crds_angular.Services
             return GetSkills(contactId, token);
         }
 
+        public Person GetPerson(int contactId)
+        {
+            var contact = _contactService.GetContactById(contactId);
+            var person = new Person();
+
+            person.ContactId = contact.Contact_ID;
+            person.EmailAddress = contact.Email_Address;
+            person.NickName = contact.Nickname;
+            person.FirstName = contact.First_Name;
+            person.MiddleName = contact.Middle_Name;
+            person.LastName = contact.Last_Name;
+            person.MaidenName = contact.Maiden_Name;
+            person.MobilePhone = contact.Mobile_Phone;
+            person.MobileCarrierId = contact.Mobile_Carrier;
+            person.DateOfBirth = contact.Date_Of_Birth;
+            person.MaritalStatusId = contact.Marital_Status_ID;
+            person.GenderId = contact.Gender_ID;
+            person.EmployerName = contact.Employer_Name;
+            person.AddressLine1 = contact.Address_Line_1;
+            person.AddressLine2 = contact.Address_Line_2;
+            person.City = contact.City;
+            person.State = contact.State;
+            person.PostalCode = contact.Postal_Code;
+            person.AnniversaryDate = contact.Anniversary_Date;
+            person.ForeignCountry = contact.Foreign_Country;
+            person.HomePhone = contact.Home_Phone;
+            person.CongregationId = contact.Congregation_ID;
+            person.HouseholdId = contact.Household_ID;
+            person.AddressId = contact.Address_ID;
+            person.Age = contact.Age;
+            
+            return person;
+
+        }
         public Person GetLoggedInUserProfile(String token)
         {
             var contact = _contactService.GetMyProfile(token);
