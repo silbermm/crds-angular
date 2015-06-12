@@ -41,6 +41,21 @@ namespace crds_angular.Controllers.API
             });
         }
 
+        [ResponseType(typeof(Person))]
+        [Route("api/profile/{contactId}")]
+        public IHttpActionResult GetProfile(int contactId)
+        {
+            return Authorized(token =>
+            {
+                var person = _personService.GetPerson(contactId);
+                if (person == null)
+                {
+                    return Unauthorized();
+                }
+                return this.Ok(person);
+            });
+        }
+
         [Route("api/profile")]
         public IHttpActionResult Post([FromBody] Person person)
         {

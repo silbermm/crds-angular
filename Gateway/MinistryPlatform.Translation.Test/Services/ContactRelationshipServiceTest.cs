@@ -38,18 +38,24 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Contact_ID", 123456},
                     {"Email_Address", "person-one@email.com"},
                     {"Preferred Name", "person-one"},
-                    {"Last Name", "person-one"}, {"Participant_ID", 654321}
+                    {"Last Name", "person-one"},
+                    {"Participant_ID", 654321},
+                    {"Relationship_ID", 1}
                 },
                 new Dictionary<string, object>()
                 {
                     {"Contact_ID", 222222},
                     {"Email_Address", "person-two@email.com"},
                     {"Preferred Name", "person-two"},
-                    {"Last Name", "person-two"}, {"Participant_ID", 3333333}
+                    {"Last Name", "person-two"},
+                    {"Participant_ID", 3333333},
+                    {"Relationship_ID", 1}
                 }
             };
             _ministryPlatformService.Setup(
-                mocked => mocked.GetSubpageViewRecords("MyContactFamilyRelationshipViewId", contactId, It.IsAny<string>(), "", "", 0))
+                mocked =>
+                    mocked.GetSubpageViewRecords("MyContactFamilyRelationshipViewId", contactId, It.IsAny<string>(), "",
+                        "", 0))
                 .Returns(getSubpageViewRecordsResponse);
 
             var family = _fixture.GetMyImmediatieFamilyRelationships(contactId, token).ToList();
