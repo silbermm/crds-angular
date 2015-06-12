@@ -26,7 +26,7 @@ var moment = require('moment');
     vm.locationSelected = locationSelected;
     vm.open = open;
     vm.religionSelected = religionSelected;
-    vm.save = save; 
+    vm.save = save;
     vm.volunteer.areaOfInterestServingInClassroom = false;
     vm.volunteer.areaOfInterestWelcomingNewFamilies=false;
     vm.volunteer.areaOfInterestHelpSpecialNeeds=false;
@@ -110,7 +110,6 @@ var moment = require('moment');
 
       var adult = new VolunteerService.SaveAdult();
       adult.contactId = vm.contactId;
-      adult.formId = 17; // get this from CMS in pageInfo
       adult.opportunityId = vm.opportunityId;
       adult.responseOpportunityId = vm.responseId;
 
@@ -552,7 +551,7 @@ var moment = require('moment');
         return false;
       });
     }
-    
+
     /**
      * Checks if one of the a religion options has been selected and returns
      * true if it has, false otherwise

@@ -5,7 +5,7 @@ var moment = require("moment");
 (function() {
 
   angular.module("crossroads").controller("KidsClubStudentApplicationController", KidsClubStudentApplicationController);
- 
+
   KidsClubStudentApplicationController.$inject = ['$log', '$rootScope', 'VolunteerService', 'studentFields'];
 
   function KidsClubStudentApplicationController($log, $rootScope, VolunteerService, studentFields) {
@@ -52,7 +52,7 @@ var moment = require("moment");
     function gradeLevelSelected(){
       if (vm.serveAgeKids && (
           vm.serveAgeKids.age1to2 ||
-          vm.serveAgeKids.age3toPreK || 
+          vm.serveAgeKids.age3toPreK ||
           vm.serveAgeKids.Kto5Grade) )
         return true;
       return false;
@@ -87,7 +87,6 @@ var moment = require("moment");
 
       var student = new VolunteerService.SaveStudent();
       student.contactId = vm.contactId;
-      student.formId = 16; // get this from CMS in pageInfo
       student.opportunityId = vm.pageInfo.opportunity;
       student.responseOpportunityId = vm.responseId;
 

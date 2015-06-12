@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using crds_angular.Models.Crossroads.VolunteerApplication;
 using crds_angular.Services.Interfaces;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 
@@ -11,21 +12,24 @@ namespace crds_angular.Services
     public class VolunteerApplicationService : IVolunteerApplicationService
     {
         private readonly IFormSubmissionService _formSubmissionService;
+        private readonly IConfigurationWrapper _configurationWrapper;
         private List<FormField> _formFields;
 
-        public VolunteerApplicationService(IFormSubmissionService formSubmissionService)
+        public VolunteerApplicationService(IFormSubmissionService formSubmissionService, IConfigurationWrapper configurationWrapper)
         {
             _formSubmissionService = formSubmissionService;
+            _configurationWrapper = configurationWrapper;
         }
 
         public bool SaveAdult(AdultApplicationDto application)
         {
+            var formId = _configurationWrapper.GetConfigIntValue("KidsClubAdultApplicant");
             var opportunityResponseId = application.ResponseOpportunityId;
-            _formFields = _formSubmissionService.GetFieldsForForm(application.FormId);
+            _formFields = _formSubmissionService.GetFieldsForForm(formId);
 
             var formResponse = new FormResponse();
             formResponse.ContactId = application.ContactId; //contact id of the person the application is for
-            formResponse.FormId = application.FormId;
+            formResponse.FormId = formId;
             formResponse.OpportunityId = application.OpportunityId; // we know this from CMS
             formResponse.OpportunityResponseId = opportunityResponseId;
 
@@ -132,12 +136,13 @@ namespace crds_angular.Services
 
         public bool SaveStudent(StudentApplicationDto application)
         {
+            var formId = _configurationWrapper.GetConfigIntValue("KidsClubStudentApplicant");
             var opportunityResponseId = application.ResponseOpportunityId;
-            _formFields = _formSubmissionService.GetFieldsForForm(application.FormId);
+            _formFields = _formSubmissionService.GetFieldsForForm(formId);
 
             var formResponse = new FormResponse();
             formResponse.ContactId = application.ContactId; //contact id of the person the application is for
-            formResponse.FormId = application.FormId;
+            formResponse.FormId = formId;
             formResponse.OpportunityId = application.OpportunityId; // we know this from CMS
             formResponse.OpportunityResponseId = opportunityResponseId;
 
