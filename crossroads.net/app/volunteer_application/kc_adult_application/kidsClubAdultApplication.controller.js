@@ -12,8 +12,10 @@ var moment = require('moment');
     $log.debug("Inside Kids-Club-Adult-Application-Controller");
     var vm = this;
 
-    // vm.reference1 = {};
-    // vm.reference2 = {};
+    if (vm.volunteer === undefined) {
+      vm.volunteer = {};
+    }
+
     vm.availabilitySelected = availabilitySelected;
     vm.dateOptions = {
       formatYear: 'yy',
@@ -27,7 +29,7 @@ var moment = require('moment');
     vm.open = open;
     vm.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
     vm.religionSelected = religionSelected;
-    vm.save = save; 
+    vm.save = save;
     vm.saving = false;
     vm.submitButtonText = "Submit";
     vm.volunteer.areaOfInterestServingInClassroom = false;
@@ -100,7 +102,7 @@ var moment = require('moment');
     function save(form) {
       vm.saving = true;
       vm.submitButtonText = "Submitting...";
-     
+
       $log.debug('you tried to save');
       $log.debug('nameTag: ' + vm.volunteer.nameTag);
       $log.debug('something from parent: ' + vm.volunteer.contactId);
@@ -559,7 +561,7 @@ var moment = require('moment');
         vm.submitButtonText = "Submit";
         return false;
       });
-      
+
     }
 
     /**
