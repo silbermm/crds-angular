@@ -13,3 +13,5 @@ app.directive("kidsClubAdultApplication", require('./kc_adult_application/kidsCl
 
 require('./kc_student_application/kidsClubStudentApplication.template.html');
 app.directive("kidsClubStudentApplication", require('./kc_student_application/kidsClubStudentApplication.directive'));
+
+app.factory("VolunteerService", ["$resource", require('./volunteerService')]);
