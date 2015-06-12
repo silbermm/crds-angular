@@ -35,6 +35,10 @@ var moment = require('moment');
     vm.volunteer.areaOfInterestAdminTasks=false;
     vm.volunteer.areaOfInterestShoppingForSupplies=false;
     vm.volunteer.areaOfInterestCreatingWeekendExperience=false;
+    vm.volunteer.child1 = {};
+    vm.volunteer.child2 = {};
+    vm.volunteer.child3 = {};
+    vm.volunteer.child4 = {};
     vm.volunteer.signatureDate = moment().format('MM/DD/YYYY');
 
     ///////////////////////////////////////////////////
