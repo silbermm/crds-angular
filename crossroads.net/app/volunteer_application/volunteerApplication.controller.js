@@ -6,20 +6,17 @@
 
   module.exports = VolunteerApplicationController;
 
-  VolunteerApplicationController.$inject = ['$scope', '$log', 'MESSAGES', 'Session', '$stateParams', 'CmsInfo', 'Opportunity', 'Contact'];
+  VolunteerApplicationController.$inject = ['$scope', '$log', 'MESSAGES', 'Session', '$stateParams', 'CmsInfo', 'Opportunity', 'Contact', 'VolunteerService', 'Family'];
 
-  function VolunteerApplicationController($scope, $log, MESSAGES, Session, $stateParams, CmsInfo, Opportunity, Contact) {
+  function VolunteerApplicationController($scope, $log, MESSAGES, Session, $stateParams, CmsInfo, Opportunity, Contact, VolunteerService, Family) {
     $log.debug("Inside VolunteerApplicationController");
     var vm = this;
 
     vm.contactId = $stateParams.id;
+    vm.family = Family;
     vm.pageInfo = pageInfo(CmsInfo);
     vm.person = Contact;
     vm.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
-    // responseCheck, need a better way to handle
-    // we display form before OpportunityReponse is
-    // returned.  When it returns false, form is hidden
-    // and proper message display, but view flashes
     vm.responseCheck = false;
     vm.save = save;
     vm.showAccessDenied = false;
@@ -36,21 +33,17 @@
     ///////////////////////////////////////////
 
     function activate() {
-
-      var loggedinContact = Session.exists('userId');
-      if (loggedinContact !== vm.contactId) {
-        vm.showAccessDenied = true;
-      } else {
+      if (checkFamily()) {
         vm.showAccessDenied = false;
         opportunityResponse();
         applicationVersion();
+      } else {
+        vm.showAccessDenied = true;
       }
       vm.viewReady = true;
     }
 
     function applicationVersion() {
-      $log.debug("Person: " + JSON.stringify(vm.person));
-
       if (vm.person.age >= 16) {
         vm.showAdult = true;
       } else if ((vm.person.age >= 14) && (vm.person.age <= 15)) {
@@ -59,12 +52,15 @@
         vm.showError = true;
       }
     }
-      
-    
 
+    function checkFamily() {
 
-    function fieldHasError(form, formField){
-       
+      for (var i = 0; i < vm.family.length; i++) {
+        if (vm.family[i].contactId == vm.contactId) {
+          return true;
+        }
+      }
+      return false;
     }
 
     function opportunityResponse() {
@@ -84,10 +80,6 @@
 
     function pageInfo(cmsInfo) {
       return cmsInfo.pages[0];
-    }
-
-    function save(form) {
-
     }
 
     function showBlock(blockName) {

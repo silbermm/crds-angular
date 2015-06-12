@@ -1,9 +1,7 @@
 'use strict()';
 (function(){
-  var _ = require('lodash');
-
   require('./myserve.html');
-  var app = require("angular").module('crossroads');
+  var app = angular.module('crossroads');
 
   require("./capacity.service");
 

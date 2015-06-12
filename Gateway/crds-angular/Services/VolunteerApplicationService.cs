@@ -1,3 +1,4 @@
+
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,12 @@ using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 
+﻿using System.Collections.Generic;
+using System.Linq;
+using crds_angular.Models.Crossroads.Serve;
+using crds_angular.Services.Interfaces;
+
+
 namespace crds_angular.Services
 {
     public class VolunteerApplicationService : IVolunteerApplicationService
@@ -15,10 +22,13 @@ namespace crds_angular.Services
         private readonly IConfigurationWrapper _configurationWrapper;
         private List<FormField> _formFields;
 
-        public VolunteerApplicationService(IFormSubmissionService formSubmissionService, IConfigurationWrapper configurationWrapper)
+        private readonly IServeService _serveService;
+
+        public VolunteerApplicationService(IFormSubmissionService formSubmissionService, IConfigurationWrapper configurationWrapper, IServeService serveService)
         {
             _formSubmissionService = formSubmissionService;
             _configurationWrapper = configurationWrapper;
+            _serveService = serveService;
         }
 
         public bool SaveAdult(AdultApplicationDto application)
@@ -264,6 +274,14 @@ namespace crds_angular.Services
             answer.OpportunityResponseId = opportunityResponseId;
             answer.Response = customField.Value;
             return answer;
+        }
+
+        
+        public List<FamilyMember> FamilyThatUserCanSubmitFor(int contactId, string token)
+        {
+            var list = _serveService.GetImmediateFamilyParticipants(contactId, token);
+            var removeSpouse = list.Where(s => s.RelationshipId != 1).ToList();
+            return removeSpouse;
         }
     }
 }
