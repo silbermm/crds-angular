@@ -1,7 +1,6 @@
 "use strict";
 (function () {
 
-    var moment = require("moment");
     module.exports = function($rootScope, $log, $timeout, MESSAGES, ProfileReferenceData) {
         var _this = this;
 

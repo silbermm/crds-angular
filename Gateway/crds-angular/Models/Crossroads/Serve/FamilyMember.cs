@@ -21,6 +21,9 @@ namespace crds_angular.Models.Crossroads.Serve
 
         [JsonProperty(PropertyName = "email")]
         public string Email { get; set; }
+
+        [JsonProperty(PropertyName = "relationshipId")]
+        public int RelationshipId { get; set; }
     }
 
     public class QualifiedServerDto

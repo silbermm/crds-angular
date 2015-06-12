@@ -3,7 +3,7 @@ describe('preloader', function() {
   var $compile, $rootScope, element, scope, isolateScope;
 
   beforeEach(function() {
-    module('crossroads.components');
+    module('crossroads.core');
   });
 
   beforeEach(inject(function(_$compile_, _$rootScope_) {

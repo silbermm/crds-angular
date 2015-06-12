@@ -1,6 +1,5 @@
 (function () {
 
-  var getCookie = require('../../utilities/cookies');
   angular.module('crossroads.give').factory('PaymentService',PaymentService);
 
   PaymentService.$inject = ['$log', '$http', '$resource','$q', 'stripe'];
@@ -22,7 +21,7 @@
       return $resource(__API_ENDPOINT__ + 'api/donor/?email=:email',{email: '@_email'}, {
         get: {
           method : 'GET',
-          headers: {'Authorization': getCookie('sessionId')}
+          headers: {'Authorization': crds_utilities.getCookie('sessionId')}
         }
       });
     }
@@ -41,7 +40,7 @@
             method: "POST",
             url: __API_ENDPOINT__ + 'api/donor',
             headers: {
-              'Authorization': getCookie('sessionId')
+              'Authorization': crds_utilities.getCookie('sessionId')
             },
             data: donor_request
             }).success(function(data) {
@@ -63,7 +62,7 @@
             method: "PUT",
             url: __API_ENDPOINT__ + 'api/donor',
             headers: {
-              'Authorization': getCookie('sessionId')
+              'Authorization': crds_utilities.getCookie('sessionId')
             },
             data: donor_request
             }).success(function(data) {
@@ -75,7 +74,7 @@
         });
        return def.promise;
     }
-
+   
     function createDonorWithBankAcct(bank, email) {
       var def = $q.defer();
       stripe.bankAccount.createToken(bank)
@@ -90,7 +89,7 @@
             method: "POST",
             url: __API_ENDPOINT__ + 'api/donor',
             headers: {
-              'Authorization': getCookie('sessionId')
+              'Authorization': crds_utilities.getCookie('sessionId')
             },
             data: donor_request
             }).success(function(data) {
@@ -103,20 +102,21 @@
        return def.promise;
     }
 
-    function donateToProgram(program_id, amount, donor_id, email_address){
+    function donateToProgram(program_id, amount, donor_id, email_address, pymt_type){
       var def = $q.defer();
       var donation_request = {
         "program_id" : program_id,
         "amount" : amount,
         "donor_id" : donor_id,
-        "email_address": email_address
+        "email_address": email_address,
+        "pymt_type": pymt_type
       };
       $http({
         method: "POST",
         url: __API_ENDPOINT__ + 'api/donation',
         data: donation_request,
         headers: {
-              'Authorization': getCookie('sessionId')
+              'Authorization': crds_utilities.getCookie('sessionId')
             }
         }).success(function(data){
           payment_service.donation = data;

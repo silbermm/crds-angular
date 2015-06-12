@@ -9,10 +9,6 @@ namespace crds_angular.Models.Crossroads.VolunteerApplication
         [Required]
         public int ContactId { get; set; }
 
-        [JsonProperty(PropertyName = "formId")]
-        [Required]
-        public int FormId { get; set; }
-
         [JsonProperty(PropertyName = "opportunityId")]
         [Required]
         public int OpportunityId { get; set; }

@@ -116,7 +116,6 @@ var moment = require('moment');
 
       var adult = new VolunteerService.SaveAdult();
       adult.contactId = vm.contactId;
-      adult.formId = 17; // get this from CMS in pageInfo
       adult.opportunityId = vm.opportunityId;
       adult.responseOpportunityId = vm.responseId;
 
@@ -562,7 +561,7 @@ var moment = require('moment');
       });
       
     }
-    
+
     /**
      * Checks if one of the a religion options has been selected and returns
      * true if it has, false otherwise

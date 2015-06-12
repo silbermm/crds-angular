@@ -6,6 +6,10 @@ using System.Net.Http;
 using System.Web.Http;
 using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads.VolunteerApplication;
+using System.Web.Http;
+using System.Web.Http.Description;
+using crds_angular.Exceptions.Models;
+using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
 
@@ -14,6 +18,7 @@ namespace crds_angular.Controllers.API
     public class VolunteerApplicationController : MPAuth
     {
         private readonly IVolunteerApplicationService _volunteerApplicationService;
+
 
          public VolunteerApplicationController(IVolunteerApplicationService volunteerApplicationService)
         {
@@ -47,8 +52,10 @@ namespace crds_angular.Controllers.API
         {
             if (!ModelState.IsValid)
             {
-                var errors = ModelState.Values.SelectMany(val => val.Errors).Aggregate("", (current, err) => current + err.ErrorMessage + " ");
-                var dataError = new ApiErrorDto("SaveStudent Data Invalid", new InvalidOperationException("Invalid SaveStudent Data" + errors));
+                var errors = ModelState.Values.SelectMany(val => val.Errors)
+                    .Aggregate("", (current, err) => current + err.ErrorMessage + " ");
+                var dataError = new ApiErrorDto("SaveStudent Data Invalid",
+                    new InvalidOperationException("Invalid SaveStudent Data" + errors));
                 throw new HttpResponseException(dataError.HttpResponseMessage);
             }
 
@@ -62,6 +69,26 @@ namespace crds_angular.Controllers.API
                 throw new HttpResponseException(apiError.HttpResponseMessage);
             }
             return Ok();
+        }
+
+        [ResponseType(typeof(List<FamilyMember>))]
+        [Route("api/volunteer-application/family/{contactId}")]
+        public IHttpActionResult GetFamily(int contactId)
+        {
+            return Authorized(token =>
+            {
+                try
+                {
+                    var family = _volunteerApplicationService.FamilyThatUserCanSubmitFor(contactId, token);
+                    return Ok(family);
+                }
+                catch (Exception ex)
+                {
+                    var apiError = new ApiErrorDto("Volunteer Application GET Family", ex);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+
+            });
         }
     }
 }

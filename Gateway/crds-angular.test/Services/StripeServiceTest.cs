@@ -5,9 +5,8 @@ using Moq;
 using NUnit.Framework;
 using RestSharp;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Net;
-using crds_angular.Services.Interfaces;
+
 
 namespace crds_angular.test.Services
 {
@@ -124,12 +123,6 @@ namespace crds_angular.test.Services
             customer.id = "12345";
             customer.default_source = "some card";
 
-            var getCustomerResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
-            getCustomerResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
-            getCustomerResponse.SetupGet(mocked => mocked.Data).Returns(customer).Verifiable();
-
-            restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(getCustomerResponse.Object);
-
             var charge = new StripeCharge();
             charge.id = "90210";
 
@@ -139,12 +132,7 @@ namespace crds_angular.test.Services
 
             restClient.Setup(mocked => mocked.Execute<StripeCharge>(It.IsAny<IRestRequest>())).Returns(chargeResponse.Object);
 
-            var response = fixture.chargeCustomer("cust_token", 9090, 98765);
-
-            restClient.Verify(mocked => mocked.Execute<StripeCustomer>(
-                It.Is<IRestRequest>(o =>
-                    o.Method == Method.GET
-                    && o.Resource.Equals("customers/cust_token"))));
+            var response = fixture.chargeCustomer("cust_token", 9090, 98765, "cc");
 
             restClient.Verify(mocked => mocked.Execute<StripeCharge>(
                 It.Is<IRestRequest>(o =>
@@ -152,13 +140,11 @@ namespace crds_angular.test.Services
                     && o.Resource.Equals("charges")
                     && parameterMatches("amount", 9090 * 100, o.Parameters)
                     && parameterMatches("currency", "usd", o.Parameters)
-                    && parameterMatches("source", "some card", o.Parameters)
-                    && parameterMatches("customer", "12345", o.Parameters)
+                    && parameterMatches("customer", "cust_token", o.Parameters)
                     && parameterMatches("description", "Donor ID #98765", o.Parameters)
                     )));
 
             restClient.VerifyAll();
-            getCustomerResponse.VerifyAll();
             chargeResponse.VerifyAll();
 
             Assert.AreEqual("90210", response);
@@ -168,28 +154,7 @@ namespace crds_angular.test.Services
         {
             return(parms.Find(p => p.Name.Equals(name) && p.Value.Equals(value)) != null);
         }
-
-        [Test]
-        public void shouldNotChargeCustomerIfCustomerLookupFails()
-        {
-            var getCustomerResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
-            getCustomerResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.BadRequest).Verifiable();
-            getCustomerResponse.SetupGet(mocked => mocked.Content).Returns("{error: {type: 'Error Type', message:'Bad Request'}}").Verifiable();
-            restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(getCustomerResponse.Object);
-            try
-            {
-                fixture.chargeCustomer("token", 123, 98765);
-                Assert.Fail("Should have thrown exception");
-            }
-            catch (StripeException e)
-            {
-                Assert.AreEqual("Could not charge customer because customer lookup failed", e.Message);
-                Assert.AreEqual("Error Type", e.type);
-                Assert.AreEqual("Bad Request", e.detailMessage);
-            }
-
-        }
-
+        
         [Test]
         public void shouldNotChargeCustomerIfAmountIsInvalid()
         {
@@ -210,7 +175,7 @@ namespace crds_angular.test.Services
             restClient.Setup(mocked => mocked.Execute<StripeCharge>(It.IsAny<IRestRequest>())).Returns(chargeResponse.Object);
             try
             {
-                fixture.chargeCustomer("token", -900, 98765);
+                fixture.chargeCustomer("token", -900, 98765, "cc");
                 Assert.Fail("Should have thrown exception");
             }
             catch (StripeException e)

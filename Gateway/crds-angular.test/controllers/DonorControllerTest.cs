@@ -68,7 +68,7 @@ namespace crds_angular.test.controllers
 
             donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(It.IsAny<string>())).Returns((ContactDonor)null);
             donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(null, string.Empty, "tok_test", It.IsAny<DateTime>())).Returns(donor);
-
+            
             IHttpActionResult result = fixture.Post(createDonorDto);
 
             Assert.IsNotNull(result);
@@ -95,6 +95,7 @@ namespace crds_angular.test.controllers
                 name = "Automated Test",
                 address_zip = "45454"
             };
+            
             donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(It.IsAny<string>())).Returns(contactDonor);
             paymentService.Setup(mocked => mocked.getDefaultSource(It.IsAny<string>())).Returns(default_source);
             IHttpActionResult result = fixture.Get();
@@ -103,10 +104,10 @@ namespace crds_angular.test.controllers
             var okResult = (OkNegotiatedContentResult<DonorDTO>)result;
             Assert.AreEqual(donorId, okResult.Content.id);
             Assert.AreEqual(processorId, okResult.Content.Processor_ID);
-            Assert.AreEqual(brand, okResult.Content.default_source.brand);
-            Assert.AreEqual(last4, okResult.Content.default_source.last4);
-            Assert.AreEqual(name, okResult.Content.default_source.name);
-            Assert.AreEqual(address_zip, okResult.Content.default_source.address_zip);
+            Assert.AreEqual(brand, okResult.Content.default_source.credit_card.brand);
+            Assert.AreEqual(last4, okResult.Content.default_source.credit_card.last4);
+            Assert.AreEqual(name, okResult.Content.default_source.credit_card.name);
+            Assert.AreEqual(address_zip, okResult.Content.default_source.credit_card.address_zip);
         }
 
         [Test]
