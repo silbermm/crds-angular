@@ -8,7 +8,50 @@ describe("Volunteer Application Controller", function() {
       Session,
       CmsInfo,
       Contact,
-      Opportunity; 
+      Opportunity,
+      Family; 
+
+  var mockFamily = [{
+     "contactId": 768379,
+     "participantId": 994377,
+     "preferredName": "Tony",
+     "lastName": null,
+     "loggedInUser": true,
+     "email": "tmaddox33mp1@gmail.com",
+     "relationshipId": 0
+  }, {
+     "contactId": 1519134,
+     "participantId": 1446324,
+     "preferredName": "Brady",
+     "lastName": "Queenan",
+     "loggedInUser": false,
+     "email": null,
+     "relationshipId": 6
+  }, {
+     "contactId": 768386,
+     "participantId": 1446320,
+     "preferredName": "Claire",
+     "lastName": "Maddox",
+     "loggedInUser": false,
+     "email": "tmaddox33mp1@gmail.com",
+     "relationshipId": 6
+  }, {
+     "contactId": 1519207,
+     "participantId": 1446358,
+     "preferredName": "Jack",
+     "lastName": "Maddox",
+     "loggedInUser": false,
+     "email": "lsangam@yahoo.com",
+     "relationshipId": 6
+  }, {
+     "contactId": 2186211,
+     "participantId": 2213526,
+     "preferredName": "Matt",
+     "lastName": "Silbernagel",
+     "loggedInUser": false,
+     "email": "matt.silbernagel@ingagepartners.com",
+     "relationshipId": 6
+  }];
 
   var mockVolunteer= {
     addressId: 99999,
@@ -83,6 +126,7 @@ describe("Volunteer Application Controller", function() {
     $provide.value('Session', mockSession);
     $provide.value('CmsInfo', mockPageInfo);
     $provide.value('Contact', mockVolunteer);
+    $provide.value('Family', mockFamily);
   }));
 
   var controller;
@@ -96,6 +140,7 @@ describe("Volunteer Application Controller", function() {
     CmsInfo = $injector.get("CmsInfo");
     Contact = $injector.get("Contact");
     Session = $injector.get("Session");
+    Family = $injector.get('Family');
    
     $scope = {};
     controller = $controller("VolunteerApplicationController", { $scope: $scope }); 
