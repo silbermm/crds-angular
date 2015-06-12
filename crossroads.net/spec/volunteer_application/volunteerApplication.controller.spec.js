@@ -116,40 +116,90 @@ describe("Volunteer Application Controller", function() {
   };
  
   beforeEach(module('crossroads'));
- 
-  beforeEach(module(function($provide){
-    $provide.value('$stateParams', { id: '12345678'}); 
-    mockSession= jasmine.createSpyObj('Session', ['exists', 'isActive']);
-    mockSession.exists.and.callFake(function(something){
-      return '12345678';
-    });
-    $provide.value('Session', mockSession);
-    $provide.value('CmsInfo', mockPageInfo);
-    $provide.value('Contact', mockVolunteer);
-    $provide.value('Family', mockFamily);
-  }));
 
-  var controller;
+  describe("Not in Family", function(){  
 
-  beforeEach(inject(function(_$controller_, _$log_, $injector ){
-    $controller = _$controller_;
-    $log = _$log_;
+    beforeEach(module(function($provide){
+      $provide.value('$stateParams', { id: '12345678'}); 
+      mockSession= jasmine.createSpyObj('Session', ['exists', 'isActive']);
+      mockSession.exists.and.callFake(function(something){
+        return '12345678';
+      });
+      $provide.value('Session', mockSession);
+      $provide.value('CmsInfo', mockPageInfo);
+      $provide.value('Contact', mockVolunteer);
+      $provide.value('Family', mockFamily);
+    }));
+
+    var controller;
+
+    beforeEach(inject(function(_$controller_, _$log_, $injector ){
+      $controller = _$controller_;
+      $log = _$log_;
+       
+      $httpBackend = $injector.get('$httpBackend');
+      Opportunity = $injector.get('Opportunity');
+      CmsInfo = $injector.get("CmsInfo");
+      Contact = $injector.get("Contact");
+      Session = $injector.get("Session");
+      Family = $injector.get('Family');
      
-    $httpBackend = $injector.get('$httpBackend');
-    Opportunity = $injector.get('Opportunity');
-    CmsInfo = $injector.get("CmsInfo");
-    Contact = $injector.get("Contact");
-    Session = $injector.get("Session");
-    Family = $injector.get('Family');
-   
-    $scope = {};
-    controller = $controller("VolunteerApplicationController", { $scope: $scope }); 
+      $scope = {};
+      controller = $controller("VolunteerApplicationController", { $scope: $scope }); 
 
-  }));
+    }));
 
-  it("should set up the tests correctly", function(){
-    expect(true).toBe(true);
+    it("should not allow access if not in family", function(){
+      expect(controller.showAccessDenied).toBe(true);
+    });
   });
 
+  describe("In Family", function(){
+    
+    beforeEach(module(function($provide){
+      $provide.value('$stateParams', { id: '2186211'}); 
+      mockSession= jasmine.createSpyObj('Session', ['exists', 'isActive']);
+      mockSession.exists.and.callFake(function(something){
+        return '2186211';
+      });
+      $provide.value('Session', mockSession);
+      $provide.value('CmsInfo', mockPageInfo);
+      $provide.value('Contact', mockVolunteer);
+      $provide.value('Family', mockFamily);
+    }));
+
+    var controller;
+
+    beforeEach(inject(function(_$controller_, _$log_, $injector ){
+      $controller = _$controller_;
+      $log = _$log_;
+       
+      $httpBackend = $injector.get('$httpBackend');
+      Opportunity = $injector.get('Opportunity');
+      CmsInfo = $injector.get("CmsInfo");
+      Contact = $injector.get("Contact");
+      Session = $injector.get("Session");
+      Family = $injector.get('Family');
+     
+      $scope = {};
+      controller = $controller("VolunteerApplicationController", { $scope: $scope }); 
+
+    }));
+
+    it("should allow access if in family", function(){
+      expect(controller.showAccessDenied).toBe(false);
+    });
+
+    it("should call the opportunity nresonponse service", function(){
+      $httpBackend.expectGET( window.__env__['CRDS_API_ENDPOINT'] + "api/opportunity/getREsponseForOpportunity/ "+ mockPageInfo.pages[0].oppportunity + "/" + controller.contactId );
+
+    });
+
+    it("should show adult", function(){
+      expect(controller.showAdult).toBe(true);
+      expect(controller.showStudent).toBe(false);
+    });
+
+  });
 
 });
