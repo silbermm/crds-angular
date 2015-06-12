@@ -18,7 +18,6 @@
     vm.person = Contact;
     vm.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
     vm.responseCheck = false;
-    vm.save = save;
     vm.showAccessDenied = false;
     vm.showAdult = false;
     vm.showContent = true;
