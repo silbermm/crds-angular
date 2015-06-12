@@ -23,18 +23,19 @@ BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @Distribution_Id INT;
+	DECLARE @Household_Id INT;
 	DECLARE @Congregation_Id INT;
 
-	SELECT @Distribution_Id = dd.Donation_Distribution_ID,  @Congregation_Id = h.congregation_id
+	SELECT @Distribution_Id = dd.Donation_Distribution_ID, @Household_Id = c.household_id, @Congregation_Id = h.congregation_id
 		FROM [dbo].[Donation_Distributions] dd
 		JOIN [dbo].[Donations] d ON d.donation_id = dd.donation_id
 		JOIN [dbo].[Donors] do ON do.donor_id = d.donor_id
 		JOIN [dbo].[Contacts] c ON c.contact_id = do.contact_id
-		JOIN [dbo].[Households] h ON h.household_id = c.household_id
+		LEFT JOIN [dbo].[Households] h ON h.household_id = c.household_id
 		JOIN INSERTED ON INSERTED.Donation_Distribution_ID = dd.Donation_Distribution_ID;
 
 	-- Set to 'No Site Specified' if Household has no Congregation		
-	IF @Congregation_Id IS NULL
+	IF (@Household_Id IS NULL) OR (@Congregation_Id IS NULL)
 		SET @Congregation_Id = 5;
 
 	UPDATE [dbo].[Donation_Distributions]

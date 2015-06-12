@@ -80,7 +80,7 @@ namespace crds_angular.Services
         public SourceData getDefaultSource(string customer_token)
         {
             SourceData defaultSource = new SourceData();
-         
+
             var getCustomerRequest = new RestRequest("customers/" + customer_token, Method.GET);
 
             IRestResponse<StripeCustomer> getCustomerResponse =
@@ -93,11 +93,11 @@ namespace crds_angular.Services
             var defaultSourceId = getCustomerResponse.Data.default_source;
             var sources = getCustomerResponse.Data.sources.data;
             defaultSource = SetDefaultSource(sources, defaultSourceId);
-            
+
             return defaultSource;
         }
 
-        public SourceData SetDefaultSource(List<SourceData>sources, string defaultSourceId )
+        public SourceData SetDefaultSource(List<SourceData>sources, string defaultSourceId)
         {
             SourceData defaultSource = new SourceData();
 
@@ -105,10 +105,10 @@ namespace crds_angular.Services
             {
                 if (source.id == defaultSourceId)
                 {
-                   if (source.@object == "bank_account")
+                    if (source.@object == "bank_account")
                     {
                         defaultSource.routing_number = source.routing_number;
-                        defaultSource.last4 = source.last4;
+                        defaultSource.bank_last4 = source.last4;
                     }
                     else
                     {
