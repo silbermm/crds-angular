@@ -1,4 +1,4 @@
-describe("KidsClub Student Application Controller", function() {
+describe("KidsClub Adult Application Controller", function() {
   
   var controller;
   
@@ -61,7 +61,7 @@ describe("KidsClub Student Application Controller", function() {
   };
 
   var mockForm = {
-    student: {
+    adult: {
       $invalid: true,
       $name: "student",
       $pending: undefined,
@@ -82,12 +82,8 @@ describe("KidsClub Student Application Controller", function() {
       responseId: mockResponseId 
     };
     var scope = _$rootScope_.$new();
-    controller = _$controller_('KidsClubStudentApplicationController', scope, data);
+    controller = _$controller_('KidsClubAdultApplicationController', scope, data);
   })); 
-
-  it("should have an empty object for reference1", function(){
-    expect(controller.reference1).toBeDefined();  
-  });
 
   it("should not allow a save if there are errors", function(){
     expect(controller.save(mockForm)).toBe(false);
@@ -103,7 +99,7 @@ describe("KidsClub Student Application Controller", function() {
   });
 
   it("should be true if an availability has been selected", function(){
-    controller.availabilityDuringWeek = "week";
+    controller.volunteer.availabilityWeek = "week";
     expect(controller.availabilitySelected()).toBe(true); 
   });
 
@@ -112,7 +108,7 @@ describe("KidsClub Student Application Controller", function() {
   });
 
   it("should be true when gradeLevel has been selected", function(){
-    controller.serveAgeKids.age1to2 = "some string";
+    controller.volunteer.birthToTwo = "some string";
     expect(controller.gradeLevelSelected()).toBe(true);
   });
 
@@ -121,8 +117,18 @@ describe("KidsClub Student Application Controller", function() {
   });
 
   it("should be true when a location has been selected", function(){
-    controller.availabilityFlorence = "some value";
+    controller.volunteer.availabilityFlorence = "some value";
     expect(controller.locationSelected()).toBe(true);
   });  
+
+  it("should set the status of the datepicker to open", function(){
+    controller.open('childDob1', null);
+    expect(controller.datePickers['childDob1']).toBe(true);
+    controller.open('childDob2', null);
+    expect(controller.datePickers['childDob2']).toBe(true);
+    controller.open('signatureDate', null);
+    expect(controller.datePickers['signatureDate']).toBe(true);
+  });
+
 
 });
