@@ -37,25 +37,5 @@ namespace crds_angular.Controllers.API
 
             });
         }
-
-
-        //[ResponseType(typeof (List<FamilyMember>))]
-        //[Route("api/volunteer-application/family/{contactId}")]
-        //public IHttpActionResult Family(int contactId)
-        //{
-        //    return Authorized(token =>
-        //    {
-        //        try
-        //        {
-        //            var family = _volunteerApplicationService.FamilyThatUserCanSubmitFor(contactId, token);
-        //            return Ok(family);
-        //        }
-        //        catch (Exception exception)
-        //        {
-        //            var apiError = new ApiErrorDto("Volunteer Application GET Family", exception);
-        //            throw new HttpResponseException(apiError.HttpResponseMessage);
-        //        }
-        //    });
-        //}
     }
 }
