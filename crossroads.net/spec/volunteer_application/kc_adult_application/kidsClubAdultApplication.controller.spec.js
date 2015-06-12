@@ -1,7 +1,7 @@
 describe("KidsClub Adult Application Controller", function() {
-  
+
   var controller;
-  
+
   var mockVolunteer= {
     addressId: 99999,
     addressLine1: "9000 Observatory Lane",
@@ -27,7 +27,7 @@ describe("KidsClub Adult Application Controller", function() {
     mobilePhone: null,
     nickName: "Miles",
     postalCode: "45223-1231",
-    state: "OH" 
+    state: "OH"
   };
 
   var mockContactId = 12345;
@@ -69,38 +69,39 @@ describe("KidsClub Adult Application Controller", function() {
       $submitted: true,
       $valid: false
     }
- }; 
+ };
 
   beforeEach(module('crossroads'));
-  
+
   beforeEach(inject(function(_$rootScope_, _$controller_){
     //Simulating isolate scope variables from the directive
     var data = {
       volunteer: mockVolunteer,
       contactId: mockContactId,
       pageInfo: mockPageInfo,
-      responseId: mockResponseId 
+      responseId: mockResponseId,
+      showSuccess: true
     };
     var scope = _$rootScope_.$new();
     controller = _$controller_('KidsClubAdultApplicationController', scope, data);
-  })); 
+  }));
 
   it("should not allow a save if there are errors", function(){
     expect(controller.save(mockForm)).toBe(false);
   });
 
-  //TODO: 
+  //TODO:
   it("should save the form when there are no errors", function(){
-   
+
   });
 
  it("should be false when checking if availability has been selected", function(){
-    expect(controller.availabilitySelected()).toBe(false); 
+    expect(controller.availabilitySelected()).toBe(false);
   });
 
   it("should be true if an availability has been selected", function(){
     controller.volunteer.availabilityWeek = "week";
-    expect(controller.availabilitySelected()).toBe(true); 
+    expect(controller.availabilitySelected()).toBe(true);
   });
 
   it("should be false when checking if gradeLevel has been selected", function(){
@@ -119,7 +120,7 @@ describe("KidsClub Adult Application Controller", function() {
   it("should be true when a location has been selected", function(){
     controller.volunteer.availabilityFlorence = "some value";
     expect(controller.locationSelected()).toBe(true);
-  });  
+  });
 
   it("should set the status of the datepicker to open", function(){
     controller.open('childDob1', null);
