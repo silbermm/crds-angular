@@ -1,22 +1,26 @@
 "use strict()";
 
-(function(){
+(function() {
 
   module.exports = KidsClubStudentApplication;
 
-  KidsClubStudentApplication.$inject = ['$log'];
+  KidsClubStudentApplication.$inject = ['$log', '$rootScope'];
 
-  function KidsClubStudentApplication($log){
+  function KidsClubStudentApplication($log, $rootScope) {
 
     return {
       restrict: "EA",
-      templateUrl : "kc_student_application/kidsClubStudentApplication.template.html",
-      link: link
+      templateUrl: "kc_student_application/kidsClubStudentApplication.template.html",
+      controller: "KidsClubStudentApplicationController as kcStudentApplication",
+      scope: {
+          volunteer: '=volunteer',
+          contactId: '=contactId',
+          pageInfo: '=pageInfo',
+          responseId: '=responseId',
+          showSuccess: '=showSuccess'
+      },
+      bindToController: true
     };
-
-    function link(scope, el, attr) {
-      $log.debug('Kids-Club-Student-Application directive');
-    }
   }
 
 })();

@@ -13,11 +13,11 @@
     var vm = this;
 
     vm.contactId = $stateParams.id;
+    vm.family = Family;
     vm.pageInfo = pageInfo(CmsInfo);
     vm.person = Contact;
-    vm.family = Family;
+    vm.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
     vm.responseCheck = false;
-    vm.save = save;
     vm.showAccessDenied = false;
     vm.showAdult = false;
     vm.showContent = true;
@@ -69,16 +69,16 @@
         }).$promise
         .then(function(response) {
           vm.responseCheck = true;
-          vm.showInvalidResponse = ((response == null) || ((response.responseId == undefined)));
+          if ((response !== null) && (response.responseId !== undefined)) {
+            vm.responseId = response.responseId;
+          } else {
+            vm.showInvalidResponse = ((response == null) || ((response.responseId == undefined)));
+          }
         });
     }
 
     function pageInfo(cmsInfo) {
       return cmsInfo.pages[0];
-    }
-
-    function save(form) {
-
     }
 
     function showBlock(blockName) {

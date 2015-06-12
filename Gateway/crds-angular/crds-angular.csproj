@@ -280,6 +280,13 @@
     <Compile Include="Models\Crossroads\StripeCharge.cs" />
     <Compile Include="Models\Crossroads\StripeCustomer.cs" />
     <Compile Include="Models\Crossroads\User.cs" />
+    <Compile Include="Models\Crossroads\VolunteerApplication\AdultApplicationDto.cs" />
+    <Compile Include="Models\Crossroads\VolunteerApplication\ChildDto.cs" />
+    <Compile Include="Models\Crossroads\VolunteerApplication\CustomField.cs" />
+    <Compile Include="Models\Crossroads\VolunteerApplication\Gender.cs" />
+    <Compile Include="Models\Crossroads\VolunteerApplication\MaritalStatus.cs" />
+    <Compile Include="Models\Crossroads\VolunteerApplication\StudentApplicationDto.cs" />
+    <Compile Include="Models\Crossroads\VolunteerApplication\VolunteerApplicationDto.cs" />
     <Compile Include="Models\Json\AccountInfoSerializer.cs" />
     <Compile Include="Models\Json\Communication.cs" />
     <Compile Include="Models\Json\NewPassword.cs" />
