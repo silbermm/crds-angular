@@ -23,8 +23,6 @@ namespace MinistryPlatform.Translation.Services
         {
             var searchString = string.Format(",{0}", crossroadsId);
             var formFields = _ministryPlatformService.GetPageViewRecords(_formFieldCustomePage, apiLogin(), searchString);
-            //make sure we just return one value
-            // pull off that value;
 
             var field = formFields.Single();
             var formFieldId = field.ToInt("Form_Field_ID");

@@ -18,16 +18,6 @@ namespace MinistryPlatform.Models
 
     public class FormAnswer
     {
-        //public FormAnswer(string fieldName, int formId, int formResponseId, string answer, int opportunityId)
-        //{
-        //    //go to MP to look up field id
-
-        //    //this.FieldId = Response.fieldId;
-        //    this.FormResponseId = formResponseId;
-        //    this.OpportunityResponseId = opportunityId;
-        //    this.Response = answer;
-
-        //}
         public int FieldId { get; set; }
         public int FormResponseId { get; set; }
         public string Response { get; set; }
