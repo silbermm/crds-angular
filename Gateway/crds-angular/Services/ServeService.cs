@@ -70,7 +70,8 @@ namespace crds_angular.Services
                 LastName = contact.Last_Name,
                 LoggedInUser = false,
                 ParticipantId = contact.Participant_Id,
-                PreferredName = contact.Preferred_Name
+                PreferredName = contact.Preferred_Name,
+                RelationshipId = contact.Relationship_Id
             }).ToList();
 
             relationships.AddRange(family.OrderBy(o=>o.PreferredName));

@@ -2,15 +2,16 @@ require('../bankInfo.html');
 (function () {
     angular
     .module('crossroads.give')
-    .directive('bankInfo', ['$log', bankInfo]);
+    .directive('bankInfo', ['$log', '$rootScope', '$timeout', bankInfo]);
 
-    function bankInfo($log) {
+    function bankInfo($log, $rootScope, $timeout) {
         var directive = {
           restrict: 'EA',
           replace: true,
           scope: {
-              routing: "=",
-              account: "="
+              account: "=", 
+              bankinfoSubmitted: "=",
+              routing: "="             
             },
           templateUrl: 'give/bankInfo.html',
           link: link
@@ -20,31 +21,33 @@ require('../bankInfo.html');
       function link(scope, element, attrs) {
         $log.debug("Inside of bankInfo directive");
 
+        scope.bankAccount = scope;
+
         scope.accountError = function() {
-          return (vm.bankinfoSubmitted && $scope.bankAccountForm.account.$error.invalidAccount && $scope.bankAccountForm.$invalid  ||
-            $scope.bankAccountForm.account.$error.invalidAccount && $scope.bankAccountForm.account.$dirty);
+          return (scope.bankinfoSubmitted && scope.bankAccountForm.account.$error.invalidAccount && scope.bankAccountForm.$invalid  ||
+            scope.bankAccountForm.account.$error.invalidAccount && scope.bankAccountForm.account.$dirty);
         };
 
         scope.blurAccountError = function() {
-          return ($scope.bankAccountForm.account.$dirty && $scope.bankAccountForm.account.$error.invalidAccount);
+            return (scope.bankAccountForm.account.$dirty && scope.bankAccountForm.account.$error.invalidAccount);
         };
 
         scope.routingError = function() {
-            return (vm.bankinfoSubmitted && $scope.bankAccountForm.routing.$error.invalidRouting && $scope.bankAccountForm.$invalid  ||
-                $scope.bankAccountForm.routing.$error.invalidRouting && $scope.bankAccountForm.routing.$dirty);
+            return (scope.bankinfoSubmitted && scope.bankAccountForm.routing.$error.invalidRouting && scope.bankAccountForm.$invalid  ||
+                scope.bankAccountForm.routing.$error.invalidRouting && scope.bankAccountForm.routing.$dirty);
         };
 
          scope.blurRoutingError = function() {
-          return ($scope.creditCardForm.routing.$dirty && $scope.creditCardForm.routing.$error.invalidRouting );
+          return (scope.bankAccountForm.routing.$dirty && scope.bankAccountForm.routing.$error.invalidRouting );
         };
 
         scope.toggleCheck = function() {
-            if (vm.showMessage == "Where?") {
-                vm.showMessage = "Close";
-                vm.showCheckClass = "";
+            if (scope.showMessage == "Where?") {
+                scope.showMessage = "Close";
+                scope.showCheckClass = "";
             } else {
-                vm.showMessage = "Where?";
-                vm.showCheckClass = "ng-hide";
+                scope.showMessage = "Where?";
+                scope.showCheckClass = "ng-hide";
             }
         };
 
