@@ -23,7 +23,7 @@ INSERT INTO [dbo].[dp_Communications]
      VALUES
            (5
            ,'Background Check Request'
-           ,'Hello there, <br /><br /> Thank you for your continued interest in serving. As part of our policy, we are requesting that you fill out a background check. Please visit https://www.employmentreports.net/ApplicationAlpha/Subject/DisclosureForm?cra=525VER&username=CrossroadsPDF&application=Crossroads.pdf&externalId=[Contact_ID]  and fill out the required information.<br /><br /> Please note that when you click the link, you will be taken to a page outside of Crossroads.net. Our background check is handled by VeriData.  <br /><br /> Thank you,'
+           ,'Hello there, <br /><br /> Thank you for your continued interest in serving. As part of our policy, we are requesting that you fill out a background check. Please visit https://www.employmentreports.net/ApplicationAlpha/Subject/DisclosureForm?cra=525VER&username=CrossroadsPDF&application=Crossroads.pdf&externalId=[Contact_ID]&redirectUrl=http://int.crossroads.net/#/backgroundcheck-thanks/  and fill out the required information.<br /><br /> Please note that when you click the link, you will be taken to a page outside of Crossroads.net. Our background check is handled by VeriData.  <br /><br /> Thank you,'
            ,1
            ,GETDATE()
            ,NULL
