@@ -204,7 +204,7 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.workPhone.$invalid}">
         <label class="control-label" for="workPhone">Work Phone (If you can receive calls at this number)</label>
-        <input type="text" class="form-control" id="workPhone" placeholder="123-456-7890" name="workPhone" ng-pattern="kcAdultApplication.volunteer.phoneFormat" ng-model="kcAdultApplication.volunteer.workPhone" ng-model-options="{ updateOn: 'blur' }">
+        <input type="text" class="form-control" id="workPhone" placeholder="123-456-7890" name="workPhone" ng-pattern="kcAdultApplication.phoneFormat" ng-model="kcAdultApplication.volunteer.workPhone" ng-model-options="{ updateOn: 'blur' }">
         <ng-messages for="adult.workPhone.$error" ng-if="adult.$submitted && adult.workPhone.$invalid">
           <span ng-message="pattern">
             <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
@@ -593,7 +593,7 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceHomePhone1.$invalid}">
         <label class="control-label" for="referenceHomePhone-1">Home Phone</label>
-        <input type="text" class="form-control" id="referenceHomePhone1" name="referenceHomePhone1" ng-model="kcAdultApplication.volunteer.referenceHomePhone1" ng-pattern="kcAdultApplication.volunteer.phoneFormat" placeholder="Home Phone">
+        <input type="text" class="form-control" id="referenceHomePhone1" name="referenceHomePhone1" ng-model="kcAdultApplication.volunteer.referenceHomePhone1" ng-pattern="kcAdultApplication.phoneFormat" placeholder="Home Phone">
         <ng-messages for="adult.referenceHomePhone1.$error" ng-if="adult.$submitted && adult.referenceHomePhone1.$invalid">
           <span ng-message="pattern">
             <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
@@ -602,8 +602,8 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceMobilePhone1.$invalid}">
         <label class="control-label" for="referenceMobilePhone-1">Mobile Phone</label>
-        <input type="text" class="form-control" id="referenceMobilePhone-1" name="referenceMobilePhone1" ng-model="kcAdultApplication.volunteer.referenceMobilePhone1" ng-pattern="kcAdultApplication.volunteer.phoneFormat" placeholder="Mobile Phone">
-        <ng-messages for="adult.refereneMobilePhone1.$error" ng-if="adult.$submitted && adult.referenceMobilePhone1.$invalid">
+        <input type="text" class="form-control" id="referenceMobilePhone-1" name="referenceMobilePhone1" ng-model="kcAdultApplication.volunteer.referenceMobilePhone1" ng-pattern="kcAdultApplication.phoneFormat" placeholder="Mobile Phone">
+        <ng-messages for="adult.referenceMobilePhone1.$error" ng-if="adult.$submitted && adult.referenceMobilePhone1.$invalid">
           <span ng-message="pattern">
             <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
           </span>
@@ -611,7 +611,7 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceWorkPhone1.$invalid}">
         <label class="control-label" for="referenceWorkPhone-1">Work Phone</label>
-        <input type="text" class="form-control" id="referenceWorkPhone-1" name="referenceWorkPhone1" ng-pattern="kcAdultApplication.volunteer.phoneFormat" ng-model="kcAdultApplication.volunteer.referenceWorkPhone1" placeholder="Work Phone">
+        <input type="text" class="form-control" id="referenceWorkPhone-1" name="referenceWorkPhone1" ng-pattern="kcAdultApplication.phoneFormat" ng-model="kcAdultApplication.volunteer.referenceWorkPhone1" placeholder="Work Phone">
         <ng-messages for="adult.referenceWorkPhone1.$error" ng-if="adult.$submitted && adult.referenceWorkPhone1.$invalid">
           <span ng-message="pattern">
             <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
@@ -681,7 +681,7 @@
 
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceHomePhone2.$invalid}">
         <label class="control-label" for="referenceHomePhone-2">Home Phone</label>
-        <input type="text" class="form-control" id="referenceHomePhone2" name="referenceHomePhone2" ng-model="kcAdultApplication.volunteer.referenceHomePhone2" ng-pattern="kcAdultApplication.volunteer.phoneFormat" placeholder="Home Phone">
+        <input type="text" class="form-control" id="referenceHomePhone2" name="referenceHomePhone2" ng-model="kcAdultApplication.volunteer.referenceHomePhone2" ng-pattern="kcAdultApplication.phoneFormat" placeholder="Home Phone">
         <ng-messages for="adult.referenceHomePhone2.$error" ng-if="adult.$submitted && adult.referenceHomePhone2.$invalid">
           <span ng-message="pattern">
             <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
@@ -690,7 +690,7 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceMobilePhone2.$invalid}">
         <label class="control-label" for="referenceMobilePhone-2">Mobile Phone</label>
-        <input type="text" class="form-control" id="referenceMobilePhone-2" name="referenceMobilePhone2" ng-model="kcAdultApplication.volunteer.referenceMobilePhone2" ng-pattern="kcAdultApplication.volunteer.phoneFormat" placeholder="Mobile Phone">
+        <input type="text" class="form-control" id="referenceMobilePhone-2" name="referenceMobilePhone2" ng-model="kcAdultApplication.volunteer.referenceMobilePhone2" ng-pattern="kcAdultApplication.phoneFormat" placeholder="Mobile Phone">
         <ng-messages for="adult.referenceMobilePhone2.$error" ng-if="adult.$submitted && adult.referenceMobilePhone2.$invalid">
           <span ng-message="pattern">
             <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
@@ -700,7 +700,7 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceWorkPhone2.$invalid}">
         <label class="control-label" for="referenceWorkPhone-2">Work Phone</label>
-        <input type="text" class="form-control" id="referenceWorkPhone-2" name="referenceWorkPhone2" ng-pattern="kcAdultApplication.volunteer.phoneFormat" ng-model="kcAdultApplication.volunteer.referenceWorkPhone2" placeholder="Work Phone">
+        <input type="text" class="form-control" id="referenceWorkPhone-2" name="referenceWorkPhone2" ng-pattern="kcAdultApplication.phoneFormat" ng-model="kcAdultApplication.volunteer.referenceWorkPhone2" placeholder="Work Phone">
         <ng-messages for="adult.referenceWorkPhone2.$error" ng-if="adult.$submitted && adult.referenceWorkPhone2.$invalid">
           <span ng-message="pattern">
             <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
@@ -769,7 +769,7 @@
 
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceHomePhone3.$invalid}">
         <label class="control-label" for="referenceHomePhone-3">Home Phone</label>
-        <input type="text" class="form-control" id="referenceHomePhone3" name="referenceHomePhone3" ng-pattern="kcAdultApplication.volunteer.phoneFormat" ng-model="kcAdultApplication.volunteer.referenceHomePhone3" placeholder="Home Phone">
+        <input type="text" class="form-control" id="referenceHomePhone3" name="referenceHomePhone3" ng-pattern="kcAdultApplication.phoneFormat" ng-model="kcAdultApplication.volunteer.referenceHomePhone3" placeholder="Home Phone">
         <ng-messages for="adult.referenceHomePhone3.$error" ng-if="adult.$submitted && adult.referenceHomePhone3.$invalid">
           <span ng-message="pattern">
             <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
@@ -778,7 +778,7 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceMobilePhone3.$invalid}">
         <label class="control-label" for="referenceMobilePhone-3">Mobile Phone</label>
-        <input type="text" class="form-control" id="referenceMobilePhone-3" name="referenceMobilePhone3" ng-pattern="kcAdultApplication.volunteer.phoneFormat" ng-model="kcAdultApplication.volunteer.referenceMobilePhone3" placeholder="Mobile Phone">
+        <input type="text" class="form-control" id="referenceMobilePhone-3" name="referenceMobilePhone3" ng-pattern="kcAdultApplication.phoneFormat" ng-model="kcAdultApplication.volunteer.referenceMobilePhone3" placeholder="Mobile Phone">
         <ng-messages for="adult.referenceMobilePhone3.$error" ng-if="adult.$submitted && adult.referenceMobilePhone3.$invalid">
           <span ng-message="pattern">
             <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
@@ -787,7 +787,7 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceWorkPhone3.$invalid}">
         <label class="control-label" for="referenceWorkPhone-3">Work Phone</label>
-        <input type="text" class="form-control" id="referenceWorkPhone-3" name="referenceWorkPhone3" ng-model="kcAdultApplication.volunteer.referenceWorkPhone3" ng-pattern="kcAdultApplication.volunteer.phoneFormat" placeholder="Work Phone">
+        <input type="text" class="form-control" id="referenceWorkPhone-3" name="referenceWorkPhone3" ng-model="kcAdultApplication.volunteer.referenceWorkPhone3" ng-pattern="kcAdultApplication.phoneFormat" placeholder="Work Phone">
         <ng-messages for="adult.referenceWorkPhone3.$error" ng-if="adult.$submitted && adult.referenceWorkPhone3.$invalid">
           <span ng-message="pattern">
             <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
@@ -861,5 +861,6 @@
     <!--/row-->
   </fieldset>
 
-  <input type="submit" name="submit" value="Submit" id="submit" class="btn btn-primary push-half-bottom">
+  <button type="submit" name="submit" id="submit" class="btn btn-primary push-half-bottom" ng-disabled="kcAdultApplication.saving"> {{kcAdultApplication.submitButtonText}} </button>
+
 </form>

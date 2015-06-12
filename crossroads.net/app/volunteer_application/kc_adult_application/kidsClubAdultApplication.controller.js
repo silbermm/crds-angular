@@ -25,8 +25,11 @@ var moment = require('moment');
     vm.gradeLevelSelected = gradeLevelSelected;
     vm.locationSelected = locationSelected;
     vm.open = open;
+    vm.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
     vm.religionSelected = religionSelected;
     vm.save = save; 
+    vm.saving = false;
+    vm.submitButtonText = "Submit";
     vm.volunteer.areaOfInterestServingInClassroom = false;
     vm.volunteer.areaOfInterestWelcomingNewFamilies=false;
     vm.volunteer.areaOfInterestHelpSpecialNeeds=false;
@@ -95,6 +98,9 @@ var moment = require('moment');
      * Attempt to save the form response
      */
     function save(form) {
+      vm.saving = true;
+      vm.submitButtonText = "Submitting...";
+     
       $log.debug('you tried to save');
       $log.debug('nameTag: ' + vm.volunteer.nameTag);
       $log.debug('something from parent: ' + vm.volunteer.contactId);
@@ -103,10 +109,10 @@ var moment = require('moment');
       if(form.adult.$invalid){
         $log.error("please fill out all required fields correctly");
         $rootScope.$emit('notify',$rootScope.MESSAGES.generalError);
+        vm.saving = false;
+        vm.submitButtonText = "Submit";
         return false;
       }
-      //$log.debug("Thank you for filling out the form");
-      //return true;
 
       var adult = new VolunteerService.SaveAdult();
       adult.contactId = vm.contactId;
@@ -544,13 +550,17 @@ var moment = require('moment');
       };
 
       adult.$save(function(saved) {
-        //need to inject rootScope
-        //$rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess);
+        vm.saving = false;
+        vm.submitButtonText = "Submit";
+        vm.showSuccess = true;
         return true;
       }, function(err) {
-        //$rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
+        $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
+        vm.saving = false;
+        vm.submitButtonText = "Submit";
         return false;
       });
+      
     }
     
     /**

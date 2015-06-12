@@ -16,7 +16,8 @@
           volunteer: '=volunteer',
           contactId: '=contactId',
           pageInfo: '=pageInfo',
-          responseId: '=responseId'
+          responseId: '=responseId',
+          showSuccess: '=showSuccess'
       },
       bindToController: true
     };

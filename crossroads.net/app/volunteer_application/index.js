@@ -18,7 +18,7 @@ require('./kc_student_application/kidsClubStudentApplication.template.html');
 require('./kc_student_application/kidsClubStudentApplication.controller' );
 
 app.directive("kidsClubStudentApplication", require('./kc_student_application/kidsClubStudentApplication.directive'));
-app.factory("VolunteerService", ["$resource", require('./volunteerService')]);
+app.factory("VolunteerService", require('./volunteer.service'));
 
 app.constant("studentFields", {
   "firstName": 310,

@@ -21,19 +21,20 @@ var moment = require("moment");
     vm.gradeLevelSelected = gradeLevelSelected;
     vm.locationSelected = locationSelected;
     vm.parentSignatureDate = moment().format('MM/DD/YYYY');
+    vm.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
     vm.reference1 = {};
     vm.reference2 = {};
     vm.save = save;
+    vm.saving = false;
     vm.serveAgeKids = {};
     vm.studentSignatureDate = moment().format('MM/DD/YYYY');
-
+    vm.submitButtonText = "Submit";
+    
     activate();
 
     ///////////////////////////////////////////
 
-    function activate() {
-
-    }
+    function activate() { }
 
     /**
      * Checks if one of the availabilities has been selected and returns
@@ -75,6 +76,10 @@ var moment = require("moment");
     // Passing in the form object to determine if the
     // form is valid. Is there a better way to do this?
     function save(form) {
+      // set the state of the save button to saving...
+      vm.saving = true;
+      vm.submitButtonText = "Submitting...";
+
       $log.debug('you tried to save');
       $log.debug('school: ' + vm.school);
       $log.debug('something from parent: ' + vm.contactId );
@@ -82,6 +87,8 @@ var moment = require("moment");
       if(form.student.$invalid){
         $log.error("please fill out all required fields correctly");
         $rootScope.$emit('notify',$rootScope.MESSAGES.generalError);
+        vm.saving = false;
+        vm.submitButtonText = "Submit";
         return false;
       }
 
@@ -384,14 +391,16 @@ var moment = require("moment");
       };
 
       student.$save(function(saved) {
-        //need to inject rootScope
-        //$rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess);
+        vm.saving = false;
+        vm.submitButtonText = "Submit";
+        vm.showSuccess = true;
         return true;
       }, function(err) {
-        //$rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
+        $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
+        vm.saving = false;
+        vm.submitButtonText = "Submit";
         return false;
       });
-
       return true;
     }
 

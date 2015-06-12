@@ -17,12 +17,20 @@
       <p id="successMessage" ng-bind-html="volunteer.pageInfo.success | html" ng-show="volunteer.showSuccess"></p>
     </div>
 
-    <div id="adult-application" ng-if="volunteer.showBlock('adult')">
-      <kids-club-adult-application volunteer="volunteer.person" contact-id="volunteer.contactId" opportunity-id="volunteer.pageInfo.opportunity" response-id="volunteer.responseId"></kids-club-adult-application>
+    <div id="adult-application" ng-if="volunteer.showBlock('adult') && !volunteer.showSuccess">
+      <kids-club-adult-application volunteer="volunteer.person" 
+                                   contact-id="volunteer.contactId" 
+                                   opportunity-id="volunteer.pageInfo.opportunity" 
+                                   response-id="volunteer.responseId"
+                                   show-success="volunteer.showSuccess" />
     </div>
 
-    <div ng-if="volunteer.showBlock('student')">
-      <kids-club-student-application volunteer="volunteer.person" contact-id="volunteer.contactId" page-info="volunteer.pageInfo" response-id="volunteer.responseId"></kids-club-student-application>
+    <div ng-if="volunteer.showBlock('student') && !volunteer.showSuccess">
+      <kids-club-student-application volunteer="volunteer.person" 
+                                     contact-id="volunteer.contactId" 
+                                     page-info="volunteer.pageInfo" 
+                                     response-id="volunteer.responseId"
+                                     show-success="volunteer.showSuccess" />
     </div>
 
     <div ng-if="volunteer.showBlock('age-error')">

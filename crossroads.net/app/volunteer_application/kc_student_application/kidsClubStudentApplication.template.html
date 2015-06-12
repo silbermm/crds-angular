@@ -152,7 +152,12 @@
       </div>
       <div class="form-group col-sm-6">
         <label class="control-label" for="cellPhone">Cell Phone</label>
-        <input type="text" class="form-control" id="cellPhone" placeholder="CellPhone" ng-value="kcStudentApplication.volunteer.mobilePhone" disabled="true">
+        <input type="text" 
+               class="form-control" 
+               id="cellPhone" 
+               placeholder="CellPhone" 
+               ng-value="kcStudentApplication.volunteer.mobilePhone" 
+               disabled="true">
         <span ng-show="false">Please provide a valid value.</span>
       </div>
       <div class="form-group col-sm-6">
@@ -454,17 +459,51 @@
           </span>
         </ng-messages>
       </div>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.referenceHomePhone1.$invalid}">
         <label class="control-label" for="referenceHomePhone-1">Home Phone</label>
-        <input type="text" class="form-control" id="referenceHomePhone-1" ng-model="kcStudentApplication.reference1.homePhone" placeholder="Home Phone">
+        <input type="text" 
+               class="form-control" 
+               id="referenceHomePhone-1"
+               name="referenceHomePhone1"
+               ng-pattern="kcStudentApplication.phoneFormat"
+               ng-model="kcStudentApplication.reference1.homePhone" 
+               placeholder="Home Phone">
+        <ng-messages for="student.referenceHomePhone1.$error" ng-if="student.$submitted && student.referenceHomePhone1.$invalid">
+          <span ng-message="pattern">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
+          </span>
+        </ng-messages>
+
       </div>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.referenceMobilePhone1.$invalid}">
         <label class="control-label" for="referenceMobilePhone-1">Mobile Phone</label>
-        <input type="text" class="form-control" id="referenceMobilePhone-1" ng-model="kcStudentApplication.reference1.mobilePhone" placeholder="Mobile Phone">
+        <input type="text" 
+               class="form-control" 
+               id="referenceMobilePhone-1" 
+               name="referenceMobilePhone1"
+               ng-model="kcStudentApplication.reference1.mobilePhone" 
+               placeholder="Mobile Phone"
+               ng-pattern="kcStudentApplication.phoneFormat">
+        <ng-messages for="student.referenceMobilePhone1.$error" ng-if="student.$submitted && student.referenceMobilePhone1.$invalid">
+          <span ng-message="pattern">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
+          </span>
+        </ng-messages>
       </div>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.referenceWorkPhone1.$invalid}">
         <label class="control-label" for="referenceWorkPhone-1">Work Phone</label>
-        <input type="text" class="form-control" id="referenceWorkPhone-1" ng-model="kcStudentApplication.reference1.workPhone" placeholder="Work Phone">
+        <input type="text" 
+               class="form-control" 
+               id="referenceWorkPhone-1" 
+               name="referenceWorkPhone1"
+               ng-model="kcStudentApplication.reference1.workPhone" 
+               placeholder="Work Phone"
+               ng-pattern="kcStudentApplication.phoneFormat">
+        <ng-messages for="student.referenceWorkPhone1.$error" ng-if="student.$submitted && student.referenceWorkPhone1.$invalid">
+          <span ng-message="pattern">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
+          </span>
+        </ng-messages>
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.referenceEmail1.$invalid }">
         <label class="control-label required" for="referenceEmail-1">Email</label>
@@ -551,17 +590,50 @@
           </span>
         </ng-messages>
       </div>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.referenceHomePhone2.$invalid}">
         <label class="control-label" for="referenceHomePhone-2">Home Phone</label>
-        <input type="text" class="form-control" id="referenceHomePhone-2" ng-model="kcStudentApplication.reference2.homePhone" placeholder="Home Phone">
+        <input type="text" 
+               class="form-control" 
+               id="referenceHomePhone-2" 
+               name="referenceHomePhone2"
+               ng-model="kcStudentApplication.reference2.homePhone"
+               ng-pattern="kcStudentApplication.phoneFormat"
+               placeholder="Home Phone">
+        <ng-messages for="student.referenceHomePhone2.$error" ng-if="student.$submitted && student.referenceHomePhone2.$invalid">
+          <span ng-message="pattern">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
+          </span>
+        </ng-messages>
       </div>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.referenceMobilePhone2.$invalid}">
         <label class="control-label" for="referenceMobilePhone-2">Mobile Phone</label>
-        <input type="text" class="form-control" id="referenceMobilePhone-2" ng-model="kcStudentApplication.reference2.mobilePhone" placeholder="Mobile Phone">
+        <input type="text" 
+               class="form-control" 
+               id="referenceMobilePhone-2" 
+               name="referenceMobilePhone2"
+               ng-model="kcStudentApplication.reference2.mobilePhone" 
+               placeholder="Mobile Phone"
+               ng-pattern="kcStudentApplication.phoneFormat">
+        <ng-messages for="student.referenceMobilePhone2.$error" ng-if="student.$submitted && student.referenceMobilePhone2.$invalid">
+          <span ng-message="pattern">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
+          </span>
+        </ng-messages>
       </div>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.referenceWorkPhone2.$invalid}">
         <label class="control-label" for="referenceWorkPhone-2">Work Phone</label>
-        <input type="text" class="form-control" id="referenceWorkPhone-2" ng-model="kcStudentApplication.reference2.workPhone" placeholder="Work Phone">
+        <input type="text" 
+               class="form-control" 
+               id="referenceWorkPhone-2" 
+               name="referenceWorkPhone2"
+               ng-model="kcStudentApplication.reference2.workPhone" 
+               placeholder="Work Phone"
+               ng-pattern="kcStudentApplication.phoneFormat">
+        <ng-messages for="student.referenceWorkPhone2.$error" ng-if="student.$submitted && student.referenceWorkPhone2.$invalid">
+          <span ng-message="pattern">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
+          </span>
+        </ng-messages>
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.referenceEmail2.$invalid }">
         <label class="control-label required" for="referenceEmail-2">Email</label>
@@ -769,5 +841,6 @@
     </div>
     <!--/row-->
   </fieldset>
-  <input type="submit" name="submit" value="Submit" id="submit" class="btn btn-primary push-half-bottom">
+  <button type="submit" name="submit" id="submit" class="btn btn-primary push-half-bottom" ng-disabled="kcStudentApplication.saving"> {{kcStudentApplication.submitButtonText}} </button>
+
 </form>
