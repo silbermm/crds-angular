@@ -4,4 +4,5 @@
   app.filter('time', require('./time.filter'));
 
   require('./html.filter');
+  require('./truncate.filter');
 })()
