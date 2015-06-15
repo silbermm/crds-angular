@@ -47,6 +47,8 @@ namespace crds_angular.Services
             formResponse.FormAnswers.Add(SetCustomField(application.MiddleInitial, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.Email, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.BirthDate, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.PreviousName, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.NameForNameTag, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(TranslateGender(application.Gender), opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(TranslateMaritalStatus(application.MaritalStatus),
                 opportunityResponseId));
