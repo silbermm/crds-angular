@@ -64,7 +64,7 @@
     }
 
     function middleInitial() {
-      if (vm.person.middleName.length > 0) {
+      if (vm.person.middleName !== null && vm.person.middle !== undefined && vm.person.middleName.length > 0) {
         return vm.person.middleName.substring(0, 1);
       }
       return vm.person.middleName;
