@@ -11,7 +11,7 @@ var svgSprite = require("gulp-svg-sprite");
 var replace = require("gulp-replace");
 var rename = require("gulp-rename");
 
-var webPackConfigs = [Object.create(webpackConfig), Object.create(webpackCoreConfig), Object.create(webpackDependenciesConfig)];
+var webPackConfigs = [Object.create(webpackDependenciesConfig), Object.create(webpackCoreConfig), Object.create(webpackConfig)];
 
 // Start the development server
 gulp.task("default", ["webpack-dev-server"]);
@@ -21,7 +21,13 @@ gulp.task("default", ["webpack-dev-server"]);
 // Disadvantage: Requests are not blocked until bundle is available,
 //               can serve an old app on refresh
 gulp.task("build-dev", ["webpack:build-dev"], function() {
-	gulp.watch(["app/**/*"], ["webpack:build-dev"]);
+	var watches = [];
+	webPackConfigs.forEach(function(element) {
+		watches.push(element.watch);
+		gutil.log("Adding watch", element.watch);
+	});
+
+	gulp.watch(watches, ["webpack:build-dev"]);
 });
 
 // Production build
@@ -41,7 +47,7 @@ gulp.task("webpack-dev-server", ["icons-watch"], function(callback) {
 		element.output.path = "/";
 		// Build app to assets - watch for changes
 		gulp.src("app/**/**")
-			.pipe(watch("app/**/**"))
+			.pipe(watch(element.watch))
 			.pipe(gulpWebpack(element))
 			.pipe(gulp.dest("./assets"));
 	});
@@ -63,8 +69,6 @@ gulp.task("webpack-dev-server", ["icons-watch"], function(callback) {
 });
 
 gulp.task("webpack:build", ["icons"], function(callback) {
-
-	//var configs = [Object.create(webpackConfig), Object.create(webpackDependenciesConfig)];
 	webPackConfigs.forEach(function(element) {
 		// modify some webpack config options
 		element.plugins = element.plugins.concat(
@@ -102,8 +106,6 @@ gulp.task("webpack:build", ["icons"], function(callback) {
 });
 
 gulp.task("webpack:build-dev", ["icons"], function(callback) {
-
-	//var configs = [Object.create(webpackConfig), Object.create(webpackDependenciesConfig)];
 	webPackConfigs.forEach(function(element) {
 		// modify some webpack config options
 		element.devtool = "sourcemap";
