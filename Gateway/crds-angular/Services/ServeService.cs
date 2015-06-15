@@ -2,17 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using crds_angular.Enum;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Extensions;
 using log4net;
-using log4net.Repository.Hierarchy;
 using MinistryPlatform.Models;
-using MinistryPlatform.Translation.Exceptions;
 using MinistryPlatform.Translation.Extensions;
-using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using IGroupService = MinistryPlatform.Translation.Services.Interfaces.IGroupService;
 
@@ -27,13 +23,14 @@ namespace crds_angular.Services
         private readonly IGroupService _groupService;
         private readonly IOpportunityService _opportunityService;
         private readonly IParticipantService _participantService;
-        private readonly ICommunicationService _communicationService;        
+        private readonly ICommunicationService _communicationService;
 
         private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public ServeService(IContactService contactService, IContactRelationshipService contactRelationshipService,
             IOpportunityService opportunityService, IEventService eventService, IParticipantService participantService,
-            IGroupParticipantService groupParticipantService, IGroupService groupService, ICommunicationService communicationService)
+            IGroupParticipantService groupParticipantService, IGroupService groupService,
+            ICommunicationService communicationService)
         {
             _contactService = contactService;
             _contactRelationshipService = contactRelationshipService;
@@ -42,7 +39,7 @@ namespace crds_angular.Services
             _participantService = participantService;
             _groupParticipantService = groupParticipantService;
             _groupService = groupService;
-            _communicationService = communicationService;            
+            _communicationService = communicationService;
         }
 
         public List<FamilyMember> GetImmediateFamilyParticipants(int contactId, string token)
@@ -71,10 +68,11 @@ namespace crds_angular.Services
                 LoggedInUser = false,
                 ParticipantId = contact.Participant_Id,
                 PreferredName = contact.Preferred_Name,
-                RelationshipId = contact.Relationship_Id, Age = contact.Age
+                RelationshipId = contact.Relationship_Id,
+                Age = contact.Age
             }).ToList();
 
-            relationships.AddRange(family.OrderBy(o=>o.PreferredName));
+            relationships.AddRange(family.OrderBy(o => o.PreferredName));
 
             return relationships;
         }
@@ -93,7 +91,8 @@ namespace crds_angular.Services
             foreach (var participant in immediateFamilyParticipants)
             {
                 var membership = _groupService.ParticipantGroupMember(groupId, participant.ParticipantId);
-                var opportunityResponse = _opportunityService.GetMyOpportunityResponses(participant.ContactId,115, token);
+                var opportunityResponse = _opportunityService.GetMyOpportunityResponses(participant.ContactId, 115,
+                    token);
                 var qualifiedServer = new QualifiedServerDto();
                 qualifiedServer.ContactId = participant.ContactId;
                 qualifiedServer.Email = participant.Email;
@@ -236,11 +235,11 @@ namespace crds_angular.Services
         public bool SaveServeRsvp(string token,
             int contactId,
             int opportunityId,
-            List<int> opportunityIds, 
+            List<int> opportunityIds,
             int eventTypeId,
             DateTime startDate,
             DateTime endDate,
-            bool signUp, 
+            bool signUp,
             bool alternateWeeks)
         {
             //get participant id for Contact
@@ -253,7 +252,9 @@ namespace crds_angular.Services
             int templateId = signUp ? AppSetting("RsvpYesTemplate") : AppSetting("RsvpNoTemplate");
 
             // Get the opportunity using any of the opportunities
-            var opportunity = (opportunityId > 0) ? _opportunityService.GetOpportunityById(opportunityId, token)  : _opportunityService.GetOpportunityById(opportunityIds.FirstOrDefault(), token);
+            var opportunity = (opportunityId > 0)
+                ? _opportunityService.GetOpportunityById(opportunityId, token)
+                : _opportunityService.GetOpportunityById(opportunityIds.FirstOrDefault(), token);
             var groupContact = _contactService.GetContactById(opportunity.GroupContactId);
 
             // Who are we sending the email to?
@@ -261,7 +262,6 @@ namespace crds_angular.Services
             //Dictionary<string,object> response = null;
             try
             {
-                
                 foreach (var e in events)
                 {
                     if ((!alternateWeeks) || includeThisWeek)
@@ -282,14 +282,16 @@ namespace crds_angular.Services
             {
                 return false;
             }
-            var mergeData = SetupMergeData(contactId, opportunityId, previousOpportunity, opportunity, startDate, endDate, groupContact);
+            var mergeData = SetupMergeData(contactId, opportunityId, previousOpportunity, opportunity, startDate,
+                endDate, groupContact);
             var communication = SetupCommunication(templateId, groupContact, toContact);
             _communicationService.SendMessage(communication, mergeData);
             //SendRSVPConfirmation(contactId, opportunityId, prevOpp, opportunity, startDate, endDate,templateId,token);            
             return true;
         }
 
-        private Dictionary<string, object> HandleYesRsvp(Participant participant, Event e, int opportunityId, IReadOnlyCollection<int> opportunityIds, String token )
+        private Dictionary<string, object> HandleYesRsvp(Participant participant, Event e, int opportunityId,
+            IReadOnlyCollection<int> opportunityIds, String token)
         {
             var templateId = AppSetting("RsvpYesTemplate");
             var deletedRSVPS = new List<int>();
@@ -297,19 +299,22 @@ namespace crds_angular.Services
 
             //Try to register this user for the event
             _eventService.registerParticipantForEvent(participant.ParticipantId, e.EventId);
-            
+
             // Make sure we are only rsvping for 1 opportunity by removing all existing responses
             deletedRSVPS.AddRange(from oid in opportunityIds
-                let deletedResponse = _opportunityService.DeleteResponseToOpportunities(participant.ParticipantId, oid, e.EventId) where deletedResponse != 0 select oid);
+                let deletedResponse =
+                    _opportunityService.DeleteResponseToOpportunities(participant.ParticipantId, oid, e.EventId)
+                where deletedResponse != 0
+                select oid);
 
-            if (deletedRSVPS.Count > 0) 
+            if (deletedRSVPS.Count > 0)
             {
                 templateId = AppSetting("RsvpChangeTemplate");
                 if (opportunityIds.Count != deletedRSVPS.Count)
                 {
                     //Changed yes to yes
                     //prevOppId = deletedRSVPS.First();
-                    previousOpportunity = _opportunityService.GetOpportunityById(deletedRSVPS.First(), token);                                      
+                    previousOpportunity = _opportunityService.GetOpportunityById(deletedRSVPS.First(), token);
                 }
             }
             var comments = string.Empty; //anything of value to put in comments?
@@ -323,7 +328,8 @@ namespace crds_angular.Services
             };
         }
 
-        private Dictionary<string, object> HandleNoRsvp(Participant participant, Event e, List<int> opportunityIds, string token )
+        private Dictionary<string, object> HandleNoRsvp(Participant participant, Event e, List<int> opportunityIds,
+            string token)
         {
             var templateId = AppSetting("RsvpNoTemplate");
             Opportunity previousOpportunity = null;
@@ -374,11 +380,11 @@ namespace crds_angular.Services
                 ReplyToEmailAddress = groupContact.Email_Address,
                 ToContactId = toContact.Contact_ID,
                 ToEmailAddress = toContact.Email_Address
-            };   
+            };
         }
 
         private Dictionary<string, object> SetupMergeData(int contactId, int opportunityId,
-            Opportunity previousOpportunity, Opportunity currentOpportunity, DateTime startDate, DateTime endDate, 
+            Opportunity previousOpportunity, Opportunity currentOpportunity, DateTime startDate, DateTime endDate,
             MyContact groupContact)
         {
             return new Dictionary<string, object>
@@ -391,10 +397,13 @@ namespace crds_angular.Services
                 {"Room", currentOpportunity.Room ?? string.Empty},
                 {"Group_Contact", groupContact.Nickname + " " + groupContact.Last_Name},
                 {"Group_Name", currentOpportunity.GroupName},
-                {"Previous_Opportunity_Name", previousOpportunity != null ? previousOpportunity.OpportunityName : @"Not Available"}
-            }; 
+                {
+                    "Previous_Opportunity_Name",
+                    previousOpportunity != null ? previousOpportunity.OpportunityName : @"Not Available"
+                }
+            };
         }
-    
+
         private ServeRole NewServingRole(GroupServingParticipant record)
         {
             return new ServeRole
@@ -457,7 +466,7 @@ namespace crds_angular.Services
         {
             if (record.Rsvp != null && !((bool) record.Rsvp))
             {
-                return new ServeRsvp { Attending = false, RoleId = 0};
+                return new ServeRsvp {Attending = false, RoleId = 0};
             }
             else if (record.Rsvp != null && ((bool) record.Rsvp))
             {
