@@ -11,5 +11,6 @@ namespace MinistryPlatform.Models
         public int Participant_Id { get; set; }
         public int Relationship_Id { get; set; }
         public DateTime Birth_date { get; set; }
+        public int Age { get; set; }
     }
 }
