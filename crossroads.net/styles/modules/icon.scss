@@ -122,11 +122,8 @@ label .icon {
 }
 
 .loading.fullscreen {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  margin-top: -25px;
-  margin-left: -25px;
+  position: relative;
+  margin: 100px 0;
 }
 
 /***************************************************************************************
