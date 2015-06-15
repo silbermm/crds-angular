@@ -35,10 +35,10 @@
         <span ng-show="false">Please provide a valid value.</span>
       </div>
 
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.nameTag.$invalid && adult.$submitted}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.nameTag.$invalid && adult.nameTag.$dirty}">
         <label class="control-label required" for="nameTag">Name For Name Tag</label>
         <input type="text" class="form-control" id="nameTag" name="nameTag" placeholder="Enter name for name tag" ng-model="kcAdultApplication.volunteer.nameTag" required>
-        <ng-messages for="adult.nameTag.$error" ng-if="adult.$submitted && adult.nameTag.$invalid">
+        <ng-messages for="adult.nameTag.$error" ng-if="adult.nameTag.$dirty && adult.nameTag.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
@@ -98,8 +98,8 @@
     </div>
 
     <div class="row">
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.siteAttend.$invalid}">
-        <label class="block required">Site where you attend service</label>
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.siteAttend.$dirty && adult.siteAttend.$invalid}">
+        <label class="block required control-label">Site where you attend service</label>
         <label class="radio-inline">
           <input type="radio" value="oakley" name="siteAttend" ng-model="kcAdultApplication.volunteer.siteAttend" required>Oakley
         </label>
@@ -115,7 +115,7 @@
         <label class="radio-inline">
           <input type="radio" value="clifton" name="siteAttend" ng-model="kcAdultApplication.volunteer.siteAttend" required>Clifton
         </label>
-        <ng-messages for="adult.siteAttend.$error" ng-if="adult.$submitted && adult.siteAttend.$invalid">
+        <ng-messages for="adult.siteAttend.$error" ng-if="adult.siteAttend.$dirty && adult.siteAttend.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
@@ -387,8 +387,8 @@
       </div>
 
       <div class="form-group col-sm-12" ng-class="{'has-error': adult.$submitted && adult.religion.$invalid}">
-        <label class="control-label block required">We're all in different places in our journey. And that's okay. But we ask that those who work in kindergarten through 5th grade be Christ-followers. There are opportunitites regardless of your spiritual orientation.</label>
-        <label class="block required">Tell us where you are</label>
+        <label class=" block required">We're all in different places in our journey. And that's okay. But we ask that those who work in kindergarten through 5th grade be Christ-followers. There are opportunitites regardless of your spiritual orientation.</label>
+        <label class="control-label block required">Tell us where you are</label>
         <label class="radio-inline">
           <input type="radio" name="religion" value="I'm exploring my faith" ng-model="kcAdultApplication.volunteer.spiritualOrientation" required>I'm exploring my faith
         </label>

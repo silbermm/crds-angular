@@ -208,7 +208,7 @@
     <div class="row">
       <div class="form-group col-sm-12" ng-class="{'has-error': student.religion.$invalid && student.$submitted}">
         <label class="control-label block required">Tell us where you are</label>
-        <label class="radio-inline">
+        <label class="radio-inline control-label">
           <input type="radio"
                  value="I'm exploring my faith"
                  name="religion" ng-model="kcStudentApplication.whereYouAre" required>I'm exploring my faith
@@ -811,7 +811,7 @@
 
     <div class="row" >
       <div class="form-group col-sm-6" ng-class="{'has-error': student.$submitted && student.studentSignature.$invalid }">
-        <label class="block required">Student Agreement</label>
+        <label class="block required control-label">Student Agreement</label>
         <label class="radio-inline">
           <input type="radio"
                  value="Yes"
