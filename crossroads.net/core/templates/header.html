@@ -3,7 +3,6 @@
     <!-- Brand Bar -->
     <ng-include src="'templates/brand-bar.html'"></ng-include>
 
-
     <div id="menu">
         <div class="container">
             <div class="row">
@@ -63,6 +62,22 @@
                                 </ul>
                             </li>
                         </ul>
+                        <!-- search box -->
+                        <div class="col-xs-3 pull-right site-search visible-lg visible-md">
+                          <form>
+                            <div class="input-group">
+                              <input type="text" class="form-control" placeholder="Search">
+                              <span class="input-group-btn">
+                                <a class="btn btn-gray-light" href="" ui-sref="search">
+                                  <svg viewBox="0 0 32 32" class="icon icon-medium icon-search3">
+                                    <use xlink:href="#search3"></use>
+                                  </svg>
+                                </button>
+                              </a>
+                            </div>
+                          </form>
+                      </div>
+                      <!-- /search box -->
                     </div>
                     <ng-include src="'templates/nav.html'"> </ng-include>
                 </div>
