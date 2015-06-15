@@ -756,3 +756,21 @@ ul.cr-nav {
 
 
 }
+
+/***************************************************************************************
+* Local Navigation
+***************************************************************************************/
+
+.local-nav {
+  list-style-type: none;
+  padding: 0;
+  li {
+    display: inline;
+    margin-right: 10px;
+    padding: 10px;
+    &.active {
+      border-bottom: 3px solid $brand-secondary;
+      color: $brand-secondary;
+    }
+  }
+}
