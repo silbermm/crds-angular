@@ -95,7 +95,6 @@ var moment = require('moment');
       vm.datePickers[field] = true;
     }
 
-
     /**
      * Attempt to save the form response
      */
@@ -132,7 +131,7 @@ var moment = require('moment');
       };
 
       adult.middleInitial = {
-        Value: vm.volunteer.middleName.substring(0, 1),
+        Value: vm.volunteer.middleInitial,
         CrossroadsId: adultFields.middleInitial
       };
 
