@@ -45,7 +45,7 @@
     function applicationVersion() {
       if (vm.person.age >= 16) {
         vm.showAdult = true;
-      } else if ((vm.person.age >= 14) && (vm.person.age <= 15)) {
+      } else if ((vm.person.age >= 10) && (vm.person.age <= 15)) {
         vm.showStudent = true;
       } else {
         vm.showError = true;
