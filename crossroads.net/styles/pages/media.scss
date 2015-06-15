@@ -47,6 +47,10 @@
   }
 }
 
+.media-details .social-media-buttons a svg {
+	color: $gray; //setting specifically so the default for .icon-twitter and .icon-facebook and be used elsewhere
+}
+
 /* Small devices (tablets, 768px and up) */
 @media (max-width: 767px) {
 	.series-list li{
