@@ -34,6 +34,7 @@
     function activate() {
       if (checkFamily()) {
         vm.showAccessDenied = false;
+        vm.person.middleInitial = middleInitial();
         opportunityResponse();
         applicationVersion();
       } else {
@@ -60,6 +61,13 @@
         }
       }
       return false;
+    }
+
+    function middleInitial() {
+      if (vm.person.middleName.length > 0) {
+        return vm.person.middleName.substring(0, 1);
+      }
+      return vm.person.middleName;
     }
 
     function opportunityResponse() {
