@@ -13,5 +13,8 @@ require('./media-search.html');
 require('./itunes-btn-messages.html');
 require('./itunes-btn-music.html');
 require('./itunes-btn-videos.html');
+require('./media-list.html');
+require('./message-action-buttons.html');
+require('./media-details.html');
 
 app.controller("MediaCtrl", ['$log', '$state', require("./media.controller")]);

@@ -1,13 +1,10 @@
-<div id="container-fluid" hide-on-mobile-menu="">
-  <div class="container hard-left hard-right">
-    <div class="col-sm-7">
-      <h2 class="flush-top">Work Like You Need It</h2>
-    </div>
-    <!--/col-sm-7-->
+<div class="container-fluid">
 
+  <div class="media-curtain container hard-left hard-right">
     <div ng-controller="mediaToggleCtrl" class="ng-scope">
       <div class="media-background">
 
+        <!--VIDEO-->
         <div class="container hard-left hard-right" ng-show="is(1)">
           <div class="col-lg-10 col-lg-offset-1 custom-poster mobile-hard-left mobile-hard-right ng-scope" ng-controller="mediaPosterCtrl as poster" ng-click="poster.showPoster()">
             <svg viewBox="0 0 32 32" class="icon icon-youtube-play-bw">
@@ -17,10 +14,10 @@
           </div>
         </div>
 
+        <!--AUDIO-->
         <div class="container hard-left hard-right ng-hide" ng-show="is(2)">
           <div class="col-lg-10 col-lg-offset-1 audio-thumb-container mobile-hard-left mobile-hard-right" ng-app="plangular">
             <img src="http://s3.amazonaws.com/crossroads-media/images/likeaboss_02_still.jpg" class="img-responsive img-full-width fade">
-            <!--/removed fade class -->
             <div plangular="" data-src="http://soundcloud.com/crdschurch/work-like-you-need-it" class="plangular col-xs-12 row ng-scope">
 
               <div class="controls">
@@ -35,32 +32,24 @@
                       <path d="M0 0 H12 V32 H0 z M20 0 H32 V32 H20 z"></path>
                     </div>
                   </a>
-                </div>
-                <!--/col-xs-2 col-sm-1-->
+                </div> <!--/col-xs-2 col-sm-1-->
                 <div class="col-xs-10 col-sm-11">
                   <div class="plangular-progress progress ng-isolate-scope" ng-transclude="" value="NaN" ng-click="seekTo($event);"></div>
                   <div class="progress bootstrap-progress">
                     <div class="progress-bar" role="progressbar" aria-valuenow="NaN" aria-valuemin="0" aria-valuemax="100" style="width: NaN%;" ng-click="seekTo($event);player.play(track)">
                       <span class="sr-only ng-binding">%</span>
                       <span class="progress-percentage ng-binding">%</span>
-                    </div>
-                    <!--/progress-bar-->
-                  </div>
-                  <!--/progress bootstrap-progress-->
-                </div>
-                <!--/col-xs-10 col-sm-11-->
-              </div>
-              <!--/controls-->
+                    </div> <!--/progress-bar-->
+                  </div> <!--/progress bootstrap-progress-->
+                </div> <!--/col-xs-10 col-sm-11-->
+              </div> <!--/controls-->
 
             </div>
             <!--/media col-xs-12 row-->
-          </div>
-          <!--/col-lg-10 col-lg-offset-1 row-->
-        </div>
-        <!--/container-->
+          </div> <!--/col-lg-10 col-lg-offset-1 row-->
+        </div> <!--/container-->
 
-      </div>
-      <!--/hidden-media-tabs-->
+      </div> <!--/hidden-media-tabs-->
 
       <div class="media-details">
         <div class="container hard-left hard-right">
@@ -156,6 +145,12 @@
       <!--/media-details-->
     </div>
     <!--ng-mediaToggleCtrl-->
+  </div><!--/media-curtain-->
 
-
+  <div class="container related-media">
+    <div class="col-sm-12">
+      <h3>Related Media</h3>
+    </div>
   </div>
+
+</div><!--/container-fuild-->

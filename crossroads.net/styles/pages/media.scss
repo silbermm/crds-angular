@@ -94,11 +94,8 @@
 }
 
 .media-details {
-  background: $gray-darker;
   color: $gray-light;
   padding-bottom: ($line-height-computed*3);
-  margin-bottom: -($line-height-computed*2);
-
   h2 {
     color: $gray-lighter;
     font-weight: normal;
