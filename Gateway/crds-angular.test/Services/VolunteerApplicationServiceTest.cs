@@ -2,6 +2,8 @@
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
+using Crossroads.Utilities.Interfaces;
+using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
 
@@ -10,15 +12,19 @@ namespace crds_angular.test.Services
     [TestFixture]
     public class VolunteerApplicationServiceTest
     {
+        private Mock<IFormSubmissionService> _formSubmissionService;
+        private Mock<IConfigurationWrapper> _configWrapper;
         private Mock<IServeService> _serveService;
         private VolunteerApplicationService _fixture;
 
         [SetUp]
         public void SetUp()
         {
+            _formSubmissionService = new Mock<IFormSubmissionService>();
+            _configWrapper= new Mock<IConfigurationWrapper>();
             _serveService = new Mock<IServeService>();
 
-            _fixture = new VolunteerApplicationService(_serveService.Object);
+            _fixture = new VolunteerApplicationService(_formSubmissionService.Object,_configWrapper.Object, _serveService.Object);
         }
 
         [Test]

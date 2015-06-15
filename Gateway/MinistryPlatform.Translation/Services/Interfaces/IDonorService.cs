@@ -16,7 +16,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         ContactDonor GetContactDonor(int contactId);
         ContactDonor GetPossibleGuestContactDonor(string email);
         int UpdatePaymentProcessorCustomerId(int donorId, string paymentProcessorCustomerId);
-        void SendConfirmationEmail(int programId, int donorId, int donationAmount, DateTime setupDate);
+        void SendConfirmationEmail(int programId, int donorId, int donationAmount, DateTime setupDate, string pymt_type);
         ContactDonor GetEmailViaDonorId(int donorId);
     }
 }

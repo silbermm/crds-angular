@@ -60,6 +60,8 @@
     <Compile Include="DonationDistribution.cs" />
     <Compile Include="Donation.cs" />
     <Compile Include="DTO\RespondToOpportunityDto.cs" />
+    <Compile Include="FormField.cs" />
+    <Compile Include="FormResponse.cs" />
     <Compile Include="GroupParticipant.cs" />
     <Compile Include="GroupServingParticipant.cs" />
     <Compile Include="GroupSignupRelationships.cs" />

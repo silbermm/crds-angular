@@ -118,7 +118,7 @@ namespace MinistryPlatform.Translation.Services
 
             try
             {
-                SendConfirmationEmail(Convert.ToInt32(programId), donorId, donationAmt, setupTime);
+                SendConfirmationEmail(Convert.ToInt32(programId), donorId, donationAmt, setupTime, pymt_type);
             }
             catch (Exception e)
             {
@@ -228,7 +228,7 @@ namespace MinistryPlatform.Translation.Services
         }
 
 
-        public void SendConfirmationEmail(int programId, int donorId, int donationAmount, DateTime setupDate)
+        public void SendConfirmationEmail(int programId, int donorId, int donationAmount, DateTime setupDate, string pymt_type)
         {
             var program = programService.GetProgramById(programId);
             //If the communcations admin does not link a message to the program, the default template will be used.
@@ -257,7 +257,7 @@ namespace MinistryPlatform.Translation.Services
                 {"Program_Name", program.Name},
                 {"Donation_Amount", donationAmount},
                 {"Donation_Date", setupDate},
-                {"Payment_Method", "Credit Card"} //TODO hard-coded until ACH story 
+                {"Payment_Method", pymt_type}
             };
  
             communicationService.SendMessage(comm, mergeData);

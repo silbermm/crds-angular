@@ -79,7 +79,7 @@
           }
         }
       }
-      
+
       function changeToDate() {
         if(scope.currentMember.currentOpportunity !== undefined && scope.currentMember.currentOpportunity.toDt !== undefined){
           var m = moment( scope.currentMember.currentOpportunity.toDt );
@@ -95,7 +95,7 @@
         scope.isCollapsed = true;
       }
 
-      function displayEmail(emailAddress) { 
+      function displayEmail(emailAddress) {
         if (!emailAddress) {
           return false;
         }
@@ -156,28 +156,28 @@
         validForm.valid = true;
         if (scope.currentMember.serveRsvp == null) {
           validForm.valid = false;
-          scope.formErrors.role = true;   
+          scope.formErrors.role = true;
         } else if (scope.currentMember.serveRsvp.roleId === undefined || scope.currentMember.serveRsvp.roleId === null || scope.currentMember.currentOpportunity === null) {
           validForm.valid = false;
           scope.formErrors.frequency = true;
         } else {
-          if ( (scope.currentMember.currentOpportunity === undefined || 
-                scope.currentMember.currentOpportunity === null || 
-                scope.currentMember.currentOpportunity.frequency === null ||  
-                scope.currentMember.currentOpportunity.frequency === undefined) && scope.currentMember.showFrequency 
+          if ( (scope.currentMember.currentOpportunity === undefined ||
+                scope.currentMember.currentOpportunity === null ||
+                scope.currentMember.currentOpportunity.frequency === null ||
+                scope.currentMember.currentOpportunity.frequency === undefined) && scope.currentMember.showFrequency
            ) {
             validForm.valid = false;
             scope.formErrors.frequency = true;
-          } 
+          }
 
           if(scope.currentMember.currentOpportunity !== undefined && scope.currentMember.currentOpportunity.toDt === undefined){
             validForm.valid = false;
-            scope.formErrors.to = true; 
-          } 
+            scope.formErrors.to = true;
+          }
 
           if(scope.currentMember.currentOpportunity !== undefined && scope.currentMember.currentOpportunity.fromDt === undefined){
             validForm.valid = false;
-            scope.formErrors.from = true; 
+            scope.formErrors.from = true;
           }
 
           if(validForm.valid) {
@@ -185,19 +185,19 @@
               var startDate = parseDate(scope.currentMember.currentOpportunity.toDt);
             } catch(ex) {
               validForm.valid = false;
-              scope.formErrors.from = true; 
+              scope.formErrors.from = true;
             }
 
-            try { 
+            try {
               var endDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
             } catch(ex) {
               validForm.valid = false;
-              scope.formErrors.to = true; 
+              scope.formErrors.to = true;
             }
 
             if (startDate < endDate) {
               validForm.valid = false;
-              scope.formErrors.dateRange = true; 
+              scope.formErrors.dateRange = true;
             }
           }
         }
@@ -298,7 +298,7 @@
 
       function saveRsvp() {
         var validForm = isFormValid();
- 
+
         if (!validForm.valid) {
           $rootScope.$emit('notify',$rootScope.MESSAGES.generalError);
           return false;
@@ -322,12 +322,12 @@
           return true;
         }, function(err){
           $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
-          return false; 
+          return false;
         });
       }
 
       function setActiveTab(member) {
-        // Reset form errors 
+        // Reset form errors
         scope.formErrors = {
           role: false,
           signup: false,

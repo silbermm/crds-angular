@@ -29,7 +29,6 @@ require('./mp_tools');
     require('./community_groups_signup/group_signup_form.html');
     require('./my_serve');
     require('./go_trip_giving');
-    require('./corkboard');
     require('./volunteer_signup');
     require('./volunteer_application');
     require('./search');

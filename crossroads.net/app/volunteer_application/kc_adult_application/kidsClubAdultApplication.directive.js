@@ -2,21 +2,25 @@
 
 (function(){
 
-  module.exports = KidsClubAdultApplication;
+  angular.module('crossroads').directive("kidsClubAdultApplication", KidsClubAdultApplication);
 
-  KidsClubAdultApplication.$inject = ['$log'];
+  KidsClubAdultApplication.$inject = ['$log', '$rootScope'];
 
-  function KidsClubAdultApplication($log){
+  function KidsClubAdultApplication($log, $rootScope){
 
     return {
       restrict: "EA",
       templateUrl : "kc_adult_application/kidsClubAdultApplication.template.html",
-      link: link
-    };
-
-    function link(scope, el, attr) {
-      $log.debug('KidsClubAdultApplication directive');
-    }
+      controller: "KidsClubAdultApplicationController as kcAdultApplication",
+      scope: {
+        volunteer: "=volunteer",
+        contactId: '=contactId',
+        opportunityId: '=opportunityId',
+        responseId: '=responseId',
+        showSuccess: '=showSuccess'
+      },
+      bindToController: true
+    }; 
   }
 
 })();

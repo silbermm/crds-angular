@@ -25,6 +25,7 @@ namespace crds_angular.Models.Crossroads
         public string id { get; set; }
         public string @object { get; set; }
         public string last4 { get; set; }
+        public string bank_last4 { get; set; }
         public string brand { get; set; }
         public string funding { get; set; }
         public string exp_month { get; set; }
