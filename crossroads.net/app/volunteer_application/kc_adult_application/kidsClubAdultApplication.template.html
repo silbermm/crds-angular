@@ -37,7 +37,7 @@
 
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.nameTag.$invalid && adult.nameTag.$dirty}">
         <label class="control-label required" for="nameTag">Name For Name Tag</label>
-        <input type="text" class="form-control" id="nameTag" name="nameTag" placeholder="Enter name for name tag" ng-model="kcAdultApplication.volunteer.nameTag" required>
+        <input type="text" class="form-control" id="nameTag" name="nameTag" placeholder="Enter name for name tag" ng-model="kcAdultApplication.volunteer.nameTag" ng-model-options="{updateOn: 'blur'}" ng-model-options="{updateOn: 'blur'}" required>
         <ng-messages for="adult.nameTag.$error" ng-if="adult.nameTag.$dirty && adult.nameTag.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
@@ -101,19 +101,19 @@
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.siteAttend.$dirty && adult.siteAttend.$invalid}">
         <label class="block required control-label">Site where you attend service</label>
         <label class="radio-inline">
-          <input type="radio" value="oakley" name="siteAttend" ng-model="kcAdultApplication.volunteer.siteAttend" required>Oakley
+          <input type="radio" value="oakley" name="siteAttend" ng-model="kcAdultApplication.volunteer.siteAttend" ng-model-options="{updateOn: 'blur'}" required>Oakley
         </label>
         <label class="radio-inline">
-          <input type="radio" value="florence" name="siteAttend" ng-model="kcAdultApplication.volunteer.siteAttend" required>Florence
+          <input type="radio" value="florence" name="siteAttend" ng-model="kcAdultApplication.volunteer.siteAttend" ng-model-options="{updateOn: 'blur'}" required>Florence
         </label>
         <label class="radio-inline">
-          <input type="radio" value="west side" name="siteAttend" ng-model="kcAdultApplication.volunteer.siteAttend" required>West Side
+          <input type="radio" value="west side" name="siteAttend" ng-model="kcAdultApplication.volunteer.siteAttend" ng-model-options="{updateOn: 'blur'}" required>West Side
         </label>
         <label class="radio-inline">
-          <input type="radio" value="mason" name="siteAttend" ng-model="kcAdultApplication.volunteer.siteAttend" required>Mason
+          <input type="radio" value="mason" name="siteAttend" ng-model="kcAdultApplication.volunteer.siteAttend" ng-model-options="{updateOn: 'blur'}" required>Mason
         </label>
         <label class="radio-inline">
-          <input type="radio" value="clifton" name="siteAttend" ng-model="kcAdultApplication.volunteer.siteAttend" required>Clifton
+          <input type="radio" value="clifton" name="siteAttend" ng-model="kcAdultApplication.volunteer.siteAttend" ng-model-options="{updateOn: 'blur'}" required>Clifton
         </label>
         <ng-messages for="adult.siteAttend.$error" ng-if="adult.siteAttend.$dirty && adult.siteAttend.$invalid">
           <span ng-message="required">
@@ -124,19 +124,19 @@
     </div>
 
     <div class="row">
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.attending.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.attending.$dirty && adult.attending.$invalid}">
         <label class="control-label required" for="attending">How long have you been attending Crossroads?</label>
-        <input type="text" class="form-control" ng-model="kcAdultApplication.volunteer.attending" id="attending" placeholder="How long have you been attending crossroads?" required name="attending">
-        <ng-messages for="adult.attending.$error" ng-if="adult.$submitted && adult.attending.$invalid">
+        <input type="text" class="form-control" ng-model="kcAdultApplication.volunteer.attending" id="attending" placeholder="How long have you been attending crossroads?" ng-model-options="{updateOn: 'blur'}"required name="attending">
+        <ng-messages for="adult.attending.$error" ng-if="adult.attending.$dirty && adult.attending.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
         </ng-messages>
       </div>
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.serviceAttend.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.serviceAttend.$dirty && adult.serviceAttend.$invalid}">
         <label class="control-label required" for="serviceAttend">What Service do you attend?</label>
-        <input type="text" class="form-control" id="serviceAttend" name="serviceAttend" ng-model="kcAdultApplication.volunteer.serviceAttend" placeholder="What Service do you attend?" required>
-        <ng-messages for="adult.serviceAttend.$error" ng-if="adult.$submitted && adult.serviceAttend.$invalid">
+        <input type="text" class="form-control" id="serviceAttend" name="serviceAttend" ng-model="kcAdultApplication.volunteer.serviceAttend" placeholder="What Service do you attend?" ng-model-options="{updateOn: 'blur'}" required>
+        <ng-messages for="adult.serviceAttend.$error" ng-if="adult.serviceAttend.$dirty && adult.serviceAttend.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
@@ -184,19 +184,20 @@
   <fieldset class="push-bottom">
     <legend>Employer</legend>
     <div class="row">
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.companyName.$invalid && adult.$submitted}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.companyName.$invalid && adult.companyName.$dirty}">
         <label class="control-label required" for="companyName">Company Name</label>
-        <input type="text" class="form-control" id="companyName" name="companyName" placeholder="Company Name" ng-model="kcAdultApplication.volunteer.company" required>
-        <ng-messages for="adult.companyName.$error" ng-if="adult.$submitted && adult.companyName.$invalid">
+        <input type="text" class="form-control" id="companyName" name="companyName" placeholder="Company Name" ng-model="kcAdultApplication.volunteer.company" ng-model-options="{updateOn: 'blur'}"required>
+        <ng-messages for="adult.companyName.$error" ng-if="adult.companyName.$dirty && adult.companyName.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
         </ng-messages>
       </div>
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.companyPosition.$invalid && adult.$submitted}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.companyPosition.$invalid && adult.companyPosition.$dirty}">
         <label class="control-label required" for="position">Position</label>
-        <input type="text" class="form-control" id="position" name="companyPosition" ng-model="kcAdultApplication.volunteer.position" placeholder="Position" required>
-        <ng-messages for="adult.companyPosition.$error" ng-if="adult.$submitted && adult.companyPosition.$invalid">
+        <input type="text" class="form-control" id="position" name="companyPosition" ng-model="kcAdultApplication.volunteer.position" placeholder="Position" ng-model-options="{updateOn: 'blur'}"required>
+        <ng-messages for="adult.companyPosition.$error" ng-if="adult.companyPosition.$dirty && adult.companyPosition.$invalid">
+
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
@@ -205,7 +206,7 @@
       <div class="form-group col-sm-6" ng-class="{'has-error': adult.workPhone.$invalid}">
         <label class="control-label" for="workPhone">Work Phone (If you can receive calls at this number)</label>
         <input type="text" class="form-control" id="workPhone" placeholder="123-456-7890" name="workPhone" ng-pattern="kcAdultApplication.phoneFormat" ng-model="kcAdultApplication.volunteer.workPhone" ng-model-options="{ updateOn: 'blur' }">
-        <ng-messages for="adult.workPhone.$error" ng-if="adult.$submitted && adult.workPhone.$invalid">
+        <ng-messages for="adult.workPhone.$error" ng-if="adult.workPhone.$dirty && adult.workPhone.$invalid">
           <span ng-message="pattern">
             <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
           </span>
@@ -311,7 +312,7 @@
     <legend>About You</legend>
     <div class="row">
 
-      <div class="form-group col-sm-12" ng-class="{'has-error': adult.$submitted && adult.crime.$invalid }">
+      <div class="form-group col-sm-12" ng-class="{'has-error': adult.crime.$dirty && adult.crime.$invalid }">
         <label class="control-label block required">Have you ever been arrested, convicted of or pleaded no contest to any crime?</label>
         <label class="radio-inline">
           <input type="radio" value="no" name="crime" ng-model="kcAdultApplication.volunteer.crime" required>No
@@ -319,14 +320,14 @@
         <label class="radio-inline">
           <input type="radio" value="yes" name="crime" ng-model="kcAdultApplication.volunteer.crime" required>Yes
         </label>
-        <ng-messages for="adult.crime.$error" ng-if="adult.$submitted && adult.crime.$invalid">
+        <ng-messages for="adult.crime.$error" ng-if="adult.crime.$dirty && adult.crime.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
         </ng-messages>
       </div>
 
-      <div class="form-group col-sm-12" ng-class="{'has-error': adult.$submitted && adult.addiction.$invalid }">
+      <div class="form-group col-sm-12" ng-class="{'has-error': adult.addiction.$dirty && adult.addiction.$invalid }">
         <label class="control-label block required">Have you ever been concerned that you may have an addiction to drugs, alcohol, pornography, or other addiction; or has anyone suggested that you do?</label>
         <label class="radio-inline">
           <input type="radio" value="no" name="addiction" ng-model="kcAdultApplication.volunteer.addiction" required>No
@@ -334,14 +335,14 @@
         <label class="radio-inline">
           <input type="radio" value="yes" name="addiction" ng-model="kcAdultApplication.volunteer.addiction" required>Yes
         </label>
-        <ng-messages for="adult.addiction.$error" ng-if="adult.$submitted && adult.addiction.$invalid">
+        <ng-messages for="adult.addiction.$error" ng-if="adult.addiction.$dirty && adult.addiction.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
         </ng-messages>
       </div>
 
-      <div class="form-group col-sm-12" ng-class="{'has-error': adult.$submitted && adult.neglect.$invalid}">
+      <div class="form-group col-sm-12" ng-class="{'has-error': adult.neglect.$dirty && adult.neglect.$invalid}">
         <label class="control-label block required">Have you ever been accused, alleged, investigated, charged or convicted of any act of neglecting,abusing, exploiting or molesting any child?</label>
         <label class="radio-inline">
           <input type="radio" value="no" name="neglect" ng-model="kcAdultApplication.volunteer.neglect" required>No
@@ -349,29 +350,29 @@
         <label class="radio-inline">
           <input type="radio" value="yes" name="neglect" ng-model="kcAdultApplication.volunteer.neglect" required>Yes
         </label>
-        <ng-messages for="adult.neglect.$error" ng-if="adult.$submitted && adult.neglect.$invalid">
+        <ng-messages for="adult.neglect.$error" ng-if="adult.neglect.$dirty && adult.neglect.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
         </ng-messages>
       </div>
 
-      <div class="form-group col-sm-12" ng-class="{'has-error': adult.$submitted && adult.psychiatricDisorder.$invalid}">
+      <div class="form-group col-sm-12" ng-class="{'has-error': adult.psychiatricDisorder.$dirty && adult.psychiatricDisorder.$invalid}">
         <label class="control-label block required">Have you ever been treated for or diagnosed with a psychiatric disorder?</label>
         <label class="radio-inline">
-          <input type="radio" value="no" name="psychiatricDisorder" ng-model="kcAdultApplication.volunteer.psychiatricDisorder" required>No
+          <input type="radio" value="no" name="psychiatricDisorder" ng-model="kcAdultApplication.volunteer.psychiatricDisorder" required >No
         </label>
         <label class="radio-inline">
           <input type="radio" value="yes" name="psychiatricDisorder" ng-model="kcAdultApplication.volunteer.psychiatricDisorder" required>Yes
         </label>
-        <ng-messages for="adult.psychiatricDisorder.$error" ng-if="adult.$submitted && adult.psychiatricDisorder.$invalid">
+        <ng-messages for="adult.psychiatricDisorder.$error" ng-if="adult.psychiatricDisorder.$dirty && adult.psychiatricDisorder.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
         </ng-messages>
       </div>
 
-      <div class="form-group col-sm-12" ng-class="{'has-error':adult.$submitted && adult.sexuallyActive.$invalid}">
+      <div class="form-group col-sm-12" ng-class="{'has-error':adult.sexuallyActive.$dirty && adult.sexuallyActive.$invalid}">
         <label class="control-label block required">Currently, or in the past year, have you been sexually active outside of marriage?</label>
         <label class="radio-inline">
           <input type="radio" value="no" name="sexuallyActive" ng-model="kcAdultApplication.volunteer.sexualyActive" required>No
@@ -379,15 +380,15 @@
         <label class="radio-inline">
           <input type="radio" value="yes" name="sexuallyActive" ng-model="kcAdultApplication.volunteer.sexualyActive" required>Yes
         </label>
-        <ng-messages for="adult.sexuallyActive.$error" ng-if="adult.$submitted && adult.sexuallyActive.$invalid">
+        <ng-messages for="adult.sexuallyActive.$error" ng-if="adult.sexuallyActive.$dirty && adult.sexuallyActive.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
         </ng-messages>
       </div>
 
-      <div class="form-group col-sm-12" ng-class="{'has-error': adult.$submitted && adult.religion.$invalid}">
-        <label class=" block required">We're all in different places in our journey. And that's okay. But we ask that those who work in kindergarten through 5th grade be Christ-followers. There are opportunitites regardless of your spiritual orientation.</label>
+      <div class="form-group col-sm-12" ng-class="{'has-error': adult.religion.$dirty && adult.religion.$invalid}">
+        <label class="block required">We're all in different places in our journey. And that's okay. But we ask that those who work in kindergarten through 5th grade be Christ-followers. There are opportunitites regardless of your spiritual orientation.</label>
         <label class="control-label block required">Tell us where you are</label>
         <label class="radio-inline">
           <input type="radio" name="religion" value="I'm exploring my faith" ng-model="kcAdultApplication.volunteer.spiritualOrientation" required>I'm exploring my faith
@@ -398,7 +399,7 @@
         <label class="radio-inline">
           <input type="radio" name="religion" value="I'm a Christ-follower" ng-model="kcAdultApplication.volunteer.spiritualOrientation" required>I'm a Christ-follower
         </label>
-        <ng-messages for="adult.religion.$error" ng-if="adult.$submitted && adult.religion.$invalid">
+        <ng-messages for="adult.religion.$error" ng-if="adult.religion.$dirty && adult.religion.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
@@ -406,11 +407,11 @@
       </div>
     </div>
     <div class="row">
-      <div class="form-group col-sm-8" ng-class="{'has-error': adult.$submitted && adult.explainFaith.$invalid }">
+      <div class="form-group col-sm-8" ng-class="{'has-error': adult.explainFaith.$dirty && adult.explainFaith.$invalid }">
         <label class="control-label required" for="explainFaith">Please Explain</label>
-        <textarea class="form-control" id="explainFaith" name="explainFaith" placeholder="Please Explain" ng-model="kcAdultApplication.volunteer.explainFaith" required>
+        <textarea class="form-control" id="explainFaith" name="explainFaith" placeholder="Please Explain" ng-model="kcAdultApplication.volunteer.explainFaith" ng-model-options="{updateOn: 'blur'}" required>
         </textarea>
-        <ng-messages for="adult.explainFaith.$error" ng-if="adult.$submitted && adult.explainFaith.$invalid">
+        <ng-messages for="adult.explainFaith.$error" ng-if="adult.explainFaith.$dirty && adult.explainFaith.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
@@ -437,7 +438,7 @@
     <legend>Serving Opportunities</legend>
     <div class="row">
 
-      <div class="form-group col-sm-12" ng-class="{'has-error': adult.$submitted && adult.availability.$invalid }">
+      <div class="form-group col-sm-12" ng-class="{'has-error': adult.availability.$dirty && adult.availability.$invalid }">
         <label class="block required control-label">What is your availability?</label>
         <div class="checkbox">
           <label>
@@ -449,14 +450,14 @@
             <input type="checkbox" name="availability" ng-model="kcAdultApplication.volunteer.availabilityWeekend" ng-required="!kcAdultApplication.availabilitySelected()"> Weekend Services
           </label>
         </div>
-        <ng-messages for="adult.availability.$error" ng-if="adult.$submitted && adult.availability.$invalid">
+        <ng-messages for="adult.availability.$error" ng-if="adult.availability.$dirty && adult.availability.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
         </ng-messages>
       </div>
 
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.availabilitySite.$invalid }">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.availabilitySite.$dirty && adult.availabilitySite.$invalid }">
         <label class="block required control-label">Site name</label>
         <div class="checkbox">
           <label>
@@ -483,7 +484,7 @@
             <input type="checkbox" value="clifton" name="availabilitySite" ng-model="kcAdultApplication.volunteer.availabilityClifton" ng-required="!kcAdultApplication.locationSelected()"> Clifton
           </label>
         </div>
-        <ng-messages for="adult.availabilitySite.$error" ng-if="adult.$submitted && adult.availabilitySite.$invalid">
+        <ng-messages for="adult.availabilitySite.$error" ng-if="adult.availabilitySite.$dirty && adult.availabilitySite.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
@@ -492,10 +493,10 @@
     </div>
 
     <div class="row">
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.serveServiceTimes.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.serveServiceTimes.$dirty && adult.serveServiceTimes.$invalid}">
         <label class="control-label required" for="serveServiceTimes">During</label>
-        <input type="text" class="form-control" id="serveServiceTimes" name="serveServiceTimes" placeholder="Service Times" ng-model="kcAdultApplication.volunteer.serveServiceTimes" required>
-        <ng-messages for="adult.serveServiceTimes.$error" ng-if="adult.$submitted && adult.serveServiceTimes.$invalid">
+        <input type="text" class="form-control" id="serveServiceTimes" name="serveServiceTimes" placeholder="Service Times" ng-model="kcAdultApplication.volunteer.serveServiceTimes" ng-model-options="{updateOn: 'blur'}" required>
+        <ng-messages for="adult.serveServiceTimes.$error" ng-if="adult.serveServiceTimes.$dirty && adult.serveServiceTimes.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
@@ -540,7 +541,7 @@
             <input type="checkbox" ng-model="kcAdultApplication.volunteer.areaOfInterestCreatingWeekendExperience">Creating the weekend experience (Write Lessons or songs, brainstorm acitivites, etc)</label>
         </div>
       </div>
-      <div class="form-group col-sm-12" ng-class="{'has-error': adult.$submitted && adult.gradeLevel.$invalid}">
+      <div class="form-group col-sm-12" ng-class="{'has-error': adult.gradeLevel.$dirty && adult.gradeLevel.$invalid}">
         <label class="required control-label">Want to serve directly with kids? What age do you prefer? (check all that apply)</label>
         <div class="checkbox">
           <label>
@@ -557,7 +558,7 @@
             <input type="checkbox" name="gradeLevel" ng-model="kcAdultApplication.volunteer.kToFifth" ng-required="!kcAdultApplication.gradeLevelSelected()"> Kinder - 5th Grade
           </label>
         </div>
-        <ng-messages for="adult.gradeLevel.$error" ng-if="adult.$submitted && adult.gradeLevel.$invalid">
+        <ng-messages for="adult.gradeLevel.$error" ng-if="adult.gradeLevel.$dirty && adult.gradeLevel.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
@@ -572,57 +573,57 @@
     <div class="row">
       <p class="help-text col-sm-12">List three adults (18 or older) you have know for at least one yaer, who are not rleated to you and have a definite knowledge of your character and ability to work with kids and students (e.g. pastor, close firend, teacher, and/or employer).</p>
       <h4 class="col-sm-12">First Reference</h4>
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceName1.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.referenceName1.$dirty && adult.referenceName1.$invalid}">
         <label class="control-label required" for="referenceName-1">Name</label>
-        <input type="text" class="form-control" id="referenceName-1" name="referenceName1" ng-model="kcAdultApplication.volunteer.referenceName1" placeholder="Name" required>
-        <ng-messages for="adult.referenceName1.$error" ng-if="adult.$submitted && adult.referenceName1.$invalid">
+        <input type="text" class="form-control" id="referenceName-1" name="referenceName1" ng-model="kcAdultApplication.volunteer.referenceName1" placeholder="Name" ng-model-options="{updateOn: 'blur'}"required>
+        <ng-messages for="adult.referenceName1.$error" ng-if="adult.referenceName1.$dirty && adult.referenceName1.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
         </ng-messages>
 
       </div>
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceTimeKnown1.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.referenceTimeKnown1.$dirty && adult.referenceTimeKnown1.$invalid}">
         <label class="control-label required" for="referenceTimeKnown-1">Length of time known</label>
-        <input type="text" class="form-control" name="referenceTimeKnown1" id="referenceTimeKnown-1" ng-model="kcAdultApplication.volunteer.referenceTimeKnown1" placeholder="Length of time known" required>
-        <ng-messages for="adult.referenceTimeKnown1.$error" ng-if="adult.$submitted && adult.referenceTimeKnown1.$invalid">
+        <input type="text" class="form-control" name="referenceTimeKnown1" id="referenceTimeKnown-1" ng-model="kcAdultApplication.volunteer.referenceTimeKnown1" placeholder="Length of time known" ng-model-options="{updateOn: 'blur'}"required>
+        <ng-messages for="adult.referenceTimeKnown1.$error" ng-if="adult.referenceTimeKnown1.$dirty && adult.referenceTimeKnown1.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
         </ng-messages>
       </div>
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceHomePhone1.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.referenceHomePhone1.$dirty && adult.referenceHomePhone1.$invalid}">
         <label class="control-label" for="referenceHomePhone-1">Home Phone</label>
-        <input type="text" class="form-control" id="referenceHomePhone1" name="referenceHomePhone1" ng-model="kcAdultApplication.volunteer.referenceHomePhone1" ng-pattern="kcAdultApplication.phoneFormat" placeholder="Home Phone">
-        <ng-messages for="adult.referenceHomePhone1.$error" ng-if="adult.$submitted && adult.referenceHomePhone1.$invalid">
+        <input type="text" class="form-control" id="referenceHomePhone1" name="referenceHomePhone1" ng-model="kcAdultApplication.volunteer.referenceHomePhone1" ng-pattern="kcAdultApplication.phoneFormat" placeholder="Home Phone" ng-model-options="{updateOn: 'blur'}">
+        <ng-messages for="adult.referenceHomePhone1.$error" ng-if="adult.referenceHomePhone1.$dirty && adult.referenceHomePhone1.$invalid">
           <span ng-message="pattern">
             <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
           </span>
         </ng-messages>
       </div>
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceMobilePhone1.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.referenceMobilePhone1.$dirty && adult.referenceMobilePhone1.$invalid}">
         <label class="control-label" for="referenceMobilePhone-1">Mobile Phone</label>
-        <input type="text" class="form-control" id="referenceMobilePhone-1" name="referenceMobilePhone1" ng-model="kcAdultApplication.volunteer.referenceMobilePhone1" ng-pattern="kcAdultApplication.phoneFormat" placeholder="Mobile Phone">
-        <ng-messages for="adult.referenceMobilePhone1.$error" ng-if="adult.$submitted && adult.referenceMobilePhone1.$invalid">
+        <input type="text" class="form-control" id="referenceMobilePhone-1" name="referenceMobilePhone1" ng-model="kcAdultApplication.volunteer.referenceMobilePhone1" ng-pattern="kcAdultApplication.phoneFormat" placeholder="Mobile Phone" ng-model-options="{updateOn: 'blur'}">
+        <ng-messages for="adult.referenceMobilePhone1.$error" ng-if="adult.referenceMobilePhone1.$dirty && adult.referenceMobilePhone1.$invalid">
           <span ng-message="pattern">
             <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
           </span>
         </ng-messages>
       </div>
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceWorkPhone1.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.referenceWorkPhone1.$dirty && adult.referenceWorkPhone1.$invalid}">
         <label class="control-label" for="referenceWorkPhone-1">Work Phone</label>
-        <input type="text" class="form-control" id="referenceWorkPhone-1" name="referenceWorkPhone1" ng-pattern="kcAdultApplication.phoneFormat" ng-model="kcAdultApplication.volunteer.referenceWorkPhone1" placeholder="Work Phone">
-        <ng-messages for="adult.referenceWorkPhone1.$error" ng-if="adult.$submitted && adult.referenceWorkPhone1.$invalid">
+        <input type="text" class="form-control" id="referenceWorkPhone-1" name="referenceWorkPhone1" ng-pattern="kcAdultApplication.phoneFormat" ng-model="kcAdultApplication.volunteer.referenceWorkPhone1" placeholder="Work Phone" ng-model-options="{updateOn: 'blur'}">
+        <ng-messages for="adult.referenceWorkPhone1.$error" ng-if="adult.referenceWorkPhone1.$dirty && adult.referenceWorkPhone1.$invalid">
           <span ng-message="pattern">
             <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
           </span>
         </ng-messages>
 
       </div>
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceEmail1.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.referenceEmail1.$dirty && adult.referenceEmail1.$invalid}">
         <label class="control-label required" for="referenceEmail-1">Email</label>
-        <input type="email" class="form-control" id="referenceEmail-1" name="referenceEmail1" ng-model="kcAdultApplication.volunteer.referenceEmail1" placeholder="Email" required>
-        <ng-messages for="adult.referenceEmail1.$error" ng-if="adult.$submitted && adult.referenceEmail1.$invalid">
+        <input type="email" class="form-control" id="referenceEmail-1" name="referenceEmail1" ng-model="kcAdultApplication.volunteer.referenceEmail1" placeholder="Email" ng-model-options="{updateOn: 'blur'}"required>
+        <ng-messages for="adult.referenceEmail1.$error" ng-if="adult.referenceEmail1.$dirty && adult.referenceEmail1.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
@@ -632,20 +633,20 @@
         </ng-messages>
 
       </div>
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceAssociation1.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.referenceAssociation1.$dirty && adult.referenceAssociation1.$invalid}">
         <label class="control-label required" for="referenceAssociation-1">Nature of Association</label>
-        <input type="text" class="form-control" id="referenceAssociation-1" name="referenceAssociation1" ng-model="kcAdultApplication.volunteer.referenceAssociation1" placeholder="Nature of Association" required>
-        <ng-messages for="adult.referenceAssociation1.$error" ng-if="adult.$submitted && adult.referenceAssociation1.$invalid">
+        <input type="text" class="form-control" id="referenceAssociation-1" name="referenceAssociation1" ng-model="kcAdultApplication.volunteer.referenceAssociation1" placeholder="Nature of Association" ng-model-options="{updateOn: 'blur'}"required>
+        <ng-messages for="adult.referenceAssociation1.$error" ng-if="adult.referenceAssociation1.$dirty && adult.referenceAssociation1.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
         </ng-messages>
 
       </div>
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceOccupation1.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.referenceOccupation1.$dirty && adult.referenceOccupation1.$invalid}">
         <label class="control-label required" for="referenceOccupation-1">Occupation</label>
-        <input type="text" class="form-control" id="referenceOccupation-1" name="referenceOccupation1" ng-model="kcAdultApplication.volunteer.referenceOccupation1" placeholder="Occupation" required>
-        <ng-messages for="adult.referenceOccupation1.$error" ng-if="adult.$submitted && adult.referenceOccupation1.$invalid">
+        <input type="text" class="form-control" id="referenceOccupation-1" name="referenceOccupation1" ng-model="kcAdultApplication.volunteer.referenceOccupation1" placeholder="Occupation" ng-model-options="{updateOn: 'blur'}"required>
+        <ng-messages for="adult.referenceOccupation1.$error" ng-if="adult.referenceOccupation1.$dirty && adult.referenceOccupation1.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
@@ -659,58 +660,58 @@
     <!-- Reference #2 -->
     <div class="row">
       <h4 class="col-sm-12">Second Reference</h4>
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceName2.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.referenceName2.$dirty && adult.referenceName2.$invalid}">
         <label class="control-label required" for="referenceName-2">Name</label>
-        <input type="text" class="form-control" id="referenceName-2" name="referenceName2" ng-model="kcAdultApplication.volunteer.referenceName2" placeholder="Name" required>
-        <ng-messages for="adult.referenceName2.$error" ng-if="adult.$submitted && adult.referenceName2.$invalid">
+        <input type="text" class="form-control" id="referenceName-2" name="referenceName2" ng-model="kcAdultApplication.volunteer.referenceName2" placeholder="Name" ng-model-options="{updateOn: 'blur'}"required>
+        <ng-messages for="adult.referenceName2.$error" ng-if="adult.referenceName2.$dirty && adult.referenceName2.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
         </ng-messages>
       </div>
 
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceTimeKnown2.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.referenceTimeKnown2.$dirty && adult.referenceTimeKnown2.$invalid}">
         <label class="control-label required" for="referenceTimeKnown-2">Length of time known</label>
-        <input type="text" class="form-control" name="referenceTimeKnown2" id="referenceTimeKnown-2" ng-model="kcAdultApplication.volunteer.referenceTimeKnown2" placeholder="Length of time known" required>
-        <ng-messages for="adult.referenceTimeKnown2.$error" ng-if="adult.$submitted && adult.referenceTimeKnown2.$invalid">
+        <input type="text" class="form-control" name="referenceTimeKnown2" id="referenceTimeKnown-2" ng-model="kcAdultApplication.volunteer.referenceTimeKnown2" placeholder="Length of time known" ng-model-options="{updateOn: 'blur'}"required>
+        <ng-messages for="adult.referenceTimeKnown2.$error" ng-if="adult.referenceTimeKnown2.$dirty && adult.referenceTimeKnown2.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
         </ng-messages>
       </div>
 
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceHomePhone2.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.referenceHomePhone2.$dirty && adult.referenceHomePhone2.$invalid}">
         <label class="control-label" for="referenceHomePhone-2">Home Phone</label>
-        <input type="text" class="form-control" id="referenceHomePhone2" name="referenceHomePhone2" ng-model="kcAdultApplication.volunteer.referenceHomePhone2" ng-pattern="kcAdultApplication.phoneFormat" placeholder="Home Phone">
-        <ng-messages for="adult.referenceHomePhone2.$error" ng-if="adult.$submitted && adult.referenceHomePhone2.$invalid">
+        <input type="text" class="form-control" id="referenceHomePhone2" name="referenceHomePhone2" ng-model="kcAdultApplication.volunteer.referenceHomePhone2" ng-pattern="kcAdultApplication.phoneFormat" placeholder="Home Phone" ng-model-options="{updateOn: 'blur'}">
+        <ng-messages for="adult.referenceHomePhone2.$error" ng-if="adult.referenceHomePhone2.$dirty && adult.referenceHomePhone2.$invalid">
           <span ng-message="pattern">
             <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
           </span>
         </ng-messages>
       </div>
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceMobilePhone2.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.referenceMobilePhone2.$dirty && adult.referenceMobilePhone2.$invalid}">
         <label class="control-label" for="referenceMobilePhone-2">Mobile Phone</label>
-        <input type="text" class="form-control" id="referenceMobilePhone-2" name="referenceMobilePhone2" ng-model="kcAdultApplication.volunteer.referenceMobilePhone2" ng-pattern="kcAdultApplication.phoneFormat" placeholder="Mobile Phone">
-        <ng-messages for="adult.referenceMobilePhone2.$error" ng-if="adult.$submitted && adult.referenceMobilePhone2.$invalid">
+        <input type="text" class="form-control" id="referenceMobilePhone-2" name="referenceMobilePhone2" ng-model="kcAdultApplication.volunteer.referenceMobilePhone2" ng-pattern="kcAdultApplication.phoneFormat" placeholder="Mobile Phone" ng-model-options="{updateOn: 'blur'}">
+        <ng-messages for="adult.referenceMobilePhone2.$error" ng-if="adult.referenceMobilePhone2.$dirty && adult.referenceMobilePhone2.$invalid">
           <span ng-message="pattern">
             <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
           </span>
         </ng-messages>
 
       </div>
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceWorkPhone2.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.referenceWorkPhone2.$dirty && adult.referenceWorkPhone2.$invalid}">
         <label class="control-label" for="referenceWorkPhone-2">Work Phone</label>
-        <input type="text" class="form-control" id="referenceWorkPhone-2" name="referenceWorkPhone2" ng-pattern="kcAdultApplication.phoneFormat" ng-model="kcAdultApplication.volunteer.referenceWorkPhone2" placeholder="Work Phone">
-        <ng-messages for="adult.referenceWorkPhone2.$error" ng-if="adult.$submitted && adult.referenceWorkPhone2.$invalid">
+        <input type="text" class="form-control" id="referenceWorkPhone-2" name="referenceWorkPhone2" ng-pattern="kcAdultApplication.phoneFormat" ng-model="kcAdultApplication.volunteer.referenceWorkPhone2" placeholder="Work Phone" ng-model-options="{updateOn: 'blur'}">
+        <ng-messages for="adult.referenceWorkPhone2.$error" ng-if="adult.referenceWorkPhone2.$dirty && adult.referenceWorkPhone2.$invalid">
           <span ng-message="pattern">
             <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
           </span>
         </ng-messages>
       </div>
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceEmail2.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.referenceEmail2.$dirty && adult.referenceEmail2.$invalid}">
         <label class="control-label required" for="referenceEmail-2">Email</label>
-        <input type="email" class="form-control" id="referenceEmail-2" name="referenceEmail2" ng-model="kcAdultApplication.volunteer.referenceEmail2" placeholder="Email" required>
-        <ng-messages for="adult.referenceEmail2.$error" ng-if="adult.$submitted && adult.referenceEmail2.$invalid">
+        <input type="email" class="form-control" id="referenceEmail-2" name="referenceEmail2" ng-model="kcAdultApplication.volunteer.referenceEmail2" placeholder="Email" ng-model-options="{updateOn: 'blur'}"required>
+        <ng-messages for="adult.referenceEmail2.$error" ng-if="adult.referenceEmail2.$dirty && adult.referenceEmail2.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
@@ -720,20 +721,20 @@
         </ng-messages>
 
       </div>
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceAssociation2.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.referenceAssociation2.$dirty && adult.referenceAssociation2.$invalid}">
         <label class="control-label required" for="referenceAssociation-2">Nature of Association</label>
-        <input type="text" class="form-control" id="referenceAssociation-2" name="referenceAssociation2" ng-model="kcAdultApplication.volunteer.referenceAssociation2" placeholder="Nature of Association" required>
-        <ng-messages for="adult.referenceAssociation2.$error" ng-if="adult.$submitted && adult.referenceAssociation2.$invalid">
+        <input type="text" class="form-control" id="referenceAssociation-2" name="referenceAssociation2" ng-model="kcAdultApplication.volunteer.referenceAssociation2" placeholder="Nature of Association" ng-model-options="{updateOn: 'blur'}"required>
+        <ng-messages for="adult.referenceAssociation2.$error" ng-if="adult.referenceAssociation2.$dirty && adult.referenceAssociation2.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
         </ng-messages>
 
       </div>
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceOccupation2.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.referenceOccupation2.$dirty && adult.referenceOccupation2.$invalid}">
         <label class="control-label required" for="referenceOccupation-2">Occupation</label>
-        <input type="text" class="form-control" id="referenceOccupation-2" name="referenceOccupation2" ng-model="kcAdultApplication.volunteer.referenceOccupation2" placeholder="Occupation" required>
-        <ng-messages for="adult.referenceOccupation2.$error" ng-if="adult.$submitted && adult.referenceOccupation2.$invalid">
+        <input type="text" class="form-control" id="referenceOccupation-2" name="referenceOccupation2" ng-model="kcAdultApplication.volunteer.referenceOccupation2" placeholder="Occupation" ng-model-options="{updateOn: 'blur'}"required>
+        <ng-messages for="adult.referenceOccupation2.$error" ng-if="adult.referenceOccupation2.$dirty && adult.referenceOccupation2.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
@@ -747,57 +748,57 @@
     <!-- Reference #3 -->
     <div class="row">
       <h4 class="col-sm-13">Third Reference</h4>
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceName3.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.referenceName3.$dirty && adult.referenceName3.$invalid}">
         <label class="control-label required" for="referenceName-3">Name</label>
-        <input type="text" class="form-control" id="referenceName-3" name="referenceName3" ng-model="kcAdultApplication.volunteer.referenceName3" placeholder="Name" required>
-        <ng-messages for="adult.referenceName3.$error" ng-if="adult.$submitted && adult.referenceName3.$invalid">
+        <input type="text" class="form-control" id="referenceName-3" name="referenceName3" ng-model="kcAdultApplication.volunteer.referenceName3" placeholder="Name" ng-model-options="{updateOn: 'blur'}" required>
+        <ng-messages for="adult.referenceName3.$error" ng-if="adult.referenceName3.$dirty && adult.referenceName3.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
         </ng-messages>
       </div>
 
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceTimeKnown3.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.referenceTimeKnown3.$dirty && adult.referenceTimeKnown3.$invalid}">
         <label class="control-label required" for="referenceTimeKnown-3">Length of time known</label>
-        <input type="text" class="form-control" name="referenceTimeKnown3" id="referenceTimeKnown-3" ng-model="kcAdultApplication.volunteer.referenceTimeKnown3" placeholder="Length of time known" required>
-        <ng-messages for="adult.referenceTimeKnown3.$error" ng-if="adult.$submitted && adult.referenceTimeKnown3.$invalid">
+        <input type="text" class="form-control" name="referenceTimeKnown3" id="referenceTimeKnown-3" ng-model="kcAdultApplication.volunteer.referenceTimeKnown3" placeholder="Length of time known" ng-model-options="{updateOn: 'blur'}" required>
+        <ng-messages for="adult.referenceTimeKnown3.$error" ng-if="adult.referenceTimeKnown3.$dirty && adult.referenceTimeKnown3.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
         </ng-messages>
       </div>
 
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceHomePhone3.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.referenceHomePhone3.$dirty && adult.referenceHomePhone3.$invalid}">
         <label class="control-label" for="referenceHomePhone-3">Home Phone</label>
-        <input type="text" class="form-control" id="referenceHomePhone3" name="referenceHomePhone3" ng-pattern="kcAdultApplication.phoneFormat" ng-model="kcAdultApplication.volunteer.referenceHomePhone3" placeholder="Home Phone">
-        <ng-messages for="adult.referenceHomePhone3.$error" ng-if="adult.$submitted && adult.referenceHomePhone3.$invalid">
+        <input type="text" class="form-control" id="referenceHomePhone3" name="referenceHomePhone3" ng-pattern="kcAdultApplication.phoneFormat" ng-model="kcAdultApplication.volunteer.referenceHomePhone3" placeholder="Home Phone" ng-model-options="{updateOn: 'blur'}">
+        <ng-messages for="adult.referenceHomePhone3.$error" ng-if="adult.referenceHomePhone3.$dirty && adult.referenceHomePhone3.$invalid">
           <span ng-message="pattern">
             <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
           </span>
         </ng-messages>
       </div>
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceMobilePhone3.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.referenceMobilePhone3.$dirty && adult.referenceMobilePhone3.$invalid}">
         <label class="control-label" for="referenceMobilePhone-3">Mobile Phone</label>
-        <input type="text" class="form-control" id="referenceMobilePhone-3" name="referenceMobilePhone3" ng-pattern="kcAdultApplication.phoneFormat" ng-model="kcAdultApplication.volunteer.referenceMobilePhone3" placeholder="Mobile Phone">
-        <ng-messages for="adult.referenceMobilePhone3.$error" ng-if="adult.$submitted && adult.referenceMobilePhone3.$invalid">
+        <input type="text" class="form-control" id="referenceMobilePhone-3" name="referenceMobilePhone3" ng-pattern="kcAdultApplication.phoneFormat" ng-model="kcAdultApplication.volunteer.referenceMobilePhone3" placeholder="Mobile Phone" ng-model-options="{updateOn: 'blur'}">
+        <ng-messages for="adult.referenceMobilePhone3.$error" ng-if="adult.referenceMobilePhone3.$dirty && adult.referenceMobilePhone3.$invalid">
           <span ng-message="pattern">
             <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
           </span>
         </ng-messages>
       </div>
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceWorkPhone3.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.referenceWorkPhone3.$dirty && adult.referenceWorkPhone3.$invalid}">
         <label class="control-label" for="referenceWorkPhone-3">Work Phone</label>
-        <input type="text" class="form-control" id="referenceWorkPhone-3" name="referenceWorkPhone3" ng-model="kcAdultApplication.volunteer.referenceWorkPhone3" ng-pattern="kcAdultApplication.phoneFormat" placeholder="Work Phone">
-        <ng-messages for="adult.referenceWorkPhone3.$error" ng-if="adult.$submitted && adult.referenceWorkPhone3.$invalid">
+        <input type="text" class="form-control" id="referenceWorkPhone-3" name="referenceWorkPhone3" ng-model="kcAdultApplication.volunteer.referenceWorkPhone3" ng-pattern="kcAdultApplication.phoneFormat" placeholder="Work Phone" ng-model-options="{updateOn: 'blur'}">
+        <ng-messages for="adult.referenceWorkPhone3.$error" ng-if="adult.referenceWorkPhonee.$dirty && adult.referenceWorkPhone3.$invalid">
           <span ng-message="pattern">
             <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
           </span>
         </ng-messages>
       </div>
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceEmail3.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.referenceEmail3.$dirty && adult.referenceEmail3.$invalid}">
         <label class="control-label required" for="referenceEmail-3">Email</label>
-        <input type="email" class="form-control" id="referenceEmail-3" name="referenceEmail3" ng-model="kcAdultApplication.volunteer.referenceEmail3" placeholder="Email" required>
-        <ng-messages for="adult.referenceEmail3.$error" ng-if="adult.$submitted && adult.referenceEmail3.$invalid">
+        <input type="email" class="form-control" id="referenceEmail-3" name="referenceEmail3" ng-model="kcAdultApplication.volunteer.referenceEmail3" placeholder="Email" ng-model-options="{updateOn: 'blur'}" required>
+        <ng-messages for="adult.referenceEmail3.$error" ng-if="adult.referenceEmail3.$dirty && adult.referenceEmail3.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
@@ -807,20 +808,20 @@
         </ng-messages>
 
       </div>
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceAssociation3.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.referenceAssociation3.$dirty && adult.referenceAssociation3.$invalid}">
         <label class="control-label required" for="referenceAssociation-3">Nature of Association</label>
-        <input type="text" class="form-control" id="referenceAssociation-3" name="referenceAssociation3" ng-model="kcAdultApplication.volunteer.referenceAssociation3" placeholder="Nature of Association" required>
-        <ng-messages for="adult.referenceAssociation3.$error" ng-if="adult.$submitted && adult.referenceAssociation3.$invalid">
+        <input type="text" class="form-control" id="referenceAssociation-3" name="referenceAssociation3" ng-model="kcAdultApplication.volunteer.referenceAssociation3" placeholder="Nature of Association" ng-model-options="{updateOn: 'blur'}" required>
+        <ng-messages for="adult.referenceAssociation3.$error" ng-if="adult.referenceAssociation3.$dirty && adult.referenceAssociation3.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
         </ng-messages>
 
       </div>
-      <div class="form-group col-sm-6" ng-class="{'has-error': adult.$submitted && adult.referenceOccupation3.$invalid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': adult.referenceOccupation3.$dirty && adult.referenceOccupation3.$invalid}">
         <label class="control-label required" for="referenceOccupation-3">Occupation</label>
-        <input type="text" class="form-control" id="referenceOccupation-3" name="referenceOccupation3" ng-model="kcAdultApplication.volunteer.referenceOccupation3" placeholder="Occupation" required>
-        <ng-messages for="adult.referenceOccupation3.$error" ng-if="adult.$submitted && adult.referenceOccupation3.$invalid">
+        <input type="text" class="form-control" id="referenceOccupation-3" name="referenceOccupation3" ng-model="kcAdultApplication.volunteer.referenceOccupation3" placeholder="Occupation" ng-model-options="{updateOn: 'blur'}" required>
+        <ng-messages for="adult.referenceOccupation3.$error" ng-if="adult.referenceOccupation3.$dirty && adult.referenceOccupation3.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
@@ -838,7 +839,7 @@
         and waive my right to inspect any written material from contact with them or from the criminal background check. I have carefully read the forgoing release and know the contents thereof and I agree to this release as my own free act. This is a
         legally binding agreement which I have read and understand.</p>
 
-      <div class="form-group col-sm-12" ng-class="{'has-error': adult.$submitted && adult.signatureAgree.$invalid}">
+      <div class="form-group col-sm-12" ng-class="{'has-error': adult.signatureAgree.$dirty && adult.signatureAgree.$invalid}">
         <label class="block required">Agree</label>
         <label class="radio-inline">
           <input type="radio" value="Yes" name="signatureAgree" ng-model="kcAdultApplication.volunteer.signatureAgree" required>Yes
@@ -846,7 +847,7 @@
         <label class="radio-inline">
           <input type="radio" value="No" name="signatureAgree" ng-model="kcAdultApplication.volunteer.signatureAgree" required>No
         </label>
-        <ng-messages for="adult.signatureAgree.$error" ng-if="adult.$submitted && adult.signatureAgree.$invalid">
+        <ng-messages for="adult.signatureAgree.$error" ng-if="adult.signatureAgree.$dirty && adult.signatureAgree.$invalid">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
