@@ -264,6 +264,7 @@
     <Compile Include="Models\Crossroads\ServeOccurance.cs" />
     <Compile Include="Models\Crossroads\Serve\Capacity.cs" />
     <Compile Include="Models\Crossroads\Serve\FamilyMember.cs" />
+    <Compile Include="Models\Crossroads\Serve\QualifiedServerDto.cs" />
     <Compile Include="Models\Crossroads\Serve\SaveRsvpDto.cs" />
     <Compile Include="Models\Crossroads\Serve\ServeRsvp.cs" />
     <Compile Include="Models\Crossroads\SignUpFamilyMembers.cs" />

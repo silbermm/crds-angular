@@ -71,7 +71,7 @@ namespace crds_angular.Services
                 LoggedInUser = false,
                 ParticipantId = contact.Participant_Id,
                 PreferredName = contact.Preferred_Name,
-                RelationshipId = contact.Relationship_Id
+                RelationshipId = contact.Relationship_Id, Age = contact.Age
             }).ToList();
 
             relationships.AddRange(family.OrderBy(o=>o.PreferredName));
