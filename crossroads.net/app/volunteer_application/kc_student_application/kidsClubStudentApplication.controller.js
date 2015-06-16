@@ -29,7 +29,7 @@ var moment = require("moment");
     vm.serveAgeKids = {};
     vm.studentSignatureDate = moment().format('MM/DD/YYYY');
     vm.submitButtonText = "Submit";
-    
+
     activate();
 
     ///////////////////////////////////////////
@@ -108,7 +108,7 @@ var moment = require("moment");
       };
 
       student.middleInitial = {
-        Value: vm.volunteer.middleName.substring(0, 1),
+        Value: vm.volunteer.middleInitial,
         CrossroadsId: studentFields.middleInitial
       };
 

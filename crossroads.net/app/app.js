@@ -31,5 +31,5 @@ require('./mp_tools');
     require('./go_trip_giving');
     require('./volunteer_signup');
     require('./volunteer_application');
-
+    require('./search');
 })()

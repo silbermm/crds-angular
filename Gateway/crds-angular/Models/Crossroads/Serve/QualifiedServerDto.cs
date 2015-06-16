@@ -2,11 +2,8 @@ using Newtonsoft.Json;
 
 namespace crds_angular.Models.Crossroads.Serve
 {
-    public class FamilyMember
+    public class QualifiedServerDto
     {
-        [JsonProperty(PropertyName = "age")]
-        public int Age { get; set; }
-        
         [JsonProperty(PropertyName = "contactId")]
         public int ContactId { get; set; }
 
@@ -25,8 +22,10 @@ namespace crds_angular.Models.Crossroads.Serve
         [JsonProperty(PropertyName = "email")]
         public string Email { get; set; }
 
-        [JsonProperty(PropertyName = "relationshipId")]
-        public int RelationshipId { get; set; }
-        
+        [JsonProperty(PropertyName = "memberOfGroup")]
+        public bool MemberOfGroup { get; set; }
+
+        [JsonProperty(PropertyName = "pending")]
+        public bool Pending { get; set; }
     }
 }

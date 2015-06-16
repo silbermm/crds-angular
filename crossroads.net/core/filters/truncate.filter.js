@@ -22,7 +22,8 @@
                 return text;
             }
             else {
-                return text.substr(0, Math.min(length, text.lastIndexOf(" "))) + ellipses;
+                var shortString = text.substr(0, length);
+                return shortString.substr(0, Math.min(length, shortString.lastIndexOf(" ")))+ellipses;
             }
         }
     }

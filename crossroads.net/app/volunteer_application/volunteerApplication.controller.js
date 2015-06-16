@@ -34,6 +34,7 @@
     function activate() {
       if (checkFamily()) {
         vm.showAccessDenied = false;
+        vm.person.middleInitial = middleInitial();
         opportunityResponse();
         applicationVersion();
       } else {
@@ -45,7 +46,7 @@
     function applicationVersion() {
       if (vm.person.age >= 16) {
         vm.showAdult = true;
-      } else if ((vm.person.age >= 14) && (vm.person.age <= 15)) {
+      } else if ((vm.person.age >= 10) && (vm.person.age <= 15)) {
         vm.showStudent = true;
       } else {
         vm.showError = true;
@@ -60,6 +61,13 @@
         }
       }
       return false;
+    }
+
+    function middleInitial() {
+      if (vm.person.middleName !== null && vm.person.middle !== undefined && vm.person.middleName.length > 0) {
+        return vm.person.middleName.substring(0, 1);
+      }
+      return vm.person.middleName;
     }
 
     function opportunityResponse() {
