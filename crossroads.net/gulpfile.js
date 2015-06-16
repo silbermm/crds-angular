@@ -11,6 +11,9 @@ var svgSprite = require("gulp-svg-sprite");
 var replace = require("gulp-replace");
 var rename = require("gulp-rename");
 
+var browserSyncCompiles = 0;
+var browserSync = require('browser-sync').create();
+
 var webPackConfigs = [Object.create(webpackDependenciesConfig), Object.create(webpackCoreConfig), Object.create(webpackConfig)];
 
 // Start the development server
@@ -21,13 +24,55 @@ gulp.task("default", ["webpack-dev-server"]);
 // Disadvantage: Requests are not blocked until bundle is available,
 //               can serve an old app on refresh
 gulp.task("build-dev", ["webpack:build-dev"], function() {
-	var watches = [];
+
+	var watchPatterns = [];
 	webPackConfigs.forEach(function(element) {
-		watches.push(element.watch);
-		gutil.log("Adding watch", element.watch);
+		watchPatterns.push(element.watchPattern);
+		gutil.log("Adding watch", element.watchPattern);
 	});
 
-	gulp.watch(watches, ["webpack:build-dev"]);
+	gulp.watch(watchPatterns, ["webpack:build-dev"]);
+});
+
+gulp.task('build-browser-sync', function () {
+	webPackConfigs.forEach(function(element) {
+
+		element.devtool = "eval";
+		element.debug = true;
+		element.output.path = "/";
+
+		// force gulpWebpack to watch for file changes
+		element.watch = true;
+
+		// Build app to assets - watch for changes
+		gulp.src(element.watchPattern)
+			.pipe(gulpWebpack(element))
+			.pipe(gulp.dest("./assets"));
+	});
+});
+
+// Browser-Sync build
+// May be useful for live injection of SCSS / CSS changes for UI/UX
+// Also should reload pages when JS / HTML are regenerated
+gulp.task("browser-sync-dev", ["build-browser-sync"], function() {
+
+	// Watch for final assets to build
+	gulp.watch("./assets/*.js", function() {
+		gutil.log("JS files in assets folder modified", "Count = " + browserSyncCompiles);
+
+		if (browserSyncCompiles >= webPackConfigs.length) {
+			gutil.log("Forcing BrowserSync reload");
+			browserSync.reload();
+		}
+
+		browserSyncCompiles += 1;
+	});
+
+	browserSync.init({
+		server: {
+			baseDir: "./"
+		}
+	});
 });
 
 // Production build
@@ -47,7 +92,7 @@ gulp.task("webpack-dev-server", ["icons-watch"], function(callback) {
 		element.output.path = "/";
 		// Build app to assets - watch for changes
 		gulp.src("app/**/**")
-			.pipe(watch(element.watch))
+			.pipe(watch(element.watchPattern))
 			.pipe(gulpWebpack(element))
 			.pipe(gulp.dest("./assets"));
 	});

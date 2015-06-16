@@ -16,7 +16,7 @@ module.exports = {
     entry: {
         core: "./core/core.js"
     },
-    watch: 'core/**/**',
+    watchPattern: 'core/**/**',
     externals: {
       stripe: "Stripe"
     },

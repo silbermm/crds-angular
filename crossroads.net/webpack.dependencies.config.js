@@ -16,7 +16,7 @@ module.exports = {
     entry: {
         dependencies: "./dependencies/dependencies.js"
     },
-    watch: 'dependencies/**/**',
+    watchPattern: 'dependencies/**/**',
     externals: {
       stripe: "Stripe"
     },
