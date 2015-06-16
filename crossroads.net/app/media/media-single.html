@@ -1,0 +1,43 @@
+<div class="container-fluid hard-left hard-right">
+  <div class="row"><!--TODO: After layouts are implemented, add a container-fluid class here in place of row-->
+    <div class="col-sm-12">
+      <div class="media-curtain">
+        <div class="media-background">
+
+          <div class="container">
+
+            <!--VIDEO-->
+            <div class="row">
+              <div class="col-lg-10 col-lg-offset-1 custom-poster mobile-hard-left mobile-hard-right ng-scope">
+                <svg viewBox="0 0 32 32" class="icon icon-youtube-play-bw">
+                	<use xlink:href="#youtube-play-bw"></use>
+                </svg>
+                <img src="http://s3.amazonaws.com/crossroads-media/images/likeaboss_02_still.jpg" class="img-full-width">
+              </div>
+            </div>
+
+            <ng-include src="'media/media-details.html'"> </ng-include>
+
+          </div><!--/container-->
+
+        </div><!--/media-background-->
+      </div><!--/media-curtain-->
+    </div><!--/col-sm-12-->
+  </div><!--/row TODO: After layouts are implemented, add a container-fluid class here in place of row-->
+</div><!--/container-fluid-->
+
+
+
+
+
+
+<div class="container">
+  <div class="row related-media push-top push-bottom"><!--TODO: After layouts are implemented, add a container class here in place of row-->
+    <div class="col-sm-12">
+      <h2>Related Media</h2>
+      <div class="row">
+        <ng-include src="'media/media-list.html'"> </ng-include>
+      </div>
+    </div>
+  </div>
+</div><!--/container-->
