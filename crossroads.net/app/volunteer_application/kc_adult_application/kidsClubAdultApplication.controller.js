@@ -31,6 +31,7 @@ var moment = require('moment');
     vm.religionSelected = religionSelected;
     vm.save = save;
     vm.saving = false;
+    vm.showError = showError;
     vm.submitButtonText = "Submit";
     vm.volunteer.areaOfInterestServingInClassroom = false;
     vm.volunteer.areaOfInterestWelcomingNewFamilies=false;
@@ -561,6 +562,15 @@ var moment = require('moment');
         return false;
       });
 
+    }
+
+    function showError(form, field) {
+      if(form[field] === undefined)
+        return false;
+      if (form.$submitted || form[field].$dirty){
+        return form[field].$invalid;
+      }
+      return false;
     }
 
     /**
