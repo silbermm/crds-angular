@@ -290,10 +290,13 @@
         }
         if (scope.selectedRole === undefined) {
           scope.currentMember.serveRsvp.attending = false ;
+          scope.currentMember.showFrequency = false;
+          scope.currentMember.currentOpportunity = {frequency: scope.frequency[0]};
+          populateDates();
         } else {
           scope.currentMember.serveRsvp.attending = true;
+          scope.currentMember.showFrequency = true;
         }
-        scope.currentMember.showFrequency = true;
       }
 
       function saveRsvp() {
