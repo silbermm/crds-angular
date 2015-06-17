@@ -73,17 +73,15 @@
         </svg>
         <a href="#" class="dropdown-toggle" dropdown-toggle>About</a>
         <ul class="dropdown-menu">
-            <li><a href="#" ng-click="ok($event)">Explore Crossroads</a>
+            <li><a ui-sref="explore-crossroads" ng-click="ok($event)">Explore Crossroads</a>
             </li>
-            <li><a href="#" ng-click="ok($event)">Who We Are</a>
+            <li><a ui-sref="who-we-are" ng-click="ok($event)">Who We Are</a>
+            </li>          
+            <li><a ui-sref="blog" ng-click="ok($event)">Blog</a>
             </li>
-            <li><a href="#" ng-click="ok($event)">Blog</a>
+            <li><a ui-sref="service-times" ng-click="ok($event)">Service Times &amp; Directions</a>
             </li>
-            <li><a href="#" ng-click="ok($event)">Service Times &amp; Directions</a>
-            </li>
-            <li><a href="#" ng-click="ok($event)">Pastoral Care</a>
-            </li>
-            <li><a href="#" ng-click="ok($event)">Contact Us</a>
+            <li><a ui-sref="pastoral-care" ng-click="ok($event)">Pastoral Care</a>
             </li>
         </ul>
     </li>
@@ -93,17 +91,17 @@
         </svg>
         <a href="#" class="dropdown-toggle" dropdown-toggle>Give</a>
         <ul class="dropdown-menu">
-            <li><a href="#" ng-click="ok($event)">Recurring Gift</a>
+            <li><a ui-sref="recurring-gift" ng-click="ok($event)">Recurring Gift</a>
             </li>
-            <li><a href="#" ng-click="ok($event)">One-time Gift</a>
+            <li><a ui-sref="give" ng-click="ok($event)">One-time Gift</a>
             </li>
-            <li><a href="#" ng-click="ok($event)">Transfer Stock</a>
+            <li><a ui-sref="transfer-stock" ng-click="ok($event)">Transfer Stock</a>
             </li>
-            <li><a href="#" ng-click="ok($event)">Estate Giving</a>
+            <li><a ui-sref="estate-giving" ng-click="ok($event)">Estate Giving</a>
             </li>
-            <li><a href="#" ng-click="ok($event)">Financial Philosophy</a>
+            <li><a ui-sref="go_trip_giving" ng-click="ok($event)">Give to Someone's Trip</a>
             </li>
-            <li><a href="/corkboard/">Give To Others</a>
+            <li><a href="/corkboard/">Give Your Stuff</a>
             </li>
         </ul>
     </li>
@@ -113,13 +111,11 @@
         </svg>
         <a href="#" class="dropdown-toggle" dropdown-toggle>Media</a>
         <ul class="dropdown-menu">
-            <li><a href="#" ng-click="ok($event)">Weekend Messages</a>
+            <li><a ui-sref="messages" ng-click="ok($event)">Weekend Messages</a>
             </li>
-            <li><a href="#" ng-click="ok($event)">Music</a>
+            <li><a ui-sref="music" ng-click="ok($event)">Music</a>
             </li>
-            <li><a href="#" ng-click="ok($event)">Videos</a>
-            </li>
-            <li><a href="#" ng-click="ok($event)">Podcast</a>
+            <li><a ui-sref="video" ng-click="ok($event)">Videos</a>
             </li>
         </ul>
     </li>
@@ -129,9 +125,9 @@
         </svg>
         <a href="#" class="dropdown-toggle" dropdown-toggle>Admin</a>
         <ul class="dropdown-menu">
-            <li><a href="#" ng-click="ok($event)">Admin</a>
+            <li><a href="https://admindemo.crossroads.net/ministryplatform/" target="_blank" ng-click="ok($event)">Ministry Platform (Demo)</a>
             </li>
-            <li><a href="#" ng-click="ok($event)">Ministry Platform</a>
+            <li><a href="https://adminint.crossroads.net/ministryplatform/" target="_blank" ng-click="ok($event)">Ministry Platform (Integration)</a>
             </li>
         </ul>
     </li>
