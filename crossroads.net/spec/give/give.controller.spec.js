@@ -247,7 +247,7 @@ describe('GiveController', function() {
       expect(controller.dto.donor).toBe("donor");
       expect(controller.dto.email).toBe("test@here.com");
       expect(controller.dto.program).toBe("program");
-      expect(controller.dto.view).toBe("view");
+      expect(controller.dto.view).toBe("cc");
       expect(controller.dto.changeAccountInfo).toBeTruthy();
     });
   });
