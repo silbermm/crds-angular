@@ -27,6 +27,7 @@ var moment = require("moment");
     vm.save = save;
     vm.saving = false;
     vm.serveAgeKids = {};
+    vm.showError = showError;
     vm.studentSignatureDate = moment().format('MM/DD/YYYY');
     vm.submitButtonText = "Submit";
 
@@ -402,7 +403,15 @@ var moment = require("moment");
       });
       return true;
     }
-
+    
+    function showError(form, field) {
+      if(form[field] === undefined)
+        return false;
+      if (form.$submitted || form[field].$dirty){
+        return form[field].$invalid;
+      }
+      return false;
+    }
 
   }
 })();

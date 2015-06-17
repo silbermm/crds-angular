@@ -16,6 +16,7 @@ module.exports = {
     entry: {
         main: './app/app.js'
     },
+    watchPattern: 'app/**/**',
     externals: {
       stripe: "Stripe",
       angular: "angular",
