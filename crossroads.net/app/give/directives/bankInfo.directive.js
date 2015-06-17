@@ -11,6 +11,8 @@ require('../bankInfo.html');
           scope: {
               account: "=", 
               bankinfoSubmitted: "=",
+              changeAccountInfo: "=",
+              defaultSource: "=",
               routing: "="             
             },
           templateUrl: 'give/bankInfo.html',
@@ -32,13 +34,17 @@ require('../bankInfo.html');
             return (scope.bankAccountForm.account.$dirty && scope.bankAccountForm.account.$error.invalidAccount);
         };
 
+        scope.blurRoutingError = function() {
+          return (scope.bankAccountForm.routing.$dirty && scope.bankAccountForm.routing.$error.invalidRouting );
+        };
+
+         scope.resetDefaultBankPlaceholderValues = function() {
+          scope.defaultBankPlaceholderValues = {};
+        };
+
         scope.routingError = function() {
             return (scope.bankinfoSubmitted && scope.bankAccountForm.routing.$error.invalidRouting && scope.bankAccountForm.$invalid  ||
                 scope.bankAccountForm.routing.$error.invalidRouting && scope.bankAccountForm.routing.$dirty);
-        };
-
-         scope.blurRoutingError = function() {
-          return (scope.bankAccountForm.routing.$dirty && scope.bankAccountForm.routing.$error.invalidRouting );
         };
 
         scope.toggleCheck = function() {
@@ -51,6 +57,21 @@ require('../bankInfo.html');
             }
         };
 
+        scope.useExistingAccountInfo = function() {
+          return(scope.changeAccountInfo && scope.bankAccountForm.$pristine);
+        };
+
+        if(!scope.defaultSource.bank_account) {
+          scope.resetDefaultBankPlaceholderValues();
+        } else if(scope.defaultSource.bank_account.last4) {
+          scope.bankAccount.account = "";
+          scope.bankAccount.routing = "";
+          scope.defaultBankPlaceholderValues = {
+            routing: scope.defaultSource.bank_account.routing,          
+            maskedAccount: "XXXXXXXXXXX" + scope.defaultSource.bank_account.last4
+          };
+
+        };
 
 
       }
