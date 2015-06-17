@@ -246,10 +246,10 @@ namespace crds_angular.Services
             var participant = _participantService.GetParticipant(contactId);
             //get events in range
             var events = _eventService.GetEventsByTypeForRange(eventTypeId, startDate, endDate, token);
-            var includeThisWeek = true;
+            //var includeThisWeek = true;
 
             Opportunity previousOpportunity = null;
-            int templateId = signUp ? AppSetting("RsvpYesTemplate") : AppSetting("RsvpNoTemplate");
+            var templateId = signUp ? AppSetting("RsvpYesTemplate") : AppSetting("RsvpNoTemplate");
 
             // Get the opportunity using any of the opportunities
             var opportunity = (opportunityId > 0)
@@ -262,21 +262,49 @@ namespace crds_angular.Services
             //Dictionary<string,object> response = null;
             try
             {
-                foreach (var e in events)
+                var sortedEvents = events.OrderBy(o => o.EventStartDate).ToList();
+                var increment = alternateWeeks ? 14 : 7;
+                var sequenceDate = startDate;
+                for (var i = 0; i < sortedEvents.Count(); i++)
                 {
-                    if ((!alternateWeeks) || includeThisWeek)
+                    var e = sortedEvents[i];
+                    if (e.EventStartDate.Date == sequenceDate.Date)
                     {
-                        var response = signUp
-                            ? HandleYesRsvp(participant, e, opportunityId, opportunityIds, token)
-                            : HandleNoRsvp(participant, e, opportunityIds, token);
+                        Dictionary<string, object> response;
+                        if (signUp)
+                        {
+                            response = HandleYesRsvp(participant, e, opportunityId, opportunityIds, token);
+                        }
+                        else
+                        {
+                            response = HandleNoRsvp(participant, e, opportunityIds, token);
+                        }
+
                         if (response.ToNullableObject<Opportunity>("previousOpportunity") != null)
                             previousOpportunity = response.ToNullableObject<Opportunity>("previousOpportunity");
+
                         templateId = (templateId != AppSetting("RsvpChangeTemplate"))
                             ? response.ToInt("templateId")
                             : templateId;
+                        sequenceDate = sequenceDate.AddDays(increment);
                     }
-                    includeThisWeek = !includeThisWeek;
+                    
                 }
+                //foreach (var e in events)
+                //{
+                //    if ((!alternateWeeks) || includeThisWeek)
+                //    {
+                //        var response = signUp
+                //            ? HandleYesRsvp(participant, e, opportunityId, opportunityIds, token)
+                //            : HandleNoRsvp(participant, e, opportunityIds, token);
+                //        if (response.ToNullableObject<Opportunity>("previousOpportunity") != null)
+                //            previousOpportunity = response.ToNullableObject<Opportunity>("previousOpportunity");
+                //        templateId = (templateId != AppSetting("RsvpChangeTemplate"))
+                //            ? response.ToInt("templateId")
+                //            : templateId;
+                //    }
+                //    includeThisWeek = !includeThisWeek;
+                //}
             }
             catch (Exception e)
             {

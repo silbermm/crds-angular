@@ -441,7 +441,7 @@ namespace crds_angular.test.Services
             const bool alternateWeeks = false;
             var oppIds = new List<int>() { 1, 2, 3, 4, 5 };
 
-            SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp);
+            SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp, SetupMockEvents());
 
             // The current Opportunity
             _opportunityService.Setup(m => m.GetOpportunityById(opportunityId, It.IsAny<string>())).Returns(fakeOpportunity);
@@ -513,7 +513,7 @@ namespace crds_angular.test.Services
             const bool alternateWeeks = false;
             var oppIds = new List<int>() { 1, 2, 3, 4, 5 };
 
-            SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp);
+            SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp, SetupMockEvents());
 
             // The current Opportunity
             _opportunityService.Setup(m => m.GetOpportunityById(opportunityId, It.IsAny<string>())).Returns(fakeOpportunity);
@@ -552,7 +552,7 @@ namespace crds_angular.test.Services
             var oppIds = new List<int>() {1,2,3,4,5};
 
 
-            SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp);
+            SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp, SetupMockEvents());
 
 
             // The current Opportunity
@@ -584,8 +584,8 @@ namespace crds_angular.test.Services
             _eventService.Verify(m => m.registerParticipantForEvent(47, It.IsAny<int>()), Times.Never());
         }
 
-        [Test]
-        public void RespondToServeOpportunityYesForEveryOtherWeek()
+        [Test, TestCaseSource("AllMockEvents")]
+        public void RespondToServeOpportunityYesForEveryOtherWeek(List<Event>  mockEvents)
         {
             const int contactId = 8;
             const int opportunityId = 12;
@@ -595,7 +595,7 @@ namespace crds_angular.test.Services
             var expectedEventIds = new List<int> { 1, 3, 5 };
             var oppIds = new List<int>() { 1, 2, 3, 4, 5 };
 
-            SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp);
+            SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp, mockEvents);
 
             // The current Opportunity
             _opportunityService.Setup(m => m.GetOpportunityById(opportunityId, It.IsAny<string>())).Returns(fakeOpportunity);
@@ -607,7 +607,7 @@ namespace crds_angular.test.Services
                 GroupContactId = fakeOpportunity.GroupContactId
             });
 
-            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, oppIds, eventTypeId, It.IsAny<DateTime>(),
+            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, oppIds, eventTypeId, new DateTime(2015,1,1), 
                 It.IsAny<DateTime>(), signUp, alternateWeeks);
 
             // The current Opportunity
@@ -626,6 +626,10 @@ namespace crds_angular.test.Services
                 Times.Exactly(3));
         }
 
+        private static readonly object[] AllMockEvents =  {
+            new List<Event>[] {SetupMockEvents()}, new List<Event>[] { SetupWeekMissingInMySeriesMockEvents()}
+        };
+
  
         [Test]
         public void RespondToServeOpportunityNoForEveryOtherWeek()
@@ -638,7 +642,7 @@ namespace crds_angular.test.Services
             var expectedEventIds = new List<int> { 1, 3, 5 };
             var oppIds = new List<int>() { 1, 2, 3, 4, 5 };
 
-            SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp);
+            SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp, SetupMockEvents());
             // The current Opportunity
             _opportunityService.Setup(m => m.GetOpportunityById(opportunityId, It.IsAny<string>())).Returns(fakeOpportunity);
 
@@ -670,7 +674,115 @@ namespace crds_angular.test.Services
                 Times.Exactly(15));
         }
 
-        private void SetUpRSVPMocks(int contactId, int eventTypeId, int opportunityId, bool signUp)
+        private static List<Event> SetupMockEvents()
+        {
+            return new List<Event>
+            {
+                new Event
+                {
+                    EventId = 1, EventStartDate = new DateTime(2015,1,1)
+                },
+                new Event
+                {
+                    EventId = 2, EventStartDate = new DateTime(2015,1,8)
+                },
+                new Event
+                {
+                    EventId = 3, EventStartDate = new DateTime(2015,1,15)
+                },
+                new Event
+                {
+                    EventId = 4, EventStartDate = new DateTime(2015,1,22)
+                },
+                new Event
+                {
+                    EventId = 5, EventStartDate = new DateTime(2015,1,29)
+                }
+            };
+        }
+
+        private static List<Event> SetupWeekMissingInMySeriesMockEvents()
+        {
+            return new List<Event>
+            {
+                new Event
+                {
+                    EventId = 1, EventStartDate = new DateTime(2015,1,1)
+                },
+                new Event
+                {
+                    EventId = 2, EventStartDate = new DateTime(2015,1,8)
+                },
+                new Event
+                {
+                    EventId = 4, EventStartDate = new DateTime(2015,1,22)
+                },
+                new Event
+                {
+                    EventId = 5, EventStartDate = new DateTime(2015,1,29)
+                },
+                new Event
+                {
+                    EventId = 6, EventStartDate = new DateTime(2015,2,5)
+                },
+                new Event
+                {
+                    EventId = 7, EventStartDate = new DateTime(2015,2,12)
+                }
+            };
+        }
+
+        private List<Event> SetupWeekMissingNotInMySeriesMockEvents()
+        {
+            return new List<Event>
+            {
+                new Event
+                {
+                    EventId = 1, EventStartDate = new DateTime(2015,1,1)
+                },
+                new Event
+                {
+                    EventId = 3, EventStartDate = new DateTime(2015,1,15)
+                },
+                new Event
+                {
+                    EventId = 4, EventStartDate = new DateTime(2015,1,22)
+                },
+                new Event
+                {
+                    EventId = 5, EventStartDate = new DateTime(2015,1,29)
+                }
+            };
+        }
+
+        private List<Event> SetupWeekMutipleMissingInMySeriesMockEvents()
+        {
+            return new List<Event>
+            {
+                new Event
+                {
+                    EventId = 1, EventStartDate = new DateTime(2015,1,1)
+                },
+                new Event
+                {
+                    EventId = 3, EventStartDate = new DateTime(2015,1,15)
+                },
+                new Event
+                {
+                    EventId = 4, EventStartDate = new DateTime(2015,1,22)
+                },
+                new Event
+                {
+                    EventId = 6, EventStartDate = new DateTime(2015,2,5)
+                },
+                new Event
+                {
+                    EventId = 7, EventStartDate = new DateTime(2015,2,12)
+                }
+            };
+        }
+
+        private void SetUpRSVPMocks(int contactId, int eventTypeId, int opportunityId, bool signUp, List<Event> mockEvents)
         {
             var mockParticipant = new Participant
             {
@@ -678,29 +790,29 @@ namespace crds_angular.test.Services
             };
 
 
-            var mockEvents = new List<Event>
-            {
-                new Event
-                {
-                    EventId = 1
-                },
-                new Event
-                {
-                    EventId = 2
-                },
-                new Event
-                {
-                    EventId = 3
-                },
-                new Event
-                {
-                    EventId = 4
-                },
-                new Event
-                {
-                    EventId = 5
-                },
-            };
+            //var mockEvents = new List<Event>
+            //{
+            //    new Event
+            //    {
+            //        EventId = 1, EventStartDate = new DateTime(2015,1,1)
+            //    },
+            //    new Event
+            //    {
+            //        EventId = 2, EventStartDate = new DateTime(2015,1,8)
+            //    },
+            //    new Event
+            //    {
+            //        EventId = 3, EventStartDate = new DateTime(2015,1,15)
+            //    },
+            //    new Event
+            //    {
+            //        EventId = 4, EventStartDate = new DateTime(2015,1,22)
+            //    },
+            //    new Event
+            //    {
+            //        EventId = 5, EventStartDate = new DateTime(2015,1,29)
+            //    },
+            //};
 
            
 
@@ -710,6 +822,7 @@ namespace crds_angular.test.Services
                 m =>
                     m.GetEventsByTypeForRange(eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(),
                         It.IsAny<string>())).Returns(mockEvents);
+
             foreach (var mockEvent in mockEvents)
             {
                 _eventService.Setup(m => m.registerParticipantForEvent(mockParticipant.ParticipantId, mockEvent.EventId));
