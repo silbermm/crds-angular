@@ -37,10 +37,6 @@ describe('GiveController', function() {
           credit_card : {
             brand : "Visa",
             last4  :"9876"
-          },
-          bank_account : {
-            routing : "111100000",
-            last4  :"987654321"
           }
         }
       };
@@ -69,8 +65,8 @@ describe('GiveController', function() {
           };
         },
         donateToProgram: function() {},
+        updateDonorWithBankAcct: function(),
         updateDonorWithCard: function() {},
-        updateDonorWithBankAcct: function() {}
       };
 
       controller = $controller('GiveCtrl',
@@ -99,21 +95,22 @@ describe('GiveController', function() {
     });
   });
 
-<<<<<<< HEAD
-  describe('function submitChangedBankInfo-CreditCard', function() {
-=======
   describe('function initDefaultState', function() {
-    var controllerDto = {
-      reset: function() {},
-    };
+    var controllerDto;
 
-    it('should go to give.amount if starting at give', function() {
-      spyOn($state, 'is').and.returnValue(true);
+    beforeEach(function() {
+      controllerDto = jasmine.createSpyObj('dto', ['reset']);
+
+      spyOn(Session, 'removeRedirectRoute');
+
       spyOn($state, 'go');
       spyOn($scope, '$on').and.callFake(function(evt, handler) {
         handler();
       });
-      spyOn(controllerDto, 'reset');
+    });
+
+    it('should go to give.amount if starting at give', function() {
+      spyOn($state, 'is').and.returnValue(true);
 
       controller.initialized = false;
       controller.dto = controllerDto;
@@ -122,6 +119,7 @@ describe('GiveController', function() {
       expect($state.is).toHaveBeenCalledWith('give');
       expect($state.go).toHaveBeenCalledWith('give.amount');
       expect(controllerDto.reset).not.toHaveBeenCalled();
+      expect(Session.removeRedirectRoute).not.toHaveBeenCalled();
     });
 
     it('should go to give.amount if starting at give', function() {
@@ -132,11 +130,6 @@ describe('GiveController', function() {
       spyOn($state, 'is').and.callFake(function(stateName) {
         return(states[stateName]);
       });
-      spyOn($state, 'go');
-      spyOn($scope, '$on').and.callFake(function(evt, handler) {
-        handler();
-      });
-      spyOn(controllerDto, 'reset');
 
       controller.initialized = false;
       controller.dto = controllerDto;
@@ -146,6 +139,7 @@ describe('GiveController', function() {
       expect($state.go).toHaveBeenCalledWith('give.amount');
       expect(controller.initialized).toBeTruthy();
       expect(controllerDto.reset).not.toHaveBeenCalled();
+      expect(Session.removeRedirectRoute).not.toHaveBeenCalled();
     });
 
     it('should do nothing special if starting at give.amount', function() {
@@ -156,11 +150,6 @@ describe('GiveController', function() {
       spyOn($state, 'is').and.callFake(function(stateName) {
         return(states[stateName]);
       });
-      spyOn($state, 'go');
-      spyOn($scope, '$on').and.callFake(function(evt, handler) {
-        handler();
-      });
-      spyOn(controllerDto, 'reset');
 
       controller.initialized = false;
       controller.dto = controllerDto;
@@ -171,6 +160,7 @@ describe('GiveController', function() {
       expect($state.go).not.toHaveBeenCalled();
       expect(controller.initialized).toBeTruthy();
       expect(controllerDto.reset).not.toHaveBeenCalled();
+      expect(Session.removeRedirectRoute).not.toHaveBeenCalled();
     });
 
     it('should go to give.amount if starting at an unknown state and not initialized', function() {
@@ -181,11 +171,6 @@ describe('GiveController', function() {
       spyOn($state, 'is').and.callFake(function(stateName) {
         return(states[stateName]);
       });
-      spyOn($state, 'go');
-      spyOn($scope, '$on').and.callFake(function(evt, handler) {
-        handler();
-      });
-      spyOn(controllerDto, 'reset');
 
       controller.initialized = false;
       controller.dto = controllerDto;
@@ -196,6 +181,7 @@ describe('GiveController', function() {
       expect($scope.$on).not.toHaveBeenCalled();
       expect(controller.initialized).toBeTruthy();
       expect(controllerDto.reset).toHaveBeenCalled();
+      expect(Session.removeRedirectRoute).toHaveBeenCalled();
     });
   });
 
@@ -239,9 +225,10 @@ describe('GiveController', function() {
   });
 
   describe('$stateChangeSuccess event hook', function() {
-    var controllerDto = jasmine.createSpyObj('dto', ['reset']);
+    var controllerDto;
 
     beforeEach(function() {
+      controllerDto = jasmine.createSpyObj('dto', ['reset']);
       controller.dto = controllerDto;
       controller.processing = true;
       controller.initialized = true;
@@ -265,7 +252,6 @@ describe('GiveController', function() {
   });
 
   describe('function submitChangedBankInfo', function() {
->>>>>>> development
     var controllerGiveForm = {
       creditCardForm: {
         $dirty: true,
@@ -275,6 +261,7 @@ describe('GiveController', function() {
 
     var controllerDto = {
       amount: 987,
+      view: 'cc',
       program: {
         ProgramId: 1,
       },
@@ -291,6 +278,24 @@ describe('GiveController', function() {
       },
       reset: function() {},
     };
+
+    var controllerBankDto = {
+      amount: 858,
+      view: 'bank',
+      program: {
+        ProgramId: 2,
+      },
+      email: 'tim@kriz.net',
+      donor: {
+        id: 654,
+        default_source: {          
+          last4: '753869',
+          routing: '110000000'          
+        }
+      },
+      reset: function() {},
+    };
+
 
     it('should call updateDonorWithCard with proper values when changing card info', function() {
       $scope.giveForm = controllerGiveForm;
@@ -321,37 +326,11 @@ describe('GiveController', function() {
         }
       );
     });
-  });
 
-
-describe('function submitChangedBankInfo-BankAcccount', function() {
-    var controllerGiveForm = {
-      bankAccountForm: {
-        $dirty: true,
-      },
-      $valid: true,
-    };
-
-    var controllerDto = {
-      amount: 987,
-      program: {
-        ProgramId: 1,
-      },
-      email: 'tim@kriz.net',
-      donor: {
-        id: 654,
-        default_source: {
-          last4: '12345698765',
-          routing: '110000000',
-        }
-      }
-    };
-
-   
-    it('should call updateDonorWithBankAcct with proper values when changing bank info', function() {
+   it('should call updateDonorWithBankAcct with proper values when bank account info in changed', function() {
       $scope.giveForm = controllerGiveForm;
-      controller.dto = controllerDto;
-   
+      controller.dto = controllerBankDto;
+
       spyOn(mockPaymentService, 'updateDonorWithBankAcct').and.callFake(function(donorId, donor) {
         var deferred = $q.defer();
         deferred.resolve(donor);
@@ -365,20 +344,18 @@ describe('function submitChangedBankInfo-BankAcccount', function() {
       $rootScope.$apply();
 
       expect(controller.donate).toHaveBeenCalled();
-      expect(mockPaymentService.updateDonorWithBankAcct).toHaveBeenCalledWith(
+      expect(mockPaymentService.updateDonorWithCard).toHaveBeenCalledWith(
         controllerDto.donor.id,
         {
-          number: controllerDto.donor.default_source.last4,
-          routing: controllerDto.donor.default_source.routing
+          account: controllerBankDto.donor.default_source.account,
+          routing: controllerBankDto.donor.default_source.routing      
         }
       );
     });
+
   });
 
-
-
   describe('function transitionForLoggedInUserBasedOnExistingDonor', function(){
-
     var mockEvent = {
       preventDefault : function(){}
     };
@@ -476,16 +453,31 @@ describe('function submitChangedBankInfo-BankAcccount', function() {
   });
 
   describe('function goToChange', function() {
-    it('should populate dto with appropriate values when going to the change page', function() {
-      controller.dto = {
+    it('should populate dto with appropriate values when going to the credit card change page', function() {
+      controller.dto = { 
         reset: function() {},
       };
-      controller.goToChange(123, "donor", "test@here.com", "program", "view");
+      controller.brand = "#visa";
+      controller.goToChange(123, "donor", "test@here.com", "program");
       expect(controller.dto.amount).toBe(123);
       expect(controller.dto.donor).toBe("donor");
       expect(controller.dto.email).toBe("test@here.com");
       expect(controller.dto.program).toBe("program");
       expect(controller.dto.view).toBe("cc");
+      expect(controller.dto.changeAccountInfo).toBeTruthy();
+    });
+
+    it('should populate dto with appropriate values when going to the bank account change page', function() {
+      controller.dto = { 
+        reset: function() {},
+      };
+      controller.brand = "#library";
+      controller.goToChange(123, "donor", "test@here.com", "program");
+      expect(controller.dto.amount).toBe(123);
+      expect(controller.dto.donor).toBe("donor");
+      expect(controller.dto.email).toBe("test@here.com");
+      expect(controller.dto.program).toBe("program");
+      expect(controller.dto.view).toBe("bank");
       expect(controller.dto.changeAccountInfo).toBeTruthy();
     });
   });

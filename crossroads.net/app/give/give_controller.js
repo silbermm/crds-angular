@@ -108,7 +108,7 @@
            number: vm.dto.donor.default_source.last4,
            exp_month: vm.dto.donor.default_source.exp_date.substr(0,2),
            exp_year: vm.dto.donor.default_source.exp_date.substr(2,2),
-           cvc: vm.cvc,
+           cvc: vm.dto.donor.default_source.cvc,
            address_zip: vm.dto.donor.default_source.address_zip
            }
         };
@@ -144,7 +144,7 @@
           }
         };
 
-        vm.goToChange = function(amount, donor, email, program, view) {
+        vm.goToChange = function(amount, donor, email, program) {
           vm.dto.amount = amount;
           vm.dto.donor = donor;
           vm.dto.email = email;
@@ -176,6 +176,7 @@
           if(!vm.initialized) {
             vm.dto.reset();
             vm.initialized = true;
+            Session.removeRedirectRoute();
             $state.go("give.amount");
             return;
           }
@@ -234,6 +235,7 @@
 
        vm.processCreditCardChange = function (){
           if ($scope.giveForm.$valid) {
+            console.log("processig change");
              vm.processing = true;
              vm.createCard();
              PaymentService.updateDonorWithCard(vm.dto.donor.id, vm.card)                
@@ -303,7 +305,8 @@
 
         vm.submitChangedBankInfo = function() {
             vm.bankinfoSubmitted = true;
-            if ($scope.give.dto.view == "cc") {
+            console.log(vm.dto.view);
+            if (vm.dto.view == "cc") {
               if (!$scope.giveForm.creditCardForm.$dirty){
                 vm.processing = true;
                 vm.donate(vm.dto.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.dto.email, vm.dto.view, function() {
@@ -313,7 +316,7 @@
                 vm.processCreditCardChange();
              }
            };           
-           if ($scope.give.dto.view == "bank"){
+           if (vm.dto.view == "bank"){
               if(!$scope.giveForm.bankAccountForm.$dirty) {
                  vm.processing = true;
                  vm.donate(vm.dto.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.dto.email, vm.dto.view, function() {
