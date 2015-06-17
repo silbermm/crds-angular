@@ -1,19 +1,19 @@
-"use strict()";
+'use strict()';
 
 (function(){
 
-  angular.module('crossroads').directive("kidsClubAdultApplication", KidsClubAdultApplication);
+  module.exports = KidsClubAdultApplication;
 
   KidsClubAdultApplication.$inject = ['$log', '$rootScope'];
 
   function KidsClubAdultApplication($log, $rootScope){
 
     return {
-      restrict: "EA",
-      templateUrl : "kc_adult_application/kidsClubAdultApplication.template.html",
-      controller: "KidsClubAdultApplicationController as kcAdultApplication",
+      restrict: 'EA',
+      templateUrl : 'kc_adult_application/kidsClubAdultApplication.template.html',
+      controller: 'KidsClubAdultApplicationController as kcAdultApplication',
       scope: {
-        volunteer: "=volunteer",
+        volunteer: '=volunteer',
         contactId: '=contactId',
         opportunityId: '=opportunityId',
         responseId: '=responseId',
