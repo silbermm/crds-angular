@@ -1,7 +1,6 @@
 'use strict';
 
-var app =
-require("angular").module('crossroads');
+var app = angular.module('crossroads');
 require('../profile/personal/profile_personal.html');
 require('../profile');
 

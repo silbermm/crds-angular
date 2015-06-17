@@ -239,6 +239,7 @@
     <Compile Include="Controllers\API\OpportunityController.cs" />
     <Compile Include="Controllers\API\ProfileController.cs" />
     <Compile Include="Controllers\API\SkillController.cs" />
+    <Compile Include="Controllers\API\VolunteerApplicationController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Exceptions\Models\ApiErrorDto.cs" />
     <Compile Include="Enum\BadgeTypeEnum.cs" />
@@ -254,6 +255,7 @@
     <Compile Include="Models\Crossroads\Opportunity\OpportunityCapacityDto.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityGroup.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityGroupParticipant.cs" />
+    <Compile Include="Models\Crossroads\Opportunity\OpportunityResponseDto.cs" />
     <Compile Include="Models\Crossroads\PartID.cs" />
     <Compile Include="Models\Crossroads\GroupDTO.cs" />
     <Compile Include="Models\Crossroads\AccountInfo.cs" />
@@ -262,6 +264,7 @@
     <Compile Include="Models\Crossroads\ServeOccurance.cs" />
     <Compile Include="Models\Crossroads\Serve\Capacity.cs" />
     <Compile Include="Models\Crossroads\Serve\FamilyMember.cs" />
+    <Compile Include="Models\Crossroads\Serve\QualifiedServerDto.cs" />
     <Compile Include="Models\Crossroads\Serve\SaveRsvpDto.cs" />
     <Compile Include="Models\Crossroads\Serve\ServeRsvp.cs" />
     <Compile Include="Models\Crossroads\SignUpFamilyMembers.cs" />
@@ -278,6 +281,13 @@
     <Compile Include="Models\Crossroads\StripeCharge.cs" />
     <Compile Include="Models\Crossroads\StripeCustomer.cs" />
     <Compile Include="Models\Crossroads\User.cs" />
+    <Compile Include="Models\Crossroads\VolunteerApplication\AdultApplicationDto.cs" />
+    <Compile Include="Models\Crossroads\VolunteerApplication\ChildDto.cs" />
+    <Compile Include="Models\Crossroads\VolunteerApplication\CustomField.cs" />
+    <Compile Include="Models\Crossroads\VolunteerApplication\Gender.cs" />
+    <Compile Include="Models\Crossroads\VolunteerApplication\MaritalStatus.cs" />
+    <Compile Include="Models\Crossroads\VolunteerApplication\StudentApplicationDto.cs" />
+    <Compile Include="Models\Crossroads\VolunteerApplication\VolunteerApplicationDto.cs" />
     <Compile Include="Models\Json\AccountInfoSerializer.cs" />
     <Compile Include="Models\Json\Communication.cs" />
     <Compile Include="Models\Json\NewPassword.cs" />
@@ -298,12 +308,14 @@
     <Compile Include="Services\Interfaces\IServeService.cs" />
     <Compile Include="Services\Interfaces\IPersonService.cs" />
     <Compile Include="Services\Interfaces\IPaymentService.cs" />
+    <Compile Include="Services\Interfaces\IVolunteerApplicationService.cs" />
     <Compile Include="Services\MinistryPlatformBaseService.cs" />
     <Compile Include="Services\PersonService.cs" />
     <Compile Include="Services\ServeService.cs" />
     <Compile Include="Services\SkillService.cs" />
     <Compile Include="Services\StripeService.cs" />
     <Compile Include="Services\TranslationService.cs" />
+    <Compile Include="Services\VolunteerApplicationService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>

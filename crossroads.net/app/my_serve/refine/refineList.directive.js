@@ -1,8 +1,6 @@
 'use strict()';
 (function() {
 
-  var moment = require('moment');
-
   module.exports = RefineDirective;
 
   RefineDirective.$inject = ['$rootScope', 'filterState', 'screenSize']
@@ -231,6 +229,9 @@
         _.each(scope.uniqueTimes, function(time) {
           time.selected = false;
         });
+        _.each(scope.uniqueSignUps, function(signUp) {
+          signUp.selected = false;
+        })
         filterAll();
       }
 

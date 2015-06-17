@@ -40,15 +40,18 @@
         vm.changeAccountInfo = false;
         vm.donor = {};
         vm.donorError = false;
+        vm.dto = GiveTransferService;
         vm.email = null;
         vm.emailAlreadyRegisteredGrowlDivRef = 1000;
         vm.emailPrefix = "give";
         vm.last4 = '';
-        vm.showMessage = "Where?";
-        vm.showCheckClass = "ng-hide";
         vm.processing = false;
         vm.programsInput = programList;
-        vm.dto = GiveTransferService;
+        vm.showMessage = "Where?";
+        vm.showCheckClass = "ng-hide";        
+        if (!vm.dto.view ){
+          vm.dto.view = "bank";
+        };
 
         var brandCode = [];
         brandCode['Visa'] = "#cc_visa";
@@ -56,55 +59,12 @@
         brandCode['American Express'] = '#cc_american_express';
         brandCode['Discover'] = '#cc_discover';
 
-        // vm.change = function(amount){
-        //   vm.dto.amount = amount;
-        //   $state.go('give.change');
-        // };
-
-        vm.transitionForLoggedInUserBasedOnExistingDonor = function(event, toState){
-          if(toState.name == "give.account" && $rootScope.username && !vm.donorError ) {
-            vm.processing = true;
-            event.preventDefault();
-            PaymentService.donor().get({email: $scope.give.email})
-            .$promise
-            .then(function(donor){
-              vm.donor = donor;
-              vm.last4 = donor.default_source.last4;
-              vm.brand = brandCode[donor.default_source.brand];
-              vm.expYear =  donor.exp_year;
-              vm.exp_month = donor.exp_month;
-              $state.go("give.confirm");
-            },function(error){
-            //  create donor record
-              vm.donorError = true;
-              $state.go("give.account");
-            });
-          }
-        }
-
-        vm.goToAccount = function() {
-            vm.amountSubmitted = true;
-            if($scope.giveForm.amountForm.$valid) {
-                if(!vm.dto.view) {
-                  vm.dto.view = 'bank';
-                }
-                vm.processing = true;
-                if ($rootScope.username === undefined) {
-                    Session.addRedirectRoute("give.account", "");
-                    $state.go("give.login");
-                } else {
-                    $state.go("give.account");
-                }
-            } else {
-               $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-            }
-        };
-
+       
         vm.confirmDonation = function(){
           try
           {
             vm.processing = true;
-            vm.donate(vm.program.ProgramId, vm.amount, vm.donor.id, vm.email, function() {
+            vm.donate(vm.program.ProgramId, vm.amount, vm.donor.id, vm.email, vm.dto.view, function() {
               $state.go("give.thank-you");
             });
           }
@@ -113,6 +73,37 @@
             $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
           }
 
+        };
+
+        vm.donate = function(programId, amount, donorId, email, pymtType, onSuccess){
+          PaymentService.donateToProgram(programId, amount, donorId, email, pymtType)
+            .then(function(confirmation){
+              vm.amount = confirmation.amount;
+              vm.program = _.find(vm.programsInput, {'ProgramId': programId});
+              vm.program_name = vm.program.Name;
+              onSuccess();
+            },
+            function(reason){
+              throw new DonationException("Failed: " + reason);
+            });
+        };
+
+        vm.goToAccount = function() {
+          vm.amountSubmitted = true;
+          if($scope.giveForm.amountForm.$valid) {
+              if(!vm.dto.view) {
+                vm.dto.view = 'bank';
+              }
+              vm.processing = true;
+              if ($rootScope.username === undefined) {
+                  Session.addRedirectRoute("give.account", "");
+                  $state.go("give.login");
+              } else {
+                  $state.go("give.account");
+              }
+          } else {
+             $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+          }
         };
 
         vm.goToChange = function(amount, donor, email, program, view) {
@@ -174,7 +165,7 @@
               PaymentService.donor().get({email: $scope.give.email})
              .$promise
               .then(function(donor){
-                vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email, function() {
+                vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email, vm.dto.view, function() {
                   $state.go("give.thank-you");
                 });
 
@@ -183,16 +174,16 @@
                   // The vm.email below is only required for guest giver, however, there
                   // is no harm in sending it for an authenticated user as well,
                   // so we'll keep it simple and send it in all cases.
-                  PaymentService.createDonorWithCard({
-                    name: vm.dto.donor.default_source.name,
-                    number: vm.dto.donor.default_source.last4,
-                    exp_month: vm.dto.donor.default_source.exp_date.substr(0,2),
-                    exp_year: vm.dto.donor.default_source.exp_date.substr(2,2),
-                    cvc: vm.cvc,
-                    address_zip: vm.dto.donor.default_source.address_zip
-                  }, vm.email)
+                  if (vm.dto.view == "cc") {
+                    PaymentService.createDonorWithCard({
+                      name: vm.dto.donor.default_source.name,
+                      number: vm.dto.donor.default_source.last4,
+                      exp_month: vm.dto.donor.default_source.exp_date.substr(0,2),
+                      exp_year: vm.dto.donor.default_source.exp_date.substr(2,2),
+                      cvc: vm.cvc
+                    }, vm.email)
                   .then(function(donor) {
-                    vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email, function() {
+                    vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email, vm.dto.view, function() {
                       $state.go("give.thank-you");
                     });
                   },
@@ -200,6 +191,26 @@
                     vm.processing = false;
                     $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
                   });
+                 };
+
+                 if (vm.dto.view == "bank") {
+                    PaymentService.createDonorWithBankAcct({
+                       country: 'US',
+                       currency: 'USD',
+                       routing_number: vm.dto.routing,
+                       account_number: vm.dto.account
+                    }, vm.email)
+                  .then(function(donor) {
+                    vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email, vm.dto.view, function() {
+                     $state.go("give.thank-you");
+                    });
+                  },
+                  function() {
+                    vm.processing = false;
+                    $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
+                  });
+                };
+
 
                 });
             }
@@ -227,7 +238,7 @@
                    address_zip: vm.dto.donor.default_source.address_zip
                  })
                .then(function(donor) {
-                 vm.donate(vm.dto.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.dto.email, function() {
+                 vm.donate(vm.dto.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.dto.email, vm.dto.view, function() {
                    $state.go("give.thank-you");
                  });
                }),
@@ -242,24 +253,39 @@
              // If pristine, it means we did not change the bank info, so we'll
              // simply make the payment using the existing info
              vm.processing = true;
-             vm.donate(vm.dto.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.dto.email, function() {
+             vm.donate(vm.dto.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.dto.email, vm.dto.view, function() {
                $state.go("give.thank-you");
              });
            }
         };
 
-        vm.donate = function(programId, amount, donorId, email, onSuccess){
-          PaymentService.donateToProgram(programId, amount, donorId, email)
-            .then(function(confirmation){
-              vm.amount = confirmation.amount;
-              vm.program = _.find(vm.programsInput, {'ProgramId': programId});
-              vm.program_name = vm.program.Name;
-              onSuccess();
-            },
-            function(reason){
-              throw new DonationException("Failed: " + reason);
+        vm.transitionForLoggedInUserBasedOnExistingDonor = function(event, toState){
+          if(toState.name == "give.account" && $rootScope.username && !vm.donorError ) {
+            vm.processing = true;
+            event.preventDefault();
+            PaymentService.donor().get({email: $scope.give.email})
+            .$promise
+            .then(function(donor){
+              vm.donor = donor;
+              if (vm.donor.default_source.credit_card.last4 != null){
+                vm.last4 = donor.default_source.credit_card.last4;
+                vm.brand = brandCode[donor.default_source.credit_card.brand];
+                vm.expYear =  donor.exp_year;
+                vm.exp_month = donor.exp_month;
+              } else {
+                vm.routing = donor.default_source.bank_account.routing;
+                vm.account = donor.default_source.bank_account.last4
+                vm.last4 = donor.default_source.bank_account.last4;
+                vm.brand = '#library';
+              };
+              $state.go("give.confirm");
+            },function(error){
+            //  create donor record
+              vm.donorError = true;
+              $state.go("give.account");
             });
-        };
+          }
+        }       
 
     }
 

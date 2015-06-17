@@ -5,6 +5,7 @@
         public int? Address_ID { get; set; }
         public string Address_Line_1 { get; set; }
         public string Address_Line_2 { get; set; }
+        public int Age { get; set; }
         public string Anniversary_Date { get; set; }
         public string City { get; set; }
         public int? Congregation_ID { get; set; }

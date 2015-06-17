@@ -408,9 +408,16 @@ describe('Refine List Directive', function() {
   });
 
   it("should clear all filters and return to the default list", function() {
+    var yes = {
+      'name': 'Yes',
+      'id': 1,
+      'selected': false,
+      'attending': true
+    };
     filterState.addFamilyMember(1970611);
     filterState.addTime("08:30:00");
     filterState.addTeam(34911);
+    filterState.addSignUp(yes)
     isolateScope.filterAll();
     isolateScope.clearFilters();
     expect(isolateScope.servingDays[0].serveTimes.length).toBe(2);

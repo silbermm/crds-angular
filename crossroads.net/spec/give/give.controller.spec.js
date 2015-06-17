@@ -11,14 +11,17 @@ describe('GiveController', function() {
       $state = $injector.get('$state');
       $timeout = $injector.get('$timeout');
       $q = _$q_;
-      httpBackend = $httpBackend;
+      httpBackend = $injector.get('$httpBackend');
       Session = $injector.get('Session');
+
 
       mockGetResponse = {
         Processor_ID: "123456",
         default_source :  {
+          credit_card : {
             brand : "Visa",
             last4  :"9876"
+          }
         }
       };
 
@@ -199,8 +202,40 @@ describe('GiveController', function() {
       expect(mockEvent.preventDefault).toHaveBeenCalled();
       expect(mockPaymentService.donor).toHaveBeenCalled();
       expect(controller.donorError).toBeFalsy();
-      expect(controller.donor.default_source.last4).toBe("9876");
-      expect(controller.donor.default_source.brand).toBe("Visa");
+      expect(controller.donor.default_source.credit_card.last4).toBe("9876");
+      expect(controller.donor.default_source.credit_card.brand).toBe("Visa");
+    });
+
+    it('should set brand and last 4 correctly when payment type is bank', function(){
+      mockGetResponse = {
+        Processor_ID: "123456",
+        default_source :  {
+          credit_card : {
+            brand : null,
+            last4  :null
+          },
+          bank_account: {
+            routing: "111000222",
+            last4: "6699"
+          }
+        }
+      };
+      $rootScope.username = "Shankar";
+
+      var mockEvent = {
+      preventDefault : function(){}
+      };
+
+      var mockToState = {
+      name : "give.account"
+      };
+      $scope.give = {
+        email: "test@test.com"
+      };
+
+      controller.transitionForLoggedInUserBasedOnExistingDonor(mockEvent, mockToState);
+      expect(controller.last4).toBe("6699");
+      expect(controller.brand).toBe("#library");
     });
   });
 
@@ -223,7 +258,7 @@ describe('GiveController', function() {
     };
 
     it('should call success callback if donation is successful', function() {
-      spyOn(mockPaymentService, 'donateToProgram').and.callFake(function(programId, amount, donorId, email) {
+      spyOn(mockPaymentService, 'donateToProgram').and.callFake(function(programId, amount, donorId, email, pymtType) {
         var deferred = $q.defer();
         deferred.resolve({ amount: amount, });
         return deferred.promise;
@@ -231,7 +266,7 @@ describe('GiveController', function() {
 
       spyOn(callback, 'onSuccess');
 
-      controller.donate(1, 123, "2", "test@here.com", callback.onSuccess);
+      controller.donate(1, 123, "2", "test@here.com", "cc", callback.onSuccess);
       // This resolves the promise above
       $rootScope.$apply();
 
@@ -242,7 +277,7 @@ describe('GiveController', function() {
     });
 
     it('should not call success callback if donation fails', function() {
-      spyOn(mockPaymentService, 'donateToProgram').and.callFake(function(programId, amount, donorId, email) {
+      spyOn(mockPaymentService, 'donateToProgram').and.callFake(function(programId, amount, donorId, email, pymtType) {
         var deferred = $q.defer();
         deferred.reject("Uh oh!");
         return deferred.promise;

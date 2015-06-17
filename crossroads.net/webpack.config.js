@@ -13,9 +13,15 @@ var definePlugin = new webpack.DefinePlugin({
 });
 
 module.exports = {
-    entry: './app/app.js',
+    entry: {
+        main: './app/app.js'
+    },
+    watchPattern: 'app/**/**',
     externals: {
-      stripe: "Stripe"
+      stripe: "Stripe",
+      angular: "angular",
+      moment: "moment"
+
     },
     context: __dirname,
     output: {
@@ -62,7 +68,7 @@ module.exports = {
     ]
     },
     plugins: [
-    new ExtractTextPlugin("[name].css"),
-    definePlugin
-  ],
+        new ExtractTextPlugin("[name].css"),
+        definePlugin
+    ]
 };

@@ -15,6 +15,30 @@
   }
 }
 
+.series-image-container {
+	overflow: hidden;
+	position: relative;
+	transform-style: preserve-3d;
+	max-height: 210px;
+}
+
+.series-image-small {
+	@include vertical-align;
+	position: absolute;
+	text-align: center;
+	width: 100%;
+
+	img {
+		margin: 0 auto;
+		@include box-shadow(0 3px 9px rgba(0,0,0,.8));
+	}
+}
+
+.blurred-series-image {
+	filter: blur(10px);
+	filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='10');
+}
+
 .series-info {
   clear: both;
 
@@ -102,9 +126,9 @@
 }
 
 .media-search {
-  
+
   margin-bottom: 0;
-  
+
   @media only screen and (max-width:  $screen-sm-min){
     margin-bottom: $line-height-computed !important;
   }
@@ -120,12 +144,6 @@
   .icon {
     height: 18px;
     width: 18px;
-  }
-}
-
-.media-index {
-  .media-search {
-    margin-top: $line-height-computed/2;
   }
 }
 

@@ -25,6 +25,7 @@ namespace crds_angular.Models.Crossroads
         public string id { get; set; }
         public string @object { get; set; }
         public string last4 { get; set; }
+        public string bank_last4 { get; set; }
         public string brand { get; set; }
         public string funding { get; set; }
         public string exp_month { get; set; }
@@ -44,6 +45,10 @@ namespace crds_angular.Models.Crossroads
         public string dynamic_last4 { get; set; }
         public Metadata2 metadata { get; set; }
         public string customer { get; set; }
+        public string currency { get; set; }
+        public string status { get; set; }
+        public string routing_number { get; set; }
+        public string bank_name { get; set; }
     }
 
     public class Sources
