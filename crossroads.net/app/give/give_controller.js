@@ -111,7 +111,11 @@
           vm.dto.donor = donor;
           vm.dto.email = email;
           vm.dto.program = program;
-          vm.dto.view = view;
+          if (vm.brand == "#library"){
+            vm.dto.view = "bank"
+          } else {
+            vm.dto.view = "cc";
+          }          
           vm.dto.changeAccountInfo = true;
           $state.go("give.change")
         };
