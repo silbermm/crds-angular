@@ -21,7 +21,6 @@
 
     function link(scope, el, attr) {
 
-      scope.closePanel = closePanel;
       scope.currentActiveTab = null;
       scope.currentMember = null;
       scope.dateOptions = {
@@ -53,12 +52,10 @@
       scope.modalInstance = {};
       scope.openFromDate = openFromDate;
       scope.openToDate = openToDate;
-      scope.openPanel = openPanel;
       scope.roleChanged = roleChanged;
       scope.roles = null;
       scope.saveRsvp = saveRsvp;
       scope.selectedRole = null;
-      scope.setActiveTab = setActiveTab;
       scope.signedup = null;
       scope.showEdit = false;
       scope.showIcon = showIcon;
@@ -93,10 +90,6 @@
           }
         }
 
-      }
-
-      function closePanel() {
-        scope.isCollapsed = true;
       }
 
       function displayEmail(emailAddress) {
@@ -217,24 +210,6 @@
         $event.preventDefault();
         $event.stopPropagation();
         scope.datePickers.toOpened = true;
-      }
-
-      function openPanel(members) {
-        if (scope.currentMember === null) {
-          var sessionId = Number(Session.exists("userId"));
-          scope.currentMember = members[0];
-          scope.currentActiveTab = scope.currentMember.name;
-        }
-        _.each(scope.currentMember.roles, function(r) {
-          r.capacity = Capacity.get({
-            id: r.roleId,
-            eventId: scope.team.eventId,
-            min: r.minimum,
-            max: r.maximum
-          });
-        });
-        scope.isCollapsed = !scope.isCollapsed;
-        allowProfileEdit();
       }
 
       function parseDate(stringDate) {
@@ -363,9 +338,9 @@
         };
         scope.currentActiveTab = member.name;
         if (scope.currentMember === null || member === scope.currentMember) {
-          scope.togglePanel();
+          scope.isCollapsed = !scope.isCollapsed;
         } else if (member !== scope.currentMember && scope.isCollapsed) {
-          scope.togglePanel();
+          scope.isCollapsed = !scope.isCollapsed;
         }
         scope.currentMember = member;
         _.each(scope.currentMember.roles, function(r) {
@@ -394,9 +369,21 @@
         }
       }
 
-      function togglePanel() {
-        scope.isCollapsed = !scope.isCollapsed;
-      };
+      function togglePanel(member) {
+        if (!scope.isCollapsed) {
+          // panel is open, close it
+          scope.isCollapsed = true;
+          scope.currentActiveTab = null;
+          return false;
+        }
+
+        //if a member wasn't passed in, use default member
+        if (member === null) {
+          scope.currentMember = scope.team.members[0];
+          member = scope.currentMember;
+        }
+        setActiveTab(member);
+      }
     };
   }
 })();
