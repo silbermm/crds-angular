@@ -370,7 +370,7 @@
       }
 
       function togglePanel(member) {
-        if (!scope.isCollapsed) {
+        if (!scope.isCollapsed && ((scope.currentMember === member) || (member === null))) {
           // panel is open, close it
           scope.isCollapsed = true;
           scope.currentActiveTab = null;
