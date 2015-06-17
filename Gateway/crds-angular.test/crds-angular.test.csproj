@@ -159,6 +159,7 @@
     <Compile Include="Services\PersonServiceTest.cs" />
     <Compile Include="Services\ServeServiceTest.cs" />
     <Compile Include="Services\StripeServiceTest.cs" />
+    <Compile Include="Services\VolunteerApplicationServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\crds-angular\Web.common.config">

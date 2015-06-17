@@ -11,8 +11,9 @@ describe('GiveController', function() {
       $state = $injector.get('$state');
       $timeout = $injector.get('$timeout');
       $q = _$q_;
-      httpBackend = $httpBackend;
+      httpBackend = $injector.get('$httpBackend');
       Session = $injector.get('Session');
+
 
       mockGetResponse = {
         Processor_ID: "123456",
@@ -203,6 +204,38 @@ describe('GiveController', function() {
       expect(controller.donorError).toBeFalsy();
       expect(controller.donor.default_source.credit_card.last4).toBe("9876");
       expect(controller.donor.default_source.credit_card.brand).toBe("Visa");
+    });
+
+    it('should set brand and last 4 correctly when payment type is bank', function(){
+      mockGetResponse = {
+        Processor_ID: "123456",
+        default_source :  {
+          credit_card : {
+            brand : null,
+            last4  :null
+          },
+          bank_account: {
+            routing: "111000222",
+            last4: "6699"
+          }
+        }
+      };
+      $rootScope.username = "Shankar";
+
+      var mockEvent = {
+      preventDefault : function(){}
+      };
+
+      var mockToState = {
+      name : "give.account"
+      };
+      $scope.give = {
+        email: "test@test.com"
+      };
+
+      controller.transitionForLoggedInUserBasedOnExistingDonor(mockEvent, mockToState);
+      expect(controller.last4).toBe("6699");
+      expect(controller.brand).toBe("#library");
     });
   });
 

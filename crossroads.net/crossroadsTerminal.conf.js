@@ -17,10 +17,10 @@ module.exports = function(config) {
     files: [
       'https://js.stripe.com/v2/',
       './node_modules/phantomjs-polyfill/bind-polyfill.js',
-      'https://js.stripe.com/v2/',
+      'assets/dependencies.js',
+      'assets/core.js',
       'assets/main.js',
       'node_modules/angular-mocks/angular-mocks.js',
-      'node_modules/moment/moment.js',
       'spec/**/*.js'
     ],
 

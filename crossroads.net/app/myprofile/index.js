@@ -1,4 +1,4 @@
-var app = require("angular").module("crossroads");
+var app = angular.module("crossroads");
 require('./myprofile.html');
 require('./templates/profile_personal.html');
 require('./templates/profile_account.html');

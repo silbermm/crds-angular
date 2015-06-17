@@ -36,49 +36,36 @@ namespace MinistryPlatform.Translation.Services
             {
                 logger.Debug(String.Format("Trying to email address of {0} failed", contactId));
                 return string.Empty;
-
-            } 
+            }
         }
 
         public MyContact GetContactById(int contactId)
         {
-            var recordsDict = _ministryPlatformService.GetRecordDict(contactsPageId, contactId, apiLogin());
+            var searchString = string.Format(",{0}", contactId);
+            var pageViewRecords = _ministryPlatformService.GetPageViewRecords("AllIndividualsWithContactId", apiLogin(), searchString);
 
-            var contact = new MyContact
+            if (pageViewRecords.Count > 1)
             {
-                Household_ID = recordsDict.ToInt("Household_ID"),
-                Anniversary_Date = recordsDict.ToDateAsString("Anniversary_Date"),
-                Contact_ID = recordsDict.ToInt("Contact_ID"),
-                Date_Of_Birth = recordsDict.ToDateAsString("Date_of_Birth"),
-                Email_Address = recordsDict.ToString("Email_Address"),
-                Employer_Name = recordsDict.ToString("Employer_Name"),
-                First_Name = recordsDict.ToString("First_Name"),
-                Gender_ID = recordsDict.ToNullableInt("Gender_ID"),
-                Last_Name = recordsDict.ToString("Last_Name"),
-                Maiden_Name = recordsDict.ToString("Maiden_Name"),
-                Marital_Status_ID = recordsDict.ToNullableInt("Marital_Status_ID"),
-                Middle_Name = recordsDict.ToString("Middle_Name"),
-                Mobile_Carrier = recordsDict.ToNullableInt("Mobile_Carrier"),
-                Mobile_Phone = recordsDict.ToString("Mobile_Phone"),
-                Nickname = recordsDict.ToString("Nickname")
-            };
-            return contact;
+                throw new ApplicationException("GetContactById returned multiple records");
+            }
+
+            return ParseProfileRecord(pageViewRecords[0]);
         }
-        
+
         public MyContact GetMyProfile(string token)
         {
             var recordsDict = _ministryPlatformService.GetRecordsDict("MyProfile", token);
 
             if (recordsDict.Count > 1)
             {
-                throw  new ApplicationException("GetMyProfile returned multiple records");
+                throw new ApplicationException("GetMyProfile returned multiple records");
             }
 
             var contact = ParseProfileRecord(recordsDict[0]);
-            
+
             return contact;
         }
-        
+
         private static MyContact ParseProfileRecord(Dictionary<string, object> recordsDict)
         {
             var contact = new MyContact
@@ -119,20 +106,22 @@ namespace MinistryPlatform.Translation.Services
             contactDictionary["Company"] = false; // default
             contactDictionary["Display_Name"] = displayName;
             contactDictionary["Nickname"] = displayName;
-            contactDictionary["Household_Position_ID"] = Convert.ToInt32(ConfigurationManager.AppSettings["Household_Position_Default_ID"]);
+            contactDictionary["Household_Position_ID"] =
+                Convert.ToInt32(ConfigurationManager.AppSettings["Household_Position_Default_ID"]);
 
             try
             {
                 var contactId = WithApiLogin<int>(apiToken =>
                     _ministryPlatformService.CreateRecord(contactsPageId, contactDictionary, apiToken)
-                );
+                    );
                 return (contactId);
             }
             catch (Exception e)
             {
-                throw (new ApplicationException(String.Format("Error creating contact for guest giver, emailAddress: {0} displayName: {1}", emailAddress, displayName), e));
+                throw (new ApplicationException(
+                    String.Format("Error creating contact for guest giver, emailAddress: {0} displayName: {1}",
+                        emailAddress, displayName), e));
             }
-
         }
     }
 }

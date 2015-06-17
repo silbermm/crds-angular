@@ -5,7 +5,7 @@ require('./profile.config');
 require('./profile.html')
 require('./personal/profile_personal.template.html');
 
-var app = require('angular').module('crossroads.profile')
+var app = angular.module('crossroads.profile')
 
 app.controller('crdsProfileCtrl', ['$rootScope','Profile', 'Lookup', '$q', '$log','$scope',  require("./profile_controller")]);
 

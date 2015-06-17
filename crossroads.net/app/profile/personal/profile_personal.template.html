@@ -29,7 +29,7 @@
         <div class="form-group col-sm-6">
             <label for="nickname" class="flush-bottom">Preferred Name <span class="text-muted small">(Example: Rob or Becky)</span>
             </label>
-            
+
             <input type="text" name="nickname" class="form-control" id="nickname" placeholder="Enter nick name" ng-model="profile.person.nickName" empty-to-null>
         </div>
     </div>
@@ -37,7 +37,7 @@
     <div class="row">
         <div class="form-group col-sm-6" ng-class="{'has-error':personal.email.$invalid}">
             <label for="email">Email</label>
-            <email-field email="profile.person.emailAddress" submitted="personal.$submitted" prefix="profile.passwordPrefix"></email-field>
+            <email-field email="profile.person.emailAddress" submitted="personal.$submitted" prefix="profile.passwordPrefix" focused="false"></email-field>
         </div>
     </div>
 

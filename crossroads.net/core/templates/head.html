@@ -1,0 +1,46 @@
+
+  <base href="/"></base>
+  <style>
+    /* Allow angular.js to be loaded in body, hiding cloaked elements until
+     * templates compile.  The !important is important given that there may be
+     * other selectors that are more specific or come later and might alter display.
+     */
+      [ng\:cloak],
+      [ng-cloak],
+      .ng-cloak {
+          display: none !important;
+      }
+  </style>
+  <title>Index</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <ng-include src="'templates/favicons.html'"> </ng-include>
+  <script type="text/ng-template" id="on-submit-messages">
+      <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span></span>
+      <span ng-message="initiativeRequired"><span ng-bind-html="$root.messages[$root.MESSAGES.noInitiativeSelected].message | html"></span></span>
+  </script>
+  <script type="text/ng-template" id="on-pause-messages">
+      <span ng-message="pattern"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span></span>
+      <span ng-message="invalidDate"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span></span>
+      <span ng-message="email"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidEmail].message | html"></span></span>
+  </script>
+  <script type="text/ng-template" id="on-blur-messages">
+      <span ng-message="minlength"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidPassword].message | html"></span></span>
+      <span ng-message="unique"><span ng-bind-html="$root.messages[$root.MESSAGES.emailInUse].message | html"></span></span>
+      <span ng-message="email"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidEmail].message | html"></span></span>
+      <span ng-message="invalidRouting"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidRoutingTransit].message | html"></span></span>
+      <span ng-message="invalidAccount"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidAccountNumber].message | html"></span></span>
+      <span ng-message="naturalNumber"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidDonationAmount].message | html"></span></span>
+      <span ng-message="invalidZip"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidZip].message | html"></span></span>
+  </script>
+  <ng-include src="'/assets/cr.svg'"></ng-include>
+  <!-- Hotjar Tracking Code for demo.crossroads.net -->
+  <script>
+      (function(f,b){
+          var c;
+          f.hj=f.hj||function(){(f.hj.q=f.hj.q||[]).push(arguments)};
+          f._hjSettings={hjid:40735, hjsv:4};
+          c=b.createElement("script");c.async=1;
+          c.src="//static.hotjar.com/c/hotjar-"+f._hjSettings.hjid+".js?sv="+f._hjSettings.hjsv;
+          b.getElementsByTagName("head")[0].appendChild(c);
+      })(window,document);
+  </script>

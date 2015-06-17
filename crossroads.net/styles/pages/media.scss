@@ -15,6 +15,30 @@
   }
 }
 
+.series-image-container {
+	overflow: hidden;
+	position: relative;
+	transform-style: preserve-3d;
+	max-height: 210px;
+}
+
+.series-image-small {
+	@include vertical-align;
+	position: absolute;
+	text-align: center;
+	width: 100%;
+
+	img {
+		margin: 0 auto;
+		@include box-shadow(0 3px 9px rgba(0,0,0,.8));
+	}
+}
+
+.blurred-series-image {
+	filter: blur(10px);
+	filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='10');
+}
+
 .series-info {
   clear: both;
 

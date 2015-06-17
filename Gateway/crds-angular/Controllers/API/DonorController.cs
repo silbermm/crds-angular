@@ -130,16 +130,16 @@ namespace crds_angular.Controllers.API
                         {
                             credit_card = new CreditCardDTO
                             {
-                               last4 = default_source.last4,
-                                name = default_source.name,
-                                brand = default_source.brand,
-                                address_zip = default_source.address_zip,
-                                exp_date = default_source.exp_month + default_source.exp_year
+                              last4 = default_source.last4,
+                              name = default_source.name,
+                              brand = default_source.brand,
+                              address_zip = default_source.address_zip,
+                              exp_date = default_source.exp_month + default_source.exp_year
                             },
                             bank_account = new BankAccountDTO
                             {
-                               last4 = default_source.last4,
-                               routing = default_source.routing_number
+                              last4 = default_source.bank_last4,
+                              routing = default_source.routing_number
                             }
                          }
                     };
@@ -225,7 +225,7 @@ namespace crds_angular.Controllers.API
                         },
                         bank_account = new BankAccountDTO
                         {
-                            last4 = sourceData.last4,
+                            last4 = sourceData.bank_last4,
                             routing = sourceData.routing_number
                         }
                     }

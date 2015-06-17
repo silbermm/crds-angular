@@ -7,6 +7,7 @@ require('./view-all-music.html');
 require('./view-all-messages.html');
 require('./view-all-videos.html');
 require('./series-single.html');
+require('./series-single-lo-res.html');
 require('./media-search.html');
 require('./itunes-btn-messages.html');
 require('./itunes-btn-music.html');

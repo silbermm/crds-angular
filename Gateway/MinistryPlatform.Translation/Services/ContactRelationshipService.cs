@@ -33,7 +33,9 @@ namespace MinistryPlatform.Translation.Services
                 Email_Address = viewRecord.ToString("Email_Address"),
                 Last_Name = viewRecord.ToString("Last Name"),
                 Preferred_Name = viewRecord.ToString("Preferred Name"),
-                Participant_Id = viewRecord.ToInt("Participant_ID")
+                Participant_Id = viewRecord.ToInt("Participant_ID"),
+                Relationship_Id = viewRecord.ToInt("Relationship_ID"), 
+                Age = viewRecord.ToInt("Age")
             }).ToList();
         }
 
