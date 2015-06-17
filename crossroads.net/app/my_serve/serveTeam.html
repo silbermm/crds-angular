@@ -117,7 +117,10 @@
               </svg>
             </a>
             <button class="btn btn-gray-light" ng-click="closePanel()">Cancel</button>
-            <button class="btn btn-primary" ng-click="saveRsvp()">Save</button>
+            <button class="btn btn-primary" ng-class="{disabled: processing}" ng-click="saveRsvp()">
+              <span ng-if="processing">Saving...</span>
+              <span ng-if="!processing">Save</span>
+            </button>
           </div><!--/col-sm-12-->
         </div><!--/row-->
       </div><!--/panel-body-->

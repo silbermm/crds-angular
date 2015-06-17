@@ -43,6 +43,7 @@
         dateRange: false
       };
       scope.populateDates = populateDates;
+      scope.processing = false;
       scope.isActiveTab = isActiveTab;
       scope.isCollapsed = true;
       scope.isFormValid = isFormValid;
@@ -303,6 +304,7 @@
           $rootScope.$emit('notify',$rootScope.MESSAGES.generalError);
           return false;
         }
+        scope.processing = true;
         var rsvp = new ServeOpportunities.SaveRsvp();
         rsvp.contactId = scope.currentMember.contactId;
         rsvp.opportunityId = scope.currentMember.serveRsvp.roleId;
@@ -319,9 +321,11 @@
         rsvp.$save(function(saved) {
           $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess);
           scope.currentMember.serveRsvp.isSaved = true;
+          scope.processing = false;
           return true;
         }, function(err){
           $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
+          scope.processing = false;
           return false;
         });
       }
