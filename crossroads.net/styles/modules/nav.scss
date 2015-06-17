@@ -653,9 +653,9 @@ ul.cr-nav {
 .ng-aside.modal.fade .modal-dialog,
 .ng-aside .modal-dialog {
   max-width: 80%;
-  padding: 20px 0px;
+  padding: 0px;
   @include translate(0, 0);
-  
+
   .modal-content {
     background: $gray-darker;
     padding-top: 10px;
