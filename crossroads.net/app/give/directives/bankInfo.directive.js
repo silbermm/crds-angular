@@ -39,7 +39,10 @@ require('../bankInfo.html');
         };
 
          scope.resetDefaultBankPlaceholderValues = function() {
-          scope.defaultBankPlaceholderValues = {};
+          scope.defaultBankPlaceholderValues = {
+            routing: "",
+            maskedAccount: ""
+          };
         };
 
         scope.routingError = function() {

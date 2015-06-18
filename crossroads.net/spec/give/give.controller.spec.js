@@ -21,6 +21,10 @@ describe('GiveController', function() {
           credit_card : {
             brand : "Visa",
             last4  :"9876"
+          },
+          bank_account : {
+            routing : "111100000",
+            last4  :"987654321"
           }
         }
       };
@@ -50,6 +54,7 @@ describe('GiveController', function() {
         },
         donateToProgram: function() {},
         updateDonorWithCard: function() {},
+        updateDonorWithBankAcct: function() {}
       };
 
       controller = $controller('GiveCtrl',
@@ -82,7 +87,7 @@ describe('GiveController', function() {
     });
   });
 
-  describe('function submitChangedBankInfo', function() {
+  describe('function submitChangedBankInfo-CreditCard', function() {
     var controllerGiveForm = {
       creditCardForm: {
         $dirty: true,
@@ -140,6 +145,60 @@ describe('GiveController', function() {
       );
     });
   });
+
+
+describe('function submitChangedBankInfo-BankAcccount', function() {
+    var controllerGiveForm = {
+      bankAccountForm: {
+        $dirty: true,
+      },
+      $valid: true,
+    };
+
+    var controllerDto = {
+      amount: 987,
+      program: {
+        ProgramId: 1,
+      },
+      email: 'tim@kriz.net',
+      donor: {
+        id: 654,
+        default_source: {
+          last4: '12345698765',
+          routing: '110000000',
+        }
+      }
+    };
+
+   
+    it('should call updateDonorWithBankAcct with proper values when changing bank info', function() {
+      $scope.giveForm = controllerGiveForm;
+      controller.dto = controllerDto;
+   
+      spyOn(mockPaymentService, 'updateDonorWithBankAcct').and.callFake(function(donorId, donor) {
+        var deferred = $q.defer();
+        deferred.resolve(donor);
+        return deferred.promise;
+      });
+
+      spyOn(controller, 'donate');
+
+      controller.submitChangedBankInfo();
+      // This resolves the promise above
+      $rootScope.$apply();
+
+      expect(controller.donate).toHaveBeenCalled();
+      expect(mockPaymentService.updateDonorWithBankAcct).toHaveBeenCalledWith(
+        controllerDto.donor.id,
+        {
+          number: controllerDto.donor.default_source.last4,
+          routing: controllerDto.donor.default_source.routing
+        }
+      );
+    });
+  });
+
+
 
   describe('function transitionForLoggedInUserBasedOnExistingDonor', function(){
 

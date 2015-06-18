@@ -226,10 +226,19 @@
 
         vm.submitChangedBankInfo = function() {
             vm.bankinfoSubmitted = true;
-            if($scope.giveForm.creditCardForm.$dirty) {
+            if ($scope.give.dto.view == "cc"){
+              vm.processCreditCardChange();
+            };
+            if ($scope.give.dto.view == "bank"){
+              vm.processBankAccountChange();
+            };
+        };
+
+        vm.processCreditCardChange = function (){
+          if($scope.giveForm.creditCardForm.$dirty) {
               // If dirty, it means we changed the bank info, so we'll
               // need to update it at the payment processor
-              if ($scope.giveForm.$valid) {
+            if ($scope.giveForm.$valid) {
                vm.processing = true;
                PaymentService.updateDonorWithCard(
                  vm.dto.donor.id,
@@ -250,6 +259,40 @@
                  $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
                };
              }
+              else {
+                $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+              }
+           } else {
+             // If pristine, it means we did not change the bank info, so we'll
+             // simply make the payment using the existing info
+             vm.processing = true;
+             vm.donate(vm.dto.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.dto.email, vm.dto.view, function() {
+               $state.go("give.thank-you");
+             });
+           }
+         };
+
+        vm.processBankAccountChange = function(){
+           if($scope.giveForm.bankAccountForm.$dirty) {
+              if ($scope.giveForm.$valid) {
+               vm.processing = true;
+               PaymentService.updateDonorWithBankAcct(
+                   vm.dto.donor.id,
+                   {
+                       country: 'US',
+                       currency: 'USD',
+                       routing_number: vm.dto.donor.default_source.bank_account.routing,
+                       account_number: vm.dto.account
+                    })
+               .then(function(donor) {
+                 vm.donate(vm.dto.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.dto.email, vm.dto.view, function() {
+                   $state.go("give.thank-you");
+                 });
+               }),
+               function() {
+                 $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
+               };
+             }
              else {
                $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
              }
@@ -260,8 +303,9 @@
              vm.donate(vm.dto.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.dto.email, vm.dto.view, function() {
                $state.go("give.thank-you");
              });
-           }
-        };
+         };
+       };
+
 
         vm.transitionForLoggedInUserBasedOnExistingDonor = function(event, toState){
           if(toState.name == "give.account" && $rootScope.username && !vm.donorError ) {
@@ -289,8 +333,7 @@
               $state.go("give.account");
             });
           }
-        }       
-
-    }
-
+        } 
+        };      
+    
 })();
