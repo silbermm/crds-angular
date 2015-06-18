@@ -18,7 +18,7 @@ namespace MinistryPlatform.Translation.Services
             this._dbConnection = dbConnection;
         }
 
-        public List<GroupServingParticipant> GetServingParticipants(List<int> participants, long from, long to)
+        public List<GroupServingParticipant> GetServingParticipants(List<int> participants, long from, long to, int loggedInContactId)
         {
             var connection = _dbConnection;
             try
@@ -27,16 +27,16 @@ namespace MinistryPlatform.Translation.Services
 
                 var command = CreateSqlCommand(participants, from, to);
                 command.Connection = connection;
-                var startTime = DateTime.Now;
                 var reader = command.ExecuteReader();
-                var endTime = DateTime.Now;
                 var groupServingParticipants = new List<GroupServingParticipant>();
                 var rowNumber = 0;
                 while (reader.Read())
                 {
+                    var rowContactId = reader.GetInt32(reader.GetOrdinal("Contact_ID"));
+                    var loggedInUser = (loggedInContactId == rowContactId);
                     rowNumber = rowNumber + 1;
                     var participant = new GroupServingParticipant();
-                    participant.ContactId = reader.GetInt32(reader.GetOrdinal("Contact_ID"));
+                    participant.ContactId = rowContactId;
                     participant.EventType = reader.GetString(reader.GetOrdinal("Event_Type"));
                     participant.EventTypeId = reader.GetInt32(reader.GetOrdinal("Event_Type_ID"));
                     participant.GroupRoleId = reader.GetInt32(reader.GetOrdinal("Group_Role_ID"));
@@ -61,12 +61,14 @@ namespace MinistryPlatform.Translation.Services
                     participant.ParticipantLastName = reader.GetString(reader.GetOrdinal("Last_Name"));
                     participant.RowNumber = rowNumber;
                     participant.Rsvp = GetRsvp(reader, "Rsvp");
+                    participant.LoggedInUser = loggedInUser;
                     groupServingParticipants.Add(participant);
                 }
                 return
                     groupServingParticipants.OrderBy(g => g.EventStartDateTime)
                         .ThenBy(g => g.GroupName)
-                        .ThenBy(g => g.ContactId)
+                        .ThenByDescending(g=> g.LoggedInUser)
+                        .ThenBy(g => g.ParticipantNickname)
                         .ToList();
             }
             finally
