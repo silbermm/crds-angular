@@ -268,6 +268,10 @@ namespace crds_angular.Services
                 for (var i = 0; i < sortedEvents.Count(); i++)
                 {
                     var e = sortedEvents[i];
+                    if (e.EventStartDate.Date > sequenceDate.Date)
+                    {
+                        sequenceDate = sequenceDate.AddDays(increment);
+                    }
                     if (e.EventStartDate.Date == sequenceDate.Date)
                     {
                         Dictionary<string, object> response;
@@ -286,9 +290,9 @@ namespace crds_angular.Services
                         templateId = (templateId != AppSetting("RsvpChangeTemplate"))
                             ? response.ToInt("templateId")
                             : templateId;
+
                         sequenceDate = sequenceDate.AddDays(increment);
                     }
-                    
                 }
                 //foreach (var e in events)
                 //{

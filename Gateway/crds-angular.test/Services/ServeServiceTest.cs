@@ -6,10 +6,10 @@ using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
-using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
+using IGroupService = MinistryPlatform.Translation.Services.Interfaces.IGroupService;
 
 namespace crds_angular.test.Services
 {
@@ -25,9 +25,8 @@ namespace crds_angular.test.Services
         private Mock<IEventService> _eventService;
         private Mock<IParticipantService> _participantService;
         private Mock<IGroupParticipantService> _groupParticipantService;
-        private Mock<MinistryPlatform.Translation.Services.Interfaces.IGroupService> _groupService;
-        private Mock<MinistryPlatform.Translation.Services.Interfaces.ICommunicationService> _communicationService;
-        
+        private Mock<IGroupService> _groupService;
+        private Mock<ICommunicationService> _communicationService;
 
         private ServeService _fixture;
 
@@ -42,18 +41,19 @@ namespace crds_angular.test.Services
 
         private MessageTemplate mockRsvpNoTemplate = new MessageTemplate
         {
-            Body = "Thank you for notifying us that you cannot serve with [Group_Name] from [Start_Date] to [End_Date]." +
-                   "If you have any questions, contact [Group_Contact] by replying to this email." +
-                   "int.crossroads.net/serve-signup",
+            Body =
+                "Thank you for notifying us that you cannot serve with [Group_Name] from [Start_Date] to [End_Date]." +
+                "If you have any questions, contact [Group_Contact] by replying to this email." +
+                "int.crossroads.net/serve-signup",
             Subject = "Serving RSVP Confirmation"
         };
 
         private MessageTemplate mockRsvpYesTemplate = new MessageTemplate
         {
-            Body = "Thank you for signing up to serve with [Opportunity_Name] from [Start_Date] to [End_Date]!" + 
-                    "On the day you are serving, please report to [Room] at [Shift_Start] and plan on staying until [Shift_End]." + 
-                    "If you have any questions, contact [Group_Contact] by replying to this email." +
-                    "int.crossroads.net/serve-signup",
+            Body = "Thank you for signing up to serve with [Opportunity_Name] from [Start_Date] to [End_Date]!" +
+                   "On the day you are serving, please report to [Room] at [Shift_Start] and plan on staying until [Shift_End]." +
+                   "If you have any questions, contact [Group_Contact] by replying to this email." +
+                   "int.crossroads.net/serve-signup",
             Subject = "Serving RSVP Confirmation"
         };
 
@@ -61,7 +61,7 @@ namespace crds_angular.test.Services
         private readonly int rsvpNoId = 11299;
         private readonly int rsvpChangeId = 11313;
 
-        private Opportunity fakeOpportunity = new Opportunity();   
+        private Opportunity fakeOpportunity = new Opportunity();
         private MyContact fakeGroupContact = new MyContact();
         private MyContact fakeMyContact = new MyContact();
 
@@ -77,10 +77,9 @@ namespace crds_angular.test.Services
             _serveService = new Mock<IServeService>();
             _participantService = new Mock<IParticipantService>();
             _groupParticipantService = new Mock<IGroupParticipantService>();
-            _groupService = new Mock<MinistryPlatform.Translation.Services.Interfaces.IGroupService>();
+            _groupService = new Mock<IGroupService>();
             _communicationService = new Mock<ICommunicationService>();
 
-            
             fakeOpportunity.EventTypeId = 3;
             fakeOpportunity.GroupContactId = 23;
             fakeOpportunity.GroupContactName = "Harold";
@@ -145,7 +144,8 @@ namespace crds_angular.test.Services
 
             _fixture = new ServeService(_contactService.Object, _contactRelationshipService.Object,
                 _opportunityService.Object, _eventService.Object,
-                _participantService.Object, _groupParticipantService.Object, _groupService.Object, _communicationService.Object);
+                _participantService.Object, _groupParticipantService.Object, _groupService.Object,
+                _communicationService.Object);
 
             //force AutoMapper to register
             AutoMapperConfig.RegisterMappings();
@@ -156,12 +156,15 @@ namespace crds_angular.test.Services
         {
             var contactId = 123456;
 
-            _contactRelationshipService.Setup(m => m.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>())).Returns(MockContactRelationships());
+            _contactRelationshipService.Setup(m => m.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>()))
+                .Returns(MockContactRelationships());
 
             _participantService.Setup(m => m.GetParticipant(It.IsAny<int>()))
-                .Returns(new Participant { ParticipantId = 1 });
+                .Returns(new Participant {ParticipantId = 1});
 
-            _groupParticipantService.Setup(g => g.GetServingParticipants(It.IsAny<List<int>>(),It.IsAny<long>(), It.IsAny<long>())).Returns(MockGroupServingParticipants());
+            _groupParticipantService.Setup(
+                g => g.GetServingParticipants(It.IsAny<List<int>>(), It.IsAny<long>(), It.IsAny<long>()))
+                .Returns(MockGroupServingParticipants());
 
             var servingDays = _fixture.GetServingDays(It.IsAny<string>(), contactId, It.IsAny<long>(), It.IsAny<long>());
             _contactRelationshipService.VerifyAll();
@@ -425,7 +428,8 @@ namespace crds_angular.test.Services
             _opportunityService.Setup(m => m.GetOpportunityResponses(opportunityId, It.IsAny<string>()))
                 .Returns(opportunity.Responses);
 
-            var capacity = _fixture.OpportunityCapacity(opportunityId, eventId, opportunity.MinimumNeeded, opportunity.MaximumNeeded, It.IsAny<string>());
+            var capacity = _fixture.OpportunityCapacity(opportunityId, eventId, opportunity.MinimumNeeded,
+                opportunity.MaximumNeeded, It.IsAny<string>());
 
             Assert.IsNotNull(capacity);
             Assert.AreEqual(capacity.Display, false);
@@ -439,12 +443,13 @@ namespace crds_angular.test.Services
             int eventTypeId = fakeOpportunity.EventTypeId;
             const bool signUp = true;
             const bool alternateWeeks = false;
-            var oppIds = new List<int>() { 1, 2, 3, 4, 5 };
+            var oppIds = new List<int>() {1, 2, 3, 4, 5};
 
             SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp, SetupMockEvents());
 
             // The current Opportunity
-            _opportunityService.Setup(m => m.GetOpportunityById(opportunityId, It.IsAny<string>())).Returns(fakeOpportunity);
+            _opportunityService.Setup(m => m.GetOpportunityById(opportunityId, It.IsAny<string>()))
+                .Returns(fakeOpportunity);
             _opportunityService.Setup(m => m.DeleteResponseToOpportunities(47, 1, 1)).Returns(1);
 
             // The previous Opportunity
@@ -454,7 +459,7 @@ namespace crds_angular.test.Services
                 OpportunityName = "Previous Opportunity"
             });
 
-            _fixture.SaveServeRsvp("1234567", contactId, opportunityId, oppIds, eventTypeId, It.IsAny<DateTime>(),
+            _fixture.SaveServeRsvp("1234567", contactId, opportunityId, oppIds, eventTypeId, new DateTime(2015, 1, 1),
                 It.IsAny<DateTime>(), signUp, alternateWeeks);
 
             _participantService.VerifyAll();
@@ -489,18 +494,18 @@ namespace crds_angular.test.Services
                 {"Start_Date", It.IsAny<string>()},
                 {"End_Date", It.IsAny<string>()},
                 {"Shift_Start", It.IsAny<string>()},
-                {"Shift_End",It.IsAny<string>()},
+                {"Shift_End", It.IsAny<string>()},
                 {"Room", It.IsAny<string>()},
                 {"Group_Contact", It.IsAny<string>()},
                 {"Group_Name", It.IsAny<string>()},
                 {"Previous_Opportunity_Name", It.IsAny<string>()}
             };
 
-            _communicationService.Setup(m => m.SendMessage(It.IsAny<Communication>(), It.IsAny<Dictionary<string, object>>()))
-                .Callback((Communication communication, Dictionary<string, object> data) => {
-                   
-                }).Verifiable();
-            _communicationService.Verify(m => m.SendMessage(It.IsAny<Communication>(), It.IsAny<Dictionary<string,object>>()));
+            _communicationService.Setup(
+                m => m.SendMessage(It.IsAny<Communication>(), It.IsAny<Dictionary<string, object>>()))
+                .Callback((Communication communication, Dictionary<string, object> data) => { }).Verifiable();
+            _communicationService.Verify(
+                m => m.SendMessage(It.IsAny<Communication>(), It.IsAny<Dictionary<string, object>>()));
         }
 
         [Test]
@@ -511,14 +516,15 @@ namespace crds_angular.test.Services
             const int eventTypeId = 3;
             const bool signUp = true;
             const bool alternateWeeks = false;
-            var oppIds = new List<int>() { 1, 2, 3, 4, 5 };
+            var oppIds = new List<int>() {1, 2, 3, 4, 5};
 
             SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp, SetupMockEvents());
 
             // The current Opportunity
-            _opportunityService.Setup(m => m.GetOpportunityById(opportunityId, It.IsAny<string>())).Returns(fakeOpportunity);
+            _opportunityService.Setup(m => m.GetOpportunityById(opportunityId, It.IsAny<string>()))
+                .Returns(fakeOpportunity);
 
-            _fixture.SaveServeRsvp("1234567", contactId, opportunityId,oppIds, eventTypeId, It.IsAny<DateTime>(),
+            _fixture.SaveServeRsvp("1234567", contactId, opportunityId, oppIds, eventTypeId, new DateTime(2015, 1, 1),
                 It.IsAny<DateTime>(), signUp, alternateWeeks);
 
             _participantService.VerifyAll();
@@ -549,14 +555,15 @@ namespace crds_angular.test.Services
             const int eventTypeId = 3;
             const bool signUp = false;
             const bool alternateWeeks = false;
-            var oppIds = new List<int>() {1,2,3,4,5};
+            var oppIds = new List<int>() {1, 2, 3, 4, 5};
 
 
             SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp, SetupMockEvents());
 
 
             // The current Opportunity
-            _opportunityService.Setup(m => m.GetOpportunityById(opportunityId, It.IsAny<string>())).Returns(fakeOpportunity);
+            _opportunityService.Setup(m => m.GetOpportunityById(opportunityId, It.IsAny<string>()))
+                .Returns(fakeOpportunity);
 
             _opportunityService.Setup(m => m.GetOpportunityById(1, It.IsAny<string>())).Returns(new Opportunity()
             {
@@ -565,7 +572,8 @@ namespace crds_angular.test.Services
                 GroupContactId = fakeOpportunity.GroupContactId
             });
 
-            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, oppIds, eventTypeId, It.IsAny<DateTime>(),
+            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, oppIds, eventTypeId,
+                new DateTime(2015, 1, 1),
                 It.IsAny<DateTime>(), signUp, alternateWeeks);
 
 
@@ -574,7 +582,7 @@ namespace crds_angular.test.Services
                 m =>
                     m.GetEventsByTypeForRange(eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(),
                         It.IsAny<string>()), Times.Exactly(1));
-            
+
             _opportunityService.Verify(
                 (m => m.RespondToOpportunity(47, 1, It.IsAny<string>(), It.IsAny<int>(), signUp)),
                 Times.Exactly(5));
@@ -585,20 +593,21 @@ namespace crds_angular.test.Services
         }
 
         [Test, TestCaseSource("AllMockEvents")]
-        public void RespondToServeOpportunityYesForEveryOtherWeek(List<Event>  mockEvents)
+        public void RespondToServeOpportunityYesForEveryOtherWeek(List<Event> mockEvents)
         {
             const int contactId = 8;
             const int opportunityId = 12;
             const int eventTypeId = 3;
             const bool signUp = true;
             const bool alternateWeeks = true;
-            var expectedEventIds = new List<int> { 1, 3, 5 };
-            var oppIds = new List<int>() { 1, 2, 3, 4, 5 };
+            var expectedEventIds = new List<int> {1, 3, 5};
+            var oppIds = new List<int>() {1, 2, 3, 4, 5};
 
             SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp, mockEvents);
 
             // The current Opportunity
-            _opportunityService.Setup(m => m.GetOpportunityById(opportunityId, It.IsAny<string>())).Returns(fakeOpportunity);
+            _opportunityService.Setup(m => m.GetOpportunityById(opportunityId, It.IsAny<string>()))
+                .Returns(fakeOpportunity);
 
             _opportunityService.Setup(m => m.GetOpportunityById(1, It.IsAny<string>())).Returns(new Opportunity()
             {
@@ -607,30 +616,37 @@ namespace crds_angular.test.Services
                 GroupContactId = fakeOpportunity.GroupContactId
             });
 
-            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, oppIds, eventTypeId, new DateTime(2015,1,1), 
+            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, oppIds, eventTypeId,
+                new DateTime(2015, 1, 1),
                 It.IsAny<DateTime>(), signUp, alternateWeeks);
 
             // The current Opportunity
-            _opportunityService.Setup(m => m.GetOpportunityById(opportunityId, It.IsAny<string>())).Returns(fakeOpportunity);
+            _opportunityService.Setup(m => m.GetOpportunityById(opportunityId, It.IsAny<string>()))
+                .Returns(fakeOpportunity);
 
             _participantService.VerifyAll();
             _eventService.Verify(
                 m =>
                     m.GetEventsByTypeForRange(eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(),
                         It.IsAny<string>()), Times.Exactly(1));
+
             _eventService.Verify(m => m.registerParticipantForEvent(47, It.IsIn<int>(expectedEventIds)),
                 Times.Exactly(3));
+
             _opportunityService.Verify(
                 (m =>
                     m.RespondToOpportunity(47, opportunityId, It.IsAny<string>(), It.IsIn<int>(expectedEventIds), signUp)),
                 Times.Exactly(3));
         }
 
-        private static readonly object[] AllMockEvents =  {
-            new List<Event>[] {SetupMockEvents()}, new List<Event>[] { SetupWeekMissingInMySeriesMockEvents()}
+        private static readonly object[] AllMockEvents =
+        {
+            new[] {SetupMockEvents()},
+            new[] {SetupWeekMissingInMySeriesMockEvents()},
+            new[] {SetupWeekMissingNotInMySeriesMockEvents()},
+            new[] {SetupWeekMutipleMissingInMySeriesMockEvents()}
         };
 
- 
         [Test]
         public void RespondToServeOpportunityNoForEveryOtherWeek()
         {
@@ -639,12 +655,13 @@ namespace crds_angular.test.Services
             const int eventTypeId = 3;
             const bool signUp = false;
             const bool alternateWeeks = true;
-            var expectedEventIds = new List<int> { 1, 3, 5 };
-            var oppIds = new List<int>() { 1, 2, 3, 4, 5 };
+            var expectedEventIds = new List<int> {1, 3, 5};
+            var oppIds = new List<int>() {1, 2, 3, 4, 5};
 
             SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp, SetupMockEvents());
             // The current Opportunity
-            _opportunityService.Setup(m => m.GetOpportunityById(opportunityId, It.IsAny<string>())).Returns(fakeOpportunity);
+            _opportunityService.Setup(m => m.GetOpportunityById(opportunityId, It.IsAny<string>()))
+                .Returns(fakeOpportunity);
 
             _opportunityService.Setup(m => m.GetOpportunityById(1, It.IsAny<string>())).Returns(new Opportunity()
             {
@@ -654,12 +671,13 @@ namespace crds_angular.test.Services
             });
 
 
-
-            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, oppIds, eventTypeId, It.IsAny<DateTime>(),
+            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, oppIds, eventTypeId,
+                new DateTime(2015, 1, 1),
                 It.IsAny<DateTime>(), signUp, alternateWeeks);
 
             // The current Opportunity
-            _opportunityService.Setup(m => m.GetOpportunityById(opportunityId, It.IsAny<string>())).Returns(fakeOpportunity);
+            _opportunityService.Setup(m => m.GetOpportunityById(opportunityId, It.IsAny<string>()))
+                .Returns(fakeOpportunity);
 
             _participantService.VerifyAll();
             _eventService.Verify(
@@ -670,7 +688,8 @@ namespace crds_angular.test.Services
 
             _opportunityService.Verify(
                 (m =>
-                    m.RespondToOpportunity(47, It.IsInRange(1,5, Range.Inclusive), It.IsAny<string>(), It.IsIn<int>(expectedEventIds), signUp)),
+                    m.RespondToOpportunity(47, It.IsInRange(1, 5, Range.Inclusive), It.IsAny<string>(),
+                        It.IsIn<int>(expectedEventIds), signUp)),
                 Times.Exactly(15));
         }
 
@@ -680,23 +699,28 @@ namespace crds_angular.test.Services
             {
                 new Event
                 {
-                    EventId = 1, EventStartDate = new DateTime(2015,1,1)
+                    EventId = 1,
+                    EventStartDate = new DateTime(2015, 1, 1)
                 },
                 new Event
                 {
-                    EventId = 2, EventStartDate = new DateTime(2015,1,8)
+                    EventId = 2,
+                    EventStartDate = new DateTime(2015, 1, 8)
                 },
                 new Event
                 {
-                    EventId = 3, EventStartDate = new DateTime(2015,1,15)
+                    EventId = 3,
+                    EventStartDate = new DateTime(2015, 1, 15)
                 },
                 new Event
                 {
-                    EventId = 4, EventStartDate = new DateTime(2015,1,22)
+                    EventId = 4,
+                    EventStartDate = new DateTime(2015, 1, 22)
                 },
                 new Event
                 {
-                    EventId = 5, EventStartDate = new DateTime(2015,1,29)
+                    EventId = 5,
+                    EventStartDate = new DateTime(2015, 1, 29)
                 }
             };
         }
@@ -707,82 +731,98 @@ namespace crds_angular.test.Services
             {
                 new Event
                 {
-                    EventId = 1, EventStartDate = new DateTime(2015,1,1)
+                    EventId = 1,
+                    EventStartDate = new DateTime(2015, 1, 1)
                 },
                 new Event
                 {
-                    EventId = 2, EventStartDate = new DateTime(2015,1,8)
+                    EventId = 2,
+                    EventStartDate = new DateTime(2015, 1, 8)
                 },
                 new Event
                 {
-                    EventId = 4, EventStartDate = new DateTime(2015,1,22)
+                    EventId = 4,
+                    EventStartDate = new DateTime(2015, 1, 22)
                 },
                 new Event
                 {
-                    EventId = 5, EventStartDate = new DateTime(2015,1,29)
+                    EventId = 3,
+                    EventStartDate = new DateTime(2015, 1, 29)
                 },
                 new Event
                 {
-                    EventId = 6, EventStartDate = new DateTime(2015,2,5)
+                    EventId = 6,
+                    EventStartDate = new DateTime(2015, 2, 5)
                 },
                 new Event
                 {
-                    EventId = 7, EventStartDate = new DateTime(2015,2,12)
+                    EventId = 5,
+                    EventStartDate = new DateTime(2015, 2, 12)
                 }
             };
         }
 
-        private List<Event> SetupWeekMissingNotInMySeriesMockEvents()
+        private static List<Event> SetupWeekMissingNotInMySeriesMockEvents()
         {
             return new List<Event>
             {
                 new Event
                 {
-                    EventId = 1, EventStartDate = new DateTime(2015,1,1)
+                    EventId = 1,
+                    EventStartDate = new DateTime(2015, 1, 1)
                 },
                 new Event
                 {
-                    EventId = 3, EventStartDate = new DateTime(2015,1,15)
+                    EventId = 3,
+                    EventStartDate = new DateTime(2015, 1, 15)
                 },
                 new Event
                 {
-                    EventId = 4, EventStartDate = new DateTime(2015,1,22)
+                    EventId = 4,
+                    EventStartDate = new DateTime(2015, 1, 22)
                 },
                 new Event
                 {
-                    EventId = 5, EventStartDate = new DateTime(2015,1,29)
+                    EventId = 5,
+                    EventStartDate = new DateTime(2015, 1, 29)
                 }
             };
         }
 
-        private List<Event> SetupWeekMutipleMissingInMySeriesMockEvents()
+        private static List<Event> SetupWeekMutipleMissingInMySeriesMockEvents()
         {
             return new List<Event>
             {
                 new Event
                 {
-                    EventId = 1, EventStartDate = new DateTime(2015,1,1)
+                    EventId = 1,
+                    EventStartDate = new DateTime(2015, 1, 1)
                 },
                 new Event
                 {
-                    EventId = 3, EventStartDate = new DateTime(2015,1,15)
+                    EventId = 3,
+                    EventStartDate = new DateTime(2015, 1, 15)
                 },
                 new Event
                 {
-                    EventId = 4, EventStartDate = new DateTime(2015,1,22)
+                    EventId = 4,
+                    EventStartDate = new DateTime(2015, 1, 22)
                 },
                 new Event
                 {
-                    EventId = 6, EventStartDate = new DateTime(2015,2,5)
+                    EventId = 6,
+                    EventStartDate = new DateTime(2015, 2, 5)
                 },
                 new Event
                 {
-                    EventId = 7, EventStartDate = new DateTime(2015,2,12)
+                    EventId = 5,
+                    EventStartDate = new DateTime(2015, 2, 12)
                 }
             };
         }
 
-        private void SetUpRSVPMocks(int contactId, int eventTypeId, int opportunityId, bool signUp, List<Event> mockEvents)
+        private void SetUpRSVPMocks(int contactId, int eventTypeId, int opportunityId, bool signUp,
+            List<Event> mockEvents)
         {
             var mockParticipant = new Participant
             {
@@ -814,7 +854,6 @@ namespace crds_angular.test.Services
             //    },
             //};
 
-           
 
             //mock it up
             _participantService.Setup(m => m.GetParticipant(contactId)).Returns(mockParticipant);
@@ -855,15 +894,14 @@ namespace crds_angular.test.Services
                 {"Start_Date", It.IsAny<string>()},
                 {"End_Date", It.IsAny<string>()},
                 {"Shift_Start", It.IsAny<string>()},
-                {"Shift_End",It.IsAny<string>()},
+                {"Shift_End", It.IsAny<string>()},
                 {"Room", It.IsAny<string>()},
                 {"Group_Contact", fakeGroupContact.Nickname + " " + fakeGroupContact.Last_Name},
                 {"Group_Name", fakeOpportunity.GroupName},
                 {"Previous_Opportunity_Name", It.IsAny<string>()}
             };
-            
-            _communicationService.Verify( m => m.SendMessage(comm, mergeData));
 
+            _communicationService.Verify(m => m.SendMessage(comm, mergeData));
         }
 
 
@@ -894,7 +932,7 @@ namespace crds_angular.test.Services
             var responses = new List<Response>();
             for (var i = 0; i < 20; i++)
             {
-                responses.Add(new Response { Event_ID = 1000 });
+                responses.Add(new Response {Event_ID = 1000});
             }
             return responses;
         }
@@ -904,7 +942,7 @@ namespace crds_angular.test.Services
             var responses = new List<Response>();
             for (var i = 0; i < 15; i++)
             {
-                responses.Add(new Response { Event_ID = 1000 });
+                responses.Add(new Response {Event_ID = 1000});
             }
             return responses;
         }
