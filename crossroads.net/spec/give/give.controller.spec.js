@@ -277,17 +277,15 @@ describe('GiveController', function() {
           last4: '98765',
           exp_date: '1213',
           address_zip: '90210',
+          cvc: '987',
         }
       },
       reset: function() {},
     };
 
-    var controllerCvc = '987';
-
     it('should call updateDonorWithCard with proper values when changing card info', function() {
       $scope.giveForm = controllerGiveForm;
       controller.dto = controllerDto;
-      controller.cvc = controllerCvc;
 
       spyOn(mockPaymentService, 'updateDonorWithCard').and.callFake(function(donorId, donor) {
         var deferred = $q.defer();
@@ -309,7 +307,7 @@ describe('GiveController', function() {
           number: controllerDto.donor.default_source.last4,
           exp_month: controllerDto.donor.default_source.exp_date.substr(0,2),
           exp_year: controllerDto.donor.default_source.exp_date.substr(2,2),
-          cvc: controllerCvc,
+          cvc: controllerDto.donor.default_source.cvc,
           address_zip: controllerDto.donor.default_source.address_zip
         }
       );

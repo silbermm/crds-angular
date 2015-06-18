@@ -209,7 +209,7 @@
                       number: vm.dto.donor.default_source.last4,
                       exp_month: vm.dto.donor.default_source.exp_date.substr(0,2),
                       exp_year: vm.dto.donor.default_source.exp_date.substr(2,2),
-                      cvc: vm.cvc
+                      cvc: vm.dto.donor.default_source.cvc
                     }, vm.email)
                   .then(function(donor) {
                     vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email, vm.dto.view, function() {
@@ -263,7 +263,7 @@
                    number: vm.dto.donor.default_source.last4,
                    exp_month: vm.dto.donor.default_source.exp_date.substr(0,2),
                    exp_year: vm.dto.donor.default_source.exp_date.substr(2,2),
-                   cvc: vm.cvc,
+                   cvc: vm.dto.donor.default_source.cvc,
                    address_zip: vm.dto.donor.default_source.address_zip
                  })
                .then(function(donor) {
