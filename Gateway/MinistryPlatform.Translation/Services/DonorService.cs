@@ -276,7 +276,7 @@ namespace MinistryPlatform.Translation.Services
                 {
                     var record = records.First();
 
-                    donor.Email = record.ToString("Email_Address");
+                    donor.Email = record.ToString("Email");
                     donor.ContactId = record.ToInt("Contact_ID");
                 }
             }
