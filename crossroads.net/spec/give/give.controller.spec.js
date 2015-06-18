@@ -1,8 +1,24 @@
 describe('GiveController', function() {
-
-  beforeEach(module('crossroads'));
   var controller, $rootScope, $scope, $state, $timeout, $q, httpBackend, Session, mockPaymentService, mockGetResponse, programList, mockPaymentServiceGetPromise;
 
+  beforeEach(module('crossroads', function($provide) {
+    programList = [
+      {ProgramId: 1, Name: "Crossroads"},
+      {ProgramId: 2, Name: "Game Change"},
+      {ProgramId: 3, Name: "Old St George Building"},
+    ];
+    $provide.value('getPrograms', {
+      Programs: function() {
+        return({
+          get: function() {
+            var deferred = $q.defer();
+            deferred.resolve(programList);
+            return deferred.promise
+          },
+        });
+      },
+    });
+  }));
 
   beforeEach(
     inject(function($injector, $controller, $httpBackend, _$q_) {
@@ -66,11 +82,7 @@ describe('GiveController', function() {
       controller.donor = {};
       controller.donorError = false;
       controller.last4 = "";
-      controller.programsInput = [
-        {ProgramId: 1, Name: "Crossroads"},
-        {ProgramId: 2, Name: "Game Change"},
-        {ProgramId: 3, Name: "Fuel"},
-      ];
+      controller.programsInput = programList;
     })
   );
 
@@ -79,6 +91,168 @@ describe('GiveController', function() {
       spyOn($rootScope, "$emit");
       controller.confirmDonation();
       expect($rootScope.$emit).toHaveBeenCalledWith("notify", 15);
+    });
+  });
+
+  describe('function initDefaultState', function() {
+    var controllerDto = {
+      reset: function() {},
+    };
+
+    it('should go to give.amount if starting at give', function() {
+      spyOn($state, 'is').and.returnValue(true);
+      spyOn($state, 'go');
+      spyOn($scope, '$on').and.callFake(function(evt, handler) {
+        handler();
+      });
+      spyOn(controllerDto, 'reset');
+
+      controller.initialized = false;
+      controller.dto = controllerDto;
+      controller.initDefaultState();
+
+      expect($state.is).toHaveBeenCalledWith('give');
+      expect($state.go).toHaveBeenCalledWith('give.amount');
+      expect(controllerDto.reset).not.toHaveBeenCalled();
+    });
+
+    it('should go to give.amount if starting at give', function() {
+      var states = {
+        'give': true,
+        'give.amount': false,
+      };
+      spyOn($state, 'is').and.callFake(function(stateName) {
+        return(states[stateName]);
+      });
+      spyOn($state, 'go');
+      spyOn($scope, '$on').and.callFake(function(evt, handler) {
+        handler();
+      });
+      spyOn(controllerDto, 'reset');
+
+      controller.initialized = false;
+      controller.dto = controllerDto;
+      controller.initDefaultState();
+
+      expect($state.is).toHaveBeenCalledWith('give');
+      expect($state.go).toHaveBeenCalledWith('give.amount');
+      expect(controller.initialized).toBeTruthy();
+      expect(controllerDto.reset).not.toHaveBeenCalled();
+    });
+
+    it('should do nothing special if starting at give.amount', function() {
+      var states = {
+        'give': false,
+        'give.amount': true,
+      };
+      spyOn($state, 'is').and.callFake(function(stateName) {
+        return(states[stateName]);
+      });
+      spyOn($state, 'go');
+      spyOn($scope, '$on').and.callFake(function(evt, handler) {
+        handler();
+      });
+      spyOn(controllerDto, 'reset');
+
+      controller.initialized = false;
+      controller.dto = controllerDto;
+      controller.initDefaultState();
+
+      expect($state.is).toHaveBeenCalledWith('give');
+      expect($state.is).toHaveBeenCalledWith('give.amount');
+      expect($state.go).not.toHaveBeenCalled();
+      expect(controller.initialized).toBeTruthy();
+      expect(controllerDto.reset).not.toHaveBeenCalled();
+    });
+
+    it('should go to give.amount if starting at an unknown state and not initialized', function() {
+      var states = {
+        'give': false,
+        'give.amount': false,
+      };
+      spyOn($state, 'is').and.callFake(function(stateName) {
+        return(states[stateName]);
+      });
+      spyOn($state, 'go');
+      spyOn($scope, '$on').and.callFake(function(evt, handler) {
+        handler();
+      });
+      spyOn(controllerDto, 'reset');
+
+      controller.initialized = false;
+      controller.dto = controllerDto;
+      controller.initDefaultState();
+
+      expect($state.is).toHaveBeenCalledWith('give');
+      expect($state.go).toHaveBeenCalledWith('give.amount');
+      expect($scope.$on).not.toHaveBeenCalled();
+      expect(controller.initialized).toBeTruthy();
+      expect(controllerDto.reset).toHaveBeenCalled();
+    });
+  });
+
+  describe('$stateChangeStart event hook', function() {
+    beforeEach(function() {
+      controller.processing = false;
+      spyOn(controller, 'initDefaultState');
+      spyOn(controller, 'transitionForLoggedInUserBasedOnExistingDonor');
+    });
+
+    it('should initialize default state if not already initialized', function() {
+      $rootScope.email = "me@here.com";
+      controller.email = undefined;
+
+      controller.initialized = false;
+      var event = $scope.$broadcast('$stateChangeStart');
+
+      expect(event.defaultPrevented).toBeTruthy();
+      expect(controller.initDefaultState).toHaveBeenCalled();
+      expect(controller.transitionForLoggedInUserBasedOnExistingDonor).not.toHaveBeenCalled();
+      expect(controller.processing).toBeTruthy();
+      expect(controller.email).toBeDefined();
+      expect(controller.email).toBe("me@here.com");
+    });
+
+    it('should not initialize default state if already initialized', function() {
+      $rootScope.email = undefined;
+      controller.email = "me2@here.com";
+
+      controller.initialized = true;
+      var event = $scope.$broadcast('$stateChangeStart');
+
+      expect(event.defaultPrevented).toBeFalsy();
+      expect(controller.initDefaultState).not.toHaveBeenCalled();
+      expect(controller.transitionForLoggedInUserBasedOnExistingDonor).toHaveBeenCalled();
+      expect(controller.processing).toBeTruthy();
+      expect(controller.email).toBeDefined();
+      expect(controller.email).toBe("me2@here.com");
+    });
+
+  });
+
+  describe('$stateChangeSuccess event hook', function() {
+    var controllerDto = jasmine.createSpyObj('dto', ['reset']);
+
+    beforeEach(function() {
+      controller.dto = controllerDto;
+      controller.processing = true;
+      controller.initialized = true;
+    });
+
+    it('should not un-initialize controller if toState is not thank-you', function() {
+      var event = $scope.$broadcast('$stateChangeSuccess', {name: 'give.amount'});
+
+      expect(controller.processing).toBeFalsy();
+      expect(controller.initialized).toBeTruthy();
+      expect(controllerDto.reset).not.toHaveBeenCalled();
+    });
+
+    it('should un-initialize controller if toState is thank-you', function() {
+      var event = $scope.$broadcast('$stateChangeSuccess', {name: 'give.thank-you'});
+
+      expect(controller.processing).toBeFalsy();
+      expect(controller.initialized).toBeFalsy();
+      expect(controllerDto.reset).toHaveBeenCalled();
     });
   });
 
@@ -104,7 +278,8 @@ describe('GiveController', function() {
           exp_date: '1213',
           address_zip: '90210',
         }
-      }
+      },
+      reset: function() {},
     };
 
     var controllerCvc = '987';
@@ -241,7 +416,9 @@ describe('GiveController', function() {
 
   describe('function goToChange', function() {
     it('should populate dto with appropriate values when going to the change page', function() {
-      controller.dto = {};
+      controller.dto = {
+        reset: function() {},
+      };
       controller.goToChange(123, "donor", "test@here.com", "program", "view");
       expect(controller.dto.amount).toBe(123);
       expect(controller.dto.donor).toBe("donor");
