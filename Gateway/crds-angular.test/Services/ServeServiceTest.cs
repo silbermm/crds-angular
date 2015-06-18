@@ -644,7 +644,8 @@ namespace crds_angular.test.Services
             new[] {SetupMockEvents()},
             new[] {SetupWeekMissingInMySeriesMockEvents()},
             new[] {SetupWeekMissingNotInMySeriesMockEvents()},
-            new[] {SetupWeekMutipleMissingInMySeriesMockEvents()}
+            new[] {SetupWeekMutipleMissingInMySeriesMockEvents()},
+            new[] {SetupWeekNotInSequentialOrderMockEvents()}
         };
 
         [Test]
@@ -817,6 +818,38 @@ namespace crds_angular.test.Services
                 {
                     EventId = 5,
                     EventStartDate = new DateTime(2015, 2, 12)
+                }
+            };
+        }
+
+        private static List<Event> SetupWeekNotInSequentialOrderMockEvents()
+        {
+            return new List<Event>
+            {
+                new Event
+                {
+                    EventId = 2,
+                    EventStartDate = new DateTime(2015, 1, 8)
+                },
+                new Event
+                {
+                    EventId = 5,
+                    EventStartDate = new DateTime(2015, 1, 29)
+                },
+                new Event
+                {
+                    EventId = 4,
+                    EventStartDate = new DateTime(2015, 1, 22)
+                },
+                new Event
+                {
+                    EventId = 1,
+                    EventStartDate = new DateTime(2015, 1, 1)
+                },
+                new Event
+                {
+                    EventId = 3,
+                    EventStartDate = new DateTime(2015, 1, 15)
                 }
             };
         }

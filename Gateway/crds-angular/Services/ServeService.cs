@@ -244,9 +244,12 @@ namespace crds_angular.Services
         {
             //get participant id for Contact
             var participant = _participantService.GetParticipant(contactId);
+
             //get events in range
-            var events = _eventService.GetEventsByTypeForRange(eventTypeId, startDate, endDate, token);
-            //var includeThisWeek = true;
+            var events =
+                _eventService.GetEventsByTypeForRange(eventTypeId, startDate, endDate, token)
+                    .OrderBy(o => o.EventStartDate)
+                    .ToList();
 
             Opportunity previousOpportunity = null;
             var templateId = signUp ? AppSetting("RsvpYesTemplate") : AppSetting("RsvpNoTemplate");
@@ -259,56 +262,32 @@ namespace crds_angular.Services
 
             // Who are we sending the email to?
             var toContact = _contactService.GetContactById(contactId);
-            //Dictionary<string,object> response = null;
             try
             {
-                var sortedEvents = events.OrderBy(o => o.EventStartDate).ToList();
                 var increment = alternateWeeks ? 14 : 7;
                 var sequenceDate = startDate;
-                for (var i = 0; i < sortedEvents.Count(); i++)
+                for (var i = 0; i < events.Count(); i++)
                 {
-                    var e = sortedEvents[i];
-                    if (e.EventStartDate.Date > sequenceDate.Date)
+                    var @event = events[i];
+                    if (@event.EventStartDate.Date > sequenceDate.Date)
                     {
                         sequenceDate = sequenceDate.AddDays(increment);
                     }
-                    if (e.EventStartDate.Date == sequenceDate.Date)
-                    {
-                        Dictionary<string, object> response;
-                        if (signUp)
-                        {
-                            response = HandleYesRsvp(participant, e, opportunityId, opportunityIds, token);
-                        }
-                        else
-                        {
-                            response = HandleNoRsvp(participant, e, opportunityIds, token);
-                        }
+                    if (@event.EventStartDate.Date != sequenceDate.Date) continue;
 
-                        if (response.ToNullableObject<Opportunity>("previousOpportunity") != null)
-                            previousOpportunity = response.ToNullableObject<Opportunity>("previousOpportunity");
+                    var response = signUp
+                        ? HandleYesRsvp(participant, @event, opportunityId, opportunityIds, token)
+                        : HandleNoRsvp(participant, @event, opportunityIds, token);
 
-                        templateId = (templateId != AppSetting("RsvpChangeTemplate"))
-                            ? response.ToInt("templateId")
-                            : templateId;
+                    if (response.ToNullableObject<Opportunity>("previousOpportunity") != null)
+                        previousOpportunity = response.ToNullableObject<Opportunity>("previousOpportunity");
 
-                        sequenceDate = sequenceDate.AddDays(increment);
-                    }
+                    templateId = (templateId != AppSetting("RsvpChangeTemplate"))
+                        ? response.ToInt("templateId")
+                        : templateId;
+
+                    sequenceDate = sequenceDate.AddDays(increment);
                 }
-                //foreach (var e in events)
-                //{
-                //    if ((!alternateWeeks) || includeThisWeek)
-                //    {
-                //        var response = signUp
-                //            ? HandleYesRsvp(participant, e, opportunityId, opportunityIds, token)
-                //            : HandleNoRsvp(participant, e, opportunityIds, token);
-                //        if (response.ToNullableObject<Opportunity>("previousOpportunity") != null)
-                //            previousOpportunity = response.ToNullableObject<Opportunity>("previousOpportunity");
-                //        templateId = (templateId != AppSetting("RsvpChangeTemplate"))
-                //            ? response.ToInt("templateId")
-                //            : templateId;
-                //    }
-                //    includeThisWeek = !includeThisWeek;
-                //}
             }
             catch (Exception e)
             {
@@ -318,7 +297,6 @@ namespace crds_angular.Services
                 endDate, groupContact);
             var communication = SetupCommunication(templateId, groupContact, toContact);
             _communicationService.SendMessage(communication, mergeData);
-            //SendRSVPConfirmation(contactId, opportunityId, prevOpp, opportunity, startDate, endDate,templateId,token);            
             return true;
         }
 
