@@ -15,17 +15,32 @@
            // vm.processing is used to set state and text on the "Give" button
            // Make sure to set the processing state to true whenever a state change begins
            vm.processing = true;
+
            if ($rootScope.email) {
                vm.email = $rootScope.email;
                //what if email is not found for some reason??
-             }
-             vm.transitionForLoggedInUserBasedOnExistingDonor(event,toState);
+           }
+
+           // If not initialized, initialize and go to default state
+           if(!vm.initialized) {
+             event.preventDefault();
+             vm.initDefaultState();
+             return;
+           }
+
+           vm.transitionForLoggedInUserBasedOnExistingDonor(event,toState);
         });
 
         $scope.$on('$stateChangeSuccess', function (event, toState, toParams) {
           // vm.processing is used to set state and text on the "Give" button
           // Make sure to reset the processing state to false whenever state change succeeds.
           vm.processing = false;
+
+          // Force the state to reset after successfully giving
+          if(toState.name == 'give.thank-you') {
+            vm.initialized = false;
+            vm.dto.reset();
+          }
         });
 
         $scope.$on('$stateChangeError', function (event, toState, toParams) {
@@ -46,11 +61,12 @@
         vm.email = null;
         vm.emailAlreadyRegisteredGrowlDivRef = 1000;
         vm.emailPrefix = "give";
+        vm.initialized = false;
         vm.last4 = '';
         vm.processing = false;
         vm.programsInput = programList;
         vm.showMessage = "Where?";
-        vm.showCheckClass = "ng-hide";        
+        vm.showCheckClass = "ng-hide";
         if (!vm.dto.view ){
           vm.dto.view = "bank";
         };
@@ -61,7 +77,7 @@
         brandCode['American Express'] = '#cc_american_express';
         brandCode['Discover'] = '#cc_discover';
 
-       
+
         vm.confirmDonation = function(){
           try
           {
@@ -151,11 +167,24 @@
 
         // Invoked from the initial "/give" state to get us to the first page
         vm.initDefaultState = function() {
-            $scope.$on('$viewContentLoaded', function() {
-                if($state.is("give")) {
-                    $state.go("give.amount");
-                }
-            });
+          if($state.is('give') || $state.is('give.amount')) {
+            vm.initialized = true;
+          }
+
+          // If we have not initialized (meaning we came in via a deep-link, refresh, etc),
+          // reset state and redirect to start page (/give/amount).
+          if(!vm.initialized) {
+            vm.dto.reset();
+            vm.initialized = true;
+            $state.go("give.amount");
+            return;
+          }
+
+          $scope.$on('$viewContentLoaded', function() {
+              if($state.is("give")) {
+                  $state.go("give.amount");
+              }
+          });
         };
 
         // Callback from email-field on guest giver page.  Emits a growl
@@ -240,7 +269,7 @@
                   // so we'll keep it simple and send it in all cases.
                   if (vm.dto.view == "cc") {
                     vm.createCard();
-                    PaymentService.createDonorWithCard(vm.card, vm.email)               
+                    PaymentService.createDonorWithCard(vm.bank, vm.email)    
                   .then(function(donor) {
                     vm.donate(vm.program.ProgramId, vm.amount, donor.id, vm.email, vm.dto.view, function() {
                       $state.go("give.thank-you");
@@ -322,7 +351,8 @@
               $state.go("give.account");
             });
           }
+
         } 
-        };      
+       };      
     
 })();
