@@ -1,17 +1,33 @@
-<h1 class="page-header flush-bottom">Sign Up To Serve </h1>
-<refine-list last-date="serve.lastDate" serving-days="serve.groups" original="serve.original" > </refine-list>
-<div class="serve-signup-cont clearfix col-sm-10 col-sm-pull-2 soft-ends" >
+<div class="serve-signup-wrapper">
+  <h1 class="page-header flush-bottom">Sign Up To Serve </h1>
+  <br>
+  <p>
+    <svg viewBox="0 0 32 32" class="icon icon-check-circle">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#check-circle">
+      </use> 
+    </svg>
+    Sign Up Yes
+    <svg viewBox="0 0 32 32" class="icon icon-check-circle-minus">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#check-circle-minus">
+      </use> 
+    </svg>
+    Sign Up No
+  </p>
+  <refine-list last-date="serve.lastDate" serving-days="serve.groups" original="serve.original" > </refine-list>
+  <div class="serve-signup-cont clearfix col-sm-10 col-sm-pull-2 soft-ends" >
 
-  <div data-ng-show="serve.showNoOpportunitiesMsg()">
-    <span ng-bind-html="$root.messages[$root.MESSAGES.noServingOpportunities].message | html"></span>
+    <div data-ng-show="serve.showNoOpportunitiesMsg()">
+      <span ng-bind-html="$root.messages[$root.MESSAGES.noServingOpportunities].message | html"></span>
+    </div>
+
+    <div class="serve-day push-bottom" data-ng-repeat="group in serve.groups" ng-show="group.serveTimes.length > 0">
+      <h4>{{::serve.convertToDate(group.day) | date:'EEEE, MMMM dd, yyyy' }}</h4>
+      <serve-tabs opportunity="opp" serve-date="group.day" ng-repeat="opp in group.serveTimes" ng-show="opp.servingTeams.length > 0" >
+      </serve-tabs>
+    </div><!-- serve day -->
+
+    <button class="btn btn-block btn-primary" ng-show="serve.showButton()"  ng-click="serve.loadNextMonth()" ng-disabled="serve.loadMore"> {{serve.loadText}} </button>
+
+
   </div>
-
-  <div class="serve-day push-bottom" data-ng-repeat="group in serve.groups" ng-show="group.serveTimes.length > 0">
-    <h4>{{::serve.convertToDate(group.day) | date:'EEEE, MMMM dd, yyyy' }}</h4>
-    <serve-tabs opportunity="opp" serve-date="group.day" ng-repeat="opp in group.serveTimes" ng-show="opp.servingTeams.length > 0" >
-    </serve-tabs>
-  </div><!-- serve day -->
-
-  <button class="btn btn-block btn-primary" ng-show="serve.showButton()"  ng-click="serve.loadNextMonth()" ng-disabled="serve.loadMore"> {{serve.loadText}} </button>
-
 </div>
