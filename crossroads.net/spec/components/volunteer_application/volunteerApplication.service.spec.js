@@ -1,6 +1,10 @@
 describe('Volunteer Application Factory', function() {
 
   var mockPageInfo = setupPageInfo();
+  var mockAdult = setupPerson(32);
+  var mockStudent = setupPerson(15);
+  var mockUnderAge = setupPerson(9);
+  var mockProfile = setupProfile();
 
   var $rootScope, scope, Page, Opportunity, VolunteerApplication, $httpBackend;
 
@@ -21,16 +25,35 @@ describe('Volunteer Application Factory', function() {
   });
 
   it('should show the adult application', function(){
-
+    var showAdult = VolunteerApplication.show('adult', mockAdult );
+    expect(showAdult).toBe(true);
   });
 
   it('should show the student application', function(){
-
+    var showStudent = VolunteerApplication.show('student', mockStudent);
+    expect(showStudent).toBe(true);
   });
 
   it('should show an error is the person is under 10', function(){
-
+    var showError = VolunteerApplication.show('student', mockUnderAge);
+    expect(showError).toBe(false);
   });
+
+  it('should get the middle intial of the person', function(){
+    expect(VolunteerApplication.middleInitial(mockProfile)).toBe('M');
+  });
+
+  it('should get the response for the volunteer', function(){
+    VolunteerApplication.getResponse(115, 12345);
+    $httpBackend.expectGET( window.__env__['CRDS_API_ENDPOINT'] + 
+          'api/opportunity/getResponseForOpportunity/'+ 
+          115 + '/' + 12345 ).respond(200);
+    $httpBackend.flush();
+    
+  });
+
+
+  /* MOCK DATA SETUP */
 
   function setupPageInfo() {
     return {
@@ -66,6 +89,48 @@ describe('Volunteer Application Factory', function() {
       }]
     };
   }
- 
+  
+  function setupPerson(age){
+    return {
+      age: age,
+      contactId: 2186211,
+      email: 'matt.silbernagel@ingagepartners.com',
+      lastName: null,
+      loggedInUser: true,
+      participantId: 2213526,
+      preferredName: 'Matt',
+      relationshipId: 0
+    };
+  }
+
+  function setupProfile(){
+    return {
+      addressId: 1687838,
+      addressLine1: '2322 Raeburn Ter',
+      addressLine2: '',
+      age: 15,
+      anniversaryDate: '',
+      city: 'Cincinnati',
+      congregationId: 5,
+      contactId: 2186211,
+      dateOfBirth: '02/21/2000',
+      emailAddress: 'matt.silbernagel@ingagepartners.com',
+      employerName: null,
+      firstName: 'Matt',
+      foreignCountry: 'United States',
+      genderId: 1,
+      homePhone: '513-555-5555',
+      householdId: 1709940,
+      lastName: 'Silbernagel',
+      maidenName: null,
+      maritalStatusId: 2,
+      middleName: 'Micheal',
+      mobileCarrierId: null,
+      mobilePhone: null,
+      nickName: 'Matt',
+      postalCode: '45223-1231',
+      state: 'OH'
+    };
+  }
 
 });

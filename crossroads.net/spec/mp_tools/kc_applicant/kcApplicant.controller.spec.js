@@ -3,6 +3,7 @@ describe('KC Applicant Tool', function(){
   var mockPageInfo = setupPageInfo();
   var mockVolunteer = setupVolunteer();
   var pageParams = setupPageParams(); 
+  var mockResponse = setupResponse();
 
   beforeEach(module('crossroads'));
 
@@ -16,7 +17,7 @@ describe('KC Applicant Tool', function(){
     spyOn($location, 'search').and.returnValue(pageParams);
   }));
 
-  var controller, $log, $httpBackend, MPTools, $window, $scope, Contact;
+  var controller, $log, $httpBackend, MPTools, $window, $scope, Contact, CmsInfo;
 
   beforeEach(inject(function(_$controller_, _$log_, _MPTools_, _$window_, $injector){
     $scope = {};
@@ -25,6 +26,7 @@ describe('KC Applicant Tool', function(){
     $window = _$window_;
     MPTools = _MPTools_;
     Contact = $injector.get('Contact');
+    CmsInfo = $injector.get('CmsInfo');
     $httpBackend = $injector.get('$httpBackend');  
   }));
 
@@ -32,9 +34,34 @@ describe('KC Applicant Tool', function(){
     expect(controller.params.userGuid).toBe(pageParams.ug); 
   });
 
+  it('should have a null middle initial', function(){
+    expect(controller.person.middleInitial).toBeNull();
+  });
 
+  it('should get the have the correct page info', function(){
+    expect(controller.pageInfo).toBe(mockPageInfo.pages[0]);
+  });
+
+  it('should query for a response', function(){
+    $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 
+        'api/opportunity/getResponseForOpportunity/' + controller.pageInfo.opportunity + 
+        '/' + controller.params.recordId)
+      .respond(200, mockResponse);
+    $httpBackend.flush();
+    expect(controller.responseId).toBe(mockResponse.responseId);
+  });
+
+  it('should show error when no response if available', function(){
+    $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 
+        'api/opportunity/getResponseForOpportunity/' + controller.pageInfo.opportunity + 
+        '/' + controller.params.recordId)
+      .respond(200, null);
+    $httpBackend.flush();
+    expect(controller.error).toBeTruthy();
+  });
+
+ 
   // SETUPS FOR MOCK DATA //
-
   function setupPageInfo() {
     return {
       pages : [
@@ -111,6 +138,19 @@ describe('KC Applicant Tool', function(){
       sc:'1',
       p:0,
       v:387
+    };
+  }
+
+  function setupResponse(){
+    return {
+      closedId: false,
+      comments: null,
+      eventId: 0,
+      opportunityId: 115,
+      participantId: 1446358,
+      responseDate: '2015-06-19T09:55:34',
+      responseId: 7646,
+      responseResultId: null
     };
   }
 

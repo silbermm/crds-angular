@@ -28,7 +28,7 @@
        * this method tries to handle that gracefully
        */
       middleInitial: function(person){
-        if (person.middleName !== null && person.middle !== undefined && person.middleName.length > 0) {
+        if (person.middleName !== null && person.middleName !== undefined && person.middleName.length > 0) {
           return person.middleName.substring(0, 1);
         }
         return person.middleName;
@@ -40,8 +40,7 @@
         return Opportunity.GetResponse.get({
           id: opportunityId,
           contactId: contactId
-        }).$promise;
-        
+        }).$promise; 
       },
       /**
        * Gets the kids club application from the CMS

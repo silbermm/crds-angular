@@ -190,9 +190,11 @@ describe('Volunteer Application Controller', function() {
       expect(controller.showAccessDenied).toBe(false);
     });
 
-    it("should call the opportunity nresonponse service", function(){
-      $httpBackend.expectGET( window.__env__['CRDS_API_ENDPOINT'] + "api/opportunity/getREsponseForOpportunity/ "+ mockPageInfo.pages[0].oppportunity + "/" + controller.contactId );
-
+    it('should call the opportunity resonponse service', function(){
+      $httpBackend.expectGET( window.__env__['CRDS_API_ENDPOINT'] + 
+          'api/opportunity/getResponseForOpportunity/'+ 
+          mockPageInfo.pages[0].opportunity + '/' + controller.contactId ).respond(200);
+      $httpBackend.flush();
     });
 
     it("should show adult", function(){

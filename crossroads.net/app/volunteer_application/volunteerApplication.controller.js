@@ -64,7 +64,7 @@
 
     function checkFamily() {
       for (var i = 0; i < vm.family.length; i++) {
-        if (vm.family[i].contactId === vm.contactId) {
+        if (vm.family[i].contactId === Number(vm.contactId)) {
           return true;
         }
       }
