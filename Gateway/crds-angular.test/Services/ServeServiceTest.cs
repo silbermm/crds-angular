@@ -861,33 +861,7 @@ namespace crds_angular.test.Services
             {
                 ParticipantId = 47
             };
-
-
-            //var mockEvents = new List<Event>
-            //{
-            //    new Event
-            //    {
-            //        EventId = 1, EventStartDate = new DateTime(2015,1,1)
-            //    },
-            //    new Event
-            //    {
-            //        EventId = 2, EventStartDate = new DateTime(2015,1,8)
-            //    },
-            //    new Event
-            //    {
-            //        EventId = 3, EventStartDate = new DateTime(2015,1,15)
-            //    },
-            //    new Event
-            //    {
-            //        EventId = 4, EventStartDate = new DateTime(2015,1,22)
-            //    },
-            //    new Event
-            //    {
-            //        EventId = 5, EventStartDate = new DateTime(2015,1,29)
-            //    },
-            //};
-
-
+            
             //mock it up
             _participantService.Setup(m => m.GetParticipant(contactId)).Returns(mockParticipant);
             _eventService.Setup(
@@ -904,62 +878,7 @@ namespace crds_angular.test.Services
                             mockEvent.EventId, signUp));
             }
         }
-
-        private void assertCommunicationServiceCalled(MessageTemplate template, int contactId, int opportunityId)
-        {
-            var comm = new Communication
-            {
-                AuthorUserId = 5,
-                DomainId = 1,
-                EmailBody = template.Body,
-                EmailSubject = template.Subject,
-                FromContactId = fakeOpportunity.GroupContactId,
-                FromEmailAddress = fakeGroupContact.Email_Address,
-                ReplyContactId = fakeOpportunity.GroupContactId,
-                ReplyToEmailAddress = fakeGroupContact.Email_Address,
-                ToContactId = contactId,
-                ToEmailAddress = It.IsAny<string>()
-            };
-
-            var mergeData = new Dictionary<string, object>
-            {
-                {"Opportunity_Name", It.IsAny<string>()},
-                {"Start_Date", It.IsAny<string>()},
-                {"End_Date", It.IsAny<string>()},
-                {"Shift_Start", It.IsAny<string>()},
-                {"Shift_End", It.IsAny<string>()},
-                {"Room", It.IsAny<string>()},
-                {"Group_Contact", fakeGroupContact.Nickname + " " + fakeGroupContact.Last_Name},
-                {"Group_Name", fakeOpportunity.GroupName},
-                {"Previous_Opportunity_Name", It.IsAny<string>()}
-            };
-
-            _communicationService.Verify(m => m.SendMessage(comm, mergeData));
-        }
-
-
-        private List<ContactRelationship> MockGetMyFamilyResponse()
-        {
-            var getMyFamilyResponse = new List<ContactRelationship>
-            {
-                new ContactRelationship
-                {
-                    Contact_Id = 1,
-                    Email_Address = "person-one@test.com",
-                    Last_Name = "person-one",
-                    Preferred_Name = "preferred-name-one"
-                },
-                new ContactRelationship
-                {
-                    Contact_Id = 2,
-                    Email_Address = "person-two@test.com",
-                    Last_Name = "person-two",
-                    Preferred_Name = "preferred-name-two"
-                }
-            };
-            return getMyFamilyResponse;
-        }
-
+        
         private static List<Response> MockTwentyResponses()
         {
             var responses = new List<Response>();
