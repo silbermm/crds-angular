@@ -91,4 +91,37 @@ describe('Giving Flow State', function() {
     expect(element(by.model('creditCard.cvc')).getText()).toBe('');
     expect(element(by.model('creditCard.billingZipCode')).getText()).toBe('');
   });
+
+  it('should be reset after navigating to register page, entering info, and then clicking refresh', function() {
+    expect(browser.getCurrentUrl()).toMatch(/\/amount/);
+
+    element(by.model('amount')).sendKeys("1999");
+    element(by.binding('amount')).click();
+    expect(browser.getCurrentUrl()).toMatch(/\/login/);
+
+    element(by.linkText('Create an account')).click();
+    expect(browser.getCurrentUrl()).toMatch(/\/register/);
+
+    element.all(by.id('registration-firstname')).get(1).sendKeys("Jack");
+    element.all(by.id('registration-lastname')).get(1).sendKeys("Protractor");
+    var ranNum = Math.floor((Math.random() * 1000) + 1);
+    element.all(by.id('registration-email')).get(4).sendKeys("updates+" +ranNum+ "@crossroads.net");
+    element.all(by.id('registration-password')).get(2).sendKeys("protractor");
+
+    browser.navigate().refresh();
+    expect(browser.getCurrentUrl()).toMatch(/\/amount/);
+
+    expect(element(by.model('amount')).getText()).toBe('');
+    element(by.model('amount')).sendKeys("1999");
+    element(by.binding('amount')).click();
+    expect(browser.getCurrentUrl()).toMatch(/\/login/);
+
+    element(by.linkText('Create an account')).click();
+    expect(browser.getCurrentUrl()).toMatch(/\/register/);
+
+    expect(element.all(by.id('registration-firstname')).get(1).getText()).toBe('');
+    expect(element.all(by.id('registration-lastname')).get(1).getText()).toBe('');
+    expect(element.all(by.id('registration-email')).get(4).getText()).toBe('');
+    expect(element.all(by.id('registration-password')).get(2).getText()).toBe('');
+  });
 });
