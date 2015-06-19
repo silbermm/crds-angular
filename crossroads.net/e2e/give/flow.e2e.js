@@ -30,7 +30,7 @@ describe('Giving Flow', function() {
     expect(browser.getCurrentUrl()).toMatch(/\/thank-you/);
   });
 
-  it('should follow full  flow, giving as guest', function () {
+  it('should follow full flow, giving as guest', function () {
     expect(browser.getCurrentUrl()).toMatch(/\/amount/);
     element(by.model('amount')).sendKeys("1999");
     element(by.binding('amount')).click();
@@ -56,25 +56,6 @@ describe('Giving Flow', function() {
       var email = element.all(by.binding('give.email')).first();
       expect(email.getText()).toBe("tim@kriz.net");
     });
-
-    // make sure state is cleared and we are taken back to the amount page instead of account
-    browser.navigate().back();
-    expect(browser.getCurrentUrl()).toMatch(/\/amount/);
-    element(by.model('amount')).sendKeys("1999");
-    element(by.binding('amount')).click();
-    expect(browser.getCurrentUrl()).toMatch(/\/login/);
-    var giveAsGuestButton = element.all(by.css('.btn')).get(7);
-    expect(giveAsGuestButton.getText()).toBe("Give as Guest");
-    giveAsGuestButton.click();
-    var creditCardButton = element.all(by.model('give.dto.view')).get(1);
-    expect(creditCardButton.getText()).toBe("Credit Card");
-    creditCardButton.click();
-    expect(element(by.id('give-email')).getText()).toBe('');
-    expect(element(by.model('creditCard.nameOnCard')).getText()).toBe('');
-    expect(element(by.model('creditCard.ccNumber')).getText()).toBe('');
-    expect(element(by.model('creditCard.expDate')).getText()).toBe('');
-    expect(element(by.model('creditCard.cvc')).getText()).toBe('');
-    expect(element(by.model('creditCard.billingZipCode')).getText()).toBe('');
   });
 
   it('should register as new user and not lose the amt or fund', function () {
