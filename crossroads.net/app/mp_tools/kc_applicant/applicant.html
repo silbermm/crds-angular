@@ -8,7 +8,7 @@
   <div>
     <h2 class='header noPspace'> Kids Club Application  </h2>
  
-    <p id="successMessage" ng-bind-html="applicant.pageInfo.success | html" ng-show="volunteer.showSuccess"></p>
+    <p id="successMessage" ng-bind-html="applicant.pageInfo.success | html" ng-show="applicant.showSuccess"></p>
     
     <div id='adult-application' ng-if='applicant.showAdult() && !applicant.showSuccess'>
       <kids-club-adult-application volunteer='applicant.person' 
