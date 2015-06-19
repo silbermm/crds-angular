@@ -366,21 +366,21 @@
         },
         resolve: {
           loggedin: crds_utilities.checkLoggedin,
-          Page: 'Page',
           Profile: 'Profile',
           MPTools: 'MPTools',
-          CmsInfo: function(Page, $stateParams) {
-            var path = '/volunteer-application/' + $stateParams.appType + '/';
-            return Page.get({
-              url: path
-            }).$promise;
-          },
           Contact: function(Profile, MPTools) {
             var params = MPTools.getParams(); 
             return Profile.Person.get({
               contactId: params.recordId
             }).$promise;
+          },
+          Page: 'Page',
+          CmsInfo: function(Page, $stateParams) {
+            return Page.get({
+              url: '/volunteer-application/kids-club/'
+            }).$promise;
           }
+
         }
       })
       .state('content', {

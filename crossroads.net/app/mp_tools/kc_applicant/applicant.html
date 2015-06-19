@@ -1,49 +1,29 @@
 <div ng-if='applicant.showError()' class='alert alert-danger' role='alert'>
-  <span ng-bind-html='$root.messages[$root.MESSAGES.toolsError].message | html'></span>
+  <span ng-bind-html='$root.messages[applicant.errorMessage].message | html'></span>
 </div>
 
-<div class='col-sm-10 col-sm-offset-1' ng-if='!applicant.showError()'>
+<preloader full-screen='true' ng-show="!applicant.viewReady"> </preloader>
 
-  <div class='alert alert-success' role='alert' ng-if='applicant.created'>
-    <span ng-bind-html='$root.messages[$root.MESSAGES.succesfulResponse].message | html'></span>
-  </div>
-
-  <div class='alert alert-danger' role='alert' ng-if='applicant.rejected'>
-    <span ng-bind-html='$root.messages[$root.MESSAGES.failedResponse].message | html'></span>
-  </div>
-
-  <preloader full-screen='true' ng-show='!applicant.viewReady'> </preloader>
-
-  <div ng-show='applicant.viewReady'>
-    <h2 class='header noPspace' ng-bind-html='applicant.pageInfo.title | html'></h2>
-    <div>
-      <p id='content' 
-         class='noPspace' 
-         dir='ltr' 
-         ng-bind-html='applicant.pageInfo.content | html' 
-         ng-show='applicant.showContent'>
-      </p>
-      <p id='successMessage' ng-bind-html='applicant.pageInfo.success | html' ng-show='applicant.showSuccess'></p>
-    </div>
-
-    <div id='adult-application' ng-if='applicant.showAdult && !applicant.showSuccess'>
+<div class='col-sm-10 col-sm-offset-1' ng-if='!applicant.showError() && applicant.viewReady' >
+  <div>
+    <h2 class='header noPspace'> Kids Club Application  </h2>
+ 
+    <p id="successMessage" ng-bind-html="applicant.pageInfo.success | html" ng-show="volunteer.showSuccess"></p>
+    
+    <div id='adult-application' ng-if='applicant.showAdult() && !applicant.showSuccess'>
       <kids-club-adult-application volunteer='applicant.person' 
-                                   contact-id='applicant.contactId' 
+                                   contact-id='applicant.params.recordId'
                                    opportunity-id='applicant.pageInfo.opportunity' 
                                    response-id='applicant.responseId'
                                    show-success='applicant.showSuccess' />
     </div>
 
-    <div id='student-application' ng-if='applicant.showStudent && !applicant.showSuccess'>
+    <div id='student-application' ng-if='applicant.showStudent() && !applicant.showSuccess'>
       <kids-club-student-application volunteer='applicant.person' 
-                                     contact-id='applicant.contactId' 
-                                     page-info='applicant.pageInfo' 
+                                     contact-id='applicant.params.recordId' 
+                                     page-info='applicant.pageInfo'
                                      response-id='applicant.responseId'
                                      show-success='applicant.showSuccess' />
-    </div>
-
-    <div ng-if='applicant.noResponse'>
-      <p id='notEligible' ng-bind-html='applicant.pageInfo.noExistingResponse | html'></p>
     </div>
 
   </div>

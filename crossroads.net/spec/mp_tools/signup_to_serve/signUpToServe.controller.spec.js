@@ -53,15 +53,33 @@ describe('Signup To Serve Tool', function(){
     groupRoleId:22,
     groupRoleTitle :'Leader'
   }];
-  var expectedMultiRSVP1 = {'alternateWeeks':false, 'contactId':768379, 'endDate':'1430452800', 'eventTypeId':142, 'opportunityId':'2923', 'signUp':true, 'startDate':'1430452800'};
-  var expectedMultiRSVP2 = {'alternateWeeks':false, 'contactId':23457890, 'endDate':'1430452800', 'eventTypeId':142, 'opportunityId':'2923', 'signUp':true, 'startDate':'1430452800'};
+
+  var expectedMultiRSVP1 = {
+    'alternateWeeks':false, 
+    'contactId':768379, 
+    'endDate':'1430452800', 
+    'eventTypeId':142, 
+    'opportunityId':'2923', 
+    'signUp':true, 
+    'startDate':'1430452800'
+  };
+  
+  var expectedMultiRSVP2 = {
+    'alternateWeeks':false, 
+    'contactId':23457890, 
+    'endDate':'1430452800', 
+    'eventTypeId':142, 
+    'opportunityId':'2923', 
+    'signUp':true, 
+    'startDate':'1430452800'
+  };
 
   var expectedDates = [1430382600,1430469000,1430555400,1430641800];
   
   beforeEach(module('crossroads'));
 
   beforeEach(inject(function(_$location_){
-    var $location = _$location_
+    var $location = _$location_;
     spyOn($location, 'search').and.returnValue({
       dg:'8b6242c9-ea32-40f7-97a2-e2bb3524ced2',
       'ug':'c29e64a5-820b-461f-a57c-5831d070d578',

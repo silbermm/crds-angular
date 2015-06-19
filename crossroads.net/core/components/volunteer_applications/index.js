@@ -3,6 +3,10 @@
   
   var MODULE = 'crossroads.core';
 
+  /* The Volunteer Service */
+  angular.module(MODULE).factory('VolunteerApplication', require('./volunteerApplication.service'));
+
+
   /* The Adult Application */
   angular.module(MODULE).controller('KidsClubAdultApplicationController', 
       require('./kc_adult_application/kidsClubAdultApplication.controller'));

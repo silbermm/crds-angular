@@ -65,6 +65,9 @@
         "after"      : false,
         "afterEach"  : false,
         "_"          : false,
-        "crds_utilities" : false
+        "crds_utilities" : false,
+        "spyOn": false,
+        "_$location_" : false,
+        "expect" : false
     }
 }

@@ -1,4 +1,4 @@
-describe("Volunteer Application Controller", function() {
+describe('Volunteer Application Controller', function() {
 
   var controller, 
       $rootScope, 
@@ -12,45 +12,45 @@ describe("Volunteer Application Controller", function() {
       Family; 
 
   var mockFamily = [{
-     "contactId": 768379,
-     "participantId": 994377,
-     "preferredName": "Tony",
-     "lastName": null,
-     "loggedInUser": true,
-     "email": "tmaddox33mp1@gmail.com",
-     "relationshipId": 0
+     contactId : 768379,
+     participantId : 994377,
+     'preferredName': 'Tony',
+     'lastName': null,
+     'loggedInUser': true,
+     'email': 'tmaddox33mp1@gmail.com',
+     'relationshipId': 0
   }, {
-     "contactId": 1519134,
-     "participantId": 1446324,
-     "preferredName": "Brady",
-     "lastName": "Queenan",
-     "loggedInUser": false,
-     "email": null,
-     "relationshipId": 6
+     contactId: 1519134,
+     participantId: 1446324,
+     'preferredName': 'Brady',
+     'lastName': 'Queenan',
+     'loggedInUser': false,
+     'email': null,
+     'relationshipId': 6
   }, {
-     "contactId": 768386,
-     "participantId": 1446320,
-     "preferredName": "Claire",
-     "lastName": "Maddox",
-     "loggedInUser": false,
-     "email": "tmaddox33mp1@gmail.com",
-     "relationshipId": 6
+     'contactId': 768386,
+     'participantId': 1446320,
+     'preferredName': 'Claire',
+     'lastName': 'Maddox',
+     'loggedInUser': false,
+     'email': 'tmaddox33mp1@gmail.com',
+     'relationshipId': 6
   }, {
-     "contactId": 1519207,
-     "participantId": 1446358,
-     "preferredName": "Jack",
-     "lastName": "Maddox",
-     "loggedInUser": false,
-     "email": "lsangam@yahoo.com",
-     "relationshipId": 6
+     'contactId': 1519207,
+     'participantId': 1446358,
+     'preferredName': 'Jack',
+     'lastName': 'Maddox',
+     'loggedInUser': false,
+     'email': 'lsangam@yahoo.com',
+     'relationshipId': 6
   }, {
-     "contactId": 2186211,
-     "participantId": 2213526,
-     "preferredName": "Matt",
-     "lastName": "Silbernagel",
-     "loggedInUser": false,
-     "email": "matt.silbernagel@ingagepartners.com",
-     "relationshipId": 6
+     'contactId': 2186211,
+     'participantId': 2213526,
+     'preferredName': 'Matt',
+     'lastName': 'Silbernagel',
+     'loggedInUser': false,
+     'email': 'matt.silbernagel@ingagepartners.com',
+     'relationshipId': 6
   }];
 
   var mockVolunteer= {
@@ -120,7 +120,7 @@ describe("Volunteer Application Controller", function() {
   describe("Not in Family", function(){  
 
     beforeEach(module(function($provide){
-      $provide.value('$stateParams', { id: '12345678'}); 
+      $provide.value('$stateParams', { id: 12345678}); 
       mockSession= jasmine.createSpyObj('Session', ['exists', 'isActive']);
       mockSession.exists.and.callFake(function(something){
         return '12345678';
@@ -157,7 +157,7 @@ describe("Volunteer Application Controller", function() {
   describe("In Family", function(){
     
     beforeEach(module(function($provide){
-      $provide.value('$stateParams', { id: '2186211'}); 
+      $provide.value('$stateParams', { id: 2186211}); 
       mockSession= jasmine.createSpyObj('Session', ['exists', 'isActive']);
       mockSession.exists.and.callFake(function(something){
         return '2186211';

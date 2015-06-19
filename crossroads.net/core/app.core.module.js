@@ -60,7 +60,8 @@
       noServingOpportunities: 34,
       toDateToSmall: 38,
       noInitiativeSelected: 16,
-      toolsError: 40
+      toolsError: 40,
+      noResponse: 49
     })
     .config(function (growlProvider) {
       growlProvider.globalPosition("top-center");

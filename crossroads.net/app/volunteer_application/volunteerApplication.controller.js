@@ -1,17 +1,25 @@
-"use strict";
 
 (function() {
-
+  'use strict';
+  
   var moment = require('moment');
-
   module.exports = VolunteerApplicationController;
 
-  VolunteerApplicationController.$inject = ['$scope', '$log', 'MESSAGES', 'Session', '$stateParams', 'CmsInfo', 'Opportunity', 'Contact', 'VolunteerService', 'Family'];
+  VolunteerApplicationController.$inject = ['$log', 'MESSAGES', 
+                                            'VolunteerApplication', 'Session', 
+                                            '$stateParams', 'CmsInfo', 'Opportunity', 
+                                            'Contact', 'VolunteerService', 'Family'];
 
-  function VolunteerApplicationController($scope, $log, MESSAGES, Session, $stateParams, CmsInfo, Opportunity, Contact, VolunteerService, Family) {
-    $log.debug("Inside VolunteerApplicationController");
+  function VolunteerApplicationController($log, MESSAGES, 
+      VolunteerApplication, 
+      Session, 
+      $stateParams, 
+      CmsInfo, 
+      Opportunity, 
+      Contact, 
+      VolunteerService, Family) {
+    
     var vm = this;
-
     vm.contactId = $stateParams.id;
     vm.family = Family;
     vm.pageInfo = pageInfo(CmsInfo);
@@ -34,7 +42,7 @@
     function activate() {
       if (checkFamily()) {
         vm.showAccessDenied = false;
-        vm.person.middleInitial = middleInitial();
+        vm.person.middleInitial = VolunteerApplication.middleInitial(vm.person);
         opportunityResponse();
         applicationVersion();
       } else {
@@ -44,6 +52,7 @@
     }
 
     function applicationVersion() {
+      //var block = VolunteerApplication.applicationVersion(vm.person);
       if (vm.person.age >= 16) {
         vm.showAdult = true;
       } else if ((vm.person.age >= 10) && (vm.person.age <= 15)) {
@@ -54,23 +63,15 @@
     }
 
     function checkFamily() {
-
       for (var i = 0; i < vm.family.length; i++) {
-        if (vm.family[i].contactId == vm.contactId) {
+        if (vm.family[i].contactId === vm.contactId) {
           return true;
         }
       }
       return false;
     }
 
-    function middleInitial() {
-      if (vm.person.middleName !== null && vm.person.middle !== undefined && vm.person.middleName.length > 0) {
-        return vm.person.middleName.substring(0, 1);
-      }
-      return vm.person.middleName;
-    }
-
-    function opportunityResponse() {
+    function opportunityResponse() { 
       Opportunity.GetResponse.get({
           id: vm.pageInfo.opportunity,
           contactId: vm.contactId
@@ -80,7 +81,7 @@
           if ((response !== null) && (response.responseId !== undefined)) {
             vm.responseId = response.responseId;
           } else {
-            vm.showInvalidResponse = ((response == null) || ((response.responseId == undefined)));
+            vm.showInvalidResponse = ((response === null) || ((response.responseId === undefined)));
           }
         });
     }
@@ -94,25 +95,20 @@
         case 'adult':
           vm.showContent = true;
           return vm.showAdult && !vm.showInvalidResponse && vm.responseCheck;
-          break;
         case 'student':
           vm.showContent = true;
           return vm.showStudent && !vm.showInvalidResponse && vm.responseCheck;
-          break;
         case 'no-response':
           vm.showContent = false;
           return vm.showInvalidResponse;
-          break;
         case 'denied':
           vm.showContent = false;
           return vm.showAccessDenied;
-          break;
         case 'age-error':
           vm.showContent = false;
           return vm.showError;
-          break;
         default:
-          $log.debug('show block undefined: ' + block);
+          $log.debug('show block undefined: ' + blockName);
           return false;
       }
     }
