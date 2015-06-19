@@ -95,17 +95,21 @@ describe('GiveController', function() {
   });
 
   describe('function initDefaultState', function() {
-    var controllerDto = {
-      reset: function() {},
-    };
+    var controllerDto;
 
-    it('should go to give.amount if starting at give', function() {
-      spyOn($state, 'is').and.returnValue(true);
+    beforeEach(function() {
+      controllerDto = jasmine.createSpyObj('dto', ['reset']);
+
+      spyOn(Session, 'removeRedirectRoute');
+
       spyOn($state, 'go');
       spyOn($scope, '$on').and.callFake(function(evt, handler) {
         handler();
       });
-      spyOn(controllerDto, 'reset');
+    });
+
+    it('should go to give.amount if starting at give', function() {
+      spyOn($state, 'is').and.returnValue(true);
 
       controller.initialized = false;
       controller.dto = controllerDto;
@@ -114,6 +118,7 @@ describe('GiveController', function() {
       expect($state.is).toHaveBeenCalledWith('give');
       expect($state.go).toHaveBeenCalledWith('give.amount');
       expect(controllerDto.reset).not.toHaveBeenCalled();
+      expect(Session.removeRedirectRoute).not.toHaveBeenCalled();
     });
 
     it('should go to give.amount if starting at give', function() {
@@ -124,11 +129,6 @@ describe('GiveController', function() {
       spyOn($state, 'is').and.callFake(function(stateName) {
         return(states[stateName]);
       });
-      spyOn($state, 'go');
-      spyOn($scope, '$on').and.callFake(function(evt, handler) {
-        handler();
-      });
-      spyOn(controllerDto, 'reset');
 
       controller.initialized = false;
       controller.dto = controllerDto;
@@ -138,6 +138,7 @@ describe('GiveController', function() {
       expect($state.go).toHaveBeenCalledWith('give.amount');
       expect(controller.initialized).toBeTruthy();
       expect(controllerDto.reset).not.toHaveBeenCalled();
+      expect(Session.removeRedirectRoute).not.toHaveBeenCalled();
     });
 
     it('should do nothing special if starting at give.amount', function() {
@@ -148,11 +149,6 @@ describe('GiveController', function() {
       spyOn($state, 'is').and.callFake(function(stateName) {
         return(states[stateName]);
       });
-      spyOn($state, 'go');
-      spyOn($scope, '$on').and.callFake(function(evt, handler) {
-        handler();
-      });
-      spyOn(controllerDto, 'reset');
 
       controller.initialized = false;
       controller.dto = controllerDto;
@@ -163,6 +159,7 @@ describe('GiveController', function() {
       expect($state.go).not.toHaveBeenCalled();
       expect(controller.initialized).toBeTruthy();
       expect(controllerDto.reset).not.toHaveBeenCalled();
+      expect(Session.removeRedirectRoute).not.toHaveBeenCalled();
     });
 
     it('should go to give.amount if starting at an unknown state and not initialized', function() {
@@ -173,11 +170,6 @@ describe('GiveController', function() {
       spyOn($state, 'is').and.callFake(function(stateName) {
         return(states[stateName]);
       });
-      spyOn($state, 'go');
-      spyOn($scope, '$on').and.callFake(function(evt, handler) {
-        handler();
-      });
-      spyOn(controllerDto, 'reset');
 
       controller.initialized = false;
       controller.dto = controllerDto;
@@ -188,6 +180,7 @@ describe('GiveController', function() {
       expect($scope.$on).not.toHaveBeenCalled();
       expect(controller.initialized).toBeTruthy();
       expect(controllerDto.reset).toHaveBeenCalled();
+      expect(Session.removeRedirectRoute).toHaveBeenCalled();
     });
   });
 
@@ -231,9 +224,10 @@ describe('GiveController', function() {
   });
 
   describe('$stateChangeSuccess event hook', function() {
-    var controllerDto = jasmine.createSpyObj('dto', ['reset']);
+    var controllerDto;
 
     beforeEach(function() {
+      controllerDto = jasmine.createSpyObj('dto', ['reset']);
       controller.dto = controllerDto;
       controller.processing = true;
       controller.initialized = true;
@@ -315,7 +309,6 @@ describe('GiveController', function() {
   });
 
   describe('function transitionForLoggedInUserBasedOnExistingDonor', function(){
-
     var mockEvent = {
       preventDefault : function(){}
     };
