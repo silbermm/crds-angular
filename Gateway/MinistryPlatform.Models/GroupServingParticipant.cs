@@ -30,5 +30,6 @@ namespace MinistryPlatform.Models
         public string Room { get; set; }
         public long RowNumber { get; set; }
         public bool? Rsvp { get; set; }
+        public bool LoggedInUser { get; set; }
     }
 }
