@@ -246,22 +246,13 @@ namespace crds_angular.Services
             var participant = _participantService.GetParticipant(contactId);
 
             //get events in range
-            var events =
-                _eventService.GetEventsByTypeForRange(eventTypeId, startDate, endDate, token)
-                    .OrderBy(o => o.EventStartDate)
-                    .ToList();
-
-            Opportunity previousOpportunity = null;
-            var templateId = signUp ? AppSetting("RsvpYesTemplate") : AppSetting("RsvpNoTemplate");
-
-            // Get the opportunity using any of the opportunities
-            var opportunity = (opportunityId > 0)
-                ? _opportunityService.GetOpportunityById(opportunityId, token)
-                : _opportunityService.GetOpportunityById(opportunityIds.FirstOrDefault(), token);
+            var events = GetEventsInRange(token, eventTypeId, startDate, endDate);
+            var templateId = GetRsvpTemplate(signUp);
+            var opportunity = GetOpportunity(token, opportunityId, opportunityIds);
             var groupContact = _contactService.GetContactById(opportunity.GroupContactId);
 
-            // Who are we sending the email to?
             var toContact = _contactService.GetContactById(contactId);
+            Opportunity previousOpportunity = null;
             try
             {
                 var increment = alternateWeeks ? 14 : 7;
@@ -269,23 +260,12 @@ namespace crds_angular.Services
                 for (var i = 0; i < events.Count(); i++)
                 {
                     var @event = events[i];
-                    if (@event.EventStartDate.Date > sequenceDate.Date)
-                    {
-                        sequenceDate = sequenceDate.AddDays(increment);
-                    }
+                    sequenceDate = IncrementSequenceDate(@event, sequenceDate, increment);
                     if (@event.EventStartDate.Date != sequenceDate.Date) continue;
 
-                    var response = signUp
-                        ? HandleYesRsvp(participant, @event, opportunityId, opportunityIds, token)
-                        : HandleNoRsvp(participant, @event, opportunityIds, token);
-
-                    if (response.ToNullableObject<Opportunity>("previousOpportunity") != null)
-                        previousOpportunity = response.ToNullableObject<Opportunity>("previousOpportunity");
-
-                    templateId = (templateId != AppSetting("RsvpChangeTemplate"))
-                        ? response.ToInt("templateId")
-                        : templateId;
-
+                    var response = CreateRsvp(token, opportunityId, opportunityIds, signUp, participant, @event);
+                    previousOpportunity = PreviousOpportunity(response, previousOpportunity);
+                    templateId = GetTemplateId(templateId, response);
                     sequenceDate = sequenceDate.AddDays(increment);
                 }
             }
@@ -298,6 +278,62 @@ namespace crds_angular.Services
             var communication = SetupCommunication(templateId, groupContact, toContact);
             _communicationService.SendMessage(communication, mergeData);
             return true;
+        }
+
+        private static DateTime IncrementSequenceDate(Event @event, DateTime sequenceDate, int increment)
+        {
+            if (@event.EventStartDate.Date > sequenceDate.Date)
+            {
+                sequenceDate = sequenceDate.AddDays(increment);
+            }
+            return sequenceDate;
+        }
+
+        private static int GetTemplateId(int templateId, Dictionary<string, object> response)
+        {
+            templateId = (templateId != AppSetting("RsvpChangeTemplate"))
+                ? response.ToInt("templateId")
+                : templateId;
+            return templateId;
+        }
+
+        private static Opportunity PreviousOpportunity(Dictionary<string, object> response, Opportunity previousOpportunity)
+        {
+            if (response.ToNullableObject<Opportunity>("previousOpportunity") != null)
+                previousOpportunity = response.ToNullableObject<Opportunity>("previousOpportunity");
+            return previousOpportunity;
+        }
+
+        private Dictionary<string, object> CreateRsvp(string token, int opportunityId, List<int> opportunityIds, bool signUp, Participant participant,
+            Event @event)
+        {
+            var response = signUp
+                ? HandleYesRsvp(participant, @event, opportunityId, opportunityIds, token)
+                : HandleNoRsvp(participant, @event, opportunityIds, token);
+            return response;
+        }
+
+        private Opportunity GetOpportunity(string token, int opportunityId, List<int> opportunityIds)
+        {
+            var opportunity = (opportunityId > 0)
+                ? _opportunityService.GetOpportunityById(opportunityId, token)
+                : _opportunityService.GetOpportunityById(opportunityIds.FirstOrDefault(), token);
+            return opportunity;
+        }
+
+        private static int GetRsvpTemplate(bool signUp)
+        {
+            var templateId = signUp ? AppSetting("RsvpYesTemplate") : AppSetting("RsvpNoTemplate");
+            return templateId;
+        }
+
+        private List<Event> GetEventsInRange(string token, int eventTypeId, DateTime startDate, DateTime endDate)
+        {
+            var events =
+                _eventService.GetEventsByTypeForRange(eventTypeId, startDate, endDate, token)
+                    .OrderBy(o => o.EventStartDate)
+                    .ToList();
+            return events;
         }
 
         private Dictionary<string, object> HandleYesRsvp(Participant participant, Event e, int opportunityId,
