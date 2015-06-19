@@ -4,16 +4,18 @@
 
     function GiveTransferService() {
         var transferObject = {
-          account : '',
-          amount : '',
-          donor : '',
-          email : '',
-          program : '',
-          routing : '',
-          view : '',
-        }
+          reset: function() {
+            this.account = '';
+            this.amount = '';
+            this.donor = '';
+            this.email = '';
+            this.program = '';
+            this.routing = '';
+            this.view = '';
+          }
+        };
+        transferObject.reset();
 
         return transferObject;
     }
-
 })()

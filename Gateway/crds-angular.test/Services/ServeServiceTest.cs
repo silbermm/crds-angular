@@ -161,7 +161,7 @@ namespace crds_angular.test.Services
             _participantService.Setup(m => m.GetParticipant(It.IsAny<int>()))
                 .Returns(new Participant { ParticipantId = 1 });
 
-            _groupParticipantService.Setup(g => g.GetServingParticipants(It.IsAny<List<int>>(),It.IsAny<long>(), It.IsAny<long>())).Returns(MockGroupServingParticipants());
+            _groupParticipantService.Setup(g => g.GetServingParticipants(It.IsAny<List<int>>(), It.IsAny<long>(), It.IsAny<long>(), contactId)).Returns(MockGroupServingParticipants());
 
             var servingDays = _fixture.GetServingDays(It.IsAny<string>(), contactId, It.IsAny<long>(), It.IsAny<long>());
             _contactRelationshipService.VerifyAll();
