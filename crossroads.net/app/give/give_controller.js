@@ -150,6 +150,7 @@
           if(!vm.initialized) {
             vm.dto.reset();
             vm.initialized = true;
+            Session.removeRedirectRoute();
             $state.go("give.amount");
             return;
           }
