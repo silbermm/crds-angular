@@ -75,7 +75,6 @@
         brandCode['American Express'] = '#cc_american_express';
         brandCode['Discover'] = '#cc_discover';
 
-
         vm.confirmDonation = function(){
           try
           {
@@ -148,7 +147,7 @@
           // If we have not initialized (meaning we came in via a deep-link, refresh, etc),
           // reset state and redirect to start page (/give/amount).
           if(!vm.initialized) {
-            vm.dto.reset();
+            vm.reset();
             vm.initialized = true;
             Session.removeRedirectRoute();
             $state.go("give.amount");
@@ -187,6 +186,18 @@
                 }, 0);
             }
         };
+
+        vm.reset = function() {
+          vm.amount = undefined;
+          vm.amountSubmitted = false;
+          vm.bankinfoSubmitted = false;
+          vm.changeAccountInfo = false;
+          vm.initialized = false;
+          vm.processing = false;
+          vm.program = undefined;
+
+          vm.dto.reset();
+        }
 
         vm.submitBankInfo = function() {
             vm.bankinfoSubmitted = true;

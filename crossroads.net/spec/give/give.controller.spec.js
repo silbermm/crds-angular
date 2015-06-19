@@ -231,6 +231,7 @@ describe('GiveController', function() {
       controller.dto = controllerDto;
       controller.processing = true;
       controller.initialized = true;
+      spyOn(controller, 'reset').and.callThrough();
     });
 
     it('should not un-initialize controller if toState is not thank-you', function() {
@@ -238,6 +239,7 @@ describe('GiveController', function() {
 
       expect(controller.processing).toBeFalsy();
       expect(controller.initialized).toBeTruthy();
+      expect(controller.reset).not.toHaveBeenCalled();
       expect(controllerDto.reset).not.toHaveBeenCalled();
     });
 
@@ -246,6 +248,31 @@ describe('GiveController', function() {
 
       expect(controller.processing).toBeFalsy();
       expect(controller.initialized).toBeFalsy();
+      expect(controller.reset).not.toHaveBeenCalled();
+      expect(controllerDto.reset).toHaveBeenCalled();
+    });
+  });
+
+  describe('function reset', function() {
+    it('should reset all appropriate values', function() {
+      var controllerDto = jasmine.createSpyObj('dto', ['reset']);
+      controller.amount = 123;
+      controller.amountSubmitted = true;
+      controller.bankinfoSubmitted = true;
+      controller.changeAccountInfo = true;
+      controller.dto = controllerDto;
+      controller.initialized = true;
+      controller.processing = true;
+      controller.program = 456;
+
+      controller.reset();
+      expect(controller.amount).not.toBeDefined();
+      expect(controller.amountSubmitted).toBeFalsy();
+      expect(controller.bankinfoSubmitted).toBeFalsy();
+      expect(controller.changeAccountInfo).toBeFalsy();
+      expect(controller.initialized).toBeFalsy();
+      expect(controller.processing).toBeFalsy();
+      expect(controller.program).not.toBeDefined();
       expect(controllerDto.reset).toHaveBeenCalled();
     });
   });
@@ -438,9 +465,7 @@ describe('GiveController', function() {
       // This resolves the promise above
       $rootScope.$apply();
 
-      expect(controller.amount).toBe(123);
-      expect(controller.program).toBeDefined();
-      expect(controller.program_name).toBe("Crossroads");
+      expect(mockPaymentService.donateToProgram).toHaveBeenCalledWith(1, 123, "2", "test@here.com", "cc");
       expect(callback.onSuccess).toHaveBeenCalled();
     });
 
