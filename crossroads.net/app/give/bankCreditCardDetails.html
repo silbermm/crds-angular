@@ -11,11 +11,13 @@
     </span>
 
     <section ng-if="give.dto.view=='bank'">
-    	<bank-info account="give.dto.account" 
-                bankinfo-submitted="give.bankinfoSubmitted" 
-                change-account-info="give.dto.changeAccountInfo" 
-                default-source="give.dto.donor.default_source" 
-                routing="give.dto.routing">
+    	<bank-info account="give.dto.donor.default_source.last4" 
+                   bankinfo-submitted="give.bankinfoSubmitted" 
+                   change-account-info="give.dto.changeAccountInfo" 
+                   default-source="give.dto.donor.default_source" 
+                   routing="give.dto.donor.default_source.routing"
+                   show-check-class="give.showCheckClass"
+                   show-message="give.showMessage">
         </bank-info> 
      </section>
 

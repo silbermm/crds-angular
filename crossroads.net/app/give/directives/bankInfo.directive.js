@@ -3,7 +3,7 @@ require('../bankInfo.html');
     angular
     .module('crossroads.give')
     .directive('bankInfo', ['$log', '$rootScope', '$timeout', bankInfo]);
-
+       
     function bankInfo($log, $rootScope, $timeout) {
         var directive = {
           restrict: 'EA',
@@ -13,7 +13,9 @@ require('../bankInfo.html');
               bankinfoSubmitted: "=",
               changeAccountInfo: "=",
               defaultSource: "=",
-              routing: "="             
+              routing: "=" ,
+              showMessage: "=" ,
+              showCheckClass: "="             
             },
           templateUrl: 'give/bankInfo.html',
           link: link
@@ -24,7 +26,7 @@ require('../bankInfo.html');
         $log.debug("Inside of bankInfo directive");
 
         scope.bankAccount = scope;
-
+      
         scope.accountError = function() {
           return (scope.bankinfoSubmitted && scope.bankAccountForm.account.$error.invalidAccount && scope.bankAccountForm.$invalid  ||
             scope.bankAccountForm.account.$error.invalidAccount && scope.bankAccountForm.account.$dirty);
@@ -39,10 +41,7 @@ require('../bankInfo.html');
         };
 
          scope.resetDefaultBankPlaceholderValues = function() {
-          scope.defaultBankPlaceholderValues = {
-            routing: "",
-            maskedAccount: ""
-          };
+          scope.defaultBankPlaceholderValues = {};
         };
 
         scope.routingError = function() {

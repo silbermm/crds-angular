@@ -97,8 +97,8 @@
           vm.bank = {
              country: 'US',
              currency: 'USD',
-             routing_number: vm.dto.routing,
-             account_number: vm.dto.account
+             routing_number: vm.dto.donor.default_source.routing,
+             account_number: vm.dto.donor.default_source.last4
           }       
         };
 
