@@ -10,14 +10,17 @@ require('./templates/footer.html');
 require('./templates/header.html');
 require('./templates/brand-bar.html');
 
-require('./app.core.module')
+require('./app.core.module');
 require('./login');
 require('./home');
 require('./register/register_directive');
 require('./cms/services/cms_services_module');
 
+// Common Components
 require('./components/svgIcon.directive');
 require('./components/preloader');
+require('./components/volunteer_applications');
+
 require('./content');
 require('./email_field/email_field_directive');
 require('./password_field/password_field_directive');
