@@ -66,6 +66,43 @@ describe('Giving Flow State', function() {
     });
   });
 
+  it('should be reset after navigating to confirmation page as existing giver, then clicking refresh', function() {
+    expect(browser.getCurrentUrl()).toMatch(/\/amount/);
+
+    element(by.model('amount')).sendKeys("12345");
+
+    element(by.model('ministryShow')).click();
+    // This selects 'Game Change'
+    element(by.model('program')).$('[value="26"]').click();
+
+    element(by.binding('amount')).click();
+    expect(browser.getCurrentUrl()).toMatch(/\/login/);
+
+    element(by.id('login-page-email')).sendKeys("tim@kriz.net");
+    element(by.id('login-page-password')).sendKeys("password");
+
+    element.all(by.id('submit_nav')).get(2).click();
+    expect(browser.getCurrentUrl()).toMatch(/\/confirm/);
+
+    var program = element(by.binding('give.program'));
+    expect(program.getText()).toBe('Game Change');
+
+    var giveButton = element(by.css("[ng-click=\"give.confirmDonation()\"]"));
+    expect(giveButton.getText()).toBe("GIVE $12,345.00");
+
+    browser.navigate().refresh().then(function() {
+      expect(browser.getCurrentUrl()).toMatch(/\/amount/);
+      expect(element(by.model('amount')).getText()).toBe('');
+      element(by.model('amount')).sendKeys("56789");
+
+      element(by.binding('amount')).click();
+      expect(browser.getCurrentUrl()).toMatch(/\/confirm/);
+
+      expect(element(by.binding('give.amount')).getText()).toBe('$56,789.00');
+      expect(element(by.binding('give.program')).getText()).toBe('Crossroads');
+    });
+  });
+
   it('should be reset after successfully giving as guest and returning to give again', function() {
     expect(browser.getCurrentUrl()).toMatch(/\/amount/);
 
