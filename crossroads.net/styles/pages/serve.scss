@@ -15,6 +15,18 @@
   }
 }
 
+.serve-signup-wrapper {
+  //Icon colors
+  .icon-check-circle {
+    color: $brand-success;
+  }
+
+  .icon-minus-circle {
+    color: $brand-danger;
+  } 
+
+} 
+
 .serve-opp-listings {
 
   .panel {
@@ -96,21 +108,11 @@
         &:last-of-type {
           margin-right: 0px;
         }
-
+        
         .icon {
           vertical-align: baseline;
         }
-
-        //Icon colors
-        .icon-check-circle {
-          color: $brand-success;
-
-        }
-
-        .icon-minus-circle {
-          color: $brand-danger;
-          margin-bottom: -3px; //the check icon does not line up with the minus for some reason
-        }
+  
       }
     }
   }
