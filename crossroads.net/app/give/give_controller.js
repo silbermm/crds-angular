@@ -265,7 +265,7 @@
         }
 
         vm.submitBankInfo = function() {
-            vm.bankinfoSubmitted = true;
+            vm.bankinfoSubmitted = true;            
             if ($scope.giveForm.accountForm.$valid) {
               vm.processing = true;
               PaymentService.donor().get({email: $scope.give.email})
@@ -313,9 +313,12 @@
               $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
             }
         };
-
+ 
         vm.submitChangedBankInfo = function() {
             vm.bankinfoSubmitted = true;
+           if($scope.give.dto.amount === undefined) {
+             $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);            
+           } else { 
             if (vm.dto.view == "cc") {
               if (!$scope.giveForm.creditCardForm.$dirty){
                 vm.processing = true;
@@ -337,7 +340,8 @@
              }
            };
         };
-
+      };
+      
         vm.transitionForLoggedInUserBasedOnExistingDonor = function(event, toState){
           if(toState.name == "give.account" && $rootScope.username && !vm.donorError ) {
             vm.processing = true;
