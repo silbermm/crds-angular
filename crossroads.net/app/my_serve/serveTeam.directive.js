@@ -354,11 +354,13 @@
             min: r.minimum,
             max: r.maximum
           });
-
-          scope.selectedRole = _.find(member.roles, function(r) {
-            return r.roleId === member.serveRsvp.roleId;
-          });
         });
+
+        if (scope.currentMember.serveRsvp !== undefined && scope.currentMember.serveRsvp !== null) {
+          scope.selectedRole = _.find(scope.currentMember.roles, function(r) {
+            return r.roleId === scope.currentMember.serveRsvp.roleId;
+          });
+        };
         allowProfileEdit();
       }
 
