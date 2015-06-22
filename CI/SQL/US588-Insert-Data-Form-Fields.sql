@@ -1,7 +1,9 @@
 USE [MinistryPlatform]
-GO
-SET IDENTITY_INSERT [dbo].[Form_Fields] ON 
 
+GO
+DELETE FROM MinistryPlatform.dbo.Form_Fields WHERE (Form_ID = 16 OR Form_ID = 17)
+
+GO
 INSERT INTO [dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (10,'Last Name',1,'NULL',1,16,1,0,310)
 INSERT INTO [dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (20,'First Name',1,'NULL',1,16,1,0,311)
 INSERT INTO [dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (30,'Middle Initial',1,'NULL',0,16,1,0,312)
@@ -158,6 +160,4 @@ INSERT INTO [dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], 
 INSERT INTO [dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (1070,'Agree Date',1,'NULL',0,17,1,0,502)
 INSERT INTO [dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (381,'Neglecting Child',8,'NULL',0,17,1,0,503)
 
-GO
-SET IDENTITY_INSERT [dbo].[Form_Fields] OFF
 GO
