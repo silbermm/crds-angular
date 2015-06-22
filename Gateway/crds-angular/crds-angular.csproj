@@ -321,7 +321,31 @@
   <ItemGroup>
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Web.common.config" />
+    <None Include="MinistryPlatform.Debug.config">
+      <DependentUpon>MinistryPlatform.config</DependentUpon>
+      <IsTransformFile>True</IsTransformFile>
+    </None>
+    <None Include="MinistryPlatform.Demo.config">
+      <DependentUpon>MinistryPlatform.config</DependentUpon>
+      <IsTransformFile>True</IsTransformFile>
+    </None>
+    <None Include="MinistryPlatform.Integration.config">
+      <DependentUpon>MinistryPlatform.config</DependentUpon>
+      <IsTransformFile>True</IsTransformFile>
+    </None>
+    <None Include="MinistryPlatform.local test.config">
+      <DependentUpon>MinistryPlatform.config</DependentUpon>
+      <IsTransformFile>True</IsTransformFile>
+    </None>
+    <None Include="MinistryPlatform.MPTest01.config">
+      <DependentUpon>MinistryPlatform.config</DependentUpon>
+      <IsTransformFile>True</IsTransformFile>
+    </None>
+    <None Include="MinistryPlatform.Release.config">
+      <DependentUpon>MinistryPlatform.config</DependentUpon>
+      <IsTransformFile>True</IsTransformFile>
+    </None>
+    <None Include="Properties\PublishProfiles\local test.pubxml" />
     <None Include="Properties\PublishProfiles\MPTest01.pubxml" />
     <Content Include="Properties\SlowCheetah\SlowCheetah.Transforms.targets" />
     <Content Include="Web.config">
@@ -340,6 +364,9 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Unity.config" />
+    <None Include="MinistryPlatform.config">
+      <TransformOnBuild>true</TransformOnBuild>
+    </None>
     <None Include="Web.Demo.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
