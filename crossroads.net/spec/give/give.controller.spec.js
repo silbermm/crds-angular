@@ -324,7 +324,7 @@ describe('GiveController', function() {
         id: 654,
         default_source: {          
           last4: '753869',
-          routing: '110000000'          
+          routing: '110000000',         
         }
       },
       reset: function() {},
@@ -381,8 +381,10 @@ describe('GiveController', function() {
       expect(mockPaymentService.updateDonorWithBankAcct).toHaveBeenCalledWith(
         controllerDto.donor.id,
         {
-          account: controllerBankDto.donor.default_source.account,
-          routing: controllerBankDto.donor.default_source.routing      
+          country: 'US',
+          currency: 'USD',
+          account_number: controllerBankDto.donor.default_source.last4,
+          routing_number: controllerBankDto.donor.default_source.routing ,
         }
       );
     });
