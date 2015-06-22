@@ -163,10 +163,9 @@ describe('Giving Flow', function() {
     expect(bankAccountButton.getText()).toBe("Bank Account");
     bankAccountButton.click();
     element(by.model('amount')).clear();
-     element(by.model('amount')).sendKeys("89321");
+    element(by.model('amount')).sendKeys("89321");
     element(by.model('bankAccount.account')).sendKeys("000123456789");
     element(by.model('bankAccount.routing')).sendKeys("110000000");
-  //  element(by.model('amount')).sendKeys("89321");
     var chgButton = element.all(by.css("[ng-click=\"give.submitChangedBankInfo()\"]")).get(0);
     expect(chgButton.getText()).toBe("GIVE $89,321.00");
     chgButton.click().then(function() {
