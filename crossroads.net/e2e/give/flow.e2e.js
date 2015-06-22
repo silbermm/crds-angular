@@ -55,7 +55,7 @@ describe('Giving Flow', function() {
       expect(browser.getCurrentUrl()).toMatch(/\/thank-you/);
       var email = element.all(by.binding('give.email')).first();
       expect(email.getText()).toBe("tim@kriz.net");
-    });    
+    });
   });
 
   it('should register as new user and not lose the amt or fund', function () {
@@ -79,7 +79,7 @@ describe('Giving Flow', function() {
     element(by.cssContainingText('.ng-binding', '$867,539.00'));
   });
 
-it('should follow full credit card flow, logging in as user with existing giver and changing account information', function () {
+  it('should follow full credit card flow, logging in as user with existing giver and changing account information', function () {
     expect(browser.getCurrentUrl()).toMatch(/\/amount/);
     element(by.model('amount')).sendKeys("12345");
     element(by.binding('amount')).click();

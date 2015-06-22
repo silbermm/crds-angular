@@ -3,7 +3,7 @@ require('../bankInfo.html');
     angular
     .module('crossroads.give')
     .directive('bankInfo', ['$log', '$rootScope', '$timeout', bankInfo]);
-       
+
     function bankInfo($log, $rootScope, $timeout) {
         var directive = {
           restrict: 'EA',
@@ -26,7 +26,7 @@ require('../bankInfo.html');
         $log.debug("Inside of bankInfo directive");
 
         scope.bankAccount = scope;
-      
+
         scope.accountError = function() {
           if(scope.useExistingAccountInfo()) {
             return(false);
