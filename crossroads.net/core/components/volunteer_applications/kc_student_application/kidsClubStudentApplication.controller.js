@@ -1,15 +1,14 @@
-"use strict";
-
-var moment = require("moment");
+var moment = require('moment');
 
 (function() {
 
-  angular.module("crossroads").controller("KidsClubStudentApplicationController", KidsClubStudentApplicationController);
+  'use strict';
+  module.exports = KidsClubStudentApplicationController;
 
   KidsClubStudentApplicationController.$inject = ['$log', '$rootScope', 'VolunteerService', 'studentFields'];
 
   function KidsClubStudentApplicationController($log, $rootScope, VolunteerService, studentFields) {
-    $log.debug("Inside Kids-Club-Student-Application-Controller");
+    $log.debug('Inside Kids-Club-Student-Application-Controller');
     var vm = this;
 
     vm.availabilitySelected = availabilitySelected;
@@ -27,9 +26,10 @@ var moment = require("moment");
     vm.save = save;
     vm.saving = false;
     vm.serveAgeKids = {};
+    vm.showError = showError;
     vm.studentSignatureDate = moment().format('MM/DD/YYYY');
-    vm.submitButtonText = "Submit";
-    
+    vm.submitButtonText = 'Submit';
+
     activate();
 
     ///////////////////////////////////////////
@@ -41,8 +41,9 @@ var moment = require("moment");
      * true if it has, false otherwise
      */
     function availabilitySelected(){
-      if (vm.availabilityDuringWeek || vm.availabilityDuringWeekend)
+      if (vm.availabilityDuringWeek || vm.availabilityDuringWeekend) {
         return true;
+      }
       return false;
     }
 
@@ -54,8 +55,10 @@ var moment = require("moment");
       if (vm.serveAgeKids && (
           vm.serveAgeKids.age1to2 ||
           vm.serveAgeKids.age3toPreK ||
-          vm.serveAgeKids.Kto5Grade) )
+          vm.serveAgeKids.Kto5Grade) 
+        ) {
         return true;
+      }
       return false;
     }
 
@@ -64,12 +67,13 @@ var moment = require("moment");
      * true if it has, false otherwise
      */
     function locationSelected(){
-      if (vm.availabilityOakley
-          || vm.availabilityFlorence
-          || vm.availabilityWestSide
-          || vm.availabilityMason
-          || vm.availabilityClifton)
+      if (vm.availabilityOakley || 
+          vm.availabilityFlorence || 
+          vm.availabilityWestSide || 
+          vm.availabilityMason || 
+          vm.availabilityClifton) {
         return true;
+      }
       return false;
     }
 
@@ -78,17 +82,17 @@ var moment = require("moment");
     function save(form) {
       // set the state of the save button to saving...
       vm.saving = true;
-      vm.submitButtonText = "Submitting...";
+      vm.submitButtonText = 'Submitting...';
 
       $log.debug('you tried to save');
       $log.debug('school: ' + vm.school);
       $log.debug('something from parent: ' + vm.contactId );
 
       if(form.student.$invalid){
-        $log.error("please fill out all required fields correctly");
+        $log.error('please fill out all required fields correctly');
         $rootScope.$emit('notify',$rootScope.MESSAGES.generalError);
         vm.saving = false;
-        vm.submitButtonText = "Submit";
+        vm.submitButtonText = 'Submit';
         return false;
       }
 
@@ -108,7 +112,7 @@ var moment = require("moment");
       };
 
       student.middleInitial = {
-        Value: vm.volunteer.middleName.substring(0, 1),
+        Value: vm.volunteer.middleInitial,
         CrossroadsId: studentFields.middleInitial
       };
 
@@ -391,18 +395,27 @@ var moment = require("moment");
 
       student.$save(function(saved) {
         vm.saving = false;
-        vm.submitButtonText = "Submit";
+        vm.submitButtonText = 'Submit';
         vm.showSuccess = true;
         return true;
       }, function(err) {
-        $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
+        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
         vm.saving = false;
-        vm.submitButtonText = "Submit";
+        vm.submitButtonText = 'Submit';
         return false;
       });
       return true;
     }
-
+    
+    function showError(form, field) {
+      if(form[field] === undefined) {
+        return false;
+      }
+      if (form.$submitted || form[field].$dirty){
+        return form[field].$invalid;
+      }
+      return false;
+    }
 
   }
 })();

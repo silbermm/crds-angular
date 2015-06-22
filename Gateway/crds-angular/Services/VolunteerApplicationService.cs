@@ -1,5 +1,4 @@
-
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using crds_angular.Models.Crossroads.VolunteerApplication;
@@ -7,8 +6,7 @@ using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
-
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services.Interfaces;
@@ -24,7 +22,8 @@ namespace crds_angular.Services
 
         private readonly IServeService _serveService;
 
-        public VolunteerApplicationService(IFormSubmissionService formSubmissionService, IConfigurationWrapper configurationWrapper, IServeService serveService)
+        public VolunteerApplicationService(IFormSubmissionService formSubmissionService,
+            IConfigurationWrapper configurationWrapper, IServeService serveService)
         {
             _formSubmissionService = formSubmissionService;
             _configurationWrapper = configurationWrapper;
@@ -48,8 +47,11 @@ namespace crds_angular.Services
             formResponse.FormAnswers.Add(SetCustomField(application.MiddleInitial, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.Email, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.BirthDate, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.PreviousName, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.NameForNameTag, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(TranslateGender(application.Gender), opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(TranslateMaritalStatus(application.MaritalStatus), opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(TranslateMaritalStatus(application.MaritalStatus),
+                opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.SpouseName, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.SpouseGender, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.SiteYouAttend, opportunityResponseId));
@@ -86,7 +88,7 @@ namespace crds_angular.Services
 
             formResponse.FormAnswers.Add(SetCustomField(application.WhatPromptedApplication, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.SpecialTalents, opportunityResponseId));
-            
+
 
             formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityWeek, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityWeekend, opportunityResponseId));
@@ -97,14 +99,19 @@ namespace crds_angular.Services
             formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityClifton, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityServiceTimes, opportunityResponseId));
 
-            formResponse.FormAnswers.Add(SetCustomField(application.AreaOfInterestServingInClassroom, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.AreaOfInterestWelcomingNewFamilies, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.AreaOfInterestHelpSpecialNeeds, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.AreaOfInterestServingInClassroom,
+                opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.AreaOfInterestWelcomingNewFamilies,
+                opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.AreaOfInterestHelpSpecialNeeds,
+                opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.AreaOfInterestTech, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.AreaOfInterestRoomPrep, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.AreaOfInterestAdminTasks, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.AreaOfInterestShoppingForSupplies, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.AreaOfInterestCreatingWeekendExperience, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.AreaOfInterestShoppingForSupplies,
+                opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.AreaOfInterestCreatingWeekendExperience,
+                opportunityResponseId));
 
             formResponse.FormAnswers.Add(SetCustomField(application.WhatAgeBirthToTwo, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.WhatAgeThreeToPreK, opportunityResponseId));
@@ -251,7 +258,6 @@ namespace crds_angular.Services
                 case "6":
                     maritalStatus.Value = MaritalStatus.Seperated.ToString();
                     break;
-
             }
             return maritalStatus;
         }
@@ -264,7 +270,7 @@ namespace crds_angular.Services
             {
                 fieldId = _formFields.Single(f => f.CrossroadsId == customField.CrossroadsId).FormFieldId;
             }
-            catch 
+            catch
             {
                 throw new ApplicationException(string.Format("Failed to locate id for crossroads field {0}",
                     customField.CrossroadsId));
@@ -276,12 +282,18 @@ namespace crds_angular.Services
             return answer;
         }
 
-        
+
         public List<FamilyMember> FamilyThatUserCanSubmitFor(int contactId, string token)
         {
             var list = _serveService.GetImmediateFamilyParticipants(contactId, token);
-            var removeSpouse = list.Where(s => s.RelationshipId != 1).ToList();
-            return removeSpouse;
+            var family =
+                list.Where(
+                    s =>
+                        (s.RelationshipId == 0) || (s.RelationshipId == 29) ||
+                        (s.RelationshipId == 21 && s.Age >= 10 && s.Age <= 13) ||
+                        (s.RelationshipId == 6 && s.Age >= 10 && s.Age <= 13)).ToList();
+
+            return family;
         }
     }
 }

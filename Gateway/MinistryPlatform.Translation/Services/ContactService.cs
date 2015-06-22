@@ -41,37 +41,16 @@ namespace MinistryPlatform.Translation.Services
 
         public MyContact GetContactById(int contactId)
         {
-            var recordsDict = _ministryPlatformService.GetRecordDict(contactsPageId, contactId, apiLogin());
+            var searchString = string.Format(",{0}", contactId);
+            
+            var pageViewRecords = _ministryPlatformService.GetPageViewRecords("AllIndividualsWithContactId", apiLogin(), searchString);
 
-            var contact = new MyContact
+            if (pageViewRecords.Count > 1)
             {
-                Household_ID = recordsDict.ToInt("Household_ID"),
-                Anniversary_Date = recordsDict.ToDateAsString("Anniversary_Date"),
-                Contact_ID = recordsDict.ToInt("Contact_ID"),
-                Date_Of_Birth = recordsDict.ToDateAsString("Date_of_Birth"),
-                Email_Address = recordsDict.ToString("Email_Address"),
-                Employer_Name = recordsDict.ToString("Employer_Name"),
-                First_Name = recordsDict.ToString("First_Name"),
-                Gender_ID = recordsDict.ToNullableInt("Gender_ID"),
-                Last_Name = recordsDict.ToString("Last_Name"),
-                Maiden_Name = recordsDict.ToString("Maiden_Name"),
-                Marital_Status_ID = recordsDict.ToNullableInt("Marital_Status_ID"),
-                Middle_Name = recordsDict.ToString("Middle_Name"),
-                Mobile_Carrier = recordsDict.ToNullableInt("Mobile_Carrier"),
-                Mobile_Phone = recordsDict.ToString("Mobile_Phone"),
-                Nickname = recordsDict.ToString("Nickname"),
-                Age = Age(recordsDict.ToDate("Date_of_Birth"))
-            };
-            return contact;
-        }
+                throw new ApplicationException("GetContactById returned multiple records");
+            }
 
-        private static int Age(DateTime birthday)
-        {
-            var reference = DateTime.Now;
-            var age = reference.Year - birthday.Year;
-            if (reference < birthday.AddYears(age)) age--;
-
-            return age;
+            return ParseProfileRecord(pageViewRecords[0]);
         }
 
         public MyContact GetMyProfile(string token)

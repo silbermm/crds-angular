@@ -40,7 +40,8 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Preferred Name", "person-one"},
                     {"Last Name", "person-one"},
                     {"Participant_ID", 654321},
-                    {"Relationship_ID", 1}
+                    {"Relationship_ID", 1},
+                    {"Age", 40}
                 },
                 new Dictionary<string, object>()
                 {
@@ -49,7 +50,8 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Preferred Name", "person-two"},
                     {"Last Name", "person-two"},
                     {"Participant_ID", 3333333},
-                    {"Relationship_ID", 1}
+                    {"Relationship_ID", 1},
+                    {"Age", 40}
                 }
             };
             _ministryPlatformService.Setup(
