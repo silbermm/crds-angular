@@ -1,10 +1,13 @@
 .my-trip {
+  .trip-date{
+    font-size: 18px;
+  }
   .funding-goal {
     margin-top: -20px;
   }
   .trip-funding {
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 18px;
+    white-space: nowrap;
   }
   .days-left {
     font-size: 18px;
