@@ -315,7 +315,7 @@
  
         vm.submitChangedBankInfo = function() {
             vm.bankinfoSubmitted = true;
-           if($scope.give.dto.amount === "") {
+           if(vm.dto.amount === "") {
              $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);            
            } else { 
             if (vm.dto.view == "cc") {
