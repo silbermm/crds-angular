@@ -11,8 +11,8 @@
       donateToProgram : donateToProgram,
       donation : {},
       donor : getDonor,
-      updateDonorWithCard :updateDonorWithCard
-      
+      updateDonorWithBankAcct :updateDonorWithBankAcct,
+      updateDonorWithCard :updateDonorWithCard      
     };
 
     stripe.setPublishableKey(__STRIPE_PUBKEY__);
@@ -87,6 +87,28 @@
           var donor_request = { stripe_token_id: token.id, email_address: email }
           $http({
             method: "POST",
+            url: __API_ENDPOINT__ + 'api/donor',
+            headers: {
+              'Authorization': crds_utilities.getCookie('sessionId')
+            },
+            data: donor_request
+            }).success(function(data) {
+              payment_service.donor = data;
+              def.resolve(data);
+            }).error(function(error) {
+              def.reject(error);
+            });
+        });
+       return def.promise;
+    }
+
+    function updateDonorWithBankAcct(donorId, bank){
+      var def = $q.defer();
+      stripe.bankAccount.createToken(bank)
+        .then(function (token) {
+          var donor_request = { "stripe_token_id": token.id }
+          $http({
+            method: "PUT",
             url: __API_ENDPOINT__ + 'api/donor',
             headers: {
               'Authorization': crds_utilities.getCookie('sessionId')
