@@ -37,6 +37,35 @@ describe('Giving Flow State', function() {
     expect(element(by.model('amount')).getText()).toBe('');
   });
 
+  it('should be reset after giving as existing giver, logging out, then returning to give again', function() {
+    expect(browser.getCurrentUrl()).toMatch(/\/amount/);
+
+    element(by.model('amount')).sendKeys("12345");
+    element(by.binding('amount')).click();
+    expect(browser.getCurrentUrl()).toMatch(/\/login/);
+
+    element(by.id('login-page-email')).sendKeys("tim@kriz.net");
+    element(by.id('login-page-password')).sendKeys("password");
+
+    var button = element.all(by.id('submit_nav')).get(2);
+    button.click();
+    expect(browser.getCurrentUrl()).toMatch(/\/confirm/);
+
+    var giveButton = element(by.css("[ng-click=\"give.confirmDonation()\"]"));
+    expect(giveButton.getText()).toBe("GIVE $12,345.00");
+    giveButton.click();
+    expect(browser.getCurrentUrl()).toMatch(/\/thank-you/);
+
+    var logoutButton = element.all(by.css(".navbar--login")).get(0).all(by.linkText('Sign Out'));
+    logoutButton.click();
+    expect(browser.getCurrentUrl()).toMatch(/\/amount/);
+
+    browser.navigate().to(env.baseUrl + '/#/give').then(function() {
+      expect(browser.getCurrentUrl()).toMatch(/\/amount/);
+      expect(element(by.model('amount')).getText()).toBe('');
+    });
+  });
+
   it('should be reset after successfully giving as guest and returning to give again', function() {
     expect(browser.getCurrentUrl()).toMatch(/\/amount/);
 
