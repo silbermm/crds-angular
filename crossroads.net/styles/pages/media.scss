@@ -48,7 +48,7 @@
 }
 
 /* Small devices (tablets, 768px and up) */
-@media (max-width: 767px) {
+@media (max-width: $screen-xs-max) {
 	.series-list li{
 		width: 50%;
 		float: left;
