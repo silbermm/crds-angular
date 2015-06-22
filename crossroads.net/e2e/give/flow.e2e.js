@@ -30,7 +30,7 @@ describe('Giving Flow', function() {
     expect(browser.getCurrentUrl()).toMatch(/\/thank-you/);
   });
 
-  it('should follow full flow, giving as guest', function () {
+  it('should follow full  flow, giving as guest', function () {
     expect(browser.getCurrentUrl()).toMatch(/\/amount/);
     element(by.model('amount')).sendKeys("1999");
     element(by.binding('amount')).click();
@@ -122,5 +122,48 @@ describe('Giving Flow', function() {
       expect(program).toBeDefined();
       expect(program.getText()).toBe("Crossroads");
     });
+  });
+
+
+  it('should follow full bank account flow, logging in as user with existing giver and changing bank account information', function () {
+    expect(browser.getCurrentUrl()).toMatch(/\/amount/);
+    element(by.model('amount')).sendKeys("12345");
+    element(by.binding('amount')).click();
+    expect(browser.getCurrentUrl()).toMatch(/\/login/);
+    var loginButton = element.all(by.css('.btn')).get(6);
+    expect(loginButton.getText()).toBe("Login");
+    loginButton.click();
+    element(by.id('login-page-email')).sendKeys("sandi.ritter+protractor@ingagepartners.com");
+    element(by.id('login-page-password')).sendKeys("winter14");
+    var button = element.all(by.id('submit_nav')).get(2);
+    button.click();
+    expect(browser.getCurrentUrl()).toMatch(/\/confirm/);
+    var giveButton = element(by.css("[ng-click=\"give.goToChange(give.amount, give.donor, give.email, give.program, 'cc')\"]"));
+    giveButton.click();
+    expect(browser.getCurrentUrl()).toMatch(/\/change/);
+    var bankAccountButton = element.all(by.model('give.dto.view')).get(0);
+    expect(bankAccountButton.getText()).toBe("Bank Account");
+    bankAccountButton.click();
+    element(by.model('amount')).clear();
+    element(by.model('amount')).sendKeys("89321");
+    element(by.model('bankAccount.routing')).sendKeys("110000000");
+    element(by.model('bankAccount.account')).sendKeys("000123456789");
+    var chgButton = element.all(by.css("[ng-click=\"give.submitChangedBankInfo()\"]")).get(0);
+    expect(chgButton.getText()).toBe("GIVE $89,321.00");
+    chgButton.click().then(function() {
+      browser.waitForAngular();
+      expect(browser.getCurrentUrl()).toMatch(/\/thank-you/);
+      var email = element.all(by.binding('give.email')).first();
+      expect(email).toBeDefined();
+      expect(email.getText()).toBe("sandi.ritter+protractor@ingagepartners.com");
+
+      var amount = element.all(by.binding('give.amount')).first();
+      expect(amount).toBeDefined();
+      expect(amount.getText()).toBe("$89,321.00");
+
+      var program = element.all(by.binding("give.program['Name']")).first();
+      expect(program).toBeDefined();
+      expect(program.getText()).toBe("Crossroads");
+   });
   });
 })
