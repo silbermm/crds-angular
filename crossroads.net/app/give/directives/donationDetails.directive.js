@@ -29,13 +29,16 @@ require('../donation-details.html');﻿
 
         if (scope.amount != undefined) {
           scope.donationDetailsForm.amount = scope.amount;
+        } else {
+          scope.donationDetailsForm.amount = "";
         };
 
         scope.amountError = function() {
             return (scope.amountSubmitted && scope.donationDetailsForm.amount.$invalid
               && scope.donationDetailsForm.$error.naturalNumber
               || scope.donationDetailsForm.$dirty
-              && scope.donationDetailsForm.amount.$invalid && scope.amountSubmitted)
+              && scope.donationDetailsForm.amount.$invalid 
+              || scope.donationDetailsForm.$dirty && scope.amount === "")
         };
 
          scope.setProgramList = function(){

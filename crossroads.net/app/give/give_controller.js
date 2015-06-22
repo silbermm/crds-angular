@@ -233,8 +233,7 @@
        };
 
        vm.processCreditCardChange = function (){
-          if ($scope.giveForm.$valid) {
-            console.log("processig change");
+          if ($scope.giveForm.$valid) {        
              vm.processing = true;
              vm.createCard();
              PaymentService.updateDonorWithCard(vm.dto.donor.id, vm.card)                
@@ -316,7 +315,7 @@
  
         vm.submitChangedBankInfo = function() {
             vm.bankinfoSubmitted = true;
-           if($scope.give.dto.amount === undefined) {
+           if($scope.give.dto.amount === "") {
              $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);            
            } else { 
             if (vm.dto.view == "cc") {
