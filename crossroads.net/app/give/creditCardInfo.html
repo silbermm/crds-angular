@@ -36,7 +36,7 @@
           </div>
           <div class="form-group col-xs-4 col-md-3"  ng-class="{'has-error': billingZipCodeError() }">
                 <label for="billingZipCode">Zip Code</label>
-                <input type="text" name="billingZipCode" class="form-control" ng-model="creditCard.billingZipCode" maxlength="10" ng-model-options="{ updateOn: 'default blur', debounce: {'blur': 500, 'default': 500}}" invalid-zip ng-change="resetDefaultCardPlaceholderValues()" ng-required="!useExistingAccountInfo()" placeholder="{{defaultCardPlaceholderValues.billingZipCode}}">
+                <input type="text" name="billingZipCode" class="form-control" ng-model="creditCard.billingZipCode" maxlength="10" ng-model-options="{ updateOn: 'default blur', debounce: {'blur': 500, 'default': 500}, allowInvalid: true }" invalid-zip ng-change="resetDefaultCardPlaceholderValues()" ng-required="!useExistingAccountInfo()" placeholder="{{defaultCardPlaceholderValues.billingZipCode}}">
                 <ng-messages for="creditCardForm.billingZipCode.$error" ng-show="blurBillingZipCodeError()" ng-messages-include="on-blur-messages"></ng-messages>
                 <ng-messages for="creditCardForm.billingZipCode.$error" ng-if="billingZipCodeError()" ng-messages-include="on-submit-messages"></ng-messages>
             </div>

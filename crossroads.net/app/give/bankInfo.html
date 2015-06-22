@@ -10,7 +10,7 @@
                <a href="" class="pull-right weight-normal" ng-click="isCollapsed=!isCollapsed; toggleCheck()">{{showMessage}}</a>
             </label>
             <input type="text" name="routing" class="form-control" ng-model="bankAccount.routing" maxlength="9" 
-            ng-keypress="resetDefaultBankPlaceholderValues()" ng-required="!useExistingAccountInfo()"  ng-model-options="{ updateOn: 'blur',  debounce: { 'blur': 500 }  }"  placeholder="{{defaultBankPlaceholderValues.routing}}" invalid-routing>
+            ng-keypress="resetDefaultBankPlaceholderValues()" ng-required="!useExistingAccountInfo()"  ng-model-options="{ updateOn: 'blur',  debounce: { 'blur': 500 }, allowInvalid: true }"  placeholder="{{defaultBankPlaceholderValues.routing}}" invalid-routing>
             <ng-messages for="bankAccountForm.routing.$error" ng-show="blurRoutingError()"  ng-messages-include="on-blur-messages"></ng-messages>
             <ng-messages for="bankAccountForm.routing.$error" ng-if="bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
         </div>      
