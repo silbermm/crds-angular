@@ -72,7 +72,7 @@ namespace crds_angular.Services
                 Age = contact.Age
             }).ToList();
 
-            relationships.AddRange(family.OrderBy(o => o.PreferredName));
+            relationships.AddRange(family);
 
             return relationships;
         }
@@ -111,7 +111,7 @@ namespace crds_angular.Services
         {
             var family = GetImmediateFamilyParticipants(contactId, token);
             var participants = family.OrderBy(f => f.ParticipantId).Select(f => f.ParticipantId).ToList();
-            var servingParticipants = _groupParticipantService.GetServingParticipants(participants, from, to);
+            var servingParticipants = _groupParticipantService.GetServingParticipants(participants, from, to, contactId);
             var servingDays = new List<ServingDay>();
             var dayIndex = 0;
 

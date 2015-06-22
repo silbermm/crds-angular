@@ -1,11 +1,21 @@
 (function(){
+  
+  'use strict()';
+
+  var MODULE = 'crossroads.mptools';
+
+  angular.module(MODULE, ['crossroads.core', 'ui.select']); 
+  angular.module(MODULE).config(require('./mpTools.config'));
+  angular.module(MODULE).factory('MPTools', require('./mpTools.service'));
+  angular.module(MODULE).run(require('./mpTools.run'));
+
+  // Require any needed html files
   require('./tools.html');
 
-  require('./mpTools.module');
-  require('./mpTools.config');
-
-  require('./mpTools.service');
+  // The SU2S Tool
   require('./signup_to_serve');
-  require('./mpTools.run');
+
+  // The KC Appliant Tool
+  require('./kc_applicant');
 
 })();

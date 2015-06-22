@@ -16,7 +16,7 @@ describe('Giving Flow', function() {
     element(by.model('amount')).sendKeys("12345");
     element(by.binding('amount')).click();
     expect(browser.getCurrentUrl()).toMatch(/\/login/);
-    var loginButton = element.all(by.css('.btn')).get(5);
+    var loginButton = element.all(by.css('.btn')).get(6);
     expect(loginButton.getText()).toBe("Login");
     loginButton.click();
     element(by.id('login-page-email')).sendKeys("tim@kriz.net");
@@ -30,12 +30,12 @@ describe('Giving Flow', function() {
     expect(browser.getCurrentUrl()).toMatch(/\/thank-you/);
   });
 
-  it('should follow full  flow, giving as guest', function () {
+  it('should follow full flow, giving as guest', function () {
     expect(browser.getCurrentUrl()).toMatch(/\/amount/);
     element(by.model('amount')).sendKeys("1999");
     element(by.binding('amount')).click();
     expect(browser.getCurrentUrl()).toMatch(/\/login/);
-    var giveAsGuestButton = element.all(by.css('.btn')).get(6);
+    var giveAsGuestButton = element.all(by.css('.btn')).get(7);
     expect(giveAsGuestButton.getText()).toBe("Give as Guest");
     giveAsGuestButton.click();
     var creditCardButton = element.all(by.model('give.dto.view')).get(1);
@@ -70,9 +70,9 @@ describe('Giving Flow', function() {
     element.all(by.id('registration-firstname')).get(1).sendKeys("Jack");
     element.all(by.id('registration-lastname')).get(1).sendKeys("Protractor");
     var ranNum = Math.floor((Math.random() * 1000) + 1);
-    element.all(by.id('registration-email')).get(2).sendKeys("updates+" +ranNum+ "@crossroads.net");
+    element.all(by.id('registration-email')).get(4).sendKeys("updates+" +ranNum+ "@crossroads.net");
     element.all(by.id('registration-password')).get(2).sendKeys("protractor");
-    var regButton = element.all(by.css('.btn')).get(5);
+    var regButton = element.all(by.css('.btn')).get(6);
     regButton.click();
     expect(browser.getCurrentUrl()).toMatch(/\/account/);
     element(by.cssContainingText('.ng-binding', 'Ministry'));
@@ -84,7 +84,7 @@ describe('Giving Flow', function() {
     element(by.model('amount')).sendKeys("12345");
     element(by.binding('amount')).click();
     expect(browser.getCurrentUrl()).toMatch(/\/login/);
-    var loginButton = element.all(by.css('.btn')).get(5);
+    var loginButton = element.all(by.css('.btn')).get(6);
     expect(loginButton.getText()).toBe("Login");
     loginButton.click();
     element(by.id('login-page-email')).sendKeys("tim@kriz.net");

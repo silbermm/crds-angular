@@ -3,7 +3,7 @@
     clear: left;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: $screen-xs-max) {
     .col-sm-2:nth-child(2n+1) {
       clear: left;
     }

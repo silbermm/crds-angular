@@ -4,12 +4,8 @@ GO
 INSERT INTO [dbo].[dp_Page_Views]
            ([View_Title]
            ,[Page_ID]
-           ,[Description]
            ,[Field_List]
-           ,[View_Clause]
-           ,[Order_By]
-           ,[User_ID]
-           ,[User_Group_ID])
+           ,[View_Clause])
      VALUES
            ('All Individuals WithContact Id'
            ,292
