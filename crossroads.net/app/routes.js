@@ -126,6 +126,11 @@
         controller: "BlogCtrl as blog",
         templateUrl: "blog/blog-index.html"
       })
+      .state("blog-post", {
+        url: "/blog/post",
+        controller: "BlogCtrl as blog",
+        templateUrl: "blog/blog-post.html"
+      })
       .state("serve-signup", {
         url: "/serve-signup",
         controller: "MyServeController as serve",
