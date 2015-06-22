@@ -87,44 +87,49 @@
           loggedin: crds_utilities.checkLoggedin
         }
       })
-      .state('mytrips', {
-        url: '/mytrips',
-        templateUrl: 'mytrips/mytrips.html'
+      .state("mytrips", {
+        url: "/mytrips",
+        templateUrl: "mytrips/mytrips.html"
       })
-      .state('media', {
-        url: '/media',
-        controller: 'MediaCtrl as media',
-        templateUrl: 'media/view-all.html'
+      .state("media", {
+        url: "/media",
+        controller: "MediaCtrl as media",
+        templateUrl: "media/view-all.html"
       })
-      .state('media-music', {
-        url: '/media/music',
-        controller: 'MediaCtrl as media',
-        templateUrl: 'media/view-all-music.html'
+      .state("media-music", {
+        url: "/media/music",
+        controller: "MediaCtrl as media",
+        templateUrl: "media/view-all-music.html"
       })
-      .state('media-messages', {
-        url: '/media/messages',
-        controller: 'MediaCtrl as media',
-        templateUrl: 'media/view-all-messages.html'
+      .state("media-messages", {
+        url: "/media/messages",
+        controller: "MediaCtrl as media",
+        templateUrl: "media/view-all-messages.html"
       })
-      .state('media-videos', {
-        url: '/media/videos',
-        controller: 'MediaCtrl as media',
-        templateUrl: 'media/view-all-videos.html'
+      .state("media-videos", {
+        url: "/media/videos",
+        controller: "MediaCtrl as media",
+        templateUrl: "media/view-all-videos.html"
       })
-      .state('media-series-single', {
-        url: '/media/series/single',
-        controller: 'MediaCtrl as media',
-        templateUrl: 'media/series-single.html'
+      .state("media-series-single", {
+        url: "/media/series/single",
+        controller: "MediaCtrl as media",
+        templateUrl: "media/series-single.html"
       })
-      .state('media-series-single-lo-res', {
-        url: '/media/series/single/lores',
-        controller: 'MediaCtrl as media',
-        templateUrl: 'media/series-single-lo-res.html'
+      .state("media-series-single-lo-res", {
+        url: "/media/series/single/lores",
+        controller: "MediaCtrl as media",
+        templateUrl: "media/series-single-lo-res.html"
       })
-      .state('serve-signup', {
-        url: '/serve-signup',
-        controller: 'MyServeController as serve',
-        templateUrl: 'my_serve/myserve.html',
+      .state("blog", {
+        url: "/blog",
+        controller: "BlogCtrl as blog",
+        templateUrl: "blog/blog-index.html"
+      })
+      .state("serve-signup", {
+        url: "/serve-signup",
+        controller: "MyServeController as serve",
+        templateUrl: "my_serve/myserve.html",
         data: {
           isProtected: true
         },
