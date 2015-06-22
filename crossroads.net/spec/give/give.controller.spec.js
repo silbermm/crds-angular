@@ -65,7 +65,7 @@ describe('GiveController', function() {
           };
         },
         donateToProgram: function() {},
-        updateDonorWithBankAcct: function(),
+        updateDonorWithBankAcct: function() {},
         updateDonorWithCard: function() {},
       };
 
@@ -259,6 +259,13 @@ describe('GiveController', function() {
       $valid: true,
     };
 
+    var controllerGiveFormBank = {
+      bankAccountForm: {
+        $dirty: true,
+      },
+      $valid: true,
+    };
+
     var controllerDto = {
       amount: 987,
       view: 'cc',
@@ -328,7 +335,7 @@ describe('GiveController', function() {
     });
 
    it('should call updateDonorWithBankAcct with proper values when bank account info in changed', function() {
-      $scope.giveForm = controllerGiveForm;
+      $scope.giveForm = controllerGiveFormBank;
       controller.dto = controllerBankDto;
 
       spyOn(mockPaymentService, 'updateDonorWithBankAcct').and.callFake(function(donorId, donor) {
@@ -344,7 +351,7 @@ describe('GiveController', function() {
       $rootScope.$apply();
 
       expect(controller.donate).toHaveBeenCalled();
-      expect(mockPaymentService.updateDonorWithCard).toHaveBeenCalledWith(
+      expect(mockPaymentService.updateDonorWithBankAcct).toHaveBeenCalledWith(
         controllerDto.donor.id,
         {
           account: controllerBankDto.donor.default_source.account,

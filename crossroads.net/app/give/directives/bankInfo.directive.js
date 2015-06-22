@@ -61,8 +61,6 @@ require('../bankInfo.html');
                 scope.bankAccountForm.routing.$error.invalidRouting && scope.bankAccountForm.routing.$dirty);
         };
 
-
-
         scope.toggleCheck = function() {
             if (scope.showMessage == "Where?") {
                 scope.showMessage = "Close";

@@ -305,7 +305,6 @@
 
         vm.submitChangedBankInfo = function() {
             vm.bankinfoSubmitted = true;
-            console.log(vm.dto.view);
             if (vm.dto.view == "cc") {
               if (!$scope.giveForm.creditCardForm.$dirty){
                 vm.processing = true;
