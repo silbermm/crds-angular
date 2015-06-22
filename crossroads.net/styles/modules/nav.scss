@@ -736,13 +736,22 @@ ul.cr-nav {
     }
   }
   .open > .dropdown-menu {
-    max-height: 1000px; //need to declare height for transition to work
+    max-height: 570px; //need to declare height for transition to work. 570px gives us 10 items in a subnav
   }
   .side-nav-search {
     padding: 10px;
+    position: relative;
+
+    input {
+      position: static;
+    }
   }
   .side-nav-login {
     padding: 10px;
+
+    input {
+      position: static;
+    }
 
     .forgot_password {
       a {
