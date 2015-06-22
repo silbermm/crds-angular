@@ -234,7 +234,6 @@
 
        vm.processCreditCardChange = function (){
           if ($scope.giveForm.$valid) {
-            console.log("processig change");
              vm.processing = true;
              vm.createCard();
              PaymentService.updateDonorWithCard(vm.dto.donor.id, vm.card)                
