@@ -35,7 +35,8 @@ require('../donation-details.html');﻿
             return (scope.amountSubmitted && scope.donationDetailsForm.amount.$invalid
               && scope.donationDetailsForm.$error.naturalNumber
               || scope.donationDetailsForm.$dirty
-              && scope.donationDetailsForm.amount.$invalid && scope.amountSubmitted)
+              && scope.donationDetailsForm.amount.$invalid 
+              || scope.donationDetailsForm.$dirty && scope.amount === "")
         };
 
          scope.setProgramList = function(){
