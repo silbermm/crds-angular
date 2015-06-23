@@ -11,6 +11,9 @@
 }
 .post{
   margin-bottom: 80px;
+  img, .videoWrapper, audio, canvas, progress, video {
+    margin-bottom: $line-height-computed;
+  }
 }
 
 .posts li {list-style:none;}
