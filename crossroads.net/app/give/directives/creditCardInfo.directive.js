@@ -24,6 +24,8 @@ require('../creditCardInfo.html');
               bankinfoSubmitted: "=",
               defaultSource: "=",
               changeAccountInfo: "=",
+              setValidCard: "=",
+              setValidCvc: "="
             },
           templateUrl: 'give/creditCardInfo.html',
           link: link
@@ -104,6 +106,9 @@ require('../creditCardInfo.html');
             if (ccValid === undefined) {
                 scope.setValidCard = false ;
             }
+            if (ccValid === true) {
+                scope.setValidCard = true ;
+            }
 
             if(scope.useExistingAccountInfo()) {
               return(false);
@@ -118,6 +123,9 @@ require('../creditCardInfo.html');
          scope.cvvError = function(cvcValid) {
             if (cvcValid === undefined) {
                 scope.setValidCvc = false  ;
+            }
+            if (ccValid === true) {
+                scope.setValidCvc = true ;
             }
 
             if(scope.useExistingAccountInfo()) {

@@ -77,6 +77,17 @@
         brandCode['American Express'] = '#cc_american_express';
         brandCode['Discover'] = '#cc_discover';
 
+        vm.changeAccountProcess = function(){       
+          vm.showMessageOnChange = true;
+          if (vm.setValidCard == false){
+            vm.dto.donor.default_source.last4 = "";
+          };
+          if (vm.setValidCvc == false){
+            vm.dto.donor.default_source.cvc = "";
+          };
+          $state.go("give.amount");
+        };
+
         vm.confirmDonation = function(){
           try
           {
@@ -155,12 +166,6 @@
           }          
           vm.dto.changeAccountInfo = true;
           $state.go("give.change")
-        };
-
-        vm.onChangeMessage = function(){
-         // if (vm.dto.donor.default_source.routing || vm.dto.donor.default_source.last4) {
-             vm.showMessageOnChange = true;
-         // }
         };
 
         vm.goToLogin = function () {

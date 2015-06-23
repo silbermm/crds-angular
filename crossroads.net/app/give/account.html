@@ -27,8 +27,7 @@
 	    <div id="existingEmail" growl inline="true" reference="{{give.emailAlreadyRegisteredGrowlDivRef}}" limit-messages="1"></div>
 	    <bank-credit-card-details></bank-credit-card-details>
 	</ng-form>
-   <p class="text-muted small">You are giving <strong>{{give.amount | currency}}</strong>  to <strong>{{give.program['Name']}}</strong>. <a href="" ui-sref="give.amount">Change</a></p>
-
+   <p class="text-muted small">You are giving <strong>{{give.amount | currency}}</strong>  to <strong>{{give.program['Name']}}</strong>. <a href="" ng-click="give.changeAccountProcess()">Change</a></p>
     <button ng-click="give.submitBankInfo()" ng-class="{disabled: give.processing}" class="btn btn-primary btn-lg col-xs-12">
       <span ng-if="give.processing">Giving...</span>
       <span ng-if="!give.processing">GIVE {{give.amount | currency}}</span>
