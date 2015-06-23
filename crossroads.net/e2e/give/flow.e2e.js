@@ -1,9 +1,18 @@
 var env = require("../environment");
 
 describe('Giving Flow', function() {
+  var checkState;
 
   beforeEach(function() {
     browser.get(env.baseUrl + '/#/give');
+    checkState = function(stateName) {
+      browser.waitForAngular();
+      browser.executeScript(function() {
+        return(angular.element(document).injector().get('$state').current);
+      }).then(function(state) {
+        expect(state.name).toBe(stateName);
+      });
+    };
   })
 
   afterEach(function() {
@@ -12,10 +21,10 @@ describe('Giving Flow', function() {
   });
 
   it('should follow full credit card flow, logging in as user with existing giver', function () {
-    expect(browser.getCurrentUrl()).toMatch(/\/amount/);
+    checkState('give.amount');
     element(by.model('amount')).sendKeys("12345");
     element(by.binding('amount')).click();
-    expect(browser.getCurrentUrl()).toMatch(/\/login/);
+    checkState('give.login');
     var loginButton = element.all(by.css('.btn')).get(6);
     expect(loginButton.getText()).toBe("Login");
     loginButton.click();
@@ -23,18 +32,18 @@ describe('Giving Flow', function() {
     element(by.id('login-page-password')).sendKeys("password");
     var button = element.all(by.id('submit_nav')).get(2);
     button.click();
-    expect(browser.getCurrentUrl()).toMatch(/\/confirm/);
+    checkState('give.confirm');
     var giveButton = element(by.css("[ng-click=\"give.confirmDonation()\"]"));
     expect(giveButton.getText()).toBe("GIVE $12,345.00");
     giveButton.click();
-    expect(browser.getCurrentUrl()).toMatch(/\/thank-you/);
+    checkState('give.thank-you');
   });
 
   it('should follow full  flow, giving as guest', function () {
-    expect(browser.getCurrentUrl()).toMatch(/\/amount/);
+    checkState('give.amount');
     element(by.model('amount')).sendKeys("1999");
     element(by.binding('amount')).click();
-    expect(browser.getCurrentUrl()).toMatch(/\/login/);
+    checkState('give.login');
     var giveAsGuestButton = element.all(by.css('.btn')).get(7);
     expect(giveAsGuestButton.getText()).toBe("Give as Guest");
     giveAsGuestButton.click();
@@ -52,21 +61,21 @@ describe('Giving Flow', function() {
     expect(giveButton.getText()).toBe("GIVE $1,999.00");
 
     giveButton.click().then(function() {
-      expect(browser.getCurrentUrl()).toMatch(/\/thank-you/);
+      checkState('give.thank-you');
       var email = element.all(by.binding('give.email')).first();
       expect(email.getText()).toBe("tim@kriz.net");
     });
   });
 
   it('should register as new user and not lose the amt or fund', function () {
-    expect(browser.getCurrentUrl()).toMatch(/\/amount/);
+    checkState('give.amount');
     element(by.model('amount')).sendKeys("867539");
     expect(element(by.binding("amount")).getText()).toContain("GIVE $867,539.00");
     element(by.binding('amount')).click();
-    expect(browser.getCurrentUrl()).toMatch(/\/login/);
+    checkState('give.login');
     var regButton = element(by.linkText('Create an account'));
     regButton.click();
-    expect(browser.getCurrentUrl()).toMatch(/\/register/);
+    checkState('give.register');
     element.all(by.id('registration-firstname')).get(1).sendKeys("Jack");
     element.all(by.id('registration-lastname')).get(1).sendKeys("Protractor");
     var ranNum = Math.floor((Math.random() * 1000) + 1);
@@ -74,16 +83,16 @@ describe('Giving Flow', function() {
     element.all(by.id('registration-password')).get(2).sendKeys("protractor");
     var regButton = element.all(by.css('.btn')).get(6);
     regButton.click();
-    expect(browser.getCurrentUrl()).toMatch(/\/account/);
+    checkState('give.account');
     element(by.cssContainingText('.ng-binding', 'Ministry'));
     element(by.cssContainingText('.ng-binding', '$867,539.00'));
   });
 
   it('should follow full credit card flow, logging in as user with existing giver and changing account information', function () {
-    expect(browser.getCurrentUrl()).toMatch(/\/amount/);
+    checkState('give.amount');
     element(by.model('amount')).sendKeys("12345");
     element(by.binding('amount')).click();
-    expect(browser.getCurrentUrl()).toMatch(/\/login/);
+    checkState('give.login');
     var loginButton = element.all(by.css('.btn')).get(6);
     expect(loginButton.getText()).toBe("Login");
     loginButton.click();
@@ -91,10 +100,10 @@ describe('Giving Flow', function() {
     element(by.id('login-page-password')).sendKeys("password");
     var button = element.all(by.id('submit_nav')).get(2);
     button.click();
-    expect(browser.getCurrentUrl()).toMatch(/\/confirm/);
+    checkState('give.confirm');
     var giveButton = element(by.css("[ng-click=\"give.goToChange(give.amount, give.donor, give.email, give.program, 'cc')\"]"));
     giveButton.click();
-    expect(browser.getCurrentUrl()).toMatch(/\/change/);
+    checkState('give.change');
     var creditCardButton = element.all(by.model('give.dto.view')).get(1);
     expect(creditCardButton.getText()).toBe("Credit Card");
     creditCardButton.click();
@@ -107,29 +116,26 @@ describe('Giving Flow', function() {
     element(by.model('creditCard.billingZipCode')).sendKeys("45202-0818");
     var chgButton = element.all(by.css("[ng-click=\"give.submitChangedBankInfo()\"]")).get(0);
     expect(chgButton.getText()).toBe("GIVE $54,321.00");
-    chgButton.click().then(function() {
-      browser.waitForAngular();
-      expect(browser.getCurrentUrl()).toMatch(/\/thank-you/);
-      var email = element.all(by.binding('give.email')).first();
-      expect(email).toBeDefined();
-      expect(email.getText()).toBe("tim@kriz.net");
+    chgButton.click();
+    checkState('give.thank-you');
+    var email = element.all(by.binding('give.email')).first();
+    expect(email).toBeDefined();
+    expect(email.getText()).toBe("tim@kriz.net");
 
-      var amount = element.all(by.binding('give.amount')).first();
-      expect(amount).toBeDefined();
-      expect(amount.getText()).toBe("$54,321.00");
+    var amount = element.all(by.binding('give.amount')).first();
+    expect(amount).toBeDefined();
+    expect(amount.getText()).toBe("$54,321.00");
 
-      var program = element.all(by.binding("give.program['Name']")).first();
-      expect(program).toBeDefined();
-      expect(program.getText()).toBe("Crossroads");
-    });
+    var program = element.all(by.binding("give.program['Name']")).first();
+    expect(program).toBeDefined();
+    expect(program.getText()).toBe("Crossroads");
   });
 
-
   it('should follow full bank account flow, logging in as user with existing giver and changing bank account information', function () {
-    expect(browser.getCurrentUrl()).toMatch(/\/amount/);
+    checkState('give.amount');
     element(by.model('amount')).sendKeys("12345");
     element(by.binding('amount')).click();
-    expect(browser.getCurrentUrl()).toMatch(/\/login/);
+    checkState('give.login');
     var loginButton = element.all(by.css('.btn')).get(6);
     expect(loginButton.getText()).toBe("Login");
     loginButton.click();
@@ -137,10 +143,10 @@ describe('Giving Flow', function() {
     element(by.id('login-page-password')).sendKeys("winter14");
     var button = element.all(by.id('submit_nav')).get(2);
     button.click();
-    expect(browser.getCurrentUrl()).toMatch(/\/confirm/);
+    checkState('give.confirm');
     var giveButton = element(by.css("[ng-click=\"give.goToChange(give.amount, give.donor, give.email, give.program, 'cc')\"]"));
     giveButton.click();
-    expect(browser.getCurrentUrl()).toMatch(/\/change/);
+    checkState('give.change');
     var bankAccountButton = element.all(by.model('give.dto.view')).get(0);
     expect(bankAccountButton.getText()).toBe("Bank Account");
     bankAccountButton.click();
@@ -152,7 +158,7 @@ describe('Giving Flow', function() {
     expect(chgButton.getText()).toBe("GIVE $89,321.00");
     chgButton.click().then(function() {
       browser.waitForAngular();
-      expect(browser.getCurrentUrl()).toMatch(/\/thank-you/);
+      checkState('give.thank-you');
       var email = element.all(by.binding('give.email')).first();
       expect(email).toBeDefined();
       expect(email.getText()).toBe("sandi.ritter+protractor@ingagepartners.com");
