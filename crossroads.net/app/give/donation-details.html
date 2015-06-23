@@ -3,12 +3,12 @@
     <div class="input-group">
       <span class="input-group-addon">$</span>
 
-      <input type="text" maxlength="10" name="amount" class="form-control" ng-model="amount" autocomplete="off" ng-model-options="{ debounce: 500 }" natural-number max-value="99999999" currency-mask required autofocus="true">
+      <input type="text" maxlength="10" name="amount" class="form-control" ng-model="amount" autocomplete="off" ng-model-options="{  updateOn: 'default blur', debounce: { 'default': 500, 'blur': 0 }, allowInvalid: true  }" natural-number max-value="99999999" currency-mask required autofocus="true">
 
       <span class="input-group-addon ">.00</span>
     </div>
 
-    <ng-messages for="donationDetailsForm.amount.$error" ng-show="donationDetailsForm.amount.$error.naturalNumber && donationDetailsForm.$dirty && amountSubmitted"
+    <ng-messages for="donationDetailsForm.$error" ng-show="donationDetailsForm.$error && donationDetailsForm.$dirty"
       ng-messages-include="on-blur-messages"></ng-messages>
       <ng-messages for="donationDetailsForm.amount.$error" ng-if="amountSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
   </div>
