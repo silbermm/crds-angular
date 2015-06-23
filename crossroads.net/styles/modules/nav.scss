@@ -650,10 +650,11 @@ ul.cr-nav {
 /***************************************************************************************
 * Off Canvas Mobile Menu
 ***************************************************************************************/
-
+.ng-aside.modal.fade .modal-dialog,
 .ng-aside .modal-dialog {
   max-width: 80%;
-  padding: 20px 0px;
+  padding: 0px;
+  @include translate(0, 0);
 
   .modal-content {
     background: $gray-darker;
@@ -735,13 +736,22 @@ ul.cr-nav {
     }
   }
   .open > .dropdown-menu {
-    max-height: 400px; //need to declar height for transition to work
+    max-height: 570px; //need to declare height for transition to work. 570px gives us 10 items in a subnav
   }
   .side-nav-search {
     padding: 10px;
+    position: relative;
+
+    input {
+      position: static;
+    }
   }
   .side-nav-login {
     padding: 10px;
+
+    input {
+      position: static;
+    }
 
     .forgot_password {
       a {
