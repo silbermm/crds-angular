@@ -78,7 +78,6 @@
         brandCode['Discover'] = '#cc_discover';
 
         vm.changeAccountProcess = function(){       
-          vm.showMessageOnChange = true;
           if (vm.setValidCard == false){
             vm.dto.donor.default_source.last4 = "";
           };
