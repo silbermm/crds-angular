@@ -264,7 +264,7 @@
         }
 
         vm.submitBankInfo = function() {
-            vm.bankinfoSubmitted = true;            
+            vm.bankinfoSubmitted = true;
             if ($scope.giveForm.accountForm.$valid) {
               vm.processing = true;
               PaymentService.donor().get({email: $scope.give.email})
@@ -312,7 +312,7 @@
               $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
             }
         };
- 
+
         vm.submitChangedBankInfo = function() {
             vm.bankinfoSubmitted = true;
            if(vm.dto.amount === "") {

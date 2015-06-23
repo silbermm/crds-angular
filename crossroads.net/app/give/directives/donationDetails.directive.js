@@ -28,9 +28,7 @@ require('../donation-details.html');﻿
         scope.ministryShow = scope.program.ProgramId != scope.programsIn[0].ProgramId;
 
         if (scope.amount != undefined) {
-          scope.donationDetailsForm.amount = scope.amount;
-        } else {
-          scope.donationDetailsForm.amount = "";
+          scope.donationDetailsForm.amount = scope.amount;       
         };
 
         scope.amountError = function() {
