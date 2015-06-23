@@ -324,6 +324,9 @@
 
         vm.submitChangedBankInfo = function() {
             vm.bankinfoSubmitted = true;
+           if(vm.dto.amount === "") {
+             $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);            
+           } else { 
             if (vm.dto.view == "cc") {
               if (!$scope.giveForm.creditCardForm.$dirty){
                 vm.processing = true;
@@ -345,7 +348,8 @@
              }
            };
         };
-
+      };
+      
         vm.transitionForLoggedInUserBasedOnExistingDonor = function(event, toState){
           if(toState.name == "give.account" && $rootScope.username && !vm.donorError ) {
             vm.processing = true;
