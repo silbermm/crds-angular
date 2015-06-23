@@ -158,12 +158,14 @@
           $state.go("give.change")
         };
 
+        vm.onChangeMessage = function(){
+         // if (vm.dto.donor.default_source.routing || vm.dto.donor.default_source.last4) {
+             vm.showMessageOnChange = true;
+         // }
+        };
 
         vm.goToLogin = function () {
           vm.processing = true;
-          if (vm.dto.donor.default_source.routing || vm.dto.donor.default_source.last4) {
-             vm.showMessageOnChange = true;
-          }
           Session.addRedirectRoute("give.account", "");
           $state.go("give.login");
         };
