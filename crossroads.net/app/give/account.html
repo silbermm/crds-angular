@@ -10,7 +10,7 @@
 	    <div
 	        class="form-group"
 	        ng-if="$root.username === undefined"
-	        ng-class="{'has-error': accountForm.email_field.email.$invalid && accountForm.email_field.email.$dirty || showMessageOnChange && accountForm.email_field.email.$invalid}">
+	        ng-class="{'has-error': accountForm.email_field.email.$invalid && give.bankinfoSubmitted }">
 	        <label for="email">Email</label>
 	        <email-field
 	            email="give.email"
@@ -19,8 +19,7 @@
 	            on-email-not-found="give.onEmailNotFound"
 	            on-email-found="give.onEmailFound"
 	            validate-unique="false"
-	            check-unique="true"
-	            show-message-on-change="give.showMessageOnChange"
+	            check-unique="true"	        
               focused="true">
 	        </email-field>
 	    </div>
@@ -28,7 +27,7 @@
 	    <div id="existingEmail" growl inline="true" reference="{{give.emailAlreadyRegisteredGrowlDivRef}}" limit-messages="1"></div>
 	    <bank-credit-card-details></bank-credit-card-details>
 	</ng-form>
-   <p class="text-muted small">You are giving <strong>{{give.amount | currency}}</strong>  to <strong>{{give.program['Name']}}</strong>. <a href="" ui-sref="give.amount" ng-click="give.onChangeMessage()">Change</a></p>
+   <p class="text-muted small">You are giving <strong>{{give.amount | currency}}</strong>  to <strong>{{give.program['Name']}}</strong>. <a href="" ui-sref="give.amount">Change</a></p>
 
     <button ng-click="give.submitBankInfo()" ng-class="{disabled: give.processing}" class="btn btn-primary btn-lg col-xs-12">
       <span ng-if="give.processing">Giving...</span>

@@ -65,8 +65,7 @@
         vm.last4 = '';
         vm.processing = false;
         vm.programsInput = programList;
-        vm.showMessage = "Where?";
-        vm.showMessageOnChange = false;
+        vm.showMessage = "Where?";      
         vm.showCheckClass = "ng-hide";
         if (!vm.dto.view ){
           vm.dto.view = "bank";
