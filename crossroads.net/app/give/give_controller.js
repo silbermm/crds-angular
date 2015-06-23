@@ -66,6 +66,7 @@
         vm.processing = false;
         vm.programsInput = programList;
         vm.showMessage = "Where?";
+        vm.showMessageOnChange = false;
         vm.showCheckClass = "ng-hide";
         if (!vm.dto.view ){
           vm.dto.view = "bank";
@@ -160,6 +161,9 @@
 
         vm.goToLogin = function () {
           vm.processing = true;
+          if (vm.dto.donor.default_source.routing || vm.dto.donor.default_source.last4) {
+             vm.showMessageOnChange = true;
+          }
           Session.addRedirectRoute("give.account", "");
           $state.go("give.login");
         };

@@ -2,7 +2,7 @@
     <div class="form-group">
         <div class="btn-group btn-group-justified" role="group" ng-show="$root.username === undefined">
             <a type="button" class="btn btn-ghost" role="button" ng-click="give.goToLogin()">Login</a>
-            <a type="button" class="btn btn-ghost active" role="button">Give as Guest</a>
+            <a type="button" class="btn btn-ghost active" role="button" >Give as Guest</a>
         </div>
     </div>
 
@@ -10,7 +10,7 @@
 	    <div
 	        class="form-group"
 	        ng-if="$root.username === undefined"
-	        ng-class="{'has-error': accountForm.email_field.email.$invalid && give.bankinfoSubmitted }">
+	        ng-class="{'has-error': accountForm.email_field.email.$invalid && accountForm.email_field.email.$dirty || showMessageOnChange && accountForm.email_field.email.$invalid}">
 	        <label for="email">Email</label>
 	        <email-field
 	            email="give.email"
@@ -20,6 +20,7 @@
 	            on-email-found="give.onEmailFound"
 	            validate-unique="false"
 	            check-unique="true"
+	            show-message-on-change="give.showMessageOnChange"
               focused="true">
 	        </email-field>
 	    </div>

@@ -16,6 +16,7 @@ require('./email_field.html');
                 onEmailFound: "&",
                 onEmailNotFound: "&",
                 focused: "=",
+                showMessageOnChange: "="
             },
             templateUrl: 'email_field/email_field.html',
             link: function (scope, element, attrs) {
