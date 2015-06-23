@@ -1,3 +1,4 @@
+<div class="form-group">
 <donation-details amount="give.dto.amount" program="give.dto.program"
 				  amount-submitted="give.amountSubmitted" programs-in="give.programsInput">
 </donation-details>
@@ -6,3 +7,4 @@
 	<span ng-if="give.processing">Giving...</span>
 	<span ng-if="!give.processing">GIVE {{give.dto.amount | currency}}</span>
 </button>
+</div>
