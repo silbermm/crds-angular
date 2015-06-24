@@ -172,4 +172,116 @@ describe('Giving Flow', function() {
       expect(program.getText()).toBe("Crossroads");
    });
   });
+
+  it('Giving as guest via credit card, using the change link- retain valid info and discard invalid info', function () {
+    checkState('give.amount');
+    element(by.model('amount')).sendKeys("1999");
+    element(by.binding('amount')).click();
+    checkState('give.login');
+    var giveAsGuestButton = element.all(by.css('.btn')).get(7);
+    expect(giveAsGuestButton.getText()).toBe("Give as Guest");
+    giveAsGuestButton.click();
+    var creditCardButton = element.all(by.model('give.dto.view')).get(1);
+    expect(creditCardButton.getText()).toBe("Credit Card");
+    creditCardButton.click();
+    element(by.id('give-email')).sendKeys("tim@kriz.net");
+    element(by.model('creditCard.nameOnCard')).sendKeys("Mr Cross Roads");
+    element(by.model('creditCard.ccNumber')).sendKeys("4242424242424242");
+    element(by.model('creditCard.expDate')).sendKeys("0118");
+    element(by.model('creditCard.cvc')).sendKeys("6");
+    element(by.model('creditCard.billingZipCode')).sendKeys("452025236");
+
+    var changeButton = element.all(by.css("[ng-click=\"give.processChange()\"]")).get(0);
+    expect(changeButton.getText()).toBe("Change");
+
+    changeButton.click().then(function() {
+       checkState('give.amount');
+       expect(element(by.model('amount'))).toBeDefined();
+    });
+    element(by.model('amount')).clear();
+    element(by.model('amount')).sendKeys("99");
+    element(by.binding('amount')).click();
+    var creditCardButton = element.all(by.model('give.dto.view')).get(1);
+    expect(creditCardButton.getText()).toBe("Credit Card");   
+    expect(element(by.model('give-email'))).toBeDefined();
+    expect(element(by.model('creditCard.nameOnCard'))).toBeDefined();
+    expect(element(by.model('creditCard.ccNumber'))).toBeDefined();
+    expect(element(by.model('creditCard.expDate'))).toBeDefined();
+    expect(element(by.model('creditCard.cvc')).getText()).toBe("");
+    expect(element(by.model('creditCard.billingZipCode')).getText()).toBe("");
+
+    element(by.model('creditCard.cvc')).sendKeys("678");
+    element(by.model('creditCard.billingZipCode')).sendKeys("45202-5236");
+
+    var chgButton = element.all(by.css("[ng-click=\"give.submitBankInfo()\"]")).get(0);
+    expect(chgButton.getText()).toBe("GIVE $99.00");
+    chgButton.click().then(function() {
+      browser.waitForAngular();
+      checkState('give.thank-you');
+      var email = element.all(by.binding('give.email')).first();
+      expect(email).toBeDefined();
+      expect(email.getText()).toBe("tim@kriz.net");
+
+      var amount = element.all(by.binding('give.amount')).first();
+      expect(amount).toBeDefined();
+      expect(amount.getText()).toBe("$99.00");
+
+      var program = element.all(by.binding("give.program['Name']")).first();
+      expect(program).toBeDefined();
+      expect(program.getText()).toBe("Crossroads");
+   });
+  });
+
+  it('Giving as guest via ACH, using the change link - retain valid info and discard invalid info', function () {
+    checkState('give.amount');
+    element(by.model('amount')).sendKeys("999");
+    element(by.binding('amount')).click();
+    checkState('give.login');
+    var giveAsGuestButton = element.all(by.css('.btn')).get(7);
+    expect(giveAsGuestButton.getText()).toBe("Give as Guest");
+    giveAsGuestButton.click();
+    var creditCardButton = element.all(by.model('give.dto.view')).get(0);
+    expect(creditCardButton.getText()).toBe("Bank Account");
+    creditCardButton.click();
+    element(by.id('give-email')).sendKeys("tim@kriz.net");
+    element(by.model('bankAccount.routing')).sendKeys("111111");
+    element(by.model('bankAccount.account')).sendKeys("aaa");
+    
+    var changeButton = element.all(by.css("[ng-click=\"give.processChange()\"]")).get(0);
+    expect(changeButton.getText()).toBe("Change");
+
+    changeButton.click().then(function() {
+       checkState('give.amount');
+       expect(element(by.model('amount'))).toBeDefined();
+    });
+    element(by.model('amount')).clear();
+    element(by.model('amount')).sendKeys("199");
+    element(by.binding('amount')).click();
+    var creditCardButton = element.all(by.model('give.dto.view')).get(1);
+    expect(creditCardButton.getText()).toBe("Credit Card");   
+    expect(element(by.model('give-email'))).toBeDefined();
+    expect(element(by.model('bankAccount.routing')).getText()).toBe("");
+    expect(element(by.model('bankAccount.account')).getText()).toBe("");
+ 
+    element(by.model('bankAccount.routing')).sendKeys("110000000");
+    element(by.model('bankAccount.account')).sendKeys("000123456789");
+   
+    var chgButton = element.all(by.css("[ng-click=\"give.submitBankInfo()\"]")).get(0);
+    expect(chgButton.getText()).toBe("GIVE $199.00");
+    chgButton.click().then(function() {
+      browser.waitForAngular();
+      checkState('give.thank-you');
+      var email = element.all(by.binding('give.email')).first();
+      expect(email).toBeDefined();
+      expect(email.getText()).toBe("tim@kriz.net");
+
+      var amount = element.all(by.binding('give.amount')).first();
+      expect(amount).toBeDefined();
+      expect(amount.getText()).toBe("$199.00");
+
+      var program = element.all(by.binding("give.program['Name']")).first();
+      expect(program).toBeDefined();
+      expect(program.getText()).toBe("Crossroads");
+   });
+  });
 })
