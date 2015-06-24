@@ -24,6 +24,9 @@ require('../creditCardInfo.html');
               bankinfoSubmitted: "=",
               defaultSource: "=",
               changeAccountInfo: "=",
+              setValidCard: "=",
+              setValidCvc: "=",
+              ccNumberClass: "="
             },
           templateUrl: 'give/creditCardInfo.html',
           link: link
@@ -104,20 +107,24 @@ require('../creditCardInfo.html');
             if (ccValid === undefined) {
                 scope.setValidCard = false ;
             }
+            if (ccValid === true) {
+                scope.setValidCard = true ;
+            }
 
             if(scope.useExistingAccountInfo()) {
               return(false);
             }
 
-            return (scope.bankinfoSubmitted && scope.creditCardForm.ccNumber.$pristine || //cannot be blank on submit
-                    scope.setValidCard && !scope.bankinfoSubmitted || //can be empty on pageload
-                    !ccValid && scope.bankinfoSubmitted ||
-                    !ccValid && scope.creditCardForm.ccNumber.$dirty);  //show error when not valid
+            return (scope.bankinfoSubmitted && scope.creditCardForm.ccNumber.$pristine && ccValid || //cannot be blank on submit
+                   !ccValid && scope.creditCardForm.ccNumber.$dirty);  //show error when not valid
          };
 
          scope.cvvError = function(cvcValid) {
             if (cvcValid === undefined) {
                 scope.setValidCvc = false  ;
+            }
+            if (cvcValid === true) {
+                scope.setValidCvc = true ;
             }
 
             if(scope.useExistingAccountInfo()) {
@@ -125,7 +132,6 @@ require('../creditCardInfo.html');
             }
 
             return (scope.bankinfoSubmitted && scope.creditCardForm.cvc.$pristine || //cannot be blank on submit
-                    scope.setValidCvc && !scope.bankinfoSubmitted || //can be empty on pageload
                     !cvcValid && scope.bankinfoSubmitted ||
                     !cvcValid && scope.creditCardForm.cvc.$dirty);  //show error when not valid
         };
