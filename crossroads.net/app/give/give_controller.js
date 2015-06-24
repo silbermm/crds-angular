@@ -99,7 +99,7 @@
              currency: 'USD',
              routing_number: vm.dto.donor.default_source.routing,
              account_number: vm.dto.donor.default_source.last4
-          }       
+          }
         };
 
         vm.createCard = function(){
@@ -153,7 +153,7 @@
             vm.dto.view = "bank"
           } else {
             vm.dto.view = "cc";
-          }          
+          }
           vm.dto.changeAccountInfo = true;
           $state.go("give.change")
         };
@@ -222,10 +222,10 @@
                vm.donate(vm.dto.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.dto.email, vm.dto.view, function() {
                  $state.go("give.thank-you");
                });
-             }),
+             },
              function() {
                $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
-             };
+             });
            }
            else {
              $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
@@ -243,24 +243,38 @@
           $state.go("give.amount");
         };
 
-       vm.processCreditCardChange = function (){
+        vm.processCreditCardChange = function (){
           if ($scope.giveForm.$valid) {
-             vm.processing = true;
-             vm.createCard();
+            vm.processing = true;
+            vm.dto.declinedCard = false;
+            vm.createCard();
              PaymentService.updateDonorWithCard(vm.dto.donor.id, vm.card, vm.dto.email)
-             .then(function(donor) {
-               vm.donate(vm.dto.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.dto.email, vm.dto.view, function() {
-                 $state.go("give.thank-you");
-               });
-             }),
-             function() {
-               $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
-             };
-           }
-            else {
-              $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-            }
-          };
+              function(donor) {
+                vm.donate(
+                  vm.dto.program.ProgramId,
+                  vm.dto.amount,
+                  vm.dto.donor.id,
+                  vm.dto.email,
+                  vm.dto.view,
+                  function() {
+                    $state.go("give.thank-you");
+                  }
+                );
+              },
+            function(error) {
+              vm.processing = false;
+              if(error.globalMessage) {
+                vm.dto.declinedCard = true;
+                $rootScope.$emit('notify', error.globalMessage);
+              } else {
+                $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
+              }
+            });
+          } else {
+            vm.processing = false;
+            $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+          }
+        };
 
         vm.reset = function() {
           vm.amount = undefined;
@@ -407,7 +421,7 @@
             });
           }
 
-        } 
-       };      
-    
+        }
+       };
+
 })();

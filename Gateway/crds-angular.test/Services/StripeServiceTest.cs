@@ -30,7 +30,7 @@ namespace crds_angular.test.Services
             stripeResponse.SetupGet(mocked => mocked.Content).Returns("{error: {message:'Bad Request'}}").Verifiable();
             restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
 
-            Assert.Throws<StripeException>(() => fixture.createCustomer("token"));
+            Assert.Throws<StripeException>(() => fixture.CreateCustomer("token"));
 
             restClient.Verify(mocked => mocked.Execute<StripeCustomer>(
                 It.Is<RestRequest>(o =>
@@ -55,7 +55,7 @@ namespace crds_angular.test.Services
 
             restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
 
-            var response = fixture.createCustomer("token");
+            var response = fixture.CreateCustomer("token");
             restClient.Verify(mocked => mocked.Execute<StripeCustomer>(
                 It.Is<IRestRequest>(o =>
                     o.Method == Method.POST
@@ -81,7 +81,7 @@ namespace crds_angular.test.Services
 
             restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
 
-            var response = fixture.updateCustomerDescription("token", 102030);
+            var response = fixture.UpdateCustomerDescription("token", 102030);
             restClient.Verify(mocked => mocked.Execute<StripeCustomer>(
                 It.Is<IRestRequest>(o =>
                     o.Method == Method.POST
@@ -105,7 +105,7 @@ namespace crds_angular.test.Services
 
             try
             {
-                fixture.updateCustomerDescription("token", 102030);
+                fixture.UpdateCustomerDescription("token", 102030);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (StripeException e)
@@ -132,7 +132,7 @@ namespace crds_angular.test.Services
 
             restClient.Setup(mocked => mocked.Execute<StripeCharge>(It.IsAny<IRestRequest>())).Returns(chargeResponse.Object);
 
-            var response = fixture.chargeCustomer("cust_token", 9090, 98765, "cc");
+            var response = fixture.ChargeCustomer("cust_token", 9090, 98765, "cc");
 
             restClient.Verify(mocked => mocked.Execute<StripeCharge>(
                 It.Is<IRestRequest>(o =>
@@ -175,7 +175,7 @@ namespace crds_angular.test.Services
             restClient.Setup(mocked => mocked.Execute<StripeCharge>(It.IsAny<IRestRequest>())).Returns(chargeResponse.Object);
             try
             {
-                fixture.chargeCustomer("token", -900, 98765, "cc");
+                fixture.ChargeCustomer("token", -900, 98765, "cc");
                 Assert.Fail("Should have thrown exception");
             }
             catch (StripeException e)
@@ -218,7 +218,7 @@ namespace crds_angular.test.Services
 
             restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
 
-            var defaultSource = fixture.updateCustomerSource("customerToken", "cardToken");
+            var defaultSource = fixture.UpdateCustomerSource("customerToken", "cardToken");
             restClient.Verify(mocked => mocked.Execute<StripeCustomer>(
                 It.Is<IRestRequest>(o =>
                     o.Method == Method.POST

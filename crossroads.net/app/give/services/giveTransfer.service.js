@@ -12,6 +12,7 @@
             this.program = '';
             this.routing = '';
             this.view = '';
+            this.declinedCard = false;
           }
         };
         transferObject.reset();

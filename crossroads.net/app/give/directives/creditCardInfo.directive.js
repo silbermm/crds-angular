@@ -25,6 +25,7 @@ require('../creditCardInfo.html');
               defaultSource: "=",
               changeAccountInfo: "=",
               setValidCard: "=",
+              declinedCard: "=",
               setValidCvc: "=",
               ccNumberClass: "="
             },
