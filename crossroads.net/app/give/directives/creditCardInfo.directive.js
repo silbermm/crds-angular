@@ -17,8 +17,7 @@ require('../creditCardInfo.html');
           //replace: true,
           scope: {
               nameOnCard: "=",
-              ccNumber: "=",
-              ccNumberClass: "=",
+              ccNumber: "=",             
               expDate: "=",
               cvc: "=",
               billingZipCode: "=",
@@ -26,7 +25,8 @@ require('../creditCardInfo.html');
               defaultSource: "=",
               changeAccountInfo: "=",
               setValidCard: "=",
-              setValidCvc: "="
+              setValidCvc: "=",
+              ccNumberClass: "=",
             },
           templateUrl: 'give/creditCardInfo.html',
           link: link
