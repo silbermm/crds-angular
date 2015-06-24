@@ -327,8 +327,7 @@
               } else {
                 vm.processCreditCardChange();
              }
-           };           
-           if (vm.dto.view == "bank"){
+           } else if (vm.dto.view == "bank"){
               if(!$scope.giveForm.bankAccountForm.$dirty) {
                  vm.processing = true;
                  vm.donate(vm.dto.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.dto.email, vm.dto.view, function() {
