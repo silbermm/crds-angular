@@ -15,7 +15,7 @@ require('./email_field.html');
                 checkUnique: "=",
                 onEmailFound: "&",
                 onEmailNotFound: "&",
-                focused: "=",             
+                focused: "=",
             },
             templateUrl: 'email_field/email_field.html',
             link: function (scope, element, attrs) {

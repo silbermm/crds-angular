@@ -7,7 +7,7 @@
         <ng-messages for="email_field.email.$error" ng-if="submitted" ng-messages-include="on-submit-messages"></ng-messages>
         <ng-messages for="email_field.email.$error" ng-show="$root.username == undefined" ng-messages-include="on-blur-messages">
             <span ng-message="unique">This email address is already in use by another account, try <a href="{{redirectTo}}" ng-click="$parent.openLogin()">logging in</a> or use <a href="#">forgot password</a></span>
-        </ng-messages>     
+        </ng-messages>
         <ng-messages for="email_field.email.$error" ng-show="$root.username != undefined" ng-messages-include="on-blur-messages"></ng-messages>
     </div>
 </ng-form>
