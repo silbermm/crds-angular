@@ -47,6 +47,10 @@
   }
 }
 
+.media-details .social-media-buttons a svg {
+	color: $gray; //setting specifically so the default for .icon-twitter and .icon-facebook and be used elsewhere
+}
+
 /* Small devices (tablets, 768px and up) */
 @media (max-width: $screen-xs-max) {
 	.series-list li{
@@ -90,10 +94,8 @@
 }
 
 .media-details {
-  background: $gray-darker;
   color: $gray-light;
   padding-bottom: ($line-height-computed*3);
-  margin-bottom: -($line-height-computed*2);
 
   h2 {
     color: $gray-lighter;
