@@ -125,6 +125,10 @@
         url: "/media/single",
         controller: "MediaCtrl as media",
         templateUrl: "media/media-single.html"
+      .state("blog", {
+        url: "/blog",
+        controller: "BlogCtrl as blog",
+        templateUrl: "blog/blog-index.html"
       })
       .state("serve-signup", {
         url: "/serve-signup",

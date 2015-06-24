@@ -7,7 +7,6 @@
 }
 
 .posts{
-  width: 90%;
   padding-left: 0;
 }
 .post{
@@ -66,6 +65,7 @@ h2 a:hover{
 .post-comments{
   padding-right: 10px;
   border-right: 1px solid $gray-light;
+  vertical-align: top;
 }
 
 .social-media-buttons{
