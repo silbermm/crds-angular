@@ -34,4 +34,5 @@ require('./mp_tools');
   require('./volunteer_signup');
   require('./volunteer_application');
   require('./search');
+  require('./blog');
 })();
