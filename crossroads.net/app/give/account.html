@@ -6,21 +6,21 @@
         </div>
     </div>
 
-	<ng-form name="accountForm">
+		<ng-form name="accountForm">
 	    <div
 	        class="form-group"
 	        ng-if="$root.username === undefined"
 	        ng-class="{'has-error': accountForm.email_field.email.$invalid && give.bankinfoSubmitted }">
 	        <label for="email">Email</label>
 	        <email-field
-	        	email="give.email" 
-	        	submitted="give.bankinfoSubmitted" 
-	        	prefix="give.emailPrefix" 
-	        	on-email-not-found="give.onEmailNotFound" 
-	        	on-email-found="give.onEmailFound" 
-	        	validate-unique="false"
-	        	check-unique="true" 
-	        	focused="true">
+	            email="give.email"
+	            submitted="give.bankinfoSubmitted"
+	            prefix="give.emailPrefix"
+	            on-email-not-found="give.onEmailNotFound"
+	            on-email-found="give.onEmailFound"
+	            validate-unique="false"
+	            check-unique="true"
+	            focused="true">
 	        </email-field>
 	    </div>
 
