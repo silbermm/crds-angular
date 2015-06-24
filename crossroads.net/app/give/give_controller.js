@@ -63,6 +63,7 @@
         vm.emailPrefix = "give";
         vm.initialized = false;
         vm.last4 = '';
+        vm.processingChange = false;
         vm.processing = false;
         vm.programsInput = programList;
         vm.showMessage = "Where?";      
@@ -76,16 +77,6 @@
         brandCode['MasterCard'] = '#cc_mastercard';
         brandCode['American Express'] = '#cc_american_express';
         brandCode['Discover'] = '#cc_discover';
-
-        vm.changeAccountProcess = function(){       
-          if (vm.setValidCard == false){
-            vm.dto.donor.default_source.last4 = "";
-          };
-          if (vm.setValidCvc == false){
-            vm.dto.donor.default_source.cvc = "";
-          };
-          $state.go("give.amount");
-        };
 
         vm.confirmDonation = function(){
           try
@@ -142,7 +133,7 @@
                 vm.dto.view = 'bank';
               }
               vm.processing = true;
-              if ($rootScope.username === undefined) {
+              if ($rootScope.username === undefined && vm.processingChange === false) {
                   Session.addRedirectRoute("give.account", "");
                   $state.go("give.login");
               } else {
@@ -222,7 +213,7 @@
             }
         };
 
-       vm.processBankAccountChange = function(){
+        vm.processBankAccountChange = function(){
          if ($scope.giveForm.$valid) {
              vm.processing = true;
              vm.createBank();
@@ -239,7 +230,18 @@
            else {
              $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
            }
-       };
+        };
+
+        vm.processChange = function(){       
+          if (vm.setValidCard == false){
+            vm.dto.donor.default_source.last4 = "";
+          };
+          if (vm.setValidCvc == false){
+            vm.dto.donor.default_source.cvc = "";
+          };
+          vm.processingChange = true;
+          $state.go("give.amount");
+        };
 
        vm.processCreditCardChange = function (){
           if ($scope.giveForm.$valid) {
