@@ -39,7 +39,7 @@ describe('Giving Flow', function() {
     checkState('give.thank-you');
   });
 
-  it('should follow full flow, giving as guest', function () {  //f
+  it('should follow full flow, giving as guest', function () {
     checkState('give.amount');
     element(by.model('amount')).sendKeys("1999");
     element(by.binding('amount')).click();
@@ -97,7 +97,7 @@ describe('Giving Flow', function() {
     element(by.cssContainingText('.ng-binding', '$867,539.00'));
   });
 
-  it('should follow full credit card flow, logging in as user with existing giver and changing account information', function () {  
+  it('should follow full credit card flow, logging in as user with existing giver and changing account information', function () {
     checkState('give.amount');
     element(by.model('amount')).sendKeys("12345");
     element(by.binding('amount')).click();
@@ -182,7 +182,7 @@ describe('Giving Flow', function() {
    });
   });
 
-  it('Giving as guest via credit card, using the change link- retain valid info and discard invalid info', function () {  
+  it('Giving as guest via credit card, using the change link- retain valid info and discard invalid info', function () {
     checkState('give.amount');
     element(by.model('amount')).sendKeys("1999");
     element(by.binding('amount')).click();
@@ -241,7 +241,7 @@ describe('Giving Flow', function() {
    });
   });
 
-  it('Giving as guest via ACH, using the change link - retain valid info and discard invalid info', function () {  
+  it('Giving as guest via ACH, using the change link - retain valid info and discard invalid info', function () {
     checkState('give.amount');
     element(by.model('amount')).sendKeys("999");
     element(by.binding('amount')).click();
