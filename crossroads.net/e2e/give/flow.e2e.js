@@ -39,7 +39,7 @@ describe('Giving Flow', function() {
     checkState('give.thank-you');
   });
 
-  it('should follow full flow, giving as guest', function () {
+  it('should follow full flow, giving as guest', function () {  //f
     checkState('give.amount');
     element(by.model('amount')).sendKeys("1999");
     element(by.binding('amount')).click();
@@ -65,6 +65,14 @@ describe('Giving Flow', function() {
       checkState('give.thank-you');
       var email = element.all(by.binding('give.email')).first();
       expect(email.getText()).toBe("tim@kriz.net");
+
+      var amount = element.all(by.binding('give.amount')).first();
+      expect(amount).toBeDefined();
+      expect(amount.getText()).toBe("$1,999.00");
+
+      var program = element.all(by.binding("give.program['Name']")).first();
+      expect(program).toBeDefined();
+      expect(program.getText()).toBe("Crossroads");
     });
   });
 
@@ -89,7 +97,7 @@ describe('Giving Flow', function() {
     element(by.cssContainingText('.ng-binding', '$867,539.00'));
   });
 
-  it('should follow full credit card flow, logging in as user with existing giver and changing account information', function () {
+  it('should follow full credit card flow, logging in as user with existing giver and changing account information', function () {  //F
     checkState('give.amount');
     element(by.model('amount')).sendKeys("12345");
     element(by.binding('amount')).click();
@@ -174,7 +182,7 @@ describe('Giving Flow', function() {
    });
   });
 
-  it('Giving as guest via credit card, using the change link- retain valid info and discard invalid info', function () {
+  it('Giving as guest via credit card, using the change link- retain valid info and discard invalid info', function () {  //F
     checkState('give.amount');
     element(by.model('amount')).sendKeys("1999");
     element(by.binding('amount')).click();
@@ -233,7 +241,7 @@ describe('Giving Flow', function() {
    });
   });
 
-  it('Giving as guest via ACH, using the change link - retain valid info and discard invalid info', function () {
+  it('Giving as guest via ACH, using the change link - retain valid info and discard invalid info', function () {  
     checkState('give.amount');
     element(by.model('amount')).sendKeys("999");
     element(by.binding('amount')).click();
@@ -252,6 +260,7 @@ describe('Giving Flow', function() {
     expect(changeButton.getText()).toBe("Change");
 
     changeButton.click().then(function() {
+       browser.waitForAngular();
        checkState('give.amount');
        expect(element(by.model('amount'))).toBeDefined();
     });
@@ -267,9 +276,9 @@ describe('Giving Flow', function() {
     element(by.model('bankAccount.routing')).sendKeys("110000000");
     element(by.model('bankAccount.account')).sendKeys("000123456789");
    
-    var chgButton = element.all(by.css("[ng-click=\"give.submitBankInfo()\"]")).get(0);
-    expect(chgButton.getText()).toBe("GIVE $199.00");
-    chgButton.click().then(function() {
+    var giveButton = element.all(by.css("[ng-click=\"give.submitBankInfo()\"]")).get(0);
+    expect(giveButton.getText()).toBe("GIVE $199.00");
+    giveButton.click().then(function() {
       browser.waitForAngular();
       checkState('give.thank-you');
       var email = element.all(by.binding('give.email')).first();
@@ -283,6 +292,7 @@ describe('Giving Flow', function() {
       var program = element.all(by.binding("give.program['Name']")).first();
       expect(program).toBeDefined();
       expect(program.getText()).toBe("Crossroads");
+
    });
   });
 
