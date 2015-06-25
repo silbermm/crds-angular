@@ -136,11 +136,6 @@ var moment = require('moment');
         CrossroadsId: studentFields.gender
       };
 
-      student.site = {
-        Value: vm.site,
-        CrossroadsId: studentFields.site
-      };
-
       student.howLongAttending = {
         Value: vm.howLongAttending,
         CrossroadsId: studentFields.howLongAttending

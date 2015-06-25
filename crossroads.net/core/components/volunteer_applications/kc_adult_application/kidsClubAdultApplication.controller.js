@@ -177,11 +177,6 @@ var moment = require('moment');
         CrossroadsId: adultFields.spouseGender
       };
 
-      adult.siteYouAttend = {
-        Value: vm.volunteer.siteAttend,
-        CrossroadsId: adultFields.site
-      };
-
       adult.howLongAttending = {
         Value: vm.volunteer.attending,
         CrossroadsId: adultFields.howLongAttending

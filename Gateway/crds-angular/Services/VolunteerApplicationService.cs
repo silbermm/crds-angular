@@ -54,7 +54,6 @@ namespace crds_angular.Services
                 opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.SpouseName, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.SpouseGender, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.SiteYouAttend, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.HowLongAttending, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.WhatServiceDoYouAttend, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.StreetAddress, opportunityResponseId));
@@ -169,7 +168,6 @@ namespace crds_angular.Services
             formResponse.FormAnswers.Add(SetCustomField(application.Email, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.BirthDate, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(TranslateGender(application.Gender), opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.SiteAttend, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.NameForNameTag, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.School, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.HowLongAttending, opportunityResponseId));

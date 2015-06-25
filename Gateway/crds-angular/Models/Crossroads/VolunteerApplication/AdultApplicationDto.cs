@@ -46,10 +46,6 @@ namespace crds_angular.Models.Crossroads.VolunteerApplication
         [JsonProperty(PropertyName = "spouseGender")]
         public CustomField SpouseGender { get; set; }
 
-        [JsonProperty(PropertyName = "siteYouAttend")]
-        [Required]
-        public CustomField SiteYouAttend { get; set; }
-
         [JsonProperty(PropertyName = "howLongAttending")]
         [Required]
         public CustomField HowLongAttending { get; set; }
