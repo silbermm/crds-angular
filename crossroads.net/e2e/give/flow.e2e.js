@@ -286,7 +286,7 @@ describe('Giving Flow', function() {
    });
   });
 
- it('Exsiting user, giving via Credit Card, giving again via ACH - testing change to payment type', function () {
+ it('Exsiting user, giving via ACH giving again via Credit Card - testing change to payment type', function () {
     checkState('give.amount');
     element(by.model('amount')).sendKeys("555");
     element(by.binding('amount')).click();
