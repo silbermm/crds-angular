@@ -60,6 +60,10 @@ namespace crds_angular.Controllers.API
             {
                 donor = _gatewayDonorService.CreateOrUpdateContactDonor(donor, dto.email_address, dto.stripe_token_id, DateTime.Now);
             }
+            catch (StripeException e)
+            {
+                return (e.GetStripeResult());
+            }
             catch (Exception e)
             {
                 var msg = "Error creating donor for email " + dto.email_address;
@@ -98,6 +102,10 @@ namespace crds_angular.Controllers.API
                 };
 
                 return Ok(response);
+            }
+            catch (StripeException e)
+            {
+                return (e.GetStripeResult());
             }
             catch (Exception exception)
             {

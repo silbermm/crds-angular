@@ -475,5 +475,81 @@ namespace crds_angular.test.controllers
             donorService.VerifyAll();
             paymentService.VerifyAll();
         }
+
+        [Test]
+        public void TestCreateDonorForUnauthenticatedUserStripeUpdateThrowsStripeException()
+        {
+            fixture.Request.Headers.Authorization = null;
+            var dto = new CreateDonorDTO
+            {
+                email_address = "me@here.com",
+                stripe_token_id = "456"
+            };
+
+            var contactDonor = new ContactDonor
+            {
+                DonorId = 123,
+                ContactId = 789,
+                Email = "me@here.com",
+                ProcessorId = "102030",
+                RegisteredUser = false,
+            };
+
+            var sourceData = new SourceData
+            {
+                bank_last4 = "5555",
+                routing_number = "987654321"
+            };
+
+            var stripeException = new StripeException(HttpStatusCode.PaymentRequired, "auxMessage", "type", "message", "code", "decline");
+            donorService.Setup(mocked => mocked.GetContactDonorForEmail("me@here.com")).Returns(contactDonor);
+            donorService.Setup(
+                (mocked => mocked.CreateOrUpdateContactDonor(contactDonor, "me@here.com", "456", It.IsAny<DateTime>())))
+                .Throws(stripeException);
+
+            var response = fixture.Post(dto);
+            Assert.AreEqual(typeof(RestHttpActionResult<StripeErrorResponse>), response.GetType());
+
+            donorService.VerifyAll();
+            paymentService.VerifyAll();
+        }
+
+        [Test]
+        public void TestCreateDonorForAuthenticatedUserStripeUpdateThrowsStripeException()
+        {
+            var dto = new CreateDonorDTO
+            {
+                email_address = "me@here.com",
+                stripe_token_id = "456"
+            };
+
+            var contactDonor = new ContactDonor
+            {
+                DonorId = 123,
+                ContactId = 789,
+                Email = "me@here.com",
+                ProcessorId = "102030",
+                RegisteredUser = true,
+            };
+
+            var sourceData = new SourceData
+            {
+                bank_last4 = "5555",
+                routing_number = "987654321"
+            };
+
+            var stripeException = new StripeException(HttpStatusCode.PaymentRequired, "auxMessage", "type", "message", "code", "decline");
+            donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(It.IsAny<string>())).Returns(contactDonor);
+            donorService.Setup(
+                (mocked => mocked.CreateOrUpdateContactDonor(contactDonor, String.Empty, "456", It.IsAny<DateTime>())))
+                .Throws(stripeException);
+
+            var response = fixture.Post(dto);
+            Assert.AreEqual(typeof(RestHttpActionResult<StripeErrorResponse>), response.GetType());
+
+            donorService.VerifyAll();
+            paymentService.VerifyAll();
+        }
+
     }
 }
