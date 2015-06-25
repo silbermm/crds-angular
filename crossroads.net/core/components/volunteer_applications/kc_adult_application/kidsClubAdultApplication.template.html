@@ -97,7 +97,7 @@
       </div>
     </div>
 
-    <div class="row">
+    <!-- <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': kcAdultApplication.showError(adult, 'siteAttend')}">
         <label class="block required control-label">Site where you attend service</label>
         <label class="radio-inline">
@@ -121,21 +121,42 @@
           </span>
         </ng-messages>
       </div>
-    </div>
+    </div> -->
 
     <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': kcAdultApplication.showError(adult, 'attending')}">
-        <label class="control-label required" for="attending">How long have you been attending Crossroads?</label>
-        <input type="text" class="form-control" ng-model="kcAdultApplication.volunteer.attending" id="attending" placeholder="How long have you been attending crossroads?" ng-model-options="{updateOn: 'blur'}"required name="attending">
+        <label class="control-label required" for="attending">When did you start attending Crossroads?</label>
+        <input type="text" class="form-control" ng-model="kcAdultApplication.volunteer.attending" id="attending" placeholder="When did you start attending Crossroads?" validate-date ng-model-options="{updateOn: 'blur'}"required name="attending">
         <ng-messages for="adult.attending.$error" ng-if="kcAdultApplication.showError(adult, 'attending')">
+          <span ng-message="invalidDate">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
+          </span>
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
         </ng-messages>
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': kcAdultApplication.showError(adult, 'serviceAttend')}">
-        <label class="control-label required" for="serviceAttend">What Service do you attend?</label>
-        <input type="text" class="form-control" id="serviceAttend" name="serviceAttend" ng-model="kcAdultApplication.volunteer.serviceAttend" placeholder="What Service do you attend?" ng-model-options="{updateOn: 'blur'}" required>
+        <label class="control-label required" for="serviceAttend">Site/Service Time where you attend </label>
+        <select class="form-control col-sm-12" name="serviceAttend" ng-model="kcAdultApplication.volunteer.serviceAttend" required>
+          <option value="">Site/Service Time where you attend</option>
+          <option value="Oakley - Sat - 4:30pm">Oakley - Sat - 4:30pm</option>
+          <option value="2">Oakley - Sat - 6:15pm</option>
+          <option value="3">Oakley - Sun - 8:30am</option>
+          <option value="4">Oakley - Sun - 10:05am</option>
+          <option value="5">Oakley - Sun - 11:55am</option>
+          <option value="6">Oakley - Sun - 11:55am</option>
+          <option value="7">Mason - Sun - 8:15am</option>
+          <option value="8">Mason - Sun - 9:45am</option>
+          <option value="9">Mason - Sun - 11:30am</option>
+          <option value="10">Florence - Sat - 5:30pm</option>
+          <option value="11">Florence - Sun - 9:30am</option>
+          <option value="12">Florence - Sun - 11:30am</option>
+          <option value="13">West Side - Sun - 8:15am</option>
+          <option value="14">West Side - Sun - 10:00am</option>
+          <option value="15">West Side - Sun 11:45am</option>
+          <option value="16">Clifton - Sun - 7pm</option>
+        </select>
         <ng-messages for="adult.serviceAttend.$error" ng-if="kcAdultApplication.showError(adult, 'serviceAttend')">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
