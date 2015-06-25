@@ -154,6 +154,7 @@
             vm.dto.view = "cc";
           }
           vm.dto.changeAccountInfo = true;
+          vm.amountSubmitted = false;
           $state.go("give.change")
         };
 
@@ -247,6 +248,7 @@
             vm.dto.donor.default_source.cvc = "";
           };
           vm.processingChange = true;
+          vm.amountSubmitted = false;
           $state.go("give.amount");
         };
 
@@ -358,6 +360,7 @@
 
         vm.submitChangedBankInfo = function() {
             vm.bankinfoSubmitted = true;
+            vm.amountSubmitted = true;
            if(vm.dto.amount === "") {
              $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
            } else {

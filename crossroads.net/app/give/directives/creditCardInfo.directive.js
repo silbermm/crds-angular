@@ -116,7 +116,7 @@ require('../creditCardInfo.html');
               return(false);
             }
 
-            return (scope.bankinfoSubmitted && scope.creditCardForm.ccNumber.$pristine && ccValid || //cannot be blank on submit
+            return (scope.bankinfoSubmitted && scope.creditCardForm.ccNumber.$pristine && !ccValid || //cannot be blank on submit
                    !ccValid && scope.creditCardForm.ccNumber.$dirty);  //show error when not valid
          };
 
@@ -132,7 +132,7 @@ require('../creditCardInfo.html');
               return(false);
             }
 
-            return (scope.bankinfoSubmitted && scope.creditCardForm.cvc.$pristine || //cannot be blank on submit
+            return (scope.bankinfoSubmitted && scope.creditCardForm.cvc.$pristine && !ccValid || //cannot be blank on submit
                     !cvcValid && scope.bankinfoSubmitted ||
                     !cvcValid && scope.creditCardForm.cvc.$dirty);  //show error when not valid
         };
