@@ -28,6 +28,7 @@ describe('Credit Card Info Directive', function() {
      + "name-on-card='model.nameOnCard' "
      + "default-source='model.defaultSource' "
      + "change-account-info='model.changeAccountInfo' "
+     + "declined-payment='model.declinedPayment' "
      + "set-valid-card='model.setValidCard' "
      + "set-valid-cvc='model.setValidCvc' "
      + "cc-number-class='model.ccNumberClass'>"
@@ -50,7 +51,8 @@ describe('Credit Card Info Directive', function() {
         last4: "9876",
       },
       changeAccountInfo: false,
-      ccNumberClass: 'cc-visa'
+      ccNumberClass: 'cc-visa',
+      declinedPayment: false
     };
 
     ccElement = $compile(templateString)(scope);

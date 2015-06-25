@@ -94,9 +94,9 @@ namespace crds_angular.test.Services
         public void shouldCreateNewContactAndDonor()
         {
             mpContactService.Setup(mocked => mocked.CreateContactForGuestGiver("me@here.com", GUEST_GIVER_DISPLAY_NAME)).Returns(123);
-            paymentService.Setup(mocked => mocked.createCustomer("stripe_token")).Returns("processor_id");
+            paymentService.Setup(mocked => mocked.CreateCustomer("stripe_token")).Returns("processor_id");
             mpDonorService.Setup(mocked => mocked.CreateDonorRecord(123, "processor_id", It.IsAny<DateTime>(), STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE)).Returns(456);
-            paymentService.Setup(mocked => mocked.updateCustomerDescription("processor_id", 456)).Returns("456");
+            paymentService.Setup(mocked => mocked.UpdateCustomerDescription("processor_id", 456)).Returns("456");
 
             var response = fixture.CreateOrUpdateContactDonor(null, "me@here.com", "stripe_token", DateTime.Now);
 
@@ -119,9 +119,9 @@ namespace crds_angular.test.Services
                 DonorId = 0,
             };
 
-            paymentService.Setup(mocked => mocked.createCustomer("stripe_token")).Returns("processor_id");
+            paymentService.Setup(mocked => mocked.CreateCustomer("stripe_token")).Returns("processor_id");
             mpDonorService.Setup(mocked => mocked.CreateDonorRecord(12345, "processor_id", It.IsAny<DateTime>(), STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE)).Returns(456);
-            paymentService.Setup(mocked => mocked.updateCustomerDescription("processor_id", 456)).Returns("456");
+            paymentService.Setup(mocked => mocked.UpdateCustomerDescription("processor_id", 456)).Returns("456");
 
             var response = fixture.CreateOrUpdateContactDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
 
@@ -144,9 +144,9 @@ namespace crds_angular.test.Services
                 RegisteredUser = true
             };
 
-            paymentService.Setup(mocked => mocked.createCustomer("stripe_token")).Returns("processor_id");
+            paymentService.Setup(mocked => mocked.CreateCustomer("stripe_token")).Returns("processor_id");
             mpDonorService.Setup(mocked => mocked.CreateDonorRecord(12345, "processor_id", It.IsAny<DateTime>(), 1, 1, 2)).Returns(456);
-            paymentService.Setup(mocked => mocked.updateCustomerDescription("processor_id", 456)).Returns("456");
+            paymentService.Setup(mocked => mocked.UpdateCustomerDescription("processor_id", 456)).Returns("456");
 
             var response = fixture.CreateOrUpdateContactDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
 
@@ -169,9 +169,9 @@ namespace crds_angular.test.Services
                 DonorId = 456,
             };
 
-            paymentService.Setup(mocked => mocked.createCustomer("stripe_token")).Returns("processor_id");
+            paymentService.Setup(mocked => mocked.CreateCustomer("stripe_token")).Returns("processor_id");
             mpDonorService.Setup(mocked => mocked.UpdatePaymentProcessorCustomerId(456, "processor_id")).Returns(456);
-            paymentService.Setup(mocked => mocked.updateCustomerDescription("processor_id", 456)).Returns("456");
+            paymentService.Setup(mocked => mocked.UpdateCustomerDescription("processor_id", 456)).Returns("456");
 
             var response = fixture.CreateOrUpdateContactDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
 

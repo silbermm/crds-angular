@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Exceptions;
 using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads;
 using crds_angular.Security;
-using crds_angular.Services;
 using crds_angular.Services.Interfaces;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 
@@ -17,19 +12,18 @@ namespace crds_angular.Controllers.API
 {
     public class DonationController : MPAuth
     {
-        private MPInterfaces.IDonorService mpDonorService;
-        private IPaymentService stripeService;
-        private MPInterfaces.IAuthenticationService authenticationService;
-        private IDonorService gatewayDonorService;
+        private readonly MPInterfaces.IDonorService _mpDonorService;
+        private readonly IPaymentService _stripeService;
+        private readonly MPInterfaces.IAuthenticationService _authenticationService;
+        private readonly IDonorService _gatewayDonorService;
 
         public DonationController(MPInterfaces.IDonorService mpDonorService, IPaymentService stripeService,
             MPInterfaces.IAuthenticationService authenticationService, IDonorService gatewayDonorService)
         {
-            this.mpDonorService = mpDonorService;
-            this.stripeService = stripeService;
-            this.authenticationService = authenticationService;
-            this.gatewayDonorService = gatewayDonorService;
-
+            _mpDonorService = mpDonorService;
+            _stripeService = stripeService;
+            _authenticationService = authenticationService;
+            _gatewayDonorService = gatewayDonorService;
         }
 
         [ResponseType(typeof(DonationDTO))]
@@ -42,14 +36,14 @@ namespace crds_angular.Controllers.API
         private IHttpActionResult CreateDonationAndDistributionAuthenticated(String token, CreateDonationDTO dto)
         {
             try{
-                var contactId = authenticationService.GetContactId(token);
-                var donor = mpDonorService.GetContactDonor(contactId);
-                var charge_id = stripeService.chargeCustomer(donor.ProcessorId, dto.amount, donor.DonorId, dto.pymt_type);
-                var donationId = mpDonorService.CreateDonationAndDistributionRecord(dto.amount, donor.DonorId, dto.program_id, charge_id, dto.pymt_type, donor.ProcessorId, DateTime.Now, true);
+                var contactId = _authenticationService.GetContactId(token);
+                var donor = _mpDonorService.GetContactDonor(contactId);
+                var chargeId = _stripeService.ChargeCustomer(donor.ProcessorId, dto.Amount, donor.DonorId, dto.PaymentType);
+                var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount, donor.DonorId, dto.ProgramId, chargeId, dto.PaymentType, donor.ProcessorId, DateTime.Now, true);
                 var response = new DonationDTO()
                     {
-                        program_id = dto.program_id,
-                        amount = dto.amount,
+                        program_id = dto.ProgramId,
+                        amount = dto.Amount,
                         donation_id = donationId.ToString()
                     };
 
@@ -57,8 +51,7 @@ namespace crds_angular.Controllers.API
                 }
                 catch (StripeException stripeException)
                 {
-                    var apiError = new ApiErrorDto(stripeException.Message, stripeException);
-                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                    return (stripeException.GetStripeResult());
                 }
                 catch (Exception exception)
                 {
@@ -71,14 +64,14 @@ namespace crds_angular.Controllers.API
         {
             try
             {
-                var donor = gatewayDonorService.GetContactDonorForEmail(dto.email_address);
-                var charge_id = stripeService.chargeCustomer(donor.ProcessorId, dto.amount, donor.DonorId, dto.pymt_type);
-                var donationId = mpDonorService.CreateDonationAndDistributionRecord(dto.amount, donor.DonorId, dto.program_id, charge_id, dto.pymt_type, donor.ProcessorId, DateTime.Now, false);
+                var donor = _gatewayDonorService.GetContactDonorForEmail(dto.EmailAddress);
+                var chargeId = _stripeService.ChargeCustomer(donor.ProcessorId, dto.Amount, donor.DonorId, dto.PaymentType);
+                var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount, donor.DonorId, dto.ProgramId, chargeId, dto.PaymentType, donor.ProcessorId, DateTime.Now, false);
 
                 var response = new DonationDTO()
                 {
-                    program_id = dto.program_id,
-                    amount = dto.amount,
+                    program_id = dto.ProgramId,
+                    amount = dto.Amount,
                     donation_id = donationId.ToString()
                 };
 
@@ -86,8 +79,7 @@ namespace crds_angular.Controllers.API
             }
             catch (StripeException stripeException)
             {
-                var apiError = new ApiErrorDto(stripeException.Message, stripeException);
-                throw new HttpResponseException(apiError.HttpResponseMessage);
+                return (stripeException.GetStripeResult());
             }
             catch (Exception exception)
             {
