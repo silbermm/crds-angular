@@ -2,9 +2,9 @@
 
   angular.module('crossroads.give').factory('PaymentService',PaymentService);
 
-  PaymentService.$inject = ['$log', '$http', '$resource','$q', 'stripe'];
+  PaymentService.$inject = ['$log', '$http', '$resource','$q', 'stripe', '$cookies'];
 
-  function PaymentService($log, $http, $resource, $q, stripe) {
+  function PaymentService($log, $http, $resource, $q, stripe, $cookies) {
     var payment_service = { 
       createDonorWithBankAcct : createDonorWithBankAcct,
       createDonorWithCard : createDonorWithCard,
@@ -21,7 +21,7 @@
       return $resource(__API_ENDPOINT__ + 'api/donor/?email=:email',{email: '@_email'}, {
         get: {
           method : 'GET',
-          headers: {'Authorization': crds_utilities.getCookie('sessionId')}
+          headers: {'Authorization': $cookies.get('sessionId')}
         }
       });
     }
@@ -40,7 +40,7 @@
             method: "POST",
             url: __API_ENDPOINT__ + 'api/donor',
             headers: {
-              'Authorization': crds_utilities.getCookie('sessionId')
+              'Authorization': $cookies.get('sessionId')
             },
             data: donor_request
             }).success(function(data) {
@@ -62,7 +62,7 @@
             method: "PUT",
             url: __API_ENDPOINT__ + 'api/donor',
             headers: {
-              'Authorization': crds_utilities.getCookie('sessionId')
+              'Authorization': $cookies.get('sessionId')
             },
             data: donor_request
             }).success(function(data) {
@@ -89,7 +89,7 @@
             method: "POST",
             url: __API_ENDPOINT__ + 'api/donor',
             headers: {
-              'Authorization': crds_utilities.getCookie('sessionId')
+              'Authorization': $cookies.get('sessionId')
             },
             data: donor_request
             }).success(function(data) {
@@ -111,7 +111,7 @@
             method: "PUT",
             url: __API_ENDPOINT__ + 'api/donor',
             headers: {
-              'Authorization': crds_utilities.getCookie('sessionId')
+              'Authorization': $cookies.get('sessionId')
             },
             data: donor_request
             }).success(function(data) {
@@ -138,7 +138,7 @@
         url: __API_ENDPOINT__ + 'api/donation',
         data: donation_request,
         headers: {
-              'Authorization': crds_utilities.getCookie('sessionId')
+              'Authorization': $cookies.get('sessionId')
             }
         }).success(function(data){
           payment_service.donation = data;

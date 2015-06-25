@@ -6,9 +6,8 @@ describe('Session Service', function() {
 
   beforeEach(module('crossroads'));
 
-  beforeEach(inject(function(_$cookies_, _$cookieStore_, _Session_){
+  beforeEach(inject(function(_$cookies_, _Session_){
     $cookies = _$cookies_;
-    $cookieStore = _$cookieStore_;
     Session = _Session_;
   }));
 

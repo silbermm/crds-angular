@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-  module.exports = function LoginController($scope, $rootScope, AUTH_EVENTS, MESSAGES, AuthService, $cookieStore, $state, $log, Session, $timeout, User) {
+  module.exports = function LoginController($scope, $rootScope, AUTH_EVENTS, MESSAGES, AuthService, $state, $log, Session, $timeout, User) {
 
     $log.debug("Inside Login controller");
     $scope.loginShow = false;

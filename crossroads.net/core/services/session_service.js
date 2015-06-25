@@ -3,15 +3,15 @@
 
   angular.module("crossroads.core").service("Session",SessionService);
 
-  SessionService.$inject = ['$log','$cookies', '$cookieStore'];
+  SessionService.$inject = ['$log','$cookies'];
 
-  function SessionService($log, $cookies, $cookieStore) {
+  function SessionService($log, $cookies) {
     var self = this;
     this.create = function (sessionId, userId, username) {
       console.log("creating cookies!");
-      $cookies.sessionId = sessionId;
-      $cookies.userId = userId;
-      $cookies.username = username;
+      $cookies.put('sessionId', sessionId);
+      $cookies.put('userId', userId);
+      $cookies.put('username', username);
     };
 
     /*
@@ -22,7 +22,7 @@
      */
     this.addFamilyMembers = function (family) {
       $log.debug("Adding " + family + " to family cookie");
-      $cookies.family = family.join(",");
+      $cookies.put('family', family.join(","));
     };
 
     /*
@@ -30,7 +30,7 @@
      */
     this.getFamilyMembers = function () {
       if(this.exists('family')){
-        return _.map($cookies.family.split(","), function(strFam){
+        return _.map($cookies.get('family').split(","), function(strFam){
           return Number(strFam);
         });
       }
@@ -46,17 +46,17 @@
     };
 
     this.exists = function (cookieId) {
-      return $cookies[cookieId];
+      return $cookies.get(cookieId);
     };
 
     this.clear = function () {
       // TODO Added to debug/research US1403 - should remove after issue is resolved
       console.log("US1403: clearing session in session_service");
 
-      $cookieStore.remove("sessionId");
-      $cookieStore.remove("userId");
-      $cookieStore.remove("username");
-      $cookieStore.remove('family');
+      $cookies.remove("sessionId");
+      $cookies.remove("userId");
+      $cookies.remove("username");
+      $cookies.remove('family');
       return true;
     };
 
@@ -85,13 +85,13 @@
     };
 
     this.addRedirectRoute = function(redirectUrl, link) {
-        $cookies.redirectUrl = redirectUrl;
-        $cookies.link = link;
+        $cookies.put('redirectUrl', redirectUrl);
+        $cookies.put('link', link);
     };
 
     this.removeRedirectRoute = function() {
-        $cookieStore.remove("redirectUrl");
-        $cookieStore.remove("link");
+        $cookies.remove("redirectUrl");
+        $cookies.remove("link");
     };
 
     this.hasRedirectionInfo = function() {

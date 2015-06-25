@@ -7,9 +7,10 @@
                         '$urlRouterProvider', 
                         '$httpProvider', 
                         '$urlMatcherFactoryProvider', 
-                        '$locationProvider' ];
+                        '$locationProvider',
+                        '$cookies'];
 
-  function AppConfig($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory, $locationProvider) {
+  function AppConfig($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory, $locationProvider, $cookies) {
 
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'contentRouteType', /^\/.*/);
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'signupRouteType', /\/sign-up\/.*$/);
@@ -138,7 +139,7 @@
           ServeOpportunities: 'ServeOpportunities',
           Groups: function(ServeOpportunities) {
             return ServeOpportunities.ServeDays.query({
-              id: crds_utilities.getCookie('userId')
+              id: $cookies.get('userId')
             }).$promise;
           }
         }
@@ -323,7 +324,7 @@
           Volunteer: 'VolunteerService',
           Family: function(Volunteer) {
             return Volunteer.Family.query({
-              contactId: crds_utilities.getCookie('userId')
+              contactId: $cookies.get('userId')
             }).$promise;
           }
         }
