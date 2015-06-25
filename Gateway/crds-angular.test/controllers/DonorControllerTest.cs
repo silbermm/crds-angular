@@ -98,7 +98,7 @@ namespace crds_angular.test.controllers
             };
             
             donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(It.IsAny<string>())).Returns(contactDonor);
-            paymentService.Setup(mocked => mocked.getDefaultSource(It.IsAny<string>())).Returns(default_source);
+            paymentService.Setup(mocked => mocked.GetDefaultSource(It.IsAny<string>())).Returns(default_source);
             IHttpActionResult result = fixture.Get();
             Assert.IsNotNull(result);
             Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonorDTO>), result);
@@ -335,7 +335,7 @@ namespace crds_angular.test.controllers
             };
 
             donorService.Setup(mocked => mocked.GetContactDonorForEmail("me@here.com")).Returns(contactDonor);
-            paymentService.Setup(mocked => mocked.updateCustomerSource(contactDonor.ProcessorId, dto.StripeTokenId))
+            paymentService.Setup(mocked => mocked.UpdateCustomerSource(contactDonor.ProcessorId, dto.StripeTokenId))
                 .Returns(sourceData);
 
             var result = fixture.UpdateDonor(dto);
@@ -385,7 +385,7 @@ namespace crds_angular.test.controllers
             };
 
             donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(It.IsAny<string>())).Returns(contactDonor);
-            paymentService.Setup(mocked => mocked.updateCustomerSource(contactDonor.ProcessorId, dto.StripeTokenId))
+            paymentService.Setup(mocked => mocked.UpdateCustomerSource(contactDonor.ProcessorId, dto.StripeTokenId))
                 .Returns(sourceData);
 
             var result = fixture.UpdateDonor(dto);
@@ -464,8 +464,8 @@ namespace crds_angular.test.controllers
 
             donorService.Setup(mocked => mocked.GetContactDonorForEmail("me@here.com")).Returns(contactDonor);
 
-            var stripeException = new StripeException("auxMessage", "type", "message", "code");
-            paymentService.Setup(mocked => mocked.updateCustomerSource(contactDonor.ProcessorId, dto.StripeTokenId))
+            var stripeException = new StripeException("auxMessage", "type", "message", "code", "decline");
+            paymentService.Setup(mocked => mocked.UpdateCustomerSource(contactDonor.ProcessorId, dto.StripeTokenId))
                 .Throws(stripeException);
 
             try

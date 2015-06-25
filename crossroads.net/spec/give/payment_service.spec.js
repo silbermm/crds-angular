@@ -1,5 +1,5 @@
 describe ('PaymentService', function () {
-  var sut, httpBackend, stripe;
+  var sut, httpBackend, stripe, $rootScope;
 
   var card = {
     number : "4242424242424242",
@@ -42,129 +42,163 @@ describe ('PaymentService', function () {
     return null;
   });
 
-  beforeEach(inject(function(_$injector_, $httpBackend, _PaymentService_) {
+  beforeEach(inject(function(_$injector_, $httpBackend, _PaymentService_, _$rootScope_) {
       var $injector = _$injector_;
 
       sut = _PaymentService_;
       httpBackend = $httpBackend;
       stripe = $injector.get('stripe');
+      $rootScope = _$rootScope_;
     })
   );
 
   afterEach(function() {
-    httpBackend.flush();
     httpBackend.verifyNoOutstandingExpectation();
     httpBackend.verifyNoOutstandingRequest();
    });
 
-  describe ('createDonorWithCard', function() {
-    var result;
-
+  describe ('function createDonorWithCard', function() {
+    var postData;
     beforeEach(function() {
-      spyOn(stripe.card, 'createToken').and.callThrough();
-
-      var postData = {
+      postData = {
         stripe_token_id: "tok_test",
         email_address: "me@here.com"
       };
+    });
+
+    it('should call createToken and create a new donor using the token', function() {
+      spyOn(stripe.card, 'createToken').and.callFake(function(donorInfo, callback) {
+        callback(200, {id: "tok_test"});
+      });
+
       httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/donor', postData)
         .respond({
           id: "12345",
           stripe_customer_id: "cust_test"
         });
+
+      var errorCallback = jasmine.createSpyObj('errorCallback', ['onError']);
       sut.createDonorWithCard(card, "me@here.com")
         .then(function(donor) {
-          result = donor;
+          expect(donor).toBeDefined();
+          expect(donor.id).toEqual("12345");
+          expect(donor.stripe_customer_id).toEqual("cust_test");
+        }, errorCallback.onError);
+      expect(stripe.card.createToken).toHaveBeenCalledWith(card, jasmine.any(Function));
+      expect(errorCallback.onError).not.toHaveBeenCalled();
+      httpBackend.flush();
+    });
+
+    it('should not create a donor if createToken fails', function() {
+      spyOn(stripe.card, 'createToken').and.callFake(function(donorInfo, callback) {
+        callback(500, { error: { type: 'junk', } });
+      });
+
+      var successCallback = jasmine.createSpyObj('successCallback', ['onSuccess']);
+      sut.createDonorWithCard(card, "me@here.com")
+        .then(successCallback.onSuccess,
+        function(error) {
+          expect(error).toBeDefined();
+          expect(error.type).toEqual("junk");
         });
+      expect(stripe.card.createToken).toHaveBeenCalledWith(card, jasmine.any(Function));
+      expect(successCallback.onSuccess).not.toHaveBeenCalled();
     });
 
-    it('should create a single use token', function() {
-      expect(stripe.card.createToken).toHaveBeenCalledWith(card);
-    });
-
-    it('should create a new donor', function() {
-      expect(result).toBeDefined();
-      expect(result.id).toEqual("12345");
-      expect(result.stripe_customer_id).toEqual("cust_test");
-    });
-  });
-
-  describe('createDonorWithCard Error', function() {
     it('should return error if there is problem calling donor service', function() {
-      var postData = {
-        stripe_token_id: "tok_test"
-      };
+      spyOn(stripe.card, 'createToken').and.callFake(function(donorInfo, callback) {
+        callback(200, {id: "tok_test"});
+      });
+
       httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/donor', postData)
         .respond(400,{
           message: "Token not found"
         } );
-      sut.createDonorWithCard(card)
-        .then(function(donor) {
-          result = donor;
-        },
+
+      var successCallback = jasmine.createSpyObj('successCallback', ['onSuccess']);
+      sut.createDonorWithCard(card, "me@here.com")
+        .then(successCallback.onSuccess,
         function(error) {
           expect(error).toBeDefined();
           expect(error.message).toEqual("Token not found");
         });
+      httpBackend.flush();
+      expect(stripe.card.createToken).toHaveBeenCalledWith(card, jasmine.any(Function));
+      expect(successCallback.onSuccess).not.toHaveBeenCalled();
     });
   });
-  
-  describe('createDonorWithBankAcct', function() {
-    var result;
-    
+
+  describe ('function createDonorWithBankAcct', function() {
+    var postData;
     beforeEach(function() {
-      spyOn(stripe.bankAccount, 'createToken').and.callThrough();
-      
-      var postData = {
-        stripe_token_id: "tok_bank",
+      postData = {
+        stripe_token_id: "tok_test",
         email_address: "me@here.com"
       };
-      httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor', postData)
+    });
+
+    it('should call createToken and create a new donor using the token', function() {
+      spyOn(stripe.bankAccount, 'createToken').and.callFake(function(donorInfo, callback) {
+        callback(200, {id: "tok_test"});
+      });
+
+      httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/donor', postData)
         .respond({
           id: "12345",
           stripe_customer_id: "cust_test"
         });
-      sut.createDonorWithBankAcct(bankAccount, "me@here.com")
-        .then(function(donor){
-          result = donor;
-        });
-    });
 
-    it('should create a single use token', function() {
-      expect(stripe.bankAccount.createToken).toHaveBeenCalledWith(bankAccount);
-    });
-    
-    it('should create a new donor', function() {
-      expect(result).toBeDefined();
-      expect(result.id).toEqual("12345");
-      expect(result.stripe_customer_id).toEqual("cust_test");
-    });
-  });
-  
-  describe('createDonorWithBankAcct Error', function(){
-    it('should return error if there is a problem calling donor service', function(){
-      var postData = {
-        stripe_token_id: "tok_bank",
-        email_address: "me@here.com"
-      };
-      httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT']+'api/donor', postData)
-        .respond(400,
-          {
-            message: "Token not found"
-          }
-        );
+      var errorCallback = jasmine.createSpyObj('errorCallback', ['onError']);
       sut.createDonorWithBankAcct(bankAccount, "me@here.com")
         .then(function(donor) {
-          result = donor;
-        },
+          expect(donor).toBeDefined();
+          expect(donor.id).toEqual("12345");
+          expect(donor.stripe_customer_id).toEqual("cust_test");
+        }, errorCallback.onError);
+      expect(stripe.bankAccount.createToken).toHaveBeenCalledWith(bankAccount, jasmine.any(Function));
+      expect(errorCallback.onError).not.toHaveBeenCalled();
+      httpBackend.flush();
+    });
+
+    it('should not create a donor if createToken fails', function() {
+      spyOn(stripe.bankAccount, 'createToken').and.callFake(function(donorInfo, callback) {
+        callback(500, { error: { type: 'junk', } });
+      });
+
+      var successCallback = jasmine.createSpyObj('successCallback', ['onSuccess']);
+      sut.createDonorWithBankAcct(bankAccount, "me@here.com")
+        .then(successCallback.onSuccess,
+        function(error) {
+          expect(error).toBeDefined();
+          expect(error.type).toEqual("junk");
+        });
+      expect(stripe.bankAccount.createToken).toHaveBeenCalledWith(bankAccount, jasmine.any(Function));
+    });
+
+    it('should return error if there is problem calling donor service', function() {
+      spyOn(stripe.bankAccount, 'createToken').and.callFake(function(donorInfo, callback) {
+        callback(200, {id: "tok_test"});
+      });
+
+      httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/donor', postData)
+        .respond(400,{
+          message: "Token not found"
+        } );
+
+      var successCallback = jasmine.createSpyObj('successCallback', ['onSuccess']);
+      sut.createDonorWithBankAcct(bankAccount, "me@here.com")
+        .then(successCallback.onSuccess,
         function(error) {
           expect(error).toBeDefined();
           expect(error.message).toEqual("Token not found");
         });
+      expect(stripe.bankAccount.createToken).toHaveBeenCalledWith(bankAccount, jasmine.any(Function));
+      expect(successCallback.onSuccess).not.toHaveBeenCalled();
+      httpBackend.flush();
     });
   });
-  
-  describe('donateToProgram', function(){
+
+  describe('function donateToProgram', function(){
     it('should successfully create a donation', function(){
 
     var postData = {
@@ -184,66 +218,166 @@ describe ('PaymentService', function () {
         expect(confirmation.program_id).toEqual("Program");
         expect(confirmation.amount).toEqual("1234");
       });
+
+    httpBackend.flush();
     });
   });
 
-  describe ('updateDonorWithCard', function() {
-     var result;
-
-     var card = {
-        number : "5555555555554444",
-        exp_month : "06",
-        exp_year : "2020",
-        cvc : "987"
-      };
+  describe ('function updateDonorWithCard', function() {
+    var putData;
+    var card;
 
     beforeEach(function() {
-      spyOn(stripe.card, 'createToken').and.callThrough();
-
-      var putData = {
-        stripe_token_id: "tok_test"
+      putData = {
+        stripe_token_id: "tok_test",
       };
+
+      card = {
+         number : "5555555555554444",
+         exp_month : "06",
+         exp_year : "2020",
+         cvc : "987"
+       };
+    });
+
+    it('should call createToken and update the donor using the token', function() {
+      spyOn(stripe.card, 'createToken').and.callFake(function(donorInfo, callback) {
+        callback(200, {id: "tok_test"});
+      });
+
       httpBackend.expectPUT(window.__env__['CRDS_API_ENDPOINT'] +'api/donor', putData)
         .respond({
           id: "12345",
           stripe_customer_id: "cust_test"
         });
-      sut.updateDonorWithCard('12345', card)
+
+      var errorCallback = jasmine.createSpyObj('errorCallback', ['onError']);
+      sut.updateDonorWithCard("12345", card)
         .then(function(donor) {
-          result = donor;
+          expect(donor).toBeDefined();
+          expect(donor.id).toEqual("12345");
+          expect(donor.stripe_customer_id).toEqual("cust_test");
+        }, errorCallback.onError);
+      expect(stripe.card.createToken).toHaveBeenCalledWith(card, jasmine.any(Function));
+      expect(errorCallback.onError).not.toHaveBeenCalled();
+      httpBackend.flush();
+    });
+
+    it('should not update the donor if createToken fails', function() {
+      spyOn(stripe.card, 'createToken').and.callFake(function(donorInfo, callback) {
+        callback(500, { error: { type: 'junk', } });
+      });
+
+      var successCallback = jasmine.createSpyObj('successCallback', ['onSuccess']);
+      sut.updateDonorWithCard("12345", card)
+        .then(successCallback.onSuccess,
+        function(error) {
+          expect(error).toBeDefined();
+          expect(error.type).toEqual("junk");
         });
+      expect(stripe.card.createToken).toHaveBeenCalledWith(card, jasmine.any(Function));
+      expect(successCallback.onSuccess).not.toHaveBeenCalled();
     });
 
-     it('should create a single use token', function() {
-      expect(stripe.card.createToken).toHaveBeenCalledWith(card);
-    });
-
-    it('should update the existing donor', function() {
-      expect(result).toBeDefined();
-      expect(result.id).toEqual("12345");
-      expect(result.stripe_customer_id).toEqual("cust_test");
-    });
-  });
-
-  describe('updateDonorWithCard Error', function() {
     it('should return error if there is problem calling donor service', function() {
-      var putData = {
-        stripe_token_id: "tok_test"
-      };
+      spyOn(stripe.card, 'createToken').and.callFake(function(donorInfo, callback) {
+        callback(200, {id: "tok_test"});
+      });
+
       httpBackend.expectPUT(window.__env__['CRDS_API_ENDPOINT'] +'api/donor', putData)
         .respond(400,{
           message: "Token not found"
         } );
-      sut.updateDonorWithCard('12345',card)
-        .then(function(donor) {
-          result = donor;
-        },
+
+      var successCallback = jasmine.createSpyObj('successCallback', ['onSuccess']);
+      sut.updateDonorWithCard("12345", card)
+        .then(successCallback.onSuccess,
         function(error) {
           expect(error).toBeDefined();
           expect(error.message).toEqual("Token not found");
         });
+      httpBackend.flush();
+      expect(stripe.card.createToken).toHaveBeenCalledWith(card, jasmine.any(Function));
+      expect(successCallback.onSuccess).not.toHaveBeenCalled();
     });
   });
 
+  describe ('function updateDonorWithBankAcct', function() {
+    var putData;
+    var bankAccount;
 
+    beforeEach(function() {
+      putData = {
+        stripe_token_id: "tok_test",
+      };
+
+      bankAccount = {
+        country: 'US',
+        currency: 'USD',
+        routing_number: '110000000',
+        account_number: '000123456789'
+      };
+    });
+
+    it('should call createToken and update the donor using the token', function() {
+      spyOn(stripe.bankAccount, 'createToken').and.callFake(function(donorInfo, callback) {
+        callback(200, {id: "tok_test"});
+      });
+
+      httpBackend.expectPUT(window.__env__['CRDS_API_ENDPOINT'] +'api/donor', putData)
+        .respond({
+          id: "12345",
+          stripe_customer_id: "cust_test"
+        });
+
+      var errorCallback = jasmine.createSpyObj('errorCallback', ['onError']);
+      sut.updateDonorWithBankAcct("12345", bankAccount)
+        .then(function(donor) {
+          expect(donor).toBeDefined();
+          expect(donor.id).toEqual("12345");
+          expect(donor.stripe_customer_id).toEqual("cust_test");
+        }, errorCallback.onError);
+      expect(stripe.bankAccount.createToken).toHaveBeenCalledWith(bankAccount, jasmine.any(Function));
+      expect(errorCallback.onError).not.toHaveBeenCalled();
+      httpBackend.flush();
+    });
+
+    it('should not update the donor if createToken fails', function() {
+      spyOn(stripe.bankAccount, 'createToken').and.callFake(function(donorInfo, callback) {
+        callback(500, { error: { type: 'junk', } });
+      });
+
+      var successCallback = jasmine.createSpyObj('successCallback', ['onSuccess']);
+      sut.updateDonorWithBankAcct("12345", bankAccount)
+        .then(successCallback.onSuccess,
+        function(error) {
+          expect(error).toBeDefined();
+          expect(error.type).toEqual("junk");
+        });
+      expect(stripe.bankAccount.createToken).toHaveBeenCalledWith(bankAccount, jasmine.any(Function));
+      expect(successCallback.onSuccess).not.toHaveBeenCalled();
+    });
+
+    it('should return error if there is problem calling donor service', function() {
+      spyOn(stripe.bankAccount, 'createToken').and.callFake(function(donorInfo, callback) {
+        callback(200, {id: "tok_test"});
+      });
+
+      httpBackend.expectPUT(window.__env__['CRDS_API_ENDPOINT'] +'api/donor', putData)
+        .respond(400,{
+          message: "Token not found"
+        } );
+
+      var successCallback = jasmine.createSpyObj('successCallback', ['onSuccess']);
+      sut.updateDonorWithBankAcct("12345", bankAccount)
+        .then(successCallback.onSuccess,
+        function(error) {
+          expect(error).toBeDefined();
+          expect(error.message).toEqual("Token not found");
+        });
+      httpBackend.flush();
+      expect(stripe.bankAccount.createToken).toHaveBeenCalledWith(bankAccount, jasmine.any(Function));
+      expect(successCallback.onSuccess).not.toHaveBeenCalled();
+    });
+  });
 });

@@ -232,7 +232,7 @@
            }
         };
 
-        vm.processChange = function(){       
+        vm.processChange = function(){
           if (vm.setValidCard == false){
             vm.dto.donor.default_source.last4 = "";
           };
@@ -249,6 +249,7 @@
             vm.dto.declinedCard = false;
             vm.createCard();
              PaymentService.updateDonorWithCard(vm.dto.donor.id, vm.card, vm.dto.email)
+             .then(
               function(donor) {
                 vm.donate(
                   vm.dto.program.ProgramId,

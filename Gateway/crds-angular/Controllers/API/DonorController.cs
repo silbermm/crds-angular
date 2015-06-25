@@ -8,7 +8,6 @@ using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
-using crds_angular.test.controllers;
 using MinistryPlatform.Models;
 
 namespace crds_angular.Controllers.API
@@ -199,12 +198,12 @@ namespace crds_angular.Controllers.API
             {
                 contactDonor = 
                     token == null ? 
-                    gatewayDonorService.GetContactDonorForEmail(dto.EmailAddress) 
+                    _gatewayDonorService.GetContactDonorForEmail(dto.EmailAddress) 
                     : 
-                    gatewayDonorService.GetContactDonorForAuthenticatedUser(token);
+                    _gatewayDonorService.GetContactDonorForAuthenticatedUser(token);
 
                 //Post apistripe/customer/{custID}/sources pass in the dto.stripe_token_id
-                sourceData = stripePaymentService.updateCustomerSource(contactDonor.ProcessorId, dto.StripeTokenId);
+                sourceData = _stripePaymentService.UpdateCustomerSource(contactDonor.ProcessorId, dto.StripeTokenId);
             }
             catch (StripeException stripeException)
             {

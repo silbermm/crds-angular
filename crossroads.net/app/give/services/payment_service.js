@@ -18,7 +18,7 @@
     stripe.setPublishableKey(__STRIPE_PUBKEY__);
 
     function createDonorWithBankAcct(bankAcct, email) {
-      return(_createDonor(bankAcct, email, stripe.bankAcct));
+      return(_createDonor(bankAcct, email, stripe.bankAccount));
     }
 
     function createDonorWithCard(card, email) {
@@ -62,7 +62,7 @@
     }
 
     function updateDonorWithBankAcct(donorId, bankAcct){
-      return(_updateDonor(donorId, bankAcct, stripe.bankAcct));
+      return(_updateDonor(donorId, bankAcct, stripe.bankAccount));
     }
 
     function updateDonorWithCard(donorId, card){
