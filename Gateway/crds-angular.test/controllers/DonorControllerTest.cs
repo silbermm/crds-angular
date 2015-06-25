@@ -15,6 +15,7 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Hosting;
 using System.Web.Http.Results;
 using crds_angular.Exceptions;
+using crds_angular.Models.Json;
 
 namespace crds_angular.test.controllers
 {
@@ -468,15 +469,8 @@ namespace crds_angular.test.controllers
             paymentService.Setup(mocked => mocked.UpdateCustomerSource(contactDonor.ProcessorId, dto.StripeTokenId))
                 .Throws(stripeException);
 
-            try
-            {
-                fixture.UpdateDonor(dto);
-                Assert.Fail("Expected exception was not thrown");
-            }
-            catch (Exception e)
-            {
-                Assert.AreEqual(typeof(HttpResponseException), e.GetType());
-            }
+            var response = fixture.UpdateDonor(dto);
+            Assert.AreEqual(typeof(RestHttpActionResult<StripeErrorResponse>), response.GetType());
 
             donorService.VerifyAll();
             paymentService.VerifyAll();
