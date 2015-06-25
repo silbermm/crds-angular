@@ -390,7 +390,7 @@
           if(toState.name == "give.account" && $rootScope.username && !vm.donorError ) {
             vm.processing = true;
             event.preventDefault();
-            PaymentService.donor().get({email: $scope.give.email.replace('+', '%2B')})
+            PaymentService.donor().get({email: $scope.give.email})
             .$promise
             .then(function(donor){
               vm.donor = donor;
