@@ -19,7 +19,7 @@ namespace crds_angular.Models.Json
         /// <summary>
         /// Get the Content object associated to this Result.
         /// </summary>
-        private T Content
+        public T Content
         {
             get { return _content; }
         }
@@ -27,7 +27,7 @@ namespace crds_angular.Models.Json
         /// <summary>
         /// Get the HTTP StatusCode associated to this Result.
         /// </summary>
-        private HttpStatusCode StatusCode
+        public HttpStatusCode StatusCode
         {
             get { return _statusCode; }
         }
