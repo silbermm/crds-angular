@@ -291,6 +291,7 @@
     <Compile Include="Models\Json\AccountInfoSerializer.cs" />
     <Compile Include="Models\Json\Communication.cs" />
     <Compile Include="Models\Json\NewPassword.cs" />
+    <Compile Include="Models\Json\RestHttpActionResult.cs" />
     <Compile Include="Models\MP\Address.cs" />
     <Compile Include="Models\MP\EmailSMSOptOut.cs" />
     <Compile Include="Models\MP\Household.cs" />

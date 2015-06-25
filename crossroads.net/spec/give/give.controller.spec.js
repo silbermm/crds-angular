@@ -588,9 +588,11 @@ describe('GiveController', function() {
   });
 
   describe('function donate', function() {
-    var callback = {
-      onSuccess: function() { }
-    };
+    var callback;
+
+    beforeEach(function() {
+      callback = jasmine.createSpyObj('stripe callback', ['onSuccess', 'onFailure']);
+    });
 
     it('should call success callback if donation is successful', function() {
       spyOn(mockPaymentService, 'donateToProgram').and.callFake(function(programId, amount, donorId, email, pymtType) {
@@ -599,14 +601,13 @@ describe('GiveController', function() {
         return deferred.promise;
       });
 
-      spyOn(callback, 'onSuccess');
-
-      controller.donate(1, 123, "2", "test@here.com", "cc", callback.onSuccess);
+      controller.donate(1, 123, "2", "test@here.com", "cc", callback.onSuccess, callback.onFailure);
       // This resolves the promise above
       $rootScope.$apply();
 
       expect(mockPaymentService.donateToProgram).toHaveBeenCalledWith(1, 123, "2", "test@here.com", "cc");
       expect(callback.onSuccess).toHaveBeenCalled();
+      expect(callback.onFailure).not.toHaveBeenCalled();
     });
 
     it('should not call success callback if donation fails', function() {
@@ -616,23 +617,15 @@ describe('GiveController', function() {
         return deferred.promise;
       });
 
-      spyOn(callback, 'onSuccess');
-
       controller.amount = undefined;
       controller.program = undefined;
       controller.program_name = undefined;
 
-      controller.donate(1, 123, "2", "test@here.com", callback.onSuccess);
-      try {
-        // This resolves the promise above
-        $rootScope.$apply();
-        fail("Expected exception was not thrown");
-      } catch(err) {
-        expect(err.message).toBeDefined();
-        expect(err.message).toMatch(/Uh oh!/);
-        expect(err.name).toBe("DonationException");
-      }
-
+      controller.donate(1, 123, "2", "test@here.com", "bank", callback.onSuccess, callback.onFailure);
+      // This resolves the promise above
+      $rootScope.$apply();
+      
+      expect(callback.onFailure).toHaveBeenCalledWith('Uh oh!');
       expect(controller.amount).toBeUndefined();
       expect(controller.program).toBeUndefined();
       expect(controller.program_name).toBeUndefined();
