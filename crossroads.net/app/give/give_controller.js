@@ -216,7 +216,9 @@
         vm._stripeErrorHandler = function(error) {
           vm.processing = false;
           if(error && error.globalMessage) {
-            vm.dto.declinedPayment = true;
+            vm.dto.declinedPayment =
+              error.globalMessage == $rootScope.MESSAGES.paymentMethodDeclined;
+              
             $rootScope.$emit('notify', error.globalMessage);
           } else {
             $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
