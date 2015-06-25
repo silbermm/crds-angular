@@ -39,7 +39,7 @@ describe('Giving Flow', function() {
     checkState('give.thank-you');
   });
 
-  it('should follow full  flow, giving as guest', function () {
+  it('should follow full flow, giving as guest', function () {
     checkState('give.amount');
     element(by.model('amount')).sendKeys("1999");
     element(by.binding('amount')).click();
