@@ -37,7 +37,7 @@ namespace crds_angular.Services
             if (IsBadResponse(response))
             {
                 Content content = JsonConvert.DeserializeObject<Content>(response.Content);
-                throw new StripeException("Customer creation failed", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode);
+                throw new StripeException(response.StatusCode, "Customer creation failed", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode);
             }
 
             return response.Data.id;
@@ -53,7 +53,7 @@ namespace crds_angular.Services
             if (IsBadResponse(response))
             {
                 Content content = JsonConvert.DeserializeObject<Content>(response.Content);
-                throw new StripeException("Customer update to add source failed", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode);
+                throw new StripeException(response.StatusCode, "Customer update to add source failed", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode);
             }
             var defaultSourceId = response.Data.default_source;
             var sources = response.Data.sources.data;
@@ -72,7 +72,7 @@ namespace crds_angular.Services
             if (IsBadResponse(response))
             {
                 Content content = JsonConvert.DeserializeObject<Content>(response.Content);
-                throw new StripeException("Customer update failed", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode);
+                throw new StripeException(response.StatusCode, "Customer update failed", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode);
             }
 
             return (response.Data.id);
@@ -86,7 +86,7 @@ namespace crds_angular.Services
             if (IsBadResponse(response))
             {
                 Content content = JsonConvert.DeserializeObject<Content>(response.Content);
-                throw new StripeException("Could not get default source information because customer lookup failed", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode);
+                throw new StripeException(response.StatusCode, "Could not get default source information because customer lookup failed", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode);
             }
             var defaultSourceId = response.Data.default_source;
             var sources = response.Data.sources.data;
@@ -132,7 +132,7 @@ namespace crds_angular.Services
             if (IsBadResponse(response))
             {
                 Content content = JsonConvert.DeserializeObject<Content>(response.Content);
-                throw new StripeException("Invalid charge request", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode);
+                throw new StripeException(response.StatusCode, "Invalid charge request", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode);
             }
 
             return response.Data.id;

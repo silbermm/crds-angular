@@ -464,7 +464,7 @@ namespace crds_angular.test.controllers
 
             donorService.Setup(mocked => mocked.GetContactDonorForEmail("me@here.com")).Returns(contactDonor);
 
-            var stripeException = new StripeException("auxMessage", "type", "message", "code", "decline");
+            var stripeException = new StripeException(HttpStatusCode.PaymentRequired, "auxMessage", "type", "message", "code", "decline");
             paymentService.Setup(mocked => mocked.UpdateCustomerSource(contactDonor.ProcessorId, dto.StripeTokenId))
                 .Throws(stripeException);
 

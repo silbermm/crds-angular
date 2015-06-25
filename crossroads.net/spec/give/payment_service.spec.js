@@ -111,9 +111,7 @@ describe ('PaymentService', function () {
       });
 
       httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/donor', postData)
-        .respond(400,{
-          message: "Token not found"
-        } );
+        .respond(400,{ error: { message: "Token not found" } } );
 
       var successCallback = jasmine.createSpyObj('successCallback', ['onSuccess']);
       sut.createDonorWithCard(card, "me@here.com")
@@ -181,9 +179,7 @@ describe ('PaymentService', function () {
       });
 
       httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] +'api/donor', postData)
-        .respond(400,{
-          message: "Token not found"
-        } );
+        .respond(400,{ error: { message: "Token not found" } } );
 
       var successCallback = jasmine.createSpyObj('successCallback', ['onSuccess']);
       sut.createDonorWithBankAcct(bankAccount, "me@here.com")
@@ -286,9 +282,7 @@ describe ('PaymentService', function () {
       });
 
       httpBackend.expectPUT(window.__env__['CRDS_API_ENDPOINT'] +'api/donor', putData)
-        .respond(400,{
-          message: "Token not found"
-        } );
+        .respond(400,{ error: { message: "Token not found" } } );
 
       var successCallback = jasmine.createSpyObj('successCallback', ['onSuccess']);
       sut.updateDonorWithCard("12345", card, "me@here.com")
@@ -366,9 +360,7 @@ describe ('PaymentService', function () {
       });
 
       httpBackend.expectPUT(window.__env__['CRDS_API_ENDPOINT'] +'api/donor', putData)
-        .respond(400,{
-          message: "Token not found"
-        } );
+        .respond(400,{ error: { message: "Token not found" } } );
 
       var successCallback = jasmine.createSpyObj('successCallback', ['onSuccess']);
       sut.updateDonorWithBankAcct("12345", bankAccount, "me@here.com")

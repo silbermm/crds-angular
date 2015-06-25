@@ -51,9 +51,7 @@ namespace crds_angular.Controllers.API
                 }
                 catch (StripeException stripeException)
                 {
-                    return (stripeException.GetPaymentRequiredResult());
-                    //var apiError = new ApiErrorDto(stripeException.Message, stripeException);
-                    //throw new HttpResponseException(apiError.HttpResponseMessage);
+                    return (stripeException.GetStripeResult());
                 }
                 catch (Exception exception)
                 {
@@ -81,9 +79,7 @@ namespace crds_angular.Controllers.API
             }
             catch (StripeException stripeException)
             {
-                return (stripeException.GetPaymentRequiredResult());
-                //var apiError = new ApiErrorDto(stripeException.Message, stripeException);
-                //throw new HttpResponseException(apiError.HttpResponseMessage);
+                return (stripeException.GetStripeResult());
             }
             catch (Exception exception)
             {

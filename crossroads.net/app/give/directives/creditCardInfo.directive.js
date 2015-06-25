@@ -25,7 +25,7 @@ require('../creditCardInfo.html');
               defaultSource: "=",
               changeAccountInfo: "=",
               setValidCard: "=",
-              declinedCard: "=",
+              declinedPayment: "=",
               setValidCvc: "=",
               ccNumberClass: "="
             },
@@ -172,6 +172,7 @@ require('../creditCardInfo.html');
           scope.defaultCardPlaceholderValues = {
             expDate: "MM/YY",
           };
+          scope.declinedPayment = false;
         }
 
         if(!scope.defaultSource.credit_card) {

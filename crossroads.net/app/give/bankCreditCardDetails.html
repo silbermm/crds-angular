@@ -12,9 +12,9 @@
 
     <section ng-if="give.dto.view=='bank'">
     	<bank-info account="give.dto.donor.default_source.last4"
-                 bankinfo-submitted="give.bankinfoSubmitted" 
-                 change-account-info="give.dto.changeAccountInfo" 
-                 default-source="give.dto.donor.default_source" 
+                 bankinfo-submitted="give.bankinfoSubmitted"
+                 change-account-info="give.dto.changeAccountInfo"
+                 default-source="give.dto.donor.default_source"
                  routing="give.dto.donor.default_source.routing"
                  show-check-class="give.showCheckClass"
                  show-message="give.showMessage"
@@ -31,7 +31,7 @@
                         name-on-card="give.dto.donor.default_source.name"
                         donor="give.donor"
                         default-source="give.dto.donor.default_source"
-                        declined-card="give.dto.declinedCard"
+                        declined-payment="give.dto.declinedPayment"
                         change-account-info="give.dto.changeAccountInfo"
                         email="give.email"
                         set-valid-card="give.setValidCard"

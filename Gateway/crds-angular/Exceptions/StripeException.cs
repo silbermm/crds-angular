@@ -1,11 +1,6 @@
 using System;
 using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Web.Http;
-using crds_angular.Services;
-using System.Collections.Generic;
+using crds_angular.Models.Json;
 using Newtonsoft.Json;
 
 namespace crds_angular.Exceptions
@@ -17,7 +12,7 @@ namespace crds_angular.Exceptions
         public string type { get; set; }
         public string DeclineCode { get; set; }
 
-        public StripeException(string auxMessage, string type, string message, string code, string declineCode) :
+        public StripeException(HttpStatusCode statusCode, string auxMessage, string type, string message, string code, string declineCode) :
             base(auxMessage)
         {
             this.type = type;
@@ -26,34 +21,26 @@ namespace crds_angular.Exceptions
             this.DeclineCode = declineCode;
         }
 
-        public PaymentRequiredResult GetPaymentRequiredResult()
+        public RestHttpActionResult<StripeErrorResponse> GetStripeResult()
         {
-            return (new PaymentRequiredResult(this));
+            var stripeError = new StripeErrorResponse
+            {
+                Error = new StripeError
+                {
+                    DeclineCode = DeclineCode,
+                    Code = code,
+                    Message = detailMessage,
+                    Type = type
+                }
+            };
+            return (RestHttpActionResult<StripeErrorResponse>.WithStatus(stripeError, HttpStatusCode.PaymentRequired));
         }
     }
 
-    public class PaymentRequiredResult : IHttpActionResult
+    public class StripeErrorResponse
     {
-        private readonly StripeException _stripeException;
-
-        public PaymentRequiredResult(StripeException stripeException)
-        {
-            _stripeException = stripeException;
-        }
-
-        public Task<HttpResponseMessage> ExecuteAsync(CancellationToken cancellationToken)
-        {
-            var response = new HttpResponseMessage(HttpStatusCode.PaymentRequired);
-            var stripeError = new StripeError
-            {
-                DeclineCode = _stripeException.DeclineCode,
-                Code = _stripeException.code,
-                Message = _stripeException.detailMessage,
-                Type = _stripeException.type
-            };
-            response.Content = new StringContent(JsonConvert.SerializeObject(new { error = stripeError }));
-            return (Task.FromResult(response));
-        }
+        [JsonProperty(PropertyName = "error")]
+        public StripeError Error { get; set; }
     }
 
     public class StripeError
