@@ -24,7 +24,6 @@ namespace crds_angular.Controllers.API
             _stripeService = stripeService;
             _authenticationService = authenticationService;
             _gatewayDonorService = gatewayDonorService;
-
         }
 
         [ResponseType(typeof(DonationDTO))]
@@ -52,8 +51,9 @@ namespace crds_angular.Controllers.API
                 }
                 catch (StripeException stripeException)
                 {
-                    var apiError = new ApiErrorDto(stripeException.Message, stripeException);
-                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                    return (stripeException.GetPaymentRequiredResult());
+                    //var apiError = new ApiErrorDto(stripeException.Message, stripeException);
+                    //throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
                 catch (Exception exception)
                 {
@@ -81,8 +81,9 @@ namespace crds_angular.Controllers.API
             }
             catch (StripeException stripeException)
             {
-                var apiError = new ApiErrorDto(stripeException.Message, stripeException);
-                throw new HttpResponseException(apiError.HttpResponseMessage);
+                return (stripeException.GetPaymentRequiredResult());
+                //var apiError = new ApiErrorDto(stripeException.Message, stripeException);
+                //throw new HttpResponseException(apiError.HttpResponseMessage);
             }
             catch (Exception exception)
             {

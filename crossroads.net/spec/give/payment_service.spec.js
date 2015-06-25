@@ -230,6 +230,7 @@ describe ('PaymentService', function () {
     beforeEach(function() {
       putData = {
         stripe_token_id: "tok_test",
+        email_address: "me@here.com"
       };
 
       card = {
@@ -252,7 +253,7 @@ describe ('PaymentService', function () {
         });
 
       var errorCallback = jasmine.createSpyObj('errorCallback', ['onError']);
-      sut.updateDonorWithCard("12345", card)
+      sut.updateDonorWithCard("12345", card, "me@here.com")
         .then(function(donor) {
           expect(donor).toBeDefined();
           expect(donor.id).toEqual("12345");
@@ -269,7 +270,7 @@ describe ('PaymentService', function () {
       });
 
       var successCallback = jasmine.createSpyObj('successCallback', ['onSuccess']);
-      sut.updateDonorWithCard("12345", card)
+      sut.updateDonorWithCard("12345", card, "me@here.com")
         .then(successCallback.onSuccess,
         function(error) {
           expect(error).toBeDefined();
@@ -290,7 +291,7 @@ describe ('PaymentService', function () {
         } );
 
       var successCallback = jasmine.createSpyObj('successCallback', ['onSuccess']);
-      sut.updateDonorWithCard("12345", card)
+      sut.updateDonorWithCard("12345", card, "me@here.com")
         .then(successCallback.onSuccess,
         function(error) {
           expect(error).toBeDefined();
@@ -309,6 +310,7 @@ describe ('PaymentService', function () {
     beforeEach(function() {
       putData = {
         stripe_token_id: "tok_test",
+        email_address: "me@here.com"
       };
 
       bankAccount = {
@@ -331,7 +333,7 @@ describe ('PaymentService', function () {
         });
 
       var errorCallback = jasmine.createSpyObj('errorCallback', ['onError']);
-      sut.updateDonorWithBankAcct("12345", bankAccount)
+      sut.updateDonorWithBankAcct("12345", bankAccount, "me@here.com")
         .then(function(donor) {
           expect(donor).toBeDefined();
           expect(donor.id).toEqual("12345");
@@ -348,7 +350,7 @@ describe ('PaymentService', function () {
       });
 
       var successCallback = jasmine.createSpyObj('successCallback', ['onSuccess']);
-      sut.updateDonorWithBankAcct("12345", bankAccount)
+      sut.updateDonorWithBankAcct("12345", bankAccount, "me@here.com")
         .then(successCallback.onSuccess,
         function(error) {
           expect(error).toBeDefined();
@@ -369,7 +371,7 @@ describe ('PaymentService', function () {
         } );
 
       var successCallback = jasmine.createSpyObj('successCallback', ['onSuccess']);
-      sut.updateDonorWithBankAcct("12345", bankAccount)
+      sut.updateDonorWithBankAcct("12345", bankAccount, "me@here.com")
         .then(successCallback.onSuccess,
         function(error) {
           expect(error).toBeDefined();

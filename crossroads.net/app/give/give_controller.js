@@ -318,7 +318,7 @@
               $state.go("give.thank-you");
             });
           },
-          function() {
+          function(response) {
             vm.processing = false;
             $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
            });
@@ -330,7 +330,7 @@
              $state.go("give.thank-you");
             });
           },
-          function() {
+          function(response) {
             vm.processing = false;
             $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
            });
@@ -349,9 +349,13 @@
               $state.go("give.thank-you");
             });
           },
-          function() {
+          function(error) {
             vm.processing = false;
-            $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
+            $rootScope.$emit('notify',
+              error.globalMessage ?
+              error.globalMessage
+              :
+              $rootScope.MESSAGES.failedResponse);
            });
          } else if (view == "bank") {
             vm.createBank();
@@ -361,9 +365,13 @@
              $state.go("give.thank-you");
             });
           },
-          function() {
+          function(error) {
             vm.processing = false;
-            $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
+            $rootScope.$emit('notify',
+              error.globalMessage ?
+              error.globalMessage
+              :
+              $rootScope.MESSAGES.failedResponse);
            });
          };
         }

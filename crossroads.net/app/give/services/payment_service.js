@@ -44,9 +44,9 @@
       }).success(function(data){
         payment_service.donation = data;
         def.resolve(data);
-      }).error(function(error) {
-        _addGlobalErrorMessage(error);
-        def.reject(error);
+      }).error(function(response) {
+        _addGlobalErrorMessage(response.error);
+        def.reject(response.error);
       });
 
       return def.promise;
@@ -61,23 +61,23 @@
       });
     }
 
-    function updateDonorWithBankAcct(donorId, bankAcct){
-      return(_updateDonor(donorId, bankAcct, stripe.bankAccount));
+    function updateDonorWithBankAcct(donorId, bankAcct, email){
+      return(_updateDonor(donorId, bankAcct, email, stripe.bankAccount));
     }
 
-    function updateDonorWithCard(donorId, card){
-      return(_updateDonor(donorId, card, stripe.card));
+    function updateDonorWithCard(donorId, card, email){
+      return(_updateDonor(donorId, card, email, stripe.card));
     }
 
     function _createDonor(donorInfo, email, stripeFunc) {
       var def = $q.defer();
       stripeFunc.createToken(donorInfo, function(status, response) {
         if(response.error) {
-          $log.error("Create donor error.  Status: " + JSON.stringify(status) + "; Response: " + JSON.stringify(response));
+          $log.error("Create donor createToken error.  Status: " + JSON.stringify(status) + "; Response: " + JSON.stringify(response));
           _addGlobalErrorMessage(response.error);
           def.reject(response.error);
         } else {
-          $log.debug("Update donor success.  Status: " + JSON.stringify(status) + "; Response: " + JSON.stringify(response));
+          $log.debug("Update donor createToken success.  Status: " + JSON.stringify(status) + "; Response: " + JSON.stringify(response));
           var donor_request = { stripe_token_id: response.id, email_address: email }
           $http({
             method: "POST",
@@ -87,10 +87,13 @@
             },
             data: donor_request
           }).success(function(data) {
+            $log.error("Create donor success.  Status: " + JSON.stringify(status) + "; Response: " + JSON.stringify(response));
             payment_service.donor = data;
             def.resolve(data);
-          }).error(function(error) {
-            def.reject(error);
+          }).error(function(response) {
+            $log.error("Create donor error.  Status: " + JSON.stringify(status) + "; Response: " + JSON.stringify(response));
+            _addGlobalErrorMessage(response.error);
+            def.reject(response.error);
           });
         }
       });
@@ -116,16 +119,16 @@
       error.globalMessage = errorCode;
     }
 
-    function _updateDonor(donorId, donorInfo, stripeFunc) {
+    function _updateDonor(donorId, donorInfo, email, stripeFunc) {
       var def = $q.defer();
       stripeFunc.createToken(donorInfo, function(status, response) {
         if(response.error) {
-          $log.error("Update donor error.  Status: " + JSON.stringify(status) + "; Response: " + JSON.stringify(response));
+          $log.error("Update donor createToken error.  Status: " + JSON.stringify(status) + "; Response: " + JSON.stringify(response));
           _addGlobalErrorMessage(response.error);
           def.reject(response.error);
         } else {
-          $log.debug("Update donor success.  Status: " + JSON.stringify(status) + "; Response: " + JSON.stringify(response));
-          var donor_request = { "stripe_token_id": response.id }
+          $log.debug("Update donor createToken success.  Status: " + JSON.stringify(status) + "; Response: " + JSON.stringify(response));
+          var donor_request = { "stripe_token_id": response.id, "email_address": email }
           $http({
             method: "PUT",
             url: __API_ENDPOINT__ + 'api/donor',
@@ -134,10 +137,13 @@
             },
             data: donor_request
           }).success(function(data) {
+            $log.error("Update donor success.  Status: " + JSON.stringify(status) + "; Response: " + JSON.stringify(response));
             payment_service.donor = data;
             def.resolve(data);
-          }).error(function(error) {
-            def.reject(error);
+          }).error(function(response) {
+            $log.error("Update donor error.  Status: " + JSON.stringify(status) + "; Response: " + JSON.stringify(response));
+            _addGlobalErrorMessage(response.error);
+            def.reject(response.error);
           });
         };
       });
