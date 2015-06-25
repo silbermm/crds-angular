@@ -465,12 +465,19 @@ namespace crds_angular.test.controllers
 
             donorService.Setup(mocked => mocked.GetContactDonorForEmail("me@here.com")).Returns(contactDonor);
 
-            var stripeException = new StripeException(HttpStatusCode.PaymentRequired, "auxMessage", "type", "message", "code", "decline");
+            var stripeException = new StripeException(HttpStatusCode.PaymentRequired, "auxMessage", "type", "message", "code", "decline", "param");
             paymentService.Setup(mocked => mocked.UpdateCustomerSource(contactDonor.ProcessorId, dto.StripeTokenId))
                 .Throws(stripeException);
 
             var response = fixture.UpdateDonor(dto);
             Assert.AreEqual(typeof(RestHttpActionResult<StripeErrorResponse>), response.GetType());
+            var stripeErrorResponse = (RestHttpActionResult<StripeErrorResponse>) response;
+            var content = stripeErrorResponse.Content;
+            Assert.AreEqual("type", content.Error.Type);
+            Assert.AreEqual("message", content.Error.Message);
+            Assert.AreEqual("code", content.Error.Code);
+            Assert.AreEqual("decline", content.Error.DeclineCode);
+            Assert.AreEqual("param", content.Error.Param);
 
             donorService.VerifyAll();
             paymentService.VerifyAll();

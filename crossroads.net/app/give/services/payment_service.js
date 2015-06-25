@@ -82,6 +82,10 @@
         } else if(error.code == 'processing_error') {
           error.globalMessage = MESSAGES.paymentMethodProcessingError;
         }
+      } else if(error.param == 'bank_account') {
+        if(error.type == 'invalid_request_error') {
+          error.globalMessage = MESSAGES.paymentMethodDeclined;
+        }
       }
     }
 
