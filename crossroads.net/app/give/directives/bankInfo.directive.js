@@ -15,6 +15,7 @@ require('../bankInfo.html');
               defaultSource: "=",
               routing: "=" ,
               showMessage: "=" ,
+              showMessageOnChange: "=",
               showCheckClass: "="             
             },
           templateUrl: 'give/bankInfo.html',
@@ -32,7 +33,8 @@ require('../bankInfo.html');
             return(false);
           }
           return (scope.bankinfoSubmitted && scope.bankAccountForm.account.$error.invalidAccount && scope.bankAccountForm.$invalid  ||
-            scope.bankAccountForm.account.$error.invalidAccount && scope.bankAccountForm.account.$dirty);
+            scope.bankAccountForm.account.$error.invalidAccount && scope.bankAccountForm.account.$dirty
+            || scope.showMessageOnChange && scope.bankAccountForm.account.$error.invalidAccount);
         };
 
         scope.blurAccountError = function() {
@@ -58,7 +60,8 @@ require('../bankInfo.html');
             return(false);
           }
           return (scope.bankinfoSubmitted && scope.bankAccountForm.routing.$error.invalidRouting && scope.bankAccountForm.$invalid  ||
-                scope.bankAccountForm.routing.$error.invalidRouting && scope.bankAccountForm.routing.$dirty);
+                scope.bankAccountForm.routing.$error.invalidRouting && scope.bankAccountForm.routing.$dirty
+                || scope.showMessageOnChange && scope.bankAccountForm.routing.$error.invalidRouting);
         };
 
         scope.toggleCheck = function() {

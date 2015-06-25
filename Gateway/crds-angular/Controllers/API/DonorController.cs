@@ -2,7 +2,6 @@
 using crds_angular.Models.Crossroads;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
-using crds_angular.test.controllers;
 using log4net;
 using MinistryPlatform.Models;
 using System;
@@ -74,8 +73,9 @@ namespace crds_angular.Controllers.API
 
             var responseBody = new DonorDTO
             {
-                id = donor.DonorId,
-                Processor_ID = donor.ProcessorId,
+                Id = donor.DonorId,
+                ProcessorId = donor.ProcessorId,
+                RegisteredUser = false
             };
 
             // HTTP StatusCode should be 201 (Created) if we created a donor, or 200 (Ok) if returning an existing donor
@@ -95,8 +95,9 @@ namespace crds_angular.Controllers.API
 
                 var response = new DonorDTO
                 {
-                    id = donor.DonorId,
-                    Processor_ID = donor.ProcessorId
+                    Id = donor.DonorId,
+                    ProcessorId = donor.ProcessorId,
+                    RegisteredUser = true
                 };
 
                 return Ok(response);
@@ -124,9 +125,9 @@ namespace crds_angular.Controllers.API
                     
                     var response = new DonorDTO()   
                     {
-                        id = donor.DonorId,
-                        Processor_ID = donor.ProcessorId,
-                        default_source = new DefaultSourceDTO
+                        Id = donor.DonorId,
+                        ProcessorId = donor.ProcessorId,
+                        DefaultSource = new DefaultSourceDTO
                         {
                             credit_card = new CreditCardDTO
                             {
@@ -141,7 +142,8 @@ namespace crds_angular.Controllers.API
                               last4 = default_source.bank_last4,
                               routing = default_source.routing_number
                             }
-                         }
+                         },
+                         RegisteredUser = donor.RegisteredUser
                     };
 
                     return Ok(response);
@@ -167,8 +169,9 @@ namespace crds_angular.Controllers.API
                 {
                     var response = new DonorDTO
                     {
-                        id = donor.DonorId,
-                        Processor_ID = donor.ProcessorId
+                        Id = donor.DonorId,
+                        ProcessorId = donor.ProcessorId,
+                        RegisteredUser = donor.RegisteredUser
                     };
 
                     return Ok(response); 
@@ -183,58 +186,63 @@ namespace crds_angular.Controllers.API
 
         [ResponseType(typeof (DonorDTO))]
         [Route("api/donor")]
-        public IHttpActionResult Put([FromBody] UpdateDonorDTO dto)
+        [HttpPut]
+        public IHttpActionResult UpdateDonor([FromBody] UpdateDonorDTO dto)
         {
-            return Authorized(token =>
+            return (Authorized(token => UpdateDonor(token, dto), () => UpdateDonor(null, dto)));
+        }
+
+        private IHttpActionResult UpdateDonor(string token, UpdateDonorDTO dto)
+        {
+            ContactDonor contactDonor;
+            SourceData sourceData;
+
+            try
             {
-                ContactDonor contactDonor;
-                SourceData sourceData;
-     
-                try
-                {
-                    contactDonor = gatewayDonorService.GetContactDonorForAuthenticatedUser(token);
+                contactDonor = 
+                    token == null ? 
+                    gatewayDonorService.GetContactDonorForEmail(dto.EmailAddress) 
+                    : 
+                    gatewayDonorService.GetContactDonorForAuthenticatedUser(token);
 
-                    //Post apistripe/customer/{custID}/sources pass in the dto.stripe_token_id
-                    sourceData = stripePaymentService.updateCustomerSource(contactDonor.ProcessorId, dto.stripe_token_id);
-
-                }
-                catch (StripeException stripeException)
+                //Post apistripe/customer/{custID}/sources pass in the dto.stripe_token_id
+                sourceData = stripePaymentService.updateCustomerSource(contactDonor.ProcessorId, dto.StripeTokenId);
+            }
+            catch (StripeException stripeException)
+            {
+                var apiError = new ApiErrorDto("Error calling payment processor:" + stripeException.Message, stripeException);
+                throw new HttpResponseException(apiError.HttpResponseMessage);
+            }
+            catch (ApplicationException applicationException)
+            {
+                var apiError = new ApiErrorDto("Error calling Ministry Platform" + applicationException.Message, applicationException);
+                throw new HttpResponseException(apiError.HttpResponseMessage);
+            }
+            //return donor
+            var donor = new DonorDTO
+            {
+                Id = contactDonor.DonorId,
+                ProcessorId = contactDonor.ProcessorId,
+                DefaultSource = new DefaultSourceDTO
                 {
-                    var apiError = new ApiErrorDto("Error calling payment processor:"+ stripeException.Message, stripeException);
-                    throw new HttpResponseException(apiError.HttpResponseMessage);
-                }
-                catch (ApplicationException applicationException)
-                {
-                    var apiError = new ApiErrorDto("Error calling Ministry Platform" + applicationException.Message, applicationException);
-                    throw new HttpResponseException(apiError.HttpResponseMessage);
-                }
-                //return donor
-                var donor = new DonorDTO
-                {
-                    id = contactDonor.DonorId,
-                    Processor_ID = contactDonor.ProcessorId,
-                    default_source = new DefaultSourceDTO
+                    credit_card = new CreditCardDTO
                     {
-                        credit_card = new CreditCardDTO
-                        {
-                            brand = sourceData.brand,
-                            last4 = sourceData.last4,
-                            name = sourceData.name,
-                            address_zip = sourceData.address_zip,
-                            exp_date = sourceData.exp_month + sourceData.exp_year
-                        },
-                        bank_account = new BankAccountDTO
-                        {
-                            last4 = sourceData.bank_last4,
-                            routing = sourceData.routing_number
-                        }
+                        brand = sourceData.brand,
+                        last4 = sourceData.last4,
+                        name = sourceData.name,
+                        address_zip = sourceData.address_zip,
+                        exp_date = sourceData.exp_month + sourceData.exp_year
+                    },
+                    bank_account = new BankAccountDTO
+                    {
+                        last4 = sourceData.bank_last4,
+                        routing = sourceData.routing_number
                     }
-                };
+                },
+                RegisteredUser = contactDonor.RegisteredUser
+            };
 
-                return Ok(donor);
-            });
-            
-
+            return Ok(donor);
         }
     }
 }

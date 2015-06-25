@@ -10,17 +10,16 @@
                <a href="" class="pull-right weight-normal" ng-click="isCollapsed=!isCollapsed; toggleCheck()">{{showMessage}}</a>
             </label>
             <input type="text" name="routing" class="form-control" ng-model="bankAccount.routing" maxlength="9" 
-            ng-keypress="resetDefaultBankPlaceholderValues()" ng-required="!useExistingAccountInfo()"  ng-model-options="{ updateOn: 'blur',  debounce: { 'blur': 500 }  }"  placeholder="{{defaultBankPlaceholderValues.routing}}" invalid-routing>
-            <ng-messages for="bankAccountForm.routing.$error" ng-show="blurRoutingError()"  ng-messages-include="on-blur-messages"></ng-messages>
+            ng-keypress="resetDefaultBankPlaceholderValues()" ng-required="!useExistingAccountInfo()"  ng-model-options="{ updateOn: 'blur',  debounce: { 'blur': 500 }}"  placeholder="{{defaultBankPlaceholderValues.routing}}" invalid-routing>
+            <ng-messages for="bankAccountForm.routing.$error" ng-show="blurRoutingError()"  ng-messages-include="on-blur-messages"></ng-messages>         
             <ng-messages for="bankAccountForm.routing.$error" ng-if="bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
-        </div>      
+        </div>
         <div class="form-group" ng-class="{'has-error': accountError() }">
             <label for="account">Account Number</label>
             <input type="text" name="account" class="form-control" ng-model="bankAccount.account" maxlength="30" ng-keypress="resetDefaultBankPlaceholderValues()" ng-required="!useExistingAccountInfo()"  ng-model-options="{ updateOn: 'default blur', debounce: {'blur': 500} }" placeholder="{{defaultBankPlaceholderValues.maskedAccount}}" invalid-account>
             <ng-messages for="bankAccountForm.account.$error" ng-show="blurAccountError()" ng-messages-include="on-blur-messages"></ng-messages>
             <ng-messages for="bankAccountForm.account.$error" ng-if="bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
-
-        </div>       
+        </div>
 
  </section>
-</ng-form>    
+</ng-form>

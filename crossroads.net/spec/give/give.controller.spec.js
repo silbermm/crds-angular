@@ -32,6 +32,7 @@ describe('GiveController', function() {
 
 
       mockGetResponse = {
+        id: "102030",
         Processor_ID: "123456",
         default_source :  {
           credit_card : {
@@ -322,9 +323,9 @@ describe('GiveController', function() {
       email: 'tim@kriz.net',
       donor: {
         id: 654,
-        default_source: {          
+        default_source: {
           last4: '753869',
-          routing: '110000000',         
+          routing: '110000000',
         }
       },
       reset: function() {},
@@ -357,7 +358,8 @@ describe('GiveController', function() {
           exp_year: controllerDto.donor.default_source.exp_date.substr(2,2),
           cvc: controllerDto.donor.default_source.cvc,
           address_zip: controllerDto.donor.default_source.address_zip
-        }
+        },
+        'tim@kriz.net'
       );
     });
 
@@ -385,10 +387,77 @@ describe('GiveController', function() {
           currency: 'USD',
           account_number: controllerBankDto.donor.default_source.last4,
           routing_number: controllerBankDto.donor.default_source.routing ,
-        }
+        },
+        'tim@kriz.net'
       );
     });
 
+  });
+
+  describe('function submitBankInfo', function() {
+    var controllerGiveForm = {
+      accountForm: {
+        $valid: true,
+      },
+    };
+
+    var controllerDto = {
+      amount: 987,
+      view: 'cc',
+      program: {
+        ProgramId: 1,
+      },
+      email: 'tim@kriz.net',
+      donor: {
+        id: 654,
+        default_source: {
+          name: 'Tim Startsgiving',
+          last4: '98765',
+          exp_date: '1213',
+          address_zip: '90210',
+          cvc: '987',
+        }
+      },
+      reset: function() {},
+    };
+
+    beforeEach(function() {
+      $scope.giveForm = controllerGiveForm;
+      controller.dto = controllerDto;
+      controller.program = controllerDto.program;
+      controller.amount = controllerDto.amount;
+      controller.email = controllerDto.email;
+    });
+
+    it('should call updateDonorAndDonate when there is an existing donor', function() {
+      spyOn(mockPaymentService, 'donor').and.callThrough();
+      mockPaymentServiceGetPromise.setSuccess(true);
+      $scope.give = {
+        email: "test@test.com"
+      };
+      spyOn(controller, 'createDonorAndDonate');
+      spyOn(controller, 'updateDonorAndDonate');
+      controller.submitBankInfo();
+
+      expect(mockPaymentService.donor).toHaveBeenCalled();
+      expect(controller.updateDonorAndDonate).toHaveBeenCalledWith(mockGetResponse.id, controllerDto.program.ProgramId, controllerDto.amount, controllerDto.email, controllerDto.view);
+      expect(controller.createDonorAndDonate).not.toHaveBeenCalled();
+    });
+
+    it('should call createDonorAndDonate when there is not an existing donor', function() {
+      spyOn(mockPaymentService, 'donor').and.callThrough();
+      mockPaymentServiceGetPromise.setSuccess(false);
+      $scope.give = {
+        email: "test@test.com"
+      };
+      spyOn(controller, 'createDonorAndDonate');
+      spyOn(controller, 'updateDonorAndDonate');
+      controller.submitBankInfo();
+
+      expect(mockPaymentService.donor).toHaveBeenCalled();
+      expect(controller.createDonorAndDonate).toHaveBeenCalledWith(controllerDto.program.ProgramId, controllerDto.amount, controllerDto.email, controllerDto.view);
+      expect(controller.updateDonorAndDonate).not.toHaveBeenCalled();
+    });
   });
 
   describe('function transitionForLoggedInUserBasedOnExistingDonor', function(){
@@ -490,7 +559,7 @@ describe('GiveController', function() {
 
   describe('function goToChange', function() {
     it('should populate dto with appropriate values when going to the credit card change page', function() {
-      controller.dto = { 
+      controller.dto = {
         reset: function() {},
       };
       controller.brand = "#visa";
@@ -504,7 +573,7 @@ describe('GiveController', function() {
     });
 
     it('should populate dto with appropriate values when going to the bank account change page', function() {
-      controller.dto = { 
+      controller.dto = {
         reset: function() {},
       };
       controller.brand = "#library";
