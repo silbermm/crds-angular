@@ -3,10 +3,10 @@
 
   module.exports = AppConfig;
 
-  AppConfig.$inject = [ '$stateProvider', 
-                        '$urlRouterProvider', 
-                        '$httpProvider', 
-                        '$urlMatcherFactoryProvider', 
+  AppConfig.$inject = [ '$stateProvider',
+                        '$urlRouterProvider',
+                        '$httpProvider',
+                        '$urlMatcherFactoryProvider',
                         '$locationProvider' ];
 
   function AppConfig($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory, $locationProvider) {
@@ -120,6 +120,11 @@
         url: "/media/series/single/lores",
         controller: "MediaCtrl as media",
         templateUrl: "media/series-single-lo-res.html"
+      })
+      .state("media-single", {
+        url: "/media/single",
+        controller: "MediaCtrl as media",
+        templateUrl: "media/media-single.html"
       })
       .state("blog", {
         url: "/blog",
@@ -363,7 +368,7 @@
           Profile: 'Profile',
           MPTools: 'MPTools',
           Contact: function(Profile, MPTools) {
-            var params = MPTools.getParams(); 
+            var params = MPTools.getParams();
             return Profile.Person.get({
               contactId: params.recordId
             }).$promise;
