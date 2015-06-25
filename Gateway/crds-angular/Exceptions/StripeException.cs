@@ -7,18 +7,20 @@ namespace crds_angular.Exceptions
 {
     public class StripeException : Exception
     {
-        public string code { get; set; }
-        public string detailMessage { get; set; }
-        public string type { get; set; }
+        public HttpStatusCode StatusCode { get; set; }
+        public string Code { get; set; }
+        public string DetailMessage { get; set; }
+        public string Type { get; set; }
         public string DeclineCode { get; set; }
 
         public StripeException(HttpStatusCode statusCode, string auxMessage, string type, string message, string code, string declineCode) :
             base(auxMessage)
         {
-            this.type = type;
-            this.detailMessage = message;
-            this.code = code;
-            this.DeclineCode = declineCode;
+            Type = type;
+            DetailMessage = message;
+            Code = code;
+            DeclineCode = declineCode;
+            StatusCode = statusCode;
         }
 
         public RestHttpActionResult<StripeErrorResponse> GetStripeResult()
@@ -28,12 +30,12 @@ namespace crds_angular.Exceptions
                 Error = new StripeError
                 {
                     DeclineCode = DeclineCode,
-                    Code = code,
-                    Message = detailMessage,
-                    Type = type
+                    Code = Code,
+                    Message = DetailMessage,
+                    Type = Type
                 }
             };
-            return (RestHttpActionResult<StripeErrorResponse>.WithStatus(stripeError, HttpStatusCode.PaymentRequired));
+            return (RestHttpActionResult<StripeErrorResponse>.WithStatus(StatusCode, stripeError));
         }
     }
 

@@ -111,8 +111,8 @@ namespace crds_angular.test.Services
             catch (StripeException e)
             {
                 Assert.AreEqual("Customer update failed", e.Message);
-                Assert.IsNotNull(e.detailMessage);
-                Assert.AreEqual("Invalid Request", e.detailMessage);
+                Assert.IsNotNull(e.DetailMessage);
+                Assert.AreEqual("Invalid Request", e.DetailMessage);
             }
         }
 
@@ -181,8 +181,8 @@ namespace crds_angular.test.Services
             catch (StripeException e)
             {
                 Assert.AreEqual("Invalid charge request", e.Message);
-                Assert.IsNotNull(e.detailMessage);
-                Assert.AreEqual("Invalid Integer Amount", e.detailMessage);
+                Assert.IsNotNull(e.DetailMessage);
+                Assert.AreEqual("Invalid Integer Amount", e.DetailMessage);
             }
 
         }
