@@ -240,6 +240,7 @@
             vm.dto.donor.default_source.cvc = "";
           };
           vm.processingChange = true;
+          vm.amountSubmitted = false;
           $state.go("give.amount");
         };
 
