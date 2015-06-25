@@ -89,11 +89,9 @@
       var def = $q.defer();
       stripeFunc.createToken(donorInfo, function(status, response) {
         if(response.error) {
-          $log.error(apiMethod + " donor createToken error.  Status: " + JSON.stringify(status) + "; Response: " + JSON.stringify(response));
           _addGlobalErrorMessage(response.error);
           def.reject(response.error);
         } else {
-          $log.debug(apiMethod + " donor createToken success.  Status: " + JSON.stringify(status) + "; Response: " + JSON.stringify(response));
           var donor_request = { stripe_token_id: response.id, email_address: email }
           $http({
             method: apiMethod,
@@ -103,11 +101,9 @@
             },
             data: donor_request
           }).success(function(data) {
-            $log.error(apiMethod + " donor success.  Status: " + JSON.stringify(status) + "; Response: " + JSON.stringify(response));
             payment_service.donor = data;
             def.resolve(data);
           }).error(function(response) {
-            $log.error(apiMethod + " donor error.  Status: " + JSON.stringify(status) + "; Response: " + JSON.stringify(response));
             _addGlobalErrorMessage(response.error);
             def.reject(response.error);
           });
