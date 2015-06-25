@@ -97,7 +97,7 @@ describe('Giving Flow', function() {
     element(by.cssContainingText('.ng-binding', '$867,539.00'));
   });
 
-  it('should follow full credit card flow, logging in as user with existing giver and changing account information', function () {  //F
+  it('should follow full credit card flow, logging in as user with existing giver and changing account information', function () {  
     checkState('give.amount');
     element(by.model('amount')).sendKeys("12345");
     element(by.binding('amount')).click();
@@ -182,7 +182,7 @@ describe('Giving Flow', function() {
    });
   });
 
-  it('Giving as guest via credit card, using the change link- retain valid info and discard invalid info', function () {  //F
+  it('Giving as guest via credit card, using the change link- retain valid info and discard invalid info', function () {  
     checkState('give.amount');
     element(by.model('amount')).sendKeys("1999");
     element(by.binding('amount')).click();
