@@ -61,6 +61,7 @@ describe('Giving Flow', function() {
     expect(giveButton.getText()).toBe("GIVE $1,999.00");
 
     giveButton.click().then(function() {
+      browser.waitForAngular();
       checkState('give.thank-you');
       var email = element.all(by.binding('give.email')).first();
       expect(email.getText()).toBe("tim@kriz.net");
@@ -101,7 +102,7 @@ describe('Giving Flow', function() {
     var button = element.all(by.id('submit_nav')).get(2);
     button.click();
     checkState('give.confirm');
-    var giveButton = element(by.css("[ng-click=\"give.goToChange(give.amount, give.donor, give.email, give.program, 'cc')\"]"));
+    var giveButton = element(by.css("[ng-click=\"give.goToChange(give.amount, give.donor, give.email, give.program, give.view)\"]"));
     giveButton.click();
     checkState('give.change');
     var creditCardButton = element.all(by.model('give.dto.view')).get(1);
@@ -144,7 +145,7 @@ describe('Giving Flow', function() {
     var button = element.all(by.id('submit_nav')).get(2);
     button.click();
     checkState('give.confirm');
-    var giveButton = element(by.css("[ng-click=\"give.goToChange(give.amount, give.donor, give.email, give.program, 'cc')\"]"));
+    var giveButton = element(by.css("[ng-click=\"give.goToChange(give.amount, give.donor, give.email, give.program, give.view)\"]"));
     giveButton.click();
     checkState('give.change');
     var bankAccountButton = element.all(by.model('give.dto.view')).get(0);
@@ -285,7 +286,7 @@ describe('Giving Flow', function() {
    });
   });
 
-  it('Exsiting user, giving via ACH giving again via Credit Card - testing change to payment type', function () {
+  it('Existing user, giving via ACH giving again via Credit Card - testing change to payment type', function () {
     checkState('give.amount');
     element(by.model('amount')).sendKeys("555");
     element(by.binding('amount')).click();
@@ -369,7 +370,6 @@ describe('Giving Flow', function() {
       expect(program).toBeDefined();
       expect(program.getText()).toBe("Crossroads"); 
     });
-
   });
 
   it('Exsiting user logs in, gives, and logs out.  All information has been cleared out - testing give flow reset', function () {
@@ -398,7 +398,7 @@ describe('Giving Flow', function() {
     expect(amount.getAttribute('value')).toBe(null);
   });
 
- it('Exsiting user logs in, gives, and retruns to main give page.  All information has been cleared out - testing give flow reset', function () {
+  it('Existing user logs in, gives, and retruns to main give page.  All information has been cleared out - testing give flow reset', function () {
     checkState('give.amount');
     element(by.model('amount')).sendKeys("765");
     element(by.binding('amount')).click();
@@ -421,4 +421,6 @@ describe('Giving Flow', function() {
     expect(amount.getAttribute('value')).toBe(null);
   });
 
-})
+});
+
+
