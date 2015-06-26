@@ -75,23 +75,29 @@
 
         var url = self.exists("redirectUrl");
         var link = self.exists("link");
+        var params = self.exists("params");
         self.removeRedirectRoute();
-        if(link === undefined){
+        if(link === undefined && params === undefined){
           $state.go(url);
-        } else {
+        } else if (params !== undefined) {
+          $state.go(url, JSON.parse(params));
+        }
+        else {
           $state.go(url,{link:link});
         }
       }
     };
 
-    this.addRedirectRoute = function(redirectUrl, link) {
+    this.addRedirectRoute = function(redirectUrl, link, params) {
         $cookies.redirectUrl = redirectUrl;
         $cookies.link = link;
+        $cookies.params = JSON.stringify(params);
     };
 
     this.removeRedirectRoute = function() {
         $cookieStore.remove("redirectUrl");
         $cookieStore.remove("link");
+        $cookieStore.remove("params");
     };
 
     this.hasRedirectionInfo = function() {

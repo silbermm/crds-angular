@@ -56,12 +56,14 @@
                     if (Session.hasRedirectionInfo()) {
                         var url = Session.exists("redirectUrl");
                         var link = Session.exists("link");
+                        var params = Session.exists("params");
                         Session.removeRedirectRoute();
-                        if(link === undefined){
+                        if(link === undefined && params === undefined){
                             $state.go(url);
+                        } else if (params !== undefined) {
+                            $state.go(url, JSON.parse(params));
                         }
-                        else
-                        {
+                        else {
                             $state.go(url,{link:link});
                         }
                     }
