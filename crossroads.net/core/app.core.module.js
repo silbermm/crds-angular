@@ -12,7 +12,8 @@
     'angular-growl',
     'toggle-switch',
     'ngAside',
-    'matchMedia'
+    'matchMedia',
+    'ui.bootstrap'
     ])
     .constant("AUTH_EVENTS", {
       loginSuccess: "auth-login-success",
