@@ -16,7 +16,7 @@
            if(toState && !/^give.*/.test(toState.name)) {
              return;
            }
-           
+
            // vm.processing is used to set state and text on the "Give" button
            // Make sure to set the processing state to true whenever a state change begins
            vm.processing = true;
@@ -176,15 +176,14 @@
         };
 
         // Invoked from the initial "/give" state to get us to the first page
-        vm.initDefaultState = function() {            
+        vm.initDefaultState = function() {
           // If we have not initialized (meaning we came in via a deep-link, refresh, etc),
           // reset state and redirect to start page (/give/amount).
-          if($state.is("give")) {
           vm.reset();
           vm.initialized = true;
           Session.removeRedirectRoute();
-          $state.go("give.amount");          
-        };
+          $state.go("give.amount");
+        }
 
         // Callback from email-field on guest giver page.  Emits a growl
         // notification indicating that the email entered may already be a
