@@ -154,8 +154,7 @@ namespace MinistryPlatform.Translation.Services
                 {
                     donor = new ContactDonor {
                         ContactId = contactId,
-                        RegisteredUser = true,
-                     //   Email =
+                        RegisteredUser = true
                     };
                 }
             }
