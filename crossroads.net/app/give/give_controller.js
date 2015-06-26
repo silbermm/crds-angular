@@ -2,14 +2,14 @@
   'use strict';
   module.exports = GiveCtrl;
 
-  GiveCtrl.$inject = ['$rootScope', '$scope', '$state', '$timeout', 'Session', 'PaymentService','programList', 'GiveTransferService'];
+  GiveCtrl.$inject = ['$rootScope', '$scope', '$state', '$timeout', 'Session', 'PaymentService','programList', 'GiveTransferService', 'User'];
 
   function DonationException(message) {
     this.message = message;
     this.name = "DonationException";
   };
 
-  function GiveCtrl($rootScope, $scope, $state, $timeout, Session, PaymentService, programList, GiveTransferService) {
+  function GiveCtrl($rootScope, $scope, $state, $timeout, Session, PaymentService, programList, GiveTransferService, User) {
 
         $scope.$on('$stateChangeStart', function (event, toState, toParams) {
            // vm.processing is used to set state and text on the "Give" button
@@ -22,7 +22,7 @@
            }
 
            // If not initialized, initialize and go to default state
-           if(!vm.initialized) {
+           if(!vm.initialized || toState.name == "give") {
              event.preventDefault();
              vm.initDefaultState();
              return;
@@ -167,25 +167,14 @@
 
         // Invoked from the initial "/give" state to get us to the first page
         vm.initDefaultState = function() {
-          if($state.is('give') || $state.is('give.amount')) {
-            vm.initialized = true;
-          }
-
+          if($state.is('give')) {            
           // If we have not initialized (meaning we came in via a deep-link, refresh, etc),
           // reset state and redirect to start page (/give/amount).
-          if(!vm.initialized) {
             vm.reset();
             vm.initialized = true;
             Session.removeRedirectRoute();
-            $state.go("give.amount");
-            return;
-          }
-
-          $scope.$on('$viewContentLoaded', function() {
-              if($state.is("give")) {
-                  $state.go("give.amount");
-              }
-          });
+            $state.go("give.amount");        
+          };
         };
 
         // Callback from email-field on guest giver page.  Emits a growl
@@ -287,9 +276,13 @@
           vm.amountSubmitted = false;
           vm.bankinfoSubmitted = false;
           vm.changeAccountInfo = false;
+          vm.email = undefined;
           vm.initialized = false;
           vm.processing = false;
           vm.program = undefined;
+          if ($rootScope.username === undefined) {
+            User.email = "";
+          };
 
           vm.dto.reset();
         }

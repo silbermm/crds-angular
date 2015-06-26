@@ -29,7 +29,7 @@ describe('GiveController', function() {
       $q = _$q_;
       httpBackend = $injector.get('$httpBackend');
       Session = $injector.get('Session');
-
+      User = $injector.get('User');
 
       mockGetResponse = {
         id: "102030",
@@ -77,7 +77,8 @@ describe('GiveController', function() {
           '$timeout': $timeout,
           'Session': Session,
           'PaymentService': mockPaymentService,
-          'programList':programList
+          'programList':programList,
+          'User' : User
         });
 
       controller.brand = "";
@@ -119,8 +120,8 @@ describe('GiveController', function() {
 
       expect($state.is).toHaveBeenCalledWith('give');
       expect($state.go).toHaveBeenCalledWith('give.amount');
-      expect(controllerDto.reset).not.toHaveBeenCalled();
-      expect(Session.removeRedirectRoute).not.toHaveBeenCalled();
+      expect(controllerDto.reset).toHaveBeenCalled();
+      expect(Session.removeRedirectRoute).toHaveBeenCalled();
     });
 
     it('should go to give.amount if starting at give', function() {
@@ -139,8 +140,8 @@ describe('GiveController', function() {
       expect($state.is).toHaveBeenCalledWith('give');
       expect($state.go).toHaveBeenCalledWith('give.amount');
       expect(controller.initialized).toBeTruthy();
-      expect(controllerDto.reset).not.toHaveBeenCalled();
-      expect(Session.removeRedirectRoute).not.toHaveBeenCalled();
+      expect(controllerDto.reset).toHaveBeenCalled();
+      expect(Session.removeRedirectRoute).toHaveBeenCalled();
     });
 
     it('should do nothing special if starting at give.amount', function() {
@@ -156,17 +157,16 @@ describe('GiveController', function() {
       controller.dto = controllerDto;
       controller.initDefaultState();
 
-      expect($state.is).toHaveBeenCalledWith('give');
-      expect($state.is).toHaveBeenCalledWith('give.amount');
+      expect($state.is).toHaveBeenCalledWith('give');      
       expect($state.go).not.toHaveBeenCalled();
-      expect(controller.initialized).toBeTruthy();
+      expect(controller.initialized).toBeFalsy();
       expect(controllerDto.reset).not.toHaveBeenCalled();
       expect(Session.removeRedirectRoute).not.toHaveBeenCalled();
     });
 
     it('should go to give.amount if starting at an unknown state and not initialized', function() {
       var states = {
-        'give': false,
+        'give': true,
         'give.amount': false,
       };
       spyOn($state, 'is').and.callFake(function(stateName) {
@@ -213,7 +213,7 @@ describe('GiveController', function() {
       controller.email = "me2@here.com";
 
       controller.initialized = true;
-      var event = $scope.$broadcast('$stateChangeStart');
+      var event = $scope.$broadcast('$stateChangeStart', {name: 'give.amount'});
 
       expect(event.defaultPrevented).toBeFalsy();
       expect(controller.initDefaultState).not.toHaveBeenCalled();
@@ -221,6 +221,20 @@ describe('GiveController', function() {
       expect(controller.processing).toBeTruthy();
       expect(controller.email).toBeDefined();
       expect(controller.email).toBe("me2@here.com");
+    });
+
+    it('should initialize default state if toState=give', function() {
+      $rootScope.email = "me@here.com";
+      controller.email = undefined;
+
+      var event = $scope.$broadcast('$stateChangeStart', {name: 'give.amount'});
+
+      expect(event.defaultPrevented).toBeTruthy();
+      expect(controller.initDefaultState).toHaveBeenCalled();
+      expect(controller.transitionForLoggedInUserBasedOnExistingDonor).not.toHaveBeenCalled();
+      expect(controller.processing).toBeTruthy();
+      expect(controller.email).toBeDefined();
+      expect(controller.email).toBe("me@here.com");
     });
 
   });
