@@ -3,7 +3,7 @@
 
   module.exports = MyServeController;
 
-  MyServeController.$inject = ['$rootScope', '$log', 'filterState', 'Session', 'ServeOpportunities', 'Groups', 'AUTH_EVENTS'];
+  MyServeController.$inject = ['$rootScope', '$log', 'filterState', 'Session', 'ServeOpportunities', 'Groups', 'AUTH_EVENTS', $modal];
 
   function MyServeController($rootScope, $log, filterState, Session, ServeOpportunities, Groups, AUTH_EVENTS){
 
@@ -19,7 +19,7 @@
     vm.original = [];
     vm.showButton = showButton;
     vm.showNoOpportunitiesMsg = showNoOpportunitiesMsg;
-    
+
     activate();
 
     $rootScope.$on("personUpdated", personUpdateHandler);
@@ -30,7 +30,7 @@
 
     $rootScope.$on("filterByDates", function(event, data) {
       loadOpportunitiesByDate(data.fromDate, data.toDate).then(function(opps){
-        vm.groups = opps;    
+        vm.groups = opps;
         vm.original = opps;
       },function(err){
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
@@ -40,6 +40,17 @@
     $rootScope.$on(AUTH_EVENTS.logoutSuccess, function(event, data) {
       vm.filterState.clearAll();
     });
+
+    // MOdals
+
+    _this.open = function (size) {
+
+      var modalInstance = $modal.open({
+        templateUrl: 'serveModalContent.html',
+        backdrop: true,
+        size: size,
+      })
+    }
 
     ////////////////////////////
     // Implementation Details //
@@ -54,7 +65,7 @@
       d.setDate(date.getDate() + 28);
       return d;
     }
- 
+
     function convertToDate(date){
       // date comes in as mm/dd/yyyy, convert to yyyy-mm-dd for moment to handle
       var d = new Date(date);
@@ -62,7 +73,7 @@
     };
 
     /**
-     * Takes a javascript date and returns a 
+     * Takes a javascript date and returns a
      * string formated MM/DD/YYYY
      * @param date - Javascript Date
      * @param days to add - How many days to add to the original date passed in
@@ -83,28 +94,28 @@
      * @returns a promise
      */
     function loadOpportunitiesByDate(fromDate, toDate){
-      return ServeOpportunities.ServeDays.query({ 
-        id: Session.exists('userId'), 
-        from: fromDate/1000, 
-        to: toDate/1000 
+      return ServeOpportunities.ServeDays.query({
+        id: Session.exists('userId'),
+        from: fromDate/1000,
+        to: toDate/1000
       }).$promise;
     }
 
     function loadNextMonth() {
-      if(vm.groups[0].day !== undefined){ 
+      if(vm.groups[0].day !== undefined){
         vm.loadMore = true;
         vm.loadText = "Loading..."
-          
+
         var lastDate = new Date(vm.groups[vm.groups.length -1].day);
-        lastDate.setDate(lastDate.getDate() + 1); 
+        lastDate.setDate(lastDate.getDate() + 1);
 
         var newDate = addOneMonth(new Date(lastDate));
-          
+
         loadOpportunitiesByDate(lastDate.getTime(), newDate.getTime()).then(function(more){
           if(more.length === 0){
             $rootScope.$emit('notify', $rootScope.MESSAGES.serveSignupMoreError);
           } else {
-            vm.lastDate = formatDate(newDate); 
+            vm.lastDate = formatDate(newDate);
             _.each(more, function(m){
               vm.groups.push(m);
             });
@@ -112,13 +123,13 @@
           vm.loadMore = false;
           vm.loadText = "Load More";
         }, function(e){
-          // error 
-          vm.loadMore = false;  
+          // error
+          vm.loadMore = false;
           vm.loadText = "Load More";
         });
       }
     };
-   
+
     function personUpdateHandler(event, data) {
       vm.groups = angular.copy(vm.original);
       _.each(vm.groups, function(group) {
@@ -142,7 +153,7 @@
     function showButton(){
       if (showNoOpportunitiesMsg()){
         return false;
-      } else { 
+      } else {
         return !filterState.isActive();
       }
     }
