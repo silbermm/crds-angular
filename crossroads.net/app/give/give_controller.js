@@ -2,16 +2,21 @@
   'use strict';
   module.exports = GiveCtrl;
 
-  GiveCtrl.$inject = ['$rootScope', '$scope', '$state', '$timeout', 'Session', 'PaymentService','programList', 'GiveTransferService', 'User'];
+  GiveCtrl.$inject = ['$rootScope', '$scope', '$state', '$timeout', 'Session', 'PaymentService','programList', 'GiveTransferService', 'User', 'AUTH_EVENTS'];
 
   function DonationException(message) {
     this.message = message;
     this.name = "DonationException";
   };
 
-  function GiveCtrl($rootScope, $scope, $state, $timeout, Session, PaymentService, programList, GiveTransferService, User) {
+  function GiveCtrl($rootScope, $scope, $state, $timeout, Session, PaymentService, programList, GiveTransferService, User, AUTH_EVENTS) {
 
         $scope.$on('$stateChangeStart', function (event, toState, toParams) {
+           // Short-circuit this handler if we're not transitioning TO a give state
+           if(toState && !/^give.*/.test(toState.name)) {
+             return;
+           }
+           
            // vm.processing is used to set state and text on the "Give" button
            // Make sure to set the processing state to true whenever a state change begins
            vm.processing = true;
@@ -29,6 +34,11 @@
            }
 
            vm.transitionForLoggedInUserBasedOnExistingDonor(event,toState);
+        });
+
+        $scope.$on(AUTH_EVENTS.logoutSuccess, function(event) {
+          vm.reset();
+          $state.go('home');
         });
 
         $scope.$on('$stateChangeSuccess', function (event, toState, toParams) {
@@ -166,14 +176,14 @@
 
         // Invoked from the initial "/give" state to get us to the first page
         vm.initDefaultState = function() {
-          if($state.is('give')) {            
           // If we have not initialized (meaning we came in via a deep-link, refresh, etc),
           // reset state and redirect to start page (/give/amount).
+          if($state.is("give")) {
             vm.reset();
             vm.initialized = true;
             Session.removeRedirectRoute();
-            $state.go("give.amount");        
-          };
+            $state.go("give.amount");
+          }
         };
 
         // Callback from email-field on guest giver page.  Emits a growl
@@ -207,7 +217,7 @@
           if(error && error.globalMessage) {
             vm.dto.declinedPayment =
               error.globalMessage == $rootScope.MESSAGES.paymentMethodDeclined;
-              
+
             $rootScope.$emit('notify', error.globalMessage);
           } else {
             $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);

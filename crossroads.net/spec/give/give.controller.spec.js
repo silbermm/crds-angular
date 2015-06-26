@@ -30,6 +30,7 @@ describe('GiveController', function() {
       httpBackend = $injector.get('$httpBackend');
       Session = $injector.get('Session');
       User = $injector.get('User');
+      AUTH_EVENTS = $injector.get('AUTH_EVENTS');
 
       mockGetResponse = {
         id: "102030",
@@ -78,7 +79,8 @@ describe('GiveController', function() {
           'Session': Session,
           'PaymentService': mockPaymentService,
           'programList':programList,
-          'User' : User
+          'User' : User,
+          'AUTH_EVENTS': AUTH_EVENTS
         });
 
       controller.brand = "";
@@ -157,7 +159,7 @@ describe('GiveController', function() {
       controller.dto = controllerDto;
       controller.initDefaultState();
 
-      expect($state.is).toHaveBeenCalledWith('give');      
+      expect($state.is).toHaveBeenCalledWith('give');
       expect($state.go).not.toHaveBeenCalled();
       expect(controller.initialized).toBeFalsy();
       expect(controllerDto.reset).not.toHaveBeenCalled();
@@ -237,6 +239,31 @@ describe('GiveController', function() {
       expect(controller.email).toBe("me@here.com");
     });
 
+    it('should not do anything if toState is not in the giving flow', function() {
+      $rootScope.email = "me@here.com";
+      controller.email = undefined;
+      controller.processing = false;
+
+      var event = $scope.$broadcast('$stateChangeStart', {name: 'Ohio'});
+
+      expect(event.defaultPrevented).toBeFalsy();
+      expect(controller.initDefaultState).not.toHaveBeenCalled();
+      expect(controller.transitionForLoggedInUserBasedOnExistingDonor).not.toHaveBeenCalled();
+      expect(controller.processing).toBeFalsy();
+      expect(controller.email).not.toBeDefined();
+    });
+
+  });
+
+  describe('AUTH_EVENTS.logoutSuccess event hook', function() {
+    it('should reset data and go home', function() {
+      spyOn(controller, 'reset');
+      spyOn($state, 'go');
+
+      var event = $scope.$broadcast(AUTH_EVENTS.logoutSuccess);
+      expect(controller.reset).toHaveBeenCalled();
+      expect($state.go).toHaveBeenCalledWith('home');
+    });
   });
 
   describe('$stateChangeSuccess event hook', function() {
@@ -638,7 +665,7 @@ describe('GiveController', function() {
       controller.donate(1, 123, "2", "test@here.com", "bank", callback.onSuccess, callback.onFailure);
       // This resolves the promise above
       $rootScope.$apply();
-      
+
       expect(callback.onFailure).toHaveBeenCalledWith('Uh oh!');
       expect(controller.amount).toBeUndefined();
       expect(controller.program).toBeUndefined();
