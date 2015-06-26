@@ -23,9 +23,9 @@
 
   .icon-minus-circle {
     color: $brand-danger;
-  } 
+  }
 
-} 
+}
 
 .serve-opp-listings {
 
@@ -108,11 +108,11 @@
         &:last-of-type {
           margin-right: 0px;
         }
-        
+
         .icon {
           vertical-align: baseline;
         }
-  
+
       }
     }
   }
@@ -134,5 +134,11 @@
   @media (min-width: $screen-sm-min) {
     padding-left: 0;
     padding-right: $grid-gutter-width/2;
+  }
+}
+.serve-filter {
+  .dropdown-menu {
+    padding-left: $panel-body-padding;
+    padding-right: $panel-body-padding;
   }
 }
