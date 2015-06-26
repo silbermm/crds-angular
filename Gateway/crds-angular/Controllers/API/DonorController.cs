@@ -76,8 +76,7 @@ namespace crds_angular.Controllers.API
             {
                 Id = donor.DonorId,
                 ProcessorId = donor.ProcessorId,
-                RegisteredUser = false,
-                Email = donor.Email
+                RegisteredUser = false
             };
 
             // HTTP StatusCode should be 201 (Created) if we created a donor, or 200 (Ok) if returning an existing donor
@@ -99,8 +98,7 @@ namespace crds_angular.Controllers.API
                 {
                     Id = donor.DonorId,
                     ProcessorId = donor.ProcessorId,
-                    RegisteredUser = true,
-                    Email = donor.Email
+                    RegisteredUser = true
                 };
 
                 return Ok(response);
@@ -150,8 +148,7 @@ namespace crds_angular.Controllers.API
                               routing = defaultSource.routing_number
                             }
                          },
-                         RegisteredUser = donor.RegisteredUser, 
-                         Email = donor.Email
+                         RegisteredUser = donor.RegisteredUser
                     };
 
                     return Ok(response);
@@ -179,8 +176,7 @@ namespace crds_angular.Controllers.API
                     {
                         Id = donor.DonorId,
                         ProcessorId = donor.ProcessorId,
-                        RegisteredUser = donor.RegisteredUser,
-                        Email = donor.Email
+                        RegisteredUser = donor.RegisteredUser
                     };
 
                     return Ok(response); 
@@ -247,8 +243,7 @@ namespace crds_angular.Controllers.API
                         routing = sourceData.routing_number
                     }
                 },
-                RegisteredUser = contactDonor.RegisteredUser,
-                Email = contactDonor.Email
+                RegisteredUser = contactDonor.RegisteredUser
             };
 
             return Ok(donor);
