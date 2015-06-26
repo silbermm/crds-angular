@@ -44,7 +44,8 @@ namespace crds_angular.Controllers.API
                     {
                         program_id = dto.ProgramId,
                         amount = dto.Amount,
-                        donation_id = donationId.ToString()
+                        donation_id = donationId.ToString(),
+                        email = dto.EmailAddress
                     };
 
                     return Ok(response);
@@ -72,7 +73,8 @@ namespace crds_angular.Controllers.API
                 {
                     program_id = dto.ProgramId,
                     amount = dto.Amount,
-                    donation_id = donationId.ToString()
+                    donation_id = donationId.ToString(),
+                    email = dto.EmailAddress
                 };
 
                 return Ok(response);

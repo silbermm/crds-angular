@@ -9,14 +9,15 @@ require('../bankInfo.html');
           restrict: 'EA',
           replace: true,
           scope: {
-              account: "=", 
+              account: "=",
               bankinfoSubmitted: "=",
               changeAccountInfo: "=",
               defaultSource: "=",
               routing: "=" ,
               showMessage: "=" ,
               showMessageOnChange: "=",
-              showCheckClass: "="             
+              showCheckClass: "=",
+              declinedPayment: "="
             },
           templateUrl: 'give/bankInfo.html',
           link: link
@@ -53,6 +54,7 @@ require('../bankInfo.html');
 
          scope.resetDefaultBankPlaceholderValues = function() {
           scope.defaultBankPlaceholderValues = {};
+          scope.declinedPayment = false;
         };
 
         scope.routingError = function() {
@@ -84,7 +86,7 @@ require('../bankInfo.html');
           scope.bankAccount.account = "";
           scope.bankAccount.routing = "";
           scope.defaultBankPlaceholderValues = {
-            routing: scope.defaultSource.bank_account.routing,          
+            routing: scope.defaultSource.bank_account.routing,
             maskedAccount: "XXXXXXXXXXX" + scope.defaultSource.bank_account.last4
           };
 
