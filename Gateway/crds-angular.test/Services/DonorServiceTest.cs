@@ -141,11 +141,13 @@ namespace crds_angular.test.Services
             {
                 ContactId = 12345,
                 DonorId = 0,
-                RegisteredUser = true
+                RegisteredUser = true,
+                Email = "me@here.com"
             };
 
             paymentService.Setup(mocked => mocked.CreateCustomer("stripe_token")).Returns("processor_id");
             mpDonorService.Setup(mocked => mocked.CreateDonorRecord(12345, "processor_id", It.IsAny<DateTime>(), 1, 1, 2)).Returns(456);
+            mpDonorService.Setup(mocked => mocked.GetEmailViaDonorId(456)).Returns(donor);
             paymentService.Setup(mocked => mocked.UpdateCustomerDescription("processor_id", 456)).Returns("456");
 
             var response = fixture.CreateOrUpdateContactDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
