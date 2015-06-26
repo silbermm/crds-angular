@@ -397,6 +397,7 @@
             .$promise
             .then(function(donor){
               vm.donor = donor;
+              vm.email = vm.donor.email;
               if (vm.donor.default_source.credit_card.last4 != null){
                 vm.last4 = donor.default_source.credit_card.last4;
                 vm.brand = brandCode[donor.default_source.credit_card.brand];
