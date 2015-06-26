@@ -155,28 +155,8 @@ namespace crds_angular.Models.Crossroads.VolunteerApplication
         [JsonProperty(PropertyName = "availabilityWeekend")]
         public CustomField AvailabilityWeekend { get; set; }
 
-        [JsonProperty(PropertyName = "availabilityOakley")]
-        [Required]
-        public CustomField AvailabilityOakley { get; set; }
-
-        [JsonProperty(PropertyName = "availabilityFlorence")]
-        [Required]
-        public CustomField AvailabilityFlorence { get; set; }
-
-        [JsonProperty(PropertyName = "availabilityWestSide")]
-        [Required]
-        public CustomField AvailabilityWestSide { get; set; }
-
-        [JsonProperty(PropertyName = "availabilityMason")]
-        [Required]
-        public CustomField AvailabilityMason { get; set; }
-
-        [JsonProperty(PropertyName = "availabilityClifton")]
-        [Required]
-        public CustomField AvailabilityClifton { get; set; }
-
-        [JsonProperty(PropertyName = "availabilityServiceTimes")]
-        public CustomField AvailabilityServiceTimes { get; set; }
+        [JsonProperty(PropertyName = "availabilityWeekendSite")]
+        public CustomField AvailabilityWeekendSite { get; set; }
 
         [JsonProperty(PropertyName = "areaOfInterestServingInClassroom")]
         public CustomField AreaOfInterestServingInClassroom { get; set; }

@@ -328,9 +328,9 @@ var moment = require('moment');
         CrossroadsId: adultFields.availabilityWeekend
       };
 
-      adult.availabilityOakley = {
-        Value: vm.volunteer.availabilityOakley,
-        CrossroadsId: adultFields.availabilityOakley
+      adult.availabilityWeekendSite = {
+        Value: vm.volunteer.availabilityWeekendSite,
+        CrossroadsId: adultFields.availabilityWeekendSite
       };
 
       adult.availabilityFlorence = {

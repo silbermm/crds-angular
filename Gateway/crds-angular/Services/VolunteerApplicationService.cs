@@ -91,12 +91,7 @@ namespace crds_angular.Services
 
             formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityWeek, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityWeekend, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityOakley, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityFlorence, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityWestSide, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityMason, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityClifton, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityServiceTimes, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityWeekendSite, opportunityResponseId));
 
             formResponse.FormAnswers.Add(SetCustomField(application.AreaOfInterestServingInClassroom,
                 opportunityResponseId));
