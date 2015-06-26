@@ -184,7 +184,7 @@ describe('GiveController', function() {
       expect(controllerDto.reset).toHaveBeenCalled();
       expect(Session.removeRedirectRoute).toHaveBeenCalled();
     });
-   });
+  });
 
   describe('$stateChangeStart event hook', function() {
     beforeEach(function() {
