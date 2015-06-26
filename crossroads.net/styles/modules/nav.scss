@@ -705,16 +705,14 @@ ul.cr-nav {
     }
   }
 
-  ul.dropdown-menu {
+  ul.drop-menu {
     position: relative;
     float: none;
     border-radius: 0px;
     border: 0px;
     background: lighten($gray-darker, 8%);
     box-shadow: none;
-    max-height: 0;
     display: block;
-    transition: max-height .5s linear;
     overflow: hidden;
 
     li {
@@ -734,9 +732,6 @@ ul.cr-nav {
         }
       }
     }
-  }
-  .open > .dropdown-menu {
-    max-height: 570px; //need to declare height for transition to work. 570px gives us 10 items in a subnav
   }
   .side-nav-search {
     padding: 10px;
