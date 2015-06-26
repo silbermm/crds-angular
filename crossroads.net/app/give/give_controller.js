@@ -119,6 +119,7 @@
               vm.amount = confirmation.amount;
               vm.program = _.find(vm.programsInput, {'ProgramId': programId});
               vm.program_name = vm.program.Name;
+              vm.email = confirmation.email;
               onSuccess(confirmation);
             }, function(error) {
               onFailure(error)

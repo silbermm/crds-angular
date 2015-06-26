@@ -12,5 +12,7 @@ namespace crds_angular.Models.Crossroads
         public DefaultSourceDTO DefaultSource { get; set; }
         [JsonProperty(PropertyName = "Registered_User")]
         public bool RegisteredUser { get; set; }
+        [JsonProperty(PropertyName = "Email")]
+        public string Email { get; set; }
     }
 }
