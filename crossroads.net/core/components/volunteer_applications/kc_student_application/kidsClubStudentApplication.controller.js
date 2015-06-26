@@ -216,34 +216,9 @@ var moment = require('moment');
         CrossroadsId: studentFields.availabilityDuringWeekend
       };
 
-      student.availabilityOakley = {
-        Value: vm.availabilityOakley,
-        CrossroadsId: studentFields.availabilityOakley
-      };
-
-      student.availabilityFlorence = {
-        Value: vm.availabilityFlorence,
-        CrossroadsId: studentFields.availabilityFlorence
-      };
-
-      student.availabilityWestSide = {
-        Value: vm.availabilityWestSide,
-        CrossroadsId: studentFields.availabilityWestSide
-      };
-
-      student.availabilityMason = {
-        Value: vm.availabilityMason,
-        CrossroadsId: studentFields.availabilityMason
-      };
-
-      student.availabilityClifton = {
-        Value: vm.availabilityClifton,
-        CrossroadsId: studentFields.availabilityClifton
-      };
-
-      student.serveServiceTimes = {
-        Value: vm.serveServiceTimes,
-        CrossroadsId: studentFields.serveServiceTimes
+      student.availabilityWeekendSite = {
+        Value: vm.availabilityWeekendSite,
+        CrossroadsId: studentFields.availabilityWeekendSite
       };
 
       student.serveAgeKids1to2 = {

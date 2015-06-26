@@ -87,21 +87,21 @@
         <select class="form-control col-sm-12" name="serviceAttend" ng-model="kcStudentApplication.volunteer.serviceAttend" required>
           <option value="">Site/Service Time where you attend</option>
           <option value="Oakley - Sat - 4:30pm">Oakley - Sat - 4:30pm</option>
-          <option value="2">Oakley - Sat - 6:15pm</option>
-          <option value="3">Oakley - Sun - 8:30am</option>
-          <option value="4">Oakley - Sun - 10:05am</option>
-          <option value="5">Oakley - Sun - 11:55am</option>
-          <option value="6">Oakley - Sun - 11:55am</option>
-          <option value="7">Mason - Sun - 8:15am</option>
-          <option value="8">Mason - Sun - 9:45am</option>
-          <option value="9">Mason - Sun - 11:30am</option>
-          <option value="10">Florence - Sat - 5:30pm</option>
-          <option value="11">Florence - Sun - 9:30am</option>
-          <option value="12">Florence - Sun - 11:30am</option>
-          <option value="13">West Side - Sun - 8:15am</option>
-          <option value="14">West Side - Sun - 10:00am</option>
-          <option value="15">West Side - Sun 11:45am</option>
-          <option value="16">Clifton - Sun - 7pm</option>
+          <option value="Oakley - Sat - 6:15pm">Oakley - Sat - 6:15pm</option>
+          <option value="Oakley - Sun - 8:30am">Oakley - Sun - 8:30am</option>
+          <option value="Oakley - Sun - 10:05am">Oakley - Sun - 10:05am</option>
+          <option value="Oakley - Sun - 11:55am">Oakley - Sun - 11:55am</option>
+          <option value="Oakley - Sun - 11:55am">Oakley - Sun - 11:55am</option>
+          <option value="Mason - Sun - 8:15am">Mason - Sun - 8:15am</option>
+          <option value="Mason - Sun - 9:45am">Mason - Sun - 9:45am</option>
+          <option value="Mason - Sun - 11:30am">Mason - Sun - 11:30am</option>
+          <option value="Florence - Sat - 5:30pm">Florence - Sat - 5:30pm</option>
+          <option value="Florence - Sun - 9:30am">Florence - Sun - 9:30am</option>
+          <option value="Florence - Sun - 11:30am">Florence - Sun - 11:30am</option>
+          <option value="West Side - Sun - 8:15am">West Side - Sun - 8:15am</option>
+          <option value="West Side - Sun - 10:00am">West Side - Sun - 10:00am</option>
+          <option value="West Side - Sun 11:45am">West Side - Sun 11:45am</option>
+          <option value="Clifton - Sun - 7pm">Clifton - Sun - 7pm</option>
         </select>
         <ng-messages for="student.serviceAttend.$error" ng-if="kcStudentApplication.showError(student, 'serviceAttend')">
           <span ng-message="required">
@@ -291,80 +291,33 @@
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
         </ng-messages>
-      </div>
-
-      <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'availabilitySite') }">
-        <label class="block required control-label" >Site name</label>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox"
-                   name="availabilitySite"
-                   value="oakley"
-                   ng-model="kcStudentApplication.availabilityOakley"
-                   ng-required="!kcStudentApplication.locationSelected()">
-            Oakley
-          </label>
+        <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'availabilityWeekendSite')}" ng-if="kcStudentApplication.volunteer.availabilityWeekend">
+          <label class="control-label required" for="availabilityWeekendSite">Weekend Site/Service Time</label>
+          <select class="form-control col-sm-12" name="availabilityWeekendSite" ng-model="kcStudentApplication.volunteer.availabilityWeekendSite" required>
+            <option value="">Weekend Site/Service Time</option>
+            <option value="Oakley - Sat - 4:30pm">Oakley - Sat - 4:30pm</option>
+            <option value="Oakley - Sat - 6:15pm">Oakley - Sat - 6:15pm</option>
+            <option value="Oakley - Sun - 8:30am">Oakley - Sun - 8:30am</option>
+            <option value="Oakley - Sun - 10:05am">Oakley - Sun - 10:05am</option>
+            <option value="Oakley - Sun - 11:55am">Oakley - Sun - 11:55am</option>
+            <option value="Oakley - Sun - 11:55am">Oakley - Sun - 11:55am</option>
+            <option value="Mason - Sun - 8:15am">Mason - Sun - 8:15am</option>
+            <option value="Mason - Sun - 9:45am">Mason - Sun - 9:45am</option>
+            <option value="Mason - Sun - 11:30am">Mason - Sun - 11:30am</option>
+            <option value="Florence - Sat - 5:30pm">Florence - Sat - 5:30pm</option>
+            <option value="Florence - Sun - 9:30am">Florence - Sun - 9:30am</option>
+            <option value="Florence - Sun - 11:30am">Florence - Sun - 11:30am</option>
+            <option value="West Side - Sun - 8:15am">West Side - Sun - 8:15am</option>
+            <option value="West Side - Sun - 10:00am">West Side - Sun - 10:00am</option>
+            <option value="West Side - Sun 11:45am">West Side - Sun 11:45am</option>
+            <option value="Clifton - Sun - 7pm">Clifton - Sun - 7pm</option>
+          </select>
+          <ng-messages for="student.availabilityWeekendSite.$error" ng-if="kcStudentApplication.showError(student, 'availabilityWeekendSite')">
+            <span ng-message="required">
+              <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            </span>
+          </ng-messages>
         </div>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox"
-                   value="florence"
-                   name="availabilitySite"
-                   ng-model="kcStudentApplication.availabilityFlorence"
-                   ng-required="!kcStudentApplication.locationSelected()">
-            Florence
-          </label>
-        </div>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox"
-                   value="west side"
-                   name="availabilitySite"
-                   ng-model="kcStudentApplication.availabilityWestSide"
-                   ng-required="!kcStudentApplication.locationSelected()">
-            West Side
-          </label>
-        </div>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox"
-                   value="mason"
-                   name="availabilitySite"
-                   ng-model="kcStudentApplication.availabilityMason"
-                   ng-required="!kcStudentApplication.locationSelected()">
-            Mason
-          </label>
-        </div>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox"
-                   value="clifton"
-                   name="availabilitySite"
-                   ng-model="kcStudentApplication.availabilityClifton"
-                   ng-required="!kcStudentApplication.locationSelected()">
-            Clifton
-          </label>
-        </div>
-        <ng-messages for="student.availabilitySite.$error" ng-if="kcStudentApplication.showError(student, 'availabilitySite')" >
-          <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span></span>
-        </ng-messages>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'serveServiceTimes') }">
-        <label class="control-label required" for="serveServiceTimes">During</label>
-        <input type="text"
-               class="form-control"
-               id="serveServiceTimes"
-               name="serveServiceTimes"
-               ng-model="kcStudentApplication.serveServiceTimes"
-               placeholder="Service Times"
-               ng-model-options="{updateOn: 'blur'}"
-               required>
-        <ng-messages for="student.serveServiceTimes.$error" ng-if="kcStudentApplication.showError(student, 'serveServiceTimes')" >
-          <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span></span>
-        </ng-messages>
       </div>
     </div>
 

@@ -333,31 +333,6 @@ var moment = require('moment');
         CrossroadsId: adultFields.availabilityWeekendSite
       };
 
-      adult.availabilityFlorence = {
-        Value: vm.volunteer.availabilityFlorence,
-        CrossroadsId: adultFields.availabilityFlorence
-      };
-
-      adult.availabilityWestSide = {
-        Value: vm.volunteer.availabilityWestSide,
-        CrossroadsId: adultFields.availabilityWestSide
-      };
-
-      adult.availabilityMason = {
-        Value: vm.volunteer.availabilityMason,
-        CrossroadsId: adultFields.availabilityMason
-      };
-
-      adult.availabilityClifton = {
-        Value: vm.volunteer.availabilityClifton,
-        CrossroadsId: adultFields.availabilityClifton
-      };
-
-      adult.availabilityServiceTimes = {
-        Value: vm.volunteer.serveServiceTimes,
-        CrossroadsId: adultFields.availabilityServiceTimes
-      };
-
       adult.areaOfInterestServingInClassroom = {
         Value: vm.volunteer.areaOfInterestServingInClassroom,
         CrossroadsId: adultFields.areaOfInterestServingInClassroom
