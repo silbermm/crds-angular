@@ -146,7 +146,8 @@ namespace MinistryPlatform.Translation.Services
                         DonorId = record.ToInt("Donor_ID"),
                         ProcessorId = record.ToString(DONOR_PROCESSOR_ID),
                         ContactId = record.ToInt("Contact_ID"),
-                        RegisteredUser = true
+                        RegisteredUser = true,
+                        Email = record.ToString("Email")
                     };
                 }
                 else

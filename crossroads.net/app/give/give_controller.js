@@ -129,6 +129,7 @@
               vm.amount = confirmation.amount;
               vm.program = _.find(vm.programsInput, {'ProgramId': programId});
               vm.program_name = vm.program.Name;
+              vm.email = confirmation.email;
               onSuccess(confirmation);
             }, function(error) {
               onFailure(error)
@@ -175,15 +176,14 @@
         };
 
         // Invoked from the initial "/give" state to get us to the first page
-        vm.initDefaultState = function() {
+        vm.initDefaultState = function() {            
           // If we have not initialized (meaning we came in via a deep-link, refresh, etc),
           // reset state and redirect to start page (/give/amount).
           if($state.is("give")) {
-            vm.reset();
-            vm.initialized = true;
-            Session.removeRedirectRoute();
-            $state.go("give.amount");
-          }
+          vm.reset();
+          vm.initialized = true;
+          Session.removeRedirectRoute();
+          $state.go("give.amount");          
         };
 
         // Callback from email-field on guest giver page.  Emits a growl
@@ -399,6 +399,7 @@
             .$promise
             .then(function(donor){
               vm.donor = donor;
+              vm.email = vm.donor.email;
               if (vm.donor.default_source.credit_card.last4 != null){
                 vm.last4 = donor.default_source.credit_card.last4;
                 vm.brand = brandCode[donor.default_source.credit_card.brand];

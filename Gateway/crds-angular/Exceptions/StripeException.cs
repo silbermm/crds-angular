@@ -12,8 +12,9 @@ namespace crds_angular.Exceptions
         public string DetailMessage { get; set; }
         public string Type { get; set; }
         public string DeclineCode { get; set; }
+        public string Param { get; set; }
 
-        public StripeException(HttpStatusCode statusCode, string auxMessage, string type, string message, string code, string declineCode) :
+        public StripeException(HttpStatusCode statusCode, string auxMessage, string type, string message, string code, string declineCode, string param) :
             base(auxMessage)
         {
             Type = type;
@@ -21,6 +22,7 @@ namespace crds_angular.Exceptions
             Code = code;
             DeclineCode = declineCode;
             StatusCode = statusCode;
+            Param = param;
         }
 
         public RestHttpActionResult<StripeErrorResponse> GetStripeResult()
@@ -32,7 +34,8 @@ namespace crds_angular.Exceptions
                     DeclineCode = DeclineCode,
                     Code = Code,
                     Message = DetailMessage,
-                    Type = Type
+                    Type = Type,
+                    Param = Param
                 }
             };
             return (RestHttpActionResult<StripeErrorResponse>.WithStatus(StatusCode, stripeError));
