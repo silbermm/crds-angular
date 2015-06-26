@@ -166,15 +166,13 @@
         };
 
         // Invoked from the initial "/give" state to get us to the first page
-        vm.initDefaultState = function() {
-          if($state.is('give')) {            
+        vm.initDefaultState = function() {            
           // If we have not initialized (meaning we came in via a deep-link, refresh, etc),
           // reset state and redirect to start page (/give/amount).
-            vm.reset();
-            vm.initialized = true;
-            Session.removeRedirectRoute();
-            $state.go("give.amount");        
-          };
+          vm.reset();
+          vm.initialized = true;
+          Session.removeRedirectRoute();
+          $state.go("give.amount");          
         };
 
         // Callback from email-field on guest giver page.  Emits a growl
