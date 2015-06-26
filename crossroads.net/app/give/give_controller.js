@@ -269,6 +269,7 @@
           vm.amountSubmitted = false;
           vm.bankinfoSubmitted = false;
           vm.changeAccountInfo = false;
+          vm.email = undefined;
           vm.initialized = false;
           vm.processing = false;
           vm.program = undefined;
