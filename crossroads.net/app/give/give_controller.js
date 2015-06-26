@@ -183,7 +183,7 @@
           vm.initialized = true;
           Session.removeRedirectRoute();
           $state.go("give.amount");
-        }
+        };
 
         // Callback from email-field on guest giver page.  Emits a growl
         // notification indicating that the email entered may already be a
