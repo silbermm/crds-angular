@@ -91,7 +91,6 @@
 
     this.removeRedirectRoute = function() {
         $cookieStore.remove("redirectUrl");
-        $cookieStore.remove("link");
         $cookieStore.remove("params");
     };
 
