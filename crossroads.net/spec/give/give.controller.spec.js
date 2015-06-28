@@ -114,7 +114,7 @@ describe('GiveController', function() {
     });
 
     it('should go to give.amount if starting at give', function() {
-    
+
       controller.initialized = false;
       controller.dto = controllerDto;
       controller.initDefaultState();
@@ -129,11 +129,11 @@ describe('GiveController', function() {
         'give': true,
         'give.amount': false,
       };
-     
+
       controller.initialized = false;
       controller.dto = controllerDto;
       controller.initDefaultState();
-     
+
       expect($state.go).toHaveBeenCalledWith('give.amount');
       expect(controller.initialized).toBeTruthy();
       expect(controllerDto.reset).toHaveBeenCalled();
@@ -145,11 +145,11 @@ describe('GiveController', function() {
         'give': false,
         'give.amount': true,
       };
-     
+
       controller.initialized = false;
       controller.dto = controllerDto;
       controller.initDefaultState();
-    
+
       expect($state.go).toHaveBeenCalled();
       expect(controller.initialized).toBeTruthy();
       expect(controllerDto.reset).toHaveBeenCalled();
@@ -161,7 +161,7 @@ describe('GiveController', function() {
         'give': true,
         'give.amount': false,
       };
-  
+
       controller.initialized = false;
       controller.dto = controllerDto;
       controller.initDefaultState();
@@ -191,13 +191,12 @@ describe('GiveController', function() {
       expect(controller.initDefaultState).toHaveBeenCalled();
       expect(controller.transitionForLoggedInUserBasedOnExistingDonor).not.toHaveBeenCalled();
       expect(controller.processing).toBeTruthy();
-      expect(controller.email).toBeDefined();
-      expect(controller.email).toBe("me@here.com");
+      expect(controller.email).toBeUndefined();
     });
 
     it('should not initialize default state if already initialized', function() {
-      $rootScope.email = undefined;
-      controller.email = "me2@here.com";
+      $rootScope.email = "me2@here.com";
+      controller.email = undefined;
 
       controller.initialized = true;
       var event = $scope.$broadcast('$stateChangeStart', {name: 'give.amount'});
@@ -206,8 +205,7 @@ describe('GiveController', function() {
       expect(controller.initDefaultState).not.toHaveBeenCalled();
       expect(controller.transitionForLoggedInUserBasedOnExistingDonor).toHaveBeenCalled();
       expect(controller.processing).toBeTruthy();
-      expect(controller.email).toBeDefined();
-      expect(controller.email).toBe("me2@here.com");
+      expect(controller.email).toBeUndefined();
     });
 
     it('should initialize default state if toState=give', function() {
@@ -220,8 +218,7 @@ describe('GiveController', function() {
       expect(controller.initDefaultState).toHaveBeenCalled();
       expect(controller.transitionForLoggedInUserBasedOnExistingDonor).not.toHaveBeenCalled();
       expect(controller.processing).toBeTruthy();
-      expect(controller.email).toBeDefined();
-      expect(controller.email).toBe("me@here.com");
+      expect(controller.email).toBeUndefined();
     });
 
     it('should not do anything if toState is not in the giving flow', function() {

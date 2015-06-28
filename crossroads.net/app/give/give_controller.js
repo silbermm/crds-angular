@@ -21,11 +21,6 @@
            // Make sure to set the processing state to true whenever a state change begins
            vm.processing = true;
 
-           if ($rootScope.email) {
-               vm.email = $rootScope.email;
-               //what if email is not found for some reason??
-           }
-
            // If not initialized, initialize and go to default state
            if(!vm.initialized || toState.name == "give") {
              event.preventDefault();
