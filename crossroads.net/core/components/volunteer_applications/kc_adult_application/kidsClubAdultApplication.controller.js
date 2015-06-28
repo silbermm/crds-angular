@@ -297,10 +297,24 @@ var moment = require('moment');
         CrossroadsId: adultFields.sexuallyActiveOutsideMarriage
       };
 
-      adult.spiritualOrientation = {
-        //currently checkboxes make radio buttons
-        Value: vm.volunteer.spiritualOrientation,
-        CrossroadsId: adultFields.spiritualOrientation
+      adult.religionSearchingForAnswers = {
+        Value: vm.volunteer.religionSearchingForAnswers,
+        CrossroadsId: adultFields.religionSearchingForAnswers
+      };
+
+      adult.religionReceivedJesus = {
+        Value: vm.volunteer.religionReceivedJesus,
+        CrossroadsId: adultFields.religionReceivedJesus
+      };
+
+      adult.religionFocusingOnObedience = {
+        Value: vm.volunteer.religionFocusingOnObedience,
+        CrossroadsId: adultFields.religionFocusingOnObedience
+      };
+
+      adult.religionReplicating = {
+        Value: vm.volunteer.religionReplicating,
+        CrossroadsId: adultFields.religionReplicating
       };
 
       adult.spiritualOrientationExplain = {
