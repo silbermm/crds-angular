@@ -186,9 +186,24 @@ var moment = require('moment');
         CrossroadsId: studentFields.grade
       };
 
-      student.whereYouAre = {
-        Value: vm.whereYouAre,
-        CrossroadsId: studentFields.whereYouAre
+      student.religionSearchingForAnswers = {
+        Value: vm.religionSearchingForAnswers,
+        CrossroadsId: studentFields.religionSearchingForAnswers
+      };
+
+      student.religionReceivedJesus = {
+        Value: vm.religionReceivedJesus,
+        CrossroadsId: studentFields.religionReceivedJesus
+      };
+
+      student.religionFocusingOnObedience = {
+        Value: vm.religionFocusingOnObedience,
+        CrossroadsId: studentFields.religionFocusingOnObedience
+      };
+
+      student.religionReplicating = {
+        Value: vm.religionReplicating,
+        CrossroadsId: studentFields.religionReplicating
       };
 
       student.explainFaith = {

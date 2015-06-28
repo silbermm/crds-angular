@@ -189,33 +189,34 @@
 
   <fieldset class="push-bottom">
     <legend>About You</legend>
-    <div class="row">
-      <div class="form-group col-sm-12" ng-class="{'has-error': kcStudentApplication.showError(student, 'religion')}">
-        <label class="control-label block required">Tell us where you are</label>
-        <label class="radio-inline control-label">
-          <input type="radio"
-                 value="I'm exploring my faith"
-                 name="religion" ng-model="kcStudentApplication.whereYouAre" required>I'm exploring my faith
-        </label>
-        <label class="radio-inline">
-          <input type="radio"
-                 value="I'm not sure"
-                 name="religion"
-                 ng-model="kcStudentApplication.whereYouAre" required>I'm not sure
-        </label>
-        <label class="radio-inline">
-          <input type="radio"
-                 value="I'm a Christ-follower"
-                 name="religion"
-                 ng-model="kcStudentApplication.whereYouAre" required>I'm a Christ-follower
-        </label>
-        <ng-messages for="student.religion.$error" ng-if="kcStudentApplication.showError(student, 'religion')" >
+    <div class="form-group col-sm-12" ng-class="{'has-error': kcStudentApplication.showError(student, 'religion')}">
+        <label class="block required">How would you define your spiritual life? Pick as many as you like.</label>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" ng-model="kcStudentApplication.religionSearchingForAnswers" required>Searching for answers.
+          </label>
+        </div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" ng-model="kcStudentApplication.religionReceivedJesus" required>I have received Jesus.
+          </label>
+        </div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" ng-model="kcStudentApplication.religionFocusingOnObedience" required>Focusing on obedience—I’ve quit negotiating with God.
+          </label>
+        </div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" ng-model="kcStudentApplication.religionReplicating" required>I’m actively replicating my faith in others.
+          </label>
+        </div>
+        <ng-messages for="student.religion.$error" ng-if="kcStudentApplication.showError(student, 'religion')">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
         </ng-messages>
       </div>
-    </div>
     <div class="row">
       <div class="form-group col-sm-8" ng-class="{'has-error': kcStudentApplication.showError(student, 'explainFaith')}">
         <label class="control-label required" for="explainFaith">Please Explain</label>
