@@ -42,8 +42,8 @@ INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (171,'There are opportunities to serve ',6,'regardless of your spiritual orientation.',0,16,1,0,328)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (180,'How would you define your spiritual life?',8,'Searching for answers.
 I have received Jesus.
-Focusing on obedience?I?ve quit negotiating with God.
-I?m actively replicating my faith in others.',1,16,1,0,330)
+Focusing on obedience- I''ve quit negotiating with God.
+I''m actively replicating my faith in others.',1,16,1,0,330)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (190,'Please Explain where you are',2,'NULL',1,16,1,0,331)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (200,'Why do you want to serve?',2,'NULL',1,16,1,0,332)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (201,'Any Special talents',6,'abilities, skills or experiences that may be helpful?  (Juggling, fire eating, acting, or making weird noises with your armpit count.)',0,16,1,0,333)
@@ -151,8 +151,8 @@ INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [
 No',1,17,1,0,417)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (360,'How would you define your spiritual life?',8,'Searching for answers.
 I have received Jesus.
-Focusing on obedience?I?ve quit negotiating with God.
-I?m actively replicating my faith in others.',1,17,1,0,421)
+Focusing on obedience-I''ve quit negotiating with God.
+I''m actively replicating my faith in others.',1,17,1,0,421)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (370,'Please Explain',2,'NULL',1,17,1,0,422)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (380,'What prompted you to fill out an application and c',2,'NULL',1,17,1,0,424)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (390,'Any special talents, abilities, skills or experien',2,'NULL',1,17,1,0,426)
@@ -212,5 +212,4 @@ INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (182,'I have received Jesus',8,'NULL',0,16,1,0,511)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (183,'Focusing on obedience',8,'NULL',0,16,1,0,512)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (184,'I''m actively replicating my faith',8,'NULL',0,16,1,0,513)
->>>>>>> development
 GO
