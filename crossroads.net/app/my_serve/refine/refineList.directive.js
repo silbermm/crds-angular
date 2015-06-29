@@ -3,9 +3,9 @@
 
   module.exports = RefineDirective;
 
-  RefineDirective.$inject = ['$rootScope', 'filterState', 'screenSize']
+  RefineDirective.$inject = ['$rootScope', 'filterState', 'screenSize', '$modal']
 
-  function RefineDirective($rootScope, filterState, screenSize) {
+  function RefineDirective($rootScope, filterState, screenSize, $modal) {
     return {
       restrict: "E",
       replace: true,
@@ -34,7 +34,7 @@
       scope.datePickers = { fromOpened : false, toOpened: false };
       scope.filterAll = filterAll;
       scope.filterFromDate = formatDate(new Date());
-      scope.format = 'MM/dd/yyyy';
+      scope.format = 'MM/dd/yy';
       scope.fromDateError = false;
       scope.getUniqueMembers = getUniqueMembers;
       scope.getUniqueSignUps = getUniqueSignUps;
@@ -45,6 +45,7 @@
       scope.isFilterSet = isFilterSet;
       scope.isFromError = isFromError;
       scope.isToError = isToError;
+      scope.open = open;
       scope.openFromDate = openFromDate;
       scope.openToDate = openToDate;
       scope.readyFilterByDate = readyFilterByDate;
@@ -380,6 +381,31 @@
         return scope.filterdates.todate.$dirty && (
           scope.filterdates.todate.$error.fromDate || scope.filterdates.todate.$error.required || scope.filterdates.todate.$error.date);
       }
+      // Modals
+      function open () {
+        console.log('open modal')
+        var modalInstance = $modal.open({
+          templateUrl: 'refine/serveModalContent.html',
+          backdrop: true,
+          size: 'sm',
+          controller: 'ServeModalController',
+          resolve: {
+            filterFromDate: function () {
+                return scope.filterFromDate;
+            },
+            lastDate: function () {
+                return scope.lastDate;
+            }
+          }
+        });
+        modalInstance.result.then(function (dates) {
+          scope.filterFromDate = dates.fromDate;
+          scope.lastDate = dates.toDate;
+
+            }, function () {
+              $log.info('Modal dismissed at: ' + new Date());
+            });
+      }
 
       function openFromDate($event) {
         $event.preventDefault();
@@ -403,7 +429,7 @@
       function formatDate(date, days=0){
         var d = moment(date);
         d.add(days, 'd');
-        return d.format('MM/DD/YYYY');
+        return d.format('MM/DD/YY');
       }
 
       function readyFilterByDate() {
@@ -459,7 +485,7 @@
           scope.isFilterCollapsed = !scope.isFilterCollapsed;
         }
       }
-      
+
       function toggleDateCollapse() {
         if ($rootScope.mobile) {
           scope.isDateCollapsed = !scope.isDateCollapsed;

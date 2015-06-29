@@ -3,7 +3,7 @@
 
   module.exports = MyServeController;
 
-  MyServeController.$inject = ['$rootScope', '$log', 'filterState', 'Session', 'ServeOpportunities', 'Groups', 'AUTH_EVENTS', $modal];
+  MyServeController.$inject = ['$rootScope', '$log', 'filterState', 'Session', 'ServeOpportunities', 'Groups', 'AUTH_EVENTS'];
 
   function MyServeController($rootScope, $log, filterState, Session, ServeOpportunities, Groups, AUTH_EVENTS){
 
@@ -41,17 +41,6 @@
       vm.filterState.clearAll();
     });
 
-    // MOdals
-
-    _this.open = function (size) {
-
-      var modalInstance = $modal.open({
-        templateUrl: 'serveModalContent.html',
-        backdrop: true,
-        size: size,
-      })
-    }
-
     ////////////////////////////
     // Implementation Details //
     ////////////////////////////
@@ -82,7 +71,7 @@
     function formatDate(date, days=0){
       var d = moment(date);
       d.add(days, 'd');
-      return d.format('MM/DD/YYYY');
+      return d.format('MM/DD/YY');
     }
 
 

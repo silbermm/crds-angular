@@ -1,0 +1,59 @@
+<div class="modal-body">
+  <form name='filterdates' ng-submit="readyFilterByDate()" novalidate>
+    <div class="push-half-bottom filter-group">
+      <!-- From -->
+      <div class="form-group" ng-class="{'has-error': isFromError()}">
+        <label>From:</label>
+        <div class="input-group">
+          <input name="fromdate" type="text" class="form-control" datepicker-popup="{{format}}" ng-required="true" close-text="Close" ng-model="fromDate" is-open="datePickers.fromOpened" datepicker-options="{showWeeks:false}" />
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-gray-light" ng-click="openFromDate($event)">
+              <i class="glyphicon glyphicon-calendar"></i>
+            </button>
+          </span>
+        </div>
+        <!--/input-group-->
+        <span ng-messages="filterdates.fromdate.$error" ng-show="isFromError()">
+          <span ng-message="fromDateToLarge" >
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fromDateToLarge].message | html"></span>
+        </span>
+        <span ng-message="required">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+        </span>
+        <span ng-message="date">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
+        </span>
+        </span>
+      </div>
+      <!--/form-group-->
+      <!-- /From -->
+
+      <div class="form-group" ng-class="{'has-error': isToError()}">
+        <label>To:</label>
+        <div class="input-group">
+          <input name="todate" type="text" class="form-control" datepicker-popup="{{::format}}" ng-required="true" close-text="Close" ng-model="toDate" is-open="datePickers.toOpened" datepicker-options="{showWeeks:false}" />
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-gray-light" ng-click="openToDate($event)">
+              <i class="glyphicon glyphicon-calendar"></i>
+            </button>
+          </span>
+        </div>
+        <!--/input-group-->
+        <span ng-messages="filterdates.todate.$error" ng-show="isToError()">
+          <span ng-message="fromDate">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.toDateToSmall].message | html"> </span>
+        </span>
+        <span ng-message="required">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+        </span>
+        <span ng-message="date">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
+        </span>
+        </span>
+      </div>
+      <!--/form-group-->
+      <button type="submit" class="btn btn-primary btn-block" > Apply </input>
+    </div>
+    <!--/push-bottom-->
+  </form>
+</div><!--/modal-body-->
