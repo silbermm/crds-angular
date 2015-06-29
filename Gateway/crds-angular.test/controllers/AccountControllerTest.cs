@@ -52,6 +52,7 @@ namespace crds_angular.test.controllers
         }
 
         [Test]
+        [Ignore]
         public void ShouldReturnOk()
         {
             // First we need to get a sessionId
