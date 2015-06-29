@@ -1,5 +1,5 @@
 .my-trip {
-  .trip-date{
+  .trip-date {
     font-size: 18px;
   }
   .funding-goal {
@@ -22,5 +22,10 @@
   }
   .icon-email {
     color: $gray;
+  }
+  .donor-row {
+    div {
+      border-bottom: 1px solid $gray-lighter;
+    }
   }
 }

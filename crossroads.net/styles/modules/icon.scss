@@ -8,6 +8,12 @@
   height: 15px;
 }
 
+.icon-small {
+  @extend %icon;
+  width: 10px;
+  height: 10px;
+}
+
 .icon-medium {
   @extend %icon;
   width: 20px;
