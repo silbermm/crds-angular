@@ -20,7 +20,7 @@ describe('Crossroads App', function() {
     var accountInput = element(by.model('account'));
     accountInput.sendKeys("account");
     accountInput.sendKeys(protractor.Key.TAB);
- 	expect(element(by.model('account')).getAttribute('class')).toMatch('ng-invalid-invalid-account');
+    expect(element(by.model('account')).getAttribute('class')).toMatch('ng-invalid-invalid-account');
   });
 
   it('It should not display an error message for a valid routing number', function() {
@@ -31,11 +31,11 @@ describe('Crossroads App', function() {
     var routingInput = element(by.model('routing'));
     routingInput.sendKeys("042000314");
     routingInput.sendKeys(protractor.Key.TAB);
- 	expect(element(by.model('routing')).getAttribute('class')).toMatch('ng-valid-invalid-routing');
- 	var accountInput = element(by.model('account'));
+    expect(element(by.model('routing')).getAttribute('class')).toMatch('ng-valid-invalid-routing');
+    var accountInput = element(by.model('account'));
     accountInput.sendKeys("042099914005");
     accountInput.sendKeys(protractor.Key.TAB);
- 	expect(element(by.model('account')).getAttribute('class')).toMatch('ng-valid-invalid-account');
+    expect(element(by.model('account')).getAttribute('class')).toMatch('ng-valid-invalid-account');
   });
 
  

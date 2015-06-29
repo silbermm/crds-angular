@@ -28,7 +28,7 @@ namespace crds_angular.Controllers.API
 {
     public class GroupController : MPAuth
     {
-        private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private crds_angular.Services.Interfaces.IGroupService groupService;
         private IAuthenticationService authenticationService;
        
@@ -55,7 +55,7 @@ namespace crds_angular.Controllers.API
                 try
                 {
                     groupService.addParticipantsToGroup(groupId, partId.partId);
-                    logger.Debug(String.Format("Successfully added participants {0} to group {1}", partId.partId, groupId));
+                    _logger.Debug(String.Format("Successfully added participants {0} to group {1}", partId.partId, groupId));
                     return (Ok());
                 }
                 catch (GroupFullException e)
@@ -69,7 +69,7 @@ namespace crds_angular.Controllers.API
                 }
                 catch (Exception e)
                 {
-                    logger.Error("Could not add user to group", e);
+                    _logger.Error("Could not add user to group", e);
                     return BadRequest();
                 }
             });

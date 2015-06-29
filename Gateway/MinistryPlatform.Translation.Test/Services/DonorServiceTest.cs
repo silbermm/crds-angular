@@ -252,7 +252,8 @@ namespace MinistryPlatform.Translation.Test.Services
             {
                 {"Donor_ID", donorId},
                 {"Processor_ID", processorId},
-                {"Contact_ID", contactId}
+                {"Contact_ID", contactId},
+                {"Email", email}
             });
             var donor = new ContactDonor()
             {
