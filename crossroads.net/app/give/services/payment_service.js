@@ -2,9 +2,9 @@
 
   angular.module('crossroads.give').factory('PaymentService',PaymentService);
 
-  PaymentService.$inject = ['$log', '$http', '$resource','$q', 'stripe', '$cookies'];
+  PaymentService.$inject = ['$log', '$http', '$resource','$q', 'stripe', '$cookies', 'MESSAGES'];
 
-  function PaymentService($log, $http, $resource, $q, stripe, $cookies) {
+  function PaymentService($log, $http, $resource, $q, stripe, $cookies, MESSAGES) {
     var payment_service = { 
       createDonorWithBankAcct : createDonorWithBankAcct,
       createDonorWithCard : createDonorWithCard,
@@ -12,116 +12,17 @@
       donation : {},
       donor : getDonor,
       updateDonorWithBankAcct :updateDonorWithBankAcct,
-      updateDonorWithCard :updateDonorWithCard      
+      updateDonorWithCard :updateDonorWithCard
     };
 
     stripe.setPublishableKey(__STRIPE_PUBKEY__);
 
-    function getDonor(){
-      return $resource(__API_ENDPOINT__ + 'api/donor/?email=:email',{email: '@_email'}, {
-        get: {
-          method : 'GET',
-          headers: {'Authorization': $cookies.get('sessionId')}
-        }
-      });
+    function createDonorWithBankAcct(bankAcct, email) {
+      return(_donor(bankAcct, email, stripe.bankAccount, 'POST'));
     }
 
     function createDonorWithCard(card, email) {
-      var def = $q.defer();
-      stripe.card.createToken(card)
-        .then(function (token) {
-          // Below, email_address is only needed for a guest giver, and Authorization
-          // header is only needed for an authenticated non-guest giver.  However,
-          // to keep things simple, we'll always send both, and the proper path in
-          // the DonorController Gateway will be followed based on the absence
-          // or presence of a non-blank Authorization header.
-          var donor_request = { stripe_token_id: token.id, email_address: email }
-          $http({
-            method: "POST",
-            url: __API_ENDPOINT__ + 'api/donor',
-            headers: {
-              'Authorization': $cookies.get('sessionId')
-            },
-            data: donor_request
-            }).success(function(data) {
-              payment_service.donor = data;
-              def.resolve(data);
-            }).error(function(error) {
-              def.reject(error);
-            });
-        });
-       return def.promise;
-    }
-
-    function updateDonorWithCard(donorId, card){
-      var def = $q.defer();
-      stripe.card.createToken(card)
-        .then(function (token) {
-          var donor_request = { "stripe_token_id": token.id }
-          $http({
-            method: "PUT",
-            url: __API_ENDPOINT__ + 'api/donor',
-            headers: {
-              'Authorization': $cookies.get('sessionId')
-            },
-            data: donor_request
-            }).success(function(data) {
-              payment_service.donor = data;
-              def.resolve(data);
-            }).error(function(error) {
-              def.reject(error);
-            });
-        });
-       return def.promise;
-    }
-   
-    function createDonorWithBankAcct(bank, email) {
-      var def = $q.defer();
-      stripe.bankAccount.createToken(bank)
-        .then(function (token) {
-          // Below, email_address is only needed for a guest giver, and Authorization
-          // header is only needed for an authenticated non-guest giver.  However,
-          // to keep things simple, we'll always send both, and the proper path in
-          // the DonorController Gateway will be followed based on the absence
-          // or presence of a non-blank Authorization header.
-          var donor_request = { stripe_token_id: token.id, email_address: email }
-          $http({
-            method: "POST",
-            url: __API_ENDPOINT__ + 'api/donor',
-            headers: {
-              'Authorization': $cookies.get('sessionId')
-            },
-            data: donor_request
-            }).success(function(data) {
-              payment_service.donor = data;
-              def.resolve(data);
-            }).error(function(error) {
-              def.reject(error);
-            });
-        });
-       return def.promise;
-    }
-
-    function updateDonorWithBankAcct(donorId, bank){
-      var def = $q.defer();
-      stripe.bankAccount.createToken(bank)
-        .then(function (token) {
-          var donor_request = { "stripe_token_id": token.id }
-          $http({
-            method: "PUT",
-            url: __API_ENDPOINT__ + 'api/donor',
-            headers: {
-              'Authorization': $cookies.get('sessionId')
-            },
-            data: donor_request
-            }).success(function(data) {
-              payment_service.donor = data;
-              def.resolve(data);
-            }).error(function(error) {
-              def.reject(error);
-            });
-        });
-       return def.promise;
+      return(_donor(card, email, stripe.card, 'POST'));
     }
 
     function donateToProgram(program_id, amount, donor_id, email_address, pymt_type){
@@ -140,15 +41,79 @@
         headers: {
               'Authorization': $cookies.get('sessionId')
             }
-        }).success(function(data){
-          payment_service.donation = data;
-          def.resolve(data);
-        }).error(function(error) {
-          def.reject(error);
-        });
+      }).success(function(data){
+        payment_service.donation = data;
+        def.resolve(data);
+      }).error(function(response) {
+        _addGlobalErrorMessage(response.error);
+        def.reject(response.error);
+      });
 
       return def.promise;
+    }
 
+    function getDonor(){
+      return $resource(__API_ENDPOINT__ + 'api/donor/?email=:email',{email: '@_email'}, {
+        get: {
+          method : 'GET',
+          headers: {'Authorization': $cookies.get('sessionId')}
+        }
+      });
+    }
+
+    function updateDonorWithBankAcct(donorId, bankAcct, email){
+      return(_donor(bankAcct, email, stripe.bankAccount, 'PUT'));
+    }
+
+    function updateDonorWithCard(donorId, card, email){
+      return(_donor(card, email, stripe.card, 'PUT'));
+    }
+
+    function _addGlobalErrorMessage(error) {
+      if(!error) {
+        return;
+      }
+
+      if(error.type == 'card_error') {
+        if(error.code == 'card_declined'
+            || /^incorrect/.test(error.code)
+            || /^invalid/.test(error.code)) {
+          error.globalMessage = MESSAGES.paymentMethodDeclined;
+        } else if(error.code == 'processing_error') {
+          error.globalMessage = MESSAGES.paymentMethodProcessingError;
+        }
+      } else if(error.param == 'bank_account') {
+        if(error.type == 'invalid_request_error') {
+          error.globalMessage = MESSAGES.paymentMethodDeclined;
+        }
+      }
+    }
+
+    function _donor(donorInfo, email, stripeFunc, apiMethod) {
+      var def = $q.defer();
+      stripeFunc.createToken(donorInfo, function(status, response) {
+        if(response.error) {
+          _addGlobalErrorMessage(response.error);
+          def.reject(response.error);
+        } else {
+          var donor_request = { stripe_token_id: response.id, email_address: email }
+          $http({
+            method: apiMethod,
+            url: __API_ENDPOINT__ + 'api/donor',
+            headers: {
+              'Authorization':  $cookies.get('sessionId')
+            },
+            data: donor_request
+          }).success(function(data) {
+            payment_service.donor = data;
+            def.resolve(data);
+          }).error(function(response) {
+            _addGlobalErrorMessage(response.error);
+            def.reject(response.error);
+          });
+        }
+      });
+      return(def.promise);
     }
 
     return payment_service;

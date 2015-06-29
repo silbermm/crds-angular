@@ -23,7 +23,7 @@
         }
     }
 
-    $scope.logout = function () {
+    $scope.logout = function ($event) {
         // TODO Added to debug/research US1403 - should remove after issue is resolved
         console.log("US1403: logging out user in login_controller");
         AuthService.logout();
@@ -34,6 +34,11 @@
             $scope.credentials.password = undefined;
         }
         $rootScope.username = undefined;
+
+        if ($state.current === undefined || $state.current.data === undefined || !$state.current.data.isProtected) {
+            // not currently on a protected page, so don't redirect to home page
+            $event.preventDefault();
+        }
     }
 
     $scope.login = function () {
@@ -50,14 +55,12 @@
                 $timeout(function() {
                     if (Session.hasRedirectionInfo()) {
                         var url = Session.exists("redirectUrl");
-                        var link = Session.exists("link");
+                        var params = Session.exists("params");
                         Session.removeRedirectRoute();
-                        if(link === undefined){
+                        if(params === undefined){
                             $state.go(url);
-                        }
-                        else
-                        {
-                            $state.go(url,{link:link});
+                        } else {
+                            $state.go(url, JSON.parse(params));
                         }
                     }
                 }, 500);

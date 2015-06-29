@@ -23,6 +23,7 @@
 
       scope.currentActiveTab = null;
       scope.currentMember = null;
+      scope.datesDisabled = true;
       scope.dateOptions = {
         formatYear: 'yy',
         startingDay: 1,
@@ -237,12 +238,14 @@
             case null:
               scope.currentMember.currentOpportunity.fromDt = null;
               scope.currentMember.currentOpportunity.toDT = null;
+              scope.datesDisabled = true;
               break;
             case 0:
               // once...
               scope.formErrors.frequency = false;
               scope.currentMember.currentOpportunity.fromDt = scope.oppServeDate;
               scope.currentMember.currentOpportunity.toDt = scope.oppServeDate;
+              scope.datesDisabled = true;
               break;
             default:
               // every  or everyother
@@ -255,6 +258,7 @@
                 var toDate = new Date(dateNum);
                 scope.currentMember.currentOpportunity.toDt = (toDate.getMonth() + 1) + "/" + toDate.getDate() + "/" + toDate.getFullYear();
               });
+              scope.datesDisabled = false;
               break;
           }
         }
@@ -351,6 +355,12 @@
             max: r.maximum
           });
         });
+
+        if (scope.currentMember.serveRsvp !== undefined && scope.currentMember.serveRsvp !== null) {
+          scope.selectedRole = _.find(scope.currentMember.roles, function(r) {
+            return r.roleId === scope.currentMember.serveRsvp.roleId;
+          });
+        };
         allowProfileEdit();
       }
 
@@ -358,9 +368,6 @@
         if (member.serveRsvp === undefined || member.serveRsvp === null) {
           return false;
         } else {
-          scope.selectedRole = _.find(member.roles, function(r) {
-            return r.roleId === member.serveRsvp.roleId;
-          });
           if (member.serveRsvp !== null && (member.serveRsvp.isSaved || member.serveRsvp.isSaved === undefined)) {
             return true;
           } else {

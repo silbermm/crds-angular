@@ -12,7 +12,8 @@
     'angular-growl',
     'toggle-switch',
     'ngAside',
-    'matchMedia'
+    'matchMedia',
+    'ui.bootstrap'
     ])
     .constant("AUTH_EVENTS", {
       loginSuccess: "auth-login-success",
@@ -59,8 +60,11 @@
       noMembers: 33,
       noServingOpportunities: 34,
       toDateToSmall: 38,
+      invalidPaymentMethodInformation: 39,
       noInitiativeSelected: 16,
       toolsError: 40,
+      paymentMethodDeclined: 44,
+      paymentMethodProcessingError: 47,
       noResponse: 49
     })
     .config(function (growlProvider) {

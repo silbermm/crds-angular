@@ -150,6 +150,7 @@
     <Compile Include="controllers\GroupControllerTest.cs" />
     <Compile Include="controllers\ServeControllerTest.cs" />
     <Compile Include="controllers\ProgramControllerTest.cs" />
+    <Compile Include="Models\Json\RestHttpActionResultTest.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\MPAuthTest.cs" />
@@ -162,9 +163,29 @@
     <Compile Include="Services\VolunteerApplicationServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\crds-angular\Web.common.config">
-      <Link>Web.common.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <None Include="..\crds-angular\MinistryPlatform.config">
+      <Link>MinistryPlatform.config</Link>
+      <TransformOnBuild>true</TransformOnBuild>
+    </None>
+    <None Include="..\crds-angular\MinistryPlatform.Debug.config">
+      <Link>MinistryPlatform.Debug.config</Link>
+      <DependentUpon>MinistryPlatform.config</DependentUpon>
+      <IsTransformFile>True</IsTransformFile>
+    </None>
+    <None Include="..\crds-angular\MinistryPlatform.Demo.config">
+      <Link>MinistryPlatform.Demo.config</Link>
+      <DependentUpon>MinistryPlatform.config</DependentUpon>
+      <IsTransformFile>True</IsTransformFile>
+    </None>
+    <None Include="..\crds-angular\MinistryPlatform.Integration.config">
+      <Link>MinistryPlatform.Integration.config</Link>
+      <DependentUpon>MinistryPlatform.config</DependentUpon>
+      <IsTransformFile>True</IsTransformFile>
+    </None>
+    <None Include="..\crds-angular\MinistryPlatform.Release.config">
+      <Link>MinistryPlatform.Release.config</Link>
+      <DependentUpon>MinistryPlatform.config</DependentUpon>
+      <IsTransformFile>True</IsTransformFile>
     </None>
     <None Include="app.config">
       <SubType>Designer</SubType>

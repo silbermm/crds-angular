@@ -650,10 +650,11 @@ ul.cr-nav {
 /***************************************************************************************
 * Off Canvas Mobile Menu
 ***************************************************************************************/
-
+.ng-aside.modal.fade .modal-dialog,
 .ng-aside .modal-dialog {
   max-width: 80%;
-  padding: 20px 0px;
+  padding: 0px;
+  @include translate(0, 0);
 
   .modal-content {
     background: $gray-darker;
@@ -704,16 +705,14 @@ ul.cr-nav {
     }
   }
 
-  ul.dropdown-menu {
+  ul.drop-menu {
     position: relative;
     float: none;
     border-radius: 0px;
     border: 0px;
     background: lighten($gray-darker, 8%);
     box-shadow: none;
-    max-height: 0;
     display: block;
-    transition: max-height .5s linear;
     overflow: hidden;
 
     li {
@@ -734,14 +733,20 @@ ul.cr-nav {
       }
     }
   }
-  .open > .dropdown-menu {
-    max-height: 400px; //need to declar height for transition to work
-  }
   .side-nav-search {
     padding: 10px;
+    position: relative;
+
+    input {
+      position: static;
+    }
   }
   .side-nav-login {
     padding: 10px;
+
+    input {
+      position: static;
+    }
 
     .forgot_password {
       a {

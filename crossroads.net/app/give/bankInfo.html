@@ -5,7 +5,7 @@
                 <use xlink:href="#crossroads_check"></use>
             </svg>
         </div>
-        <div class="form-group" ng-class="{'has-error': routingError() }">
+        <div class="form-group" ng-class="{'has-error': routingError() || bankAccount.declinedPayment }">
             <label for="routing" class="wide-label">Routing Number
                <a href="" class="pull-right weight-normal" ng-click="isCollapsed=!isCollapsed; toggleCheck()">{{showMessage}}</a>
             </label>
@@ -17,6 +17,7 @@
             <ng-messages for="bankAccountForm.routing.$error" ng-if="bankinfoSubmitted">
               <ng-messages-include src="on-submit-messages"></ng-messages-include>
             </ng-messages>
+			<span ng-show="bankAccount.declinedPayment" ng-bind-html="$root.messages[$root.MESSAGES.invalidPaymentMethodInformation].message | html"></span>
         </div>      
         <div class="form-group" ng-class="{'has-error': accountError() }">
             <label for="account">Account Number</label>
@@ -27,8 +28,7 @@
             <ng-messages for="bankAccountForm.account.$error" ng-if="bankinfoSubmitted">
               <ng-messages-include src="on-submit-messages"></ng-messages-include>
             </ng-messages>
-
-        </div>       
+			<span ng-show="bankAccount.declinedPayment" ng-bind-html="$root.messages[$root.MESSAGES.invalidPaymentMethodInformation].message | html"></span>
 
  </section>
-</ng-form>    
+</ng-form>

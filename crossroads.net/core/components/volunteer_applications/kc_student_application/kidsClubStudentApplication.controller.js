@@ -136,11 +136,6 @@ var moment = require('moment');
         CrossroadsId: studentFields.gender
       };
 
-      student.site = {
-        Value: vm.site,
-        CrossroadsId: studentFields.site
-      };
-
       student.howLongAttending = {
         Value: vm.howLongAttending,
         CrossroadsId: studentFields.howLongAttending
@@ -191,9 +186,24 @@ var moment = require('moment');
         CrossroadsId: studentFields.grade
       };
 
-      student.whereYouAre = {
-        Value: vm.whereYouAre,
-        CrossroadsId: studentFields.whereYouAre
+      student.religionSearchingForAnswers = {
+        Value: vm.religionSearchingForAnswers,
+        CrossroadsId: studentFields.religionSearchingForAnswers
+      };
+
+      student.religionReceivedJesus = {
+        Value: vm.religionReceivedJesus,
+        CrossroadsId: studentFields.religionReceivedJesus
+      };
+
+      student.religionFocusingOnObedience = {
+        Value: vm.religionFocusingOnObedience,
+        CrossroadsId: studentFields.religionFocusingOnObedience
+      };
+
+      student.religionReplicating = {
+        Value: vm.religionReplicating,
+        CrossroadsId: studentFields.religionReplicating
       };
 
       student.explainFaith = {
@@ -221,34 +231,9 @@ var moment = require('moment');
         CrossroadsId: studentFields.availabilityDuringWeekend
       };
 
-      student.availabilityOakley = {
-        Value: vm.availabilityOakley,
-        CrossroadsId: studentFields.availabilityOakley
-      };
-
-      student.availabilityFlorence = {
-        Value: vm.availabilityFlorence,
-        CrossroadsId: studentFields.availabilityFlorence
-      };
-
-      student.availabilityWestSide = {
-        Value: vm.availabilityWestSide,
-        CrossroadsId: studentFields.availabilityWestSide
-      };
-
-      student.availabilityMason = {
-        Value: vm.availabilityMason,
-        CrossroadsId: studentFields.availabilityMason
-      };
-
-      student.availabilityClifton = {
-        Value: vm.availabilityClifton,
-        CrossroadsId: studentFields.availabilityClifton
-      };
-
-      student.serveServiceTimes = {
-        Value: vm.serveServiceTimes,
-        CrossroadsId: studentFields.serveServiceTimes
+      student.availabilityWeekendSite = {
+        Value: vm.availabilityWeekendSite,
+        CrossroadsId: studentFields.availabilityWeekendSite
       };
 
       student.serveAgeKids1to2 = {

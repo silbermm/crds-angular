@@ -74,24 +74,24 @@
         console.log("US1403: redirectIfNeeded session_service - has redirect info");
 
         var url = self.exists("redirectUrl");
-        var link = self.exists("link");
+        var params = self.exists("params");
         self.removeRedirectRoute();
-        if(link === undefined){
+        if(params === undefined){
           $state.go(url);
         } else {
-          $state.go(url,{link:link});
+          $state.go(url, JSON.parse(params));
         }
       }
     };
 
-    this.addRedirectRoute = function(redirectUrl, link) {
-        $cookies.put('redirectUrl', redirectUrl);
-        $cookies.put('link', link);
+    this.addRedirectRoute = function(redirectUrl, params) {
+        $cookies.redirectUrl = redirectUrl;
+		$cookies.put("params", JSON.stringify(params));
     };
 
     this.removeRedirectRoute = function() {
         $cookies.remove("redirectUrl");
-        $cookies.remove("link");
+        $cookies.remove("params");
     };
 
     this.hasRedirectionInfo = function() {

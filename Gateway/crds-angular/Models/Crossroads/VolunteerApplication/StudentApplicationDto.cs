@@ -32,10 +32,6 @@ namespace crds_angular.Models.Crossroads.VolunteerApplication
         [Required]
         public CustomField Gender { get; set; }
 
-        [JsonProperty(PropertyName = "site")]
-        [Required]
-        public CustomField SiteAttend { get; set; }
-
         [JsonProperty(PropertyName = "howLongAttending")]
         [Required]
         public CustomField HowLongAttending { get; set; }
@@ -76,9 +72,21 @@ namespace crds_angular.Models.Crossroads.VolunteerApplication
         [Required]
         public CustomField Grade { get; set; }
 
-        [JsonProperty(PropertyName = "whereYouAre")]
+        [JsonProperty(PropertyName = "religionSearchingForAnswers")]
         [Required]
-        public CustomField WhereYouAre { get; set; }
+        public CustomField ReligionSearchingForAnswers { get; set; }
+
+        [JsonProperty(PropertyName = "religionReceivedJesus")]
+        [Required]
+        public CustomField ReligionReceivedJesus { get; set; }
+
+        [JsonProperty(PropertyName = "religionFocusingOnObedience")]
+        [Required]
+        public CustomField ReligionFocusingOnObedience { get; set; }
+
+        [JsonProperty(PropertyName = "religionReplicating")]
+        [Required]
+        public CustomField ReligionReplicating { get; set; }
 
         [JsonProperty(PropertyName = "explainFaith")]
         [Required]
@@ -100,29 +108,8 @@ namespace crds_angular.Models.Crossroads.VolunteerApplication
         [Required]
         public CustomField AvailabilityDuringWeekend { get; set; }
 
-        [JsonProperty(PropertyName = "availabilityOakley")]
-        [Required]
-        public CustomField AvailabilityOakley { get; set; }
-
-        [JsonProperty(PropertyName = "availabilityFlorence")]
-        [Required]
-        public CustomField AvailabilityFlorence { get; set; }
-
-        [JsonProperty(PropertyName = "availabilityWestSide")]
-        [Required]
-        public CustomField AvailabilityWestSide { get; set; }
-
-        [JsonProperty(PropertyName = "availabilityMason")]
-        [Required]
-        public CustomField AvailabilityMason { get; set; }
-
-        [JsonProperty(PropertyName = "availabilityClifton")]
-        [Required]
-        public CustomField AvailabilityClifton { get; set; }
-
-        [JsonProperty(PropertyName = "serveServiceTimes")]
-        [Required]
-        public CustomField ServeServiceTimes { get; set; }
+        [JsonProperty(PropertyName = "availabilityWeekendSite")]
+        public CustomField AvailabilityWeekendSite { get; set; }
 
         [JsonProperty(PropertyName = "serveAgeKids1to2")]
         [Required]

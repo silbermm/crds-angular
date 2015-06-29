@@ -122,10 +122,20 @@
         controller: "MediaCtrl as media",
         templateUrl: "media/series-single-lo-res.html"
       })
+      .state("media-single", {
+        url: "/media/single",
+        controller: "MediaCtrl as media",
+        templateUrl: "media/media-single.html"
+      })
       .state("blog", {
         url: "/blog",
         controller: "BlogCtrl as blog",
         templateUrl: "blog/blog-index.html"
+      })
+      .state("blog-post", {
+        url: "/blog/post",
+        controller: "BlogCtrl as blog",
+        templateUrl: "blog/blog-post.html"
       })
       .state("serve-signup", {
         url: "/serve-signup",
@@ -164,33 +174,26 @@
         }
       })
       .state('give.amount', {
-        url: '/amount',
         templateUrl: 'give/amount.html'
       })
       .state('give.login', {
-        url: '/login',
         controller: 'LoginCtrl',
         templateUrl: 'give/login.html'
       })
       .state('give.register', {
-        url: '/register',
         controller: 'RegisterCtrl',
         templateUrl: 'give/register.html'
       })
       .state('give.confirm', {
-        url: '/confirm',
         templateUrl: 'give/confirm.html'
       })
       .state('give.account', {
-        url: '/account',
         templateUrl: 'give/account.html'
       })
       .state("give.change", {
-        url: "/change",
         templateUrl: "give/change.html"
       })
       .state('give.thank-you', {
-        url: '/thank-you',
         templateUrl: 'give/thank_you.html'
       })
       //Not a child route of give because I did not want to use the parent give template
@@ -366,7 +369,7 @@
           Profile: 'Profile',
           MPTools: 'MPTools',
           Contact: function(Profile, MPTools) {
-            var params = MPTools.getParams(); 
+            var params = MPTools.getParams();
             return Profile.Person.get({
               contactId: params.recordId
             }).$promise;
