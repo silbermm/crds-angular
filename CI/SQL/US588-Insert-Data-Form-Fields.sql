@@ -37,9 +37,10 @@ INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (160,'School',1,'NULL',1,16,1,0,326)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (170,'Grade',1,'NULL',1,16,1,0,327)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (171,'There are opportunities to serve ',6,'regardless of your spiritual orientation.',0,16,1,0,328)
-INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (180,'Tell us where you are:',7,'I''m Exploring my faith
-I''m not sure
-I''m a Christ-follower',1,16,1,0,330)
+INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (180,'How would you define your spiritual life?',8,'Searching for answers.
+I have received Jesus.
+Focusing on obedience—I’ve quit negotiating with God.
+I’m actively replicating my faith in others.',1,16,1,0,330)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (190,'Please Explain where you are',2,'NULL',1,16,1,0,331)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (200,'Why do you want to serve?',2,'NULL',1,16,1,0,332)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (201,'Any Special talents',6,'abilities, skills or experiences that may be helpful?  (Juggling, fire eating, acting, or making weird noises with your armpit count.)',0,16,1,0,333)
@@ -51,8 +52,7 @@ Florence
 West Side
 Mason
 Clifton',0,16,1,0,338)
-INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (281,'During',6,'NULL',0,16,1,0,339)
-INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (290,'Service Time(s)',1,'NULL',1,16,1,0,340)
+INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (290,'Serve Site and Service Time',1,'NULL',1,16,1,0,340)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (291,'What age kids do you prefer to serve with?',6,'NULL',0,16,1,0,343)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (292,'Check all that Apply',8,'One - 2 years old
 3-Year-olds - Pre-K
@@ -146,15 +146,16 @@ INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [
 No',1,17,1,0,415)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (350,'Currently, or in the past year, have you been sexu',7,'Yes
 No',1,17,1,0,417)
-INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (360,'Tell us where you are:',8,'I''m exploring my faith
-I''m not sure
-I''m a Christ-follower',1,17,1,0,421)
+INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (360,'How would you define your spiritual life?',8,'Searching for answers.
+I have received Jesus.
+Focusing on obedience—I’ve quit negotiating with God.
+I’m actively replicating my faith in others.',1,17,1,0,421)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (370,'Please Explain',2,'NULL',1,17,1,0,422)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (380,'What prompted you to fill out an application and c',2,'NULL',1,17,1,0,424)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (390,'Any special talents, abilities, skills or experien',2,'NULL',1,17,1,0,426)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (400,'Serve During the Week',8,'NULL',0,17,1,0,428)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (410,'Serve During Weekend Services',8,'NULL',0,17,1,0,429)
-INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (470,'Serve During',1,'NULL',0,17,1,0,432)
+INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (470,'Serve Site and Service Time',1,'NULL',0,17,1,0,432)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (590,'Reference 1:  Name',1,'NULL',1,17,1,0,440)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (600,'Reference 1: Length of Time Known',1,'NULL',1,17,1,0,441)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (610,'Reference 1: Home Phone',1,'NULL',0,17,1,0,442)
@@ -182,21 +183,11 @@ INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (830,'Applicant Agreement',7,'Yes 
 No',1,17,1,0,465)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (60,'What service do you attend?',1,'NULL',1,16,1,0,474)
-INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (240,'Oakley',8,'NULL',0,16,1,0,476)
-INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (250,'Florence',8,'NULL',0,16,1,0,477)
-INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (260,'West Side',8,'NULL',0,16,1,0,478)
-INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (270,'Mason',8,'NULL',0,16,1,0,479)
-INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (280,'Clifton',8,'NULL',0,16,1,0,480)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (300,'1 to 2 Year Olds',8,'NULL',0,16,1,0,481)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (310,'3 Year Olds - Pre K',8,'NULL',0,16,1,0,482)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (320,'Kinder - 5th Grade',8,'NULL',0,16,1,0,483)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (220,'During the Week',8,'NULL',0,16,1,0,484)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (230,'Weekend Services',8,'NULL',0,16,1,0,485)
-INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (420,'Serving Opportunities - Site Name - Oakley',8,'NULL',0,17,1,0,486)
-INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (430,'Serving Opportunities - Site Name - Florence',8,'NULL',0,17,1,0,487)
-INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (440,'Serving Opportunities - Site Name - West Site',8,'NULL',0,17,1,0,488)
-INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (450,'Serving Opportunities - Site Name - Mason',8,'NULL',0,17,1,0,489)
-INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (460,'Serving Opportunities - Site Name - Clifton',8,'NULL',0,17,1,0,490)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (480,'Serving in a Classroom',8,'NULL',0,17,1,0,491)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (490,'Welcoming New Families and showing them to their r',8,'NULL',0,17,1,0,492)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (500,'One-on-one helper with a kid who has special needs',8,'NULL',0,17,1,0,493)
@@ -210,5 +201,12 @@ INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (580,'K to 5th Grade',8,'NULL',0,17,1,0,501)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (840,'Agree Date',1,'NULL',0,17,1,0,502)
 INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (330,'Neglecting Child',8,'NULL',0,17,1,0,503)
-
+INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (361,'Searching For Answers',8,'NULL',0,17,1,0,505)
+INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (362,'I have received Jesus',8,'NULL',0,17,1,0,506)
+INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (363,'Focusing on obedience',8,'NULL',0,17,1,0,508)
+INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (364,'I''m Actively replicating my faith',8,'NULL',0,17,1,0,509)
+INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (181,'Searching For Answers',8,'NULL',0,16,1,0,510)
+INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (182,'I have received Jesus',8,'NULL',0,16,1,0,511)
+INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (183,'Focusing on obedience',8,'NULL',0,16,1,0,512)
+INSERT INTO MinistryPlatform[dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (184,'I''m actively replicating my faith',8,'NULL',0,16,1,0,513)
 GO
