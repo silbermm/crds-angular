@@ -1,5 +1,9 @@
 USE [MinistryPlatform]
 GO
+
+DELETE FROM MinistryPlatform.dbo.Form_Fields WHERE (Form_ID = 16 OR Form_ID = 17)
+GO
+
 SET IDENTITY_INSERT [dbo].[Form_Fields] ON 
 
 INSERT INTO [dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (310,10,'Last Name',1,'NULL',1,16,1,0,310)
