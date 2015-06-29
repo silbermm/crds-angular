@@ -12,16 +12,7 @@
     vm.cancel = cancel;
     vm.eventDates = [];
     vm.format = 'MM/dd/yyyy';
-    vm.frequencies = [{
-      value: 0,
-      text: "Once"
-    }, {
-      value: 1,
-      text: "Every Week"
-    }, {
-      value: 2,
-      text: "Every Other Week"
-    }];
+    vm.frequencies = [{ value: 0, text: 'Once' }, { value: 1, text: 'Every Week' }, { value: 2, text: 'Every Other Week' }];
     vm.group = {};
     vm.isFrequencyOnce = isFrequencyOnce;
     vm.isFrequencyMoreThanOnce = isFrequencyMoreThanOnce;
@@ -38,7 +29,7 @@
 
     function activate() {
       Su2sData.get({
-        "oppId": vm.params.recordId
+        'oppId': vm.params.recordId
       }, function(g) {
         vm.group = g;
         vm.allParticipants = g.Participants;
@@ -53,7 +44,7 @@
 
     function isFrequencyOnce() {
       if (vm.selectedFrequency) {
-        return (vm.selectedFrequency.value == 0)
+        return (vm.selectedFrequency.value === 0)
       }
       return false;
     }

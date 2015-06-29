@@ -141,6 +141,7 @@ angular.module('ngPayments', [])
               }
 
               scope.ccVerified = ccVerified;
+              ngModel.$setValidity('invalidCard', scope.ccVerified);
             }
           }, true);
 
@@ -168,6 +169,7 @@ angular.module('ngPayments', [])
                 scope.ngModel.cvcValid = $payments.validateCVC(card.cvcLength, newValue.length);
                 ngModel.$validators.cvcValid = true;
               }
+              ngModel.$setValidity('invalidCvc', scope.ngModel.cvcValid);
             }
           }, true);
 

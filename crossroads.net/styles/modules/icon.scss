@@ -8,6 +8,12 @@
   height: 15px;
 }
 
+.icon-small {
+  @extend %icon;
+  width: 10px;
+  height: 10px;
+}
+
 .icon-medium {
   @extend %icon;
   width: 20px;
@@ -66,7 +72,7 @@
 }
 
 .serve-opp-listings .icon-check-circle,
-.serve-opp-listings .icon-cancel-circle {
+.serve-opp-listings .icon-minus-circle {
   top: 3px;
   position: relative;
   left: 2px;

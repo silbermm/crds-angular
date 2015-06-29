@@ -19,7 +19,7 @@
         <div class="form-group" ng-class="{'has-error': isFromError()}">
           <label>From:</label>
           <div class="input-group">
-            <input name="fromdate" type="text" class="form-control" datepicker-popup="{{format}}" ng-required="true" close-text="Close" ng-model="filterFromDate" is-open="datePickers.fromOpened" datepicker-options="dateOptions" />
+            <input name="fromdate" type="text" class="form-control" datepicker-popup="{{format}}" ng-required="true" close-text="Close" ng-model="filterFromDate" is-open="datePickers.fromOpened" datepicker-options="{showWeeks:false}" />
             <span class="input-group-btn">
               <button type="button" class="btn btn-gray-light" ng-click="openFromDate($event)">
                 <i class="glyphicon glyphicon-calendar"></i>
@@ -45,7 +45,7 @@
         <div class="form-group" ng-class="{'has-error': isToError()}">
           <label>To:</label>
           <div class="input-group">
-            <input name="todate" type="text" class="form-control" datepicker-popup="{{::format}}" ng-required="true" close-text="Close" ng-model="lastDate" is-open="datePickers.toOpened" datepicker-options="dateOptions" />
+            <input name="todate" type="text" class="form-control" datepicker-popup="{{::format}}" ng-required="true" close-text="Close" ng-model="lastDate" is-open="datePickers.toOpened" datepicker-options="{showWeeks:false}" />
             <span class="input-group-btn">
               <button type="button" class="btn btn-gray-light" ng-click="openToDate($event)">
                 <i class="glyphicon glyphicon-calendar"></i>

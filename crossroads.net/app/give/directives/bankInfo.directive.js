@@ -9,9 +9,15 @@ require('../bankInfo.html');
           restrict: 'EA',
           replace: true,
           scope: {
-              account: "=", 
+              account: "=",
               bankinfoSubmitted: "=",
-              routing: "="             
+              changeAccountInfo: "=",
+              defaultSource: "=",
+              routing: "=" ,
+              showMessage: "=" ,
+              showMessageOnChange: "=",
+              showCheckClass: "=",
+              declinedPayment: "="
             },
           templateUrl: 'give/bankInfo.html',
           link: link
@@ -24,21 +30,40 @@ require('../bankInfo.html');
         scope.bankAccount = scope;
 
         scope.accountError = function() {
+          if(scope.useExistingAccountInfo()) {
+            return(false);
+          }
           return (scope.bankinfoSubmitted && scope.bankAccountForm.account.$error.invalidAccount && scope.bankAccountForm.$invalid  ||
-            scope.bankAccountForm.account.$error.invalidAccount && scope.bankAccountForm.account.$dirty);
+            scope.bankAccountForm.account.$error.invalidAccount && scope.bankAccountForm.account.$dirty
+            || scope.showMessageOnChange && scope.bankAccountForm.account.$error.invalidAccount);
         };
 
         scope.blurAccountError = function() {
-            return (scope.bankAccountForm.account.$dirty && scope.bankAccountForm.account.$error.invalidAccount);
+          if(scope.useExistingAccountInfo()) {
+            return(false);
+          }
+          return (scope.bankAccountForm.account.$dirty && scope.bankAccountForm.account.$error.invalidAccount);
+        };
+
+        scope.blurRoutingError = function() {
+          if(scope.useExistingAccountInfo()) {
+            return(false);
+          }
+          return (scope.bankAccountForm.routing.$dirty && scope.bankAccountForm.routing.$error.invalidRouting );
+        };
+
+         scope.resetDefaultBankPlaceholderValues = function() {
+          scope.defaultBankPlaceholderValues = {};
+          scope.declinedPayment = false;
         };
 
         scope.routingError = function() {
-            return (scope.bankinfoSubmitted && scope.bankAccountForm.routing.$error.invalidRouting && scope.bankAccountForm.$invalid  ||
-                scope.bankAccountForm.routing.$error.invalidRouting && scope.bankAccountForm.routing.$dirty);
-        };
-
-         scope.blurRoutingError = function() {
-          return (scope.bankAccountForm.routing.$dirty && scope.bankAccountForm.routing.$error.invalidRouting );
+          if(scope.useExistingAccountInfo()) {
+            return(false);
+          }
+          return (scope.bankinfoSubmitted && scope.bankAccountForm.routing.$error.invalidRouting && scope.bankAccountForm.$invalid  ||
+                scope.bankAccountForm.routing.$error.invalidRouting && scope.bankAccountForm.routing.$dirty
+                || scope.showMessageOnChange && scope.bankAccountForm.routing.$error.invalidRouting);
         };
 
         scope.toggleCheck = function() {
@@ -51,6 +76,21 @@ require('../bankInfo.html');
             }
         };
 
+        scope.useExistingAccountInfo = function() {
+          return(scope.changeAccountInfo && scope.bankAccountForm.$pristine);
+        };
+
+        if(!scope.defaultSource.bank_account) {
+          scope.resetDefaultBankPlaceholderValues();
+        } else if(scope.defaultSource.bank_account.last4) {
+          scope.bankAccount.account = "";
+          scope.bankAccount.routing = "";
+          scope.defaultBankPlaceholderValues = {
+            routing: scope.defaultSource.bank_account.routing,
+            maskedAccount: "XXXXXXXXXXX" + scope.defaultSource.bank_account.last4
+          };
+
+        };
 
 
       }

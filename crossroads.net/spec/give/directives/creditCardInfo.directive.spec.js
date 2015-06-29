@@ -27,7 +27,11 @@ describe('Credit Card Info Directive', function() {
      + "bankinfo-submitted='model.bankinfoSubmitted' "
      + "name-on-card='model.nameOnCard' "
      + "default-source='model.defaultSource' "
-     + "change-account-info='model.changeAccountInfo'>"
+     + "change-account-info='model.changeAccountInfo' "
+     + "declined-payment='model.declinedPayment' "
+     + "set-valid-card='model.setValidCard' "
+     + "set-valid-cvc='model.setValidCvc' "
+     + "cc-number-class='model.ccNumberClass'>"
      + "</credit-card-info>";
 
     scope = $rootScope.$new();
@@ -47,6 +51,8 @@ describe('Credit Card Info Directive', function() {
         last4: "9876",
       },
       changeAccountInfo: false,
+      ccNumberClass: 'cc-visa',
+      declinedPayment: false
     };
 
     ccElement = $compile(templateString)(scope);
@@ -77,12 +83,12 @@ describe('Credit Card Info Directive', function() {
     });
   });
 
-  describe('ccCardType Function', function() {
-    it('should have the visa credit card class', function(){
-      form.ccNumber.$modelValue = '4242424242424242';
-      isolateScope.ccCardType();
-      expect(isolateScope.ccNumberClass).toBe("cc-visa");
-    });
+ describe('ccCardType Function', function() {
+   it('should have the visa credit card class', function(){
+     form.ccNumber.$modelValue = '4242424242424242';
+     isolateScope.ccCardType();
+     expect(isolateScope.ccNumberClass).toBe("cc-visa");
+   });
 
     it('should have the mastercard credit card class', function(){
       form.ccNumber.$modelValue = '5105105105105100';

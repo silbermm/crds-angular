@@ -1,15 +1,15 @@
-"use strict";
+'use strict';
 
 var moment = require('moment');
 
 (function() {
 
-  angular.module("crossroads").controller("KidsClubAdultApplicationController", KidsClubAdultApplicationController);
+  module.exports = KidsClubAdultApplicationController;
 
   KidsClubAdultApplicationController.$inject = ['$rootScope', '$log', 'VolunteerService', 'adultFields'];
 
   function KidsClubAdultApplicationController($rootScope, $log, VolunteerService, adultFields) {
-    $log.debug("Inside Kids-Club-Adult-Application-Controller");
+    $log.debug('Inside Kids-Club-Adult-Application-Controller');
     var vm = this;
 
     if (vm.volunteer === undefined) {
@@ -32,7 +32,7 @@ var moment = require('moment');
     vm.save = save;
     vm.saving = false;
     vm.showError = showError;
-    vm.submitButtonText = "Submit";
+    vm.submitButtonText = 'Submit';
     vm.volunteer.areaOfInterestServingInClassroom = false;
     vm.volunteer.areaOfInterestWelcomingNewFamilies=false;
     vm.volunteer.areaOfInterestHelpSpecialNeeds=false;
@@ -80,7 +80,8 @@ var moment = require('moment');
           || vm.volunteer.availabilityFlorence
           || vm.volunteer.availabilityWestSide
           || vm.volunteer.availabilityMason
-          || vm.volunteer.availabilityClifton)
+          || vm.volunteer.availabilityClifton
+        )
         return true;
       return false;
     }
@@ -101,18 +102,18 @@ var moment = require('moment');
      */
     function save(form) {
       vm.saving = true;
-      vm.submitButtonText = "Submitting...";
+      vm.submitButtonText = 'Submitting...';
 
       $log.debug('you tried to save');
       $log.debug('nameTag: ' + vm.volunteer.nameTag);
       $log.debug('something from parent: ' + vm.volunteer.contactId);
 
-      $log.debug("saving");
+      $log.debug('saving');
       if(form.adult.$invalid){
-        $log.error("please fill out all required fields correctly");
+        $log.error('please fill out all required fields correctly');
         $rootScope.$emit('notify',$rootScope.MESSAGES.generalError);
         vm.saving = false;
-        vm.submitButtonText = "Submit";
+        vm.submitButtonText = 'Submit';
         return false;
       }
 
@@ -174,11 +175,6 @@ var moment = require('moment');
       adult.spouseGender = {
         Value: vm.volunteer.spouseGender,
         CrossroadsId: adultFields.spouseGender
-      };
-
-      adult.siteYouAttend = {
-        Value: vm.volunteer.siteAttend,
-        CrossroadsId: adultFields.site
       };
 
       adult.howLongAttending = {
@@ -301,10 +297,24 @@ var moment = require('moment');
         CrossroadsId: adultFields.sexuallyActiveOutsideMarriage
       };
 
-      adult.spiritualOrientation = {
-        //currently checkboxes make radio buttons
-        Value: vm.volunteer.spiritualOrientation,
-        CrossroadsId: adultFields.spiritualOrientation
+      adult.religionSearchingForAnswers = {
+        Value: vm.volunteer.religionSearchingForAnswers,
+        CrossroadsId: adultFields.religionSearchingForAnswers
+      };
+
+      adult.religionReceivedJesus = {
+        Value: vm.volunteer.religionReceivedJesus,
+        CrossroadsId: adultFields.religionReceivedJesus
+      };
+
+      adult.religionFocusingOnObedience = {
+        Value: vm.volunteer.religionFocusingOnObedience,
+        CrossroadsId: adultFields.religionFocusingOnObedience
+      };
+
+      adult.religionReplicating = {
+        Value: vm.volunteer.religionReplicating,
+        CrossroadsId: adultFields.religionReplicating
       };
 
       adult.spiritualOrientationExplain = {
@@ -332,34 +342,9 @@ var moment = require('moment');
         CrossroadsId: adultFields.availabilityWeekend
       };
 
-      adult.availabilityOakley = {
-        Value: vm.volunteer.availabilityOakley,
-        CrossroadsId: adultFields.availabilityOakley
-      };
-
-      adult.availabilityFlorence = {
-        Value: vm.volunteer.availabilityFlorence,
-        CrossroadsId: adultFields.availabilityFlorence
-      };
-
-      adult.availabilityWestSide = {
-        Value: vm.volunteer.availabilityWestSide,
-        CrossroadsId: adultFields.availabilityWestSide
-      };
-
-      adult.availabilityMason = {
-        Value: vm.volunteer.availabilityMason,
-        CrossroadsId: adultFields.availabilityMason
-      };
-
-      adult.availabilityClifton = {
-        Value: vm.volunteer.availabilityClifton,
-        CrossroadsId: adultFields.availabilityClifton
-      };
-
-      adult.availabilityServiceTimes = {
-        Value: vm.volunteer.serveServiceTimes,
-        CrossroadsId: adultFields.availabilityServiceTimes
+      adult.availabilityWeekendSite = {
+        Value: vm.volunteer.availabilityWeekendSite,
+        CrossroadsId: adultFields.availabilityWeekendSite
       };
 
       adult.areaOfInterestServingInClassroom = {
@@ -552,13 +537,13 @@ var moment = require('moment');
 
       adult.$save(function(saved) {
         vm.saving = false;
-        vm.submitButtonText = "Submit";
+        vm.submitButtonText = 'Submit';
         vm.showSuccess = true;
         return true;
       }, function(err) {
-        $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
+        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
         vm.saving = false;
-        vm.submitButtonText = "Submit";
+        vm.submitButtonText = 'Submit';
         return false;
       });
 
