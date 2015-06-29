@@ -13,7 +13,7 @@ describe('Session Service', function() {
 
   it("should save an array of family members", function(){
     Session.addFamilyMembers(family);
-    expect($cookies.family).toBe(family.join(','));
+    expect($cookies.get("family")).toBe(family.join(','));
   });
 
   it("should return an array of family members", function(){

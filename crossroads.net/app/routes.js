@@ -7,10 +7,9 @@
                         '$urlRouterProvider', 
                         '$httpProvider', 
                         '$urlMatcherFactoryProvider', 
-                        '$locationProvider',
-                        '$cookies'];
+                        '$locationProvider'];
 
-  function AppConfig($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory, $locationProvider, $cookies) {
+  function AppConfig($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory, $locationProvider) {
 
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'contentRouteType', /^\/.*/);
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'signupRouteType', /\/sign-up\/.*$/);
@@ -327,7 +326,7 @@
           Volunteer: 'VolunteerService',
           Family: function(Volunteer) {
             return Volunteer.Family.query({
-              contactId: $cookies.get('userId')
+              contactId: crds_utilities.getCookie('userId')
             }).$promise;
           }
         }
