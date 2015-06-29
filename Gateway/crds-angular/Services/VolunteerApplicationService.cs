@@ -54,7 +54,6 @@ namespace crds_angular.Services
                 opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.SpouseName, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.SpouseGender, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.SiteYouAttend, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.HowLongAttending, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.WhatServiceDoYouAttend, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.StreetAddress, opportunityResponseId));
@@ -83,7 +82,10 @@ namespace crds_angular.Services
             formResponse.FormAnswers.Add(SetCustomField(application.PsychiatricDisorder, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.SexuallyActiveOutsideMarriage, opportunityResponseId));
 
-            formResponse.FormAnswers.Add(SetCustomField(application.SpiritualOrientation, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.ReligionSearchingForAnswers, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.ReligionReceivedJesus, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.ReligionFocusingOnObedience, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.ReligionReplicating, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.SpiritualOrientationExplain, opportunityResponseId));
 
             formResponse.FormAnswers.Add(SetCustomField(application.WhatPromptedApplication, opportunityResponseId));
@@ -92,12 +94,7 @@ namespace crds_angular.Services
 
             formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityWeek, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityWeekend, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityOakley, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityFlorence, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityWestSide, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityMason, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityClifton, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityServiceTimes, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityWeekendSite, opportunityResponseId));
 
             formResponse.FormAnswers.Add(SetCustomField(application.AreaOfInterestServingInClassroom,
                 opportunityResponseId));
@@ -169,7 +166,6 @@ namespace crds_angular.Services
             formResponse.FormAnswers.Add(SetCustomField(application.Email, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.BirthDate, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(TranslateGender(application.Gender), opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.SiteAttend, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.NameForNameTag, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.School, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.HowLongAttending, opportunityResponseId));
@@ -180,18 +176,16 @@ namespace crds_angular.Services
             formResponse.FormAnswers.Add(SetCustomField(application.Zip, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.MobilePhone, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.Grade, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.WhereYouAre, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.ReligionSearchingForAnswers, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.ReligionReceivedJesus, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.ReligionFocusingOnObedience, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.ReligionReplicating, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.ExplainFaith, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.WhyServe, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.SpecialTalents, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityDuringWeek, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityDuringWeekend, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityOakley, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityFlorence, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityWestSide, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityMason, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityClifton, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.ServeServiceTimes, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.AvailabilityWeekendSite, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.ServeAgeKids1To2, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.ServeAgeKids3ToPreK, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.ServeAgeKidsKto5Grade, opportunityResponseId));
