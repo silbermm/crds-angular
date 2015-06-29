@@ -133,9 +133,21 @@ namespace crds_angular.Models.Crossroads.VolunteerApplication
         [Required]
         public CustomField SexuallyActiveOutsideMarriage { get; set; }
 
-        [JsonProperty(PropertyName = "spiritualOrientation")]
+        [JsonProperty(PropertyName = "religionSearchingForAnswers")]
         [Required]
-        public CustomField SpiritualOrientation { get; set; }
+        public CustomField ReligionSearchingForAnswers { get; set; }
+
+        [JsonProperty(PropertyName = "religionReceivedJesus")]
+        [Required]
+        public CustomField ReligionReceivedJesus { get; set; }
+
+        [JsonProperty(PropertyName = "religionFocusingOnObedience")]
+        [Required]
+        public CustomField ReligionFocusingOnObedience { get; set; }
+
+        [JsonProperty(PropertyName = "religionReplicating")]
+        [Required]
+        public CustomField ReligionReplicating { get; set; }
 
         [JsonProperty(PropertyName = "spiritualOrientationExplain")]
         [Required]

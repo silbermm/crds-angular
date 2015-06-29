@@ -72,9 +72,21 @@ namespace crds_angular.Models.Crossroads.VolunteerApplication
         [Required]
         public CustomField Grade { get; set; }
 
-        [JsonProperty(PropertyName = "whereYouAre")]
+        [JsonProperty(PropertyName = "religionSearchingForAnswers")]
         [Required]
-        public CustomField WhereYouAre { get; set; }
+        public CustomField ReligionSearchingForAnswers { get; set; }
+
+        [JsonProperty(PropertyName = "religionReceivedJesus")]
+        [Required]
+        public CustomField ReligionReceivedJesus { get; set; }
+
+        [JsonProperty(PropertyName = "religionFocusingOnObedience")]
+        [Required]
+        public CustomField ReligionFocusingOnObedience { get; set; }
+
+        [JsonProperty(PropertyName = "religionReplicating")]
+        [Required]
+        public CustomField ReligionReplicating { get; set; }
 
         [JsonProperty(PropertyName = "explainFaith")]
         [Required]

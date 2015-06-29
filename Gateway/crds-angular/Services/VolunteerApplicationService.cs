@@ -82,7 +82,10 @@ namespace crds_angular.Services
             formResponse.FormAnswers.Add(SetCustomField(application.PsychiatricDisorder, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.SexuallyActiveOutsideMarriage, opportunityResponseId));
 
-            formResponse.FormAnswers.Add(SetCustomField(application.SpiritualOrientation, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.ReligionSearchingForAnswers, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.ReligionReceivedJesus, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.ReligionFocusingOnObedience, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.ReligionReplicating, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.SpiritualOrientationExplain, opportunityResponseId));
 
             formResponse.FormAnswers.Add(SetCustomField(application.WhatPromptedApplication, opportunityResponseId));
@@ -173,7 +176,10 @@ namespace crds_angular.Services
             formResponse.FormAnswers.Add(SetCustomField(application.Zip, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.MobilePhone, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.Grade, opportunityResponseId));
-            formResponse.FormAnswers.Add(SetCustomField(application.WhereYouAre, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.ReligionSearchingForAnswers, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.ReligionReceivedJesus, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.ReligionFocusingOnObedience, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.ReligionReplicating, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.ExplainFaith, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.WhyServe, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.SpecialTalents, opportunityResponseId));
