@@ -100,7 +100,7 @@
     <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': kcAdultApplication.showError(adult, 'attending')}">
         <label class="control-label required" for="attending">When did you start attending Crossroads?</label>
-        <input type="text" class="form-control" ng-model="kcAdultApplication.volunteer.attending" id="attending" placeholder="When did you start attending Crossroads?" validate-date ng-model-options="{updateOn: 'blur'}"required name="attending">
+        <input type="text" class="form-control" ng-model="kcAdultApplication.volunteer.attending" id="attending" placeholder="mm/dd/yyyy" validate-date ng-model-options="{updateOn: 'blur'}"required name="attending">
         <ng-messages for="adult.attending.$error" ng-if="kcAdultApplication.showError(adult, 'attending')">
           <span ng-message="invalidDate">
             <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
@@ -386,22 +386,22 @@
         <label class="block required">How would you define your spiritual life? Pick as many as you like.</label>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcAdultApplication.volunteer.religionSearchingForAnswers" required>Searching for answers.
+            <input type="checkbox" name="religion" ng-model="kcAdultApplication.volunteer.religionSearchingForAnswers" ng-required="!kcAdultApplication.spiritualSelected()">Searching for answers.
           </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcAdultApplication.volunteer.religionReceivedJesus" required>I have received Jesus.
+            <input type="checkbox" name="religion" ng-model="kcAdultApplication.volunteer.religionReceivedJesus" ng-required="!kcAdultApplication.spiritualSelected()">I have received Jesus.
           </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcAdultApplication.volunteer.religionFocusingOnObedience" required>Focusing on obedience—I’ve quit negotiating with God.
+            <input type="checkbox" name="religion" ng-model="kcAdultApplication.volunteer.religionFocusingOnObedience" ng-required="!kcAdultApplication.spiritualSelected()">Focusing on obedience—I’ve quit negotiating with God.
           </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcAdultApplication.volunteer.religionReplicating" required>I’m actively replicating my faith in others.
+            <input type="checkbox" name="religion" ng-model="kcAdultApplication.volunteer.religionReplicating" ng-required="!kcAdultApplication.spiritualSelected()">I’m actively replicating my faith in others.
           </label>
         </div>
         <ng-messages for="adult.religion.$error" ng-if="kcAdultApplication.showError(adult, 'religion')">
@@ -411,7 +411,7 @@
         </ng-messages>
       </div>
     </div>
-    
+
     <div class="row">
       <div class="form-group col-sm-8" ng-class="{'has-error': kcAdultApplication.showError(adult, 'explainFaith') }">
         <label class="control-label required" for="explainFaith">Please Explain</label>
@@ -463,7 +463,7 @@
         </ng-messages>
         <div class="form-group col-sm-6" ng-class="{'has-error': kcAdultApplication.showError(adult, 'availabilityWeekendSite')}" ng-if="kcAdultApplication.volunteer.availabilityWeekend">
           <label class="control-label required" for="availabilityWeekendSite">Weekend Site/Service Time</label>
-          <select class="form-control col-sm-12" name="availabilityWeekendSite" ng-model="kcAdultApplication.volunteer.availabilityWeekendSite" required>
+          <select class="form-control col-sm-12" name="availabilityWeekendSite" ng-model="kcAdultApplication.volunteer.availabilityWeekendSite" ng-required="kcAdultApplication.volunteer.availabilityWeekend">
             <option value="">Weekend Site/Service Time</option>
             <option value="Oakley - Sat - 4:30pm">Oakley - Sat - 4:30pm</option>
             <option value="Oakley - Sat - 6:15pm">Oakley - Sat - 6:15pm</option>

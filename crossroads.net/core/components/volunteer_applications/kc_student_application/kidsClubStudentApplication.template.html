@@ -72,7 +72,7 @@
     <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'attending')}">
         <label class="control-label required" for="attending">When did you start attending Crossroads?</label>
-        <input type="text" class="form-control" ng-model="kcStudentApplication.volunteer.attending" id="attending" placeholder="When did you start attending Crossroads?" validate-date ng-model-options="{updateOn: 'blur'}"required name="attending">
+        <input type="text" class="form-control" ng-model="kcStudentApplication.volunteer.attending" id="attending" placeholder="mm/dd/yyyy" validate-date ng-model-options="{updateOn: 'blur'}"required name="attending">
         <ng-messages for="student.attending.$error" ng-if="kcStudentApplication.showError(student, 'attending')">
           <span ng-message="invalidDate">
             <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
@@ -193,22 +193,22 @@
         <label class="block required">How would you define your spiritual life? Pick as many as you like.</label>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcStudentApplication.religionSearchingForAnswers" required>Searching for answers.
+            <input type="checkbox" ng-model="kcStudentApplication.religionSearchingForAnswers" ng-required="!kcStudentApplication.spiritualSelected()">Searching for answers.
           </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcStudentApplication.religionReceivedJesus" required>I have received Jesus.
+            <input type="checkbox" ng-model="kcStudentApplication.religionReceivedJesus" ng-required="!kcStudentApplication.spiritualSelected()">I have received Jesus.
           </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcStudentApplication.religionFocusingOnObedience" required>Focusing on obedience—I’ve quit negotiating with God.
+            <input type="checkbox" ng-model="kcStudentApplication.religionFocusingOnObedience" ng-required="!kcStudentApplication.spiritualSelected()">Focusing on obedience—I’ve quit negotiating with God.
           </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcStudentApplication.religionReplicating" required>I’m actively replicating my faith in others.
+            <input type="checkbox" ng-model="kcStudentApplication.religionReplicating" ng-required="!kcStudentApplication.spiritualSelected()">I’m actively replicating my faith in others.
           </label>
         </div>
         <ng-messages for="student.religion.$error" ng-if="kcStudentApplication.showError(student, 'religion')">
@@ -294,7 +294,7 @@
         </ng-messages>
         <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'availabilityWeekendSite')}" ng-if="kcStudentApplication.availabilityDuringWeekend">
           <label class="control-label required" for="availabilityWeekendSite">Weekend Site/Service Time</label>
-          <select class="form-control col-sm-12" name="availabilityWeekendSite" ng-model="kcStudentApplication.volunteer.availabilityWeekendSite" required>
+          <select class="form-control col-sm-12" name="availabilityWeekendSite" ng-model="kcStudentApplication.volunteer.availabilityWeekendSite" ng-required="kcStudentApplication.availabilityDuringWeekend">
             <option value="">Weekend Site/Service Time</option>
             <option value="Oakley - Sat - 4:30pm">Oakley - Sat - 4:30pm</option>
             <option value="Oakley - Sat - 6:15pm">Oakley - Sat - 6:15pm</option>

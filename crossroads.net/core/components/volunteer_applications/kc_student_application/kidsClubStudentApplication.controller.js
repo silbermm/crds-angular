@@ -27,6 +27,7 @@ var moment = require('moment');
     vm.saving = false;
     vm.serveAgeKids = {};
     vm.showError = showError;
+    vm.spiritualSelected = spiritualSelected;
     vm.studentSignatureDate = moment().format('MM/DD/YYYY');
     vm.submitButtonText = 'Submit';
 
@@ -398,6 +399,20 @@ var moment = require('moment');
       }
       if (form.$submitted || form[field].$dirty){
         return form[field].$invalid;
+      }
+      return false;
+    }
+
+    /**
+     * Checks if one of the spiritual life responses has been selected and returns
+     * true if it has, false otherwise
+     */
+    function spiritualSelected(){
+      if (vm.religionSearchingForAnswers || 
+          vm.religionReceivedJesus || 
+          vm.religionFocusingOnObedience || 
+          vm.religionReplicating) {
+        return true;
       }
       return false;
     }
