@@ -6,7 +6,7 @@
   KCApplicantController.$inject = ['$rootScope', '$log', 'VolunteerApplication', 'MPTools', 'Contact', 'CmsInfo' ];
 
   function KCApplicantController($rootScope, $log, VolunteerApplication, MPTools, Contact, CmsInfo) {
-
+    
     var vm = this;
     vm.errorMessage = $rootScope.MESSAGES.toolsError;
     vm.params = MPTools.getParams();
@@ -17,15 +17,15 @@
     vm.showStudent = showStudent;
     vm.showSuccess = false;
     vm.viewReady = false;
-
+    
 
     activate();
     //////////////////////
-
+    
     function activate(){
       vm.person.middleInitial = VolunteerApplication.middleInitial(vm.person);
       vm.pageInfo = (CmsInfo.pages !== undefined && CmsInfo.pages.length > 0) ? CmsInfo.pages[0] : null;
-
+     
       if(vm.pageInfo !== null){
         var response = VolunteerApplication.getResponse(vm.pageInfo.opportunity, vm.params.recordId)
           .then(function(response){
@@ -42,10 +42,10 @@
         vm.error = true;
         vm.errorMessage = $rootScope.MESSAGES.generalError;
       }
-    }
+    }    
 
     function showAdult(){
-      return !vm.showInvalidResponse && VolunteerApplication.show('adult', vm.person);
+      return !vm.showInvalidResponse && VolunteerApplication.show('adult', vm.person); 
     }
 
     function showAgeError(){
@@ -54,19 +54,19 @@
 
     function showError(){
       if (vm.params.selectedCount > 1 || vm.params.recordDescription === undefined || vm.params.recordId === '-1'){
-        vm.errorMessage = $rootScope.MESSAGES.toolsError;
+        vm.errorMessage = $rootScope.MESSAGES.toolsError; 
         vm.error = true;
       } else if(showAgeError()){
-        vm.errorMessage = $rootScope.MESSAGES.ageError; 
+        vm.errorMessage = $rootScope.MESSAGES.toolsError; 
         vm.error = $rootScope.MESSAGES.generalError;
-      }
+      } 
       return vm.error;
     }
 
     function showStudent(){
-      return !vm.showInvalidResponse && VolunteerApplication.show('student', vm.person);
+      return !vm.showInvalidResponse && VolunteerApplication.show('student', vm.person); 
     }
-
+ 
   }
 
 })();

@@ -65,8 +65,7 @@
       toolsError: 40,
       paymentMethodDeclined: 44,
       paymentMethodProcessingError: 47,
-      noResponse: 49,
-      ageError: 54
+      noResponse: 49
     })
     .config(function (growlProvider) {
       growlProvider.globalPosition("top-center");
