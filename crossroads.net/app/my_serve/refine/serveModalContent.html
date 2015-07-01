@@ -1,19 +1,27 @@
 <div class="modal-body">
-  <form name='filterdates' ng-submit="readyFilterByDate()" novalidate>
+  <form name='modal.filterdates' ng-submit="modal.readyFilterByDate()" novalidate>
     <div class="push-half-bottom filter-group">
       <!-- From -->
-      <div class="form-group" ng-class="{'has-error': isFromError()}">
+      <div class="form-group" ng-class="{'has-error': modal.isFromError()}">
         <label>From:</label>
         <div class="input-group">
-          <input name="fromdate" type="text" class="form-control" datepicker-popup="{{format}}" ng-required="true" close-text="Close" ng-model="fromDate" is-open="datePickers.fromOpened" datepicker-options="{showWeeks:false}" />
+          <input name="fromdate" 
+                 type="text" 
+                 class="form-control" 
+                 datepicker-popup="{{modal.format}}"
+                 ng-required="true" 
+                 close-text="Close" 
+                 ng-model="modal.fromDate" 
+                 is-open="modal.datePickers.fromOpened" 
+                 datepicker-options="modal.dateOptions" />
           <span class="input-group-btn">
-            <button type="button" class="btn btn-gray-light" ng-click="openFromDate($event)">
+            <button type="button" class="btn btn-gray-light" ng-click="modal.openFromDate($event)">
               <i class="glyphicon glyphicon-calendar"></i>
             </button>
           </span>
         </div>
         <!--/input-group-->
-        <span ng-messages="filterdates.fromdate.$error" ng-show="isFromError()">
+        <span ng-messages="modal.filterdates.fromdate.$error" ng-show="modal.isFromError()">
           <span ng-message="fromDateToLarge" >
             <span ng-bind-html="$root.messages[$root.MESSAGES.fromDateToLarge].message | html"></span>
         </span>
@@ -28,18 +36,26 @@
       <!--/form-group-->
       <!-- /From -->
 
-      <div class="form-group" ng-class="{'has-error': isToError()}">
+      <div class="form-group" ng-class="{'has-error': modal.isToError()}">
         <label>To:</label>
         <div class="input-group">
-          <input name="todate" type="text" class="form-control" datepicker-popup="{{::format}}" ng-required="true" close-text="Close" ng-model="toDate" is-open="datePickers.toOpened" datepicker-options="{showWeeks:false}" />
+          <input name="todate" 
+                 type="text" 
+                 class="form-control" 
+                 datepicker-popup="{{::modal.format}}" 
+                 ng-required="true" 
+                 close-text="Close" 
+                 ng-model="modal.toDate" 
+                 is-open="modal.datePickers.toOpened" 
+                 datepicker-options="modal.dateOptions" />
           <span class="input-group-btn">
-            <button type="button" class="btn btn-gray-light" ng-click="openToDate($event)">
+            <button type="button" class="btn btn-gray-light" ng-click="modal.openToDate($event)">
               <i class="glyphicon glyphicon-calendar"></i>
             </button>
           </span>
         </div>
         <!--/input-group-->
-        <span ng-messages="filterdates.todate.$error" ng-show="isToError()">
+        <span ng-messages="modal.filterdates.todate.$error" ng-show="modal.isToError()">
           <span ng-message="fromDate">
             <span ng-bind-html="$root.messages[$root.MESSAGES.toDateToSmall].message | html"> </span>
         </span>
