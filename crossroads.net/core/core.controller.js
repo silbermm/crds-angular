@@ -60,9 +60,8 @@
     });
 
     $rootScope.$on("mailchimp-response", function (event, result, msg) {
-      console.log($rootScope);
       if (result == 'success') {
-        //growl['success'](msg);
+        $rootScope.$emit('notify', $rootScope.MESSAGES.mailchimpSuccess);
       } else if (result == 'error') {
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
       }
