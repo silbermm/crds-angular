@@ -1,13 +1,6 @@
 <ng-form name="creditCardForm" ng-model="creditCard" validate-card>
     <section class="bank-section">
         <div growl inline="true" reference="1001" limit-messages="1"></div>
-        <div class="form-group" ng-class="{'has-error': nameError() || creditCard.declinedPayment }">
-            <label for="nameOnCard">Name On Card</label>
-            <input type="text" name="nameOnCard" class="form-control" ng-model="creditCard.nameOnCard" ng-change="resetDefaultCardPlaceholderValues()" ng-required="!useExistingAccountInfo()" ng-model-options="{ updateOn: 'default blur', debounce: {'blur': 500} }" placeholder="{{defaultCardPlaceholderValues.nameOnCard}}">
-            <ng-messages for="creditCardForm.nameOnCard.$error" ng-show="creditCardForm.nameOnCard.$error.required" ng-messages-include="on-blur-messages"></ng-messages>
-            <ng-messages for="creditCardForm.nameOnCard.$error" ng-if="bankinfoSubmitted" ng-messages-include="on-submit-messages"></ng-messages>
-            <span ng-show="creditCard.declinedPayment" ng-bind-html="$root.messages[$root.MESSAGES.invalidPaymentMethodInformation].message | html"></span>
-        </div>
         <div class="form-group" ng-class="{'has-error': ccNumberError(creditCard.ccValid) || creditCard.declinedPayment }">
             <label for="ccNumber">Credit Card Number</label>
             <input type="text" name="ccNumber" class="form-control cc-icon" ng-class="ccNumberClass" ng-model="creditCard.ccNumber" maxlength="16" ng-change="ccCardType(); resetDefaultCardPlaceholderValues();" ng-required="!useExistingAccountInfo()" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }" placeholder="{{defaultCardPlaceholderValues.maskedCard}}">
