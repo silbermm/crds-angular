@@ -12,6 +12,7 @@
     'angular-growl',
     'toggle-switch',
     'ngAside',
+    'mailchimp',
     'matchMedia',
     'ui.bootstrap'
     ])

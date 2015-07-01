@@ -90,6 +90,7 @@
     "angular-ui-utils": "./dependencies/third-party/angular/ui-utils.min.js",
     "angular-ui-select": "./dependencies/third-party/angular/select.min.js",
     "angular-aside": "./dependencies/third-party/angular/angular-aside.min.js",
+    "angular-mailchimp": "./dependencies/third-party/angular/angular-mailchimp.js",
     "angular-match-media": "./dependencies/third-party/angular/match-media.js",
     "_comment_angular-payments": "Refer to https://github.com/raaspazasu/ngPayments",
     "angular-payments": "./dependencies/third-party/angular/angular.payments.js"

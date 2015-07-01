@@ -8,28 +8,30 @@
 
   <hr>
 
-  <!-- Begin MailChimp Signup Form -->
-  <div id="mc_embed_signup">
-    <form action="//crossroads.us5.list-manage.com/subscribe/post?u=30fc95dac2caa1e536e62b5d2&amp;id=7900a9a5ab" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate ng-pristine ng-valid" target="_blank" novalidate="novalidate">
-      <div class="mc-field-group row">
-        <div class="col-lg-12">
-          <div class="input-group push-bottom">
-            <input type="email" value="" name="EMAIL" class="required email form-control" id="mce-EMAIL" placeholder="Email Address" aria-required="true">
+
+    <form name="MailchimpSubscriptionForm" ng-controller="MailchimpSubscriptionCtrl" novalidate>
+      <div class="mc-field-group row" ng-hide="mailchimp.result === 'success'">
+        <input class="hidden" type="hidden" ng-model="mailchimp.username" ng-init="mailchimp.username='crossroads'">
+        <input class="hidden" type="hidden" ng-model="mailchimp.dc" ng-init="mailchimp.dc='us5'">
+        <input class="hidden" type="hidden" ng-model="mailchimp.u" ng-init="mailchimp.u='30fc95dac2caa1e536e62b5d2'">
+        <input class="hidden" type="hidden" ng-model="mailchimp.id" ng-init="mailchimp.id='7900a9a5ab'">
+        <div class="col-lg-12 push-bottom" ng-class="{'has-error': mailchimp.result}">
+          <div class="input-group">
+            <input type="email" name="email" ng-model="mailchimp.EMAIL" placeholder="Email address" class="required email form-control">
             <span class="input-group-btn">
-              <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="btn btn-default">
+              <input type="submit" value="Subscribe" ng-click="addSubscription(mailchimp)" class="btn btn-default">
             </span>
+
           </div><!-- /input-group -->
-          <div id="mce-responses" class="clear crossroads-growl">
-            <div class="response" id="mce-error-response" style="display:none"></div>
-            <div class="response" id="mce-success-response" style="display:none"></div>
-          </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-          <div style="position: absolute; left: -5000px;"><input type="text" name="b_30fc95dac2caa1e536e62b5d2_7900a9a5ab" tabindex="-1" value=""></div>
+          <span ng-show="mailchimp.result === 'error'" ng-cloak ng-bind-html="mailchimp.errorMessage"></span>
         </div><!-- /.col-lg-12 -->
       </div><!-- /.row -->
+
+      <!-- Show success message if MailChimp returned successfully. -->
+      <div class="push-bottom" ng-show="mailchimp.result === 'success'" ng-cloak>
+        <span ng-bind-html="mailchimp.successMessage"></span>
+      </div>
     </form>
-  </div><!--/mc_embed_signup-->
-  <script type="text/javascript" src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script><script type="text/javascript">(function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';}(jQuery));var $mcj = jQuery.noConflict(true);</script>
-  <!--End mc_embed_signup-->
 
   <p>Looking to unsubscribe from The Daily emails? <a href="http://crossroads.us5.list-manage.com/unsubscribe?u=30fc95dac2caa1e536e62b5d2&amp;id=7900a9a5ab">Click here</a>.</p>
 
