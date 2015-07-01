@@ -163,7 +163,6 @@ describe('Giving Flow State', function() {
     creditCardButton.click();
 
     element(by.id('give-email')).sendKeys("tim@kriz.net");
-    element(by.model('creditCard.nameOnCard')).sendKeys("Mr Cross Roads");
     element(by.model('creditCard.ccNumber')).sendKeys("4242424242424242");
     element(by.model('creditCard.expDate')).sendKeys("0118");
     element(by.model('creditCard.cvc')).sendKeys("654");
@@ -196,7 +195,6 @@ describe('Giving Flow State', function() {
       creditCardButton.click();
 
       expect(element(by.id('give-email')).getText()).toBe('');
-      expect(element(by.model('creditCard.nameOnCard')).getText()).toBe('');
       expect(element(by.model('creditCard.ccNumber')).getText()).toBe('');
       expect(element(by.model('creditCard.expDate')).getText()).toBe('');
       expect(element(by.model('creditCard.cvc')).getText()).toBe('');

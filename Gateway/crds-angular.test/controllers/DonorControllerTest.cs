@@ -32,7 +32,6 @@ namespace crds_angular.test.controllers
         private static int donorId  = 394256;
         private static string last4 = "1234";
         private static string brand = "Visa";
-        private static string name = "Automated Test";
         private static string address_zip = "45454";
         private ContactDonor donor = new ContactDonor()
         {
@@ -94,7 +93,6 @@ namespace crds_angular.test.controllers
             {
                 last4 = "1234",
                 brand = "Visa",
-                name = "Automated Test",
                 address_zip = "45454"
             };
             
@@ -108,7 +106,6 @@ namespace crds_angular.test.controllers
             Assert.AreEqual(processorId, okResult.Content.ProcessorId);
             Assert.AreEqual(brand, okResult.Content.DefaultSource.credit_card.brand);
             Assert.AreEqual(last4, okResult.Content.DefaultSource.credit_card.last4);
-            Assert.AreEqual(name, okResult.Content.DefaultSource.credit_card.name);
             Assert.AreEqual(address_zip, okResult.Content.DefaultSource.credit_card.address_zip);
         }
 
@@ -379,7 +376,6 @@ namespace crds_angular.test.controllers
             {
                 brand = "Visa",
                 last4 = "5432",
-                name = "Omar Vizquel",
                 address_zip = "90210",
                 exp_month = "12",
                 exp_year = "19"
@@ -403,7 +399,6 @@ namespace crds_angular.test.controllers
             Assert.IsNotNull(donorDto.DefaultSource.credit_card);
             Assert.AreEqual(sourceData.brand, donorDto.DefaultSource.credit_card.brand);
             Assert.AreEqual(sourceData.last4, donorDto.DefaultSource.credit_card.last4);
-            Assert.AreEqual(sourceData.name, donorDto.DefaultSource.credit_card.name);
             Assert.AreEqual(sourceData.address_zip, donorDto.DefaultSource.credit_card.address_zip);
             Assert.AreEqual(sourceData.exp_month + sourceData.exp_year, donorDto.DefaultSource.credit_card.exp_date);
         }

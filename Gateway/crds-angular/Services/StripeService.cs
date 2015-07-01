@@ -110,7 +110,6 @@ namespace crds_angular.Services
                 {
                     defaultSource.brand = source.brand;
                     defaultSource.last4 = source.last4;
-                    defaultSource.name = source.name;
                     defaultSource.address_zip = source.address_zip;
                     defaultSource.exp_month = source.exp_month.PadLeft(2, '0');
                     defaultSource.exp_year = source.exp_year.Substring(2, 2);

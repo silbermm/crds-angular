@@ -200,7 +200,6 @@ namespace crds_angular.test.Services
                 {
                     new SourceData()
                     {
-                        name = "Automated Test",
                         last4 = "8585",
                         brand = "Visa",
                         address_zip = "45454" ,
@@ -227,8 +226,7 @@ namespace crds_angular.test.Services
                     )));
             restClient.VerifyAll();
             stripeResponse.VerifyAll();
-           
-            Assert.AreEqual("Automated Test",  defaultSource.name);  
+          
             Assert.AreEqual("Visa", defaultSource.brand);
             Assert.AreEqual("8585", defaultSource.last4);
             Assert.AreEqual("45454", defaultSource.address_zip);
