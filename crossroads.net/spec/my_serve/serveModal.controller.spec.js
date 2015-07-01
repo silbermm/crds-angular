@@ -43,7 +43,9 @@ describe('Serve Modal Controller', function() {
   });
 
   it('should have an error when the FROM date is after the TO date', function(){
+    controller.fromDate = new Date();
     controller.fromDate.setDate(controller.fromDate.getDate() +10);
+    controller.toDate = new Date();
     var ret = controller.readyFilterByDate();
     expect(ret).toBe(false);
     expect(controller.filterdates.fromDate.$error.fromDateToLarge).toBe(true);
