@@ -51,7 +51,6 @@ describe('Giving Flow', function() {
     expect(creditCardButton.getText()).toBe("Credit Card");
     creditCardButton.click();
     element(by.id('give-email')).sendKeys("tim@kriz.net");
-    element(by.model('creditCard.nameOnCard')).sendKeys("Mr Cross Roads");
     element(by.model('creditCard.ccNumber')).sendKeys("4242424242424242");
     element(by.model('creditCard.expDate')).sendKeys("0118");
     element(by.model('creditCard.cvc')).sendKeys("654");
@@ -118,7 +117,6 @@ describe('Giving Flow', function() {
     creditCardButton.click();
     element(by.model('amount')).clear();
     element(by.model('amount')).sendKeys("54321");
-    element(by.model('creditCard.nameOnCard')).sendKeys("Mr Change Cards");
     element(by.model('creditCard.ccNumber')).sendKeys("5555555555554444");
     element(by.model('creditCard.expDate')).sendKeys("0818");
     element(by.model('creditCard.cvc')).sendKeys("999");
@@ -194,7 +192,6 @@ describe('Giving Flow', function() {
     expect(creditCardButton.getText()).toBe("Credit Card");
     creditCardButton.click();
     element(by.id('give-email')).sendKeys("tim@kriz.net");
-    element(by.model('creditCard.nameOnCard')).sendKeys("Mr Cross Roads");
     element(by.model('creditCard.ccNumber')).sendKeys("4242424242424242");
     element(by.model('creditCard.expDate')).sendKeys("0118");
     element(by.model('creditCard.cvc')).sendKeys("6");
@@ -213,7 +210,6 @@ describe('Giving Flow', function() {
     var creditCardButton = element.all(by.model('give.dto.view')).get(1);
     expect(creditCardButton.getText()).toBe("Credit Card");   
     expect(element(by.model('give-email'))).toBeDefined();
-    expect(element(by.model('creditCard.nameOnCard'))).toBeDefined();
     expect(element(by.model('creditCard.ccNumber'))).toBeDefined();
     expect(element(by.model('creditCard.expDate'))).toBeDefined();
     expect(element(by.model('creditCard.cvc')).getText()).toBe("");
@@ -358,7 +354,6 @@ describe('Giving Flow', function() {
     var creditCardButton = element.all(by.model('give.dto.view')).get(1);
     expect(creditCardButton.getText()).toBe("Credit Card");
     creditCardButton.click();
-    element(by.model('creditCard.nameOnCard')).sendKeys("Pro Tractor");
     element(by.model('creditCard.ccNumber')).sendKeys("5555555555554444");
     element(by.model('creditCard.expDate')).sendKeys("0818");
     element(by.model('creditCard.cvc')).sendKeys("999");
