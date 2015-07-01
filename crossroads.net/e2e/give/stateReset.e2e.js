@@ -177,7 +177,7 @@ describe('Giving Flow State', function() {
       expect(email.getText()).toBe("tim@kriz.net");
     });
 
-    make sure state is cleared and we are taken back to the amount page instead of account
+    //make sure state is cleared and we are taken back to the amount page instead of account
     browser.navigate().refresh().then(function() {
       checkState('give.amount');
       expect(element(by.model('amount')).getText()).toBe('');
