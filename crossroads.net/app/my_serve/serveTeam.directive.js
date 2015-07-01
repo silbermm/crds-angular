@@ -36,7 +36,7 @@
       scope.displayEmail = displayEmail;
       scope.editProfile = editProfile;
       scope.frequency = getFrequency();
-      scope.format = 'MM/dd/yyyy';
+      scope.format = 'MM/dd/yy';
       scope.formErrors = {
         role: false,
         signup: false,

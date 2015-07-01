@@ -1,41 +1,35 @@
 'use strict()';
 (function() {
 
+  var formatDate = require('../../../core/crds_utilities').formatDate;
+  
   module.exports = RefineDirective;
 
-  RefineDirective.$inject = ['$rootScope', 'filterState', 'screenSize']
+  RefineDirective.$inject = ['$rootScope', 'filterState', 'screenSize', '$modal'];
 
-  function RefineDirective($rootScope, filterState, screenSize) {
+  function RefineDirective($rootScope, filterState, screenSize, $modal) {
     return {
-      restrict: "E",
+      restrict: 'E',
       replace: true,
-      templateUrl: "refine/refineList.html",
+      templateUrl: 'refine/refineList.html',
       scope: {
-        "servingDays": "=servingDays",
-        "original": "=?original",
-        "filterBoxes": "=?filterBoxes",
-        "lastDate": "=lastDate"
+        'servingDays': '=servingDays',
+        'original': '=?original',
+        'filterBoxes': '=?filterBoxes',
+        'lastDate': '=lastDate'
       },
       link: link
-    }
+    };
 
     function link(scope, el, attr) {
-
       scope.applyFamilyFilter = applyFamilyFilter;
       scope.applySignUpFilter = applySignUpFilter;
       scope.applyTeamFilter = applyTeamFilter;
       scope.applyTimeFilter = applyTimeFilter;
       scope.clearFilters = clearFilters;
-      scope.dateOptions = {
-        formatYear: 'yy',
-        startingDay: 1,
-        showWeeks: 'false'
-      };
-      scope.datePickers = { fromOpened : false, toOpened: false };
       scope.filterAll = filterAll;
       scope.filterFromDate = formatDate(new Date());
-      scope.format = 'MM/dd/yyyy';
-      scope.fromDateError = false;
+      scope.format = 'MM/dd/yy';
       scope.getUniqueMembers = getUniqueMembers;
       scope.getUniqueSignUps = getUniqueSignUps;
       scope.getUniqueTeams = getUniqueTeams;
@@ -43,12 +37,7 @@
       scope.isDateCollapsed = $rootScope.mobile;
       scope.isFilterCollapsed = $rootScope.mobile;
       scope.isFilterSet = isFilterSet;
-      scope.isFromError = isFromError;
-      scope.isToError = isToError;
-      scope.openFromDate = openFromDate;
-      scope.openToDate = openToDate;
-      scope.readyFilterByDate = readyFilterByDate;
-      scope.toDateError = false;
+      scope.open = openDateModal;
       scope.toggleDateCollapse = toggleDateCollapse;
       scope.toggleFilterCollapse = toggleFilterCollapse;
       scope.toggleFamilyMember = toggleFamilyMember;
@@ -63,14 +52,13 @@
 
       activate();
 
-      $rootScope.$on("rerunFilters", function(event, data) {
+      $rootScope.$on('rerunFilters', function(event, data) {
         // Update the entire data with the new data
         scope.servingDays = data;
         initServeArrays();
         filter(data, false);
-        $rootScope.$emit("filterDone", scope.servingDays);
+        $rootScope.$emit('filterDone', scope.servingDays);
       });
-
       //////////////////////////////////
 
       function activate() {
@@ -333,7 +321,7 @@
           return {
             time: time.time
           };
-        }).uniq("time").sortBy(function(n) {
+        }).uniq('time').sortBy(function(n) {
           return n.time;
         }).value();
       }
@@ -368,90 +356,26 @@
       function isFilterSet() {
         return filterState.isActive();
       }
-
-      function isFromError(){
-        return scope.filterdates.fromdate.$dirty && (
-          scope.filterdates.fromdate.$error.fromDateToLarge ||
-          scope.filterdates.fromdate.$error.date ||
-          scope.filterdates.fromdate.$error.required);
-      }
-
-      function isToError(){
-        return scope.filterdates.todate.$dirty && (
-          scope.filterdates.todate.$error.fromDate || scope.filterdates.todate.$error.required || scope.filterdates.todate.$error.date);
-      }
-
-      function openFromDate($event) {
-        $event.preventDefault();
-        $event.stopPropagation();
-        scope.datePickers.fromOpened = true;
-      }
-
-      function openToDate($event) {
-        $event.preventDefault();
-        $event.stopPropagation();
-        scope.datePickers.toOpened = true;
-      }
-
-      /**
-       * Takes a javascript date and returns a
-       * string formated MM/DD/YYYY
-       * @param date - Javascript Date
-       * @param days to add - How many days to add to the original date passed in
-       * @return string formatted in the way we want to display
-       */
-      function formatDate(date, days=0){
-        var d = moment(date);
-        d.add(days, 'd');
-        return d.format('MM/DD/YYYY');
-      }
-
-      function readyFilterByDate() {
-        var now = moment();
-        now.hour(0);
-        var toDate = moment(scope.lastDate);
-        toDate.hour(23);
-
-        if( now.unix() > toDate.unix() ) {
-          scope.filterdates.todate.$error.fromDate = true;
-          $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
-          return false;
-        } else {
-          scope.filterdates.todate.$error.fromDate = false;
-        }
-
-        if (scope.lastDate !== undefined && toDate.isValid()){
-          if (scope.filterFromDate === undefined) {
-            scope.filterdates.fromdate.$error.date = true;
-            $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
-            return false;
+      // Modals
+      function openDateModal () {
+        var modalInstance = $modal.open({
+          templateUrl: 'refine/serveModalContent.html',
+          backdrop: true,
+          size: 'sm',
+          controller: 'ServeModalController as modal',
+          resolve: {
+            dates: function () {
+              return {
+                'fromDate': scope.filterFromDate, 
+                'toDate': scope.lastDate
+              };
+            }
           }
-          var fromDate = moment(scope.filterFromDate);
-          if (fromDate.isBefore(now, 'days')) {
-            fromDate = now;
-          }
-          if (!fromDate.isValid()) {
-            scope.filterdates.fromdate.$error.date = true;
-            $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
-            return false;
-          }
-
-          if ( fromDate.isAfter(toDate, 'days' )){
-            scope.filterdates.fromdate.$error.fromDateToLarge = true;
-            $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
-            return false;
-          } else {
-            scope.filterdates.fromdate.$error.fromDateToLarge = false;
-          }
-          $rootScope.$emit("filterByDates", {'fromDate': fromDate, 'toDate': toDate});
-          return true;
-        } else if (isToError()) {
-          scope.filterdates.todate.$error.date = true;
-          $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
-          return false;
-        } else {
-          return false;
-        }
+        });
+        modalInstance.result.then(function (dates) {
+          scope.filterFromDate = dates.fromDate;
+          scope.lastDate = dates.toDate;
+        });
       }
 
       function toggleFilterCollapse() {
@@ -459,7 +383,7 @@
           scope.isFilterCollapsed = !scope.isFilterCollapsed;
         }
       }
-      
+
       function toggleDateCollapse() {
         if ($rootScope.mobile) {
           scope.isDateCollapsed = !scope.isDateCollapsed;
@@ -503,5 +427,4 @@
       }
     }
   }
-
-})()
+})();
