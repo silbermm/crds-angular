@@ -89,7 +89,12 @@
             vm.processing = true;
             vm.donate(vm.program.ProgramId, vm.amount, vm.donor.id, vm.email, vm.dto.view, function() {
               $state.go("give.thank-you");
-            }, vm._stripeErrorHandler);
+            }, function(error) {
+              vm._stripeErrorHandler(error);
+              if(vm.dto.declinedPayment) {
+                vm.goToChange(vm.amount, vm.donor, vm.email, vm.program, vm.dto.view);
+              }
+            });
           }
           catch(DonationException)
           {
