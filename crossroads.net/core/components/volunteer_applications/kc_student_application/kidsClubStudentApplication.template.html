@@ -72,7 +72,7 @@
     <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'attending')}">
         <label class="control-label required" for="attending">When did you start attending Crossroads?</label>
-        <input type="text" class="form-control" ng-model="kcStudentApplication.volunteer.attending" id="attending" placeholder="mm/dd/yyyy" validate-date ng-model-options="{updateOn: 'blur'}"required name="attending">
+        <input type="text" class="form-control" ng-model="kcStudentApplication.howLongAttending" id="attending" placeholder="mm/dd/yyyy" validate-date ng-model-options="{updateOn: 'blur'}"required name="attending">
         <ng-messages for="student.attending.$error" ng-if="kcStudentApplication.showError(student, 'attending')">
           <span ng-message="invalidDate">
             <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
@@ -84,7 +84,7 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'serviceAttend')}">
         <label class="control-label required" for="serviceAttend">Site/Service Time where you attend </label>
-        <select class="form-control col-sm-12" name="serviceAttend" ng-model="kcStudentApplication.volunteer.serviceAttend" required>
+        <select class="form-control col-sm-12" name="serviceAttend" ng-model="kcStudentApplication.serviceAttend" required>
           <option value="">Site/Service Time where you attend</option>
           <option value="Oakley - Sat - 4:30pm">Oakley - Sat - 4:30pm</option>
           <option value="Oakley - Sat - 6:15pm">Oakley - Sat - 6:15pm</option>
@@ -294,7 +294,7 @@
         </ng-messages>
         <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'availabilityWeekendSite')}" ng-if="kcStudentApplication.availabilityDuringWeekend">
           <label class="control-label required" for="availabilityWeekendSite">Weekend Site/Service Time</label>
-          <select class="form-control col-sm-12" name="availabilityWeekendSite" ng-model="kcStudentApplication.volunteer.availabilityWeekendSite" ng-required="kcStudentApplication.availabilityDuringWeekend">
+          <select class="form-control col-sm-12" name="availabilityWeekendSite" ng-model="kcStudentApplication.availabilityWeekendSite" ng-required="kcStudentApplication.availabilityDuringWeekend">
             <option value="">Weekend Site/Service Time</option>
             <option value="Oakley - Sat - 4:30pm">Oakley - Sat - 4:30pm</option>
             <option value="Oakley - Sat - 6:15pm">Oakley - Sat - 6:15pm</option>
@@ -366,7 +366,7 @@
   <fieldset class="push-bottom">
     <legend>Personal References</legend>
     <div class="row">
-      <p class="help-text col-sm-12">List two adults you have known for at least one year, who are not rleated to you and have a definite knowledge of your character and ability to work wtih kids (e.g. pastor, close friend, and/or teacher)</p>
+      <p class="help-text col-sm-12">List two adults you have known for at least one year, who are not related to you and have a definite knowledge of your character and ability to work with kids (e.g. pastor, close friend, and/or teacher)</p>
 
       <h4 class="col-sm-12">First Reference</h4>
       <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'referenceName1') }">
