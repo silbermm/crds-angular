@@ -19,4 +19,6 @@
   require('./refine/refineList.html');
   app.directive("refineList", require('./refine/refineList.directive'));
 
+  require('./refine/serveModalContent.html');
+  app.controller("ServeModalController", require('./refine/serveModal.controller'));
 })()

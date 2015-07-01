@@ -91,8 +91,83 @@ describe('GiveController', function() {
     })
   );
 
-  describe('vm.confirmDonation() emits message in case of exception', function(){
-    it('calls vm.donate with missing params', function(){
+  describe('function confirmDonation()', function() {
+    beforeEach(function() {
+      spyOn(controller, '_stripeErrorHandler');
+      spyOn(controller,  'goToChange');
+    });
+
+    it('should go to the thank-you page if credit card payment was accepted', function() {
+      var error = {error1: '1', error2: '2'};
+      controller.dto = {
+        view: 'cc'
+      };
+      controller.amount = 123;
+      controller.donor = {donorinfo: 'blah'};
+      controller.email = 'test@somewhere.com';
+      controller.program = {id: 3};
+
+      spyOn(controller, 'donate').and.callFake(function(programId, amount, donorId, email, pymtType, onSuccess, onFailure) {
+        onSuccess(error);
+      });
+      spyOn($state, 'go');
+
+      controller.confirmDonation();
+      expect($state.go).toHaveBeenCalledWith('give.thank-you');
+      expect(controller._stripeErrorHandler).not.toHaveBeenCalled();
+      expect(controller.goToChange).not.toHaveBeenCalled();
+    });
+
+    it('should go to the change page if credit card payment was declined', function() {
+      var error = {error1: '1', error2: '2'};
+      controller.dto = {
+        view: 'cc'
+      };
+      controller.amount = 123;
+      controller.donor = {donorinfo: 'blah'};
+      controller.email = 'test@somewhere.com';
+      controller.program = {id: 3};
+
+      spyOn(controller, 'donate').and.callFake(function(programId, amount, donorId, email, pymtType, onSuccess, onFailure) {
+        controller.dto.declinedPayment = true;
+        onFailure(error);
+      });
+      spyOn($state, 'go');
+
+      controller.confirmDonation();
+      expect($state.go).not.toHaveBeenCalled();
+      expect(controller._stripeErrorHandler).toHaveBeenCalledWith(error);
+      expect(controller.goToChange).toHaveBeenCalledWith(
+        controller.amount,
+        controller.donor,
+        controller.email,
+        controller.program,
+        controller.dto.view);
+    });
+
+    it('should stay on the confirm page if there was a processing error', function() {
+      var error = {error1: '1', error2: '2'};
+      controller.dto = {
+        view: 'cc'
+      };
+      controller.amount = 123;
+      controller.donor = {donorinfo: 'blah'};
+      controller.email = 'test@somewhere.com';
+      controller.program = {id: 3};
+
+      spyOn(controller, 'donate').and.callFake(function(programId, amount, donorId, email, pymtType, onSuccess, onFailure) {
+        controller.dto.declinedPayment = false;
+        onFailure(error);
+      });
+      spyOn($state, 'go');
+
+      controller.confirmDonation();
+      expect($state.go).not.toHaveBeenCalled();
+      expect(controller._stripeErrorHandler).toHaveBeenCalledWith(error);
+      expect(controller.goToChange).not.toHaveBeenCalled();
+    });
+
+    it('should emit a failure message if called with missing params', function(){
       spyOn($rootScope, "$emit");
       controller.confirmDonation();
       expect($rootScope.$emit).toHaveBeenCalledWith("notify", 15);

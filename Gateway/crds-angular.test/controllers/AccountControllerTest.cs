@@ -52,7 +52,7 @@ namespace crds_angular.test.controllers
         }
 
         [Test]
-        [Ignore("Test failing in Demo")]
+       
         public void ShouldReturnOk()
         {
             // First we need to get a sessionId

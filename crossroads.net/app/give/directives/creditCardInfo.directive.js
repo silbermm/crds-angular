@@ -16,7 +16,6 @@ require('../creditCardInfo.html');
           restrict: 'EA',
           //replace: true,
           scope: {
-              nameOnCard: "=",
               ccNumber: "=",
               expDate: "=",
               cvc: "=",
@@ -145,14 +144,6 @@ require('../creditCardInfo.html');
             return (scope.bankinfoSubmitted && scope.creditCardForm.expDate.$invalid);
         };
 
-        scope.nameError = function() {
-          if(scope.useExistingAccountInfo()) {
-            return(false);
-          }
-
-            return (scope.bankinfoSubmitted && scope.creditCardForm.nameOnCard.$invalid);
-        };
-
         // This function swaps the expDate field with the current value placeholder
         // for the expDate field with the "MM/YY" placeholder.  This works around
         // an issue with using ui-mask and a placeholder value, otherwise we'd
@@ -178,7 +169,6 @@ require('../creditCardInfo.html');
         if(!scope.defaultSource.credit_card) {
           scope.resetDefaultCardPlaceholderValues();
         } else if(scope.defaultSource.credit_card.last4) {
-          scope.creditCard.nameOnCard = "";
           scope.creditCard.ccNumber = "";
           scope.creditCard.expDate = "";
           scope.creditCard.cvc = "";
@@ -188,7 +178,6 @@ require('../creditCardInfo.html');
             brand: scope.defaultSource.credit_card.brand,
             cvc: "XXX",
             expDate: scope.defaultSource.credit_card.exp_date.replace(/^(..)(..).*$/, "$1/$2"),
-            nameOnCard: scope.defaultSource.credit_card.name,
             maskedCard: "XXXXXXXXXXX" + scope.defaultSource.credit_card.last4
           };
 
