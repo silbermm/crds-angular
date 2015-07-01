@@ -35,7 +35,7 @@ describe('Giving Flow State', function() {
     button.click();
     checkState('give.confirm');
 
-    var giveButton = element(by.css("[ng-click=\"give.goToChange(give.amount, give.donor, give.email, give.program, 'cc')\"]"));
+    var giveButton = element(by.css("[ng-click=\"give.goToChange(give.amount, give.donor, give.email, give.program, give.view)\"]"));
     giveButton.click();
     checkState('give.change');
 
@@ -69,12 +69,11 @@ describe('Giving Flow State', function() {
 
     var logoutButton = element.all(by.css(".navbar--login")).get(0).all(by.linkText('Sign Out'));
     logoutButton.click();
-    checkState('give.amount');
+    checkState('home');
 
-    browser.navigate().to(env.baseUrl + '/#/give').then(function() {
-      checkState('give.amount');
-      expect(element(by.model('amount')).getText()).toBe('');
-    });
+    browser.navigate().to(env.baseUrl + '/#/give');
+    checkState('give.amount');
+    expect(element(by.model('amount')).getText()).toBe(''); 
   });
 
   it('should be reset after navigating to confirmation page as existing giver, then clicking refresh', function() {
@@ -172,12 +171,13 @@ describe('Giving Flow State', function() {
     expect(giveButton.getText()).toBe("GIVE $1,999.00");
 
     giveButton.click().then(function() {
+      browser.waitForAngular;
       checkState('give.thank-you');
       var email = element.all(by.binding('give.email')).first();
       expect(email.getText()).toBe("tim@kriz.net");
     });
 
-    // make sure state is cleared and we are taken back to the amount page instead of account
+    make sure state is cleared and we are taken back to the amount page instead of account
     browser.navigate().refresh().then(function() {
       checkState('give.amount');
       expect(element(by.model('amount')).getText()).toBe('');
