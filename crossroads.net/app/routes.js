@@ -158,6 +158,14 @@
         controller: 'StyleguideCtrl as styleguide',
         templateUrl: 'styleguide/styleguide.html'
       })
+      .state('thedaily', {
+        url: '/thedaily',
+        templateUrl: 'thedaily/thedaily.html'
+      })
+      .state('thedaily-getting-started', {
+        url: '/thedaily/getting-started',
+        templateUrl: 'thedaily/getting-started.html'
+      })
       .state('give', {
         url: '/give',
         controller: 'GiveCtrl as give',
