@@ -50,17 +50,18 @@ namespace MinistryPlatform.Translation.Services
 
         public int SubmitFormResponse(FormResponse form)
         {
+            var token = apiLogin();
             var responseId = CreateFormResponse(form.FormId, form.ContactId, form.OpportunityId,
-                form.OpportunityResponseId);
+                form.OpportunityResponseId, token);
             foreach (var answer in form.FormAnswers)
             {
                 answer.FormResponseId = responseId;
-                CreateFormAnswer(answer);
+                CreateFormAnswer(answer, token);
             }
             return responseId;
         }
 
-        private int CreateFormResponse(int formId, int contactId, int opportunityId, int opportunityResponseId)
+        private int CreateFormResponse(int formId, int contactId, int opportunityId, int opportunityResponseId, string token)
         {
             var formResponse = new Dictionary<string, object>
             {
@@ -71,11 +72,11 @@ namespace MinistryPlatform.Translation.Services
                 {"Opportunity_Response", opportunityResponseId}
             };
 
-            var responseId = _ministryPlatformService.CreateRecord(_formResponsePageId, formResponse, apiLogin(), true);
+            var responseId = _ministryPlatformService.CreateRecord(_formResponsePageId, formResponse, token, true);
             return responseId;
         }
 
-        private void CreateFormAnswer(FormAnswer answer)
+        private void CreateFormAnswer(FormAnswer answer, string token)
         {
             var formAnswer = new Dictionary<string, object>
             {
@@ -85,7 +86,7 @@ namespace MinistryPlatform.Translation.Services
                 {"Opportunity_Response", answer.OpportunityResponseId}
             };
 
-            _ministryPlatformService.CreateRecord(_formAnswerPageId, formAnswer, apiLogin(), true);
+            _ministryPlatformService.CreateRecord(_formAnswerPageId, formAnswer, token, true);
         }
     }
 }
