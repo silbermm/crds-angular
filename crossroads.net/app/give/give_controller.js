@@ -288,6 +288,7 @@
           vm.initialized = false;
           vm.processing = false;
           vm.program = undefined;
+          vm.donorError = false;
           if ($rootScope.username === undefined) {
             User.email = "";
           };
