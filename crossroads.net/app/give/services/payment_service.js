@@ -53,10 +53,18 @@
     }
 
     function getDonor(){
-      return $resource(__API_ENDPOINT__ + 'api/donor/?email=:email',{email: '@_email'}, {
-        get: {
-          method : 'GET',
-          headers: {'Authorization': crds_utilities.getCookie('sessionId')}
+      return({
+        get: function(params) {
+          var encodedEmail = params && params.email ?
+              encodeURI(params.email).replace(/\+/, '%2B')
+              :
+              '';
+          return $resource(__API_ENDPOINT__ + 'api/donor/?email=' + encodedEmail, {}, {
+            get: {
+              method : 'GET',
+              headers: {'Authorization': crds_utilities.getCookie('sessionId')}
+            }
+          }).get();
         }
       });
     }
