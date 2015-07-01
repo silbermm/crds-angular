@@ -177,11 +177,6 @@ var moment = require('moment');
         CrossroadsId: adultFields.spouseGender
       };
 
-      adult.siteYouAttend = {
-        Value: vm.volunteer.siteAttend,
-        CrossroadsId: adultFields.site
-      };
-
       adult.howLongAttending = {
         Value: vm.volunteer.attending,
         CrossroadsId: adultFields.howLongAttending
@@ -302,10 +297,24 @@ var moment = require('moment');
         CrossroadsId: adultFields.sexuallyActiveOutsideMarriage
       };
 
-      adult.spiritualOrientation = {
-        //currently checkboxes make radio buttons
-        Value: vm.volunteer.spiritualOrientation,
-        CrossroadsId: adultFields.spiritualOrientation
+      adult.religionSearchingForAnswers = {
+        Value: vm.volunteer.religionSearchingForAnswers,
+        CrossroadsId: adultFields.religionSearchingForAnswers
+      };
+
+      adult.religionReceivedJesus = {
+        Value: vm.volunteer.religionReceivedJesus,
+        CrossroadsId: adultFields.religionReceivedJesus
+      };
+
+      adult.religionFocusingOnObedience = {
+        Value: vm.volunteer.religionFocusingOnObedience,
+        CrossroadsId: adultFields.religionFocusingOnObedience
+      };
+
+      adult.religionReplicating = {
+        Value: vm.volunteer.religionReplicating,
+        CrossroadsId: adultFields.religionReplicating
       };
 
       adult.spiritualOrientationExplain = {
@@ -333,34 +342,9 @@ var moment = require('moment');
         CrossroadsId: adultFields.availabilityWeekend
       };
 
-      adult.availabilityOakley = {
-        Value: vm.volunteer.availabilityOakley,
-        CrossroadsId: adultFields.availabilityOakley
-      };
-
-      adult.availabilityFlorence = {
-        Value: vm.volunteer.availabilityFlorence,
-        CrossroadsId: adultFields.availabilityFlorence
-      };
-
-      adult.availabilityWestSide = {
-        Value: vm.volunteer.availabilityWestSide,
-        CrossroadsId: adultFields.availabilityWestSide
-      };
-
-      adult.availabilityMason = {
-        Value: vm.volunteer.availabilityMason,
-        CrossroadsId: adultFields.availabilityMason
-      };
-
-      adult.availabilityClifton = {
-        Value: vm.volunteer.availabilityClifton,
-        CrossroadsId: adultFields.availabilityClifton
-      };
-
-      adult.availabilityServiceTimes = {
-        Value: vm.volunteer.serveServiceTimes,
-        CrossroadsId: adultFields.availabilityServiceTimes
+      adult.availabilityWeekendSite = {
+        Value: vm.volunteer.availabilityWeekendSite,
+        CrossroadsId: adultFields.availabilityWeekendSite
       };
 
       adult.areaOfInterestServingInClassroom = {

@@ -53,10 +53,18 @@
     }
 
     function getDonor(){
-      return $resource(__API_ENDPOINT__ + 'api/donor/?email=:email',{email: '@_email'}, {
-        get: {
-          method : 'GET',
-          headers: {'Authorization': crds_utilities.getCookie('sessionId')}
+      return({
+        get: function(params) {
+          var encodedEmail = params && params.email ?
+              encodeURI(params.email).replace(/\+/, '%2B')
+              :
+              '';
+          return $resource(__API_ENDPOINT__ + 'api/donor/?email=' + encodedEmail, {}, {
+            get: {
+              method : 'GET',
+              headers: {'Authorization': crds_utilities.getCookie('sessionId')}
+            }
+          }).get();
         }
       });
     }
@@ -81,6 +89,10 @@
           error.globalMessage = MESSAGES.paymentMethodDeclined;
         } else if(error.code == 'processing_error') {
           error.globalMessage = MESSAGES.paymentMethodProcessingError;
+        }
+      } else if(error.param == 'bank_account') {
+        if(error.type == 'invalid_request_error') {
+          error.globalMessage = MESSAGES.paymentMethodDeclined;
         }
       }
     }

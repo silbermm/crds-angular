@@ -77,6 +77,7 @@ namespace crds_angular.Services
                 contactDonorResponse.ProcessorId = paymentService.CreateCustomer(paymentProcessorToken);
                 contactDonorResponse.DonorId = mpDonorService.CreateDonorRecord(contactDonorResponse.ContactId, contactDonorResponse.ProcessorId, setupDate, 
                     STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE);
+                contactDonorResponse.Email = emailAddress;
                 paymentService.UpdateCustomerDescription(contactDonorResponse.ProcessorId, contactDonorResponse.DonorId);
             } else if(!contactDonor.HasPaymentProcessorRecord) {
                 contactDonorResponse.ContactId = contactDonor.ContactId;
@@ -90,6 +91,8 @@ namespace crds_angular.Services
                     if (contactDonor.RegisteredUser)
                     {
                         contactDonorResponse.DonorId = mpDonorService.CreateDonorRecord(contactDonor.ContactId, contactDonorResponse.ProcessorId, setupDate);
+                        ContactDonor contact = mpDonorService.GetEmailViaDonorId(contactDonorResponse.DonorId);
+                        contactDonorResponse.Email = contact.Email;
                     }
                     else
                     {

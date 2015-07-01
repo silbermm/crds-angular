@@ -37,7 +37,7 @@ namespace crds_angular.Services
             if (IsBadResponse(response))
             {
                 Content content = JsonConvert.DeserializeObject<Content>(response.Content);
-                throw new StripeException(response.StatusCode, "Customer creation failed", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode);
+                throw new StripeException(response.StatusCode, "Customer creation failed", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode, content.Error.Param);
             }
 
             return response.Data.id;
@@ -53,7 +53,7 @@ namespace crds_angular.Services
             if (IsBadResponse(response))
             {
                 Content content = JsonConvert.DeserializeObject<Content>(response.Content);
-                throw new StripeException(response.StatusCode, "Customer update to add source failed", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode);
+                throw new StripeException(response.StatusCode, "Customer update to add source failed", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode, content.Error.Param);
             }
             var defaultSourceId = response.Data.default_source;
             var sources = response.Data.sources.data;
@@ -72,7 +72,7 @@ namespace crds_angular.Services
             if (IsBadResponse(response))
             {
                 Content content = JsonConvert.DeserializeObject<Content>(response.Content);
-                throw new StripeException(response.StatusCode, "Customer update failed", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode);
+                throw new StripeException(response.StatusCode, "Customer update failed", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode, content.Error.Param);
             }
 
             return (response.Data.id);
@@ -86,7 +86,7 @@ namespace crds_angular.Services
             if (IsBadResponse(response))
             {
                 Content content = JsonConvert.DeserializeObject<Content>(response.Content);
-                throw new StripeException(response.StatusCode, "Could not get default source information because customer lookup failed", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode);
+                throw new StripeException(response.StatusCode, "Could not get default source information because customer lookup failed", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode, content.Error.Param);
             }
             var defaultSourceId = response.Data.default_source;
             var sources = response.Data.sources.data;
@@ -110,7 +110,6 @@ namespace crds_angular.Services
                 {
                     defaultSource.brand = source.brand;
                     defaultSource.last4 = source.last4;
-                    defaultSource.name = source.name;
                     defaultSource.address_zip = source.address_zip;
                     defaultSource.exp_month = source.exp_month.PadLeft(2, '0');
                     defaultSource.exp_year = source.exp_year.Substring(2, 2);
@@ -132,7 +131,7 @@ namespace crds_angular.Services
             if (IsBadResponse(response))
             {
                 Content content = JsonConvert.DeserializeObject<Content>(response.Content);
-                throw new StripeException(response.StatusCode, "Invalid charge request", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode);
+                throw new StripeException(response.StatusCode, "Invalid charge request", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode, content.Error.Param);
             }
 
             return response.Data.id;

@@ -55,14 +55,12 @@
                 $timeout(function() {
                     if (Session.hasRedirectionInfo()) {
                         var url = Session.exists("redirectUrl");
-                        var link = Session.exists("link");
+                        var params = Session.exists("params");
                         Session.removeRedirectRoute();
-                        if(link === undefined){
+                        if(params === undefined){
                             $state.go(url);
-                        }
-                        else
-                        {
-                            $state.go(url,{link:link});
+                        } else {
+                            $state.go(url, JSON.parse(params));
                         }
                     }
                 }, 500);

@@ -76,7 +76,8 @@ namespace crds_angular.Controllers.API
             {
                 Id = donor.DonorId,
                 ProcessorId = donor.ProcessorId,
-                RegisteredUser = false
+                RegisteredUser = false,
+                Email = donor.Email
             };
 
             // HTTP StatusCode should be 201 (Created) if we created a donor, or 200 (Ok) if returning an existing donor
@@ -98,7 +99,8 @@ namespace crds_angular.Controllers.API
                 {
                     Id = donor.DonorId,
                     ProcessorId = donor.ProcessorId,
-                    RegisteredUser = true
+                    RegisteredUser = true,
+                    Email = donor.Email
                 };
 
                 return Ok(response);
@@ -137,7 +139,6 @@ namespace crds_angular.Controllers.API
                             credit_card = new CreditCardDTO
                             {
                               last4 = defaultSource.last4,
-                              name = defaultSource.name,
                               brand = defaultSource.brand,
                               address_zip = defaultSource.address_zip,
                               exp_date = defaultSource.exp_month + defaultSource.exp_year
@@ -148,7 +149,8 @@ namespace crds_angular.Controllers.API
                               routing = defaultSource.routing_number
                             }
                          },
-                         RegisteredUser = donor.RegisteredUser
+                         RegisteredUser = donor.RegisteredUser,
+                         Email = donor.Email
                     };
 
                     return Ok(response);
@@ -176,7 +178,8 @@ namespace crds_angular.Controllers.API
                     {
                         Id = donor.DonorId,
                         ProcessorId = donor.ProcessorId,
-                        RegisteredUser = donor.RegisteredUser
+                        RegisteredUser = donor.RegisteredUser,
+                        Email = donor.Email
                     };
 
                     return Ok(response); 
@@ -233,7 +236,6 @@ namespace crds_angular.Controllers.API
                     {
                         brand = sourceData.brand,
                         last4 = sourceData.last4,
-                        name = sourceData.name,
                         address_zip = sourceData.address_zip,
                         exp_date = sourceData.exp_month + sourceData.exp_year
                     },
@@ -243,7 +245,8 @@ namespace crds_angular.Controllers.API
                         routing = sourceData.routing_number
                     }
                 },
-                RegisteredUser = contactDonor.RegisteredUser
+                RegisteredUser = contactDonor.RegisteredUser,
+                Email = contactDonor.Email
             };
 
             return Ok(donor);

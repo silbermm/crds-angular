@@ -12,7 +12,8 @@
     'angular-growl',
     'toggle-switch',
     'ngAside',
-    'matchMedia'
+    'matchMedia',
+    'ui.bootstrap'
     ])
     .constant("AUTH_EVENTS", {
       loginSuccess: "auth-login-success",
@@ -64,7 +65,8 @@
       toolsError: 40,
       paymentMethodDeclined: 44,
       paymentMethodProcessingError: 47,
-      noResponse: 49
+      noResponse: 49,
+      ageError: 54
     })
     .config(function (growlProvider) {
       growlProvider.globalPosition("top-center");

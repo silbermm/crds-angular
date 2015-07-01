@@ -29,7 +29,8 @@ describe('GiveController', function() {
       $q = _$q_;
       httpBackend = $injector.get('$httpBackend');
       Session = $injector.get('Session');
-
+      User = $injector.get('User');
+      AUTH_EVENTS = $injector.get('AUTH_EVENTS');
 
       mockGetResponse = {
         id: "102030",
@@ -77,7 +78,9 @@ describe('GiveController', function() {
           '$timeout': $timeout,
           'Session': Session,
           'PaymentService': mockPaymentService,
-          'programList':programList
+          'programList':programList,
+          'User' : User,
+          'AUTH_EVENTS': AUTH_EVENTS
         });
 
       controller.brand = "";
@@ -88,8 +91,83 @@ describe('GiveController', function() {
     })
   );
 
-  describe('vm.confirmDonation() emits message in case of exception', function(){
-    it('calls vm.donate with missing params', function(){
+  describe('function confirmDonation()', function() {
+    beforeEach(function() {
+      spyOn(controller, '_stripeErrorHandler');
+      spyOn(controller,  'goToChange');
+    });
+
+    it('should go to the thank-you page if credit card payment was accepted', function() {
+      var error = {error1: '1', error2: '2'};
+      controller.dto = {
+        view: 'cc'
+      };
+      controller.amount = 123;
+      controller.donor = {donorinfo: 'blah'};
+      controller.email = 'test@somewhere.com';
+      controller.program = {id: 3};
+
+      spyOn(controller, 'donate').and.callFake(function(programId, amount, donorId, email, pymtType, onSuccess, onFailure) {
+        onSuccess(error);
+      });
+      spyOn($state, 'go');
+
+      controller.confirmDonation();
+      expect($state.go).toHaveBeenCalledWith('give.thank-you');
+      expect(controller._stripeErrorHandler).not.toHaveBeenCalled();
+      expect(controller.goToChange).not.toHaveBeenCalled();
+    });
+
+    it('should go to the change page if credit card payment was declined', function() {
+      var error = {error1: '1', error2: '2'};
+      controller.dto = {
+        view: 'cc'
+      };
+      controller.amount = 123;
+      controller.donor = {donorinfo: 'blah'};
+      controller.email = 'test@somewhere.com';
+      controller.program = {id: 3};
+
+      spyOn(controller, 'donate').and.callFake(function(programId, amount, donorId, email, pymtType, onSuccess, onFailure) {
+        controller.dto.declinedPayment = true;
+        onFailure(error);
+      });
+      spyOn($state, 'go');
+
+      controller.confirmDonation();
+      expect($state.go).not.toHaveBeenCalled();
+      expect(controller._stripeErrorHandler).toHaveBeenCalledWith(error);
+      expect(controller.goToChange).toHaveBeenCalledWith(
+        controller.amount,
+        controller.donor,
+        controller.email,
+        controller.program,
+        controller.dto.view);
+    });
+
+    it('should stay on the confirm page if there was a processing error', function() {
+      var error = {error1: '1', error2: '2'};
+      controller.dto = {
+        view: 'cc'
+      };
+      controller.amount = 123;
+      controller.donor = {donorinfo: 'blah'};
+      controller.email = 'test@somewhere.com';
+      controller.program = {id: 3};
+
+      spyOn(controller, 'donate').and.callFake(function(programId, amount, donorId, email, pymtType, onSuccess, onFailure) {
+        controller.dto.declinedPayment = false;
+        onFailure(error);
+      });
+      spyOn($state, 'go');
+
+      controller.confirmDonation();
+      expect($state.go).not.toHaveBeenCalled();
+      expect(controller._stripeErrorHandler).toHaveBeenCalledWith(error);
+      expect(controller.goToChange).not.toHaveBeenCalled();
+    });
+
+    it('should emit a failure message if called with missing params', function(){
       spyOn($rootScope, "$emit");
       controller.confirmDonation();
       expect($rootScope.$emit).toHaveBeenCalledWith("notify", 15);
@@ -111,36 +189,30 @@ describe('GiveController', function() {
     });
 
     it('should go to give.amount if starting at give', function() {
-      spyOn($state, 'is').and.returnValue(true);
 
       controller.initialized = false;
       controller.dto = controllerDto;
       controller.initDefaultState();
 
-      expect($state.is).toHaveBeenCalledWith('give');
       expect($state.go).toHaveBeenCalledWith('give.amount');
-      expect(controllerDto.reset).not.toHaveBeenCalled();
-      expect(Session.removeRedirectRoute).not.toHaveBeenCalled();
+      expect(controllerDto.reset).toHaveBeenCalled();
+      expect(Session.removeRedirectRoute).toHaveBeenCalled();
     });
 
-    it('should go to give.amount if starting at give', function() {
+    it('should go to give.amount if starting at give II', function() {
       var states = {
         'give': true,
         'give.amount': false,
       };
-      spyOn($state, 'is').and.callFake(function(stateName) {
-        return(states[stateName]);
-      });
 
       controller.initialized = false;
       controller.dto = controllerDto;
       controller.initDefaultState();
 
-      expect($state.is).toHaveBeenCalledWith('give');
       expect($state.go).toHaveBeenCalledWith('give.amount');
       expect(controller.initialized).toBeTruthy();
-      expect(controllerDto.reset).not.toHaveBeenCalled();
-      expect(Session.removeRedirectRoute).not.toHaveBeenCalled();
+      expect(controllerDto.reset).toHaveBeenCalled();
+      expect(Session.removeRedirectRoute).toHaveBeenCalled();
     });
 
     it('should do nothing special if starting at give.amount', function() {
@@ -148,38 +220,28 @@ describe('GiveController', function() {
         'give': false,
         'give.amount': true,
       };
-      spyOn($state, 'is').and.callFake(function(stateName) {
-        return(states[stateName]);
-      });
 
       controller.initialized = false;
       controller.dto = controllerDto;
       controller.initDefaultState();
 
-      expect($state.is).toHaveBeenCalledWith('give');
-      expect($state.is).toHaveBeenCalledWith('give.amount');
-      expect($state.go).not.toHaveBeenCalled();
+      expect($state.go).toHaveBeenCalled();
       expect(controller.initialized).toBeTruthy();
-      expect(controllerDto.reset).not.toHaveBeenCalled();
-      expect(Session.removeRedirectRoute).not.toHaveBeenCalled();
+      expect(controllerDto.reset).toHaveBeenCalled();
+      expect(Session.removeRedirectRoute).toHaveBeenCalled();
     });
 
     it('should go to give.amount if starting at an unknown state and not initialized', function() {
       var states = {
-        'give': false,
+        'give': true,
         'give.amount': false,
       };
-      spyOn($state, 'is').and.callFake(function(stateName) {
-        return(states[stateName]);
-      });
 
       controller.initialized = false;
       controller.dto = controllerDto;
       controller.initDefaultState();
 
-      expect($state.is).toHaveBeenCalledWith('give');
       expect($state.go).toHaveBeenCalledWith('give.amount');
-      expect($scope.$on).not.toHaveBeenCalled();
       expect(controller.initialized).toBeTruthy();
       expect(controllerDto.reset).toHaveBeenCalled();
       expect(Session.removeRedirectRoute).toHaveBeenCalled();
@@ -204,25 +266,61 @@ describe('GiveController', function() {
       expect(controller.initDefaultState).toHaveBeenCalled();
       expect(controller.transitionForLoggedInUserBasedOnExistingDonor).not.toHaveBeenCalled();
       expect(controller.processing).toBeTruthy();
-      expect(controller.email).toBeDefined();
-      expect(controller.email).toBe("me@here.com");
+      expect(controller.email).toBeUndefined();
     });
 
     it('should not initialize default state if already initialized', function() {
-      $rootScope.email = undefined;
-      controller.email = "me2@here.com";
+      $rootScope.email = "me2@here.com";
+      controller.email = undefined;
 
       controller.initialized = true;
-      var event = $scope.$broadcast('$stateChangeStart');
+      var event = $scope.$broadcast('$stateChangeStart', {name: 'give.amount'});
 
       expect(event.defaultPrevented).toBeFalsy();
       expect(controller.initDefaultState).not.toHaveBeenCalled();
       expect(controller.transitionForLoggedInUserBasedOnExistingDonor).toHaveBeenCalled();
       expect(controller.processing).toBeTruthy();
-      expect(controller.email).toBeDefined();
-      expect(controller.email).toBe("me2@here.com");
+      expect(controller.email).toBeUndefined();
     });
 
+    it('should initialize default state if toState=give', function() {
+      $rootScope.email = "me@here.com";
+      controller.email = undefined;
+
+      var event = $scope.$broadcast('$stateChangeStart', {name: 'give.amount'});
+
+      expect(event.defaultPrevented).toBeTruthy();
+      expect(controller.initDefaultState).toHaveBeenCalled();
+      expect(controller.transitionForLoggedInUserBasedOnExistingDonor).not.toHaveBeenCalled();
+      expect(controller.processing).toBeTruthy();
+      expect(controller.email).toBeUndefined();
+    });
+
+    it('should not do anything if toState is not in the giving flow', function() {
+      $rootScope.email = "me@here.com";
+      controller.email = undefined;
+      controller.processing = false;
+
+      var event = $scope.$broadcast('$stateChangeStart', {name: 'Ohio'});
+
+      expect(event.defaultPrevented).toBeFalsy();
+      expect(controller.initDefaultState).not.toHaveBeenCalled();
+      expect(controller.transitionForLoggedInUserBasedOnExistingDonor).not.toHaveBeenCalled();
+      expect(controller.processing).toBeFalsy();
+      expect(controller.email).not.toBeDefined();
+    });
+
+  });
+
+  describe('AUTH_EVENTS.logoutSuccess event hook', function() {
+    it('should reset data and go home', function() {
+      spyOn(controller, 'reset');
+      spyOn($state, 'go');
+
+      var event = $scope.$broadcast(AUTH_EVENTS.logoutSuccess);
+      expect(controller.reset).toHaveBeenCalled();
+      expect($state.go).toHaveBeenCalledWith('home');
+    });
   });
 
   describe('$stateChangeSuccess event hook', function() {
@@ -624,7 +722,7 @@ describe('GiveController', function() {
       controller.donate(1, 123, "2", "test@here.com", "bank", callback.onSuccess, callback.onFailure);
       // This resolves the promise above
       $rootScope.$apply();
-      
+
       expect(callback.onFailure).toHaveBeenCalledWith('Uh oh!');
       expect(controller.amount).toBeUndefined();
       expect(controller.program).toBeUndefined();
