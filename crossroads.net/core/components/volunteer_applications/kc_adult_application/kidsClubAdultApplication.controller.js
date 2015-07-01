@@ -32,6 +32,7 @@ var moment = require('moment');
     vm.save = save;
     vm.saving = false;
     vm.showError = showError;
+    vm.spiritualSelected = spiritualSelected;
     vm.submitButtonText = 'Submit';
     vm.volunteer.areaOfInterestServingInClassroom = false;
     vm.volunteer.areaOfInterestWelcomingNewFamilies=false;
@@ -554,6 +555,20 @@ var moment = require('moment');
         return false;
       if (form.$submitted || form[field].$dirty){
         return form[field].$invalid;
+      }
+      return false;
+    }
+
+    /**
+     * Checks if one of the spiritual life responses has been selected and returns
+     * true if it has, false otherwise
+     */
+    function spiritualSelected(){
+      if (vm.volunteer.religionSearchingForAnswers || 
+          vm.volunteer.religionReceivedJesus || 
+          vm.volunteer.religionFocusingOnObedience || 
+          vm.volunteer.religionReplicating) {
+        return true;
       }
       return false;
     }

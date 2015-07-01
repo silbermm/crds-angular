@@ -10,14 +10,14 @@ body {
 
 p .icon {
   vertical-align: middle;
-  margin-bottom: 0px; 
+  margin-bottom: 0px;
   width: ceil(($font-size-base * 1.25));
   height: ceil(($font-size-base * 1.25));
 }
 
 // Links
 
-a:hover {
+a:hover, a:active {
   text-decoration:none;
 }
 
