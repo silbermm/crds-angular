@@ -77,7 +77,7 @@ require('./email_field.html');
           if(email === undefined || !email) {
               return(true);
           }
-          return $http.get(__API_ENDPOINT__ + 'api/lookup/' + userid  + '/find/?email=' +  encodeURI(email).replace(/\+/, '%2B'))
+          return $http.get(__API_ENDPOINT__ + 'api/lookup/' + userid  + '/find/?email=' +  encodeURI(email).replace(/\+/g, '%2B'))
           .success(function(data) {
               // Successful response from this call means we did NOT find a matching email
               // which means that the unique email field is valid

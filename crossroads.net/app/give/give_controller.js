@@ -300,8 +300,7 @@
             vm.bankinfoSubmitted = true;
             if ($scope.giveForm.accountForm.$valid) {
               vm.processing = true;
-              PaymentService.donor().get({email: $scope.give.email})
-              .$promise
+              PaymentService.getDonor($scope.give.email)
               .then(function(donor){
                   vm.updateDonorAndDonate(donor.id, vm.program.ProgramId, vm.amount, vm.email, vm.dto.view);
               },
@@ -395,8 +394,7 @@
           if(toState.name == "give.account" && $rootScope.username && !vm.donorError ) {
             vm.processing = true;
             event.preventDefault();
-            PaymentService.donor().get({email: $scope.give.email})
-            .$promise
+            PaymentService.getDonor($scope.give.email)
             .then(function(donor){
               vm.donor = donor;
               vm.email = vm.donor.email;

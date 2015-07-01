@@ -10,7 +10,7 @@
       createDonorWithCard : createDonorWithCard,
       donateToProgram : donateToProgram,
       donation : {},
-      donor : getDonor,
+      getDonor : getDonor,
       updateDonorWithBankAcct :updateDonorWithBankAcct,
       updateDonorWithCard :updateDonorWithCard
     };
@@ -18,11 +18,11 @@
     stripe.setPublishableKey(__STRIPE_PUBKEY__);
 
     function createDonorWithBankAcct(bankAcct, email) {
-      return(_donor(bankAcct, email, stripe.bankAccount, 'POST'));
+      return(apiDonor(bankAcct, email, stripe.bankAccount, 'POST'));
     }
 
     function createDonorWithCard(card, email) {
-      return(_donor(card, email, stripe.card, 'POST'));
+      return(apiDonor(card, email, stripe.card, 'POST'));
     }
 
     function donateToProgram(program_id, amount, donor_id, email_address, pymt_type){
@@ -52,29 +52,32 @@
       return def.promise;
     }
 
-    function getDonor(){
-      return({
-        get: function(params) {
-          var encodedEmail = params && params.email ?
-              encodeURI(params.email).replace(/\+/, '%2B')
-              :
-              '';
-          return $resource(__API_ENDPOINT__ + 'api/donor/?email=' + encodedEmail, {}, {
-            get: {
-              method : 'GET',
-              headers: {'Authorization': crds_utilities.getCookie('sessionId')}
-            }
-          }).get();
+    function getDonor(email) {
+      var encodedEmail = email ?
+          encodeURI(email).replace(/\+/g, '%2B')
+          :
+          '';
+      var def = $q.defer();
+      $http({
+        method: "GET",
+        url: __API_ENDPOINT__ + 'api/donor/?email=' + encodedEmail,
+        headers: {
+          'Authorization': crds_utilities.getCookie('sessionId')
         }
+      }).success(function(data) {
+        def.resolve(data);
+      }).error(function(error) {
+        def.reject(error);
       });
+      return(def.promise);
     }
 
     function updateDonorWithBankAcct(donorId, bankAcct, email){
-      return(_donor(bankAcct, email, stripe.bankAccount, 'PUT'));
+      return(apiDonor(bankAcct, email, stripe.bankAccount, 'PUT'));
     }
 
     function updateDonorWithCard(donorId, card, email){
-      return(_donor(card, email, stripe.card, 'PUT'));
+      return(apiDonor(card, email, stripe.card, 'PUT'));
     }
 
     function _addGlobalErrorMessage(error) {
@@ -97,7 +100,7 @@
       }
     }
 
-    function _donor(donorInfo, email, stripeFunc, apiMethod) {
+    function apiDonor(donorInfo, email, stripeFunc, apiMethod) {
       var def = $q.defer();
       stripeFunc.createToken(donorInfo, function(status, response) {
         if(response.error) {
