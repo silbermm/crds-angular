@@ -1,7 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Data.Entity.Core.Objects;
+using System.Diagnostics.Eventing.Reader;
+using System.EnterpriseServices;
 using System.Linq;
+using System.Net.Mail;
 using System.Reflection;
+using System.Text;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using crds_angular.Enum;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services.Interfaces;
@@ -14,6 +22,14 @@ using IGroupService = MinistryPlatform.Translation.Services.Interfaces.IGroupSer
 
 namespace crds_angular.Services
 {
+    internal class MailRow
+    {
+        public string EventDate { get; set; }
+        public string OpportunityName { get; set; }
+        public string ShiftTime { get; set; }
+        public string Location { get; set; }
+    }
+
     public class ServeService : MinistryPlatformBaseService, IServeService
     {
         private readonly IContactService _contactService;
@@ -24,7 +40,13 @@ namespace crds_angular.Services
         private readonly IOpportunityService _opportunityService;
         private readonly IParticipantService _participantService;
         private readonly ICommunicationService _communicationService;
-
+        private readonly List<string> TABLE_HEADERS = new List<string>()
+            {
+                "Event Date",
+                "Opportunity Name",
+                "Shift Start and End",
+                "Location"
+            };
         private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public ServeService(IContactService contactService, IContactRelationshipService contactRelationshipService,
@@ -242,6 +264,10 @@ namespace crds_angular.Services
             bool signUp,
             bool alternateWeeks)
         {
+
+            List<MailRow> mailRows = new List<MailRow>();
+            
+
             //get participant id for Contact
             var participant = _participantService.GetParticipant(contactId);
 
@@ -262,7 +288,13 @@ namespace crds_angular.Services
                     var @event = events[i];
                     sequenceDate = IncrementSequenceDate(@event, sequenceDate, increment);
                     if (@event.EventStartDate.Date != sequenceDate.Date) continue;
-
+                    mailRows.Add(new MailRow()
+                    {
+                        EventDate = @event.EventStartDate.ToString(),
+                        Location = opportunity.Room,
+                        OpportunityName = opportunity.OpportunityName,
+                        ShiftTime = opportunity.ShiftStart.ToString() + opportunity.ShiftEnd.ToString()
+                    });
                     var response = CreateRsvp(token, opportunityId, opportunityIds, signUp, participant, @event);
                     previousOpportunity = PreviousOpportunity(response, previousOpportunity);
                     templateId = GetTemplateId(templateId, response);
@@ -273,8 +305,9 @@ namespace crds_angular.Services
             {
                 return false;
             }
+            var htmlTable = SetupHTMLTable(mailRows);
             var mergeData = SetupMergeData(contactId, opportunityId, previousOpportunity, opportunity, startDate,
-                endDate, groupContact);
+                endDate, groupContact, htmlTable);
             var communication = SetupCommunication(templateId, groupContact, toContact);
             _communicationService.SendMessage(communication, mergeData);
             return true;
@@ -429,9 +462,58 @@ namespace crds_angular.Services
             };
         }
 
+        private String SetupHTMLTable(List<MailRow> content)
+        {
+            StringBuilder htmlTable = new StringBuilder();
+            IEnumerable<string> rows = content.Select<MailRow, string>(rowObj =>
+            {
+                StringBuilder cells = new StringBuilder();
+                cells.AppendFormat(HtmlElement("td", rowObj.EventDate));
+                cells.Append(HtmlElement("td", rowObj.OpportunityName));
+                cells.Append(HtmlElement("td", rowObj.ShiftTime));
+                cells.Append(HtmlElement("td", rowObj.Location));
+                return HtmlElement("tr", cells.ToString()).ToString();
+            });
+
+            var table = rows.Aggregate((current, next) => current + next);
+
+            htmlTable.Append(HtmlElement("table", table));
+            return htmlTable.ToString();
+        }
+
+        private String SetupTableHeader()
+        {
+            var headers = TABLE_HEADERS.Aggregate<string>((current, next) => HtmlElement("th", current) + HtmlElement("th", next));
+            return HtmlElement("tr", headers);
+        }
+
+
+        private String HtmlElement(String el, String content)
+        {
+            StringBuilder element = new StringBuilder();
+            element.AppendFormat("<");
+            element.Append(el);
+            element.Append(">");
+
+            element.Append(content);
+
+            element.AppendFormat("<");
+            element.Append(el);
+            element.Append("/>");
+
+            return element.ToString();
+        }
+
+        private String TableRow(String content)
+        {
+            StringBuilder th = new StringBuilder();
+            th.AppendFormat("<tr> {0} </tr>", content);
+            return th.ToString();
+        }
+
         private Dictionary<string, object> SetupMergeData(int contactId, int opportunityId,
             Opportunity previousOpportunity, Opportunity currentOpportunity, DateTime startDate, DateTime endDate,
-            MyContact groupContact)
+            MyContact groupContact, String htmlTable)
         {
             return new Dictionary<string, object>
             {
@@ -446,7 +528,8 @@ namespace crds_angular.Services
                 {
                     "Previous_Opportunity_Name",
                     previousOpportunity != null ? previousOpportunity.OpportunityName : @"Not Available"
-                }
+                },
+                {"Html_Table", htmlTable}
             };
         }
 
@@ -534,5 +617,8 @@ namespace crds_angular.Services
                     .ToList();
             return r.Count <= 0 ? null : new ServeRsvp {Attending = (r[0] == 1), RoleId = opportunityId};
         }
+
     }
+
+   
 }
