@@ -53,7 +53,8 @@ namespace crds_angular.test.controllers
             {
                 ProgramId = "3", //crossroads
                 Amount = 86868,
-                DonorId = 394256
+                DonorId = 394256,
+                EmailAddress = "test@test.com"
             };
 
             var donor = new ContactDonor
@@ -64,7 +65,8 @@ namespace crds_angular.test.controllers
                 StatementFreq = "1",
                 StatementMethod = "2",
                 StatementType = "3",
-                ProcessorId = "cus_test1234567"
+                ProcessorId = "cus_test1234567",
+                Email = "moc.tset@tset"
             };
 
             authenticationServiceMock.Setup(mocked => mocked.GetContactId(authType + " " + authToken)).Returns(contactId);
@@ -93,6 +95,9 @@ namespace crds_angular.test.controllers
             var okResult = (OkNegotiatedContentResult<DonationDTO>)result;
             Assert.AreEqual(6186818, donationId);
 
+            var resultDto = ((OkNegotiatedContentResult<DonationDTO>) result).Content;
+            Assert.IsNotNull(resultDto);
+            Assert.AreEqual(donor.Email, resultDto.email);
         }
 
         [Test]
@@ -118,7 +123,8 @@ namespace crds_angular.test.controllers
                 StatementFreq = "1",
                 StatementMethod = "2",
                 StatementType = "3",
-                ProcessorId = "cus_test1234567"
+                ProcessorId = "cus_test1234567",
+                Email = "moc.tset@tset"
             };
 
             fixture.Request.Headers.Authorization = null;
@@ -143,6 +149,9 @@ namespace crds_angular.test.controllers
             var okResult = (OkNegotiatedContentResult<DonationDTO>)result;
             Assert.AreEqual(6186818, donationId);
 
+            var resultDto = ((OkNegotiatedContentResult<DonationDTO>)result).Content;
+            Assert.IsNotNull(resultDto);
+            Assert.AreEqual(donor.Email, resultDto.email);
         }
 
     }
