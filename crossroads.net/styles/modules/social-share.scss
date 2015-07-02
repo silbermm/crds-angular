@@ -1,0 +1,16 @@
+.addthis_custom_sharing {
+  display: block;
+
+  a {
+    display: inline-block;
+    float: left;
+    margin-right: $padding-base-horizontal/2;
+    .at4-icon {
+      height: 32px;
+      width: 32px;
+      text-align: center;
+      background-position: center;
+      border-radius: 50%;
+    }
+  }
+}
