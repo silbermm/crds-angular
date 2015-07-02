@@ -4,6 +4,7 @@ require('angular');
 require('../node_modules/angular-toggle-switch/angular-toggle-switch-bootstrap.css');
 require('../node_modules/angular-toggle-switch/angular-toggle-switch.css');
 
+require('angular-addthis');
 require('angular-aside');
 require('angular-match-media');
 

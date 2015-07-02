@@ -89,6 +89,7 @@
     "bootstrap-dropdown": "./node_modules/bootstrap/js/dropdown.js",
     "angular-ui-utils": "./dependencies/third-party/angular/ui-utils.min.js",
     "angular-ui-select": "./dependencies/third-party/angular/select.min.js",
+    "angular-addthis": "./dependencies/third-party/angular/angular-addthis.min.js",
     "angular-aside": "./dependencies/third-party/angular/angular-aside.min.js",
     "angular-match-media": "./dependencies/third-party/angular/match-media.js",
     "_comment_angular-payments": "Refer to https://github.com/raaspazasu/ngPayments",
