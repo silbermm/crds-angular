@@ -6,15 +6,14 @@ describe('Session Service', function() {
 
   beforeEach(module('crossroads'));
 
-  beforeEach(inject(function(_$cookies_, _$cookieStore_, _Session_){
+  beforeEach(inject(function(_$cookies_, _Session_){
     $cookies = _$cookies_;
-    $cookieStore = _$cookieStore_;
     Session = _Session_;
   }));
 
   it("should save an array of family members", function(){
     Session.addFamilyMembers(family);
-    expect($cookies.family).toBe(family.join(','));
+    expect($cookies.get("family")).toBe(family.join(','));
   });
 
   it("should return an array of family members", function(){

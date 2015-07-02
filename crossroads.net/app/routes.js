@@ -3,11 +3,11 @@
 
   module.exports = AppConfig;
 
-  AppConfig.$inject = [ '$stateProvider',
-                        '$urlRouterProvider',
-                        '$httpProvider',
-                        '$urlMatcherFactoryProvider',
-                        '$locationProvider' ];
+  AppConfig.$inject = [ '$stateProvider', 
+                        '$urlRouterProvider', 
+                        '$httpProvider', 
+                        '$urlMatcherFactoryProvider', 
+                        '$locationProvider'];
 
   function AppConfig($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory, $locationProvider) {
 
@@ -146,9 +146,10 @@
         resolve: {
           loggedin: crds_utilities.checkLoggedin,
           ServeOpportunities: 'ServeOpportunities',
-          Groups: function(ServeOpportunities) {
+          $cookies: '$cookies',
+          Groups: function(ServeOpportunities, $cookies) {
             return ServeOpportunities.ServeDays.query({
-              id: crds_utilities.getCookie('userId')
+              id: $cookies.get('userId')
             }).$promise;
           }
         }

@@ -2,10 +2,10 @@
 
   angular.module('crossroads.give').factory('PaymentService',PaymentService);
 
-  PaymentService.$inject = ['$log', '$http', '$resource','$q', 'stripe', 'MESSAGES'];
+  PaymentService.$inject = ['$log', '$http', '$resource','$q', 'stripe', '$cookies', 'MESSAGES'];
 
-  function PaymentService($log, $http, $resource, $q, stripe, MESSAGES) {
-    var payment_service = {
+  function PaymentService($log, $http, $resource, $q, stripe, $cookies, MESSAGES) {
+    var payment_service = { 
       createDonorWithBankAcct : createDonorWithBankAcct,
       createDonorWithCard : createDonorWithCard,
       donateToProgram : donateToProgram,
@@ -39,7 +39,7 @@
         url: __API_ENDPOINT__ + 'api/donation',
         data: donation_request,
         headers: {
-              'Authorization': crds_utilities.getCookie('sessionId')
+              'Authorization': $cookies.get('sessionId')
             }
       }).success(function(data){
         payment_service.donation = data;
@@ -62,7 +62,7 @@
         method: "GET",
         url: __API_ENDPOINT__ + 'api/donor/?email=' + encodedEmail,
         headers: {
-          'Authorization': crds_utilities.getCookie('sessionId')
+          'Authorization': $cookies.get('sessionId')
         }
       }).success(function(data) {
         def.resolve(data);
@@ -112,7 +112,7 @@
             method: apiMethod,
             url: __API_ENDPOINT__ + 'api/donor',
             headers: {
-              'Authorization': crds_utilities.getCookie('sessionId')
+              'Authorization':  $cookies.get('sessionId')
             },
             data: donor_request
           }).success(function(data) {
