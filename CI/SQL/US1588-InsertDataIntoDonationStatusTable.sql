@@ -10,11 +10,11 @@ INSERT INTO [dbo].[Donation_Status]
            ,0
            ,1)
            ,
-		      ('Declined'
+          ('Declined'
            ,1
            ,1)
-		       ,
-          ('Deposited'
+           ,
+           ('Deposited'
            ,1
            ,0)
 GO
