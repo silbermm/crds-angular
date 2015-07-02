@@ -12,5 +12,5 @@ INSERT INTO [dbo].[dp_Page_Views]
            ,301
            ,'Equipment for the Oakley Annex location only'
            ,'Room_ID_Table_Building_ID_Table.[Building_Name], Equipment.[Equipment_Name], Equipment_Type_ID_Table.[Equipment_Type], Equipment.[Bookable], Equipment_Coordinator_Table.[User_Name] AS [Equipment Coordinator]'
-           ,'Room_ID_Table_Building_ID_Table.[Building_ID] = 19')
+           ,'Room_ID_Table_Building_ID_Table.[Building_ID] = 16')
 GO
