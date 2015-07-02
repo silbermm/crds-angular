@@ -11,6 +11,25 @@
       text-align: center;
       background-position: center;
       border-radius: 50%;
+      background-color: $gray-light !important;
+
+      &.aticon-facebook {
+        &:hover {
+          background-color: rgb(48, 88, 145) !important;
+        }
+      }
+
+      &.aticon-twitter {
+        &:hover {
+          background-color: rgb(44, 168, 210) !important;
+        }
+      }
+
+      &.aticon-email {
+        &:hover {
+          background-color: $brand-primary !important;
+        }
+      }
     }
   }
 }
