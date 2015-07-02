@@ -57,8 +57,7 @@
       var toDate = moment(vm.toDate, 'MM/DD/YY');
       toDate.hour(23); 
 
-      if( now.unix() > toDate.unix() ) {
-        
+      if( now.unix() > toDate.unix() ) { 
         vm.filterdates.todate.$error.fromDate = true;
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
         return false;
@@ -72,7 +71,7 @@
           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
           return false;
         }
-        var fromDate = moment(vm.fromDate);
+        var fromDate = moment(vm.fromDate, 'MM/DD/YY');
         if (fromDate.isBefore(now, 'days')) {
           fromDate = now;
         }
@@ -91,6 +90,7 @@
         }
         $rootScope.$emit('filterByDates', {'fromDate': fromDate, 'toDate': toDate});
         $modalInstance.close({ fromDate:vm.fromDate, toDate: vm.toDate });
+        return true;
       } else if (isToError()) {
         vm.filterdates.todate.$error.date = true;
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
