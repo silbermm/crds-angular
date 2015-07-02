@@ -54,7 +54,7 @@
     function readyFilterByDate() {
       var now = moment();
       now.hour(0);
-      var toDate = moment(vm.toDate);
+      var toDate = moment(vm.toDate, 'MM/DD/YY');
       toDate.hour(23); 
 
       if( now.unix() > toDate.unix() ) {
