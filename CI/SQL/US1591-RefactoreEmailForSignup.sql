@@ -19,7 +19,7 @@ INSERT INTO [dbo].[dp_Communications]
      VALUES
            (5
            ,'Serve Signup Confirmation'
-           ,'Thanks for signing up to serve<br/><br/> [html_table]'
+           ,'Thanks for signing up to serve<br/><br/> [Html_Table]'
            ,1
            ,GETDATE()
            ,NULL
@@ -51,7 +51,7 @@ INSERT INTO [dbo].[dp_Communications]
      VALUES
            (5
            ,'Serve Signup Cancelation'
-           ,'Thanks for letting us know you can''t make it.<br/><br/> [html_table]'
+           ,'Thanks for letting us know you can''t make it.<br/><br/> [Html_Table]'
            ,1
            ,GETDATE()
            ,NULL
