@@ -5,7 +5,7 @@
             <label for="ccNumber">Credit Card Number</label>
             <input type="text" name="ccNumber" class="form-control cc-icon" ng-class="ccNumberClass" ng-model="creditCard.ccNumber" maxlength="16" ng-change="ccCardType(); resetDefaultCardPlaceholderValues();" ng-required="!useExistingAccountInfo()" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }" placeholder="{{defaultCardPlaceholderValues.maskedCard}}">
             <ng-messages for="creditCardForm.ccNumber.$error" ng-if="bankinfoSubmitted">
-              <ng-messages-include src="on-blur-messages"></ng-messages-include>
+              <ng-messages-include src="on-submit-messages"></ng-messages-include>
             </ng-messages>
             <span ng-show="!creditCard.ccValid && creditCardForm.ccNumber.$dirty" ng-bind-html="$root.messages[$root.MESSAGES.invalidCard].message | html"></span>
             <span ng-show="creditCard.declinedPayment" ng-bind-html="$root.messages[$root.MESSAGES.invalidPaymentMethodInformation].message | html"></span>
