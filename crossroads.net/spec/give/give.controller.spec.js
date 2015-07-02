@@ -357,6 +357,7 @@ describe('GiveController', function() {
       controller.amountSubmitted = true;
       controller.bankinfoSubmitted = true;
       controller.changeAccountInfo = true;
+      controller.donorError = true;
       controller.dto = controllerDto;
       controller.initialized = true;
       controller.processing = true;
@@ -367,6 +368,7 @@ describe('GiveController', function() {
       expect(controller.amountSubmitted).toBeFalsy();
       expect(controller.bankinfoSubmitted).toBeFalsy();
       expect(controller.changeAccountInfo).toBeFalsy();
+      expect(controller.donorError).toBeFalsy();
       expect(controller.initialized).toBeFalsy();
       expect(controller.processing).toBeFalsy();
       expect(controller.program).not.toBeDefined();
