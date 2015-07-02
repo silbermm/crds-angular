@@ -5,7 +5,9 @@ require('../node_modules/angular-toggle-switch/angular-toggle-switch-bootstrap.c
 require('../node_modules/angular-toggle-switch/angular-toggle-switch.css');
 
 require('angular-aside');
+require('angular-mailchimp');
 require('angular-match-media');
+
 
 require('./third-party/angular/select.css');
 require('./third-party/angular/angular-aside.min.css');
