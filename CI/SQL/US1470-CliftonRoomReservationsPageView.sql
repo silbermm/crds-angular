@@ -8,10 +8,10 @@ INSERT INTO [dbo].[dp_Page_Views]
            ,[View_Clause]
            ,[Order_By])
      VALUES
-           ('Oakley Current & Future Reserv.'
+           ('Clifton Current & Future Reserv.'
            ,384
-           ,'Current & future  rom reservations for Oakley only'
-           ,'Event_ID_Table.Event_End_Date > GetDate() AND Room_ID_Table.Building_ID=2'
+           ,'Current & future room reservations for Clifton only'
+           ,'Event_ID_Table.Event_End_Date > GetDate() AND Room_ID_Table.Building_ID=7'
            ,'Event_ID_Table.Event_Start_Date')
            
 GO
