@@ -43,9 +43,8 @@ describe('Serve Modal Controller', function() {
   });
 
   it('should have an error when the FROM date is after the TO date', function(){
-    controller.fromDate = new Date();
-    controller.fromDate.setDate(controller.fromDate.getDate() +10);
-    controller.toDate = new Date();
+    controller.fromDate = formatDate(new Date(), 16);
+    controller.toDate = formatDate(new Date(), 10);
     var ret = controller.readyFilterByDate();
     expect(ret).toBe(false);
     expect(controller.filterdates.fromdate.$error.fromDateToLarge).toBe(true);
@@ -68,5 +67,15 @@ describe('Serve Modal Controller', function() {
         }
       }
     };
-   } 
+   }
+
+  function formatDate(date, days){
+    if(days === undefined){
+      days = 0; 
+    }
+    var d = moment(date);
+    d.add(days, 'd');
+    return d.format('MM/DD/YY');
+  }
+
 });
