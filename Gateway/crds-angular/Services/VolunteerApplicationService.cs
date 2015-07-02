@@ -1,16 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Models.Crossroads.VolunteerApplication;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
-using System.Collections.Generic;
-using System.Linq;
-using crds_angular.Models.Crossroads.Serve;
-using crds_angular.Services.Interfaces;
-
 
 namespace crds_angular.Services
 {
