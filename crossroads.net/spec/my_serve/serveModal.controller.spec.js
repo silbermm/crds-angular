@@ -47,7 +47,6 @@ describe('Serve Modal Controller', function() {
     controller.toDate = formatDate(new Date(), 10);
     var ret = controller.readyFilterByDate();
     expect(ret).toBe(false);
-    console.log(controller.filterdates.fromdate.$error);
     expect(controller.filterdates.fromdate.$error.fromDateToLarge).toBe(true);
   }); 
 
