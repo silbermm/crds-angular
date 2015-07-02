@@ -146,7 +146,8 @@
         resolve: {
           loggedin: crds_utilities.checkLoggedin,
           ServeOpportunities: 'ServeOpportunities',
-          Groups: function(ServeOpportunities) {
+          $cookies: '$cookies',
+          Groups: function(ServeOpportunities, $cookies) {
             return ServeOpportunities.ServeDays.query({
               id: $cookies.get('userId')
             }).$promise;
