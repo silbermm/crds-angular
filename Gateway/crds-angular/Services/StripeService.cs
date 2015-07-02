@@ -18,7 +18,6 @@ namespace crds_angular.Services
         public StripeService(IRestClient stripeRestClient)
         {
             _stripeRestClient = stripeRestClient;
-            _stripeRestClient.BaseUrl = new System.Uri("http://jimsapi.stripe.com/v1");
         }
 
         private static bool IsBadResponse(IRestResponse response)
