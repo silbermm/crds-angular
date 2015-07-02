@@ -59,14 +59,13 @@ describe ('PaymentService', function () {
 
   describe('function getDonor', function() {
     beforeEach(function() {
-      httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +'api/donor/?email=me%2Byou@here.com').respond(200, 'good');
+      httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +'api/donor/?email=me%2Byou%2Bus@here.com').respond(200, 'good');
     });
 
     it('should encode plus signs in an email address', function() {
-      var response = sut.donor().get({email: 'me+you@here.com'});
+      var response = sut.getDonor('me+you+us@here.com');
       httpBackend.flush();
       expect(response).toBeDefined();
-      expect(response.$promise).toBeDefined();
     });
   });
 

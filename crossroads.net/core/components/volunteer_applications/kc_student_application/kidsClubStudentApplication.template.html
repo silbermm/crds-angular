@@ -193,22 +193,22 @@
         <label class="block required">How would you define your spiritual life? Pick as many as you like.</label>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcStudentApplication.religionSearchingForAnswers" ng-required="!kcStudentApplication.spiritualSelected()">Searching for answers.
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" ng-model="kcStudentApplication.religionSearchingForAnswers" ng-required="!kcStudentApplication.spiritualSelected()">Searching for answers.
           </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcStudentApplication.religionReceivedJesus" ng-required="!kcStudentApplication.spiritualSelected()">I have received Jesus.
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" ng-model="kcStudentApplication.religionReceivedJesus" ng-required="!kcStudentApplication.spiritualSelected()">I have received Jesus.
           </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcStudentApplication.religionFocusingOnObedience" ng-required="!kcStudentApplication.spiritualSelected()">Focusing on obedience—I’ve quit negotiating with God.
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" ng-model="kcStudentApplication.religionFocusingOnObedience" ng-required="!kcStudentApplication.spiritualSelected()">Focusing on obedience—I’ve quit negotiating with God.
           </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcStudentApplication.religionReplicating" ng-required="!kcStudentApplication.spiritualSelected()">I’m actively replicating my faith in others.
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" ng-model="kcStudentApplication.religionReplicating" ng-required="!kcStudentApplication.spiritualSelected()">I’m actively replicating my faith in others.
           </label>
         </div>
         <ng-messages for="student.religion.$error" ng-if="kcStudentApplication.showError(student, 'religion')">
@@ -271,7 +271,7 @@
 
         <div class="checkbox">
           <label>
-            <input type="checkbox"
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''"
                    name="availability"
                    ng-model="kcStudentApplication.availabilityDuringWeek"
                    ng-required="!kcStudentApplication.availabilitySelected()">
@@ -280,7 +280,7 @@
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox"
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''"
                    name="availability"
                    ng-model="kcStudentApplication.availabilityDuringWeekend"
                    ng-required="!kcStudentApplication.availabilitySelected()">
@@ -328,7 +328,7 @@
         <label class="control-label required">What age kids do you prefer to serve with?</label>
         <div class="checkbox">
           <label>
-            <input type="checkbox"
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''"
                    value="1"
                    name="serveAge"
                    ng-model="kcStudentApplication.serveAgeKids.age1to2"
@@ -338,7 +338,7 @@
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox"
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''"
                    value="2"
                    name="serveAge"
                    ng-model="kcStudentApplication.serveAgeKids.age3toPreK"
@@ -348,7 +348,7 @@
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox"
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''"
                    value="3"
                    name="serveAge"
                    ng-model="kcStudentApplication.serveAgeKids.Kto5Grade"

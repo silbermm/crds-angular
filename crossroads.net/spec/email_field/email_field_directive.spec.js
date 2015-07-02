@@ -100,9 +100,9 @@ describe('Email Field Directive', function() {
     });
 
     it("should lookup an email with an encoded plus sign", function() {
-      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/lookup/0/find/?email=me%2Byou@there.com').respond(404, "existing email");
+      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/lookup/0/find/?email=me%2Byou%2Bus@there.com').respond(404, "existing email");
 
-      form.email.$setViewValue("me+you@there.com");
+      form.email.$setViewValue("me+you+us@there.com");
       isolateScope.$digest();
       $httpBackend.flush();
     });

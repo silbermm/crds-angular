@@ -310,10 +310,10 @@
       <div class="form-group col-sm-12" ng-class="{'has-error': kcAdultApplication.showError(adult, 'crime') }">
         <label class="control-label block required">Have you ever been arrested, convicted of or pleaded no contest to any crime?</label>
         <label class="radio-inline">
-          <input type="radio" value="no" name="crime" ng-model="kcAdultApplication.volunteer.crime" required>No
+          <input type="radio" value="No" name="crime" ng-model="kcAdultApplication.volunteer.crime" required>No
         </label>
         <label class="radio-inline">
-          <input type="radio" value="yes" name="crime" ng-model="kcAdultApplication.volunteer.crime" required>Yes
+          <input type="radio" value="Yes" name="crime" ng-model="kcAdultApplication.volunteer.crime" required>Yes
         </label>
         <ng-messages for="adult.crime.$error" ng-if="kcAdultApplication.showError(adult, 'crime')">
           <span ng-message="required">
@@ -325,10 +325,10 @@
       <div class="form-group col-sm-12" ng-class="{'has-error': kcAdultApplication.showError(adult, 'addiction') }">
         <label class="control-label block required">Have you ever been concerned that you may have an addiction to drugs, alcohol, pornography, or other addiction; or has anyone suggested that you do?</label>
         <label class="radio-inline">
-          <input type="radio" value="no" name="addiction" ng-model="kcAdultApplication.volunteer.addiction" required>No
+          <input type="radio" value="No" name="addiction" ng-model="kcAdultApplication.volunteer.addiction" required>No
         </label>
         <label class="radio-inline">
-          <input type="radio" value="yes" name="addiction" ng-model="kcAdultApplication.volunteer.addiction" required>Yes
+          <input type="radio" value="Yes" name="addiction" ng-model="kcAdultApplication.volunteer.addiction" required>Yes
         </label>
         <ng-messages for="adult.addiction.$error" ng-if="kcAdultApplication.showError(adult, 'addiction')">
           <span ng-message="required">
@@ -340,10 +340,10 @@
       <div class="form-group col-sm-12" ng-class="{'has-error': kcAdultApplication.showError(adult, 'neglect')}">
         <label class="control-label block required">Have you ever been accused, alleged, investigated, charged or convicted of any act of neglecting,abusing, exploiting or molesting any child?</label>
         <label class="radio-inline">
-          <input type="radio" value="no" name="neglect" ng-model="kcAdultApplication.volunteer.neglect" required>No
+          <input type="radio" value="No" name="neglect" ng-model="kcAdultApplication.volunteer.neglect" required>No
         </label>
         <label class="radio-inline">
-          <input type="radio" value="yes" name="neglect" ng-model="kcAdultApplication.volunteer.neglect" required>Yes
+          <input type="radio" value="Yes" name="neglect" ng-model="kcAdultApplication.volunteer.neglect" required>Yes
         </label>
         <ng-messages for="adult.neglect.$error" ng-if="kcAdultApplication.showError(adult, 'neglect')">
           <span ng-message="required">
@@ -355,10 +355,10 @@
       <div class="form-group col-sm-12" ng-class="{'has-error': kcAdultApplication.showError(adult, 'psychiatricDisorder')}">
         <label class="control-label block required">Have you ever been treated for or diagnosed with a psychiatric disorder?</label>
         <label class="radio-inline">
-          <input type="radio" value="no" name="psychiatricDisorder" ng-model="kcAdultApplication.volunteer.psychiatricDisorder" required >No
+          <input type="radio" value="No" name="psychiatricDisorder" ng-model="kcAdultApplication.volunteer.psychiatricDisorder" required >No
         </label>
         <label class="radio-inline">
-          <input type="radio" value="yes" name="psychiatricDisorder" ng-model="kcAdultApplication.volunteer.psychiatricDisorder" required>Yes
+          <input type="radio" value="Yes" name="psychiatricDisorder" ng-model="kcAdultApplication.volunteer.psychiatricDisorder" required>Yes
         </label>
         <ng-messages for="adult.psychiatricDisorder.$error" ng-if="kcAdultApplication.showError(adult, 'psychiatricDisorder')">
           <span ng-message="required">
@@ -370,10 +370,10 @@
       <div class="form-group col-sm-12" ng-class="{'has-error':kcAdultApplication.showError(adult, 'sexuallyActive')}">
         <label class="control-label block required">Currently, or in the past year, have you been sexually active outside of marriage?</label>
         <label class="radio-inline">
-          <input type="radio" value="no" name="sexuallyActive" ng-model="kcAdultApplication.volunteer.sexualyActive" required>No
+          <input type="radio" value="No" name="sexuallyActive" ng-model="kcAdultApplication.volunteer.sexualyActive" required>No
         </label>
         <label class="radio-inline">
-          <input type="radio" value="yes" name="sexuallyActive" ng-model="kcAdultApplication.volunteer.sexualyActive" required>Yes
+          <input type="radio" value="Yes" name="sexuallyActive" ng-model="kcAdultApplication.volunteer.sexualyActive" required>Yes
         </label>
         <ng-messages for="adult.sexuallyActive.$error" ng-if="kcAdultApplication.showError(adult, 'sexuallyActive')">
           <span ng-message="required">
@@ -386,22 +386,22 @@
         <label class="block required">How would you define your spiritual life? Pick as many as you like.</label>
         <div class="checkbox">
           <label>
-            <input type="checkbox" name="religion" ng-model="kcAdultApplication.volunteer.religionSearchingForAnswers" ng-required="!kcAdultApplication.spiritualSelected()">Searching for answers.
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" name="religion" ng-model="kcAdultApplication.volunteer.religionSearchingForAnswers" ng-required="!kcAdultApplication.spiritualSelected()">Searching for answers.
           </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" name="religion" ng-model="kcAdultApplication.volunteer.religionReceivedJesus" ng-required="!kcAdultApplication.spiritualSelected()">I have received Jesus.
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" name="religion" ng-model="kcAdultApplication.volunteer.religionReceivedJesus" ng-required="!kcAdultApplication.spiritualSelected()">I have received Jesus.
           </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" name="religion" ng-model="kcAdultApplication.volunteer.religionFocusingOnObedience" ng-required="!kcAdultApplication.spiritualSelected()">Focusing on obedience—I’ve quit negotiating with God.
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" name="religion" ng-model="kcAdultApplication.volunteer.religionFocusingOnObedience" ng-required="!kcAdultApplication.spiritualSelected()">Focusing on obedience—I’ve quit negotiating with God.
           </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" name="religion" ng-model="kcAdultApplication.volunteer.religionReplicating" ng-required="!kcAdultApplication.spiritualSelected()">I’m actively replicating my faith in others.
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" name="religion" ng-model="kcAdultApplication.volunteer.religionReplicating" ng-required="!kcAdultApplication.spiritualSelected()">I’m actively replicating my faith in others.
           </label>
         </div>
         <ng-messages for="adult.religion.$error" ng-if="kcAdultApplication.showError(adult, 'religion')">
@@ -448,12 +448,12 @@
         <label class="block required control-label">What is your availability?</label>
         <div class="checkbox">
           <label>
-            <input type="checkbox" name="availability" ng-model="kcAdultApplication.volunteer.availabilityWeek" ng-required="!kcAdultApplication.availabilitySelected()"> During the Week
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" name="availability" ng-model="kcAdultApplication.volunteer.availabilityWeek" ng-required="!kcAdultApplication.availabilitySelected()"> During the Week
           </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" name="availability" ng-model="kcAdultApplication.volunteer.availabilityWeekend" ng-required="!kcAdultApplication.availabilitySelected()"> Weekend Services
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" name="availability" ng-model="kcAdultApplication.volunteer.availabilityWeekend" ng-required="!kcAdultApplication.availabilitySelected()"> Weekend Services
           </label>
         </div>
         <ng-messages for="adult.availability.$error" ng-if="kcAdultApplication.showError(adult, 'availability')">
@@ -497,52 +497,52 @@
 
         <div class="checkbox">
           <label>
-            <input type="checkbox" value="classroom" ng-model="kcAdultApplication.volunteer.areaOfInterestServingInClassroom">Serving in a Classroom</label>
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" value="classroom" ng-model="kcAdultApplication.volunteer.areaOfInterestServingInClassroom">Serving in a Classroom</label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcAdultApplication.volunteer.areaOfInterestWelcomingNewFamilies">Welcoming New Familites and showing them to their room</label>
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" ng-model="kcAdultApplication.volunteer.areaOfInterestWelcomingNewFamilies">Welcoming New Familites and showing them to their room</label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcAdultApplication.volunteer.areaOfInterestHelpSpecialNeeds">One-on-one helper with a kid who has special needs</label>
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" ng-model="kcAdultApplication.volunteer.areaOfInterestHelpSpecialNeeds">One-on-one helper with a kid who has special needs</label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcAdultApplication.volunteer.areaOfInterestTech">Tech (Provide tech and systems support)</label>
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" ng-model="kcAdultApplication.volunteer.areaOfInterestTech">Tech (Provide tech and systems support)</label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcAdultApplication.volunteer.areaOfInterestRoomPrep">Prepping the rooms (set up props, activities, etc on thursday and/or friday mornings)</label>
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" ng-model="kcAdultApplication.volunteer.areaOfInterestRoomPrep">Prepping the rooms (set up props, activities, etc on thursday and/or friday mornings)</label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcAdultApplication.volunteer.areaOfInterestAdminTasks">Administrative tasks (Data entry, filing, mailing, etc)</label>
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" ng-model="kcAdultApplication.volunteer.areaOfInterestAdminTasks">Administrative tasks (Data entry, filing, mailing, etc)</label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcAdultApplication.volunteer.areaOfInterestShoppingForSupplies">Shopping for supplies</label>
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" ng-model="kcAdultApplication.volunteer.areaOfInterestShoppingForSupplies">Shopping for supplies</label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="kcAdultApplication.volunteer.areaOfInterestCreatingWeekendExperience">Creating the weekend experience (Write Lessons or songs, brainstorm acitivites, etc)</label>
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" ng-model="kcAdultApplication.volunteer.areaOfInterestCreatingWeekendExperience">Creating the weekend experience (Write Lessons or songs, brainstorm acitivites, etc)</label>
         </div>
       </div>
       <div class="form-group col-sm-12" ng-class="{'has-error': kcAdultApplication.showError(adult, 'gradeLevel')}">
         <label class="required control-label">Want to serve directly with kids? What age do you prefer? (check all that apply)</label>
         <div class="checkbox">
           <label>
-            <input type="checkbox" name="gradeLevel" ng-model="kcAdultApplication.volunteer.birthToTwo" ng-required="!kcAdultApplication.gradeLevelSelected()"> Birth - 2 years old
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" name="gradeLevel" ng-model="kcAdultApplication.volunteer.birthToTwo" ng-required="!kcAdultApplication.gradeLevelSelected()"> Birth - 2 years old
           </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" name="gradeLevel" ng-model="kcAdultApplication.volunteer.threeToPreK" ng-required="!kcAdultApplication.gradeLevelSelected()"> 3-year olds - Pre-K
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" name="gradeLevel" ng-model="kcAdultApplication.volunteer.threeToPreK" ng-required="!kcAdultApplication.gradeLevelSelected()"> 3-year olds - Pre-K
           </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" name="gradeLevel" ng-model="kcAdultApplication.volunteer.kToFifth" ng-required="!kcAdultApplication.gradeLevelSelected()"> Kinder - 5th Grade
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" name="gradeLevel" ng-model="kcAdultApplication.volunteer.kToFifth" ng-required="!kcAdultApplication.gradeLevelSelected()"> Kinder - 5th Grade
           </label>
         </div>
         <ng-messages for="adult.gradeLevel.$error" ng-if="kcAdultApplication.showError(adult, 'gradeLevel')">
