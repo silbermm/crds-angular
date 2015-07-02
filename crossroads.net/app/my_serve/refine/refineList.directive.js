@@ -375,6 +375,7 @@
         modalInstance.result.then(function (dates) {
           scope.filterFromDate = dates.fromDate;
           scope.lastDate = dates.toDate;
+          filterAll();
         });
       }
 
