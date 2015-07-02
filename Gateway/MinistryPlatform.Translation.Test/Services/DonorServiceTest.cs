@@ -97,19 +97,26 @@ namespace MinistryPlatform.Translation.Test.Services
             var processorId = "cus_8675309";
             var pymt_type = "cc";
             var expectedDonationId = 321321;
+            var expectedDonationStatusId = 1;
             var expectedDonationDistributionId = 231231;
             const string viewKey = "DonorByContactId";
             const string sortString = "";
             var searchString = "," + donorId;
             var donationPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Donations"]);
+            var donationDistPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Distributions"]);
+            var donationStatusPageId = Convert.ToInt32(ConfigurationManager.AppSettings["DonationStatus"]);
 
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
-              It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(),
+              donationPageId, It.IsAny<Dictionary<string, object>>(),
               It.IsAny<string>(), true)).Returns(expectedDonationId);
 
+            _ministryPlatformService.Setup(mocked => mocked.CreateSubRecord(
+               It.IsAny<int>(), It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(),
+             It.IsAny<string>(), true)).Returns(expectedDonationStatusId);
+
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
-              It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(),
-              It.IsAny<string>(), true)).Returns(expectedDonationDistributionId);
+                donationDistPageId, It.IsAny<Dictionary<string, object>>(),
+                It.IsAny<string>(), true)).Returns(expectedDonationDistributionId);
 
             _communicationService.Setup(mocked => mocked.SendMessage(It.IsAny<Communication>(), It.IsAny<Dictionary<string, object>>()));
 
@@ -122,6 +129,19 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Transaction_code", charge_id},
                 {"Registered_Donor", true}, 
                 {"Processor_ID", processorId}
+            };
+
+            var expectedDonationStatusValues = new Dictionary<string, object>
+            {
+                {"Donation_Status_ID", "1"}, //Hardcoded to Pending
+                {"Donation_Status_Date", setupDate}
+            };
+
+            var expectedDistributionValues = new Dictionary<string, object>
+            {
+                {"Donation_ID", expectedDonationId},
+                {"Amount", donationAmt},
+                {"Program_ID", programId}
             };
 
             var programServiceResponse = new Program
@@ -157,6 +177,8 @@ namespace MinistryPlatform.Translation.Test.Services
             _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>(), It.IsAny<Dictionary<string, object>>()));
             _programService.Verify(mocked => mocked.GetProgramById(3));
             _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donationPageId, expectedDonationValues, It.IsAny<string>(), true));
+            _ministryPlatformService.Verify(mocked => mocked.CreateSubRecord(donationStatusPageId, expectedDonationId, expectedDonationStatusValues, It.IsAny<string>(), true));
+            _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donationDistPageId, expectedDistributionValues, It.IsAny<string>(), true));
 
             _ministryPlatformService.VerifyAll();
             _programService.VerifyAll();

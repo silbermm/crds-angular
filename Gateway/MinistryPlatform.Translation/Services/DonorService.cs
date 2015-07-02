@@ -15,6 +15,7 @@ namespace MinistryPlatform.Translation.Services
 
         private readonly int donorPageId = Convert.ToInt32(AppSettings("Donors"));
         private readonly int donationPageId = Convert.ToInt32((AppSettings("Donations")));
+        private readonly int donationStatusPageId = Convert.ToInt32((AppSettings("DonationStatus")));
         private readonly int donationDistributionPageId = Convert.ToInt32(AppSettings("Distributions"));
 
         public const string DONOR_RECORD_ID = "Donor_Record";
@@ -91,6 +92,27 @@ namespace MinistryPlatform.Translation.Services
             catch (Exception e)
             {
                 throw new ApplicationException(string.Format("CreateDonationRecord failed.  Donor Id: {0}", donorId), e);
+            }
+
+            var donationStatusValues = new Dictionary<string, object>
+            {
+                {"Donation_Status_ID", "1"}, //Hardcoded to Pending
+                {"Donation_Status_Date", setupTime}
+            };
+
+            int donationStatusId;
+
+            try
+            {
+                donationStatusId =
+                    WithApiLogin<int>(
+                        apiToken =>
+                            (ministryPlatformService.CreateSubRecord(donationStatusPageId, donationId, donationStatusValues, apiToken, true)));
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException(
+                    string.Format("CreateDonationDistributionRecord failed while creating donation status.  Donation Id: {0}", donationId), e);
             }
 
 
