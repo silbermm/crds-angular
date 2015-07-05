@@ -411,9 +411,14 @@
               };
               $state.go("give.confirm");
             },function(error){
-            //  create donor record
-              vm.donorError = true;
-              $state.go("give.account");
+              // Go forward to account info if it was a 404 "not found" error,
+              // the donor service returns a 404 when a donor doesn't exist
+              if(error && error.httpStatusCode == 404) {
+                vm.donorError = true;
+                $state.go("give.account");
+              } else {
+                vm._stripeErrorHandler(error);
+              }
             });
           }
 

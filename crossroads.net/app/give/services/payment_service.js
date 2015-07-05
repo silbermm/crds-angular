@@ -12,7 +12,8 @@
       donation : {},
       getDonor : getDonor,
       updateDonorWithBankAcct :updateDonorWithBankAcct,
-      updateDonorWithCard :updateDonorWithCard
+      updateDonorWithCard :updateDonorWithCard,
+      addGlobalErrorMessage: _addGlobalErrorMessage
     };
 
     stripe.setPublishableKey(__STRIPE_PUBKEY__);
@@ -44,9 +45,8 @@
       }).success(function(data){
         payment_service.donation = data;
         def.resolve(data);
-      }).error(function(response) {
-        _addGlobalErrorMessage(response.error);
-        def.reject(response.error);
+      }).error(function(response, statusCode) {
+        def.reject(_addGlobalErrorMessage(response.error, statusCode));
       });
 
       return def.promise;
@@ -66,8 +66,8 @@
         }
       }).success(function(data) {
         def.resolve(data);
-      }).error(function(error) {
-        def.reject(error);
+      }).error(function(response, statusCode) {
+        def.reject(_addGlobalErrorMessage(response.error, statusCode));
       });
       return(def.promise);
     }
@@ -80,32 +80,33 @@
       return(apiDonor(card, email, stripe.card, 'PUT'));
     }
 
-    function _addGlobalErrorMessage(error) {
-      if(!error) {
-        return;
-      }
+    function _addGlobalErrorMessage(error, httpStatusCode) {
+      var e = error ? error : {};
+      e.httpStatusCode = httpStatusCode;
 
-      if(error.type == 'card_error') {
-        if(error.code == 'card_declined'
-            || /^incorrect/.test(error.code)
-            || /^invalid/.test(error.code)) {
-          error.globalMessage = MESSAGES.paymentMethodDeclined;
-        } else if(error.code == 'processing_error') {
-          error.globalMessage = MESSAGES.paymentMethodProcessingError;
+      if(e.type == 'connection_error') {
+        e.globalMessage = MESSAGES.paymentMethodProcessingError;
+      } else if(e.type == 'card_error') {
+        if(e.code == 'card_declined'
+            || /^incorrect/.test(e.code)
+            || /^invalid/.test(e.code)) {
+          e.globalMessage = MESSAGES.paymentMethodDeclined;
+        } else if(e.code == 'processing_error') {
+          e.globalMessage = MESSAGES.paymentMethodProcessingError;
         }
-      } else if(error.param == 'bank_account') {
-        if(error.type == 'invalid_request_error') {
-          error.globalMessage = MESSAGES.paymentMethodDeclined;
+      } else if(e.param == 'bank_account') {
+        if(e.type == 'invalid_request_error') {
+          e.globalMessage = MESSAGES.paymentMethodDeclined;
         }
       }
+      return(e);
     }
 
     function apiDonor(donorInfo, email, stripeFunc, apiMethod) {
       var def = $q.defer();
       stripeFunc.createToken(donorInfo, function(status, response) {
         if(response.error) {
-          _addGlobalErrorMessage(response.error);
-          def.reject(response.error);
+          def.reject(_addGlobalErrorMessage(response.error, status));
         } else {
           var donor_request = { stripe_token_id: response.id, email_address: email }
           $http({
@@ -118,9 +119,8 @@
           }).success(function(data) {
             payment_service.donor = data;
             def.resolve(data);
-          }).error(function(response) {
-            _addGlobalErrorMessage(response.error);
-            def.reject(response.error);
+          }).error(function(response, statusCode) {
+            def.reject(_addGlobalErrorMessage(response.error, statusCode));
           });
         }
       });

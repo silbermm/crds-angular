@@ -22,23 +22,39 @@ namespace crds_angular.Services
 
         private static bool IsBadResponse(IRestResponse response)
         {
-            return (response.StatusCode == HttpStatusCode.BadRequest ||
-                    response.StatusCode == HttpStatusCode.PaymentRequired);
+            return (response.ResponseStatus != ResponseStatus.Completed 
+                    || response.StatusCode == HttpStatusCode.BadRequest
+                    || response.StatusCode == HttpStatusCode.PaymentRequired);
         }
+
+        private static void CheckStripeResponse(string errorMessage, IRestResponse response)
+        {
+            if (!IsBadResponse(response))
+            {
+                return;
+            }
+
+            var content = JsonConvert.DeserializeObject<Content>(response.Content);
+            if (content == null || content.Error == null)
+            {
+                throw (new StripeException(HttpStatusCode.InternalServerError, errorMessage, "connection_error",
+                    response.ErrorException.Message, null, null, null));
+            }
+            else
+            {
+                throw new StripeException(response.StatusCode, errorMessage, content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode, content.Error.Param);
+            }
+        }
+
 
         public string CreateCustomer(string customerToken)
         {
-
             var request = new RestRequest("customers", Method.POST);
             request.AddParameter("description", string.Format(StripeCustomerDescription, "pending")); // adds to POST or URL querystring based on Method
             request.AddParameter("source", customerToken);
 
             var response = _stripeRestClient.Execute<StripeCustomer>(request);
-            if (IsBadResponse(response))
-            {
-                Content content = JsonConvert.DeserializeObject<Content>(response.Content);
-                throw new StripeException(response.StatusCode, "Customer creation failed", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode, content.Error.Param);
-            }
+            CheckStripeResponse("Customer creation failed", response);
 
             return response.Data.id;
 
@@ -50,14 +66,11 @@ namespace crds_angular.Services
             request.AddParameter("source", cardToken);
 
             var response = _stripeRestClient.Execute<StripeCustomer>(request);
-            if (IsBadResponse(response))
-            {
-                Content content = JsonConvert.DeserializeObject<Content>(response.Content);
-                throw new StripeException(response.StatusCode, "Customer update to add source failed", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode, content.Error.Param);
-            }
+            CheckStripeResponse("Customer update to add source failed", response);
+
             var defaultSourceId = response.Data.default_source;
             var sources = response.Data.sources.data;
-            SourceData defaultSource = SetDefaultSource(sources, defaultSourceId);
+            var defaultSource = MapDefaultSource(sources, defaultSourceId);
             
             return defaultSource;
 
@@ -69,11 +82,7 @@ namespace crds_angular.Services
             request.AddParameter("description", string.Format(StripeCustomerDescription, donorId));
 
             var response = _stripeRestClient.Execute<StripeCustomer>(request);
-            if (IsBadResponse(response))
-            {
-                Content content = JsonConvert.DeserializeObject<Content>(response.Content);
-                throw new StripeException(response.StatusCode, "Customer update failed", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode, content.Error.Param);
-            }
+            CheckStripeResponse("Customer update failed", response);
 
             return (response.Data.id);
         }
@@ -83,19 +92,16 @@ namespace crds_angular.Services
             var request = new RestRequest("customers/" + customerToken, Method.GET);
 
             var response = _stripeRestClient.Execute<StripeCustomer>(request);
-            if (IsBadResponse(response))
-            {
-                Content content = JsonConvert.DeserializeObject<Content>(response.Content);
-                throw new StripeException(response.StatusCode, "Could not get default source information because customer lookup failed", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode, content.Error.Param);
-            }
+            CheckStripeResponse("Could not get default source information because customer lookup failed", response);
+
             var defaultSourceId = response.Data.default_source;
             var sources = response.Data.sources.data;
-            SourceData defaultSource = SetDefaultSource(sources, defaultSourceId);
+            var defaultSource = MapDefaultSource(sources, defaultSourceId);
 
             return defaultSource;
         }
 
-        public SourceData SetDefaultSource(List<SourceData>sources, string defaultSourceId)
+        private static SourceData MapDefaultSource(List<SourceData>sources, string defaultSourceId)
         {
             var defaultSource = new SourceData();
 
@@ -128,11 +134,7 @@ namespace crds_angular.Services
             request.AddParameter("description", "Donor ID #" + donorId);
 
             IRestResponse<StripeCharge> response = _stripeRestClient.Execute<StripeCharge>(request);
-            if (IsBadResponse(response))
-            {
-                Content content = JsonConvert.DeserializeObject<Content>(response.Content);
-                throw new StripeException(response.StatusCode, "Invalid charge request", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode, content.Error.Param);
-            }
+            CheckStripeResponse("Invalid charge request", response);
 
             return response.Data.id;
         }
