@@ -15,6 +15,7 @@ require('./session_service');
                     $rootScope.email = credentials.username;
                     $rootScope.username = res.data.username;
                     $rootScope.roles = res.data.roles;
+                    $rootScope.userid = res.data.userId;
                     return res.data.username;
                 });
         };
@@ -22,10 +23,13 @@ require('./session_service');
         authService.logout = function () {
             // TODO Added to debug/research US1403 - should remove after issue is resolved
             console.log("US1403: logging out user in auth_service");
+            $rootScope.email = null;
             $rootScope.username = null;
+            $rootScope.userid = null;
+            $rootScope.roles = null;
             Session.clear();
             $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
-        }
+        };
 
         authService.isAuthenticated = function () {
             return !!Session.userId;
@@ -40,5 +44,5 @@ require('./session_service');
         };
 
         return authService;
-    }])
-})()
+    }]);
+})();

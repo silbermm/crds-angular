@@ -85,8 +85,8 @@
     };
 
     this.addRedirectRoute = function(redirectUrl, params) {
-        $cookies.redirectUrl = redirectUrl;
-		$cookies.put("params", JSON.stringify(params));
+        $cookies.put("redirectUrl", redirectUrl);
+		    $cookies.put("params", JSON.stringify(params));
     };
 
     this.removeRedirectRoute = function() {
