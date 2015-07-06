@@ -1,4 +1,5 @@
-﻿using crds_angular.Exceptions;
+﻿using System;
+using crds_angular.Exceptions;
 using crds_angular.Models.Crossroads;
 using crds_angular.Services;
 using Moq;
@@ -111,6 +112,31 @@ namespace crds_angular.test.Services
                     )));
             restClient.VerifyAll();
             stripeResponse.VerifyAll();
+        }
+
+        [Test]
+        public void ShouldThrowAbortExceptionWhenStripeConnectionFails()
+        {
+            var stripeResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
+            stripeResponse.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.BadRequest).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.Content).Returns("{}").Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.ErrorException).Returns(new Exception("Doh!")).Verifiable();
+            restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
+
+            try
+            {
+                fixture.CreateCustomer("token");
+                Assert.Fail("Expected exception was not thrown");
+            }
+            catch (StripeException e)
+            {
+                Assert.AreEqual("abort", e.Type);
+                Assert.AreEqual("Doh!", e.DetailMessage);
+                Assert.AreEqual(HttpStatusCode.InternalServerError, e.StatusCode);
+            }
+
+
         }
 
         [Test]
