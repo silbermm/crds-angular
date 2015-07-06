@@ -109,9 +109,13 @@
           vm.filterdates.fromdate.$error.fromDateToLarge = false;
         }
         $rootScope.$emit('filterByDates', {'fromDate': fromDate, 'toDate': toDate});
-        $modalInstance.close({ fromDate:vm.fromDate, toDate: vm.toDate });
-        vm.saving = false;
-        return true;
+        $rootScope.$on('filterByDatesDone', function(event,data) { 
+          $modalInstance.close({ fromDate:vm.fromDate, toDate: vm.toDate });
+        }, function(err){
+          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+          vm.saving = false;
+          return false;
+        });
       } else {
         vm.filterdates.todate.$error.date = true;
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
