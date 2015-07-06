@@ -1,3 +1,4 @@
+<div ng-bind-html="kcStudentApplication.pageInfo.page1"></div>
 <form name="student" ng-submit="kcStudentApplication.save(this)" novalidate>
   <fieldset class="push-bottom">
     <legend>General Info</legend>
@@ -189,6 +190,7 @@
 
   <fieldset class="push-bottom">
     <legend>About You</legend>
+    <div ng-bind-html="kcStudentApplication.pageInfo.contentBlock1"></div>
     <div class="form-group col-sm-12" ng-class="{'has-error': kcStudentApplication.showError(student, 'religion')}">
         <label class="block required">How would you define your spiritual life? Pick as many as you like.</label>
         <div class="checkbox">
@@ -409,7 +411,7 @@
                name="referenceHomePhone1"
                ng-pattern="kcStudentApplication.phoneFormat"
                ng-model-options="{updateOn: 'blur'} "
-               ng-model="kcStudentApplication.reference1.homePhone" 
+               ng-model="kcStudentApplication.reference1.homePhone"
                placeholder="Home Phone">
         <ng-messages for="student.referenceHomePhone1.$error" ng-if="kcStudentApplication.showError(student, 'referenceHomePhone1')">
           <span ng-message="pattern">
@@ -564,7 +566,7 @@
                name="referenceMobilePhone2"
                ng-model="kcStudentApplication.reference2.mobilePhone"
                placeholder="Mobile Phone"
-ng-model-options="{updateOn: 'blur'}"
+               ng-model-options="{updateOn: 'blur'}"
                ng-pattern="kcStudentApplication.phoneFormat">
         <ng-messages for="student.referenceMobilePhone2.$error" ng-if="kcStudentApplication.showError(student, 'referenceMobilePhone2')">
           <span ng-message="pattern">
@@ -580,7 +582,7 @@ ng-model-options="{updateOn: 'blur'}"
                name="referenceWorkPhone2"
                ng-model="kcStudentApplication.reference2.workPhone"
                placeholder="Work Phone"
-ng-model-options="{updateOn: 'blur'}"
+               ng-model-options="{updateOn: 'blur'}"
                ng-pattern="kcStudentApplication.phoneFormat">
         <ng-messages for="student.referenceWorkPhone2.$error" ng-if="kcStudentApplication.showError(student, 'referenceWorkPhone2')">
           <span ng-message="pattern">
@@ -642,6 +644,7 @@ ng-model-options="{updateOn: 'blur'}"
     <!--/row-->
 
     <hr />
+    <div ng-bind-html="kcStudentApplication.pageInfo.contentBlock3"></div>
 
     <div class="row">
       <p class="help-text col-sm-12">Okay, here's some formal stuff. We don't really talk like this, but we couldn't figure out how to say all this in kid-friendly language. So put your glasses on, read it and agree to it, please. The information contained in this application is true.
@@ -805,3 +808,4 @@ ng-model-options="{updateOn: 'blur'}"
   <button type="submit" name="submit" id="submit" class="btn btn-primary push-half-bottom" ng-disabled="kcStudentApplication.saving"> {{kcStudentApplication.submitButtonText}} </button>
 
 </form>
+<div ng-bind-html="kcStudentApplication.pageInfo.page2"></div>

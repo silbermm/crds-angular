@@ -3,11 +3,12 @@
 
   module.exports = AppConfig;
 
-  AppConfig.$inject = [ '$stateProvider',
-                        '$urlRouterProvider',
-                        '$httpProvider',
-                        '$urlMatcherFactoryProvider',
-                        '$locationProvider' ];
+  AppConfig.$inject = ['$stateProvider',
+    '$urlRouterProvider',
+    '$httpProvider',
+    '$urlMatcherFactoryProvider',
+    '$locationProvider'
+  ];
 
   function AppConfig($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory, $locationProvider) {
 
@@ -267,7 +268,7 @@
         url: '/demo/go-trip-giving',
         templateUrl: 'trip_giving/give.html'
       })
-        .state('search', {
+      .state('search', {
         url: '/search-results',
         controller: 'SearchCtrl as search',
         templateUrl: 'search/search-results.html'
@@ -310,18 +311,42 @@
         resolve: {
           loggedin: crds_utilities.checkLoggedin,
           Page: 'Page',
-          CmsInfo: function(Page, $stateParams) {
-            var path = '/volunteer-application/' + $stateParams.appType + '/';
-            return Page.get({
-              url: path
-            }).$promise;
-          },
-          Profile: 'Profile',
-          Contact: function(Profile, $stateParams) {
+          // CmsInfo: function(Page, $stateParams) {
+          //   var path = '/volunteer-application/' + $stateParams.appType + '/';
+          //   return Page.get({
+          //     url: path
+          //   }).$promise;
+          // },
+          // Profile: 'Profile',
+          // Contact: function(Profile, $stateParams) {
+          //   var contactId = $stateParams.id;
+          //   return Profile.Person.get({
+          //     contactId: contactId
+          //   }).$promise;
+          // },
+          PageInfo: function($q, Profile, Page, $stateParams) {
+            var deferred = $q.defer();
             var contactId = $stateParams.id;
-            return Profile.Person.get({
+
+            Profile.Person.get({
               contactId: contactId
-            }).$promise;
+            }).$promise.then(
+              function(contact) {
+                var age = contact.age;
+                var cmsPath = '/kids-club-applicant-form/adult-applicant-form/';
+                if ((age >= 10) && (age <= 15)) {
+                  cmsPath = '/kids-club-applicant-form/student-applicant-form/';
+                }
+                Page.get({
+                    url: cmsPath
+                  }).$promise.then(function(cmsInfo) {
+                      deferred.resolve({
+                        contact, cmsInfo
+                      });
+                    }
+                  )
+              });
+            return deferred.promise;
           },
           Volunteer: 'VolunteerService',
           Family: function(Volunteer) {
