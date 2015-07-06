@@ -70,10 +70,10 @@ namespace MinistryPlatform.Translation.Services
         /// </summary>
         /// <param name="communication">The message properties </param>
         /// <param name="mergeData">A dictionary of varible names and their values that MP will place in the template</param>
-        public void SendMessage(Communication communication, Dictionary<string, object> mergeData)
+        public void SendMessage(Communication communication)
         {
             var communicationId = AddCommunication(communication, apiLogin());
-            AddCommunicationMessage(communication, communicationId, mergeData, apiLogin());
+            AddCommunicationMessage(communication, communicationId, apiLogin());
         }
 
         private int AddCommunication(Communication communication, string token)
@@ -92,7 +92,7 @@ namespace MinistryPlatform.Translation.Services
             return communicationId;
         }
 
-        private void AddCommunicationMessage(Communication communication, int communicationId, Dictionary<string, object> mergeData, string token)
+        private void AddCommunicationMessage(Communication communication, int communicationId, string token)
         {
             var dictionary = new Dictionary<string, object>
             {
@@ -103,7 +103,7 @@ namespace MinistryPlatform.Translation.Services
                 {"To", communication.ToEmailAddress},
                 {"Reply_To", communication.ReplyToEmailAddress},
                 {"Subject", communication.EmailSubject},
-                {"Body", ParseTemplateBody(communication.EmailBody, mergeData)}
+                {"Body", ParseTemplateBody(communication.EmailBody, communication.MergeData)}
             };
             MinistryPlatformService.CreateSubRecord(RecipientsSubPageId, communicationId, dictionary, token);
         }

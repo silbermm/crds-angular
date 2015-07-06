@@ -111,7 +111,7 @@ namespace MinistryPlatform.Translation.Test.Services
               It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(),
               It.IsAny<string>(), true)).Returns(expectedDonationDistributionId);
 
-            _communicationService.Setup(mocked => mocked.SendMessage(It.IsAny<Communication>(), It.IsAny<Dictionary<string, object>>()));
+            _communicationService.Setup(mocked => mocked.SendMessage(It.IsAny<Communication>()));
 
             var expectedDonationValues = new Dictionary<string, object>
             {
@@ -154,7 +154,7 @@ namespace MinistryPlatform.Translation.Test.Services
             var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, donorId, programId, charge_id, pymt_type, processorId, setupDate, true);
 
             // Explicitly verify each expectation...
-            _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>(), It.IsAny<Dictionary<string, object>>()));
+            _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>()));
             _programService.Verify(mocked => mocked.GetProgramById(3));
             _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donationPageId, expectedDonationValues, It.IsAny<string>(), true));
 

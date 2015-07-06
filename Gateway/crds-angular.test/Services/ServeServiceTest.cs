@@ -500,10 +500,10 @@ namespace crds_angular.test.Services
             };
 
             _communicationService.Setup(
-                m => m.SendMessage(It.IsAny<Communication>(), It.IsAny<Dictionary<string, object>>()))
+                m => m.SendMessage(It.IsAny<Communication>()))
                 .Callback((Communication communication, Dictionary<string, object> data) => { }).Verifiable();
             _communicationService.Verify(
-                m => m.SendMessage(It.IsAny<Communication>(), It.IsAny<Dictionary<string, object>>()));
+                m => m.SendMessage(It.IsAny<Communication>()));
         }
 
         [Test]

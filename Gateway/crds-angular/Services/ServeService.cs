@@ -275,8 +275,8 @@ namespace crds_angular.Services
             }
             var mergeData = SetupMergeData(contactId, opportunityId, previousOpportunity, opportunity, startDate,
                 endDate, groupContact);
-            var communication = SetupCommunication(templateId, groupContact, toContact);
-            _communicationService.SendMessage(communication, mergeData);
+            var communication = SetupCommunication(templateId, groupContact, toContact, mergeData);
+            _communicationService.SendMessage(communication);
             return true;
         }
 
@@ -411,7 +411,7 @@ namespace crds_angular.Services
             };
         }
 
-        private Communication SetupCommunication(int templateId, MyContact groupContact, MyContact toContact)
+        private Communication SetupCommunication(int templateId, MyContact groupContact, MyContact toContact, Dictionary<string, object> mergeData)
         {
             var template = _communicationService.GetTemplate(templateId);
             return new Communication
@@ -425,7 +425,8 @@ namespace crds_angular.Services
                 ReplyContactId = groupContact.Contact_ID,
                 ReplyToEmailAddress = groupContact.Email_Address,
                 ToContactId = toContact.Contact_ID,
-                ToEmailAddress = toContact.Email_Address
+                ToEmailAddress = toContact.Email_Address,
+                MergeData = mergeData
             };
         }
 
