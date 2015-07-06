@@ -79,11 +79,20 @@
                   <span ng-bind-html="$root.messages[$root.MESSAGES.selectFrequency].message | html"></span>
                 </div>
               </div><!--/form-group-->
-              <div>
+              <div ng-if="currentMember.showFrequency">
                 <div class="form-group" ng-class="{'has-error': formErrors.from || formErrors.dateRange}">
                   <label>From: </label>
                   <div class="input-group">
-                    <input type="text" class="form-control" datepicker-popup="{{::format}}" ng-model="currentMember.currentOpportunity.fromDt" is-open="datePickers.fromOpened" datepicker-options="{showWeeks:false}"  ng-required="true" close-text="Close" ng-change="changeFromDate()" ng-disabled="datesDisabled"/>
+                    <input type="text" 
+                           class="form-control" 
+                           datepicker-popup="{{::format}}" 
+                           ng-model="currentMember.currentOpportunity.fromDt" 
+                           is-open="datePickers.fromOpened" 
+                           datepicker-options="{showWeeks:false}"  
+                           ng-required="true" 
+                           close-text="Close" 
+                           ng-change="changeFromDate()" 
+                           ng-disabled="datesDisabled" />
                     <span class="input-group-btn">
                       <button type="button" class="btn btn-gray-light" ng-click="openFromDate($event)" ng-disabled="datesDisabled"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
@@ -95,7 +104,19 @@
                 <div class="form-group" ng-class="{'has-error': formErrors.to || formErrors.dateRange}" >
                   <label>To:</label>
                   <div class="input-group">
-                    <input type="text" class="form-control" datepicker-popup="{{::format}}" ng-model="currentMember.currentOpportunity.toDt" is-open="datePickers.toOpened" min-date="minDate" max-date="'2050-06-22'" datepicker-options="{showWeeks:false}" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-change="changeToDate()" ng-disabled="datesDisabled"/>
+                    <input type="text" 
+                           class="form-control" 
+                           datepicker-popup="{{::format}}" 
+                           ng-model="currentMember.currentOpportunity.toDt" 
+                           is-open="datePickers.toOpened" 
+                           min-date="minDate" 
+                           max-date="'2050-06-22'" 
+                           datepicker-options="{showWeeks:false}" 
+                           date-disabled="disabled(date, mode)" 
+                           ng-required="true" 
+                           close-text="Close" 
+                           ng-change="changeToDate()" 
+                           ng-disabled="datesDisabled" />
                     <span class="input-group-btn">
                       <button type="button" class="btn btn-gray-light" ng-click="openToDate($event)" ng-disabled="datesDisabled"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
