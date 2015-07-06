@@ -27,12 +27,20 @@
     float: left;
     margin-right: $padding-base-horizontal/2;
 
+    &.gray-share {
+      .at4-icon {
+        background-color: $gray !important;
+      }
+    }
+
     .at4-icon {
       text-align: center;
       background-position: center;
       border-radius: 50%;
       background-color: $gray-light !important;
       transition: background 0.2s linear;
+
+
 
       &.aticon-facebook {
         &:hover {
