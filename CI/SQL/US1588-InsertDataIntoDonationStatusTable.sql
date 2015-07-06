@@ -1,7 +1,7 @@
 USE [MinistryPlatform]
 GO
 
-INSERT INTO [dbo].[Donation_Status]
+INSERT INTO [dbo].[Donation_Statuses]
             ([Donation_Status]
            ,[Display_On_Statements]
            ,[Display_On_Giving_History])

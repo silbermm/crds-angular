@@ -19,11 +19,11 @@ INSERT INTO [dbo].[dp_Pages]
            ,[Display_Copy])
      VALUES
            (506
-           ,'Donation Status'
+           ,'Donation Statuses'
            ,'Donation Status'
            ,'This Crossroads custom table contains the valid statuses for any donation'
            ,90
-           ,'Donation_Status'
+           ,'Donation_Statuses'
            ,'Donation_Status_ID'           
            ,'Donation_Status,Donation_Status.Display_On_Statements,Donation_Status.Display_On_Giving_History'
            ,'Donation_Status'       

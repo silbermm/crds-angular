@@ -11,5 +11,6 @@ namespace MinistryPlatform.Models
         public int paymentTypeId { get; set; }
         public string donationNotes { get; set; }
         public int donationStatus { get; set; }
+        public DateTime donationStatusDate { get; set; }
     }
 }

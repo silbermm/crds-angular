@@ -7,7 +7,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[Donation_Status](
+CREATE TABLE [dbo].[Donation_Statuses](
 	[Donation_Status_ID] [int] IDENTITY(1,1) NOT NULL,
 	[Donation_Status] [nvarchar](50) NOT NULL,
 	[Display_On_Statements] [bit] NULL,

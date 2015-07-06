@@ -8,7 +8,7 @@ ALTER TABLE [dbo].[Donations]
 GO
 
 ALTER TABLE [dbo].[Donations]  WITH CHECK ADD  CONSTRAINT [FK_Donations_Donation_Status] FOREIGN KEY([Donation_Status_ID])
-REFERENCES [dbo].[Donation_Status] ([Donation_Status_ID])
+REFERENCES [dbo].[Donation_Statuses] ([Donation_Status_ID])
 GO
 
 ALTER TABLE [dbo].[Donations] CHECK CONSTRAINT [FK_Donations_Donation_Status]

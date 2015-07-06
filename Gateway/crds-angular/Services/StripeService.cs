@@ -133,7 +133,7 @@ namespace crds_angular.Services
                 Content content = JsonConvert.DeserializeObject<Content>(response.Content);
                 throw new StripeException(response.StatusCode, "Invalid charge request", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode, content.Error.Param);
             }
-          
+
             return response.Data.id;
         }
     }
