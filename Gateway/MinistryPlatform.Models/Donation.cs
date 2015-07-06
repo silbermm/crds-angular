@@ -9,5 +9,7 @@ namespace MinistryPlatform.Models
         public int donationAmt { get; set; }
         public DateTime donationDate { get; set; }
         public int paymentTypeId { get; set; }
+        public string donationNotes { get; set; }
+        public int donationStatus { get; set; }
     }
 }

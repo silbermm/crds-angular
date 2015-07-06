@@ -7,8 +7,8 @@ INSERT INTO [dbo].[Donation_Status]
            ,[Display_On_Giving_History])
      VALUES
            ('Pending'
-           ,0
-           ,1)
+           ,1
+           ,0)
            ,
           ('Declined'
            ,1

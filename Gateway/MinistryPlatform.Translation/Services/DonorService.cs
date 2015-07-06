@@ -33,7 +33,7 @@ namespace MinistryPlatform.Translation.Services
         }
 
 
-        public int CreateDonorRecord(int contactId, string processorId, DateTime setupTime,
+        public int CreateDonorRecord(int contactId, string processorId, DateTime setupTime, 
             int? statementFrequencyId = 1, // default to quarterly
             int? statementTypeId = 1, //default to individual
             int? statementMethodId = 2 // default to email/online
@@ -80,7 +80,9 @@ namespace MinistryPlatform.Translation.Services
                 {"Donation_Date", setupTime},
                 {"Transaction_code", charge_id},
                 {"Registered_Donor", registeredDonor},
-                {"Processor_ID", processorId }
+                {"Processor_ID", processorId },
+                {"Donation_Status_Date", setupTime},
+                {"Donation_Status_ID", 1} //hardcoded to pending 
             };
 
             int donationId;
@@ -93,29 +95,7 @@ namespace MinistryPlatform.Translation.Services
             {
                 throw new ApplicationException(string.Format("CreateDonationRecord failed.  Donor Id: {0}", donorId), e);
             }
-
-            var donationStatusValues = new Dictionary<string, object>
-            {
-                {"Donation_Status_ID", "1"}, //Hardcoded to Pending
-                {"Donation_Status_Date", setupTime}
-            };
-
-            int donationStatusId;
-
-            try
-            {
-                donationStatusId =
-                    WithApiLogin<int>(
-                        apiToken =>
-                            (ministryPlatformService.CreateSubRecord(donationStatusPageId, donationId, donationStatusValues, apiToken, true)));
-            }
-            catch (Exception e)
-            {
-                throw new ApplicationException(
-                    string.Format("CreateDonationDistributionRecord failed while creating donation status.  Donation Id: {0}", donationId), e);
-            }
-
-
+            
             var distributionValues = new Dictionary<string, object>
             {
                 {"Donation_ID", donationId},
