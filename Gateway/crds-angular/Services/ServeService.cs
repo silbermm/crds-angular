@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data.Entity.Core.Objects;
@@ -7,6 +8,7 @@ using System.EnterpriseServices;
 using System.Linq;
 using System.Net.Mail;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -19,6 +21,7 @@ using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
 using IGroupService = MinistryPlatform.Translation.Services.Interfaces.IGroupService;
+using Crossroads.Utilities.Services;
 
 namespace crds_angular.Services
 {
@@ -305,9 +308,8 @@ namespace crds_angular.Services
             {
                 return false;
             }
-            var htmlTable = SetupHTMLTable(mailRows);
             var mergeData = SetupMergeData(contactId, opportunityId, previousOpportunity, opportunity, startDate,
-                endDate, groupContact, htmlTable);
+                endDate, groupContact, SetupHTMLTable(mailRows).Build());
             var communication = SetupCommunication(templateId, groupContact, toContact);
             _communicationService.SendMessage(communication, mergeData);
             return true;
@@ -462,51 +464,27 @@ namespace crds_angular.Services
             };
         }
 
-        private String SetupHTMLTable(List<MailRow> content)
+        private HtmlElement SetupHTMLTable(List<MailRow> content)
         {
-            StringBuilder htmlTable = new StringBuilder();
-      
-            IEnumerable<string> rows = content.Select<MailRow, string>(rowObj =>
-            {
-                StringBuilder cells = new StringBuilder();
-                cells.AppendFormat(HtmlElement("td", rowObj.EventDate));
-                cells.Append(HtmlElement("td", rowObj.OpportunityName));
-                cells.Append(HtmlElement("td", rowObj.ShiftTime));
-                cells.Append(HtmlElement("td", rowObj.Location));
-                return HtmlElement("tr", cells.ToString()).ToString();
-            });
-
           
-
-            var allCells = rows.Aggregate((current, next) => current + next);
-
-            htmlTable.Append(HtmlElement("table", SetupTableHeader() + allCells));
-            return htmlTable.ToString();
+            return new HtmlElement("table", new Dictionary<string, string>() { { "width", "100%" } }).Append(() =>
+            {
+                var lst = content.Select<MailRow, HtmlElement>(rowObj => new HtmlElement("tr")
+                  .Append(new HtmlElement("td", rowObj.EventDate))
+                  .Append(new HtmlElement("td", rowObj.OpportunityName))
+                  .Append(new HtmlElement("td", rowObj.ShiftTime))
+                  .Append(new HtmlElement("td", rowObj.Location))).ToList();
+                return lst.FirstOrDefault();
+            });    
+            
         }
 
-        private String SetupTableHeader()
+        private HtmlElement SetupTableHeader()
         {
-            var headers = TABLE_HEADERS.Aggregate("", (current, el) => current + HtmlElement("th", el));
-            return HtmlElement("tr", headers);
+            var headers = TABLE_HEADERS.Select(el => new HtmlElement("th", el)).ToList();
+            //var headers = TABLE_HEADERS.Aggregate("", (current, el) => current + new HtmlElement("th", el));
+            return new HtmlElement("tr", headers);
         }
-
-
-        private String HtmlElement(String el, String content)
-        {
-            StringBuilder element = new StringBuilder();
-            element.AppendFormat("<");
-            element.Append(el);
-            element.Append(">");
-
-            element.Append(content);
-
-            element.AppendFormat("</");
-            element.Append(el);
-            element.Append(">");
-
-            return element.ToString();
-        }
-
 
         private Dictionary<string, object> SetupMergeData(int contactId, int opportunityId,
             Opportunity previousOpportunity, Opportunity currentOpportunity, DateTime startDate, DateTime endDate,
