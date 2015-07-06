@@ -1,4 +1,3 @@
-<div >andrew</div>
 <div ng-bind-html="kcAdultApplication.pageInfo.page1"></div>
 <form name="adult" ng-submit="kcAdultApplication.save(this)" novalidate>
   <fieldset class="push-bottom">
@@ -307,6 +306,7 @@
 
   <fieldset class="push-bottom">
     <legend>About You</legend>
+    <div ng-bind-html="kcAdultApplication.pageInfo.contentBlock1"></div>
     <div class="row">
 
       <div class="form-group col-sm-12" ng-class="{'has-error': kcAdultApplication.showError(adult, 'crime') }">
@@ -556,6 +556,7 @@
       </div>
   </fieldset>
 
+  <div ng-bind-html="kcAdultApplication.pageInfo.contentBlock2"></div>
   <!-- Reference #1 -->
   <fieldset class="push-bottom">
     <legend>Personal References</legend>
