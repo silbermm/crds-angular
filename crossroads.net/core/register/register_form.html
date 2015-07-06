@@ -4,12 +4,16 @@
 
         <div class="soft-half-bottom" ng-class="{'has-error': firstnameError() }">
               <input id="{{passwordPrefix}}-firstname" class="form-control" id="firstname" name="firstname" type="text" ng-model="newuser.firstname" required placeholder="First Name" autofocus>
-                <ng-messages for="registerForm.firstname.$error" ng-if="registerForm.$submitted " ng-messages-include="on-submit-messages"></ng-messages>
+                <ng-messages for="registerForm.firstname.$error" ng-if="registerForm.$submitted">
+                  <ng-messages-include src="on-submit-messages"></ng-messages-include>
+                </ng-messages>
        </div>
 
         <div class="soft-half-bottom" ng-class="{'has-error': lastnameError() }">
                 <input id="{{passwordPrefix}}-lastname" class="form-control" id="lastname" name="lastname" type="text" ng-model="newuser.lastname" required placeholder="Last Name">
-                <ng-messages for="registerForm.lastname.$error" ng-if="registerForm.$submitted " ng-messages-include="on-submit-messages"></ng-messages>
+                <ng-messages for="registerForm.lastname.$error" ng-if="registerForm.$submitted">
+                  <ng-messages-include src="on-submit-messages"></ng-messages-include>
+                </ng-messages>
         </div>
 
         <span>

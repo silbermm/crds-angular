@@ -13,6 +13,7 @@
     var vm = this;
 
     vm.apply = apply;
+    vm.buttonText = 'Save';
     vm.dateOptions = {
       formatYear: 'yy',
       startingDay: 1,
@@ -29,6 +30,7 @@
     vm.openFromDate = openFromDate;
     vm.openToDate = openToDate;
     vm.readyFilterByDate = readyFilterByDate;
+    vm.saving = false;
 
     ///////////////////////////////////////////
 
@@ -51,16 +53,30 @@
       );
     }
 
+    function parseDate(date){
+      if ( date instanceof Date ){
+        var iso = date.toISOString();
+        return moment(iso);
+      } else {
+        return moment(date, 'MM/DD/YY');
+
+      }
+    }
+
     function readyFilterByDate() {
+      // set the button loading state
+      vm.saving = true; 
+      vm.buttonText = 'Saving...';
+
       var now = moment();
       now.hour(0);
-      var toDate = moment(vm.toDate);
+      var toDate = parseDate(vm.toDate);
       toDate.hour(23); 
 
-      if( now.unix() > toDate.unix() ) {
-        
+      if( now.unix() > toDate.unix() ) { 
         vm.filterdates.todate.$error.fromDate = true;
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+        vm.saving = false;
         return false;
       } else {
         vm.filterdates.todate.$error.fromDate = false;
@@ -70,34 +86,42 @@
         if (vm.fromDate === undefined) {
           vm.filterdates.fromdate.$error.date = true;
           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+          vm.saving = false;
           return false;
         }
-        var fromDate = moment(vm.fromDate);
+        var fromDate = parseDate(vm.fromDate);
         if (fromDate.isBefore(now, 'days')) {
           fromDate = now;
         }
         if (!fromDate.isValid()) {
           vm.filterdates.fromdate.$error.date = true;
           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+          vm.saving = false;
           return false;
         }
 
         if ( fromDate.isAfter(toDate, 'days' )){
           vm.filterdates.fromdate.$error.fromDateToLarge = true;
           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+          vm.saving = false;
           return false;
         } else {
           vm.filterdates.fromdate.$error.fromDateToLarge = false;
         }
         $rootScope.$emit('filterByDates', {'fromDate': fromDate, 'toDate': toDate});
-        $modalInstance.close({ fromDate:vm.fromDate, toDate: vm.toDate });
-      } else if (isToError()) {
+        $rootScope.$on('filterByDatesDone', function(event,data) { 
+          $modalInstance.close({ fromDate:vm.fromDate, toDate: vm.toDate });
+        }, function(err){
+          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+          vm.saving = false;
+          return false;
+        });
+      } else {
         vm.filterdates.todate.$error.date = true;
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+        vm.saving = false;
         return false;
-      } else {
-        return false;
-      }
+      } 
     }
 
     function openFromDate($event) {
@@ -111,7 +135,7 @@
       $event.stopPropagation();
       vm.datePickers.toOpened = true;
     }
-    
+   
   }
 
 })();

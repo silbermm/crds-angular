@@ -156,6 +156,10 @@ namespace crds_angular.Controllers.API
                     return Ok(response);
                 }
             }
+            catch (StripeException stripeException)
+            {
+                return (stripeException.GetStripeResult());
+            }
             catch (Exception exception)
             {
                 var apiError = new ApiErrorDto("Donor Get Failed", exception);
@@ -184,6 +188,10 @@ namespace crds_angular.Controllers.API
 
                     return Ok(response); 
                 }
+            }
+            catch (StripeException stripeException)
+            {
+                return (stripeException.GetStripeResult());
             }
             catch (Exception exception)
             {
@@ -225,6 +233,7 @@ namespace crds_angular.Controllers.API
                 var apiError = new ApiErrorDto("Error calling Ministry Platform" + applicationException.Message, applicationException);
                 throw new HttpResponseException(apiError.HttpResponseMessage);
             }
+
             //return donor
             var donor = new DonorDTO
             {

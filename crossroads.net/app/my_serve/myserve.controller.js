@@ -3,9 +3,9 @@
 
   module.exports = MyServeController;
 
-  MyServeController.$inject = ['$rootScope', '$log', 'filterState', 'Session', 'ServeOpportunities', 'Groups', 'AUTH_EVENTS'];
+  MyServeController.$inject = ['$scope', '$rootScope', '$log', 'filterState', 'Session', 'ServeOpportunities', 'Groups', 'AUTH_EVENTS'];
 
-  function MyServeController($rootScope, $log, filterState, Session, ServeOpportunities, Groups, AUTH_EVENTS){
+  function MyServeController($scope, $rootScope, $log, filterState, Session, ServeOpportunities, Groups, AUTH_EVENTS){
 
     var vm = this;
 
@@ -32,6 +32,8 @@
       loadOpportunitiesByDate(data.fromDate, data.toDate).then(function(opps){
         vm.groups = opps;
         vm.original = opps;
+        $scope.$apply();
+        $rootScope.$broadcast('filterByDatesDone');
       },function(err){
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
       });

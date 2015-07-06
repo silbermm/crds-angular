@@ -7,11 +7,22 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using MinistryPlatform.Translation.PlatformService;
 using Attribute = MinistryPlatform.Models.Attribute;
+using RoleDTO = MinistryPlatform.Models.DTO.RoleDto;
 
 namespace MinistryPlatform.Translation.Services
 {
     public class GetMyRecords : BaseService
     {
+        public static List<RoleDTO> GetMyRoles(string token)
+        {
+            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["MyRoles"]);
+            var pageRecords = MinistryPlatformService.GetRecordsDict(pageId, token);
+
+            return pageRecords.Select(record => new RoleDTO
+            {
+                Id = (int) record["Role_ID"], Name = (string) record["Role_Name"]
+            }).ToList();
+        }
         public static List<Attribute> GetMyAttributes(int recordId, string token)
         {
             var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);

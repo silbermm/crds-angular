@@ -15,6 +15,7 @@ namespace MinistryPlatform.Translation.Services
 
         private readonly int donorPageId = Convert.ToInt32(AppSettings("Donors"));
         private readonly int donationPageId = Convert.ToInt32((AppSettings("Donations")));
+        private readonly int donationStatusPageId = Convert.ToInt32((AppSettings("DonationStatus")));
         private readonly int donationDistributionPageId = Convert.ToInt32(AppSettings("Distributions"));
 
         public const string DONOR_RECORD_ID = "Donor_Record";
@@ -79,7 +80,9 @@ namespace MinistryPlatform.Translation.Services
                 {"Donation_Date", setupTime},
                 {"Transaction_code", charge_id},
                 {"Registered_Donor", registeredDonor},
-                {"Processor_ID", processorId }
+                {"Processor_ID", processorId },
+                {"Donation_Status_Date", setupTime},
+                {"Donation_Status_ID", 1} //hardcoded to pending 
             };
 
             int donationId;
@@ -92,8 +95,7 @@ namespace MinistryPlatform.Translation.Services
             {
                 throw new ApplicationException(string.Format("CreateDonationRecord failed.  Donor Id: {0}", donorId), e);
             }
-
-
+            
             var distributionValues = new Dictionary<string, object>
             {
                 {"Donation_ID", donationId},
