@@ -49,13 +49,17 @@ describe('GiveController', function() {
             if(this._success) {
               successCallback(mockGetResponse);
             } else {
-              errorCallback();
+              errorCallback({httpStatusCode: this._httpStatusCode});
             }
           },
-          _success: true
+          _success: true,
+          _httpStatusCode: 200,
         },
         setSuccess: function(success) {
           this.$promise._success = success;
+        },
+        setHttpStatusCode: function(code) {
+          this.$promise._httpStatusCode = code;
         }
       };
 
@@ -588,6 +592,7 @@ describe('GiveController', function() {
       spyOn(mockEvent, "preventDefault");
       spyOn(mockPaymentService, "getDonor").and.callThrough();
       mockPaymentServiceGetPromise.setSuccess(false);
+      mockPaymentServiceGetPromise.setHttpStatusCode(404);
       $scope.give = {
         email: "test@test.com"
       };

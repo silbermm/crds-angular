@@ -5,24 +5,24 @@
 
   CoreController.$inject = [
     "$scope",
-    "$rootScope", 
-    "MESSAGES", 
-    "Message", 
-    "growl", 
-    "$aside", 
-    "screenSize", 
+    "$rootScope",
+    "MESSAGES",
+    "Message",
+    "growl",
+    "$aside",
+    "screenSize",
     "$state"];
 
   function CoreController($scope, $rootScope, MESSAGES, Message, growl, $aside, screenSize, $state) {
-    
+
     var vm = this;
-                
+
     vm.asideState = { open: false };
     vm.openAside = openAside;
     vm.prevent = prevent;
     vm.resolving = true;
-    vm.state = $state; 
-   
+    vm.state = $state;
+
     ////////////////////////////
     // State Change Listeners //
     ////////////////////////////
@@ -33,11 +33,11 @@
     });
 
     $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-      vm.resolving = false; 
+      vm.resolving = false;
     });
 
     $scope.$on('$stateChangeError', function(event,toState, toParams, fromState, fromParams){
-      //TODO: put the 'toState' in the session if we want to redirect to that page 
+      //TODO: put the 'toState' in the session if we want to redirect to that page
       vm.resolving = false;
       $state.go('content', {link:'/server-error/'});
     });
@@ -58,7 +58,15 @@
       }
       growl[$rootScope.messages[id].type]($rootScope.messages[id].message, parms);
     });
-    
+
+    $rootScope.$on("mailchimp-response", function (event, result, msg) {
+      if (result == 'success') {
+        $rootScope.$emit('notify', $rootScope.MESSAGES.mailchimpSuccess);
+      } else if (result == 'error') {
+        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+      }
+    });
+
     $rootScope.$on("context", function (event, id) {
      var message = Message.get({
         id: id
@@ -101,7 +109,7 @@
     };
 
     function prevent(evt){
-      evt.stopPropagation(); 
+      evt.stopPropagation();
     };
 
   }
