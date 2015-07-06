@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using crds_angular.Models;
 using crds_angular.Models.Crossroads;
-using crds_angular.Models.Crossroads.Serve;
-using ServingTeam = crds_angular.Models.Crossroads.Serve.ServingTeam;
+using MinistryPlatform.Models.DTO;
 
 namespace crds_angular.Services.Interfaces
 {
@@ -13,5 +12,6 @@ namespace crds_angular.Services.Interfaces
         List<Skill> GetLoggedInUserSkills(int contactId, string token);
         Person GetLoggedInUserProfile(String token);
         Person GetPerson(int contactId);
+        List<RoleDto> GetLoggedInUserRoles(string token);
     }
 }
