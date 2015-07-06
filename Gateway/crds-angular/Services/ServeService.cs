@@ -290,7 +290,7 @@ namespace crds_angular.Services
                     if (@event.EventStartDate.Date != sequenceDate.Date) continue;
                     mailRows.Add(new MailRow()
                     {
-                        EventDate = @event.EventStartDate.ToString(),
+                        EventDate = @event.EventStartDate.ToShortDateString(),
                         Location = opportunity.Room,
                         OpportunityName = opportunity.OpportunityName,
                         ShiftTime = opportunity.ShiftStart.ToString() + opportunity.ShiftEnd.ToString()
@@ -465,6 +465,7 @@ namespace crds_angular.Services
         private String SetupHTMLTable(List<MailRow> content)
         {
             StringBuilder htmlTable = new StringBuilder();
+      
             IEnumerable<string> rows = content.Select<MailRow, string>(rowObj =>
             {
                 StringBuilder cells = new StringBuilder();
@@ -475,15 +476,17 @@ namespace crds_angular.Services
                 return HtmlElement("tr", cells.ToString()).ToString();
             });
 
-            var table = rows.Aggregate((current, next) => current + next);
+          
 
-            htmlTable.Append(HtmlElement("table", table));
+            var allCells = rows.Aggregate((current, next) => current + next);
+
+            htmlTable.Append(HtmlElement("table", SetupTableHeader() + allCells));
             return htmlTable.ToString();
         }
 
         private String SetupTableHeader()
         {
-            var headers = TABLE_HEADERS.Aggregate<string>((current, next) => HtmlElement("th", current) + HtmlElement("th", next));
+            var headers = TABLE_HEADERS.Aggregate("", (current, el) => current + HtmlElement("th", el));
             return HtmlElement("tr", headers);
         }
 
@@ -497,19 +500,13 @@ namespace crds_angular.Services
 
             element.Append(content);
 
-            element.AppendFormat("<");
+            element.AppendFormat("</");
             element.Append(el);
-            element.Append("/>");
+            element.Append(">");
 
             return element.ToString();
         }
 
-        private String TableRow(String content)
-        {
-            StringBuilder th = new StringBuilder();
-            th.AppendFormat("<tr> {0} </tr>", content);
-            return th.ToString();
-        }
 
         private Dictionary<string, object> SetupMergeData(int contactId, int opportunityId,
             Opportunity previousOpportunity, Opportunity currentOpportunity, DateTime startDate, DateTime endDate,
