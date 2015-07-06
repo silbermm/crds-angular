@@ -33,7 +33,6 @@ namespace crds_angular.Controllers.API
                 {
                     //var personService = new PersonService();
                     var person = _personService.GetLoggedInUserProfile(token);
-                    var roles = _personService.GetLoggedInUserRoles(token);
 
                     if (person == null)
                     {
@@ -41,6 +40,7 @@ namespace crds_angular.Controllers.API
                     }
                     else
                     {
+                        var roles = _personService.GetLoggedInUserRoles(token);
                         var l = new LoginReturn(token, person.ContactId, person.FirstName, person.EmailAddress, roles);
                         return this.Ok(l);
                     }
@@ -58,11 +58,11 @@ namespace crds_angular.Controllers.API
         {
             // try to login 
             var token = TranslationService.Login(cred.username, cred.password);
-            var userRoles = _personService.GetLoggedInUserRoles(token);
             if (token == null)
             {
                 return this.Unauthorized();
             }
+            var userRoles = _personService.GetLoggedInUserRoles(token);
             var p = _personService.GetLoggedInUserProfile(token);
             var r = new LoginReturn
             {
