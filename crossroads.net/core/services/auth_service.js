@@ -14,7 +14,6 @@ require('./session_service');
                     // In a future story, the contact email address will always be in sync with the user email address.
                     $rootScope.email = credentials.username;
                     $rootScope.username = res.data.username;
-                    alert(res.data.roles);
                     $rootScope.roles = res.data.roles;
                     return res.data.username;
                 });
