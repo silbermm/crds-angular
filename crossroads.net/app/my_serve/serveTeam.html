@@ -79,7 +79,7 @@
                   <span ng-bind-html="$root.messages[$root.MESSAGES.selectFrequency].message | html"></span>
                 </div>
               </div><!--/form-group-->
-              <div>
+              <div ng-if="currentMember.showFrequency">
                 <div class="form-group" ng-class="{'has-error': formErrors.from || formErrors.dateRange}">
                   <label>From: </label>
                   <div class="input-group">
