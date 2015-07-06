@@ -7,11 +7,12 @@
 
   function SessionService($log, $cookies) {
     var self = this;
-    this.create = function (sessionId, userId, username) {
+    this.create = function (sessionId, userId, username, roles) {
       console.log("creating cookies!");
       $cookies.put('sessionId', sessionId);
       $cookies.put('userId', userId);
       $cookies.put('username', username);
+      $cookies.put('roles', roles);
     };
 
     /*
@@ -56,6 +57,7 @@
       $cookies.remove("sessionId");
       $cookies.remove("userId");
       $cookies.remove("username");
+      $cookies.remove("roles");
       $cookies.remove('family');
       return true;
     };
