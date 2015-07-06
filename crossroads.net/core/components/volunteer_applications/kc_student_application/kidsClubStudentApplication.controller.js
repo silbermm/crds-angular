@@ -56,7 +56,7 @@ var moment = require('moment');
       if (vm.serveAgeKids && (
           vm.serveAgeKids.age1to2 ||
           vm.serveAgeKids.age3toPreK ||
-          vm.serveAgeKids.Kto5Grade) 
+          vm.serveAgeKids.Kto5Grade)
         ) {
         return true;
       }
@@ -68,10 +68,10 @@ var moment = require('moment');
      * true if it has, false otherwise
      */
     function locationSelected(){
-      if (vm.availabilityOakley || 
-          vm.availabilityFlorence || 
-          vm.availabilityWestSide || 
-          vm.availabilityMason || 
+      if (vm.availabilityOakley ||
+          vm.availabilityFlorence ||
+          vm.availabilityWestSide ||
+          vm.availabilityMason ||
           vm.availabilityClifton) {
         return true;
       }
@@ -173,7 +173,7 @@ var moment = require('moment');
       };
 
       student.homePhone = {
-        Value: vm.homePhone,
+        Value: vm.volunteer.homePhone,
         CrossroadsId: studentFields.homePhone
       };
 
@@ -392,7 +392,7 @@ var moment = require('moment');
       });
       return true;
     }
-    
+
     function showError(form, field) {
       if(form[field] === undefined) {
         return false;
@@ -408,9 +408,9 @@ var moment = require('moment');
      * true if it has, false otherwise
      */
     function spiritualSelected(){
-      if (vm.religionSearchingForAnswers || 
-          vm.religionReceivedJesus || 
-          vm.religionFocusingOnObedience || 
+      if (vm.religionSearchingForAnswers ||
+          vm.religionReceivedJesus ||
+          vm.religionFocusingOnObedience ||
           vm.religionReplicating) {
         return true;
       }

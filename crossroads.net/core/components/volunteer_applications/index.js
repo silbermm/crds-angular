@@ -27,8 +27,8 @@
 
   /* CONSTANTS */
   angular.module(MODULE).constant('studentFields', {
-    'firstName': 310,
-    'lastName': 311,
+    'firstName': 311,
+    'lastName': 310,
     'middleInitial': 312,
     'email': 325,
     'nameForNameTag': 318,
