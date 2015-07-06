@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Linq.Expressions;
 using Crossroads.Utilities.Extensions;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -44,7 +45,7 @@ namespace MinistryPlatform.Translation.Services
                     participant.EventId = reader.GetInt32(reader.GetOrdinal("Event_ID"));
                     participant.EventStartDateTime = (DateTime) reader["Event_Start_Date"];
                     participant.EventTitle = reader.GetString(reader.GetOrdinal("Event_Title"));
-                    participant.Room = SafeString(reader,"Room");
+                    participant.Room = SafeString(reader, "Room");
                     participant.GroupId = reader.GetInt32(reader.GetOrdinal("Group_ID"));
                     participant.GroupName = reader.GetString(reader.GetOrdinal("Group_Name"));
                     participant.GroupPrimaryContactEmail = reader.GetString(reader.GetOrdinal("Primary_Contact_Email"));
@@ -54,6 +55,7 @@ namespace MinistryPlatform.Translation.Services
                     participant.OpportunityRoleTitle = reader.GetString(reader.GetOrdinal("Role_Title"));
                     participant.OpportunityShiftEnd = GetTimeSpan(reader, "Shift_End");
                     participant.OpportunityShiftStart = GetTimeSpan(reader, "Shift_Start");
+                    participant.OpportunitySignUpDeadline = reader.GetInt32(reader.GetOrdinal("Sign_Up_Deadline"));
                     participant.OpportunityTitle = reader.GetString(reader.GetOrdinal("Opportunity_Title"));
                     participant.ParticipantNickname = reader.GetString(reader.GetOrdinal("Nickname"));
                     participant.ParticipantEmail = SafeString(reader, "Email_Address");
@@ -67,7 +69,7 @@ namespace MinistryPlatform.Translation.Services
                 return
                     groupServingParticipants.OrderBy(g => g.EventStartDateTime)
                         .ThenBy(g => g.GroupName)
-                        .ThenByDescending(g=> g.LoggedInUser)
+                        .ThenByDescending(g => g.LoggedInUser)
                         .ThenBy(g => g.ParticipantNickname)
                         .ToList();
             }

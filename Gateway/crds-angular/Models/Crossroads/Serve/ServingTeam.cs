@@ -28,6 +28,9 @@ namespace crds_angular.Models.Crossroads.Serve
 
         [JsonProperty(PropertyName = "primaryContact")]
         public string PrimaryContact { get; set; }
+
+        [JsonProperty(PropertyName = "pastDeadline")]
+        public bool PastDeadline { get; set; }
         
         public ServingTeam()
         {
