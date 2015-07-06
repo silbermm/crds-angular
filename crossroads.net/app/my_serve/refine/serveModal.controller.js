@@ -135,11 +135,7 @@
       $event.stopPropagation();
       vm.datePickers.toOpened = true;
     }
-
-    function setApplyButton(loading){
-      
-    }
-    
+   
   }
 
 })();
