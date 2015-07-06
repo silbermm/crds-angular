@@ -33,5 +33,17 @@ describe('Session Service', function() {
     expect(Session.getFamilyMembers()[5]).toBe(family[5]);
   });
 
+  describe("function addRedirectRoute", function() {
+    it("should add redirectUrl and params cookies", function() {
+      var params = {
+        p1: 2,
+        p3: "4"
+      };
+      Session.addRedirectRoute("new.state", params);
+      expect($cookies.get("redirectUrl")).toBe("new.state");
+      expect($cookies.get("params")).toBe(JSON.stringify(params));
+    });
+  });
+
 
 });
