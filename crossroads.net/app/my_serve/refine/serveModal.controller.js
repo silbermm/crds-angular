@@ -38,10 +38,6 @@
       $modalInstance.close(vm.fromDate, vm.toDate);
     }
 
-    function buttonClass() {
-      
-    }
-
     function isFromError(){
       return vm.filterdates.fromdate.$dirty && (
         vm.filterdates.fromdate.$error.fromDateToLarge ||
