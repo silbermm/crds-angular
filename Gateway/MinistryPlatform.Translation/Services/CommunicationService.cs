@@ -22,6 +22,14 @@ namespace MinistryPlatform.Translation.Services
         private readonly int ActionStatusId = Convert.ToInt32(AppSettings("ActionStatusId"));
         private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
+        public int GetUserIdFromContactId(string token, int contactId)
+        {
+            int pNum = Convert.ToInt32(ConfigurationManager.AppSettings["MyContact"]);
+            var profile = MinistryPlatformService.GetRecordDict(pNum, contactId, token);
+
+            return (int) profile["User_Account"];
+        }
+
         public CommunicationPreferences GetPreferences(String token, int userId)
         {
             int pNum = Convert.ToInt32( ConfigurationManager.AppSettings["MyContact"]);
@@ -68,12 +76,13 @@ namespace MinistryPlatform.Translation.Services
         /// Creates the correct record in MP so that the mail service can pick it up and send 
         /// it during the scheduled run
         /// </summary>
-        /// <param name="communication">The message properties </param>
-        /// <param name="mergeData">A dictionary of varible names and their values that MP will place in the template</param>
+        /// <param name="communication">The message properties </param>        
         public void SendMessage(Communication communication)
         {
-            var communicationId = AddCommunication(communication, apiLogin());
-            AddCommunicationMessage(communication, communicationId, apiLogin());
+            var token = apiLogin();
+
+            var communicationId = AddCommunication(communication, token);
+            AddCommunicationMessage(communication, communicationId, token);
         }
 
         private int AddCommunication(Communication communication, string token)

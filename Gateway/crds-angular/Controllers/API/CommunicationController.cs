@@ -28,21 +28,22 @@ namespace crds_angular.Controllers.API
         [Route("api/sendemail")]
         public IHttpActionResult Post(Communication communication)
         {
-            // TODO: Re-enable authorization when done with testing
-            //return Authorized(token =>
-            //{
+            return Authorized(token =>
+            {
                 try
                 {
                     communication.DomainId = 1;
+
+                    // populate the email fields for sender and receiver
+                    var userId = _mpCommunicationService.GetUserIdFromContactId(token, communication.FromContactId);
+                    var sender = _mpPersonService.GetPerson(communication.FromContactId);
 
                     // template id is set in client 
                     MessageTemplate template = _mpCommunicationService.GetTemplate(communication.TemplateId);
                     communication.EmailBody = template.Body;
                     communication.EmailSubject = template.Subject;
-
-                    // populate the email fields for sender and receiver
-                    var sender = _mpPersonService.GetPerson(communication.FromContactId);
-                    communication.AuthorUserId = communication.FromContactId;
+					
+                    communication.AuthorUserId = userId;
                     communication.FromEmailAddress = sender.EmailAddress;
                     communication.ReplyContactId = communication.FromContactId;
                     communication.ReplyToEmailAddress = sender.EmailAddress;
@@ -58,7 +59,7 @@ namespace crds_angular.Controllers.API
                 {
                     return InternalServerError(ex);
                 }
-            //});
+            });
         }
     }
 }

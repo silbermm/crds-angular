@@ -12,5 +12,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         void SendMessage(Communication communication);
         MessageTemplate GetTemplate(int templateId);    
         string ParseTemplateBody(string templateBody, Dictionary<string, object> record);
+        int GetUserIdFromContactId(string token, int contactId);
     }
 }
