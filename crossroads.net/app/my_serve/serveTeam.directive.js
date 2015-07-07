@@ -3,13 +3,27 @@
 
   module.exports = ServeTeam;
 
-  ServeTeam.$inject = ['$rootScope', '$log', 'Session', 'ServeOpportunities', 'Capacity', '$modal', 'growl'];
+  ServeTeam.$inject = ['$rootScope', 
+    '$log', 
+    'Session', 
+    'ServeOpportunities', 
+    'Capacity', 
+    '$modal', 
+    'growl'
+  ];
 
-  function ServeTeam($rootScope, $log, Session, ServeOpportunities, Capacity, $modal, growl) {
+  function ServeTeam( $rootScope, 
+      $log, 
+      Session, 
+      ServeOpportunities, 
+      Capacity, 
+      $modal, 
+      growl) {
+
     return {
-      restrict: "EA",
+      restrict: 'EA',
       transclude: true,
-      templateUrl: "my_serve/serveTeam.html",
+      templateUrl: 'my_serve/serveTeam.html',
       replace: true,
       scope: {
         team: '=',
@@ -20,6 +34,8 @@
     };
 
     function link(scope, el, attr) {
+
+      scope.panelStates = { };
 
       scope.currentActiveTab = null;
       scope.currentMember = null;
@@ -60,7 +76,8 @@
       scope.signedup = null;
       scope.showEdit = false;
       scope.showIcon = showIcon;
-      scope.togglePanel = togglePanel;
+      scope.togglePanel = togglePanel; 
+      
       //////////////////////////////////////
 
       function allowProfileEdit() {
@@ -288,6 +305,28 @@
         }
       }
 
+      function savePanel(member, force=false){
+        
+        var save = function(member){
+          scope.panelStates[member.contactId] = { 
+            attending : angular.copy(member.serveRsvp.attending),
+            isSaved : angular.copy(member.serveRsvp.isSaved),
+            roleId : angular.copy(member.serveRsvp.roleId)
+          };
+        }
+ 
+        if(force){
+          save(member);
+          return true
+        }
+
+        if(scope.panelStates[member.contactId] === undefined){
+          save(member);
+          return true;
+        }
+        return false;
+      }
+
       function saveRsvp() {
         var validForm = isFormValid();
 
@@ -324,7 +363,7 @@
           scope.currentMember.serveRsvp.isSaved = true;
           scope.processing = false;
           updateCapacity();
-
+          savePanel(scope.currentMember, true);
           return true;
         }, function(err) {
           $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
@@ -334,6 +373,9 @@
       }
 
       function setActiveTab(member) {
+        // save the original state of the current tab
+        savePanel(member);
+        
         // Reset form errors
         scope.formErrors = {
           role: false,
@@ -372,18 +414,29 @@
       }
 
       function togglePanel(member) {
-        if (!scope.isCollapsed && ((scope.currentMember === member) || (member === null))) {
+        if (!scope.isCollapsed && 
+            ( scope.currentMember === member || member === null)) {
           // panel is open, close it
+          // but first, revert back to original state...
+          _.each(scope.team.members, function(m){
+            if(scope.panelStates[m.contactId] !== undefined){
+              m.serveRsvp = scope.panelStates[m.contactId];
+              m.showFrequency = false;
+            }
+          });
+          // reset panel states
+          scope.panelStates = {};
           scope.isCollapsed = true;
           scope.currentActiveTab = null;
           return false;
         }
-
+       
         //if a member wasn't passed in, use default member
         if (member === null) {
           scope.currentMember = scope.team.members[0];
           member = scope.currentMember;
         }
+        // save the original state of the member
         setActiveTab(member);
       }
 
