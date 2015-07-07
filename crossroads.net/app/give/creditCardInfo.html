@@ -39,7 +39,7 @@
                 <label for="cvv">CVV</label>
                 <input type="text" name="cvc" class="form-control" ng-model="creditCard.cvc" maxlength="4" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }" ng-change="resetDefaultCardPlaceholderValues()" ng-required="!useExistingAccountInfo()" placeholder="{{defaultCardPlaceholderValues.cvc}}">
                 <span ng-show="cvvError(cvcValid) && !submitError(cvc)" ng-bind-html="$root.messages[$root.MESSAGES.invalidCvv].message | html"></span>
-                <ng-messages for="creditCardForm.cvc.$error" ng-show="submitError()">
+                <ng-messages for="creditCardForm.cvc.$error" ng-show="submitError(cvc)">
                   <ng-messages-include src="on-submit-messages"></ng-messages-include>
                 </ng-messages>
 				<span ng-show="creditCard.declinedPayment" ng-bind-html="$root.messages[$root.MESSAGES.invalidPaymentMethodInformation].message | html"></span>

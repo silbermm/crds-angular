@@ -99,10 +99,6 @@ require('../creditCardInfo.html');
             }
         };
 
-        scope.useExistingAccountInfo = function() {
-          return(scope.changeAccountInfo && scope.creditCardForm.$pristine);
-        }
-
         scope.ccNumberError = function(ccValid) {
             if (ccValid === undefined) {
                 scope.setValidCard = false ;
@@ -119,32 +115,20 @@ require('../creditCardInfo.html');
                      scope.creditCardForm.ccNumber.$dirty && !ccValid);//cannot be invalid prior to submittal
          };
 
-        scope.submitError = function(cardValue) {
-            return (scope.bankinfoSubmitted && cardValue == undefined)
-        };
-
         scope.cvvError = function(cvcValid) {
-            if (cvcValid === undefined) {
-                scope.setValidCvc = false  ;
-            }
-            if (cvcValid === true) {
-                scope.setValidCvc = true ;
-            }
+          if (cvcValid === undefined) {
+              scope.setValidCvc = false  ;
+          }
+          if (cvcValid === true) {
+              scope.setValidCvc = true ;
+          }
 
-            if(scope.useExistingAccountInfo()) {
-              return(false);
-            }
+          if(scope.useExistingAccountInfo()) {
+            return(false);
+          }
 
-            return ((scope.cvc == undefined && scope.bankinfoSubmitted) || //cannot be blank on submittal
-                    (scope.creditCardForm.cvc.$dirty && !cvcValid) || //must be valid on submittal
-                    (scope.creditCardForm.cvc.$dirty && !scope.creditCardForm.cvc))
-                //    (cvcValid && scope.creditCardForm.cvc.$dirty));
-             // return (scope.bankinfoSubmitted && scope.creditCardForm.cvc.$pristine && !cvcValid || //cannot be blank on submit
-             //        !cvcValid && scope.bankinfoSubmitted ||
-             //        !cvcValid && scope.creditCardForm.cvc.$dirty);  //show error when not valid
-
-           // var cvc = scope.creditCardForm.cvc;
-           // return ((cvc.$invalid || !cvcValid) && (scope.bankinfoSubmitted || cvc.$dirty));
+          return (!cvcValid && scope.bankinfoSubmitted  ||            //cannot be invalid upon submittal
+                   scope.creditCardForm.cvc.$dirty && !cvcValid);//cannot be invalid prior to submittal
         };
 
         scope.expDateError = function() {
@@ -155,6 +139,13 @@ require('../creditCardInfo.html');
             return (scope.bankinfoSubmitted && scope.creditCardForm.expDate.$invalid);
         };
 
+        scope.resetDefaultCardPlaceholderValues = function() {
+          scope.defaultCardPlaceholderValues = {
+            expDate: "MM/YY",
+          };
+          scope.declinedPayment = false;
+        };
+        
         // This function swaps the expDate field with the current value placeholder
         // for the expDate field with the "MM/YY" placeholder.  This works around
         // an issue with using ui-mask and a placeholder value, otherwise we'd
@@ -168,14 +159,15 @@ require('../creditCardInfo.html');
               e.focus();
             });
           }
-        }
+        };        
 
-        scope.resetDefaultCardPlaceholderValues = function() {
-          scope.defaultCardPlaceholderValues = {
-            expDate: "MM/YY",
-          };
-          scope.declinedPayment = false;
-        }
+        scope.submitError = function(cardValue) {
+            return (scope.bankinfoSubmitted && cardValue == undefined)
+        };
+
+        scope.useExistingAccountInfo = function() {
+          return(scope.changeAccountInfo && scope.creditCardForm.$pristine);
+        };
 
         if(!scope.defaultSource.credit_card) {
           scope.resetDefaultCardPlaceholderValues();
@@ -193,7 +185,7 @@ require('../creditCardInfo.html');
           };
 
           scope.ccCardType();
-        }
+        }        
       }
     };
 
