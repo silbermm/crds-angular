@@ -24,13 +24,22 @@ namespace crds_angular.Controllers.API
 
         [Route("api/stripe-event")]
         [HttpPost]
-        public void ProcessStripeEvent([FromBody]StripeEvent stripeEvent)
+        public IHttpActionResult ProcessStripeEvent([FromBody]StripeEvent stripeEvent)
         {
+            if (stripeEvent == null || !ModelState.IsValid)
+            {
+                if (_logger.IsDebugEnabled)
+                {
+                    _logger.Debug("Received invalid Stripe event " + stripeEvent);
+                }
+                return (BadRequest(ModelState));
+            }
+
             _logger.Debug("Received Stripe Event " + stripeEvent.Type);
             if (_liveMode != stripeEvent.LiveMode)
             {
                 _logger.Debug("Dropping Stripe Event " + stripeEvent.Type + " because LiveMode was " + stripeEvent.LiveMode);
-                return;
+                return (Ok());
             }
 
             switch (stripeEvent.Type)
@@ -45,6 +54,7 @@ namespace crds_angular.Controllers.API
                     _logger.Debug("Ignoring event " + stripeEvent.Type);
                     break;
             }
+            return (Ok());
         }
 
         private void ChargeSucceeded(StripeCharge charge)
