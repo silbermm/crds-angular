@@ -170,6 +170,7 @@ namespace crds_angular.Services
             formResponse.FormAnswers.Add(SetCustomField(application.City, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.State, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.Zip, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.HomePhone, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.MobilePhone, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.Grade, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.ReligionSearchingForAnswers, opportunityResponseId));
