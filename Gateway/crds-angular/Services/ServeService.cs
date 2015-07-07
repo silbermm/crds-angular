@@ -133,6 +133,10 @@ namespace crds_angular.Services
                         if (team != null)
                         {
                             //team already in collection
+                            if (!team.PastDeadline)
+                            {
+                                team.PastDeadline = (record.EventStartDateTime.AddDays(0 - record.OpportunitySignUpDeadline) < DateTime.Today);
+                            }
                             var member = team.Members.SingleOrDefault(m => m.ContactId == record.ContactId);
                             if (member == null)
                             {
