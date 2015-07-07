@@ -1,8 +1,10 @@
+using Newtonsoft.Json;
+
 namespace crds_angular.Models.Crossroads
 {
-    public class StripeCharge
+    public class StripeCharge : StripeObject
     {
-        public string id { get; set; }
-
+        [JsonProperty("status")]
+        public string Status { get; set; }
     }
 }

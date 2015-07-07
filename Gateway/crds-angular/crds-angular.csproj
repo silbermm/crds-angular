@@ -232,6 +232,7 @@
     <Compile Include="Controllers\API\GroupController.cs" />
     <Compile Include="Controllers\API\ProgramController.cs" />
     <Compile Include="Controllers\API\ServeController.cs" />
+    <Compile Include="Controllers\API\StripeEventController.cs" />
     <Compile Include="Controllers\API\UpdateDonorDTO.cs" />
     <Compile Include="Controllers\API\UserController.cs" />
     <Compile Include="Controllers\API\LoginController.cs" />
@@ -279,7 +280,11 @@
     <Compile Include="Models\Crossroads\Skill.cs" />
     <Compile Include="Models\Crossroads\Event.cs" />
     <Compile Include="Models\Crossroads\StripeCharge.cs" />
+    <Compile Include="Models\Crossroads\StripeCharges.cs" />
     <Compile Include="Models\Crossroads\StripeCustomer.cs" />
+    <Compile Include="Models\Crossroads\StripeEvent.cs" />
+    <Compile Include="Models\Crossroads\StripeObject.cs" />
+    <Compile Include="Models\Crossroads\StripeTransfer.cs" />
     <Compile Include="Models\Crossroads\User.cs" />
     <Compile Include="Models\Crossroads\VolunteerApplication\AdultApplicationDto.cs" />
     <Compile Include="Models\Crossroads\VolunteerApplication\ChildDto.cs" />
@@ -292,6 +297,8 @@
     <Compile Include="Models\Json\Communication.cs" />
     <Compile Include="Models\Json\NewPassword.cs" />
     <Compile Include="Models\Json\RestHttpActionResult.cs" />
+    <Compile Include="Models\Json\StripeDateTimeConverter.cs" />
+    <Compile Include="Models\Json\StripeEpochTime.cs" />
     <Compile Include="Models\MP\Address.cs" />
     <Compile Include="Models\MP\EmailSMSOptOut.cs" />
     <Compile Include="Models\MP\Household.cs" />

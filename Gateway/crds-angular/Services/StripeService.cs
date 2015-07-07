@@ -17,6 +17,8 @@ namespace crds_angular.Services
 
         private const string StripeNetworkErrorResponseCode = "abort";
 
+        private const int MaxChargesPerPage = 100;
+
         public StripeService(IRestClient stripeRestClient)
         {
             _stripeRestClient = stripeRestClient;
@@ -135,10 +137,33 @@ namespace crds_angular.Services
             request.AddParameter("customer", customerToken);
             request.AddParameter("description", "Donor ID #" + donorId);
 
-            IRestResponse<StripeCharge> response = _stripeRestClient.Execute<StripeCharge>(request);
+            var response = _stripeRestClient.Execute<StripeCharge>(request);
             CheckStripeResponse("Invalid charge request", response);
 
-            return response.Data.id;
+            return response.Data.Id;
+        }
+
+        public List<string> GetChargesForTransfer(string transferId)
+        {
+            var url = string.Format("transfers/{0}/transactions", transferId);
+            var request = new RestRequest(url, Method.GET);
+            request.AddParameter("count", MaxChargesPerPage);
+
+            var charges = new List<string>();
+            IRestResponse<StripeCharges> response;
+            do
+            {
+                response = _stripeRestClient.Execute<StripeCharges>(request);
+                CheckStripeResponse("Could not query transactions", response);
+
+                charges.AddRange(response.Data.Data.Select(charge => charge.Id));
+
+                request = new RestRequest(url, Method.GET);
+                request.AddParameter("count", MaxChargesPerPage);
+                request.AddParameter("starting_after", charges.Last());
+            } while (response.Data.HasMore);
+
+            return (charges);
         }
     }
 

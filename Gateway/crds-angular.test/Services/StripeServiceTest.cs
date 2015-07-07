@@ -223,7 +223,7 @@ namespace crds_angular.test.Services
             customer.default_source = "some card";
 
             var charge = new StripeCharge();
-            charge.id = "90210";
+            charge.Id = "90210";
 
             var stripeResponse = new Mock<IRestResponse<StripeCharge>>(MockBehavior.Strict);
             stripeResponse.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
