@@ -1,15 +1,15 @@
 describe('Volunteer Application Controller', function() {
 
-  var controller, 
-      $rootScope, 
-      $scope, 
-      httpBackend, 
+  var controller,
+      $rootScope,
+      $scope,
+      httpBackend,
       mockSession,
       Session,
       CmsInfo,
       Contact,
       Opportunity,
-      Family; 
+      Family;
 
   var mockFamily = [{
      contactId : 768379,
@@ -78,7 +78,7 @@ describe('Volunteer Application Controller', function() {
     mobilePhone: null,
     nickName: "Miles",
     postalCode: "45223-1231",
-    state: "OH" 
+    state: "OH"
   };
 
   var mockContactId = '12345678';
@@ -114,20 +114,19 @@ describe('Volunteer Application Controller', function() {
     version: "15"
     }]
   };
- 
+
   beforeEach(module('crossroads'));
 
-  describe("Not in Family", function(){  
+  describe("Not in Family", function(){
 
     beforeEach(module(function($provide){
-      $provide.value('$stateParams', { id: 12345678}); 
+      $provide.value('$stateParams', { id: 12345678});
       mockSession= jasmine.createSpyObj('Session', ['exists', 'isActive']);
       mockSession.exists.and.callFake(function(something){
         return '12345678';
       });
       $provide.value('Session', mockSession);
-      $provide.value('CmsInfo', mockPageInfo);
-      $provide.value('Contact', mockVolunteer);
+      $provide.value('PageInfo', {contact: mockVolunteer, cmsInfo: mockPageInfo});
       $provide.value('Family', mockFamily);
     }));
 
@@ -136,16 +135,15 @@ describe('Volunteer Application Controller', function() {
     beforeEach(inject(function(_$controller_, _$log_, $injector ){
       $controller = _$controller_;
       $log = _$log_;
-       
+
       $httpBackend = $injector.get('$httpBackend');
       Opportunity = $injector.get('Opportunity');
-      CmsInfo = $injector.get("CmsInfo");
-      Contact = $injector.get("Contact");
+      PageInfo = $injector.get("PageInfo");
       Session = $injector.get("Session");
       Family = $injector.get('Family');
-     
+
       $scope = {};
-      controller = $controller("VolunteerApplicationController", { $scope: $scope }); 
+      controller = $controller("VolunteerApplicationController", { $scope: $scope });
 
     }));
 
@@ -155,16 +153,15 @@ describe('Volunteer Application Controller', function() {
   });
 
   describe("In Family", function(){
-    
+
     beforeEach(module(function($provide){
-      $provide.value('$stateParams', { id: 2186211}); 
+      $provide.value('$stateParams', { id: 2186211});
       mockSession= jasmine.createSpyObj('Session', ['exists', 'isActive']);
       mockSession.exists.and.callFake(function(something){
         return '2186211';
       });
       $provide.value('Session', mockSession);
-      $provide.value('CmsInfo', mockPageInfo);
-      $provide.value('Contact', mockVolunteer);
+      $provide.value('PageInfo', {contact: mockVolunteer, cmsInfo: mockPageInfo});
       $provide.value('Family', mockFamily);
     }));
 
@@ -173,16 +170,15 @@ describe('Volunteer Application Controller', function() {
     beforeEach(inject(function(_$controller_, _$log_, $injector ){
       $controller = _$controller_;
       $log = _$log_;
-       
+
       $httpBackend = $injector.get('$httpBackend');
       Opportunity = $injector.get('Opportunity');
-      CmsInfo = $injector.get("CmsInfo");
-      Contact = $injector.get("Contact");
+      PageInfo = $injector.get("PageInfo");
       Session = $injector.get("Session");
       Family = $injector.get('Family');
-     
+
       $scope = {};
-      controller = $controller("VolunteerApplicationController", { $scope: $scope }); 
+      controller = $controller("VolunteerApplicationController", { $scope: $scope });
 
     }));
 
@@ -191,8 +187,8 @@ describe('Volunteer Application Controller', function() {
     });
 
     it('should call the opportunity resonponse service', function(){
-      $httpBackend.expectGET( window.__env__['CRDS_API_ENDPOINT'] + 
-          'api/opportunity/getResponseForOpportunity/'+ 
+      $httpBackend.expectGET( window.__env__['CRDS_API_ENDPOINT'] +
+          'api/opportunity/getResponseForOpportunity/'+
           mockPageInfo.pages[0].opportunity + '/' + controller.contactId ).respond(200);
       $httpBackend.flush();
     });
