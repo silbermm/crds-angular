@@ -3,7 +3,9 @@
  
   var app = angular.module('crossroads.profile');
   app.config(config);
-
+  
+  app.$inject = ['$httpProvider'];
+  
   function config($httpProvider){
     $httpProvider.defaults.timeout = 15000;
     $httpProvider.defaults.useXDomain = true; 

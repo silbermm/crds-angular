@@ -1,4 +1,5 @@
-﻿using crds_angular.Exceptions;
+﻿using System;
+using crds_angular.Exceptions;
 using crds_angular.Models.Crossroads;
 using crds_angular.Services;
 using Moq;
@@ -23,9 +24,79 @@ namespace crds_angular.test.Services
         }
 
         [Test]
+        public void ShouldGetDefaultSource()
+        {
+            var cust = new StripeCustomer
+            {
+                sources = new Sources
+                {
+                    data = new List<SourceData>
+                    {
+                        new SourceData
+                        {
+                            id = "456",
+                            @object = "bank_account",
+                            last4 = "9876",
+                            routing_number = "5432",
+                        },
+                        new SourceData
+                        {
+                            id = "123",
+                            @object = "bank_account",
+                            last4 = "1234",
+                            routing_number = "5678",
+                        },
+                        new SourceData
+                        {
+                            id = "789",
+                            @object = "credit_card",
+                            brand = "visa",
+                            last4 = "0001",
+                            exp_month = "01",
+                            exp_year = "2023",
+                            address_zip = "20202"
+                        },
+                        new SourceData
+                        {
+                            id = "123",
+                            @object = "credit_card",
+                            brand = "mcc",
+                            last4 = "0002",
+                            exp_month = "2",
+                            exp_year = "2024",
+                            address_zip = "10101"
+                        },
+                    }
+                },
+                default_source = "123",
+            };
+            var stripeResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
+            stripeResponse.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.Data).Returns(cust).Verifiable();
+            restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
+
+            var defaultSource = fixture.GetDefaultSource("token");
+            Assert.IsNotNull(defaultSource);
+
+            Assert.AreEqual("5678", defaultSource.routing_number);
+            Assert.AreEqual("1234", defaultSource.bank_last4);
+
+            Assert.AreEqual("mcc", defaultSource.brand);
+            Assert.AreEqual("0002", defaultSource.last4);
+            Assert.AreEqual("02", defaultSource.exp_month);
+            Assert.AreEqual("24", defaultSource.exp_year);
+            Assert.AreEqual("10101", defaultSource.address_zip);
+
+            restClient.VerifyAll();
+            stripeResponse.VerifyAll();
+        }
+
+        [Test]
         public void shouldThrowExceptionWhenTokenIsInvalid()
         {
             var stripeResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
+            stripeResponse.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
             stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.BadRequest).Verifiable();
             stripeResponse.SetupGet(mocked => mocked.Content).Returns("{error: {message:'Bad Request'}}").Verifiable();
             restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
@@ -44,12 +115,38 @@ namespace crds_angular.test.Services
         }
 
         [Test]
+        public void ShouldThrowAbortExceptionWhenStripeConnectionFails()
+        {
+            var stripeResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
+            stripeResponse.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.BadRequest).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.Content).Returns("{}").Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.ErrorException).Returns(new Exception("Doh!")).Verifiable();
+            restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
+
+            try
+            {
+                fixture.CreateCustomer("token");
+                Assert.Fail("Expected exception was not thrown");
+            }
+            catch (StripeException e)
+            {
+                Assert.AreEqual("abort", e.Type);
+                Assert.AreEqual("Doh!", e.DetailMessage);
+                Assert.AreEqual(HttpStatusCode.InternalServerError, e.StatusCode);
+            }
+
+
+        }
+
+        [Test]
         public void shouldReturnSuccessfulCustomerId()
         {
             var customer = new StripeCustomer();
             customer.id = "12345";
 
             var stripeResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
+            stripeResponse.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
             stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
             stripeResponse.SetupGet(mocked => mocked.Data).Returns(customer).Verifiable();
 
@@ -76,6 +173,7 @@ namespace crds_angular.test.Services
             customer.id = "12345";
 
             var stripeResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
+            stripeResponse.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
             stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
             stripeResponse.SetupGet(mocked => mocked.Data).Returns(customer).Verifiable();
 
@@ -98,6 +196,7 @@ namespace crds_angular.test.Services
         public void shouldThrowExceptionWhenCustomerUpdateFails()
         {
             var stripeResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
+            stripeResponse.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
             stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.BadRequest).Verifiable();
             stripeResponse.SetupGet(mocked => mocked.Content).Returns("{error: {message:'Invalid Request'}}").Verifiable();
 
@@ -126,11 +225,12 @@ namespace crds_angular.test.Services
             var charge = new StripeCharge();
             charge.id = "90210";
 
-            var chargeResponse = new Mock<IRestResponse<StripeCharge>>(MockBehavior.Strict);
-            chargeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
-            chargeResponse.SetupGet(mocked => mocked.Data).Returns(charge).Verifiable();
+            var stripeResponse = new Mock<IRestResponse<StripeCharge>>(MockBehavior.Strict);
+            stripeResponse.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.Data).Returns(charge).Verifiable();
 
-            restClient.Setup(mocked => mocked.Execute<StripeCharge>(It.IsAny<IRestRequest>())).Returns(chargeResponse.Object);
+            restClient.Setup(mocked => mocked.Execute<StripeCharge>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
 
             var response = fixture.ChargeCustomer("cust_token", 9090, 98765, "cc");
 
@@ -145,7 +245,7 @@ namespace crds_angular.test.Services
                     )));
 
             restClient.VerifyAll();
-            chargeResponse.VerifyAll();
+            stripeResponse.VerifyAll();
 
             Assert.AreEqual("90210", response);
         }
@@ -163,12 +263,15 @@ namespace crds_angular.test.Services
             customer.default_source = "some card";
             
             var getCustomerResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
+
+            getCustomerResponse.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
             getCustomerResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
             getCustomerResponse.SetupGet(mocked => mocked.Data).Returns(customer).Verifiable();
             restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(getCustomerResponse.Object);
 
 
             var chargeResponse = new Mock<IRestResponse<StripeCharge>>(MockBehavior.Strict);
+            chargeResponse.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
             chargeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.BadRequest).Verifiable();
             chargeResponse.SetupGet(mocked => mocked.Content).Returns("{error: {message:'Invalid Integer Amount'}}").Verifiable();
 
@@ -212,6 +315,7 @@ namespace crds_angular.test.Services
             };
 
             var stripeResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
+            stripeResponse.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
             stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
             stripeResponse.SetupGet(mocked => mocked.Data).Returns(customer).Verifiable();
 

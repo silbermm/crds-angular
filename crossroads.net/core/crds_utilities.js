@@ -33,16 +33,16 @@ var preventRouteTypeUrlEncoding = function(urlMatcherFactory, routeType, urlPatt
 //================================================
 // Check if the user is connected
 //================================================
-var checkLoggedin = function ($q, $timeout, $http, $location, $rootScope) {
+var checkLoggedin = function ($q, $timeout, $http, $location, $rootScope, $cookies) {
   // TODO Added to debug/research US1403 - should remove after issue is resolved
   console.log('US1403: checkLoggedIn');
   var deferred = $q.defer();
-  $http.defaults.headers.common['Authorization'] = getCookie('sessionId');
+  $http.defaults.headers.common['Authorization'] = $cookies.get('sessionId');
   $http({
     method: 'GET',
     url: __API_ENDPOINT__ + 'api/authenticated',
     headers: {
-      'Authorization': getCookie('sessionId')
+      'Authorization': $cookies.get('sessionId')
     }
   }).success(function (user) {
     // TODO Added to debug/research US1403 - should remove after issue is resolved

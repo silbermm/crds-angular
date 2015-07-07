@@ -6,15 +6,14 @@ describe('Session Service', function() {
 
   beforeEach(module('crossroads'));
 
-  beforeEach(inject(function(_$cookies_, _$cookieStore_, _Session_){
+  beforeEach(inject(function(_$cookies_, _Session_){
     $cookies = _$cookies_;
-    $cookieStore = _$cookieStore_;
     Session = _Session_;
   }));
 
   it("should save an array of family members", function(){
     Session.addFamilyMembers(family);
-    expect($cookies.family).toBe(family.join(','));
+    expect($cookies.get("family")).toBe(family.join(','));
   });
 
   it("should return an array of family members", function(){
@@ -32,6 +31,18 @@ describe('Session Service', function() {
     family.push(5);
     Session.addFamilyMembers(family);
     expect(Session.getFamilyMembers()[5]).toBe(family[5]);
+  });
+
+  describe("function addRedirectRoute", function() {
+    it("should add redirectUrl and params cookies", function() {
+      var params = {
+        p1: 2,
+        p3: "4"
+      };
+      Session.addRedirectRoute("new.state", params);
+      expect($cookies.get("redirectUrl")).toBe("new.state");
+      expect($cookies.get("params")).toBe(JSON.stringify(params));
+    });
   });
 
 

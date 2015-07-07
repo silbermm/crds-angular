@@ -1,0 +1,14 @@
+<div>
+  <input type='{{inputType}}' 
+         class='{{inputClasses}}'
+         ng-value='buttonText()'
+         ng-class='buttonClass()'
+         ng-if='showInput()'
+  />
+
+  <button class='{{inputClasses}}'
+          ng-class='buttonClass()'
+          ng-if='!showInput()' >
+    {{ buttonText() }}
+  </button>
+</div>
