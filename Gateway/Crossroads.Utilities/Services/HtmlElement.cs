@@ -73,6 +73,17 @@ namespace Crossroads.Utilities.Services
         }
 
         /// <summary>
+        /// Builds the element with a list of attributes and the text to put inside the element
+        /// </summary>
+        /// <param name="el">The element </param>
+        /// <param name="attributes">The list of attributes</param>
+        /// <param name="text">Text that belongs inside of the element</param>
+        public HtmlElement(String el, Dictionary<string, string> attributes, String text) : this(el, attributes)
+        {
+            this.elementText = text;
+        }
+
+        /// <summary>
         /// Builds the element with a list of attributes and text
         /// </summary>
         /// <param name="el">The element</param>

@@ -291,12 +291,14 @@ namespace crds_angular.Services
                     var @event = events[i];
                     sequenceDate = IncrementSequenceDate(@event, sequenceDate, increment);
                     if (@event.EventStartDate.Date != sequenceDate.Date) continue;
+                    DateTime from = DateTime.Today.Add(opportunity.ShiftStart);
+                    DateTime to = DateTime.Today.Add(opportunity.ShiftEnd);
                     mailRows.Add(new MailRow()
                     {
                         EventDate = @event.EventStartDate.ToShortDateString(),
                         Location = opportunity.Room,
                         OpportunityName = opportunity.OpportunityName,
-                        ShiftTime = opportunity.ShiftStart.ToString() + opportunity.ShiftEnd.ToString()
+                        ShiftTime = from.ToString("hh:mm tt") + " - " + to.ToString("hh:mm tt")
                     });
                     var response = CreateRsvp(token, opportunityId, opportunityIds, signUp, participant, @event);
                     previousOpportunity = PreviousOpportunity(response, previousOpportunity);
@@ -308,8 +310,9 @@ namespace crds_angular.Services
             {
                 return false;
             }
+            var table = SetupHTMLTable(mailRows).Build();
             var mergeData = SetupMergeData(contactId, opportunityId, previousOpportunity, opportunity, startDate,
-                endDate, groupContact, SetupHTMLTable(mailRows).Build());
+                endDate, groupContact, table);
             var communication = SetupCommunication(templateId, groupContact, toContact);
             _communicationService.SendMessage(communication, mergeData);
             return true;
@@ -466,23 +469,36 @@ namespace crds_angular.Services
 
         private HtmlElement SetupHTMLTable(List<MailRow> content)
         {
-          
-            return new HtmlElement("table", new Dictionary<string, string>() { { "width", "100%" } }).Append(() =>
+            var tableAttrs = new Dictionary<string, string>()
             {
-                var lst = content.Select<MailRow, HtmlElement>(rowObj => new HtmlElement("tr")
-                  .Append(new HtmlElement("td", rowObj.EventDate))
-                  .Append(new HtmlElement("td", rowObj.OpportunityName))
-                  .Append(new HtmlElement("td", rowObj.ShiftTime))
-                  .Append(new HtmlElement("td", rowObj.Location))).ToList();
-                return lst.FirstOrDefault();
-            });    
-            
+                {"width", "100%"},
+                {"border", "1"},
+                {"cellspacing", "0"},
+                {"cellpadding", "5"}
+            };
+
+            var cellAttrs = new Dictionary<string, string>()
+            {
+                {"align", "center"}
+            };
+
+            List<HtmlElement> rows = content.Select(rowObj =>
+            {
+                return new HtmlElement("tr")
+                    .Append(new HtmlElement("td", cellAttrs, rowObj.EventDate))
+                    .Append(new HtmlElement("td", cellAttrs, rowObj.OpportunityName))
+                    .Append(new HtmlElement("td", cellAttrs, rowObj.ShiftTime))
+                    .Append(new HtmlElement("td", cellAttrs, rowObj.Location));
+            }).ToList();
+
+            return new HtmlElement("table", tableAttrs)
+                .Append(SetupTableHeader)
+                .Append(rows);
         }
 
         private HtmlElement SetupTableHeader()
         {
             var headers = TABLE_HEADERS.Select(el => new HtmlElement("th", el)).ToList();
-            //var headers = TABLE_HEADERS.Aggregate("", (current, el) => current + new HtmlElement("th", el));
             return new HtmlElement("tr", headers);
         }
 
