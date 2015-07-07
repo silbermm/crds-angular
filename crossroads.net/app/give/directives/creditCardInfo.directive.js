@@ -119,12 +119,8 @@ require('../creditCardInfo.html');
                      scope.creditCardForm.ccNumber.$dirty && !ccValid);//cannot be invalid prior to submittal
          };
 
-         scope.ccSubmitError = function() {
-            return (scope.bankinfoSubmitted && scope.ccNumber == undefined)
-        };
-
-        scope.cvvSubmitError = function() {
-            return (scope.bankinfoSubmitted && scope.cvc == undefined)
+        scope.submitError = function(cardValue) {
+            return (scope.bankinfoSubmitted && cardValue == undefined)
         };
 
         scope.cvvError = function(cvcValid) {
