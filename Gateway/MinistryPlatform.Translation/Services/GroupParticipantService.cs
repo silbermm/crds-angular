@@ -75,11 +75,6 @@ namespace MinistryPlatform.Translation.Services
                         .ThenBy(g => g.ParticipantNickname)
                         .ToList();
             }
-            catch (Exception ex)
-            {
-                Console.Write(ex.Message);
-                return new List<GroupServingParticipant>();
-            }
             finally
             {
                 connection.Close();
