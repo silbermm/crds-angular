@@ -323,6 +323,8 @@
           }
           scope.currentMember.serveRsvp.isSaved = true;
           scope.processing = false;
+          updateCapacity();
+
           return true;
         }, function(err) {
           $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
@@ -347,14 +349,7 @@
           scope.isCollapsed = !scope.isCollapsed;
         }
         scope.currentMember = member;
-        _.each(scope.currentMember.roles, function(r) {
-          r.capacity = Capacity.get({
-            id: r.roleId,
-            eventId: scope.team.eventId,
-            min: r.minimum,
-            max: r.maximum
-          });
-        });
+        updateCapacity();
 
         if (scope.currentMember.serveRsvp !== undefined && scope.currentMember.serveRsvp !== null) {
           scope.selectedRole = _.find(scope.currentMember.roles, function(r) {
@@ -390,6 +385,17 @@
           member = scope.currentMember;
         }
         setActiveTab(member);
+      }
+
+      function updateCapacity() {
+        _.each(scope.currentMember.roles, function(r) {
+          r.capacity = Capacity.get({
+            id: r.roleId,
+            eventId: scope.team.eventId,
+            min: r.minimum,
+            max: r.maximum
+          });
+        });
       }
     };
   }
