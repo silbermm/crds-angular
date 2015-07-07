@@ -169,23 +169,25 @@ require('../creditCardInfo.html');
           return(scope.changeAccountInfo && scope.creditCardForm.$pristine);
         };
 
-        if(!scope.defaultSource.credit_card) {
-          scope.resetDefaultCardPlaceholderValues();
-        } else if(scope.defaultSource.credit_card.last4) {
-          scope.creditCard.ccNumber = "";
-          scope.creditCard.expDate = "";
-          scope.creditCard.cvc = "";
-          scope.creditCard.billingZipCode = "";
-          scope.defaultCardPlaceholderValues = {
-            billingZipCode: scope.defaultSource.credit_card.address_zip,
-            brand: scope.defaultSource.credit_card.brand,
-            cvc: "XXX",
-            expDate: scope.defaultSource.credit_card.exp_date.replace(/^(..)(..).*$/, "$1/$2"),
-            maskedCard: "XXXXXXXXXXX" + scope.defaultSource.credit_card.last4
-          };
+        if (scope.defaultSource !== undefined){   
+          if(!scope.defaultSource.credit_card) {
+            scope.resetDefaultCardPlaceholderValues();
+          } else if(scope.defaultSource.credit_card.last4) {
+            scope.creditCard.ccNumber = "";
+            scope.creditCard.expDate = "";
+            scope.creditCard.cvc = "";
+            scope.creditCard.billingZipCode = "";
+            scope.defaultCardPlaceholderValues = {
+              billingZipCode: scope.defaultSource.credit_card.address_zip,
+              brand: scope.defaultSource.credit_card.brand,
+              cvc: "XXX",
+              expDate: scope.defaultSource.credit_card.exp_date.replace(/^(..)(..).*$/, "$1/$2"),
+              maskedCard: "XXXXXXXXXXX" + scope.defaultSource.credit_card.last4
+            };
 
-          scope.ccCardType();
-        }
+            scope.ccCardType();
+          }
+        };  
       }
     };
 
