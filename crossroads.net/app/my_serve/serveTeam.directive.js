@@ -324,7 +324,8 @@
         
         var save = function(member){
           scope.panelStates[member.contactId] = { 
-            attending : angular.copy(member.serveRsvp.attending),
+            attending : member.serveRsvp.attending !== undefined ? 
+              angular.copy(member.serveRsvp.attending) : undefined,
             isSaved : angular.copy(member.serveRsvp.isSaved),
             roleId : angular.copy(member.serveRsvp.roleId)
           };
