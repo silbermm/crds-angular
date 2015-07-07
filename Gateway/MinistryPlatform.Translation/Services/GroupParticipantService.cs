@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -10,7 +11,7 @@ using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
 {
-    public class GroupParticipantService : IGroupParticipantService
+    public class GroupParticipantService : BaseService, IGroupParticipantService
     {
         private IDbConnection _dbConnection;
 
@@ -56,6 +57,7 @@ namespace MinistryPlatform.Translation.Services
                     participant.OpportunityShiftEnd = GetTimeSpan(reader, "Shift_End");
                     participant.OpportunityShiftStart = GetTimeSpan(reader, "Shift_Start");
                     participant.OpportunitySignUpDeadline = reader.GetInt32(reader.GetOrdinal("Sign_Up_Deadline"));
+                    participant.DeadlinePassedMessage = (SafeInt32(reader, "Deadline_Passed_Message") ?? Convert.ToInt32(AppSettings("DefaultDeadlinePassedMessage")));
                     participant.OpportunityTitle = reader.GetString(reader.GetOrdinal("Opportunity_Title"));
                     participant.ParticipantNickname = reader.GetString(reader.GetOrdinal("Nickname"));
                     participant.ParticipantEmail = SafeString(reader, "Email_Address");
@@ -72,6 +74,11 @@ namespace MinistryPlatform.Translation.Services
                         .ThenByDescending(g => g.LoggedInUser)
                         .ThenBy(g => g.ParticipantNickname)
                         .ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.Message);
+                return new List<GroupServingParticipant>();
             }
             finally
             {
@@ -146,6 +153,12 @@ namespace MinistryPlatform.Translation.Services
         {
             var ordinal = record.GetOrdinal(fieldName);
             return !record.IsDBNull(ordinal) ? record.GetInt16(ordinal) : (int?) null;
+        }
+
+        private static int? SafeInt32(IDataRecord record, string fieldName)
+        {
+            var ordinal = record.GetOrdinal(fieldName);
+            return !record.IsDBNull(ordinal) ? record.GetInt32(ordinal) : (int?)null;
         }
     }
 }

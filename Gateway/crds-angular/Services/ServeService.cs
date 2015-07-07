@@ -490,7 +490,8 @@ namespace crds_angular.Services
                 Members = new List<TeamMember> {NewTeamMember(record)},
                 Name = record.GroupName,
                 PrimaryContact = record.GroupPrimaryContactEmail, 
-                PastDeadline = (record.EventStartDateTime.AddDays(0 - record.OpportunitySignUpDeadline) < DateTime.Today)
+                PastDeadline = (record.EventStartDateTime.AddDays(0 - record.OpportunitySignUpDeadline) < DateTime.Today),
+                PastDeadlineMessage = record.DeadlinePassedMessage
             };
         }
 

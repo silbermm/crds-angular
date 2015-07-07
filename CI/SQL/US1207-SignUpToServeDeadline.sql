@@ -13,7 +13,7 @@ ALTER VIEW [dbo].[vw_crds_Serving_Participants]
 AS
 SELECT        g.Group_ID, gp.Participant_ID, c.Email_Address, c.Display_Name, c.Nickname, c.Last_Name, gp.Domain_ID, g.Group_Name, g.Group_Type_ID, 
                          groupContact.Email_Address AS Primary_Contact_Email, o.Opportunity_ID, o.Opportunity_Title, o.Minimum_Needed, o.Maximum_Needed, o.Shift_Start, o.Shift_End, o.Room,
-                         sud.Sign_Up_Deadline, gr.Role_Title, e.Event_ID, e.Event_Title, e.Event_Start_Date,
+                         sud.Sign_Up_Deadline, g.Deadline_Passed_Message, gr.Role_Title, e.Event_ID, e.Event_Title, e.Event_Start_Date,
                              (SELECT        TOP (1) Response_Result_ID
                                FROM            dbo.Responses AS r
                                WHERE        (Event_ID = e.Event_ID) AND (Opportunity_ID = o.Opportunity_ID) AND (Participant_ID = gp.Participant_ID)) AS RSVP, c.Contact_ID, gr.Group_Role_ID, 
@@ -28,4 +28,10 @@ FROM            dbo.Group_Participants AS gp INNER JOIN
                          dbo.Group_Roles AS gr ON gr.Group_Role_ID = o.Group_Role_ID INNER JOIN
 						 dbo.cr_Sign_Up_Deadline AS sud ON o.Sign_Up_Deadline_ID = sud.Sign_Up_Deadline_ID
 
+GO
+
+ALTER TABLE dbo.Groups
+ADD 
+	Sign_Up_To_Serve dp_Separator NULL,
+	Deadline_Passed_Message int NULL
 GO

@@ -22,9 +22,8 @@
     <!-- TODO: Pull this out into it's own directive so that each form doesn't share scope? -->
     <div class="panel-collapse collapse" collapse="isCollapsed">
       <div class="panel-body soft-half-bottom">
-        <div class="alert alert-info" role="alert" ng-show="team.pastDeadline">
-+         <strong>Heads up!</strong> This opportunity is past the signup deadline. If you need to cancel please contact 513.731.7400.
-+       </div>
+        <div class="alert alert-info" role="alert" ng-show="team.pastDeadline" ng-bind-html="$root.messages[team.pastDeadlineMessage].message | html">
+        </div>
         <p class="flush-bottom">Editing sign up for {{currentMember.name}} {{currentMember.lastName}}
         <span ng-show="displayEmail(currentMember.emailAddress)">( <span> {{ currentMember.emailAddress}} </span> )</span>
         <span class="text-muted"></span>
