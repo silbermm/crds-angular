@@ -15,6 +15,8 @@ namespace crds_angular.Services
 
         private const string StripeCustomerDescription = "Crossroads Donor #{0}";
 
+        private const string StripeNetworkErrorResponseCode = "abort";
+
         public StripeService(IRestClient stripeRestClient)
         {
             _stripeRestClient = stripeRestClient;
@@ -37,7 +39,7 @@ namespace crds_angular.Services
             var content = JsonConvert.DeserializeObject<Content>(response.Content);
             if (content == null || content.Error == null)
             {
-                throw (new StripeException(HttpStatusCode.InternalServerError, errorMessage, "connection_error",
+                throw (new StripeException(HttpStatusCode.InternalServerError, errorMessage, StripeNetworkErrorResponseCode,
                     response.ErrorException.Message, null, null, null));
             }
             else

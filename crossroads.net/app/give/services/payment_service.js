@@ -5,7 +5,7 @@
   PaymentService.$inject = ['$log', '$http', '$resource','$q', 'stripe', '$cookies', 'MESSAGES'];
 
   function PaymentService($log, $http, $resource, $q, stripe, $cookies, MESSAGES) {
-    var payment_service = { 
+    var payment_service = {
       createDonorWithBankAcct : createDonorWithBankAcct,
       createDonorWithCard : createDonorWithCard,
       donateToProgram : donateToProgram,
@@ -84,7 +84,7 @@
       var e = error ? error : {};
       e.httpStatusCode = httpStatusCode;
 
-      if(e.type == 'connection_error') {
+      if(e.type == 'abort' || e.code == 'abort') {
         e.globalMessage = MESSAGES.paymentMethodProcessingError;
       } else if(e.type == 'card_error') {
         if(e.code == 'card_declined'
