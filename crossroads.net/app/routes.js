@@ -316,19 +316,6 @@
         resolve: {
           loggedin: crds_utilities.checkLoggedin,
           Page: 'Page',
-          // CmsInfo: function(Page, $stateParams) {
-          //   var path = '/volunteer-application/' + $stateParams.appType + '/';
-          //   return Page.get({
-          //     url: path
-          //   }).$promise;
-          // },
-          // Profile: 'Profile',
-          // Contact: function(Profile, $stateParams) {
-          //   var contactId = $stateParams.id;
-          //   return Profile.Person.get({
-          //     contactId: contactId
-          //   }).$promise;
-          // },
           PageInfo: function($q, Profile, Page, $stateParams) {
             var deferred = $q.defer();
             var contactId = $stateParams.id;
