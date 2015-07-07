@@ -123,7 +123,7 @@ var moment = require('moment');
       };
 
       student.nameForNameTag = {
-        Value: vm.nameTag,
+        Value: vm.volunteer.nickName,
         CrossroadsId: studentFields.nameForNameTag
       };
 
