@@ -11,6 +11,7 @@
     'ngMessages',
     'angular-growl',
     'toggle-switch',
+    'sn.addthis',
     'ngAside',
     'mailchimp',
     'matchMedia',
