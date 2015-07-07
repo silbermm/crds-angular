@@ -127,7 +127,7 @@ require('../creditCardInfo.html');
             return(false);
           }
 
-          return (!cvcValid && scope.bankinfoSubmitted  ||            //cannot be invalid upon submittal
+          return (!cvcValid && scope.bankinfoSubmitted  ||       //cannot be invalid upon submittal
                    scope.creditCardForm.cvc.$dirty && !cvcValid);//cannot be invalid prior to submittal
         };
 
@@ -145,7 +145,7 @@ require('../creditCardInfo.html');
           };
           scope.declinedPayment = false;
         };
-        
+
         // This function swaps the expDate field with the current value placeholder
         // for the expDate field with the "MM/YY" placeholder.  This works around
         // an issue with using ui-mask and a placeholder value, otherwise we'd
@@ -185,7 +185,7 @@ require('../creditCardInfo.html');
           };
 
           scope.ccCardType();
-        }        
+        }
       }
     };
 

@@ -7,7 +7,7 @@
             <ng-messages for="creditCardForm.ccNumber.$error" ng-show="submitError(ccNumber)">
               <ng-messages-include src="on-submit-messages"></ng-messages-include>
             </ng-messages>
-            <span ng-show="!creditCard.ccValid && creditCardForm.ccNumber.$dirty && !submitError(ccNumber)" ng-bind-html="$root.messages[$root.MESSAGES.invalidCard].message | html"></span>
+            <span ng-show="!creditCard.ccValid && !submitError(ccNumber)" ng-bind-html="$root.messages[$root.MESSAGES.invalidCard].message | html"></span>
             <span ng-show="creditCard.declinedPayment" ng-bind-html="$root.messages[$root.MESSAGES.invalidPaymentMethodInformation].message | html"></span>
         </div>
         <div class="row">
