@@ -324,6 +324,7 @@
           scope.currentMember.serveRsvp.isSaved = true;
           scope.processing = false;
           updateCapacity();
+
           return true;
         }, function(err) {
           $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
@@ -386,16 +387,16 @@
         setActiveTab(member);
       }
 
-    function updateCapacity() {
-      _.each(scope.currentMember.roles, function(r) {
-        r.capacity = Capacity.get({
-          id: r.roleId,
-          eventId: scope.team.eventId,
-          min: r.minimum,
-          max: r.maximum
+      function updateCapacity() {
+        _.each(scope.currentMember.roles, function(r) {
+          r.capacity = Capacity.get({
+            id: r.roleId,
+            eventId: scope.team.eventId,
+            min: r.minimum,
+            max: r.maximum
+          });
         });
-      });
-    }
+      }
     };
   }
 })();
