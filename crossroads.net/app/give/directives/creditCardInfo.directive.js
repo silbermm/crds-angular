@@ -52,8 +52,8 @@ require('../creditCardInfo.html');
             return(false);
           }
 
-          return (scope.bankinfoSubmitted && scope.creditCardForm.billingZipCode.$invalid ||
-            scope.creditCardForm.billingZipCode.$dirty && scope.creditCardForm.billingZipCode.$invalid);
+          return ((scope.creditCardForm.billingZipCode.$dirty || scope.bankinfoSubmitted) && (scope.creditCardForm.billingZipCode.$modelValue == undefined || 
+                   scope.creditCardForm.billingZipCode.$invalid));
         };
 
         scope.blurBillingZipCodeError = function() {
