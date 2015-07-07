@@ -1,3 +1,4 @@
+<div ng-bind-html="kcAdultApplication.pageInfo.page1"></div>
 <form name="adult" ng-submit="kcAdultApplication.save(this)" novalidate>
   <fieldset class="push-bottom">
     <legend>General Info</legend>
@@ -69,7 +70,7 @@
 
       <div class="form-group col-sm-6">
         <label class="block">Marital Status</label>
-        <select class="form-control col-sm-12" name="maritalStatus" ng-model="kcAdultApplication.volunteer.maritalStatusId" disabled="true">
+        <select class="form-control col-sm-12" name="maritalStatus" ng-model="kcAdultApplication.volunteer.maritalStatusId+''" disabled="true">
           <option></option>
           <option value="1">Single</option>
           <option value="3">Divorced</option>
@@ -305,6 +306,7 @@
 
   <fieldset class="push-bottom">
     <legend>About You</legend>
+    <div ng-bind-html="kcAdultApplication.pageInfo.contentBlock1"></div>
     <div class="row">
 
       <div class="form-group col-sm-12" ng-class="{'has-error': kcAdultApplication.showError(adult, 'crime') }">
@@ -554,6 +556,7 @@
       </div>
   </fieldset>
 
+  <div ng-bind-html="kcAdultApplication.pageInfo.contentBlock2"></div>
   <!-- Reference #1 -->
   <fieldset class="push-bottom">
     <legend>Personal References</legend>
@@ -820,11 +823,12 @@
     <hr />
 
     <div class="row">
-      <p class="help-text col-sm-12">Okay, here's some formal stuff. We don't really talk like this, but we couldn't figure out how to say all this in kid-friendly language. So put your glasses on, read it and agree to it, please. The information contained in this application is true.
+      <p class="help-text col-sm-12">Okay, here's some formal stuff. We don't really talk like this, but we couldn't figure out how to say all this in kid-friendly language. So put your glasses on, read it and agree to it, please.</p>
+      <p class="help-text col-sm-12"><small>The information contained in this application is true.
         I authorize any reference or church listed here to give you any information (including opinions) that they may have regarding my character and fitness for working with kids. By agreeing to this form, I also consent to a complete criminal background
         check now and in the future. I understand my involvement with Crossroads Kids' Club is influenced by the information provided by all these sources. I release from liability for damages any person or organizations identified by me in this application,
         and waive my right to inspect any written material from contact with them or from the criminal background check. I have carefully read the forgoing release and know the contents thereof and I agree to this release as my own free act. This is a
-        legally binding agreement which I have read and understand.</p>
+        legally binding agreement which I have read and understand.</small></p>
 
       <div class="form-group col-sm-12" ng-class="{'has-error': kcAdultApplication.showError(adult, 'signatureAgree')}">
         <label class="block required control-label">Agree</label>
@@ -852,3 +856,4 @@
   <button type="submit" name="submit" id="submit" class="btn btn-primary push-half-bottom" ng-disabled="kcAdultApplication.saving"> {{kcAdultApplication.submitButtonText}} </button>
 
 </form>
+<div ng-bind-html="kcAdultApplication.pageInfo.page2"></div>
