@@ -1,29 +1,27 @@
 
 (function() {
   'use strict';
-  
+
   var moment = require('moment');
   module.exports = VolunteerApplicationController;
 
-  VolunteerApplicationController.$inject = ['$log', 'MESSAGES', 
-                                            'VolunteerApplication', 'Session', 
-                                            '$stateParams', 'CmsInfo', 'Opportunity', 
-                                            'Contact', 'VolunteerService', 'Family'];
+  VolunteerApplicationController.$inject = ['$log', 'MESSAGES',
+                                            'VolunteerApplication', 'Session',
+                                            '$stateParams', 'Opportunity',
+                                            'VolunteerService', 'Family', 'PageInfo'];
 
-  function VolunteerApplicationController($log, MESSAGES, 
-      VolunteerApplication, 
-      Session, 
-      $stateParams, 
-      CmsInfo, 
-      Opportunity, 
-      Contact, 
-      VolunteerService, Family) {
-    
+  function VolunteerApplicationController($log, MESSAGES,
+      VolunteerApplication,
+      Session,
+      $stateParams,
+      Opportunity,
+      VolunteerService, Family, PageInfo) {
+
     var vm = this;
     vm.contactId = $stateParams.id;
     vm.family = Family;
-    vm.pageInfo = pageInfo(CmsInfo);
-    vm.person = Contact;
+    vm.pageInfo = pageInfo(PageInfo.cmsInfo);
+    vm.person = PageInfo.contact;
     vm.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
     vm.responseCheck = false;
     vm.showAccessDenied = false;
@@ -71,7 +69,7 @@
       return false;
     }
 
-    function opportunityResponse() { 
+    function opportunityResponse() {
       Opportunity.GetResponse.get({
           id: vm.pageInfo.opportunity,
           contactId: vm.contactId

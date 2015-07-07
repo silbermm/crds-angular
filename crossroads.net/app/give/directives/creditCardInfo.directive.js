@@ -52,8 +52,8 @@ require('../creditCardInfo.html');
             return(false);
           }
 
-          return (scope.bankinfoSubmitted && scope.creditCardForm.billingZipCode.$invalid ||
-            scope.creditCardForm.billingZipCode.$dirty && scope.creditCardForm.billingZipCode.$invalid);
+          return ((scope.creditCardForm.billingZipCode.$dirty || scope.bankinfoSubmitted) && (scope.creditCardForm.billingZipCode.$modelValue == undefined || 
+                   scope.creditCardForm.billingZipCode.$invalid));
         };
 
         scope.blurBillingZipCodeError = function() {
@@ -99,10 +99,6 @@ require('../creditCardInfo.html');
             }
         };
 
-        scope.useExistingAccountInfo = function() {
-          return(scope.changeAccountInfo && scope.creditCardForm.$pristine);
-        }
-
         scope.ccNumberError = function(ccValid) {
             if (ccValid === undefined) {
                 scope.setValidCard = false ;
@@ -120,19 +116,19 @@ require('../creditCardInfo.html');
          };
 
         scope.cvvError = function(cvcValid) {
-            if (cvcValid === undefined) {
-                scope.setValidCvc = false  ;
-            }
-            if (cvcValid === true) {
-                scope.setValidCvc = true ;
-            }
+          if (cvcValid === undefined) {
+              scope.setValidCvc = false  ;
+          }
+          if (cvcValid === true) {
+              scope.setValidCvc = true ;
+          }
 
-            if(scope.useExistingAccountInfo()) {
-              return(false);
-            }
+          if(scope.useExistingAccountInfo()) {
+            return(false);
+          }
 
-            return (!cvcValid && scope.bankinfoSubmitted  ||       //cannot be invalid upon submittal
-                     scope.creditCardForm.cvc.$dirty && !cvcValid);//cannot be invalid prior to submittal
+          return (!cvcValid && scope.bankinfoSubmitted  ||       //cannot be invalid upon submittal
+                   scope.creditCardForm.cvc.$dirty && !cvcValid);//cannot be invalid prior to submittal
         };
 
         scope.expDateError = function() {
@@ -141,6 +137,13 @@ require('../creditCardInfo.html');
           }
 
             return (scope.bankinfoSubmitted && scope.creditCardForm.expDate.$invalid);
+        };
+
+        scope.resetDefaultCardPlaceholderValues = function() {
+          scope.defaultCardPlaceholderValues = {
+            expDate: "MM/YY",
+          };
+          scope.declinedPayment = false;
         };
 
         // This function swaps the expDate field with the current value placeholder
@@ -156,14 +159,15 @@ require('../creditCardInfo.html');
               e.focus();
             });
           }
-        }
+        };
 
-        scope.resetDefaultCardPlaceholderValues = function() {
-          scope.defaultCardPlaceholderValues = {
-            expDate: "MM/YY",
-          };
-          scope.declinedPayment = false;
-        }
+        scope.submitError = function(cardValue) {
+            return (scope.bankinfoSubmitted && cardValue == undefined)
+        };
+
+        scope.useExistingAccountInfo = function() {
+          return(scope.changeAccountInfo && scope.creditCardForm.$pristine);
+        };
 
         if(!scope.defaultSource.credit_card) {
           scope.resetDefaultCardPlaceholderValues();
