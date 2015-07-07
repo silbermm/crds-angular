@@ -300,7 +300,7 @@ namespace crds_angular.Services
                         OpportunityName = opportunity.OpportunityName,
                         ShiftTime = from.ToString("hh:mm tt") + " - " + to.ToString("hh:mm tt")
                     });
-                    var response = CreateRsvp(token, opportunityId, opportunityIds, signUp, participant, @event);
+                    var response = CreateRsvp(token, opportunityId, opportunityIds, signUp, participant, @event, groupContact);
                     previousOpportunity = PreviousOpportunity(response, previousOpportunity);
                     templateId = GetTemplateId(templateId, response);
                     sequenceDate = sequenceDate.AddDays(increment);
@@ -343,11 +343,11 @@ namespace crds_angular.Services
         }
 
         private Dictionary<string, object> CreateRsvp(string token, int opportunityId, List<int> opportunityIds, bool signUp, Participant participant,
-            Event @event)
+            Event @event, MyContact groupLeader)
         {
             var response = signUp
                 ? HandleYesRsvp(participant, @event, opportunityId, opportunityIds, token)
-                : HandleNoRsvp(participant, @event, opportunityIds, token);
+                : HandleNoRsvp(participant, @event, opportunityIds, token, groupLeader);
             return response;
         }
 
@@ -413,9 +413,9 @@ namespace crds_angular.Services
         }
 
         private Dictionary<string, object> HandleNoRsvp(Participant participant, Event e, List<int> opportunityIds,
-            string token)
+            string token, MyContact groupLeader)
         {
-            var templateId = AppSetting("RsvpNoTemplate");
+            int templateId;
             Opportunity previousOpportunity = null;
 
             try
@@ -441,12 +441,42 @@ namespace crds_angular.Services
                     previousOpportunity = _opportunityService.GetOpportunityById(oid, token);
                 }
             }
+
+            if (previousOpportunity != null)
+            {
+                var emailName = participant.DisplayName;
+                var emailEmail = participant.EmailAddress;
+                var emailTeamName = previousOpportunity.GroupName;
+                var emailOpportunityName = previousOpportunity.OpportunityName;
+                var emailEventDateTime = e.EventStartDate.ToString();
+
+                SendCancellationMessage(groupLeader,emailName, emailEmail,emailTeamName,emailOpportunityName,emailEventDateTime);
+            }
+
             return new Dictionary<string, object>()
             {
                 {"templateId", templateId},
                 {"previousOpportunity", previousOpportunity},
                 {"rsvp", false}
             };
+        }
+
+        private void SendCancellationMessage(MyContact groupLeader, string volunteerName, string volunteerEmail, string teamName, string opportunityName, string eventDateTime)
+        {
+            //TODO: move this to web.config
+            var templateId = 11619;
+
+            var communication = SetupCommunication(templateId, groupLeader, groupLeader);
+            var mergeData = new Dictionary<string, object>
+            {
+                {"VolunteerName", volunteerName},
+                {"VolunteerEmail",volunteerEmail},
+                {"TeamName", teamName},
+                {"OpportunityName", opportunityName},
+                {"EventDateTime", eventDateTime}
+            };
+
+            _communicationService.SendMessage(communication,mergeData);
         }
 
         private Communication SetupCommunication(int templateId, MyContact groupContact, MyContact toContact)
