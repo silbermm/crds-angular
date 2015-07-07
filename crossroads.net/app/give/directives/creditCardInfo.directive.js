@@ -119,6 +119,14 @@ require('../creditCardInfo.html');
                      scope.creditCardForm.ccNumber.$dirty && !ccValid);//cannot be invalid prior to submittal
          };
 
+         scope.ccSubmitError = function() {
+            return (scope.bankinfoSubmitted && scope.ccNumber == undefined)
+        };
+
+        scope.cvvSubmitError = function() {
+            return (scope.bankinfoSubmitted && scope.cvc == undefined)
+        };
+
         scope.cvvError = function(cvcValid) {
             if (cvcValid === undefined) {
                 scope.setValidCvc = false  ;
@@ -131,8 +139,16 @@ require('../creditCardInfo.html');
               return(false);
             }
 
-            return (!cvcValid && scope.bankinfoSubmitted  ||       //cannot be invalid upon submittal
-                     scope.creditCardForm.cvc.$dirty && !cvcValid);//cannot be invalid prior to submittal
+            return ((scope.cvc == undefined && scope.bankinfoSubmitted) || //cannot be blank on submittal
+                    (scope.creditCardForm.cvc.$dirty && !cvcValid) || //must be valid on submittal
+                    (scope.creditCardForm.cvc.$dirty && !scope.creditCardForm.cvc))
+                //    (cvcValid && scope.creditCardForm.cvc.$dirty));
+             // return (scope.bankinfoSubmitted && scope.creditCardForm.cvc.$pristine && !cvcValid || //cannot be blank on submit
+             //        !cvcValid && scope.bankinfoSubmitted ||
+             //        !cvcValid && scope.creditCardForm.cvc.$dirty);  //show error when not valid
+
+           // var cvc = scope.creditCardForm.cvc;
+           // return ((cvc.$invalid || !cvcValid) && (scope.bankinfoSubmitted || cvc.$dirty));
         };
 
         scope.expDateError = function() {
