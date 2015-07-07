@@ -1,6 +1,8 @@
-"use strict()";
 (function() {
-
+  'use strict()';
+  
+  var moment = require('moment');  
+  
   module.exports = ServeTeam;
 
   ServeTeam.$inject = ['$rootScope', 
@@ -36,7 +38,7 @@
     function link(scope, el, attr) {
 
       scope.panelStates = { };
-
+      scope.cancel = cancel;
       scope.currentActiveTab = null;
       scope.currentMember = null;
       scope.datesDisabled = true;
@@ -81,16 +83,29 @@
       //////////////////////////////////////
 
       function allowProfileEdit() {
-        var cookieId = Session.exists("userId");
+        var cookieId = Session.exists('userId');
         if (cookieId !== undefined) {
           scope.showEdit = Number(cookieId) === scope.currentMember.contactId;
         } else {
           scope.showEdit = false;
         }
-      };
+      }
+
+      function cancel(){
+        // panel is open, close it
+        // but first, revert back to original state...
+        if(scope.panelStates[scope.currentMember.contactId] !== undefined){
+          scope.currentMember.serveRsvp = scope.panelStates[scope.currentMember.contactId];
+          scope.currentMember.showFrequency = false;
+        }
+        // reset panel states
+        scope.panelStates[scope.currentMember.contactId] = undefined;
+        togglePanel(null);
+      }
 
       function changeFromDate() {
-        if (scope.currentMember.currentOpportunity !== undefined && scope.currentMember.currentOpportunity.fromDt !== undefined) {
+        if (scope.currentMember.currentOpportunity !== undefined && 
+            scope.currentMember.currentOpportunity.fromDt !== undefined) {
           var m = moment(scope.currentMember.currentOpportunity.fromDt);
           if (m.isValid()) {
             scope.formErrors.dateRange = false;
@@ -416,21 +431,10 @@
       function togglePanel(member) {
         if (!scope.isCollapsed && 
             ( scope.currentMember === member || member === null)) {
-          // panel is open, close it
-          // but first, revert back to original state...
-          _.each(scope.team.members, function(m){
-            if(scope.panelStates[m.contactId] !== undefined){
-              m.serveRsvp = scope.panelStates[m.contactId];
-              m.showFrequency = false;
-            }
-          });
-          // reset panel states
-          scope.panelStates = {};
-          scope.isCollapsed = true;
+                    scope.isCollapsed = true;
           scope.currentActiveTab = null;
           return false;
-        }
-       
+        } 
         //if a member wasn't passed in, use default member
         if (member === null) {
           scope.currentMember = scope.team.members[0];
