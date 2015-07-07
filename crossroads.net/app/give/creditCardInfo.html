@@ -3,7 +3,7 @@
         <div growl inline="true" reference="1001" limit-messages="1"></div>
         <div class="form-group" ng-class="{'has-error': ccNumberError(creditCard.ccValid) || creditCard.declinedPayment }">
             <label for="ccNumber">Credit Card Number</label>
-            <input type="text" name="ccNumber" class="form-control cc-icon" ng-class="ccNumberClass" ng-model="creditCard.ccNumber" maxlength="16" ng-change="ccCardType(); resetDefaultCardPlaceholderValues();" ng-required="!useExistingAccountInfo()" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }" placeholder="{{defaultCardPlaceholderValues.maskedCard}}">
+            <input type="text" name="ccNumber" class="form-control cc-icon" ng-class="ccNumberClass" ng-model="creditCard.ccNumber" maxlength="16" ng-change="ccCardType(); resetDefaultCardPlaceholderValues();" ng-required="!useExistingAccountInfo()" ng-model-options="{ updateOn: 'default blur' }" placeholder="{{defaultCardPlaceholderValues.maskedCard}}">
             <ng-messages for="creditCardForm.ccNumber.$error" ng-show="submitError(ccNumber)">
               <ng-messages-include src="on-submit-messages"></ng-messages-include>
             </ng-messages>
@@ -37,7 +37,7 @@
             </div>
             <div class="form-group col-xs-4 col-md-2" ng-class="{'has-error': cvvError(cvcValid) || creditCard.declinedPayment }">
                 <label for="cvv">CVV</label>
-                <input type="text" name="cvc" class="form-control" ng-model="creditCard.cvc" maxlength="4" ng-model-options="{ updateOn: 'blur', debounce: {'blur': 500} }" ng-change="resetDefaultCardPlaceholderValues()" ng-required="!useExistingAccountInfo()" placeholder="{{defaultCardPlaceholderValues.cvc}}">
+                <input type="text" name="cvc" class="form-control" ng-model="creditCard.cvc" maxlength="4" ng-model-options="{ updateOn: 'default blur' }" ng-change="resetDefaultCardPlaceholderValues()" ng-required="!useExistingAccountInfo()" placeholder="{{defaultCardPlaceholderValues.cvc}}">
                 <span ng-show="cvvError(cvcValid) && !submitError(cvc)" ng-bind-html="$root.messages[$root.MESSAGES.invalidCvv].message | html"></span>
                 <ng-messages for="creditCardForm.cvc.$error" ng-show="submitError(cvc)">
                   <ng-messages-include src="on-submit-messages"></ng-messages-include>
