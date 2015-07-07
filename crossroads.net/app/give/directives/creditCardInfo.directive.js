@@ -159,7 +159,7 @@ require('../creditCardInfo.html');
               e.focus();
             });
           }
-        };        
+        };
 
         scope.submitError = function(cardValue) {
             return (scope.bankinfoSubmitted && cardValue == undefined)
