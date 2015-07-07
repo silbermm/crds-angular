@@ -111,7 +111,7 @@ namespace MinistryPlatform.Translation.Services
                 {"From", communication.FromEmailAddress},
                 {"To", communication.ToEmailAddress},
                 {"Reply_To", communication.ReplyToEmailAddress},
-                {"Subject", communication.EmailSubject},
+                {"Subject", ParseTemplateBody(communication.EmailSubject, communication.MergeData)},
                 {"Body", ParseTemplateBody(communication.EmailBody, communication.MergeData)}
             };
             MinistryPlatformService.CreateSubRecord(RecipientsSubPageId, communicationId, dictionary, token);
