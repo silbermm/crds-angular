@@ -28,6 +28,11 @@ var mockTeam = [{
     { 
       "name":  "Jane", 
       "contactId": 1234567890, 
+      "serveRsvp": {
+       "roleId": 145, 
+       "attending": true, 
+       'isSaved': true
+      }, 
       "roles" : [ 
         {
           "name": "NuseryA", 
@@ -48,7 +53,7 @@ var mockTeam = [{
 
 var mockOpportunity = { "time": "8:30am", "team": mockTeam  };
 
-var mockMatt = {"name":"Matt", "lastName": "Silbernagel", "contactId":1970611, "serveRsvp": {"isSaved": true}, "roles":[{"name":"Nursery A - Sunday 8:30 Member","capacity":100,"slotsTaken":0},{"name":"Nursery B - Sunday 8:30 Member","capacity":10,"slotsTaken":2},{"name":"Nursery C - Sunday 8:30 Member","capacity":0,"slotsTaken":1}]};
+var mockMatt = {"name":"Matt", "lastName": "Silbernagel", "contactId":1970611, "serveRsvp": {"isSaved": true, 'attending': false, }, "roles":[{"name":"Nursery A - Sunday 8:30 Member","capacity":100,"slotsTaken":0},{"name":"Nursery B - Sunday 8:30 Member","capacity":10,"slotsTaken":2},{"name":"Nursery C - Sunday 8:30 Member","capacity":0,"slotsTaken":1}]};
 
 describe('Serve Teams Directive', function() {
 
