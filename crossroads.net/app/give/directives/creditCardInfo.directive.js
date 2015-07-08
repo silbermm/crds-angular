@@ -164,7 +164,7 @@ require('../creditCardInfo.html');
         };
 
         scope.submitError = function(cardValue) {
-            return (scope.bankinfoSubmitted && cardValue == undefined)
+            return ((!scope.useExistingAccountInfo()) && scope.bankinfoSubmitted && (cardValue == "" || cardValue == undefined));
         };
 
         scope.useExistingAccountInfo = function() {
