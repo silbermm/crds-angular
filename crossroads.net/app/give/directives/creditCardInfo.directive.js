@@ -143,7 +143,7 @@ require('../creditCardInfo.html');
           scope.defaultCardPlaceholderValues = {
             expDate: "MM/YY",
           };
-          scope.declinedPayment = false;
+          scope.declinedPayment = false;         
         };
 
         // This function swaps the expDate field with the current value placeholder
@@ -155,7 +155,7 @@ require('../creditCardInfo.html');
             scope.creditCardForm.$setDirty();
             $timeout(function() {
               // The third field is the expDate
-              var e = element.find('input')[2];
+              var e = element.find('input')[1];
               e.focus();
             });
           }

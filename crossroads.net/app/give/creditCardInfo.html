@@ -3,7 +3,7 @@
         <div growl inline="true" reference="1001" limit-messages="1"></div>
         <div class="form-group" ng-class="{'has-error': ccNumberError(creditCard.ccValid) || creditCard.declinedPayment }">
             <label for="ccNumber">Credit Card Number</label>
-            <input type="text" name="ccNumber" class="form-control cc-icon" ng-class="ccNumberClass" ng-model="creditCard.ccNumber" maxlength="16" ng-change="ccCardType(); resetDefaultCardPlaceholderValues();" ng-required="!useExistingAccountInfo()" ng-model-options="{ updateOn: 'blur' }" placeholder="{{defaultCardPlaceholderValues.maskedCard}}">
+            <input type="text" name="ccNumber" class="form-control cc-icon" ng-class="ccNumberClass" ng-model="creditCard.ccNumber" maxlength="16" ng-change="ccCardType(); resetDefaultCardPlaceholderValues(); swapCreditCardExpDateFields()" ng-required="!useExistingAccountInfo()" ng-model-options="{ updateOn: 'blur' }" placeholder="{{defaultCardPlaceholderValues.maskedCard}}">
             <ng-messages for="creditCardForm.ccNumber.$error" ng-show="submitError(ccNumber)">
               <ng-messages-include src="on-submit-messages"></ng-messages-include>
             </ng-messages>
@@ -26,7 +26,7 @@
             <!-- Show this expDate input if we are NOT changing existing account info OR the form is pristine - this works around a ui-mask/placeholder bug -->
             <div class="form-group col-xs-4  col-md-3" ng-class="{'has-error': expDateError() || creditCard.declinedPayment }" ng-if="!changeAccountInfo || creditCardForm.$pristine">
                 <label>Expiration</label>
-                <input type="text" name="expDate" class="form-control" ng-model="creditCard.expDate" ui-mask="99/99" ng-focus="swapCreditCardExpDateFields()" ng-change="resetDefaultCardPlaceholderValues()" ng-required="!useExistingAccountInfo()" placeholder="{{defaultCardPlaceholderValues.expDate}}" >
+                <input type="text" name="expDate" class="form-control" ng-model="creditCard.expDate" ui-mask="99/99" ng-change="resetDefaultCardPlaceholderValues()" ng-required="!useExistingAccountInfo()" placeholder="{{defaultCardPlaceholderValues.expDate}}" >
                 <ng-messages for="creditCardForm.expDate.$error" ng-show="creditCardForm.expDate.$error.required">
                   <ng-messages-include src="on-blur-messages"></ng-messages-include>
                 </ng-messages>
