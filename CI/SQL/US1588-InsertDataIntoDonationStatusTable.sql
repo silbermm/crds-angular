@@ -25,8 +25,8 @@ INSERT INTO [dbo].[Donation_Statuses]
            ,
            (4
            ,'Succeeded'
-           ,0
-           ,0)
+           ,1
+           ,1)
 GO
 SET IDENTITY_INSERT [dbo].[Donation_Statuses] OFF
 GO
