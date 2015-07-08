@@ -1,5 +1,5 @@
 <div class="col-sm-12 serve-opp-listings mobile-hard-sides">
-  <div class="panel panel-default ng-isolate-scope" ng-class="{'serve-opp-listing-expired': team.pastDeadline}">
+  <div class="panel panel-default" ng-class="{'serve-opp-listing-expired': team.pastDeadline}">
     <div class="panel-heading clearfix" ng-click="togglePanel(null)">
       <span class="team-name" ng-class="{'text-muted': team.pastDeadline}">{{::team.name}}</span>
       <span ng-show="team.pastDeadline" class="badge word-badge">Signup Closed</span>
