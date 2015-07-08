@@ -255,7 +255,7 @@ namespace MinistryPlatform.Translation.Services
                 ToEmailAddress = contact.Email
             };
 
-            var mergeData = new Dictionary<string, object>
+            comm.MergeData = new Dictionary<string, object>
             {
                 {"Program_Name", program.Name},
                 {"Donation_Amount", donationAmount},
@@ -263,7 +263,7 @@ namespace MinistryPlatform.Translation.Services
                 {"Payment_Method", pymt_type}
             };
  
-            communicationService.SendMessage(comm, mergeData);
+            communicationService.SendMessage(comm);
         }
 
         public ContactDonor GetEmailViaDonorId(int donorId)
