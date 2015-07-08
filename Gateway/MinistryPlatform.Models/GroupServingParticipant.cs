@@ -22,6 +22,7 @@ namespace MinistryPlatform.Models
         public TimeSpan OpportunityShiftEnd { get; set; }
         public TimeSpan OpportunityShiftStart { get; set; }
         public int OpportunitySignUpDeadline { get; set; }
+        public int DeadlinePassedMessage { get; set; }
         public string OpportunityTitle { get; set; }
         public string ParticipantNickname { get; set; }
         public string ParticipantEmail { get; set; }
