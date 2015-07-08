@@ -82,10 +82,10 @@
 .btn-secondary {
   @include button-variant($btn-primary-color, $brand-secondary, $brand-secondary);
 }
-.btn-standard {
+.btn-standard-dark {
   @include button-variant($btn-primary-color, $gray, $gray);
 }
-.btn-standard-dark {
+.btn-standard {
   @include button-variant(black, $gray-lighter, $gray-lighter);
 }
 

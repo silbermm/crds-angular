@@ -117,7 +117,7 @@ h2 {
 // Table buttons
 .table-btn {
   @extend .btn;
-  @extend .btn-default;
+  @extend .btn-primary;
   @extend .col-full-height;
   @extend .push-half-bottom;
   display: block;
