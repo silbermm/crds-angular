@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Crossroads.Utilities.Interfaces;
+using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
+using RestSharp.Extensions;
 
 namespace MinistryPlatform.Translation.Services
 {
@@ -20,21 +23,29 @@ namespace MinistryPlatform.Translation.Services
         public void UpdateDonationStatus(int donationId, int statusId, DateTime statusDate,
             string statusNote = null)
         {
-            UpdateDonationStatus(new KeyValuePair<string, object>("Donation_ID", donationId), statusId, statusDate, statusNote);
+            UpdateDonationStatus(apiLogin(), donationId, statusId, statusDate, statusNote);
         }
 
         public void UpdateDonationStatus(string processorPaymentId, int statusId,
             DateTime statusDate, string statusNote = null)
         {
-            UpdateDonationStatus(new KeyValuePair<string, object>("Transaction_Code", processorPaymentId), statusId, statusDate, statusNote);
+            var token = apiLogin();
+            var result = _ministryPlatformService.GetRecordsDict(_donationsPageId, token,
+                ",,,,,,," + processorPaymentId);
+            int? donationId;
+            if (result.Count == 0 || (donationId = result.Last().ToNullableInt("dp_RecordID")) == null)
+            {
+                throw (new ApplicationException("Could not locate donation for charge " + processorPaymentId));
+            }
+            UpdateDonationStatus(token, donationId.Value, statusId, statusDate, statusNote);
         }
 
-        private void UpdateDonationStatus(KeyValuePair<string, object> recordKey, int statusId, DateTime statusDate,
+        private void UpdateDonationStatus(string apiToken, int donationId, int statusId, DateTime statusDate,
             string statusNote)
         {
             var parms = new Dictionary<string, object>
             {
-                {recordKey.Key, recordKey.Value},
+                {"Donation_ID", donationId},
                 {"Donation_Status_Date", statusDate},
                 {"Donation_Status_Notes", statusNote},
                 {"Donation_Status_ID", statusId},
@@ -42,14 +53,14 @@ namespace MinistryPlatform.Translation.Services
 
             try
             {
-                _ministryPlatformService.UpdateRecord(_donationsPageId, parms, apiLogin());
+                _ministryPlatformService.UpdateRecord(_donationsPageId, parms, apiToken);
             }
             catch (Exception e)
             {
                 throw new ApplicationException(
                     string.Format(
-                        "UpdateDonationStatus failed. {0}: {1}, statusId: {2}, statusNote: {3}, statusDate: {4}",
-                        recordKey.Key, recordKey.Value, statusId, statusNote, statusDate), e);
+                        "UpdateDonationStatus failed. donationId: {1}, statusId: {2}, statusNote: {3}, statusDate: {4}",
+                        donationId, statusId, statusNote, statusDate), e);
             }
         }
     }

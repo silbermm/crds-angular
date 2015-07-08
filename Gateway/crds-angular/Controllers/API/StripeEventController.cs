@@ -67,29 +67,21 @@ namespace crds_angular.Controllers.API
 
         private void ChargeSucceeded(DateTime? eventTimestamp, StripeCharge charge)
         {
-            if (charge == null)
-            {
-                return;
-            }
-
             _logger.Debug("Processing charge.succeeded event for charge id " + charge.Id);
             _donationService.UpdateDonationStatus(charge.Id, _donationStatusSucceeded, eventTimestamp);
         }
 
         private void TransferPaid(DateTime? eventTimestamp, StripeTransfer transfer)
         {
-            if (transfer == null)
-            {
-                return;
-            }
-
             _logger.Debug("Processing transfer.paid event for transfer id " + transfer.Id);
             var charges = _paymentService.GetChargesForTransfer(transfer.Id);
             if (charges == null || charges.Count <= 0)
             {
+                _logger.Debug("No charges found for transfer: " + transfer.Id);
                 return;
             }
 
+            _logger.Debug(string.Format("{0} charges to update for transfer {1}", charges.Count, transfer.Id));
             foreach (var charge in charges)
             {
                 _logger.Debug("Updating charge id " + charge + " to Deposited status");
