@@ -145,7 +145,7 @@ require('../creditCardInfo.html');
           scope.defaultCardPlaceholderValues = {
             expDate: "MM/YY",
           };
-          scope.declinedPayment = false;         
+          scope.declinedPayment = false;
         };
 
         // This function swaps the expDate field with the current value placeholder
