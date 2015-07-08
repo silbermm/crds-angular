@@ -6,5 +6,11 @@ namespace crds_angular.Models.Crossroads
     {
         [JsonProperty("status")]
         public string Status { get; set; }
+
+        [JsonProperty("failure_code")]
+        public string FailureCode { get; set; }
+
+        [JsonProperty("failure_message")]
+        public string FailureMessage { get; set; }
     }
 }

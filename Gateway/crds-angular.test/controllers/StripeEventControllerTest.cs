@@ -23,6 +23,7 @@ namespace crds_angular.test.controllers
             var configuration = new Mock<IConfigurationWrapper>();
             configuration.Setup(mocked => mocked.GetConfigIntValue("DonationStatusDeposited")).Returns(999);
             configuration.Setup(mocked => mocked.GetConfigIntValue("DonationStatusSucceeded")).Returns(888);
+            configuration.Setup(mocked => mocked.GetConfigIntValue("DonationStatusDeclined")).Returns(777);
             configuration.Setup(mocked => mocked.GetConfigValue("StripeWebhookLiveMode")).Returns("true");
 
             _paymentService = new Mock<IPaymentService>(MockBehavior.Strict);
@@ -96,6 +97,32 @@ namespace crds_angular.test.controllers
             };
 
             _donationService.Setup(mocked => mocked.UpdateDonationStatus("9876", 888, e.Created, null));
+            var result = _fixture.ProcessStripeEvent(e);
+            Assert.IsInstanceOf<OkResult>(result);
+            _paymentService.VerifyAll();
+            _donationService.VerifyAll();
+        }
+
+        [Test]
+        public void TestChargeFailed()
+        {
+            var e = new StripeEvent
+            {
+                LiveMode = true,
+                Type = "charge.failed",
+                Created = DateTime.Now.AddDays(-1),
+                Data = new StripeEventData
+                {
+                    Object = JObject.FromObject(new StripeCharge
+                    {
+                        Id = "9876",
+                        FailureCode = "invalid_routing_number",
+                        FailureMessage = "description from stripe"
+                    })
+                }
+            };
+
+            _donationService.Setup(mocked => mocked.UpdateDonationStatus("9876", 777, e.Created, "invalid_routing_number: description from stripe"));
             var result = _fixture.ProcessStripeEvent(e);
             Assert.IsInstanceOf<OkResult>(result);
             _paymentService.VerifyAll();
