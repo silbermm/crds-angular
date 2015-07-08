@@ -1,7 +1,8 @@
 <div class="col-sm-12 serve-opp-listings mobile-hard-sides">
-  <div class="panel panel-default ng-isolate-scope">
+  <div class="panel panel-default" ng-class="{'serve-opp-listing-expired': team.pastDeadline}">
     <div class="panel-heading clearfix" ng-click="togglePanel(null)">
-      <span class="team-name">{{::team.name}}</span>
+      <span class="team-name" ng-class="{'text-muted': team.pastDeadline}">{{::team.name}}</span>
+      <span ng-show="team.pastDeadline" class="badge word-badge">Signup Closed</span>
       <div class="name-btns">
         <button type="button"
           ng-click="togglePanel(member)"
@@ -21,6 +22,8 @@
     <!-- TODO: Pull this out into it's own directive so that each form doesn't share scope? -->
     <div class="panel-collapse collapse" collapse="isCollapsed">
       <div class="panel-body soft-half-bottom">
+        <div class="alert alert-info" role="alert" ng-show="team.pastDeadline" ng-bind-html="$root.messages[team.pastDeadlineMessage].message | html">
+        </div>
         <p class="flush-bottom">Editing sign up for {{currentMember.name}} {{currentMember.lastName}}
         <span ng-show="displayEmail(currentMember.emailAddress)">( <span> {{ currentMember.emailAddress}} </span> )</span>
         <span class="text-muted"></span>
@@ -35,14 +38,19 @@
            <h5>Opportunities</h5>
             <div class="radio" ng-class="{'text-muted': role.capacity.badgeType === 'label-default', 'has-error': formErrors.role}"  >
               <div ng-repeat="role in currentMember.roles">
-              <label>
-                <input type="radio" ng-disabled="role.capacity.badgeType === 'label-default'" ng-model="currentMember.serveRsvp.roleId" ng-value="role.roleId" ng-change="roleChanged(role)" name="{{team.$$hashKey}}">
-                <span class="opportunity-name">{{::role.name}}</span>
-                <span class="label {{ role.capacity.badgeType }}" ng-show="role.capacity.display">{{ role.capacity.message }}</span>
-              </label>
+                <label>
+                  <input type="radio" 
+                         ng-disabled="role.capacity.badgeType === 'label-default' || team.pastDeadline" 
+                         ng-model="currentMember.serveRsvp.roleId" 
+                         ng-value="role.roleId" 
+                         ng-change="roleChanged(role)" 
+                         name="{{team.$$hashKey}}">
+                  <span class="opportunity-name">{{::role.name}}</span>
+                  <span class="label {{ role.capacity.badgeType }}" ng-show="role.capacity.display">{{ role.capacity.message }}</span>
+                </label>
               </div>
               <label>
-                <input type="radio" ng-model="currentMember.serveRsvp.roleId" ng-value="0" ng-change="roleChanged(role)" name="">
+                <input type="radio" ng-disabled="team.pastDeadline" ng-model="currentMember.serveRsvp.roleId" ng-value="0" ng-change="roleChanged(role)" name="">
                 <span class="opportunity-name">Not Available</span>
               </label>
               <div ng-show="formErrors.role">
@@ -137,8 +145,8 @@
                 <use xlink:href="#mail5"></use>
               </svg>
             </a>
-            <button class="btn btn-gray-light" ng-click="togglePanel(null)">Cancel</button>
-            <button class="btn btn-primary" ng-class="{disabled: processing}" ng-click="saveRsvp()">
+            <button class="btn btn-gray-light" ng-disabled="team.pastDeadline" ng-click="cancel()">Cancel</button>
+            <button class="btn btn-primary" ng-disabled="team.pastDeadline" ng-class="{disabled: processing}" ng-click="saveRsvp()">
               <span ng-if="processing">Saving...</span>
               <span ng-if="!processing">Save</span>
             </button>

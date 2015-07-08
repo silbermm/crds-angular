@@ -141,7 +141,7 @@ var moment = require('moment');
       };
 
       adult.nameForNameTag = {
-        Value: vm.volunteer.nameTag,
+        Value: vm.volunteer.nickName,
         CrossroadsId: adultFields.nameForNameTag
       };
 
@@ -556,9 +556,9 @@ var moment = require('moment');
      * true if it has, false otherwise
      */
     function spiritualSelected(){
-      if (vm.volunteer.religionSearchingForAnswers || 
-          vm.volunteer.religionReceivedJesus || 
-          vm.volunteer.religionFocusingOnObedience || 
+      if (vm.volunteer.religionSearchingForAnswers ||
+          vm.volunteer.religionReceivedJesus ||
+          vm.volunteer.religionFocusingOnObedience ||
           vm.volunteer.religionReplicating) {
         return true;
       }

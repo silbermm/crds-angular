@@ -33,18 +33,13 @@
       <div class="form-group col-sm-6">
         <label class="control-label" for="email">Email</label>
         <input type="text" class="form-control" id="email" placeholder="Email" ng-value="kcAdultApplication.volunteer.emailAddress" disabled="true">
-        <span ng-show="false">Please provide a valid value.</span>
       </div>
 
-      <div class="form-group col-sm-6" ng-class="{'has-error': kcAdultApplication.showError(adult, 'nameTag')}">
-        <label class="control-label required" for="nameTag">Name For Name Tag</label>
-        <input type="text" class="form-control" id="nameTag" name="nameTag" placeholder="Enter name for name tag" ng-model="kcAdultApplication.volunteer.nameTag" ng-model-options="{updateOn: 'blur'}" ng-model-options="{updateOn: 'blur'}" required>
-        <ng-messages for="adult.nameTag.$error" ng-if="kcAdultApplication.showError(adult, 'nameTag')">
-          <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
-          </span>
-        </ng-messages>
+      <div class="form-group col-sm-6">
+        <label class="control-label" for="nameTag">Name For Name Tag</label>
+        <input type="text" class="form-control" id="nameTag" placeholder="Enter name for name tag" ng-value="kcAdultApplication.volunteer.nickName" disabled="true">
       </div>
+
     </div>
 
     <div class="row">

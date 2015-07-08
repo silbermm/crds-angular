@@ -35,6 +35,7 @@
                     console.log("US1403: stateChangeStart event handler, successful call to api/authenticated in app.run");
                     $rootScope.userid = user.userId;
                     $rootScope.username = user.username;
+                    $rootScope.roles = user.roles;
                 }).error(function (e) {
                     // TODO Added to debug/research US1403 - should remove after issue is resolved
                     console.log("US1403: stateChangeStart event handler, failed call to api/authenticated in app.run");
