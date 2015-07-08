@@ -251,7 +251,7 @@ namespace crds_angular.Services
             return capacity;
         }
 
-        public bool SaveServeRsvp(string token,
+        public List<int> SaveServeRsvp(string token,
             int contactId,
             int opportunityId,
             List<int> opportunityIds,
@@ -263,7 +263,7 @@ namespace crds_angular.Services
         {
 
             List<MailRow> mailRows = new List<MailRow>();
-            
+            var updatedEvents = new List<int>();
 
             //get participant id for Contact
             var participant = _participantService.GetParticipant(contactId);
@@ -285,6 +285,7 @@ namespace crds_angular.Services
                     var @event = events[i];
                     sequenceDate = IncrementSequenceDate(@event, sequenceDate, increment);
                     if (@event.EventStartDate.Date != sequenceDate.Date) continue;
+                    updatedEvents.Add(@event.EventId);
                     DateTime from = DateTime.Today.Add(opportunity.ShiftStart);
                     DateTime to = DateTime.Today.Add(opportunity.ShiftEnd);
                     mailRows.Add(new MailRow()
@@ -302,14 +303,14 @@ namespace crds_angular.Services
             }
             catch (Exception e)
             {
-                return false;
+                return new List<int>();
             }
             var table = SetupHTMLTable(mailRows).Build();
             var mergeData = SetupMergeData(contactId, opportunityId, previousOpportunity, opportunity, startDate,
                 endDate, groupContact, table);
             var communication = SetupCommunication(templateId, groupContact, toContact);
             _communicationService.SendMessage(communication, mergeData);
-            return true;
+            return updatedEvents;
         }
 
         private static DateTime IncrementSequenceDate(Event @event, DateTime sequenceDate, int increment)

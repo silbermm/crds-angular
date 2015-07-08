@@ -355,7 +355,7 @@
           rsvp.signUp = false;
         }
         rsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
-        rsvp.$save(function(saved) {
+        rsvp.$save(function(updatedEvents) {
           if (rsvp.signUp) {
             $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess);
           } else {
@@ -369,6 +369,7 @@
           scope.processing = false;
           updateCapacity();
           savePanel(scope.currentMember, true);
+          $rootScope.$emit("updateAfterSave", {'member': scope.currentMember, 'groupId': scope.team.groupId, 'eventIds': updatedEvents.EventIds});
           return true;
         }, function(err) {
           $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);

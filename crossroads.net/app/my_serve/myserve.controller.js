@@ -39,6 +39,27 @@
       });
     });
 
+    $rootScope.$on("updateAfterSave", function(event, data){
+      _.each(vm.groups, function(group) {
+        _.each(group.serveTimes, function(serveTime) {
+          _.each(serveTime.servingTeams, function(servingTeam) {
+            if (servingTeam.groupId === data.groupId) {
+              _.each(data.eventIds, function(eventId) {
+                if (servingTeam.eventId === eventId){
+                  _.each(servingTeam.members, function(member) {
+                    if (member.contactId === data.member.contactId) {
+                      member.serveRsvp = data.member.serveRsvp;
+                    }
+                  });
+                }  
+              });
+            }
+          });
+        });
+      }); 
+      //$scope.$apply();   
+    });
+
     $rootScope.$on(AUTH_EVENTS.logoutSuccess, function(event, data) {
       vm.filterState.clearAll();
     });

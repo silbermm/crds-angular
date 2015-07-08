@@ -111,18 +111,19 @@ namespace crds_angular.Controllers.API
 
             return Authorized(token =>
             {
+                var updatedEvents = new UpdatedEvents();
                 try
                 {
-                    _serveService.SaveServeRsvp(token, saveRsvp.ContactId, saveRsvp.OpportunityId, saveRsvp.OpportunityIds,
+                    updatedEvents.EventIds.AddRange(_serveService.SaveServeRsvp(token, saveRsvp.ContactId, saveRsvp.OpportunityId, saveRsvp.OpportunityIds,
                         saveRsvp.EventTypeId, saveRsvp.StartDateUnix.FromUnixTime(),
-                        saveRsvp.EndDateUnix.FromUnixTime(), saveRsvp.SignUp, saveRsvp.AlternateWeeks);
+                        saveRsvp.EndDateUnix.FromUnixTime(), saveRsvp.SignUp, saveRsvp.AlternateWeeks));
                 }
                 catch (Exception exception)
                 {
                     var apiError = new ApiErrorDto("Save RSVP Failed", exception);
                     throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
-                return Ok();
+                return Ok(updatedEvents);
             });
         }
 

@@ -267,6 +267,7 @@
     <Compile Include="Models\Crossroads\Serve\QualifiedServerDto.cs" />
     <Compile Include="Models\Crossroads\Serve\SaveRsvpDto.cs" />
     <Compile Include="Models\Crossroads\Serve\ServeRsvp.cs" />
+    <Compile Include="Models\Crossroads\Serve\UpdatedEvents.cs" />
     <Compile Include="Models\Crossroads\SignUpFamilyMembers.cs" />
     <Compile Include="Models\Crossroads\GroupOpportunity.cs" />
     <Compile Include="Models\Crossroads\Serve\EventType.cs" />
