@@ -128,7 +128,7 @@ namespace MinistryPlatform.Translation.Services
                         ParticipantId = int.Parse(results.Single()["dp_RecordID"].ToString()),
                         EmailAddress = results.Single()["Email_Address"].ToString(),
                         PreferredName = results.Single()["Nickname"].ToString(),
-                        DisplayName = results.Single()["LastName"].ToString()
+                        DisplayName = results.Single()["Display_Name"].ToString()
                     };
 
                     return participant;
