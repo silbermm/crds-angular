@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using System;
+using log4net;
 using System.Web.Http;
 using crds_angular.Services.Interfaces;
 using Newtonsoft.Json;
@@ -12,14 +13,21 @@ namespace crds_angular.Controllers.API
     {
         private readonly ILog _logger = LogManager.GetLogger(typeof(StripeEventController));
         private readonly IPaymentService _paymentService;
+        private readonly IDonationService _donationService;
         private readonly bool _liveMode;
+        private readonly int _donationStatusDeposited;
+        private readonly int _donationStatusSucceeded;
 
-        public StripeEventController(IPaymentService paymentService, IConfigurationWrapper configuration)
+        public StripeEventController(IPaymentService paymentService, IDonationService donationService, IConfigurationWrapper configuration)
         {
             _paymentService = paymentService;
+            _donationService = donationService;
 
             var b = configuration.GetConfigValue("StripeWebhookLiveMode");
             _liveMode = b != null && bool.Parse(b);
+
+            _donationStatusDeposited = configuration.GetConfigIntValue("DonationStatusDeposited");
+            _donationStatusSucceeded = configuration.GetConfigIntValue("DonationStatusSucceeded");
         }
 
         [Route("api/stripe-event")]
@@ -45,10 +53,10 @@ namespace crds_angular.Controllers.API
             switch (stripeEvent.Type)
             {
                 case "charge.succeeded":
-                    ChargeSucceeded(ParseStripeEvent<StripeCharge>(stripeEvent.Data));
+                    ChargeSucceeded(stripeEvent.Created, ParseStripeEvent<StripeCharge>(stripeEvent.Data));
                     break;
                 case "transfer.paid":
-                    TransferPaid(ParseStripeEvent<StripeTransfer>(stripeEvent.Data));
+                    TransferPaid(stripeEvent.Created, ParseStripeEvent<StripeTransfer>(stripeEvent.Data));
                     break;
                 default:
                     _logger.Debug("Ignoring event " + stripeEvent.Type);
@@ -57,7 +65,7 @@ namespace crds_angular.Controllers.API
             return (Ok());
         }
 
-        private void ChargeSucceeded(StripeCharge charge)
+        private void ChargeSucceeded(DateTime? eventTimestamp, StripeCharge charge)
         {
             if (charge == null)
             {
@@ -65,10 +73,10 @@ namespace crds_angular.Controllers.API
             }
 
             _logger.Debug("Processing charge.succeeded event for charge id " + charge.Id);
-            // TODO Call service to update charge to "Succeeded" status
+            _donationService.UpdateDonationStatus(charge.Id, _donationStatusSucceeded, eventTimestamp);
         }
 
-        private void TransferPaid(StripeTransfer transfer)
+        private void TransferPaid(DateTime? eventTimestamp, StripeTransfer transfer)
         {
             if (transfer == null)
             {
@@ -85,7 +93,7 @@ namespace crds_angular.Controllers.API
             foreach (var charge in charges)
             {
                 _logger.Debug("Updating charge id " + charge + " to Deposited status");
-                // TODO Call service to update charge to "Deposited" status
+                _donationService.UpdateDonationStatus(charge, _donationStatusDeposited, eventTimestamp);
             }
         }
 

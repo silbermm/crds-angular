@@ -17,7 +17,7 @@ namespace crds_angular.Services
 
         private const string StripeNetworkErrorResponseCode = "abort";
 
-        private const int MaxChargesPerPage = 100;
+        private const int MaxChargesPerPage = 10;
 
         public StripeService(IRestClient stripeRestClient)
         {
