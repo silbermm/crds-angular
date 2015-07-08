@@ -32,22 +32,11 @@
         <input type="text" class="form-control" id="email" placeholder="Email" ng-value="kcStudentApplication.volunteer.emailAddress" disabled="true">
       </div>
 
-      <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student,'nameTag')}">
-        <label class="control-label required" for="nameTag">Name For Name Tag</label>
-        <input type="text"
-               class="form-control"
-               id="nameTag"
-               name="nameTag"
-               placeholder="Enter name for name tag"
-               ng-model="kcStudentApplication.nameTag"
-               ng-model-options="{updateOn: 'blur'}"
-               required>
-        <ng-messages for="student.nameTag.$error" ng-if="kcStudentApplication.showError(student,'nameTag')" >
-            <span ng-message="required">
-              <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
-            </span>
-        </ng-messages>
+      <div class="form-group col-sm-6">
+        <label class="control-label" for="nameTag">Name For Name Tag</label>
+        <input type="text" class="form-control" id="nameTag" placeholder="Enter name for name tag" ng-value="kcStudentApplication.volunteer.nickName" disabled="true">
       </div>
+
     </div>
 
     <div class="row">
@@ -409,7 +398,7 @@
                name="referenceHomePhone1"
                ng-pattern="kcStudentApplication.phoneFormat"
                ng-model-options="{updateOn: 'blur'} "
-               ng-model="kcStudentApplication.reference1.homePhone" 
+               ng-model="kcStudentApplication.reference1.homePhone"
                placeholder="Home Phone">
         <ng-messages for="student.referenceHomePhone1.$error" ng-if="kcStudentApplication.showError(student, 'referenceHomePhone1')">
           <span ng-message="pattern">

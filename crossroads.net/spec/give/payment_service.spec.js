@@ -59,19 +59,19 @@ describe ('PaymentService', function () {
    });
 
   describe('function addGlobalErrorMessage', function() {
-    it('should set paymentMethodProcessingError global error message for connection_error', function() {
-      var error = {type: 'connection_error'};
+    it('should set paymentMethodProcessingError global error message for abort', function() {
+      var error = {type: 'abort'};
       var e = sut.addGlobalErrorMessage(error, 200);
       expect(e.httpStatusCode).toBe(200);
       expect(e.globalMessage).toBe(MESSAGES.paymentMethodProcessingError);
     });
 
     it('should set paymentMethodProcessingError global error message for card_error/processing_error', function() {
-      var error = {type: 'connection_error', code: 'processing_error'};
+      var error = {type: 'card_error', code: 'processing_error'};
       var e = sut.addGlobalErrorMessage(error, 200);
       expect(e.httpStatusCode).toBe(200);
       expect(e.globalMessage).toBe(MESSAGES.paymentMethodProcessingError);
-      expect(e.type).toBe('connection_error');
+      expect(e.type).toBe('card_error');
     });
 
     it('should set paymentMethodDeclined global error message for bank_account/invalid_request_error', function() {
