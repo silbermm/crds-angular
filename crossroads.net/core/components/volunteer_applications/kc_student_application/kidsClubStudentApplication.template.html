@@ -500,20 +500,26 @@
 
       <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'parentHomePhone') }">
         <label class="control-label required" for="parentHomePhone">Home Phone</label>
-        <input type="text" class="form-control" id="parentHomePhone" name="parentHomePhone" ng-model="kcStudentApplication.parent.homePhone" placeholder="Enter Parent Home Phone" ng-model-options="{updateOn: 'blur'}" required>
+        <input type="text" class="form-control" id="parentHomePhone" name="parentHomePhone" ng-model="kcStudentApplication.parent.homePhone" placeholder="Enter Parent Home Phone" ng-model-options="{updateOn: 'blur'}" required ng-pattern="kcStudentApplication.phoneFormat">
         <ng-messages for="student.parentHomePhone.$error" ng-if="kcStudentApplication.showError(student, 'parentHomePhone')">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+          <span ng-message="pattern">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
           </span>
         </ng-messages>
       </div>
 
       <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'parentMobilePhone') }">
         <label class="control-label required" for="parentMobilePhone">Mobile Phone</label>
-        <input type="text" class="form-control" id="parentMobilePhone" name="parentMobilePhone" ng-model="kcStudentApplication.parent.mobilePhone" placeholder="Enter Parent Mobile Phone" ng-model-options="{updateOn: 'blur'}" required>
+        <input type="text" class="form-control" id="parentMobilePhone" name="parentMobilePhone" ng-model="kcStudentApplication.parent.mobilePhone" placeholder="Enter Parent Mobile Phone" ng-model-options="{updateOn: 'blur'}" required ng-pattern="kcStudentApplication.phoneFormat">
         <ng-messages for="student.parentMobilePhone.$error" ng-if="kcStudentApplication.showError(student, 'parentMobilePhone')">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+          <span ng-message="pattern">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
           </span>
         </ng-messages>
       </div>
