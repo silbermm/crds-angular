@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using log4net;
 using System.Web.Http;
 using crds_angular.Services.Interfaces;
@@ -16,6 +17,7 @@ namespace crds_angular.Controllers.API
         private readonly IPaymentService _paymentService;
         private readonly IDonationService _donationService;
         private readonly bool _liveMode;
+        private readonly int _donationStatusDeclined;
         private readonly int _donationStatusDeposited;
         private readonly int _donationStatusSucceeded;
 
@@ -27,6 +29,7 @@ namespace crds_angular.Controllers.API
             var b = configuration.GetConfigValue("StripeWebhookLiveMode");
             _liveMode = b != null && bool.Parse(b);
 
+            _donationStatusDeclined = configuration.GetConfigIntValue("DonationStatusDeclined");
             _donationStatusDeposited = configuration.GetConfigIntValue("DonationStatusDeposited");
             _donationStatusSucceeded = configuration.GetConfigIntValue("DonationStatusSucceeded");
         }
@@ -57,6 +60,9 @@ namespace crds_angular.Controllers.API
                 case "charge.succeeded":
                     ChargeSucceeded(stripeEvent.Created, ParseStripeEvent<StripeCharge>(stripeEvent.Data));
                     break;
+                case "charge.failed":
+                    ChargeFailed(stripeEvent.Created, ParseStripeEvent<StripeCharge>(stripeEvent.Data));
+                    break;
                 case "transfer.paid":
                     response = TransferPaid(stripeEvent.Created, ParseStripeEvent<StripeTransfer>(stripeEvent.Data));
                     break;
@@ -71,6 +77,16 @@ namespace crds_angular.Controllers.API
         {
             _logger.Debug("Processing charge.succeeded event for charge id " + charge.Id);
             _donationService.UpdateDonationStatus(charge.Id, _donationStatusSucceeded, eventTimestamp);
+        }
+
+        private void ChargeFailed(DateTime? eventTimestamp, StripeCharge charge)
+        {
+            _logger.Debug("Processing charge.failed event for charge id " + charge.Id);
+            var notes = new StringBuilder();
+            notes.Append(charge.FailureCode ?? "No Stripe Failure Code")
+                .Append(": ")
+                .Append(charge.FailureMessage ?? "No Stripe Failure Message");
+            _donationService.UpdateDonationStatus(charge.Id, _donationStatusDeclined, eventTimestamp, notes.ToString());
         }
 
         private TransferPaidResponseDTO TransferPaid(DateTime? eventTimestamp, StripeTransfer transfer)
