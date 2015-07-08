@@ -1,3 +1,4 @@
+<div ng-bind-html="kcStudentApplication.pageInfo.page1"></div>
 <form name="student" ng-submit="kcStudentApplication.save(this)" novalidate>
   <fieldset class="push-bottom">
     <legend>General Info</legend>
@@ -178,6 +179,10 @@
 
   <fieldset class="push-bottom">
     <legend>About You</legend>
+    <div>
+      <p>Because you will be a role model, we need to know more about you.</p>
+      <p>Please answer the following questions.</p>
+    </div>
     <div class="form-group col-sm-12" ng-class="{'has-error': kcStudentApplication.showError(student, 'religion')}">
         <label class="block required">How would you define your spiritual life? Pick as many as you like.</label>
         <div class="checkbox">
@@ -351,6 +356,8 @@
           </span>
         </ng-messages>
       </div>
+    </div>
+    <div ng-bind-html="kcStudentApplication.pageInfo.contentBlock1"></div>
   </fieldset>
   <fieldset class="push-bottom">
     <legend>Personal References</legend>
@@ -552,8 +559,8 @@
                id="referenceMobilePhone-2"
                name="referenceMobilePhone2"
                ng-model="kcStudentApplication.reference2.mobilePhone"
-               placeholder="Mobile Phone"
-ng-model-options="{updateOn: 'blur'}"
+               placeholder="Mobile Phone" 
+               ng-model-options="{updateOn: 'blur'}"
                ng-pattern="kcStudentApplication.phoneFormat">
         <ng-messages for="student.referenceMobilePhone2.$error" ng-if="kcStudentApplication.showError(student, 'referenceMobilePhone2')">
           <span ng-message="pattern">
@@ -568,8 +575,8 @@ ng-model-options="{updateOn: 'blur'}"
                id="referenceWorkPhone-2"
                name="referenceWorkPhone2"
                ng-model="kcStudentApplication.reference2.workPhone"
-               placeholder="Work Phone"
-ng-model-options="{updateOn: 'blur'}"
+               placeholder="Work Phone" 
+               ng-model-options="{updateOn: 'blur'}"
                ng-pattern="kcStudentApplication.phoneFormat">
         <ng-messages for="student.referenceWorkPhone2.$error" ng-if="kcStudentApplication.showError(student, 'referenceWorkPhone2')">
           <span ng-message="pattern">
@@ -629,15 +636,13 @@ ng-model-options="{updateOn: 'blur'}"
         </ng-messages>
       </div>    </div>
     <!--/row-->
-
-    <hr />
-
+    <div ng-bind-html="kcStudentApplication.pageInfo.contentBlock2"></div>
+  </fieldset>
+    
+    <fieldset class="push-bottom">
+    <legend>Parent/Guardian Commitment</legend>
     <div class="row">
-      <p class="help-text col-sm-12">Okay, here's some formal stuff. We don't really talk like this, but we couldn't figure out how to say all this in kid-friendly language. So put your glasses on, read it and agree to it, please. The information contained in this application is true.
-        I authorize any reference or church listed here to give you any information (including opinions) that they may have regarding my character and fitness for working with kids. By agreeing to this form, I also consent to a complete criminal background
-        check now an din the future. I understand my involvement with Crossroads Kids' Club is influenced by the information provided by all these sources. I release from liability for damages any person or organizations identified by me in this application,
-        and waive my right to inspect any written material from contact with them or from the criminal background check. I have carefully read the forgoing release and know the contents thereof and I agree to this release as my own free act. This is a
-        legally binding agreement which I have read and understand.</p>
+      <div ng-bind-html="kcStudentApplication.pageInfo.contentBlock3"></div>
       <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'parentLastName') }" >
         <label class="control-label required" for="parentLastName">Last Name</label>
         <input type="text"
@@ -802,3 +807,4 @@ ng-model-options="{updateOn: 'blur'}"
   <button type="submit" name="submit" id="submit" class="btn btn-primary push-half-bottom" ng-disabled="kcStudentApplication.saving"> {{kcStudentApplication.submitButtonText}} </button>
 
 </form>
+<div ng-bind-html="kcStudentApplication.pageInfo.page2"></div>
