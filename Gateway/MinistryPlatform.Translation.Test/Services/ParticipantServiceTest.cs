@@ -36,7 +36,8 @@ namespace MinistryPlatform.Translation.Test.Services
                 new Dictionary<string, object>{
                 {"dp_RecordID", 100},
                 {"Email Address", "email-address"},
-                {"Nickname", "nick-name"}}
+                {"Nickname", "nick-name"},
+                {"Display Name", "display-name"}}
             };
 
             _mpServiceMock.Setup(m => m.GetPageViewRecords(viewKey, It.IsAny<string>(), searchString, "", 0)).Returns(mockDictionaryList);
