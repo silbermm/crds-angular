@@ -1,27 +1,17 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Data.Entity.Core.Objects;
-using System.Diagnostics.Eventing.Reader;
-using System.EnterpriseServices;
 using System.Linq;
-using System.Net.Mail;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using crds_angular.Enum;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Extensions;
+using Crossroads.Utilities.Services;
 using log4net;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
 using IGroupService = MinistryPlatform.Translation.Services.Interfaces.IGroupService;
-using Crossroads.Utilities.Services;
 
 namespace crds_angular.Services
 {
@@ -463,8 +453,7 @@ namespace crds_angular.Services
 
         private void SendCancellationMessage(MyContact groupLeader, string volunteerName, string volunteerEmail, string teamName, string opportunityName, string eventDateTime)
         {
-            //TODO: move this to web.config
-            var templateId = 11619;
+            var templateId = AppSetting("RsvpYesToNo");
 
             var communication = SetupCommunication(templateId, groupLeader, groupLeader);
             var mergeData = new Dictionary<string, object>
