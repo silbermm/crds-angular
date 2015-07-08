@@ -320,24 +320,13 @@
         }
       }
 
-      function savePanel(member, force=false){
-        
-        var save = function(member){
-          scope.panelStates[member.contactId] = { 
-            attending : member.serveRsvp.attending !== undefined ? 
-              angular.copy(member.serveRsvp.attending) : undefined,
-            isSaved : angular.copy(member.serveRsvp.isSaved),
-            roleId : angular.copy(member.serveRsvp.roleId)
-          };
-        }
- 
+      function savePanel(member, force){
         if(force){
-          save(member);
-          return true
+          scope.panelStates[member.contactId] = angular.copy(member.serveRsvp);
+          return true;
         }
-
-        if(scope.panelStates[member.contactId] === undefined){
-          save(member);
+        if(scope.panelStates[member.contactId] === undefined ){
+          scope.panelStates[member.contactId] = angular.copy(member.serveRsvp);
           return true;
         }
         return false;
