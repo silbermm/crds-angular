@@ -112,8 +112,9 @@ require('../creditCardInfo.html');
             }
 
             return (!ccValid && scope.bankinfoSubmitted  ||            //cannot be invalid upon submittal
-                     scope.creditCardForm.ccNumber.$dirty && !ccValid);//cannot be invalid prior to submittal
-         };
+                     scope.creditCardForm.ccNumber.$dirty && !ccValid || //cannot be invalid prior to submittal
+                     scope.creditCard.ccNumber == undefined && scope.bankinfoSubmitted); //cannot be blank when submitting change form
+        };
 
         scope.cvvError = function(cvcValid) {
           if (cvcValid === undefined) {
@@ -128,7 +129,8 @@ require('../creditCardInfo.html');
           }
 
           return (!cvcValid && scope.bankinfoSubmitted  ||       //cannot be invalid upon submittal
-                   scope.creditCardForm.cvc.$dirty && !cvcValid);//cannot be invalid prior to submittal
+                   scope.creditCardForm.cvc.$dirty && !cvcValid || //cannot be invalid prior to submittal
+                   scope.creditCard.cvc == undefined && scope.bankinfoSubmitted); //cannot be blank when submitting change form
         };
 
         scope.expDateError = function() {
