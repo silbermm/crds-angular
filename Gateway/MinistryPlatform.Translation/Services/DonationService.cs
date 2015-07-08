@@ -59,7 +59,7 @@ namespace MinistryPlatform.Translation.Services
             {
                 throw new ApplicationException(
                     string.Format(
-                        "UpdateDonationStatus failed. donationId: {1}, statusId: {2}, statusNote: {3}, statusDate: {4}",
+                        "UpdateDonationStatus failed. donationId: {0}, statusId: {1}, statusNote: {2}, statusDate: {3}",
                         donationId, statusId, statusNote, statusDate), e);
             }
         }
