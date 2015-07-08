@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using log4net;
 using System.Web.Http;
 using crds_angular.Services.Interfaces;
@@ -50,19 +51,20 @@ namespace crds_angular.Controllers.API
                 return (Ok());
             }
 
+            dynamic response = null;
             switch (stripeEvent.Type)
             {
                 case "charge.succeeded":
                     ChargeSucceeded(stripeEvent.Created, ParseStripeEvent<StripeCharge>(stripeEvent.Data));
                     break;
                 case "transfer.paid":
-                    TransferPaid(stripeEvent.Created, ParseStripeEvent<StripeTransfer>(stripeEvent.Data));
+                    response = TransferPaid(stripeEvent.Created, ParseStripeEvent<StripeTransfer>(stripeEvent.Data));
                     break;
                 default:
                     _logger.Debug("Ignoring event " + stripeEvent.Type);
                     break;
             }
-            return (Ok());
+            return (response == null ? Ok() : Ok(response));
         }
 
         private void ChargeSucceeded(DateTime? eventTimestamp, StripeCharge charge)
@@ -71,22 +73,36 @@ namespace crds_angular.Controllers.API
             _donationService.UpdateDonationStatus(charge.Id, _donationStatusSucceeded, eventTimestamp);
         }
 
-        private void TransferPaid(DateTime? eventTimestamp, StripeTransfer transfer)
+        private TransferPaidResponseDTO TransferPaid(DateTime? eventTimestamp, StripeTransfer transfer)
         {
             _logger.Debug("Processing transfer.paid event for transfer id " + transfer.Id);
+            var response = new TransferPaidResponseDTO();
             var charges = _paymentService.GetChargesForTransfer(transfer.Id);
             if (charges == null || charges.Count <= 0)
             {
                 _logger.Debug("No charges found for transfer: " + transfer.Id);
-                return;
+                response.TotalTransactionCount = 0;
+                return(response);
             }
 
+            response.TotalTransactionCount = charges.Count;
             _logger.Debug(string.Format("{0} charges to update for transfer {1}", charges.Count, transfer.Id));
             foreach (var charge in charges)
             {
                 _logger.Debug("Updating charge id " + charge + " to Deposited status");
-                _donationService.UpdateDonationStatus(charge, _donationStatusDeposited, eventTimestamp);
+                try
+                {
+                    _donationService.UpdateDonationStatus(charge, _donationStatusDeposited, eventTimestamp);
+                    response.SuccessfulUpdates.Add(charge);
+                }
+                catch (Exception e)
+                {
+                    _logger.Warn("Error updating charge " + charge, e);
+                    response.FailedUpdates.Add(new KeyValuePair<string, string>(charge, e.Message));
+                }
             }
+
+            return (response);
         }
 
         private static T ParseStripeEvent<T>(StripeEventData data)
@@ -94,5 +110,20 @@ namespace crds_angular.Controllers.API
             var jObject = data != null && data.Object != null ? data.Object as JObject : null;
             return jObject != null ? JsonConvert.DeserializeObject<T>(jObject.ToString()) : (default(T));
         }
+    }
+
+    // ReSharper disable once InconsistentNaming
+    public class TransferPaidResponseDTO
+    {
+        [JsonProperty("transaction_count")]
+        public int TotalTransactionCount { get; set; }
+        
+        [JsonProperty("successful_updates")]
+        public List<string> SuccessfulUpdates { get { return (_successfulUpdates); } }
+        private readonly List<string> _successfulUpdates = new List<string>();
+
+        [JsonProperty("failed_updates")]
+        public List<KeyValuePair<string, string>> FailedUpdates { get { return (_failedUpdates); } }
+        private readonly List<KeyValuePair<string, string>> _failedUpdates = new List<KeyValuePair<string, string>>();
     }
 }

@@ -121,7 +121,13 @@ namespace crds_angular.test.controllers
 
             _paymentService.Setup(mocked => mocked.GetChargesForTransfer("tx9876")).Returns(new List<string>());
             var result = _fixture.ProcessStripeEvent(e);
-            Assert.IsInstanceOf<OkResult>(result);
+            var dto = ((OkNegotiatedContentResult<TransferPaidResponseDTO>)result).Content;
+            Assert.IsInstanceOf<OkNegotiatedContentResult<TransferPaidResponseDTO>>(result);
+            Assert.IsNotNull(dto);
+            Assert.AreEqual(0, dto.TotalTransactionCount);
+            Assert.AreEqual(0, dto.SuccessfulUpdates.Count);
+            Assert.AreEqual(0, dto.FailedUpdates.Count);
+
             _paymentService.VerifyAll();
             _donationService.VerifyAll();
         }
@@ -148,15 +154,25 @@ namespace crds_angular.test.controllers
                 "111",
                 "222",
                 "333",
+                "444"
             };
 
             _paymentService.Setup(mocked => mocked.GetChargesForTransfer("tx9876")).Returns(charges);
             _donationService.Setup(mocked => mocked.UpdateDonationStatus("111", 999, e.Created, null));
             _donationService.Setup(mocked => mocked.UpdateDonationStatus("222", 999, e.Created, null));
             _donationService.Setup(mocked => mocked.UpdateDonationStatus("333", 999, e.Created, null));
+            _donationService.Setup(mocked => mocked.UpdateDonationStatus("444", 999, e.Created, null)).Throws(new Exception("Not gonna do it, wouldn't be prudent."));
 
             var result = _fixture.ProcessStripeEvent(e);
-            Assert.IsInstanceOf<OkResult>(result);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<TransferPaidResponseDTO>>(result);
+            var dto = ((OkNegotiatedContentResult<TransferPaidResponseDTO>) result).Content;
+            Assert.IsNotNull(dto);
+            Assert.AreEqual(4, dto.TotalTransactionCount);
+            Assert.AreEqual(3, dto.SuccessfulUpdates.Count);
+            Assert.AreEqual(charges.GetRange(0, 3), dto.SuccessfulUpdates);
+            Assert.AreEqual(1, dto.FailedUpdates.Count);
+            Assert.AreEqual("444", dto.FailedUpdates[0].Key);
+            Assert.AreEqual("Not gonna do it, wouldn't be prudent.", dto.FailedUpdates[0].Value);
             _paymentService.VerifyAll();
             _donationService.VerifyAll();
 
