@@ -501,7 +501,7 @@ namespace crds_angular.test.Services
 
             _communicationService.Setup(
                 m => m.SendMessage(It.IsAny<Communication>()))
-                .Callback((Communication communication, Dictionary<string, object> data) => { }).Verifiable();
+                .Callback((Communication communication) => { }).Verifiable();
             _communicationService.Verify(
                 m => m.SendMessage(It.IsAny<Communication>()));
         }
