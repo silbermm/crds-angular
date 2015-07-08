@@ -459,7 +459,6 @@ namespace crds_angular.Services
         {
             var templateId = AppSetting("RsvpYesToNo");
 
-            var communication = SetupCommunication(templateId, groupLeader, groupLeader);
             var mergeData = new Dictionary<string, object>
             {
                 {"VolunteerName", volunteerName},
@@ -469,7 +468,9 @@ namespace crds_angular.Services
                 {"EventDateTime", eventDateTime}
             };
 
-            _communicationService.SendMessage(communication,mergeData);
+            var communication = SetupCommunication(templateId, groupLeader, groupLeader, mergeData);
+
+            _communicationService.SendMessage(communication);
         }
 
         private Communication SetupCommunication(int templateId, MyContact groupContact, MyContact toContact, Dictionary<string, object> mergeData)

@@ -69,7 +69,7 @@ namespace MinistryPlatform.Translation.Services
             var token = apiLogin();
 
             var communicationId = AddCommunication(communication, token);
-            AddCommunicationMessage(communication, communicationId, mergeData, apiLogin());
+            AddCommunicationMessage(communication, communicationId, apiLogin());
         }
 
         private int AddCommunication(Communication communication, string token)
