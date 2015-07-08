@@ -39,6 +39,29 @@
     }
   }
 
+  .label {
+    margin-left: 5px;
+  }
+
+  &.serve-opp-listing-expired {
+    @extend .text-muted;
+
+    h5 {
+      @extend .text-muted;
+    }
+
+    button,
+    .label {
+      display: none;
+    }
+
+    .badge {
+      margin-left: 5px;
+      font-size: 83%;
+      background: $gray-light;
+    }
+  }
+
   .panel-link {
     position: absolute;
     top: 0;

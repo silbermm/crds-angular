@@ -80,18 +80,19 @@ require('../bankInfo.html');
           return(scope.changeAccountInfo && scope.bankAccountForm.$pristine);
         };
 
-        if(!scope.defaultSource.bank_account) {
-          scope.resetDefaultBankPlaceholderValues();
-        } else if(scope.defaultSource.bank_account.last4) {
-          scope.bankAccount.account = "";
-          scope.bankAccount.routing = "";
-          scope.defaultBankPlaceholderValues = {
-            routing: scope.defaultSource.bank_account.routing,
-            maskedAccount: "XXXXXXXXXXX" + scope.defaultSource.bank_account.last4
-          };
+        if (scope.defaultSource !== undefined){       
+          if(!scope.defaultSource.bank_account) {
+            scope.resetDefaultBankPlaceholderValues();
+          } else if(scope.defaultSource.bank_account.last4) {
+            scope.bankAccount.account = "";
+            scope.bankAccount.routing = "";
+            scope.defaultBankPlaceholderValues = {
+              routing: scope.defaultSource.bank_account.routing,
+              maskedAccount: "XXXXXXXXXXX" + scope.defaultSource.bank_account.last4
+            };
 
-        };
-
+         };
+      };
 
       }
     }
