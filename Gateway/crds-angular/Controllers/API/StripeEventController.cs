@@ -91,7 +91,7 @@ namespace crds_angular.Controllers.API
 
         private static T ParseStripeEvent<T>(StripeEventData data)
         {
-            var jObject = data != null ? data.Object as JObject : null;
+            var jObject = data != null && data.Object != null ? data.Object as JObject : null;
             return jObject != null ? JsonConvert.DeserializeObject<T>(jObject.ToString()) : (default(T));
         }
     }

@@ -6,6 +6,7 @@ using crds_angular.Services.Interfaces;
 using Newtonsoft.Json;
 using RestSharp;
 using System.Net;
+using Crossroads.Utilities.Interfaces;
 
 namespace crds_angular.Services
 {
@@ -17,11 +18,12 @@ namespace crds_angular.Services
 
         private const string StripeNetworkErrorResponseCode = "abort";
 
-        private const int MaxChargesPerPage = 10;
+        private readonly int _maxQueryResultsPerPage;
 
-        public StripeService(IRestClient stripeRestClient)
+        public StripeService(IRestClient stripeRestClient, IConfigurationWrapper configuration)
         {
             _stripeRestClient = stripeRestClient;
+            _maxQueryResultsPerPage = configuration.GetConfigIntValue("MaxStripeQueryResultsPerPage");
         }
 
         private static bool IsBadResponse(IRestResponse response)
@@ -147,21 +149,22 @@ namespace crds_angular.Services
         {
             var url = string.Format("transfers/{0}/transactions", transferId);
             var request = new RestRequest(url, Method.GET);
-            request.AddParameter("count", MaxChargesPerPage);
+            request.AddParameter("count", _maxQueryResultsPerPage);
 
             var charges = new List<string>();
-            IRestResponse<StripeCharges> response;
+            StripeCharges nextPage;
             do
             {
-                response = _stripeRestClient.Execute<StripeCharges>(request);
+                var response = _stripeRestClient.Execute<StripeCharges>(request);
                 CheckStripeResponse("Could not query transactions", response);
 
-                charges.AddRange(response.Data.Data.Select(charge => charge.Id));
+                nextPage = response.Data;
+                charges.AddRange(nextPage.Data.Select(charge => charge.Id));
 
                 request = new RestRequest(url, Method.GET);
-                request.AddParameter("count", MaxChargesPerPage);
+                request.AddParameter("count", _maxQueryResultsPerPage);
                 request.AddParameter("starting_after", charges.Last());
-            } while (response.Data.HasMore);
+            } while (nextPage.HasMore);
 
             return (charges);
         }

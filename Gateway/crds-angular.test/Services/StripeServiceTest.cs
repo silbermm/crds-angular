@@ -7,6 +7,8 @@ using NUnit.Framework;
 using RestSharp;
 using System.Collections.Generic;
 using System.Net;
+using Crossroads.Utilities.Interfaces;
+using NUnit.Framework.Internal;
 
 
 namespace crds_angular.test.Services
@@ -14,13 +16,84 @@ namespace crds_angular.test.Services
     class StripeServiceTest
     {
         private Mock<IRestClient> restClient;
+        private Mock<IConfigurationWrapper> configuration;
         private StripeService fixture;
 
         [SetUp]
         public void Setup()
         {
             restClient = new Mock<IRestClient>(MockBehavior.Strict);
-            fixture = new StripeService(restClient.Object);
+            configuration = new Mock<IConfigurationWrapper>();
+            configuration.Setup(mocked => mocked.GetConfigIntValue("MaxStripeQueryResultsPerPage")).Returns(42);
+
+            fixture = new StripeService(restClient.Object, configuration.Object);
+        }
+
+        [Test]
+        public void ShouldGetChargesForTransfer()
+        {
+            var q = new Queue<StripeCharges>();
+            q.Enqueue(new StripeCharges
+            {
+                HasMore = true,
+                Data = new List<StripeCharge>
+                {
+                    new StripeCharge
+                    {
+                        Id = "123",
+                    },
+                    new StripeCharge
+                    {
+                        Id = "last_one_in_first_page",
+                    }
+                }
+            });
+            q.Enqueue(new StripeCharges
+            {
+                HasMore = false,
+                Data = new List<StripeCharge>
+                {
+                    new StripeCharge
+                    {
+                        Id = "789",
+                    },
+                    new StripeCharge
+                    {
+                        Id = "90210",
+                    }
+                }
+            });
+            
+            var response = new Mock<IRestResponse<StripeCharges>>();
+            response.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
+            response.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            response.SetupGet(mocked => mocked.Data).Returns(() => (q.Dequeue())).Verifiable();
+
+            restClient.Setup(mocked => mocked.Execute<StripeCharges>(It.IsAny<IRestRequest>())).Returns(response.Object);
+
+            var charges = fixture.GetChargesForTransfer("tx123");
+            restClient.Verify(mocked => mocked.Execute<StripeCharges>(
+                It.Is<RestRequest>(o =>
+                    o.Method == Method.GET
+                    && o.Resource.Equals("transfers/tx123/transactions")
+                    && parameterMatches("count", 42, o.Parameters)
+            )));
+            restClient.Verify(mocked => mocked.Execute<StripeCharges>(
+                It.Is<RestRequest>(o =>
+                    o.Method == Method.GET
+                    && o.Resource.Equals("transfers/tx123/transactions")
+                    && parameterMatches("count", 42, o.Parameters)
+                    && parameterMatches("starting_after", "last_one_in_first_page", o.Parameters)
+            )));
+            restClient.VerifyAll();
+            response.VerifyAll();
+
+            Assert.IsNotNull(charges);
+            Assert.AreEqual(4, charges.Count);
+            Assert.AreEqual("123", charges[0]);
+            Assert.AreEqual("last_one_in_first_page", charges[1]);
+            Assert.AreEqual("789", charges[2]);
+            Assert.AreEqual("90210", charges[3]);
         }
 
         [Test]

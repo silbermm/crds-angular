@@ -9,7 +9,7 @@ namespace crds_angular.Models.Crossroads
         public string Id { get; set; }
 
         [JsonProperty("object")]
-        public bool Object { get; set; }
+        public dynamic Object { get; set; }
 
         [JsonProperty("livemode")]
         public bool LiveMode { get; set; }
