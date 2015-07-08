@@ -87,7 +87,7 @@
 }
 
 .btn-gray {
-  @include button-variant($btn-default-color, $gray, $gray);
+  @include button-variant($btn-default-color, $cr-grey, $cr-grey);
 }
 
 .btn-gray-light {
