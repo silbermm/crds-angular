@@ -4,14 +4,13 @@ using System.Linq;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
-using RestSharp.Extensions;
 
 namespace MinistryPlatform.Translation.Services
 {
     public class DonationService : BaseService, IDonationService
     {
-        private readonly IMinistryPlatformService _ministryPlatformService;
         private readonly int _donationsPageId;
+        private readonly IMinistryPlatformService _ministryPlatformService;
 
         public DonationService(IMinistryPlatformService ministryPlatformService, IConfigurationWrapper configuration)
         {
@@ -29,15 +28,18 @@ namespace MinistryPlatform.Translation.Services
         public void UpdateDonationStatus(string processorPaymentId, int statusId,
             DateTime statusDate, string statusNote = null)
         {
-            var token = apiLogin();
-            var result = _ministryPlatformService.GetRecordsDict(_donationsPageId, token,
-                ",,,,,,," + processorPaymentId);
-            int? donationId;
-            if (result.Count == 0 || (donationId = result.Last().ToNullableInt("dp_RecordID")) == null)
+            WithApiLogin(token =>
             {
-                throw (new ApplicationException("Could not locate donation for charge " + processorPaymentId));
-            }
-            UpdateDonationStatus(token, donationId.Value, statusId, statusDate, statusNote);
+                var result = _ministryPlatformService.GetRecordsDict(_donationsPageId, token,
+                    ",,,,,,," + processorPaymentId);
+                int? donationId;
+                if (result.Count == 0 || (donationId = result.Last().ToNullableInt("dp_RecordID")) == null)
+                {
+                    throw (new ApplicationException("Could not locate donation for charge " + processorPaymentId));
+                }
+                UpdateDonationStatus(token, donationId.Value, statusId, statusDate, statusNote);
+                return (true);
+            });
         }
 
         private void UpdateDonationStatus(string apiToken, int donationId, int statusId, DateTime statusDate,
@@ -48,7 +50,7 @@ namespace MinistryPlatform.Translation.Services
                 {"Donation_ID", donationId},
                 {"Donation_Status_Date", statusDate},
                 {"Donation_Status_Notes", statusNote},
-                {"Donation_Status_ID", statusId},
+                {"Donation_Status_ID", statusId}
             };
 
             try
