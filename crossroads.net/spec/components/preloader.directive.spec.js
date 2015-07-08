@@ -11,9 +11,9 @@ describe('preloader', function() {
     $rootScope = _$rootScope_;
   }));
 
-  it("should not have a fullscreen class", function(){
+  it('should not have a fullscreen class', function(){
     scope = $rootScope.$new();
-    element = "<preloader full-screen='false'></preloader>";
+    element = '<preloader full-screen=\'false\'></preloader>';
     element = $compile(element)(scope);
     scope.$digest();
     isolateScope = element.isolateScope();
@@ -21,9 +21,9 @@ describe('preloader', function() {
     expect(isolateScope.isFullScreen()).toBe(false);
   });
 
-  it("should have a fullscreen class", function(){
+  it('should have a fullscreen class', function(){
     scope = $rootScope.$new();
-    element = "<preloader full-screen='true'></preloader>";
+    element = '<preloader full-screen=\'true\'></preloader>';
     element = $compile(element)(scope);
     scope.$digest();
     isolateScope = element.isolateScope();
