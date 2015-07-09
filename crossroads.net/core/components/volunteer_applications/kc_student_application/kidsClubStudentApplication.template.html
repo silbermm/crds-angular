@@ -1,3 +1,4 @@
+<div ng-bind-html="kcStudentApplication.pageInfo.page1"></div>
 <form name="student" ng-submit="kcStudentApplication.save(this)" novalidate>
   <fieldset class="push-bottom">
     <legend>General Info</legend>
@@ -32,22 +33,11 @@
         <input type="text" class="form-control" id="email" placeholder="Email" ng-value="kcStudentApplication.volunteer.emailAddress" disabled="true">
       </div>
 
-      <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student,'nameTag')}">
-        <label class="control-label required" for="nameTag">Name For Name Tag</label>
-        <input type="text"
-               class="form-control"
-               id="nameTag"
-               name="nameTag"
-               placeholder="Enter name for name tag"
-               ng-model="kcStudentApplication.nameTag"
-               ng-model-options="{updateOn: 'blur'}"
-               required>
-        <ng-messages for="student.nameTag.$error" ng-if="kcStudentApplication.showError(student,'nameTag')" >
-            <span ng-message="required">
-              <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
-            </span>
-        </ng-messages>
+      <div class="form-group col-sm-6">
+        <label class="control-label" for="nameTag">Name For Name Tag</label>
+        <input type="text" class="form-control" id="nameTag" placeholder="Enter name for name tag" ng-value="kcStudentApplication.volunteer.nickName" disabled="true">
       </div>
+
     </div>
 
     <div class="row">
@@ -70,64 +60,44 @@
     </div>
 
     <div class="row">
-      <div class="form-group col-sm-6" ng-class="{'has-error':kcStudentApplication.showError(student,'siteAttend') }">
-        <label class="block required">Site where you attend service</label>
-        <label class="radio-inline">
-          <input type="radio" value="oakley" name="siteAttend" ng-model="kcStudentApplication.site" required>Oakley
-        </label>
-        <label class="radio-inline">
-          <input type="radio" value="florence" name="siteAttend" ng-model="kcStudentApplication.site" required>Florence
-        </label>
-        <label class="radio-inline">
-          <input type="radio" value="west side" name="siteAttend" ng-model="kcStudentApplication.site" required>West Side
-        </label>
-        <label class="radio-inline">
-          <input type="radio" value="mason" name="siteAttend" ng-model="kcStudentApplication.site" required>Mason
-        </label>
-        <label class="radio-inline">
-          <input type="radio" value="clifton" name="siteAttend" ng-model="kcStudentApplication.site" required>Clifton
-        </label>
-        <ng-messages for="student.siteAttend.$error" ng-if="kcStudentApplication.showError(student,'siteAttend')" >
+      <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'attending')}">
+        <label class="control-label required" for="attending">When did you start attending Crossroads?</label>
+        <input type="text" class="form-control" ng-model="kcStudentApplication.howLongAttending" id="attending" placeholder="mm/dd/yyyy" validate-date ng-model-options="{updateOn: 'blur'}"required name="attending">
+        <ng-messages for="student.attending.$error" ng-if="kcStudentApplication.showError(student, 'attending')">
+          <span ng-message="invalidDate">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
+          </span>
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
         </ng-messages>
       </div>
-    </div>
-
-    <div class="row">
-      <div class="form-group col-sm-6" ng-class="{'has-error':kcStudentApplication.showError(student,'attending')}">
-        <label class="control-label required" for="attending">How long have you been attending Crossroads?</label>
-        <input type="text"
-               class="form-control"
-               id="attending"
-               name="attending"
-               ng-model="kcStudentApplication.howLongAttending"
-               placeholder="How long have you been attending crossroads?"
-               ng-model-options="{updateOn: 'blur'}"
-               required>
-        <ng-messages for="student.attending.$error" ng-if="kcStudentApplication.showError(student,'attending')" >
+      <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'serviceAttend')}">
+        <label class="control-label required" for="serviceAttend">Site/Service Time where you attend </label>
+        <select class="form-control col-sm-12" name="serviceAttend" ng-model="kcStudentApplication.serviceAttend" required>
+          <option value="">Site/Service Time where you attend</option>
+          <option value="Oakley - Sat - 4:30pm">Oakley - Sat - 4:30pm</option>
+          <option value="Oakley - Sat - 6:15pm">Oakley - Sat - 6:15pm</option>
+          <option value="Oakley - Sun - 8:30am">Oakley - Sun - 8:30am</option>
+          <option value="Oakley - Sun - 10:05am">Oakley - Sun - 10:05am</option>
+          <option value="Oakley - Sun - 11:55am">Oakley - Sun - 11:55am</option>
+          <option value="Oakley - Sun - 11:55am">Oakley - Sun - 11:55am</option>
+          <option value="Mason - Sun - 8:15am">Mason - Sun - 8:15am</option>
+          <option value="Mason - Sun - 9:45am">Mason - Sun - 9:45am</option>
+          <option value="Mason - Sun - 11:30am">Mason - Sun - 11:30am</option>
+          <option value="Florence - Sat - 5:30pm">Florence - Sat - 5:30pm</option>
+          <option value="Florence - Sun - 9:30am">Florence - Sun - 9:30am</option>
+          <option value="Florence - Sun - 11:30am">Florence - Sun - 11:30am</option>
+          <option value="West Side - Sun - 8:15am">West Side - Sun - 8:15am</option>
+          <option value="West Side - Sun - 10:00am">West Side - Sun - 10:00am</option>
+          <option value="West Side - Sun 11:45am">West Side - Sun 11:45am</option>
+          <option value="Clifton - Sun - 7pm">Clifton - Sun - 7pm</option>
+        </select>
+        <ng-messages for="student.serviceAttend.$error" ng-if="kcStudentApplication.showError(student, 'serviceAttend')">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
         </ng-messages>
-      </div>
-      <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student,'serviceAttend') }">
-        <label class="control-label required" for="serviceAttend">What Service do you attend?</label>
-        <input type="text"
-               class="form-control"
-               id="serviceAttend"
-               name="serviceAttend"
-               ng-model="kcStudentApplication.serviceAttend"
-               placeholder="What Service do you attend?"
-               ng-model-options="{updateOn: 'blur'}"
-               required>
-        <ng-messages for="student.serviceAttend.$error" ng-if="kcStudentApplication.showError(student,'serviceAttend')" >
-          <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
-          </span>
-        </ng-messages>
-
       </div>
     </div>
 
@@ -190,14 +160,18 @@
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'grade')}">
         <label class="control-label required" for="grade">Grade</label>
-        <input type="text"
-               class="form-control"
-               id="grade"
-               name="grade"
-               ng-model="kcStudentApplication.grade"
-               placeholder="Enter grade"
-               ng-model-options="{updateOn: 'blur'}"
-               required>
+        <select class="form-control col-sm-12" name="grade" ng-model="kcStudentApplication.grade" required>
+            <option value="">Select Grade</option>
+            <option value="Fourth Grade">Fourth Grade</option>
+            <option value="Fifth Grade">Fifth Grade</option>
+            <option value="Sixth Grade">Sixth Grade</option>
+            <option value="Seventh Grade">Seventh Grade</option>
+            <option value="Eighth Grade">Eighth Grade</option>
+            <option value="Ninth Grade">Ninth Grade</option>
+            <option value="Tenth Grade">Tenth Grade</option>
+            <option value="Eleventh Grade">Eleventh Grade</option>
+            <option value="Twelfth Grade">Twelfth Grade</option>
+          </select>
          <ng-messages for="student.grade.$error" ng-if="kcStudentApplication.showError(student, 'grade')" >
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
@@ -209,33 +183,38 @@
 
   <fieldset class="push-bottom">
     <legend>About You</legend>
-    <div class="row">
-      <div class="form-group col-sm-12" ng-class="{'has-error': kcStudentApplication.showError(student, 'religion')}">
-        <label class="control-label block required">Tell us where you are</label>
-        <label class="radio-inline control-label">
-          <input type="radio"
-                 value="I'm exploring my faith"
-                 name="religion" ng-model="kcStudentApplication.whereYouAre" required>I'm exploring my faith
-        </label>
-        <label class="radio-inline">
-          <input type="radio"
-                 value="I'm not sure"
-                 name="religion"
-                 ng-model="kcStudentApplication.whereYouAre" required>I'm not sure
-        </label>
-        <label class="radio-inline">
-          <input type="radio"
-                 value="I'm a Christ-follower"
-                 name="religion"
-                 ng-model="kcStudentApplication.whereYouAre" required>I'm a Christ-follower
-        </label>
-        <ng-messages for="student.religion.$error" ng-if="kcStudentApplication.showError(student, 'religion')" >
+    <div>
+      <p>Because you will be a role model, we need to know more about you.</p>
+      <p>Please answer the following questions.</p>
+    </div>
+    <div class="form-group col-sm-12" ng-class="{'has-error': kcStudentApplication.showError(student, 'religion')}">
+        <label class="block required">How would you define your spiritual life? Pick as many as you like.</label>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" ng-model="kcStudentApplication.religionSearchingForAnswers" ng-required="!kcStudentApplication.spiritualSelected()">Searching for answers.
+          </label>
+        </div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" ng-model="kcStudentApplication.religionReceivedJesus" ng-required="!kcStudentApplication.spiritualSelected()">I have received Jesus.
+          </label>
+        </div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" ng-model="kcStudentApplication.religionFocusingOnObedience" ng-required="!kcStudentApplication.spiritualSelected()">Focusing on obedience—I’ve quit negotiating with God.
+          </label>
+        </div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" ng-model="kcStudentApplication.religionReplicating" ng-required="!kcStudentApplication.spiritualSelected()">I’m actively replicating my faith in others.
+          </label>
+        </div>
+        <ng-messages for="student.religion.$error" ng-if="kcStudentApplication.showError(student, 'religion')">
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
         </ng-messages>
       </div>
-    </div>
     <div class="row">
       <div class="form-group col-sm-8" ng-class="{'has-error': kcStudentApplication.showError(student, 'explainFaith')}">
         <label class="control-label required" for="explainFaith">Please Explain</label>
@@ -290,7 +269,7 @@
 
         <div class="checkbox">
           <label>
-            <input type="checkbox"
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''"
                    name="availability"
                    ng-model="kcStudentApplication.availabilityDuringWeek"
                    ng-required="!kcStudentApplication.availabilitySelected()">
@@ -299,7 +278,7 @@
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox"
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''"
                    name="availability"
                    ng-model="kcStudentApplication.availabilityDuringWeekend"
                    ng-required="!kcStudentApplication.availabilitySelected()">
@@ -311,80 +290,33 @@
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
         </ng-messages>
-      </div>
-
-      <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'availabilitySite') }">
-        <label class="block required control-label" >Site name</label>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox"
-                   name="availabilitySite"
-                   value="oakley"
-                   ng-model="kcStudentApplication.availabilityOakley"
-                   ng-required="!kcStudentApplication.locationSelected()">
-            Oakley
-          </label>
+        <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'availabilityWeekendSite')}" ng-if="kcStudentApplication.availabilityDuringWeekend">
+          <label class="control-label required" for="availabilityWeekendSite">Weekend Site/Service Time</label>
+          <select class="form-control col-sm-12" name="availabilityWeekendSite" ng-model="kcStudentApplication.availabilityWeekendSite" ng-required="kcStudentApplication.availabilityDuringWeekend">
+            <option value="">Weekend Site/Service Time</option>
+            <option value="Oakley - Sat - 4:30pm">Oakley - Sat - 4:30pm</option>
+            <option value="Oakley - Sat - 6:15pm">Oakley - Sat - 6:15pm</option>
+            <option value="Oakley - Sun - 8:30am">Oakley - Sun - 8:30am</option>
+            <option value="Oakley - Sun - 10:05am">Oakley - Sun - 10:05am</option>
+            <option value="Oakley - Sun - 11:55am">Oakley - Sun - 11:55am</option>
+            <option value="Oakley - Sun - 11:55am">Oakley - Sun - 11:55am</option>
+            <option value="Mason - Sun - 8:15am">Mason - Sun - 8:15am</option>
+            <option value="Mason - Sun - 9:45am">Mason - Sun - 9:45am</option>
+            <option value="Mason - Sun - 11:30am">Mason - Sun - 11:30am</option>
+            <option value="Florence - Sat - 5:30pm">Florence - Sat - 5:30pm</option>
+            <option value="Florence - Sun - 9:30am">Florence - Sun - 9:30am</option>
+            <option value="Florence - Sun - 11:30am">Florence - Sun - 11:30am</option>
+            <option value="West Side - Sun - 8:15am">West Side - Sun - 8:15am</option>
+            <option value="West Side - Sun - 10:00am">West Side - Sun - 10:00am</option>
+            <option value="West Side - Sun 11:45am">West Side - Sun 11:45am</option>
+            <option value="Clifton - Sun - 7pm">Clifton - Sun - 7pm</option>
+          </select>
+          <ng-messages for="student.availabilityWeekendSite.$error" ng-if="kcStudentApplication.showError(student, 'availabilityWeekendSite')">
+            <span ng-message="required">
+              <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            </span>
+          </ng-messages>
         </div>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox"
-                   value="florence"
-                   name="availabilitySite"
-                   ng-model="kcStudentApplication.availabilityFlorence"
-                   ng-required="!kcStudentApplication.locationSelected()">
-            Florence
-          </label>
-        </div>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox"
-                   value="west side"
-                   name="availabilitySite"
-                   ng-model="kcStudentApplication.availabilityWestSide"
-                   ng-required="!kcStudentApplication.locationSelected()">
-            West Side
-          </label>
-        </div>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox"
-                   value="mason"
-                   name="availabilitySite"
-                   ng-model="kcStudentApplication.availabilityMason"
-                   ng-required="!kcStudentApplication.locationSelected()">
-            Mason
-          </label>
-        </div>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox"
-                   value="clifton"
-                   name="availabilitySite"
-                   ng-model="kcStudentApplication.availabilityClifton"
-                   ng-required="!kcStudentApplication.locationSelected()">
-            Clifton
-          </label>
-        </div>
-        <ng-messages for="student.availabilitySite.$error" ng-if="kcStudentApplication.showError(student, 'availabilitySite')" >
-          <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span></span>
-        </ng-messages>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'serveServiceTimes') }">
-        <label class="control-label required" for="serveServiceTimes">During</label>
-        <input type="text"
-               class="form-control"
-               id="serveServiceTimes"
-               name="serveServiceTimes"
-               ng-model="kcStudentApplication.serveServiceTimes"
-               placeholder="Service Times"
-               ng-model-options="{updateOn: 'blur'}"
-               required>
-        <ng-messages for="student.serveServiceTimes.$error" ng-if="kcStudentApplication.showError(student, 'serveServiceTimes')" >
-          <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span></span>
-        </ng-messages>
       </div>
     </div>
 
@@ -394,7 +326,7 @@
         <label class="control-label required">What age kids do you prefer to serve with?</label>
         <div class="checkbox">
           <label>
-            <input type="checkbox"
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''"
                    value="1"
                    name="serveAge"
                    ng-model="kcStudentApplication.serveAgeKids.age1to2"
@@ -404,7 +336,7 @@
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox"
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''"
                    value="2"
                    name="serveAge"
                    ng-model="kcStudentApplication.serveAgeKids.age3toPreK"
@@ -414,7 +346,7 @@
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox"
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''"
                    value="3"
                    name="serveAge"
                    ng-model="kcStudentApplication.serveAgeKids.Kto5Grade"
@@ -428,11 +360,13 @@
           </span>
         </ng-messages>
       </div>
+    </div>
+    <div ng-bind-html="kcStudentApplication.pageInfo.contentBlock1"></div>
   </fieldset>
   <fieldset class="push-bottom">
     <legend>Personal References</legend>
     <div class="row">
-      <p class="help-text col-sm-12">List two adults you have known for at least one year, who are not rleated to you and have a definite knowledge of your character and ability to work wtih kids (e.g. pastor, close friend, and/or teacher)</p>
+      <p class="help-text col-sm-12">List two adults you have known for at least one year, who are not related to you and have a definite knowledge of your character and ability to work with kids (e.g. pastor, close friend, and/or teacher)</p>
 
       <h4 class="col-sm-12">First Reference</h4>
       <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'referenceName1') }">
@@ -475,7 +409,7 @@
                name="referenceHomePhone1"
                ng-pattern="kcStudentApplication.phoneFormat"
                ng-model-options="{updateOn: 'blur'} "
-               ng-model="kcStudentApplication.reference1.homePhone" 
+               ng-model="kcStudentApplication.reference1.homePhone"
                placeholder="Home Phone">
         <ng-messages for="student.referenceHomePhone1.$error" ng-if="kcStudentApplication.showError(student, 'referenceHomePhone1')">
           <span ng-message="pattern">
@@ -629,8 +563,8 @@
                id="referenceMobilePhone-2"
                name="referenceMobilePhone2"
                ng-model="kcStudentApplication.reference2.mobilePhone"
-               placeholder="Mobile Phone"
-ng-model-options="{updateOn: 'blur'}"
+               placeholder="Mobile Phone" 
+               ng-model-options="{updateOn: 'blur'}"
                ng-pattern="kcStudentApplication.phoneFormat">
         <ng-messages for="student.referenceMobilePhone2.$error" ng-if="kcStudentApplication.showError(student, 'referenceMobilePhone2')">
           <span ng-message="pattern">
@@ -645,8 +579,8 @@ ng-model-options="{updateOn: 'blur'}"
                id="referenceWorkPhone-2"
                name="referenceWorkPhone2"
                ng-model="kcStudentApplication.reference2.workPhone"
-               placeholder="Work Phone"
-ng-model-options="{updateOn: 'blur'}"
+               placeholder="Work Phone" 
+               ng-model-options="{updateOn: 'blur'}"
                ng-pattern="kcStudentApplication.phoneFormat">
         <ng-messages for="student.referenceWorkPhone2.$error" ng-if="kcStudentApplication.showError(student, 'referenceWorkPhone2')">
           <span ng-message="pattern">
@@ -706,15 +640,13 @@ ng-model-options="{updateOn: 'blur'}"
         </ng-messages>
       </div>    </div>
     <!--/row-->
-
-    <hr />
-
+    <div ng-bind-html="kcStudentApplication.pageInfo.contentBlock2"></div>
+  </fieldset>
+    
+    <fieldset class="push-bottom">
+    <legend>Parent/Guardian Commitment</legend>
     <div class="row">
-      <p class="help-text col-sm-12">Okay, here's some formal stuff. We don't really talk like this, but we couldn't figure out how to say all this in kid-friendly language. So put your glasses on, read it and agree to it, please. The information contained in this application is true.
-        I authorize any reference or church listed here to give you any information (including opinions) that they may have regarding my character and fitness for working with kids. By agreeing to this form, I also consent to a complete criminal background
-        check now an din the future. I understand my involvement with Crossroads Kids' Club is influenced by the information provided by all these sources. I release from liability for damages any person or organizations identified by me in this application,
-        and waive my right to inspect any written material from contact with them or from the criminal background check. I have carefully read the forgoing release and know the contents thereof and I agree to this release as my own free act. This is a
-        legally binding agreement which I have read and understand.</p>
+      <div ng-bind-html="kcStudentApplication.pageInfo.contentBlock3"></div>
       <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'parentLastName') }" >
         <label class="control-label required" for="parentLastName">Last Name</label>
         <input type="text"
@@ -758,10 +690,14 @@ ng-model-options="{updateOn: 'blur'}"
                ng-model="kcStudentApplication.parent.homePhone"
                placeholder="Enter Parent Home Phone"
                ng-model-options="{updateOn: 'blur'}"
-               required>
+               required 
+               ng-pattern="kcStudentApplication.phoneFormat">
         <ng-messages for="student.parentHomePhone.$error" ng-if="kcStudentApplication.showError(student, 'parentHomePhone')" >
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+          <span ng-message="pattern">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -775,10 +711,14 @@ ng-model-options="{updateOn: 'blur'}"
                ng-model="kcStudentApplication.parent.mobilePhone"
                placeholder="Enter Parent Mobile Phone"
                ng-model-options="{updateOn: 'blur'}"
-               required>
+               required 
+               ng-pattern="kcStudentApplication.phoneFormat">
         <ng-messages for="student.parentMobilePhone.$error" ng-if="kcStudentApplication.showError(student, 'parentMobilePhone')" >
           <span ng-message="required">
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+          </span>
+          <span ng-message="pattern">
+            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -871,3 +811,4 @@ ng-model-options="{updateOn: 'blur'}"
   <button type="submit" name="submit" id="submit" class="btn btn-primary push-half-bottom" ng-disabled="kcStudentApplication.saving"> {{kcStudentApplication.submitButtonText}} </button>
 
 </form>
+<div ng-bind-html="kcStudentApplication.pageInfo.page2"></div>

@@ -6,7 +6,9 @@
         <div class="form-group col-sm-6" ng-class="{'has-error':personal['first-name'].$invalid}">
             <label for="first-name">First Name</label>
             <input type="text" name="first-name" class="form-control" id="first-name" placeholder="Enter first name" ng-model="profile.person.firstName" ng-model-options="{ debounce : { 'default' : 500, blur : 0 } }" required>
-            <ng-messages for="personal['first-name'].$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages">
+            <ng-messages for="personal['first-name'].$error" ng-if="personal.$submitted">
+              <ng-messages-include src="on-submit-messages"></ng-messages-include>
+            </ng-messages>
         </div>
 
         <div class="form-group col-sm-6">
@@ -18,7 +20,9 @@
             <label for="last-name">Last Name</label>
             <input type="text" class="form-control" id="last-name" name="last-name" placeholder="Enter last name" ng-model="profile.person.lastName" ng-model-options="{ debounce : { 'default' : 500, blur : 0 } }" required>
 
-            <ng-messages for="personal['last-name'].$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
+            <ng-messages for="personal['last-name'].$error" ng-if="personal.$submitted">
+              <ng-messages-include src="on-submit-messages"></ng-messages-include>
+            </ng-messages>
         </div>
 
         <div class="form-group col-sm-6">
@@ -45,8 +49,12 @@
         <div class="form-group col-sm-6" ng-class="{'has-error': profile.isDobError()}">
             <label for="birthdate">Birth Date</label>
             <input type="text" name="birthdate" class="form-control" id="birthdate" placeholder="MM/DD/YYYY" ng-model="profile.person.dateOfBirth" validate-date required />
-            <ng-messages for="personal.birthdate.$error" ng-if="personal.$submitted || personal.birthdate.$touched" ng-messages-include="on-submit-messages"></ng-messages>
-            <ng-messages for="personal.birthdate.$error" ng-if="personal.$submitted || personal.birthdate.$touched" ng-messages-include="on-pause-messages"></ng-messages>
+            <ng-messages for="personal.birthdate.$error" ng-if="personal.$submitted || personal.birthdate.$touched">
+              <ng-messages-include src="on-submit-messages"></ng-messages-include>
+            </ng-messages>
+            <ng-messages for="personal.birthdate.$error" ng-if="personal.$submitted || personal.birthdate.$touched">
+              <ng-messages-include src="on-pause-messages"></ng-messages-include>
+            </ng-messages>
         </div>
     </div>
 
@@ -75,7 +83,9 @@
         <div class="form-group col-sm-6" ng-controller="crdsDatePickerCtrl" ng-class="{'has-error':personal['anniversary-date'].$invalid}">
             <label for="anniversary-date">When did you start attending Crossroads?</label>
             <input type="text" name="anniversary-date" placeholder="MM/DD/YYYY" class="form-control" id="anniversary-date" validate-date ng-model="profile.person.anniversaryDate" ng-pattern="profile.dateFormat" />
-            <ng-messages for="personal['anniversary-date'].$error" ng-messages-include="on-pause-messages"></ng-messages>
+            <ng-messages for="personal['anniversary-date'].$error">
+              <ng-messages-include src="on-pause-messages"></ng-messages-include>
+            </ng-messages>
         </div>
     </div>
 
@@ -93,7 +103,9 @@
             <select name="service-provider" class="form-control col-sm-12" id="service-provider" ng-model="profile.person.mobileCarrierId" ng-options="providers.dp_RecordID as providers.dp_RecordName for providers in profile.serviceProviders" ng-required="profile.serviceProviderRequired()">
                 <option value=""> -- Choose One -- </option>
             </select>
-            <ng-messages for="personal['service-provider'].$error" ng-messages-include="on-submit-messages"></ng-messages>
+            <ng-messages for="personal['service-provider'].$error">
+              <ng-messages-include src="on-submit-messages"></ng-messages-include>
+            </ng-messages>
         </div>
     </div>
 
@@ -146,7 +158,8 @@
                                     <div class="form-group col-sm-6" ng-class="{'has-error':personal.address.$invalid}">
                                         <label for="address">Street</label>
                                         <input name="address" ng-model="profile.person.addressLine1" type="text" class="form-control" id="address" placeholder="Enter street address" required>
-                                        <ng-messages for="personal.address.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages">
+                                        <ng-messages for="personal.address.$error" ng-if="personal.$submitted">
+                                          <ng-messages-include src="on-submit-messages"></ng-messages-include>
                                         </ng-messages>
                                     </div>
 
@@ -158,7 +171,9 @@
                                     <div class="form-group col-sm-6" ng-class="{'has-error':personal.city.$invalid}">
                                         <label for="city">City</label>
                                         <input name="city" ng-model="profile.person.city" type="text" class="form-control" id="city" placeholder="Enter city" required>
-                                        <ng-messages for="personal.city.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
+                                        <ng-messages for="personal.city.$error" ng-if="personal.$submitted">
+                                          <ng-messages-include src="on-submit-messages"></ng-messages-include>
+                                        </ng-messages>
                                     </div>
 
                                     <div class="form-group col-sm-6" ng-class="{'has-error':personal.state.$invalid}">
@@ -166,13 +181,17 @@
                                         <select name="state" id="state" class="form-control col-sm-12" ng-model="profile.person.state" ng-options="state.dp_RecordName as state.dp_RecordName for state in profile.states" required>
                                             <option value=""> -- Choose a State -- </option>
                                         </select>
-                                        <ng-messages for="personal.state.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
+                                        <ng-messages for="personal.state.$error" ng-if="personal.$submitted">
+                                          <ng-messages-include src="on-submit-messages"></ng-messages-include>
+                                        </ng-messages>
                                     </div>
 
                                     <div class="form-group col-sm-6" ng-class="{'has-error':personal.zip.$invalid}">
                                         <label for="zip">Zip</label>
                                         <input name="zip" ng-model="profile.person.postalCode" type="text" class="form-control" id="zip" placeholder="Enter zip code" required ng-pattern="profile.zipFormat">
-                                        <ng-messages for="personal.zip.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
+                                        <ng-messages for="personal.zip.$error" ng-if="personal.$submitted">
+                                          <ng-messages-include src="on-submit-messages"></ng-messages-include>
+                                        </ng-messages>
                                         <ng-messages for="personal.zip.$error">
                                             <!-- TODO Create custom zip validator here so we can use the template instead of the override below -->
                                             <span ng-message="pattern"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidZip].message | html"></span></span>
@@ -185,7 +204,9 @@
                                         <select name="country" id="country" ng-model="profile.person.foreignCountry" ng-options="country.dp_RecordName as country.dp_RecordName for country in profile.countries" class="form-control col-sm-12" required>
                                             <option value=""> -- Choose One -- </option>
                                         </select>
-                                        <ng-messages for="personal.country.$error" ng-if="personal.$submitted" ng-messages-include="on-submit-messages"></ng-messages>
+                                        <ng-messages for="personal.country.$error" ng-if="personal.$submitted">
+                                          <ng-messages-include src="on-submit-messages"></ng-messages-include>
+                                        </ng-messages>
                                     </div>
 
                                 </li>
@@ -193,7 +214,8 @@
                                     <div class="form-group col-sm-6">
                                         <label for="home-phone">Home Phone</label>
                                         <input name="home-phone" ng-model="profile.person.homePhone" ng-model-options="{ updateOn: 'default blur', debounce: {'default': 300, 'blur': 0} }" type="text" class="form-control" id="home-phone" ng-pattern="profile.phoneFormat" placeholder="Enter home phone" ng-blur="profile.convertHomePhone()">
-                                        <ng-messages for="personal['home-phone'].$error" ng-messages-include="on-submit-messages">
+                                        <ng-messages for="personal['home-phone'].$error">
+                                            <ng-messages-include src="on-submit-messages"></ng-messages-include>
                                             <!-- TODO Create custom phone validator here so we can use the template instead of the override below -->
                                             <span ng-message="pattern"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span></span>
                                         </ng-messages>

@@ -1,11 +1,9 @@
 describe('Email Field Directive', function() {
   var mockSession, mockUser;
 
-  var emailModel, emailPrefix, formSubmitted, emailNotFound, onEmailNotFound, emailFound, onEmailFound, validateUnique, checkUnique, focused;
+  var templateString, scope, callback;
 
-  var element, scope, isolateScope;
-
-  var $compile, $rootScope, $templateCache, $httpBackend, $compile, $rootScope;
+  var $compile, $rootScope, $templateCache, $httpBackend;
 
   beforeEach(function(){
     module('crossroads', function($provide){
@@ -30,30 +28,26 @@ describe('Email Field Directive', function() {
       $templateCache = _$templateCache_;
       $httpBackend = _$httpBackend_;
 
-      emailModel = "me@here.com";
-      emailPrefix = "myPrefix";
-      formSubmitted = false;
-      emailNotFound = false;
-      onEmailNotFound = function() {
-        emailNotFound = true;
-      };
-      emailFound = false;
-      onEmailFound = function() {
-        emailFound = true;
-      };
-      validateUnique = true;
-      checkUnique = true;
-      focused = false;
-
       $templateCache.put('on-submit-messages', '<span ng-message="required">Required</span>');
       $templateCache.put('on-blur-messages',
         '<span ng-message="unique">Not a Unique Email</span>'
         + '<span ng-message="email">Invalid Email</span>');
 
-      $httpBackend.whenGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/lookup/0/find/?email=me@here.com').respond(404, "not found");
+      callback = jasmine.createSpyObj('callback', ['onEmailFound', 'onEmailNotFound']);
 
       scope = $rootScope.$new();
-      element =
+      scope.model = {
+        emailModel: "me@here.com",
+        emailPrefix: "myPrefix",
+        formSubmitted: false,
+        onEmailNotFound: callback.onEmailNotFound,
+        onEmailFound: callback.onEmailFound,
+        validateUnique: true,
+        checkUnique: true,
+        focused: true,
+      };
+
+      templateString =
         '<email-field '
         + 'email="model.emailModel" '
         + 'prefix="model.emailPrefix" '
@@ -63,27 +57,20 @@ describe('Email Field Directive', function() {
         + 'validate-unique="model.validateUnique" '
         + 'check-unique="model.checkUnique" '
         + 'focused="model.focused"/>';
-
-      scope.model = {
-        emailModel: emailModel,
-        emailPrefix: emailPrefix,
-        formSubmitted: formSubmitted,
-        onEmailNotFound: onEmailNotFound,
-        onEmailFound: onEmailFound,
-        validateUnique: validateUnique,
-        checkUnique: checkUnique,
-        focused: focused,
-      };
-
-      element = $compile(element)(scope);
-      scope.$digest();
-      isolateScope = element.isolateScope();
     })
   );
 
   describe("markup", function(){
+    var element;
+    beforeEach(function() {
+      $httpBackend.whenGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/lookup/0/find/?email=me@here.com').respond(404, "not found");
+
+      element = $compile(templateString)(scope);
+      scope.$digest();
+    });
+
     it("should have an id set with the prefix value", function(){
-      expect(element.html()).toContain("id=\"" + emailPrefix + "-email\"");
+      expect(element.html()).toContain("id=\"" + scope.model.emailPrefix + "-email\"");
     });
 
     it("should have the autofocus attribute set", function() {
@@ -91,4 +78,60 @@ describe('Email Field Directive', function() {
     });
   });
 
+  describe("checkUniqueEmail", function() {
+    var element, form, isolateScope;
+    beforeEach(function() {
+      scope.model.emailModel = "me+you@here.com";
+      $httpBackend.whenGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/lookup/0/find/?email=me%2Byou@here.com').respond(404, "not found");
+      element = $compile(templateString)(scope);
+      scope.$digest();
+      isolateScope = element.isolateScope();
+      form = isolateScope.email_field;
+
+      // This forces the directive to update on default - allows us to easily test
+      // the email field that normally only updates on blur
+      form.email.$options.updateOnDefault = true;
+      form.email.$options.updateOn = 'default blur';
+    });
+
+    afterEach(function() {
+      $httpBackend.verifyNoOutstandingExpectation();
+      $httpBackend.verifyNoOutstandingRequest();
+    });
+
+    it("should lookup an email with an encoded plus sign", function() {
+      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/lookup/0/find/?email=me%2Byou%2Bus@there.com').respond(404, "existing email");
+
+      form.email.$setViewValue("me+you+us@there.com");
+      isolateScope.$digest();
+      $httpBackend.flush();
+    });
+
+    it("should call onEmailNotFound callback if API returns a 200", function() {
+      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/lookup/0/find/?email=me%2Byou@there.com').respond(200, "email ok");
+
+      form.email.$setViewValue("me+you@there.com");
+      isolateScope.$digest();
+      $httpBackend.flush();
+      expect(isolateScope.email).toBe("me+you@there.com");
+      expect(form.email.$valid).toBeTruthy();
+      expect(callback.onEmailNotFound).toHaveBeenCalledWith('me+you@there.com');
+      expect(callback.onEmailFound).toHaveBeenCalledWith('me+you@here.com');
+      expect(callback.onEmailFound).not.toHaveBeenCalledWith('me+you@there.com');
+    });
+
+    it("should call onEmailFound callback if API returns a 404", function() {
+      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/lookup/0/find/?email=me%2Byou@there.com').respond(404, "existing email");
+
+      form.email.$setViewValue("me+you@there.com");
+      isolateScope.$digest();
+      $httpBackend.flush();
+      expect(isolateScope.email).toBeUndefined();
+      expect(form.email.$valid).toBeFalsy();
+      expect(callback.onEmailFound).toHaveBeenCalledWith('me+you@there.com');
+      expect(callback.onEmailNotFound).not.toHaveBeenCalled();
+    });
+
+
+  });
 });

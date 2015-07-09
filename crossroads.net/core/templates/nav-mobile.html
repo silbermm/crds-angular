@@ -6,12 +6,12 @@
         </div>
 
     </li>
-    <li class="dropdown" dropdown auto-close="outsideClick">
+    <li>
         <svg viewBox="0 0 32 32" class="icon icon-arrow-right9">
             <use xlink:href="#arrow-right9"></use>
         </svg>
-        <a href="#" class="dropdown-toggle" dropdown-toggle>My Crossroads</a>
-        <ul class="dropdown-menu">
+        <a href="#" ng-click="myCrdsCollapse = !myCrdsCollapse">My Crossroads</a>
+        <ul collapse="!myCrdsCollapse" class="drop-menu">
             <li ng-if="$root.username == undefined">
                 <div class="dd_menu side-nav-login clearfix">
                     <login-form prefix="mobile-page" ng-click="app.prevent($event)"></login-form>
@@ -28,18 +28,18 @@
                     <li><a ui-sref="history" ng-click="ok($event)">Giving History</a>
                     </li>
                     <li><a ui-sref="serve-signup" ng-click="ok($event)">Sign Up to Serve</a></li>
-                    <li><a href="#/home" ng-click="logout()" class="ng-cloak" ng-click="ok($event)">Sign Out</a>
+                    <li><a href="#/" ng-click="logout($event)" class="ng-cloak" ng-click="ok($event)">Sign Out</a>
                     </li>
                 </ul>
             </li>
         </ul>
     </li>
-    <li class="dropdown" dropdown>
+    <li>
         <svg viewBox="0 0 32 32" class="icon icon-arrow-right9">
             <use xlink:href="#arrow-right9"></use>
         </svg>
-        <a href="#" class="dropdown-toggle" dropdown-toggle>Engage</a>
-        <ul class="dropdown-menu">
+        <a href="#" ng-click="engageCollapse = !engageCollapse">Engage</a>
+        <ul collapse="!engageCollapse" class="drop-menu">
           <li><a ui-sref="content({link:'/engage/'})" ng-click="ok($event)">Get Involved (Overview)</a>
           </li>
           <li><a href="#" ng-click="ok($event)">Connect</a>
@@ -50,15 +50,15 @@
           </li>
         </ul>
     </li>
-    <li class="dropdown" dropdown>
+    <li>
         <svg viewBox="0 0 32 32" class="icon icon-arrow-right9">
             <use xlink:href="#arrow-right9"></use>
         </svg>
-        <a href="#" class="dropdown-toggle" dropdown-toggle>Grow</a>
-        <ul class="dropdown-menu">
+        <a href="#" ng-click="growCollapse = !growCollapse">Grow</a>
+        <ul collapse="!growCollapse" class="drop-menu">
             <li><a ui-sref="grow" ng-click="ok($event)">Essentials of Growth</a>
             </li>
-            <li><a ui-sref="the-daily-signup" ng-click="ok($event)">Subscribe to the Daily</a>
+            <li><a ui-sref="thedaily" ng-click="ok($event)">Subscribe to the Daily</a>
             </li>
             <li><a ui-sref="get-in-community" ng-click="ok($event)">Get in Community</a>
             </li>
@@ -66,12 +66,12 @@
             </li>
         </ul>
     </li>
-    <li class="dropdown" dropdown>
+    <li>
         <svg viewBox="0 0 32 32" class="icon icon-arrow-right9">
             <use xlink:href="#arrow-right9"></use>
         </svg>
-        <a href="#" class="dropdown-toggle" dropdown-toggle>About</a>
-        <ul class="dropdown-menu">
+        <a href="#" ng-click="aboutCollapse = !aboutCollapse">About</a>
+        <ul collapse="!aboutCollapse" class="drop-menu">
             <li><a ui-sref="explore-crossroads" ng-click="ok($event)">Explore Crossroads</a>
             </li>
             <li><a ui-sref="who-we-are" ng-click="ok($event)">Who We Are</a>
@@ -84,12 +84,12 @@
             </li>
         </ul>
     </li>
-    <li class="dropdown" dropdown>
+    <li>
         <svg viewBox="0 0 32 32" class="icon icon-arrow-right9">
             <use xlink:href="#arrow-right9"></use>
         </svg>
-        <a href="#" class="dropdown-toggle" dropdown-toggle>Give</a>
-        <ul class="dropdown-menu">
+        <a href="#" ng-click="giveCollapse = !giveCollapse">Give</a>
+        <ul collapse="!giveCollapse" class="drop-menu">
             <li><a ui-sref="recurring-gift" ng-click="ok($event)">Recurring Gift</a>
             </li>
             <li><a ui-sref="give" ng-click="ok($event)">One-time Gift</a>
@@ -104,12 +104,12 @@
             </li>
         </ul>
     </li>
-    <li class="dropdown" dropdown>
+    <li>
         <svg viewBox="0 0 32 32" class="icon icon-arrow-right9">
             <use xlink:href="#arrow-right9"></use>
         </svg>
-        <a href="#" class="dropdown-toggle" dropdown-toggle>Media</a>
-        <ul class="dropdown-menu">
+        <a href="#" ng-click="mediaCollapse = !mediaCollapse">Media</a>
+        <ul collapse="!mediaCollapse" class="drop-menu">
             <li><a ui-sref="messages" ng-click="ok($event)">Weekend Messages</a>
             </li>
             <li><a ui-sref="music" ng-click="ok($event)">Music</a>
@@ -118,12 +118,12 @@
             </li>
         </ul>
     </li>
-    <li class="dropdown" dropdown>
+    <li>
         <svg viewBox="0 0 32 32" class="icon icon-arrow-right9">
             <use xlink:href="#arrow-right9"></use>
         </svg>
-        <a href="#" class="dropdown-toggle" dropdown-toggle>Admin</a>
-        <ul class="dropdown-menu">
+        <a href="#" ng-click="adminCollapse = !adminCollapse">Admin</a>
+        <ul collapse="!adminCollapse" class="drop-menu">
             <li><a href="https://admindemo.crossroads.net/ministryplatform/" target="_blank" ng-click="ok($event)">Ministry Platform (Demo)</a>
             </li>
             <li><a href="https://adminint.crossroads.net/ministryplatform/" target="_blank" ng-click="ok($event)">Ministry Platform (Integration)</a>

@@ -27,6 +27,7 @@ var moment = require('moment');
     vm.saving = false;
     vm.serveAgeKids = {};
     vm.showError = showError;
+    vm.spiritualSelected = spiritualSelected;
     vm.studentSignatureDate = moment().format('MM/DD/YYYY');
     vm.submitButtonText = 'Submit';
 
@@ -55,7 +56,7 @@ var moment = require('moment');
       if (vm.serveAgeKids && (
           vm.serveAgeKids.age1to2 ||
           vm.serveAgeKids.age3toPreK ||
-          vm.serveAgeKids.Kto5Grade) 
+          vm.serveAgeKids.Kto5Grade)
         ) {
         return true;
       }
@@ -67,10 +68,10 @@ var moment = require('moment');
      * true if it has, false otherwise
      */
     function locationSelected(){
-      if (vm.availabilityOakley || 
-          vm.availabilityFlorence || 
-          vm.availabilityWestSide || 
-          vm.availabilityMason || 
+      if (vm.availabilityOakley ||
+          vm.availabilityFlorence ||
+          vm.availabilityWestSide ||
+          vm.availabilityMason ||
           vm.availabilityClifton) {
         return true;
       }
@@ -122,7 +123,7 @@ var moment = require('moment');
       };
 
       student.nameForNameTag = {
-        Value: vm.nameTag,
+        Value: vm.volunteer.nickName,
         CrossroadsId: studentFields.nameForNameTag
       };
 
@@ -134,11 +135,6 @@ var moment = require('moment');
       student.gender = {
         Value: vm.volunteer.genderId,
         CrossroadsId: studentFields.gender
-      };
-
-      student.site = {
-        Value: vm.site,
-        CrossroadsId: studentFields.site
       };
 
       student.howLongAttending = {
@@ -177,7 +173,7 @@ var moment = require('moment');
       };
 
       student.homePhone = {
-        Value: vm.homePhone,
+        Value: vm.volunteer.homePhone,
         CrossroadsId: studentFields.homePhone
       };
 
@@ -191,9 +187,24 @@ var moment = require('moment');
         CrossroadsId: studentFields.grade
       };
 
-      student.whereYouAre = {
-        Value: vm.whereYouAre,
-        CrossroadsId: studentFields.whereYouAre
+      student.religionSearchingForAnswers = {
+        Value: vm.religionSearchingForAnswers,
+        CrossroadsId: studentFields.religionSearchingForAnswers
+      };
+
+      student.religionReceivedJesus = {
+        Value: vm.religionReceivedJesus,
+        CrossroadsId: studentFields.religionReceivedJesus
+      };
+
+      student.religionFocusingOnObedience = {
+        Value: vm.religionFocusingOnObedience,
+        CrossroadsId: studentFields.religionFocusingOnObedience
+      };
+
+      student.religionReplicating = {
+        Value: vm.religionReplicating,
+        CrossroadsId: studentFields.religionReplicating
       };
 
       student.explainFaith = {
@@ -221,34 +232,9 @@ var moment = require('moment');
         CrossroadsId: studentFields.availabilityDuringWeekend
       };
 
-      student.availabilityOakley = {
-        Value: vm.availabilityOakley,
-        CrossroadsId: studentFields.availabilityOakley
-      };
-
-      student.availabilityFlorence = {
-        Value: vm.availabilityFlorence,
-        CrossroadsId: studentFields.availabilityFlorence
-      };
-
-      student.availabilityWestSide = {
-        Value: vm.availabilityWestSide,
-        CrossroadsId: studentFields.availabilityWestSide
-      };
-
-      student.availabilityMason = {
-        Value: vm.availabilityMason,
-        CrossroadsId: studentFields.availabilityMason
-      };
-
-      student.availabilityClifton = {
-        Value: vm.availabilityClifton,
-        CrossroadsId: studentFields.availabilityClifton
-      };
-
-      student.serveServiceTimes = {
-        Value: vm.serveServiceTimes,
-        CrossroadsId: studentFields.serveServiceTimes
+      student.availabilityWeekendSite = {
+        Value: vm.availabilityWeekendSite,
+        CrossroadsId: studentFields.availabilityWeekendSite
       };
 
       student.serveAgeKids1to2 = {
@@ -406,13 +392,27 @@ var moment = require('moment');
       });
       return true;
     }
-    
+
     function showError(form, field) {
       if(form[field] === undefined) {
         return false;
       }
       if (form.$submitted || form[field].$dirty){
         return form[field].$invalid;
+      }
+      return false;
+    }
+
+    /**
+     * Checks if one of the spiritual life responses has been selected and returns
+     * true if it has, false otherwise
+     */
+    function spiritualSelected(){
+      if (vm.religionSearchingForAnswers ||
+          vm.religionReceivedJesus ||
+          vm.religionFocusingOnObedience ||
+          vm.religionReplicating) {
+        return true;
       }
       return false;
     }

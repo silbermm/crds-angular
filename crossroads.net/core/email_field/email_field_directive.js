@@ -77,14 +77,14 @@ require('./email_field.html');
           if(email === undefined || !email) {
               return(true);
           }
-          return $http.get(__API_ENDPOINT__ + 'api/lookup/' + userid  + '/find/?email=' +  encodeURI(email))
+          return $http.get(__API_ENDPOINT__ + 'api/lookup/' + userid  + '/find/?email=' +  encodeURI(email).replace(/\+/g, '%2B'))
           .success(function(data) {
               // Successful response from this call means we did NOT find a matching email
               // which means that the unique email field is valid
               User.email = email;
               var onEmailNotFound = scope.onEmailNotFound();
-              if(angular.isDefined(onEmailNotFound) && angular.isFunction(onEmailNotFound)) {
-                  onEmailNotFound();
+              if(angular.isFunction(onEmailNotFound)) {
+                  onEmailNotFound(email);
               }
           })
           .error(function(err) {
@@ -92,8 +92,8 @@ require('./email_field.html');
               // which means that the unique email field is not valid
               User.email = email;
               var onEmailFound = scope.onEmailFound();
-              if(angular.isDefined(onEmailFound) && angular.isFunction(onEmailFound)) {
-                  onEmailFound();
+              if(angular.isFunction(onEmailFound)) {
+                  onEmailFound(email);
               }
           });
     };

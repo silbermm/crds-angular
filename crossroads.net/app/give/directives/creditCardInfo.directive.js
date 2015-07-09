@@ -16,7 +16,6 @@ require('../creditCardInfo.html');
           restrict: 'EA',
           //replace: true,
           scope: {
-              nameOnCard: "=",
               ccNumber: "=",
               expDate: "=",
               cvc: "=",
@@ -25,6 +24,7 @@ require('../creditCardInfo.html');
               defaultSource: "=",
               changeAccountInfo: "=",
               setValidCard: "=",
+              declinedPayment: "=",
               setValidCvc: "=",
               ccNumberClass: "="
             },
@@ -52,8 +52,8 @@ require('../creditCardInfo.html');
             return(false);
           }
 
-          return (scope.bankinfoSubmitted && scope.creditCardForm.billingZipCode.$invalid ||
-            scope.creditCardForm.billingZipCode.$dirty && scope.creditCardForm.billingZipCode.$invalid);
+          return ((scope.creditCardForm.billingZipCode.$dirty || scope.bankinfoSubmitted) && (scope.creditCardForm.billingZipCode.$modelValue == undefined || 
+                   scope.creditCardForm.billingZipCode.$invalid));
         };
 
         scope.blurBillingZipCodeError = function() {
@@ -99,10 +99,6 @@ require('../creditCardInfo.html');
             }
         };
 
-        scope.useExistingAccountInfo = function() {
-          return(scope.changeAccountInfo && scope.creditCardForm.$pristine);
-        }
-
         scope.ccNumberError = function(ccValid) {
             if (ccValid === undefined) {
                 scope.setValidCard = false ;
@@ -115,25 +111,26 @@ require('../creditCardInfo.html');
               return(false);
             }
 
-            return (scope.bankinfoSubmitted && scope.creditCardForm.ccNumber.$pristine && !ccValid || //cannot be blank on submit
-                   !ccValid && scope.creditCardForm.ccNumber.$dirty);  //show error when not valid
-         };
+            return (!ccValid && scope.bankinfoSubmitted  ||            //cannot be invalid upon submittal
+                     scope.creditCardForm.ccNumber.$dirty && !ccValid || //cannot be invalid prior to submittal
+                     scope.creditCard.ccNumber == undefined && scope.bankinfoSubmitted); //cannot be blank when submitting change form
+        };
 
-         scope.cvvError = function(cvcValid) {
-            if (cvcValid === undefined) {
-                scope.setValidCvc = false  ;
-            }
-            if (cvcValid === true) {
-                scope.setValidCvc = true ;
-            }
+        scope.cvvError = function(cvcValid) {
+          if (cvcValid === undefined) {
+              scope.setValidCvc = false  ;
+          }
+          if (cvcValid === true) {
+              scope.setValidCvc = true ;
+          }
 
-            if(scope.useExistingAccountInfo()) {
-              return(false);
-            }
+          if(scope.useExistingAccountInfo()) {
+            return(false);
+          }
 
-            return (scope.bankinfoSubmitted && scope.creditCardForm.cvc.$pristine && !ccValid || //cannot be blank on submit
-                    !cvcValid && scope.bankinfoSubmitted ||
-                    !cvcValid && scope.creditCardForm.cvc.$dirty);  //show error when not valid
+          return (!cvcValid && scope.bankinfoSubmitted  ||       //cannot be invalid upon submittal
+                   scope.creditCardForm.cvc.$dirty && !cvcValid || //cannot be invalid prior to submittal
+                   scope.creditCard.cvc == undefined && scope.bankinfoSubmitted); //cannot be blank when submitting change form
         };
 
         scope.expDateError = function() {
@@ -144,12 +141,11 @@ require('../creditCardInfo.html');
             return (scope.bankinfoSubmitted && scope.creditCardForm.expDate.$invalid);
         };
 
-        scope.nameError = function() {
-          if(scope.useExistingAccountInfo()) {
-            return(false);
-          }
-
-            return (scope.bankinfoSubmitted && scope.creditCardForm.nameOnCard.$invalid);
+        scope.resetDefaultCardPlaceholderValues = function() {
+          scope.defaultCardPlaceholderValues = {
+            expDate: "MM/YY",
+          };
+          scope.declinedPayment = false;
         };
 
         // This function swaps the expDate field with the current value placeholder
@@ -161,37 +157,39 @@ require('../creditCardInfo.html');
             scope.creditCardForm.$setDirty();
             $timeout(function() {
               // The third field is the expDate
-              var e = element.find('input')[2];
+              var e = element.find('input')[1];
               e.focus();
             });
           }
-        }
+        };
 
-        scope.resetDefaultCardPlaceholderValues = function() {
-          scope.defaultCardPlaceholderValues = {
-            expDate: "MM/YY",
-          };
-        }
+        scope.submitError = function(cardValue) {
+            return ((!scope.useExistingAccountInfo()) && scope.bankinfoSubmitted && (cardValue == "" || cardValue == undefined));
+        };
 
-        if(!scope.defaultSource.credit_card) {
-          scope.resetDefaultCardPlaceholderValues();
-        } else if(scope.defaultSource.credit_card.last4) {
-          scope.creditCard.nameOnCard = "";
-          scope.creditCard.ccNumber = "";
-          scope.creditCard.expDate = "";
-          scope.creditCard.cvc = "";
-          scope.creditCard.billingZipCode = "";
-          scope.defaultCardPlaceholderValues = {
-            billingZipCode: scope.defaultSource.credit_card.address_zip,
-            brand: scope.defaultSource.credit_card.brand,
-            cvc: "XXX",
-            expDate: scope.defaultSource.credit_card.exp_date.replace(/^(..)(..).*$/, "$1/$2"),
-            nameOnCard: scope.defaultSource.credit_card.name,
-            maskedCard: "XXXXXXXXXXX" + scope.defaultSource.credit_card.last4
-          };
+        scope.useExistingAccountInfo = function() {
+          return(scope.changeAccountInfo && scope.creditCardForm.$pristine);
+        };
 
-          scope.ccCardType();
-        }
+        if (scope.defaultSource !== undefined){   
+          if(!scope.defaultSource.credit_card) {
+            scope.resetDefaultCardPlaceholderValues();
+          } else if(scope.defaultSource.credit_card.last4) {
+            scope.creditCard.ccNumber = "";
+            scope.creditCard.expDate = "";
+            scope.creditCard.cvc = "";
+            scope.creditCard.billingZipCode = "";
+            scope.defaultCardPlaceholderValues = {
+              billingZipCode: scope.defaultSource.credit_card.address_zip,
+              brand: scope.defaultSource.credit_card.brand,
+              cvc: "XXX",
+              expDate: scope.defaultSource.credit_card.exp_date.replace(/^(..)(..).*$/, "$1/$2"),
+              maskedCard: "XXXXXXXXXXX" + scope.defaultSource.credit_card.last4
+            };
+
+            scope.ccCardType();
+          }
+        };  
       }
     };
 

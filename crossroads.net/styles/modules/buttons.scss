@@ -1,5 +1,8 @@
 .btn {
   @include button-size($padding-base-vertical, $padding-base-horizontal, $font-size-base, $line-height-base, $border-radius-base);
+  &:focus {
+    text-decoration: none;
+  }
 }
 
 .btn-lg {
@@ -84,11 +87,14 @@
 }
 
 .btn-gray {
-  @include button-variant($btn-default-color, $gray, $gray);
+  @include button-variant($btn-default-color, $cr-grey, $cr-grey);
 }
 
 .btn-gray-light {
-  @include button-variant($gray, #f1f1f1, $gray-lighter);
+  @include button-variant($gray, $gray-lighter, $gray-lighter);
+}
+.btn-white {
+  @include button-variant($gray, #fff, #fff);
 }
 
 .input-group-btn {
@@ -111,7 +117,7 @@ h2 {
 // Table buttons
 .table-btn {
   @extend .btn;
-  @extend .btn-default;
+  @extend .btn-primary;
   @extend .col-full-height;
   @extend .push-half-bottom;
   display: block;

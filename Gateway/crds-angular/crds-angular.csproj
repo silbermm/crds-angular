@@ -226,12 +226,14 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\API\AccountController.cs" />
+    <Compile Include="Controllers\API\EmailCommunicationController.cs" />
     <Compile Include="Controllers\API\DonationController.cs" />
     <Compile Include="Controllers\API\DonorController.cs" />
     <Compile Include="Controllers\API\EventLocationController.cs" />
     <Compile Include="Controllers\API\GroupController.cs" />
     <Compile Include="Controllers\API\ProgramController.cs" />
     <Compile Include="Controllers\API\ServeController.cs" />
+    <Compile Include="Controllers\API\StripeEventController.cs" />
     <Compile Include="Controllers\API\UpdateDonorDTO.cs" />
     <Compile Include="Controllers\API\UserController.cs" />
     <Compile Include="Controllers\API\LoginController.cs" />
@@ -240,7 +242,6 @@
     <Compile Include="Controllers\API\ProfileController.cs" />
     <Compile Include="Controllers\API\SkillController.cs" />
     <Compile Include="Controllers\API\VolunteerApplicationController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Exceptions\Models\ApiErrorDto.cs" />
     <Compile Include="Enum\BadgeTypeEnum.cs" />
     <Compile Include="Exceptions\StripeException.cs" />
@@ -252,6 +253,7 @@
     <Compile Include="Models\Crossroads\DefaultSourceDTO.cs" />
     <Compile Include="Models\Crossroads\DonationDTO .cs" />
     <Compile Include="Models\Crossroads\DonorDTO.cs" />
+    <Compile Include="Models\Crossroads\EmailCommunicationDTO.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityCapacityDto.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityGroup.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityGroupParticipant.cs" />
@@ -267,6 +269,7 @@
     <Compile Include="Models\Crossroads\Serve\QualifiedServerDto.cs" />
     <Compile Include="Models\Crossroads\Serve\SaveRsvpDto.cs" />
     <Compile Include="Models\Crossroads\Serve\ServeRsvp.cs" />
+    <Compile Include="Models\Crossroads\Serve\UpdatedEvents.cs" />
     <Compile Include="Models\Crossroads\SignUpFamilyMembers.cs" />
     <Compile Include="Models\Crossroads\GroupOpportunity.cs" />
     <Compile Include="Models\Crossroads\Serve\EventType.cs" />
@@ -279,7 +282,11 @@
     <Compile Include="Models\Crossroads\Skill.cs" />
     <Compile Include="Models\Crossroads\Event.cs" />
     <Compile Include="Models\Crossroads\StripeCharge.cs" />
+    <Compile Include="Models\Crossroads\StripeCharges.cs" />
     <Compile Include="Models\Crossroads\StripeCustomer.cs" />
+    <Compile Include="Models\Crossroads\StripeEvent.cs" />
+    <Compile Include="Models\Crossroads\StripeObject.cs" />
+    <Compile Include="Models\Crossroads\StripeTransfer.cs" />
     <Compile Include="Models\Crossroads\User.cs" />
     <Compile Include="Models\Crossroads\VolunteerApplication\AdultApplicationDto.cs" />
     <Compile Include="Models\Crossroads\VolunteerApplication\ChildDto.cs" />
@@ -291,6 +298,9 @@
     <Compile Include="Models\Json\AccountInfoSerializer.cs" />
     <Compile Include="Models\Json\Communication.cs" />
     <Compile Include="Models\Json\NewPassword.cs" />
+    <Compile Include="Models\Json\RestHttpActionResult.cs" />
+    <Compile Include="Models\Json\StripeDateTimeConverter.cs" />
+    <Compile Include="Models\Json\StripeEpochTime.cs" />
     <Compile Include="Models\MP\Address.cs" />
     <Compile Include="Models\MP\EmailSMSOptOut.cs" />
     <Compile Include="Models\MP\Household.cs" />
@@ -300,10 +310,14 @@
     <Compile Include="Security\MPAuth.cs" />
     <Compile Include="Security\CustomAuthorize.cs" />
     <Compile Include="Services\AccountService.cs" />
+    <Compile Include="Services\DonationService.cs" />
     <Compile Include="Services\DonorService.cs" />
+    <Compile Include="Services\EmailCommunication.cs" />
     <Compile Include="Services\GroupService.cs" />
     <Compile Include="Services\Interfaces\IAccountService.cs" />
+    <Compile Include="Services\Interfaces\IDonationService.cs" />
     <Compile Include="Services\Interfaces\IDonorService.cs" />
+    <Compile Include="Services\Interfaces\IEmailCommunication.cs" />
     <Compile Include="Services\Interfaces\IGroupService.cs" />
     <Compile Include="Services\Interfaces\IServeService.cs" />
     <Compile Include="Services\Interfaces\IPersonService.cs" />
@@ -357,15 +371,10 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Views\Web.config" />
-    <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Unity.config" />
     <None Include="MinistryPlatform.config">
       <TransformOnBuild>true</TransformOnBuild>
+      <SubType>Designer</SubType>
     </None>
     <None Include="Web.Demo.config">
       <DependentUpon>Web.config</DependentUpon>

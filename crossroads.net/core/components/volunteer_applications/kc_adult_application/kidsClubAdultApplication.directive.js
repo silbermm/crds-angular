@@ -15,12 +15,13 @@
       scope: {
         volunteer: '=volunteer',
         contactId: '=contactId',
+        pageInfo: '=pageInfo',
         opportunityId: '=opportunityId',
         responseId: '=responseId',
         showSuccess: '=showSuccess'
       },
       bindToController: true
-    }; 
+    };
   }
 
 })();

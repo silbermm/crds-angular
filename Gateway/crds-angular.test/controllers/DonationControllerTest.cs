@@ -51,9 +51,10 @@ namespace crds_angular.test.controllers
 
             var createDonationDTO = new CreateDonationDTO
             {
-                program_id = "3", //crossroads
-                amount = 86868,
-                donor_id = 394256
+                ProgramId = "3", //crossroads
+                Amount = 86868,
+                DonorId = 394256,
+                EmailAddress = "test@test.com"
             };
 
             var donor = new ContactDonor
@@ -64,7 +65,8 @@ namespace crds_angular.test.controllers
                 StatementFreq = "1",
                 StatementMethod = "2",
                 StatementType = "3",
-                ProcessorId = "cus_test1234567"
+                ProcessorId = "cus_test1234567",
+                Email = "moc.tset@tset"
             };
 
             authenticationServiceMock.Setup(mocked => mocked.GetContactId(authType + " " + authToken)).Returns(contactId);
@@ -73,12 +75,12 @@ namespace crds_angular.test.controllers
                 .Returns(donor);
 
             stripeServiceMock.Setup(
-                mocked => mocked.chargeCustomer(donor.ProcessorId, createDonationDTO.amount, donor.DonorId, createDonationDTO.pymt_type))
+                mocked => mocked.ChargeCustomer(donor.ProcessorId, createDonationDTO.Amount, donor.DonorId, createDonationDTO.PaymentType))
                 .Returns(charge_id);
 
             donorServiceMock.Setup(mocked => mocked.
-                CreateDonationAndDistributionRecord(createDonationDTO.amount, donor.DonorId,
-                    createDonationDTO.program_id, charge_id, createDonationDTO.pymt_type, donor.ProcessorId, It.IsAny<DateTime>(), true))
+                CreateDonationAndDistributionRecord(createDonationDTO.Amount, donor.DonorId,
+                    createDonationDTO.ProgramId, charge_id, createDonationDTO.PaymentType, donor.ProcessorId, It.IsAny<DateTime>(), true))
                     .Returns(donationId);
 
             IHttpActionResult result = fixture.Post(createDonationDTO);
@@ -93,6 +95,9 @@ namespace crds_angular.test.controllers
             var okResult = (OkNegotiatedContentResult<DonationDTO>)result;
             Assert.AreEqual(6186818, donationId);
 
+            var resultDto = ((OkNegotiatedContentResult<DonationDTO>) result).Content;
+            Assert.IsNotNull(resultDto);
+            Assert.AreEqual(donor.Email, resultDto.email);
         }
 
         [Test]
@@ -104,10 +109,10 @@ namespace crds_angular.test.controllers
             
             var createDonationDTO = new CreateDonationDTO
             {
-                program_id = "3", //crossroads
-                amount = 86868,
-                donor_id = 394256,
-                email_address = "test@test.com"
+                ProgramId = "3", //crossroads
+                Amount = 86868,
+                DonorId = 394256,
+                EmailAddress = "test@test.com"
             };
 
             var donor = new ContactDonor
@@ -118,18 +123,19 @@ namespace crds_angular.test.controllers
                 StatementFreq = "1",
                 StatementMethod = "2",
                 StatementType = "3",
-                ProcessorId = "cus_test1234567"
+                ProcessorId = "cus_test1234567",
+                Email = "moc.tset@tset"
             };
 
             fixture.Request.Headers.Authorization = null;
-            gatewayDonorServiceMock.Setup(mocked => mocked.GetContactDonorForEmail(createDonationDTO.email_address)).Returns(donor);
+            gatewayDonorServiceMock.Setup(mocked => mocked.GetContactDonorForEmail(createDonationDTO.EmailAddress)).Returns(donor);
             
-            stripeServiceMock.Setup(mocked => mocked.chargeCustomer(donor.ProcessorId, createDonationDTO.amount, donor.DonorId, createDonationDTO.pymt_type)).
+            stripeServiceMock.Setup(mocked => mocked.ChargeCustomer(donor.ProcessorId, createDonationDTO.Amount, donor.DonorId, createDonationDTO.PaymentType)).
                 Returns(charge_id);
 
             donorServiceMock.Setup(mocked => mocked.
-                CreateDonationAndDistributionRecord(createDonationDTO.amount, donor.DonorId,
-                    createDonationDTO.program_id, charge_id, createDonationDTO.pymt_type, donor.ProcessorId, It.IsAny<DateTime>(), false))
+                CreateDonationAndDistributionRecord(createDonationDTO.Amount, donor.DonorId,
+                    createDonationDTO.ProgramId, charge_id, createDonationDTO.PaymentType, donor.ProcessorId, It.IsAny<DateTime>(), false))
                     .Returns(donationId);
 
             IHttpActionResult result = fixture.Post(createDonationDTO);
@@ -143,6 +149,9 @@ namespace crds_angular.test.controllers
             var okResult = (OkNegotiatedContentResult<DonationDTO>)result;
             Assert.AreEqual(6186818, donationId);
 
+            var resultDto = ((OkNegotiatedContentResult<DonationDTO>)result).Content;
+            Assert.IsNotNull(resultDto);
+            Assert.AreEqual(donor.Email, resultDto.email);
         }
 
     }
