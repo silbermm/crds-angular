@@ -226,6 +226,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\API\AccountController.cs" />
+    <Compile Include="Controllers\API\EmailCommunicationController.cs" />
     <Compile Include="Controllers\API\DonationController.cs" />
     <Compile Include="Controllers\API\DonorController.cs" />
     <Compile Include="Controllers\API\EventLocationController.cs" />
@@ -252,6 +253,7 @@
     <Compile Include="Models\Crossroads\DefaultSourceDTO.cs" />
     <Compile Include="Models\Crossroads\DonationDTO .cs" />
     <Compile Include="Models\Crossroads\DonorDTO.cs" />
+    <Compile Include="Models\Crossroads\EmailCommunicationDTO.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityCapacityDto.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityGroup.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityGroupParticipant.cs" />
@@ -310,10 +312,12 @@
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\DonationService.cs" />
     <Compile Include="Services\DonorService.cs" />
+    <Compile Include="Services\EmailCommunication.cs" />
     <Compile Include="Services\GroupService.cs" />
     <Compile Include="Services\Interfaces\IAccountService.cs" />
     <Compile Include="Services\Interfaces\IDonationService.cs" />
     <Compile Include="Services\Interfaces\IDonorService.cs" />
+    <Compile Include="Services\Interfaces\IEmailCommunication.cs" />
     <Compile Include="Services\Interfaces\IGroupService.cs" />
     <Compile Include="Services\Interfaces\IServeService.cs" />
     <Compile Include="Services\Interfaces\IPersonService.cs" />

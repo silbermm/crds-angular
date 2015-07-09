@@ -19,7 +19,7 @@ namespace crds_angular.Services
         public AccountService(IConfigurationWrapper configurationWrapper, ICommunicationService communicationService)
         {
             this._configurationWrapper = configurationWrapper;
-            this._communicationService = _communicationService;
+            this._communicationService = communicationService;
         }
         public bool ChangePassword(string token, string newPassword)
         {

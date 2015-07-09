@@ -24,6 +24,14 @@ namespace MinistryPlatform.Translation.Services
         {
             _ministryPlatformService = ministryPlatformService;
         }
+		
+        public int GetUserIdFromContactId(string token, int contactId)
+        {
+            int pNum = Convert.ToInt32(ConfigurationManager.AppSettings["MyContact"]);
+            var profile = MinistryPlatformService.GetRecordDict(pNum, contactId, token);
+
+            return (int) profile["User_Account"];
+        }
 
         public CommunicationPreferences GetPreferences(String token, int userId)
         {
@@ -55,13 +63,13 @@ namespace MinistryPlatform.Translation.Services
         /// Creates the correct record in MP so that the mail service can pick it up and send 
         /// it during the scheduled run
         /// </summary>
-        /// <param name="communication">The message properties </param>
-        /// <param name="mergeData">A dictionary of varible names and their values that MP will place in the template</param>
-        public void SendMessage(Communication communication, Dictionary<string, object> mergeData)
+        /// <param name="communication">The message properties </param>        
+        public void SendMessage(Communication communication)
         {
             var token = apiLogin();
+
             var communicationId = AddCommunication(communication, token);
-            AddCommunicationMessage(communication, communicationId, mergeData, token);
+            AddCommunicationMessage(communication, communicationId, apiLogin());
         }
 
         private int AddCommunication(Communication communication, string token)
@@ -80,7 +88,7 @@ namespace MinistryPlatform.Translation.Services
             return communicationId;
         }
 
-        private void AddCommunicationMessage(Communication communication, int communicationId, Dictionary<string, object> mergeData, string token)
+        private void AddCommunicationMessage(Communication communication, int communicationId, string token)
         {
             var dictionary = new Dictionary<string, object>
             {
@@ -90,8 +98,8 @@ namespace MinistryPlatform.Translation.Services
                 {"From", communication.FromEmailAddress},
                 {"To", communication.ToEmailAddress},
                 {"Reply_To", communication.ReplyToEmailAddress},
-                {"Subject", communication.EmailSubject},
-                {"Body", ParseTemplateBody(communication.EmailBody, mergeData)}
+                {"Subject", ParseTemplateBody(communication.EmailSubject, communication.MergeData)},
+                {"Body", ParseTemplateBody(communication.EmailBody, communication.MergeData)}
             };
             _ministryPlatformService.CreateSubRecord(_recipientsSubPageId, communicationId, dictionary, token);
         }
