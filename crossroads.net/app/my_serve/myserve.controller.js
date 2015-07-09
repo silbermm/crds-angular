@@ -48,7 +48,7 @@
                 if (servingTeam.eventId === eventId){
                   _.each(servingTeam.members, function(member) {
                     if (member.contactId === data.member.contactId) {
-                      member.serveRsvp = data.member.serveRsvp;
+                      member.serveRsvp = angular.copy(data.member.serveRsvp);
                     }
                   });
                 }  

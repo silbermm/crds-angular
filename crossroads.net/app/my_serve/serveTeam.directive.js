@@ -340,7 +340,7 @@
           return false;
         }
         scope.processing = true;
-        var rsvp = new ServeOpportunities.SaveRsvp();
+        var rsvp = {};
         rsvp.contactId = scope.currentMember.contactId;
         rsvp.opportunityId = scope.currentMember.serveRsvp.roleId;
         rsvp.opportunityIds = _.map(scope.currentMember.roles, function(role) {
@@ -355,7 +355,7 @@
           rsvp.signUp = false;
         }
         rsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
-        rsvp.$save(function(updatedEvents) {
+        ServeOpportunities.SaveRsvp.save(rsvp, function(updatedEvents) {
           if (rsvp.signUp) {
             $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess);
           } else {
