@@ -91,7 +91,7 @@
 }
 
 .btn-gray-light {
-  @include button-variant($gray, #f1f1f1, $gray-lighter);
+  @include button-variant($gray, $gray-lighter, $gray-lighter);
 }
 .btn-white {
   @include button-variant($gray, #fff, #fff);
