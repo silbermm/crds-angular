@@ -28,6 +28,7 @@ describe('Credit Card Info Directive', function() {
      + "name-on-card='model.nameOnCard' "
      + "default-source='model.defaultSource' "
      + "change-account-info='model.changeAccountInfo' "
+     + "declined-payment='model.declinedPayment' "
      + "set-valid-card='model.setValidCard' "
      + "set-valid-cvc='model.setValidCvc' "
      + "cc-number-class='model.ccNumberClass'>"
@@ -50,7 +51,8 @@ describe('Credit Card Info Directive', function() {
         last4: "9876",
       },
       changeAccountInfo: false,
-      ccNumberClass: 'cc-visa'
+      ccNumberClass: 'cc-visa',
+      declinedPayment: false
     };
 
     ccElement = $compile(templateString)(scope);
@@ -61,7 +63,7 @@ describe('Credit Card Info Directive', function() {
 
   describe('swapCreditCardExpDateFields Function', function() {
     it('should not dirty the credit card form or set focus if not changing existing account info', function() {
-      var expDate = ccElement.find('input')[2];
+      var expDate = ccElement.find('input')[1];
       spyOn(expDate, 'focus');
       isolateScope.swapCreditCardExpDateFields();
       expect(form.$dirty).toBeFalsy();
@@ -71,7 +73,7 @@ describe('Credit Card Info Directive', function() {
 
   describe('swapCreditCardExpDateFields Function', function() {
     it('should dirty the credit card form and set focus if changing existing account info', function() {
-      var expDate = ccElement.find('input')[2];
+      var expDate = ccElement.find('input')[1];
       spyOn(expDate, 'focus');
       isolateScope.changeAccountInfo = true;
       isolateScope.swapCreditCardExpDateFields();

@@ -6,6 +6,7 @@ using crds_angular.Enum;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Extensions;
+using Crossroads.Utilities.Services;
 using log4net;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
@@ -14,6 +15,14 @@ using IGroupService = MinistryPlatform.Translation.Services.Interfaces.IGroupSer
 
 namespace crds_angular.Services
 {
+    internal class MailRow
+    {
+        public string EventDate { get; set; }
+        public string OpportunityName { get; set; }
+        public string ShiftTime { get; set; }
+        public string Location { get; set; }
+    }
+
     public class ServeService : MinistryPlatformBaseService, IServeService
     {
         private readonly IContactService _contactService;
@@ -24,7 +33,13 @@ namespace crds_angular.Services
         private readonly IOpportunityService _opportunityService;
         private readonly IParticipantService _participantService;
         private readonly ICommunicationService _communicationService;
-
+        private readonly List<string> TABLE_HEADERS = new List<string>()
+            {
+                "Event Date",
+                "Opportunity Name",
+                "Shift Start and End",
+                "Location"
+            };
         private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public ServeService(IContactService contactService, IContactRelationshipService contactRelationshipService,
@@ -133,6 +148,10 @@ namespace crds_angular.Services
                         if (team != null)
                         {
                             //team already in collection
+                            if (!team.PastDeadline)
+                            {
+                                team.PastDeadline = (record.EventStartDateTime.AddDays(0 - record.OpportunitySignUpDeadline) < DateTime.Today);
+                            }
                             var member = team.Members.SingleOrDefault(m => m.ContactId == record.ContactId);
                             if (member == null)
                             {
@@ -232,7 +251,7 @@ namespace crds_angular.Services
             return capacity;
         }
 
-        public bool SaveServeRsvp(string token,
+        public List<int> SaveServeRsvp(string token,
             int contactId,
             int opportunityId,
             List<int> opportunityIds,
@@ -242,6 +261,10 @@ namespace crds_angular.Services
             bool signUp,
             bool alternateWeeks)
         {
+
+            List<MailRow> mailRows = new List<MailRow>();
+            var updatedEvents = new List<int>();
+
             //get participant id for Contact
             var participant = _participantService.GetParticipant(contactId);
 
@@ -262,8 +285,17 @@ namespace crds_angular.Services
                     var @event = events[i];
                     sequenceDate = IncrementSequenceDate(@event, sequenceDate, increment);
                     if (@event.EventStartDate.Date != sequenceDate.Date) continue;
-
-                    var response = CreateRsvp(token, opportunityId, opportunityIds, signUp, participant, @event);
+                    updatedEvents.Add(@event.EventId);
+                    DateTime from = DateTime.Today.Add(opportunity.ShiftStart);
+                    DateTime to = DateTime.Today.Add(opportunity.ShiftEnd);
+                    mailRows.Add(new MailRow()
+                    {
+                        EventDate = @event.EventStartDate.ToShortDateString(),
+                        Location = opportunity.Room,
+                        OpportunityName = opportunity.OpportunityName,
+                        ShiftTime = from.ToString("hh:mm tt") + " - " + to.ToString("hh:mm tt")
+                    });
+                    var response = CreateRsvp(token, opportunityId, opportunityIds, signUp, participant, @event, groupContact);
                     previousOpportunity = PreviousOpportunity(response, previousOpportunity);
                     templateId = GetTemplateId(templateId, response);
                     sequenceDate = sequenceDate.AddDays(increment);
@@ -271,13 +303,16 @@ namespace crds_angular.Services
             }
             catch (Exception e)
             {
-                return false;
+                return new List<int>();
             }
+            var table = SetupHTMLTable(mailRows).Build();
             var mergeData = SetupMergeData(contactId, opportunityId, previousOpportunity, opportunity, startDate,
-                endDate, groupContact);
-            var communication = SetupCommunication(templateId, groupContact, toContact);
-            _communicationService.SendMessage(communication, mergeData);
-            return true;
+                endDate, groupContact, table);
+
+            //var communication = SetupCommunication(templateId, groupContact, toContact);
+            var communication = SetupCommunication(templateId, groupContact, toContact, mergeData);
+            _communicationService.SendMessage(communication);
+            return updatedEvents;
         }
 
         private static DateTime IncrementSequenceDate(Event @event, DateTime sequenceDate, int increment)
@@ -305,11 +340,11 @@ namespace crds_angular.Services
         }
 
         private Dictionary<string, object> CreateRsvp(string token, int opportunityId, List<int> opportunityIds, bool signUp, Participant participant,
-            Event @event)
+            Event @event, MyContact groupLeader)
         {
             var response = signUp
                 ? HandleYesRsvp(participant, @event, opportunityId, opportunityIds, token)
-                : HandleNoRsvp(participant, @event, opportunityIds, token);
+                : HandleNoRsvp(participant, @event, opportunityIds, token, groupLeader);
             return response;
         }
 
@@ -375,9 +410,9 @@ namespace crds_angular.Services
         }
 
         private Dictionary<string, object> HandleNoRsvp(Participant participant, Event e, List<int> opportunityIds,
-            string token)
+            string token, MyContact groupLeader)
         {
-            var templateId = AppSetting("RsvpNoTemplate");
+            int templateId;
             Opportunity previousOpportunity = null;
 
             try
@@ -403,6 +438,18 @@ namespace crds_angular.Services
                     previousOpportunity = _opportunityService.GetOpportunityById(oid, token);
                 }
             }
+
+            if (previousOpportunity != null)
+            {
+                var emailName = participant.DisplayName;
+                var emailEmail = participant.EmailAddress;
+                var emailTeamName = previousOpportunity.GroupName;
+                var emailOpportunityName = previousOpportunity.OpportunityName;
+                var emailEventDateTime = e.EventStartDate.ToString();
+
+                SendCancellationMessage(groupLeader,emailName, emailEmail,emailTeamName,emailOpportunityName,emailEventDateTime);
+            }
+
             return new Dictionary<string, object>()
             {
                 {"templateId", templateId},
@@ -411,7 +458,25 @@ namespace crds_angular.Services
             };
         }
 
-        private Communication SetupCommunication(int templateId, MyContact groupContact, MyContact toContact)
+        private void SendCancellationMessage(MyContact groupLeader, string volunteerName, string volunteerEmail, string teamName, string opportunityName, string eventDateTime)
+        {
+            var templateId = AppSetting("RsvpYesToNo");
+
+            var mergeData = new Dictionary<string, object>
+            {
+                {"VolunteerName", volunteerName},
+                {"VolunteerEmail",volunteerEmail},
+                {"TeamName", teamName},
+                {"OpportunityName", opportunityName},
+                {"EventDateTime", eventDateTime}
+            };
+
+            var communication = SetupCommunication(templateId, groupLeader, groupLeader, mergeData);
+
+            _communicationService.SendMessage(communication);
+        }
+
+        private Communication SetupCommunication(int templateId, MyContact groupContact, MyContact toContact, Dictionary<string, object> mergeData)
         {
             var template = _communicationService.GetTemplate(templateId);
             return new Communication
@@ -425,13 +490,49 @@ namespace crds_angular.Services
                 ReplyContactId = groupContact.Contact_ID,
                 ReplyToEmailAddress = groupContact.Email_Address,
                 ToContactId = toContact.Contact_ID,
-                ToEmailAddress = toContact.Email_Address
+                ToEmailAddress = toContact.Email_Address,
+                MergeData = mergeData
             };
+        }
+
+        private HtmlElement SetupHTMLTable(List<MailRow> content)
+        {
+            var tableAttrs = new Dictionary<string, string>()
+            {
+                {"width", "100%"},
+                {"border", "1"},
+                {"cellspacing", "0"},
+                {"cellpadding", "5"}
+            };
+
+            var cellAttrs = new Dictionary<string, string>()
+            {
+                {"align", "center"}
+            };
+
+            List<HtmlElement> rows = content.Select(rowObj =>
+            {
+                return new HtmlElement("tr")
+                    .Append(new HtmlElement("td", cellAttrs, rowObj.EventDate))
+                    .Append(new HtmlElement("td", cellAttrs, rowObj.OpportunityName))
+                    .Append(new HtmlElement("td", cellAttrs, rowObj.ShiftTime))
+                    .Append(new HtmlElement("td", cellAttrs, rowObj.Location));
+            }).ToList();
+
+            return new HtmlElement("table", tableAttrs)
+                .Append(SetupTableHeader)
+                .Append(rows);
+        }
+
+        private HtmlElement SetupTableHeader()
+        {
+            var headers = TABLE_HEADERS.Select(el => new HtmlElement("th", el)).ToList();
+            return new HtmlElement("tr", headers);
         }
 
         private Dictionary<string, object> SetupMergeData(int contactId, int opportunityId,
             Opportunity previousOpportunity, Opportunity currentOpportunity, DateTime startDate, DateTime endDate,
-            MyContact groupContact)
+            MyContact groupContact, String htmlTable)
         {
             return new Dictionary<string, object>
             {
@@ -446,7 +547,8 @@ namespace crds_angular.Services
                 {
                     "Previous_Opportunity_Name",
                     previousOpportunity != null ? previousOpportunity.OpportunityName : @"Not Available"
-                }
+                },
+                {"Html_Table", htmlTable}
             };
         }
 
@@ -485,7 +587,9 @@ namespace crds_angular.Services
                 GroupId = record.GroupId,
                 Members = new List<TeamMember> {NewTeamMember(record)},
                 Name = record.GroupName,
-                PrimaryContact = record.GroupPrimaryContactEmail
+                PrimaryContact = record.GroupPrimaryContactEmail, 
+                PastDeadline = (record.EventStartDateTime.AddDays(0 - record.OpportunitySignUpDeadline) < DateTime.Today),
+                PastDeadlineMessage = record.DeadlinePassedMessage
             };
         }
 
@@ -534,5 +638,8 @@ namespace crds_angular.Services
                     .ToList();
             return r.Count <= 0 ? null : new ServeRsvp {Attending = (r[0] == 1), RoleId = opportunityId};
         }
+
     }
+
+   
 }

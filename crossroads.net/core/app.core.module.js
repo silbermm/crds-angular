@@ -11,8 +11,11 @@
     'ngMessages',
     'angular-growl',
     'toggle-switch',
+    'sn.addthis',
     'ngAside',
-    'matchMedia'
+    'mailchimp',
+    'matchMedia',
+    'ui.bootstrap'
     ])
     .constant("AUTH_EVENTS", {
       loginSuccess: "auth-login-success",
@@ -59,9 +62,14 @@
       noMembers: 33,
       noServingOpportunities: 34,
       toDateToSmall: 38,
+      invalidPaymentMethodInformation: 39,
       noInitiativeSelected: 16,
       toolsError: 40,
-      noResponse: 49
+      paymentMethodDeclined: 44,
+      paymentMethodProcessingError: 47,
+      noResponse: 49,
+      ageError: 54,
+      mailchimpSuccess: 55
     })
     .config(function (growlProvider) {
       growlProvider.globalPosition("top-center");

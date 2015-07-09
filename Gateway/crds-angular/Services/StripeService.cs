@@ -6,156 +6,187 @@ using crds_angular.Services.Interfaces;
 using Newtonsoft.Json;
 using RestSharp;
 using System.Net;
+using Crossroads.Utilities.Interfaces;
 
 namespace crds_angular.Services
 {
     public class StripeService : IPaymentService
     {
-        private IRestClient stripeRestClient;
+        private readonly IRestClient _stripeRestClient;
 
-        private const string STRIPE_CUSTOMER_DESCRIPTION = "Crossroads Donor #{0}";
+        private const string StripeCustomerDescription = "Crossroads Donor #{0}";
 
-        public StripeService(IRestClient stripeRestClient)
+        private const string StripeNetworkErrorResponseCode = "abort";
+
+        private readonly int _maxQueryResultsPerPage;
+
+        public StripeService(IRestClient stripeRestClient, IConfigurationWrapper configuration)
         {
-            this.stripeRestClient = stripeRestClient;
+            _stripeRestClient = stripeRestClient;
+            _maxQueryResultsPerPage = configuration.GetConfigIntValue("MaxStripeQueryResultsPerPage");
         }
 
-        public string createCustomer(string token)
+        private static bool IsBadResponse(IRestResponse response)
         {
+            return (response.ResponseStatus != ResponseStatus.Completed 
+                    || response.StatusCode == HttpStatusCode.BadRequest
+                    || response.StatusCode == HttpStatusCode.PaymentRequired);
+        }
 
-            var request = new RestRequest("customers", Method.POST);
-            request.AddParameter("description", string.Format(STRIPE_CUSTOMER_DESCRIPTION, "pending")); // adds to POST or URL querystring based on Method
-            request.AddParameter("source", token);
-
-            IRestResponse<StripeCustomer> response =
-                (IRestResponse<StripeCustomer>)stripeRestClient.Execute<StripeCustomer>(request);
-            if (response.StatusCode == HttpStatusCode.BadRequest)
+        private static void CheckStripeResponse(string errorMessage, IRestResponse response)
+        {
+            if (!IsBadResponse(response))
             {
-                Content content = JsonConvert.DeserializeObject<Content>(response.Content);
-                throw new StripeException("Customer creation failed", content.error.type, content.error.message, content.error.code);
+                return;
             }
+
+            var content = JsonConvert.DeserializeObject<Content>(response.Content);
+            if (content == null || content.Error == null)
+            {
+                throw (new StripeException(HttpStatusCode.InternalServerError, errorMessage, StripeNetworkErrorResponseCode,
+                    response.ErrorException.Message, null, null, null));
+            }
+            else
+            {
+                throw new StripeException(response.StatusCode, errorMessage, content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode, content.Error.Param);
+            }
+        }
+
+
+        public string CreateCustomer(string customerToken)
+        {
+            var request = new RestRequest("customers", Method.POST);
+            request.AddParameter("description", string.Format(StripeCustomerDescription, "pending")); // adds to POST or URL querystring based on Method
+            request.AddParameter("source", customerToken);
+
+            var response = _stripeRestClient.Execute<StripeCustomer>(request);
+            CheckStripeResponse("Customer creation failed", response);
 
             return response.Data.id;
 
         }
 
-        public SourceData updateCustomerSource(string customerToken, string cardToken)
+        public SourceData UpdateCustomerSource(string customerToken, string cardToken)
         {
-            SourceData defaultSource = new SourceData();
-
             var request = new RestRequest("customers/" + customerToken, Method.POST);
             request.AddParameter("source", cardToken);
 
-            IRestResponse<StripeCustomer> response =
-                (IRestResponse<StripeCustomer>)stripeRestClient.Execute<StripeCustomer>(request);
-            if (response.StatusCode == HttpStatusCode.BadRequest)
-            {
-                Content content = JsonConvert.DeserializeObject<Content>(response.Content);
-                throw new StripeException("Customer update to add source failed", content.error.type, content.error.message, content.error.code);
-            }
+            var response = _stripeRestClient.Execute<StripeCustomer>(request);
+            CheckStripeResponse("Customer update to add source failed", response);
+
             var defaultSourceId = response.Data.default_source;
             var sources = response.Data.sources.data;
-            defaultSource = SetDefaultSource(sources, defaultSourceId);
+            var defaultSource = MapDefaultSource(sources, defaultSourceId);
             
             return defaultSource;
 
         }
 
-        public string updateCustomerDescription(string customer_token, int donor_id)
+        public string UpdateCustomerDescription(string customerToken, int donorId)
         {
-            var request = new RestRequest("customers/" + customer_token, Method.POST);
-            request.AddParameter("description", string.Format(STRIPE_CUSTOMER_DESCRIPTION, donor_id));
+            var request = new RestRequest("customers/" + customerToken, Method.POST);
+            request.AddParameter("description", string.Format(StripeCustomerDescription, donorId));
 
-            IRestResponse<StripeCustomer> response =
-                (IRestResponse<StripeCustomer>)stripeRestClient.Execute<StripeCustomer>(request);
-            if (response.StatusCode == HttpStatusCode.BadRequest)
-            {
-                Content content = JsonConvert.DeserializeObject<Content>(response.Content);
-                throw new StripeException("Customer update failed", content.error.type, content.error.message, content.error.code);
-            }
+            var response = _stripeRestClient.Execute<StripeCustomer>(request);
+            CheckStripeResponse("Customer update failed", response);
 
             return (response.Data.id);
         }
 
-        public SourceData getDefaultSource(string customer_token)
+        public SourceData GetDefaultSource(string customerToken)
         {
-            SourceData defaultSource = new SourceData();
+            var request = new RestRequest("customers/" + customerToken, Method.GET);
 
-            var getCustomerRequest = new RestRequest("customers/" + customer_token, Method.GET);
+            var response = _stripeRestClient.Execute<StripeCustomer>(request);
+            CheckStripeResponse("Could not get default source information because customer lookup failed", response);
 
-            IRestResponse<StripeCustomer> getCustomerResponse =
-                (IRestResponse<StripeCustomer>)stripeRestClient.Execute<StripeCustomer>(getCustomerRequest);
-            if (getCustomerResponse.StatusCode == HttpStatusCode.BadRequest)
-            {
-                Content content = JsonConvert.DeserializeObject<Content>(getCustomerResponse.Content);
-                throw new StripeException("Could not get default source information because customer lookup failed", content.error.type, content.error.message, content.error.code);
-            }
-            var defaultSourceId = getCustomerResponse.Data.default_source;
-            var sources = getCustomerResponse.Data.sources.data;
-            defaultSource = SetDefaultSource(sources, defaultSourceId);
+            var defaultSourceId = response.Data.default_source;
+            var sources = response.Data.sources.data;
+            var defaultSource = MapDefaultSource(sources, defaultSourceId);
 
             return defaultSource;
         }
 
-        public SourceData SetDefaultSource(List<SourceData>sources, string defaultSourceId)
+        private static SourceData MapDefaultSource(List<SourceData>sources, string defaultSourceId)
         {
-            SourceData defaultSource = new SourceData();
+            var defaultSource = new SourceData();
 
-            foreach (var source in sources)
+            foreach (var source in sources.Where(source => source.id == defaultSourceId))
             {
-                if (source.id == defaultSourceId)
+                if (source.@object == "bank_account")
                 {
-                    if (source.@object == "bank_account")
-                    {
-                        defaultSource.routing_number = source.routing_number;
-                        defaultSource.bank_last4 = source.last4;
-                    }
-                    else
-                    {
-                        defaultSource.brand = source.brand;
-                        defaultSource.last4 = source.last4;
-                        defaultSource.name = source.name;
-                        defaultSource.address_zip = source.address_zip;
-                        defaultSource.exp_month = source.exp_month.PadLeft(2, '0');
-                        defaultSource.exp_year = source.exp_year.Substring(2, 2);
-                    }
+                    defaultSource.routing_number = source.routing_number;
+                    defaultSource.bank_last4 = source.last4;
+                }
+                else
+                {
+                    defaultSource.brand = source.brand;
+                    defaultSource.last4 = source.last4;
+                    defaultSource.address_zip = source.address_zip;
+                    defaultSource.exp_month = source.exp_month.PadLeft(2, '0');
+                    defaultSource.exp_year = source.exp_year.Substring(2, 2);
                 }
             }
 
             return defaultSource;
         }
 
-        public string chargeCustomer(string customer_token, int amount, int donor_id, string pymt_type)
+        public string ChargeCustomer(string customerToken, int amount, int donorId, string paymentType)
         {
-            var chargeRequest = new RestRequest("charges", Method.POST);
-            chargeRequest.AddParameter("amount", amount * 100);
-            chargeRequest.AddParameter("currency", "usd");
-            chargeRequest.AddParameter("customer", customer_token);
-            chargeRequest.AddParameter("description", "Donor ID #" + donor_id);
+            var request = new RestRequest("charges", Method.POST);
+            request.AddParameter("amount", amount * 100);
+            request.AddParameter("currency", "usd");
+            request.AddParameter("customer", customerToken);
+            request.AddParameter("description", "Donor ID #" + donorId);
 
-            IRestResponse<StripeCharge> chargeResponse =
-                (IRestResponse<StripeCharge>)stripeRestClient.Execute<StripeCharge>(chargeRequest);
-            if (chargeResponse.StatusCode == HttpStatusCode.BadRequest)
+            var response = _stripeRestClient.Execute<StripeCharge>(request);
+            CheckStripeResponse("Invalid charge request", response);
+
+            return response.Data.Id;
+        }
+
+        public List<string> GetChargesForTransfer(string transferId)
+        {
+            var url = string.Format("transfers/{0}/transactions", transferId);
+            var request = new RestRequest(url, Method.GET);
+            request.AddParameter("count", _maxQueryResultsPerPage);
+
+            var charges = new List<string>();
+            StripeCharges nextPage;
+            do
             {
-                Content content = JsonConvert.DeserializeObject<Content>(chargeResponse.Content);
-                throw new StripeException("Invalid charge request", content.error.type, content.error.message, content.error.code);
-            }
+                var response = _stripeRestClient.Execute<StripeCharges>(request);
+                CheckStripeResponse("Could not query transactions", response);
 
-            return chargeResponse.Data.id;
+                nextPage = response.Data;
+                charges.AddRange(nextPage.Data.Select(charge => charge.Id));
+
+                request = new RestRequest(url, Method.GET);
+                request.AddParameter("count", _maxQueryResultsPerPage);
+                request.AddParameter("starting_after", charges.Last());
+            } while (nextPage.HasMore);
+
+            return (charges);
         }
     }
 
     public class Error
     {
-        public string type { get; set; }
-        public string message { get; set; }
-        public string param { get; set; }
-        public string code { get; set; }
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
+        [JsonProperty(PropertyName = "message")]
+        public string Message { get; set; }
+        [JsonProperty(PropertyName = "param")]
+        public string Param { get; set; }
+        [JsonProperty(PropertyName = "code")]
+        public string Code { get; set; }
+        [JsonProperty(PropertyName = "decline_code")]
+        public string DeclineCode { get; set; }
     }
 
     public class Content
     {
-        public Error error { get; set; }
+        public Error Error { get; set; }
     }
 }
 

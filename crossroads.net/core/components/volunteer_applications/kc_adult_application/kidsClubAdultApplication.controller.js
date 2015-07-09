@@ -32,15 +32,8 @@ var moment = require('moment');
     vm.save = save;
     vm.saving = false;
     vm.showError = showError;
+    vm.spiritualSelected = spiritualSelected;
     vm.submitButtonText = 'Submit';
-    vm.volunteer.areaOfInterestServingInClassroom = false;
-    vm.volunteer.areaOfInterestWelcomingNewFamilies=false;
-    vm.volunteer.areaOfInterestHelpSpecialNeeds=false;
-    vm.volunteer.areaOfInterestTech=false;
-    vm.volunteer.areaOfInterestRoomPrep=false;
-    vm.volunteer.areaOfInterestAdminTasks=false;
-    vm.volunteer.areaOfInterestShoppingForSupplies=false;
-    vm.volunteer.areaOfInterestCreatingWeekendExperience=false;
     vm.volunteer.child1 = {};
     vm.volunteer.child2 = {};
     vm.volunteer.child3 = {};
@@ -148,7 +141,7 @@ var moment = require('moment');
       };
 
       adult.nameForNameTag = {
-        Value: vm.volunteer.nameTag,
+        Value: vm.volunteer.nickName,
         CrossroadsId: adultFields.nameForNameTag
       };
 
@@ -175,11 +168,6 @@ var moment = require('moment');
       adult.spouseGender = {
         Value: vm.volunteer.spouseGender,
         CrossroadsId: adultFields.spouseGender
-      };
-
-      adult.siteYouAttend = {
-        Value: vm.volunteer.siteAttend,
-        CrossroadsId: adultFields.site
       };
 
       adult.howLongAttending = {
@@ -302,10 +290,24 @@ var moment = require('moment');
         CrossroadsId: adultFields.sexuallyActiveOutsideMarriage
       };
 
-      adult.spiritualOrientation = {
-        //currently checkboxes make radio buttons
-        Value: vm.volunteer.spiritualOrientation,
-        CrossroadsId: adultFields.spiritualOrientation
+      adult.religionSearchingForAnswers = {
+        Value: vm.volunteer.religionSearchingForAnswers,
+        CrossroadsId: adultFields.religionSearchingForAnswers
+      };
+
+      adult.religionReceivedJesus = {
+        Value: vm.volunteer.religionReceivedJesus,
+        CrossroadsId: adultFields.religionReceivedJesus
+      };
+
+      adult.religionFocusingOnObedience = {
+        Value: vm.volunteer.religionFocusingOnObedience,
+        CrossroadsId: adultFields.religionFocusingOnObedience
+      };
+
+      adult.religionReplicating = {
+        Value: vm.volunteer.religionReplicating,
+        CrossroadsId: adultFields.religionReplicating
       };
 
       adult.spiritualOrientationExplain = {
@@ -333,34 +335,9 @@ var moment = require('moment');
         CrossroadsId: adultFields.availabilityWeekend
       };
 
-      adult.availabilityOakley = {
-        Value: vm.volunteer.availabilityOakley,
-        CrossroadsId: adultFields.availabilityOakley
-      };
-
-      adult.availabilityFlorence = {
-        Value: vm.volunteer.availabilityFlorence,
-        CrossroadsId: adultFields.availabilityFlorence
-      };
-
-      adult.availabilityWestSide = {
-        Value: vm.volunteer.availabilityWestSide,
-        CrossroadsId: adultFields.availabilityWestSide
-      };
-
-      adult.availabilityMason = {
-        Value: vm.volunteer.availabilityMason,
-        CrossroadsId: adultFields.availabilityMason
-      };
-
-      adult.availabilityClifton = {
-        Value: vm.volunteer.availabilityClifton,
-        CrossroadsId: adultFields.availabilityClifton
-      };
-
-      adult.availabilityServiceTimes = {
-        Value: vm.volunteer.serveServiceTimes,
-        CrossroadsId: adultFields.availabilityServiceTimes
+      adult.availabilityWeekendSite = {
+        Value: vm.volunteer.availabilityWeekendSite,
+        CrossroadsId: adultFields.availabilityWeekendSite
       };
 
       adult.areaOfInterestServingInClassroom = {
@@ -570,6 +547,20 @@ var moment = require('moment');
         return false;
       if (form.$submitted || form[field].$dirty){
         return form[field].$invalid;
+      }
+      return false;
+    }
+
+    /**
+     * Checks if one of the spiritual life responses has been selected and returns
+     * true if it has, false otherwise
+     */
+    function spiritualSelected(){
+      if (vm.volunteer.religionSearchingForAnswers ||
+          vm.volunteer.religionReceivedJesus ||
+          vm.volunteer.religionFocusingOnObedience ||
+          vm.volunteer.religionReplicating) {
+        return true;
       }
       return false;
     }

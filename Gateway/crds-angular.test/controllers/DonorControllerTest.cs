@@ -15,6 +15,7 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Hosting;
 using System.Web.Http.Results;
 using crds_angular.Exceptions;
+using crds_angular.Models.Json;
 
 namespace crds_angular.test.controllers
 {
@@ -31,7 +32,6 @@ namespace crds_angular.test.controllers
         private static int donorId  = 394256;
         private static string last4 = "1234";
         private static string brand = "Visa";
-        private static string name = "Automated Test";
         private static string address_zip = "45454";
         private ContactDonor donor = new ContactDonor()
         {
@@ -93,12 +93,11 @@ namespace crds_angular.test.controllers
             {
                 last4 = "1234",
                 brand = "Visa",
-                name = "Automated Test",
                 address_zip = "45454"
             };
             
             donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(It.IsAny<string>())).Returns(contactDonor);
-            paymentService.Setup(mocked => mocked.getDefaultSource(It.IsAny<string>())).Returns(default_source);
+            paymentService.Setup(mocked => mocked.GetDefaultSource(It.IsAny<string>())).Returns(default_source);
             IHttpActionResult result = fixture.Get();
             Assert.IsNotNull(result);
             Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonorDTO>), result);
@@ -107,7 +106,6 @@ namespace crds_angular.test.controllers
             Assert.AreEqual(processorId, okResult.Content.ProcessorId);
             Assert.AreEqual(brand, okResult.Content.DefaultSource.credit_card.brand);
             Assert.AreEqual(last4, okResult.Content.DefaultSource.credit_card.last4);
-            Assert.AreEqual(name, okResult.Content.DefaultSource.credit_card.name);
             Assert.AreEqual(address_zip, okResult.Content.DefaultSource.credit_card.address_zip);
         }
 
@@ -335,7 +333,7 @@ namespace crds_angular.test.controllers
             };
 
             donorService.Setup(mocked => mocked.GetContactDonorForEmail("me@here.com")).Returns(contactDonor);
-            paymentService.Setup(mocked => mocked.updateCustomerSource(contactDonor.ProcessorId, dto.StripeTokenId))
+            paymentService.Setup(mocked => mocked.UpdateCustomerSource(contactDonor.ProcessorId, dto.StripeTokenId))
                 .Returns(sourceData);
 
             var result = fixture.UpdateDonor(dto);
@@ -378,14 +376,13 @@ namespace crds_angular.test.controllers
             {
                 brand = "Visa",
                 last4 = "5432",
-                name = "Omar Vizquel",
                 address_zip = "90210",
                 exp_month = "12",
                 exp_year = "19"
             };
 
             donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(It.IsAny<string>())).Returns(contactDonor);
-            paymentService.Setup(mocked => mocked.updateCustomerSource(contactDonor.ProcessorId, dto.StripeTokenId))
+            paymentService.Setup(mocked => mocked.UpdateCustomerSource(contactDonor.ProcessorId, dto.StripeTokenId))
                 .Returns(sourceData);
 
             var result = fixture.UpdateDonor(dto);
@@ -402,7 +399,6 @@ namespace crds_angular.test.controllers
             Assert.IsNotNull(donorDto.DefaultSource.credit_card);
             Assert.AreEqual(sourceData.brand, donorDto.DefaultSource.credit_card.brand);
             Assert.AreEqual(sourceData.last4, donorDto.DefaultSource.credit_card.last4);
-            Assert.AreEqual(sourceData.name, donorDto.DefaultSource.credit_card.name);
             Assert.AreEqual(sourceData.address_zip, donorDto.DefaultSource.credit_card.address_zip);
             Assert.AreEqual(sourceData.exp_month + sourceData.exp_year, donorDto.DefaultSource.credit_card.exp_date);
         }
@@ -464,22 +460,98 @@ namespace crds_angular.test.controllers
 
             donorService.Setup(mocked => mocked.GetContactDonorForEmail("me@here.com")).Returns(contactDonor);
 
-            var stripeException = new StripeException("auxMessage", "type", "message", "code");
-            paymentService.Setup(mocked => mocked.updateCustomerSource(contactDonor.ProcessorId, dto.StripeTokenId))
+            var stripeException = new StripeException(HttpStatusCode.PaymentRequired, "auxMessage", "type", "message", "code", "decline", "param");
+            paymentService.Setup(mocked => mocked.UpdateCustomerSource(contactDonor.ProcessorId, dto.StripeTokenId))
                 .Throws(stripeException);
 
-            try
-            {
-                fixture.UpdateDonor(dto);
-                Assert.Fail("Expected exception was not thrown");
-            }
-            catch (Exception e)
-            {
-                Assert.AreEqual(typeof(HttpResponseException), e.GetType());
-            }
+            var response = fixture.UpdateDonor(dto);
+            Assert.AreEqual(typeof(RestHttpActionResult<StripeErrorResponse>), response.GetType());
+            var stripeErrorResponse = (RestHttpActionResult<StripeErrorResponse>) response;
+            var content = stripeErrorResponse.Content;
+            Assert.AreEqual("type", content.Error.Type);
+            Assert.AreEqual("message", content.Error.Message);
+            Assert.AreEqual("code", content.Error.Code);
+            Assert.AreEqual("decline", content.Error.DeclineCode);
+            Assert.AreEqual("param", content.Error.Param);
 
             donorService.VerifyAll();
             paymentService.VerifyAll();
         }
+
+        [Test]
+        public void TestCreateDonorForUnauthenticatedUserStripeUpdateThrowsStripeException()
+        {
+            fixture.Request.Headers.Authorization = null;
+            var dto = new CreateDonorDTO
+            {
+                email_address = "me@here.com",
+                stripe_token_id = "456"
+            };
+
+            var contactDonor = new ContactDonor
+            {
+                DonorId = 123,
+                ContactId = 789,
+                Email = "me@here.com",
+                ProcessorId = "102030",
+                RegisteredUser = false,
+            };
+
+            var sourceData = new SourceData
+            {
+                bank_last4 = "5555",
+                routing_number = "987654321"
+            };
+
+            var stripeException = new StripeException(HttpStatusCode.PaymentRequired, "auxMessage", "type", "message", "code", "decline", "param");
+            donorService.Setup(mocked => mocked.GetContactDonorForEmail("me@here.com")).Returns(contactDonor);
+            donorService.Setup(
+                (mocked => mocked.CreateOrUpdateContactDonor(contactDonor, "me@here.com", "456", It.IsAny<DateTime>())))
+                .Throws(stripeException);
+
+            var response = fixture.Post(dto);
+            Assert.AreEqual(typeof(RestHttpActionResult<StripeErrorResponse>), response.GetType());
+
+            donorService.VerifyAll();
+            paymentService.VerifyAll();
+        }
+
+        [Test]
+        public void TestCreateDonorForAuthenticatedUserStripeUpdateThrowsStripeException()
+        {
+            var dto = new CreateDonorDTO
+            {
+                email_address = "me@here.com",
+                stripe_token_id = "456"
+            };
+
+            var contactDonor = new ContactDonor
+            {
+                DonorId = 123,
+                ContactId = 789,
+                Email = "me@here.com",
+                ProcessorId = "102030",
+                RegisteredUser = true,
+            };
+
+            var sourceData = new SourceData
+            {
+                bank_last4 = "5555",
+                routing_number = "987654321"
+            };
+
+            var stripeException = new StripeException(HttpStatusCode.PaymentRequired, "auxMessage", "type", "message", "code", "decline", "param");
+            donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(It.IsAny<string>())).Returns(contactDonor);
+            donorService.Setup(
+                (mocked => mocked.CreateOrUpdateContactDonor(contactDonor, String.Empty, "456", It.IsAny<DateTime>())))
+                .Throws(stripeException);
+
+            var response = fixture.Post(dto);
+            Assert.AreEqual(typeof(RestHttpActionResult<StripeErrorResponse>), response.GetType());
+
+            donorService.VerifyAll();
+            paymentService.VerifyAll();
+        }
+
     }
 }

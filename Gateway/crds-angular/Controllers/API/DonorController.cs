@@ -1,36 +1,33 @@
-﻿using crds_angular.Exceptions.Models;
-using crds_angular.Models.Crossroads;
-using crds_angular.Security;
-using crds_angular.Services.Interfaces;
-using log4net;
-using MinistryPlatform.Models;
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Exceptions;
+using crds_angular.Exceptions.Models;
+using crds_angular.Models.Crossroads;
+using crds_angular.Security;
+using crds_angular.Services.Interfaces;
+using MinistryPlatform.Models;
 
 namespace crds_angular.Controllers.API
 {
     public class DonorController : MPAuth
     {
-        private IDonorService gatewayDonorService;
-        private IPaymentService stripePaymentService;
-
-        private static readonly ILog logger = LogManager.GetLogger(typeof(DonorController));
+        private readonly IDonorService _gatewayDonorService;
+        private readonly IPaymentService _stripePaymentService;
 
         public DonorController(IDonorService gatewayDonorService, IPaymentService stripePaymentService)
         {
-            this.gatewayDonorService = gatewayDonorService;
-            this.stripePaymentService = stripePaymentService;
+            _gatewayDonorService = gatewayDonorService;
+            _stripePaymentService = stripePaymentService;
         }
 
         [ResponseType(typeof(DonorDTO))]
         [Route("api/donor/{email?}")]
         public IHttpActionResult Get(string email="")
         {
-            return (Authorized(token => GetDonorForAuthenticatedUser(token), () => GetDonorForUnauthenticatedUser(email)));
+            return (Authorized(GetDonorForAuthenticatedUser, () => GetDonorForUnauthenticatedUser(email)));
         }
 
         [ResponseType(typeof (DonorDTO))]
@@ -45,7 +42,7 @@ namespace crds_angular.Controllers.API
             ContactDonor donor;
             try
             {
-                donor = gatewayDonorService.GetContactDonorForEmail(dto.email_address);
+                donor = _gatewayDonorService.GetContactDonorForEmail(dto.email_address);
             }
             catch (Exception e)
             {
@@ -61,7 +58,11 @@ namespace crds_angular.Controllers.API
 
             try
             {
-                donor = gatewayDonorService.CreateOrUpdateContactDonor(donor, dto.email_address, dto.stripe_token_id, DateTime.Now);
+                donor = _gatewayDonorService.CreateOrUpdateContactDonor(donor, dto.email_address, dto.stripe_token_id, DateTime.Now);
+            }
+            catch (StripeException e)
+            {
+                return (e.GetStripeResult());
             }
             catch (Exception e)
             {
@@ -75,7 +76,8 @@ namespace crds_angular.Controllers.API
             {
                 Id = donor.DonorId,
                 ProcessorId = donor.ProcessorId,
-                RegisteredUser = false
+                RegisteredUser = false,
+                Email = donor.Email
             };
 
             // HTTP StatusCode should be 201 (Created) if we created a donor, or 200 (Ok) if returning an existing donor
@@ -83,24 +85,29 @@ namespace crds_angular.Controllers.API
                 (existingDonorId == donor.DonorId) ?
                     HttpStatusCode.OK :
                     HttpStatusCode.Created;
-            return (ResponseMessage(Request.CreateResponse<DonorDTO>(statusCode, responseBody)));
+            return (ResponseMessage(Request.CreateResponse(statusCode, responseBody)));
         }
 
-        private IHttpActionResult CreateDonorForAuthenticatedUser(String authToken, CreateDonorDTO dto)
+        private IHttpActionResult CreateDonorForAuthenticatedUser(string authToken, CreateDonorDTO dto)
         {
             try
             {
-                var donor = gatewayDonorService.GetContactDonorForAuthenticatedUser(authToken);
-                donor = gatewayDonorService.CreateOrUpdateContactDonor(donor, string.Empty, dto.stripe_token_id, DateTime.Now);
+                var donor = _gatewayDonorService.GetContactDonorForAuthenticatedUser(authToken);
+                donor = _gatewayDonorService.CreateOrUpdateContactDonor(donor, string.Empty, dto.stripe_token_id, DateTime.Now);
 
                 var response = new DonorDTO
                 {
                     Id = donor.DonorId,
                     ProcessorId = donor.ProcessorId,
-                    RegisteredUser = true
+                    RegisteredUser = true,
+                    Email = donor.Email
                 };
 
                 return Ok(response);
+            }
+            catch (StripeException e)
+            {
+                return (e.GetStripeResult());
             }
             catch (Exception exception)
             {
@@ -113,7 +120,7 @@ namespace crds_angular.Controllers.API
         {
             try
             {
-                var donor = gatewayDonorService.GetContactDonorForAuthenticatedUser(token);
+                var donor = _gatewayDonorService.GetContactDonorForAuthenticatedUser(token);
 
                 if (donor == null || !donor.HasPaymentProcessorRecord)
                 {
@@ -121,7 +128,7 @@ namespace crds_angular.Controllers.API
                 }
                 else
                 {
-                    var default_source = stripePaymentService.getDefaultSource(donor.ProcessorId);
+                    var defaultSource = _stripePaymentService.GetDefaultSource(donor.ProcessorId);
                     
                     var response = new DonorDTO()   
                     {
@@ -131,23 +138,27 @@ namespace crds_angular.Controllers.API
                         {
                             credit_card = new CreditCardDTO
                             {
-                              last4 = default_source.last4,
-                              name = default_source.name,
-                              brand = default_source.brand,
-                              address_zip = default_source.address_zip,
-                              exp_date = default_source.exp_month + default_source.exp_year
+                              last4 = defaultSource.last4,
+                              brand = defaultSource.brand,
+                              address_zip = defaultSource.address_zip,
+                              exp_date = defaultSource.exp_month + defaultSource.exp_year
                             },
                             bank_account = new BankAccountDTO
                             {
-                              last4 = default_source.bank_last4,
-                              routing = default_source.routing_number
+                              last4 = defaultSource.bank_last4,
+                              routing = defaultSource.routing_number
                             }
                          },
-                         RegisteredUser = donor.RegisteredUser
+                         RegisteredUser = donor.RegisteredUser,
+                         Email = donor.Email
                     };
 
                     return Ok(response);
                 }
+            }
+            catch (StripeException stripeException)
+            {
+                return (stripeException.GetStripeResult());
             }
             catch (Exception exception)
             {
@@ -160,7 +171,7 @@ namespace crds_angular.Controllers.API
         {
             try
             {
-                var donor = gatewayDonorService.GetContactDonorForEmail(email);
+                var donor = _gatewayDonorService.GetContactDonorForEmail(email);
                 if (donor == null || !donor.HasPaymentProcessorRecord)
                 {
                     return NotFound();
@@ -171,11 +182,16 @@ namespace crds_angular.Controllers.API
                     {
                         Id = donor.DonorId,
                         ProcessorId = donor.ProcessorId,
-                        RegisteredUser = donor.RegisteredUser
+                        RegisteredUser = donor.RegisteredUser,
+                        Email = donor.Email
                     };
 
                     return Ok(response); 
                 }
+            }
+            catch (StripeException stripeException)
+            {
+                return (stripeException.GetStripeResult());
             }
             catch (Exception exception)
             {
@@ -201,23 +217,23 @@ namespace crds_angular.Controllers.API
             {
                 contactDonor = 
                     token == null ? 
-                    gatewayDonorService.GetContactDonorForEmail(dto.EmailAddress) 
+                    _gatewayDonorService.GetContactDonorForEmail(dto.EmailAddress) 
                     : 
-                    gatewayDonorService.GetContactDonorForAuthenticatedUser(token);
+                    _gatewayDonorService.GetContactDonorForAuthenticatedUser(token);
 
                 //Post apistripe/customer/{custID}/sources pass in the dto.stripe_token_id
-                sourceData = stripePaymentService.updateCustomerSource(contactDonor.ProcessorId, dto.StripeTokenId);
+                sourceData = _stripePaymentService.UpdateCustomerSource(contactDonor.ProcessorId, dto.StripeTokenId);
             }
             catch (StripeException stripeException)
             {
-                var apiError = new ApiErrorDto("Error calling payment processor:" + stripeException.Message, stripeException);
-                throw new HttpResponseException(apiError.HttpResponseMessage);
+                return (stripeException.GetStripeResult());
             }
             catch (ApplicationException applicationException)
             {
                 var apiError = new ApiErrorDto("Error calling Ministry Platform" + applicationException.Message, applicationException);
                 throw new HttpResponseException(apiError.HttpResponseMessage);
             }
+
             //return donor
             var donor = new DonorDTO
             {
@@ -229,7 +245,6 @@ namespace crds_angular.Controllers.API
                     {
                         brand = sourceData.brand,
                         last4 = sourceData.last4,
-                        name = sourceData.name,
                         address_zip = sourceData.address_zip,
                         exp_date = sourceData.exp_month + sourceData.exp_year
                     },
@@ -239,7 +254,8 @@ namespace crds_angular.Controllers.API
                         routing = sourceData.routing_number
                     }
                 },
-                RegisteredUser = contactDonor.RegisteredUser
+                RegisteredUser = contactDonor.RegisteredUser,
+                Email = contactDonor.Email
             };
 
             return Ok(donor);

@@ -20,6 +20,7 @@ require('./cms/services/cms_services_module');
 require('./components/svgIcon.directive');
 require('./components/preloader');
 require('./components/volunteer_applications');
+require('./components/loadingButton');
 
 require('./content');
 require('./email_field/email_field_directive');

@@ -1,6 +1,6 @@
 (function(){
   'use strict()';
-  
+
   var MODULE = 'crossroads.core';
 
   /* The Volunteer Service */
@@ -8,33 +8,32 @@
 
 
   /* The Adult Application */
-  angular.module(MODULE).controller('KidsClubAdultApplicationController', 
+  angular.module(MODULE).controller('KidsClubAdultApplicationController',
       require('./kc_adult_application/kidsClubAdultApplication.controller'));
-  angular.module(MODULE).directive('kidsClubAdultApplication', 
+  angular.module(MODULE).directive('kidsClubAdultApplication',
       require('./kc_adult_application/kidsClubAdultApplication.directive'));
-  // html file 
+  // html file
   require('./kc_adult_application/kidsClubAdultApplication.template.html');
 
 
   /* The Student Application */
-  angular.module(MODULE).controller('KidsClubStudentApplicationController', 
+  angular.module(MODULE).controller('KidsClubStudentApplicationController',
       require('./kc_student_application/kidsClubStudentApplication.controller'));
-  angular.module(MODULE).directive('kidsClubStudentApplication', 
+  angular.module(MODULE).directive('kidsClubStudentApplication',
       require('./kc_student_application/kidsClubStudentApplication.directive'));
-  // html file 
+  // html file
   require('./kc_student_application/kidsClubStudentApplication.template.html');
 
 
   /* CONSTANTS */
   angular.module(MODULE).constant('studentFields', {
-    'firstName': 310,
-    'lastName': 311,
+    'firstName': 311,
+    'lastName': 310,
     'middleInitial': 312,
     'email': 325,
     'nameForNameTag': 318,
     'birthDate': 317,
     'gender': 315,
-    'site': 313,
     'howLongAttending': 314,
     'serviceAttend': 474,
     'streetAddress': 319,
@@ -45,19 +44,16 @@
     'homePhone': 324,
     'school': 326,
     'grade': 327,
-    'whereYouAre': 330,
+    'religionSearchingForAnswers': 510,
+    'religionReceivedJesus': 511,
+    'religionFocusingOnObedience' : 512,
+    'religionReplicating' : 513,
     'explainFaith': 331,
     'whyServe': 332,
-    'specialTalents': 333,
+    'specialTalents': 335,
     'availabilityDuringWeek': 484,
     'availabilityDuringWeekend': 485,
-    'serveSite': 338,
-    'availabilityOakley': 476,
-    'availabilityFlorence': 477,
-    'availabilityWestSide': 478,
-    'availabilityMason': 479,
-    'availabilityClifton': 480,
-    'serveServiceTimes': 340,
+    'availabilityWeekendSite': 340,
     'serveAgeKids1to2': 481,
     'serveAgeKids3toPreK': 482,
     'serveAgeKidsKto5Grade': 483,
@@ -100,9 +96,8 @@
     'maritalStatus': 396,
     'spouseName': 397,
     'spouseGender': 398,
-    'site': 379,
     'howLongAttending': 378,
-    'serviceAttend': 473,
+    'serviceAttend': 379,
     'streetAddress': 385,
     'city': 386,
     'state': 387,
@@ -125,18 +120,16 @@
     'neglectingChild': 503,
     'psychiatricDisorder':415,
     'sexuallyActiveOutsideMarriage':417,
-    'spiritualOrientation':421,
+    'religionSearchingForAnswers': 505,
+    'religionReceivedJesus': 506,
+    'religionFocusingOnObedience' : 508,
+    'religionReplicating' : 509,
     'spiritualOrientationExplain':422,
     'whatPromptedApplication':424,
     'specialTalents':426,
     'availabilityWeek':428,
     'availabilityWeekend':429,
-    'availabilityOakley':486,
-    'availabilityFlorence':487,
-    'availabilityWestSide':488,
-    'availabilityMason':489,
-    'availabilityClifton':490,
-    'availabilityServiceTimes':432,
+    'availabilityWeekendSite': 432,
     'areaOfInterestServingInClassroom':491,
     'areaOfInterestWelcomingNewFamilies':492,
     'areaOfInterestHelpSpecialNeeds':493,

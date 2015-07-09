@@ -39,7 +39,7 @@ describe('Giving Flow', function() {
     checkState('give.thank-you');
   });
 
-  it('should follow full  flow, giving as guest', function () {
+  it('should follow full flow, giving as guest', function () {
     checkState('give.amount');
     element(by.model('amount')).sendKeys("1999");
     element(by.binding('amount')).click();
@@ -51,7 +51,6 @@ describe('Giving Flow', function() {
     expect(creditCardButton.getText()).toBe("Credit Card");
     creditCardButton.click();
     element(by.id('give-email')).sendKeys("tim@kriz.net");
-    element(by.model('creditCard.nameOnCard')).sendKeys("Mr Cross Roads");
     element(by.model('creditCard.ccNumber')).sendKeys("4242424242424242");
     element(by.model('creditCard.expDate')).sendKeys("0118");
     element(by.model('creditCard.cvc')).sendKeys("654");
@@ -61,9 +60,18 @@ describe('Giving Flow', function() {
     expect(giveButton.getText()).toBe("GIVE $1,999.00");
 
     giveButton.click().then(function() {
+      browser.waitForAngular();
       checkState('give.thank-you');
       var email = element.all(by.binding('give.email')).first();
       expect(email.getText()).toBe("tim@kriz.net");
+
+      var amount = element.all(by.binding('give.amount')).first();
+      expect(amount).toBeDefined();
+      expect(amount.getText()).toBe("$1,999.00");
+
+      var program = element.all(by.binding("give.program['Name']")).first();
+      expect(program).toBeDefined();
+      expect(program.getText()).toBe("Crossroads");
     });
   });
 
@@ -101,7 +109,7 @@ describe('Giving Flow', function() {
     var button = element.all(by.id('submit_nav')).get(2);
     button.click();
     checkState('give.confirm');
-    var giveButton = element(by.css("[ng-click=\"give.goToChange(give.amount, give.donor, give.email, give.program, 'cc')\"]"));
+    var giveButton = element(by.css("[ng-click=\"give.goToChange(give.amount, give.donor, give.email, give.program, give.view)\"]"));
     giveButton.click();
     checkState('give.change');
     var creditCardButton = element.all(by.model('give.dto.view')).get(1);
@@ -109,7 +117,6 @@ describe('Giving Flow', function() {
     creditCardButton.click();
     element(by.model('amount')).clear();
     element(by.model('amount')).sendKeys("54321");
-    element(by.model('creditCard.nameOnCard')).sendKeys("Mr Change Cards");
     element(by.model('creditCard.ccNumber')).sendKeys("5555555555554444");
     element(by.model('creditCard.expDate')).sendKeys("0818");
     element(by.model('creditCard.cvc')).sendKeys("999");
@@ -144,7 +151,7 @@ describe('Giving Flow', function() {
     var button = element.all(by.id('submit_nav')).get(2);
     button.click();
     checkState('give.confirm');
-    var giveButton = element(by.css("[ng-click=\"give.goToChange(give.amount, give.donor, give.email, give.program, 'cc')\"]"));
+    var giveButton = element(by.css("[ng-click=\"give.goToChange(give.amount, give.donor, give.email, give.program, give.view)\"]"));
     giveButton.click();
     checkState('give.change');
     var bankAccountButton = element.all(by.model('give.dto.view')).get(0);
@@ -185,7 +192,6 @@ describe('Giving Flow', function() {
     expect(creditCardButton.getText()).toBe("Credit Card");
     creditCardButton.click();
     element(by.id('give-email')).sendKeys("tim@kriz.net");
-    element(by.model('creditCard.nameOnCard')).sendKeys("Mr Cross Roads");
     element(by.model('creditCard.ccNumber')).sendKeys("4242424242424242");
     element(by.model('creditCard.expDate')).sendKeys("0118");
     element(by.model('creditCard.cvc')).sendKeys("6");
@@ -204,7 +210,6 @@ describe('Giving Flow', function() {
     var creditCardButton = element.all(by.model('give.dto.view')).get(1);
     expect(creditCardButton.getText()).toBe("Credit Card");   
     expect(element(by.model('give-email'))).toBeDefined();
-    expect(element(by.model('creditCard.nameOnCard'))).toBeDefined();
     expect(element(by.model('creditCard.ccNumber'))).toBeDefined();
     expect(element(by.model('creditCard.expDate'))).toBeDefined();
     expect(element(by.model('creditCard.cvc')).getText()).toBe("");
@@ -251,6 +256,7 @@ describe('Giving Flow', function() {
     expect(changeButton.getText()).toBe("Change");
 
     changeButton.click().then(function() {
+       browser.waitForAngular();
        checkState('give.amount');
        expect(element(by.model('amount'))).toBeDefined();
     });
@@ -266,9 +272,9 @@ describe('Giving Flow', function() {
     element(by.model('bankAccount.routing')).sendKeys("110000000");
     element(by.model('bankAccount.account')).sendKeys("000123456789");
    
-    var chgButton = element.all(by.css("[ng-click=\"give.submitBankInfo()\"]")).get(0);
-    expect(chgButton.getText()).toBe("GIVE $199.00");
-    chgButton.click().then(function() {
+    var giveButton = element.all(by.css("[ng-click=\"give.submitBankInfo()\"]")).get(0);
+    expect(giveButton.getText()).toBe("GIVE $199.00");
+    giveButton.click().then(function() {
       browser.waitForAngular();
       checkState('give.thank-you');
       var email = element.all(by.binding('give.email')).first();
@@ -282,6 +288,144 @@ describe('Giving Flow', function() {
       var program = element.all(by.binding("give.program['Name']")).first();
       expect(program).toBeDefined();
       expect(program.getText()).toBe("Crossroads");
+
    });
   });
-})
+
+  it('Existing user, giving via ACH giving again via Credit Card - testing change to payment type', function () {
+    checkState('give.amount');
+    element(by.model('amount')).sendKeys("555");
+    element(by.binding('amount')).click();
+    checkState('give.login');
+    var loginButton = element.all(by.css('.btn')).get(6);
+    expect(loginButton.getText()).toBe("Login");
+    loginButton.click();
+    element(by.id('login-page-email')).sendKeys("sandi.ritter+protractor@ingagepartners.com");
+    element(by.id('login-page-password')).sendKeys("winter14");
+    var button = element.all(by.id('submit_nav')).get(2);
+    button.click();
+    checkState('give.confirm');
+    var giveButton = element(by.css("[ng-click=\"give.goToChange(give.amount, give.donor, give.email, give.program, give.view)\"]"));
+    giveButton.click();
+    checkState('give.change');
+    var bankAccountButton = element.all(by.model('give.dto.view')).get(0);
+    expect(bankAccountButton.getText()).toBe("Bank Account");
+    bankAccountButton.click();
+    element(by.model('amount')).clear();
+    element(by.model('amount')).sendKeys("444");
+    element(by.model('bankAccount.routing')).sendKeys("110000000");
+    element(by.model('bankAccount.account')).sendKeys("000123456789");
+    var chgButton = element.all(by.css("[ng-click=\"give.submitChangedBankInfo()\"]")).get(0);
+    expect(chgButton.getText()).toBe("GIVE $444.00");
+    chgButton.click().then(function() {
+      browser.waitForAngular();
+      checkState('give.thank-you');
+      var email = element.all(by.binding('give.email')).first();
+      expect(email).toBeDefined();
+      expect(email.getText()).toBe("sandi.ritter+protractor@ingagepartners.com");
+
+      var amount = element.all(by.binding('give.amount')).first();
+      expect(amount).toBeDefined();
+      expect(amount.getText()).toBe("$444.00");
+
+      var program = element.all(by.binding("give.program['Name']")).first();
+      expect(program).toBeDefined();
+      expect(program.getText()).toBe("Crossroads"); 
+     });
+    var logoutButton = element.all(by.css(".navbar--login")).get(0).all(by.linkText('Sign Out'));
+    logoutButton.click();
+
+    browser.get(env.baseUrl + '/#/give');
+    checkState('give.amount');
+    element(by.model('amount')).sendKeys("543");
+    element(by.binding('amount')).click();
+    checkState('give.login');
+    var loginButton = element.all(by.css('.btn')).get(6);
+    expect(loginButton.getText()).toBe("Login");
+    loginButton.click();
+    element(by.id('login-page-email')).sendKeys("sandi.ritter+protractor@ingagepartners.com");
+    element(by.id('login-page-password')).sendKeys("winter14");
+    var button = element.all(by.id('submit_nav')).get(2);
+    button.click();
+    checkState('give.confirm');
+    var giveButton = element(by.css("[ng-click=\"give.goToChange(give.amount, give.donor, give.email, give.program, give.view)\"]"));
+    giveButton.click();
+    checkState('give.change');
+    var creditCardButton = element.all(by.model('give.dto.view')).get(1);
+    expect(creditCardButton.getText()).toBe("Credit Card");
+    creditCardButton.click();
+    element(by.model('creditCard.ccNumber')).sendKeys("5555555555554444");
+    element(by.model('creditCard.expDate')).sendKeys("0818");
+    element(by.model('creditCard.cvc')).sendKeys("999");
+    element(by.model('creditCard.billingZipCode')).sendKeys("45202-0818");
+    var chgButton = element.all(by.css("[ng-click=\"give.submitChangedBankInfo()\"]")).get(0);
+    expect(chgButton.getText()).toBe("GIVE $543.00");
+    chgButton.click().then(function() {
+      browser.waitForAngular();
+      checkState('give.thank-you');
+      var email = element.all(by.binding('give.email')).first();
+      expect(email).toBeDefined();
+      expect(email.getText()).toBe("sandi.ritter+protractor@ingagepartners.com");
+
+      var amount = element.all(by.binding('give.amount')).first();
+      expect(amount).toBeDefined();
+      expect(amount.getText()).toBe("$543.00");
+
+      var program = element.all(by.binding("give.program['Name']")).first();
+      expect(program).toBeDefined();
+      expect(program.getText()).toBe("Crossroads"); 
+    });
+  });
+
+  it('Exsiting user logs in, gives, and logs out.  All information has been cleared out - testing give flow reset', function () {
+    checkState('give.amount');
+    element(by.model('amount')).sendKeys("99");
+    element(by.binding('amount')).click();
+    checkState('give.login');
+    var loginButton = element.all(by.css('.btn')).get(6);
+    expect(loginButton.getText()).toBe("Login");
+    loginButton.click();
+    element(by.id('login-page-email')).sendKeys("sandi.ritter+protractor@ingagepartners.com");
+    element(by.id('login-page-password')).sendKeys("winter14");
+    var button = element.all(by.id('submit_nav')).get(2);
+    button.click();
+    checkState('give.confirm');
+    var giveButton = element(by.css("[ng-click=\"give.confirmDonation()\"]"));
+    giveButton.click();
+
+    var logoutButton = element.all(by.css(".navbar--login")).get(0).all(by.linkText('Sign Out'));
+    logoutButton.click();
+    //navigate to give and verify amount is null
+    browser.get(env.baseUrl + '/#/give');
+    checkState('give.amount');
+    var amount = element.all(by.binding('give.amount')).first();
+    expect(amount.getText()).toBe("GIVE");
+    expect(amount.getAttribute('value')).toBe(null);
+  });
+
+  it('Existing user logs in, gives, and retruns to main give page.  All information has been cleared out - testing give flow reset', function () {
+    checkState('give.amount');
+    element(by.model('amount')).sendKeys("765");
+    element(by.binding('amount')).click();
+    checkState('give.login');
+    var loginButton = element.all(by.css('.btn')).get(6);
+    expect(loginButton.getText()).toBe("Login");
+    loginButton.click();
+    element(by.id('login-page-email')).sendKeys("sandi.ritter+protractor@ingagepartners.com");
+    element(by.id('login-page-password')).sendKeys("winter14");
+    var button = element.all(by.id('submit_nav')).get(2);
+    button.click();
+    checkState('give.confirm');
+    var giveButton = element(by.css("[ng-click=\"give.confirmDonation()\"]"));
+    giveButton.click();
+    //navigate to give and verify amount is null
+    browser.get(env.baseUrl + '/#/give');
+    checkState('give.amount');
+    var amount = element.all(by.binding('give.amount')).first();
+    expect(amount.getText()).toBe("GIVE");
+    expect(amount.getAttribute('value')).toBe(null);
+  });
+
+});
+
+
