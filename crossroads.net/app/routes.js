@@ -136,6 +136,11 @@
         controller: "BlogCtrl as blog",
         templateUrl: "blog/blog-post.html"
       })
+      .state("adbox", {
+        url: "/adbox",
+        controller: "AdboxCtrl as adbox",
+        templateUrl: "adbox/adbox-index.html"
+      })
       .state("serve-signup", {
         url: "/serve-signup",
         controller: "MyServeController as serve",

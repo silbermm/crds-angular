@@ -35,4 +35,5 @@ require('./mp_tools');
   require('./volunteer_application');
   require('./search');
   require('./blog');
+  require('./adbox');
 })();
