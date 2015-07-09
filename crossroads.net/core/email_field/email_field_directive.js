@@ -1,9 +1,9 @@
 
 require('./email_field.html');
 (function () {
-    angular.module("crossroads.core").directive("emailField", ['$log', '$http', 'Session', 'User', EmailField]);
+    angular.module("crossroads.core").directive("emailField", ['$log', '$http', 'Session', 'User', '$timeout', EmailField]);
 
-    function EmailField($log, $http, Session, User) {
+    function EmailField($log, $http, Session, User, $timeout) {
         return {
             restrict: 'EA',
             replace: true,
@@ -35,6 +35,12 @@ require('./email_field.html');
                 var ngModel = scope.email_field.email;
 
                 attachUniqueEmailFunctions(scope, emailElement, ngModel, $http, Session, User);
+
+                if(scope.focused && scope.focused == true) {
+                  $timeout(function() {
+                    emailElement[0].focus();
+                  });
+                }
 
                 scope.checkEmail = function () {
                     //TODO Put this logic in a method that is globally accessible
