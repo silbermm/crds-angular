@@ -78,16 +78,6 @@ ol.breadcrumb li.active {
   border-radius: 6px;
 }
 
-
-
-.btn-ghost {
-    @include button-variant($gray-dark, transparent, lighten($gray-light, 10%));
-}
-
-.btn-ghost.active {
-    @include button-variant(white, $gray-light, $gray-light);
-}
-
 /***************************************************************************************
 * Badges
 ***************************************************************************************/
