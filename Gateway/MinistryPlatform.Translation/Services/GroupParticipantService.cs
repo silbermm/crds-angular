@@ -57,7 +57,7 @@ namespace MinistryPlatform.Translation.Services
                     participant.OpportunityShiftEnd = GetTimeSpan(reader, "Shift_End");
                     participant.OpportunityShiftStart = GetTimeSpan(reader, "Shift_Start");
                     participant.OpportunitySignUpDeadline = reader.GetInt32(reader.GetOrdinal("Sign_Up_Deadline"));
-                    participant.DeadlinePassedMessage = (SafeInt32(reader, "Deadline_Passed_Message") ?? Convert.ToInt32(AppSettings("DefaultDeadlinePassedMessage")));
+                    participant.DeadlinePassedMessage = (SafeInt32(reader, "Deadline_Passed_Message_ID") ?? Convert.ToInt32(AppSettings("DefaultDeadlinePassedMessage")));
                     participant.OpportunityTitle = reader.GetString(reader.GetOrdinal("Opportunity_Title"));
                     participant.ParticipantNickname = reader.GetString(reader.GetOrdinal("Nickname"));
                     participant.ParticipantEmail = SafeString(reader, "Email_Address");
