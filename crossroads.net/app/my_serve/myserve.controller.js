@@ -56,8 +56,7 @@
             }
           });
         });
-      }); 
-      //$scope.$apply();   
+      });   
     });
 
     $rootScope.$on(AUTH_EVENTS.logoutSuccess, function(event, data) {
