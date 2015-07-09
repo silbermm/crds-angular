@@ -34,6 +34,9 @@ describe('Give Transfer Service', function() {
 
       expect(fixture.view).toBeDefined();
       expect(fixture.view).toBe('');
+
+      expect(fixture.ccNumberClass).toBeDefined();
+      expect(fixture.ccNumberClass).toBe('');
     });
 
     it("should have the expected attributes reset", function() {
@@ -44,6 +47,7 @@ describe('Give Transfer Service', function() {
       fixture.program = '5';
       fixture.routing = '6';
       fixture.view = '7';
+      fixture.ccNumberClass = '8';
 
       fixture.reset();
 
@@ -67,6 +71,9 @@ describe('Give Transfer Service', function() {
 
       expect(fixture.view).toBeDefined();
       expect(fixture.view).toBe('');
+
+      expect(fixture.ccNumberClass).toBeDefined();
+      expect(fixture.ccNumberClass).toBe('');
 
     });
   });
