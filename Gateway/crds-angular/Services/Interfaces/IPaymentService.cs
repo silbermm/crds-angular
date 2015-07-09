@@ -14,5 +14,6 @@ namespace crds_angular.Services.Interfaces
         string UpdateCustomerDescription(string customerToken, int donorId);
         SourceData UpdateCustomerSource(string customerToken, string cardToken);
         SourceData GetDefaultSource(string customerToken);
+        List<string> GetChargesForTransfer(string transferId);
     }
 }

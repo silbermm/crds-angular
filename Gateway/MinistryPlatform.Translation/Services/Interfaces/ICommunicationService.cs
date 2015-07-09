@@ -9,8 +9,9 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         CommunicationPreferences GetPreferences(String token, int userId);
         bool SetEmailSMSPreferences(String token, Dictionary<string, object> prefs);
         bool SetMailPreferences(string token, Dictionary<string, object> prefs);
-        void SendMessage(Communication communication, Dictionary<string, object> mergeData);
+        void SendMessage(Communication communication);
         MessageTemplate GetTemplate(int templateId);    
         string ParseTemplateBody(string templateBody, Dictionary<string, object> record);
+        int GetUserIdFromContactId(string token, int contactId);
     }
 }
