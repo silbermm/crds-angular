@@ -18,20 +18,12 @@
     width: $container-large-desktop * .25;
   }
 }
-
 .styleguide-content {
   float: none;
   margin-bottom: $line-height-computed*4;
 
   @media (min-width: $screen-sm-min) {
     float: right;
-  }
-
-  .panel,
-  h4,
-  h3,
-  pre {
-    margin-top: $line-height-computed;
   }
 
   .billboard-label {
