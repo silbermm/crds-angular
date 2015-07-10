@@ -75,7 +75,27 @@ CREATE TABLE [dbo].[cr_Onboarding_Statuses](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
+GO 
+
+IF NOT EXISTS (SELECT * FROM [dbo].[cr_Onboarding_Statuses] WHERE [Onboarding_Status] = 'Not Started')
+INSERT INTO [dbo].[cr_Onboarding_Statuses]
+           ([Onboarding_Status])
+     VALUES
+           ('Not Started')
 GO
+IF NOT EXISTS (SELECT * FROM [dbo].[cr_Onboarding_Statuses] WHERE [Onboarding_Status] = 'In Progress')
+INSERT INTO [dbo].[cr_Onboarding_Statuses]
+           ([Onboarding_Status])
+     VALUES
+           ('In Progress')
+GO
+IF NOT EXISTS (SELECT * FROM [dbo].[cr_Onboarding_Statuses] WHERE [Onboarding_Status] = 'Completed')
+INSERT INTO [dbo].[cr_Onboarding_Statuses]
+           ([Onboarding_Status])
+     VALUES
+           ('Completed')
+GO
+
 
 /****** Object:  Table [dbo].[Response_Attributes]    Script Date: 6/9/2015 ******/
 SET ANSI_NULLS ON

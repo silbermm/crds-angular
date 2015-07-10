@@ -2,15 +2,19 @@
   'use strict';
   angular.module('crossroads.core').service('Session',SessionService);
 
-  SessionService.$inject = ['$log','$cookies'];
+  SessionService.$inject = ['$log','$cookies', '$http'];
 
-  function SessionService($log, $cookies) {
+  function SessionService($log, $cookies, $http) {
     var self = this;
     this.create = function (sessionId, userId, username) {
       console.log('creating cookies!');
       $cookies.put('sessionId', sessionId);
       $cookies.put('userId', userId);
       $cookies.put('username', username);
+
+      // Set the defaults for $http in case the current page needs to
+      // authenticate to API without a new $httpProvider being injected
+      $http.defaults.headers.common['Authorization']= sessionId;
     };
 
     /*
