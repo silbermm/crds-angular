@@ -22,10 +22,13 @@
 }
 
 .card-header {
-  @extend h3;
-  margin-top: 0;
-  padding-left:11px;
-  padding-right:11px;
+  //@extend h3;
+  //margin-top: 0;
+  //padding-left:11px;
+  //padding-right:11px;
+  h1, h2, h3, h4, h5 {
+    margin: 0;
+  }
    a {
      color: $text-color;
 
