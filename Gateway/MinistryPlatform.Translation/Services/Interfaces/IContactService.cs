@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using MinistryPlatform.Models;
 
 namespace MinistryPlatform.Translation.Services.Interfaces
@@ -8,5 +9,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         MyContact GetContactById(int contactId);
         MyContact GetMyProfile(string token);
         int CreateContactForGuestGiver(string emailAddress, string displayName);
+        IList<int> GetContactIdByRoleId(int roleId, string token);
     }
 }

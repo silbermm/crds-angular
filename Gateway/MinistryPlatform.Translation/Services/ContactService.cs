@@ -11,8 +11,8 @@ namespace MinistryPlatform.Translation.Services
 {
     public class ContactService : BaseService, IContactService
     {
-        private readonly int _myProfilePageId = AppSettings("MyProfile");
         private readonly int contactsPageId = AppSettings("Contacts");
+        private readonly int _securityRolesSubPageId = AppSettings("SecurityRolesSubPageId");
         private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private IMinistryPlatformService _ministryPlatformService;
@@ -123,6 +123,18 @@ namespace MinistryPlatform.Translation.Services
                     String.Format("Error creating contact for guest giver, emailAddress: {0} displayName: {1}",
                         emailAddress, displayName), e));
             }
+        }
+
+        public IList<int> GetContactIdByRoleId(int roleId, string token)
+        {
+            var records = _ministryPlatformService.GetSubPageRecords(_securityRolesSubPageId, roleId, token);
+
+            var contactIds = new List<int>();
+            foreach (var record in records)
+            {
+                contactIds.Add((int)record["Contact_ID"]);
+            }
+            return contactIds;
         }
     }
 }
