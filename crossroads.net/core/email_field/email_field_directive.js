@@ -36,7 +36,11 @@ require('./email_field.html');
 
                 attachUniqueEmailFunctions(scope, emailElement, ngModel, $http, Session, User);
 
+                // Conditionally set focus on the email input
                 if(scope.focused && scope.focused == true) {
+                  // Wrapping the .focus() in $timeout to make sure it happens
+                  // after Angular is done rendering the DOM.
+                  // http://blog.brunoscopelliti.com/run-a-directive-after-the-dom-has-finished-rendering/
                   $timeout(function() {
                     emailElement[0].focus();
                   });
