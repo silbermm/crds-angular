@@ -9,7 +9,6 @@
 
 .filter-group {
   border-bottom: 1px solid darken($gray-lighter, 20%);
-
   &:last-of-type {
     border-bottom: 0px;
   }
@@ -104,8 +103,7 @@
       .btn {
         margin: 5px 5px 0 0;
         display: inline-block;
-        background: darken($gray-lighter, 5%);
-        color: $text-color;
+        @extend .btn-default;
 
         &:hover {
           background: darken($gray-lighter, 15%);

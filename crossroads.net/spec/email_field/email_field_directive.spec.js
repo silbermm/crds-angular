@@ -3,7 +3,7 @@ describe('Email Field Directive', function() {
 
   var templateString, scope, callback;
 
-  var $compile, $rootScope, $templateCache, $httpBackend;
+  var $compile, $rootScope, $templateCache, $httpBackend, $timeout;
 
   beforeEach(function(){
     module('crossroads', function($provide){
@@ -22,11 +22,12 @@ describe('Email Field Directive', function() {
   });
 
   beforeEach(
-    inject(function(_$compile_, _$rootScope_, _$templateCache_, _$httpBackend_) {
+    inject(function(_$compile_, _$rootScope_, _$templateCache_, _$httpBackend_, _$timeout_) {
       $compile = _$compile_;
       $rootScope = _$rootScope_;
       $templateCache = _$templateCache_;
       $httpBackend = _$httpBackend_;
+      $timeout = _$timeout_;
 
       $templateCache.put('on-submit-messages', '<span ng-message="required">Required</span>');
       $templateCache.put('on-blur-messages',
@@ -73,8 +74,11 @@ describe('Email Field Directive', function() {
       expect(element.html()).toContain("id=\"" + scope.model.emailPrefix + "-email\"");
     });
 
-    it("should have the autofocus attribute set", function() {
-      expect(element.html()).toContain("autofocus");
+    it("should have focused the email element", function() {
+      var emailInput = element.find('input')[0];
+      spyOn(emailInput, 'focus');
+      $timeout.flush();
+      expect(emailInput.focus).toHaveBeenCalled();
     });
   });
 

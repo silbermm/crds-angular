@@ -628,12 +628,12 @@
               </div>
               <div class="form-group">
                 <label for="date">Date Picker</label>
-                  <p class="input-group datepicker">
-                    <input type="text" class="form-control" placeholder="dd/mm/yyyy" datepicker-popup="dd/MM/yyyy" ng-model="styleguide.dt" ng-required="true" close-text="Close" is-open="styleguide.opened" />
-                    <span class="input-group-btn">
+                <p class="input-group datepicker">
+                  <input type="text" class="form-control" placeholder="dd/mm/yyyy" datepicker-popup="dd/MM/yyyy" ng-model="styleguide.dt" ng-required="true" close-text="Close" is-open="styleguide.opened" />
+                  <span class="input-group-btn">
                       <button type="button" class="btn btn-gray-light" ng-click="styleguide.openDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
-                  </p>
+                </p>
               </div>
               <div class="checkbox">
                 <label>
@@ -698,72 +698,78 @@
         <div class="panel-heading">Buttons
         </div>
         <div class="panel-body">
+          <h4>Main Buttons</h4>
           <p>
-            <button type="button" class="btn btn-lg btn-default">Default</button>
-            <button type="button" class="btn btn-lg btn-primary">Primary</button>
-            <button type="button" class="btn btn-lg btn-success">Success</button>
-            <button type="button" class="btn btn-lg btn-info">Info</button>
-            <button type="button" class="btn btn-lg btn-warning">Warning</button>
-            <button type="button" class="btn btn-lg btn-danger">Danger</button>
-            <button type="button" class="btn btn-lg btn-gray">Gray</button>
-            <button type="button" class="btn btn-lg btn-gray-light">Gray Light</button>
-
-            <button type="button" class="btn btn-lg btn-primary btn-labeled">Label<span class="btn-label"><svg viewBox="0 0 32 32" class="icon icon-checkmark"><use xlink:href="#checkmark"></use></svg></span>
-            </button>
-            <button type="button" class="btn btn-lg btn-link">Link</button>
+            <button type="button" class="btn btn-primary">Primary</button>
+            <button type="button" class="btn btn-standard">Standard</button>
           </p>
+          
+          <p>
+            The Primary <code>.btn-primary</code> is used as the Call to Action button. It should never be used as a standard button type. <br>
+            The Standard <code>.btn-standard</code> is to used for all buttons that aren't the Call to Action.
+          </p>
+
+          <h4>Alternative Buttons</h4>
+          <p>
+            <button type="button" class="btn btn-secondary">Secondary</button>
+            <button type="button" class="btn btn-standard-dark">Standard (Dark)</button>
+          </p>
+          <p>The Secondary <code>.btn-secondary</code> is used as a secondary call to action. It should never be used as a standard button type, or as the primary call to action.</p>
+          <p>The Standard (Dark) <code>.btn-standard-dark</code> is used as a standard button, but when the background color of the containing container calls for it.</p>
+
+          <h4>Default Button</h4>
           <p>
             <button type="button" class="btn btn-default">Default</button>
-            <button type="button" class="btn btn-primary">Primary</button>
-            <button type="button" class="btn btn-success">Success</button>
-            <button type="button" class="btn btn-info">Info</button>
-            <button type="button" class="btn btn-warning">Warning</button>
-            <button type="button" class="btn btn-danger">Danger</button>
-            <button type="button" class="btn btn-gray">Gray</button>
-            <button type="button" class="btn btn-primary btn-labeled">Label<span class="btn-label"><svg viewBox="0 0 32 32" class="icon icon-checkmark"><use xlink:href="#checkmark"></use></svg></span>
-            </button>
+          </p>
+
+          <p>
+            This is the bootstrap default button <code>.btn-default</code> that is used by many third party libraries. It can be treated as a standard button, primarily, when attached to a form element. i.e. Datepicker.
+          </p>
+
+          <h4>Button Link</h4>
+          <p>
             <button type="button" class="btn btn-link">Link</button>
           </p>
+
+          <h4>Button Sizes</h4>
           <p>
-            <button type="button" class="btn btn-sm btn-default">Default</button>
-            <button type="button" class="btn btn-sm btn-primary">Primary</button>
-            <button type="button" class="btn btn-sm btn-success">Success</button>
-            <button type="button" class="btn btn-sm btn-info">Info</button>
-            <button type="button" class="btn btn-sm btn-warning">Warning</button>
-            <button type="button" class="btn btn-sm btn-danger">Danger</button>
-            <button type="button" class="btn btn-sm btn-gray">Gray</button>
-            <button type="button" class="btn btn-sm btn-primary btn-labeled">Label<span class="btn-label"><svg viewBox="0 0 32 32" class="icon icon-checkmark"><use xlink:href="#checkmark"></use></svg></span>
-            </button>
-            <button type="button" class="btn btn-sm btn-link">Link</button>
+            <button type="button" class="btn btn-default btn-xs">.btn-xs</button>
+            <button type="button" class="btn btn-default btn-sm">.btn-sm</button>
+            <button type="button" class="btn btn-default">Normal</button>
+            <button type="button" class="btn btn-default btn-lg">.btn-lg</button>
           </p>
-          <p>
-            <button type="button" class="btn btn-xs btn-default">Default</button>
-            <button type="button" class="btn btn-xs btn-primary">Primary</button>
-            <button type="button" class="btn btn-xs btn-success">Success</button>
-            <button type="button" class="btn btn-xs btn-info">Info</button>
-            <button type="button" class="btn btn-xs btn-warning">Warning</button>
-            <button type="button" class="btn btn-xs btn-danger">Danger</button>
-            <button type="button" class="btn btn-xs btn-gray">Gray</button>
-            <button type="button" class="btn btn-xs btn-primary btn-labeled">Label<span class="btn-label"><svg viewBox="0 0 32 32" class="icon icon-checkmark"><use xlink:href="#checkmark"></use></svg></span>
-            </button>
-            <button type="button" class="btn btn-xs btn-link">Link</button>
-          </p>
+
+          <h4>Glyphicons</h4>
           <p>
             <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-star"></span> Glyphicons!</button>
-            <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span>
+            <button type="button" class="btn btn-standard btn-labeled">Label<span class="btn-label"><svg viewBox="0 0 32 32" class="icon icon-checkmark"><use xlink:href="#checkmark"></use></svg></span>
             </button>
-            <button type="button" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span>
-            </button>
-            <button type="button" class="btn btn-info"><span class="glyphicon glyphicon-info-sign"></span>
-            </button>
-            <button type="button" class="btn btn-warning"><span class="glyphicon glyphicon-flash"></span>
-            </button>
-            <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-ban-circle"></span>
-            </button>
-            <button type="button" class="btn btn-gray"><span class="glyphicon glyphicon-ban-circle"></span>
-            </button>
-            <button type="button" class="btn btn-link"><span class="glyphicon glyphicon-arrow-right"></span>
-            </button>
+          </p>
+
+          <h4>Alert Buttons</h4>
+          <p>
+            <button type="button" class="btn btn-success">.success</button>
+            <button type="button" class="btn btn-info">.info</button>
+            <button type="button" class="btn btn-warning">.warning</button>
+            <button type="button" class="btn btn-danger">.danger</button>
+          </p>
+
+          <p>
+            These buttons are to be used only inside an alert as shown in the example below.
+          </p>
+
+          <h5>Example</h5>
+          <p>
+            <div class="crossroads-growl ng-isolate-scope">
+              <div class="growl-container">
+                <div class="growl-item alert ng-scope alert-info alert alert-dismissable">
+                  <h4 class="growl-title ng-binding ng-hide"></h4>
+                  <div class="growl-message ng-binding clearfix"><strong>Heads up!</strong> This <a href="#" class="alert-link">alert needs your attention</a>, but it's not super important.
+                    <button type="button" class="btn btn-info btn-sm pull-right">Got it!</button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </p>
 
           <hr />
@@ -1062,10 +1068,14 @@
           <div class="panel panel-default push-top">
             <div class="panel-body text-muted small" role="alert">
               This is an example of a notice that we would put at the bottom of the page. This can be fine print or messages that aren't as important as an alert. It just uses a combination of the <code>.panel</code>, <code>.text-muted</code> and <code>.small</code> classes.
-            </div> <!--/panel-body-->
-          </div><!--/panel-->
-        </div><!--/panel-body-->
-      </div><!--/panel-->
+            </div>
+            <!--/panel-body-->
+          </div>
+          <!--/panel-->
+        </div>
+        <!--/panel-body-->
+      </div>
+      <!--/panel-->
       <div>
         <a ng-click="styleguide.scrollTo('top')">Back to top <i class="fa fa-caret-up"></i></a>
       </div>
@@ -1630,9 +1640,9 @@
                   <div class=" go-trip-name col-xs-12 col-xs-height col-top">
                     <h4 class="small-heading flush-left inline pull-left">SHARE:</h4>
                     <sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_20x20_style pull-left push-half-left push-half-top">
-                        <a href class="addthis_button_facebook"></a>
-                        <a href class="addthis_button_twitter"></a>
-                        <a href class="addthis_button_email"></a>
+                      <a href class="addthis_button_facebook"></a>
+                      <a href class="addthis_button_twitter"></a>
+                      <a href class="addthis_button_email"></a>
                     </sn-addthis-toolbox>
                   </div>
                 </li>
@@ -1656,53 +1666,54 @@
               <div class="col-sm-4">
                 <h5>Large (32 x 32px)</h5>
                 <sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_32x32_style">
-                    <a href class="addthis_button_facebook"></a>
-                    <a href class="addthis_button_twitter"></a>
-                    <a href class="addthis_button_email"></a>
+                  <a href class="addthis_button_facebook"></a>
+                  <a href class="addthis_button_twitter"></a>
+                  <a href class="addthis_button_email"></a>
                 </sn-addthis-toolbox>
               </div>
               <div class="col-sm-4">
                 <h5>Medium (20 x 20px)</h5>
                 <sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_20x20_style">
-                    <a href class="addthis_button_facebook"></a>
-                    <a href class="addthis_button_twitter"></a>
-                    <a href class="addthis_button_email"></a>
+                  <a href class="addthis_button_facebook"></a>
+                  <a href class="addthis_button_twitter"></a>
+                  <a href class="addthis_button_email"></a>
                 </sn-addthis-toolbox>
               </div>
               <div class="col-sm-4">
                 <h5>Small (16 x 16px)</h5>
                 <sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_16x16_style">
-                    <a href class="addthis_button_facebook"></a>
-                    <a href class="addthis_button_twitter"></a>
-                    <a href class="addthis_button_email"></a>
+                  <a href class="addthis_button_facebook"></a>
+                  <a href class="addthis_button_twitter"></a>
+                  <a href class="addthis_button_email"></a>
                 </sn-addthis-toolbox>
               </div>
-            </div><!--/col-sm-12-->
+            </div>
+            <!--/col-sm-12-->
             <div class="col-sm-12 push-top">
               <div class="col-sm-4">
-              <h5>With Tooltips</h5>
-              <sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_32x32_style">
+                <h5>With Tooltips</h5>
+                <sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_32x32_style">
                   <a href class="addthis_button_facebook" tooltip="Share your trip fundraising page with friends and family on Facebook" tooltip-append-to-body="true" tooltip-placement="right"></a>
-                  <a href  class="addthis_button_twitter" tooltip="Share your trip fundraising page with friends and family on Twitter" tooltip-append-to-body="true" tooltip-placement="right"></a>
+                  <a href class="addthis_button_twitter" tooltip="Share your trip fundraising page with friends and family on Twitter" tooltip-append-to-body="true" tooltip-placement="right"></a>
                   <a href class="addthis_button_email" tooltip="Share your trip fundraising page with friends and family via Email" tooltip-append-to-body="true" tooltip-placement="right"></a>
-              </sn-addthis-toolbox>
+                </sn-addthis-toolbox>
               </div>
               <div class="col-sm-4">
-              <h5>With Custom URL Info</h5>
-              <sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_32x32_style" data-url="http://www.google.com" data-title="Google Homepage" data-description="Here is the Google homepage.">
+                <h5>With Custom URL Info</h5>
+                <sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_32x32_style" data-url="http://www.google.com" data-title="Google Homepage" data-description="Here is the Google homepage.">
                   <a href class="addthis_button_facebook"></a>
-                  <a href  class="addthis_button_twitter"></a>
+                  <a href class="addthis_button_twitter"></a>
                   <a href class="addthis_button_email"></a>
-              </sn-addthis-toolbox>
+                </sn-addthis-toolbox>
               </div>
               <div class="col-sm-12 push-top">
-              <strong>Note: </strong>To set your own custom URL information, change the directive's opening tag from:
-              <pre>&lt;sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_32x32_style"&gt;</pre>
-              With this (using example.com):
-              <pre>&lt;sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_32x32_style" data-url="http://www.example.com" data-title="Example Homepage" data-description="Here is the Example description."&gt; </pre>
+                <strong>Note: </strong>To set your own custom URL information, change the directive's opening tag from:
+                <pre>&lt;sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_32x32_style"&gt;</pre> With this (using example.com):
+                <pre>&lt;sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_32x32_style" data-url="http://www.example.com" data-title="Example Homepage" data-description="Here is the Example description."&gt; </pre>
               </div>
             </div>
-          </div><!--/row-->
+          </div>
+          <!--/row-->
         </div>
         <!--/panel-body-->
       </div>
