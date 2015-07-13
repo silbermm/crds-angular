@@ -106,7 +106,7 @@ h1.subheading, h2.subheading, h3.subheading, h4.subheading {
 .subheading {
   font-weight: 400;
   color: #777;
-  margin-top: -$line-height-computed*1.364;
+  margin-top: -$line-height-computed * 1.364;
   border-bottom: 1px solid $gray-lighter;
   background: #fff;
   padding-bottom: 5px;
@@ -115,7 +115,7 @@ h1.subheading, h2.subheading, h3.subheading, h4.subheading {
   border: none;
 }
 .small-heading {
-  font-size: $font-size-h4*$subheading-ratio;
+  font-size: $font-size-h4 * $subheading-ratio;
   text-transform: uppercase;
   font-weight: normal;
   letter-spacing: 1px;
