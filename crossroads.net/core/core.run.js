@@ -2,9 +2,9 @@
 (function() {
     angular.module("crossroads.core").run( AppRun );
 
-    AppRun.$inject = ["Session", "$rootScope", "MESSAGES", "$http", "$log", "$state", "$timeout", "$location"];
+    AppRun.$inject = ["Session", "$rootScope", "MESSAGES", "$http", "$log", "$state", "$timeout", "$location", "$cookies"];
 
-    function AppRun(Session, $rootScope, MESSAGES, $http, $log, $state, $timeout, $location) {
+    function AppRun(Session, $rootScope, MESSAGES, $http, $log, $state, $timeout, $location, $cookies) {
         $rootScope.MESSAGES = MESSAGES;
 
         function clearAndRedirect(event, toState,toParams) {
@@ -29,12 +29,13 @@
                 url :__API_ENDPOINT__ + "api/authenticated",
                 withCredentials: true,
                 headers: {
-                  'Authorization': crds_utilities.getCookie('sessionId')
+                  'Authorization': $cookies.get('sessionId')
                 }}).success(function (user) {
                     // TODO Added to debug/research US1403 - should remove after issue is resolved
                     console.log("US1403: stateChangeStart event handler, successful call to api/authenticated in app.run");
                     $rootScope.userid = user.userId;
                     $rootScope.username = user.username;
+                    $rootScope.roles = user.roles;
                 }).error(function (e) {
                     // TODO Added to debug/research US1403 - should remove after issue is resolved
                     console.log("US1403: stateChangeStart event handler, failed call to api/authenticated in app.run");

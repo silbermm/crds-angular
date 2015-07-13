@@ -3,11 +3,12 @@
 
   module.exports = AppConfig;
 
-  AppConfig.$inject = [ '$stateProvider',
-                        '$urlRouterProvider',
-                        '$httpProvider',
-                        '$urlMatcherFactoryProvider',
-                        '$locationProvider' ];
+  AppConfig.$inject = ['$stateProvider',
+    '$urlRouterProvider',
+    '$httpProvider',
+    '$urlMatcherFactoryProvider',
+    '$locationProvider'
+  ];
 
   function AppConfig($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory, $locationProvider) {
 
@@ -136,6 +137,11 @@
         controller: "BlogCtrl as blog",
         templateUrl: "blog/blog-post.html"
       })
+      .state("adbox", {
+        url: "/adbox",
+        controller: "AdboxCtrl as adbox",
+        templateUrl: "adbox/adbox-index.html"
+      })
       .state("serve-signup", {
         url: "/serve-signup",
         controller: "MyServeController as serve",
@@ -146,9 +152,10 @@
         resolve: {
           loggedin: crds_utilities.checkLoggedin,
           ServeOpportunities: 'ServeOpportunities',
-          Groups: function(ServeOpportunities) {
+          $cookies: '$cookies',
+          Groups: function(ServeOpportunities, $cookies) {
             return ServeOpportunities.ServeDays.query({
-              id: crds_utilities.getCookie('userId')
+              id: $cookies.get('userId')
             }).$promise;
           }
         }
@@ -157,6 +164,10 @@
         url: '/styleguide',
         controller: 'StyleguideCtrl as styleguide',
         templateUrl: 'styleguide/styleguide.html'
+      })
+      .state('thedaily', {
+        url: '/thedaily',
+        templateUrl: 'thedaily/thedaily.html'
       })
       .state('give', {
         url: '/give',
@@ -267,7 +278,7 @@
         url: '/demo/go-trip-giving',
         templateUrl: 'trip_giving/give.html'
       })
-        .state('search', {
+      .state('search', {
         url: '/search-results',
         controller: 'SearchCtrl as search',
         templateUrl: 'search/search-results.html'
@@ -310,18 +321,29 @@
         resolve: {
           loggedin: crds_utilities.checkLoggedin,
           Page: 'Page',
-          CmsInfo: function(Page, $stateParams) {
-            var path = '/volunteer-application/' + $stateParams.appType + '/';
-            return Page.get({
-              url: path
-            }).$promise;
-          },
-          Profile: 'Profile',
-          Contact: function(Profile, $stateParams) {
+          PageInfo: function($q, Profile, Page, $stateParams) {
+            var deferred = $q.defer();
             var contactId = $stateParams.id;
-            return Profile.Person.get({
+
+            Profile.Person.get({
               contactId: contactId
-            }).$promise;
+            }).$promise.then(
+              function(contact) {
+                var age = contact.age;
+                var cmsPath = '/kids-club-applicant-form/adult-applicant-form/';
+                if ((age >= 10) && (age <= 15)) {
+                  cmsPath = '/kids-club-applicant-form/student-applicant-form/';
+                }
+                Page.get({
+                    url: cmsPath
+                  }).$promise.then(function(cmsInfo) {
+                      deferred.resolve({
+                        contact, cmsInfo
+                      });
+                    }
+                  )
+              });
+            return deferred.promise;
           },
           Volunteer: 'VolunteerService',
           Family: function(Volunteer) {

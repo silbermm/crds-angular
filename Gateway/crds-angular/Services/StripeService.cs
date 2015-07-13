@@ -6,6 +6,7 @@ using crds_angular.Services.Interfaces;
 using Newtonsoft.Json;
 using RestSharp;
 using System.Net;
+using Crossroads.Utilities.Interfaces;
 
 namespace crds_angular.Services
 {
@@ -15,30 +16,51 @@ namespace crds_angular.Services
 
         private const string StripeCustomerDescription = "Crossroads Donor #{0}";
 
-        public StripeService(IRestClient stripeRestClient)
+        private const string StripeNetworkErrorResponseCode = "abort";
+
+        private readonly int _maxQueryResultsPerPage;
+
+        public StripeService(IRestClient stripeRestClient, IConfigurationWrapper configuration)
         {
             _stripeRestClient = stripeRestClient;
+            _maxQueryResultsPerPage = configuration.GetConfigIntValue("MaxStripeQueryResultsPerPage");
         }
 
         private static bool IsBadResponse(IRestResponse response)
         {
-            return (response.StatusCode == HttpStatusCode.BadRequest ||
-                    response.StatusCode == HttpStatusCode.PaymentRequired);
+            return (response.ResponseStatus != ResponseStatus.Completed 
+                    || response.StatusCode == HttpStatusCode.BadRequest
+                    || response.StatusCode == HttpStatusCode.PaymentRequired);
         }
+
+        private static void CheckStripeResponse(string errorMessage, IRestResponse response)
+        {
+            if (!IsBadResponse(response))
+            {
+                return;
+            }
+
+            var content = JsonConvert.DeserializeObject<Content>(response.Content);
+            if (content == null || content.Error == null)
+            {
+                throw (new StripeException(HttpStatusCode.InternalServerError, errorMessage, StripeNetworkErrorResponseCode,
+                    response.ErrorException.Message, null, null, null));
+            }
+            else
+            {
+                throw new StripeException(response.StatusCode, errorMessage, content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode, content.Error.Param);
+            }
+        }
+
 
         public string CreateCustomer(string customerToken)
         {
-
             var request = new RestRequest("customers", Method.POST);
             request.AddParameter("description", string.Format(StripeCustomerDescription, "pending")); // adds to POST or URL querystring based on Method
             request.AddParameter("source", customerToken);
 
             var response = _stripeRestClient.Execute<StripeCustomer>(request);
-            if (IsBadResponse(response))
-            {
-                Content content = JsonConvert.DeserializeObject<Content>(response.Content);
-                throw new StripeException(response.StatusCode, "Customer creation failed", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode, content.Error.Param);
-            }
+            CheckStripeResponse("Customer creation failed", response);
 
             return response.Data.id;
 
@@ -50,14 +72,11 @@ namespace crds_angular.Services
             request.AddParameter("source", cardToken);
 
             var response = _stripeRestClient.Execute<StripeCustomer>(request);
-            if (IsBadResponse(response))
-            {
-                Content content = JsonConvert.DeserializeObject<Content>(response.Content);
-                throw new StripeException(response.StatusCode, "Customer update to add source failed", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode, content.Error.Param);
-            }
+            CheckStripeResponse("Customer update to add source failed", response);
+
             var defaultSourceId = response.Data.default_source;
             var sources = response.Data.sources.data;
-            SourceData defaultSource = SetDefaultSource(sources, defaultSourceId);
+            var defaultSource = MapDefaultSource(sources, defaultSourceId);
             
             return defaultSource;
 
@@ -69,11 +88,7 @@ namespace crds_angular.Services
             request.AddParameter("description", string.Format(StripeCustomerDescription, donorId));
 
             var response = _stripeRestClient.Execute<StripeCustomer>(request);
-            if (IsBadResponse(response))
-            {
-                Content content = JsonConvert.DeserializeObject<Content>(response.Content);
-                throw new StripeException(response.StatusCode, "Customer update failed", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode, content.Error.Param);
-            }
+            CheckStripeResponse("Customer update failed", response);
 
             return (response.Data.id);
         }
@@ -83,19 +98,16 @@ namespace crds_angular.Services
             var request = new RestRequest("customers/" + customerToken, Method.GET);
 
             var response = _stripeRestClient.Execute<StripeCustomer>(request);
-            if (IsBadResponse(response))
-            {
-                Content content = JsonConvert.DeserializeObject<Content>(response.Content);
-                throw new StripeException(response.StatusCode, "Could not get default source information because customer lookup failed", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode, content.Error.Param);
-            }
+            CheckStripeResponse("Could not get default source information because customer lookup failed", response);
+
             var defaultSourceId = response.Data.default_source;
             var sources = response.Data.sources.data;
-            SourceData defaultSource = SetDefaultSource(sources, defaultSourceId);
+            var defaultSource = MapDefaultSource(sources, defaultSourceId);
 
             return defaultSource;
         }
 
-        public SourceData SetDefaultSource(List<SourceData>sources, string defaultSourceId)
+        private static SourceData MapDefaultSource(List<SourceData>sources, string defaultSourceId)
         {
             var defaultSource = new SourceData();
 
@@ -110,7 +122,6 @@ namespace crds_angular.Services
                 {
                     defaultSource.brand = source.brand;
                     defaultSource.last4 = source.last4;
-                    defaultSource.name = source.name;
                     defaultSource.address_zip = source.address_zip;
                     defaultSource.exp_month = source.exp_month.PadLeft(2, '0');
                     defaultSource.exp_year = source.exp_year.Substring(2, 2);
@@ -128,14 +139,34 @@ namespace crds_angular.Services
             request.AddParameter("customer", customerToken);
             request.AddParameter("description", "Donor ID #" + donorId);
 
-            IRestResponse<StripeCharge> response = _stripeRestClient.Execute<StripeCharge>(request);
-            if (IsBadResponse(response))
-            {
-                Content content = JsonConvert.DeserializeObject<Content>(response.Content);
-                throw new StripeException(response.StatusCode, "Invalid charge request", content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode, content.Error.Param);
-            }
+            var response = _stripeRestClient.Execute<StripeCharge>(request);
+            CheckStripeResponse("Invalid charge request", response);
 
-            return response.Data.id;
+            return response.Data.Id;
+        }
+
+        public List<string> GetChargesForTransfer(string transferId)
+        {
+            var url = string.Format("transfers/{0}/transactions", transferId);
+            var request = new RestRequest(url, Method.GET);
+            request.AddParameter("count", _maxQueryResultsPerPage);
+
+            var charges = new List<string>();
+            StripeCharges nextPage;
+            do
+            {
+                var response = _stripeRestClient.Execute<StripeCharges>(request);
+                CheckStripeResponse("Could not query transactions", response);
+
+                nextPage = response.Data;
+                charges.AddRange(nextPage.Data.Select(charge => charge.Id));
+
+                request = new RestRequest(url, Method.GET);
+                request.AddParameter("count", _maxQueryResultsPerPage);
+                request.AddParameter("starting_after", charges.Last());
+            } while (nextPage.HasMore);
+
+            return (charges);
         }
     }
 

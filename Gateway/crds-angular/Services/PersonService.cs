@@ -4,6 +4,7 @@ using AutoMapper;
 using crds_angular.Models;
 using crds_angular.Models.Crossroads;
 using crds_angular.Services.Interfaces;
+using MinistryPlatform.Models.DTO;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Attribute = MinistryPlatform.Models.Attribute;
@@ -81,6 +82,12 @@ namespace crds_angular.Services
             return person;
 
         }
+
+        public List<RoleDto> GetLoggedInUserRoles(string token)
+        {
+            return GetMyRecords.GetMyRoles(token);
+        }
+
         public Person GetLoggedInUserProfile(String token)
         {
             var contact = _contactService.GetMyProfile(token);

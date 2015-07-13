@@ -6,8 +6,8 @@ require('./mp_tools');
 
 (function () {
   'use strict()';
-  
-  var MODULE = 'crossroads'; 
+
+  var MODULE = 'crossroads';
 
   angular.module(MODULE, [
    'crossroads.core',
@@ -17,7 +17,7 @@ require('./mp_tools');
    ]);
 
   angular.module(MODULE).config(require('./routes'));
-  
+
   require('./community_groups_signup');
   require('./mytrips');
   require('./profile/profile.html');
@@ -25,6 +25,7 @@ require('./mp_tools');
   require('./profile/profile_account.html');
   require('./profile/skills/profile_skills.html');
   require('./styleguide');
+  require('./thedaily');
   require('./give');
   require('./media');
   require('./myprofile');
@@ -35,4 +36,5 @@ require('./mp_tools');
   require('./volunteer_application');
   require('./search');
   require('./blog');
+  require('./adbox');
 })();

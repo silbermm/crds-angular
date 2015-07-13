@@ -89,7 +89,12 @@
             vm.processing = true;
             vm.donate(vm.program.ProgramId, vm.amount, vm.donor.id, vm.email, vm.dto.view, function() {
               $state.go("give.thank-you");
-            }, vm._stripeErrorHandler);
+            }, function(error) {
+              vm._stripeErrorHandler(error);
+              if(vm.dto.declinedPayment) {
+                vm.goToChange(vm.amount, vm.donor, vm.email, vm.program, vm.dto.view);
+              }
+            });
           }
           catch(DonationException)
           {
@@ -283,6 +288,7 @@
           vm.initialized = false;
           vm.processing = false;
           vm.program = undefined;
+          vm.donorError = false;
           if ($rootScope.username === undefined) {
             User.email = "";
           };
@@ -294,8 +300,7 @@
             vm.bankinfoSubmitted = true;
             if ($scope.giveForm.accountForm.$valid) {
               vm.processing = true;
-              PaymentService.donor().get({email: $scope.give.email})
-              .$promise
+              PaymentService.getDonor($scope.give.email)
               .then(function(donor){
                   vm.updateDonorAndDonate(donor.id, vm.program.ProgramId, vm.amount, vm.email, vm.dto.view);
               },
@@ -389,8 +394,7 @@
           if(toState.name == "give.account" && $rootScope.username && !vm.donorError ) {
             vm.processing = true;
             event.preventDefault();
-            PaymentService.donor().get({email: $scope.give.email})
-            .$promise
+            PaymentService.getDonor($scope.give.email)
             .then(function(donor){
               vm.donor = donor;
               vm.email = vm.donor.email;
@@ -407,9 +411,14 @@
               };
               $state.go("give.confirm");
             },function(error){
-            //  create donor record
-              vm.donorError = true;
-              $state.go("give.account");
+              // Go forward to account info if it was a 404 "not found" error,
+              // the donor service returns a 404 when a donor doesn't exist
+              if(error && error.httpStatusCode == 404) {
+                vm.donorError = true;
+                $state.go("give.account");
+              } else {
+                vm._stripeErrorHandler(error);
+              }
             });
           }
 

@@ -57,9 +57,9 @@ namespace crds_angular.test.Services
             Subject = "Serving RSVP Confirmation"
         };
 
-        private readonly int rsvpYesId = 11298;
+        private readonly int rsvpYesId = 11430;
         private readonly int rsvpNoId = 11299;
-        private readonly int rsvpChangeId = 11313;
+        private readonly int rsvpChangeId = 11430;
 
         private Opportunity fakeOpportunity = new Opportunity();
         private MyContact fakeGroupContact = new MyContact();
@@ -500,10 +500,10 @@ namespace crds_angular.test.Services
             };
 
             _communicationService.Setup(
-                m => m.SendMessage(It.IsAny<Communication>(), It.IsAny<Dictionary<string, object>>()))
-                .Callback((Communication communication, Dictionary<string, object> data) => { }).Verifiable();
+                m => m.SendMessage(It.IsAny<Communication>()))
+                .Callback((Communication communication) => { }).Verifiable();
             _communicationService.Verify(
-                m => m.SendMessage(It.IsAny<Communication>(), It.IsAny<Dictionary<string, object>>()));
+                m => m.SendMessage(It.IsAny<Communication>()));
         }
 
         [Test]

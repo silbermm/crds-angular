@@ -1,4 +1,6 @@
-﻿namespace MinistryPlatform.Models
+﻿using System.Collections.Generic;
+
+namespace MinistryPlatform.Models
 {
     public class Communication
     {
@@ -12,5 +14,7 @@
         public string ReplyToEmailAddress { get; set; }
         public int ToContactId { get; set; }
         public string ToEmailAddress { get; set; }
+        public int TemplateId { get; set; }
+        public Dictionary<string, object> MergeData { get; set; }
     }
 }

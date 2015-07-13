@@ -139,7 +139,6 @@ namespace crds_angular.Controllers.API
                             credit_card = new CreditCardDTO
                             {
                               last4 = defaultSource.last4,
-                              name = defaultSource.name,
                               brand = defaultSource.brand,
                               address_zip = defaultSource.address_zip,
                               exp_date = defaultSource.exp_month + defaultSource.exp_year
@@ -156,6 +155,10 @@ namespace crds_angular.Controllers.API
 
                     return Ok(response);
                 }
+            }
+            catch (StripeException stripeException)
+            {
+                return (stripeException.GetStripeResult());
             }
             catch (Exception exception)
             {
@@ -185,6 +188,10 @@ namespace crds_angular.Controllers.API
 
                     return Ok(response); 
                 }
+            }
+            catch (StripeException stripeException)
+            {
+                return (stripeException.GetStripeResult());
             }
             catch (Exception exception)
             {
@@ -226,6 +233,7 @@ namespace crds_angular.Controllers.API
                 var apiError = new ApiErrorDto("Error calling Ministry Platform" + applicationException.Message, applicationException);
                 throw new HttpResponseException(apiError.HttpResponseMessage);
             }
+
             //return donor
             var donor = new DonorDTO
             {
@@ -237,7 +245,6 @@ namespace crds_angular.Controllers.API
                     {
                         brand = sourceData.brand,
                         last4 = sourceData.last4,
-                        name = sourceData.name,
                         address_zip = sourceData.address_zip,
                         exp_date = sourceData.exp_month + sourceData.exp_year
                     },

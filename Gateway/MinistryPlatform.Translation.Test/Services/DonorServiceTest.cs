@@ -102,16 +102,17 @@ namespace MinistryPlatform.Translation.Test.Services
             const string sortString = "";
             var searchString = "," + donorId;
             var donationPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Donations"]);
-
+            var donationDistPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Distributions"]);
+           
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
-              It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(),
+              donationPageId, It.IsAny<Dictionary<string, object>>(),
               It.IsAny<string>(), true)).Returns(expectedDonationId);
 
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
-              It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(),
-              It.IsAny<string>(), true)).Returns(expectedDonationDistributionId);
+                donationDistPageId, It.IsAny<Dictionary<string, object>>(),
+                It.IsAny<string>(), true)).Returns(expectedDonationDistributionId);
 
-            _communicationService.Setup(mocked => mocked.SendMessage(It.IsAny<Communication>(), It.IsAny<Dictionary<string, object>>()));
+            _communicationService.Setup(mocked => mocked.SendMessage(It.IsAny<Communication>()));
 
             var expectedDonationValues = new Dictionary<string, object>
             {
@@ -121,7 +122,16 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Donation_Date", setupDate},
                 {"Transaction_code", charge_id},
                 {"Registered_Donor", true}, 
-                {"Processor_ID", processorId}
+                {"Processor_ID", processorId},
+                {"Donation_Status_Date", setupDate},
+                {"Donation_Status_ID", 1}
+            };
+            
+            var expectedDistributionValues = new Dictionary<string, object>
+            {
+                {"Donation_ID", expectedDonationId},
+                {"Amount", donationAmt},
+                {"Program_ID", programId}
             };
 
             var programServiceResponse = new Program
@@ -154,9 +164,10 @@ namespace MinistryPlatform.Translation.Test.Services
             var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, donorId, programId, charge_id, pymt_type, processorId, setupDate, true);
 
             // Explicitly verify each expectation...
-            _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>(), It.IsAny<Dictionary<string, object>>()));
+            _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>()));
             _programService.Verify(mocked => mocked.GetProgramById(3));
             _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donationPageId, expectedDonationValues, It.IsAny<string>(), true));
+            _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donationDistPageId, expectedDistributionValues, It.IsAny<string>(), true));
 
             _ministryPlatformService.VerifyAll();
             _programService.VerifyAll();

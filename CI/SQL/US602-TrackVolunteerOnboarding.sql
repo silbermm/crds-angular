@@ -75,7 +75,27 @@ CREATE TABLE [dbo].[cr_Onboarding_Statuses](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
+GO 
+
+IF NOT EXISTS (SELECT * FROM [dbo].[cr_Onboarding_Statuses] WHERE [Onboarding_Status] = 'Not Started')
+INSERT INTO [dbo].[cr_Onboarding_Statuses]
+           ([Onboarding_Status])
+     VALUES
+           ('Not Started')
 GO
+IF NOT EXISTS (SELECT * FROM [dbo].[cr_Onboarding_Statuses] WHERE [Onboarding_Status] = 'In Progress')
+INSERT INTO [dbo].[cr_Onboarding_Statuses]
+           ([Onboarding_Status])
+     VALUES
+           ('In Progress')
+GO
+IF NOT EXISTS (SELECT * FROM [dbo].[cr_Onboarding_Statuses] WHERE [Onboarding_Status] = 'Completed')
+INSERT INTO [dbo].[cr_Onboarding_Statuses]
+           ([Onboarding_Status])
+     VALUES
+           ('Completed')
+GO
+
 
 /****** Object:  Table [dbo].[Response_Attributes]    Script Date: 6/9/2015 ******/
 SET ANSI_NULLS ON
@@ -280,5 +300,160 @@ BEGIN
 	ORDER BY GA.[Order]
 
 END
+
+GO
+
+/** Add AttributeType for OnBoarding **/
+DECLARE @attribute_type varchar(50);
+SET @attribute_type = N'Onboarding';
+DECLARE @attribute_type_id int;
+DECLARE @attributeIds table (id int);
+DECLARE @group_id int;
+
+IF EXISTS (
+	SELECT 1 
+	FROM [dbo].[Attribute_Types]
+	WHERE [dbo].[Attribute_Types].[Attribute_Type] = @attribute_type)
+
+	BEGIN
+		UPDATE [dbo].[Attribute_Types]
+		SET [Description] = 'Onboarding Steps'
+		OUTPUT INSERTED.Attribute_Type_ID INTO @attributeIds
+		WHERE [dbo].[Attribute_Types].[Attribute_Type] = @attribute_type 
+		SELECT TOP 1 @attribute_type_id = id from @attributeIds
+	END
+ELSE
+	BEGIN
+		INSERT INTO [dbo].[Attribute_Types]
+				   ([Attribute_Type]
+				   ,[Description]
+				   ,[Domain_ID])
+			 VALUES
+				   (@attribute_type
+				   ,'Onboarding Steps'
+				   ,1)
+		SET @attribute_type_id = SCOPE_IDENTITY()
+	END
+
+/** Remove all onboarding steps from the Kids Club Volunteers Group **/
+SELECT @group_id = [Group_ID] 
+	FROM [dbo].[Groups] 
+	WHERE [Group_Name] = N'Kids Club Volunteers'
+
+DELETE FROM [dbo].[Group_Attributes] where Group_ID = @group_id
+
+/** Remove all attributes with an attribute type of Onboarding Steps **/
+DELETE FROM [dbo].[Attributes]
+	WHERE [Attribute_Type_ID] = @attribute_type_id
+
+
+
+DECLARE @attribute_id int
+
+INSERT INTO [dbo].[Attributes]
+           ([Attribute_Name]
+           ,[Description]
+           ,[Attribute_Type_ID]
+           ,[Domain_ID])
+     VALUES
+           (N'Application Review', 
+            N'Review the application',
+           @attribute_type_id,
+           1)
+	 SET @attribute_id = SCOPE_IDENTITY()
+
+INSERT INTO [dbo].[Group_Attributes]
+			([Attribute_ID],
+			 [Group_ID],
+			 [Domain_ID],
+			 [Start_Date],
+			 [Order])
+	   VALUES 
+			( @attribute_id,
+			  @group_id,
+			  1,
+			  getDate(),
+			  1)
+
+INSERT INTO [dbo].[Attributes]
+           ([Attribute_Name]
+           ,[Description]
+           ,[Attribute_Type_ID]
+           ,[Domain_ID])
+     VALUES
+           (N'Background Check', 
+            N'Request a background check',
+           @attribute_type_id,
+           1); 
+	 SET @attribute_id = SCOPE_IDENTITY()
+
+INSERT INTO [dbo].[Group_Attributes]
+			(
+			 [Attribute_ID],
+		     [Group_ID],
+			 [Domain_ID],
+			 [Start_Date],
+			 [Order])
+	   VALUES 
+			( 
+			  @attribute_id,
+		      @group_id,
+			  1,
+			  getDate(),
+			  2)
+
+INSERT INTO [dbo].[Attributes]
+           ([Attribute_Name]
+           ,[Description]
+           ,[Attribute_Type_ID]
+           ,[Domain_ID])
+     VALUES
+           (N'KC 101 Invite', 
+            N'Invite the applicant to KC101',
+           @attribute_type_id,
+           1); 
+	 SET @attribute_id = SCOPE_IDENTITY()
+
+INSERT INTO [dbo].[Group_Attributes]
+			(
+			 [Attribute_ID],
+		     [Group_ID],
+			 [Domain_ID],
+			 [Start_Date],
+			 [Order])
+	   VALUES 
+			( 
+			  @attribute_id,
+		      @group_id,
+			  1,
+			  getDate(),
+			  3)
+
+INSERT INTO [dbo].[Attributes]
+           ([Attribute_Name]
+           ,[Description]
+           ,[Attribute_Type_ID]
+           ,[Domain_ID])
+     VALUES
+           (N'KC 101 Attend', 
+            N'The applicant attends KC 101',
+           @attribute_type_id,
+           1); 
+	 SET @attribute_id = SCOPE_IDENTITY()
+
+INSERT INTO [dbo].[Group_Attributes]
+			(
+			 [Attribute_ID],
+		     [Group_ID],
+			 [Domain_ID],
+			 [Start_Date],
+			 [Order])
+	   VALUES 
+			( 
+			  @attribute_id,
+		      @group_id,
+			  1,
+			  getDate(),
+			  4)
 
 GO

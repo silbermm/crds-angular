@@ -1,6 +1,6 @@
 (function(){
   'use strict()';
-  
+
   var MODULE = 'crossroads.core';
 
   /* The Volunteer Service */
@@ -8,27 +8,27 @@
 
 
   /* The Adult Application */
-  angular.module(MODULE).controller('KidsClubAdultApplicationController', 
+  angular.module(MODULE).controller('KidsClubAdultApplicationController',
       require('./kc_adult_application/kidsClubAdultApplication.controller'));
-  angular.module(MODULE).directive('kidsClubAdultApplication', 
+  angular.module(MODULE).directive('kidsClubAdultApplication',
       require('./kc_adult_application/kidsClubAdultApplication.directive'));
-  // html file 
+  // html file
   require('./kc_adult_application/kidsClubAdultApplication.template.html');
 
 
   /* The Student Application */
-  angular.module(MODULE).controller('KidsClubStudentApplicationController', 
+  angular.module(MODULE).controller('KidsClubStudentApplicationController',
       require('./kc_student_application/kidsClubStudentApplication.controller'));
-  angular.module(MODULE).directive('kidsClubStudentApplication', 
+  angular.module(MODULE).directive('kidsClubStudentApplication',
       require('./kc_student_application/kidsClubStudentApplication.directive'));
-  // html file 
+  // html file
   require('./kc_student_application/kidsClubStudentApplication.template.html');
 
 
   /* CONSTANTS */
   angular.module(MODULE).constant('studentFields', {
-    'firstName': 310,
-    'lastName': 311,
+    'firstName': 311,
+    'lastName': 310,
     'middleInitial': 312,
     'email': 325,
     'nameForNameTag': 318,
@@ -50,7 +50,7 @@
     'religionReplicating' : 513,
     'explainFaith': 331,
     'whyServe': 332,
-    'specialTalents': 333,
+    'specialTalents': 335,
     'availabilityDuringWeek': 484,
     'availabilityDuringWeekend': 485,
     'availabilityWeekendSite': 340,

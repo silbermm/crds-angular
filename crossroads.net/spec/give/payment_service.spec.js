@@ -1,5 +1,5 @@
 describe ('PaymentService', function () {
-  var sut, httpBackend, stripe, $rootScope;
+  var sut, httpBackend, stripe, $rootScope, MESSAGES;
 
   var card = {
     number : "4242424242424242",
@@ -42,13 +42,14 @@ describe ('PaymentService', function () {
     return null;
   });
 
-  beforeEach(inject(function(_$injector_, $httpBackend, _PaymentService_, _$rootScope_) {
+  beforeEach(inject(function(_$injector_, $httpBackend, _PaymentService_, _$rootScope_, _MESSAGES_) {
       var $injector = _$injector_;
 
       sut = _PaymentService_;
       httpBackend = $httpBackend;
       stripe = $injector.get('stripe');
       $rootScope = _$rootScope_;
+      MESSAGES = _MESSAGES_;
     })
   );
 
@@ -56,6 +57,71 @@ describe ('PaymentService', function () {
     httpBackend.verifyNoOutstandingExpectation();
     httpBackend.verifyNoOutstandingRequest();
    });
+
+  describe('function addGlobalErrorMessage', function() {
+    it('should set paymentMethodProcessingError global error message for abort', function() {
+      var error = {type: 'abort'};
+      var e = sut.addGlobalErrorMessage(error, 200);
+      expect(e.httpStatusCode).toBe(200);
+      expect(e.globalMessage).toBe(MESSAGES.paymentMethodProcessingError);
+    });
+
+    it('should set paymentMethodProcessingError global error message for card_error/processing_error', function() {
+      var error = {type: 'card_error', code: 'processing_error'};
+      var e = sut.addGlobalErrorMessage(error, 200);
+      expect(e.httpStatusCode).toBe(200);
+      expect(e.globalMessage).toBe(MESSAGES.paymentMethodProcessingError);
+      expect(e.type).toBe('card_error');
+    });
+
+    it('should set paymentMethodDeclined global error message for bank_account/invalid_request_error', function() {
+      var error = {param: 'bank_account', type: 'invalid_request_error'};
+      var e = sut.addGlobalErrorMessage(error, 200);
+      expect(e.httpStatusCode).toBe(200);
+      expect(e.globalMessage).toBe(MESSAGES.paymentMethodDeclined);
+      expect(e.type).toBe('invalid_request_error');
+      expect(e.param).toBe('bank_account');
+    });
+
+    it('should set paymentMethodDeclined global error message for card_error/card_declined', function() {
+      var error = {type: 'card_error', code: 'card_declined'};
+      var e = sut.addGlobalErrorMessage(error, 200);
+      expect(e.httpStatusCode).toBe(200);
+      expect(e.globalMessage).toBe(MESSAGES.paymentMethodDeclined);
+      expect(e.type).toBe('card_error');
+      expect(e.code).toBe('card_declined');
+    });
+
+    it('should set paymentMethodDeclined global error message for card_error/incorrect_*', function() {
+      var error = {type: 'card_error', code: 'incorrect_cvc'};
+      var e = sut.addGlobalErrorMessage(error, 200);
+      expect(e.httpStatusCode).toBe(200);
+      expect(e.globalMessage).toBe(MESSAGES.paymentMethodDeclined);
+      expect(e.type).toBe('card_error');
+      expect(e.code).toBe('incorrect_cvc');
+    });
+
+    it('should set paymentMethodDeclined global error message for card_error/invalid_*', function() {
+      var error = {type: 'card_error', code: 'invalid_cvc'};
+      var e = sut.addGlobalErrorMessage(error, 200);
+      expect(e.httpStatusCode).toBe(200);
+      expect(e.globalMessage).toBe(MESSAGES.paymentMethodDeclined);
+      expect(e.type).toBe('card_error');
+      expect(e.code).toBe('invalid_cvc');
+    });
+  });
+
+  describe('function getDonor', function() {
+    beforeEach(function() {
+      httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +'api/donor/?email=me%2Byou%2Bus@here.com').respond(200, 'good');
+    });
+
+    it('should encode plus signs in an email address', function() {
+      var response = sut.getDonor('me+you+us@here.com');
+      httpBackend.flush();
+      expect(response).toBeDefined();
+    });
+  });
 
   describe ('function createDonorWithCard', function() {
     var postData;

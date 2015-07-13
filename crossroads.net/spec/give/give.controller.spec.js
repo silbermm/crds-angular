@@ -49,22 +49,23 @@ describe('GiveController', function() {
             if(this._success) {
               successCallback(mockGetResponse);
             } else {
-              errorCallback();
+              errorCallback({httpStatusCode: this._httpStatusCode});
             }
           },
-          _success: true
+          _success: true,
+          _httpStatusCode: 200,
         },
         setSuccess: function(success) {
           this.$promise._success = success;
+        },
+        setHttpStatusCode: function(code) {
+          this.$promise._httpStatusCode = code;
         }
       };
 
       mockPaymentService = {
-        donor: function(){ return {
-            get: function(parms) {
-              return(mockPaymentServiceGetPromise);
-            }
-          };
+        getDonor: function(email){
+          return(mockPaymentServiceGetPromise.$promise);
         },
         donateToProgram: function() {},
         updateDonorWithBankAcct: function() {},
@@ -91,8 +92,83 @@ describe('GiveController', function() {
     })
   );
 
-  describe('vm.confirmDonation() emits message in case of exception', function(){
-    it('calls vm.donate with missing params', function(){
+  describe('function confirmDonation()', function() {
+    beforeEach(function() {
+      spyOn(controller, '_stripeErrorHandler');
+      spyOn(controller,  'goToChange');
+    });
+
+    it('should go to the thank-you page if credit card payment was accepted', function() {
+      var error = {error1: '1', error2: '2'};
+      controller.dto = {
+        view: 'cc'
+      };
+      controller.amount = 123;
+      controller.donor = {donorinfo: 'blah'};
+      controller.email = 'test@somewhere.com';
+      controller.program = {id: 3};
+
+      spyOn(controller, 'donate').and.callFake(function(programId, amount, donorId, email, pymtType, onSuccess, onFailure) {
+        onSuccess(error);
+      });
+      spyOn($state, 'go');
+
+      controller.confirmDonation();
+      expect($state.go).toHaveBeenCalledWith('give.thank-you');
+      expect(controller._stripeErrorHandler).not.toHaveBeenCalled();
+      expect(controller.goToChange).not.toHaveBeenCalled();
+    });
+
+    it('should go to the change page if credit card payment was declined', function() {
+      var error = {error1: '1', error2: '2'};
+      controller.dto = {
+        view: 'cc'
+      };
+      controller.amount = 123;
+      controller.donor = {donorinfo: 'blah'};
+      controller.email = 'test@somewhere.com';
+      controller.program = {id: 3};
+
+      spyOn(controller, 'donate').and.callFake(function(programId, amount, donorId, email, pymtType, onSuccess, onFailure) {
+        controller.dto.declinedPayment = true;
+        onFailure(error);
+      });
+      spyOn($state, 'go');
+
+      controller.confirmDonation();
+      expect($state.go).not.toHaveBeenCalled();
+      expect(controller._stripeErrorHandler).toHaveBeenCalledWith(error);
+      expect(controller.goToChange).toHaveBeenCalledWith(
+        controller.amount,
+        controller.donor,
+        controller.email,
+        controller.program,
+        controller.dto.view);
+    });
+
+    it('should stay on the confirm page if there was a processing error', function() {
+      var error = {error1: '1', error2: '2'};
+      controller.dto = {
+        view: 'cc'
+      };
+      controller.amount = 123;
+      controller.donor = {donorinfo: 'blah'};
+      controller.email = 'test@somewhere.com';
+      controller.program = {id: 3};
+
+      spyOn(controller, 'donate').and.callFake(function(programId, amount, donorId, email, pymtType, onSuccess, onFailure) {
+        controller.dto.declinedPayment = false;
+        onFailure(error);
+      });
+      spyOn($state, 'go');
+
+      controller.confirmDonation();
+      expect($state.go).not.toHaveBeenCalled();
+      expect(controller._stripeErrorHandler).toHaveBeenCalledWith(error);
+      expect(controller.goToChange).not.toHaveBeenCalled();
+    });
+
+    it('should emit a failure message if called with missing params', function(){
       spyOn($rootScope, "$emit");
       controller.confirmDonation();
       expect($rootScope.$emit).toHaveBeenCalledWith("notify", 15);
@@ -285,6 +361,7 @@ describe('GiveController', function() {
       controller.amountSubmitted = true;
       controller.bankinfoSubmitted = true;
       controller.changeAccountInfo = true;
+      controller.donorError = true;
       controller.dto = controllerDto;
       controller.initialized = true;
       controller.processing = true;
@@ -295,6 +372,7 @@ describe('GiveController', function() {
       expect(controller.amountSubmitted).toBeFalsy();
       expect(controller.bankinfoSubmitted).toBeFalsy();
       expect(controller.changeAccountInfo).toBeFalsy();
+      expect(controller.donorError).toBeFalsy();
       expect(controller.initialized).toBeFalsy();
       expect(controller.processing).toBeFalsy();
       expect(controller.program).not.toBeDefined();
@@ -453,7 +531,7 @@ describe('GiveController', function() {
     });
 
     it('should call updateDonorAndDonate when there is an existing donor', function() {
-      spyOn(mockPaymentService, 'donor').and.callThrough();
+      spyOn(mockPaymentService, 'getDonor').and.callThrough();
       mockPaymentServiceGetPromise.setSuccess(true);
       $scope.give = {
         email: "test@test.com"
@@ -462,13 +540,13 @@ describe('GiveController', function() {
       spyOn(controller, 'updateDonorAndDonate');
       controller.submitBankInfo();
 
-      expect(mockPaymentService.donor).toHaveBeenCalled();
+      expect(mockPaymentService.getDonor).toHaveBeenCalledWith("test@test.com");
       expect(controller.updateDonorAndDonate).toHaveBeenCalledWith(mockGetResponse.id, controllerDto.program.ProgramId, controllerDto.amount, controllerDto.email, controllerDto.view);
       expect(controller.createDonorAndDonate).not.toHaveBeenCalled();
     });
 
     it('should call createDonorAndDonate when there is not an existing donor', function() {
-      spyOn(mockPaymentService, 'donor').and.callThrough();
+      spyOn(mockPaymentService, 'getDonor').and.callThrough();
       mockPaymentServiceGetPromise.setSuccess(false);
       $scope.give = {
         email: "test@test.com"
@@ -477,7 +555,7 @@ describe('GiveController', function() {
       spyOn(controller, 'updateDonorAndDonate');
       controller.submitBankInfo();
 
-      expect(mockPaymentService.donor).toHaveBeenCalled();
+      expect(mockPaymentService.getDonor).toHaveBeenCalledWith("test@test.com");
       expect(controller.createDonorAndDonate).toHaveBeenCalledWith(controllerDto.program.ProgramId, controllerDto.amount, controllerDto.email, controllerDto.view);
       expect(controller.updateDonorAndDonate).not.toHaveBeenCalled();
     });
@@ -497,13 +575,13 @@ describe('GiveController', function() {
 
       spyOn($state, "go");
       spyOn(mockEvent, "preventDefault");
-      spyOn(mockPaymentService, "donor").and.callThrough();
+      spyOn(mockPaymentService, "getDonor").and.callThrough();
 
       controller.transitionForLoggedInUserBasedOnExistingDonor(mockEvent, mockToState);
 
       expect($state.go).not.toHaveBeenCalled();
       expect(mockEvent.preventDefault).not.toHaveBeenCalled();
-      expect(mockPaymentService.donor).not.toHaveBeenCalled();
+      expect(mockPaymentService.getDonor).not.toHaveBeenCalled();
       expect(controller.donorError).toBeFalsy();
     });
 
@@ -512,8 +590,9 @@ describe('GiveController', function() {
 
       spyOn($state, "go");
       spyOn(mockEvent, "preventDefault");
-      spyOn(mockPaymentService, "donor").and.callThrough();
+      spyOn(mockPaymentService, "getDonor").and.callThrough();
       mockPaymentServiceGetPromise.setSuccess(false);
+      mockPaymentServiceGetPromise.setHttpStatusCode(404);
       $scope.give = {
         email: "test@test.com"
       };
@@ -522,7 +601,7 @@ describe('GiveController', function() {
 
       expect($state.go).toHaveBeenCalledWith("give.account");
       expect(mockEvent.preventDefault).toHaveBeenCalled();
-      expect(mockPaymentService.donor).toHaveBeenCalled();
+      expect(mockPaymentService.getDonor).toHaveBeenCalledWith("test@test.com");
       expect(controller.donorError).toBeTruthy();
     });
 
@@ -531,7 +610,7 @@ describe('GiveController', function() {
 
       spyOn($state, "go");
       spyOn(mockEvent, "preventDefault");
-      spyOn(mockPaymentService, "donor").and.callThrough();
+      spyOn(mockPaymentService, "getDonor").and.callThrough();
       mockPaymentServiceGetPromise.setSuccess(true);
       $scope.give = {
         email: "test@test.com"
@@ -541,7 +620,7 @@ describe('GiveController', function() {
 
       expect($state.go).toHaveBeenCalledWith("give.confirm");
       expect(mockEvent.preventDefault).toHaveBeenCalled();
-      expect(mockPaymentService.donor).toHaveBeenCalled();
+      expect(mockPaymentService.getDonor).toHaveBeenCalledWith("test@test.com");
       expect(controller.donorError).toBeFalsy();
       expect(controller.donor.default_source.credit_card.last4).toBe("9876");
       expect(controller.donor.default_source.credit_card.brand).toBe("Visa");

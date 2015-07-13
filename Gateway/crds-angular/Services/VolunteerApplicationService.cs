@@ -1,16 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Models.Crossroads.VolunteerApplication;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
-using System.Collections.Generic;
-using System.Linq;
-using crds_angular.Models.Crossroads.Serve;
-using crds_angular.Services.Interfaces;
-
 
 namespace crds_angular.Services
 {
@@ -174,6 +170,7 @@ namespace crds_angular.Services
             formResponse.FormAnswers.Add(SetCustomField(application.City, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.State, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.Zip, opportunityResponseId));
+            formResponse.FormAnswers.Add(SetCustomField(application.HomePhone, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.MobilePhone, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.Grade, opportunityResponseId));
             formResponse.FormAnswers.Add(SetCustomField(application.ReligionSearchingForAnswers, opportunityResponseId));

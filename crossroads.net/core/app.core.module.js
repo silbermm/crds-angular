@@ -11,7 +11,9 @@
     'ngMessages',
     'angular-growl',
     'toggle-switch',
+    'sn.addthis',
     'ngAside',
+    'mailchimp',
     'matchMedia',
     'ui.bootstrap'
     ])
@@ -66,7 +68,8 @@
       paymentMethodDeclined: 44,
       paymentMethodProcessingError: 47,
       noResponse: 49,
-      ageError: 54
+      ageError: 54,
+      mailchimpSuccess: 55
     })
     .config(function (growlProvider) {
       growlProvider.globalPosition("top-center");
