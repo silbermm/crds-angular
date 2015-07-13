@@ -57,9 +57,9 @@ namespace crds_angular.test.Services
             Subject = "Serving RSVP Confirmation"
         };
 
-        private readonly int rsvpYesId = 11430;
+        private readonly int rsvpYesId = 11366;
         private readonly int rsvpNoId = 11299;
-        private readonly int rsvpChangeId = 11430;
+        private readonly int rsvpChangeId = 11366;
 
         private Opportunity fakeOpportunity = new Opportunity();
         private MyContact fakeGroupContact = new MyContact();
