@@ -1,7 +1,7 @@
 USE [MinistryPlatform]
 GO
 SET IDENTITY_INSERT [dbo].[dp_Processes] ON
-
+GO
 INSERT INTO [dbo].[dp_Process_Steps] ([Process_Step_ID]
 , [Step_Name]
 , [Instructions]
