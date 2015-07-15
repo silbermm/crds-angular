@@ -9,11 +9,5 @@
   function TripGivingController($scope, $log, CmsInfo) {
   	var vm = this;
   	vm.pageHeader = CmsInfo.pages[0].renderedContent;
-  	activate();
   }
-
-  function activate () {
-  	
-  }
-  
 })()
