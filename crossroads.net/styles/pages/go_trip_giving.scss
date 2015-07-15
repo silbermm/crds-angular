@@ -1,5 +1,15 @@
-.go-trip-name {
-  padding-left: 0px;
+.card-content {
+  ul.list-group {
+    .go-trip-name {
+      padding-left: 0px;
+
+      p {
+        margin-bottom: 0px;
+        line-height: 1.5;
+        padding: $line-height-computed/4 0;
+      }
+    }
+  }
 }
 
 .go-trip-btn {

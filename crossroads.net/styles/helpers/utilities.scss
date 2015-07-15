@@ -285,6 +285,35 @@
         padding-right: 0;
         padding-left: 0;
     }
+    .mobile-soft {
+        padding: $line-height-computed;
+    }
+
+    .mobile-soft-top {
+        padding-top: $line-height-computed;
+    }
+
+    .mobile-soft-right {
+        padding-right: $line-height-computed;
+    }
+
+    .mobile-soft-bottom {
+        padding-bottom: $line-height-computed;
+    }
+
+    .mobile-soft-left {
+        padding-left: $line-height-computed;
+    }
+
+    .mobile-soft-ends {
+        padding-top: $line-height-computed;
+        padding-bottom: $line-height-computed;
+    }
+
+    .mobile-soft-sides {
+        padding-right: $line-height-computed;
+        padding-left: $line-height-computed;
+    }
 }
 
 // Misc helpers
