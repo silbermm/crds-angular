@@ -216,15 +216,15 @@
         url: '/demo',
         template: '<p>demo</p>'
       })
-      .state('go_trip_giving', {
-        url: '/go_trip_giving',
-        controller: 'GoTripGivingCtrl as gotripsearch',
-        templateUrl: 'go_trip_giving/go_trip_giving.html'
+      .state('tripgiving', {
+        url: '/tripgiving',
+        controller: 'TripGivingCtrl as gotripsearch',
+        templateUrl: 'tripgiving/tripgiving.html'
       })
       .state('go_trip_giving_results', {
         url: '/go_trip_giving_results',
-        controller: 'GoTripGivingCtrl as gotripresults',
-        templateUrl: 'go_trip_giving/go_trip_giving_results.html'
+        controller: 'TripGivingCtrl as gotripresults',
+        templateUrl: 'tripgiving/tripgivingresults.html'
       })
       .state('/demo/guest-giver', {
         url: '/demo/guest-giver',
