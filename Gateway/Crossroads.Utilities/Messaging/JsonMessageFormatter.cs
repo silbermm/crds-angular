@@ -6,6 +6,10 @@ using Newtonsoft.Json;
 
 namespace Crossroads.Utilities.Messaging
 {
+    /// <summary>
+    /// An IMessageFormatter implementation for serializing/deserializing JSON messages.
+    /// This was borrowed from GitHub, https://gist.github.com/jchadwick/2430984
+    /// </summary>
     public class JsonMessageFormatter : IMessageFormatter
     {
         private static readonly JsonSerializerSettings DefaultSerializerSettings =
