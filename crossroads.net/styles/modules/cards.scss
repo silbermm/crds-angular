@@ -21,11 +21,17 @@
   }
 }
 
+
+
 .card-header {
   //@extend h3;
   //margin-top: 0;
   //padding-left:11px;
   //padding-right:11px;
+
+  padding: $line-height-computed/4 $line-height-computed/2;
+
+
   h1, h2, h3, h4, h5 {
     margin: 0;
   }

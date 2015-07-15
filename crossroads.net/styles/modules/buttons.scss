@@ -122,35 +122,26 @@ h2 {
   text-align: center;
   vertical-align: middle;
   border-bottom-width: 0px;
-  min-height: 31px;
   width: 100%;
   padding-left: 0px;
   padding-right: 0px;
 
   @media (min-width: $screen-sm-min) {
+    min-height: $line-height-computed*2;
+    line-height: 2;
     margin-bottom: 0;
     border-radius: 0px;
+
+    &.table-btn-sm {
+      min-height: 31px;
+      line-height: 1.5;
+    }
 
     &.table-btn-lg {
      min-height: 54px;
      line-height: 3;
     }
   }
-
-  /*
-  &.btn-standard {
-    &:focus {
-      background: $gray-lighter;
-      border-color: $gray-lighter;
-
-
-      &:hover {
-        background: darken($gray-lighter, 10%);
-        border-color: darken($gray-lighter, 10%);
-      }
-    }
-  }
-  */
 }
 
 
