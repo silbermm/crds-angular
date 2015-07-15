@@ -3,9 +3,29 @@
 
   module.exports = MyServeController;
 
-  MyServeController.$inject = ['$scope', '$rootScope', '$log', 'filterState', 'Session', 'ServeOpportunities', 'Groups', 'AUTH_EVENTS'];
+  MyServeController.$inject = [
+    '$scope', 
+    '$rootScope', 
+    '$window',
+    '$log', 
+    'filterState', 
+    'Session', 
+    'ServeOpportunities', 
+    'Groups', 
+    'AUTH_EVENTS'
+  ];
 
-  function MyServeController($scope, $rootScope, $log, filterState, Session, ServeOpportunities, Groups, AUTH_EVENTS){
+  function MyServeController(
+    $scope, 
+    $rootScope, 
+    $window, 
+    $log, 
+    filterState, 
+    Session, 
+    ServeOpportunities, 
+    Groups, 
+    AUTH_EVENTS
+    ){
 
     var vm = this;
 
@@ -15,20 +35,20 @@
     vm.lastDate = null;
     vm.loadMore = false;
     vm.loadNextMonth = loadNextMonth;
-    vm.loadText = "Load More";
+    vm.loadText = 'Load More';
     vm.original = [];
     vm.showButton = showButton;
     vm.showNoOpportunitiesMsg = showNoOpportunitiesMsg;
 
     activate();
 
-    $rootScope.$on("personUpdated", personUpdateHandler);
+    $rootScope.$on('personUpdated', personUpdateHandler);
 
-    $rootScope.$on("filterDone", function(event, data) {
+    $rootScope.$on('filterDone', function(event, data) {
       vm.groups = data;
     });
 
-    $rootScope.$on("filterByDates", function(event, data) {
+    $rootScope.$on('filterByDates', function(event, data) {
       loadOpportunitiesByDate(data.fromDate, data.toDate).then(function(opps){
         vm.groups = opps;
         vm.original = opps;
@@ -39,7 +59,7 @@
       });
     });
 
-    $rootScope.$on("updateAfterSave", function(event, data){
+    $rootScope.$on('updateAfterSave', function(event, data){
       _.each(vm.groups, function(group) {
         _.each(group.serveTimes, function(serveTime) {
           _.each(serveTime.servingTeams, function(servingTeam) {
@@ -63,6 +83,20 @@
       vm.filterState.clearAll();
     });
 
+    // $window.onbeforeunload = function(){
+    //         if ($scope['serveForm'].$dirty) {
+    //             return '';
+    //         }
+    //     };
+
+    // $rootScope.$on('$stateChangeStart', function(event, next, current) {
+    //         if ($scope['serveForm'].$dirty) {
+    //             if(!confirm('Are you sure you want to leave this page?')) {
+    //                 event.preventDefault();
+    //             }
+    //         }
+    //     });
+
     ////////////////////////////
     // Implementation Details //
     ////////////////////////////
@@ -81,7 +115,7 @@
       // date comes in as mm/dd/yyyy, convert to yyyy-mm-dd for moment to handle
       var d = new Date(date);
       return d;
-    };
+    }
 
     /**
      * Takes a javascript date and returns a
@@ -115,7 +149,7 @@
     function loadNextMonth() {
       if(vm.groups[0].day !== undefined){
         vm.loadMore = true;
-        vm.loadText = "Loading..."
+        vm.loadText = 'Loading...';
 
         var lastDate = new Date(vm.groups[vm.groups.length -1].day);
         lastDate.setDate(lastDate.getDate() + 1);
@@ -132,14 +166,14 @@
             });
           }
           vm.loadMore = false;
-          vm.loadText = "Load More";
+          vm.loadText = 'Load More';
         }, function(e){
           // error
           vm.loadMore = false;
-          vm.loadText = "Load More";
+          vm.loadText = 'Load More';
         });
       }
-    };
+    }
 
     function personUpdateHandler(event, data) {
       vm.groups = angular.copy(vm.original);
@@ -153,12 +187,12 @@
                 member.lastName = data.lastName;
                 member.emailAddress = data.emailAddress;
               }
-            })
-          })
-        })
-      })
+            });
+          });
+        });
+      });
       vm.original = angular.copy(vm.groups);
-      $rootScope.$broadcast("rerunFilters", vm.groups);
+      $rootScope.$broadcast('rerunFilters', vm.groups);
     }
 
     function showButton(){
