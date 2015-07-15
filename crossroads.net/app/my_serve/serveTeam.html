@@ -145,7 +145,7 @@
                 <use xlink:href="#mail5"></use>
               </svg>
             </a>
-            <button class="btn btn-gray-light" ng-disabled="team.pastDeadline" ng-click="cancel()">Cancel</button>
+            <button class="btn btn-standard" ng-disabled="team.pastDeadline" ng-click="cancel()">Cancel</button>
             <button class="btn btn-primary" ng-disabled="team.pastDeadline" ng-class="{disabled: processing}" ng-click="saveRsvp()">
               <span ng-if="processing">Saving...</span>
               <span ng-if="!processing">Save</span>

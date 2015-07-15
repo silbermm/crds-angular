@@ -86,20 +86,9 @@
   }
 }
 
-.btn-gray {
-  @include button-variant($btn-default-color, $cr-grey, $cr-grey);
-}
-
-.btn-gray-light {
-  @include button-variant($gray, $gray-lighter, $gray-lighter);
-}
-.btn-white {
-  @include button-variant($gray, #fff, #fff);
-}
-
 .input-group-btn {
   .btn {
-    border-left: 0px;
+    border-bottom-width: 1px;
   }
 }
 
