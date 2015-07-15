@@ -1,8 +1,12 @@
+require('../../../dependencies/dependencies');
+require('../../../core/core');
+require('../../../app/app');
+
 describe('Give Transfer Service', function() {
   var fixture;
 
   beforeEach(function(){
-    module('crossroads', function($provide){
+    angular.mock.module('crossroads', function($provide){
     });
   });
 

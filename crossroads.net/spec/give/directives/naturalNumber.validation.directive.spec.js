@@ -1,8 +1,12 @@
+require('../../../dependencies/dependencies');
+require('../../../core/core');
+require('../../../app/app');
+
 describe('Natural Number Validation Directive', function() {
   var scope, form;
 
   beforeEach(function() {
-    module('crossroads');
+    angular.mock.module('crossroads');
   });
 
   beforeEach(inject(function(_$compile_, _$rootScope_) {

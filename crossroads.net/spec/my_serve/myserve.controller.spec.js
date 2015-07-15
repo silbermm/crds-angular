@@ -1,3 +1,7 @@
+require('../../dependencies/dependencies');
+require('../../core/core');
+require('../../app/app');
+
 describe('MyServeController', function() {
 
   var mockSession;
@@ -8,9 +12,9 @@ describe('MyServeController', function() {
   var more = [ { "day":"5/17/2015", "serveTimes" : [ { "time": "8:30am", "name" : "Kids Club Nusery", "members" : [ { "name": "John", "roles" : [ {"name": "NuseryA"}, {"name": "NuseryB"}, {"name": "NuseryC"}, {"name": "NuseryD"} ] }, { "name":  "Jane", "roles" : [ {"name": "NuseryA"}, {"name": "NuseryB"}, {"name": "NuseryC"}, {"name": "NuseryD"} ], "signedup" : "yes" }, ] }, { "time": "8:30am", "name": "First Impressions", "members" : [ { "name": "John"}, {"name": "Jane" } ] } ] }];
 
 
-  beforeEach(module('crossroads'));
+  beforeEach(angular.mock.module('crossroads'));
  
-  beforeEach(module(function($provide){
+  beforeEach(angular.mock.module(function($provide){
     $provide.value('Groups', retArray);
     mockSession= jasmine.createSpyObj('Session', ['exists', 'isActive']);
     mockSession.exists.and.callFake(function(something){

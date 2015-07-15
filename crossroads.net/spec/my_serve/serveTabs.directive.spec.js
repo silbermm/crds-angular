@@ -1,3 +1,7 @@
+require('../../dependencies/dependencies');
+require('../../core/core');
+require('../../app/app');
+
 describe('Serve Tabs Directive', function() {
 
   var $compile, $rootScope, element, scope, mockSession;
@@ -6,7 +10,7 @@ describe('Serve Tabs Directive', function() {
 
 
   beforeEach(function(){
-    module('crossroads', function($provide){
+    angular.mock.module('crossroads', function($provide){
       mockSession= jasmine.createSpyObj('Session', ['exists']);
       mockSession.exists.and.callFake(function(something){
         return '12345678';
