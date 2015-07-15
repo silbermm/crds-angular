@@ -406,7 +406,7 @@ describe('GiveController', function() {
         id: 654,
         default_source: {
           name: 'Tim Startsgiving',
-          last4: '98765',
+          cc_number: '98765',
           exp_date: '1213',
           address_zip: '90210',
           cvc: '987',
@@ -425,13 +425,12 @@ describe('GiveController', function() {
       donor: {
         id: 654,
         default_source: {
-          last4: '753869',
+          bank_account_number: '753869',
           routing: '110000000',
         }
       },
       reset: function() {},
     };
-
 
     it('should call updateDonorWithCard with proper values when changing card info', function() {
       $scope.giveForm = controllerGiveForm;
@@ -454,7 +453,7 @@ describe('GiveController', function() {
         controllerDto.donor.id,
         {
           name: controllerDto.donor.default_source.name,
-          number: controllerDto.donor.default_source.last4,
+          number: controllerDto.donor.default_source.cc_number,
           exp_month: controllerDto.donor.default_source.exp_date.substr(0,2),
           exp_year: controllerDto.donor.default_source.exp_date.substr(2,2),
           cvc: controllerDto.donor.default_source.cvc,
@@ -464,7 +463,7 @@ describe('GiveController', function() {
       );
     });
 
-   it('should call updateDonorWithBankAcct with proper values when bank account info in changed', function() {
+   it('should call updateDonorWithBankAcct with proper values when bank account info is changed', function() {
       $scope.giveForm = controllerGiveFormBank;
       controller.dto = controllerBankDto;
 
@@ -486,7 +485,7 @@ describe('GiveController', function() {
         {
           country: 'US',
           currency: 'USD',
-          account_number: controllerBankDto.donor.default_source.last4,
+          account_number: controllerBankDto.donor.default_source.bank_account_number,
           routing_number: controllerBankDto.donor.default_source.routing ,
         },
         'tim@kriz.net'
