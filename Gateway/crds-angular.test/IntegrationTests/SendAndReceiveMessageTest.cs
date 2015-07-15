@@ -9,11 +9,10 @@ namespace crds_angular.test.IntegrationTests
     /// This test is here simply to prove out MSMQ setup.
     /// </summary>
     [TestFixture]
-    //[Category("IntegrationTests")]
+    [Category("IntegrationTests")]
     public class SendAndReceiveMessageTest
     {
-        //private const string QueueName = @".\Private$\StripeEvents";
-        private const string QueueName = @"FormatName:DIRECT=OS:mp-int-web.crossroads.net\Private$\StripeEvents";
+        private const string QueueName = @".\Private$\TestMessages";
         private MessageQueue _sender;
         private MessageQueue _receiver;
         [SetUp]
@@ -40,9 +39,9 @@ namespace crds_angular.test.IntegrationTests
                 Formatter = new JsonMessageFormatter()
             };
 
-            _sender.Send(message, MessageQueueTransactionType.None);
+            _sender.Send(message, MessageQueueTransactionType.Single);
 
-            var received = _receiver.Receive(MessageQueueTransactionType.None);
+            var received = _receiver.Receive(MessageQueueTransactionType.Single);
             if (received == null)
             {
                 Assert.Fail("Could not receive message from queue " + QueueName);
