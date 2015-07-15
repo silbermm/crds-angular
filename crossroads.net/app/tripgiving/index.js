@@ -3,4 +3,4 @@
 var app = angular.module('crossroads');
 require('./tripgiving.html');
 
-app.controller("TripGivingCtrl", ['$scope', require("./tripgiving.controller")]);
+app.controller("TripGivingCtrl", require("./tripgiving.controller"));

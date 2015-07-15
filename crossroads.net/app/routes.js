@@ -218,8 +218,16 @@
       })
       .state('tripgiving', {
         url: '/tripgiving',
-        controller: 'TripGivingCtrl as gotripsearch',
-        templateUrl: 'tripgiving/tripgiving.html'
+        controller: 'TripGivingCtrl as tripsearch',
+        templateUrl: 'tripgiving/tripgiving.html',
+        resolve: {
+          Page: 'Page',
+          CmsInfo: function(Page, $stateParams) {
+            return Page.get({
+              url: '/tripgiving/'
+            }).$promise;
+          }
+        }
       })
       .state('go_trip_giving_results', {
         url: '/go_trip_giving_results',
