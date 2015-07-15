@@ -1,6 +1,8 @@
+require('../app/app');
+
 describe('CoreController', function() {
 
-  beforeEach(module('crossroads'));
+  beforeEach(angular.mock.module('crossroads'));
 
   var $controller, $rootScope, Message, MESSAGES, $aside, $scope, controller;
   beforeEach(inject(function(_$controller_, _$rootScope_, _Message_, _MESSAGES_, _$aside_){

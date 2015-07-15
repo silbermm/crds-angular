@@ -1,3 +1,7 @@
+require('../../../dependencies/dependencies');
+require('../../../core/core');
+require('../../../app/app');
+
 describe('Volunteer Application Factory', function() {
 
   var mockPageInfo = setupPageInfo();
@@ -8,7 +12,7 @@ describe('Volunteer Application Factory', function() {
 
   var $rootScope, scope, Page, Opportunity, VolunteerApplication, $httpBackend;
 
-  beforeEach(module('crossroads'));
+  beforeEach(angular.mock.module('crossroads'));
 
   beforeEach(inject(function(_Page_, _Opportunity_, _VolunteerApplication_, $injector) {
     Page = _Page_;

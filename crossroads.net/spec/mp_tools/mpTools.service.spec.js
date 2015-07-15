@@ -1,8 +1,12 @@
+require('../../dependencies/dependencies');
+require('../../core/core');
+require('../../app/app');
+
 describe('MP Tools Service', function() {
 
   var $rootScope, scope, MPTools, $location;
 
-  beforeEach(module('crossroads.mptools'));
+  beforeEach(angular.mock.module('crossroads.mptools'));
 
   beforeEach(inject(function(_$location_){
     $location = _$location_

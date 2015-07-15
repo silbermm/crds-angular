@@ -1,3 +1,7 @@
+require('../../../dependencies/dependencies');
+require('../../../core/core');
+require('../../../app/app');
+
 describe('KC Applicant Tool', function(){
   
   var mockPageInfo = setupPageInfo();
@@ -5,9 +9,9 @@ describe('KC Applicant Tool', function(){
   var pageParams = setupPageParams(); 
   var mockResponse = setupResponse();
 
-  beforeEach(module('crossroads'));
+  beforeEach(angular.mock.module('crossroads'));
 
-  beforeEach(module(function($provide){
+  beforeEach(angular.mock.module(function($provide){
     $provide.value('CmsInfo', mockPageInfo);
     $provide.value('Contact', mockVolunteer);
   }));

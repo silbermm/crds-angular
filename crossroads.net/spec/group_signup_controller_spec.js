@@ -1,3 +1,4 @@
+require('../app/app');
 
 // testing controller
 describe('GroupSignupController', function() {
@@ -78,7 +79,7 @@ var successResponse = [
    //var endpoint = JSON.stringify(process.env.CRDS_API_ENDPOINT || "http://localhost:49380/");
 
    // Set up the module
-   beforeEach(module('crossroads'));
+   beforeEach(angular.mock.module('crossroads'));
 
    beforeEach(
     inject(

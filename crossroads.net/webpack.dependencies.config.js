@@ -18,7 +18,7 @@ module.exports = {
     },
     watchPattern: 'dependencies/**/**',
     externals: {
-      stripe: "Stripe"
+      stripe: 'Stripe'
     },
     context: __dirname,
     output: {

@@ -136,3 +136,19 @@ Clone the crds-corkboard github repo to your local machine
 ##Angular Style Guide
 We will follow the [Crossroads Angular Style Guide](https://github.com/crdschurch/angular-styleguide).
 
+##Linting
+### JSHint
+First install jshint globally with npm `npm install -g jshint`
+A .jshintrc file has already been added to the project
+* For Atom, install [linter-jshint](https://github.com/AtomLinter/linter-jshint)
+* For Sublime Text, install [Sublime-jshint](https://github.com/victorporof/Sublime-JSHint)
+* For IntelliJ, supported out of the box
+
+### JSCS
+Install jscs with npm `npm install jscs -g`
+A .jscsrc file exists to use AirBnB styleguide
+* For Atom. [linter-jscs](https://atom.io/packages/linter-jscs)
+* For Sublime Text 3, [SublimeLinter](https://github.com/SublimeLinter/SublimeLinter-jscs/)
+* For IntelliJ, [jscs-plugin](https://github.com/idok/jscs-plugin)
+
+
