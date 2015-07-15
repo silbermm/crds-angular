@@ -40,9 +40,9 @@ namespace crds_angular.test.IntegrationTests
                 Formatter = new JsonMessageFormatter()
             };
 
-            _sender.Send(message, MessageQueueTransactionType.Single);
+            _sender.Send(message, MessageQueueTransactionType.None);
 
-            var received = _receiver.Receive(MessageQueueTransactionType.Single);
+            var received = _receiver.Receive(MessageQueueTransactionType.None);
             if (received == null)
             {
                 Assert.Fail("Could not receive message from queue " + QueueName);
