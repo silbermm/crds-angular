@@ -1,9 +1,12 @@
+require('../../dependencies/dependencies');
+require('../../core/core');
+
 describe('preloader', function() {
 
   var $compile, $rootScope, element, scope, isolateScope;
 
   beforeEach(function() {
-    module('crossroads.core');
+    angular.mock.module('crossroads.core');
   });
 
   beforeEach(inject(function(_$compile_, _$rootScope_) {

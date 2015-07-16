@@ -1,3 +1,7 @@
+require('../../dependencies/dependencies');
+require('../../core/core');
+require('../../app/app');
+
 describe('Email Field Directive', function() {
   var mockSession, mockUser;
 
@@ -6,7 +10,7 @@ describe('Email Field Directive', function() {
   var $compile, $rootScope, $templateCache, $httpBackend, $timeout;
 
   beforeEach(function(){
-    module('crossroads', function($provide){
+    angular.mock.module('crossroads', function($provide){
       mockSession = jasmine.createSpyObj('Session', ['exists', 'isActive']);
       mockSession.exists.and.callFake(function(something){
         return undefined;

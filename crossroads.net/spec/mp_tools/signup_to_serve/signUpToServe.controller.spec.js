@@ -1,3 +1,7 @@
+require('../../../dependencies/dependencies');
+require('../../../core/core');
+require('../../../app/app');
+
 describe('Signup To Serve Tool', function(){
 
   var expectedReturn = {
@@ -76,7 +80,7 @@ describe('Signup To Serve Tool', function(){
 
   var expectedDates = [1430382600,1430469000,1430555400,1430641800];
   
-  beforeEach(module('crossroads'));
+  beforeEach(angular.mock.module('crossroads'));
 
   beforeEach(inject(function(_$location_){
     var $location = _$location_;

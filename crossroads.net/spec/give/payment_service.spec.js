@@ -1,3 +1,7 @@
+require('../../dependencies/dependencies');
+require('../../core/core');
+require('../../app/app');
+
 describe ('PaymentService', function () {
   var sut, httpBackend, stripe, $rootScope, MESSAGES;
 
@@ -15,9 +19,9 @@ describe ('PaymentService', function () {
   };
 
   beforeEach(function() {
-    module('crossroads.give');
+    angular.mock.module('crossroads.give');
 
-    module(function($provide) {
+    angular.mock.module(function($provide) {
       $provide.value('stripe', {
         setPublishableKey: function() {},
         card :

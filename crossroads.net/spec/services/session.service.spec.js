@@ -1,10 +1,14 @@
+require('../../dependencies/dependencies');
+require('../../core/core');
+require('../../app/app');
+
 describe('Session Service', function() {
 
   var $cookies, $cookieStore, Session;
 
   var family = [0, 1, 2, 3, 4];
 
-  beforeEach(module('crossroads'));
+  beforeEach(angular.mock.module('crossroads'));
 
   beforeEach(inject(function(_$cookies_, _Session_){
     $cookies = _$cookies_;

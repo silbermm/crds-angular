@@ -1,3 +1,7 @@
+require('../../../../dependencies/dependencies');
+require('../../../../core/core');
+require('../../../../app/app');
+
 describe('KidsClub Adult Application Controller', function() {
 
   var controller;
@@ -71,7 +75,7 @@ describe('KidsClub Adult Application Controller', function() {
     }
  };
 
-  beforeEach(module('crossroads'));
+  beforeEach(angular.mock.module('crossroads'));
 
   beforeEach(inject(function(_$rootScope_, _$controller_){
     //Simulating isolate scope variables from the directive
