@@ -41,6 +41,12 @@
           // Make sure to reset the processing state to false whenever state change succeeds.
           vm.processing = false;
 
+          // If we're ont the account page and the user is logged in, focus the
+          // proper account field
+          if(toState.name == 'give.account' && $rootScope.username !== undefined) {
+            vm.togglePaymentInfo();
+          }
+
           // Force the state to reset after successfully giving
           if(toState.name == 'give.thank-you') {
             vm.initialized = false;
@@ -322,9 +328,9 @@
             }
         };
 
-        vm.togglePaymentInfo = function(view) {
+        vm.togglePaymentInfo = function() {
           $timeout(function() {
-            var e = view == "cc" ?
+            var e = vm.dto.view == "cc" ?
                         document.querySelector("[name='ccNumber']")
                         : document.querySelector("[name='routing']");
             e.focus();
