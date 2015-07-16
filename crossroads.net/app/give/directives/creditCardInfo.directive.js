@@ -47,10 +47,13 @@ require('../creditCardInfo.html');
             -1 // Indicates that this message should not time out
             );
 
-        // This is a hack to keep from tabbing on the close button on the growl message
+        // This is a hack to keep from tabbing on the close button on the growl message.
+        // There is no option in Growl to make the close button not tabbable...
         $timeout(function() {
             var closeButton = document.querySelector("#creditCardDiscouraged .close");
-            closeButton.tabIndex = -1;
+            if(closeButton) {
+              closeButton.tabIndex = -1;
+            }
         }, 0);
 
         scope.billingZipCodeError = function() {
@@ -162,10 +165,10 @@ require('../creditCardInfo.html');
           if(scope.changeAccountInfo) {
             scope.creditCardForm.$setDirty();
             $timeout(function() {
-              // The third field is the expDate
+              // The second field is the expDate
               var e = element.find('input')[1];
               e.focus();
-            });
+            }, 0);
           }
         };
 

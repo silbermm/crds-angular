@@ -196,12 +196,15 @@
                 vm.emailAlreadyRegisteredGrowlDivRef,
                 -1 // Indicates that this message should not time out
                 );
-                
-            // This is a hack to keep from tabbing on the close button on the growl message
+
+            // This is a hack to keep from tabbing on the close button on the growl message.
+            // There is no option in Growl to make the close button not tabbable...
             $timeout(function() {
               var closeButton = document.querySelector("#existingEmail .close");
-              closeButton.tabIndex = -1;
-            }, 0);
+              if(closeButton) {
+                closeButton.tabIndex = -1;
+              }
+            }, 11);
         };
 
         // Callback from email-field on guest giver page.  This closes any
