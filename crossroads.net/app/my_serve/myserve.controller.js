@@ -42,62 +42,26 @@
 
     activate();
 
+    //////////////////////////
+    // $rootScope listeners //
+    //////////////////////////
     $rootScope.$on('personUpdated', personUpdateHandler);
 
     $rootScope.$on('filterDone', function(event, data) {
       vm.groups = data;
     });
 
-    $rootScope.$on('filterByDates', function(event, data) {
-      loadOpportunitiesByDate(data.fromDate, data.toDate).then(function(opps){
-        vm.groups = opps;
-        vm.original = opps;
-        $scope.$apply();
-        $rootScope.$broadcast('filterByDatesDone');
-      },function(err){
-        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-      });
-    });
-
-    $rootScope.$on('updateAfterSave', function(event, data){
-      _.each(vm.groups, function(group) {
-        _.each(group.serveTimes, function(serveTime) {
-          _.each(serveTime.servingTeams, function(servingTeam) {
-            if (servingTeam.groupId === data.groupId) {
-              _.each(data.eventIds, function(eventId) {
-                if (servingTeam.eventId === eventId){
-                  _.each(servingTeam.members, function(member) {
-                    if (member.contactId === data.member.contactId) {
-                      member.serveRsvp = angular.copy(data.member.serveRsvp);
-                    }
-                  });
-                }  
-              });
-            }
-          });
-        });
-      });   
-    });
+    $rootScope.$on('filterByDates', filterByDates);
+    
+    $rootScope.$on('updateAfterSave', updateAfterSave);
 
     $rootScope.$on(AUTH_EVENTS.logoutSuccess, function(event, data) {
       vm.filterState.clearAll();
     });
 
-    $window.onbeforeunload = function(){
-      checkChildForms(); 
-      if ($scope['serveForm'].$dirty) {
-        return '';
-      }
-    };
-
-    $rootScope.$on('$stateChangeStart', function(event, next, current) {
-      checkChildForms();
-      if ($scope['serveForm'].$dirty) {
-        if(!$window.confirm('Are you sure you want to leave this page?')) {
-          event.preventDefault();
-        }
-      }
-    });
+    $rootScope.$on('$stateChangeStart', stateChangeStart);
+    
+    $window.onbeforeunload = onBeforeUnload;
 
     ////////////////////////////
     // Implementation Details //
@@ -133,6 +97,17 @@
       // date comes in as mm/dd/yyyy, convert to yyyy-mm-dd for moment to handle
       var d = new Date(date);
       return d;
+    }
+
+    function filterByDates(event,data){
+      loadOpportunitiesByDate(data.fromDate, data.toDate).then(function(opps){
+        vm.groups = opps;
+        vm.original = opps;
+        $scope.$apply();
+        $rootScope.$broadcast('filterByDatesDone');
+      },function(err){
+        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+      });
     }
 
     /**
@@ -196,6 +171,13 @@
       }
     }
 
+    function onBeforeUnload() {
+      checkChildForms(); 
+      if ($scope['serveForm'].$dirty) {
+        return '';
+      }
+    }
+
     function personUpdateHandler(event, data) {
       vm.groups = angular.copy(vm.original);
       _.each(vm.groups, function(group) {
@@ -228,12 +210,42 @@
       return vm.groups.length < 1 || totalServeTimesLength() === 0;
     }
 
+    function stateChangeStart(event, next, current) {
+      checkChildForms();
+      if ($scope['serveForm'].$dirty) {
+        if(!$window.confirm('Are you sure you want to leave this page?')) {
+          event.preventDefault();
+        }
+      }
+    }
+
     function totalServeTimesLength(){
       var len = _.reduce(vm.groups, function(total,n){
         return total + n.serveTimes.length;
       }, 0);
       return len;
     }
+
+   function updateAfterSave(event, data){
+      _.each(vm.groups, function(group) {
+        _.each(group.serveTimes, function(serveTime) {
+          _.each(serveTime.servingTeams, function(servingTeam) {
+            if (servingTeam.groupId === data.groupId) {
+              _.each(data.eventIds, function(eventId) {
+                if (servingTeam.eventId === eventId){
+                  _.each(servingTeam.members, function(member) {
+                    if (member.contactId === data.member.contactId) {
+                      member.serveRsvp = angular.copy(data.member.serveRsvp);
+                    }
+                  });
+                }  
+              });
+            }
+          });
+        });
+      });   
+    }
+
   }
 
 })();
