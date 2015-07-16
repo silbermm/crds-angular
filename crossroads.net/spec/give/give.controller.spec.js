@@ -1,7 +1,11 @@
+require('../../dependencies/dependencies');
+require('../../core/core');
+require('../../app/app');
+
 describe('GiveController', function() {
   var controller, $rootScope, $scope, $state, $timeout, $q, httpBackend, Session, mockPaymentService, mockGetResponse, programList, mockPaymentServiceGetPromise;
 
-  beforeEach(module('crossroads', function($provide) {
+  beforeEach(angular.mock.module('crossroads', function($provide) {
     programList = [
       {ProgramId: 1, Name: "Crossroads"},
       {ProgramId: 2, Name: "Game Change"},

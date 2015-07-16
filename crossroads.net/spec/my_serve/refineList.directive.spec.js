@@ -1,3 +1,7 @@
+require('../../dependencies/dependencies');
+require('../../core/core');
+require('../../app/app');
+
 describe('Refine List Directive', function() {
 
   var $compile, $rootScope, element, scope, isolateScope, filterState;
@@ -80,7 +84,7 @@ describe('Refine List Directive', function() {
   }];
 
   beforeEach(function() {
-    module('crossroads');
+    angular.mock.module('crossroads');
   });
 
   beforeEach(inject(function(_$compile_, _$rootScope_, _$q_, _filterState_) {

@@ -1,3 +1,7 @@
+require('../../dependencies/dependencies');
+require('../../core/core');
+require('../../app/app');
+
 describe('Volunteer Application Controller', function() {
 
   var controller,
@@ -115,11 +119,11 @@ describe('Volunteer Application Controller', function() {
     }]
   };
 
-  beforeEach(module('crossroads'));
+  beforeEach(angular.mock.module('crossroads'));
 
   describe("Not in Family", function(){
 
-    beforeEach(module(function($provide){
+    beforeEach(angular.mock.module(function($provide){
       $provide.value('$stateParams', { id: 12345678});
       mockSession= jasmine.createSpyObj('Session', ['exists', 'isActive']);
       mockSession.exists.and.callFake(function(something){
@@ -154,7 +158,7 @@ describe('Volunteer Application Controller', function() {
 
   describe("In Family", function(){
 
-    beforeEach(module(function($provide){
+    beforeEach(angular.mock.module(function($provide){
       $provide.value('$stateParams', { id: 2186211});
       mockSession= jasmine.createSpyObj('Session', ['exists', 'isActive']);
       mockSession.exists.and.callFake(function(something){
