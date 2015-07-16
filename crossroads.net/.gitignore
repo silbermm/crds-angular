@@ -37,3 +37,6 @@ styles/pages/*.css*
 corkboard
 
 .DS_Store
+
+corkboard
+karma_html/
