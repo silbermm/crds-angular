@@ -126,3 +126,9 @@ h2 {
   text-align: left;
   font-family: $font-family-base;
 }
+
+.btn-block-mobile {
+  @media (max-width: $screen-xs-max) { 
+    width: 100%;
+  }
+}
