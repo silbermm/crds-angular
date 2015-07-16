@@ -41,8 +41,8 @@
           // Make sure to reset the processing state to false whenever state change succeeds.
           vm.processing = false;
 
-          // If we're ont the account page and the user is logged in, focus the
-          // proper account field
+          // If we're on the account page and the user is logged in, focus the
+          // proper account field (email gets focus of not logged in)
           if(toState.name == 'give.account' && $rootScope.username !== undefined) {
             vm.togglePaymentInfo();
           }
