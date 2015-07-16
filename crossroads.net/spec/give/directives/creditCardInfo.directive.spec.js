@@ -1,8 +1,12 @@
+require('../../../dependencies/dependencies');
+require('../../../core/core');
+require('../../../app/app');
+
 describe('Credit Card Info Directive', function() {
   var ccElement, scope, isolateScope, form, $timeout;
 
   beforeEach(function() {
-    module('crossroads');
+    angular.mock.module('crossroads');
   });
 
   beforeEach(inject(function(_$compile_, _$rootScope_, _$templateCache_, _$timeout_) {
@@ -13,11 +17,11 @@ describe('Credit Card Info Directive', function() {
     $timeout = _$timeout_;
 
     $templateCache.put('on-submit-messages', '<span ng-message="required">Required</span>');
-    $templateCache.put('on-blur-messages',
-      '<span ng-message="invalidRouting">Invalid routing</span>'
-      + '<span ng-message="invalidAccount">Invalid account</span>'
-      + '<span ng-message="naturalNumber">Not a valid number</span>'
-      + '<span ng-message="invalidZip">Invalid zip</span>');
+    $templateCache.put('on-blur-messages', 
+      '<span ng-message="invalidRouting">Invalid routing</span>' + 
+      '<span ng-message="invalidAccount">Invalid account</span>' +
+      '<span ng-message="naturalNumber">Not a valid number</span>' +
+      '<span ng-message="invalidZip">Invalid zip</span>');
 
     var templateString = "<credit-card-info "
      + "cvc='model.cvc' "
@@ -57,6 +61,7 @@ describe('Credit Card Info Directive', function() {
 
     ccElement = $compile(templateString)(scope);
     scope.$digest();
+    $timeout.flush();
     isolateScope = ccElement.isolateScope();
     form = isolateScope.creditCardForm;
   }));
@@ -66,12 +71,11 @@ describe('Credit Card Info Directive', function() {
       var expDate = ccElement.find('input')[1];
       spyOn(expDate, 'focus');
       isolateScope.swapCreditCardExpDateFields();
+      $timeout.verifyNoPendingTasks();
       expect(form.$dirty).toBeFalsy();
       expect(expDate.focus).not.toHaveBeenCalled();
     });
-  });
 
-  describe('swapCreditCardExpDateFields Function', function() {
     it('should dirty the credit card form and set focus if changing existing account info', function() {
       var expDate = ccElement.find('input')[1];
       spyOn(expDate, 'focus');

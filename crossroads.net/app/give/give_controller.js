@@ -108,14 +108,14 @@
              country: 'US',
              currency: 'USD',
              routing_number: vm.dto.donor.default_source.routing,
-             account_number: vm.dto.donor.default_source.last4
+             account_number: vm.dto.donor.default_source.bank_account_number
           }
         };
 
         vm.createCard = function(){
           vm.card = {
            name: vm.dto.donor.default_source.name,
-           number: vm.dto.donor.default_source.last4,
+           number: vm.dto.donor.default_source.cc_number,
            exp_month: vm.dto.donor.default_source.exp_date.substr(0,2),
            exp_year: vm.dto.donor.default_source.exp_date.substr(2,2),
            cvc: vm.dto.donor.default_source.cvc,
@@ -164,6 +164,7 @@
           } else {
             vm.dto.view = "cc";
           }
+          vm.dto.savedPayment = vm.dto.view;
           vm.dto.changeAccountInfo = true;
           vm.amountSubmitted = false;
           $state.go("give.change")
@@ -195,6 +196,15 @@
                 vm.emailAlreadyRegisteredGrowlDivRef,
                 -1 // Indicates that this message should not time out
                 );
+
+            // This is a hack to keep from tabbing on the close button on the growl message.
+            // There is no option in Growl to make the close button not tabbable...
+            $timeout(function() {
+              var closeButton = document.querySelector("#existingEmail .close");
+              if(closeButton) {
+                closeButton.tabIndex = -1;
+              }
+            }, 11);
         };
 
         // Callback from email-field on guest giver page.  This closes any
@@ -312,6 +322,15 @@
             }
         };
 
+        vm.togglePaymentInfo = function(view) {
+          $timeout(function() {
+            var e = view == "cc" ?
+                        document.querySelector("[name='ccNumber']")
+                        : document.querySelector("[name='routing']");
+            e.focus();
+          }, 0);
+        };
+
         vm.createDonorAndDonate = function(programId, amount, email, view) {
           // The vm.email below is only required for guest giver, however, there
           // is no harm in sending it for an authenticated user as well,
@@ -369,6 +388,9 @@
              $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
            } else {
             if (vm.dto.view == "cc") {
+              if(vm.dto.savedPayment == 'bank') {
+                $scope.giveForm.creditCardForm.$setDirty();
+              }
               if (!$scope.giveForm.creditCardForm.$dirty){
                 vm.processing = true;
                 vm.donate(vm.dto.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.dto.email, vm.dto.view, function() {
@@ -378,6 +400,9 @@
                 vm.processCreditCardChange();
              }
            } else if (vm.dto.view == "bank"){
+              if(vm.dto.savedPayment == 'cc') {
+                $scope.giveForm.bankAccountForm.$setDirty();
+              }
               if(!$scope.giveForm.bankAccountForm.$dirty) {
                  vm.processing = true;
                  vm.donate(vm.dto.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.dto.email, vm.dto.view, function() {

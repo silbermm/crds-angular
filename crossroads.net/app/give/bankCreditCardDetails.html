@@ -1,17 +1,17 @@
 <div class="form-group" >
     <div class="btn-group btn-group-sm account-type form-group" role="group">
-        <button type="button" class="btn btn-default" ng-model="give.dto.view" btn-radio="'bank'">Bank Account</button>
-        <button type="button" class="btn btn-default" ng-model="give.dto.view" btn-radio="'cc'">Credit Card</button>
+        <button type="button" class="btn btn-default" ng-model="give.dto.view" btn-radio="'bank'" tabindex="-1" ng-click="give.togglePaymentInfo('bank')">Bank Account</button>
+        <button type="button" class="btn btn-default" ng-model="give.dto.view" btn-radio="'cc'" tabindex="-1" ng-click="give.togglePaymentInfo('cc')">Credit Card</button>
     </div>
 
     <span>
-  <a ui-sref="content({link:'/confidentiality-and-security/'})" target="_blank">
+  <a ui-sref="content({link:'/confidentiality-and-security/'})" target="_blank" tabindex="-1">
             <svg viewBox="0 0 21 32" class="icon icon-lock"><use xlink:href="#lock"></use></svg>
         </a>
     </span>
 
     <section ng-if="give.dto.view=='bank'">
-    	<bank-info account="give.dto.donor.default_source.last4"
+    	<bank-info account="give.dto.donor.default_source.bank_account_number"
                  bankinfo-submitted="give.bankinfoSubmitted"
                  change-account-info="give.dto.changeAccountInfo"
                  default-source="give.dto.donor.default_source"
@@ -26,9 +26,9 @@
     <section ng-if="give.dto.view=='cc'" >
       <credit-card-info cvc="give.dto.donor.default_source.cvc"
                         exp-date="give.dto.donor.default_source.exp_date"
-                        cc-number="give.dto.donor.default_source.last4"
+                        cc-number="give.dto.donor.default_source.cc_number"
                         billing-zip-code="give.dto.donor.default_source.address_zip"
-                        bankinfo-submitted="give.bankinfoSubmitted"                        
+                        bankinfo-submitted="give.bankinfoSubmitted"
                         donor="give.donor"
                         default-source="give.dto.donor.default_source"
                         declined-payment="give.dto.declinedPayment"

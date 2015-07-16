@@ -1,3 +1,7 @@
+require('../../dependencies/dependencies');
+require('../../core/core');
+require('../../app/app');
+
 var $compile, $rootScope, element, scope, mockSession, mockServeDate, $httpBackend;
 
 var mockOpp = {"name": "NuseryA", "roleId": 145};
@@ -58,7 +62,7 @@ var mockMatt = {"name":"Matt", "lastName": "Silbernagel", "contactId":1970611, "
 describe('Serve Teams Directive', function() {
 
   beforeEach(function(){
-    module('crossroads');
+    angular.mock.module('crossroads');
   });
 
   beforeEach(inject(function(_$compile_, _$rootScope_, $injector){
@@ -257,7 +261,7 @@ describe('Serve Teams Directive', function() {
 
 describe("Serve Teams Directive Edit", function() {
   beforeEach(function(){
-    module('crossroads', function($provide){
+    angular.mock.module('crossroads', function($provide){
       mockSession= jasmine.createSpyObj('Session', ['exists']);
       mockSession.exists.and.callFake(function(something){
         return '12345678';
