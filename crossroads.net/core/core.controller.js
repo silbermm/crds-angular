@@ -27,7 +27,7 @@
     // State Change Listeners //
     ////////////////////////////
     $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-      if (toState.resolve) {
+      if (toState.resolve && !event.defaultPrevented) {
         vm.resolving = true;
       }
     });

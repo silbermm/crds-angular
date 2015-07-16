@@ -83,19 +83,19 @@
       vm.filterState.clearAll();
     });
 
-    // $window.onbeforeunload = function(){
-    //         if ($scope['serveForm'].$dirty) {
-    //             return '';
-    //         }
-    //     };
+    $window.onbeforeunload = function(){
+            if ($scope['serveForm'].$dirty) {
+                return '';
+            }
+        };
 
-    // $rootScope.$on('$stateChangeStart', function(event, next, current) {
-    //         if ($scope['serveForm'].$dirty) {
-    //             if(!confirm('Are you sure you want to leave this page?')) {
-    //                 event.preventDefault();
-    //             }
-    //         }
-    //     });
+    $rootScope.$on('$stateChangeStart', function(event, next, current) {
+            if ($scope['serveForm'].$dirty) {
+                if(!confirm('Are you sure you want to leave this page?')) {
+                    event.preventDefault();
+                }
+            }
+        });
 
     ////////////////////////////
     // Implementation Details //
