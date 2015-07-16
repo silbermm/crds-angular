@@ -47,12 +47,21 @@ require('../creditCardInfo.html');
             -1 // Indicates that this message should not time out
             );
 
+        // This is a hack to keep from tabbing on the close button on the growl message.
+        // There is no option in Growl to make the close button not tabbable...
+        $timeout(function() {
+            var closeButton = document.querySelector("#creditCardDiscouraged .close");
+            if(closeButton) {
+              closeButton.tabIndex = -1;
+            }
+        }, 0);
+
         scope.billingZipCodeError = function() {
           if(scope.useExistingAccountInfo()) {
             return(false);
           }
 
-          return ((scope.creditCardForm.billingZipCode.$dirty || scope.bankinfoSubmitted) && (scope.creditCardForm.billingZipCode.$modelValue == undefined || 
+          return ((scope.creditCardForm.billingZipCode.$dirty || scope.bankinfoSubmitted) && (scope.creditCardForm.billingZipCode.$modelValue == undefined ||
                    scope.creditCardForm.billingZipCode.$invalid));
         };
 
@@ -156,10 +165,10 @@ require('../creditCardInfo.html');
           if(scope.changeAccountInfo) {
             scope.creditCardForm.$setDirty();
             $timeout(function() {
-              // The third field is the expDate
+              // The second field is the expDate
               var e = element.find('input')[1];
               e.focus();
-            });
+            }, 0);
           }
         };
 
@@ -171,7 +180,7 @@ require('../creditCardInfo.html');
           return(scope.changeAccountInfo && scope.creditCardForm.$pristine);
         };
 
-        if (scope.defaultSource !== undefined){   
+        if (scope.defaultSource !== undefined){
           if(!scope.defaultSource.credit_card) {
             scope.resetDefaultCardPlaceholderValues();
           } else if(scope.defaultSource.credit_card.last4) {
@@ -189,7 +198,7 @@ require('../creditCardInfo.html');
 
             scope.ccCardType();
           }
-        };  
+        };
       }
     };
 
