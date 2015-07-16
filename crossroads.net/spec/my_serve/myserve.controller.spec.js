@@ -34,6 +34,9 @@ describe('MyServeController', function() {
 
     beforeEach(inject(function($log, $httpBackend){
       $scope = {};
+      $scope.serveForm = {
+        $dirty: false
+      };
       controller = $controller('MyServeController', { $scope: $scope });
     }));
 
