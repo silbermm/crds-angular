@@ -1,0 +1,37 @@
+<!-- <div ng-show="groupsignup.viewReady"> -->
+<div class="row">
+  <div class="col-sm-10 col-sm-offset-1">
+    <h1>Go South Africa Signup</h1>
+    <p>
+      You will have the opportunity to sign up any family members who are registered in our site for the trip once you have submitted your application.
+    </p>
+    <div>
+      <legend>Participants</legend>
+
+      <form name="partForm" role="form" id="partForm">
+        <div class="checkbox">
+          <label>
+            <input name="input" type="checkbox" checked="checked">&nbsp;</span><span>Peter</span>
+            <span class="ng-binding">(mpcrds+peterparker@gmail.com)</span>
+            <span>
+              <a href="" ng-click="groupsignup.editProfile()">
+                <svg viewBox="0 0 32 32" class="icon icon-pencil4">
+                  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#pencil4"></use>
+                </svg>
+              </a>
+            </span>
+          </label>
+        </div><!--/checkbox-->
+      </div><!--/form-group-->
+
+      <div class="form-group">
+        <legend>Go Group</legend>
+          <div class="form-group">
+           <label for="exampleInputEmail1" class="required">Enter A New Common Name</label>
+           <input type="text" class="form-control" id="personOne" placeholder="Person One">
+         </div>
+      </div><!--/form-group-->
+      <input type="submit" name="submit_group_signup" value="Sign Up" id="submit_group_signup" class="btn btn-primary push-half-bottom">
+    </form>
+  </div><!--/col-sm-12-->
+</div><!--/row-->

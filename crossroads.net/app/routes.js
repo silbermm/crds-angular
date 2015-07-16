@@ -92,6 +92,10 @@
         url: "/mytrips",
         templateUrl: "mytrips/mytrips.html"
       })
+      .state("go-south-africa-signup", {
+        url: "/go/south-africa/signup",
+        templateUrl: "gotrips/south-africa-signup.html"
+      })
       .state("media", {
         url: "/media",
         controller: "MediaCtrl as media",
