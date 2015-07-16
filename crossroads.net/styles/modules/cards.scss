@@ -5,6 +5,9 @@
   border-left: 5px solid $cr-blue;
   box-shadow: -1px 2px 2px 0 rgba(0, 0, 0, 0.16), -1px 2px 2px 0 rgba(0, 0, 0, 0.12);
   overflow: hidden;
+  h1, h2, h3, h4, h5 {
+    margin: 0;
+  }
 }
 
 .card-img {
@@ -15,20 +18,16 @@
     max-width: 89%;
     background-color: transparent;
     border-radius: 50%;
-    border: 3px solid rgba(214, 224, 226, 0.4);
+    border: 3px solid rgba(214, 224, 226, 0.8);
     position: relative;
     margin: 0 auto;
   }
 }
 
+
+
 .card-header {
-  //@extend h3;
-  //margin-top: 0;
-  //padding-left:11px;
-  //padding-right:11px;
-  h1, h2, h3, h4, h5 {
-    margin: 0;
-  }
+  padding: $line-height-computed/4 $grid-gutter-width/2;
    a {
      color: $text-color;
 
@@ -67,7 +66,15 @@
       left: 20px;
     }
   }
-
+  h4 {
+    padding: $line-height-computed/2 0px;
+    margin: 0px;
+  }
+  p {
+    //line-height: 1.5;
+    //margin-bottom: $line-height-computed/4;
+    margin-bottom: 0;
+  }
   ul.list-group {
     margin-bottom: 0px;
 
@@ -80,22 +87,9 @@
       padding-top: 0px;
       padding-bottom: 0px;
       line-height: 33px;
-      padding-left: $line-height-computed/2;
-      padding-right: $line-height-computed/2;
 
       @media (min-width: $screen-sm-min) {
         padding-right: 0;
-      }
-
-      h4 {
-        padding: $line-height-computed/2 0px;
-        margin: 0px;
-      }
-
-      p {
-        margin-bottom: 0px;
-        line-height: 1.5;
-        padding: 6px 0;
       }
     }
   }
