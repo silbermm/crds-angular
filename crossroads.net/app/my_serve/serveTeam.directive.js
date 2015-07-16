@@ -400,6 +400,12 @@
           updateCapacity();
           savePanel(scope.currentMember, true);
           $rootScope.$emit("updateAfterSave", {'member': scope.currentMember, 'groupId': scope.team.groupId, 'eventIds': updatedEvents.EventIds});
+          // should we reset the form to pristine
+          if(!isFormDirty()){
+            var teamFormName = 'teamForm-' + scope.team.index;
+            var form = scope['teamForm-' + scope.team.index];
+            form.$setPristine();
+          }
           return true;
         }, function(err) {
           $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
