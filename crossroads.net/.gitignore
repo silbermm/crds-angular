@@ -38,5 +38,5 @@ styles/pages/*.css*
 .DS_Store
 
 
-corkboard/
+corkboard
 karma_html/
