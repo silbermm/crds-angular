@@ -2,14 +2,13 @@ USE [MinistryPlatform]
 GO
 
 DECLARE @CANCEL_SUBJECT varchar(50);
-DELCARE @CONFIRM_SUBJECT varchar(50);
-DECLARE @CANCEL_BODY varchar(255);
-DECLARE @CONFIRM_BODY varchar(255);
-
 SET @CANCEL_SUBJECT = N'Serve Signup Cancelation';
-SET @CONFIRM_BODY = N'Thanks for signing up [] serve<br/><br/> [Html_Table]';
+DECLARE @CONFIRM_BODY varchar(255)
+SET @CONFIRM_BODY = N'Thanks for signing up [Volunteer_Name] to serve<br/><br/> [Html_Table]';
 
-SET @CANCEL_BODY = N'Thanks for letting us know [] can''t make it.<br/><br/> [Html_Table]';
+DECLARE @CANCEL_BODY varchar(255)
+SET @CANCEL_BODY = N'Thanks for letting us know that [Volunteer_Name] can''t make it.<br/><br/> [Html_Table]';
+DECLARE @CONFIRM_SUBJECT varchar(50)
 SET @CONFIRM_SUBJECT = N'Serve Signup Confirmation';
 
 IF NOT EXISTS (SELECT * FROM [dbo].[dp_Communications]
@@ -54,8 +53,6 @@ IF NOT EXISTS (SELECT * FROM [dbo].[dp_Communications]
             WHERE [Subject] = @CONFIRM_SUBJECT
             AND [Template] = 1
           END
-GO
-
 IF NOT EXISTS (SELECT * FROM [dbo].[dp_Communications]
   WHERE [Subject] = @CANCEL_SUBJECT
   AND [Template] = 1)
