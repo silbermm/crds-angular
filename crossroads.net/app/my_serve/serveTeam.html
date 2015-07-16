@@ -20,7 +20,7 @@
     </div><!--/panel-heading-->
 
     <!-- TODO: Pull this out into it's own directive so that each form doesn't share scope? -->
-    <form name="teamForm">
+    <form name="teamForm-{{team.index}}" >
     <div class="panel-collapse collapse" collapse="isCollapsed">
       <div class="panel-body soft-half-bottom">
         <div class="alert alert-info" role="alert" ng-show="team.pastDeadline" ng-bind-html="$root.messages[team.pastDeadlineMessage].message | html">

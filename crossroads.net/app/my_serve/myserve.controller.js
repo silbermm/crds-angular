@@ -1,6 +1,6 @@
-'use strict()';
 (function(){
-
+  'use strict';
+  var moment = require('moment');
   module.exports = MyServeController;
 
   MyServeController.$inject = [
@@ -84,18 +84,20 @@
     });
 
     $window.onbeforeunload = function(){
-            if ($scope['serveForm'].$dirty) {
-                return '';
-            }
-        };
+      checkChildForms(); 
+      if ($scope['serveForm'].$dirty) {
+        return '';
+      }
+    };
 
     $rootScope.$on('$stateChangeStart', function(event, next, current) {
-            if ($scope['serveForm'].$dirty) {
-                if(!confirm('Are you sure you want to leave this page?')) {
-                    event.preventDefault();
-                }
-            }
-        });
+      checkChildForms();
+      if ($scope['serveForm'].$dirty) {
+        if(!$window.confirm('Are you sure you want to leave this page?')) {
+          event.preventDefault();
+        }
+      }
+    });
 
     ////////////////////////////
     // Implementation Details //
@@ -111,6 +113,22 @@
       return d;
     }
 
+    function checkChildForms(){
+      var form = $scope.serveForm;
+      var keys = _.keys(form);
+      var dirty = []; 
+      _.each(keys, function(k){
+        if(_.startsWith(k, 'team')){
+          if(form[k].$dirty){
+            dirty.push(k);
+          }
+        }
+      });
+      if(dirty.length < 1){
+        $scope['serveForm'].$setPristine();
+      }
+    }
+
     function convertToDate(date){
       // date comes in as mm/dd/yyyy, convert to yyyy-mm-dd for moment to handle
       var d = new Date(date);
@@ -124,7 +142,10 @@
      * @param days to add - How many days to add to the original date passed in
      * @return string formatted in the way we want to display
      */
-    function formatDate(date, days=0){
+    function formatDate(date, days){
+      if(days === undefined){
+        days = 0;
+      }
       var d = moment(date);
       d.add(days, 'd');
       return d.format('MM/DD/YY');
