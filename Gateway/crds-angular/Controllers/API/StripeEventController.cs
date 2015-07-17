@@ -144,7 +144,7 @@ namespace crds_angular.Controllers.API
                     response.SuccessfulUpdates.Add(charge.Id);
                     batch.ItemCount++;
                     batch.BatchTotalAmount += (charge.Amount / 100M);
-                    batch.Donations.Add(new DonationDTO { donation_id = ""+donationId });
+                    batch.Donations.Add(new DonationDTO { donation_id = "" + donationId, amount = charge.Amount });
                 }
                 catch (Exception e)
                 {
@@ -153,7 +153,15 @@ namespace crds_angular.Controllers.API
                 }
             }
 
-            response.Batch = _donationService.CreateDonationBatch(batch);
+            try
+            {
+                response.Batch = _donationService.CreateDonationBatch(batch);
+            }
+            catch (Exception e)
+            {
+                _logger.Error("Failed to create donation batch", e);
+                throw;
+            }
 
             return (response);
         }

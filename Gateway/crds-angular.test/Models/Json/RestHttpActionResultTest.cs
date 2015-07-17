@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace crds_angular.test.Models.Json
 {
@@ -64,6 +65,7 @@ namespace crds_angular.test.Models.Json
             Assert.NotNull(response);
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             var content = response.Content;
+            Assert.AreEqual(MediaTypeHeaderValue.Parse("application/json"), response.Content.Headers.ContentType);
             Assert.IsInstanceOf<StringContent>(content);
             var stringContentTask = content.ReadAsStringAsync();
             stringContentTask.Wait();
