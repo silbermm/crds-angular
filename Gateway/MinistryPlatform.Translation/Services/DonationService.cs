@@ -29,7 +29,7 @@ namespace MinistryPlatform.Translation.Services
         public int UpdateDonationStatus(string processorPaymentId, int statusId,
             DateTime statusDate, string statusNote = null)
         {
-            WithApiLogin(token =>
+            return(WithApiLogin(token =>
             {
                 var result = _ministryPlatformService.GetRecordsDict(_donationsPageId, token,
                     ",,,,,,," + processorPaymentId);
@@ -39,11 +39,11 @@ namespace MinistryPlatform.Translation.Services
                     throw (new ApplicationException("Could not locate donation for charge " + processorPaymentId));
                 }
                 UpdateDonationStatus(token, donationId.Value, statusId, statusDate, statusNote);
-                return (donationId);
-            });
+                return (donationId.Value);
+            }));
         }
 
-        private int UpdateDonationStatus(string apiToken, int donationId, int statusId, DateTime statusDate,
+        private void UpdateDonationStatus(string apiToken, int donationId, int statusId, DateTime statusDate,
             string statusNote)
         {
             var parms = new Dictionary<string, object>

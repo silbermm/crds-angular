@@ -131,27 +131,28 @@ namespace crds_angular.Services
             return defaultSource;
         }
 
-        public string ChargeCustomer(string customerToken, int amount, int donorId, string paymentType)
+        public StripeCharge ChargeCustomer(string customerToken, int amount, int donorId, string paymentType)
         {
             var request = new RestRequest("charges", Method.POST);
             request.AddParameter("amount", amount * 100);
             request.AddParameter("currency", "usd");
             request.AddParameter("customer", customerToken);
             request.AddParameter("description", "Donor ID #" + donorId);
+            request.AddParameter("expand[]", "balance_transaction");
 
             var response = _stripeRestClient.Execute<StripeCharge>(request);
             CheckStripeResponse("Invalid charge request", response);
 
-            return response.Data.Id;
+            return response.Data;
         }
 
-        public List<string> GetChargesForTransfer(string transferId)
+        public List<StripeCharge> GetChargesForTransfer(string transferId)
         {
             var url = string.Format("transfers/{0}/transactions", transferId);
             var request = new RestRequest(url, Method.GET);
             request.AddParameter("count", _maxQueryResultsPerPage);
 
-            var charges = new List<string>();
+            var charges = new List<StripeCharge>();
             StripeCharges nextPage;
             do
             {
@@ -159,11 +160,11 @@ namespace crds_angular.Services
                 CheckStripeResponse("Could not query transactions", response);
 
                 nextPage = response.Data;
-                charges.AddRange(nextPage.Data.Select(charge => charge.Id));
+                charges.AddRange(nextPage.Data.Select(charge => charge));
 
                 request = new RestRequest(url, Method.GET);
                 request.AddParameter("count", _maxQueryResultsPerPage);
-                request.AddParameter("starting_after", charges.Last());
+                request.AddParameter("starting_after", charges.Last().Id);
             } while (nextPage.HasMore);
 
             return (charges);
