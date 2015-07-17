@@ -1,25 +1,10 @@
 USE [MinistryPlatform]
 GO
 
-/****** Object:  Table [dbo].[cr_Onboarding_Statuses]    Script Date: 7/16/2015 3:51:48 PM ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
-GO
-
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[cr_Onboarding_Statuses]') AND type in (N'U'))
-BEGIN
-CREATE TABLE [dbo].[cr_Onboarding_Statuses](
-	[Onboarding_Status_ID] [int] IDENTITY(1,1) NOT NULL,
-	[Onboarding_Status] [nvarchar](50) NOT NULL,
-	[Final_Status] [bit] NOT NULL CONSTRAINT [DF_cr_Onboarding_Statuses_Final_Status]  DEFAULT ((0)),
- CONSTRAINT [PK_cr_Onboarding_Status] PRIMARY KEY CLUSTERED 
-(
-	[Onboarding_Status_ID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-END
 GO
 
 UPDATE dp_Sub_Pages
