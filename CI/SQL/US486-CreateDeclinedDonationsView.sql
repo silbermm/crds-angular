@@ -56,7 +56,7 @@ VALUES
 		, Donations.[Transaction_Code] AS [Transaction Code]
 		, Donor_ID_Table.[Processor_ID] AS [Processor ID]'
 	,'Donation_Status_ID_Table.[Donation_Status] = ''Declined''
-		AND Donations.[Donation_Date] >= DATEDIFF(month, -18, GETDATE())'
+		AND Donations.[Donation_Date] >= DATEADD(month, -18, GETDATE())'
 	,'Donations.[Donation_Status_Date] DESC'
 	,NULL
 	,NULL);
