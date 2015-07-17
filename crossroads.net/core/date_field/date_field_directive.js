@@ -7,19 +7,16 @@
                 ngModel.$validators.pastDate = function(value) {
 
                     var currentDate = new Date(Date.now());
-                    currentDate.setHours(0,0,0,0);
+                    currentDate.setHours(0, 0, 0, 0);
 
-                    if (value){
-
-                        if (value < currentDate) {
-                            return false;
-                        } else {
-                            return true;
-                        }
-
-                    }
-                    else {
+                    if (!value) {
                         return true;
+                    }
+
+                    if (value >= currentDate) {
+                        return true;
+                    } else {
+                        return false;
                     }
                 }
             }
