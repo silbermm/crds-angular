@@ -6,6 +6,7 @@ using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
+using Microsoft.Ajax.Utilities;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Controllers.API
@@ -38,8 +39,10 @@ namespace crds_angular.Controllers.API
             try{
                 var contactId = _authenticationService.GetContactId(token);
                 var donor = _mpDonorService.GetContactDonor(contactId);
-                var chargeId = _stripeService.ChargeCustomer(donor.ProcessorId, dto.Amount, donor.DonorId, dto.PaymentType);
-                var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount, donor.DonorId, dto.ProgramId, chargeId, dto.PaymentType, donor.ProcessorId, DateTime.Now, true);
+                var charge = _stripeService.ChargeCustomer(donor.ProcessorId, dto.Amount, donor.DonorId, dto.PaymentType);
+                var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
+
+                var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount, fee, donor.DonorId, dto.ProgramId, charge.Id, dto.PaymentType, donor.ProcessorId, DateTime.Now, true);
                 var response = new DonationDTO()
                     {
                         program_id = dto.ProgramId,
@@ -66,8 +69,10 @@ namespace crds_angular.Controllers.API
             try
             {
                 var donor = _gatewayDonorService.GetContactDonorForEmail(dto.EmailAddress);
-                var chargeId = _stripeService.ChargeCustomer(donor.ProcessorId, dto.Amount, donor.DonorId, dto.PaymentType);
-                var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount, donor.DonorId, dto.ProgramId, chargeId, dto.PaymentType, donor.ProcessorId, DateTime.Now, false);
+                var charge = _stripeService.ChargeCustomer(donor.ProcessorId, dto.Amount, donor.DonorId, dto.PaymentType);
+                var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
+
+                var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount, fee, donor.DonorId, dto.ProgramId, charge.Id, dto.PaymentType, donor.ProcessorId, DateTime.Now, false);
 
                 var response = new DonationDTO()
                 {

@@ -282,10 +282,12 @@
     <Compile Include="Models\Crossroads\ServingRSVP.cs" />
     <Compile Include="Models\Crossroads\Skill.cs" />
     <Compile Include="Models\Crossroads\Event.cs" />
+    <Compile Include="Models\Crossroads\StripeBalanceTransaction.cs" />
     <Compile Include="Models\Crossroads\StripeCharge.cs" />
     <Compile Include="Models\Crossroads\StripeCharges.cs" />
     <Compile Include="Models\Crossroads\StripeCustomer.cs" />
     <Compile Include="Models\Crossroads\StripeEvent.cs" />
+    <Compile Include="Models\Crossroads\StripeExpandableProperty.cs" />
     <Compile Include="Models\Crossroads\StripeObject.cs" />
     <Compile Include="Models\Crossroads\StripeTransfer.cs" />
     <Compile Include="Models\Crossroads\User.cs" />

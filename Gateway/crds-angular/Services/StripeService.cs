@@ -131,18 +131,19 @@ namespace crds_angular.Services
             return defaultSource;
         }
 
-        public string ChargeCustomer(string customerToken, int amount, int donorId, string paymentType)
+        public StripeCharge ChargeCustomer(string customerToken, int amount, int donorId, string paymentType)
         {
             var request = new RestRequest("charges", Method.POST);
             request.AddParameter("amount", amount * 100);
             request.AddParameter("currency", "usd");
             request.AddParameter("customer", customerToken);
             request.AddParameter("description", "Donor ID #" + donorId);
+            request.AddParameter("expand[]", "balance_transaction");
 
             var response = _stripeRestClient.Execute<StripeCharge>(request);
             CheckStripeResponse("Invalid charge request", response);
 
-            return response.Data.Id;
+            return response.Data;
         }
 
         public List<string> GetChargesForTransfer(string transferId)

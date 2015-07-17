@@ -100,7 +100,15 @@
         }
         // reset panel states
         scope.panelStates[scope.currentMember.contactId] = undefined;
+        
+        // should we reset the form to pristine
+        if(!isFormDirty()){
+          var teamFormName = 'teamForm-' + scope.team.index;
+          var form = scope['teamForm-' + scope.team.index];
+          form.$setPristine();
+        }
         togglePanel(null);
+       
       }
 
       function changeFromDate() {
@@ -177,7 +185,29 @@
 
       function isActiveTab(memberName) {
         return memberName === scope.currentActiveTab;
-      };
+      }
+
+      function isFormDirty(){
+        var dirty = false;
+        // are there any other unsaved changes
+        var possible = _.filter(scope.team.members,function(m){
+            if(m.contactId === scope.currentMember.contactId){
+              return false; 
+            } 
+            var keys = _.keys(scope.panelStates);
+            if(_.indexOf(keys,"" + m.contactId) > -1){
+              return true;
+            }
+            return false;
+        }); 
+          
+        _.each(possible,function(e){
+          if(e.serveRsvp !== scope.panelStates[e.contactId]){
+            dirty = true;
+          }
+        });
+        return dirty;
+      }
 
       function isFormValid() {
         var validForm = {
@@ -370,6 +400,12 @@
           updateCapacity();
           savePanel(scope.currentMember, true);
           $rootScope.$emit("updateAfterSave", {'member': scope.currentMember, 'groupId': scope.team.groupId, 'eventIds': updatedEvents.EventIds});
+          // should we reset the form to pristine
+          if(!isFormDirty()){
+            var teamFormName = 'teamForm-' + scope.team.index;
+            var form = scope['teamForm-' + scope.team.index];
+            form.$setPristine();
+          }
           return true;
         }, function(err) {
           $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);

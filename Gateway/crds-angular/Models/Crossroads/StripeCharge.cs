@@ -12,5 +12,21 @@ namespace crds_angular.Models.Crossroads
 
         [JsonProperty("failure_message")]
         public string FailureMessage { get; set; }
+
+        #region Expandable Balance Transaction
+        public string BalanceTransactionId { get; set; }
+
+        [JsonIgnore]
+        public StripeBalanceTransaction BalanceTransaction { get; set; }
+
+        [JsonProperty("balance_transaction")]
+        internal object InternalBalanceTransaction
+        {
+            set
+            {
+                StripeExpandableProperty<StripeBalanceTransaction>.Map(value, s => BalanceTransactionId = s, o => BalanceTransaction = o);
+            }
+        }
+        #endregion
     }
 }
