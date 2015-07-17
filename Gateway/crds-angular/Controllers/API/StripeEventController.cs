@@ -23,6 +23,9 @@ namespace crds_angular.Controllers.API
         private readonly int _donationStatusSucceeded;
         private readonly int _batchEntryTypePaymentProcessor;
 
+        // This value is used when creating the batch name for exporting to GP.  It must be 15 characters or less.
+        private const string BatchNameDateFormat = @"\M\PyyyyMMddHHmm";
+
         public StripeEventController(IPaymentService paymentService, IDonationService donationService, IConfigurationWrapper configuration)
         {
             _paymentService = paymentService;
@@ -120,7 +123,7 @@ namespace crds_angular.Controllers.API
             }
 
             var now = DateTime.Now;
-            var batchName = now.ToString(@"\M\PyyyyMMddHHmm");
+            var batchName = now.ToString(BatchNameDateFormat);
 
             var batch = new DonationBatchDTO()
             {
