@@ -90,6 +90,7 @@ namespace MinistryPlatform.Translation.Test.Services
         public void CreateDonationAndDistributionRecord()
         {
             var donationAmt = 676767;
+            var feeAmt = 5656;
             var donorId = 1234567;
             var programId = "3";
             var setupDate = DateTime.Now;
@@ -118,6 +119,7 @@ namespace MinistryPlatform.Translation.Test.Services
             {
                 {"Donor_ID", donorId},
                 {"Donation_Amount", donationAmt},
+                {"Processor_Fee_Amount", feeAmt / 100M},
                 {"Payment_Type_ID", "4"}, //hardcoded as credit card until ACH stories are worked
                 {"Donation_Date", setupDate},
                 {"Transaction_code", charge_id},
@@ -161,7 +163,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _communicationService.Setup(mocked => mocked.GetTemplate(It.IsAny<int>())).Returns(getTemplateResponse);
 
 
-            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, donorId, programId, charge_id, pymt_type, processorId, setupDate, true);
+            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, charge_id, pymt_type, processorId, setupDate, true);
 
             // Explicitly verify each expectation...
             _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>()));

@@ -68,14 +68,16 @@ namespace MinistryPlatform.Translation.Services
 
         }
 
-        public int CreateDonationAndDistributionRecord(int donationAmt, int donorId, string programId, string charge_id, string pymt_type, string processorId, DateTime setupTime, bool registeredDonor)
+        public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string charge_id, string pymt_type, string processorId, DateTime setupTime, bool registeredDonor)
         {
             var pymt_id = (pymt_type == "bank") ? "5" : "4";
+            var fee = feeAmt.HasValue ? feeAmt/100M : null;
             
             var donationValues = new Dictionary<string, object>
             {
                 {"Donor_ID", donorId},
                 {"Donation_Amount", donationAmt},
+                {"Processor_Fee_Amount", fee},
                 {"Payment_Type_ID", pymt_id},
                 {"Donation_Date", setupTime},
                 {"Transaction_code", charge_id},

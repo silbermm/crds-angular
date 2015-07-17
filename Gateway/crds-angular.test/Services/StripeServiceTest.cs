@@ -295,7 +295,12 @@ namespace crds_angular.test.Services
         {
             var charge = new StripeCharge
             {
-                Id = "90210"
+                Id = "90210",
+                BalanceTransaction = new StripeBalanceTransaction
+                {
+                    Id = "txn_123",
+                    Fee = 145
+                }
             };
             
 
@@ -316,12 +321,13 @@ namespace crds_angular.test.Services
                     && ParameterMatches("currency", "usd", o.Parameters)
                     && ParameterMatches("customer", "cust_token", o.Parameters)
                     && ParameterMatches("description", "Donor ID #98765", o.Parameters)
+                    && ParameterMatches("expand[]", "balance_transaction", o.Parameters)
                     )));
 
             _restClient.VerifyAll();
             stripeResponse.VerifyAll();
 
-            Assert.AreEqual("90210", response);
+            Assert.AreSame(charge, response);
         }
 
         private bool ParameterMatches(string name, object value, List<Parameter> parms)
