@@ -26,7 +26,17 @@ namespace crds_angular.Services
 
         public DonationBatchDTO CreateDonationBatch(DonationBatchDTO batch)
         {
-            throw new NotImplementedException();
+            var batchId = _mpDonationService.CreateDonationBatch(batch.BatchName, batch.SetupDateTime,
+                batch.BatchTotalAmount, batch.ItemCount, batch.BatchEntryType, batch.DepositId, batch.FinalizedDateTime);
+
+            batch.Id = batchId;
+
+            foreach (var donation in batch.Donations)
+            {
+                _mpDonationService.AddDonationToBatch(batchId, int.Parse(donation.donation_id));
+            }
+
+            return (batch);
         }
     }
 }

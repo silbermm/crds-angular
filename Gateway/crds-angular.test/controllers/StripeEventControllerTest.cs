@@ -233,7 +233,7 @@ namespace crds_angular.test.controllers
 
             _donationService.Verify(mocked => mocked.CreateDonationBatch(It.Is<DonationBatchDTO>(o =>
                 o.BatchName.Matches(@"MP\d{12}")
-                && o.SetupDateTime == o.FinalizedDate
+                && o.SetupDateTime == o.FinalizedDateTime
                 && o.BatchEntryType == 555
                 && o.ItemCount == 3
                 && o.BatchTotalAmount == (111 + 222 + 333) / 100M

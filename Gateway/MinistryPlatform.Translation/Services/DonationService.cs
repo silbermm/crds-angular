@@ -10,6 +10,8 @@ namespace MinistryPlatform.Translation.Services
     public class DonationService : BaseService, IDonationService
     {
         private readonly int _donationsPageId;
+        private readonly int _batchesPageId;
+
         private readonly IMinistryPlatformService _ministryPlatformService;
 
         public DonationService(IMinistryPlatformService ministryPlatformService, IConfigurationWrapper configuration)
@@ -17,6 +19,7 @@ namespace MinistryPlatform.Translation.Services
             _ministryPlatformService = ministryPlatformService;
 
             _donationsPageId = configuration.GetConfigIntValue("Donations");
+            _batchesPageId = configuration.GetConfigIntValue("Batches");
         }
 
         public int UpdateDonationStatus(int donationId, int statusId, DateTime statusDate,
@@ -41,6 +44,57 @@ namespace MinistryPlatform.Translation.Services
                 UpdateDonationStatus(token, donationId.Value, statusId, statusDate, statusNote);
                 return (donationId.Value);
             }));
+        }
+
+        public int CreateDonationBatch(string batchName, DateTime setupDateTime, decimal batchTotalAmount, int itemCount,
+            int batchEntryType, int? depositId, DateTime finalizedDateTime)
+        {
+            var parms = new Dictionary<string, object>
+            {
+                {"Batch_Name", batchName},
+                {"Setup_Date", setupDateTime},
+                {"Batch_Total", batchTotalAmount},
+                {"Item_Count", itemCount},
+                {"Batch_Entry_Type", batchEntryType},
+                {"Deposit_ID", depositId},
+                {"Finalize_Date", finalizedDateTime}
+            };
+            try
+            {
+                return (WithApiLogin(token => (_ministryPlatformService.CreateRecord(_batchesPageId, parms, token))));
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException(
+                    string.Format(
+                        "CreateDonationBatch failed. batchName: {0}, setupDateTime: {1}, batchTotalAmount: {2}, itemCount: {3}, batchEntryType: {4}, depositId: {5}, finalizedDateTime: {6}",
+                        batchName, setupDateTime, batchTotalAmount, itemCount, batchEntryType, depositId, finalizedDateTime), e);
+            }
+        }
+
+        public void AddDonationToBatch(int batchId, int donationId)
+        {
+            var parms = new Dictionary<string, object>
+            {
+                {"Donation_ID", donationId},
+                {"Batch_ID", batchId}
+            };
+
+            try
+            {
+                WithApiLogin(token =>
+                {
+                    _ministryPlatformService.UpdateRecord(_donationsPageId, parms, token);
+                    return (true);
+                });
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException(
+                    string.Format(
+                        "AddDonationToBatch failed. batchId: {0}, donationId: {1}",
+                        batchId, donationId), e);
+            }
         }
 
         private void UpdateDonationStatus(string apiToken, int donationId, int statusId, DateTime statusDate,
