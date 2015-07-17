@@ -19,13 +19,14 @@ namespace MinistryPlatform.Translation.Services
             _donationsPageId = configuration.GetConfigIntValue("Donations");
         }
 
-        public void UpdateDonationStatus(int donationId, int statusId, DateTime statusDate,
+        public int UpdateDonationStatus(int donationId, int statusId, DateTime statusDate,
             string statusNote = null)
         {
             UpdateDonationStatus(apiLogin(), donationId, statusId, statusDate, statusNote);
+            return (donationId);
         }
 
-        public void UpdateDonationStatus(string processorPaymentId, int statusId,
+        public int UpdateDonationStatus(string processorPaymentId, int statusId,
             DateTime statusDate, string statusNote = null)
         {
             WithApiLogin(token =>
@@ -38,11 +39,11 @@ namespace MinistryPlatform.Translation.Services
                     throw (new ApplicationException("Could not locate donation for charge " + processorPaymentId));
                 }
                 UpdateDonationStatus(token, donationId.Value, statusId, statusDate, statusNote);
-                return (true);
+                return (donationId);
             });
         }
 
-        private void UpdateDonationStatus(string apiToken, int donationId, int statusId, DateTime statusDate,
+        private int UpdateDonationStatus(string apiToken, int donationId, int statusId, DateTime statusDate,
             string statusNote)
         {
             var parms = new Dictionary<string, object>

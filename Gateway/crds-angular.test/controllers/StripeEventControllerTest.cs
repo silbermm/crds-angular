@@ -4,7 +4,7 @@ using System.Web.Http.Results;
 using Moq;
 using NUnit.Framework;
 using crds_angular.Controllers.API;
-using crds_angular.Models.Crossroads;
+using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Interfaces;
 using Newtonsoft.Json.Linq;

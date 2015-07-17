@@ -6,7 +6,7 @@ using System.Web.Http;
 using crds_angular.Services.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using crds_angular.Models.Crossroads;
+using crds_angular.Models.Crossroads.Stewardship;
 using Crossroads.Utilities.Interfaces;
 
 namespace crds_angular.Controllers.API
@@ -20,6 +20,7 @@ namespace crds_angular.Controllers.API
         private readonly int _donationStatusDeclined;
         private readonly int _donationStatusDeposited;
         private readonly int _donationStatusSucceeded;
+        private readonly int _batchEntryTypePaymentProcessor;
 
         public StripeEventController(IPaymentService paymentService, IDonationService donationService, IConfigurationWrapper configuration)
         {
@@ -32,6 +33,7 @@ namespace crds_angular.Controllers.API
             _donationStatusDeclined = configuration.GetConfigIntValue("DonationStatusDeclined");
             _donationStatusDeposited = configuration.GetConfigIntValue("DonationStatusDeposited");
             _donationStatusSucceeded = configuration.GetConfigIntValue("DonationStatusSucceeded");
+            _batchEntryTypePaymentProcessor = configuration.GetConfigIntValue("BatchEntryTypePaymentProcessor");
         }
 
         [Route("api/stripe-event")]
@@ -101,6 +103,19 @@ namespace crds_angular.Controllers.API
                 return(response);
             }
 
+            var now = DateTime.Now;
+            var batchName = now.ToString(@"\M\PyyyyMMddHHmm");
+
+            var batch = new DonationBatchDTO()
+            {
+                BatchName = batchName,
+                SetupDateTime = now,
+                BatchTotalAmount = 0,
+                ItemCount = 0,
+                BatchEntryType = _batchEntryTypePaymentProcessor,
+                FinalizedDate = now
+            };
+
             response.TotalTransactionCount = charges.Count;
             _logger.Debug(string.Format("{0} charges to update for transfer {1}", charges.Count, transfer.Id));
             foreach (var charge in charges)
@@ -108,8 +123,11 @@ namespace crds_angular.Controllers.API
                 _logger.Debug("Updating charge id " + charge + " to Deposited status");
                 try
                 {
-                    _donationService.UpdateDonationStatus(charge, _donationStatusDeposited, eventTimestamp);
+                    var donationId = _donationService.UpdateDonationStatus(charge, _donationStatusDeposited, eventTimestamp);
                     response.SuccessfulUpdates.Add(charge);
+                    batch.ItemCount++;
+                    batch.BatchTotalAmount += charge;
+                    batch.Donations.Add(new DonationDTO { donation_id = ""+donationId });
                 }
                 catch (Exception e)
                 {
@@ -117,6 +135,8 @@ namespace crds_angular.Controllers.API
                     response.FailedUpdates.Add(new KeyValuePair<string, string>(charge, e.Message));
                 }
             }
+
+            var batchResponse = _donationService.CreateDonationBatch(batch);
 
             return (response);
         }
@@ -141,5 +161,8 @@ namespace crds_angular.Controllers.API
         [JsonProperty("failed_updates")]
         public List<KeyValuePair<string, string>> FailedUpdates { get { return (_failedUpdates); } }
         private readonly List<KeyValuePair<string, string>> _failedUpdates = new List<KeyValuePair<string, string>>();
+
+        [JsonProperty("donation_batch")]
+        public DonationBatchDTO
     }
 }

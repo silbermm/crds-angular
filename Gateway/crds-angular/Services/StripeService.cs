@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using crds_angular.Exceptions;
-using crds_angular.Models.Crossroads;
 using crds_angular.Services.Interfaces;
 using Newtonsoft.Json;
 using RestSharp;
 using System.Net;
+using crds_angular.Models.Crossroads.Stewardship;
 using Crossroads.Utilities.Interfaces;
 
 namespace crds_angular.Services

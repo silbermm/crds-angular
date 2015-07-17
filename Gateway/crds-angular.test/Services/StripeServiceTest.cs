@@ -1,12 +1,12 @@
 ﻿using System;
 using crds_angular.Exceptions;
-using crds_angular.Models.Crossroads;
 using crds_angular.Services;
 using Moq;
 using NUnit.Framework;
 using RestSharp;
 using System.Collections.Generic;
 using System.Net;
+using crds_angular.Models.Crossroads.Stewardship;
 using Crossroads.Utilities.Interfaces;
 
 namespace crds_angular.test.Services
