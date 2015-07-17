@@ -29,7 +29,7 @@
     scope.showInput = showInput;
 
     ////////////////////////////
-    
+
     function buttonClass(){
       return scope.loading ? scope.loadingClass : '';
     }

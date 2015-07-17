@@ -17,6 +17,7 @@ require('./register/register_directive');
 require('./cms/services/cms_services_module');
 
 // Common Components
+require('./components/btnLoading.directive');
 require('./components/svgIcon.directive');
 require('./components/preloader');
 require('./components/volunteer_applications');
