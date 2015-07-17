@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json.Linq;
 
-namespace crds_angular.Models.Crossroads
+namespace crds_angular.Models.Crossroads.Stewardship
 {
     public static class StripeExpandableProperty<T> where T : StripeObject
     {

@@ -65,37 +65,31 @@ WHERE [Sub_Page_ID] = 303
 GO
 
 /****** Object:  Table [dbo].[cr_Onboarding_Statuses]    Script Date: 6/9/2015 ******/
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[cr_Onboarding_Statuses]') AND type in (N'U'))
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[cr_Onboarding_Statuses]') AND type in (N'U'))
+DROP TABLE [dbo].[cr_Onboarding_Statuses]
+GO 
+
+BEGIN
 CREATE TABLE [dbo].[cr_Onboarding_Statuses](
 	[Onboarding_Status_ID] [int] IDENTITY(1,1) NOT NULL,
 	[Onboarding_Status] [nvarchar](50) NOT NULL,
+	[Final_Status] [bit] NOT NULL CONSTRAINT [DF_cr_Onboarding_Statuses_Final_Status]  DEFAULT ((0)),
  CONSTRAINT [PK_cr_Onboarding_Status] PRIMARY KEY CLUSTERED 
 (
 	[Onboarding_Status_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
-GO 
-
-IF NOT EXISTS (SELECT * FROM [dbo].[cr_Onboarding_Statuses] WHERE [Onboarding_Status] = 'Not Started')
-INSERT INTO [dbo].[cr_Onboarding_Statuses]
-           ([Onboarding_Status])
-     VALUES
-           ('Not Started')
-GO
-IF NOT EXISTS (SELECT * FROM [dbo].[cr_Onboarding_Statuses] WHERE [Onboarding_Status] = 'In Progress')
-INSERT INTO [dbo].[cr_Onboarding_Statuses]
-           ([Onboarding_Status])
-     VALUES
-           ('In Progress')
-GO
-IF NOT EXISTS (SELECT * FROM [dbo].[cr_Onboarding_Statuses] WHERE [Onboarding_Status] = 'Completed')
-INSERT INTO [dbo].[cr_Onboarding_Statuses]
-           ([Onboarding_Status])
-     VALUES
-           ('Completed')
+END
 GO
 
+INSERT INTO [dbo].[cr_Onboarding_Statuses]
+           ([Onboarding_Status], [Final_Status])
+     VALUES
+           ('Not Started', 0),
+		   ('In Progress', 0),
+		   ('Completed', 1),
+		   ('Omit', 1)
+GO
 
 /****** Object:  Table [dbo].[Response_Attributes]    Script Date: 6/9/2015 ******/
 SET ANSI_NULLS ON
@@ -272,38 +266,7 @@ ELSE
            ,'Response_ID'
            ,2)
 	END
-
-/****** Object:  StoredProcedure [dbo].[cr_CopyOnboarding]    Script Date: 6/10/2015 ******/
--- =============================================
--- Author:		Canterbury, Andy
--- Create date: 06/10/2015
--- Description:	Copy Onboarding Steps to a Response
--- =============================================
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[cr_CopyOnboardingSteps]') AND type in (N'P', N'PC'))
-BEGIN
-EXEC dbo.sp_executesql @statement = N'CREATE PROCEDURE [dbo].[cr_CopyOnboardingSteps] AS' 
-END
-GO
-
-ALTER PROCEDURE [dbo].[cr_CopyOnboardingSteps] 
-	-- Add the parameters for the stored procedure here
-	@ResponseID int 	
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;	
-
-	INSERT INTO [dbo].[Response_Attributes] 
-		([Attribute_ID], [Response_ID], [Domain_ID], [Start_Date], [Order], [Onboarding_Status_ID])
-    SELECT GA.[Attribute_ID], @ResponseID as Response_ID, 1 as Domain_ID, GETDATE() as Start_Date, GA.[Order],  1 as Onboarding_Status_ID FROM [dbo].[Group_Attributes] GA
-	JOIN [MinistryPlatform].[dbo].[Attributes] AT ON GA.Attribute_ID = AT.Attribute_ID
-	WHERE GA.Group_ID = (SELECT O.Add_to_Group FROM [dbo].[Responses] R JOIN [dbo].[Opportunities] O on O.Opportunity_ID = R.Opportunity_ID WHERE Response_ID = @ResponseID) and AT.Attribute_Type_ID = 58
-	ORDER BY GA.[Order]
-
-END
-
-GO
+GO 
 
 /** Add AttributeType for OnBoarding **/
 DECLARE @attribute_type varchar(50);
@@ -457,5 +420,35 @@ INSERT INTO [dbo].[Group_Attributes]
 			  1,
 			  getDate(),
 			  4)
+
+/****** Object:  StoredProcedure [dbo].[cr_CopyOnboarding]    Script Date: 6/10/2015 ******/
+-- =============================================
+-- Author:		Canterbury, Andy
+-- Create date: 06/10/2015
+-- Description:	Copy Onboarding Steps to a Response
+-- =============================================
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[cr_CopyOnboardingSteps]') AND type in (N'P', N'PC'))
+BEGIN
+EXEC dbo.sp_executesql @statement = N'CREATE PROCEDURE [dbo].[cr_CopyOnboardingSteps] AS' 
+END
+GO
+
+ALTER PROCEDURE [dbo].[cr_CopyOnboardingSteps] 
+	-- Add the parameters for the stored procedure here
+	@ResponseID int 	
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;	
+
+	INSERT INTO [dbo].[Response_Attributes] 
+		([Attribute_ID], [Response_ID], [Domain_ID], [Start_Date], [Order], [Onboarding_Status_ID])
+    SELECT GA.[Attribute_ID], @ResponseID as Response_ID, 1 as Domain_ID, GETDATE() as Start_Date, GA.[Order],  1 as Onboarding_Status_ID FROM [dbo].[Group_Attributes] GA
+	JOIN [MinistryPlatform].[dbo].[Attributes] AT ON GA.Attribute_ID = AT.Attribute_ID
+	WHERE GA.Group_ID = (SELECT O.Add_to_Group FROM [dbo].[Responses] R JOIN [dbo].[Opportunities] O on O.Opportunity_ID = R.Opportunity_ID WHERE Response_ID = @ResponseID) and AT.Attribute_Type_ID = @attribute_type_id
+	ORDER BY GA.[Order]
+
+END
 
 GO

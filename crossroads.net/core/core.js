@@ -25,6 +25,7 @@ require('./components/loadingButton');
 
 require('./content');
 require('./email_field/email_field_directive');
+require('./date_field/date_field_directive');
 require('./password_field/password_field_directive');
 require('./filters');
 

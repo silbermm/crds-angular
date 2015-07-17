@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using crds_angular.Models.Json;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace crds_angular.Models.Crossroads
+namespace crds_angular.Models.Crossroads.Stewardship
 {
     public class StripeBalanceTransaction : StripeObject
     {
