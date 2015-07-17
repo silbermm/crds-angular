@@ -129,7 +129,8 @@ namespace crds_angular.Controllers.API
                 BatchTotalAmount = 0,
                 ItemCount = 0,
                 BatchEntryType = _batchEntryTypePaymentProcessor,
-                FinalizedDateTime = now
+                FinalizedDateTime = now,
+                DepositId = null
             };
 
             response.TotalTransactionCount = charges.Count;

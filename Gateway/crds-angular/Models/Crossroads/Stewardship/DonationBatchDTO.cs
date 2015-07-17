@@ -21,7 +21,7 @@ namespace crds_angular.Models.Crossroads.Stewardship
         [JsonProperty("batch_entry_type")]
         public int BatchEntryType { get; set; }
         [JsonProperty("deposit_id")]
-        public int DepositId { get; set; }
+        public int? DepositId { get; set; }
         [JsonProperty("finalized_date_time")]
         public DateTime FinalizedDateTime { get; set; }
         #region Donations property and accessor

@@ -55,7 +55,7 @@ namespace MinistryPlatform.Translation.Services
                 {"Setup_Date", setupDateTime},
                 {"Batch_Total", batchTotalAmount},
                 {"Item_Count", itemCount},
-                {"Batch_Entry_Type", batchEntryType},
+                {"Batch_Entry_Type_ID", batchEntryType},
                 {"Deposit_ID", depositId},
                 {"Finalize_Date", finalizedDateTime}
             };

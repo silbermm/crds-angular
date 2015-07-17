@@ -1,4 +1,5 @@
 ﻿using System;
+using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services;
 using Moq;
 using NUnit.Framework;
@@ -58,5 +59,32 @@ namespace crds_angular.test.Services
             Assert.AreEqual(456, response);
             _mpDonationService.VerifyAll();
         }
+
+        [Test]
+        public void TestCreateDonationBatch()
+        {
+            var dto = new DonationBatchDTO
+            {
+                DepositId = 123,
+                BatchEntryType = 2,
+                BatchName = "batch name",
+                BatchTotalAmount = 456.78M,
+                FinalizedDateTime = DateTime.Now,
+                ItemCount = 5,
+                SetupDateTime = DateTime.Now,
+                Id = 999 // Should be overwritten in service
+            };
+            dto.Donations.Add(new DonationDTO { donation_id = "102030"});
+            _mpDonationService.Setup(
+                mocked =>
+                    mocked.CreateDonationBatch(dto.BatchName, dto.SetupDateTime, dto.BatchTotalAmount, dto.ItemCount,
+                        dto.BatchEntryType, dto.DepositId, dto.FinalizedDateTime)).Returns(987);
+            _mpDonationService.Setup(mocked => mocked.AddDonationToBatch(987, 102030));
+
+            var response = _fixture.CreateDonationBatch(dto);
+            Assert.AreSame(dto, response);
+            Assert.AreEqual(987, response.Id);
+        }
+
     }
 }
