@@ -142,10 +142,10 @@
         controller: "AdboxCtrl as adbox",
         templateUrl: "adbox/adbox-index.html"
       })
-      .state("serve-signup", {
-        url: "/serve-signup",
-        controller: "MyServeController as serve",
-        templateUrl: "my_serve/myserve.html",
+      .state('serve-signup', {
+        url: '/serve-signup',
+        controller: 'MyServeController as serve',
+        templateUrl: 'my_serve/myserve.html',
         data: {
           isProtected: true
         },
