@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using crds_angular.Exceptions;
-using crds_angular.Models.Crossroads;
 using crds_angular.Services.Interfaces;
 using Newtonsoft.Json;
 using RestSharp;
 using System.Net;
+using crds_angular.Models.Crossroads.Stewardship;
 using Crossroads.Utilities.Interfaces;
 
 namespace crds_angular.Services
@@ -146,13 +146,13 @@ namespace crds_angular.Services
             return response.Data;
         }
 
-        public List<string> GetChargesForTransfer(string transferId)
+        public List<StripeCharge> GetChargesForTransfer(string transferId)
         {
             var url = string.Format("transfers/{0}/transactions", transferId);
             var request = new RestRequest(url, Method.GET);
             request.AddParameter("count", _maxQueryResultsPerPage);
 
-            var charges = new List<string>();
+            var charges = new List<StripeCharge>();
             StripeCharges nextPage;
             do
             {
@@ -160,11 +160,11 @@ namespace crds_angular.Services
                 CheckStripeResponse("Could not query transactions", response);
 
                 nextPage = response.Data;
-                charges.AddRange(nextPage.Data.Select(charge => charge.Id));
+                charges.AddRange(nextPage.Data.Select(charge => charge));
 
                 request = new RestRequest(url, Method.GET);
                 request.AddParameter("count", _maxQueryResultsPerPage);
-                request.AddParameter("starting_after", charges.Last());
+                request.AddParameter("starting_after", charges.Last().Id);
             } while (nextPage.HasMore);
 
             return (charges);

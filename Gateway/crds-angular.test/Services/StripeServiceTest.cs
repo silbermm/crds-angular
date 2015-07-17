@@ -1,12 +1,12 @@
 ﻿using System;
 using crds_angular.Exceptions;
-using crds_angular.Models.Crossroads;
 using crds_angular.Services;
 using Moq;
 using NUnit.Framework;
 using RestSharp;
 using System.Collections.Generic;
 using System.Net;
+using crds_angular.Models.Crossroads.Stewardship;
 using Crossroads.Utilities.Interfaces;
 
 namespace crds_angular.test.Services
@@ -88,10 +88,10 @@ namespace crds_angular.test.Services
 
             Assert.IsNotNull(charges);
             Assert.AreEqual(4, charges.Count);
-            Assert.AreEqual("123", charges[0]);
-            Assert.AreEqual("last_one_in_first_page", charges[1]);
-            Assert.AreEqual("789", charges[2]);
-            Assert.AreEqual("90210", charges[3]);
+            Assert.AreEqual("123", charges[0].Id);
+            Assert.AreEqual("last_one_in_first_page", charges[1].Id);
+            Assert.AreEqual("789", charges[2].Id);
+            Assert.AreEqual("90210", charges[3].Id);
         }
 
         [Test]

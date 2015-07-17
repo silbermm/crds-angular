@@ -1,4 +1,5 @@
 ﻿using System;
+using crds_angular.Models.Crossroads.Stewardship;
 using MPServices=MinistryPlatform.Translation.Services.Interfaces;
 using crds_angular.Services.Interfaces;
 
@@ -13,14 +14,29 @@ namespace crds_angular.Services
             _mpDonationService = mpDonationService;
         }
 
-        public void UpdateDonationStatus(int donationId, int statusId, DateTime? statusDate, string statusNote = null)
+        public int UpdateDonationStatus(int donationId, int statusId, DateTime? statusDate, string statusNote = null)
         {
-            _mpDonationService.UpdateDonationStatus(donationId, statusId, statusDate ?? DateTime.Now, statusNote);
+            return(_mpDonationService.UpdateDonationStatus(donationId, statusId, statusDate ?? DateTime.Now, statusNote));
         }
 
-        public void UpdateDonationStatus(string processorPaymentId, int statusId, DateTime? statusDate, string statusNote = null)
+        public int UpdateDonationStatus(string processorPaymentId, int statusId, DateTime? statusDate, string statusNote = null)
         {
-            _mpDonationService.UpdateDonationStatus(processorPaymentId, statusId, statusDate ?? DateTime.Now, statusNote);
+            return(_mpDonationService.UpdateDonationStatus(processorPaymentId, statusId, statusDate ?? DateTime.Now, statusNote));
+        }
+
+        public DonationBatchDTO CreateDonationBatch(DonationBatchDTO batch)
+        {
+            var batchId = _mpDonationService.CreateDonationBatch(batch.BatchName, batch.SetupDateTime,
+                batch.BatchTotalAmount, batch.ItemCount, batch.BatchEntryType, batch.DepositId, batch.FinalizedDateTime);
+
+            batch.Id = batchId;
+
+            foreach (var donation in batch.Donations)
+            {
+                _mpDonationService.AddDonationToBatch(batchId, int.Parse(donation.donation_id));
+            }
+
+            return (batch);
         }
     }
 }
