@@ -7,5 +7,8 @@
       <button ng-click="give.confirmDonation()" ng-class="{disabled: give.processing}" class="btn btn-primary btn-lg col-xs-12" autofocus>
         <span ng-if="give.processing">Giving...</span>
         <span ng-if="!give.processing">GIVE {{give.amount | currency}}</span>
+        <svg viewBox="0 0 32 32" class="icon-medium icon-arrow-right9">
+	      <use xlink:href="#arrow-right9"></use>
+        </svg>
       </button>
 </div>
