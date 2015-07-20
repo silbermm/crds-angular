@@ -249,6 +249,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Messaging\Contracts\IStripeWebhookService.cs" />
+    <Compile Include="Messaging\StripeWebhookService.cs" />
     <Compile Include="Models\Crossroads\DefaultSourceDTO.cs" />
     <Compile Include="Models\Crossroads\EmailCommunicationDTO.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityCapacityDto.cs" />
@@ -327,11 +329,13 @@
     <Compile Include="Services\Interfaces\IServeService.cs" />
     <Compile Include="Services\Interfaces\IPersonService.cs" />
     <Compile Include="Services\Interfaces\IPaymentService.cs" />
+    <Compile Include="Services\Interfaces\IStripeEventService.cs" />
     <Compile Include="Services\Interfaces\IVolunteerApplicationService.cs" />
     <Compile Include="Services\MinistryPlatformBaseService.cs" />
     <Compile Include="Services\PersonService.cs" />
     <Compile Include="Services\ServeService.cs" />
     <Compile Include="Services\SkillService.cs" />
+    <Compile Include="Services\StripeEventService.cs" />
     <Compile Include="Services\StripeService.cs" />
     <Compile Include="Services\TranslationService.cs" />
     <Compile Include="Services\VolunteerApplicationService.cs" />
@@ -367,6 +371,9 @@
     <None Include="Properties\PublishProfiles\local test.pubxml" />
     <None Include="Properties\PublishProfiles\MPTest01.pubxml" />
     <Content Include="Properties\SlowCheetah\SlowCheetah.Transforms.targets" />
+    <Content Include="StripeEvents.svc">
+      <TransformOnBuild>true</TransformOnBuild>
+    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
