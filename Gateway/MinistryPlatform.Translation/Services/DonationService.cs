@@ -11,6 +11,7 @@ namespace MinistryPlatform.Translation.Services
     {
         private readonly int _donationsPageId;
         private readonly int _batchesPageId;
+        private readonly int _depositsPageId;
 
         private readonly IMinistryPlatformService _ministryPlatformService;
 
@@ -20,6 +21,7 @@ namespace MinistryPlatform.Translation.Services
 
             _donationsPageId = configuration.GetConfigIntValue("Donations");
             _batchesPageId = configuration.GetConfigIntValue("Batches");
+            _depositsPageId = configuration.GetConfigIntValue("Deposits");
         }
 
         public int UpdateDonationStatus(int donationId, int statusId, DateTime statusDate,
@@ -94,6 +96,33 @@ namespace MinistryPlatform.Translation.Services
                     string.Format(
                         "AddDonationToBatch failed. batchId: {0}, donationId: {1}",
                         batchId, donationId), e);
+            }
+        }
+
+        public int CreateDeposit(string depositName, decimal depositTotalAmount, DateTime depositDateTime,
+            string accountNumber, int batchCount, bool exported, string notes)
+        {
+            var parms = new Dictionary<string, object>
+            {
+                {"Deposit_Name", depositName},
+                {"Deposit_Total", depositTotalAmount},
+                {"Deposit_Date", depositDateTime},
+                {"Account_Number", accountNumber},
+                {"Batch_Count", batchCount},
+                {"Exported", exported},
+                {"Notes", notes}
+            };
+
+            try
+            {
+                return (WithApiLogin(token => (_ministryPlatformService.CreateRecord(_depositsPageId, parms, token))));
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException(
+                    string.Format(
+                        "CreateDeposit failed. depositName: {0}, depositTotalAmount: {1}, depositDateTime: {2}, accountNumber: {3}, batchCount: {4}, exported: {5}, notes: {6}",
+                        depositName, depositTotalAmount, depositDateTime, accountNumber, batchCount, exported, notes), e);
             }
         }
 

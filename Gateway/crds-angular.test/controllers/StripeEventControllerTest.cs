@@ -180,6 +180,7 @@ namespace crds_angular.test.controllers
                     Object = JObject.FromObject(new StripeTransfer
                     {
                         Id = "tx9876",
+                        Amount = 50000
                     })
                 }
             };
@@ -213,6 +214,10 @@ namespace crds_angular.test.controllers
             _donationService.Setup(mocked => mocked.UpdateDonationStatus("ch222", 999, e.Created, null)).Returns(2222);
             _donationService.Setup(mocked => mocked.UpdateDonationStatus("ch333", 999, e.Created, null)).Returns(3333);
             _donationService.Setup(mocked => mocked.UpdateDonationStatus("ch444", 999, e.Created, null)).Throws(new Exception("Not gonna do it, wouldn't be prudent."));
+            _donationService.Setup(mocked => mocked.CreateDeposit(It.IsAny<DepositDTO>())).Returns(
+                (DepositDTO o) => { o.Id = 98765;
+                                      return (o);
+                });
             _donationService.Setup(mocked => mocked.CreateDonationBatch(It.IsAny<DonationBatchDTO>())).Returns((DonationBatchDTO o) => o);
 
             var result = _fixture.ProcessStripeEvent(e);
@@ -230,6 +235,7 @@ namespace crds_angular.test.controllers
             Assert.AreEqual("ch444", tp.FailedUpdates[0].Key);
             Assert.AreEqual("Not gonna do it, wouldn't be prudent.", tp.FailedUpdates[0].Value);
             Assert.IsNotNull(tp.Batch);
+            Assert.IsNotNull(tp.Deposit);
 
             _donationService.Verify(mocked => mocked.CreateDonationBatch(It.Is<DonationBatchDTO>(o =>
                 o.BatchName.Matches(@"MP\d{12}")
@@ -239,7 +245,19 @@ namespace crds_angular.test.controllers
                 && o.BatchTotalAmount == (111 + 222 + 333) / 100M
                 && o.Donations != null
                 && o.Donations.Count == 3
+                && o.DepositId == 98765
             )));
+
+            _donationService.Verify(mocked => mocked.CreateDeposit(It.Is<DepositDTO>(o =>
+                o.DepositName.Matches(@"MP\d{12}")
+                && !o.Exported
+                && o.AccountNumber == null
+                && o.BatchCount == 1
+                && o.DepositDateTime != null
+                && o.DepositTotalAmount == 500M
+                && o.Notes == null
+            )));
+
             _paymentService.VerifyAll();
             _donationService.VerifyAll();
 

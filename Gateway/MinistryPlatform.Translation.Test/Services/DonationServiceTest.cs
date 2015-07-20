@@ -21,6 +21,7 @@ namespace MinistryPlatform.Translation.Test.Services
             var configuration = new Mock<IConfigurationWrapper>();
             configuration.Setup(mocked => mocked.GetConfigIntValue("Donations")).Returns(9090);
             configuration.Setup(mocked => mocked.GetConfigIntValue("Batches")).Returns(8080);
+            configuration.Setup(mocked => mocked.GetConfigIntValue("Deposits")).Returns(7070);
 
             _fixture = new DonationService(_ministryPlatformService.Object, configuration.Object);
         }
@@ -124,6 +125,36 @@ namespace MinistryPlatform.Translation.Test.Services
             };
             _ministryPlatformService.Setup(mocked => mocked.UpdateRecord(9090, expectedParms, It.IsAny<string>()));
             _fixture.AddDonationToBatch(batchId, donationId);
+            _ministryPlatformService.VerifyAll();
+        }
+
+        [Test]
+        public void TestCreateDeposit()
+        {
+            const string depositName = "MP12345";
+            const decimal depositTotalAmount = 456.78M;
+            var depositDateTime = DateTime.Now;
+            const string accountNumber = "8675309";
+            const int batchCount = 55;
+            const bool exported = true;
+            const string notes = "C Sharp";
+
+            var expectedParms = new Dictionary<string, object>
+            {
+                {"Deposit_Name", depositName},
+                {"Deposit_Total", depositTotalAmount},
+                {"Deposit_Date", depositDateTime},
+                {"Account_Number", accountNumber},
+                {"Batch_Count", batchCount},
+                {"Exported", exported},
+                {"Notes", notes}
+            };
+
+            _ministryPlatformService.Setup(mocked => mocked.CreateRecord(7070, expectedParms, It.IsAny<string>(), false))
+                .Returns(513);
+            var depositId = _fixture.CreateDeposit(depositName, depositTotalAmount, depositDateTime, accountNumber,
+                batchCount, exported, notes);
+            Assert.AreEqual(513, depositId);
             _ministryPlatformService.VerifyAll();
         }
     }

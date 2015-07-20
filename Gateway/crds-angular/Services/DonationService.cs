@@ -38,5 +38,13 @@ namespace crds_angular.Services
 
             return (batch);
         }
+
+        public DepositDTO CreateDeposit(DepositDTO deposit)
+        {
+            deposit.Id = _mpDonationService.CreateDeposit(deposit.DepositName, deposit.DepositTotalAmount, deposit.DepositDateTime,
+                deposit.AccountNumber, deposit.BatchCount, deposit.Exported, deposit.Notes);
+            
+            return (deposit);
+        }
     }
 }

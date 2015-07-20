@@ -82,6 +82,33 @@ namespace crds_angular.test.Services
             _mpDonationService.Setup(mocked => mocked.AddDonationToBatch(987, 102030));
 
             var response = _fixture.CreateDonationBatch(dto);
+            _mpDonationService.VerifyAll();
+            Assert.AreSame(dto, response);
+            Assert.AreEqual(987, response.Id);
+        }
+
+        [Test]
+        public void TestCreateDeposit()
+        {
+            var dto = new DepositDTO
+            {
+                Id = 123,
+                AccountNumber = "8675309",
+                BatchCount = 5,
+                DepositDateTime = DateTime.Now,
+                DepositName = "deposit name",
+                DepositTotalAmount = 456.78M,
+                Exported = true,
+                Notes = "blah blah blah"
+            };
+
+            _mpDonationService.Setup(
+                mocked =>
+                    mocked.CreateDeposit(dto.DepositName, dto.DepositTotalAmount, dto.DepositDateTime, dto.AccountNumber,
+                        dto.BatchCount, dto.Exported, dto.Notes)).Returns(987);
+
+            var response = _fixture.CreateDeposit(dto);
+            _mpDonationService.VerifyAll();
             Assert.AreSame(dto, response);
             Assert.AreEqual(987, response.Id);
         }
