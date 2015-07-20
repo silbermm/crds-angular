@@ -1,9 +1,59 @@
+//// BUTTON VARIABLES ////
+
+$button-border-width: 2px;
+$button-border-darken-amount: 15%;
+
+
+//// BUTTON STYLES ////
 .btn {
   @include button-size($padding-base-vertical, $padding-base-horizontal, $font-size-base, $line-height-base, $border-radius-base);
   &:focus {
     text-decoration: none;
   }
 }
+
+.btn-default {
+  @include button-variant(#333, white, #DDD);
+  border-bottom: $button-border-width solid darken(#DDD, $button-border-darken-amount);
+}
+.btn-primary {
+  @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border);
+  border-bottom: $button-border-width solid darken($btn-primary-border, $button-border-darken-amount);
+}
+// Success appears as green
+.btn-success {
+  @include button-variant($btn-success-color, $btn-success-bg, $btn-success-border);
+  border-bottom: $button-border-width solid darken($btn-success-border, $button-border-darken-amount);
+}
+// Info appears as blue-green
+.btn-info {
+  @include button-variant($btn-info-color, $btn-info-bg, $btn-info-border);
+  border-bottom: $button-border-width solid darken($btn-info-border, $button-border-darken-amount);
+}
+// Warning appears as orange
+.btn-warning {
+  @include button-variant($btn-warning-color, $btn-warning-bg, $btn-warning-border);
+  border-bottom: $button-border-width solid darken($btn-warning-border, $button-border-darken-amount);
+}
+// Danger and error appear as red
+.btn-danger {
+  @include button-variant($btn-danger-color, $btn-danger-bg, $btn-danger-border);
+  border-bottom: $button-border-width solid darken($btn-danger-border, $button-border-darken-amount);
+}
+.btn-secondary {
+  @include button-variant($btn-primary-color, $brand-secondary, $brand-secondary);
+  border-bottom: $button-border-width solid darken($brand-secondary, $button-border-darken-amount);
+}
+.btn-standard-dark {
+  @include button-variant($btn-primary-color, $gray, $gray);
+  border-bottom: $button-border-width solid darken($gray, $button-border-darken-amount);
+}
+.btn-standard {
+  @include button-variant(black, $gray-lighter, $gray-lighter);
+  border-bottom: $button-border-width solid darken($gray-lighter, $button-border-darken-amount);
+}
+
+//// BUTTON SIZES ////
 
 .btn-lg {
   // line-height: ensure even-numbered height of button next to large input
@@ -17,6 +67,16 @@
 
 .btn-xs {
   @include button-size($padding-xs-vertical, $padding-xs-horizontal, $font-size-small, $line-height-small, $border-radius-small);
+}
+
+.btn-group {
+  .btn {
+    border-bottom-width: 1px;
+  }
+}
+
+.input-group-addon {
+  border-bottom-width: 1px;
 }
 
 .btn-labeled {
@@ -139,6 +199,7 @@ h2 {
   @include button-variant($gray, #ffffff, $input-group-addon-border-color);
   text-align: left;
   font-family: $font-family-base;
+  border-bottom-width: 1px;
 }
 
 .btn-block-mobile {

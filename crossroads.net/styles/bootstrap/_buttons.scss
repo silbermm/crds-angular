@@ -79,16 +79,6 @@
 .btn-danger {
   @include button-variant($btn-danger-color, $btn-danger-bg, $btn-danger-border);
 }
-.btn-secondary {
-  @include button-variant($btn-primary-color, $brand-secondary, $brand-secondary);
-}
-.btn-standard-dark {
-  @include button-variant($btn-primary-color, $gray, $gray);
-}
-.btn-standard {
-  @include button-variant(black, $gray-lighter, $gray-lighter);
-}
-
 
 // Link buttons
 // -------------------------
