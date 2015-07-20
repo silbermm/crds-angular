@@ -1,0 +1,24 @@
+<div>
+	<div class="card-item go-trip-card clearfix row-same-height" data-category="view">
+	  <div class="col-sm-3 col-xs-4 card-img card-dark mobile-hard-left col-xs-height">
+	      <img class="card-img-show" src="{{tripParticipant.participantPhotoUrl}}">
+	  </div><!--/card-img-->
+	  <div class="col-sm-9 col-xs-8 card-content col-xs-height col-top hard-left">
+	      <div class="card-row card-header">
+	          <h3>{{tripParticipant.participantName}}</h3>
+	      </div>
+	      <ul class="list-group">
+	        <li class="list-group-item row-sm-same-height" ng-repeat="trip in tripParticipant.trips">
+	            <div class="go-trip-name col-xs-12 col-sm-10 col-sm-height col-top">
+	              <p>
+	                {{trip.tripName}} {{convertToDate(trip.tripStart) | date:'MMM dd, yyyy'}} - {{convertToDate(trip.tripEnd) | date:'MMM dd, yyyy'}}
+	              </p>
+	            </div>
+	            <div class="go-trip-btn col-xs-12 col-sm-2 hard-sides col-sm-height">
+	              <a href="/#/demo/go-trip-giving" class="table-btn table-btn-sm btn-standard"><span>Give</span></a>
+	            </div>
+	        </li>
+	      </ul>
+	  </div><!--/card-content-->
+	</div><!--/card-item-->
+</div>
