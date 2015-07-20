@@ -3,8 +3,8 @@
     <div class="form-group">
        <donation-details amount="give.amount" program="give.program" amount-submitted="give.amountSubmitted" programs-in="give.programsInput"></donation-details>
        <button ng-click="give.goToAccount()" ng-class="{disabled: give.processing}" class="btn btn-primary btn-lg btn-block-mobile give-button">
-         <span ng-if="give.processing">Giving...</span>
-         <span ng-if="!give.processing">GIVE {{give.amount | currency}}</span>
+         <span ng-if="give.processing">Next...</span>
+         <span ng-if="!give.processing">Next</span><!--OLD GIVE {{give.amount | currency}} -->
          <svg viewBox="0 0 32 32" class="icon-medium icon-arrow-right9 text-right">
 	       <use xlink:href="#arrow-right9"></use>
          </svg>

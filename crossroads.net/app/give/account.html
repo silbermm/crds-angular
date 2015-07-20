@@ -30,7 +30,7 @@
    <p class="text-muted small">You are giving <strong>{{give.amount | currency}}</strong>  to <strong>{{give.program['Name']}}</strong>. <a href="" ng-click="give.processChange()" tabindex="-1">Change</a></p>
     <button ng-click="give.submitBankInfo()" ng-class="{disabled: give.processing}" class="btn btn-primary btn-lg btn-block-mobile give-button">
       <span ng-if="give.processing">Giving...</span>
-      <span ng-if="!give.processing">GIVE {{give.amount | currency}}</span>
+      <span ng-if="!give.processing">Give {{give.amount | currency}}</span>
       <span>
         <svg viewBox="0 0 32 32" class="icon-medium icon-arrow-right9">
 	      <use xlink:href="#arrow-right9"></use>
