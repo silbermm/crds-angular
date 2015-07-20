@@ -4,7 +4,7 @@
       <p>You are giving <strong>{{give.amount | currency}}</strong> to <strong>{{give.program['Name']}}</strong> with <svg viewBox="0 0 160 100" class="icon icon-cc_visa confirm-cc-icon"> <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{give.brand}}"></use></svg> ending in {{give.last4}}.&nbsp;
       <a href="" ng-click="give.goToChange(give.amount, give.donor, give.email, give.program, give.view)" tabindex="-1">Change</a>
   </div>
-      <button ng-click="give.confirmDonation()" ng-class="{disabled: give.processing}" class="btn btn-primary btn-lg col-xs-12" autofocus>
+      <button ng-click="give.confirmDonation()" ng-class="{disabled: give.processing}" class="btn btn-primary btn-lg btn-block-mobile" autofocus>
         <span ng-if="give.processing">Giving...</span>
         <span ng-if="!give.processing">GIVE {{give.amount | currency}}</span>
       </button>

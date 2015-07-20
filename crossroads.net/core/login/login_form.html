@@ -23,10 +23,12 @@
                         <span ng-bind-html="$root.messages[$root.MESSAGES.loginFailed].message | html"></span>
                     </span>
                 </div>
-                <input type="submit" name="submit_nav" value="Login" ng-class="{disabled: processing }" id="submit_nav" class="col-xs-12 btn btn-primary push-half-bottom"/>
-                <div class="pull-right">
-                    <p class="forgot_password"><a href="#">Forgot password?</a></p>
-                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                    <input type="submit" name="submit_nav" value="Login" ng-class="{disabled: processing }" id="submit_nav" class="btn btn-primary btn-block-mobile push-half-bottom"/>
+                    <p class="forgot_password pull-right"><a href="#">Forgot password?</a></p>
+                  </div>
+              </div>
             </div>
         </form>
     </div>
