@@ -5,7 +5,7 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Results;
 using crds_angular.Controllers.API;
-using crds_angular.Models.Crossroads;
+using crds_angular.Models.Crossroads.Stewardship;
 using MinistryPlatform.Translation.Services.Interfaces;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
@@ -47,7 +47,14 @@ namespace crds_angular.test.controllers
         {
             var contactId = 999999;
             var donationId = 6186818;
-            var charge_id = "ch_crdscharge86868";
+            var charge = new StripeCharge()
+            {
+                Id = "ch_crdscharge86868",
+                BalanceTransaction = new StripeBalanceTransaction()
+                {
+                    Fee = 987
+                }
+            };
 
             var createDonationDTO = new CreateDonationDTO
             {
@@ -76,11 +83,11 @@ namespace crds_angular.test.controllers
 
             stripeServiceMock.Setup(
                 mocked => mocked.ChargeCustomer(donor.ProcessorId, createDonationDTO.Amount, donor.DonorId, createDonationDTO.PaymentType))
-                .Returns(charge_id);
+                .Returns(charge);
 
             donorServiceMock.Setup(mocked => mocked.
-                CreateDonationAndDistributionRecord(createDonationDTO.Amount, donor.DonorId,
-                    createDonationDTO.ProgramId, charge_id, createDonationDTO.PaymentType, donor.ProcessorId, It.IsAny<DateTime>(), true))
+                CreateDonationAndDistributionRecord(createDonationDTO.Amount, charge.BalanceTransaction.Fee, donor.DonorId,
+                    createDonationDTO.ProgramId, charge.Id, createDonationDTO.PaymentType, donor.ProcessorId, It.IsAny<DateTime>(), true))
                     .Returns(donationId);
 
             IHttpActionResult result = fixture.Post(createDonationDTO);
@@ -105,8 +112,15 @@ namespace crds_angular.test.controllers
         {
             var contactId = 999999;
             var donationId = 6186818;
-            var charge_id = "ch_crdscharge86868";
-            
+            var charge = new StripeCharge()
+            {
+                Id = "ch_crdscharge86868",
+                BalanceTransaction = new StripeBalanceTransaction()
+                {
+                    Fee = 987
+                }
+            };
+           
             var createDonationDTO = new CreateDonationDTO
             {
                 ProgramId = "3", //crossroads
@@ -131,11 +145,11 @@ namespace crds_angular.test.controllers
             gatewayDonorServiceMock.Setup(mocked => mocked.GetContactDonorForEmail(createDonationDTO.EmailAddress)).Returns(donor);
             
             stripeServiceMock.Setup(mocked => mocked.ChargeCustomer(donor.ProcessorId, createDonationDTO.Amount, donor.DonorId, createDonationDTO.PaymentType)).
-                Returns(charge_id);
+                Returns(charge);
 
             donorServiceMock.Setup(mocked => mocked.
-                CreateDonationAndDistributionRecord(createDonationDTO.Amount, donor.DonorId,
-                    createDonationDTO.ProgramId, charge_id, createDonationDTO.PaymentType, donor.ProcessorId, It.IsAny<DateTime>(), false))
+                CreateDonationAndDistributionRecord(createDonationDTO.Amount, charge.BalanceTransaction.Fee, donor.DonorId,
+                    createDonationDTO.ProgramId, charge.Id, createDonationDTO.PaymentType, donor.ProcessorId, It.IsAny<DateTime>(), false))
                     .Returns(donationId);
 
             IHttpActionResult result = fixture.Post(createDonationDTO);

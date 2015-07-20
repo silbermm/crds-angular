@@ -1,5 +1,6 @@
 <div class="serve-signup-wrapper">
   <h1 class="page-header">Sign Up To Serve </h1>
+
   <p>
     <svg viewBox="0 0 32 32" class="icon icon-check-circle">
       <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#check-circle">
@@ -18,11 +19,14 @@
       <span ng-bind-html="$root.messages[$root.MESSAGES.noServingOpportunities].message | html"></span>
     </div>
 
-    <div class="serve-day push-bottom" data-ng-repeat="group in serve.groups" ng-show="group.serveTimes.length > 0">
-      <h4>{{::serve.convertToDate(group.day) | date:'EEEE, MMMM dd, yyyy' }}</h4>
-      <serve-tabs opportunity="opp" serve-date="group.day" ng-repeat="opp in group.serveTimes" ng-show="opp.servingTeams.length > 0" >
-      </serve-tabs>
-    </div><!-- serve day -->
+    <form name='serveForm'>
+      <div class="serve-day push-bottom" data-ng-repeat="group in serve.groups" ng-show="group.serveTimes.length > 0">
+        <h4>{{::serve.convertToDate(group.day) | date:'EEEE, MMMM dd, yyyy' }}</h4>
+        
+        <serve-tabs opportunity="opp" serve-date="group.day" ng-repeat="opp in group.serveTimes" ng-show="opp.servingTeams.length > 0" >
+        </serve-tabs>
+      </div><!-- serve day -->
+    </form>
 
     <button class="btn btn-block btn-primary" ng-show="serve.showButton()"  ng-click="serve.loadNextMonth()" ng-disabled="serve.loadMore"> {{serve.loadText}} </button>
 

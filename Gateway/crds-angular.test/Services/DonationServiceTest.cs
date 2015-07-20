@@ -1,4 +1,5 @@
 ﻿using System;
+using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services;
 using Moq;
 using NUnit.Framework;
@@ -23,8 +24,9 @@ namespace crds_angular.test.Services
         public void TestUpdateDonationByIdWithOptionalParameters()
         {
             var d = DateTime.Now.AddDays(-1);
-            _mpDonationService.Setup(mocked => mocked.UpdateDonationStatus(123, 4, d, "note"));
-            _fixture.UpdateDonationStatus(123, 4, d, "note");
+            _mpDonationService.Setup(mocked => mocked.UpdateDonationStatus(123, 4, d, "note")).Returns(456);
+            var response = _fixture.UpdateDonationStatus(123, 4, d, "note");
+            Assert.AreEqual(456, response);
             _mpDonationService.VerifyAll();
         }
 
@@ -32,8 +34,9 @@ namespace crds_angular.test.Services
         public void TestUpdateDonationByIdWithoutOptionalParameters()
         {
             var d = DateTime.Now.AddDays(-1);
-            _mpDonationService.Setup(mocked => mocked.UpdateDonationStatus(123, 4, It.IsNotNull<DateTime>(), null));
-            _fixture.UpdateDonationStatus(123, 4, null);
+            _mpDonationService.Setup(mocked => mocked.UpdateDonationStatus(123, 4, It.IsNotNull<DateTime>(), null)).Returns(456);
+            var response = _fixture.UpdateDonationStatus(123, 4, null);
+            Assert.AreEqual(456, response);
             _mpDonationService.VerifyAll();
         }
 
@@ -41,8 +44,9 @@ namespace crds_angular.test.Services
         public void TestUpdateDonationByProcessorIdWithOptionalParameters()
         {
             var d = DateTime.Now.AddDays(-1);
-            _mpDonationService.Setup(mocked => mocked.UpdateDonationStatus("ch_123", 4, d, "note"));
-            _fixture.UpdateDonationStatus("ch_123", 4, d, "note");
+            _mpDonationService.Setup(mocked => mocked.UpdateDonationStatus("ch_123", 4, d, "note")).Returns(456);
+            var response = _fixture.UpdateDonationStatus("ch_123", 4, d, "note");
+            Assert.AreEqual(456, response);
             _mpDonationService.VerifyAll();
         }
 
@@ -50,9 +54,37 @@ namespace crds_angular.test.Services
         public void TestUpdateDonationByProcessorIdWithoutOptionalParameters()
         {
             var d = DateTime.Now.AddDays(-1);
-            _mpDonationService.Setup(mocked => mocked.UpdateDonationStatus("ch_123", 4, It.IsNotNull<DateTime>(), null));
-            _fixture.UpdateDonationStatus("ch_123", 4, null);
+            _mpDonationService.Setup(mocked => mocked.UpdateDonationStatus("ch_123", 4, It.IsNotNull<DateTime>(), null)).Returns(456);
+            var response = _fixture.UpdateDonationStatus("ch_123", 4, null);
+            Assert.AreEqual(456, response);
             _mpDonationService.VerifyAll();
         }
+
+        [Test]
+        public void TestCreateDonationBatch()
+        {
+            var dto = new DonationBatchDTO
+            {
+                DepositId = 123,
+                BatchEntryType = 2,
+                BatchName = "batch name",
+                BatchTotalAmount = 456.78M,
+                FinalizedDateTime = DateTime.Now,
+                ItemCount = 5,
+                SetupDateTime = DateTime.Now,
+                Id = 999 // Should be overwritten in service
+            };
+            dto.Donations.Add(new DonationDTO { donation_id = "102030"});
+            _mpDonationService.Setup(
+                mocked =>
+                    mocked.CreateDonationBatch(dto.BatchName, dto.SetupDateTime, dto.BatchTotalAmount, dto.ItemCount,
+                        dto.BatchEntryType, dto.DepositId, dto.FinalizedDateTime)).Returns(987);
+            _mpDonationService.Setup(mocked => mocked.AddDonationToBatch(987, 102030));
+
+            var response = _fixture.CreateDonationBatch(dto);
+            Assert.AreSame(dto, response);
+            Assert.AreEqual(987, response.Id);
+        }
+
     }
 }

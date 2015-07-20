@@ -417,7 +417,7 @@ namespace crds_angular.Services
 
             try
             {
-                templateId = AppSetting("RsvpChangeTemplate");
+                templateId = AppSetting("RsvpNoTemplate");
                 //opportunityId = opportunityIds.First();
                 _eventService.unRegisterParticipantForEvent(participant.ParticipantId, e.EventId);
             }
@@ -534,6 +534,7 @@ namespace crds_angular.Services
             Opportunity previousOpportunity, Opportunity currentOpportunity, DateTime startDate, DateTime endDate,
             MyContact groupContact, String htmlTable)
         {
+            MyContact volunteer = _contactService.GetContactById(contactId);
             return new Dictionary<string, object>
             {
                 {"Opportunity_Name", opportunityId == 0 ? "Not Available" : currentOpportunity.OpportunityName},
@@ -548,6 +549,7 @@ namespace crds_angular.Services
                     "Previous_Opportunity_Name",
                     previousOpportunity != null ? previousOpportunity.OpportunityName : @"Not Available"
                 },
+                {"Volunteer_Name", volunteer.Nickname + " " + volunteer.Last_Name},
                 {"Html_Table", htmlTable}
             };
         }

@@ -6,6 +6,7 @@ var $compile, $rootScope, element, scope, mockSession, mockServeDate, $httpBacke
 
 var mockOpp = {"name": "NuseryA", "roleId": 145};
 var mockTeam = [{ 
+  "index": 0,
   "name" : "Kids Club Nusery", 
   "eventTypeId": 100, 
   "members" : [ 
@@ -153,6 +154,13 @@ describe('Serve Teams Directive', function() {
     var dateArr = "10/15/2015".split("/");
     var d = moment(dateArr[2] + "-" + dateArr[0] + "-" + dateArr[1]);
     var dFormated = d.format('X');
+   
+    isolated['teamForm-' + isolated.team.index] = {
+      $dirty : false,
+      $setPristine : function(){
+        return true;
+      }
+    }
 
     var rsvp = {
       contactId: mockTeam[0].members[0].contactId,
