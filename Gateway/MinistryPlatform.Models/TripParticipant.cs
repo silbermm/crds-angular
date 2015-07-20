@@ -13,5 +13,6 @@ namespace MinistryPlatform.Models
         public string EventType { get; set; }
         public string Lastname { get; set; }
         public string Nickname { get; set; }
+        public int ParticipantId { get; set; }
     }
 }

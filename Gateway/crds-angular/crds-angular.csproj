@@ -291,9 +291,8 @@
     <Compile Include="Models\Crossroads\StripeExpandableProperty.cs" />
     <Compile Include="Models\Crossroads\StripeObject.cs" />
     <Compile Include="Models\Crossroads\StripeTransfer.cs" />
-    <Compile Include="Models\Crossroads\Trip\Particpant.cs" />
-    <Compile Include="Models\Crossroads\Trip\Trip.cs" />
-    <Compile Include="Models\Crossroads\Trip\TripParticipant.cs" />
+    <Compile Include="Models\Crossroads\Trip\TripParticipantDto.cs" />
+    <Compile Include="Models\Crossroads\Trip\TripDto.cs" />
     <Compile Include="Models\Crossroads\User.cs" />
     <Compile Include="Models\Crossroads\VolunteerApplication\AdultApplicationDto.cs" />
     <Compile Include="Models\Crossroads\VolunteerApplication\ChildDto.cs" />

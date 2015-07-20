@@ -1,9 +1,15 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace crds_angular.Models.Crossroads.Trip
 {
-    public class Particpant
+    public class TripParticipantDto
     {
+        public TripParticipantDto()
+        {
+            Trips = new List<TripDto>();
+        }
+
         [JsonProperty(PropertyName = "email")]
         public string Email { get; set; }
 
@@ -22,7 +28,13 @@ namespace crds_angular.Models.Crossroads.Trip
             get { return string.Format("{0} {1}", Nickname, Lastname); }
         }
 
-        [JsonProperty(PropertyName = "tripParticipant")]
-        public TripParticipant TripParticipant { get; set; }
+        [JsonProperty(PropertyName = "participantPhotoUrl")]
+        public string PhotoUrl
+        {
+            get { return "http://crossroads-media.s3.amazonaws.com/images/avatar.svg"; }
+        }
+
+        [JsonProperty(PropertyName = "trips")]
+        public List<TripDto> Trips { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Exceptions.Models;
-using crds_angular.Models.Crossroads;
+using crds_angular.Models.Crossroads.Trip;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
 
@@ -17,7 +17,8 @@ namespace crds_angular.Controllers.API
             _tripService = tripService;
         }
 
-        [ResponseType(typeof(DonorDTO))]
+        [AcceptVerbs("GET")]
+        [ResponseType(typeof(TripParticipantDto))]
         [Route("api/trip/search/{search}")]
         public IHttpActionResult Search(string search)
         {

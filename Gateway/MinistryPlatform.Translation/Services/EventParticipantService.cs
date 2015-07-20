@@ -35,7 +35,8 @@ namespace MinistryPlatform.Translation.Services
                     EmailAddress = viewRecord.ToString("Email_Address"),
                     EventStartDate = viewRecord.ToDate("Event_Start_Date"),
                     EventEndDate = viewRecord.ToDate("Event_End_Date"),
-                    EventType = viewRecord.ToString("Event_Type")
+                    EventType = viewRecord.ToString("Event_Type"),
+                    ParticipantId = viewRecord.ToInt("Participant_ID")
                 }).ToList();
             }
             catch (Exception ex)
