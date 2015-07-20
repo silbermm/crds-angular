@@ -2,9 +2,12 @@
   <ng-form class="give-form" role="form" name="amountForm" novalidate>
     <div class="form-group">
        <donation-details amount="give.amount" program="give.program" amount-submitted="give.amountSubmitted" programs-in="give.programsInput"></donation-details>
-       <button ng-click="give.goToAccount()" ng-class="{disabled: give.processing}" class="btn btn-primary btn-lg col-xs-12">
+       <button ng-click="give.goToAccount()" ng-class="{disabled: give.processing}" class="btn btn-primary btn-lg col-xs-12 give-button">
          <span ng-if="give.processing">Giving...</span>
          <span ng-if="!give.processing">GIVE {{give.amount | currency}}</span>
+         <svg viewBox="0 0 32 32" class="icon-medium icon-arrow-right9 text-right">
+	       <use xlink:href="#arrow-right9"></use>
+         </svg>
        </button>
     <p class="give-info">You may also manage your
         <a href="">recurring giving</a>,
