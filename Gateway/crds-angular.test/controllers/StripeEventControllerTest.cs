@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Web.Http.Results;
 using Moq;
 using NUnit.Framework;
 using crds_angular.Controllers.API;
-using crds_angular.Models.Crossroads;
+using crds_angular.Models.Crossroads.Stewardship;
+using crds_angular.Models.Json;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Interfaces;
 using Newtonsoft.Json.Linq;
+using RestSharp.Extensions;
 
 namespace crds_angular.test.controllers
 {
@@ -25,6 +29,7 @@ namespace crds_angular.test.controllers
             configuration.Setup(mocked => mocked.GetConfigIntValue("DonationStatusSucceeded")).Returns(888);
             configuration.Setup(mocked => mocked.GetConfigIntValue("DonationStatusDeclined")).Returns(777);
             configuration.Setup(mocked => mocked.GetConfigValue("StripeWebhookLiveMode")).Returns("true");
+            configuration.Setup(mocked => mocked.GetConfigIntValue("BatchEntryTypePaymentProcessor")).Returns(555);
 
             _paymentService = new Mock<IPaymentService>(MockBehavior.Strict);
             _donationService = new Mock<IDonationService>(MockBehavior.Strict);
@@ -98,7 +103,7 @@ namespace crds_angular.test.controllers
 
             _donationService.Setup(mocked => mocked.UpdateDonationStatus("9876", 888, e.Created, null));
             var result = _fixture.ProcessStripeEvent(e);
-            Assert.IsInstanceOf<OkResult>(result);
+            Assert.IsInstanceOf<RestHttpActionResult<StripeEventResponseDTO>>(result);
             _paymentService.VerifyAll();
             _donationService.VerifyAll();
         }
@@ -124,7 +129,7 @@ namespace crds_angular.test.controllers
 
             _donationService.Setup(mocked => mocked.UpdateDonationStatus("9876", 777, e.Created, "invalid_routing_number: description from stripe"));
             var result = _fixture.ProcessStripeEvent(e);
-            Assert.IsInstanceOf<OkResult>(result);
+            Assert.IsInstanceOf<RestHttpActionResult<StripeEventResponseDTO>>(result);
             _paymentService.VerifyAll();
             _donationService.VerifyAll();
         }
@@ -146,14 +151,17 @@ namespace crds_angular.test.controllers
                 }
             };
 
-            _paymentService.Setup(mocked => mocked.GetChargesForTransfer("tx9876")).Returns(new List<string>());
+            _paymentService.Setup(mocked => mocked.GetChargesForTransfer("tx9876")).Returns(new List<StripeCharge>());
             var result = _fixture.ProcessStripeEvent(e);
-            var dto = ((OkNegotiatedContentResult<TransferPaidResponseDTO>)result).Content;
-            Assert.IsInstanceOf<OkNegotiatedContentResult<TransferPaidResponseDTO>>(result);
+            Assert.IsInstanceOf<RestHttpActionResult<StripeEventResponseDTO>>(result);
+            Assert.AreEqual(HttpStatusCode.OK, ((RestHttpActionResult<StripeEventResponseDTO>)result).StatusCode);
+            var dto = ((RestHttpActionResult<StripeEventResponseDTO>)result).Content;
             Assert.IsNotNull(dto);
-            Assert.AreEqual(0, dto.TotalTransactionCount);
-            Assert.AreEqual(0, dto.SuccessfulUpdates.Count);
-            Assert.AreEqual(0, dto.FailedUpdates.Count);
+            Assert.IsInstanceOf<TransferPaidResponseDTO>(dto);
+            var tp = (TransferPaidResponseDTO) dto;
+            Assert.AreEqual(0, tp.TotalTransactionCount);
+            Assert.AreEqual(0, tp.SuccessfulUpdates.Count);
+            Assert.AreEqual(0, tp.FailedUpdates.Count);
 
             _paymentService.VerifyAll();
             _donationService.VerifyAll();
@@ -176,30 +184,62 @@ namespace crds_angular.test.controllers
                 }
             };
 
-            var charges = new List<string>
+            var charges = new List<StripeCharge>
             {
-                "111",
-                "222",
-                "333",
-                "444"
+                new StripeCharge
+                {
+                    Id = "ch111",
+                    Amount = 111
+                },
+                new StripeCharge
+                {
+                    Id = "ch222",
+                    Amount = 222
+                },
+                new StripeCharge
+                {
+                    Id = "ch333",
+                    Amount = 333
+                },
+                new StripeCharge
+                {
+                    Id = "ch444",
+                    Amount = 444
+                }
             };
 
             _paymentService.Setup(mocked => mocked.GetChargesForTransfer("tx9876")).Returns(charges);
-            _donationService.Setup(mocked => mocked.UpdateDonationStatus("111", 999, e.Created, null));
-            _donationService.Setup(mocked => mocked.UpdateDonationStatus("222", 999, e.Created, null));
-            _donationService.Setup(mocked => mocked.UpdateDonationStatus("333", 999, e.Created, null));
-            _donationService.Setup(mocked => mocked.UpdateDonationStatus("444", 999, e.Created, null)).Throws(new Exception("Not gonna do it, wouldn't be prudent."));
+            _donationService.Setup(mocked => mocked.UpdateDonationStatus("ch111", 999, e.Created, null)).Returns(1111);
+            _donationService.Setup(mocked => mocked.UpdateDonationStatus("ch222", 999, e.Created, null)).Returns(2222);
+            _donationService.Setup(mocked => mocked.UpdateDonationStatus("ch333", 999, e.Created, null)).Returns(3333);
+            _donationService.Setup(mocked => mocked.UpdateDonationStatus("ch444", 999, e.Created, null)).Throws(new Exception("Not gonna do it, wouldn't be prudent."));
+            _donationService.Setup(mocked => mocked.CreateDonationBatch(It.IsAny<DonationBatchDTO>())).Returns((DonationBatchDTO o) => o);
 
             var result = _fixture.ProcessStripeEvent(e);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<TransferPaidResponseDTO>>(result);
-            var dto = ((OkNegotiatedContentResult<TransferPaidResponseDTO>) result).Content;
+            Assert.IsInstanceOf<RestHttpActionResult<StripeEventResponseDTO>>(result);
+            Assert.AreEqual(HttpStatusCode.OK, ((RestHttpActionResult<StripeEventResponseDTO>)result).StatusCode);
+            var dto = ((RestHttpActionResult<StripeEventResponseDTO>)result).Content;
             Assert.IsNotNull(dto);
-            Assert.AreEqual(4, dto.TotalTransactionCount);
-            Assert.AreEqual(3, dto.SuccessfulUpdates.Count);
-            Assert.AreEqual(charges.GetRange(0, 3), dto.SuccessfulUpdates);
-            Assert.AreEqual(1, dto.FailedUpdates.Count);
-            Assert.AreEqual("444", dto.FailedUpdates[0].Key);
-            Assert.AreEqual("Not gonna do it, wouldn't be prudent.", dto.FailedUpdates[0].Value);
+            Assert.IsNotNull(dto);
+            Assert.IsInstanceOf<TransferPaidResponseDTO>(dto);
+            var tp = (TransferPaidResponseDTO)dto;
+            Assert.AreEqual(4, tp.TotalTransactionCount);
+            Assert.AreEqual(3, tp.SuccessfulUpdates.Count);
+            Assert.AreEqual(charges.GetRange(0, 3).Select(charge => charge.Id), tp.SuccessfulUpdates);
+            Assert.AreEqual(1, tp.FailedUpdates.Count);
+            Assert.AreEqual("ch444", tp.FailedUpdates[0].Key);
+            Assert.AreEqual("Not gonna do it, wouldn't be prudent.", tp.FailedUpdates[0].Value);
+            Assert.IsNotNull(tp.Batch);
+
+            _donationService.Verify(mocked => mocked.CreateDonationBatch(It.Is<DonationBatchDTO>(o =>
+                o.BatchName.Matches(@"MP\d{12}")
+                && o.SetupDateTime == o.FinalizedDateTime
+                && o.BatchEntryType == 555
+                && o.ItemCount == 3
+                && o.BatchTotalAmount == (111 + 222 + 333) / 100M
+                && o.Donations != null
+                && o.Donations.Count == 3
+            )));
             _paymentService.VerifyAll();
             _donationService.VerifyAll();
 

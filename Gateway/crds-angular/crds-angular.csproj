@@ -249,11 +249,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Crossroads\CreateDonationDTO.cs" />
-    <Compile Include="Models\Crossroads\CreateDonorDTO.cs" />
     <Compile Include="Models\Crossroads\DefaultSourceDTO.cs" />
-    <Compile Include="Models\Crossroads\DonationDTO .cs" />
-    <Compile Include="Models\Crossroads\DonorDTO.cs" />
     <Compile Include="Models\Crossroads\EmailCommunicationDTO.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityCapacityDto.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityGroup.cs" />
@@ -282,12 +278,19 @@
     <Compile Include="Models\Crossroads\ServingRSVP.cs" />
     <Compile Include="Models\Crossroads\Skill.cs" />
     <Compile Include="Models\Crossroads\Event.cs" />
-    <Compile Include="Models\Crossroads\StripeCharge.cs" />
-    <Compile Include="Models\Crossroads\StripeCharges.cs" />
-    <Compile Include="Models\Crossroads\StripeCustomer.cs" />
-    <Compile Include="Models\Crossroads\StripeEvent.cs" />
-    <Compile Include="Models\Crossroads\StripeObject.cs" />
-    <Compile Include="Models\Crossroads\StripeTransfer.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\StripeBalanceTransaction.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\StripeExpandableProperty.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\CreateDonationDTO.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\CreateDonorDto.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\DonationBatchDTO.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\DonationDTO .cs" />
+    <Compile Include="Models\Crossroads\Stewardship\DonorDto.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\StripeCharge.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\StripeCharges.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\StripeCustomer.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\StripeEvent.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\StripeObject.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\StripeTransfer.cs" />
     <Compile Include="Models\Crossroads\User.cs" />
     <Compile Include="Models\Crossroads\VolunteerApplication\AdultApplicationDto.cs" />
     <Compile Include="Models\Crossroads\VolunteerApplication\ChildDto.cs" />

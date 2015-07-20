@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
 using crds_angular.Models.Json;
+using Newtonsoft.Json;
 
-namespace crds_angular.Models.Crossroads
+namespace crds_angular.Models.Crossroads.Stewardship
 {
     public class StripeEvent : StripeObject
     {

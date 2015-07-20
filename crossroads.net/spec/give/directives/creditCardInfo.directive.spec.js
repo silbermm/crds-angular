@@ -61,6 +61,7 @@ describe('Credit Card Info Directive', function() {
 
     ccElement = $compile(templateString)(scope);
     scope.$digest();
+    $timeout.flush();
     isolateScope = ccElement.isolateScope();
     form = isolateScope.creditCardForm;
   }));
@@ -70,12 +71,11 @@ describe('Credit Card Info Directive', function() {
       var expDate = ccElement.find('input')[1];
       spyOn(expDate, 'focus');
       isolateScope.swapCreditCardExpDateFields();
+      $timeout.verifyNoPendingTasks();
       expect(form.$dirty).toBeFalsy();
       expect(expDate.focus).not.toHaveBeenCalled();
     });
-  });
 
-  describe('swapCreditCardExpDateFields Function', function() {
     it('should dirty the credit card form and set focus if changing existing account info', function() {
       var expDate = ccElement.find('input')[1];
       spyOn(expDate, 'focus');

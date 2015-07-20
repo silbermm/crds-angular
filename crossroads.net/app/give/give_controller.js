@@ -41,6 +41,12 @@
           // Make sure to reset the processing state to false whenever state change succeeds.
           vm.processing = false;
 
+          // If we're on the account page and the user is logged in, focus the
+          // proper account field (email gets focus of not logged in)
+          if(toState.name == 'give.account' && $rootScope.username !== undefined) {
+            vm.togglePaymentInfo();
+          }
+
           // Force the state to reset after successfully giving
           if(toState.name == 'give.thank-you') {
             vm.initialized = false;
@@ -196,6 +202,15 @@
                 vm.emailAlreadyRegisteredGrowlDivRef,
                 -1 // Indicates that this message should not time out
                 );
+
+            // This is a hack to keep from tabbing on the close button on the growl message.
+            // There is no option in Growl to make the close button not tabbable...
+            $timeout(function() {
+              var closeButton = document.querySelector("#existingEmail .close");
+              if(closeButton) {
+                closeButton.tabIndex = -1;
+              }
+            }, 11);
         };
 
         // Callback from email-field on guest giver page.  This closes any
@@ -311,6 +326,15 @@
             } else {
               $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
             }
+        };
+
+        vm.togglePaymentInfo = function() {
+          $timeout(function() {
+            var e = vm.dto.view == "cc" ?
+                        document.querySelector("[name='ccNumber']")
+                        : document.querySelector("[name='routing']");
+            e.focus();
+          }, 0);
         };
 
         vm.createDonorAndDonate = function(programId, amount, email, view) {
