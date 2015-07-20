@@ -11,6 +11,7 @@ namespace MinistryPlatform.Translation.Services
     {
         private readonly int _donationsPageId;
         private readonly int _batchesPageId;
+        private readonly int _depositsPageId;
 
         private readonly IMinistryPlatformService _ministryPlatformService;
 
@@ -20,6 +21,7 @@ namespace MinistryPlatform.Translation.Services
 
             _donationsPageId = configuration.GetConfigIntValue("Donations");
             _batchesPageId = configuration.GetConfigIntValue("Batches");
+            _depositsPageId = configuration.GetConfigIntValue("Deposits");
         }
 
         public int UpdateDonationStatus(int donationId, int statusId, DateTime statusDate,
@@ -47,7 +49,7 @@ namespace MinistryPlatform.Translation.Services
         }
 
         public int CreateDonationBatch(string batchName, DateTime setupDateTime, decimal batchTotalAmount, int itemCount,
-            int batchEntryType, int? depositId, DateTime finalizedDateTime)
+            int batchEntryType, int? depositId, DateTime finalizedDateTime, string processorTransferId)
         {
             var parms = new Dictionary<string, object>
             {
@@ -57,7 +59,8 @@ namespace MinistryPlatform.Translation.Services
                 {"Item_Count", itemCount},
                 {"Batch_Entry_Type_ID", batchEntryType},
                 {"Deposit_ID", depositId},
-                {"Finalize_Date", finalizedDateTime}
+                {"Finalize_Date", finalizedDateTime},
+                {"Processor_Transfer_ID", processorTransferId}
             };
             try
             {
@@ -94,6 +97,34 @@ namespace MinistryPlatform.Translation.Services
                     string.Format(
                         "AddDonationToBatch failed. batchId: {0}, donationId: {1}",
                         batchId, donationId), e);
+            }
+        }
+
+        public int CreateDeposit(string depositName, decimal depositTotalAmount, DateTime depositDateTime,
+            string accountNumber, int batchCount, bool exported, string notes, string processorTransferId)
+        {
+            var parms = new Dictionary<string, object>
+            {
+                {"Deposit_Name", depositName},
+                {"Deposit_Total", depositTotalAmount},
+                {"Deposit_Date", depositDateTime},
+                {"Account_Number", accountNumber},
+                {"Batch_Count", batchCount},
+                {"Exported", exported},
+                {"Notes", notes},
+                {"Processor_Transfer_ID", processorTransferId}
+            };
+
+            try
+            {
+                return (WithApiLogin(token => (_ministryPlatformService.CreateRecord(_depositsPageId, parms, token))));
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException(
+                    string.Format(
+                        "CreateDeposit failed. depositName: {0}, depositTotalAmount: {1}, depositDateTime: {2}, accountNumber: {3}, batchCount: {4}, exported: {5}, notes: {6}",
+                        depositName, depositTotalAmount, depositDateTime, accountNumber, batchCount, exported, notes), e);
             }
         }
 

@@ -133,7 +133,8 @@ namespace crds_angular.Controllers.API
                 ItemCount = 0,
                 BatchEntryType = _batchEntryTypePaymentProcessor,
                 FinalizedDateTime = now,
-                DepositId = null
+                DepositId = null,
+                ProcessorTransferId = transfer.Id
             };
 
             response.TotalTransactionCount = charges.Count;
@@ -156,6 +157,32 @@ namespace crds_angular.Controllers.API
                 }
             }
 
+            // Create the deposit
+            var deposit = new DepositDTO
+            {
+                // Account number must be non-null, and non-empty; using a single space to fulfill this requirement
+                AccountNumber = " ",
+                BatchCount = 1,
+                DepositDateTime = now,
+                DepositName = batchName,
+                // This is the amount from Stripe - will show out of balance if does not match batch total above
+                DepositTotalAmount = transfer.Amount / 100M,
+                Exported = false,
+                Notes = null,
+                ProcessorTransferId = transfer.Id
+            };
+            try
+            {
+                response.Deposit = _donationService.CreateDeposit(deposit);
+            }
+            catch (Exception e)
+            {
+                _logger.Error("Failed to create batch deposit", e);
+                throw;
+            }
+
+            // Create the batch, with the above deposit id
+            batch.DepositId = response.Deposit.Id;
             try
             {
                 response.Batch = _donationService.CreateDonationBatch(batch);
@@ -202,5 +229,8 @@ namespace crds_angular.Controllers.API
 
         [JsonProperty("donation_batch")]
         public DonationBatchDTO Batch;
+
+        [JsonProperty("deposit")]
+        public DepositDTO Deposit;
     }
 }
