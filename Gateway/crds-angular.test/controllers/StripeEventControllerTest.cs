@@ -246,16 +246,18 @@ namespace crds_angular.test.controllers
                 && o.Donations != null
                 && o.Donations.Count == 3
                 && o.DepositId == 98765
+                && o.ProcessorTransferId.Equals("tx9876")
             )));
 
             _donationService.Verify(mocked => mocked.CreateDeposit(It.Is<DepositDTO>(o =>
                 o.DepositName.Matches(@"MP\d{12}")
                 && !o.Exported
-                && o.AccountNumber == null
+                && o.AccountNumber.Equals(" ")
                 && o.BatchCount == 1
                 && o.DepositDateTime != null
                 && o.DepositTotalAmount == 500M
                 && o.Notes == null
+                && o.ProcessorTransferId.Equals("tx9876")
             )));
 
             _paymentService.VerifyAll();

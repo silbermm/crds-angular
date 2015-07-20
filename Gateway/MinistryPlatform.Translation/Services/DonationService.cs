@@ -49,7 +49,7 @@ namespace MinistryPlatform.Translation.Services
         }
 
         public int CreateDonationBatch(string batchName, DateTime setupDateTime, decimal batchTotalAmount, int itemCount,
-            int batchEntryType, int? depositId, DateTime finalizedDateTime)
+            int batchEntryType, int? depositId, DateTime finalizedDateTime, string processorTransferId)
         {
             var parms = new Dictionary<string, object>
             {
@@ -59,7 +59,8 @@ namespace MinistryPlatform.Translation.Services
                 {"Item_Count", itemCount},
                 {"Batch_Entry_Type_ID", batchEntryType},
                 {"Deposit_ID", depositId},
-                {"Finalize_Date", finalizedDateTime}
+                {"Finalize_Date", finalizedDateTime},
+                {"Processor_Transfer_ID", processorTransferId}
             };
             try
             {
@@ -100,7 +101,7 @@ namespace MinistryPlatform.Translation.Services
         }
 
         public int CreateDeposit(string depositName, decimal depositTotalAmount, DateTime depositDateTime,
-            string accountNumber, int batchCount, bool exported, string notes)
+            string accountNumber, int batchCount, bool exported, string notes, string processorTransferId)
         {
             var parms = new Dictionary<string, object>
             {
@@ -110,7 +111,8 @@ namespace MinistryPlatform.Translation.Services
                 {"Account_Number", accountNumber},
                 {"Batch_Count", batchCount},
                 {"Exported", exported},
-                {"Notes", notes}
+                {"Notes", notes},
+                {"Processor_Transfer_ID", processorTransferId}
             };
 
             try

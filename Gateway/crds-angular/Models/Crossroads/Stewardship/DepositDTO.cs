@@ -29,5 +29,8 @@ namespace crds_angular.Models.Crossroads.Stewardship
 
         [JsonProperty("notes")]
         public string Notes { get; set; }
+
+        [JsonProperty("processor_transfer_id")]
+        public string ProcessorTransferId { get; set; }
     }
 }

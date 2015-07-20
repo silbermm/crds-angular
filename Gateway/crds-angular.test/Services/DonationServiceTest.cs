@@ -72,13 +72,14 @@ namespace crds_angular.test.Services
                 FinalizedDateTime = DateTime.Now,
                 ItemCount = 5,
                 SetupDateTime = DateTime.Now,
+                ProcessorTransferId = "transfer 1",
                 Id = 999 // Should be overwritten in service
             };
             dto.Donations.Add(new DonationDTO { donation_id = "102030"});
             _mpDonationService.Setup(
                 mocked =>
                     mocked.CreateDonationBatch(dto.BatchName, dto.SetupDateTime, dto.BatchTotalAmount, dto.ItemCount,
-                        dto.BatchEntryType, dto.DepositId, dto.FinalizedDateTime)).Returns(987);
+                        dto.BatchEntryType, dto.DepositId, dto.FinalizedDateTime, dto.ProcessorTransferId)).Returns(987);
             _mpDonationService.Setup(mocked => mocked.AddDonationToBatch(987, 102030));
 
             var response = _fixture.CreateDonationBatch(dto);
@@ -92,20 +93,21 @@ namespace crds_angular.test.Services
         {
             var dto = new DepositDTO
             {
-                Id = 123,
                 AccountNumber = "8675309",
                 BatchCount = 5,
                 DepositDateTime = DateTime.Now,
                 DepositName = "deposit name",
                 DepositTotalAmount = 456.78M,
                 Exported = true,
-                Notes = "blah blah blah"
+                Notes = "blah blah blah",
+                ProcessorTransferId = "transfer 1",
+                Id = 123 // should be overwritten in service
             };
 
             _mpDonationService.Setup(
                 mocked =>
                     mocked.CreateDeposit(dto.DepositName, dto.DepositTotalAmount, dto.DepositDateTime, dto.AccountNumber,
-                        dto.BatchCount, dto.Exported, dto.Notes)).Returns(987);
+                        dto.BatchCount, dto.Exported, dto.Notes, dto.ProcessorTransferId)).Returns(987);
 
             var response = _fixture.CreateDeposit(dto);
             _mpDonationService.VerifyAll();

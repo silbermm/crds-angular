@@ -133,7 +133,8 @@ namespace crds_angular.Controllers.API
                 ItemCount = 0,
                 BatchEntryType = _batchEntryTypePaymentProcessor,
                 FinalizedDateTime = now,
-                DepositId = null
+                DepositId = null,
+                ProcessorTransferId = transfer.Id
             };
 
             response.TotalTransactionCount = charges.Count;
@@ -159,14 +160,16 @@ namespace crds_angular.Controllers.API
             // Create the deposit
             var deposit = new DepositDTO
             {
-                AccountNumber = null,
+                // Account number must be non-null, and non-empty; using a single space to fulfill this requirement
+                AccountNumber = " ",
                 BatchCount = 1,
                 DepositDateTime = now,
                 DepositName = batchName,
                 // This is the amount from Stripe - will show out of balance if does not match batch total above
                 DepositTotalAmount = transfer.Amount / 100M,
                 Exported = false,
-                Notes = null
+                Notes = null,
+                ProcessorTransferId = transfer.Id
             };
             try
             {

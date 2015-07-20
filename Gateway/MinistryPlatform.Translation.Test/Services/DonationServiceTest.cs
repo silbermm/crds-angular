@@ -93,6 +93,7 @@ namespace MinistryPlatform.Translation.Test.Services
             const int batchEntryType = 44;
             const int depositId = 987;
             var finalizedDateTime = DateTime.Now;
+            const string processorTransferId = "transfer 1";
 
             var expectedParms = new Dictionary<string, object>
             {
@@ -102,12 +103,13 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Item_Count", itemCount},
                 {"Batch_Entry_Type_ID", batchEntryType},
                 {"Deposit_ID", depositId},
-                {"Finalize_Date", finalizedDateTime}
+                {"Finalize_Date", finalizedDateTime},
+                {"Processor_Transfer_ID", processorTransferId}
             };
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(8080, expectedParms, It.IsAny<string>(), false))
                 .Returns(513);
             var batchId = _fixture.CreateDonationBatch(batchName, setupDateTime, batchTotalAmount, itemCount, batchEntryType,
-                depositId, finalizedDateTime);
+                depositId, finalizedDateTime, processorTransferId);
             Assert.AreEqual(513, batchId);
             _ministryPlatformService.VerifyAll();
         }
@@ -138,6 +140,7 @@ namespace MinistryPlatform.Translation.Test.Services
             const int batchCount = 55;
             const bool exported = true;
             const string notes = "C Sharp";
+            const string processorTransferId = "transfer 1";
 
             var expectedParms = new Dictionary<string, object>
             {
@@ -147,13 +150,14 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Account_Number", accountNumber},
                 {"Batch_Count", batchCount},
                 {"Exported", exported},
-                {"Notes", notes}
+                {"Notes", notes},
+                {"Processor_Transfer_ID", processorTransferId}
             };
 
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(7070, expectedParms, It.IsAny<string>(), false))
                 .Returns(513);
             var depositId = _fixture.CreateDeposit(depositName, depositTotalAmount, depositDateTime, accountNumber,
-                batchCount, exported, notes);
+                batchCount, exported, notes, processorTransferId);
             Assert.AreEqual(513, depositId);
             _ministryPlatformService.VerifyAll();
         }
