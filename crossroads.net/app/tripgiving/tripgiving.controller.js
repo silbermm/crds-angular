@@ -14,6 +14,8 @@
   	vm.tripParticipants = [{
 	  		participantName: 'James Jones', 
 	  		participantPhotoUrl: 'http://crossroads-media.s3.amazonaws.com/images/avatar.svg',
+	  		showShareButtons: true,
+	  		showGiveButton: false,
 	  		trips: [
 	  			{
 	  				tripParticipantId: '', 
@@ -24,6 +26,8 @@
   		},{
   			participantName: 'John Jones', 
 	  		participantPhotoUrl: 'http://crossroads-media.s3.amazonaws.com/images/avatar.svg',
+	  		showShareButtons: false,
+	  		showGiveButton: true,
 	  		trips: [
 	  			{
 	  				tripParticipantId: '', 
@@ -39,6 +43,8 @@
   		}, {
   			participantName: 'Jane Jones', 
 	  		participantPhotoUrl: 'http://crossroads-media.s3.amazonaws.com/images/avatar.svg',
+	  		showShareButtons: false,
+	  		showGiveButton: true,
 	  		trips: [
 	  			{
 	  				tripParticipantId: '', 
