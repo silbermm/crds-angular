@@ -7,8 +7,9 @@ $button-border-darken-amount: 15%;
 //// BUTTON STYLES ////
 .btn {
   @include button-size($padding-base-vertical, $padding-base-horizontal, $font-size-base, $line-height-base, $border-radius-base);
-  &:focus {
+  &:focus, &:active {
     text-decoration: none;
+    outline: none;
   }
 }
 
@@ -203,7 +204,7 @@ h2 {
 }
 
 .btn-block-mobile {
-  @media (max-width: $screen-xs-max) { 
+  @media (max-width: $screen-xs-max) {
     width: 100%;
   }
 }
