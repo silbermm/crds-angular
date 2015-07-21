@@ -20,8 +20,9 @@
 	  			{
 	  				tripParticipantId: '', 
 	  				tripName: 'GO South Africa', 
-	  				tripStart: '1437407769', 
-	  				tripEnd: '1438214401'
+	  				tripStart: '1437407769',
+	  				tripStartDate: 'Jul 20, 2015', 
+	  				tripEnd: 'Jul 30, 2015'
 	  			}]
   		},{
   			participantName: 'John Jones', 
@@ -33,12 +34,14 @@
 	  				tripParticipantId: '', 
 	  				tripName: 'GO South Africa', 
 	  				tripStart: '1413504000', 
-	  				tripEnd: '1414368000'
+	  				tripStartDate: 'Oct 17, 2014',
+	  				tripEnd: 'Oct 27, 2014'
 	  			}, {
 	  				tripParticipantId: '', 
 	  				tripName: 'GO South Dakota', 
 	  				tripStart: '1413504000', 
-	  				tripEnd: '1414368000'
+	  				tripStartDate: 'Oct 17, 2014',
+	  				tripEnd: 'Oct 27, 2014'
 	  			}]
   		}, {
   			participantName: 'Jane Jones', 
@@ -50,17 +53,20 @@
 	  				tripParticipantId: '', 
 	  				tripName: 'GO South Africa', 
 	  				tripStart: '1413504000', 
-	  				tripEnd: '1414368000'
+	  				tripStartDate: 'Oct 17, 2014',
+	  				tripEnd: 'Oct 27, 2014'
 	  			}, {
 	  				tripParticipantId: '', 
 	  				tripName: 'GO South Dakota', 
 	  				tripStart: '1413504000', 
-	  				tripEnd: '1414368000'
+	  				tripStartDate: 'Oct 17, 2014',
+	  				tripEnd: 'Oct 27, 2014'
 	  			}, {
 	  				tripParticipantId: '', 
 	  				tripName: 'GO South Carolina', 
 	  				tripStart: '1413504000', 
-	  				tripEnd: '1414368000'
+	  				tripStartDate: 'Oct 17, 2014',
+	  				tripEnd: 'Oct 27, 2014'
 	  			}]
   		}];
   }
