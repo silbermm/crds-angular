@@ -30,14 +30,14 @@ module.exports = function(config) {
       'node_modules/angular/angular.js',
       'node_modules/angular-mocks/angular-mocks.js',
       'node_modules/moment/moment.js',
-      'spec/**/*.js'
+      'spec/spec_index.js'
     ],
 
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'spec/**/*.js': ['webpack','env']
+      'spec/spec_index.js': ['webpack','env']
     },
 
     webpack: {

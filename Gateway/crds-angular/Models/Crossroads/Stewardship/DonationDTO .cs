@@ -1,4 +1,4 @@
-namespace crds_angular.Models.Crossroads
+namespace crds_angular.Models.Crossroads.Stewardship
 {
     public class DonationDTO
     {
