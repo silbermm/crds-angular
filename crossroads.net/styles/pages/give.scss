@@ -21,6 +21,11 @@
     .panel-body {
         padding: 10px 8px;
     }
+    .give-button {
+      svg {
+        vertical-align: sub;
+      }
+    }
 }
 
 .give-amount {

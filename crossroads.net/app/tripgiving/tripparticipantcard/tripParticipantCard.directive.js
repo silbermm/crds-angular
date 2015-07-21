@@ -1,5 +1,5 @@
 (function(){
-  "use strict()";
+  'use strict()';
 
   module.exports = TripParticipantCard;
 
@@ -7,13 +7,12 @@
 
   function TripParticipantCard($log,Session){
     return {
-      restrict: "EA",
+      restrict: 'EA',
       transclude: true,
-      templateUrl : "tripparticipantcard/tripParticipantCard.html",
+      templateUrl : 'tripparticipantcard/tripParticipantCard.html',
       scope : {
         tripParticipant: '='
       }
     };
   }
-
 })();

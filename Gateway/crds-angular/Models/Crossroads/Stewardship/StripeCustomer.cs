@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace crds_angular.Models.Crossroads
+namespace crds_angular.Models.Crossroads.Stewardship
 {
 
     public class Metadata

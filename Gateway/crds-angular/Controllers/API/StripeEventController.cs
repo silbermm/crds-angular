@@ -6,7 +6,8 @@ using System.Web.Http;
 using crds_angular.Services.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using crds_angular.Models.Crossroads;
+using crds_angular.Models.Crossroads.Stewardship;
+using crds_angular.Models.Json;
 using Crossroads.Utilities.Interfaces;
 
 namespace crds_angular.Controllers.API
@@ -20,6 +21,10 @@ namespace crds_angular.Controllers.API
         private readonly int _donationStatusDeclined;
         private readonly int _donationStatusDeposited;
         private readonly int _donationStatusSucceeded;
+        private readonly int _batchEntryTypePaymentProcessor;
+
+        // This value is used when creating the batch name for exporting to GP.  It must be 15 characters or less.
+        private const string BatchNameDateFormat = @"\M\PyyyyMMddHHmm";
 
         public StripeEventController(IPaymentService paymentService, IDonationService donationService, IConfigurationWrapper configuration)
         {
@@ -32,6 +37,7 @@ namespace crds_angular.Controllers.API
             _donationStatusDeclined = configuration.GetConfigIntValue("DonationStatusDeclined");
             _donationStatusDeposited = configuration.GetConfigIntValue("DonationStatusDeposited");
             _donationStatusSucceeded = configuration.GetConfigIntValue("DonationStatusSucceeded");
+            _batchEntryTypePaymentProcessor = configuration.GetConfigIntValue("BatchEntryTypePaymentProcessor");
         }
 
         [Route("api/stripe-event")]
@@ -54,23 +60,38 @@ namespace crds_angular.Controllers.API
                 return (Ok());
             }
 
-            dynamic response = null;
-            switch (stripeEvent.Type)
+            StripeEventResponseDTO response = null;
+            try
             {
-                case "charge.succeeded":
-                    ChargeSucceeded(stripeEvent.Created, ParseStripeEvent<StripeCharge>(stripeEvent.Data));
-                    break;
-                case "charge.failed":
-                    ChargeFailed(stripeEvent.Created, ParseStripeEvent<StripeCharge>(stripeEvent.Data));
-                    break;
-                case "transfer.paid":
-                    response = TransferPaid(stripeEvent.Created, ParseStripeEvent<StripeTransfer>(stripeEvent.Data));
-                    break;
-                default:
-                    _logger.Debug("Ignoring event " + stripeEvent.Type);
-                    break;
+                switch (stripeEvent.Type)
+                {
+                    case "charge.succeeded":
+                        ChargeSucceeded(stripeEvent.Created, ParseStripeEvent<StripeCharge>(stripeEvent.Data));
+                        break;
+                    case "charge.failed":
+                        ChargeFailed(stripeEvent.Created, ParseStripeEvent<StripeCharge>(stripeEvent.Data));
+                        break;
+                    case "transfer.paid":
+                        response = TransferPaid(stripeEvent.Created, ParseStripeEvent<StripeTransfer>(stripeEvent.Data));
+                        break;
+                    default:
+                        _logger.Debug("Ignoring event " + stripeEvent.Type);
+                        break;
+                }
             }
-            return (response == null ? Ok() : Ok(response));
+            catch (Exception e)
+            {
+                var msg = "Unexpected error processing Stripe Event " + stripeEvent.Type;
+                _logger.Error(msg, e);
+                var responseDto = new StripeEventResponseDTO()
+                {
+                    Exception = new ApplicationException(msg, e),
+                    Message = msg
+                };
+                return (RestHttpActionResult<StripeEventResponseDTO>.ServerError(responseDto));
+            }
+
+            return (response == null ? Ok() : (IHttpActionResult)RestHttpActionResult<StripeEventResponseDTO>.Ok(response));
         }
 
         private void ChargeSucceeded(DateTime? eventTimestamp, StripeCharge charge)
@@ -101,6 +122,21 @@ namespace crds_angular.Controllers.API
                 return(response);
             }
 
+            var now = DateTime.Now;
+            var batchName = now.ToString(BatchNameDateFormat);
+
+            var batch = new DonationBatchDTO()
+            {
+                BatchName = batchName,
+                SetupDateTime = now,
+                BatchTotalAmount = 0,
+                ItemCount = 0,
+                BatchEntryType = _batchEntryTypePaymentProcessor,
+                FinalizedDateTime = now,
+                DepositId = null,
+                ProcessorTransferId = transfer.Id
+            };
+
             response.TotalTransactionCount = charges.Count;
             _logger.Debug(string.Format("{0} charges to update for transfer {1}", charges.Count, transfer.Id));
             foreach (var charge in charges)
@@ -108,14 +144,53 @@ namespace crds_angular.Controllers.API
                 _logger.Debug("Updating charge id " + charge + " to Deposited status");
                 try
                 {
-                    _donationService.UpdateDonationStatus(charge, _donationStatusDeposited, eventTimestamp);
-                    response.SuccessfulUpdates.Add(charge);
+                    var donationId = _donationService.UpdateDonationStatus(charge.Id, _donationStatusDeposited, eventTimestamp);
+                    response.SuccessfulUpdates.Add(charge.Id);
+                    batch.ItemCount++;
+                    batch.BatchTotalAmount += (charge.Amount / 100M);
+                    batch.Donations.Add(new DonationDTO { donation_id = "" + donationId, amount = charge.Amount });
                 }
                 catch (Exception e)
                 {
                     _logger.Warn("Error updating charge " + charge, e);
-                    response.FailedUpdates.Add(new KeyValuePair<string, string>(charge, e.Message));
+                    response.FailedUpdates.Add(new KeyValuePair<string, string>(charge.Id, e.Message));
                 }
+            }
+
+            // Create the deposit
+            var deposit = new DepositDTO
+            {
+                // Account number must be non-null, and non-empty; using a single space to fulfill this requirement
+                AccountNumber = " ",
+                BatchCount = 1,
+                DepositDateTime = now,
+                DepositName = batchName,
+                // This is the amount from Stripe - will show out of balance if does not match batch total above
+                DepositTotalAmount = transfer.Amount / 100M,
+                Exported = false,
+                Notes = null,
+                ProcessorTransferId = transfer.Id
+            };
+            try
+            {
+                response.Deposit = _donationService.CreateDeposit(deposit);
+            }
+            catch (Exception e)
+            {
+                _logger.Error("Failed to create batch deposit", e);
+                throw;
+            }
+
+            // Create the batch, with the above deposit id
+            batch.DepositId = response.Deposit.Id;
+            try
+            {
+                response.Batch = _donationService.CreateDonationBatch(batch);
+            }
+            catch (Exception e)
+            {
+                _logger.Error("Failed to create donation batch", e);
+                throw;
             }
 
             return (response);
@@ -129,7 +204,17 @@ namespace crds_angular.Controllers.API
     }
 
     // ReSharper disable once InconsistentNaming
-    public class TransferPaidResponseDTO
+    public class StripeEventResponseDTO
+    {
+        [JsonProperty("message")]
+        public string Message { get; set; }
+
+        [JsonProperty("exception")]
+        public ApplicationException Exception { get; set; }
+    }
+
+    // ReSharper disable once InconsistentNaming
+    public class TransferPaidResponseDTO : StripeEventResponseDTO
     {
         [JsonProperty("transaction_count")]
         public int TotalTransactionCount { get; set; }
@@ -141,5 +226,11 @@ namespace crds_angular.Controllers.API
         [JsonProperty("failed_updates")]
         public List<KeyValuePair<string, string>> FailedUpdates { get { return (_failedUpdates); } }
         private readonly List<KeyValuePair<string, string>> _failedUpdates = new List<KeyValuePair<string, string>>();
+
+        [JsonProperty("donation_batch")]
+        public DonationBatchDTO Batch;
+
+        [JsonProperty("deposit")]
+        public DepositDTO Deposit;
     }
 }
