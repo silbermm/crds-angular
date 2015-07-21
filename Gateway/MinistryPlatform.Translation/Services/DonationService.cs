@@ -51,6 +51,7 @@ namespace MinistryPlatform.Translation.Services
         public int CreateDonationBatch(string batchName, DateTime setupDateTime, decimal batchTotalAmount, int itemCount,
             int batchEntryType, int? depositId, DateTime finalizedDateTime, string processorTransferId)
         {
+            
             var parms = new Dictionary<string, object>
             {
                 {"Batch_Name", batchName},
@@ -60,11 +61,25 @@ namespace MinistryPlatform.Translation.Services
                 {"Batch_Entry_Type_ID", batchEntryType},
                 {"Deposit_ID", depositId},
                 {"Finalize_Date", finalizedDateTime},
-                {"Processor_Transfer_ID", processorTransferId}
+                {"Processor_Transfer_ID", processorTransferId},
             };
             try
             {
-                return (WithApiLogin(token => (_ministryPlatformService.CreateRecord(_batchesPageId, parms, token))));
+                var token = apiLogin();
+                var batchId = _ministryPlatformService.CreateRecord(_batchesPageId, parms, token);
+
+                // Important! These two fields have to be set on an update, not on the initial
+                // create.  They are nullable fields with default values, but setting a null
+                // value on the CreateRecord call has no effect (the default values still get used).
+                var updateParms = new Dictionary<string, object>
+                {
+                    {"Batch_ID", batchId},
+                    {"Currency", null},
+                    {"Default_Payment_Type", null}
+                };
+                _ministryPlatformService.UpdateRecord(_batchesPageId, updateParms, token);
+
+                return (batchId);
             }
             catch (Exception e)
             {
