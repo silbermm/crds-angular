@@ -14,8 +14,8 @@
   	vm.tripParticipants = [{
 	  		participantName: 'James Jones', 
 	  		participantPhotoUrl: 'http://crossroads-media.s3.amazonaws.com/images/avatar.svg',
-	  		showShareButtons: true,
-	  		showGiveButton: false,
+	  		showShareButtons: false,
+	  		showGiveButton: true,
 	  		trips: [
 	  			{
 	  				tripParticipantId: '', 
