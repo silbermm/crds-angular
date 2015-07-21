@@ -218,7 +218,7 @@
       })
       .state('tripgiving', {
         url: '/tripgiving',
-        controller: 'TripGivingCtrl as tripsearch',
+        controller: 'TripGivingCtrl as tripSearch',
         templateUrl: 'tripgiving/tripgiving.html',
         resolve: {
           Page: 'Page',
