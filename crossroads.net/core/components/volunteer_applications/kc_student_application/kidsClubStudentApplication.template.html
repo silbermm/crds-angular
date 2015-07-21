@@ -191,22 +191,22 @@
         <label class="block required">How would you define your spiritual life? Pick as many as you like.</label>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" name="religion" ng-model="kcStudentApplication.religionSearchingForAnswers" ng-required="!kcStudentApplication.spiritualSelected()">Searching for answers.
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" ng-model="kcStudentApplication.religionSearchingForAnswers" ng-required="!kcStudentApplication.spiritualSelected()">Searching for answers.
           </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" name="religion" ng-model="kcStudentApplication.religionReceivedJesus" ng-required="!kcStudentApplication.spiritualSelected()">I have received Jesus.
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" ng-model="kcStudentApplication.religionReceivedJesus" ng-required="!kcStudentApplication.spiritualSelected()">I have received Jesus.
           </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" name="religion" ng-model="kcStudentApplication.religionFocusingOnObedience" ng-required="!kcStudentApplication.spiritualSelected()">Focusing on obedience—I’ve quit negotiating with God.
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" ng-model="kcStudentApplication.religionFocusingOnObedience" ng-required="!kcStudentApplication.spiritualSelected()">Focusing on obedience—I’ve quit negotiating with God.
           </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" name="religion" ng-model="kcStudentApplication.religionReplicating" ng-required="!kcStudentApplication.spiritualSelected()">I’m actively replicating my faith in others.
+            <input type="checkbox" ng-true-value="'Yes'" ng-false-value="''" ng-model="kcStudentApplication.religionReplicating" ng-required="!kcStudentApplication.spiritualSelected()">I’m actively replicating my faith in others.
           </label>
         </div>
         <ng-messages for="student.religion.$error" ng-if="kcStudentApplication.showError(student, 'religion')">
@@ -401,8 +401,6 @@
           </span>
         </ng-messages>
       </div>
-      </div>
-      <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'referenceHomePhone1')}">
         <label class="control-label" for="referenceHomePhone-1">Home Phone</label>
         <input type="text"
@@ -436,8 +434,6 @@
           </span>
         </ng-messages>
       </div>
-      </div>
-      <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'referenceWorkPhone1')}">
         <label class="control-label" for="referenceWorkPhone-1">Work Phone</label>
         <input type="text"
@@ -473,8 +469,6 @@
           </span>
         </ng-messages>
       </div>
-      </div>
-      <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'referenceAssociation1') }">
         <label class="control-label required" for="referenceAssociation-1">Nature of Association</label>
         <input type="text"
@@ -546,8 +540,6 @@
           </span>
         </ng-messages>
       </div>
-      </div>
-      <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'referenceHomePhone2')}">
         <label class="control-label" for="referenceHomePhone-2">Home Phone</label>
         <input type="text"
@@ -580,8 +572,6 @@
           </span>
         </ng-messages>
       </div>
-      </div>
-      <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'referenceWorkPhone2')}">
         <label class="control-label" for="referenceWorkPhone-2">Work Phone</label>
         <input type="text"
@@ -597,7 +587,7 @@
             <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
           </span>
         </ng-messages>
-      </div> 
+      </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'referenceEmail2') }">
         <label class="control-label required" for="referenceEmail-2">Email</label>
         <input type="email"
@@ -617,8 +607,6 @@
           </span>
         </ng-messages>
       </div>
-      </div>
-      <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'referenceAssociation2') }">
         <label class="control-label required" for="referenceAssociation-2">Nature of Association</label>
         <input type="text"
@@ -650,8 +638,7 @@
             <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
           </span>
         </ng-messages>
-      </div>    
-      </div>
+      </div>    </div>
     <!--/row-->
     <div ng-bind-html="kcStudentApplication.pageInfo.contentBlock2"></div>
   </fieldset>
