@@ -108,6 +108,14 @@ namespace MinistryPlatform.Translation.Test.Services
             };
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(8080, expectedParms, It.IsAny<string>(), false))
                 .Returns(513);
+
+            var expectedUpdateParms = new Dictionary<string, object>
+            {
+                {"Batch_ID", 513},
+                {"Currency", null},
+                {"Default_Payment_Type", null}
+            };
+            _ministryPlatformService.Setup(mocked => mocked.UpdateRecord(8080, expectedUpdateParms, It.IsAny<string>()));
             var batchId = _fixture.CreateDonationBatch(batchName, setupDateTime, batchTotalAmount, itemCount, batchEntryType,
                 depositId, finalizedDateTime, processorTransferId);
             Assert.AreEqual(513, batchId);

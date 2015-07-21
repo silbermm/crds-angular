@@ -11,5 +11,7 @@ SET [Default_Field_List] =
 	,Batches.Deposit_ID
 	,Congregation_ID_Table.Congregation_Name AS Congregation
 	,Batch_Entry_Type_ID_Table.Batch_Entry_Type
-	,Batches.Processor_Transfer_ID'
+	,Batches.Processor_Transfer_ID
+	,Batches.Currency
+	,Batches.Default_Payment_Type'
 WHERE [Page_ID] = 282;
