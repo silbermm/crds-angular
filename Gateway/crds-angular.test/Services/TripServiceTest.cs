@@ -27,7 +27,7 @@ namespace crds_angular.test.Services
         {
             _eventParticipantService.Setup(m => m.TripParticipants(It.IsAny<string>())).Returns(MockMpSearchResponse());
 
-            var searchResults = _fixture.Search(It.IsAny<string>(), It.IsAny<string>());
+            var searchResults = _fixture.Search(It.IsAny<string>());
 
             _eventParticipantService.VerifyAll();
             Assert.AreEqual(2, searchResults.Count);

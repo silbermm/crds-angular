@@ -22,11 +22,11 @@ namespace crds_angular.Controllers.API
         [Route("api/trip/search/{search}")]
         public IHttpActionResult Search(string search)
         {
-            return Authorized(token =>
-            {
+            //return Authorized(token =>
+            //{
                 try
                 {
-                    var list = _tripService.Search(search, token);
+                    var list = _tripService.Search(search);
                     return Ok(list);
                 }
                 catch (Exception ex)
@@ -35,7 +35,7 @@ namespace crds_angular.Controllers.API
                     throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
 
-            });
+            //});
         }
     }
 }

@@ -5,7 +5,7 @@ namespace crds_angular.Models.Crossroads.Trip
     public class TripDto
     {
         [JsonProperty(PropertyName = "tripEnd")]
-        public long EventEndDate { get; set; }
+        public string EventEnd { get; set; }
 
         [JsonIgnore]
         public int EventId { get; set; }
@@ -13,8 +13,11 @@ namespace crds_angular.Models.Crossroads.Trip
         [JsonProperty(PropertyName = "tripParticipantId")]
         public int EventParticipantId { get; set; }
 
-        [JsonProperty(PropertyName = "tripStart")]
+        [JsonProperty(PropertyName = "tripStartDate")]
         public long EventStartDate { get; set; }
+
+        [JsonProperty(PropertyName = "tripStart")]
+        public string EventStart { get; set; }
 
         [JsonProperty(PropertyName = "tripName")]
         public string EventTitle { get; set; }

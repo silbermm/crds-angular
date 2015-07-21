@@ -5,6 +5,6 @@ namespace crds_angular.Services.Interfaces
 {
     public interface ITripService
     {
-        List<TripParticipantDto> Search(string search, string token);
+        List<TripParticipantDto> Search(string search);
     }
 }

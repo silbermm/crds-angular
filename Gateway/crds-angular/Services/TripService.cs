@@ -16,7 +16,7 @@ namespace crds_angular.Services
             _eventParticipantService = eventParticipant;
         }
 
-        public List<TripParticipantDto> Search(string search, string token)
+        public List<TripParticipantDto> Search(string search)
         {
             var results = _eventParticipantService.TripParticipants(search);
 
@@ -39,17 +39,18 @@ namespace crds_angular.Services
             {
                 var tp = new TripDto();
                 tp.EventParticipantId = result.EventParticipantId;
-                tp.EventEndDate = result.EventEndDate.ToUnixTime();
+                tp.EventEnd = result.EventEndDate.ToString("MMM dd, yyyy");
                 tp.EventId = result.EventId;
                 tp.EventStartDate = result.EventStartDate.ToUnixTime();
+                tp.EventStart = result.EventStartDate.ToString("MMM dd, yyyy");
                 tp.EventTitle = result.EventTitle;
                 tp.EventType = result.EventType;
 
                 var participant = participants[result.ParticipantId];
                 participant.Trips.Add(tp);                
             }
-
-            return participants.Values.ToList();
+            
+            return participants.Values.OrderBy(o=>o.Lastname).ThenBy(o=>o.Nickname).ToList();
             
         }
 

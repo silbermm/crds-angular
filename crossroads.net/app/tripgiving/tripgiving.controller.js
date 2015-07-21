@@ -4,58 +4,60 @@
 
   module.exports = TripGivingController;
 
-  TripGivingController.$inject = ['$scope', '$log', 'CmsInfo'];
+  TripGivingController.$inject = ['$rootScope', '$scope', '$log', 'CmsInfo', 'Trip'];
 
-  function TripGivingController($scope, $log, CmsInfo) {
+  function TripGivingController($rootScope, $scope, $log, CmsInfo, Trip) {
   	var vm = this;
-  	vm.pageHeader = CmsInfo.pages[0].renderedContent;
 
-  	//This is mock data. Will be replaced with real search results after US224
-  	vm.tripParticipants = [{
-	  		participantName: 'James Jones', 
-	  		participantPhotoUrl: 'http://crossroads-media.s3.amazonaws.com/images/avatar.svg',
-	  		trips: [
-	  			{
-	  				tripParticipantId: '', 
-	  				tripName: 'GO South Africa', 
-	  				tripStart: '1437407769', 
-	  				tripEnd: '1438214401'
-	  			}]
-  		},{
-  			participantName: 'John Jones', 
-	  		participantPhotoUrl: 'http://crossroads-media.s3.amazonaws.com/images/avatar.svg',
-	  		trips: [
-	  			{
-	  				tripParticipantId: '', 
-	  				tripName: 'GO South Africa', 
-	  				tripStart: '1413504000', 
-	  				tripEnd: '1414368000'
-	  			}, {
-	  				tripParticipantId: '', 
-	  				tripName: 'GO South Dakota', 
-	  				tripStart: '1413504000', 
-	  				tripEnd: '1414368000'
-	  			}]
-  		}, {
-  			participantName: 'Jane Jones', 
-	  		participantPhotoUrl: 'http://crossroads-media.s3.amazonaws.com/images/avatar.svg',
-	  		trips: [
-	  			{
-	  				tripParticipantId: '', 
-	  				tripName: 'GO South Africa', 
-	  				tripStart: '1413504000', 
-	  				tripEnd: '1414368000'
-	  			}, {
-	  				tripParticipantId: '', 
-	  				tripName: 'GO South Dakota', 
-	  				tripStart: '1413504000', 
-	  				tripEnd: '1414368000'
-	  			}, {
-	  				tripParticipantId: '', 
-	  				tripName: 'GO South Carolina', 
-	  				tripStart: '1413504000', 
-	  				tripEnd: '1414368000'
-	  			}]
-  		}];
+  	vm.empty = false;
+  	vm.loading = false;
+  	vm.pageHeader = CmsInfo.pages[0].renderedContent;
+  	vm.search = search;
+  	vm.searchString = '';
+  	vm.showError = showError;
+  	vm.tripParticipants = [];
+
+  	function search(form) {
+  		vm.loading = true;
+  		vm.tripParticipants = [];
+
+  		if (vm.query === undefined || vm.query==='') {
+  			form.searchForm.searchText.$setValidity('required', false);
+  		}
+  		else {
+  			form.searchForm.searchText.$setValidity('required', true);	
+  		}
+
+  		if(form.searchForm.$invalid){
+	      $log.error('please fill out all required fields correctly');
+	      $rootScope.$emit('notify',$rootScope.MESSAGES.generalError);
+	      vm.loading = false;
+	      return false;
+	    }
+
+	    vm.searchString = vm.query;
+      Trip.Search.query({query: vm.query})
+  		.$promise
+  		.then(function(response){
+  			vm.tripParticipants = response;
+  			if (vm.tripParticipants.length > 0) {
+  				vm.empty = false;
+  			}
+  			else {
+  				vm.empty = true;
+  			}
+  			vm.loading = false;
+  		});
+  	}
+
+  	function showError(form, field) {
+      if(form[field] === undefined) {
+        return false;
+      }
+      if (form.$submitted || form[field].$dirty){
+        return form[field].$invalid;
+      }
+      return false;
+    }
   }
-})()
+})();
