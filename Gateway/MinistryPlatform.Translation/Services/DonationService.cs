@@ -61,7 +61,7 @@ namespace MinistryPlatform.Translation.Services
                 {"Batch_Entry_Type_ID", batchEntryType},
                 {"Deposit_ID", depositId},
                 {"Finalize_Date", finalizedDateTime},
-                {"Processor_Transfer_ID", processorTransferId},
+                {"Processor_Transfer_ID", processorTransferId}
             };
             try
             {
