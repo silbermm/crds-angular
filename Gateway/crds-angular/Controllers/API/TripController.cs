@@ -22,8 +22,6 @@ namespace crds_angular.Controllers.API
         [Route("api/trip/search/{search}")]
         public IHttpActionResult Search(string search)
         {
-            //return Authorized(token =>
-            //{
                 try
                 {
                     var list = _tripService.Search(search);
@@ -34,8 +32,6 @@ namespace crds_angular.Controllers.API
                     var apiError = new ApiErrorDto("Trip Search Failed", ex);
                     throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
-
-            //});
         }
     }
 }
