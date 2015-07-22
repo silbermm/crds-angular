@@ -577,6 +577,8 @@
           </span>
         </ng-messages>
       </div>
+      </div>
+      <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': kcAdultApplication.showError(adult, 'referenceHomePhone1')}">
         <label class="control-label" for="referenceHomePhone-1">Home Phone</label>
         <input type="text" class="form-control" id="referenceHomePhone1" name="referenceHomePhone1" ng-model="kcAdultApplication.volunteer.referenceHomePhone1" ng-pattern="kcAdultApplication.phoneFormat" placeholder="Home Phone" ng-model-options="{updateOn: 'blur'}">
@@ -595,6 +597,8 @@
           </span>
         </ng-messages>
       </div>
+      </div>
+      <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': kcAdultApplication.showError(adult, 'referenceWorkPhone1')}">
         <label class="control-label" for="referenceWorkPhone-1">Work Phone</label>
         <input type="text" class="form-control" id="referenceWorkPhone-1" name="referenceWorkPhone1" ng-pattern="kcAdultApplication.phoneFormat" ng-model="kcAdultApplication.volunteer.referenceWorkPhone1" placeholder="Work Phone" ng-model-options="{updateOn: 'blur'}">
@@ -618,6 +622,8 @@
         </ng-messages>
 
       </div>
+      </div>
+      <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': kcAdultApplication.showError(adult, 'referenceAssociation1')}">
         <label class="control-label required" for="referenceAssociation-1">Nature of Association</label>
         <input type="text" class="form-control" id="referenceAssociation-1" name="referenceAssociation1" ng-model="kcAdultApplication.volunteer.referenceAssociation1" placeholder="Nature of Association" ng-model-options="{updateOn: 'blur'}"required>
@@ -664,7 +670,8 @@
           </span>
         </ng-messages>
       </div>
-
+    </div>
+    <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': kcAdultApplication.showError(adult, 'referenceHomePhone2')}">
         <label class="control-label" for="referenceHomePhone-2">Home Phone</label>
         <input type="text" class="form-control" id="referenceHomePhone2" name="referenceHomePhone2" ng-model="kcAdultApplication.volunteer.referenceHomePhone2" ng-pattern="kcAdultApplication.phoneFormat" placeholder="Home Phone" ng-model-options="{updateOn: 'blur'}">
@@ -684,6 +691,8 @@
         </ng-messages>
 
       </div>
+    </div>
+    <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': kcAdultApplication.showError(adult, 'referenceWorkPhone2')}">
         <label class="control-label" for="referenceWorkPhone-2">Work Phone</label>
         <input type="text" class="form-control" id="referenceWorkPhone-2" name="referenceWorkPhone2" ng-pattern="kcAdultApplication.phoneFormat" ng-model="kcAdultApplication.volunteer.referenceWorkPhone2" placeholder="Work Phone" ng-model-options="{updateOn: 'blur'}">
@@ -706,6 +715,8 @@
         </ng-messages>
 
       </div>
+    </div>
+    <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': kcAdultApplication.showError(adult, 'referenceAssociation2')}">
         <label class="control-label required" for="referenceAssociation-2">Nature of Association</label>
         <input type="text" class="form-control" id="referenceAssociation-2" name="referenceAssociation2" ng-model="kcAdultApplication.volunteer.referenceAssociation2" placeholder="Nature of Association" ng-model-options="{updateOn: 'blur'}"required>
@@ -752,7 +763,8 @@
           </span>
         </ng-messages>
       </div>
-
+    </div>
+    <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': kcAdultApplication.showError(adult, 'referenceHomePhone3')}">
         <label class="control-label" for="referenceHomePhone-3">Home Phone</label>
         <input type="text" class="form-control" id="referenceHomePhone3" name="referenceHomePhone3" ng-pattern="kcAdultApplication.phoneFormat" ng-model="kcAdultApplication.volunteer.referenceHomePhone3" placeholder="Home Phone" ng-model-options="{updateOn: 'blur'}">
@@ -771,10 +783,12 @@
           </span>
         </ng-messages>
       </div>
+    </div>
+    <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': kcAdultApplication.showError(adult, 'referenceWorkPhone3')}">
         <label class="control-label" for="referenceWorkPhone-3">Work Phone</label>
         <input type="text" class="form-control" id="referenceWorkPhone-3" name="referenceWorkPhone3" ng-model="kcAdultApplication.volunteer.referenceWorkPhone3" ng-pattern="kcAdultApplication.phoneFormat" placeholder="Work Phone" ng-model-options="{updateOn: 'blur'}">
-        <ng-messages for="adult.referenceWorkPhone3.$error" ng-if="kcAdultApplication.showError(adult, 'referenceWorkPhonee')">
+        <ng-messages for="adult.referenceWorkPhone3.$error" ng-if="kcAdultApplication.showError(adult, 'referenceWorkPhone3')">
           <span ng-message="pattern">
             <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
           </span>
@@ -793,6 +807,8 @@
         </ng-messages>
 
       </div>
+    </div>
+    <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': kcAdultApplication.showError(adult, 'referenceAssociation3')}">
         <label class="control-label required" for="referenceAssociation-3">Nature of Association</label>
         <input type="text" class="form-control" id="referenceAssociation-3" name="referenceAssociation3" ng-model="kcAdultApplication.volunteer.referenceAssociation3" placeholder="Nature of Association" ng-model-options="{updateOn: 'blur'}" required>

@@ -146,10 +146,10 @@
         controller: "AdboxCtrl as adbox",
         templateUrl: "adbox/adbox-index.html"
       })
-      .state("serve-signup", {
-        url: "/serve-signup",
-        controller: "MyServeController as serve",
-        templateUrl: "my_serve/myserve.html",
+      .state('serve-signup', {
+        url: '/serve-signup',
+        controller: 'MyServeController as serve',
+        templateUrl: 'my_serve/myserve.html',
         data: {
           isProtected: true
         },
@@ -222,7 +222,7 @@
       })
       .state('tripgiving', {
         url: '/tripgiving',
-        controller: 'TripGivingCtrl as tripsearch',
+        controller: 'TripGivingCtrl as tripSearch',
         templateUrl: 'tripgiving/tripgiving.html',
         resolve: {
           Page: 'Page',

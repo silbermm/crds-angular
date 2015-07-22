@@ -13,6 +13,12 @@ require('./login_form.html');
           if(attrs.prefix){
             scope.passwordPrefix = attrs.prefix;
           }
+          
+          if (attrs.registerUrl) {
+            scope.registerUrl = attrs.registerUrl;
+            scope.showRegister = true;
+          }
+          
           $log.debug(scope.passwordPrefix);
           scope.visible = false;     
         }

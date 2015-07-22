@@ -20,6 +20,7 @@
     </div><!--/panel-heading-->
 
     <!-- TODO: Pull this out into it's own directive so that each form doesn't share scope? -->
+    <form name="teamForm-{{team.index}}" >
     <div class="panel-collapse collapse" collapse="isCollapsed">
       <div class="panel-body soft-half-bottom">
         <div class="alert alert-info" role="alert" ng-show="team.pastDeadline" ng-bind-html="$root.messages[team.pastDeadlineMessage].message | html">
@@ -32,7 +33,7 @@
                 <use xlink:href="#pencil4"></use>
             </svg>
         </a>
-      </p>
+        </p>
         <div class="row">
           <div class="col-md-5">
            <h5>Opportunities</h5>
@@ -145,7 +146,7 @@
                 <use xlink:href="#mail5"></use>
               </svg>
             </a>
-            <button class="btn btn-gray-light" ng-disabled="team.pastDeadline" ng-click="cancel()">Cancel</button>
+            <button class="btn btn-standard" ng-disabled="team.pastDeadline" ng-click="cancel()">Cancel</button>
             <button class="btn btn-primary" ng-disabled="team.pastDeadline" ng-class="{disabled: processing}" ng-click="saveRsvp()">
               <span ng-if="processing">Saving...</span>
               <span ng-if="!processing">Save</span>
@@ -154,6 +155,7 @@
         </div><!--/row-->
       </div><!--/panel-body-->
     </div><!--/panel-collapse-->
+    </form>
 
   </div><!--/panel-->
 </div>
