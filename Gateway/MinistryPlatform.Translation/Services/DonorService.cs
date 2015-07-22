@@ -126,8 +126,7 @@ namespace MinistryPlatform.Translation.Services
             }
             catch (Exception e)
             {
-                throw new ApplicationException(
-                    string.Format("Sending of Confirmation Email failed for Donation Id: {0}", donationId), e);
+                logger.Debug(string.Format("Failed when processing the template for Donation Id: {0}", donationId));
             }
 
             return donationDistributionId;
