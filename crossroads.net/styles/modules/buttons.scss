@@ -181,6 +181,8 @@ h2 {
     line-height: 2;
     margin-bottom: 0;
     border-radius: 0px;
+    //border-top-right-radius: $panel-border-radius;
+    //border-bottom-right-radius: $panel-border-radius;
 
     &.table-btn-sm {
       min-height: 31px;
@@ -188,13 +190,48 @@ h2 {
     }
 
     &.table-btn-lg {
-     min-height: 54px;
+     min-height: 58px;
      line-height: 3;
     }
   }
 }
 
+@media (min-width: $screen-sm-min) {
+  .list-group-item:first-child {
+    .table-btn {
+      border-top-right-radius: $panel-border-radius - 1;
+    }
+  }
+  .list-group-item:last-child {
+    .table-btn {
+      border-bottom-right-radius: $panel-border-radius - 1;
+    }
+  }
+  .card-content {
+    ul.list-group {
+      .list-group-item {
+        position: relative;
 
+        .table-btn {
+          right: -1px;
+          position: relative;
+        }
+
+        &:first-child {
+          .table-btn {
+            border-top-right-radius: 0px;
+          }
+        }
+
+        &:last-child {
+          .table-btn {
+            border-bottom-right-radius: 0px;
+          }
+        }
+      }
+    }
+  }
+}
 
 .btn-checkbox-toggle {
   @include button-variant($gray, #ffffff, $input-group-addon-border-color);
