@@ -9,5 +9,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         int CreateDonationBatch(string batchName, DateTime setupDateTime, decimal batchTotalAmount, int itemCount,
             int batchEntryType, int? depositId, DateTime finalizedDateTime);
         void AddDonationToBatch(int batchId, int donationId);
+        void ProcessDeclineEmail(string processorPaymentId);
     }
 }

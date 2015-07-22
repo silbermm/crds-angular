@@ -313,5 +313,31 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.IsNull(response.ProcessorId);
         }
 
+        [Test]
+        public void TestSendEmail()
+        {
+            const string program = "Crossroads";
+            const int declineEmailTemplate = 11940;
+            var donationDate = DateTime.Now;
+            const string declineReason = "rejected: lack of funds";
+            const int donorId = 9876;
+            const int donationAmt = 4343;
+            const string paymentType = "Bank";
+
+            var getTemplateResponse = new MessageTemplate()
+            {
+                Body = "Your payment was rejected.  Darn.",
+                Subject = "Test Decline Email"
+            };
+            _communicationService.Setup(mocked => mocked.GetTemplate(It.IsAny<int>())).Returns(getTemplateResponse);
+
+            _fixture.SendEmail(declineEmailTemplate, donorId, donationAmt, paymentType, donationDate, program,
+                declineReason);
+
+            _ministryPlatformService.VerifyAll();
+            _communicationService.VerifyAll();
+ 
+        }
+
     }
 }

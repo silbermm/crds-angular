@@ -38,5 +38,10 @@ namespace crds_angular.Services
 
             return (batch);
         }
+
+        public void ProcessDeclineEmail(string processorPaymentId)
+        {
+            _mpDonationService.ProcessDeclineEmail(processorPaymentId);
+        }
     }
 }

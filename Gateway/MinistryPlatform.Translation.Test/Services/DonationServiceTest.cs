@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Crossroads.Utilities.Interfaces;
+using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -12,17 +14,24 @@ namespace MinistryPlatform.Translation.Test.Services
     {
         private DonationService _fixture;
         private Mock<IMinistryPlatformService> _ministryPlatformService;
+        private Mock<IDonorService> _donorService;
 
         [SetUp]
         public void SetUp()
         {
             _ministryPlatformService = new Mock<IMinistryPlatformService>(MockBehavior.Strict);
+            _donorService = new Mock<IDonorService>(MockBehavior.Strict);
+            
 
             var configuration = new Mock<IConfigurationWrapper>();
             configuration.Setup(mocked => mocked.GetConfigIntValue("Donations")).Returns(9090);
             configuration.Setup(mocked => mocked.GetConfigIntValue("Batches")).Returns(8080);
+            configuration.Setup(mocked => mocked.GetConfigIntValue("Distributions")).Returns(1234);
+            configuration.Setup(mocked => mocked.GetConfigIntValue("DefaultGiveDeclineEmailTemplate")).Returns(999999);
+            configuration.Setup(mocked => mocked.GetConfigIntValue("BankAccount")).Returns(5);
+            configuration.Setup(mocked => mocked.GetConfigIntValue("CreditCard")).Returns(4);
 
-            _fixture = new DonationService(_ministryPlatformService.Object, configuration.Object);
+            _fixture = new DonationService(_ministryPlatformService.Object, _donorService.Object, configuration.Object);
         }
 
         [Test]
@@ -54,6 +63,8 @@ namespace MinistryPlatform.Translation.Test.Services
             var donationStatusDate = DateTime.Now.AddDays(-1);
             const string donationStatusNotes = "note";
             const int donationStatusId = 654;
+            const int donorId = 9876;
+            const int donationAmt = 4343;
 
             var expectedParms = new Dictionary<string, object>
             {
@@ -70,7 +81,12 @@ namespace MinistryPlatform.Translation.Test.Services
                 {
                     new Dictionary<string, object>
                     {
-                        {"dp_RecordID", donationId}
+                        {"dp_RecordID", donationId},
+                        {"Donor_ID", donorId},
+                        {"Donation_Amount", donationAmt},
+                        {"Donation_Date", donationStatusDate},
+                        {"Donation_Status_Notes", donationStatusNotes},
+                        {"Payment_Type", "Bank"}
                     }
                 }
             };
@@ -126,5 +142,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _fixture.AddDonationToBatch(batchId, donationId);
             _ministryPlatformService.VerifyAll();
         }
+        
+        
     }
 }
