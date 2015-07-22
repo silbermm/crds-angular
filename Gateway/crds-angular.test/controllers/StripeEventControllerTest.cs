@@ -128,8 +128,7 @@ namespace crds_angular.test.controllers
             };
 
             _donationService.Setup(mocked => mocked.UpdateDonationStatus("9876", 777, e.Created, "invalid_routing_number: description from stripe"));
-          //  _donationService.Setup(mocked => mocked.ProcessDeclineEmail("9876"));
-      
+          
             var result = _fixture.ProcessStripeEvent(e);
             Assert.IsInstanceOf<RestHttpActionResult<StripeEventResponseDTO>>(result);
             _paymentService.VerifyAll();

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Crossroads.Utilities.Interfaces;
-using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -21,7 +19,6 @@ namespace MinistryPlatform.Translation.Test.Services
         {
             _ministryPlatformService = new Mock<IMinistryPlatformService>(MockBehavior.Strict);
             _donorService = new Mock<IDonorService>(MockBehavior.Strict);
-            
 
             var configuration = new Mock<IConfigurationWrapper>();
             configuration.Setup(mocked => mocked.GetConfigIntValue("Donations")).Returns(9090);
@@ -66,6 +63,7 @@ namespace MinistryPlatform.Translation.Test.Services
             const int donationStatusId = 654;
             const int donorId = 9876;
             const int donationAmt = 4343;
+            const string paymentType = "Bank";
 
             var expectedParms = new Dictionary<string, object>
             {
@@ -87,7 +85,7 @@ namespace MinistryPlatform.Translation.Test.Services
                         {"Donation_Amount", donationAmt},
                         {"Donation_Date", donationStatusDate},
                         {"Donation_Status_Notes", donationStatusNotes},
-                        {"Payment_Type", "Bank"}
+                        {"Payment_Type", paymentType}
                     }
                 }
             };
@@ -185,5 +183,6 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(513, depositId);
             _ministryPlatformService.VerifyAll();
         }
+
     }
 }

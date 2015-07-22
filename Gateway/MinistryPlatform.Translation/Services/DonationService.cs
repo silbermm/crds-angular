@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
-using RestSharp.Extensions;
 
 namespace MinistryPlatform.Translation.Services
 {
@@ -17,7 +15,8 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _distributionPageId;
         private readonly int _batchesPageId;
         private readonly int _declineEmailTemplate;
-        private readonly int _creditCardPaymentType;
+        private readonly string _creditCardPaymentType;
+        private readonly string _bankPaymentType;
         private readonly int _depositsPageId;
 
         private readonly IMinistryPlatformService _ministryPlatformService;
@@ -32,7 +31,8 @@ namespace MinistryPlatform.Translation.Services
             _distributionPageId = configuration.GetConfigIntValue("Distributions");
             _batchesPageId = configuration.GetConfigIntValue("Batches");
             _declineEmailTemplate = configuration.GetConfigIntValue("DefaultGiveDeclineEmailTemplate");
-            _creditCardPaymentType = configuration.GetConfigIntValue("CreditCard");
+            _creditCardPaymentType = configuration.GetConfigValue("CreditCard");
+            _bankPaymentType = configuration.GetConfigValue("Bank");
             _depositsPageId = configuration.GetConfigIntValue("Deposits");
         }
 
@@ -46,16 +46,8 @@ namespace MinistryPlatform.Translation.Services
         public int UpdateDonationStatus(string processorPaymentId, int statusId,
             DateTime statusDate, string statusNote = null)
         {
-            return (WithApiLogin(token =>
+            return(WithApiLogin(token =>
             {
-                //var result = _ministryPlatformService.GetRecordsDict(_donationsPageId, token,
-                //    ",,,,,,," + processorPaymentId);
-                //int? donationId;
-                //if (result.Count == 0 || (donationId = result.Last().ToNullableInt("dp_RecordID")) == null)
-                //{
-                //    throw (new ApplicationException("Could not locate donation for charge " + processorPaymentId));
-                //}
-
                 var result = GetDonationByProcessorPaymentId(processorPaymentId, token);
 
                 UpdateDonationStatus(token, result.donationId, statusId, statusDate, statusNote);
@@ -191,17 +183,17 @@ namespace MinistryPlatform.Translation.Services
                 var result = GetDonationByProcessorPaymentId(processorPaymentId, apiToken);
 
                 var rec = _ministryPlatformService.GetRecordsDict(_distributionPageId, apiToken, ",,,,,,,," + result.donationId);
-                int? distributionId;
-                if (rec.Count == 0 || (distributionId = rec.Last().ToNullableInt("dp_RecordID")) == null)
+                
+                if (rec.Count == 0 || (rec.Last().ToNullableInt("dp_RecordID")) == null)
                 {
                     throw (new ApplicationException("Could not locate donation for charge " + processorPaymentId));
                 }
                 
                 var program = rec.First().ToString("Statement_Title");
 
-                var paymentType = (result.paymentTypeId == _creditCardPaymentType)
-                    ? "Credit Card"
-                    : "Bank";
+                var paymentType = (result.paymentTypeId.ToString() == _creditCardPaymentType.Substring(0,1))
+                    ? _creditCardPaymentType.Substring(2,11)
+                    : _bankPaymentType.Substring(2,4);
 
                 _donorService.SendEmail(_declineEmailTemplate, result.donorId, result.donationAmt, paymentType, result.donationDate,
                     program, result.donationNotes);
@@ -213,15 +205,13 @@ namespace MinistryPlatform.Translation.Services
                         "ProcessDeclineEmail failed. processorPaymentId: {0},", processorPaymentId), ex);
             }
         }
-
-
+        
         private Donation GetDonationByProcessorPaymentId(string processorPaymentId, string apiToken)
         {
             var result = _ministryPlatformService.GetRecordsDict(_donationsPageId, apiToken,
                 ",,,,,,," + processorPaymentId);
-            int? donationId;
-
-            if (result.Count == 0 || (donationId = result.Last().ToNullableInt("dp_RecordID")) == null)
+          
+            if (result.Count == 0 || (result.Last().ToNullableInt("dp_RecordID")) == null)
             {
                 throw (new ApplicationException("Could not locate donation for charge " + processorPaymentId));
             }
@@ -240,6 +230,4 @@ namespace MinistryPlatform.Translation.Services
             return (d);
         }
     }
-
-   
 }
