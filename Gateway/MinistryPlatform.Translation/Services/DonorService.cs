@@ -68,9 +68,9 @@ namespace MinistryPlatform.Translation.Services
 
         }
 
-        public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string charge_id, string pymt_type, string processorId, DateTime setupTime, bool registeredDonor)
+        public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string charge_id, string pymtType, string processorId, DateTime setupTime, bool registeredDonor)
         {
-            var pymt_id = (pymt_type == "bank") ? "5" : "4";
+            var pymt_id = (pymtType == "bank") ? "5" : "4";
             var fee = feeAmt.HasValue ? feeAmt/100M : null;
             
             var donationValues = new Dictionary<string, object>
@@ -122,7 +122,7 @@ namespace MinistryPlatform.Translation.Services
 
             try
             {
-                SetupConfirmationEmail(Convert.ToInt32(programId), donorId, donationAmt, setupTime, pymt_type);
+                SetupConfirmationEmail(Convert.ToInt32(programId), donorId, donationAmt, setupTime, pymtType);
             }
             catch (Exception e)
             {

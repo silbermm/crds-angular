@@ -12,11 +12,11 @@ namespace MinistryPlatform.Translation.Services.Interfaces
             int? statementMethodId = 2 // default to email/online
             );
 
-        int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string charge_id, string pymt_type, string processorId, DateTime setupDate, bool registeredDonor);
+        int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string charge_id, string pymtType, string processorId, DateTime setupDate, bool registeredDonor);
         ContactDonor GetContactDonor(int contactId);
         ContactDonor GetPossibleGuestContactDonor(string email);
         int UpdatePaymentProcessorCustomerId(int donorId, string paymentProcessorCustomerId);
-        void SetupConfirmationEmail(int programId, int donorId, int donationAmount, DateTime setupDate, string pymt_type);
+        void SetupConfirmationEmail(int programId, int donorId, int donationAmount, DateTime setupDate, string pymtType);
         ContactDonor GetEmailViaDonorId(int donorId);
         void SendEmail(int emailTemplate, int donorId, int donationAmount, string donationType, DateTime donationDate, string programName, string emailReason);
     }
