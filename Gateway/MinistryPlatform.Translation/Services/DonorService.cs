@@ -269,7 +269,7 @@ namespace MinistryPlatform.Translation.Services
             return donor;
         }
 
-        public void SendEmail(int communicationTemplateId, int donorId, int donationAmount, string paymentType, DateTime setupDate, string program, string declineReason)
+        public void SendEmail(int communicationTemplateId, int donorId, int donationAmount, string paymentType, DateTime setupDate, string program, string emailReason)
         {
             MessageTemplate template = communicationService.GetTemplate(communicationTemplateId);
 
@@ -295,7 +295,7 @@ namespace MinistryPlatform.Translation.Services
                 {"Donation_Amount", donationAmount},
                 {"Donation_Date", setupDate},
                 {"Payment_Method", paymentType},
-                {"Decline_Reason", declineReason}
+                {"Decline_Reason", emailReason}
             };
 
             communicationService.SendMessage(comm);
