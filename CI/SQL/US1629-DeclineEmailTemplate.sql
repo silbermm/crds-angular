@@ -17,7 +17,7 @@ INSERT INTO [dbo].[dp_Communications]
      VALUES
            (11402
 		   ,1
-           ,'Thank you for your investment - Crossroads'
+           ,'Thank you for your investment, but there was a problem'
            ,'<p>Thank you for your investment!</p>
 Because of you, people will encounter God for the first time. Because of you, people in our city will receive care and hope. Because of you, relationships will be restored and individual lives will be transformed.
 </p><p></p><p><b>You gave to</b>: [Program_Name]<br /></p><p>

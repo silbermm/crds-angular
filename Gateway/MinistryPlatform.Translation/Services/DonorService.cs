@@ -236,10 +236,11 @@ namespace MinistryPlatform.Translation.Services
         public void SetupConfirmationEmail(int programId, int donorId, int donationAmount, DateTime setupDate, string pymtType)
         {
             var program = programService.GetProgramById(programId);
+            var emailReason = "none";
             //If the communcations admin does not link a message to the program, the default template will be used.
             int communicationTemplateId = program.CommunicationTemplateId == 0 ? AppSetting("DefaultGiveConfirmationEmailTemplate") : program.CommunicationTemplateId;
 
-            SendEmail(communicationTemplateId, donorId, donationAmount, pymtType, setupDate, program.Name, null);
+            SendEmail(communicationTemplateId, donorId, donationAmount, pymtType, setupDate, program.Name, emailReason);
         }
 
         public ContactDonor GetEmailViaDonorId(int donorId)

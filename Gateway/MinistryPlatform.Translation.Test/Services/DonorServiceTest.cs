@@ -319,7 +319,7 @@ namespace MinistryPlatform.Translation.Test.Services
             const string program = "Crossroads";
             const int declineEmailTemplate = 11940;
             var donationDate = DateTime.Now;
-            const string declineReason = "rejected: lack of funds";
+            const string emailReason = "rejected: lack of funds";
             const int donorId = 9876;
             const int donationAmt = 4343;
             const string paymentType = "Bank";
@@ -332,7 +332,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _communicationService.Setup(mocked => mocked.GetTemplate(It.IsAny<int>())).Returns(getTemplateResponse);
 
             _fixture.SendEmail(declineEmailTemplate, donorId, donationAmt, paymentType, donationDate, program,
-                declineReason);
+                emailReason);
 
             _ministryPlatformService.VerifyAll();
             _communicationService.VerifyAll();

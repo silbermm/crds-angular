@@ -18,6 +18,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         int UpdatePaymentProcessorCustomerId(int donorId, string paymentProcessorCustomerId);
         void SetupConfirmationEmail(int programId, int donorId, int donationAmount, DateTime setupDate, string pymt_type);
         ContactDonor GetEmailViaDonorId(int donorId);
-        void SendEmail(int emailTemplate, int donorId, int donationAmount, string donationType, DateTime donationDate, string programName, string declineReason);
+        void SendEmail(int emailTemplate, int donorId, int donationAmount, string donationType, DateTime donationDate, string programName, string emailReason);
     }
 }
