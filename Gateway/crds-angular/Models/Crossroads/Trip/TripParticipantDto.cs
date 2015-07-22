@@ -31,6 +31,12 @@ namespace crds_angular.Models.Crossroads.Trip
             get { return string.Format("{0} {1}", Nickname, Lastname); }
         }
 
+        [JsonProperty(PropertyName = "showGiveButton")]
+        public bool ShowGiveButton { get; set; }
+
+        [JsonProperty(PropertyName = "showShareButtons")]
+        public bool ShowShareButtons { get; set; }
+
         [JsonProperty(PropertyName = "participantPhotoUrl")]
         public string PhotoUrl
         {
