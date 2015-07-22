@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using crds_angular.Models.Crossroads.Stewardship;
 
 namespace crds_angular.Services.Interfaces
@@ -12,5 +9,6 @@ namespace crds_angular.Services.Interfaces
         int UpdateDonationStatus(string processorPaymentId, int statusId, DateTime? statusDate, string statusNote = null);
         DonationBatchDTO CreateDonationBatch(DonationBatchDTO batch);
         void ProcessDeclineEmail(string processorPaymentId);
+        DepositDTO CreateDeposit(DepositDTO deposit);
     }
 }

@@ -27,7 +27,7 @@ namespace crds_angular.Services
         public DonationBatchDTO CreateDonationBatch(DonationBatchDTO batch)
         {
             var batchId = _mpDonationService.CreateDonationBatch(batch.BatchName, batch.SetupDateTime,
-                batch.BatchTotalAmount, batch.ItemCount, batch.BatchEntryType, batch.DepositId, batch.FinalizedDateTime);
+                batch.BatchTotalAmount, batch.ItemCount, batch.BatchEntryType, batch.DepositId, batch.FinalizedDateTime, batch.ProcessorTransferId);
 
             batch.Id = batchId;
 
@@ -42,6 +42,15 @@ namespace crds_angular.Services
         public void ProcessDeclineEmail(string processorPaymentId)
         {
             _mpDonationService.ProcessDeclineEmail(processorPaymentId);
+        }
+
+        public DepositDTO CreateDeposit(DepositDTO deposit)
+        {
+            deposit.Id = _mpDonationService.CreateDeposit(deposit.DepositName, deposit.DepositTotalAmount, deposit.DepositDateTime,
+                deposit.AccountNumber, deposit.BatchCount, deposit.Exported, deposit.Notes, deposit.ProcessorTransferId);
+            
+            return (deposit);
+
         }
     }
 }
