@@ -104,6 +104,14 @@
         url: "/go/south-africa/signup/3",
         templateUrl: "gotrips/signup-page-3.html"
       })
+      .state("go-south-africa-signup-page-4", {
+        url: "/go/south-africa/signup/4",
+        templateUrl: "gotrips/signup-page-4.html"
+      })
+      .state("go-south-africa-signup-page-confirmation", {
+        url: "/go/south-africa/signup/confirmation",
+        templateUrl: "gotrips/signup-page-confirmation.html"
+      })
       .state("media", {
         url: "/media",
         controller: "MediaCtrl as media",
