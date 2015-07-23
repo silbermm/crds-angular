@@ -20,6 +20,7 @@ namespace MinistryPlatform.Translation.Services
 
         public const string DONOR_RECORD_ID = "Donor_Record";
         public const string DONOR_PROCESSOR_ID = "Processor_ID";
+        public const string EMAILREASON = "None";
 
         private IMinistryPlatformService ministryPlatformService;
         private IProgramService programService;
@@ -236,11 +237,10 @@ namespace MinistryPlatform.Translation.Services
         public void SetupConfirmationEmail(int programId, int donorId, int donationAmount, DateTime setupDate, string pymtType)
         {
             var program = programService.GetProgramById(programId);
-            var emailReason = "none";
             //If the communcations admin does not link a message to the program, the default template will be used.
             int communicationTemplateId = program.CommunicationTemplateId == 0 ? AppSetting("DefaultGiveConfirmationEmailTemplate") : program.CommunicationTemplateId;
 
-            SendEmail(communicationTemplateId, donorId, donationAmount, pymtType, setupDate, program.Name, emailReason);
+            SendEmail(communicationTemplateId, donorId, donationAmount, pymtType, setupDate, program.Name, EMAILREASON);
         }
 
         public ContactDonor GetEmailViaDonorId(int donorId)
@@ -269,7 +269,7 @@ namespace MinistryPlatform.Translation.Services
             return donor;
         }
 
-        public void SendEmail(int communicationTemplateId, int donorId, int donationAmount, string paymentType, DateTime setupDate, string program, string emailReason)
+        public void SendEmail(int communicationTemplateId, int donorId, int donationAmount, string paymentType, DateTime setupDate, string program, string EMAILREASON)
         {
             MessageTemplate template = communicationService.GetTemplate(communicationTemplateId);
 
@@ -295,7 +295,7 @@ namespace MinistryPlatform.Translation.Services
                 {"Donation_Amount", donationAmount},
                 {"Donation_Date", setupDate},
                 {"Payment_Method", paymentType},
-                {"Decline_Reason", emailReason}
+                {"Decline_Reason", EMAILREASON}
             };
 
             communicationService.SendMessage(comm);
