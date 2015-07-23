@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Http.Results;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
@@ -169,6 +168,8 @@ namespace crds_angular.test.Services
             };
 
             _paymentService.Setup(mocked => mocked.GetChargesForTransfer("tx9876")).Returns(charges);
+            _donationService.Setup(
+                mocked => mocked.CreatePaymentProcessorEventError(e, It.IsAny<StripeEventResponseDTO>()));
             _donationService.Setup(mocked => mocked.UpdateDonationStatus("ch111", 999, e.Created, null)).Returns(1111);
             _donationService.Setup(mocked => mocked.UpdateDonationStatus("ch222", 999, e.Created, null)).Returns(2222);
             _donationService.Setup(mocked => mocked.UpdateDonationStatus("ch333", 999, e.Created, null)).Returns(3333);
@@ -193,6 +194,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual("Not gonna do it, wouldn't be prudent.", tp.FailedUpdates[0].Value);
             Assert.IsNotNull(tp.Batch);
             Assert.IsNotNull(tp.Deposit);
+            Assert.IsNotNull(tp.Exception);
 
             _donationService.Verify(mocked => mocked.CreateDonationBatch(It.Is<DonationBatchDTO>(o =>
                 o.BatchName.Matches(@"MP\d{12}")
@@ -219,7 +221,6 @@ namespace crds_angular.test.Services
 
             _paymentService.VerifyAll();
             _donationService.VerifyAll();
-
         }
     }
 }

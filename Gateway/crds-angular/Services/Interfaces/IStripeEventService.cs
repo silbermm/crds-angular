@@ -10,5 +10,6 @@ namespace crds_angular.Services.Interfaces
         void ChargeFailed(DateTime? eventTimestamp, StripeCharge charge);
         TransferPaidResponseDTO TransferPaid(DateTime? eventTimestamp, StripeTransfer transfer);
         StripeEventResponseDTO ProcessStripeEvent(StripeEvent stripeEvent);
+        void RecordFailedEvent(StripeEvent stripeEvent, StripeEventResponseDTO stripeEventResponse);
     }
 }

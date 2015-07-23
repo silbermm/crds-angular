@@ -1,11 +1,10 @@
 ﻿using System;
 using crds_angular.Models.Crossroads.Stewardship;
+using crds_angular.Services;
 using crds_angular.Services.Interfaces;
 using Crossroads.AsyncJobs.Interfaces;
 using Crossroads.AsyncJobs.Models;
 using log4net;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Crossroads.AsyncJobs.Processors
 {
@@ -32,6 +31,11 @@ namespace Crossroads.AsyncJobs.Processors
             {
                 var msg = "Unexpected error processing Stripe Event " + stripeEvent.Type;
                 _logger.Error(msg, e);
+
+                _stripeEventService.RecordFailedEvent(stripeEvent, new StripeEventResponseDTO
+                {
+                    Exception = new ApplicationException("Problem processing Stripe event", e)
+                });
             }
         }
     }

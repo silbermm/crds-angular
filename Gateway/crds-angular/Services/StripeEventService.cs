@@ -100,6 +100,11 @@ namespace crds_angular.Services
                 }
             }
 
+            if (response.FailedUpdates.Count > 0)
+            {
+                response.Exception = new ApplicationException("Could not update all charges to 'deposited' status, see message for details");
+            }
+
             // Create the deposit
             var deposit = new DepositDTO
             {
@@ -142,22 +147,50 @@ namespace crds_angular.Services
         public StripeEventResponseDTO ProcessStripeEvent(StripeEvent stripeEvent)
         {
             StripeEventResponseDTO response = null;
-            switch (stripeEvent.Type)
+            try
             {
-                case "charge.succeeded":
-                    ChargeSucceeded(stripeEvent.Created, ParseStripeEvent<StripeCharge>(stripeEvent.Data));
-                    break;
-                case "charge.failed":
-                    ChargeFailed(stripeEvent.Created, ParseStripeEvent<StripeCharge>(stripeEvent.Data));
-                    break;
-                case "transfer.paid":
-                    response = TransferPaid(stripeEvent.Created, ParseStripeEvent<StripeTransfer>(stripeEvent.Data));
-                    break;
-                default:
-                    _logger.Debug("Ignoring event " + stripeEvent.Type);
-                    break;
+                switch (stripeEvent.Type)
+                {
+                    case "charge.succeeded":
+                        ChargeSucceeded(stripeEvent.Created, ParseStripeEvent<StripeCharge>(stripeEvent.Data));
+                        break;
+                    case "charge.failed":
+                        ChargeFailed(stripeEvent.Created, ParseStripeEvent<StripeCharge>(stripeEvent.Data));
+                        break;
+                    case "transfer.paid":
+                        response = TransferPaid(stripeEvent.Created, ParseStripeEvent<StripeTransfer>(stripeEvent.Data));
+                        break;
+                    default:
+                        _logger.Debug("Ignoring event " + stripeEvent.Type);
+                        break;
+                }
+                if (response != null && response.Exception != null)
+                {
+                    RecordFailedEvent(stripeEvent, response);
+                }
+            }
+            catch (Exception e)
+            {
+                response = new StripeEventResponseDTO
+                {
+                    Exception = new ApplicationException("Problem processing Stripe event", e)
+                };
+                RecordFailedEvent(stripeEvent, response);
+                throw;
             }
             return (response);
+        }
+
+        public void RecordFailedEvent(StripeEvent stripeEvent, StripeEventResponseDTO stripeEventResponse)
+        {
+            try
+            {
+                _donationService.CreatePaymentProcessorEventError(stripeEvent, stripeEventResponse);
+            }
+            catch (Exception e)
+            {
+                _logger.Error("Error writing event to failure log", e);
+            }
         }
 
         private static T ParseStripeEvent<T>(StripeEventData data)
