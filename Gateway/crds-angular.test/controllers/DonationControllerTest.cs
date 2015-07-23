@@ -82,7 +82,7 @@ namespace crds_angular.test.controllers
                 .Returns(donor);
 
             stripeServiceMock.Setup(
-                mocked => mocked.ChargeCustomer(donor.ProcessorId, createDonationDTO.Amount, donor.DonorId, createDonationDTO.PaymentType))
+                mocked => mocked.ChargeCustomer(donor.ProcessorId, createDonationDTO.Amount, donor.DonorId))
                 .Returns(charge);
 
             donorServiceMock.Setup(mocked => mocked.
@@ -144,7 +144,7 @@ namespace crds_angular.test.controllers
             fixture.Request.Headers.Authorization = null;
             gatewayDonorServiceMock.Setup(mocked => mocked.GetContactDonorForEmail(createDonationDTO.EmailAddress)).Returns(donor);
             
-            stripeServiceMock.Setup(mocked => mocked.ChargeCustomer(donor.ProcessorId, createDonationDTO.Amount, donor.DonorId, createDonationDTO.PaymentType)).
+            stripeServiceMock.Setup(mocked => mocked.ChargeCustomer(donor.ProcessorId, createDonationDTO.Amount, donor.DonorId)).
                 Returns(charge);
 
             donorServiceMock.Setup(mocked => mocked.
