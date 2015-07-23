@@ -35,27 +35,8 @@
     };
 
     $scope.logout = function() {
-        //Session.clear();
         $state.go('logout');
     };
-
-    // $scope.logout = function ($event) {
-    //     // TODO Added to debug/research US1403 - should remove after issue is resolved
-    //     console.log("US1403: logging out user in login_controller");
-    //     AuthService.logout();
-    //     if ($scope.credentials !== undefined) {
-    //         // TODO Added to debug/research US1403 - should remove after issue is resolved
-    //         console.log("US1403: clearing credentials defined in login_controller");
-    //         $scope.credentials.username = undefined;
-    //         $scope.credentials.password = undefined;
-    //     }
-    //     $rootScope.username = undefined;
-
-    //     if ($state.current === undefined || $state.current.data === undefined || !$state.current.data.isProtected) {
-    //         // not currently on a protected page, so don't redirect to home page
-    //         $event.preventDefault();
-    //     }
-    // }
 
     $scope.login = function () {
         if (($scope.credentials === undefined) || 
@@ -93,5 +74,5 @@
             });
         }
     };
-  };
-})()
+  }
+})();
