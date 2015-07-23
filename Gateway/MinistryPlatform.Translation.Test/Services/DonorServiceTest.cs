@@ -96,7 +96,7 @@ namespace MinistryPlatform.Translation.Test.Services
             var setupDate = DateTime.Now;
             var charge_id = "ch_crds1234567";
             var processorId = "cus_8675309";
-            var pymt_type = "cc";
+            var pymtType = "cc";
             var expectedDonationId = 321321;
             var expectedDonationDistributionId = 231231;
             const string viewKey = "DonorByContactId";
@@ -163,7 +163,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _communicationService.Setup(mocked => mocked.GetTemplate(It.IsAny<int>())).Returns(getTemplateResponse);
 
 
-            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, charge_id, pymt_type, processorId, setupDate, true);
+            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, charge_id, pymtType, processorId, setupDate, true);
 
             // Explicitly verify each expectation...
             _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>()));
@@ -311,6 +311,32 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(contactId, response.ContactId);
             Assert.AreEqual(0, response.DonorId);
             Assert.IsNull(response.ProcessorId);
+        }
+
+        [Test]
+        public void TestSendEmail()
+        {
+            const string program = "Crossroads";
+            const int declineEmailTemplate = 11940;
+            var donationDate = DateTime.Now;
+            const string emailReason = "rejected: lack of funds";
+            const int donorId = 9876;
+            const int donationAmt = 4343;
+            const string paymentType = "Bank";
+
+            var getTemplateResponse = new MessageTemplate()
+            {
+                Body = "Your payment was rejected.  Darn.",
+                Subject = "Test Decline Email"
+            };
+            _communicationService.Setup(mocked => mocked.GetTemplate(It.IsAny<int>())).Returns(getTemplateResponse);
+
+            _fixture.SendEmail(declineEmailTemplate, donorId, donationAmt, paymentType, donationDate, program,
+                emailReason);
+
+            _ministryPlatformService.VerifyAll();
+            _communicationService.VerifyAll();
+ 
         }
 
     }

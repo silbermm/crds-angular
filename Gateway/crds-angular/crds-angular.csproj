@@ -235,6 +235,7 @@
     <Compile Include="Controllers\API\ProgramController.cs" />
     <Compile Include="Controllers\API\ServeController.cs" />
     <Compile Include="Controllers\API\StripeEventController.cs" />
+    <Compile Include="Controllers\API\TripController.cs" />
     <Compile Include="Controllers\API\UpdateDonorDTO.cs" />
     <Compile Include="Controllers\API\RoleController.cs" />
     <Compile Include="Controllers\API\UserController.cs" />
@@ -293,6 +294,8 @@
     <Compile Include="Models\Crossroads\Stewardship\StripeEvent.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeObject.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeTransfer.cs" />
+	<Compile Include="Models\Crossroads\Trip\TripParticipantDto.cs" />
+    <Compile Include="Models\Crossroads\Trip\TripDto.cs" />
     <Compile Include="Models\Crossroads\User.cs" />
     <Compile Include="Models\Crossroads\VolunteerApplication\AdultApplicationDto.cs" />
     <Compile Include="Models\Crossroads\VolunteerApplication\ChildDto.cs" />
@@ -329,6 +332,7 @@
     <Compile Include="Services\Interfaces\IPersonService.cs" />
     <Compile Include="Services\Interfaces\IPaymentService.cs" />
     <Compile Include="Services\Interfaces\IStripeEventService.cs" />
+    <Compile Include="Services\Interfaces\ITripService.cs" />
     <Compile Include="Services\Interfaces\IVolunteerApplicationService.cs" />
     <Compile Include="Services\MinistryPlatformBaseService.cs" />
     <Compile Include="Services\PersonService.cs" />
@@ -337,6 +341,7 @@
     <Compile Include="Services\StripeEventService.cs" />
     <Compile Include="Services\StripeService.cs" />
     <Compile Include="Services\TranslationService.cs" />
+    <Compile Include="Services\TripService.cs" />
     <Compile Include="Services\VolunteerApplicationService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>

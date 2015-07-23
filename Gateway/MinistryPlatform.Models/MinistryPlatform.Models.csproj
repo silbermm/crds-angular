@@ -76,6 +76,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Response.cs" />
+    <Compile Include="TripParticipant.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

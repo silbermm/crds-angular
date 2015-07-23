@@ -12,18 +12,24 @@ namespace MinistryPlatform.Translation.Test.Services
     {
         private DonationService _fixture;
         private Mock<IMinistryPlatformService> _ministryPlatformService;
+        private Mock<IDonorService> _donorService;
 
         [SetUp]
         public void SetUp()
         {
             _ministryPlatformService = new Mock<IMinistryPlatformService>(MockBehavior.Strict);
+            _donorService = new Mock<IDonorService>(MockBehavior.Strict);
 
             var configuration = new Mock<IConfigurationWrapper>();
             configuration.Setup(mocked => mocked.GetConfigIntValue("Donations")).Returns(9090);
             configuration.Setup(mocked => mocked.GetConfigIntValue("Batches")).Returns(8080);
+            configuration.Setup(mocked => mocked.GetConfigIntValue("Distributions")).Returns(1234);
+            configuration.Setup(mocked => mocked.GetConfigIntValue("DefaultGiveDeclineEmailTemplate")).Returns(999999);
+            configuration.Setup(mocked => mocked.GetConfigIntValue("BankAccount")).Returns(5);
+            configuration.Setup(mocked => mocked.GetConfigIntValue("CreditCard")).Returns(4);
             configuration.Setup(mocked => mocked.GetConfigIntValue("Deposits")).Returns(7070);
 
-            _fixture = new DonationService(_ministryPlatformService.Object, configuration.Object);
+            _fixture = new DonationService(_ministryPlatformService.Object, _donorService.Object, configuration.Object);
         }
 
         [Test]
@@ -55,6 +61,9 @@ namespace MinistryPlatform.Translation.Test.Services
             var donationStatusDate = DateTime.Now.AddDays(-1);
             const string donationStatusNotes = "note";
             const int donationStatusId = 654;
+            const int donorId = 9876;
+            const int donationAmt = 4343;
+            const string paymentType = "Bank";
 
             var expectedParms = new Dictionary<string, object>
             {
@@ -71,7 +80,12 @@ namespace MinistryPlatform.Translation.Test.Services
                 {
                     new Dictionary<string, object>
                     {
-                        {"dp_RecordID", donationId}
+                        {"dp_RecordID", donationId},
+                        {"Donor_ID", donorId},
+                        {"Donation_Amount", donationAmt},
+                        {"Donation_Date", donationStatusDate},
+                        {"Donation_Status_Notes", donationStatusNotes},
+                        {"Payment_Type", paymentType}
                     }
                 }
             };
@@ -108,6 +122,14 @@ namespace MinistryPlatform.Translation.Test.Services
             };
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(8080, expectedParms, It.IsAny<string>(), false))
                 .Returns(513);
+
+            var expectedUpdateParms = new Dictionary<string, object>
+            {
+                {"Batch_ID", 513},
+                {"Currency", null},
+                {"Default_Payment_Type", null}
+            };
+            _ministryPlatformService.Setup(mocked => mocked.UpdateRecord(8080, expectedUpdateParms, It.IsAny<string>()));
             var batchId = _fixture.CreateDonationBatch(batchName, setupDateTime, batchTotalAmount, itemCount, batchEntryType,
                 depositId, finalizedDateTime, processorTransferId);
             Assert.AreEqual(513, batchId);
@@ -161,5 +183,6 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(513, depositId);
             _ministryPlatformService.VerifyAll();
         }
+
     }
 }
