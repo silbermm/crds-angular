@@ -8,12 +8,12 @@ namespace Crossroads.AsyncJobs.Application
 
         public JobProcessorController(JobProcessor jobProcessor)
         {
-            _jobProcessor = jobProcessor;
+            //_jobProcessor = jobProcessor;
         }
 
         public string Get()
         {
-            _jobProcessor.Start();
+            //_jobProcessor.Start();
             return "value";
         }
     }

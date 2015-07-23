@@ -15,10 +15,6 @@ namespace Crossroads.AsyncJobs
             var section = (UnityConfigurationSection)ConfigurationManager.GetSection("unity");
             var container = new UnityContainer();
             section.Configure(container);
-            foreach (var reg in container.Registrations)
-            {
-                Console.WriteLine(reg.Name);
-            }
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
         }
     }

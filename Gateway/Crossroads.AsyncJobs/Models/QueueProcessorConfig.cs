@@ -8,10 +8,5 @@ namespace Crossroads.AsyncJobs.Models
         public string QueueName { get; set; }
         public IMessageFormatter MessageFormatter;
         public IJobExecutor<T> JobExecutor { get; set; }
-
-        public QueueProcessorConfig()
-        {
-            return;
-        }
     }
 }

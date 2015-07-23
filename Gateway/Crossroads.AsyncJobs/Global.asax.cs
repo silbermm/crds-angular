@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Web;
 using System.Web.Http;
@@ -16,10 +15,7 @@ namespace Crossroads.AsyncJobs
             AreaRegistration.RegisterAllAreas();
             UnityConfig.RegisterComponents();
             GlobalConfiguration.Configure(WebApiConfig.Register);
-            Console.WriteLine("Preloading app");
-            ApplicationPreload.Preload();
-            Debugger.Break();
-            Console.WriteLine("Preloaded app");
+            ApplicationPreload.StartJobProcessor();
             XmlConfigurator.Configure(new FileInfo(Server.MapPath("~/Web.config")));
         }
 
@@ -50,7 +46,7 @@ namespace Crossroads.AsyncJobs
 
         protected void Application_End(object sender, EventArgs e)
         {
-
+            ApplicationPreload.StopJobProcessor();
         }
     }
 }
