@@ -133,6 +133,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Messaging" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
@@ -249,8 +250,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Messaging\Contracts\IStripeWebhookService.cs" />
-    <Compile Include="Messaging\StripeWebhookService.cs" />
     <Compile Include="Models\Crossroads\DefaultSourceDTO.cs" />
     <Compile Include="Models\Crossroads\EmailCommunicationDTO.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityCapacityDto.cs" />
@@ -371,9 +370,6 @@
     <None Include="Properties\PublishProfiles\local test.pubxml" />
     <None Include="Properties\PublishProfiles\MPTest01.pubxml" />
     <Content Include="Properties\SlowCheetah\SlowCheetah.Transforms.targets" />
-    <Content Include="StripeEvents.svc">
-      <TransformOnBuild>true</TransformOnBuild>
-    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

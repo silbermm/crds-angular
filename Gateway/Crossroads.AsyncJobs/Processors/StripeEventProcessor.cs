@@ -1,30 +1,30 @@
 ﻿using System;
-using System.ServiceModel;
-using crds_angular.Controllers.API;
-using crds_angular.Messaging.Contracts;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services.Interfaces;
+using Crossroads.AsyncJobs.Interfaces;
+using Crossroads.AsyncJobs.Models;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace crds_angular.Messaging
+namespace Crossroads.AsyncJobs.Processors
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    public class StripeWebhookService : IStripeWebhookService
+    public class StripeEventProcessor : IJobExecutor<StripeEvent>
     {
         private readonly IStripeEventService _stripeEventService;
-        private readonly ILog _logger = LogManager.GetLogger(typeof(StripeWebhookService));
+        private readonly ILog _logger = LogManager.GetLogger(typeof(StripeEventProcessor));
 
-        public StripeWebhookService(IStripeEventService stripeEventService)
+        public StripeEventProcessor(IStripeEventService stripeEventService)
         {
             _stripeEventService = stripeEventService;
         }
 
-        [OperationBehavior(TransactionScopeRequired = true, TransactionAutoComplete = true)]
-        public StripeEventResponseDTO OnWebhookReceived(StripeEvent stripeEvent)
+        public void Execute(JobDetails<StripeEvent> details)
         {
-            StripeEventResponseDTO response = null;
+            var stripeEvent = details.Data;
+
+            _logger.Debug(string.Format("Received event {0} at {1} (queued at {2})", stripeEvent.Type, details.RetrievedDateTime, details.EnqueuedDateTime));
+
             try
             {
                 switch (stripeEvent.Type)
@@ -36,7 +36,7 @@ namespace crds_angular.Messaging
                         _stripeEventService.ChargeFailed(stripeEvent.Created, ParseStripeEvent<StripeCharge>(stripeEvent.Data));
                         break;
                     case "transfer.paid":
-                        response = _stripeEventService.TransferPaid(stripeEvent.Created, ParseStripeEvent<StripeTransfer>(stripeEvent.Data));
+                        _stripeEventService.TransferPaid(stripeEvent.Created, ParseStripeEvent<StripeTransfer>(stripeEvent.Data));
                         break;
                     default:
                         _logger.Debug("Ignoring event " + stripeEvent.Type);
@@ -47,15 +47,7 @@ namespace crds_angular.Messaging
             {
                 var msg = "Unexpected error processing Stripe Event " + stripeEvent.Type;
                 _logger.Error(msg, e);
-                var responseDto = new StripeEventResponseDTO()
-                {
-                    Exception = new ApplicationException(msg, e),
-                    Message = msg
-                };
-                return (responseDto);
             }
-
-            return (response ?? new StripeEventResponseDTO { });
         }
 
         private static T ParseStripeEvent<T>(StripeEventData data)

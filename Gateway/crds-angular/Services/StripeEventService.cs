@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using crds_angular.Controllers.API;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services.Interfaces;
 using log4net;
-using Newtonsoft.Json;
 using Crossroads.Utilities.Interfaces;
 using System.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace crds_angular.Services
 {
 
-    public class StripeEventService
+    public class StripeEventService : IStripeEventService
     {
         private readonly ILog _logger = LogManager.GetLogger(typeof(StripeEventController));
         private readonly IPaymentService _paymentService;
@@ -142,5 +141,63 @@ namespace crds_angular.Services
 
             return (response);
         }
+
+        public StripeEventResponseDTO ProcessStripeEvent(StripeEvent stripeEvent)
+        {
+            StripeEventResponseDTO response = null;
+            switch (stripeEvent.Type)
+            {
+                case "charge.succeeded":
+                    ChargeSucceeded(stripeEvent.Created, ParseStripeEvent<StripeCharge>(stripeEvent.Data));
+                    break;
+                case "charge.failed":
+                    ChargeFailed(stripeEvent.Created, ParseStripeEvent<StripeCharge>(stripeEvent.Data));
+                    break;
+                case "transfer.paid":
+                    response = TransferPaid(stripeEvent.Created, ParseStripeEvent<StripeTransfer>(stripeEvent.Data));
+                    break;
+                default:
+                    _logger.Debug("Ignoring event " + stripeEvent.Type);
+                    break;
+            }
+            return (response);
+        }
+
+        private static T ParseStripeEvent<T>(StripeEventData data)
+        {
+            var jObject = data != null && data.Object != null ? data.Object as JObject : null;
+            return jObject != null ? JsonConvert.DeserializeObject<T>(jObject.ToString()) : (default(T));
+        }
+    }
+
+    // ReSharper disable once InconsistentNaming
+    public class StripeEventResponseDTO
+    {
+        [JsonProperty("message")]
+        public string Message { get; set; }
+
+        [JsonProperty("exception")]
+        public ApplicationException Exception { get; set; }
+    }
+
+    // ReSharper disable once InconsistentNaming
+    public class TransferPaidResponseDTO : StripeEventResponseDTO
+    {
+        [JsonProperty("transaction_count")]
+        public int TotalTransactionCount { get; set; }
+
+        [JsonProperty("successful_updates")]
+        public List<string> SuccessfulUpdates { get { return (_successfulUpdates); } }
+        private readonly List<string> _successfulUpdates = new List<string>();
+
+        [JsonProperty("failed_updates")]
+        public List<KeyValuePair<string, string>> FailedUpdates { get { return (_failedUpdates); } }
+        private readonly List<KeyValuePair<string, string>> _failedUpdates = new List<KeyValuePair<string, string>>();
+
+        [JsonProperty("donation_batch")]
+        public DonationBatchDTO Batch;
+
+        [JsonProperty("deposit")]
+        public DepositDTO Deposit;
     }
 }
