@@ -126,7 +126,7 @@ namespace MinistryPlatform.Translation.Services
             }
             catch (Exception e)
             {
-                logger.Debug(string.Format("Failed when processing the template for Donation Id: {0}", donationId));
+                logger.Error(string.Format("Failed when processing the template for Donation Id: {0}", donationId));
             }
 
             return donationDistributionId;
