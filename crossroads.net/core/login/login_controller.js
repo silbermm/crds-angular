@@ -36,6 +36,7 @@
 
     $scope.logout = function() {
         $state.go('logout');
+        clearCredentials();
     };
 
     $scope.login = function () {
@@ -51,6 +52,7 @@
             AuthService.login($scope.credentials).then(function (user) {
                 $scope.processing = false;
                 $scope.loginShow = false;
+                clearCredentials();
                 $timeout(function() {
                     if (Session.hasRedirectionInfo()) {
                         var url = Session.exists('redirectUrl');
@@ -74,5 +76,15 @@
             });
         }
     };
-  }
+  
+
+    function clearCredentials() {
+        if ($scope.credentials !== undefined) {
+            // TODO Added to debug/research US1403 - should remove after issue is resolved
+            console.log('US1403: clearing credentials defined in login_controller');
+            $scope.credentials.username = undefined;
+            $scope.credentials.password = undefined;
+        }
+    }
+};
 })();
