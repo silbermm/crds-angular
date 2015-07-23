@@ -36,7 +36,7 @@
 
     $scope.logout = function() {
         $state.go('logout');
-        clearCredentials();
+        //clearCredentials();
     };
 
     $scope.login = function () {

@@ -210,11 +210,15 @@
       return vm.groups.length < 1 || totalServeTimesLength() === 0;
     }
 
-    function stateChangeStart(event, next, current) {
+    function stateChangeStart(event, toState, toParams, fromState, fromParams) {
+      console.log('US1403: stateChangeStart event handler in myserve (' + 
+                fromState.name + '->' + toState.name + '), session active, in core.run');
+
       if ($scope.serveForm !== undefined) {
         checkChildForms();
         if ($scope['serveForm'].$dirty) {
           if(!$window.confirm('Are you sure you want to leave this page?')) {
+            console.log('US1403: preventing default');
             event.preventDefault();
           }
         }

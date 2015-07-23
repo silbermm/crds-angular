@@ -29,6 +29,9 @@
         }
 
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+           console.log('US1403: stateChangeStart event handler (' + 
+            fromState.name + '->' + toState.name + '), do not yet know if session active, in core.run');
+
            if (fromState.name === 'logout') {
             $cookies.remove('sessionId');
            }
