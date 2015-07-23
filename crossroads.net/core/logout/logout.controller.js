@@ -20,11 +20,6 @@
             $scope.credentials.password = undefined;
         }
         $rootScope.username = undefined;
-
-        // if ($state.current === undefined || $state.current.data === undefined || !$state.current.data.isProtected) {
-        //     // not currently on a protected page, so don't redirect to home page
-        //     $event.preventDefault();
-        // }
     }
   }
 })();

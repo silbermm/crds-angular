@@ -31,15 +31,12 @@
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
            if (fromState.name === 'logout') {
             $cookies.remove('sessionId');
-             // console.log('US1403: stateChangeStart event handler (' + 
-             //    fromState.name + '->' + toState.name + '), from logout');
-             // clearAndRedirect(event, toState, toParams);
            }
            if (Session.isActive()) {
             if (toState.name !== 'logout') {
               // TODO Added to debug/research US1403 - should remove after issue is resolved
               console.log('US1403: stateChangeStart event handler (' + 
-                fromState.name + '->' + toState.name + '), session active, in app.run');
+                fromState.name + '->' + toState.name + '), session active, in core.run');
               $http({
                 method: 'GET',
                 url :__API_ENDPOINT__ + 'api/authenticated',
@@ -48,20 +45,20 @@
                   'Authorization': $cookies.get('sessionId')
                 }}).success(function (user) {
                     // TODO Added to debug/research US1403 - should remove after issue is resolved
-                    console.log('US1403: stateChangeStart event handler, successful call to api/authenticated in app.run');
+                    console.log('US1403: stateChangeStart event handler, successful call to api/authenticated in core.run');
                     $rootScope.userid = user.userId;
                     $rootScope.username = user.username;
                     $rootScope.roles = user.roles;
                 }).error(function (e) {
                     // TODO Added to debug/research US1403 - should remove after issue is resolved
-                    console.log('US1403: stateChangeStart event handler, failed call to api/authenticated in app.run');
+                    console.log('US1403: stateChangeStart event handler, failed call to api/authenticated in core.run');
                     clearAndRedirect(event, toState, toParams);
                 });
             }
             } else if (toState.data !== undefined && toState.data.isProtected) {
                 // TODO Added to debug/research US1403 - should remove after issue is resolved
                 console.log('US1403: stateChangeStart event handler (' + 
-                    fromState.name + '->' + toState.name + '), no session w/protected data, in app.run');
+                    fromState.name + '->' + toState.name + '), no session w/protected data, in core.run');
                 clearAndRedirect(event, toState, toParams);
         }
         });
