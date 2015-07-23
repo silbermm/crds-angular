@@ -36,6 +36,7 @@
              // clearAndRedirect(event, toState, toParams);
            }
            if (Session.isActive()) {
+            if (toState.name !== 'logout') {
               // TODO Added to debug/research US1403 - should remove after issue is resolved
               console.log('US1403: stateChangeStart event handler (' + 
                 fromState.name + '->' + toState.name + '), session active, in app.run');
@@ -56,12 +57,13 @@
                     console.log('US1403: stateChangeStart event handler, failed call to api/authenticated in app.run');
                     clearAndRedirect(event, toState, toParams);
                 });
+            }
             } else if (toState.data !== undefined && toState.data.isProtected) {
                 // TODO Added to debug/research US1403 - should remove after issue is resolved
                 console.log('US1403: stateChangeStart event handler (' + 
                     fromState.name + '->' + toState.name + '), no session w/protected data, in app.run');
                 clearAndRedirect(event, toState, toParams);
-            }
+        }
         });
     }
 })();

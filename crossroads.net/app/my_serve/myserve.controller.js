@@ -211,10 +211,12 @@
     }
 
     function stateChangeStart(event, next, current) {
-      checkChildForms();
-      if ($scope['serveForm'].$dirty) {
-        if(!$window.confirm('Are you sure you want to leave this page?')) {
-          event.preventDefault();
+      if ($scope.serveForm !== undefined) {
+        checkChildForms();
+        if ($scope['serveForm'].$dirty) {
+          if(!$window.confirm('Are you sure you want to leave this page?')) {
+            event.preventDefault();
+          }
         }
       }
     }
