@@ -17,7 +17,6 @@ namespace crds_angular.Services
         private readonly ILog _logger = LogManager.GetLogger(typeof(StripeEventController));
         private readonly IPaymentService _paymentService;
         private readonly IDonationService _donationService;
-        private readonly bool _liveMode;
         private readonly int _donationStatusDeclined;
         private readonly int _donationStatusDeposited;
         private readonly int _donationStatusSucceeded;
@@ -30,9 +29,6 @@ namespace crds_angular.Services
         {
             _paymentService = paymentService;
             _donationService = donationService;
-
-            var b = configuration.GetConfigValue("StripeWebhookLiveMode");
-            _liveMode = b != null && bool.Parse(b);
 
             _donationStatusDeclined = configuration.GetConfigIntValue("DonationStatusDeclined");
             _donationStatusDeposited = configuration.GetConfigIntValue("DonationStatusDeposited");

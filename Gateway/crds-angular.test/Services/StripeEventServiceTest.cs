@@ -26,26 +26,11 @@ namespace crds_angular.test.Services
             configuration.Setup(mocked => mocked.GetConfigIntValue("DonationStatusDeposited")).Returns(999);
             configuration.Setup(mocked => mocked.GetConfigIntValue("DonationStatusSucceeded")).Returns(888);
             configuration.Setup(mocked => mocked.GetConfigIntValue("DonationStatusDeclined")).Returns(777);
-            configuration.Setup(mocked => mocked.GetConfigValue("StripeWebhookLiveMode")).Returns("true");
             configuration.Setup(mocked => mocked.GetConfigIntValue("BatchEntryTypePaymentProcessor")).Returns(555);
 
             _paymentService = new Mock<IPaymentService>(MockBehavior.Strict);
             _donationService = new Mock<IDonationService>(MockBehavior.Strict);
             _fixture = new StripeEventService(_paymentService.Object, _donationService.Object, configuration.Object);
-        }
-
-        [Test]
-        public void TestProcessStripeEventLiveModeMismatch()
-        {
-            var e = new StripeEvent
-            {
-                LiveMode = false
-            };
-
-            var result = _fixture.ProcessStripeEvent(e);
-            Assert.IsInstanceOf<OkResult>(result);
-            _paymentService.VerifyAll();
-            _donationService.VerifyAll();
         }
 
         [Test]
@@ -79,7 +64,7 @@ namespace crds_angular.test.Services
                 }
             };
 
-            _donationService.Setup(mocked => mocked.UpdateDonationStatus("9876", 888, e.Created, null));
+            _donationService.Setup(mocked => mocked.UpdateDonationStatus("9876", 888, e.Created, null)).Returns(123);
             Assert.IsNull(_fixture.ProcessStripeEvent(e));
             _paymentService.VerifyAll();
             _donationService.VerifyAll();
@@ -104,8 +89,8 @@ namespace crds_angular.test.Services
                 }
             };
 
-            _donationService.Setup(mocked => mocked.UpdateDonationStatus("9876", 777, e.Created, "invalid_routing_number: description from stripe"));
-
+            _donationService.Setup(mocked => mocked.UpdateDonationStatus("9876", 777, e.Created, "invalid_routing_number: description from stripe")).Returns(123);
+            _donationService.Setup(mocked => mocked.ProcessDeclineEmail("9876"));
             Assert.IsNull(_fixture.ProcessStripeEvent(e));
             _paymentService.VerifyAll();
             _donationService.VerifyAll();
