@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Messaging;
+using crds_angular.Models.Crossroads.Stewardship;
 using Crossroads.Utilities.Messaging;
 using NUnit.Framework;
 
@@ -50,6 +51,31 @@ namespace crds_angular.test.IntegrationTests
 
             Assert.AreEqual(dto.Property1, receivedDto.Property1);
             Assert.AreEqual(dto.Property2, receivedDto.Property2);
+        }
+
+        [Test]
+        public void SendToWcfService()
+        {
+            var evt = new StripeEvent
+            {
+                Type = "transfer.paid",
+                Data = new StripeEventData
+                {
+                    Object = new StripeTransfer
+                    {
+                        Amount = 12345,
+                        Id = "102030"
+                    }
+                }
+            };
+            //var mq = new MessageQueue(@"DIRECT=OS:ing029-hp\private$\Crossroads.StripeEventsService/StripeEvents.svc", QueueAccessMode.Send);
+            var message = new Message
+            {
+                Body = evt,
+                Formatter = new JsonMessageFormatter()
+            };
+            _sender.Send(message);
+
         }
     }
 

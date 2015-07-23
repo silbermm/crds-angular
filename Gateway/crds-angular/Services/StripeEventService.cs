@@ -54,6 +54,7 @@ namespace crds_angular.Services
                 .Append(": ")
                 .Append(charge.FailureMessage ?? "No Stripe Failure Message");
             _donationService.UpdateDonationStatus(charge.Id, _donationStatusDeclined, eventTimestamp, notes.ToString());
+            _donationService.ProcessDeclineEmail(charge.Id);
         }
 
         public TransferPaidResponseDTO TransferPaid(DateTime? eventTimestamp, StripeTransfer transfer)
