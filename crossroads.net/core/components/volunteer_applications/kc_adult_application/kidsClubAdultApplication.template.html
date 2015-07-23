@@ -65,13 +65,20 @@
 
       <div class="form-group col-sm-6">
         <label class="block">Marital Status</label>
-        <select class="form-control col-sm-12" name="maritalStatus" ng-model="kcAdultApplication.volunteer.maritalStatusId" disabled="true">
+        <!-- <select class="form-control col-sm-12" name="maritalStatus" ng-model="kcAdultApplication.volunteer.maritalStatusId" disabled="true" convert-to-number>
           <option></option>
           <option value="1">Single</option>
           <option value="3">Divorced</option>
           <option value="6">Separated</option>
           <option value="4">Widowed</option>
           <option value="2">Married</option>
+        </select> -->
+        <pre>{{ kcAdultApplication.maritialStati() }}</pre>
+        <pre>{{ kcAdultApplication.volunteer.maritalStatusId }}</pre>
+        <select class="form-control col-sm-12" name="maritalStatus" 
+                ng-model="kcAdultApplication.volunteer.maritalStatusId" 
+                ng-options="m.label for m in kcAdultApplication.maritialStati() track by m.value">
+          <option value=""></option>
         </select>
       </div>
     </div>
