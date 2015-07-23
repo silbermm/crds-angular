@@ -17,17 +17,40 @@
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'volunteerRouteType', /\/volunteer-sign-up\/.*$/);
 
     $stateProvider
+      .state('noSideBar',{
+        abstract:true,
+        templateUrl: 'core/templates/noSideBar.html'
+      })
+      .state('leftSideBar',{
+        abstract:true,
+        templateUrl: 'core/templates/leftSideBar.html'
+      })
+      .state('rightSideBar',{
+        abstract:true,
+        templateUrl: 'core/templates/rightSideBar.html'
+      })
+      .state('screenWidth',{
+        abstract:true,
+        templateUrl: 'core/templates/screenWidth.html'
+      })
+      .state('noHeaderOrFooter',{
+        abstract:true,
+        templateUrl: 'core/templates/noHeaderOrFooter.html'
+      })
       .state('home', {
+        parent: 'noSideBar',
         url: '/',
         templateUrl: 'home/home.html',
         controller: 'HomeCtrl'
       })
       .state('homealso', {
+        parent: 'noSideBar',
         url: '/home',
         templateUrl: 'home/home.html',
         controller: 'HomeCtrl'
       })
       .state('login', {
+        parent: 'noSideBar',
         url: '/login',
         templateUrl: 'login/login_page.html',
         controller: 'LoginCtrl',
@@ -36,11 +59,13 @@
         }
       })
       .state('register', {
+        parent: 'noSideBar',
         url: '/register',
         templateUrl: 'register/register_form.html',
         controller: 'RegisterCtrl'
       })
       .state('profile', {
+        parent: 'noSideBar',
         url: '/profile',
         resolve: {
           loggedin: crds_utilities.checkLoggedin
@@ -78,6 +103,7 @@
         }
       })
       .state('myprofile', {
+        parent: 'noSideBar',
         url: '/myprofile',
         controller: 'MyProfileCtrl as myProfile',
         templateUrl: 'myprofile/myprofile.html',
@@ -88,61 +114,73 @@
           loggedin: crds_utilities.checkLoggedin
         }
       })
-      .state("mytrips", {
-        url: "/mytrips",
-        templateUrl: "mytrips/mytrips.html"
+      .state('mytrips', {
+        parent: 'noSideBar',
+        url: '/mytrips',
+        templateUrl: 'mytrips/mytrips.html'
       })
-      .state("media", {
-        url: "/media",
-        controller: "MediaCtrl as media",
-        templateUrl: "media/view-all.html"
+      .state('media', {
+        parent: 'noSideBar',
+        url: '/media',
+        controller: 'MediaCtrl as media',
+        templateUrl: 'media/view-all.html'
       })
-      .state("media-music", {
-        url: "/media/music",
-        controller: "MediaCtrl as media",
-        templateUrl: "media/view-all-music.html"
+      .state('media-music', {
+        parent: 'noSideBar',
+        url: '/media/music',
+        controller: 'MediaCtrl as media',
+        templateUrl: 'media/view-all-music.html'
       })
-      .state("media-messages", {
-        url: "/media/messages",
-        controller: "MediaCtrl as media",
-        templateUrl: "media/view-all-messages.html"
+      .state('media-messages', {
+        parent: 'noSideBar',
+        url: '/media/messages',
+        controller: 'MediaCtrl as media',
+        templateUrl: 'media/view-all-messages.html'
       })
-      .state("media-videos", {
-        url: "/media/videos",
-        controller: "MediaCtrl as media",
-        templateUrl: "media/view-all-videos.html"
+      .state('media-videos', {
+        parent: 'noSideBar',
+        url: '/media/videos',
+        controller: 'MediaCtrl as media',
+        templateUrl: 'media/view-all-videos.html'
       })
-      .state("media-series-single", {
-        url: "/media/series/single",
-        controller: "MediaCtrl as media",
-        templateUrl: "media/series-single.html"
+      .state('media-series-single', {
+        parent: 'noSideBar',
+        url: '/media/series/single',
+        controller: 'MediaCtrl as media',
+        templateUrl: 'media/series-single.html'
       })
-      .state("media-series-single-lo-res", {
-        url: "/media/series/single/lores",
-        controller: "MediaCtrl as media",
-        templateUrl: "media/series-single-lo-res.html"
+      .state('media-series-single-lo-res', {
+        parent: 'noSideBar',
+        url: '/media/series/single/lores',
+        controller: 'MediaCtrl as media',
+        templateUrl: 'media/series-single-lo-res.html'
       })
-      .state("media-single", {
-        url: "/media/single",
-        controller: "MediaCtrl as media",
-        templateUrl: "media/media-single.html"
+      .state('media-single', {
+        parent: 'screenWidth',
+        url: '/media/single',
+        controller: 'MediaCtrl as media',
+        templateUrl: 'media/media-single.html'
       })
-      .state("blog", {
-        url: "/blog",
-        controller: "BlogCtrl as blog",
-        templateUrl: "blog/blog-index.html"
+      .state('blog', {
+        parent: 'noSideBar',
+        url: '/blog',
+        controller: 'BlogCtrl as blog',
+        templateUrl: 'blog/blog-index.html'
       })
-      .state("blog-post", {
-        url: "/blog/post",
-        controller: "BlogCtrl as blog",
-        templateUrl: "blog/blog-post.html"
+      .state('blog-post', {
+        parent: 'noSideBar',
+        url: '/blog/post',
+        controller: 'BlogCtrl as blog',
+        templateUrl: 'blog/blog-post.html'
       })
-      .state("adbox", {
-        url: "/adbox",
-        controller: "AdboxCtrl as adbox",
-        templateUrl: "adbox/adbox-index.html"
+      .state('adbox', {
+        parent: 'noSideBar',
+        url: '/adbox',
+        controller: 'AdboxCtrl as adbox',
+        templateUrl: 'adbox/adbox-index.html'
       })
       .state('serve-signup', {
+        parent: 'noSideBar',
         url: '/serve-signup',
         controller: 'MyServeController as serve',
         templateUrl: 'my_serve/myserve.html',
@@ -161,15 +199,18 @@
         }
       })
       .state('styleguide', {
+        parent: 'noSideBar',
         url: '/styleguide',
         controller: 'StyleguideCtrl as styleguide',
         templateUrl: 'styleguide/styleguide.html'
       })
       .state('thedaily', {
+        parent: 'noSideBar',
         url: '/thedaily',
         templateUrl: 'thedaily/thedaily.html'
       })
       .state('give', {
+        parent: 'noSideBar',
         url: '/give',
         controller: 'GiveCtrl as give',
         templateUrl: 'give/give.html',
@@ -200,23 +241,26 @@
       .state('give.account', {
         templateUrl: 'give/account.html'
       })
-      .state("give.change", {
-        templateUrl: "give/change.html"
+      .state('give.change', {
+        templateUrl: 'give/change.html'
       })
       .state('give.thank-you', {
         templateUrl: 'give/thank_you.html'
       })
       //Not a child route of give because I did not want to use the parent give template
       .state('history', {
+        parent: 'noSideBar',
         url: '/give/history',
         templateUrl: 'give/history.html'
       })
       .state('demo', {
+        parent: 'noSideBar',
         //abstract: true,
         url: '/demo',
         template: '<p>demo</p>'
       })
       .state('tripgiving', {
+        parent: 'noSideBar',
         url: '/tripgiving',
         controller: 'TripGivingCtrl as tripsearch',
         templateUrl: 'tripgiving/tripgiving.html',
@@ -230,68 +274,83 @@
         }
       })
       .state('go_trip_giving_results', {
+        parent: 'noSideBar',
         url: '/go_trip_giving_results',
         controller: 'TripGivingCtrl as gotripresults',
         templateUrl: 'tripgiving/tripgivingresults.html'
       })
       .state('/demo/guest-giver', {
+        parent: 'noSideBar',
         url: '/demo/guest-giver',
         templateUrl: 'guest_giver/give.html'
       })
       .state('/demo/guest-giver/login', {
+        parent: 'noSideBar',
         url: '/demo/guest-giver/login',
         templateUrl: 'guest_giver/give-login.html'
       })
       .state('/demo/guest-giver/login-guest', {
+        parent: 'noSideBar',
         url: '/demo/guest-giver/login-guest',
         controller: 'GiveCtrl as give',
         templateUrl: 'guest_giver/give-login-guest.html'
       })
       .state('/demo/guest-giver/give-confirmation', {
+        parent: 'noSideBar',
         url: '/demo/guest-giver/confirmation',
         templateUrl: 'guest_giver/give-confirmation.html'
       })
       .state('/demo/guest-giver/give-register', {
+        parent: 'noSideBar',
         url: '/demo/guest-giver/register',
         templateUrl: 'guest_giver/give-register.html'
       })
       .state('/demo/guest-giver/give-logged-in-bank-info', {
+        parent: 'noSideBar',
         url: '/demo/guest-giver/logged-in-bank-info',
         controller: 'GiveCtrl as give',
         templateUrl: 'guest_giver/give-logged-in-bank-info.html'
       })
       .state('/demo/guest-giver/give-confirm-amount', {
+        parent: 'noSideBar',
         url: '/demo/guest_giver/give-confirm-amount',
         templateUrl: 'guest_giver/give-confirm-amount.html'
       })
       .state('/demo/guest-giver/give-change-information', {
+        parent: 'noSideBar',
         url: '/demo/guest_giver/give-change-information',
         controller: 'GiveCtrl as give',
         templateUrl: 'guest_giver/give-change-information.html'
       })
       .state('/demo/logged-in-giver/existing-giver', {
+        parent: 'noSideBar',
         url: '/demo/logged-in-giver/existing-giver',
         templateUrl: 'guest_giver/give-logged-in.html'
       })
       .state('/demo/logged-in-giver/change-information', {
+        parent: 'noSideBar',
         url: '/demo/logged-in-giver/change-information',
         controller: 'GiveCtrl as give',
         templateUrl: 'guest_giver/give-change-information-logged-in.html'
       })
       .state('/demo/logged-in-giver/new-giver', {
+        parent: 'noSideBar',
         url: '/demo/logged-in-giver/new-giver',
         templateUrl: 'guest_giver/give-logged-in-new-giver.html'
       })
       .state('/demo/go-trip-giving', {
+        parent: 'noSideBar',
         url: '/demo/go-trip-giving',
         templateUrl: 'trip_giving/give.html'
       })
       .state('search', {
+        parent: 'noSideBar',
         url: '/search-results',
         controller: 'SearchCtrl as search',
         templateUrl: 'search/search-results.html'
       })
       .state('community-groups-signup', {
+        parent: 'noSideBar',
         url: '{link:signupRouteType}',
         controller: 'GroupSignupController as groupsignup',
         templateUrl: 'community_groups_signup/group_signup_form.html',
@@ -303,6 +362,7 @@
         }
       })
       .state('volunteer-request', {
+        parent: 'noSideBar',
         url: '{link:volunteerRouteType}',
         controller: 'VolunteerController as volunteer',
         templateUrl: 'volunteer_signup/volunteer_signup_form.html',
@@ -320,6 +380,7 @@
         }
       })
       .state('volunteer-application', {
+        parent: 'noSideBar',
         url: '/volunteer-application/:appType/:id',
         controller: 'VolunteerApplicationController as volunteer',
         templateUrl: 'volunteer_application/volunteerApplicationForm.html',
@@ -349,7 +410,7 @@
                         contact, cmsInfo
                       });
                     }
-                  )
+                  );
               });
             return deferred.promise;
           },
@@ -362,14 +423,17 @@
         }
       })
       .state('errors/404', {
+        parent: 'noSideBar',
         url: '/errors/404',
         templateUrl: 'errors/404.html'
       })
       .state('errors/500', {
+        parent: 'noSideBar',
         url: '/errors/500',
         templateUrl: 'errors/500.html'
       })
       .state('tools', {
+        parent: 'noSideBar',
         abstract: true,
         url: '/mptools',
         templateUrl: 'mp_tools/tools.html',
@@ -413,10 +477,13 @@
         }
       })
       .state('content', {
+        parent: 'noSideBar',
         // This url will match a slash followed by anything (including additional slashes).
         url: '{link:contentRouteType}',
         controller: 'ContentCtrl',
-        templateUrl: 'content/content.html'
+        templateUrl: function(){
+            return 'content/content.html';
+        }
       });
     //Leave the comment below.  Once we have a true 404 page hosted in the same domain, this is how we
     //will handle the routing.
