@@ -172,12 +172,6 @@
     <Content Include="MinistryPlatform.Integration.config">
       <DependentUpon>MinistryPlatform.config</DependentUpon>
     </Content>
-    <Content Include="MinistryPlatform.local test.config">
-      <DependentUpon>MinistryPlatform.config</DependentUpon>
-    </Content>
-    <Content Include="MinistryPlatform.MPTest01.config">
-      <DependentUpon>MinistryPlatform.config</DependentUpon>
-    </Content>
     <Content Include="MinistryPlatform.Release.config">
       <DependentUpon>MinistryPlatform.config</DependentUpon>
     </Content>
@@ -185,6 +179,12 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Demo.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Integration.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
@@ -238,7 +238,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
