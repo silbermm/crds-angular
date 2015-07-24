@@ -11,9 +11,31 @@
     </div>
 
     <br/><p><b><h2 class="page-header">Trip Preferences</h2></b></p>
-    <p>Do you have friends signing up that you would like to experience this trip with?  If yes, everyone in your group should enter a common participant name through which you have all agreed to be connected.  This is how we will know to treat you as a group.  For example, if Jim Smith, Sarah Johnson and Kerry Moore all want to travel together, they can all enter "Jim Smith" in this section and Jim will be the common link for the group.</p>
-
+   
     <form role="form">
+      <div class="form-group col-sm-6" ng-controller="crdsDatePickerCtrl">
+        <label class="control-label">Preferred Trip Date</label>        
+        <input type="text" class="form-control" id="tripDate" placeholder="mm/dd/yyyy">
+      </div><br><br><br><br>
+      <div class="form-group col-md-12">
+       <p>Do you have friends signing up that you would like to experience this trip with?  If yes, everyone in your group should enter a common participant name through which you have all agreed to be connected.  This is how we will know to treat you as a group.  For example, if Jim Smith, Sarah Johnson and Kerry Moore all want to travel together, they can all enter "Jim Smith" in this section and Jim will be the common link for the group. Note:  If you are the one common name, you will still need to enter your name in this section. </p>
+      </div>   
+      <div class="form-group col-sm-6">
+        <label class="control-label">Common Name</label>
+        <input type="text" class="form-control" id="commonName">
+      </div>
+
+      <div class="form-group col-md-12">
+
+       <p>Everybody on the trip gets a roommate.  Married co-ed couples may room together, otherwise you and your significant other get split up for the trip (no shacking up on Crossroads time). </p>
+      </div>   
+      <div class="form-group col-sm-6">
+        <label class="control-label">Who are your roommate choices?</label>
+        <input type="text" class="form-control" id="mateNameOne">
+        <input type="text" class="form-control" id="mateNameTwo">
+      </div>
+
+
       <a ui-sref="go-south-africa-signup-page-4" class="btn btn-primary pull-right">Continue</a>
       <a ui-sref="go-south-africa-signup-page-2" class="btn btn-primary pull-right">Back</a>
     </form>
