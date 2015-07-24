@@ -37,17 +37,17 @@ namespace Crossroads.AsyncJobs.Application
                     if (message == null)
                     {
                         _logger.Error("Received message was null");
-                        return;
+                        continue;
                     }
                     else if (message.Body == null)
                     {
                         _logger.Error("Received message did not have a body, Id: " + message.Id);
-                        return;
+                        continue;
                     }
                     else if (message.Body.GetType() != GetType().GetGenericArguments()[0])
                     {
                         _logger.Error(string.Format("Received message body type ({0}) did not match expected {1}", message.Body.GetType(), GetType().GetGenericArguments()[0].BaseType));
-                        return;
+                        continue;
                     }
 
                     var details = new JobDetails<T>
@@ -56,10 +56,14 @@ namespace Crossroads.AsyncJobs.Application
                         EnqueuedDateTime = message.ArrivedTime,
                         RetrievedDateTime = DateTime.Now
                     };
-                    ThreadPool.QueueUserWorkItem(delegate
+                    try
                     {
                         _config.JobExecutor.Execute(details);
-                    });
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.Error("Error in worker", e);
+                    }
                 }
             });
         }
