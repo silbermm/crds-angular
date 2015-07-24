@@ -11,5 +11,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         void AddDonationToBatch(int batchId, int donationId);
         void ProcessDeclineEmail(string processorPaymentId);
         int CreateDeposit(string depositName, decimal depositTotalAmount, DateTime depositDateTime, string accountNumber, int batchCount, bool exported, string notes, string processorTransferId);
+        void CreatePaymentProcessorEventError(DateTime? eventDateTime, string eventId, string eventType,
+            string eventMessage, string responseMessage);
     }
 }
