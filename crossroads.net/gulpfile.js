@@ -98,7 +98,8 @@ gulp.task("webpack-dev-server", ["icons-watch"], function(callback) {
 	});
 
 	new WebpackDevServer(webpack(webPackConfigs), {
-			publicPath: "/assets/",
+	        historyApiFallback: true,
+		    publicPath: "/assets/",
 			quiet: false,
 			watchDelay: 300,
 			stats: {
