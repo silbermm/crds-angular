@@ -10,6 +10,32 @@
     '$locationProvider',
     'CurrentPageProvider'
   ];
+  function templateProviderFactory(){
+    return function($templateFactory, $rootScope, $location, $stateParams, $state, Page, CurrentPage) {
+      debugger
+      var promise = Page.get({ url: $location.url() }).$promise;
+      $rootScope.page = {};
+      return promise.then(function(promise) {
+        if (promise.pages.length > 0) {
+          $rootScope.page = promise.pages[0];
+        } else {
+          var notFoundRequest = Page.get({ url: 'page-not-found' }, function() {
+            if (notFoundRequest.pages.length > 0) {
+              $rootScope.page.renderedContent = notFoundRequest.pages[0].renderedContent;
+            } else {
+              $rootScope.page.renderedContent = '404 Content not found';
+            }
+          });
+        }
+        switch($rootScope.page.pageType){
+          case 'noHeaderOrFooter':
+            return $templateFactory.fromUrl('core/templates/noHeaderOrFooter.html');
+          default:
+            return $templateFactory.fromUrl('core/templates/noSideBar.html');
+        }
+      });
+    };
+  }
 
   function AppConfig($stateProvider,
     $urlRouterProvider,
@@ -482,33 +508,20 @@
 
         }
       })
-      .state('content', {
-        // This url will match a slash followed by anything (including additional slashes).
-        url: '{link:contentRouteType}',
+      .state('contentParent', {
+        abstract:true,
         controller: 'ContentCtrl',
-        templateProvider: function($templateFactory, $rootScope, $stateParams, Page, CurrentPage) {
-          var promise = Page.get({ url: $stateParams.link }).$promise;
-          $rootScope.page = {};
-          promise.then(function(promise) {
-            if (promise.pages.length > 0) {
-              $rootScope.page = promise.pages[0];
-            } else {
-              var notFoundRequest = Page.get({ url: 'page-not-found' }, function() {
-                if (notFoundRequest.pages.length > 0) {
-                  $rootScope.page.renderedContent = notFoundRequest.pages[0].renderedContent;
-                } else {
-                  $rootScope.page.renderedContent = '404 Content not found';
-                }
-              });
-            }
-          });
-          return $templateFactory.fromUrl('core/templates/noSideBar.html');
+        templateProvider: templateProviderFactory()
+      })
+      .state('content',{
+        parent: 'contentParent',
+        url: '{link:contentRouteType}',
+        // This url will match a slash followed by anything (including additional slashes).
+        views: {
+          '@contentParent': {
+            templateUrl: 'content/content.html'
+          }
         }
-        // views: {
-        //   'left': {
-        //     template: 'content/content.html'
-        //   }
-        // }
       });
     //Leave the comment below.  Once we have a true 404 page hosted in the same domain, this is how we
     //will handle the routing.
