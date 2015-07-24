@@ -39,7 +39,7 @@ namespace crds_angular.Controllers.API
             try{
                 var contactId = _authenticationService.GetContactId(token);
                 var donor = _mpDonorService.GetContactDonor(contactId);
-                var charge = _stripeService.ChargeCustomer(donor.ProcessorId, dto.Amount, donor.DonorId, dto.PaymentType);
+                var charge = _stripeService.ChargeCustomer(donor.ProcessorId, dto.Amount, donor.DonorId);
                 var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
 
                 var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount, fee, donor.DonorId, dto.ProgramId, charge.Id, dto.PaymentType, donor.ProcessorId, DateTime.Now, true);
@@ -69,7 +69,7 @@ namespace crds_angular.Controllers.API
             try
             {
                 var donor = _gatewayDonorService.GetContactDonorForEmail(dto.EmailAddress);
-                var charge = _stripeService.ChargeCustomer(donor.ProcessorId, dto.Amount, donor.DonorId, dto.PaymentType);
+                var charge = _stripeService.ChargeCustomer(donor.ProcessorId, dto.Amount, donor.DonorId);
                 var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
 
                 var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount, fee, donor.DonorId, dto.ProgramId, charge.Id, dto.PaymentType, donor.ProcessorId, DateTime.Now, false);

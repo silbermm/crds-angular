@@ -131,7 +131,7 @@ namespace crds_angular.Services
             return defaultSource;
         }
 
-        public StripeCharge ChargeCustomer(string customerToken, int amount, int donorId, string paymentType)
+        public StripeCharge ChargeCustomer(string customerToken, int amount, int donorId)
         {
             var request = new RestRequest("charges", Method.POST);
             request.AddParameter("amount", amount * 100);

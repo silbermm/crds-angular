@@ -32,7 +32,9 @@ namespace crds_angular.Services
                     ParticipantId = x.Key.ParticipantId,
                     Email = x.Key.EmailAddress,
                     Lastname = x.Key.Lastname,
-                    Nickname = x.Key.Nickname
+                    Nickname = x.Key.Nickname,
+                    ShowGiveButton = true,
+                    ShowShareButtons = false
                 }).ToDictionary(y => y.ParticipantId);
 
             foreach (var result in results)
@@ -45,7 +47,6 @@ namespace crds_angular.Services
                 tp.EventStart = result.EventStartDate.ToString("MMM dd, yyyy");
                 tp.EventTitle = result.EventTitle;
                 tp.EventType = result.EventType;
-
                 var participant = participants[result.ParticipantId];
                 participant.Trips.Add(tp);                
             }
