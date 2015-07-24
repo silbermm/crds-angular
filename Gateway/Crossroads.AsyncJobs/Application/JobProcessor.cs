@@ -6,8 +6,10 @@ namespace Crossroads.AsyncJobs.Application
     public class JobProcessor : IRegisteredObject
     {
         private readonly IQueueProcessor[] _queueProcessors;
-        private bool _started;
+        public bool IsRunning { get; private set; }
+
         private readonly object _lockObject = new object();
+
 
         public JobProcessor(IQueueProcessor[] processors)
         {
@@ -19,11 +21,11 @@ namespace Crossroads.AsyncJobs.Application
             lock (_lockObject)
             {
                 Console.WriteLine("Starting job processor");
-                if (_started)
+                if (IsRunning)
                 {
                     return;
                 }
-                _started = true;
+                IsRunning = true;
 
                 HostingEnvironment.RegisterObject(this);
 
@@ -38,11 +40,11 @@ namespace Crossroads.AsyncJobs.Application
         {
             lock (_lockObject)
             {
-                if (!_started)
+                if (!IsRunning)
                 {
                     return;
                 }
-                _started = false;
+                IsRunning = false;
 
                 HostingEnvironment.UnregisterObject(this);
 

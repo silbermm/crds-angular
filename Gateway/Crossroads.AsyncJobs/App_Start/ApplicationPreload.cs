@@ -25,7 +25,7 @@ namespace Crossroads.AsyncJobs
         public static JobProcessor GetJobProcessorInstance()
         {
             var uc = (IUnityContainer)GlobalConfiguration.Configuration.DependencyResolver.GetService(typeof(IUnityContainer));
-            var processor = (JobProcessor)uc.Resolve(typeof(JobProcessor), "JobProcessor");
+            var processor = (JobProcessor)uc.Resolve(typeof(JobProcessor));
             return (processor);
         }
 
