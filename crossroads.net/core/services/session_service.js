@@ -60,6 +60,7 @@
       $cookies.remove('userId');
       $cookies.remove('username');
       $cookies.remove('family');
+      $http.defaults.headers.common['Authorization']= undefined;
       return true;
     };
 
