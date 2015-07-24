@@ -504,11 +504,13 @@
             if (promise.pages.length > 0) {
               ContentPageService.page = promise.pages[0];
             } else {
-              var notFoundRequest = Page.get({ url: 'page-not-found' }, function() {
+              var notFoundRequest = Page.get({ url: '/page-not-found/' }, function() {
                 if (notFoundRequest.pages.length > 0) {
                   ContentPageService.page.renderedContent = notFoundRequest.pages[0].renderedContent;
+                  ContentPageService.page.pageType = '';
                 } else {
                   ContentPageService.page.renderedContent = '404 Content not found';
+                  ContentPageService.page.pageType = '';
                 }
               });
             }
