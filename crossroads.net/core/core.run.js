@@ -32,11 +32,12 @@
            console.log('US1403: stateChangeStart event handler (' + 
             fromState.name + '->' + toState.name + '), do not yet know if session active, in core.run');
 
-           if (fromState.name === 'logout') {
-            $cookies.remove('sessionId');
-           }
+           if (toState.name === 'logout') {
+            console.log('US1403: stateChangeStart toState logout');
+            return;
+            }
            if (Session.isActive()) {
-            if (toState.name !== 'logout') {
+            
               // TODO Added to debug/research US1403 - should remove after issue is resolved
               console.log('US1403: stateChangeStart event handler (' + 
                 fromState.name + '->' + toState.name + '), session active, in core.run');
@@ -57,7 +58,6 @@
                     console.log('US1403: stateChangeStart event handler, failed call to api/authenticated in core.run');
                     clearAndRedirect(event, toState, toParams);
                 });
-            }
             } else if (toState.data !== undefined && toState.data.isProtected) {
                 // TODO Added to debug/research US1403 - should remove after issue is resolved
                 console.log('US1403: stateChangeStart event handler (' + 

@@ -220,6 +220,7 @@
           if(!$window.confirm('Are you sure you want to leave this page?')) {
             console.log('US1403: preventing default');
             event.preventDefault();
+            return;
           }
         }
       }
