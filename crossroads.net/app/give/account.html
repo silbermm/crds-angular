@@ -5,6 +5,10 @@
             <a type="button" class="btn btn-default active" role="button">Give as Guest</a>
         </div>
     </div>
+  
+    <hr>
+      <p>You are giving <strong>{{give.amount | currency}}</strong>  to <strong>{{give.program['Name']}}</strong>. <a href="" ng-click="give.processChange()" tabindex="-1" class="text-secondary">Change</a></p>
+    <hr>
 
     <ng-form name="accountForm">
 	    <div
@@ -27,7 +31,6 @@
 	    <div id="existingEmail" growl inline="true" reference="{{give.emailAlreadyRegisteredGrowlDivRef}}" limit-messages="1"></div>
 	    <bank-credit-card-details></bank-credit-card-details>
 	</ng-form>
-   <p class="text-muted small">You are giving <strong>{{give.amount | currency}}</strong>  to <strong>{{give.program['Name']}}</strong>. <a href="" ng-click="give.processChange()" tabindex="-1">Change</a></p>
     <button ng-click="give.submitBankInfo()" ng-class="{disabled: give.processing}" class="btn btn-primary btn-lg btn-block-mobile give-button">
       <span ng-if="give.processing">Giving...</span>
       <span ng-if="!give.processing">Give {{give.amount | currency}}</span>

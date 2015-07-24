@@ -28,6 +28,7 @@ namespace MinistryPlatform.Translation.Test.Services
             configuration.Setup(mocked => mocked.GetConfigIntValue("BankAccount")).Returns(5);
             configuration.Setup(mocked => mocked.GetConfigIntValue("CreditCard")).Returns(4);
             configuration.Setup(mocked => mocked.GetConfigIntValue("Deposits")).Returns(7070);
+            configuration.Setup(mocked => mocked.GetConfigIntValue("PaymentProcessorEventErrors")).Returns(6060);
 
             _fixture = new DonationService(_ministryPlatformService.Object, _donorService.Object, configuration.Object);
         }
@@ -181,6 +182,29 @@ namespace MinistryPlatform.Translation.Test.Services
             var depositId = _fixture.CreateDeposit(depositName, depositTotalAmount, depositDateTime, accountNumber,
                 batchCount, exported, notes, processorTransferId);
             Assert.AreEqual(513, depositId);
+            _ministryPlatformService.VerifyAll();
+        }
+
+        [Test]
+        public void TestCreatePaymentProcessorEventError()
+        {
+            var dateTime = DateTime.Now;
+            const string eventId = "123";
+            const string eventType = "456";
+            const string message = "message";
+            const string response = "response";
+            var expectedParms = new Dictionary<string, object>
+            {
+                {"Event_Date_Time", dateTime},
+                {"Event_ID", eventId},
+                {"Event_Type", eventType},
+                {"Event_Message", message},
+                {"Response_Message", response}
+            };
+            _ministryPlatformService.Setup(mocked => mocked.CreateRecord(6060, expectedParms, It.IsAny<string>(), false)).Returns(513);
+
+            _fixture.CreatePaymentProcessorEventError(dateTime, eventId, eventType, message, response);
+
             _ministryPlatformService.VerifyAll();
         }
 
