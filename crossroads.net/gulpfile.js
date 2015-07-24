@@ -98,7 +98,14 @@ gulp.task("webpack-dev-server", ["icons-watch"], function(callback) {
 	});
 
 	new WebpackDevServer(webpack(webPackConfigs), {
-	        historyApiFallback: true,
+			historyApiFallback: {
+			  index: 'index.html',
+			  rewrites: [
+				// TODO: see if there is a way to dry this up so we don't need to specify every folder/filename
+				{ from: /\/corkboard\/assets\/main.js/, to: '/corkboard/assets/main.js'},
+				{ from: /\/corkboard/, to: '/corkboard/index.html'}
+			  ]
+			},
 		    publicPath: "/assets/",
 			quiet: false,
 			watchDelay: 300,
