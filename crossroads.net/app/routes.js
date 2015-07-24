@@ -7,10 +7,16 @@
     '$urlRouterProvider',
     '$httpProvider',
     '$urlMatcherFactoryProvider',
-    '$locationProvider'
+    '$locationProvider',
+    'CurrentPageProvider'
   ];
 
-  function AppConfig($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory, $locationProvider) {
+  function AppConfig($stateProvider,
+    $urlRouterProvider,
+    $httpProvider,
+    $urlMatcherFactory,
+    $locationProvider,
+    CurrentPage) {
 
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'contentRouteType', /^\/.*/);
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'signupRouteType', /\/sign-up\/.*$/);
@@ -477,13 +483,32 @@
         }
       })
       .state('content', {
-        parent: 'noSideBar',
         // This url will match a slash followed by anything (including additional slashes).
         url: '{link:contentRouteType}',
         controller: 'ContentCtrl',
-        templateUrl: function(){
-            return 'content/content.html';
+        templateProvider: function($templateFactory, $rootScope, $stateParams, Page, CurrentPage) {
+          var promise = Page.get({ url: $stateParams.link }).$promise;
+          $rootScope.page = {};
+          promise.then(function(promise) {
+            if (promise.pages.length > 0) {
+              $rootScope.page = promise.pages[0];
+            } else {
+              var notFoundRequest = Page.get({ url: 'page-not-found' }, function() {
+                if (notFoundRequest.pages.length > 0) {
+                  $rootScope.page.renderedContent = notFoundRequest.pages[0].renderedContent;
+                } else {
+                  $rootScope.page.renderedContent = '404 Content not found';
+                }
+              });
+            }
+          });
+          return $templateFactory.fromUrl('core/templates/noSideBar.html');
         }
+        // views: {
+        //   'left': {
+        //     template: 'content/content.html'
+        //   }
+        // }
       });
     //Leave the comment below.  Once we have a true 404 page hosted in the same domain, this is how we
     //will handle the routing.
