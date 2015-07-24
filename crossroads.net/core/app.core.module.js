@@ -81,6 +81,6 @@
     .directive('stopEvent', require('./shared/stopevent.directive.js'))
     .directive('requireMultiple', require('./shared/requireMultiple.directive.js'))
     .directive('autofocus', require('./shared/autofocus.directive.js'))
-    .factory('CurrentPage', require('./cms/services/current_page.service'));
+    .factory('ContentPageService', require('./cms/services/content_page.service'));
 
 })();

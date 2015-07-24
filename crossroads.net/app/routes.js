@@ -8,41 +8,15 @@
     '$httpProvider',
     '$urlMatcherFactoryProvider',
     '$locationProvider',
-    'CurrentPageProvider'
+    'ContentPageServiceProvider'
   ];
-  function templateProviderFactory(){
-    return function($templateFactory, $rootScope, $location, $stateParams, $state, Page, CurrentPage) {
-      debugger
-      var promise = Page.get({ url: $location.url() }).$promise;
-      $rootScope.page = {};
-      return promise.then(function(promise) {
-        if (promise.pages.length > 0) {
-          $rootScope.page = promise.pages[0];
-        } else {
-          var notFoundRequest = Page.get({ url: 'page-not-found' }, function() {
-            if (notFoundRequest.pages.length > 0) {
-              $rootScope.page.renderedContent = notFoundRequest.pages[0].renderedContent;
-            } else {
-              $rootScope.page.renderedContent = '404 Content not found';
-            }
-          });
-        }
-        switch($rootScope.page.pageType){
-          case 'noHeaderOrFooter':
-            return $templateFactory.fromUrl('core/templates/noHeaderOrFooter.html');
-          default:
-            return $templateFactory.fromUrl('core/templates/noSideBar.html');
-        }
-      });
-    };
-  }
 
   function AppConfig($stateProvider,
     $urlRouterProvider,
     $httpProvider,
     $urlMatcherFactory,
     $locationProvider,
-    CurrentPage) {
+    ContentPageService) {
 
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'contentRouteType', /^\/.*/);
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'signupRouteType', /\/sign-up\/.*$/);
@@ -511,7 +485,34 @@
       .state('contentParent', {
         abstract:true,
         controller: 'ContentCtrl',
-        templateProvider: templateProviderFactory()
+        templateProvider: function($templateFactory, $location, Page, ContentPageService) {
+          var promise;
+          ContentPageService.reload = true;
+          if(ContentPageService.toParams){
+            promise = Page.get({ url: ContentPageService.toParams.link }).$promise;
+          }else{
+            promise = Page.get({ url: $location.url() }).$promise;
+          }
+          return promise.then(function(promise) {
+            if (promise.pages.length > 0) {
+              ContentPageService.page = promise.pages[0];
+            } else {
+              var notFoundRequest = Page.get({ url: 'page-not-found' }, function() {
+                if (notFoundRequest.pages.length > 0) {
+                  ContentPageService.page.renderedContent = notFoundRequest.pages[0].renderedContent;
+                } else {
+                  ContentPageService.page.renderedContent = '404 Content not found';
+                }
+              });
+            }
+            switch(ContentPageService.page.pageType){
+              case 'noHeaderOrFooter':
+                return $templateFactory.fromUrl('core/templates/noHeaderOrFooter.html');
+              default:
+                return $templateFactory.fromUrl('core/templates/noSideBar.html');
+            }
+          });
+        }
       })
       .state('content',{
         parent: 'contentParent',
