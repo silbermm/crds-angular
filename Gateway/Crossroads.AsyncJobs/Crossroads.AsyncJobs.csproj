@@ -47,7 +47,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup> 
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Demo|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\</OutputPath>
@@ -62,7 +62,7 @@
     <SlowCheetah_EnableImportFromNuGet Condition=" '$(SlowCheetah_EnableImportFromNuGet)'=='' ">true</SlowCheetah_EnableImportFromNuGet>
     <SlowCheetah_NuGetImportPath Condition=" '$(SlowCheetah_NuGetImportPath)'=='' ">$([System.IO.Path]::GetFullPath( $(MSBuildProjectDirectory)\Properties\SlowCheetah\SlowCheetah.Transforms.targets ))</SlowCheetah_NuGetImportPath>
     <SlowCheetahTargets Condition=" '$(SlowCheetah_EnableImportFromNuGet)'=='true' and Exists('$(SlowCheetah_NuGetImportPath)') ">$(SlowCheetah_NuGetImportPath)</SlowCheetahTargets>
-  </PropertyGroup>  
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
@@ -186,20 +186,29 @@
     </Content>
     <Content Include="MinistryPlatform.config">
       <SubType>Designer</SubType>
+      <TransformOnBuild>true</TransformOnBuild>
     </Content>
-    <Content Include="MinistryPlatform.Debug.config">
+    <None Include="MinistryPlatform.Debug.config">
       <DependentUpon>MinistryPlatform.config</DependentUpon>
-    </Content>
-    <Content Include="MinistryPlatform.Demo.config">
+      <IsTransformFile>True</IsTransformFile>
+    </None>
+    <None Include="MinistryPlatform.Demo.config">
       <DependentUpon>MinistryPlatform.config</DependentUpon>
-    </Content>
-    <Content Include="MinistryPlatform.Integration.config">
+      <IsTransformFile>True</IsTransformFile>
+    </None>
+    <None Include="MinistryPlatform.Integration.config">
       <DependentUpon>MinistryPlatform.config</DependentUpon>
-    </Content>
-    <Content Include="MinistryPlatform.Release.config">
+      <IsTransformFile>True</IsTransformFile>
+    </None>
+    <None Include="MinistryPlatform.Jim.config">
       <DependentUpon>MinistryPlatform.config</DependentUpon>
-    </Content>
-	<Content Include="Properties\SlowCheetah\SlowCheetah.Transforms.targets" />
+      <IsTransformFile>True</IsTransformFile>
+    </None>
+    <None Include="MinistryPlatform.Release.config">
+      <DependentUpon>MinistryPlatform.config</DependentUpon>
+      <IsTransformFile>True</IsTransformFile>
+    </None>
+    <Content Include="Properties\SlowCheetah\SlowCheetah.Transforms.targets" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
