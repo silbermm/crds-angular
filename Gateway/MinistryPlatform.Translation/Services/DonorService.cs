@@ -20,6 +20,7 @@ namespace MinistryPlatform.Translation.Services
 
         public const string DONOR_RECORD_ID = "Donor_Record";
         public const string DONOR_PROCESSOR_ID = "Processor_ID";
+        public const string EMAILREASON = "None";
 
         private IMinistryPlatformService ministryPlatformService;
         private IProgramService programService;
@@ -68,9 +69,9 @@ namespace MinistryPlatform.Translation.Services
 
         }
 
-        public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string charge_id, string pymt_type, string processorId, DateTime setupTime, bool registeredDonor)
+        public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string charge_id, string pymtType, string processorId, DateTime setupTime, bool registeredDonor)
         {
-            var pymt_id = (pymt_type == "bank") ? "5" : "4";
+            var pymt_id = (pymtType == "bank") ? "5" : "4";
             var fee = feeAmt.HasValue ? feeAmt/100M : null;
             
             var donationValues = new Dictionary<string, object>
@@ -122,12 +123,11 @@ namespace MinistryPlatform.Translation.Services
 
             try
             {
-                SendConfirmationEmail(Convert.ToInt32(programId), donorId, donationAmt, setupTime, pymt_type);
+                SetupConfirmationEmail(Convert.ToInt32(programId), donorId, donationAmt, setupTime, pymtType);
             }
             catch (Exception e)
             {
-                throw new ApplicationException(
-                    string.Format("Sending of Confirmation Email failed for Donation Id: {0}", donationId), e);
+                logger.Error(string.Format("Failed when processing the template for Donation Id: {0}", donationId));
             }
 
             return donationDistributionId;
@@ -233,39 +233,13 @@ namespace MinistryPlatform.Translation.Services
         }
 
 
-        public void SendConfirmationEmail(int programId, int donorId, int donationAmount, DateTime setupDate, string pymt_type)
+        public void SetupConfirmationEmail(int programId, int donorId, int donationAmount, DateTime setupDate, string pymtType)
         {
             var program = programService.GetProgramById(programId);
             //If the communcations admin does not link a message to the program, the default template will be used.
             int communicationTemplateId = program.CommunicationTemplateId == 0 ? AppSetting("DefaultGiveConfirmationEmailTemplate") : program.CommunicationTemplateId;
 
-            MessageTemplate template = communicationService.GetTemplate(communicationTemplateId);
-
-            ContactDonor contact = GetEmailViaDonorId(donorId);
-
-            var comm = new Communication
-            {
-                AuthorUserId = 5,
-                DomainId = 1,
-                EmailBody = template.Body,
-                EmailSubject = template.Subject,
-                FromContactId = 5,
-                FromEmailAddress = "giving@crossroads.net",
-                ReplyContactId = 5,
-                ReplyToEmailAddress = "giving@crossroads.net",
-                ToContactId = contact.ContactId,
-                ToEmailAddress = contact.Email
-            };
-
-            comm.MergeData = new Dictionary<string, object>
-            {
-                {"Program_Name", program.Name},
-                {"Donation_Amount", donationAmount},
-                {"Donation_Date", setupDate},
-                {"Payment_Method", pymt_type}
-            };
- 
-            communicationService.SendMessage(comm);
+            SendEmail(communicationTemplateId, donorId, donationAmount, pymtType, setupDate, program.Name, EMAILREASON);
         }
 
         public ContactDonor GetEmailViaDonorId(int donorId)
@@ -292,6 +266,38 @@ namespace MinistryPlatform.Translation.Services
             }
 
             return donor;
+        }
+
+        public void SendEmail(int communicationTemplateId, int donorId, int donationAmount, string paymentType, DateTime setupDate, string program, string EMAILREASON)
+        {
+            MessageTemplate template = communicationService.GetTemplate(communicationTemplateId);
+
+            ContactDonor contact = GetEmailViaDonorId(donorId);
+
+            var comm = new Communication
+            {
+                AuthorUserId = 5,
+                DomainId = 1,
+                EmailBody = template.Body,
+                EmailSubject = template.Subject,
+                FromContactId = 5,
+                FromEmailAddress = "giving@crossroads.net",
+                ReplyContactId = 5,
+                ReplyToEmailAddress = "giving@crossroads.net",
+                ToContactId = contact.ContactId,
+                ToEmailAddress = contact.Email
+            };
+
+            comm.MergeData = new Dictionary<string, object>
+            {
+                {"Program_Name", program},
+                {"Donation_Amount", donationAmount},
+                {"Donation_Date", setupDate},
+                {"Payment_Method", paymentType},
+                {"Decline_Reason", EMAILREASON}
+            };
+
+            communicationService.SendMessage(comm);
         }
     }
 

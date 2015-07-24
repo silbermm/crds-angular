@@ -64,6 +64,13 @@
           isProtected: false
         }
       })
+      .state('logout', {
+        url: '/logout',
+        controller: 'LogoutController',
+        data: {
+          isProtected: false
+        }
+      })
       .state('register', {
         parent: 'noSideBar',
         url: '/register',
@@ -268,7 +275,7 @@
       .state('tripgiving', {
         parent: 'noSideBar',
         url: '/tripgiving',
-        controller: 'TripGivingCtrl as tripsearch',
+        controller: 'TripGivingCtrl as tripSearch',
         templateUrl: 'tripgiving/tripgiving.html',
         resolve: {
           Page: 'Page',

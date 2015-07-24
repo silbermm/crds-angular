@@ -12,6 +12,7 @@ require('./templates/brand-bar.html');
 
 require('./app.core.module');
 require('./login');
+require('./logout');
 require('./home');
 require('./register/register_directive');
 require('./cms/services/cms_services_module');

@@ -69,7 +69,8 @@
       paymentMethodProcessingError: 47,
       noResponse: 49,
       ageError: 54,
-      mailchimpSuccess: 55
+      mailchimpSuccess: 55,
+      tripSearchNotFound: 59
     })
     .config(function (growlProvider) {
       growlProvider.globalPosition('top-center');
