@@ -26,7 +26,6 @@ var moment = require('moment');
     vm.format = 'MM/dd/yyyy';
     vm.gradeLevelSelected = gradeLevelSelected;
     vm.locationSelected = locationSelected;
-    vm.maritialStati = maritialStati;
     vm.open = open;
     vm.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
     vm.religionSelected = religionSelected;
@@ -48,9 +47,8 @@ var moment = require('moment');
      * true if it has, false otherwise
      */
     function availabilitySelected(){
-      if (vm.volunteer.availabilityWeek || vm.volunteer.availabilityWeekend) {
+      if (vm.volunteer.availabilityWeek || vm.volunteer.availabilityWeekend)
         return true;
-      }
       return false;
     }
 
@@ -61,9 +59,8 @@ var moment = require('moment');
     function gradeLevelSelected(){
       if (vm.volunteer.birthToTwo ||
           vm.volunteer.threeToPreK ||
-          vm.volunteer.kToFifth) {
+          vm.volunteer.kToFifth)
         return true;
-    }
       return false;
     }
 
@@ -77,29 +74,9 @@ var moment = require('moment');
           || vm.volunteer.availabilityWestSide
           || vm.volunteer.availabilityMason
           || vm.volunteer.availabilityClifton
-        ){
+        )
         return true;
-    }
       return false;
-    }
-
-    function maritialStati() {
-      return [{
-        value: 1,
-        label: 'Single'
-      }, {
-        value: 3,
-        label: 'Divorced'
-      }, {
-        value: 6,
-        label: 'Separated'
-      }, {
-        value: 4,
-        label: 'Widowed'
-      }, {
-        value: 2,
-        label: 'Married'
-      }];
     }
 
     /**
