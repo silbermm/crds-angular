@@ -17,6 +17,8 @@
       </p>
       <p class="push-bottom">Information shared here is kept secure and private. We will not share or sell your information.</p>
 
+      <br/><p><b><h2 class="page-header">Profile Information</h2></b></p>
+      
       <div class="row">
           <div class="form-group col-sm-6">
               <label for="firstname" class="required">First Name</label>
@@ -239,7 +241,60 @@
           </fieldset>
         </div>
         <!--/row-->
-
+        <div class="row">
+          <div id="Site" class="form-group col-sm-6 required">
+            <label for="provider">T-shirt Size</label>
+            <select class="form-control col-sm-12" ng-model="attribute">
+            </select>
+          </div> 
+          <div class="form-group col-sm-6">
+              <label class="block required">How did you her about this trip?</label>              
+              <label class="radio-inline">
+                  <input type="radio" value="yes" name="program">Program
+              </label>
+              <label class="radio-inline">
+                  <input type="radio" value="no" name="session">Info Session
+              </label>
+              <label class="radio-inline">
+                  <input type="radio" value="no" name="friend">Friend/Family
+              </label>
+              <label class="radio-inline">
+                  <input type="radio" value="no" name="website">Website
+              </label>
+              <label class="radio-inline">
+                  <input type="radio" value="no" name="other">Other
+              </label>
+          </div>
+          <div class="form-group col-sm-6">
+              <label for="conditions" class="required">Please describe any medical conditions that may affect your ability to participate in this trip (Leave blank if it doesn't apply):</label>
+              <textarea class="form-control" rows="2" cols="1" id="conditions" maxlength="250"></textarea>
+          </div>
+          <div class="form-group col-sm-6">
+              <label class="block required">Vegetarian? (If you mark yes we will do our best to provide vegetarian meals during the trip)</label>              
+              <label class="radio-inline">
+                  <input type="radio" value="yes" name="vegetarian">Yes
+              </label>
+              <label class="radio-inline">
+                  <input type="radio" value="no" name="vegetarian">No
+              </label>
+          </div> 
+          <div class="form-group col-sm-6">
+              <label for="allergies" class="required">Please describe all food allergies (Leave blank if it doesn't apply):</label>
+              <textarea class="form-control" rows="2" cols="1" id="allergies" maxlength="250"></textarea>
+          </div>
+          
+          <div id="Site" class="form-group col-sm-6">
+            <label for="provider" class="required">How would you define your spiritual life? (Pick as many as you like)</label>
+            <input type="checkbox" name="vehicle" value="Searching">Searching for answers<br>
+            <input type="checkbox" name="vehicle" value="Received">I have received Jesus <br>
+            <input type="checkbox" name="vehicle" value="Obedience">Focusing on obedience - I've quit negotiating with God<br>
+            <input type="checkbox" name="vehicle" value="Replicating">I'm actively replicating my faith in others
+          </div>             
+          <div class="form-group col-sm-6">
+              <label for="why" class="required">Tell us why you want to go on this trip (Please be specific):</label>
+              <textarea cols="1" rows="4" class="form-control" id="why" maxlength="1000"></textarea>
+          </div>        
+        </div>
         <a ui-sref="go-south-africa-signup-page-2" class="btn btn-primary pull-right">Continue</a>
     </form>
 
