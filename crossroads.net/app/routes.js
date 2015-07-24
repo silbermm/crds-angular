@@ -506,7 +506,7 @@
               });
             }
             switch(ContentPageService.page.pageType){
-              case 'noHeaderOrFooter':
+              case 'NoHeaderOrFooter':
                 return $templateFactory.fromUrl('core/templates/noHeaderOrFooter.html');
               default:
                 return $templateFactory.fromUrl('core/templates/noSideBar.html');
