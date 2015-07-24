@@ -2,6 +2,7 @@
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services;
 using Moq;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using MPServices=MinistryPlatform.Translation.Services.Interfaces;
 
@@ -113,6 +114,41 @@ namespace crds_angular.test.Services
             _mpDonationService.VerifyAll();
             Assert.AreSame(dto, response);
             Assert.AreEqual(987, response.Id);
+        }
+
+        [Test]
+        public void TestCreatePaymentProcessorEventError()
+        {
+            var stripeEvent = new StripeEvent
+            {
+                Created = DateTime.Now,
+                Data = new StripeEventData
+                {
+                    Object = new StripeTransfer
+                    {
+                        Amount = 1000
+                    }
+                },
+                LiveMode = true,
+                Id = "123",
+                Type = "transfer.paid"
+            };
+
+            var stripeEventResponse = new StripeEventResponseDTO
+            {
+                Exception = new ApplicationException()
+            };
+
+            var eventString = JsonConvert.SerializeObject(stripeEvent, Formatting.Indented);
+            var responseString = JsonConvert.SerializeObject(stripeEventResponse, Formatting.Indented);
+
+            _mpDonationService.Setup(
+                mocked =>
+                    mocked.CreatePaymentProcessorEventError(stripeEvent.Created, stripeEvent.Id, stripeEvent.Type,
+                        eventString, responseString));
+
+            _fixture.CreatePaymentProcessorEventError(stripeEvent, stripeEventResponse);
+            _mpDonationService.VerifyAll();
         }
 
     }

@@ -18,6 +18,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly string _creditCardPaymentType;
         private readonly string _bankPaymentType;
         private readonly int _depositsPageId;
+        private readonly int _paymentProcessorErrorsPageId;
 
         private readonly IMinistryPlatformService _ministryPlatformService;
         private readonly IDonorService _donorService;
@@ -34,6 +35,7 @@ namespace MinistryPlatform.Translation.Services
             _creditCardPaymentType = configuration.GetConfigValue("CreditCard");
             _bankPaymentType = configuration.GetConfigValue("Bank");
             _depositsPageId = configuration.GetConfigIntValue("Deposits");
+            _paymentProcessorErrorsPageId = configuration.GetConfigIntValue("PaymentProcessorEventErrors");
         }
 
         public int UpdateDonationStatus(int donationId, int statusId, DateTime statusDate,
@@ -151,6 +153,27 @@ namespace MinistryPlatform.Translation.Services
             }
         }
 
+        public void CreatePaymentProcessorEventError(DateTime? eventDateTime, string eventId, string eventType, string eventMessage,
+            string responseMessage)
+        {
+            var parms = new Dictionary<string, object>
+            {
+                {"Event_Date_Time", eventDateTime ?? DateTime.Now},
+                {"Event_ID", eventId},
+                {"Event_Type", eventType},
+                {"Event_Message", eventMessage},
+                {"Response_Message", responseMessage}
+            };
+            try
+            {
+                WithApiLogin(token => _ministryPlatformService.CreateRecord(_paymentProcessorErrorsPageId, parms, token));
+            }
+            catch (Exception e)
+            {
+                throw (new ApplicationException(string.Format("Could not insert event error dateTime: {0}, eventId: {1}, eventType: {2}, eventMessage: {3}, responseMessage: {4}, Error: {5}", eventDateTime, eventId, eventType, eventMessage, responseMessage, e.Message)));
+            }
+        }
+
         private void UpdateDonationStatus(string apiToken, int donationId, int statusId, DateTime statusDate,
             string statusNote)
         {
@@ -224,7 +247,7 @@ namespace MinistryPlatform.Translation.Services
                 donorId = dictionary.ToInt("Donor_ID"),
                 donationDate = dictionary.ToDate("Donation_Date"),
                 donationAmt = Convert.ToInt32(dictionary["Donation_Amount"]),
-                paymentTypeId = (dictionary.ToString("Payment_Type") == "Bank") ? 4 : 5,
+                paymentTypeId = (dictionary.ToString("Payment_Type") == "Bank") ? 5 : 4,
                 donationNotes = dictionary.ToString("Donation_Status_Notes")
             };
             return (d);

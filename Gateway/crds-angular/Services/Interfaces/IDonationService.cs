@@ -10,5 +10,6 @@ namespace crds_angular.Services.Interfaces
         DonationBatchDTO CreateDonationBatch(DonationBatchDTO batch);
         void ProcessDeclineEmail(string processorPaymentId);
         DepositDTO CreateDeposit(DepositDTO deposit);
+        void CreatePaymentProcessorEventError(StripeEvent stripeEvent, StripeEventResponseDTO stripeEventResponse);
     }
 }
