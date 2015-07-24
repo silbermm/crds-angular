@@ -35,6 +35,13 @@
           isProtected: false
         }
       })
+      .state('logout', {
+        url: '/logout',
+        controller: 'LogoutController',
+        data: {
+          isProtected: false
+        }
+      })
       .state('register', {
         url: '/register',
         templateUrl: 'register/register_form.html',
