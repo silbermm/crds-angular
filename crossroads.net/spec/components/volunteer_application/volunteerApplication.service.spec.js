@@ -23,8 +23,9 @@ describe('Volunteer Application Factory', function() {
 
   it('should fetch the page object', function(){
     VolunteerApplication.getPageInfo();
-    $httpBackend.expectGET( window.__env__['CRDS_CMS_ENDPOINT'] + 
+    $httpBackend.expectGET( window.__env__['CRDS_CMS_ENDPOINT'] +
         '/api/Page/?link=%2Fvolunteer-application%2Fkids-club%2F').respond(200, mockPageInfo );
+    $httpBackend.expectGET( 'core/templates/noSideBar.html').respond(200, mockPageInfo );
     $httpBackend.flush();
   });
 
@@ -49,11 +50,12 @@ describe('Volunteer Application Factory', function() {
 
   it('should get the response for the volunteer', function(){
     VolunteerApplication.getResponse(115, 12345);
-    $httpBackend.expectGET( window.__env__['CRDS_API_ENDPOINT'] + 
-          'api/opportunity/getResponseForOpportunity/'+ 
+    $httpBackend.expectGET( window.__env__['CRDS_API_ENDPOINT'] +
+          'api/opportunity/getResponseForOpportunity/'+
           115 + '/' + 12345 ).respond(200);
+    $httpBackend.expectGET( 'core/templates/noSideBar.html').respond(200, mockPageInfo );
     $httpBackend.flush();
-    
+
   });
 
 
@@ -93,7 +95,7 @@ describe('Volunteer Application Factory', function() {
       }]
     };
   }
-  
+
   function setupPerson(age){
     return {
       age: age,

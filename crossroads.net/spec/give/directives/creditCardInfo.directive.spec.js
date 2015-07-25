@@ -3,22 +3,23 @@ require('../../../core/core');
 require('../../../app/app');
 
 describe('Credit Card Info Directive', function() {
-  var ccElement, scope, isolateScope, form, $timeout;
+  var ccElement, scope, isolateScope, form, $timeout, httpBackend;
 
   beforeEach(function() {
     angular.mock.module('crossroads');
   });
 
-  beforeEach(inject(function(_$compile_, _$rootScope_, _$templateCache_, _$timeout_) {
+  beforeEach(inject(function($injector, _$compile_, _$rootScope_, _$templateCache_, _$timeout_) {
     var $compile = _$compile_;
     var $rootScope = _$rootScope_;
     var $templateCache = _$templateCache_;
+    httpBackend = $injector.get('$httpBackend');
 
     $timeout = _$timeout_;
 
     $templateCache.put('on-submit-messages', '<span ng-message="required">Required</span>');
-    $templateCache.put('on-blur-messages', 
-      '<span ng-message="invalidRouting">Invalid routing</span>' + 
+    $templateCache.put('on-blur-messages',
+      '<span ng-message="invalidRouting">Invalid routing</span>' +
       '<span ng-message="invalidAccount">Invalid account</span>' +
       '<span ng-message="naturalNumber">Not a valid number</span>' +
       '<span ng-message="invalidZip">Invalid zip</span>');
@@ -59,6 +60,7 @@ describe('Credit Card Info Directive', function() {
       declinedPayment: false
     };
 
+    httpBackend.expectGET( 'core/templates/noSideBar.html').respond(200, 'noSideBar.html' );
     ccElement = $compile(templateString)(scope);
     scope.$digest();
     $timeout.flush();

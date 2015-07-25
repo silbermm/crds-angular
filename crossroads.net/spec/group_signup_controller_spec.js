@@ -247,6 +247,7 @@ var successResponse = [
    function verifyExpectations(){
      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +'api/profile');
      $httpBackend.expectGET(window.__env__['CRDS_CMS_ENDPOINT'] + '/api/Page/?link=test');
+     $httpBackend.expectGET( 'core/templates/noSideBar.html').respond(200, 'noSideBar.html' );
      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +'api/group/1');
      $httpBackend.flush();
    }

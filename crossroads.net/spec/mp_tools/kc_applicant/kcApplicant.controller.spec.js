@@ -3,10 +3,10 @@ require('../../../core/core');
 require('../../../app/app');
 
 describe('KC Applicant Tool', function(){
-  
+
   var mockPageInfo = setupPageInfo();
   var mockVolunteer = setupVolunteer();
-  var pageParams = setupPageParams(); 
+  var pageParams = setupPageParams();
   var mockResponse = setupResponse();
 
   beforeEach(angular.mock.module('crossroads'));
@@ -31,11 +31,11 @@ describe('KC Applicant Tool', function(){
     MPTools = _MPTools_;
     Contact = $injector.get('Contact');
     CmsInfo = $injector.get('CmsInfo');
-    $httpBackend = $injector.get('$httpBackend');  
+    $httpBackend = $injector.get('$httpBackend');
   }));
 
   it('should get the correct query parameters', function(){
-    expect(controller.params.userGuid).toBe(pageParams.ug); 
+    expect(controller.params.userGuid).toBe(pageParams.ug);
   });
 
   it('should have a null middle initial', function(){
@@ -47,24 +47,26 @@ describe('KC Applicant Tool', function(){
   });
 
   it('should query for a response', function(){
-    $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 
-        'api/opportunity/getResponseForOpportunity/' + controller.pageInfo.opportunity + 
+    $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +
+        'api/opportunity/getResponseForOpportunity/' + controller.pageInfo.opportunity +
         '/' + controller.params.recordId)
       .respond(200, mockResponse);
+      $httpBackend.expectGET( 'core/templates/noSideBar.html').respond(200, 'noSideBar.html' );
     $httpBackend.flush();
     expect(controller.responseId).toBe(mockResponse.responseId);
   });
 
   it('should show error when no response if available', function(){
-    $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 
-        'api/opportunity/getResponseForOpportunity/' + controller.pageInfo.opportunity + 
+    $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +
+        'api/opportunity/getResponseForOpportunity/' + controller.pageInfo.opportunity +
         '/' + controller.params.recordId)
       .respond(200, null);
+      $httpBackend.expectGET( 'core/templates/noSideBar.html').respond(200, 'noSideBar.html' );
     $httpBackend.flush();
     expect(controller.error).toBeTruthy();
   });
 
- 
+
   // SETUPS FOR MOCK DATA //
   function setupPageInfo() {
     return {
@@ -127,7 +129,7 @@ describe('KC Applicant Tool', function(){
       mobilePhone: null,
       nickName: 'Miles',
       postalCode: '45223-1231',
-      state: 'OH' 
+      state: 'OH'
     };
   }
 
