@@ -489,46 +489,40 @@
 
         }
       })
-      .state('contentParent', {
-        abstract:true,
-        controller: 'ContentCtrl',
-        templateProvider: function($templateFactory, $location, Page, ContentPageService) {
-          var promise;
-          ContentPageService.reload = true;
-          if(ContentPageService.toParams){
-            promise = Page.get({ url: ContentPageService.toParams.link }).$promise;
-          }else{
-            promise = Page.get({ url: $location.url() }).$promise;
-          }
-          return promise.then(function(promise) {
-            if (promise.pages.length > 0) {
-              ContentPageService.page = promise.pages[0];
-            } else {
-              var notFoundRequest = Page.get({ url: '/page-not-found/' }, function() {
-                if (notFoundRequest.pages.length > 0) {
-                  ContentPageService.page.renderedContent = notFoundRequest.pages[0].renderedContent;
-                  ContentPageService.page.pageType = '';
-                } else {
-                  ContentPageService.page.renderedContent = '404 Content not found';
-                  ContentPageService.page.pageType = '';
-                }
-              });
-            }
-            switch(ContentPageService.page.pageType){
-              case 'NoHeaderOrFooter':
-                return $templateFactory.fromUrl('templates/noHeaderOrFooter.html');
-              default:
-                return $templateFactory.fromUrl('templates/noSideBar.html');
-            }
-          });
-        }
-      })
-      .state('content',{
-        parent: 'contentParent',
+      .state('content', {
         url: '{link:contentRouteType}',
         // This url will match a slash followed by anything (including additional slashes).
         views: {
-          '@contentParent': {
+          '': {
+            controller: 'ContentCtrl',
+            templateProvider: function($templateFactory, $stateParams, Page, ContentPageService) {
+              var promise;
+              promise = Page.get({ url: $stateParams.link }).$promise;
+
+              return promise.then(function(promise) {
+                if (promise.pages.length > 0) {
+                  ContentPageService.page = promise.pages[0];
+                } else {
+                  var notFoundRequest = Page.get({ url: '/page-not-found/' }, function() {
+                    if (notFoundRequest.pages.length > 0) {
+                      ContentPageService.page.renderedContent = notFoundRequest.pages[0].renderedContent;
+                      ContentPageService.page.pageType = '';
+                    } else {
+                      ContentPageService.page.renderedContent = '404 Content not found';
+                      ContentPageService.page.pageType = '';
+                    }
+                  });
+                }
+                switch(ContentPageService.page.pageType){
+                  case 'NoHeaderOrFooter':
+                    return $templateFactory.fromUrl('templates/noHeaderOrFooter.html');
+                  default:
+                    return $templateFactory.fromUrl('templates/noSideBar.html');
+                }
+              });
+            }
+          },
+          '@content': {
             templateUrl: 'content/content.html'
           }
         }

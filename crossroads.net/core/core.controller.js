@@ -11,10 +11,9 @@
     'growl',
     '$aside',
     'screenSize',
-    '$state',
-    'ContentPageService'];
+    '$state'];
 
-  function CoreController($scope, $rootScope, MESSAGES, Message, growl, $aside, screenSize, $state, ContentPageService) {
+  function CoreController($scope, $rootScope, MESSAGES, Message, growl, $aside, screenSize, $state) {
 
     var vm = this;
 
@@ -28,12 +27,6 @@
     // State Change Listeners //
     ////////////////////////////
     $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-      ContentPageService.toParams = toParams;
-      if(toState===fromState && ContentPageService.reload){
-        ContentPageService.reload = false;
-        $state.transitionTo(toState, toParams, { reload: true, inherit: true, notify: true });
-        event.preventDefault();
-      }
       if (toState.resolve && !event.defaultPrevented) {
         vm.resolving = true;
       }
@@ -43,7 +36,8 @@
       vm.resolving = false;
     });
 
-    $scope.$on('$stateChangeError', function(event,toState, toParams, fromState, fromParams){
+    $scope.$on('$stateChangeError', function(event,toState, toParams, fromState, fromParams, error){
+      console.error('$stateChangeError: ' + error);
       //TODO: put the 'toState' in the session if we want to redirect to that page
       vm.resolving = false;
       $state.go('content', {link:'/server-error/'});
@@ -67,9 +61,9 @@
     });
 
     $rootScope.$on('mailchimp-response', function (event, result, msg) {
-      if (result == 'success') {
+      if (result === 'success') {
         $rootScope.$emit('notify', $rootScope.MESSAGES.mailchimpSuccess);
-      } else if (result == 'error') {
+      } else if (result === 'error') {
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
       }
     });
@@ -113,11 +107,11 @@
         }
       }).result.then(postClose, postClose);
 
-    };
+    }
 
     function prevent(evt){
       evt.stopPropagation();
-    };
+    }
 
   }
 
