@@ -51,7 +51,7 @@ describe('KC Applicant Tool', function(){
         'api/opportunity/getResponseForOpportunity/' + controller.pageInfo.opportunity +
         '/' + controller.params.recordId)
       .respond(200, mockResponse);
-      $httpBackend.expectGET( 'core/templates/noSideBar.html').respond(200, 'noSideBar.html' );
+      
     $httpBackend.flush();
     expect(controller.responseId).toBe(mockResponse.responseId);
   });
@@ -61,7 +61,7 @@ describe('KC Applicant Tool', function(){
         'api/opportunity/getResponseForOpportunity/' + controller.pageInfo.opportunity +
         '/' + controller.params.recordId)
       .respond(200, null);
-      $httpBackend.expectGET( 'core/templates/noSideBar.html').respond(200, 'noSideBar.html' );
+      
     $httpBackend.flush();
     expect(controller.error).toBeTruthy();
   });

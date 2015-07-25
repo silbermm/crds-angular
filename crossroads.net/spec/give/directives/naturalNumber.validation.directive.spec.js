@@ -22,21 +22,21 @@ describe('Natural Number Validation Directive', function() {
   }));
 
   it("should reject non-numeric", function() {
-    httpBackend.expectGET( 'core/templates/noSideBar.html').respond(200, 'noSideBar.html' );
+    
     form.amount.$setViewValue('abc');
     scope.$digest();
     expect(form.amount.$valid).toBeFalsy();
   });
 
   it("should reject value greater than max", function() {
-    httpBackend.expectGET( 'core/templates/noSideBar.html').respond(200, 'noSideBar.html' );
+    
     form.amount.$setViewValue(1000);
     scope.$digest();
     expect(form.amount.$valid).toBeFalsy();
   });
 
   it("should accept valid numeric value", function() {
-    httpBackend.expectGET( 'core/templates/noSideBar.html').respond(200, 'noSideBar.html' );
+    
     form.amount.$setViewValue(999);
     scope.$digest();
     expect(form.amount.$valid).toBeTruthy();

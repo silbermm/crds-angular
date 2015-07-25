@@ -60,7 +60,7 @@ describe('Credit Card Info Directive', function() {
       declinedPayment: false
     };
 
-    httpBackend.expectGET( 'core/templates/noSideBar.html').respond(200, 'noSideBar.html' );
+    
     ccElement = $compile(templateString)(scope);
     scope.$digest();
     $timeout.flush();

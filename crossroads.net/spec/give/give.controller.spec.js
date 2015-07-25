@@ -440,7 +440,7 @@ describe('GiveController', function() {
       $scope.giveForm = controllerGiveForm;
       controller.dto = controllerDto;
 
-      httpBackend.expectGET( 'core/templates/noSideBar.html').respond(200, 'noSideBar.html' );
+      
       spyOn(mockPaymentService, 'updateDonorWithCard').and.callFake(function(donorId, donor) {
         var deferred = $q.defer();
         deferred.resolve(donor);
@@ -472,7 +472,7 @@ describe('GiveController', function() {
       $scope.giveForm = controllerGiveFormBank;
       controller.dto = controllerBankDto;
 
-      httpBackend.expectGET( 'core/templates/noSideBar.html').respond(200, 'noSideBar.html' );
+      
       spyOn(mockPaymentService, 'updateDonorWithBankAcct').and.callFake(function(donorId, donor) {
         var deferred = $q.defer();
         deferred.resolve(donor);
@@ -702,7 +702,7 @@ describe('GiveController', function() {
     });
 
     it('should call success callback if donation is successful', function() {
-    httpBackend.expectGET( 'core/templates/noSideBar.html').respond(200, 'noSideBar.html' );
+    
       spyOn(mockPaymentService, 'donateToProgram').and.callFake(function(programId, amount, donorId, email, pymtType) {
         var deferred = $q.defer();
         deferred.resolve({ amount: amount, });
@@ -719,7 +719,7 @@ describe('GiveController', function() {
     });
 
     it('should not call success callback if donation fails', function() {
-    httpBackend.expectGET( 'core/templates/noSideBar.html').respond(200, 'noSideBar.html' );
+    
       spyOn(mockPaymentService, 'donateToProgram').and.callFake(function(programId, amount, donorId, email, pymtType) {
         var deferred = $q.defer();
         deferred.reject("Uh oh!");

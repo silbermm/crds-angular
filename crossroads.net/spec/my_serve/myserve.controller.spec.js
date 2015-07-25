@@ -61,7 +61,7 @@ describe('MyServeController', function() {
       expect(controller.groups.length).toBe(1);
       $httpBackend.expect('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/family-serve-days/12345678?from='+ date/1000+ '&to=' + newDate/1000).respond(200, more);
       controller.loadNextMonth();
-      $httpBackend.expectGET( 'core/templates/noSideBar.html').respond(200, 'noSideBar.html' );
+      
       $httpBackend.flush();
       expect(controller.groups.length).toBe(2);
     });
