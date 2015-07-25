@@ -1,19 +1,20 @@
 'use strict()';
 (function(){
 
-  angular.module("crossroads.core").controller('coreController', CoreController);
+  angular.module('crossroads.core').controller('coreController', CoreController);
 
   CoreController.$inject = [
-    "$scope",
-    "$rootScope",
-    "MESSAGES",
-    "Message",
-    "growl",
-    "$aside",
-    "screenSize",
-    "$state"];
+    '$scope',
+    '$rootScope',
+    'MESSAGES',
+    'Message',
+    'growl',
+    '$aside',
+    'screenSize',
+    '$state',
+    'ContentPageService'];
 
-  function CoreController($scope, $rootScope, MESSAGES, Message, growl, $aside, screenSize, $state) {
+  function CoreController($scope, $rootScope, MESSAGES, Message, growl, $aside, screenSize, $state, ContentPageService) {
 
     var vm = this;
 
@@ -27,6 +28,12 @@
     // State Change Listeners //
     ////////////////////////////
     $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+      ContentPageService.toParams = toParams;
+      if(toState===fromState && ContentPageService.reload){
+        ContentPageService.reload = false;
+        $state.transitionTo(toState, toParams, { reload: true, inherit: true, notify: true });
+        event.preventDefault();
+      }
       if (toState.resolve && !event.defaultPrevented) {
         vm.resolving = true;
       }
@@ -48,7 +55,7 @@
     //////////////////////////
     $rootScope.mobile = screenSize.on('xs, sm', function(match){ $rootScope.mobile = match; });
 
-    $rootScope.$on("notify", function (event, id, refId, ttl) {
+    $rootScope.$on('notify', function (event, id, refId, ttl) {
       var parms = { };
       if(refId !== undefined && refId !== null) {
         parms.referenceId = refId;
@@ -59,7 +66,7 @@
       growl[$rootScope.messages[id].type]($rootScope.messages[id].message, parms);
     });
 
-    $rootScope.$on("mailchimp-response", function (event, result, msg) {
+    $rootScope.$on('mailchimp-response', function (event, result, msg) {
       if (result == 'success') {
         $rootScope.$emit('notify', $rootScope.MESSAGES.mailchimpSuccess);
       } else if (result == 'error') {
@@ -67,7 +74,7 @@
       }
     });
 
-    $rootScope.$on("context", function (event, id) {
+    $rootScope.$on('context', function (event, id) {
      var message = Message.get({
         id: id
       }, function () {
@@ -75,7 +82,7 @@
       });
     });
 
-    var messagesRequest = Message.get("", function () {
+    var messagesRequest = Message.get('', function () {
       messagesRequest.messages.unshift(null); //Adding a null so the indexes match the DB
       //TODO Refactor to not use rootScope, now using ngTemplate w/ ngMessages but also need to pull this out into a service
       $rootScope.messages = messagesRequest.messages;
