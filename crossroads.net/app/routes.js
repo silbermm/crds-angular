@@ -516,9 +516,9 @@
             }
             switch(ContentPageService.page.pageType){
               case 'NoHeaderOrFooter':
-                return $templateFactory.fromUrl('core/templates/noHeaderOrFooter.html');
+                return $templateFactory.fromUrl('templates/noHeaderOrFooter.html');
               default:
-                return $templateFactory.fromUrl('core/templates/noSideBar.html');
+                return $templateFactory.fromUrl('templates/noSideBar.html');
             }
           });
         }
