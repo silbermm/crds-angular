@@ -25,23 +25,23 @@
     $stateProvider
       .state('noSideBar',{
         abstract:true,
-        templateUrl: 'core/templates/noSideBar.html'
+        templateUrl: 'templates/noSideBar.html'
       })
       .state('leftSideBar',{
         abstract:true,
-        templateUrl: 'core/templates/leftSideBar.html'
+        templateUrl: 'templates/leftSideBar.html'
       })
       .state('rightSideBar',{
         abstract:true,
-        templateUrl: 'core/templates/rightSideBar.html'
+        templateUrl: 'templates/rightSideBar.html'
       })
       .state('screenWidth',{
         abstract:true,
-        templateUrl: 'core/templates/screenWidth.html'
+        templateUrl: 'templates/screenWidth.html'
       })
       .state('noHeaderOrFooter',{
         abstract:true,
-        templateUrl: 'core/templates/noHeaderOrFooter.html'
+        templateUrl: 'templates/noHeaderOrFooter.html'
       })
       .state('home', {
         parent: 'noSideBar',
