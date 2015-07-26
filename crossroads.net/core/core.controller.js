@@ -1,17 +1,17 @@
 'use strict()';
 (function(){
 
-  angular.module("crossroads.core").controller('coreController', CoreController);
+  angular.module('crossroads.core').controller('coreController', CoreController);
 
   CoreController.$inject = [
-    "$scope",
-    "$rootScope",
-    "MESSAGES",
-    "Message",
-    "growl",
-    "$aside",
-    "screenSize",
-    "$state"];
+    '$scope',
+    '$rootScope',
+    'MESSAGES',
+    'Message',
+    'growl',
+    '$aside',
+    'screenSize',
+    '$state'];
 
   function CoreController($scope, $rootScope, MESSAGES, Message, growl, $aside, screenSize, $state) {
 
@@ -36,7 +36,8 @@
       vm.resolving = false;
     });
 
-    $scope.$on('$stateChangeError', function(event,toState, toParams, fromState, fromParams){
+    $scope.$on('$stateChangeError', function(event,toState, toParams, fromState, fromParams, error){
+      console.error('$stateChangeError: ' + error);
       //TODO: put the 'toState' in the session if we want to redirect to that page
       vm.resolving = false;
       $state.go('content', {link:'/server-error/'});
@@ -48,7 +49,7 @@
     //////////////////////////
     $rootScope.mobile = screenSize.on('xs, sm', function(match){ $rootScope.mobile = match; });
 
-    $rootScope.$on("notify", function (event, id, refId, ttl) {
+    $rootScope.$on('notify', function (event, id, refId, ttl) {
       var parms = { };
       if(refId !== undefined && refId !== null) {
         parms.referenceId = refId;
@@ -59,15 +60,15 @@
       growl[$rootScope.messages[id].type]($rootScope.messages[id].message, parms);
     });
 
-    $rootScope.$on("mailchimp-response", function (event, result, msg) {
-      if (result == 'success') {
+    $rootScope.$on('mailchimp-response', function (event, result, msg) {
+      if (result === 'success') {
         $rootScope.$emit('notify', $rootScope.MESSAGES.mailchimpSuccess);
-      } else if (result == 'error') {
+      } else if (result === 'error') {
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
       }
     });
 
-    $rootScope.$on("context", function (event, id) {
+    $rootScope.$on('context', function (event, id) {
      var message = Message.get({
         id: id
       }, function () {
@@ -75,7 +76,7 @@
       });
     });
 
-    var messagesRequest = Message.get("", function () {
+    var messagesRequest = Message.get('', function () {
       messagesRequest.messages.unshift(null); //Adding a null so the indexes match the DB
       //TODO Refactor to not use rootScope, now using ngTemplate w/ ngMessages but also need to pull this out into a service
       $rootScope.messages = messagesRequest.messages;
@@ -106,11 +107,11 @@
         }
       }).result.then(postClose, postClose);
 
-    };
+    }
 
     function prevent(evt){
       evt.stopPropagation();
-    };
+    }
 
   }
 

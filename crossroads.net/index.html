@@ -73,25 +73,7 @@
 <body ng-controller="coreController as app" ng-class="app.asideState.position">
   <div growl class="crossroads-growl">
   </div>
-
-  <div>
-
-    <ng-include src="'templates/header.html'"></ng-include>
-
-    <div class="container main animated fadeIn">
-      <div class="row">
-        <div class="col-md-12">
-          <preloader ng-if="app.resolving" full-screen='true'> </preloader>
-          <div ui-view ng-if="!app.resolving"> </div>
-        </div>
-      </div>
-    </div>
-    <!--/container-->
-
-    <ng-include src="'templates/footer.html'"></ng-include>
-
-  </div>
-
+  <div ui-view> </div>
 </body>
 <script src="https://js.stripe.com/v2/"></script>
 <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5391d6a6145291c4" async="async"></script>

@@ -2,6 +2,7 @@
 using crds_angular.Models.Crossroads.Stewardship;
 using MPServices=MinistryPlatform.Translation.Services.Interfaces;
 using crds_angular.Services.Interfaces;
+using Newtonsoft.Json;
 
 namespace crds_angular.Services
 {
@@ -39,12 +40,23 @@ namespace crds_angular.Services
             return (batch);
         }
 
+        public void ProcessDeclineEmail(string processorPaymentId)
+        {
+            _mpDonationService.ProcessDeclineEmail(processorPaymentId);
+        }
+
         public DepositDTO CreateDeposit(DepositDTO deposit)
         {
             deposit.Id = _mpDonationService.CreateDeposit(deposit.DepositName, deposit.DepositTotalAmount, deposit.DepositDateTime,
                 deposit.AccountNumber, deposit.BatchCount, deposit.Exported, deposit.Notes, deposit.ProcessorTransferId);
             
             return (deposit);
+
+        }
+
+        public void CreatePaymentProcessorEventError(StripeEvent stripeEvent, StripeEventResponseDTO stripeEventResponse)
+        {
+            _mpDonationService.CreatePaymentProcessorEventError(stripeEvent.Created, stripeEvent.Id, stripeEvent.Type, JsonConvert.SerializeObject(stripeEvent, Formatting.Indented), JsonConvert.SerializeObject(stripeEventResponse, Formatting.Indented));
         }
     }
 }

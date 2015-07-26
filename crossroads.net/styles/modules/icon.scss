@@ -32,6 +32,18 @@
   height: 32px;
 }
 
+.icon-xxlarge {
+  @extend %icon;
+  width: 48px;
+  height: 48px;
+}
+
+.icon-xxxlarge {
+  @extend %icon;
+  width: 64px;
+  height: 64px;
+}
+
 .icon-middle {
   vertical-align: middle;
 }

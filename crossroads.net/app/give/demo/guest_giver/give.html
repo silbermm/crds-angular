@@ -1,41 +1,62 @@
 <div class="row">
   <div class="col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-    <h1>Give</h1>
-    <p class="subheading">Your generosity fuels the life change we experience around here.</p>
+    <h1 class="page-header">Give</h1>
+    <h2 class="subheading">Your generosity fuels the life change we experience around here.</h2>
     <div class="push-top">
       <form class="give-form">
         <div class="form-inline form-group give-amount form-group-lg">
           <div class="input-group">
             <span class="input-group-addon">$</span>
-            <input type="tel" class="form-control" min="0" maxlength="6" ng-model="give.amount = '125'" autocomplete="off"></input>
+            <input type="tel" class="form-control" min="0" maxlength="6" ng-model="give.amount" autocomplete="off"></input>
             <span class="input-group-addon ">.00</span>
           </div>
           <!--/input-group-->
         </div>
         <!--/form-inline-->
 
-        <div class="form-group clearfix">
-          <label class="btn btn-block btn-checkbox-toggle"><input type="checkbox" ng-model="ministryShow" />&nbsp;&nbsp; Give to a specific initiative</label>
-        </div>
-        <!--/checkbox-->
 
-        <div class="form-group" ng-show="ministryShow">
-          <select class="form-control">
-            <option>Choose Initiative</option>
-            <option>Game Change Fund</option>
-            <option>Old St. George</option>
-          </select>
-        </div>
-        <!--/form-group-->
+        <div class="row">
+          <div class="col-xs-12">
+            <h3>Where To?</h3>
 
-        <div class="form-group">
-          <select class="form-control">
-            <option>One Time</option>
-          </select>
-        </div>
-        <!--/form-group-->
+            <button type="button" class="btn btn-standard btn-lg" ng-model="give.fund" ng-click="give.fund = 'crossroads'" ng-class="{'active' : give.fund === 'crossroads'}">
+              <svg viewBox="0 0 32 32" class="icon-xxlarge text-primary icon-crossroads">
+                <use xlink:href="#crossroads"></use>
+              </svg>
+              <br>
+              <span>General <br>Giving</span>
+            </button>
+            <button type="button" class="btn btn-standard btn-lg" ng-model="give.fund" ng-click="give.fund = 'beans'" ng-class="{'active' : give.fund === 'beans'}">
+              <svg viewBox="0 0 75 77" class="icon-xxlarge icon-Beans and Rice">
+                <use xlink:href="#Beans and Rice"></use>
+              </svg>
+              <br>
+              <span>Beans <br>& Rice</span>
+            </button>
+            <button type="button" class="btn btn-standard btn-lg" ng-model="give.fund" ng-click="give.fund = 'in'" ng-class="{'active' : give.fund === 'in'}">
+              <svg viewBox="0 0 76 77" class="icon-xxlarge icon-IN">
+                <use xlink:href="#IN"></use>
+              </svg>
+              <br>
+              <span>I'm IN<br>&nbsp;</span>
+            </button>
+          </div>
 
-        <a ui-sref="/demo/guest-giver/login" class="btn btn-primary btn-lg col-xs-12">Give $125</a>
+          <div class="col-xs-12 push-top">
+            <h3>How Often?</h3>
+            <button type="button" class="btn btn-standard btn-lg" ng-model="give.frequency" ng-click="give.frequency = 'once'" ng-class="{'active' : give.frequency == 'once'}">Once</button>
+            <button type="button" class="btn btn-standard btn-lg" ng-model="give.frequency" ng-click="give.frequency = 'weekly'" ng-class="{'active' : give.frequency == 'weekly'}">Weekly</button>
+            <button type="button" class="btn btn-standard btn-lg" ng-model="give.frequency" ng-click="give.frequency = 'monthly'" ng-class="{'active' : give.frequency == 'monthly'}">Monthly</button>
+          </div>
+          <div class="col-xs-12 push-top">
+            <button type="button" ui-sref="/demo/guest-giver/login" class="btn btn-primary btn-lg btn-block-mobile give-button">
+              <span>Next</span>
+              <svg viewBox="0 0 32 32" class="icon-medium icon-arrow-right9 text-right">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right9"></use>
+              </svg>
+            </button>
+          </div>
+        </div>
       </form>
       <!--/col-sm-6-->
       <p class="give-info">You may also manage your

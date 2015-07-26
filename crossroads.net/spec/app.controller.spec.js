@@ -12,7 +12,7 @@ describe('CoreController', function() {
     MESSAGES = _MESSAGES_;
     $aside = _$aside_;
     $scope = {};
-    controller = $controller("coreController", {$scope: $scope});
+    controller = $controller('coreController', {$scope: $scope});
   }));
 
 });
