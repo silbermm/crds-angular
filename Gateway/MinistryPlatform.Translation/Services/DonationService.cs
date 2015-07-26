@@ -247,7 +247,7 @@ namespace MinistryPlatform.Translation.Services
                 donorId = dictionary.ToInt("Donor_ID"),
                 donationDate = dictionary.ToDate("Donation_Date"),
                 donationAmt = Convert.ToInt32(dictionary["Donation_Amount"]),
-                paymentTypeId = (dictionary.ToString("Payment_Type") == "Bank") ? 4 : 5,
+                paymentTypeId = (dictionary.ToString("Payment_Type") == "Bank") ? 5 : 4,
                 donationNotes = dictionary.ToString("Donation_Status_Notes")
             };
             return (d);

@@ -1,0 +1,15 @@
+<ng-include src="'templates/header.html'"></ng-include>
+
+<div class="container main animated fadeIn">
+  <preloader ng-if="app.resolving" full-screen='true'> </preloader>
+  <div class="row" ng-if="!app.resolving">
+      <div class="col-md-8">
+        <div ui-view="left"> </div>
+      </div>
+      <div class="col-md-4">
+        <div ui-view="right"> </div>
+      </div>
+  </div>
+</div><!--/container-->
+
+<ng-include src="'templates/footer.html'"></ng-include>

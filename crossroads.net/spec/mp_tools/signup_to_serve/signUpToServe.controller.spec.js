@@ -30,14 +30,14 @@ describe('Signup To Serve Tool', function(){
     'groupRoleId':22,
     'groupRoleTitle':'Leader'
   }];
-  
+
   var expectedSingleRSVP = {
-    'contactId':768379, 
-    'opportunityId':'2923', 
-    'eventTypeId':142, 
-    'endDate':'1430452800', 
-    'startDate':'1430452800', 
-    'signUp':true, 
+    'contactId':768379,
+    'opportunityId':'2923',
+    'eventTypeId':142,
+    'endDate':'1430452800',
+    'startDate':'1430452800',
+    'signUp':true,
     'alternateWeeks':false
   };
 
@@ -48,7 +48,7 @@ describe('Signup To Serve Tool', function(){
     lastname: 'Maddox',
     groupRoleId: 22,
     groupRoleTitle: 'Leader'
-  }, 
+  },
   {
     participantId: 2346790,
     contactId:23457890,
@@ -59,27 +59,27 @@ describe('Signup To Serve Tool', function(){
   }];
 
   var expectedMultiRSVP1 = {
-    'alternateWeeks':false, 
-    'contactId':768379, 
-    'endDate':'1430452800', 
-    'eventTypeId':142, 
-    'opportunityId':'2923', 
-    'signUp':true, 
+    'alternateWeeks':false,
+    'contactId':768379,
+    'endDate':'1430452800',
+    'eventTypeId':142,
+    'opportunityId':'2923',
+    'signUp':true,
     'startDate':'1430452800'
   };
-  
+
   var expectedMultiRSVP2 = {
-    'alternateWeeks':false, 
-    'contactId':23457890, 
-    'endDate':'1430452800', 
-    'eventTypeId':142, 
-    'opportunityId':'2923', 
-    'signUp':true, 
+    'alternateWeeks':false,
+    'contactId':23457890,
+    'endDate':'1430452800',
+    'eventTypeId':142,
+    'opportunityId':'2923',
+    'signUp':true,
     'startDate':'1430452800'
   };
 
   var expectedDates = [1430382600,1430469000,1430555400,1430641800];
-  
+
   beforeEach(angular.mock.module('crossroads'));
 
   beforeEach(inject(function(_$location_){
@@ -117,7 +117,7 @@ describe('Signup To Serve Tool', function(){
       controller = $controller('SignupToServeController', { $scope: $scope });
       $httpBackend.expectGET( window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getGroupParticipantsForOpportunity/2923').respond(expectedReturn);
       $httpBackend.expectGET( window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getAllOpportunityDates/2923').respond(expectedDates);
-    }); 
+    });
 
     describe('Initial Load', function(){
       it('should get the correct query parameters', function(){
@@ -125,6 +125,7 @@ describe('Signup To Serve Tool', function(){
       });
 
       it('should get a list of participants', function(){
+      
         $httpBackend.flush();
         expect(controller.group.groupId).toBe(expectedReturn.groupId);
         expect(controller.group.groupName).toBe(expectedReturn.groupName);
@@ -138,6 +139,7 @@ describe('Signup To Serve Tool', function(){
 
     describe('Save RSVP', function() {
       it('should save RSVP for one participant', function(){
+      
         $httpBackend.flush();
         $httpBackend.expectPOST( window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/save-rsvp', expectedSingleRSVP).respond(201, '');
         controller.group.eventTypeId = 142;
@@ -150,6 +152,7 @@ describe('Signup To Serve Tool', function(){
       });
 
       it('should save RSVP for multiple participants', function(){
+      
         $httpBackend.flush();
         $httpBackend.expectPOST( window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/save-rsvp', expectedMultiRSVP1).respond(201, '');
         $httpBackend.expectPOST( window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/save-rsvp', expectedMultiRSVP2).respond(201, '');
