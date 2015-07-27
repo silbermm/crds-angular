@@ -8,7 +8,9 @@ namespace crds_angular.Models.Json
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            writer.WriteRawValue(@"""\/Date(" + StripeEpochTime.ConvertDateTimeToEpoch((DateTime)value).ToString() + @")\/""");
+            writer.WriteRawValue(value == null
+                ? "0"
+                : ((DateTime) value).ConvertDateTimeToEpoch().ToString());
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
