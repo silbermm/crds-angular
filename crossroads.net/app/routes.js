@@ -133,7 +133,7 @@
       })
       .state("go-south-africa-signup", {
         url: "/go/south-africa/signup",
-        templateUrl: "gotrips/south-africa-signup.html"
+        templateUrl: "gotrips/signup-page-1.html"
       })
       .state("go-south-africa-signup-page-2", {
         url: "/go/south-africa/signup/2",
@@ -146,6 +146,10 @@
       .state("go-south-africa-signup-page-4", {
         url: "/go/south-africa/signup/4",
         templateUrl: "gotrips/signup-page-4.html"
+      })
+      .state("go-south-africa-signup-page-5", {
+        url: "/go/south-africa/signup/5",
+        templateUrl: "gotrips/signup-page-5.html"
       })
       .state("go-south-africa-signup-page-confirmation", {
         url: "/go/south-africa/signup/confirmation",
