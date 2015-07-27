@@ -66,7 +66,11 @@ GO
 
 /****** Object:  Table [dbo].[cr_Onboarding_Statuses]    Script Date: 6/9/2015 ******/
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[cr_Onboarding_Statuses]') AND type in (N'U'))
-DROP TABLE [dbo].[cr_Onboarding_Statuses]
+	IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[FK_Response_ Attributes_cr_Onboarding_Statuses]'))
+	BEGIN
+		ALTER TABLE [dbo].[Response_Attributes] DROP CONSTRAINT [FK_Response_ Attributes_cr_Onboarding_Statuses]
+	END
+	DROP TABLE [dbo].[cr_Onboarding_Statuses]
 GO 
 
 BEGIN
@@ -82,13 +86,21 @@ CREATE TABLE [dbo].[cr_Onboarding_Statuses](
 END
 GO
 
+SET IDENTITY_INSERT [dbo].[cr_Onboarding_Statuses] ON
+GO
+
 INSERT INTO [dbo].[cr_Onboarding_Statuses]
-           ([Onboarding_Status], [Final_Status])
+           ([Onboarding_Status_ID], [Onboarding_Status], [Final_Status])
      VALUES
-           ('Not Started', 0),
-		   ('In Progress', 0),
-		   ('Completed', 1),
-		   ('Omit', 1)
+           (1, 'Not Started', 0),
+		   (2, 'In Progress', 0),
+		   (3, 'Completed', 1),
+		   (4, 'Omit', 1)
+
+SET IDENTITY_INSERT [dbo].[cr_Onboarding_Statuses] OFF
+GO 
+ALTER TABLE [dbo].[Response_Attributes] WITH CHECK ADD CONSTRAINT [FK_Response_Attributes_cr_Onboarding_Statuses] FOREIGN KEY([Onboarding_Status_ID])
+REFERENCES [dbo].[cr_Onboarding_Statuses] ([Onboarding_Status_ID])
 GO
 
 /****** Object:  Table [dbo].[Response_Attributes]    Script Date: 6/9/2015 ******/
@@ -268,6 +280,10 @@ ELSE
 	END
 GO 
 
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Onboarding_Atrribute_Type_Id]') AND type in (N'U'))
+DROP TABLE [dbo].[Onboarding_Atrribute_Type_Id]
+CREATE TABLE [dbo].[Onboarding_Atrribute_Type_Id] (attribute_type_id int)
+
 /** Add AttributeType for OnBoarding **/
 DECLARE @attribute_type varchar(50);
 SET @attribute_type = N'Onboarding';
@@ -283,9 +299,9 @@ IF EXISTS (
 	BEGIN
 		UPDATE [dbo].[Attribute_Types]
 		SET [Description] = 'Onboarding Steps'
-		OUTPUT INSERTED.Attribute_Type_ID INTO @attributeIds
+		OUTPUT INSERTED.Attribute_Type_ID INTO [dbo].[Onboarding_Atrribute_Type_Id]
 		WHERE [dbo].[Attribute_Types].[Attribute_Type] = @attribute_type 
-		SELECT TOP 1 @attribute_type_id = id from @attributeIds
+		SELECT TOP 1 @attribute_type_id = attribute_type_id from [dbo].[Onboarding_Atrribute_Type_Id]
 	END
 ELSE
 	BEGIN
@@ -435,12 +451,15 @@ GO
 
 ALTER PROCEDURE [dbo].[cr_CopyOnboardingSteps] 
 	-- Add the parameters for the stored procedure here
-	@ResponseID int 	
+	@ResponseID int
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;	
+
+	DECLARE @attribute_type_id int
+	SET @attribute_type_id = (SELECT TOP 1 attribute_type_id from [dbo].[Onboarding_Atrribute_Type_Id])
 
 	INSERT INTO [dbo].[Response_Attributes] 
 		([Attribute_ID], [Response_ID], [Domain_ID], [Start_Date], [Order], [Onboarding_Status_ID])
