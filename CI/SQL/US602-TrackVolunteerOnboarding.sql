@@ -66,10 +66,7 @@ GO
 
 /****** Object:  Table [dbo].[cr_Onboarding_Statuses]    Script Date: 6/9/2015 ******/
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[cr_Onboarding_Statuses]') AND type in (N'U'))
-	IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[FK_Response_ Attributes_cr_Onboarding_Statuses]'))
-	BEGIN
-		ALTER TABLE [dbo].[Response_Attributes] DROP CONSTRAINT [FK_Response_ Attributes_cr_Onboarding_Statuses]
-	END
+	ALTER TABLE [dbo].[Response_Attributes] DROP CONSTRAINT [FK_Response_ Attributes_cr_Onboarding_Statuses]
 	DROP TABLE [dbo].[cr_Onboarding_Statuses]
 GO 
 
