@@ -27,9 +27,9 @@
         abstract:true,
         templateUrl: 'templates/noSideBar.html'
       })
-      .state('leftSideBar',{
+      .state('leftSidebar',{
         abstract:true,
-        templateUrl: 'templates/leftSideBar.html'
+        templateUrl: 'templates/leftSidebar.html'
       })
       .state('rightSideBar',{
         abstract:true,
@@ -516,6 +516,8 @@
                 switch(ContentPageService.page.pageType){
                   case 'NoHeaderOrFooter':
                     return $templateFactory.fromUrl('templates/noHeaderOrFooter.html');
+                    case 'LeftSidebar':
+                    return $templateFactory.fromUrl('templates/leftSidebar.html');
                   default:
                     return $templateFactory.fromUrl('templates/noSideBar.html');
                 }
@@ -524,6 +526,9 @@
           },
           '@content': {
             templateUrl: 'content/content.html'
+          },
+          'right@content': {
+            templateUrl: 'content/rightContent.html'
           }
         }
       });
