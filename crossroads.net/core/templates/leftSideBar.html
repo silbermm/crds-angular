@@ -4,10 +4,10 @@
   <preloader ng-if="app.resolving" full-screen='true'> </preloader>
   <div class="row" ng-if="!app.resolving">
       <div class="col-md-4">
-        <div ui-view> </div>
+        <div ui-view="sidebar"> </div>
       </div>
       <div class="col-md-8">
-        <div ui-view="right"> </div>
+        <div ui-view> </div>
       </div>
   </div>
 </div><!--/container-->

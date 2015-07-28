@@ -527,8 +527,8 @@
           '@content': {
             templateUrl: 'content/content.html'
           },
-          'right@content': {
-            templateUrl: 'content/rightContent.html'
+          'sidebar@content': {
+            templateUrl: 'content/sidebarContent.html'
           }
         }
       });
