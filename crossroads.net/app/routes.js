@@ -31,9 +31,9 @@
         abstract:true,
         templateUrl: 'templates/leftSidebar.html'
       })
-      .state('rightSideBar',{
+      .state('rightSidebar',{
         abstract:true,
-        templateUrl: 'templates/rightSideBar.html'
+        templateUrl: 'templates/rightSidebar.html'
       })
       .state('screenWidth',{
         abstract:true,
@@ -516,8 +516,10 @@
                 switch(ContentPageService.page.pageType){
                   case 'NoHeaderOrFooter':
                     return $templateFactory.fromUrl('templates/noHeaderOrFooter.html');
-                    case 'LeftSidebar':
+                  case 'LeftSidebar':
                     return $templateFactory.fromUrl('templates/leftSidebar.html');
+                  case 'RightSidebar':
+                    return $templateFactory.fromUrl('templates/rightSidebar.html');
                   default:
                     return $templateFactory.fromUrl('templates/noSideBar.html');
                 }
