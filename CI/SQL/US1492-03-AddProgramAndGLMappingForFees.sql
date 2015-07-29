@@ -39,13 +39,13 @@ VALUES
 	,NULL
 	,1
 	,NULL
-	,2435931
+	,2760496
 	,NULL
 	,NULL
 	,NULL
 	,0
 	,'Payment Processor Fees'
-	,0
+	,6
 	,0
 	,NULL
 	,NULL
