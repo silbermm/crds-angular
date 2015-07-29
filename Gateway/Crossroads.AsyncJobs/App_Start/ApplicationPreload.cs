@@ -24,6 +24,10 @@ namespace Crossroads.AsyncJobs
 
         public static JobProcessor GetJobProcessorInstance()
         {
+            // Need to configure Unity before this will work properly.
+            // UnityConfig.RegisterComponents makes sure it is only run once, and is thread-safe.
+            UnityConfig.RegisterComponents();
+
             var uc = (IUnityContainer)GlobalConfiguration.Configuration.DependencyResolver.GetService(typeof(IUnityContainer));
             var processor = (JobProcessor)uc.Resolve(typeof(JobProcessor));
             return (processor);
