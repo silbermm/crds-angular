@@ -26,6 +26,7 @@ var moment = require('moment');
     vm.format = 'MM/dd/yyyy';
     vm.gradeLevelSelected = gradeLevelSelected;
     vm.locationSelected = locationSelected;
+    vm.maritalStati = maritalStati();
     vm.open = open;
     vm.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
     vm.religionSelected = religionSelected;
@@ -77,6 +78,16 @@ var moment = require('moment');
         )
         return true;
       return false;
+    }
+
+    function maritalStati() {
+      return [
+        { value: 'Single', id: 1 },
+        { value: 'Divorced', id: 3 },
+        { value: 'Separated', id: 6 },
+        { value: 'Widowed', id: 4 },
+        { value: 'Married', id: 2 }
+      ];
     }
 
     /**
