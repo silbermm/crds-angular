@@ -520,6 +520,8 @@
                     return $templateFactory.fromUrl('templates/leftSidebar.html');
                   case 'RightSidebar':
                     return $templateFactory.fromUrl('templates/rightSidebar.html');
+                  case 'ScreenWidth':
+                    return $templateFactory.fromUrl('templates/screenWidth.html');
                   default:
                     return $templateFactory.fromUrl('templates/noSideBar.html');
                 }
