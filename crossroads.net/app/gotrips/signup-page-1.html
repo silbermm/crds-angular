@@ -4,7 +4,7 @@
     <h1 class="page-header">Go South Africa Signup</h1>
     <h2 class="subheading">Step 1 of 6</h2>
 
-    <p class="text-muted hard-ends flush-ends">0% Completed</p>
+    <p class="text-muted hard-ends flush-bottom push-top">0% Completed</p>
     <div class="progress">
       <div class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
         <span class="sr-only">45% Complete</span>
@@ -12,13 +12,11 @@
     </div>
 
     <form role="form">
-      <p>
-        You will have the opportunity to sign up any family members who are registered in our site for the trip once you have submitted your application.
-      </p>
-      <p class="push-bottom">Information shared here is kept secure and private. We will not share or sell your information.</p>
+      <p class="push-bottom">
+      You will have the opportunity to sign up any family members who are registered in our site for the trip once you have submitted your application.
+      Information shared here is kept secure and private. We will not share or sell your information.</p>
 
-      <br/><p><b><h2 class="page-header">Profile Information</h2></b></p>
-      
+      <legend>Profile Information</legend>
       <div class="row">
           <div class="form-group col-sm-6">
               <label for="firstname" class="required">First Name</label>
@@ -242,60 +240,77 @@
         </div>
         <!--/row-->
         <div class="row">
-          <div id="Site" class="form-group col-sm-6 required">
-            <label for="provider">T-shirt Size</label>
-            <select class="form-control col-sm-12" ng-model="attribute">
-            </select>
-          </div> 
-          <div class="form-group col-sm-6">
-              <label class="block required">How did you her about this trip?</label>              
-              <label class="radio-inline">
-                  <input type="radio" value="yes" name="program">Program
-              </label>
-              <label class="radio-inline">
-                  <input type="radio" value="no" name="session">Info Session
-              </label>
-              <label class="radio-inline">
-                  <input type="radio" value="no" name="friend">Friend/Family
-              </label>
-              <label class="radio-inline">
-                  <input type="radio" value="no" name="website">Website
-              </label>
-              <label class="radio-inline">
-                  <input type="radio" value="no" name="other">Other
-              </label>
-          </div>
-          <div class="form-group col-sm-6">
-              <label for="conditions" class="required">Please describe any medical conditions that may affect your ability to participate in this trip (Leave blank if it doesn't apply):</label>
-              <textarea class="form-control" rows="2" cols="1" id="conditions" maxlength="250"></textarea>
-          </div>
-          <div class="form-group col-sm-6">
-              <label class="block required">Vegetarian? (If you mark yes we will do our best to provide vegetarian meals during the trip)</label>              
-              <label class="radio-inline">
-                  <input type="radio" value="yes" name="vegetarian">Yes
-              </label>
-              <label class="radio-inline">
-                  <input type="radio" value="no" name="vegetarian">No
-              </label>
-          </div> 
-          <div class="form-group col-sm-6">
-              <label for="allergies" class="required">Please describe all food allergies (Leave blank if it doesn't apply):</label>
-              <textarea class="form-control" rows="2" cols="1" id="allergies" maxlength="250"></textarea>
-          </div>
-          
+          <fieldset>
+            <div class="col-sm-12">
+              <legend>Trip Information</legend>
+            </div><!--/col-sm-12-->
+            <div id="Site" class="form-group col-sm-6 required">
+              <label for="provider">T-shirt Size</label>
+              <select class="form-control col-sm-12" ng-model="attribute">
+              </select>
+            </div><!--/form-group-->
+            <div class="form-group col-sm-12">
+                <label class="block required">How did you her about this trip?</label>
+                <label class="radio-inline">
+                    <input type="radio" value="yes" name="program">Program
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" value="no" name="session">Info Session
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" value="no" name="friend">Friend/Family
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" value="no" name="website">Website
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" value="no" name="other">Other
+                </label>
+            </div><!--/form-group-->
 
-          <div id="Site" class="form-group col-sm-6">
-            <label for="provider" class="required">How would you define your spiritual life? (Pick as many as you like)</label><br>
-            <input type="checkbox" name="vehicle" value="Searching">Searching for answers<br>
-            <input type="checkbox" name="vehicle" value="Received">I have received Jesus <br>
-            <input type="checkbox" name="vehicle" value="Obedience">Focusing on obedience - I've quit negotiating with God<br>
-            <input type="checkbox" name="vehicle" value="Replicating">I'm actively replicating my faith in others
-          </div>             
-          <div class="form-group col-sm-6">
-              <label for="why" class="required">Tell us why you want to go on this trip (Please be specific):</label>
-              <textarea cols="1" rows="4" class="form-control" id="why" maxlength="1000"></textarea>
-          </div>        
-        </div>
+          </div><!--/row-->
+          <div class="row">
+            <div class="form-group col-sm-12">
+                <label for="conditions" class="required">Please describe any medical conditions that may affect your ability to participate in this trip (Leave blank if it doesn't apply):</label>
+                <textarea class="form-control" rows="2" cols="1" id="conditions" maxlength="250"></textarea>
+            </div><!--/form-group-->
+          </div><!--/row-->
+          <div class="row">
+            <div class="form-group col-sm-12">
+                <label class="block required">Vegetarian? (If you mark yes we will do our best to provide vegetarian meals during the trip)</label>
+                <label class="radio-inline">
+                    <input type="radio" value="yes" name="vegetarian">Yes
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" value="no" name="vegetarian">No
+                </label>
+            </div><!--/form-group-->
+          </div><!--/row-->
+          <div class="row">
+            <div class="form-group col-sm-12">
+                <label for="allergies" class="required">Please describe all food allergies (Leave blank if it doesn't apply):</label>
+                <textarea class="form-control" rows="2" cols="1" id="allergies" maxlength="250"></textarea>
+            </div><!--/form-group-->
+          </div><!--/row-->
+          <div class="row">
+            <div id="Site" class="form-group col-sm-6">
+              <label for="slife" class="required">How would you define your spiritual life? (Pick as many as you like)</label><br>
+
+              <div class="checkbox"> <label> <input type="checkbox" name="slife" value="Searching"> Searching for answers </label> </div>
+              <div class="checkbox"> <label> <input type="checkbox" name="slife" value="Received"> I have received Jesus </label> </div>
+              <div class="checkbox"> <label> <input type="checkbox" name="slife" value="Obedience"> Focusing on obedience - I've quit negotiating with God </label> </div>
+              <div class="checkbox"> <label> <input type="checkbox" name="slife" value="Replicating"> I'm actively replicating my faith in others </label> </div>
+
+
+            </div><!--/form-group-->
+          </div><!--/row-->
+          <div class="row">
+            <div class="form-group col-sm-12">
+                <label for="why" class="required">Tell us why you want to go on this trip (Please be specific):</label>
+                <textarea cols="1" rows="4" class="form-control" id="why" maxlength="1000"></textarea>
+            </div><!--/form-group-->
+          </fieldset>
+        </div><!--/row-->
         <a ui-sref="go-south-africa-signup-page-2" class="btn btn-primary pull-right">Continue</a>
     </form>
 

@@ -10,6 +10,14 @@ function GoTripsCtrl($scope, $log, $location, $anchorScroll) {
 
 		vm.isCollapsed = true;
 		vm.phoneToggle = true;
+    vm.openDatePicker = openDatePicker;
+
+    vm.openDatePicker = function($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+      alert('asdsad');
+      vm.opened = true;
+    }
 
 		vm.buttonClickBack = function(){
 			console.log("in here");
@@ -19,7 +27,7 @@ function GoTripsCtrl($scope, $log, $location, $anchorScroll) {
 			vm.isCollapsed = false;
 
 			$location.hash('homephonecont');
-			
+
 			setTimeout(function () {
 					$anchorScroll();
 			}, 500);

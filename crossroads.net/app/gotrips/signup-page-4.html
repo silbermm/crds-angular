@@ -10,56 +10,95 @@
       </div>
     </div>
 
+    <legend>
+      Skills &amp; Experience
+    </legend>
 
-    <br/><p><b><h3 class="page-header">Skills & Experience</h3></b></p>
-   
     <form role="form">
-      <div class="form-group col-sm-12">
-        <label for="experience" class="required">Describe any previous trip experience</label>
-        <textarea cols="1" rows="4" class="form-control" id="tripExperience" maxlength="250"></textarea>
-      </div>
-      <div id="profession" class="form-group col-sm-12">
-        <label for="provider" class="required">Are you a professional in any of the following fields?</label><br>
-        <div>
-          <input type="checkbox" name="business" value="business"> Business
+      <div class="row">
+        <div class="form-group col-sm-12">
+          <label for="experience" class="required">Describe any previous trip experience</label>
+          <textarea cols="1" rows="4" class="form-control" id="tripExperience" maxlength="250"></textarea>
         </div>
-        <div>
-          <input type="checkbox" name="construction" value="construction">Construction
+        <div id="profession" class="form-group col-sm-12">
+          <label for="professionchoice" class="required">Are you a professional in any of the following fields?</label><br>
+
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="professionchoice" value="business"> Business
+            </label>
+          </div><!--/checkbox-->
+
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="professionchoice" value="construction"> Construction
+            </label>
+          </div><!--/checkbox-->
+
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="professionchoice" value="dental"> Dental
+            </label>
+          </div><!--/checkbox-->
+
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="professionchoice" value="education"> Education
+            </label>
+          </div><!--/checkbox-->
+
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="professionchoice" value="it"> IT
+            </label>
+          </div><!--/checkbox-->
+
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="professionchoice" value="media"> Media/Journalism
+            </label>
+          </div><!--/checkbox-->
+
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="professionchoice" value="medical"> Medical
+            </label>
+          </div><!--/checkbox-->
+
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="professionchoice" value="music"> Music
+            </label>
+          </div><!--/checkbox-->
+
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="professionchoice" value="other"> Other
+            </label>
+          </div><!--/checkbox-->
+
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="professionchoice" value="photography"> Photography
+            </label>
+          </div><!--/checkbox-->
+
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="professionchoice" value="social"> Social Worker/Counselor
+            </label>
+          </div><!--/checkbox-->
+
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="professionchoice" value="student"> Student
+            </label>
+          </div><!--/checkbox-->
+
         </div>
-        <div>
-          <input type="checkbox" name="dental" value="dental"> Dental
-        </div>
-        <div>
-          <input type="checkbox" name="education" value="education"> Education
-        </div>
-        <div>
-          <input type="checkbox" name="it" value="IT"> IT
-        </div>
-        <div>
-          <input type="checkbox" name="mediaJournalism" value="mediaJournalism"> Media/Journalism
-        </div>
-        <div>
-          <input type="checkbox" name="medical" value="medical"> Medical
-        </div>
-        <div>
-          <input type="checkbox" name="music" value="music"> Music
-        </div>
-        <div>
-          <input type="checkbox" name="other" value="other"> Other
-        </div>
-        <div>
-          <input type="checkbox" name="photography" value="photography"> Photography
-        </div>
-        <div>
-          <input type="checkbox" name="socialCounselor" value="socialCounselor"> Social Worker/Counselor
-        </div>
-        <div>
-          <input type="checkbox" name="student" value="student"> Student
-        </div>
-      </div>
-  
+      </div><!--/row-->
+
       <a ui-sref="go-south-africa-signup-page-5" class="btn btn-primary pull-right">Continue</a>
       <a ui-sref="go-south-africa-signup-page-3" class="btn btn-primary pull-right">Back</a>
     </form>
 </div>
-
