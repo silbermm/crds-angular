@@ -19,6 +19,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly string _bankPaymentType;
         private readonly int _depositsPageId;
         private readonly int _paymentProcessorErrorsPageId;
+        private readonly int _tripDistributionsPageView;
 
         private readonly IMinistryPlatformService _ministryPlatformService;
         private readonly IDonorService _donorService;
@@ -36,6 +37,7 @@ namespace MinistryPlatform.Translation.Services
             _bankPaymentType = configuration.GetConfigValue("Bank");
             _depositsPageId = configuration.GetConfigIntValue("Deposits");
             _paymentProcessorErrorsPageId = configuration.GetConfigIntValue("PaymentProcessorEventErrors");
+            _tripDistributionsPageView = configuration.GetConfigIntValue("TripDistributionsView");
         }
 
         public int UpdateDonationStatus(int donationId, int statusId, DateTime statusDate,
@@ -251,6 +253,36 @@ namespace MinistryPlatform.Translation.Services
                 donationNotes = dictionary.ToString("Donation_Status_Notes")
             };
             return (d);
+        }
+
+        public List<TripDistribution> GetMyTripDistributions(int contactId)
+        {
+            var apiToken = apiLogin();
+            var results = _ministryPlatformService.GetPageViewRecords(_tripDistributionsPageView, apiToken, contactId.ToString());
+            var trips = new List<TripDistribution>();
+            foreach (var result in results)
+            {
+                var trip = new TripDistribution
+                {
+                    EventId = result.ToInt("Event_ID"),
+                    EventTypeId = result.ToInt("Event_Type_ID"),
+                    EventTitle = result.ToString("Event_Title"),
+                    EventStartDate = result.ToDate("Event_Start_Date"),
+                    EventEndDate = result.ToDate("Event_End_Date"),
+                    TotalPledge = result.ToInt("Total_Pledge"),
+                    CampaignStartDate = result.ToDate("Start_Date"),
+                    CampaignEndDate = result.ToDate("End_Date"),
+                    DonorNickname = result.ToString("Nickname"),
+                    DonorFirstName = result.ToString("First_Name"),
+                    DonorLastName = result.ToString("Last_Name"),
+                    DonorEmail = result.ToString("Email_Address"),
+                    DonationDate = result.ToDate("Donation_Date"),
+                    DonationAmount = result.ToInt("Amount")
+                };
+
+                trips.Add(trip);
+            }
+            return trips;
         }
     }
 }

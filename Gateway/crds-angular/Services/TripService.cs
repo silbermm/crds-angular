@@ -4,16 +4,19 @@ using crds_angular.Models.Crossroads.Trip;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
+using IDonationService = MinistryPlatform.Translation.Services.Interfaces.IDonationService;
 
 namespace crds_angular.Services
 {
     public class TripService : MinistryPlatformBaseService, ITripService
     {
         private readonly IEventParticipantService _eventParticipantService;
+        private readonly IDonationService _donationService;
 
-        public TripService(IEventParticipantService eventParticipant)
+        public TripService(IEventParticipantService eventParticipant, IDonationService donationService)
         {
             _eventParticipantService = eventParticipant;
+            _donationService = donationService;
         }
 
         public List<TripParticipantDto> Search(string search)
@@ -55,7 +58,10 @@ namespace crds_angular.Services
             
         }
 
-        
-       
+        public List<MyTripsDTO> GetMyTrips(int contactId)
+        {
+            var trips = _donationService.GetMyTripDistributions(contactId);
+            throw new System.NotImplementedException();
+        }
     }
 }

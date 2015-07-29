@@ -18,20 +18,37 @@ namespace crds_angular.Controllers.API
         }
 
         [AcceptVerbs("GET")]
-        [ResponseType(typeof(TripParticipantDto))]
+        [ResponseType(typeof (TripParticipantDto))]
         [Route("api/trip/search/{search}")]
         public IHttpActionResult Search(string search)
         {
-                try
-                {
-                    var list = _tripService.Search(search);
-                    return Ok(list);
-                }
-                catch (Exception ex)
-                {
-                    var apiError = new ApiErrorDto("Trip Search Failed", ex);
-                    throw new HttpResponseException(apiError.HttpResponseMessage);
-                }
+            try
+            {
+                var list = _tripService.Search(search);
+                return Ok(list);
+            }
+            catch (Exception ex)
+            {
+                var apiError = new ApiErrorDto("Trip Search Failed", ex);
+                throw new HttpResponseException(apiError.HttpResponseMessage);
+            }
+        }
+
+        [AcceptVerbs("GET")]
+        [ResponseType(typeof (MyTripsDTO))]
+        [Route("api/trip/mytrip/{contactId}")]
+        public IHttpActionResult MyTrip(int contactId)
+        {
+            try
+            {
+                var trips = _tripService.GetMyTrips(contactId);
+                return Ok(trips);
+            }
+            catch (Exception ex)
+            {
+                var apiError = new ApiErrorDto("Failed to retrieve My Trips info", ex);
+                throw new HttpResponseException(apiError.HttpResponseMessage);
+            }
         }
     }
 }

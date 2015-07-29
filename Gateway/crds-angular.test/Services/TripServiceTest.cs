@@ -13,13 +13,15 @@ namespace crds_angular.test.Services
     public class TripServiceTest
     {
         private Mock<IEventParticipantService> _eventParticipantService;
+        private Mock<IDonationService> _donationService;
         private TripService _fixture;
 
         [SetUp]
         public void SetUp()
         {
             _eventParticipantService = new Mock<IEventParticipantService>();
-            _fixture = new TripService(_eventParticipantService.Object);
+            _donationService = new Mock<IDonationService>();
+            _fixture = new TripService(_eventParticipantService.Object, _donationService.Object);
         }
 
         [Test]
