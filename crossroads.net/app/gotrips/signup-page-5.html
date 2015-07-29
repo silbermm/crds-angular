@@ -120,7 +120,7 @@
           </div>
         </div>
 
-        <div class="col-sm-12">
+        <div class="col-sm-12 push-bottom">
           <label class="block required">Do you have outside experience with serving abroad outside of Crossroads GO Trips?</label>
 
           <label class="radio-inline" ng-click="isCollapsed = !isCollapsed">
@@ -135,6 +135,25 @@
             <textarea cols="1" rows="4" class="form-control" id="travelExperience" maxlength="250"></textarea>
           </div>
         </div>
+      </div>
+
+      <div class="col-sm-12" ng-show="gotrip.pageTitle == 'india'">
+        <div class="row">
+          <legend>
+            Past Abuse History <span class="text-muted small">This will in no way keep you from going to India</span>
+          </legend>
+
+          <div class="form-group">
+            <label class="block required">Have you ever been a victim of any form of abuse?</label>
+            <label class="radio-inline">
+                <input type="radio" value="yes"  name="abuse">Yes
+            </label>
+            <label class="radio-inline">
+                <input type="radio" value="no" name="abuse">No
+            </label>
+          </div>
+        </div>
+
       </div>
 
       <a ui-sref="go-trip-signup-page-confirmation({trip_location: gotrip.pageTitle})" class="btn btn-primary pull-right">Continue</a>

@@ -15,11 +15,14 @@ function GoTripsCtrl($scope, $stateParams, $log, $location, $anchorScroll) {
 
     switch(vm.pageTitle) {
       case 'nola':
-          vm.friendlyPageTitle = 'New Orleans';
-          break;
+        vm.friendlyPageTitle = 'New Orleans';
+        break;
       case 'south-africa':
-          vm.friendlyPageTitle = 'South Africa';
-          break;
+        vm.friendlyPageTitle = 'South Africa';
+        break;
+      case 'india':
+        vm.friendlyPageTitle = 'India';
+        break;
     }
 
 		vm.buttonClickBack = function(){
