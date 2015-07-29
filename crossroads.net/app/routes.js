@@ -445,6 +445,15 @@
         url: '/errors/500',
         templateUrl: 'errors/500.html'
       })
+      .state('corkboard', {        
+        url: '/corkboard/',
+        resolve: {
+          RedirectToSubSite: function ($window, $location) {
+            // Force browser to do a full reload to load corkboard's index.html
+            $window.location.href = $location.path();
+          }
+        }
+      })
       .state('tools', {
         parent: 'noSideBar',
         abstract: true,
