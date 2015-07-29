@@ -131,35 +131,41 @@
         url: "/mytrips",
         templateUrl: "mytrips/mytrips.html"
       })
-      .state("go-south-africa-signup", {
+      .state("go-trip-signup", {
         parent: 'noSideBar',
-        url: "/go/south-africa/signup",
-        templateUrl: "gotrips/signup-page-1.html"
+        url: "/go/:trip_location/signup",
+        templateUrl: "gotrips/signup-page-1.html",
+        controller: 'GoTripsCtrl as gotrip'
       })
-      .state("go-south-africa-signup-page-2", {
+      .state("go-trip-signup-page-2", {
         parent: 'noSideBar',
-        url: "/go/south-africa/signup/2",
-        templateUrl: "gotrips/signup-page-2.html"
+        url: "/go/:trip_location/signup/2",
+        templateUrl: "gotrips/signup-page-2.html",
+        controller: 'GoTripsCtrl as gotrip'
       })
-      .state("go-south-africa-signup-page-3", {
+      .state("go-trip-signup-page-3", {
         parent: 'noSideBar',
-        url: "/go/south-africa/signup/3",
-        templateUrl: "gotrips/signup-page-3.html"
+        url: "/go/:trip_location/signup/3",
+        templateUrl: "gotrips/signup-page-3.html",
+        controller: 'GoTripsCtrl as gotrip'
       })
-      .state("go-south-africa-signup-page-4", {
+      .state("go-trip-signup-page-4", {
         parent: 'noSideBar',
-        url: "/go/south-africa/signup/4",
-        templateUrl: "gotrips/signup-page-4.html"
+        url: "/go/:trip_location/signup/4",
+        templateUrl: "gotrips/signup-page-4.html",
+        controller: 'GoTripsCtrl as gotrip'
       })
-      .state("go-south-africa-signup-page-5", {
+      .state("go-trip-signup-page-5", {
         parent: 'noSideBar',
-        url: "/go/south-africa/signup/5",
-        templateUrl: "gotrips/signup-page-5.html"
+        url: "/go/:trip_location/signup/5",
+        templateUrl: "gotrips/signup-page-5.html",
+        controller: 'GoTripsCtrl as gotrip'
       })
-      .state("go-south-africa-signup-page-confirmation", {
+      .state("go-trip-signup-page-confirmation", {
         parent: 'noSideBar',
-        url: "/go/south-africa/signup/confirmation",
-        templateUrl: "gotrips/signup-page-confirmation.html"
+        url: "/go/:trip_location/signup/confirmation",
+        templateUrl: "gotrips/signup-page-confirmation.html",
+        controller: 'GoTripsCtrl as gotrip'
       })
       .state('media', {
         parent: 'noSideBar',

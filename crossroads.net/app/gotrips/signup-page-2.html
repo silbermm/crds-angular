@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-sm-10 col-sm-offset-1">
-      <h1 class="page-header">Go South Africa Signup</h1>
+      <h1 class="page-header">Go {{gotrip.friendlyPageTitle}} Signup</h1>
       <h2 class="subheading">Step 2 of 6</h2>
 
       <p class="text-muted flush-bottom push-top">20% Completed</p>
@@ -42,8 +42,8 @@
         </div>
 
 
-        <a ui-sref="go-south-africa-signup-page-3" class="btn btn-primary pull-right">Continue</a>
-        <a ui-sref="go-south-africa-signup" class="btn btn-primary pull-right">Back</a>
+        <a ui-sref="go-trip-signup-page-3({trip_location: gotrip.pageTitle})" class="btn btn-primary pull-right">Continue</a>
+        <a ui-sref="go-trip-signup({trip_location: gotrip.pageTitle})" class="btn btn-primary pull-right">Back</a>
       </form>
 
   </div><!--/col-sm-12-->

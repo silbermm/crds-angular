@@ -1,7 +1,7 @@
 <div class="row">
   <!-- <div ng-show="groupsignup.viewReady"> -->
   <div class="col-sm-10 col-sm-offset-1">
-      <h1 class="page-header">Go South Africa Signup</h1>
+      <h1 class="page-header">Go {{gotrip.friendlyPageTitle}} Signup</h1>
       <h2 class="subheading">Step 3 of 6</h2>
 
       <p class="text-muted flush-bottom push-top">40% Completed</p>
@@ -122,8 +122,8 @@
             </div>
         </div><!--/row-->
 
-        <a ui-sref="go-south-africa-signup-page-4" class="btn btn-primary pull-right">Continue</a>
-        <a ui-sref="go-south-africa-signup-page-2" class="btn btn-primary pull-right">Back</a>
+        <a ui-sref="go-trip-signup-page-4({trip_location: gotrip.pageTitle})" class="btn btn-primary pull-right">Continue</a>
+        <a ui-sref="go-trip-signup-page-2({trip_location: gotrip.pageTitle})" class="btn btn-primary pull-right">Back</a>
       </form>
 
   </div>

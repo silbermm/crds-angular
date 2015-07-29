@@ -2,21 +2,24 @@
   'use strict';
   module.exports = GoTripsCtrl;
 
-  GoTripsCtrl.$inject = ['$scope', '$log', '$location', '$anchorScroll'];
+  GoTripsCtrl.$inject = ['$scope', '$stateParams', '$log', '$location', '$anchorScroll'];
 
-function GoTripsCtrl($scope, $log, $location, $anchorScroll) {
+function GoTripsCtrl($scope, $stateParams, $log, $location, $anchorScroll) {
 ﻿
 		var vm = this;
 
 		vm.isCollapsed = true;
 		vm.phoneToggle = true;
-    vm.openDatePicker = openDatePicker;
+    vm.pageTitle = $stateParams.trip_location;
+    vm.friendlyPageTitle;
 
-    vm.openDatePicker = function($event) {
-      $event.preventDefault();
-      $event.stopPropagation();
-      alert('asdsad');
-      vm.opened = true;
+    switch(vm.pageTitle) {
+      case 'nola':
+          vm.friendlyPageTitle = 'New Orleans';
+          break;
+      case 'south-africa':
+          vm.friendlyPageTitle = 'South Africa';
+          break;
     }
 
 		vm.buttonClickBack = function(){
