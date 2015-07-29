@@ -43,6 +43,10 @@
         abstract:true,
         templateUrl: 'templates/noHeaderOrFooter.html'
       })
+      .state('fullWidth',{
+        abstract:true,
+        templateUrl: 'templates/fullWidth.html'
+      })
       .state('home', {
         parent: 'noSideBar',
         url: '/',
