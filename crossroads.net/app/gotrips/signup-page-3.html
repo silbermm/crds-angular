@@ -1,128 +1,130 @@
-<!-- <div ng-show="groupsignup.viewReady"> -->
-<div class="col-sm-10 col-sm-offset-1">
-    <h1 class="page-header">Go South Africa Signup</h1>
-    <h2 class="subheading">Step 3 of 6</h2>
+<div class="row">
+  <!-- <div ng-show="groupsignup.viewReady"> -->
+  <div class="col-sm-10 col-sm-offset-1">
+      <h1 class="page-header">Go South Africa Signup</h1>
+      <h2 class="subheading">Step 3 of 6</h2>
 
-    <p class="text-muted hard-ends flush-ends">40% Completed</p>
-    <div class="progress">
-      <div class="progress-bar" role="progressbar" aria-valuenow="30" aria-valuemin="10" aria-valuemax="100" style="width: 40%">
-        <span class="sr-only">40% Complete</span>
+      <p class="text-muted flush-bottom push-top">40% Completed</p>
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" aria-valuenow="30" aria-valuemin="10" aria-valuemax="100" style="width: 40%">
+          <span class="sr-only">40% Complete</span>
+        </div>
       </div>
-    </div>
 
-    <legend>
-      Trip Preferences
-    </legend>
+      <legend>
+        Trip Preferences
+      </legend>
 
-    <form role="form">
-      <div class="row">
-        <div class="form-group col-md-12">
-         We will use a random lottery if we have more people sign up than avaiable spots.  While we must prepare for this, it has not happened in past years.  If we hold a lottery and you are not selected, your deposit will be refunded.
-        </div>
-        <div class="form-group col-sm-12">
-          <label class="block required">Preferred Trip Date</label>
-          <div>
-            <label class="radio-inline">
-                <input type="radio" value="yes"  name="tripDate"> July 12-19, 2015
-            </label>
-          </div>
-          <div>
-            <label class="radio-inline">
-                <input type="radio" value="no" name="tripDate"> July 20-27, 2015
-            </label>
-          </div>
-        </div><!--/col-sm-12-->
-
-        <div class="form-group col-md-12 flush-bottom">
-          <p>
-            Do you have friends signing up that you would like to experience this trip with?  If yes, everyone in your group should enter a common participant name through which you have all agreed to be connected.  This is how we will know to treat you as a group.  For example, if Jim Smith, Sarah Johnson and Kerry Moore all want to travel together, they can all enter "Jim Smith" in this section and Jim will be the common link for the group. Note:  If you are the one common name, you will still need to enter your name in this section.<br>
-          </p>
-        </div>
-
-        <div class="form-group col-md-6">
-          <label class="control-label">Common Name:</label>
-          <input type="text" class="form-control" id="commonName" placeholder="Common Name">
-        </div>
-
-        <div class="form-group col-md-12">
-          Everybody on the trip gets a roommate.  Married co-ed couples may room together, otherwise you and your significant other get split up for the trip (no shacking up on Crossroads time). <br>
-        </div>
-
-          <div class="form-group col-md-6">
-            <label class="control-label">Who are your roommate choices?</label>
-            <input type="text" class="form-control push-half-bottom" id="roommateOne" placeholder="Roommate Name - First Choice">
-            <input type="text" class="form-control" id="roommateTwo" placeholder="Roommate Name - Second Choice">
-          </div>
-        </div><!--/row-->
-
+      <form role="form">
         <div class="row">
-          <div class="form-group col-sm-6">
-            <label class="control-label">Support Person Name</label>
-            <input type="text" class="form-control" id="supportPerson" placeholder="Support Person Name">
-          </div>
-          <div class="form-group col-sm-6">
-            <label class="control-label">Support Person Email Address</label>
-            <input type="text" class="form-control" id="supportPersonEmail" placeholder="Support Person Email Address">
-          </div>
-        </div><!--/row-->
-
-        <div class="row">
-
-
-          <div class="form-group col-sm-12">
-            <label class="block required">Would you be interested in being a GO Group Leader?</label>
-            <label class="radio-inline" ng-click="isCollapsed = !isCollapsed">
-                <input type="radio" value="yes"  name="leaderYes">Yes
-            </label>
-            <label class="radio-inline" ng-click="isCollapsed = !isCollapsed">
-                <input type="radio" value="no" name="leaderNo">No
-            </label>
-          </div>
-          <div class="form-group col-sm-12"  collapse="!isCollapsed">
-            <label for="why" class="required">Why would you like to be a GO Group Leader?</label>
-            <textarea cols="1" rows="4" class="form-control" id="whyGoleader" maxlength="250"></textarea>
-          </div>
-          <div class="col-sm-12">
-            <legend>
-              Lottery
-            </legend>
-          </div><!--/col-sm-12-->
-
           <div class="form-group col-md-12">
            We will use a random lottery if we have more people sign up than avaiable spots.  While we must prepare for this, it has not happened in past years.  If we hold a lottery and you are not selected, your deposit will be refunded.
           </div>
           <div class="form-group col-sm-12">
-            <label class="block required">Please select one choice below:</label>
+            <label class="block required">Preferred Trip Date</label>
             <div>
               <label class="radio-inline">
-                  <input type="radio" value="yes"  name="leaderYes"> As long as I am selected, I will go on the trip.
+                  <input type="radio" value="yes"  name="tripDate"> July 12-19, 2015
               </label>
             </div>
             <div>
               <label class="radio-inline">
-                  <input type="radio" value="no" name="leaderNo">If my spouse or any member of my family is not selected, none of us will go.
+                  <input type="radio" value="no" name="tripDate"> July 20-27, 2015
               </label>
             </div>
-            <div>
-              <label class="radio-inline">
-                  <input type="radio" value="no" name="leaderNo">If my spouse or any member of my family is not selected, all others will go.
-              </label>
-            </div>
-            <div>
-              <label class="radio-inline">
-                  <input type="radio" value="no" name="leaderNo">If my spouse or any member of my family OR any member of our larger group of friends is not selected, none of us will go.
-              </label>
-            </div>
-            <div>
-              <label class="radio-inline">
-                  <input type="radio" value="no" name="leaderNo"> If my spouse or any member of my fmaily OR any member of our larger group of friends is not selected, my spouse or family will still go.
-              </label>
-            </div>
+          </div><!--/col-sm-12-->
+
+          <div class="form-group col-md-12 flush-bottom">
+            <p>
+              Do you have friends signing up that you would like to experience this trip with?  If yes, everyone in your group should enter a common participant name through which you have all agreed to be connected.  This is how we will know to treat you as a group.  For example, if Jim Smith, Sarah Johnson and Kerry Moore all want to travel together, they can all enter "Jim Smith" in this section and Jim will be the common link for the group. Note:  If you are the one common name, you will still need to enter your name in this section.<br>
+            </p>
           </div>
-      </div><!--/row-->
 
-      <a ui-sref="go-south-africa-signup-page-4" class="btn btn-primary pull-right">Continue</a>
-      <a ui-sref="go-south-africa-signup-page-2" class="btn btn-primary pull-right">Back</a>
-    </form>
+          <div class="form-group col-md-6">
+            <label class="control-label">Common Name:</label>
+            <input type="text" class="form-control" id="commonName" placeholder="Common Name">
+          </div>
 
-</div>
+          <div class="form-group col-md-12">
+            Everybody on the trip gets a roommate.  Married co-ed couples may room together, otherwise you and your significant other get split up for the trip (no shacking up on Crossroads time). <br>
+          </div>
+
+            <div class="form-group col-md-6">
+              <label class="control-label">Who are your roommate choices?</label>
+              <input type="text" class="form-control push-half-bottom" id="roommateOne" placeholder="Roommate Name - First Choice">
+              <input type="text" class="form-control" id="roommateTwo" placeholder="Roommate Name - Second Choice">
+            </div>
+          </div><!--/row-->
+
+          <div class="row">
+            <div class="form-group col-sm-6">
+              <label class="control-label">Support Person Name</label>
+              <input type="text" class="form-control" id="supportPerson" placeholder="Support Person Name">
+            </div>
+            <div class="form-group col-sm-6">
+              <label class="control-label">Support Person Email Address</label>
+              <input type="text" class="form-control" id="supportPersonEmail" placeholder="Support Person Email Address">
+            </div>
+          </div><!--/row-->
+
+          <div class="row">
+
+
+            <div class="form-group col-sm-12">
+              <label class="block required">Would you be interested in being a GO Group Leader?</label>
+              <label class="radio-inline" ng-click="isCollapsed = !isCollapsed">
+                  <input type="radio" value="yes"  name="leaderYes">Yes
+              </label>
+              <label class="radio-inline" ng-click="isCollapsed = !isCollapsed">
+                  <input type="radio" value="no" name="leaderNo">No
+              </label>
+            </div>
+            <div class="form-group col-sm-12"  collapse="!isCollapsed">
+              <label for="why" class="required">Why would you like to be a GO Group Leader?</label>
+              <textarea cols="1" rows="4" class="form-control" id="whyGoleader" maxlength="250"></textarea>
+            </div>
+            <div class="col-sm-12">
+              <legend>
+                Lottery
+              </legend>
+            </div><!--/col-sm-12-->
+
+            <div class="form-group col-md-12">
+             We will use a random lottery if we have more people sign up than avaiable spots.  While we must prepare for this, it has not happened in past years.  If we hold a lottery and you are not selected, your deposit will be refunded.
+            </div>
+            <div class="form-group col-sm-12">
+              <label class="block required">Please select one choice below:</label>
+              <div>
+                <label class="radio-inline">
+                    <input type="radio" value="yes"  name="leaderYes"> As long as I am selected, I will go on the trip.
+                </label>
+              </div>
+              <div>
+                <label class="radio-inline">
+                    <input type="radio" value="no" name="leaderNo">If my spouse or any member of my family is not selected, none of us will go.
+                </label>
+              </div>
+              <div>
+                <label class="radio-inline">
+                    <input type="radio" value="no" name="leaderNo">If my spouse or any member of my family is not selected, all others will go.
+                </label>
+              </div>
+              <div>
+                <label class="radio-inline">
+                    <input type="radio" value="no" name="leaderNo">If my spouse or any member of my family OR any member of our larger group of friends is not selected, none of us will go.
+                </label>
+              </div>
+              <div>
+                <label class="radio-inline">
+                    <input type="radio" value="no" name="leaderNo"> If my spouse or any member of my fmaily OR any member of our larger group of friends is not selected, my spouse or family will still go.
+                </label>
+              </div>
+            </div>
+        </div><!--/row-->
+
+        <a ui-sref="go-south-africa-signup-page-4" class="btn btn-primary pull-right">Continue</a>
+        <a ui-sref="go-south-africa-signup-page-2" class="btn btn-primary pull-right">Back</a>
+      </form>
+
+  </div>
+</div><!--/row-->
