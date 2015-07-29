@@ -22,7 +22,7 @@
                         <ul class="navbar--login list-unstyled">
                             <span id="current-user" class="hidden-xs" ng-if="$root.username != undefined" ng-cloak> {{$root.username}} </span>
                             <li class="hidden-xs ng-cloak" ng-show="$root.username != undefined" ng-cloak>
-                                <a href="#/logout" class="ng-cloak">Sign Out</a>
+                                <a ui-sref="logout" class="ng-cloak">Sign Out</a>
                             </li>
                             <li class="hidden-xs" data-toggle="dropdown" ng-show="$root.username == undefined">
                                 <button class="btn btn-primary" id="form-toggle" ng-click="toggleDesktopLogin(); passwordPrefix='login-dropdown'">
