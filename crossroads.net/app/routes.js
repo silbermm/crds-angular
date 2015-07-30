@@ -122,6 +122,7 @@
         templateUrl: 'myprofile/myprofile.html',
       })
       .state("mytrips", {
+        parent: 'noSideBar',
         url: "/mytrips",
         templateUrl: "mytrips/mytrips.html"
       })
