@@ -41,7 +41,7 @@ namespace MinistryPlatform.Translation.Services
 
         public MyContact GetContactById(int contactId)
         {
-            var searchString = string.Format(",{0}", contactId);
+            var searchString = string.Format(",\"{0}\"", contactId);
             
             var pageViewRecords = _ministryPlatformService.GetPageViewRecords("AllIndividualsWithContactId", apiLogin(), searchString);
 

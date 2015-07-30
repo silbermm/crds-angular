@@ -32,9 +32,15 @@
            console.log('US1403: stateChangeStart event handler (' + 
             fromState.name + '->' + toState.name + '), do not yet know if session active, in core.run');
 
-           if (toState.name === 'logout') {
-            console.log('US1403: stateChangeStart toState logout');
-            return;
+            if (toState.name === 'logout') {
+                console.log('US1403: stateChangeStart toState logout');
+                if (fromState.data === undefined || !fromState.data.isProtected) {
+                    Session.addRedirectRoute(fromState.name, fromParams);
+                }
+                else {
+                    Session.addRedirectRoute('home', '');
+                }
+                return;
             }
            if (Session.isActive()) {
             

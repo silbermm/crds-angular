@@ -7,13 +7,13 @@
     '$scope',
     '$rootScope',
     'MESSAGES',
-    'Message',
+    'ContentBlock',
     'growl',
     '$aside',
     'screenSize',
     '$state'];
 
-  function CoreController($scope, $rootScope, MESSAGES, Message, growl, $aside, screenSize, $state) {
+  function CoreController($scope, $rootScope, MESSAGES, ContentBlock, growl, $aside, screenSize, $state) {
 
     var vm = this;
 
@@ -57,7 +57,7 @@
       if(ttl !== undefined && ttl !== null) {
         parms.ttl = ttl;
       }
-      growl[$rootScope.messages[id].type]($rootScope.messages[id].message, parms);
+      growl[$rootScope.messages[id].type]($rootScope.messages[id].content, parms);
     });
 
     $rootScope.$on('mailchimp-response', function (event, result, msg) {
@@ -69,17 +69,17 @@
     });
 
     $rootScope.$on('context', function (event, id) {
-     var message = Message.get({
+     var contentBlocks = ContentBlock.get({
         id: id
       }, function () {
-        return message.message.message;
+        return contentBlocks.ContentBlock.content;
       });
     });
 
-    var messagesRequest = Message.get('', function () {
-      messagesRequest.messages.unshift(null); //Adding a null so the indexes match the DB
+    var contentBlockRequest = ContentBlock.get('', function () {
+      contentBlockRequest.contentBlocks.unshift(null); //Adding a null so the indexes match the DB
       //TODO Refactor to not use rootScope, now using ngTemplate w/ ngMessages but also need to pull this out into a service
-      $rootScope.messages = messagesRequest.messages;
+      $rootScope.messages = contentBlockRequest.contentBlocks;
     });
 
     function openAside(position, backdrop) {

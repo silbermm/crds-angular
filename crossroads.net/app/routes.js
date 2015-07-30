@@ -27,13 +27,13 @@
         abstract:true,
         templateUrl: 'templates/noSideBar.html'
       })
-      .state('leftSideBar',{
+      .state('leftSidebar',{
         abstract:true,
-        templateUrl: 'templates/leftSideBar.html'
+        templateUrl: 'templates/leftSidebar.html'
       })
-      .state('rightSideBar',{
+      .state('rightSidebar',{
         abstract:true,
-        templateUrl: 'templates/rightSideBar.html'
+        templateUrl: 'templates/rightSidebar.html'
       })
       .state('screenWidth',{
         abstract:true,
@@ -119,12 +119,47 @@
         parent: 'noSideBar',
         url: '/myprofile',
         controller: 'MyProfileCtrl as myProfile',
-        templateUrl: 'myprofile/myprofile.html'
+        templateUrl: 'myprofile/myprofile.html',
       })
-      .state('mytrips', {
+      .state("mytrips", {
+        url: "/mytrips",
+        templateUrl: "mytrips/mytrips.html"
+      })
+      .state("go-trip-signup", {
         parent: 'noSideBar',
-        url: '/mytrips',
-        templateUrl: 'mytrips/mytrips.html'
+        url: "/go/:trip_location/signup",
+        templateUrl: "gotrips/signup-page-1.html",
+        controller: 'GoTripsCtrl as gotrip'
+      })
+      .state("go-trip-signup-page-2", {
+        parent: 'noSideBar',
+        url: "/go/:trip_location/signup/2",
+        templateUrl: "gotrips/signup-page-2.html",
+        controller: 'GoTripsCtrl as gotrip'
+      })
+      .state("go-trip-signup-page-3", {
+        parent: 'noSideBar',
+        url: "/go/:trip_location/signup/3",
+        templateUrl: "gotrips/signup-page-3.html",
+        controller: 'GoTripsCtrl as gotrip'
+      })
+      .state("go-trip-signup-page-4", {
+        parent: 'noSideBar',
+        url: "/go/:trip_location/signup/4",
+        templateUrl: "gotrips/signup-page-4.html",
+        controller: 'GoTripsCtrl as gotrip'
+      })
+      .state("go-trip-signup-page-5", {
+        parent: 'noSideBar',
+        url: "/go/:trip_location/signup/5",
+        templateUrl: "gotrips/signup-page-5.html",
+        controller: 'GoTripsCtrl as gotrip'
+      })
+      .state("go-trip-signup-page-confirmation", {
+        parent: 'noSideBar',
+        url: "/go/:trip_location/signup/confirmation",
+        templateUrl: "gotrips/signup-page-confirmation.html",
+        controller: 'GoTripsCtrl as gotrip'
       })
       .state('media', {
         parent: 'noSideBar',
@@ -510,6 +545,12 @@
                 switch(ContentPageService.page.pageType){
                   case 'NoHeaderOrFooter':
                     return $templateFactory.fromUrl('templates/noHeaderOrFooter.html');
+                  case 'LeftSidebar':
+                    return $templateFactory.fromUrl('templates/leftSidebar.html');
+                  case 'RightSidebar':
+                    return $templateFactory.fromUrl('templates/rightSidebar.html');
+                  case 'ScreenWidth':
+                    return $templateFactory.fromUrl('templates/screenWidth.html');
                   default:
                     return $templateFactory.fromUrl('templates/noSideBar.html');
                 }
@@ -518,6 +559,9 @@
           },
           '@content': {
             templateUrl: 'content/content.html'
+          },
+          'sidebar@content': {
+            templateUrl: 'content/sidebarContent.html'
           }
         }
       });
