@@ -1,0 +1,171 @@
+<div class="row">
+  <!-- <div ng-show="groupsignup.viewReady"> -->
+  <div class="col-sm-10 col-sm-offset-1">
+      <h1 class="page-header">Go {{gotrip.friendlyPageTitle}} Signup</h1>
+      <h2 class="subheading">2015 Oct SA Topsy Trip</h2>
+
+      <p class="text-muted flush-bottom push-top">60% Completed | Step 4 of 6</p>
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="10" aria-valuemax="100" style="width: 60%">
+          <span class="sr-only">60% Complete</span>
+        </div>
+      </div>
+
+      <legend>
+        Skills &amp; Experience
+      </legend>
+
+      <form role="form">
+
+        <div class="row" ng-show="gotrip.pageTitle == 'nola'">
+          <div class="form-group col-sm-12">
+            <label for="workteam">First Choice Work Team <span class="small text-muted">Kids traveling must be on the same work team as at least one parent.</span></label>
+
+            <div class="row">
+              <div class="col-sm-6">
+                <select class="form-control">
+                  <option></option>
+                  <option>Aftercare</option>
+                  <option>Church Relations</option>
+                  <option>Construction</option>
+                  <option>Dental</option>
+                  <option>Gardening</option>
+                  <option>General</option>
+                  <option>Habitat</option>
+                  <option>Habitat (must be 16 or older)</option>
+                  <option>Hands on - Neighborhood Restoration</option>
+                  <option>Kids</option>
+                  <option>Photo</option>
+                  <option>Schools (Clean up, painting, etc)</option>
+                  <option>Vacation Bible Camp</option>
+                  <option>VBC</option>
+                  <option>VBS</option>
+                </select>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="form-group col-sm-12">
+            <label for="experience" class="required">Please describe your experience in this area:</label>
+            <textarea cols="1" rows="4" class="form-control" id="tripExperience" maxlength="250"></textarea>
+          </div>
+
+          <div class="form-group col-sm-12">
+            <label for="workteam">Second Choice Work Team</label>
+
+            <div class="row">
+              <div class="col-sm-6">
+                <select class="form-control">
+                  <option></option>
+                  <option>Aftercare</option>
+                  <option>Church Relations</option>
+                  <option>Construction</option>
+                  <option>Dental</option>
+                  <option>Gardening</option>
+                  <option>General</option>
+                  <option>Habitat</option>
+                  <option>Habitat (must be 16 or older)</option>
+                  <option>Hands on - Neighborhood Restoration</option>
+                  <option>Kids</option>
+                  <option>Photo</option>
+                  <option>Schools (Clean up, painting, etc)</option>
+                  <option>Vacation Bible Camp</option>
+                  <option>VBC</option>
+                  <option>VBS</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row">
+          <div class="form-group col-sm-12">
+            <label for="experience" class="required">Describe any previous trip experience</label>
+            <textarea cols="1" rows="4" class="form-control" id="tripExperience" maxlength="250"></textarea>
+          </div>
+          <div id="profession" class="form-group col-sm-12">
+            <label for="professionchoice" class="required">Are you a professional in any of the following fields?</label><br>
+
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="professionchoice" value="business"> Business
+              </label>
+            </div><!--/checkbox-->
+
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="professionchoice" value="construction"> Construction
+              </label>
+            </div><!--/checkbox-->
+
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="professionchoice" value="dental"> Dental
+              </label>
+            </div><!--/checkbox-->
+
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="professionchoice" value="education"> Education
+              </label>
+            </div><!--/checkbox-->
+
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="professionchoice" value="it"> IT
+              </label>
+            </div><!--/checkbox-->
+
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="professionchoice" value="media"> Media/Journalism
+              </label>
+            </div><!--/checkbox-->
+
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="professionchoice" value="medical"> Medical
+              </label>
+            </div><!--/checkbox-->
+
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="professionchoice" value="music"> Music
+              </label>
+            </div><!--/checkbox-->
+
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="professionchoice" value="other"> Other
+              </label>
+            </div><!--/checkbox-->
+
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="professionchoice" value="photography"> Photography
+              </label>
+            </div><!--/checkbox-->
+
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="professionchoice" value="social"> Social Worker/Counselor
+              </label>
+            </div><!--/checkbox-->
+
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="professionchoice" value="student"> Student
+              </label>
+            </div><!--/checkbox-->
+
+          </div>
+        </div><!--/row-->
+
+        <a ui-sref="go-trip-signup-page-5({trip_location: gotrip.pageTitle})" class="btn btn-primary pull-right" ng-show="gotrip.pageTitle != 'nola'">Continue</a>
+        <a ui-sref="go-trip-signup-page-confirmation({trip_location: gotrip.pageTitle})" class="btn btn-primary pull-right" ng-show="gotrip.pageTitle == 'nola'">Continue</a>
+        <a ui-sref="go-trip-signup-page-3({trip_location: gotrip.pageTitle})" class="btn btn-standard pull-right">Back</a>
+      </form>
+  </div>
+</div><!--/row-->
