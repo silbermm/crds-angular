@@ -34,16 +34,17 @@
   padding: $line-height-computed/2 $grid-gutter-width/2;
    a {
      color: $text-color;
-
      &:hover {
-       color: $link-color;
+       color: darken($text-color, 12%);
      }
    }
   h1, h2, h3, h4, h5 {
    margin: 0;
   }
 }
-
+.card-body {
+  padding: 0 $grid-gutter-width/2;
+}
 .card-dark {
   background: rgba(214, 224, 226, 0.4);
 }

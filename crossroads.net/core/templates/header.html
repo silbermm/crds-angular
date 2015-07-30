@@ -45,7 +45,7 @@
                         </ul>
                         <ul class="navbar--login list-unstyled">
                             <li class="hidden-xs" data-toggle="dropdown" ng-show="$root.username == undefined">
-                                <button class="btn btn-primary" id="form-toggle" ng-click="toggleDesktopRegister(); passwordPrefix='registration'">
+                                <button class="btn btn-standard" id="form-toggle" ng-click="toggleDesktopRegister(); passwordPrefix='registration'">
                                     <span>Create an Account</span>
                                 </button>
                             </li>
@@ -63,19 +63,13 @@
                             </li>
                         </ul>
                         <!-- search box -->
-                        <div class="col-xs-3 pull-right site-search visible-lg visible-md">
-                          <form>
-                            <div class="input-group">
-                              <input type="text" class="form-control" placeholder="Search">
-                              <span class="input-group-btn">
-                                <a class="btn btn-gray-light" href="" ui-sref="search">
-                                  <svg viewBox="0 0 32 32" class="icon icon-medium icon-search3">
-                                    <use xlink:href="#search3"></use>
-                                  </svg>
-                                </button>
-                              </a>
-                            </div>
-                          </form>
+                        <div class="pull-right site-search visible-lg visible-md">
+
+                          <a class="btn btn-link" href="" ui-sref="search">
+                            <svg viewBox="0 0 32 32" class="icon icon-medium icon-search3">
+                              <use xlink:href="#search3"></use>
+                            </svg>
+                          </a>
                       </div>
                       <!-- /search box -->
                     </div>
