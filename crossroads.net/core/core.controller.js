@@ -80,6 +80,11 @@
       messagesRequest.messages.unshift(null); //Adding a null so the indexes match the DB
       //TODO Refactor to not use rootScope, now using ngTemplate w/ ngMessages but also need to pull this out into a service
       $rootScope.messages = messagesRequest.messages;
+      _.forEach(messagesRequest.messages, function(m) {
+        if(m && m.name) {
+          MESSAGES[m.name] = m.id;
+        }
+      })
     });
 
     function openAside(position, backdrop) {
