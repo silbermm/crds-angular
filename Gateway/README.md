@@ -14,3 +14,15 @@ Prerequisites: A Windows machine, or Windows VM
     * Control Panel -> System and Security -> System
 	* Advanced System Settings
 	* Environment Variables
+
+
+##.NET Style
+###Resharper Configuration
+The team level configuration file is checked into git alongside the .NET solution file, and is named **Crossroads.Resharper.Team.DotSettings**
+The initial version of this file is concentrated on providing a default code formatting and cleanup template.
+To format and cleanup code for the current file using the following steps
+* Press Ctrl+E,F for both VS and InteliJ keyboard layouts to run the silent cleanup which will utilize the **Crossroads - Reformat and Remove References** cleanup options
+* Alternatively you can press Ctrl+E,C for VS keyboard layout or Ctrl+Alt+F for InteliJ keyboard layout, and then select a specific cleanup option by name
+
+These settings will probably be tweaked over time. When modifying the settings for code styles and formatting please set the values on the team configuration file **Crossroads.Resharper.Team.DotSettings**
+and check into source control. The easiest way to modify the team configuration file is to go to the **Resharper -> Manage Options** menu item and click on the Edit Layer Wrench icon on the **Crossroads.Resharper.Team** entry.

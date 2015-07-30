@@ -27,13 +27,13 @@
         abstract:true,
         templateUrl: 'templates/noSideBar.html'
       })
-      .state('leftSideBar',{
+      .state('leftSidebar',{
         abstract:true,
-        templateUrl: 'templates/leftSideBar.html'
+        templateUrl: 'templates/leftSidebar.html'
       })
-      .state('rightSideBar',{
+      .state('rightSidebar',{
         abstract:true,
-        templateUrl: 'templates/rightSideBar.html'
+        templateUrl: 'templates/rightSidebar.html'
       })
       .state('screenWidth',{
         abstract:true,
@@ -516,6 +516,12 @@
                 switch(ContentPageService.page.pageType){
                   case 'NoHeaderOrFooter':
                     return $templateFactory.fromUrl('templates/noHeaderOrFooter.html');
+                  case 'LeftSidebar':
+                    return $templateFactory.fromUrl('templates/leftSidebar.html');
+                  case 'RightSidebar':
+                    return $templateFactory.fromUrl('templates/rightSidebar.html');
+                  case 'ScreenWidth':
+                    return $templateFactory.fromUrl('templates/screenWidth.html');
                   default:
                     return $templateFactory.fromUrl('templates/noSideBar.html');
                 }
@@ -524,6 +530,9 @@
           },
           '@content': {
             templateUrl: 'content/content.html'
+          },
+          'sidebar@content': {
+            templateUrl: 'content/sidebarContent.html'
           }
         }
       });
