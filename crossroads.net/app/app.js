@@ -1,4 +1,4 @@
-
+require('crds-core');
 require('./profile');
 require('./events');
 require('./give');

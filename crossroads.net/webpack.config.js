@@ -19,7 +19,6 @@ module.exports = {
     watchPattern: 'app/**/**',
     externals: {
       stripe: 'Stripe',
-      angular: 'angular',
       moment: 'moment'
 
     },
