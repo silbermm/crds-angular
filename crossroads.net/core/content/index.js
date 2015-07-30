@@ -2,7 +2,7 @@ require('./content.html');
 require('./sidebarContent.html');
 require('../templates/noHeaderOrFooter.html');
 require('../templates/noSideBar.html');
-require('../templates/rightSideBar.html');
+require('../templates/rightSidebar.html');
 require('../templates/leftSidebar.html');
 require('../templates/screenWidth.html');
 

@@ -348,12 +348,30 @@
                     </li>
                 </ul>
             </li>
-            <li role="presentation" class="dropdown" dropdown>
-                <a class="dropdown-toggle" dropdown-toggle href="#" role="button" aria-expanded="false">Admin</a>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="https://admindemo.crossroads.net/ministryplatform/" target="_blank">Ministry Platform (Demo)</a>
+            <li class="dropdown dropdown-large" dropdown>
+                <a href="#" class="dropdown-toggle" dropdown-toggle>Admin New</a>
+                <ul class="dropdown-menu dropdown-menu-large dropdown-menu-featured-row row">
+                    <li class="col-sm-3 ">
+                        <ul>
+                          <li class="dropdown-header">Admin</li>
+                          <li><a href="https://admindemo.crossroads.net/ministryplatform/" target="_blank">Ministry Platform (Demo)</a>
+                          </li>
+                          <li><a href="https://adminint.crossroads.net/ministryplatform/" target="_blank">Ministry Platform (Integration)</a>
+                          </li>
+                        </ul>
                     </li>
-                    <li><a href="https://adminint.crossroads.net/ministryplatform/" target="_blank">Ministry Platform (Integration)</a>
+                    <li class="col-sm-3 ">
+                        <ul>
+                          <li class="dropdown-header">Static Mocks</li>
+                          <li><a ui-sref="go-trip-signup({trip_location: 'india'})">GO India Signup</a>
+                          </li>
+                          <li><a ui-sref="go-trip-signup({trip_location: 'nola'})">Go New Orleans Signup</a>
+                          </li>
+                          <li><a ui-sref="go-trip-signup({trip_location: 'south-africa'})">Go South Africa Signup</a>
+                          </li>
+                          <li><a ui-sref="go-trip-signup({trip_location: 'nicaragua'})">GO Nicaragua Signup</a>
+                          </li>
+                        </ul>
                     </li>
                 </ul>
             </li>
