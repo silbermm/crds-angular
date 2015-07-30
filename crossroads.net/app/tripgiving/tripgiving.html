@@ -17,7 +17,7 @@
     </div>
     <ng-messages for="searchForm.searchText.$error" ng-if="tripSearch.showError(searchForm, 'searchText')">
       <span ng-message="required">
-        <span class='text-danger' ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+        <span class='text-danger' ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].content | html"></span>
       </span>
     </ng-messages>
   </form>

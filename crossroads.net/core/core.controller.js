@@ -7,13 +7,13 @@
     '$scope',
     '$rootScope',
     'MESSAGES',
-    'Message',
+    'ContentBlock',
     'growl',
     '$aside',
     'screenSize',
     '$state'];
 
-  function CoreController($scope, $rootScope, MESSAGES, Message, growl, $aside, screenSize, $state) {
+  function CoreController($scope, $rootScope, MESSAGES, ContentBlock, growl, $aside, screenSize, $state) {
 
     var vm = this;
 
@@ -69,18 +69,18 @@
     });
 
     $rootScope.$on('context', function (event, id) {
-     var message = Message.get({
+     var contentBlocks = ContentBlock.get({
         id: id
       }, function () {
-        return message.message.message;
+        return contentBlocks.ContentBlock.content;
       });
     });
 
-    var messagesRequest = Message.get('', function () {
-      messagesRequest.contentBlocks.unshift(null); //Adding a null so the indexes match the DB
+    var contentBlockRequest = ContentBlock.get('', function () {
+      contentBlockRequest.contentBlocks.unshift(null); //Adding a null so the indexes match the DB
       //TODO Refactor to not use rootScope, now using ngTemplate w/ ngMessages but also need to pull this out into a service
-      $rootScope.messages = messagesRequest.contentBlocks;
-      _.forEach(messagesRequest.contentBlocks, function(m) {
+      $rootScope.messages = contentBlockRequest.contentBlocks;
+      _.forEach(contentBlockRequest.contentBlocks, function(m) {
         if(m && m.title) {
           MESSAGES[m.title] = m.id;
         }
