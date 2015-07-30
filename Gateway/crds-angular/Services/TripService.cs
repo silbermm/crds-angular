@@ -72,8 +72,7 @@ namespace crds_angular.Services
                 {
                     var gift = new TripGift
                     {
-                        DonorNickname = donation.DonorNickname,
-                        DonorFirstName = donation.DonorFirstName,
+                        DonorNickname = donation.DonorNickname ?? donation.DonorFirstName,
                         DonorLastName = donation.DonorLastName,
                         DonorEmail = donation.DonorEmail,
                         DonationDate = donation.DonationDate.ToShortDateString(),

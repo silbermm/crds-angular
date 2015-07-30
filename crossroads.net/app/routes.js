@@ -127,9 +127,24 @@
           loggedin: crds_utilities.checkLoggedin
         }
       })
+      .state('tripgiving', {
+        parent: 'noSideBar',
+        url: '/trips',
+        controller: 'TripGivingCtrl as tripSearch',
+        templateUrl: 'tripgiving/tripgiving.html',
+        resolve: {
+          Page: 'Page',
+          CmsInfo: function(Page, $stateParams) {
+            return Page.get({
+              url: '/tripgiving/'
+            }).$promise;
+          }
+        }
+      })
       .state('mytrips', {
         parent: 'noSideBar',
-        url: '/mytrips',
+        url: '/trips/mytrips',
+        controller: 'MyTripsController as tripsController',
         templateUrl: 'mytrips/mytrips.html'
       })
       .state('media', {
@@ -271,20 +286,6 @@
         //abstract: true,
         url: '/demo',
         template: '<p>demo</p>'
-      })
-      .state('tripgiving', {
-        parent: 'noSideBar',
-        url: '/tripgiving',
-        controller: 'TripGivingCtrl as tripSearch',
-        templateUrl: 'tripgiving/tripgiving.html',
-        resolve: {
-          Page: 'Page',
-          CmsInfo: function(Page, $stateParams) {
-            return Page.get({
-              url: '/tripgiving/'
-            }).$promise;
-          }
-        }
       })
       .state('go_trip_giving_results', {
         parent: 'noSideBar',

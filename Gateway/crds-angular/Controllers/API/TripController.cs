@@ -36,8 +36,8 @@ namespace crds_angular.Controllers.API
 
         [AcceptVerbs("GET")]
         [ResponseType(typeof (MyTripsDTO))]
-        [Route("api/trip/mytrip/{contactId}")]
-        public IHttpActionResult MyTrip(int contactId)
+        [Route("api/trip/mytrips/{contactId}")]
+        public IHttpActionResult MyTrips(int contactId)
         {
             try
             {
