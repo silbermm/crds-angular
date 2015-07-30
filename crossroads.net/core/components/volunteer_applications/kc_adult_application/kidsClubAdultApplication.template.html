@@ -62,12 +62,11 @@
     </div>
 
     <div class="row">
-
       <div class="form-group col-sm-6">
         <label class="block">Marital Status</label>
         <select class="form-control col-sm-12" name="maritalStatus" 
           ng-model="kcAdultApplication.volunteer.maritalStatusId" 
-          ng-options="item.id as item.value for item in kcAdultApplication.maritalStati"
+          ng-options="item.dp_RecordID as item.dp_RecordName for item in kcAdultApplication.maritalStatuses"
           disabled="true">
           <option></option>
         </select>
