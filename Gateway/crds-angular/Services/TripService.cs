@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using crds_angular.Models.Crossroads.Trip;
@@ -58,10 +59,32 @@ namespace crds_angular.Services
             
         }
 
-        public List<MyTripsDTO> GetMyTrips(int contactId)
+        public MyTripsDTO GetMyTrips(int contactId)
         {
             var trips = _donationService.GetMyTripDistributions(contactId);
-            throw new System.NotImplementedException();
+
+            var myTrips = new MyTripsDTO();
+            var events = trips.Select(e => new Trip {EventId = e.EventId, EventTitle = e.EventTitle, EventStartDate = e.EventStartDate.ToShortDateString(), EventEndDate = e.EventEndDate.ToShortDateString(), FundraisingGoal = e.TotalPledge, FundraisingDaysLeft = (e.CampaignEndDate - DateTime.Today).Days}).Distinct().ToList();
+            foreach (var e in events)
+            {
+                var donations = trips.Where(d => d.EventId == e.EventId).ToList();
+                foreach (var donation in donations)
+                {
+                    var gift = new TripGift
+                    {
+                        DonorNickname = donation.DonorNickname,
+                        DonorFirstName = donation.DonorFirstName,
+                        DonorLastName = donation.DonorLastName,
+                        DonorEmail = donation.DonorEmail,
+                        DonationDate = donation.DonationDate.ToShortDateString(),
+                        DonationAmount = donation.DonationAmount
+                    };
+                    e.TripGifts.Add(gift);
+                    e.TotalRaised += donation.DonationAmount;
+                }
+                myTrips.MyTrips.Add(e);
+            }
+            return myTrips;
         }
     }
 }

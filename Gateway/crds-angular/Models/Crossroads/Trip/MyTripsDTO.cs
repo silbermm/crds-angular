@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using AutoMapper;
 using Newtonsoft.Json;
 
 namespace crds_angular.Models.Crossroads.Trip
@@ -8,7 +9,7 @@ namespace crds_angular.Models.Crossroads.Trip
         [JsonProperty(PropertyName = "myTrips")]
         public List<Trip> MyTrips { get; set; }
 
-        MyTripsDTO()
+        public MyTripsDTO()
         {
             MyTrips = new List<Trip>();
         }
@@ -22,11 +23,8 @@ namespace crds_angular.Models.Crossroads.Trip
         [JsonIgnore]
         public string EventType { get; set; }
 
-        [JsonProperty(PropertyName = "tripParticipantId")]
-        public int EventParticipantId { get; set; }
-
         [JsonProperty(PropertyName = "tripStartDate")]
-        public long EventStartDate { get; set; }
+        public string EventStartDate { get; set; }
 
         [JsonProperty(PropertyName = "tripEnd")]
         public string EventEndDate { get; set; }
@@ -34,16 +32,31 @@ namespace crds_angular.Models.Crossroads.Trip
         [JsonProperty(PropertyName = "tripName")]
         public string EventTitle { get; set; }
 
+        [JsonProperty(PropertyName = "fundraisingDays")]
+        public int FundraisingDaysLeft { get; set; }
+
+        [JsonProperty(PropertyName = "fundraisingGoal")]
+        public int FundraisingGoal { get; set; }
+
+        [JsonProperty(PropertyName = "totalRaised")]
+        public int TotalRaised { get; set; }
+
         [JsonProperty(PropertyName = "tripGifts")]
-        public List<TripGift> TripGifts { get; set; } 
+        public List<TripGift> TripGifts { get; set; }
+
+        public Trip()
+        {
+            TripGifts = new List<TripGift>();
+        }
     }
 
     public class TripGift
     {
+        public string DonorNickname { get; set; }
         public string DonorFirstName { get; set; }
         public string DonorLastName { get; set; }
         public string DonorEmail { get; set; }
-        public decimal DonationAmount { get; set; }
+        public int DonationAmount { get; set; }
         public string DonationDate { get; set; }
     }
 }

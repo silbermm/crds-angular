@@ -264,20 +264,20 @@ namespace MinistryPlatform.Translation.Services
             {
                 var trip = new TripDistribution
                 {
-                    EventId = result.ToInt("Event_ID"),
-                    EventTypeId = result.ToInt("Event_Type_ID"),
-                    EventTitle = result.ToString("Event_Title"),
-                    EventStartDate = result.ToDate("Event_Start_Date"),
-                    EventEndDate = result.ToDate("Event_End_Date"),
-                    TotalPledge = result.ToInt("Total_Pledge"),
-                    CampaignStartDate = result.ToDate("Start_Date"),
-                    CampaignEndDate = result.ToDate("End_Date"),
+                    EventId = result.ToInt("Event ID"),
+                    EventTypeId = result.ToInt("Event Type ID"),
+                    EventTitle = result.ToString("Event Title"),
+                    EventStartDate = result.ToDate("Event Start Date"),
+                    EventEndDate = result.ToDate("Event End Date"),
+                    TotalPledge = Convert.ToInt32(result["Total Pledge"]),
+                    CampaignStartDate = result.ToDate("Start Date"),
+                    CampaignEndDate = result.ToDate("End Date"),
                     DonorNickname = result.ToString("Nickname"),
-                    DonorFirstName = result.ToString("First_Name"),
-                    DonorLastName = result.ToString("Last_Name"),
-                    DonorEmail = result.ToString("Email_Address"),
-                    DonationDate = result.ToDate("Donation_Date"),
-                    DonationAmount = result.ToInt("Amount")
+                    DonorFirstName = result.ToString("First Name"),
+                    DonorLastName = result.ToString("Last Name"),
+                    DonorEmail = result.ToString("Email Address"),
+                    DonationDate = result.ToDate("Donation Date"),
+                    DonationAmount = Convert.ToInt32(result["Amount"])
                 };
 
                 trips.Add(trip);
