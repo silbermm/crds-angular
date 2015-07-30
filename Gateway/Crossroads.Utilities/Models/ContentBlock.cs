@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
 namespace Crossroads.Utilities.Models
@@ -37,5 +38,15 @@ namespace Crossroads.Utilities.Models
         Main,
         [EnumMember(Value = "corkboard")]
         Corkboard
+    }
+
+    public class ContentBlocks
+    {
+        [JsonProperty("contentBlocks")]
+        // RestSharp currently has an issue deserializing List not named the same as property,
+        // so have to name this "contentBlocks" in order to deserialize properly
+        //
+        // ReSharper disable once InconsistentNaming
+        public List<ContentBlock> contentBlocks { get; set; }
     }
 }

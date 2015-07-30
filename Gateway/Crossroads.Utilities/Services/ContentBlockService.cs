@@ -9,9 +9,9 @@ namespace Crossroads.Utilities.Services
     {
         public ContentBlockService(IRestClient cmsRestClient)
         {
-            var blocks = cmsRestClient.Execute<List<ContentBlock>>(new RestRequest("/api/ContentBlock", Method.GET));
+            var blocks = cmsRestClient.Execute<ContentBlocks>(new RestRequest("/api/ContentBlock", Method.GET));
 
-            foreach (var b in blocks.Data)
+            foreach (var b in blocks.Data.contentBlocks)
             {
                 Add(b.Title, b);
             }
