@@ -2,9 +2,9 @@
   <!-- <div ng-show="groupsignup.viewReady"> -->
   <div class="col-sm-10 col-sm-offset-1">
       <h1 class="page-header">Go {{gotrip.friendlyPageTitle}} Signup</h1>
-      <h2 class="subheading">Step 3 of 6</h2>
+      <h2 class="subheading">2015 Oct SA Topsy Trip</h2>
 
-      <p class="text-muted flush-bottom push-top">40% Completed</p>
+      <p class="text-muted flush-bottom push-top">40% Completed | Step 3 of 6</p>
       <div class="progress">
         <div class="progress-bar" role="progressbar" aria-valuenow="30" aria-valuemin="10" aria-valuemax="100" style="width: 40%">
           <span class="sr-only">40% Complete</span>
@@ -41,7 +41,7 @@
           </div>
 
           <div class="form-group col-md-6" ng-show="gotrip.pageTitle != 'india'">
-            <label class="control-label">Common Name:</label>
+            <label class="control-label">Common Name</label>
             <input type="text" class="form-control" id="commonName" placeholder="Common Name">
           </div>
 
@@ -82,7 +82,7 @@
               <textarea cols="1" rows="4" class="form-control" id="whyGoleader" maxlength="250"></textarea>
             </div>
           </div>
-          
+
           <div class="row" ng-show="gotrip.pageTitle != 'india'">
             <div class="col-sm-12">
               <legend>
@@ -94,7 +94,7 @@
              We will use a random lottery if we have more people sign up than avaiable spots.  While we must prepare for this, it has not happened in past years.  If we hold a lottery and you are not selected, your deposit will be refunded.
             </div>
             <div class="form-group col-sm-12">
-              <label class="block required">Please select one choice below:</label>
+              <label class="block required">Please select one choice below</label>
               <div>
                 <label class="radio-inline">
                     <input type="radio" value="yes"  name="leaderYes"> As long as I am selected, I will go on the trip.
@@ -124,7 +124,7 @@
         </div><!--/row-->
 
         <a ui-sref="go-trip-signup-page-4({trip_location: gotrip.pageTitle})" class="btn btn-primary pull-right">Continue</a>
-        <a ui-sref="go-trip-signup-page-2({trip_location: gotrip.pageTitle})" class="btn btn-primary pull-right">Back</a>
+        <a ui-sref="go-trip-signup-page-2({trip_location: gotrip.pageTitle})" class="btn btn-standard pull-right">Back</a>
       </form>
 
   </div>

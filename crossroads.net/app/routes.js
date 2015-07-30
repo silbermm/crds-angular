@@ -120,12 +120,6 @@
         url: '/myprofile',
         controller: 'MyProfileCtrl as myProfile',
         templateUrl: 'myprofile/myprofile.html',
-        data: {
-          isProtected: true
-        },
-        resolve: {
-          loggedin: crds_utilities.checkLoggedin
-        }
       })
       .state("mytrips", {
         url: "/mytrips",
