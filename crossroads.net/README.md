@@ -151,4 +151,3 @@ A .jscsrc file exists to use AirBnB styleguide
 * For Sublime Text 3, [SublimeLinter](https://github.com/SublimeLinter/SublimeLinter-jscs/)
 * For IntelliJ, [jscs-plugin](https://github.com/idok/jscs-plugin)
 
-
