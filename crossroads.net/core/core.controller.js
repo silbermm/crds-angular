@@ -57,7 +57,7 @@
       if(ttl !== undefined && ttl !== null) {
         parms.ttl = ttl;
       }
-      growl[$rootScope.messages[id].type]($rootScope.messages[id].message, parms);
+      growl[$rootScope.messages[id].type]($rootScope.messages[id].content, parms);
     });
 
     $rootScope.$on('mailchimp-response', function (event, result, msg) {
@@ -77,12 +77,12 @@
     });
 
     var messagesRequest = Message.get('', function () {
-      messagesRequest.messages.unshift(null); //Adding a null so the indexes match the DB
+      messagesRequest.contentBlocks.unshift(null); //Adding a null so the indexes match the DB
       //TODO Refactor to not use rootScope, now using ngTemplate w/ ngMessages but also need to pull this out into a service
-      $rootScope.messages = messagesRequest.messages;
-      _.forEach(messagesRequest.messages, function(m) {
-        if(m && m.name) {
-          MESSAGES[m.name] = m.id;
+      $rootScope.messages = messagesRequest.contentBlocks;
+      _.forEach(messagesRequest.contentBlocks, function(m) {
+        if(m && m.title) {
+          MESSAGES[m.title] = m.id;
         }
       })
     });

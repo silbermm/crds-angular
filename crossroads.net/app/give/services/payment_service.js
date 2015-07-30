@@ -84,6 +84,16 @@
       var e = error ? error : {};
       e.httpStatusCode = httpStatusCode;
 
+      if(e.globalMessage && e.globalMessage > 0) {
+        // Short-circuit the logic below, as the API should have
+        // already determined the message to display
+        return(e);
+      }
+
+      // This same logic exists on the .Net side in crds-angular/Services/StripeService.cs
+      // This is because of the Stripe "tokens" call, which goes directly to Stripe, not via our API.  We
+      // are implementing the same here in the interest of keeping our application somewhat agnostic to
+      // the underlying payment processor.
       if(e.type == 'abort' || e.code == 'abort') {
         e.globalMessage = MESSAGES.paymentMethodProcessingError;
       } else if(e.type == 'card_error') {

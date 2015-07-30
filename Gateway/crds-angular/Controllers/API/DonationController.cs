@@ -53,7 +53,7 @@ namespace crds_angular.Controllers.API
 
                     return Ok(response);
                 }
-                catch (StripeException stripeException)
+                catch (PaymentProcessorException stripeException)
                 {
                     return (stripeException.GetStripeResult());
                 }
@@ -84,7 +84,7 @@ namespace crds_angular.Controllers.API
 
                 return Ok(response);
             }
-            catch (StripeException stripeException)
+            catch (PaymentProcessorException stripeException)
             {
                 return (stripeException.GetStripeResult());
             }

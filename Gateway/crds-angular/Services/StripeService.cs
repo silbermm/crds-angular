@@ -7,6 +7,7 @@ using RestSharp;
 using System.Net;
 using crds_angular.Models.Crossroads.Stewardship;
 using Crossroads.Utilities.Interfaces;
+using RestSharp.Extensions;
 
 namespace crds_angular.Services
 {
@@ -20,10 +21,13 @@ namespace crds_angular.Services
 
         private readonly int _maxQueryResultsPerPage;
 
-        public StripeService(IRestClient stripeRestClient, IConfigurationWrapper configuration)
+        private readonly IContentBlockService _contentBlockService;
+
+        public StripeService(IRestClient stripeRestClient, IConfigurationWrapper configuration, IContentBlockService contentBlockService)
         {
             _stripeRestClient = stripeRestClient;
             _maxQueryResultsPerPage = configuration.GetConfigIntValue("MaxStripeQueryResultsPerPage");
+            _contentBlockService = contentBlockService;
         }
 
         private static bool IsBadResponse(IRestResponse response)
@@ -33,7 +37,7 @@ namespace crds_angular.Services
                     || response.StatusCode == HttpStatusCode.PaymentRequired);
         }
 
-        private static void CheckStripeResponse(string errorMessage, IRestResponse response)
+        private void CheckStripeResponse(string errorMessage, IRestResponse response)
         {
             if (!IsBadResponse(response))
             {
@@ -43,15 +47,49 @@ namespace crds_angular.Services
             var content = JsonConvert.DeserializeObject<Content>(response.Content);
             if (content == null || content.Error == null)
             {
-                throw (new StripeException(HttpStatusCode.InternalServerError, errorMessage, StripeNetworkErrorResponseCode,
-                    response.ErrorException.Message, null, null, null));
+                throw(AddGlobalErrorMessage(new PaymentProcessorException(HttpStatusCode.InternalServerError, errorMessage, StripeNetworkErrorResponseCode,
+                    response.ErrorException.Message, null, null, null)));
             }
             else
             {
-                throw new StripeException(response.StatusCode, errorMessage, content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode, content.Error.Param);
+                throw(AddGlobalErrorMessage(new PaymentProcessorException(response.StatusCode, errorMessage, content.Error.Type, content.Error.Message, content.Error.Code, content.Error.DeclineCode, content.Error.Param)));
             }
         }
 
+        private PaymentProcessorException AddGlobalErrorMessage(PaymentProcessorException e)
+        {
+            // This same logic exists on the Angular side in app/give/services/payment_service.js.
+            // This is because of the Stripe "tokens" call, which goes directly to Stripe, not via our API.  We
+            // are implementing the same here in the interest of keeping our application somewhat agnostic to
+            // the underlying payment processor.
+            if ("abort".Equals(e.Type) || "abort".Equals(e.Code))
+            {
+                e.GlobalMessage = _contentBlockService["paymentMethodProcessingError"].Id;
+            }
+            else if ("card_error".Equals(e.Type))
+            {
+                if (e.Code != null && ("card_declined".Equals(e.Code) || e.Code.Matches("^incorrect") || e.Code.Matches("^invalid")))
+                {
+                    e.GlobalMessage = _contentBlockService["paymentMethodDeclined"].Id;
+                }
+                else if ("processing_error".Equals(e.Code))
+                {
+                    e.GlobalMessage = _contentBlockService["paymentMethodProcessingError"].Id;
+                }
+            }
+            else if ("bank_account".Equals(e.Param))
+            {
+                if ("invalid_request_error".Equals(e.Type))
+                {
+                    e.GlobalMessage = _contentBlockService["paymentMethodDeclined"].Id;
+                }
+            }
+            else
+            {
+                e.GlobalMessage = _contentBlockService["failedResponse"].Id;
+            }
+            return (e);
+        }
 
         public string CreateCustomer(string customerToken)
         {

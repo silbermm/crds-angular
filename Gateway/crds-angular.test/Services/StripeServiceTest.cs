@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Net;
 using crds_angular.Models.Crossroads.Stewardship;
 using Crossroads.Utilities.Interfaces;
+using Crossroads.Utilities.Models;
 
 namespace crds_angular.test.Services
 {
@@ -15,16 +16,32 @@ namespace crds_angular.test.Services
     {
         private Mock<IRestClient> _restClient;
         private Mock<IConfigurationWrapper> _configuration;
+        private Mock<IContentBlockService> _contentBlockService;
         private StripeService _fixture;
+        private Dictionary<string, ContentBlock> _errors;
 
         [SetUp]
         public void Setup()
         {
+            _errors = new Dictionary<string, ContentBlock>
+            {
+                {"paymentMethodProcessingError", new ContentBlock { Id = 123 }},
+                {"paymentMethodDeclined", new ContentBlock { Id = 456 }},
+                {"failedResponse", new ContentBlock { Id = 789 }},
+            };
+
             _restClient = new Mock<IRestClient>(MockBehavior.Strict);
             _configuration = new Mock<IConfigurationWrapper>();
             _configuration.Setup(mocked => mocked.GetConfigIntValue("MaxStripeQueryResultsPerPage")).Returns(42);
 
-            _fixture = new StripeService(_restClient.Object, _configuration.Object);
+            _contentBlockService = new Mock<IContentBlockService>();
+            foreach (var e in _errors)
+            {
+                var e1 = e;
+                _contentBlockService.SetupGet(mocked => mocked[e1.Key]).Returns(e1.Value);
+            }
+
+            _fixture = new StripeService(_restClient.Object, _configuration.Object, _contentBlockService.Object);
         }
 
         [Test]
@@ -172,7 +189,7 @@ namespace crds_angular.test.Services
             stripeResponse.SetupGet(mocked => mocked.Content).Returns("{error: {message:'Bad Request'}}").Verifiable();
             _restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
 
-            Assert.Throws<StripeException>(() => _fixture.CreateCustomer("token"));
+            Assert.Throws<PaymentProcessorException>(() => _fixture.CreateCustomer("token"));
 
             _restClient.Verify(mocked => mocked.Execute<StripeCustomer>(
                 It.Is<RestRequest>(o =>
@@ -200,11 +217,12 @@ namespace crds_angular.test.Services
                 _fixture.CreateCustomer("token");
                 Assert.Fail("Expected exception was not thrown");
             }
-            catch (StripeException e)
+            catch (PaymentProcessorException e)
             {
                 Assert.AreEqual("abort", e.Type);
                 Assert.AreEqual("Doh!", e.DetailMessage);
                 Assert.AreEqual(HttpStatusCode.InternalServerError, e.StatusCode);
+                Assert.AreEqual(_errors["paymentMethodProcessingError"].Id, e.GlobalMessage);
             }
 
 
@@ -282,11 +300,12 @@ namespace crds_angular.test.Services
                 _fixture.UpdateCustomerDescription("token", 102030);
                 Assert.Fail("Expected exception was not thrown");
             }
-            catch (StripeException e)
+            catch (PaymentProcessorException e)
             {
                 Assert.AreEqual("Customer update failed", e.Message);
                 Assert.IsNotNull(e.DetailMessage);
                 Assert.AreEqual("Invalid Request", e.DetailMessage);
+                Assert.AreEqual(_errors["failedResponse"].Id, e.GlobalMessage);
             }
         }
 
@@ -363,11 +382,12 @@ namespace crds_angular.test.Services
                 _fixture.ChargeCustomer("token", -900, 98765);
                 Assert.Fail("Should have thrown exception");
             }
-            catch (StripeException e)
+            catch (PaymentProcessorException e)
             {
                 Assert.AreEqual("Invalid charge request", e.Message);
                 Assert.IsNotNull(e.DetailMessage);
                 Assert.AreEqual("Invalid Integer Amount", e.DetailMessage);
+                Assert.AreEqual(_errors["failedResponse"].Id, e.GlobalMessage);
             }
 
         }
