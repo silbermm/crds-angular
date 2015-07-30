@@ -506,7 +506,9 @@
             controller: 'ContentCtrl',
             templateProvider: function($templateFactory, $stateParams, Page, ContentPageService) {
               var promise;
-              promise = Page.get({ url: $stateParams.link }).$promise;
+
+              var link = addTrailingSlashIfNecessary($stateParams.link);
+              promise = Page.get({ url: link }).$promise;
 
               return promise.then(function(promise) {
                 if (promise.pages.length > 0) {
@@ -549,4 +551,13 @@
 
     $urlRouterProvider.otherwise('/');
   }
+
+  function addTrailingSlashIfNecessary(link) {
+    if (_.endsWith(link, '/') === false) {
+      return link + '/';
+    }
+
+    return link;
+  }
+
 })();
