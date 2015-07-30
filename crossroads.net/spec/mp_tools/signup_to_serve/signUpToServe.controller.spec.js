@@ -1,5 +1,4 @@
-require('../../../dependencies/dependencies');
-require('../../../core/core');
+require('crds-core');
 require('../../../app/app');
 
 describe('Signup To Serve Tool', function(){

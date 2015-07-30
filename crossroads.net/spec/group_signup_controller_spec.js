@@ -1,3 +1,4 @@
+require('crds-core');
 require('../app/app');
 
 // testing controller
