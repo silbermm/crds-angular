@@ -53,6 +53,8 @@ describe ('PaymentService', function () {
       stripe = $injector.get('stripe');
       $rootScope = _$rootScope_;
       MESSAGES = _MESSAGES_;
+      MESSAGES.paymentMethodProcessingError = 1;
+      MESSAGES.paymentMethodDeclined = 2;
     })
   );
 

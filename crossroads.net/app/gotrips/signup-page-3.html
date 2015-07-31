@@ -2,7 +2,7 @@
   <!-- <div ng-show="groupsignup.viewReady"> -->
   <div class="col-sm-10 col-sm-offset-1">
       <h1 class="page-header">Go {{gotrip.friendlyPageTitle}} Signup</h1>
-      <h2 class="subheading">2015 Oct SA Topsy Trip</h2>
+      <h2 class="subheading">{{gotrip.tripName}}</h2>
 
       <p class="text-muted flush-bottom push-top">40% Completed | Step 3 of 6</p>
       <div class="progress">
@@ -11,27 +11,57 @@
         </div>
       </div>
 
-      <legend>
-        Trip Preferences
-      </legend>
+    <form role="form">
 
-      <form role="form">
-        <div class="row">
-          <div class="form-group col-md-12" ng-show="gotrip.pageTitle != 'india'">
-           We will use a random lottery if we have more people sign up than avaiable spots.  While we must prepare for this, it has not happened in past years.  If we hold a lottery and you are not selected, your deposit will be refunded.
+      <div class="row" ng-show="gotrip.pageTitle != 'india'">
+        <div class="col-sm-12">
+          <legend>
+            Lottery
+          </legend>
+        </div><!--/col-sm-12-->
+
+        <div class="form-group col-md-12">
+         We will use a random lottery if we have more people sign up than avaiable spots.  While we must prepare for this, it has not happened in past years.  If we hold a lottery and you are not selected, your deposit will be refunded.
+        </div>
+        <!--CONDITION RULE: IF LOTTERY-SPOUSE OR LOTTERY-NO-SPOUSE OR LOTTERY-FAMILY OR LOTTER-NO-FAMILY ARE SELECTED, THEN MAKE COMMON-NAME REQURED. ELSE MAKE COMMON-NAME OPTIONAL.-->
+        <div class="form-group col-sm-12">
+          <label class="block required">Please select one choice below</label>
+          <div>
+            <label for="lottery-go" class="radio-inline">
+                <input type="radio" value="yes" name="lottery" id="lottery-go"> As long as I am selected, I will go on the trip.
+            </label>
           </div>
-          <div class="form-group col-sm-12">
-            <label class="block required">Preferred Trip Date</label>
-            <div>
-              <label class="radio-inline">
-                  <input type="radio" value="yes"  name="tripDate"> July 12-19, 2015
-              </label>
-            </div>
-            <div>
-              <label class="radio-inline">
-                  <input type="radio" value="no" name="tripDate"> July 20-27, 2015
-              </label>
-            </div>
+          <div>
+            <label for="lottery-spouse" class="radio-inline">
+                <input type="radio" value="no" name="lottery" id="lottery-spouse">If my spouse or any member of my family is not selected, none of us will go.
+            </label>
+          </div>
+          <div>
+            <label for="lottery-no-spouse" class="radio-inline">
+                <input type="radio" value="no" name="lottery" id="lottery-no-spouse">If my spouse or any member of my family is not selected, all others will go.
+            </label>
+          </div>
+          <div>
+            <label for="lottery-family" class="radio-inline">
+                <input type="radio" value="no" name="lottery" id="lottery-family">If my spouse or any member of my family OR any member of our larger group of friends is not selected, none of us will go.
+            </label>
+          </div>
+          <div>
+            <label for="lottery-no-family" class="radio-inline">
+                <input type="radio" value="no" name="lottery" id="lottery-no-family"> If my spouse or any member of my fmaily OR any member of our larger group of friends is not selected, my spouse or family will still go.
+            </label>
+          </div>
+        </div>
+      </div>
+
+
+
+
+        <div class="row">
+          <div class="col-sm-12">
+            <legend>
+              Trip Preferences
+            </legend>
           </div><!--/col-sm-12-->
 
           <div class="form-group col-md-12 flush-bottom" ng-show="gotrip.pageTitle != 'india'">
@@ -41,8 +71,8 @@
           </div>
 
           <div class="form-group col-md-6" ng-show="gotrip.pageTitle != 'india'">
-            <label class="control-label">Common Name</label>
-            <input type="text" class="form-control" id="commonName" placeholder="Common Name">
+            <label for="common-name" class="control-label">Common Name</label>
+            <input type="text" class="form-control" id="common-name" placeholder="Common Name">
           </div>
 
           <div class="form-group col-md-12">
@@ -51,79 +81,39 @@
 
             <div class="form-group col-md-6">
               <label class="control-label">Who are your roommate choices?</label>
-              <input type="text" class="form-control push-half-bottom" id="roommateOne" placeholder="Roommate Name - First Choice">
-              <input type="text" class="form-control" id="roommateTwo" placeholder="Roommate Name - Second Choice">
+              <input type="text" class="form-control push-half-bottom" id="roommate-one" placeholder="Roommate Name - First Choice">
+              <input type="text" class="form-control" id="roommate-two" placeholder="Roommate Name - Second Choice">
             </div>
           </div><!--/row-->
 
           <div class="row">
+            <p class="col-sm-12">
+              Content block explaining support person email.
+            </p>
             <div class="form-group col-sm-6">
-              <label class="control-label">Support Person Name</label>
-              <input type="text" class="form-control" id="supportPerson" placeholder="Support Person Name">
-            </div>
-            <div class="form-group col-sm-6">
-              <label class="control-label">Support Person Email Address</label>
-              <input type="text" class="form-control" id="supportPersonEmail" placeholder="Support Person Email Address">
+              <label for="support-person-email" class="control-label">Support Person Email Address</label>
+              <input type="text" class="form-control" id="support-person-email" placeholder="Support Person Email Address">
             </div>
           </div><!--/row-->
 
           <div class="row">
             <div class="form-group col-sm-12">
               <label class="block required">Would you be interested in being a GO Group Leader?</label>
-              <label class="radio-inline" ng-click="isCollapsed = !isCollapsed">
-                  <input type="radio" value="yes"  name="leaderYes">Yes
+              <label class="radio-inline" ng-click="isCollapsed = true">
+                  <input type="radio" value="yes" name="leader" id="leader-yes">Yes
               </label>
-              <label class="radio-inline" ng-click="isCollapsed = !isCollapsed">
-                  <input type="radio" value="no" name="leaderNo">No
+              <label class="radio-inline" ng-click="isCollapsed = false">
+                  <input type="radio" value="no" name="leader" id="leader-no">No
               </label>
             </div>
-            <div class="form-group col-sm-12"  collapse="!isCollapsed">
-              <label for="why" class="required">Why would you like to be a GO Group Leader?</label>
-              <textarea cols="1" rows="4" class="form-control" id="whyGoleader" maxlength="250"></textarea>
+            <div class="form-group col-sm-12" collapse="!isCollapsed">
+              <label for="why-go-leader" class="required">Why would you like to be a GO Group Leader?</label>
+              <textarea cols="1" rows="4" class="form-control" id="why-go-leader" maxlength="250"></textarea>
             </div>
           </div>
 
-          <div class="row" ng-show="gotrip.pageTitle != 'india'">
-            <div class="col-sm-12">
-              <legend>
-                Lottery
-              </legend>
-            </div><!--/col-sm-12-->
 
-            <div class="form-group col-md-12">
-             We will use a random lottery if we have more people sign up than avaiable spots.  While we must prepare for this, it has not happened in past years.  If we hold a lottery and you are not selected, your deposit will be refunded.
-            </div>
-            <div class="form-group col-sm-12">
-              <label class="block required">Please select one choice below</label>
-              <div>
-                <label class="radio-inline">
-                    <input type="radio" value="yes"  name="leaderYes"> As long as I am selected, I will go on the trip.
-                </label>
-              </div>
-              <div>
-                <label class="radio-inline">
-                    <input type="radio" value="no" name="leaderNo">If my spouse or any member of my family is not selected, none of us will go.
-                </label>
-              </div>
-              <div>
-                <label class="radio-inline">
-                    <input type="radio" value="no" name="leaderNo">If my spouse or any member of my family is not selected, all others will go.
-                </label>
-              </div>
-              <div>
-                <label class="radio-inline">
-                    <input type="radio" value="no" name="leaderNo">If my spouse or any member of my family OR any member of our larger group of friends is not selected, none of us will go.
-                </label>
-              </div>
-              <div>
-                <label class="radio-inline">
-                    <input type="radio" value="no" name="leaderNo"> If my spouse or any member of my fmaily OR any member of our larger group of friends is not selected, my spouse or family will still go.
-                </label>
-              </div>
-            </div>
-        </div><!--/row-->
-
-        <a ui-sref="go-trip-signup-page-4({trip_location: gotrip.pageTitle})" class="btn btn-primary pull-right">Continue</a>
+        <a ui-sref="go-trip-signup-page-4({trip_location: gotrip.pageTitle})" class="btn btn-primary pull-right">Next</a>
         <a ui-sref="go-trip-signup-page-2({trip_location: gotrip.pageTitle})" class="btn btn-standard pull-right">Back</a>
       </form>
 

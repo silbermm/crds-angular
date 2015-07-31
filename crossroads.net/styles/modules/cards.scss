@@ -13,40 +13,48 @@
   text-align: center;
 
   img, .corkboard-icon {
-    max-width: 89%;
+    width: 30%;
     background-color: transparent;
     border-radius: 50%;
     border: 3px solid rgba(214, 224, 226, 0.8);
     position: relative;
     margin: 0 auto;
+    @media (min-width: 500px) {
+      width: 20%;
+    }
+    @media (min-width: $screen-sm-min) {
+      width: 70%;
+    }
   }
 }
 
 
 
 .card-header {
-  padding: $line-height-computed/4 $grid-gutter-width/2;
+  padding: $line-height-computed/2 $grid-gutter-width/2;
    a {
      color: $text-color;
-
      &:hover {
-       color: $link-color;
+       color: darken($text-color, 12%);
      }
    }
   h1, h2, h3, h4, h5 {
    margin: 0;
   }
 }
-
+.card-body {
+  padding: 0 $grid-gutter-width/2;
+}
 .card-dark {
   background: rgba(214, 224, 226, 0.4);
 }
 
 .card-content {
   padding: 0;
-  border-radius: 0 0 0 0;
-  bottom: -1px;
-  right: -1px;
+  border-radius:0;
+  vertical-align: top;
+  //bottom: -1px;
+  //right: -1px;
 
   @media (min-width: $screen-sm-min) {
     border-radius: 0 2px 2px 0;
@@ -88,5 +96,21 @@
         padding-right: 0;
       }
     }
+  }
+  .days-left {
+    font-size: 18px;
+    line-height: 20px;
+    font-weight: normal;
+  }
+  .funding-goal {
+    margin-top: -20px;
+  }
+  .trip-funding {
+    white-space: nowrap;
+  }
+  .progress-bar {
+    text-align: right;
+    padding-right: 5px;
+    color: rgba(255, 255, 255, 0.5);
   }
 }
