@@ -231,7 +231,7 @@
           vm.processing = false;
           if(error && error.globalMessage) {
             vm.dto.declinedPayment =
-              error.globalMessage == $rootScope.MESSAGES.paymentMethodDeclined;
+              error.globalMessage.id == $rootScope.MESSAGES.paymentMethodDeclined.id;
 
             $rootScope.$emit('notify', error.globalMessage);
           } else {
