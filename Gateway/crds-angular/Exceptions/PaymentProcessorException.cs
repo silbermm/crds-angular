@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using crds_angular.Models.Json;
+using Crossroads.Utilities.Models;
 using Newtonsoft.Json;
 
 namespace crds_angular.Exceptions
@@ -13,9 +14,9 @@ namespace crds_angular.Exceptions
         public string Type { get; set; }
         public string DeclineCode { get; set; }
         public string Param { get; set; }
-        public int? GlobalMessage { get; set; }
+        public ContentBlock GlobalMessage { get; set; }
 
-        public PaymentProcessorException(HttpStatusCode statusCode, string auxMessage, string type, string message, string code, string declineCode, string param, int? globalMessage = null) :
+        public PaymentProcessorException(HttpStatusCode statusCode, string auxMessage, string type, string message, string code, string declineCode, string param, ContentBlock globalMessage = null) :
             base(auxMessage)
         {
             Type = type;
@@ -66,6 +67,6 @@ namespace crds_angular.Exceptions
         [JsonIgnore, JsonProperty(PropertyName = "decline_code")]
         public string DeclineCode { get; set; }
         [JsonProperty(PropertyName = "globalMessage", NullValueHandling = NullValueHandling.Ignore)]
-        public int? GlobalMessage { get; set; }
+        public ContentBlock GlobalMessage { get; set; }
     }
 }

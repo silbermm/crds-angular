@@ -222,7 +222,7 @@ namespace crds_angular.test.Services
                 Assert.AreEqual("abort", e.Type);
                 Assert.AreEqual("Doh!", e.DetailMessage);
                 Assert.AreEqual(HttpStatusCode.InternalServerError, e.StatusCode);
-                Assert.AreEqual(_errors["paymentMethodProcessingError"].Id, e.GlobalMessage);
+                Assert.AreEqual(_errors["paymentMethodProcessingError"], e.GlobalMessage);
             }
 
 
@@ -305,7 +305,7 @@ namespace crds_angular.test.Services
                 Assert.AreEqual("Customer update failed", e.Message);
                 Assert.IsNotNull(e.DetailMessage);
                 Assert.AreEqual("Invalid Request", e.DetailMessage);
-                Assert.AreEqual(_errors["failedResponse"].Id, e.GlobalMessage);
+                Assert.AreEqual(_errors["failedResponse"], e.GlobalMessage);
             }
         }
 
@@ -387,7 +387,7 @@ namespace crds_angular.test.Services
                 Assert.AreEqual("Invalid charge request", e.Message);
                 Assert.IsNotNull(e.DetailMessage);
                 Assert.AreEqual("Invalid Integer Amount", e.DetailMessage);
-                Assert.AreEqual(_errors["failedResponse"].Id, e.GlobalMessage);
+                Assert.AreEqual(_errors["failedResponse"], e.GlobalMessage);
             }
 
         }

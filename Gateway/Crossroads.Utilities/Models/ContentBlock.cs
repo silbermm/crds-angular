@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Crossroads.Utilities.Models
 {
@@ -10,11 +11,11 @@ namespace Crossroads.Utilities.Models
         public int Id { get; set; }
         [JsonProperty("title")]
         public string Title { get; set; }
-        [JsonProperty("message")]
-        public string Message { get; set; }
-        [JsonProperty("type")]
+        [JsonProperty("content")]
+        public string Content { get; set; }
+        [JsonProperty("type"), JsonConverter(typeof(StringEnumConverter))]
         public ContentBlockType Type { get; set; }
-        [JsonProperty("category")]
+        [JsonProperty("category"), JsonConverter(typeof(StringEnumConverter))]
         public ContentBlockCategory Category { get; set; }
     }
 

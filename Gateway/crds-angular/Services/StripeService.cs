@@ -64,29 +64,29 @@ namespace crds_angular.Services
             // the underlying payment processor.
             if ("abort".Equals(e.Type) || "abort".Equals(e.Code))
             {
-                e.GlobalMessage = _contentBlockService["paymentMethodProcessingError"].Id;
+                e.GlobalMessage = _contentBlockService["paymentMethodProcessingError"];
             }
             else if ("card_error".Equals(e.Type))
             {
                 if (e.Code != null && ("card_declined".Equals(e.Code) || e.Code.Matches("^incorrect") || e.Code.Matches("^invalid")))
                 {
-                    e.GlobalMessage = _contentBlockService["paymentMethodDeclined"].Id;
+                    e.GlobalMessage = _contentBlockService["paymentMethodDeclined"];
                 }
                 else if ("processing_error".Equals(e.Code))
                 {
-                    e.GlobalMessage = _contentBlockService["paymentMethodProcessingError"].Id;
+                    e.GlobalMessage = _contentBlockService["paymentMethodProcessingError"];
                 }
             }
             else if ("bank_account".Equals(e.Param))
             {
                 if ("invalid_request_error".Equals(e.Type))
                 {
-                    e.GlobalMessage = _contentBlockService["paymentMethodDeclined"].Id;
+                    e.GlobalMessage = _contentBlockService["paymentMethodDeclined"];
                 }
             }
             else
             {
-                e.GlobalMessage = _contentBlockService["failedResponse"].Id;
+                e.GlobalMessage = _contentBlockService["failedResponse"];
             }
             return (e);
         }
