@@ -17,6 +17,7 @@
                             <li><a ui-sref="history">Giving History</a>
                              </li>
                              <li><a ui-sref="serve-signup">Sign Up to Serve</a></li>
+                             <li><a ui-sref="mytrips">My Trips</a></li>
                         </ul>
                     </li>
                     <li class="col-sm-3" ng-if="$root.username ==undefined">
@@ -208,7 +209,7 @@
                     <li class="col-sm-3 ">
                         <ul>
                             <li class="dropdown-header">Locations</li>
-                            <li><a ui-sref="crossroads-clifton">Crossroads Clifton</a>
+                            <li><a ui-sref="crossroads-uptown">Crossroads Uptown</a>
                             </li>
                             <li><a ui-sref="crossroads-florence">Crossroads Florence</a>
                             </li>
@@ -348,12 +349,43 @@
                     </li>
                 </ul>
             </li>
-            <li role="presentation" class="dropdown" dropdown>
-                <a class="dropdown-toggle" dropdown-toggle href="#" role="button" aria-expanded="false">Admin</a>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="https://admindemo.crossroads.net/ministryplatform/" target="_blank">Ministry Platform (Demo)</a>
+            <li class="dropdown dropdown-large" dropdown>
+                <a href="#" class="dropdown-toggle" dropdown-toggle>Admin</a>
+                <ul class="dropdown-menu dropdown-menu-large dropdown-menu-featured-row row">
+                    <li class="col-sm-3 ">
+                        <ul>
+                          <li class="dropdown-header">Admin</li>
+                          <li><a href="https://admindemo.crossroads.net/ministryplatform/" target="_blank">Ministry Platform (Demo)</a>
+                          </li>
+                          <li><a href="https://adminint.crossroads.net/ministryplatform/" target="_blank">Ministry Platform (Integration)</a>
+                          </li>
+                        </ul>
                     </li>
-                    <li><a href="https://adminint.crossroads.net/ministryplatform/" target="_blank">Ministry Platform (Integration)</a>
+                    <li class="col-sm-3 ">
+                        <ul>
+                          <li class="dropdown-header">Trip Static Mocks</li>
+                          <li><a ui-sref="go-trip-signup({trip_location: 'india'})">GO India Signup</a>
+                          </li>
+                          <li><a ui-sref="go-trip-signup({trip_location: 'nola'})">Go New Orleans Signup</a>
+                          </li>
+                          <li><a ui-sref="go-trip-signup({trip_location: 'south-africa'})">Go South Africa Signup</a>
+                          </li>
+                          <li><a ui-sref="go-trip-signup({trip_location: 'nicaragua'})">GO Nicaragua Signup</a>
+                          </li>
+                        </ul>
+                    </li>
+                    <li class="col-sm-3 ">
+                        <ul>
+                          <li class="dropdown-header">Static Mocks</li>
+                          <li><a ui-sref="myprofile">My Profile</a>
+                          </li>
+                          <li><a ui-sref="mytrips">My Trips</a>
+                          </li>
+                          <li><a ui-sref="demo/go-trip-giving">Go Trip Giving</a>
+                          </li>
+                          <li><a ui-sref="give/history">Giving History</a>
+                          </li>
+                        </ul>
                     </li>
                 </ul>
             </li>

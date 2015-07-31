@@ -26,6 +26,7 @@ require('./mp_tools');
   require('./styleguide');
   require('./thedaily');
   require('./give');
+  require('./gotrips');
   require('./media');
   require('./myprofile');
   require('./community_groups_signup/group_signup_form.html');

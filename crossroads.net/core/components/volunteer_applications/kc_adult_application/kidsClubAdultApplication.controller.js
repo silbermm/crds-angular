@@ -6,9 +6,9 @@ var moment = require('moment');
 
   module.exports = KidsClubAdultApplicationController;
 
-  KidsClubAdultApplicationController.$inject = ['$rootScope', '$log', 'VolunteerService', 'adultFields'];
+  KidsClubAdultApplicationController.$inject = ['$rootScope', '$log', 'VolunteerService', 'adultFields', 'Lookup'];
 
-  function KidsClubAdultApplicationController($rootScope, $log, VolunteerService, adultFields) {
+  function KidsClubAdultApplicationController($rootScope, $log, VolunteerService, adultFields, Lookup) {
     $log.debug('Inside Kids-Club-Adult-Application-Controller');
     var vm = this;
 
@@ -26,6 +26,7 @@ var moment = require('moment');
     vm.format = 'MM/dd/yyyy';
     vm.gradeLevelSelected = gradeLevelSelected;
     vm.locationSelected = locationSelected;
+    vm.maritalStatuses = [];
     vm.open = open;
     vm.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
     vm.religionSelected = religionSelected;
@@ -39,6 +40,8 @@ var moment = require('moment');
     vm.volunteer.child3 = {};
     vm.volunteer.child4 = {};
     vm.volunteer.signatureDate = moment().format('MM/DD/YYYY');
+
+    maritalStatuses();
 
     ///////////////////////////////////////////////////
 
@@ -77,6 +80,15 @@ var moment = require('moment');
         )
         return true;
       return false;
+    }
+
+    function maritalStatuses() {
+      Lookup.query({
+          table: 'maritalstatus'
+      }).$promise
+      .then(function(response) {
+        vm.maritalStatuses = response;
+      });
     }
 
     /**
