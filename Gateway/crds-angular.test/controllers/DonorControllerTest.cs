@@ -458,13 +458,13 @@ namespace crds_angular.test.controllers
 
             donorService.Setup(mocked => mocked.GetContactDonorForEmail("me@here.com")).Returns(contactDonor);
 
-            var stripeException = new StripeException(HttpStatusCode.PaymentRequired, "auxMessage", "type", "message", "code", "decline", "param");
+            var stripeException = new PaymentProcessorException(HttpStatusCode.PaymentRequired, "auxMessage", "type", "message", "code", "decline", "param");
             paymentService.Setup(mocked => mocked.UpdateCustomerSource(contactDonor.ProcessorId, dto.StripeTokenId))
                 .Throws(stripeException);
 
             var response = fixture.UpdateDonor(dto);
-            Assert.AreEqual(typeof(RestHttpActionResult<StripeErrorResponse>), response.GetType());
-            var stripeErrorResponse = (RestHttpActionResult<StripeErrorResponse>) response;
+            Assert.AreEqual(typeof(RestHttpActionResult<PaymentProcessorErrorResponse>), response.GetType());
+            var stripeErrorResponse = (RestHttpActionResult<PaymentProcessorErrorResponse>) response;
             var content = stripeErrorResponse.Content;
             Assert.AreEqual("type", content.Error.Type);
             Assert.AreEqual("message", content.Error.Message);
@@ -501,14 +501,14 @@ namespace crds_angular.test.controllers
                 routing_number = "987654321"
             };
 
-            var stripeException = new StripeException(HttpStatusCode.PaymentRequired, "auxMessage", "type", "message", "code", "decline", "param");
+            var stripeException = new PaymentProcessorException(HttpStatusCode.PaymentRequired, "auxMessage", "type", "message", "code", "decline", "param");
             donorService.Setup(mocked => mocked.GetContactDonorForEmail("me@here.com")).Returns(contactDonor);
             donorService.Setup(
                 (mocked => mocked.CreateOrUpdateContactDonor(contactDonor, "me@here.com", "456", It.IsAny<DateTime>())))
                 .Throws(stripeException);
 
             var response = fixture.Post(dto);
-            Assert.AreEqual(typeof(RestHttpActionResult<StripeErrorResponse>), response.GetType());
+            Assert.AreEqual(typeof(RestHttpActionResult<PaymentProcessorErrorResponse>), response.GetType());
 
             donorService.VerifyAll();
             paymentService.VerifyAll();
@@ -538,14 +538,14 @@ namespace crds_angular.test.controllers
                 routing_number = "987654321"
             };
 
-            var stripeException = new StripeException(HttpStatusCode.PaymentRequired, "auxMessage", "type", "message", "code", "decline", "param");
+            var stripeException = new PaymentProcessorException(HttpStatusCode.PaymentRequired, "auxMessage", "type", "message", "code", "decline", "param");
             donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(It.IsAny<string>())).Returns(contactDonor);
             donorService.Setup(
                 (mocked => mocked.CreateOrUpdateContactDonor(contactDonor, String.Empty, "456", It.IsAny<DateTime>())))
                 .Throws(stripeException);
 
             var response = fixture.Post(dto);
-            Assert.AreEqual(typeof(RestHttpActionResult<StripeErrorResponse>), response.GetType());
+            Assert.AreEqual(typeof(RestHttpActionResult<PaymentProcessorErrorResponse>), response.GetType());
 
             donorService.VerifyAll();
             paymentService.VerifyAll();

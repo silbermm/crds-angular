@@ -61,7 +61,7 @@ namespace crds_angular.Controllers.API
             {
                 donor = _gatewayDonorService.CreateOrUpdateContactDonor(donor, dto.email_address, dto.stripe_token_id, DateTime.Now);
             }
-            catch (StripeException e)
+            catch (PaymentProcessorException e)
             {
                 return (e.GetStripeResult());
             }
@@ -106,7 +106,7 @@ namespace crds_angular.Controllers.API
 
                 return Ok(response);
             }
-            catch (StripeException e)
+            catch (PaymentProcessorException e)
             {
                 return (e.GetStripeResult());
             }
@@ -157,7 +157,7 @@ namespace crds_angular.Controllers.API
                     return Ok(response);
                 }
             }
-            catch (StripeException stripeException)
+            catch (PaymentProcessorException stripeException)
             {
                 return (stripeException.GetStripeResult());
             }
@@ -190,7 +190,7 @@ namespace crds_angular.Controllers.API
                     return Ok(response); 
                 }
             }
-            catch (StripeException stripeException)
+            catch (PaymentProcessorException stripeException)
             {
                 return (stripeException.GetStripeResult());
             }
@@ -225,7 +225,7 @@ namespace crds_angular.Controllers.API
                 //Post apistripe/customer/{custID}/sources pass in the dto.stripe_token_id
                 sourceData = _stripePaymentService.UpdateCustomerSource(contactDonor.ProcessorId, dto.StripeTokenId);
             }
-            catch (StripeException stripeException)
+            catch (PaymentProcessorException stripeException)
             {
                 return (stripeException.GetStripeResult());
             }

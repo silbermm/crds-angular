@@ -23,11 +23,11 @@
           </p>
 
           <label class="block required">Do you have a valid passport?</label>
-          <label class="radio-inline" ng-click="isCollapsed = !isCollapsed">
-              <input type="radio" value="yes"  name="pssportYes">Yes
+          <label id="passport-yes" class="radio-inline" ng-click="isCollapsed = false">
+              <input type="radio" value="yes"  name="pssport" id="passport-yes">Yes
           </label>
-          <label class="radio-inline" ng-click="isCollapsed = !isCollapsed">
-              <input type="radio" value="no" name="passportNo">No
+          <label id="passport-no" class="radio-inline" ng-click="isCollapsed = true">
+              <input type="radio" value="no" name="passport" id="passport-no">No
           </label>
         </div>
         <div class="form-group col-sm-12"  collapse="!isCollapsed">
@@ -35,8 +35,8 @@
         </div>
 
         <div class="form-group col-sm-6" ng-controller="crdsDatePickerCtrl">
-          <label class="control-label">When does your passport expire?</label>
-          <input type="text" class="form-control" id="tripDate" placeholder="mm/dd/yyyy">
+          <label for="passport-expire" class="control-label">When does your passport expire?</label>
+          <input type="text" class="form-control" id="passport-expire" placeholder="mm/dd/yyyy">
         </div>
       </div><!--/row-->
 
@@ -45,53 +45,53 @@
           <p>We'll use the information suplied below to buy your plane ticket.  It must be entered exactly as it appears on your passport.  This is frequently an issue for women who have their maiden name on their passport. </p>
           <div class="row">
             <div class="form-group col-sm-6">
-                <label for="firstname" class="required">First Name</label>
-                <input type="text" class="form-control" id="firstname" placeholder="Enter first name">
+                <label for="passport-firstname" class="required">First Name</label>
+                <input type="text" class="form-control" id="passport-firstname" placeholder="Enter first name">
             </div>
             <div class="form-group col-sm-6">
-                <label for="middlename">Middle Name</label>
-                <input type="text" class="form-control" id="middlename" placeholder="Enter middle name">
+                <label for="passport-middlename" class="required">Middle Name <small class="text-muted">Exactly as printed on your passport</small></label>
+                <input type="text" class="form-control" id="passport-middlename" placeholder="Enter middle name">
             </div>
             <div class="form-group col-sm-6">
-                <label for="lastname" class="required">Last Name</label>
-                <input type="text" class="form-control" id="lastname" placeholder="Enter last name">
+                <label for="passport-lastname" class="required">Last Name</label>
+                <input type="text" class="form-control" id="passport-lastname" placeholder="Enter last name">
             </div>
             <div class="form-group col-sm-6">
-                <label for="country" class="required">Country of Passport</label>
-                <input type="text" class="form-control" id="country" placeholder="Enter pssport country">
+                <label for="passport-country" class="required">Country of Passport</label>
+                <input type="text" class="form-control" id="passport-country" placeholder="Enter passport country">
             </div>
             <div class="form-group col-sm-6" ng-controller="crdsDatePickerCtrl">
-              <label class="control-label required">Birthdate</label>
-              <input type="text" class="form-control" id="birthdate" placeholder="mm/dd/yyyy">
+              <label for="passport-birthdate" class="control-label required">Birthdate</label>
+              <input type="text" class="form-control" id="passport-birthdate" placeholder="mm/dd/yyyy">
             </div>
 
           </div>
         </div>
       </div><!--/row-->
 
-      <div class="row">
+      <div class="row" ng-show="gotrip.pageTitle != 'nola'">
         <div class="col-sm-12">
           <legend>Frequent Flyer Information</legend>
         </div>
         <div class="form-group col-sm-6">
-            <label for="firstname">Delta</label>
+            <label for="deltaff">Delta</label>
             <input type="text" class="form-control" id="deltaff" placeholder="Enter Delta frequent flyer number">
         </div>
-        <div class="form-group col-sm-6">
-            <label for="firstname">South African Airlines</label>
+        <div class="form-group col-sm-6" ng-show="gotrip.pageTitle == 'south-africa'">
+            <label for="southafricaff">South African Airlines</label>
             <input type="text" class="form-control" id="southafricaff" placeholder="Enter South African Airlines frequent flyer number">
         </div>
         <div class="form-group col-sm-6">
-            <label for="firstname">United Airlines</label>
+            <label for="unitedff">United Airlines</label>
             <input type="text" class="form-control" id="unitedff" placeholder="Enter United Airlines frequent flyer number">
         </div>
         <div class="form-group col-sm-6">
-            <label for="firstname">USAirways</label>
+            <label for="usairff">USAirways</label>
             <input type="text" class="form-control" id="usairff" placeholder="Enter USAirways frequent flyer number">
         </div>
       </div><!--/row-->
 
-      <div class="row">
+      <div class="row" ng-show="gotrip.pageTitle != 'nola'">
        <div class="col-sm-12">
         <legend>
           Travel Experience Information
@@ -99,23 +99,23 @@
       </div>
       </div><!--/row-->
 
-      <div class="row">
+      <div class="row" ng-show="gotrip.pageTitle != 'nola'">
         <div class="form-group col-sm-12">
           <label class="block required">International Travel Experience</label>
           <div>
-            <label class="radio-inline">
-                <input type="radio" value="yes"  name="internationMulti"> I take three or more international trips a year.
+            <label for="international-trips-multi" class="radio-inline">
+                <input type="radio" value="multi"  name="international-trips" id="international-trips-multi"> I take three or more international trips a year.
             </label>
           </div>
           <div>
-            <label class="radio-inline">
-                <input type="radio" value="no"  name="internationalSome"> I take less than three international trips per year.
+            <label for="international-trips-some" class="radio-inline">
+                <input type="radio" value="some"  name="international-trips" id="international-trips-some"> I take less than three international trips per year.
 
             </label>
           </div>
           <div>
-            <label class="radio-inline">
-                <input type="radio" value="no"  name="internationalNo"> I have not traveled internationally.
+            <label for="international-trips-none" class="radio-inline">
+                <input type="radio" value="none"  name="international-trips" id="international-trips-none"> I have not traveled internationally.
             </label>
           </div>
         </div>
@@ -123,15 +123,15 @@
         <div class="col-sm-12 push-bottom">
           <label class="block required">Do you have outside experience with serving abroad outside of Crossroads GO Trips?</label>
 
-          <label class="radio-inline" ng-click="isCollapsed = !isCollapsed">
-              <input type="radio" value="yes"  name="travelExperience">Yes
+          <label for="travel-experience-yes" class="radio-inline" ng-click="isCollapsed = true">
+              <input type="radio" value="yes"  name="travel-experience" id="travel-experience-yes">Yes
           </label>
-          <label class="radio-inline" ng-click="isCollapsed = !isCollapsed">
-              <input type="radio" value="no" name="travelExperience">No
+          <label for="travel-experience-no" class="radio-inline" ng-click="isCollapsed = false">
+              <input type="radio" value="no" name="travelExperience" id="travel-experience-no">No
           </label>
 
           <div class="form-group push-top" collapse="!isCollapsed">
-            <label for="why" class="required">Please describe your experince:</label>
+            <label for="why" class="required">Please describe your experience</label>
             <textarea cols="1" rows="4" class="form-control" id="travelExperience" maxlength="250"></textarea>
           </div>
         </div>
@@ -145,18 +145,17 @@
 
           <div class="form-group">
             <label class="block required">Have you ever been a victim of any form of abuse?</label>
-            <label class="radio-inline">
-                <input type="radio" value="yes"  name="abuse">Yes
+            <label for="abuse-yes" class="radio-inline">
+                <input type="radio" value="yes" name="abuse" id="abuse-yes">Yes
             </label>
-            <label class="radio-inline">
-                <input type="radio" value="no" name="abuse">No
+            <label for="abuse-no" class="radio-inline">
+                <input type="radio" value="no" name="abuse" id="abuse-no">No
             </label>
           </div>
         </div>
-
       </div>
 
-      <a ui-sref="go-trip-signup-page-confirmation({trip_location: gotrip.pageTitle})" class="btn btn-primary pull-right">Continue</a>
+      <a ui-sref="go-trip-signup-page-confirmation({trip_location: gotrip.pageTitle})" class="btn btn-primary pull-right">Submit Application</a>
       <a ui-sref="go-trip-signup-page-4({trip_location: gotrip.pageTitle})" class="btn btn-standard pull-right">Back</a>
     </form>
   </div>

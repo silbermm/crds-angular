@@ -247,7 +247,7 @@
     <Compile Include="Controllers\API\VolunteerApplicationController.cs" />
     <Compile Include="Exceptions\Models\ApiErrorDto.cs" />
     <Compile Include="Enum\BadgeTypeEnum.cs" />
-    <Compile Include="Exceptions\StripeException.cs" />
+    <Compile Include="Exceptions\PaymentProcessorException.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

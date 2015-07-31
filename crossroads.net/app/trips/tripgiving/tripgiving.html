@@ -7,7 +7,7 @@
       <div class="input-group">
       <div class="form-group" ng-class="{ 'has-error': tripSearch.showError(searchForm, 'searchText') }">
         <input type="search" name="searchText" id="searchText" class="form-control" placeholder="Search" ng-model="tripSearch.query" autocomplete="off">
-        
+
       </div>
       <span class="input-group-btn">
           <button class="btn btn-gray-light" type="submit" ng-click="searchForm.$submit()">
@@ -31,7 +31,6 @@
         </div>
       </div>
       <div ng-if="tripSearch.empty" ng-bind-html="$root.MESSAGES.tripSearchNotFound.content | html"></div>
-      
     </div>
     <preloader full-screen='false' ng-show="tripSearch.loading"> </preloader>
   </div>
