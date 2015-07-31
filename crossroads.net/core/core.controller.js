@@ -22,6 +22,7 @@
     vm.prevent = prevent;
     vm.resolving = true;
     vm.state = $state;
+    vm.mapContentBlocks = mapContentBlocks;
 
     ////////////////////////////
     // State Change Listeners //
@@ -80,12 +81,21 @@
       contentBlockRequest.contentBlocks.unshift(null); //Adding a null so the indexes match the DB
       //TODO Refactor to not use rootScope, now using ngTemplate w/ ngMessages but also need to pull this out into a service
       $rootScope.messages = contentBlockRequest.contentBlocks;
-      _.forEach(contentBlockRequest.contentBlocks, function(m) {
-        if(m && m.title) {
-          MESSAGES[m.title] = m.id;
-        }
-      })
+      mapContentBlocks(contentBlockRequest.contentBlocks);
     });
+
+    function mapContentBlocks(contentBlocks) {
+      _.forEach(contentBlocks, function(cb) {
+        // Need this check in case the contentBlocks have any null entries (like with the unshift above)
+        if(cb && cb.title) {
+          MESSAGES[cb.title] = cb.id;
+        }
+      });
+      // Matt S. and Dan suggested something like this, but this is syntax error
+      // MESSAGES = _.map(contentBlocks, function(cb) {
+      //   return((cb && cb.title) ? {cb.title: cb.id} : null);
+      // });
+    }
 
     function openAside(position, backdrop) {
       vm.asideState = {
