@@ -85,16 +85,13 @@
     });
 
     function mapContentBlocks(contentBlocks) {
-      _.forEach(contentBlocks, function(cb) {
+      _.reduce(contentBlocks, function(result, cb) {
         // Need this check in case the contentBlocks have any null entries (like with the unshift above)
         if(cb && cb.title) {
-          MESSAGES[cb.title] = cb.id;
+          result[cb.title] = cb.id
         }
-      });
-      // Matt S. and Dan suggested something like this, but this is syntax error
-      // MESSAGES = _.map(contentBlocks, function(cb) {
-      //   return((cb && cb.title) ? {cb.title: cb.id} : null);
-      // });
+        return(result);
+      }, MESSAGES);
     }
 
     function openAside(position, backdrop) {
