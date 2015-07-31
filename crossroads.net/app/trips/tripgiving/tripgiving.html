@@ -17,7 +17,7 @@
     </div>
     <ng-messages for="searchForm.searchText.$error" ng-if="tripSearch.showError(searchForm, 'searchText')">
       <span ng-message="required">
-        <span class='text-danger' ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].content | html"></span>
+        <span class='text-danger' ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
       </span>
     </ng-messages>
   </form>
@@ -30,7 +30,7 @@
           <trip-participant-card trip-participant="participant"></trip-participant-card>
         </div>
       </div>
-      <div ng-if="tripSearch.empty" ng-bind-html="$root.messages[$root.MESSAGES.tripSearchNotFound].message"></div>
+      <div ng-if="tripSearch.empty" ng-bind-html="$root.MESSAGES.tripSearchNotFound.content | html"></div>
       
     </div>
     <preloader full-screen='false' ng-show="tripSearch.loading"> </preloader>
