@@ -70,7 +70,8 @@
       noResponse: 49,
       ageError: 54,
       mailchimpSuccess: 55,
-      tripSearchNotFound: 59
+      tripSearchNotFound: 59,
+      myTrips: 61
     })
     .config(function (growlProvider) {
       growlProvider.globalPosition('top-center');

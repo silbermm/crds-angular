@@ -5,7 +5,7 @@
 
   TripDonations.$inject = ['$log', 'Session'];
 
-  function TripDonations($log,Session){
+  function TripDonations($log, Session){
     return {
       restrict: 'EA',
       transclude: true,
