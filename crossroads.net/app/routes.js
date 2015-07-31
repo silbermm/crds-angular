@@ -145,7 +145,17 @@
         parent: 'noSideBar',
         url: '/trips/mytrips',
         controller: 'MyTripsController as tripsController',
-        templateUrl: 'mytrips/mytrips.html'
+        templateUrl: 'mytrips/mytrips.html',
+        resolve: {
+          loggedin: crds_utilities.checkLoggedin,
+          Trip: 'Trip',
+          $cookies: '$cookies',
+          MyTrips: function(Trip, $cookies) {
+            return Trip.MyTrips.get({
+              contact: $cookies.get('userId')
+            }).$promise;
+          }
+        }
       })
       .state('media', {
         parent: 'noSideBar',
