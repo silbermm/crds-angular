@@ -11,6 +11,38 @@
         </div>
       </div>
 
+
+      <div ng-show="gotrip.pageTitle == 'nicaragua'">
+        <legend>
+          Child Sponsorship
+        </legend>
+
+        <div class="row">
+          <div class="form-group col-sm-12">
+            <label class="block required">Have you sponsored a child through Crossroads in Nicaragua?</label>
+            <label class="radio-inline" ng-click="isCollapsed = true">
+                <input type="radio" value="yes" name="leader" id="sponsor-yes">Yes
+            </label>
+            <label class="radio-inline" ng-click="isCollapsed = false">
+                <input type="radio" value="no" name="leader" id="sponsor-no">No
+            </label>
+          </div>
+          <div class="form-group col-sm-6" collapse="!isCollapsed">
+            <label for="sponsor-firstname" class="required">Child's First Name</label>
+            <input type="text" class="form-control" id="sponsor-firstname" placeholder="Enter sponsored child's first name">
+          </div>
+          <div class="form-group col-sm-6" collapse="!isCollapsed">
+            <label for="sponsor-lastname" class="required">Child's Last Name</label>
+            <input type="text" class="form-control" id="sponsor-lastname" placeholder="Enter sponsored child's last name">
+          </div>
+          <div class="form-group col-sm-6" collapse="!isCollapsed">
+            <label for="sponsor-number" class="required">Child's Sponsorship Number</label>
+            <input type="text" class="form-control" id="sponsor-number" placeholder="Enter sponsored child's number">
+          </div>
+        </div>
+      </div><!--/#child sponsor-->
+
+
       <legend>
         Skills &amp; Experience
       </legend>
@@ -83,7 +115,7 @@
         <div class="row">
           <div class="form-group col-sm-12">
             <label for="trip-experience" class="required">Describe any previous serving trip experience</label>
-            <textarea cols="1" rows="4" class="form-control" id="trip-experience" maxlength="250" placeholder="We'd love to hear about your travel experiences where you were serving others." ></textarea>
+            <textarea cols="1" rows="4" class="form-control" id="trip-experience" maxlength="250" placeholder="We'd love to hear about your experiences serving others on a trip." ></textarea>
           </div>
           <div id="profession" class="form-group col-sm-12">
             <label class="required">Are you a professional in any of the following fields?</label><br>
