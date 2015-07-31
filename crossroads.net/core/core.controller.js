@@ -85,12 +85,12 @@
     });
 
     function mapContentBlocks(contentBlocks) {
-      _.reduce(contentBlocks, function(result, cb) {
+      _.reduce(contentBlocks, function(messages, cb) {
         // Need this check in case the contentBlocks have any null entries (like with the unshift above)
         if(cb && cb.title) {
-          result[cb.title] = cb.id
+          messages[cb.title] = cb.id
         }
-        return(result);
+        return(messages);
       }, MESSAGES);
     }
 
