@@ -27,6 +27,10 @@ function GoTripsCtrl($scope, $stateParams, $log, $location, $anchorScroll) {
         vm.friendlyPageTitle = 'India';
         vm.tripName = '2015 SEPT India JA Annual';
         break;
+      case 'nicaragua':
+        vm.friendlyPageTitle = 'Nicaragua';
+        vm.tripName = '2015 Winter Kickoff Trip';
+        break;
     }
 
 		vm.buttonClickBack = function(){

@@ -58,7 +58,7 @@
             </div>
             <div class="form-group col-sm-6">
                 <label for="passport-country" class="required">Country of Passport</label>
-                <input type="text" class="form-control" id="passport-country" placeholder="Enter pssport country">
+                <input type="text" class="form-control" id="passport-country" placeholder="Enter passport country">
             </div>
             <div class="form-group col-sm-6" ng-controller="crdsDatePickerCtrl">
               <label for="passport-birthdate" class="control-label required">Birthdate</label>
@@ -69,7 +69,7 @@
         </div>
       </div><!--/row-->
 
-      <div class="row">
+      <div class="row" ng-show="gotrip.pageTitle != 'nola'">
         <div class="col-sm-12">
           <legend>Frequent Flyer Information</legend>
         </div>
@@ -77,7 +77,7 @@
             <label for="deltaff">Delta</label>
             <input type="text" class="form-control" id="deltaff" placeholder="Enter Delta frequent flyer number">
         </div>
-        <div class="form-group col-sm-6">
+        <div class="form-group col-sm-6" ng-show="gotrip.pageTitle == 'south-africa'">
             <label for="southafricaff">South African Airlines</label>
             <input type="text" class="form-control" id="southafricaff" placeholder="Enter South African Airlines frequent flyer number">
         </div>
@@ -91,7 +91,7 @@
         </div>
       </div><!--/row-->
 
-      <div class="row">
+      <div class="row" ng-show="gotrip.pageTitle != 'nola'">
        <div class="col-sm-12">
         <legend>
           Travel Experience Information
@@ -99,7 +99,7 @@
       </div>
       </div><!--/row-->
 
-      <div class="row">
+      <div class="row" ng-show="gotrip.pageTitle != 'nola'">
         <div class="form-group col-sm-12">
           <label class="block required">International Travel Experience</label>
           <div>
