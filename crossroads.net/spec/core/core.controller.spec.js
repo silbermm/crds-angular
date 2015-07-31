@@ -31,21 +31,23 @@ describe('CoreController', function() {
 
   describe('function mapContentBlocks', function() {
     it('should set MESSAGES with retrieved contentBlocks', function() {
+      var firstMessage = {id: 1, title: 'firstMessage'};
+      var secondMessage = {id: 2, title: 'secondMessage'};
+      var thirdMessage = {id: 3, title: 'thirdMessage'};
+      var fourthMessage = {id: 4, title: 'fourthMessage'};
       var contentBlocks = [
-        null,
-        {id: 1, title: 'firstMessage'},
-        {id: 2, title: 'secondMessage'},
-        {id: 3, title: 'thirdMessage'},
-        null,
-        {id: 4, title: 'fourthMessage'},
+        firstMessage,
+        secondMessage,
+        thirdMessage,
+        fourthMessage
       ];
 
       controller.mapContentBlocks(contentBlocks);
       expect(_.size(MESSAGES)).toBe(4);
-      expect(MESSAGES.firstMessage).toBe(1);
-      expect(MESSAGES.secondMessage).toBe(2);
-      expect(MESSAGES.thirdMessage).toBe(3);
-      expect(MESSAGES.fourthMessage).toBe(4);
+      expect(MESSAGES.firstMessage).toBe(firstMessage);
+      expect(MESSAGES.secondMessage).toBe(secondMessage);
+      expect(MESSAGES.thirdMessage).toBe(thirdMessage);
+      expect(MESSAGES.fourthMessage).toBe(fourthMessage);
     });
   });
 });

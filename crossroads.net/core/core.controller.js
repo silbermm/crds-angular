@@ -50,7 +50,7 @@
     //////////////////////////
     $rootScope.mobile = screenSize.on('xs, sm', function(match){ $rootScope.mobile = match; });
 
-    $rootScope.$on('notify', function (event, id, refId, ttl) {
+    $rootScope.$on('notify', function (event, msg, refId, ttl) {
       var parms = { };
       if(refId !== undefined && refId !== null) {
         parms.referenceId = refId;
@@ -58,7 +58,7 @@
       if(ttl !== undefined && ttl !== null) {
         parms.ttl = ttl;
       }
-      growl[$rootScope.messages[id].type]($rootScope.messages[id].content, parms);
+      growl[msg.type](msg.content, parms);
     });
 
     $rootScope.$on('mailchimp-response', function (event, result, msg) {
@@ -78,18 +78,12 @@
     });
 
     var contentBlockRequest = ContentBlock.get('', function () {
-      contentBlockRequest.contentBlocks.unshift(null); //Adding a null so the indexes match the DB
-      //TODO Refactor to not use rootScope, now using ngTemplate w/ ngMessages but also need to pull this out into a service
-      $rootScope.messages = contentBlockRequest.contentBlocks;
       mapContentBlocks(contentBlockRequest.contentBlocks);
     });
 
     function mapContentBlocks(contentBlocks) {
       _.reduce(contentBlocks, function(messages, cb) {
-        // Need this check in case the contentBlocks have any null entries (like with the unshift above)
-        if(cb && cb.title) {
-          messages[cb.title] = cb.id
-        }
+        messages[cb.title] = cb;
         return(messages);
       }, MESSAGES);
     }
