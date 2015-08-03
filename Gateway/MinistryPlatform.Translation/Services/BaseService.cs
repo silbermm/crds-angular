@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using Crossroads.Utilities.Services;
+using Newtonsoft.Json.Linq;
 
 namespace MinistryPlatform.Translation.Services
 {
@@ -26,7 +27,10 @@ namespace MinistryPlatform.Translation.Services
             var configWrapper = new ConfigurationWrapper();
             var apiUser = configWrapper.GetEnvironmentVarAsString("API_USER");
             var apiPasword = configWrapper.GetEnvironmentVarAsString("API_PASSWORD");
-            return (AuthenticationService.authenticate(apiUser, apiPasword));
+            var authData = AuthenticationService.authenticate(apiUser, apiPasword);
+            var token = authData["token"].ToString();
+          
+            return (token);
         }
 
         protected static int AppSetting(string key)

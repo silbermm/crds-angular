@@ -6,9 +6,13 @@
 
   function SessionService($log, $cookies, $http) {
     var self = this;
-    this.create = function (sessionId, userId, username) {
+    this.create = function (sessionId, userTokenExp, userId, username) {
       console.log('creating cookies!');
-      $cookies.put('sessionId', sessionId);
+      var expDate = new Date();
+      expDate.setTime(expDate.getTime() + (userTokenExp * 1000));
+      $cookies.put('sessionId', sessionId, {
+         'expires': expDate
+      });
       $cookies.put('userId', userId);
       $cookies.put('username', username);
 

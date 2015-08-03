@@ -70,7 +70,7 @@ namespace MinistryPlatform.Translation.Services
         }
 
         //get token using logged in user's credentials
-        public String authenticate(string username, string password)
+        public Dictionary<string, object> authenticate(string username, string password)
         {
             var userCredentials =
                 new FormUrlEncodedContent(new Dictionary<string, string>
@@ -90,9 +90,15 @@ namespace MinistryPlatform.Translation.Services
 
                 var obj = JObject.Parse(result);
                 var token = (string)obj["access_token"];
+                var exp = (string)obj["expires_in"];
                 //ignorning refreshToken for now
                 var refreshToken = (string)obj["refresh_token"];
-                return token;
+                var authData = new Dictionary<string, object>
+                {
+                    {"token", token},
+                    {"exp", exp}
+                };
+                return authData;
             }
             catch (Exception e)
             {

@@ -33,8 +33,8 @@ namespace crds_angular.Controllers.API
             //var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["TodaysEventLocationRecords"]);
             var apiUser = _configurationWrapper.GetEnvironmentVarAsString("API_USER");
             var apiPassword = _configurationWrapper.GetEnvironmentVarAsString("API_PASSWORD");
-            string token = _authenticationService.authenticate(apiUser, apiPassword);
-
+            var authData =  _authenticationService.authenticate(apiUser, apiPassword);
+            var token = authData["token"].ToString();
             var todaysEvents = _ministryPlatformService.GetRecordsDict("TodaysEventLocationRecords", token, site, "5 asc");//Why 5 you ask... Think Ministry
 
             var events = ConvertToEvents(todaysEvents);

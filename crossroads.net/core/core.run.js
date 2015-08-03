@@ -69,7 +69,11 @@
                 console.log('US1403: stateChangeStart event handler (' + 
                     fromState.name + '->' + toState.name + '), no session w/protected data, in core.run');
                 clearAndRedirect(event, toState, toParams);
-        }
+            } else {
+                $rootScope.userid = null;
+                $rootScope.username = null;
+            }
+        //}
         });
     }
 })();

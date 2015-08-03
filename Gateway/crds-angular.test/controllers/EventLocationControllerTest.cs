@@ -31,7 +31,12 @@ namespace crds_angular.test.controllers
             _configurationWrapper.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("mockApiPassword");
 
             _authenticationServiceMock = new Mock<IAuthenticationService>();
-            _authenticationServiceMock.Setup(m => m.authenticate("mockApiUser", "mockApiPassword")).Returns("mockToken");
+            var mockAuthData = new Dictionary<string, object>
+                {
+                    {"token", "123123"},
+                    {"exp", "010125"}
+                };
+            _authenticationServiceMock.Setup(m => m.authenticate("mockApiUser", "mockApiPassword")).Returns(mockAuthData);
 
             controller = new EventLocationController(_ministryPlatfromServiceMock.Object, _configurationWrapper.Object,
                 _authenticationServiceMock.Object);

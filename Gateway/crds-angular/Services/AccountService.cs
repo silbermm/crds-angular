@@ -179,7 +179,8 @@ namespace crds_angular.Services
         {
             var apiUser = this._configurationWrapper.GetEnvironmentVarAsString("API_USER");
             var apiPassword = this._configurationWrapper.GetEnvironmentVarAsString("API_PASSWORD");
-            string token = AuthenticationService.authenticate(apiUser, apiPassword);
+            var authData = AuthenticationService.authenticate(apiUser, apiPassword);
+            var token = authData["token"].ToString();
 
             int householdRecordID = CreateHouseholdRecord(newUserData,token);
             int contactRecordID = CreateContactRecord(newUserData,token,householdRecordID);

@@ -21,8 +21,9 @@ namespace MinistryPlatform.Translation.Test
         [Test]
         public void FindAnAttribute([Values("Dentist", "Social media wizard")] string attributeName)
         {
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            Assert.IsNotNull(token);
+            var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            Assert.IsNotNull(authData);
+            var token = authData["token"].ToString();
 
             var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["Attributes"]);
 
@@ -33,8 +34,9 @@ namespace MinistryPlatform.Translation.Test
         [Test]
         public void ShouldReturnAValidObjectWithUserIdAndEmailAddress()
         {
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            Assert.IsNotNull(token);
+            var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            Assert.IsNotNull(authData);
+            var token = authData["token"].ToString();
             var contactId = AuthenticationService.GetContactId(token);
             Assert.IsNotNull(contactId);
             var emails = LookupService.EmailSearch(EMAIL, token);
@@ -44,8 +46,9 @@ namespace MinistryPlatform.Translation.Test
         [Test]
         public void ShouldReturnValidObjectForUpperCaseEmailAddress()
         {
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            Assert.IsNotNull(token);
+            var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            Assert.IsNotNull(authData);
+            var token = authData["token"].ToString();
             var contactId = AuthenticationService.GetContactId(token);
             Assert.IsNotNull(contactId);
             var emails = LookupService.EmailSearch(EMAIL.ToUpper(), token);
@@ -55,8 +58,9 @@ namespace MinistryPlatform.Translation.Test
         [Test]
         public void ShouldBeEmpty()
         {
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            Assert.IsNotNull(token);
+            var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            Assert.IsNotNull(authData);
+            var token = authData["token"].ToString();
             var contactId = AuthenticationService.GetContactId(token);
             Assert.IsNotNull(contactId);
             var emails = LookupService.EmailSearch("CRAP@CRAP.com", token);
@@ -66,8 +70,9 @@ namespace MinistryPlatform.Translation.Test
         [Test]
         public void ShouldFindListOfGenders()
         {
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            Assert.IsNotNull(token);
+            var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            Assert.IsNotNull(authData);
+            var token = authData["token"].ToString();
             List<Dictionary<string,object>> genders = LookupService.Genders(token);
             Assert.IsNotEmpty(genders);
             genders.ForEach(x =>
@@ -79,8 +84,9 @@ namespace MinistryPlatform.Translation.Test
         [Test]
         public void ShouldFindListOfMaritalStatus()
         {
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            Assert.IsNotNull(token);
+            var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            Assert.IsNotNull(authData);
+            var token = authData["token"].ToString();
             List<Dictionary<string, object>> maritalStatus = LookupService.MaritalStatus(token);
             Assert.IsNotEmpty(maritalStatus);
             maritalStatus.ForEach(x =>
@@ -92,8 +98,9 @@ namespace MinistryPlatform.Translation.Test
         [Test]
         public void ShouldFindListOfServiceProviders()
         {
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            Assert.IsNotNull(token);
+            var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            Assert.IsNotNull(authData);
+            var token = authData["token"].ToString();
             List<Dictionary<string, object>> ServiceProviders = LookupService.ServiceProviders(token);
             Assert.IsNotEmpty(ServiceProviders);
             ServiceProviders.ForEach(x =>
@@ -105,8 +112,9 @@ namespace MinistryPlatform.Translation.Test
         [Test]
         public void ShouldFindListOfStates()
         {
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            Assert.IsNotNull(token);
+            var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            Assert.IsNotNull(authData);
+            var token = authData["token"].ToString();
             List<Dictionary<string, object>> States = LookupService.States(token);
             Assert.IsNotEmpty(States);
             States.ForEach(x =>
@@ -118,8 +126,9 @@ namespace MinistryPlatform.Translation.Test
         [Test]
         public void ShouldFindListOfCountries()
         {
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            Assert.IsNotNull(token);
+            var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            Assert.IsNotNull(authData);
+            var token = authData["token"].ToString();
             List<Dictionary<string, object>> Countries = LookupService.Countries(token);
             Assert.IsNotEmpty(Countries);
             Countries.ForEach(x =>
@@ -131,8 +140,9 @@ namespace MinistryPlatform.Translation.Test
        [Test]
         public void ShouldFindListOfCrossroadsLocations()
         {
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            Assert.IsNotNull(token);
+            var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            Assert.IsNotNull(authData);
+            var token = authData["token"].ToString();;
             List<Dictionary<string, object>> CrossroadsLocations = LookupService.CrossroadsLocations(token);
             Assert.IsNotEmpty(CrossroadsLocations);
             var clifton = new Dictionary<string, object>();
