@@ -3,11 +3,14 @@
 
   var app = angular.module("crossroads.core");
   app.config(AppConfig);
-  
+
   AppConfig.$inject = ['$httpProvider', '$locationProvider', 'datepickerConfig', 'datepickerPopupConfig', '$cookiesProvider'];
 
   function AppConfig($httpProvider, $locationProvider, datepickerConfig, datepickerPopupConfig, $cookiesProvider){
-    $locationProvider.html5Mode(true);
+    $locationProvider.html5Mode({
+        enabled:true,
+        requireBase:false
+    });
 
     $httpProvider.defaults.useXDomain = true;
     $httpProvider.defaults.headers.common['Authorization']= crds_utilities.getCookie('sessionId');
