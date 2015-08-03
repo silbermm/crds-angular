@@ -257,12 +257,6 @@
         };
 
         vm.processChange = function(){
-          if (vm.setValidCard == false){
-            vm.dto.donor.default_source.last4 = "";
-          };
-          if (vm.setValidCvc == false){
-            vm.dto.donor.default_source.cvc = "";
-          };
           vm.processingChange = true;
           vm.amountSubmitted = false;
           $state.go("give.amount");
