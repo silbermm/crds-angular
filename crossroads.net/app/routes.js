@@ -120,17 +120,47 @@
         url: '/myprofile',
         controller: 'MyProfileCtrl as myProfile',
         templateUrl: 'myprofile/myprofile.html',
-        data: {
-          isProtected: true
-        },
-        resolve: {
-          loggedin: crds_utilities.checkLoggedin
-        }
       })
-      .state('mytrips', {
+      .state("mytrips", {
         parent: 'noSideBar',
-        url: '/mytrips',
-        templateUrl: 'mytrips/mytrips.html'
+        url: "/mytrips",
+        templateUrl: "mytrips/mytrips.html"
+      })
+      .state("go-trip-signup", {
+        parent: 'noSideBar',
+        url: "/go/:trip_location/signup",
+        templateUrl: "gotrips/signup-page-1.html",
+        controller: 'GoTripsCtrl as gotrip'
+      })
+      .state("go-trip-signup-page-2", {
+        parent: 'noSideBar',
+        url: "/go/:trip_location/signup/2",
+        templateUrl: "gotrips/signup-page-2.html",
+        controller: 'GoTripsCtrl as gotrip'
+      })
+      .state("go-trip-signup-page-3", {
+        parent: 'noSideBar',
+        url: "/go/:trip_location/signup/3",
+        templateUrl: "gotrips/signup-page-3.html",
+        controller: 'GoTripsCtrl as gotrip'
+      })
+      .state("go-trip-signup-page-4", {
+        parent: 'noSideBar',
+        url: "/go/:trip_location/signup/4",
+        templateUrl: "gotrips/signup-page-4.html",
+        controller: 'GoTripsCtrl as gotrip'
+      })
+      .state("go-trip-signup-page-5", {
+        parent: 'noSideBar',
+        url: "/go/:trip_location/signup/5",
+        templateUrl: "gotrips/signup-page-5.html",
+        controller: 'GoTripsCtrl as gotrip'
+      })
+      .state("go-trip-signup-page-confirmation", {
+        parent: 'noSideBar',
+        url: "/go/:trip_location/signup/confirmation",
+        templateUrl: "gotrips/signup-page-confirmation.html",
+        controller: 'GoTripsCtrl as gotrip'
       })
       .state('media', {
         parent: 'noSideBar',

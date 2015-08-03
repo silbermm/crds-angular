@@ -7,13 +7,13 @@
     '$scope',
     '$rootScope',
     'MESSAGES',
-    'Message',
+    'ContentBlock',
     'growl',
     '$aside',
     'screenSize',
     '$state'];
 
-  function CoreController($scope, $rootScope, MESSAGES, Message, growl, $aside, screenSize, $state) {
+  function CoreController($scope, $rootScope, MESSAGES, ContentBlock, growl, $aside, screenSize, $state) {
 
     var vm = this;
 
@@ -22,6 +22,7 @@
     vm.prevent = prevent;
     vm.resolving = true;
     vm.state = $state;
+    vm.mapContentBlocks = mapContentBlocks;
 
     ////////////////////////////
     // State Change Listeners //
@@ -49,7 +50,7 @@
     //////////////////////////
     $rootScope.mobile = screenSize.on('xs, sm', function(match){ $rootScope.mobile = match; });
 
-    $rootScope.$on('notify', function (event, id, refId, ttl) {
+    $rootScope.$on('notify', function (event, msg, refId, ttl) {
       var parms = { };
       if(refId !== undefined && refId !== null) {
         parms.referenceId = refId;
@@ -57,7 +58,7 @@
       if(ttl !== undefined && ttl !== null) {
         parms.ttl = ttl;
       }
-      growl[$rootScope.messages[id].type]($rootScope.messages[id].message, parms);
+      growl[msg.type](msg.content, parms);
     });
 
     $rootScope.$on('mailchimp-response', function (event, result, msg) {
@@ -69,18 +70,23 @@
     });
 
     $rootScope.$on('context', function (event, id) {
-     var message = Message.get({
+     var contentBlocks = ContentBlock.get({
         id: id
       }, function () {
-        return message.message.message;
+        return contentBlocks.ContentBlock.content;
       });
     });
 
-    var messagesRequest = Message.get('', function () {
-      messagesRequest.messages.unshift(null); //Adding a null so the indexes match the DB
-      //TODO Refactor to not use rootScope, now using ngTemplate w/ ngMessages but also need to pull this out into a service
-      $rootScope.messages = messagesRequest.messages;
+    var contentBlockRequest = ContentBlock.get('', function () {
+      mapContentBlocks(contentBlockRequest.contentBlocks);
     });
+
+    function mapContentBlocks(contentBlocks) {
+      _.reduce(contentBlocks, function(messages, cb) {
+        messages[cb.title] = cb;
+        return(messages);
+      }, MESSAGES);
+    }
 
     function openAside(position, backdrop) {
       vm.asideState = {

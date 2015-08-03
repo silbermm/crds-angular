@@ -37,6 +37,10 @@ describe('GiveController', function() {
       Session = $injector.get('Session');
       User = $injector.get('User');
       AUTH_EVENTS = $injector.get('AUTH_EVENTS');
+      $rootScope.MESSAGES = {
+        failedResponse: 15
+      };
+
 
       mockGetResponse = {
         id: "102030",

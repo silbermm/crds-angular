@@ -247,7 +247,7 @@
     <Compile Include="Controllers\API\VolunteerApplicationController.cs" />
     <Compile Include="Exceptions\Models\ApiErrorDto.cs" />
     <Compile Include="Enum\BadgeTypeEnum.cs" />
-    <Compile Include="Exceptions\StripeException.cs" />
+    <Compile Include="Exceptions\PaymentProcessorException.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -294,7 +294,7 @@
     <Compile Include="Models\Crossroads\Stewardship\StripeEvent.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeObject.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeTransfer.cs" />
-	<Compile Include="Models\Crossroads\Trip\TripParticipantDto.cs" />
+    <Compile Include="Models\Crossroads\Trip\TripParticipantDto.cs" />
     <Compile Include="Models\Crossroads\Trip\TripDto.cs" />
     <Compile Include="Models\Crossroads\User.cs" />
     <Compile Include="Models\Crossroads\VolunteerApplication\AdultApplicationDto.cs" />

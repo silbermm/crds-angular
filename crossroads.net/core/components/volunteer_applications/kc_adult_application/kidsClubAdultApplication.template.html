@@ -62,16 +62,13 @@
     </div>
 
     <div class="row">
-
       <div class="form-group col-sm-6">
         <label class="block">Marital Status</label>
-        <select class="form-control col-sm-12" name="maritalStatus" ng-model="kcAdultApplication.volunteer.maritalStatusId+''" disabled="true">
+        <select class="form-control col-sm-12" name="maritalStatus" 
+          ng-model="kcAdultApplication.volunteer.maritalStatusId" 
+          ng-options="item.dp_RecordID as item.dp_RecordName for item in kcAdultApplication.maritalStatuses"
+          disabled="true">
           <option></option>
-          <option value="1">Single</option>
-          <option value="3">Divorced</option>
-          <option value="6">Separated</option>
-          <option value="4">Widowed</option>
-          <option value="2">Married</option>
         </select>
       </div>
     </div>
@@ -99,10 +96,10 @@
         <input type="text" class="form-control" ng-model="kcAdultApplication.volunteer.attending" id="attending" placeholder="mm/dd/yyyy" validate-date ng-model-options="{updateOn: 'blur'}"required name="attending">
         <ng-messages for="adult.attending.$error" ng-if="kcAdultApplication.showError(adult, 'attending')">
           <span ng-message="invalidDate">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
           </span>
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -129,7 +126,7 @@
         </select>
         <ng-messages for="adult.serviceAttend.$error" ng-if="kcAdultApplication.showError(adult, 'serviceAttend')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -180,7 +177,7 @@
         <input type="text" class="form-control" id="companyName" name="companyName" placeholder="Company Name" ng-model="kcAdultApplication.volunteer.company" ng-model-options="{updateOn: 'blur'}"required>
         <ng-messages for="adult.companyName.$error" ng-if="kcAdultApplication.showError(adult, 'companyName')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -190,7 +187,7 @@
         <ng-messages for="adult.companyPosition.$error" ng-if="kcAdultApplication.showError(adult, 'companyPosition')">
 
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -199,7 +196,7 @@
         <input type="text" class="form-control" id="workPhone" placeholder="123-456-7890" name="workPhone" ng-pattern="kcAdultApplication.phoneFormat" ng-model="kcAdultApplication.volunteer.workPhone" ng-model-options="{ updateOn: 'blur' }">
         <ng-messages for="adult.workPhone.$error" ng-if="kcAdultApplication.showError(adult, 'workPhone')">
           <span ng-message="pattern">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -226,7 +223,7 @@
         </div>
         <ng-messages for="adult.childDob1.$error" ng-if="adult.childDob1.$invalid">
           <span ng-message="date">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -248,7 +245,7 @@
         </div>
         <ng-messages for="adult.childDob2.$error" ng-if="adult.childDob2.$invalid">
           <span ng-message="date">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -270,7 +267,7 @@
         </div>
         <ng-messages for="adult.childDob3.$error" ng-if="adult.childDob3.$invalid">
           <span ng-message="date">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -292,7 +289,7 @@
         </div>
         <ng-messages for="adult.childDob4.$error" ng-if="adult.childDob4.$invalid">
           <span ng-message="date">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -314,7 +311,7 @@
         </label>
         <ng-messages for="adult.crime.$error" ng-if="kcAdultApplication.showError(adult, 'crime')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -329,7 +326,7 @@
         </label>
         <ng-messages for="adult.addiction.$error" ng-if="kcAdultApplication.showError(adult, 'addiction')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -344,7 +341,7 @@
         </label>
         <ng-messages for="adult.neglect.$error" ng-if="kcAdultApplication.showError(adult, 'neglect')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -359,7 +356,7 @@
         </label>
         <ng-messages for="adult.psychiatricDisorder.$error" ng-if="kcAdultApplication.showError(adult, 'psychiatricDisorder')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -374,7 +371,7 @@
         </label>
         <ng-messages for="adult.sexuallyActive.$error" ng-if="kcAdultApplication.showError(adult, 'sexuallyActive')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -403,7 +400,7 @@
         </div>
         <ng-messages for="adult.religion.$error" ng-if="kcAdultApplication.showError(adult, 'religion')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -416,7 +413,7 @@
         </textarea>
         <ng-messages for="adult.explainFaith.$error" ng-if="kcAdultApplication.showError(adult, 'explainFaith')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -455,7 +452,7 @@
         </div>
         <ng-messages for="adult.availability.$error" ng-if="kcAdultApplication.showError(adult, 'availability')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
         <div class="form-group col-sm-6" ng-class="{'has-error': kcAdultApplication.showError(adult, 'availabilityWeekendSite')}" ng-if="kcAdultApplication.volunteer.availabilityWeekend">
@@ -481,7 +478,7 @@
           </select>
           <ng-messages for="adult.availabilityWeekendSite.$error" ng-if="kcAdultApplication.showError(adult, 'availabilityWeekendSite')">
             <span ng-message="required">
-              <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+              <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
             </span>
           </ng-messages>
         </div>
@@ -544,7 +541,7 @@
         </div>
         <ng-messages for="adult.gradeLevel.$error" ng-if="kcAdultApplication.showError(adult, 'gradeLevel')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
 
@@ -563,7 +560,7 @@
         <input type="text" class="form-control" id="referenceName-1" name="referenceName1" ng-model="kcAdultApplication.volunteer.referenceName1" placeholder="Name" ng-model-options="{updateOn: 'blur'}"required>
         <ng-messages for="adult.referenceName1.$error" ng-if="kcAdultApplication.showError(adult, 'referenceName1')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
 
@@ -573,7 +570,7 @@
         <input type="text" class="form-control" name="referenceTimeKnown1" id="referenceTimeKnown-1" ng-model="kcAdultApplication.volunteer.referenceTimeKnown1" placeholder="Length of time known" ng-model-options="{updateOn: 'blur'}"required>
         <ng-messages for="adult.referenceTimeKnown1.$error" ng-if="kcAdultApplication.showError(adult, 'referenceTimeKnown1')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -584,7 +581,7 @@
         <input type="text" class="form-control" id="referenceHomePhone1" name="referenceHomePhone1" ng-model="kcAdultApplication.volunteer.referenceHomePhone1" ng-pattern="kcAdultApplication.phoneFormat" placeholder="Home Phone" ng-model-options="{updateOn: 'blur'}">
         <ng-messages for="adult.referenceHomePhone1.$error" ng-if="kcAdultApplication.showError(adult, 'referenceHomePhone1')">
           <span ng-message="pattern">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -593,7 +590,7 @@
         <input type="text" class="form-control" id="referenceMobilePhone-1" name="referenceMobilePhone1" ng-model="kcAdultApplication.volunteer.referenceMobilePhone1" ng-pattern="kcAdultApplication.phoneFormat" placeholder="Mobile Phone" ng-model-options="{updateOn: 'blur'}">
         <ng-messages for="adult.referenceMobilePhone1.$error" ng-if="kcAdultApplication.showError(adult, 'referenceMobilePhone1')">
           <span ng-message="pattern">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -604,7 +601,7 @@
         <input type="text" class="form-control" id="referenceWorkPhone-1" name="referenceWorkPhone1" ng-pattern="kcAdultApplication.phoneFormat" ng-model="kcAdultApplication.volunteer.referenceWorkPhone1" placeholder="Work Phone" ng-model-options="{updateOn: 'blur'}">
         <ng-messages for="adult.referenceWorkPhone1.$error" ng-if="kcAdultApplication.showError(adult, 'referenceWorkPhone1')">
           <span ng-message="pattern">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span>
           </span>
         </ng-messages>
 
@@ -614,10 +611,10 @@
         <input type="email" class="form-control" id="referenceEmail-1" name="referenceEmail1" ng-model="kcAdultApplication.volunteer.referenceEmail1" placeholder="Email" ng-model-options="{updateOn: 'blur'}"required>
         <ng-messages for="adult.referenceEmail1.$error" ng-if="kcAdultApplication.showError(adult, 'referenceEmail1')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
           <span ng-message="email">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidEmail].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidEmail.content | html"></span>
           </span>
         </ng-messages>
 
@@ -629,7 +626,7 @@
         <input type="text" class="form-control" id="referenceAssociation-1" name="referenceAssociation1" ng-model="kcAdultApplication.volunteer.referenceAssociation1" placeholder="Nature of Association" ng-model-options="{updateOn: 'blur'}"required>
         <ng-messages for="adult.referenceAssociation1.$error" ng-if="kcAdultApplication.showError(adult, 'referenceAssociation1')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
 
@@ -639,7 +636,7 @@
         <input type="text" class="form-control" id="referenceOccupation-1" name="referenceOccupation1" ng-model="kcAdultApplication.volunteer.referenceOccupation1" placeholder="Occupation" ng-model-options="{updateOn: 'blur'}"required>
         <ng-messages for="adult.referenceOccupation1.$error" ng-if="kcAdultApplication.showError(adult, 'referenceOccupation1')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -656,7 +653,7 @@
         <input type="text" class="form-control" id="referenceName-2" name="referenceName2" ng-model="kcAdultApplication.volunteer.referenceName2" placeholder="Name" ng-model-options="{updateOn: 'blur'}"required>
         <ng-messages for="adult.referenceName2.$error" ng-if="kcAdultApplication.showError(adult, 'referenceName2')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -666,7 +663,7 @@
         <input type="text" class="form-control" name="referenceTimeKnown2" id="referenceTimeKnown-2" ng-model="kcAdultApplication.volunteer.referenceTimeKnown2" placeholder="Length of time known" ng-model-options="{updateOn: 'blur'}"required>
         <ng-messages for="adult.referenceTimeKnown2.$error" ng-if="kcAdultApplication.showError(adult, 'referenceTimeKnown2')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -677,7 +674,7 @@
         <input type="text" class="form-control" id="referenceHomePhone2" name="referenceHomePhone2" ng-model="kcAdultApplication.volunteer.referenceHomePhone2" ng-pattern="kcAdultApplication.phoneFormat" placeholder="Home Phone" ng-model-options="{updateOn: 'blur'}">
         <ng-messages for="adult.referenceHomePhone2.$error" ng-if="kcAdultApplication.showError(adult, 'referenceHomePhone2')">
           <span ng-message="pattern">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -686,7 +683,7 @@
         <input type="text" class="form-control" id="referenceMobilePhone-2" name="referenceMobilePhone2" ng-model="kcAdultApplication.volunteer.referenceMobilePhone2" ng-pattern="kcAdultApplication.phoneFormat" placeholder="Mobile Phone" ng-model-options="{updateOn: 'blur'}">
         <ng-messages for="adult.referenceMobilePhone2.$error" ng-if="kcAdultApplication.showError(adult, 'referenceMobilePhone2')">
           <span ng-message="pattern">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span>
           </span>
         </ng-messages>
 
@@ -698,7 +695,7 @@
         <input type="text" class="form-control" id="referenceWorkPhone-2" name="referenceWorkPhone2" ng-pattern="kcAdultApplication.phoneFormat" ng-model="kcAdultApplication.volunteer.referenceWorkPhone2" placeholder="Work Phone" ng-model-options="{updateOn: 'blur'}">
         <ng-messages for="adult.referenceWorkPhone2.$error" ng-if="kcAdultApplication.showError(adult, 'referenceWorkPhone2')">
           <span ng-message="pattern">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -707,10 +704,10 @@
         <input type="email" class="form-control" id="referenceEmail-2" name="referenceEmail2" ng-model="kcAdultApplication.volunteer.referenceEmail2" placeholder="Email" ng-model-options="{updateOn: 'blur'}"required>
         <ng-messages for="adult.referenceEmail2.$error" ng-if="kcAdultApplication.showError(adult, 'referenceEmail2')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
           <span ng-message="email">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidEmail].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidEmail.content | html"></span>
           </span>
         </ng-messages>
 
@@ -722,7 +719,7 @@
         <input type="text" class="form-control" id="referenceAssociation-2" name="referenceAssociation2" ng-model="kcAdultApplication.volunteer.referenceAssociation2" placeholder="Nature of Association" ng-model-options="{updateOn: 'blur'}"required>
         <ng-messages for="adult.referenceAssociation2.$error" ng-if="kcAdultApplication.showError(adult, 'referenceAssociation2')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
 
@@ -732,7 +729,7 @@
         <input type="text" class="form-control" id="referenceOccupation-2" name="referenceOccupation2" ng-model="kcAdultApplication.volunteer.referenceOccupation2" placeholder="Occupation" ng-model-options="{updateOn: 'blur'}"required>
         <ng-messages for="adult.referenceOccupation2.$error" ng-if="kcAdultApplication.showError(adult, 'referenceOccupation2')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -749,7 +746,7 @@
         <input type="text" class="form-control" id="referenceName-3" name="referenceName3" ng-model="kcAdultApplication.volunteer.referenceName3" placeholder="Name" ng-model-options="{updateOn: 'blur'}" required>
         <ng-messages for="adult.referenceName3.$error" ng-if="kcAdultApplication.showError(adult, 'referenceName3')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -759,7 +756,7 @@
         <input type="text" class="form-control" name="referenceTimeKnown3" id="referenceTimeKnown-3" ng-model="kcAdultApplication.volunteer.referenceTimeKnown3" placeholder="Length of time known" ng-model-options="{updateOn: 'blur'}" required>
         <ng-messages for="adult.referenceTimeKnown3.$error" ng-if="kcAdultApplication.showError(adult, 'referenceTimeKnown3')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -770,7 +767,7 @@
         <input type="text" class="form-control" id="referenceHomePhone3" name="referenceHomePhone3" ng-pattern="kcAdultApplication.phoneFormat" ng-model="kcAdultApplication.volunteer.referenceHomePhone3" placeholder="Home Phone" ng-model-options="{updateOn: 'blur'}">
         <ng-messages for="adult.referenceHomePhone3.$error" ng-if="kcAdultApplication.showError(adult, 'referenceHomePhone3')">
           <span ng-message="pattern">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -779,7 +776,7 @@
         <input type="text" class="form-control" id="referenceMobilePhone-3" name="referenceMobilePhone3" ng-pattern="kcAdultApplication.phoneFormat" ng-model="kcAdultApplication.volunteer.referenceMobilePhone3" placeholder="Mobile Phone" ng-model-options="{updateOn: 'blur'}">
         <ng-messages for="adult.referenceMobilePhone3.$error" ng-if="kcAdultApplication.showError(adult, 'referenceMobilePhone3')">
           <span ng-message="pattern">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -790,7 +787,7 @@
         <input type="text" class="form-control" id="referenceWorkPhone-3" name="referenceWorkPhone3" ng-model="kcAdultApplication.volunteer.referenceWorkPhone3" ng-pattern="kcAdultApplication.phoneFormat" placeholder="Work Phone" ng-model-options="{updateOn: 'blur'}">
         <ng-messages for="adult.referenceWorkPhone3.$error" ng-if="kcAdultApplication.showError(adult, 'referenceWorkPhone3')">
           <span ng-message="pattern">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -799,10 +796,10 @@
         <input type="email" class="form-control" id="referenceEmail-3" name="referenceEmail3" ng-model="kcAdultApplication.volunteer.referenceEmail3" placeholder="Email" ng-model-options="{updateOn: 'blur'}" required>
         <ng-messages for="adult.referenceEmail3.$error" ng-if="kcAdultApplication.showError(adult, 'referenceEmail3')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
           <span ng-message="email">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidEmail].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidEmail.content | html"></span>
           </span>
         </ng-messages>
 
@@ -814,7 +811,7 @@
         <input type="text" class="form-control" id="referenceAssociation-3" name="referenceAssociation3" ng-model="kcAdultApplication.volunteer.referenceAssociation3" placeholder="Nature of Association" ng-model-options="{updateOn: 'blur'}" required>
         <ng-messages for="adult.referenceAssociation3.$error" ng-if="kcAdultApplication.showError(adult, 'referenceAssociation3')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
 
@@ -824,7 +821,7 @@
         <input type="text" class="form-control" id="referenceOccupation-3" name="referenceOccupation3" ng-model="kcAdultApplication.volunteer.referenceOccupation3" placeholder="Occupation" ng-model-options="{updateOn: 'blur'}" required>
         <ng-messages for="adult.referenceOccupation3.$error" ng-if="kcAdultApplication.showError(adult, 'referenceOccupation3')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -851,7 +848,7 @@
         </label>
         <ng-messages for="adult.signatureAgree.$error" ng-if="kcAdultApplication.showError(adult, 'signatureAgree')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>

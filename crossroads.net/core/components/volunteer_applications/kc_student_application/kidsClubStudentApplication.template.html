@@ -65,10 +65,10 @@
         <input type="text" class="form-control" ng-model="kcStudentApplication.howLongAttending" id="attending" placeholder="mm/dd/yyyy" validate-date ng-model-options="{updateOn: 'blur'}"required name="attending">
         <ng-messages for="student.attending.$error" ng-if="kcStudentApplication.showError(student, 'attending')">
           <span ng-message="invalidDate">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
           </span>
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -95,7 +95,7 @@
         </select>
         <ng-messages for="student.serviceAttend.$error" ng-if="kcStudentApplication.showError(student, 'serviceAttend')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -155,7 +155,7 @@
                ng-model-options="{updateOn: 'blur'}"
                required>
         <ng-messages for="student.school.$error" ng-if="kcStudentApplication.showError(student,'school')" >
-          <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span></span>
+          <span ng-message="required"><span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span></span>
         </ng-messages>
       </div>
       <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'grade')}">
@@ -174,7 +174,7 @@
           </select>
          <ng-messages for="student.grade.$error" ng-if="kcStudentApplication.showError(student, 'grade')" >
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -211,7 +211,7 @@
         </div>
         <ng-messages for="student.religion.$error" ng-if="kcStudentApplication.showError(student, 'religion')">
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -228,7 +228,7 @@
         </textarea>
         <ng-messages for="student.explainFaith.$error" ng-if="kcStudentApplication.showError(student, 'explainFaith')" >
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -246,7 +246,7 @@
                required>
         <ng-messages for="student.prompted.$error" ng-if="kcStudentApplication.showError(student, 'prompted')" >
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
 
@@ -287,7 +287,7 @@
         </div>
         <ng-messages for="student.availability.$error" ng-if="kcStudentApplication.showError(student, 'availability')" >
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
         <div class="form-group col-sm-6" ng-class="{'has-error': kcStudentApplication.showError(student, 'availabilityWeekendSite')}" ng-if="kcStudentApplication.availabilityDuringWeekend">
@@ -313,7 +313,7 @@
           </select>
           <ng-messages for="student.availabilityWeekendSite.$error" ng-if="kcStudentApplication.showError(student, 'availabilityWeekendSite')">
             <span ng-message="required">
-              <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+              <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
             </span>
           </ng-messages>
         </div>
@@ -356,7 +356,7 @@
         </div>
         <ng-messages for="student.serveAge.$error" ng-if="kcStudentApplication.showError(student, 'serveAge')" >
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -381,7 +381,7 @@
                required>
         <ng-messages for="student.referenceName1.$error" ng-if="kcStudentApplication.showError(student, 'referenceName1')" >
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -397,7 +397,7 @@
                required>
          <ng-messages for="student.referenceTime1.$error" ng-if="kcStudentApplication.showError(student, 'referenceTime1')" >
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -415,7 +415,7 @@
                placeholder="Home Phone">
         <ng-messages for="student.referenceHomePhone1.$error" ng-if="kcStudentApplication.showError(student, 'referenceHomePhone1')">
           <span ng-message="pattern">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span>
           </span>
         </ng-messages>
 
@@ -432,7 +432,7 @@
                ng-pattern="kcStudentApplication.phoneFormat">
         <ng-messages for="student.referenceMobilePhone1.$error" ng-if="kcStudentApplication.showError(student, 'referenceMobilePhone1')">
           <span ng-message="pattern">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -450,7 +450,7 @@
                ng-pattern="kcStudentApplication.phoneFormat">
         <ng-messages for="student.referenceWorkPhone1.$error" ng-if="kcStudentApplication.showError(student, 'referenceWorkPhone1')">
           <span ng-message="pattern">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -466,10 +466,10 @@
                required>
         <ng-messages for="student.referenceEmail1.$error" ng-if="kcStudentApplication.showError(student, 'referenceEmail1')" >
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
           <span ng-message="email">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidEmail].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidEmail.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -487,7 +487,7 @@
                required>
         <ng-messages for="student.referenceAssociation1.$error" ng-if="kcStudentApplication.showError(student, 'referenceAssociation1')" >
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -503,7 +503,7 @@
                required>
         <ng-messages for="student.referenceOccupation1.$error" ng-if="kcStudentApplication.showError(student, 'referenceOccupation1')" >
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -526,7 +526,7 @@
                required>
         <ng-messages for="student.referenceName2.$error" ng-if="kcStudentApplication.showError(student, 'referenceName2')" >
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -542,7 +542,7 @@
                required>
          <ng-messages for="student.referenceTime2.$error" ng-if="kcStudentApplication.showError(student, 'referenceTime2')" >
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -560,7 +560,7 @@
                placeholder="Home Phone">
         <ng-messages for="student.referenceHomePhone2.$error" ng-if="kcStudentApplication.showError(student, 'referenceHomePhone2')">
           <span ng-message="pattern">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -576,7 +576,7 @@
                ng-pattern="kcStudentApplication.phoneFormat">
         <ng-messages for="student.referenceMobilePhone2.$error" ng-if="kcStudentApplication.showError(student, 'referenceMobilePhone2')">
           <span ng-message="pattern">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -594,7 +594,7 @@
                ng-pattern="kcStudentApplication.phoneFormat">
         <ng-messages for="student.referenceWorkPhone2.$error" ng-if="kcStudentApplication.showError(student, 'referenceWorkPhone2')">
           <span ng-message="pattern">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span>
           </span>
         </ng-messages>
       </div> 
@@ -610,10 +610,10 @@
                required>
         <ng-messages for="student.referenceEmail2.$error" ng-if="kcStudentApplication.showError(student, 'referenceEmail2')" >
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
           <span ng-message="email">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidEmail].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidEmail.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -631,7 +631,7 @@
                required>
         <ng-messages for="student.referenceAssociation2.$error" ng-if="kcStudentApplication.showError(student, 'referenceAssociation2')" >
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -647,7 +647,7 @@
                required>
         <ng-messages for="student.referenceOccupation2.$error" ng-if="kcStudentApplication.showError(student, 'referenceOccupation2')" >
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>    
@@ -672,7 +672,7 @@
                required>
         <ng-messages for="student.parentLastName.$error" ng-if="kcStudentApplication.showError(student, 'parentLastName')" >
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -689,7 +689,7 @@
                required>
         <ng-messages for="student.parentFirstName.$error" ng-if="kcStudentApplication.showError(student, 'parentFirstName')" >
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -707,10 +707,10 @@
                ng-pattern="kcStudentApplication.phoneFormat">
         <ng-messages for="student.parentHomePhone.$error" ng-if="kcStudentApplication.showError(student, 'parentHomePhone')" >
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
           <span ng-message="pattern">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -728,10 +728,10 @@
                ng-pattern="kcStudentApplication.phoneFormat">
         <ng-messages for="student.parentMobilePhone.$error" ng-if="kcStudentApplication.showError(student, 'parentMobilePhone')" >
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
           <span ng-message="pattern">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidPhone].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -748,11 +748,11 @@
                required>
         <ng-messages for="student.parentEmail.$error" ng-if="kcStudentApplication.showError(student, 'parentEmail')" >
           <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
 
            <span ng-message="email">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidEmail].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidEmail.content | html"></span>
           </span>
         </ng-messages>
       </div>

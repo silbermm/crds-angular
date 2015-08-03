@@ -15,22 +15,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <ng-include src="'templates/favicons.html'"> </ng-include>
   <script type="text/ng-template" id="on-submit-messages">
-      <span ng-message="required"><span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span></span>
-      <span ng-message="initiativeRequired"><span ng-bind-html="$root.messages[$root.MESSAGES.noInitiativeSelected].message | html"></span></span>
+      <span ng-message="required"><span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span></span>
+      <span ng-message="initiativeRequired"><span ng-bind-html="$root.MESSAGES.noInitiativeSelected.content | html"></span></span>
   </script>
   <script type="text/ng-template" id="on-pause-messages">
-      <span ng-message="pattern"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span></span>
-      <span ng-message="invalidDate"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span></span>
-      <span ng-message="email"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidEmail].message | html"></span></span>
+      <span ng-message="pattern"><span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span></span>
+      <span ng-message="invalidDate"><span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span></span>
+      <span ng-message="email"><span ng-bind-html="$root.MESSAGES.invalidEmail.content | html"></span></span>
   </script>
   <script type="text/ng-template" id="on-blur-messages">
-      <span ng-message="minlength"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidPassword].message | html"></span></span>
-      <span ng-message="unique"><span ng-bind-html="$root.messages[$root.MESSAGES.emailInUse].message | html"></span></span>
-      <span ng-message="email"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidEmail].message | html"></span></span>
-      <span ng-message="invalidRouting"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidRoutingTransit].message | html"></span></span>
-      <span ng-message="invalidAccount"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidAccountNumber].message | html"></span></span>
-      <span ng-message="naturalNumber"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidDonationAmount].message | html"></span></span>
-      <span ng-message="invalidZip"><span ng-bind-html="$root.messages[$root.MESSAGES.invalidZip].message | html"></span></span>
+      <span ng-message="minlength"><span ng-bind-html="$root.MESSAGES.invalidPassword.content | html"></span></span>
+      <span ng-message="unique"><span ng-bind-html="$root.MESSAGES.emailInUse.content | html"></span></span>
+      <span ng-message="email"><span ng-bind-html="$root.MESSAGES.invalidEmail.content | html"></span></span>
+      <span ng-message="invalidRouting"><span ng-bind-html="$root.MESSAGES.invalidRoutingTransit.content | html"></span></span>
+      <span ng-message="invalidAccount"><span ng-bind-html="$root.MESSAGES.invalidAccountNumber.content | html"></span></span>
+      <span ng-message="naturalNumber"><span ng-bind-html="$root.MESSAGES.invalidDonationAmount.content | html"></span></span>
+      <span ng-message="invalidZip"><span ng-bind-html="$root.MESSAGES.invalidZip.content | html"></span></span>
   </script>
   <ng-include src="'/assets/cr.svg'"></ng-include>
   <!-- Hotjar Tracking Code for demo.crossroads.net -->

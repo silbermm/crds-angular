@@ -236,7 +236,7 @@
           vm.processing = false;
           if(error && error.globalMessage) {
             vm.dto.declinedPayment =
-              error.globalMessage == $rootScope.MESSAGES.paymentMethodDeclined;
+              error.globalMessage.id == $rootScope.MESSAGES.paymentMethodDeclined.id;
 
             $rootScope.$emit('notify', error.globalMessage);
           } else {
@@ -262,15 +262,6 @@
         };
 
         vm.processChange = function(){
-          if (!Session.isActive()) {
-            $state.go("give.login");
-          }
-          if (vm.setValidCard == false){
-            vm.dto.donor.default_source.last4 = "";
-          };
-          if (vm.setValidCvc == false){
-            vm.dto.donor.default_source.cvc = "";
-          };
           vm.processingChange = true;
           vm.amountSubmitted = false;
           $state.go("give.amount");

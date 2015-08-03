@@ -23,7 +23,7 @@
     <form name="teamForm-{{team.index}}" >
     <div class="panel-collapse collapse" collapse="isCollapsed">
       <div class="panel-body soft-half-bottom">
-        <div class="alert alert-info" role="alert" ng-show="team.pastDeadline" ng-bind-html="$root.messages[team.pastDeadlineMessage].message | html">
+        <div class="alert alert-info" role="alert" ng-show="team.pastDeadline" ng-bind-html="team.pastDeadlineMessage.content | html">
         </div>
         <p class="flush-bottom">Editing sign up for {{currentMember.name}} {{currentMember.lastName}}
         <span ng-show="displayEmail(currentMember.emailAddress)">( <span> {{ currentMember.emailAddress}} </span> )</span>
@@ -55,7 +55,7 @@
                 <span class="opportunity-name">Not Available</span>
               </label>
               <div ng-show="formErrors.role">
-                <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+                <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
               </div>
             </div><!--/radio-->
             <div ng-show="selectedRole">
@@ -85,7 +85,7 @@
                   <option value="">Select a Frequency</option>
                 </select>
                 <div ng-show="formErrors.frequency">
-                  <span ng-bind-html="$root.messages[$root.MESSAGES.selectFrequency].message | html"></span>
+                  <span ng-bind-html="$root.MESSAGES.selectFrequency.content | html"></span>
                 </div>
               </div><!--/form-group-->
               <div ng-if="currentMember.showFrequency">
@@ -107,7 +107,7 @@
                     </span>
                   </div><!--/input-group-->
                   <div ng-show="formErrors.from">
-                    <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
+                    <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
                   </div>
                 </div><!--/form-group-->
                 <div class="form-group" ng-class="{'has-error': formErrors.to || formErrors.dateRange}" >
@@ -131,10 +131,10 @@
                     </span>
                   </div><!--/input-group-->
                   <div ng-show="formErrors.to">
-                    <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
+                    <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
                   </div>
                   <div ng-show="formErrors.dateRange">
-                    <span ng-bind-html="$root.messages[$root.MESSAGES.invalidDateRange].message | html"></span>
+                    <span ng-bind-html="$root.MESSAGES.invalidDateRange.content | html"></span>
                   </div>
                 </div><!--/form-group-->
               </div><!--/ng-show-->
