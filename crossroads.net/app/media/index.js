@@ -12,6 +12,7 @@ require('./media-single.html');
 require('./subscribe-btn-messages.html');
 require('./subscribe-btn-music.html');
 require('./subscribe-btn-videos.html');
+require('./subscribe-btn-dropdown.html');
 require('./media-list.html');
 require('./message-action-buttons.html');
 require('./media-details.html');
