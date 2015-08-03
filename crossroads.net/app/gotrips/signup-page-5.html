@@ -39,7 +39,7 @@
 
       <div class="row">
         <div class="form-group col-sm-12">
-          <p>We'll use the information suplied below to buy your plane ticket. It must be entered exactly as it appears on your passport. If your passport contains your maiden name, please use that as your Last Name.</p>
+          <p>We'll use the information supplied below to buy your plane ticket. It must be entered exactly as it appears on your passport. If your passport contains your maiden name, please use that as your Last Name.</p>
           <div class="row">
             <div class="form-group col-sm-6">
                 <label for="passport-firstname" class="required">First Name</label>
@@ -137,17 +137,28 @@
       <div class="col-sm-12" ng-show="gotrip.pageTitle == 'india'">
         <div class="row">
           <legend>
-            Past Abuse History <span class="text-muted small">This will in no way keep you from going to India</span>
+            Past Abuse History
           </legend>
-
+          <p>
+            The issue of human trafficking can be overwhelming in a stimulating environment such as India. Answering this question honestly will not disqualify you from this trip but will allow us to better serve you during the pre-trip process.
+          </p>
           <div class="form-group">
             <label class="block required">Have you ever been a victim of any form of abuse?</label>
-            <label for="abuse-yes" class="radio-inline">
-                <input type="radio" value="yes" name="abuse" id="abuse-yes">Yes
-            </label>
-            <label for="abuse-no" class="radio-inline">
-                <input type="radio" value="no" name="abuse" id="abuse-no">No
-            </label>
+            <div class="radio">
+              <label for="abuse-yes">
+                  <input type="radio" value="yes" name="abuse" id="abuse-yes">Yes
+              </label>
+            </div>
+            <div class="radio">
+              <label for="abuse-no" class="radio">
+                  <input type="radio" value="no" name="abuse" id="abuse-no">No
+              </label>
+            </div>
+            <div class="radio">
+              <label for="abuse-talk" class="radio">
+                  <input type="radio" value="no" name="abuse" id="abuse-talk">I'd prefer to talk with someone confidentially
+              </label>
+            </div>
           </div>
         </div>
       </div>
