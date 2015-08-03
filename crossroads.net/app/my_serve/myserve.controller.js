@@ -4,26 +4,26 @@
   module.exports = MyServeController;
 
   MyServeController.$inject = [
-    '$scope', 
-    '$rootScope', 
+    '$scope',
+    '$rootScope',
     '$window',
-    '$log', 
-    'filterState', 
-    'Session', 
-    'ServeOpportunities', 
-    'Groups', 
+    '$log',
+    'filterState',
+    'Session',
+    'ServeOpportunities',
+    'Groups',
     'AUTH_EVENTS'
   ];
 
   function MyServeController(
-    $scope, 
-    $rootScope, 
-    $window, 
-    $log, 
-    filterState, 
-    Session, 
-    ServeOpportunities, 
-    Groups, 
+    $scope,
+    $rootScope,
+    $window,
+    $log,
+    filterState,
+    Session,
+    ServeOpportunities,
+    Groups,
     AUTH_EVENTS
     ){
 
@@ -52,7 +52,7 @@
     });
 
     $rootScope.$on('filterByDates', filterByDates);
-    
+
     $rootScope.$on('updateAfterSave', updateAfterSave);
 
     $rootScope.$on(AUTH_EVENTS.logoutSuccess, function(event, data) {
@@ -60,7 +60,7 @@
     });
 
     $rootScope.$on('$stateChangeStart', stateChangeStart);
-    
+
     $window.onbeforeunload = onBeforeUnload;
 
     ////////////////////////////
@@ -80,7 +80,7 @@
     function checkChildForms(){
       var form = $scope.serveForm;
       var keys = _.keys(form);
-      var dirty = []; 
+      var dirty = [];
       _.each(keys, function(k){
         if(_.startsWith(k, 'team')){
           if(form[k].$dirty){
@@ -172,7 +172,7 @@
     }
 
     function onBeforeUnload() {
-      checkChildForms(); 
+      checkChildForms();
       if ($scope['serveForm'].$dirty) {
         return '';
       }
@@ -211,14 +211,10 @@
     }
 
     function stateChangeStart(event, toState, toParams, fromState, fromParams) {
-      console.log('US1403: stateChangeStart event handler in myserve (' + 
-                fromState.name + '->' + toState.name + '), session active, in core.run');
-
       if ($scope.serveForm !== undefined) {
         checkChildForms();
         if ($scope['serveForm'].$dirty) {
-          if(!$window.confirm('Are you sure you want to leave this page?')) {
-            console.log('US1403: preventing default');
+          if(!$window.confirm('Are you sure you want to leave this page?')) {            
             event.preventDefault();
             return;
           }
@@ -245,12 +241,12 @@
                       member.serveRsvp = angular.copy(data.member.serveRsvp);
                     }
                   });
-                }  
+                }
               });
             }
           });
         });
-      });   
+      });
     }
 
   }

@@ -10,8 +10,7 @@
 
     logout();
 
-    function logout(){
-      console.log('US1403: logging out user in logout_controller');
+    function logout(){    
         AuthService.logout();
         Session.redirectIfNeeded($state);
     }

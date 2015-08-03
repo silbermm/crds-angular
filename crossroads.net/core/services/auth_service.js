@@ -22,8 +22,6 @@ require('./session_service');
         };
 
         authService.logout = function () {
-            // TODO Added to debug/research US1403 - should remove after issue is resolved
-            console.log('US1403: logging out user in auth_service');
             $rootScope.email = null;
             $rootScope.username = null;
             $rootScope.userid = null;
