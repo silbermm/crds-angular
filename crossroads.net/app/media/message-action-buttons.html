@@ -1,19 +1,16 @@
 <div class="message-action-buttons col-sm-4 col-lg-2 push-top">
-
   <a class="btn btn-standard-dark btn-labeled btn-sm btn-block ng-hide" ng-click="media.musicisopen = false; media.msgisopen = true;" ng-show="media.musicisopen">
     Watch Video
     <span class="btn-label">
       <svg viewBox="0 0 32 32" class="icon icon-play4"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#play4"></use></svg>
     </span>
   </a>
-
   <a class="btn btn-standard-dark btn-labeled btn-sm btn-block" ng-click="media.musicisopen = true; media.msgisopen = false;" ng-show="media.msgisopen">
     Listen to Audio
     <span class="btn-label">
       <svg viewBox="0 0 32 32" class="icon icon-music4"><use xlink:href="#music4"></use></svg>
     </span>
   </a>
-
   <a href="http://s3.amazonaws.com/crossroads-media/documents/08_30-31_14Program_LO.pdf" class="btn btn-standard-dark btn-labeled btn-sm btn-block">
     View Program
     <span class="btn-label">
@@ -32,15 +29,14 @@
       MP3
     </span>
   </a>
-  <a href="https://itunes.apple.com/us/podcast/crossroads-church-audio/id254202585?mt=2" class="btn btn-standard-dark btn-labeled btn-sm btn-block">
-    Subscribe To Audio
-    <span class="btn-label">
-      <svg viewBox="0 0 32 32" class="icon icon-podcast"> <use xlink:href="#podcast"></use> </svg>
-    </span>
-  </a>
-  <a href="https://itunes.apple.com/us/podcast/crossroads-church-video/id312696731?mt=2" class="btn btn-standard-dark btn-labeled btn-sm btn-block">Subscribe To Video
-    <span class="btn-label">
-      <svg viewBox="0 0 32 32" class="icon icon-podcast"> <use xlink:href="#podcast"></use> </svg>
-    </span>
-  </a>
+  <div class="btn-group btn-block" dropdown is-open="msgisopen">
+    <button type="button" class="btn btn-standard-dark btn-labeled btn-sm btn-block dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+      Subscribe to Podcast
+      <span class="btn-label">
+        <svg viewBox="0 0 32 32" class="icon icon-podcast"> <use xlink:href="#podcast"></use> </svg>
+      </span>
+    </button>
+    <ul class="dropdown-menu podcast-dropdown" role="menu" ng-include="'media/subscribe-btn-dropdown.html'">
+    </ul>
+  </div>
 </div> <!--/message-action-buttons-->
