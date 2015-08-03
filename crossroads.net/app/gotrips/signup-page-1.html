@@ -39,7 +39,7 @@
           </div>
 
           <div class="form-group col-sm-6">
-              <label for="nickname">Preferred Name <small class="text-muted">(Example: Chris instead of Christopher)</small>
+              <label for="nickname">Preferred Name <small class="text-muted">Example: Chris instead of Christopher</small>
               </label>
               <input type="text" class="form-control" id="nickname" placeholder="Enter nick name" ng-model="contact.nickname">
           </div>
@@ -47,7 +47,7 @@
 
       <div class="row">
           <div class="form-group col-sm-6">
-              <label for="firstname" class="required">Email</label>
+              <label for="email" class="required">Email</label>
               <input type="email" class="form-control" id="email" name="email" placeholder="Enter email address" ng-model="contact.emailAddress">
           </div>
 
@@ -58,7 +58,7 @@
                   <!--<input type="text" class="form-control" id="password-clear" name="password" ng-model="fields.password" ng-if="showPassword" value="testpassword" />-->
                   <span class="input-group-addon">
             <label>
-              <input type="checkbox" ng-click="showPassword = !showPassword"> Show
+              <input type="checkbox" ng-click="showPassword = !showPassword" id="password-show"> Show
             </label>
           </span>
               </div>
@@ -68,15 +68,15 @@
 
       <div class="row">
           <div class="form-group col-sm-6" ng-controller="crdsDatePickerCtrl">
-              <label class="control-label required">Birth Date</label>
-              <input type="text" class="form-control" id="dateOfBirth" placeholder="mm/dd/yyyy" ng-required="true">
+              <label for="date-of-birth" class="control-label required">Birth Date</label>
+              <input type="text" class="form-control" id="date-of-birth" placeholder="mm/dd/yyyy" ng-required="true">
           </div>
       </div>
 
       <div class="row">
           <div class="form-group col-sm-6">
-              <label for="marital_status">Maritial Status</label>
-              <select class="form-control col-sm-12" ng-model="contact.maritalStatusId" ng-options="status.dpRecordid as status.dpRecordname for status in maritalStatuses">
+              <label for="marital-status">Maritial Status</label>
+              <select id="marital-status" class="form-control col-sm-12" ng-model="contact.maritalStatusId" ng-options="status.dpRecordid as status.dpRecordname for status in maritalStatuses">
               </select>
           </div>
 
@@ -84,11 +84,11 @@
               <label class="block required">Gender</label>
               <!--<label class="radio-inline" ng-repeat="gender in genders">-->
               <!--<input type="radio" id="gender" ng-value="gender.dpRecordid" ng-model="contact.genderId"> {{ gender.dpRecordname }}-->
-              <label class="radio-inline">
-                  <input type="radio" value="male" name="gender">Male
+              <label class="radio-inline" for="gender-male">
+                  <input type="radio" value="male" name="gender" id="gender-male">Male
               </label>
-              <label class="radio-inline">
-                  <input type="radio" value="female" name="gender">Female
+              <label class="radio-inline" for="gender-female">
+                  <input type="radio" value="female" name="gender" id="gender-female">Female
               </label>
           </div>
       </div>
@@ -102,15 +102,15 @@
 
       <div class="row">
           <div class="form-group col-sm-6" ng-controller="crdsDatePickerCtrl">
-              <label class="control-label">When did you start attending Crossroads?</label>
+              <label class="control-label" for="anniversary-date">When did you start attending Crossroads?</label>
               </span>
-              <input type="text" class="form-control" id="anniversaryDate" placeholder="mm/dd/yyyy" ng-model="contact.anniversaryDate">
+              <input type="text" class="form-control" id="anniversary-date" placeholder="mm/dd/yyyy" ng-model="contact.anniversaryDate">
           </div>
       </div>
 
       <div class="row">
           <div class="form-group col-sm-6">
-              <label for="mobilephone" class="required">Mobile Phone</label>
+              <label for="mobile" class="required">Mobile Phone</label>
               <div class="small inline bold">
                   <span ng-show="phoneToggle" class="link-styling" ng-click="phoneToggle = !phoneToggle">Don't have a mobile phone?</span>
                   <span ng-show="!phoneToggle" class="text-muted">Edit your household phone <a class="pointer" ng-click="householdPhoneFocus()">here</a>.</span>
@@ -120,15 +120,15 @@
 
           <div class="form-group col-sm-6">
               <label for="provider">Service Provider</label>
-              <select class="form-control col-sm-12">
+              <select class="form-control col-sm-12" id="provider">
                   <option></option>
               </select>
           </div>
 
           <div class="form-group col-sm-12">
-            <label class="block required">Profile Photo</label>
-            <a class="profile-pic col-sm-2" href=""> <img class="profile-image pull-left img-square img-responsive" src="//crossroads-media.s3.amazonaws.com/images/avatar.svg" alt="Profile Default Photo">
-<span class="change-photo">Change Photo</span> </a>
+            <label class="block required" for="profile-photo">Profile Photo</label>
+            <a class="profile-pic col-sm-2 col-xs-6" href=""> <img class="profile-image pull-left img-square img-responsive" src="//crossroads-media.s3.amazonaws.com/images/avatar.svg" alt="Profile Default Photo">
+            <span class="change-photo">Change Photo</span> </a>
           </div>
 
       </div>
@@ -197,7 +197,7 @@
 
                                               <div class="form-group col-sm-6">
                                                   <label for="state" class="required">State</label>
-                                                  <select ng-model="address.state__Region" ng-options="state.stateAbbreviation as state.stateAbbreviation for state in states" class="form-control col-sm-12">
+                                                  <select ng-model="address.state__Region" ng-options="state.stateAbbreviation as state.stateAbbreviation for state in states" class="form-control col-sm-12" id="state">
                                                   </select>
                                               </div>
 
@@ -213,7 +213,7 @@
 
                                               <div class="form-group col-sm-6">
                                                   <label for="country" class="required">Country</label>
-                                                  <select ng-model="countryObj" ng-change="setCountry()" ng-options="country as country.dpRecordname for country in countries track by country.dpRecordname" class="form-control col-sm-12">
+                                                  <select ng-model="countryObj" ng-change="setCountry()" ng-options="country as country.dpRecordname for country in countries track by country.dpRecordname" class="form-control col-sm-12" id="country">
                                                   </select>
                                               </div>
                                           </li>
@@ -224,9 +224,9 @@
                                               </div>
                                           </li>
                                           <li class="list-group-item clearfix">
-                                              <div id="Site" class="form-group col-sm-6">
+                                              <div id="site" class="form-group col-sm-6">
                                                   <label for="provider" class="required">Crossroads Location</label>
-                                                  <select class="form-control col-sm-12" ng-model="household.congregationId" ng-options="congregation.dpRecordid as congregation.congregationName for congregation in congregations">
+                                                  <select class="form-control col-sm-12" ng-model="household.congregationId" ng-options="congregation.dpRecordid as congregation.congregationName for congregation in congregations" id="site">
                                                   </select>
                                               </div>
                                           </li>
@@ -250,74 +250,80 @@
             <div class="col-sm-12">
               <legend>Trip Information</legend>
             </div><!--/col-sm-12-->
-            <div id="Site" class="form-group col-sm-6">
+            <div class="form-group col-sm-6">
               <label for="tshirt" class="required">T-shirt Size</label>
               <select class="form-control col-sm-12" ng-model="attribute" id="tshirt">
               </select>
             </div><!--/form-group-->
+
+            <div class="form-group col-sm-6" ng-show="gotrip.pageTitle == 'south-africa'">
+              <label for="scrub">Scrub Size <small class="text-muted">Only required for Topsy trips</small></label>
+              <select class="form-control col-sm-12" ng-model="attribute" id="scrub">
+              </select>
+            </div><!--/form-group-->
+
             <div class="form-group col-sm-12">
-                <label class="block required">How did you her about this trip?</label>
-                <label class="radio-inline">
-                    <input type="radio" value="yes" name="program">Program
+                <label class="block required">How did you here about this trip?</label>
+                <label for="program" class="radio-inline">
+                    <input type="radio" value="program" id="program" name="referral">Program
                 </label>
-                <label class="radio-inline">
-                    <input type="radio" value="no" name="session">Info Session
+                <label for="session" class="radio-inline">
+                    <input type="radio" value="session" id="session" name="referral">Info Session
                 </label>
-                <label class="radio-inline">
-                    <input type="radio" value="no" name="friend">Friend/Family
+                <label for="friend" class="radio-inline">
+                    <input type="radio" value="friend" id="friend" name="referral">Friend/Family
                 </label>
-                <label class="radio-inline">
-                    <input type="radio" value="no" name="website">Website
+                <label for="website" class="radio-inline">
+                    <input type="radio" value="website" id="website" name="referral">Website
                 </label>
-                <label class="radio-inline">
-                    <input type="radio" value="no" name="other">Other
+                <label for="other" class="radio-inline">
+                    <input type="radio" value="other" id="other" name="referral">Other
                 </label>
             </div><!--/form-group-->
 
           </div><!--/row-->
           <div class="row">
             <div class="form-group col-sm-12">
-                <label for="conditions">Please describe any medical conditions that may affect your ability to participate in this trip <small class="text-muted">(Leave blank if it doesn't apply)</small></label>
+                <label for="conditions">Please describe any medical conditions that may affect your ability to participate in this trip <small class="text-muted">Leave blank if it doesn't apply</small></label>
                 <textarea class="form-control" rows="2" cols="1" id="conditions" maxlength="250"></textarea>
             </div><!--/form-group-->
           </div><!--/row-->
           <div class="row">
             <div class="form-group col-sm-12">
-                <label class="block required">Vegetarian? <small class="text-muted">(If you mark yes we will do our best to provide vegetarian meals during the trip)</small></label>
-                <label class="radio-inline">
-                    <input type="radio" value="yes" name="vegetarian">Yes
+                <label class="block required">Vegetarian? <small class="text-muted">If you mark yes we will do our best to provide vegetarian meals during the trip</small></label>
+                <label for="vegetarian-yes" class="radio-inline">
+                    <input type="radio" value="yes" name="vegetarian" id="vegetarian-yes">Yes
                 </label>
-                <label class="radio-inline">
-                    <input type="radio" value="no" name="vegetarian">No
+                <label for="vegetarian-no" class="radio-inline">
+                    <input type="radio" value="no" name="vegetarian" for="vegetarian-no">No
                 </label>
             </div><!--/form-group-->
           </div><!--/row-->
           <div class="row">
             <div class="form-group col-sm-12">
-                <label for="allergies">Please describe all food allergies <small class="text-muted">(Leave blank if it doesn't apply)</small)</label>
+                <label for="allergies">Please describe all food allergies <small class="text-muted">Leave blank if it doesn't apply</small</label>
                 <textarea class="form-control" rows="2" cols="1" id="allergies" maxlength="250"></textarea>
             </div><!--/form-group-->
           </div><!--/row-->
           <div class="row">
             <div id="Site" class="form-group col-sm-6">
-              <label for="slife" class="required">How would you define your spiritual life? <small class="text-muted">(Pick as many as you like)</small></label><br>
+              <label for="slife" class="required">How would you define your spiritual life? <small class="text-muted">Pick as many as you like</small></label><br>
 
-              <div class="checkbox"> <label> <input type="checkbox" name="slife" value="Searching"> Searching for answers </label> </div>
-              <div class="checkbox"> <label> <input type="checkbox" name="slife" value="Received"> I have received Jesus </label> </div>
-              <div class="checkbox"> <label> <input type="checkbox" name="slife" value="Obedience"> Focusing on obedience - I've quit negotiating with God </label> </div>
-              <div class="checkbox"> <label> <input type="checkbox" name="slife" value="Replicating"> I'm actively replicating my faith in others </label> </div>
-
+              <div class="checkbox"> <label for="slife-searching"> <input type="checkbox" name="slife" value="Searching" id="slife-searching"> Searching for answers </label> </div>
+              <div class="checkbox"> <label for="slife-received"> <input type="checkbox" name="slife" value="Received" id="slife-received"> I have received Jesus </label> </div>
+              <div class="checkbox"> <label for="slife-obedience"> <input type="checkbox" name="slife" value="Obedience" id="slife-obedience"> Focusing on obedience - I've quit negotiating with God </label> </div>
+              <div class="checkbox"> <label for="slife-replicating"> <input type="checkbox" name="slife" value="Replicating" id="slife-replicating"> I'm actively replicating my faith in others </label> </div>
 
             </div><!--/form-group-->
           </div><!--/row-->
           <div class="row">
             <div class="form-group col-sm-12">
-                <label for="why" class="required">Tell us why you want to go on this trip <small class="text-muted">(Please be specific)</small></label>
+                <label for="why" class="required">Tell us why you want to go on this trip <small class="text-muted">Please be specific</small></label>
                 <textarea cols="1" rows="4" class="form-control" id="why" maxlength="1000"></textarea>
             </div><!--/form-group-->
           </fieldset>
         </div><!--/row-->
-        <a ui-sref="go-trip-signup-page-2({trip_location: gotrip.pageTitle})" class="btn btn-primary pull-right">Continue</a>
+        <a ui-sref="go-trip-signup-page-2({trip_location: gotrip.pageTitle})" class="btn btn-primary pull-right">Next</a>
     </form>
 
   </div><!--/col-sm-12-->

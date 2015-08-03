@@ -6,9 +6,7 @@
 
 .search-link {
   margin-top: -5px;
-  margin-bottom: 10px;
-  color: $brand-secondary;
-  
+  color: $brand-secondary !important;
   &:hover {
     color: darken($brand-secondary, 20%);
   }
