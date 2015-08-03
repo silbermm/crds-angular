@@ -1,6 +1,8 @@
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var path = require('path');
+var AssetsPlugin         = require('assets-webpack-plugin');
+var assetsPluginInstance = new AssetsPlugin();
 
 var endpoint = {
     'url': 'http://localhost:49380'
@@ -26,19 +28,19 @@ module.exports = {
     output: {
         path: './assets',
         publicPath: '/assets/',
-        filename: '[name].js'
+        filename: '[name].[hash].js'
     },
     module: {
         loaders: [
             {
                 test: /\.css$/,
-                loader: "style-loader!css-loader"
+                loader: 'style-loader!css-loader'
             },
             {
                 test: /\.js$/,
                 include: [
-                  path.resolve(__dirname, "app"),
-                  path.resolve(__dirname, "node_modules/angular-stripe")
+                  path.resolve(__dirname, 'app'),
+                  path.resolve(__dirname, 'node_modules/angular-stripe')
                 ],
                 loader: 'babel-loader'
             },
@@ -52,20 +54,21 @@ module.exports = {
             },
             {
                 test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-                loader: "url-loader?limit=10000&minetype=application/font-woff"
+                loader: 'url-loader?limit=10000&minetype=application/font-woff'
             },
             {
                 test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-                loader: "file-loader"
+                loader: 'file-loader'
             },
             {
                 test: /\.html$/,
-                loader: "ng-cache?prefix=[dir]"
+                loader: 'ng-cache?prefix=[dir]'
             }
     ]
     },
     plugins: [
-        new ExtractTextPlugin("[name].css"),
-        definePlugin
+        new ExtractTextPlugin('[name].[hash].css'),
+        definePlugin,
+        assetsPluginInstance
     ]
 };

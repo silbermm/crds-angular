@@ -8,6 +8,7 @@ var webpackConfig = require('./webpack.config.js');
 var svgSprite = require('gulp-svg-sprite');
 var replace = require('gulp-replace');
 var rename = require('gulp-rename');
+var htmlreplace = require('gulp-html-replace');
 
 var browserSyncCompiles = 0;
 var browserSync = require('browser-sync').create();
@@ -15,7 +16,7 @@ var browserSync = require('browser-sync').create();
 var webPackConfigs = [Object.create(webpackConfig)];
 
 // Start the development server
-gulp.task('default', ['webpack-dev-server']);
+gulp.task('default', ['webpack-dev-server', 'html-replace']);
 
 // Build and watch cycle (another option for development)
 // Advantage: No server required, can run app from filesystem
@@ -30,6 +31,18 @@ gulp.task('build-dev', ['webpack:build-dev'], function() {
 	});
 
 	gulp.watch(watchPatterns, ['webpack:build-dev']);
+});
+
+gulp.task('html-replace', function(){
+  // first get the file names...
+  var assets = require('./webpack-assets.json');
+  
+  gulp.src('app/index.html')
+    .pipe(htmlreplace({
+      'css': assets.main.css,
+      'js': assets.main.js
+    }))
+    .pipe(gulp.dest('./'));
 });
 
 gulp.task('build-browser-sync', function () {

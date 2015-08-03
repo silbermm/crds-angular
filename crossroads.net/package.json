@@ -29,6 +29,7 @@
     "extract-text-webpack-plugin": "^0.3.8",
     "file-loader": "^0.8.1",
     "gulp": "^3.8.11",
+    "gulp-html-replace": "^1.5.1",
     "gulp-protractor": "0.0.12",
     "gulp-rename": "^1.2.0",
     "gulp-replace": "^0.5.3",
