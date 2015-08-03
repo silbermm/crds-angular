@@ -16,7 +16,7 @@ var fallbackOptions = {
   verbose: true,
   rewrites: [
 	// TODO: see if there is a way to dry this up so we don't need to specify every folder/filename
-	{from: /\/corkboard\/assets\/main.js/, to: '/corkboard/assets/main.js'},
+	{from: /\/corkboard\/assets\/main.*.js/, to: '/corkboard/assets/main.*.js'},
 	{from: /\/corkboard/, to: '/corkboard/index.html'}
   ]
 };
@@ -125,11 +125,11 @@ gulp.task('webpack-dev-server', ['icons-watch'], function(callback) {
 	new WebpackDevServer(webpack(webPackConfigs), {
 			historyApiFallback: fallbackOptions,
 		    publicPath: '/assets/',
-			quiet: false,
-			watchDelay: 300,
-			stats: {
-				colors: true
-			}
+			  quiet: false,
+			  watchDelay: 300,
+        stats: {
+          colors: true
+        }
 			}).listen(8080, 'localhost', function(err) {
 				if(err){
           throw new gutil.PluginError('webpack-dev-server', err);
