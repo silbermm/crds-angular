@@ -262,6 +262,9 @@
         };
 
         vm.processChange = function(){
+          if (!Session.isActive()) {
+            $state.go("give.login");
+          };
           vm.processingChange = true;
           vm.amountSubmitted = false;
           $state.go("give.amount");
