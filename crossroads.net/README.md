@@ -5,6 +5,16 @@ The client facing website for crossroads church.
 ###Getting Started 
 The first thing you'll need to get started is NodeJS. Head over to [http://nodejs.org/](http://nodejs.org) and install based on your operating system. Once you pull down the code, just run `npm i` to install all dependencies locally.
 
+#### Core Functionality
+If you are developing a module that can be considered a core module (used throughout the site in different modules) then you will also need to pull down [crds-core](https://github.com/crdschurch/crds-corejs).
+
+To test the core-module in the main site, use the `npm link` tool. 
+* cd into crds-core and type `npm link`
+* cd into crds-angular/crossroads.net and type `npm link crds-core`
+This will create a symbolic link in your node_modules directory to your local copy of crds-core
+
+#### Builds
+
 We use gulp scripts to build and run webpack so you will also need to install gulp globally.  This is not required, but makes command-line tasks easier later on.  To install gulp globally, use one of the following commands.  Both will install gulp into the NodeJS path, which is presumably already on your OS's execution PATH.
 
 For Windows users (replace the prefix value below with the path to your NodeJS install):
