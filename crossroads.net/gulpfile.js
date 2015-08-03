@@ -9,6 +9,17 @@ var svgSprite = require('gulp-svg-sprite');
 var replace = require('gulp-replace');
 var rename = require('gulp-rename');
 var htmlreplace = require('gulp-html-replace');
+var history = require('connect-history-api-fallback');
+
+var fallbackOptions = {
+  index: '/index.html',
+  verbose: true,
+  rewrites: [
+	// TODO: see if there is a way to dry this up so we don't need to specify every folder/filename
+	{from: /\/corkboard\/assets\/main.js/, to: '/corkboard/assets/main.js'},
+	{from: /\/corkboard/, to: '/corkboard/index.html'}
+  ]
+};
 
 var browserSyncCompiles = 0;
 var browserSync = require('browser-sync').create();
@@ -81,7 +92,10 @@ gulp.task('browser-sync-dev', ['build-browser-sync'], function() {
 
 	browserSync.init({
 		server: {
-			baseDir: './'
+		  baseDir: './',
+		  middleware: [
+			  history(fallbackOptions)
+			]
 		}
 	});
 });
@@ -109,7 +123,8 @@ gulp.task('webpack-dev-server', ['icons-watch'], function(callback) {
 	});
 
 	new WebpackDevServer(webpack(webPackConfigs), {
-			publicPath: '/assets/',
+			historyApiFallback: fallbackOptions,
+		    publicPath: '/assets/',
 			quiet: false,
 			watchDelay: 300,
 			stats: {

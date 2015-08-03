@@ -25,6 +25,7 @@
     "babel-core": "^4.1.1",
     "babel-loader": "^4.0.0",
     "browser-sync": "^2.7.10",
+    "connect-history-api-fallback": "^1.1.0",
     "css-loader": "^0.9.1",
     "expose-loader": "^0.7.0",
     "extract-text-webpack-plugin": "^0.3.8",

@@ -11,12 +11,16 @@
       </div>
     </div>
 
-    <form role="form">
-      <p class="push-bottom">
-      You will have the opportunity to sign up any family members who are registered in our site for the trip once you have submitted your application.
-      Information shared here is kept secure and private. We will not share or sell your information.</p>
+    <div class="row">
+      <div class="col-sm-12">
+        <p class="push-bottom">
+        You will have the opportunity to sign up any family members who are registered in our site for the trip once you have submitted your application.
+        Information shared here is kept secure and private. We will not share or sell your information.</p>
+      </div>
+    </div>
 
-      <legend>Profile Information</legend>
+    <form role="form">
+      <legend>Update Profile Information</legend>
       <div class="row">
           <div class="form-group col-sm-6">
               <label for="firstname" class="required">First Name</label>
@@ -51,20 +55,23 @@
               <input type="email" class="form-control" id="email" name="email" placeholder="Enter email address" ng-model="contact.emailAddress">
           </div>
 
+          <!--HIDE THIS FIELD WHEN PRESENTED ON THE GO TRIP APPLICATION. ASSUMING WE CAN PASS THIS THROUGH THE DIRECTIVE
           <div class="form-group col-sm-6">
               <label for="password">Change Password</label>
               <div class="input-group">
                   <input type="password" class="form-control" id="password" name="password" ng-model="fields.password" value="testpassword" />
-                  <!--<input type="text" class="form-control" id="password-clear" name="password" ng-model="fields.password" ng-if="showPassword" value="testpassword" />-->
+                  <!--<input type="text" class="form-control" id="password-clear" name="password" ng-model="fields.password" ng-if="showPassword" value="testpassword" />
                   <span class="input-group-addon">
             <label>
               <input type="checkbox" ng-click="showPassword = !showPassword" id="password-show"> Show
             </label>
           </span>
               </div>
-              <!-- /input-group -->
+              <!-- /input-group
           </div>
+          -->
       </div>
+
 
       <div class="row">
           <div class="form-group col-sm-6" ng-controller="crdsDatePickerCtrl">
@@ -104,7 +111,7 @@
           <div class="form-group col-sm-6" ng-controller="crdsDatePickerCtrl">
               <label class="control-label" for="anniversary-date">When did you start attending Crossroads?</label>
               </span>
-              <input type="text" class="form-control" id="anniversary-date" placeholder="mm/dd/yyyy" ng-model="contact.anniversaryDate">
+              <input type="text" class="form-control" id="anniversary-date" placeholder="mm/yyyy" ng-model="contact.anniversaryDate">
           </div>
       </div>
 
@@ -263,7 +270,7 @@
             </div><!--/form-group-->
 
             <div class="form-group col-sm-12">
-                <label class="block required">How did you here about this trip?</label>
+                <label class="block required">How did you hear about this trip?</label>
                 <label for="program" class="radio-inline">
                     <input type="radio" value="program" id="program" name="referral">Program
                 </label>
@@ -284,7 +291,7 @@
           </div><!--/row-->
           <div class="row">
             <div class="form-group col-sm-12">
-                <label for="conditions">Please describe any medical conditions that may affect your ability to participate in this trip <small class="text-muted">Leave blank if it doesn't apply</small></label>
+                <label for="conditions">Please describe any medical condition(s) that may affect your ability to participate in this trip <small class="text-muted">Leave blank if it doesn't apply</small></label>
                 <textarea class="form-control" rows="2" cols="1" id="conditions" maxlength="250"></textarea>
             </div><!--/form-group-->
           </div><!--/row-->
@@ -318,8 +325,8 @@
           </div><!--/row-->
           <div class="row">
             <div class="form-group col-sm-12">
-                <label for="why" class="required">Tell us why you want to go on this trip <small class="text-muted">Please be specific</small></label>
-                <textarea cols="1" rows="4" class="form-control" id="why" maxlength="1000"></textarea>
+                <label for="why" class="required">Tell us why you want to go on this trip</label>
+                <textarea cols="1" rows="4" class="form-control" id="why" maxlength="1000" placeholder="Please be specific. In instances where we have a limited number of spots, we strongly consider responses to this question."></textarea>
             </div><!--/form-group-->
           </fieldset>
         </div><!--/row-->
