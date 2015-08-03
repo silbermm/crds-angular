@@ -52,7 +52,8 @@ namespace crds_angular.test.Services
             _donationService.VerifyAll();
 
             Assert.IsNotNull(myTrips);
-            Assert.AreEqual(2, myTrips.MyTrips.Count);
+            Assert.AreEqual(1, myTrips.MyTrips.Count);
+            Assert.AreEqual(2, myTrips.MyTrips[0].TripGifts.Count);
         }
 
         private List<TripDistribution> MockTripDonationsResponse()

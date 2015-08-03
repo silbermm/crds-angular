@@ -25,21 +25,21 @@ namespace crds_angular.Services
             var results = _eventParticipantService.TripParticipants(search);
 
             var participants = results.GroupBy(r =>
-                new
-                {
-                    r.ParticipantId,
-                    r.EmailAddress,
-                    r.Lastname,
-                    r.Nickname
-                }).Select(x => new TripParticipantDto()
-                {
-                    ParticipantId = x.Key.ParticipantId,
-                    Email = x.Key.EmailAddress,
-                    Lastname = x.Key.Lastname,
-                    Nickname = x.Key.Nickname,
-                    ShowGiveButton = true,
-                    ShowShareButtons = false
-                }).ToDictionary(y => y.ParticipantId);
+                                                   new
+                                                   {
+                                                       r.ParticipantId,
+                                                       r.EmailAddress,
+                                                       r.Lastname,
+                                                       r.Nickname
+                                                   }).Select(x => new TripParticipantDto()
+                                                   {
+                                                       ParticipantId = x.Key.ParticipantId,
+                                                       Email = x.Key.EmailAddress,
+                                                       Lastname = x.Key.Lastname,
+                                                       Nickname = x.Key.Nickname,
+                                                       ShowGiveButton = true,
+                                                       ShowShareButtons = false
+                                                   }).ToDictionary(y => y.ParticipantId);
 
             foreach (var result in results)
             {
@@ -52,11 +52,10 @@ namespace crds_angular.Services
                 tp.EventTitle = result.EventTitle;
                 tp.EventType = result.EventType;
                 var participant = participants[result.ParticipantId];
-                participant.Trips.Add(tp);                
+                participant.Trips.Add(tp);
             }
-            
-            return participants.Values.OrderBy(o=>o.Lastname).ThenBy(o=>o.Nickname).ToList();
-            
+
+            return participants.Values.OrderBy(o => o.Lastname).ThenBy(o => o.Nickname).ToList();
         }
 
         public MyTripsDTO GetMyTrips(int contactId)
@@ -64,7 +63,24 @@ namespace crds_angular.Services
             var trips = _donationService.GetMyTripDistributions(contactId);
 
             var myTrips = new MyTripsDTO();
-            var events = trips.Select(e => new Trip {EventId = e.EventId, EventTitle = e.EventTitle, EventStartDate = e.EventStartDate.ToShortDateString(), EventEndDate = e.EventEndDate.ToShortDateString(), FundraisingGoal = e.TotalPledge, FundraisingDaysLeft = (e.CampaignEndDate - DateTime.Today).Days}).Distinct().ToList();
+
+            var events = new List<Trip>();
+            var eventIds = new List<int>();
+            foreach (var trip in trips.Where(trip => !eventIds.Contains(trip.EventId)))
+            {
+                eventIds.Add(trip.EventId);
+                events.Add(new Trip
+                {
+                    EventId = trip.EventId,
+                    EventType = trip.EventTypeId.ToString(),
+                    EventTitle = trip.EventTitle,
+                    EventStartDate = trip.EventStartDate.ToShortDateString(),
+                    EventEndDate = trip.EventEndDate.ToShortDateString(),
+                    FundraisingDaysLeft = (trip.CampaignEndDate - DateTime.Today).Days,
+                    FundraisingGoal = trip.TotalPledge
+                });
+            }
+
             foreach (var e in events)
             {
                 var donations = trips.Where(d => d.EventId == e.EventId).ToList();
