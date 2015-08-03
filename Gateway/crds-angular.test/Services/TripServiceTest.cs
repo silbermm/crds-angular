@@ -43,6 +43,61 @@ namespace crds_angular.test.Services
             Assert.AreEqual(1, p2.Trips.Count);
         }
 
+        [Test]
+        public void ShouldGetMyTrips()
+        {
+            _donationService.Setup(m => m.GetMyTripDistributions(It.IsAny<int>())).Returns(MockTripDonationsResponse());
+            var myTrips = _fixture.GetMyTrips(It.IsAny<int>());
+
+            _donationService.VerifyAll();
+
+            Assert.IsNotNull(myTrips);
+            Assert.AreEqual(2, myTrips.MyTrips.Count);
+        }
+
+        private List<TripDistribution> MockTripDonationsResponse()
+        {
+            return new List<TripDistribution>
+            {
+                new TripDistribution
+                {
+                    ContactId = 1234,
+                    EventTypeId = 6,
+                    EventId = 8,
+                    EventTitle = "GO Someplace",
+                    EventStartDate = DateTime.Today,
+                    EventEndDate = DateTime.Today,
+                    TotalPledge = 1000,
+                    CampaignStartDate = DateTime.Today,
+                    CampaignEndDate = DateTime.Today,
+                    DonorNickname = "John",
+                    DonorFirstName = "John",
+                    DonorLastName = "Donor",
+                    DonorEmail = "crdsusertest+johndonor@gmail.com",
+                    DonationDate = DateTime.Today,
+                    DonationAmount = 350
+                },
+                new TripDistribution
+                {
+                    ContactId = 1234,
+                    EventTypeId = 6,
+                    EventId = 8,
+                    EventTitle = "Go Someplace",
+                    EventStartDate = DateTime.Today,
+                    EventEndDate = DateTime.Today,
+                    TotalPledge = 1000,
+                    CampaignStartDate = DateTime.Today,
+                    CampaignEndDate = DateTime.Today,
+                    DonorNickname = "John",
+                    DonorFirstName = "John",
+                    DonorLastName = "Donor",
+                    DonorEmail = "crdsusertest+johndonor@gmail.com",
+                    DonationDate = DateTime.Today,
+                    DonationAmount = 200
+                }
+            };
+        }
+
         private static List<TripParticipant> MockMpSearchResponse()
         {
             return new List<TripParticipant>

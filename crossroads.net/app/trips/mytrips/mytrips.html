@@ -3,7 +3,7 @@
 
     <div ng-bind-html="$root.MESSAGES.myTrips.content | html"></div>
 
-    <div ng-repeat="trip in tripsController.myTrips"> <!--ng-if="tripsController.myTrips.length!=0" -->
+    <div ng-repeat="trip in tripsController.myTrips">
       <my-trip-card trip="trip"></my-trip-card>
     </div>
 
