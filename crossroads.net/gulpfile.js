@@ -33,7 +33,7 @@ gulp.task('default', ['webpack-dev-server', 'html-replace']);
 // Advantage: No server required, can run app from filesystem
 // Disadvantage: Requests are not blocked until bundle is available,
 //               can serve an old app on refresh
-gulp.task('build-dev', ['webpack:build-dev'], function() {
+gulp.task('build-dev', ['webpack:build-dev', 'html-replace'], function() {
 
 	var watchPatterns = [];
 	webPackConfigs.forEach(function(element) {
@@ -101,10 +101,10 @@ gulp.task('browser-sync-dev', ['build-browser-sync'], function() {
 });
 
 // Production build
-gulp.task('build', ['webpack:build']);
+gulp.task('build', ['webpack:build', 'html-replace']);
 
 // For convenience, an 'alias' to webpack-dev-server
-gulp.task('start', ['webpack-dev-server']);
+gulp.task('start', ['webpack-dev-server', 'html-replace']);
 
 
 // Run the development server
