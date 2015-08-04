@@ -1,4 +1,4 @@
-<header ng-if="!app.state.current.data.hideMenu">
+<header ng-if="!app.state.current.data.hideMenu" class="hidden-print">
     <div class="overlay-container"></div>
     <!-- Brand Bar -->
     <ng-include src="'templates/brand-bar.html'"></ng-include>
@@ -7,7 +7,7 @@
         <div class="container">
             <div class="row">
                 <!-- TODO refactor this out into it's own directive, that uses the login and registration directives. The new directive should take an argument that is the internal directive (login and/or registration)* -->
-                <div class="col-xs-12 menu__container hidden-print">
+                <div class="col-xs-12 menu__container">
                     <div class="navbar-header">
                         <div ng-class="{show: menu.isMobileShowing}">
                             <button type="button" class="nav__side--toggle navbar-left hidden-md hidden-lg hidden-xl" ng-click="app.openAside('left', true)">
