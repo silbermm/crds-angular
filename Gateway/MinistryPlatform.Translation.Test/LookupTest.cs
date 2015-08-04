@@ -18,7 +18,8 @@ namespace MinistryPlatform.Translation.Test
     {
 
         private const string USERNAME = "testme";
-        private const string PASSWORD = "changeme";private const string EMAIL = "donotreply+testme@crossroads.net";
+        private const string PASSWORD = "changeme";
+        private const string EMAIL = "donotreply+testme@crossroads.net";
     
         private AuthenticationServiceImpl _fixture;
         private PlatformServiceClient _platformService;
