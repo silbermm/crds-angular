@@ -13,13 +13,15 @@ namespace crds_angular.test.Services
     public class TripServiceTest
     {
         private Mock<IEventParticipantService> _eventParticipantService;
+        private Mock<IDonationService> _donationService;
         private TripService _fixture;
 
         [SetUp]
         public void SetUp()
         {
             _eventParticipantService = new Mock<IEventParticipantService>();
-            _fixture = new TripService(_eventParticipantService.Object);
+            _donationService = new Mock<IDonationService>();
+            _fixture = new TripService(_eventParticipantService.Object, _donationService.Object);
         }
 
         [Test]
@@ -39,6 +41,62 @@ namespace crds_angular.test.Services
             var p2 = searchResults.FirstOrDefault(s => s.ParticipantId == 5555);
             Assert.IsNotNull(p2);
             Assert.AreEqual(1, p2.Trips.Count);
+        }
+
+        [Test]
+        public void ShouldGetMyTrips()
+        {
+            _donationService.Setup(m => m.GetMyTripDistributions(It.IsAny<int>(), It.IsAny<string>())).Returns(MockTripDonationsResponse());
+            var myTrips = _fixture.GetMyTrips(It.IsAny<int>(), It.IsAny<string>());
+
+            _donationService.VerifyAll();
+
+            Assert.IsNotNull(myTrips);
+            Assert.AreEqual(1, myTrips.MyTrips.Count);
+            Assert.AreEqual(2, myTrips.MyTrips[0].TripGifts.Count);
+        }
+
+        private List<TripDistribution> MockTripDonationsResponse()
+        {
+            return new List<TripDistribution>
+            {
+                new TripDistribution
+                {
+                    ContactId = 1234,
+                    EventTypeId = 6,
+                    EventId = 8,
+                    EventTitle = "GO Someplace",
+                    EventStartDate = DateTime.Today,
+                    EventEndDate = DateTime.Today,
+                    TotalPledge = 1000,
+                    CampaignStartDate = DateTime.Today,
+                    CampaignEndDate = DateTime.Today,
+                    DonorNickname = "John",
+                    DonorFirstName = "John",
+                    DonorLastName = "Donor",
+                    DonorEmail = "crdsusertest+johndonor@gmail.com",
+                    DonationDate = DateTime.Today,
+                    DonationAmount = 350
+                },
+                new TripDistribution
+                {
+                    ContactId = 1234,
+                    EventTypeId = 6,
+                    EventId = 8,
+                    EventTitle = "Go Someplace",
+                    EventStartDate = DateTime.Today,
+                    EventEndDate = DateTime.Today,
+                    TotalPledge = 1000,
+                    CampaignStartDate = DateTime.Today,
+                    CampaignEndDate = DateTime.Today,
+                    DonorNickname = "John",
+                    DonorFirstName = "John",
+                    DonorLastName = "Donor",
+                    DonorEmail = "crdsusertest+johndonor@gmail.com",
+                    DonationDate = DateTime.Today,
+                    DonationAmount = 200
+                }
+            };
         }
 
         private static List<TripParticipant> MockMpSearchResponse()
