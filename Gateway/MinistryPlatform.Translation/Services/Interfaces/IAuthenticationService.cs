@@ -22,7 +22,5 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         //Get Participant IDs of a contact
         Participant GetParticipantRecord(string token);
 
-        Dictionary<string, object> authenticate(string username, string password);
-
     }
 }
