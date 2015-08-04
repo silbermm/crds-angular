@@ -46,8 +46,8 @@ namespace crds_angular.test.Services
         [Test]
         public void ShouldGetMyTrips()
         {
-            _donationService.Setup(m => m.GetMyTripDistributions(It.IsAny<int>())).Returns(MockTripDonationsResponse());
-            var myTrips = _fixture.GetMyTrips(It.IsAny<int>());
+            _donationService.Setup(m => m.GetMyTripDistributions(It.IsAny<int>(), It.IsAny<string>())).Returns(MockTripDonationsResponse());
+            var myTrips = _fixture.GetMyTrips(It.IsAny<int>(), It.IsAny<string>());
 
             _donationService.VerifyAll();
 
