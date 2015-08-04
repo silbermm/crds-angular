@@ -69,43 +69,6 @@ namespace MinistryPlatform.Translation.Services
             }
         }
 
-        //get token using logged in user's credentials
-        public Dictionary<string, object> authenticate(string username, string password)
-        {
-            var userCredentials =
-                new FormUrlEncodedContent(new Dictionary<string, string>
-                {
-                    {"username", username},
-                    {"password", password},
-                    {"client_id", "client"},
-                    {"client_secret", "secret"},
-                    {"grant_type", "password"}
-                });
-            var client = new HttpClient();
-            var tokenUrl = ConfigurationManager.AppSettings["TokenURL"];
-            var message = client.PostAsync(tokenUrl, userCredentials);
-            try
-            {
-                var result = message.Result.Content.ReadAsStringAsync().Result;
-
-                var obj = JObject.Parse(result);
-                var token = (string)obj["access_token"];
-                var exp = (string)obj["expires_in"];
-                //ignorning refreshToken for now
-                var refreshToken = (string)obj["refresh_token"];
-                var authData = new Dictionary<string, object>
-                {
-                    {"token", token},
-                    {"exp", exp}
-                };
-                return authData;
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-        }
-
         //Get ID of currently logged in user
         public int GetContactId(string token)
         {
