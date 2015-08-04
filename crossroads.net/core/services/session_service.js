@@ -6,9 +6,13 @@
 
   function SessionService($log, $cookies, $http) {
     var self = this;
-    this.create = function (sessionId, userId, username) {
+    this.create = function (sessionId, userTokenExp, userId, username) {
       console.log('creating cookies!');
-      $cookies.put('sessionId', sessionId);
+      var expDate = new Date();
+      expDate.setTime(expDate.getTime() + (userTokenExp * 1000));
+      $cookies.put('sessionId', sessionId, {
+         'expires': expDate
+      });
       $cookies.put('userId', userId);
       $cookies.put('username', username);
 
@@ -53,9 +57,6 @@
     };
 
     this.clear = function () {
-      // TODO Added to debug/research US1403 - should remove after issue is resolved
-      console.log('US1403: clearing session in session_service');
-
       $cookies.remove('sessionId');
       $cookies.remove('userId');
       $cookies.remove('username');
@@ -70,13 +71,8 @@
 
     //TODO: Get this working to DRY up login_controller and register_controller
     this.redirectIfNeeded = function($state){
-      // TODO Added to debug/research US1403 - should remove after issue is resolved
-      console.log('US1403: redirectIfNeeded session_service');
 
       if (self.hasRedirectionInfo()) {
-        // TODO Added to debug/research US1403 - should remove after issue is resolved
-        console.log('US1403: redirectIfNeeded session_service - has redirect info');
-
         var url = self.exists('redirectUrl');
         var params = self.exists('params');
         self.removeRedirectRoute();

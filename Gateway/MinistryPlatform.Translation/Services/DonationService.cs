@@ -11,7 +11,6 @@ namespace MinistryPlatform.Translation.Services
     public class DonationService : BaseService, IDonationService
     {
         private readonly int _donationsPageId;
-        private readonly int _donorPageId;
         private readonly int _distributionPageId;
         private readonly int _batchesPageId;
         private readonly int _declineEmailTemplate;

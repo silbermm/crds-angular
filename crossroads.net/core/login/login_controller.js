@@ -1,15 +1,15 @@
 (function () {
   'use strict';
   module.exports = function LoginController(
-    $scope, 
-    $rootScope, 
-    AUTH_EVENTS, 
-    MESSAGES, 
-    AuthService, 
-    $state, 
-    $log, 
-    Session, 
-    $timeout, 
+    $scope,
+    $rootScope,
+    AUTH_EVENTS,
+    MESSAGES,
+    AuthService,
+    $state,
+    $log,
+    Session,
+    $timeout,
     User) {
 
     $log.debug('Inside Login controller');
@@ -21,7 +21,7 @@
     $scope.checkEmail = function() {
         return ($scope.navlogin.username.$error.required && $scope.navlogin.$submitted && $scope.navlogin.username.$dirty ||
             $scope.navlogin.username.$error.required && $scope.navlogin.$submitted && !$scope.navlogin.username.$touched ||
-            $scope.navlogin.username.$error.required && $scope.navlogin.$submitted && $scope.navlogin.username.$touched || 
+            $scope.navlogin.username.$error.required && $scope.navlogin.$submitted && $scope.navlogin.username.$touched ||
             !$scope.navlogin.username.$error.required && $scope.navlogin.username.$dirty && !$scope.navlogin.username.$valid);
     };
 
@@ -40,8 +40,8 @@
     };
 
     $scope.login = function () {
-        if (($scope.credentials === undefined) || 
-            ($scope.credentials.username === undefined || 
+        if (($scope.credentials === undefined) ||
+            ($scope.credentials.username === undefined ||
             $scope.credentials.password === undefined)) {
             $scope.pending = true;
             $scope.loginFailed = false;
@@ -76,12 +76,10 @@
             });
         }
     };
-  
+
 
     function clearCredentials() {
-        if ($scope.credentials !== undefined) {
-            // TODO Added to debug/research US1403 - should remove after issue is resolved
-            console.log('US1403: clearing credentials defined in login_controller');
+        if ($scope.credentials !== undefined) {            
             $scope.credentials.username = undefined;
             $scope.credentials.password = undefined;
         }

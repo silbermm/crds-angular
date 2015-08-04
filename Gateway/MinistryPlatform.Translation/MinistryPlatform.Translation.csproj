@@ -92,8 +92,8 @@
     <Compile Include="Exceptions\MultipleRecordsException.cs" />
     <Compile Include="Exceptions\TemplateParseException.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
-    <Compile Include="Services\AuthenticationServiceImpl.cs" />
     <Compile Include="Services\AuthenticationService.cs" />
+    <Compile Include="Services\AuthenticationServiceImpl.cs" />
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\ContactRelationshipService.cs" />
     <Compile Include="Services\ContactService.cs" />
@@ -126,7 +126,6 @@
     <Compile Include="Services\MessageInfo.cs" />
     <Compile Include="Services\MinistryPlatformService.cs" />
     <Compile Include="Services\MinistryPlatformServiceImpl.cs" />
-    <Compile Include="Services\OpportunityService.cs" />
     <Compile Include="Services\OpportunityServiceImpl.cs" />
     <Compile Include="Services\ParticipantService.cs" />
     <Compile Include="Services\ProgramService.cs" />

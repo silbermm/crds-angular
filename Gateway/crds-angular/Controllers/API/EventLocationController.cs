@@ -15,14 +15,11 @@ namespace crds_angular.Controllers.API
     {
         private IMinistryPlatformService _ministryPlatformService;
         private IConfigurationWrapper _configurationWrapper;
-        private IAuthenticationService _authenticationService;
-        
 
-        public EventLocationController(IMinistryPlatformService ministryPlatformService, IConfigurationWrapper configurationWrapper, IAuthenticationService authenticationService)
+        public EventLocationController(IMinistryPlatformService ministryPlatformService, IConfigurationWrapper configurationWrapper)
         {
             this._ministryPlatformService = ministryPlatformService;
             this._configurationWrapper = configurationWrapper;
-            this._authenticationService = authenticationService;
         }
 
         [ResponseType(typeof(List<Event>))]
@@ -33,8 +30,8 @@ namespace crds_angular.Controllers.API
             //var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["TodaysEventLocationRecords"]);
             var apiUser = _configurationWrapper.GetEnvironmentVarAsString("API_USER");
             var apiPassword = _configurationWrapper.GetEnvironmentVarAsString("API_PASSWORD");
-            string token = _authenticationService.authenticate(apiUser, apiPassword);
-
+            var authData =  AuthenticationService.authenticate(apiUser, apiPassword);
+            var token = authData["token"].ToString();
             var todaysEvents = _ministryPlatformService.GetRecordsDict("TodaysEventLocationRecords", token, site, "5 asc");//Why 5 you ask... Think Ministry
 
             var events = ConvertToEvents(todaysEvents);
