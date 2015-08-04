@@ -69,7 +69,7 @@ namespace MinistryPlatform.Translation.Services
             }
         }
 
-        ////get token using logged in user's credentials
+        //get token using logged in user's credentials
         public Dictionary<string, object> authenticate(string username, string password)
         {
             var userCredentials =
