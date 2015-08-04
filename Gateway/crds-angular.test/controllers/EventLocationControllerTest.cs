@@ -5,6 +5,9 @@ using System.Web.Http.Results;
 using crds_angular.Controllers.API;
 using crds_angular.Models.Crossroads;
 using Crossroads.Utilities.Interfaces;
+using Crossroads.Utilities.Services;
+using MinistryPlatform.Translation.PlatformService;
+using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
@@ -19,8 +22,7 @@ namespace crds_angular.test.controllers
         private Mock<IMinistryPlatformService> _ministryPlatfromServiceMock;
         private Mock<IConfigurationWrapper> _configurationWrapper;
         private Mock<IAuthenticationService> _authenticationServiceMock;
-
-
+      
         [SetUp]
         public void SetUp()
         {
@@ -30,16 +32,17 @@ namespace crds_angular.test.controllers
             _configurationWrapper.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("mockApiUser");
             _configurationWrapper.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("mockApiPassword");
 
-            _authenticationServiceMock = new Mock<IAuthenticationService>();
-            var mockAuthData = new Dictionary<string, object>
+            _authenticationServiceMock = new Mock<IAuthenticationService>();            
+
+            var authData = new Dictionary<string, object>
                 {
                     {"token", "123123"},
                     {"exp", "010125"}
                 };
-            _authenticationServiceMock.Setup(m => m.authenticate("mockApiUser", "mockApiPassword")).Returns(mockAuthData);
 
-            controller = new EventLocationController(_ministryPlatfromServiceMock.Object, _configurationWrapper.Object,
-                _authenticationServiceMock.Object);
+            _authenticationServiceMock.Setup(m => m.authenticate("mockApiUser", "mockApiPassword")).Returns(authData);
+
+            controller = new EventLocationController(_ministryPlatfromServiceMock.Object, _configurationWrapper.Object, _authenticationServiceMock.Object);
         }
 
         [Test]

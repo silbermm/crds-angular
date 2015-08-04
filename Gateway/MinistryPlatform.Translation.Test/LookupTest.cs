@@ -5,7 +5,10 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services;
+using MinistryPlatform.Translation.Services.Interfaces;
+using Moq;
 
 namespace MinistryPlatform.Translation.Test
 {
@@ -15,9 +18,21 @@ namespace MinistryPlatform.Translation.Test
     {
 
         private const string USERNAME = "testme";
-        private const string PASSWORD = "changeme";
-        private const string EMAIL = "donotreply+testme@crossroads.net";
+        private const string PASSWORD = "changeme";private const string EMAIL = "donotreply+testme@crossroads.net";
+    
+        private AuthenticationServiceImpl _fixture;
+        private PlatformServiceClient _platformService;
+        private Mock<IMinistryPlatformService> _ministryPlatformService;
 
+       
+        [SetUp]
+        public void SetUp()
+        {
+            _ministryPlatformService = new Mock<IMinistryPlatformService>();
+            _platformService = new PlatformServiceClient();
+            _fixture = new AuthenticationServiceImpl(_platformService, _ministryPlatformService.Object);
+        }
+       
         [Test]
         public void FindAnAttribute([Values("Dentist", "Social media wizard")] string attributeName)
         {
@@ -37,7 +52,7 @@ namespace MinistryPlatform.Translation.Test
             var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
             Assert.IsNotNull(authData);
             var token = authData["token"].ToString();
-            var contactId = AuthenticationService.GetContactId(token);
+            var contactId = _fixture.GetContactId(token);
             Assert.IsNotNull(contactId);
             var emails = LookupService.EmailSearch(EMAIL, token);
             Assert.IsNotEmpty(emails);
@@ -49,7 +64,7 @@ namespace MinistryPlatform.Translation.Test
             var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
             Assert.IsNotNull(authData);
             var token = authData["token"].ToString();
-            var contactId = AuthenticationService.GetContactId(token);
+            var contactId = _fixture.GetContactId(token);
             Assert.IsNotNull(contactId);
             var emails = LookupService.EmailSearch(EMAIL.ToUpper(), token);
             Assert.IsNotEmpty(emails);
@@ -61,7 +76,7 @@ namespace MinistryPlatform.Translation.Test
             var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
             Assert.IsNotNull(authData);
             var token = authData["token"].ToString();
-            var contactId = AuthenticationService.GetContactId(token);
+            var contactId = _fixture.GetContactId(token);
             Assert.IsNotNull(contactId);
             var emails = LookupService.EmailSearch("CRAP@CRAP.com", token);
             Assert.IsEmpty(emails);

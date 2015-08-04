@@ -15,21 +15,23 @@ namespace crds_angular.Services
     {
         private IConfigurationWrapper _configurationWrapper;
         private ICommunicationService _communicationService;
+        private IAuthenticationService _authenticationService;
 
-        public AccountService(IConfigurationWrapper configurationWrapper, ICommunicationService communicationService)
+        public AccountService(IConfigurationWrapper configurationWrapper, ICommunicationService communicationService, IAuthenticationService authenticationService)
         {
             this._configurationWrapper = configurationWrapper;
             this._communicationService = communicationService;
+            this._authenticationService = authenticationService;
         }
         public bool ChangePassword(string token, string newPassword)
         {
-            return AuthenticationService.ChangePassword(token, newPassword);
+            return _authenticationService.ChangePassword(token, newPassword);
         }
 
         //TODO: Put this logic in the Translation Layer?
         public bool SaveCommunicationPrefs(string token, AccountInfo accountInfo)
         {
-            var contactId = AuthenticationService.GetContactId(token);
+            var contactId = _authenticationService.GetContactId(token);
             var contact = MinistryPlatformService.GetRecordDict(Convert.ToInt32(ConfigurationManager.AppSettings["MyContact"]), contactId, token);
             try
             {                
@@ -56,7 +58,7 @@ namespace crds_angular.Services
 
         public AccountInfo getAccountInfo(string token)
         {
-            var contactId = AuthenticationService.GetContactId(token);
+            var contactId = _authenticationService.GetContactId(token);
             CommunicationPreferences contact = _communicationService.GetPreferences(token, contactId);
             var accountInfo = new AccountInfo
             {

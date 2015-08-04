@@ -16,7 +16,6 @@ namespace crds_angular.Controllers.API
         private IMinistryPlatformService _ministryPlatformService;
         private IConfigurationWrapper _configurationWrapper;
         private IAuthenticationService _authenticationService;
-        
 
         public EventLocationController(IMinistryPlatformService ministryPlatformService, IConfigurationWrapper configurationWrapper, IAuthenticationService authenticationService)
         {
