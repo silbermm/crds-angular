@@ -18,6 +18,7 @@ var fallbackOptions = {
   rewrites: [
     // TODO: see if there is a way to dry this up so we don't need to specify every folder/filename
     {from: /\/corkboard\/assets\/main.js/, to: '/corkboard/assets/main.js'},
+    {from: /\/corkboard\/assets\/main.css/, to: '/corkboard/assets/main.css'},
     {from: /\/corkboard/, to: '/corkboard/index.html'}
   ]
 };
