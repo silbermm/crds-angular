@@ -9,7 +9,7 @@
     return {
       restrict: 'EA',
       transclude: true,
-      templateUrl : '/tripDonations.html',
+      templateUrl : 'mytrips/tripDonations.html',
       scope : {
         donation: '='
       }
