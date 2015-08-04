@@ -43,7 +43,7 @@
 
           // If we're on the account page and the user is logged in, focus the
           // proper account field (email gets focus of not logged in)
-          if(toState.name == 'give.account' && $rootScope.username !== undefined) {
+          if(toState.name == 'give.account' && Session.isActive()) {
             vm.togglePaymentInfo();
           }
 
@@ -90,6 +90,9 @@
         brandCode['Discover'] = '#cc_discover';
 
         vm.confirmDonation = function(){
+          if (!Session.isActive()) {
+            $state.go("give.login");
+          }
           try
           {
             vm.processing = true;
@@ -106,7 +109,6 @@
           {
             $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
           }
-
         };
 
         vm.createBank = function(){
@@ -149,7 +151,7 @@
                 vm.dto.view = 'bank';
               }
               vm.processing = true;
-              if ($rootScope.username === undefined && vm.processingChange === false) {
+              if (!Session.isActive() && vm.processingChange === false) {
                   Session.addRedirectRoute("give.account", "");
                   $state.go("give.login");
               } else {
@@ -161,6 +163,9 @@
         };
 
         vm.goToChange = function(amount, donor, email, program) {
+          if (!Session.isActive()) {
+            $state.go("give.login");
+          };
           vm.dto.amount = amount;
           vm.dto.donor = donor;
           vm.dto.email = email;
@@ -257,6 +262,9 @@
         };
 
         vm.processChange = function(){
+          if (!Session.isActive()) {
+            $state.go("give.login");
+          };
           vm.processingChange = true;
           vm.amountSubmitted = false;
           $state.go("give.amount");
@@ -297,9 +305,10 @@
           vm.email = undefined;
           vm.initialized = false;
           vm.processing = false;
+          vm.processingChange = false;
           vm.program = undefined;
           vm.donorError = false;
-          if ($rootScope.username === undefined) {
+          if (!Session.isActive()) {
             User.email = "";
           };
 
@@ -307,19 +316,22 @@
         }
 
         vm.submitBankInfo = function() {
-            vm.bankinfoSubmitted = true;
-            if ($scope.giveForm.accountForm.$valid) {
-              vm.processing = true;
-              PaymentService.getDonor($scope.give.email)
-              .then(function(donor){
-                  vm.updateDonorAndDonate(donor.id, vm.program.ProgramId, vm.amount, vm.email, vm.dto.view);
-              },
-              function(error){
-                vm.createDonorAndDonate(vm.program.ProgramId, vm.amount, vm.email, vm.dto.view);
-              });
-            } else {
-              $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-            }
+          if (!Session.isActive()) {
+            $state.go("give.login");
+          };
+          vm.bankinfoSubmitted = true;
+          if ($scope.giveForm.accountForm.$valid) {
+            vm.processing = true;
+            PaymentService.getDonor($scope.give.email)
+            .then(function(donor){
+                vm.updateDonorAndDonate(donor.id, vm.program.ProgramId, vm.amount, vm.email, vm.dto.view);
+            },
+            function(error){
+              vm.createDonorAndDonate(vm.program.ProgramId, vm.amount, vm.email, vm.dto.view);
+            });
+          } else {
+            $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+          }
         };
 
         vm.togglePaymentInfo = function() {
@@ -382,22 +394,25 @@
         }
 
         vm.submitChangedBankInfo = function() {
-            vm.bankinfoSubmitted = true;
-            vm.amountSubmitted = true;
-           if(vm.dto.amount === "") {
-             $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-           } else {
-            if (vm.dto.view == "cc") {
-              if(vm.dto.savedPayment == 'bank') {
-                $scope.giveForm.creditCardForm.$setDirty();
-              }
-              if (!$scope.giveForm.creditCardForm.$dirty){
-                vm.processing = true;
-                vm.donate(vm.dto.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.dto.email, vm.dto.view, function() {
-                 $state.go("give.thank-you");
-               }, vm._stripeErrorHandler);
-              } else {
-                vm.processCreditCardChange();
+          if (!Session.isActive()) {
+             $state.go("give.login");
+          }
+          vm.bankinfoSubmitted = true;
+          vm.amountSubmitted = true;
+          if(vm.dto.amount === "") {
+           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+          } else {
+          if (vm.dto.view == "cc") {
+            if(vm.dto.savedPayment == 'bank') {
+              $scope.giveForm.creditCardForm.$setDirty();
+            }
+            if (!$scope.giveForm.creditCardForm.$dirty){
+              vm.processing = true;
+              vm.donate(vm.dto.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.dto.email, vm.dto.view, function() {
+               $state.go("give.thank-you");
+             }, vm._stripeErrorHandler);
+             } else {
+               vm.processCreditCardChange();
              }
            } else if (vm.dto.view == "bank"){
               if(vm.dto.savedPayment == 'cc') {
@@ -415,39 +430,39 @@
         };
       };
 
-        vm.transitionForLoggedInUserBasedOnExistingDonor = function(event, toState){
-          if(toState.name == "give.account" && $rootScope.username && !vm.donorError ) {
-            vm.processing = true;
-            event.preventDefault();
-            PaymentService.getDonor($scope.give.email)
-            .then(function(donor){
-              vm.donor = donor;
-              vm.email = vm.donor.email;
-              if (vm.donor.default_source.credit_card.last4 != null){
-                vm.last4 = donor.default_source.credit_card.last4;
-                vm.brand = brandCode[donor.default_source.credit_card.brand];
-                vm.expYear =  donor.exp_year;
-                vm.exp_month = donor.exp_month;
-              } else {
-                vm.routing = donor.default_source.bank_account.routing;
-                vm.account = donor.default_source.bank_account.last4
-                vm.last4 = donor.default_source.bank_account.last4;
-                vm.brand = '#library';
-              };
-              $state.go("give.confirm");
-            },function(error){
-              // Go forward to account info if it was a 404 "not found" error,
-              // the donor service returns a 404 when a donor doesn't exist
-              if(error && error.httpStatusCode == 404) {
-                vm.donorError = true;
-                $state.go("give.account");
-              } else {
-                vm._stripeErrorHandler(error);
-              }
-            });
-          }
-
+      vm.transitionForLoggedInUserBasedOnExistingDonor = function(event, toState){
+        if(toState.name == "give.account" && Session.isActive() && !vm.donorError ) {
+          vm.processing = true;
+          event.preventDefault();
+          PaymentService.getDonor($scope.give.email)
+          .then(function(donor){
+            vm.donor = donor;
+            vm.email = vm.donor.email;
+            if (vm.donor.default_source.credit_card.last4 != null){
+              vm.last4 = donor.default_source.credit_card.last4;
+              vm.brand = brandCode[donor.default_source.credit_card.brand];
+              vm.expYear =  donor.exp_year;
+              vm.exp_month = donor.exp_month;
+            } else {
+              vm.routing = donor.default_source.bank_account.routing;
+              vm.account = donor.default_source.bank_account.last4
+              vm.last4 = donor.default_source.bank_account.last4;
+              vm.brand = '#library';
+            };
+            $state.go("give.confirm");
+          },function(error){
+            // Go forward to account info if it was a 404 "not found" error,
+            // the donor service returns a 404 when a donor doesn't exist
+            if(error && error.httpStatusCode == 404) {
+              vm.donorError = true;
+              $state.go("give.account");
+            } else {
+              vm._stripeErrorHandler(error);
+            }
+          });
         }
-       };
+
+      }
+     };
 
 })();

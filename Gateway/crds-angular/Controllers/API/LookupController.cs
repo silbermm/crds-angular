@@ -81,8 +81,9 @@ namespace crds_angular.Controllers.API
                 var apiUser = _configurationWrapper.GetEnvironmentVarAsString("API_USER");
                 var apiPassword = _configurationWrapper.GetEnvironmentVarAsString("API_PASSWORD");
 
-                var token = AuthenticationService.authenticate(apiUser, apiPassword);
-                var exists = LookupService.EmailSearch(email, token);
+                var authData = AuthenticationService.authenticate(apiUser, apiPassword);
+                var token = authData["token"].ToString();
+                var exists = LookupService.EmailSearch(email, token.ToString());
                 if (exists.Count == 0)
                 {
                     return Ok();

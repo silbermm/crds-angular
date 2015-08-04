@@ -121,10 +121,35 @@
         controller: 'MyProfileCtrl as myProfile',
         templateUrl: 'myprofile/myprofile.html',
       })
-      .state("mytrips", {
+      .state('tripgiving', {
         parent: 'noSideBar',
-        url: "/mytrips",
-        templateUrl: "mytrips/mytrips.html"
+        url: '/trips',
+        controller: 'TripGivingCtrl as tripSearch',
+        templateUrl: 'tripgiving/tripgiving.html',
+        resolve: {
+          Page: 'Page',
+          CmsInfo: function(Page, $stateParams) {
+            return Page.get({
+              url: '/tripgiving/'
+            }).$promise;
+          }
+        }
+      })
+      .state('mytrips', {
+        parent: 'noSideBar',
+        url: '/trips/mytrips',
+        controller: 'MyTripsController as tripsController',
+        templateUrl: 'mytrips/mytrips.html',
+        resolve: {
+          loggedin: crds_utilities.checkLoggedin,
+          Trip: 'Trip',
+          $cookies: '$cookies',
+          MyTrips: function(Trip, $cookies) {
+            return Trip.MyTrips.get({
+              contact: $cookies.get('userId')
+            }).$promise;
+          }
+        }
       })
       .state("go-trip-signup", {
         parent: 'noSideBar',
@@ -301,20 +326,6 @@
         //abstract: true,
         url: '/demo',
         template: '<p>demo</p>'
-      })
-      .state('tripgiving', {
-        parent: 'noSideBar',
-        url: '/tripgiving',
-        controller: 'TripGivingCtrl as tripSearch',
-        templateUrl: 'tripgiving/tripgiving.html',
-        resolve: {
-          Page: 'Page',
-          CmsInfo: function(Page, $stateParams) {
-            return Page.get({
-              url: '/tripgiving/'
-            }).$promise;
-          }
-        }
       })
       .state('go_trip_giving_results', {
         parent: 'noSideBar',

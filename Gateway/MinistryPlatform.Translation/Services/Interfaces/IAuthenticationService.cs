@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MinistryPlatform.Models;
 
 namespace MinistryPlatform.Translation.Services.Interfaces
@@ -14,10 +15,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         /// <param name="newPassword"></param>
         /// <returns></returns>
         Boolean ChangePassword(string token, string newPassword);
-
-        //get token using logged in user's credentials
-        String authenticate(string username, string password);
-
+        
         //Get ID of currently logged in user
         int GetContactId(string token);
 
