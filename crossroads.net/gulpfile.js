@@ -5,35 +5,48 @@ var webpack = require('webpack');
 var gulpWebpack = require('gulp-webpack');
 var WebpackDevServer = require('webpack-dev-server');
 var webpackConfig = require('./webpack.config.js');
+var webPackDevConfig = require('./webpack-dev.config.js');
 var svgSprite = require('gulp-svg-sprite');
 var replace = require('gulp-replace');
 var rename = require('gulp-rename');
 var htmlreplace = require('gulp-html-replace');
-var history = require('connect-history-api-fallback');
+var connect_history = require('connect-history-api-fallback');
 
 var fallbackOptions = {
   index: '/index.html',
   verbose: true,
   rewrites: [
-	// TODO: see if there is a way to dry this up so we don't need to specify every folder/filename
-	{from: /\/corkboard\/assets\/main.*.js/, to: '/corkboard/assets/main.*.js'},
-	{from: /\/corkboard/, to: '/corkboard/index.html'}
+    // TODO: see if there is a way to dry this up so we don't need to specify every folder/filename
+    {from: /\/corkboard\/assets\/main.js/, to: '/corkboard/assets/main.js'},
+    {from: /\/corkboard/, to: '/corkboard/index.html'}
   ]
 };
+
+function htmlReplace(){
+  var assets = require('./webpack-assets.json');
+  
+  gulp.src('app/index.html')
+    .pipe(htmlreplace({
+      'css': assets.main.css,
+      'js': assets.main.js
+    }))
+    .pipe(gulp.dest('./'));
+}
 
 var browserSyncCompiles = 0;
 var browserSync = require('browser-sync').create();
 
 var webPackConfigs = [Object.create(webpackConfig)];
+var webPackDevConfigs = [Object.create(webPackDevConfig)];
 
 // Start the development server
-gulp.task('default', ['webpack-dev-server', 'html-replace']);
+gulp.task('default', ['webpack-dev-server']);
 
 // Build and watch cycle (another option for development)
 // Advantage: No server required, can run app from filesystem
 // Disadvantage: Requests are not blocked until bundle is available,
 //               can serve an old app on refresh
-gulp.task('build-dev', ['webpack:build-dev', 'html-replace'], function() {
+gulp.task('build-dev', ['webpack:build-dev'], function() {
 
 	var watchPatterns = [];
 	webPackConfigs.forEach(function(element) {
@@ -44,20 +57,8 @@ gulp.task('build-dev', ['webpack:build-dev', 'html-replace'], function() {
 	gulp.watch(watchPatterns, ['webpack:build-dev']);
 });
 
-gulp.task('html-replace', function(){
-  // first get the file names...
-  var assets = require('./webpack-assets.json');
-  
-  gulp.src('app/index.html')
-    .pipe(htmlreplace({
-      'css': assets.main.css,
-      'js': assets.main.js
-    }))
-    .pipe(gulp.dest('./'));
-});
-
 gulp.task('build-browser-sync', function () {
-	webPackConfigs.forEach(function(element) {
+	webPackDevConfigs.forEach(function(element) {
 
 		element.devtool = 'eval';
 		element.debug = true;
@@ -71,6 +72,14 @@ gulp.task('build-browser-sync', function () {
 			.pipe(gulpWebpack(element))
 			.pipe(gulp.dest('./assets'));
 	});
+
+  gulp.src('app/index.html')
+    .pipe(htmlreplace({
+      'css': '/assets/main.css',
+      'js': '/assets/main.js'
+    })).pipe(gulp.dest('./'));
+
+
 });
 
 // Browser-Sync build
@@ -94,22 +103,22 @@ gulp.task('browser-sync-dev', ['build-browser-sync'], function() {
 		server: {
 		  baseDir: './',
 		  middleware: [
-			  history(fallbackOptions)
+			  connect_history(fallbackOptions)
 			]
 		}
 	});
 });
 
 // Production build
-gulp.task('build', ['webpack:build', 'html-replace']);
+gulp.task('build', ['webpack:build']);
 
 // For convenience, an 'alias' to webpack-dev-server
-gulp.task('start', ['webpack-dev-server', 'html-replace']);
+gulp.task('start', ['webpack-dev-server']);
 
 
 // Run the development server
 gulp.task('webpack-dev-server', ['icons-watch'], function(callback) {
-	webPackConfigs.forEach(function(element, index) {
+	webPackDevConfigs.forEach(function(element, index) {
 
 		// Modify some webpack config options
 		element.devtool = 'eval';
@@ -122,20 +131,26 @@ gulp.task('webpack-dev-server', ['icons-watch'], function(callback) {
 			.pipe(gulp.dest('./assets'));
 	});
 
-	new WebpackDevServer(webpack(webPackConfigs), {
-			historyApiFallback: fallbackOptions,
-		    publicPath: '/assets/',
-			  quiet: false,
-			  watchDelay: 300,
-        stats: {
-          colors: true
-        }
-			}).listen(8080, 'localhost', function(err) {
-				if(err){
-          throw new gutil.PluginError('webpack-dev-server', err);
-        }
-				gutil.log('[start]', 'http://localhost:8080/webpack-dev-server/index.html');
-			});
+	new WebpackDevServer(webpack(webPackDevConfigs), {
+    historyApiFallback: true,
+    publicPath: '/',
+    quiet: false,
+    watchDelay: 300,
+    stats: {
+      colors: true
+    }
+  }).listen(8080, 'localhost', function(err) {
+    if(err){
+      throw new gutil.PluginError('webpack-dev-server', err);
+    }
+    gutil.log('[start]', 'http://localhost:8080/webpack-dev-server/index.html');
+  });
+
+  gulp.src('app/index.html')
+    .pipe(htmlreplace({
+      'css': '/assets/main.css',
+      'js': '/assets/main.js'
+    })).pipe(gulp.dest('./'));
 
 	gutil.log('[start]', 'Access crossroads.net at http://localhost:8080/#');
 	gutil.log('[start]', 'Access crossroads.net Live Reload at http://localhost:8080/webpack-dev-server/#');
@@ -165,17 +180,16 @@ gulp.task('webpack:build', ['icons'], function(callback) {
 		}));
 		callback();
 	});
+
+  // html replace
+  htmlReplace();
+
 });
 
 gulp.task('webpack:build-dev', ['icons'], function(callback) {
-	webPackConfigs.forEach(function(element) {
-		// modify some webpack config options
-		element.devtool = 'sourcemap';
-		element.debug = true;
-	});
-
+	
 	// run webpack
-	webpack(webPackConfigs).run(function(err, stats) {
+	webpack(webPackDevConfig).run(function(err, stats) {
 		if(err) {
       throw new gutil.PluginError('webpack:build-dev', err);
     }
@@ -184,6 +198,14 @@ gulp.task('webpack:build-dev', ['icons'], function(callback) {
 		}));
 		callback();
 	});
+ 
+  gulp.src('app/index.html')
+    .pipe(htmlreplace({
+      'css': '/assets/main.css',
+      'js': '/assets/main.js'
+    })).pipe(gulp.dest('./'));
+
+
 });
 
 // Watches for svg icon changes - run 'icons' once, then watch

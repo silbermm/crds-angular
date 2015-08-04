@@ -1,8 +1,6 @@
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var path = require('path');
-var AssetsPlugin         = require('assets-webpack-plugin');
-var assetsPluginInstance = new AssetsPlugin();
 
 var endpoint = {
     'url': 'http://localhost:49380'
@@ -27,8 +25,10 @@ module.exports = {
     output: {
         path: './assets',
         publicPath: '/assets/',
-        filename: '[name].[hash].js',
+        filename: '[name].js',
     },
+    devtool: 'sourcemap',
+    debug: true,
     module: {
         loaders: [
             {
@@ -66,8 +66,7 @@ module.exports = {
     ]
     },
     plugins: [
-        new ExtractTextPlugin('[name].[hash].css'),
-        definePlugin,
-        assetsPluginInstance
+        new ExtractTextPlugin('[name].css'),
+        definePlugin
     ]
 };
