@@ -475,6 +475,15 @@
         url: '/errors/500',
         templateUrl: 'errors/500.html'
       })
+      .state('corkboard', {        
+        url: '/corkboard/',
+        resolve: {
+          RedirectToSubSite: function ($window, $location) {
+            // Force browser to do a full reload to load corkboard's index.html
+            $window.location.href = $location.path();
+          }
+        }
+      })
       .state('tools', {
         parent: 'noSideBar',
         abstract: true,
@@ -527,7 +536,9 @@
             controller: 'ContentCtrl',
             templateProvider: function($templateFactory, $stateParams, Page, ContentPageService) {
               var promise;
-              promise = Page.get({ url: $stateParams.link }).$promise;
+
+              var link = addTrailingSlashIfNecessary($stateParams.link);
+              promise = Page.get({ url: link }).$promise;
 
               return promise.then(function(promise) {
                 if (promise.pages.length > 0) {
@@ -574,4 +585,13 @@
 
     $urlRouterProvider.otherwise('/');
   }
+
+  function addTrailingSlashIfNecessary(link) {
+    if (_.endsWith(link, '/') === false) {
+      return link + '/';
+    }
+
+    return link;
+  }
+
 })();

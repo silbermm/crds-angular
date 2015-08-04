@@ -7,10 +7,11 @@ $button-border-darken-amount: 15%;
 //// BUTTON STYLES ////
 .btn {
   @include button-size($padding-base-vertical, $padding-base-horizontal, $font-size-base, $line-height-base, $border-radius-base);
-  &:focus, &:active {
+  &:focus, &:active, &:hover {
     text-decoration: none;
     outline: none;
   }
+
 }
 
 .btn-default {
