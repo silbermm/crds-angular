@@ -102,6 +102,9 @@ h1.subheading, h2.subheading, h3.subheading, h4.subheading {
 .page-header {
   font-weight: normal;
   margin-top: 0;
+  @media print {
+    border: none;
+  }
 }
 .subheading {
   font-weight: 400;
@@ -110,6 +113,9 @@ h1.subheading, h2.subheading, h3.subheading, h4.subheading {
   border-bottom: 1px solid $gray-lighter;
   background: #fff;
   padding-bottom: 5px;
+  @media print {
+    border: none;
+  }
 }
 .subheading.inpage {
   border: none;
