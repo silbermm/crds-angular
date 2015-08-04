@@ -39,16 +39,19 @@ namespace crds_angular.Controllers.API
         [Route("api/trip/mytrips/{contactId}")]
         public IHttpActionResult MyTrips(int contactId)
         {
-            try
+            return Authorized(token =>
             {
-                var trips = _tripService.GetMyTrips(contactId);
-                return Ok(trips);
-            }
-            catch (Exception ex)
-            {
-                var apiError = new ApiErrorDto("Failed to retrieve My Trips info", ex);
-                throw new HttpResponseException(apiError.HttpResponseMessage);
-            }
+                try
+                {
+                    var trips = _tripService.GetMyTrips(contactId, token);
+                    return Ok(trips);
+                }
+                catch (Exception ex)
+                {
+                    var apiError = new ApiErrorDto("Failed to retrieve My Trips info", ex);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+            });
         }
     }
 }

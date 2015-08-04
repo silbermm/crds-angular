@@ -16,6 +16,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         void CreatePaymentProcessorEventError(DateTime? eventDateTime, string eventId, string eventType,
             string eventMessage, string responseMessage);
 
-        List<TripDistribution> GetMyTripDistributions(int contactId);
+        List<TripDistribution> GetMyTripDistributions(int contactId, string token);
     }
 }
