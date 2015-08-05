@@ -1,6 +1,5 @@
-require('../../../dependencies/dependencies');
-require('../../../core/core');
-require('../../../app/app');
+require('crds-core');
+require('../../app/app');
 
 describe('Volunteer Application Factory', function() {
 

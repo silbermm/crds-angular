@@ -1,43 +1,45 @@
-var webpack = require("webpack");
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var path = require("path");
+var webpack = require('webpack');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var path = require('path');
 
 var endpoint = {
     'url': 'http://localhost:49380'
 };
 
 var definePlugin = new webpack.DefinePlugin({
-    __API_ENDPOINT__: JSON.stringify(process.env.CRDS_API_ENDPOINT || "http://mp-int-web.cloudapp.net/gateway/"),
-    __CMS_ENDPOINT__: JSON.stringify(process.env.CRDS_CMS_ENDPOINT || "http://content.crossroads.net/"),
-    __STRIPE_PUBKEY__ : JSON.stringify(process.env.CRDS_STRIPE_PUBKEY || "pk_test_TR1GulD113hGh2RgoLhFqO0M")
+    __API_ENDPOINT__: JSON.stringify(process.env.CRDS_API_ENDPOINT || 'http://gatewayint.crossroads.net/gateway/'),
+    __CMS_ENDPOINT__: JSON.stringify(process.env.CRDS_CMS_ENDPOINT || 'http://contentint.crossroads.net/'),
+    __STRIPE_PUBKEY__ : JSON.stringify(process.env.CRDS_STRIPE_PUBKEY || 'pk_test_TR1GulD113hGh2RgoLhFqO0M')
 });
 
 module.exports = {
     entry: {
-        core: "./core/core.js"
+        main: './app/app.js'
     },
-    watchPattern: 'core/**/**',
+    watchPattern: 'app/**/**',
     externals: {
-      stripe: "Stripe"
+      stripe: 'Stripe',
+      moment: 'moment'
     },
     context: __dirname,
     output: {
         path: './assets',
         publicPath: '/assets/',
         filename: '[name].js',
-        sourceMapFilename: '[name].js.map'
     },
+    devtool: 'sourcemap',
+    debug: true,
     module: {
         loaders: [
             {
                 test: /\.css$/,
-                loader: "style-loader!css-loader"
+                loader: 'style-loader!css-loader'
             },
             {
                 test: /\.js$/,
                 include: [
-                  path.resolve(__dirname, "core"),
-                  path.resolve(__dirname, "node_modules/angular-stripe")
+                  path.resolve(__dirname, 'app'),
+                  path.resolve(__dirname, 'node_modules/angular-stripe')
                 ],
                 loader: 'babel-loader'
             },
@@ -51,20 +53,20 @@ module.exports = {
             },
             {
                 test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-                loader: "url-loader?limit=10000&minetype=application/font-woff"
+                loader: 'url-loader?limit=10000&minetype=application/font-woff'
             },
             {
                 test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-                loader: "file-loader"
+                loader: 'file-loader'
             },
             {
                 test: /\.html$/,
-                loader: "ng-cache?prefix=[dir]"
+                loader: 'ng-cache?prefix=[dir]'
             }
     ]
     },
     plugins: [
-        new ExtractTextPlugin("[name].css"),
+        new ExtractTextPlugin('[name].css'),
         definePlugin
     ]
 };

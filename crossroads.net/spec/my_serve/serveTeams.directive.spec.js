@@ -1,5 +1,4 @@
-require('../../dependencies/dependencies');
-require('../../core/core');
+require('crds-core');
 require('../../app/app');
 
 var $compile, $rootScope, element, scope, mockSession, mockServeDate, $httpBackend;
