@@ -65,5 +65,8 @@ namespace crds_angular.Models.Crossroads.Trip
 
         [JsonProperty(PropertyName = "donationDate")]
         public string DonationDate { get; set; }
+
+        [JsonProperty(PropertyName = "registeredDonor")]
+        public bool RegisteredDonor { get; set; }
     }
 }
