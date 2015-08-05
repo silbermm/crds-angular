@@ -1,5 +1,4 @@
-require('../../../dependencies/dependencies');
-require('../../../core/core');
+require('crds-core');
 require('../../../app/app');
 
 describe('Natural Number Validation Directive', function() {

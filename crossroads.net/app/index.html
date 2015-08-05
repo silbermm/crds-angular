@@ -50,7 +50,7 @@
   <!-- Type of content. See http://ogp.me/#types for available types -->
   <meta property="og:type" content="article" />
   <!-- the following two tags are only relevant for blog posts -->
-  <meta property="article:author" content="https://www.facebook.com/tatelucas" />
+  <!--<meta property="article:author" content="https://www.facebook.com/tatelucas" />-->
   <meta property="article:publisher" content="https://www.facebook.com/crdschurch" />
 
   <!-- Twitter card tags -->
@@ -105,7 +105,9 @@
           b.getElementsByTagName("head")[0].appendChild(c);
       })(window,document);
   </script>
-  <link href="/assets/core.css" rel="stylesheet" />
+  <!-- build:css -->
+  <link href="assets/main.css" rel="stylesheet" />
+  <!-- endbuild -->
 </head>
 
 <body ng-controller="coreController as app" ng-class="app.asideState.position">
@@ -115,7 +117,7 @@
 </body>
 <script src="https://js.stripe.com/v2/"></script>
 <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5391d6a6145291c4" async="async"></script>
-<script src="/assets/dependencies.js"></script>
-<script src="/assets/core.js"></script>
-<script src="/assets/main.js"></script>
+<!-- build:js -->
+<script src="assets/main.js"></script>
+<!-- endbuild -->
 </html>

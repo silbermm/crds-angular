@@ -1,6 +1,6 @@
 'use strict';
 
-var app = require("angular").module('crossroads');
+var app = require('angular').module('crossroads');
 
 require('./view-all.html');
 require('./view-all-music.html');
@@ -17,4 +17,4 @@ require('./media-list.html');
 require('./message-action-buttons.html');
 require('./media-details.html');
 
-app.controller("MediaCtrl", ['$log', '$state', require("./media.controller")]);
+app.controller('MediaCtrl', ['$log', '$state', require('./media.controller')]);
