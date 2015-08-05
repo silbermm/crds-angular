@@ -322,7 +322,7 @@
 
         vm.submitBankInfo = function() {
           vm.bankinfoSubmitted = true;
-          if ($scope.giveForm.accountForm.$valid && Session.isActive()) {
+          if ($scope.giveForm.accountForm.$valid) {
             vm.processing = true;
             PaymentService.getDonor($scope.give.email)
             .then(function(donor){
