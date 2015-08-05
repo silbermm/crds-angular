@@ -90,8 +90,7 @@
         brandCode['Discover'] = '#cc_discover';
 
         vm.activeSession = function (){
-          if (Session.isActive())
-            return true
+          return (Session.isActive())     
         };
 
         vm.confirmDonation = function(){
