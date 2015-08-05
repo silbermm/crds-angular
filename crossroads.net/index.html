@@ -36,6 +36,43 @@
   <meta name="msapplication-TileImage" content="http://crossroads-media.s3.amazonaws.com/images/favicon/mstile-144x144.png">
   <meta name="msapplication-config" content="http://crossroads-media.s3.amazonaws.com/images/favicon/browserconfig.xml">
   <meta name="theme-color" content="#ffffff">
+
+  <!-- Site wide og/fb tags -->
+  <meta property="og:site_name" content="Crossroads"/>
+  <!--<meta property="fb:app_id" content="[FB_APP_ID]" />-->
+  <meta property="og:locale" content="en_US" />
+
+  <!-- Page specific og/fb tags. Using http://int.crossroads.net/media/single for example data-->
+  <meta property="og:title" content="Work Like You Need It" />
+  <meta property="og:url" content="http://int.crossroads.net/media/single" />
+  <!-- Image for sharing current page. At least 1200x630 pixels -->
+  <meta property="og:image" content="http://s3.amazonaws.com/crossroads-media/images/likeaboss_02_still.jpg" />
+  <meta property="og:description" content="From the series Like A Boss." />
+  <!-- Type of content. See http://ogp.me/#types for available types -->
+  <meta property="og:type" content="article" />
+  <!-- the following two tags are only relevant for blog posts -->
+  <meta property="article:author" content="https://www.facebook.com/fareedzakaria" />
+  <meta property="article:publisher" content="https://www.facebook.com/tatelucas" />
+
+  <!-- Twitter card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@crdschurch">
+  <meta name="twitter:creator" content="@tatelucas">
+  <meta name="twitter:url" content="http://int.crossroads.net/media/single">
+  <meta name="twitter:title" content="Work Like You Need It">
+  <meta name="twitter:description" content="From the series Like A Boss.">
+  <meta name="twitter:image" content="http://s3.amazonaws.com/crossroads-media/images/likeaboss_02_still.jpg">
+
+  <!-- Example media tags for Twitter-->
+  <meta name="twitter:image:width" content="600">
+  <meta name="twitter:image:height" content="600">
+  <!-- Use YouTube embed URL if you want to embed YouTube directly -->
+  <meta name="twitter:player" content="https://www.youtube.com/embed/WsPa0OV1_5g">
+  <meta name="twitter:player:width" content="350">
+  <meta name="twitter:player:height" content="196">
+  <meta name="twitter:player:stream" content="https://www.youtube.com/embed/WsPa0OV1_5g">
+  <meta name="twitter:player:stream:content_type" content="video/mp4; codecs="avc1.42E01E1, mpa.40.2"">
+
   <script type="text/ng-template" id="on-submit-messages">
       <span ng-message="required"><span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span></span>
       <span ng-message="initiativeRequired"><span ng-bind-html="$root.MESSAGES.noInitiativeSelected.content | html"></span></span>
