@@ -56,6 +56,41 @@ namespace crds_angular.test.Services
             Assert.AreEqual(2, myTrips.MyTrips[0].TripGifts.Count);
         }
 
+        [Test]
+        public void FundraisingDaysLeftShouldNotBeNegative()
+        {
+            _donationService.Setup(m => m.GetMyTripDistributions(It.IsAny<int>(), It.IsAny<string>())).Returns(MockFundingPastTripDonationsResponse());
+            var myTrips = _fixture.GetMyTrips(It.IsAny<int>(), It.IsAny<string>());
+
+            Assert.IsNotNull(myTrips);
+            Assert.AreEqual(0, myTrips.MyTrips[0].FundraisingDaysLeft);
+        }
+
+        private List<TripDistribution> MockFundingPastTripDonationsResponse()
+        {
+            return new List<TripDistribution>
+            {
+                new TripDistribution
+                {
+                    ContactId = 1234,
+                    EventTypeId = 6,
+                    EventId = 8,
+                    EventTitle = "GO Someplace",
+                    EventStartDate = DateTime.Today,
+                    EventEndDate = DateTime.Today,
+                    TotalPledge = 1000,
+                    CampaignStartDate = DateTime.Today.AddDays(-15),
+                    CampaignEndDate = DateTime.Today.AddDays(-10),
+                    DonorNickname = "John",
+                    DonorFirstName = "John",
+                    DonorLastName = "Donor",
+                    DonorEmail = "crdsusertest+johndonor@gmail.com",
+                    DonationDate = DateTime.Today,
+                    DonationAmount = 350
+                }
+            };
+        }
+
         private List<TripDistribution> MockTripDonationsResponse()
         {
             return new List<TripDistribution>
