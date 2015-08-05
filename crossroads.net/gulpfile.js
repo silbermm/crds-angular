@@ -180,11 +180,8 @@ gulp.task('webpack:build', ['icons'], function(callback) {
 			colors: true
 		}));
 		callback();
+    htmlReplace();
 	});
-
-  // html replace
-  htmlReplace();
-
 });
 
 gulp.task('webpack:build-dev', ['icons'], function(callback) {
