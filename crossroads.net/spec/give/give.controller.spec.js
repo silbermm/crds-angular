@@ -601,25 +601,7 @@ describe('GiveController', function() {
       expect(controller.createDonorAndDonate).toHaveBeenCalledWith(controllerDto.program.ProgramId, controllerDto.amount, controllerDto.email, controllerDto.view);
       expect(controller.updateDonorAndDonate).not.toHaveBeenCalled();
     });
-
-    it('should go to give.login if session is not active', function() {
-       mockSession.isActive.and.callFake(function(){
-         return false;
-       });
-       $scope.give = {
-         email: "test@test.com"
-       };
-       spyOn($state, "go");
-
-       spyOn(mockPaymentService, "getDonor").and.callThrough();
-       spyOn(controller, 'updateDonorAndDonate');
-       spyOn(controller, 'createDonorAndDonate');
-
-       controller.submitBankInfo();
-
-       expect(controller.createDonorAndDonate).not.toHaveBeenCalled();
-       expect($state.go).toHaveBeenCalledWith('give.login');
-     });
+    
   });
 
 

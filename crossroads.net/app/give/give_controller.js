@@ -89,6 +89,10 @@
         brandCode['American Express'] = '#cc_american_express';
         brandCode['Discover'] = '#cc_discover';
 
+        vm.activeSession = function (){
+          return (Session.isActive())     
+        };
+
         vm.confirmDonation = function(){
           if (!Session.isActive()) {
             $state.go("give.login");
@@ -316,9 +320,6 @@
         }
 
         vm.submitBankInfo = function() {
-          if (!Session.isActive()) {
-            $state.go("give.login");
-          };
           vm.bankinfoSubmitted = true;
           if ($scope.giveForm.accountForm.$valid) {
             vm.processing = true;

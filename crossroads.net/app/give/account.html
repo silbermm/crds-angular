@@ -1,6 +1,6 @@
 <div class="push-top">
     <div class="form-group">
-        <div class="btn-group btn-group-justified" role="group" ng-show="!Session.isActive()">
+        <div class="btn-group btn-group-justified" role="group" ng-show="!give.activeSession()">
             <a type="button" class="btn btn-default" role="button" ng-click="give.goToLogin()">Login</a>
             <a type="button" class="btn btn-default active" role="button">Give as Guest</a>
         </div>
@@ -13,7 +13,7 @@
     <ng-form name="accountForm">
 	    <div
 	        class="form-group"
-	        ng-if="$root.username === undefined"
+	        ng-if="!give.activeSession()"
 	        ng-class="{'has-error': accountForm.email_field.email.$invalid && give.bankinfoSubmitted }">
 	        <label for="email">Email</label>
 	        <email-field
