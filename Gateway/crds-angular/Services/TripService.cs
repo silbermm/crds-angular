@@ -60,7 +60,7 @@ namespace crds_angular.Services
 
         public MyTripsDTO GetMyTrips(int contactId, string token)
         {
-            var trips = _donationService.GetMyTripDistributions(contactId, token);
+            var trips = _donationService.GetMyTripDistributions(contactId, token).OrderBy(t => t.EventStartDate);
 
             var myTrips = new MyTripsDTO();
 
