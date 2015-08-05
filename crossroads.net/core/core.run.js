@@ -35,7 +35,11 @@
                     Session.addRedirectRoute('home', '');
                 }
                 return;
-            }
+           }
+	    
+           if (toState.data !== undefined && toState.data.preventRouteAuthentication) {
+             return;
+           }
            if (Session.isActive()) {
               $http({
                 method: 'GET',
