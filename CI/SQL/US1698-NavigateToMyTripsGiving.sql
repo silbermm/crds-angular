@@ -27,5 +27,5 @@ INSERT INTO [dbo].[dp_Page_Views]
 , Donation_ID_Table_Donor_ID_Table_Contact_ID_Table.[Email_Address] AS [Email Address]
 , Donation_ID_Table.[Donation_Date] AS [Donation Date]
 , Donation_Distributions.[Amount] AS [Amount]'
-           ,'Pledge_ID_Table_Pledge_Campaign_ID_Table_Event_ID_Table_Event_Type_ID_Table.[Event_Type_ID] = 6')
+           ,'(Pledge_ID_Table_Pledge_Campaign_ID_Table_Event_ID_Table_Event_Type_ID_Table.[Event_Type_ID] = 6) AND (Donation_ID_Table_Donation_Status_ID_Table.[Display_On_MyTrips] = 1) AND (DATEADD(day, 90, Pledge_ID_Table_Pledge_Campaign_ID_Table_Event_ID_Table.[Event_End_Date]) >= GETDATE())')
 GO

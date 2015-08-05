@@ -60,7 +60,7 @@ namespace crds_angular.Services
 
         public MyTripsDTO GetMyTrips(int contactId, string token)
         {
-            var trips = _donationService.GetMyTripDistributions(contactId, token);
+            var trips = _donationService.GetMyTripDistributions(contactId, token).OrderBy(t => t.EventStartDate);
 
             var myTrips = new MyTripsDTO();
 
@@ -83,7 +83,7 @@ namespace crds_angular.Services
 
             foreach (var e in events)
             {
-                var donations = trips.Where(d => d.EventId == e.EventId).ToList();
+                var donations = trips.Where(d => d.EventId == e.EventId).OrderByDescending(d => d.DonationDate).ToList();
                 foreach (var donation in donations)
                 {
                     var gift = new TripGift
