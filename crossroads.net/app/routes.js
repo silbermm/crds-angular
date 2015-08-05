@@ -496,6 +496,9 @@
             // Force browser to do a full reload to load corkboard's index.html
             $window.location.href = $location.path();
           }
+        },
+        data: {
+          preventRouteAuthentication: true
         }
       })
       .state('tools', {
