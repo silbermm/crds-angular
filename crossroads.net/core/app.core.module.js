@@ -28,6 +28,7 @@
     })
     //TODO Pull out to service and/or config file
     .constant('MESSAGES', {})
+
     .config(function (growlProvider) {
       growlProvider.globalPosition('top-center');
       growlProvider.globalTimeToLive(6000);

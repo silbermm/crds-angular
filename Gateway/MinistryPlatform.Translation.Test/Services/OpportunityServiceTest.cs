@@ -84,7 +84,6 @@ namespace MinistryPlatform.Translation.Test.Services
             };
             responses.Add(response);
 
-            const int opportunityResponsePageKey = 315;
             _ministryPlatformService.Setup(
                 m => m.DeleteRecord(It.IsAny<int>(), responseId, null, It.IsAny<string>()))
                 .Returns(1);

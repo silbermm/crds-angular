@@ -121,10 +121,38 @@
         controller: 'MyProfileCtrl as myProfile',
         templateUrl: 'myprofile/myprofile.html',
       })
-      .state("mytrips", {
+      .state('tripgiving', {
         parent: 'noSideBar',
-        url: "/mytrips",
-        templateUrl: "mytrips/mytrips.html"
+        url: '/trips',
+        controller: 'TripGivingCtrl as tripSearch',
+        templateUrl: 'tripgiving/tripgiving.html',
+        resolve: {
+          Page: 'Page',
+          CmsInfo: function(Page, $stateParams) {
+            return Page.get({
+              url: '/tripgiving/'
+            }).$promise;
+          }
+        }
+      })
+      .state('mytrips', {
+        parent: 'noSideBar',
+        url: '/trips/mytrips',
+        controller: 'MyTripsController as tripsController',
+        templateUrl: 'mytrips/mytrips.html',
+        data: {
+          isProtected: true
+        },
+        resolve: {
+          loggedin: crds_utilities.checkLoggedin,
+          Trip: 'Trip',
+          $cookies: '$cookies',
+          MyTrips: function(Trip, $cookies) {
+            return Trip.MyTrips.get({
+              contact: $cookies.get('userId')
+            }).$promise;
+          }
+        }
       })
       .state("go-trip-signup", {
         parent: 'noSideBar',
@@ -302,20 +330,6 @@
         url: '/demo',
         template: '<p>demo</p>'
       })
-      .state('tripgiving', {
-        parent: 'noSideBar',
-        url: '/tripgiving',
-        controller: 'TripGivingCtrl as tripSearch',
-        templateUrl: 'tripgiving/tripgiving.html',
-        resolve: {
-          Page: 'Page',
-          CmsInfo: function(Page, $stateParams) {
-            return Page.get({
-              url: '/tripgiving/'
-            }).$promise;
-          }
-        }
-      })
       .state('go_trip_giving_results', {
         parent: 'noSideBar',
         url: '/go_trip_giving_results',
@@ -475,6 +489,18 @@
         url: '/errors/500',
         templateUrl: 'errors/500.html'
       })
+      .state('corkboard', {        
+        url: '/corkboard/',
+        resolve: {
+          RedirectToSubSite: function ($window, $location) {
+            // Force browser to do a full reload to load corkboard's index.html
+            $window.location.href = $location.path();
+          }
+        },
+        data: {
+          preventRouteAuthentication: true
+        }
+      })
       .state('tools', {
         parent: 'noSideBar',
         abstract: true,
@@ -527,7 +553,9 @@
             controller: 'ContentCtrl',
             templateProvider: function($templateFactory, $stateParams, Page, ContentPageService) {
               var promise;
-              promise = Page.get({ url: $stateParams.link }).$promise;
+
+              var link = addTrailingSlashIfNecessary($stateParams.link);
+              promise = Page.get({ url: link }).$promise;
 
               return promise.then(function(promise) {
                 if (promise.pages.length > 0) {
@@ -574,4 +602,13 @@
 
     $urlRouterProvider.otherwise('/');
   }
+
+  function addTrailingSlashIfNecessary(link) {
+    if (_.endsWith(link, '/') === false) {
+      return link + '/';
+    }
+
+    return link;
+  }
+
 })();

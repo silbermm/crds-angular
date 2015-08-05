@@ -69,37 +69,6 @@ namespace MinistryPlatform.Translation.Services
             }
         }
 
-        //get token using logged in user's credentials
-        public String authenticate(string username, string password)
-        {
-            var userCredentials =
-                new FormUrlEncodedContent(new Dictionary<string, string>
-                {
-                    {"username", username},
-                    {"password", password},
-                    {"client_id", "client"},
-                    {"client_secret", "secret"},
-                    {"grant_type", "password"}
-                });
-            var client = new HttpClient();
-            var tokenUrl = ConfigurationManager.AppSettings["TokenURL"];
-            var message = client.PostAsync(tokenUrl, userCredentials);
-            try
-            {
-                var result = message.Result.Content.ReadAsStringAsync().Result;
-
-                var obj = JObject.Parse(result);
-                var token = (string)obj["access_token"];
-                //ignorning refreshToken for now
-                var refreshToken = (string)obj["refresh_token"];
-                return token;
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-        }
-
         //Get ID of currently logged in user
         public int GetContactId(string token)
         {
@@ -144,5 +113,6 @@ namespace MinistryPlatform.Translation.Services
 
             return null;
         }
+        
     }
 }

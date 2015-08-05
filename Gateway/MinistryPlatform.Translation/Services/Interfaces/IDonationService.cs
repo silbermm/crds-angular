@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using MinistryPlatform.Models;
 
 namespace MinistryPlatform.Translation.Services.Interfaces
 {
@@ -13,5 +15,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         int CreateDeposit(string depositName, decimal depositTotalAmount, DateTime depositDateTime, string accountNumber, int batchCount, bool exported, string notes, string processorTransferId);
         void CreatePaymentProcessorEventError(DateTime? eventDateTime, string eventId, string eventType,
             string eventMessage, string responseMessage);
+
+        List<TripDistribution> GetMyTripDistributions(int contactId, string token);
     }
 }

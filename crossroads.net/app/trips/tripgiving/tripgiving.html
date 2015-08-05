@@ -30,8 +30,7 @@
           <trip-participant-card trip-participant="participant"></trip-participant-card>
         </div>
       </div>
-      <div ng-if="tripSearch.empty" ng-bind-html="$root.MESSAGES.tripSearchNotFound.message"></div>
-
+      <div ng-if="tripSearch.empty" ng-bind-html="$root.MESSAGES.tripSearchNotFound.content | html"></div>
     </div>
     <preloader full-screen='false' ng-show="tripSearch.loading"> </preloader>
   </div>

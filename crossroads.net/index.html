@@ -2,7 +2,6 @@
 <html lang="en" ng-app="crossroads">
 
 <head>
-  <base href="/"></base>
   <style>
     /* Allow angular.js to be loaded in body, hiding cloaked elements until
      * templates compile.  The !important is important given that there may be
@@ -79,7 +78,7 @@
       <span ng-message="naturalNumber"><span ng-bind-html="$root.MESSAGES.invalidDonationAmount.content | html"></span></span>
       <span ng-message="invalidZip"><span ng-bind-html="$root.MESSAGES.invalidZip.content | html"></span></span>
   </script>
-  <ng-include src="'assets/cr.svg'"></ng-include>
+  <ng-include src="'/assets/cr.svg'"></ng-include>
   <!-- Hotjar Tracking Code for demo.crossroads.net -->
   <script>
       (function(f,b){
@@ -91,7 +90,7 @@
           b.getElementsByTagName("head")[0].appendChild(c);
       })(window,document);
   </script>
-  <link href="assets/core.css" rel="stylesheet" />
+  <link href="/assets/core.css" rel="stylesheet" />
 </head>
 
 <body ng-controller="coreController as app" ng-class="app.asideState.position">
@@ -101,7 +100,7 @@
 </body>
 <script src="https://js.stripe.com/v2/"></script>
 <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5391d6a6145291c4" async="async"></script>
-<script src="assets/dependencies.js"></script>
-<script src="assets/core.js"></script>
-<script src="assets/main.js"></script>
+<script src="/assets/dependencies.js"></script>
+<script src="/assets/core.js"></script>
+<script src="/assets/main.js"></script>
 </html>

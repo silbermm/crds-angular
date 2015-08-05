@@ -11,7 +11,6 @@ namespace MinistryPlatform.Translation.Services
     public class DonationService : BaseService, IDonationService
     {
         private readonly int _donationsPageId;
-        private readonly int _donorPageId;
         private readonly int _distributionPageId;
         private readonly int _batchesPageId;
         private readonly int _declineEmailTemplate;
@@ -19,6 +18,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly string _bankPaymentType;
         private readonly int _depositsPageId;
         private readonly int _paymentProcessorErrorsPageId;
+        private readonly int _tripDistributionsPageView;
 
         private readonly IMinistryPlatformService _ministryPlatformService;
         private readonly IDonorService _donorService;
@@ -36,6 +36,7 @@ namespace MinistryPlatform.Translation.Services
             _bankPaymentType = configuration.GetConfigValue("Bank");
             _depositsPageId = configuration.GetConfigIntValue("Deposits");
             _paymentProcessorErrorsPageId = configuration.GetConfigIntValue("PaymentProcessorEventErrors");
+            _tripDistributionsPageView = configuration.GetConfigIntValue("TripDistributionsView");
         }
 
         public int UpdateDonationStatus(int donationId, int statusId, DateTime statusDate,
@@ -251,6 +252,35 @@ namespace MinistryPlatform.Translation.Services
                 donationNotes = dictionary.ToString("Donation_Status_Notes")
             };
             return (d);
+        }
+
+        public List<TripDistribution> GetMyTripDistributions(int contactId, string token)
+        {
+            var results = _ministryPlatformService.GetPageViewRecords(_tripDistributionsPageView, token, contactId.ToString());
+            var trips = new List<TripDistribution>();
+            foreach (var result in results)
+            {
+                var trip = new TripDistribution
+                {
+                    EventId = result.ToInt("Event ID"),
+                    EventTypeId = result.ToInt("Event Type ID"),
+                    EventTitle = result.ToString("Event Title"),
+                    EventStartDate = result.ToDate("Event Start Date"),
+                    EventEndDate = result.ToDate("Event End Date"),
+                    TotalPledge = Convert.ToInt32(result["Total Pledge"]),
+                    CampaignStartDate = result.ToDate("Start Date"),
+                    CampaignEndDate = result.ToDate("End Date"),
+                    DonorNickname = result.ToString("Nickname"),
+                    DonorFirstName = result.ToString("First Name"),
+                    DonorLastName = result.ToString("Last Name"),
+                    DonorEmail = result.ToString("Email Address"),
+                    DonationDate = result.ToDate("Donation Date"),
+                    DonationAmount = Convert.ToInt32(result["Amount"])
+                };
+
+                trips.Add(trip);
+            }
+            return trips;
         }
     }
 }

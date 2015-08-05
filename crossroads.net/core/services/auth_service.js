@@ -10,7 +10,7 @@ require('./session_service');
                 .post(__API_ENDPOINT__ + 'api/login', credentials)
                 .then(function (res) {
                     console.log(res.data);
-                    Session.create(res.data.userToken, res.data.userId, res.data.username);
+                    Session.create(res.data.userToken, res.data.userTokenExp, res.data.userId, res.data.username);
                     // The username from the credentials is really the email address
                     // In a future story, the contact email address will always be in sync with the user email address.
                     $rootScope.email = credentials.username;
@@ -22,8 +22,6 @@ require('./session_service');
         };
 
         authService.logout = function () {
-            // TODO Added to debug/research US1403 - should remove after issue is resolved
-            console.log('US1403: logging out user in auth_service');
             $rootScope.email = null;
             $rootScope.username = null;
             $rootScope.userid = null;
@@ -35,7 +33,7 @@ require('./session_service');
         //We are pretty sure they are copied from an example of how WE SHOULD be doing this,
         //instead we are using the above rootScope
         authService.isAuthenticated = function () {
-            return !!Session.userId;
+            return Session.isActive();
         };
 
         authService.isAuthorized = function (authorizedRoles) {

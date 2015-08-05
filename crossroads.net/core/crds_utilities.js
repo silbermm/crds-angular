@@ -33,9 +33,7 @@ var preventRouteTypeUrlEncoding = function(urlMatcherFactory, routeType, urlPatt
 //================================================
 // Check if the user is connected
 //================================================
-var checkLoggedin = function ($q, $timeout, $http, $location, $rootScope, $cookies) {
-  // TODO Added to debug/research US1403 - should remove after issue is resolved
-  console.log('US1403: checkLoggedIn');
+var checkLoggedin = function ($q, $timeout, $http, $location, $rootScope, $cookies) {  
   var deferred = $q.defer();
   $http.defaults.headers.common['Authorization'] = $cookies.get('sessionId');
   $http({
@@ -45,18 +43,12 @@ var checkLoggedin = function ($q, $timeout, $http, $location, $rootScope, $cooki
       'Authorization': $cookies.get('sessionId')
     }
   }).success(function (user) {
-    // TODO Added to debug/research US1403 - should remove after issue is resolved
-    console.log('US1403: checkLoggedIn success');
     // Authenticated
     if (user.userId !== undefined) {
-      // TODO Added to debug/research US1403 - should remove after issue is resolved
-      console.log('US1403: checkLoggedIn success with user');
       $timeout(deferred.resolve, 0);
       $rootScope.userid = user.userId;
       $rootScope.username = user.username;
     } else {
-      // TODO Added to debug/research US1403 - should remove after issue is resolved
-      console.log('US1403: checkLoggedIn success, undefined user');
       Session.clear();
       $rootScope.message = 'You need to log in.';
       $timeout(function () {
@@ -80,7 +72,7 @@ var checkLoggedin = function ($q, $timeout, $http, $location, $rootScope, $cooki
  */
 function formatDate(date, days){
   if(days === undefined){
-    days = 0; 
+    days = 0;
   }
   var d = moment(date);
   d.add(days, 'd');
