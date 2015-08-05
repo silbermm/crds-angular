@@ -140,6 +140,9 @@
         url: '/trips/mytrips',
         controller: 'MyTripsController as tripsController',
         templateUrl: 'mytrips/mytrips.html',
+        data: {
+          isProtected: true
+        },
         resolve: {
           loggedin: crds_utilities.checkLoggedin,
           Trip: 'Trip',
