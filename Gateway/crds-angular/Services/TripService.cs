@@ -76,7 +76,7 @@ namespace crds_angular.Services
                     EventTitle = trip.EventTitle,
                     EventStartDate = trip.EventStartDate.ToString("MMM dd, yyyy"),
                     EventEndDate = trip.EventEndDate.ToString("MMM dd, yyyy"),
-                    FundraisingDaysLeft = (trip.CampaignEndDate - DateTime.Today).Days,
+                    FundraisingDaysLeft = Math.Max(0, (trip.CampaignEndDate - DateTime.Today).Days),
                     FundraisingGoal = trip.TotalPledge
                 });
             }
