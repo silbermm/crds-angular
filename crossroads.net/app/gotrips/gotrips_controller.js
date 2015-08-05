@@ -13,6 +13,7 @@ function GoTripsCtrl($scope, $stateParams, $log, $location, $anchorScroll) {
     vm.pageTitle = $stateParams.trip_location;
     vm.friendlyPageTitle;
     vm.tripName;
+    vm.whyPlaceholder = 'Please be specific.';
 
     switch(vm.pageTitle) {
       case 'nola':
@@ -26,6 +27,7 @@ function GoTripsCtrl($scope, $stateParams, $log, $location, $anchorScroll) {
       case 'india':
         vm.friendlyPageTitle = 'India';
         vm.tripName = '2015 SEPT India JA Annual';
+        vm.whyPlaceholder = 'Please be specific. In instances where we have a limited number of spots, we strongly consider responses to this question.';
         break;
       case 'nicaragua':
         vm.friendlyPageTitle = 'Nicaragua';
