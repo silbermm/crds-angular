@@ -133,7 +133,7 @@ gulp.task('webpack-dev-server', ['icons-watch'], function(callback) {
 	});
 
 	new WebpackDevServer(webpack(webPackDevConfigs), {
-    historyApiFallback: true,
+    historyApiFallback: fallbackOptions,
     publicPath: '/',
     quiet: false,
     watchDelay: 300,
