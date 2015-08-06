@@ -275,7 +275,9 @@ namespace MinistryPlatform.Translation.Services
                     DonorLastName = result.ToString("Last Name"),
                     DonorEmail = result.ToString("Email Address"),
                     DonationDate = result.ToDate("Donation Date"),
-                    DonationAmount = Convert.ToInt32(result["Amount"])
+                    DonationAmount = Convert.ToInt32(result["Amount"]),
+                    AnonymousGift = result.ToBool("Anonymous"),
+                    RegisteredDonor = result.ToBool("Registered Donor")
                 };
 
                 trips.Add(trip);

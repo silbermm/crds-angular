@@ -19,5 +19,7 @@ namespace MinistryPlatform.Models
         public string DonorEmail { get; set; } 
         public DateTime DonationDate { get; set; }
         public int DonationAmount { get; set; }
+        public bool AnonymousGift { get; set; }
+        public bool RegisteredDonor { get; set; }
     }
 }
