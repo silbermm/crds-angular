@@ -1,6 +1,6 @@
 'use strict';
 
-var app = require("angular").module('crossroads');
+var app = angular.module('crossroads');
 
 require('./adbox-index.html');
 require('./ads/donate.html');
