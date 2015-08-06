@@ -11,7 +11,7 @@ INSERT INTO [dbo].[dp_Page_Section_Pages]
      VALUES
            (246
 		   ,509
-           ,9)
+           ,4)
 GO
 
 SET IDENTITY_INSERT [dbo].[dp_Page_Section_Pages] OFF
