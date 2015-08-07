@@ -24,7 +24,7 @@ INSERT INTO [dbo].Group_Participants
 
 INSERT INTO [dbo].Group_Participants 
 (Group_ID                                                                             ,Participant_ID                                                                                     ,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
-((select group_id from [dbo].groups where group_name = '(d) Fathers'' Group Mason')   ,(select Participant_Record from [dbo].contacts where Email_Address = 'rtheil+Wife@crossroads.net') ,16           ,1        ,{ts '2015-07-29 12:06:50'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
+((select group_id from [dbo].groups where group_name = '(d) Fathers'' Group Mason')   ,(select Participant_Record from [dbo].contacts where Email_Address = 'kidsclubmom@gmail.com') ,16           ,1        ,{ts '2015-07-29 12:06:50'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
 GO
 
 --Oakley Fathers Community Group - A full group with a wait list
@@ -47,7 +47,7 @@ INSERT INTO [dbo].Group_Participants
 
 INSERT INTO [dbo].Group_Participants 
 (Group_ID                                                                             ,Participant_ID                                                                                     ,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
-((select group_id from [dbo].groups where group_name = '(d) Fathers'' Group Oakley')  ,(select Participant_Record from [dbo].contacts where Email_Address = 'rtheil+Wife@crossroads.net') ,16           ,1        ,{ts '2015-07-29 12:06:50'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
+((select group_id from [dbo].groups where group_name = '(d) Fathers'' Group Oakley')  ,(select Participant_Record from [dbo].contacts where Email_Address = 'kidsclubmom@gmail.com') ,16           ,1        ,{ts '2015-07-29 12:06:50'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
 GO
 
 --Florence Fathers Community Group - A group with 1 open spot. A family shouldn't be able to both sign up for this.
