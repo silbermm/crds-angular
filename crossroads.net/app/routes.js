@@ -551,7 +551,7 @@
         views: {
           '': {
             controller: 'ContentCtrl',
-            templateProvider: function($templateFactory, $stateParams, Page, ContentPageService, $templateCache) {
+            templateProvider: function($templateFactory, $stateParams, Page, ContentPageService) {
               var promise;
 
               var link = addTrailingSlashIfNecessary($stateParams.link);
