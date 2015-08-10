@@ -551,13 +551,15 @@
         views: {
           '': {
             controller: 'ContentCtrl',
-            templateProvider: function($templateFactory, $stateParams, Page, ContentPageService) {
+            templateProvider: function($templateFactory, $stateParams, Page, ContentPageService, $templateCache) {
               var promise;
 
               var link = addTrailingSlashIfNecessary($stateParams.link);
               promise = Page.get({ url: link }).$promise;
 
               return promise.then(function(promise) {
+                debugger;
+
                 if (promise.pages.length > 0) {
                   ContentPageService.page = promise.pages[0];
                 } else {
@@ -573,16 +575,20 @@
                 }
                 switch(ContentPageService.page.pageType){
                   case 'NoHeaderOrFooter':
-                    return $templateFactory.fromUrl('templates/noHeaderOrFooter.html');
+                    //return $templateCache.get
+
+                    return $templateCache.get('templates/noHeaderOrFooter.html');
                   case 'LeftSidebar':
-                    return $templateFactory.fromUrl('templates/leftSidebar.html');
+                    return $templateCache.get('templates/leftSideBar.html');
                   case 'RightSidebar':
-                    return $templateFactory.fromUrl('templates/rightSidebar.html');
+                    return $templateCache.get('templates/rightSideBar.html');
                   case 'ScreenWidth':
-                    return $templateFactory.fromUrl('templates/screenWidth.html');
+                    return $templateCache.get('templates/screenWidth.html');
                   default:
-                    return $templateFactory.fromUrl('templates/noSideBar.html');
+                    return $templateCache.get('templates/noSideBar.html');
                 }
+              }, function() {
+                debugger;
               });
             }
           },
