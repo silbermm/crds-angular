@@ -558,7 +558,6 @@
               promise = Page.get({ url: link }).$promise;
 
               return promise.then(function(promise) {
-                debugger;
 
                 if (promise.pages.length > 0) {
                   ContentPageService.page = promise.pages[0];
@@ -575,20 +574,16 @@
                 }
                 switch(ContentPageService.page.pageType){
                   case 'NoHeaderOrFooter':
-                    //return $templateCache.get
-
-                    return $templateCache.get('templates/noHeaderOrFooter.html');
+                    return $templateFactory.fromUrl('templates/noHeaderOrFooter.html');
                   case 'LeftSidebar':
-                    return $templateCache.get('templates/leftSideBar.html');
+                    return $templateFactory.fromUrl('templates/leftSideBar.html');
                   case 'RightSidebar':
-                    return $templateCache.get('templates/rightSideBar.html');
+                    return $templateFactory.fromUrl('templates/rightSideBar.html');
                   case 'ScreenWidth':
-                    return $templateCache.get('templates/screenWidth.html');
+                    return $templateFactory.fromUrl('templates/screenWidth.html');
                   default:
-                    return $templateCache.get('templates/noSideBar.html');
+                    return $templateFactory.fromUrl('templates/noSideBar.html');
                 }
-              }, function() {
-                debugger;
               });
             }
           },
