@@ -558,6 +558,7 @@
               promise = Page.get({ url: link }).$promise;
 
               return promise.then(function(promise) {
+
                 if (promise.pages.length > 0) {
                   ContentPageService.page = promise.pages[0];
                 } else {
@@ -575,9 +576,9 @@
                   case 'NoHeaderOrFooter':
                     return $templateFactory.fromUrl('templates/noHeaderOrFooter.html');
                   case 'LeftSidebar':
-                    return $templateFactory.fromUrl('templates/leftSidebar.html');
+                    return $templateFactory.fromUrl('templates/leftSideBar.html');
                   case 'RightSidebar':
-                    return $templateFactory.fromUrl('templates/rightSidebar.html');
+                    return $templateFactory.fromUrl('templates/rightSideBar.html');
                   case 'ScreenWidth':
                     return $templateFactory.fromUrl('templates/screenWidth.html');
                   default:
