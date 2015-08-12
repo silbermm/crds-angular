@@ -31,7 +31,7 @@ require('../donation-details.html');﻿
             return (scope.amountSubmitted && scope.donationDetailsForm.amount.$invalid
               && scope.donationDetailsForm.$error.naturalNumber
               || scope.donationDetailsForm.$dirty
-              && scope.donationDetailsForm.amount.$invalid
+              && scope.donationDetailsForm.amount.$invalid && scope.amount != undefined
               || scope.donationDetailsForm.$dirty && scope.amount === "")
         };
 
