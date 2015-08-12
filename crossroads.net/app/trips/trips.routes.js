@@ -22,6 +22,12 @@
           }
         }
       })
+      .state('tripgiving',{
+        parent: 'noSideBar',
+        url: '/trips/giving/:eventParticipantId',
+        controller: 'TripGivingController as tripGiving',
+        templateUrl: 'tripgiving/tripgiving.html'
+      })
       .state('mytrips', {
         parent: 'noSideBar',
         url: '/trips/mytrips',

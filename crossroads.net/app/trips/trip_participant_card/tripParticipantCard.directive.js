@@ -9,7 +9,7 @@
     return {
       restrict: 'EA',
       transclude: true,
-      templateUrl : 'tripparticipantcard/tripParticipantCard.html',
+      templateUrl : 'trip_participant_card/tripParticipantCard.html',
       scope : {
         tripParticipant: '='
       }
