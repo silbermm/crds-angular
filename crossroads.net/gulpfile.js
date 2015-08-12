@@ -33,7 +33,6 @@ function htmlReplace(){
       'corejs': assets.core.js,
       'corecss': assets.core.css,
       'tripsjs': assets.trips.js,
-      'css': assets.main.css,
       'js': assets.main.js
     }))
     .pipe(gulp.dest('./'));
