@@ -2,7 +2,7 @@
 (function() {
   'use strict';
 
-  module.exports = TripGivingController;
+  module.exports = TripSearchController;
 
   TripSearchController.$inject = ['$rootScope', '$scope', '$log', 'CmsInfo', 'Trip'];
 
@@ -11,7 +11,7 @@
 
   	vm.empty = false;
   	vm.loading = false;
-  	vm.pageHeader = CmsInfo.pages[0].renderedContent;
+  	vm.pageHeader = CmsInfo.pages[0].content;
   	vm.search = search;
   	vm.searchString = '';
   	vm.showError = showError;
