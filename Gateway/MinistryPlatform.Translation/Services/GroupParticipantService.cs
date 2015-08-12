@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
 using Crossroads.Utilities.Extensions;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 
@@ -15,7 +16,8 @@ namespace MinistryPlatform.Translation.Services
     {
         private IDbConnection _dbConnection;
 
-        public GroupParticipantService(IDbConnection dbConnection)
+        public GroupParticipantService(IDbConnection dbConnection, IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
+            : base(authenticationService, configurationWrapper)
         {
             this._dbConnection = dbConnection;
         }

@@ -5,7 +5,9 @@ using System.Linq;
 using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Web;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Translation.PlatformService;
+using MinistryPlatform.Translation.Services.Interfaces;
 using Attribute = MinistryPlatform.Models.Attribute;
 using RoleDTO = MinistryPlatform.Models.DTO.RoleDto;
 
@@ -13,6 +15,12 @@ namespace MinistryPlatform.Translation.Services
 {
     public class GetMyRecords : BaseService
     {
+        public GetMyRecords(IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
+            : base(authenticationService, configurationWrapper)
+        {
+            
+        }
+
         public static List<RoleDTO> GetMyRoles(string token)
         {
             var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["MyRoles"]);

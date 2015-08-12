@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Trip;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Extensions;
@@ -20,42 +21,9 @@ namespace crds_angular.Services
             _donationService = donationService;
         }
 
-        public List<TripParticipantDto> Search(string search)
+        public List<GroupDTO> GetGroupsByEventId(int eventId)
         {
-            var results = _eventParticipantService.TripParticipants(search);
-
-            var participants = results.GroupBy(r =>
-                                                   new
-                                                   {
-                                                       r.ParticipantId,
-                                                       r.EmailAddress,
-                                                       r.Lastname,
-                                                       r.Nickname
-                                                   }).Select(x => new TripParticipantDto()
-                                                   {
-                                                       ParticipantId = x.Key.ParticipantId,
-                                                       Email = x.Key.EmailAddress,
-                                                       Lastname = x.Key.Lastname,
-                                                       Nickname = x.Key.Nickname,
-                                                       ShowGiveButton = true,
-                                                       ShowShareButtons = false
-                                                   }).ToDictionary(y => y.ParticipantId);
-
-            foreach (var result in results)
-            {
-                var tp = new TripDto();
-                tp.EventParticipantId = result.EventParticipantId;
-                tp.EventEnd = result.EventEndDate.ToString("MMM dd, yyyy");
-                tp.EventId = result.EventId;
-                tp.EventStartDate = result.EventStartDate.ToUnixTime();
-                tp.EventStart = result.EventStartDate.ToString("MMM dd, yyyy");
-                tp.EventTitle = result.EventTitle;
-                tp.EventType = result.EventType;
-                var participant = participants[result.ParticipantId];
-                participant.Trips.Add(tp);
-            }
-
-            return participants.Values.OrderBy(o => o.Lastname).ThenBy(o => o.Nickname).ToList();
+            throw new NotImplementedException("Dooh!");
         }
 
         public MyTripsDTO GetMyTrips(int contactId, string token)
@@ -108,5 +76,45 @@ namespace crds_angular.Services
             }
             return myTrips;
         }
+
+        public List<TripParticipantDto> Search(string search)
+        {
+            var results = _eventParticipantService.TripParticipants(search);
+
+            var participants = results.GroupBy(r =>
+                                                   new
+                                                   {
+                                                       r.ParticipantId,
+                                                       r.EmailAddress,
+                                                       r.Lastname,
+                                                       r.Nickname
+                                                   }).Select(x => new TripParticipantDto()
+                                                   {
+                                                       ParticipantId = x.Key.ParticipantId,
+                                                       Email = x.Key.EmailAddress,
+                                                       Lastname = x.Key.Lastname,
+                                                       Nickname = x.Key.Nickname,
+                                                       ShowGiveButton = true,
+                                                       ShowShareButtons = false
+                                                   }).ToDictionary(y => y.ParticipantId);
+
+            foreach (var result in results)
+            {
+                var tp = new TripDto();
+                tp.EventParticipantId = result.EventParticipantId;
+                tp.EventEnd = result.EventEndDate.ToString("MMM dd, yyyy");
+                tp.EventId = result.EventId;
+                tp.EventStartDate = result.EventStartDate.ToUnixTime();
+                tp.EventStart = result.EventStartDate.ToString("MMM dd, yyyy");
+                tp.EventTitle = result.EventTitle;
+                tp.EventType = result.EventType;
+                var participant = participants[result.ParticipantId];
+                participant.Trips.Add(tp);
+            }
+
+            return participants.Values.OrderBy(o => o.Lastname).ThenBy(o => o.Nickname).ToList();
+        }
+
+        
     }
 }

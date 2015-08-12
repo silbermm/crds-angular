@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -13,6 +14,8 @@ namespace MinistryPlatform.Translation.Test.Services
     {
         private FormSubmissionService _fixture;
         private Mock<IMinistryPlatformService> _ministryPlatformService;
+        private Mock<IAuthenticationService> _authService;
+        private Mock<IConfigurationWrapper> _configWrapper;
         private FormResponse _mockForm;
         private FormAnswer _mockAnswer1, _mockAnswer2, _mockAnswer3;
         private const int formResponsePageId = 424;
@@ -23,7 +26,14 @@ namespace MinistryPlatform.Translation.Test.Services
         public void SetUp()
         {
             _ministryPlatformService = new Mock<IMinistryPlatformService>();
-            _fixture = new FormSubmissionService(_ministryPlatformService.Object);
+            _authService = new Mock<IAuthenticationService>();
+            _configWrapper = new Mock<IConfigurationWrapper>();
+
+            _configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
+            _configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("pwd");
+            _authService.Setup(m => m.Authenticate(It.IsAny<string>(), It.IsAny<string>())).Returns(new Dictionary<string, object> { { "token", "ABC" }, { "exp", "123" } });
+        
+            _fixture = new FormSubmissionService(_ministryPlatformService.Object, _authService.Object, _configWrapper.Object);
 
             _mockAnswer1 = new FormAnswer
             {

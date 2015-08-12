@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -15,7 +16,8 @@ namespace MinistryPlatform.Translation.Services
 
         private readonly IMinistryPlatformService _ministryPlatformService;
 
-        public FormSubmissionService(IMinistryPlatformService ministryPlatformService)
+        public FormSubmissionService(IMinistryPlatformService ministryPlatformService, IAuthenticationService authenticationService,IConfigurationWrapper configurationWrapper)
+            : base(authenticationService,configurationWrapper)
         {
             _ministryPlatformService = ministryPlatformService;
         }
@@ -23,7 +25,7 @@ namespace MinistryPlatform.Translation.Services
         public int GetFormFieldId(int crossroadsId)
         {
             var searchString = string.Format(",{0}", crossroadsId);
-            var formFields = _ministryPlatformService.GetPageViewRecords(_formFieldCustomPage, apiLogin(), searchString);
+            var formFields = _ministryPlatformService.GetPageViewRecords(_formFieldCustomPage, ApiLogin(), searchString);
 
             var field = formFields.Single();
             var formFieldId = field.ToInt("Form_Field_ID");
@@ -33,7 +35,7 @@ namespace MinistryPlatform.Translation.Services
         public List<FormField> GetFieldsForForm(int formId)
         {
             var searchString = string.Format(",,,,{0}", formId);
-            var formFields = _ministryPlatformService.GetPageViewRecords(_formFieldCustomPage, apiLogin(), searchString);
+            var formFields = _ministryPlatformService.GetPageViewRecords(_formFieldCustomPage, ApiLogin(), searchString);
 
             return formFields.Select(formField => new FormField
             {
@@ -50,7 +52,7 @@ namespace MinistryPlatform.Translation.Services
 
         public int SubmitFormResponse(FormResponse form)
         {
-            var token = apiLogin();
+            var token = ApiLogin();
             var responseId = CreateFormResponse(form.FormId, form.ContactId, form.OpportunityId,
                 form.OpportunityResponseId, token);
             foreach (var answer in form.FormAnswers)

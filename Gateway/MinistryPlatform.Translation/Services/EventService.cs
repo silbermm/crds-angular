@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.PlatformService;
@@ -22,7 +23,8 @@ namespace MinistryPlatform.Translation.Services
 
         private IMinistryPlatformService ministryPlatformService;
 
-        public EventService(IMinistryPlatformService ministryPlatformService)
+        public EventService(IMinistryPlatformService ministryPlatformService, IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
+            : base(authenticationService, configurationWrapper)
         {
             this.ministryPlatformService = ministryPlatformService;
         }
@@ -71,7 +73,7 @@ namespace MinistryPlatform.Translation.Services
             {
                 // go get record id to delete
                 var recordId = GetEventParticipantRecordId(eventId, participantId);
-                eventParticipantId = ministryPlatformService.DeleteRecord(EventParticipantPageId, recordId, null, apiLogin());
+                eventParticipantId = ministryPlatformService.DeleteRecord(EventParticipantPageId, recordId, null, ApiLogin());
             }
             catch (Exception ex)
             {
@@ -88,7 +90,7 @@ namespace MinistryPlatform.Translation.Services
         public int GetEventParticipantRecordId(int eventId, int participantId)
         {
             var search = "," + eventId + "," + participantId;
-            var participants = ministryPlatformService.GetPageViewRecords("EventParticipantByEventIdAndParticipantId", apiLogin(), search).Single();
+            var participants = ministryPlatformService.GetPageViewRecords("EventParticipantByEventIdAndParticipantId", ApiLogin(), search).Single();
             return (int) participants["Event_Participant_ID"];
         }
 

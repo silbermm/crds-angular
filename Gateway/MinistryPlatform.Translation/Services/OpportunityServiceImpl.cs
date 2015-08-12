@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Models.DTO;
 using MinistryPlatform.Translation.Extensions;
@@ -26,7 +27,8 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _contactOpportunityResponses = Convert.ToInt32(AppSettings("ContactOpportunityResponses"));
 
         public OpportunityServiceImpl(IMinistryPlatformService ministryPlatformService, IEventService eventService,
-            IAuthenticationService authenticationService)
+            IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
+            : base(authenticationService, configurationWrapper)
         {
             _ministryPlatformService = ministryPlatformService;
             _eventService = eventService;
@@ -77,7 +79,7 @@ namespace MinistryPlatform.Translation.Services
         {
             var searchString = ",,,," + contactId;
             var subpageViewRecords = _ministryPlatformService.GetSubpageViewRecords(_contactOpportunityResponses,
-                opportunityId, apiLogin(), searchString);
+                opportunityId, ApiLogin(), searchString);
             var record = subpageViewRecords.ToList().SingleOrDefault();
             if (record == null) return null;
 
@@ -205,7 +207,7 @@ namespace MinistryPlatform.Translation.Services
                     {"Closed", false},
                     {"Comments", comments}
                 };
-                _ministryPlatformService.CreateRecord("OpportunityResponses", values, apiLogin(), true);
+                _ministryPlatformService.CreateRecord("OpportunityResponses", values, ApiLogin(), true);
             }
         }
 
@@ -236,7 +238,7 @@ namespace MinistryPlatform.Translation.Services
                 var prevResponse = GetOpportunityResponse(opportunityId, eventId, participant);
                 if (prevResponse.Response_ID != 0)
                 {
-                    _ministryPlatformService.DeleteRecord(_opportunityResponses, prevResponse.Response_ID, null, apiLogin());
+                    _ministryPlatformService.DeleteRecord(_opportunityResponses, prevResponse.Response_ID, null, ApiLogin());
                     return prevResponse.Response_ID;
                 }
                 return 0;
@@ -275,7 +277,7 @@ namespace MinistryPlatform.Translation.Services
                 {
                     recordId = prevResponse.Response_ID;
                     values.Add("Response_ID", recordId);
-                    _ministryPlatformService.UpdateRecord(_opportunityResponses, values, apiLogin());
+                    _ministryPlatformService.UpdateRecord(_opportunityResponses, values, ApiLogin());
                 }
                 else
                 {

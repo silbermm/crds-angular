@@ -14,7 +14,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
 
         Group getGroupDetails(int groupId);
 
-        List<Group> GetServingTeams(int contactId, string token);
+        //List<Group> GetServingTeams(int contactId, string token); can't find uses of this TM 08/12
 
         bool checkIfUserInGroup(int participantId, IList<GroupParticipant> participants);
 
@@ -22,10 +22,12 @@ namespace MinistryPlatform.Translation.Services.Interfaces
      
         List<GroupSignupRelationships> GetGroupSignupRelations(int groupType); 
 
-        int CalculateAge(DateTime birthDate, DateTime now);
+        //int CalculateAge(DateTime birthDate, DateTime now); can't find uses of this TM 08/12
 
        // bool CheckAgeForRelationship(IList<ContactRelationship> familyToReturn, string signupRelations);
 
         bool ParticipantGroupMember(int groupId, int participantId);
+
+        List<Group> GetGroupsForEvent(int eventId);
     }
 }

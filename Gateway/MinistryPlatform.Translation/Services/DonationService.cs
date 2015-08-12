@@ -22,8 +22,9 @@ namespace MinistryPlatform.Translation.Services
 
         private readonly IMinistryPlatformService _ministryPlatformService;
         private readonly IDonorService _donorService;
-      
-        public DonationService(IMinistryPlatformService ministryPlatformService, IDonorService donorService, IConfigurationWrapper configuration)
+
+        public DonationService(IMinistryPlatformService ministryPlatformService, IDonorService donorService, IConfigurationWrapper configuration, IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
+            : base(authenticationService, configurationWrapper)
         {
             _ministryPlatformService = ministryPlatformService;
             _donorService = donorService;
@@ -42,7 +43,7 @@ namespace MinistryPlatform.Translation.Services
         public int UpdateDonationStatus(int donationId, int statusId, DateTime statusDate,
             string statusNote = null)
         {
-            UpdateDonationStatus(apiLogin(), donationId, statusId, statusDate, statusNote);
+            UpdateDonationStatus(ApiLogin(), donationId, statusId, statusDate, statusNote);
             return (donationId);
         }
 
@@ -75,7 +76,7 @@ namespace MinistryPlatform.Translation.Services
             };
             try
             {
-                var token = apiLogin();
+                var token = ApiLogin();
                 var batchId = _ministryPlatformService.CreateRecord(_batchesPageId, parms, token);
 
                 // Important! These two fields have to be set on an update, not on the initial
@@ -203,7 +204,7 @@ namespace MinistryPlatform.Translation.Services
         {
             try
             {
-                string apiToken = apiLogin();
+                string apiToken = ApiLogin();
                 var result = GetDonationByProcessorPaymentId(processorPaymentId, apiToken);
 
                 var rec = _ministryPlatformService.GetRecordsDict(_distributionPageId, apiToken, ",,,,,,,," + result.donationId);

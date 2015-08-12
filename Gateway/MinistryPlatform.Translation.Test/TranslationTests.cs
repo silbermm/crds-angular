@@ -110,19 +110,19 @@ namespace MinistryPlatform.Translation.Test
             //MinistryPlatformService.DeleteRecord(hhPageId, newRecordId, null, adminToken);
         }
 
-        [Test]
-        public void ShouldGetSubPageRecord()
-        {
-            var subGroupPageId = Convert.ToInt32(ConfigurationManager.AppSettings["GroupsSubgroups"]);
-            var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            var token = authData["token"].ToString();
-            var recordId = _fixture.GetContactId(token);
-            Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
-            var record = MinistryPlatformService.GetSubPageRecords(subGroupPageId, 6717,
-                token);
-            Assert.IsNotNull(record);
-            Assert.IsNotEmpty(record);
-        }
+        //[Test]
+        //public void ShouldGetSubPageRecord()
+        //{
+        //    var subGroupPageId = Convert.ToInt32(ConfigurationManager.AppSettings["GroupsSubgroups"]);
+        //    var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
+        //    var token = authData["token"].ToString();
+        //    var recordId = _fixture.GetContactId(token);
+        //    Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
+        //    var record = MinistryPlatformService.GetSubPageRecords(subGroupPageId, 6717,
+        //        token);
+        //    Assert.IsNotNull(record);
+        //    Assert.IsNotEmpty(record);
+        //}
 
 
         [Test]
@@ -150,30 +150,30 @@ namespace MinistryPlatform.Translation.Test
             Assert.IsNotNull(attributes);
         }
 
-        [Test]
-        public void UpdateMySkills()
-        {
-            var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            var token = authData["token"].ToString();
-            var recordId = _fixture.GetContactId(token);
-            Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
+        //[Test]
+        //public void UpdateMySkills()
+        //{
+        //    var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
+        //    var token = authData["token"].ToString();
+        //    var recordId = _fixture.GetContactId(token);
+        //    Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
 
-            var attributePageId = Convert.ToInt32(ConfigurationManager.AppSettings["Attributes"]);
-            var dentist = MinistryPlatformService.GetLookupRecord(attributePageId,
-                "Dentist", token, 1);
-            Assert.IsNotNull(dentist);
+        //    var attributePageId = Convert.ToInt32(ConfigurationManager.AppSettings["Attributes"]);
+        //    var dentist = MinistryPlatformService.GetLookupRecord(attributePageId,
+        //        "Dentist", token, 1);
+        //    Assert.IsNotNull(dentist);
 
-            var attribute = new Attribute();
-            attribute.Start_Date = new DateTime(2013, 7, 1);
-            attribute.Attribute_ID = Convert.ToInt32(dentist["dp_RecordID"]);
-            var added = GetMyRecords.CreateAttribute(attribute, recordId, token);
-            Assert.IsNotNull(added);
-            Assert.IsFalse(added == 0);
+        //    var attribute = new Attribute();
+        //    attribute.Start_Date = new DateTime(2013, 7, 1);
+        //    attribute.Attribute_ID = Convert.ToInt32(dentist["dp_RecordID"]);
+        //    var added = GetMyRecords.CreateAttribute(attribute, recordId, token);
+        //    Assert.IsNotNull(added);
+        //    Assert.IsFalse(added == 0);
 
-            //now try to delete just added attribute
-            var deleted = GetMyRecords.DeleteAttribute(added, token);
-            Assert.IsTrue(deleted);
-        }
+        //    //now try to delete just added attribute
+        //    var deleted = GetMyRecords.DeleteAttribute(added, token);
+        //    Assert.IsTrue(deleted);
+        //}
 
         
 
