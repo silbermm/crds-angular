@@ -1,8 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" ng-app="atrium-events">
 <head>
 	<base href="." />
-  <link rel="stylesheet" href="/assets/core.005efc93270ec603f9f1.css">
+  <!-- build:corecss -->
+  <link href="/assets/core.css" rel="stylesheet" />
+  <!-- endbuild -->
 	<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
 	<script src="http://malsup.github.io/jquery.cycle2.js"></script>
 	<script src="http://malsup.github.io/jquery.cycle2.scrollVert.js"></script>
@@ -27,6 +29,14 @@
     </div><!--/table-responsive-->
   </div><!--/atrium-event-container-->
   <script src="https://js.stripe.com/v2/"></script>
-  <script src="/assets/core.005efc93270ec603f9f1.js"></script>
-  <script src="/assets/trips.005efc93270ec603f9f1.js"></script>  <script src="/assets/main.005efc93270ec603f9f1.js"></script></body>
+  <!-- build:corejs -->
+  <script src="/assets/core.js"></script>
+  <!-- endbuild -->
+  <!-- build:tripsjs -->
+  <script src="/assets/trips.js"></script>
+  <!-- endbuild -->
+  <!-- build:js -->
+  <script src="/assets/main.js"></script>
+  <!-- endbuild -->
+</body>
 </html>

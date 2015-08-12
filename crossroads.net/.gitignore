@@ -42,5 +42,5 @@ corkboard
 karma_html/
 
 index.html
-atriumevents.html
+./atriumevents.html
 webpack-assets.json
