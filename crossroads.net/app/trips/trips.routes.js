@@ -8,11 +8,11 @@
   function TripRoutes($stateProvider){
 
     $stateProvider
-      .state('tripgiving', {
+      .state('tripsearch', {
         parent: 'noSideBar',
         url: '/trips',
-        controller: 'TripGivingCtrl as tripSearch',
-        templateUrl: 'tripgiving/tripgiving.html',
+        controller: 'TripSearchCtrl as tripSearch',
+        templateUrl: 'tripsearch/tripsearch.html',
         resolve: {
           Page: 'Page',
           CmsInfo: function(Page, $stateParams) {
