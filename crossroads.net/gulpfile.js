@@ -19,6 +19,8 @@ var fallbackOptions = {
     // TODO: see if there is a way to dry this up so we don't need to specify every folder/filename
     {from: /\/corkboard\/assets\/main.js/, to: '/corkboard/assets/main.js'},
     {from: /\/corkboard\/assets\/main.css/, to: '/corkboard/assets/main.css'},
+    {from: /\/corkboard\/assets\/core.js/, to: '/corkboard/assets/core.js'},
+    {from: /\/corkboard\/assets\/core.css/, to: '/corkboard/assets/core.css'},
     {from: /\/corkboard/, to: '/corkboard/index.html'}
   ]
 };
@@ -28,6 +30,8 @@ function htmlReplace(){
   
   gulp.src('app/index.html')
     .pipe(htmlreplace({
+      'corejs': assets.core.js,
+      'corecss': assets.core.css,
       'tripsjs': assets.trips.js,
       'css': assets.main.css,
       'js': assets.main.js
@@ -77,6 +81,8 @@ gulp.task('build-browser-sync', function () {
 
   gulp.src('app/index.html')
     .pipe(htmlreplace({
+      'corejs': '/assets/core.js',
+      'corecss': '/assets/core.css',
       'tripsjs': '/assets/trips.js',
       'css': '/assets/main.css',
       'js': '/assets/main.js'
@@ -151,6 +157,8 @@ gulp.task('webpack-dev-server', ['icons-watch'], function(callback) {
 
   gulp.src('app/index.html')
     .pipe(htmlreplace({
+      'corejs': '/assets/core.js',
+      'corecss': '/assets/core.css',
       'tripsjs': '/assets/trips.js',
       'css': '/assets/main.css',
       'js': '/assets/main.js'
@@ -200,6 +208,8 @@ gulp.task('webpack:build-dev', ['icons'], function(callback) {
 		callback();
     gulp.src('app/index.html')
     .pipe(htmlreplace({
+      'corejs': '/assets/core.js',
+      'corecss': '/assets/core.css',
       'tripsjs': '/assets/trips.js',
       'css': '/assets/main.css',
       'js': '/assets/main.js'
