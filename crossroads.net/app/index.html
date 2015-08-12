@@ -57,8 +57,7 @@
 
   <!-- URL specific twitter tags. Using http://int.crossroads.net/media/single for example data-->
   <!-- <meta name="twitter:creator" content="@tatelucas" /> --> <!-- optional tag if you want to identify the author instead of just "Crossroads". -->
-
-
+    
   <script type="text/ng-template" id="on-submit-messages">
       <span ng-message="required"><span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span></span>
       <span ng-message="initiativeRequired"><span ng-bind-html="$root.MESSAGES.noInitiativeSelected.content | html"></span></span>
@@ -102,6 +101,9 @@
 </body>
 <script src="https://js.stripe.com/v2/"></script>
 <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5391d6a6145291c4" async="async"></script>
+<!-- build:tripsjs -->
+<script src="assets/trips.js"></script>
+<!-- endbuild -->
 <!-- build:js -->
 <script src="assets/main.js"></script>
 <!-- endbuild -->

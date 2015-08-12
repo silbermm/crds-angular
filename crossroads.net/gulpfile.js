@@ -28,6 +28,7 @@ function htmlReplace(){
   
   gulp.src('app/index.html')
     .pipe(htmlreplace({
+      'tripsjs': assets.trips.js,
       'css': assets.main.css,
       'js': assets.main.js
     }))
@@ -76,6 +77,7 @@ gulp.task('build-browser-sync', function () {
 
   gulp.src('app/index.html')
     .pipe(htmlreplace({
+      'tripsjs': '/assets/trips.js',
       'css': '/assets/main.css',
       'js': '/assets/main.js'
     })).pipe(gulp.dest('./'));
@@ -149,6 +151,7 @@ gulp.task('webpack-dev-server', ['icons-watch'], function(callback) {
 
   gulp.src('app/index.html')
     .pipe(htmlreplace({
+      'tripsjs': '/assets/trips.js',
       'css': '/assets/main.css',
       'js': '/assets/main.js'
     })).pipe(gulp.dest('./'));
@@ -195,15 +198,15 @@ gulp.task('webpack:build-dev', ['icons'], function(callback) {
 			colors: true
 		}));
 		callback();
-	});
- 
-  gulp.src('app/index.html')
+    gulp.src('app/index.html')
     .pipe(htmlreplace({
+      'tripsjs': '/assets/trips.js',
       'css': '/assets/main.css',
       'js': '/assets/main.js'
     })).pipe(gulp.dest('./'));
-
-
+	});
+ 
+  
 });
 
 // Watches for svg icon changes - run 'icons' once, then watch

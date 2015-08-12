@@ -1,4 +1,3 @@
-require('crds-core');
 require('./profile');
 require('./events');
 require('./give');
@@ -32,9 +31,6 @@ require('./mp_tools');
   require('./myprofile');
   require('./community_groups_signup/group_signup_form.html');
   require('./my_serve');
-  //require('./trips/tripgiving');
-  //require('./trips/mytrips')
-  require('./trips');
   require('./volunteer_signup');
   require('./volunteer_application');
   require('./search');

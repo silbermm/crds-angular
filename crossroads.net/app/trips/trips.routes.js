@@ -3,9 +3,9 @@
 
   module.exports = TripRoutes;
   
-  TripRoutes.$inject = ['$stateProvider', '$urlRouterProvider' ];
+  TripRoutes.$inject = ['$stateProvider'];
 
-  function TripRoutes($stateProvider, $urlRouterProvider){
+  function TripRoutes($stateProvider){
 
     $stateProvider
       .state('tripgiving', {
@@ -43,8 +43,6 @@
       })
  
   }
-
-
 
 })();
 

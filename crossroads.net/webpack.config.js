@@ -16,6 +16,7 @@ var definePlugin = new webpack.DefinePlugin({
 
 module.exports = {
     entry: {
+        trips: './app/trips/trips.module.js',
         main: './app/app.js'
     },
     watchPattern: 'app/**/**',
