@@ -12,14 +12,16 @@ using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
 {
-    public class GroupParticipantService : BaseService, IGroupParticipantService
+    public class GroupParticipantService :  IGroupParticipantService
     {
         private IDbConnection _dbConnection;
+        private IConfigurationWrapper _configurationWrapper;
 
-        public GroupParticipantService(IDbConnection dbConnection, IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
-            : base(authenticationService, configurationWrapper)
+        public GroupParticipantService(IDbConnection dbConnection, IConfigurationWrapper configurationWrapper)
+            
         {
             this._dbConnection = dbConnection;
+            _configurationWrapper = configurationWrapper;
         }
 
         public List<GroupServingParticipant> GetServingParticipants(List<int> participants, long from, long to, int loggedInContactId)
@@ -34,6 +36,7 @@ namespace MinistryPlatform.Translation.Services
                 var reader = command.ExecuteReader();
                 var groupServingParticipants = new List<GroupServingParticipant>();
                 var rowNumber = 0;
+                var defaultDeadlinePassedMessage = _configurationWrapper.GetConfigIntValue("DefaultDeadlinePassedMessage");
                 while (reader.Read())
                 {
                     var rowContactId = reader.GetInt32(reader.GetOrdinal("Contact_ID"));
@@ -59,7 +62,7 @@ namespace MinistryPlatform.Translation.Services
                     participant.OpportunityShiftEnd = GetTimeSpan(reader, "Shift_End");
                     participant.OpportunityShiftStart = GetTimeSpan(reader, "Shift_Start");
                     participant.OpportunitySignUpDeadline = reader.GetInt32(reader.GetOrdinal("Sign_Up_Deadline"));
-                    participant.DeadlinePassedMessage = (SafeInt32(reader, "Deadline_Passed_Message_ID") ?? Convert.ToInt32(AppSettings("DefaultDeadlinePassedMessage")));
+                    participant.DeadlinePassedMessage = (SafeInt32(reader, "Deadline_Passed_Message_ID") ?? defaultDeadlinePassedMessage);
                     participant.OpportunityTitle = reader.GetString(reader.GetOrdinal("Opportunity_Title"));
                     participant.ParticipantNickname = reader.GetString(reader.GetOrdinal("Nickname"));
                     participant.ParticipantEmail = SafeString(reader, "Email_Address");

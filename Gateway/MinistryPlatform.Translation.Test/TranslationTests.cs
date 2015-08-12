@@ -110,72 +110,19 @@ namespace MinistryPlatform.Translation.Test
             //MinistryPlatformService.DeleteRecord(hhPageId, newRecordId, null, adminToken);
         }
 
-        //[Test]
-        //public void ShouldGetSubPageRecord()
-        //{
-        //    var subGroupPageId = Convert.ToInt32(ConfigurationManager.AppSettings["GroupsSubgroups"]);
-        //    var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
-        //    var token = authData["token"].ToString();
-        //    var recordId = _fixture.GetContactId(token);
-        //    Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
-        //    var record = MinistryPlatformService.GetSubPageRecords(subGroupPageId, 6717,
-        //        token);
-        //    Assert.IsNotNull(record);
-        //    Assert.IsNotEmpty(record);
-        //}
-
-
         [Test]
-        public void GetAvailableSkills()
+        public void ShouldGetSubPageRecord()
         {
-            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["Attributes"]);
-            var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            var token = authData["token"].ToString();
-            var records = MinistryPlatformService.GetRecords(pageId, token);
-            Assert.IsNotNull(records);
-        }
-
-        [Test]
-        public void GetMySkills()
-        {
-            //setup stuff
-            var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);
+            var subGroupPageId = Convert.ToInt32(ConfigurationManager.AppSettings["GroupsSubgroups"]);
             var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
             var token = authData["token"].ToString();
             var recordId = _fixture.GetContactId(token);
             Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
-
-            //the good stuff
-            var attributes = GetMyRecords.GetMyAttributes(recordId, token);
-            Assert.IsNotNull(attributes);
+            var record = MinistryPlatformService.GetSubPageRecords(subGroupPageId, 6717,
+                token);
+            Assert.IsNotNull(record);
+            Assert.IsNotEmpty(record);
         }
-
-        //[Test]
-        //public void UpdateMySkills()
-        //{
-        //    var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
-        //    var token = authData["token"].ToString();
-        //    var recordId = _fixture.GetContactId(token);
-        //    Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
-
-        //    var attributePageId = Convert.ToInt32(ConfigurationManager.AppSettings["Attributes"]);
-        //    var dentist = MinistryPlatformService.GetLookupRecord(attributePageId,
-        //        "Dentist", token, 1);
-        //    Assert.IsNotNull(dentist);
-
-        //    var attribute = new Attribute();
-        //    attribute.Start_Date = new DateTime(2013, 7, 1);
-        //    attribute.Attribute_ID = Convert.ToInt32(dentist["dp_RecordID"]);
-        //    var added = GetMyRecords.CreateAttribute(attribute, recordId, token);
-        //    Assert.IsNotNull(added);
-        //    Assert.IsFalse(added == 0);
-
-        //    //now try to delete just added attribute
-        //    var deleted = GetMyRecords.DeleteAttribute(added, token);
-        //    Assert.IsTrue(deleted);
-        //}
-
-        
 
         [Test]
         public void GetParticipants()
@@ -187,19 +134,5 @@ namespace MinistryPlatform.Translation.Test
             Assert.IsNotNull(participants);
         }
         
-        [Test]
-        public void ShouldReturnTodaysEvents()
-        {
-            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["TodaysEventLocationRecords"]);
-            var configWrapper = new ConfigurationWrapper();
-            var apiUser = configWrapper.GetEnvironmentVarAsString("API_USER");
-            var apiPassword = configWrapper.GetEnvironmentVarAsString("API_PASSWORD");
-            var authData = AuthenticationService.authenticate(apiUser, apiPassword);
-            var token = authData["token"].ToString();
-
-            var todaysEvents = MinistryPlatformService.GetRecordsDict(pageId, token, ",Mason", "5");
-
-            Assert.IsNotNull(todaysEvents);
-        }
     }
 }
