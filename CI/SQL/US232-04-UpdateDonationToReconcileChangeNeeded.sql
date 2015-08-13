@@ -77,8 +77,8 @@ BEGIN
 END
 GO
 
-IF OBJECT_ID('dbo.crds_tr_Update_Donation_To_Reconcile_Change_Needed', 'TR') IS NULL
-  EXEC('CREATE TRIGGER dbo.crds_tr_Update_Donation_To_Reconcile_Change_Needed ON [dbo].[Donation_Distributions] AFTER UPDATE AS SELECT 1')
+IF OBJECT_ID('dbo.crds_tr_Update_Donation_To_Reconcile_Change_Needed_Due_To_Distribution', 'TR') IS NULL
+  EXEC('CREATE TRIGGER dbo.crds_tr_Update_Donation_To_Reconcile_Change_Needed_Due_To_Distribution ON [dbo].[Donation_Distributions] AFTER UPDATE AS SELECT 1')
 GO
 
 -- =============================================
@@ -86,8 +86,8 @@ GO
 -- Create date: 8/13/2015
 -- Description: Calls crds_Update_Donation_To_Reconcile_Change_Needed when Distribution Amount or Program is Updated
 -- =============================================
-ALTER TRIGGER [dbo].[crds_tr_Update_Donation_To_Reconcile_Change_Needed]
-  ON  [dbo].[Donations]
+ALTER TRIGGER [dbo].[crds_tr_Update_Donation_To_Reconcile_Change_Needed_Due_To_Distribution]
+  ON  [dbo].[Donation_Distributions]
   AFTER UPDATE
 AS
 BEGIN
@@ -104,13 +104,14 @@ BEGIN
 
     -- Get the Donation ID if it belongs to a finalized
     -- and deposited batch
-    SELECT @donation_id = I.Donation_ID, @amount = dd.Amount, @program_name = p.Program_Name
+    SELECT @donation_id = I.Donation_ID, @amount = 'Distribution Amount ' + cast(dd.Amount as varchar(100)),
+      @program_name = 'Distribution Program ' + cast(p.Program_Name as varchar(100))
     FROM INSERTED I
     INNER JOIN DELETED D ON I.Donation_Distribution_ID = D.Donation_Distribution_ID
     INNER JOIN [dbo].[Donation_Distributions] dd on dd.Donation_Distribution_ID = I.Donation_Distribution_ID
     INNER JOIN [dbo].[Donations] dtns on dtns.Donation_ID = dd.Donation_ID
-    INNER JOIN [dbo].[Batches] b on b.Batch_ID = d.Batch_ID
-    INNER JOIN [dbo].[Programs] p on p.Program_ID = dtns.Program_ID
+    INNER JOIN [dbo].[Batches] b on b.Batch_ID = dtns.Batch_ID
+    INNER JOIN [dbo].[Programs] p on p.Program_ID = dd.Program_ID
     WHERE dtns.Donation_Status_ID = 2 and b.Finalize_Date is not NULL and b.Deposit_ID is not NULL
 
     -- if we have a donation id and Amount is being updated
@@ -118,13 +119,13 @@ BEGIN
     begin
       EXEC [dbo].[crds_Update_Donation_To_Reconcile_Change_Needed]
         @Donation_Id = @donation_id,
-        @ReconcileChangeNeededOn = 'Distribution Amount: ' + @amount
+        @ReconcileChangeNeededOn = @amount
     end
     else if @donation_id is not NULL and UPDATE(Program_ID)
     begin
       EXEC [dbo].[crds_Update_Donation_To_Reconcile_Change_Needed]
         @Donation_Id = @donation_id,
-        @ReconcileChangeNeededOn = 'Distribution Program: ' + @program_name
+        @ReconcileChangeNeededOn = @program_name
     end
 
   end
