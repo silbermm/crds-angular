@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
-using MinistryPlatform.Models.DTO;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
 
@@ -70,31 +70,14 @@ namespace MinistryPlatform.Translation.Services
                     return (null);
                 }
 
-                return (MapDonationBatch(batches[0]));
+                return (Mapper.Map<Dictionary<string, object>, DonationBatch>(batches[0]));
             }));
             
         }
 
         public DonationBatch GetDonationBatch(int batchId)
         {
-            return (WithApiLogin(token => (MapDonationBatch(_ministryPlatformService.GetRecordDict(_batchesPageId, batchId, token)))));
-        }
-
-        private static DonationBatch MapDonationBatch(Dictionary<string, object> b)
-        {
-            if (b == null)
-            {
-                return (null);
-            }
-
-            var batchId = b.ContainsKey("dp_RecordID") ? b.ToInt("dp_RecordID") : b.ToInt("Batch_ID");
-            var batch = new DonationBatch
-            {
-                Id = batchId,
-                DepositId = b.ToInt("Deposit_ID"),
-                ProcessorTransferId = b.ToString("Processor_Transfer_ID")
-            };
-            return (batch);
+            return (WithApiLogin(token => (Mapper.Map<Dictionary<string,object>, DonationBatch>(_ministryPlatformService.GetRecordDict(_batchesPageId, batchId, token)))));
         }
 
         public int CreateDonationBatch(string batchName, DateTime setupDateTime, decimal batchTotalAmount, int itemCount,

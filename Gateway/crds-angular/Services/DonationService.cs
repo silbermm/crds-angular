@@ -1,4 +1,5 @@
 ﻿using System;
+using AutoMapper;
 using crds_angular.Models.Crossroads.Stewardship;
 using MPServices=MinistryPlatform.Translation.Services.Interfaces;
 using crds_angular.Services.Interfaces;
@@ -61,28 +62,12 @@ namespace crds_angular.Services
 
         public DonationBatchDTO GetDonationBatchByProcessorTransferId(string processorTransferId)
         {
-            return(MapDonationBatchDto(_mpDonationService.GetDonationBatchByProcessorTransferId(processorTransferId)));
+            return (Mapper.Map<DonationBatch, DonationBatchDTO>(_mpDonationService.GetDonationBatchByProcessorTransferId(processorTransferId)));
         }
 
         public DonationBatchDTO GetDonationBatch(int batchId)
         {
-            return (MapDonationBatchDto(_mpDonationService.GetDonationBatch(batchId)));
-        }
-
-        private static DonationBatchDTO MapDonationBatchDto(DonationBatch b)
-        {
-            if (b == null)
-            {
-                return (null);
-            }
-
-            var batch = new DonationBatchDTO
-            {
-                Id = b.Id,
-                DepositId = b.DepositId,
-                ProcessorTransferId = b.ProcessorTransferId
-            };
-            return (batch);
+            return (Mapper.Map<DonationBatch, DonationBatchDTO>(_mpDonationService.GetDonationBatch(batchId)));
         }
 
         public void ProcessDeclineEmail(string processorPaymentId)

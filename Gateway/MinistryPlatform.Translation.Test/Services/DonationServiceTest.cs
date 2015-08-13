@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using crds_angular.App_Start;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -17,6 +18,8 @@ namespace MinistryPlatform.Translation.Test.Services
         [SetUp]
         public void SetUp()
         {
+            AutoMapperConfig.RegisterMappings();
+
             _ministryPlatformService = new Mock<IMinistryPlatformService>(MockBehavior.Strict);
             _donorService = new Mock<IDonorService>(MockBehavior.Strict);
 
@@ -31,6 +34,55 @@ namespace MinistryPlatform.Translation.Test.Services
             configuration.Setup(mocked => mocked.GetConfigIntValue("PaymentProcessorEventErrors")).Returns(6060);
 
             _fixture = new DonationService(_ministryPlatformService.Object, _donorService.Object, configuration.Object);
+        }
+
+        [Test]
+        public void TestGetDonationBatchByProcessorTransferId()
+        {
+            const string processorTransferId = "123";
+            const int depositId = 456;
+            const int batchId = 789;
+            var searchResult = new List<Dictionary<string, object>>
+            {
+                {
+                    new Dictionary<string, object>
+                    {
+                        {"dp_RecordID", batchId},
+                        {"Processor_Transfer_ID", processorTransferId},
+                        {"Deposit_ID", depositId},
+                    }
+                }
+            };
+            _ministryPlatformService.Setup(mocked => mocked.GetRecordsDict(8080, It.IsAny<string>(), string.Format(",,,,,,,,{0},", processorTransferId), "")).Returns(searchResult);
+
+            var result = _fixture.GetDonationBatchByProcessorTransferId(processorTransferId);
+            _ministryPlatformService.VerifyAll();
+            Assert.IsNotNull(result);
+            Assert.AreEqual(processorTransferId, result.ProcessorTransferId);
+            Assert.AreEqual(batchId, result.Id);
+            Assert.AreEqual(depositId, result.DepositId);
+        }
+
+        [Test]
+        public void TestGetDonationBatch()
+        {
+            const string processorTransferId = "123";
+            const int depositId = 456;
+            const int batchId = 789;
+            var getResult = new Dictionary<string, object>
+                {
+                    {"Batch_ID", batchId},
+                    {"Processor_Transfer_ID", processorTransferId},
+                    {"Deposit_ID", depositId},
+                };
+            _ministryPlatformService.Setup(mocked => mocked.GetRecordDict(8080, batchId, It.IsAny<string>(), false)).Returns(getResult);
+
+            var result = _fixture.GetDonationBatch(batchId);
+            _ministryPlatformService.VerifyAll();
+            Assert.IsNotNull(result);
+            Assert.AreEqual(processorTransferId, result.ProcessorTransferId);
+            Assert.AreEqual(batchId, result.Id);
+            Assert.AreEqual(depositId, result.DepositId);
         }
 
         [Test]

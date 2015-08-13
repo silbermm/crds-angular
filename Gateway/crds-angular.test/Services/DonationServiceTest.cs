@@ -1,4 +1,6 @@
 ﻿using System;
+using AutoMapper;
+using crds_angular.App_Start;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services;
 using MinistryPlatform.Models;
@@ -17,6 +19,8 @@ namespace crds_angular.test.Services
         [SetUp]
         public void SetUp()
         {
+            AutoMapperConfig.RegisterMappings();
+
             _mpDonationService = new Mock<MPServices.IDonationService>(MockBehavior.Strict);
 
             _fixture = new DonationService(_mpDonationService.Object);
@@ -37,6 +41,15 @@ namespace crds_angular.test.Services
             Assert.AreEqual(123, result.Id);
             Assert.AreEqual(456, result.DepositId);
             Assert.AreEqual("789", result.ProcessorTransferId);
+        }
+
+        [Test]
+        public void TestGetDonationBatchReturnsNull()
+        {
+            _mpDonationService.Setup(mocked => mocked.GetDonationBatch(123)).Returns((DonationBatch) null);
+            var result = _fixture.GetDonationBatch(123);
+            _mpDonationService.VerifyAll();
+            Assert.IsNull(result);
         }
 
         [Test]
