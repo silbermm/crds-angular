@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
+using MinistryPlatform.Models.DTO;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
 
@@ -56,6 +57,44 @@ namespace MinistryPlatform.Translation.Services
                 UpdateDonationStatus(token, result.donationId, statusId, statusDate, statusNote);
                 return (result.donationId);
             }));
+        }
+
+        public DonationBatch GetDonationBatchByProcessorTransferId(string processorTransferId)
+        {
+            return(WithApiLogin(token =>
+            {
+                var search = string.Format(",,,,,,,,{0},", processorTransferId);
+                var batches = _ministryPlatformService.GetRecordsDict(_batchesPageId, token, search);
+                if (batches == null || batches.Count == 0)
+                {
+                    return (null);
+                }
+
+                return (MapDonationBatch(batches[0]));
+            }));
+            
+        }
+
+        public DonationBatch GetDonationBatch(int batchId)
+        {
+            return (WithApiLogin(token => (MapDonationBatch(_ministryPlatformService.GetRecordDict(_batchesPageId, batchId, token)))));
+        }
+
+        private static DonationBatch MapDonationBatch(Dictionary<string, object> b)
+        {
+            if (b == null)
+            {
+                return (null);
+            }
+
+            var batchId = b.ContainsKey("dp_RecordID") ? b.ToInt("dp_RecordID") : b.ToInt("Batch_ID");
+            var batch = new DonationBatch
+            {
+                Id = batchId,
+                DepositId = b.ToInt("Deposit_ID"),
+                ProcessorTransferId = b.ToString("Processor_Transfer_ID")
+            };
+            return (batch);
         }
 
         public int CreateDonationBatch(string batchName, DateTime setupDateTime, decimal batchTotalAmount, int itemCount,
@@ -229,6 +268,11 @@ namespace MinistryPlatform.Translation.Services
                         "ProcessDeclineEmail failed. processorPaymentId: {0},", processorPaymentId), ex);
             }
         }
+
+        public Donation GetDonationByProcessorPaymentId(string processorPaymentId)
+        {
+            return (WithApiLogin(token => GetDonationByProcessorPaymentId(processorPaymentId, token)));
+        }
         
         private Donation GetDonationByProcessorPaymentId(string processorPaymentId, string apiToken)
         {
@@ -249,7 +293,8 @@ namespace MinistryPlatform.Translation.Services
                 donationDate = dictionary.ToDate("Donation_Date"),
                 donationAmt = Convert.ToInt32(dictionary["Donation_Amount"]),
                 paymentTypeId = (dictionary.ToString("Payment_Type") == "Bank") ? 5 : 4,
-                donationNotes = dictionary.ToString("Donation_Status_Notes")
+                donationNotes = dictionary.ToString("Donation_Status_Notes"),
+                batchId = dictionary.ToNullableInt("Batch_ID")
             };
             return (d);
         }

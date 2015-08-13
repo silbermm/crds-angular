@@ -56,12 +56,28 @@ namespace crds_angular.Services
         public TransferPaidResponseDTO TransferPaid(DateTime? eventTimestamp, StripeTransfer transfer)
         {
             _logger.Debug("Processing transfer.paid event for transfer id " + transfer.Id);
+
             var response = new TransferPaidResponseDTO();
+
+            // Don't process this transfer if we already have a batch for the same transfer id
+            var existingBatch = _donationService.GetDonationBatchByProcessorTransferId(transfer.Id);
+            if (existingBatch != null)
+            {
+                var msg = string.Format("Batch {0} already created for transfer {1}", existingBatch.Id, existingBatch.ProcessorTransferId);
+                _logger.Debug(msg);
+                response.TotalTransactionCount = 0;
+                response.Message = msg;
+                return (response);
+            }
+
+            // Don't process this transfer if we can't find any charges for the transfer
             var charges = _paymentService.GetChargesForTransfer(transfer.Id);
             if (charges == null || charges.Count <= 0)
             {
-                _logger.Debug("No charges found for transfer: " + transfer.Id);
+                var msg = "No charges found for transfer: " + transfer.Id;
+                _logger.Debug(msg);
                 response.TotalTransactionCount = 0;
+                response.Message = msg;
                 return (response);
             }
 
@@ -84,10 +100,30 @@ namespace crds_angular.Services
             _logger.Debug(string.Format("{0} charges to update for transfer {1}", charges.Count, transfer.Id));
             foreach (var charge in charges)
             {
-                _logger.Debug("Updating charge id " + charge + " to Deposited status");
                 try
                 {
-                    var donationId = _donationService.UpdateDonationStatus(charge.Id, _donationStatusDeposited, eventTimestamp);
+                    var donation = _donationService.GetDonationByProcessorPaymentId(charge.Id);
+                    if (donation.batch_id != null)
+                    {
+                        var b = _donationService.GetDonationBatch(donation.batch_id.Value);
+                        if (string.IsNullOrWhiteSpace(b.ProcessorTransferId))
+                        {
+                            // If this donation exists on another batch that does not have a Stripe transfer ID, we'll move it to our batch instead
+                            var msg = string.Format("Charge {0} already exists on batch {1}, moving to new batch", charge.Id, b.Id);
+                            _logger.Debug(msg);
+                        } 
+                        else 
+                        {
+                            // If this donation exists on another batch that has a Stripe transfer ID, skip it
+                            var msg = string.Format("Charge {0} already exists on batch {1} with transfer id {2}", charge.Id, b.Id, b.ProcessorTransferId);
+                            _logger.Debug(msg);
+                            response.FailedUpdates.Add(new KeyValuePair<string, string>(charge.Id, msg));
+                            continue;
+                        }
+                    }
+
+                    _logger.Debug("Updating charge id " + charge + " to Deposited status");
+                    var donationId = _donationService.UpdateDonationStatus(int.Parse(donation.donation_id), _donationStatusDeposited, eventTimestamp);
                     response.SuccessfulUpdates.Add(charge.Id);
                     batch.ItemCount++;
                     batch.BatchTotalAmount += (charge.Amount / 100M);

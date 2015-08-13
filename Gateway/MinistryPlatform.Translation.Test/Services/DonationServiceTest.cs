@@ -65,6 +65,7 @@ namespace MinistryPlatform.Translation.Test.Services
             const int donorId = 9876;
             const int donationAmt = 4343;
             const string paymentType = "Bank";
+            const int batchId = 9090;
 
             var expectedParms = new Dictionary<string, object>
             {
@@ -86,7 +87,8 @@ namespace MinistryPlatform.Translation.Test.Services
                         {"Donation_Amount", donationAmt},
                         {"Donation_Date", donationStatusDate},
                         {"Donation_Status_Notes", donationStatusNotes},
-                        {"Payment_Type", paymentType}
+                        {"Payment_Type", paymentType},
+                        {"Batch_ID", batchId}
                     }
                 }
             };
