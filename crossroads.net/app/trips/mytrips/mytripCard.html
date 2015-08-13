@@ -17,11 +17,11 @@
   <!-- Goal Status -->
   <div ng-if="goalMet(trip.totalRaised, trip.fundraisingGoal)" class="col-xs-12 push-bottom goal-status">
     <div class="card-row days-left">Goal Reached!</div>
-    <p class="text-muted">{{trip.fundraisingDays}} days left to add funding.</p>
+    <p class="text-muted">{{trip.fundraisingDays}} days remaining for raising funds</p>
   </div><!-- /goal-status -->
 
   <div ng-if="!goalMet(trip.totalRaised, trip.fundraisingGoal)" class="col-xs-12 push-bottom goal-status">
-    <div class="card-row days-left"><span class="text-danger">{{trip.fundraisingDays}}</span> days left for funding.</div>
+    <div class="card-row days-left"><span class="text-danger">{{trip.fundraisingDays}}</span> days remaining for raising funds</div>
   </div>
 
   <!-- Trip-Sharing -->
