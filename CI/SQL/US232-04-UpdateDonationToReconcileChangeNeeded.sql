@@ -62,7 +62,7 @@ BEGIN
     FROM INSERTED I
     INNER JOIN DELETED D ON I.Donation_ID = D.Donation_ID
     INNER JOIN [dbo].[Donations] dtns on dtns.Donation_ID = I.Donation_ID
-    INNER JOIN [dbo].[Batches] b on b.Batch_ID = d.Batch_ID
+    INNER JOIN [dbo].[Batches] b on b.Batch_ID = dtns.Batch_ID
     WHERE dtns.Donation_Status_ID = 2 and b.Finalize_Date is not NULL and b.Deposit_ID is not NULL
 
     -- if we have a donation id
@@ -99,7 +99,7 @@ BEGIN
   begin
 
     DECLARE @donation_id INT;
-    DECLARE @amount MONEY;
+    DECLARE @amount nvarchar(100);
     DECLARE @program_name nvarchar(130);
 
     -- Get the Donation ID if it belongs to a finalized
