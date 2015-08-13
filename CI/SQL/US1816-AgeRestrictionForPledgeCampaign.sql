@@ -31,6 +31,22 @@ IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[
 ALTER TABLE [dbo].[Pledge_Campaigns] DROP CONSTRAINT [FK_Pledge_Campaigns_dp_Domains]
 GO
 
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Programs_Pledge_Campaigns]') AND parent_object_id = OBJECT_ID(N'[dbo].[Programs]'))
+ALTER TABLE [dbo].[Programs] DROP CONSTRAINT [FK_Programs_Pledge_Campaigns]
+GO
+
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Form_Responses_Pledge_Campaigns]') AND parent_object_id = OBJECT_ID(N'[dbo].[Form_Responses]'))
+ALTER TABLE [dbo].[Form_Responses] DROP CONSTRAINT [FK_Form_Responses_Pledge_Campaigns]
+GO
+
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Pledges_Pledge_Campaigns]') AND parent_object_id = OBJECT_ID(N'[dbo].[Pledges]'))
+ALTER TABLE [dbo].[Pledges] DROP CONSTRAINT [FK_Pledges_Pledge_Campaigns]
+GO
+
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Statement_Settings_Pledge_Campaigns]') AND parent_object_id = OBJECT_ID(N'[dbo].[Accounting_Companies]'))
+ALTER TABLE [dbo].[Accounting_Companies] DROP CONSTRAINT [FK_Statement_Settings_Pledge_Campaigns]
+GO
+
 /****** Done dropping FKs, build temp table, with new field ******/
 CREATE TABLE [dbo].[tmp_Pledge_Campaigns](
 	[Pledge_Campaign_ID] [int] IDENTITY(1,1) NOT NULL,
@@ -88,6 +104,7 @@ IF EXISTS (SELECT TOP 1 1
 				[Registration_Start],
 				[Registration_End],
 				[Maximum_Registrants],
+				[Youngest_Age_Allowed],
 				[Registration_Deposit],
 				[Fundraising_Goal],
 				[Registration_Form],
@@ -199,4 +216,40 @@ GO
 
 IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Pledge_Campaigns', N'COLUMN',N'Program_ID'))
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'If this is a mission trip campaign the program listed here will be credited by default when a donation is made online to the pledge of one of the trip participants.' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Pledge_Campaigns', @level2type=N'COLUMN',@level2name=N'Program_ID'
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Programs_Pledge_Campaigns]') AND parent_object_id = OBJECT_ID(N'[dbo].[Programs]'))
+ALTER TABLE [dbo].[Programs]  WITH CHECK ADD  CONSTRAINT [FK_Programs_Pledge_Campaigns] FOREIGN KEY([Pledge_Campaign_ID])
+REFERENCES [dbo].[Pledge_Campaigns] ([Pledge_Campaign_ID])
+GO
+
+IF EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Programs_Pledge_Campaigns]') AND parent_object_id = OBJECT_ID(N'[dbo].[Programs]'))
+ALTER TABLE [dbo].[Programs] CHECK CONSTRAINT [FK_Programs_Pledge_Campaigns]
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Form_Responses_Pledge_Campaigns]') AND parent_object_id = OBJECT_ID(N'[dbo].[Form_Responses]'))
+ALTER TABLE [dbo].[Form_Responses]  WITH CHECK ADD  CONSTRAINT [FK_Form_Responses_Pledge_Campaigns] FOREIGN KEY([Pledge_Campaign_ID])
+REFERENCES [dbo].[Pledge_Campaigns] ([Pledge_Campaign_ID])
+GO
+
+IF EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Form_Responses_Pledge_Campaigns]') AND parent_object_id = OBJECT_ID(N'[dbo].[Form_Responses]'))
+ALTER TABLE [dbo].[Form_Responses] CHECK CONSTRAINT [FK_Form_Responses_Pledge_Campaigns]
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Pledges_Pledge_Campaigns]') AND parent_object_id = OBJECT_ID(N'[dbo].[Pledges]'))
+ALTER TABLE [dbo].[Pledges]  WITH CHECK ADD  CONSTRAINT [FK_Pledges_Pledge_Campaigns] FOREIGN KEY([Pledge_Campaign_ID])
+REFERENCES [dbo].[Pledge_Campaigns] ([Pledge_Campaign_ID])
+GO
+
+IF EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Pledges_Pledge_Campaigns]') AND parent_object_id = OBJECT_ID(N'[dbo].[Pledges]'))
+ALTER TABLE [dbo].[Pledges] CHECK CONSTRAINT [FK_Pledges_Pledge_Campaigns]
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Statement_Settings_Pledge_Campaigns]') AND parent_object_id = OBJECT_ID(N'[dbo].[Accounting_Companies]'))
+ALTER TABLE [dbo].[Accounting_Companies]  WITH CHECK ADD  CONSTRAINT [FK_Statement_Settings_Pledge_Campaigns] FOREIGN KEY([Pledge_Campaign_ID])
+REFERENCES [dbo].[Pledge_Campaigns] ([Pledge_Campaign_ID])
+GO
+
+IF EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Statement_Settings_Pledge_Campaigns]') AND parent_object_id = OBJECT_ID(N'[dbo].[Accounting_Companies]'))
+ALTER TABLE [dbo].[Accounting_Companies] CHECK CONSTRAINT [FK_Statement_Settings_Pledge_Campaigns]
 GO
