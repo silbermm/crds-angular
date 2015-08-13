@@ -1,176 +1,180 @@
-(function(){
+(function () {
   'use strict';
+  module.exports = GiveCtrl;
 
-  module.exports = TripGivingController;
-
-  TripGivingController.$inject = ['$rootScope', 
+  GiveCtrl.$inject = ['$rootScope', 
                       '$scope', 
                       '$state', 
                       '$timeout', 
                       'Session', 
                       'PaymentService',
+                      'programList', 
                       'GiveTransferService', 
                       'User', 
                       'AUTH_EVENTS',
-                      'CC_BRAND_CODES',
                       'TripParticipant'];
 
-  function TripGivingController($rootScope, $scope, $state, $timeout, 
-                                Session, PaymentService, GiveTransferService,
-                                User, AUTH_EVENTS, CC_BRAND_CODES, TripParticipant){
-    var vm = this;
-    vm.activeSession = activeSession;
-    vm.amountSubmitted = false;
-    vm.bank= {};
-    vm.bankinfoSubmitted = false;
-    vm.card = {};
-    vm.changeAccountInfo = false;
-    vm.confirmDonation = confirmDonation;
-    vm.createBank = createBank;
-    vm.createCard = createCard;
-    vm.donate = donate;
-    vm.donor = {};
-    vm.donorError = false;
-    vm.dto = GiveTransferService;
-    vm.email = null;
-    vm.emailAlreadyRegisteredGrowlDivRef = 1000;
-    vm.emailPrefix = 'give';
-    vm.goToAccount = goToAccount;
-    vm.initialized = false;
-    vm.last4 = '';
-    vm.processingChange = false;
-    vm.processing = false;
-    vm.showMessage = 'Where?';
-    vm.showCheckClass = 'ng-hide';
-    vm.tripParticipant = TripParticipant;
-    if (!vm.dto.view ){
-      vm.dto.view = 'bank';
-    }
+  function DonationException(message) {
+    this.message = message;
+    this.name = 'DonationException';
+  }
 
-    //////////////////////////////// 
-    //// State Change Listeners ////
-    ////////////////////////////////
-    $scope.$on('$stateChangeStart', function (event, toState, toParams) {
-      if(toState && !/^give.*/.test(toState.name)) {
-        return;
-      }
-      vm.processing = true;
-      if(!vm.initialized || toState.name === 'tripgiving') {
-       event.preventDefault();
-       vm.initDefaultState();
-       return;
-      }
-      vm.transitionForLoggedInUserBasedOnExistingDonor(event,toState);
-    });
+  function GiveCtrl($rootScope, $scope, $state, $timeout, Session, PaymentService, programList, GiveTransferService, User, AUTH_EVENTS, TripParticipant) {
 
-    $scope.$on(AUTH_EVENTS.logoutSuccess, function(event) {
-      vm.reset();
-      $state.go('tripsearch');
-    });
+        $scope.$on('$stateChangeStart', function (event, toState, toParams) {
+           // Short-circuit this handler if we're not transitioning TO a give state
+           if(toState && !/^give.*/.test(toState.name)) {
+             return;
+           }
 
-    $scope.$on('$stateChangeSuccess', function (event, toState, toParams) {
-      vm.processing = false;
-      if(toState.name === 'tripgiving.account' && Session.isActive()) {
-        vm.togglePaymentInfo();
-      }
+           // vm.processing is used to set state and text on the "Give" button
+           // Make sure to set the processing state to true whenever a state change begins
+           vm.processing = true;
 
-      if(toState.name === 'tripgiving.thank-you') {
-        vm.initialized = false;
-        vm.dto.reset();
-      }
-    });
+           // If not initialized, initialize and go to default state
+           if(!vm.initialized || toState.name == "give") {
+             event.preventDefault();
+             vm.initDefaultState();
+             return;
+           }
 
-    $scope.$on('$stateChangeError', function (event, toState, toParams) {
-      vm.processing = false;
-    });
+           vm.transitionForLoggedInUserBasedOnExistingDonor(event,toState);
+        });
 
-    
+        $scope.$on(AUTH_EVENTS.logoutSuccess, function(event) {
+          vm.reset();
+          $state.go('home');
+        });
 
-    activate();
-    ////////////////////////////
-    // IMPLEMENTATION DETAILS //
-    ////////////////////////////
-    
-    function activate(){
-      vm.tripParticipant.showGiveButton = false;
-      vm.tripParticipant.showShareButtons = true;
-    }
+        $scope.$on('$stateChangeSuccess', function (event, toState, toParams) {
+          // vm.processing is used to set state and text on the "Give" button
+          // Make sure to reset the processing state to false whenever state change succeeds.
+          vm.processing = false;
 
-    function activeSession(){
-      return (Session.isActive());
-    }
+          // If we're on the account page and the user is logged in, focus the
+          // proper account field (email gets focus of not logged in)
+          if(toState.name == 'give.account' && Session.isActive()) {
+            vm.togglePaymentInfo();
+          }
 
-    function confirmDonation(){
-      if (!Session.isActive()) {
-        $state.go('tripgiving.login');
-      }
-      try
-      {
-        vm.processing = true;
-        vm.donate(vm.program.ProgramId, vm.amount, vm.donor.id, vm.email, vm.dto.view, function() {
-          $state.go('tripgiving.thank-you');
-        }, function(error) {
-          vm._stripeErrorHandler(error);
-          if(vm.dto.declinedPayment) {
-            vm.goToChange(vm.amount, vm.donor, vm.email, vm.program, vm.dto.view);
+          // Force the state to reset after successfully giving
+          if(toState.name == 'give.thank-you') {
+            vm.initialized = false;
+            vm.dto.reset();
           }
         });
-      }
-      catch(DonationException)
-      {
-        $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
-      }
-    }
 
-    function createBank(){
-      vm.bank = {
-        country: 'US',
-        currency: 'USD',
-        routing_number: vm.dto.donor.default_source.routing,
-        account_number: vm.dto.donor.default_source.bank_account_number
-      };
-    }
+        $scope.$on('$stateChangeError', function (event, toState, toParams) {
+          // vm.processing is used to set state and text on the "Give" button
+          // Make sure to reset the processing state to false whenever state change fails.
+          vm.processing = false;
+        });
 
-    function createCard(){
-      vm.card = {
-        name: vm.dto.donor.default_source.name,
-        number: vm.dto.donor.default_source.cc_number,
-        exp_month: vm.dto.donor.default_source.exp_date.substr(0,2),
-        exp_year: vm.dto.donor.default_source.exp_date.substr(2,2),
-        cvc: vm.dto.donor.default_source.cvc,
-        address_zip: vm.dto.donor.default_source.address_zip
-      };
-    }
-    
-    function donate(programId, amount, donorId, email, pymtType, onSuccess, onFailure){
-      PaymentService.donateToProgram(programId, amount, donorId, email, pymtType) .then(function(confirmation){
-        vm.amount = confirmation.amount;
-        vm.program = _.find(vm.programsInput, {'ProgramId': programId});
-        vm.program_name = vm.program.Name;
-        vm.email = confirmation.email;
-        onSuccess(confirmation);
-      }, function(error) {
-        onFailure(error);
-      });
-    }
+        var vm = this;
+        vm.amountSubmitted = false;
+        vm.bank= {};
+        vm.bankinfoSubmitted = false;
+        vm.card = {};
+        vm.changeAccountInfo = false;
+        vm.donor = {};
+        vm.donorError = false;
+        vm.dto = GiveTransferService;
+        vm.email = null;
+        vm.emailAlreadyRegisteredGrowlDivRef = 1000;
+        vm.emailPrefix = "give";
+        vm.initialized = false;
+        vm.last4 = '';
+        vm.processingChange = false;
+        vm.processing = false;
+        vm.programsInput = programList;
+        vm.showMessage = "Where?";
+        vm.showCheckClass = "ng-hide";
+        if (!vm.dto.view ){
+          vm.dto.view = "bank";
+        };
 
-    function goToAccount() {
-      vm.amountSubmitted = true;
-      if($scope.giveForm.amountForm.$valid) {
-          if(!vm.dto.view) {
-            vm.dto.view = 'bank';
+        var brandCode = [];
+        brandCode['Visa'] = "#cc_visa";
+        brandCode['MasterCard'] = '#cc_mastercard';
+        brandCode['American Express'] = '#cc_american_express';
+        brandCode['Discover'] = '#cc_discover';
+
+        vm.activeSession = function (){
+          return (Session.isActive())     
+        };
+
+        vm.confirmDonation = function(){
+          if (!Session.isActive()) {
+            $state.go("give.login");
           }
-          vm.processing = true;
-          if (!Session.isActive() && vm.processingChange === false) {
-              Session.addRedirectRoute('tripgiving.account', '');
-              $state.go('tripgiving.login');
+          try
+          {
+            vm.processing = true;
+            vm.donate(vm.program.ProgramId, vm.amount, vm.donor.id, vm.email, vm.dto.view, function() {
+              $state.go("give.thank-you");
+            }, function(error) {
+              vm._stripeErrorHandler(error);
+              if(vm.dto.declinedPayment) {
+                vm.goToChange(vm.amount, vm.donor, vm.email, vm.program, vm.dto.view);
+              }
+            });
+          }
+          catch(DonationException)
+          {
+            $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
+          }
+        };
+
+        vm.createBank = function(){
+          vm.bank = {
+             country: 'US',
+             currency: 'USD',
+             routing_number: vm.dto.donor.default_source.routing,
+             account_number: vm.dto.donor.default_source.bank_account_number
+          }
+        };
+
+        vm.createCard = function(){
+          vm.card = {
+           name: vm.dto.donor.default_source.name,
+           number: vm.dto.donor.default_source.cc_number,
+           exp_month: vm.dto.donor.default_source.exp_date.substr(0,2),
+           exp_year: vm.dto.donor.default_source.exp_date.substr(2,2),
+           cvc: vm.dto.donor.default_source.cvc,
+           address_zip: vm.dto.donor.default_source.address_zip
+           }
+        };
+
+        vm.donate = function(programId, amount, donorId, email, pymtType, onSuccess, onFailure){
+          PaymentService.donateToProgram(programId, amount, donorId, email, pymtType)
+            .then(function(confirmation){
+              vm.amount = confirmation.amount;
+              vm.program = _.find(vm.programsInput, {'ProgramId': programId});
+              vm.program_name = vm.program.Name;
+              vm.email = confirmation.email;
+              onSuccess(confirmation);
+            }, function(error) {
+              onFailure(error)
+            });
+        };
+
+        vm.goToAccount = function() {
+          vm.amountSubmitted = true;
+          if($scope.giveForm.amountForm.$valid) {
+              if(!vm.dto.view) {
+                vm.dto.view = 'bank';
+              }
+              vm.processing = true;
+              if (!Session.isActive() && vm.processingChange === false) {
+                  Session.addRedirectRoute("give.account", "");
+                  $state.go("give.login");
+              } else {
+                  $state.go("give.account");
+              }
           } else {
-              $state.go('tripgiving.account');
+             $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
           }
-      } else {
-         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-      }
-    }
+        };
 
         vm.goToChange = function(amount, donor, email, program) {
           if (!Session.isActive()) {
@@ -469,13 +473,7 @@
           });
         }
 
-
-    
-  }
-
-  function DonationException(message) {
-    this.message = message;
-    this.name = 'DonationException';
-  }
+      }
+     };
 
 })();

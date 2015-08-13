@@ -26,7 +26,39 @@
         parent: 'noSideBar',
         url: '/trips/giving/:eventParticipantId',
         controller: 'TripGivingController as tripGiving',
-        templateUrl: 'tripgiving/tripgiving.html'
+        templateUrl: 'tripgiving/tripgiving.html',
+        resolve: {
+          Trip: 'Trip',
+          $stateParams: '$stateParams',
+          TripParticipant: function(Trip, $stateParams){
+            return Trip.TripParticipant.get({
+              tripParticipantId: $stateParams.eventParticipantId 
+            }).$promise;
+          }
+        }
+      })
+      .state('tripgiving.amount', {
+        templateUrl: 'tripgiving/amount.html'
+      })
+      .state('tripgiving.login', {
+        controller: 'LoginCtrl',
+        templateUrl: 'tripgiving/login.html'
+      })
+      .state('tripgiving.register', {
+        controller: 'RegisterCtrl',
+        templateUrl: 'tripgiving/register.html'
+      })
+      .state('tripgiving.confirm', {
+        templateUrl: 'tripgiving/confirm.html'
+      })
+      .state('tripgiving.account', {
+        templateUrl: 'tripgiving/account.html'
+      })
+      .state('tripgiving.change', {
+        templateUrl: 'tripgiving/change.html'
+      })
+      .state('tripgiving.thank-you', {
+        templateUrl: 'tripgiving/thank_you.html'
       })
       .state('mytrips', {
         parent: 'noSideBar',
