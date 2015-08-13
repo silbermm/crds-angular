@@ -1,6 +1,8 @@
 'use strict';
 
-var app =  angular.module('crossroads');
+var MODULE = 'crossroads.trips';
+
+var app =  angular.module(MODULE);
 require('./mytrips.html');
 require('./mytripCard.html');
 require('./tripDonations.html');

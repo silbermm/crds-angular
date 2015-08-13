@@ -1,4 +1,3 @@
-require('crds-core');
 require('./profile');
 require('./events');
 require('./give');
@@ -13,7 +12,8 @@ require('./mp_tools');
    'crossroads.core',
    'crossroads.profile',
    'crossroads.mptools',
-   'crossroads.give'
+   'crossroads.give',
+   'crossroads.trips'
    ]);
 
   angular.module(MODULE).config(require('./routes'));
@@ -31,8 +31,6 @@ require('./mp_tools');
   require('./myprofile');
   require('./community_groups_signup/group_signup_form.html');
   require('./my_serve');
-  require('./trips/tripgiving');
-  require('./trips/mytrips')
   require('./volunteer_signup');
   require('./volunteer_application');
   require('./search');
