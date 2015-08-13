@@ -6,7 +6,6 @@ describe('GroupSignupController', function() {
  var $httpBackend, scope;
 
  var userGetResponse = {
-
    "Contact_Id" : "contactJson.Contact_Id",
    "Email_Address" : "test@test.com",
    "NickName" : "contactJson.Nickname",

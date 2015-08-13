@@ -26,7 +26,8 @@ module.exports = function(config) {
       'https://js.stripe.com/v2/',
       './node_modules/phantomjs-polyfill/bind-polyfill.js',
       './node_modules/angular/angular.js',
-      'node_modules/angular-mocks/angular-mocks.js',
+      './node_modules/angular-mocks/angular-mocks.js',
+      './assets/trips.js',
       'spec/spec_index.js'
     ],
 
