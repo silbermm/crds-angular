@@ -34,7 +34,7 @@ namespace MinistryPlatform.Translation.Services
 
                 return contactEmail;
             }
-            catch (NullReferenceException ex)
+            catch (NullReferenceException )
             {
                 logger.Debug(String.Format("Trying to email address of {0} failed", contactId));
                 return string.Empty;

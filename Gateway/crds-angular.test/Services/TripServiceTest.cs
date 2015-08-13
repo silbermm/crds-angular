@@ -14,6 +14,7 @@ namespace crds_angular.test.Services
     {
         private Mock<IEventParticipantService> _eventParticipantService;
         private Mock<IDonationService> _donationService;
+        private Mock<IGroupService> _groupService;
         private TripService _fixture;
 
         [SetUp]
@@ -21,7 +22,8 @@ namespace crds_angular.test.Services
         {
             _eventParticipantService = new Mock<IEventParticipantService>();
             _donationService = new Mock<IDonationService>();
-            _fixture = new TripService(_eventParticipantService.Object, _donationService.Object);
+            _groupService = new Mock<IGroupService>();
+            _fixture = new TripService(_eventParticipantService.Object, _donationService.Object,_groupService.Object);
         }
 
         [Test]

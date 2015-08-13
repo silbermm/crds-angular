@@ -301,7 +301,7 @@ namespace crds_angular.Services
                     sequenceDate = sequenceDate.AddDays(increment);
                 }
             }
-            catch (Exception e)
+            catch (Exception )
             {
                 return new List<int>();
             }

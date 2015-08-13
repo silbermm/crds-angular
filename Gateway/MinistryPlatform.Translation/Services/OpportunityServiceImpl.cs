@@ -188,7 +188,7 @@ namespace MinistryPlatform.Translation.Services
             {
                 return events.Last();
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
                 throw new Exception("No events found. Cannot return the last event date.");
             }

@@ -18,6 +18,26 @@ namespace crds_angular.Controllers.API
         }
 
         [AcceptVerbs("GET")]
+        [ResponseType(typeof(TripGroupDto))]
+        [Route("api/trip/groups/{eventId}")]
+        public IHttpActionResult GetGroupsForEvent(int eventId)
+        {
+            return Authorized(token =>
+            {
+                try
+                {
+                    var groups = _tripService.GetGroupsByEventId(eventId);
+                    return Ok(groups);
+                }
+                catch (Exception ex)
+                {
+                    var apiError = new ApiErrorDto("GetGroupsForEvent Failed", ex);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+            });
+        }
+
+        [AcceptVerbs("GET")]
         [ResponseType(typeof (TripParticipantDto))]
         [Route("api/trip/search/{search}")]
         public IHttpActionResult Search(string search)

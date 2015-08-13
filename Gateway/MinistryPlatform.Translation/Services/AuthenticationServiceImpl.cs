@@ -54,7 +54,7 @@ namespace MinistryPlatform.Translation.Services
                 };
                 return authData;
             }
-            catch (Exception e)
+            catch (Exception )
             {
                 return null;
             }
@@ -76,7 +76,7 @@ namespace MinistryPlatform.Translation.Services
                     platformService.UpdateCurrentUserInfo(user);
                     return true;
                 }
-                catch (Exception e)
+                catch (Exception )
                 {
                     return false;
                 }

@@ -127,7 +127,7 @@ namespace MinistryPlatform.Translation.Services
             {
                 SetupConfirmationEmail(Convert.ToInt32(programId), donorId, donationAmt, setupTime, pymtType);
             }
-            catch (Exception e)
+            catch (Exception )
             {
                 logger.Error(string.Format("Failed when processing the template for Donation Id: {0}", donationId));
             }

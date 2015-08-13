@@ -207,26 +207,6 @@ namespace MinistryPlatform.Translation.Services
             return teams.Count != 0;
         }
 
-        // Only found this in a test TM 08/12 
-        //public List<Group> GetServingTeams(int contactId, string token)
-        //{
-        //    var searchString = ",,,," + contactId;
-        //    var teams = ministryPlatformService.GetPageViewRecords(GetServingTeamsPageId, token, searchString);
-        //    var groups = new List<Group>();
-        //    foreach (var team in teams)
-        //    {
-        //        var group = new Group
-        //        {
-        //            GroupId = (int) team["Group_ID"],
-        //            Name = (string) team["Group_Name"],
-        //            GroupRole = (string) team["Role_Title"],
-        //            PrimaryContact = (string) team["Primary_Contact"]
-        //        };
-        //        groups.Add(group);
-        //    }
-        //    return groups;
-        //}
-
         public bool checkIfUserInGroup(int participantId, IList<GroupParticipant> groupParticipants)
         {
             return groupParticipants.Select(p => p.ParticipantId).Contains(participantId);
@@ -236,8 +216,7 @@ namespace MinistryPlatform.Translation.Services
         {
             return currRelationshipsList.Contains(relationshipId);
         }
-
-
+        
         public List<GroupSignupRelationships> GetGroupSignupRelations(int groupType)
         {
             var response = WithApiLogin<List<GroupSignupRelationships>>(
@@ -257,14 +236,6 @@ namespace MinistryPlatform.Translation.Services
             return response;
         }
 
-        // Can't find uses of this method TM 08/12
-        //public int CalculateAge(DateTime birthDate, DateTime now)
-        //{
-        //    int age = now.Year - birthDate.Year;
-        //    if (now.Month < birthDate.Month || (now.Month == birthDate.Month && now.Day < birthDate.Day)) age--;
-        //    return age;
-        //}
-
         public List<Group> GetGroupsForEvent(int eventId)
         {
             var searchString = eventId + ",";
@@ -278,9 +249,7 @@ namespace MinistryPlatform.Translation.Services
             return records.Select(record => new Group
             {
                 GroupId = record.ToInt("Group_ID"),
-                Name = record.ToString("Group_Name"),
-                GroupRole = record.ToString("Role_Title"),
-                PrimaryContact = record.ToString("Primary_Contact")
+                Name = record.ToString("Group_Name")
             }).ToList();
         }
     }
