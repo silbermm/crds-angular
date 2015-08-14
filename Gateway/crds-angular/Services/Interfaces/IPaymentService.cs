@@ -6,6 +6,7 @@ namespace crds_angular.Services.Interfaces
     public interface IPaymentService
     {
         string CreateCustomer(string customerToken);
+        string CreateToken(string accountNumber, string routingNumber);
         StripeCharge ChargeCustomer(string customerToken, int amount, int donorId);
         string UpdateCustomerDescription(string customerToken, int donorId);
         SourceData UpdateCustomerSource(string customerToken, string cardToken);

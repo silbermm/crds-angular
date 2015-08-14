@@ -101,7 +101,12 @@ namespace crds_angular.Services
             CheckStripeResponse("Customer creation failed", response);
 
             return response.Data.id;
+        }
 
+        public string CreateToken(string accountNumber, string routingNumber)
+        {
+            // TODO Implement CreateToken
+            throw new System.NotImplementedException();
         }
 
         public SourceData UpdateCustomerSource(string customerToken, string cardToken)

@@ -28,6 +28,9 @@ namespace crds_angular.Models.Crossroads.Stewardship
         public string RoutingNumber { get; set; }
         [JsonProperty("account_number")]
         public string AccountNumber { get; set; }
+
+        [JsonProperty("donation_id")]
+        public int DonationId { get; set; }
     }
 
     public class Address

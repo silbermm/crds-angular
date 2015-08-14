@@ -7,6 +7,7 @@ namespace crds_angular.Services.Interfaces
     {
         List<CheckScannerBatch> GetOpenBatches();
         List<CheckScannerCheck> GetChecksForBatch(string batchName);
-        CheckScannerBatch UpdateBatchStatus(string batchName, int newStatus);
+        CheckScannerBatch UpdateBatchStatus(string batchName, BatchStatus newStatus);
+        CheckScannerBatch CreateDonationsForBatch(CheckScannerBatch batchDetails);
     }
 }
