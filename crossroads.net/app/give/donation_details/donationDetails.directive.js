@@ -13,7 +13,9 @@
                 amount: '=',
                 program: '=',
                 amountSubmitted: '=',
-                programsIn: '='
+                programsIn: '=',
+                showInitiative: '=',
+                showFrequency: '='
             },
           templateUrl: 'donation_details/donationDetails.html',
           link: link
@@ -22,10 +24,11 @@
       function link(scope, element, attrs) {
 
         scope.ministryShow = false;
-        scope.program = null;
+        scope.program = scope.program === undefined ? null : scope.program;
         scope.amountError = amountError;
         scope.setProgramList = setProgramList;
 
+        activate();
         /////////////////////////////////
         ////// IMPLMENTATION DETAILS ////
         /////////////////////////////////
