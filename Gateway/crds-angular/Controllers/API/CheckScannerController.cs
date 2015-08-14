@@ -16,15 +16,23 @@ namespace crds_angular.Controllers.API
         [Route("api/checkscanner/batches")]
         public IHttpActionResult GetOpenBatches()
         {
-            var batches = _checkScannerService.GetOpenBatches();
-            return (Ok(batches));
+            // TODO Uncomment this to make the endpoint require authentication
+            //return (Authorized(token =>
+            //{
+                var batches = _checkScannerService.GetOpenBatches();
+                return (Ok(batches));
+            //}));
         }
 
         [Route("api/checkscanner/batches/{batchName}/checks")]
         public IHttpActionResult GetChecksForBatch(string batchName)
         {
-            var checks = _checkScannerService.GetChecksForBatch(batchName);
-            return (Ok(checks));
+            // TODO Uncomment this to make the endpoint require authentication
+            //return (Authorized(token =>
+            //{
+                var checks = _checkScannerService.GetChecksForBatch(batchName);
+                return (Ok(checks));
+            //}));
         }
     }
 }
