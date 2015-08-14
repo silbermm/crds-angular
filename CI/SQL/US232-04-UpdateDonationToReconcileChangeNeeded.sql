@@ -20,7 +20,7 @@ GO
 -- =============================================
 ALTER PROCEDURE [dbo].[crds_Update_Donation_To_Reconcile_Change_Needed]
   @Donation_Id INT = NULL,
-  @ReconcileChangeNeededOn nvarchar(50) = NULL
+  @ReconcileChangeNeededOn NVARCHAR(50) = NULL
 AS
 BEGIN
 
@@ -51,8 +51,8 @@ BEGIN
   SET NOCOUNT ON;
 
   -- If Donation Amount column is being updated
-  if UPDATE(Donation_Amount)
-  begin
+  IF UPDATE(Donation_Amount)
+  BEGIN
 
     DECLARE @donation_id INT;
 
@@ -61,18 +61,18 @@ BEGIN
     SELECT @donation_id = I.Donation_ID
     FROM INSERTED I
     INNER JOIN DELETED D ON I.Donation_ID = D.Donation_ID
-    INNER JOIN [dbo].[Donations] dtns on dtns.Donation_ID = I.Donation_ID
-    INNER JOIN [dbo].[Batches] b on b.Batch_ID = dtns.Batch_ID
-    WHERE dtns.Donation_Status_ID = 2 and b.Finalize_Date is not NULL and b.Deposit_ID is not NULL
+    INNER JOIN [dbo].[Donations] dtns ON dtns.Donation_ID = I.Donation_ID
+    INNER JOIN [dbo].[Batches] b ON b.Batch_ID = dtns.Batch_ID
+    WHERE dtns.Donation_Status_ID = 2 AND b.Finalize_Date IS NOT NULL AND b.Deposit_ID IS NOT NULL
 
     -- if we have a donation id
-    if @donation_id is not NULL
-    begin
+    IF @donation_id IS NOT NULL
+    BEGIN
       EXEC [dbo].[crds_Update_Donation_To_Reconcile_Change_Needed]
         @Donation_Id = @donation_id,
         @ReconcileChangeNeededOn = 'Donation Amount'
-    end
-  end
+    END
+  END
 
 END
 GO
@@ -95,39 +95,39 @@ BEGIN
   SET NOCOUNT ON;
 
   -- If Donation Amount column or Program is being updated
-  if UPDATE(Amount) or UPDATE(Program_ID)
-  begin
+  IF UPDATE(Amount) OR UPDATE(Program_ID)
+  BEGIN
 
     DECLARE @donation_id INT;
-    DECLARE @amount nvarchar(100);
-    DECLARE @program_name nvarchar(130);
+    DECLARE @amount NVARCHAR(100);
+    DECLARE @program_name NVARCHAR(130);
 
     -- Get the Donation ID if it belongs to a finalized
     -- and deposited batch
-    SELECT @donation_id = I.Donation_ID, @amount = 'Distribution Amount ' + cast(dd.Amount as varchar(100)),
-      @program_name = 'Distribution Program ' + cast(p.Program_Name as varchar(100))
+    SELECT @donation_id = I.Donation_ID, @amount = 'Distribution Amount ' + CAST(dd.Amount AS VARCHAR(100)),
+      @program_name = 'Distribution Program ' + CAST(p.Program_Name AS VARCHAR(100))
     FROM INSERTED I
     INNER JOIN DELETED D ON I.Donation_Distribution_ID = D.Donation_Distribution_ID
-    INNER JOIN [dbo].[Donation_Distributions] dd on dd.Donation_Distribution_ID = I.Donation_Distribution_ID
-    INNER JOIN [dbo].[Donations] dtns on dtns.Donation_ID = dd.Donation_ID
-    INNER JOIN [dbo].[Batches] b on b.Batch_ID = dtns.Batch_ID
-    INNER JOIN [dbo].[Programs] p on p.Program_ID = dd.Program_ID
-    WHERE dtns.Donation_Status_ID = 2 and b.Finalize_Date is not NULL and b.Deposit_ID is not NULL
+    INNER JOIN [dbo].[Donation_Distributions] dd ON dd.Donation_Distribution_ID = I.Donation_Distribution_ID
+    INNER JOIN [dbo].[Donations] dtns ON dtns.Donation_ID = dd.Donation_ID
+    INNER JOIN [dbo].[Batches] b ON b.Batch_ID = dtns.Batch_ID
+    INNER JOIN [dbo].[Programs] p ON p.Program_ID = dd.Program_ID
+    WHERE dtns.Donation_Status_ID = 2 AND b.Finalize_Date IS NOT NULL AND b.Deposit_ID IS NOT NULL
 
     -- if we have a donation id and Amount is being updated
-    if @donation_id is not NULL and UPDATE(Amount)
-    begin
+    IF @donation_id IS NOT NULL AND UPDATE(Amount)
+    BEGIN
       EXEC [dbo].[crds_Update_Donation_To_Reconcile_Change_Needed]
         @Donation_Id = @donation_id,
         @ReconcileChangeNeededOn = @amount
-    end
-    else if @donation_id is not NULL and UPDATE(Program_ID)
-    begin
+    END
+    ELSE IF @donation_id IS NOT NULL AND UPDATE(Program_ID)
+    BEGIN
       EXEC [dbo].[crds_Update_Donation_To_Reconcile_Change_Needed]
         @Donation_Id = @donation_id,
         @ReconcileChangeNeededOn = @program_name
-    end
+    END
 
-  end
+  END
 
 END
