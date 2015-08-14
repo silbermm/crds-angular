@@ -81,6 +81,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\ContentBlock.cs" />
     <Compile Include="Services\ContentBlockService.cs" />
+    <Compile Include="Services\DbConnectionStringTypeConverter.cs" />
     <Compile Include="Services\EnvironmentVariableTypeConverter.cs" />
     <Compile Include="Services\AppSettingsTypeConverter.cs" />
     <Compile Include="Services\ConfigurationWrapper.cs" />
