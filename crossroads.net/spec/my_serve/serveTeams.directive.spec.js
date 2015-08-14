@@ -142,43 +142,43 @@ describe('Serve Teams Directive', function() {
     expect(isolated.currentMember.currentOpportunity.toDt).toBe(isolated.currentMember.currentOpportunity.fromDt);
   });
 
-  it("should save the response of one time rsvping", function(){
-    var isolated = element.isolateScope();
-    $httpBackend.when('GET', new RegExp(window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity\\?id=.*')).respond(200, {});
-    $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({'date': '1444552200'});
-    $httpBackend.when('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/save-rsvp', rsvp ).respond(200, '');
-    isolated.togglePanel(null);
+  // it("should save the response of one time rsvping", function(){
+  //   var isolated = element.isolateScope();
+  //   $httpBackend.when('GET', new RegExp(window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity\\?id=.*')).respond(200, {});
+  //   $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({'date': '1444552200'});
+  //   $httpBackend.when('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/save-rsvp', rsvp ).respond(200, '');
+  //   isolated.togglePanel(null);
     
-    $httpBackend.flush();
-    expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
-    isolated.currentMember.currentOpportunity = mockTeam[0].members[0].roles[0];
-    isolated.currentMember.currentOpportunity.frequency = {value:0, text:"Once"};
-    isolated.currentMember.serveRsvp = {roleId: mockOpp.roleId, attending: false};
+  //   $httpBackend.flush();
+  //   expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
+  //   isolated.currentMember.currentOpportunity = mockTeam[0].members[0].roles[0];
+  //   isolated.currentMember.currentOpportunity.frequency = {value:0, text:"Once"};
+  //   isolated.currentMember.serveRsvp = {roleId: mockOpp.roleId, attending: false};
 
-    var dateArr = "10/15/2015".split("/");
-    var d = moment(dateArr[2] + "-" + dateArr[0] + "-" + dateArr[1]);
-    var dFormated = d.format('X');
+  //   var dateArr = "10/15/2015".split("/");
+  //   var d = moment(dateArr[2] + "-" + dateArr[0] + "-" + dateArr[1]);
+  //   var dFormated = d.format('X');
 
-    isolated['teamForm-' + isolated.team.index] = {
-      $dirty : false,
-      $setPristine : function(){
-        return true;
-      }
-    }
+  //   isolated['teamForm-' + isolated.team.index] = {
+  //     $dirty : false,
+  //     $setPristine : function(){
+  //       return true;
+  //     }
+  //   }
 
-    var rsvp = {
-      contactId: mockTeam[0].members[0].contactId,
-      opportunityId: mockOpp.roleId,
-      eventTypeId: 100,
-      endDate: dFormated,
-      startDate: dFormated,
-      signUp: false,
-      alternateWeeks: false
-    };
-    isolated.populateDates();
-    isolated.saveRsvp();
-    $httpBackend.flush();
-  });
+  //   var rsvp = {
+  //     contactId: mockTeam[0].members[0].contactId,
+  //     opportunityId: mockOpp.roleId,
+  //     eventTypeId: 100,
+  //     endDate: dFormated,
+  //     startDate: dFormated,
+  //     signUp: false,
+  //     alternateWeeks: false
+  //   };
+  //   isolated.populateDates();
+  //   isolated.saveRsvp();
+  //   $httpBackend.flush();
+  // });
 
   it("should not allow a save if opportunity is not choosen", function(){
     var isolated = element.isolateScope();
