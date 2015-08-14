@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
@@ -15,11 +17,13 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _formFieldCustomPage = AppSettings("AllFormFieldsView");
 
         private readonly IMinistryPlatformService _ministryPlatformService;
+        private IDbConnection _dbConnection;
 
-        public FormSubmissionService(IMinistryPlatformService ministryPlatformService, IAuthenticationService authenticationService,IConfigurationWrapper configurationWrapper)
+        public FormSubmissionService(IMinistryPlatformService ministryPlatformService, IDbConnection dbConnection, IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
             : base(authenticationService,configurationWrapper)
         {
             _ministryPlatformService = ministryPlatformService;
+            _dbConnection = dbConnection;
         }
 
         public int GetFormFieldId(int crossroadsId)
@@ -48,6 +52,52 @@ namespace MinistryPlatform.Translation.Services
                 FormTitle = formField.ToString("Form_Title"),
                 Required = formField.ToBool("Required")
             }).ToList();
+        }
+
+        public List<TripFormResponse> GetTripFormResponses(int selectionId)
+        {
+            var connection = _dbConnection;
+            try
+            {
+                connection.Open();
+
+                var command = CreateTripFormResponsesSqlCommand(selectionId);
+                command.Connection = connection;
+                var reader = command.ExecuteReader();
+                var responses = new List<TripFormResponse>();
+                while (reader.Read())
+                {
+                    var response = new TripFormResponse();
+                    response.ContactId = reader.GetInt32(reader.GetOrdinal("Contact_ID"));
+                    response.ParticipantId = reader.GetInt32(reader.GetOrdinal("Participant_ID"));
+                    response.PledgeCampaignId = reader.GetInt32(reader.GetOrdinal("Pledge_Campaign_ID"));
+                    response.EventId = reader.GetInt32(reader.GetOrdinal("Event_ID"));
+
+                    responses.Add(response);
+                }
+                return responses;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        private static IDbCommand CreateTripFormResponsesSqlCommand(int selectionId)
+        {
+            const string query = @"SELECT fr.Contact_ID, fr.Pledge_Campaign_ID, pc.Event_ID, p.Participant_ID
+                                  FROM [MinistryPlatform].[dbo].[dp_Selected_Records] sr
+                                  INNER JOIN [MinistryPlatform].[dbo].[Form_Responses] fr on sr.Record_ID = fr.Form_Response_ID
+                                  INNER JOIN [MinistryPlatform].[dbo].[Participants] p on fr.Contact_ID = p.Contact_ID
+                                  LEFT OUTER JOIN [MinistryPlatform].[dbo].[Pledge_Campaigns] pc on fr.Pledge_Campaign_ID = pc.Pledge_Campaign_ID
+                                  WHERE sr.Selection_ID = @selectionId";
+
+            using (IDbCommand command = new SqlCommand(string.Format(query)))
+            {
+                command.Parameters.Add(new SqlParameter("@selectionId", selectionId) { DbType = DbType.Int32 });
+                command.CommandType = CommandType.Text;
+                return command;
+            }
         }
 
         public int SubmitFormResponse(FormResponse form)

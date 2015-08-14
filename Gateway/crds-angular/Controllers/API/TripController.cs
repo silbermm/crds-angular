@@ -17,16 +17,36 @@ namespace crds_angular.Controllers.API
             _tripService = tripService;
         }
 
+        //[AcceptVerbs("GET")]
+        //[ResponseType(typeof(TripGroupDto))]
+        //[Route("api/trip/groups/{eventId}")]
+        //public IHttpActionResult GetGroupsForEvent(int eventId)
+        //{
+        //    return Authorized(token =>
+        //    {
+        //        try
+        //        {
+        //            var groups = _tripService.GetGroupsByEventId(eventId);
+        //            return Ok(groups);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            var apiError = new ApiErrorDto("GetGroupsForEvent Failed", ex);
+        //            throw new HttpResponseException(apiError.HttpResponseMessage);
+        //        }
+        //    });
+        //}
+
         [AcceptVerbs("GET")]
-        [ResponseType(typeof(TripGroupDto))]
-        [Route("api/trip/groups/{eventId}")]
-        public IHttpActionResult GetGroupsForEvent(int eventId)
+        [ResponseType(typeof(TripFormResponseDto))]
+        [Route("api/trip/form-responses/{selectionId}/{selectionCount}")]
+        public IHttpActionResult TripFormResponses(int selectionId, int selectionCount)
         {
             return Authorized(token =>
             {
                 try
                 {
-                    var groups = _tripService.GetGroupsByEventId(eventId);
+                    var groups = _tripService.GetFormResponses(selectionId, selectionCount);
                     return Ok(groups);
                 }
                 catch (Exception ex)
@@ -35,6 +55,12 @@ namespace crds_angular.Controllers.API
                     throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
             });
+        }
+
+        public IHttpActionResult SaveParticipants([FromBody] SaveTripParticipantsDto dto)
+        {
+            
+            _tripService.SaveParticipants(dto);
         }
 
         [AcceptVerbs("GET")]

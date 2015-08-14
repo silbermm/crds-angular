@@ -6,9 +6,11 @@ namespace crds_angular.Services.Interfaces
 {
     public interface ITripService
     {
+        TripFormResponseDto GetFormResponses(int selectionId, int selectionCount);
         List<TripGroupDto> GetGroupsByEventId(int eventId);
         MyTripsDTO GetMyTrips(int contactId, string token);
         List<TripParticipantDto> Search(string search);
-        
+
+        void SaveParticipants(SaveTripParticipantsDto dto);
     }
 }

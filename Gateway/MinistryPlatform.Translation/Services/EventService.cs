@@ -22,11 +22,13 @@ namespace MinistryPlatform.Translation.Services
             Convert.ToInt32(AppSettings("Event_Participant_Status_Default_ID"));
 
         private IMinistryPlatformService ministryPlatformService;
+        private readonly IGroupService _groupService;
 
-        public EventService(IMinistryPlatformService ministryPlatformService, IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
+        public EventService(IMinistryPlatformService ministryPlatformService, IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper, IGroupService groupService)
             : base(authenticationService, configurationWrapper)
         {
             this.ministryPlatformService = ministryPlatformService;
+            _groupService = groupService;
         }
 
         public int registerParticipantForEvent(int participantId, int eventId)
@@ -131,6 +133,11 @@ namespace MinistryPlatform.Translation.Services
                 events.Where(e => e.EventStartDate.Date >= startDate.Date && e.EventStartDate.Date <= endDate.Date)
                     .ToList();
             return filteredEvents;
+        }
+
+        public List<Group> GetGroupsForEvent(int eventId)
+        {
+            return _groupService.GetGroupsForEvent(eventId);
         }
     }
 }

@@ -1,13 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
-using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Trip;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Extensions;
-using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using IDonationService = MinistryPlatform.Translation.Services.Interfaces.IDonationService;
 using IGroupService = MinistryPlatform.Translation.Services.Interfaces.IGroupService;
@@ -19,14 +15,21 @@ namespace crds_angular.Services
         private readonly IEventParticipantService _eventParticipantService;
         private readonly IDonationService _donationService;
         private readonly IGroupService _groupService;
-        private readonly IDbConnection _dbConnection;
+        private readonly IFormSubmissionService _formSubmissionService;
+        private readonly IEventService _mpEventService;
 
-        public TripService(IEventParticipantService eventParticipant, IDonationService donationService, IGroupService groupService, IDbConnection dbConnection)
+
+        public TripService(IEventParticipantService eventParticipant,
+                           IDonationService donationService,
+                           IGroupService groupService,
+                           IFormSubmissionService formSubmissionService,
+                           IEventService eventService)
         {
             _eventParticipantService = eventParticipant;
             _donationService = donationService;
             _groupService = groupService;
-            _dbConnection = dbConnection;
+            _formSubmissionService = formSubmissionService;
+            _mpEventService = eventService;
         }
 
         public List<TripGroupDto> GetGroupsByEventId(int eventId)
@@ -40,58 +43,42 @@ namespace crds_angular.Services
             }).ToList();
         }
 
-        public List<TripFormResponsesDto> GetFormResponses(int selectionId, int selectionCount)
+        public TripFormResponseDto GetFormResponses(int selectionId, int selectionCount)
         {
-            
+            var tripApplicantResponses = GetTripAplicantsSelection(selectionId, selectionCount);
+
+            //get groups for event, type = go trip
+            var eventId = tripApplicantResponses[0].EventId;
+            var eventGroups = _mpEventService.GetGroupsForEvent(eventId);
+
+            var dto = new TripFormResponseDto();
+            dto.Applicants = tripApplicantResponses.Select(s => new TripApplicant {ContactId = s.ContactId, ParticipantId = s.ParticipantId}).ToList();
+            dto.Groups = eventGroups.Select(s => new TripGroupDto {GroupId = s.GroupId, GroupName = s.Name}).ToList();
+            return dto;
         }
 
-        private List<TripApplicant> GetTripAplicants(int selectionId, int selectionCount)
+        private List<TripApplicantResponse> GetTripAplicantsSelection(int selectionId, int selectionCount)
         {
-            // 1. get selection records
-            // 2. look each one up to return a list of responses
-            var connection = _dbConnection;
-            try
+            var responses = _formSubmissionService.GetTripFormResponses(selectionId);
+
+            //check for only one pledge campaign
+            var campaignCount = responses.GroupBy(x => x.PledgeCampaignId)
+                .Select(x => new {Date = x.Key, Values = x.Distinct().Count()}).Count();
+
+            // is this check stupid?
+            if (responses.Count != selectionCount)
+                throw new ApplicationException("Error Retrieving Selection");
+
+            if (campaignCount > 1)
+                throw new ApplicationException("Invalid Trip Selection");
+
+            return responses.Select(record => new TripApplicantResponse
             {
-                connection.Open();
-
-                var command = CreateSqlCommand(selectionId);
-                command.Connection = connection;
-                var reader = command.ExecuteReader();
-                var tripApplicants = new List<TripApplicant>();
-                //var rowNumber = 0;
-                while (reader.Read())
-                {
-                    //var rowContactId = reader.GetInt32(reader.GetOrdinal("Contact_ID"));
-                    //var loggedInUser = (loggedInContactId == rowContactId);
-                    //rowNumber = rowNumber + 1;
-                    var tripApplicant = new TripApplicant();
-                    tripApplicant.ContactId = reader.GetInt32(reader.GetOrdinal("Contact_ID"));
-                    tripApplicant.PledgeCampaignId = reader.GetInt32(reader.GetOrdinal("Pledge_Campaign_ID"));
-
-
-                    tripApplicants.Add(tripApplicant);
-                }
-                return tripApplicants;
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
-
-        private static IDbCommand CreateSqlCommand(int selectionId)
-        {
-            const string query = @"SELECT fr.Contact_ID, fr.Pledge_Campaign_ID
-                                  FROM [MinistryPlatform].[dbo].[dp_Selected_Records] sr
-                                  INNER JOIN [MinistryPlatform].[dbo].[Form_Responses] fr on sr.Record_ID = fr.Form_Response_ID
-                                  WHERE sr.Selection_ID = @selectionId";
-
-            using (IDbCommand command = new SqlCommand(string.Format(query)))
-            {
-                command.Parameters.Add(new SqlParameter("@selectionId", selectionId) { DbType = DbType.Int32 });
-                command.CommandType = CommandType.Text;
-                return command;
-            }
+                ContactId = record.ContactId,
+                PledgeCampaignId = record.PledgeCampaignId,
+                EventId = record.EventId,
+                ParticipantId = record.ParticipantId
+            }).ToList();
         }
 
         public MyTripsDTO GetMyTrips(int contactId, string token)
@@ -183,6 +170,40 @@ namespace crds_angular.Services
             return participants.Values.OrderBy(o => o.Lastname).ThenBy(o => o.Nickname).ToList();
         }
 
-        
+        public void SaveParticipants(SaveTripParticipantsDto dto)
+        {
+            // need a list of contacts?
+            // need a groupId
+            // we have pledge campaign id, that would be nice too
+
+            // make them a group participiant
+            // get all events for group id
+            // add event participant for each contact to each event found
+            // create pledge for donor associated with contact
+            // if donor doesn't exist create one?
+
+            var groupStartDate = DateTime.Now;
+            const int groupRoleId = 16; // wondering if eventually this will become user input?
+            var events = _groupService.getAllEventsForGroup(dto.GroupId);
+
+            foreach (var applicant in dto.Applicants)
+            {
+                //create group participant
+                var x = _groupService.addParticipantToGroup(applicant.ParticipantId, dto.GroupId, groupRoleId, groupStartDate);
+
+                // create pledge
+                //what if no donor?
+
+                // register for all events
+                foreach (var e in events)
+                {
+                    _mpEventService.registerParticipantForEvent(applicant.ParticipantId, e.EventId);
+                }
+            }
+
+            
+
+            throw new NotImplementedException();
+        }
     }
 }

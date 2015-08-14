@@ -26,6 +26,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         Dictionary<string, object> GetRecordDict(int pageId, int recordId, String token, bool quickadd = false);
         
         List<Dictionary<string, object>> GetSubPageRecords(int subPageId, int recordId, String token);
+        List<Dictionary<string, object>> GetSubPageRecords(string subPageKey, int recordId, String token);
         
         int CreateRecord(int pageId, Dictionary<string, object> dictionary, String token,
             bool quickadd = false);

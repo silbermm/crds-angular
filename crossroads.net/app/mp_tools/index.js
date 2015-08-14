@@ -19,4 +19,7 @@
   // The KC Appliant Tool
   require('./kc_applicant');
 
+  // The Trip Participant Tool
+  require('./trip_participants');
+
 })();

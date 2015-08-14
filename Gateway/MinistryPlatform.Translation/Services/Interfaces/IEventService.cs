@@ -10,5 +10,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         int unRegisterParticipantForEvent(int participantId, int eventId);
         List<Event> GetEvents(string eventType, string token);
         List<Event> GetEventsByTypeForRange(int eventTypeId, DateTime startDate, DateTime endDate, string token);
+        List<Group> GetGroupsForEvent(int eventId);
     }
 }
