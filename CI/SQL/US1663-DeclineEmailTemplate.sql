@@ -15,18 +15,16 @@ INSERT INTO [dbo].[dp_Communications]
             ,[Template]
             ,[Active])
         VALUES
-          (12200, 5, 'Thank you for your investment, but there was a problem.'
-            ,'<p>Oh no!  The Gift you recently initiated was declined! </p>
+          (12200, 5, 'Thank you for your investment, but there was a problem.',
+            '<p>Oh no!  The Gift you recently initiated was declined! </p>
 Details can be found below:
-</p><p></p><p><b>You attempted to give to</b>: [Program_Name]<br /></p><p>
+<p></p><p></p><p><b>You attempted to give to</b>: [Program_Name]<br /></p><p>
 <b>Amount</b>: $[Donation_Amount]</p><p>
 <b>Date</b>: [Donation_Date]</p>
 <p> <b>Payment Method</b>: [Payment_Method]</p>
-<b>Decline Reason</b>: [Decline_Reason]</p>
-<p>Please log in and try to submit your gift again! </p>
-<p>If at any point you have questions, please contact our Finance team at <a href="mailto:finance@crossroads.net"><span style="color:#1155CC; font-family:Arial;">finance@crossroads.net</span></a>.</p>
+<b>Decline Reason</b>: [Decline_Reason]<div><br /></div><div>Please register an account online or if you already have an account, you can log in and try to submit your gift again!<p>If at any point you have questions, please contact our Finance team at <a href="mailto:finance@crossroads.net"><span style="color:#1155CC; font-family:Arial;">finance@crossroads.net</span></a>.</p>
 <p>Thanks again for being part of the team!<br /></p>
-<p> - Crossroads </p>'
+<p> - Crossroads </p></div>'
             ,1
             ,'08/14/2015'
             ,7
