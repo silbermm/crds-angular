@@ -1,4 +1,4 @@
---Registered Account / Guest Give Account - This is an account that started as a guest giving account and then registered as a new user.
+--Registered Account - This is a user that has ACH saved as payment data in stripe and should not change to credit card. 
 USE [MinistryPlatform]
 GO
 
@@ -15,14 +15,14 @@ INSERT INTO [dbo].Households
 
 SET IDENTITY_INSERT [dbo].[Households] OFF;
 
---Mpcrds+20@gmail.com contact record
+--Mpcrds+32@gmail.com contact record
 SET IDENTITY_INSERT [dbo].[Contacts] ON;
 DECLARE @contactID as int
 set @contactID = IDENT_CURRENT('Contacts')+1;
 
 INSERT INTO [dbo].Contacts 
-(Contact_ID,Company,Company_Name,Display_Name  ,Prefix_ID,First_Name,Middle_Name,Last_Name,Suffix_ID,Nickname ,Date_of_Birth,Gender_ID,Marital_Status_ID,Contact_Status_ID,Household_ID,Household_Position_ID,Participant_Record,Donor_Record,Email_Address        ,Email_Unlisted,Bulk_Email_Opt_Out,Bulk_SMS_Opt_Out,Mobile_Phone,Mobile_Carrier,Mobile_Phone_Unlisted,Company_Phone,Pager_Phone,Fax_Phone,User_Account,Web_Page,Remove_From_Directory,Industry_ID,Occupation_ID,Employer_Name,[SSN/EIN],Anniversary_Date,HS_Graduation_Year,Current_School,Contact_GUID                          ,ID_Card,Domain_ID,__ShelbyID,__ExternalHouseholdID,__ExternalPersonID,__ExternalUserID,__ExternalBusinessID,Maiden_Name,__LastLegacyLogin,__LegacyUserName,__LegacyUserID,__LegacyEmailAddress) VALUES
-(@contactID,0      ,null        ,'Fry, Phillip',null     ,'Phillip' ,'J'        ,'Fry'    ,null     ,'Phillip',null         ,null     ,null             ,1                ,@householdID,1                    ,null              ,null        ,'mpcrds+32@gmail.com',null          ,0                 ,0               ,null        ,null          ,null                 ,null         ,null       ,null     ,null        ,null    ,null                 ,null       ,null         ,null         ,null     ,null            ,null              ,null          ,'8C989222-0CFE-4858-BABE-066D0F2F641F',null   ,1        ,null      ,null                 ,null              ,null            ,null                ,null       ,null             ,null            ,null          ,null                );
+(Contact_ID,Company,Company_Name,Display_Name  ,Prefix_ID,First_Name,Middle_Name,Last_Name,Suffix_ID,Nickname ,Date_of_Birth,Gender_ID,Marital_Status_ID,Contact_Status_ID,Household_ID,Household_Position_ID,Participant_Record,Donor_Record,Email_Address        ,Email_Unlisted,Bulk_Email_Opt_Out,Bulk_SMS_Opt_Out,Mobile_Phone,Mobile_Carrier,Mobile_Phone_Unlisted,Company_Phone,Pager_Phone,Fax_Phone,User_Account,Web_Page,Remove_From_Directory,Industry_ID,Occupation_ID,Employer_Name,[SSN/EIN],Anniversary_Date,HS_Graduation_Year,Current_School,Contact_GUID,ID_Card,Domain_ID,__ShelbyID,__ExternalHouseholdID,__ExternalPersonID,__ExternalUserID,__ExternalBusinessID,Maiden_Name,__LastLegacyLogin,__LegacyUserName,__LegacyUserID,__LegacyEmailAddress) VALUES
+(@contactID,0      ,null        ,'Fry, Phillip',null     ,'Phillip' ,'J'        ,'Fry'    ,null     ,'Phillip',null         ,null     ,null             ,1                ,@householdID,1                    ,null              ,null        ,'mpcrds+32@gmail.com',null          ,0                 ,0               ,null        ,null          ,null                 ,null         ,null       ,null     ,null        ,null    ,null                 ,null       ,null         ,null         ,null     ,null            ,null              ,null          ,NEWID()     ,null   ,1        ,null      ,null                 ,null              ,null            ,null                ,null       ,null             ,null            ,null          ,null                );
 
 --User Record
 SET IDENTITY_INSERT [dbo].[Contacts] OFF;
@@ -31,8 +31,8 @@ DECLARE @user_id as int
 set @user_id = IDENT_CURRENT('Dp_Users')+1;
 
 INSERT INTO [dbo].Dp_Users 
-(User_ID ,User_Name            ,User_Email           ,Display_Name,Password                     ,Admin,Domain_ID,Publications_Manager,Contact_ID,Supervisor,User_GUID                             ,Can_Impersonate,In_Recovery,Time_Zone,Locale,Theme,Setup_Admin,__ExternalPersonID,__ExternalUserID,Data_Service_Permissions,Read_Permitted,Create_Permitted,Update_Permitted,Delete_Permitted) VALUES
-(@user_id,'mpcrds+32@gmail.com','mpcrds+32@gmail.com','Phillip'   ,CAST('welcome' as binary(16)),0    ,1        ,0                   ,@contactID,null      ,'3E4DEA5C-FA91-4F0F-9CAE-6B9D8F12DCDF',null           ,null       ,null     ,null  ,null ,0          ,null              ,null            ,null                    ,0         ,0           ,0           ,0           );
+(User_ID ,User_Name            ,User_Email           ,Display_Name,Password                     ,Admin,Domain_ID,Publications_Manager,Contact_ID,Supervisor,User_GUID,Can_Impersonate,In_Recovery,Time_Zone,Locale,Theme,Setup_Admin,__ExternalPersonID,__ExternalUserID,Data_Service_Permissions,Read_Permitted,Create_Permitted,Update_Permitted,Delete_Permitted) VALUES
+(@user_id,'mpcrds+32@gmail.com','mpcrds+32@gmail.com','Phillip'   ,CAST('welcome' as binary(16)),0    ,1        ,0                   ,@contactID,null      ,NEWID()  ,null           ,null       ,null     ,null  ,null ,0          ,null              ,null            ,null                    ,0         ,0           ,0           ,0           );
 
 --Participant RECORD
 SET IDENTITY_INSERT [dbo].[Dp_Users] OFF;

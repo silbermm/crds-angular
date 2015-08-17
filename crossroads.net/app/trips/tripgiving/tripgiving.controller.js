@@ -490,4 +490,5 @@
       this.name = 'DonationException';
     }
  }
+
 })();

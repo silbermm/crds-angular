@@ -2,7 +2,9 @@
 using AutoMapper;
 using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Opportunity;
+using crds_angular.Models.Crossroads.Stewardship;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Extensions;
 using Response = MinistryPlatform.Models.Response;
 
 namespace crds_angular.App_Start
@@ -46,7 +48,15 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.ResponseId, opts => opts.MapFrom(src => src.Response_ID))
                 .ForMember(dest => dest.ResponseResultId, opts => opts.MapFrom(src => src.Response_Result_ID));
 
+            Mapper.CreateMap<DonationBatch, DonationBatchDTO>()
+                .ForMember(dest => dest.ProcessorTransferId, opts => opts.MapFrom(src => src.ProcessorTransferId))
+                .ForMember(dest => dest.DepositId, opts => opts.MapFrom(src => src.DepositId))
+                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id));
 
+            Mapper.CreateMap<Dictionary<string, object>, DonationBatch>()
+                .ForMember(dest => dest.ProcessorTransferId, opts => opts.MapFrom(src => src.ToString("Processor_Transfer_ID")))
+                .ForMember(dest => dest.DepositId, opts => opts.MapFrom(src => src.ToNullableInt("Deposit_ID", false)))
+                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.ContainsKey("dp_RecordID") ? src.ToInt("dp_RecordID", false) : src.ToInt("Batch_ID", false)));
         }
     }
 }

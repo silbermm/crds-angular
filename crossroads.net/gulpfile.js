@@ -27,7 +27,17 @@ var fallbackOptions = {
 
 function htmlReplace(){
   var assets = require('./webpack-assets.json');
-  
+ 
+  gulp.src('app/atriumevents.html')
+    .pipe(htmlreplace({
+      'corejs': assets.core.js,
+      'corecss': assets.core.css,
+      'tripsjs': assets.trips.js,
+      'js': assets.main.js
+    }))
+    .pipe(gulp.dest('./'));
+
+
   gulp.src('app/index.html')
     .pipe(htmlreplace({
       'corejs': assets.core.js,
@@ -86,6 +96,17 @@ gulp.task('build-browser-sync', function () {
       'css': '/assets/main.css',
       'js': '/assets/main.js'
     })).pipe(gulp.dest('./'));
+ 
+  gulp.src('app/atriumevents.html')
+    .pipe(htmlreplace({
+      'corejs': '/assets/core.js',
+      'corecss': '/assets/core.css',
+      'tripsjs': '/assets/trips.js',
+      'css': '/assets/main.css',
+      'js': '/assets/main.js'
+    }))
+    .pipe(gulp.dest('./'));
+
 
 
 });
@@ -163,6 +184,17 @@ gulp.task('webpack-dev-server', ['icons-watch'], function(callback) {
       'js': '/assets/main.js'
     })).pipe(gulp.dest('./'));
 
+  gulp.src('app/atriumevents.html')
+    .pipe(htmlreplace({
+      'corejs': '/assets/core.js',
+      'corecss': '/assets/core.css',
+      'tripsjs': '/assets/trips.js',
+      'css': '/assets/main.css',
+      'js': '/assets/main.js'
+    }))
+    .pipe(gulp.dest('./'));
+
+
 	gutil.log('[start]', 'Access crossroads.net at http://localhost:8080/#');
 	gutil.log('[start]', 'Access crossroads.net Live Reload at http://localhost:8080/webpack-dev-server/#');
 });
@@ -213,6 +245,18 @@ gulp.task('webpack:build-dev', ['icons'], function(callback) {
       'css': '/assets/main.css',
       'js': '/assets/main.js'
     })).pipe(gulp.dest('./'));
+
+    gulp.src('app/atriumevents.html')
+    .pipe(htmlreplace({
+      'corejs': '/assets/core.js',
+      'corecss': '/assets/core.css',
+      'tripsjs': '/assets/trips.js',
+      'css': '/assets/main.css',
+      'js': '/assets/main.js'
+    }))
+    .pipe(gulp.dest('./'));
+
+
 	});
  
   
