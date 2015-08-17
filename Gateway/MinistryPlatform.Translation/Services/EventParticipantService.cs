@@ -47,5 +47,7 @@ namespace MinistryPlatform.Translation.Services
                     string.Format("TripParticipants failed.  search: {0}", search), ex);
             }
         }
+
+        
     }
 }
