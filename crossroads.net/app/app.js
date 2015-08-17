@@ -2,7 +2,7 @@ require('./profile');
 require('./events');
 require('./give');
 require('./mp_tools');
-
+require('../lib/select.css');
 (function () {
   'use strict()';
 
@@ -36,4 +36,5 @@ require('./mp_tools');
   require('./search');
   require('./blog');
   require('./adbox');
+
 })();
