@@ -22,7 +22,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         int GetContactId(string token);
 
         //Get Participant IDs of a contact
-        Participant GetParticipantRecord(string token);
+        //Participant GetParticipantRecord(string token);
 
     }
 }

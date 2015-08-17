@@ -124,15 +124,15 @@ namespace MinistryPlatform.Translation.Test
             Assert.IsNotEmpty(record);
         }
 
-        [Test]
-        public void GetParticipants()
-        {
-            var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            var token = authData["token"].ToString();
-            var participants = _fixture.GetParticipantRecord(token);
+        //[Test]
+        //public void GetParticipants()
+        //{
+        //    var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
+        //    var token = authData["token"].ToString();
+        //    var participants = _fixture.GetParticipantRecord(token);
 
-            Assert.IsNotNull(participants);
-        }
+        //    Assert.IsNotNull(participants);
+        //}
         
     }
 }

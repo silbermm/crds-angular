@@ -15,6 +15,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly IAuthenticationService _authenticationService;
         private readonly int _eventPage = Convert.ToInt32(AppSettings("Events"));
         private readonly IEventService _eventService;
+        private readonly IParticipantService _participantService;
 
         private readonly int _groupOpportunitiesEventsPageViewId =
             Convert.ToInt32(AppSettings("GroupOpportunitiesEvents"));
@@ -27,12 +28,13 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _contactOpportunityResponses = Convert.ToInt32(AppSettings("ContactOpportunityResponses"));
 
         public OpportunityServiceImpl(IMinistryPlatformService ministryPlatformService, IEventService eventService,
-            IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
+            IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper, IParticipantService participantService)
             : base(authenticationService, configurationWrapper)
         {
             _ministryPlatformService = ministryPlatformService;
             _eventService = eventService;
             _authenticationService = authenticationService;
+            _participantService = participantService;
         }
 
         public Response GetMyOpportunityResponses(int contactId, int opportunityId, string token)
@@ -213,7 +215,7 @@ namespace MinistryPlatform.Translation.Services
 
         public int RespondToOpportunity(string token, int opportunityId, string comments)
         {
-            var participant = _authenticationService.GetParticipantRecord(token);
+            var participant = _participantService.GetParticipantRecord(token);
             var participantId = participant.ParticipantId;
 
             var values = new Dictionary<string, object>

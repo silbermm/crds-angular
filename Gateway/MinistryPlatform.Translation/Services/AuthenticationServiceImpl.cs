@@ -117,38 +117,38 @@ namespace MinistryPlatform.Translation.Services
         }
 
         //Get Participant IDs of a contact
-        public Participant GetParticipantRecord(string token)
-        {
-            try
-            {
-                using (new OperationContextScope(platformService.InnerChannel))
-                {
-                    if (WebOperationContext.Current != null)
-                        WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
-                    var results =
-                        ministryPlatformService.GetRecordsDict(
-                            Convert.ToInt32(ConfigurationManager.AppSettings["MyParticipantRecords"]), token);
-                    var participant = new Participant
-                    {
-                        ParticipantId = int.Parse(results.Single()["dp_RecordID"].ToString()),
-                        EmailAddress = results.Single()["Email_Address"].ToString(),
-                        PreferredName = results.Single()["Nickname"].ToString(),
-                        DisplayName = results.Single()["Display_Name"].ToString()
-                    };
+        //public Participant GetParticipantRecord(string token)
+        //{
+        //    try
+        //    {
+        //        using (new OperationContextScope(platformService.InnerChannel))
+        //        {
+        //            if (WebOperationContext.Current != null)
+        //                WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+        //            var results =
+        //                ministryPlatformService.GetRecordsDict(
+        //                    Convert.ToInt32(ConfigurationManager.AppSettings["MyParticipantRecords"]), token);
+        //            var participant = new Participant
+        //            {
+        //                ParticipantId = int.Parse(results.Single()["dp_RecordID"].ToString()),
+        //                EmailAddress = results.Single()["Email_Address"].ToString(),
+        //                PreferredName = results.Single()["Nickname"].ToString(),
+        //                DisplayName = results.Single()["Display_Name"].ToString()
+        //            };
 
-                    return participant;
-                }
-            }
-            catch (InvalidOperationException ex)
-            {
-                if (ex.Message == "Sequence contains more than one element")
-                {
-                    throw new MultipleRecordsException("Multiple Participant records found! Only one participant allowed per Contact.");
-                }
-            }
+        //            return participant;
+        //        }
+        //    }
+        //    catch (InvalidOperationException ex)
+        //    {
+        //        if (ex.Message == "Sequence contains more than one element")
+        //        {
+        //            throw new MultipleRecordsException("Multiple Participant records found! Only one participant allowed per Contact.");
+        //        }
+        //    }
 
-            return null;
-        }
+        //    return null;
+        //}
         
     }
 }
