@@ -270,7 +270,7 @@ namespace MinistryPlatform.Translation.Services
                 donorId = dictionary.ToInt("Donor_ID"),
                 donationDate = dictionary.ToDate("Donation_Date"),
                 donationAmt = Convert.ToInt32(dictionary["Donation_Amount"]),
-                paymentTypeId = PaymentUtil.getPaymentTypeId(_configuration, dictionary.ToString("Payment_Type")),
+                paymentTypeId = int.Parse(PaymentUtil.getPaymentTypeId(_configuration, dictionary.ToString("Payment_Type"))),
                 donationNotes = dictionary.ToString("Donation_Status_Notes"),
                 batchId = dictionary.ToNullableInt("Batch_ID")
             };

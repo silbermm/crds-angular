@@ -27,9 +27,9 @@ namespace MinistryPlatform.Translation.Test.Services
             _communicationService = new Mock<ICommunicationService>();
 
             var configuration = new Mock<IConfigurationWrapper>();
-            configuration.Setup(mocked => mocked.GetConfigIntValue("BankAccount")).Returns(5);
-            configuration.Setup(mocked => mocked.GetConfigIntValue("CreditCard")).Returns(4);
-            configuration.Setup(mocked => mocked.GetConfigIntValue("Check")).Returns(1);
+            configuration.Setup(mocked => mocked.GetConfigValue("Bank")).Returns("5:Bank");
+            configuration.Setup(mocked => mocked.GetConfigValue("CreditCard")).Returns("4:CreditCard");
+            configuration.Setup(mocked => mocked.GetConfigValue("Check")).Returns("1:Check");
 
             _fixture = new DonorService(_ministryPlatformService.Object, _programService.Object, _communicationService.Object, configuration.Object);
         }
@@ -102,7 +102,7 @@ namespace MinistryPlatform.Translation.Test.Services
             var setupDate = DateTime.Now;
             var charge_id = "ch_crds1234567";
             var processorId = "cus_8675309";
-            var pymtType = "cc";
+            var pymtType = "CreditCard";
             var expectedDonationId = 321321;
             var expectedDonationDistributionId = 231231;
             const string viewKey = "DonorByContactId";
