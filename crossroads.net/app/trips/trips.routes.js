@@ -2,11 +2,11 @@
   'use strict';
 
   module.exports = TripRoutes;
-  
-  TripRoutes.$inject = ['$stateProvider', '$urlMatcherFactoryProvider' ];
 
-  function TripRoutes($stateProvider, $urlMatcherFactory){
- 
+  TripRoutes.$inject = ['$stateProvider', '$urlMatcherFactoryProvider'];
+
+  function TripRoutes($stateProvider, $urlMatcherFactory) {
+
     $stateProvider
       .state('tripsearch', {
         parent: 'noSideBar',
@@ -22,7 +22,7 @@
           }
         }
       })
-      .state('tripgiving',{
+      .state('tripgiving', {
         parent: 'noSideBar',
         url: '/trips/giving/:eventParticipantId',
         controller: 'TripGivingController as tripGiving',
@@ -30,9 +30,9 @@
         resolve: {
           Trip: 'Trip',
           $stateParams: '$stateParams',
-          TripParticipant: function(Trip, $stateParams){
+          TripParticipant: function(Trip, $stateParams) {
             return Trip.TripParticipant.get({
-              tripParticipantId: $stateParams.eventParticipantId 
+              tripParticipantId: $stateParams.eventParticipantId
             }).$promise;
           }
         }
@@ -79,7 +79,6 @@
           }
         }
       });
- 
   }
 
 })();
