@@ -632,8 +632,8 @@
                 <p class="input-group datepicker">
                   <input type="text" class="form-control" placeholder="dd/mm/yyyy" datepicker-popup="dd/MM/yyyy" ng-model="styleguide.dt" ng-required="true" close-text="Close" is-open="styleguide.opened" />
                   <span class="input-group-btn">
-                      <button type="button" class="btn btn-gray-light" ng-click="styleguide.openDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-                    </span>
+                    <button type="button" class="btn btn-standard" ng-click="styleguide.openDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                  </span>
                 </p>
               </div>
               <div class="checkbox">
@@ -894,8 +894,10 @@
         </div>
         <div class="panel-body">
           <div class="input-group">
-            <span class="input-group-btn">                <button class="btn btn-default" type="button">Go!</button>              </span>
             <input type="text" class="form-control" placeholder="Username">
+            <span class="input-group-btn">                
+              <button class="btn btn-default" type="button">Go!</button>              
+            </span>
           </div>
           <br>
           <div class="input-group">
@@ -1521,45 +1523,11 @@
       <div class="panel panel-default" id="registerpattern">
         <div class="panel-heading">Register Form
         </div>
-        <!--/panel-heading-->
         <div class="panel-body">
-          <div class="col-sm-6 col-sm-offset-3 push-top">
-            <div class="dd_menu">
-              <div class="primary">
-                <form id="nav_login" role="form" ng-submit="login()" class="ng-pristine ng-valid">
-                  <div class="form-group">
-                    <div class="soft-half-bottom">
-                      <input class="form-control ng-pristine ng-untouched ng-valid" type="text" placeholder="First Name" />
-                    </div>
-                    <div class="soft-half-bottom">
-                      <input class="form-control ng-pristine ng-untouched ng-valid" type="text" placeholder="Last Name" />
-                    </div>
-                    <div class="soft-half-bottom">
-                      <input class="form-control" type="text" name="userName" id="username_nav" placeholder="Email" autocomplete="off" autocapitalize="off">
-                    </div>
-                    <div class="soft-half-bottom">
-
-                      <div class="input-group">
-                        <input type="text" class="form-control" id="exampleInputAmount" placeholder="Password">
-                        <a class="input-group-addon btn-primary pointer" ng-click="pwprocessing = 'HIDE'"><small class="smaller">{{ pwprocessing || 'SHOW' }}</small></a>
-
-
-                      </div>
-
-                    </div>
-                    <div>
-                      <!-- ngIf: loginError -->
-                    </div>
-                    <p class="small push-half-bottom text-muted">Registering signifies that you have read and agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
-                    <input type="submit" name="submit_nav" value="Register" ng-class="{disabled: processing }" id="submit_nav" class="col-xs-12 btn btn-primary push-half-bottom">
-                  </div>
-                </form>
-              </div>
-            </div>
+          <div class="col-xs-12">
+            <register-form></register-form>
           </div>
-          <!--/col-sm-6-->
         </div>
-        <!--/panel-body-->
       </div>
       <div>
         <a ng-click="styleguide.scrollTo('top')">Back to top <i class="fa fa-caret-up"></i></a>

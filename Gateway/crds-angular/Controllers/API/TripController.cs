@@ -83,12 +83,12 @@ namespace crds_angular.Controllers.API
 
         [AcceptVerbs("GET")]
         [ResponseType(typeof (TripParticipantDto))]
-        [Route("api/trip/search/{search}")]
-        public IHttpActionResult Search(string search)
+        [Route("api/trip/search/{query?}")]
+        public IHttpActionResult Search(string query)
         {
             try
             {
-                var list = _tripService.Search(search);
+                var list = _tripService.Search(query);
                 return Ok(list);
             }
             catch (Exception ex)

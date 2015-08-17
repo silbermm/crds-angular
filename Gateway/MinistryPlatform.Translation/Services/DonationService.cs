@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
@@ -57,6 +58,27 @@ namespace MinistryPlatform.Translation.Services
                 UpdateDonationStatus(token, result.donationId, statusId, statusDate, statusNote);
                 return (result.donationId);
             }));
+        }
+
+        public DonationBatch GetDonationBatchByProcessorTransferId(string processorTransferId)
+        {
+            return(WithApiLogin(token =>
+            {
+                var search = string.Format(",,,,,,,,{0},", processorTransferId);
+                var batches = _ministryPlatformService.GetRecordsDict(_batchesPageId, token, search);
+                if (batches == null || batches.Count == 0)
+                {
+                    return (null);
+                }
+
+                return (Mapper.Map<Dictionary<string, object>, DonationBatch>(batches[0]));
+            }));
+            
+        }
+
+        public DonationBatch GetDonationBatch(int batchId)
+        {
+            return (WithApiLogin(token => (Mapper.Map<Dictionary<string,object>, DonationBatch>(_ministryPlatformService.GetRecordDict(_batchesPageId, batchId, token)))));
         }
 
         public int CreateDonationBatch(string batchName, DateTime setupDateTime, decimal batchTotalAmount, int itemCount,
@@ -230,6 +252,11 @@ namespace MinistryPlatform.Translation.Services
                         "ProcessDeclineEmail failed. processorPaymentId: {0},", processorPaymentId), ex);
             }
         }
+
+        public Donation GetDonationByProcessorPaymentId(string processorPaymentId)
+        {
+            return (WithApiLogin(token => GetDonationByProcessorPaymentId(processorPaymentId, token)));
+        }
         
         private Donation GetDonationByProcessorPaymentId(string processorPaymentId, string apiToken)
         {
@@ -250,7 +277,8 @@ namespace MinistryPlatform.Translation.Services
                 donationDate = dictionary.ToDate("Donation_Date"),
                 donationAmt = Convert.ToInt32(dictionary["Donation_Amount"]),
                 paymentTypeId = (dictionary.ToString("Payment_Type") == "Bank") ? 5 : 4,
-                donationNotes = dictionary.ToString("Donation_Status_Notes")
+                donationNotes = dictionary.ToString("Donation_Status_Notes"),
+                batchId = dictionary.ToNullableInt("Batch_ID")
             };
             return (d);
         }
