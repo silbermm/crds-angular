@@ -16,6 +16,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _distributionPageId;
         private readonly int _batchesPageId;
         private readonly int _declineEmailTemplate;
+        private readonly int _declineCheckEmailTemplate;
         private readonly int _depositsPageId;
         private readonly int _paymentProcessorErrorsPageId;
         private readonly int _tripDistributionsPageView;
@@ -29,11 +30,12 @@ namespace MinistryPlatform.Translation.Services
             _ministryPlatformService = ministryPlatformService;
             _donorService = donorService;
 
+            _configuration = configuration;
             _donationsPageId = configuration.GetConfigIntValue("Donations");
             _distributionPageId = configuration.GetConfigIntValue("Distributions");
             _batchesPageId = configuration.GetConfigIntValue("Batches");
             _declineEmailTemplate = configuration.GetConfigIntValue("DefaultGiveDeclineEmailTemplate");
-            _configuration = configuration;
+            _declineCheckEmailTemplate = configuration.GetConfigIntValue("CheckGiveDeclineEmailTemplate");
             _depositsPageId = configuration.GetConfigIntValue("Deposits");
             _paymentProcessorErrorsPageId = configuration.GetConfigIntValue("PaymentProcessorEventErrors");
             _tripDistributionsPageView = configuration.GetConfigIntValue("TripDistributionsView");

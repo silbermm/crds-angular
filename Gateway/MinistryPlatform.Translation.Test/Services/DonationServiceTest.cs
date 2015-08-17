@@ -28,8 +28,10 @@ namespace MinistryPlatform.Translation.Test.Services
             configuration.Setup(mocked => mocked.GetConfigIntValue("Batches")).Returns(8080);
             configuration.Setup(mocked => mocked.GetConfigIntValue("Distributions")).Returns(1234);
             configuration.Setup(mocked => mocked.GetConfigIntValue("DefaultGiveDeclineEmailTemplate")).Returns(999999);
+            configuration.Setup(mocked => mocked.GetConfigIntValue("CheckGiveDeclineEmailTemplate")).Returns(12200);
             configuration.Setup(mocked => mocked.GetConfigIntValue("BankAccount")).Returns(5);
             configuration.Setup(mocked => mocked.GetConfigIntValue("CreditCard")).Returns(4);
+            configuration.Setup(mocked => mocked.GetConfigIntValue("Check")).Returns(1);
             configuration.Setup(mocked => mocked.GetConfigIntValue("Deposits")).Returns(7070);
             configuration.Setup(mocked => mocked.GetConfigIntValue("PaymentProcessorEventErrors")).Returns(6060);
 
