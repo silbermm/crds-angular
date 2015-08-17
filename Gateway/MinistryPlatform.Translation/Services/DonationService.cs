@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using AutoMapper;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
@@ -80,7 +81,7 @@ namespace MinistryPlatform.Translation.Services
             return (WithApiLogin(token => (Mapper.Map<Dictionary<string,object>, DonationBatch>(_ministryPlatformService.GetRecordDict(_batchesPageId, batchId, token)))));
         }
 
-        public int CreateDonationBatch(string batchName, DateTime setupDateTime, decimal batchTotalAmount, int itemCount,
+        public int CreateDonationBatch(string batchName, DateTime setupDateTime, decimal batchTotalAmount,int itemCount,
             int batchEntryType, int? depositId, DateTime finalizedDateTime, string processorTransferId)
         {
             
@@ -148,13 +149,15 @@ namespace MinistryPlatform.Translation.Services
             }
         }
 
-        public int CreateDeposit(string depositName, decimal depositTotalAmount, DateTime depositDateTime,
+        public int CreateDeposit(string depositName, decimal depositTotalAmount, decimal depositAmount, decimal depositProcessorFee, DateTime depositDateTime,
             string accountNumber, int batchCount, bool exported, string notes, string processorTransferId)
         {
             var parms = new Dictionary<string, object>
             {
                 {"Deposit_Name", depositName},
                 {"Deposit_Total", depositTotalAmount},
+                {"Deposit_Amount", depositAmount},
+                {"Deposit_Processor_Fee", depositProcessorFee},
                 {"Deposit_Date", depositDateTime},
                 {"Account_Number", accountNumber},
                 {"Batch_Count", batchCount},
@@ -171,8 +174,8 @@ namespace MinistryPlatform.Translation.Services
             {
                 throw new ApplicationException(
                     string.Format(
-                        "CreateDeposit failed. depositName: {0}, depositTotalAmount: {1}, depositDateTime: {2}, accountNumber: {3}, batchCount: {4}, exported: {5}, notes: {6}",
-                        depositName, depositTotalAmount, depositDateTime, accountNumber, batchCount, exported, notes), e);
+                        "CreateDeposit failed. depositName: {0}, depositTotalAmount: {1}, depositAmount: {2}, depositProcessorFee: {3}, depositDateTime: {4}, accountNumber: {5}, batchCount: {6}, exported: {7}, notes: {8}",
+                        depositName, depositTotalAmount, depositAmount, depositProcessorFee, depositDateTime, accountNumber, batchCount, exported, notes), e);
             }
         }
 

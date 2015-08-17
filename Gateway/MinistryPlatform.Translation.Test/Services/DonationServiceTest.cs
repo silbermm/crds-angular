@@ -212,6 +212,8 @@ namespace MinistryPlatform.Translation.Test.Services
         {
             const string depositName = "MP12345";
             const decimal depositTotalAmount = 456.78M;
+            const decimal depositAmount = 450.00M;
+            const decimal depositProcessorFee = 6.78M;
             var depositDateTime = DateTime.Now;
             const string accountNumber = "8675309";
             const int batchCount = 55;
@@ -223,6 +225,8 @@ namespace MinistryPlatform.Translation.Test.Services
             {
                 {"Deposit_Name", depositName},
                 {"Deposit_Total", depositTotalAmount},
+                {"Deposit_Amount", depositAmount},
+                {"Deposit_Processor_Fee", depositProcessorFee},
                 {"Deposit_Date", depositDateTime},
                 {"Account_Number", accountNumber},
                 {"Batch_Count", batchCount},
@@ -233,7 +237,7 @@ namespace MinistryPlatform.Translation.Test.Services
 
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(7070, expectedParms, It.IsAny<string>(), false))
                 .Returns(513);
-            var depositId = _fixture.CreateDeposit(depositName, depositTotalAmount, depositDateTime, accountNumber,
+            var depositId = _fixture.CreateDeposit(depositName, depositTotalAmount, depositAmount, depositProcessorFee, depositDateTime, accountNumber,
                 batchCount, exported, notes, processorTransferId);
             Assert.AreEqual(513, depositId);
             _ministryPlatformService.VerifyAll();

@@ -15,6 +15,12 @@ namespace crds_angular.Models.Crossroads.Stewardship
         [JsonProperty("deposit_total_amount")]
         public decimal DepositTotalAmount { get; set; }
 
+        [JsonProperty("deposit_amount")]
+        public decimal DepositAmount { get; set; }
+
+        [JsonProperty("processor_fee_total")]
+        public decimal ProcessorFeeTotal { get; set; }
+
         [JsonProperty("deposit_date_time")]
         public DateTime DepositDateTime { get; set; }
 

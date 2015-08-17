@@ -149,32 +149,38 @@ namespace crds_angular.test.Services
                 new StripeCharge
                 {
                     Id = "ch111",
-                    Amount = 111
+                    Amount = 111,
+                    Fee = 1
                 },
                 new StripeCharge
                 {
                     Id = "ch222",
-                    Amount = 222
+                    Amount = 222,
+                    Fee = 2
                 },
                 new StripeCharge
                 {
                     Id = "ch333",
-                    Amount = 333
+                    Amount = 333,
+                    Fee = 3
                 },
                 new StripeCharge
                 {
                     Id = "ch777",
-                    Amount = 777
+                    Amount = 777, 
+                    Fee = 7
                 },
                 new StripeCharge
                 {
                     Id = "ch444",
-                    Amount = 444
+                    Amount = 444,
+                    Fee = 4
                 },
                 new StripeCharge
                 {
                     Id = "ch555",
-                    Amount = 555
+                    Amount = 555, 
+                    Fee = 5
                 }
             };
 
