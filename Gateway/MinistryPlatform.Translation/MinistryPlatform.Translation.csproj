@@ -145,6 +145,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Utils\PaymentUtil.cs" />
     <Compile Include="Utils\PlatformUtils.cs" />
   </ItemGroup>
   <ItemGroup>

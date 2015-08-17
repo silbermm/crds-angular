@@ -25,7 +25,13 @@ namespace MinistryPlatform.Translation.Test.Services
             _ministryPlatformService = new Mock<IMinistryPlatformService>();
             _programService = new Mock<IProgramService>();
             _communicationService = new Mock<ICommunicationService>();
-            _fixture = new DonorService(_ministryPlatformService.Object, _programService.Object,_communicationService.Object);
+
+            var configuration = new Mock<IConfigurationWrapper>();
+            configuration.Setup(mocked => mocked.GetConfigIntValue("BankAccount")).Returns(5);
+            configuration.Setup(mocked => mocked.GetConfigIntValue("CreditCard")).Returns(4);
+            configuration.Setup(mocked => mocked.GetConfigIntValue("Check")).Returns(1);
+
+            _fixture = new DonorService(_ministryPlatformService.Object, _programService.Object, _communicationService.Object, configuration.Object);
         }
 
         [Test]

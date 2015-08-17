@@ -2,6 +2,7 @@
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -26,12 +27,14 @@ namespace MinistryPlatform.Translation.Services
         private IMinistryPlatformService ministryPlatformService;
         private IProgramService programService;
         private ICommunicationService communicationService;
+        private readonly IConfigurationWrapper configuration;
 
-        public DonorService(IMinistryPlatformService ministryPlatformService, IProgramService programService, ICommunicationService communicationService)
+        public DonorService(IMinistryPlatformService ministryPlatformService, IProgramService programService, ICommunicationService communicationService, IConfigurationWrapper configuration)
         {
             this.ministryPlatformService = ministryPlatformService;
             this.programService = programService;
             this.communicationService = communicationService;
+            this.configuration = configuration;
         }
 
 
@@ -72,7 +75,7 @@ namespace MinistryPlatform.Translation.Services
 
         public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string charge_id, string pymtType, string processorId, DateTime setupTime, bool registeredDonor)
         {
-            var pymt_id = PaymentUtil.getPaymentTypeId(pymtType);
+            var pymt_id = PaymentUtil.getPaymentTypeId(configuration, pymtType);
             var fee = feeAmt.HasValue ? feeAmt/100M : null;
             
             var donationValues = new Dictionary<string, object>

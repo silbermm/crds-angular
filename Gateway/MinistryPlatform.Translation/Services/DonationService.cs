@@ -15,8 +15,6 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _donationsPageId;
         private readonly int _distributionPageId;
         private readonly int _batchesPageId;
-        private readonly int _declineEmailTemplate;
-        private readonly int _declineCheckEmailTemplate;
         private readonly int _depositsPageId;
         private readonly int _paymentProcessorErrorsPageId;
         private readonly int _tripDistributionsPageView;
@@ -34,8 +32,6 @@ namespace MinistryPlatform.Translation.Services
             _donationsPageId = configuration.GetConfigIntValue("Donations");
             _distributionPageId = configuration.GetConfigIntValue("Distributions");
             _batchesPageId = configuration.GetConfigIntValue("Batches");
-            _declineEmailTemplate = configuration.GetConfigIntValue("DefaultGiveDeclineEmailTemplate");
-            _declineCheckEmailTemplate = configuration.GetConfigIntValue("CheckGiveDeclineEmailTemplate");
             _depositsPageId = configuration.GetConfigIntValue("Deposits");
             _paymentProcessorErrorsPageId = configuration.GetConfigIntValue("PaymentProcessorEventErrors");
             _tripDistributionsPageView = configuration.GetConfigIntValue("TripDistributionsView");
@@ -238,8 +234,9 @@ namespace MinistryPlatform.Translation.Services
                 
                 var program = rec.First().ToString("Statement_Title");
                 var paymentType = PaymentUtil.getPaymentType(_configuration, result.paymentTypeId);
+                var declineEmailTemplate = PaymentUtil.getDeclineEmailByPaymentType(_configuration, result.paymentTypeId);
 
-                _donorService.SendEmail(_declineEmailTemplate, result.donorId, result.donationAmt, paymentType, result.donationDate,
+                _donorService.SendEmail(declineEmailTemplate, result.donorId, result.donationAmt, paymentType, result.donationDate,
                     program, result.donationNotes);
             }
             catch (Exception ex)
@@ -273,7 +270,7 @@ namespace MinistryPlatform.Translation.Services
                 donorId = dictionary.ToInt("Donor_ID"),
                 donationDate = dictionary.ToDate("Donation_Date"),
                 donationAmt = Convert.ToInt32(dictionary["Donation_Amount"]),
-                paymentTypeId = PaymentUtil.getPaymentTypeId(dictionary.ToString("Payment_Type")),
+                paymentTypeId = PaymentUtil.getPaymentTypeId(_configuration, dictionary.ToString("Payment_Type")),
                 donationNotes = dictionary.ToString("Donation_Status_Notes"),
                 batchId = dictionary.ToNullableInt("Batch_ID")
             };
