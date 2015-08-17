@@ -11,6 +11,9 @@ namespace crds_angular.Models.Crossroads.Trip
 
         [JsonProperty(PropertyName = "groups")]
         public List<TripGroupDto> Groups { get; set; }
+
+        [JsonProperty(PropertyName = "campaign")]
+        public PledgeCampaign Campaign { get; set; }
     }
 
     public class TripApplicant

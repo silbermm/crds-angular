@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Models.Crossroads.Trip;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Extensions;
+using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using IDonationService = MinistryPlatform.Translation.Services.Interfaces.IDonationService;
 using IDonorService = MinistryPlatform.Translation.Services.Interfaces.IDonorService;
@@ -27,7 +29,8 @@ namespace crds_angular.Services
                            IGroupService groupService,
                            IFormSubmissionService formSubmissionService,
                            IEventService eventService,
-                           IDonorService donorService, IPledgeService pledgeService)
+                           IDonorService donorService,
+                           IPledgeService pledgeService)
         {
             _eventParticipantService = eventParticipant;
             _donationService = donationService;
@@ -54,16 +57,22 @@ namespace crds_angular.Services
             var tripApplicantResponses = GetTripAplicantsSelection(selectionId, selectionCount);
 
             //get groups for event, type = go trip
-            var eventId = tripApplicantResponses[0].EventId;
-            var eventGroups = _mpEventService.GetGroupsForEvent(eventId);
+            var eventId = tripApplicantResponses.TripInfo.EventId;
+            var eventGroups = _mpEventService.GetGroupsForEvent(eventId); //need to add check for group type?  TM 8/17
 
             var dto = new TripFormResponseDto();
-            dto.Applicants = tripApplicantResponses.Select(s => new TripApplicant {ContactId = s.ContactId, ParticipantId = s.ParticipantId}).ToList();
+            dto.Applicants = tripApplicantResponses.Applicants;
             dto.Groups = eventGroups.Select(s => new TripGroupDto {GroupId = s.GroupId, GroupName = s.Name}).ToList();
+            dto.Campaign = new PledgeCampaign
+            {
+                FundraisingGoal = tripApplicantResponses.TripInfo.FundraisingGoal,
+                PledgeCampaignId = tripApplicantResponses.TripInfo.PledgeCampaignId
+            };
+
             return dto;
         }
 
-        private List<TripApplicantResponse> GetTripAplicantsSelection(int selectionId, int selectionCount)
+        private TripApplicantResponse GetTripAplicantsSelection(int selectionId, int selectionCount)
         {
             var responses = _formSubmissionService.GetTripFormResponses(selectionId);
 
@@ -73,20 +82,38 @@ namespace crds_angular.Services
 
             // is this check stupid?
             if (responses.Count != selectionCount)
+            {
                 throw new ApplicationException("Error Retrieving Selection");
+            }
 
             if (campaignCount > 1)
+            {
                 throw new ApplicationException("Invalid Trip Selection");
+            }
 
-            return responses.Select(record => new TripApplicantResponse
+            var tripInfo = responses
+                .Select(r =>
+                            new TripInfo
+                            {
+                                EventId = r.EventId,
+                                FundraisingGoal = r.FundraisingGoal,
+                                PledgeCampaignId = r.PledgeCampaignId
+                            });
+
+            var applicants = responses.Select(record => new TripApplicant
             {
                 ContactId = record.ContactId,
                 DonorId = record.DonorId,
-                FundraisingGoal = record.FundraisingGoal,
-                PledgeCampaignId = record.PledgeCampaignId,
-                EventId = record.EventId,
                 ParticipantId = record.ParticipantId
             }).ToList();
+
+            var resp = new TripApplicantResponse
+            {
+                Applicants = applicants,
+                TripInfo = tripInfo.First()
+            };
+
+            return resp;
         }
 
         public MyTripsDTO GetMyTrips(int contactId, string token)
@@ -178,51 +205,48 @@ namespace crds_angular.Services
             return participants.Values.OrderBy(o => o.Lastname).ThenBy(o => o.Nickname).ToList();
         }
 
-        public void SaveParticipants(SaveTripParticipantsDto dto)
+        public List<int> SaveParticipants(SaveTripParticipantsDto dto)
         {
-            // need a list of contacts?
-            // need a groupId
-            // we have pledge campaign id, that would be nice too
-
-            // make them a group participiant
-            // get all events for group id
-            // add event participant for each contact to each event found
-            // create pledge for donor associated with contact
-            // if donor doesn't exist create one?
-
+            var groupParticipants = new List<int>();
             var groupStartDate = DateTime.Now;
             const int groupRoleId = 16; // wondering if eventually this will become user input?
             var events = _groupService.getAllEventsForGroup(dto.GroupId);
 
             foreach (var applicant in dto.Applicants)
             {
-                //create group participant
                 var groupParticipantId = _groupService.addParticipantToGroup(applicant.ParticipantId, dto.GroupId, groupRoleId, groupStartDate);
+                groupParticipants.Add(groupParticipantId);
 
-                // create pledge
-                //what if no donor?
-                int donorId;
-                if (applicant.DonorId != null)
-                {
-                    donorId = (int)applicant.DonorId;
-                }
-                else
-                {
-                    donorId = _mpDonorService.CreateDonorRecord(applicant.ContactId, null, DateTime.Now); ;
-                }
+                CreatePledge(dto, applicant);
 
-                var campaign = dto.Campaign;
-                _mpPledgeService.CreatePledge(donorId, campaign.PledgeCampaignId, campaign.FundraisingGoal);
-
-                // register for all events
-                foreach (var e in events)
-                {
-                    _mpEventService.registerParticipantForEvent(applicant.ParticipantId, e.EventId);
-                }
+                EventRegistration(events, applicant);
             }
 
+            return groupParticipants;
+        }
 
-            throw new NotImplementedException();
+        private void CreatePledge(SaveTripParticipantsDto dto, TripApplicant applicant)
+        {
+            int donorId;
+            if (applicant.DonorId != null)
+            {
+                donorId = (int) applicant.DonorId;
+            }
+            else
+            {
+                donorId = _mpDonorService.CreateDonorRecord(applicant.ContactId, null, DateTime.Now);
+            }
+
+            var campaign = dto.Campaign;
+            _mpPledgeService.CreatePledge(donorId, campaign.PledgeCampaignId, campaign.FundraisingGoal);
+        }
+
+        private void EventRegistration(IEnumerable<Event> events, TripApplicant applicant)
+        {
+            foreach (var e in events)
+            {
+                _mpEventService.registerParticipantForEvent(applicant.ParticipantId, e.EventId);
+            }
         }
     }
 }

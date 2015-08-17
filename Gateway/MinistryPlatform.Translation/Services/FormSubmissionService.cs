@@ -69,8 +69,9 @@ namespace MinistryPlatform.Translation.Services
                 {
                     var response = new TripFormResponse();
                     response.ContactId = reader.GetInt32(reader.GetOrdinal("Contact_ID"));
-                    response.DonorId = reader.GetInt32(reader.GetOrdinal("Donor_ID"));
-                    response.FundraisingGoal = reader.GetDecimal(reader.GetOrdinal("Fundraising_Goal"));
+                    var donorId = SafeInt32(reader, "Donor_ID");
+                    response.DonorId = donorId;
+                    response.FundraisingGoal = SafeDecimal(reader,"Fundraising_Goal");
                     response.ParticipantId = reader.GetInt32(reader.GetOrdinal("Participant_ID"));
                     response.PledgeCampaignId = reader.GetInt32(reader.GetOrdinal("Pledge_Campaign_ID"));
                     response.EventId = reader.GetInt32(reader.GetOrdinal("Event_ID"));
@@ -83,6 +84,24 @@ namespace MinistryPlatform.Translation.Services
             {
                 connection.Close();
             }
+        }
+
+        private static decimal SafeDecimal(IDataRecord record, string fieldName)
+        {
+            var ordinal = record.GetOrdinal(fieldName);
+            return !record.IsDBNull(ordinal) ? record.GetDecimal(ordinal) : 0;
+        }
+
+        private static int? SafeInt(IDataRecord record, string fieldName)
+        {
+            var ordinal = record.GetOrdinal(fieldName);
+            return !record.IsDBNull(ordinal) ? record.GetInt16(ordinal) : (int?)null;
+        }
+
+        private static int? SafeInt32(IDataRecord record, string fieldName)
+        {
+            var ordinal = record.GetOrdinal(fieldName);
+            return !record.IsDBNull(ordinal) ? record.GetInt32(ordinal) : (int?)null;
         }
 
         private static IDbCommand CreateTripFormResponsesSqlCommand(int selectionId)

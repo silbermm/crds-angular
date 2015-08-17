@@ -11,6 +11,6 @@ namespace crds_angular.Services.Interfaces
         MyTripsDTO GetMyTrips(int contactId, string token);
         List<TripParticipantDto> Search(string search);
 
-        void SaveParticipants(SaveTripParticipantsDto dto);
+        List<int> SaveParticipants(SaveTripParticipantsDto dto);
     }
 }

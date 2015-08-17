@@ -3,9 +3,9 @@
 
   module.exports = TripParticipantController;
 
-  TripParticipantController.$inject = ['$rootScope', '$log', 'MPTools', 'Trip', 'PageInfo'];
+  TripParticipantController.$inject = ['$rootScope', '$window', '$log', 'MPTools', 'Trip', 'PageInfo'];
 
-  function TripParticipantController($rootScope, $log, MPTools, Trip, PageInfo) {
+  function TripParticipantController($rootScope, $window, $log, MPTools, Trip, PageInfo) {
 
     $log.debug('TripParticipantController');
     var vm = this;
@@ -13,37 +13,29 @@
     vm.groups = [];
     vm.pageInfo = PageInfo;
     vm.params = MPTools.getParams();
-    // vm.person = Contact;
-    vm.selectedRecord = null;
-    vm.showError = showError;
-    vm.showSuccess = false;
-    // vm.viewReady = false;
-    vm.viewReady = true;
+    vm.save = save;
+    vm.viewReady = false;
 
     activate();
     //////////////////////
 
     function activate(){
       $log.debug('pageInfo: ' + vm.pageInfo);
-      // $log.debug('selectedCount: ' + vm.params.selectedCount);
-
-      // Trip.TripFormResponses.query(
-      //   {selectionId: vm.params.selectedRecord, selectionCount: vm.params.selectedCount})
-      // .$promise
-      // .then(function(response){
-      //   $log.debug(response);
-      // });
+      vm.viewReady = true;
     }
 
-    
+    function save() {
+      var dto = {};
 
-    function showError(){
-      return false;
-      // if (vm.params.selectedCount > 1 || vm.params.recordDescription === undefined || vm.params.recordId === '-1'){
-      //   vm.errorMessage = $rootScope.MESSAGES.toolsError;
-      //   vm.error = true;
-      // } 
-      // return vm.error;
+      dto.applicants = vm.pageInfo.applicants;
+      dto.group = vm.group.groupId;
+      dto.pledgeCampaign = vm.pageInfo.campaign;
+
+      Trip.SaveParticipants.save(dto, function(updatedEvents) {
+        $window.close();
+      }, function(err) {
+        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+      });
     }
   }
 

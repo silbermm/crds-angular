@@ -8,6 +8,6 @@ namespace crds_angular.Models.Crossroads.Stewardship
         public int PledgeCampaignId { get; set; }
 
         [JsonProperty(PropertyName = "fundraisingGoal")]
-        public int FundraisingGoal { get; set; }
+        public decimal FundraisingGoal { get; set; }
     }
 }
