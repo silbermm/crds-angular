@@ -512,6 +512,14 @@
 
         }
       })
+      .state('tools.checkBatchProcessor', {
+        url: '/checkBatchProcessor',
+        controller: 'CheckBatchProcessor as checkBatchProcessor',
+        templateUrl: 'check_batch_processor/checkBatchProcessor.html',
+        data: {
+          isProtected: true
+        }
+      })
       .state('content', {
         url: '{link:contentRouteType}',
         // This url will match a slash followed by anything (including additional slashes).

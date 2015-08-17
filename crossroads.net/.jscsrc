@@ -1,3 +1,5 @@
 {
-  "preset": "airbnb"
+  "preset": "airbnb",
+  "requireTrailingComma": null,
+  "requireDotNotation": { "allExcept": [ "snake_case" ] }
 }
