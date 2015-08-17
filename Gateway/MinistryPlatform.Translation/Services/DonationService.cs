@@ -17,6 +17,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _declineEmailTemplate;
         private readonly string _creditCardPaymentType;
         private readonly string _bankPaymentType;
+        private readonly string _checkPaymentType;
         private readonly int _depositsPageId;
         private readonly int _paymentProcessorErrorsPageId;
         private readonly int _tripDistributionsPageView;
@@ -35,6 +36,7 @@ namespace MinistryPlatform.Translation.Services
             _declineEmailTemplate = configuration.GetConfigIntValue("DefaultGiveDeclineEmailTemplate");
             _creditCardPaymentType = configuration.GetConfigValue("CreditCard");
             _bankPaymentType = configuration.GetConfigValue("Bank");
+            _checkPaymentType = configuration.GetConfigValue("Check");
             _depositsPageId = configuration.GetConfigIntValue("Deposits");
             _paymentProcessorErrorsPageId = configuration.GetConfigIntValue("PaymentProcessorEventErrors");
             _tripDistributionsPageView = configuration.GetConfigIntValue("TripDistributionsView");
@@ -236,10 +238,7 @@ namespace MinistryPlatform.Translation.Services
                 }
                 
                 var program = rec.First().ToString("Statement_Title");
-
-                var paymentType = (result.paymentTypeId.ToString() == _creditCardPaymentType.Substring(0,1))
-                    ? _creditCardPaymentType.Substring(2,11)
-                    : _bankPaymentType.Substring(2,4);
+                var paymentType = getPaymentType(result.paymentTypeId);
 
                 _donorService.SendEmail(_declineEmailTemplate, result.donorId, result.donationAmt, paymentType, result.donationDate,
                     program, result.donationNotes);
@@ -311,6 +310,13 @@ namespace MinistryPlatform.Translation.Services
                 trips.Add(trip);
             }
             return trips;
+        }
+
+        private String getPaymentType(int paymentTypeId)
+        {
+            return (paymentTypeId.ToString() == _creditCardPaymentType.Substring(0, 1)) ? _creditCardPaymentType.Substring(2, 11) :
+                        (paymentTypeId.ToString() == _checkPaymentType.Substring(0, 1)) ? _checkPaymentType.Substring(2, 4) :
+                        _bankPaymentType.Substring(2, 4);
         }
     }
 }
