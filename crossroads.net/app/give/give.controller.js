@@ -11,15 +11,14 @@
                       'programList', 
                       'GiveTransferService', 
                       'User', 
-                      'AUTH_EVENTS',
-                      'TripParticipant'];
+                      'AUTH_EVENTS'];
 
   function DonationException(message) {
     this.message = message;
     this.name = 'DonationException';
   }
 
-  function GiveCtrl($rootScope, $scope, $state, $timeout, Session, PaymentService, programList, GiveTransferService, User, AUTH_EVENTS, TripParticipant) {
+  function GiveCtrl($rootScope, $scope, $state, $timeout, Session, PaymentService, programList, GiveTransferService, User, AUTH_EVENTS) {
 
         $scope.$on('$stateChangeStart', function (event, toState, toParams) {
            // Short-circuit this handler if we're not transitioning TO a give state

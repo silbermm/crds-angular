@@ -3,10 +3,10 @@
 
   module.exports = TripRoutes;
   
-  TripRoutes.$inject = ['$stateProvider'];
+  TripRoutes.$inject = ['$stateProvider', '$urlMatcherFactoryProvider' ];
 
-  function TripRoutes($stateProvider){
-
+  function TripRoutes($stateProvider, $urlMatcherFactory){
+ 
     $stateProvider
       .state('tripsearch', {
         parent: 'noSideBar',
@@ -78,7 +78,7 @@
             }).$promise;
           }
         }
-      })
+      });
  
   }
 

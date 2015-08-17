@@ -259,13 +259,7 @@
             return getPrograms.Programs.get({
               programType: 1
             }).$promise;
-          },
-          TripParticipant: function (Trip, $stateParams){
-            return Trip.TripParticipant.get({
-              tripParticipantId: '00000000,'
-            }).$promise; 
-          }
-
+          } 
         }
       })
       .state('give.amount', {
