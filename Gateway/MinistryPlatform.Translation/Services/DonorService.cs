@@ -1,7 +1,9 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using Crossroads.Utilities.Interfaces;
+using log4net;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -10,38 +12,44 @@ namespace MinistryPlatform.Translation.Services
 {
     public class DonorService : BaseService, IDonorService
     {
-        private readonly log4net.ILog logger =
-            log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILog _logger =
+            LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        private readonly int donorPageId = Convert.ToInt32(AppSettings("Donors"));
-        private readonly int donationPageId = Convert.ToInt32((AppSettings("Donations")));
-        private readonly int donationStatusPageId = Convert.ToInt32((AppSettings("DonationStatus")));
-        private readonly int donationDistributionPageId = Convert.ToInt32(AppSettings("Distributions"));
+        private readonly int _donorPageId;
+        private readonly int _donationPageId;
+        private readonly int _donationDistributionPageId;
+        private readonly int _donorAccountsPageId;
 
-        public const string DONOR_RECORD_ID = "Donor_Record";
-        public const string DONOR_PROCESSOR_ID = "Processor_ID";
-        public const string EMAILREASON = "None";
+        public const string DonorRecordId = "Donor_Record";
+        public const string DonorProcessorId = "Processor_ID";
+        public const string EmailReason = "None";
+        public const string DefaultInstitutionName = "Bank";
 
-        private IMinistryPlatformService ministryPlatformService;
-        private IProgramService programService;
-        private ICommunicationService communicationService;
+        private readonly IMinistryPlatformService _ministryPlatformService;
+        private readonly IProgramService _programService;
+        private readonly ICommunicationService _communicationService;
 
-        public DonorService(IMinistryPlatformService ministryPlatformService, IProgramService programService, ICommunicationService communicationService)
+        public DonorService(IMinistryPlatformService ministryPlatformService, IProgramService programService, ICommunicationService communicationService, IConfigurationWrapper configuration)
         {
-            this.ministryPlatformService = ministryPlatformService;
-            this.programService = programService;
-            this.communicationService = communicationService;
+            _ministryPlatformService = ministryPlatformService;
+            _programService = programService;
+            _communicationService = communicationService;
+
+            _donorPageId = configuration.GetConfigIntValue("Donors");
+            _donationPageId = configuration.GetConfigIntValue("Donations");
+            _donationDistributionPageId = configuration.GetConfigIntValue("Distributions");
+            _donorAccountsPageId = configuration.GetConfigIntValue("DonorAccounts");
         }
 
 
         public int CreateDonorRecord(int contactId, string processorId, DateTime setupTime,
             int? statementFrequencyId = 1, // default to quarterly
             int? statementTypeId = 1, //default to individual
-            int? statementMethodId = 2 // default to email/online
+            int? statementMethodId = 2, // default to email/online
+            DonorAccount donorAccount = null
             )
         {
             //this assumes that you do not already have a donor record - new giver
-
             var values = new Dictionary<string, object>
             {
                 {"Contact_ID", contactId},
@@ -52,26 +60,42 @@ namespace MinistryPlatform.Translation.Services
                 {"Processor_ID", processorId}
             };
 
+            var apiToken = apiLogin();
+
             int donorId;
 
             try
             {
-                donorId = WithApiLogin<int>(apiToken =>
-                {
-                    return (ministryPlatformService.CreateRecord(donorPageId, values, apiToken, true));
-                });
+                donorId = _ministryPlatformService.CreateRecord(_donorPageId, values, apiToken, true);
             }
             catch (Exception e)
             {
                 throw new ApplicationException(string.Format("CreateDonorRecord failed.  Contact Id: {0}", contactId), e);
             }
+
+            // Create a new DonorAccount for this donor, if we have account info
+            if (donorAccount != null)
+            {
+                values = new Dictionary<string, object>
+                {
+                    { "Institution_Name", DefaultInstitutionName },
+                    { "Account_Number", donorAccount.AccountNumber },
+                    { "Routing_Number", donorAccount.RoutingNumber },
+                    { "Donor_ID", donorId },
+                    { "Non_Assignable", false },
+                    { "Account_Type_ID", (int)donorAccount.Type },
+                    { "Closed", false }
+                };
+
+                _ministryPlatformService.CreateRecord(_donorAccountsPageId, values, apiToken);
+            }
             return donorId;
 
         }
 
-        public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string charge_id, string pymtType, string processorId, DateTime setupTime, bool registeredDonor)
+        public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor)
         {
-            var pymt_id = (pymtType == "bank") ? "5" : "4";
+            var pymtId = (pymtType == "bank") ? "5" : "4";
             var fee = feeAmt.HasValue ? feeAmt/100M : null;
             
             var donationValues = new Dictionary<string, object>
@@ -79,9 +103,9 @@ namespace MinistryPlatform.Translation.Services
                 {"Donor_ID", donorId},
                 {"Donation_Amount", donationAmt},
                 {"Processor_Fee_Amount", fee},
-                {"Payment_Type_ID", pymt_id},
+                {"Payment_Type_ID", pymtId},
                 {"Donation_Date", setupTime},
-                {"Transaction_code", charge_id},
+                {"Transaction_code", chargeId},
                 {"Registered_Donor", registeredDonor},
                 {"Processor_ID", processorId },
                 {"Donation_Status_Date", setupTime},
@@ -92,7 +116,7 @@ namespace MinistryPlatform.Translation.Services
 
             try
             {
-                donationId = WithApiLogin<int>(apiToken => (ministryPlatformService.CreateRecord(donationPageId, donationValues, apiToken, true)));
+                donationId = WithApiLogin(apiToken => (_ministryPlatformService.CreateRecord(_donationPageId, donationValues, apiToken, true)));
             }
             catch (Exception e)
             {
@@ -111,9 +135,9 @@ namespace MinistryPlatform.Translation.Services
             try
             {
                 donationDistributionId =
-                    WithApiLogin<int>(
+                    WithApiLogin(
                         apiToken =>
-                            (ministryPlatformService.CreateRecord(donationDistributionPageId, distributionValues, apiToken, true)));
+                            (_ministryPlatformService.CreateRecord(_donationDistributionPageId, distributionValues, apiToken, true)));
             }
             catch (Exception e)
             {
@@ -125,9 +149,9 @@ namespace MinistryPlatform.Translation.Services
             {
                 SetupConfirmationEmail(Convert.ToInt32(programId), donorId, donationAmt, setupTime, pymtType);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                logger.Error(string.Format("Failed when processing the template for Donation Id: {0}", donationId));
+                _logger.Error(string.Format("Failed when processing the template for Donation Id: {0}", donationId));
             }
 
             return donationDistributionId;
@@ -138,17 +162,17 @@ namespace MinistryPlatform.Translation.Services
             ContactDonor donor;
             try
             {
-                var searchStr = contactId.ToString() + ",";
+                var searchStr = contactId + ",";
                 var records =
-                    WithApiLogin<List<Dictionary<string, object>>>(
-                        apiToken => (ministryPlatformService.GetPageViewRecords("DonorByContactId", apiToken, searchStr, "")));
+                    WithApiLogin(
+                        apiToken => (_ministryPlatformService.GetPageViewRecords("DonorByContactId", apiToken, searchStr)));
                 if (records != null && records.Count > 0)
                 {
                     var record = records.First();
                     donor = new ContactDonor()
                     {
                         DonorId = record.ToInt("Donor_ID"),
-                        ProcessorId = record.ToString(DONOR_PROCESSOR_ID),
+                        ProcessorId = record.ToString(DonorProcessorId),
                         ContactId = record.ToInt("Contact_ID"),
                         RegisteredUser = true,
                         Email = record.ToString("Email")
@@ -176,22 +200,22 @@ namespace MinistryPlatform.Translation.Services
             ContactDonor donor;
             try
             {
-                if (String.IsNullOrWhiteSpace(email))
+                if (string.IsNullOrWhiteSpace(email))
                 {
                     return null;
                 }
                 var searchStr =  "," + email;
                 var records =
-                    WithApiLogin<List<Dictionary<string, object>>>(
-                        apiToken => (ministryPlatformService.GetPageViewRecords("PossibleGuestDonorContact", apiToken, searchStr, "")));
+                    WithApiLogin(
+                        apiToken => (_ministryPlatformService.GetPageViewRecords("PossibleGuestDonorContact", apiToken, searchStr)));
                 if (records != null && records.Count > 0)
                 {
                     var record = records.First();
                     donor = new ContactDonor()
                     {
                         
-                        DonorId = record.ToInt(DONOR_RECORD_ID),
-                        ProcessorId = record.ToString(DONOR_PROCESSOR_ID),
+                        DonorId = record.ToInt(DonorRecordId),
+                        ProcessorId = record.ToString(DonorProcessorId),
                         ContactId = record.ToInt("Contact_ID"),
                         Email = record.ToString("Email_Address"),
                         RegisteredUser = false
@@ -212,16 +236,38 @@ namespace MinistryPlatform.Translation.Services
 
         }
 
+        public ContactDonor GetContactDonorForDonorAccount(string accountNumber, string routingNumber)
+        {
+            var apiToken = apiLogin();
+            var search = string.Format(",,,{0},{1}", accountNumber, routingNumber);
+
+            var accounts = _ministryPlatformService.GetRecordsDict(_donorAccountsPageId, apiToken, search);
+            if (accounts == null || accounts.Count == 0)
+            {
+                return (null);
+            }
+
+            var donorId = accounts[0]["Account_ID"] as int? ?? -1;
+            if (donorId == -1)
+            {
+                return (null);
+            }
+
+            var donor = _ministryPlatformService.GetRecordDict(_donorPageId, donorId, apiToken);
+            var contactId = donor["Contact_ID"] as int? ?? -1;
+            return contactId == -1 ? (null) : (GetContactDonor(contactId));
+        }
+
         public int UpdatePaymentProcessorCustomerId(int donorId, string paymentProcessorCustomerId)
         {
             var parms = new Dictionary<string, object> {
                 { "Donor_ID", donorId },
-                { DONOR_PROCESSOR_ID, paymentProcessorCustomerId },
+                { DonorProcessorId, paymentProcessorCustomerId },
             };
 
             try
             {
-                ministryPlatformService.UpdateRecord(donorPageId, parms, apiLogin());
+                _ministryPlatformService.UpdateRecord(_donorPageId, parms, apiLogin());
             }
             catch (Exception e)
             {
@@ -235,22 +281,22 @@ namespace MinistryPlatform.Translation.Services
 
         public void SetupConfirmationEmail(int programId, int donorId, int donationAmount, DateTime setupDate, string pymtType)
         {
-            var program = programService.GetProgramById(programId);
+            var program = _programService.GetProgramById(programId);
             //If the communcations admin does not link a message to the program, the default template will be used.
-            int communicationTemplateId = program.CommunicationTemplateId == 0 ? AppSetting("DefaultGiveConfirmationEmailTemplate") : program.CommunicationTemplateId;
+            var communicationTemplateId = program.CommunicationTemplateId == 0 ? AppSetting("DefaultGiveConfirmationEmailTemplate") : program.CommunicationTemplateId;
 
-            SendEmail(communicationTemplateId, donorId, donationAmount, pymtType, setupDate, program.Name, EMAILREASON);
+            SendEmail(communicationTemplateId, donorId, donationAmount, pymtType, setupDate, program.Name, EmailReason);
         }
 
         public ContactDonor GetEmailViaDonorId(int donorId)
         {
-            ContactDonor donor = new ContactDonor();
+            var donor = new ContactDonor();
             try
             {
                 var searchStr = "," + donorId.ToString();
                 var records =
-                    WithApiLogin<List<Dictionary<string, object>>>(
-                        apiToken => (ministryPlatformService.GetPageViewRecords("DonorByContactId", apiToken, searchStr, "")));
+                    WithApiLogin(
+                        apiToken => (_ministryPlatformService.GetPageViewRecords("DonorByContactId", apiToken, searchStr)));
                 if (records != null && records.Count > 0)
                 {
                     var record = records.First();
@@ -268,11 +314,11 @@ namespace MinistryPlatform.Translation.Services
             return donor;
         }
 
-        public void SendEmail(int communicationTemplateId, int donorId, int donationAmount, string paymentType, DateTime setupDate, string program, string EMAILREASON)
+        public void SendEmail(int communicationTemplateId, int donorId, int donationAmount, string paymentType, DateTime setupDate, string program, string emailReason)
         {
-            MessageTemplate template = communicationService.GetTemplate(communicationTemplateId);
+            var template = _communicationService.GetTemplate(communicationTemplateId);
 
-            ContactDonor contact = GetEmailViaDonorId(donorId);
+            var contact = GetEmailViaDonorId(donorId);
 
             var comm = new Communication
             {
@@ -285,19 +331,19 @@ namespace MinistryPlatform.Translation.Services
                 ReplyContactId = 5,
                 ReplyToEmailAddress = "giving@crossroads.net",
                 ToContactId = contact.ContactId,
-                ToEmailAddress = contact.Email
+                ToEmailAddress = contact.Email,
+                MergeData = new Dictionary<string, object>
+                {
+                    {"Program_Name", program},
+                    {"Donation_Amount", donationAmount},
+                    {"Donation_Date", setupDate},
+                    {"Payment_Method", paymentType},
+                    {"Decline_Reason", emailReason}
+                }
             };
 
-            comm.MergeData = new Dictionary<string, object>
-            {
-                {"Program_Name", program},
-                {"Donation_Amount", donationAmount},
-                {"Donation_Date", setupDate},
-                {"Payment_Method", paymentType},
-                {"Decline_Reason", EMAILREASON}
-            };
 
-            communicationService.SendMessage(comm);
+            _communicationService.SendMessage(comm);
         }
     }
 

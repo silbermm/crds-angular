@@ -9,12 +9,14 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         int CreateDonorRecord(int contactId, string processorId, DateTime setupTime,
             int? statementFrequencyId = 1, // default to quarterly
             int? statementTypeId = 1, //default to individual
-            int? statementMethodId = 2 // default to email/online
+            int? statementMethodId = 2, // default to email/online
+            DonorAccount donorAccount = null
             );
 
-        int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string charge_id, string pymtType, string processorId, DateTime setupDate, bool registeredDonor);
+        int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string chargeId, string pymtType, string processorId, DateTime setupDate, bool registeredDonor);
         ContactDonor GetContactDonor(int contactId);
         ContactDonor GetPossibleGuestContactDonor(string email);
+        ContactDonor GetContactDonorForDonorAccount(string accountNumber, string routingNumber);
         int UpdatePaymentProcessorCustomerId(int donorId, string paymentProcessorCustomerId);
         void SetupConfirmationEmail(int programId, int donorId, int donationAmount, DateTime setupDate, string pymtType);
         ContactDonor GetEmailViaDonorId(int donorId);

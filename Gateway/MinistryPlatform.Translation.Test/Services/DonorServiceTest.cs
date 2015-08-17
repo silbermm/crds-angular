@@ -6,7 +6,6 @@ using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
-using Newtonsoft.Json.Bson;
 using NUnit.Framework;
 
 namespace MinistryPlatform.Translation.Test.Services
@@ -17,6 +16,7 @@ namespace MinistryPlatform.Translation.Test.Services
         private Mock<IMinistryPlatformService> _ministryPlatformService;
         private Mock<IProgramService> _programService;
         private Mock<ICommunicationService> _communicationService;
+        private Mock<IConfigurationWrapper> _configuration;
         private DonorService _fixture;
 
         [SetUp]
@@ -25,7 +25,13 @@ namespace MinistryPlatform.Translation.Test.Services
             _ministryPlatformService = new Mock<IMinistryPlatformService>();
             _programService = new Mock<IProgramService>();
             _communicationService = new Mock<ICommunicationService>();
-            _fixture = new DonorService(_ministryPlatformService.Object, _programService.Object,_communicationService.Object);
+            _configuration = new Mock<IConfigurationWrapper>();
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("Donors")).Returns(299);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("Donations")).Returns(297);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("Distributions")).Returns(296);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("DonorAccounts")).Returns(298);
+
+            _fixture = new DonorService(_ministryPlatformService.Object, _programService.Object,_communicationService.Object, _configuration.Object);
         }
 
         [Test]
@@ -94,7 +100,7 @@ namespace MinistryPlatform.Translation.Test.Services
             var donorId = 1234567;
             var programId = "3";
             var setupDate = DateTime.Now;
-            var charge_id = "ch_crds1234567";
+            var chargeId = "ch_crds1234567";
             var processorId = "cus_8675309";
             var pymtType = "cc";
             var expectedDonationId = 321321;
@@ -122,7 +128,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Processor_Fee_Amount", feeAmt / 100M},
                 {"Payment_Type_ID", "4"}, //hardcoded as credit card until ACH stories are worked
                 {"Donation_Date", setupDate},
-                {"Transaction_code", charge_id},
+                {"Transaction_code", chargeId},
                 {"Registered_Donor", true}, 
                 {"Processor_ID", processorId},
                 {"Donation_Status_Date", setupDate},
@@ -163,7 +169,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _communicationService.Setup(mocked => mocked.GetTemplate(It.IsAny<int>())).Returns(getTemplateResponse);
 
 
-            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, charge_id, pymtType, processorId, setupDate, true);
+            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, chargeId, pymtType, processorId, setupDate, true);
 
             // Explicitly verify each expectation...
             _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>()));
@@ -179,7 +185,7 @@ namespace MinistryPlatform.Translation.Test.Services
         }
 
         [Test]
-        public void shouldUpdatePaymentProcessorCustomerId()
+        public void ShouldUpdatePaymentProcessorCustomerId()
         {
             _ministryPlatformService.Setup(mocked => mocked.UpdateRecord(299, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>()));
 
@@ -189,13 +195,13 @@ namespace MinistryPlatform.Translation.Test.Services
                 299,
                 It.Is<Dictionary<string, object>>(
                     d => ((int)d["Donor_ID"]) == 123
-                        && ((string)d[DonorService.DONOR_PROCESSOR_ID]).Equals("456")),
+                        && ((string)d[DonorService.DonorProcessorId]).Equals("456")),
                 It.IsAny<string>()));
             Assert.AreEqual(123, response);
         }
 
         [Test]
-        public void shouldThrowApplicationExceptionWhenMinistryPlatformUpdateFails()
+        public void ShouldThrowApplicationExceptionWhenMinistryPlatformUpdateFails()
         {
             var ex = new Exception("Oh no!!!");
             _ministryPlatformService.Setup(mocked => mocked.UpdateRecord(299, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>())).Throws(ex);

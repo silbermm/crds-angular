@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -12,12 +13,22 @@ namespace MinistryPlatform.Translation.Test.Services
     {
         private Mock<IMinistryPlatformService> _ministryPlatformService;
         private ContactService _fixture;
+        private Mock<IConfigurationWrapper> _configuration;
 
         [SetUp]
         public void SetUp()
         {
             _ministryPlatformService = new Mock<IMinistryPlatformService>();
-            _fixture = new ContactService(_ministryPlatformService.Object);
+            _configuration = new Mock<IConfigurationWrapper>();
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("Contacts")).Returns(292);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("Households")).Returns(327);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("SecurityRolesSubPageId")).Returns(363);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("Congregation_Default_ID")).Returns(5);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("Household_Default_Source_ID")).Returns(30);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("Household_Position_Default_ID")).Returns(1);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("Addresses")).Returns(271);
+
+            _fixture = new ContactService(_ministryPlatformService.Object, _configuration.Object);
         }
 
         [Test]

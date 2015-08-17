@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services.Interfaces;
+using MinistryPlatform.Models;
 using MPServices=MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Services
@@ -173,10 +174,23 @@ namespace crds_angular.Services
             var checks = GetChecksForBatch(batchDetails.Name);
             foreach (var check in checks)
             {
-                var contactDonor = _donorService.GetContactDonorForCheckingAccount(check.AccountNumber, check.RoutingNumber);
-                if (contactDonor == null || !contactDonor.HasPaymentProcessorRecord)
+                var contactDonor = _donorService.GetContactDonorForDonorAccount(check.AccountNumber, check.RoutingNumber) ?? new ContactDonor();
+                if (!contactDonor.HasPaymentProcessorRecord)
                 {
                     var token = _paymentService.CreateToken(check.AccountNumber, check.RoutingNumber);
+                    contactDonor.Details = new ContactDetails
+                    {
+                        DisplayName = check.Name1,
+                        Address = new PostalAddress
+                        {
+                            Line1 = check.Address.Line1,
+                            Line2 = check.Address.Line2,
+                            City = check.Address.City,
+                            State = check.Address.State,
+                            PostalCode = check.Address.PostalCode
+                        }
+                    };
+
                     contactDonor = _donorService.CreateOrUpdateContactDonor(contactDonor, string.Empty, token, DateTime.Now);
                 }
 

@@ -15,8 +15,10 @@ namespace crds_angular.Services
         private readonly string _guestGiverDisplayName;
 
         private readonly int _statementFrequencyNever;
+        private readonly int _statementFrequencyQuarterly;
         private readonly int _statementTypeIndividual;
         private readonly int _statementMethodNone;
+        private readonly int _statementMethodPostalMail;
 
         public DonorService(IDonorService mpDonorService, IContactService mpContactService,
             Interfaces.IPaymentService paymentService, IConfigurationWrapper configurationWrapper,
@@ -28,9 +30,12 @@ namespace crds_angular.Services
             _authenticationService = authenticationService;
 
             _guestGiverDisplayName = configurationWrapper.GetConfigValue("GuestGiverContactDisplayName");
+
             _statementFrequencyNever = configurationWrapper.GetConfigIntValue("DonorStatementFrequencyNever");
+            _statementFrequencyQuarterly = configurationWrapper.GetConfigIntValue("DonorStatementFrequencyQuarterly");
             _statementTypeIndividual = configurationWrapper.GetConfigIntValue("DonorStatementTypeIndividual");
             _statementMethodNone = configurationWrapper.GetConfigIntValue("DonorStatementMethodNone");
+            _statementMethodPostalMail = configurationWrapper.GetConfigIntValue("DonorStatementMethodPostalMail");
         }
 
         public ContactDonor GetContactDonorForEmail(string emailAddress)
@@ -44,10 +49,9 @@ namespace crds_angular.Services
             return (_mpDonorService.GetContactDonor(contactId));
         }
 
-        public ContactDonor GetContactDonorForCheckingAccount(string accountNumber, string routingNumber)
+        public ContactDonor GetContactDonorForDonorAccount(string accountNumber, string routingNumber)
         {
-            // TODO Implement GetContactDonorForCheckingAccount
-            throw new NotImplementedException();
+            return (_mpDonorService.GetContactDonorForDonorAccount(accountNumber, routingNumber));
         }
 
         /// <summary>
@@ -75,14 +79,28 @@ namespace crds_angular.Services
             var contactDonorResponse = new ContactDonor();
             if (contactDonor == null || !contactDonor.ExistingContact)
             {
-                // TODO Need to handle additional details in ContactDonor (like name, address, etc) when creating a new contact and donor
-                contactDonorResponse.ContactId = _mpContactService.CreateContactForGuestGiver(emailAddress, _guestGiverDisplayName);
+                var statementMethod = _statementMethodNone;
+                var statementFrequency = _statementFrequencyNever;
+                if (contactDonor != null && contactDonor.HasDetails)
+                {
+                    contactDonorResponse.ContactId = _mpContactService.CreateContactForNewDonor(contactDonor);
+                    statementMethod = _statementMethodPostalMail;
+                    statementFrequency = _statementFrequencyQuarterly;
+                }
+                else
+                {
+                    contactDonorResponse.ContactId = _mpContactService.CreateContactForGuestGiver(emailAddress, _guestGiverDisplayName);
+                }
+
+                var donorAccount = contactDonor != null ? contactDonor.Account : null;
                 contactDonorResponse.ProcessorId = _paymentService.CreateCustomer(paymentProcessorToken);
                 contactDonorResponse.DonorId = _mpDonorService.CreateDonorRecord(contactDonorResponse.ContactId, contactDonorResponse.ProcessorId, setupDate, 
-                    _statementFrequencyNever, _statementTypeIndividual, _statementMethodNone);
+                    statementFrequency, _statementTypeIndividual, statementMethod, donorAccount);
                 contactDonorResponse.Email = emailAddress;
                 _paymentService.UpdateCustomerDescription(contactDonorResponse.ProcessorId, contactDonorResponse.DonorId);
-            } else if(!contactDonor.HasPaymentProcessorRecord) {
+            }
+            else if (!contactDonor.HasPaymentProcessorRecord)
+            {
                 contactDonorResponse.ContactId = contactDonor.ContactId;
                 contactDonorResponse.ProcessorId = _paymentService.CreateCustomer(paymentProcessorToken);
                 if (contactDonor.ExistingDonor)
