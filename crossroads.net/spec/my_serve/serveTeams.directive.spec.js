@@ -303,14 +303,12 @@ describe("Serve Teams Directive Edit", function() {
   }));
 
   it("should show edit button for logged in user", function() {
-    console.log("finished beforeEach, starting logged in user");
     var isolated = element.isolateScope();
     isolated.togglePanel(mockTeam[0].members[0]);
     expect(isolated.showEdit).toBe(true);
   });
 
   it("should not show edit button for not logged in user", function() {
-    console.log("finished beforeEach, starting NOT logged in user");
     var isolated = element.isolateScope();
     isolated.togglePanel(mockTeam[0].members[1]);
     expect(isolated.showEdit).toBe(false);
