@@ -91,6 +91,8 @@ namespace crds_angular.Services
                 BatchName = batchName,
                 SetupDateTime = now,
                 BatchTotalAmount = 0,
+                BatchDepositAmount = 0,
+                BatchProcessorFee = 0,
                 ItemCount = 0,
                 BatchEntryType = _batchEntryTypePaymentProcessor,
                 FinalizedDateTime = now,
@@ -129,6 +131,8 @@ namespace crds_angular.Services
                     response.SuccessfulUpdates.Add(charge.Id);
                     batch.ItemCount++;
                     batch.BatchTotalAmount += (charge.Amount / 100M);
+                    batch.BatchProcessorFee += (charge.Fee/100m);
+                    batch.BatchDepositAmount += (batch.BatchTotalAmount - batch.BatchProcessorFee);
                     batch.Donations.Add(new DonationDTO { donation_id = "" + donationId, amount = charge.Amount });
                 }
                 catch (Exception e)

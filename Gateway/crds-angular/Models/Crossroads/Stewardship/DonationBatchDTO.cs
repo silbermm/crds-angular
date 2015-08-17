@@ -20,6 +20,12 @@ namespace crds_angular.Models.Crossroads.Stewardship
         [JsonProperty("batch_total_amount")]
         public decimal BatchTotalAmount { get; set; }
 
+        [JsonProperty("batch_depostit_amount")]
+        public decimal BatchDepositAmount { get; set; }
+
+        [JsonProperty("batch_processor_fee")]
+        public decimal BatchProcessorFee { get; set; }
+
         [JsonProperty("item_count")]
         public int ItemCount { get; set; }
 
