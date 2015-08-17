@@ -6,6 +6,7 @@ using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
+using MinistryPlatform.Translation.Utils;
 
 namespace MinistryPlatform.Translation.Services
 {
@@ -15,15 +16,13 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _distributionPageId;
         private readonly int _batchesPageId;
         private readonly int _declineEmailTemplate;
-        private readonly string _creditCardPaymentType;
-        private readonly string _bankPaymentType;
-        private readonly string _checkPaymentType;
         private readonly int _depositsPageId;
         private readonly int _paymentProcessorErrorsPageId;
         private readonly int _tripDistributionsPageView;
 
         private readonly IMinistryPlatformService _ministryPlatformService;
         private readonly IDonorService _donorService;
+        private readonly IConfigurationWrapper _configuration;
       
         public DonationService(IMinistryPlatformService ministryPlatformService, IDonorService donorService, IConfigurationWrapper configuration)
         {
@@ -34,9 +33,7 @@ namespace MinistryPlatform.Translation.Services
             _distributionPageId = configuration.GetConfigIntValue("Distributions");
             _batchesPageId = configuration.GetConfigIntValue("Batches");
             _declineEmailTemplate = configuration.GetConfigIntValue("DefaultGiveDeclineEmailTemplate");
-            _creditCardPaymentType = configuration.GetConfigValue("CreditCard");
-            _bankPaymentType = configuration.GetConfigValue("Bank");
-            _checkPaymentType = configuration.GetConfigValue("Check");
+            _configuration = configuration;
             _depositsPageId = configuration.GetConfigIntValue("Deposits");
             _paymentProcessorErrorsPageId = configuration.GetConfigIntValue("PaymentProcessorEventErrors");
             _tripDistributionsPageView = configuration.GetConfigIntValue("TripDistributionsView");
@@ -238,7 +235,7 @@ namespace MinistryPlatform.Translation.Services
                 }
                 
                 var program = rec.First().ToString("Statement_Title");
-                var paymentType = getPaymentType(result.paymentTypeId);
+                var paymentType = PaymentUtil.getPaymentType(_configuration, result.paymentTypeId);
 
                 _donorService.SendEmail(_declineEmailTemplate, result.donorId, result.donationAmt, paymentType, result.donationDate,
                     program, result.donationNotes);
@@ -274,7 +271,7 @@ namespace MinistryPlatform.Translation.Services
                 donorId = dictionary.ToInt("Donor_ID"),
                 donationDate = dictionary.ToDate("Donation_Date"),
                 donationAmt = Convert.ToInt32(dictionary["Donation_Amount"]),
-                paymentTypeId = getPaymentTypeId(dictionary.ToString("Payment_Type")),
+                paymentTypeId = PaymentUtil.getPaymentTypeId(dictionary.ToString("Payment_Type")),
                 donationNotes = dictionary.ToString("Donation_Status_Notes"),
                 batchId = dictionary.ToNullableInt("Batch_ID")
             };
@@ -310,38 +307,6 @@ namespace MinistryPlatform.Translation.Services
                 trips.Add(trip);
             }
             return trips;
-        }
-
-        private String getPaymentType(int paymentTypeId)
-        {
-            if (paymentTypeId.ToString() == _creditCardPaymentType.Substring(0, 1))
-            {
-                return _creditCardPaymentType.Substring(2, 11);
-            }
-            else if (paymentTypeId.ToString() == _checkPaymentType.Substring(0, 1))
-            {
-                return _checkPaymentType.Substring(2, 5);
-            }
-            else
-            {
-                return _bankPaymentType.Substring(2, 4);
-            }
-        }
-
-        private int getPaymentTypeId(string paymentType)
-        {
-            if (paymentType == "Bank")
-            {
-                return 4;
-            }
-            else if (paymentType == "Check")
-            {
-                return 1;
-            }
-            else
-            {
-                return 5;
-            }
         }
     }
 }

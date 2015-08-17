@@ -5,6 +5,7 @@ using System.Linq;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
+using MinistryPlatform.Translation.Utils;
 
 namespace MinistryPlatform.Translation.Services
 {
@@ -71,7 +72,7 @@ namespace MinistryPlatform.Translation.Services
 
         public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string charge_id, string pymtType, string processorId, DateTime setupTime, bool registeredDonor)
         {
-            var pymt_id = (pymtType == "bank") ? "5" : "4";
+            var pymt_id = PaymentUtil.getPaymentTypeId(pymtType);
             var fee = feeAmt.HasValue ? feeAmt/100M : null;
             
             var donationValues = new Dictionary<string, object>
