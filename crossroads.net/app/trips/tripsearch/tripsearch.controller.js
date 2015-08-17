@@ -8,10 +8,9 @@
 
   function TripSearchController($rootScope, $scope, $log, CmsInfo, Trip) {
   	var vm = this;
-
-  	vm.empty = false;
-  	vm.loading = false;
-  	vm.pageHeader = CmsInfo.pages[0].content;
+    vm.empty = false;
+    vm.loading = false;
+    vm.pageHeader = CmsInfo.pages[0].content;
   	vm.search = search;
   	vm.searchString = '';
   	vm.showError = showError;

@@ -17,8 +17,9 @@
     };
 
     function link(scope, el, attr) {
+
       scope.goalMet = goalMet;
-      scope.shareUrl  = TripsUrlService.ShareUrl('trip');
+      scope.shareUrl = TripsUrlService.ShareUrl(scope.trip.eventParticipantId);
 
       function goalMet(totalRaised, goal) {
         return (totalRaised >= goal);
