@@ -163,7 +163,7 @@ namespace MinistryPlatform.Translation.Test
             Assert.IsNotEmpty(CrossroadsLocations);
             var clifton = new Dictionary<string, object>();
             clifton.Add("dp_RecordID", 11);
-            clifton.Add("dp_RecordName", "Clifton");
+            clifton.Add("dp_RecordName", "Uptown");
 
            ////var list = CrossroadsLocations.ToList();
             Assert.Contains(clifton, CrossroadsLocations);
