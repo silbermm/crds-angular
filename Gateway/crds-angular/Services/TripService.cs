@@ -6,6 +6,7 @@ using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
 using IDonationService = MinistryPlatform.Translation.Services.Interfaces.IDonationService;
+using IDonorService = MinistryPlatform.Translation.Services.Interfaces.IDonorService;
 using IGroupService = MinistryPlatform.Translation.Services.Interfaces.IGroupService;
 
 namespace crds_angular.Services
@@ -17,19 +18,24 @@ namespace crds_angular.Services
         private readonly IGroupService _groupService;
         private readonly IFormSubmissionService _formSubmissionService;
         private readonly IEventService _mpEventService;
+        private readonly IDonorService _mpDonorService;
+        private readonly IPledgeService _mpPledgeService;
 
 
         public TripService(IEventParticipantService eventParticipant,
                            IDonationService donationService,
                            IGroupService groupService,
                            IFormSubmissionService formSubmissionService,
-                           IEventService eventService)
+                           IEventService eventService,
+                           IDonorService donorService, IPledgeService pledgeService)
         {
             _eventParticipantService = eventParticipant;
             _donationService = donationService;
             _groupService = groupService;
             _formSubmissionService = formSubmissionService;
             _mpEventService = eventService;
+            _mpDonorService = donorService;
+            _mpPledgeService = pledgeService;
         }
 
         public List<TripGroupDto> GetGroupsByEventId(int eventId)
@@ -75,6 +81,8 @@ namespace crds_angular.Services
             return responses.Select(record => new TripApplicantResponse
             {
                 ContactId = record.ContactId,
+                DonorId = record.DonorId,
+                FundraisingGoal = record.FundraisingGoal,
                 PledgeCampaignId = record.PledgeCampaignId,
                 EventId = record.EventId,
                 ParticipantId = record.ParticipantId
@@ -189,10 +197,22 @@ namespace crds_angular.Services
             foreach (var applicant in dto.Applicants)
             {
                 //create group participant
-                var x = _groupService.addParticipantToGroup(applicant.ParticipantId, dto.GroupId, groupRoleId, groupStartDate);
+                var groupParticipantId = _groupService.addParticipantToGroup(applicant.ParticipantId, dto.GroupId, groupRoleId, groupStartDate);
 
                 // create pledge
                 //what if no donor?
+                int donorId;
+                if (applicant.DonorId != null)
+                {
+                    donorId = (int)applicant.DonorId;
+                }
+                else
+                {
+                    donorId = _mpDonorService.CreateDonorRecord(applicant.ContactId, null, DateTime.Now); ;
+                }
+
+                var campaign = dto.Campaign;
+                _mpPledgeService.CreatePledge(donorId, campaign.PledgeCampaignId, campaign.FundraisingGoal);
 
                 // register for all events
                 foreach (var e in events)
@@ -201,7 +221,6 @@ namespace crds_angular.Services
                 }
             }
 
-            
 
             throw new NotImplementedException();
         }

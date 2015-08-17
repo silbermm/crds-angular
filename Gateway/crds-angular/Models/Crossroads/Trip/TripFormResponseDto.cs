@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using crds_angular.Models.Crossroads.Stewardship;
 using Newtonsoft.Json;
 
 namespace crds_angular.Models.Crossroads.Trip
@@ -19,6 +20,9 @@ namespace crds_angular.Models.Crossroads.Trip
 
         [JsonProperty(PropertyName = "participantId")]
         public int ParticipantId { get; set; }
+
+        [JsonProperty(PropertyName = "donorId")]
+        public int? DonorId { get; set; }
     }
 
     public class SaveTripParticipantsDto
@@ -30,6 +34,6 @@ namespace crds_angular.Models.Crossroads.Trip
         public int GroupId { get; set; }
 
         [JsonProperty(PropertyName = "pledgeCampaign")]
-        public int CampaignId { get; set; }
+        public PledgeCampaign Campaign { get; set; }
     }
 }

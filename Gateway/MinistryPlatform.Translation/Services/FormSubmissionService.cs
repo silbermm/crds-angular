@@ -69,6 +69,8 @@ namespace MinistryPlatform.Translation.Services
                 {
                     var response = new TripFormResponse();
                     response.ContactId = reader.GetInt32(reader.GetOrdinal("Contact_ID"));
+                    response.DonorId = reader.GetInt32(reader.GetOrdinal("Donor_ID"));
+                    response.FundraisingGoal = reader.GetDecimal(reader.GetOrdinal("Fundraising_Goal"));
                     response.ParticipantId = reader.GetInt32(reader.GetOrdinal("Participant_ID"));
                     response.PledgeCampaignId = reader.GetInt32(reader.GetOrdinal("Pledge_Campaign_ID"));
                     response.EventId = reader.GetInt32(reader.GetOrdinal("Event_ID"));
@@ -85,11 +87,12 @@ namespace MinistryPlatform.Translation.Services
 
         private static IDbCommand CreateTripFormResponsesSqlCommand(int selectionId)
         {
-            const string query = @"SELECT fr.Contact_ID, fr.Pledge_Campaign_ID, pc.Event_ID, p.Participant_ID
+            const string query = @"SELECT fr.Contact_ID, fr.Pledge_Campaign_ID, pc.Event_ID, pc.Fundraising_Goal, p.Participant_ID, d.Donor_ID
                                   FROM [MinistryPlatform].[dbo].[dp_Selected_Records] sr
                                   INNER JOIN [MinistryPlatform].[dbo].[Form_Responses] fr on sr.Record_ID = fr.Form_Response_ID
                                   INNER JOIN [MinistryPlatform].[dbo].[Participants] p on fr.Contact_ID = p.Contact_ID
                                   LEFT OUTER JOIN [MinistryPlatform].[dbo].[Pledge_Campaigns] pc on fr.Pledge_Campaign_ID = pc.Pledge_Campaign_ID
+                                  LEFT OUTER JOIN [MinistryPlatform].[dbo].[Donors] d on fr.Contact_ID = d.Contact_ID
                                   WHERE sr.Selection_ID = @selectionId";
 
             using (IDbCommand command = new SqlCommand(string.Format(query)))
