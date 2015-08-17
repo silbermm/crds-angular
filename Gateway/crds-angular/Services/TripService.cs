@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.EnterpriseServices;
 using System.Linq;
 using crds_angular.Models.Crossroads.Trip;
 using crds_angular.Services.Interfaces;
@@ -53,6 +54,8 @@ namespace crds_angular.Services
                 tp.EventType = result.EventType;
                 var participant = participants[result.ParticipantId];
                 participant.Trips.Add(tp);
+                tp.ProgramId = result.ParticipantId;
+                tp.ProgramName = result.ProgramName;
             }
 
             return participants.Values.OrderBy(o => o.Lastname).ThenBy(o => o.Nickname).ToList();
@@ -108,5 +111,6 @@ namespace crds_angular.Services
             }
             return myTrips;
         }
+
     }
 }

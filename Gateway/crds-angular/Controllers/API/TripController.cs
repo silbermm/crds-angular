@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Exceptions.Models;
@@ -26,6 +27,24 @@ namespace crds_angular.Controllers.API
             {
                 var list = _tripService.Search(search);
                 return Ok(list);
+            }
+            catch (Exception ex)
+            {
+                var apiError = new ApiErrorDto("Trip Search Failed", ex);
+                throw new HttpResponseException(apiError.HttpResponseMessage);
+            }
+        }
+
+        [AcceptVerbs("GET")]
+        [ResponseType(typeof(TripParticipantDto))]
+        [Route("api/trip/participant/{tripParticipantId}")]
+        public IHttpActionResult TripParticipant(string tripParticipantId)
+        {
+            try
+            {
+                // Get Participant
+                var participant = _tripService.Search(tripParticipantId).FirstOrDefault();
+                return Ok(participant);
             }
             catch (Exception ex)
             {
