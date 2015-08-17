@@ -1,71 +1,87 @@
-<div class="col-sm-12">
-  <div class="row media-index">
-    <div class="col-sm-12 push-bottom">
-      <h1 class="page-header">Media</h1>
-      <h2 class="subheading">We got videos, music, messages, and more...o yeah.</h2>
-    </div><!--/col-sm-12-->
-  </div> <!--/row-->
+<div class="row media-index">
+  <div class="col-sm-12 push-bottom">
+    <h1 class="page-header">Media</h1>
+    <h2 class="subheading">We got videos, music, messages, and more...o yeah.</h2>
+  </div><!--/col-sm-12-->
+</div> <!--/row-->
 
-  <a href=''><img src="http://crossroads-media.s3.amazonaws.com/images/streaming-banner-2.jpg" alt="Watch Live Services Online" class="img-responsive" /></a>
+<a href="live" title="Watch Live Services Online" >
+<div class="row">
+  <div class="col-sm-12">
+    <div class="streaming-banner">
+      <div class="row">
+        <div class="col-sm-8 col-xs-12">
+          <h2><span>Watch Live </span><span>Services Online</span></h2>
+          <h4>
+            <span>SAT 4:30PM &amp; 6:15PM</span>
+            <span>SUN 8:30AM, 10:05AM & 11:55AM</span>
+          </h4>
+        </div>
+        <div class="col-sm-4 hidden-xs">
+          <img src="http://crossroads-media.s3.amazonaws.com/images/streaming-banner-devices.png" class="img-responsive" >
+        </div>
+      </div>
+  </div><!--/steaming-banner-->
+  </div>
+</div><!--/row-->
+</a>
 
-  <h2 class="push-bottom">
-    <a ui-sref="media-messages">Series</a>
-    <ng-include src="'media/subscribe-btn-messages.html'"> </ng-include>
-  </h2>
 
-  <div class="row">
-    <ul class="media-list">
+<h2 class="push-bottom">
+  <a ui-sref="media-messages">Series</a>
+  <ng-include src="'media/subscribe-btn-messages.html'"> </ng-include>
+</h2>
+
+<div class="row">
+  <ul class="media-list">
 
 
-    </ul>
+  </ul>
+</div>
+
+<div class="row text-center push-bottom">
+  <div class="col-sm-12">
+    <a ui-sref="media-messages" class="btn btn-lg btn-link">View All Series</a>
   </div>
 
-  <div class="row text-center push-bottom">
-    <div class="col-sm-12">
-      <a ui-sref="media-messages" class="btn btn-lg btn-link">View All Series</a>
-    </div>
+</div>
 
+<hr>
+
+<h2 class="push-bottom">
+  <a ui-sref="media-music">Music</a>
+  <ng-include src="'media/subscribe-btn-music.html'"> </ng-include>
+</h2>
+
+<div class="row">
+  <ul class="media-list">
+
+
+  </ul>
+</div>
+
+<div class="row text-center push-bottom">
+  <div class="col-sm-12">
+    <a ui-sref="media-music" class="btn btn-lg btn-link">View All Music</a>
   </div>
+</div>
 
-  <hr>
+<hr>
 
-  <h2 class="push-bottom">
-    <a ui-sref="media-music">Music</a>
-    <ng-include src="'media/subscribe-btn-music.html'"> </ng-include>
-  </h2>
+<h2 class="push-bottom">
+  <a ui-sref="media-videos">Videos</a>
+  <ng-include src="'media/subscribe-btn-videos.html'"> </ng-include>
+</h2>
 
-  <div class="row">
-    <ul class="media-list">
+<div class="row">
+  <ul class="media-list">
 
 
-    </ul>
+  </ul>
+</div>
+
+<div class="row text-center push-bottom">
+  <div class="col-sm-12">
+    <a ui-sref="media-videos" class="btn btn-lg btn-link">View All Videos</a>
   </div>
-
-  <div class="row text-center push-bottom">
-    <div class="col-sm-12">
-      <a ui-sref="media-music" class="btn btn-lg btn-link">View All Music</a>
-    </div>
-  </div>
-
-  <hr>
-
-  <h2 class="push-bottom">
-    <a ui-sref="media-videos">Videos</a>
-    <ng-include src="'media/subscribe-btn-videos.html'"> </ng-include>
-  </h2>
-
-  <div class="row">
-    <ul class="media-list">
-
-
-    </ul>
-  </div>
-
-  <div class="row text-center push-bottom">
-    <div class="col-sm-12">
-      <a ui-sref="media-videos" class="btn btn-lg btn-link">View All Videos</a>
-    </div>
-  </div>
-
-
 </div>
