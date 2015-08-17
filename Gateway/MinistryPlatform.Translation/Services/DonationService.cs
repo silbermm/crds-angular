@@ -274,7 +274,7 @@ namespace MinistryPlatform.Translation.Services
                 donorId = dictionary.ToInt("Donor_ID"),
                 donationDate = dictionary.ToDate("Donation_Date"),
                 donationAmt = Convert.ToInt32(dictionary["Donation_Amount"]),
-                paymentTypeId = (dictionary.ToString("Payment_Type") == "Bank") ? 5 : 4,
+                paymentTypeId = getPaymentTypeId(dictionary.ToString("Payment_Type")),
                 donationNotes = dictionary.ToString("Donation_Status_Notes"),
                 batchId = dictionary.ToNullableInt("Batch_ID")
             };
@@ -314,9 +314,34 @@ namespace MinistryPlatform.Translation.Services
 
         private String getPaymentType(int paymentTypeId)
         {
-            return (paymentTypeId.ToString() == _creditCardPaymentType.Substring(0, 1)) ? _creditCardPaymentType.Substring(2, 11) :
-                        (paymentTypeId.ToString() == _checkPaymentType.Substring(0, 1)) ? _checkPaymentType.Substring(2, 4) :
-                        _bankPaymentType.Substring(2, 4);
+            if (paymentTypeId.ToString() == _creditCardPaymentType.Substring(0, 1))
+            {
+                return _creditCardPaymentType.Substring(2, 11);
+            }
+            else if (paymentTypeId.ToString() == _checkPaymentType.Substring(0, 1))
+            {
+                return _checkPaymentType.Substring(2, 5);
+            }
+            else
+            {
+                return _bankPaymentType.Substring(2, 4);
+            }
+        }
+
+        private int getPaymentTypeId(string paymentType)
+        {
+            if (paymentType == "Bank")
+            {
+                return 4;
+            }
+            else if (paymentType == "Check")
+            {
+                return 1;
+            }
+            else
+            {
+                return 5;
+            }
         }
     }
 }
