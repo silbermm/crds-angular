@@ -22,7 +22,8 @@ Details can be found below:
 <b>Amount</b>: $[Donation_Amount]</p><p>
 <b>Date</b>: [Donation_Date]</p>
 <p> <b>Payment Method</b>: [Payment_Method]</p>
-<b>Decline Reason</b>: [Decline_Reason]<div><br /></div><div>Please register an account online or if you already have an account, you can log in and try to submit your gift again!<p>If at any point you have questions, please contact our Finance team at <a href="mailto:finance@crossroads.net"><span style="color:#1155CC; font-family:Arial;">finance@crossroads.net</span></a>.</p>
+<b>Decline Reason</b>: [Decline_Reason]<div><br /></div><div>
+Please contact the Finance team at <a href="mailto:finance@crossroads.net"><span style="color:#1155CC; font-family:Arial;">finance@crossroads.net</span></a> or submit a new check.</p>
 <p>Thanks again for being part of the team!<br /></p>
 <p> - Crossroads </p></div>'
             ,1
