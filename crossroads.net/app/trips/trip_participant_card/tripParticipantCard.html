@@ -16,7 +16,7 @@
 	              </p>
 	            </div>
 	            <div class="go-trip-btn col-xs-12 col-sm-2 hard-sides col-sm-height" ng-show="tripParticipant.showGiveButton">
-	              <a href="/#/demo/go-trip-giving" class="table-btn table-btn-lg btn-standard"><span>Give</span></a>
+                <a ui-sref="tripgiving({'eventParticipantId': tripParticipant.trips[0].tripParticipantId})" class="table-btn table-btn-lg btn-standard"><span>Give</span></a>
 	            </div>
 	        </li>
 	      </ul>
@@ -24,7 +24,9 @@
           <li class="list-group-item hard-left row-same-height">
             <div class=" go-trip-name col-xs-12 col-xs-height col-top">
               <h4 class="small-heading flush-left inline pull-left">SHARE:</h4>
-              <sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_20x20_style pull-left push-half-left push-half-top">
+              <sn-addthis-toolbox 
+                class="addthis_crossroads_sharing clearfix addthis_20x20_style pull-left push-half-left push-half-top"
+                data-url="{{shareUrl}}">
                   <a href class="addthis_button_facebook"></a>
                   <a href class="addthis_button_twitter"></a>
                   <a href class="addthis_button_email"></a>

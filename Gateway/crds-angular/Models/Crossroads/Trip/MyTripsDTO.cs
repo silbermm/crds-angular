@@ -19,6 +19,9 @@ namespace crds_angular.Models.Crossroads.Trip
         [JsonIgnore]
         public int EventId { get; set; }
 
+        [JsonProperty(PropertyName = "eventParticipantId")]
+        public int EventParticipantId { get; set; }
+
         [JsonIgnore]
         public string EventType { get; set; }
 
