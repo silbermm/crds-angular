@@ -53,7 +53,7 @@ select
    event_id, 244, null, null, null, null, 1, 1, null, null, 0, null, null, null, null, null, 0
    from Events
    where Event_Title = 'Selenium Test Event XX'
-   and event_id not in ( select event_id from event_rooms where room_id =243 and notes is null));
+   and event_id not in ( select event_id from event_rooms where room_id =244 and notes is null);
 GO
 
 --Requested but not approved room

@@ -16,7 +16,9 @@ var definePlugin = new webpack.DefinePlugin({
 
 module.exports = {
     entry: {
-        main: './app/app.js'
+        trips: './app/trips/trips.module.js',
+        main: './app/app.js',
+        core: ['./node_modules/crds-core'] 
     },
     watchPattern: 'app/**/**',
     externals: {

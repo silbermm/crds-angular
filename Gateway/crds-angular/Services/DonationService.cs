@@ -1,7 +1,10 @@
 ﻿using System;
+using AutoMapper;
 using crds_angular.Models.Crossroads.Stewardship;
 using MPServices=MinistryPlatform.Translation.Services.Interfaces;
 using crds_angular.Services.Interfaces;
+using MinistryPlatform.Models;
+using MinistryPlatform.Models.DTO;
 using Newtonsoft.Json;
 
 namespace crds_angular.Services
@@ -13,6 +16,23 @@ namespace crds_angular.Services
         public DonationService(MPServices.IDonationService mpDonationService)
         {
             _mpDonationService = mpDonationService;
+        }
+
+        public DonationDTO GetDonationByProcessorPaymentId(string processorPaymentId)
+        {
+            var d = _mpDonationService.GetDonationByProcessorPaymentId(processorPaymentId);
+            if (d == null)
+            {
+                return (null);
+            }
+
+            var donation = new DonationDTO
+            {
+                amount = d.donationAmt,
+                donation_id = d.donationId + "",
+                batch_id = d.batchId
+            };
+            return (donation);
         }
 
         public int UpdateDonationStatus(int donationId, int statusId, DateTime? statusDate, string statusNote = null)
@@ -38,6 +58,16 @@ namespace crds_angular.Services
             }
 
             return (batch);
+        }
+
+        public DonationBatchDTO GetDonationBatchByProcessorTransferId(string processorTransferId)
+        {
+            return (Mapper.Map<DonationBatch, DonationBatchDTO>(_mpDonationService.GetDonationBatchByProcessorTransferId(processorTransferId)));
+        }
+
+        public DonationBatchDTO GetDonationBatch(int batchId)
+        {
+            return (Mapper.Map<DonationBatch, DonationBatchDTO>(_mpDonationService.GetDonationBatch(batchId)));
         }
 
         public void ProcessDeclineEmail(string processorPaymentId)

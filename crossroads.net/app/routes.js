@@ -121,39 +121,6 @@
         controller: 'MyProfileCtrl as myProfile',
         templateUrl: 'myprofile/myprofile.html',
       })
-      .state('tripgiving', {
-        parent: 'noSideBar',
-        url: '/trips',
-        controller: 'TripGivingCtrl as tripSearch',
-        templateUrl: 'tripgiving/tripgiving.html',
-        resolve: {
-          Page: 'Page',
-          CmsInfo: function(Page, $stateParams) {
-            return Page.get({
-              url: '/tripgiving/'
-            }).$promise;
-          }
-        }
-      })
-      .state('mytrips', {
-        parent: 'noSideBar',
-        url: '/trips/mytrips',
-        controller: 'MyTripsController as tripsController',
-        templateUrl: 'mytrips/mytrips.html',
-        data: {
-          isProtected: true
-        },
-        resolve: {
-          loggedin: crds_utilities.checkLoggedin,
-          Trip: 'Trip',
-          $cookies: '$cookies',
-          MyTrips: function(Trip, $cookies) {
-            return Trip.MyTrips.get({
-              contact: $cookies.get('userId')
-            }).$promise;
-          }
-        }
-      })
       .state("go-trip-signup", {
         parent: 'noSideBar',
         url: "/go/:trip_location/signup",
@@ -558,15 +525,16 @@
               promise = Page.get({ url: link }).$promise;
 
               return promise.then(function(promise) {
+
                 if (promise.pages.length > 0) {
                   ContentPageService.page = promise.pages[0];
                 } else {
                   var notFoundRequest = Page.get({ url: '/page-not-found/' }, function() {
                     if (notFoundRequest.pages.length > 0) {
-                      ContentPageService.page.renderedContent = notFoundRequest.pages[0].renderedContent;
+                      ContentPageService.page.content = notFoundRequest.pages[0].content;
                       ContentPageService.page.pageType = '';
                     } else {
-                      ContentPageService.page.renderedContent = '404 Content not found';
+                      ContentPageService.page.content = '404 Content not found';
                       ContentPageService.page.pageType = '';
                     }
                   });
@@ -575,9 +543,9 @@
                   case 'NoHeaderOrFooter':
                     return $templateFactory.fromUrl('templates/noHeaderOrFooter.html');
                   case 'LeftSidebar':
-                    return $templateFactory.fromUrl('templates/leftSidebar.html');
+                    return $templateFactory.fromUrl('templates/leftSideBar.html');
                   case 'RightSidebar':
-                    return $templateFactory.fromUrl('templates/rightSidebar.html');
+                    return $templateFactory.fromUrl('templates/rightSideBar.html');
                   case 'ScreenWidth':
                     return $templateFactory.fromUrl('templates/screenWidth.html');
                   default:

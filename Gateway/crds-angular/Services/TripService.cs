@@ -86,14 +86,21 @@ namespace crds_angular.Services
                 var donations = trips.Where(d => d.EventId == e.EventId).OrderByDescending(d => d.DonationDate).ToList();
                 foreach (var donation in donations)
                 {
-                    var gift = new TripGift
+                    var gift = new TripGift();
+                    if (donation.AnonymousGift)
                     {
-                        DonorNickname = donation.DonorNickname ?? donation.DonorFirstName,
-                        DonorLastName = donation.DonorLastName,
-                        DonorEmail = donation.DonorEmail,
-                        DonationDate = donation.DonationDate.ToShortDateString(),
-                        DonationAmount = donation.DonationAmount
-                    };
+                        gift.DonorNickname = "Anonymous";
+                        gift.DonorLastName = "";
+                    }
+                    else
+                    {
+                        gift.DonorNickname = donation.DonorNickname ?? donation.DonorFirstName;
+                        gift.DonorLastName = donation.DonorLastName;
+                    }
+                    gift.DonorEmail = donation.DonorEmail;
+                    gift.DonationDate = donation.DonationDate.ToShortDateString();
+                    gift.DonationAmount = donation.DonationAmount;
+                    gift.RegisteredDonor = donation.RegisteredDonor;
                     e.TripGifts.Add(gift);
                     e.TotalRaised += donation.DonationAmount;
                 }

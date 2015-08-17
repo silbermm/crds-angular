@@ -112,6 +112,7 @@ namespace crds_angular.test.Services
                 }
             };
 
+            _donationService.Setup(mocked => mocked.GetDonationBatchByProcessorTransferId("tx9876")).Returns((DonationBatchDTO)null);
             _paymentService.Setup(mocked => mocked.GetChargesForTransfer("tx9876")).Returns(new List<StripeCharge>());
             var result = _fixture.ProcessStripeEvent(e);
             Assert.IsNotNull(_fixture.ProcessStripeEvent(e));
@@ -162,18 +163,71 @@ namespace crds_angular.test.Services
                 },
                 new StripeCharge
                 {
+                    Id = "ch777",
+                    Amount = 777
+                },
+                new StripeCharge
+                {
                     Id = "ch444",
                     Amount = 444
+                },
+                new StripeCharge
+                {
+                    Id = "ch555",
+                    Amount = 555
                 }
             };
 
+            _donationService.Setup(mocked => mocked.GetDonationByProcessorPaymentId("ch111")).Returns(new DonationDTO
+            {
+                donation_id = "1111",
+                batch_id = null
+            });
+
+            _donationService.Setup(mocked => mocked.GetDonationByProcessorPaymentId("ch222")).Returns(new DonationDTO
+            {
+                donation_id = "2222",
+                batch_id = null
+            });
+
+            _donationService.Setup(mocked => mocked.GetDonationByProcessorPaymentId("ch333")).Returns(new DonationDTO
+            {
+                donation_id = "3333",
+                batch_id = null
+            });
+
+            _donationService.Setup(mocked => mocked.GetDonationByProcessorPaymentId("ch444")).Throws(new Exception("Not gonna do it, wouldn't be prudent."));
+
+            _donationService.Setup(mocked => mocked.GetDonationByProcessorPaymentId("ch555")).Returns(new DonationDTO
+            {
+                donation_id = "5555",
+                batch_id = 1984
+            });
+            _donationService.Setup(mocked => mocked.GetDonationBatch(1984)).Returns(new DonationBatchDTO
+            {
+                Id = 5150,
+                ProcessorTransferId = "OU812"
+            });
+
+            _donationService.Setup(mocked => mocked.GetDonationByProcessorPaymentId("ch777")).Returns(new DonationDTO
+            {
+                donation_id = "7777",
+                batch_id = 2112
+            });
+            _donationService.Setup(mocked => mocked.GetDonationBatch(2112)).Returns(new DonationBatchDTO
+            {
+                Id = 2112,
+                ProcessorTransferId = null
+            });
+
+            _donationService.Setup(mocked => mocked.GetDonationBatchByProcessorTransferId("tx9876")).Returns((DonationBatchDTO)null);
             _paymentService.Setup(mocked => mocked.GetChargesForTransfer("tx9876")).Returns(charges);
             _donationService.Setup(
                 mocked => mocked.CreatePaymentProcessorEventError(e, It.IsAny<StripeEventResponseDTO>()));
-            _donationService.Setup(mocked => mocked.UpdateDonationStatus("ch111", 999, e.Created, null)).Returns(1111);
-            _donationService.Setup(mocked => mocked.UpdateDonationStatus("ch222", 999, e.Created, null)).Returns(2222);
-            _donationService.Setup(mocked => mocked.UpdateDonationStatus("ch333", 999, e.Created, null)).Returns(3333);
-            _donationService.Setup(mocked => mocked.UpdateDonationStatus("ch444", 999, e.Created, null)).Throws(new Exception("Not gonna do it, wouldn't be prudent."));
+            _donationService.Setup(mocked => mocked.UpdateDonationStatus(1111, 999, e.Created, null)).Returns(1111);
+            _donationService.Setup(mocked => mocked.UpdateDonationStatus(2222, 999, e.Created, null)).Returns(2222);
+            _donationService.Setup(mocked => mocked.UpdateDonationStatus(3333, 999, e.Created, null)).Returns(3333);
+            _donationService.Setup(mocked => mocked.UpdateDonationStatus(7777, 999, e.Created, null)).Returns(7777);
             _donationService.Setup(mocked => mocked.CreateDeposit(It.IsAny<DepositDTO>())).Returns(
                 (DepositDTO o) =>
                 {
@@ -186,12 +240,13 @@ namespace crds_angular.test.Services
             Assert.IsNotNull(result);
             Assert.IsInstanceOf<TransferPaidResponseDTO>(result);
             var tp = (TransferPaidResponseDTO)result;
-            Assert.AreEqual(4, tp.TotalTransactionCount);
-            Assert.AreEqual(3, tp.SuccessfulUpdates.Count);
-            Assert.AreEqual(charges.GetRange(0, 3).Select(charge => charge.Id), tp.SuccessfulUpdates);
-            Assert.AreEqual(1, tp.FailedUpdates.Count);
+            Assert.AreEqual(6, tp.TotalTransactionCount);
+            Assert.AreEqual(4, tp.SuccessfulUpdates.Count);
+            Assert.AreEqual(charges.GetRange(0, 4).Select(charge => charge.Id), tp.SuccessfulUpdates);
+            Assert.AreEqual(2, tp.FailedUpdates.Count);
             Assert.AreEqual("ch444", tp.FailedUpdates[0].Key);
             Assert.AreEqual("Not gonna do it, wouldn't be prudent.", tp.FailedUpdates[0].Value);
+            Assert.AreEqual("ch555", tp.FailedUpdates[1].Key);
             Assert.IsNotNull(tp.Batch);
             Assert.IsNotNull(tp.Deposit);
             Assert.IsNotNull(tp.Exception);
@@ -200,10 +255,10 @@ namespace crds_angular.test.Services
                 o.BatchName.Matches(@"MP\d{12}")
                 && o.SetupDateTime == o.FinalizedDateTime
                 && o.BatchEntryType == 555
-                && o.ItemCount == 3
-                && o.BatchTotalAmount == (111 + 222 + 333) / 100M
+                && o.ItemCount == 4
+                && o.BatchTotalAmount == (111 + 222 + 333 + 777) / 100M
                 && o.Donations != null
-                && o.Donations.Count == 3
+                && o.Donations.Count == 4
                 && o.DepositId == 98765
                 && o.ProcessorTransferId.Equals("tx9876")
             )));
