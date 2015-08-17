@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.EnterpriseServices;
 using System.Linq;
 using crds_angular.Models.Crossroads.Trip;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Extensions;
+using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using IDonationService = MinistryPlatform.Translation.Services.Interfaces.IDonationService;
 
@@ -53,6 +55,8 @@ namespace crds_angular.Services
                 tp.EventType = result.EventType;
                 var participant = participants[result.ParticipantId];
                 participant.Trips.Add(tp);
+                tp.ProgramId = result.ParticipantId;
+                tp.ProgramName = result.ProgramName;
             }
 
             return participants.Values.OrderBy(o => o.Lastname).ThenBy(o => o.Nickname).ToList();
@@ -61,13 +65,20 @@ namespace crds_angular.Services
         public MyTripsDTO GetMyTrips(int contactId, string token)
         {
             var trips = _donationService.GetMyTripDistributions(contactId, token).OrderBy(t => t.EventStartDate);
-
+            
+            
             var myTrips = new MyTripsDTO();
 
             var events = new List<Trip>();
             var eventIds = new List<int>();
             foreach (var trip in trips.Where(trip => !eventIds.Contains(trip.EventId)))
             {
+                var eventParticipantId = 0;
+                var eventParticipantIds = _eventParticipantService.TripParticipants("," + trip.EventId + ",,,,,,,,,,,," + contactId).First();
+                if (eventParticipantIds != null)
+                {
+                    eventParticipantId = eventParticipantIds.EventParticipantId;
+                }
                 eventIds.Add(trip.EventId);
                 events.Add(new Trip
                 {
@@ -77,7 +88,8 @@ namespace crds_angular.Services
                     EventStartDate = trip.EventStartDate.ToString("MMM dd, yyyy"),
                     EventEndDate = trip.EventEndDate.ToString("MMM dd, yyyy"),
                     FundraisingDaysLeft = Math.Max(0, (trip.CampaignEndDate - DateTime.Today).Days),
-                    FundraisingGoal = trip.TotalPledge
+                    FundraisingGoal = trip.TotalPledge,
+                    EventParticipantId = eventParticipantId
                 });
             }
 
@@ -108,5 +120,6 @@ namespace crds_angular.Services
             }
             return myTrips;
         }
+
     }
 }

@@ -26,10 +26,8 @@ require('./demo/guest_giver/give-change-information.html');
 require('./demo/guest_giver/give-logged-in.html');
 require('./demo/guest_giver/give-change-information-logged-in.html');
 require('./demo/guest_giver/give-logged-in-new-giver.html');
-require('./demo/trip_giving/give.html');
 
-
-app.controller("GiveCtrl",require("./give_controller"));
+app.controller("GiveController",require("./give.controller"));
 app.directive("naturalNumber", require('./directives/naturalNumber.validation.directive.js'));
 app.directive("invalidRouting", require('./directives/invalidRouting.validation.directive.js'));
 app.directive("invalidAccount", require('./directives/invalidAccount.validation.directive.js'));

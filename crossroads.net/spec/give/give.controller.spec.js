@@ -2,13 +2,25 @@ require('crds-core');
 require('../../app/app');
 
 describe('GiveController', function() {
-  var controller, $rootScope, $scope, $state, $timeout, $q, httpBackend, Session, mockPaymentService, mockGetResponse, programList, mockPaymentServiceGetPromise, mockSession;
+  var controller, 
+      $rootScope, 
+      $scope, 
+      $state, 
+      $timeout, 
+      $q, 
+      httpBackend, 
+      Session, 
+      mockPaymentService, 
+      mockGetResponse, 
+      programList, 
+      mockPaymentServiceGetPromise, 
+      mockSession;
 
   beforeEach(angular.mock.module('crossroads', function($provide) {
     programList = [
-      {ProgramId: 1, Name: "Crossroads"},
-      {ProgramId: 2, Name: "Game Change"},
-      {ProgramId: 3, Name: "Old St George Building"},
+      {ProgramId: 1, Name: 'Crossroads'},
+      {ProgramId: 2, Name: 'Game Change'},
+      {ProgramId: 3, Name: 'Old St George Building'},
     ];
     $provide.value('getPrograms', {
       Programs: function() {
@@ -16,7 +28,7 @@ describe('GiveController', function() {
           get: function() {
             var deferred = $q.defer();
             deferred.resolve(programList);
-            return deferred.promise
+            return deferred.promise;
           },
         });
       },
@@ -81,7 +93,7 @@ describe('GiveController', function() {
         updateDonorWithCard: function() {},
       };
 
-      controller = $controller('GiveCtrl',
+      controller = $controller('GiveController',
         { '$rootScope': $rootScope,
           '$scope': $scope,
           '$state': $state,
@@ -93,10 +105,10 @@ describe('GiveController', function() {
           'AUTH_EVENTS': AUTH_EVENTS
         });
 
-      controller.brand = "";
+      controller.brand = '';
       controller.donor = {};
       controller.donorError = false;
-      controller.last4 = "";
+      controller.last4 = '';
       controller.programsInput = programList;
     })
   );
@@ -117,7 +129,8 @@ describe('GiveController', function() {
       controller.email = 'test@somewhere.com';
       controller.program = {id: 3};
 
-      spyOn(controller, 'donate').and.callFake(function(programId, amount, donorId, email, pymtType, onSuccess, onFailure) {
+      spyOn(controller, 'donate').and.callFake(function(programId, amount, donorId, 
+                                                        email, pymtType, onSuccess, onFailure) {
         onSuccess(error);
       });
       spyOn($state, 'go');
@@ -141,7 +154,8 @@ describe('GiveController', function() {
       mockSession.isActive.and.callFake(function(){
         return true;
       });
-      spyOn(controller, 'donate').and.callFake(function(programId, amount, donorId, email, pymtType, onSuccess, onFailure) {
+      spyOn(controller, 'donate').and.callFake(function(programId, amount, donorId, 
+                                                        email, pymtType, onSuccess, onFailure) {
         controller.dto.declinedPayment = true;
         onFailure(error);
       });
@@ -172,7 +186,8 @@ describe('GiveController', function() {
       mockSession.isActive.and.callFake(function(){
         return true;
       });
-      spyOn(controller, 'donate').and.callFake(function(programId, amount, donorId, email, pymtType, onSuccess, onFailure) {
+      spyOn(controller, 'donate').and.callFake(function(programId, amount, donorId, 
+                                                        email, pymtType, onSuccess, onFailure) {
         controller.dto.declinedPayment = false;
         onFailure(error);
       });
@@ -185,9 +200,9 @@ describe('GiveController', function() {
     });
 
     it('should emit a failure message if called with missing params', function(){
-      spyOn($rootScope, "$emit");
+      spyOn($rootScope, '$emit');
       controller.confirmDonation();
-      expect($rootScope.$emit).toHaveBeenCalledWith("notify", 15);
+      expect($rootScope.$emit).toHaveBeenCalledWith('notify', 15);
     });
 
     it('should goto give.login if session is not active', function() {
@@ -281,7 +296,7 @@ describe('GiveController', function() {
     });
 
     it('should initialize default state if not already initialized', function() {
-      $rootScope.email = "me@here.com";
+      $rootScope.email = 'me@here.com';
       controller.email = undefined;
 
       controller.initialized = false;
@@ -295,7 +310,7 @@ describe('GiveController', function() {
     });
 
     it('should not initialize default state if already initialized', function() {
-      $rootScope.email = "me2@here.com";
+      $rootScope.email = 'me2@here.com';
       controller.email = undefined;
 
       controller.initialized = true;
@@ -309,7 +324,7 @@ describe('GiveController', function() {
     });
 
     it('should initialize default state if toState=give', function() {
-      $rootScope.email = "me@here.com";
+      $rootScope.email = 'me@here.com';
       controller.email = undefined;
 
       var event = $scope.$broadcast('$stateChangeStart', {name: 'give.amount'});
@@ -322,7 +337,7 @@ describe('GiveController', function() {
     });
 
     it('should not do anything if toState is not in the giving flow', function() {
-      $rootScope.email = "me@here.com";
+      $rootScope.email = 'me@here.com';
       controller.email = undefined;
       controller.processing = false;
 
@@ -521,7 +536,7 @@ describe('GiveController', function() {
        mockSession.isActive.and.callFake(function(){
          return false;
        });
-       spyOn($state, "go");
+       spyOn($state, 'go');
        spyOn(controller, 'donate');
 
        controller.submitChangedBankInfo();
@@ -569,7 +584,7 @@ describe('GiveController', function() {
       spyOn(mockPaymentService, 'getDonor').and.callThrough();
       mockPaymentServiceGetPromise.setSuccess(true);
       $scope.give = {
-        email: "test@test.com"
+        email: 'test@test.com'
       };
       mockSession.isActive.and.callFake(function(){
         return true;
@@ -578,8 +593,12 @@ describe('GiveController', function() {
       spyOn(controller, 'updateDonorAndDonate');
       controller.submitBankInfo();
 
-      expect(mockPaymentService.getDonor).toHaveBeenCalledWith("test@test.com");
-      expect(controller.updateDonorAndDonate).toHaveBeenCalledWith(mockGetResponse.id, controllerDto.program.ProgramId, controllerDto.amount, controllerDto.email, controllerDto.view);
+      expect(mockPaymentService.getDonor).toHaveBeenCalledWith('test@test.com');
+      expect(controller.updateDonorAndDonate).toHaveBeenCalledWith(mockGetResponse.id, 
+                                                                   controllerDto.program.ProgramId, 
+                                                                   controllerDto.amount, 
+                                                                   controllerDto.email, 
+                                                                   controllerDto.view);
       expect(controller.createDonorAndDonate).not.toHaveBeenCalled();
     });
 
@@ -587,7 +606,7 @@ describe('GiveController', function() {
       spyOn(mockPaymentService, 'getDonor').and.callThrough();
       mockPaymentServiceGetPromise.setSuccess(false);
       $scope.give = {
-        email: "test@test.com"
+        email: 'test@test.com'
       };
       mockSession.isActive.and.callFake(function(){
        return true;
@@ -596,8 +615,11 @@ describe('GiveController', function() {
       spyOn(controller, 'updateDonorAndDonate');
       controller.submitBankInfo();
 
-      expect(mockPaymentService.getDonor).toHaveBeenCalledWith("test@test.com");
-      expect(controller.createDonorAndDonate).toHaveBeenCalledWith(controllerDto.program.ProgramId, controllerDto.amount, controllerDto.email, controllerDto.view);
+      expect(mockPaymentService.getDonor).toHaveBeenCalledWith('test@test.com');
+      expect(controller.createDonorAndDonate).toHaveBeenCalledWith(controllerDto.program.ProgramId, 
+                                                                   controllerDto.amount, 
+                                                                   controllerDto.email, 
+                                                                   controllerDto.view);
       expect(controller.updateDonorAndDonate).not.toHaveBeenCalled();
     });
     
@@ -611,16 +633,16 @@ describe('GiveController', function() {
      };
 
      var mockToState = {
-       name : "give.account"
+       name : 'give.account'
      };
 
      it('should not perform any transitions for an unauthenticated user', function(){
        mockSession.isActive.and.callFake(function(){
          return false;
        });
-       spyOn($state, "go");
-       spyOn(mockEvent, "preventDefault");
-       spyOn(mockPaymentService, "getDonor").and.callThrough();
+       spyOn($state, 'go');
+       spyOn(mockEvent, 'preventDefault');
+       spyOn(mockPaymentService, 'getDonor').and.callThrough();
 
        controller.transitionForLoggedInUserBasedOnExistingDonor(mockEvent, mockToState);
 
