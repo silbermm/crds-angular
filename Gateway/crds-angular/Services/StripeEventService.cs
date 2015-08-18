@@ -67,6 +67,7 @@ namespace crds_angular.Services
                 _logger.Debug(msg);
                 response.TotalTransactionCount = 0;
                 response.Message = msg;
+                response.Exception = new ApplicationException(msg);
                 return (response);
             }
 
@@ -78,6 +79,7 @@ namespace crds_angular.Services
                 _logger.Debug(msg);
                 response.TotalTransactionCount = 0;
                 response.Message = msg;
+                response.Exception = new ApplicationException(msg);
                 return (response);
             }
 

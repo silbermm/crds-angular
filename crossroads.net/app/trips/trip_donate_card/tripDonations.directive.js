@@ -1,16 +1,16 @@
-(function(){
+(function() {
   'use strict()';
 
   module.exports = TripDonations;
 
   TripDonations.$inject = ['$log', 'Session'];
 
-  function TripDonations($log, Session){
+  function TripDonations($log, Session) {
     return {
       restrict: 'EA',
       transclude: true,
-      templateUrl : 'mytrips/tripDonations.html',
-      scope : {
+      templateUrl: 'trip_donate_card/tripDonations.html',
+      scope: {
         donation: '='
       }
     };
