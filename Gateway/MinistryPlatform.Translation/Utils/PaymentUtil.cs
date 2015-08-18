@@ -36,7 +36,7 @@ namespace MinistryPlatform.Translation.Utils
             return configuration.GetConfigIntValue("DefaultGiveDeclineEmailTemplate");
         }
 
-        private static String formatePaymentType(string paymentType)
+        private static String formatPaymentType(string paymentType)
         {
             // if there are any pascal casing go ahead and split
             paymentType = Regex.Replace(paymentType, "([A-Z])", " $1");
