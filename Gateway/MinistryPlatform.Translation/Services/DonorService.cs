@@ -2,7 +2,9 @@
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Enum;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
 
@@ -71,7 +73,7 @@ namespace MinistryPlatform.Translation.Services
 
         public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string charge_id, string pymtType, string processorId, DateTime setupTime, bool registeredDonor)
         {
-            var pymt_id = (pymtType == "bank") ? "5" : "4";
+            var pymt_id = PaymentType.getPaymentType(pymtType).id;
             var fee = feeAmt.HasValue ? feeAmt/100M : null;
             
             var donationValues = new Dictionary<string, object>
