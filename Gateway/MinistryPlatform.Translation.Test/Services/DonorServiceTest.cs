@@ -181,7 +181,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _programService.VerifyAll();
             _communicationService.VerifyAll();
             Assert.IsNotNull(response);
-            Assert.AreEqual(response, expectedDonationDistributionId);
+            Assert.AreEqual(response, expectedDonationId);
         }
 
         [Test]
