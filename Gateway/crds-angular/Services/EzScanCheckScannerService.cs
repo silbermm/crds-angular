@@ -60,7 +60,7 @@ namespace crds_angular.Services
             return (batches);
         }
 
-        public List<CheckScannerCheck> GetChecksForBatch(string batchName)
+        public virtual List<CheckScannerCheck> GetChecksForBatch(string batchName)
         {
             List<CheckScannerCheck> checks;
             IDataReader reader = null;
@@ -169,7 +169,7 @@ namespace crds_angular.Services
             });
         }
 
-        public CheckScannerBatch CreateDonationsForBatch(CheckScannerBatch batchDetails)
+        public virtual CheckScannerBatch CreateDonationsForBatch(CheckScannerBatch batchDetails)
         {
             var checks = GetChecksForBatch(batchDetails.Name);
             foreach (var check in checks)
