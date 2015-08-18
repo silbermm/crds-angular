@@ -250,7 +250,7 @@
       .state('give', {
         parent: 'noSideBar',
         url: '/give',
-        controller: 'GiveCtrl as give',
+        controller: 'GiveController as give',
         templateUrl: 'give/give.html',
         resolve: {
           programList: function(getPrograms) {
@@ -259,7 +259,7 @@
             return getPrograms.Programs.get({
               programType: 1
             }).$promise;
-          }
+          } 
         }
       })
       .state('give.amount', {
@@ -316,7 +316,7 @@
       .state('/demo/guest-giver/login-guest', {
         parent: 'noSideBar',
         url: '/demo/guest-giver/login-guest',
-        controller: 'GiveCtrl as give',
+        controller: 'GiveController as give',
         templateUrl: 'guest_giver/give-login-guest.html'
       })
       .state('/demo/guest-giver/give-confirmation', {
@@ -332,7 +332,7 @@
       .state('/demo/guest-giver/give-logged-in-bank-info', {
         parent: 'noSideBar',
         url: '/demo/guest-giver/logged-in-bank-info',
-        controller: 'GiveCtrl as give',
+        controller: 'GiveController as give',
         templateUrl: 'guest_giver/give-logged-in-bank-info.html'
       })
       .state('/demo/guest-giver/give-confirm-amount', {
@@ -343,7 +343,7 @@
       .state('/demo/guest-giver/give-change-information', {
         parent: 'noSideBar',
         url: '/demo/guest_giver/give-change-information',
-        controller: 'GiveCtrl as give',
+        controller: 'GiveController as give',
         templateUrl: 'guest_giver/give-change-information.html'
       })
       .state('/demo/logged-in-giver/existing-giver', {
@@ -354,7 +354,7 @@
       .state('/demo/logged-in-giver/change-information', {
         parent: 'noSideBar',
         url: '/demo/logged-in-giver/change-information',
-        controller: 'GiveCtrl as give',
+        controller: 'GiveController as give',
         templateUrl: 'guest_giver/give-change-information-logged-in.html'
       })
       .state('/demo/logged-in-giver/new-giver', {

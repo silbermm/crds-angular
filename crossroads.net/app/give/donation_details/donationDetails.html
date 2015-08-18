@@ -15,13 +15,13 @@
       <ng-messages-include src="on-submit-messages"></ng-messages-include>
     </ng-messages>
   </div>
-  <div class="form-group clearfix">
+  <div class="form-group clearfix" ng-show='showInitiative'>
     <label class="btn btn-block btn-checkbox-toggle"><input type="checkbox" ng-model="ministryShow" ng-click="setProgramList()" />&nbsp;&nbsp; Give to a specific initiative
     </label>
   </div>
         <!--/checkbox-->
   <div class="form-group" ng-show="ministryShow" ng-class="{'has-error': donationDetailsForm.initiative.$error.initiativeRequired && amountSubmitted}">
-    <select class="form-control" ng-options="program.Name for program in programs.slice(1) track by program.ProgramId" ng-model="program" name="initiative" initiative-required>
+    <select class="form-control" ng-options="program.Name for program in programsIn.slice(1) track by program.ProgramId" ng-model="program" name="initiative" initiative-required>
       <option value="">Choose Initiative</option>
     </select>
     <ng-messages for="donationDetailsForm.initiative.$error" ng-show="donationDetailsForm.initiative.$error.initiativeRequired && amountSubmitted">
@@ -29,10 +29,10 @@
     </ng-messages>
   </div>
 
-  <div class="form-group">
+  <div class="form-group" ng-show='showFrequency'>
     <select class="form-control">
       <option>One Time</option>
     </select>
   </div>
-        <!--/form-group-->
+  <!--/form-group-->
 </ng-form>
