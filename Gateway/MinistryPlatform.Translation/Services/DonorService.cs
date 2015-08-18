@@ -13,8 +13,7 @@ namespace MinistryPlatform.Translation.Services
 {
     public class DonorService : BaseService, IDonorService
     {
-        private readonly ILog _logger =
-            LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILog _logger = LogManager.GetLogger(typeof(DonorService));
 
         private readonly int _donorPageId;
         private readonly int _donationPageId;
@@ -98,19 +97,7 @@ namespace MinistryPlatform.Translation.Services
 
         public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor)
         {
-            var pymt_id = PaymentType.getPaymentType(pymtType).id;
-            switch (pymtType)
-            {
-                case "bank":
-                    pymtId = "5";
-                    break;
-                case "check":
-                    pymtId = "1";
-                    break;
-                default:
-                    pymtId = "4";
-                    break;
-            }
+            var pymtId = PaymentType.getPaymentType(pymtType).id;
             var fee = feeAmt.HasValue ? feeAmt /Constants.StripeDecimalConversionValue : null;
 
 

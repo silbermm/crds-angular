@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services;
