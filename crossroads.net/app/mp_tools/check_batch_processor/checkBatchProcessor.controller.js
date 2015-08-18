@@ -6,17 +6,23 @@
   CheckBatchProcessor.$inject = ['$rootScope', '$log', 'MPTools', 'CheckScannerBatches', 'getPrograms'];
 
   function CheckBatchProcessor($rootScope, $log, MPTools, CheckScannerBatches, getPrograms) {
-    var _this = this;
+    var vm = this;
 
-    _this.batch = {};
-    _this.batches = [];
-    _this.params = MPTools.getParams();
+    vm.batch = {};
+    vm.batches = [];
+    vm.programs = [];
+    vm.program = {};
+    vm.params = MPTools.getParams();
 
     activate();
 
     function activate() {
       CheckScannerBatches.query(function(data) {
-        _this.batches = data;
+        vm.batches = data;
+      });
+
+      getPrograms.Programs.get({programType: 1}).$promise.then(function(data) {
+        vm.programs = data;
       });
     }
   }
