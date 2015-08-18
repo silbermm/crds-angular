@@ -4,8 +4,9 @@ using crds_angular.Controllers.API;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services.Interfaces;
 using log4net;
-using Crossroads.Utilities.Interfaces;
 using System.Text;
+using Crossroads.Utilities;
+using Crossroads.Utilities.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -24,7 +25,7 @@ namespace crds_angular.Services
 
         // This value is used when creating the batch name for exporting to GP.  It must be 15 characters or less.
         private const string BatchNameDateFormat = @"\M\PyyyyMMddHHmm";
-
+       
         public StripeEventService(IPaymentService paymentService, IDonationService donationService, IConfigurationWrapper configuration)
         {
             _paymentService = paymentService;
@@ -128,7 +129,7 @@ namespace crds_angular.Services
                     var donationId = _donationService.UpdateDonationStatus(int.Parse(donation.donation_id), _donationStatusDeposited, eventTimestamp);
                     response.SuccessfulUpdates.Add(charge.Id);
                     batch.ItemCount++;
-                    batch.BatchTotalAmount += (charge.Amount / 100M);
+                    batch.BatchTotalAmount += (charge.Amount /Constants.StripeDecimalConversionValue);
                     batch.Donations.Add(new DonationDTO { donation_id = "" + donationId, amount = charge.Amount });
                 }
                 catch (Exception e)
@@ -152,7 +153,9 @@ namespace crds_angular.Services
                 DepositDateTime = now,
                 DepositName = batchName,
                 // This is the amount from Stripe - will show out of balance if does not match batch total above
-                DepositTotalAmount = transfer.Amount / 100M,
+                DepositTotalAmount = transfer.Amount /Constants.StripeDecimalConversionValue,
+                ProcessorFeeTotal = transfer.Fee /Constants.StripeDecimalConversionValue,
+                DepositAmount = ((transfer.Amount /Constants.StripeDecimalConversionValue) - transfer.Fee / (Constants.StripeDecimalConversionValue)),
                 Exported = false,
                 Notes = null,
                 ProcessorTransferId = transfer.Id

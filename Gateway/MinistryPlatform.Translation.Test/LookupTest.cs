@@ -161,12 +161,12 @@ namespace MinistryPlatform.Translation.Test
             var token = authData["token"].ToString();;
             List<Dictionary<string, object>> CrossroadsLocations = LookupService.CrossroadsLocations(token);
             Assert.IsNotEmpty(CrossroadsLocations);
-            var clifton = new Dictionary<string, object>();
-            clifton.Add("dp_RecordID", 11);
-            clifton.Add("dp_RecordName", "Clifton");
+            var uptown = new Dictionary<string, object>();
+            uptown.Add("dp_RecordID", 11);
+            uptown.Add("dp_RecordName", "Uptown");
 
            ////var list = CrossroadsLocations.ToList();
-            Assert.Contains(clifton, CrossroadsLocations);
+            Assert.Contains(uptown, CrossroadsLocations);
             CrossroadsLocations.ForEach(x =>
             {
                 Assert.IsInstanceOf<Dictionary<string, object>>(x);
