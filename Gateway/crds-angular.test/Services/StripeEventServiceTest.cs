@@ -4,6 +4,7 @@ using System.Linq;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
+using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
 using Moq;
 using Newtonsoft.Json.Linq;
@@ -263,7 +264,7 @@ namespace crds_angular.test.Services
                 && o.SetupDateTime == o.FinalizedDateTime
                 && o.BatchEntryType == 555
                 && o.ItemCount == 4
-                && o.BatchTotalAmount == (111 + 222 + 333 + 777) / 100M
+                && o.BatchTotalAmount == ((111 + 222 + 333 + 777) / Constants.StripeDecimalConversionValue)
                 && o.Donations != null
                 && o.Donations.Count == 4
                 && o.DepositId == 98765
