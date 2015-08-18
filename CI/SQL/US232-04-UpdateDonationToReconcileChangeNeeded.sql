@@ -63,7 +63,9 @@ BEGIN
     INNER JOIN DELETED D ON I.Donation_ID = D.Donation_ID
     INNER JOIN [dbo].[Donations] dtns ON dtns.Donation_ID = I.Donation_ID
     INNER JOIN [dbo].[Batches] b ON b.Batch_ID = dtns.Batch_ID
-    WHERE dtns.Donation_Status_ID = 2 AND b.Finalize_Date IS NOT NULL AND b.Deposit_ID IS NOT NULL
+    INNER JOIN [dbo].[Deposits] dp ON dp.Deposit_ID = b.Deposit_ID
+    WHERE dtns.Donation_Status_ID = 2 AND b.Finalize_Date IS NOT NULL AND
+      b.Deposit_ID IS NOT NULL AND dp.Exported = 1
 
     -- if we have a donation id
     IF @donation_id IS NOT NULL
@@ -112,7 +114,9 @@ BEGIN
     INNER JOIN [dbo].[Donations] dtns ON dtns.Donation_ID = dd.Donation_ID
     INNER JOIN [dbo].[Batches] b ON b.Batch_ID = dtns.Batch_ID
     INNER JOIN [dbo].[Programs] p ON p.Program_ID = dd.Program_ID
-    WHERE dtns.Donation_Status_ID = 2 AND b.Finalize_Date IS NOT NULL AND b.Deposit_ID IS NOT NULL
+    INNER JOIN [dbo].[Deposits] dp ON dp.Deposit_ID = b.Deposit_ID
+    WHERE dtns.Donation_Status_ID = 2 AND b.Finalize_Date IS NOT NULL AND
+      b.Deposit_ID IS NOT NULL AND dp.Exported = 1
 
     -- if we have a donation id and Amount is being updated
     IF @donation_id IS NOT NULL AND UPDATE(Amount)
