@@ -8,6 +8,7 @@
   function CheckBatchProcessor($rootScope, $log, MPTools, CheckScannerBatches, getPrograms) {
     var _this = this;
 
+    _this.batch = {};
     _this.batches = [];
     _this.params = MPTools.getParams();
 

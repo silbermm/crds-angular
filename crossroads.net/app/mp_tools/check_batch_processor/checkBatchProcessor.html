@@ -1,3 +1,19 @@
 <div>
   
 </div>
+
+<form name="checkBatchProcessorForm">
+  <div class="col-xs-6 col-sm-6 col-md-6">
+    <h3> Check Batch </h3>
+    <p>Selected: {{checkBatchProcessor.batch.selected}}</p>
+    <ui-select ng-model="checkBatchProcessor.batch.selected" theme="select2">
+      <ui-select-match placeholder="Click here to choose check batch...">{{$select.selected.name}}</ui-select-match>
+      <ui-select-choices repeat="batch in checkBatchProcessor.batches | filter: $select.search track by batch.id">
+        <div ng-bind-html="batch.name | highlight: $select.search"></div>
+        <!-- <small>
+          Scan Date: <scan ng-bind-html="''+batch.scan_date | highlight: $select.search"></span>
+        </small> -->
+      </ui-select-choices>
+    </ui-select>
+  </div>
+</form>
