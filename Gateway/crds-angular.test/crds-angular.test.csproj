@@ -152,6 +152,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="controllers\CheckScannerControllerTest.cs" />
     <Compile Include="controllers\DonationControllerTest.cs" />
     <Compile Include="controllers\DonorControllerTest.cs" />
     <Compile Include="controllers\EventLocationControllerTest.cs" />
