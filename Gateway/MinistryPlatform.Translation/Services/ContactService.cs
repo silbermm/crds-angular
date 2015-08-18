@@ -185,7 +185,7 @@ namespace MinistryPlatform.Translation.Services
                     { "Address_Line_1", address.Line1 },
                     { "Address_Line_2", address.Line2 },
                     { "City", address.City },
-                    { "State", address.State },
+                    { "State/Region", address.State },
                     { "Postal_Code", address.PostalCode }
                 };
             var addressId = _ministryPlatformService.CreateRecord(_addressesPageId, addressDictionary, apiToken);

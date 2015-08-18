@@ -8,6 +8,7 @@ using System.Net;
 using crds_angular.Models.Crossroads.Stewardship;
 using Crossroads.Utilities.Interfaces;
 using RestSharp.Extensions;
+using RestSharp.Serializers;
 
 namespace crds_angular.Services
 {
@@ -105,8 +106,25 @@ namespace crds_angular.Services
 
         public string CreateToken(string accountNumber, string routingNumber)
         {
-            // TODO Implement CreateToken
-            throw new System.NotImplementedException();
+            var request = new RestRequest("tokens", Method.POST);
+            request.AddParameter("bank_account[account_number]", accountNumber);
+            request.AddParameter("bank_account[routing_number]", routingNumber);
+            request.AddParameter("bank_account[country]", "US");
+            request.AddParameter("bank_account[currency]", "USD");
+            // TODO Should be able to use request.AddJsonBody here, but that seems to ignore the property annotations
+            //request.RequestFormat = DataFormat.Json;
+            //request.AddJsonBody(new StripeBankAccount
+            //{
+            //    AccountNumber = accountNumber,
+            //    RoutingNumber = routingNumber,
+            //    Country = "US",
+            //    Currency = "USD"
+            //});
+
+            var response = _stripeRestClient.Execute<StripeToken>(request);
+            CheckStripeResponse("Token creation failed", response);
+
+            return (response.Data.Id);
         }
 
         public SourceData UpdateCustomerSource(string customerToken, string cardToken)

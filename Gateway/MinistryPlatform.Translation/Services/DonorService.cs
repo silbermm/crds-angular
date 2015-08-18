@@ -19,6 +19,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _donationPageId;
         private readonly int _donationDistributionPageId;
         private readonly int _donorAccountsPageId;
+        private readonly int _findDonorByAccountPageViewId;
 
         public const string DonorRecordId = "Donor_Record";
         public const string DonorProcessorId = "Processor_ID";
@@ -39,6 +40,7 @@ namespace MinistryPlatform.Translation.Services
             _donationPageId = configuration.GetConfigIntValue("Donations");
             _donationDistributionPageId = configuration.GetConfigIntValue("Distributions");
             _donorAccountsPageId = configuration.GetConfigIntValue("DonorAccounts");
+            _findDonorByAccountPageViewId = configuration.GetConfigIntValue("FindDonorByAccountPageView");
         }
 
 
@@ -82,7 +84,7 @@ namespace MinistryPlatform.Translation.Services
                     { "Account_Number", donorAccount.AccountNumber },
                     { "Routing_Number", donorAccount.RoutingNumber },
                     { "Donor_ID", donorId },
-                    { "Non_Assignable", false },
+                    { "Non-Assignable", false },
                     { "Account_Type_ID", (int)donorAccount.Type },
                     { "Closed", false }
                 };
@@ -95,7 +97,19 @@ namespace MinistryPlatform.Translation.Services
 
         public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor)
         {
-            var pymtId = (pymtType == "bank") ? "5" : "4";
+            string pymtId;
+            switch (pymtType)
+            {
+                case "bank":
+                    pymtId = "5";
+                    break;
+                case "check":
+                    pymtId = "1";
+                    break;
+                default:
+                    pymtId = "4";
+                    break;
+            }
             var fee = feeAmt.HasValue ? feeAmt/100M : null;
             
             var donationValues = new Dictionary<string, object>
@@ -239,15 +253,15 @@ namespace MinistryPlatform.Translation.Services
         public ContactDonor GetContactDonorForDonorAccount(string accountNumber, string routingNumber)
         {
             var apiToken = apiLogin();
-            var search = string.Format(",,,{0},{1}", accountNumber, routingNumber);
+            var search = string.Format("{0},{1}", accountNumber, routingNumber);
 
-            var accounts = _ministryPlatformService.GetRecordsDict(_donorAccountsPageId, apiToken, search);
+            var accounts = _ministryPlatformService.GetPageViewRecords(_findDonorByAccountPageViewId, apiToken, search);
             if (accounts == null || accounts.Count == 0)
             {
                 return (null);
             }
 
-            var donorId = accounts[0]["Account_ID"] as int? ?? -1;
+            var donorId = accounts[0]["Donor_ID"] as int? ?? -1;
             if (donorId == -1)
             {
                 return (null);

@@ -292,6 +292,7 @@
     <Compile Include="Models\Crossroads\Stewardship\CheckScannerCheck.cs" />
     <Compile Include="Models\Crossroads\Stewardship\DepositDTO.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeBalanceTransaction.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\StripeBankAccount.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeExpandableProperty.cs" />
     <Compile Include="Models\Crossroads\Stewardship\CreateDonationDTO.cs" />
     <Compile Include="Models\Crossroads\Stewardship\CreateDonorDto.cs" />
@@ -303,6 +304,7 @@
     <Compile Include="Models\Crossroads\Stewardship\StripeCustomer.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeEvent.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeObject.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\StripeToken.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeTransfer.cs" />
     <Compile Include="Models\Crossroads\Trip\MyTripsDTO.cs" />
     <Compile Include="Models\Crossroads\Trip\TripParticipantDto.cs" />

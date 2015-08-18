@@ -86,7 +86,7 @@ namespace crds_angular.Services
                         {
                             Id = reader[i++] as int? ?? 0,
                             AccountNumber = reader[i++] as string,
-                            Amount = reader[i++] as decimal? ?? 0M,
+                            Amount = (decimal) (reader[i++] as double? ?? 0.0),
                             CheckNumber = reader[i++] as string,
                             ScanDate = reader[i++] as DateTime? ?? DateTime.Now,
                             RoutingNumber = reader[i++] as string,
@@ -190,14 +190,20 @@ namespace crds_angular.Services
                             PostalCode = check.Address.PostalCode
                         }
                     };
+                    contactDonor.Account = new DonorAccount
+                    {
+                        AccountNumber = check.AccountNumber,
+                        RoutingNumber = check.RoutingNumber,
+                        Type = AccountType.Checking
+                    };
 
                     contactDonor = _donorService.CreateOrUpdateContactDonor(contactDonor, string.Empty, token, DateTime.Now);
                 }
 
-                var charge = _paymentService.ChargeCustomer(contactDonor.ProcessorId, (int)(check.Amount * 100M), contactDonor.DonorId);
+                var charge = _paymentService.ChargeCustomer(contactDonor.ProcessorId, (int)(check.Amount), contactDonor.DonorId);
                 var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
 
-                var donationId = _mpDonorService.CreateDonationAndDistributionRecord((int)(check.Amount * 100M), fee, contactDonor.DonorId, batchDetails.ProgramId+"", charge.Id, "bank", contactDonor.ProcessorId, DateTime.Now, contactDonor.RegisteredUser);
+                var donationId = _mpDonorService.CreateDonationAndDistributionRecord((int)(check.Amount), fee, contactDonor.DonorId, batchDetails.ProgramId+"", charge.Id, "check", contactDonor.ProcessorId, DateTime.Now, contactDonor.RegisteredUser);
                 check.DonationId = donationId;
 
                 batchDetails.Checks.Add(check);
