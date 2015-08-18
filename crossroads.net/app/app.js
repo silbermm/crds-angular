@@ -2,7 +2,7 @@ require('./profile');
 require('./events');
 require('./give');
 require('./mp_tools');
-
+require('../lib/select.css');
 (function () {
   'use strict()';
 
@@ -18,6 +18,7 @@ require('./mp_tools');
 
   angular.module(MODULE).config(require('./routes'));
 
+  require('./services');
   require('./community_groups_signup');
   require('./profile/profile.html');
   require('./profile/personal/profile_personal.html');
@@ -25,7 +26,6 @@ require('./mp_tools');
   require('./profile/skills/profile_skills.html');
   require('./styleguide');
   require('./thedaily');
-  require('./give');
   require('./gotrips');
   require('./media');
   require('./myprofile');
@@ -36,4 +36,5 @@ require('./mp_tools');
   require('./search');
   require('./blog');
   require('./adbox');
+
 })();
