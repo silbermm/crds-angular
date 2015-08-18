@@ -96,6 +96,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enum\PaymentType.cs" />
     <Compile Include="Exceptions\GroupFullException.cs" />
     <Compile Include="Exceptions\MultipleRecordsException.cs" />
     <Compile Include="Exceptions\TemplateParseException.cs" />
@@ -145,7 +146,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="Utils\PaymentUtil.cs" />
     <Compile Include="Utils\PlatformUtils.cs" />
   </ItemGroup>
   <ItemGroup>
