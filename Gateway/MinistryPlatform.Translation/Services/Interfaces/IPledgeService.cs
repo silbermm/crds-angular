@@ -3,5 +3,6 @@
     public interface IPledgeService
     {
         int CreatePledge(int donorId, int pledgeCampaignId, decimal totalPledge);
+        bool DonorHasPledge(int pledgeCampaignId, int donorId);
     }
 }

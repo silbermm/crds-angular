@@ -214,6 +214,10 @@ namespace crds_angular.Services
 
             foreach (var applicant in dto.Applicants)
             {
+                if (_groupService.ParticipantGroupMember(dto.GroupId, applicant.ParticipantId))
+                {
+                    continue;
+                }
                 var groupParticipantId = _groupService.addParticipantToGroup(applicant.ParticipantId, dto.GroupId, groupRoleId, groupStartDate);
                 groupParticipants.Add(groupParticipantId);
 
@@ -228,17 +232,24 @@ namespace crds_angular.Services
         private void CreatePledge(SaveTripParticipantsDto dto, TripApplicant applicant)
         {
             int donorId;
+            bool addPledge = true;
             if (applicant.DonorId != null)
             {
                 donorId = (int) applicant.DonorId;
+                //does pledge exist?
+                addPledge = !_mpPledgeService.DonorHasPledge(dto.Campaign.PledgeCampaignId, donorId);
+
             }
             else
             {
                 donorId = _mpDonorService.CreateDonorRecord(applicant.ContactId, null, DateTime.Now);
+                addPledge = true;
             }
 
-            var campaign = dto.Campaign;
-            _mpPledgeService.CreatePledge(donorId, campaign.PledgeCampaignId, campaign.FundraisingGoal);
+            if (addPledge)
+            {
+                _mpPledgeService.CreatePledge(donorId, dto.Campaign.PledgeCampaignId, dto.Campaign.FundraisingGoal);
+            }
         }
 
         private void EventRegistration(IEnumerable<Event> events, TripApplicant applicant)

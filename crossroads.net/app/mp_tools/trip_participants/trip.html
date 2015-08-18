@@ -4,7 +4,7 @@
   <div>
     <h2 class='header noPspace'> Trip Participants </h2>
 
-    <div>Your selection contained {{ trip.params.selectedCount }} members.</div>
+    <div>Your selection contained {{ trip.params.selectedCount }} member(s).</div>
 
 		<form name="tripForm">
     	<div class="form-group">
@@ -20,7 +20,6 @@
 
 	    <div class="form-group">
 	      <button class="btn btn-primary btn-sm" ng-click="trip.cancel()">Cancel</button>
-	      <button class="btn btn-primary btn-sm" ng-click="trip.save()">trippin</button>
 	      <input type="submit" value="Submit" class="btn btn-primary btn-sm" 
 	      	ng-click="trip.save(tripForm.$valid)" 
 	      	ng-enabled="tripForm.$valid" />

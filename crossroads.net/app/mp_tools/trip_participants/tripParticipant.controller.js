@@ -9,6 +9,8 @@
 
     $log.debug('TripParticipantController');
     var vm = this;
+
+    vm.cancel = cancel;
     vm.errorMessage = $rootScope.MESSAGES.toolsError;
     vm.groups = [];
     vm.pageInfo = PageInfo;
@@ -22,6 +24,10 @@
     function activate(){
       $log.debug('pageInfo: ' + vm.pageInfo);
       vm.viewReady = true;
+    }
+
+    function cancel() {
+      $window.close();
     }
 
     function save() {
