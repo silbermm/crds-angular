@@ -178,7 +178,7 @@ namespace crds_angular.test.Services
 
             _mpDonationService.Setup(
                 mocked =>
-                    mocked.CreateDeposit(dto.DepositName, dto.DepositTotalAmount, dto.DepositDateTime, dto.AccountNumber,
+                    mocked.CreateDeposit(dto.DepositName, dto.DepositTotalAmount, dto.DepositAmount, dto.ProcessorFeeTotal, dto.DepositDateTime, dto.AccountNumber,
                         dto.BatchCount, dto.Exported, dto.Notes, dto.ProcessorTransferId)).Returns(987);
 
             var response = _fixture.CreateDeposit(dto);

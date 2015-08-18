@@ -1,15 +1,22 @@
 (function () {
   'use strict';
-  module.exports = GiveCtrl;
+  module.exports = GiveController;
 
-  GiveCtrl.$inject = ['$rootScope', '$scope', '$state', '$timeout', 'Session', 'PaymentService','programList', 'GiveTransferService', 'User', 'AUTH_EVENTS'];
+  GiveController.$inject = ['$rootScope', 
+                      '$scope', 
+                      '$state', 
+                      '$timeout', 
+                      'Session', 
+                      'PaymentService',
+                      'programList', 
+                      'GiveTransferService', 
+                      'User', 
+                      'AUTH_EVENTS',
+                      'TripParticipant'];
 
-  function DonationException(message) {
-    this.message = message;
-    this.name = "DonationException";
-  };
-
-  function GiveCtrl($rootScope, $scope, $state, $timeout, Session, PaymentService, programList, GiveTransferService, User, AUTH_EVENTS) {
+    function GiveController($rootScope, $scope, $state, $timeout, Session, 
+                            PaymentService, programList, GiveTransferService, 
+                            User, AUTH_EVENTS, TripParticipant) {
 
         $scope.$on('$stateChangeStart', function (event, toState, toParams) {
            // Short-circuit this handler if we're not transitioning TO a give state
@@ -22,12 +29,11 @@
            vm.processing = true;
 
            // If not initialized, initialize and go to default state
-           if(!vm.initialized || toState.name == "give") {
+           if(!vm.initialized || toState.name === 'give') {
              event.preventDefault();
              vm.initDefaultState();
              return;
            }
-
            vm.transitionForLoggedInUserBasedOnExistingDonor(event,toState);
         });
 
@@ -465,5 +471,11 @@
 
       }
      };
+  
+  function DonationException(message) {
+    this.message = message;
+    this.name = 'DonationException';
+  }
+
 
 })();
