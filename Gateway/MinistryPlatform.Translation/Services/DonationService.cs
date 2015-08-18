@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using AutoMapper;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Enum;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
 
@@ -15,9 +16,6 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _donationsPageId;
         private readonly int _distributionPageId;
         private readonly int _batchesPageId;
-        private readonly int _declineEmailTemplate;
-        private readonly string _creditCardPaymentType;
-        private readonly string _bankPaymentType;
         private readonly int _depositsPageId;
         private readonly int _paymentProcessorErrorsPageId;
         private readonly int _tripDistributionsPageView;
@@ -33,9 +31,6 @@ namespace MinistryPlatform.Translation.Services
             _donationsPageId = configuration.GetConfigIntValue("Donations");
             _distributionPageId = configuration.GetConfigIntValue("Distributions");
             _batchesPageId = configuration.GetConfigIntValue("Batches");
-            _declineEmailTemplate = configuration.GetConfigIntValue("DefaultGiveDeclineEmailTemplate");
-            _creditCardPaymentType = configuration.GetConfigValue("CreditCard");
-            _bankPaymentType = configuration.GetConfigValue("Bank");
             _depositsPageId = configuration.GetConfigIntValue("Deposits");
             _paymentProcessorErrorsPageId = configuration.GetConfigIntValue("PaymentProcessorEventErrors");
             _tripDistributionsPageView = configuration.GetConfigIntValue("TripDistributionsView");
@@ -239,12 +234,10 @@ namespace MinistryPlatform.Translation.Services
                 }
                 
                 var program = rec.First().ToString("Statement_Title");
+                var paymentType = PaymentType.getPaymentType(result.paymentTypeId).name;
+                var declineEmailTemplate = PaymentType.getPaymentType(result.paymentTypeId).declineEmailTemplateId;
 
-                var paymentType = (result.paymentTypeId.ToString() == _creditCardPaymentType.Substring(0,1))
-                    ? _creditCardPaymentType.Substring(2,11)
-                    : _bankPaymentType.Substring(2,4);
-
-                _donorService.SendEmail(_declineEmailTemplate, result.donorId, result.donationAmt, paymentType, result.donationDate,
+                _donorService.SendEmail(declineEmailTemplate, result.donorId, result.donationAmt, paymentType, result.donationDate,
                     program, result.donationNotes);
             }
             catch (Exception ex)
@@ -278,7 +271,7 @@ namespace MinistryPlatform.Translation.Services
                 donorId = dictionary.ToInt("Donor_ID"),
                 donationDate = dictionary.ToDate("Donation_Date"),
                 donationAmt = Convert.ToInt32(dictionary["Donation_Amount"]),
-                paymentTypeId = (dictionary.ToString("Payment_Type") == "Bank") ? 5 : 4,
+                paymentTypeId = PaymentType.getPaymentType(dictionary.ToString("Payment_Type")).id,
                 donationNotes = dictionary.ToString("Donation_Status_Notes"),
                 batchId = dictionary.ToNullableInt("Batch_ID")
             };

@@ -5,6 +5,7 @@ using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
 using log4net;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Enum;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
 
@@ -97,7 +98,7 @@ namespace MinistryPlatform.Translation.Services
 
         public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor)
         {
-            string pymtId;
+            var pymt_id = PaymentType.getPaymentType(pymtType).id;
             switch (pymtType)
             {
                 case "bank":
