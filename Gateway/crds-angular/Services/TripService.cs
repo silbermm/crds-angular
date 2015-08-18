@@ -74,7 +74,7 @@ namespace crds_angular.Services
             foreach (var trip in trips.Where(trip => !eventIds.Contains(trip.EventId)))
             {
                 var eventParticipantId = 0;
-                var eventParticipantIds = _eventParticipantService.TripParticipants("," + trip.EventId + ",,,,,,,,,,,," + contactId).First();
+                var eventParticipantIds = _eventParticipantService.TripParticipants("," + trip.EventId + ",,,,,,,,,,,," + contactId).FirstOrDefault();
                 if (eventParticipantIds != null)
                 {
                     eventParticipantId = eventParticipantIds.EventParticipantId;
