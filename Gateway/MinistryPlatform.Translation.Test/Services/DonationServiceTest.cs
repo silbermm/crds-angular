@@ -226,7 +226,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Deposit_Name", depositName},
                 {"Deposit_Total", depositTotalAmount},
                 {"Deposit_Amount", depositAmount},
-                {"Deposit_Processor_Fee", depositProcessorFee},
+                {"Processor_Fee_Total", depositProcessorFee},
                 {"Deposit_Date", depositDateTime},
                 {"Account_Number", accountNumber},
                 {"Batch_Count", batchCount},
