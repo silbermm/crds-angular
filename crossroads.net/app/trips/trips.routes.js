@@ -78,6 +78,18 @@
             }).$promise;
           }
         }
+      })
+      .state('tripsignup', {
+        parent: 'noSideBar',
+        url: '/trips/:tripLocation/signup',
+        templateUrl: 'signup/signupPage1.html',
+        controller: 'TripsSignupController as tripsSignup',
+        data: {
+          isProtected: true
+        },
+        resolve: {
+          loggedin: crds_utilities.checkLoggedin
+        }
       });
   }
 
