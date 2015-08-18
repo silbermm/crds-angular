@@ -203,7 +203,9 @@ namespace crds_angular.Services
                 var charge = _paymentService.ChargeCustomer(contactDonor.ProcessorId, (int)(check.Amount), contactDonor.DonorId);
                 var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
 
-                var donationId = _mpDonorService.CreateDonationAndDistributionRecord((int)(check.Amount), fee, contactDonor.DonorId, batchDetails.ProgramId+"", charge.Id, "check", contactDonor.ProcessorId, DateTime.Now, contactDonor.RegisteredUser);
+                var programId = batchDetails.ProgramId == null ? null : batchDetails.ProgramId + "";
+
+                var donationId = _mpDonorService.CreateDonationAndDistributionRecord((int)(check.Amount), fee, contactDonor.DonorId, programId, charge.Id, "check", contactDonor.ProcessorId, DateTime.Now, contactDonor.RegisteredUser);
                 check.DonationId = donationId;
 
                 batchDetails.Checks.Add(check);

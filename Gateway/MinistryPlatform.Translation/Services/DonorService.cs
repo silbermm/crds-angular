@@ -111,6 +111,8 @@ namespace MinistryPlatform.Translation.Services
                     break;
             }
             var fee = feeAmt.HasValue ? feeAmt/100M : null;
+
+            var apiToken = apiLogin();
             
             var donationValues = new Dictionary<string, object>
             {
@@ -130,11 +132,16 @@ namespace MinistryPlatform.Translation.Services
 
             try
             {
-                donationId = WithApiLogin(apiToken => (_ministryPlatformService.CreateRecord(_donationPageId, donationValues, apiToken, true)));
+                donationId = _ministryPlatformService.CreateRecord(_donationPageId, donationValues, apiToken, true);
             }
             catch (Exception e)
             {
                 throw new ApplicationException(string.Format("CreateDonationRecord failed.  Donor Id: {0}", donorId), e);
+            }
+
+            if (string.IsNullOrWhiteSpace(programId))
+            {
+                return (donationId);
             }
             
             var distributionValues = new Dictionary<string, object>
@@ -144,14 +151,9 @@ namespace MinistryPlatform.Translation.Services
                 {"Program_ID", programId}
             };
 
-            int donationDistributionId;
-
             try
             {
-                donationDistributionId =
-                    WithApiLogin(
-                        apiToken =>
-                            (_ministryPlatformService.CreateRecord(_donationDistributionPageId, distributionValues, apiToken, true)));
+                _ministryPlatformService.CreateRecord(_donationDistributionPageId, distributionValues, apiToken, true);
             }
             catch (Exception e)
             {
@@ -168,7 +170,7 @@ namespace MinistryPlatform.Translation.Services
                 _logger.Error(string.Format("Failed when processing the template for Donation Id: {0}", donationId));
             }
 
-            return donationDistributionId;
+            return donationId;
         }
 
         public ContactDonor GetContactDonor(int contactId)
