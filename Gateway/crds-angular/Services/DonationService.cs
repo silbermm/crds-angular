@@ -76,7 +76,7 @@ namespace crds_angular.Services
 
         public DepositDTO CreateDeposit(DepositDTO deposit)
         {
-            deposit.Id = _mpDonationService.CreateDeposit(deposit.DepositName, deposit.DepositTotalAmount,deposit.DepositAmount, deposit.ProcessorFeeTotal, deposit.DepositDateTime,
+            deposit.Id = _mpDonationService.CreateDeposit(deposit.DepositName, deposit.DepositTotalAmount, deposit.DepositAmount, deposit.ProcessorFeeTotal, deposit.DepositDateTime,
                 deposit.AccountNumber, deposit.BatchCount, deposit.Exported, deposit.Notes, deposit.ProcessorTransferId);
             
             return (deposit);

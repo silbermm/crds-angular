@@ -139,7 +139,8 @@ namespace crds_angular.test.Services
                     Object = JObject.FromObject(new StripeTransfer
                     {
                         Id = "tx9876",
-                        Amount = 50000
+                        Amount = 50000,
+                        Fee = 1500
                     })
                 }
             };
@@ -276,6 +277,8 @@ namespace crds_angular.test.Services
                 && o.BatchCount == 1
                 && o.DepositDateTime != null
                 && o.DepositTotalAmount == 500M
+                &&o.ProcessorFeeTotal == 15M
+                &&o.DepositAmount == 485M
                 && o.Notes == null
                 && o.ProcessorTransferId.Equals("tx9876")
             )));

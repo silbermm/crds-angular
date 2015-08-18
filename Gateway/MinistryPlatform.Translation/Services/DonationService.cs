@@ -81,7 +81,7 @@ namespace MinistryPlatform.Translation.Services
             return (WithApiLogin(token => (Mapper.Map<Dictionary<string,object>, DonationBatch>(_ministryPlatformService.GetRecordDict(_batchesPageId, batchId, token)))));
         }
 
-        public int CreateDonationBatch(string batchName, DateTime setupDateTime, decimal batchTotalAmount,int itemCount,
+        public int CreateDonationBatch(string batchName, DateTime setupDateTime, decimal batchTotalAmount, int itemCount,
             int batchEntryType, int? depositId, DateTime finalizedDateTime, string processorTransferId)
         {
             
