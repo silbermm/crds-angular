@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
+using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
 using log4net;
 using MinistryPlatform.Models;
@@ -110,7 +110,8 @@ namespace MinistryPlatform.Translation.Services
                     pymtId = "4";
                     break;
             }
-            var fee = feeAmt.HasValue ? feeAmt/100M : null;
+            var fee = feeAmt.HasValue ? feeAmt /Constants.StripeDecimalConversionValue : null;
+
 
             var apiToken = apiLogin();
             

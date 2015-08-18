@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using Crossroads.Utilities.Interfaces;
+using Crossroads.Utilities;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -125,7 +125,7 @@ namespace MinistryPlatform.Translation.Test.Services
             {
                 {"Donor_ID", donorId},
                 {"Donation_Amount", donationAmt},
-                {"Processor_Fee_Amount", feeAmt / 100M},
+                {"Processor_Fee_Amount", feeAmt /Constants.StripeDecimalConversionValue},
                 {"Payment_Type_ID", "4"}, //hardcoded as credit card until ACH stories are worked
                 {"Donation_Date", setupDate},
                 {"Transaction_code", chargeId},
