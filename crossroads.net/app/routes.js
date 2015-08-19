@@ -509,7 +509,29 @@
               url: '/volunteer-application/kids-club/'
             }).$promise;
           }
-
+        }
+      })
+      .state('tools.tripParticipants', {
+        url: '/tripParticipants',
+        controller: 'TripParticipantController as trip',
+        templateUrl: 'trip_participants/trip.html',
+        resolve: {
+          MPTools: 'MPTools',
+          Trip: 'Trip',
+          PageInfo: function(MPTools, Trip) {
+            var params = MPTools.getParams();
+            return Trip.TripFormResponses.get({
+              selectionId: params.selectedRecord, 
+              selectionCount: params.selectedCount
+            }).$promise.then(function(data) {
+                    // promise fulfilled
+                    return data;
+                }, function(error) {
+                    // promise rejected, could log the error with: console.log('error', error);
+                    var tmpErr = error;
+                    return error;
+                });
+          }
         }
       })
       .state('content', {

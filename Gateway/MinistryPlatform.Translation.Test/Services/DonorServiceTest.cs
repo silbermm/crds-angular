@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Configuration;
 using Crossroads.Utilities;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
+using Newtonsoft.Json.Bson;
 using NUnit.Framework;
 
 namespace MinistryPlatform.Translation.Test.Services
@@ -16,6 +18,8 @@ namespace MinistryPlatform.Translation.Test.Services
         private Mock<IMinistryPlatformService> _ministryPlatformService;
         private Mock<IProgramService> _programService;
         private Mock<ICommunicationService> _communicationService;
+        private Mock<IAuthenticationService> _authService;
+        private Mock<IConfigurationWrapper> _configWrapper;
         private DonorService _fixture;
 
         [SetUp]
@@ -24,8 +28,14 @@ namespace MinistryPlatform.Translation.Test.Services
             _ministryPlatformService = new Mock<IMinistryPlatformService>();
             _programService = new Mock<IProgramService>();
             _communicationService = new Mock<ICommunicationService>();
+            _authService = new Mock<IAuthenticationService>();
+            _configWrapper = new Mock<IConfigurationWrapper>();
 
-            _fixture = new DonorService(_ministryPlatformService.Object, _programService.Object, _communicationService.Object);
+            _configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
+            _configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("pwd");
+            _authService.Setup(m => m.Authenticate(It.IsAny<string>(), It.IsAny<string>())).Returns(new Dictionary<string, object> { { "token", "ABC" }, { "exp", "123" } });
+        
+            _fixture = new DonorService(_ministryPlatformService.Object, _programService.Object,_communicationService.Object, _authService.Object, _configWrapper.Object);
         }
 
         [Test]

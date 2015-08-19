@@ -66,7 +66,7 @@ namespace crds_angular.Controllers.API
                 }
                 catch (Exception ex)
                 {
-                    var apiError = new ApiErrorDto("Save RSVP Failed", ex);
+                    var apiError = new ApiErrorDto("GetFamily Failed", ex);
                     throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
                 
@@ -86,7 +86,7 @@ namespace crds_angular.Controllers.API
                 }
                 catch (Exception ex)
                 {
-                    var apiError = new ApiErrorDto("Save RSVP Failed", ex);
+                    var apiError = new ApiErrorDto("GetQualifiedServers Failed", ex);
                     throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
 
