@@ -37,6 +37,8 @@ namespace crds_angular.test.controllers
         {
             groupServiceMock = new Mock<crds_angular.Services.Interfaces.IGroupService>();
             authenticationServiceMock = new Mock<IAuthenticationService>();
+            participantServiceMock = new Mock<IParticipantService>();
+
             fixture = new GroupController(groupServiceMock.Object, authenticationServiceMock.Object,participantServiceMock.Object);
 
             authType = "auth_type";

@@ -308,11 +308,9 @@ namespace MinistryPlatform.Translation.Test.Services
 
             Assert.AreEqual(1, groups[0].GroupId);
             Assert.AreEqual("group-one", groups[0].Name);
-            Assert.AreEqual("group-one-role", groups[0].GroupRole);
 
             Assert.AreEqual(2, groups[1].GroupId);
             Assert.AreEqual("group-two", groups[1].Name);
-            Assert.AreEqual("group-two-role", groups[1].GroupRole);
         }
 
         
