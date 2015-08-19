@@ -73,6 +73,7 @@ namespace crds_angular.Services
             }
 
             // Don't process this transfer if we can't find any charges for the transfer
+            //this returns charges and refunds
             var charges = _paymentService.GetChargesForTransfer(transfer.Id);
             if (charges == null || charges.Count <= 0)
             {
@@ -105,6 +106,15 @@ namespace crds_angular.Services
             {
                 try
                 {
+                    if (charge.Type == "refund")
+                    {
+                        //take charge.id and call stripe /v1/charges/{id}/refunds
+                        var refund = _paymentService.GetChargeRefund(charge.Id);
+                        //get data.id whihc will contain the refund trans code
+                        //get donation using refund trans code
+                        //process like all the others
+                        var donationa = _donationService.GetDonationByProcessorPaymentId(refund.Data[0].Id);
+                    }
                     var donation = _donationService.GetDonationByProcessorPaymentId(charge.Id);
                     if (donation.batch_id != null)
                     {
