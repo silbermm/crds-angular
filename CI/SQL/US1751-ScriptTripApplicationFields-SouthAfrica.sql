@@ -44,7 +44,7 @@ No', 1, @SouthAfricaForm, 1, 0, 604),
 (60, 'Food Allergies', 1, 'NULL', 0, @SouthAfricaForm, 1, 0, 605),
 (70, 'Medical Conditions', 1, 'NULL', 0, @SouthAfricaForm, 1, 0, 606),
 (80, 'Home Church', 5, 'None
-Clifton
+Uptown
 Florence
 I do not attend Crossroads
 Mason
