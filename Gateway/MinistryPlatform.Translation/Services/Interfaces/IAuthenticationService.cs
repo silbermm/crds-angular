@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using MinistryPlatform.Models;
 
 namespace MinistryPlatform.Translation.Services.Interfaces
 {
@@ -17,12 +16,8 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         /// <param name="newPassword"></param>
         /// <returns></returns>
         Boolean ChangePassword(string token, string newPassword);
-        
+
         //Get ID of currently logged in user
         int GetContactId(string token);
-
-        //Get Participant IDs of a contact
-        //Participant GetParticipantRecord(string token);
-
     }
 }

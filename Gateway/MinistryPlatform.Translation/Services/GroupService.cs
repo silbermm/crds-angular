@@ -29,7 +29,7 @@ namespace MinistryPlatform.Translation.Services
         private IMinistryPlatformService ministryPlatformService;
 
         public GroupService(IMinistryPlatformService ministryPlatformService, IConfigurationWrapper configurationWrapper, IAuthenticationService authenticationService)
-            : base(authenticationService,configurationWrapper)
+            : base(authenticationService, configurationWrapper)
         {
             this.ministryPlatformService = ministryPlatformService;
             this._configurationWrapper = configurationWrapper;
@@ -86,32 +86,44 @@ namespace MinistryPlatform.Translation.Services
                 object gid = null;
                 groupDetails.TryGetValue("Group_ID", out gid);
                 if (gid != null)
+                {
                     g.GroupId = (int) gid;
+                }
 
                 object gn = null;
                 groupDetails.TryGetValue("Group_Name", out gn);
                 if (gn != null)
+                {
                     g.Name = (string) gn;
+                }
 
                 object gt = null;
                 groupDetails.TryGetValue("Group_Type_ID", out gt);
                 if (gt != null)
+                {
                     g.GroupType = (int) gt;
+                }
 
                 object gsz = null;
                 groupDetails.TryGetValue("Target_Size", out gsz);
                 if (gsz != null)
+                {
                     g.TargetSize = (short) gsz;
+                }
 
                 object gf = null;
                 groupDetails.TryGetValue("Group_Is_Full", out gf);
                 if (gf != null)
+                {
                     g.Full = (Boolean) gf;
+                }
 
                 object gwl = null;
                 groupDetails.TryGetValue("Enable_Waiting_List", out gwl);
                 if (gwl != null)
+                {
                     g.WaitList = (Boolean) gwl;
+                }
 
                 if (g.WaitList)
                 {
@@ -132,7 +144,9 @@ namespace MinistryPlatform.Translation.Services
                         }
                     }
                     else
+                    {
                         logger.Debug("No wait list found for group id " + groupId);
+                    }
                 }
 
                 logger.Debug("Getting participants for group " + groupId);
@@ -158,7 +172,9 @@ namespace MinistryPlatform.Translation.Services
                     }
                 }
                 else
+                {
                     logger.Debug("No participants found for group id " + groupId);
+                }
 
                 logger.Debug("Group details: " + g);
                 return (g);
@@ -172,7 +188,9 @@ namespace MinistryPlatform.Translation.Services
             // Get all the Groups->Events sub-page records
             var mpEvents = ministryPlatformService.GetSubPageRecords(GroupsEventsPageId, groupId, apiToken);
             if (mpEvents == null || mpEvents.Count == 0)
+            {
                 return (null);
+            }
 
             var events = new List<Event>();
             foreach (Dictionary<string, object> e in mpEvents)
@@ -186,7 +204,9 @@ namespace MinistryPlatform.Translation.Services
                                                                            apiToken,
                                                                            false);
                     if (eventGroup == null)
+                    {
                         continue;
+                    }
 
                     object eventId = null;
                     if (eventGroup.TryGetValue("Event_ID", out eventId))
@@ -214,8 +234,6 @@ namespace MinistryPlatform.Translation.Services
             return teams.Count != 0;
         }
 
-        //GroupParticipantsById
-
         public bool checkIfUserInGroup(int participantId, IList<GroupParticipant> groupParticipants)
         {
             return groupParticipants.Select(p => p.ParticipantId).Contains(participantId);
@@ -225,7 +243,7 @@ namespace MinistryPlatform.Translation.Services
         {
             return currRelationshipsList.Contains(relationshipId);
         }
-        
+
         public List<GroupSignupRelationships> GetGroupSignupRelations(int groupType)
         {
             var response = WithApiLogin<List<GroupSignupRelationships>>(

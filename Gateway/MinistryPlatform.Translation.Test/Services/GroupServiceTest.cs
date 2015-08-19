@@ -23,8 +23,6 @@ namespace MinistryPlatform.Translation.Test.Services
         private readonly int EventsGroupsPageId = 408;
         private readonly int GroupsSubGroupsPageId = 299;
 
-        //private readonly int GetMyServingTeamsViewId = 1014;
-
         [SetUp]
         public void SetUp()
         {
@@ -212,47 +210,6 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(320, g.WaitListGroupId);
         }
 
-        //[Test]
-        //public void ShouldReturnMyServingTeams()
-        //{
-        //    const int contactId = 123456;
-        //    const string token = "some-string";
-        //    var searchString = ",,,," + contactId;
-
-        //    var getPageViewRecordsResponse = new List<Dictionary<string, object>>
-        //    {
-        //        new Dictionary<string, object>()
-        //        {
-        //            {"Group_ID", 1},
-        //            {"Group_Name", "group-one"},
-        //            {"Role_Title", "group-one-role"}, {"Primary_Contact", "me@aol.com"}
-        //        },
-        //        new Dictionary<string, object>()
-        //        {
-        //            {"Group_ID", 2},
-        //            {"Group_Name", "group-two"},
-        //            {"Role_Title", "group-two-role"}, {"Primary_Contact", "me@aol.com"}
-        //        }
-        //    };
-        //    ministryPlatformService.Setup(
-        //        mocked => mocked.GetPageViewRecords(GetMyServingTeamsViewId, It.IsAny<string>(), searchString, "", 0))
-        //        .Returns(getPageViewRecordsResponse);
-
-
-        //    var teams = fixture.GetServingTeams(contactId, token);
-
-        //    Assert.IsNotNull(teams);
-        //    Assert.AreEqual(2, teams.Count);
-
-        //    Assert.AreEqual(1, teams[0].GroupId);
-        //    Assert.AreEqual("group-one", teams[0].Name);
-        //    Assert.AreEqual("group-one-role", teams[0].GroupRole);
-
-        //    Assert.AreEqual(2, teams[1].GroupId);
-        //    Assert.AreEqual("group-two", teams[1].Name);
-        //    Assert.AreEqual("group-two-role", teams[1].GroupRole);
-        //}
-
         [Test]
         public void testIsUserInGroup()
         {
@@ -339,9 +296,6 @@ namespace MinistryPlatform.Translation.Test.Services
             var searchString = eventId + ",";
 
             configWrapper.Setup(m => m.GetConfigIntValue(It.IsAny<string>())).Returns(pageViewId);
-            //configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
-            //configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("pwd");
-            //authService.Setup(m => m.Authenticate(It.IsAny<string>(), It.IsAny<string>())).Returns(AuthenticateResponse());
             ministryPlatformService.Setup(m => m.GetPageViewRecords(pageViewId, It.IsAny<string>(), searchString, It.IsAny<string>(), It.IsAny<int>()))
                 .Returns(GroupsByEventId_MpResponse());
 

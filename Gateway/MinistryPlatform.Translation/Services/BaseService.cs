@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using Crossroads.Utilities.Interfaces;
-using Crossroads.Utilities.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
@@ -21,18 +20,19 @@ namespace MinistryPlatform.Translation.Services
         {
             int pageId;
             if (!int.TryParse(ConfigurationManager.AppSettings[pageKey], out pageId))
+            {
                 throw new InvalidOperationException(string.Format("Invalid Page Key: {0}", pageKey));
+            }
             return pageId;
         }
 
-        protected  T WithApiLogin<T>(Func<string, T> doIt)
+        protected T WithApiLogin<T>(Func<string, T> doIt)
         {
             return (doIt(ApiLogin()));
         }
 
-        protected  string ApiLogin()
+        protected string ApiLogin()
         {
-            //var configWrapper = new ConfigurationWrapper();
             var apiUser = _configurationWrapper.GetEnvironmentVarAsString("API_USER");
             var apiPasword = _configurationWrapper.GetEnvironmentVarAsString("API_PASSWORD");
             var authData = _authenticationService.Authenticate(apiUser, apiPasword);
@@ -45,7 +45,9 @@ namespace MinistryPlatform.Translation.Services
         {
             int value;
             if (!int.TryParse(ConfigurationManager.AppSettings[key], out value))
+            {
                 throw new InvalidOperationException(string.Format("Invalid Page Key: {0}", key));
+            }
             return value;
         }
     }

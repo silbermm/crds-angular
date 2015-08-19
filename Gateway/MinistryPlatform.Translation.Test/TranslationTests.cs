@@ -5,10 +5,7 @@ using Crossroads.Utilities.Interfaces;
 using Crossroads.Utilities.Services;
 using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services;
-using MinistryPlatform.Translation.Services.Interfaces;
-using Moq;
 using NUnit.Framework;
-using Attribute = MinistryPlatform.Models.Attribute;
 
 namespace MinistryPlatform.Translation.Test
 {
@@ -118,21 +115,11 @@ namespace MinistryPlatform.Translation.Test
             var token = authData["token"].ToString();
             var recordId = _fixture.GetContactId(token);
             Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
-            var record = MinistryPlatformService.GetSubPageRecords(subGroupPageId, 6717,
-                token);
+            var record = MinistryPlatformService.GetSubPageRecords(subGroupPageId,
+                                                                   6717,
+                                                                   token);
             Assert.IsNotNull(record);
             Assert.IsNotEmpty(record);
         }
-
-        //[Test]
-        //public void GetParticipants()
-        //{
-        //    var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
-        //    var token = authData["token"].ToString();
-        //    var participants = _fixture.GetParticipantRecord(token);
-
-        //    Assert.IsNotNull(participants);
-        //}
-        
     }
 }
