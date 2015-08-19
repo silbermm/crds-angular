@@ -286,7 +286,7 @@ namespace MinistryPlatform.Translation.Test.Services
             ministryPlatformService.Setup(
                 m => m.GetPageViewRecords(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), 0)).Returns(mockResponse);
 
-            var result = fixture.ParticipantGroupMember(groupId, participantId);
+            var result = fixture.ParticipantQualifiedServerGroupMember(groupId, participantId);
             Assert.AreEqual(result, true);
 
             ministryPlatformService.VerifyAll();
@@ -302,7 +302,7 @@ namespace MinistryPlatform.Translation.Test.Services
             ministryPlatformService.Setup(
                 m => m.GetPageViewRecords(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), 0)).Returns(mockResponse);
 
-            var result = fixture.ParticipantGroupMember(groupId, participantId);
+            var result = fixture.ParticipantQualifiedServerGroupMember(groupId, participantId);
             Assert.AreEqual(result, false);
 
             ministryPlatformService.VerifyAll();

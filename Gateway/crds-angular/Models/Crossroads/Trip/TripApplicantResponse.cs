@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace crds_angular.Models.Crossroads.Trip
 {
@@ -6,6 +7,7 @@ namespace crds_angular.Models.Crossroads.Trip
     {
 
         public List<TripApplicant> Applicants { get; set; }
+        public List<TripToolError> Errors { get; set; }
         public TripInfo TripInfo { get; set; }
     }
 
@@ -16,8 +18,9 @@ namespace crds_angular.Models.Crossroads.Trip
         public int PledgeCampaignId { get; set; }
     }
 
-    //public class TripApplicant
-    //{
-        
-    //}
+    public class TripToolError
+    {
+        [JsonProperty(PropertyName = "messages")]
+        public List<string> Messages { get; set; }
+    }
 }

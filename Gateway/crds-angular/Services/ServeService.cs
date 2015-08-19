@@ -105,7 +105,7 @@ namespace crds_angular.Services
 
             foreach (var participant in immediateFamilyParticipants)
             {
-                var membership = _groupService.ParticipantGroupMember(groupId, participant.ParticipantId);
+                var membership = _groupService.ParticipantQualifiedServerGroupMember(groupId, participant.ParticipantId);
                 var opportunityResponse = _opportunityService.GetMyOpportunityResponses(participant.ContactId, 115,
                     token);
                 var qualifiedServer = new QualifiedServerDto();

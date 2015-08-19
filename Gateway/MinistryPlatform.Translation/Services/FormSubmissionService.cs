@@ -73,8 +73,9 @@ namespace MinistryPlatform.Translation.Services
                     response.DonorId = donorId;
                     response.FundraisingGoal = SafeDecimal(reader,"Fundraising_Goal");
                     response.ParticipantId = reader.GetInt32(reader.GetOrdinal("Participant_ID"));
-                    response.PledgeCampaignId = reader.GetInt32(reader.GetOrdinal("Pledge_Campaign_ID"));
-                    response.EventId = reader.GetInt32(reader.GetOrdinal("Event_ID"));
+                    //response.PledgeCampaignId = reader.GetInt32(reader.GetOrdinal("Pledge_Campaign_ID"));
+                    response.PledgeCampaignId = SafeInt32(reader, "Pledge_Campaign_ID");
+                    response.EventId = SafeInt32(reader, "Event_ID"); 
 
                     responses.Add(response);
                 }

@@ -47,14 +47,9 @@ namespace MinistryPlatform.Translation.Services
 
         public bool DonorHasPledge(int pledgeCampaignId, int donorId)
         {
-            //var searchString = string.Format("{0},{1}", pledgeCampaignId, donorId);
-            //var records = _ministryPlatformService.GetPageViewRecords("", ApiLogin(), searchString);
-
-            //var field = formFields.Single();
-            //var formFieldId = field.ToInt("Form_Field_ID");
-            //return formFieldId;
-
-            throw new NotImplementedException();
+            var searchString = string.Format(",{0},{1}", pledgeCampaignId, donorId);
+            var records = _ministryPlatformService.GetPageViewRecords("PledgesByDonorId", ApiLogin(), searchString);
+            return records.Count != 0;
         }
     }
 }

@@ -10,12 +10,12 @@ INSERT INTO [dbo].[dp_Page_Views]
 		   ,[Field_List]
            ,[View_Clause])
      VALUES
-           (92187
-		   ,'Pledge By Donor Id'
-		   ,363
+           (92188
+		   ,'Group Participants By Id'
+		   ,316
            ,NULL
-		   ,'Pledges.[Pledge_ID], Pledge_Campaign_ID_Table.[Pledge_Campaign_ID], Donor_ID_Table.[Donor_ID], Pledge_Status_ID_Table.[Pledge_Status_ID]'
-           ,'Pledges.[Pledge_ID] IS NOT NULL')
+		   ,'Group_Participants.[Group_Participant_ID], Group_ID_Table.[Group_ID], Participant_ID_Table.[Participant_ID]'
+           ,'Group_Participants.[Group_Participant_ID] IS NOT NULL')
 
 SET IDENTITY_INSERT [dbo].[dp_Page_Views] OFF
 GO

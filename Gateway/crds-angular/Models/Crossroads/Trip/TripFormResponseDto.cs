@@ -14,6 +14,9 @@ namespace crds_angular.Models.Crossroads.Trip
 
         [JsonProperty(PropertyName = "campaign")]
         public PledgeCampaign Campaign { get; set; }
+
+        [JsonProperty(PropertyName = "errors")]
+        public List<TripToolError> Errors { get; set; }
     }
 
     public class TripApplicant

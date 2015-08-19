@@ -96,6 +96,13 @@ namespace MinistryPlatform.Translation.Services
             return (int) participants["Event_Participant_ID"];
         }
 
+        public bool EventHasParticipant(int eventId, int participantId)
+        {
+            var searchString = "," + eventId + "," + participantId;
+            var records = ministryPlatformService.GetPageViewRecords("EventParticipantByEventIdAndParticipantId", ApiLogin(), searchString);
+            return records.Count != 0;
+        }
+
         public List<Event> GetEvents(string eventType, string token)
         {
             //this is using the basic Events page, any concern there?

@@ -56,11 +56,21 @@ namespace crds_angular.Services
         {
             var tripApplicantResponses = GetTripAplicantsSelection(selectionId, selectionCount);
 
+            var dto = new TripFormResponseDto();
+            if (tripApplicantResponses.Errors != null)
+            {
+                if (tripApplicantResponses.Errors.Count != 0)
+                {
+                    dto.Errors = tripApplicantResponses.Errors;
+                    return dto;
+                }
+            }
+
             //get groups for event, type = go trip
             var eventId = tripApplicantResponses.TripInfo.EventId;
             var eventGroups = _mpEventService.GetGroupsForEvent(eventId); //need to add check for group type?  TM 8/17
 
-            var dto = new TripFormResponseDto();
+
             dto.Applicants = tripApplicantResponses.Applicants;
             dto.Groups = eventGroups.Select(s => new TripGroupDto {GroupId = s.GroupId, GroupName = s.Name}).ToList();
             dto.Campaign = new PledgeCampaign
@@ -76,29 +86,41 @@ namespace crds_angular.Services
         {
             var responses = _formSubmissionService.GetTripFormResponses(selectionId);
 
-            //check for only one pledge campaign
-            var campaignCount = responses.GroupBy(x => x.PledgeCampaignId)
-                .Select(x => new {Date = x.Key, Values = x.Distinct().Count()}).Count();
-
-            // is this check stupid?
+            var messages = new List<string>();
             if (responses.Count != selectionCount)
             {
-                throw new ApplicationException("Error Retrieving Selection");
+                messages.Add("Error Retrieving Selection");
+                messages.Add(string.Format("You selected {0} records in Ministry Platform, but only {1} were retrieved.", selectionCount, responses.Count));
+                messages.Add("Please verify records you selected.");
             }
 
+            var campaignCount = responses.GroupBy(x => x.PledgeCampaignId)
+                .Select(x => new {Date = x.Key, Values = x.Distinct().Count()}).Count();
             if (campaignCount > 1)
             {
-                throw new ApplicationException("Invalid Trip Selection");
+                messages.Add("Invalid Trip Selection - Multiple Campaigns Selected");
+            }
+
+            if (messages.Count > 0)
+            {
+                return new TripApplicantResponse
+                {
+                    Errors = new List<TripToolError> {new TripToolError {Messages = messages}}
+                };
             }
 
             var tripInfo = responses
                 .Select(r =>
-                            new TripInfo
-                            {
-                                EventId = r.EventId,
-                                FundraisingGoal = r.FundraisingGoal,
-                                PledgeCampaignId = r.PledgeCampaignId
-                            });
+                            r.EventId != null
+                                ? (r.PledgeCampaignId != null
+                                    ? new TripInfo
+                                    {
+                                        EventId = (int) r.EventId,
+                                        FundraisingGoal = r.FundraisingGoal,
+                                        PledgeCampaignId = (int) r.PledgeCampaignId
+                                    }
+                                    : null)
+                                : null);
 
             var applicants = responses.Select(record => new TripApplicant
             {
@@ -214,12 +236,11 @@ namespace crds_angular.Services
 
             foreach (var applicant in dto.Applicants)
             {
-                if (_groupService.ParticipantGroupMember(dto.GroupId, applicant.ParticipantId))
+                if (!_groupService.ParticipantGroupMember(dto.GroupId, applicant.ParticipantId))
                 {
-                    continue;
+                    var groupParticipantId = _groupService.addParticipantToGroup(applicant.ParticipantId, dto.GroupId, groupRoleId, groupStartDate);
+                    groupParticipants.Add(groupParticipantId);
                 }
-                var groupParticipantId = _groupService.addParticipantToGroup(applicant.ParticipantId, dto.GroupId, groupRoleId, groupStartDate);
-                groupParticipants.Add(groupParticipantId);
 
                 CreatePledge(dto, applicant);
 
@@ -232,18 +253,16 @@ namespace crds_angular.Services
         private void CreatePledge(SaveTripParticipantsDto dto, TripApplicant applicant)
         {
             int donorId;
-            bool addPledge = true;
+            var addPledge = true;
+
             if (applicant.DonorId != null)
             {
                 donorId = (int) applicant.DonorId;
-                //does pledge exist?
                 addPledge = !_mpPledgeService.DonorHasPledge(dto.Campaign.PledgeCampaignId, donorId);
-
             }
             else
             {
                 donorId = _mpDonorService.CreateDonorRecord(applicant.ContactId, null, DateTime.Now);
-                addPledge = true;
             }
 
             if (addPledge)
@@ -256,7 +275,10 @@ namespace crds_angular.Services
         {
             foreach (var e in events)
             {
-                _mpEventService.registerParticipantForEvent(applicant.ParticipantId, e.EventId);
+                if (_mpEventService.EventHasParticipant(e.EventId, applicant.ParticipantId) == false)
+                {
+                    _mpEventService.registerParticipantForEvent(applicant.ParticipantId, e.EventId);
+                }
             }
         }
     }

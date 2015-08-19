@@ -200,12 +200,21 @@ namespace MinistryPlatform.Translation.Services
             return (events);
         }
 
-        public bool ParticipantGroupMember(int groupId, int participantId)
+        public bool ParticipantQualifiedServerGroupMember(int groupId, int participantId)
         {
             var searchString = string.Format(",{0},,{1}", groupId, participantId);
             var teams = ministryPlatformService.GetPageViewRecords(GroupParticipantQualifiedServerPageView, ApiLogin(), searchString);
             return teams.Count != 0;
         }
+
+        public bool ParticipantGroupMember(int groupId, int participantId)
+        {
+            var searchString = string.Format(",{0},{1}", groupId, participantId);
+            var teams = ministryPlatformService.GetPageViewRecords("GroupParticipantsById", ApiLogin(), searchString);
+            return teams.Count != 0;
+        }
+
+        //GroupParticipantsById
 
         public bool checkIfUserInGroup(int participantId, IList<GroupParticipant> groupParticipants)
         {

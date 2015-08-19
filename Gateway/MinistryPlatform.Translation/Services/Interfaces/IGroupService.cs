@@ -26,6 +26,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
 
        // bool CheckAgeForRelationship(IList<ContactRelationship> familyToReturn, string signupRelations);
 
+        bool ParticipantQualifiedServerGroupMember(int groupId, int participantId);
         bool ParticipantGroupMember(int groupId, int participantId);
 
         List<Group> GetGroupsForEvent(int eventId);

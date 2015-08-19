@@ -523,7 +523,14 @@
             return Trip.TripFormResponses.get({
               selectionId: params.selectedRecord, 
               selectionCount: params.selectedCount
-            }).$promise;
+            }).$promise.then(function(data) {
+                    // promise fulfilled
+                    return data;
+                }, function(error) {
+                    // promise rejected, could log the error with: console.log('error', error);
+                    var tmpErr = error;
+                    return error;
+                });
           }
         }
       })

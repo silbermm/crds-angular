@@ -11,5 +11,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         List<Event> GetEvents(string eventType, string token);
         List<Event> GetEventsByTypeForRange(int eventTypeId, DateTime startDate, DateTime endDate, string token);
         List<Group> GetGroupsForEvent(int eventId);
+        bool EventHasParticipant(int eventId, int participantId);
     }
 }
