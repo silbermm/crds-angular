@@ -137,7 +137,7 @@ namespace crds_angular.Services
             }
         }
 
-        public CheckScannerBatch UpdateBatchStatus(string batchName, BatchStatus newStatus)
+        public virtual CheckScannerBatch UpdateBatchStatus(string batchName, BatchStatus newStatus)
         {
             WithDbCommand(dbCommand =>
             {
@@ -210,6 +210,9 @@ namespace crds_angular.Services
 
                 batchDetails.Checks.Add(check);
             }
+
+            batchDetails.Status = BatchStatus.Exported;
+            UpdateBatchStatus(batchDetails.Name, batchDetails.Status);
 
             return (batchDetails);
         }

@@ -247,6 +247,7 @@ namespace crds_angular.test.Services
             var fixtureMock = new Mock<EzScanCheckScannerService>(_dbConnection.Object, _donorService.Object, _paymentService.Object, _mpDonorService.Object);
             fixtureMock.Setup(mocked => mocked.GetChecksForBatch("batch123")).Returns(checks);
             fixtureMock.Setup(mocked => mocked.CreateDonationsForBatch(It.IsAny<CheckScannerBatch>())).CallBase();
+            fixtureMock.Setup(mocked => mocked.UpdateBatchStatus("batch123", BatchStatus.Exported)).Returns(new CheckScannerBatch());
 
             _donorService.Setup(mocked => mocked.GetContactDonorForDonorAccount(checks[0].AccountNumber, checks[0].RoutingNumber)).Returns(contactDonorExisting);
             _paymentService.Setup(mocked => mocked.ChargeCustomer(contactDonorExisting.ProcessorId, (int) checks[0].Amount, contactDonorExisting.DonorId)).Returns(new StripeCharge
@@ -313,12 +314,14 @@ namespace crds_angular.test.Services
                 Name = "batch123",
                 ProgramId = 9090
             });
+            fixtureMock.VerifyAll();
             _donorService.VerifyAll();
             _mpDonorService.VerifyAll();
             _paymentService.VerifyAll();
             Assert.NotNull(result);
             Assert.NotNull(result.Checks);
             Assert.AreEqual(2, result.Checks.Count);
+            Assert.AreEqual(BatchStatus.Exported, result.Status);
         }
     }
 }

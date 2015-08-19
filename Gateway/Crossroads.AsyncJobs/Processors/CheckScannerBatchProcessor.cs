@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace Crossroads.AsyncJobs.Processors
 {
-    public class EzScanCheckScannerBatchProcessor : IJobExecutor<CheckScannerBatch>
+    public class CheckScannerBatchProcessor : IJobExecutor<CheckScannerBatch>
     {
         private readonly ICheckScannerService _checkScannerService;
         private readonly IEmailCommunication _emailService;
@@ -20,7 +20,7 @@ namespace Crossroads.AsyncJobs.Processors
 
         private readonly ILog _logger = LogManager.GetLogger(typeof(CheckScannerBatch));
 
-        public EzScanCheckScannerBatchProcessor(ICheckScannerService checkScannerService, IEmailCommunication emailService, IConfigurationWrapper configuration)
+        public CheckScannerBatchProcessor(ICheckScannerService checkScannerService, IEmailCommunication emailService, IConfigurationWrapper configuration)
         {
             _checkScannerService = checkScannerService;
             _emailService = emailService;
