@@ -28,10 +28,10 @@ require('../../../app/app');
       TripsUrlService = $injector.get('TripsUrlService');
     }));
 
-    // it('should set the shareUrl of all of the trips', function() {
-    //   expect($controller.myTrips[0].shareUrl)
-    //     .toBe('http://server/trips/giving/' + getMyTrips().myTrips[0].eventParticipantId);
-    // });
+    it('should set the shareUrl of all of the trips', function() {
+      expect($controller.myTrips[0].shareUrl)
+        .toBe('http://server/trips/giving/' + getMyTrips().myTrips[0].eventParticipantId);
+    });
 
     function getMyTrips() {
       return { myTrips:[
