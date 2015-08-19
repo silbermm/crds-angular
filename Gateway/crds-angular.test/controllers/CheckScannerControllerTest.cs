@@ -7,6 +7,9 @@ using Crossroads.Utilities.Messaging.Interfaces;
 using Moq;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Web.Http.Controllers;
 using System.Web.Http.Results;
 using MinistryPlatform.Translation.Services.Interfaces;
 
@@ -22,6 +25,9 @@ namespace crds_angular.test.controllers
         private Mock<IMessageQueueFactory> _messageQueueFactory;
         private Mock<IMessageFactory> _messageFactory;
 
+        private const string AuthType = "auth_type";
+        private const string AuthToken = "auth_token";
+
         [SetUp]
         public void SetUp()
         {
@@ -36,6 +42,10 @@ namespace crds_angular.test.controllers
             _configuration.Setup(mocked => mocked.GetConfigValue("CheckScannerDonationsQueueName")).Returns("CheckScannerBatchQueue");
 
             _fixture = new CheckScannerController(_configuration.Object, _checkScannerService.Object, _authenticationService.Object, _communicationService.Object, _messageQueueFactory.Object, _messageFactory.Object);
+
+            _fixture.Request = new HttpRequestMessage();
+            _fixture.Request.Headers.Authorization = new AuthenticationHeaderValue(AuthType, AuthToken);
+            _fixture.RequestContext = new HttpRequestContext();
         }
 
         [Test]
