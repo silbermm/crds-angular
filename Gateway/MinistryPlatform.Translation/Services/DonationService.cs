@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using AutoMapper;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Enum;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
 
@@ -14,9 +16,6 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _donationsPageId;
         private readonly int _distributionPageId;
         private readonly int _batchesPageId;
-        private readonly int _declineEmailTemplate;
-        private readonly string _creditCardPaymentType;
-        private readonly string _bankPaymentType;
         private readonly int _depositsPageId;
         private readonly int _paymentProcessorErrorsPageId;
         private readonly int _tripDistributionsPageView;
@@ -32,9 +31,6 @@ namespace MinistryPlatform.Translation.Services
             _donationsPageId = configuration.GetConfigIntValue("Donations");
             _distributionPageId = configuration.GetConfigIntValue("Distributions");
             _batchesPageId = configuration.GetConfigIntValue("Batches");
-            _declineEmailTemplate = configuration.GetConfigIntValue("DefaultGiveDeclineEmailTemplate");
-            _creditCardPaymentType = configuration.GetConfigValue("CreditCard");
-            _bankPaymentType = configuration.GetConfigValue("Bank");
             _depositsPageId = configuration.GetConfigIntValue("Deposits");
             _paymentProcessorErrorsPageId = configuration.GetConfigIntValue("PaymentProcessorEventErrors");
             _tripDistributionsPageView = configuration.GetConfigIntValue("TripDistributionsView");
@@ -148,13 +144,15 @@ namespace MinistryPlatform.Translation.Services
             }
         }
 
-        public int CreateDeposit(string depositName, decimal depositTotalAmount, DateTime depositDateTime,
+        public int CreateDeposit(string depositName, decimal depositTotalAmount, decimal depositAmount, decimal depositProcessorFee, DateTime depositDateTime,
             string accountNumber, int batchCount, bool exported, string notes, string processorTransferId)
         {
             var parms = new Dictionary<string, object>
             {
                 {"Deposit_Name", depositName},
                 {"Deposit_Total", depositTotalAmount},
+                {"Deposit_Amount", depositAmount},
+                {"Processor_Fee_Total", depositProcessorFee},
                 {"Deposit_Date", depositDateTime},
                 {"Account_Number", accountNumber},
                 {"Batch_Count", batchCount},
@@ -171,8 +169,8 @@ namespace MinistryPlatform.Translation.Services
             {
                 throw new ApplicationException(
                     string.Format(
-                        "CreateDeposit failed. depositName: {0}, depositTotalAmount: {1}, depositDateTime: {2}, accountNumber: {3}, batchCount: {4}, exported: {5}, notes: {6}",
-                        depositName, depositTotalAmount, depositDateTime, accountNumber, batchCount, exported, notes), e);
+                        "CreateDeposit failed. depositName: {0}, depositTotalAmount: {1}, depositAmount: {2}, depositProcessorFee: {3}, depositDateTime: {4}, accountNumber: {5}, batchCount: {6}, exported: {7}, notes: {8}",
+                        depositName, depositTotalAmount, depositAmount, depositProcessorFee, depositDateTime, accountNumber, batchCount, exported, notes), e);
             }
         }
 
@@ -236,12 +234,10 @@ namespace MinistryPlatform.Translation.Services
                 }
                 
                 var program = rec.First().ToString("Statement_Title");
+                var paymentType = PaymentType.getPaymentType(result.paymentTypeId).name;
+                var declineEmailTemplate = PaymentType.getPaymentType(result.paymentTypeId).declineEmailTemplateId;
 
-                var paymentType = (result.paymentTypeId.ToString() == _creditCardPaymentType.Substring(0,1))
-                    ? _creditCardPaymentType.Substring(2,11)
-                    : _bankPaymentType.Substring(2,4);
-
-                _donorService.SendEmail(_declineEmailTemplate, result.donorId, result.donationAmt, paymentType, result.donationDate,
+                _donorService.SendEmail(declineEmailTemplate, result.donorId, result.donationAmt, paymentType, result.donationDate,
                     program, result.donationNotes);
             }
             catch (Exception ex)
@@ -275,7 +271,7 @@ namespace MinistryPlatform.Translation.Services
                 donorId = dictionary.ToInt("Donor_ID"),
                 donationDate = dictionary.ToDate("Donation_Date"),
                 donationAmt = Convert.ToInt32(dictionary["Donation_Amount"]),
-                paymentTypeId = (dictionary.ToString("Payment_Type") == "Bank") ? 5 : 4,
+                paymentTypeId = PaymentType.getPaymentType(dictionary.ToString("Payment_Type")).id,
                 donationNotes = dictionary.ToString("Donation_Status_Notes"),
                 batchId = dictionary.ToNullableInt("Batch_ID")
             };

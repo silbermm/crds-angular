@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using Crossroads.Utilities.Interfaces;
+using Crossroads.Utilities;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
-using Newtonsoft.Json.Bson;
 using NUnit.Framework;
 
 namespace MinistryPlatform.Translation.Test.Services
@@ -25,7 +24,8 @@ namespace MinistryPlatform.Translation.Test.Services
             _ministryPlatformService = new Mock<IMinistryPlatformService>();
             _programService = new Mock<IProgramService>();
             _communicationService = new Mock<ICommunicationService>();
-            _fixture = new DonorService(_ministryPlatformService.Object, _programService.Object,_communicationService.Object);
+
+            _fixture = new DonorService(_ministryPlatformService.Object, _programService.Object, _communicationService.Object);
         }
 
         [Test]
@@ -119,8 +119,8 @@ namespace MinistryPlatform.Translation.Test.Services
             {
                 {"Donor_ID", donorId},
                 {"Donation_Amount", donationAmt},
-                {"Processor_Fee_Amount", feeAmt / 100M},
-                {"Payment_Type_ID", "4"}, //hardcoded as credit card until ACH stories are worked
+                {"Processor_Fee_Amount", feeAmt /Constants.StripeDecimalConversionValue},
+                {"Payment_Type_ID", 4}, //hardcoded as credit card until ACH stories are worked
                 {"Donation_Date", setupDate},
                 {"Transaction_code", charge_id},
                 {"Registered_Donor", true}, 
