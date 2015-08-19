@@ -25,11 +25,25 @@
   </div>
 
   <!-- Trip-Sharing -->
-  <div class="col-xs-7 trip-sharing">
-    <sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_32x32_style push-half-bottom" data-url="https://www.crossroads.net/blog/view/466/20509" data-title="Example Blog Post" data-description="Example Blog info.">
-        <a href class="addthis_button_facebook" tooltip="Share your trip fundraising page with friends and family on Facebook" tooltip-append-to-body="true" tooltip-placement="right"></a>
-        <a href class="addthis_button_twitter" tooltip="Share your trip fundraising page with friends and family on Twitter" tooltip-append-to-body="true" tooltip-placement="right"></a>
-        <a href class="addthis_button_email" tooltip="Share your trip fundraising page with friends and family via Email" tooltip-append-to-body="true" tooltip-placement="right"></a>
+  <div class="col-xs-7 trip-sharing" ng-show="trip.eventParticipantId > 0">
+    <sn-addthis-toolbox 
+      class="addthis_crossroads_sharing clearfix addthis_32x32_style push-half-bottom" 
+      data-url="{{trip.shareUrl}}">
+        <a href class="addthis_button_facebook" 
+          tooltip="Share your trip fundraising page with friends and family on Facebook" 
+          tooltip-append-to-body="true" u
+          tooltip-placement="right">
+        </a>
+        <a href class="addthis_button_twitter" 
+          tooltip="Share your trip fundraising page with friends and family on Twitter" 
+          tooltip-append-to-body="true" 
+          tooltip-placement="right">
+        </a>
+        <a href class="addthis_button_email" 
+          tooltip="Share your trip fundraising page with friends and family via Email" 
+          tooltip-append-to-body="true" 
+          tooltip-placement="right">
+        </a>
     </sn-addthis-toolbox>
   </div><!--/trip-sharing-->
 
@@ -41,5 +55,4 @@
       </li><!--/list-group-item-->
     </ul>
   </div><!-- /donor-list -->
-
 </div><!-- /card-item -->

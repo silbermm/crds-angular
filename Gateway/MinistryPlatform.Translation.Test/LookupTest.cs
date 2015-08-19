@@ -140,6 +140,7 @@ namespace MinistryPlatform.Translation.Test
             var clifton = new Dictionary<string, object> { { "dp_RecordID", 11 }, { "dp_RecordName", "Uptown" } };
             var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
             Assert.IsNotNull(authData);
+
             var token = authData["token"].ToString();
             var crossroadsLocations = LookupService.CrossroadsLocations(token);
             Assert.IsNotEmpty(crossroadsLocations);

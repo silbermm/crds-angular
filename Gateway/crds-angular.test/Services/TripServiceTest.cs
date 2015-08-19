@@ -58,6 +58,7 @@ namespace crds_angular.test.Services
         public void ShouldGetMyTrips()
         {
             _donationService.Setup(m => m.GetMyTripDistributions(It.IsAny<int>(), It.IsAny<string>())).Returns(MockTripDonationsResponse());
+            _eventParticipantService.Setup(m => m.TripParticipants(It.IsAny<string>())).Returns(mockTripParticipants());
             var myTrips = _fixture.GetMyTrips(It.IsAny<int>(), It.IsAny<string>());
 
             _donationService.VerifyAll();
@@ -71,6 +72,7 @@ namespace crds_angular.test.Services
         public void FundraisingDaysLeftShouldNotBeNegative()
         {
             _donationService.Setup(m => m.GetMyTripDistributions(It.IsAny<int>(), It.IsAny<string>())).Returns(MockFundingPastTripDonationsResponse());
+            _eventParticipantService.Setup(m => m.TripParticipants(It.IsAny<string>())).Returns(mockTripParticipants());
             var myTrips = _fixture.GetMyTrips(It.IsAny<int>(), It.IsAny<string>());
 
             Assert.IsNotNull(myTrips);
@@ -98,6 +100,28 @@ namespace crds_angular.test.Services
                     DonorEmail = "crdsusertest+johndonor@gmail.com",
                     DonationDate = DateTime.Today,
                     DonationAmount = 350
+                }
+            };
+        }
+
+        private List<TripParticipant> mockTripParticipants()
+        {
+            return new List<TripParticipant>
+            {
+                new TripParticipant()
+                {
+                    EmailAddress = "myEmail@Address.com",
+                    EventStartDate = new DateTime(2015, 10, 08),
+                    EventEndDate =  new DateTime(2015, 10, 23),
+                    EventId = 20,
+                    EventParticipantId = 21,
+                    EventTitle = "Go Someplace",
+                    EventType = "MissionTrip",
+                    Lastname = "Name",
+                    Nickname = "Funny",
+                    ParticipantId = 213,
+                    ProgramId = 2,
+                    ProgramName = "Go Someplace"
                 }
             };
         }

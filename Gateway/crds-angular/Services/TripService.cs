@@ -70,7 +70,6 @@ namespace crds_angular.Services
             var eventId = tripApplicantResponses.TripInfo.EventId;
             var eventGroups = _mpEventService.GetGroupsForEvent(eventId); //need to add check for group type?  TM 8/17
 
-
             dto.Applicants = tripApplicantResponses.Applicants;
             dto.Groups = eventGroups.Select(s => new TripGroupDto {GroupId = s.GroupId, GroupName = s.Name}).ToList();
             dto.Campaign = new PledgeCampaign
@@ -138,57 +137,6 @@ namespace crds_angular.Services
             return resp;
         }
 
-        public MyTripsDTO GetMyTrips(int contactId, string token)
-        {
-            var trips = _donationService.GetMyTripDistributions(contactId, token).OrderBy(t => t.EventStartDate);
-
-            var myTrips = new MyTripsDTO();
-
-            var events = new List<Trip>();
-            var eventIds = new List<int>();
-            foreach (var trip in trips.Where(trip => !eventIds.Contains(trip.EventId)))
-            {
-                eventIds.Add(trip.EventId);
-                events.Add(new Trip
-                {
-                    EventId = trip.EventId,
-                    EventType = trip.EventTypeId.ToString(),
-                    EventTitle = trip.EventTitle,
-                    EventStartDate = trip.EventStartDate.ToString("MMM dd, yyyy"),
-                    EventEndDate = trip.EventEndDate.ToString("MMM dd, yyyy"),
-                    FundraisingDaysLeft = Math.Max(0, (trip.CampaignEndDate - DateTime.Today).Days),
-                    FundraisingGoal = trip.TotalPledge
-                });
-            }
-
-            foreach (var e in events)
-            {
-                var donations = trips.Where(d => d.EventId == e.EventId).OrderByDescending(d => d.DonationDate).ToList();
-                foreach (var donation in donations)
-                {
-                    var gift = new TripGift();
-                    if (donation.AnonymousGift)
-                    {
-                        gift.DonorNickname = "Anonymous";
-                        gift.DonorLastName = "";
-                    }
-                    else
-                    {
-                        gift.DonorNickname = donation.DonorNickname ?? donation.DonorFirstName;
-                        gift.DonorLastName = donation.DonorLastName;
-                    }
-                    gift.DonorEmail = donation.DonorEmail;
-                    gift.DonationDate = donation.DonationDate.ToShortDateString();
-                    gift.DonationAmount = donation.DonationAmount;
-                    gift.RegisteredDonor = donation.RegisteredDonor;
-                    e.TripGifts.Add(gift);
-                    e.TotalRaised += donation.DonationAmount;
-                }
-                myTrips.MyTrips.Add(e);
-            }
-            return myTrips;
-        }
-
         public List<TripParticipantDto> Search(string search)
         {
             var results = _eventParticipantService.TripParticipants(search);
@@ -220,11 +168,72 @@ namespace crds_angular.Services
                 tp.EventStart = result.EventStartDate.ToString("MMM dd, yyyy");
                 tp.EventTitle = result.EventTitle;
                 tp.EventType = result.EventType;
+                tp.ProgramId = result.ParticipantId;
+                tp.ProgramName = result.ProgramName;
                 var participant = participants[result.ParticipantId];
                 participant.Trips.Add(tp);
             }
 
             return participants.Values.OrderBy(o => o.Lastname).ThenBy(o => o.Nickname).ToList();
+        }
+
+        public MyTripsDTO GetMyTrips(int contactId, string token)
+        {
+            var trips = _donationService.GetMyTripDistributions(contactId, token).OrderBy(t => t.EventStartDate);
+
+
+            var myTrips = new MyTripsDTO();
+
+            var events = new List<Trip>();
+            var eventIds = new List<int>();
+            foreach (var trip in trips.Where(trip => !eventIds.Contains(trip.EventId)))
+            {
+                var eventParticipantId = 0;
+                var eventParticipantIds = _eventParticipantService.TripParticipants("," + trip.EventId + ",,,,,,,,,,,," + contactId).FirstOrDefault();
+                if (eventParticipantIds != null)
+                {
+                    eventParticipantId = eventParticipantIds.EventParticipantId;
+                }
+                eventIds.Add(trip.EventId);
+                events.Add(new Trip
+                {
+                    EventId = trip.EventId,
+                    EventType = trip.EventTypeId.ToString(),
+                    EventTitle = trip.EventTitle,
+                    EventStartDate = trip.EventStartDate.ToString("MMM dd, yyyy"),
+                    EventEndDate = trip.EventEndDate.ToString("MMM dd, yyyy"),
+                    FundraisingDaysLeft = Math.Max(0, (trip.CampaignEndDate - DateTime.Today).Days),
+                    FundraisingGoal = trip.TotalPledge,
+                    EventParticipantId = eventParticipantId
+                });
+            }
+
+            foreach (var e in events)
+            {
+                var donations = trips.Where(d => d.EventId == e.EventId).OrderByDescending(d => d.DonationDate).ToList();
+                foreach (var donation in donations)
+                {
+                    var gift = new TripGift();
+                    if (donation.AnonymousGift)
+                    {
+                        gift.DonorNickname = "Anonymous";
+                        gift.DonorLastName = "";
+                    }
+                    else
+                    {
+                        gift.DonorNickname = donation.DonorNickname ?? donation.DonorFirstName;
+                        gift.DonorLastName = donation.DonorLastName;
+                    }
+                    gift.DonorEmail = donation.DonorEmail;
+                    gift.DonationDate = donation.DonationDate.ToShortDateString();
+                    gift.DonationAmount = donation.DonationAmount;
+                    gift.RegisteredDonor = donation.RegisteredDonor;
+                    e.TripGifts.Add(gift);
+                    e.TotalRaised += donation.DonationAmount;
+                }
+                myTrips.MyTrips.Add(e);
+            }
+            return myTrips;
         }
 
         public List<int> SaveParticipants(SaveTripParticipantsDto dto)
