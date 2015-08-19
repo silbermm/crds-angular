@@ -1,42 +1,50 @@
-<div>
-  
-</div>
+<div ng-init="checkBatchProcessor.activate()">
+  <div ng-if="checkBatchProcessor.error" class="alert alert-danger" role="alert">
+    <strong>{{checkBatchProcessor.batch.name}}</strong> did not submit. Please try again.
+  </div>
 
-<div class="form-group">
-  <form name="checkBatchProcessorForm">
-    <div class="row">
-      <div class="col-xs-6 col-sm-6 col-md-6">
-        <h3> Check Batch </h3>
-        <ui-select ng-model="checkBatchProcessor.batch.selected">
-          <ui-select-match placeholder="Click here to choose check batch...">{{$select.selected.name}}</ui-select-match>
-          <ui-select-choices repeat="batch in checkBatchProcessor.batches | filter: $select.search track by batch.id">
-            <div ng-bind-html="batch.name | highlight: $select.search"></div>
-            <small>
-              Scan Date: <span ng-bind-html="''+batch.scanDate | highlight: $select.search"></span>
-            </small>
-          </ui-select-choices>
-        </ui-select>
-      </div>
-    </div>
+  <div ng-if="checkBatchProcessor.success" class="alert alert-success" role="alert">
+    <strong>{{checkBatchProcessor.batch.name}}</strong> was successfully submitted.
+  </div>
 
-    <div class="row">
-      <div class="col-xs-6 col-sm-6 col-md-6">
-        <h3> Program </h3>
-        <ui-select ng-model="checkBatchProcessor.program.selected">
-          <ui-select-match placeholder="Click here to choose the program...">{{$select.selected.Name}}</ui-select-match>
-          <ui-select-choices repeat="program in checkBatchProcessor.programs | filter: $select.search track by program.ProgramId">
-            <div ng-bind-html="program.Name | highlight: $select.search"></div>
-          </ui-select-choices>
-        </ui-select>
+  <div class="form-group">
+    <form name="checkBatchProcessorForm">
+      <div class="row">
+        <div class="col-xs-6 col-sm-6 col-md-6">
+          <h3> Check Batch </h3>
+          <ui-select ng-model="checkBatchProcessor.batch" name="batch" required>
+            <ui-select-match placeholder="Click here to choose check batch...">{{$select.selected.name}}</ui-select-match>
+            <ui-select-choices repeat="batch in checkBatchProcessor.batches | filter: $select.search track by batch.id">
+              <div ng-bind-html="batch.name | highlight: $select.search"></div>
+              <small>
+                Scan Date: <span ng-bind-html="''+batch.scanDate | date: 'MMM d, yyyy' | highlight: $select.search "></span>
+              </small>
+            </ui-select-choices>
+          </ui-select>
+        </div>
       </div>
-    </div>
 
-    <div class="row" style="margin-top: 15px;">
-      <div class="col-xs-6 col-sm-6 col-md-6">
-        <button ng-class="{disabled: checkBatchProcessor.processing}" class="btn btn-primary btn-lg btn-block-mobile give-button">
-          Submit Batch
-        </button>
+      <div class="row">
+        <div class="col-xs-6 col-sm-6 col-md-6">
+          <h3> Program </h3>
+          <ui-select ng-model="checkBatchProcessor.program" name="program" required>
+            <ui-select-match placeholder="Click here to choose the program...">{{$select.selected.Name}}</ui-select-match>
+            <ui-select-choices repeat="program in checkBatchProcessor.programs | filter: $select.search track by program.ProgramId">
+              <div ng-bind-html="program.Name | highlight: $select.search"></div>
+            </ui-select-choices>
+          </ui-select>
+        </div>
       </div>
-    </div>
-  </form>
+
+      <div class="row" style="margin-top: 15px;">
+        <div class="col-xs-6 col-sm-6 col-md-6">
+          <button ng-submit="checkBatchProcessor.processBatch()"
+                  ng-disabled="!checkBatchProcessorForm.batch.$dirty || !checkBatchProcessorForm.program.$dirty"
+                  class="btn btn-primary btn-lg btn-block-mobile give-button">
+            Submit Batch
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
