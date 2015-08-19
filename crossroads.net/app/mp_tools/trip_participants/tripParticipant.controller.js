@@ -1,4 +1,4 @@
-(function(){
+(function() {
   'use strict()';
 
   module.exports = TripParticipantController;
@@ -11,7 +11,7 @@
     var vm = this;
 
     vm.cancel = cancel;
-    
+
     vm.hasError = hasError;
     vm.groups = [];
     vm.pageInfo = PageInfo;
@@ -21,9 +21,10 @@
     vm.viewReady = false;
 
     activate();
+
     //////////////////////
 
-    function activate(){
+    function activate() {
       $log.debug('pageInfo: ' + vm.pageInfo);
       vm.errorMessages = errorMessages();
       vm.viewReady = true;
@@ -36,13 +37,15 @@
           errors.push(m);
         });
       });
+
       return errors;
     }
 
-    function hasError() {     
+    function hasError() {
       if (vm.errorMessages.length > 0) {
         return true;
       }
+
       return false;
     }
 
@@ -61,6 +64,7 @@
       Trip.SaveParticipants.save(dto, function(updatedEvents) {
         $window.close();
       }, function(err) {
+
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
         vm.processing = false;
       });

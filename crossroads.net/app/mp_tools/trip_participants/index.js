@@ -1,8 +1,8 @@
-(function(){
+(function() {
   'use strict()';
 
   var MODULE = 'crossroads.mptools';
-  
+
   // HTML Files
   require('./trip.html');
 
