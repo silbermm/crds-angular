@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
-using MinistryPlatform.Translation.Exceptions;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -14,6 +14,8 @@ namespace MinistryPlatform.Translation.Test.Services
     {
         private GroupService fixture;
         private Mock<IMinistryPlatformService> ministryPlatformService;
+        private Mock<IConfigurationWrapper> configWrapper;
+        private Mock<IAuthenticationService> authService;
         private readonly int GroupsParticipantsPageId = 298;
         private readonly int GroupsParticipantsSubPage = 88;
         private readonly int GroupsPageId = 322;
@@ -21,13 +23,26 @@ namespace MinistryPlatform.Translation.Test.Services
         private readonly int EventsGroupsPageId = 408;
         private readonly int GroupsSubGroupsPageId = 299;
 
-        private readonly int GetMyServingTeamsViewId = 1014;
-
         [SetUp]
         public void SetUp()
         {
             ministryPlatformService = new Mock<IMinistryPlatformService>();
-            fixture = new GroupService(ministryPlatformService.Object);
+            configWrapper = new Mock<IConfigurationWrapper>();
+            authService = new Mock<IAuthenticationService>();
+            fixture = new GroupService(ministryPlatformService.Object, configWrapper.Object, authService.Object);
+
+
+            configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
+            configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("pwd");
+            authService.Setup(m => m.Authenticate(It.IsAny<string>(), It.IsAny<string>())).Returns(AuthenticateResponse());
+        }
+        private Dictionary<string, object> AuthenticateResponse()
+        {
+            return new Dictionary<string, object>
+            {
+                {"token", "ABC"},
+                {"exp", "123"}
+            };
         }
 
         [Test]
@@ -49,8 +64,11 @@ namespace MinistryPlatform.Translation.Test.Services
                 .Returns((List<Dictionary<string, object>>) null);
 
             ministryPlatformService.Setup(mocked => mocked.CreateSubRecord(
-                It.IsAny<int>(), It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(),
-                It.IsAny<string>(), true)).Returns(987);
+                It.IsAny<int>(),
+                It.IsAny<int>(),
+                It.IsAny<Dictionary<string, object>>(),
+                It.IsAny<string>(),
+                true)).Returns(987);
 
             DateTime startDate = DateTime.Now;
             DateTime endDate = startDate.AddDays(1);
@@ -67,12 +85,16 @@ namespace MinistryPlatform.Translation.Test.Services
             int groupParticipantId = fixture.addParticipantToGroup(123, 456, 789, startDate, endDate, true);
 
             ministryPlatformService.Verify(mocked => mocked.CreateSubRecord(
-                GroupsParticipantsPageId, 456, expectedValues, It.IsAny<string>(), true));
+                GroupsParticipantsPageId,
+                456,
+                expectedValues,
+                It.IsAny<string>(),
+                true));
 
             Assert.AreEqual(987, groupParticipantId);
         }
 
-       
+
         [Test]
         public void testGetAllEventsForGroupNoGroupFound()
         {
@@ -189,47 +211,6 @@ namespace MinistryPlatform.Translation.Test.Services
         }
 
         [Test]
-        public void ShouldReturnMyServingTeams()
-        {
-            const int contactId = 123456;
-            const string token = "some-string";
-            var searchString = ",,,," + contactId;
-
-            var getPageViewRecordsResponse = new List<Dictionary<string, object>>
-            {
-                new Dictionary<string, object>()
-                {
-                    {"Group_ID", 1},
-                    {"Group_Name", "group-one"},
-                    {"Role_Title", "group-one-role"}, {"Primary_Contact", "me@aol.com"}
-                },
-                new Dictionary<string, object>()
-                {
-                    {"Group_ID", 2},
-                    {"Group_Name", "group-two"},
-                    {"Role_Title", "group-two-role"}, {"Primary_Contact", "me@aol.com"}
-                }
-            };
-            ministryPlatformService.Setup(
-                mocked => mocked.GetPageViewRecords(GetMyServingTeamsViewId, It.IsAny<string>(), searchString, "", 0))
-                .Returns(getPageViewRecordsResponse);
-
-
-            var teams = fixture.GetServingTeams(contactId, token);
-
-            Assert.IsNotNull(teams);
-            Assert.AreEqual(2, teams.Count);
-
-            Assert.AreEqual(1, teams[0].GroupId);
-            Assert.AreEqual("group-one", teams[0].Name);
-            Assert.AreEqual("group-one-role", teams[0].GroupRole);
-
-            Assert.AreEqual(2, teams[1].GroupId);
-            Assert.AreEqual("group-two", teams[1].Name);
-            Assert.AreEqual("group-two-role", teams[1].GroupRole);
-        }
-
-        [Test]
         public void testIsUserInGroup()
         {
             int participantId = 123;
@@ -262,7 +243,7 @@ namespace MinistryPlatform.Translation.Test.Services
             ministryPlatformService.Setup(
                 m => m.GetPageViewRecords(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), 0)).Returns(mockResponse);
 
-            var result = fixture.ParticipantGroupMember(groupId, participantId);
+            var result = fixture.ParticipantQualifiedServerGroupMember(groupId, participantId);
             Assert.AreEqual(result, true);
 
             ministryPlatformService.VerifyAll();
@@ -278,10 +259,81 @@ namespace MinistryPlatform.Translation.Test.Services
             ministryPlatformService.Setup(
                 m => m.GetPageViewRecords(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), 0)).Returns(mockResponse);
 
-            var result = fixture.ParticipantGroupMember(groupId, participantId);
+            var result = fixture.ParticipantQualifiedServerGroupMember(groupId, participantId);
             Assert.AreEqual(result, false);
 
             ministryPlatformService.VerifyAll();
+        }
+
+        [Test]
+        public void GroupsByEventIdNoRecords()
+        {
+            //Arrange
+            const int eventId = 123456;
+            const int pageViewId = 999;
+            var searchString = eventId + ",";
+
+            var mpResponse = new List<Dictionary<string, object>>();
+
+            configWrapper.Setup(m => m.GetConfigIntValue(It.IsAny<string>())).Returns(pageViewId);
+           
+            ministryPlatformService.Setup(m => m.GetPageViewRecords(pageViewId, It.IsAny<string>(), searchString, It.IsAny<string>(), It.IsAny<int>()))
+                .Returns(mpResponse);
+
+            //Act
+            var groups = fixture.GetGroupsForEvent(eventId);
+
+            //Assert
+            Assert.IsNotNull(groups);
+            Assert.AreEqual(0, groups.Count);
+        }
+        [Test]
+        public void GroupsByEventId()
+        {
+            //Arrange
+            const int eventId = 123456;
+            const int pageViewId = 999;
+            var searchString = eventId + ",";
+
+            configWrapper.Setup(m => m.GetConfigIntValue(It.IsAny<string>())).Returns(pageViewId);
+            ministryPlatformService.Setup(m => m.GetPageViewRecords(pageViewId, It.IsAny<string>(), searchString, It.IsAny<string>(), It.IsAny<int>()))
+                .Returns(GroupsByEventId_MpResponse());
+
+            //Act
+            var groups = fixture.GetGroupsForEvent(eventId);
+
+            //Assert
+            Assert.IsNotNull(groups);
+            Assert.AreEqual(2, groups.Count);
+
+            Assert.AreEqual(1, groups[0].GroupId);
+            Assert.AreEqual("group-one", groups[0].Name);
+
+            Assert.AreEqual(2, groups[1].GroupId);
+            Assert.AreEqual("group-two", groups[1].Name);
+        }
+
+        
+
+        private List<Dictionary<string, object>> GroupsByEventId_MpResponse()
+        {
+            return new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>()
+                {
+                    {"Group_ID", 1},
+                    {"Group_Name", "group-one"},
+                    {"Role_Title", "group-one-role"},
+                    {"Primary_Contact", "me@aol.com"}
+                },
+                new Dictionary<string, object>()
+                {
+                    {"Group_ID", 2},
+                    {"Group_Name", "group-two"},
+                    {"Role_Title", "group-two-role"},
+                    {"Primary_Contact", "me@aol.com"}
+                }
+            };
         }
     }
 }

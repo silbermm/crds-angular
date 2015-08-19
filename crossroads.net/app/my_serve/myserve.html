@@ -27,7 +27,11 @@
       <!-- serve day -->
     </form>
 
-    <button class="btn btn-block-mobile btn-primary" ng-show="serve.showButton()"  ng-click="serve.loadNextMonth()" ng-disabled="serve.loadMore"> {{serve.loadText}} </button>
+    <div class="row text-center">
+      <div class="col-sm-12">
+        <button class="btn btn-block-mobile btn-standard" ng-show="serve.showButton()"  ng-click="serve.loadNextMonth()" ng-disabled="serve.loadMore"> {{serve.loadText}} </button>
+      </div>
+    </div>
 
   </div>
 </div>

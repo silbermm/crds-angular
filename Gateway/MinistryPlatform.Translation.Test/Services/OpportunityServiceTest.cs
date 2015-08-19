@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ServiceModel;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Models.DTO;
 using MinistryPlatform.Translation.Services;
@@ -24,6 +25,8 @@ namespace MinistryPlatform.Translation.Test.Services
         private Mock<IMinistryPlatformService> _ministryPlatformService;
         private Mock<IEventService> _eventService;
         private Mock<IAuthenticationService> _authenticationService;
+        private Mock<IConfigurationWrapper> _configWrapper;
+        private Mock<IParticipantService> _participantService;
 
         private OpportunityServiceImpl _fixture;
 
@@ -35,9 +38,18 @@ namespace MinistryPlatform.Translation.Test.Services
             _ministryPlatformService = new Mock<IMinistryPlatformService>();
             _eventService = new Mock<IEventService>();
             _authenticationService = new Mock<IAuthenticationService>();
+            _configWrapper = new Mock<IConfigurationWrapper>();
+            _participantService = new Mock<IParticipantService>();
 
-            _fixture = new OpportunityServiceImpl(_ministryPlatformService.Object, _eventService.Object,
-                _authenticationService.Object);
+            _configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
+            _configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("pwd");
+            _authenticationService.Setup(m => m.Authenticate(It.IsAny<string>(), It.IsAny<string>())).Returns(new Dictionary<string, object> {{"token", "ABC"}, {"exp", "123"}});
+
+
+            _fixture = new OpportunityServiceImpl(_ministryPlatformService.Object,
+                                                  _eventService.Object,
+                                                  _authenticationService.Object,
+                                                  _configWrapper.Object, _participantService.Object);
         }
 
         [Test]
@@ -47,19 +59,21 @@ namespace MinistryPlatform.Translation.Test.Services
             const string comment = "Test Comment";
 
             const int mockParticipantId = 7777;
-            _authenticationService.Setup(m => m.GetParticipantRecord(It.IsAny<string>()))
+            _participantService.Setup(m => m.GetParticipantRecord(It.IsAny<string>()))
                 .Returns(new Participant {ParticipantId = mockParticipantId});
 
             const string opportunityResponsePageKey = "OpportunityResponses";
             _ministryPlatformService.Setup(
                 m =>
-                    m.CreateRecord(opportunityResponsePageKey, It.IsAny<Dictionary<string, object>>(),
-                        It.IsAny<string>(), true))
+                    m.CreateRecord(opportunityResponsePageKey,
+                                   It.IsAny<Dictionary<string, object>>(),
+                                   It.IsAny<string>(),
+                                   true))
                 .Returns(3333);
 
             Assert.DoesNotThrow(() => _fixture.RespondToOpportunity(It.IsAny<string>(), opportunityId, comment));
 
-            _authenticationService.VerifyAll();
+            _participantService.Verify(m => m.GetParticipantRecord(It.IsAny<string>()), Times.Once);
             _ministryPlatformService.VerifyAll();
         }
 
@@ -104,7 +118,7 @@ namespace MinistryPlatform.Translation.Test.Services
             const int opportunityId = 10000000;
             const string comment = "Fail Test Comment";
             const int mockParticipantId = 7777;
-            _authenticationService.Setup(m => m.GetParticipantRecord(It.IsAny<string>()))
+            _participantService.Setup(m => m.GetParticipantRecord(It.IsAny<string>()))
                 .Returns(new Participant {ParticipantId = mockParticipantId});
 
             const string opportunityResponsePageKey = "OpportunityResponses";
@@ -114,14 +128,16 @@ namespace MinistryPlatform.Translation.Test.Services
 
             _ministryPlatformService.Setup(
                 m =>
-                    m.CreateRecord(opportunityResponsePageKey, It.IsAny<Dictionary<string, object>>(),
-                        It.IsAny<string>(), true))
+                    m.CreateRecord(opportunityResponsePageKey,
+                                   It.IsAny<Dictionary<string, object>>(),
+                                   It.IsAny<string>(),
+                                   true))
                 .Throws(faultException);
 
             Assert.Throws<FaultException<ExceptionDetail>>(
                 () => _fixture.RespondToOpportunity(It.IsAny<string>(), opportunityId, comment));
 
-            _authenticationService.VerifyAll();
+            _participantService.Verify(m => m.GetParticipantRecord(It.IsAny<string>()), Times.Once);
             _ministryPlatformService.VerifyAll();
         }
 
@@ -309,7 +325,7 @@ namespace MinistryPlatform.Translation.Test.Services
             const int mockParticipantId = 7777;
             const string pageKey = "OpportunityResponses";
 
-            _authenticationService.Setup(m => m.GetParticipantRecord(It.IsAny<string>()))
+            _participantService.Setup(m => m.GetParticipantRecord(It.IsAny<string>()))
                 .Returns(new Participant {ParticipantId = mockParticipantId});
 
             _ministryPlatformService.Setup(
@@ -318,7 +334,7 @@ namespace MinistryPlatform.Translation.Test.Services
 
             var responseId = _fixture.RespondToOpportunity(It.IsAny<string>(), opportunityId, comments);
 
-            _authenticationService.VerifyAll();
+            _participantService.Verify(m => m.GetParticipantRecord(It.IsAny<string>()), Times.Once);
             _ministryPlatformService.VerifyAll();
 
             Assert.IsNotNull(responseId);
@@ -387,8 +403,12 @@ namespace MinistryPlatform.Translation.Test.Services
 
             var search = ",,," + eventId;
             _ministryPlatformService.Setup(mock =>
-                mock.GetSubpageViewRecords(_signedupToServeSubPageViewId, opportunityId, It.IsAny<string>(), search, "",
-                    0))
+                                               mock.GetSubpageViewRecords(_signedupToServeSubPageViewId,
+                                                                          opportunityId,
+                                                                          It.IsAny<string>(),
+                                                                          search,
+                                                                          "",
+                                                                          0))
                 .Returns(signedupToServeResults);
 
             var response = _fixture.GetOpportunitySignupCount(opportunityId, eventId, It.IsAny<string>());
@@ -433,8 +453,10 @@ namespace MinistryPlatform.Translation.Test.Services
                 .Returns(expectedEventType);
             _ministryPlatformService.Setup(
                 mock =>
-                    mock.GetRecordsDict(_eventPageId, It.IsAny<string>(), ",,KC Nursery Oakley Sunday 8:30",
-                        It.IsAny<string>()))
+                    mock.GetRecordsDict(_eventPageId,
+                                        It.IsAny<string>(),
+                                        ",,KC Nursery Oakley Sunday 8:30",
+                                        It.IsAny<string>()))
                 .Returns(expectedEvents);
 
             var dates = _fixture.GetAllOpportunityDates(opportunityId, It.IsAny<string>());
@@ -466,8 +488,10 @@ namespace MinistryPlatform.Translation.Test.Services
                 .Returns(expectedEventType);
             _ministryPlatformService.Setup(
                 mock =>
-                    mock.GetRecordsDict(_eventPageId, It.IsAny<string>(), ",,KC Nursery Oakley Sunday 8:30",
-                        It.IsAny<string>()))
+                    mock.GetRecordsDict(_eventPageId,
+                                        It.IsAny<string>(),
+                                        ",,KC Nursery Oakley Sunday 8:30",
+                                        It.IsAny<string>()))
                 .Returns(expectedEvents);
 
             var lastDate = _fixture.GetLastOpportunityDate(opportunityId, It.IsAny<string>());
@@ -491,8 +515,10 @@ namespace MinistryPlatform.Translation.Test.Services
                 .Returns(expectedEventType);
             _ministryPlatformService.Setup(
                 mock =>
-                    mock.GetRecordsDict(_eventPageId, It.IsAny<string>(), ",,KC Nursery Oakley Sunday 8:30",
-                        It.IsAny<string>()))
+                    mock.GetRecordsDict(_eventPageId,
+                                        It.IsAny<string>(),
+                                        ",,KC Nursery Oakley Sunday 8:30",
+                                        It.IsAny<string>()))
                 .Returns(expectedEvents);
 
             Assert.Throws<Exception>(() => _fixture.GetLastOpportunityDate(opportunityId, It.IsAny<string>()));
@@ -545,8 +571,12 @@ namespace MinistryPlatform.Translation.Test.Services
                 .Returns(expectedOpportunity);
             _ministryPlatformService.Setup(
                 mock =>
-                    mock.GetSubpageViewRecords(_groupsParticipantsSubPageId, 255, It.IsAny<string>(), It.IsAny<string>(),
-                        It.IsAny<string>(), It.IsAny<int>())).Returns(expectedParticipants);
+                    mock.GetSubpageViewRecords(_groupsParticipantsSubPageId,
+                                               255,
+                                               It.IsAny<string>(),
+                                               It.IsAny<string>(),
+                                               It.IsAny<string>(),
+                                               It.IsAny<int>())).Returns(expectedParticipants);
 
             var output = _fixture.GetGroupParticipantsForOpportunity(opportunityId, It.IsAny<string>());
 

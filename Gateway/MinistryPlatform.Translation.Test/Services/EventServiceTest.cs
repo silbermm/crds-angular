@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
+using Crossroads.Utilities.Interfaces;
 using Crossroads.Utilities.Services;
 using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services;
@@ -15,6 +17,9 @@ namespace MinistryPlatform.Translation.Test.Services
     {
         private EventService fixture;
         private Mock<IMinistryPlatformService> ministryPlatformService;
+        private Mock<IAuthenticationService> _authService;
+        private Mock<IConfigurationWrapper> _configWrapper;
+        private Mock<IGroupService> _groupService;
         private const int EventParticipantId = 12345;
         private readonly int EventParticipantPageId = 281;
         private readonly int EventParticipantStatusDefaultID = 2;
@@ -25,7 +30,15 @@ namespace MinistryPlatform.Translation.Test.Services
         public void SetUp()
         {
             ministryPlatformService = new Mock<IMinistryPlatformService>();
-            fixture = new EventService(ministryPlatformService.Object);
+            _authService = new Mock<IAuthenticationService>();
+            _configWrapper = new Mock<IConfigurationWrapper>();
+            _groupService = new Mock<IGroupService>();
+
+            _configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
+            _configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("pwd");
+            _authService.Setup(m => m.Authenticate(It.IsAny<string>(), It.IsAny<string>())).Returns(new Dictionary<string, object> { { "token", "ABC" }, { "exp", "123" } });
+        
+            fixture = new EventService(ministryPlatformService.Object, _authService.Object, _configWrapper.Object,_groupService.Object);
         }
 
         [Test]

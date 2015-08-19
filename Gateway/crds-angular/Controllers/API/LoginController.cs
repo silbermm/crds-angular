@@ -49,7 +49,7 @@ namespace crds_angular.Controllers.API
                         return this.Ok(l);
                     }
                 }
-                catch (Exception e)
+                catch (Exception )
                 {
                     return this.Unauthorized();
                 }

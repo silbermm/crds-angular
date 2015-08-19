@@ -4,6 +4,7 @@ using System.Linq;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
+using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
 using Moq;
 using Newtonsoft.Json.Linq;
@@ -139,7 +140,8 @@ namespace crds_angular.test.Services
                     Object = JObject.FromObject(new StripeTransfer
                     {
                         Id = "tx9876",
-                        Amount = 50000
+                        Amount = 50000,
+                        Fee = 1500
                     })
                 }
             };
@@ -149,32 +151,38 @@ namespace crds_angular.test.Services
                 new StripeCharge
                 {
                     Id = "ch111",
-                    Amount = 111
+                    Amount = 111,
+                    Fee = 1
                 },
                 new StripeCharge
                 {
                     Id = "ch222",
-                    Amount = 222
+                    Amount = 222,
+                    Fee = 2
                 },
                 new StripeCharge
                 {
                     Id = "ch333",
-                    Amount = 333
+                    Amount = 333,
+                    Fee = 3
                 },
                 new StripeCharge
                 {
                     Id = "ch777",
-                    Amount = 777
+                    Amount = 777, 
+                    Fee = 7
                 },
                 new StripeCharge
                 {
                     Id = "ch444",
-                    Amount = 444
+                    Amount = 444,
+                    Fee = 4
                 },
                 new StripeCharge
                 {
                     Id = "ch555",
-                    Amount = 555
+                    Amount = 555, 
+                    Fee = 5
                 }
             };
 
@@ -256,7 +264,7 @@ namespace crds_angular.test.Services
                 && o.SetupDateTime == o.FinalizedDateTime
                 && o.BatchEntryType == 555
                 && o.ItemCount == 4
-                && o.BatchTotalAmount == (111 + 222 + 333 + 777) / 100M
+                && o.BatchTotalAmount == ((111 + 222 + 333 + 777) / Constants.StripeDecimalConversionValue)
                 && o.Donations != null
                 && o.Donations.Count == 4
                 && o.DepositId == 98765
@@ -270,6 +278,8 @@ namespace crds_angular.test.Services
                 && o.BatchCount == 1
                 && o.DepositDateTime != null
                 && o.DepositTotalAmount == 500M
+                &&o.ProcessorFeeTotal == 15M
+                &&o.DepositAmount == 485M
                 && o.Notes == null
                 && o.ProcessorTransferId.Equals("tx9876")
             )));
