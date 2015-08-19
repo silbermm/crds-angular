@@ -11,9 +11,9 @@
       transclude: true,
       templateUrl: 'trip_participant_card/tripParticipantCard.html',
       scope: {
-        tripParticipant: '='
+        tripParticipant: '=',
       },
-      link: link
+      link: link,
     };
 
     function link(scope, el, attr) {
