@@ -25,7 +25,7 @@ require('../../../app/app');
       $log = _$log_;
       $httpBackend = $injector.get('$httpBackend');
       MyTrips = $injector.get('MyTrips');
-      TripsUrlService = $injector.get('TripsUrlService');
+      //TripsUrlService = $injector.get('TripsUrlService');
     }));
 
     it('should set the shareUrl of all of the trips', function() {
