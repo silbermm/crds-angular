@@ -4,6 +4,6 @@ namespace crds_angular.Services.Interfaces
 {
     public interface IEmailCommunication
     {
-        void SendEmail(EmailCommunicationDTO email, string token);        
+        void SendEmail(EmailCommunicationDTO email, string token = null);        
     }
 }

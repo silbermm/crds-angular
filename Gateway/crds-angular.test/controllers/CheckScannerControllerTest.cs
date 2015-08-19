@@ -8,6 +8,7 @@ using Moq;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Web.Http.Results;
+using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.test.controllers
 {
@@ -16,6 +17,8 @@ namespace crds_angular.test.controllers
         private CheckScannerController _fixture;
         private Mock<IConfigurationWrapper> _configuration;
         private Mock<ICheckScannerService> _checkScannerService;
+        private Mock<IAuthenticationService> _authenticationService;
+        private Mock<ICommunicationService> _communicationService;
         private Mock<IMessageQueueFactory> _messageQueueFactory;
         private Mock<IMessageFactory> _messageFactory;
 
@@ -24,13 +27,15 @@ namespace crds_angular.test.controllers
         {
             _configuration = new Mock<IConfigurationWrapper>();
             _checkScannerService = new Mock<ICheckScannerService>(MockBehavior.Strict);
+            _authenticationService = new Mock<IAuthenticationService>();
+            _communicationService = new Mock<ICommunicationService>();
             _messageQueueFactory = new Mock<IMessageQueueFactory>(MockBehavior.Strict);
             _messageFactory = new Mock<IMessageFactory>(MockBehavior.Strict);
 
             _configuration.Setup(mocked => mocked.GetConfigValue("CheckScannerDonationsAsynchronousProcessingMode")).Returns("false");
             _configuration.Setup(mocked => mocked.GetConfigValue("CheckScannerDonationsQueueName")).Returns("CheckScannerBatchQueue");
 
-            _fixture = new CheckScannerController(_configuration.Object, _checkScannerService.Object, _messageQueueFactory.Object, _messageFactory.Object);
+            _fixture = new CheckScannerController(_configuration.Object, _checkScannerService.Object, _authenticationService.Object, _communicationService.Object, _messageQueueFactory.Object, _messageFactory.Object);
         }
 
         [Test]

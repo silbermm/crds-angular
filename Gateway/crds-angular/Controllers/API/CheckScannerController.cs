@@ -6,6 +6,7 @@ using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Interfaces;
 using Crossroads.Utilities.Messaging.Interfaces;
 using log4net;
+using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Controllers.API
 {
@@ -14,14 +15,18 @@ namespace crds_angular.Controllers.API
         private readonly ILog _logger = LogManager.GetLogger(typeof(CheckScannerController));
 
         private readonly ICheckScannerService _checkScannerService;
+        private readonly IAuthenticationService _authenticationService;
+        private readonly ICommunicationService _communicationService;
 
         private readonly MessageQueue _donationsQueue;
         private readonly IMessageFactory _messageFactory;
         private readonly bool _asynchronous;
 
-        public CheckScannerController(IConfigurationWrapper configuration, ICheckScannerService checkScannerService, IMessageQueueFactory messageQueueFactory = null, IMessageFactory messageFactory = null)
+        public CheckScannerController(IConfigurationWrapper configuration, ICheckScannerService checkScannerService, IAuthenticationService authenticationService, ICommunicationService communicationService, IMessageQueueFactory messageQueueFactory = null, IMessageFactory messageFactory = null)
         {
             _checkScannerService = checkScannerService;
+            _authenticationService = authenticationService;
+            _communicationService = communicationService;
 
             var b = configuration.GetConfigValue("CheckScannerDonationsAsynchronousProcessingMode");
             _asynchronous = b != null && bool.Parse(b);
@@ -60,9 +65,13 @@ namespace crds_angular.Controllers.API
         public IHttpActionResult CreateDonationsForBatch([FromBody] CheckScannerBatch batch)
         {
             // TODO Uncomment this to make the endpoint require authentication
+            var token = "";
             //return (Authorized(token =>
             //{
                 if (!_asynchronous) return (Ok(_checkScannerService.CreateDonationsForBatch(batch)));
+
+                batch.MinistryPlatformContactId = _authenticationService.GetContactId(token);
+                batch.MinistryPlatformUserId = _communicationService.GetUserIdFromContactId(token, batch.MinistryPlatformContactId.Value);
 
                 var message = _messageFactory.CreateMessage(batch);
                 _donationsQueue.Send(message);

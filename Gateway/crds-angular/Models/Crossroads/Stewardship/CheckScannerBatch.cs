@@ -14,13 +14,13 @@ namespace crds_angular.Models.Crossroads.Stewardship
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty(PropertyName = "scanDate", ItemConverterType = typeof(JavaScriptDateTimeConverter))]
+        [JsonProperty(PropertyName = "scanDate"), JsonConverter(typeof(IsoDateTimeConverter))]
         public DateTime ScanDate { get; set; }
 
         [JsonProperty("status"), JsonConverter(typeof(StringEnumConverter))]
         public BatchStatus Status { get; set; }
 
-        [JsonProperty("programId")]
+        [JsonProperty("programId", NullValueHandling = NullValueHandling.Ignore)]
         public int? ProgramId { get; set; }
 
         #region Checks property and accessor
@@ -29,6 +29,12 @@ namespace crds_angular.Models.Crossroads.Stewardship
         [JsonProperty("checks")]
         public List<CheckScannerCheck> Checks { get { return (_checks); } }
         #endregion
+
+        [JsonProperty("contactId", NullValueHandling = NullValueHandling.Ignore)]
+        public int? MinistryPlatformContactId { get; set; }
+
+        [JsonProperty("userId", NullValueHandling = NullValueHandling.Ignore)]
+        public int? MinistryPlatformUserId { get; set; }
     }
 
     public enum BatchStatus
