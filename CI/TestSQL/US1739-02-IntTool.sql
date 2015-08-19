@@ -1,17 +1,7 @@
 USE [MinistryPlatform]
 GO
-SET IDENTITY_INSERT [dbo].[dp_Tools] ON
 
-INSERT INTO [dbo].[dp_Tools]
-           ([Tool_ID]
-		   ,[Tool_Name]
-           ,[Description]
-           ,[Launch_Page])
-     VALUES
-           (42
-		   ,'Trip Participants'
-           ,'Trip Participants Tool'
-           ,'http://int.crossroads.net/mptools/tripParticipants'
-
-SET IDENTITY_INSERT [dbo].[dp_Tools] OFF
+UPDATE [dbo].[dp_Tools]
+   SET [Launch_Page] = 'http://int.crossroads.net/mptools/tripParticipants'
+ WHERE Tool_ID = 42
 GO
