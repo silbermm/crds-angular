@@ -16,6 +16,9 @@ require('./subscribe-btn-dropdown.html');
 require('./media-list.html');
 require('./message-action-buttons.html');
 require('./media-details.html');
+require('./templates/media.list.card.html');
+
 
 app.controller('MediaCtrl', require('./media.controller'));
 app.factory('Media', require('./services/media.service'));
+app.directive("mediaListCard", require('./directives/media.list.card'));

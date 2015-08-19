@@ -161,7 +161,13 @@
         parent: 'noSideBar',
         url: '/media',
         controller: 'MediaCtrl as media',
-        templateUrl: 'media/view-all.html'
+        templateUrl: 'media/view-all.html',
+        resolve: {
+          Media: 'Media',
+          Series: function(Media) {
+            return Media.Series().get().$promise;
+          }
+        }
       })
       .state('media-music', {
         parent: 'noSideBar',
