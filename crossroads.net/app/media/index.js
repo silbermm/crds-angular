@@ -17,4 +17,5 @@ require('./media-list.html');
 require('./message-action-buttons.html');
 require('./media-details.html');
 
-app.controller('MediaCtrl', ['$log', '$state', require('./media.controller')]);
+app.controller('MediaCtrl', require('./media.controller'));
+app.factory('Media', require('./services/media.service'));
