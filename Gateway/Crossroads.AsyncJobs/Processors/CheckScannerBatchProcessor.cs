@@ -35,6 +35,8 @@ namespace Crossroads.AsyncJobs.Processors
             {
                 _logger.Debug(string.Format("Received check scanner batch {0} at {1} (queued at {2})", batch.Name, details.RetrievedDateTime, details.EnqueuedDateTime));
                 var result = _checkScannerService.CreateDonationsForBatch(batch);
+                result.MinistryPlatformContactId = batch.MinistryPlatformContactId;
+                result.MinistryPlatformUserId = batch.MinistryPlatformUserId;
                 SendEmail(result, null);
             }
             catch (Exception e)
@@ -56,8 +58,9 @@ namespace Crossroads.AsyncJobs.Processors
             var email = new EmailCommunicationDTO
             {
                 FromContactId = batch.MinistryPlatformContactId.Value,
-                TemplateId = error == null ? _checkScannerBatchSuccessTemplateId : _checkScannerBatchFailureTemplateId,
+                FromUserId = batch.MinistryPlatformUserId,
                 ToContactId = batch.MinistryPlatformContactId.Value,
+                TemplateId = error == null ? _checkScannerBatchSuccessTemplateId : _checkScannerBatchFailureTemplateId,
                 MergeData = new Dictionary<string, object>
                     {
                         { "batchName", batch.Name },
@@ -71,11 +74,18 @@ namespace Crossroads.AsyncJobs.Processors
             }
             else
             {
-                email.MergeData["result"] = JsonConvert.SerializeObject(batch, Formatting.Indented);
+                email.MergeData["batch"] = JsonConvert.SerializeObject(batch, Formatting.Indented);
             }
 
 
-            _emailService.SendEmail(email);
+            try
+            {
+                _emailService.SendEmail(email);
+            }
+            catch(Exception e)
+            {
+                _logger.Error(string.Format("Could not send email {0} for batch", JsonConvert.SerializeObject(email, Formatting.Indented)), e);
+            }
         }
     }
 }

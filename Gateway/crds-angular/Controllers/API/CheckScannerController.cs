@@ -42,32 +42,28 @@ namespace crds_angular.Controllers.API
         [Route("api/checkscanner/batches")]
         public IHttpActionResult GetOpenBatches()
         {
-            // TODO Uncomment this to make the endpoint require authentication
-            //return (Authorized(token =>
-            //{
+            return (Authorized(token =>
+            {
                 var batches = _checkScannerService.GetOpenBatches();
                 return (Ok(batches));
-            //}));
+            }));
         }
 
         [Route("api/checkscanner/batches/{batchName}/checks")]
         public IHttpActionResult GetChecksForBatch(string batchName)
         {
-            // TODO Uncomment this to make the endpoint require authentication
-            //return (Authorized(token =>
-            //{
+            return (Authorized(token =>
+            {
                 var checks = _checkScannerService.GetChecksForBatch(batchName);
                 return (Ok(checks));
-            //}));
+            }));
         }
 
         [Route("api/checkscanner/batches"), HttpPost]
         public IHttpActionResult CreateDonationsForBatch([FromBody] CheckScannerBatch batch)
         {
-            // TODO Uncomment this to make the endpoint require authentication
-            var token = "";
-            //return (Authorized(token =>
-            //{
+            return (Authorized(token =>
+            {
                 if (!_asynchronous) return (Ok(_checkScannerService.CreateDonationsForBatch(batch)));
 
                 batch.MinistryPlatformContactId = _authenticationService.GetContactId(token);
@@ -76,7 +72,7 @@ namespace crds_angular.Controllers.API
                 var message = _messageFactory.CreateMessage(batch);
                 _donationsQueue.Send(message);
                 return (Ok(batch));
-            //}));
+            }));
         }
     }
 }
