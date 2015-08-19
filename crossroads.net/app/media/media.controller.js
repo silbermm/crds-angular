@@ -27,7 +27,7 @@
 
           return seriesArray;
         }, function (error) {
-          // todo -- add the error
+          // todo -- add the error...
           debugger;
         });
 
