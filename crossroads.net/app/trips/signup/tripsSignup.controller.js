@@ -3,15 +3,17 @@
 
   module.exports = TripsSignupController;
 
-  TripsSignupController.$inject = ['$log', '$stateParams', '$location', '$anchorScroll'];
+  TripsSignupController.$inject = ['$log', '$state', '$location', '$anchorScroll', 'Campaign'];
 
-  function TripsSignupController($log, $stateParams, $location, $anchorScroll) {
+  function TripsSignupController($log, $state, $location, $anchorScroll, Campaign) {
 
     var vm = this;
 
-    vm.friendlyPageTitle = $stateParams.tripLocation;
-    vm.pageTitle = $stateParams.tripLocation;
-    vm.tripName = '';
+    vm.campaign = Campaign;
+    vm.currentPage = 1;
+    vm.numberOfPages = 0;
+    vm.pageTitle = vm.campaign.formName;
+    vm.tripName = vm.campaign.name;
     vm.whyPlaceholder = '';
 
     activate();
@@ -21,27 +23,28 @@
     ////////////////////////////////
     function activate() {
       switch (vm.pageTitle) {
-        case 'nola':
+        case 'GO NOLA Application':
           vm.friendlyPageTitle = 'New Orleans';
-          vm.tripName = '2015 July New Orleans Men\'s Trip';
+          vm.numberOfPages = 5;
           break;
-        case 'south-africa':
+        case 'GO South Africa Application':
           vm.friendlyPageTitle = 'South Africa';
-          vm.tripName = '2015 Oct SA Topsy Trip';
+          vm.numberOfPages = 6;
           break;
-        case 'india':
+        case 'GO India Application':
           vm.friendlyPageTitle = 'India';
-          vm.tripName = '2015 SEPT India JA Annual';
+          vm.numberOfPages = 6;
           vm.whyPlaceholder = 'Please be specific. ' +
             'In instances where we have a limited number of spots, we strongly consider responses to this question.';
           break;
-        case 'nicaragua':
+        case 'GO Nicaragua Application':
           vm.friendlyPageTitle = 'Nicaragua';
-          vm.tripName = '2015 Winter Kickoff Trip';
+          vm.numberOfPages = 6;
           break;
       }
 
     }
+
   }
 
 })();

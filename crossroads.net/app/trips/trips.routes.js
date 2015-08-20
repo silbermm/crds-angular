@@ -81,16 +81,22 @@
       })
       .state('tripsignup', {
         parent: 'noSideBar',
-        url: '/trips/:tripLocation/signup',
-        templateUrl: 'signup/signupPage1.html',
+        url: '/trips/:campaignId/signup',
+        templateUrl: 'signup/signupPage.html',
         controller: 'TripsSignupController as tripsSignup',
         data: {
-          isProtected: true
+          isProtected: true,
         },
         resolve: {
-          loggedin: crds_utilities.checkLoggedin
-        }
-      });
+          loggedin: crds_utilities.checkLoggedin,
+          Trip: 'Trip',
+          $stateParams: '$stateParams',
+          Campaign: function(Trip, $stateParams) {
+            return Trip.Campaign.get({campaignId: $stateParams.campaignId}).$promise;
+          }
+        },
+      })
+      ;
   }
 
 })();
