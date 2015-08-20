@@ -11,7 +11,7 @@ INSERT INTO [dbo].[dp_Tools]
            (43
 		   ,'Trip Participants - Developmen'
            ,'Development Trip Participants Tool'
-           ,'http://localhost:3000/mptools/tripParticipants'
+           ,'http://localhost:3000/mptools/tripParticipants')
 
 SET IDENTITY_INSERT [dbo].[dp_Tools] OFF
 GO
