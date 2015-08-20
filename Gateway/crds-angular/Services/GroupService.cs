@@ -1,18 +1,18 @@
-﻿using crds_angular.Models.Crossroads;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using crds_angular.Models.Crossroads;
 using Crossroads.Utilities.Interfaces;
 using log4net;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Exceptions;
 using MinistryPlatform.Translation.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace crds_angular.Services
 {
     public class GroupService : crds_angular.Services.Interfaces.IGroupService
     {
-        private readonly ILog logger = LogManager.GetLogger(typeof(GroupService));
+        private readonly ILog logger = LogManager.GetLogger(typeof (GroupService));
 
         private IGroupService _mpGroupService;
         private IConfigurationWrapper _configurationWrapper;
@@ -25,8 +25,11 @@ namespace crds_angular.Services
         /// </summary>
         private readonly int GroupRoleDefaultId;
 
-        public GroupService(IGroupService mpGroupService, IConfigurationWrapper configurationWrapper,
-            IAuthenticationService authenticationService, IEventService eventService, IContactRelationshipService contactRelationshipService)
+        public GroupService(IGroupService mpGroupService,
+                            IConfigurationWrapper configurationWrapper,
+                            IAuthenticationService authenticationService,
+                            IEventService eventService,
+                            IContactRelationshipService contactRelationshipService)
         {
             this._mpGroupService = mpGroupService;
             this._configurationWrapper = configurationWrapper;
@@ -44,7 +47,6 @@ namespace crds_angular.Services
             try
             {
                 g = _mpGroupService.getGroupDetails(groupId);
-
             }
             catch (Exception e)
             {
@@ -65,8 +67,10 @@ namespace crds_angular.Services
                 foreach (var p in participantIds)
                 {
                     // First sign this user up for the community group
-                    int groupParticipantId = _mpGroupService.addParticipantToGroup(p, Convert.ToInt32(groupId),
-                        GroupRoleDefaultId, DateTime.Now);
+                    int groupParticipantId = _mpGroupService.addParticipantToGroup(p,
+                                                                                   Convert.ToInt32(groupId),
+                                                                                   GroupRoleDefaultId,
+                                                                                   DateTime.Now);
                     logger.Debug("Added user - group/participant id = " + groupParticipantId);
 
                     // Now see what future events are scheduled for this group, and register the user for those
@@ -89,7 +93,6 @@ namespace crds_angular.Services
                 logger.Error("Could not add user to group", e);
                 throw (e);
             }
-
         }
 
         public GroupDTO getGroupDetails(int groupId, int contactId, Participant participant, string authUserToken)
@@ -106,7 +109,7 @@ namespace crds_angular.Services
             if (currRelationships != null)
             {
                 familyToReturn = currRelationships.Where(
-                      c => signupRelations.Select(s => s.RelationshipId).Contains(c.Relationship_Id)).ToArray();
+                    c => signupRelations.Select(s => s.RelationshipId).Contains(c.Relationship_Id)).ToArray();
             }
 
             var detail = new GroupDTO();
@@ -124,7 +127,7 @@ namespace crds_angular.Services
                     UserInGroup = _mpGroupService.checkIfUserInGroup(participantId, g.Participants),
                     ParticpantId = participantId,
                 };
-                detail.SignUpFamilyMembers = new List<SignUpFamilyMembers> { fam };
+                detail.SignUpFamilyMembers = new List<SignUpFamilyMembers> {fam};
 
                 if (familyToReturn != null)
                 {

@@ -29,7 +29,7 @@ namespace crds_angular.Controllers.API
                     var contactIds = _contactSerivce.GetContactIdByRoleId(id, token);
                     return this.Ok(contactIds);
                 }
-                catch (Exception e)
+                catch (Exception )
                 {
                     return BadRequest();
                 }

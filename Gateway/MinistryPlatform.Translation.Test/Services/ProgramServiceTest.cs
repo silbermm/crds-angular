@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using MinistryPlatform.Models;
-using MinistryPlatform.Translation.Exceptions;
+﻿using System.Collections.Generic;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -14,13 +12,21 @@ namespace MinistryPlatform.Translation.Test.Services
     {
         private ProgramService fixture;
         private Mock<IMinistryPlatformService> _ministryPlatformService;
-        
+        private Mock<IAuthenticationService> _authService;
+        private Mock<IConfigurationWrapper> _configWrapper;
 
         [SetUp]
         public void SetUp()
         {
             _ministryPlatformService = new Mock<IMinistryPlatformService>();
-            fixture = new ProgramService(_ministryPlatformService.Object);
+            _authService = new Mock<IAuthenticationService>();
+            _configWrapper = new Mock<IConfigurationWrapper>();
+
+            _configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
+            _configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("pwd");
+            _authService.Setup(m => m.Authenticate(It.IsAny<string>(), It.IsAny<string>())).Returns(new Dictionary<string, object> {{"token", "ABC"}, {"exp", "123"}});
+
+            fixture = new ProgramService(_ministryPlatformService.Object, _authService.Object, _configWrapper.Object);
         }
 
         [Test]
@@ -39,46 +45,44 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Program_ID", 22},
             });
 
-    
+
             const int OnlineGivingProgramsPageViewId = 1038;
 
             _ministryPlatformService.Setup(
-            mocked => mocked.GetPageViewRecords(OnlineGivingProgramsPageViewId, It.IsAny<string>(), ",,,1", "", 0)).Returns(GetPageViewRecordsResponse);
+                mocked => mocked.GetPageViewRecords(OnlineGivingProgramsPageViewId, It.IsAny<string>(), ",,,1", "", 0)).Returns(GetPageViewRecordsResponse);
 
             var programs = fixture.GetOnlineGivingPrograms(1);
 
             _ministryPlatformService.VerifyAll();
             Assert.IsNotNull(programs);
-            
+
             Assert.AreEqual("Test Program Name", programs[0].Name);
             Assert.AreEqual(22, programs[1].ProgramId);
-                
         }
+
         [Test]
         public void testGetOnlineGivingProgramsNullResponse()
         {
             const int OnlineGivingProgramsPageViewId = 1038;
 
             _ministryPlatformService.Setup(
-            mocked => mocked.GetPageViewRecords(OnlineGivingProgramsPageViewId, It.IsAny<string>(), ",,,1", "", 0)).Returns((List<Dictionary<string,object>>)null);
+                mocked => mocked.GetPageViewRecords(OnlineGivingProgramsPageViewId, It.IsAny<string>(), ",,,1", "", 0)).Returns((List<Dictionary<string, object>>) null);
 
             var programs = fixture.GetOnlineGivingPrograms(1);
 
             _ministryPlatformService.VerifyAll();
             Assert.IsNotNull(programs);
             Assert.AreEqual(0, programs.Count);
-            
         }
 
         [Test]
         public void testGetProgram()
         {
-
-           var GetRecordResponse = new Dictionary<string, object>()
+            var GetRecordResponse = new Dictionary<string, object>()
             {
                 {"Communication_ID", "1234"},
                 {"Program_ID", 3},
-                {"Program_Name","TEst Name" }
+                {"Program_Name", "TEst Name"}
             };
 
             const int ProgramsPageId = 375;

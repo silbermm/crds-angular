@@ -165,9 +165,9 @@ namespace crds_angular.Services
                 DepositDateTime = now,
                 DepositName = batchName,
                 // This is the amount from Stripe - will show out of balance if does not match batch total above
-                DepositTotalAmount = transfer.Amount /Constants.StripeDecimalConversionValue,
+                DepositTotalAmount = ((transfer.Amount /Constants.StripeDecimalConversionValue) + (transfer.Fee / Constants.StripeDecimalConversionValue)),
                 ProcessorFeeTotal = transfer.Fee /Constants.StripeDecimalConversionValue,
-                DepositAmount = ((transfer.Amount /Constants.StripeDecimalConversionValue) - transfer.Fee / (Constants.StripeDecimalConversionValue)),
+                DepositAmount = transfer.Amount /Constants.StripeDecimalConversionValue,
                 Exported = false,
                 Notes = null,
                 ProcessorTransferId = transfer.Id

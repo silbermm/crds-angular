@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Reflection;
+using Crossroads.Utilities.Interfaces;
 using log4net;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
@@ -17,7 +18,8 @@ namespace MinistryPlatform.Translation.Services
 
         private IMinistryPlatformService _ministryPlatformService;
 
-        public ContactService(IMinistryPlatformService ministryPlatformService)
+        public ContactService(IMinistryPlatformService ministryPlatformService, IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
+            : base(authenticationService, configurationWrapper)
         {
             this._ministryPlatformService = ministryPlatformService;
         }
@@ -26,13 +28,13 @@ namespace MinistryPlatform.Translation.Services
         {
             try
             {
-                var recordsDict = _ministryPlatformService.GetRecordDict(contactsPageId, contactId, apiLogin());
+                var recordsDict = _ministryPlatformService.GetRecordDict(contactsPageId, contactId, ApiLogin());
 
                 var contactEmail = recordsDict["Email_Address"].ToString();
 
                 return contactEmail;
             }
-            catch (NullReferenceException ex)
+            catch (NullReferenceException )
             {
                 logger.Debug(String.Format("Trying to email address of {0} failed", contactId));
                 return string.Empty;
@@ -43,7 +45,7 @@ namespace MinistryPlatform.Translation.Services
         {
             var searchString = string.Format(",\"{0}\"", contactId);
             
-            var pageViewRecords = _ministryPlatformService.GetPageViewRecords("AllIndividualsWithContactId", apiLogin(), searchString);
+            var pageViewRecords = _ministryPlatformService.GetPageViewRecords("AllIndividualsWithContactId", ApiLogin(), searchString);
 
             if (pageViewRecords.Count > 1)
             {
