@@ -277,9 +277,9 @@ namespace crds_angular.test.Services
                 && o.AccountNumber.Equals(" ")
                 && o.BatchCount == 1
                 && o.DepositDateTime != null
-                && o.DepositTotalAmount == 500M
+                && o.DepositTotalAmount == 515M
                 &&o.ProcessorFeeTotal == 15M
-                &&o.DepositAmount == 485M
+                &&o.DepositAmount == 500M
                 && o.Notes == null
                 && o.ProcessorTransferId.Equals("tx9876")
             )));

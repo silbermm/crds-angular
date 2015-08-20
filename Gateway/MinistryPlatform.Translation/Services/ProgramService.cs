@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Translation.Services.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
@@ -15,7 +16,8 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _onlineGivingProgramsPageViewId = Convert.ToInt32(AppSettings("OnlineGivingProgramsPageViewId"));
         private readonly int programsPageId = AppSettings("Programs");
 
-        public ProgramService(IMinistryPlatformService ministryPlatformService)
+        public ProgramService(IMinistryPlatformService ministryPlatformService, IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
+            : base(authenticationService, configurationWrapper)
         {
             this.ministryPlatformService = ministryPlatformService;
         }
@@ -47,7 +49,7 @@ namespace MinistryPlatform.Translation.Services
 
         public Program GetProgramById(int programId)
         {
-            var recordsDict = ministryPlatformService.GetRecordDict(programsPageId, programId, apiLogin());
+            var recordsDict = ministryPlatformService.GetRecordDict(programsPageId, programId, ApiLogin());
 
             var program = new Program
             {

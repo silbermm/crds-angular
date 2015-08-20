@@ -281,6 +281,7 @@
     <Compile Include="Models\Crossroads\Skill.cs" />
     <Compile Include="Models\Crossroads\Event.cs" />
     <Compile Include="Models\Crossroads\Stewardship\DepositDTO.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\PledgeCampaign.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeBalanceTransaction.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeExpandableProperty.cs" />
     <Compile Include="Models\Crossroads\Stewardship\CreateDonationDTO.cs" />
@@ -295,8 +296,16 @@
     <Compile Include="Models\Crossroads\Stewardship\StripeObject.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeTransfer.cs" />
     <Compile Include="Models\Crossroads\Trip\MyTripsDTO.cs" />
+    <Compile Include="Models\Crossroads\Trip\SaveTripParticipantsDto.cs" />
+    <Compile Include="Models\Crossroads\Trip\Trip.cs" />
+    <Compile Include="Models\Crossroads\Trip\TripApplicantResponse.cs" />
+    <Compile Include="Models\Crossroads\Trip\TripFormResponseDto.cs" />
+    <Compile Include="Models\Crossroads\Trip\TripGift.cs" />
+    <Compile Include="Models\Crossroads\Trip\TripGroupDto.cs" />
+    <Compile Include="Models\Crossroads\Trip\TripInfo.cs" />
     <Compile Include="Models\Crossroads\Trip\TripParticipantDto.cs" />
     <Compile Include="Models\Crossroads\Trip\TripDto.cs" />
+    <Compile Include="Models\Crossroads\Trip\TripToolError.cs" />
     <Compile Include="Models\Crossroads\User.cs" />
     <Compile Include="Models\Crossroads\VolunteerApplication\AdultApplicationDto.cs" />
     <Compile Include="Models\Crossroads\VolunteerApplication\ChildDto.cs" />

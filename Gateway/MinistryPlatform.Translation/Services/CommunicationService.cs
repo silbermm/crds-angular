@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
+using Crossroads.Utilities.Interfaces;
 using log4net;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Exceptions;
@@ -20,7 +21,8 @@ namespace MinistryPlatform.Translation.Services
         private readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly IMinistryPlatformService _ministryPlatformService;
 
-        public CommunicationService(IMinistryPlatformService ministryPlatformService)
+        public CommunicationService(IMinistryPlatformService ministryPlatformService, IAuthenticationService authenticationService,IConfigurationWrapper configurationWrapper)
+            : base(authenticationService, configurationWrapper)
         {
             _ministryPlatformService = ministryPlatformService;
         }
@@ -66,7 +68,7 @@ namespace MinistryPlatform.Translation.Services
         /// <param name="communication">The message properties </param>        
         public void SendMessage(Communication communication)
         {
-            var token = apiLogin();
+            var token = ApiLogin();
 
             var communicationId = AddCommunication(communication, token);
             AddCommunicationMessage(communication, communicationId, token);
@@ -106,7 +108,7 @@ namespace MinistryPlatform.Translation.Services
 
         public MessageTemplate GetTemplate(int templateId)
         {
-            var pageRecords = _ministryPlatformService.GetRecordDict(_messagePageId, templateId, apiLogin());
+            var pageRecords = _ministryPlatformService.GetRecordDict(_messagePageId, templateId, ApiLogin());
 
             if (pageRecords == null)
             {
