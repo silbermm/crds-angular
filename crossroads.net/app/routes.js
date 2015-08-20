@@ -161,7 +161,7 @@
         abstract: true,
         parent: 'noSideBar',
         url: '/media',
-        controller: 'MediaCtrl as media',
+        controller: 'MediaController as media',
         template: '<ui-view/>',
         resolve: {
           Media: 'Media',
@@ -172,8 +172,8 @@
       })
       .state('media.all', {
         url: '',
-        controller: 'MediaCtrl as media',
-        templateUrl: 'media/view-all.html',
+        controller: 'MediaController as media',
+        templateUrl: 'media/viewAll.html',
         resolve: {
           Media: 'Media',
           Series: function (Media) {
@@ -184,35 +184,35 @@
       .state('media-music', {
         parent: 'noSideBar',
         url: '/media/music',
-        controller: 'MediaCtrl as media',
+        controller: 'MediaController as media',
         templateUrl: 'media/view-all-music.html'
       })
       .state('media.series', {
         url: '/series',
-        templateUrl: 'media/view-all-series.html',
+        templateUrl: 'media/viewAllSeries.html'
       })
       .state('media-videos', {
         parent: 'noSideBar',
         url: '/media/videos',
-        controller: 'MediaCtrl as media',
+        controller: 'MediaController as media',
         templateUrl: 'media/view-all-videos.html'
       })
       .state('media-series-single', {
         parent: 'noSideBar',
         url: '/media/series/single',
-        controller: 'MediaCtrl as media',
+        controller: 'MediaController as media',
         templateUrl: 'media/series-single.html'
       })
       .state('media-series-single-lo-res', {
         parent: 'noSideBar',
         url: '/media/series/single/lores',
-        controller: 'MediaCtrl as media',
+        controller: 'MediaController as media',
         templateUrl: 'media/series-single-lo-res.html'
       })
       .state('media-single', {
         parent: 'screenWidth',
         url: '/media/single',
-        controller: 'MediaCtrl as media',
+        controller: 'MediaController as media',
         templateUrl: 'media/media-single.html'
       })
       .state('blog', {

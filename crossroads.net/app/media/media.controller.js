@@ -1,10 +1,10 @@
 'use strict';
 (function () {
-  module.exports = MediaCtrl;
+  module.exports = MediaController;
 
-  MediaCtrl.$inject = ['Series'];
+  MediaController.$inject = ['Series'];
 
-  function MediaCtrl(Series) {
+  function MediaController(Series) {
     var vm = this;
     vm.msgisopen = true;
     vm.musicisopen = false;
