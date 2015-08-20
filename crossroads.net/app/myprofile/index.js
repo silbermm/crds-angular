@@ -9,6 +9,8 @@ require('./templates/profile_skills.html');
 require('./profile_modal.js');
 require('./templates/profile_giving_edit_modal.html');
 require('./templates/profile_giving_remove_modal.html');
+require('./templates/profile_image_upload.html');
 
 
-app.controller("MyProfileCtrl", ['$scope', '$log', '$location', '$anchorScroll', require("./myprofile_controller")]);
+app.controller("MyProfileCtrl", ['$scope', '$log', '$location', '$anchorScroll', '$modal', require("./myprofile_controller")]);
+app.controller("ChangeProfileImageCtrl", ['$modalInstance', '$scope', '$timeout', require("./templates/changeProfileImage.controller")]);
