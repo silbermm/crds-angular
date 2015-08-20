@@ -54,14 +54,24 @@ namespace MinistryPlatform.Translation.Services
             }).ToList();
         }
 
-        public List<TripFormResponse> GetTripFormResponses(int selectionId)
+        public List<TripFormResponse> GetTripFormResponsesByRecordId(int recordId)
+        {
+            var command = CreateTripFormResponsesSqlCommandWithRecordId(recordId);
+            return GetTripFormResponses(command);
+        }
+
+        public List<TripFormResponse> GetTripFormResponsesBySelectionId(int selectionId)
+        {
+            var command = CreateTripFormResponsesSqlCommandWithSelectionId(selectionId);
+            return GetTripFormResponses(command);
+        }
+        private List<TripFormResponse> GetTripFormResponses(IDbCommand command)
         {
             var connection = _dbConnection;
             try
             {
                 connection.Open();
 
-                var command = CreateTripFormResponsesSqlCommand(selectionId);
                 command.Connection = connection;
                 var reader = command.ExecuteReader();
                 var responses = new List<TripFormResponse>();
@@ -73,7 +83,6 @@ namespace MinistryPlatform.Translation.Services
                     response.DonorId = donorId;
                     response.FundraisingGoal = SafeDecimal(reader,"Fundraising_Goal");
                     response.ParticipantId = reader.GetInt32(reader.GetOrdinal("Participant_ID"));
-                    //response.PledgeCampaignId = reader.GetInt32(reader.GetOrdinal("Pledge_Campaign_ID"));
                     response.PledgeCampaignId = SafeInt32(reader, "Pledge_Campaign_ID");
                     response.EventId = SafeInt32(reader, "Event_ID"); 
 
@@ -105,7 +114,24 @@ namespace MinistryPlatform.Translation.Services
             return !record.IsDBNull(ordinal) ? record.GetInt32(ordinal) : (int?)null;
         }
 
-        private static IDbCommand CreateTripFormResponsesSqlCommand(int selectionId)
+        private static IDbCommand CreateTripFormResponsesSqlCommandWithRecordId(int recordId)
+        {
+            const string query = @"SELECT fr.Contact_ID, fr.Pledge_Campaign_ID, pc.Event_ID, pc.Fundraising_Goal, p.Participant_ID, d.Donor_ID
+                                  FROM [MinistryPlatform].[dbo].[Form_Responses] fr
+                                  INNER JOIN [MinistryPlatform].[dbo].[Participants] p on fr.Contact_ID = p.Contact_ID
+                                  LEFT OUTER JOIN [MinistryPlatform].[dbo].[Pledge_Campaigns] pc on fr.Pledge_Campaign_ID = pc.Pledge_Campaign_ID
+                                  LEFT OUTER JOIN [MinistryPlatform].[dbo].[Donors] d on fr.Contact_ID = d.Contact_ID
+                                  WHERE fr.Form_Response_ID = @recordId";
+
+            using (IDbCommand command = new SqlCommand(string.Format(query)))
+            {
+                command.Parameters.Add(new SqlParameter("@recordId", recordId) { DbType = DbType.Int32 });
+                command.CommandType = CommandType.Text;
+                return command;
+            }
+        }
+
+        private static IDbCommand CreateTripFormResponsesSqlCommandWithSelectionId(int selectionId)
         {
             const string query = @"SELECT fr.Contact_ID, fr.Pledge_Campaign_ID, pc.Event_ID, pc.Fundraising_Goal, p.Participant_ID, d.Donor_ID
                                   FROM [MinistryPlatform].[dbo].[dp_Selected_Records] sr

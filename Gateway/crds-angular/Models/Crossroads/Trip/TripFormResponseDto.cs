@@ -30,16 +30,4 @@ namespace crds_angular.Models.Crossroads.Trip
         [JsonProperty(PropertyName = "donorId")]
         public int? DonorId { get; set; }
     }
-
-    public class SaveTripParticipantsDto
-    {
-        [JsonProperty(PropertyName = "applicants")]
-        public List<TripApplicant> Applicants { get; set; }
-
-        [JsonProperty(PropertyName = "group")]
-        public int GroupId { get; set; }
-
-        [JsonProperty(PropertyName = "pledgeCampaign")]
-        public PledgeCampaign Campaign { get; set; }
-    }
 }
