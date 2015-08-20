@@ -93,5 +93,7 @@ I take less than three international trips per year.
 I have not traveled internationally.', 1, @IndiaForm, 1, 0, 945),
 (470, 'Experience Abroad Outside GO Trips', 7, 'Yes
 No', 1, @IndiaForm, 1, 0, 946),
-(480, 'Describe Experience Abroad', 1, 'NULL', 1, @IndiaForm, 1, 0, 947)
+(480, 'Describe Experience Abroad', 1, 'NULL', 1, @IndiaForm, 1, 0, 947),
+(490, 'Past Abuse History', 7, 'Yes
+No', 1, @IndiaForm, 1, 0, 948)
 END
