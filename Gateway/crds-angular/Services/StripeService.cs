@@ -215,7 +215,7 @@ namespace crds_angular.Services
             var request = new RestRequest(url, Method.GET);
 
             var response = _stripeRestClient.Execute<StripeRefund>(request);
-            CheckStripeResponse("Could not query transactions", response);
+            CheckStripeResponse("Could not query charge refund", response);
             var refund = response.Data;
             
             return (refund);

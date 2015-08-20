@@ -10,6 +10,9 @@ namespace crds_angular.Models.Crossroads.Stewardship
         [JsonProperty("fee")]
         public int Fee { get; set; }
 
+        [JsonProperty("status")]
+        public string Status { get; set; }
+
         [JsonProperty("type")]
         public string Type { get; set; }
 

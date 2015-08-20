@@ -73,7 +73,6 @@ namespace crds_angular.Services
             }
 
             // Don't process this transfer if we can't find any charges for the transfer
-            //this returns charges and refunds
             var charges = _paymentService.GetChargesForTransfer(transfer.Id);
             if (charges == null || charges.Count <= 0)
             {

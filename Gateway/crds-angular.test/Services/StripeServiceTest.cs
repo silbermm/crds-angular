@@ -443,26 +443,6 @@ namespace crds_angular.test.Services
         [Test]
         public void ShouldGetChargeRefund()
         {
-            var q = new Queue<StripeCharges>();
-            q.Enqueue(new StripeCharges
-            {
-                HasMore = false,
-                Data = new List<StripeCharge>
-                {
-                    new StripeCharge
-                    {
-                        Id = "123",
-                        Type = "charge"
-                    },
-                    new StripeCharge
-                    {
-                        Id = "456",
-                        Type = "refund"
-,                    }
-                }
-            });
-            
-
             var response = new Mock<IRestResponse<StripeRefund>>();
             response.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
             response.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
@@ -479,7 +459,6 @@ namespace crds_angular.test.Services
        
             _restClient.VerifyAll();
             response.VerifyAll();
-            
         }
 
     }
