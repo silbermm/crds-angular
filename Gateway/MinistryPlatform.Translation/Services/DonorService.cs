@@ -30,7 +30,8 @@ namespace MinistryPlatform.Translation.Services
         private readonly IProgramService _programService;
         private readonly ICommunicationService _communicationService;
 
-        public DonorService(IMinistryPlatformService ministryPlatformService, IProgramService programService, ICommunicationService communicationService, IConfigurationWrapper configuration)
+        public DonorService(IMinistryPlatformService ministryPlatformService, IProgramService programService, ICommunicationService communicationService, IAuthenticationService authenticationService,IConfigurationWrapper configuration)
+            : base(authenticationService, configuration)
         {
             _ministryPlatformService = ministryPlatformService;
             _programService = programService;
@@ -62,7 +63,7 @@ namespace MinistryPlatform.Translation.Services
                 {"Processor_ID", processorId}
             };
 
-            var apiToken = apiLogin();
+            var apiToken = ApiLogin();
 
             int donorId;
 
@@ -98,10 +99,10 @@ namespace MinistryPlatform.Translation.Services
         public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor)
         {
             var pymtId = PaymentType.getPaymentType(pymtType).id;
-            var fee = feeAmt.HasValue ? feeAmt /Constants.StripeDecimalConversionValue : null;
+            var fee = feeAmt.HasValue ? feeAmt / Constants.StripeDecimalConversionValue : null;
 
 
-            var apiToken = apiLogin();
+            var apiToken = ApiLogin();
             
             var donationValues = new Dictionary<string, object>
             {
@@ -243,7 +244,7 @@ namespace MinistryPlatform.Translation.Services
 
         public ContactDonor GetContactDonorForDonorAccount(string accountNumber, string routingNumber)
         {
-            var apiToken = apiLogin();
+            var apiToken = ApiLogin();
             var search = string.Format("{0},{1}", accountNumber, routingNumber);
 
             var accounts = _ministryPlatformService.GetPageViewRecords(_findDonorByAccountPageViewId, apiToken, search);
@@ -272,7 +273,7 @@ namespace MinistryPlatform.Translation.Services
 
             try
             {
-                _ministryPlatformService.UpdateRecord(_donorPageId, parms, apiLogin());
+                _ministryPlatformService.UpdateRecord(_donorPageId, parms, ApiLogin());
             }
             catch (Exception e)
             {

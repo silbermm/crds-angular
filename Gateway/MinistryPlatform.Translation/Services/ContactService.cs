@@ -22,7 +22,8 @@ namespace MinistryPlatform.Translation.Services
 
         private readonly IMinistryPlatformService _ministryPlatformService;
 
-        public ContactService(IMinistryPlatformService ministryPlatformService, IConfigurationWrapper configuration)
+        public ContactService(IMinistryPlatformService ministryPlatformService, IAuthenticationService authenticationService, IConfigurationWrapper configuration)
+            : base(authenticationService, configuration)
         {
             _ministryPlatformService = ministryPlatformService;
 
@@ -39,7 +40,7 @@ namespace MinistryPlatform.Translation.Services
         {
             try
             {
-                var recordsDict = _ministryPlatformService.GetRecordDict(_contactsPageId, contactId, apiLogin());
+                var recordsDict = _ministryPlatformService.GetRecordDict(_contactsPageId, contactId, ApiLogin());
 
                 var contactEmail = recordsDict["Email_Address"].ToString();
 
@@ -56,7 +57,7 @@ namespace MinistryPlatform.Translation.Services
         {
             var searchString = string.Format(",\"{0}\"", contactId);
             
-            var pageViewRecords = _ministryPlatformService.GetPageViewRecords("AllIndividualsWithContactId", apiLogin(), searchString);
+            var pageViewRecords = _ministryPlatformService.GetPageViewRecords("AllIndividualsWithContactId", ApiLogin(), searchString);
 
             if (pageViewRecords.Count > 1)
             {
@@ -133,7 +134,7 @@ namespace MinistryPlatform.Translation.Services
 
         private int CreateContact(ContactDonor contactDonor)
         {
-            var token = apiLogin();
+            var token = ApiLogin();
 
             var emailAddress = contactDonor.Details.EmailAddress;
             var displayName = contactDonor.Details.DisplayName;

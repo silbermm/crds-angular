@@ -7,6 +7,7 @@ using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
+using Newtonsoft.Json.Bson;
 using NUnit.Framework;
 
 namespace MinistryPlatform.Translation.Test.Services
@@ -17,7 +18,9 @@ namespace MinistryPlatform.Translation.Test.Services
         private Mock<IMinistryPlatformService> _ministryPlatformService;
         private Mock<IProgramService> _programService;
         private Mock<ICommunicationService> _communicationService;
+        private Mock<IAuthenticationService> _authService;
         private Mock<IConfigurationWrapper> _configuration;
+
         private DonorService _fixture;
 
         [SetUp]
@@ -26,13 +29,18 @@ namespace MinistryPlatform.Translation.Test.Services
             _ministryPlatformService = new Mock<IMinistryPlatformService>();
             _programService = new Mock<IProgramService>();
             _communicationService = new Mock<ICommunicationService>();
+            _authService = new Mock<IAuthenticationService>();
             _configuration = new Mock<IConfigurationWrapper>();
             _configuration.Setup(mocked => mocked.GetConfigIntValue("Donors")).Returns(299);
             _configuration.Setup(mocked => mocked.GetConfigIntValue("Donations")).Returns(297);
             _configuration.Setup(mocked => mocked.GetConfigIntValue("Distributions")).Returns(296);
             _configuration.Setup(mocked => mocked.GetConfigIntValue("DonorAccounts")).Returns(298);
+            _configuration.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
+            _configuration.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("pwd");
 
-            _fixture = new DonorService(_ministryPlatformService.Object, _programService.Object,_communicationService.Object, _configuration.Object);
+            _authService.Setup(m => m.Authenticate(It.IsAny<string>(), It.IsAny<string>())).Returns(new Dictionary<string, object> { { "token", "ABC" }, { "exp", "123" } });
+
+            _fixture = new DonorService(_ministryPlatformService.Object, _programService.Object,_communicationService.Object, _authService.Object, _configuration.Object);
         }
 
         [Test]
