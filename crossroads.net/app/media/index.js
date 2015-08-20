@@ -4,7 +4,7 @@ var app = angular.module('crossroads');
 
 require('./view-all.html');
 require('./view-all-music.html');
-require('./view-all-messages.html');
+require('./view-all-series.html');
 require('./view-all-videos.html');
 require('./series-single.html');
 require('./series-single-lo-res.html');

@@ -175,11 +175,17 @@
         controller: 'MediaCtrl as media',
         templateUrl: 'media/view-all-music.html'
       })
-      .state('media-messages', {
+      .state('media-series', {
         parent: 'noSideBar',
-        url: '/media/messages',
+        url: '/media/series',
         controller: 'MediaCtrl as media',
-        templateUrl: 'media/view-all-messages.html'
+        templateUrl: 'media/view-all-series.html',
+        resolve: {
+          Media: 'Media',
+          Series: function(Media) {
+            return Media.Series().get().$promise;
+          }
+        }
       })
       .state('media-videos', {
         parent: 'noSideBar',
