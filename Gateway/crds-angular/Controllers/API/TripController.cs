@@ -19,6 +19,49 @@ namespace crds_angular.Controllers.API
         }
 
         [AcceptVerbs("GET")]
+        [ResponseType(typeof(TripFormResponseDto))]
+        [Route("api/trip/form-responses/{selectionId}/{selectionCount}/{recordId}")]
+        public IHttpActionResult TripFormResponses(int selectionId, int selectionCount, int recordId)
+        {
+            return Authorized(token =>
+            {
+                try
+                {
+                    var groups = _tripService.GetFormResponses(selectionId, selectionCount, recordId);
+                    return Ok(groups);
+                }
+                catch (Exception ex)
+                {
+                    var apiError = new ApiErrorDto("GetGroupsForEvent Failed", ex);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+            });
+        }
+
+        [AcceptVerbs("POST")]
+        [Route("api/trip/participants")]
+        public IHttpActionResult SaveParticipants([FromBody] SaveTripParticipantsDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(val => val.Errors).Aggregate("", (current, err) => current + err.Exception.Message);
+                var dataError = new ApiErrorDto("Trip-SaveParticipants Data Invalid", new InvalidOperationException("Invalid SaveParticipants Data" + errors));
+                throw new HttpResponseException(dataError.HttpResponseMessage);
+            }
+
+            try
+            {
+                _tripService.SaveParticipants(dto);
+            }
+            catch (Exception exception)
+            {
+                var apiError = new ApiErrorDto("SaveParticipants Failed", exception);
+                throw new HttpResponseException(apiError.HttpResponseMessage);
+            }
+            return Ok();
+        }
+
+        [AcceptVerbs("GET")]
         [ResponseType(typeof (TripParticipantDto))]
         [Route("api/trip/search/{query?}")]
         public IHttpActionResult Search(string query)
@@ -54,7 +97,7 @@ namespace crds_angular.Controllers.API
         }
 
         [AcceptVerbs("GET")]
-        [ResponseType(typeof (MyTripsDTO))]
+        [ResponseType(typeof (MyTripsDto))]
         [Route("api/trip/mytrips/{contactId}")]
         public IHttpActionResult MyTrips(int contactId)
         {

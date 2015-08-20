@@ -9,6 +9,7 @@ namespace MinistryPlatform.Models
         public int OpportunityId { get; set; }
         public int OpportunityResponseId { get; set; }
         public List<FormAnswer> FormAnswers { get; set; }
+        public int PledgeCampaignId { get; set; }
 
         public FormResponse()
         {

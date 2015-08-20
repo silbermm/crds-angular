@@ -77,6 +77,12 @@ namespace MinistryPlatform.Translation.Services
             return MPFormatConversion.MPFormatToList(result);
         }
 
+        public List<Dictionary<string, object>> GetSubPageRecords(string subPageKey, int recordId, String token)
+        {
+            var subPageId = GetMinistryPlatformId(subPageKey);
+            return GetSubPageRecords(subPageId, recordId, token);
+        }
+
         public List<Dictionary<string, object>> GetSubpageViewRecords(int viewId, int recordId,
            string token, string searchString = "", string sort = "", int top = 0)
         {

@@ -275,7 +275,7 @@
             return getPrograms.Programs.get({
               programType: 1
             }).$promise;
-          } 
+          }
         }
       })
       .state('give.amount', {
@@ -472,7 +472,7 @@
         url: '/errors/500',
         templateUrl: 'errors/500.html'
       })
-      .state('corkboard', {        
+      .state('corkboard', {
         url: '/corkboard/',
         resolve: {
           RedirectToSubSite: function ($window, $location) {
@@ -525,7 +525,31 @@
               url: '/volunteer-application/kids-club/'
             }).$promise;
           }
-
+        }
+      })
+      .state('tools.tripParticipants', {
+        url: '/tripParticipants',
+        controller: 'TripParticipantController as trip',
+        templateUrl: 'trip_participants/trip.html',
+        resolve: {
+          MPTools: 'MPTools',
+          Trip: 'Trip',
+          PageInfo: function(MPTools, Trip) {
+            var params = MPTools.getParams();
+            return Trip.TripFormResponses.get({
+              selectionId: params.selectedRecord,
+              selectionCount: params.selectedCount,
+              recordId: params.recordId
+            }).$promise.then(function(data) {
+                    // promise fulfilled
+                    return data;
+                }, function(error) {
+                    // promise rejected, could log the error with: console.log('error', error);
+                    var data = {};
+                    data.errors = error;
+                    return error;
+                });
+          }
         }
       })
       .state('content', {
