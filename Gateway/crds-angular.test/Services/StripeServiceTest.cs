@@ -448,9 +448,9 @@ namespace crds_angular.test.Services
             {
                 new StripeRefund.StripeRefundData
                 {
-                    Id = "ch555",
+                    Id = "456",
                     Amount = "987",
-                    Charge = "re_123456"
+                    Charge = "ch_123456"
                 }
             };
             
