@@ -158,13 +158,25 @@
         controller: 'GoTripsCtrl as gotrip'
       })
       .state('media', {
+        abstract: true,
         parent: 'noSideBar',
         url: '/media',
+        controller: 'MediaCtrl as media',
+        template: '<ui-view/>',
+        resolve: {
+          Media: 'Media',
+          Series: function (Media) {
+            return Media.Series().get().$promise;
+          }
+        }
+      })
+      .state('media.all', {
+        url: '',
         controller: 'MediaCtrl as media',
         templateUrl: 'media/view-all.html',
         resolve: {
           Media: 'Media',
-          Series: function(Media) {
+          Series: function (Media) {
             return Media.Series().get().$promise;
           }
         }
@@ -175,17 +187,9 @@
         controller: 'MediaCtrl as media',
         templateUrl: 'media/view-all-music.html'
       })
-      .state('media-series', {
-        parent: 'noSideBar',
-        url: '/media/series',
-        controller: 'MediaCtrl as media',
+      .state('media.series', {
+        url: '/series',
         templateUrl: 'media/view-all-series.html',
-        resolve: {
-          Media: 'Media',
-          Series: function(Media) {
-            return Media.Series().get().$promise;
-          }
-        }
       })
       .state('media-videos', {
         parent: 'noSideBar',
