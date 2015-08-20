@@ -33,10 +33,14 @@
     function errorMessages() {
       var errors = [];
       _.each(vm.pageInfo.errors, function(d) {
-        _.each(d.messages, function(m) {
-          errors.push(m);
-        });
+        errors.push(d.message);
       });
+
+      if (vm.pageInfo.data !== undefined) {
+        _.each(vm.pageInfo.data.errors, function(d) {
+          errors.push(d);
+        });
+      }
 
       return errors;
     }
