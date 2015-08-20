@@ -106,16 +106,18 @@ namespace crds_angular.Services
             {
                 try
                 {
+                    var  paymentId = "";
                     if (charge.Type == "refund")
                     {
-                        //take charge.id and call stripe /v1/charges/{id}/refunds
                         var refund = _paymentService.GetChargeRefund(charge.Id);
-                        //get data.id whihc will contain the refund trans code
-                        //get donation using refund trans code
-                        //process like all the others
-                        var donationa = _donationService.GetDonationByProcessorPaymentId(refund.Data[0].Id);
+                        paymentId = refund.Data[0].Id;
                     }
-                    var donation = _donationService.GetDonationByProcessorPaymentId(charge.Id);
+                    else
+                    {
+                        paymentId = charge.Id;
+                    }
+                    
+                    var donation = _donationService.GetDonationByProcessorPaymentId(paymentId);
                     if (donation.batch_id != null)
                     {
                         var b = _donationService.GetDonationBatch(donation.batch_id.Value);
