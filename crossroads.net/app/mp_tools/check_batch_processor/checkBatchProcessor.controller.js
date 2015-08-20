@@ -15,6 +15,19 @@
     vm.processing = false;
     vm.params = MPTools.getParams();
 
+    activate();
+    //////////////////////
+
+    function activate() {
+      CheckScannerBatches.query(function(data) {
+        vm.batches = data;
+      });
+
+      getPrograms.Programs.get({programType: 1}, function(data) {
+        vm.programs = data;
+      });
+    }
+
     vm.processBatch = function() {
       vm.processing = true;
 
@@ -28,18 +41,5 @@
         vm.processing = false;
       });
     };
-
-    activate();
-    //////////////////////
-
-    function activate() {
-      CheckScannerBatches.query(function(data) {
-        vm.batches = data;
-      });
-
-      getPrograms.Programs.get({programType: 1}, function(data) {
-        vm.programs = data;
-      });
-    }
   }
 })();
