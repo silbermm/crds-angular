@@ -17,6 +17,7 @@ require('./media-list.html');
 require('./message-action-buttons.html');
 require('./media-details.html');
 require('./templates/media.list.card.html');
+require('./templates/series.list.card.html');
 
 
 app.controller('MediaCtrl', require('./media.controller'));
