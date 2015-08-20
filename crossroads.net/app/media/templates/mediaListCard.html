@@ -1,0 +1,10 @@
+<ul class="media-list">
+    <li class="col-sm-2 col-xs-6" ng-repeat="item in items | orderBy: '-startDate' | limitTo: limit">
+        <a href="/#/media/series/single">
+            <img src="{{item.image.filename}}" class="img-responsive">
+            <h4 class="flush-bottom">{{item.title}}</h4>
+
+            <p class="text-muted">{{item.startDate}}</p>
+        </a>
+    </li>
+</ul>

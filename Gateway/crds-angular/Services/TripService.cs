@@ -52,9 +52,9 @@ namespace crds_angular.Services
             }).ToList();
         }
 
-        public TripFormResponseDto GetFormResponses(int selectionId, int selectionCount)
+        public TripFormResponseDto GetFormResponses(int selectionId, int selectionCount, int formResponseId)
         {
-            var tripApplicantResponses = GetTripAplicantsSelection(selectionId, selectionCount);
+            var tripApplicantResponses = GetTripAplicants(selectionId, selectionCount, formResponseId);
 
             var dto = new TripFormResponseDto();
             if (tripApplicantResponses.Errors != null)
@@ -81,33 +81,20 @@ namespace crds_angular.Services
             return dto;
         }
 
-        private TripApplicantResponse GetTripAplicantsSelection(int selectionId, int selectionCount)
+        private TripApplicantResponse GetTripAplicants(int selectionId, int selectionCount, int formResponseId)
         {
-            var responses = _formSubmissionService.GetTripFormResponses(selectionId);
+            var responses = formResponseId == -1
+                ? _formSubmissionService.GetTripFormResponsesBySelectionId(selectionId)
+                : _formSubmissionService.GetTripFormResponsesByRecordId(formResponseId);
 
-            var messages = new List<string>();
-            if (responses.Count != selectionCount)
-            {
-                messages.Add("Error Retrieving Selection");
-                messages.Add(string.Format("You selected {0} records in Ministry Platform, but only {1} were retrieved.", selectionCount, responses.Count));
-                messages.Add("Please verify records you selected.");
-            }
+            var messages = ValidateResponse(selectionCount, formResponseId, responses);
+            return messages.Count > 0
+                ? new TripApplicantResponse {Errors = messages.Select(m => new TripToolError {Message = m}).ToList()}
+                : FormatTripResponse(responses);
+        }
 
-            var campaignCount = responses.GroupBy(x => x.PledgeCampaignId)
-                .Select(x => new {Date = x.Key, Values = x.Distinct().Count()}).Count();
-            if (campaignCount > 1)
-            {
-                messages.Add("Invalid Trip Selection - Multiple Campaigns Selected");
-            }
-
-            if (messages.Count > 0)
-            {
-                return new TripApplicantResponse
-                {
-                    Errors = new List<TripToolError> {new TripToolError {Messages = messages}}
-                };
-            }
-
+        private static TripApplicantResponse FormatTripResponse(List<TripFormResponse> responses)
+        {
             var tripInfo = responses
                 .Select(r =>
                             r.EventId != null
@@ -133,8 +120,31 @@ namespace crds_angular.Services
                 Applicants = applicants,
                 TripInfo = tripInfo.First()
             };
-
             return resp;
+        }
+
+        private static List<string> ValidateResponse(int selectionCount, int formResponseId, List<TripFormResponse> responses)
+        {
+            var messages = new List<string>();
+            if (responses.Count == 0)
+            {
+                messages.Add("Could not retrieve records from Ministry Platform");
+            }
+
+            if (formResponseId == -1 && responses.Count != selectionCount)
+            {
+                messages.Add("Error Retrieving Selection");
+                messages.Add(string.Format("You selected {0} records in Ministry Platform, but only {1} were retrieved.", selectionCount, responses.Count));
+                messages.Add("Please verify records you selected.");
+            }
+
+            var campaignCount = responses.GroupBy(x => x.PledgeCampaignId)
+                .Select(x => new {Date = x.Key, Values = x.Distinct().Count()}).Count();
+            if (campaignCount > 1)
+            {
+                messages.Add("Invalid Trip Selection - Multiple Campaigns Selected");
+            }
+            return messages;
         }
 
         public List<TripParticipantDto> Search(string search)
@@ -177,10 +187,10 @@ namespace crds_angular.Services
             return participants.Values.OrderBy(o => o.Lastname).ThenBy(o => o.Nickname).ToList();
         }
 
-        public MyTripsDTO GetMyTrips(int contactId, string token)
+        public MyTripsDto GetMyTrips(int contactId, string token)
         {
             var trips = _donationService.GetMyTripDistributions(contactId, token).OrderBy(t => t.EventStartDate);
-            var myTrips = new MyTripsDTO();
+            var myTrips = new MyTripsDto();
 
             var events = new List<Trip>();
             var eventIds = new List<int>();
