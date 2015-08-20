@@ -71,7 +71,7 @@ If my spouse or any member of my family OR any member of our larger group of fri
 (240, 'Insterested In Being A GO Group Leader?', 7, 'Yes
 No', 1, @NicaraguaForm, 1, 0, 823),
 (250, 'Why would you like to be a GO Group Leader', 1, 'NULL', 1, @NicaraguaForm, 1, 0, 824),
-(260, 'Sponsored a child through Crossroads in Nicaraguq?', 7, 'Yes
+(260, 'Sponsored a child through Crossroads in Nicaragua?', 7, 'Yes
 No', 1, @NicaraguaForm, 1, 0, 825),
 (270, 'Sponsored Child''s First Name', 1, 'NULL', 0, @NicaraguaForm, 1, 0, 826),
 (280, 'Sponsored Child''s Last Name', 1, 'NULL', 0, @NicaraguaForm, 1, 0, 827),
