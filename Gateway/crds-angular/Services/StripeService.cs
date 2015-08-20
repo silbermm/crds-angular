@@ -214,10 +214,9 @@ namespace crds_angular.Services
             var url = string.Format("charges/{0}/refunds", chargeId);
             var request = new RestRequest(url, Method.GET);
 
-            StripeRefund refund; 
             var response = _stripeRestClient.Execute<StripeRefund>(request);
             CheckStripeResponse("Could not query transactions", response);
-            refund = response.Data;
+            var refund = response.Data;
             
             return (refund);
         }

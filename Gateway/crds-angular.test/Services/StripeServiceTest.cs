@@ -440,6 +440,48 @@ namespace crds_angular.test.Services
             Assert.AreEqual("45454", defaultSource.address_zip);
         }
 
+        [Test]
+        public void ShouldGetChargeRefund()
+        {
+            var q = new Queue<StripeCharges>();
+            q.Enqueue(new StripeCharges
+            {
+                HasMore = false,
+                Data = new List<StripeCharge>
+                {
+                    new StripeCharge
+                    {
+                        Id = "123",
+                        Type = "charge"
+                    },
+                    new StripeCharge
+                    {
+                        Id = "456",
+                        Type = "refund"
+,                    }
+                }
+            });
+            
+
+            var response = new Mock<IRestResponse<StripeRefund>>();
+            response.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
+            response.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            response.SetupGet(mocked => mocked.Data).Returns(new StripeRefund()).Verifiable();
+
+            _restClient.Setup(mocked => mocked.Execute<StripeRefund>(It.IsAny<IRestRequest>())).Returns(response.Object);
+
+            var refund = _fixture.GetChargeRefund("456");
+            _restClient.Verify(mocked => mocked.Execute<StripeRefund>(
+                It.Is<RestRequest>(o =>
+                    o.Method == Method.GET
+                    && o.Resource.Equals("charges/456/refunds")
+            )));
+       
+            _restClient.VerifyAll();
+            response.VerifyAll();
+            
+        }
+
     }
 
 }
