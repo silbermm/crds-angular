@@ -28,12 +28,13 @@
 
 
 <h2 class="push-bottom">
-  <a ui-sref="media-messages">Series</a>
+  <a ui-sref="media.series">Series</a>
   <ng-include src="'media/subscribe-btn-messages.html'"> </ng-include>
 </h2>
 
 <div class="row">
-  <media-list-card items="media.series" limit="12"></media-list-card>
+  <media-list-card items="media.series" limit="12" filename="234"></media-list-card>
+  <!--<media-list-card items="media.series" limit="12" filename="image"></media-list-card>-->
 </div>
 
 <div class="row text-center push-bottom">
@@ -46,39 +47,33 @@
 <hr>
 
 <h2 class="push-bottom">
-  <a ui-sref="media-music">Music</a>
+  <a ui-sref="media.music">Music</a>
   <ng-include src="'media/subscribe-btn-music.html'"> </ng-include>
 </h2>
 
 <div class="row">
-  <ul class="media-list">
-
-
-  </ul>
+  <media-list-card items="media.musics" limit="12" filename="still"></media-list-card>
 </div>
 
 <div class="row text-center push-bottom">
   <div class="col-sm-12">
-    <a ui-sref="media-music" class="btn btn-lg btn-link">View All Music</a>
+    <a ui-sref="media.music" class="btn btn-lg btn-link">View All Music</a>
   </div>
 </div>
 
 <hr>
 
 <h2 class="push-bottom">
-  <a ui-sref="media-videos">Videos</a>
+  <a ui-sref="media.videos">Videos</a>
   <ng-include src="'media/subscribe-btn-videos.html'"> </ng-include>
 </h2>
 
 <div class="row">
-  <ul class="media-list">
-
-
-  </ul>
+  <media-list-card items="media.videos" limit="12" filename="still"></media-list-card>
 </div>
 
 <div class="row text-center push-bottom">
   <div class="col-sm-12">
-    <a ui-sref="media-videos" class="btn btn-lg btn-link">View All Videos</a>
+    <a ui-sref="media.videos" class="btn btn-lg btn-link">View All Videos</a>
   </div>
 </div>
