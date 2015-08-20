@@ -9,7 +9,7 @@
     return {
       restrict: "EA",
       templateUrl: function (elem, attr) {
-        return 'templates/' + attr.type + '.list.card.html';
+        return 'templates/' + attr.type + 'ListCard.html';
       },
       scope: {
         items: '=',

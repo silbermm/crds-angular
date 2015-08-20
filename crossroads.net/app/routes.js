@@ -161,7 +161,7 @@
         abstract: true,
         parent: 'noSideBar',
         url: '/media',
-        controller: 'MediaCtrl as media',
+        controller: 'MediaController as media',
         template: '<ui-view/>',
         resolve: {
           Media: 'Media',
@@ -178,36 +178,36 @@
       })
       .state('media.all', {
         url: '',
-        templateUrl: 'media/view-all.html',
+        templateUrl: 'media/viewAll.html',
       })
       .state('media.music', {
         url: '/music',
-        templateUrl: 'media/view-all-music.html'
+        templateUrl: 'media/viewAllMusic.html'
       })
       .state('media.series', {
         url: '/series',
-        templateUrl: 'media/view-all-series.html',
+        templateUrl: 'media/viewAllSeries.html'
       })
       .state('media.videos', {
         url: '/videos',
-        templateUrl: 'media/view-all-videos.html'
+        templateUrl: 'media/viewAllVideos.html'
       })
       .state('media-series-single', {
         parent: 'noSideBar',
         url: '/media/series/single',
-        controller: 'MediaCtrl as media',
+        controller: 'MediaController as media',
         templateUrl: 'media/series-single.html'
       })
       .state('media-series-single-lo-res', {
         parent: 'noSideBar',
         url: '/media/series/single/lores',
-        controller: 'MediaCtrl as media',
+        controller: 'MediaController as media',
         templateUrl: 'media/series-single-lo-res.html'
       })
       .state('media-single', {
         parent: 'screenWidth',
         url: '/media/single',
-        controller: 'MediaCtrl as media',
+        controller: 'MediaController as media',
         templateUrl: 'media/media-single.html'
       })
       .state('blog', {

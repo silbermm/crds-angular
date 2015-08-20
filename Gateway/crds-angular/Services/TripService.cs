@@ -54,7 +54,6 @@ namespace crds_angular.Services
 
         public TripFormResponseDto GetFormResponses(int selectionId, int selectionCount, int formResponseId)
         {
-            throw new ApplicationException("test message");
             var tripApplicantResponses = GetTripAplicants(selectionId, selectionCount, formResponseId);
 
             var dto = new TripFormResponseDto();

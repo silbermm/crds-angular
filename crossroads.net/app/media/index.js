@@ -2,10 +2,10 @@
 
 var app = angular.module('crossroads');
 
-require('./view-all.html');
-require('./view-all-music.html');
-require('./view-all-series.html');
-require('./view-all-videos.html');
+require('./viewAll.html');
+require('./viewAllMusic.html');
+require('./viewAllSeries.html');
+require('./viewAllVideos.html');
 require('./series-single.html');
 require('./series-single-lo-res.html');
 require('./media-single.html');
@@ -16,10 +16,10 @@ require('./subscribe-btn-dropdown.html');
 require('./media-list.html');
 require('./message-action-buttons.html');
 require('./media-details.html');
-require('./templates/media.list.card.html');
-require('./templates/series.list.card.html');
+require('./templates/mediaListCard.html');
+require('./templates/seriesListCard.html');
 
 
-app.controller('MediaCtrl', require('./media.controller'));
+app.controller('MediaController', require('./media.controller'));
 app.factory('Media', require('./services/media.service'));
-app.directive("mediaListCard", require('./directives/media.list.card'));
+app.directive("mediaListCard", require('./directives/mediaListCard.directive.js'));
