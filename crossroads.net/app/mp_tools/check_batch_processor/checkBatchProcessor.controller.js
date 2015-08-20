@@ -18,15 +18,15 @@
     vm.processBatch = function() {
       vm.processing = true;
 
-      CheckScannerBatches.save({name: vm.batch.name, programId: vm.program.ProgramId},
-        function(){
-            vm.success = true;
-            vm.error = false;
-        },
-        function(){
+      CheckScannerBatches.save({name: vm.batch.name, programId: vm.program.ProgramId}).$promise.then(function(){
+          vm.success = true;
+          vm.error = false;
+        }, function(){
           vm.success = false;
           vm.error=true;
-      }).finally(function(){ vm.processing = false; });
+      }).finally(function(){
+        vm.processing = false;
+      });
     };
 
     activate();
