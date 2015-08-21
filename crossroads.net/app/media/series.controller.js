@@ -2,20 +2,21 @@
 (function () {
     module.exports = SeriesController;
 
-    SeriesController.$inject = ['$routeParams','Series'];
+    SeriesController.$inject = ['$stateParams', 'Series', 'Messages'];
 
-    function SeriesController($routeParams, Series) {
+    function SeriesController($stateParams, Series, Messages) {
+        debugger;
         var vm = this;
         vm.msgisopen = true;
         vm.musicisopen = false;
-        vm.selectedSeries = getSeriesByTitle($routeParams.title); // fix the references in the card(s)
         vm.series = Series.series;
+        vm.selectedSeries = getSeriesByTitle($stateParams.title); // fix the references in the card(s)
+        vm.messages = Messages.messages;
 
         function getSeriesByTitle(seriesTitle) {
-            vm.selectedSeries = _.find(vm.series, function(obj) {
-                //return ((obj.title = seriesTitle)[0]); <-- is lodash building an array? check when debugging
-                return (obj.title = seriesTitle); // <-- assume lodash returns only a single object
-            })
+            return _.find(vm.series, function(obj) {
+                return (obj.title === seriesTitle);
+            });
         };
     }
 })();

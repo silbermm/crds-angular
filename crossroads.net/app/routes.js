@@ -192,14 +192,20 @@
         url: '/videos',
         templateUrl: 'media/viewAllVideos.html'
       })
-      .state('media.series.single', {
-        url: '/series/single/:title',
+      .state('media.seriessingle', {
+        url: '/single/:title',
         controller: 'SeriesController as series',
         templateUrl: 'media/seriesSingle.html',
           resolve: {
             Media: 'Media',
-            Messages: function (Media) {
-              return Media.Messages().get({ title: title }).$promise;
+            $stateParams: '$stateParams',
+            Series: function(Media, $stateParams) {
+              return Media.Series().get().$promise;
+            },
+            Messages: function (Media, $stateParams) {
+              debugger;
+              var item = Media.Messages().get({ title: $stateParams.title }).$promise;
+              return item;
             }
           }
       })
