@@ -2,12 +2,14 @@
   'use strict';
   module.exports = function MyProfileCtrl($scope, $log, $location, $anchorScroll, $modal) {
     var _this = this;
-    _this.changeProfileImage = changeProfileImage;
-
+    
+    //METHODS
+    _this.openModal = openModal;
+    
+    //VARIABLES
+    _this.profileImage = "//crossroads-media.s3.amazonaws.com/images/avatar.svg";
     _this.isCollapsed = true;
     _this.phoneToggle = true;
-    _this.myImage = '';
-    _this.myCroppedImage = '';
 
     _this.householdPhoneFocus = function () {
       _this.isCollapsed = false;
@@ -22,26 +24,19 @@
       //$('#homephone').focus();
     };
 
-    function changeProfileImage() {
-      $modal.open({
+    function openModal() {
+
+      var changeProfileImage = $modal.open({
         templateUrl: 'templates/profile_image_upload.html',
         controller: 'ChangeProfileImageCtrl as modal',
         backdrop: true
       });
-    };
 
-    var handleFileSelect = function (evt) {
-      var file = evt.currentTarget.files[0];
-      var reader = new FileReader();
-      reader.onload = function (evt) {
-        $scope.$apply(function ($scope) {
-          _this.myImage = evt.target.result;
-        });
-      };
-      reader.readAsDataURL(file);
-    };
-    angular.element(document.querySelector('#fileInput')).on('change', handleFileSelect);
+      changeProfileImage.result.then(function (croppedImage) {
+        _this.profileImage = croppedImage;
+      });
 
+    };
 
   };
 })();

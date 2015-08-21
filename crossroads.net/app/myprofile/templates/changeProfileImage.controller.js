@@ -22,11 +22,11 @@
     };
 
     $timeout(function () {
-      angular.element(document.querySelector('#fileInput')).on('change', handleFileSelect);
-    }, false);
+      angular.element(document.querySelector('#fileInputModal')).on('change', handleFileSelect);
+    });
 
     function ok() {
-      $modalInstance.close();
+      $modalInstance.close(_this.myCroppedImage);
     };
 
     function cancel() {
