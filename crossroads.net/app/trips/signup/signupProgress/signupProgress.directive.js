@@ -1,11 +1,11 @@
 (function() {
   'use strict';
 
-  module.exports = SignupDirective;
+  module.exports = SignupProgressDirective;
 
-  SignupDirective.$inject = [];
+  SignupProgressDirective.$inject = [];
 
-  function SignupDirective() {
+  function SignupProgressDirective() {
     return {
       restrict: 'E',
       scope: {

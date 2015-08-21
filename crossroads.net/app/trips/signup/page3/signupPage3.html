@@ -3,7 +3,7 @@
         Emergency Contact Information
       </legend>
 
-      <p>This needs to be someone not going on the trip.  We will notify them in the event of an emergency.</p>
+      <span ng-bind-html="$root.MESSAGES.TripEmergencyContact.content | html"></span>
 
       <form role="form">
         <div class="row">
@@ -28,7 +28,6 @@
               <input type="text" class="form-control" id="emergency-email" placeholder="Enter emergency contact email address">
             </div>
         </div>
-
 
         <a ng-click='pages.handleNext(4)'  class="btn btn-primary pull-right">Next</a>
         <a ng-click='pages.handlePrevious(2)' class="btn btn-standard pull-right">Back</a>

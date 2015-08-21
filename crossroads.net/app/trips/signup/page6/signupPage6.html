@@ -7,7 +7,9 @@
 
       <div class="row">
         <div class="form-group col-sm-12">
-          <p> Please note that your passport cannot be expired within 6 months of the return date of the trip to be valid and must have at least 2 blank pages.</p>
+
+          <span ng-bind-html="$root.MESSAGES.TripPassport.content | html"></span>
+
           <label class="block required">Do you have a valid passport?</label>
           <label id="passport-yes" class="radio-inline" ng-click="isCollapsed = false">
               <input type="radio" value="yes"  name="pssport" id="passport-yes">Yes
@@ -17,7 +19,9 @@
           </label>
         </div>
         <div class="form-group col-sm-12"  collapse="!isCollapsed">
-          <label for="why">Please update your passport as soon as possible</label>
+          <label for="why">
+            <span ng-bind-html="$root.MESSAGES.TripNoPassport.content | html"></span>
+          </label>
         </div>
 
         <div class="form-group col-sm-6" ng-controller="crdsDatePickerCtrl">
@@ -28,7 +32,7 @@
 
       <div class="row">
         <div class="form-group col-sm-12">
-          <p>We'll use the information supplied below to buy your plane ticket. It must be entered exactly as it appears on your passport. If your passport contains your maiden name, please use that as your Last Name.</p>
+          <span ng-bind-html="$root.MESSAGES.TripPassportName.content | html"></span>
           <div class="row">
             <div class="form-group col-sm-6">
                 <label for="passport-firstname" class="required">First Name</label>

@@ -5,8 +5,9 @@
         <legend>
           Lottery
         </legend>
-        <p>We will use a random lottery if we have more people sign up than available spots.  While we must prepare for this, it has not happened in past years.  If we hold a lottery and you are not selected, your deposit will be refunded.</p>
-        </div><!--/col-sm-12-->
+           
+        <span ng-bind-html="$root.MESSAGES.TripRandomLottery.content | html"></span>
+      </div><!--/col-sm-12-->
 
         <!--CONDITION RULE: IF LOTTERY-SPOUSE OR LOTTERY-NO-SPOUSE OR LOTTERY-FAMILY OR LOTTER-NO-FAMILY ARE SELECTED, THEN MAKE COMMON-NAME REQURED. ELSE MAKE COMMON-NAME OPTIONAL.-->
         <div class="form-group col-sm-12">
@@ -47,7 +48,7 @@
         </div><!--/col-sm-12-->
 
         <div class="col-md-12" ng-show="gotrip.pageTitle != 'india'">
-            <p>Do you have friends signing up that you would like to experience this trip with?  If yes, everyone in your group should enter a common participant name through which you have all agreed to be connected.  This is how we will know to treat you as a group.  For example, if Jim Smith, Sarah Johnson and Kerry Moore all want to travel together, they can all enter "Jim Smith" in this section and Jim will be the common link for the group. Note:  If you are the one common name, you will still need to enter your name in this section.</p>
+          <span ng-bind-html="$root.MESSAGES.TripGroupCommonName.content | html"></span>
         </div>
 
         <div class="form-group col-md-6" ng-show="gotrip.pageTitle != 'india'">
@@ -56,7 +57,7 @@
         </div>
 
         <div class="col-md-12">
-          <p>Everybody on the trip gets a roommate.  Married co-ed couples may room together, otherwise you and your significant other get split up for the trip (no shacking up on Crossroads time).</p>
+          <span ng-bind-html="$root.MESSAGES.TripRoommate.content | html"></span>
         </div>
 
           <div class="form-group col-md-6">

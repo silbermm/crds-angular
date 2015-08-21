@@ -10,14 +10,16 @@
     //   * currentStep
     //   * totalSteps
     var vm = this;
-
+    vm.percentComplete = percentComplete;
     activate();
 
     ////////////////////////////////
     //// IMPLEMENTATION DETAILS ////
     ////////////////////////////////
-    function activate() {
+    function activate() { }
 
+    function percentComplete() {
+      return Math.round(((vm.currentStep - 1) / vm.totalSteps) * 100);
     }
 
   }

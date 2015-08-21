@@ -3,9 +3,9 @@
 
   module.exports = PagesController;
 
-  PagesController.$inject = [];
+  PagesController.$inject = ['$location', '$anchorScroll'];
 
-  function PagesController() {
+  function PagesController($location, $anchorScroll) {
     var vm = this;
 
     vm.handleNext = handleNext;
@@ -15,10 +15,14 @@
 
     function handleNext(nextPage) {
       vm.currentPage = nextPage;
+      $location.hash('form-top');
+      $anchorScroll();
     }
 
     function handlePrevious(prevPage) {
       vm.currentPage = prevPage;
+      $location.hash('form-top');
+      $anchorScroll();
     }
 
     function handleSubmit() {
