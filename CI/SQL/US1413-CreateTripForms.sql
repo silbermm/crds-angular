@@ -854,6 +854,7 @@ ELSE
 				   ,[Youngest_Age_Allowed]
 				   ,[Registration_Deposit]
 				   ,[Fundraising_Goal]
+				   ,Registration_Form
 				   ,[Allow_Online_Pledge]
 				   ,[Show_On_My_Pledges])
 			 VALUES
@@ -873,6 +874,7 @@ ELSE
 				   ,13
 				   ,200
 				   ,1000
+				   ,@NICARAGUA_FORM_ID
 				   ,1
 				   ,1)
 				SET IDENTITY_INSERT [dbo].[Pledge_Campaigns] OFF

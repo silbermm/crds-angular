@@ -10,7 +10,7 @@ namespace crds_angular.Services.Interfaces
         List<TripGroupDto> GetGroupsByEventId(int eventId);
         MyTripsDTO GetMyTrips(int contactId, string token);
         List<TripParticipantDto> Search(string search);
-
+        TripCampaignDto GetTripCampaign(int pledgeCampaignId);
         List<int> SaveParticipants(SaveTripParticipantsDto dto);
     }
 }

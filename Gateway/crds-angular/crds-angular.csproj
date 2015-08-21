@@ -297,6 +297,7 @@
     <Compile Include="Models\Crossroads\Stewardship\StripeTransfer.cs" />
     <Compile Include="Models\Crossroads\Trip\MyTripsDTO.cs" />
     <Compile Include="Models\Crossroads\Trip\TripApplicantResponse.cs" />
+    <Compile Include="Models\Crossroads\Trip\TripCampaignDto.cs" />
     <Compile Include="Models\Crossroads\Trip\TripFormResponseDto.cs" />
     <Compile Include="Models\Crossroads\Trip\TripGroupDto.cs" />
     <Compile Include="Models\Crossroads\Trip\TripParticipantDto.cs" />
