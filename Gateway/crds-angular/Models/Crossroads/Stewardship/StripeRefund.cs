@@ -8,18 +8,18 @@ namespace crds_angular.Models.Crossroads.Stewardship
     {
         [JsonProperty("data")]
         public List<StripeRefundData> Data { get; set; }
+    }
 
-        public class StripeRefundData
-        {
-            [JsonProperty("id")]
-            public String Id { get; set; }
+    public class StripeRefundData
+    {
+        [JsonProperty("id")]
+        public String Id { get; set; }
 
-            [JsonProperty("amount")]
-            public string Amount { get; set; }
+        [JsonProperty("amount")]
+        public string Amount { get; set; }
 
-            [JsonProperty("charge")]
-            public string Charge { get; set; }
-        }
+        [JsonProperty("charge")]
+        public string Charge { get; set; }
+    }
         
     }
-}

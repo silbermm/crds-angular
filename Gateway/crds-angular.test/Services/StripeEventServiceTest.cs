@@ -215,8 +215,8 @@ namespace crds_angular.test.Services
 
             _paymentService.Setup(mocked => mocked.GetChargeRefund("ch555")).Returns(new StripeRefund
             {
-                Data = new List<StripeRefund.StripeRefundData>
-                { new StripeRefund.StripeRefundData
+                Data = new List<StripeRefundData>
+                { new StripeRefundData()
                     {
                         Id = "ch555",
                         Amount = "987",

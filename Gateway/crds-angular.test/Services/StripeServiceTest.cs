@@ -446,9 +446,9 @@ namespace crds_angular.test.Services
 
             var data = new StripeRefund
             {
-                Data = new List<StripeRefund.StripeRefundData>()
+                Data = new List<StripeRefundData>()
                 {
-                    new StripeRefund.StripeRefundData()
+                    new StripeRefundData()
                     {
                         Id = "456",
                         Amount = "987",
