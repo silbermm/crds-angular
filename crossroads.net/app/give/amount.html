@@ -1,13 +1,7 @@
 <div class="push-top">
   <ng-form class="give-form" role="form" name="amountForm" novalidate>
     <div class="form-group">
-       <donation-details amount="give.amount" 
-                         program="give.program" 
-                         amount-submitted="give.amountSubmitted" 
-                         programs-in="give.programsInput"
-                         show-frequency="give.showFrequency"
-                         show-initiative="give.showInitiative">
-       </donation-details>
+       <donation-details amount="give.amount" program="give.program" amount-submitted="give.amountSubmitted" programs-in="give.programsInput"></donation-details>
        <button ng-click="give.goToAccount()" ng-class="{disabled: give.processing}" class="btn btn-primary btn-lg btn-block-mobile give-button">
          <span ng-if="give.processing">Next...</span>
          <span ng-if="!give.processing">Next</span><!--OLD GIVE {{give.amount | currency}} -->

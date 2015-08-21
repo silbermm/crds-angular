@@ -8,7 +8,9 @@
   function MediaListCard() {
     return {
       restrict: "EA",
-      templateUrl: "templates/mediaListCard.html",
+      templateUrl: function (elem, attr) {
+        return 'templates/' + attr.type + 'ListCard.html';
+      },
       scope: {
         items: '=',
         limit: "="
