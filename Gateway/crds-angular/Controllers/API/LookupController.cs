@@ -49,6 +49,9 @@ namespace crds_angular.Controllers.API
                     case "crossroadslocations":
                         ret = LookupService.CrossroadsLocations(t);
                         break;
+                    case "workteams":
+                        ret = LookupService.WorkTeams(t);
+                        break;
                     default:
                         break;
                 }
