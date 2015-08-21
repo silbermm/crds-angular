@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MinistryPlatform.Models
 {
@@ -16,5 +12,6 @@ namespace MinistryPlatform.Models
         public double Goal { get; set; }
         public int FormId { get; set; }
         public string FormTitle { get; set; }
+        public int YoungestAgeAllowed { get; set; }
     }
 }

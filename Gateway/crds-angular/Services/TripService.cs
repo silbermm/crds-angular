@@ -93,7 +93,8 @@ namespace crds_angular.Services
                 Id = campaign.Id,
                 Name = campaign.Name,
                 FormId = campaign.FormId,
-                FormName = campaign.FormTitle
+                FormName = campaign.FormTitle,
+                YoungestAgeAllowed = campaign.YoungestAgeAllowed
             };
         }
 

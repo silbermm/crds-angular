@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
@@ -12,7 +9,6 @@ namespace MinistryPlatform.Translation.Services
 {
     class CampaignService : BaseService, ICampaignService
     {
-        private IAuthenticationService _authenticationService;
         private IConfigurationWrapper _configurationWrapper;
         private IMinistryPlatformService _ministryPlatformService;
 
@@ -20,7 +16,6 @@ namespace MinistryPlatform.Translation.Services
             : base(authenticationService, configurationWrapper)
         {
             _ministryPlatformService = ministryPlatformService;
-            _authenticationService = authenticationService;
             _configurationWrapper = configurationWrapper;
         }
 
@@ -41,7 +36,8 @@ namespace MinistryPlatform.Translation.Services
                         EndDate = result.ToDate("End_Date"),
                         Goal = result.ToInt("Campaign_Goal"),
                         FormId = result.ToInt("Form_ID"),
-                        FormTitle = result.ToString("Form_Title")
+                        FormTitle = result.ToString("Form_Title"),
+                        YoungestAgeAllowed = result.ToInt("Youngest_Age_Allowed")
                     };
                     campaigns.Add(campaign);
 
