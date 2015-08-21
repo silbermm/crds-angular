@@ -6,7 +6,6 @@ using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
-using Microsoft.Ajax.Utilities;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Controllers.API
@@ -30,6 +29,12 @@ namespace crds_angular.Controllers.API
         [ResponseType(typeof(DonationDTO))]
         [Route("api/donation")]
         public IHttpActionResult Post([FromBody] CreateDonationDTO dto)
+        {
+            return (Authorized(token => CreateDonationAndDistributionAuthenticated(token, dto), () => CreateDonationAndDistributionUnauthenticated(dto)));
+        }
+
+        [Route("api/gpexport/:batchId")]
+        public IHttpActionResult Get(int batchId)
         {
             return (Authorized(token => CreateDonationAndDistributionAuthenticated(token, dto), () => CreateDonationAndDistributionUnauthenticated(dto)));
         }

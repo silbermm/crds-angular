@@ -19,6 +19,8 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _depositsPageId;
         private readonly int _paymentProcessorErrorsPageId;
         private readonly int _tripDistributionsPageView;
+        private readonly int _gpExportPageView;
+        private readonly int _processingProgramId;
 
         private readonly IMinistryPlatformService _ministryPlatformService;
         private readonly IDonorService _donorService;
@@ -35,6 +37,8 @@ namespace MinistryPlatform.Translation.Services
             _depositsPageId = configuration.GetConfigIntValue("Deposits");
             _paymentProcessorErrorsPageId = configuration.GetConfigIntValue("PaymentProcessorEventErrors");
             _tripDistributionsPageView = configuration.GetConfigIntValue("TripDistributionsView");
+            _gpExportPageView = configuration.GetConfigIntValue("GPExportView");
+            _processingProgramId = configuration.GetConfigIntValue("ProcessingProgramId");
         }
 
         public int UpdateDonationStatus(int donationId, int statusId, DateTime statusDate,
@@ -308,6 +312,41 @@ namespace MinistryPlatform.Translation.Services
                 trips.Add(trip);
             }
             return trips;
+        }
+
+        public List<GPExportDatum> CreateGPExport(int batchId, string token)
+        {
+            var results = _ministryPlatformService.GetPageViewRecords(_gpExportPageView, token, batchId.ToString());
+            var gpExport = new List<GPExportDatum>();
+
+            foreach (var result in results)
+            {
+                bool processingFee = result.ToInt("Program ID") == _processingProgramId;
+
+                var gp = new GPExportDatum
+                {
+                    DocumentType = result.ToString("Document Type"),
+                    DocumentNumber = result.ToInt("Donation ID"),
+                    DocumentDescription = result.ToString("Batch Name"),
+                    BatchId = result.ToString("Batch Name"),
+                    ContributionDate = result.ToDate("Donation Date"),
+                    SettlementDate = result.ToDate("Deposit Date"),
+                    CustomerId = result.ToString("Customer ID"),
+                    ContributionAmount = result.ToString("Donation Amount"),
+                    CheckbookId = result.ToString("Checkbook ID"),
+                    CashAccount = result.ToString("Cash Account"),
+                    ReceivableAccount = result.ToString("Receivable Account"),
+                    DistributionAccount = result.ToString("Distribution Account"),
+                    DistributionAmount = result.ToString("Amount"),
+                    DistributionReference = processingFee ? "Processor Fees " + result.ToDate("Donation Date") : "Contribution " + result.ToDate("Donation Date")
+                    
+                    
+                };
+
+                gpExport.Add(gp);
+            }
+
+            return gpExport;
         }
     }
 }
