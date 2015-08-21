@@ -152,40 +152,47 @@ namespace crds_angular.test.Services
                 {
                     Id = "ch111",
                     Amount = 111,
-                    Fee = 1
+                    Fee = 1,
+                    Type = "charge"
                 },
                 new StripeCharge
                 {
                     Id = "ch222",
                     Amount = 222,
-                    Fee = 2
+                    Fee = 2,
+                    Type = "charge"
                 },
                 new StripeCharge
                 {
                     Id = "ch333",
                     Amount = 333,
-                    Fee = 3
+                    Fee = 3,
+                    Type = "charge"
                 },
                 new StripeCharge
                 {
                     Id = "ch777",
                     Amount = 777, 
-                    Fee = 7
+                    Fee = 7,
+                    Type = "charge"
                 },
                 new StripeCharge
                 {
                     Id = "ch444",
                     Amount = 444,
-                    Fee = 4
+                    Fee = 4,
+                    Type = "charge"
                 },
                 new StripeCharge
                 {
                     Id = "ch555",
                     Amount = 555, 
-                    Fee = 5
+                    Fee = 5,
+                    Type = "refund"
                 }
             };
 
+           
             _donationService.Setup(mocked => mocked.GetDonationByProcessorPaymentId("ch111")).Returns(new DonationDTO
             {
                 donation_id = "1111",
@@ -205,6 +212,18 @@ namespace crds_angular.test.Services
             });
 
             _donationService.Setup(mocked => mocked.GetDonationByProcessorPaymentId("ch444")).Throws(new Exception("Not gonna do it, wouldn't be prudent."));
+
+            _paymentService.Setup(mocked => mocked.GetChargeRefund("ch555")).Returns(new StripeRefund
+            {
+                Data = new List<StripeRefundData>
+                { new StripeRefundData()
+                    {
+                        Id = "ch555",
+                        Amount = "987",
+                        Charge = "re_123456"
+                    }
+                }
+            });
 
             _donationService.Setup(mocked => mocked.GetDonationByProcessorPaymentId("ch555")).Returns(new DonationDTO
             {
@@ -277,9 +296,9 @@ namespace crds_angular.test.Services
                 && o.AccountNumber.Equals(" ")
                 && o.BatchCount == 1
                 && o.DepositDateTime != null
-                && o.DepositTotalAmount == 500M
+                && o.DepositTotalAmount == 515M
                 &&o.ProcessorFeeTotal == 15M
-                &&o.DepositAmount == 485M
+                &&o.DepositAmount == 500M
                 && o.Notes == null
                 && o.ProcessorTransferId.Equals("tx9876")
             )));

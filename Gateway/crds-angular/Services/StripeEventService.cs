@@ -105,7 +105,18 @@ namespace crds_angular.Services
             {
                 try
                 {
-                    var donation = _donationService.GetDonationByProcessorPaymentId(charge.Id);
+                    var  paymentId = "";
+                    if (charge.Type == "refund")
+                    {
+                        var refund = _paymentService.GetChargeRefund(charge.Id);
+                        paymentId = refund.Data[0].Id;
+                    }
+                    else
+                    {
+                        paymentId = charge.Id;
+                    }
+                    
+                    var donation = _donationService.GetDonationByProcessorPaymentId(paymentId);
                     if (donation.batch_id != null)
                     {
                         var b = _donationService.GetDonationBatch(donation.batch_id.Value);
@@ -153,9 +164,9 @@ namespace crds_angular.Services
                 DepositDateTime = now,
                 DepositName = batchName,
                 // This is the amount from Stripe - will show out of balance if does not match batch total above
-                DepositTotalAmount = transfer.Amount /Constants.StripeDecimalConversionValue,
+                DepositTotalAmount = ((transfer.Amount /Constants.StripeDecimalConversionValue) + (transfer.Fee / Constants.StripeDecimalConversionValue)),
                 ProcessorFeeTotal = transfer.Fee /Constants.StripeDecimalConversionValue,
-                DepositAmount = ((transfer.Amount /Constants.StripeDecimalConversionValue) - transfer.Fee / (Constants.StripeDecimalConversionValue)),
+                DepositAmount = transfer.Amount /Constants.StripeDecimalConversionValue,
                 Exported = false,
                 Notes = null,
                 ProcessorTransferId = transfer.Id

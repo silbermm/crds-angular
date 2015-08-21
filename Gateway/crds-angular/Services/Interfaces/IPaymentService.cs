@@ -11,5 +11,6 @@ namespace crds_angular.Services.Interfaces
         SourceData UpdateCustomerSource(string customerToken, string cardToken);
         SourceData GetDefaultSource(string customerToken);
         List<StripeCharge> GetChargesForTransfer(string transferId);
+        StripeRefund GetChargeRefund(string chargeId);
     }
 }
