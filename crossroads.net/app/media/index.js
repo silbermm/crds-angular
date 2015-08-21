@@ -6,7 +6,7 @@ require('./viewAll.html');
 require('./viewAllMusic.html');
 require('./viewAllSeries.html');
 require('./viewAllVideos.html');
-require('./series-single.html');
+require('./seriesSingle.html');
 require('./series-single-lo-res.html');
 require('./media-single.html');
 require('./subscribe-btn-messages.html');
@@ -18,8 +18,11 @@ require('./message-action-buttons.html');
 require('./media-details.html');
 require('./templates/mediaListCard.html');
 require('./templates/seriesListCard.html');
+require('./templates/seriesSingleCard.html');
+require('./templates/messagesListCard.html');
 
 
 app.controller('MediaController', require('./media.controller'));
+app.controller('SeriesController', require('./series.controller'));
 app.factory('Media', require('./services/media.service'));
 app.directive("mediaListCard", require('./directives/mediaListCard.directive.js'));

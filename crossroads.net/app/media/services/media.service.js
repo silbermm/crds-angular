@@ -13,6 +13,9 @@
       },
       Videos: function() {
         return $resource(__CMS_ENDPOINT__ + 'api/videos/')
+      },
+      Messages: function () {
+        return $resource(__CMS_ENDPOINT__ + 'api/message/:seriesid', {seriesid : '@seriesid'});
       }
     };
   }
