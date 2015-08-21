@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
+using System.Text;
 using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
-using Newtonsoft.Json.Bson;
 using NUnit.Framework;
 
 namespace MinistryPlatform.Translation.Test.Services
@@ -20,6 +21,7 @@ namespace MinistryPlatform.Translation.Test.Services
         private Mock<ICommunicationService> _communicationService;
         private Mock<IAuthenticationService> _authService;
         private Mock<IConfigurationWrapper> _configuration;
+        private Mock<ICryptoProvider> _crypto;
 
         private DonorService _fixture;
 
@@ -30,17 +32,19 @@ namespace MinistryPlatform.Translation.Test.Services
             _programService = new Mock<IProgramService>();
             _communicationService = new Mock<ICommunicationService>();
             _authService = new Mock<IAuthenticationService>();
+            _crypto = new Mock<ICryptoProvider>();
             _configuration = new Mock<IConfigurationWrapper>();
             _configuration.Setup(mocked => mocked.GetConfigIntValue("Donors")).Returns(299);
             _configuration.Setup(mocked => mocked.GetConfigIntValue("Donations")).Returns(297);
             _configuration.Setup(mocked => mocked.GetConfigIntValue("Distributions")).Returns(296);
             _configuration.Setup(mocked => mocked.GetConfigIntValue("DonorAccounts")).Returns(298);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("FindDonorByAccountPageView")).Returns(2015);
             _configuration.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
             _configuration.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("pwd");
 
             _authService.Setup(m => m.Authenticate(It.IsAny<string>(), It.IsAny<string>())).Returns(new Dictionary<string, object> { { "token", "ABC" }, { "exp", "123" } });
 
-            _fixture = new DonorService(_ministryPlatformService.Object, _programService.Object,_communicationService.Object, _authService.Object, _configuration.Object);
+            _fixture = new DonorService(_ministryPlatformService.Object, _programService.Object, _communicationService.Object, _authService.Object, _configuration.Object, _crypto.Object);
         }
 
         [Test]
@@ -60,16 +64,45 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Processor_ID", "cus_crds123456"}
             };
 
+            var donorAccount = new DonorAccount
+            {
+                AccountNumber = "123",
+                RoutingNumber = "456"
+            };
+
+            var acctBytes = Encoding.UTF8.GetBytes("acctNum");
+            var rtnBytes = Encoding.UTF8.GetBytes("rtn");
+            var expectedEncAcct = Convert.ToBase64String(acctBytes.Concat(rtnBytes).ToArray());
+
+            _crypto.Setup(mocked => mocked.EncryptValue(donorAccount.AccountNumber)).Returns(acctBytes);
+            _crypto.Setup(mocked => mocked.EncryptValue(donorAccount.RoutingNumber)).Returns(rtnBytes);
+
            _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
               It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(),
               It.IsAny<string>(), true)).Returns(expectedDonorId);
 
-           var response = _fixture.CreateDonorRecord(888888, "cus_crds123456", setupDate);
+           var expectedAcctValues = new Dictionary<string, object>
+            {
+                {"Institution_Name", "Bank"},
+                {"Account_Number", "0"},
+                {"Routing_Number", "0"},
+                {"Encrypted_Account", expectedEncAcct},
+                {"Donor_ID", expectedDonorId},
+                {"Non-Assignable", false},
+                {"Account_Type_ID", (int)donorAccount.Type},
+                {"Closed", false}
+            };
+
+           _ministryPlatformService.Setup(mocked => mocked.CreateRecord(298, expectedAcctValues, It.IsAny<string>(), false)).Returns(102030);
+
+           var response = _fixture.CreateDonorRecord(888888, "cus_crds123456", setupDate, 1, 1, 2, donorAccount);
 
            _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donorPageId, expectedValues, It.IsAny<string>(), true));
+           _ministryPlatformService.VerifyAll();
+
+           _crypto.VerifyAll();
 
             Assert.AreEqual(response, expectedDonorId);
-
         }
 
         [Test]
@@ -352,6 +385,64 @@ namespace MinistryPlatform.Translation.Test.Services
             _ministryPlatformService.VerifyAll();
             _communicationService.VerifyAll();
  
+        }
+
+        [Test]
+        public void TestGetContactDonorForDonorAccount()
+        {
+            const int donorId = 1234567;
+            const string processorId = "cus_431234";
+            const int contactId = 565656;
+            const string email = "cross@crossroads.net";
+            const string guestDonorPageViewId = "DonorByContactId";
+
+            var acctBytes = Encoding.UTF8.GetBytes("acctNum");
+            var rtnBytes = Encoding.UTF8.GetBytes("rtn");
+            var expectedEncAcct = Convert.ToBase64String(acctBytes.Concat(rtnBytes).ToArray());
+
+            _crypto.Setup(mocked => mocked.EncryptValue("123")).Returns(acctBytes);
+            _crypto.Setup(mocked => mocked.EncryptValue("456")).Returns(rtnBytes);
+
+            var queryResults = new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    { "Contact_ID", contactId }
+                }
+            };
+
+            _ministryPlatformService.Setup(mocked => mocked.GetPageViewRecords(2015, It.IsAny<string>(), "," + expectedEncAcct, "", 0)).Returns(queryResults);
+
+            var expectedDonorValues = new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    {"Donor_ID", donorId},
+                    {"Processor_ID", processorId},
+                    {"Contact_ID", contactId},
+                    {"Email", email}
+                }
+            };
+            var donor = new ContactDonor()
+            {
+                DonorId = donorId,
+                ProcessorId = processorId,
+                ContactId = contactId,
+                Email = email
+            };
+
+            _ministryPlatformService.Setup(mocked => mocked.GetPageViewRecords(
+                guestDonorPageViewId, It.IsAny<string>(),
+                contactId+",", "", 0)).Returns(expectedDonorValues);
+
+            var result = _fixture.GetContactDonorForDonorAccount("123", "456");
+            _ministryPlatformService.VerifyAll();
+            _crypto.VerifyAll();
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(result.DonorId, donor.DonorId);
+            Assert.AreEqual(result.ContactId, donor.ContactId);
+            Assert.AreEqual(result.ProcessorId, donor.ProcessorId);
         }
 
     }

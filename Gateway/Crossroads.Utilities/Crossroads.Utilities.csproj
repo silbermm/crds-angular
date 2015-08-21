@@ -83,10 +83,13 @@
     <Compile Include="Models\ContentBlock.cs" />
     <Compile Include="Services\ContentBlockService.cs" />
     <Compile Include="Services\DbConnectionStringTypeConverter.cs" />
+    <Compile Include="Services\EnumTypeConverter.cs" />
     <Compile Include="Services\EnvironmentVariableTypeConverter.cs" />
     <Compile Include="Services\AppSettingsTypeConverter.cs" />
     <Compile Include="Services\ConfigurationWrapper.cs" />
     <Compile Include="Services\HtmlElement.cs" />
+    <Compile Include="Interfaces\ICryptoProvider.cs" />
+    <Compile Include="Services\TripleDesSymmetricKeyCryptoProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

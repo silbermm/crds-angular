@@ -13,9 +13,9 @@ namespace crds_angular.Models.Crossroads.Stewardship
         [JsonProperty("amount")]
         public decimal Amount { get; set; }
         [JsonProperty(PropertyName = "checkDate"), JsonConverter(typeof(IsoDateTimeConverter))]
-        public DateTime CheckDate { get; set; }
+        public DateTime? CheckDate { get; set; }
         [JsonProperty(PropertyName = "scanDate"), JsonConverter(typeof(IsoDateTimeConverter))]
-        public DateTime ScanDate { get; set; }
+        public DateTime? ScanDate { get; set; }
 
         [JsonProperty("name1")]
         public string Name1 { get; set; }

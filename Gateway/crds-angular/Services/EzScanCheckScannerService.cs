@@ -88,10 +88,10 @@ namespace crds_angular.Services
                             AccountNumber = reader[i++] as string,
                             Amount = (decimal) (reader[i++] as double? ?? 0.0),
                             CheckNumber = reader[i++] as string,
-                            ScanDate = reader[i++] as DateTime? ?? DateTime.Now,
+                            ScanDate = reader[i++] as DateTime?,
                             RoutingNumber = reader[i++] as string,
                             Name1 = reader[i++] as string,
-                            CheckDate = reader[i++] as DateTime? ?? DateTime.Now,
+                            CheckDate = reader[i++] as DateTime?,
                             Name2 = reader[i++] as string,
                             Address = new Address
                             {
@@ -205,7 +205,7 @@ namespace crds_angular.Services
 
                 var programId = batchDetails.ProgramId == null ? null : batchDetails.ProgramId + "";
 
-                var donationId = _mpDonorService.CreateDonationAndDistributionRecord((int)(check.Amount), fee, contactDonor.DonorId, programId, charge.Id, "check", contactDonor.ProcessorId, DateTime.Now, contactDonor.RegisteredUser);
+                var donationId = _mpDonorService.CreateDonationAndDistributionRecord((int)(check.Amount), fee, contactDonor.DonorId, programId, charge.Id, "check", contactDonor.ProcessorId, check.CheckDate ?? (check.ScanDate ?? DateTime.Now), contactDonor.RegisteredUser);
                 check.DonationId = donationId;
 
                 batchDetails.Checks.Add(check);

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
 using log4net;
@@ -25,17 +27,21 @@ namespace MinistryPlatform.Translation.Services
         public const string DonorProcessorId = "Processor_ID";
         public const string EmailReason = "None";
         public const string DefaultInstitutionName = "Bank";
+        public const string DonorRoutingNumberDefault = "0";
+        public const string DonorAccountNumberDefault = "0";
 
         private readonly IMinistryPlatformService _ministryPlatformService;
         private readonly IProgramService _programService;
         private readonly ICommunicationService _communicationService;
+        private readonly ICryptoProvider _crypto;
 
-        public DonorService(IMinistryPlatformService ministryPlatformService, IProgramService programService, ICommunicationService communicationService, IAuthenticationService authenticationService,IConfigurationWrapper configuration)
+        public DonorService(IMinistryPlatformService ministryPlatformService, IProgramService programService, ICommunicationService communicationService, IAuthenticationService authenticationService, IConfigurationWrapper configuration, ICryptoProvider crypto)
             : base(authenticationService, configuration)
         {
             _ministryPlatformService = ministryPlatformService;
             _programService = programService;
             _communicationService = communicationService;
+            _crypto = crypto;
 
             _donorPageId = configuration.GetConfigIntValue("Donors");
             _donationPageId = configuration.GetConfigIntValue("Donations");
@@ -82,8 +88,9 @@ namespace MinistryPlatform.Translation.Services
                 values = new Dictionary<string, object>
                 {
                     { "Institution_Name", DefaultInstitutionName },
-                    { "Account_Number", donorAccount.AccountNumber },
-                    { "Routing_Number", donorAccount.RoutingNumber },
+                    { "Account_Number", DonorAccountNumberDefault },
+                    { "Routing_Number", DonorRoutingNumberDefault },
+                    { "Encrypted_Account", CreateEncodedAndEncryptedAccountAndRoutingNumber(donorAccount.AccountNumber, donorAccount.RoutingNumber) },
                     { "Donor_ID", donorId },
                     { "Non-Assignable", false },
                     { "Account_Type_ID", (int)donorAccount.Type },
@@ -245,7 +252,7 @@ namespace MinistryPlatform.Translation.Services
         public ContactDonor GetContactDonorForDonorAccount(string accountNumber, string routingNumber)
         {
             var apiToken = ApiLogin();
-            var search = string.Format("{0},{1}", accountNumber, routingNumber);
+            var search = string.Format(",{0}", CreateEncodedAndEncryptedAccountAndRoutingNumber(accountNumber, routingNumber));
 
             var accounts = _ministryPlatformService.GetPageViewRecords(_findDonorByAccountPageViewId, apiToken, search);
             if (accounts == null || accounts.Count == 0)
@@ -253,15 +260,16 @@ namespace MinistryPlatform.Translation.Services
                 return (null);
             }
 
-            var donorId = accounts[0]["Donor_ID"] as int? ?? -1;
-            if (donorId == -1)
-            {
-                return (null);
-            }
-
-            var donor = _ministryPlatformService.GetRecordDict(_donorPageId, donorId, apiToken);
-            var contactId = donor["Contact_ID"] as int? ?? -1;
+            var contactId = accounts[0]["Contact_ID"] as int? ?? -1;
             return contactId == -1 ? (null) : (GetContactDonor(contactId));
+        }
+
+        private string CreateEncodedAndEncryptedAccountAndRoutingNumber(string accountNumber, string routingNumber)
+        {
+            var acct = _crypto.EncryptValue(accountNumber);
+            var rtn = _crypto.EncryptValue(routingNumber);
+
+            return (Convert.ToBase64String(acct.Concat(rtn).ToArray()));
         }
 
         public int UpdatePaymentProcessorCustomerId(int donorId, string paymentProcessorCustomerId)
