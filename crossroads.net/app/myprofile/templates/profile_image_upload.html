@@ -3,12 +3,11 @@
 </div>
 <div class="modal-body">
   <div ng-hide="!modal.myImage" class="change-profile-pic">
-    <img-crop image="modal.myImage" result-image="modal.myCroppedImage" area-type="square" result-image-quality="1.0"></img-crop>
+    <img-crop image="modal.myImage" result-image="modal.myCroppedImage" area-type="square" ></img-crop>
   </div>
   <div class="push-ends">
-    <label>Select an image file:
+    <label>Select an image file:</label>
       <input type="file" id="fileInputModal" />
-    </label>
   </div>
   <div class="modal-footer">
     <button class="btn btn-primary" type="button" ng-click="modal.ok()">OK</button>
