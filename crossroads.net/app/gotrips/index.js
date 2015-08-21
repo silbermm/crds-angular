@@ -1,4 +1,5 @@
 var app = angular.module("crossroads");
+require('./signup-select-person.html');
 require('./signup-page-1.html');
 require('./signup-page-2.html');
 require('./signup-page-3.html');

@@ -121,6 +121,12 @@
         controller: 'MyProfileCtrl as myProfile',
         templateUrl: 'myprofile/myprofile.html',
       })
+      .state("go-trip-select", {
+        parent: 'noSideBar',
+        url: "/go/:trip_location/select-person",
+        templateUrl: "gotrips/signup-select-person.html",
+        controller: 'GoTripsCtrl as gotrip'
+      })
       .state("go-trip-signup", {
         parent: 'noSideBar',
         url: "/go/:trip_location/signup",
