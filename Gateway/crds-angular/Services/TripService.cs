@@ -10,6 +10,7 @@ using MinistryPlatform.Translation.Services.Interfaces;
 using IDonationService = MinistryPlatform.Translation.Services.Interfaces.IDonationService;
 using IDonorService = MinistryPlatform.Translation.Services.Interfaces.IDonorService;
 using IGroupService = MinistryPlatform.Translation.Services.Interfaces.IGroupService;
+using PledgeCampaign = crds_angular.Models.Crossroads.Stewardship.PledgeCampaign;
 
 namespace crds_angular.Services
 {
@@ -22,6 +23,7 @@ namespace crds_angular.Services
         private readonly IEventService _mpEventService;
         private readonly IDonorService _mpDonorService;
         private readonly IPledgeService _mpPledgeService;
+        private readonly ICampaignService _campaignService;
 
 
         public TripService(IEventParticipantService eventParticipant,
@@ -30,7 +32,8 @@ namespace crds_angular.Services
                            IFormSubmissionService formSubmissionService,
                            IEventService eventService,
                            IDonorService donorService,
-                           IPledgeService pledgeService)
+                           IPledgeService pledgeService,
+                           ICampaignService campaignService)
         {
             _eventParticipantService = eventParticipant;
             _donationService = donationService;
@@ -39,6 +42,7 @@ namespace crds_angular.Services
             _mpEventService = eventService;
             _mpDonorService = donorService;
             _mpPledgeService = pledgeService;
+            _campaignService = campaignService;
         }
 
         public List<TripGroupDto> GetGroupsByEventId(int eventId)
@@ -79,6 +83,19 @@ namespace crds_angular.Services
             };
 
             return dto;
+        }
+
+        public TripCampaignDto GetTripCampaign(int pledgeCampaignId)
+        {
+            var campaign = _campaignService.GetPledgeCampaign(pledgeCampaignId);
+            return new TripCampaignDto()
+            {
+                Id = campaign.Id,
+                Name = campaign.Name,
+                FormId = campaign.FormId,
+                FormName = campaign.FormTitle,
+                YoungestAgeAllowed = campaign.YoungestAgeAllowed
+            };
         }
 
         private TripApplicantResponse GetTripAplicants(int selectionId, int selectionCount, int formResponseId)

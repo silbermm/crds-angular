@@ -10,7 +10,7 @@
     $stateProvider
       .state('tripsearch', {
         parent: 'noSideBar',
-        url: '/trips',
+        url: '/trips/search',
         controller: 'TripSearchCtrl as tripSearch',
         templateUrl: 'tripsearch/tripsearch.html',
         resolve: {
@@ -78,8 +78,29 @@
             }).$promise;
           }
         }
-      });
+      })
+      .state('tripsignup', {
+        parent: 'noSideBar',
+        url: '/trips/:campaignId/signup',
+        templateUrl: 'signup/signupPage.html',
+        controller: 'TripsSignupController as tripsSignup',
+        data: {
+          isProtected: true,
+        },
+        resolve: {
+          loggedin: crds_utilities.checkLoggedin,
+          Trip: 'Trip',
+          $stateParams: '$stateParams',
+          Campaign: function(Trip, $stateParams) {
+            return Trip.Campaign.get({campaignId: $stateParams.campaignId}).$promise;
+          },
+
+          WorkTeams: function(Trip) {
+            return Trip.WorkTeams.query().$promise;
+          },
+        },
+      })
+      ;
   }
 
 })();
-

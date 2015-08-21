@@ -26,6 +26,7 @@
         scope.amountError = amountError;
         scope.setProgramList = setProgramList;
 
+        activate();
         /////////////////////////////////
         ////// IMPLMENTATION DETAILS ////
         /////////////////////////////////

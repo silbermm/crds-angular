@@ -300,6 +300,7 @@
     <Compile Include="Models\Crossroads\Trip\SaveTripParticipantsDto.cs" />
     <Compile Include="Models\Crossroads\Trip\Trip.cs" />
     <Compile Include="Models\Crossroads\Trip\TripApplicantResponse.cs" />
+    <Compile Include="Models\Crossroads\Trip\TripCampaignDto.cs" />
     <Compile Include="Models\Crossroads\Trip\TripFormResponseDto.cs" />
     <Compile Include="Models\Crossroads\Trip\TripGift.cs" />
     <Compile Include="Models\Crossroads\Trip\TripGroupDto.cs" />
