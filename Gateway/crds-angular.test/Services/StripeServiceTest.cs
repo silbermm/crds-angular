@@ -443,21 +443,25 @@ namespace crds_angular.test.Services
         [Test]
         public void ShouldGetChargeRefund()
         {
-          
-            var data = new List<StripeRefund.StripeRefundData>
+
+            var data = new StripeRefund
             {
-                new StripeRefund.StripeRefundData
+                Data = new List<StripeRefund.StripeRefundData>()
                 {
-                    Id = "456",
-                    Amount = "987",
-                    Charge = "ch_123456"
+                    new StripeRefund.StripeRefundData()
+                    {
+                        Id = "456",
+                        Amount = "987",
+                        Charge = "ch_123456"
+                    }
+
                 }
             };
-            
+        
             var response = new Mock<IRestResponse<StripeRefund>>();
             response.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
             response.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
-            response.SetupGet(mocked => mocked.Data).Returns(new StripeRefund()).Verifiable();
+            response.SetupGet(mocked => mocked.Data).Returns(data).Verifiable();
 
             _restClient.Setup(mocked => mocked.Execute<StripeRefund>(It.IsAny<IRestRequest>())).Returns(response.Object);
 
