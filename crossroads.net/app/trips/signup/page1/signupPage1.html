@@ -1,16 +1,4 @@
-<!-- <div ng-show="groupsignup.viewReady"> -->
-<div class="row">
-  <div class="col-sm-10 col-sm-offset-1">
-    <h1 class="page-header">Go {{gotrip.friendlyPageTitle}} Signup</h1>
-    <h2 class="subheading">{{gotrip.tripName}}</h2>
-
-    <p class="text-muted flush-bottom push-top">0% Completed | Step 1 of 6</p>
-    <div class="progress">
-      <div class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-        <span class="sr-only">45% Complete</span>
-      </div>
-    </div>
-
+<div>
     <div class="row">
       <div class="col-sm-12">
         <p class="push-bottom">
@@ -19,7 +7,8 @@
       </div>
     </div>
 
-    <form role="form">
+ 
+  <form role="form">
       <legend>Update Profile Information</legend>
       <div class="row">
           <div class="form-group col-sm-6">
@@ -252,86 +241,7 @@
           </fieldset>
         </div>
         <!--/row-->
-        <div class="row">
-          <fieldset>
-            <div class="col-sm-12">
-              <legend>Trip Information</legend>
-            </div><!--/col-sm-12-->
-            <div class="form-group col-sm-6">
-              <label for="tshirt" class="required">T-shirt Size</label>
-              <select class="form-control col-sm-12" ng-model="attribute" id="tshirt">
-              </select>
-            </div><!--/form-group-->
-
-            <div class="form-group col-sm-6" ng-show="gotrip.pageTitle == 'south-africa'">
-              <label for="scrub">Scrub Size <small class="text-muted">Only required for Topsy trips</small></label>
-              <select class="form-control col-sm-12" ng-model="attribute" id="scrub">
-              </select>
-            </div><!--/form-group-->
-
-            <div class="form-group col-sm-12">
-                <label class="block required">How did you hear about this trip?</label>
-                <label for="program" class="radio-inline">
-                    <input type="radio" value="program" id="program" name="referral">Program
-                </label>
-                <label for="session" class="radio-inline">
-                    <input type="radio" value="session" id="session" name="referral">Info Session
-                </label>
-                <label for="friend" class="radio-inline">
-                    <input type="radio" value="friend" id="friend" name="referral">Friend/Family
-                </label>
-                <label for="website" class="radio-inline">
-                    <input type="radio" value="website" id="website" name="referral">Website
-                </label>
-                <label for="other" class="radio-inline">
-                    <input type="radio" value="other" id="other" name="referral">Other
-                </label>
-            </div><!--/form-group-->
-
-          </div><!--/row-->
-          <div class="row">
-            <div class="form-group col-sm-12">
-                <label for="conditions">Please describe any medical condition(s) that may affect your ability to participate in this trip <small class="text-muted">Leave blank if it doesn't apply</small></label>
-                <textarea class="form-control" rows="2" cols="1" id="conditions" maxlength="250"></textarea>
-            </div><!--/form-group-->
-          </div><!--/row-->
-          <div class="row">
-            <div class="form-group col-sm-12">
-                <label class="block required">Vegetarian? <small class="text-muted">If you mark yes we will do our best to provide vegetarian meals during the trip</small></label>
-                <label for="vegetarian-yes" class="radio-inline">
-                    <input type="radio" value="yes" name="vegetarian" id="vegetarian-yes">Yes
-                </label>
-                <label for="vegetarian-no" class="radio-inline">
-                    <input type="radio" value="no" name="vegetarian" for="vegetarian-no">No
-                </label>
-            </div><!--/form-group-->
-          </div><!--/row-->
-          <div class="row">
-            <div class="form-group col-sm-12">
-                <label for="allergies">Please describe all food allergies <small class="text-muted">Leave blank if it doesn't apply</small</label>
-                <textarea class="form-control" rows="2" cols="1" id="allergies" maxlength="250"></textarea>
-            </div><!--/form-group-->
-          </div><!--/row-->
-          <div class="row">
-            <div id="Site" class="form-group col-sm-6">
-              <label for="slife" class="required">How would you define your spiritual life? <small class="text-muted">Pick as many as you like</small></label><br>
-
-              <div class="checkbox"> <label for="slife-searching"> <input type="checkbox" name="slife" value="Searching" id="slife-searching"> Searching for answers </label> </div>
-              <div class="checkbox"> <label for="slife-received"> <input type="checkbox" name="slife" value="Received" id="slife-received"> I have received Jesus </label> </div>
-              <div class="checkbox"> <label for="slife-obedience"> <input type="checkbox" name="slife" value="Obedience" id="slife-obedience"> Focusing on obedience - I've quit negotiating with God </label> </div>
-              <div class="checkbox"> <label for="slife-replicating"> <input type="checkbox" name="slife" value="Replicating" id="slife-replicating"> I'm actively replicating my faith in others </label> </div>
-
-            </div><!--/form-group-->
-          </div><!--/row-->
-          <div class="row">
-            <div class="form-group col-sm-12">
-                <label for="why" class="required">Tell us why you want to go on this trip</label>
-                <textarea cols="1" rows="4" class="form-control" id="why" maxlength="1000" placeholder="{{gotrip.whyPlaceholder}}"></textarea>
-            </div><!--/form-group-->
-          </fieldset>
-        </div><!--/row-->
-        <a ui-sref="go-trip-signup-page-2({trip_location: gotrip.pageTitle})" class="btn btn-primary pull-right">Next</a>
+        
+        <button class="btn btn-primary pull-right" ng-click='pages.handleNext(2)'  > Next </button>
     </form>
-
-  </div><!--/col-sm-12-->
-</div><!--/row-->
+</div>
