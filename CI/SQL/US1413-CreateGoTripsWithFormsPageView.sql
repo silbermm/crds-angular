@@ -61,7 +61,8 @@ IF EXISTS (Select 1 FROM [dbo].[dp_Page_Views] WHERE [dbo].[dp_Page_Views].[Page
 		, Registration_Form_Table.[Form_ID]
 		, Registration_Form_Table.[Form_Title]
 		, Pledge_Campaigns.[Registration_Start]
-		, Pledge_Campaigns.[Registration_End]'
+		, Pledge_Campaigns.[Registration_End]
+		, Pledge_Campaigns.[Youngest_Age_Allowed]'
 			,View_Clause = 'Pledge_Campaign_Type_ID_Table.[Campaign_Type] = ''Mission Project/Trip''
 		 AND Registration_Form_Table.[Form_ID] IS NOT NULL
 		 AND Pledge_Campaigns.[Registration_Start] <= GetDate()
@@ -91,7 +92,8 @@ ELSE
 		, Registration_Form_Table.[Form_ID]
 		, Registration_Form_Table.[Form_Title]
 		, Pledge_Campaigns.[Registration_Start]
-		, Pledge_Campaigns.[Registration_End]'
+		, Pledge_Campaigns.[Registration_End]
+		, Pledge_Campaigns.[Youngest_Age_Allowed]'
 				   ,'Pledge_Campaign_Type_ID_Table.[Campaign_Type] = ''Mission Project/Trip''
 		 AND Registration_Form_Table.[Form_ID] IS NOT NULL
 		 AND Pledge_Campaigns.[Registration_Start] <= GetDate()
