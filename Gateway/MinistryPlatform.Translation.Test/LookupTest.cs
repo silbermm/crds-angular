@@ -1,14 +1,11 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
+using NUnit.Framework;
 
 namespace MinistryPlatform.Translation.Test
 {
@@ -16,16 +13,15 @@ namespace MinistryPlatform.Translation.Test
     [Category("IntegrationTests")]
     public class LookupTest
     {
-
         private const string USERNAME = "testme";
         private const string PASSWORD = "changeme";
         private const string EMAIL = "donotreply+testme@crossroads.net";
-    
+
         private AuthenticationServiceImpl _fixture;
         private PlatformServiceClient _platformService;
         private Mock<IMinistryPlatformService> _ministryPlatformService;
 
-       
+
         [SetUp]
         public void SetUp()
         {
@@ -33,7 +29,7 @@ namespace MinistryPlatform.Translation.Test
             _platformService = new PlatformServiceClient();
             _fixture = new AuthenticationServiceImpl(_platformService, _ministryPlatformService.Object);
         }
-       
+
         [Test]
         public void FindAnAttribute([Values("Dentist", "Social media wizard")] string attributeName)
         {
@@ -89,12 +85,9 @@ namespace MinistryPlatform.Translation.Test
             var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
             Assert.IsNotNull(authData);
             var token = authData["token"].ToString();
-            List<Dictionary<string,object>> genders = LookupService.Genders(token);
+            List<Dictionary<string, object>> genders = LookupService.Genders(token);
             Assert.IsNotEmpty(genders);
-            genders.ForEach(x =>
-            {
-                Assert.IsInstanceOf<Dictionary<string,object>>(x);
-            });
+            genders.ForEach(x => { Assert.IsInstanceOf<Dictionary<string, object>>(x); });
         }
 
         [Test]
@@ -105,10 +98,7 @@ namespace MinistryPlatform.Translation.Test
             var token = authData["token"].ToString();
             List<Dictionary<string, object>> maritalStatus = LookupService.MaritalStatus(token);
             Assert.IsNotEmpty(maritalStatus);
-            maritalStatus.ForEach(x =>
-            {
-                Assert.IsInstanceOf<Dictionary<string, object>>(x);
-            });
+            maritalStatus.ForEach(x => { Assert.IsInstanceOf<Dictionary<string, object>>(x); });
         }
 
         [Test]
@@ -119,10 +109,7 @@ namespace MinistryPlatform.Translation.Test
             var token = authData["token"].ToString();
             List<Dictionary<string, object>> ServiceProviders = LookupService.ServiceProviders(token);
             Assert.IsNotEmpty(ServiceProviders);
-            ServiceProviders.ForEach(x =>
-            {
-                Assert.IsInstanceOf<Dictionary<string, object>>(x);
-            });
+            ServiceProviders.ForEach(x => { Assert.IsInstanceOf<Dictionary<string, object>>(x); });
         }
 
         [Test]
@@ -133,10 +120,7 @@ namespace MinistryPlatform.Translation.Test
             var token = authData["token"].ToString();
             List<Dictionary<string, object>> States = LookupService.States(token);
             Assert.IsNotEmpty(States);
-            States.ForEach(x =>
-            {
-                Assert.IsInstanceOf<Dictionary<string, object>>(x);
-            });
+            States.ForEach(x => { Assert.IsInstanceOf<Dictionary<string, object>>(x); });
         }
 
         [Test]
@@ -147,31 +131,22 @@ namespace MinistryPlatform.Translation.Test
             var token = authData["token"].ToString();
             List<Dictionary<string, object>> Countries = LookupService.Countries(token);
             Assert.IsNotEmpty(Countries);
-            Countries.ForEach(x =>
-            {
-                Assert.IsInstanceOf<Dictionary<string, object>>(x);
-            });
+            Countries.ForEach(x => { Assert.IsInstanceOf<Dictionary<string, object>>(x); });
         }
 
-       [Test]
+        [Test]
         public void ShouldFindListOfCrossroadsLocations()
         {
+            var clifton = new Dictionary<string, object> { { "dp_RecordID", 11 }, { "dp_RecordName", "Uptown" } };
             var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
             Assert.IsNotNull(authData);
-            var token = authData["token"].ToString();;
-            List<Dictionary<string, object>> CrossroadsLocations = LookupService.CrossroadsLocations(token);
-            Assert.IsNotEmpty(CrossroadsLocations);
-            var clifton = new Dictionary<string, object>();
-            clifton.Add("dp_RecordID", 11);
-            clifton.Add("dp_RecordName", "Clifton");
 
-           ////var list = CrossroadsLocations.ToList();
-            Assert.Contains(clifton, CrossroadsLocations);
-            CrossroadsLocations.ForEach(x =>
-            {
-                Assert.IsInstanceOf<Dictionary<string, object>>(x);
-            });
+            var token = authData["token"].ToString();
+            var crossroadsLocations = LookupService.CrossroadsLocations(token);
+            Assert.IsNotEmpty(crossroadsLocations);
+
+            Assert.Contains(clifton, crossroadsLocations);
+            crossroadsLocations.ForEach(Assert.IsInstanceOf<Dictionary<string, object>>);
         }
-
     }
 }

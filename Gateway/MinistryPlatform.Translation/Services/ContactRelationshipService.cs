@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -17,7 +18,8 @@ namespace MinistryPlatform.Translation.Services
 
         private IMinistryPlatformService _ministryPlatformService;
 
-        public ContactRelationshipService(IMinistryPlatformService ministryPlatformService)
+        public ContactRelationshipService(IMinistryPlatformService ministryPlatformService, IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
+            : base(authenticationService, configurationWrapper)
         {
             this._ministryPlatformService = ministryPlatformService;
         }

@@ -2,7 +2,10 @@
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
+using Crossroads.Utilities;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Enum;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
 
@@ -26,7 +29,8 @@ namespace MinistryPlatform.Translation.Services
         private IProgramService programService;
         private ICommunicationService communicationService;
 
-        public DonorService(IMinistryPlatformService ministryPlatformService, IProgramService programService, ICommunicationService communicationService)
+        public DonorService(IMinistryPlatformService ministryPlatformService, IProgramService programService, ICommunicationService communicationService, IAuthenticationService authenticationService,IConfigurationWrapper configurationWrapper)
+            : base(authenticationService, configurationWrapper)
         {
             this.ministryPlatformService = ministryPlatformService;
             this.programService = programService;
@@ -71,8 +75,9 @@ namespace MinistryPlatform.Translation.Services
 
         public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string charge_id, string pymtType, string processorId, DateTime setupTime, bool registeredDonor)
         {
-            var pymt_id = (pymtType == "bank") ? "5" : "4";
-            var fee = feeAmt.HasValue ? feeAmt/100M : null;
+            var fee = feeAmt.HasValue ? feeAmt / Constants.StripeDecimalConversionValue : null;
+
+            var pymt_id = PaymentType.getPaymentType(pymtType).id;
             
             var donationValues = new Dictionary<string, object>
             {
@@ -125,7 +130,7 @@ namespace MinistryPlatform.Translation.Services
             {
                 SetupConfirmationEmail(Convert.ToInt32(programId), donorId, donationAmt, setupTime, pymtType);
             }
-            catch (Exception e)
+            catch (Exception )
             {
                 logger.Error(string.Format("Failed when processing the template for Donation Id: {0}", donationId));
             }
@@ -221,7 +226,7 @@ namespace MinistryPlatform.Translation.Services
 
             try
             {
-                ministryPlatformService.UpdateRecord(donorPageId, parms, apiLogin());
+                ministryPlatformService.UpdateRecord(donorPageId, parms, ApiLogin());
             }
             catch (Exception e)
             {

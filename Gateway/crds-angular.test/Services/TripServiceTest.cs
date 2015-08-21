@@ -14,6 +14,12 @@ namespace crds_angular.test.Services
     {
         private Mock<IEventParticipantService> _eventParticipantService;
         private Mock<IDonationService> _donationService;
+        private Mock<IGroupService> _groupService;
+        private Mock<IFormSubmissionService> _formSubmissionService;
+        private Mock<IEventService> _eventService;
+        private Mock<IDonorService> _donorService;
+        private Mock<IPledgeService> _pledgeService;
+        private Mock<ICampaignService> _campaignService;
         private TripService _fixture;
 
         [SetUp]
@@ -21,7 +27,14 @@ namespace crds_angular.test.Services
         {
             _eventParticipantService = new Mock<IEventParticipantService>();
             _donationService = new Mock<IDonationService>();
-            _fixture = new TripService(_eventParticipantService.Object, _donationService.Object);
+            _groupService = new Mock<IGroupService>();
+            _formSubmissionService = new Mock<IFormSubmissionService>();
+            _eventService = new Mock<IEventService>();
+            _donorService = new Mock<IDonorService>();
+            _pledgeService = new Mock<IPledgeService>();
+            _campaignService = new Mock<ICampaignService>();
+
+            _fixture = new TripService(_eventParticipantService.Object, _donationService.Object, _groupService.Object, _formSubmissionService.Object, _eventService.Object, _donorService.Object, _pledgeService.Object, _campaignService.Object);
         }
 
         [Test]

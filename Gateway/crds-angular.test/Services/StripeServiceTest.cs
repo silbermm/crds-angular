@@ -7,6 +7,7 @@ using RestSharp;
 using System.Collections.Generic;
 using System.Net;
 using crds_angular.Models.Crossroads.Stewardship;
+using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
 using Crossroads.Utilities.Models;
 
@@ -336,7 +337,7 @@ namespace crds_angular.test.Services
                 It.Is<IRestRequest>(o =>
                     o.Method == Method.POST
                     && o.Resource.Equals("charges")
-                    && ParameterMatches("amount", 9090 * 100, o.Parameters)
+                    && ParameterMatches("amount", 9090 *Constants.StripeDecimalConversionValue, o.Parameters)
                     && ParameterMatches("currency", "usd", o.Parameters)
                     && ParameterMatches("customer", "cust_token", o.Parameters)
                     && ParameterMatches("description", "Donor ID #98765", o.Parameters)

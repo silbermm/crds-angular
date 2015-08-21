@@ -10,7 +10,7 @@
     $stateProvider
       .state('tripsearch', {
         parent: 'noSideBar',
-        url: '/trips',
+        url: '/trips/search',
         controller: 'TripSearchCtrl as tripSearch',
         templateUrl: 'tripsearch/tripsearch.html',
         resolve: {
@@ -104,4 +104,3 @@
   }
 
 })();
-
