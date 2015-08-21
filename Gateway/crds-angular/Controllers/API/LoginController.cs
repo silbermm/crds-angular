@@ -77,7 +77,8 @@ namespace crds_angular.Controllers.API
                 userId = p.ContactId,
                 username = p.FirstName,
                 userEmail = p.EmailAddress,
-                roles = userRoles
+                roles = userRoles,
+                age = p.Age
             };
 
            //ttpResponseHeadersExtensions.AddCookies();
@@ -101,6 +102,7 @@ namespace crds_angular.Controllers.API
         public string username { get; set; }
         public string userEmail { get; set;  }
         public List<RoleDto> roles { get; set; }
+        public int age { get; set; }
     }
 
     public class Credentials

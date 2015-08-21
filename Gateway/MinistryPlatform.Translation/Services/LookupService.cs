@@ -46,5 +46,10 @@ namespace MinistryPlatform.Translation.Services
         {
             return MinistryPlatformService.GetLookupRecords(AppSettings("CrossroadsLocations"), token);
         }
+
+        public static List<Dictionary<string, object>> WorkTeams(string token)
+        {
+            return MinistryPlatformService.GetLookupRecords(AppSettings("WorkTeams"), token);
+        }
     }
 }
