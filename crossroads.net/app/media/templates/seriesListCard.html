@@ -4,7 +4,7 @@
             <img src="{{item.image.filename}}" class="img-responsive">
             <h4 class="flush-bottom">{{item.title}}</h4>
 
-            <p class="text-muted">{{item.startDate}}</p>
+            <p class="text-muted">{{item.startDate | date: "MM.dd.yyyy"}}</p>
         </a>
     </li>
 </ul>
