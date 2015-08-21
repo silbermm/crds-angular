@@ -87,8 +87,6 @@
         vm.processing = false;
         vm.programsInput = programList;
         vm.showMessage = "Where?";
-        vm.showFrequency = true;
-        vm.showInitiative = true;
         vm.showCheckClass = "ng-hide";
         if (!vm.dto.view ){
           vm.dto.view = "bank";
