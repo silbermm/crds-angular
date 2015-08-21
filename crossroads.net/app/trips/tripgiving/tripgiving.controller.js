@@ -170,7 +170,7 @@
       } else {
          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
       }
-    }
+    };
 
         vm.goToChange = function(amount, donor, email, program) {
           if (!Session.isActive()) {
@@ -469,4 +469,5 @@
           });
         }
       }
+    }
 })();
