@@ -167,35 +167,30 @@
           Media: 'Media',
           Series: function (Media) {
             return Media.Series().get().$promise;
+          },
+          Musics: function (Media) {
+            return Media.Musics().get().$promise;
+          },
+          Videos: function (Media) {
+            return Media.Videos().get().$promise;
           }
         }
       })
       .state('media.all', {
         url: '',
-        controller: 'MediaController as media',
         templateUrl: 'media/viewAll.html',
-        resolve: {
-          Media: 'Media',
-          Series: function (Media) {
-            return Media.Series().get().$promise;
-          }
-        }
       })
-      .state('media-music', {
-        parent: 'noSideBar',
-        url: '/media/music',
-        controller: 'MediaController as media',
-        templateUrl: 'media/view-all-music.html'
+      .state('media.music', {
+        url: '/music',
+        templateUrl: 'media/viewAllMusic.html'
       })
       .state('media.series', {
         url: '/series',
         templateUrl: 'media/viewAllSeries.html'
       })
-      .state('media-videos', {
-        parent: 'noSideBar',
-        url: '/media/videos',
-        controller: 'MediaController as media',
-        templateUrl: 'media/view-all-videos.html'
+      .state('media.videos', {
+        url: '/videos',
+        templateUrl: 'media/viewAllVideos.html'
       })
       .state('media.series.single', {
         url: '/series/single/:title',

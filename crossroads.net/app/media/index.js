@@ -3,9 +3,9 @@
 var app = angular.module('crossroads');
 
 require('./viewAll.html');
-require('./view-all-music.html');
+require('./viewAllMusic.html');
 require('./viewAllSeries.html');
-require('./view-all-videos.html');
+require('./viewAllVideos.html');
 require('./seriesSingle.html');
 require('./series-single-lo-res.html');
 require('./media-single.html');
@@ -17,6 +17,7 @@ require('./media-list.html');
 require('./message-action-buttons.html');
 require('./media-details.html');
 require('./templates/mediaListCard.html');
+require('./templates/seriesListCard.html');
 require('./templates/seriesSingleCard.html');
 
 
