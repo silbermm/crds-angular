@@ -12,6 +12,7 @@
       scope: {
         currentPage: '=',
         pageTitle: '=',
+        numberOfPages: '=',
       },
       templateUrl: 'page5/signupPage5.html',
       controller: 'PagesController as pages',

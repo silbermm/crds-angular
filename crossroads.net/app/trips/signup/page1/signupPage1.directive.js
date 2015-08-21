@@ -11,6 +11,8 @@
       replace: true,
       scope: {
         currentPage: '=',
+        pageTitle: '=',
+        numberOfPages: '=',
       },
       controller: 'PagesController as pages',
       bindToController: true,

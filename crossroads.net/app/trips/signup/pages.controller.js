@@ -5,32 +5,39 @@
 
   PagesController.$inject = ['$location', '$anchorScroll'];
 
+  /**
+   * Controller for all of the pages directives
+   * Variobles passed into the directives:
+   *    - currentPage
+   *    - pageTitle
+   *    - numberOfPages
+   */
   function PagesController($location, $anchorScroll) {
     var vm = this;
 
     vm.handleNext = handleNext;
     vm.handlePrevious = handlePrevious;
     vm.handleSubmit = handleSubmit;
-    vm.showSubmit = showSubmit;
 
     function handleNext(nextPage) {
       vm.currentPage = nextPage;
-      $location.hash('form-top');
-      $anchorScroll();
+      toTop();
     }
 
     function handlePrevious(prevPage) {
       vm.currentPage = prevPage;
-      $location.hash('form-top');
-      $anchorScroll();
+      toTop();
     }
 
     function handleSubmit() {
-
+      // submit info and then show the thankyou page directive
+      vm.currentPage = vm.numberOfPages + 1;
+      toTop();
     }
 
-    function showSubmit() {
-      
+    function toTop() {
+      $location.hash('form-top');
+      $anchorScroll();
     }
 
   }

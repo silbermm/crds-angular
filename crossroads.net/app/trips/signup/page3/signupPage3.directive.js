@@ -11,6 +11,8 @@
       replace: true,
       scope: {
         currentPage: '=',
+        pageTitle: '=',
+        numberOfPages: '=',
       },
       templateUrl: 'page3/signupPage3.html',
       controller: 'PagesController as pages',
