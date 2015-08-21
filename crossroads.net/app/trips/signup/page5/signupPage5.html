@@ -42,23 +42,10 @@
 
             <div class="row">
               <div class="col-sm-6">
-                <select class="form-control" id="workteam-first">
-                  <option></option>
-                  <option>Aftercare</option>
-                  <option>Church Relations</option>
-                  <option>Construction</option>
-                  <option>Dental</option>
-                  <option>Gardening</option>
-                  <option>General</option>
-                  <option>Habitat</option>
-                  <option>Habitat (must be 16 or older)</option>
-                  <option>Hands on - Neighborhood Restoration</option>
-                  <option>Kids</option>
-                  <option>Photo</option>
-                  <option>Schools (Clean up, painting, etc)</option>
-                  <option>Vacation Bible Camp</option>
-                  <option>VBC</option>
-                  <option>VBS</option>
+                <select class='form-control' 
+                  id='workteam-first' 
+                  ng-model='pages.selectedTeam' >
+                    <option ng-repeat="workTeam in pages.workTeams" value="{{workTeam.dp_RecordID}}">{{workTeam.dp_RecordName}}</option> 
                 </select>
               </div>
             </div>
@@ -75,23 +62,9 @@
 
             <div class="row">
               <div class="col-sm-6">
-                <select class="form-control" id="workteam-second">
-                  <option></option>
-                  <option>Aftercare</option>
-                  <option>Church Relations</option>
-                  <option>Construction</option>
-                  <option>Dental</option>
-                  <option>Gardening</option>
-                  <option>General</option>
-                  <option>Habitat</option>
-                  <option>Habitat (must be 16 or older)</option>
-                  <option>Hands on - Neighborhood Restoration</option>
-                  <option>Kids</option>
-                  <option>Photo</option>
-                  <option>Schools (Clean up, painting, etc)</option>
-                  <option>Vacation Bible Camp</option>
-                  <option>VBC</option>
-                  <option>VBS</option>
+                <select class="form-control" id="workteam-second"
+                  ng-model='pages.selectedTeam' >
+                  <option ng-repeat="workTeam in pages.workTeams" value="{{workTeam.dp_RecordID}}">{{workTeam.dp_RecordName}}</option> 
                 </select>
               </div>
             </div>

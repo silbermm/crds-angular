@@ -3,18 +3,20 @@
 
   module.exports = TripsSignupController;
 
-  TripsSignupController.$inject = ['$log', '$state', '$location', '$anchorScroll', 'Campaign'];
+  TripsSignupController.$inject = ['$log', 'Session',  'Campaign', 'WorkTeams'];
 
-  function TripsSignupController($log, $state, $location, $anchorScroll, Campaign) {
+  function TripsSignupController($log, Session, Campaign, WorkTeams) {
 
     var vm = this;
 
+    vm.ageLimitReached = ageLimitReached;
     vm.campaign = Campaign;
     vm.currentPage = 1;
     vm.numberOfPages = 0;
     vm.pageTitle = vm.campaign.formName;
     vm.tripName = vm.campaign.name;
     vm.whyPlaceholder = '';
+    vm.workTeams = WorkTeams;
 
     activate();
 
@@ -42,7 +44,10 @@
           vm.numberOfPages = 6;
           break;
       }
+    }
 
+    function ageLimitReached() {
+      return Session.exists('age') && Session.exists('age') < Campaign.ageLimit;
     }
 
   }

@@ -13,6 +13,7 @@
         currentPage: '=',
         pageTitle: '=',
         numberOfPages: '=',
+        workTeams: '=',
       },
       templateUrl: 'page5/signupPage5.html',
       controller: 'PagesController as pages',

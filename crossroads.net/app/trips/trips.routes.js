@@ -93,7 +93,11 @@
           $stateParams: '$stateParams',
           Campaign: function(Trip, $stateParams) {
             return Trip.Campaign.get({campaignId: $stateParams.campaignId}).$promise;
-          }
+          },
+
+          WorkTeams: function(Trip) {
+            return Trip.WorkTeams.query().$promise;
+          },
         },
       })
       ;

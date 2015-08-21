@@ -3,7 +3,7 @@
 
   module.exports = PagesController;
 
-  PagesController.$inject = ['$location', '$anchorScroll'];
+  PagesController.$inject = ['$location', '$anchorScroll', 'Trip'];
 
   /**
    * Controller for all of the pages directives
