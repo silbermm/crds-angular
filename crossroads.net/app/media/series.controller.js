@@ -10,7 +10,7 @@
         vm.msgisopen = true;
         vm.musicisopen = false;
         vm.series = Series.series;
-        vm.selectedSeries = getSeriesByTitle($stateParams.title); // fix the references in the card(s)
+        vm.selected = getSeriesByTitle($stateParams.title); // fix the references in the card(s)
         vm.messages = Messages.messages;
 
         function getSeriesByTitle(seriesTitle) {

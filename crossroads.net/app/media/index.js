@@ -19,6 +19,7 @@ require('./media-details.html');
 require('./templates/mediaListCard.html');
 require('./templates/seriesListCard.html');
 require('./templates/seriesSingleCard.html');
+require('./templates/messagesListCard.html');
 
 
 app.controller('MediaController', require('./media.controller'));
