@@ -197,11 +197,16 @@
         controller: 'MediaController as media',
         templateUrl: 'media/view-all-videos.html'
       })
-      .state('media-series-single', {
-        parent: 'noSideBar',
-        url: '/media/series/single',
-        controller: 'MediaController as media',
-        templateUrl: 'media/series-single.html'
+      .state('media.series.single', {
+        url: '/series/single/:title',
+        controller: 'SeriesController as series',
+        templateUrl: 'media/seriesSingle.html',
+          resolve: {
+            Media: 'Media',
+            Messages: function (Media) {
+              return Media.Messages().get({ title: title }).$promise;
+            }
+          }
       })
       .state('media-series-single-lo-res', {
         parent: 'noSideBar',
