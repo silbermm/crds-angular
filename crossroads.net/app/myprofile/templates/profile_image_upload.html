@@ -5,11 +5,11 @@
   <div ng-hide="!modal.myImage" class="change-profile-pic">
     <img-crop image="modal.myImage" result-image="modal.myCroppedImage" area-type="square" ></img-crop>
   </div>
-  <div class="push-ends">
-    <label>Select an image file:</label>
+  <div class="push-ends hidden-lg hidden-xs">
       <input type="file" id="fileInputModal" />
   </div>
-  <div class="modal-footer">
-    <button class="btn btn-primary" type="button" ng-click="modal.ok()">OK</button>
-    <button class="btn btn-standard" type="button" ng-click="modal.cancel()">Cancel</button>
-  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-primary" type="button" ng-click="modal.ok()">OK</button>
+  <button class="btn btn-standard" type="button" ng-click="modal.cancel()">Cancel</button>
+</div>
