@@ -12,9 +12,9 @@ namespace crds_angular.Models.Crossroads.Stewardship
         public string CheckNumber { get; set; }
         [JsonProperty("amount")]
         public decimal Amount { get; set; }
-        [JsonProperty(PropertyName = "checkDate"), JsonConverter(typeof(IsoDateTimeConverter))]
+        [JsonProperty(PropertyName = "checkDate", NullValueHandling = NullValueHandling.Ignore), JsonConverter(typeof(IsoDateTimeConverter))]
         public DateTime? CheckDate { get; set; }
-        [JsonProperty(PropertyName = "scanDate"), JsonConverter(typeof(IsoDateTimeConverter))]
+        [JsonProperty(PropertyName = "scanDate", NullValueHandling = NullValueHandling.Ignore), JsonConverter(typeof(IsoDateTimeConverter))]
         public DateTime? ScanDate { get; set; }
 
         [JsonProperty("name1")]
@@ -31,6 +31,9 @@ namespace crds_angular.Models.Crossroads.Stewardship
 
         [JsonProperty("donationId")]
         public int DonationId { get; set; }
+
+        [JsonProperty("error", NullValueHandling = NullValueHandling.Ignore)]
+        public string Error { get; set; }
     }
 
     public class Address

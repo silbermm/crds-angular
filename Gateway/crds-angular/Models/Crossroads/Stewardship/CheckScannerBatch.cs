@@ -30,6 +30,13 @@ namespace crds_angular.Models.Crossroads.Stewardship
         public List<CheckScannerCheck> Checks { get { return (_checks); } }
         #endregion
 
+        #region Errored Checks property and accessor
+        [JsonIgnore]
+        private readonly List<CheckScannerCheck> _errorChecks = new List<CheckScannerCheck>();
+        [JsonProperty("errorChecks")]
+        public List<CheckScannerCheck> ErrorChecks { get { return (_errorChecks); } }
+        #endregion
+
         [JsonProperty("contactId", NullValueHandling = NullValueHandling.Ignore)]
         public int? MinistryPlatformContactId { get; set; }
 

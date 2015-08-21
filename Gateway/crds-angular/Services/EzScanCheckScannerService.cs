@@ -174,41 +174,57 @@ namespace crds_angular.Services
             var checks = GetChecksForBatch(batchDetails.Name);
             foreach (var check in checks)
             {
-                var contactDonor = _donorService.GetContactDonorForDonorAccount(check.AccountNumber, check.RoutingNumber) ?? new ContactDonor();
-                if (!contactDonor.HasPaymentProcessorRecord)
+                try
                 {
-                    var token = _paymentService.CreateToken(check.AccountNumber, check.RoutingNumber);
-                    contactDonor.Details = new ContactDetails
+                    var contactDonor = _donorService.GetContactDonorForDonorAccount(check.AccountNumber, check.RoutingNumber) ?? new ContactDonor();
+                    if (!contactDonor.HasPaymentProcessorRecord)
                     {
-                        DisplayName = check.Name1,
-                        Address = new PostalAddress
+                        var token = _paymentService.CreateToken(check.AccountNumber, check.RoutingNumber);
+                        contactDonor.Details = new ContactDetails
                         {
-                            Line1 = check.Address.Line1,
-                            Line2 = check.Address.Line2,
-                            City = check.Address.City,
-                            State = check.Address.State,
-                            PostalCode = check.Address.PostalCode
-                        }
-                    };
-                    contactDonor.Account = new DonorAccount
-                    {
-                        AccountNumber = check.AccountNumber,
-                        RoutingNumber = check.RoutingNumber,
-                        Type = AccountType.Checking
-                    };
+                            DisplayName = check.Name1,
+                            Address = new PostalAddress
+                            {
+                                Line1 = check.Address.Line1,
+                                Line2 = check.Address.Line2,
+                                City = check.Address.City,
+                                State = check.Address.State,
+                                PostalCode = check.Address.PostalCode
+                            }
+                        };
+                        contactDonor.Account = new DonorAccount
+                        {
+                            AccountNumber = check.AccountNumber,
+                            RoutingNumber = check.RoutingNumber,
+                            Type = AccountType.Checking
+                        };
 
-                    contactDonor = _donorService.CreateOrUpdateContactDonor(contactDonor, string.Empty, token, DateTime.Now);
+                        contactDonor = _donorService.CreateOrUpdateContactDonor(contactDonor, string.Empty, token, DateTime.Now);
+                    }
+
+                    var charge = _paymentService.ChargeCustomer(contactDonor.ProcessorId, (int) (check.Amount), contactDonor.DonorId);
+                    var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
+
+                    var programId = batchDetails.ProgramId == null ? null : batchDetails.ProgramId + "";
+
+                    var donationId = _mpDonorService.CreateDonationAndDistributionRecord((int) (check.Amount),
+                                                                                         fee,
+                                                                                         contactDonor.DonorId,
+                                                                                         programId,
+                                                                                         charge.Id,
+                                                                                         "check",
+                                                                                         contactDonor.ProcessorId,
+                                                                                         check.CheckDate ?? (check.ScanDate ?? DateTime.Now),
+                                                                                         contactDonor.RegisteredUser);
+                    check.DonationId = donationId;
+
+                    batchDetails.Checks.Add(check);
                 }
-
-                var charge = _paymentService.ChargeCustomer(contactDonor.ProcessorId, (int)(check.Amount), contactDonor.DonorId);
-                var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
-
-                var programId = batchDetails.ProgramId == null ? null : batchDetails.ProgramId + "";
-
-                var donationId = _mpDonorService.CreateDonationAndDistributionRecord((int)(check.Amount), fee, contactDonor.DonorId, programId, charge.Id, "check", contactDonor.ProcessorId, check.CheckDate ?? (check.ScanDate ?? DateTime.Now), contactDonor.RegisteredUser);
-                check.DonationId = donationId;
-
-                batchDetails.Checks.Add(check);
+                catch (Exception e)
+                {
+                    check.Error = e.ToString();
+                    batchDetails.ErrorChecks.Add(check);
+                }
             }
 
             batchDetails.Status = BatchStatus.Exported;
