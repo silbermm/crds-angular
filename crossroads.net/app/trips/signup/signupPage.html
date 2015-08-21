@@ -1,0 +1,57 @@
+<div class="row" id="form-top">
+  <div class="col-sm-10 col-sm-offset-1">
+    <h1 class="page-header">{{tripsSignup.pageTitle}} Signup</h1>
+    <h2 class="subheading">{{tripsSignup.tripName}}</h2>
+
+    <div ng-show='tripsSignup.ageLimitReached()'>
+      <span ng-bind-html='$root.MESSAGES.TripAgeLimitReached.content | html'></span> 
+    </div>
+    
+    <div ng-show='!tripsSignup.ageLimitReached()'> <!-- Content if there is no Age Error -->
+
+      <signup-progress total-steps='tripsSignup.numberOfPages' current-step='tripsSignup.currentPage'> </signup-progress>
+      
+      <signup-page-1 current-page='tripsSignup.currentPage' 
+          number-of-pages='tripsSignup.numberOfPages' 
+          page-title='tripsSignup.pageTitle' 
+          ng-if='tripsSignup.currentPage == 1'> 
+      </signup-page-1> 
+      <signup-page-2 
+        current-page='tripsSignup.currentPage' 
+        number-of-pages='tripsSignup.numberOfPages' 
+        page-title='tripsSignup.pageTitle' 
+        ng-if='tripsSignup.currentPage == 2'> 
+      </signup-page-2> 
+      <signup-page-3 
+        current-page='tripsSignup.currentPage' 
+        number-of-pages='tripsSignup.numberOfPages' 
+        page-title='tripsSignup.pageTitle' 
+        ng-if='tripsSignup.currentPage == 3'> 
+      </signup-page-3> 
+      <signup-page-4 
+        current-page='tripsSignup.currentPage' 
+        number-of-pages='tripsSignup.numberOfPages' 
+        page-title='tripsSignup.pageTitle' 
+        ng-if='tripsSignup.currentPage == 4'> 
+      </signup-page-4> 
+      <signup-page-5 
+        current-page='tripsSignup.currentPage' 
+        number-of-pages='tripsSignup.numberOfPages' 
+        page-title='tripsSignup.pageTitle' 
+        work-teams='tripsSignup.workTeams'
+        ng-if='tripsSignup.currentPage == 5'> 
+      </signup-page-5> 
+      <signup-page-6 
+        current-page='tripsSignup.currentPage' 
+        number-of-pages='tripsSignup.numberOfPages' 
+        page-title='tripsSignup.pageTitle' 
+        ng-if="tripsSignup.currentPage == 6 && tripsSignup.pageTitle != 'GO NOLA Application"> 
+      </signup-page-6> 
+      <thank-you-page 
+        current-page='tripsSignup.currentPage' 
+        number-of-pages='tripsSignup.numberOfPages' 
+        page-title='tripsSignup.pageTitle' 
+        ng-if='tripsSignup.currentPage > tripsSignup.numberOfPages'> 
+      </thank-you-page> 
+    </div>
+</div><!--/row-->
