@@ -31,7 +31,7 @@
 
     function handleSubmit() {
       // submit info and then show the thankyou page directive
-      vm.currentPage = vm.numberOfPages + 1;
+      vm.currentPage = 'thanks';
       toTop();
     }
 
