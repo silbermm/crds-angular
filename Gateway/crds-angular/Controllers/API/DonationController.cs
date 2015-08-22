@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Net;
+using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Exceptions;
@@ -16,14 +19,16 @@ namespace crds_angular.Controllers.API
         private readonly IPaymentService _stripeService;
         private readonly MPInterfaces.IAuthenticationService _authenticationService;
         private readonly IDonorService _gatewayDonorService;
+        private readonly IDonationService _gatewayDonationService;
 
         public DonationController(MPInterfaces.IDonorService mpDonorService, IPaymentService stripeService,
-            MPInterfaces.IAuthenticationService authenticationService, IDonorService gatewayDonorService)
+            MPInterfaces.IAuthenticationService authenticationService, IDonorService gatewayDonorService, IDonationService gatewayDonationService)
         {
             _mpDonorService = mpDonorService;
             _stripeService = stripeService;
             _authenticationService = authenticationService;
             _gatewayDonorService = gatewayDonorService;
+            _gatewayDonationService = gatewayDonationService;
         }
 
         [ResponseType(typeof(DonationDTO))]
@@ -36,7 +41,20 @@ namespace crds_angular.Controllers.API
         [Route("api/gpexport/:batchId")]
         public IHttpActionResult Get(int batchId)
         {
-            return (Authorized(token => CreateDonationAndDistributionAuthenticated(token, dto), () => CreateDonationAndDistributionUnauthenticated(dto)));
+            return Authorized(token =>
+            {
+                try
+                {
+                    var content = _gatewayDonationService.CreateGPExport(batchId, token);
+
+                    return Ok(content);
+                }
+                catch (Exception ex)
+                {
+                    var apiError = new ApiErrorDto("GetGroupsForEvent Failed", ex);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+            });
         }
 
         private IHttpActionResult CreateDonationAndDistributionAuthenticated(String token, CreateDonationDTO dto)

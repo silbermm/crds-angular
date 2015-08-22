@@ -338,9 +338,7 @@ namespace MinistryPlatform.Translation.Services
                     ReceivableAccount = result.ToString("Receivable Account"),
                     DistributionAccount = result.ToString("Distribution Account"),
                     DistributionAmount = result.ToString("Amount"),
-                    DistributionReference = processingFee ? "Processor Fees " + result.ToDate("Donation Date") : "Contribution " + result.ToDate("Donation Date")
-                    
-                    
+                    DistributionReference = processingFee ? "Processor Fees " + result.ToDate("Donation Date") : "Contribution " + result.ToDate("Donation Date")                    
                 };
 
                 gpExport.Add(gp);
