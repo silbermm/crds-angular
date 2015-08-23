@@ -12,6 +12,7 @@ using MinistryPlatform.Models;
 using Moq;
 using NUnit.Framework;
 using IDonorService = crds_angular.Services.Interfaces.IDonorService;
+using IDonationService = crds_angular.Services.Interfaces.IDonationService;
 
 namespace crds_angular.test.controllers
 {
@@ -22,6 +23,7 @@ namespace crds_angular.test.controllers
         private Mock<IPaymentService> stripeServiceMock;
         private Mock<IAuthenticationService> authenticationServiceMock;
         private Mock<IDonorService> gatewayDonorServiceMock;
+        private Mock<IDonationService> gatewayDonationServiceMock;
         private string authToken;
         private string authType;
 
@@ -32,8 +34,10 @@ namespace crds_angular.test.controllers
             gatewayDonorServiceMock = new Mock<IDonorService>();
             stripeServiceMock = new Mock<IPaymentService>();
             authenticationServiceMock = new Mock<IAuthenticationService>();
+            gatewayDonationServiceMock = new Mock<IDonationService>();
+
             fixture = new DonationController(donorServiceMock.Object, stripeServiceMock.Object,
-                authenticationServiceMock.Object, gatewayDonorServiceMock.Object);
+                authenticationServiceMock.Object, gatewayDonorServiceMock.Object, gatewayDonationServiceMock.Object);
 
             authType = "auth_type";
             authToken = "auth_token";
