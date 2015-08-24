@@ -11,32 +11,43 @@
     var vm = this;
 
     vm.cancel = cancel;
-
     vm.hasError = hasError;
     vm.groups = [];
     vm.pageInfo = PageInfo;
     vm.params = MPTools.getParams();
     vm.processing = false;
     vm.save = save;
+    vm.selectionMessage = '';
     vm.viewReady = false;
 
     activate();
 
     //////////////////////
 
+    function selectionMessage() {
+      if (vm.params.recordId === '-1') {
+        vm.selectionMessage = 'Your selection contained ' + vm.params.selectedCount + ' member(s).';
+      }
+    }
+
     function activate() {
       $log.debug('pageInfo: ' + vm.pageInfo);
       vm.errorMessages = errorMessages();
       vm.viewReady = true;
+      selectionMessage();
     }
 
     function errorMessages() {
       var errors = [];
       _.each(vm.pageInfo.errors, function(d) {
-        _.each(d.messages, function(m) {
-          errors.push(m);
-        });
+        errors.push(d.message);
       });
+
+      if (vm.pageInfo.data !== undefined) {
+        _.each(vm.pageInfo.data.errors, function(d) {
+          errors.push(d);
+        });
+      }
 
       return errors;
     }

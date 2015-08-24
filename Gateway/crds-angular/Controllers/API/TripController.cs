@@ -20,14 +20,14 @@ namespace crds_angular.Controllers.API
 
         [AcceptVerbs("GET")]
         [ResponseType(typeof(TripFormResponseDto))]
-        [Route("api/trip/form-responses/{selectionId}/{selectionCount}")]
-        public IHttpActionResult TripFormResponses(int selectionId, int selectionCount)
+        [Route("api/trip/form-responses/{selectionId}/{selectionCount}/{recordId}")]
+        public IHttpActionResult TripFormResponses(int selectionId, int selectionCount, int recordId)
         {
             return Authorized(token =>
             {
                 try
                 {
-                    var groups = _tripService.GetFormResponses(selectionId, selectionCount);
+                    var groups = _tripService.GetFormResponses(selectionId, selectionCount, recordId);
                     return Ok(groups);
                 }
                 catch (Exception ex)
@@ -36,6 +36,26 @@ namespace crds_angular.Controllers.API
                     throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
             });
+        }
+
+        [AcceptVerbs("GET")]
+        [ResponseType(typeof(TripCampaignDto))]
+        [Route("api/trip/campaign/{campaignId}")]
+        public IHttpActionResult GetCampaigns(int campaignId)
+        {
+            return Authorized(token =>
+            {
+                try
+                {
+                    var campaign = _tripService.GetTripCampaign(campaignId);
+                    return Ok(campaign);
+                }
+                catch (Exception ex)
+                {
+                    var apiError = new ApiErrorDto("Get Campaign Failed", ex);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+            });   
         }
 
         [AcceptVerbs("POST")]
@@ -97,7 +117,7 @@ namespace crds_angular.Controllers.API
         }
 
         [AcceptVerbs("GET")]
-        [ResponseType(typeof (MyTripsDTO))]
+        [ResponseType(typeof (MyTripsDto))]
         [Route("api/trip/mytrips/{contactId}")]
         public IHttpActionResult MyTrips(int contactId)
         {

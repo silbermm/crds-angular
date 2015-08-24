@@ -11,8 +11,8 @@
       transclude: true,
       templateUrl: 'trip_donate_card/tripDonations.html',
       scope: {
-        donation: '='
-      }
+        donation: '=',
+      },
     };
   }
 })();

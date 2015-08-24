@@ -231,6 +231,18 @@ namespace crds_angular.Services
 
             return (charges);
         }
+
+        public StripeRefund GetChargeRefund(string chargeId)
+        {
+            var url = string.Format("charges/{0}/refunds", chargeId);
+            var request = new RestRequest(url, Method.GET);
+
+            var response = _stripeRestClient.Execute<StripeRefund>(request);
+            CheckStripeResponse("Could not query charge refund", response);
+            var refund = response.Data;
+            
+            return (refund);
+        }
     }
 
     public class Error

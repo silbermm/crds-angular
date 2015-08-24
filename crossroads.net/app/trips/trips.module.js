@@ -9,3 +9,4 @@ angular.module(MODULE, ['crossroads.core', 'crossroads.give'])
 require('./mytrips');
 require('./tripsearch');
 require('./tripgiving');
+require('./signup');

@@ -4,21 +4,21 @@
 
 <preloader full-screen='true' ng-show="!trip.viewReady"> </preloader>
 
-<div class='col-sm-10 col-sm-offset-1' 
-			style="overflow-y: scroll; height:40em;" 
+<div class='col-sm-10 col-sm-offset-1'
+			style="overflow-y: scroll; height:40em;"
 			ng-if='trip.viewReady && !trip.hasError()'>
   <div>
     <h2 class='header noPspace'> Trip Participants </h2>
 
-    <div>Your selection contained {{ trip.params.selectedCount }} member(s).</div>
+    <div>{{ trip.selectionMessage }}</div>
 
 		<form name="tripForm">
     	<div class="form-group">
 	      <label>Which Group would you like to add to?</label>
-	      <select class="form-control" 
-	      	ng-model="trip.group" 
-	      	ng-options="g.groupName for g in trip.pageInfo.groups track by g.groupId" 
-	      	name="selectedGroup" 
+	      <select class="form-control"
+	      	ng-model="trip.group"
+	      	ng-options="g.groupName for g in trip.pageInfo.groups track by g.groupId"
+	      	name="selectedGroup"
 	      	ng-required='true'>
 	        <option value="">Select a Group</option>
 	      </select>
@@ -26,8 +26,8 @@
 
 	    <div class="form-group">
 	      <button class="btn btn-primary btn-sm" ng-click="trip.cancel()">Cancel</button>
-				<button class="btn btn-primary btn-sm" 
-						ng-class="{disabled: trip.processing}" 
+				<button class="btn btn-primary btn-sm"
+						ng-class="{disabled: trip.processing}"
 						ng-disabled="!tripForm.$valid"
 						ng-click="trip.save()">
 					<span ng-if="trip.processing">Saving...</span>
