@@ -8,7 +8,7 @@ INSERT INTO [dbo].[dp_Tools]
            ,[Description]
            ,[Launch_Page])
      VALUES
-           (42
+           (44
 		   ,'Trip Participants'
            ,'Trip Participants Tool'
            ,'http://demo.crossroads.net/mptools/tripParticipants')
