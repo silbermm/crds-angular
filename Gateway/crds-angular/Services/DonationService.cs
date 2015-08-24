@@ -97,7 +97,7 @@ namespace crds_angular.Services
         {
             var gpExport = _mpDonationService.CreateGPExport(batchId, token);
             var stream = new MemoryStream();
-            CSV.Create(gpExport, GPExportDatum.Headers, stream, "\\t");
+            CSV.Create(gpExport, GPExportDatum.Headers, stream, "\t");
 
             return stream;
         }
