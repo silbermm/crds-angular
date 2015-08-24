@@ -7,7 +7,7 @@ DECLARE @PAGE_ROLE_ID int = 10405;
 DECLARE @API_ROLE_ID int = 62;
 DECLARE @ACCESS_LEVEL int = 0;
 
-IF EXISTS (Select 1 FROM [dbo].[dp_Page_Views] WHERE [dbo].[dp_Role_Pages].[Role_Page_ID] = @PAGE_ROLE_ID)
+IF EXISTS (Select 1 FROM [dbo].[dp_Role_Pages] WHERE [dbo].[dp_Role_Pages].[Role_Page_ID] = @PAGE_ROLE_ID)
 	BEGIN
 		UPDATE [dbo].[dp_Role_Pages]
 		SET  Role_ID = @API_ROLE_ID

@@ -40,6 +40,9 @@ SET IDENTITY_INSERT [dbo].[cr_Work_Teams] OFF;
 GO
 
 IF NOT EXISTS (SELECT * FROM [dbo].[dp_Pages] WHERE [Page_ID] = 513)
+
+SET IDENTITY_INSERT [dbo].[dp_Pages] ON;
+
 INSERT INTO [dbo].[dp_Pages]
            ([Page_ID]
 		   ,[Display_Name]
@@ -64,6 +67,8 @@ INSERT INTO [dbo].[dp_Pages]
 		   ,'Work_Team'
 		   ,'Work_Team'
            ,1)
+SET IDENTITY_INSERT [dbo].[dp_Pages] OFF;
+
 GO
 
 IF NOT EXISTS (SELECT * FROM [dbo].[dp_Page_Section_Pages] WHERE [Page_ID] = 513)
