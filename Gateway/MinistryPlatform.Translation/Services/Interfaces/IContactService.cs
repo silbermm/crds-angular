@@ -9,6 +9,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         MyContact GetContactById(int contactId);
         MyContact GetMyProfile(string token);
         int CreateContactForGuestGiver(string emailAddress, string displayName);
+        int CreateContactForNewDonor(ContactDonor contactDonor);
         IList<int> GetContactIdByRoleId(int roleId, string token);
     }
 }

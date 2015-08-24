@@ -13,20 +13,29 @@ namespace MinistryPlatform.Translation.Test.Services
     {
         private Mock<IMinistryPlatformService> _ministryPlatformService;
         private Mock<IAuthenticationService> _authService;
-        private Mock<IConfigurationWrapper> _configWrapper;
         private ContactService _fixture;
+        private Mock<IConfigurationWrapper> _configuration;
 
         [SetUp]
         public void SetUp()
         {
             _ministryPlatformService = new Mock<IMinistryPlatformService>();
             _authService = new Mock<IAuthenticationService>();
-            _configWrapper = new Mock<IConfigurationWrapper>();
-            _fixture = new ContactService(_ministryPlatformService.Object, _authService.Object, _configWrapper.Object);
+            _configuration = new Mock<IConfigurationWrapper>();
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("Contacts")).Returns(292);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("Households")).Returns(327);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("SecurityRolesSubPageId")).Returns(363);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("Congregation_Default_ID")).Returns(5);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("Household_Default_Source_ID")).Returns(30);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("Household_Position_Default_ID")).Returns(1);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("Addresses")).Returns(271);
+            _configuration.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
+            _configuration.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("pwd");
 
-            _configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
-            _configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("pwd");
             _authService.Setup(m => m.Authenticate(It.IsAny<string>(), It.IsAny<string>())).Returns(new Dictionary<string, object> { { "token", "ABC" }, { "exp", "123" } });
+
+
+            _fixture = new ContactService(_ministryPlatformService.Object, _authService.Object, _configuration.Object);
         }
 
         [Test]
