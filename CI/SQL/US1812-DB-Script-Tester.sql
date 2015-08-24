@@ -1,4 +1,2 @@
 USE [MinistryPlatform]
 GO
-
-
