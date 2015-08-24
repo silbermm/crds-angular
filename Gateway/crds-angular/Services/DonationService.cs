@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -6,6 +7,7 @@ using AutoMapper;
 using crds_angular.Models.Crossroads.Stewardship;
 using MPServices=MinistryPlatform.Translation.Services.Interfaces;
 using crds_angular.Services.Interfaces;
+using crds_angular.Util;
 using MinistryPlatform.Models;
 using MinistryPlatform.Models.DTO;
 using Newtonsoft.Json;
@@ -95,8 +97,7 @@ namespace crds_angular.Services
         {
             var gpExport = _mpDonationService.CreateGPExport(batchId, token);
             var stream = new MemoryStream();
-            //CsvHelper.ToCsv(users, outputStream);
-
+            CSV.Create(gpExport, stream, "\\t");
 
             var content = new ByteArrayContent(stream.GetBuffer());
             content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");

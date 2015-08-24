@@ -1,126 +1,78 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Text;
-using System.Web.WebPages;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace crds_angular.Util
 {
     public static class CSV
     {
-        private const string Quote = "\"";
-        private const string EscapedQuote = "\"\"";
-        private static readonly char[] EscapableCharacters = { '"', ',', '\r', '\n' };
-
-        public static void ToCsv(List<Object> list, Stream stream, string delimiter)
+        public static void Create<T>(List<T> list, Stream stream, string delimiter) where T : class
         {
             var sw = new StreamWriter(stream, Encoding.UTF8);
-            bool haveHeaders = false;
+            var headers = new List<string>();
 
-            foreach (var item in list)
+            foreach (var row in list)
             {
-                if (!haveHeaders)
+                if (headers.Count == 0)
                 {
-                    haveHeaders = true;
+                    WriteHeaders(sw, row, headers, delimiter);
                 }
+
+                WriteRow(sw, row, headers, delimiter);
             }
 
             // Reset the stream position to the beginning
             stream.Seek(0, SeekOrigin.Begin);
         }
 
-        private static Dictionary<PropertyInfo, string> GetProperties(Type type, string[] onlyFields)
+        private static void WriteHeaders<T>(TextWriter sw, T row, List<string> headers, string delimiter)
         {
-            var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy)
-                                    .Where(prop => IsSimpleOrNullableType(prop.PropertyType))
-                                    .OrderBy(prop =>
-                                    {
-                                        var displayAttr = prop.GetCustomAttributes(typeof(DisplayAttribute), true).FirstOrDefault() as DisplayAttribute;
-                                        return displayAttr != null ? displayAttr.Order : int.MaxValue;
-                                    });
+            var json = JsonConvert.SerializeObject(row);
+            var jobj = JObject.Parse(json);
+            var tokens = jobj.Children();
+            var initialCell = true;
 
-            // If the entity has MetadataTypeAttribute's, use them
-            var metadata = (MetadataTypeAttribute[])type.GetCustomAttributes(typeof(MetadataTypeAttribute), true);
-
-            var names = new Dictionary<PropertyInfo, string>();
-            foreach (var property in properties)
+            foreach (var token in tokens)
             {
-                if (onlyFields.Length == 0 || onlyFields.Contains(property.Name, StringComparer.InvariantCultureIgnoreCase))
+                var header = ((JProperty) token).Name;
+                headers.Add(header);
+
+                if (initialCell)
                 {
-                    var text = GetDisplayName(property, metadata);
-
-                    names.Add(property, text);
-                }
-            }
-
-            return names;
-        }
-
-        private static string GetDisplayName(PropertyInfo property, IEnumerable<MetadataTypeAttribute> metadata)
-        {
-            // Extract the display name from the DisplayAttribute on the object or on any of the MetadataTypeAttribute's 
-            // it may contain
-            var displayText = metadata.Select(m => m.MetadataClassType.GetProperty(property.Name))
-                    .Where(p => p != null)
-                    .SelectMany(p => (DisplayAttribute[])p.GetCustomAttributes(typeof(DisplayAttribute), true))
-                    .Concat((DisplayAttribute[])property.GetCustomAttributes(typeof(DisplayAttribute), true))
-                    .Select(m => m.GetName())
-                    .FirstOrDefault(n => !string.IsNullOrEmpty(n));
-
-            // Return the display text if found, otherwise return the property name
-            return displayText ?? property.Name;
-        }
-
-        private static bool IsSimpleOrNullableType(Type t)
-        {
-            if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>))
-            {
-                t = Nullable.GetUnderlyingType(t);
-            }
-
-            return IsSimpleType(t);
-        }
-
-        private static bool IsSimpleType(Type t)
-        {
-            return t.IsPrimitive || t.IsEnum || t == typeof(string) || t == typeof(Decimal) || t == typeof(DateTime) || t == typeof(Guid);
-        }
-
-        private static void WriteRow(TextWriter sw, IEnumerable<string> values)
-        {
-            int index = 0;
-            foreach (var value in values)
-            {
-                if (index > 0)
-                {
-                    sw.Write(",");
+                    sw.Write(delimiter);
+                    initialCell = false;
                 }
 
-                WriteValue(sw, value);
-                index++;
+                sw.Write(header);
             }
 
             sw.Write(Environment.NewLine);
             sw.Flush();
         }
 
-        private static void WriteValue(TextWriter sw, string value)
+        private static void WriteRow<T>(TextWriter sw, T row, List<string> headers, string delimiter)
         {
-            bool needsEscaping = value.IndexOfAny(EscapableCharacters) >= 0;
+            var initialCell = true;
 
-            if (needsEscaping)
+            foreach (var name in headers)
             {
-                sw.Write(Quote);
-                sw.Write(value.Replace(Quote, EscapedQuote));
-                sw.Write(Quote);
+                if (initialCell)
+                {
+                    sw.Write(delimiter);
+                    initialCell = false;
+                }
+
+                var attrName = name.Replace(" ", "");
+                var value = row.GetType().GetProperty(attrName).GetValue(row);
+
+                sw.Write(value.ToString());
             }
-            else
-            {
-                sw.Write(value);
-            }
+
+            sw.Write(Environment.NewLine);
+            sw.Flush();
         }
     }
 }

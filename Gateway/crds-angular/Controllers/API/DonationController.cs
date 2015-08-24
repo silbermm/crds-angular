@@ -46,7 +46,6 @@ namespace crds_angular.Controllers.API
                 try
                 {
                     var content = _gatewayDonationService.CreateGPExport(batchId, token);
-
                     return Ok(content);
                 }
                 catch (Exception ex)
