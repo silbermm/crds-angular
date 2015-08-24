@@ -10,7 +10,6 @@
     _this.myCroppedImage = '';
 
     function handleFileSelect(evt) {
-      console.log("handling event");
       var file = evt.currentTarget.files[0];
       var reader = new FileReader();
       reader.onload = function (evt) {
