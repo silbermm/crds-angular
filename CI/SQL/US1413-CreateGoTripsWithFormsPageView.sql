@@ -11,7 +11,7 @@ IF EXISTS (Select 1 FROM [dbo].[dp_Role_Pages] WHERE [dbo].[dp_Role_Pages].[Role
 	BEGIN
 		UPDATE [dbo].[dp_Role_Pages]
 		SET  Role_ID = @API_ROLE_ID
-			,Page_ID = @PAGE_ROLE_ID
+			,Page_ID = @PLEDGE_CAMPAIGN_PAGE_ID
 			,Access_Level = @ACCESS_LEVEL
 		WHERE Role_Page_ID = @PAGE_ROLE_ID
 	END
@@ -34,7 +34,7 @@ ELSE
      VALUES
            (@PAGE_ROLE_ID 
 		    ,@API_ROLE_ID
-		    ,@PAGE_ROLE_ID
+		    ,@PLEDGE_CAMPAIGN_PAGE_ID
 			,@ACCESS_LEVEL
 			,0
 			,0
