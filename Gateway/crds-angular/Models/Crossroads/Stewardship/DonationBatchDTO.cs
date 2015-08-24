@@ -41,5 +41,8 @@ namespace crds_angular.Models.Crossroads.Stewardship
 
         [JsonProperty("processor_transfer_id")]
         public string ProcessorTransferId { get; set; }
+
+        [JsonProperty("program_id")]
+        public int ProgramId { get; set; }
     }
 }

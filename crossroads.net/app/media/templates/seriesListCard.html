@@ -1,6 +1,6 @@
 <ul class="media-list">
     <li class="col-sm-2 col-xs-6" ng-repeat="item in items | orderBy: '-startDate' | limitTo: limit">
-        <a href="/#/media/series/single">
+        <a ui-sref="media.seriesSingle({title: '{{item.title}}' })">
             <img src="{{item.image.filename}}" class="img-responsive">
             <h4 class="flush-bottom">{{item.title}}</h4>
 

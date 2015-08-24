@@ -22,6 +22,7 @@
 
         $scope.$on('$stateChangeStart', function (event, toState, toParams) {
            // Short-circuit this handler if we're not transitioning TO a give state
+          // IS THIS NEEDED?? IT SHOULD NEVER HAPPEN  
            if(toState && !/^give.*/.test(toState.name)) {
              return;
            }
@@ -45,6 +46,7 @@
           $state.go('home');
         });
 
+
         $scope.$on('$stateChangeSuccess', function (event, toState, toParams) {
           // vm.processing is used to set state and text on the "Give" button
           // Make sure to reset the processing state to false whenever state change succeeds.
@@ -52,17 +54,21 @@
 
           // If we're on the account page and the user is logged in, focus the
           // proper account field (email gets focus of not logged in)
+          
+          //// POTENTIALLY MOVE TO BANK DETAILS DIRECTIVE 
           if(toState.name == 'give.account' && Session.isActive()) {
             vm.togglePaymentInfo();
           }
 
           // Force the state to reset after successfully giving
+          //// POTENTIALLY MOVE TO THE THANK YOU DIRECTIVE
           if(toState.name == 'give.thank-you') {
             vm.initialized = false;
             vm.dto.reset();
           }
         });
 
+        /// USE THE LOADING BUTTON DIRECTIVE TO HANDLE THIS
         $scope.$on('$stateChangeError', function (event, toState, toParams) {
           // vm.processing is used to set state and text on the "Give" button
           // Make sure to reset the processing state to false whenever state change fails.
@@ -92,6 +98,7 @@
           vm.dto.view = "bank";
         };
 
+        //// CONSTANT 
         var brandCode = [];
         brandCode['Visa'] = "#cc_visa";
         brandCode['MasterCard'] = '#cc_mastercard';
@@ -102,6 +109,7 @@
           return (Session.isActive())     
         };
 
+        //// DONTATION SERVICE/DIRECTIVE MAYBE NEEDED  REFER TO TRANSFER SERVICE
         vm.confirmDonation = function(){
           if (!Session.isActive()) {
             $state.go("give.login");
@@ -124,6 +132,7 @@
           }
         };
 
+        // belongs in a service - maybe transfer/donation service
         vm.createBank = function(){
           vm.bank = {
              country: 'US',
@@ -133,6 +142,7 @@
           }
         };
 
+        // belongs in a service - maybe transfer/donation service
         vm.createCard = function(){
           vm.card = {
            name: vm.dto.donor.default_source.name,
@@ -144,6 +154,8 @@
            }
         };
 
+
+        // belongs in a service - maybe transfer/donation service
         vm.donate = function(programId, amount, donorId, email, pymtType, onSuccess, onFailure){
           PaymentService.donateToProgram(programId, amount, donorId, email, pymtType)
             .then(function(confirmation){
@@ -157,8 +169,12 @@
             });
         };
 
+        // maybe specific to the onetime give flow -- look at putting in bankInfo directive also
+        // extract setting up of transfer service ??  
         vm.goToAccount = function() {
           vm.amountSubmitted = true;
+          // look at refactoring form validation
+          // custom validator for Growl
           if($scope.giveForm.amountForm.$valid) {
               if(!vm.dto.view) {
                 vm.dto.view = 'bank';
@@ -175,14 +191,20 @@
           }
         };
 
+        // extract setting up of transfer service ??  
+        // resolve in state
         vm.goToChange = function(amount, donor, email, program) {
           if (!Session.isActive()) {
             $state.go("give.login");
           };
+
+          // if these live in the service, why set these
           vm.dto.amount = amount;
           vm.dto.donor = donor;
           vm.dto.email = email;
           vm.dto.program = program;
+         
+          /// IS THIS NEEDED IF WE BIND TO THE SERVICE
           if (vm.brand == "#library"){
             vm.dto.view = "bank"
           } else {
@@ -194,6 +216,7 @@
           $state.go("give.change")
         };
 
+        // RESOLVER IN STATE
         vm.goToLogin = function () {
           vm.processing = true;
           Session.addRedirectRoute("give.account", "");
@@ -206,6 +229,7 @@
           // reset state and redirect to start page (/give/amount).
           vm.reset();
           vm.initialized = true;
+          //// LEFTOVER FROM USING MULTIPLE STATE URLS LOOK AT REMOVING
           Session.removeRedirectRoute();
           $state.go("give.amount");
         };
@@ -245,6 +269,8 @@
             }
         };
 
+        // IF PRIVATE, NO NEED TO PLACE ON VM
+        // POTENTIAL TO MOVE TO A SERVICE?
         vm._stripeErrorHandler = function(error) {
           vm.processing = false;
           if(error && error.globalMessage) {
@@ -257,6 +283,7 @@
           }
         };
 
+        // 
         vm.processBankAccountChange = function(){
          if ($scope.giveForm.$valid) {
              vm.processing = true;

@@ -121,6 +121,12 @@
         controller: 'MyProfileCtrl as myProfile',
         templateUrl: 'myprofile/myprofile.html',
       })
+      .state("go-trip-select", {
+        parent: 'noSideBar',
+        url: "/go/:trip_location/select-person",
+        templateUrl: "gotrips/signup-select-person.html",
+        controller: 'GoTripsCtrl as gotrip'
+      })
       .state("go-trip-signup", {
         parent: 'noSideBar',
         url: "/go/:trip_location/signup",
@@ -192,11 +198,25 @@
         url: '/videos',
         templateUrl: 'media/viewAllVideos.html'
       })
-      .state('media-series-single', {
-        parent: 'noSideBar',
-        url: '/media/series/single',
-        controller: 'MediaController as media',
-        templateUrl: 'media/series-single.html'
+      .state('media.seriesSingle', {
+        url: '/series/single/:title',
+        controller: 'SeriesController as series',
+        templateUrl: 'media/seriesSingle.html',
+          resolve: {
+            Media: 'Media',
+            $stateParams: '$stateParams',
+            Messages: function (Media, Series, $stateParams) {
+              var series = getSeriesByTitle(Series.series, $stateParams.title)
+              var item = Media.Messages().get({ seriesId: series.id }).$promise;
+              return item;
+
+              function getSeriesByTitle(series, seriesTitle) {
+                return _.find(series, function(obj) {
+                  return (obj.title === seriesTitle);
+                });
+              };
+            }
+          }
       })
       .state('media-series-single-lo-res', {
         parent: 'noSideBar',
@@ -545,6 +565,14 @@
                     return error;
                 });
           }
+        }
+      })
+      .state('tools.checkBatchProcessor', {
+        url: '/checkBatchProcessor',
+        controller: 'CheckBatchProcessor as checkBatchProcessor',
+        templateUrl: 'check_batch_processor/checkBatchProcessor.html',
+        data: {
+          isProtected: true
         }
       })
       .state('content', {

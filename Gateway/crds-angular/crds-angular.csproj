@@ -122,6 +122,13 @@
     <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention">
       <HintPath>..\packages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
     </Reference>
+    <Reference Include="MySql.Data">
+      <HintPath>..\packages\MySql.Data.6.9.7\lib\net45\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Web">
+      <HintPath>..\packages\MySql.Web.6.9.7\lib\net45\MySql.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -232,6 +239,7 @@
     <Compile Include="Controllers\API\DonorController.cs" />
     <Compile Include="Controllers\API\EventLocationController.cs" />
     <Compile Include="Controllers\API\GroupController.cs" />
+    <Compile Include="Controllers\API\CheckScannerController.cs" />
     <Compile Include="Controllers\API\ProgramController.cs" />
     <Compile Include="Controllers\API\ServeController.cs" />
     <Compile Include="Controllers\API\StripeEventController.cs" />
@@ -280,9 +288,12 @@
     <Compile Include="Models\Crossroads\ServingRSVP.cs" />
     <Compile Include="Models\Crossroads\Skill.cs" />
     <Compile Include="Models\Crossroads\Event.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\CheckScannerBatch.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\CheckScannerCheck.cs" />
     <Compile Include="Models\Crossroads\Stewardship\DepositDTO.cs" />
     <Compile Include="Models\Crossroads\Stewardship\PledgeCampaign.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeBalanceTransaction.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\StripeBankAccount.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeExpandableProperty.cs" />
     <Compile Include="Models\Crossroads\Stewardship\CreateDonationDTO.cs" />
     <Compile Include="Models\Crossroads\Stewardship\CreateDonorDto.cs" />
@@ -295,11 +306,13 @@
     <Compile Include="Models\Crossroads\Stewardship\StripeEvent.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeObject.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeRefund.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\StripeToken.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeTransfer.cs" />
     <Compile Include="Models\Crossroads\Trip\MyTripsDTO.cs" />
     <Compile Include="Models\Crossroads\Trip\SaveTripParticipantsDto.cs" />
     <Compile Include="Models\Crossroads\Trip\Trip.cs" />
     <Compile Include="Models\Crossroads\Trip\TripApplicantResponse.cs" />
+    <Compile Include="Models\Crossroads\Trip\TripCampaignDto.cs" />
     <Compile Include="Models\Crossroads\Trip\TripFormResponseDto.cs" />
     <Compile Include="Models\Crossroads\Trip\TripGift.cs" />
     <Compile Include="Models\Crossroads\Trip\TripGroupDto.cs" />
@@ -333,8 +346,10 @@
     <Compile Include="Services\DonationService.cs" />
     <Compile Include="Services\DonorService.cs" />
     <Compile Include="Services\EmailCommunication.cs" />
+    <Compile Include="Services\EzScanCheckScannerService.cs" />
     <Compile Include="Services\GroupService.cs" />
     <Compile Include="Services\Interfaces\IAccountService.cs" />
+    <Compile Include="Services\Interfaces\ICheckScannerService.cs" />
     <Compile Include="Services\Interfaces\IDonationService.cs" />
     <Compile Include="Services\Interfaces\IDonorService.cs" />
     <Compile Include="Services\Interfaces\IEmailCommunication.cs" />
@@ -395,7 +410,9 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Unity.config" />
+    <Content Include="Unity.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="MinistryPlatform.config">
       <TransformOnBuild>true</TransformOnBuild>
       <SubType>Designer</SubType>

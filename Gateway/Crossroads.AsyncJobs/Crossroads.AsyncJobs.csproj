@@ -185,6 +185,7 @@
     <Compile Include="Application\JobProcessor.cs" />
     <Compile Include="Interfaces\IJobExecutor.cs" />
     <Compile Include="Models\JobDetails.cs" />
+    <Compile Include="Processors\CheckScannerBatchProcessor.cs" />
     <Compile Include="Processors\StripeEventProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />

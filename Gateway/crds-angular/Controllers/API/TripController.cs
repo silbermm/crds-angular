@@ -38,6 +38,26 @@ namespace crds_angular.Controllers.API
             });
         }
 
+        [AcceptVerbs("GET")]
+        [ResponseType(typeof(TripCampaignDto))]
+        [Route("api/trip/campaign/{campaignId}")]
+        public IHttpActionResult GetCampaigns(int campaignId)
+        {
+            return Authorized(token =>
+            {
+                try
+                {
+                    var campaign = _tripService.GetTripCampaign(campaignId);
+                    return Ok(campaign);
+                }
+                catch (Exception ex)
+                {
+                    var apiError = new ApiErrorDto("Get Campaign Failed", ex);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+            });   
+        }
+
         [AcceptVerbs("POST")]
         [Route("api/trip/participants")]
         public IHttpActionResult SaveParticipants([FromBody] SaveTripParticipantsDto dto)
