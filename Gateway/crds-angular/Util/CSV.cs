@@ -58,7 +58,7 @@ namespace crds_angular.Util
                     sw.Write(delimiter);
                 }
 
-                var methodName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name.ToLower()).Replace(" ", "");
+                var methodName = "get_" + CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name.ToLower()).Replace(" ", "");
                 var method = row.GetType().GetMethod(methodName);
                 var value = method.Invoke(row, null);
                 var sValue = (value == null ? "" : value.ToString());

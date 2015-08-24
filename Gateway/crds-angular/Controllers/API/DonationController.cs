@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Exceptions;
@@ -10,6 +12,8 @@ using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
+using System.Threading.Tasks;
+using System.Web;
 
 namespace crds_angular.Controllers.API
 {
@@ -32,21 +36,23 @@ namespace crds_angular.Controllers.API
         }
 
         [ResponseType(typeof(DonationDTO))]
-        [Route("api/donation")]
+        [System.Web.Http.Route("api/donation")]
         public IHttpActionResult Post([FromBody] CreateDonationDTO dto)
         {
             return (Authorized(token => CreateDonationAndDistributionAuthenticated(token, dto), () => CreateDonationAndDistributionUnauthenticated(dto)));
         }
 
-        [Route("api/gpexport/{batchId}")]
+        [System.Web.Http.Route("api/gpexport/{batchId}")]
         public IHttpActionResult Get(int batchId)
         {
             return Authorized(token =>
             {
                 try
                 {
-                    var content = _gatewayDonationService.CreateGPExport(batchId, token);
-                    return Ok(content);
+                    var stream = _gatewayDonationService.CreateGPExport(batchId, token);
+                    var contentType = MimeMapping.GetMimeMapping(string.Format("GP_Export_Batch {0}.csv", batchId));
+
+                    return new FileResult(stream, contentType);
                 }
                 catch (Exception ex)
                 {
@@ -116,7 +122,36 @@ namespace crds_angular.Controllers.API
                 throw new HttpResponseException(apiError.HttpResponseMessage);
             }       
         }
-        
     }
-    
+
+    class FileResult : IHttpActionResult
+    {
+        private readonly MemoryStream _stream;
+        private readonly string _contentType;
+
+        public FileResult(MemoryStream stream, string contentType = null)
+        {
+            if (stream == null) throw new ArgumentNullException("stream");
+
+            _stream = stream;
+            _contentType = contentType;
+        }
+
+        public Task<HttpResponseMessage> ExecuteAsync(CancellationToken cancellationToken)
+        {
+            return Task.Run(() =>
+            {
+                var response = new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StreamContent(_stream)
+                };
+
+                var contentType = _contentType;
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+
+                return response;
+
+            }, cancellationToken);
+        }
+    }
 }

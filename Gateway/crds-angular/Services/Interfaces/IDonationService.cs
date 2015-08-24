@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Net.Http;
+using System.IO;
 using crds_angular.Models.Crossroads.Stewardship;
 
 namespace crds_angular.Services.Interfaces
@@ -15,6 +15,6 @@ namespace crds_angular.Services.Interfaces
         void CreatePaymentProcessorEventError(StripeEvent stripeEvent, StripeEventResponseDTO stripeEventResponse);
         DonationBatchDTO GetDonationBatchByProcessorTransferId(string processorTransferId);
         DonationBatchDTO GetDonationBatch(int batchId);
-        ByteArrayContent CreateGPExport(int batchId, string token);
+        MemoryStream CreateGPExport(int batchId, string token);
     }
 }

@@ -93,18 +93,13 @@ namespace crds_angular.Services
             _mpDonationService.CreatePaymentProcessorEventError(stripeEvent.Created, stripeEvent.Id, stripeEvent.Type, JsonConvert.SerializeObject(stripeEvent, Formatting.Indented), JsonConvert.SerializeObject(stripeEventResponse, Formatting.Indented));
         }
 
-        public ByteArrayContent CreateGPExport(int batchId, string token)
+        public MemoryStream CreateGPExport(int batchId, string token)
         {
             var gpExport = _mpDonationService.CreateGPExport(batchId, token);
             var stream = new MemoryStream();
             CSV.Create(gpExport, GPExportDatum.Headers, stream, "\\t");
 
-            var content = new ByteArrayContent(stream.GetBuffer());
-            content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
-            content.Headers.ContentDisposition.FileName = string.Format("GP_Export_Batch {0}.csv", batchId);
-            content.Headers.ContentType = new MediaTypeHeaderValue("text/csv");
-
-            return content;
+            return stream;
         }
     }
 }
