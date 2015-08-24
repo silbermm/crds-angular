@@ -18,6 +18,18 @@
     vm.handleNext = handleNext;
     vm.handlePrevious = handlePrevious;
     vm.handleSubmit = handleSubmit;
+    vm.nolaRequired = nolaRequired;
+    vm.whyPlaceholder = '';
+
+    activate();
+
+    function activate() {
+      if (vm.pageTitle === 'Go India Application') {
+        vm.whyPlaceholder = 'Please be specific. ' +
+          'In instances where we have a limited number of spots, we strongly consider responses to this question.';
+      }
+
+    }
 
     function handleNext(nextPage) {
       vm.currentPage = nextPage;
@@ -33,6 +45,14 @@
       // submit info and then show the thankyou page directive
       vm.currentPage = 'thanks';
       toTop();
+    }
+
+    function nolaRequired() {
+      if (vm.pageTitle === 'GO NOLA Application') {
+        return 'required';
+      }
+
+      return '';
     }
 
     function toTop() {
