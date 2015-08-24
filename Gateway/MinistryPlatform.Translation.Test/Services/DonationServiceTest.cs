@@ -31,6 +31,8 @@ namespace MinistryPlatform.Translation.Test.Services
             configuration.Setup(mocked => mocked.GetConfigIntValue("Distributions")).Returns(1234);
             configuration.Setup(mocked => mocked.GetConfigIntValue("Deposits")).Returns(7070);
             configuration.Setup(mocked => mocked.GetConfigIntValue("PaymentProcessorEventErrors")).Returns(6060);
+            configuration.Setup(mocked => mocked.GetConfigIntValue("GPExportView")).Returns(92198);
+            configuration.Setup(mocked => mocked.GetConfigIntValue("ProcessingProgramId")).Returns(127);
 
             configuration.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
             configuration.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("pwd");
@@ -270,5 +272,78 @@ namespace MinistryPlatform.Translation.Test.Services
             _ministryPlatformService.VerifyAll();
         }
 
+        [Test]
+        public void TestCreateGPExport()
+        {
+            const int viewId = 92198;
+            const int batchId = 789;
+
+            _ministryPlatformService.Setup(mock => mock.GetPageViewRecords(viewId, It.IsAny<string>(), batchId.ToString(), "", 0)).Returns(MockGPExport());
+
+            var result = _fixture.CreateGPExport(batchId, It.IsAny<string>());
+            _ministryPlatformService.VerifyAll();
+            Assert.IsNotNull(result);
+            Assert.AreEqual(3, result.Count);
+            Assert.AreEqual("Contribution " + new DateTime(2015, 3, 28, 8, 30, 0), result[0].DistributionReference);
+            Assert.AreEqual("Processor Fees " + new DateTime(2015, 3, 28, 8, 30, 0), result[1].DistributionReference);
+        }
+
+        private List<Dictionary<string, object>> MockGPExport()
+        {
+            return new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    {"dp_RecordID", 100},
+                    {"Document Type", "SALE"},
+                    {"Donation ID", "10002"},
+                    {"Batch Name", "Test Batch"},
+                    {"Donation Date", new DateTime(2015, 3, 28, 8, 30, 0)},
+                    {"Deposit Date", new DateTime(2015, 3, 28, 8, 30, 0)},
+                    {"Customer ID", "CONTRIBUTI001"},
+                    {"Donation Amount", "200.00"},
+                    {"Checkbook ID", "PNC001"},
+                    {"Cash Account", "91213-031-20"},
+                    {"Receivable Account", "90013-031-21"},
+                    {"Distribution Account", "90001-031-22"},
+                    {"Amount", "200.00"},
+                    {"Program ID", "15"}
+                },
+                new Dictionary<string, object>
+                {
+                    {"dp_RecordID", 200},
+                    {"Document Type", "SALE"},
+                    {"Donation ID", "10002"},
+                    {"Batch Name", "Test Batch"},
+                    {"Donation Date", new DateTime(2015, 3, 28, 8, 30, 0)},
+                    {"Deposit Date", new DateTime(2015, 3, 28, 8, 30, 0)},
+                    {"Customer ID", "CONTRIBUTI001"},
+                    {"Donation Amount", "200.00"},
+                    {"Checkbook ID", "PNC001"},
+                    {"Cash Account", "91213-031-20"},
+                    {"Receivable Account", "90013-031-21"},
+                    {"Distribution Account", "90001-031-22"},
+                    {"Amount", "15.00"},
+                    {"Program ID", "127"}
+                },
+                new Dictionary<string, object>
+                {
+                    {"dp_RecordID", 300},
+                    {"Document Type", "SALE"},
+                    {"Donation ID", "10003"},
+                    {"Batch Name", "Test Batch 1"},
+                    {"Donation Date", new DateTime(2015, 3, 10, 8, 30, 0)},
+                    {"Deposit Date", new DateTime(2015, 3, 10, 8, 30, 0)},
+                    {"Customer ID", "CONTRIBUTI001"},
+                    {"Donation Amount", "300.00"},
+                    {"Checkbook ID", "PNC001"},
+                    {"Cash Account", "91213-031-20"},
+                    {"Receivable Account", "90013-031-21"},
+                    {"Distribution Account", "90001-031-22"},
+                    {"Amount", "300.00"},
+                    {"Program ID", "150"}
+                },
+            };
+        }
     }
 }

@@ -370,6 +370,7 @@
     <Compile Include="Services\TripService.cs" />
     <Compile Include="Services\VolunteerApplicationService.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Util\CSV.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />

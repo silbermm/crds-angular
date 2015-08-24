@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using AutoMapper;
 using crds_angular.Models.Crossroads.Stewardship;
 using MPServices=MinistryPlatform.Translation.Services.Interfaces;
 using crds_angular.Services.Interfaces;
+using crds_angular.Util;
 using MinistryPlatform.Models;
 using MinistryPlatform.Models.DTO;
 using Newtonsoft.Json;
@@ -86,6 +91,15 @@ namespace crds_angular.Services
         public void CreatePaymentProcessorEventError(StripeEvent stripeEvent, StripeEventResponseDTO stripeEventResponse)
         {
             _mpDonationService.CreatePaymentProcessorEventError(stripeEvent.Created, stripeEvent.Id, stripeEvent.Type, JsonConvert.SerializeObject(stripeEvent, Formatting.Indented), JsonConvert.SerializeObject(stripeEventResponse, Formatting.Indented));
+        }
+
+        public MemoryStream CreateGPExport(int batchId, string token)
+        {
+            var gpExport = _mpDonationService.CreateGPExport(batchId, token);
+            var stream = new MemoryStream();
+            CSV.Create(gpExport, GPExportDatum.Headers, stream, "\t");
+
+            return stream;
         }
     }
 }

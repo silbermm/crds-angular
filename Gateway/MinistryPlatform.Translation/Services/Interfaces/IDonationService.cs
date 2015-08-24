@@ -20,5 +20,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
             string eventMessage, string responseMessage);
 
         List<TripDistribution> GetMyTripDistributions(int contactId, string token);
+        List<GPExportDatum> CreateGPExport(int batchId, string token);
     }
 }
