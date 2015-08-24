@@ -7,6 +7,7 @@ using RestSharp;
 using System.Collections.Generic;
 using System.Net;
 using crds_angular.Models.Crossroads.Stewardship;
+using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
 using Crossroads.Utilities.Models;
 
@@ -336,7 +337,7 @@ namespace crds_angular.test.Services
                 It.Is<IRestRequest>(o =>
                     o.Method == Method.POST
                     && o.Resource.Equals("charges")
-                    && ParameterMatches("amount", 9090 * 100, o.Parameters)
+                    && ParameterMatches("amount", 9090 *Constants.StripeDecimalConversionValue, o.Parameters)
                     && ParameterMatches("currency", "usd", o.Parameters)
                     && ParameterMatches("customer", "cust_token", o.Parameters)
                     && ParameterMatches("description", "Donor ID #98765", o.Parameters)
@@ -437,6 +438,43 @@ namespace crds_angular.test.Services
             Assert.AreEqual("Visa", defaultSource.brand);
             Assert.AreEqual("8585", defaultSource.last4);
             Assert.AreEqual("45454", defaultSource.address_zip);
+        }
+
+        [Test]
+        public void ShouldGetChargeRefund()
+        {
+
+            var data = new StripeRefund
+            {
+                Data = new List<StripeRefundData>()
+                {
+                    new StripeRefundData()
+                    {
+                        Id = "456",
+                        Amount = "987",
+                        Charge = "ch_123456"
+                    }
+
+                }
+            };
+        
+            var response = new Mock<IRestResponse<StripeRefund>>();
+            response.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
+            response.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            response.SetupGet(mocked => mocked.Data).Returns(data).Verifiable();
+
+            _restClient.Setup(mocked => mocked.Execute<StripeRefund>(It.IsAny<IRestRequest>())).Returns(response.Object);
+
+            var refund = _fixture.GetChargeRefund("456");
+            _restClient.Verify(mocked => mocked.Execute<StripeRefund>(
+                It.Is<RestRequest>(o =>
+                    o.Method == Method.GET
+                    && o.Resource.Equals("charges/456/refunds")
+            )));
+       
+            _restClient.VerifyAll();
+            response.VerifyAll();
+            Assert.IsNotNull(refund.Data);
         }
 
     }

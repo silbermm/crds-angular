@@ -38,7 +38,9 @@ namespace Crossroads.Utilities.Models
         [EnumMember(Value = "main")]
         Main,
         [EnumMember(Value = "corkboard")]
-        Corkboard
+        Corkboard,
+        [EnumMember(Value = "trip application")]
+        TripApplication
     }
 
     public class ContentBlocks

@@ -12,5 +12,6 @@ namespace MinistryPlatform.Models
         public string donationNotes { get; set; }
         public int donationStatus { get; set; }
         public DateTime donationStatusDate { get; set; }
+        public int? batchId { get; set; }
     }
 }

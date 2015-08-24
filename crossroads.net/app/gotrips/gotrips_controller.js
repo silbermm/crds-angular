@@ -5,7 +5,6 @@
   GoTripsCtrl.$inject = ['$scope', '$stateParams', '$log', '$location', '$anchorScroll'];
 
 function GoTripsCtrl($scope, $stateParams, $log, $location, $anchorScroll) {
-﻿
 		var vm = this;
 
 		vm.isCollapsed = true;

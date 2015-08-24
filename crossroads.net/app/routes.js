@@ -121,38 +121,11 @@
         controller: 'MyProfileCtrl as myProfile',
         templateUrl: 'myprofile/myprofile.html',
       })
-      .state('tripgiving', {
+      .state("go-trip-select", {
         parent: 'noSideBar',
-        url: '/trips',
-        controller: 'TripGivingCtrl as tripSearch',
-        templateUrl: 'tripgiving/tripgiving.html',
-        resolve: {
-          Page: 'Page',
-          CmsInfo: function(Page, $stateParams) {
-            return Page.get({
-              url: '/tripgiving/'
-            }).$promise;
-          }
-        }
-      })
-      .state('mytrips', {
-        parent: 'noSideBar',
-        url: '/trips/mytrips',
-        controller: 'MyTripsController as tripsController',
-        templateUrl: 'mytrips/mytrips.html',
-        data: {
-          isProtected: true
-        },
-        resolve: {
-          loggedin: crds_utilities.checkLoggedin,
-          Trip: 'Trip',
-          $cookies: '$cookies',
-          MyTrips: function(Trip, $cookies) {
-            return Trip.MyTrips.get({
-              contact: $cookies.get('userId')
-            }).$promise;
-          }
-        }
+        url: "/go/:trip_location/select-person",
+        templateUrl: "gotrips/signup-select-person.html",
+        controller: 'GoTripsCtrl as gotrip'
       })
       .state("go-trip-signup", {
         parent: 'noSideBar',
@@ -191,45 +164,70 @@
         controller: 'GoTripsCtrl as gotrip'
       })
       .state('media', {
+        abstract: true,
         parent: 'noSideBar',
         url: '/media',
-        controller: 'MediaCtrl as media',
-        templateUrl: 'media/view-all.html'
+        controller: 'MediaController as media',
+        template: '<ui-view/>',
+        resolve: {
+          Media: 'Media',
+          Series: function (Media) {
+            return Media.Series().get().$promise;
+          },
+          Musics: function (Media) {
+            return Media.Musics().get().$promise;
+          },
+          Videos: function (Media) {
+            return Media.Videos().get().$promise;
+          }
+        }
       })
-      .state('media-music', {
-        parent: 'noSideBar',
-        url: '/media/music',
-        controller: 'MediaCtrl as media',
-        templateUrl: 'media/view-all-music.html'
+      .state('media.all', {
+        url: '',
+        templateUrl: 'media/viewAll.html',
       })
-      .state('media-messages', {
-        parent: 'noSideBar',
-        url: '/media/messages',
-        controller: 'MediaCtrl as media',
-        templateUrl: 'media/view-all-messages.html'
+      .state('media.music', {
+        url: '/music',
+        templateUrl: 'media/viewAllMusic.html'
       })
-      .state('media-videos', {
-        parent: 'noSideBar',
-        url: '/media/videos',
-        controller: 'MediaCtrl as media',
-        templateUrl: 'media/view-all-videos.html'
+      .state('media.series', {
+        url: '/series',
+        templateUrl: 'media/viewAllSeries.html'
       })
-      .state('media-series-single', {
-        parent: 'noSideBar',
-        url: '/media/series/single',
-        controller: 'MediaCtrl as media',
-        templateUrl: 'media/series-single.html'
+      .state('media.videos', {
+        url: '/videos',
+        templateUrl: 'media/viewAllVideos.html'
+      })
+      .state('media.seriesSingle', {
+        url: '/series/single/:title',
+        controller: 'SeriesController as series',
+        templateUrl: 'media/seriesSingle.html',
+          resolve: {
+            Media: 'Media',
+            $stateParams: '$stateParams',
+            Messages: function (Media, Series, $stateParams) {
+              var series = getSeriesByTitle(Series.series, $stateParams.title)
+              var item = Media.Messages().get({ seriesId: series.id }).$promise;
+              return item;
+
+              function getSeriesByTitle(series, seriesTitle) {
+                return _.find(series, function(obj) {
+                  return (obj.title === seriesTitle);
+                });
+              };
+            }
+          }
       })
       .state('media-series-single-lo-res', {
         parent: 'noSideBar',
         url: '/media/series/single/lores',
-        controller: 'MediaCtrl as media',
+        controller: 'MediaController as media',
         templateUrl: 'media/series-single-lo-res.html'
       })
       .state('media-single', {
         parent: 'screenWidth',
         url: '/media/single',
-        controller: 'MediaCtrl as media',
+        controller: 'MediaController as media',
         templateUrl: 'media/media-single.html'
       })
       .state('blog', {
@@ -283,7 +281,7 @@
       .state('give', {
         parent: 'noSideBar',
         url: '/give',
-        controller: 'GiveCtrl as give',
+        controller: 'GiveController as give',
         templateUrl: 'give/give.html',
         resolve: {
           programList: function(getPrograms) {
@@ -349,7 +347,7 @@
       .state('/demo/guest-giver/login-guest', {
         parent: 'noSideBar',
         url: '/demo/guest-giver/login-guest',
-        controller: 'GiveCtrl as give',
+        controller: 'GiveController as give',
         templateUrl: 'guest_giver/give-login-guest.html'
       })
       .state('/demo/guest-giver/give-confirmation', {
@@ -365,7 +363,7 @@
       .state('/demo/guest-giver/give-logged-in-bank-info', {
         parent: 'noSideBar',
         url: '/demo/guest-giver/logged-in-bank-info',
-        controller: 'GiveCtrl as give',
+        controller: 'GiveController as give',
         templateUrl: 'guest_giver/give-logged-in-bank-info.html'
       })
       .state('/demo/guest-giver/give-confirm-amount', {
@@ -376,7 +374,7 @@
       .state('/demo/guest-giver/give-change-information', {
         parent: 'noSideBar',
         url: '/demo/guest_giver/give-change-information',
-        controller: 'GiveCtrl as give',
+        controller: 'GiveController as give',
         templateUrl: 'guest_giver/give-change-information.html'
       })
       .state('/demo/logged-in-giver/existing-giver', {
@@ -387,7 +385,7 @@
       .state('/demo/logged-in-giver/change-information', {
         parent: 'noSideBar',
         url: '/demo/logged-in-giver/change-information',
-        controller: 'GiveCtrl as give',
+        controller: 'GiveController as give',
         templateUrl: 'guest_giver/give-change-information-logged-in.html'
       })
       .state('/demo/logged-in-giver/new-giver', {
@@ -489,7 +487,7 @@
         url: '/errors/500',
         templateUrl: 'errors/500.html'
       })
-      .state('corkboard', {        
+      .state('corkboard', {
         url: '/corkboard/',
         resolve: {
           RedirectToSubSite: function ($window, $location) {
@@ -542,7 +540,39 @@
               url: '/volunteer-application/kids-club/'
             }).$promise;
           }
-
+        }
+      })
+      .state('tools.tripParticipants', {
+        url: '/tripParticipants',
+        controller: 'TripParticipantController as trip',
+        templateUrl: 'trip_participants/trip.html',
+        resolve: {
+          MPTools: 'MPTools',
+          Trip: 'Trip',
+          PageInfo: function(MPTools, Trip) {
+            var params = MPTools.getParams();
+            return Trip.TripFormResponses.get({
+              selectionId: params.selectedRecord,
+              selectionCount: params.selectedCount,
+              recordId: params.recordId
+            }).$promise.then(function(data) {
+                    // promise fulfilled
+                    return data;
+                }, function(error) {
+                    // promise rejected, could log the error with: console.log('error', error);
+                    var data = {};
+                    data.errors = error;
+                    return error;
+                });
+          }
+        }
+      })
+      .state('tools.checkBatchProcessor', {
+        url: '/checkBatchProcessor',
+        controller: 'CheckBatchProcessor as checkBatchProcessor',
+        templateUrl: 'check_batch_processor/checkBatchProcessor.html',
+        data: {
+          isProtected: true
         }
       })
       .state('content', {
@@ -558,15 +588,16 @@
               promise = Page.get({ url: link }).$promise;
 
               return promise.then(function(promise) {
+
                 if (promise.pages.length > 0) {
                   ContentPageService.page = promise.pages[0];
                 } else {
                   var notFoundRequest = Page.get({ url: '/page-not-found/' }, function() {
                     if (notFoundRequest.pages.length > 0) {
-                      ContentPageService.page.renderedContent = notFoundRequest.pages[0].renderedContent;
+                      ContentPageService.page.content = notFoundRequest.pages[0].content;
                       ContentPageService.page.pageType = '';
                     } else {
-                      ContentPageService.page.renderedContent = '404 Content not found';
+                      ContentPageService.page.content = '404 Content not found';
                       ContentPageService.page.pageType = '';
                     }
                   });
@@ -575,9 +606,9 @@
                   case 'NoHeaderOrFooter':
                     return $templateFactory.fromUrl('templates/noHeaderOrFooter.html');
                   case 'LeftSidebar':
-                    return $templateFactory.fromUrl('templates/leftSidebar.html');
+                    return $templateFactory.fromUrl('templates/leftSideBar.html');
                   case 'RightSidebar':
-                    return $templateFactory.fromUrl('templates/rightSidebar.html');
+                    return $templateFactory.fromUrl('templates/rightSideBar.html');
                   case 'ScreenWidth':
                     return $templateFactory.fromUrl('templates/screenWidth.html');
                   default:

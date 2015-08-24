@@ -1,6 +1,9 @@
 ﻿using System;
+using AutoMapper;
+using crds_angular.App_Start;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services;
+using MinistryPlatform.Models;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -16,9 +19,79 @@ namespace crds_angular.test.Services
         [SetUp]
         public void SetUp()
         {
+            AutoMapperConfig.RegisterMappings();
+
             _mpDonationService = new Mock<MPServices.IDonationService>(MockBehavior.Strict);
 
             _fixture = new DonationService(_mpDonationService.Object);
+        }
+
+        [Test]
+        public void TestGetDonationBatch()
+        {
+            _mpDonationService.Setup(mocked => mocked.GetDonationBatch(123)).Returns(new DonationBatch
+            {
+                Id = 123,
+                DepositId = 456,
+                ProcessorTransferId = "789"
+            });
+            var result = _fixture.GetDonationBatch(123);
+            _mpDonationService.VerifyAll();
+            Assert.IsNotNull(result);
+            Assert.AreEqual(123, result.Id);
+            Assert.AreEqual(456, result.DepositId);
+            Assert.AreEqual("789", result.ProcessorTransferId);
+        }
+
+        [Test]
+        public void TestGetDonationBatchReturnsNull()
+        {
+            _mpDonationService.Setup(mocked => mocked.GetDonationBatch(123)).Returns((DonationBatch) null);
+            var result = _fixture.GetDonationBatch(123);
+            _mpDonationService.VerifyAll();
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void TestGetDonationBatchByProcessorTransferId()
+        {
+            _mpDonationService.Setup(mocked => mocked.GetDonationBatchByProcessorTransferId("123")).Returns(new DonationBatch
+            {
+                Id = 123,
+                DepositId = 456,
+                ProcessorTransferId = "789"
+            });
+            var result = _fixture.GetDonationBatchByProcessorTransferId("123");
+            _mpDonationService.VerifyAll();
+            Assert.IsNotNull(result);
+            Assert.AreEqual(123, result.Id);
+            Assert.AreEqual(456, result.DepositId);
+            Assert.AreEqual("789", result.ProcessorTransferId);
+        }
+
+        [Test]
+        public void TestGetDonationByProcessorPaymentIdDonationNotFound()
+        {
+            _mpDonationService.Setup(mocked => mocked.GetDonationByProcessorPaymentId("123")).Returns((Donation) null);
+            Assert.IsNull(_fixture.GetDonationByProcessorPaymentId("123"));
+            _mpDonationService.VerifyAll();
+        }
+
+        [Test]
+        public void TestGetDonationByProcessorPaymentId()
+        {
+            _mpDonationService.Setup(mocked => mocked.GetDonationByProcessorPaymentId("123")).Returns(new Donation
+            {
+                donationId = 123,
+                donationAmt = 456,
+                batchId = 789
+            });
+            var result = _fixture.GetDonationByProcessorPaymentId("123");
+            _mpDonationService.VerifyAll();
+            Assert.IsNotNull(result);
+            Assert.AreEqual(123+"", result.donation_id);
+            Assert.AreEqual(456, result.amount);
+            Assert.AreEqual(789, result.batch_id);
         }
 
         [Test]
@@ -34,7 +107,6 @@ namespace crds_angular.test.Services
         [Test]
         public void TestUpdateDonationByIdWithoutOptionalParameters()
         {
-            var d = DateTime.Now.AddDays(-1);
             _mpDonationService.Setup(mocked => mocked.UpdateDonationStatus(123, 4, It.IsNotNull<DateTime>(), null)).Returns(456);
             var response = _fixture.UpdateDonationStatus(123, 4, null);
             Assert.AreEqual(456, response);
@@ -54,7 +126,6 @@ namespace crds_angular.test.Services
         [Test]
         public void TestUpdateDonationByProcessorIdWithoutOptionalParameters()
         {
-            var d = DateTime.Now.AddDays(-1);
             _mpDonationService.Setup(mocked => mocked.UpdateDonationStatus("ch_123", 4, It.IsNotNull<DateTime>(), null)).Returns(456);
             var response = _fixture.UpdateDonationStatus("ch_123", 4, null);
             Assert.AreEqual(456, response);
@@ -107,7 +178,7 @@ namespace crds_angular.test.Services
 
             _mpDonationService.Setup(
                 mocked =>
-                    mocked.CreateDeposit(dto.DepositName, dto.DepositTotalAmount, dto.DepositDateTime, dto.AccountNumber,
+                    mocked.CreateDeposit(dto.DepositName, dto.DepositTotalAmount, dto.DepositAmount, dto.ProcessorFeeTotal, dto.DepositDateTime, dto.AccountNumber,
                         dto.BatchCount, dto.Exported, dto.Notes, dto.ProcessorTransferId)).Returns(987);
 
             var response = _fixture.CreateDeposit(dto);

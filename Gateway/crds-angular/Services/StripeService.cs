@@ -6,8 +6,10 @@ using Newtonsoft.Json;
 using RestSharp;
 using System.Net;
 using crds_angular.Models.Crossroads.Stewardship;
+using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
 using RestSharp.Extensions;
+using RestSharp.Serializers;
 
 namespace crds_angular.Services
 {
@@ -101,7 +103,29 @@ namespace crds_angular.Services
             CheckStripeResponse("Customer creation failed", response);
 
             return response.Data.id;
+        }
 
+        public string CreateToken(string accountNumber, string routingNumber)
+        {
+            var request = new RestRequest("tokens", Method.POST);
+            request.AddParameter("bank_account[account_number]", accountNumber);
+            request.AddParameter("bank_account[routing_number]", routingNumber);
+            request.AddParameter("bank_account[country]", "US");
+            request.AddParameter("bank_account[currency]", "USD");
+            // TODO Should be able to use request.AddJsonBody here, but that seems to ignore the property annotations
+            //request.RequestFormat = DataFormat.Json;
+            //request.AddJsonBody(new StripeBankAccount
+            //{
+            //    AccountNumber = accountNumber,
+            //    RoutingNumber = routingNumber,
+            //    Country = "US",
+            //    Currency = "USD"
+            //});
+
+            var response = _stripeRestClient.Execute<StripeToken>(request);
+            CheckStripeResponse("Token creation failed", response);
+
+            return (response.Data.Id);
         }
 
         public SourceData UpdateCustomerSource(string customerToken, string cardToken)
@@ -172,7 +196,7 @@ namespace crds_angular.Services
         public StripeCharge ChargeCustomer(string customerToken, int amount, int donorId)
         {
             var request = new RestRequest("charges", Method.POST);
-            request.AddParameter("amount", amount * 100);
+            request.AddParameter("amount", amount * Constants.StripeDecimalConversionValue);
             request.AddParameter("currency", "usd");
             request.AddParameter("customer", customerToken);
             request.AddParameter("description", "Donor ID #" + donorId);
@@ -206,6 +230,18 @@ namespace crds_angular.Services
             } while (nextPage.HasMore);
 
             return (charges);
+        }
+
+        public StripeRefund GetChargeRefund(string chargeId)
+        {
+            var url = string.Format("charges/{0}/refunds", chargeId);
+            var request = new RestRequest(url, Method.GET);
+
+            var response = _stripeRestClient.Execute<StripeRefund>(request);
+            CheckStripeResponse("Could not query charge refund", response);
+            var refund = response.Data;
+            
+            return (refund);
         }
     }
 

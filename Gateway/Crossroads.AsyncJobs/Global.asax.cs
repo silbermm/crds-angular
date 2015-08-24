@@ -13,6 +13,7 @@ namespace Crossroads.AsyncJobs
         protected void Application_Start(object sender, EventArgs e)
         {
             AreaRegistration.RegisterAllAreas();
+            AutoMapperConfig.RegisterMappings();
             UnityConfig.RegisterComponents();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             ApplicationPreload.StartJobProcessor();

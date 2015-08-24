@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -11,7 +12,8 @@ namespace MinistryPlatform.Translation.Services
     {
         private readonly IMinistryPlatformService _ministryPlatformService;
 
-        public EventParticipantService(IMinistryPlatformService ministryPlatformService)
+        public EventParticipantService(IMinistryPlatformService ministryPlatformService, IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
+            : base(authenticationService, configurationWrapper)
         {
             _ministryPlatformService = ministryPlatformService;
         }
@@ -36,7 +38,9 @@ namespace MinistryPlatform.Translation.Services
                     EventStartDate = viewRecord.ToDate("Event_Start_Date"),
                     EventEndDate = viewRecord.ToDate("Event_End_Date"),
                     EventType = viewRecord.ToString("Event_Type"),
-                    ParticipantId = viewRecord.ToInt("Participant_ID")
+                    ParticipantId = viewRecord.ToInt("Participant_ID"),
+                    ProgramId = viewRecord.ToInt("Program_ID"),
+                    ProgramName = viewRecord.ToString("Program_Name")
                 }).ToList();
             }
             catch (Exception ex)
@@ -45,5 +49,7 @@ namespace MinistryPlatform.Translation.Services
                     string.Format("TripParticipants failed.  search: {0}", search), ex);
             }
         }
+
+        
     }
 }

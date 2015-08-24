@@ -38,7 +38,7 @@ namespace MinistryPlatform.Translation.Services
                 };
                 return authData;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }

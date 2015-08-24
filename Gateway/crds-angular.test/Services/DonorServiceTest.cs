@@ -20,8 +20,10 @@ namespace crds_angular.test.Services
         private const string GUEST_GIVER_DISPLAY_NAME = "Guest Giver";
 
         private const int STATEMENT_FREQUENCY_NEVER = 9;
+        private const int STATEMENT_FREQUENCY_QUARTERLY = 99;
         private const int STATEMENT_TYPE_INDIVIDUAL = 8;
         private const int STATEMENT_METHOD_NONE = 7;
+        private const int STATEMENT_METHOD_POSTAL_MAIL = 77;
 
         [SetUp]
         public void SetUp()
@@ -33,8 +35,10 @@ namespace crds_angular.test.Services
 
             configurationWrapper = new Mock<IConfigurationWrapper>();
             configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("DonorStatementFrequencyNever")).Returns(STATEMENT_FREQUENCY_NEVER);
+            configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("DonorStatementFrequencyQuarterly")).Returns(STATEMENT_FREQUENCY_QUARTERLY);
             configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("DonorStatementTypeIndividual")).Returns(STATEMENT_TYPE_INDIVIDUAL);
             configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("DonorStatementMethodNone")).Returns(STATEMENT_METHOD_NONE);
+            configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("DonorStatementMethodPostalMail")).Returns(STATEMENT_METHOD_POSTAL_MAIL);
             configurationWrapper.Setup(mocked => mocked.GetConfigValue("GuestGiverContactDisplayName")).Returns(GUEST_GIVER_DISPLAY_NAME);
 
             fixture = new DonorService(mpDonorService.Object, mpContactService.Object, paymentService.Object, configurationWrapper.Object, authenticationService.Object);
@@ -95,7 +99,7 @@ namespace crds_angular.test.Services
         {
             mpContactService.Setup(mocked => mocked.CreateContactForGuestGiver("me@here.com", GUEST_GIVER_DISPLAY_NAME)).Returns(123);
             paymentService.Setup(mocked => mocked.CreateCustomer("stripe_token")).Returns("processor_id");
-            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(123, "processor_id", It.IsAny<DateTime>(), STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE)).Returns(456);
+            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(123, "processor_id", It.IsAny<DateTime>(), STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE, null)).Returns(456);
             paymentService.Setup(mocked => mocked.UpdateCustomerDescription("processor_id", 456)).Returns("456");
 
             var response = fixture.CreateOrUpdateContactDonor(null, "me@here.com", "stripe_token", DateTime.Now);
@@ -120,7 +124,7 @@ namespace crds_angular.test.Services
             };
 
             paymentService.Setup(mocked => mocked.CreateCustomer("stripe_token")).Returns("processor_id");
-            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(12345, "processor_id", It.IsAny<DateTime>(), STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE)).Returns(456);
+            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(12345, "processor_id", It.IsAny<DateTime>(), STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE, null)).Returns(456);
             paymentService.Setup(mocked => mocked.UpdateCustomerDescription("processor_id", 456)).Returns("456");
 
             var response = fixture.CreateOrUpdateContactDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
@@ -146,7 +150,7 @@ namespace crds_angular.test.Services
             };
 
             paymentService.Setup(mocked => mocked.CreateCustomer("stripe_token")).Returns("processor_id");
-            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(12345, "processor_id", It.IsAny<DateTime>(), 1, 1, 2)).Returns(456);
+            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(12345, "processor_id", It.IsAny<DateTime>(), 1, 1, 2, null)).Returns(456);
             mpDonorService.Setup(mocked => mocked.GetEmailViaDonorId(456)).Returns(donor);
             paymentService.Setup(mocked => mocked.UpdateCustomerDescription("processor_id", 456)).Returns("456");
 

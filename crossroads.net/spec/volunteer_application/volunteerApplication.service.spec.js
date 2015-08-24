@@ -80,7 +80,7 @@ describe('Volunteer Application Factory', function() {
       opportunity: '115',
       pageType: 'VolunteerApplicationPage',
       parent: 82,
-      renderedContent: '<p>Please complete this application.</p>',
+      content: '<p>Please complete this application.</p>',
       reportClass: null,
       showInMenus: '1',
       showInSearch: '1',

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using AutoMapper;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Enum;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
 
@@ -13,17 +16,17 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _donationsPageId;
         private readonly int _distributionPageId;
         private readonly int _batchesPageId;
-        private readonly int _declineEmailTemplate;
-        private readonly string _creditCardPaymentType;
-        private readonly string _bankPaymentType;
         private readonly int _depositsPageId;
         private readonly int _paymentProcessorErrorsPageId;
         private readonly int _tripDistributionsPageView;
+        private readonly int _gpExportPageView;
+        private readonly int _processingProgramId;
 
         private readonly IMinistryPlatformService _ministryPlatformService;
         private readonly IDonorService _donorService;
-      
-        public DonationService(IMinistryPlatformService ministryPlatformService, IDonorService donorService, IConfigurationWrapper configuration)
+
+        public DonationService(IMinistryPlatformService ministryPlatformService, IDonorService donorService, IConfigurationWrapper configuration, IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
+            : base(authenticationService, configurationWrapper)
         {
             _ministryPlatformService = ministryPlatformService;
             _donorService = donorService;
@@ -31,18 +34,17 @@ namespace MinistryPlatform.Translation.Services
             _donationsPageId = configuration.GetConfigIntValue("Donations");
             _distributionPageId = configuration.GetConfigIntValue("Distributions");
             _batchesPageId = configuration.GetConfigIntValue("Batches");
-            _declineEmailTemplate = configuration.GetConfigIntValue("DefaultGiveDeclineEmailTemplate");
-            _creditCardPaymentType = configuration.GetConfigValue("CreditCard");
-            _bankPaymentType = configuration.GetConfigValue("Bank");
             _depositsPageId = configuration.GetConfigIntValue("Deposits");
             _paymentProcessorErrorsPageId = configuration.GetConfigIntValue("PaymentProcessorEventErrors");
             _tripDistributionsPageView = configuration.GetConfigIntValue("TripDistributionsView");
+            _gpExportPageView = configuration.GetConfigIntValue("GPExportView");
+            _processingProgramId = configuration.GetConfigIntValue("ProcessingProgramId");
         }
 
         public int UpdateDonationStatus(int donationId, int statusId, DateTime statusDate,
             string statusNote = null)
         {
-            UpdateDonationStatus(apiLogin(), donationId, statusId, statusDate, statusNote);
+            UpdateDonationStatus(ApiLogin(), donationId, statusId, statusDate, statusNote);
             return (donationId);
         }
 
@@ -56,6 +58,27 @@ namespace MinistryPlatform.Translation.Services
                 UpdateDonationStatus(token, result.donationId, statusId, statusDate, statusNote);
                 return (result.donationId);
             }));
+        }
+
+        public DonationBatch GetDonationBatchByProcessorTransferId(string processorTransferId)
+        {
+            return(WithApiLogin(token =>
+            {
+                var search = string.Format(",,,,,,,,{0},", processorTransferId);
+                var batches = _ministryPlatformService.GetRecordsDict(_batchesPageId, token, search);
+                if (batches == null || batches.Count == 0)
+                {
+                    return (null);
+                }
+
+                return (Mapper.Map<Dictionary<string, object>, DonationBatch>(batches[0]));
+            }));
+            
+        }
+
+        public DonationBatch GetDonationBatch(int batchId)
+        {
+            return (WithApiLogin(token => (Mapper.Map<Dictionary<string,object>, DonationBatch>(_ministryPlatformService.GetRecordDict(_batchesPageId, batchId, token)))));
         }
 
         public int CreateDonationBatch(string batchName, DateTime setupDateTime, decimal batchTotalAmount, int itemCount,
@@ -75,7 +98,7 @@ namespace MinistryPlatform.Translation.Services
             };
             try
             {
-                var token = apiLogin();
+                var token = ApiLogin();
                 var batchId = _ministryPlatformService.CreateRecord(_batchesPageId, parms, token);
 
                 // Important! These two fields have to be set on an update, not on the initial
@@ -126,13 +149,15 @@ namespace MinistryPlatform.Translation.Services
             }
         }
 
-        public int CreateDeposit(string depositName, decimal depositTotalAmount, DateTime depositDateTime,
+        public int CreateDeposit(string depositName, decimal depositTotalAmount, decimal depositAmount, decimal depositProcessorFee, DateTime depositDateTime,
             string accountNumber, int batchCount, bool exported, string notes, string processorTransferId)
         {
             var parms = new Dictionary<string, object>
             {
                 {"Deposit_Name", depositName},
                 {"Deposit_Total", depositTotalAmount},
+                {"Deposit_Amount", depositAmount},
+                {"Processor_Fee_Total", depositProcessorFee},
                 {"Deposit_Date", depositDateTime},
                 {"Account_Number", accountNumber},
                 {"Batch_Count", batchCount},
@@ -149,8 +174,8 @@ namespace MinistryPlatform.Translation.Services
             {
                 throw new ApplicationException(
                     string.Format(
-                        "CreateDeposit failed. depositName: {0}, depositTotalAmount: {1}, depositDateTime: {2}, accountNumber: {3}, batchCount: {4}, exported: {5}, notes: {6}",
-                        depositName, depositTotalAmount, depositDateTime, accountNumber, batchCount, exported, notes), e);
+                        "CreateDeposit failed. depositName: {0}, depositTotalAmount: {1}, depositAmount: {2}, depositProcessorFee: {3}, depositDateTime: {4}, accountNumber: {5}, batchCount: {6}, exported: {7}, notes: {8}",
+                        depositName, depositTotalAmount, depositAmount, depositProcessorFee, depositDateTime, accountNumber, batchCount, exported, notes), e);
             }
         }
 
@@ -203,7 +228,7 @@ namespace MinistryPlatform.Translation.Services
         {
             try
             {
-                string apiToken = apiLogin();
+                string apiToken = ApiLogin();
                 var result = GetDonationByProcessorPaymentId(processorPaymentId, apiToken);
 
                 var rec = _ministryPlatformService.GetRecordsDict(_distributionPageId, apiToken, ",,,,,,,," + result.donationId);
@@ -214,12 +239,10 @@ namespace MinistryPlatform.Translation.Services
                 }
                 
                 var program = rec.First().ToString("Statement_Title");
+                var paymentType = PaymentType.getPaymentType(result.paymentTypeId).name;
+                var declineEmailTemplate = PaymentType.getPaymentType(result.paymentTypeId).declineEmailTemplateId;
 
-                var paymentType = (result.paymentTypeId.ToString() == _creditCardPaymentType.Substring(0,1))
-                    ? _creditCardPaymentType.Substring(2,11)
-                    : _bankPaymentType.Substring(2,4);
-
-                _donorService.SendEmail(_declineEmailTemplate, result.donorId, result.donationAmt, paymentType, result.donationDate,
+                _donorService.SendEmail(declineEmailTemplate, result.donorId, result.donationAmt, paymentType, result.donationDate,
                     program, result.donationNotes);
             }
             catch (Exception ex)
@@ -228,6 +251,11 @@ namespace MinistryPlatform.Translation.Services
                     string.Format(
                         "ProcessDeclineEmail failed. processorPaymentId: {0},", processorPaymentId), ex);
             }
+        }
+
+        public Donation GetDonationByProcessorPaymentId(string processorPaymentId)
+        {
+            return (WithApiLogin(token => GetDonationByProcessorPaymentId(processorPaymentId, token)));
         }
         
         private Donation GetDonationByProcessorPaymentId(string processorPaymentId, string apiToken)
@@ -248,8 +276,9 @@ namespace MinistryPlatform.Translation.Services
                 donorId = dictionary.ToInt("Donor_ID"),
                 donationDate = dictionary.ToDate("Donation_Date"),
                 donationAmt = Convert.ToInt32(dictionary["Donation_Amount"]),
-                paymentTypeId = (dictionary.ToString("Payment_Type") == "Bank") ? 5 : 4,
-                donationNotes = dictionary.ToString("Donation_Status_Notes")
+                paymentTypeId = PaymentType.getPaymentType(dictionary.ToString("Payment_Type")).id,
+                donationNotes = dictionary.ToString("Donation_Status_Notes"),
+                batchId = dictionary.ToNullableInt("Batch_ID")
             };
             return (d);
         }
@@ -283,6 +312,39 @@ namespace MinistryPlatform.Translation.Services
                 trips.Add(trip);
             }
             return trips;
+        }
+
+        public List<GPExportDatum> CreateGPExport(int batchId, string token)
+        {
+            var results = _ministryPlatformService.GetPageViewRecords(_gpExportPageView, token, batchId.ToString());
+            var gpExport = new List<GPExportDatum>();
+
+            foreach (var result in results)
+            {
+                bool processingFee = result.ToInt("Program ID") == _processingProgramId;
+
+                var gp = new GPExportDatum
+                {
+                    DocumentType = result.ToString("Document Type"),
+                    DocumentNumber = result.ToInt("Donation ID"),
+                    DocumentDescription = result.ToString("Batch Name"),
+                    BatchId = result.ToString("Batch Name"),
+                    ContributionDate = result.ToDate("Donation Date"),
+                    SettlementDate = result.ToDate("Deposit Date"),
+                    CustomerId = result.ToString("Customer ID"),
+                    ContributionAmount = result.ToString("Donation Amount"),
+                    CheckbookId = result.ToString("Checkbook ID"),
+                    CashAccount = result.ToString("Cash Account"),
+                    ReceivableAccount = result.ToString("Receivable Account"),
+                    DistributionAccount = result.ToString("Distribution Account"),
+                    DistributionAmount = result.ToString("Amount"),
+                    DistributionReference = processingFee ? "Processor Fees " + result.ToDate("Donation Date") : "Contribution " + result.ToDate("Donation Date")                    
+                };
+
+                gpExport.Add(gp);
+            }
+
+            return gpExport;
         }
     }
 }

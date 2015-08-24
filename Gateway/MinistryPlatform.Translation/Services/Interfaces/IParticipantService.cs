@@ -7,5 +7,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
     {
         Participant GetParticipant(int contactId);
         List<Response> GetParticipantResponses(int participantId);
+        Participant GetParticipantRecord(string token);
     }
 }

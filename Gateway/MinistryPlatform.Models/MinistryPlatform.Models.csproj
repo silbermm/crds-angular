@@ -57,6 +57,7 @@
     <Compile Include="Communication.cs" />
     <Compile Include="CommunicationPreferences.cs" />
     <Compile Include="ContactDonor.cs" />
+    <Compile Include="DonationBatch.cs" />
     <Compile Include="DonationDistribution.cs" />
     <Compile Include="Donation.cs" />
     <Compile Include="DTO\RespondToOpportunityDto.cs" />
@@ -73,10 +74,14 @@
     <Compile Include="Group.cs" />
     <Compile Include="Opportunity.cs" />
     <Compile Include="Participant.cs" />
+    <Compile Include="PledgeCampaign.cs" />
+    <Compile Include="PostalAddress.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Response.cs" />
+    <Compile Include="GPExportDatum.cs" />
     <Compile Include="TripDistribution.cs" />
+    <Compile Include="TripFormResponse.cs" />
     <Compile Include="TripParticipant.cs" />
   </ItemGroup>
   <ItemGroup>
