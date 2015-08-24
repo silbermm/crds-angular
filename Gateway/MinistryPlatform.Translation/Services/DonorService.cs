@@ -251,10 +251,9 @@ namespace MinistryPlatform.Translation.Services
 
         public ContactDonor GetContactDonorForDonorAccount(string accountNumber, string routingNumber)
         {
-            var apiToken = ApiLogin();
             var search = string.Format(",{0}", CreateEncodedAndEncryptedAccountAndRoutingNumber(accountNumber, routingNumber));
 
-            var accounts = _ministryPlatformService.GetPageViewRecords(_findDonorByAccountPageViewId, apiToken, search);
+            var accounts = WithApiLogin(apiToken => _ministryPlatformService.GetPageViewRecords(_findDonorByAccountPageViewId, apiToken, search));
             if (accounts == null || accounts.Count == 0)
             {
                 return (null);
