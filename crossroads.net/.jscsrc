@@ -1,6 +1,6 @@
 {
   "preset": "airbnb",
   "requireTrailingComma": null,
-  "requireDotNotation": { "allExcept": [ "snake_case" ] }
+  "requireDotNotation": { "allExcept": [ "snake_case" ] },
   "safeContextKeyword": "vm"
 }
