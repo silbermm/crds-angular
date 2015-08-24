@@ -1,6 +1,3 @@
 USE [MinistryPlatform]
 GO
 
-
-
-
