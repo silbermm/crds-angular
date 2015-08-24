@@ -3,7 +3,7 @@
 
   module.exports = PagesController;
 
-  PagesController.$inject = ['$location', '$anchorScroll', 'Trip'];
+  PagesController.$inject = ['Session', '$location', '$anchorScroll', 'Trip'];
 
   /**
    * Controller for all of the pages directives
@@ -12,13 +12,14 @@
    *    - pageTitle
    *    - numberOfPages
    */
-  function PagesController($location, $anchorScroll) {
+  function PagesController(Session, $location, $anchorScroll, Trip) {
     var vm = this;
 
     vm.handleNext = handleNext;
     vm.handlePrevious = handlePrevious;
     vm.handleSubmit = handleSubmit;
     vm.nolaRequired = nolaRequired;
+    vm.underAge = underAge;
     vm.whyPlaceholder = '';
 
     activate();
@@ -47,7 +48,7 @@
       toTop();
     }
 
-    function nolaRequired() {
+   function nolaRequired() {
       if (vm.pageTitle === 'GO NOLA Application') {
         return 'required';
       }
@@ -60,5 +61,8 @@
       $anchorScroll();
     }
 
+    function underAge() {
+      return Session.exists('age') && Session.exists('age') < 18;
+    }
   }
 })();
