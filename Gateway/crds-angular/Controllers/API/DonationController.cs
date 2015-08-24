@@ -38,7 +38,7 @@ namespace crds_angular.Controllers.API
             return (Authorized(token => CreateDonationAndDistributionAuthenticated(token, dto), () => CreateDonationAndDistributionUnauthenticated(dto)));
         }
 
-        [Route("api/gpexport/:batchId")]
+        [Route("api/gpexport/{batchId}")]
         public IHttpActionResult Get(int batchId)
         {
             return Authorized(token =>
@@ -50,7 +50,7 @@ namespace crds_angular.Controllers.API
                 }
                 catch (Exception ex)
                 {
-                    var apiError = new ApiErrorDto("GetGroupsForEvent Failed", ex);
+                    var apiError = new ApiErrorDto("GP Export File Creation Failed", ex);
                     throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
             });

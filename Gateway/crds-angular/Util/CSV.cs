@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using RestSharp.Extensions;
 
 namespace crds_angular.Util
 {
@@ -40,13 +42,11 @@ namespace crds_angular.Util
                 var header = ((JProperty) token).Name;
                 headers.Add(header);
 
-                if (initialCell)
-                {
+                if (!initialCell)
                     sw.Write(delimiter);
-                    initialCell = false;
-                }
 
                 sw.Write(header);
+                initialCell = false;
             }
 
             sw.Write(Environment.NewLine);
@@ -59,16 +59,15 @@ namespace crds_angular.Util
 
             foreach (var name in headers)
             {
-                if (initialCell)
-                {
+                if (!initialCell)
                     sw.Write(delimiter);
-                    initialCell = false;
-                }
 
-                var attrName = name.Replace(" ", "");
+                var attrName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name.ToLower()).Replace(" ", "");
                 var value = row.GetType().GetProperty(attrName).GetValue(row);
+                var sValue = (value == null ? "" : value.ToString());
 
-                sw.Write(value.ToString());
+                sw.Write(sValue);
+                initialCell = false;
             }
 
             sw.Write(Environment.NewLine);
