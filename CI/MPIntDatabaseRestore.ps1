@@ -97,7 +97,7 @@ DECLARE @externalServerName varchar(75) = 'adminint.crossroads.net';
 -- The name of the site
 DECLARE @applicationTitle varchar(30) = 'Crossroads Integration';
 -- The user which will be logging in to the MP database from the ministryplatform and ministryplatformapi apps
-DECLARE @dbLoginUser varchar(50) = 'MP-INT-DB\MPUser';
+DECLARE @dbLoginUser varchar(50) = '[MP-INT-DB\MPUser]';
 -- The user which will be running the Windows scheduled tasks from the WEB server
 DECLARE @scheduledTasksUser varchar(50) = 'MP-INT-WEB\MPAdmin';
 -- The domain GUID - set this to NEWID() when setting up a new domain, but use a previous value for an existing domain
