@@ -9,12 +9,29 @@
       <div class="form-group col-sm-6">
         <label for="tshirt" class="required">T-shirt Size</label>
         <select class="form-control col-sm-12" ng-model="attribute" id="tshirt">
+          <option> Adult XS </option>
+          <option> Adult S </option>
+          <option> Adult M </option>
+          <option> Adult L </option>
+          <option> Adult XL </option>
+          <option> Adult XXL </option>
+          <option> Adult XXXL </option>
+          <option> Child S </option>
+          <option> Child M </option>
+          <option> Child L </option>
         </select>
       </div><!--/form-group-->
 
-      <div class="form-group col-sm-6" ng-show="gotrip.pageTitle == 'south-africa'">
+      <div class="form-group col-sm-6" ng-show="pages.pageTitle == 'GO South Africa Application'">
         <label for="scrub">Scrub Size <small class="text-muted">Only required for Topsy trips</small></label>
         <select class="form-control col-sm-12" ng-model="attribute" id="scrub">
+          <option>Adult XS</option>
+          <option>Adult S</option>
+          <option>Adult M</option>
+          <option>Adult L</option>
+          <option>Adult XL</option>
+          <option>Adult XXL</option>
+          <option>Adult XXXL</option>
         </select>
       </div><!--/form-group-->
 
@@ -79,7 +96,7 @@
     <div class="row">
       <div class="form-group col-sm-12">
           <label for="why" class="required">Tell us why you want to go on this trip</label>
-          <textarea cols="1" rows="4" class="form-control" id="why" maxlength="1000" placeholder="{{gotrip.whyPlaceholder}}"></textarea>
+          <textarea cols="1" rows="4" class="form-control" id="why" maxlength="1000" placeholder="{{pages.whyPlaceholder}}"></textarea>
       </div><!--/form-group-->
     </div>
   </fieldset>
