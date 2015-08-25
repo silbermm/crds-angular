@@ -1,3 +1,3 @@
-USE [MinistryPlatform]
+USE [MinistryPlatformwefwerwfe]
 GO
 
