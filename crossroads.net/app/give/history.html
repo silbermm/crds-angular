@@ -5,7 +5,7 @@
     <h2 class="subheading hidden-print">Your history of financial giving to crossroads</h2>
     <h3 class="subheading visible-print-block">Printed: 04/01/15</h3>
 
-    <div class="row push-top">
+    <div class="row push-top" ng-show="history">
       <address class="col-sm-12 hidden-print">
       <strong>John & Jane Doe</strong><br>
       795 Folsom Ave, Suite 600<br>
@@ -18,17 +18,29 @@
       San Francisco, CA 94107<br>
     </address>
 
-      <p class="visible-print-block col-xs-6 text-right" ng-show="history">
+      <p class="visible-print-block col-xs-6 text-right">
         <strong>Period : 01/01/2012 - 03/31/2012</strong>
         <br />
         <small>No goods or services were provided by Crossroads in exchange for the contributions recorded on this statement.</small>
       </p>
     </div>
-    
+
+    <!--  NO GIVING HISTORY  -->
     <div ng-show="!history">
-      No Giving History
+      <h3 class="flush-bottom">Looks Empty Around Here</h3>
+      <h4 class="text-muted flush-top">It’s the generosity of everyday people in our community that fuels the life change we experience around here.</h4>
+      <p>We follow three core principles in the handling of money:
+        <ol>
+          <li>bless people</li>
+          <li>base our budget on what we think God wants, not on what we think we’ll get</li>
+          <li>money is a tool for a church to use and therefore should be spent, not saved.</li>
+        </ol>
+        We believe these things strike at the heart of how God wants money to be used, as seen in the Bible.
+      </p>
+      <button class="btn btn-lg btn-primary" ui-sref="give">Give Now</button>
     </div>
 
+    <!-- GIVING HISTORY -->
     <div ng-show="history">
 
       <div class="row">
@@ -299,7 +311,7 @@
               </div>
             </td>
             <td class="text-right">
-              <div class="bold" style="text-decoration: line-through;">$100.00</div>
+              <div class="text-muted bold" style="text-decoration: line-through;">$100.00</div>
               <div class="text-muted">10/12/15</div>
             </td>
           </tr>
@@ -424,21 +436,21 @@
         <h4 class="text-right hidden-print">Total: $300.00</h4>
       </div>
 
-    </div>
+      <p class="push-top hidden-print">Question about your giving? <a href="#">Email our finance team</a>
+        <br />
+      </p>
 
-    <p class="push-top hidden-print">Question about your giving? <a href="#">Email our finance team</a>
-      <br />
-    </p>
-
-    <div class="row giving-statement-footer visible-print-block">
-      <div class="col-xs-12">
-        <div class="logo">
-          <img src="//crossroads-media.s3.amazonaws.com/images/logo.svg" alt="crossroads">
-        </div>
-        <div class="statement-address text-uppercase">
-          <small>3500 Madison Road, Cincinnati, OH 45209 P513.731.7400 F513.731.3978 crossroads.net</small>
+      <div class="row giving-statement-footer visible-print-block">
+        <div class="col-xs-12">
+          <div class="logo">
+            <img src="//crossroads-media.s3.amazonaws.com/images/logo.svg" alt="crossroads">
+          </div>
+          <div class="statement-address text-uppercase">
+            <small>3500 Madison Road, Cincinnati, OH 45209 P513.731.7400 F513.731.3978 crossroads.net</small>
+          </div>
         </div>
       </div>
+
     </div>
 
     <!-- DEMO CONTROLS -->
