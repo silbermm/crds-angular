@@ -14,7 +14,6 @@ var app = angular.module('crossroads.give');
 
 app.config(require('./give.routes'));
 
-app.factory('GiveTransferService', require('./services/giveTransfer.service.js'));
 
 app.controller('GiveController', require('./give.controller'));
 app.directive('naturalNumber', require('./directives/naturalNumber.validation.directive.js'));

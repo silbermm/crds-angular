@@ -86,7 +86,7 @@
         vm.dto = GiveTransferService;
         vm.email = null;
         vm.emailAlreadyRegisteredGrowlDivRef = 1000;
-        vm.emailPrefix = "give";
+        vm.emailPrefix = 'give';
         vm.initialized = false;
         vm.last4 = '';
         vm.processingChange = false;
@@ -165,7 +165,7 @@
               vm.email = confirmation.email;
               onSuccess(confirmation);
             }, function(error) {
-              onFailure(error)
+              onFailure(error);
             });
         };
 
@@ -369,15 +369,6 @@
           } else {
             $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
           }
-        };
-
-        vm.togglePaymentInfo = function() {
-          $timeout(function() {
-            var e = vm.dto.view == "cc" ?
-                        document.querySelector("[name='ccNumber']")
-                        : document.querySelector("[name='routing']");
-            e.focus();
-          }, 0);
         };
 
         vm.createDonorAndDonate = function(programId, amount, email, view) {
