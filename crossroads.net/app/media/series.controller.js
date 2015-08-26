@@ -5,12 +5,11 @@
     SeriesController.$inject = ['$stateParams', 'Series', 'Messages'];
 
     function SeriesController($stateParams, Series, Messages) {
-        debugger;
         var vm = this;
         vm.msgisopen = true;
         vm.musicisopen = false;
         vm.series = Series.series;
-        vm.selected = getSeriesByTitle($stateParams.title); // fix the references in the card(s)
+        vm.selected = getSeriesByTitle($stateParams.title);
         vm.messages = Messages.messages;
 
         function getSeriesByTitle(seriesTitle) {

@@ -202,21 +202,21 @@
         url: '/series/single/:title',
         controller: 'SeriesController as series',
         templateUrl: 'media/seriesSingle.html',
-          resolve: {
-            Media: 'Media',
-            $stateParams: '$stateParams',
-            Messages: function (Media, Series, $stateParams) {
-              var series = getSeriesByTitle(Series.series, $stateParams.title)
-              var item = Media.Messages().get({ seriesId: series.id }).$promise;
-              return item;
+        resolve: {
+          Media: 'Media',
+          $stateParams: '$stateParams',
+          Messages: function (Media, Series, $stateParams) {
+            var series = getSeriesByTitle(Series.series, $stateParams.title)
+            var item = Media.Messages().get({seriesId: series.id}).$promise;
+            return item;
 
-              function getSeriesByTitle(series, seriesTitle) {
-                return _.find(series, function(obj) {
-                  return (obj.title === seriesTitle);
-                });
-              };
-            }
+            function getSeriesByTitle(series, seriesTitle) {
+              return _.find(series, function (obj) {
+                return (obj.title === seriesTitle);
+              });
+            };
           }
+        }
       })
       .state('media-series-single-lo-res', {
         parent: 'noSideBar',
@@ -229,6 +229,23 @@
         url: '/media/single',
         controller: 'MediaController as media',
         templateUrl: 'media/media-single.html'
+      })
+      .state('message-single', {
+        parent: 'screenWidth',
+        url: '/media/message/:title',
+        controller: 'SingleMediaController as singleMedia',
+        templateUrl: 'media/media-single.html',
+        resolve: {
+          Media: 'Media',
+          $stateParams: '$stateParams',
+          ItemProperty: function () {
+            return 'messages';
+          },
+          SingleMedia: function (Media, $stateParams) {
+            var item = Media.MessageByTitle().get({title: $stateParams.title}).$promise;
+            return item;
+          }
+        }
       })
       .state('blog', {
         parent: 'noSideBar',
