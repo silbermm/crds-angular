@@ -19,8 +19,8 @@ DECLARE @user_id as int
 set @user_id = IDENT_CURRENT('Dp_Users')+1;
 
 INSERT INTO [dbo].Dp_Users 
-(User_ID ,User_Name                 ,User_Email                ,Display_Name,Password                     ,Admin,Domain_ID,Publications_Manager,Contact_ID,Supervisor,User_GUID                             ,Can_Impersonate,In_Recovery,Time_Zone,Locale,Theme,Setup_Admin,__ExternalPersonID,__ExternalUserID,Data_Service_Permissions,Read_Permitted,Create_Permitted,Update_Permitted,Delete_Permitted) VALUES
-(@user_id,'mpcrds+cbadmin@gmail.com','mpcrds+cbadmin@gmail.com','CBadmin'   ,CAST('welcome' as binary(16)),0    ,1        ,0                   ,@contactID,null      ,NEWID(),null           ,null       ,null     ,null  ,null ,0          ,null              ,null            ,null                    ,0         ,0           ,0           ,0           );
+(User_ID ,User_Name                 ,User_Email                ,Display_Name,Password                     ,Admin,Domain_ID,Publications_Manager,Contact_ID,Supervisor,User_GUID ,Can_Impersonate,In_Recovery,Time_Zone,Locale,Theme,Setup_Admin,__ExternalPersonID,__ExternalUserID,Data_Service_Permissions,Read_Permitted,Create_Permitted,Update_Permitted,Delete_Permitted) VALUES
+(@user_id,'mpcrds+cbadmin@gmail.com','mpcrds+cbadmin@gmail.com','CBadmin'   ,CAST('welcome' as binary(16)),0    ,1        ,0                   ,@contactID,null      ,NEWID()   ,null           ,null       ,null     ,null  ,null ,0          ,null              ,null            ,null                    ,0         ,0           ,0           ,0           );
 
 --Participant RECORD
 SET IDENTITY_INSERT [dbo].[Dp_Users] OFF;
@@ -34,7 +34,7 @@ INSERT INTO [dbo].Participants
 (@part_id      ,@contactID,4                  ,null             ,{ts '2015-08-05 12:26:07.877'},null                ,null ,1        ,null              ,null                  ,null                   ,null                  ,null                 );
 
 
---User ROLE
+--User ROLE - Corkboard admin
 SET IDENTITY_INSERT [dbo].[Donors] OFF;
 SET IDENTITY_INSERT [dbo].[Dp_User_Roles] ON;
 
