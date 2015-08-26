@@ -119,13 +119,4 @@ describe('KidsClub Student Application Controller', function() {
     expect(controller.gradeLevelSelected()).toBe(true);
   });
 
-  it("should be false when checking if location has been selected", function(){
-    expect(controller.locationSelected()).toBe(false);
-  });
-
-  it("should be true when a location has been selected", function(){
-    controller.availabilityFlorence = "some value";
-    expect(controller.locationSelected()).toBe(true);
-  });  
-
 });
