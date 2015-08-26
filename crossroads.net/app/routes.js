@@ -207,6 +207,10 @@
           $stateParams: '$stateParams',
           Messages: function (Media, Series, $stateParams) {
             var series = getSeriesByTitle(Series.series, $stateParams.title)
+            if (!series) {
+              return null;
+            }
+            
             var item = Media.Messages({seriesId: series.id}).get().$promise;
             return item;
 
@@ -244,6 +248,18 @@
           SingleMedia: function (Media, $stateParams) {
             var item = Media.Messages({title: $stateParams.title}).get().$promise;
             return item;
+          },
+          ParentItemProperty: function() {
+            return 'series';
+          },
+          ParentMedia: function (Media, SingleMedia) {
+            if (!SingleMedia.messages[0]) {
+              return null;
+            }
+
+            var seriesId = SingleMedia.messages[0].series;
+            var parent = Media.Series({id: seriesId}).get().$promise;
+            return parent;
           }
         }
       })

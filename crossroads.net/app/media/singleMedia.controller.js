@@ -1,15 +1,21 @@
-'use strict';
 (function () {
-    module.exports = SingleMediaController;
+  'use strict';
+  module.exports = SingleMediaController;
 
-    SingleMediaController.$inject = ['SingleMedia', 'ItemProperty'];
+  SingleMediaController.$inject = ['$state', 'SingleMedia', 'ItemProperty', 'ParentMedia', 'ParentItemProperty'];
 
-    function SingleMediaController(SingleMedia, ItemProperty) {
-        var vm = this;
-        vm.msgisopen = true;
-        vm.musicisopen = false;
+  function SingleMediaController($state, SingleMedia, ItemProperty, ParentMedia, ParentItemProperty) {
+    var vm = this;
+    vm.msgisopen = true;
+    vm.musicisopen = false;
 
-        vm.media = SingleMedia[ItemProperty][0];
+    vm.media = SingleMedia[ItemProperty][0];
+
+    if (!vm.media) {
+      $state.go('errors/404');
+      return;
     }
-})();
 
+    vm.parentMedia = ParentMedia[ParentItemProperty][0];
+  }
+})();
