@@ -207,7 +207,7 @@
           $stateParams: '$stateParams',
           Messages: function (Media, Series, $stateParams) {
             var series = getSeriesByTitle(Series.series, $stateParams.title)
-            var item = Media.Messages().get({seriesId: series.id}).$promise;
+            var item = Media.Messages({seriesId: series.id}).get().$promise;
             return item;
 
             function getSeriesByTitle(series, seriesTitle) {
@@ -242,7 +242,7 @@
             return 'messages';
           },
           SingleMedia: function (Media, $stateParams) {
-            var item = Media.MessageByTitle().get({title: $stateParams.title}).$promise;
+            var item = Media.Messages({title: $stateParams.title}).get().$promise;
             return item;
           }
         }

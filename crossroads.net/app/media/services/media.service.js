@@ -5,22 +5,35 @@
 
   function Media($resource) {
     return {
-      Series: function () {
-        return $resource(__CMS_ENDPOINT__ + 'api/series/');
+      Series: function (params) {
+        return $resource(__CMS_ENDPOINT__ + 'api/series/',
+          params,
+          {
+            'get': { method:'GET', cache: true}
+          });
       },
-      Musics: function() {
-        return $resource(__CMS_ENDPOINT__ + 'api/musics/')
+      Musics: function(params) {
+        return $resource(__CMS_ENDPOINT__ + 'api/musics/',
+          params,
+          {
+            'get': { method:'GET', cache: true}
+          });
       },
-      Videos: function() {
-        return $resource(__CMS_ENDPOINT__ + 'api/videos/')
+      Videos: function(params) {
+        return $resource(__CMS_ENDPOINT__ + 'api/videos/',
+          params,
+          {
+            'get': { method:'GET', cache: true}
+          });
       },
-      Messages: function () {
-        return $resource(__CMS_ENDPOINT__ + 'api/message/', {seriesid : '@seriesid'});
+      Messages: function (params) {
+        return $resource(__CMS_ENDPOINT__ + 'api/message/',
+          params,
+          {
+            'get': { method:'GET', cache: true}
+          });
+
       },
-      MessageByTitle: function () {
-        return $resource(__CMS_ENDPOINT__ + 'api/message/', {title : '@title'});
-      }
     };
   }
-
 })();
