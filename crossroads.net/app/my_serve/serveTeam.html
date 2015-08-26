@@ -23,7 +23,7 @@
     <form name="teamForm-{{team.index}}" >
     <div class="panel-collapse collapse" collapse="isCollapsed">
       <div class="panel-body soft-half-bottom">
-        <div class="alert alert-info" role="alert" ng-show="team.pastDeadline" ng-bind-html="team.pastDeadlineMessage.content | html">
+        <div class="alert alert-info" role="alert" ng-show="team.pastDeadline" ng-bind-html="passedDeadlineMsg(team.pastDeadlineMessage) | html">
         </div>
         <p class="flush-bottom">Editing sign up for {{currentMember.name}} {{currentMember.lastName}}
         <span ng-show="displayEmail(currentMember.emailAddress)">( <span> {{ currentMember.emailAddress}} </span> )</span>
