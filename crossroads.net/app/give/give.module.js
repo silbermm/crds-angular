@@ -1,7 +1,7 @@
 'use strict';
 //var stripe = require ('stripe');
-require('angular-stripe');
-angular.module('crossroads.give', ['angular-stripe','crossroads.core']);
+//require('angular-stripe');
+angular.module('crossroads.give', ['crossroads.core']);
 
 require('./donation_details');
 require('./directives/bankInfo.directive');

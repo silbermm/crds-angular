@@ -67,7 +67,6 @@
   },
   "dependencies": {
     "ng-cache-loader": "0.0.8",
-    "angular-stripe": "~4.2.8",
     "crds-core": "^0.0.21",
     "jquery": "^2.1.3",
     "lodash": "^3.5.0",

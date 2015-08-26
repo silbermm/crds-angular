@@ -22,7 +22,7 @@ describe('GiveController', function() {
       {ProgramId: 2, Name: 'Game Change'},
       {ProgramId: 3, Name: 'Old St George Building'},
     ];
-    $provide.value('getPrograms', {
+    $provide.value('Programs', {
       Programs: function() {
         return({
           get: function() {

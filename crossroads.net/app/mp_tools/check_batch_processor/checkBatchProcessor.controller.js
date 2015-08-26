@@ -3,9 +3,9 @@
 
   module.exports = CheckBatchProcessor;
 
-  CheckBatchProcessor.$inject = ['$rootScope', '$log', 'MPTools', 'CheckScannerBatches', 'getPrograms'];
+  CheckBatchProcessor.$inject = ['$rootScope', '$log', 'MPTools', 'CheckScannerBatches', 'Programs'];
 
-  function CheckBatchProcessor($rootScope, $log, MPTools, CheckScannerBatches, getPrograms) {
+  function CheckBatchProcessor($rootScope, $log, MPTools, CheckScannerBatches, Programs) {
     var vm = this;
 
     vm.batch = {};
@@ -23,7 +23,7 @@
         vm.batches = data;
       });
 
-      getPrograms.Programs.get({programType: 1}, function(data) {
+      Programs.Programs.query({programType: 1}, function(data) {
         vm.programs = data;
       });
     }

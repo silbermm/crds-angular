@@ -278,45 +278,7 @@
         url: '/thedaily',
         templateUrl: 'thedaily/thedaily.html'
       })
-      .state('give', {
-        parent: 'noSideBar',
-        url: '/give',
-        controller: 'GiveController as give',
-        templateUrl: 'give/give.html',
-        resolve: {
-          programList: function(getPrograms) {
-            // TODO The number one relates to the programType in MP. At some point we should fetch
-            // that number from MP based in human readable input here.
-            return getPrograms.Programs.get({
-              programType: 1
-            }).$promise;
-          }
-        }
-      })
-      .state('give.amount', {
-        templateUrl: 'give/amount.html'
-      })
-      .state('give.login', {
-        controller: 'LoginCtrl',
-        templateUrl: 'give/login.html'
-      })
-      .state('give.register', {
-        controller: 'RegisterCtrl',
-        templateUrl: 'give/register.html'
-      })
-      .state('give.confirm', {
-        templateUrl: 'give/confirm.html'
-      })
-      .state('give.account', {
-        templateUrl: 'give/account.html'
-      })
-      .state('give.change', {
-        templateUrl: 'give/change.html'
-      })
-      .state('give.thank-you', {
-        templateUrl: 'give/thank_you.html'
-      })
-      //Not a child route of give because I did not want to use the parent give template
+            //Not a child route of give because I did not want to use the parent give template
       .state('history', {
         parent: 'noSideBar',
         url: '/give/history',
