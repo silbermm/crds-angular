@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using AutoMapper;
 using crds_angular.App_Start;
 using crds_angular.Models.Crossroads.Stewardship;
@@ -220,6 +221,25 @@ namespace crds_angular.test.Services
 
             _fixture.CreatePaymentProcessorEventError(stripeEvent, stripeEventResponse);
             _mpDonationService.VerifyAll();
+        }
+
+        [Test]
+        public void TestGPExportFileName()
+        {
+            var date = DateTime.Today;
+            var fileName = string.Format("TestBatchName_{0}{1}.csv", date.ToString("MM"), date.ToString("yy"));
+
+            _mpDonationService.Setup(mocked => mocked.GetDonationBatch(123)).Returns(new DonationBatch
+            {
+                Id = 123,
+                DepositId = 456,
+                ProcessorTransferId = "789",
+                BatchName = "TestBatchName",
+            });
+
+            var result = _fixture.GPExportFileName(123);
+            _mpDonationService.VerifyAll();
+            Assert.AreEqual(fileName, result.ExportFileName);
         }
 
     }

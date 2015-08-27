@@ -48,6 +48,7 @@ namespace MinistryPlatform.Translation.Test.Services
             const string processorTransferId = "123";
             const int depositId = 456;
             const int batchId = 789;
+            const string batchName = "TestBachName";
             var searchResult = new List<Dictionary<string, object>>
             {
                 {
@@ -56,6 +57,7 @@ namespace MinistryPlatform.Translation.Test.Services
                         {"dp_RecordID", batchId},
                         {"Processor_Transfer_ID", processorTransferId},
                         {"Deposit_ID", depositId},
+                        {"Batch_Name", batchName},
                     }
                 }
             };
@@ -67,6 +69,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(processorTransferId, result.ProcessorTransferId);
             Assert.AreEqual(batchId, result.Id);
             Assert.AreEqual(depositId, result.DepositId);
+            Assert.AreEqual(batchName, result.BatchName);
         }
 
         [Test]
@@ -75,11 +78,13 @@ namespace MinistryPlatform.Translation.Test.Services
             const string processorTransferId = "123";
             const int depositId = 456;
             const int batchId = 789;
+            const string batchName = "TestBatchName";
             var getResult = new Dictionary<string, object>
                 {
                     {"Batch_ID", batchId},
                     {"Processor_Transfer_ID", processorTransferId},
                     {"Deposit_ID", depositId},
+                    {"Batch_Name", batchName},
                 };
             _ministryPlatformService.Setup(mocked => mocked.GetRecordDict(8080, batchId, It.IsAny<string>(), false)).Returns(getResult);
 
@@ -89,6 +94,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(processorTransferId, result.ProcessorTransferId);
             Assert.AreEqual(batchId, result.Id);
             Assert.AreEqual(depositId, result.DepositId);
+            Assert.AreEqual(batchName, result.BatchName);
         }
 
         [Test]
@@ -344,6 +350,35 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Program ID", "150"}
                 },
             };
+        }
+
+        [Test]
+        public void TestUpdateBatchToExported()
+        {
+            const int depositId = 1245;
+            const bool exported = true;
+            const string processorTransferId = "123";
+            const int batchId = 789;
+            const string batchName = "TestBatchName";
+
+            var getResult = new Dictionary<string, object>
+                {
+                    {"Batch_ID", batchId},
+                    {"Processor_Transfer_ID", processorTransferId},
+                    {"Deposit_ID", depositId},
+                    {"Batch_Name", batchName},
+                };
+            _ministryPlatformService.Setup(mocked => mocked.GetRecordDict(8080, batchId, It.IsAny<string>(), false)).Returns(getResult);
+
+            var expectedParms = new Dictionary<string, object>
+            {
+                {"Deposit_ID", depositId},
+                {"Exported", exported},
+            };
+            _ministryPlatformService.Setup(mocked => mocked.UpdateRecord(7070, expectedParms, It.IsAny<string>()));
+
+            _fixture.UpdateBatchToExported(batchId);
+            _ministryPlatformService.VerifyAll();
         }
     }
 }
