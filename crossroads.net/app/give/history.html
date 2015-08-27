@@ -5,7 +5,7 @@
     <h2 class="subheading hidden-print">Your history of financial giving to crossroads</h2>
     <h3 class="subheading visible-print-block">Printed: 04/01/15</h3>
 
-    <div class="row push-top" ng-show="history">
+    <div class="row push-top" ng-show="!history">
       <address class="col-sm-12 hidden-print">
       <strong>John & Jane Doe</strong><br>
       795 Folsom Ave, Suite 600<br>
@@ -25,11 +25,8 @@
       </p>
     </div>
 
-
-
-
     <!--  NO GIVING HISTORY  -->
-    <div ng-show="!history" class="no-data">
+    <div ng-show="history" class="no-data">
       <div class="row">
         <div class="col-sm-6 col-sm-offset-3">
 
@@ -46,16 +43,13 @@
       </div><!--/row-->
     </div><!--/no-data-->
 
-
     <!-- GIVING HISTORY -->
-    <div ng-show="history">
-
+    <div ng-show="!history">
       <div class="row">
         <div class="col-sm-6 clearfix hidden-print">
           <a href="" class="btn btn-primary col-sm-6 col-md-5 col-xs-12 mobile-push-bottom" onClick="window.print();">Print Statement</a>
         </div>
         <!--/col-sm-6-->
-
         <div class="col-sm-6">
           <form class="form-inline hidden-print">
             <div class="form-group sm-pull-right">
@@ -469,9 +463,8 @@
           </svg>
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
-          <li role="menuitem"><a ng-click="history = true">Show State with History</a></li>
-          <li role="menuitem"><a ng-click="history = false">Show State without History</a></li>
-
+          <li role="menuitem"><a ng-click="history = false">Show State with History</a></li>
+          <li role="menuitem"><a ng-click="history = true">Show State without History</a></li>
         </ul>
       </div>
     </div>
