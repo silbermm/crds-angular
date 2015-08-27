@@ -77,6 +77,24 @@
         templateUrl: 'register/register_form.html',
         controller: 'RegisterCtrl'
       })
+      .state('forgotPassword', {
+        parent: 'noSideBar',
+        url: '/forgot-password',
+        templateUrl: 'login/forgot_password.html',
+        controller: 'LoginCtrl',
+        data: {
+          isProtected: false
+        }
+      })
+      .state('resetPassword', {
+        parent: 'noSideBar',
+        url: '/reset-password',
+        templateUrl: 'login/reset_password.html',
+        controller: 'LoginCtrl',
+        data: {
+          isProtected: false
+        }
+      })
       .state('profile', {
         parent: 'noSideBar',
         url: '/profile',
