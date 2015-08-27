@@ -6,7 +6,7 @@ declare @LaunchPage varchar(100) = 'http://demo.crossroads.net/mptools/gpExport'
 declare @Description varchar(50) = 'Generate the GP Export tab delimited file.'
 declare @ToolId int = 367
 
-declare @PageToolAppearsOn int = 297 -- Donation Page
+declare @PageToolAppearsOn int = 294 -- Deposit Page
 declare @Role int = 2 -- Administrator
 
 -- Integration Environment
