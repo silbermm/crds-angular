@@ -101,5 +101,19 @@ namespace crds_angular.Services
 
             return stream;
         }
+
+        public DonationBatchDTO GPExportFileName(int batchId)
+        {
+            var batch = GetDonationBatch(batchId);
+            var date = DateTime.Today.ToString("MMyy");
+            batch.ExportFileName = string.Format("{0}_{1}.csv", batch.BatchName, date);
+
+            return batch;
+        }
+
+        public void UpdateBatchToExported(int batchId)
+        {
+            _mpDonationService.UpdateBatchToExported(batchId);
+        }
     }
 }

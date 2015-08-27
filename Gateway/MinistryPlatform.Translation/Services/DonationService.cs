@@ -346,5 +346,19 @@ namespace MinistryPlatform.Translation.Services
 
             return gpExport;
         }
+
+        public void UpdateBatchToExported(int batchId)
+        {
+            var batch = GetDonationBatch(batchId);
+
+            var token = ApiLogin();
+            var paramaters = new Dictionary<string, object>
+            {
+                {"Deposit_ID", batch.DepositId},
+                {"Exported", true},
+            };
+
+            _ministryPlatformService.UpdateRecord(_depositsPageId, paramaters, token);
+        }
     }
 }

@@ -16,5 +16,7 @@ namespace crds_angular.Services.Interfaces
         DonationBatchDTO GetDonationBatchByProcessorTransferId(string processorTransferId);
         DonationBatchDTO GetDonationBatch(int batchId);
         MemoryStream CreateGPExport(int batchId, string token);
+        DonationBatchDTO GPExportFileName(int batchId);
+        void UpdateBatchToExported(int batchId);
     }
 }

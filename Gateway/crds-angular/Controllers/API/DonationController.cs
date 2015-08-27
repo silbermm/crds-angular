@@ -49,8 +49,13 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
+                    // get export file and name
                     var stream = _gatewayDonationService.CreateGPExport(batchId, token);
-                    var contentType = MimeMapping.GetMimeMapping(string.Format("GP_Export_Batch {0}.csv", batchId));
+                    var batch = _gatewayDonationService.GPExportFileName(batchId);
+                    var contentType = MimeMapping.GetMimeMapping(batch.ExportFileName);
+
+                    // set batch/deposite to exported
+                    _gatewayDonationService.UpdateBatchToExported(batchId);
 
                     return new FileResult(stream, contentType);
                 }
