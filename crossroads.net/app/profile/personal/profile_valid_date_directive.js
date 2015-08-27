@@ -22,7 +22,7 @@
                     dateFormat = dateFormat.replace(/YYYY/, '((19|20)\\d\\d)');
                     dateFormat = dateFormat.replace(/MM/, '(0[1-9]|1[012])');
                     dateFormat = dateFormat.replace(/DD/, '(0[1-9]|[12][0-9]|3[01])');
-                    dateFormat = new RegExp(dateFormat);
+                    dateFormat = new RegExp('^' + dateFormat + '$');
                     
                     if (!value.match(dateFormat)) {
                         return false;
