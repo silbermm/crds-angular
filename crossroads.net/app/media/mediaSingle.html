@@ -1,21 +1,21 @@
   <div class="row">
 
-      <div class="media-curtain" ng-controller="MediaController as media">
+      <div class="media-curtain">
         <div class="media-background">
           <div class="container">
 
             <!--VIDEO-->
-            <div class="row" ng-show="media.msgisopen">
+            <div class="row" ng-show="singleMedia.msgisopen">
               <div class="col-lg-10 col-lg-offset-1 custom-poster mobile-hard-left mobile-hard-right ng-scope">
                 <svg viewBox="0 0 32 32" class="icon icon-youtube-play-bw">
                 	<use xlink:href="#youtube-play-bw"></use>
                 </svg>
-                <img src="http://s3.amazonaws.com/crossroads-media/images/likeaboss_02_still.jpg" class="img-full-width">
+                <img src="{{singleMedia.media.video.still.filename}}" class="img-full-width">
               </div>
             </div>
 
             <!--AUDIO-->
-            <div class="row" ng-show="media.musicisopen">
+            <div class="row" ng-show="singleMedia.musicisopen">
               <div class="col-lg-10 col-lg-offset-1 mobile-hard-left mobile-hard-right ng-scope">
                 <div class="controls">
                   <div class="col-xs-2 col-sm-1">
@@ -33,14 +33,11 @@
                     </div>
                   </div><!--/col-xs-10 col-sm-11-->
               </div>
-                <img src="http://s3.amazonaws.com/crossroads-media/images/likeaboss_02_still.jpg" class="img-full-width">
+                <img src="{{singleMedia.media.audio.still.filename}}" class="img-full-width">
               </div>
             </div>
-
-            <ng-include src="'media/media-details.html'"> </ng-include>
-
+            <ng-include src="'media/mediaDetails.html'"> </ng-include>
           </div><!--/container-->
-
         </div><!--/media-background-->
       </div><!--/media-curtain-->
 
