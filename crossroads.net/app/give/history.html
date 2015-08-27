@@ -25,20 +25,30 @@
       </p>
     </div>
 
+
+
+
     <!--  NO GIVING HISTORY  -->
-    <div ng-show="!history">
-      <h3 class="flush-bottom">Looks Empty Around Here</h3>
-      <h4 class="text-muted flush-top">It’s the generosity of everyday people in our community that fuels the life change we experience around here.</h4>
-      <p>We follow three core principles in the handling of money:
-        <ol>
-          <li>bless people</li>
-          <li>base our budget on what we think God wants, not on what we think we’ll get</li>
-          <li>money is a tool for a church to use and therefore should be spent, not saved.</li>
-        </ol>
-        We believe these things strike at the heart of how God wants money to be used, as seen in the Bible.
-      </p>
-      <button class="btn btn-lg btn-secondary" ui-sref="give">Give Now</button>
-    </div>
+    <div ng-show="!history" class="no-data">
+      <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+
+          <svg viewBox="0 0 32 32" class="icon icon-clock3">
+          	<use xlink:href="#clock3"></use>
+          </svg>
+          <svg viewBox="0 0 18 32" class="icon icon-dollar">
+          	<use xlink:href="#dollar"></use>
+          </svg>
+          <h4>You have no recorded giving history.</h4>
+          <p>Learn more about our <a href="/financial-philosophy">financial philosophy</a>,start <a href="/give">giving now</a>, or contact <a href="mailto:finance@crossroads.net">finance@crossroads.net</a> for more information.</p>
+          <button class="btn btn-lg btn-secondary" ui-sref="give">Give Now</button>
+        </div><!--/col-sm-12-->
+      </div><!--/row-->
+    </div><!--/no-data-->
+
+
+
+
 
     <!-- GIVING HISTORY -->
     <div ng-show="history">
@@ -453,12 +463,21 @@
 
     </div>
 
-    <!-- DEMO CONTROLS -->
-    <hr>
-    <h5>DEMO CONTROLS</h5>
-    <button class="btn btn-standard" ng-click="history = !history">Toggle History</button>
+    <!-- Mock CONTROLS -->
+    <div class="mock-toggle-controls">
+      <div class="btn-group" dropdown is-open="status.isopen">
+        <button id="single-button" type="button" class="btn btn-default" dropdown-toggle ng-disabled="disabled">
+          <svg viewBox="0 0 32 32" class="icon icon-gear">
+          	<use xlink:href="#gear"></use>
+          </svg>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
+          <li role="menuitem"><a ng-click="history = true">Show State with History</a></li>
+          <li role="menuitem"><a ng-click="history = false">Show State without History</a></li>
 
-  </div>
-  <!--/col-sm-10-->
-</div>
-<!--/row-->
+        </ul>
+      </div>
+    </div>
+
+  </div><!--/col-sm-10-->
+</div><!--/row-->
