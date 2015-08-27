@@ -11,7 +11,7 @@
       .state('media', {
         abstract: true,
         parent: 'noSideBar',
-        url: '/media',
+        url: '',
         controller: 'MediaController as media',
         template: '<ui-view/>',
         resolve: {
@@ -28,7 +28,7 @@
         }
       })
       .state('media.all', {
-        url: '',
+        url: '/media',
         templateUrl: 'media/viewAll.html',
       })
       .state('media.music', {
@@ -45,26 +45,19 @@
       })
       .state('media.seriesSingle', {
         url: '/series/{id:int}/:title?',
-        controller: 'SeriesController as series',
+        controller: 'SingleSeriesController as series',
         templateUrl: 'media/seriesSingle.html',
         resolve: {
           Media: 'Media',
           $stateParams: '$stateParams',
-          Messages: function (Media, Series, $stateParams) {
-            debugger;
-            var series = getSeriesById(Series.series, $stateParams.id)
-            if (!series) {
-              return null;
-            }
-
-            var item = Media.Messages({seriesId: series.id}).get().$promise;
+          Selected: function(Media, Series, $stateParams) {
+            return _.find(Series.series, function (obj) {
+              return (obj.id === $stateParams.id);
+            });
+          },
+          Messages: function (Media, Selected) {
+            var item = Media.Messages({seriesId: Selected.id}).get().$promise;
             return item;
-
-            function getSeriesById(series, seriesID) {
-              return _.find(series, function (obj) {
-                return (obj.id === seriesID);
-              });
-            };
           }
         }
       })
@@ -82,7 +75,7 @@
       })
       .state('messageSingle', {
         parent: 'screenWidth',
-        url: '/media/message/:id/:title?',
+        url: '/message/:id/:title?',
         controller: 'SingleMediaController as singleMedia',
         templateUrl: 'media/mediaSingle.html',
         resolve: {
@@ -92,7 +85,7 @@
             return 'messages';
           },
           SingleMedia: function (Media, $stateParams) {
-            var item = Media.Messages({title: $stateParams.id}).get().$promise;
+            var item = Media.Messages({id: $stateParams.id}).get().$promise;
             return item;
           },
           ParentItemProperty: function() {
@@ -108,61 +101,36 @@
             return parent;
           },
           ImageURL: function (SingleMedia) {
-            debugger;
+            if (!SingleMedia.messages[0]) {
+              return null;
+            }
             return _.get(SingleMedia.messages[0], 'video.still.filename');
           }
         }
       })
-      .state('videoSingle', {
+      .state('mediaSingle', {
         parent: 'screenWidth',
-        url: '/media/video/:title',
+        url: '/media/{id:int}/:title?',
         controller: 'SingleMediaController as singleMedia',
         templateUrl: 'media/mediaSingle.html',
         resolve: {
           Media: 'Media',
           $stateParams: '$stateParams',
           ItemProperty: function () {
-            return 'videos';
+            return 'media';
           },
           SingleMedia: function (Media, $stateParams) {
-            var item = Media.Videos({title: $stateParams.title}).get().$promise;
+            var item = Media.Medias({id: $stateParams.id}).get().$promise;
             return item;
           },
           ParentItemProperty: function() {
             return null;
           },
-          ParentMedia: function (Media, SingleMedia) {
+          ParentMedia: function () {
             return null;
           },
           ImageURL: function (SingleMedia) {
-            return _.get(SingleMedia.videos[0], 'still.filename');
-          }
-        }
-      })
-      .state('musicSingle', {
-        parent: 'screenWidth',
-        url: '/media/music/:title',
-        controller: 'SingleMediaController as singleMedia',
-        templateUrl: 'media/mediaSingle.html',
-        resolve: {
-          Media: 'Media',
-          $stateParams: '$stateParams',
-          ItemProperty: function () {
-            return 'musics';
-          },
-          SingleMedia: function (Media, $stateParams) {
-            var item = Media.Musics({title: $stateParams.title}).get().$promise;
-            return item;
-          },
-          ParentItemProperty: function() {
-            return null;
-          },
-          ParentMedia: function (Media, SingleMedia) {
-            return null;
-          },
-          ImageURL: function (SingleMedia) {
-            debugger;
-            return _.get(SingleMedia.musics[0], 'still.filename');
+            return _.get(SingleMedia.media[0], 'still.filename');
           }
         }
       })

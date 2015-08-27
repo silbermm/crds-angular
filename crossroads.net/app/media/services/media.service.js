@@ -12,6 +12,13 @@
             'get': { method:'GET', cache: true}
           });
       },
+      Medias: function(params) {
+        return $resource(__CMS_ENDPOINT__ + 'api/media/',
+          params,
+          {
+            'get': { method:'GET', cache: true}
+          });
+      },
       Musics: function(params) {
         return $resource(__CMS_ENDPOINT__ + 'api/musics/',
           params,

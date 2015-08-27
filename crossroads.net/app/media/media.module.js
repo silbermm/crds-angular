@@ -24,7 +24,8 @@ require('./templates/seriesListCard.html');
 require('./templates/messagesListCard.html');
 
 app.controller('MediaController', require('./media.controller'));
-app.controller('SingleMediaController', require('./singleMedia.controller.js'));
-app.controller('SeriesController', require('./series.controller'));
+app.controller('SingleMediaController', require('./singleMedia.controller'));
+app.controller('SingleSeriesController', require('./singleSeries.controller.js'));
+app.filter('replaceNonAlphaNumeric', require('./filters/replaceNonAlphaNumeric.filter.js'));
 
-app.directive("mediaListCard", require('./directives/mediaListCard.directive.js'));
+app.directive("mediaListCard", require('./directives/mediaListCard.directive'));
