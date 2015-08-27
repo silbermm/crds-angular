@@ -29,16 +29,14 @@
     <div ng-show="history" class="no-data">
       <div class="row">
         <div class="col-sm-6 col-sm-offset-3">
-
           <svg viewBox="0 0 32 32" class="icon icon-clock3">
-          	<use xlink:href="#clock3"></use>
+            <use xlink:href="#clock3"></use>
           </svg>
           <svg viewBox="0 0 18 32" class="icon icon-dollar">
-          	<use xlink:href="#dollar"></use>
+            <use xlink:href="#dollar"></use>
           </svg>
-          <h4>You have no recorded giving history.</h4>
-          <p>Learn more about our <a href="/financial-philosophy">financial philosophy</a>,start <a href="/give">giving now</a>, or contact <a href="mailto:finance@crossroads.net">finance@crossroads.net</a> for more information.</p>
-          <button class="btn btn-lg btn-secondary" ui-sref="give">Give Now</button>
+          <div ng-bind-html="$root.MESSAGES.no_giving_history.content | html">
+          </div>
         </div><!--/col-sm-12-->
       </div><!--/row-->
     </div><!--/no-data-->
