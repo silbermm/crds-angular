@@ -51,16 +51,8 @@
           // vm.processing is used to set state and text on the "Give" button
           // Make sure to reset the processing state to false whenever state change succeeds.
           vm.processing = false;
-
-          // If we're on the account page and the user is logged in, focus the
-          // proper account field (email gets focus of not logged in)
-          
-          //// POTENTIALLY MOVE TO BANK DETAILS DIRECTIVE 
-          if(toState.name == 'give.account' && Session.isActive()) {
-            vm.togglePaymentInfo();
-          }
-
           // Force the state to reset after successfully giving
+
           //// POTENTIALLY MOVE TO THE THANK YOU DIRECTIVE
           if(toState.name == 'give.thank-you') {
             vm.initialized = false;
@@ -80,7 +72,7 @@
         vm.bank= {};
         vm.bankinfoSubmitted = false;
         vm.card = {};
-        vm.changeAccountInfo = false;
+        //vm.changeAccountInfo = false;
         vm.donor = {};
         vm.donorError = false;
         vm.dto = GiveTransferService;
@@ -175,7 +167,7 @@
           vm.amountSubmitted = true;
           // look at refactoring form validation
           // custom validator for Growl
-          if($scope.giveForm.amountForm.$valid) {
+          if(vm.giveForm.amountForm.$valid) {
               if(!vm.dto.view) {
                 vm.dto.view = 'bank';
               }
@@ -285,7 +277,7 @@
 
         // 
         vm.processBankAccountChange = function(){
-         if ($scope.giveForm.$valid) {
+         if (vm.giveForm.$valid) {
              vm.processing = true;
              vm.createBank();
              PaymentService.updateDonorWithBankAcct(vm.dto.donor.id,vm.bank,vm.dto.email)
@@ -311,7 +303,7 @@
         };
 
         vm.processCreditCardChange = function (){
-          if ($scope.giveForm.$valid) {
+          if (vm.giveForm.$valid) {
             vm.processing = true;
             vm.dto.declinedCard = false;
             vm.createCard();
@@ -341,7 +333,7 @@
           vm.amount = undefined;
           vm.amountSubmitted = false;
           vm.bankinfoSubmitted = false;
-          vm.changeAccountInfo = false;
+          //vm.changeAccountInfo = false;
           vm.email = undefined;
           vm.initialized = false;
           vm.processing = false;
@@ -357,7 +349,7 @@
 
         vm.submitBankInfo = function() {
           vm.bankinfoSubmitted = true;
-          if ($scope.giveForm.accountForm.$valid) {
+          if (vm.giveForm.accountForm.$valid) {
             vm.processing = true;
             PaymentService.getDonor($scope.give.email)
             .then(function(donor){
@@ -432,9 +424,9 @@
           } else {
           if (vm.dto.view == "cc") {
             if(vm.dto.savedPayment == 'bank') {
-              $scope.giveForm.creditCardForm.$setDirty();
+              vm.giveForm.creditCardForm.$setDirty();
             }
-            if (!$scope.giveForm.creditCardForm.$dirty){
+            if (!vm.giveForm.creditCardForm.$dirty){
               vm.processing = true;
               vm.donate(vm.dto.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.dto.email, vm.dto.view, function() {
                $state.go("give.thank-you");
@@ -444,9 +436,9 @@
              }
            } else if (vm.dto.view == "bank"){
               if(vm.dto.savedPayment == 'cc') {
-                $scope.giveForm.bankAccountForm.$setDirty();
+                vm.giveForm.bankAccountForm.$setDirty();
               }
-              if(!$scope.giveForm.bankAccountForm.$dirty) {
+              if(!vm.giveForm.bankAccountForm.$dirty) {
                  vm.processing = true;
                  vm.donate(vm.dto.program.ProgramId, vm.dto.amount, vm.dto.donor.id, vm.dto.email, vm.dto.view, function() {
                 $state.go("give.thank-you");

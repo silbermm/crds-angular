@@ -2,7 +2,20 @@
 	<donation-details amount="give.dto.amount" program="give.dto.program"
 					  amount-submitted="give.amountSubmitted" programs-in="give.programsInput">
 	</donation-details>
-	<bank-credit-card-details></bank-credit-card-details>
+	<bank-credit-card-details 
+        dto='give.dto'
+        show-message-on-change='give.showMessageOnChange'
+        bank-info-submitted='give.bankInfoSubmitted'
+        show-check-class='give.showCheckClass'
+        show-message='give.showMessage'
+        show-message-on-change='give.showMessageOnChange' 
+        donor='give.donor'
+        email='give.email'
+        set-valid-card='setValidCard'
+        set-valid-cvc='setValidCvc' 
+        account-state-name='give.account'>
+      </bank-credit-card-details>
+  </bank-credit-card-details>
 	<button ng-click="give.submitChangedBankInfo()" ng-class="{disabled: give.processing}" class="btn btn-primary btn-lg btn-block-mobile give-button">
 		<span ng-if="give.processing">Giving...</span>
 		<span ng-if="!give.processing">Give {{give.dto.amount | currency}}</span>

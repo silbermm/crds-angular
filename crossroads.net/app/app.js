@@ -3,20 +3,23 @@ require('./events');
 require('./give');
 require('./mp_tools');
 require('../lib/select.css');
-(function () {
+(function() {
   'use strict()';
 
   var MODULE = 'crossroads';
+  var constants = require('./constants');
 
-  angular.module(MODULE, [
-   'crossroads.core',
-   'crossroads.profile',
-   'crossroads.mptools',
-   'crossroads.give',
-   'crossroads.trips'
+
+  angular.module(constants.MODULES.CROSSROADS, [
+      constants.MODULES.CORE,
+      constants.MODULES.COMMON,
+      constants.MODULES.PROFILE,
+      constants.MODULES.MPTOOLS,
+      constants.MODULES.GIVE,
+      constants.MODULES.TRIPS,
    ]);
 
-  angular.module(MODULE).config(require('./routes'));
+  angular.module(constants.MODULES.CROSSROADS).config(require('./routes'));
 
   require('./services');
   require('./community_groups_signup');

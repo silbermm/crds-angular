@@ -16,7 +16,8 @@ module.exports = {
     entry: {
         trips: './app/trips/trips.module.js',
         main: './app/app.js',
-        core: ['./node_modules/crds-core'] 
+        core: ['./node_modules/crds-core'], 
+        common: ['./app/common/common.module.js'],
     },
     watchPattern: 'app/**/**',
     externals: {
