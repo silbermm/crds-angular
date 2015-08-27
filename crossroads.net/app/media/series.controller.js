@@ -1,5 +1,5 @@
-'use strict';
 (function () {
+    'use strict';
     module.exports = SeriesController;
 
     SeriesController.$inject = ['$state', '$stateParams', 'Series', 'Messages'];
