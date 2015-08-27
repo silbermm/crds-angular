@@ -202,21 +202,25 @@
         url: '/series/single/:title',
         controller: 'SeriesController as series',
         templateUrl: 'media/seriesSingle.html',
-          resolve: {
-            Media: 'Media',
-            $stateParams: '$stateParams',
-            Messages: function (Media, Series, $stateParams) {
-              var series = getSeriesByTitle(Series.series, $stateParams.title)
-              var item = Media.Messages().get({ seriesId: series.id }).$promise;
-              return item;
-
-              function getSeriesByTitle(series, seriesTitle) {
-                return _.find(series, function(obj) {
-                  return (obj.title === seriesTitle);
-                });
-              };
+        resolve: {
+          Media: 'Media',
+          $stateParams: '$stateParams',
+          Messages: function (Media, Series, $stateParams) {
+            var series = getSeriesByTitle(Series.series, $stateParams.title)
+            if (!series) {
+              return null;
             }
+
+            var item = Media.Messages({seriesId: series.id}).get().$promise;
+            return item;
+
+            function getSeriesByTitle(series, seriesTitle) {
+              return _.find(series, function (obj) {
+                return (obj.title === seriesTitle);
+              });
+            };
           }
+        }
       })
       .state('media-series-single-lo-res', {
         parent: 'noSideBar',
@@ -228,7 +232,36 @@
         parent: 'screenWidth',
         url: '/media/single',
         controller: 'MediaController as media',
-        templateUrl: 'media/media-single.html'
+        templateUrl: 'media/mediaSingle.html'
+      })
+      .state('messageSingle', {
+        parent: 'screenWidth',
+        url: '/media/message/:title',
+        controller: 'SingleMediaController as singleMedia',
+        templateUrl: 'media/mediaSingle.html',
+        resolve: {
+          Media: 'Media',
+          $stateParams: '$stateParams',
+          ItemProperty: function () {
+            return 'messages';
+          },
+          SingleMedia: function (Media, $stateParams) {
+            var item = Media.Messages({title: $stateParams.title}).get().$promise;
+            return item;
+          },
+          ParentItemProperty: function() {
+            return 'series';
+          },
+          ParentMedia: function (Media, SingleMedia) {
+            if (!SingleMedia.messages[0]) {
+              return null;
+            }
+
+            var seriesId = SingleMedia.messages[0].series;
+            var parent = Media.Series({id: seriesId}).get().$promise;
+            return parent;
+          }
+        }
       })
       .state('blog', {
         parent: 'noSideBar',
