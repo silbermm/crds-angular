@@ -210,7 +210,7 @@
             if (!series) {
               return null;
             }
-            
+
             var item = Media.Messages({seriesId: series.id}).get().$promise;
             return item;
 
@@ -232,13 +232,13 @@
         parent: 'screenWidth',
         url: '/media/single',
         controller: 'MediaController as media',
-        templateUrl: 'media/media-single.html'
+        templateUrl: 'media/mediaSingle.html'
       })
-      .state('message-single', {
+      .state('messageSingle', {
         parent: 'screenWidth',
         url: '/media/message/:title',
         controller: 'SingleMediaController as singleMedia',
-        templateUrl: 'media/media-single.html',
+        templateUrl: 'media/mediaSingle.html',
         resolve: {
           Media: 'Media',
           $stateParams: '$stateParams',
