@@ -26,18 +26,13 @@
     </div>
 
     <!--  NO GIVING HISTORY  -->
-    <div ng-show="!history">
-      <h3 class="flush-bottom">Looks Empty Around Here</h3>
-      <h4 class="text-muted flush-top">It’s the generosity of everyday people in our community that fuels the life change we experience around here.</h4>
-      <p>We follow three core principles in the handling of money:
-        <ol>
-          <li>bless people</li>
-          <li>base our budget on what we think God wants, not on what we think we’ll get</li>
-          <li>money is a tool for a church to use and therefore should be spent, not saved.</li>
-        </ol>
-        We believe these things strike at the heart of how God wants money to be used, as seen in the Bible.
-      </p>
-      <button class="btn btn-lg btn-secondary" ui-sref="give">Give Now</button>
+    <div ng-show="!history" class="text-center">
+      <svg viewBox="0 0 32 32" class="icon-xxxlarge icon-clock3">
+        <use xlink:href="#clock3"></use>
+      </svg>
+      <h3>You have no recorded giving history yet.</h3>
+      <button class="btn btn-lg btn-secondary btn-block-mobile" ui-sref="give">Give Now</button>
+      <p class="push-top">Learn more about our <a ui-sref="give">financial philosophy</a>, or contact <a href="mailto:finance@crossroads.net">finance@crossroads.net</a> for more information.</p>
     </div>
 
     <!-- GIVING HISTORY -->
