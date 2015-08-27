@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using AutoMapper;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
@@ -79,6 +78,21 @@ namespace MinistryPlatform.Translation.Services
         public DonationBatch GetDonationBatch(int batchId)
         {
             return (WithApiLogin(token => (Mapper.Map<Dictionary<string,object>, DonationBatch>(_ministryPlatformService.GetRecordDict(_batchesPageId, batchId, token)))));
+        }
+
+        public DonationBatch GetDonationBatchByDepositId(int depositId)
+        {
+            return (WithApiLogin(token =>
+            {
+                var search = string.Format(",,,,,{0}", depositId);
+                var batches = _ministryPlatformService.GetRecordsDict(_batchesPageId, token, search);
+                if (batches == null || batches.Count == 0)
+                {
+                    return (null);
+                }
+
+                return (Mapper.Map<Dictionary<string, object>, DonationBatch>(batches[0]));
+            }));
         }
 
         public int CreateDonationBatch(string batchName, DateTime setupDateTime, decimal batchTotalAmount, int itemCount,
@@ -314,9 +328,9 @@ namespace MinistryPlatform.Translation.Services
             return trips;
         }
 
-        public List<GPExportDatum> CreateGPExport(int batchId, string token)
+        public List<GPExportDatum> CreateGPExport(int depositId, string token)
         {
-            var results = _ministryPlatformService.GetPageViewRecords(_gpExportPageView, token, batchId.ToString());
+            var results = _ministryPlatformService.GetPageViewRecords(_gpExportPageView, token, depositId.ToString());
             var gpExport = new List<GPExportDatum>();
 
             foreach (var result in results)
@@ -347,14 +361,12 @@ namespace MinistryPlatform.Translation.Services
             return gpExport;
         }
 
-        public void UpdateBatchToExported(int batchId)
+        public void UpdateDepositToExported(int depositId)
         {
-            var batch = GetDonationBatch(batchId);
-
             var token = ApiLogin();
             var paramaters = new Dictionary<string, object>
             {
-                {"Deposit_ID", batch.DepositId},
+                {"Deposit_ID", depositId},
                 {"Exported", true},
             };
 

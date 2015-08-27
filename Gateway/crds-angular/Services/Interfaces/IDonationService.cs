@@ -10,13 +10,14 @@ namespace crds_angular.Services.Interfaces
         int UpdateDonationStatus(string processorPaymentId, int statusId, DateTime? statusDate, string statusNote = null);
         DonationDTO GetDonationByProcessorPaymentId(string processorPaymentId);
         DonationBatchDTO CreateDonationBatch(DonationBatchDTO batch);
+        DonationBatchDTO GetDonationBatchByDepositId(int depositId);
         void ProcessDeclineEmail(string processorPaymentId);
         DepositDTO CreateDeposit(DepositDTO deposit);
         void CreatePaymentProcessorEventError(StripeEvent stripeEvent, StripeEventResponseDTO stripeEventResponse);
         DonationBatchDTO GetDonationBatchByProcessorTransferId(string processorTransferId);
         DonationBatchDTO GetDonationBatch(int batchId);
-        MemoryStream CreateGPExport(int batchId, string token);
-        DonationBatchDTO GPExportFileName(int batchId);
-        void UpdateBatchToExported(int batchId);
+        MemoryStream CreateGPExport(int depositId, string token);
+        DonationBatchDTO GPExportFileName(int depositId);
+        void UpdateDepositToExported(int depositId);
     }
 }

@@ -42,20 +42,20 @@ namespace crds_angular.Controllers.API
             return (Authorized(token => CreateDonationAndDistributionAuthenticated(token, dto), () => CreateDonationAndDistributionUnauthenticated(dto)));
         }
 
-        [System.Web.Http.Route("api/gpexport/{batchId}")]
-        public IHttpActionResult Get(int batchId)
+        [System.Web.Http.Route("api/gpexport/{depositId}")]
+        public IHttpActionResult Get(int depositId)
         {
             return Authorized(token =>
             {
                 try
                 {
                     // get export file and name
-                    var stream = _gatewayDonationService.CreateGPExport(batchId, token);
-                    var batch = _gatewayDonationService.GPExportFileName(batchId);
+                    var stream = _gatewayDonationService.CreateGPExport(depositId, token);
+                    var batch = _gatewayDonationService.GPExportFileName(depositId);
                     var contentType = MimeMapping.GetMimeMapping(batch.ExportFileName);
 
                     // set batch/deposite to exported
-                    _gatewayDonationService.UpdateBatchToExported(batchId);
+                    _gatewayDonationService.UpdateDepositToExported(depositId);
 
                     return new FileResult(stream, contentType);
                 }

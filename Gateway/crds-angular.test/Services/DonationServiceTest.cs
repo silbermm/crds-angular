@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
-using AutoMapper;
 using crds_angular.App_Start;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services;
@@ -93,6 +91,29 @@ namespace crds_angular.test.Services
             Assert.AreEqual(123+"", result.donation_id);
             Assert.AreEqual(456, result.amount);
             Assert.AreEqual(789, result.batch_id);
+        }
+
+        [Test]
+        public void TestGetDonationBatchByDepositDonationIdNotFound()
+        {
+            _mpDonationService.Setup(mocked => mocked.GetDonationBatchByDepositId(12424)).Returns((DonationBatch)null);
+            Assert.IsNull(_fixture.GetDonationBatchByDepositId(12424));
+            _mpDonationService.VerifyAll();
+        }
+
+        [Test]
+        public void TestGetDonationBatchByDepositId()
+        {
+            _mpDonationService.Setup(mocked => mocked.GetDonationBatchByDepositId(12424)).Returns(new DonationBatch
+            {
+                Id = 123,
+                DepositId = 12424,
+            });
+            var result = _fixture.GetDonationBatchByDepositId(12424);
+            _mpDonationService.VerifyAll();
+            Assert.IsNotNull(result);
+            Assert.AreEqual(123, result.Id);
+            Assert.AreEqual(12424, result.DepositId);
         }
 
         [Test]
@@ -229,7 +250,7 @@ namespace crds_angular.test.Services
             var date = DateTime.Today;
             var fileName = string.Format("TestBatchName_{0}{1}.csv", date.ToString("MM"), date.ToString("yy"));
 
-            _mpDonationService.Setup(mocked => mocked.GetDonationBatch(123)).Returns(new DonationBatch
+            _mpDonationService.Setup(mocked => mocked.GetDonationBatchByDepositId(123)).Returns(new DonationBatch
             {
                 Id = 123,
                 DepositId = 456,
