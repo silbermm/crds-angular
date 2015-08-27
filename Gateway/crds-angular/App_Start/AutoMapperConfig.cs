@@ -54,6 +54,7 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id));
 
             Mapper.CreateMap<Dictionary<string, object>, DonationBatch>()
+                .ForMember(dest => dest.BatchName, opts => opts.MapFrom(src => src.ToString("Batch_Name")))
                 .ForMember(dest => dest.ProcessorTransferId, opts => opts.MapFrom(src => src.ToString("Processor_Transfer_ID")))
                 .ForMember(dest => dest.DepositId, opts => opts.MapFrom(src => src.ToNullableInt("Deposit_ID", false)))
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.ContainsKey("dp_RecordID") ? src.ToInt("dp_RecordID", false) : src.ToInt("Batch_ID", false)));

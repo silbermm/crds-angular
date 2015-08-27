@@ -321,7 +321,7 @@ namespace MinistryPlatform.Translation.Services
 
             foreach (var result in results)
             {
-                bool processingFee = result.ToInt("Program ID") == _processingProgramId;
+                var processingFee = result.ToInt("Program ID") == _processingProgramId;
 
                 var gp = new GPExportDatum
                 {
