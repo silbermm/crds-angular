@@ -199,14 +199,14 @@
         templateUrl: 'media/viewAllVideos.html'
       })
       .state('media.seriesSingle', {
-        url: '/series/single/:title',
+        url: '/series/single/:id/:title?',
         controller: 'SeriesController as series',
         templateUrl: 'media/seriesSingle.html',
         resolve: {
           Media: 'Media',
           $stateParams: '$stateParams',
           Messages: function (Media, Series, $stateParams) {
-            var series = getSeriesByTitle(Series.series, $stateParams.title)
+            var series = getSeriesByTitle(Series.series, $stateParams.id)
             if (!series) {
               return null;
             }
@@ -214,9 +214,9 @@
             var item = Media.Messages({seriesId: series.id}).get().$promise;
             return item;
 
-            function getSeriesByTitle(series, seriesTitle) {
+            function getSeriesByTitle(series, seriesID) {
               return _.find(series, function (obj) {
-                return (obj.title === seriesTitle);
+                return (obj.title === seriesID);
               });
             };
           }
@@ -236,7 +236,7 @@
       })
       .state('messageSingle', {
         parent: 'screenWidth',
-        url: '/media/message/:title',
+        url: '/media/message/:id/:title?',
         controller: 'SingleMediaController as singleMedia',
         templateUrl: 'media/mediaSingle.html',
         resolve: {
@@ -246,7 +246,7 @@
             return 'messages';
           },
           SingleMedia: function (Media, $stateParams) {
-            var item = Media.Messages({title: $stateParams.title}).get().$promise;
+            var item = Media.Messages({title: $stateParams.id}).get().$promise;
             return item;
           },
           ParentItemProperty: function() {
@@ -260,6 +260,63 @@
             var seriesId = SingleMedia.messages[0].series;
             var parent = Media.Series({id: seriesId}).get().$promise;
             return parent;
+          },
+          ImageURL: function (SingleMedia) {
+            debugger;
+            return _.get(SingleMedia.messages[0], 'video.still.filename');
+          }
+        }
+      })
+      .state('videoSingle', {
+        parent: 'screenWidth',
+        url: '/media/video/:title',
+        controller: 'SingleMediaController as singleMedia',
+        templateUrl: 'media/mediaSingle.html',
+        resolve: {
+          Media: 'Media',
+          $stateParams: '$stateParams',
+          ItemProperty: function () {
+            return 'videos';
+          },
+          SingleMedia: function (Media, $stateParams) {
+            var item = Media.Videos({title: $stateParams.title}).get().$promise;
+            return item;
+          },
+          ParentItemProperty: function() {
+            return null;
+          },
+          ParentMedia: function (Media, SingleMedia) {
+            return null;
+          },
+          ImageURL: function (SingleMedia) {
+            return _.get(SingleMedia.videos[0], 'still.filename');
+          }
+        }
+      })
+      .state('musicSingle', {
+        parent: 'screenWidth',
+        url: '/media/music/:title',
+        controller: 'SingleMediaController as singleMedia',
+        templateUrl: 'media/mediaSingle.html',
+        resolve: {
+          Media: 'Media',
+          $stateParams: '$stateParams',
+          ItemProperty: function () {
+            return 'musics';
+          },
+          SingleMedia: function (Media, $stateParams) {
+            var item = Media.Musics({title: $stateParams.title}).get().$promise;
+            return item;
+          },
+          ParentItemProperty: function() {
+            return null;
+          },
+          ParentMedia: function (Media, SingleMedia) {
+            return null;
+          },
+          ImageURL: function (SingleMedia) {
+            debugger;
+            return _.get(SingleMedia.musics[0], 'still.filename');
           }
         }
       })
