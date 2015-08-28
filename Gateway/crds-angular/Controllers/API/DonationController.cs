@@ -44,6 +44,7 @@ namespace crds_angular.Controllers.API
         }
 
         [AcceptVerbs("Post")]
+        [ResponseType(typeof(FileResult))]
         [Route("api/gpexport")]
         public IHttpActionResult GenerateGPExportFiles([FromBody] DepositDTO dto)
         {
