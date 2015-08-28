@@ -128,6 +128,50 @@ namespace MinistryPlatform.Translation.Test.Services
         }
 
         [Test]
+        public void TestGetSelectedDonationBatches()
+        {
+            const int selectionId = 1248579;
+            const int depositPageId = 7070;
+            const string token = "afasdfoweradfafewwefafdsajfdafoew";
+
+            _ministryPlatformService.Setup(mocked => mocked.GetSelectionsForPageDict(depositPageId, selectionId, token)).Returns(MockDepositList);
+
+            var result = _fixture.GetSelectedDonationBatches(selectionId, token);
+            _ministryPlatformService.VerifyAll();
+            Assert.IsNotNull(result);
+            Assert.AreEqual(result.Count, 2);
+            Assert.AreEqual(DateTime.Parse("2/12/2015"), result[1].DepositDateTime);
+            Assert.AreEqual(456, result[0].Id);
+        }
+
+        private List<Dictionary<string, object>> MockDepositList()
+        {
+            return new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    {"Deposit_Date", DateTime.Parse("2/12/2010")},
+                    {"Deposit_Name", "Test Deposit Name 1"},
+                    {"Deposit_ID", 456},
+                    {"Deposit_Total", "7829.00"},
+                    {"Batch_Count", 1},
+                    {"Exported", false},
+                    {"Processor_Transfer_ID", "1233"},
+                },
+                new Dictionary<string, object>
+                {
+                    {"Deposit_Date", DateTime.Parse("2/12/2015")},
+                    {"Deposit_Name", "Test Deposit Name 2"},
+                    {"Deposit_ID", 777},
+                    {"Deposit_Total", "2.00"},
+                    {"Batch_Count", 11},
+                    {"Exported", false},
+                    {"Processor_Transfer_ID", "122233"},
+                }
+            };
+        }
+
+        [Test]
         public void TestUpdateDonationStatusById()
         {
             const int donationId = 987;
