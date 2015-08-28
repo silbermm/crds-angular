@@ -7,12 +7,18 @@
             <!--VIDEO-->
             <div class="row" ng-show="singleMedia.msgisopen">
               <div class="col-lg-10 col-lg-offset-1 custom-poster mobile-hard-left mobile-hard-right ng-scope">
+
+                <!--Commenting out this section to simulate the state presented after the user clicks on the still image to play video. After still image is clicked, the image and SVG should be hidden and the YouTube player started
                 <svg viewBox="0 0 32 32" class="icon icon-youtube-play-bw">
-                	<!--<use xlink:href="#youtube-play-bw"></use>-->
-                  <use xlink:href="https://www.youtube.com/watch?v=3yBHxsTnIXg"></use>
+                	<use xlink:href="#youtube-play-bw"></use>
                 </svg>
-                <!--<img src="{{singleMedia.imageurl}}" class="img-full-width">-->
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/3yBHxsTnIXg" frameborder="0" allowfullscreen></iframe>
+                <img src="{{singleMedia.imageurl}}" class="img-full-width">
+                -->
+
+                <div class="embed-responsive embed-responsive-16by9">
+                  <iframe width="560" height="315" src="https://www.youtube.com/embed/PYrZUJeHlz4" frameborder="0" allowfullscreen></iframe>
+                </div>
+
               </div>
             </div>
 
