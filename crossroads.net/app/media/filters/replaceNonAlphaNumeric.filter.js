@@ -7,7 +7,7 @@
 
   function ReplaceNonAlphaNumeric(input) {
     if (input) {
-      return input.replace(/[^a-zA-Z0-9_]/g, '_');
+      return input.replace(/[^a-zA-Z0-9_]/g, '-');
     }
 
     return input;

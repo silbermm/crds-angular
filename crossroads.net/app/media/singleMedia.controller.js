@@ -21,7 +21,7 @@
       vm.parentMedia = ParentMedia[ParentItemProperty][0];
     }
     else {
-      vm.parentMedia = "none";
+      vm.parentMedia = false;
     }
 
   }
