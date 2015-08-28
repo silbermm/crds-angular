@@ -78,6 +78,7 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
+                    _gatewayDonationService.GenerateGPExportFileNames(selectionId, token);
                     return Ok("");
                 }
                 catch (Exception ex)

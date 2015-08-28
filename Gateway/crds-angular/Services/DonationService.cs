@@ -76,9 +76,9 @@ namespace crds_angular.Services
             return (Mapper.Map<DonationBatch, DonationBatchDTO>(_mpDonationService.GetDonationBatchByDepositId(depositId)));
         }
 
-        public List<DonationBatchDTO> GetSelectedDonationBatches(int selectionId)
+        public List<DonationBatchDTO> GetSelectedDonationBatches(int selectionId, string token)
         {
-            var selectedBatches = _mpDonationService.GetSelectedDonationBatches(selectionId);
+            var selectedBatches = _mpDonationService.GetSelectedDonationBatches(selectionId, token);
             var batches = new List<DonationBatchDTO>();
 
             foreach (var batch in selectedBatches)
@@ -128,8 +128,9 @@ namespace crds_angular.Services
             _mpDonationService.UpdateDepositToExported(depositId);
         }
 
-        public List<DonationBatchDTO> GenerateGPExportFileNames(int selectionId)
+        public List<DonationBatchDTO> GenerateGPExportFileNames(int selectionId, string token)
         {
+            _mpDonationService.GetSelectedDonationBatches(selectionId,token);
             return new List<DonationBatchDTO>();
         }
     }
