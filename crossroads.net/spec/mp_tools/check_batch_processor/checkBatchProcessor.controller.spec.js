@@ -33,6 +33,25 @@ describe('Check Batch Processor Tool', function() {
 
   beforeEach(angular.mock.module('crossroads'));
 
+  var GIVE_ROLES = { StewardshipDonationProcessor: 123 };
+  var GIVE_PROGRAM_TYPES = { Fuel: 999 };
+
+  beforeEach(function() {
+    angular.mock.module('crossroads.give', function($provide) {
+      $provide.constant('GIVE_ROLES', GIVE_ROLES);
+      $provide.constant('GIVE_PROGRAM_TYPES', GIVE_PROGRAM_TYPES);
+    });
+  });
+
+  var AuthService;
+
+  beforeEach(function(){
+    angular.mock.module('crossroads.core', function($provide){
+      AuthService = jasmine.createSpyObj('AuthService', ['isAuthenticated', 'isAuthorized']);
+      $provide.value('AuthService', AuthService);
+    });
+  });
+
   var $controller;
   var $log;
   var $httpBackend;
@@ -53,7 +72,38 @@ describe('Check Batch Processor Tool', function() {
       $scope = {};
       controller = $controller('CheckBatchProcessor', { $scope: $scope });
       $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/checkscanner/batches').respond(batchList);
-      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/programs/1').respond(programList);
+      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/programs/' + GIVE_PROGRAM_TYPES.Fuel).respond(programList);
+    });
+
+    describe('Function allowAccess', function() {
+      it('Should not allow access if user is not authenticated', function() {
+        AuthService.isAuthenticated.and.returnValue(false);
+
+        expect(controller.allowAccess()).toBeFalsy();
+
+        expect(AuthService.isAuthenticated).toHaveBeenCalled();
+        expect(AuthService.isAuthorized).not.toHaveBeenCalled();
+      });
+
+      it('Should not allow access if user is authenticated but not authorized', function() {
+        AuthService.isAuthenticated.and.returnValue(true);
+        AuthService.isAuthorized.and.returnValue(false);
+
+        expect(controller.allowAccess()).toBeFalsy();
+
+        expect(AuthService.isAuthenticated).toHaveBeenCalled();
+        expect(AuthService.isAuthorized).toHaveBeenCalledWith(GIVE_ROLES.StewardshipDonationProcessor);
+      });
+
+      it('Should not allow access if user is authenticated but not authorized', function() {
+        AuthService.isAuthenticated.and.returnValue(true);
+        AuthService.isAuthorized.and.returnValue(true);
+
+        expect(controller.allowAccess()).toBeTruthy();
+
+        expect(AuthService.isAuthenticated).toHaveBeenCalled();
+        expect(AuthService.isAuthorized).toHaveBeenCalledWith(GIVE_ROLES.StewardshipDonationProcessor);
+      });
     });
 
     describe('Initial Load', function() {
