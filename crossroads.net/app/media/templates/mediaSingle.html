@@ -10,7 +10,7 @@
                 <svg viewBox="0 0 32 32" class="icon icon-youtube-play-bw">
                 	<use xlink:href="#youtube-play-bw"></use>
                 </svg>
-                <img src="{{singleMedia.media.video.still.filename}}" class="img-full-width">
+                <img src="{{singleMedia.imageurl}}" class="img-full-width">
               </div>
             </div>
 
@@ -33,10 +33,10 @@
                     </div>
                   </div><!--/col-xs-10 col-sm-11-->
               </div>
-                <img src="{{singleMedia.media.audio.still.filename}}" class="img-full-width">
+                <img src="{{singleMedia.imageurl}}" class="img-full-width">
               </div>
             </div>
-            <ng-include src="'media/mediaDetails.html'"> </ng-include>
+            <ng-include src="'templates/mediaDetails.html'"> </ng-include>
           </div><!--/container-->
         </div><!--/media-background-->
       </div><!--/media-curtain-->
@@ -48,7 +48,7 @@
     <div class="col-sm-12">
       <h2>Related Media</h2>
       <div class="row">
-        <ng-include src="'media/media-list.html'"> </ng-include>
+        <ng-include src="'templates/media-list.html'"> </ng-include>
       </div>
     </div>
   </div>

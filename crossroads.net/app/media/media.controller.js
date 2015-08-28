@@ -1,5 +1,5 @@
-'use strict';
 (function () {
+  'use strict';
   module.exports = MediaController;
 
   MediaController.$inject = ['Series', 'Musics', 'Videos'];
