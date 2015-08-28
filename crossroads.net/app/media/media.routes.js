@@ -103,7 +103,7 @@
             function redirectIfItemNotFound(data) {
               var media = data.messages[0];
               if (!media) {
-                $state.go('content', {link: '/page-not-found/'});
+                $state.go('content', {link: '/page-not-found/'}, {location: 'replace'});
               }
             }
           },
@@ -111,8 +111,12 @@
             return 'series';
           },
           ParentMedia: function (Media, SingleMedia) {
-            var seriesId = SingleMedia.messages[0].series;
-            var parent = Media.Series({id: seriesId}).get().$promise;
+            var series = SingleMedia.messages[0];
+            if (!series) {
+              return null;
+            }
+
+            var parent = Media.Series({id: series.seriesId}).get().$promise;
             return parent;
           },
           ImageURL: function (SingleMedia) {
@@ -141,7 +145,7 @@
             function redirectIfItemNotFound(data) {
               var media = data.media[0];
               if (!media) {
-                $state.go('content', {link: '/page-not-found/'});
+                $state.go('content', {link: '/page-not-found/'}, {location: 'replace'});
               }
             }
           },
