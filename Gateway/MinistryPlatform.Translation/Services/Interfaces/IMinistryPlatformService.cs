@@ -46,7 +46,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         List<Dictionary<string, object>> GetPageViewRecords(int viewId, string token, string searchString = "", string sort = "", int top = 0);
         List<Dictionary<string, object>> GetPageViewRecords(string viewKey, string token, string searchString = "", string sort = "", int top = 0);
 
-        List<Dictionary<string, object>> GetSelectionsForPageDict(int pageId, int selectionId, String token, String key);
+        List<Dictionary<string, object>> GetSelectionsForPageDict(int pageId, int selectionId, String token);
         List<Dictionary<string, object>> GetSelectionsDict(int selectionId, String token, String search = "", String sort = "");
         SelectQueryResult GetSelectionRecords(int selectionId, String token, String search = "", String sort = "");
     }

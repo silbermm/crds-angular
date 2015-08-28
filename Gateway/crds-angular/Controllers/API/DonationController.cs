@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -52,9 +53,8 @@ namespace crds_angular.Controllers.API
                 {
                     // get export file and name
                     var stream = _gatewayDonationService.CreateGPExport(depositId, token);
-                    var batch = _gatewayDonationService.GetDonationBatchByDepositId(depositId);
-                    _gatewayDonationService.GPExportFileName(batch);
-                    var contentType = MimeMapping.GetMimeMapping(batch.ExportFileName);
+                    var fileName = _gatewayDonationService.GPExportFileName(depositId);
+                    var contentType = MimeMapping.GetMimeMapping(fileName);
 
                     // set batch/deposite to exported
                     _gatewayDonationService.UpdateDepositToExported(depositId);
@@ -70,7 +70,7 @@ namespace crds_angular.Controllers.API
         }
 
         [AcceptVerbs("GET")]
-        [ResponseType(typeof(DonationBatchDTO))]
+        [ResponseType(typeof(List<DepositDTO>))]
         [Route("api/gpexport/filenames/{selectionId}")]
         public IHttpActionResult GetGPExportFileNames(int selectionId)
         {
@@ -78,8 +78,8 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
-                    _gatewayDonationService.GenerateGPExportFileNames(selectionId, token);
-                    return Ok("");
+                    var batches = _gatewayDonationService.GenerateGPExportFileNames(selectionId, token);
+                    return Ok(batches);
                 }
                 catch (Exception ex)
                 {

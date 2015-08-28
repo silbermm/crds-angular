@@ -43,8 +43,5 @@ namespace crds_angular.Models.Crossroads.Stewardship
 
         [JsonProperty("program_id")]
         public int ProgramId { get; set; }
-
-        [JsonProperty("export_file_name")]
-        public string ExportFileName { get; set; }
     }
 }

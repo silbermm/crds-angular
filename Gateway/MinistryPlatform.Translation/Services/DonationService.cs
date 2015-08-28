@@ -95,10 +95,18 @@ namespace MinistryPlatform.Translation.Services
             }));
         }
 
-        public List<DonationBatch> GetSelectedDonationBatches(int selectionId, string token)
+        public List<Deposit> GetSelectedDonationBatches(int selectionId, string token)
         {
-            var result = _ministryPlatformService.GetSelectionsDict(selectionId, token);
-            return new List<DonationBatch>();
+            var results = _ministryPlatformService.GetSelectionsForPageDict(_depositsPageId, selectionId, token);
+            var batches = new List<Deposit>();
+
+            foreach (var result in results)
+            {
+                batches.Add(Mapper.Map<Dictionary<string, object>, Deposit>(result));
+
+            }
+
+            return batches;
         } 
 
         public int CreateDonationBatch(string batchName, DateTime setupDateTime, decimal batchTotalAmount, int itemCount,

@@ -71,6 +71,24 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name))
                 .ForMember(dest => dest.CommunicationTemplateId, opts => opts.MapFrom(src => src.CommunicationTemplateId))
                 .ForMember(dest => dest.ProgramId, opts => opts.MapFrom(src => src.ProgramId));
+
+            Mapper.CreateMap<Deposit, DepositDTO>()
+                .ForMember(dest => dest.DepositDateTime, opts => opts.MapFrom(src => src.DepositDateTime))
+                .ForMember(dest => dest.DepositName, opts => opts.MapFrom(src => src.DepositName))
+                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
+                .ForMember(dest => dest.DepositTotalAmount, opts => opts.MapFrom(src => src.DepositTotalAmount))
+                .ForMember(dest => dest.BatchCount, opts => opts.MapFrom(src => src.BatchCount))
+                .ForMember(dest => dest.Exported, opts => opts.MapFrom(src => src.Exported))
+                .ForMember(dest => dest.ProcessorTransferId, opts => opts.MapFrom(src => src.ProcessorTransferId));
+
+            Mapper.CreateMap<Dictionary<string, object>, Deposit>()
+                .ForMember(dest => dest.DepositDateTime, opts => opts.MapFrom(src => src.ToString("Deposit_Date")))
+                .ForMember(dest => dest.DepositName, opts => opts.MapFrom(src => src.ToString("Deposit_Name")))
+                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.ToString("Deposit_ID")))
+                .ForMember(dest => dest.DepositTotalAmount, opts => opts.MapFrom(src => src.ToString("Deposit_Total")))
+                .ForMember(dest => dest.BatchCount, opts => opts.MapFrom(src => src.ToString("Batch_Count")))
+                .ForMember(dest => dest.Exported, opts => opts.MapFrom(src => src.ToString("Exported")))
+                .ForMember(dest => dest.ProcessorTransferId, opts => opts.MapFrom(src => src.ToString("Processor_Transfer_ID")));
         }
     }
 }

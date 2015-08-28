@@ -76,17 +76,17 @@ namespace crds_angular.Services
             return (Mapper.Map<DonationBatch, DonationBatchDTO>(_mpDonationService.GetDonationBatchByDepositId(depositId)));
         }
 
-        public List<DonationBatchDTO> GetSelectedDonationBatches(int selectionId, string token)
+        public List<DepositDTO> GetSelectedDonationBatches(int selectionId, string token)
         {
-            var selectedBatches = _mpDonationService.GetSelectedDonationBatches(selectionId, token);
-            var batches = new List<DonationBatchDTO>();
+            var selectedDeposits = _mpDonationService.GetSelectedDonationBatches(selectionId, token);
+            var deposits = new List<DepositDTO>();
 
-            foreach (var batch in selectedBatches)
+            foreach (var deposit in selectedDeposits)
             {
-                batches.Add(Mapper.Map<DonationBatch, DonationBatchDTO>(batch));
+                deposits.Add(Mapper.Map<Deposit, DepositDTO>(deposit));
             }
 
-            return batches;
+            return deposits;
         }
 
         public void ProcessDeclineEmail(string processorPaymentId)
@@ -116,22 +116,29 @@ namespace crds_angular.Services
 
             return stream;
         }
-
-        public void GPExportFileName(DonationBatchDTO batch)
-        {
-            var date = DateTime.Today.ToString("MMyy");
-            batch.ExportFileName = string.Format("{0}_{1}.csv", batch.BatchName, date);
-        }
-
         public void UpdateDepositToExported(int depositId)
         {
             _mpDonationService.UpdateDepositToExported(depositId);
         }
 
-        public List<DonationBatchDTO> GenerateGPExportFileNames(int selectionId, string token)
+        public List<DepositDTO> GenerateGPExportFileNames(int selectionId, string token)
         {
-            _mpDonationService.GetSelectedDonationBatches(selectionId,token);
-            return new List<DonationBatchDTO>();
+            var deposits = GetSelectedDonationBatches(selectionId, token);
+
+            foreach (var deposit in deposits)
+            {
+                deposit.ExportFileName = GPExportFileName(deposit.Id);
+            }
+
+            return deposits;
+        }
+
+        public string GPExportFileName(int depositId)
+        {
+            var batch = GetDonationBatchByDepositId(depositId);
+
+            var date = DateTime.Today.ToString("MMyy");
+            return string.Format("{0}_{1}.csv", batch.BatchName, date);
         }
     }
 }

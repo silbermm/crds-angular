@@ -38,5 +38,8 @@ namespace crds_angular.Models.Crossroads.Stewardship
 
         [JsonProperty("processor_transfer_id")]
         public string ProcessorTransferId { get; set; }
+
+        [JsonProperty("export_file_name")]
+        public string ExportFileName { get; set; }
     }
 }

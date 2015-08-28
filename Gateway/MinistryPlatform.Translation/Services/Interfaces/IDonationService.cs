@@ -13,7 +13,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         DonationBatch GetDonationBatch(int batchId);
         DonationBatch GetDonationBatchByDepositId(int depositId);
         Donation GetDonationByProcessorPaymentId(string processorPaymentId);
-        List<DonationBatch> GetSelectedDonationBatches(int selectionId, string token); 
+        List<Deposit> GetSelectedDonationBatches(int selectionId, string token); 
         void AddDonationToBatch(int batchId, int donationId);
         void ProcessDeclineEmail(string processorPaymentId);
         int CreateDeposit(string depositName, decimal depositTotalAmount, decimal depositAmount, decimal depositProcessorFee, DateTime depositDateTime, string accountNumber, int batchCount, bool exported, string notes, string processorTransferId);
