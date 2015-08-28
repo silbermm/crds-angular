@@ -105,15 +105,5 @@ namespace MinistryPlatform.Translation.Services
         {
             PlatformUtils.VoidCall(token, platfromClient => platfromClient.UpdatePageRecord(pageId, dictionary, false));
         }
-
-        public static List<Dictionary<string, object>> GetSelectionsDict(int selectionId, String token, String search = "", String sort = "")
-        {
-            return MPFormatConversion.MPFormatToList(GetSelectionRecords(selectionId, token, search, sort));
-        }
-
-        public static SelectQueryResult GetSelectionRecords(int selectionId, String token, String search = "", String sort = "")
-        {
-            return PlatformUtils.Call(token, platformClient => platformClient.GetSelectionRecords(selectionId, search, sort, 0));
-        }
     }
 }

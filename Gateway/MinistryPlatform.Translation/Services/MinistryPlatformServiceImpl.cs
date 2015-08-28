@@ -54,6 +54,32 @@ namespace MinistryPlatform.Translation.Services
             return MPFormatConversion.MPFormatToList(GetRecords(GetMinistryPlatformId(pageKey), token, search, sort));
         }
 
+        public List<Dictionary<string, object>> GetSelectionsForPageDict(int pageId, int selectionId, String token, String key)
+        {
+            var selections = GetSelectionsDict(selectionId, token);
+            var page = GetRecordsDict(pageId, token);
+            var selectionPageRecords = new List<Dictionary<string, object>>();
+
+            foreach (var selection in selections)
+            {
+                foreach (var record in page)
+                {
+                    object selectionIdValue;
+                    object recordIdValue;
+                    selection.TryGetValue("dp_RecordID", out selectionIdValue);
+                    record.TryGetValue(key, out recordIdValue);
+
+                    if (selectionIdValue != null && selectionIdValue.Equals(recordIdValue))
+                    {
+                        selectionPageRecords.Add(record);
+                        break;
+                    }
+                }
+            }
+
+            return selectionPageRecords;
+        }
+
         public List<Dictionary<string, object>> GetSelectionsDict(int selectionId, String token, String search = "", String sort = "")
         {
             return MPFormatConversion.MPFormatToList(GetSelectionRecords(selectionId, token, search, sort));
