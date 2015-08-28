@@ -410,16 +410,6 @@
           }
         }
       })
-      .state('errors/404', {
-        parent: 'noSideBar',
-        url: '/errors/404',
-        templateUrl: 'errors/404.html'
-      })
-      .state('errors/500', {
-        parent: 'noSideBar',
-        url: '/errors/500',
-        templateUrl: 'errors/500.html'
-      })
       .state('corkboard', {
         url: '/corkboard/',
         resolve: {

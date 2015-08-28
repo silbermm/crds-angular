@@ -29,31 +29,40 @@
       })
       .state('media.all', {
         url: '/media',
-        templateUrl: 'media/viewAll.html',
+        templateUrl: 'templates/viewAll.html',
       })
       .state('media.music', {
         url: '/music',
-        templateUrl: 'media/viewAllMusic.html'
+        templateUrl: 'templates/viewAllMusic.html'
       })
       .state('media.series', {
         url: '/series',
-        templateUrl: 'media/viewAllSeries.html'
+        templateUrl: 'templates/viewAllSeries.html'
       })
       .state('media.videos', {
         url: '/videos',
-        templateUrl: 'media/viewAllVideos.html'
+        templateUrl: 'templates/viewAllVideos.html'
       })
       .state('media.seriesSingle', {
         url: '/series/{id:int}/:title?',
         controller: 'SingleSeriesController as series',
-        templateUrl: 'media/seriesSingle.html',
+        templateUrl: 'templates/seriesSingle.html',
         resolve: {
           Media: 'Media',
           $stateParams: '$stateParams',
-          Selected: function(Media, Series, $stateParams) {
-            return _.find(Series.series, function (obj) {
+          $state: '$state',
+          Selected: function(Media, Series, $stateParams, $state) {
+            var singleSeries = _.find(Series.series, function (obj) {
               return (obj.id === $stateParams.id);
             });
+
+            if (!singleSeries) {
+              // Doing this here instead of controller to prevent flicker of unbound page
+              $state.go('content', {link: '/page-not-found/'}, {location: 'replace'});
+              return;
+            }
+
+            return singleSeries;
           },
           Messages: function (Media, Selected) {
             var item = Media.Messages({seriesId: Selected.id}).get().$promise;
@@ -65,45 +74,48 @@
         parent: 'noSideBar',
         url: '/media/series/single/lores',
         controller: 'MediaController as media',
-        templateUrl: 'media/series-single-lo-res.html'
+        templateUrl: 'templates/series-single-lo-res.html'
       })
       .state('media-single', {
         parent: 'screenWidth',
         url: '/media/single',
         controller: 'MediaController as media',
-        templateUrl: 'media/mediaSingle.html'
+        templateUrl: 'templates/mediaSingle.html'
       })
       .state('messageSingle', {
         parent: 'screenWidth',
         url: '/message/:id/:title?',
         controller: 'SingleMediaController as singleMedia',
-        templateUrl: 'media/mediaSingle.html',
+        templateUrl: 'templates/mediaSingle.html',
         resolve: {
           Media: 'Media',
           $stateParams: '$stateParams',
+          $state: '$state',
           ItemProperty: function () {
             return 'messages';
           },
-          SingleMedia: function (Media, $stateParams) {
+          SingleMedia: function (Media, $stateParams, $state) {
             var item = Media.Messages({id: $stateParams.id}).get().$promise;
+            item.then(redirectIfItemNotFound);
             return item;
+
+            // Doing this here instead of controller to prevent flicker of unbound page
+            function redirectIfItemNotFound(data) {
+              var media = data.messages[0];
+              if (!media) {
+                $state.go('content', {link: '/page-not-found/'});
+              }
+            }
           },
           ParentItemProperty: function() {
             return 'series';
           },
           ParentMedia: function (Media, SingleMedia) {
-            if (!SingleMedia.messages[0]) {
-              return null;
-            }
-
             var seriesId = SingleMedia.messages[0].series;
             var parent = Media.Series({id: seriesId}).get().$promise;
             return parent;
           },
           ImageURL: function (SingleMedia) {
-            if (!SingleMedia.messages[0]) {
-              return null;
-            }
             return _.get(SingleMedia.messages[0], 'video.still.filename');
           }
         }
@@ -112,16 +124,26 @@
         parent: 'screenWidth',
         url: '/media/{id:int}/:title?',
         controller: 'SingleMediaController as singleMedia',
-        templateUrl: 'media/mediaSingle.html',
+        templateUrl: 'templates/mediaSingle.html',
         resolve: {
           Media: 'Media',
           $stateParams: '$stateParams',
+          $state: '$state',
           ItemProperty: function () {
             return 'media';
           },
-          SingleMedia: function (Media, $stateParams) {
+          SingleMedia: function (Media, $stateParams, $state) {
             var item = Media.Medias({id: $stateParams.id}).get().$promise;
+            item.then(redirectIfItemNotFound);
             return item;
+
+            // Doing this here instead of controller to prevent flicker of unbound page
+            function redirectIfItemNotFound(data) {
+              var media = data.media[0];
+              if (!media) {
+                $state.go('content', {link: '/page-not-found/'});
+              }
+            }
           },
           ParentItemProperty: function() {
             return null;
