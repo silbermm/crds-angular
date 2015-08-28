@@ -95,6 +95,13 @@ namespace MinistryPlatform.Translation.Services
             }));
         }
 
+        public List<DonationBatch> GetSelectedDonationBatches(int selectionId)
+        {
+            string apiToken = ApiLogin();
+            var result = _ministryPlatformService.GetSelectionsDict(selectionId, apiToken);
+            return new List<DonationBatch>();
+        } 
+
         public int CreateDonationBatch(string batchName, DateTime setupDateTime, decimal batchTotalAmount, int itemCount,
             int batchEntryType, int? depositId, DateTime finalizedDateTime, string processorTransferId)
         {

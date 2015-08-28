@@ -36,14 +36,15 @@ namespace crds_angular.Controllers.API
         }
 
         [ResponseType(typeof(DonationDTO))]
-        [System.Web.Http.Route("api/donation")]
+        [Route("api/donation")]
         public IHttpActionResult Post([FromBody] CreateDonationDTO dto)
         {
             return (Authorized(token => CreateDonationAndDistributionAuthenticated(token, dto), () => CreateDonationAndDistributionUnauthenticated(dto)));
         }
 
-        [System.Web.Http.Route("api/gpexport/{depositId}")]
-        public IHttpActionResult Get(int depositId)
+        [AcceptVerbs("GET")]
+        [Route("api/gpexport/{depositId}")]
+        public IHttpActionResult GetGPExportFiles(int depositId)
         {
             return Authorized(token =>
             {
@@ -51,7 +52,8 @@ namespace crds_angular.Controllers.API
                 {
                     // get export file and name
                     var stream = _gatewayDonationService.CreateGPExport(depositId, token);
-                    var batch = _gatewayDonationService.GPExportFileName(depositId);
+                    var batch = _gatewayDonationService.GetDonationBatchByDepositId(depositId);
+                    _gatewayDonationService.GPExportFileName(batch);
                     var contentType = MimeMapping.GetMimeMapping(batch.ExportFileName);
 
                     // set batch/deposite to exported
@@ -62,6 +64,25 @@ namespace crds_angular.Controllers.API
                 catch (Exception ex)
                 {
                     var apiError = new ApiErrorDto("GP Export File Creation Failed", ex);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+            });
+        }
+
+        [AcceptVerbs("GET")]
+        [ResponseType(typeof(DonationBatchDTO))]
+        [Route("api/gpexport/filenames/{selectionId}")]
+        public IHttpActionResult GetGPExportFileNames(int selectionId)
+        {
+            return Authorized(token =>
+            {
+                try
+                {
+                    return Ok("");
+                }
+                catch (Exception ex)
+                {
+                    var apiError = new ApiErrorDto("Getting GP Export File Names Failed", ex);
                     throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
             });

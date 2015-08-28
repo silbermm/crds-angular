@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using AutoMapper;
 using crds_angular.Models.Crossroads.Stewardship;
@@ -75,6 +76,19 @@ namespace crds_angular.Services
             return (Mapper.Map<DonationBatch, DonationBatchDTO>(_mpDonationService.GetDonationBatchByDepositId(depositId)));
         }
 
+        public List<DonationBatchDTO> GetSelectedDonationBatches(int selectionId)
+        {
+            var selectedBatches = _mpDonationService.GetSelectedDonationBatches(selectionId);
+            var batches = new List<DonationBatchDTO>();
+
+            foreach (var batch in selectedBatches)
+            {
+                batches.Add(Mapper.Map<DonationBatch, DonationBatchDTO>(batch));
+            }
+
+            return batches;
+        }
+
         public void ProcessDeclineEmail(string processorPaymentId)
         {
             _mpDonationService.ProcessDeclineEmail(processorPaymentId);
@@ -103,18 +117,20 @@ namespace crds_angular.Services
             return stream;
         }
 
-        public DonationBatchDTO GPExportFileName(int depositId)
+        public void GPExportFileName(DonationBatchDTO batch)
         {
-            var batch = GetDonationBatchByDepositId(depositId);
             var date = DateTime.Today.ToString("MMyy");
             batch.ExportFileName = string.Format("{0}_{1}.csv", batch.BatchName, date);
-
-            return batch;
         }
 
         public void UpdateDepositToExported(int depositId)
         {
             _mpDonationService.UpdateDepositToExported(depositId);
+        }
+
+        public List<DonationBatchDTO> GenerateGPExportFileNames(int selectionId)
+        {
+            return new List<DonationBatchDTO>();
         }
     }
 }

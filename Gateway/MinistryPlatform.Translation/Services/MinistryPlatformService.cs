@@ -113,8 +113,7 @@ namespace MinistryPlatform.Translation.Services
 
         public static SelectQueryResult GetSelectionRecords(int selectionId, String token, String search = "", String sort = "")
         {
-            return PlatformUtils.Call<SelectQueryResult>(token,
-                platformClient => platformClient.GetSelectionRecords(selectionId, search, sort, 0));
+            return PlatformUtils.Call(token, platformClient => platformClient.GetSelectionRecords(selectionId, search, sort, 0));
         }
     }
 }
