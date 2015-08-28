@@ -50,10 +50,19 @@
         resolve: {
           Media: 'Media',
           $stateParams: '$stateParams',
-          Selected: function(Media, Series, $stateParams) {
-            return _.find(Series.series, function (obj) {
+          $state: '$state',
+          Selected: function(Media, Series, $stateParams, $state) {
+            var singleSeries = _.find(Series.series, function (obj) {
               return (obj.id === $stateParams.id);
             });
+
+            if (!singleSeries) {
+              // Doing this here instead of controller to prevent flicker of unbound page
+              $state.go('content', {link: '/page-not-found/'}, {location: 'replace'});
+              return;
+            }
+
+            return singleSeries;
           },
           Messages: function (Media, Selected) {
             var item = Media.Messages({seriesId: Selected.id}).get().$promise;
@@ -81,29 +90,32 @@
         resolve: {
           Media: 'Media',
           $stateParams: '$stateParams',
+          $state: '$state',
           ItemProperty: function () {
             return 'messages';
           },
-          SingleMedia: function (Media, $stateParams) {
+          SingleMedia: function (Media, $stateParams, $state) {
             var item = Media.Messages({id: $stateParams.id}).get().$promise;
+            item.then(redirectIfItemNotFound);
             return item;
+
+            // Doing this here instead of controller to prevent flicker of unbound page
+            function redirectIfItemNotFound(data) {
+              var media = data.messages[0];
+              if (!media) {
+                $state.go('content', {link: '/page-not-found/'});
+              }
+            }
           },
           ParentItemProperty: function() {
             return 'series';
           },
           ParentMedia: function (Media, SingleMedia) {
-            if (!SingleMedia.messages[0]) {
-              return null;
-            }
-
             var seriesId = SingleMedia.messages[0].series;
             var parent = Media.Series({id: seriesId}).get().$promise;
             return parent;
           },
           ImageURL: function (SingleMedia) {
-            if (!SingleMedia.messages[0]) {
-              return null;
-            }
             return _.get(SingleMedia.messages[0], 'video.still.filename');
           }
         }
@@ -116,12 +128,22 @@
         resolve: {
           Media: 'Media',
           $stateParams: '$stateParams',
+          $state: '$state',
           ItemProperty: function () {
             return 'media';
           },
-          SingleMedia: function (Media, $stateParams) {
+          SingleMedia: function (Media, $stateParams, $state) {
             var item = Media.Medias({id: $stateParams.id}).get().$promise;
+            item.then(redirectIfItemNotFound);
             return item;
+
+            // Doing this here instead of controller to prevent flicker of unbound page
+            function redirectIfItemNotFound(data) {
+              var media = data.media[0];
+              if (!media) {
+                $state.go('content', {link: '/page-not-found/'});
+              }
+            }
           },
           ParentItemProperty: function() {
             return null;
