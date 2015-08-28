@@ -29,24 +29,24 @@
       })
       .state('media.all', {
         url: '/media',
-        templateUrl: 'media/viewAll.html',
+        templateUrl: 'templates/viewAll.html',
       })
       .state('media.music', {
         url: '/music',
-        templateUrl: 'media/viewAllMusic.html'
+        templateUrl: 'templates/viewAllMusic.html'
       })
       .state('media.series', {
         url: '/series',
-        templateUrl: 'media/viewAllSeries.html'
+        templateUrl: 'templates/viewAllSeries.html'
       })
       .state('media.videos', {
         url: '/videos',
-        templateUrl: 'media/viewAllVideos.html'
+        templateUrl: 'templates/viewAllVideos.html'
       })
       .state('media.seriesSingle', {
         url: '/series/{id:int}/:title?',
         controller: 'SingleSeriesController as series',
-        templateUrl: 'media/seriesSingle.html',
+        templateUrl: 'templates/seriesSingle.html',
         resolve: {
           Media: 'Media',
           $stateParams: '$stateParams',
@@ -74,19 +74,19 @@
         parent: 'noSideBar',
         url: '/media/series/single/lores',
         controller: 'MediaController as media',
-        templateUrl: 'media/series-single-lo-res.html'
+        templateUrl: 'templates/series-single-lo-res.html'
       })
       .state('media-single', {
         parent: 'screenWidth',
         url: '/media/single',
         controller: 'MediaController as media',
-        templateUrl: 'media/mediaSingle.html'
+        templateUrl: 'templates/mediaSingle.html'
       })
       .state('messageSingle', {
         parent: 'screenWidth',
         url: '/message/:id/:title?',
         controller: 'SingleMediaController as singleMedia',
-        templateUrl: 'media/mediaSingle.html',
+        templateUrl: 'templates/mediaSingle.html',
         resolve: {
           Media: 'Media',
           $stateParams: '$stateParams',
@@ -124,7 +124,7 @@
         parent: 'screenWidth',
         url: '/media/{id:int}/:title?',
         controller: 'SingleMediaController as singleMedia',
-        templateUrl: 'media/mediaSingle.html',
+        templateUrl: 'templates/mediaSingle.html',
         resolve: {
           Media: 'Media',
           $stateParams: '$stateParams',
