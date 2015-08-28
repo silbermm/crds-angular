@@ -250,17 +250,17 @@ namespace crds_angular.test.Services
             var date = DateTime.Today;
             var fileName = string.Format("TestBatchName_{0}{1}.csv", date.ToString("MM"), date.ToString("yy"));
 
-            _mpDonationService.Setup(mocked => mocked.GetDonationBatchByDepositId(123)).Returns(new DonationBatch
+            var batch = new DonationBatchDTO
             {
                 Id = 123,
                 DepositId = 456,
                 ProcessorTransferId = "789",
                 BatchName = "TestBatchName",
-            });
+            };
+            _fixture.GPExportFileName(batch);
 
-            var result = _fixture.GPExportFileName(123);
             _mpDonationService.VerifyAll();
-            Assert.AreEqual(fileName, result.ExportFileName);
+            Assert.AreEqual(fileName, batch.ExportFileName);
         }
 
     }
