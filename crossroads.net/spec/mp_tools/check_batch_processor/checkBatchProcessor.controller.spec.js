@@ -31,7 +31,16 @@ describe('Check Batch Processor Tool', function() {
     {ProgramId: 3, Name: 'Old St George Building'},
   ];
 
+  var AuthService;
+
   beforeEach(angular.mock.module('crossroads'));
+
+  beforeEach(function(){
+    angular.mock.module('crossroads.core', function($provide){
+      AuthService = jasmine.createSpyObj('AuthService', ['isAuthenticated', 'isAuthorized']);
+      $provide.value('AuthService', AuthService);
+    });
+  });
 
   var $controller;
   var $log;
@@ -54,6 +63,37 @@ describe('Check Batch Processor Tool', function() {
       controller = $controller('CheckBatchProcessor', { $scope: $scope });
       $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/checkscanner/batches').respond(batchList);
       $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/programs/1').respond(programList);
+    });
+
+    describe('Function allowAccess', function() {
+      it('Should not allow access if user is not authenticated', function() {
+        AuthService.isAuthenticated.and.returnValue(false);
+
+        expect(controller.allowAccess()).toBeFalsy();
+
+        expect(AuthService.isAuthenticated).toHaveBeenCalled();
+        expect(AuthService.isAuthorized).not.toHaveBeenCalled();
+      });
+
+      it('Should not allow access if user is authenticated but not authorized', function() {
+        AuthService.isAuthenticated.and.returnValue(true);
+        AuthService.isAuthorized.and.returnValue(false);
+
+        expect(controller.allowAccess()).toBeFalsy();
+
+        expect(AuthService.isAuthenticated).toHaveBeenCalled();
+        expect(AuthService.isAuthorized).toHaveBeenCalledWith(7);
+      });
+
+      it('Should not allow access if user is authenticated but not authorized', function() {
+        AuthService.isAuthenticated.and.returnValue(true);
+        AuthService.isAuthorized.and.returnValue(true);
+
+        expect(controller.allowAccess()).toBeTruthy();
+
+        expect(AuthService.isAuthenticated).toHaveBeenCalled();
+        expect(AuthService.isAuthorized).toHaveBeenCalledWith(7);
+      });
     });
 
     describe('Initial Load', function() {

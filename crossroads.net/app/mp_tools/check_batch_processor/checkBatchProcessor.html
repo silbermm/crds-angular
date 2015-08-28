@@ -1,4 +1,8 @@
-<div ng-init="checkBatchProcessor.activate()">
+<div ng-if="!checkBatchProcessor.allowAccess()" class="alert alert-danger" role="alert">
+  Sorry, you do not have access to run this tool.  Please contact an administrator.
+</div>
+
+<div ng-if="checkBatchProcessor.allowAccess()" ng-init="checkBatchProcessor.activate()">
   <div ng-if="checkBatchProcessor.error" class="alert alert-danger" role="alert">
     <strong>{{checkBatchProcessor.batch.name}}</strong> did not submit. Please try again.
   </div>
@@ -8,10 +12,22 @@
   </div>
 
   <div class="form-group">
+    <div class="row">
+      <div class="col-xs-6 col-sm-6 col-md-6">
+        <h3> To import donation batches from EZ Scan to Ministry Platform: </h3>
+        <ol>
+          <li>Select the EZ Scan Batch Name that you wish to import into MP</li>
+          <li>Select the Program this batch is allocated for from the dropdown.  If you are importing a batch with split donations, then leave the Program dropdown unselected.</li>
+          <li>Click Import Donations</li>
+          <li>View the progress of the donation import</li>
+        </ol>
+      </div>
+    </div>
+
     <form name="checkBatchProcessorForm" ng-submit="checkBatchProcessor.processBatch()">
       <div class="row">
         <div class="col-xs-6 col-sm-6 col-md-6">
-          <h3> Check Batch </h3>
+          <h3> EZ Scan Batch Name </h3>
           <ui-select ng-model="checkBatchProcessor.batch" name="batch" required>
             <ui-select-match placeholder="Click here to choose check batch...">{{$select.selected.name}}</ui-select-match>
             <ui-select-choices repeat="batch in checkBatchProcessor.batches | filter: $select.search track by batch.id">
@@ -40,7 +56,7 @@
         <div class="col-xs-6 col-sm-6 col-md-6">
           <button ng-disabled="!checkBatchProcessorForm.batch.$dirty || checkBatchProcessor.processing"
                   class="btn btn-primary btn-lg btn-block-mobile give-button">
-            Submit Batch
+            Import Donations
           </button>
         </div>
       </div>
