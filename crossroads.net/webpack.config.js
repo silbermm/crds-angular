@@ -16,6 +16,7 @@ var definePlugin = new webpack.DefinePlugin({
 
 module.exports = {
     entry: {
+        media: './app/media/media.module.js',
         trips: './app/trips/trips.module.js',
         main: './app/app.js',
         core: ['./node_modules/crds-core'] 

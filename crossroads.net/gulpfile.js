@@ -33,6 +33,7 @@ function htmlReplace(){
       'corejs': assets.core.js,
       'corecss': assets.core.css,
       'tripsjs': assets.trips.js,
+      'mediajs': assets.media.js,
       'js': assets.main.js
     }))
     .pipe(gulp.dest('./'));
@@ -43,6 +44,7 @@ function htmlReplace(){
       'corejs': assets.core.js,
       'corecss': assets.core.css,
       'tripsjs': assets.trips.js,
+      'mediajs': assets.media.js,
       'js': assets.main.js
     }))
     .pipe(gulp.dest('./'));
@@ -93,6 +95,7 @@ gulp.task('build-browser-sync', function () {
       'corejs': '/assets/core.js',
       'corecss': '/assets/core.css',
       'tripsjs': '/assets/trips.js',
+      'mediajs': '/assets/media.js',
       'css': '/assets/main.css',
       'js': '/assets/main.js'
     })).pipe(gulp.dest('./'));
@@ -102,6 +105,7 @@ gulp.task('build-browser-sync', function () {
       'corejs': '/assets/core.js',
       'corecss': '/assets/core.css',
       'tripsjs': '/assets/trips.js',
+      'mediajs': '/assets/media.js',
       'css': '/assets/main.css',
       'js': '/assets/main.js'
     }))
@@ -180,6 +184,7 @@ gulp.task('webpack-dev-server', ['icons-watch'], function(callback) {
       'corejs': '/assets/core.js',
       'corecss': '/assets/core.css',
       'tripsjs': '/assets/trips.js',
+      'mediajs': '/assets/media.js',
       'css': '/assets/main.css',
       'js': '/assets/main.js'
     })).pipe(gulp.dest('./'));
@@ -189,6 +194,7 @@ gulp.task('webpack-dev-server', ['icons-watch'], function(callback) {
       'corejs': '/assets/core.js',
       'corecss': '/assets/core.css',
       'tripsjs': '/assets/trips.js',
+      'mediajs': '/assets/media.js',
       'css': '/assets/main.css',
       'js': '/assets/main.js'
     }))
@@ -242,6 +248,7 @@ gulp.task('webpack:build-dev', ['icons'], function(callback) {
       'corejs': '/assets/core.js',
       'corecss': '/assets/core.css',
       'tripsjs': '/assets/trips.js',
+      'mediajs': '/assets/media.js',
       'css': '/assets/main.css',
       'js': '/assets/main.js'
     })).pipe(gulp.dest('./'));
@@ -251,6 +258,7 @@ gulp.task('webpack:build-dev', ['icons'], function(callback) {
       'corejs': '/assets/core.js',
       'corecss': '/assets/core.css',
       'tripsjs': '/assets/trips.js',
+      'mediajs': '/assets/media.js',
       'css': '/assets/main.css',
       'js': '/assets/main.js'
     }))
