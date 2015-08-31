@@ -59,7 +59,7 @@ namespace crds_angular.Controllers.API
                     // set batch/deposite to exported
                     _gatewayDonationService.UpdateDepositToExported(depositId);
 
-                    return new FileResult(stream, contentType);
+                    return new FileResult(stream, fileName, contentType);
                 }
                 catch (Exception ex)
                 {
@@ -154,13 +154,15 @@ namespace crds_angular.Controllers.API
     class FileResult : IHttpActionResult
     {
         private readonly MemoryStream _stream;
+        private readonly string _fileName;
         private readonly string _contentType;
 
-        public FileResult(MemoryStream stream, string contentType = null)
+        public FileResult(MemoryStream stream, string fileName, string contentType = null)
         {
             if (stream == null) throw new ArgumentNullException("stream");
 
             _stream = stream;
+            _fileName = fileName;
             _contentType = contentType;
         }
 
@@ -175,6 +177,10 @@ namespace crds_angular.Controllers.API
 
                 var contentType = _contentType;
                 response.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = _fileName
+                };
 
                 return response;
 
