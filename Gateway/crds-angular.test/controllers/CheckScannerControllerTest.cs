@@ -80,6 +80,37 @@ namespace crds_angular.test.controllers
         }
 
         [Test]
+        public void TestGetAllBatches()
+        {
+            var batches = new List<CheckScannerBatch>
+            {
+                new CheckScannerBatch
+                {
+                    Id = 1,
+                    Name = "Name 1",
+                    ScanDate = DateTime.Now,
+                    Status = BatchStatus.NotExported
+                },
+                new CheckScannerBatch
+                {
+                    Id = 2,
+                    Name = "Name 2",
+                    ScanDate = DateTime.Now,
+                    Status = BatchStatus.NotExported
+                }
+            };
+            _checkScannerService.Setup(mocked => mocked.GetAllBatches()).Returns(batches);
+
+            var result = _fixture.GetBatches(false);
+            _checkScannerService.VerifyAll();
+            Assert.NotNull(result);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<List<CheckScannerBatch>>>(result);
+            var okResult = (OkNegotiatedContentResult<List<CheckScannerBatch>>)result;
+            Assert.IsNotNull(okResult.Content);
+            Assert.AreSame(batches, okResult.Content);
+        }
+
+        [Test]
         public void TestGetChecksForBatch()
         {
             var checks = new List<CheckScannerCheck>
