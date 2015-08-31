@@ -70,7 +70,7 @@ namespace crds_angular.test.controllers
             };
             _checkScannerService.Setup(mocked => mocked.GetOpenBatches()).Returns(batches);
 
-            var result = _fixture.GetOpenBatches();
+            var result = _fixture.GetBatches();
             _checkScannerService.VerifyAll();
             Assert.NotNull(result);
             Assert.IsInstanceOf<OkNegotiatedContentResult<List<CheckScannerBatch>>>(result);

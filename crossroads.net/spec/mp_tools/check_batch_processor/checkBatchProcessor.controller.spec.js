@@ -7,21 +7,25 @@ describe('Check Batch Processor Tool', function() {
       id: 22,
       name: 'GeneralFunding012948',
       scanDate: '2015-08-12T00:00:00',
+      status: 'notExported'
     },
     {
       id: 23,
       name: 'PickUpTheSlack938747',
       scanDate: '2015-08-14T00:00:00',
+      status: 'exported'
     },
     {
       id: 24,
       name: 'General194200382',
       scanDate: '2015-09-12T00:00:00',
+      status: 'notExported'
     },
     {
       id: 25,
       name: 'GetTough38294729',
       scanDate: '2015-09-13T00:00:00',
+      status: 'notExported'
     },
   ];
 
@@ -71,7 +75,7 @@ describe('Check Batch Processor Tool', function() {
     beforeEach(function() {
       $scope = {};
       controller = $controller('CheckBatchProcessor', { $scope: $scope });
-      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/checkscanner/batches').respond(batchList);
+      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/checkscanner/batches?onlyOpen=false').respond(batchList);
       $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/programs?excludeTypes%5B%5D=' + GIVE_PROGRAM_TYPES.NonFinancial).respond(programList);
     });
 
@@ -110,7 +114,9 @@ describe('Check Batch Processor Tool', function() {
       it('should get a list of check batches', function() {
         $httpBackend.flush();
 
-        expect(controller.batches.length).toBe(4);
+        expect(controller.batches.length).toBe(3);
+        expect(_.find(controller.batches, {'status': 'exported'})).toBeUndefined();
+
         expect(controller.programs.length).toBe(3);
         expect(controller.programs[0].Name).toBe('Crossroads');
         expect(controller.programs[1].Name).toBe('Game Change');
@@ -118,6 +124,26 @@ describe('Check Batch Processor Tool', function() {
       });
     });
 
+    describe('Function filterBatches', function() {
+      it('Should filter out exported batches', function() {
+        $httpBackend.flush();
+
+        controller.showClosedBatches = false;
+        controller.filterBatches();
+
+        expect(controller.batches.length).toBe(3);
+        expect(_.find(controller.batches, {'status': 'exported'})).toBeUndefined();
+      });
+      it('Should show all batches', function() {
+        $httpBackend.flush();
+
+        controller.showClosedBatches = true;
+        controller.filterBatches();
+
+        expect(controller.batches.length).toBe(4);
+        expect(_.find(controller.batches, {'status': 'exported'})).toBeDefined();
+      });
+    });
 
     describe('Process Batch', function() {
       var postData;

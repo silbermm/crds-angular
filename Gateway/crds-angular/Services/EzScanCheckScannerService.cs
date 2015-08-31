@@ -23,16 +23,28 @@ namespace crds_angular.Services
             _mpDonorService = mpDonorService;
         }
 
+        public List<CheckScannerBatch> GetAllBatches()
+        {
+            return (GetBatches(false));
+        }
+
         public List<CheckScannerBatch> GetOpenBatches()
+        {
+            return (GetBatches(true));
+        }
+
+        private List<CheckScannerBatch> GetBatches(bool onlyOpen)
         {
             List<CheckScannerBatch> batches;
             IDataReader reader = null;
             try
             {
+                var whereClause = onlyOpen ? "WHERE COALESCE(BatchStatus, 0) <> 1" : string.Empty;
+
                 batches = WithDbCommand(dbCommand =>
                 {
                     dbCommand.CommandType = CommandType.Text;
-                    dbCommand.CommandText = "SELECT ID, IDBatch, DateProcess, BatchStatus FROM batches WHERE COALESCE(BatchStatus, 0) <> 1 ORDER BY DateProcess DESC";
+                    dbCommand.CommandText = string.Format("SELECT ID, IDBatch, DateProcess, BatchStatus FROM batches {0} ORDER BY DateProcess DESC", whereClause);
 
                     var b = new List<CheckScannerBatch>();
                     reader = dbCommand.ExecuteReader();

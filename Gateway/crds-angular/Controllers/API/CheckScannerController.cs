@@ -40,11 +40,11 @@ namespace crds_angular.Controllers.API
         }
 
         [Route("api/checkscanner/batches")]
-        public IHttpActionResult GetOpenBatches()
+        public IHttpActionResult GetBatches([FromUri(Name = "onlyOpen")] bool onlyOpen = true)
         {
             return (Authorized(token =>
             {
-                var batches = _checkScannerService.GetOpenBatches();
+                var batches = onlyOpen ? _checkScannerService.GetOpenBatches() : _checkScannerService.GetAllBatches();
                 return (Ok(batches));
             }));
         }
