@@ -1,9 +1,15 @@
 'use strict';
 var MODULE = 'crossroads.media';
 
-  var app = angular.module(MODULE, ['crossroads.core'])
-    .config(require('./media.routes'))
-    .factory('Media', require('./services/media.service'));
+require('plangular');
+
+var app = angular.module(MODULE, ['crossroads.core', 'plangular'])
+  .config(require('./media.routes'))
+  .config(function(plangularConfigProvider){
+    // TODO: Borrowerd ID from http://jxnblk.com/plangular/
+    plangularConfigProvider.clientId = 'aeb5b3f63ac0518f8362010439a77ca1';
+  })
+  .factory('Media', require('./services/media.service'));
 
 require('./templates/viewAll.html');
 require('./templates/viewAllMusic.html');
