@@ -27,14 +27,14 @@ describe('Check Batch Processor Tool', function() {
 
   var programList = [
     {ProgramId: 1, Name: 'Crossroads'},
-    {ProgramId: 2, Name: 'Game Change'},
-    {ProgramId: 3, Name: 'Old St George Building'},
+    {ProgramId: 2, Name: 'Old St George Building'},
+    {ProgramId: 3, Name: 'Game Change'},
   ];
 
   beforeEach(angular.mock.module('crossroads'));
 
   var GIVE_ROLES = { StewardshipDonationProcessor: 123 };
-  var GIVE_PROGRAM_TYPES = { Fuel: 999 };
+  var GIVE_PROGRAM_TYPES = { Fuel: 999, NonFinancial: 888 };
 
   beforeEach(function() {
     angular.mock.module('crossroads.give', function($provide) {
@@ -72,7 +72,7 @@ describe('Check Batch Processor Tool', function() {
       $scope = {};
       controller = $controller('CheckBatchProcessor', { $scope: $scope });
       $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/checkscanner/batches').respond(batchList);
-      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/programs/' + GIVE_PROGRAM_TYPES.Fuel).respond(programList);
+      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/programs?excludeTypes%5B%5D=' + GIVE_PROGRAM_TYPES.NonFinancial).respond(programList);
     });
 
     describe('Function allowAccess', function() {
@@ -112,6 +112,9 @@ describe('Check Batch Processor Tool', function() {
 
         expect(controller.batches.length).toBe(4);
         expect(controller.programs.length).toBe(3);
+        expect(controller.programs[0].Name).toBe('Crossroads');
+        expect(controller.programs[1].Name).toBe('Game Change');
+        expect(controller.programs[2].Name).toBe('Old St George Building');
       });
     });
 

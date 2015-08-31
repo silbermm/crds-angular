@@ -23,8 +23,8 @@
         vm.batches = data;
       });
 
-      getPrograms.Programs.get({programType: GIVE_PROGRAM_TYPES.Fuel}, function(data) {
-        vm.programs = data;
+      getPrograms.Programs.get({'excludeTypes[]': [GIVE_PROGRAM_TYPES.NonFinancial]}, function(data) {
+        vm.programs = _.sortBy(data, 'Name');
       });
     }
 
