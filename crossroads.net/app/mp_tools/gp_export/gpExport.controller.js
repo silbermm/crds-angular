@@ -40,7 +40,7 @@
         vm.selectedDeposits.splice(vm.selectedDeposits.indexOf(deposit), 1);
       }, function(data) {
         vm.error = true;
-      })finally(function(){
+      }).finally(function(){
         deposit.processing = false;
       });
     };
