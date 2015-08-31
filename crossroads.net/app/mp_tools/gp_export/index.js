@@ -3,8 +3,8 @@
 
   var module = 'crossroads.mptools';
 
-  require('./gpeEport.service');
-  require('./gpeEport.html');
+  require('./gpExport.service');
+  require('./gpExport.html');
 
   angular.module(module).controller('GPExportController', require('./gpExport.controller'));
 
