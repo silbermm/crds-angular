@@ -33,7 +33,7 @@ namespace crds_angular.test.controllers
         }
 
         [Test]
-        public void TestGetPrograms()
+        public void TestGetProgramsByType()
         {
             int programType = 1;
             var programList = new List<ProgramDTO>();
@@ -46,7 +46,7 @@ namespace crds_angular.test.controllers
 
             _programServiceMock.Setup(mocked => mocked.GetOnlineGivingPrograms(programType)).Returns(programList);
 
-            var httpResult = _fixture.Get(null, programType);
+            var httpResult = _fixture.GetProgramsByType(programType);
             var result = (OkNegotiatedContentResult<List<ProgramDTO>>) httpResult;
             Assert.IsNotNull(result);
             Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<List<ProgramDTO>>), result);
@@ -54,6 +54,44 @@ namespace crds_angular.test.controllers
 
             Assert.AreEqual(result.Content[0].Name, program.Name);
             Assert.AreEqual(result.Content[0].ProgramId, program.ProgramId);
+        }
+
+        [Test]
+        public void TestGetAllPrograms()
+        {
+            var programList = new List<ProgramDTO>
+            {
+                new ProgramDTO
+                {
+                    Name = "Program 1",
+                    ProgramId = 1,
+                    ProgramType = 1
+                },
+                new ProgramDTO
+                {
+                    Name = "Program 3",
+                    ProgramId = 3,
+                    ProgramType = 3
+                },
+                new ProgramDTO
+                {
+                    Name = "Program 2",
+                    ProgramId = 2,
+                    ProgramType = 2
+                }
+            };
+            _programServiceMock.Setup(mocked => mocked.GetOnlineGivingPrograms(null)).Returns(programList);
+
+            var httpResult = _fixture.GetAllPrograms(new[] {1, 2});
+            _programServiceMock.VerifyAll();
+
+            Assert.IsNotNull(httpResult);
+            Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<List<ProgramDTO>>), httpResult);
+            var result = (OkNegotiatedContentResult<List<ProgramDTO>>)httpResult;
+            Assert.IsNotNull(result.Content);
+            Assert.AreEqual(1, result.Content.Count);
+            Assert.AreEqual(result.Content[0].Name, "Program 3");
+            Assert.AreEqual(result.Content[0].ProgramId, 3);
         }
     }
 }

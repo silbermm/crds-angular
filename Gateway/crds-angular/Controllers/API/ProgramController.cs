@@ -13,14 +13,10 @@ namespace crds_angular.Controllers.API
             _programService = programService;
         }
 
-        [Route("api/programs/{programType:int?}")]
-        public IHttpActionResult Get([FromUri(Name = "excludeTypes")] int[] excludeTypes, int? programType = null)
+        [Route("api/programs")]
+        [HttpGet]
+        public IHttpActionResult GetAllPrograms([FromUri(Name = "excludeTypes")] int[] excludeTypes = null)
         {
-            if (programType != null)
-            {
-                return Ok(_programService.GetOnlineGivingPrograms(programType));
-            }
-
             var result = _programService.GetOnlineGivingPrograms();
             if (excludeTypes == null || excludeTypes.Length == 0)
             {
@@ -33,6 +29,13 @@ namespace crds_angular.Controllers.API
             }
 
             return Ok(result);
+        }
+
+        [Route("api/programs/{programType}")]
+        [HttpGet]
+        public IHttpActionResult GetProgramsByType(int programType)
+        {
+            return Ok(_programService.GetOnlineGivingPrograms(programType));
         }
     }
 }
