@@ -1,15 +1,12 @@
 USE [MinistryPlatform]
 GO
 
-/****** Object:  StoredProcedure [dbo].[report_CRDS_Donor_Search]    Script Date: 8/24/2015 10:56:22 AM ******/
+/****** Object:  StoredProcedure [dbo].[report_CRDS_Donor_Search]    Script Date: 8/31/2015 10:16:00 AM ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
-
-
 
 
 CREATE PROCEDURE [dbo].[report_CRDS_Donor_Search]
@@ -23,6 +20,7 @@ CREATE PROCEDURE [dbo].[report_CRDS_Donor_Search]
 	,@StmtHeaderID NVarchar(MAX) = '0'
 	,@ProgramID NVarchar(MAX) = '0'
 	,@MinGiv Money
+	,@MaxGiv Money
 	,@FirstTimeGiver INT --0 all givers, 1 1st individual gift, 2 first family gift, 3 first ever gift
 	,@CreateSelection BIT = 0
 	,@AccountingCompanyID INT = NULL
@@ -193,6 +191,7 @@ FROM Donors Do
  LEFT OUTER JOIN Congregations Cong ON Cong.Congregation_ID = H.Congregation_ID
  OUTER APPLY (SELECT Top 1 First_Name AS Spouse_First,Nickname AS Spouse_Nickname, Last_Name AS Spouse_Last, S.__Age AS Spouse_Age FROM Contacts S WHERE S.Household_Position_ID = 1 AND C.Household_Position_ID = 1 AND S.Household_ID = C.Household_ID AND S.Contact_ID <> C.Contact_ID) Spouse
 WHERE #D.Period_Amount >= ISNULL(@MinGiv,#D.Period_Amount)
+ AND #D.Period_Amount <= ISNULL(@MaxGiv, #D.Period_Amount)
  AND #D.Period_Donations >= ISNULL(@MinGifts,#D.Period_Donations)
  AND (@FirstTimeGiver = 0 OR (@FirstTimeGiver >= 1 AND Do.Donor_ID IN (SELECT Donor_ID FROM #D1)))
 
@@ -229,6 +228,7 @@ WHERE #D.Period_Amount >= ISNULL(@MinGiv,#D.Period_Amount)
 		SELECT DISTINCT Donor_ID, Display_Name, @SelectionID2, Donor_ID
 		FROM #D
 		WHERE #D.Period_Amount >= ISNULL(@MinGiv,#D.Period_Amount)
+		 AND #D.Period_Amount <= ISNULL(@MaxGiv, #D.Period_Amount)
 		 AND #D.Period_Donations >= ISNULL(@MinGifts,#D.Period_Donations)
 		 AND (@FirstTimeGiver = 0 OR (@FirstTimeGiver >= 1 AND #D.Donor_ID IN (SELECT Donor_ID FROM #D1)))
 
@@ -236,7 +236,6 @@ WHERE #D.Period_Amount >= ISNULL(@MinGiv,#D.Period_Amount)
 	END
 
 END
-
 
 
 GO
