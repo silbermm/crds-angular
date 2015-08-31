@@ -1,7 +1,6 @@
-USE [MinistryPlatform]
 GO
 
-/****** Object:  StoredProcedure [dbo].[report_CRDS_Donor_Search_Households]    Script Date: 8/27/2015 12:49:04 PM ******/
+/****** Object:  StoredProcedure [dbo].[report_CRDS_Donor_Search_Households]    Script Date: 8/31/2015 10:14:15 AM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -20,6 +19,7 @@ CREATE PROCEDURE [dbo].[report_CRDS_Donor_Search_Households]
 	,@StmtHeaderID NVarchar(MAX) = '0'
 	,@ProgramID NVarchar(MAX) = '0'
 	,@MinGiv Money
+	,@MaxGiv Money
 	,@FirstTimeGiver INT = 0--0 all givers, 1 1st individual gift, 2 first family gift, 3 first ever gift
 	,@CreateSelection BIT = 0
 	,@AccountingCompanyID INT = NULL
@@ -150,6 +150,7 @@ FROM #D
  LEFT OUTER JOIN Addresses A ON A.Address_ID = H.Address_ID
  LEFT OUTER JOIN Congregations Cong ON Cong.Congregation_ID = H.Congregation_ID
 WHERE #D.Period_Amount >= ISNULL(@MinGiv,#D.Period_Amount)
+ AND #D.Period_Amount <= ISNULL(@MaxGiv, #D.Period_Amount)
  AND #D.Period_Donations >= ISNULL(@MinGifts,#D.Period_Donations)
  AND (@FirstTimeGiver <= 1
 		OR (@FirstTimeGiver = 2 AND #D.Household_ID IN (SELECT Household_ID FROM #FirstEverThese))
@@ -167,6 +168,7 @@ WHERE #D.Period_Amount >= ISNULL(@MinGiv,#D.Period_Amount)
 		 INNER JOIN Contacts C ON #D.Household_ID = C.Household_ID
 		WHERE C.Donor_Record IS NOT NULL
 		 AND #D.Period_Amount >= ISNULL(@MinGiv,#D.Period_Amount)
+		 AND #D.Period_Amount <= ISNULL(@MaxGiv, #D.Period_Amount)
 		 AND #D.Period_Donations >= ISNULL(@MinGifts,#D.Period_Donations)
 		 AND (@HeadsOnly = 0 OR (@HeadsOnly = 1 AND C.Household_Position_ID IN (1,6)))
 		 AND (@FirstTimeGiver <= 1
@@ -205,11 +207,9 @@ WHERE #D.Period_Amount >= ISNULL(@MinGiv,#D.Period_Amount)
 		SELECT DISTINCT Donor_ID, Display_Name, @SelectionID2, Donor_ID
 		FROM #D1
 
-
 	END
 
 
 END
-
 
 GO
