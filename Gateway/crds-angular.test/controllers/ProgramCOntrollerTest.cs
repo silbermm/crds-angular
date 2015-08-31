@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.Http;
-using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Results;
+using crds_angular.App_Start;
 using NUnit.Framework;
 using crds_angular.Controllers.API;
 using crds_angular.Models.Crossroads;
-using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
-using MinistryPlatform.Models;
+using crds_angular.Services.Interfaces;
 
 namespace crds_angular.test.controllers
 {
@@ -17,36 +15,42 @@ namespace crds_angular.test.controllers
     public class ProgramControllerTest
 
     {
-        private ProgramController fixture;
-        private Mock<IProgramService> programServiceMock;
+        private ProgramController _fixture;
+        private Mock<IProgramService> _programServiceMock;
 
 
         [SetUp]
         public void SetUp()
         {
-            programServiceMock = new Mock<IProgramService>();
-            fixture = new ProgramController(programServiceMock.Object);
-            fixture.Request = new HttpRequestMessage();
-            fixture.RequestContext = new HttpRequestContext();
+            _programServiceMock = new Mock<IProgramService>();
+            _fixture = new ProgramController(_programServiceMock.Object)
+            {
+                Request = new HttpRequestMessage(),
+                RequestContext = new HttpRequestContext()
+            };
+
+            AutoMapperConfig.RegisterMappings();
         }
 
         [Test]
-        public void testGetPrograms()
+        public void TestGetPrograms()
         {
             int programType = 1;
-            var programList = new List<Program>();
-            Program program = new Program();
-            program.Name = "Test Fund";
-            program.ProgramId = 1;
+            var programList = new List<ProgramDTO>();
+            ProgramDTO program = new ProgramDTO
+            {
+                Name = "Test Fund",
+                ProgramId = 1
+            };
             programList.Add(program);
 
-            programServiceMock.Setup(mocked => mocked.GetOnlineGivingPrograms(programType)).Returns(programList);
+            _programServiceMock.Setup(mocked => mocked.GetOnlineGivingPrograms(programType)).Returns(programList);
 
-            IHttpActionResult httpResult = fixture.Get(programType);
-            OkNegotiatedContentResult<List<ProgramDTO>> result = (OkNegotiatedContentResult<List<ProgramDTO>>) httpResult;
+            var httpResult = _fixture.Get(null, programType);
+            var result = (OkNegotiatedContentResult<List<ProgramDTO>>) httpResult;
             Assert.IsNotNull(result);
             Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<List<ProgramDTO>>), result);
-            programServiceMock.VerifyAll();
+            _programServiceMock.VerifyAll();
 
             Assert.AreEqual(result.Content[0].Name, program.Name);
             Assert.AreEqual(result.Content[0].ProgramId, program.ProgramId);
