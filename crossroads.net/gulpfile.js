@@ -146,7 +146,7 @@ gulp.task('browser-sync-dev', ['build-browser-sync'], function() {
 gulp.task('build', ['webpack:build']);
 
 // For convenience, an 'alias' to webpack-dev-server
-gulp.task('start', ['browser-sync-dev']);
+gulp.task('start', ['webpack-dev-server']);
 
 
 // Run the development server
