@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace crds_angular.Models.Crossroads.Trip
 {
@@ -18,5 +19,8 @@ namespace crds_angular.Models.Crossroads.Trip
 
         [JsonProperty(PropertyName = "ageLimit")]
         public int YoungestAgeAllowed { get; set; }
+
+        [JsonProperty(PropertyName = "ageExceptions")]
+        public List<int> AgeExceptions { get; set; } 
     }
 }
