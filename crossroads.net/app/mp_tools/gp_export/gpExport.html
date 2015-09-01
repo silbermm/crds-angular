@@ -25,14 +25,19 @@
           before clicking to download the report.
         </p>
         <p>Deposits to be Downloaded:</p>
-        <ul>
-          <li ng-repeat="deposit in gpExport.selectedDeposits">
-            <a href="#" ng-click="gpExport.generateGPExportFile(deposit)">{{deposit.export_file_name}}</a>
-            <svg viewBox="0 0 32 32" class="icon spinner3">
-              <use xlink:href="/icons/cr.svg#spinner3"></use>
-            </svg>
-          </li>
-        <ul>
+        <div ng-show="gpExport.selectedDeposits.length > 0">
+          <ul>
+            <li ng-repeat="deposit in gpExport.selectedDeposits">
+              <a href="#" ng-click="gpExport.generateGPExportFile(deposit)">{{deposit.export_file_name}}</a>
+              <svg viewBox="0 0 32 32" class="icon spinner3" ng-show="deposit.processing">
+                <use xlink:href="#spinner3"></use>
+              </svg>
+            </li>
+          <ul>
+        </div>
+        <div ng-show="gpExport.selectedDeposits.length == 0">
+          <p>You do not have any selected deposits left to export.</div>
+        </div>
       </div>
     </div>
   </div>
