@@ -19,12 +19,6 @@ namespace MinistryPlatform.Translation.Services
 
         public PrivateInvite Create(int pledgeCampaignId, string emailAddress, string recipientName, string token)
         {
-            //var token = ApiLogin();
-            var values = new Dictionary<string, object>
-            {
-                {"Email_Address", emailAddress},
-                {"Recipient_Name", recipientName}
-            };
             var v = new Dictionary<string, object>
             {
                 {"Pledge_Campaign_ID", pledgeCampaignId},
@@ -35,8 +29,6 @@ namespace MinistryPlatform.Translation.Services
             try
             {
                 var privateInviteId = _ministryPlatformService.CreateRecord(515, v, token, true);
-                //var privateInviteId = _ministryPlatformService.CreateSubRecord("TripPrivateInvite", pledgeCampaignId, values, token, false);
-                //var record = _ministryPlatformService.GetSubPageRecord("TripPrivateInvite", privateInviteId, token);
                 var record = _ministryPlatformService.GetRecordDict(515, privateInviteId, token, false);
                 var invite = new PrivateInvite();
                 invite.EmailAddress = record.ToString("Email_Address");
@@ -53,11 +45,6 @@ namespace MinistryPlatform.Translation.Services
             {
                 throw new ApplicationException(string.Format("Create Private Invite failed.  Pledge Campaign Id: {0}", pledgeCampaignId), e);
             }
-        }
-
-        public void Email()
-        {
-            throw new NotImplementedException();
         }
 
         public bool PrivateInviteValid(int pledgeCampaignId, string guid)

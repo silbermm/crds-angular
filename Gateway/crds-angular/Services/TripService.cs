@@ -305,14 +305,12 @@ namespace crds_angular.Services
 
             return invite.PrivateInvitationId;
 
-            //throw new NotImplementedException();
         }
 
         private Communication PrivateInviteCommunication(PrivateInvite invite)
         {
             var template = _communicationService.GetTemplate(12302);
             var fromContact = _contactService.GetContactById(4);
-            //var pledgeCampaign = _campaignService.GetPledgeCampaign(invite.PledgeCampaignId);
             var mergeData = SetMergeData(invite.PledgeCampaignIdText, invite.PledgeCampaignId, invite.InvitationGuid, invite.RecipientName);
 
             return new Communication
