@@ -20,7 +20,6 @@ namespace crds_angular.Services.Interfaces
         DonationBatchDTO GetDonationBatch(int batchId);
         MemoryStream CreateGPExport(int depositId, string token);
         string GPExportFileName(int depositId);
-        void UpdateDepositToExported(int depositId);
         List<DepositDTO> GenerateGPExportFileNames(int selectionId, string token);
     }
 }

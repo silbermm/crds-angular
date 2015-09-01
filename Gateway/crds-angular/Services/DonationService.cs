@@ -6,6 +6,7 @@ using crds_angular.Models.Crossroads.Stewardship;
 using MPServices=MinistryPlatform.Translation.Services.Interfaces;
 using crds_angular.Services.Interfaces;
 using crds_angular.Util;
+using Microsoft.Practices.Unity.ObjectBuilder;
 using MinistryPlatform.Models;
 using Newtonsoft.Json;
 
@@ -113,10 +114,12 @@ namespace crds_angular.Services
             var gpExport = _mpDonationService.CreateGPExport(depositId, token);
             var stream = new MemoryStream();
             CSV.Create(gpExport, GPExportDatum.Headers, stream, "\t");
+            UpdateDepositToExported(depositId);
 
             return stream;
         }
-        public void UpdateDepositToExported(int depositId)
+
+        private void UpdateDepositToExported(int depositId)
         {
             _mpDonationService.UpdateDepositToExported(depositId);
         }
