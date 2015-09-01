@@ -19,7 +19,7 @@ namespace crds_angular.Controllers.API
         }
 
         [AcceptVerbs("GET")]
-        [ResponseType(typeof(TripFormResponseDto))]
+        [ResponseType(typeof (TripFormResponseDto))]
         [Route("api/trip/form-responses/{selectionId}/{selectionCount}/{recordId}")]
         public IHttpActionResult TripFormResponses(int selectionId, int selectionCount, int recordId)
         {
@@ -39,7 +39,7 @@ namespace crds_angular.Controllers.API
         }
 
         [AcceptVerbs("GET")]
-        [ResponseType(typeof(TripCampaignDto))]
+        [ResponseType(typeof (TripCampaignDto))]
         [Route("api/trip/campaign/{campaignId}")]
         public IHttpActionResult GetCampaigns(int campaignId)
         {
@@ -55,7 +55,33 @@ namespace crds_angular.Controllers.API
                     var apiError = new ApiErrorDto("Get Campaign Failed", ex);
                     throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
-            });   
+            });
+        }
+
+        [AcceptVerbs("POST")]
+        [Route("api/trip/generate-private-invite")]
+        public IHttpActionResult GeneratePrivateInvite([FromBody] PrivateInviteDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(val => val.Errors).Aggregate("", (current, err) => current + err.Exception.Message);
+                var dataError = new ApiErrorDto("GeneratePrivateInvite Data Invalid", new InvalidOperationException("Invalid GeneratePrivateInvite Data" + errors));
+                throw new HttpResponseException(dataError.HttpResponseMessage);
+            }
+
+            return Authorized(token =>
+            {
+                try
+                {
+                    _tripService.GeneratePrivateInvite(dto, token);
+                    return Ok();
+                }
+                catch (Exception exception)
+                {
+                    var apiError = new ApiErrorDto("GeneratePrivateInvite Failed", exception);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+            });
         }
 
         [AcceptVerbs("POST")]
@@ -69,16 +95,17 @@ namespace crds_angular.Controllers.API
                 throw new HttpResponseException(dataError.HttpResponseMessage);
             }
 
+
             try
             {
                 _tripService.SaveParticipants(dto);
+                return Ok();
             }
             catch (Exception exception)
             {
                 var apiError = new ApiErrorDto("SaveParticipants Failed", exception);
                 throw new HttpResponseException(apiError.HttpResponseMessage);
             }
-            return Ok();
         }
 
         [AcceptVerbs("GET")]
@@ -99,7 +126,7 @@ namespace crds_angular.Controllers.API
         }
 
         [AcceptVerbs("GET")]
-        [ResponseType(typeof(TripParticipantDto))]
+        [ResponseType(typeof (TripParticipantDto))]
         [Route("api/trip/participant/{tripParticipantId}")]
         public IHttpActionResult TripParticipant(string tripParticipantId)
         {
@@ -131,6 +158,25 @@ namespace crds_angular.Controllers.API
                 catch (Exception ex)
                 {
                     var apiError = new ApiErrorDto("Failed to retrieve My Trips info", ex);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+            });
+        }
+
+        [AcceptVerbs("GET")]
+        [Route("api/trip/validate-private-invite/{pledgeCampaignId}/{guid}")]
+        public IHttpActionResult ValidatePrivateInvite(int pledgeCampaignId, string guid)
+        {
+            return Authorized(token =>
+            {
+                try
+                {
+                    var valid = _tripService.ValidatePrivateInvite(pledgeCampaignId, guid, token);
+                    return Ok(valid);
+                }
+                catch (Exception exception)
+                {
+                    var apiError = new ApiErrorDto("ValidatePrivateInvite Failed", exception);
                     throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
             });

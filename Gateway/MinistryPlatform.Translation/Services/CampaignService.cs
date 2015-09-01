@@ -37,7 +37,9 @@ namespace MinistryPlatform.Translation.Services
                         Goal = result.ToInt("Campaign_Goal"),
                         FormId = result.ToInt("Form_ID"),
                         FormTitle = result.ToString("Form_Title"),
-                        YoungestAgeAllowed = result.ToInt("Youngest_Age_Allowed")
+                        YoungestAgeAllowed = result.ToInt("Youngest_Age_Allowed"),
+                        RegistrationEnd = result.ToDate("Registration_End"),
+                        RegistrationStart = result.ToDate("Registration_Start")
                     };
                     campaigns.Add(campaign);
 

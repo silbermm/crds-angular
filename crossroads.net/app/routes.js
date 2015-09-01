@@ -600,6 +600,15 @@
           }
         }
       })
+      .state('tools.tripPrivateInvite', {
+        url: '/tripPrivateInvite',
+        controller: 'TripPrivateInviteController as invite',
+        templateUrl: 'trip_private_invite/invite.html',
+        resolve: {
+          MPTools: 'MPTools',
+          Trip: 'Trip'
+        }
+      })
       .state('tools.checkBatchProcessor', {
         url: '/checkBatchProcessor',
         controller: 'CheckBatchProcessor as checkBatchProcessor',

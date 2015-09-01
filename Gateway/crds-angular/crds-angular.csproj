@@ -309,6 +309,7 @@
     <Compile Include="Models\Crossroads\Stewardship\StripeToken.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeTransfer.cs" />
     <Compile Include="Models\Crossroads\Trip\MyTripsDTO.cs" />
+    <Compile Include="Models\Crossroads\Trip\PrivateInviteDto.cs" />
     <Compile Include="Models\Crossroads\Trip\SaveTripParticipantsDto.cs" />
     <Compile Include="Models\Crossroads\Trip\Trip.cs" />
     <Compile Include="Models\Crossroads\Trip\TripApplicantResponse.cs" />

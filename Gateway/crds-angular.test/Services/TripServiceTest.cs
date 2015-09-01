@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using crds_angular.Services;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -20,6 +21,10 @@ namespace crds_angular.test.Services
         private Mock<IDonorService> _donorService;
         private Mock<IPledgeService> _pledgeService;
         private Mock<ICampaignService> _campaignService;
+        private Mock<IPrivateInviteService> _privateInviteService;
+        private Mock<ICommunicationService> _communicationService;
+        private Mock<IContactService> _contactService;
+        private Mock<IConfigurationWrapper> _configurationWrapper;
         private TripService _fixture;
 
         [SetUp]
@@ -33,8 +38,23 @@ namespace crds_angular.test.Services
             _donorService = new Mock<IDonorService>();
             _pledgeService = new Mock<IPledgeService>();
             _campaignService = new Mock<ICampaignService>();
+            _privateInviteService = new Mock<IPrivateInviteService>();
+            _communicationService = new Mock<ICommunicationService>();
+            _contactService = new Mock<IContactService>();
+            _configurationWrapper = new Mock<IConfigurationWrapper>();
 
-            _fixture = new TripService(_eventParticipantService.Object, _donationService.Object, _groupService.Object, _formSubmissionService.Object, _eventService.Object, _donorService.Object, _pledgeService.Object, _campaignService.Object);
+            _fixture = new TripService(_eventParticipantService.Object,
+                                       _donationService.Object,
+                                       _groupService.Object,
+                                       _formSubmissionService.Object,
+                                       _eventService.Object,
+                                       _donorService.Object,
+                                       _pledgeService.Object,
+                                       _campaignService.Object,
+                                       _privateInviteService.Object,
+                                       _communicationService.Object,
+                                       _contactService.Object,
+                                       _configurationWrapper.Object);
         }
 
         [Test]
@@ -49,7 +69,7 @@ namespace crds_angular.test.Services
 
             var p1 = searchResults.FirstOrDefault(s => s.ParticipantId == 9999);
             Assert.IsNotNull(p1);
-            Assert.AreEqual(2,p1.Trips.Count);
+            Assert.AreEqual(2, p1.Trips.Count);
 
             var p2 = searchResults.FirstOrDefault(s => s.ParticipantId == 5555);
             Assert.IsNotNull(p2);
@@ -114,7 +134,7 @@ namespace crds_angular.test.Services
                 {
                     EmailAddress = "myEmail@Address.com",
                     EventStartDate = new DateTime(2015, 10, 08),
-                    EventEndDate =  new DateTime(2015, 10, 23),
+                    EventEndDate = new DateTime(2015, 10, 23),
                     EventId = 20,
                     EventParticipantId = 21,
                     EventTitle = "Go Someplace",
