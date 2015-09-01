@@ -23,10 +23,15 @@
       vm.audio = vm.media.audio;
       vm.video = vm.media.video;
     } else {
-      //TODO: handle for media pages
-      //SingleMedia[ItemProperty].music[music]
-      vm.audio = vm.media;
-      vm.videoIsOpen = true;
+      if (vm.media.className === 'Music') {
+        vm.audio = vm.media;
+        vm.video = null;
+        vm.videoIsOpen = false;
+      } else if (vm.media.className === 'Video') {
+        vm.audio = null;
+        vm.video = vm.media;
+        vm.videoIsOpen = true;
+      }
     }
 
     if (ParentMedia) {
