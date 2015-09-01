@@ -1,4 +1,4 @@
-(function () {
+(function() {
   'use strict';
   module.exports = SingleMediaController;
 
@@ -25,15 +25,13 @@
     } else {
       //TODO: handle for media pages
       //SingleMedia[ItemProperty].music[music]
-      vm.audio = vm.media;      
+      vm.audio = vm.media;
       vm.videoIsOpen = true;
     }
 
-
-    if (ParentMedia){
+    if (ParentMedia) {
       vm.parentMedia = ParentMedia[ParentItemProperty][0];
-    }
-    else {
+    } else {
       vm.parentMedia = false;
     }
 
@@ -42,14 +40,14 @@
     }
 
     function showAudio() {
-      return !showVideo()
+      return !showVideo();
     }
 
     function showVideo() {
       return vm.videoIsOpen;
     }
 
-    function stopSoundCloudPlayer(){
+    function stopSoundCloudPlayer() {
       if (!vm.soundCloudPlayer) {
         return;
       }
@@ -73,7 +71,7 @@
       stopSoundCloudPlayer();
     }
 
-    $scope.$on("$destroy", function() {
+    $scope.$on('$destroy', function() {
       stopSoundCloudPlayer();
     });
   }
