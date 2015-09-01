@@ -20,7 +20,7 @@
                    plangular="https://soundcloud.com/crossroads-church-1/{{singleMedia.media.serviceId}}">
                 <div class="controls">
                   <div class="col-xs-2 col-sm-1">
-                    <a href="" ng-click="play()" ng-show="!player.playing">
+                    <a href="" ng-click="singleMedia.setSoundCloudPlayer(player); play()" ng-show="!player.playing">
                       <svg viewBox="0 0 32 32" class="icon icon-play4">
                       	<use xlink:href="#play4"></use>
                       </svg>

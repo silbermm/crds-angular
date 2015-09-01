@@ -12,6 +12,25 @@
     vm.media = SingleMedia[ItemProperty][0];
     vm.imageurl = ImageURL;
 
+    vm.setSoundCloudPlayer = function(soundCloudPlayer) {
+      vm.soundCloudPlayer = soundCloudPlayer;
+    }
+
+    vm.switchToVideo = function() {
+      vm.musicisopen = false;
+      vm.msgisopen = true;
+
+      if (!vm.soundCloudPlayer) {
+        return;
+      }
+
+      if (!vm.soundCloudPlayer.playing) {
+        return;
+      }
+
+      vm.soundCloudPlayer.pause();
+    }
+
     if (ParentMedia){
       vm.parentMedia = ParentMedia[ParentItemProperty][0];
     }
