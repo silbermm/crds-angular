@@ -7,10 +7,15 @@
             <!--VIDEO-->
             <div class="row" ng-show="singleMedia.msgisopen">
               <div class="col-lg-10 col-lg-offset-1 custom-poster mobile-hard-left mobile-hard-right ng-scope">
-                <svg viewBox="0 0 32 32" class="icon icon-youtube-play-bw">
-                	<use xlink:href="#youtube-play-bw"></use>
-                </svg>
-                <img src="{{singleMedia.imageurl}}" class="img-full-width">
+
+                <div ng-click="singleMedia.showVideo()" ng-show="singleMedia.stillIsVisible">
+                  <img ng-src="{{singleMedia.imageUrl}}" class="img-full-width">
+                </div>
+
+                <div ng-show="singleMedia.videoIsVisible" class="embed-responsive embed-responsive-16by9">
+                  <you-tube-player width="640" height="480" videoid="{{singleMedia.videoUrl}}" ></you-tube-player>
+                </div>
+                
               </div>
             </div>
 
@@ -33,7 +38,7 @@
                     </div>
                   </div><!--/col-xs-10 col-sm-11-->
               </div>
-                <img src="{{singleMedia.imageurl}}" class="img-full-width">
+                <img src="{{singleMedia.imageUrl}}" class="img-full-width">
               </div>
             </div>
             <ng-include src="'templates/mediaDetails.html'"> </ng-include>
