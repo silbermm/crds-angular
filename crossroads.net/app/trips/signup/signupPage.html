@@ -11,12 +11,6 @@
       <span ng-bind-html='$root.MESSAGES.TripRegistrationNotOpen.content | html'></span>
     </div>
 
-    <div>
-      <pre>ageLimit: {{ tripsSignup.ageLimitReached }}</pre>
-      <pre>registrationNotOpen: {{ tripsSignup.registrationNotOpen }}</pre>
-      <pre>pageHasErrors: {{ tripsSignup.pageHasErrors }}</pre>
-    </div>
-
     <div ng-show='!tripsSignup.pageHasErrors'> <!-- Content if there is no Page Error -->
 
       <signup-progress total-steps='tripsSignup.numberOfPages' current-step='tripsSignup.currentPage'> </signup-progress>
