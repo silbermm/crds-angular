@@ -6,8 +6,6 @@
 
     function SingleSeriesController(Selected, Messages) {
         var vm = this;
-        vm.msgisopen = true;
-        vm.musicisopen = false;
         vm.selected = Selected;
         vm.messages = Messages.messages;
     }

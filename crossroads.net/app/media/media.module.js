@@ -1,9 +1,12 @@
 'use strict';
 var MODULE = 'crossroads.media';
 
-  var app = angular.module(MODULE, ['crossroads.core'])
-    .config(require('./media.routes'))
-    .factory('Media', require('./services/media.service'));
+require('plangular');
+
+var app = angular.module(MODULE, ['crossroads.core', 'plangular'])
+  .config(require('./media.routes'))
+  .config(configureAudioPlayer)
+  .factory('Media', require('./services/media.service'));
 
 require('./templates/viewAll.html');
 require('./templates/viewAllMusic.html');
@@ -28,8 +31,8 @@ app.controller('SingleMediaController', require('./singleMedia.controller'));
 app.controller('SingleSeriesController', require('./singleSeries.controller.js'));
 app.filter('replaceNonAlphaNumeric', require('./filters/replaceNonAlphaNumeric.filter.js'));
 
-app.directive("mediaListCard", require('./directives/mediaListCard.directive'));
-app.directive("youTubePlayer", require('./directives/youTubePlayer.directive'));
+app.directive('mediaListCard', require('./directives/mediaListCard.directive'));
+app.directive('youTubePlayer', require('./directives/youTubePlayer.directive'));
 
 app.constant('YT_EVENT', {
   STOP:            0,
@@ -37,3 +40,7 @@ app.constant('YT_EVENT', {
   PAUSE:           2,
   STATUS_CHANGE:   3
 });
+
+function configureAudioPlayer(plangularConfigProvider) {
+  plangularConfigProvider.clientId = __SOUNDCLOUD_API_KEY__;
+}
