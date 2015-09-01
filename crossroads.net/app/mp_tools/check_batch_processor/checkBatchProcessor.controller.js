@@ -3,9 +3,9 @@
 
   module.exports = CheckBatchProcessor;
 
-  CheckBatchProcessor.$inject = ['$rootScope', '$log', 'MPTools', 'CheckScannerBatches', 'getPrograms'];
+  CheckBatchProcessor.$inject = ['$rootScope', '$log', 'MPTools', 'CheckScannerBatches', 'getPrograms', 'AuthService', 'GIVE_PROGRAM_TYPES', 'GIVE_ROLES'];
 
-  function CheckBatchProcessor($rootScope, $log, MPTools, CheckScannerBatches, getPrograms) {
+  function CheckBatchProcessor($rootScope, $log, MPTools, CheckScannerBatches, getPrograms, AuthService, GIVE_PROGRAM_TYPES, GIVE_ROLES) {
     var vm = this;
 
     vm.batch = {};
@@ -23,9 +23,13 @@
         vm.batches = data;
       });
 
-      getPrograms.Programs.get({programType: 1}, function(data) {
-        vm.programs = data;
+      getPrograms.Programs.get({'excludeTypes[]': [GIVE_PROGRAM_TYPES.NonFinancial]}, function(data) {
+        vm.programs = _.sortBy(data, 'Name');
       });
+    }
+
+    vm.allowAccess = function() {
+      return(AuthService.isAuthenticated() && AuthService.isAuthorized(GIVE_ROLES.StewardshipDonationProcessor));
     }
 
     vm.processBatch = function() {

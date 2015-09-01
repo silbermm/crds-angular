@@ -1,5 +1,5 @@
-"use strict()";
 (function () {
+  "use strict()";
 
   module.exports = Media;
 
@@ -7,6 +7,13 @@
     return {
       Series: function (params) {
         return $resource(__CMS_ENDPOINT__ + 'api/series/',
+          params,
+          {
+            'get': { method:'GET', cache: true}
+          });
+      },
+      Medias: function(params) {
+        return $resource(__CMS_ENDPOINT__ + 'api/media/',
           params,
           {
             'get': { method:'GET', cache: true}

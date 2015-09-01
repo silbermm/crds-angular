@@ -27,11 +27,30 @@ describe('Check Batch Processor Tool', function() {
 
   var programList = [
     {ProgramId: 1, Name: 'Crossroads'},
-    {ProgramId: 2, Name: 'Game Change'},
-    {ProgramId: 3, Name: 'Old St George Building'},
+    {ProgramId: 2, Name: 'Old St George Building'},
+    {ProgramId: 3, Name: 'Game Change'},
   ];
 
   beforeEach(angular.mock.module('crossroads'));
+
+  var GIVE_ROLES = { StewardshipDonationProcessor: 123 };
+  var GIVE_PROGRAM_TYPES = { Fuel: 999, NonFinancial: 888 };
+
+  beforeEach(function() {
+    angular.mock.module('crossroads.give', function($provide) {
+      $provide.constant('GIVE_ROLES', GIVE_ROLES);
+      $provide.constant('GIVE_PROGRAM_TYPES', GIVE_PROGRAM_TYPES);
+    });
+  });
+
+  var AuthService;
+
+  beforeEach(function(){
+    angular.mock.module('crossroads.core', function($provide){
+      AuthService = jasmine.createSpyObj('AuthService', ['isAuthenticated', 'isAuthorized']);
+      $provide.value('AuthService', AuthService);
+    });
+  });
 
   var $controller;
   var $log;
@@ -53,7 +72,38 @@ describe('Check Batch Processor Tool', function() {
       $scope = {};
       controller = $controller('CheckBatchProcessor', { $scope: $scope });
       $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/checkscanner/batches').respond(batchList);
-      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/programs/1').respond(programList);
+      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/programs?excludeTypes%5B%5D=' + GIVE_PROGRAM_TYPES.NonFinancial).respond(programList);
+    });
+
+    describe('Function allowAccess', function() {
+      it('Should not allow access if user is not authenticated', function() {
+        AuthService.isAuthenticated.and.returnValue(false);
+
+        expect(controller.allowAccess()).toBeFalsy();
+
+        expect(AuthService.isAuthenticated).toHaveBeenCalled();
+        expect(AuthService.isAuthorized).not.toHaveBeenCalled();
+      });
+
+      it('Should not allow access if user is authenticated but not authorized', function() {
+        AuthService.isAuthenticated.and.returnValue(true);
+        AuthService.isAuthorized.and.returnValue(false);
+
+        expect(controller.allowAccess()).toBeFalsy();
+
+        expect(AuthService.isAuthenticated).toHaveBeenCalled();
+        expect(AuthService.isAuthorized).toHaveBeenCalledWith(GIVE_ROLES.StewardshipDonationProcessor);
+      });
+
+      it('Should not allow access if user is authenticated but not authorized', function() {
+        AuthService.isAuthenticated.and.returnValue(true);
+        AuthService.isAuthorized.and.returnValue(true);
+
+        expect(controller.allowAccess()).toBeTruthy();
+
+        expect(AuthService.isAuthenticated).toHaveBeenCalled();
+        expect(AuthService.isAuthorized).toHaveBeenCalledWith(GIVE_ROLES.StewardshipDonationProcessor);
+      });
     });
 
     describe('Initial Load', function() {
@@ -62,6 +112,9 @@ describe('Check Batch Processor Tool', function() {
 
         expect(controller.batches.length).toBe(4);
         expect(controller.programs.length).toBe(3);
+        expect(controller.programs[0].Name).toBe('Crossroads');
+        expect(controller.programs[1].Name).toBe('Game Change');
+        expect(controller.programs[2].Name).toBe('Old St George Building');
       });
     });
 
