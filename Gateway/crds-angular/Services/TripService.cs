@@ -107,7 +107,8 @@ namespace crds_angular.Services
                 FormName = campaign.FormTitle,
                 YoungestAgeAllowed = campaign.YoungestAgeAllowed,
                 RegistrationEnd = campaign.RegistrationEnd,
-                RegistrationStart = campaign.RegistrationStart
+                RegistrationStart = campaign.RegistrationStart,
+                AgeExceptions = campaign.AgeExceptions
             };
         }
 

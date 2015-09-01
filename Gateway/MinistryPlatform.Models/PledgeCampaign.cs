@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MinistryPlatform.Models
 {
@@ -15,5 +16,6 @@ namespace MinistryPlatform.Models
         public int YoungestAgeAllowed { get; set; }
         public DateTime RegistrationStart { get; set; }
         public DateTime RegistrationEnd { get; set; }
+        public List<int> AgeExceptions { get; set; }
     }
 }

@@ -27,6 +27,8 @@ namespace MinistryPlatform.Translation.Services
                 var campaigns = new List<PledgeCampaign>();
                 foreach (var result in results)
                 {
+                    var ageExceptions = _ministryPlatformService.GetSubPageRecords(_configurationWrapper.GetConfigIntValue("GoTripAgeExceptions"), campaignId, token);
+                    var exceptions = ageExceptions.Select(ae => ae.ToInt("Contact_ID")).ToList();
                     var campaign = new PledgeCampaign()
                     {
                         Id = result.ToInt("Pledge_Campaign_ID"),
@@ -39,11 +41,12 @@ namespace MinistryPlatform.Translation.Services
                         FormTitle = result.ToString("Form_Title"),
                         YoungestAgeAllowed = result.ToInt("Youngest_Age_Allowed"),
                         RegistrationEnd = result.ToDate("Registration_End"),
-                        RegistrationStart = result.ToDate("Registration_Start")
+                        RegistrationStart = result.ToDate("Registration_Start"),
+                        AgeExceptions = exceptions
                     };
                     campaigns.Add(campaign);
-
                 }
+                
                 return campaigns.FirstOrDefault();
             });
            
