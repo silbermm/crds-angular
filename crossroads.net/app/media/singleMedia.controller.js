@@ -2,42 +2,35 @@
   'use strict';
   module.exports = SingleMediaController;
 
-  SingleMediaController.$inject = ['$rootScope', '$scope', 'SingleMedia', 'ItemProperty', 'ParentMedia', 'ParentItemProperty', 'ImageURL', 'YT_event'];
+  SingleMediaController.$inject = ['$rootScope', '$scope', '$sce', 'SingleMedia', 'ItemProperty', 'ParentMedia', 'ParentItemProperty', 'ImageURL', 'YT_EVENT'];
 
-  function SingleMediaController($rootScope, $scope, SingleMedia, ItemProperty, ParentMedia, ParentItemProperty, ImageURL, YT_event) {
+  function SingleMediaController($rootScope, $scope, $sce, SingleMedia, ItemProperty, ParentMedia, ParentItemProperty, ImageURL, YT_EVENT) {
     var vm = this;
     vm.msgisopen = true;
     vm.musicisopen = false;
-    vm.showvideo = ShowVideo;
+    vm.showVideo = ShowVideo;
     vm.stopVideo = StopVideo;
     vm.sendControlEvent = SendControlEvent;
-    vm.stillisvisible = true;
-    vm.videoisvisible = false;
+    vm.stillIsVisible = true;
+    vm.videoIsVisible = false;
 
     vm.media = SingleMedia[ItemProperty][0];
 
-    vm.imageurl = ImageURL;
+    vm.imageUrl = ImageURL;
 
     // if the video url is bound directly in the iframe at some point, it will need to be marked as
     // trusted for Strict Contextual Escaping, such as --
     // $sce.trustAsResourceUrl("https://www.youtube.com/embed/" + _.get(vm.media, 'serviceId'));
-    vm.videourl = _.get(vm.media, 'serviceId');
-    debugger;
+    vm.videoUrl = _.get(vm.media, 'serviceId');
+    $sce.trustAsResourceUrl(vm.videoUrl);
 
-    $scope.yt = {
-      width: 600,
-      height: 480,
-      videoid: vm.videourl,
-      playerStatus: "NOT PLAYING"
-    };
-
-    $scope.YT_event = YT_event;
+    $scope.YT_EVENT = YT_EVENT;
 
     function SendControlEvent(ctrlEvent) {
       $rootScope.$broadcast(ctrlEvent);
     };
 
-    $scope.$on(YT_event.STATUS_CHANGE, function(event, data) {
+    $scope.$on(YT_EVENT.STATUS_CHANGE, function(event, data) {
       $scope.yt.playerStatus = data;
     });
 
@@ -49,14 +42,14 @@
     }
 
     function ShowVideo() {
-      vm.stillisvisible = false;
-      vm.videoisvisible = true;
+      vm.stillIsVisible = false;
+      vm.videoIsVisible = true;
     };
 
     function StopVideo() {
-      vm.sendControlEvent(YT_event.STOP);
-      vm.stillisvisible = true;
-      vm.videoisvisible = false;
+      vm.sendControlEvent(YT_EVENT.STOP);
+      vm.stillIsVisible = true;
+      vm.videoIsVisible = false;
     };
   }
 

@@ -31,7 +31,7 @@ app.filter('replaceNonAlphaNumeric', require('./filters/replaceNonAlphaNumeric.f
 app.directive("mediaListCard", require('./directives/mediaListCard.directive'));
 app.directive("youTubePlayer", require('./directives/youTubePlayer.directive'));
 
-app.constant('YT_event', {
+app.constant('YT_EVENT', {
   STOP:            0,
   PLAY:            1,
   PAUSE:           2,
