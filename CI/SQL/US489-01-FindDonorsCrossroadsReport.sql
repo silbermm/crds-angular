@@ -1,12 +1,13 @@
 USE [MinistryPlatform]
 GO
 
-/****** Object:  StoredProcedure [dbo].[report_CRDS_Donor_Search]    Script Date: 8/31/2015 10:16:00 AM ******/
+/****** Object:  StoredProcedure [dbo].[report_CRDS_Donor_Search]    Script Date: 9/1/2015 9:21:53 AM ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 CREATE PROCEDURE [dbo].[report_CRDS_Donor_Search]
@@ -188,7 +189,7 @@ FROM Donors Do
  LEFT OUTER JOIN Participant_Types PT ON PT.Participant_Type_ID = Part.Participant_Type_ID
  LEFT OUTER JOIN Households H ON H.Household_ID = C.Household_ID
  LEFT OUTER JOIN Addresses A ON A.Address_ID = H.Address_ID
- LEFT OUTER JOIN Congregations Cong ON Cong.Congregation_ID = H.Congregation_ID
+ LEFT OUTER JOIN Congregations Cong ON Cong.Congregation_ID = ISNULL(@CongregationID, H.Congregation_ID)
  OUTER APPLY (SELECT Top 1 First_Name AS Spouse_First,Nickname AS Spouse_Nickname, Last_Name AS Spouse_Last, S.__Age AS Spouse_Age FROM Contacts S WHERE S.Household_Position_ID = 1 AND C.Household_Position_ID = 1 AND S.Household_ID = C.Household_ID AND S.Contact_ID <> C.Contact_ID) Spouse
 WHERE #D.Period_Amount >= ISNULL(@MinGiv,#D.Period_Amount)
  AND #D.Period_Amount <= ISNULL(@MaxGiv, #D.Period_Amount)
@@ -236,6 +237,7 @@ WHERE #D.Period_Amount >= ISNULL(@MinGiv,#D.Period_Amount)
 	END
 
 END
+
 
 
 GO
