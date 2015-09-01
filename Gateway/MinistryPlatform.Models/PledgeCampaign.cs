@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MinistryPlatform.Models
 {
@@ -13,5 +14,6 @@ namespace MinistryPlatform.Models
         public int FormId { get; set; }
         public string FormTitle { get; set; }
         public int YoungestAgeAllowed { get; set; }
+        public List<int> AgeExceptions { get; set; } 
     }
 }

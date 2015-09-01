@@ -57,6 +57,18 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.ProcessorTransferId, opts => opts.MapFrom(src => src.ToString("Processor_Transfer_ID")))
                 .ForMember(dest => dest.DepositId, opts => opts.MapFrom(src => src.ToNullableInt("Deposit_ID", false)))
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.ContainsKey("dp_RecordID") ? src.ToInt("dp_RecordID", false) : src.ToInt("Batch_ID", false)));
+
+            Mapper.CreateMap<Dictionary<string, object>, Program>()
+                .ForMember(dest => dest.ProgramId, opts => opts.MapFrom(src => src.ToInt("Program_ID", false)))
+                .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.ToString("Program_Name")))
+                .ForMember(dest => dest.ProgramType, opts => opts.MapFrom(src => src.ToInt("Program_Type_ID", false)))
+                .ForMember(dest => dest.CommunicationTemplateId, opts => opts.MapFrom(src => src.ContainsKey("Communication_ID") ? src.ToInt("Communication_ID", false) : (int?)null));
+
+            Mapper.CreateMap<Program, ProgramDTO>()
+                .ForMember(dest => dest.ProgramType, opts => opts.MapFrom(src => src.ProgramType))
+                .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name))
+                .ForMember(dest => dest.CommunicationTemplateId, opts => opts.MapFrom(src => src.CommunicationTemplateId))
+                .ForMember(dest => dest.ProgramId, opts => opts.MapFrom(src => src.ProgramId));
         }
     }
 }

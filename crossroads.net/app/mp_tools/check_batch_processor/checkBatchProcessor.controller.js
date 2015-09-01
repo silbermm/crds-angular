@@ -8,28 +8,40 @@
   function CheckBatchProcessor($rootScope, $log, MPTools, CheckScannerBatches, getPrograms, AuthService, GIVE_PROGRAM_TYPES, GIVE_ROLES) {
     var vm = this;
 
+    vm.allBatches = [];
     vm.batch = {};
     vm.batches = [];
+    vm.openBatches = [];
     vm.programs = [];
     vm.program = {};
     vm.processing = false;
     vm.params = MPTools.getParams();
+    vm.showClosedBatches = false;
 
     activate();
     //////////////////////
 
     function activate() {
-      CheckScannerBatches.query(function(data) {
-        vm.batches = data;
+      CheckScannerBatches.query({'onlyOpen': false}, function(data) {
+        vm.allBatches = data;
       });
 
-      getPrograms.Programs.get({programType: GIVE_PROGRAM_TYPES.Fuel}, function(data) {
-        vm.programs = data;
+      CheckScannerBatches.query(function(data) {
+        vm.openBatches = data;
+        vm.batches = vm.openBatches;
+      });
+
+      getPrograms.Programs.get({'excludeTypes[]': [GIVE_PROGRAM_TYPES.NonFinancial]}, function(data) {
+        vm.programs = _.sortBy(data, 'Name');
       });
     }
 
     vm.allowAccess = function() {
       return(AuthService.isAuthenticated() && AuthService.isAuthorized(GIVE_ROLES.StewardshipDonationProcessor));
+    }
+
+    vm.filterBatches = function() {
+      vm.batches = vm.showClosedBatches ? vm.allBatches : vm.openBatches;
     }
 
     vm.processBatch = function() {

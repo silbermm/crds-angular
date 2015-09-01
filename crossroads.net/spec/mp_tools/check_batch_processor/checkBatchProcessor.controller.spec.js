@@ -2,39 +2,64 @@ require('crds-core');
 require('../../../app/app');
 
 describe('Check Batch Processor Tool', function() {
-  var batchList = [
+  var openBatchList = [
     {
       id: 22,
       name: 'GeneralFunding012948',
       scanDate: '2015-08-12T00:00:00',
-    },
-    {
-      id: 23,
-      name: 'PickUpTheSlack938747',
-      scanDate: '2015-08-14T00:00:00',
+      status: 'notExported'
     },
     {
       id: 24,
       name: 'General194200382',
       scanDate: '2015-09-12T00:00:00',
+      status: 'notExported'
     },
     {
       id: 25,
       name: 'GetTough38294729',
       scanDate: '2015-09-13T00:00:00',
+      status: 'notExported'
+    },
+  ];
+
+  var allBatchList = [
+    {
+      id: 22,
+      name: 'GeneralFunding012948',
+      scanDate: '2015-08-12T00:00:00',
+      status: 'notExported'
+    },
+    {
+      id: 23,
+      name: 'PickUpTheSlack938747',
+      scanDate: '2015-08-14T00:00:00',
+      status: 'exported'
+    },
+    {
+      id: 24,
+      name: 'General194200382',
+      scanDate: '2015-09-12T00:00:00',
+      status: 'notExported'
+    },
+    {
+      id: 25,
+      name: 'GetTough38294729',
+      scanDate: '2015-09-13T00:00:00',
+      status: 'notExported'
     },
   ];
 
   var programList = [
     {ProgramId: 1, Name: 'Crossroads'},
-    {ProgramId: 2, Name: 'Game Change'},
-    {ProgramId: 3, Name: 'Old St George Building'},
+    {ProgramId: 2, Name: 'Old St George Building'},
+    {ProgramId: 3, Name: 'Game Change'},
   ];
 
   beforeEach(angular.mock.module('crossroads'));
 
   var GIVE_ROLES = { StewardshipDonationProcessor: 123 };
-  var GIVE_PROGRAM_TYPES = { Fuel: 999 };
+  var GIVE_PROGRAM_TYPES = { Fuel: 999, NonFinancial: 888 };
 
   beforeEach(function() {
     angular.mock.module('crossroads.give', function($provide) {
@@ -71,8 +96,9 @@ describe('Check Batch Processor Tool', function() {
     beforeEach(function() {
       $scope = {};
       controller = $controller('CheckBatchProcessor', { $scope: $scope });
-      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/checkscanner/batches').respond(batchList);
-      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/programs/' + GIVE_PROGRAM_TYPES.Fuel).respond(programList);
+      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/checkscanner/batches?onlyOpen=false').respond(allBatchList);
+      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/checkscanner/batches').respond(openBatchList);
+      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/programs?excludeTypes%5B%5D=' + GIVE_PROGRAM_TYPES.NonFinancial).respond(programList);
     });
 
     describe('Function allowAccess', function() {
@@ -110,17 +136,42 @@ describe('Check Batch Processor Tool', function() {
       it('should get a list of check batches', function() {
         $httpBackend.flush();
 
-        expect(controller.batches.length).toBe(4);
+        expect(controller.batches.length).toBe(3);
+        expect(_.find(controller.batches, {'status': 'exported'})).toBeUndefined();
+
         expect(controller.programs.length).toBe(3);
+        expect(controller.programs[0].Name).toBe('Crossroads');
+        expect(controller.programs[1].Name).toBe('Game Change');
+        expect(controller.programs[2].Name).toBe('Old St George Building');
       });
     });
 
+    describe('Function filterBatches', function() {
+      it('Should filter out exported batches', function() {
+        $httpBackend.flush();
+
+        controller.showClosedBatches = false;
+        controller.filterBatches();
+
+        expect(controller.batches.length).toBe(3);
+        expect(_.find(controller.batches, {'status': 'exported'})).toBeUndefined();
+      });
+      it('Should show all batches', function() {
+        $httpBackend.flush();
+
+        controller.showClosedBatches = true;
+        controller.filterBatches();
+
+        expect(controller.batches.length).toBe(4);
+        expect(_.find(controller.batches, {'status': 'exported'})).toBeDefined();
+      });
+    });
 
     describe('Process Batch', function() {
       var postData;
       beforeEach(function() {
         postData = {
-          name: batchList[1].name,
+          name: openBatchList[1].name,
           programId: programList[1].ProgramId
         };
       });
@@ -129,7 +180,7 @@ describe('Check Batch Processor Tool', function() {
         $httpBackend.flush();
         $httpBackend.expectPOST( window.__env__['CRDS_API_ENDPOINT'] + 'api/checkscanner/batches', postData).respond(200, '');
 
-        controller.batch = batchList[1];
+        controller.batch = openBatchList[1];
         controller.program = programList[1];
         controller.processBatch();
 
@@ -144,7 +195,7 @@ describe('Check Batch Processor Tool', function() {
         $httpBackend.flush();
         $httpBackend.expectPOST( window.__env__['CRDS_API_ENDPOINT'] + 'api/checkscanner/batches', postData).respond(500, '');
 
-        controller.batch = batchList[1];
+        controller.batch = openBatchList[1];
         controller.program = programList[1];
         controller.processBatch();
 

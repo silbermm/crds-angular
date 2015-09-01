@@ -47,7 +47,14 @@
     }
 
     function ageLimitReached() {
-      return Session.exists('age') && Session.exists('age') < Campaign.ageLimit;
+      if (Session.exists('age') && Session.exists('age') < Campaign.ageLimit) {
+        //Under age limit, check for exceptions
+        if(Session.exists('userId') && _.includes(Campaign.ageExceptions, Number(Session.exists('userId')))) {
+          return false;
+        }
+        return true;
+      }
+      return false;
     }
 
   }
