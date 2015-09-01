@@ -8,17 +8,14 @@
             <div class="row" ng-show="singleMedia.msgisopen">
               <div class="col-lg-10 col-lg-offset-1 custom-poster mobile-hard-left mobile-hard-right ng-scope">
 
-                <!--Commenting out this section to simulate the state presented after the user clicks on the still image to play video. After still image is clicked, the image and SVG should be hidden and the YouTube player started
-                <svg viewBox="0 0 32 32" class="icon icon-youtube-play-bw">
-                	<use xlink:href="#youtube-play-bw"></use>
-                </svg>
-                <img src="{{singleMedia.imageurl}}" class="img-full-width">
-                -->
-
-                <div class="embed-responsive embed-responsive-16by9">
-                  <iframe width="560" height="315" src="https://www.youtube.com/embed/PYrZUJeHlz4" frameborder="0" allowfullscreen></iframe>
+                <div ng-click="singleMedia.showvideo()" ng-show="singleMedia.stillisvisible">
+                  <img ng-src="{{singleMedia.imageurl}}" class="img-full-width">
                 </div>
 
+                <div ng-show="singleMedia.videoisvisible" class="embed-responsive embed-responsive-16by9">
+                  <you-tube-player width="{{yt.width}}" height="{{yt.height}}" videoid="{{yt.videoid}}" ></you-tube-player>
+                </div>
+                <div ng-click="singleMedia.stopVideo()" class="input">Pause video</div>
               </div>
             </div>
 

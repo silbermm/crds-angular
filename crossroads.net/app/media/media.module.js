@@ -29,3 +29,11 @@ app.controller('SingleSeriesController', require('./singleSeries.controller.js')
 app.filter('replaceNonAlphaNumeric', require('./filters/replaceNonAlphaNumeric.filter.js'));
 
 app.directive("mediaListCard", require('./directives/mediaListCard.directive'));
+app.directive("youTubePlayer", require('./directives/youTubePlayer.directive'));
+
+app.constant('YT_event', {
+  STOP:            0,
+  PLAY:            1,
+  PAUSE:           2,
+  STATUS_CHANGE:   3
+});
