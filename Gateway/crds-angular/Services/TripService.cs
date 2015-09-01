@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Models.Crossroads.Trip;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Extensions;
@@ -94,7 +93,8 @@ namespace crds_angular.Services
                 Name = campaign.Name,
                 FormId = campaign.FormId,
                 FormName = campaign.FormTitle,
-                YoungestAgeAllowed = campaign.YoungestAgeAllowed
+                YoungestAgeAllowed = campaign.YoungestAgeAllowed,
+                AgeExceptions = campaign.AgeExceptions
             };
         }
 
