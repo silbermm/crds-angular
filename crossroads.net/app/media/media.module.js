@@ -34,8 +34,8 @@ app.controller('SingleMediaController', require('./singleMedia.controller'));
 app.controller('SingleSeriesController', require('./singleSeries.controller.js'));
 app.filter('replaceNonAlphaNumeric', require('./filters/replaceNonAlphaNumeric.filter.js'));
 
-app.directive("mediaListCard", require('./directives/mediaListCard.directive'));
-app.directive("youTubePlayer", require('./directives/youTubePlayer.directive'));
+app.directive('mediaListCard', require('./directives/mediaListCard.directive'));
+app.directive('youTubePlayer', require('./directives/youTubePlayer.directive'));
 
 app.constant('YT_EVENT', {
   STOP:            0,
