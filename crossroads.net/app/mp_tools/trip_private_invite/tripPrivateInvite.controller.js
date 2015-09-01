@@ -11,13 +11,14 @@
     var vm = this;
 
     vm.cancel = cancel;
+    vm.emailPrefix = 'privateInvite';
     vm.fieldError = fieldError;
+    vm.formSubmitted = false;
+    vm.multipleRecordsSelected = true;
     vm.params = MPTools.getParams();
     vm.processing = false;
     vm.save = save;
     vm.viewReady = false;
-    vm.emailPrefix = 'privateInvite';
-    vm.formSubmitted = false;
 
     activate();
 
@@ -25,6 +26,7 @@
 
     function activate() {
       vm.pledgeCampaignId = vm.params.recordId;
+      vm.multipleRecordsSelected = showError();
       vm.viewReady = true;
     }
 
@@ -68,6 +70,10 @@
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
         vm.processing = false;
       });
+    }
+
+    function showError() {
+      return vm.params.selectedCount > 1 || vm.params.recordDescription === undefined || vm.params.recordId === '-1';
     }
   }
 

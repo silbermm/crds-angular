@@ -1,8 +1,12 @@
 <preloader full-screen='true' ng-show="!invite.viewReady"> </preloader>
 
+<div ng-if="invite.viewReady && invite.multipleRecordsSelected" class="alert alert-danger" role="alert">
+  <strong>Sorry </strong> You cannot use this tool from that specific page. This tool only supports being called from the record view page.
+</div>
+
 <div class='col-sm-10 col-sm-offset-1'
 			style="overflow-y: scroll; height:40em;"
-			ng-if='invite.viewReady'>
+			ng-if='invite.viewReady && !invite.multipleRecordsSelected'>
   <div>
     <h2 class='header noPspace'> Trip Private Invitations</h2>
 
