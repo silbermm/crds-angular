@@ -12,7 +12,10 @@
     vm.error = false;
     vm.params = MPTools.getParams();
 
-    vm.activate = function() {
+    activate();
+    //////////////////////
+
+    function activate() {
       GPExport.FileNames.query({selectionId: vm.params.selectedRecord}, function(data) {
         vm.selectedDeposits = data;
       });
