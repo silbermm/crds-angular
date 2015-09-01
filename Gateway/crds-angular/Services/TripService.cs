@@ -299,7 +299,7 @@ namespace crds_angular.Services
 
         public int GeneratePrivateInvite(PrivateInviteDto dto, string token)
         {
-            var invite = _privateInviteService.Create(dto.PledgeCampaignId, dto.EmailAddress, dto.RecipientName);
+            var invite = _privateInviteService.Create(dto.PledgeCampaignId, dto.EmailAddress, dto.RecipientName, token);
             var communication = PrivateInviteCommunication(invite);
             _communicationService.SendMessage(communication);
 

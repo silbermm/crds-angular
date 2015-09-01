@@ -17,9 +17,9 @@ namespace MinistryPlatform.Translation.Services
             _ministryPlatformService = ministryPlatformService;
         }
 
-        public PrivateInvite Create(int pledgeCampaignId, string emailAddress, string recipientName)
+        public PrivateInvite Create(int pledgeCampaignId, string emailAddress, string recipientName, string token)
         {
-            var token = ApiLogin();
+            //var token = ApiLogin();
             var values = new Dictionary<string, object>
             {
                 {"Email_Address", emailAddress},
