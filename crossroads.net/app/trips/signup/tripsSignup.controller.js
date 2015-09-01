@@ -51,9 +51,8 @@
         //Under age limit, check for exceptions
         if(Session.exists('userId') && _.includes(Campaign.ageExceptions, Number(Session.exists('userId')))) {
           return false;
-        } else {
-          return true;
         }
+        return true;
       }
       return false;
     }
