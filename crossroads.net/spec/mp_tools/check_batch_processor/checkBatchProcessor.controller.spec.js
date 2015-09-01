@@ -2,7 +2,28 @@ require('crds-core');
 require('../../../app/app');
 
 describe('Check Batch Processor Tool', function() {
-  var batchList = [
+  var openBatchList = [
+    {
+      id: 22,
+      name: 'GeneralFunding012948',
+      scanDate: '2015-08-12T00:00:00',
+      status: 'notExported'
+    },
+    {
+      id: 24,
+      name: 'General194200382',
+      scanDate: '2015-09-12T00:00:00',
+      status: 'notExported'
+    },
+    {
+      id: 25,
+      name: 'GetTough38294729',
+      scanDate: '2015-09-13T00:00:00',
+      status: 'notExported'
+    },
+  ];
+
+  var allBatchList = [
     {
       id: 22,
       name: 'GeneralFunding012948',
@@ -75,7 +96,8 @@ describe('Check Batch Processor Tool', function() {
     beforeEach(function() {
       $scope = {};
       controller = $controller('CheckBatchProcessor', { $scope: $scope });
-      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/checkscanner/batches?onlyOpen=false').respond(batchList);
+      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/checkscanner/batches?onlyOpen=false').respond(allBatchList);
+      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/checkscanner/batches').respond(openBatchList);
       $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/programs?excludeTypes%5B%5D=' + GIVE_PROGRAM_TYPES.NonFinancial).respond(programList);
     });
 
@@ -149,7 +171,7 @@ describe('Check Batch Processor Tool', function() {
       var postData;
       beforeEach(function() {
         postData = {
-          name: batchList[1].name,
+          name: openBatchList[1].name,
           programId: programList[1].ProgramId
         };
       });
@@ -158,7 +180,7 @@ describe('Check Batch Processor Tool', function() {
         $httpBackend.flush();
         $httpBackend.expectPOST( window.__env__['CRDS_API_ENDPOINT'] + 'api/checkscanner/batches', postData).respond(200, '');
 
-        controller.batch = batchList[1];
+        controller.batch = openBatchList[1];
         controller.program = programList[1];
         controller.processBatch();
 
@@ -173,7 +195,7 @@ describe('Check Batch Processor Tool', function() {
         $httpBackend.flush();
         $httpBackend.expectPOST( window.__env__['CRDS_API_ENDPOINT'] + 'api/checkscanner/batches', postData).respond(500, '');
 
-        controller.batch = batchList[1];
+        controller.batch = openBatchList[1];
         controller.program = programList[1];
         controller.processBatch();
 

@@ -68,7 +68,7 @@ namespace crds_angular.test.controllers
                     Status = BatchStatus.NotExported
                 }
             };
-            _checkScannerService.Setup(mocked => mocked.GetOpenBatches()).Returns(batches);
+            _checkScannerService.Setup(mocked => mocked.GetBatches(true)).Returns(batches);
 
             var result = _fixture.GetBatches();
             _checkScannerService.VerifyAll();
@@ -99,7 +99,7 @@ namespace crds_angular.test.controllers
                     Status = BatchStatus.NotExported
                 }
             };
-            _checkScannerService.Setup(mocked => mocked.GetAllBatches()).Returns(batches);
+            _checkScannerService.Setup(mocked => mocked.GetBatches(false)).Returns(batches);
 
             var result = _fixture.GetBatches(false);
             _checkScannerService.VerifyAll();

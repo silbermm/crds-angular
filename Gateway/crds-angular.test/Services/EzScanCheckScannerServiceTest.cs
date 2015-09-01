@@ -53,7 +53,7 @@ namespace crds_angular.test.Services
             _dbConnection.Setup(mocked => mocked.CreateCommand()).Returns(dbCommand.Object);
             _dbConnection.Setup(mocked => mocked.Close());
 
-            var result = _fixture.GetOpenBatches();
+            var result = _fixture.GetBatches(true);
             _dbConnection.VerifyAll();
             dataReader.VerifyAll();
             dbCommand.VerifyAll();
@@ -96,7 +96,7 @@ namespace crds_angular.test.Services
             _dbConnection.Setup(mocked => mocked.CreateCommand()).Returns(dbCommand.Object);
             _dbConnection.Setup(mocked => mocked.Close());
 
-            var result = _fixture.GetAllBatches();
+            var result = _fixture.GetBatches(false);
             _dbConnection.VerifyAll();
             dataReader.VerifyAll();
             dbCommand.VerifyAll();

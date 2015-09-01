@@ -24,7 +24,10 @@
     function activate() {
       CheckScannerBatches.query({'onlyOpen': false}, function(data) {
         vm.allBatches = data;
-        vm.openBatches = _.filter(data, {'status': 'notExported'});
+      });
+
+      CheckScannerBatches.query(function(data) {
+        vm.openBatches = data;
         vm.batches = vm.openBatches;
       });
 

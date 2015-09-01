@@ -44,7 +44,7 @@ namespace crds_angular.Controllers.API
         {
             return (Authorized(token =>
             {
-                var batches = onlyOpen ? _checkScannerService.GetOpenBatches() : _checkScannerService.GetAllBatches();
+                var batches = _checkScannerService.GetBatches(onlyOpen);
                 return (Ok(batches));
             }));
         }

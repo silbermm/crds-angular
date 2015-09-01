@@ -23,23 +23,13 @@ namespace crds_angular.Services
             _mpDonorService = mpDonorService;
         }
 
-        public List<CheckScannerBatch> GetAllBatches()
-        {
-            return (GetBatches(false));
-        }
-
-        public List<CheckScannerBatch> GetOpenBatches()
-        {
-            return (GetBatches(true));
-        }
-
-        private List<CheckScannerBatch> GetBatches(bool onlyOpen)
+        public List<CheckScannerBatch> GetBatches(bool onlyOpenBatches = true)
         {
             List<CheckScannerBatch> batches;
             IDataReader reader = null;
             try
             {
-                var whereClause = onlyOpen ? "WHERE COALESCE(BatchStatus, 0) <> 1" : string.Empty;
+                var whereClause = onlyOpenBatches ? "WHERE COALESCE(BatchStatus, 0) <> 1" : string.Empty;
 
                 batches = WithDbCommand(dbCommand =>
                 {
