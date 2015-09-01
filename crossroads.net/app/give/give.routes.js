@@ -4,9 +4,13 @@
 
   module.exports = GiveRoutes;
 
-  GiveRoutes.$inject = ['$stateProvider'];
+  GiveRoutes.$inject = ['$httpProvider', '$stateProvider'];
 
-  function GiveRoutes($stateProvider) {
+  function GiveRoutes($httpProvider, $stateProvider) {
+
+    $httpProvider.defaults.useXDomain = true;
+    $httpProvider.defaults.headers.common['X-Use-The-Force'] = true;
+
     $stateProvider
       .state('give', {
         parent: 'noSideBar',

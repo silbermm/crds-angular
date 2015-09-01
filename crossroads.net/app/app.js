@@ -1,6 +1,5 @@
 require('./profile');
 require('./events');
-require('./give');
 require('./mp_tools');
 require('../lib/select.css');
 (function() {
@@ -8,7 +7,6 @@ require('../lib/select.css');
 
   var MODULE = 'crossroads';
   var constants = require('./constants');
-
 
   angular.module(constants.MODULES.CROSSROADS, [
       constants.MODULES.CORE,

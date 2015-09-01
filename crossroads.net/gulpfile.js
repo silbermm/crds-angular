@@ -32,6 +32,7 @@ function htmlReplace() {
       corecss: assets.core.css,
       commonjs: assets.common.js,
       tripsjs: assets.trips.js,
+      givejs: assets.give.js,
       js: assets.main.js
     }))
     .pipe(gulp.dest('./'));
@@ -42,6 +43,7 @@ function htmlReplace() {
       corecss: assets.core.css,
       commonjs: assets.common.js,
       tripsjs: assets.trips.js,
+      givejs: assets.give.js,
       js: assets.main.js
     }))
     .pipe(gulp.dest('./'));
@@ -93,6 +95,7 @@ gulp.task('build-browser-sync', function() {
       corecss: '/assets/core.css',
       commonjs: '/assets/common.js',
       tripsjs: '/assets/trips.js',
+      givejs: '/assets/give.js',
       css: '/assets/main.css',
       js: '/assets/main.js'
     })).pipe(gulp.dest('./'));
@@ -103,6 +106,7 @@ gulp.task('build-browser-sync', function() {
       corecss: '/assets/core.css',
       commonjs: '/assets/common.js',
       tripsjs: '/assets/trips.js',
+      givejs: '/assets/give.js',
       css: '/assets/main.css',
       js: '/assets/main.js'
     }))
@@ -180,6 +184,7 @@ gulp.task('webpack-dev-server', ['icons-watch'], function(callback) {
       corecss: '/assets/core.css',
       commonjs: '/assets/common.js',
       tripsjs: '/assets/trips.js',
+      givejs: '/assets/give.js',
       css: '/assets/main.css',
       js: '/assets/main.js'
     })).pipe(gulp.dest('./'));
@@ -190,6 +195,7 @@ gulp.task('webpack-dev-server', ['icons-watch'], function(callback) {
       corecss: '/assets/core.css',
       commonjs: '/assets/common.js',
       tripsjs: '/assets/trips.js',
+      givejs: '/assets/give.js',
       css: '/assets/main.css',
       js: '/assets/main.js'
     }))
@@ -243,6 +249,7 @@ gulp.task('webpack:build-dev', ['icons'], function(callback) {
       corejs: '/assets/core.js',
       corecss: '/assets/core.css',
       commonjs: '/assets/common.js',
+      givejs: '/assets/give.js',
       tripsjs: '/assets/trips.js',
       css: '/assets/main.css',
       js: '/assets/main.js'
@@ -254,6 +261,7 @@ gulp.task('webpack:build-dev', ['icons'], function(callback) {
       corecss: '/assets/core.css',
       commonjs: '/assets/common.js',
       tripsjs: '/assets/trips.js',
+      givejs: '/assets/give.js',
       css: '/assets/main.css',
       js: '/assets/main.js'
     }))

@@ -3,22 +3,23 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var path = require('path');
 
 var endpoint = {
-    'url': 'http://localhost:49380'
+  url: 'http://localhost:49380'
 };
 
 var definePlugin = new webpack.DefinePlugin({
-    __API_ENDPOINT__: JSON.stringify(process.env.CRDS_API_ENDPOINT || 'http://gatewayint.crossroads.net/gateway/'),
-    __CMS_ENDPOINT__: JSON.stringify(process.env.CRDS_CMS_ENDPOINT || 'http://contentint.crossroads.net/'),
-    __STRIPE_PUBKEY__ : JSON.stringify(process.env.CRDS_STRIPE_PUBKEY || 'pk_test_TR1GulD113hGh2RgoLhFqO0M')
+  __API_ENDPOINT__: JSON.stringify(process.env.CRDS_API_ENDPOINT || 'http://gatewayint.crossroads.net/gateway/'),
+  __CMS_ENDPOINT__: JSON.stringify(process.env.CRDS_CMS_ENDPOINT || 'http://contentint.crossroads.net/'),
+  __STRIPE_PUBKEY__: JSON.stringify(process.env.CRDS_STRIPE_PUBKEY || 'pk_test_TR1GulD113hGh2RgoLhFqO0M')
 });
 
 module.exports = {
-    entry: {
-        trips: './app/trips/trips.module.js',
-        main: './app/app.js',
-        core: ['./node_modules/crds-core'], 
-        common: ['./app/common/common.module.js'],
-    },
+  entry: {
+    trips: './app/trips/trips.module.js',
+    give: './app/give/give.module.js',
+    main: './app/app.js',
+    core: ['./node_modules/crds-core'], 
+    common: ['./app/common/common.module.js'],
+  },
     watchPattern: 'app/**/**',
     externals: {
       stripe: 'Stripe',

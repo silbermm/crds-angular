@@ -296,65 +296,6 @@
         controller: 'TripGivingCtrl as gotripresults',
         templateUrl: 'tripgiving/tripgivingresults.html'
       })
-      .state('/demo/guest-giver', {
-        parent: 'noSideBar',
-        url: '/demo/guest-giver',
-        templateUrl: 'guest_giver/give.html'
-      })
-      .state('/demo/guest-giver/login', {
-        parent: 'noSideBar',
-        url: '/demo/guest-giver/login',
-        templateUrl: 'guest_giver/give-login.html'
-      })
-      .state('/demo/guest-giver/login-guest', {
-        parent: 'noSideBar',
-        url: '/demo/guest-giver/login-guest',
-        controller: 'GiveController as give',
-        templateUrl: 'guest_giver/give-login-guest.html'
-      })
-      .state('/demo/guest-giver/give-confirmation', {
-        parent: 'noSideBar',
-        url: '/demo/guest-giver/confirmation',
-        templateUrl: 'guest_giver/give-confirmation.html'
-      })
-      .state('/demo/guest-giver/give-register', {
-        parent: 'noSideBar',
-        url: '/demo/guest-giver/register',
-        templateUrl: 'guest_giver/give-register.html'
-      })
-      .state('/demo/guest-giver/give-logged-in-bank-info', {
-        parent: 'noSideBar',
-        url: '/demo/guest-giver/logged-in-bank-info',
-        controller: 'GiveController as give',
-        templateUrl: 'guest_giver/give-logged-in-bank-info.html'
-      })
-      .state('/demo/guest-giver/give-confirm-amount', {
-        parent: 'noSideBar',
-        url: '/demo/guest_giver/give-confirm-amount',
-        templateUrl: 'guest_giver/give-confirm-amount.html'
-      })
-      .state('/demo/guest-giver/give-change-information', {
-        parent: 'noSideBar',
-        url: '/demo/guest_giver/give-change-information',
-        controller: 'GiveController as give',
-        templateUrl: 'guest_giver/give-change-information.html'
-      })
-      .state('/demo/logged-in-giver/existing-giver', {
-        parent: 'noSideBar',
-        url: '/demo/logged-in-giver/existing-giver',
-        templateUrl: 'guest_giver/give-logged-in.html'
-      })
-      .state('/demo/logged-in-giver/change-information', {
-        parent: 'noSideBar',
-        url: '/demo/logged-in-giver/change-information',
-        controller: 'GiveController as give',
-        templateUrl: 'guest_giver/give-change-information-logged-in.html'
-      })
-      .state('/demo/logged-in-giver/new-giver', {
-        parent: 'noSideBar',
-        url: '/demo/logged-in-giver/new-giver',
-        templateUrl: 'guest_giver/give-logged-in-new-giver.html'
-      })
       .state('/demo/go-trip-giving', {
         parent: 'noSideBar',
         url: '/demo/go-trip-giving',

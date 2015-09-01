@@ -1,10 +1,12 @@
-require('../../app/core');
+require('crds-core');
+require('../../../app/common/common.module');
+require('../../../app/app');
 
 describe('Credit Card Info Directive', function() {
   var ccElement, scope, isolateScope, form, $timeout, httpBackend;
 
   beforeEach(function() {
-    angular.mock.module('crossroads.core');
+    angular.mock.module('crossroads');
   });
 
   beforeEach(inject(function($injector, _$compile_, _$rootScope_, _$templateCache_, _$timeout_) {

@@ -11,7 +11,9 @@
     .directive('invalidZip', require('./invalidZip.validation.directive'))
     .directive('naturalNumber', require('./naturalNumber.validation.directive'));
 
+  require('./services');
   require('./bankCreditCardDetails');
+  require('./donation_details');
   require('./bankInfo');
   require('./creditCardInfo');
 
