@@ -1,3 +1,8 @@
+USE [MinistryPlatform]
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[report_CRDS_Donor_Search_Households]') AND type in (N'P'))
+DROP PROCEDURE [dbo].[report_CRDS_Donor_Search_Households]
 GO
 
 /****** Object:  StoredProcedure [dbo].[report_CRDS_Donor_Search_Households]    Script Date: 8/31/2015 10:14:15 AM ******/
