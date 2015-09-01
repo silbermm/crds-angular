@@ -8,22 +8,23 @@
     var vm = this;
     vm.msgisopen = true;
     vm.musicisopen = false;
-
     vm.media = SingleMedia[ItemProperty][0];
     vm.imageurl = ImageURL;
+    vm.setSoundCloudPlayer = setSoundCloudPlayer;
+    vm.switchToVideo = switchToVideo;
 
-    vm.setSoundCloudPlayer = function(soundCloudPlayer) {
+    if (ParentMedia){
+      vm.parentMedia = ParentMedia[ParentItemProperty][0];
+    }
+    else {
+      vm.parentMedia = false;
+    }
+
+    function setSoundCloudPlayer(soundCloudPlayer) {
       vm.soundCloudPlayer = soundCloudPlayer;
     }
 
-    vm.switchToVideo = function() {
-      vm.musicisopen = false;
-      vm.msgisopen = true;
-
-      stopSoundCloudPlayer();
-    }
-
-    var stopSoundCloudPlayer = function(){
+    function stopSoundCloudPlayer(){
       if (!vm.soundCloudPlayer) {
         return;
       }
@@ -35,11 +36,11 @@
       vm.soundCloudPlayer.pause();
     }
 
-    if (ParentMedia){
-      vm.parentMedia = ParentMedia[ParentItemProperty][0];
-    }
-    else {
-      vm.parentMedia = false;
+    function switchToVideo() {
+      vm.musicisopen = false;
+      vm.msgisopen = true;
+
+      stopSoundCloudPlayer();
     }
 
     $scope.$on("$destroy", function() {

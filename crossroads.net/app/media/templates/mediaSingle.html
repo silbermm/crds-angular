@@ -17,7 +17,7 @@
             <!--AUDIO-->
             <div class="row" ng-show="singleMedia.musicisopen">
               <div class="col-lg-10 col-lg-offset-1 mobile-hard-left mobile-hard-right ng-scope"
-                   plangular="https://soundcloud.com/crossroads-church-1/{{singleMedia.media.serviceId}}">
+                   plangular="{{singleMedia.media.serviceId}}">
                 <div class="controls">
                   <div class="col-xs-2 col-sm-1">
                     <a href="" ng-click="singleMedia.setSoundCloudPlayer(player); play()" ng-show="!player.playing">
