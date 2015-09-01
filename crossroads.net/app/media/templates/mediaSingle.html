@@ -5,7 +5,7 @@
           <div class="container">
 
             <!--VIDEO-->
-            <div class="row" ng-show="singleMedia.msgisopen">
+            <div class="row" ng-show="singleMedia.showVideo()">
               <div class="col-lg-10 col-lg-offset-1 custom-poster mobile-hard-left mobile-hard-right ng-scope">
                 <svg viewBox="0 0 32 32" class="icon icon-youtube-play-bw">
                 	<use xlink:href="#youtube-play-bw"></use>
@@ -15,7 +15,7 @@
             </div>
 
             <!--AUDIO-->
-            <div class="row" ng-show="singleMedia.musicisopen">
+            <div class="row" ng-show="singleMedia.showAudio()">
               <div class="col-lg-10 col-lg-offset-1 mobile-hard-left mobile-hard-right ng-scope"
                    plangular="{{singleMedia.media.serviceId}}">
                 <div class="controls">

@@ -6,12 +6,17 @@
 
   function SingleMediaController($scope, SingleMedia, ItemProperty, ParentMedia, ParentItemProperty, ImageURL) {
     var vm = this;
-    vm.msgisopen = true;
-    vm.musicisopen = false;
-    vm.media = SingleMedia[ItemProperty][0];
+
     vm.imageurl = ImageURL;
+    vm.isMessage = (ItemProperty === 'messages');
+    vm.isSubscribeOpen = false;
+    vm.media = SingleMedia[ItemProperty][0];
     vm.setSoundCloudPlayer = setSoundCloudPlayer;
+    vm.switchToAudio = switchToAudio;
     vm.switchToVideo = switchToVideo;
+    vm.showVideo = showVideo;
+    vm.showAudio = showAudio;
+    vm.videoIsOpen = true;
 
     if (ParentMedia){
       vm.parentMedia = ParentMedia[ParentItemProperty][0];
@@ -22,6 +27,14 @@
 
     function setSoundCloudPlayer(soundCloudPlayer) {
       vm.soundCloudPlayer = soundCloudPlayer;
+    }
+
+    function showAudio() {
+      return !showVideo()
+    }
+
+    function showVideo() {
+      return vm.videoIsOpen;
     }
 
     function stopSoundCloudPlayer(){
@@ -36,9 +49,14 @@
       vm.soundCloudPlayer.pause();
     }
 
+    function switchToAudio() {
+      vm.videoIsOpen = false;
+
+      //stopYouTubePlayer();
+    }
+
     function switchToVideo() {
-      vm.musicisopen = false;
-      vm.msgisopen = true;
+      vm.videoIsOpen = true;
 
       stopSoundCloudPlayer();
     }
@@ -46,6 +64,5 @@
     $scope.$on("$destroy", function() {
       stopSoundCloudPlayer();
     });
-
   }
 })();
