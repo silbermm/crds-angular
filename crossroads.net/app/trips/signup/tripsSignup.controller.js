@@ -66,7 +66,6 @@
     }
 
     function pageHasErrors() {
-      $log.debug('pageHasErrors Function');
       vm.ageLimitReached = ageLimitReached();
       var promise = registrationNotOpen();
       promise.then(function(regNotOpen) {
@@ -87,27 +86,24 @@
 
     function registrationNotOpen() {
       return $q(function(resolve, reject) {
-        $log.debug('guid: ' + vm.privateInvite);
-        if (vm.privateInvite === undefined) {
-          var regStart = moment(vm.campaign.registrationStart);
-          var regEnd = moment(vm.campaign.registrationEnd);
-          var today = moment();
-          if (today.isBetween(regStart, regEnd)) {
-            resolve(false);
-          } else {
-            resolve(true);
-          }
+        var regStart = moment(vm.campaign.registrationStart);
+        var regEnd = moment(vm.campaign.registrationEnd);
+        var today = moment();
+        if (today.isBetween(regStart, regEnd)) {
+          resolve(false);
         } else {
-          $log.debug('verify guid');
-          Trip.ValidatePrivateInvite.get({
-            pledgeCampaignId: vm.campaign.id,
-            guid: vm.privateInvite
-          }, function(data) {
-            $log.debug('guid: ' + data.valid);
-            resolve(!data.valid);
-          }, function(error) {
+          if (vm.privateInvite === undefined) {
             resolve(true);
-          });
+          } else {
+            Trip.ValidatePrivateInvite.get({
+              pledgeCampaignId: vm.campaign.id,
+              guid: vm.privateInvite
+            }, function(data) {
+              resolve(!data.valid);
+            }, function(error) {
+              resolve(true);
+            });
+          }
         }
       });
     }
