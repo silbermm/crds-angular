@@ -14,6 +14,7 @@
       confirmDonation: confirmDonation,
       donate: donate,
       processBankAccountChange: processBankAccountChange,
+      processChange: processChange,
       processCreditCardChange: processCreditCardChange,
     };
 
@@ -97,7 +98,7 @@
          .then(function(donor) {
            var pgram;
            if (programsInput !== undefined) {
-             pgram = _.find(vm.programsInput, { ProgramId: GiveTransferService.program.ProgramId });
+             pgram = _.find(programsInput, { ProgramId: GiveTransferService.program.ProgramId });
            } else {
              pgram = GiveTransferService.program;  
            }
@@ -107,6 +108,16 @@
          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
        }
 
+    }
+
+    function processChange() {
+      if (!Session.isActive()) {
+        $state.go(GiveFlow.login);
+      }
+
+      GiveTransferService.processingChange = true;
+      GiveTransferService.amountSubmitted = false;
+      $state.go(GiveFlow.amount);
     }
 
     function processCreditCardChange(pgram, card, onSuccess, onFailure) {

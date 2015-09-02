@@ -3,7 +3,9 @@
 
   module.exports = GiveTransferService;
 
-  function GiveTransferService() {
+  GiveTransferService.$inject = ['Session', 'User'];
+
+  function GiveTransferService(Session, User) {
     var transferObject = {
       reset: function() {
         this.account = '';
@@ -14,7 +16,7 @@
         this.changeAccountInfo = false;
         this.declinedPayment = false;
         this.donor = {};
-        this.email = '';
+        this.email = undefined;
         this.last4 = '';
         this.processing = false;
         this.processingChange = false;
@@ -22,6 +24,11 @@
         this.routing = '';
         this.savedPayment = '';
         this.view = '';
+
+        if (!Session.isActive()) {
+          User.email = '';
+        }
+
       }
     };
     transferObject.reset();

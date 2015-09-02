@@ -7,7 +7,7 @@
     </div>
   
     <hr>
-      <p>You are giving <strong>{{give.dto.amount | currency}}</strong>  to <strong>{{give.dto.program['Name']}}</strong>. <a href="" ng-click="give.processChange()" tabindex="-1" class="text-secondary">Change</a></p>
+      <p>You are giving <strong>{{give.dto.amount | currency}}</strong>  to <strong>{{give.dto.program['Name']}}</strong>. <a href="" ng-click="give.donationService.processChange()" tabindex="-1" class="text-secondary">Change</a></p>
     <hr>
 
     <ng-form name="accountForm">
@@ -31,7 +31,6 @@
 	    <div id="existingEmail" growl inline="true" reference="{{give.emailAlreadyRegisteredGrowlDivRef}}" limit-messages="1"></div>
 	    <bank-credit-card-details 
         dto='give.dto'
-        show-message-on-change='give.showMessageOnChange'
         bank-info-submitted='give.bankinfoSubmitted'
         show-check-class='give.showCheckClass'
         donor='give.dto.donor'

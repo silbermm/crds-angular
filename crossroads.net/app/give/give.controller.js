@@ -11,7 +11,6 @@
                       'programList', 
                       'GiveTransferService',
                       'GiveFlow',
-                      'User', 
                       'AUTH_EVENTS',
                       'CC_BRAND_CODES'];
 
@@ -20,7 +19,7 @@
     this.name = 'DonationException';
   }
 
-  function GiveCtrl($rootScope, $state, $timeout, Session, PaymentService, DonationService, programList, GiveTransferService, GiveFlow, User, AUTH_EVENTS, CC_BRAND_CODES) {
+  function GiveCtrl($rootScope, $state, $timeout, Session, PaymentService, DonationService, programList, GiveTransferService, GiveFlow, AUTH_EVENTS, CC_BRAND_CODES) {
 
     var vm = this;
     vm.activeSession = activeSession;
@@ -145,21 +144,11 @@
       var closeButton = document.querySelector("#existingEmail .close");
       if(closeButton !== undefined) {
           $timeout(function() {
-              angular.element(closeButton).triggerHandler("click");
+              angular.element(closeButton).triggerHandler('click');
           }, 0);
       }
     }
     
-        vm.processChange = function(){
-          if (!Session.isActive()) {
-            $state.go("give.login");
-          }
-
-          vm.dto.processingChange = true;
-          vm.dto.amountSubmitted = false;
-          $state.go("give.amount");
-        };
-
         vm.processCreditCardChange = function (){
           if (vm.giveForm.$valid) {
             vm.dto.processing = true;
@@ -178,17 +167,15 @@
 
         vm.reset = function() {
           vm.bankinfoSubmitted = false;
-          vm.dto.email = undefined;
+          //vm.dto.email = undefined;
           vm.initialized = false;
-          //vm.dto.processing = false;
-          //vm.dto.processingChange = false;
           vm.donorError = false;
-          if (!Session.isActive()) {
-            User.email = "";
-          };
+          /*if (!Session.isActive()) {*/
+            //User.email = "";
+          /*};*/
 
           vm.dto.reset();
-        }
+        };
 
         vm.submitBankInfo = function() {
           vm.bankinfoSubmitted = true;
