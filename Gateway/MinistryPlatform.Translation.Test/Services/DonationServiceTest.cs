@@ -441,7 +441,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _ministryPlatformService.Setup(mocked => mocked.UpdateRecord(7070, expectedParms, It.IsAny<string>()));
             _ministryPlatformService.Setup(mocked => mocked.RemoveSelection(selectionId, new [] {depositId}, It.IsAny<string>()));
 
-            _fixture.UpdateDepositToExported(selectionId, depositId);
+            _fixture.UpdateDepositToExported(selectionId, depositId, "afasdfasdf");
             _ministryPlatformService.VerifyAll();
         }
     }

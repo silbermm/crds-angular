@@ -114,14 +114,14 @@ namespace crds_angular.Services
             var gpExport = _mpDonationService.CreateGPExport(depositId, token);
             var stream = new MemoryStream();
             CSV.Create(gpExport, GPExportDatum.Headers, stream, "\t");
-            UpdateDepositToExported(selectionId, depositId);
+            UpdateDepositToExported(selectionId, depositId, token);
 
             return stream;
         }
 
-        private void UpdateDepositToExported(int selectionId, int depositId)
+        private void UpdateDepositToExported(int selectionId, int depositId, string token)
         {
-            _mpDonationService.UpdateDepositToExported(selectionId, depositId);
+            _mpDonationService.UpdateDepositToExported(selectionId, depositId, token);
         }
 
         public List<DepositDTO> GenerateGPExportFileNames(int selectionId, string token)
