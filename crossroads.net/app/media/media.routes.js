@@ -111,12 +111,12 @@
             return 'series';
           },
           ParentMedia: function (Media, SingleMedia) {
-            var series = SingleMedia.messages[0];
-            if (!series) {
+            var message = SingleMedia.messages[0];
+            if (!message) {
               return null;
             }
 
-            var parent = Media.Series({id: series.seriesId}).get().$promise;
+            var parent = Media.Series({id: message.series}).get().$promise;
             return parent;
           },
           ImageURL: function (SingleMedia) {
