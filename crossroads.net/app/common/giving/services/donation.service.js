@@ -42,7 +42,7 @@
     function createDonorAndDonate(programsInput) {
       var pgram;
       if (programsInput !== undefined) {
-        pgram = _.find(programsInput, { ProgramId: GiveTransferService.program.programId });
+        pgram = _.find(programsInput, { ProgramId: GiveTransferService.program.ProgramId });
       } else {
         pgram = GiveTransferService.program;
       }

@@ -155,7 +155,7 @@
                 vm.updateDonorAndDonate(donor.id, vm.dto.program.ProgramId, vm.dto.amount, vm.dto.email, vm.dto.view);
             },
             function(error){
-              vm.donationService.createDonorAndDonate(vm.dto.program.ProgramId, vm.dto.amount, vm.dto.email, vm.dto.view);
+              vm.donationService.createDonorAndDonate(vm.programsInput);
             });
           } else {
             $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
