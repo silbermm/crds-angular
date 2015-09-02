@@ -10,16 +10,18 @@ namespace MinistryPlatform.Translation.Services
     public class PrivateInviteService : BaseService, IPrivateInviteService
     {
         private readonly IMinistryPlatformService _ministryPlatformService;
+        private readonly IConfigurationWrapper _configurationWrapper;
 
         public PrivateInviteService(IMinistryPlatformService ministryPlatformService, IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
             : base(authenticationService, configurationWrapper)
         {
             _ministryPlatformService = ministryPlatformService;
+            _configurationWrapper = configurationWrapper;
         }
 
         public PrivateInvite Create(int pledgeCampaignId, string emailAddress, string recipientName, string token)
         {
-            var v = new Dictionary<string, object>
+            var values = new Dictionary<string, object>
             {
                 {"Pledge_Campaign_ID", pledgeCampaignId},
                 {"Email_Address", emailAddress},
@@ -28,8 +30,9 @@ namespace MinistryPlatform.Translation.Services
 
             try
             {
-                var privateInviteId = _ministryPlatformService.CreateRecord(515, v, token, true);
-                var record = _ministryPlatformService.GetRecordDict(515, privateInviteId, token, false);
+                var tripInvitationsPageId = _configurationWrapper.GetConfigIntValue("TripInvitations");
+                var privateInviteId = _ministryPlatformService.CreateRecord(tripInvitationsPageId, values, token, true);
+                var record = _ministryPlatformService.GetRecordDict(tripInvitationsPageId, privateInviteId, token, false);
                 var invite = new PrivateInvite();
                 invite.EmailAddress = record.ToString("Email_Address");
                 invite.InvitationGuid = record.ToString("Invitation_GUID");

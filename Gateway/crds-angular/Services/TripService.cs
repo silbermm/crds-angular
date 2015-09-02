@@ -312,8 +312,9 @@ namespace crds_angular.Services
 
         private Communication PrivateInviteCommunication(PrivateInvite invite)
         {
-            var template = _communicationService.GetTemplate(12302);
-            var fromContact = _contactService.GetContactById(4);
+            var templateId = _configurationWrapper.GetConfigIntValue("PrivateInviteTemplate");
+            var template = _communicationService.GetTemplate(templateId);
+            var fromContact = _contactService.GetContactById(_configurationWrapper.GetConfigIntValue("UnassignedContact"));
             var mergeData = SetMergeData(invite.PledgeCampaignIdText, invite.PledgeCampaignId, invite.InvitationGuid, invite.RecipientName);
 
             return new Communication
