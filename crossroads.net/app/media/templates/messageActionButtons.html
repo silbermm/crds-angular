@@ -11,19 +11,19 @@
       <svg viewBox="0 0 32 32" class="icon icon-music4"><use xlink:href="#music4"></use></svg>
     </span>
   </a>
-  <a href="http://s3.amazonaws.com/crossroads-media/documents/08_30-31_14Program_LO.pdf" class="btn btn-standard-dark btn-labeled btn-sm btn-block">
+  <a ng-show="singleMedia.showProgramDownloadLink()" href="{{ singleMedia.programDownloadLink }}" class="btn btn-standard-dark btn-labeled btn-sm btn-block">
     View Program
     <span class="btn-label">
       <svg viewBox="0 0 32 32" class="icon icon-file-pdf"><use xlink:href="#file-pdf"></use></svg>
     </span>
   </a>
-  <a href="http://s3.amazonaws.com/crossroads-media/messages/video/likeaboss_02.mp4" class="btn btn-standard-dark btn-labeled btn-sm btn-block">
+  <a ng-show="singleMedia.showVideoDownloadLink()" href="{{ singleMedia.videoDownloadLink }}" class="btn btn-standard-dark btn-labeled btn-sm btn-block">
     Download Video
     <span class="btn-label">
       MP4
     </span>
   </a>
-  <a href="http://s3.amazonaws.com/crossroads-media/messages/audio/likeaboss_02.mp3" class="btn btn-standard-dark btn-labeled btn-sm btn-block">
+  <a ng-show="singleMedia.showAudioDownloadLink()" href="{{ singleMedia.audioDownloadLink }}" class="btn btn-standard-dark btn-labeled btn-sm btn-block">
     Download Audio
     <span class="btn-label">
       MP3

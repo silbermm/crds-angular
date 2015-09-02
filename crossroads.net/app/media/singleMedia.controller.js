@@ -22,11 +22,15 @@
     vm.switchToVideo = switchToVideo;
     vm.videoStillIsVisible = true;
     vm.videoPlayerIsVisible = false;
+    vm.showVideoDownloadLink = showVideoDownloadLink;
+    vm.showAudioDownloadLink = showAudioDownloadLink;
+    vm.showProgramDownloadLink = showProgramDownloadLink;
 
     if (vm.isMessage) {
       vm.videoSectionIsOpen = true;
       vm.audio = vm.media.audio;
       vm.video = vm.media.video;
+      vm.programDownloadLink = _.get(vm.media, 'program.filename');
     } else {
       if (vm.media.className === 'Music') {
         vm.audio = vm.media;
@@ -44,7 +48,12 @@
       // trusted for Strict Contextual Escaping, such as --
       // $sce.trustAsResourceUrl("https://www.youtube.com/embed/" + _.get(vm.media, 'serviceId'));
       vm.video.videoUrl = _.get(vm.video, 'serviceId');
+      vm.videoDownloadLink = _.get(vm.video, 'source.filename');
       $sce.trustAsResourceUrl(vm.videoUrl);
+    }
+
+    if (vm.audio) {
+      vm.audioDownloadLink = _.get(vm.audio, 'source.filename');
     }
 
 
@@ -119,6 +128,18 @@
     function switchToVideo() {
       vm.videoSectionIsOpen = true;
       stopAudioPlayer();
+    }
+
+    function showVideoDownloadLink() {
+      return ((vm.videoDownloadLink === undefined) ? false : true);
+    }
+
+    function showAudioDownloadLink() {
+      return ((vm.audioDownloadLink === undefined) ? false : true);
+    }
+
+    function showProgramDownloadLink() {
+      return ((vm.programDownloadLink === undefined) ? false : true);
     }
   }
 })();
