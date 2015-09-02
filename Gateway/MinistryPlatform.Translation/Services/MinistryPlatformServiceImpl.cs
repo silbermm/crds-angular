@@ -179,19 +179,19 @@ namespace MinistryPlatform.Translation.Services
 
         public void RemoveSelection(int selectionId, int[] records, String token)
         {
-            VoidCall(token, platfromClient => platfromClient.RemoveFromSelection(selectionId, records));
+            VoidCall(token, platformClient => platformClient.RemoveFromSelection(selectionId, records));
         }
 
         public int DeleteRecord(int pageId, int recordId, DeleteOption[] deleteOptions, String token)
         {
             VoidCall(token,
-                platfromClient => platfromClient.DeletePageRecord(pageId, recordId, deleteOptions));
+                platformClient => platformClient.DeletePageRecord(pageId, recordId, deleteOptions));
             return recordId;
         }
 
         public void UpdateRecord(int pageId, Dictionary<string, object> dictionary, String token)
         {
-            VoidCall(token, platfromClient => platfromClient.UpdatePageRecord(pageId, dictionary, false));
+            VoidCall(token, platformClient => platformClient.UpdatePageRecord(pageId, dictionary, false));
         }
 
         private int GetMinistryPlatformId(string mpKey)
