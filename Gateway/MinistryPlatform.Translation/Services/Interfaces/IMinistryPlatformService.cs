@@ -39,7 +39,9 @@ namespace MinistryPlatform.Translation.Services.Interfaces
 
         int CreateSubRecord(string subPageKey, int parentRecordId, Dictionary<string, object> dictionary,
             String token, bool quickadd = false);
-        
+
+        void RemoveSelection(int selectionId, int[] records, String token);
+
         int DeleteRecord(int pageId, int recordId, DeleteOption[] deleteOptions, String token);
 
         void UpdateRecord(int pageId, Dictionary<string, object> dictionary, String token);

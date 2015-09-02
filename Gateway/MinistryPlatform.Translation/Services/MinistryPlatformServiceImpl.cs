@@ -177,6 +177,11 @@ namespace MinistryPlatform.Translation.Services
                 platformClient => platformClient.CreateSubpageRecord(subPageId, parentRecordId, dictionary, quickadd));
         }
 
+        public void RemoveSelection(int selectionId, int[] records, String token)
+        {
+            VoidCall(token, platfromClient => platfromClient.RemoveFromSelection(selectionId, records));
+        }
+
         public int DeleteRecord(int pageId, int recordId, DeleteOption[] deleteOptions, String token)
         {
             VoidCall(token,
