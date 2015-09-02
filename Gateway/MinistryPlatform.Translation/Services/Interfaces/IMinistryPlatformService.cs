@@ -26,6 +26,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         
         List<Dictionary<string, object>> GetSubPageRecords(int subPageId, int recordId, String token);
         List<Dictionary<string, object>> GetSubPageRecords(string subPageKey, int recordId, String token);
+        Dictionary<string, object> GetSubPageRecord(string subPageKey, int recordId, String token);
         
         int CreateRecord(int pageId, Dictionary<string, object> dictionary, String token,
             bool quickadd = false);
@@ -34,6 +35,9 @@ namespace MinistryPlatform.Translation.Services.Interfaces
             bool quickadd = false);
         
         int CreateSubRecord(int subPageId, int parentRecordId, Dictionary<string, object> dictionary,
+            String token, bool quickadd = false);
+
+        int CreateSubRecord(string subPageKey, int parentRecordId, Dictionary<string, object> dictionary,
             String token, bool quickadd = false);
         
         int DeleteRecord(int pageId, int recordId, DeleteOption[] deleteOptions, String token);

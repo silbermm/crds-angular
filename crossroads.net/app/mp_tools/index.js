@@ -1,12 +1,10 @@
 (function(){
-
   'use strict()';
   require('angular-ui-select');
 
-
   var MODULE = 'crossroads.mptools';
 
-  angular.module(MODULE, ['crossroads.core', 'ui.select']); 
+  angular.module(MODULE, ['crossroads.core', 'ui.select']);
   angular.module(MODULE).config(require('./mpTools.config'));
   angular.module(MODULE).factory('MPTools', require('./mpTools.service'));
   angular.module(MODULE).run(require('./mpTools.run'));
@@ -25,6 +23,9 @@
 
   // The Trip Participant Tool
   require('./trip_participants');
+
+  // The Trip Private Invitation Tool
+  require('./trip_private_invite');
 
   // The GP Export Tool
   require('./gp_export');

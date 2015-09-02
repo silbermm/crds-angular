@@ -133,6 +133,7 @@
     <Compile Include="Services\Interfaces\IOpportunityService.cs" />
     <Compile Include="Services\Interfaces\IParticipantService.cs" />
     <Compile Include="Services\Interfaces\IPledgeService.cs" />
+    <Compile Include="Services\Interfaces\IPrivateInviteService.cs" />
     <Compile Include="Services\Interfaces\IProgramService.cs" />
     <Compile Include="Services\LookupService.cs" />
     <Compile Include="Services\MessageInfo.cs" />
@@ -141,6 +142,7 @@
     <Compile Include="Services\OpportunityServiceImpl.cs" />
     <Compile Include="Services\ParticipantService.cs" />
     <Compile Include="Services\PledgeService.cs" />
+    <Compile Include="Services\PrivateInviteService.cs" />
     <Compile Include="Services\ProgramService.cs" />
     <Compile Include="Utils\DbConnectionNameTypeConverter.cs" />
     <Compile Include="Utils\MPFormatConversion.cs" />
