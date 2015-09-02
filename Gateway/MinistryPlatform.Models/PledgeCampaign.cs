@@ -14,6 +14,8 @@ namespace MinistryPlatform.Models
         public int FormId { get; set; }
         public string FormTitle { get; set; }
         public int YoungestAgeAllowed { get; set; }
-        public List<int> AgeExceptions { get; set; } 
+        public DateTime RegistrationStart { get; set; }
+        public DateTime RegistrationEnd { get; set; }
+        public List<int> AgeExceptions { get; set; }
     }
 }
