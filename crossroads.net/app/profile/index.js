@@ -25,6 +25,11 @@ app.directive('uniqueEmail', ['$http', 'Session', 'User', require('./personal/pr
 app.directive("validateDate", ["$log", require('./personal/profile_valid_date_directive')]);
 app.directive('profilePersonal', ["$log", require("./personal/profile_personal.directive")]);
 
+// Household
+require('./household/profile_household.template.html');
+app.controller('ProfileHouseholdController', ["$rootScope", "$log","$timeout","MESSAGES", "ProfileReferenceData", require('./household/profile_household.controller')]);
+app.directive('profileHousehold', ["$log", require("./household/profile_household.directive")]);
+
 // Skills
 require('./skills/profile_skills.html');
 app.controller("ProfileSkillsController", ['$rootScope', 'Skills', 'Session', '$log', require('./skills/profile_skills_controllers')]);
