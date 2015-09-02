@@ -14,7 +14,6 @@
         changeAccountInfo: '=',
         defaultSource: '=',
         routing: '=',
-        showCheckClass: '=',
         declinedPayment: '='
       },
       templateUrl: 'bankInfo/bankInfo.html',

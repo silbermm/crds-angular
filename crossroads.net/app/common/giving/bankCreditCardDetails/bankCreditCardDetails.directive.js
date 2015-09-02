@@ -13,7 +13,6 @@
       scope: {
         dto: '=',
         bankInfoSubmitted: '=',
-        showCheckClass: '=',
         donor: '=',
         email: '=',
         setValidCard: '=',

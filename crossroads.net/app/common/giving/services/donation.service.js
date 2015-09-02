@@ -11,6 +11,7 @@
       card: {},
       createBank: createBank,
       createCard: createCard,
+      createDonorAndDonate: createDonorAndDonate,
       confirmDonation: confirmDonation,
       donate: donate,
       processBankAccountChange: processBankAccountChange,
@@ -36,6 +37,28 @@
         cvc: GiveTransferService.donor.default_source.cvc,
         address_zip: GiveTransferService.donor.default_source.address_zip
       };
+    }
+
+    function createDonorAndDonate(programsInput) {
+      var pgram;
+      if (programsInput !== undefined) {
+        pgram = _.find(programsInput, { ProgramId: GiveTransferService.program.programId });
+      } else {
+        pgram = GiveTransferService.program;
+      }
+      if (GiveTransferService.view === 'cc') {
+        donationService.createCard();
+        PaymentService.createDonorWithCard(donationService.card, GiveTransferService.email)
+          .then(function(donor) {
+            donationService.donate(pgram);
+          }, PaymentService.stripeErrorHandler);
+      } else if (view === 'bank') {
+        vm.donationService.createBank();
+        PaymentService.createDonorWithBankAcct(donationService.bank, GiveTransferService.email)
+          .then(function(donor) {
+            donationService.donate(pgram);
+          }, PaymentService.stripeErrorHandler);
+      }
     }
 
     function confirmDonation(programsInput) {

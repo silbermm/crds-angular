@@ -11,12 +11,15 @@
         this.account = '';
         this.amount = undefined;
         this.amountSubmitted = false;
+        this.bankinfoSubmitted = false;
         this.brand = '';
         this.ccNumberClass = '';
         this.changeAccountInfo = false;
         this.declinedPayment = false;
         this.donor = {};
+        this.donorError = false;
         this.email = undefined;
+        this.initialized = false;
         this.last4 = '';
         this.processing = false;
         this.processingChange = false;
