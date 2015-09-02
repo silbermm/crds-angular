@@ -27,4 +27,6 @@
   // The Trip Private Invitation Tool
   require('./trip_private_invite');
 
+  // The GP Export Tool
+  require('./gp_export');
 })();

@@ -57,6 +57,7 @@
     <Compile Include="Communication.cs" />
     <Compile Include="CommunicationPreferences.cs" />
     <Compile Include="ContactDonor.cs" />
+    <Compile Include="Deposit.cs" />
     <Compile Include="DonationBatch.cs" />
     <Compile Include="DonationDistribution.cs" />
     <Compile Include="Donation.cs" />

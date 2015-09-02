@@ -49,11 +49,13 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.ResponseResultId, opts => opts.MapFrom(src => src.Response_Result_ID));
 
             Mapper.CreateMap<DonationBatch, DonationBatchDTO>()
+                .ForMember(dest => dest.BatchName, opts => opts.MapFrom(src => src.BatchName))
                 .ForMember(dest => dest.ProcessorTransferId, opts => opts.MapFrom(src => src.ProcessorTransferId))
                 .ForMember(dest => dest.DepositId, opts => opts.MapFrom(src => src.DepositId))
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id));
 
             Mapper.CreateMap<Dictionary<string, object>, DonationBatch>()
+                .ForMember(dest => dest.BatchName, opts => opts.MapFrom(src => src.ToString("Batch_Name")))
                 .ForMember(dest => dest.ProcessorTransferId, opts => opts.MapFrom(src => src.ToString("Processor_Transfer_ID")))
                 .ForMember(dest => dest.DepositId, opts => opts.MapFrom(src => src.ToNullableInt("Deposit_ID", false)))
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.ContainsKey("dp_RecordID") ? src.ToInt("dp_RecordID", false) : src.ToInt("Batch_ID", false)));
@@ -69,6 +71,17 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name))
                 .ForMember(dest => dest.CommunicationTemplateId, opts => opts.MapFrom(src => src.CommunicationTemplateId))
                 .ForMember(dest => dest.ProgramId, opts => opts.MapFrom(src => src.ProgramId));
+
+            Mapper.CreateMap<Deposit, DepositDTO>();
+
+            Mapper.CreateMap<Dictionary<string, object>, Deposit>()
+                .ForMember(dest => dest.DepositDateTime, opts => opts.MapFrom(src => src.ToString("Deposit_Date")))
+                .ForMember(dest => dest.DepositName, opts => opts.MapFrom(src => src.ToString("Deposit_Name")))
+                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.ToString("Deposit_ID")))
+                .ForMember(dest => dest.DepositTotalAmount, opts => opts.MapFrom(src => src.ToString("Deposit_Total")))
+                .ForMember(dest => dest.BatchCount, opts => opts.MapFrom(src => src.ToString("Batch_Count")))
+                .ForMember(dest => dest.Exported, opts => opts.MapFrom(src => src.ToString("Exported")))
+                .ForMember(dest => dest.ProcessorTransferId, opts => opts.MapFrom(src => src.ToString("Processor_Transfer_ID")));
         }
     }
 }
