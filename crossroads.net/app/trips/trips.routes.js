@@ -81,7 +81,7 @@
       })
       .state('tripsignup', {
         parent: 'noSideBar',
-        url: '/trips/:campaignId/signup',
+        url: '/trips/:campaignId/signup?invite',
         templateUrl: 'signup/signupPage.html',
         controller: 'TripsSignupController as tripsSignup',
         data: {
