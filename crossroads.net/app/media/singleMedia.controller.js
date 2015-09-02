@@ -31,7 +31,6 @@
       vm.audio = vm.media.audio;
       vm.video = vm.media.video;
       vm.programDownloadLink = _.get(vm.media, 'program.filename');
-      debugger;
     } else {
       if (vm.media.className === 'Music') {
         vm.audio = vm.media;
@@ -132,30 +131,15 @@
     }
 
     function showVideoDownloadLink() {
-      debugger;
-      if (vm.videoDownloadLink === undefined) {
-        return false;
-      }
-
-      return true;
+      return ((vm.videoDownloadLink === undefined) ? false : true);
     }
 
     function showAudioDownloadLink() {
-      debugger;
-      if (vm.audioDownloadLink === undefined) {
-        return false;
-      }
-
-      return true;
+      return ((vm.audioDownloadLink === undefined) ? false : true);
     }
 
     function showProgramDownloadLink() {
-      debugger;
-      if (vm.programDownloadLink === undefined) {
-        return false;
-      }
-
-      return true;
+      return ((vm.programDownloadLink === undefined) ? false : true);
     }
   }
 })();
