@@ -13,6 +13,8 @@
     vm.media = SingleMedia[ItemProperty][0];
     vm.playVideo = playVideo;
     vm.setAudioPlayer = setAudioPlayer;
+    vm.showSwitchToAudio = showSwitchToAudio;
+    vm.showSwitchToVideo = showSwitchToVideo;
     vm.showAudioSection = showAudioSection;
     vm.showVideoSection = showVideoSection;
     vm.stopVideo = stopVideo;
@@ -44,6 +46,7 @@
       vm.video.videoUrl = _.get(vm.video, 'serviceId');
       $sce.trustAsResourceUrl(vm.videoUrl);
     }
+
 
     if (ParentMedia) {
       vm.parentMedia = ParentMedia[ParentItemProperty][0];
@@ -78,6 +81,14 @@
 
     function sendControlEvent(ctrlEvent) {
       $rootScope.$broadcast(ctrlEvent);
+    }
+
+    function showSwitchToAudio() {
+      return vm.audio && vm.showVideoSection();
+    }
+
+    function showSwitchToVideo() {
+      return vm.video && vm.showAudioSection();
     }
 
     function showAudioSection() {

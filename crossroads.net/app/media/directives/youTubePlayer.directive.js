@@ -61,10 +61,13 @@
           }
 
           player.setSize(scope.width, scope.height);
-
         });
 
         scope.$on(YT_EVENT.STOP, function() {
+          if (!player) {
+            return;
+          }
+
           player.seekTo(0);
           player.stopVideo();
         });
