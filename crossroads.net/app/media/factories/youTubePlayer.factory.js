@@ -3,6 +3,8 @@
 
   module.exports = YouTubePlayerFactory;
 
+  YouTubePlayerFactory.$inject = ['$q', '$window'];
+
   function YouTubePlayerFactory($q, $window) {
 
     var deferred = $q.defer();

@@ -17,7 +17,7 @@
 
       template: '<div></div>',
 
-      link: function(scope, element, attrs, $rootScope) {
+      link: function(scope, element) {
         var tag = document.createElement('script');
         tag.src = 'https://www.youtube.com/iframe_api';
         var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -97,12 +97,15 @@
         });
 
         scope.$on(YT_EVENT.STOP, function() {
+          if (!player) {
+            return;
+          }
+
           player.seekTo(0);
           player.stopVideo();
         });
 
         scope.$on(YT_EVENT.PLAY, function() {
-          console.log('RECEIVING');
           player.playVideo();
         });
 
