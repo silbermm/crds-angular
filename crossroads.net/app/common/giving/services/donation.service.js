@@ -41,9 +41,9 @@
         $state.go(GiveFlow.login);
       }
 
+      GiveTransferService.processing = true;
       try {
         var pgram;
-        GiveTransferService.processing = true;
         if (programsInput !== undefined) {
           pgram = _.find(programsInput, { ProgramId: GiveTransferService.program.ProgramId });
         } else {

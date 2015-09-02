@@ -14,8 +14,6 @@
         dto: '=',
         bankInfoSubmitted: '=',
         showCheckClass: '=',
-        showMessage: '=',
-        showMessageOnChange: '=',
         donor: '=',
         email: '=',
         setValidCard: '=',

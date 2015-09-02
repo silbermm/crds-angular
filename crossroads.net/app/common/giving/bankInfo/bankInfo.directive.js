@@ -14,8 +14,6 @@
         changeAccountInfo: '=',
         defaultSource: '=',
         routing: '=',
-        showMessage: '=',
-        showMessageOnChange: '=',
         showCheckClass: '=',
         declinedPayment: '='
       },
@@ -33,7 +31,6 @@
       scope.blurRoutingError = blurRoutingError;
       scope.resetDefaultBankPlaceholderValues = resetDefaultBankPlaceholderValues;
       scope.routingError = routingError;
-      scope.toggleCheck = toggleCheck;
       scope.useExistingAccountInfo = useExistingAccountInfo;
 
       activate();
@@ -67,9 +64,7 @@
             scope.bankAccountForm.account.$error.invalidAccount &&
             scope.bankAccountForm.$invalid  ||
             scope.bankAccountForm.account.$error.invalidAccount &&
-            scope.bankAccountForm.account.$dirty ||
-            scope.showMessageOnChange &&
-            scope.bankAccountForm.account.$error.invalidAccount);
+            scope.bankAccountForm.account.$dirty);
       }
 
       function blurAccountError() {
@@ -102,21 +97,10 @@
             scope.bankAccountForm.routing.$error.invalidRouting &&
             scope.bankAccountForm.$invalid  ||
             scope.bankAccountForm.routing.$error.invalidRouting &&
-            scope.bankAccountForm.routing.$dirty ||
-            scope.showMessageOnChange &&
-            scope.bankAccountForm.routing.$error.invalidRouting);
+            scope.bankAccountForm.routing.$dirty);
       }
 
-      function toggleCheck() {
-        if (scope.showMessage === 'Where?') {
-          scope.showMessage = 'Close';
-          scope.showCheckClass = '';
-        } else {
-          scope.showMessage = 'Where?';
-          scope.showCheckClass = 'ng-hide';
-        }
-      }
-
+      
       function useExistingAccountInfo() {
         return scope.changeAccountInfo && scope.bankAccountForm.$pristine;
       }

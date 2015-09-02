@@ -9,5 +9,6 @@
     .factory('Programs', require('./programs.service'))
     .factory('DonationService', require('./donation.service'))
     .factory('GiveFlow', require('./giveFlow.service'))
+    .constant('CC_BRAND_CODES', require('./ccBrand.constants'))
     ;
 })();
