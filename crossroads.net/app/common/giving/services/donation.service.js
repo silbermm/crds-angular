@@ -17,6 +17,8 @@
       processBankAccountChange: processBankAccountChange,
       processChange: processChange,
       processCreditCardChange: processCreditCardChange,
+      submitBankInfo: submitBankInfo,
+      updateDonorAndDonate: updateDonorAndDonate,
     };
 
     function createBank() {
@@ -171,6 +173,47 @@
         GiveTransferService.processing = false;
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
       }
+    }
+
+    function submitBankInfo(giveForm, programsInput) {
+      GiveTransferService.bankinfoSubmitted = true;
+      if (giveForm.accountForm.$valid) {
+        GiveTransferService.processing = true;
+        PaymentService.getDonor(giveForm.email)
+          .then(function(donor){
+            donationService.updateDonorAndDonate(donor.id, programsInput);
+          },
+          function(error){
+            donationService.createDonorAndDonate(programsInput);
+          });
+      } else {
+        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+      }
+    }
+
+    function updateDonorAndDonate(donorId, programsInput) {
+      // The vm.email below is only required for guest giver, however, there
+      // is no harm in sending it for an authenticated user as well,
+      // so we'll keep it simple and send it in all cases.
+      var pgram;
+      if (programsInput !== undefined){
+        pgram = _.find(programsInput, { ProgramId: GiveTransferService.program.ProgramId });
+      } else {
+        pgram = GiveTransferService.program
+      }
+      if (GiveTransferService.view === 'cc') {
+        donationService.createCard();
+        PaymentService.updateDonorWithCard(donorId, donationService.card, GiveTransferService.email)
+          .then(function(donor) {
+            DonationService.donate(pgram);
+          }, PaymentService.stripeErrorHandler);
+      } else if (GiveTransferService.view === 'bank') {
+        donationService.createBank();
+        PaymentService.updateDonorWithBankAcct(donorId, donationService.bank, GiveTransferService.email)
+          .then(function(donor) {
+            donationService.donate(pgram);
+          }, PaymentService.stripeErrorHandler);
+      };
     }
 
     return donationService;

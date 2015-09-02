@@ -26,7 +26,7 @@
         this.program = undefined;
         this.routing = '';
         this.savedPayment = '';
-        this.view = '';
+        this.view = 'bank';
 
         if (!Session.isActive()) {
           User.email = '';

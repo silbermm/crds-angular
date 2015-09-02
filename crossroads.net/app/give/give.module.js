@@ -19,3 +19,4 @@ var app = angular.module(constants.MODULES.GIVE, [
 
 app.config(require('./give.routes'));
 app.controller('GiveController', require('./give.controller'));
+app.factory('OneTimeGiving', require('./oneTimeGiving.service'));

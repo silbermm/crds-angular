@@ -12,6 +12,7 @@
                       'GiveTransferService',
                       'GiveFlow',
                       'AUTH_EVENTS',
+                      'OneTimeGiving',
                       'CC_BRAND_CODES'];
 
   function DonationException(message) {
@@ -19,7 +20,7 @@
     this.name = 'DonationException';
   }
 
-  function GiveCtrl($rootScope, $state, $timeout, Session, PaymentService, DonationService, programList, GiveTransferService, GiveFlow, AUTH_EVENTS, CC_BRAND_CODES) {
+  function GiveCtrl($rootScope, $state, $timeout, Session, PaymentService, DonationService, programList, GiveTransferService, GiveFlow, AUTH_EVENTS, OneTimeGiving, CC_BRAND_CODES) {
 
     var vm = this;
     vm.activeSession = activeSession;
@@ -28,17 +29,11 @@
     vm.emailAlreadyRegisteredGrowlDivRef = 1000;
     vm.emailPrefix = 'give';
     vm.giveFlow = GiveFlow;
-    vm.initDefaultState = initDefaultState;
-    //vm.initialized = false;
-    vm.dto.processing = false;
+    vm.initDefaultState = OneTimeGiving.initDefaultState;
     vm.onEmailFound = onEmailFound;
     vm.onEmailNotFound = onEmailNotFound;
     vm.programsInput = programList;
-    if (!vm.dto.view ){
-      vm.dto.view = 'bank';
-    }
-
-
+   
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
        // Short-circuit this handler if we're not transitioning TO a give state
       if(toState && !/^give.*/.test(toState.name)) {
@@ -52,7 +47,7 @@
        // If not initialized, initialize and go to default state
        if(!vm.dto.initialized || toState.name === 'give') {
          event.preventDefault();
-         vm.initDefaultState();
+         OneTimeGiving.initDefaultState();
          return;
        }
 
@@ -91,28 +86,6 @@
       return (Session.isActive()); 
     }
 
-    function initDefaultState() {
-      // If we have not initialized (meaning we came in via a deep-link, refresh, etc),
-      // reset state and redirect to start page (/give/amount).
-      vm.dto.reset();
-
-      // Setup the give flow service
-      GiveFlow.reset({
-        amount: 'give.amount',
-        account: 'give.account',
-        login: 'give.login',
-        register: 'give.register',
-        confirm: 'give.confirm',
-        change: 'give.change',
-        thankYou: 'give.thank-you'
-      });          
-
-      vm.dto.initialized = true;
-      //// LEFTOVER FROM USING MULTIPLE STATE URLS LOOK AT REMOVING
-      Session.removeRedirectRoute();
-      $state.go(GiveFlow.amount);
-    }
-
     // Callback from email-field on guest giver page.  Emits a growl
     // notification indicating that the email entered may already be a
     // registered user.
@@ -146,61 +119,21 @@
       }
     }
     
-        vm.submitBankInfo = function() {
-          vm.dto.bankinfoSubmitted = true;
-          if (vm.giveForm.accountForm.$valid) {
-            vm.dto.processing = true;
-            PaymentService.getDonor(vm.giveForm.email)
-            .then(function(donor){
-                vm.updateDonorAndDonate(donor.id, vm.dto.program.ProgramId, vm.dto.amount, vm.dto.email, vm.dto.view);
-            },
-            function(error){
-              vm.donationService.createDonorAndDonate(vm.programsInput);
-            });
-          } else {
-            $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-          }
-        };
-
-        /*vm.createDonorAndDonate = function(programId, amount, email, view) {*/
-          //// The vm.email below is only required for guest giver, however, there
-          //// is no harm in sending it for an authenticated user as well,
-          //// so we'll keep it simple and send it in all cases.
-          //var pgram = _.find(vm.programsInput, { ProgramId: programId });
-          //if (view == "cc") {
-            //vm.donationService.createCard();
-            //PaymentService.createDonorWithCard(vm.donationService.card, email)
-              //.then(function(donor) {
-                //DonationService.donate(pgram);
-              //}, PaymentService.stripeErrorHandler);
-          //} else if (view == "bank") {
-            //vm.donationService.createBank();
-            //PaymentService.createDonorWithBankAcct(vm.donationService.bank, email)
-              //.then(function(donor) {
-                //DonationService.donate(pgram);
-              //}, PaymentService.stripeErrorHandler);
-         //};
-        /*}*/
-
-        vm.updateDonorAndDonate = function(donorId, programId, amount, email, view) {
-          // The vm.email below is only required for guest giver, however, there
-          // is no harm in sending it for an authenticated user as well,
-          // so we'll keep it simple and send it in all cases.
-          var pgram = _.find(vm.programsInput, { ProgramId: programId });
-          if (view == "cc") {
-            vm.donationService.createCard();
-            PaymentService.updateDonorWithCard(donorId, vm.donationService.card, email)
-              .then(function(donor) {
-                DonationService.donate(pgram);
-              }, PaymentService.stripeErrorHandler);
-         } else if (view == "bank") {
-            vm.donationService.createBank();
-            PaymentService.updateDonorWithBankAcct(donorId, vm.donationService.bank, email)
-              .then(function(donor) {
-                DonationService.donate(pgram);
-              }, PaymentService.stripeErrorHandler);
-         };
-        }
+/*        vm.submitBankInfo = function() {*/
+          //vm.dto.bankinfoSubmitted = true;
+          //if (vm.giveForm.accountForm.$valid) {
+            //vm.dto.processing = true;
+            //PaymentService.getDonor(vm.giveForm.email)
+            //.then(function(donor){
+                //vm.donationService.updateDonorAndDonate(donor.id, vm.programsInput);
+            //},
+            //function(error){
+              //vm.donationService.createDonorAndDonate(vm.programsInput);
+            //});
+          //} else {
+            //$rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+          //}
+        //};
 
         vm.submitChangedBankInfo = function() {
           if (!Session.isActive()) {
