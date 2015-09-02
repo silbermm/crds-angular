@@ -164,6 +164,7 @@ namespace crds_angular.Controllers.API
         }
 
         [AcceptVerbs("GET")]
+        [ResponseType(typeof (ValidatePrivateInviteDto))]
         [Route("api/trip/validate-private-invite/{pledgeCampaignId}/{guid}")]
         public IHttpActionResult ValidatePrivateInvite(int pledgeCampaignId, string guid)
         {
@@ -171,8 +172,8 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
-                    var valid = _tripService.ValidatePrivateInvite(pledgeCampaignId, guid, token);
-                    return Ok(valid);
+                    var retVal = new ValidatePrivateInviteDto {Valid = _tripService.ValidatePrivateInvite(pledgeCampaignId, guid, token)};
+                    return Ok(retVal);
                 }
                 catch (Exception exception)
                 {

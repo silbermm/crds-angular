@@ -28,6 +28,7 @@ namespace crds_angular.Services
         private readonly ICommunicationService _communicationService;
         private readonly IContactService _contactService;
         private readonly IConfigurationWrapper _configurationWrapper;
+        private readonly IPersonService _personService;
 
         public TripService(IEventParticipantService eventParticipant,
                            IDonationService donationService,
@@ -40,7 +41,8 @@ namespace crds_angular.Services
                            IPrivateInviteService privateInviteService,
                            ICommunicationService communicationService,
                            IContactService contactService,
-            IConfigurationWrapper configurationWrapper)
+                           IConfigurationWrapper configurationWrapper,
+                           IPersonService personService)
         {
             _eventParticipantService = eventParticipant;
             _donationService = donationService;
@@ -54,6 +56,7 @@ namespace crds_angular.Services
             _communicationService = communicationService;
             _contactService = contactService;
             _configurationWrapper = configurationWrapper;
+            _personService = personService;
         }
 
         public List<TripGroupDto> GetGroupsByEventId(int eventId)
@@ -305,7 +308,6 @@ namespace crds_angular.Services
             _communicationService.SendMessage(communication);
 
             return invite.PrivateInvitationId;
-
         }
 
         private Communication PrivateInviteCommunication(PrivateInvite invite)
@@ -338,7 +340,7 @@ namespace crds_angular.Services
                 {"PledgeCampaignID", pledgeCampaignId},
                 {"InviteGUID", inviteGuid},
                 {"ParticipantName", participantName},
-                {"BaseUrl",_configurationWrapper.GetConfigValue("BaseUrl")}
+                {"BaseUrl", _configurationWrapper.GetConfigValue("BaseUrl")}
             };
             return mergeData;
         }
@@ -377,7 +379,8 @@ namespace crds_angular.Services
 
         public bool ValidatePrivateInvite(int pledgeCampaignId, string guid, string token)
         {
-            return _privateInviteService.PrivateInviteValid(pledgeCampaignId, guid);
+            var person = _personService.GetLoggedInUserProfile(token);
+            return _privateInviteService.PrivateInviteValid(pledgeCampaignId, guid, person.EmailAddress);
         }
     }
 }

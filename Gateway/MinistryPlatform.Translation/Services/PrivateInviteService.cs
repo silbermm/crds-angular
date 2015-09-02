@@ -47,10 +47,10 @@ namespace MinistryPlatform.Translation.Services
             }
         }
 
-        public bool PrivateInviteValid(int pledgeCampaignId, string guid)
+        public bool PrivateInviteValid(int pledgeCampaignId, string guid, string emailAddress)
         {
             var token = ApiLogin();
-            var searchString = string.Format(@",,""{0}""", guid);
+            var searchString = string.Format(@",,""{0}"", ""{1}"", ""{2}""", guid, false, emailAddress);
             var records = _ministryPlatformService.GetSubpageViewRecords("TripPrivateInviteValid", pledgeCampaignId, token, searchString);
             return records.Count == 1;
         }

@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using crds_angular.Services;
+using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
+using IDonationService = MinistryPlatform.Translation.Services.Interfaces.IDonationService;
+using IDonorService = MinistryPlatform.Translation.Services.Interfaces.IDonorService;
+using IGroupService = MinistryPlatform.Translation.Services.Interfaces.IGroupService;
 
 namespace crds_angular.test.Services
 {
@@ -25,6 +29,7 @@ namespace crds_angular.test.Services
         private Mock<ICommunicationService> _communicationService;
         private Mock<IContactService> _contactService;
         private Mock<IConfigurationWrapper> _configurationWrapper;
+        private Mock<IPersonService> _personService;
         private TripService _fixture;
 
         [SetUp]
@@ -42,6 +47,7 @@ namespace crds_angular.test.Services
             _communicationService = new Mock<ICommunicationService>();
             _contactService = new Mock<IContactService>();
             _configurationWrapper = new Mock<IConfigurationWrapper>();
+            _personService = new Mock<IPersonService>();
 
             _fixture = new TripService(_eventParticipantService.Object,
                                        _donationService.Object,
@@ -54,7 +60,8 @@ namespace crds_angular.test.Services
                                        _privateInviteService.Object,
                                        _communicationService.Object,
                                        _contactService.Object,
-                                       _configurationWrapper.Object);
+                                       _configurationWrapper.Object,
+                                       _personService.Object);
         }
 
         [Test]

@@ -5,6 +5,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
     public interface IPrivateInviteService
     {
         PrivateInvite Create(int pledgeCampaignId, string emailAddress, string recipientName, string token);
-        bool PrivateInviteValid(int pledgeCampaignId, string guid);
+        bool PrivateInviteValid(int pledgeCampaignId, string guid, string emailAddress);
     }
 }

@@ -3,14 +3,15 @@
 
   module.exports = TripsSignupController;
 
-  TripsSignupController.$inject = ['$log', 'Session',  'Campaign', 'WorkTeams', '$location', 'Trip', '$q'];
+  TripsSignupController.$inject = ['$log', 'Session',  'Campaign', 'WorkTeams', '$location', 'Trip', '$q', 'contactId'];
 
-  function TripsSignupController($log, Session, Campaign, WorkTeams, $location, Trip, $q) {
+  function TripsSignupController($log, Session, Campaign, WorkTeams, $location, Trip, $q, contactId) {
 
     var vm = this;
 
     vm.ageLimitReached = true;
     vm.campaign = Campaign;
+    vm.contactId = contactId;
     vm.currentPage = 1;
     vm.numberOfPages = 0;
     vm.pageHasErrors = true;
@@ -18,6 +19,7 @@
     vm.privateInvite = $location.search()['invite'];
     vm.registrationNotOpen = true;
     vm.tripName = vm.campaign.name;
+    vm.viewReady = false;
     vm.whyPlaceholder = '';
     vm.workTeams = WorkTeams;
 
@@ -75,8 +77,11 @@
           vm.pageHasErrors = false;
         }
 
+        vm.viewReady = true;
+
       }, function(reason) {
         vm.pageHasErrors = true;
+        vm.viewReady = true;
       });
     }
 
@@ -94,14 +99,14 @@
           }
         } else {
           $log.debug('verify guid');
-          var valid = Trip.ValidatePrivateInvite.get({
+          Trip.ValidatePrivateInvite.get({
             pledgeCampaignId: vm.campaign.id,
             guid: vm.privateInvite
           }, function(data) {
-            $log.debug('guid: ' + data);
-            resolve(!data);
+            $log.debug('guid: ' + data.valid);
+            resolve(!data.valid);
           }, function(error) {
-            resolve(false);
+            resolve(true);
           });
         }
       });
