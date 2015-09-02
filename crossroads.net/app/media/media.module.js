@@ -6,7 +6,8 @@ require('plangular');
 var app = angular.module(MODULE, ['crossroads.core', 'plangular'])
   .config(require('./media.routes'))
   .config(configureAudioPlayer)
-  .factory('Media', require('./services/media.service'));
+  .factory('Media', require('./services/media.service'))
+  .factory('YouTubePlayerFactory', require('./factories/youTubePlayer.factory.js'));
 
 require('./templates/viewAll.html');
 require('./templates/viewAllMusic.html');
