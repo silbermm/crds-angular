@@ -140,7 +140,7 @@ namespace crds_angular.Services
         {
             var batch = GetDonationBatchByDepositId(depositId);
 
-            var date = DateTime.Today.ToString("MMyydd");
+            var date = DateTime.Today.ToString("yyMMdd");
             return string.Format("{0}_{1}.csv", batch.BatchName, date);
         }
     }

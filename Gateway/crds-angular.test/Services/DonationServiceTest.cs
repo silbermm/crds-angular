@@ -289,7 +289,7 @@ namespace crds_angular.test.Services
         public void TestGPExportFileName()
         {
             var date = DateTime.Today;
-            var fileName = string.Format("TestBatchName_{0}{1}{2}.csv", date.ToString("MM"), date.ToString("yy"), date.ToString("dd"));
+            var fileName = string.Format("TestBatchName_{0}{1}{2}.csv", date.ToString("yy"), date.ToString("MM"), date.ToString("dd"));
 
             _mpDonationService.Setup(mocked => mocked.GetDonationBatchByDepositId(456)).Returns(new DonationBatch
             {
@@ -308,7 +308,7 @@ namespace crds_angular.test.Services
         public void TestGenerateGPExportFileNames()
         {
             var date = DateTime.Today;
-            var fileName = string.Format("TestBatchName_{0}{1}{2}.csv", date.ToString("MM"), date.ToString("yy"), date.ToString("dd"));
+            var fileName = string.Format("TestBatchName_{0}{1}{2}.csv", date.ToString("yy"), date.ToString("MM"), date.ToString("dd"));
 
             _mpDonationService.Setup(mocked => mocked.GetSelectedDonationBatches(12424, "afdasfsafd")).Returns(MockDepositList);
             _mpDonationService.Setup(mocked => mocked.GetDonationBatchByDepositId(456)).Returns(new DonationBatch
