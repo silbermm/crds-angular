@@ -375,7 +375,7 @@ namespace MinistryPlatform.Translation.Services
             return gpExport;
         }
 
-        public void UpdateDepositToExported(int depositId)
+        public void UpdateDepositToExported(int selectionId, int depositId)
         {
             var token = ApiLogin();
             var paramaters = new Dictionary<string, object>
@@ -385,6 +385,7 @@ namespace MinistryPlatform.Translation.Services
             };
 
             _ministryPlatformService.UpdateRecord(_depositsPageId, paramaters, token);
+            _ministryPlatformService.RemoveSelection(selectionId, new [] {depositId}, token);
         }
     }
 }

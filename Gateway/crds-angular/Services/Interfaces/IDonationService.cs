@@ -18,7 +18,7 @@ namespace crds_angular.Services.Interfaces
         void CreatePaymentProcessorEventError(StripeEvent stripeEvent, StripeEventResponseDTO stripeEventResponse);
         DonationBatchDTO GetDonationBatchByProcessorTransferId(string processorTransferId);
         DonationBatchDTO GetDonationBatch(int batchId);
-        MemoryStream CreateGPExport(int depositId, string token);
+        MemoryStream CreateGPExport(int selectionId, int depositId, string token);
         string GPExportFileName(int depositId);
         List<DepositDTO> GenerateGPExportFileNames(int selectionId, string token);
     }

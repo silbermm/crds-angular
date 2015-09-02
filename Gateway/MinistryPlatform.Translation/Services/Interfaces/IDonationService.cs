@@ -22,6 +22,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
 
         List<TripDistribution> GetMyTripDistributions(int contactId, string token);
         List<GPExportDatum> CreateGPExport(int depositId, string token);
-        void UpdateDepositToExported(int depositId);
+        void UpdateDepositToExported(int selectionId, int depositId);
     }
 }

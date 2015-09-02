@@ -43,9 +43,9 @@ namespace crds_angular.Controllers.API
             return (Authorized(token => CreateDonationAndDistributionAuthenticated(token, dto), () => CreateDonationAndDistributionUnauthenticated(dto)));
         }
 
-        [Route("api/gpexport/file/{depositId}")]
+        [Route("api/gpexport/file/{selectionId}/{depositId}")]
         [HttpGet]
-        public IHttpActionResult GetGPExportFile(int depositId)
+        public IHttpActionResult GetGPExportFile(int selectionId, int depositId)
         {
             return Authorized(token =>
             {
@@ -53,7 +53,7 @@ namespace crds_angular.Controllers.API
                 {
                     // get export file and name
                     var fileName = _gatewayDonationService.GPExportFileName(depositId);
-                    var stream = _gatewayDonationService.CreateGPExport(depositId, token);
+                    var stream = _gatewayDonationService.CreateGPExport(selectionId, depositId, token);
                     var contentType = MimeMapping.GetMimeMapping(fileName);
 
                     return new FileResult(stream, fileName, contentType);
