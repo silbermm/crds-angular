@@ -6,6 +6,9 @@
 
   GiveRoutes.$inject = ['$httpProvider', '$stateProvider'];
 
+  /**
+   * This holds all of One-Time Giving routes
+   */
   function GiveRoutes($httpProvider, $stateProvider) {
 
     $httpProvider.defaults.useXDomain = true;
@@ -16,7 +19,7 @@
         parent: 'noSideBar',
         url: '/give',
         controller: 'GiveController as give',
-        templateUrl: 'give/give.html',
+        templateUrl: 'giveTemplates/give.html',
         resolve: {
           Programs: 'Programs',
           programList: function(Programs) {
@@ -29,27 +32,27 @@
         }
       })
       .state('give.amount', {
-        templateUrl: 'give/amount.html'
+        templateUrl: 'giveTemplates/amount.html'
       })
       .state('give.login', {
         controller: 'LoginCtrl',
-        templateUrl: 'give/login.html'
+        templateUrl: 'giveTemplates/login.html'
       })
       .state('give.register', {
         controller: 'RegisterCtrl',
-        templateUrl: 'give/register.html'
+        templateUrl: 'giveTemplates/register.html'
       })
       .state('give.confirm', {
-        templateUrl: 'give/confirm.html'
+        templateUrl: 'giveTemplates/confirm.html'
       })
       .state('give.account', {
-        templateUrl: 'give/account.html'
+        templateUrl: 'giveTemplates/account.html'
       })
       .state('give.change', {
-        templateUrl: 'give/change.html'
+        templateUrl: 'giveTemplates/change.html'
       })
       .state('give.thank-you', {
-        templateUrl: 'give/thank_you.html'
+        templateUrl: 'giveTemplates/thank_you.html'
       });
   }
 

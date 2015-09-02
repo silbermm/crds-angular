@@ -77,7 +77,7 @@
         templateUrl: 'register/register_form.html',
         controller: 'RegisterCtrl'
       })
-      .state('profile', {
+            .state('profile', {
         parent: 'noSideBar',
         url: '/profile',
         resolve: {

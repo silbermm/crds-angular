@@ -2,15 +2,15 @@
 
 var constants = require('../constants');
 
-require('./give.html');
-require('./amount.html');
-require('./login.html');
-require('./confirm.html');
-require('./account.html');
-require('./change.html');
-require('./thank_you.html');
-require('./register.html');
-require('./history.html');
+require('./giveTemplates/give.html');
+require('./giveTemplates/amount.html');
+require('./giveTemplates/login.html');
+require('./giveTemplates/confirm.html');
+require('./giveTemplates/account.html');
+require('./giveTemplates/change.html');
+require('./giveTemplates/thank_you.html');
+require('./giveTemplates/register.html');
+require('./giveTemplates/history.html');
 
 var app = angular.module(constants.MODULES.GIVE, [
     constants.MODULES.CORE,

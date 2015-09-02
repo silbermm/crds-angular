@@ -120,23 +120,34 @@
       $state.go(GiveFlow.amount);
     }
 
-    function processCreditCardChange(pgram, card, onSuccess, onFailure) {
-      PaymentService.updateDonorWithCard(GiveTransferService.donor.id, card, GiveTransferService.email)
-        .then(function(donor) {
-          donate(pgram, function() {
-            onSuccess();
-          }, function(error) {
-
+    function processCreditCardChange(giveForm, programsInput) {
+      if (giveForm.$valid) {
+        GiveTransferService.processing = true;
+        GiveTransferService.declinedCard = false;
+        donationService.createCard();
+        var pgram;
+        if (programsInput !== undefined) {
+          pgram = _.find(programsInput, { ProgramId: GiveTransferService.program.ProgramId });
+        } else {
+          pgram = GiveTransferService.program;
+        }
+        PaymentService.updateDonorWithCard(GiveTransferService.donor.id, donationService.card, GiveTransferService.email)
+          .then(function(donor) {
+            donate(pgram, function() {
+            
+            }, function(error) {
+              GiveTransferService.processing = false;
+              PaymentService.stripeErrorHandler(error);
+            });
+          },function(error) {
             GiveTransferService.processing = false;
-            onFailure();
             PaymentService.stripeErrorHandler(error);
           });
-        }, function(error) {
 
-          GiveTransferService.processing = false;
-          onFailure();
-          PaymentService.stripeErrorHandler(error);
-        });
+      } else {
+        GiveTransferService.processing = false;
+        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+      }
     }
 
     return donationService;

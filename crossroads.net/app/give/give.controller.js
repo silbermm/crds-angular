@@ -149,21 +149,21 @@
       }
     }
     
-        vm.processCreditCardChange = function (){
-          if (vm.giveForm.$valid) {
-            vm.dto.processing = true;
-            vm.dto.declinedCard = false;
-            vm.donationService.createCard();
-            var pgram = _.find(vm.programsInput, { ProgramId: vm.dto.program.ProgramId });
-            DonationService.processCreditCardChange(pgram, vm.donationService.card, function(){
-              $state.go('give.thank-you');
-            }); 
-            vm.dto.processing = false;
-          } else {
-            vm.dto.processing = false;
-            $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-          }
-        };
+        /*vm.processCreditCardChange = function (){*/
+          //if (vm.giveForm.$valid) {
+            //vm.dto.processing = true;
+            //vm.dto.declinedCard = false;
+            //vm.donationService.createCard();
+            //var pgram = _.find(vm.programsInput, { ProgramId: vm.dto.program.ProgramId });
+            //DonationService.processCreditCardChange(pgram, vm.donationService.card, function(){
+              //$state.go('give.thank-you');
+            //}); 
+            //vm.dto.processing = false;
+          //} else {
+            //vm.dto.processing = false;
+            //$rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+          //}
+        /*};*/
 
         vm.reset = function() {
           vm.bankinfoSubmitted = false;
@@ -251,7 +251,7 @@
                 vm.dto.processing = true;
                 DonationService.donate(pgram);
               } else {
-                vm.processCreditCardChange();
+                vm.donationService.processCreditCardChange(vm.giveForm, vm.programsInput);
               }
             } else if (vm.dto.view == "bank"){
               if(vm.dto.savedPayment == 'cc') {
