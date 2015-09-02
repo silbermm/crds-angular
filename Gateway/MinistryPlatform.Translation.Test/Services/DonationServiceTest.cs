@@ -429,6 +429,7 @@ namespace MinistryPlatform.Translation.Test.Services
         [Test]
         public void TestUpdateDepositToExported()
         {
+            const int selectionId = 124112312;
             const int depositId = 1245;
             const bool exported = true;
 
@@ -438,8 +439,9 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Exported", exported},
             };
             _ministryPlatformService.Setup(mocked => mocked.UpdateRecord(7070, expectedParms, It.IsAny<string>()));
+            _ministryPlatformService.Setup(mocked => mocked.RemoveSelection(selectionId, new [] {depositId}, It.IsAny<string>()));
 
-            _fixture.UpdateDepositToExported(depositId);
+            _fixture.UpdateDepositToExported(selectionId, depositId, "afasdfasdf");
             _ministryPlatformService.VerifyAll();
         }
     }

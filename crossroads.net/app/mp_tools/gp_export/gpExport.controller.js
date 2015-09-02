@@ -28,7 +28,7 @@
     vm.generateGPExportFile = function(deposit) {
       deposit.processing = true;
 
-      GPExport.File.download({depositId: deposit.id}).$promise.then(function(data) {
+      GPExport.File.download({selectionId: vm.params.selectedRecord, depositId: deposit.id}).$promise.then(function(data) {
         //trick to download store a file having its URL
         //Found on http://stackoverflow.com/questions/14215049/how-to-download-file-using-angularjs-and-calling-mvc-api
         var fileURL = URL.createObjectURL(data.response.blob);

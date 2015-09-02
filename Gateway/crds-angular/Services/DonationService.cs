@@ -109,19 +109,19 @@ namespace crds_angular.Services
             _mpDonationService.CreatePaymentProcessorEventError(stripeEvent.Created, stripeEvent.Id, stripeEvent.Type, JsonConvert.SerializeObject(stripeEvent, Formatting.Indented), JsonConvert.SerializeObject(stripeEventResponse, Formatting.Indented));
         }
 
-        public MemoryStream CreateGPExport(int depositId, string token)
+        public MemoryStream CreateGPExport(int selectionId, int depositId, string token)
         {
             var gpExport = _mpDonationService.CreateGPExport(depositId, token);
             var stream = new MemoryStream();
             CSV.Create(gpExport, GPExportDatum.Headers, stream, "\t");
-            UpdateDepositToExported(depositId);
+            UpdateDepositToExported(selectionId, depositId, token);
 
             return stream;
         }
 
-        private void UpdateDepositToExported(int depositId)
+        private void UpdateDepositToExported(int selectionId, int depositId, string token)
         {
-            _mpDonationService.UpdateDepositToExported(depositId);
+            _mpDonationService.UpdateDepositToExported(selectionId, depositId, token);
         }
 
         public List<DepositDTO> GenerateGPExportFileNames(int selectionId, string token)
