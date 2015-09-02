@@ -1,9 +1,9 @@
 USE [MinistryPlatform]
 GO
 
-declare @ToolName varchar(30) = 'GP Export'
+declare @ToolName varchar(30) = 'GP Deposit Export'
 declare @LaunchPage varchar(100) = 'http://int.crossroads.net/mptools/gpExport'
-declare @Description varchar(50) = 'Generate the GP Export tab delimited file.'
+declare @Description varchar(50) = 'Generate the GP Deposit Export tab delimited file.'
 declare @ToolId int = 367
 
 declare @PageToolAppearsOn int = 294 -- Deposit Page
@@ -25,7 +25,7 @@ BEGIN
 END
 
 /* DEVELOPMENT TOOL */
-declare @ToolNameDev varchar(30) = 'GP Export - Dev'
+declare @ToolNameDev varchar(30) = 'GP Deposit Export - Dev'
 declare @LaunchPageDev varchar(100) = 'http://localhost:8080/mptools/gpExport'
 declare @DescriptionDev varchar(50) = 'Dev to Generate the GP Export tab delimited file.'
 declare @ToolIdDev int = 368
