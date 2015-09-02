@@ -52,8 +52,8 @@
           .then(function(donor) {
             donationService.donate(pgram);
           }, PaymentService.stripeErrorHandler);
-      } else if (view === 'bank') {
-        vm.donationService.createBank();
+      } else if (GiveTransferService.view === 'bank') {
+        donationService.createBank();
         PaymentService.createDonorWithBankAcct(donationService.bank, GiveTransferService.email)
           .then(function(donor) {
             donationService.donate(pgram);
