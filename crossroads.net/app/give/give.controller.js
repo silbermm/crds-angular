@@ -35,6 +35,7 @@
     vm.initialized = false;
     vm.dto.processing = false;
     vm.onEmailFound = onEmailFound;
+    vm.onEmailNotFound = onEmailNotFound;
     vm.programsInput = programList;
     vm.showCheckClass = 'ng-hide';
     if (!vm.dto.view ){
@@ -137,39 +138,23 @@
       }, 11);
     }
 
-        // Callback from email-field on guest giver page.  This closes any
-        // growl notification left over from the onEmailFound callback.
-        vm.onEmailNotFound = function() {
-            // There isn't a way to close growl messages in code, outside of the growl
-            // directive itself.  To work around this, we'll simply trigger the "click"
-            // event on the close button, which has a close handler function.
-            var closeButton = document.querySelector("#existingEmail .close");
-            if(closeButton !== undefined) {
-                $timeout(function() {
-                    angular.element(closeButton).triggerHandler("click");
-                }, 0);
-            }
-        };
-        
-        vm.processBankAccountChange = function(){
-         if (vm.giveForm.$valid) {
-             vm.dto.processing = true;
-             vm.donationService.createBank();
-             PaymentService.updateDonorWithBankAcct(vm.dto.donor.id,vm.donationService.bank,vm.dto.email)
-             .then(function(donor) {
-               var pgram = _.find(vm.programsInput, { ProgramId: vm.dto.program.ProgramId });
-               DonationService.donate(pgram);
-             }, PaymentService.stripeErrorHandler);
-           }
-           else {
-             $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-           }
-        };
-
+    function onEmailNotFound() {
+      // There isn't a way to close growl messages in code, outside of the growl
+      // directive itself.  To work around this, we'll simply trigger the "click"
+      // event on the close button, which has a close handler function.
+      var closeButton = document.querySelector("#existingEmail .close");
+      if(closeButton !== undefined) {
+          $timeout(function() {
+              angular.element(closeButton).triggerHandler("click");
+          }, 0);
+      }
+    }
+    
         vm.processChange = function(){
           if (!Session.isActive()) {
             $state.go("give.login");
-          };
+          }
+
           vm.dto.processingChange = true;
           vm.dto.amountSubmitted = false;
           $state.go("give.amount");
@@ -290,7 +275,7 @@
                 vm.dto.processing = true;
                 DonationService.donate(pgram);
               } else {
-                vm.processBankAccountChange();
+                vm.donationService.processBankAccountChange(vm.giveForm, vm.programsInput);
               }
             };
           };

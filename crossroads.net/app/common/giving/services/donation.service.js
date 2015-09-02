@@ -13,6 +13,7 @@
       createCard: createCard,
       confirmDonation: confirmDonation,
       donate: donate,
+      processBankAccountChange: processBankAccountChange,
       processCreditCardChange: processCreditCardChange,
     };
 
@@ -86,6 +87,26 @@
               onFailure(error);
             }
           });
+    }
+
+    function processBankAccountChange(giveForm, programsInput) {
+      if (giveForm.$valid) {
+        GiveTransferService.processing = true;
+        donationService.createBank();
+        PaymentService.updateDonorWithBankAcct(GiveTransferService.donor.id,donationService.bank,GiveTransferService.email)
+         .then(function(donor) {
+           var pgram;
+           if (programsInput !== undefined) {
+             pgram = _.find(vm.programsInput, { ProgramId: GiveTransferService.program.ProgramId });
+           } else {
+             pgram = GiveTransferService.program;  
+           }
+           donationService.donate(pgram);
+        }, PaymentService.stripeErrorHandler);
+      } else {
+         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+       }
+
     }
 
     function processCreditCardChange(pgram, card, onSuccess, onFailure) {
