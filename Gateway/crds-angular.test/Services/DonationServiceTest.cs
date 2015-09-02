@@ -1,5 +1,5 @@
 ﻿using System;
-using AutoMapper;
+using System.Collections.Generic;
 using crds_angular.App_Start;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services;
@@ -92,6 +92,69 @@ namespace crds_angular.test.Services
             Assert.AreEqual(123+"", result.donation_id);
             Assert.AreEqual(456, result.amount);
             Assert.AreEqual(789, result.batch_id);
+        }
+
+        [Test]
+        public void TestGetDonationBatchByDepositDonationIdNotFound()
+        {
+            _mpDonationService.Setup(mocked => mocked.GetDonationBatchByDepositId(12424)).Returns((DonationBatch)null);
+            Assert.IsNull(_fixture.GetDonationBatchByDepositId(12424));
+            _mpDonationService.VerifyAll();
+        }
+
+        [Test]
+        public void TestGetDonationBatchByDepositId()
+        {
+            _mpDonationService.Setup(mocked => mocked.GetDonationBatchByDepositId(12424)).Returns(new DonationBatch
+            {
+                Id = 123,
+                DepositId = 12424,
+            });
+            var result = _fixture.GetDonationBatchByDepositId(12424);
+            _mpDonationService.VerifyAll();
+            Assert.IsNotNull(result);
+            Assert.AreEqual(123, result.Id);
+            Assert.AreEqual(12424, result.DepositId);
+        }
+
+        [Test]
+        public void TestGetSelectedDonationBatches()
+        {
+            _mpDonationService.Setup(mocked => mocked.GetSelectedDonationBatches(12424, "afdasfsafd")).Returns(MockDepositList);
+
+            var result = _fixture.GetSelectedDonationBatches(12424, "afdasfsafd");
+            _mpDonationService.VerifyAll();
+            Assert.IsNotNull(result);
+            Assert.AreEqual(result.Count, 2);
+            Assert.AreEqual(DateTime.Parse("2/12/2015"), result[1].DepositDateTime);
+            Assert.AreEqual(456, result[0].Id);
+        }
+
+        private List<Deposit> MockDepositList()
+        {
+            return new List<Deposit>
+            {
+                new Deposit
+                {
+                    DepositDateTime = DateTime.Parse("12/01/2010"),
+                    DepositName = "Test Deposit Name 1",
+                    Id = 456,
+                    DepositTotalAmount = Convert.ToDecimal(7829.00),
+                    BatchCount = 1,
+                    Exported = false,
+                    ProcessorTransferId = "1233"
+                },
+                new Deposit
+                {
+                    DepositDateTime = DateTime.Parse("2/12/2015"),
+                    DepositName = "Test Deposit Name 2",
+                    Id = 4557657,
+                    DepositTotalAmount = Convert.ToDecimal(4.00),
+                    BatchCount = 11,
+                    Exported = false,
+                    ProcessorTransferId = "12325523"
+                }
+            };
         }
 
         [Test]
@@ -222,5 +285,51 @@ namespace crds_angular.test.Services
             _mpDonationService.VerifyAll();
         }
 
+        [Test]
+        public void TestGPExportFileName()
+        {
+            var date = DateTime.Today;
+            var fileName = string.Format("TestBatchName_{0}{1}{2}.csv", date.ToString("MM"), date.ToString("yy"), date.ToString("dd"));
+
+            _mpDonationService.Setup(mocked => mocked.GetDonationBatchByDepositId(456)).Returns(new DonationBatch
+            {
+                Id = 123,
+                DepositId = 456,
+                ProcessorTransferId = "789",
+                BatchName = "TestBatchName",
+            });
+            var result = _fixture.GPExportFileName(456);
+
+            _mpDonationService.VerifyAll();
+            Assert.AreEqual(fileName, result);
+        }
+
+        [Test]
+        public void TestGenerateGPExportFileNames()
+        {
+            var date = DateTime.Today;
+            var fileName = string.Format("TestBatchName_{0}{1}{2}.csv", date.ToString("MM"), date.ToString("yy"), date.ToString("dd"));
+
+            _mpDonationService.Setup(mocked => mocked.GetSelectedDonationBatches(12424, "afdasfsafd")).Returns(MockDepositList);
+            _mpDonationService.Setup(mocked => mocked.GetDonationBatchByDepositId(456)).Returns(new DonationBatch
+            {
+                Id = 123,
+                DepositId = 456,
+                ProcessorTransferId = "789",
+                BatchName = "TestBatchName",
+            });
+            _mpDonationService.Setup(mocked => mocked.GetDonationBatchByDepositId(4557657)).Returns(new DonationBatch
+            {
+                Id = 1212213,
+                DepositId = 4557657,
+                ProcessorTransferId = "7846469",
+                BatchName = "TestBatchName2",
+            });
+
+            var results = _fixture.GenerateGPExportFileNames(12424, "afdasfsafd");
+
+            _mpDonationService.VerifyAll();
+            Assert.AreEqual(fileName, results[0].ExportFileName);
+        }
     }
 }

@@ -516,6 +516,11 @@
           isProtected: true
         }
       })
+      .state('tools.gpExport', {
+        url: '/gpExport',
+        controller: 'GPExportController as gpExport',
+        templateUrl: 'gp_export/gpExport.html'
+      })
       .state('content', {
         url: '{link:contentRouteType}',
         // This url will match a slash followed by anything (including additional slashes).
