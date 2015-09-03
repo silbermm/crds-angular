@@ -2,9 +2,9 @@
   'use strict';
   module.exports = SingleMediaController;
 
-  SingleMediaController.$inject = ['$rootScope', '$scope', '$sce', 'SingleMedia', 'ItemProperty', 'ParentMedia', 'ParentItemProperty', 'ImageURL', 'YT_EVENT'];
+  SingleMediaController.$inject = ['$rootScope', '$scope', '$sce', '$location', '$sanitize', 'SingleMedia', 'ItemProperty', 'ParentMedia', 'ParentItemProperty', 'ImageURL', 'YT_EVENT'];
 
-  function SingleMediaController($rootScope, $scope, $sce, SingleMedia, ItemProperty, ParentMedia, ParentItemProperty, ImageURL, YT_EVENT) {
+  function SingleMediaController($rootScope, $scope, $sce, $location, $sanitize, SingleMedia, ItemProperty, ParentMedia, ParentItemProperty, ImageURL, YT_EVENT) {
     var vm = this;
     vm.imageUrl = ImageURL;
     vm.isMessage = (ItemProperty === 'messages');
@@ -25,6 +25,8 @@
     vm.showVideoDownloadLink = showVideoDownloadLink;
     vm.showAudioDownloadLink = showAudioDownloadLink;
     vm.showProgramDownloadLink = showProgramDownloadLink;
+    vm.shareUrl = $location.absUrl();
+    vm.sanitizedDescription = $sanitize(vm.media.description);
 
     if (vm.isMessage) {
       vm.videoSectionIsOpen = true;
