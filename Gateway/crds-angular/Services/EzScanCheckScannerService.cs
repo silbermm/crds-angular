@@ -102,7 +102,7 @@ namespace crds_angular.Services
                                                                                          "check",
                                                                                          contactDonor.ProcessorId,
                                                                                          check.CheckDate ?? (check.ScanDate ?? DateTime.Now),
-                                                                                         contactDonor.RegisteredUser);
+                                                                                         contactDonor.RegisteredUser, batchDetails.Name);
 
                     check.DonationId = donationId;
 

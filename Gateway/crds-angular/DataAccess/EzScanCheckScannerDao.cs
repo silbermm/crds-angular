@@ -165,7 +165,7 @@ namespace crds_angular.DataAccess
 
                 dbCommand.Prepare();
 
-                var x = dbCommand.ExecuteScalar() as int?;
+                var x = dbCommand.ExecuteScalar() as long?;
                 if (x.HasValue && x > 0)
                 {
                     dbCommand.CommandText = "UPDATE itemsStatus SET Exported = @Exported, ErrorMessage = @ErrorMessage WHERE ItemID = @ItemID";
