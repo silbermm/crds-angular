@@ -353,20 +353,19 @@ namespace MinistryPlatform.Translation.Test.Services
         }
 
         [Test]
-        public void TestCreateGPExport()
+        public void TestGetGPExport()
         {
             const int viewId = 92198;
             const int depositId = 789;
 
             _ministryPlatformService.Setup(mock => mock.GetPageViewRecords(viewId, It.IsAny<string>(), depositId.ToString(), "", 0)).Returns(MockGPExport());
 
-            var result = _fixture.CreateGPExport(depositId, It.IsAny<string>());
+            var result = _fixture.GetGPExport(depositId, It.IsAny<string>());
             _ministryPlatformService.VerifyAll();
             Assert.IsNotNull(result);
             Assert.AreEqual(3, result.Count);
-            Assert.AreEqual(new DateTime(2015, 3, 28, 8, 30, 0).ToString("MM/dd/yyyy"), result[0].SettlementDate);
-            Assert.AreEqual("Contribution " + new DateTime(2015, 3, 28, 8, 30, 0), result[0].DistributionReference);
-            Assert.AreEqual("Processor Fees " + new DateTime(2015, 3, 28, 8, 30, 0), result[1].DistributionReference);
+            Assert.AreEqual(new DateTime(2015, 3, 28, 8, 30, 0), result[0].DepositDate);
+            Assert.AreEqual(15, result[0].ProgramId);
         }
 
         private List<Dictionary<string, object>> MockGPExport()

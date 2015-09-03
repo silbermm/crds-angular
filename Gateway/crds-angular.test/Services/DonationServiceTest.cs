@@ -331,5 +331,135 @@ namespace crds_angular.test.Services
             _mpDonationService.VerifyAll();
             Assert.AreEqual(fileName, results[0].ExportFileName);
         }
+
+        [Test]
+        public void TestGetGPExport()
+        {
+            const int depositId = 789;
+            var mockedExport = MockGPExport();
+            var expectedReturn = MockExpectedGPExportDTO();
+
+            _mpDonationService.Setup(mocked => mocked.GetGPExport(depositId, It.IsAny<string>())).Returns(mockedExport);
+
+            var result = _fixture.GetGPExport(depositId, "asdfafasdfas");
+
+            _mpDonationService.VerifyAll();
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.Count);
+            Assert.AreEqual(expectedReturn[0].DocumentType, mockedExport[0].DocumentType);
+            Assert.AreEqual(expectedReturn[0].DocumentNumber, mockedExport[0].DonationId);
+            Assert.AreEqual(expectedReturn[0].DocumentDescription, mockedExport[0].BatchName);
+            Assert.AreEqual(expectedReturn[0].BatchId, mockedExport[0].BatchName);
+            Assert.AreEqual(expectedReturn[0].ContributionDate, mockedExport[0].DonationDate.ToString("MM/dd/yyyy"));
+            Assert.AreEqual(expectedReturn[0].SettlementDate, mockedExport[0].DepositDate.ToString("MM/dd/yyyy"));
+            Assert.AreEqual(expectedReturn[0].CustomerId, mockedExport[0].CustomerId);
+            Assert.AreEqual(expectedReturn[0].ContributionAmount, mockedExport[0].DonationAmount);
+            Assert.AreEqual(expectedReturn[0].CheckbookId, mockedExport[0].CheckbookId);
+            Assert.AreEqual(expectedReturn[0].CashAccount, mockedExport[0].CashAccount);
+            Assert.AreEqual(expectedReturn[0].ReceivablesAccount, mockedExport[0].ReceivableAccount);
+            Assert.AreEqual(expectedReturn[0].DistributionAccount, mockedExport[0].DistributionAccount);
+            Assert.AreEqual(expectedReturn[0].DistributionAmount, mockedExport[0].Amount);
+            Assert.AreEqual(expectedReturn[0].DistributionReference, "Processor Fees " + mockedExport[0].DonationDate);
+            Assert.AreEqual(expectedReturn[1].DistributionReference, "Contribution " + mockedExport[1].DonationDate);
+
+            Assert.AreEqual(expectedReturn[0].DocumentType, result[0].DocumentType);
+            Assert.AreEqual(expectedReturn[0].DocumentNumber, result[0].DocumentNumber);
+            Assert.AreEqual(expectedReturn[0].DocumentDescription, result[0].DocumentDescription);
+            Assert.AreEqual(expectedReturn[0].BatchId, result[0].BatchId);
+            Assert.AreEqual(expectedReturn[0].ContributionDate, result[0].ContributionDate);
+            Assert.AreEqual(expectedReturn[0].SettlementDate, result[0].SettlementDate);
+            Assert.AreEqual(expectedReturn[0].CustomerId, result[0].CustomerId);
+            Assert.AreEqual(expectedReturn[0].ContributionAmount, result[0].ContributionAmount);
+            Assert.AreEqual(expectedReturn[0].CheckbookId, result[0].CheckbookId);
+            Assert.AreEqual(expectedReturn[0].CashAccount, result[0].CashAccount);
+            Assert.AreEqual(expectedReturn[0].ReceivablesAccount, result[0].ReceivablesAccount);
+            Assert.AreEqual(expectedReturn[0].DistributionAccount, result[0].DistributionAccount);
+            Assert.AreEqual(expectedReturn[0].DistributionAmount, result[0].DistributionAmount);
+            Assert.AreEqual(expectedReturn[0].DistributionReference, result[0].DistributionReference);
+            Assert.AreEqual(expectedReturn[1].DistributionReference, result[1].DistributionReference);
+        }
+
+        private List<GPExportDatumDTO> MockExpectedGPExportDTO()
+        {
+            return new List<GPExportDatumDTO>
+            {
+                new GPExportDatumDTO
+                {
+                    DocumentType = "SALE",
+                    DocumentNumber = 10002,
+                    DocumentDescription = "Test Batch",
+                    BatchId = "Test Batch",
+                    ContributionDate = new DateTime(2015, 3, 28, 8, 30, 0).ToString("MM/dd/yyyy"),
+                    SettlementDate = new DateTime(2015, 3, 28, 8, 30, 0).ToString("MM/dd/yyyy"),
+                    CustomerId = "CONTRIBUTI001",
+                    ContributionAmount = "200.00",
+                    CheckbookId = "PNC001",
+                    CashAccount = "91213-031-20",
+                    ReceivablesAccount = "90013-031-21",
+                    DistributionAccount = "90001-031-22",
+                    DistributionAmount = "200.00",
+                    DistributionReference = "Processor Fees " + new DateTime(2015, 3, 28, 8, 30, 0)
+                },
+                new GPExportDatumDTO
+                {
+                    DocumentType = "SALE",
+                    DocumentNumber = 10002,
+                    DocumentDescription = "Test 2 Batch",
+                    BatchId = "Test 2 Batch",
+                    ContributionDate = new DateTime(2014, 3, 28, 8, 30, 0).ToString("MM/dd/yyyy"),
+                    SettlementDate = new DateTime(2014, 3, 28, 8, 30, 0).ToString("MM/dd/yyyy"),
+                    CustomerId = "CONTRIBUTI001",
+                    ContributionAmount = "20.00",
+                    CheckbookId = "PNC001",
+                    CashAccount = "91213-031-20",
+                    ReceivablesAccount = "90013-031-21",
+                    DistributionAccount = "90001-031-22",
+                    DistributionAmount = "20.00",
+                    DistributionReference = "Contribution " + new DateTime(2014, 3, 28, 8, 30, 0)
+                }
+            };
+        }
+
+        private List<GPExportDatum> MockGPExport()
+        {
+            return new List<GPExportDatum>
+            {
+                new GPExportDatum
+                {
+                    DocumentType = "SALE",
+                    DonationId = 10002,
+                    BatchName = "Test Batch",
+                    DonationDate = new DateTime(2015, 3, 28, 8, 30, 0),
+                    DepositDate = new DateTime(2015, 3, 28, 8, 30, 0),
+                    CustomerId = "CONTRIBUTI001",
+                    DonationAmount = "200.00",
+                    CheckbookId = "PNC001",
+                    CashAccount = "91213-031-20",
+                    ReceivableAccount = "90013-031-21",
+                    DistributionAccount = "90001-031-22",
+                    Amount = "200.00",
+                    ProgramId = 12,
+                    ProccessFeeProgramId = 12,
+                },
+                new GPExportDatum
+                {
+                    DocumentType = "SALE",
+                    DonationId = 10002,
+                    BatchName = "Test Batch",
+                    DonationDate = new DateTime(2014, 3, 28, 8, 30, 0),
+                    DepositDate = new DateTime(2014, 3, 28, 8, 30, 0),
+                    CustomerId = "CONTRIBUTI001",
+                    DonationAmount = "20.00",
+                    CheckbookId = "PNC001",
+                    CashAccount = "91213-031-20",
+                    ReceivableAccount = "90013-031-21",
+                    DistributionAccount = "90001-031-22",
+                    Amount = "20.00",
+                    ProgramId = 112,
+                    ProccessFeeProgramId = 12,
+                }
+            };
+        }
     }
 }

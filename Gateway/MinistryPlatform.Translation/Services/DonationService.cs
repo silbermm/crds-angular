@@ -341,31 +341,29 @@ namespace MinistryPlatform.Translation.Services
             return trips;
         }
 
-        public List<GPExportDatum> CreateGPExport(int depositId, string token)
+        public List<GPExportDatum> GetGPExport(int depositId, string token)
         {
             var results = _ministryPlatformService.GetPageViewRecords(_gpExportPageView, token, depositId.ToString());
             var gpExport = new List<GPExportDatum>();
 
             foreach (var result in results)
             {
-                var processingFee = result.ToInt("Program ID") == _processingProgramId;
-
                 var gp = new GPExportDatum
                 {
+                    ProccessFeeProgramId = _processingProgramId,
+                    ProgramId = result.ToInt("Program ID"),
                     DocumentType = result.ToString("Document Type"),
-                    DocumentNumber = result.ToInt("Donation ID"),
-                    DocumentDescription = result.ToString("Batch Name"),
-                    BatchId = result.ToString("Batch Name"),
-                    ContributionDate = result.ToDate("Donation Date").ToString("MM/dd/yyyy"),
-                    SettlementDate = result.ToDate("Deposit Date").ToString("MM/dd/yyyy"),
+                    DonationId = result.ToInt("Donation ID"),
+                    BatchName = result.ToString("Batch Name"),
+                    DonationDate = result.ToDate("Donation Date"),
+                    DepositDate = result.ToDate("Deposit Date"),
                     CustomerId = result.ToString("Customer ID"),
-                    ContributionAmount = result.ToString("Donation Amount"),
+                    DonationAmount = result.ToString("Donation Amount"),
                     CheckbookId = result.ToString("Checkbook ID"),
                     CashAccount = result.ToString("Cash Account"),
-                    ReceivablesAccount = result.ToString("Receivable Account"),
+                    ReceivableAccount = result.ToString("Receivable Account"),
                     DistributionAccount = result.ToString("Distribution Account"),
-                    DistributionAmount = result.ToString("Amount"),
-                    DistributionReference = processingFee ? "Processor Fees " + result.ToDate("Donation Date") : "Contribution " + result.ToDate("Donation Date")                    
+                    Amount = result.ToString("Amount"),
                 };
 
                 gpExport.Add(gp);

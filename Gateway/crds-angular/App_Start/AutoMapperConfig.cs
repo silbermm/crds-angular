@@ -75,13 +75,24 @@ namespace crds_angular.App_Start
             Mapper.CreateMap<Deposit, DepositDTO>();
 
             Mapper.CreateMap<Dictionary<string, object>, Deposit>()
-                .ForMember(dest => dest.DepositDateTime, opts => opts.MapFrom(src => src.ToString("Deposit_Date")))
+                .ForMember(dest => dest.DepositDateTime, opts => opts.MapFrom(src => src.ToDate("Deposit_Date", false)))
                 .ForMember(dest => dest.DepositName, opts => opts.MapFrom(src => src.ToString("Deposit_Name")))
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.ToString("Deposit_ID")))
                 .ForMember(dest => dest.DepositTotalAmount, opts => opts.MapFrom(src => src.ToString("Deposit_Total")))
                 .ForMember(dest => dest.BatchCount, opts => opts.MapFrom(src => src.ToString("Batch_Count")))
                 .ForMember(dest => dest.Exported, opts => opts.MapFrom(src => src.ToString("Exported")))
                 .ForMember(dest => dest.ProcessorTransferId, opts => opts.MapFrom(src => src.ToString("Processor_Transfer_ID")));
+
+            Mapper.CreateMap<GPExportDatum, GPExportDatumDTO>()
+                .ForMember(dest => dest.DocumentNumber, opts => opts.MapFrom(src => src.DonationId))
+                .ForMember(dest => dest.DocumentDescription, opts => opts.MapFrom(src => src.BatchName))
+                .ForMember(dest => dest.BatchId, opts => opts.MapFrom(src => src.BatchName))
+                .ForMember(dest => dest.ContributionDate, opts => opts.MapFrom(src => src.DonationDate.ToString("MM/dd/yyyy")))
+                .ForMember(dest => dest.SettlementDate, opts => opts.MapFrom(src => src.DepositDate.ToString("MM/dd/yyyy")))
+                .ForMember(dest => dest.ContributionAmount, opts => opts.MapFrom(src => src.DonationAmount))
+                .ForMember(dest => dest.ReceivablesAccount, opts => opts.MapFrom(src => src.ReceivableAccount))
+                .ForMember(dest => dest.DistributionAmount, opts => opts.MapFrom(src => src.Amount))
+                .ForMember(dest => dest.DistributionReference, opts => opts.MapFrom(src => (src.ProccessFeeProgramId == src.ProgramId ? "Processor Fees " + src.DonationDate : "Contribution " + src.DonationDate  )));
         }
     }
 }
