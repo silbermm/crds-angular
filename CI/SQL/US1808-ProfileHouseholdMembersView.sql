@@ -1,6 +1,8 @@
 USE [MinistryPlatform]
 GO
 
+IF NOT EXISTS (SELECT * FROM [dbo].[dp_Sub_Page_Views] WHERE [Sub_Page_View_ID] = 102)
+BEGIN
 SET IDENTITY_INSERT [dbo].[dp_Sub_Page_Views] ON
 INSERT INTO [dbo].[dp_Sub_Page_Views]
            ([Sub_Page_View_ID]
@@ -18,4 +20,5 @@ INSERT INTO [dbo].[dp_Sub_Page_Views]
 		   , Household_Position_ID_Table.[Household_Position], Contacts.[Date_of_Birth], Contacts.[__Age]'
            ,'(1=1)')
 SET IDENTITY_INSERT [dbo].[dp_Sub_Page_Views] OFF
+END
 GO
