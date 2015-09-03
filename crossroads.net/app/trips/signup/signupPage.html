@@ -3,55 +3,61 @@
     <h1 class="page-header">{{tripsSignup.pageTitle}} Signup</h1>
     <h2 class="subheading">{{tripsSignup.tripName}}</h2>
 
-    <div ng-show='tripsSignup.ageLimitReached()'>
-      <span ng-bind-html='$root.MESSAGES.TripAgeLimitReached.content | html'></span> 
+    <preloader full-screen='true' ng-show="!tripsSignup.viewReady"> </preloader>
+
+    <div ng-show='tripsSignup.ageLimitReached && tripsSignup.viewReady && !tripsSignup.registrationNotOpen'>
+      <span ng-bind-html='$root.MESSAGES.TripAgeLimitReached.content | html'></span>
     </div>
-    
-    <div ng-show='!tripsSignup.ageLimitReached()'> <!-- Content if there is no Age Error -->
+
+    <div ng-show='tripsSignup.registrationNotOpen && tripsSignup.viewReady'>
+      <span ng-bind-html='$root.MESSAGES.TripRegistrationNotOpen.content | html'></span>
+    </div>
+
+    <div ng-show='!tripsSignup.pageHasErrors && tripsSignup.viewReady'> <!-- Content if there is no Page Error -->
 
       <signup-progress total-steps='tripsSignup.numberOfPages' current-step='tripsSignup.currentPage'> </signup-progress>
-      
-      <signup-page-1 current-page='tripsSignup.currentPage' 
-          number-of-pages='tripsSignup.numberOfPages' 
-          page-title='tripsSignup.pageTitle' 
-          ng-if='tripsSignup.currentPage == 1'> 
-      </signup-page-1> 
-      <signup-page-2 
-        current-page='tripsSignup.currentPage' 
-        number-of-pages='tripsSignup.numberOfPages' 
-        page-title='tripsSignup.pageTitle' 
-        ng-if='tripsSignup.currentPage == 2'> 
-      </signup-page-2> 
-      <signup-page-3 
-        current-page='tripsSignup.currentPage' 
-        number-of-pages='tripsSignup.numberOfPages' 
-        page-title='tripsSignup.pageTitle' 
-        ng-if='tripsSignup.currentPage == 3'> 
-      </signup-page-3> 
-      <signup-page-4 
-        current-page='tripsSignup.currentPage' 
-        number-of-pages='tripsSignup.numberOfPages' 
-        page-title='tripsSignup.pageTitle' 
-        ng-if='tripsSignup.currentPage == 4'> 
-      </signup-page-4> 
-      <signup-page-5 
-        current-page='tripsSignup.currentPage' 
-        number-of-pages='tripsSignup.numberOfPages' 
-        page-title='tripsSignup.pageTitle' 
+
+      <signup-page-1 current-page='tripsSignup.currentPage'
+          number-of-pages='tripsSignup.numberOfPages'
+          page-title='tripsSignup.pageTitle'
+          ng-if='tripsSignup.currentPage == 1'>
+      </signup-page-1>
+      <signup-page-2
+        current-page='tripsSignup.currentPage'
+        number-of-pages='tripsSignup.numberOfPages'
+        page-title='tripsSignup.pageTitle'
+        ng-if='tripsSignup.currentPage == 2'>
+      </signup-page-2>
+      <signup-page-3
+        current-page='tripsSignup.currentPage'
+        number-of-pages='tripsSignup.numberOfPages'
+        page-title='tripsSignup.pageTitle'
+        ng-if='tripsSignup.currentPage == 3'>
+      </signup-page-3>
+      <signup-page-4
+        current-page='tripsSignup.currentPage'
+        number-of-pages='tripsSignup.numberOfPages'
+        page-title='tripsSignup.pageTitle'
+        ng-if='tripsSignup.currentPage == 4'>
+      </signup-page-4>
+      <signup-page-5
+        current-page='tripsSignup.currentPage'
+        number-of-pages='tripsSignup.numberOfPages'
+        page-title='tripsSignup.pageTitle'
         work-teams='tripsSignup.workTeams'
-        ng-if='tripsSignup.currentPage == 5'> 
-      </signup-page-5> 
-      <signup-page-6 
-        current-page='tripsSignup.currentPage' 
-        number-of-pages='tripsSignup.numberOfPages' 
-        page-title='tripsSignup.pageTitle' 
-        ng-if='tripsSignup.currentPage == 6'> 
-      </signup-page-6> 
-      <thank-you-page 
-        current-page='tripsSignup.currentPage' 
-        number-of-pages='tripsSignup.numberOfPages' 
-        page-title='tripsSignup.pageTitle' 
-        ng-if="tripsSignup.currentPage == 'thanks'"> 
-      </thank-you-page> 
+        ng-if='tripsSignup.currentPage == 5'>
+      </signup-page-5>
+      <signup-page-6
+        current-page='tripsSignup.currentPage'
+        number-of-pages='tripsSignup.numberOfPages'
+        page-title='tripsSignup.pageTitle'
+        ng-if='tripsSignup.currentPage == 6'>
+      </signup-page-6>
+      <thank-you-page
+        current-page='tripsSignup.currentPage'
+        number-of-pages='tripsSignup.numberOfPages'
+        page-title='tripsSignup.pageTitle'
+        ng-if="tripsSignup.currentPage == 'thanks'">
+      </thank-you-page>
     </div>
 </div><!--/row-->

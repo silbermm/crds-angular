@@ -13,7 +13,8 @@ require('../lib/select.css');
    'crossroads.profile',
    'crossroads.mptools',
    'crossroads.give',
-   'crossroads.trips'
+   'crossroads.trips',
+   'crossroads.media'
    ]);
 
   angular.module(MODULE).config(require('./routes'));
@@ -27,7 +28,6 @@ require('../lib/select.css');
   require('./styleguide');
   require('./thedaily');
   require('./gotrips');
-  require('./media');
   require('./myprofile');
   require('./community_groups_signup/group_signup_form.html');
   require('./my_serve');

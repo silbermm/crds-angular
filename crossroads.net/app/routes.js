@@ -101,6 +101,24 @@
           }
         }
       })
+      .state('forgotPassword', {
+        parent: 'noSideBar',
+        url: '/forgot-password',
+        templateUrl: 'login/forgot_password.html',
+        controller: 'LoginCtrl',
+        data: {
+          isProtected: false
+        }
+      })
+      .state('resetPassword', {
+        parent: 'noSideBar',
+        url: '/reset-password',
+        templateUrl: 'login/reset_password.html',
+        controller: 'LoginCtrl',
+        data: {
+          isProtected: false
+        }
+      })
       .state('profile', {
         parent: 'noSideBar',
         url: '/profile',
@@ -197,6 +215,7 @@
         templateUrl: "gotrips/signup-page-confirmation.html",
         controller: 'GoTripsCtrl as gotrip'
       })
+<<<<<<< HEAD
       .state('media', {
         abstract: true,
         parent: 'noSideBar',
@@ -294,6 +313,8 @@
         controller: 'MediaController as media',
         templateUrl: 'media/media-single.html'
       })
+=======
+>>>>>>> development
       .state('blog', {
         parent: 'noSideBar',
         url: '/blog',
@@ -557,16 +578,6 @@
           }
         }
       })
-      .state('errors/404', {
-        parent: 'noSideBar',
-        url: '/errors/404',
-        templateUrl: 'errors/404.html'
-      })
-      .state('errors/500', {
-        parent: 'noSideBar',
-        url: '/errors/500',
-        templateUrl: 'errors/500.html'
-      })
       .state('corkboard', {
         url: '/corkboard/',
         resolve: {
@@ -659,6 +670,15 @@
           }
         }
       })
+      .state('tools.tripPrivateInvite', {
+        url: '/tripPrivateInvite',
+        controller: 'TripPrivateInviteController as invite',
+        templateUrl: 'trip_private_invite/invite.html',
+        resolve: {
+          MPTools: 'MPTools',
+          Trip: 'Trip'
+        }
+      })
       .state('tools.checkBatchProcessor', {
         url: '/checkBatchProcessor',
         controller: 'CheckBatchProcessor as checkBatchProcessor',
@@ -670,6 +690,11 @@
            description: ''
           }
         }
+      })
+      .state('tools.gpExport', {
+        url: '/gpExport',
+        controller: 'GPExportController as gpExport',
+        templateUrl: 'gp_export/gpExport.html'
       })
       .state('content', {
         url: '{link:contentRouteType}',
