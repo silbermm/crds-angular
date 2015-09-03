@@ -102,6 +102,10 @@ namespace crds_angular.Services
         public TripCampaignDto GetTripCampaign(int pledgeCampaignId)
         {
             var campaign = _campaignService.GetPledgeCampaign(pledgeCampaignId);
+            if (campaign == null)
+            {
+                return null;
+            }
             return new TripCampaignDto()
             {
                 Id = campaign.Id,
