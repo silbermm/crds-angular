@@ -72,7 +72,7 @@
         }
       })
       .state('register', {
-        parent: 'noSideBar',
+        parent: 'noSideBar', 
         url: '/register',
         templateUrl: 'register/register_form.html',
         controller: 'RegisterCtrl'
