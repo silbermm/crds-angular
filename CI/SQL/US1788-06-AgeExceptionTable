@@ -1,7 +1,6 @@
 USE [MinistryPlatform]
 GO
 
-/****** Object:  Table [dbo].[cr_Campaign_Age_Exception]    Script Date: 8/28/2015 11:16:29 AM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -18,7 +17,7 @@ CREATE TABLE [dbo].[cr_Campaign_Age_Exception](
 	[Pledge_Campaign_ID] [int] NOT NULL,
 	[Contact_ID] [int] NOT NULL,
 	[Domain_ID] [int] NOT NULL DEFAULT ((1))
- CONSTRAINT [PK_cr_Campaign_Age_Exception] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_cr_Campaign_Age_Exception] PRIMARY KEY CLUSTERED
 (
 	[Age_Exception_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
