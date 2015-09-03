@@ -45,7 +45,11 @@
       vm.batches = vm.showClosedBatches ? vm.allBatches : vm.openBatches;
     }
 
-    vm.processBatch = function() {
+    vm.processBatch = function(target) {
+      if(target.checkBatchProcessorForm.$invalid) {
+        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+        return;
+      }
       vm.processing = true;
 
       CheckScannerBatches.checks.query({'batchName': vm.batch.name}).$promise.then(function(data) {

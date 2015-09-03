@@ -190,7 +190,7 @@ describe('Check Batch Processor Tool', function() {
 
         controller.batch = openBatchList[1];
         controller.program = programList[1];
-        controller.processBatch();
+        controller.processBatch({checkBatchProcessorForm: {$invalid: false}});
 
         expect(controller.processing).toBe(true);
         $httpBackend.flush();
@@ -203,12 +203,24 @@ describe('Check Batch Processor Tool', function() {
         expect(controller.checkCounts.notExported).toBe(1);
       });
 
-      it('should successfully submit the selected Batch with the selected Program', function(){
+      it('should not allow submit when the form is invalid', function(){
+        controller.batch = openBatchList[1];
+        controller.program = programList[1];
+        controller.processBatch({checkBatchProcessorForm: {$invalid: true}});
+
+        expect(controller.processing).toBe(false);
+        $httpBackend.verifyNoOutstandingRequest();
+        expect(controller.success).not.toBeDefined();
+        expect(controller.error).not.toBeDefined();
+        expect(controller.processing).toBe(false);
+      });
+
+      it('should report error when error is returned from the submit', function(){
         $httpBackend.expectPOST( window.__env__['CRDS_API_ENDPOINT'] + 'api/checkscanner/batches', postData).respond(500, '');
 
         controller.batch = openBatchList[1];
         controller.program = programList[1];
-        controller.processBatch();
+        controller.processBatch({checkBatchProcessorForm: {$invalid: false}});
 
         expect(controller.processing).toBe(true);
         $httpBackend.flush();
