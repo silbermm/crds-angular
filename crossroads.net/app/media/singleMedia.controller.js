@@ -31,6 +31,11 @@
       vm.audio = vm.media.audio;
       vm.video = vm.media.video;
       vm.programDownloadLink = _.get(vm.media, 'program.filename');
+
+      if (vm.media.speakers) {
+        debugger;
+      }
+
     } else {
       if (vm.media.className === 'Music') {
         vm.audio = vm.media;
@@ -42,6 +47,8 @@
         vm.videoSectionIsOpen = true;
       }
     }
+
+    debugger;
 
     if (vm.video) {
       // if the video url is bound directly in the iframe at some point, it will need to be marked as
