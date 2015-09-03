@@ -5,7 +5,7 @@
 
     <preloader full-screen='true' ng-show="!tripsSignup.viewReady"> </preloader>
 
-    <div ng-show='tripsSignup.ageLimitReached && tripsSignup.viewReady'>
+    <div ng-show='tripsSignup.ageLimitReached && tripsSignup.viewReady && !tripsSignup.registrationNotOpen'>
       <span ng-bind-html='$root.MESSAGES.TripAgeLimitReached.content | html'></span>
     </div>
 
