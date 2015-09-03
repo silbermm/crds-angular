@@ -118,84 +118,63 @@
           }, 0);
       }
     }
-    
-/*        vm.submitBankInfo = function() {*/
-          //vm.dto.bankinfoSubmitted = true;
-          //if (vm.giveForm.accountForm.$valid) {
-            //vm.dto.processing = true;
-            //PaymentService.getDonor(vm.giveForm.email)
-            //.then(function(donor){
-                //vm.donationService.updateDonorAndDonate(donor.id, vm.programsInput);
-            //},
-            //function(error){
-              //vm.donationService.createDonorAndDonate(vm.programsInput);
-            //});
-          //} else {
-            //$rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+
+    //vm.submitChangedBankInfo = function() {
+          //if (!Session.isActive()) {
+             //$state.go("give.login");
           //}
+          //vm.dto.bankinfoSubmitted = true;
+          //vm.dto.amountSubmitted = true;
+          //if(vm.dto.amount === "") {
+           //$rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+          //} else {
+            //if (vm.dto.view == "cc") {
+              //if(vm.dto.savedPayment == 'bank') {
+                //vm.giveForm.creditCardForm.$setDirty();
+              //}
+              //if (!vm.giveForm.creditCardForm.$dirty){
+                //var pgram = _.find(vm.programsInput, { ProgramId: vm.dto.program.ProgramId });
+                //vm.dto.processing = true;
+                //DonationService.donate(pgram);
+              //} else {
+                //vm.donationService.processCreditCardChange(vm.giveForm, vm.programsInput);
+              //}
+            //} else if (vm.dto.view == "bank"){
+              //if(vm.dto.savedPayment == 'cc') {
+                //vm.giveForm.bankAccountForm.$setDirty();
+              //}
+              //if(!vm.giveForm.bankAccountForm.$dirty) {
+                //var pgram = _.find(vm.programsInput, { ProgramId: vm.dto.program.ProgramId });
+                //vm.dto.processing = true;
+                //DonationService.donate(pgram);
+              //} else {
+                //vm.donationService.processBankAccountChange(vm.giveForm, vm.programsInput);
+              //}
+            //};
+          //};
         //};
-
-        vm.submitChangedBankInfo = function() {
-          if (!Session.isActive()) {
-             $state.go("give.login");
-          }
-          vm.dto.bankinfoSubmitted = true;
-          vm.dto.amountSubmitted = true;
-          if(vm.dto.amount === "") {
-           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-          } else {
-            if (vm.dto.view == "cc") {
-              if(vm.dto.savedPayment == 'bank') {
-                vm.giveForm.creditCardForm.$setDirty();
-              }
-              if (!vm.giveForm.creditCardForm.$dirty){
-                var pgram = _.find(vm.programsInput, { ProgramId: vm.dto.program.ProgramId });
-                vm.dto.processing = true;
-                DonationService.donate(pgram);
-              } else {
-                vm.donationService.processCreditCardChange(vm.giveForm, vm.programsInput);
-              }
-            } else if (vm.dto.view == "bank"){
-              if(vm.dto.savedPayment == 'cc') {
-                vm.giveForm.bankAccountForm.$setDirty();
-              }
-              if(!vm.giveForm.bankAccountForm.$dirty) {
-                var pgram = _.find(vm.programsInput, { ProgramId: vm.dto.program.ProgramId });
-                vm.dto.processing = true;
-                DonationService.donate(pgram);
-              } else {
-                vm.donationService.processBankAccountChange(vm.giveForm, vm.programsInput);
-              }
-            };
-          };
-        };
-
-      vm.transitionForLoggedInUserBasedOnExistingDonor = function(event, toState){
-        if(toState.name == "give.account" && Session.isActive() && !vm.dto.donorError ) {
+//
+    vm.transitionForLoggedInUserBasedOnExistingDonor = function(event, toState){
+        if(toState.name === GiveFlow.account && Session.isActive() && vm.dto.donorError ) {
           vm.dto.processing = true;
           event.preventDefault();
-          PaymentService.getDonor(vm.giveForm.email)
+          PaymentService.getDonor(vm.dto.email)
           .then(function(donor){
             vm.dto.donor = donor;
-            vm.dto.email = vm.dto.donor.email;
             if (vm.dto.donor.default_source.credit_card.last4 != null){
               vm.dto.last4 = vm.dto.donor.default_source.credit_card.last4;
               vm.dto.brand = CC_BRAND_CODES[vm.dto.donor.default_source.credit_card.brand];
-              vm.expYear =  vm.dto.donor.exp_year;
-              vm.exp_month = vm.dto.donor.exp_month;
             } else {
-              vm.routing = vm.dto.donor.default_source.bank_account.routing;
-              vm.account = vm.dto.donor.default_source.bank_account.last4
               vm.dto.last4 = vm.dto.donor.default_source.bank_account.last4;
               vm.dto.brand = '#library';
             };
-            $state.go("give.confirm");
+            $state.go(GiveFlow.confirm);
           },function(error){
             // Go forward to account info if it was a 404 "not found" error,
             // the donor service returns a 404 when a donor doesn't exist
             if(error && error.httpStatusCode == 404) {
               vm.dto.donorError = true;
-              $state.go("give.account");
+              $state.go(GiveFlow.account);
             } else {
               PaymentService.stripeErrorHandler(error);
             }

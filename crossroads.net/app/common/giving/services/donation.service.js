@@ -18,6 +18,7 @@
       processChange: processChange,
       processCreditCardChange: processCreditCardChange,
       submitBankInfo: submitBankInfo,
+      submitChangedBankInfo: submitChangedBankInfo,
       updateDonorAndDonate: updateDonorAndDonate,
     };
 
@@ -188,6 +189,46 @@
           });
       } else {
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+      }
+    }
+
+    function submitChangedBankInfo(giveForm, programsInput) {
+
+      var pgram = (programsInput !== undefined) ?  
+        _.find(programsInput, { ProgramId: GiveTransferService.program.ProgramId }) :
+        GiveTransferService.program;
+
+      if (!Session.isActive()) {
+        $state.go(GiveFlow.login);
+      }
+      
+      GiveTransferService.bankinfoSubmitted = true;
+      GiveTransferService.amountSubmitted = true;
+
+      if(GiveTransferService.amount === '') {
+        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+      } else {
+        if (GiveTransferService.view === 'cc') {
+          if(GiveTransferService.savedPayment === 'bank') {
+            giveForm.creditCardForm.$setDirty();
+          }
+          if (!giveForm.creditCardForm.$dirty) {
+            GiveTransferService.processing = true;
+            donationService.donate(pgram);
+          } else {
+            donationService.processCreditCardChange(giveForm, programsInput);
+          }
+        } else if (GiveTransferService.view === 'bank'){
+          if(GiveTransferService.savedPayment === 'cc') {
+            giveForm.bankAccountForm.$setDirty();
+          }
+          if(!giveForm.bankAccountForm.$dirty) {
+            GiveTransferService.processing = true;
+            donationService.donate(pgram);
+          } else {
+            donationService.processBankAccountChange(giveForm, programsInput);
+          }
+        }
       }
     }
 

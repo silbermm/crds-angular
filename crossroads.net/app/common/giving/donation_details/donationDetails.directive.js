@@ -22,7 +22,6 @@
     function link(scope, element, attrs) {
 
       scope.ministryShow = false;
-      scope.program = null;
       scope.amountError = amountError;
       scope.setProgramList = setProgramList;
 
