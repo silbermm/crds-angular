@@ -20,6 +20,12 @@
               url: '/tripgiving/'
             }).$promise;
           }
+        },
+        data: {
+          meta: {
+           title: 'Trip Search',
+           description: ''
+          }
         }
       })
       .state('tripgiving', {
@@ -34,6 +40,12 @@
             return Trip.TripParticipant.get({
               tripParticipantId: $stateParams.eventParticipantId
             }).$promise;
+          }
+        },
+        data: {
+          meta: {
+           title: 'Trip Giving',
+           description: ''
           }
         }
       })
@@ -66,7 +78,11 @@
         controller: 'MyTripsController as tripsController',
         templateUrl: 'mytrips/mytrips.html',
         data: {
-          isProtected: true
+          isProtected: true,
+          meta: {
+           title: 'My Trips',
+           description: ''
+          }
         },
         resolve: {
           loggedin: crds_utilities.checkLoggedin,
@@ -86,6 +102,10 @@
         controller: 'TripsSignupController as tripsSignup',
         data: {
           isProtected: true,
+          meta: {
+           title: 'Trip Signup',
+           description: ''
+          }
         },
         resolve: {
           loggedin: crds_utilities.checkLoggedin,
