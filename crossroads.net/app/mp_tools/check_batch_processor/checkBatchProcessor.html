@@ -11,7 +11,13 @@
     <strong>{{checkBatchProcessor.batch.name}}</strong> was successfully submitted.
   </div>
 
-  <div class="form-group">
+  <div class="row" ng-if="checkBatchProcessorForm.$submitted && checkBatchProcessor.success">
+    <div class="col-xs-6 col-sm-6 col-md-6">
+      <h3>Batch Information</h3>
+    </div>
+  </div>
+
+  <div class="form-group" ng-if="!checkBatchProcessorForm.$submitted || checkBatchProcessor.error">
     <div class="row">
       <div class="col-xs-6 col-sm-6 col-md-6">
         <h3> To import donation batches from EZ Scan to Ministry Platform: </h3>
@@ -45,13 +51,12 @@
               </div>
             </ui-select-choices>
           </ui-select>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-xs-6 col-sm-6 col-md-6">
-          <input type="checkbox" ng-model="checkBatchProcessor.showClosedBatches" id="showClosedBatches" ng-change="checkBatchProcessor.filterBatches()" />
-          <label for="showClosedBatches">Include Exported Batches</label>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" ng-model="checkBatchProcessor.showClosedBatches" id="showClosedBatches" ng-change="checkBatchProcessor.filterBatches()" />
+              Include Exported Batches
+            </label>
+          </div>
         </div>
       </div>
 

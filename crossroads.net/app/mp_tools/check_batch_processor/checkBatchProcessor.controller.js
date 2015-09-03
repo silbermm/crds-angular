@@ -11,6 +11,7 @@
     vm.allBatches = [];
     vm.batch = {};
     vm.batches = [];
+    vm.checkCounts = {};
     vm.openBatches = [];
     vm.programs = [];
     vm.program = {};
@@ -22,11 +23,11 @@
     //////////////////////
 
     function activate() {
-      CheckScannerBatches.query({'onlyOpen': false}, function(data) {
+      CheckScannerBatches.batches.query({'onlyOpen': false}, function(data) {
         vm.allBatches = data;
       });
 
-      CheckScannerBatches.query(function(data) {
+      CheckScannerBatches.batches.query(function(data) {
         vm.openBatches = data;
         vm.batches = vm.openBatches;
       });
@@ -47,14 +48,26 @@
     vm.processBatch = function() {
       vm.processing = true;
 
-      CheckScannerBatches.save({name: vm.batch.name, programId: vm.program.ProgramId}).$promise.then(function(){
+      CheckScannerBatches.checks.query({'batchName': batchName}).$promise.then(function(data) {
+        var counts = _.countBy(data, 'exported');
+        vm.checkCounts = {
+          total: data.length,
+          notExported: counts['false'],
+          exported: counts['true']
+        };
+
+        CheckScannerBatches.batches.save({name: vm.batch.name, programId: vm.program.ProgramId}).$promise.then(function(){
           vm.success = true;
           vm.error = false;
         }, function(){
           vm.success = false;
           vm.error=true;
-      }).finally(function(){
-        vm.processing = false;
+        }).finally(function(){
+          vm.processing = false;
+        });
+      }, function() {
+        vm.success = false;
+        vm.error=true;
       });
     };
   }
