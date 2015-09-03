@@ -181,73 +181,6 @@
         templateUrl: "gotrips/signup-page-confirmation.html",
         controller: 'GoTripsCtrl as gotrip'
       })
-      .state('media', {
-        abstract: true,
-        parent: 'noSideBar',
-        url: '/media',
-        controller: 'MediaController as media',
-        template: '<ui-view/>',
-        resolve: {
-          Media: 'Media',
-          Series: function (Media) {
-            return Media.Series().get().$promise;
-          },
-          Musics: function (Media) {
-            return Media.Musics().get().$promise;
-          },
-          Videos: function (Media) {
-            return Media.Videos().get().$promise;
-          }
-        }
-      })
-      .state('media.all', {
-        url: '',
-        templateUrl: 'media/viewAll.html',
-      })
-      .state('media.music', {
-        url: '/music',
-        templateUrl: 'media/viewAllMusic.html'
-      })
-      .state('media.series', {
-        url: '/series',
-        templateUrl: 'media/viewAllSeries.html'
-      })
-      .state('media.videos', {
-        url: '/videos',
-        templateUrl: 'media/viewAllVideos.html'
-      })
-      .state('media.seriesSingle', {
-        url: '/series/single/:title',
-        controller: 'SeriesController as series',
-        templateUrl: 'media/seriesSingle.html',
-          resolve: {
-            Media: 'Media',
-            $stateParams: '$stateParams',
-            Messages: function (Media, Series, $stateParams) {
-              var series = getSeriesByTitle(Series.series, $stateParams.title)
-              var item = Media.Messages().get({ seriesId: series.id }).$promise;
-              return item;
-
-              function getSeriesByTitle(series, seriesTitle) {
-                return _.find(series, function(obj) {
-                  return (obj.title === seriesTitle);
-                });
-              };
-            }
-          }
-      })
-      .state('media-series-single-lo-res', {
-        parent: 'noSideBar',
-        url: '/media/series/single/lores',
-        controller: 'MediaController as media',
-        templateUrl: 'media/series-single-lo-res.html'
-      })
-      .state('media-single', {
-        parent: 'screenWidth',
-        url: '/media/single',
-        controller: 'MediaController as media',
-        templateUrl: 'media/media-single.html'
-      })
       .state('blog', {
         parent: 'noSideBar',
         url: '/blog',
@@ -495,16 +428,6 @@
           }
         }
       })
-      .state('errors/404', {
-        parent: 'noSideBar',
-        url: '/errors/404',
-        templateUrl: 'errors/404.html'
-      })
-      .state('errors/500', {
-        parent: 'noSideBar',
-        url: '/errors/500',
-        templateUrl: 'errors/500.html'
-      })
       .state('corkboard', {
         url: '/corkboard/',
         resolve: {
@@ -585,6 +508,15 @@
           }
         }
       })
+      .state('tools.tripPrivateInvite', {
+        url: '/tripPrivateInvite',
+        controller: 'TripPrivateInviteController as invite',
+        templateUrl: 'trip_private_invite/invite.html',
+        resolve: {
+          MPTools: 'MPTools',
+          Trip: 'Trip'
+        }
+      })
       .state('tools.checkBatchProcessor', {
         url: '/checkBatchProcessor',
         controller: 'CheckBatchProcessor as checkBatchProcessor',
@@ -592,6 +524,11 @@
         data: {
           isProtected: true
         }
+      })
+      .state('tools.gpExport', {
+        url: '/gpExport',
+        controller: 'GPExportController as gpExport',
+        templateUrl: 'gp_export/gpExport.html'
       })
       .state('content', {
         url: '{link:contentRouteType}',

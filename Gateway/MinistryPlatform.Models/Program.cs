@@ -7,6 +7,7 @@ namespace MinistryPlatform.Models
     {
         public int ProgramId { get; set; }
         public string Name { get; set; }
-        public int CommunicationTemplateId { get; set; }
+        public int? CommunicationTemplateId { get; set; }
+        public int ProgramType { get; set; }
     }
 }

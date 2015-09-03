@@ -116,15 +116,6 @@ describe('KidsClub Adult Application Controller', function() {
     expect(controller.gradeLevelSelected()).toBe(true);
   });
 
-  it('should be false when checking if location has been selected', function(){
-    expect(controller.locationSelected()).toBe(false);
-  });
-
-  it('should be true when a location has been selected', function(){
-    controller.volunteer.availabilityFlorence = 'some value';
-    expect(controller.locationSelected()).toBe(true);
-  });
-
   it('should set the status of the datepicker to open', function(){
     controller.open('childDob1', null);
     expect(controller.datePickers['childDob1']).toBe(true);

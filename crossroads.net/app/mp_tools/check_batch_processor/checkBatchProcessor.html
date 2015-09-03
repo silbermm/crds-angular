@@ -1,4 +1,8 @@
-<div ng-init="checkBatchProcessor.activate()">
+<div ng-if="!checkBatchProcessor.allowAccess()" class="alert alert-danger" role="alert">
+  Sorry, you do not have access to run this tool.  Please contact an administrator.
+</div>
+
+<div ng-if="checkBatchProcessor.allowAccess()" ng-init="checkBatchProcessor.activate()">
   <div ng-if="checkBatchProcessor.error" class="alert alert-danger" role="alert">
     <strong>{{checkBatchProcessor.batch.name}}</strong> did not submit. Please try again.
   </div>
@@ -8,17 +12,25 @@
   </div>
 
   <div class="form-group">
+    <div class="row">
+      <div class="col-xs-6 col-sm-6 col-md-6">
+        <h3>EZ Scan Check Batch Processor</h3>
+      </div>
+    </div>
+
     <form name="checkBatchProcessorForm" ng-submit="checkBatchProcessor.processBatch()">
       <div class="row">
-        <div class="col-xs-6 col-sm-6 col-md-6">
-          <h3> Check Batch </h3>
-          <ui-select ng-model="checkBatchProcessor.batch" name="batch" required>
+        <div class="form-group col-xs-6 col-sm-6 col-md-6">
+          <label class="control-label required" for="batch">EZ Scan Batch Name</label>
+          <ui-select ng-model="checkBatchProcessor.batch" name="batch" id="batch" required>
             <ui-select-match placeholder="Click here to choose check batch...">{{$select.selected.name}}</ui-select-match>
             <ui-select-choices repeat="batch in checkBatchProcessor.batches | filter: $select.search track by batch.id">
-              <div ng-bind-html="batch.name | highlight: $select.search"></div>
-              <small>
-                Scan Date: <span ng-bind-html="''+batch.scanDate | date: 'MMM d, yyyy' | highlight: $select.search "></span>
-              </small>
+              <div ng-class="batch.status == 'exported' ? 'brand-warning' : ''">
+                <div ng-bind-html="batch.name | highlight: $select.search"></div>
+                <small>
+                  Scan Date: <span ng-bind-html="''+batch.scanDate | date: 'MMM d, yyyy' | highlight: $select.search "></span>
+                </small>
+              </div>
             </ui-select-choices>
           </ui-select>
         </div>
@@ -26,8 +38,17 @@
 
       <div class="row">
         <div class="col-xs-6 col-sm-6 col-md-6">
-          <h3> Program </h3>
-          <ui-select ng-model="checkBatchProcessor.program" name="program" required>
+          <input type="checkbox" ng-model="checkBatchProcessor.showClosedBatches" id="showClosedBatches" ng-change="checkBatchProcessor.filterBatches()" />
+          <label for="showClosedBatches">Include Exported Batches</label>
+        </div>
+      </div>
+
+      <br/>
+
+      <div class="row">
+        <div class="form-group col-xs-6 col-sm-6 col-md-6">
+          <label class="control-label" for="program">Program</label>
+          <ui-select ng-model="checkBatchProcessor.program" name="program" id="program" required>
             <ui-select-match placeholder="Click here to choose the program...">{{$select.selected.Name}}</ui-select-match>
             <ui-select-choices repeat="program in checkBatchProcessor.programs | filter: $select.search track by program.ProgramId">
               <div ng-bind-html="program.Name | highlight: $select.search"></div>
@@ -40,7 +61,7 @@
         <div class="col-xs-6 col-sm-6 col-md-6">
           <button ng-disabled="!checkBatchProcessorForm.batch.$dirty || checkBatchProcessor.processing"
                   class="btn btn-primary btn-lg btn-block-mobile give-button">
-            Submit Batch
+            Import Donations
           </button>
         </div>
       </div>

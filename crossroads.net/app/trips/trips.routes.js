@@ -3,9 +3,9 @@
 
   module.exports = TripRoutes;
 
-  TripRoutes.$inject = ['$stateProvider', '$urlMatcherFactoryProvider'];
+  TripRoutes.$inject = ['$stateProvider', '$urlMatcherFactoryProvider', '$locationProvider'];
 
-  function TripRoutes($stateProvider, $urlMatcherFactory) {
+  function TripRoutes($stateProvider, $urlMatcherFactory, $locationProvider) {
 
     $stateProvider
       .state('tripsearch', {
@@ -81,7 +81,7 @@
       })
       .state('tripsignup', {
         parent: 'noSideBar',
-        url: '/trips/:campaignId/signup',
+        url: '/trips/:campaignId/signup?invite',
         templateUrl: 'signup/signupPage.html',
         controller: 'TripsSignupController as tripsSignup',
         data: {
@@ -89,6 +89,11 @@
         },
         resolve: {
           loggedin: crds_utilities.checkLoggedin,
+          $cookies: '$cookies',
+          contactId: function($cookies) {
+            return $cookies.get('userId');
+          },
+
           Trip: 'Trip',
           $stateParams: '$stateParams',
           Campaign: function(Trip, $stateParams) {
@@ -97,10 +102,9 @@
 
           WorkTeams: function(Trip) {
             return Trip.WorkTeams.query().$promise;
-          },
-        },
-      })
-      ;
+          }
+        }
+      });
   }
 
 })();
