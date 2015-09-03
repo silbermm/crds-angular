@@ -67,6 +67,8 @@
     <Compile Include="GroupParticipant.cs" />
     <Compile Include="GroupServingParticipant.cs" />
     <Compile Include="GroupSignupRelationships.cs" />
+    <Compile Include="Household.cs" />
+    <Compile Include="HouseholdMember.cs" />
     <Compile Include="MessageTemplate.cs" />
     <Compile Include="MyContact.cs" />
     <Compile Include="ContactRelationship.cs" />

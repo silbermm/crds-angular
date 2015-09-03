@@ -67,6 +67,39 @@ namespace MinistryPlatform.Translation.Services
             return ParseProfileRecord(pageViewRecords[0]);
         }
 
+        public Household GetHouseholdById(int householdId)
+        {
+            var token = ApiLogin();
+            var recordsDict = _ministryPlatformService.GetRecordDict(_householdsPageId, householdId, token);
+            
+            var house = new Household
+            {
+                AddressLine1 = recordsDict.ToString("Address_Line_1"),
+                AddressLine2 = recordsDict.ToString("Address_Line_2"),
+                City = recordsDict.ToString("City"),
+                State = recordsDict.ToString("State"),
+                PostalCode = recordsDict.ToString("Postal_Code"),
+                HomePhone = recordsDict.ToString("Home_Phone"),
+                ForeignCountry = recordsDict.ToString("Foreign_Country"),
+                County = recordsDict.ToString("County"),
+                CongregationId = recordsDict.ToNullableInt("Congregation_ID"),
+                HouseholdId = recordsDict.ToInt("Household_ID")
+            };
+            var familyRecords = _ministryPlatformService.GetSubpageViewRecords("HouseholdMembers", house.HouseholdId, token);
+            var family = familyRecords.Select(famRec => new HouseholdMember
+            {
+                ContactId = famRec.ToInt("Contact_ID"), 
+                FirstName = famRec.ToString("First_Name"), 
+                Nickname = famRec.ToString("Nickname"), 
+                LastName = famRec.ToString("Last_Name"), 
+                DateOfBirth = famRec.ToDate("Date_Of_Birth"),
+                HouseholdPosition = famRec.ToString("Household_Position")
+            }).ToList();
+
+            house.HouseholdMembers = family;
+            return house;
+        }
+
         public MyContact GetMyProfile(string token)
         {
             var recordsDict = _ministryPlatformService.GetRecordsDict("MyProfile", token);
