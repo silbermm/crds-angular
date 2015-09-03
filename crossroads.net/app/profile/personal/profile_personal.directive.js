@@ -8,7 +8,7 @@
     $log.debug('ProfilePersonalDirective');
     return {
       restrict: 'E',
-      transclude: false,
+      transclude: true,
       bindToController: true,
       scope: {
         updatedPerson: '=',

@@ -8,7 +8,7 @@
     $log.debug('ProfileHouseholdDirective');
     return {
       restrict: 'E',
-      transclude: false,
+      transclude: true,
       // bindToController: true,
       scope: {
         householdId: '='

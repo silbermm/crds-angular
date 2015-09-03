@@ -26,7 +26,7 @@ namespace crds_angular.Controllers.API
         }
 
         [ResponseType(typeof (Household))]
-        [Route("api/profile/household")]
+        [Route("api/profile/household/{householdId}")]
         public IHttpActionResult GetHousehold(int householdId)
         {
             return Authorized(token =>

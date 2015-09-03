@@ -92,12 +92,12 @@
     };
 
     vm.serviceProviderRequired = function() {
-      if (vm.person.mobilePhone === 'undefined' ||
-      vm.person.mobilePhone === null ||
-      vm.person.mobilePhone === '' ||
-      this.form.personal['mobile-phone'].$invalid) {
-        return false;
-      }
+      // if (vm.person.mobilePhone === 'undefined' ||
+      // vm.person.mobilePhone === null ||
+      // vm.person.mobilePhone === '' ||
+      // this.form.personal['mobile-phone'].$invalid) {
+      //   return false;
+      // }
 
       return true;
     };
