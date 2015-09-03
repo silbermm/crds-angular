@@ -62,7 +62,8 @@ namespace crds_angular.Services
                 Foreign_Country = house.ForeignCountry,
                 Home_Phone = house.HomePhone,
                 Postal_Code = house.PostalCode,
-                State = house.PostalCode
+                State = house.State,
+                Household_ID = house.HouseholdId
             };
 
             foreach (var fam in house.HouseholdMembers)
@@ -112,9 +113,8 @@ namespace crds_angular.Services
             person.HouseholdId = contact.Household_ID;
             person.AddressId = contact.Address_ID;
             person.Age = contact.Age;
-            
-            return person;
 
+            return person;
         }
 
         public List<RoleDto> GetLoggedInUserRoles(string token)
@@ -167,6 +167,5 @@ namespace crds_angular.Services
 
             return skills;
         }
-
     }
 }

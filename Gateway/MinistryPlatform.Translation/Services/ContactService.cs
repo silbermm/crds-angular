@@ -82,7 +82,7 @@ namespace MinistryPlatform.Translation.Services
                 AddressLine1 = record.ToString("Address_Line_1"),
                 AddressLine2 = record.ToString("Address_Line_2"),
                 City = record.ToString("City"),
-                State = record.ToString("State"),
+                State = record.ToString("State/Region"),
                 PostalCode = record.ToString("Postal_Code"),
                 HomePhone = record.ToString("Home_Phone"),
                 ForeignCountry = record.ToString("Foreign_Country"),
@@ -97,7 +97,7 @@ namespace MinistryPlatform.Translation.Services
                 FirstName = famRec.ToString("First_Name"), 
                 Nickname = famRec.ToString("Nickname"), 
                 LastName = famRec.ToString("Last_Name"), 
-                DateOfBirth = famRec.ToDate("Date_Of_Birth"),
+                DateOfBirth = famRec.ToDate("Date_of_Birth"),
                 HouseholdPosition = famRec.ToString("Household_Position")
             }).ToList();
 

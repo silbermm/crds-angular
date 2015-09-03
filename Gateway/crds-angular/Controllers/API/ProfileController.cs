@@ -36,7 +36,7 @@ namespace crds_angular.Controllers.API
                 {
                     return Unauthorized();
                 }
-                return this.Ok();
+                return this.Ok(household);
             });
         }
         

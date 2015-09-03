@@ -7,7 +7,9 @@
     vm.ProfileReferenceData = ProfileReferenceData.getInstance();
     vm.person = {};
 
+    //default parm values
     vm.allowPasswordChange = angular.isDefined(vm.allowPasswordChange) ? vm.allowPasswordChange : 'true';
+    vm.allowSave = angular.isDefined(vm.allowSave) ? vm.allowSave : 'true';
     vm.requireMobilePhone = angular.isDefined(vm.requireMobilePhone) ? vm.requireMobilePhone : 'false';
 
     vm.passwordPrefix = 'account-page';
@@ -30,6 +32,8 @@
         vm.countries = response.countries;
         vm.crossroadsLocations = response.crossroadsLocations;
         configurePerson(response.person);
+
+        // var household =
 
         vm.viewReady = true;
       });

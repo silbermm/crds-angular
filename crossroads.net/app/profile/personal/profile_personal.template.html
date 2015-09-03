@@ -112,13 +112,13 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" ng-if="profile.person.householdId!==undefined">
       <div>profile.person.householdId:{{ profile.person.householdId }}</div>
         <profile-household household-id='profile.person.householdId'/>
     </div>
     <!--/row-->
 
-    <button id="save-personal" ng-click="savePersonal(contact)" class="btn btn-primary" data-style="expand-left">
+    <button id="save-personal" ng-if="profile.allowSave" ng-click="savePersonal(contact)" class="btn btn-primary" data-style="expand-left">
         Save
     </button>
 </form>

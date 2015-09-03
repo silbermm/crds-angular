@@ -9,12 +9,12 @@
     return {
       restrict: 'E',
       transclude: true,
-      // bindToController: true,
+      bindToController: true,
       scope: {
         householdId: '='
       },
       templateUrl: 'household/profile_household.template.html',
-      // controller: 'ProfileHouseholdController as household',
+      controller: 'ProfileHouseholdController as household',
       link: link
     };
   }

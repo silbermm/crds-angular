@@ -14,7 +14,8 @@
         updatedPerson: '=',
         modalInstance: '=',
         allowPasswordChange: '=',
-        requireMobilePhone: '='
+        requireMobilePhone: '=',
+        allowSave: '='
       },
       templateUrl: 'personal/profile_personal.template.html',
       controller: 'ProfilePersonalController as profile',
