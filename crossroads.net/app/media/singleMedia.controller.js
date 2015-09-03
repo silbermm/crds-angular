@@ -51,7 +51,7 @@
       // $sce.trustAsResourceUrl("https://www.youtube.com/embed/" + _.get(vm.media, 'serviceId'));
       vm.video.videoUrl = _.get(vm.video, 'serviceId');
       vm.videoDownloadLink = _.get(vm.video, 'source.filename');
-      $sce.trustAsResourceUrl(vm.videoUrl);
+      $sce.trustAsResourceUrl(vm.video.videoUrl);
     }
 
     if (vm.audio) {
