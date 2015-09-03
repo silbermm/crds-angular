@@ -36,7 +36,7 @@
             <input type="email" class="form-control" id="email" name="email" placeholder="Enter email address" ng-model="profile.person.emailAddress">
         </div>
 
-        <div class="form-group col-sm-6">
+        <div class="form-group col-sm-6" ng-if="profile.allowPasswordChange">
             <label for="password">Change Password</label>
             <div class="input-group">
                 <input type="password" class="form-control" id="password" name="password" ng-model="fields.password" value="testpassword" />
@@ -92,7 +92,7 @@
 
     <div class="row">
         <div class="form-group col-sm-6">
-            <label for="nickname">Mobile Phone
+            <label for="nickname" ng-class="{'required': profile.requireMobilePhone}">Mobile Phone
             </label>
             <div class="small inline bold">
                 <span ng-show="phoneToggle" class="link-styling" ng-click="phoneToggle = !phoneToggle">Don't have a mobile phone?</span>
@@ -113,7 +113,8 @@
     </div>
 
     <div class="row">
-        <profile-household householdId='{{profile.person.householdId}}'/>
+      <div>profile.person.householdId:{{ profile.person.householdId }}</div>
+        <profile-household household-id='profile.person.householdId'/>
     </div>
     <!--/row-->
 

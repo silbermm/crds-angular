@@ -2,10 +2,10 @@
 require('./profile.module');
 require('./profile.config');
 
-require('./profile.html')
+require('./profile.html');
 require('./personal/profile_personal.template.html');
 
-var app = angular.module('crossroads.profile')
+var app = angular.module('crossroads.profile');
 
 app.controller('crdsProfileCtrl', ['$rootScope','Profile', 'Lookup', '$q', '$log','$scope',  require("./profile_controller")]);
 
@@ -27,8 +27,8 @@ app.directive('profilePersonal', ["$log", require("./personal/profile_personal.d
 
 // Household
 require('./household/profile_household.template.html');
-app.controller('ProfileHouseholdController', ["$rootScope", "$log","$timeout","MESSAGES", "ProfileReferenceData", require('./household/profile_household.controller')]);
-app.directive('profileHousehold', ["$log", require("./household/profile_household.directive")]);
+app.directive('profileHousehold', ['$log', require('./household/profile_household.directive')]);
+app.controller('ProfileHouseholdController', require('./household/profile_household.controller'));
 
 // Skills
 require('./skills/profile_skills.html');

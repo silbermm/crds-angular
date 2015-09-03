@@ -1,11 +1,12 @@
-"use strict";
-(function () {
+'use strict';
+(function() {
+  module.exports = ProfileHouseholdController;
 
-	module.exports = ProfileHouseholdController;
+  ProfileHouseholdController.$inject = ['$log'];
 
-  	ProfileHouseholdController.$inject = ['Session', '$location', '$anchorScroll', 'Trip'];
+  function ProfileHouseholdController($log) {
+    var vm = this;
 
-    function ProfileHouseholdController($rootScope, $log, $timeout, MESSAGES, ProfileReferenceData) {
-        var vm = this;
-	}
-});
+    $log.debug('householdId: ' + vm.householdId);
+  }
+})();
