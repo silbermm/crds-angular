@@ -2,15 +2,16 @@
   'use strict';
   module.exports = SingleMediaController;
 
-  SingleMediaController.$inject = ['$rootScope', '$scope', '$sce', 'SingleMedia', 'ItemProperty', 'ParentMedia', 'ParentItemProperty', 'ImageURL', 'YT_EVENT'];
+  SingleMediaController.$inject = ['$rootScope', '$scope', '$sce', '$location', '$sanitize', 'SingleMedia', 'ItemProperty', 'ParentMedia', 'ParentItemProperty', 'ImageURL', 'YT_EVENT'];
 
-  function SingleMediaController($rootScope, $scope, $sce, SingleMedia, ItemProperty, ParentMedia, ParentItemProperty, ImageURL, YT_EVENT) {
+  function SingleMediaController($rootScope, $scope, $sce, $location, $sanitize, SingleMedia, ItemProperty, ParentMedia, ParentItemProperty, ImageURL, YT_EVENT) {
     var vm = this;
     vm.imageUrl = ImageURL;
     vm.isMessage = (ItemProperty === 'messages');
 
     vm.isSubscribeOpen = false;
     vm.media = SingleMedia[ItemProperty][0];
+    vm.pauseVideo = pauseVideo;
     vm.playVideo = playVideo;
     vm.setAudioPlayer = setAudioPlayer;
     vm.showSwitchToAudio = showSwitchToAudio;
@@ -25,6 +26,8 @@
     vm.showVideoDownloadLink = showVideoDownloadLink;
     vm.showAudioDownloadLink = showAudioDownloadLink;
     vm.showProgramDownloadLink = showProgramDownloadLink;
+    vm.shareUrl = $location.absUrl();
+    vm.sanitizedDescription = $sanitize(vm.media.description);
 
     if (vm.isMessage) {
       vm.videoSectionIsOpen = true;
@@ -49,7 +52,7 @@
       // $sce.trustAsResourceUrl("https://www.youtube.com/embed/" + _.get(vm.media, 'serviceId'));
       vm.video.videoUrl = _.get(vm.video, 'serviceId');
       vm.videoDownloadLink = _.get(vm.video, 'source.filename');
-      $sce.trustAsResourceUrl(vm.videoUrl);
+      $sce.trustAsResourceUrl(vm.video.videoUrl);
     }
 
     if (vm.audio) {
@@ -71,6 +74,10 @@
       stopAudioPlayer();
       stopVideo();
     });
+
+    function pauseVideo() {
+      sendControlEvent(YT_EVENT.PAUSE);
+    }
 
     function playVideo() {
       vm.videoStillIsVisible = false;
@@ -122,7 +129,7 @@
 
     function switchToAudio() {
       vm.videoSectionIsOpen = false;
-      vm.stopVideo();
+      vm.pauseVideo();
     }
 
     function switchToVideo() {
