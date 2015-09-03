@@ -3,9 +3,9 @@
 
   module.exports = DonationService;
 
-  DonationService.$inject = ['$rootScope', 'Session', 'GiveTransferService', 'PaymentService', 'GiveFlow', '$state'];
+  DonationService.$inject = ['$rootScope', 'Session', 'GiveTransferService', 'PaymentService', 'GiveFlow', '$state', 'CC_BRAND_CODES'];
 
-  function DonationService($rootScope, Session, GiveTransferService, PaymentService, GiveFlow, $state) {
+  function DonationService($rootScope, Session, GiveTransferService, PaymentService, GiveFlow, $state, CC_BRAND_CODES) {
     var donationService = {
       bank: {},
       card: {},
@@ -17,6 +17,7 @@
       processBankAccountChange: processBankAccountChange,
       processChange: processChange,
       processCreditCardChange: processCreditCardChange,
+      transitionForLoggedInUserBasedOnExistingDonor: transitionForLoggedInUserBasedOnExistingDonor,
       submitBankInfo: submitBankInfo,
       submitChangedBankInfo: submitChangedBankInfo,
       updateDonorAndDonate: updateDonorAndDonate,
@@ -104,7 +105,6 @@
             if (onSuccess !== undefined) {
               onSuccess(confirmation);
             }
-
             $state.go(GiveFlow.thankYou);
           }, function(error) {
 
@@ -176,7 +176,7 @@
       }
     }
 
-    function submitBankInfo(giveForm, programsInput) {
+   function submitBankInfo(giveForm, programsInput) {
       GiveTransferService.bankinfoSubmitted = true;
       if (giveForm.accountForm.$valid) {
         GiveTransferService.processing = true;
@@ -231,6 +231,35 @@
         }
       }
     }
+    
+    function transitionForLoggedInUserBasedOnExistingDonor(event, toState) {
+      if(toState.name === GiveFlow.account && Session.isActive() && !GiveTransferService.donorError ) {
+        GiveTransferService.processing = true;
+        event.preventDefault();
+        PaymentService.getDonor(GiveTransferService.email)
+        .then(function(donor){
+          GiveTransferService.donor = donor;
+          if (GiveTransferService.donor.default_source.credit_card.last4 != null){
+            GiveTransferService.last4 = donor.default_source.credit_card.last4;
+            GiveTransferService.brand = CC_BRAND_CODES[donor.default_source.credit_card.brand];
+          } else {
+            GiveTransferService.last4 = donor.default_source.bank_account.last4;
+            GiveTransferService.brand = '#library';
+          }
+          $state.go(GiveFlow.confirm);
+        },function(error){
+          // Go forward to account info if it was a 404 "not found" error,
+          // the donor service returns a 404 when a donor doesn't exist
+          if(error && error.httpStatusCode === 404) {
+            GiveTransferService.donorError = true;
+            $state.go(GiveFlow.account);
+          } else {
+            PaymentService.stripeErrorHandler(error);
+          }
+        });
+      }
+    } 
+
 
     function updateDonorAndDonate(donorId, programsInput) {
       // The vm.email below is only required for guest giver, however, there
@@ -246,7 +275,7 @@
         donationService.createCard();
         PaymentService.updateDonorWithCard(donorId, donationService.card, GiveTransferService.email)
           .then(function(donor) {
-            DonationService.donate(pgram);
+            donationService.donate(pgram);
           }, PaymentService.stripeErrorHandler);
       } else if (GiveTransferService.view === 'bank') {
         donationService.createBank();
@@ -254,7 +283,7 @@
           .then(function(donor) {
             donationService.donate(pgram);
           }, PaymentService.stripeErrorHandler);
-      };
+      }
     }
 
     return donationService;

@@ -12,6 +12,7 @@
 
     function initDefaultState() {
       GiveTransferService.reset();
+      GiveTransferService.processing = false;
 
       // Setup the give flow service
       GiveFlow.reset({
