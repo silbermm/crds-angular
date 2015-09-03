@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace crds_angular.Models.MP
 {
@@ -17,6 +14,6 @@ namespace crds_angular.Models.MP
         public string County { get; set; }
         public int? Congregation_ID { get; set; }
         public int Household_ID { get; set; }
-        public string Household_Position_ID { get; set; }   
+        public List<HouseholdMember> Household_Members { get; set; }
     }
 }

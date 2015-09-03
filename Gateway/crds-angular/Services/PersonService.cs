@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AutoMapper;
 using crds_angular.Models;
 using crds_angular.Models.Crossroads;
+using crds_angular.Models.MP;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models.DTO;
 using MinistryPlatform.Translation.Services;
@@ -46,6 +47,39 @@ namespace crds_angular.Services
         public List<Skill> GetLoggedInUserSkills(int contactId, string token)
         {
             return GetSkills(contactId, token);
+        }
+
+        public Household GetHousehold(int householdId)
+        {
+            var house = _contactService.GetHouseholdById(householdId);
+            var household = new Household
+            {
+                Address_Line_1 = house.AddressLine1,
+                Address_Line_2 = house.AddressLine2,
+                City = house.City,
+                Congregation_ID = house.CongregationId,
+                County = house.County,
+                Foreign_Country = house.ForeignCountry,
+                Home_Phone = house.HomePhone,
+                Postal_Code = house.PostalCode,
+                State = house.PostalCode
+            };
+
+            foreach (var fam in house.HouseholdMembers)
+            {
+                var member = new HouseholdMember
+                {
+                    Contact_ID = fam.ContactId,
+                    Date_Of_Birth = fam.DateOfBirth,
+                    First_Name = fam.FirstName,
+                    Nickname = fam.Nickname,
+                    Last_Name = fam.LastName,
+                    Household_Position = fam.HouseholdPosition
+                };
+                household.Household_Members.Add(member);
+            }
+
+            return household;
         }
 
         public Person GetPerson(int contactId)
