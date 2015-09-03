@@ -169,15 +169,23 @@ describe('Check Batch Processor Tool', function() {
 
     describe('Process Batch', function() {
       var postData;
+      var checksList;
       beforeEach(function() {
         postData = {
           name: openBatchList[1].name,
           programId: programList[1].ProgramId
         };
+
+        checksList = [
+          { id: 1, exported: true },
+          { id: 2, exported: true },
+          { id: 3, exported: false }
+        ];
+        $httpBackend.flush();
+        $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/checkscanner/batches/General194200382/checks').respond(checksList);
       });
 
       it('should successfully submit the selected Batch with the selected Program', function(){
-        $httpBackend.flush();
         $httpBackend.expectPOST( window.__env__['CRDS_API_ENDPOINT'] + 'api/checkscanner/batches', postData).respond(200, '');
 
         controller.batch = openBatchList[1];
@@ -189,10 +197,13 @@ describe('Check Batch Processor Tool', function() {
         expect(controller.success).toBe(true);
         expect(controller.error).toBe(false);
         expect(controller.processing).toBe(false);
+        expect(controller.checkCounts).toBeDefined();
+        expect(controller.checkCounts.total).toBe(3);
+        expect(controller.checkCounts.exported).toBe(2);
+        expect(controller.checkCounts.notExported).toBe(1);
       });
 
       it('should successfully submit the selected Batch with the selected Program', function(){
-        $httpBackend.flush();
         $httpBackend.expectPOST( window.__env__['CRDS_API_ENDPOINT'] + 'api/checkscanner/batches', postData).respond(500, '');
 
         controller.batch = openBatchList[1];
@@ -204,6 +215,10 @@ describe('Check Batch Processor Tool', function() {
         expect(controller.success).toBe(false);
         expect(controller.error).toBe(true);
         expect(controller.processing).toBe(false);
+        expect(controller.checkCounts).toBeDefined();
+        expect(controller.checkCounts.total).toBe(3);
+        expect(controller.checkCounts.exported).toBe(2);
+        expect(controller.checkCounts.notExported).toBe(1);
       });
     });
 
