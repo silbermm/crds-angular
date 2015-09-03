@@ -6,7 +6,6 @@ using crds_angular.Models.Crossroads.Stewardship;
 using MPServices=MinistryPlatform.Translation.Services.Interfaces;
 using crds_angular.Services.Interfaces;
 using crds_angular.Util;
-using Microsoft.Practices.Unity.ObjectBuilder;
 using MinistryPlatform.Models;
 using Newtonsoft.Json;
 
@@ -109,11 +108,25 @@ namespace crds_angular.Services
             _mpDonationService.CreatePaymentProcessorEventError(stripeEvent.Created, stripeEvent.Id, stripeEvent.Type, JsonConvert.SerializeObject(stripeEvent, Formatting.Indented), JsonConvert.SerializeObject(stripeEventResponse, Formatting.Indented));
         }
 
+
+        public List<GPExportDatumDTO> GetGPExport(int depositId, string token)
+        {
+            var gpExportData = _mpDonationService.GetGPExport(depositId, token);
+            var gpExport = new List<GPExportDatumDTO>();
+
+            foreach (var gpExportDatum in gpExportData)
+            {
+                gpExport.Add(Mapper.Map<GPExportDatum, GPExportDatumDTO>(gpExportDatum));
+            }
+
+            return gpExport;
+        }
+
         public MemoryStream CreateGPExport(int selectionId, int depositId, string token)
         {
-            var gpExport = _mpDonationService.CreateGPExport(depositId, token);
+            var gpExport = GetGPExport(depositId, token);
             var stream = new MemoryStream();
-            CSV.Create(gpExport, GPExportDatum.Headers, stream, "\t");
+            CSV.Create(gpExport, GPExportDatumDTO.Headers, stream, "\t");
             UpdateDepositToExported(selectionId, depositId, token);
 
             return stream;
@@ -141,7 +154,8 @@ namespace crds_angular.Services
             var batch = GetDonationBatchByDepositId(depositId);
 
             var date = DateTime.Today.ToString("yyMMdd");
-            return string.Format("{0}_{1}.csv", batch.BatchName, date);
+            var batchName = batch.BatchName.Replace(" ", "_");
+            return string.Format("XRDReceivables-{0}_{1}.txt", batchName, date);
         }
     }
 }
