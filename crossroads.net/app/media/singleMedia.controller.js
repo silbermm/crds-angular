@@ -11,6 +11,7 @@
 
     vm.isSubscribeOpen = false;
     vm.media = SingleMedia[ItemProperty][0];
+    vm.pauseVideo = pauseVideo;
     vm.playVideo = playVideo;
     vm.setAudioPlayer = setAudioPlayer;
     vm.showSwitchToAudio = showSwitchToAudio;
@@ -72,6 +73,10 @@
       stopVideo();
     });
 
+    function pauseVideo() {
+      sendControlEvent(YT_EVENT.PAUSE);
+    }
+
     function playVideo() {
       vm.videoStillIsVisible = false;
       vm.videoPlayerIsVisible = true;
@@ -122,7 +127,7 @@
 
     function switchToAudio() {
       vm.videoSectionIsOpen = false;
-      vm.stopVideo();
+      vm.pauseVideo();
     }
 
     function switchToVideo() {
