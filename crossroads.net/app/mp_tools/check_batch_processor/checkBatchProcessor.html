@@ -11,19 +11,24 @@
     <strong>{{checkBatchProcessor.batch.name}}</strong> was successfully submitted.
   </div>
 
-  <div class="row" ng-if="checkBatchProcessorForm.$submitted && checkBatchProcessor.success">
+  <div class="row">
     <div class="col-xs-6 col-sm-6 col-md-6">
-      <h3>Batch Information</h3>
+      <h2>EZ Scan Check Batch Processor</h2>
     </div>
   </div>
 
-  <div class="form-group" ng-if="!checkBatchProcessorForm.$submitted || checkBatchProcessor.error">
-    <div class="row">
-      <div class="col-xs-6 col-sm-6 col-md-6">
-        <h3>EZ Scan Check Batch Processor</h3>
-      </div>
+  <div class="row" ng-if="checkBatchProcessor.success">
+    <div class="col-xs-6 col-sm-6 col-md-6">
+      <h3>Batch Information</h3>
+      <label>Batch Name:&nbsp;</label><span>{{checkBatchProcessor.batch.name}}</span><br/>
+      <label>Program Name:&nbsp;</label><span ng-if="checkBatchProcessor.program">{{checkBatchProcessor.program.Name}}</span><br/>
+      <label>Total Checks in Batch:&nbsp;</label><span>{{checkBatchProcessor.checkCounts.total}}</span><br/>
+      <label>Total Checks to Import:&nbsp;</label><span>{{checkBatchProcessor.checkCounts.notExported}}</span><br/>
+      <label>Checks Already Imported:&nbsp;</label><span>{{checkBatchProcessor.checkCounts.exported}}</span>
     </div>
+  </div>
 
+  <div class="form-group" ng-if="checkBatchProcessor.error || !checkBatchProcessor.success">
     <form name="checkBatchProcessorForm" ng-submit="checkBatchProcessor.processBatch()">
       <div class="row">
         <div class="form-group col-xs-6 col-sm-6 col-md-6">

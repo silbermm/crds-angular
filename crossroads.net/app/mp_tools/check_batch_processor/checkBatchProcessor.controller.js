@@ -48,12 +48,12 @@
     vm.processBatch = function() {
       vm.processing = true;
 
-      CheckScannerBatches.checks.query({'batchName': batchName}).$promise.then(function(data) {
+      CheckScannerBatches.checks.query({'batchName': vm.batch.name}).$promise.then(function(data) {
         var counts = _.countBy(data, 'exported');
         vm.checkCounts = {
           total: data.length,
-          notExported: counts['false'],
-          exported: counts['true']
+          notExported: counts['false'] ? counts['false'] : 0,
+          exported: counts['true'] ? counts['true'] : 0
         };
 
         CheckScannerBatches.batches.save({name: vm.batch.name, programId: vm.program.ProgramId}).$promise.then(function(){
