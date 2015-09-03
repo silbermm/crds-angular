@@ -8,6 +8,7 @@
     var vm = this;
 
     vm.displayName = displayName;
+    vm.displayLocation = displayLocation;
     vm.countries = getCountries();
     vm.locations = getLocations();
     vm.states = getStates();
@@ -22,6 +23,10 @@
 
     function displayName(member) {
       return member.nickname + ' ' + member.lastName;
+    }
+
+    function displayLocation(locationId) {
+      return _.result(_.find(vm.locations, 'dp_RecordID', locationId), 'dp_RecordName');
     }
 
     function getCountries() {

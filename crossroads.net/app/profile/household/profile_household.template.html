@@ -6,7 +6,9 @@ Household ID: {{ household.householdId }}
             <legend>Your Household</legend>
             <p>Update information for your household, which includes:
                 <br />
-                <strong>Tate Lucas</strong>, <strong>Christy Lucas</strong>, <strong>Sadie Lucas</strong>, <strong>Simon Lucas</strong>
+                <span ng-repeat="member in household.info.members">
+                    <strong>{{household.displayName(member)}}{{$last ? '' : ', '}}</strong>
+                </span>
             </p>
 
             <div class="panel panel-default clearfix">
@@ -25,15 +27,15 @@ Household ID: {{ household.householdId }}
                         <div class="col-md-7">
                             <svg viewBox="0 0 32 32" class="icon icon-home">
                                 <use xlink:href="#home"></use>
-                            </svg>3727 Hyde Park Ave, Cincinnati, OH 45209</div>
+                            </svg>{{household.info.addressLine1}} {{household.info.addressLine2}}, {{household.info.city}}, {{household.info.state}} {{household.info.postalCode}}</div>
                         <div class="col-md-2">
                             <svg viewBox="0 0 32 32" class="icon icon-phone3">
                                 <use xlink:href="#phone3"></use>
-                            </svg>(513) 258-5827</div>
+                            </svg>{{household.info.homePhone}}</div>
                         <div class="col-md-3">
                             <svg viewBox="0 0 32 32" class="icon icon-crossroads">
                                 <use xlink:href="#crossroads"></use>
-                            </svg>Crossroads Oakley
+                            </svg>{{household.displayLocation(household.info.congregationId)}}
                         </div>
                     </div>
                     <!--/row-->
