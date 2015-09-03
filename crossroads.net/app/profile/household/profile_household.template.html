@@ -1,75 +1,112 @@
 Household ID: {{ household.householdId }}
 
-<form role="form" ng-controller="ProfileHouseholdController">
-    <fieldset class="row household-cards">
-        <legend class="col-sm-12">Your Household</legend>
-        <div ng-repeat="member in household.info.members">
-            <div class="col-md-4 profile-card clearfix">
-                <div class="well well-sm">
-                    <div class="media">
-                        <div class="thumbnail pull-left">
-                            <img class="media-object" src="http://crossroads-media.s3.amazonaws.com/images/avatar.svg" alt="Profile Default Photo" />
-                        </div>
-                        <div class="media-body">
-                            <h4 class="media-heading">{{household.displayName(member)}}</h4>
-                            <p><span class="label label-info">{{member.householdPosition}}</span>
-                            </p>
+<div class="row" ng-controller="ProfileHouseholdController">
+    <fieldset>
+        <div class="col-sm-12">
+            <legend>Your Household</legend>
+            <p>Update information for your household, which includes:
+                <br />
+                <strong>Tate Lucas</strong>, <strong>Christy Lucas</strong>, <strong>Sadie Lucas</strong>, <strong>Simon Lucas</strong>
+            </p>
+
+            <div class="panel panel-default clearfix">
+                <div class="panel-heading address-panel-heading clearfix" ng-click="myProfile.isCollapsed = !myProfile.isCollapsed">
+                    <div class="row">
+                        <a ng-click="myProfile.isCollapsed = !myProfile.isCollapsed" href="#" class="address-show" ng-show="myProfile.isCollapsed">
+                            <svg viewBox="0 0 32 32" class="icon icon-pencil4">
+                                <use xlink:href="#pencil4"></use>
+                            </svg>
+                        </a>
+                        <a ng-click="myProfile.isCollapsed = !myProfile.isCollapsed" href="#" class="address-show" ng-show="!myProfile.isCollapsed">
+                            <svg viewBox="0 0 18 32" class="icon icon-caret-up">
+                                <use xlink:href="#caret-up"></use>
+                            </svg>
+                        </a>
+                        <div class="col-md-7">
+                            <svg viewBox="0 0 32 32" class="icon icon-home">
+                                <use xlink:href="#home"></use>
+                            </svg>3727 Hyde Park Ave, Cincinnati, OH 45209</div>
+                        <div class="col-md-2">
+                            <svg viewBox="0 0 32 32" class="icon icon-phone3">
+                                <use xlink:href="#phone3"></use>
+                            </svg>(513) 258-5827</div>
+                        <div class="col-md-3">
+                            <svg viewBox="0 0 32 32" class="icon icon-crossroads">
+                                <use xlink:href="#crossroads"></use>
+                            </svg>Crossroads Oakley
                         </div>
                     </div>
+                    <!--/row-->
                 </div>
+                <!--/panel-heading-->
+
+                <div class="address-panel-body panel-body clearfix" collapse="myProfile.isCollapsed">
+                    <div class="col-sm-12">
+                        <form role="form">
+                            <fieldset class="row">
+                                <ul class="list-group clearfix">
+                                    <li class="list-group-item clearfix">
+                                        <div class="form-group col-sm-6">
+                                            <label for="street" class="required">Street</label>
+                                            <input ng-model="household.info.addressLine1" type="text" class="form-control" id="street" placeholder="Enter street address">
+                                        </div>
+
+                                        <div class="form-group col-sm-6">
+                                            <label for="street2">Street 2</label>
+                                            <input ng-model="household.info.addressLine2" type="text" class="form-control" id="street2" placeholder="Enter street address (cont.)">
+                                        </div>
+
+                                        <div class="form-group col-sm-6">
+                                            <label for="city" class="required">City</label>
+                                            <input ng-model="household.info.city" type="text" class="form-control" id="city" placeholder="Enter city">
+                                        </div>
+
+                                        <div class="form-group col-sm-6">
+                                            <label for="state" class="required">State</label>
+                                            <select ng-model="household.info.state" ng-options="state.dp_RecordName as state.dp_RecordName for state in household.states" class="form-control col-sm-12">
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group col-sm-6">
+                                            <label for="zip" class="required">Zip</label>
+                                            <input ng-model="household.info.postalCode" type="text" class="form-control" id="zip" placeholder="Enter zip code">
+                                        </div>
+
+                                        <div class="form-group col-sm-6">
+                                            <label for="county">County</label>
+                                            <input ng-model="household.info.county" type="text" class="form-control" id="county" placeholder="Enter county">
+                                        </div>
+
+                                        <div class="form-group col-sm-6">
+                                            <label for="country" class="required">Country</label>
+                                            <select ng-model="household.info.foreignCountry" ng-change="setCountry()" ng-options="country.dp_RecordName as country.dp_RecordName for country in household.countries" class="form-control col-sm-12">
+                                            </select>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item clearfix">
+                                        <div class="form-group col-sm-6" id="homephonecont">
+                                            <label for="homephone">Home Phone</label>
+                                            <input ng-model="household.info.homePhone" type="text" class="form-control" id="homephone" placeholder="Enter home phone">
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item clearfix">
+                                        <div id="Site" class="form-group col-sm-6">
+                                            <label for="provider">Crossroads Location</label>
+                                            <select class="form-control col-sm-12" ng-model="household.info.congregationId" ng-options="location.dp_RecordID as location.dp_RecordName for location in household.locations">
+                                            </select>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </fieldset>
+                        </form>
+                    </div>
+                    <!--/col-sm-12-->
+                </div>
+                <!--/panel-body-->
             </div>
+            <!--/panel-->
+
         </div>
+        <!--/col-sm-12-->
     </fieldset>
-    <fieldset class="row">
-        <div class="form-group col-sm-6">
-            <label for="street">Street</label>
-            <input ng-model="household.info.addressLine1" type="text" class="form-control" id="street" placeholder="Enter street address">
-        </div>
-
-        <div class="form-group col-sm-6">
-            <label for="street2">Street 2</label>
-            <input ng-model="household.info.addressLine2" type="text" class="form-control" id="street2" placeholder="Enter street address (cont.)">
-        </div>
-
-        <div class="form-group col-sm-6">
-            <label for="city">City</label>
-            <input ng-model="household.info.city" type="text" class="form-control" id="city" placeholder="Enter city">
-        </div>
-
-        <div class="form-group col-sm-6">
-            <label for="state">State</label>
-            <select ng-model="household.info.state" ng-options="state.dp_RecordName as state.dp_RecordName for state in household.states" class="form-control col-sm-12">
-            </select>
-        </div>
-
-        <div class="form-group col-sm-6">
-            <label for="zip">Zip</label>
-            <input ng-model="household.info.postalCode" type="text" class="form-control" id="zip" placeholder="Enter zip code">
-        </div>
-
-        <div class="form-group col-sm-6">
-            <label for="county">County</label>
-            <input ng-model="household.info.county" type="text" class="form-control" id="county" placeholder="Enter county">
-        </div>
-
-        <div class="form-group col-sm-6">
-            <label for="country">Country</label>
-            <select ng-model="household.info.foreignCountry" ng-change="setCountry()" ng-options="country.dp_RecordName as country.dp_RecordName for country in household.countries" class="form-control col-sm-12">
-            </select>
-        </div>
-
-        <hr class="col-sm-12" />
-
-        <div class="form-group col-sm-6">
-            <label for="homephone">Home Phone</label>
-            <input ng-model="household.info.homePhone" type="text" class="form-control" id="homephone" placeholder="Enter home phone">
-        </div>
-
-        <hr class="col-sm-12" />
-        <div id="Site" class="form-group col-sm-6">
-            <label for="provider">Crossroads Location</label>
-            <select class="form-control col-sm-12" ng-model="household.info.congregationId" ng-options="location.dp_RecordID as location.dp_RecordName for location in household.locations">
-            </select>
-        </div>
-    </fieldset>
-</form>
+</div>
