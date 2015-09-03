@@ -289,14 +289,14 @@ namespace crds_angular.test.Services
         public void TestGPExportFileName()
         {
             var date = DateTime.Today;
-            var fileName = string.Format("TestBatchName_{0}{1}{2}.csv", date.ToString("yy"), date.ToString("MM"), date.ToString("dd"));
+            var fileName = string.Format("XRDReceivables-Test_Batch_Name_{0}{1}{2}.txt", date.ToString("yy"), date.ToString("MM"), date.ToString("dd"));
 
             _mpDonationService.Setup(mocked => mocked.GetDonationBatchByDepositId(456)).Returns(new DonationBatch
             {
                 Id = 123,
                 DepositId = 456,
                 ProcessorTransferId = "789",
-                BatchName = "TestBatchName",
+                BatchName = "Test Batch Name",
             });
             var result = _fixture.GPExportFileName(456);
 
@@ -308,7 +308,7 @@ namespace crds_angular.test.Services
         public void TestGenerateGPExportFileNames()
         {
             var date = DateTime.Today;
-            var fileName = string.Format("TestBatchName_{0}{1}{2}.csv", date.ToString("yy"), date.ToString("MM"), date.ToString("dd"));
+            var fileName = string.Format("XRDReceivables-Test_BatchName_{0}{1}{2}.txt", date.ToString("yy"), date.ToString("MM"), date.ToString("dd"));
 
             _mpDonationService.Setup(mocked => mocked.GetSelectedDonationBatches(12424, "afdasfsafd")).Returns(MockDepositList);
             _mpDonationService.Setup(mocked => mocked.GetDonationBatchByDepositId(456)).Returns(new DonationBatch
@@ -316,7 +316,7 @@ namespace crds_angular.test.Services
                 Id = 123,
                 DepositId = 456,
                 ProcessorTransferId = "789",
-                BatchName = "TestBatchName",
+                BatchName = "Test BatchName",
             });
             _mpDonationService.Setup(mocked => mocked.GetDonationBatchByDepositId(4557657)).Returns(new DonationBatch
             {
