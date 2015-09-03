@@ -98,15 +98,14 @@ namespace MinistryPlatform.Translation.Services
         public List<Deposit> GetSelectedDonationBatches(int selectionId, string token)
         {
             var results = _ministryPlatformService.GetSelectionsForPageDict(_depositsPageId, selectionId, token);
-            var batches = new List<Deposit>();
+            var deposits = new List<Deposit>();
 
             foreach (var result in results)
             {
-                batches.Add(Mapper.Map<Dictionary<string, object>, Deposit>(result));
-
+                deposits.Add(Mapper.Map<Dictionary<string, object>, Deposit>(result));
             }
 
-            return batches;
+            return deposits;
         } 
 
         public int CreateDonationBatch(string batchName, DateTime setupDateTime, decimal batchTotalAmount, int itemCount,
@@ -357,13 +356,13 @@ namespace MinistryPlatform.Translation.Services
                     DocumentNumber = result.ToInt("Donation ID"),
                     DocumentDescription = result.ToString("Batch Name"),
                     BatchId = result.ToString("Batch Name"),
-                    ContributionDate = result.ToDate("Donation Date"),
-                    SettlementDate = result.ToDate("Deposit Date"),
+                    ContributionDate = result.ToDate("Donation Date").ToString("MM/dd/yyyy"),
+                    SettlementDate = result.ToDate("Deposit Date").ToString("MM/dd/yyyy"),
                     CustomerId = result.ToString("Customer ID"),
                     ContributionAmount = result.ToString("Donation Amount"),
                     CheckbookId = result.ToString("Checkbook ID"),
                     CashAccount = result.ToString("Cash Account"),
-                    ReceivableAccount = result.ToString("Receivable Account"),
+                    ReceivablesAccount = result.ToString("Receivable Account"),
                     DistributionAccount = result.ToString("Distribution Account"),
                     DistributionAmount = result.ToString("Amount"),
                     DistributionReference = processingFee ? "Processor Fees " + result.ToDate("Donation Date") : "Contribution " + result.ToDate("Donation Date")                    

@@ -364,6 +364,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _ministryPlatformService.VerifyAll();
             Assert.IsNotNull(result);
             Assert.AreEqual(3, result.Count);
+            Assert.AreEqual(new DateTime(2015, 3, 28, 8, 30, 0).ToString("MM/dd/yyyy"), result[0].SettlementDate);
             Assert.AreEqual("Contribution " + new DateTime(2015, 3, 28, 8, 30, 0), result[0].DistributionReference);
             Assert.AreEqual("Processor Fees " + new DateTime(2015, 3, 28, 8, 30, 0), result[1].DistributionReference);
         }
@@ -378,7 +379,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Document Type", "SALE"},
                     {"Donation ID", "10002"},
                     {"Batch Name", "Test Batch"},
-                    {"Donation Date", new DateTime(2015, 3, 28, 8, 30, 0)},
+                    {"Donation Date",new DateTime(2015, 3, 28, 8, 30, 0)},
                     {"Deposit Date", new DateTime(2015, 3, 28, 8, 30, 0)},
                     {"Customer ID", "CONTRIBUTI001"},
                     {"Donation Amount", "200.00"},
