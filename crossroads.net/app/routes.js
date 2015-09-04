@@ -90,9 +90,9 @@
         }
       })
       .state('register', {
-        parent: 'noSideBar', 
+        parent: 'noSideBar',
         url: '/register',
-        templateUrl: 'register/register_form.html',
+        templateUrl: 'register/register_page.html',
         controller: 'RegisterCtrl',
         data: {
           meta: {
