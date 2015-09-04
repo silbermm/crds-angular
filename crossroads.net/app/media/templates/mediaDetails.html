@@ -20,8 +20,8 @@
           </div><!--/message-body-->
           <div class="message-tags">
             <div class="row push-top">
-              <div class="col-xs-3 col-md-2" data-ng-show="singleMedia.media.speakers">
-                <span class="small-heading text-muted">SPEAKER: </span>
+              <div class="col-xs-3 col-md-2">
+                <span class="small-heading text-muted" data-ng-show="singleMedia.media.speakers">SPEAKER: </span>
               </div>
               <div class="col-xs-9 col-md-10" >
                 <a ng-repeat="speaker in singleMedia.media.speakers" href="#" class="label label-standard-dark">{{ speaker.title }}</a>
