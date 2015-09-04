@@ -52,10 +52,24 @@
       }
     }
 
-    function ageLimitReached() {
-      if (Session.exists('age') && Session.exists('age') < Campaign.ageLimit) {
+    function preliminaryAgeCheck() {
+      var age = Session.exists('age');
+      if (age === '0') {
+        // null value for birth date is converted to age = 0
+        // validate age based on required field birth date on pg 1 submit
+        return false;
+      }
+
+      if (age === undefined) {
+        // age is undefned
+        // validate age based on required field birth date on pg 1 submit
+        return false;
+      }
+
+      if (age < Campaign.ageLimit) {
         //Under age limit, check for exceptions
-        if (Session.exists('userId') && _.includes(Campaign.ageExceptions, Number(Session.exists('userId')))) {
+        var userId = Session.exists('userId');
+        if (userId && _.includes(Campaign.ageExceptions, Number(userId))) {
           return false;
         }
 
@@ -66,7 +80,7 @@
     }
 
     function pageHasErrors() {
-      vm.ageLimitReached = ageLimitReached();
+      vm.ageLimitReached = preliminaryAgeCheck();
       var promise = registrationNotOpen();
       promise.then(function(regNotOpen) {
         vm.registrationNotOpen = regNotOpen;

@@ -32,6 +32,7 @@
             name="recipientName"
             placeholder="Recipient Name"
             ng-model="invite.recipientName"
+            maxlength="50"
             required />
           <ng-messages for="privateInviteForm.recipientName.$error" ng-if="invite.fieldError(privateInviteForm, 'recipientName')">
             <span ng-message="required">

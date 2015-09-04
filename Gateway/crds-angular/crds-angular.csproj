@@ -253,6 +253,8 @@
     <Compile Include="Controllers\API\ProfileController.cs" />
     <Compile Include="Controllers\API\SkillController.cs" />
     <Compile Include="Controllers\API\VolunteerApplicationController.cs" />
+    <Compile Include="DataAccess\EzScanCheckScannerDao.cs" />
+    <Compile Include="DataAccess\Interfaces\ICheckScannerDao.cs" />
     <Compile Include="Exceptions\Models\ApiErrorDto.cs" />
     <Compile Include="Enum\BadgeTypeEnum.cs" />
     <Compile Include="Exceptions\PaymentProcessorException.cs" />
@@ -291,6 +293,7 @@
     <Compile Include="Models\Crossroads\Stewardship\CheckScannerBatch.cs" />
     <Compile Include="Models\Crossroads\Stewardship\CheckScannerCheck.cs" />
     <Compile Include="Models\Crossroads\Stewardship\DepositDTO.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\GPExportDatumDTO.cs" />
     <Compile Include="Models\Crossroads\Stewardship\PledgeCampaign.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeBalanceTransaction.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeBankAccount.cs" />
