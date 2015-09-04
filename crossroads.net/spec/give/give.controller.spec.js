@@ -46,7 +46,7 @@ describe('GiveController', function() {
     $provide.value('Session', mockSession);
     mockPaymentService = jasmine.createSpyObj('PaymentService', ['getDonor', 'updateDonorWithCard', 'donateToProgram', 'updateDonorWithBankAcct', 'stripeErrorHandler' ]);
     mockPaymentService.getDonor.and.callFake(function(n) {
-      return(mockPaymentServiceGetPromise.$promise);
+      return (mockPaymentServiceGetPromise.$promise);
     });
     mockPaymentService.updateDonorWithBankAcct.and.callFake(function(donorId, bankAcct, email) {
       var deferred = $q.defer();
@@ -112,15 +112,6 @@ describe('GiveController', function() {
           this.$promise._httpStatusCode = code;
         }
       };
-
-      /*mockPaymentService = {*/
-        //getDonor: function(email){
-          //return(mockPaymentServiceGetPromise.$promise);
-        //},
-        //donateToProgram: function() {},
-        //updateDonorWithBankAcct: function() {},
-        //updateDonorWithCard: function() {},
-      /*};*/
 
       controller = $controller('GiveController',
         { '$rootScope': $rootScope,
@@ -390,58 +381,60 @@ describe('GiveController', function() {
       $valid: true,
     };
 
-    /*it('should call updateDonorWithCard with proper values when changing card info', function() {*/
+    it('should call updateDonorWithCard with proper values when changing card info', function() {
+      
+      httpBackend.whenGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/authenticated').respond(200);
      
-      //controller.giveForm = controllerGiveForm;
-      //controller.dto.amount = 858;
-      //controller.dto.view = 'cc';
-      //controller.dto.program = {
-        //programId: 1,
-        //Name: 'crossroads'
-      //};
-      //controller.dto.email = 'tim@kriz.net';
-      //controller.dto.donor = {
-        //id: 654,
-        //default_source: {
-          //name: 'Tim Startsgiving',
-          //cc_number: '98765',
-          //exp_date: '1213',
-          //address_zip: '90210',
-          //cvc: '987',
-        //}
-      //};
-      //controller.dto.pymtType = 'cc';
+      controller.giveForm = controllerGiveForm;
+      controller.dto.amount = 858;
+      controller.dto.view = 'cc';
+      controller.dto.program = {
+        programId: 1,
+        Name: 'crossroads'
+      };
+      controller.dto.email = 'tim@kriz.net';
+      controller.dto.donor = {
+        id: 654,
+        default_source: {
+          name: 'Tim Startsgiving',
+          cc_number: '98765',
+          exp_date: '1213',
+          address_zip: '90210',
+          cvc: '987',
+        }
+      };
+      controller.dto.pymtType = 'cc';
+      controller.dto.savedPayment = 'cc';
 
-      //mockSession.isActive.and.callFake(function(){
-         //return true;
-      //});
+      mockSession.isActive.and.callFake(function(){
+         return true;
+      });
 
-      //mockPaymentService.donateToProgram.and.callFake(function(p, a, d, e, t){
-        //var deferred = $q.defer();
-        //deferred.resolve({ amount: a, email: e });
-        //return deferred.promise;
-      //});
+      mockPaymentService.donateToProgram.and.callFake(function(p, a, d, e, t){
+        var deferred = $q.defer();
+        deferred.resolve({ amount: a, email: e });
+        return deferred.promise;
+      });
       
-      //mockPaymentService.updateDonorWithCard.and.callFake(function(donorId, card, email){
-        //var deferred = $q.defer();
-        //deferred.resolve({ donorId: donorId, email: email });
-        //return deferred.promise;
-      //});
+      mockPaymentService.updateDonorWithCard.and.callFake(function(donorId, card, email){
+        var deferred = $q.defer();
+        deferred.resolve({ donorId: donorId, email: email });
+        return deferred.promise;
+      });
 
       
-      //spyOn($state, 'go').and.callFake(function(a) {
-        //return true;
-      //}); 
+      spyOn($state, 'go').and.callFake(function(a) {
+        return true;
+      }); 
 
-      //spyOn(controller.donationService, 'donate');
+      spyOn(controller.donationService, 'donate');
       
-      //controller.donationService.submitChangedBankInfo(controller.giveForm );
-      //// This resolves the promise above
-      //$rootScope.$apply();
+      controller.donationService.submitChangedBankInfo(controller.giveForm );
+      // This resolves the promise above
+      $rootScope.$apply();
 
-      //expect(controller.donationService.donate).toHaveBeenCalled();
-      //expect(mockPaymentService.updateDonorWithCard).toHaveBeenCalled();
-    /*});*/
+      expect(mockPaymentService.updateDonorWithCard).toHaveBeenCalled();
+    });
 
    it('should call updateDonorWithBankAcct with proper values when bank account info is changed', function() {
 
@@ -620,7 +613,6 @@ describe('GiveController', function() {
 
        spyOn($state, 'go');
        spyOn(mockEvent, 'preventDefault');
-       //spyOn(mockPaymentService, 'getDonor').and.callThrough();
 
        controller.donationService.transitionForLoggedInUserBasedOnExistingDonor(mockEvent, mockToState);
 
@@ -638,7 +630,7 @@ describe('GiveController', function() {
        });
        spyOn($state, "go");
        spyOn(mockEvent, "preventDefault");
-      // spyOn(mockPaymentService, "getDonor").and.callThrough();
+       
        mockPaymentServiceGetPromise.setSuccess(false);
        mockPaymentServiceGetPromise.setHttpStatusCode(404);
        controller.giveForm = {
@@ -662,7 +654,6 @@ describe('GiveController', function() {
        spyOn($state, "go");
        spyOn(mockEvent, "preventDefault");
 
-       //spyOn(mockPaymentService, "getDonor").and.callThrough();
        mockPaymentServiceGetPromise.setSuccess(true);
        controller.dto.email = 'test@test.com';
        controller.donationService.transitionForLoggedInUserBasedOnExistingDonor(mockEvent, mockToState);
