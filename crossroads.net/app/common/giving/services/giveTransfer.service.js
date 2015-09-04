@@ -24,7 +24,7 @@
         this.processing = false;
         this.processingChange = false;
         this.program = undefined;
-        this.pymtType = undefined; 
+        this.pymtType = undefined;
         this.routing = '';
         this.savedPayment = '';
         this.view = 'bank';

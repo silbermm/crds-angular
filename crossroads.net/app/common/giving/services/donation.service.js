@@ -80,7 +80,7 @@
         }
 
         donationService.donate(pgram, function(confirmation) {
-
+          console.log('successfully donated'); 
         }, function(error) {
 
           if (GiveTransferService.declinedPayment) {

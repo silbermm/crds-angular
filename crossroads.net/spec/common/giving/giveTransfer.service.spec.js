@@ -20,8 +20,7 @@ describe('Give Transfer Service', function() {
       expect(fixture.account).toBeDefined();
       expect(fixture.account).toBe('');
 
-      expect(fixture.amount).toBeDefined();
-      expect(fixture.amount).toBe('');
+      expect(fixture.amount).toBeUndefined();
 
       expect(fixture.ccNumberClass).toBeDefined();
       expect(fixture.ccNumberClass).toBe('');
@@ -30,13 +29,11 @@ describe('Give Transfer Service', function() {
       expect(fixture.declinedPayment).toBeFalsy();
 
       expect(fixture.donor).toBeDefined();
-      expect(fixture.donor).toBe('');
+      expect(fixture.donor).toEqual({});
 
-      expect(fixture.email).toBeDefined();
-      expect(fixture.email).toBe('');
+      expect(fixture.email).toBeUndefined();
 
-      expect(fixture.program).toBeDefined();
-      expect(fixture.program).toBe('');
+      expect(fixture.program).toBeUndefined();
 
       expect(fixture.routing).toBeDefined();
       expect(fixture.routing).toBe('');
@@ -45,7 +42,7 @@ describe('Give Transfer Service', function() {
       expect(fixture.savedPayment).toBe('');
 
       expect(fixture.view).toBeDefined();
-      expect(fixture.view).toBe('');
+      expect(fixture.view).toBe('bank');
     });
 
     it("should have the expected attributes reset", function() {
@@ -61,12 +58,11 @@ describe('Give Transfer Service', function() {
       fixture.view = '10';
 
       fixture.reset();
-
+      
       expect(fixture.account).toBeDefined();
       expect(fixture.account).toBe('');
 
-      expect(fixture.amount).toBeDefined();
-      expect(fixture.amount).toBe('');
+      expect(fixture.amount).toBeUndefined();
 
       expect(fixture.ccNumberClass).toBeDefined();
       expect(fixture.ccNumberClass).toBe('');
@@ -75,13 +71,11 @@ describe('Give Transfer Service', function() {
       expect(fixture.declinedPayment).toBeFalsy();
 
       expect(fixture.donor).toBeDefined();
-      expect(fixture.donor).toBe('');
+      expect(fixture.donor).toEqual({});
 
-      expect(fixture.email).toBeDefined();
-      expect(fixture.email).toBe('');
+      expect(fixture.email).toBeUndefined();
 
-      expect(fixture.program).toBeDefined();
-      expect(fixture.program).toBe('');
+      expect(fixture.program).toBeUndefined();
 
       expect(fixture.routing).toBeDefined();
       expect(fixture.routing).toBe('');
@@ -90,8 +84,7 @@ describe('Give Transfer Service', function() {
       expect(fixture.savedPayment).toBe('');
 
       expect(fixture.view).toBeDefined();
-      expect(fixture.view).toBe('');
-    });
+      expect(fixture.view).toBe('bank');    });
   });
 
 });
