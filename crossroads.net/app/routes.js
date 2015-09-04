@@ -630,9 +630,7 @@
                 }
 
                 $rootScope.meta = {
-                  title: ContentPageService.page.title +
-                    ' | ' +
-                    ContentSiteConfigService.siteconfig.title,
+                  title: ContentPageService.page.title,
                   description: ContentPageService.page.metaDescription,
                   extraMeta: ContentPageService.page.extraMeta
                 };
