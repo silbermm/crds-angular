@@ -95,7 +95,7 @@ ELSE
 		 				, Pledge_Campaigns.[Registration_End]
 		 				, Pledge_Campaigns.[Youngest_Age_Allowed]
 		 				, Event_ID_Table.[Event_Start_Date]'
-				   ,'Pledge_Campaign_Type_ID_Table.[Campaign_Type] = 'Mission Project/Trip'
+				   ,'Pledge_Campaign_Type_ID_Table.[Campaign_Type] = ''Mission Project/Trip''
 		 				AND Registration_Form_Table.[Form_ID] IS NOT NULL
 		 				AND Event_ID_Table.[Event_Start_Date] >= GetDate()
 		')
