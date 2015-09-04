@@ -71,6 +71,7 @@
       scope.modalInstance = {};
       scope.openFromDate = openFromDate;
       scope.openToDate = openToDate;
+      scope.passedDeadlineMsg = passedDeadlineMsg;
       scope.roleChanged = roleChanged;
       scope.roles = null;
       scope.saveRsvp = saveRsvp;
@@ -291,6 +292,11 @@
         }
         $log.debug('date: ' + m.format('X'));
         return m.format('X');
+      }
+
+      function passedDeadlineMsg(id)
+      {
+        return _.result(_.find($rootScope.MESSAGES, 'id', id), 'content');
       }
 
       function populateDates() {

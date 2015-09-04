@@ -30,6 +30,7 @@ module.exports = function(config) {
       './assets/common*.js',
       './assets/trips*.js',
       './assets/give*.js',
+      './assets/media*.js',
       'spec/spec_index.js'
     ],
 

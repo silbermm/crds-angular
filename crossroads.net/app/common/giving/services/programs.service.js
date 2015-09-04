@@ -6,7 +6,13 @@
 
   function Programs($resource) {
     return {
-      Programs: $resource(__API_ENDPOINT__ +  'api/programs/:programType', { programType: '@programType' })
+      Programs: $resource(__API_ENDPOINT__ + 'api/programs/:programType', {programType: '@programType'}, {
+       get: {
+         method: 'GET',
+         isArray: true
+       }
+     })
+
     };
   }
 

@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using AutoMapper;
 using crds_angular.Models.Crossroads.Stewardship;
 using MPServices=MinistryPlatform.Translation.Services.Interfaces;
 using crds_angular.Services.Interfaces;
 using crds_angular.Util;
 using MinistryPlatform.Models;
-using MinistryPlatform.Models.DTO;
 using Newtonsoft.Json;
 
 namespace crds_angular.Services
@@ -74,6 +71,24 @@ namespace crds_angular.Services
             return (Mapper.Map<DonationBatch, DonationBatchDTO>(_mpDonationService.GetDonationBatch(batchId)));
         }
 
+        public DonationBatchDTO GetDonationBatchByDepositId(int depositId)
+        {
+            return (Mapper.Map<DonationBatch, DonationBatchDTO>(_mpDonationService.GetDonationBatchByDepositId(depositId)));
+        }
+
+        public List<DepositDTO> GetSelectedDonationBatches(int selectionId, string token)
+        {
+            var selectedDeposits = _mpDonationService.GetSelectedDonationBatches(selectionId, token);
+            var deposits = new List<DepositDTO>();
+
+            foreach (var deposit in selectedDeposits)
+            {
+                deposits.Add(Mapper.Map<Deposit, DepositDTO>(deposit));
+            }
+
+            return deposits;
+        }
+
         public void ProcessDeclineEmail(string processorPaymentId)
         {
             _mpDonationService.ProcessDeclineEmail(processorPaymentId);
@@ -93,13 +108,54 @@ namespace crds_angular.Services
             _mpDonationService.CreatePaymentProcessorEventError(stripeEvent.Created, stripeEvent.Id, stripeEvent.Type, JsonConvert.SerializeObject(stripeEvent, Formatting.Indented), JsonConvert.SerializeObject(stripeEventResponse, Formatting.Indented));
         }
 
-        public MemoryStream CreateGPExport(int batchId, string token)
+
+        public List<GPExportDatumDTO> GetGPExport(int depositId, string token)
         {
-            var gpExport = _mpDonationService.CreateGPExport(batchId, token);
+            var gpExportData = _mpDonationService.GetGPExport(depositId, token);
+            var gpExport = new List<GPExportDatumDTO>();
+
+            foreach (var gpExportDatum in gpExportData)
+            {
+                gpExport.Add(Mapper.Map<GPExportDatum, GPExportDatumDTO>(gpExportDatum));
+            }
+
+            return gpExport;
+        }
+
+        public MemoryStream CreateGPExport(int selectionId, int depositId, string token)
+        {
+            var gpExport = GetGPExport(depositId, token);
             var stream = new MemoryStream();
-            CSV.Create(gpExport, GPExportDatum.Headers, stream, "\t");
+            CSV.Create(gpExport, GPExportDatumDTO.Headers, stream, "\t");
+            UpdateDepositToExported(selectionId, depositId, token);
 
             return stream;
+        }
+
+        private void UpdateDepositToExported(int selectionId, int depositId, string token)
+        {
+            _mpDonationService.UpdateDepositToExported(selectionId, depositId, token);
+        }
+
+        public List<DepositDTO> GenerateGPExportFileNames(int selectionId, string token)
+        {
+            var deposits = GetSelectedDonationBatches(selectionId, token);
+
+            foreach (var deposit in deposits)
+            {
+                deposit.ExportFileName = GPExportFileName(deposit.Id);
+            }
+
+            return deposits;
+        }
+
+        public string GPExportFileName(int depositId)
+        {
+            var batch = GetDonationBatchByDepositId(depositId);
+
+            var date = DateTime.Today.ToString("yyMMdd");
+            var batchName = batch.BatchName.Replace(" ", "_");
+            return string.Format("XRDReceivables-{0}_{1}.txt", batchName, date);
         }
     }
 }

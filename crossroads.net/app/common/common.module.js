@@ -5,6 +5,6 @@
 
   angular.module(constants.MODULES.COMMON, []);
 
-  // require all components
+  // require all giving common components
   require('./giving');
 })();

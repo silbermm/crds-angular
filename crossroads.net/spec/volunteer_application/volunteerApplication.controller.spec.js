@@ -140,6 +140,7 @@ describe('Volunteer Application Controller', function() {
       $log = _$log_;
 
       $httpBackend = $injector.get('$httpBackend');
+
       Opportunity = $injector.get('Opportunity');
       PageInfo = $injector.get("PageInfo");
       Session = $injector.get("Session");
@@ -175,6 +176,7 @@ describe('Volunteer Application Controller', function() {
       $log = _$log_;
 
       $httpBackend = $injector.get('$httpBackend');
+      $httpBackend.whenGET(/SiteConfig*/).respond('');
       Opportunity = $injector.get('Opportunity');
       PageInfo = $injector.get("PageInfo");
       Session = $injector.get("Session");
@@ -193,7 +195,7 @@ describe('Volunteer Application Controller', function() {
       $httpBackend.expectGET( window.__env__['CRDS_API_ENDPOINT'] +
           'api/opportunity/getResponseForOpportunity/'+
           mockPageInfo.pages[0].opportunity + '/' + controller.contactId ).respond(200);
-          
+
       $httpBackend.flush();
     });
 

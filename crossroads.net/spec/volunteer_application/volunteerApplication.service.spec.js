@@ -18,6 +18,7 @@ describe('Volunteer Application Factory', function() {
     Opportunity = _Opportunity_;
     VolunteerApplication = _VolunteerApplication_;
     $httpBackend = $injector.get('$httpBackend');
+    $httpBackend.whenGET(/SiteConfig*/).respond('');
   }));
 
   it('should fetch the page object', function(){

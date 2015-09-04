@@ -58,7 +58,7 @@ describe('GiveController', function() {
       deferred.resolve({ donorId: donorId });
       return deferred.promise;
     });
-        $provide.value('PaymentService', mockPaymentService);
+    $provide.value('PaymentService', mockPaymentService);
   }));
 
   beforeEach(
@@ -69,6 +69,7 @@ describe('GiveController', function() {
       $timeout = $injector.get('$timeout');
       $q = _$q_;
       httpBackend = $injector.get('$httpBackend');
+      httpBackend.whenGET(/SiteConfig*/).respond('');
       Session = $injector.get('Session');
       User = $injector.get('User');
       AUTH_EVENTS = $injector.get('AUTH_EVENTS');
@@ -357,15 +358,15 @@ describe('GiveController', function() {
     });
 
     it('should not un-initialize controller if toState is not thank-you', function() {
+      $rootScope.meta = { title:  '' };
       $rootScope.$broadcast('$stateChangeSuccess', {name: 'give.amount'});
-
       expect(controller.dto.processing).toBeFalsy();
       expect(controller.dto.initialized).toBeTruthy();
     });
 
     it('should un-initialize controller if toState is thank-you', function() {
+      $rootScope.meta = { title:  '' };
       $rootScope.$broadcast('$stateChangeSuccess', {name: 'give.thank-you'});
-
       expect(controller.processing).toBeFalsy();
       expect(controller.initialized).toBeFalsy();
     });
@@ -596,7 +597,7 @@ describe('GiveController', function() {
       expect(mockPaymentService.getDonor).toHaveBeenCalledWith('test@test.com');
       expect(controller.donationService.createDonorAndDonate).toHaveBeenCalled();
     });
-    
+
   });
 
 

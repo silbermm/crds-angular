@@ -29,6 +29,12 @@
               programType: 1
             }).$promise;
           }
+        },
+        data: {
+          meta: {
+            title: 'Give',
+            description: ''
+          }
         }
       })
       .state('give.amount', {

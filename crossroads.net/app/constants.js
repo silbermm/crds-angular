@@ -10,6 +10,7 @@
       GIVE: 'crossroads.give',
       MPTOOLS: 'crossroads.mptools',
       PROFILE: 'crossroads.profile',
+      MEDIA: 'crossroads.media',
     },
   }
 })();

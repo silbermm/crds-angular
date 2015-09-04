@@ -32,6 +32,7 @@ function htmlReplace() {
       corecss: assets.core.css,
       commonjs: assets.common.js,
       tripsjs: assets.trips.js,
+      mediajs: assets.media.js,
       givejs: assets.give.js,
       js: assets.main.js
     }))
@@ -43,6 +44,7 @@ function htmlReplace() {
       corecss: assets.core.css,
       commonjs: assets.common.js,
       tripsjs: assets.trips.js,
+      mediajs: assets.media.js,
       givejs: assets.give.js,
       js: assets.main.js
     }))
@@ -95,6 +97,7 @@ gulp.task('build-browser-sync', function() {
       corecss: '/assets/core.css',
       commonjs: '/assets/common.js',
       tripsjs: '/assets/trips.js',
+      mediajs: '/assets/media.js',
       givejs: '/assets/give.js',
       css: '/assets/main.css',
       js: '/assets/main.js'
@@ -106,6 +109,7 @@ gulp.task('build-browser-sync', function() {
       corecss: '/assets/core.css',
       commonjs: '/assets/common.js',
       tripsjs: '/assets/trips.js',
+      mediajs: '/assets/media.js',
       givejs: '/assets/give.js',
       css: '/assets/main.css',
       js: '/assets/main.js'
@@ -184,6 +188,7 @@ gulp.task('webpack-dev-server', ['icons-watch'], function(callback) {
       corecss: '/assets/core.css',
       commonjs: '/assets/common.js',
       tripsjs: '/assets/trips.js',
+      mediajs: '/assets/media.js',
       givejs: '/assets/give.js',
       css: '/assets/main.css',
       js: '/assets/main.js'
@@ -195,6 +200,7 @@ gulp.task('webpack-dev-server', ['icons-watch'], function(callback) {
       corecss: '/assets/core.css',
       commonjs: '/assets/common.js',
       tripsjs: '/assets/trips.js',
+      mediajs: '/assets/media.js',
       givejs: '/assets/give.js',
       css: '/assets/main.css',
       js: '/assets/main.js'
@@ -251,6 +257,7 @@ gulp.task('webpack:build-dev', ['icons'], function(callback) {
       commonjs: '/assets/common.js',
       givejs: '/assets/give.js',
       tripsjs: '/assets/trips.js',
+      mediajs: '/assets/media.js',
       css: '/assets/main.css',
       js: '/assets/main.js'
     })).pipe(gulp.dest('./'));
@@ -261,6 +268,7 @@ gulp.task('webpack:build-dev', ['icons'], function(callback) {
       corecss: '/assets/core.css',
       commonjs: '/assets/common.js',
       tripsjs: '/assets/trips.js',
+      mediajs: '/assets/media.js',
       givejs: '/assets/give.js',
       css: '/assets/main.css',
       js: '/assets/main.js'

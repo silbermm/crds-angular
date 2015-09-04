@@ -103,7 +103,7 @@ namespace MinistryPlatform.Translation.Services
 
         }
 
-        public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor)
+        public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor, string checkScannerBatchName = null)
         {
             var pymtId = PaymentType.getPaymentType(pymtType).id;
             var fee = feeAmt.HasValue ? feeAmt / Constants.StripeDecimalConversionValue : null;
@@ -124,6 +124,10 @@ namespace MinistryPlatform.Translation.Services
                 {"Donation_Status_Date", setupTime},
                 {"Donation_Status_ID", 1} //hardcoded to pending 
             };
+            if (!string.IsNullOrWhiteSpace(checkScannerBatchName))
+            {
+                donationValues["Check_Scanner_Batch"] = checkScannerBatchName;
+            }
 
             int donationId;
 
@@ -296,7 +300,7 @@ namespace MinistryPlatform.Translation.Services
         {
             var program = _programService.GetProgramById(programId);
             //If the communcations admin does not link a message to the program, the default template will be used.
-            var communicationTemplateId = program.CommunicationTemplateId == 0 ? AppSetting("DefaultGiveConfirmationEmailTemplate") : program.CommunicationTemplateId;
+            var communicationTemplateId = program.CommunicationTemplateId ?? AppSetting("DefaultGiveConfirmationEmailTemplate");
 
             SendEmail(communicationTemplateId, donorId, donationAmount, pymtType, setupDate, program.Name, EmailReason);
         }
