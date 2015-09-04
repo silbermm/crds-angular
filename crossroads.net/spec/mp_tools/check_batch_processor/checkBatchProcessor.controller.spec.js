@@ -87,6 +87,7 @@ describe('Check Batch Processor Tool', function() {
     $log = _$log_;
     MPTools = _MPTools_;
     $httpBackend = $injector.get('$httpBackend');
+    $httpBackend.whenGET(/SiteConfig*/).respond('');
   }));
 
   describe('Check Batch Processor Controller', function() {

@@ -13,7 +13,7 @@ describe('Credit Card Info Directive', function() {
     var $rootScope = _$rootScope_;
     var $templateCache = _$templateCache_;
     httpBackend = $injector.get('$httpBackend');
-
+    httpBackend.whenGET(/SiteConfig*/).respond('');
     $timeout = _$timeout_;
 
     $templateCache.put('on-submit-messages', '<span ng-message="required">Required</span>');
@@ -59,7 +59,7 @@ describe('Credit Card Info Directive', function() {
       declinedPayment: false
     };
 
-    
+
     ccElement = $compile(templateString)(scope);
     scope.$digest();
     $timeout.flush();

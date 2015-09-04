@@ -2,18 +2,18 @@ require('crds-core');
 require('../../app/app');
 
 describe('GiveController', function() {
-  var controller, 
-      $rootScope, 
-      $scope, 
-      $state, 
-      $timeout, 
-      $q, 
-      httpBackend, 
-      Session, 
-      mockPaymentService, 
-      mockGetResponse, 
-      programList, 
-      mockPaymentServiceGetPromise, 
+  var controller,
+      $rootScope,
+      $scope,
+      $state,
+      $timeout,
+      $q,
+      httpBackend,
+      Session,
+      mockPaymentService,
+      mockGetResponse,
+      programList,
+      mockPaymentServiceGetPromise,
       mockSession;
 
   beforeEach(angular.mock.module('crossroads', function($provide) {
@@ -45,6 +45,7 @@ describe('GiveController', function() {
       $timeout = $injector.get('$timeout');
       $q = _$q_;
       httpBackend = $injector.get('$httpBackend');
+      httpBackend.whenGET(/SiteConfig*/).respond('');
       Session = $injector.get('Session');
       User = $injector.get('User');
       AUTH_EVENTS = $injector.get('AUTH_EVENTS');
@@ -129,7 +130,7 @@ describe('GiveController', function() {
       controller.email = 'test@somewhere.com';
       controller.program = {id: 3};
 
-      spyOn(controller, 'donate').and.callFake(function(programId, amount, donorId, 
+      spyOn(controller, 'donate').and.callFake(function(programId, amount, donorId,
                                                         email, pymtType, onSuccess, onFailure) {
         onSuccess(error);
       });
@@ -154,7 +155,7 @@ describe('GiveController', function() {
       mockSession.isActive.and.callFake(function(){
         return true;
       });
-      spyOn(controller, 'donate').and.callFake(function(programId, amount, donorId, 
+      spyOn(controller, 'donate').and.callFake(function(programId, amount, donorId,
                                                         email, pymtType, onSuccess, onFailure) {
         controller.dto.declinedPayment = true;
         onFailure(error);
@@ -186,7 +187,7 @@ describe('GiveController', function() {
       mockSession.isActive.and.callFake(function(){
         return true;
       });
-      spyOn(controller, 'donate').and.callFake(function(programId, amount, donorId, 
+      spyOn(controller, 'donate').and.callFake(function(programId, amount, donorId,
                                                         email, pymtType, onSuccess, onFailure) {
         controller.dto.declinedPayment = false;
         onFailure(error);
@@ -594,10 +595,10 @@ describe('GiveController', function() {
       controller.submitBankInfo();
 
       expect(mockPaymentService.getDonor).toHaveBeenCalledWith('test@test.com');
-      expect(controller.updateDonorAndDonate).toHaveBeenCalledWith(mockGetResponse.id, 
-                                                                   controllerDto.program.ProgramId, 
-                                                                   controllerDto.amount, 
-                                                                   controllerDto.email, 
+      expect(controller.updateDonorAndDonate).toHaveBeenCalledWith(mockGetResponse.id,
+                                                                   controllerDto.program.ProgramId,
+                                                                   controllerDto.amount,
+                                                                   controllerDto.email,
                                                                    controllerDto.view);
       expect(controller.createDonorAndDonate).not.toHaveBeenCalled();
     });
@@ -616,13 +617,13 @@ describe('GiveController', function() {
       controller.submitBankInfo();
 
       expect(mockPaymentService.getDonor).toHaveBeenCalledWith('test@test.com');
-      expect(controller.createDonorAndDonate).toHaveBeenCalledWith(controllerDto.program.ProgramId, 
-                                                                   controllerDto.amount, 
-                                                                   controllerDto.email, 
+      expect(controller.createDonorAndDonate).toHaveBeenCalledWith(controllerDto.program.ProgramId,
+                                                                   controllerDto.amount,
+                                                                   controllerDto.email,
                                                                    controllerDto.view);
       expect(controller.updateDonorAndDonate).not.toHaveBeenCalled();
     });
-    
+
   });
 
 
