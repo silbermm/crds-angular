@@ -26,14 +26,17 @@
     vm.showVideoDownloadLink = showVideoDownloadLink;
     vm.showAudioDownloadLink = showAudioDownloadLink;
     vm.showProgramDownloadLink = showProgramDownloadLink;
-    vm.shareUrl = $location.absUrl();
+ vm.shareUrl = $location.absUrl();
     vm.sanitizedDescription = $sanitize(vm.media.description);
+    vm.addTagsToArray = addTagsToArray;
+    vm.mediaTags = [];
 
     if (vm.isMessage) {
       vm.videoSectionIsOpen = true;
       vm.audio = vm.media.audio;
       vm.video = vm.media.video;
       vm.programDownloadLink = _.get(vm.media, 'program.filename');
+      vm.addTagsToArray(vm.media, vm.mediaTags);
     } else {
       if (vm.media.className === 'Music') {
         vm.audio = vm.media;
@@ -47,18 +50,16 @@
     }
 
     if (vm.video) {
-      // if the video url is bound directly in the iframe at some point, it will need to be marked as
-      // trusted for Strict Contextual Escaping, such as --
-      // $sce.trustAsResourceUrl("https://www.youtube.com/embed/" + _.get(vm.media, 'serviceId'));
       vm.video.videoUrl = _.get(vm.video, 'serviceId');
       vm.videoDownloadLink = _.get(vm.video, 'source.filename');
-      $sce.trustAsResourceUrl(vm.video.videoUrl);
+      $sce.trustAsResourceUrl(vm.videoUrl);
     }
 
     if (vm.audio) {
       vm.audioDownloadLink = _.get(vm.audio, 'source.filename');
-    }
 
+      vm.addTagsToArray(vm.audio, vm.mediaTags);
+    }
 
     if (ParentMedia) {
       vm.parentMedia = ParentMedia[ParentItemProperty][0];
@@ -148,5 +149,14 @@
     function showProgramDownloadLink() {
       return ((vm.programDownloadLink === undefined) ? false : true);
     }
+
+    function addTagsToArray(media, mediaTags) {
+      _.forEach(media.tags, function(n) {
+        if (!(_.any(mediaTags, _.matches(n.title)))) {
+          mediaTags.push(n.title);
+        }
+      });
+    }
+
   }
 })();
