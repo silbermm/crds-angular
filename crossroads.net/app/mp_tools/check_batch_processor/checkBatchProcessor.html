@@ -11,39 +11,62 @@
     <strong>{{checkBatchProcessor.batch.name}}</strong> was successfully submitted.
   </div>
 
-  <div class="form-group">
-    <div class="row">
-      <div class="col-xs-6 col-sm-6 col-md-6">
-        <h3> To import donation batches from EZ Scan to Ministry Platform: </h3>
-        <ol>
-          <li>Select the EZ Scan Batch Name that you wish to import into MP</li>
-          <li>Select the Program this batch is allocated for from the dropdown.  If you are importing a batch with split donations, then leave the Program dropdown unselected.</li>
-          <li>Click Import Donations</li>
-          <li>View the progress of the donation import</li>
-        </ol>
-      </div>
+  <div class="row">
+    <div class="col-xs-6 col-sm-6 col-md-6">
+      <h2>EZ Scan Check Batch Processor</h2>
     </div>
+  </div>
 
-    <form name="checkBatchProcessorForm" ng-submit="checkBatchProcessor.processBatch()">
+  <div class="row" ng-if="checkBatchProcessor.success">
+    <div class="col-xs-6 col-sm-6 col-md-6">
+      <h3>Batch Information</h3>
+      <label>Batch Name:&nbsp;</label><span>{{checkBatchProcessor.batch.name}}</span><br/>
+      <label>Program Name:&nbsp;</label><span ng-if="checkBatchProcessor.program">{{checkBatchProcessor.program.Name}}</span><br/>
+      <label>Total Checks in Batch:&nbsp;</label><span>{{checkBatchProcessor.checkCounts.total}}</span><br/>
+      <label>Total Checks to Import:&nbsp;</label><span>{{checkBatchProcessor.checkCounts.notExported}}</span><br/>
+      <label>Checks Already Imported:&nbsp;</label><span>{{checkBatchProcessor.checkCounts.exported}}</span>
+    </div>
+  </div>
+
+  <div class="form-group" ng-if="checkBatchProcessor.error || !checkBatchProcessor.success">
+    <form name="checkBatchProcessorForm" ng-submit="checkBatchProcessor.processBatch(this)">
       <div class="row">
-        <div class="col-xs-6 col-sm-6 col-md-6">
-          <h3> EZ Scan Batch Name </h3>
-          <ui-select ng-model="checkBatchProcessor.batch" name="batch" required>
+        <div class="form-group col-xs-6 col-sm-6 col-md-6" ng-class="{'has-error': checkBatchProcessorForm.$submitted && checkBatchProcessorForm.batch.$invalid }">
+          <label class="control-label required" for="batch">EZ Scan Batch Name</label>
+          <ui-select ng-model="checkBatchProcessor.batch" name="batch" id="batch" ui-select-required>
             <ui-select-match placeholder="Click here to choose check batch...">{{$select.selected.name}}</ui-select-match>
             <ui-select-choices repeat="batch in checkBatchProcessor.batches | filter: $select.search track by batch.id">
-              <div ng-bind-html="batch.name | highlight: $select.search"></div>
-              <small>
-                Scan Date: <span ng-bind-html="''+batch.scanDate | date: 'MMM d, yyyy' | highlight: $select.search "></span>
-              </small>
+              <div ng-class="batch.status == 'exported' ? 'brand-warning' : ''">
+                <div ng-bind-html="batch.name | highlight: $select.search"></div>
+                <small>
+                  Scan Date: <span ng-bind-html="''+batch.scanDate | date: 'MMM d, yyyy' | highlight: $select.search "></span>
+                </small>
+              </div>
             </ui-select-choices>
           </ui-select>
+          <ng-messages for="checkBatchProcessorForm.batch.$error" ng-if="checkBatchProcessorForm.$submitted && checkBatchProcessorForm.batch.$invalid">
+            <ng-messages-include src="on-submit-messages"></ng-messages-include>
+          </ng-messages>
         </div>
       </div>
 
       <div class="row">
-        <div class="col-xs-6 col-sm-6 col-md-6">
-          <h3> Program </h3>
-          <ui-select ng-model="checkBatchProcessor.program" name="program" required>
+        <div class="form-group col-xs-6 col-sm-6 col-md-6">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" ng-model="checkBatchProcessor.showClosedBatches" id="showClosedBatches" ng-change="checkBatchProcessor.filterBatches()" />
+              Include Exported Batches
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <br/>
+
+      <div class="row">
+        <div class="form-group col-xs-6 col-sm-6 col-md-6">
+          <label class="control-label" for="program">Program</label>
+          <ui-select ng-model="checkBatchProcessor.program" name="program" id="program" required>
             <ui-select-match placeholder="Click here to choose the program...">{{$select.selected.Name}}</ui-select-match>
             <ui-select-choices repeat="program in checkBatchProcessor.programs | filter: $select.search track by program.ProgramId">
               <div ng-bind-html="program.Name | highlight: $select.search"></div>
@@ -54,7 +77,7 @@
 
       <div class="row" style="margin-top: 15px;">
         <div class="col-xs-6 col-sm-6 col-md-6">
-          <button ng-disabled="!checkBatchProcessorForm.batch.$dirty || checkBatchProcessor.processing"
+          <button ng-disabled="checkBatchProcessor.processing"
                   class="btn btn-primary btn-lg btn-block-mobile give-button">
             Import Donations
           </button>

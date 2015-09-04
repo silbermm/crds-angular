@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Models.Crossroads.Trip;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Extensions;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using IDonationService = MinistryPlatform.Translation.Services.Interfaces.IDonationService;
@@ -24,7 +24,11 @@ namespace crds_angular.Services
         private readonly IDonorService _mpDonorService;
         private readonly IPledgeService _mpPledgeService;
         private readonly ICampaignService _campaignService;
-
+        private readonly IPrivateInviteService _privateInviteService;
+        private readonly ICommunicationService _communicationService;
+        private readonly IContactService _contactService;
+        private readonly IConfigurationWrapper _configurationWrapper;
+        private readonly IPersonService _personService;
 
         public TripService(IEventParticipantService eventParticipant,
                            IDonationService donationService,
@@ -33,7 +37,12 @@ namespace crds_angular.Services
                            IEventService eventService,
                            IDonorService donorService,
                            IPledgeService pledgeService,
-                           ICampaignService campaignService)
+                           ICampaignService campaignService,
+                           IPrivateInviteService privateInviteService,
+                           ICommunicationService communicationService,
+                           IContactService contactService,
+                           IConfigurationWrapper configurationWrapper,
+                           IPersonService personService)
         {
             _eventParticipantService = eventParticipant;
             _donationService = donationService;
@@ -43,6 +52,11 @@ namespace crds_angular.Services
             _mpDonorService = donorService;
             _mpPledgeService = pledgeService;
             _campaignService = campaignService;
+            _privateInviteService = privateInviteService;
+            _communicationService = communicationService;
+            _contactService = contactService;
+            _configurationWrapper = configurationWrapper;
+            _personService = personService;
         }
 
         public List<TripGroupDto> GetGroupsByEventId(int eventId)
@@ -88,13 +102,20 @@ namespace crds_angular.Services
         public TripCampaignDto GetTripCampaign(int pledgeCampaignId)
         {
             var campaign = _campaignService.GetPledgeCampaign(pledgeCampaignId);
+            if (campaign == null)
+            {
+                return null;
+            }
             return new TripCampaignDto()
             {
                 Id = campaign.Id,
                 Name = campaign.Name,
                 FormId = campaign.FormId,
                 FormName = campaign.FormTitle,
-                YoungestAgeAllowed = campaign.YoungestAgeAllowed
+                YoungestAgeAllowed = campaign.YoungestAgeAllowed,
+                RegistrationEnd = campaign.RegistrationEnd,
+                RegistrationStart = campaign.RegistrationStart,
+                AgeExceptions = campaign.AgeExceptions
             };
         }
 
@@ -284,6 +305,51 @@ namespace crds_angular.Services
             return groupParticipants;
         }
 
+        public int GeneratePrivateInvite(PrivateInviteDto dto, string token)
+        {
+            var invite = _privateInviteService.Create(dto.PledgeCampaignId, dto.EmailAddress, dto.RecipientName, token);
+            var communication = PrivateInviteCommunication(invite);
+            _communicationService.SendMessage(communication);
+
+            return invite.PrivateInvitationId;
+        }
+
+        private Communication PrivateInviteCommunication(PrivateInvite invite)
+        {
+            var templateId = _configurationWrapper.GetConfigIntValue("PrivateInviteTemplate");
+            var template = _communicationService.GetTemplate(templateId);
+            var fromContact = _contactService.GetContactById(_configurationWrapper.GetConfigIntValue("UnassignedContact"));
+            var mergeData = SetMergeData(invite.PledgeCampaignIdText, invite.PledgeCampaignId, invite.InvitationGuid, invite.RecipientName);
+
+            return new Communication
+            {
+                AuthorUserId = 5,
+                DomainId = 1,
+                EmailBody = template.Body,
+                EmailSubject = template.Subject,
+                FromContactId = fromContact.Contact_ID,
+                FromEmailAddress = fromContact.Email_Address,
+                ReplyContactId = fromContact.Contact_ID,
+                ReplyToEmailAddress = fromContact.Email_Address,
+                ToContactId = fromContact.Contact_ID,
+                ToEmailAddress = invite.EmailAddress,
+                MergeData = mergeData
+            };
+        }
+
+        private Dictionary<string, object> SetMergeData(string tripTitle, int pledgeCampaignId, string inviteGuid, string participantName)
+        {
+            var mergeData = new Dictionary<string, object>
+            {
+                {"TripTitle", tripTitle},
+                {"PledgeCampaignID", pledgeCampaignId},
+                {"InviteGUID", inviteGuid},
+                {"ParticipantName", participantName},
+                {"BaseUrl", _configurationWrapper.GetConfigValue("BaseUrl")}
+            };
+            return mergeData;
+        }
+
         private void CreatePledge(SaveTripParticipantsDto dto, TripApplicant applicant)
         {
             int donorId;
@@ -314,6 +380,12 @@ namespace crds_angular.Services
                     _mpEventService.registerParticipantForEvent(applicant.ParticipantId, e.EventId);
                 }
             }
+        }
+
+        public bool ValidatePrivateInvite(int pledgeCampaignId, string guid, string token)
+        {
+            var person = _personService.GetLoggedInUserProfile(token);
+            return _privateInviteService.PrivateInviteValid(pledgeCampaignId, guid, person.EmailAddress);
         }
     }
 }

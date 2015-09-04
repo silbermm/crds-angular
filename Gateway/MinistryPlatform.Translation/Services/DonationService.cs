@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using AutoMapper;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
@@ -80,6 +79,34 @@ namespace MinistryPlatform.Translation.Services
         {
             return (WithApiLogin(token => (Mapper.Map<Dictionary<string,object>, DonationBatch>(_ministryPlatformService.GetRecordDict(_batchesPageId, batchId, token)))));
         }
+
+        public DonationBatch GetDonationBatchByDepositId(int depositId)
+        {
+            return (WithApiLogin(token =>
+            {
+                var search = string.Format(",,,,,{0}", depositId);
+                var batches = _ministryPlatformService.GetRecordsDict(_batchesPageId, token, search);
+                if (batches == null || batches.Count == 0)
+                {
+                    return (null);
+                }
+
+                return (Mapper.Map<Dictionary<string, object>, DonationBatch>(batches[0]));
+            }));
+        }
+
+        public List<Deposit> GetSelectedDonationBatches(int selectionId, string token)
+        {
+            var results = _ministryPlatformService.GetSelectionsForPageDict(_depositsPageId, selectionId, token);
+            var deposits = new List<Deposit>();
+
+            foreach (var result in results)
+            {
+                deposits.Add(Mapper.Map<Dictionary<string, object>, Deposit>(result));
+            }
+
+            return deposits;
+        } 
 
         public int CreateDonationBatch(string batchName, DateTime setupDateTime, decimal batchTotalAmount, int itemCount,
             int batchEntryType, int? depositId, DateTime finalizedDateTime, string processorTransferId)
@@ -314,37 +341,47 @@ namespace MinistryPlatform.Translation.Services
             return trips;
         }
 
-        public List<GPExportDatum> CreateGPExport(int batchId, string token)
+        public List<GPExportDatum> GetGPExport(int depositId, string token)
         {
-            var results = _ministryPlatformService.GetPageViewRecords(_gpExportPageView, token, batchId.ToString());
+            var results = _ministryPlatformService.GetPageViewRecords(_gpExportPageView, token, depositId.ToString());
             var gpExport = new List<GPExportDatum>();
 
             foreach (var result in results)
             {
-                bool processingFee = result.ToInt("Program ID") == _processingProgramId;
-
                 var gp = new GPExportDatum
                 {
+                    ProccessFeeProgramId = _processingProgramId,
+                    ProgramId = result.ToInt("Program ID"),
                     DocumentType = result.ToString("Document Type"),
-                    DocumentNumber = result.ToInt("Donation ID"),
-                    DocumentDescription = result.ToString("Batch Name"),
-                    BatchId = result.ToString("Batch Name"),
-                    ContributionDate = result.ToDate("Donation Date"),
-                    SettlementDate = result.ToDate("Deposit Date"),
+                    DonationId = result.ToInt("Donation ID"),
+                    BatchName = result.ToString("Batch Name"),
+                    DonationDate = result.ToDate("Donation Date"),
+                    DepositDate = result.ToDate("Deposit Date"),
                     CustomerId = result.ToString("Customer ID"),
-                    ContributionAmount = result.ToString("Donation Amount"),
+                    DonationAmount = result.ToString("Donation Amount"),
                     CheckbookId = result.ToString("Checkbook ID"),
                     CashAccount = result.ToString("Cash Account"),
                     ReceivableAccount = result.ToString("Receivable Account"),
                     DistributionAccount = result.ToString("Distribution Account"),
-                    DistributionAmount = result.ToString("Amount"),
-                    DistributionReference = processingFee ? "Processor Fees " + result.ToDate("Donation Date") : "Contribution " + result.ToDate("Donation Date")                    
+                    Amount = result.ToString("Amount"),
                 };
 
                 gpExport.Add(gp);
             }
 
             return gpExport;
+        }
+
+        public void UpdateDepositToExported(int selectionId, int depositId, string token)
+        {
+            var paramaters = new Dictionary<string, object>
+            {
+                {"Deposit_ID", depositId},
+                {"Exported", true},
+            };
+
+            _ministryPlatformService.UpdateRecord(_depositsPageId, paramaters, token);
+            _ministryPlatformService.RemoveSelection(selectionId, new [] {depositId}, token);
         }
     }
 }

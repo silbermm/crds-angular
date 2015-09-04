@@ -25,23 +25,53 @@
           Videos: function (Media) {
             return Media.Videos().get().$promise;
           }
+        },
+        data: {
+          meta: {
+           title: 'Media',
+           description: ''
+          }
         }
       })
       .state('media.all', {
         url: '/media',
         templateUrl: 'templates/viewAll.html',
+        data: {
+          meta: {
+           title: 'Media',
+           description: ''
+          }
+        }
       })
       .state('media.music', {
         url: '/music',
-        templateUrl: 'templates/viewAllMusic.html'
+        templateUrl: 'templates/viewAllMusic.html',
+        data: {
+          meta: {
+           title: 'Music',
+           description: ''
+          }
+        }
       })
       .state('media.series', {
         url: '/series',
-        templateUrl: 'templates/viewAllSeries.html'
+        templateUrl: 'templates/viewAllSeries.html',
+        data: {
+          meta: {
+           title: 'Series',
+           description: ''
+          }
+        }
       })
       .state('media.videos', {
         url: '/videos',
-        templateUrl: 'templates/viewAllVideos.html'
+        templateUrl: 'templates/viewAllVideos.html',
+        data: {
+          meta: {
+           title: 'Videos',
+           description: ''
+          }
+        }
       })
       .state('media.seriesSingle', {
         url: '/series/{id:int}/:title?',
@@ -61,8 +91,14 @@
               $state.go('content', {link: '/page-not-found/'}, {location: 'replace'});
               return;
             }
-
             return singleSeries;
+          },
+          Meta: function (Selected, $state) {
+            $state.next.data.meta = {
+             title: Selected.title,
+             description: ''
+            };
+            return $state.next.data.meta;
           },
           Messages: function (Media, Selected) {
             var item = Media.Messages({seriesId: Selected.id}).get().$promise;
@@ -107,16 +143,23 @@
               }
             }
           },
+          Meta: function (SingleMedia, $state) {
+            $state.next.data.meta = {
+             title: SingleMedia.messages[0].title,
+             description: ''
+            };
+            return $state.next.data.meta;
+          },
           ParentItemProperty: function() {
             return 'series';
           },
           ParentMedia: function (Media, SingleMedia) {
-            var series = SingleMedia.messages[0];
-            if (!series) {
+            var message = SingleMedia.messages[0];
+            if (!message) {
               return null;
             }
 
-            var parent = Media.Series({id: series.seriesId}).get().$promise;
+            var parent = Media.Series({id: message.series}).get().$promise;
             return parent;
           },
           ImageURL: function (SingleMedia) {
@@ -129,8 +172,12 @@
         url: '/media/{id:int}/:title?',
         controller: 'SingleMediaController as singleMedia',
         templateUrl: 'templates/mediaSingle.html',
+        data: {
+          meta: {}
+        },
         resolve: {
           Media: 'Media',
+          $rootScope: '$rootScope',
           $stateParams: '$stateParams',
           $state: '$state',
           ItemProperty: function () {
@@ -148,6 +195,13 @@
                 $state.go('content', {link: '/page-not-found/'}, {location: 'replace'});
               }
             }
+          },
+          Meta: function (SingleMedia, $state) {
+            $state.next.data.meta = {
+             title: SingleMedia.media[0].title,
+             description: ''
+            };
+            return $state.next.data.meta;
           },
           ParentItemProperty: function() {
             return null;

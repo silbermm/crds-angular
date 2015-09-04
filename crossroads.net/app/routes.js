@@ -7,16 +7,14 @@
     '$urlRouterProvider',
     '$httpProvider',
     '$urlMatcherFactoryProvider',
-    '$locationProvider',
-    'ContentPageServiceProvider'
+    '$locationProvider'
   ];
 
   function AppConfig($stateProvider,
     $urlRouterProvider,
     $httpProvider,
     $urlMatcherFactory,
-    $locationProvider,
-    ContentPageService) {
+    $locationProvider) {
 
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'contentRouteType', /^\/.*/);
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'signupRouteType', /\/sign-up\/.*$/);
@@ -47,13 +45,25 @@
         parent: 'noSideBar',
         url: '/',
         templateUrl: 'home/home.html',
-        controller: 'HomeCtrl'
+        controller: 'HomeCtrl',
+        data: {
+          meta: {
+           title: 'Home',
+           description: ''
+          }
+        }
       })
       .state('homealso', {
         parent: 'noSideBar',
         url: '/home',
         templateUrl: 'home/home.html',
-        controller: 'HomeCtrl'
+        controller: 'HomeCtrl',
+        data: {
+          meta: {
+           title: 'Home',
+           description: ''
+          }
+        }
       })
       .state('login', {
         parent: 'noSideBar',
@@ -61,21 +71,53 @@
         templateUrl: 'login/login_page.html',
         controller: 'LoginCtrl',
         data: {
-          isProtected: false
+          isProtected: false,
+          meta: {
+           title: 'Login',
+           description: ''
+          }
         }
       })
       .state('logout', {
         url: '/logout',
         controller: 'LogoutController',
         data: {
-          isProtected: false
+          isProtected: false,
+          meta: {
+           title: 'Logout',
+           description: ''
+          }
         }
       })
       .state('register', {
         parent: 'noSideBar', 
         url: '/register',
         templateUrl: 'register/register_form.html',
-        controller: 'RegisterCtrl'
+        controller: 'RegisterCtrl',
+        data: {
+          meta: {
+           title: 'Register',
+           description: ''
+          }
+        }
+      })
+      .state('forgotPassword', {
+        parent: 'noSideBar',
+        url: '/forgot-password',
+        templateUrl: 'login/forgot_password.html',
+        controller: 'LoginCtrl',
+        data: {
+          isProtected: false
+        }
+      })
+      .state('resetPassword', {
+        parent: 'noSideBar',
+        url: '/reset-password',
+        templateUrl: 'login/reset_password.html',
+        controller: 'LoginCtrl',
+        data: {
+          isProtected: false
+        }
       })
       .state('profile', {
         parent: 'noSideBar',
@@ -84,7 +126,11 @@
           loggedin: crds_utilities.checkLoggedin
         },
         data: {
-          isProtected: true
+          isProtected: true,
+          meta: {
+           title: 'Profile',
+           description: ''
+          }
         },
         views: {
           '': {
@@ -120,6 +166,12 @@
         url: '/myprofile',
         controller: 'MyProfileCtrl as myProfile',
         templateUrl: 'myprofile/myprofile.html',
+        data: {
+          meta: {
+           title: 'Profile',
+           description: ''
+          }
+        }
       })
       .state("go-trip-select", {
         parent: 'noSideBar',
@@ -187,7 +239,11 @@
         controller: 'MyServeController as serve',
         templateUrl: 'my_serve/myserve.html',
         data: {
-          isProtected: true
+          isProtected: true,
+          meta: {
+           title: 'Signup to Serve',
+           description: ''
+          }
         },
         resolve: {
           loggedin: crds_utilities.checkLoggedin,
@@ -343,7 +399,11 @@
         controller: 'GroupSignupController as groupsignup',
         templateUrl: 'community_groups_signup/group_signup_form.html',
         data: {
-          isProtected: true
+          isProtected: true,
+          meta: {
+           title: 'Community Group Signup',
+           description: ''
+          }
         },
         resolve: {
           loggedin: crds_utilities.checkLoggedin
@@ -355,7 +415,11 @@
         controller: 'VolunteerController as volunteer',
         templateUrl: 'volunteer_signup/volunteer_signup_form.html',
         data: {
-          isProtected: true
+          isProtected: true,
+          meta: {
+           title: 'Volunteer Signup',
+           description: ''
+          }
         },
         resolve: {
           loggedin: crds_utilities.checkLoggedin,
@@ -373,7 +437,11 @@
         controller: 'VolunteerApplicationController as volunteer',
         templateUrl: 'volunteer_application/volunteerApplicationForm.html',
         data: {
-          isProtected: true
+          isProtected: true,
+          meta: {
+           title: 'Volunteer Signup',
+           description: ''
+          }
         },
         resolve: {
           loggedin: crds_utilities.checkLoggedin,
@@ -419,7 +487,11 @@
           }
         },
         data: {
-          preventRouteAuthentication: true
+          preventRouteAuthentication: true,
+          meta: {
+           title: 'Corkboard',
+           description: ''
+          }
         }
       })
       .state('tools', {
@@ -429,7 +501,11 @@
         templateUrl: 'mp_tools/tools.html',
         data: {
           hideMenu: true,
-          isProtected: true
+          isProtected: true,
+          meta: {
+           title: 'Tools',
+           description: ''
+          }
         },
         resolve: {
           loggedin: crds_utilities.checkLoggedin
@@ -445,7 +521,11 @@
         controller: 'KCApplicantController as applicant',
         templateUrl: 'kc_applicant/applicant.html',
         data: {
-          isProtected: true
+          isProtected: true,
+          meta: {
+           title: 'Kids Club Application',
+           description: ''
+          }
         },
         resolve: {
           loggedin: crds_utilities.checkLoggedin,
@@ -490,13 +570,31 @@
           }
         }
       })
+      .state('tools.tripPrivateInvite', {
+        url: '/tripPrivateInvite',
+        controller: 'TripPrivateInviteController as invite',
+        templateUrl: 'trip_private_invite/invite.html',
+        resolve: {
+          MPTools: 'MPTools',
+          Trip: 'Trip'
+        }
+      })
       .state('tools.checkBatchProcessor', {
         url: '/checkBatchProcessor',
         controller: 'CheckBatchProcessor as checkBatchProcessor',
         templateUrl: 'check_batch_processor/checkBatchProcessor.html',
         data: {
-          isProtected: true
+          isProtected: true,
+          meta: {
+           title: 'Check Batch Processor',
+           description: ''
+          }
         }
+      })
+      .state('tools.gpExport', {
+        url: '/gpExport',
+        controller: 'GPExportController as gpExport',
+        templateUrl: 'gp_export/gpExport.html'
       })
       .state('content', {
         url: '{link:contentRouteType}',
@@ -504,7 +602,12 @@
         views: {
           '': {
             controller: 'ContentCtrl',
-            templateProvider: function($templateFactory, $stateParams, Page, ContentPageService) {
+            templateProvider: function($rootScope,
+              $templateFactory,
+              $stateParams,
+              Page,
+              ContentPageService,
+              ContentSiteConfigService) {
               var promise;
 
               var link = addTrailingSlashIfNecessary($stateParams.link);
@@ -525,6 +628,15 @@
                     }
                   });
                 }
+
+                $rootScope.meta = {
+                  title: ContentPageService.page.title +
+                    ' | ' +
+                    ContentSiteConfigService.siteconfig.title,
+                  description: ContentPageService.page.metaDescription,
+                  extraMeta: ContentPageService.page.extraMeta
+                };
+
                 switch(ContentPageService.page.pageType){
                   case 'NoHeaderOrFooter':
                     return $templateFactory.fromUrl('templates/noHeaderOrFooter.html');
@@ -541,7 +653,7 @@
             }
           },
           '@content': {
-            templateUrl: 'content/content.html'
+            templateUrl: 'content/content.html',
           },
           'sidebar@content': {
             templateUrl: 'content/sidebarContent.html'
