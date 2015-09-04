@@ -1,4 +1,5 @@
 require('crds-core');
+require('../../../app/common/common.module');
 require('../../../app/app');
 
 describe('Give Transfer Service', function() {

@@ -1,4 +1,6 @@
 require('crds-core');
+require('../../app/common/common.module');
+require('../../app/give/give.module');
 require('../../app/app');
 
 describe('GiveController', function() {
