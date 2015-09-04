@@ -6,6 +6,7 @@
 
     vm.ProfileReferenceData = ProfileReferenceData.getInstance();
     vm.person = {};
+    vm.householdPhoneFocus = householdPhoneFocus;
 
     //default parm values
     vm.allowPasswordChange = angular.isDefined(vm.allowPasswordChange) ? vm.allowPasswordChange : 'true';
@@ -52,6 +53,10 @@
         var mAdate = moment(new Date(vm.person.anniversaryDate));
         vm.person.anniversaryDate = mAdate.format('MM/DD/YYYY');
       }
+    }
+
+    function householdPhoneFocus(){
+      $rootScope.$emit('homePhoneFocus');
     }
 
     vm.savePersonal = function() {

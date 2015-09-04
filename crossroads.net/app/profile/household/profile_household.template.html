@@ -1,5 +1,3 @@
-Household ID: {{ household.householdId }}
-
 <div class="row" ng-controller="ProfileHouseholdController">
   <fieldset>
     <div class="col-sm-12">
@@ -12,14 +10,14 @@ Household ID: {{ household.householdId }}
       </p>
 
       <div class="panel panel-default clearfix">
-        <div class="panel-heading address-panel-heading clearfix" ng-click="myProfile.isCollapsed = !myProfile.isCollapsed">
+        <div class="panel-heading address-panel-heading clearfix" ng-click="household.isCollapsed = !household.isCollapsed">
           <div class="row">
-            <a ng-click="myProfile.isCollapsed = !myProfile.isCollapsed" href="#" class="address-show" ng-show="myProfile.isCollapsed">
+            <a ng-click="household.isCollapsed = !household.isCollapsed" href="#" class="address-show" ng-show="household.isCollapsed">
               <svg viewBox="0 0 32 32" class="icon icon-pencil4">
                 <use xlink:href="#pencil4"></use>
               </svg>
             </a>
-            <a ng-click="myProfile.isCollapsed = !myProfile.isCollapsed" href="#" class="address-show" ng-show="!myProfile.isCollapsed">
+            <a ng-click="household.isCollapsed = !household.isCollapsed" href="#" class="address-show" ng-show="!household.isCollapsed">
               <svg viewBox="0 0 18 32" class="icon icon-caret-up">
                 <use xlink:href="#caret-up"></use>
               </svg>
@@ -42,7 +40,7 @@ Household ID: {{ household.householdId }}
         </div>
         <!--/panel-heading-->
 
-        <div class="address-panel-body panel-body clearfix" collapse="myProfile.isCollapsed">
+        <div class="address-panel-body panel-body clearfix" collapse="household.isCollapsed">
           <div class="col-sm-12">
             <form role="form">
               <fieldset class="row">

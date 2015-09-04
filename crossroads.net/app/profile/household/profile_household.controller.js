@@ -2,14 +2,15 @@
 (function() {
   module.exports = ProfileHouseholdController;
 
-  ProfileHouseholdController.$inject = ['$log', 'Profile', 'Lookup'];
+  ProfileHouseholdController.$inject = ['$rootScope', '$location', '$anchorScroll', '$log', 'Profile', 'Lookup'];
 
-  function ProfileHouseholdController($log, Profile, Lookup) {
+  function ProfileHouseholdController($rootScope, $location, $anchorScroll, $log, Profile, Lookup) {
     var vm = this;
 
+    vm.countries = getCountries();
     vm.displayName = displayName;
     vm.displayLocation = displayLocation;
-    vm.countries = getCountries();
+    vm.isCollapsed = true;
     vm.locations = getLocations();
     vm.states = getStates();
 
@@ -20,6 +21,17 @@
         vm.info = data;
       });
     }
+
+    $rootScope.$on('homePhoneFocus', function(event,data) { 
+      vm.isCollapsed = false;
+
+      $location.hash('homephonecont');
+
+      setTimeout(function () {
+        $anchorScroll();
+      }, 500);
+    });
+
 
     function displayName(member) {
       return member.nickname + ' ' + member.lastName;
