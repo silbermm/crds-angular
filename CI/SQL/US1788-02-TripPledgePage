@@ -1,6 +1,6 @@
 USE [MinistryPlatform]
 GO
-
+/*
 SET IDENTITY_INSERT [dbo].[dp_Pages] ON
 GO
 
@@ -33,19 +33,13 @@ INSERT INTO [dbo].[dp_Pages]
 
 SET IDENTITY_INSERT [dbo].[dp_Pages] OFF
 GO
-
-
-SET IDENTITY_INSERT [dbo].[dp_Page_Section_Pages] ON
-GO
+*/
 
 INSERT INTO [dbo].[dp_Page_Section_Pages]
            ([Page_ID]
            ,[Page_Section_ID])
      VALUES
            (514, 9)
-GO
-
-SET IDENTITY_INSERT [dbo].[dp_Page_Section_Pages] OFF
 GO
 
 INSERT INTO [dbo].[dp_Role_Pages]
