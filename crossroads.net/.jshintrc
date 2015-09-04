@@ -66,6 +66,7 @@
         "afterEach"  : false,
         "_"          : false,
         "__API_ENDPOINT__" : false,
+        "__STRIPE_PUBKEY__": false,
         "crds_utilities" : false,
         "spyOn": false,
         "_$location_" : false,

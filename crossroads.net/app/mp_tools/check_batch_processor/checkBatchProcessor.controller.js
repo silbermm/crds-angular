@@ -3,7 +3,7 @@
 
   module.exports = CheckBatchProcessor;
 
-  CheckBatchProcessor.$inject = ['$rootScope', '$log', 'MPTools', 'CheckScannerBatches', 'getPrograms', 'AuthService', 'GIVE_PROGRAM_TYPES', 'GIVE_ROLES'];
+  CheckBatchProcessor.$inject = ['$rootScope', '$log', 'MPTools', 'CheckScannerBatches', 'Programs', 'AuthService', 'GIVE_PROGRAM_TYPES', 'GIVE_ROLES'];
 
   function CheckBatchProcessor($rootScope, $log, MPTools, CheckScannerBatches, getPrograms, AuthService, GIVE_PROGRAM_TYPES, GIVE_ROLES) {
     var vm = this;

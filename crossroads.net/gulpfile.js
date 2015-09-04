@@ -10,13 +10,12 @@ var svgSprite = require('gulp-svg-sprite');
 var replace = require('gulp-replace');
 var rename = require('gulp-rename');
 var htmlreplace = require('gulp-html-replace');
-var connect_history = require('connect-history-api-fallback');
+var connectHistory = require('connect-history-api-fallback');
 
 var fallbackOptions = {
   index: '/index.html',
   verbose: true,
   rewrites: [
-    // TODO: see if there is a way to dry this up so we don't need to specify every folder/filename
     {from: /\/corkboard\/assets\/main.js/, to: '/corkboard/assets/main.js'},
     {from: /\/corkboard\/assets\/main.css/, to: '/corkboard/assets/main.css'},
     {from: /\/corkboard\/assets\/core.js/, to: '/corkboard/assets/core.js'},
@@ -25,27 +24,29 @@ var fallbackOptions = {
   ]
 };
 
-function htmlReplace(){
+function htmlReplace() {
   var assets = require('./webpack-assets.json');
- 
   gulp.src('app/atriumevents.html')
     .pipe(htmlreplace({
-      'corejs': assets.core.js,
-      'corecss': assets.core.css,
-      'tripsjs': assets.trips.js,
-      'mediajs': assets.media.js,
-      'js': assets.main.js
+      corejs: assets.core.js,
+      corecss: assets.core.css,
+      commonjs: assets.common.js,
+      tripsjs: assets.trips.js,
+      mediajs: assets.media.js,
+      givejs: assets.give.js,
+      js: assets.main.js
     }))
     .pipe(gulp.dest('./'));
 
-
   gulp.src('app/index.html')
     .pipe(htmlreplace({
-      'corejs': assets.core.js,
-      'corecss': assets.core.css,
-      'tripsjs': assets.trips.js,
-      'mediajs': assets.media.js,
-      'js': assets.main.js
+      corejs: assets.core.js,
+      corecss: assets.core.css,
+      commonjs: assets.common.js,
+      tripsjs: assets.trips.js,
+      mediajs: assets.media.js,
+      givejs: assets.give.js,
+      js: assets.main.js
     }))
     .pipe(gulp.dest('./'));
 }
@@ -65,53 +66,55 @@ gulp.task('default', ['webpack-dev-server']);
 //               can serve an old app on refresh
 gulp.task('build-dev', ['webpack:build-dev'], function() {
 
-	var watchPatterns = [];
-	webPackConfigs.forEach(function(element) {
-		watchPatterns.push(element.watchPattern);
-		gutil.log('Adding watch', element.watchPattern);
-	});
+  var watchPatterns = [];
+  webPackConfigs.forEach(function(element) {
+    watchPatterns.push(element.watchPattern);
+    gutil.log('Adding watch', element.watchPattern);
+  });
 
-	gulp.watch(watchPatterns, ['webpack:build-dev']);
+  gulp.watch(watchPatterns, ['webpack:build-dev']);
 });
 
-gulp.task('build-browser-sync', function () {
-	webPackDevConfigs.forEach(function(element) {
+gulp.task('build-browser-sync', function() {
+  webPackDevConfigs.forEach(function(element) {
 
-		element.devtool = 'eval';
-		element.debug = true;
-		element.output.path = '/';
+    element.devtool = 'eval';
+    element.debug = true;
+    element.output.path = '/';
 
-		// force gulpWebpack to watch for file changes
-		element.watch = true;
+    // force gulpWebpack to watch for file changes
+    element.watch = true;
 
-		// Build app to assets - watch for changes
-		gulp.src(element.watchPattern)
-			.pipe(gulpWebpack(element))
-			.pipe(gulp.dest('./assets'));
-	});
+    // Build app to assets - watch for changes
+    gulp.src(element.watchPattern)
+    .pipe(gulpWebpack(element))
+    .pipe(gulp.dest('./assets'));
+  });
 
   gulp.src('app/index.html')
     .pipe(htmlreplace({
-      'corejs': '/assets/core.js',
-      'corecss': '/assets/core.css',
-      'tripsjs': '/assets/trips.js',
-      'mediajs': '/assets/media.js',
-      'css': '/assets/main.css',
-      'js': '/assets/main.js'
+      corejs: '/assets/core.js',
+      corecss: '/assets/core.css',
+      commonjs: '/assets/common.js',
+      tripsjs: '/assets/trips.js',
+      mediajs: '/assets/media.js',
+      givejs: '/assets/give.js',
+      css: '/assets/main.css',
+      js: '/assets/main.js'
     })).pipe(gulp.dest('./'));
- 
+
   gulp.src('app/atriumevents.html')
     .pipe(htmlreplace({
-      'corejs': '/assets/core.js',
-      'corecss': '/assets/core.css',
-      'tripsjs': '/assets/trips.js',
-      'mediajs': '/assets/media.js',
-      'css': '/assets/main.css',
-      'js': '/assets/main.js'
+      corejs: '/assets/core.js',
+      corecss: '/assets/core.css',
+      commonjs: '/assets/common.js',
+      tripsjs: '/assets/trips.js',
+      mediajs: '/assets/media.js',
+      givejs: '/assets/give.js',
+      css: '/assets/main.css',
+      js: '/assets/main.js'
     }))
     .pipe(gulp.dest('./'));
-
-
 
 });
 
@@ -136,7 +139,7 @@ gulp.task('browser-sync-dev', ['build-browser-sync'], function() {
 		server: {
 		  baseDir: './',
 		  middleware: [
-			  connect_history(fallbackOptions)
+			  connectHistory(fallbackOptions)
 			]
 		}
 	});
@@ -181,22 +184,26 @@ gulp.task('webpack-dev-server', ['icons-watch'], function(callback) {
 
   gulp.src('app/index.html')
     .pipe(htmlreplace({
-      'corejs': '/assets/core.js',
-      'corecss': '/assets/core.css',
-      'tripsjs': '/assets/trips.js',
-      'mediajs': '/assets/media.js',
-      'css': '/assets/main.css',
-      'js': '/assets/main.js'
+      corejs: '/assets/core.js',
+      corecss: '/assets/core.css',
+      commonjs: '/assets/common.js',
+      tripsjs: '/assets/trips.js',
+      mediajs: '/assets/media.js',
+      givejs: '/assets/give.js',
+      css: '/assets/main.css',
+      js: '/assets/main.js'
     })).pipe(gulp.dest('./'));
 
   gulp.src('app/atriumevents.html')
     .pipe(htmlreplace({
-      'corejs': '/assets/core.js',
-      'corecss': '/assets/core.css',
-      'tripsjs': '/assets/trips.js',
-      'mediajs': '/assets/media.js',
-      'css': '/assets/main.css',
-      'js': '/assets/main.js'
+      corejs: '/assets/core.js',
+      corecss: '/assets/core.css',
+      commonjs: '/assets/common.js',
+      tripsjs: '/assets/trips.js',
+      mediajs: '/assets/media.js',
+      givejs: '/assets/give.js',
+      css: '/assets/main.css',
+      js: '/assets/main.js'
     }))
     .pipe(gulp.dest('./'));
 
@@ -245,22 +252,26 @@ gulp.task('webpack:build-dev', ['icons'], function(callback) {
 		callback();
     gulp.src('app/index.html')
     .pipe(htmlreplace({
-      'corejs': '/assets/core.js',
-      'corecss': '/assets/core.css',
-      'tripsjs': '/assets/trips.js',
-      'mediajs': '/assets/media.js',
-      'css': '/assets/main.css',
-      'js': '/assets/main.js'
+      corejs: '/assets/core.js',
+      corecss: '/assets/core.css',
+      commonjs: '/assets/common.js',
+      givejs: '/assets/give.js',
+      tripsjs: '/assets/trips.js',
+      mediajs: '/assets/media.js',
+      css: '/assets/main.css',
+      js: '/assets/main.js'
     })).pipe(gulp.dest('./'));
 
     gulp.src('app/atriumevents.html')
     .pipe(htmlreplace({
-      'corejs': '/assets/core.js',
-      'corecss': '/assets/core.css',
-      'tripsjs': '/assets/trips.js',
-      'mediajs': '/assets/media.js',
-      'css': '/assets/main.css',
-      'js': '/assets/main.js'
+      corejs: '/assets/core.js',
+      corecss: '/assets/core.css',
+      commonjs: '/assets/common.js',
+      tripsjs: '/assets/trips.js',
+      mediajs: '/assets/media.js',
+      givejs: '/assets/give.js',
+      css: '/assets/main.css',
+      js: '/assets/main.js'
     }))
     .pipe(gulp.dest('./'));
 
