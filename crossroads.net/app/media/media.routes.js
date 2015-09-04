@@ -123,6 +123,12 @@
         url: '/message/:id/:title?',
         controller: 'SingleMediaController as singleMedia',
         templateUrl: 'templates/mediaSingle.html',
+        data: {
+          meta: {
+           title: 'Message',
+           description: ''
+          }
+        },
         resolve: {
           Media: 'Media',
           $stateParams: '$stateParams',
