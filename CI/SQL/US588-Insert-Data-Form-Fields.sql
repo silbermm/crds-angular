@@ -75,7 +75,7 @@ Florence - Sun - 11:30am
 West Side - Sun - 8:15am
 West Side - Sun - 10:00am
 West Side - Sun 11:45am
-Clifton - Sun - 7:00pm',1,17,1,0,379)
+Uptown - Sun - 7:00pm',1,17,1,0,379)
 INSERT INTO [dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (80,'Gender',7,'Male
 Female',1,17,1,0,380)
 INSERT INTO [dbo].[Form_Fields] ([Field_Order], [Field_Label], [Field_Type_ID], [Field_Values], [Required], [Form_ID], [Domain_ID], [Placement_Required], [CrossroadsId]) VALUES (70,'Date of Birth',3,'NULL',1,17,1,0,382)

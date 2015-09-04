@@ -13,7 +13,8 @@
           display: none !important;
       }
   </style>
-  <title>Index</title>
+  <title ng-bind="meta.title">Crossroads</title>
+  <meta name="description" content="{{meta.description}}">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <link rel="apple-touch-icon" sizes="57x57" href="http://crossroads-media.s3.amazonaws.com/images/favicon/apple-touch-icon-57x57.png">
   <link rel="apple-touch-icon" sizes="60x60" href="http://crossroads-media.s3.amazonaws.com/images/favicon/apple-touch-icon-60x60.png">
@@ -57,7 +58,7 @@
 
   <!-- URL specific twitter tags. Using http://int.crossroads.net/media/single for example data-->
   <!-- <meta name="twitter:creator" content="@tatelucas" /> --> <!-- optional tag if you want to identify the author instead of just "Crossroads". -->
-    
+
   <script type="text/ng-template" id="on-submit-messages">
       <span ng-message="required"><span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span></span>
       <span ng-message="initiativeRequired"><span ng-bind-html="$root.MESSAGES.noInitiativeSelected.content | html"></span></span>
@@ -110,7 +111,11 @@
 <!-- build:tripsjs -->
 <script src="/assets/trips.js"></script>
 <!-- endbuild -->
+<!-- build:mediajs -->
+<script src="/assets/media.js"></script>
+<!-- endbuild -->
 <!-- build:js -->
 <script src="/assets/main.js"></script>
 <!-- endbuild -->
+
 </html>

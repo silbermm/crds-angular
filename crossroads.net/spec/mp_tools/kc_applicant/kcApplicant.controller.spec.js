@@ -31,6 +31,7 @@ describe('KC Applicant Tool', function(){
     Contact = $injector.get('Contact');
     CmsInfo = $injector.get('CmsInfo');
     $httpBackend = $injector.get('$httpBackend');
+    $httpBackend.whenGET(/SiteConfig*/).respond('');
   }));
 
   it('should get the correct query parameters', function(){
@@ -50,7 +51,7 @@ describe('KC Applicant Tool', function(){
         'api/opportunity/getResponseForOpportunity/' + controller.pageInfo.opportunity +
         '/' + controller.params.recordId)
       .respond(200, mockResponse);
-      
+
     $httpBackend.flush();
     expect(controller.responseId).toBe(mockResponse.responseId);
   });
@@ -60,7 +61,7 @@ describe('KC Applicant Tool', function(){
         'api/opportunity/getResponseForOpportunity/' + controller.pageInfo.opportunity +
         '/' + controller.params.recordId)
       .respond(200, null);
-      
+
     $httpBackend.flush();
     expect(controller.error).toBeTruthy();
   });

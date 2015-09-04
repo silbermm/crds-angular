@@ -253,6 +253,8 @@
     <Compile Include="Controllers\API\ProfileController.cs" />
     <Compile Include="Controllers\API\SkillController.cs" />
     <Compile Include="Controllers\API\VolunteerApplicationController.cs" />
+    <Compile Include="DataAccess\EzScanCheckScannerDao.cs" />
+    <Compile Include="DataAccess\Interfaces\ICheckScannerDao.cs" />
     <Compile Include="Exceptions\Models\ApiErrorDto.cs" />
     <Compile Include="Enum\BadgeTypeEnum.cs" />
     <Compile Include="Exceptions\PaymentProcessorException.cs" />
@@ -291,6 +293,7 @@
     <Compile Include="Models\Crossroads\Stewardship\CheckScannerBatch.cs" />
     <Compile Include="Models\Crossroads\Stewardship\CheckScannerCheck.cs" />
     <Compile Include="Models\Crossroads\Stewardship\DepositDTO.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\GPExportDatumDTO.cs" />
     <Compile Include="Models\Crossroads\Stewardship\PledgeCampaign.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeBalanceTransaction.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeBankAccount.cs" />
@@ -309,6 +312,7 @@
     <Compile Include="Models\Crossroads\Stewardship\StripeToken.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeTransfer.cs" />
     <Compile Include="Models\Crossroads\Trip\MyTripsDTO.cs" />
+    <Compile Include="Models\Crossroads\Trip\PrivateInviteDto.cs" />
     <Compile Include="Models\Crossroads\Trip\SaveTripParticipantsDto.cs" />
     <Compile Include="Models\Crossroads\Trip\Trip.cs" />
     <Compile Include="Models\Crossroads\Trip\TripApplicantResponse.cs" />
@@ -320,6 +324,7 @@
     <Compile Include="Models\Crossroads\Trip\TripParticipantDto.cs" />
     <Compile Include="Models\Crossroads\Trip\TripDto.cs" />
     <Compile Include="Models\Crossroads\Trip\TripToolError.cs" />
+    <Compile Include="Models\Crossroads\Trip\ValidatePrivateInviteDto.cs" />
     <Compile Include="Models\Crossroads\User.cs" />
     <Compile Include="Models\Crossroads\VolunteerApplication\AdultApplicationDto.cs" />
     <Compile Include="Models\Crossroads\VolunteerApplication\ChildDto.cs" />
@@ -354,6 +359,7 @@
     <Compile Include="Services\Interfaces\IDonorService.cs" />
     <Compile Include="Services\Interfaces\IEmailCommunication.cs" />
     <Compile Include="Services\Interfaces\IGroupService.cs" />
+    <Compile Include="Services\Interfaces\IProgramService.cs" />
     <Compile Include="Services\Interfaces\IServeService.cs" />
     <Compile Include="Services\Interfaces\IPersonService.cs" />
     <Compile Include="Services\Interfaces\IPaymentService.cs" />
@@ -362,6 +368,7 @@
     <Compile Include="Services\Interfaces\IVolunteerApplicationService.cs" />
     <Compile Include="Services\MinistryPlatformBaseService.cs" />
     <Compile Include="Services\PersonService.cs" />
+    <Compile Include="Services\ProgramService.cs" />
     <Compile Include="Services\ServeService.cs" />
     <Compile Include="Services\SkillService.cs" />
     <Compile Include="Services\StripeEventService.cs" />
