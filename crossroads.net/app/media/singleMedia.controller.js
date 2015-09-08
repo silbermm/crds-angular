@@ -26,7 +26,7 @@
     vm.showVideoDownloadLink = showVideoDownloadLink;
     vm.showAudioDownloadLink = showAudioDownloadLink;
     vm.showProgramDownloadLink = showProgramDownloadLink;
- vm.shareUrl = $location.absUrl();
+    vm.shareUrl = $location.absUrl();
     vm.sanitizedDescription = $sanitize(vm.media.description);
     vm.addTagsToArray = addTagsToArray;
     vm.mediaTags = [];
@@ -53,6 +53,8 @@
       vm.video.videoUrl = _.get(vm.video, 'serviceId');
       vm.videoDownloadLink = _.get(vm.video, 'source.filename');
       $sce.trustAsResourceUrl(vm.videoUrl);
+
+      vm.addTagsToArray(vm.video, vm.mediaTags);
     }
 
     if (vm.audio) {
