@@ -115,6 +115,10 @@
           Campaign: function(Trip, $stateParams) {
             return Trip.Campaign.get({campaignId: $stateParams.campaignId}).$promise;
           },
+
+          Family: function(Trip, $stateParams) {
+            return Trip.Family.query({pledgeCampaignId: $stateParams.campaignId}).$promise;
+          }
         }
       })
       .state('tripsignup.application', {

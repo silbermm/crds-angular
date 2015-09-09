@@ -3,9 +3,9 @@
 
   module.exports = TripsSignupService;
 
-  TripsSignupService.$inject = ['$location'];
+  TripsSignupService.$inject = ['$resource', '$location'];
 
-  function TripsSignupService($location) {
+  function TripsSignupService($resource, $location) {
     var signupService = {
       activate: activate,
       reset: reset,
