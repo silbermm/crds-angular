@@ -41,30 +41,6 @@
         abstract:true,
         templateUrl: 'templates/noHeaderOrFooter.html'
       })
-      //.state('home', {
-      //  parent: 'noSideBar',
-      //  url: '/',
-      //  templateUrl: 'home/home.html',
-      //  controller: 'HomeCtrl',
-      //  data: {
-      //    meta: {
-      //     title: 'Home',
-      //     description: ''
-      //    }
-      //  }
-      //})
-      //.state('homealso', {
-      //  parent: 'noSideBar',
-      //  url: '/home',
-      //  templateUrl: 'home/home.html',
-      //  controller: 'HomeCtrl',
-      //  data: {
-      //    meta: {
-      //     title: 'Home',
-      //     description: ''
-      //    }
-      //  }
-      //})
       .state('login', {
         parent: 'noSideBar',
         url: '/login',
@@ -514,7 +490,6 @@
               var promise;
 
               var link = addTrailingSlashIfNecessary($stateParams.link);
-              debugger;
               promise = Page.get({ url: link }).$promise;
 
               return promise.then(function(promise) {
