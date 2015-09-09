@@ -7,7 +7,7 @@ require('./personal/profile_personal.template.html');
 
 var app = angular.module('crossroads.profile');
 
-app.controller('crdsProfileCtrl', ['$rootScope','Profile', 'Lookup', '$q', '$log','$scope',  require("./profile_controller")]);
+app.controller('crdsProfileCtrl', ['$rootScope','Profile', 'Lookup', '$q', '$log','$scope', require("./profile_controller")]);
 
 // Modal
 require("./editProfile.html");
@@ -20,7 +20,7 @@ app.factory('ProfileReferenceData', ['Lookup', 'Profile', '$resolve', require('.
 
 // Personal
 require("./personal/profile_personal.html");
-app.controller("ProfilePersonalController", ["$rootScope", "$log","$timeout","MESSAGES", "ProfileReferenceData", require('./personal/profile_personal_controller')]);
+app.controller("ProfilePersonalController", ["$rootScope", "$log","$timeout","MESSAGES", "ProfileReferenceData", "Validation", require('./personal/profile_personal_controller')]);
 app.directive('uniqueEmail', ['$http', 'Session', 'User', require('./personal/profile_unique_email_directive') ]);
 app.directive("validateDate", ["$log", require('./personal/profile_valid_date_directive')]);
 app.directive('profilePersonal', ["$log", require("./personal/profile_personal.directive")]);

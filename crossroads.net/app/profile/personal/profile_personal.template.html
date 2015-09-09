@@ -1,12 +1,13 @@
 <section ng-show="profile.viewReady" class="email-modal">
-<form role="form" name="personal" ng-init="profile.initProfile(this)" novalidate>
+<pre> form valid: {{ profile }}</pre>
+<form role="form" name="profile.personal" novalidate>
     <p class="push-bottom">Information shared here is kept secure and private. We will not share or sell your information.</p>
 
     <div class="row">
-        <div class="form-group col-sm-6" ng-class="{'has-error': profile.showError(personal, 'first-name')}">
+        <div class="form-group col-sm-6" ng-class="{'has-error': profile.validation.showErrors(profile.form, 'firstName')}">
             <label for="firstname" class="required">First Name</label>
-            <input type="text" class="form-control" id="first-name" name="first-name" placeholder="Enter first name" ng-model="profile.person.firstName" required>
-            <ng-messages for="personal.firstName.$error" ng-if="profile.showError(personal, 'first-name')">
+            <input type="text" class="form-control" id="first-name" name="firstName" placeholder="Enter first name" ng-model="profile.person.firstName" required>
+            <ng-messages for="profile.personal.firstName.$error" ng-if="profile.validation.showErrors(profile.form, 'firstName')">
               <span ng-message="required">
                 <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
               </span>
@@ -17,12 +18,16 @@
             <label for="middlename">Middle Name</label>
             <input type="text" class="form-control" id="middle-name" placeholder="Enter middle name" ng-model="profile.person.middleName">
         </div>
+    </div>
 
-        <div class="form-group col-sm-6">
+    <div class="row">
+        <div class="form-group col-sm-6" ng-class="{'has-error': profile.validation.showErrors(profile.personal, 'lastName')}">
             <label for="lastname" class="required">Last Name</label>
-            <input type="text" class="form-control" id="last-name" placeholder="Enter last name" ng-model="profile.person.lastName">
-            <ng-messages for="personal['last-name'].$error" ng-if="personal.$submitted">
-              <ng-messages-include src="on-submit-messages"></ng-messages-include>
+            <input type="text" class="form-control" id="last-name" name="lastName" placeholder="Enter last name" ng-model="profile.person.lastName" required>
+            <ng-messages for="personal.lastName.$error" ng-if="profile.validation.showErrors(profile.personal, 'lastName')">
+              <span ng-message="required">
+                <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+              </span>
             </ng-messages>
         </div>
 
@@ -30,7 +35,9 @@
             <label for="maidenname">Maiden Name</label>
             <input type="text" class="form-control" id="maidenname" placeholder="Enter maiden name" ng-model='profile.person.maidenName'>
         </div>
+    </div>
 
+    <div class="row">
         <div class="form-group col-sm-6">
             <label for="nickname">Preferred Name <small class="text-muted">(Example: Chris instead of Christopher)</small>
             </label>

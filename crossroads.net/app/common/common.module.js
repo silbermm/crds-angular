@@ -7,4 +7,5 @@
 
   // require all giving common components
   require('./giving');
+  require('./validation');
 })();

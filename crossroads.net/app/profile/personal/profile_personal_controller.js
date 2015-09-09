@@ -1,9 +1,10 @@
 'use strict';
 (function() {
 
-  module.exports = function($rootScope, $log, $timeout, MESSAGES, ProfileReferenceData) {
+  module.exports = function($rootScope, $log, $timeout, MESSAGES, ProfileReferenceData, Validation) {
     var vm = this;
 
+    vm.validation = Validation;
     vm.ProfileReferenceData = ProfileReferenceData.getInstance();
     vm.person = {};
     vm.householdPhoneFocus = householdPhoneFocus;
@@ -23,8 +24,27 @@
     vm.loading = true;
     vm.viewReady = false;
 
-    vm.initProfile = function(form) {
-      vm.form = form;
+    activate();
+
+    // vm.initProfile = function(form) {
+    //   vm.form = form;
+    //   vm.ProfileReferenceData.then(function(response) {
+    //     vm.genders = response.genders;
+    //     vm.maritalStatuses = response.maritalStatuses;
+    //     vm.serviceProviders = response.serviceProviders;
+    //     vm.states = response.states;
+    //     vm.countries = response.countries;
+    //     vm.crossroadsLocations = response.crossroadsLocations;
+    //     configurePerson(response.person);
+
+    //     // var household =
+
+    //     vm.viewReady = true;
+    //   });
+    // };
+
+    function activate() {
+      vm.form = vm.personal;
       vm.ProfileReferenceData.then(function(response) {
         vm.genders = response.genders;
         vm.maritalStatuses = response.maritalStatuses;
@@ -38,7 +58,7 @@
 
         vm.viewReady = true;
       });
-    };
+    }
 
     function configurePerson(person) {
       vm.person = person;
@@ -110,6 +130,7 @@
 
       return true;
     };
+
   };
 
 })();

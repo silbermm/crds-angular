@@ -9,8 +9,9 @@
     <!-- <form role="form"> -->
       <legend>Update Profile Information</legend>
       <div class="row">
-        <profile-personal allow-password-change="false" require-mobile-phone="true" allow-save="false" />
+        <form>
+        <profile-personal allow-password-change="false" require-mobile-phone="true" allow-save="false"/>
       </div>
-      <button class="btn btn-primary pull-right" ng-click='pages.handleNext(2)'  > Next </button>
+      <button class="btn btn-primary pull-right" ng-click='pages.validateProfile()'  > Next </button>
     <!-- </form> -->
 </div>

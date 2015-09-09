@@ -21,6 +21,7 @@
     vm.nolaRequired = nolaRequired;
     vm.underAge = underAge;
     vm.whyPlaceholder = '';
+    vm.validateProfile = validateProfile;
 
     activate();
 
@@ -30,6 +31,12 @@
           'In instances where we have a limited number of spots, we strongly consider responses to this question.';
       }
 
+    }
+    function validateProfile()
+    {
+      //do stuff
+      
+      handleNext(2);
     }
 
     function handleNext(nextPage) {
