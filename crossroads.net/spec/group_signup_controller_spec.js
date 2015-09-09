@@ -86,6 +86,7 @@ var successResponse = [
       function($injector) {
        // Set up the mock http service responses
        $httpBackend = $injector.get('$httpBackend');
+       $httpBackend.whenGET(/SiteConfig*/).respond('');
        // Get hold of a scope (i.e. the root scope)
        $rootScope = $injector.get('$rootScope');
        scope = $rootScope.$new();
@@ -247,7 +248,7 @@ var successResponse = [
    function verifyExpectations(){
      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +'api/profile');
      $httpBackend.expectGET(window.__env__['CRDS_CMS_ENDPOINT'] + '/api/Page/?link=test');
-     
+
      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +'api/group/1');
      $httpBackend.flush();
    }

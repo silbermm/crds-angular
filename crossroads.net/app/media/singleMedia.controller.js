@@ -2,15 +2,16 @@
   'use strict';
   module.exports = SingleMediaController;
 
-  SingleMediaController.$inject = ['$rootScope', '$scope', '$sce', 'SingleMedia', 'ItemProperty', 'ParentMedia', 'ParentItemProperty', 'ImageURL', 'YT_EVENT'];
+  SingleMediaController.$inject = ['$rootScope', '$scope', '$sce', '$location', '$sanitize', 'SingleMedia', 'ItemProperty', 'ParentMedia', 'ParentItemProperty', 'ImageURL', 'YT_EVENT'];
 
-  function SingleMediaController($rootScope, $scope, $sce, SingleMedia, ItemProperty, ParentMedia, ParentItemProperty, ImageURL, YT_EVENT) {
+  function SingleMediaController($rootScope, $scope, $sce, $location, $sanitize, SingleMedia, ItemProperty, ParentMedia, ParentItemProperty, ImageURL, YT_EVENT) {
     var vm = this;
     vm.imageUrl = ImageURL;
     vm.isMessage = (ItemProperty === 'messages');
 
     vm.isSubscribeOpen = false;
     vm.media = SingleMedia[ItemProperty][0];
+    vm.pauseVideo = pauseVideo;
     vm.playVideo = playVideo;
     vm.setAudioPlayer = setAudioPlayer;
     vm.showSwitchToAudio = showSwitchToAudio;
@@ -25,12 +26,17 @@
     vm.showVideoDownloadLink = showVideoDownloadLink;
     vm.showAudioDownloadLink = showAudioDownloadLink;
     vm.showProgramDownloadLink = showProgramDownloadLink;
+    vm.shareUrl = $location.absUrl();
+    vm.sanitizedDescription = $sanitize(vm.media.description);
+    vm.addTagsToArray = addTagsToArray;
+    vm.mediaTags = [];
 
     if (vm.isMessage) {
       vm.videoSectionIsOpen = true;
       vm.audio = vm.media.audio;
       vm.video = vm.media.video;
       vm.programDownloadLink = _.get(vm.media, 'program.filename');
+      vm.addTagsToArray(vm.media, vm.mediaTags);
     } else {
       if (vm.media.className === 'Music') {
         vm.audio = vm.media;
@@ -44,18 +50,18 @@
     }
 
     if (vm.video) {
-      // if the video url is bound directly in the iframe at some point, it will need to be marked as
-      // trusted for Strict Contextual Escaping, such as --
-      // $sce.trustAsResourceUrl("https://www.youtube.com/embed/" + _.get(vm.media, 'serviceId'));
       vm.video.videoUrl = _.get(vm.video, 'serviceId');
       vm.videoDownloadLink = _.get(vm.video, 'source.filename');
       $sce.trustAsResourceUrl(vm.videoUrl);
+
+      vm.addTagsToArray(vm.video, vm.mediaTags);
     }
 
     if (vm.audio) {
       vm.audioDownloadLink = _.get(vm.audio, 'source.filename');
-    }
 
+      vm.addTagsToArray(vm.audio, vm.mediaTags);
+    }
 
     if (ParentMedia) {
       vm.parentMedia = ParentMedia[ParentItemProperty][0];
@@ -71,6 +77,10 @@
       stopAudioPlayer();
       stopVideo();
     });
+
+    function pauseVideo() {
+      sendControlEvent(YT_EVENT.PAUSE);
+    }
 
     function playVideo() {
       vm.videoStillIsVisible = false;
@@ -122,7 +132,7 @@
 
     function switchToAudio() {
       vm.videoSectionIsOpen = false;
-      vm.stopVideo();
+      vm.pauseVideo();
     }
 
     function switchToVideo() {
@@ -141,5 +151,14 @@
     function showProgramDownloadLink() {
       return ((vm.programDownloadLink === undefined) ? false : true);
     }
+
+    function addTagsToArray(media, mediaTags) {
+      _.forEach(media.tags, function(n) {
+        if (!(_.any(mediaTags, _.matches(n.title)))) {
+          mediaTags.push(n.title);
+        }
+      });
+    }
+
   }
 })();

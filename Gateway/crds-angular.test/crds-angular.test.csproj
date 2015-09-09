@@ -163,6 +163,7 @@
     <Compile Include="controllers\ServeControllerTest.cs" />
     <Compile Include="controllers\ProgramControllerTest.cs" />
     <Compile Include="controllers\StripeEventControllerTest.cs" />
+    <Compile Include="DataAccess\EzScanCheckScannerDaoTest.cs" />
     <Compile Include="Models\Json\RestHttpActionResultTest.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

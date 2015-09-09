@@ -27,7 +27,9 @@ module.exports = function(config) {
       './node_modules/phantomjs-polyfill/bind-polyfill.js',
       './node_modules/angular/angular.js',
       './node_modules/angular-mocks/angular-mocks.js',
-      './assets/trips.js',
+      //'./assets/common.js',
+      //'./assets/trips.js',
+      //'./assets/give.js',
       './assets/media*.js',
       'spec/spec_index.js'
     ],
@@ -75,33 +77,28 @@ module.exports = function(config) {
           { test: /\.html$/, loader: 'ng-cache?prefix=[dir]' }
         ]
       },
-      plugins: [ new ExtractTextPlugin('[name].css'), definePlugin ]  
+      plugins: [ new ExtractTextPlugin('[name].css'), definePlugin ]
     },
 
-    
     webpackMiddleware: {
       stats: {
-        colors: true  
+        colors: true
       }
     },
-    
+
     // enable / disable colors in the output (reporters and logs)
     colors: true,
 
-
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
-
+    logLevel: config.LOG_ERROR,
 
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
 
-
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
     browsers: ['PhantomJS'],
-
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
@@ -115,7 +112,6 @@ module.exports = function(config) {
       require('karma-phantomjs-launcher'),
       require('karma-env-preprocessor')
     ]
-
 
   });
 };

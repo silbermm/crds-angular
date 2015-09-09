@@ -15,7 +15,7 @@ IF EXISTS (Select 1 FROM [dbo].[dp_Role_Pages] WHERE [dbo].[dp_Role_Pages].[Role
 			,Access_Level = @ACCESS_LEVEL
 		WHERE Role_Page_ID = @PAGE_ROLE_ID
 	END
-ELSE 
+ELSE
 	BEGIN
 		SET IDENTITY_INSERT [dbo].[dp_Role_Pages] ON
 		INSERT INTO [dbo].[dp_Role_Pages]
@@ -32,7 +32,7 @@ ELSE
            ,[Allow_Comments]
            ,[Quick_Add])
      VALUES
-           (@PAGE_ROLE_ID 
+           (@PAGE_ROLE_ID
 		    ,@API_ROLE_ID
 		    ,@PLEDGE_CAMPAIGN_PAGE_ID
 			,@ACCESS_LEVEL
@@ -49,24 +49,24 @@ ELSE
 
 IF EXISTS (Select 1 FROM [dbo].[dp_Page_Views] WHERE [dbo].[dp_Page_Views].[Page_View_ID] = @PAGE_VIEW_ID)
 	BEGIN
-		UPDATE [dbo].[dp_Page_Views] SET 
+		UPDATE [dbo].[dp_Page_Views] SET
 			 View_Title = 'GO Trips with Forms'
 			,Page_ID = @PLEDGE_CAMPAIGN_PAGE_ID
 			,Field_List = 'Pledge_Campaigns.[Pledge_Campaign_ID]
-		, Pledge_Campaigns.[Campaign_Name]
-		, Pledge_Campaign_Type_ID_Table.[Campaign_Type] 
-		, Pledge_Campaigns.[Start_Date]
-		, Pledge_Campaigns.[End_Date]
-		, Pledge_Campaigns.[Campaign_Goal]
-		, Registration_Form_Table.[Form_ID]
-		, Registration_Form_Table.[Form_Title]
-		, Pledge_Campaigns.[Registration_Start]
-		, Pledge_Campaigns.[Registration_End]
-		, Pledge_Campaigns.[Youngest_Age_Allowed]'
+				, Pledge_Campaigns.[Campaign_Name]
+				, Pledge_Campaign_Type_ID_Table.[Campaign_Type]
+				, Pledge_Campaigns.[Start_Date]
+				, Pledge_Campaigns.[End_Date]
+				, Pledge_Campaigns.[Campaign_Goal]
+				, Registration_Form_Table.[Form_ID]
+				, Registration_Form_Table.[Form_Title]
+				, Pledge_Campaigns.[Registration_Start]
+				, Pledge_Campaigns.[Registration_End]
+				, Pledge_Campaigns.[Youngest_Age_Allowed]
+				, Event_ID_Table.[Event_Start_Date]'
 			,View_Clause = 'Pledge_Campaign_Type_ID_Table.[Campaign_Type] = ''Mission Project/Trip''
-		 AND Registration_Form_Table.[Form_ID] IS NOT NULL
-		 AND Pledge_Campaigns.[Registration_Start] <= GetDate()
-		 AND Pledge_Campaigns.[Registration_End] >= GetDate()
+				AND Registration_Form_Table.[Form_ID] IS NOT NULL
+				AND Event_ID_Table.[Event_Start_Date] >= GetDate()
 		'
 		WHERE dp_Page_Views.Page_View_ID = @PAGE_VIEW_ID
 	END
@@ -84,24 +84,20 @@ ELSE
 				   ,'GO Trips with Forms'
 				   ,@PLEDGE_CAMPAIGN_PAGE_ID
 				   ,'Pledge_Campaigns.[Pledge_Campaign_ID]
-		, Pledge_Campaigns.[Campaign_Name]
-		, Pledge_Campaign_Type_ID_Table.[Campaign_Type] 
-		, Pledge_Campaigns.[Start_Date]
-		, Pledge_Campaigns.[End_Date]
-		, Pledge_Campaigns.[Campaign_Goal]
-		, Registration_Form_Table.[Form_ID]
-		, Registration_Form_Table.[Form_Title]
-		, Pledge_Campaigns.[Registration_Start]
-		, Pledge_Campaigns.[Registration_End]
-		, Pledge_Campaigns.[Youngest_Age_Allowed]'
+		 				, Pledge_Campaigns.[Campaign_Name]
+		 				, Pledge_Campaign_Type_ID_Table.[Campaign_Type]
+		 				, Pledge_Campaigns.[Start_Date]
+		 				, Pledge_Campaigns.[End_Date]
+		 				, Pledge_Campaigns.[Campaign_Goal]
+		 				, Registration_Form_Table.[Form_ID]
+		 				, Registration_Form_Table.[Form_Title]
+		 				, Pledge_Campaigns.[Registration_Start]
+		 				, Pledge_Campaigns.[Registration_End]
+		 				, Pledge_Campaigns.[Youngest_Age_Allowed]
+		 				, Event_ID_Table.[Event_Start_Date]'
 				   ,'Pledge_Campaign_Type_ID_Table.[Campaign_Type] = ''Mission Project/Trip''
-		 AND Registration_Form_Table.[Form_ID] IS NOT NULL
-		 AND Pledge_Campaigns.[Registration_Start] <= GetDate()
-		 AND Pledge_Campaigns.[Registration_End] >= GetDate()
+		 				AND Registration_Form_Table.[Form_ID] IS NOT NULL
+		 				AND Event_ID_Table.[Event_Start_Date] >= GetDate()
 		')
 		SET IDENTITY_INSERT [dbo].[dp_Page_Views] OFF
 	END
-
-
-
-

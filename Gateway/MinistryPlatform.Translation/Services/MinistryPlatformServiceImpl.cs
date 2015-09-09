@@ -54,6 +54,31 @@ namespace MinistryPlatform.Translation.Services
             return MPFormatConversion.MPFormatToList(GetRecords(GetMinistryPlatformId(pageKey), token, search, sort));
         }
 
+        public List<Dictionary<string, object>> GetSelectionsForPageDict(int pageId, int selectionId, String token)
+        {
+            var selections = GetSelectionsDict(selectionId, token);
+            var selectionPageRecords = new List<Dictionary<string, object>>();
+
+            foreach (var selection in selections)
+            {
+                object recordId;
+                selection.TryGetValue("dp_RecordID", out recordId);
+                selectionPageRecords.Add(GetRecordDict(pageId, Convert.ToInt32(recordId), token));
+            }
+
+            return selectionPageRecords;
+        }
+
+        public List<Dictionary<string, object>> GetSelectionsDict(int selectionId, String token, String search = "", String sort = "")
+        {
+            return MPFormatConversion.MPFormatToList(GetSelectionRecords(selectionId, token, search, sort));
+        }
+
+        public SelectQueryResult GetSelectionRecords(int selectionId, String token, String search = "", String sort = "")
+        {
+            return Call(token, platformClient => platformClient.GetSelectionRecords(selectionId, search, sort, 0));
+        }
+
         public SelectQueryResult GetRecord(int pageId, int recordId, String token, bool quickadd = false)
         {
             return Call<SelectQueryResult>(token,
@@ -68,6 +93,14 @@ namespace MinistryPlatform.Translation.Services
         public Dictionary<string, object> GetRecordDict(int pageId, int recordId, String token, bool quickadd = false)
         {
             return MPFormatConversion.MPFormatToDictionary(GetRecord(pageId, recordId, token, quickadd));
+        }
+
+        public Dictionary<string, object> GetSubPageRecord(string subPageKey, int recordId, String token)
+        {
+            var subPageId = GetMinistryPlatformId(subPageKey);
+            var result = Call<SelectQueryResult>(token,
+                                                 platformClient => platformClient.GetSubpageRecord(subPageId, recordId, false));
+            return MPFormatConversion.MPFormatToDictionary(result);
         }
 
         public List<Dictionary<string, object>> GetSubPageRecords(int subPageId, int recordId, String token)
@@ -136,16 +169,29 @@ namespace MinistryPlatform.Translation.Services
                 platformClient => platformClient.CreateSubpageRecord(subPageId, parentRecordId, dictionary, quickadd));
         }
 
+        public int CreateSubRecord(string subPageKey, int parentRecordId, Dictionary<string, object> dictionary,
+            String token, bool quickadd = false)
+        {
+            var subPageId = GetMinistryPlatformId(subPageKey);
+            return Call<int>(token,
+                platformClient => platformClient.CreateSubpageRecord(subPageId, parentRecordId, dictionary, quickadd));
+        }
+
+        public void RemoveSelection(int selectionId, int[] records, String token)
+        {
+            VoidCall(token, platformClient => platformClient.RemoveFromSelection(selectionId, records));
+        }
+
         public int DeleteRecord(int pageId, int recordId, DeleteOption[] deleteOptions, String token)
         {
             VoidCall(token,
-                platfromClient => platfromClient.DeletePageRecord(pageId, recordId, deleteOptions));
+                platformClient => platformClient.DeletePageRecord(pageId, recordId, deleteOptions));
             return recordId;
         }
 
         public void UpdateRecord(int pageId, Dictionary<string, object> dictionary, String token)
         {
-            VoidCall(token, platfromClient => platfromClient.UpdatePageRecord(pageId, dictionary, false));
+            VoidCall(token, platformClient => platformClient.UpdatePageRecord(pageId, dictionary, false));
         }
 
         private int GetMinistryPlatformId(string mpKey)

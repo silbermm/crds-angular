@@ -104,6 +104,7 @@ describe('Signup To Serve Tool', function(){
     $window = _$window_;
     MPTools = _MPTools_;
     $httpBackend = $injector.get('$httpBackend');
+    $httpBackend.whenGET(/SiteConfig*/).respond('');
     mockSu2sResource = $injector.get('Su2sData');
     mockServeResource = $injector.get('ServeOpportunities');
   }));
@@ -124,7 +125,7 @@ describe('Signup To Serve Tool', function(){
       });
 
       it('should get a list of participants', function(){
-      
+
         $httpBackend.flush();
         expect(controller.group.groupId).toBe(expectedReturn.groupId);
         expect(controller.group.groupName).toBe(expectedReturn.groupName);
@@ -138,7 +139,7 @@ describe('Signup To Serve Tool', function(){
 
     describe('Save RSVP', function() {
       it('should save RSVP for one participant', function(){
-      
+
         $httpBackend.flush();
         $httpBackend.expectPOST( window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/save-rsvp', expectedSingleRSVP).respond(201, '');
         controller.group.eventTypeId = 142;
@@ -151,7 +152,7 @@ describe('Signup To Serve Tool', function(){
       });
 
       it('should save RSVP for multiple participants', function(){
-      
+
         $httpBackend.flush();
         $httpBackend.expectPOST( window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/save-rsvp', expectedMultiRSVP1).respond(201, '');
         $httpBackend.expectPOST( window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/save-rsvp', expectedMultiRSVP2).respond(201, '');
