@@ -48,7 +48,7 @@
       toTop();
     }
 
-   function nolaRequired() {
+    function nolaRequired() {
       if (vm.pageTitle === 'GO NOLA Application') {
         return 'required';
       }
