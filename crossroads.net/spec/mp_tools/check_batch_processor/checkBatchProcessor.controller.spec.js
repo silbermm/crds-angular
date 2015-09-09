@@ -1,4 +1,5 @@
 require('crds-core');
+require('../../../app/common/common.module');
 require('../../../app/app');
 
 describe('Check Batch Processor Tool', function() {
@@ -62,7 +63,7 @@ describe('Check Batch Processor Tool', function() {
   var GIVE_PROGRAM_TYPES = { Fuel: 999, NonFinancial: 888 };
 
   beforeEach(function() {
-    angular.mock.module('crossroads.give', function($provide) {
+    angular.mock.module('crossroads', function($provide) {
       $provide.constant('GIVE_ROLES', GIVE_ROLES);
       $provide.constant('GIVE_PROGRAM_TYPES', GIVE_PROGRAM_TYPES);
     });
@@ -81,12 +82,15 @@ describe('Check Batch Processor Tool', function() {
   var $log;
   var $httpBackend;
   var MPTools;
+  var Programs;
 
-  beforeEach(inject(function(_$controller_, _$log_, _MPTools_, $injector) {
+  beforeEach(inject(function(_$controller_, _$log_, _MPTools_, _Programs_, $injector) {
     $controller = _$controller_;
     $log = _$log_;
+    Programs = _Programs_;
     MPTools = _MPTools_;
     $httpBackend = $injector.get('$httpBackend');
+    $httpBackend.whenGET(/SiteConfig*/).respond('');
   }));
 
   describe('Check Batch Processor Controller', function() {
@@ -134,6 +138,7 @@ describe('Check Batch Processor Tool', function() {
 
     describe('Initial Load', function() {
       it('should get a list of check batches', function() {
+         
         $httpBackend.flush();
 
         expect(controller.batches.length).toBe(3);
@@ -169,41 +174,68 @@ describe('Check Batch Processor Tool', function() {
 
     describe('Process Batch', function() {
       var postData;
+      var checksList;
       beforeEach(function() {
         postData = {
           name: openBatchList[1].name,
           programId: programList[1].ProgramId
         };
+
+        checksList = [
+          { id: 1, exported: true },
+          { id: 2, exported: true },
+          { id: 3, exported: false }
+        ];
+        $httpBackend.flush();
+        $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/checkscanner/batches/General194200382/checks').respond(checksList);
       });
 
       it('should successfully submit the selected Batch with the selected Program', function(){
-        $httpBackend.flush();
         $httpBackend.expectPOST( window.__env__['CRDS_API_ENDPOINT'] + 'api/checkscanner/batches', postData).respond(200, '');
 
         controller.batch = openBatchList[1];
         controller.program = programList[1];
-        controller.processBatch();
+        controller.processBatch({checkBatchProcessorForm: {$invalid: false}});
 
         expect(controller.processing).toBe(true);
         $httpBackend.flush();
         expect(controller.success).toBe(true);
         expect(controller.error).toBe(false);
         expect(controller.processing).toBe(false);
+        expect(controller.checkCounts).toBeDefined();
+        expect(controller.checkCounts.total).toBe(3);
+        expect(controller.checkCounts.exported).toBe(2);
+        expect(controller.checkCounts.notExported).toBe(1);
       });
 
-      it('should successfully submit the selected Batch with the selected Program', function(){
-        $httpBackend.flush();
+      it('should not allow submit when the form is invalid', function(){
+        controller.batch = openBatchList[1];
+        controller.program = programList[1];
+        controller.processBatch({checkBatchProcessorForm: {$invalid: true}});
+
+        expect(controller.processing).toBe(false);
+        $httpBackend.verifyNoOutstandingRequest();
+        expect(controller.success).not.toBeDefined();
+        expect(controller.error).not.toBeDefined();
+        expect(controller.processing).toBe(false);
+      });
+
+      it('should report error when error is returned from the submit', function(){
         $httpBackend.expectPOST( window.__env__['CRDS_API_ENDPOINT'] + 'api/checkscanner/batches', postData).respond(500, '');
 
         controller.batch = openBatchList[1];
         controller.program = programList[1];
-        controller.processBatch();
+        controller.processBatch({checkBatchProcessorForm: {$invalid: false}});
 
         expect(controller.processing).toBe(true);
         $httpBackend.flush();
         expect(controller.success).toBe(false);
         expect(controller.error).toBe(true);
         expect(controller.processing).toBe(false);
+        expect(controller.checkCounts).toBeDefined();
+        expect(controller.checkCounts.total).toBe(3);
+        expect(controller.checkCounts.exported).toBe(2);
+        expect(controller.checkCounts.notExported).toBe(1);
       });
     });
 

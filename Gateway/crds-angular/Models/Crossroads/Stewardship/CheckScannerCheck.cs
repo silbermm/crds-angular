@@ -32,6 +32,9 @@ namespace crds_angular.Models.Crossroads.Stewardship
         [JsonProperty("donationId")]
         public int DonationId { get; set; }
 
+        [JsonProperty("exported")]
+        public bool Exported { get; set; }
+
         [JsonProperty("error", NullValueHandling = NullValueHandling.Ignore)]
         public string Error { get; set; }
     }

@@ -9,7 +9,7 @@
             </h2>
             <span class="message-date text-muted">{{singleMedia.media.created | date: 'fullDate'}}</span>
 
-            <sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_24x24_style pull-right" data-url="https://www.crossroads.net/blog/view/466/20509" data-title="Example Blog Post" data-description="Example Blog info.">
+            <sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_24x24_style pull-right" data-url="{{ singleMedia.shareUrl }}" data-title="{{ singleMedia.media.title }}" data-description="{{ singleMedia.media.description }}">
               <a href class="addthis_button_facebook gray-share"></a>
               <a href class="addthis_button_twitter gray-share"></a>
               <a href class="addthis_button_email gray-share"></a>
@@ -21,20 +21,16 @@
           <div class="message-tags">
             <div class="row push-top">
               <div class="col-xs-3 col-md-2">
-                <span class="small-heading text-muted">SPEAKER: </span>
+                <span class="small-heading text-muted" data-ng-show="singleMedia.media.speakers">SPEAKER: </span>
               </div>
-              <div class="col-xs-9 col-md-10">
-                <a href="#" class="label label-standard-dark">chuck mingo</a>
+              <div class="col-xs-9 col-md-10" >
+                <a ng-repeat="speaker in singleMedia.media.speakers" href="#" class="label label-standard-dark">{{ speaker.title }}</a>
               </div>
-              <div class="col-xs-3 col-md-2">
+              <div class="col-xs-3 col-md-2" data-ng-show="singleMedia.mediaTags.length > 0">
                 <span class="small-heading">TOPICS: </span>
               </div>
               <div class="col-xs-9 col-md-10">
-                <a href="" class="label label-standard-dark">program</a>
-                <a href="#" class="label label-standard-dark">work</a>
-                <a href="#" class="label label-standard-dark">community groups</a>
-                <a href="#" class="label label-standard-dark">crossroads</a>
-                <a href="#" class="label label-standard-dark">crossroads church</a>
+                <a ng-repeat="tag in singleMedia.mediaTags" href="#" class="label label-standard-dark">{{ tag }}</a>
               </div>
             </div><!--/row-->
           </div>
