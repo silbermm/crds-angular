@@ -215,6 +215,11 @@
         templateUrl: "gotrips/signup-page-confirmation.html",
         controller: 'GoTripsCtrl as gotrip'
       })
+      .state('explore', {
+        parent: 'noHeaderOrFooter',
+        url: '/explore',
+        templateUrl: 'explore/explore.html'
+      })
       .state('blog', {
         parent: 'noSideBar',
         url: '/blog',

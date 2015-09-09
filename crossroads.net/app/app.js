@@ -28,6 +28,7 @@ require('../lib/select.css');
   require('./profile/skills/profile_skills.html');
   require('./styleguide');
   require('./thedaily');
+  require('./explore');
   require('./gotrips');
   require('./myprofile');
   require('./community_groups_signup/group_signup_form.html');
