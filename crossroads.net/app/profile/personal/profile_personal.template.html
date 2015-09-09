@@ -3,10 +3,10 @@
     <p class="push-bottom">Information shared here is kept secure and private. We will not share or sell your information.</p>
 
     <div class="row">
-        <div class="form-group col-sm-6">
+        <div class="form-group col-sm-6" ng-class="{'has-error': profile.showError(personal, 'first-name')}">
             <label for="firstname" class="required">First Name</label>
-            <input type="text" class="form-control" id="first-name" name="firstName" placeholder="Enter first name" ng-model="profile.person.firstName" ng-model-options="{updateOn: 'blur'}" required>
-            <ng-messages for="personal.firstName.$error">
+            <input type="text" class="form-control" id="first-name" name="first-name" placeholder="Enter first name" ng-model="profile.person.firstName" required>
+            <ng-messages for="personal.firstName.$error" ng-if="profile.showError(personal, 'first-name')">
               <span ng-message="required">
                 <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
               </span>
