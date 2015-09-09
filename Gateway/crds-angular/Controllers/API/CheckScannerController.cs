@@ -5,24 +5,25 @@ using crds_angular.Security;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Interfaces;
 using Crossroads.Utilities.Messaging.Interfaces;
-using log4net;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Controllers.API
 {
     public class CheckScannerController : MPAuth
     {
-        private readonly ILog _logger = LogManager.GetLogger(typeof(CheckScannerController));
-
-        private readonly ICheckScannerService _checkScannerService;
+        private readonly bool _asynchronous;
         private readonly IAuthenticationService _authenticationService;
+        private readonly ICheckScannerService _checkScannerService;
         private readonly ICommunicationService _communicationService;
-
         private readonly MessageQueue _donationsQueue;
         private readonly IMessageFactory _messageFactory;
-        private readonly bool _asynchronous;
 
-        public CheckScannerController(IConfigurationWrapper configuration, ICheckScannerService checkScannerService, IAuthenticationService authenticationService, ICommunicationService communicationService, IMessageQueueFactory messageQueueFactory = null, IMessageFactory messageFactory = null)
+        public CheckScannerController(IConfigurationWrapper configuration,
+                                      ICheckScannerService checkScannerService,
+                                      IAuthenticationService authenticationService,
+                                      ICommunicationService communicationService,
+                                      IMessageQueueFactory messageQueueFactory = null,
+                                      IMessageFactory messageFactory = null)
         {
             _checkScannerService = checkScannerService;
             _authenticationService = authenticationService;
@@ -64,7 +65,10 @@ namespace crds_angular.Controllers.API
         {
             return (Authorized(token =>
             {
-                if (!_asynchronous) return (Ok(_checkScannerService.CreateDonationsForBatch(batch)));
+                if (!_asynchronous)
+                {
+                    return (Ok(_checkScannerService.CreateDonationsForBatch(batch)));
+                }
 
                 batch.MinistryPlatformContactId = _authenticationService.GetContactId(token);
                 batch.MinistryPlatformUserId = _communicationService.GetUserIdFromContactId(token, batch.MinistryPlatformContactId.Value);
@@ -73,6 +77,12 @@ namespace crds_angular.Controllers.API
                 _donationsQueue.Send(message);
                 return (Ok(batch));
             }));
+        }
+
+        [Route("api/checkscanner/donor"), HttpPost]
+        public IHttpActionResult CreateOrUpdateDonor([FromBody] CheckScannerCheck checkDetails)
+        {
+            return (Authorized(token => { return (Ok(_checkScannerService.CreateOrUpdateDonor(checkDetails))); }));
         }
     }
 }
