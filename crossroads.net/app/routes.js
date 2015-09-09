@@ -218,7 +218,13 @@
       .state('explore', {
         parent: 'noHeaderOrFooter',
         url: '/explore',
-        templateUrl: 'explore/explore.html'
+        templateUrl: 'explore/explore.html',
+        data: {
+          meta: {
+           title: 'Explore',
+           description: ''
+          }
+        }
       })
       .state('blog', {
         parent: 'noSideBar',
