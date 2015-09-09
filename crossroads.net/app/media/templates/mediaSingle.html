@@ -12,7 +12,7 @@
                   <svg viewBox="0 0 32 32" class="icon icon-youtube-play-bw">
                 	<use xlink:href="#youtube-play-bw"></use>
                   </svg>
-                  <img ng-src="{{singleMedia.imageUrl}}" class="img-full-width">
+                  <img data-src="{{singleMedia.imageUrl}}" class="img-responsive img-full-width">
                 </div>
 
                 <div ng-show="singleMedia.videoPlayerIsVisible" class="embed-responsive embed-responsive-16by9">
@@ -54,7 +54,7 @@
 
 
 
-                <img src="{{singleMedia.imageUrl}}" class="img-full-width">
+                <img data-src="{{singleMedia.imageUrl}}" class="img-responsive img-full-width">
               </div>
             </div>
             <ng-include src="'templates/mediaDetails.html'"> </ng-include>
