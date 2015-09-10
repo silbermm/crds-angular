@@ -1,10 +1,12 @@
 ﻿using System.Messaging;
 using System.Web.Http;
+using System.Web.Http.Description;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Interfaces;
 using Crossroads.Utilities.Messaging.Interfaces;
+using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Controllers.API
@@ -79,6 +81,12 @@ namespace crds_angular.Controllers.API
             }));
         }
 
+        /// <summary>
+        /// Creates or Updates a donor record in Ministry Platform based off of the check details passed in.
+        /// </summary>
+        /// <param name="checkDetails">The Check Details from the check that was scanned.</param>
+        /// <returns>The created or updated donor record.</returns>
+        [ResponseType(typeof(ContactDonor))]
         [Route("api/checkscanner/donor"), HttpPost]
         public IHttpActionResult CreateOrUpdateDonor([FromBody] CheckScannerCheck checkDetails)
         {
