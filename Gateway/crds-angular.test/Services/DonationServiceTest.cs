@@ -15,6 +15,7 @@ namespace crds_angular.test.Services
     {
         private DonationService _fixture;
         private Mock<MPServices.IDonationService> _mpDonationService;
+        private Mock<MPServices.IDonorService> _mpDonorService;
 
         [SetUp]
         public void SetUp()
@@ -22,8 +23,9 @@ namespace crds_angular.test.Services
             AutoMapperConfig.RegisterMappings();
 
             _mpDonationService = new Mock<MPServices.IDonationService>(MockBehavior.Strict);
+            _mpDonorService = new Mock<MPServices.IDonorService>(MockBehavior.Strict);
 
-            _fixture = new DonationService(_mpDonationService.Object);
+            _fixture = new DonationService(_mpDonationService.Object, _mpDonorService.Object);
         }
 
         [Test]
@@ -89,9 +91,9 @@ namespace crds_angular.test.Services
             var result = _fixture.GetDonationByProcessorPaymentId("123");
             _mpDonationService.VerifyAll();
             Assert.IsNotNull(result);
-            Assert.AreEqual(123+"", result.donation_id);
-            Assert.AreEqual(456, result.amount);
-            Assert.AreEqual(789, result.batch_id);
+            Assert.AreEqual(123+"", result.Id);
+            Assert.AreEqual(456, result.Amount);
+            Assert.AreEqual(789, result.BatchId);
         }
 
         [Test]
@@ -210,7 +212,7 @@ namespace crds_angular.test.Services
                 ProcessorTransferId = "transfer 1",
                 Id = 999 // Should be overwritten in service
             };
-            dto.Donations.Add(new DonationDTO { donation_id = "102030"});
+            dto.Donations.Add(new DonationDTO { Id = "102030"});
             _mpDonationService.Setup(
                 mocked =>
                     mocked.CreateDonationBatch(dto.BatchName, dto.SetupDateTime, dto.BatchTotalAmount, dto.ItemCount,

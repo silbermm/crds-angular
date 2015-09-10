@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using AutoMapper;
 using crds_angular.Models.Crossroads.Stewardship;
 using MPServices=MinistryPlatform.Translation.Services.Interfaces;
@@ -14,10 +15,12 @@ namespace crds_angular.Services
     public class DonationService: IDonationService
     {
         private readonly MPServices.IDonationService _mpDonationService;
+        private readonly MPServices.IDonorService _mpDonorService;
 
-        public DonationService(MPServices.IDonationService mpDonationService)
+        public DonationService(MPServices.IDonationService mpDonationService, MPServices.IDonorService mpDonorService)
         {
             _mpDonationService = mpDonationService;
+            _mpDonorService = mpDonorService;
         }
 
         public DonationDTO GetDonationByProcessorPaymentId(string processorPaymentId)
@@ -30,9 +33,9 @@ namespace crds_angular.Services
 
             var donation = new DonationDTO
             {
-                amount = d.donationAmt,
-                donation_id = d.donationId + "",
-                batch_id = d.batchId
+                Amount = d.donationAmt,
+                Id = d.donationId + "",
+                BatchId = d.batchId
             };
             return (donation);
         }
@@ -55,7 +58,7 @@ namespace crds_angular.Services
 
             foreach (var donation in batch.Donations)
             {
-                _mpDonationService.AddDonationToBatch(batchId, int.Parse(donation.donation_id));
+                _mpDonationService.AddDonationToBatch(batchId, int.Parse(donation.Id));
             }
 
             return (batch);
@@ -69,6 +72,73 @@ namespace crds_angular.Services
         public DonationBatchDTO GetDonationBatch(int batchId)
         {
             return (Mapper.Map<DonationBatch, DonationBatchDTO>(_mpDonationService.GetDonationBatch(batchId)));
+        }
+
+        public List<DonationDTO> GetDonationsForAuthenticatedUser(string userToken, string donationYear = null, bool softCredit = false)
+        {
+            // TODO implement GetDonationsForAuthenticatedUser
+            throw new NotImplementedException();
+        }
+
+        public List<string> GetDonationYearsForAuthenticatedUser(string userToken)
+        {
+            // TODO implement GetDonationYearsForAuthenticatedUser
+            throw new NotImplementedException();
+        }
+
+        public List<DonationDTO> GetDonationsForDonor(int donorId, string donationYear = null, bool softCredit = false)
+        {
+            var donations = softCredit ? _mpDonorService.GetSoftCreditDonations(donorId) : _mpDonorService.GetDonations(donorId);
+            if (donations == null || donations.Count == 0)
+            {
+                return (null);
+            }
+
+            var response = donations.Select(Mapper.Map<DonationDTO>).ToList();
+
+            foreach (var donation in response)
+            {
+                switch (donation.SourceType)
+                {
+                    case PaymentType.Cash:
+                        donation.SourceTypeDescription = "cash";
+                        break;
+
+                    case PaymentType.CreditCard:
+                        // TODO Need to lookup info at stripe
+                        donation.CardType = CreditCardType.Visa;
+                        donation.SourceTypeDescription = "ending in 1234";
+                        break;
+
+                    case PaymentType.Bank:
+                    case PaymentType.Check:
+                        // TODO Need to lookup info at stripe
+                        donation.SourceTypeDescription = "ending in 5678";
+                        break;
+                }
+            }
+
+            return (response);
+        }
+
+        public List<string> GetDonationYearsForDonor(int donorId)
+        {
+            var allDonations = new List<Donation>();
+            var softCreditDonations = _mpDonorService.GetSoftCreditDonations(donorId);
+            var donations = _mpDonorService.GetDonations(donorId);
+
+            if (softCreditDonations != null)
+            {
+                allDonations.AddRange(softCreditDonations);
+            }
+            if (donations != null)
+            {
+                allDonations.AddRange(donations);
+            }
+
+            var years = allDonations.ToDictionary(d => d.donationDate.Year.ToString()).Keys.ToList();
+
+            return (years);
         }
 
         public DonationBatchDTO GetDonationBatchByDepositId(int depositId)

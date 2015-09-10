@@ -108,7 +108,7 @@ namespace crds_angular.test.controllers
 
             var resultDto = ((OkNegotiatedContentResult<DonationDTO>) result).Content;
             Assert.IsNotNull(resultDto);
-            Assert.AreEqual(donor.Email, resultDto.email);
+            Assert.AreEqual(donor.Email, resultDto.Email);
         }
 
         [Test]
@@ -169,7 +169,7 @@ namespace crds_angular.test.controllers
 
             var resultDto = ((OkNegotiatedContentResult<DonationDTO>)result).Content;
             Assert.IsNotNull(resultDto);
-            Assert.AreEqual(donor.Email, resultDto.email);
+            Assert.AreEqual(donor.Email, resultDto.Email);
         }
 
     }

@@ -15,13 +15,41 @@ namespace crds_angular.Controllers.API
 {
     public class DonorController : MPAuth
     {
-        private readonly IDonorService _gatewayDonorService;
+        private readonly IDonorService _donorService;
         private readonly IPaymentService _stripePaymentService;
+        private readonly IDonationService _donationService;
 
-        public DonorController(IDonorService gatewayDonorService, IPaymentService stripePaymentService)
+        public DonorController(IDonorService donorService, IPaymentService stripePaymentService, IDonationService donationService)
         {
-            _gatewayDonorService = gatewayDonorService;
+            _donorService = donorService;
             _stripePaymentService = stripePaymentService;
+            _donationService = donationService;
+        }
+
+        /// <summary>
+        /// Retrieve list of donations for the specified donor, optionally for the specified year, and optionally returns only soft credit donations (by default returns only direct gifts).
+        /// </summary>
+        /// <param name="donorId"></param>
+        /// <param name="softCredit">A bool indicating if the result should contain soft-credit (true) or direct (false) donations.  Defaults to false.</param>
+        /// <param name="donationYear">A year filter (YYYY format) for donations returned - defaults to null, meaning return all available donations regardless of year.</param>
+        /// <returns>A list of DonationDTOs</returns>
+        [Route("api/donor/{donorId:int}/donations/{donationYear:regex([0-9][0-9][0-9][0-9])?}")]
+        [HttpGet]
+        public IHttpActionResult GetDonations(int donorId, string donationYear = null, [FromUri(Name = "softCredit")]bool? softCredit = false)
+        {
+            return (Authorized(token => Ok(_donationService.GetDonationsForDonor(donorId, donationYear, softCredit.GetValueOrDefault(false)))));
+        }
+
+        /// <summary>
+        /// Retrieve a list of donation years for the specified donor.  This includes any year the donor has given either directly, or via soft-credit.
+        /// </summary>
+        /// <param name="donorId"></param>
+        /// <returns>A list of years (string)</returns>
+        [Route("api/donor/{donorId:int}/donations/years")]
+        [HttpGet]
+        public IHttpActionResult GetDonationYears(int donorId)
+        {
+            return (Authorized(token => Ok(_donationService.GetDonationYearsForDonor(donorId))));
         }
 
         [ResponseType(typeof(DonorDTO))]
@@ -43,7 +71,7 @@ namespace crds_angular.Controllers.API
             ContactDonor donor;
             try
             {
-                donor = _gatewayDonorService.GetContactDonorForEmail(dto.email_address);
+                donor = _donorService.GetContactDonorForEmail(dto.email_address);
             }
             catch (Exception e)
             {
@@ -59,7 +87,7 @@ namespace crds_angular.Controllers.API
 
             try
             {
-                donor = _gatewayDonorService.CreateOrUpdateContactDonor(donor, dto.email_address, dto.stripe_token_id, DateTime.Now);
+                donor = _donorService.CreateOrUpdateContactDonor(donor, dto.email_address, dto.stripe_token_id, DateTime.Now);
             }
             catch (PaymentProcessorException e)
             {
@@ -93,8 +121,8 @@ namespace crds_angular.Controllers.API
         {
             try
             {
-                var donor = _gatewayDonorService.GetContactDonorForAuthenticatedUser(authToken);
-                donor = _gatewayDonorService.CreateOrUpdateContactDonor(donor, string.Empty, dto.stripe_token_id, DateTime.Now);
+                var donor = _donorService.GetContactDonorForAuthenticatedUser(authToken);
+                donor = _donorService.CreateOrUpdateContactDonor(donor, string.Empty, dto.stripe_token_id, DateTime.Now);
 
                 var response = new DonorDTO
                 {
@@ -121,7 +149,7 @@ namespace crds_angular.Controllers.API
         {
             try
             {
-                var donor = _gatewayDonorService.GetContactDonorForAuthenticatedUser(token);
+                var donor = _donorService.GetContactDonorForAuthenticatedUser(token);
 
                 if (donor == null || !donor.HasPaymentProcessorRecord)
                 {
@@ -172,7 +200,7 @@ namespace crds_angular.Controllers.API
         {
             try
             {
-                var donor = _gatewayDonorService.GetContactDonorForEmail(email);
+                var donor = _donorService.GetContactDonorForEmail(email);
                 if (donor == null || !donor.HasPaymentProcessorRecord)
                 {
                     return NotFound();
@@ -218,9 +246,9 @@ namespace crds_angular.Controllers.API
             {
                 contactDonor = 
                     token == null ? 
-                    _gatewayDonorService.GetContactDonorForEmail(dto.EmailAddress) 
+                    _donorService.GetContactDonorForEmail(dto.EmailAddress) 
                     : 
-                    _gatewayDonorService.GetContactDonorForAuthenticatedUser(token);
+                    _donorService.GetContactDonorForAuthenticatedUser(token);
 
                 //Post apistripe/customer/{custID}/sources pass in the dto.stripe_token_id
                 sourceData = _stripePaymentService.UpdateCustomerSource(contactDonor.ProcessorId, dto.StripeTokenId);

@@ -20,7 +20,8 @@ namespace crds_angular.test.controllers
     class DonorControllerTest
     {
         private DonorController fixture;
-        private Mock<crds_angular.Services.Interfaces.IDonorService> donorService;
+        private Mock<IDonorService> donorService;
+        private Mock<IDonationService> _donationService;
         private Mock<IPaymentService> paymentService;
         private string authType;
         private string authToken;
@@ -42,9 +43,10 @@ namespace crds_angular.test.controllers
         [SetUp]
         public void SetUp()
         {
-            donorService = new Mock<crds_angular.Services.Interfaces.IDonorService>();
+            donorService = new Mock<IDonorService>();
+            _donationService = new Mock<IDonationService>();
             paymentService = new Mock<IPaymentService>();
-            fixture = new DonorController(donorService.Object,paymentService.Object);
+            fixture = new DonorController(donorService.Object,paymentService.Object, _donationService.Object);
 
             authType = "auth_type";
             authToken = "auth_token";

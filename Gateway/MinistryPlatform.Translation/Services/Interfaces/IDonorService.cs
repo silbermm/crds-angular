@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MinistryPlatform.Models;
 
 namespace MinistryPlatform.Translation.Services.Interfaces
@@ -20,5 +21,8 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         void SetupConfirmationEmail(int programId, int donorId, int donationAmount, DateTime setupDate, string pymtType);
         ContactDonor GetEmailViaDonorId(int donorId);
         void SendEmail(int emailTemplate, int donorId, int donationAmount, string donationType, DateTime donationDate, string programName, string emailReason);
+
+        List<Donation> GetDonations(int donorId);
+        List<Donation> GetSoftCreditDonations(int donorId);
     }
 }
