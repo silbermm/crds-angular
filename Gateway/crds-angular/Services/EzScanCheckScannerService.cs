@@ -123,5 +123,15 @@ namespace crds_angular.Services
 
             return (batchDetails);
         }
+
+        public ContactDetails GetContactDonorForCheck(string encryptedKey)
+        {
+            var contactDetails = _donorService.GetContactDonorForCheckAccount(encryptedKey);
+            //return _mpDonorService.GetContactDonorForCheckAccount(encryptedKey); 
+            //checkfor null
+            return contactDetails;
+        }
+
+       
     }
 }

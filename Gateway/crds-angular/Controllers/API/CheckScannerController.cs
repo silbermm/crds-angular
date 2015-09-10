@@ -74,5 +74,15 @@ namespace crds_angular.Controllers.API
                 return (Ok(batch));
             }));
         }
+
+        [Route("api/checkscanner/getdonor/{encryptedKey?}")]
+        public IHttpActionResult GetDonorForCheck(string encryptedKey)
+        {
+            return (Authorized(token =>
+            {
+                var donorDetails = _checkScannerService.GetContactDonorForCheck(encryptedKey);
+                return (Ok(donorDetails));
+            }));
+        }
     }
 }

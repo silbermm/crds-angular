@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using crds_angular.Models.Crossroads.Stewardship;
+using MinistryPlatform.Models;
 
 namespace crds_angular.Services.Interfaces
 {
@@ -9,5 +10,6 @@ namespace crds_angular.Services.Interfaces
         List<CheckScannerCheck> GetChecksForBatch(string batchName);
         CheckScannerBatch UpdateBatchStatus(string batchName, BatchStatus newStatus);
         CheckScannerBatch CreateDonationsForBatch(CheckScannerBatch batchDetails);
+        ContactDetails GetContactDonorForCheck(string encryptedKey);
     }
 }

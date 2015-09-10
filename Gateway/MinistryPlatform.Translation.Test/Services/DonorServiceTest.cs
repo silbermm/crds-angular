@@ -21,6 +21,7 @@ namespace MinistryPlatform.Translation.Test.Services
         private Mock<ICommunicationService> _communicationService;
         private Mock<IAuthenticationService> _authService;
         private Mock<IConfigurationWrapper> _configuration;
+        private Mock<IContactService> _contactService; 
         private Mock<ICryptoProvider> _crypto;
 
         private DonorService _fixture;
@@ -32,6 +33,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _programService = new Mock<IProgramService>();
             _communicationService = new Mock<ICommunicationService>();
             _authService = new Mock<IAuthenticationService>();
+            _contactService = new Mock<IContactService>();
             _crypto = new Mock<ICryptoProvider>();
             _configuration = new Mock<IConfigurationWrapper>();
             _configuration.Setup(mocked => mocked.GetConfigIntValue("Donors")).Returns(299);
@@ -44,7 +46,7 @@ namespace MinistryPlatform.Translation.Test.Services
 
             _authService.Setup(m => m.Authenticate(It.IsAny<string>(), It.IsAny<string>())).Returns(new Dictionary<string, object> { { "token", "ABC" }, { "exp", "123" } });
 
-            _fixture = new DonorService(_ministryPlatformService.Object, _programService.Object, _communicationService.Object, _authService.Object, _configuration.Object, _crypto.Object);
+            _fixture = new DonorService(_ministryPlatformService.Object, _programService.Object, _communicationService.Object, _authService.Object, _contactService.Object, _configuration.Object,  _crypto.Object);
         }
 
         [Test]

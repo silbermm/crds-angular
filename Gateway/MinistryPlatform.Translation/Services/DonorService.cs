@@ -22,6 +22,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _donationDistributionPageId;
         private readonly int _donorAccountsPageId;
         private readonly int _findDonorByAccountPageViewId;
+        private readonly int _donorLookupByEncryptedAccount;
 
         public const string DonorRecordId = "Donor_Record";
         public const string DonorProcessorId = "Processor_ID";
@@ -33,14 +34,16 @@ namespace MinistryPlatform.Translation.Services
         private readonly IMinistryPlatformService _ministryPlatformService;
         private readonly IProgramService _programService;
         private readonly ICommunicationService _communicationService;
+        private readonly IContactService _contactService;
         private readonly ICryptoProvider _crypto;
 
-        public DonorService(IMinistryPlatformService ministryPlatformService, IProgramService programService, ICommunicationService communicationService, IAuthenticationService authenticationService, IConfigurationWrapper configuration, ICryptoProvider crypto)
+        public DonorService(IMinistryPlatformService ministryPlatformService, IProgramService programService, ICommunicationService communicationService, IAuthenticationService authenticationService, IContactService contactService, IConfigurationWrapper configuration, ICryptoProvider crypto)
             : base(authenticationService, configuration)
         {
             _ministryPlatformService = ministryPlatformService;
             _programService = programService;
             _communicationService = communicationService;
+            _contactService = contactService;
             _crypto = crypto;
 
             _donorPageId = configuration.GetConfigIntValue("Donors");
@@ -48,6 +51,7 @@ namespace MinistryPlatform.Translation.Services
             _donationDistributionPageId = configuration.GetConfigIntValue("Distributions");
             _donorAccountsPageId = configuration.GetConfigIntValue("DonorAccounts");
             _findDonorByAccountPageViewId = configuration.GetConfigIntValue("FindDonorByAccountPageView");
+            _donorLookupByEncryptedAccount = configuration.GetConfigIntValue("DonorLookupByEncryptedAccount");
         }
 
 
@@ -265,6 +269,33 @@ namespace MinistryPlatform.Translation.Services
 
             var contactId = accounts[0]["Contact_ID"] as int? ?? -1;
             return contactId == -1 ? (null) : (GetContactDonor(contactId));
+        }
+
+        public ContactDetails GetContactDonorForCheckAccount(string encrptedKey)
+        {
+           //ContactDonor contactDonor;
+            var donorAccount = WithApiLogin(apiToken => _ministryPlatformService.GetPageViewRecords(_donorLookupByEncryptedAccount, apiToken, encrptedKey));
+            if (donorAccount == null || donorAccount.Count == 0)
+            {
+                return null;
+            }
+            var contactId = Convert.ToInt32(donorAccount[0]["Contact_ID"]);
+            var myContact = _contactService.GetContactById(contactId);
+
+            var details = new ContactDetails
+            {
+                DisplayName = donorAccount[0]["Display_Name"].ToString(),
+                Address =  new PostalAddress
+                {
+                    Line1 = myContact.Address_Line_1,
+                    Line2 = myContact.Address_Line_2,
+                    City = myContact.City,
+                    State = myContact.State,
+                    PostalCode = myContact.Postal_Code  
+                }
+            };
+
+            return details;
         }
 
         private string CreateEncodedAndEncryptedAccountAndRoutingNumber(string accountNumber, string routingNumber)
