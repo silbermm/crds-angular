@@ -10,8 +10,8 @@
       <legend>Update Profile Information</legend>
       <div class="row">
         <form>
-        <profile-personal allow-password-change="false" require-mobile-phone="true" allow-save="false"/>
+        <profile-personal allow-password-change="false" require-mobile-phone="true" allow-save="false" submit-form-callback='pages.submitProfile' />
       </div>
-      <button class="btn btn-primary pull-right" ng-click='pages.validateProfile()'  > Next </button>
+      <button class="btn btn-primary pull-right" ng-click='pages.validateProfile()'> Next </button>
     <!-- </form> -->
 </div>

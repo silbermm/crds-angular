@@ -32,10 +32,10 @@
       }
 
     }
-    function validateProfile()
+    function validateProfile(profile)
     {
       //do stuff
-      
+      console.log(profile); 
       handleNext(2);
     }
 
