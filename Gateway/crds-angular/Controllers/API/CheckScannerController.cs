@@ -80,8 +80,9 @@ namespace crds_angular.Controllers.API
         {
             return (Authorized(token =>
             {
-                var donorDetails = _checkScannerService.GetContactDonorForCheck(encryptedKey);
-                return (Ok(donorDetails));
+                var donorDetail = _checkScannerService.GetContactDonorForCheck(encryptedKey);
+
+                return (Ok(donorDetail));
             }));
         }
     }

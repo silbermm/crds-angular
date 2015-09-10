@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AutoMapper;
 using crds_angular.DataAccess.Interfaces;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services.Interfaces;
@@ -124,12 +125,13 @@ namespace crds_angular.Services
             return (batchDetails);
         }
 
-        public ContactDetails GetContactDonorForCheck(string encryptedKey)
+        public EZScanDonorDetails GetContactDonorForCheck(string encryptedKey)
         {
-            var contactDetails = _donorService.GetContactDonorForCheckAccount(encryptedKey);
-            //return _mpDonorService.GetContactDonorForCheckAccount(encryptedKey); 
+           //var contactDetails = _donorService.GetContactDonorForCheckAccount(encryptedKey);
+          
             //checkfor null
-            return contactDetails;
+             return (Mapper.Map<ContactDetails, EZScanDonorDetails>(_donorService.GetContactDonorForCheckAccount(encryptedKey)));
+            //return contactDetails;
         }
 
        
