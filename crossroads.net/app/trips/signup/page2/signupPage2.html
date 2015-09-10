@@ -1,4 +1,4 @@
-  <form>
+  <form name="tripAppPage2" id="tripAppPage2">
   <fieldset>
 
     <div class='row' ng-show='pages.underAge()'>
@@ -6,15 +6,15 @@
         <legend>Guardian Information</legend>
         <span ng-bind-html="$root.MESSAGES.TripGuardianInformation.content | html"></span>
       </div><!--/col-sm-12-->
-      
+
       <div class="form-group col-sm-6" >
         <label for='firstName' class='required'> First Name </label>
-        <input type='text' class='form-control' id='guardian-first-name' placeholder='First Name'> 
+        <input ng-model="pages.page2.guardianFirstName" type='text' class='form-control' id='guardian-first-name' placeholder='First Name'>
       </div>
 
       <div class="form-group col-sm-6" >
         <label for='lastName' class='required'> Last Name </label>
-        <input type='text' class='form-control' id='guardian-last-name' placeholder='Last Name'> 
+        <input type='text' class='form-control' id='guardian-last-name' placeholder='Last Name'>
       </div>
     </div>
 
@@ -22,12 +22,12 @@
       <div class="col-sm-12">
         <legend>Trip Information</legend>
       </div><!--/col-sm-12-->
-  
 
 
-      <div class="form-group col-sm-6">
+
+      <div class="form-group col-sm-6" ng-class="{'has-error': !pages.page2.tshirtSize.$valid}">
         <label for="tshirt" class="required">T-shirt Size</label>
-        <select class="form-control col-sm-12" ng-model="attribute" id="tshirt">
+        <select class="form-control col-sm-12" ng-model="pages.page2.tshirtSize" name="tshirtSize" id="tshirt" ng-required='true'>
           <option> Adult XS </option>
           <option> Adult S </option>
           <option> Adult M </option>
@@ -39,11 +39,16 @@
           <option> Child M </option>
           <option> Child L </option>
         </select>
+        <ng-messages for="pages.tripAppPage2.tshirtSize.$error" ng-if="!pages.page2.tshirtSize.$valid">
+          <span ng-message="required">rrrrrr
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+          </span>
+        </ng-messages>
       </div><!--/form-group-->
 
       <div class="form-group col-sm-6" ng-show="pages.pageTitle == 'GO South Africa Application'">
         <label for="scrub">Scrub Size <small class="text-muted">Only required for Topsy trips</small></label>
-        <select class="form-control col-sm-12" ng-model="attribute" id="scrub">
+        <select class="form-control col-sm-12" ng-model="pages.page2.scrubSize" id="scrub">
           <option>Adult XS</option>
           <option>Adult S</option>
           <option>Adult M</option>
@@ -57,30 +62,30 @@
       <div class="form-group col-sm-12">
           <label class="block required">How did you hear about this trip?</label>
           <label for="program" class="radio-inline">
-              <input type="radio" value="program" id="program" name="referral">Program
+              <input type="radio" value="program" id="program" name="referral" ng-model="pages.page2.referral">Program
           </label>
           <label for="session" class="radio-inline">
-              <input type="radio" value="session" id="session" name="referral">Info Session
+              <input type="radio" value="session" id="session" name="referral" ng-model="pages.page2.referral">Info Session
           </label>
           <label for="friend" class="radio-inline">
-              <input type="radio" value="friend" id="friend" name="referral">Friend/Family
+              <input type="radio" value="friend" id="friend" name="referral" ng-model="pages.page2.referral">Friend/Family
           </label>
           <label for="website" class="radio-inline">
-              <input type="radio" value="website" id="website" name="referral">Website
+              <input type="radio" value="website" id="website" name="referral" ng-model="pages.page2.referral">Website
           </label>
           <label for="other" class="radio-inline">
-              <input type="radio" value="other" id="other" name="referral">Other
+              <input type="radio" value="other" id="other" name="referral" ng-model="pages.page2.referral">Other
           </label>
-      </div><!--/form-group--> 
+      </div><!--/form-group-->
     </div><!--/row-->
-    
+
     <div class="row">
       <div class="form-group col-sm-12">
         <label for="conditions">Please describe any medical condition(s) that may affect your ability to participate in this trip <small class="text-muted">Leave blank if it doesn't apply</small></label>
-        <textarea class="form-control" rows="2" cols="1" id="conditions" maxlength="250"></textarea>
+        <textarea ng-model="pages.page2.conditions" class="form-control" rows="2" cols="1" id="conditions" maxlength="250"></textarea>
       </div><!--/form-group-->
     </div><!--/row-->
-    
+
     <div class="row">
       <div class="form-group col-sm-12">
           <label class="block required">Vegetarian? <small class="text-muted">If you mark yes we will do our best to provide vegetarian meals during the trip</small></label>
@@ -92,14 +97,14 @@
           </label>
       </div><!--/form-group-->
     </div><!--/row-->
-    
+
     <div class="row">
       <div class="form-group col-sm-12">
           <label for="allergies">Please describe all food allergies <small class="text-muted">Leave blank if it doesn't apply</small</label>
           <textarea class="form-control" rows="2" cols="1" id="allergies" maxlength="250"></textarea>
       </div><!--/form-group-->
     </div><!--/row-->
-    
+
     <div class="row">
       <div id="Site" class="form-group col-sm-6">
         <label for="slife" class="required">How would you define your spiritual life? <small class="text-muted">Pick as many as you like</small></label><br>
@@ -111,14 +116,25 @@
 
       </div><!--/form-group-->
     </div><!--/row-->
-    
+
     <div class="row">
-      <div class="form-group col-sm-12">
+      <div class="form-group col-sm-12" ng-class="{ 'has-error': pages.validation.showErrors(tripAppPage2, 'why') }">>
           <label for="why" class="required">Tell us why you want to go on this trip</label>
-          <textarea cols="1" rows="4" class="form-control" id="why" maxlength="1000" placeholder="{{pages.whyPlaceholder}}"></textarea>
+          <textarea ng-model="pages.page2.why" ng-required="true" cols="1" rows="4" class="form-control" name="why" id="why" maxlength="1000" placeholder="{{pages.whyPlaceholder}}"></textarea>
+          <!-- <input ng-model="pages.page2.why" ng-required="true" class="form-control" name="why" placeholder="{{pages.whyPlaceholder}}"></input> -->
+          <ng-messages for="tripAppPage2.why.$error" ng-if="pages.validation.showErrors(tripAppPage2, 'why')">
+            <span ng-message="required">
+              <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+            </span>
+          </ng-messages>
       </div><!--/form-group-->
+      <pre>why: {{ pages.page2.why }}</pre>
+      <pre>valid: {{ pages.page2.why.$invalid }}</pre>
+      <pre>error: {{ tripAppPage2.why.$valid }}</pre>
+      <pre>error: {{ tripAppPage2.why.$invalid }}</pre>
+      <pre>error: {{ tripAppPage2.why.$error }}</pre>
     </div>
   </fieldset>
-  <a ng-click='pages.handleNext(3)'  class="btn btn-primary pull-right">Next</a>
+  <a ng-click='pages.handleNextt(3, this)' class="btn btn-primary pull-right">Next</a>
   <a ng-click='pages.handlePrevious(1)' class="btn btn-standard pull-right">Back</a>
 </form>
