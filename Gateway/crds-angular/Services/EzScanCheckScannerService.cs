@@ -127,11 +127,8 @@ namespace crds_angular.Services
 
         public EZScanDonorDetails GetContactDonorForCheck(string encryptedKey)
         {
-           //var contactDetails = _donorService.GetContactDonorForCheckAccount(encryptedKey);
-          
-            //checkfor null
-             return (Mapper.Map<ContactDetails, EZScanDonorDetails>(_donorService.GetContactDonorForCheckAccount(encryptedKey)));
-            //return contactDetails;
+           return (Mapper.Map<ContactDetails, EZScanDonorDetails>(_donorService.GetContactDonorForCheckAccount(encryptedKey)));
+            
         }
 
        
