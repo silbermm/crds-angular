@@ -13,7 +13,8 @@
       Campaign: $resource(__API_ENDPOINT__ + 'api/trip/campaign/:campaignId'),
       WorkTeams: $resource(__API_ENDPOINT__ + 'api/lookup?table=workteams'),
       GeneratePrivateInvites: $resource(__API_ENDPOINT__ + 'api/trip/generate-private-invite'),
-      ValidatePrivateInvite: $resource(__API_ENDPOINT__ + 'api/trip/validate-private-invite/:pledgeCampaignId/:guid')
+      ValidatePrivateInvite: $resource(__API_ENDPOINT__ + 'api/trip/validate-private-invite/:pledgeCampaignId/:guid'),
+      Family: $resource(__API_ENDPOINT__ + 'api/trip/:pledgeCampaignId/family-members')
     };
   }
 })();
