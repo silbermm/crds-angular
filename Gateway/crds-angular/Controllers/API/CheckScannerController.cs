@@ -84,13 +84,18 @@ namespace crds_angular.Controllers.API
         /// <summary>
         /// Creates or Updates a donor record in Ministry Platform based off of the check details passed in.
         /// </summary>
-        /// <param name="checkDetails">The Check Details from the check that was scanned.</param>
+        /// <param name="checkDetails" type="FromBody">The Check Details from the check that was scanned.</param>
         /// <returns>The created or updated donor record.</returns>
+        [RequiresAuthorization]
         [ResponseType(typeof(ContactDonor))]
         [Route("api/checkscanner/donor"), HttpPost]
         public IHttpActionResult CreateOrUpdateDonor([FromBody] CheckScannerCheck checkDetails)
         {
-            return (Authorized(token => { return (Ok(_checkScannerService.CreateOrUpdateDonor(checkDetails))); }));
+            return (Authorized(token =>
+            {
+                var result = _checkScannerService.CreateOrUpdateDonor(checkDetails);
+                return (Ok(result));
+            }));
         }
     }
 }
