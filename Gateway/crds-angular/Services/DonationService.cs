@@ -16,11 +16,13 @@ namespace crds_angular.Services
     {
         private readonly MPServices.IDonationService _mpDonationService;
         private readonly MPServices.IDonorService _mpDonorService;
+        private readonly MPServices.IAuthenticationService _mpAuthenticationService;
 
-        public DonationService(MPServices.IDonationService mpDonationService, MPServices.IDonorService mpDonorService)
+        public DonationService(MPServices.IDonationService mpDonationService, MPServices.IDonorService mpDonorService, MPServices.IAuthenticationService mpAuthenticationService)
         {
             _mpDonationService = mpDonationService;
             _mpDonorService = mpDonorService;
+            _mpAuthenticationService = mpAuthenticationService;
         }
 
         public DonationDTO GetDonationByProcessorPaymentId(string processorPaymentId)
@@ -76,14 +78,20 @@ namespace crds_angular.Services
 
         public List<DonationDTO> GetDonationsForAuthenticatedUser(string userToken, string donationYear = null, bool softCredit = false)
         {
-            // TODO implement GetDonationsForAuthenticatedUser
-            throw new NotImplementedException();
+            var donorId = GetDonorIdForAuthenticatedUser(userToken);
+            return (donorId == null ? null : GetDonationsForDonor(donorId.Value));
         }
 
         public List<string> GetDonationYearsForAuthenticatedUser(string userToken)
         {
-            // TODO implement GetDonationYearsForAuthenticatedUser
-            throw new NotImplementedException();
+            var donorId = GetDonorIdForAuthenticatedUser(userToken);
+            return (donorId == null ? null : GetDonationYearsForDonor(donorId.Value));
+        }
+
+        private int? GetDonorIdForAuthenticatedUser(string userToken)
+        {
+            var donor = _mpDonorService.GetContactDonor(_mpAuthenticationService.GetContactId(userToken));
+            return (donor != null && donor.ExistingDonor ? donor.DonorId : (int?)null);
         }
 
         public List<DonationDTO> GetDonationsForDonor(int donorId, string donationYear = null, bool softCredit = false)
