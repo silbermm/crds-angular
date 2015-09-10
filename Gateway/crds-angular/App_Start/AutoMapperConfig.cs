@@ -77,7 +77,7 @@ namespace crds_angular.App_Start
             Mapper.CreateMap<Dictionary<string, object>, Deposit>()
                 .ForMember(dest => dest.DepositDateTime, opts => opts.MapFrom(src => src.ToDate("Deposit_Date", false)))
                 .ForMember(dest => dest.DepositName, opts => opts.MapFrom(src => src.ToString("Deposit_Name")))
-                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.ContainsKey("Deposit_ID") ? src.ToInt("Deposit_ID", false) : 0))
+                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.ToInt("Deposit_ID", false)))
                 .ForMember(dest => dest.DepositTotalAmount, opts => opts.MapFrom(src => src.ToString("Deposit_Total")))
                 .ForMember(dest => dest.BatchCount, opts => opts.MapFrom(src => src.ToString("Batch_Count")))
                 .ForMember(dest => dest.Exported, opts => opts.MapFrom(src => src.ToString("Exported")))
