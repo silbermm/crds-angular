@@ -14,7 +14,7 @@
 
       <div class="form-group col-sm-6" >
         <label for='lastName' class='required'> Last Name </label>
-        <input type='text' class='form-control' id='guardian-last-name' placeholder='Last Name'>
+        <input ng-model="pages.page2.guardianLastName" type='text' class='form-control' id='guardian-last-name' placeholder='Last Name'>
       </div>
     </div>
 
@@ -90,10 +90,10 @@
       <div class="form-group col-sm-12">
           <label class="block required">Vegetarian? <small class="text-muted">If you mark yes we will do our best to provide vegetarian meals during the trip</small></label>
           <label for="vegetarian-yes" class="radio-inline">
-              <input type="radio" value="yes" name="vegetarian" id="vegetarian-yes">Yes
+              <input ng-model="pages.page2.vegetarian" type="radio" value="yes" name="vegetarian" id="vegetarian-yes">Yes
           </label>
           <label for="vegetarian-no" class="radio-inline">
-              <input type="radio" value="no" name="vegetarian" for="vegetarian-no">No
+              <input ng-model="pages.page2.vegetarian" type="radio" value="no" name="vegetarian" for="vegetarian-no">No
           </label>
       </div><!--/form-group-->
     </div><!--/row-->
@@ -101,7 +101,7 @@
     <div class="row">
       <div class="form-group col-sm-12">
           <label for="allergies">Please describe all food allergies <small class="text-muted">Leave blank if it doesn't apply</small</label>
-          <textarea class="form-control" rows="2" cols="1" id="allergies" maxlength="250"></textarea>
+          <textarea ng-model="pages.page2.allergies" class="form-control" rows="2" cols="1" id="allergies" maxlength="250"></textarea>
       </div><!--/form-group-->
     </div><!--/row-->
 
@@ -109,10 +109,10 @@
       <div id="Site" class="form-group col-sm-6">
         <label for="slife" class="required">How would you define your spiritual life? <small class="text-muted">Pick as many as you like</small></label><br>
 
-        <div class="checkbox"> <label for="slife-searching"> <input type="checkbox" name="slife" value="Searching" id="slife-searching"> Searching for answers </label> </div>
-        <div class="checkbox"> <label for="slife-received"> <input type="checkbox" name="slife" value="Received" id="slife-received"> I have received Jesus </label> </div>
-        <div class="checkbox"> <label for="slife-obedience"> <input type="checkbox" name="slife" value="Obedience" id="slife-obedience"> Focusing on obedience - I've quit negotiating with God </label> </div>
-        <div class="checkbox"> <label for="slife-replicating"> <input type="checkbox" name="slife" value="Replicating" id="slife-replicating"> I'm actively replicating my faith in others </label> </div>
+        <div class="checkbox"> <label for="slife-searching"> <input ng-model="pages.page2.spiritualLife" type="checkbox" name="slife" value="Searching" id="slife-searching"> Searching for answers </label> </div>
+        <div class="checkbox"> <label for="slife-received"> <input ng-model="pages.page2.spiritualLife" type="checkbox" name="slife" value="Received" id="slife-received"> I have received Jesus </label> </div>
+        <div class="checkbox"> <label for="slife-obedience"> <input ng-model="pages.page2.spiritualLife" type="checkbox" name="slife" value="Obedience" id="slife-obedience"> Focusing on obedience - I've quit negotiating with God </label> </div>
+        <div class="checkbox"> <label for="slife-replicating"> <input ng-model="pages.page2.spiritualLife" type="checkbox" name="slife" value="Replicating" id="slife-replicating"> I'm actively replicating my faith in others </label> </div>
 
       </div><!--/form-group-->
     </div><!--/row-->
@@ -128,11 +128,6 @@
             </span>
           </ng-messages>
       </div><!--/form-group-->
-      <pre>why: {{ pages.page2.why }}</pre>
-      <pre>valid: {{ pages.page2.why.$invalid }}</pre>
-      <pre>error: {{ tripAppPage2.why.$valid }}</pre>
-      <pre>error: {{ tripAppPage2.why.$invalid }}</pre>
-      <pre>error: {{ tripAppPage2.why.$error }}</pre>
     </div>
   </fieldset>
   <a ng-click='pages.handleNextt(3, this)' class="btn btn-primary pull-right">Next</a>

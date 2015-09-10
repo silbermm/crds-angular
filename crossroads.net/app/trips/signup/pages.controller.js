@@ -3,7 +3,7 @@
 
   module.exports = PagesController;
 
-  PagesController.$inject = ['Session', '$location', '$anchorScroll', 'Trip', 'Validation'];
+  PagesController.$inject = ['$rootScope', 'Session', '$location', '$anchorScroll', 'Trip', 'Validation', 'SignupPage2Service'];
 
   /**
    * Controller for all of the pages directives
@@ -12,7 +12,7 @@
    *    - pageTitle
    *    - numberOfPages
    */
-  function PagesController(Session, $location, $anchorScroll, Trip, Validation) {
+  function PagesController($rootScope, Session, $location, $anchorScroll, Trip, Validation, SignupPage2Service) {
     var vm = this;
 
     vm.handleNext = handleNext;
@@ -21,6 +21,7 @@
     vm.handleSubmit = handleSubmit;
     vm.nolaRequired = nolaRequired;
     vm.page2 = {};
+    vm.page2Service = SignupPage2Service;
     vm.underAge = underAge;
     vm.validation = Validation;
     vm.whyPlaceholder = '';
@@ -35,20 +36,26 @@
       }
 
     }
+
     function validateProfile()
     {
       //do stuff
-      
+
       handleNext(2);
     }
 
     function handleNextt(nextPage, target) {
       var x = target;
       var form = target.tripAppPage2;
-      var v = form.$valid;
+      form.$setSubmitted(true);
 
-      // vm.currentPage = nextPage;
-      // toTop();
+      if (form.$valid) {
+        vm.page2Service.setPage2(vm.page2);
+        vm.currentPage = nextPage;
+        toTop();
+      } else {
+        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+      }
     }
 
     function handleNext(nextPage) {
