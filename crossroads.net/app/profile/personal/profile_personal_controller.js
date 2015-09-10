@@ -1,93 +1,136 @@
-"use strict";
-(function () {
+'use strict';
+(function() {
 
-    module.exports = function($rootScope, $log, $timeout, MESSAGES, ProfileReferenceData) {
-        var _this = this;
+  module.exports = function($rootScope, $log, $timeout, MESSAGES, ProfileReferenceData, Validation) {
+    var vm = this;
 
-        _this.ProfileReferenceData = ProfileReferenceData.getInstance();
-        _this.person = {};
+    vm.validation = Validation;
+    vm.ProfileReferenceData = ProfileReferenceData.getInstance();
+    vm.person = {};
+    vm.householdPhoneFocus = householdPhoneFocus;
 
-        _this.passwordPrefix = "account-page";
-        _this.submitted = false;
+    //default parm values
+    vm.allowPasswordChange = angular.isDefined(vm.allowPasswordChange) ? vm.allowPasswordChange : 'true';
+    vm.allowSave = angular.isDefined(vm.allowSave) ? vm.allowSave : 'true';
+    vm.requireMobilePhone = angular.isDefined(vm.requireMobilePhone) ? vm.requireMobilePhone : 'false';
 
-        _this.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
-        _this.zipFormat = /^(\d{5}([\-]\d{4})?)$/;
-        _this.dateFormat = /^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.]((19|20)\d\d)$/;
+    vm.passwordPrefix = 'account-page';
+    vm.submitted = false;
 
-        _this.loading = true;
-        _this.viewReady = false;
+    vm.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
+    vm.zipFormat = /^(\d{5}([\-]\d{4})?)$/;
+    vm.dateFormat = /^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.]((19|20)\d\d)$/;
 
-        _this.initProfile = function (form) {
-            _this.form = form;
-            _this.ProfileReferenceData.then(function(response) {
-                _this.genders = response.genders;
-                _this.maritalStatuses = response.maritalStatuses;
-                _this.serviceProviders = response.serviceProviders;
-                _this.states = response.states;
-                _this.countries = response.countries;
-                _this.crossroadsLocations = response.crossroadsLocations;
-                configurePerson(response.person);
+    vm.loading = true;
+    vm.viewReady = false;
 
-                _this.viewReady = true;
-            });
-        };
+    activate();
 
-        function configurePerson(person) {
-            _this.person = person;
+    // vm.initProfile = function(form) {
+    //   vm.form = form;
+    //   vm.ProfileReferenceData.then(function(response) {
+    //     vm.genders = response.genders;
+    //     vm.maritalStatuses = response.maritalStatuses;
+    //     vm.serviceProviders = response.serviceProviders;
+    //     vm.states = response.states;
+    //     vm.countries = response.countries;
+    //     vm.crossroadsLocations = response.crossroadsLocations;
+    //     configurePerson(response.person);
 
-            if (_this.person.dateOfBirth !== undefined) {
-                var newBirthDate = _this.person.dateOfBirth.replace(_this.dateFormat, "$3 $1 $2");
-                var mBdate = moment(newBirthDate, "YYYY MM DD");
-                _this.person.dateOfBirth = mBdate.format("MM/DD/YYYY");
-            }
+    //     // var household =
 
-            if (_this.person.anniversaryDate !== undefined) {
-                var mAdate = moment(new Date(_this.person.anniversaryDate));
-                _this.person.anniversaryDate = mAdate.format("MM/DD/YYYY");
-            }
+    //     vm.viewReady = true;
+    //   });
+    // };
+
+    function activate() {
+      vm.form = vm.personal;
+      vm.ProfileReferenceData.then(function(response) {
+        vm.genders = response.genders;
+        vm.maritalStatuses = response.maritalStatuses;
+        vm.serviceProviders = response.serviceProviders;
+        vm.states = response.states;
+        vm.countries = response.countries;
+        vm.crossroadsLocations = response.crossroadsLocations;
+        configurePerson(response.person);
+
+        // var household =
+
+        vm.viewReady = true;
+      });
+    }
+
+    function configurePerson(person) {
+      vm.person = person;
+
+      if (vm.person.dateOfBirth !== undefined) {
+        var newBirthDate = vm.person.dateOfBirth.replace(vm.dateFormat, '$3 $1 $2');
+        var mBdate = moment(newBirthDate, 'YYYY MM DD');
+        vm.person.dateOfBirth = mBdate.format('MM/DD/YYYY');
+      }
+
+      if (vm.person.anniversaryDate !== undefined) {
+        var mAdate = moment(new Date(vm.person.anniversaryDate));
+        vm.person.anniversaryDate = mAdate.format('MM/DD/YYYY');
+      }
+    }
+
+    function householdPhoneFocus(){
+      $rootScope.$emit('homePhoneFocus');
+    }
+
+    vm.savePersonal = function() {
+      $timeout(function() {
+        vm.submitted = true;
+        $log.debug(vm.form.personal);
+        if (vm.form.personal.$invalid) {
+          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+          vm.submitted = false;
+          return;
         }
 
-        _this.savePersonal = function () {
-          $timeout(function(){
-            _this.submitted = true;
-            $log.debug(_this.form.personal);
-            if (_this.form.personal.$invalid) {
-                $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-                _this.submitted = false;
-                return;
-            }
-            _this.person["State/Region"] = _this.person.State;
-            //debugger;
-            _this.person.$save(function () {
-                $rootScope.$emit('notify', $rootScope.MESSAGES.profileUpdated);
-                $log.debug("person save successful");
-                if(_this.modalInstance !== undefined) {
-                    _this.closeModal(true);
-                }
-            }, function () {
-                $log.debug("person save unsuccessful");
-            });
-          }, 550);
-        };
-        _this.isDobError = function () {
-            return (_this.form.personal.birthdate.$touched || _this.form.personal.$submitted) && _this.form.personal.birthdate.$invalid;
-        };
-        _this.convertHomePhone = function () {
-            if (_this.form.personal["home-phone"].$valid) {
-                    _this.person.homePhone = _this.person.homePhone.replace(_this.phoneFormat, "$1-$2-$3");
-                }
-        };
-        _this.convertPhone = function() {
-            if (_this.form.personal["mobile-phone"].$valid) {
-                _this.person.mobilePhone = _this.person.mobilePhone.replace(_this.phoneFormat, "$1-$2-$3");
-            }
-        };
-        _this.serviceProviderRequired = function () {
-            if (_this.person.mobilePhone === "undefined" || _this.person.mobilePhone === null || _this.person.mobilePhone === "" || this.form.personal["mobile-phone"].$invalid) {
-                return false;
-            }
-            return true;
-        };
-    }
+        vm.person['State/Region'] = vm.person.State;
+        vm.person.$save(function() {
+          $rootScope.$emit('notify', $rootScope.MESSAGES.profileUpdated);
+          $log.debug('person save successful');
+          if (vm.modalInstance !== undefined) {
+            vm.closeModal(true);
+          }
+        }, function() {
+          $log.debug('person save unsuccessful');
+        });
+      }, 550);
+    };
+
+    vm.isDobError = function() {
+      return (vm.form.personal.birthdate.$touched ||
+        vm.form.personal.$submitted) &&
+        vm.form.personal.birthdate.$invalid;
+    };
+
+    vm.convertHomePhone = function() {
+      if (vm.form.personal['home-phone'].$valid) {
+        vm.person.homePhone = vm.person.homePhone.replace(vm.phoneFormat, '$1-$2-$3');
+      }
+    };
+
+    vm.convertPhone = function() {
+      if (vm.form.personal['mobile-phone'].$valid) {
+        vm.person.mobilePhone = vm.person.mobilePhone.replace(vm.phoneFormat, '$1-$2-$3');
+      }
+    };
+
+    vm.serviceProviderRequired = function() {
+      // if (vm.person.mobilePhone === 'undefined' ||
+      // vm.person.mobilePhone === null ||
+      // vm.person.mobilePhone === '' ||
+      // this.form.personal['mobile-phone'].$invalid) {
+      //   return false;
+      // }
+
+      return true;
+    };
+
+  };
 
 })();
