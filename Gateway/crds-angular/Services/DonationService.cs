@@ -81,7 +81,7 @@ namespace crds_angular.Services
         public List<DonationDTO> GetDonationsForAuthenticatedUser(string userToken, string donationYear = null, bool softCredit = false)
         {
             var donorId = GetDonorIdForAuthenticatedUser(userToken);
-            return (donorId == null ? null : GetDonationsForDonor(donorId.Value));
+            return (donorId == null ? null : GetDonationsForDonor(donorId.Value, donationYear, softCredit));
         }
 
         public List<string> GetDonationYearsForAuthenticatedUser(string userToken)
@@ -105,6 +105,11 @@ namespace crds_angular.Services
             }
 
             var response = donations.Select(Mapper.Map<DonationDTO>).ToList();
+
+            if (donationYear != null)
+            {
+                response.RemoveAll(donation => !donationYear.Equals(donation.DonationDate.Year.ToString()));
+            }
 
             foreach (var donation in response)
             {
