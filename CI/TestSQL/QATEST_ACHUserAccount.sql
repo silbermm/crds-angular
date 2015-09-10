@@ -54,7 +54,7 @@ set @donor_id =IDENT_CURRENT('Donors')+1;
 
 INSERT INTO [dbo].donors 
 (Donor_ID ,Contact_ID,Statement_Frequency_ID,Statement_Type_ID,Statement_Method_ID,Setup_Date                ,Envelope_No,Cancel_Envelopes,Notes,First_Contact_Made,Domain_ID,__ExternalPersonID,_First_Donation_Date,_Last_Donation_Date,Processor_ID        ) VALUES
-(@donor_id,@contactID,1                     ,1                ,2                  ,{ts '2015-07-15 16:19:22'},null       ,null            ,null ,null              ,1        ,null              ,null                ,null               ,'cus_6cAhwmmKyaw9D5');
+(@donor_id,@contactID,1                     ,1                ,2                  ,{ts '2015-07-15 16:19:22'},null       ,0               ,null ,null              ,1        ,null              ,null                ,null               ,'cus_6cAhwmmKyaw9D5');
 
 --User ROLE
 SET IDENTITY_INSERT [dbo].[Donors] OFF;
