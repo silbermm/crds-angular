@@ -10,7 +10,7 @@ namespace crds_angular.Models.Crossroads.Stewardship
     public class EZScanDonorDetails
     {
         [JsonProperty(PropertyName = "DisplayName")]
-        public int DisplayName { get; set; }
+        public string DisplayName { get; set; }
         [JsonProperty(PropertyName = "PostalAddress")]
         public PostalAddress Address { get; set; }
     }
