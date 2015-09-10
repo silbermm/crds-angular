@@ -99,6 +99,7 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.DonationDate, opts => opts.MapFrom(src => src.donationDate))
                 .ForMember(dest => dest.Status, opts => opts.MapFrom(src => src.donationStatus))
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.donationId))
+                .ForMember(dest => dest.PaymentProcessorId, opts => opts.MapFrom(src => src.transactionCode))
                 .ForMember(dest => dest.Distributions, opts => opts.MapFrom(src => src.Distributions))
                 .ForMember(dest => dest.SourceType, opts => opts.MapFrom(src => src.paymentTypeId));
 

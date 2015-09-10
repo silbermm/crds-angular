@@ -17,12 +17,14 @@ namespace crds_angular.Services
         private readonly MPServices.IDonationService _mpDonationService;
         private readonly MPServices.IDonorService _mpDonorService;
         private readonly MPServices.IAuthenticationService _mpAuthenticationService;
+        private readonly IPaymentService _paymentService;
 
-        public DonationService(MPServices.IDonationService mpDonationService, MPServices.IDonorService mpDonorService, MPServices.IAuthenticationService mpAuthenticationService)
+        public DonationService(MPServices.IDonationService mpDonationService, MPServices.IDonorService mpDonorService, MPServices.IAuthenticationService mpAuthenticationService, IPaymentService paymentService)
         {
             _mpDonationService = mpDonationService;
             _mpDonorService = mpDonorService;
             _mpAuthenticationService = mpAuthenticationService;
+            _paymentService = paymentService;
         }
 
         public DonationDTO GetDonationByProcessorPaymentId(string processorPaymentId)
@@ -106,23 +108,40 @@ namespace crds_angular.Services
 
             foreach (var donation in response)
             {
-                switch (donation.SourceType)
+                StripeCharge charge = null;
+                if (!string.IsNullOrWhiteSpace(donation.PaymentProcessorId))
                 {
-                    case PaymentType.Cash:
-                        donation.SourceTypeDescription = "cash";
-                        break;
+                    charge = _paymentService.GetCharge(donation.PaymentProcessorId);
+                }
 
-                    case PaymentType.CreditCard:
-                        // TODO Need to lookup info at stripe
-                        donation.CardType = CreditCardType.Visa;
-                        donation.SourceTypeDescription = "ending in 1234";
-                        break;
-
-                    case PaymentType.Bank:
-                    case PaymentType.Check:
-                        // TODO Need to lookup info at stripe
-                        donation.SourceTypeDescription = "ending in 5678";
-                        break;
+                if (donation.SourceType == PaymentType.Cash)
+                {
+                    donation.SourceTypeDescription = "cash";
+                }
+                else if (charge != null && charge.Source != null)
+                {
+                    donation.SourceTypeDescription = string.Format("ending in {0}", charge.Source.AccountNumberLast4);
+                    if (donation.SourceType == PaymentType.CreditCard && charge.Source.Brand != null)
+                    {
+                        switch (charge.Source.Brand)
+                        {
+                            case CardBrand.AmericanExpress:
+                                donation.CardType = CreditCardType.AmericanExpress;
+                                break;
+                            case CardBrand.Discover:
+                                donation.CardType = CreditCardType.Discover;
+                                break;
+                            case CardBrand.MasterCard:
+                                donation.CardType = CreditCardType.MasterCard;
+                                break;
+                            case CardBrand.Visa:
+                                donation.CardType = CreditCardType.Visa;
+                                break;
+                            default:
+                                donation.CardType = null;
+                                break;
+                        }
+                    }
                 }
             }
 

@@ -39,7 +39,7 @@ namespace crds_angular.Controllers.API
         /// <summary>
         /// Retrieve list of donations for the logged-in donor, optionally for the specified year, and optionally returns only soft credit donations (by default returns only direct gifts).
         /// </summary>
-        /// <param name="softCredit">A bool indicating if the result should contain soft-credit (true) or direct (false) donations.  Defaults to false.</param>
+        /// <param name="softCredit">A bool indicating if the result should contain only soft-credit (true) or only direct (false) donations.  Defaults to false.</param>
         /// <param name="donationYear">A year filter (YYYY format) for donations returned - defaults to null, meaning return all available donations regardless of year.</param>
         /// <returns>A list of DonationDTOs</returns>
         [Route("api/donations/{donationYear:regex([0-9][0-9][0-9][0-9])?}")]

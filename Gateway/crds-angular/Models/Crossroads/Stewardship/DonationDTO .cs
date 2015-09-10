@@ -41,6 +41,9 @@ namespace crds_angular.Models.Crossroads.Stewardship
 
         [JsonProperty(PropertyName = "card_type", NullValueHandling = NullValueHandling.Ignore), JsonConverter(typeof(StringEnumConverter))]
         public CreditCardType? CardType { get; set; }
+
+        [JsonProperty(PropertyName = "payment_processor_id", NullValueHandling = NullValueHandling.Ignore)]
+        public string PaymentProcessorId { get; set; }
     }
 
     public enum DonationStatus
@@ -52,7 +55,9 @@ namespace crds_angular.Models.Crossroads.Stewardship
         [EnumMember(Value = "Declined")]
         Declined = 3,
         [EnumMember(Value = "Succeeded")]
-        Succeeded = 4
+        Succeeded = 4,
+        [EnumMember(Value = "Refunded")]
+        Refunded = 5
     }
 
     public enum PaymentType
