@@ -9,12 +9,12 @@
 
       <div class="form-group col-sm-6" >
         <label for='firstName' class='required'> First Name </label>
-        <input ng-model="pages.page2.guardianFirstName" type='text' class='form-control' id='guardian-first-name' placeholder='First Name'>
+        <input ng-model="pages.signupService.page2.guardianFirstName" type='text' class='form-control' id='guardian-first-name' placeholder='First Name'>
       </div>
 
       <div class="form-group col-sm-6" >
         <label for='lastName' class='required'> Last Name </label>
-        <input ng-model="pages.page2.guardianLastName" type='text' class='form-control' id='guardian-last-name' placeholder='Last Name'>
+        <input ng-model="pages.signupService.page2.guardianLastName" type='text' class='form-control' id='guardian-last-name' placeholder='Last Name'>
       </div>
     </div>
 
@@ -25,9 +25,9 @@
 
 
 
-      <div class="form-group col-sm-6" ng-class="{'has-error': !pages.page2.tshirtSize.$valid}">
+      <div class="form-group col-sm-6" ng-class="{'has-error': pages.validation.showErrors(tripAppPage2, 'tshirtSize') }">
         <label for="tshirt" class="required">T-shirt Size</label>
-        <select class="form-control col-sm-12" ng-model="pages.signupService.tshirtSize" name="tshirtSize" id="tshirt" ng-required='true'>
+        <select class="form-control col-sm-12" ng-model="pages.signupService.page2.tshirtSize" name="tshirtSize" id="tshirt" ng-required='true'>
           <option> Adult XS </option>
           <option> Adult S </option>
           <option> Adult M </option>
@@ -39,8 +39,8 @@
           <option> Child M </option>
           <option> Child L </option>
         </select>
-        <ng-messages for="pages.tripAppPage2.tshirtSize.$error" ng-if="!pages.page2.tshirtSize.$valid">
-          <span ng-message="required">rrrrrr
+        <ng-messages for="tripAppPage2.tshirtSize.$error" ng-if="pages.validation.showErrors(tripAppPage2, 'tshirtSize')">
+          <span ng-message="required">
             <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
@@ -48,7 +48,7 @@
 
       <div class="form-group col-sm-6" ng-show="pages.pageTitle == 'GO South Africa Application'">
         <label for="scrub">Scrub Size <small class="text-muted">Only required for Topsy trips</small></label>
-        <select class="form-control col-sm-12" ng-model="pages.page2.scrubSize" id="scrub">
+        <select class="form-control col-sm-12" ng-model="pages.signupService.page2.scrubSize" id="scrub">
           <option>Adult XS</option>
           <option>Adult S</option>
           <option>Adult M</option>
@@ -62,19 +62,19 @@
       <div class="form-group col-sm-12">
           <label class="block required">How did you hear about this trip?</label>
           <label for="program" class="radio-inline">
-              <input type="radio" value="program" id="program" name="referral" ng-model="pages.page2.referral">Program
+              <input type="radio" value="program" id="program" name="referral" ng-model="pages.signupService.page2.referral">Program
           </label>
           <label for="session" class="radio-inline">
-              <input type="radio" value="session" id="session" name="referral" ng-model="pages.page2.referral">Info Session
+              <input type="radio" value="session" id="session" name="referral" ng-model="pages.signupService.page2.referral">Info Session
           </label>
           <label for="friend" class="radio-inline">
-              <input type="radio" value="friend" id="friend" name="referral" ng-model="pages.page2.referral">Friend/Family
+              <input type="radio" value="friend" id="friend" name="referral" ng-model="pages.signupService.page2.referral">Friend/Family
           </label>
           <label for="website" class="radio-inline">
-              <input type="radio" value="website" id="website" name="referral" ng-model="pages.page2.referral">Website
+              <input type="radio" value="website" id="website" name="referral" ng-model="pages.signupService.page2.referral">Website
           </label>
           <label for="other" class="radio-inline">
-              <input type="radio" value="other" id="other" name="referral" ng-model="pages.page2.referral">Other
+              <input type="radio" value="other" id="other" name="referral" ng-model="pages.signupService.page2.referral">Other
           </label>
       </div><!--/form-group-->
     </div><!--/row-->
@@ -82,7 +82,7 @@
     <div class="row">
       <div class="form-group col-sm-12">
         <label for="conditions">Please describe any medical condition(s) that may affect your ability to participate in this trip <small class="text-muted">Leave blank if it doesn't apply</small></label>
-        <textarea ng-model="pages.page2.conditions" class="form-control" rows="2" cols="1" id="conditions" maxlength="250"></textarea>
+        <textarea ng-model="pages.signupService.page2.conditions" class="form-control" rows="2" cols="1" id="conditions" maxlength="250"></textarea>
       </div><!--/form-group-->
     </div><!--/row-->
 
@@ -90,10 +90,10 @@
       <div class="form-group col-sm-12">
           <label class="block required">Vegetarian? <small class="text-muted">If you mark yes we will do our best to provide vegetarian meals during the trip</small></label>
           <label for="vegetarian-yes" class="radio-inline">
-              <input ng-model="pages.page2.vegetarian" type="radio" value="yes" name="vegetarian" id="vegetarian-yes">Yes
+              <input ng-model="pages.signupService.page2.vegetarian" type="radio" value="yes" name="vegetarian" id="vegetarian-yes">Yes
           </label>
           <label for="vegetarian-no" class="radio-inline">
-              <input ng-model="pages.page2.vegetarian" type="radio" value="no" name="vegetarian" for="vegetarian-no">No
+              <input ng-model="pages.signupService.page2.vegetarian" type="radio" value="no" name="vegetarian" for="vegetarian-no">No
           </label>
       </div><!--/form-group-->
     </div><!--/row-->
@@ -101,7 +101,7 @@
     <div class="row">
       <div class="form-group col-sm-12">
           <label for="allergies">Please describe all food allergies <small class="text-muted">Leave blank if it doesn't apply</small</label>
-          <textarea ng-model="pages.page2.allergies" class="form-control" rows="2" cols="1" id="allergies" maxlength="250"></textarea>
+          <textarea ng-model="pages.signupService.page2.allergies" class="form-control" rows="2" cols="1" id="allergies" maxlength="250"></textarea>
       </div><!--/form-group-->
     </div><!--/row-->
 
@@ -109,10 +109,10 @@
       <div id="Site" class="form-group col-sm-6">
         <label for="slife" class="required">How would you define your spiritual life? <small class="text-muted">Pick as many as you like</small></label><br>
 
-        <div class="checkbox"> <label for="slife-searching"> <input ng-model="pages.page2.spiritualLifeSearching" type="checkbox" name="slife" value="Searching" id="slife-searching"> Searching for answers </label> </div>
-        <div class="checkbox"> <label for="slife-received"> <input ng-model="pages.page2.spiritualLifeReceived" type="checkbox" name="slife" value="Received" id="slife-received"> I have received Jesus </label> </div>
-        <div class="checkbox"> <label for="slife-obedience"> <input ng-model="pages.page2.spiritualLifeObedience" type="checkbox" name="slife" value="Obedience" id="slife-obedience"> Focusing on obedience - I've quit negotiating with God </label> </div>
-        <div class="checkbox"> <label for="slife-replicating"> <input ng-model="pages.page2.spiritualLifeReplicating" type="checkbox" name="slife" value="Replicating" id="slife-replicating"> I'm actively replicating my faith in others </label> </div>
+        <div class="checkbox"> <label for="slife-searching"> <input ng-model="pages.signupService.page2.spiritualLifeSearching" type="checkbox" name="slife" value="Searching" id="slife-searching"> Searching for answers </label> </div>
+        <div class="checkbox"> <label for="slife-received"> <input ng-model="pages.signupService.page2.spiritualLifeReceived" type="checkbox" name="slife" value="Received" id="slife-received"> I have received Jesus </label> </div>
+        <div class="checkbox"> <label for="slife-obedience"> <input ng-model="pages.signupService.page2.spiritualLifeObedience" type="checkbox" name="slife" value="Obedience" id="slife-obedience"> Focusing on obedience - I've quit negotiating with God </label> </div>
+        <div class="checkbox"> <label for="slife-replicating"> <input ng-model="pages.signupService.page2.spiritualLifeReplicating" type="checkbox" name="slife" value="Replicating" id="slife-replicating"> I'm actively replicating my faith in others </label> </div>
 
       </div><!--/form-group-->
     </div><!--/row-->
@@ -120,7 +120,7 @@
     <div class="row">
       <div class="form-group col-sm-12" ng-class="{ 'has-error': pages.validation.showErrors(tripAppPage2, 'why') }">>
           <label for="why" class="required">Tell us why you want to go on this trip</label>
-          <textarea ng-model="pages.page2.why" ng-required="true" cols="1" rows="4" class="form-control" name="why" id="why" maxlength="1000" placeholder="{{pages.whyPlaceholder}}"></textarea>
+          <textarea ng-model="pages.signupService.page2.why" ng-required="true" cols="1" rows="4" class="form-control" name="why" id="why" maxlength="1000" placeholder="{{pages.whyPlaceholder}}"></textarea>
           <!-- <input ng-model="pages.page2.why" ng-required="true" class="form-control" name="why" placeholder="{{pages.whyPlaceholder}}"></input> -->
           <ng-messages for="tripAppPage2.why.$error" ng-if="pages.validation.showErrors(tripAppPage2, 'why')">
             <span ng-message="required">

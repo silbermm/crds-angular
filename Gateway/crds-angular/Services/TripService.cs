@@ -413,5 +413,10 @@ namespace crds_angular.Services
             var person = _personService.GetLoggedInUserProfile(token);
             return _privateInviteService.PrivateInviteValid(pledgeCampaignId, guid, person.EmailAddress);
         }
+
+        public void SaveApplication(TripApplicationDto dto, string token)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -3,7 +3,14 @@
 
   module.exports = PagesController;
 
-  PagesController.$inject = ['$rootScope', 'Session', '$location', '$anchorScroll', 'Trip', 'Validation', 'TripsSignupService', 'SignupPage2Service'];
+  PagesController.$inject = [
+    '$rootScope',
+    'Session',
+    '$location',
+    '$anchorScroll',
+    'Trip',
+    'Validation',
+    'TripsSignupService'];
 
   /**
    * Controller for all of the pages directives
@@ -12,7 +19,7 @@
    *    - pageTitle
    *    - numberOfPages
    */
-  function PagesController($rootScope, Session, $location, $anchorScroll, Trip, Validation, TripsSignupService, SignupPage2Service) {
+  function PagesController($rootScope, Session, $location, $anchorScroll, Trip, Validation, TripsSignupService) {
     var vm = this;
 
     vm.handleNext = handleNext;
@@ -20,8 +27,6 @@
     vm.handlePrevious = handlePrevious;
     vm.handleSubmit = handleSubmit;
     vm.nolaRequired = nolaRequired;
-    vm.page2 = {};
-    vm.page2Service = SignupPage2Service;
     vm.signupService = TripsSignupService;
     vm.underAge = underAge;
     vm.validation = Validation;
@@ -51,7 +56,6 @@
       form.$setSubmitted(true);
 
       if (form.$valid) {
-        vm.page2Service.setPage2(vm.page2);
         vm.currentPage = nextPage;
         toTop();
       } else {

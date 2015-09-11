@@ -43,7 +43,7 @@
         if(!member.signedUp) {
           return 'flush-bottom';
         }
-        
+
         return '';
       }
     }

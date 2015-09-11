@@ -4,7 +4,6 @@
   angular.module('crossroads.trips')
     .controller('TripsSignupController', require('./tripsSignup.controller'))
     .controller('PagesController', require('./pages.controller'))
-    .factory('SignupPage2Service', require('./page2/signupPage2.service'))
     .factory('TripsSignupService', require('./tripsSignup.service'));
 
   require('./signupProgress');
