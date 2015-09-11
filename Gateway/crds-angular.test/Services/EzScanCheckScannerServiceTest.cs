@@ -298,10 +298,10 @@ namespace crds_angular.test.Services
                 mocked =>
                     mocked.CreateOrUpdateContactDonor(
                         It.Is<ContactDonor>(
-                            o =>
+                            o => 
                                 o.Details.DisplayName.Equals(check.Name1) && o.Details.Address.Line1.Equals(check.Address.Line1) && o.Details.Address.Line2.Equals(check.Address.Line2) &&
                                 o.Details.Address.City.Equals(check.Address.City) && o.Details.Address.State.Equals(check.Address.State) && o.Details.Address.PostalCode.Equals(check.Address.PostalCode) &&
-                                o.Account.RoutingNumber.Equals(check.RoutingNumber) && o.Account.AccountNumber.Equals(check.RoutingNumber) && o.Account.Type == AccountType.Checking),
+                                o.Account.RoutingNumber.Equals(check.RoutingNumber) && o.Account.AccountNumber.Equals(check.AccountNumber) && o.Account.Type == AccountType.Checking),
                         string.Empty,
                         token,
                         It.IsAny<DateTime>()))
