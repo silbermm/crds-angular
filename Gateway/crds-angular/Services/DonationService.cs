@@ -150,27 +150,25 @@ namespace crds_angular.Services
                 }
             }
 
-            return (response);
+            return (response.OrderBy(donation => donation.DonationDate).ToList());
         }
 
         public List<string> GetDonationYearsForDonor(int donorId)
         {
-            var allDonations = new List<Donation>();
+            var years = new HashSet<string>();
             var softCreditDonations = _mpDonorService.GetSoftCreditDonations(donorId);
             var donations = _mpDonorService.GetDonations(donorId);
 
             if (softCreditDonations != null)
             {
-                allDonations.AddRange(softCreditDonations);
+                years.UnionWith(softCreditDonations.Select(d => d.donationDate.Year.ToString()));
             }
             if (donations != null)
             {
-                allDonations.AddRange(donations);
+                years.UnionWith(donations.Select(d => d.donationDate.Year.ToString()));
             }
 
-            var years = allDonations.ToDictionary(d => d.donationDate.Year.ToString()).Keys.ToList();
-
-            return (years);
+            return (years.OrderByDescending(i => i).ToList());
         }
 
         public DonationBatchDTO GetDonationBatchByDepositId(int depositId)

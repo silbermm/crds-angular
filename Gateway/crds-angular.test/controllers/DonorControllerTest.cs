@@ -4,6 +4,7 @@ using MinistryPlatform.Models;
 using Moq;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -12,6 +13,7 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Hosting;
 using System.Web.Http.Results;
 using crds_angular.Exceptions;
+using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Models.Json;
 
@@ -304,6 +306,87 @@ namespace crds_angular.test.controllers
             }
 
             donorService.VerifyAll();
+        }
+
+        [Test]
+        public void TestGetDonations()
+        {
+            var donations = new List<DonationDTO>
+            {
+                new DonationDTO
+                {
+                    BatchId = 123,
+                    Amount = 78900,
+                    DonationDate = DateTime.Now,
+                    Id = "456",
+                    SourceType = PaymentType.CreditCard,
+                    CardType = CreditCardType.AmericanExpress,
+                    Email = "me@here.com",
+                    SourceTypeDescription = "ending in 1234",
+                    ProgramId = "3",
+                    PaymentProcessorId = "tx_123",
+                    Status = DonationStatus.Succeeded
+                }
+            };
+
+            _donationService.Setup(mocked => mocked.GetDonationsForDonor(123, "1999", true)).Returns(donations);
+            var response = fixture.GetDonations(123, "1999", true);
+            _donationService.VerifyAll();
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<List<DonationDTO>>>(response);
+            var r = (OkNegotiatedContentResult<List<DonationDTO>>) response;
+            Assert.IsNotNull(r.Content);
+            Assert.AreSame(donations, r.Content);
+        }
+
+        [Test]
+        public void TestGetDonationsNoDonationsFound()
+        {
+            _donationService.Setup(mocked => mocked.GetDonationsForDonor(123, "1999", true)).Returns((List<DonationDTO>) null);
+            var response = fixture.GetDonations(123, "1999", true);
+            _donationService.VerifyAll();
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<RestHttpActionResult<ApiErrorDto>>(response);
+            var r = (RestHttpActionResult<ApiErrorDto>)response;
+            Assert.IsNotNull(r.Content);
+            Assert.AreEqual("No matching donations found", r.Content.Message);
+        }
+
+        [Test]
+        public void TestGetDonationYears()
+        {
+            var donationYears = new List<string>
+            {
+                "1999",
+                "2010",
+                "2038"
+            };
+
+            _donationService.Setup(mocked => mocked.GetDonationYearsForDonor(123)).Returns(donationYears);
+            var response = fixture.GetDonationYears(123);
+            _donationService.VerifyAll();
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<List<string>>>(response);
+            var r = (OkNegotiatedContentResult<List<string>>)response;
+            Assert.IsNotNull(r.Content);
+            Assert.AreSame(donationYears, r.Content);
+        }
+
+        [Test]
+        public void TestGetDonationYearsNoYearsFound()
+        {
+            _donationService.Setup(mocked => mocked.GetDonationYearsForDonor(123)).Returns((List<string>)null);
+            var response = fixture.GetDonationYears(123);
+            _donationService.VerifyAll();
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<RestHttpActionResult<ApiErrorDto>>(response);
+            var r = (RestHttpActionResult<ApiErrorDto>)response;
+            Assert.IsNotNull(r.Content);
+            Assert.AreEqual("No donation years found", r.Content.Message);
         }
 
         [Test]

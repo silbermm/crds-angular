@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Results;
 using crds_angular.Controllers.API;
+using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads.Stewardship;
+using crds_angular.Models.Json;
 using MinistryPlatform.Translation.Services.Interfaces;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
@@ -45,6 +48,88 @@ namespace crds_angular.test.controllers
             fixture.Request.Headers.Authorization = new AuthenticationHeaderValue(authType, authToken);
             fixture.RequestContext = new HttpRequestContext();
         }
+
+        [Test]
+        public void TestGetDonations()
+        {
+            var donations = new List<DonationDTO>
+            {
+                new DonationDTO
+                {
+                    BatchId = 123,
+                    Amount = 78900,
+                    DonationDate = DateTime.Now,
+                    Id = "456",
+                    SourceType = PaymentType.CreditCard,
+                    CardType = CreditCardType.AmericanExpress,
+                    Email = "me@here.com",
+                    SourceTypeDescription = "ending in 1234",
+                    ProgramId = "3",
+                    PaymentProcessorId = "tx_123",
+                    Status = DonationStatus.Succeeded
+                }
+            };
+
+            gatewayDonationServiceMock.Setup(mocked => mocked.GetDonationsForAuthenticatedUser(authType + " " + authToken, "1999", true)).Returns(donations);
+            var response = fixture.GetDonations("1999", true);
+            gatewayDonationServiceMock.VerifyAll();
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<List<DonationDTO>>>(response);
+            var r = (OkNegotiatedContentResult<List<DonationDTO>>)response;
+            Assert.IsNotNull(r.Content);
+            Assert.AreSame(donations, r.Content);
+        }
+
+        [Test]
+        public void TestGetDonationsNoDonationsFound()
+        {
+            gatewayDonationServiceMock.Setup(mocked => mocked.GetDonationsForAuthenticatedUser(authType + " " + authToken, "1999", true)).Returns((List<DonationDTO>)null);
+            var response = fixture.GetDonations("1999", true);
+            gatewayDonationServiceMock.VerifyAll();
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<RestHttpActionResult<ApiErrorDto>>(response);
+            var r = (RestHttpActionResult<ApiErrorDto>)response;
+            Assert.IsNotNull(r.Content);
+            Assert.AreEqual("No matching donations found", r.Content.Message);
+        }
+
+        [Test]
+        public void TestGetDonationYears()
+        {
+            var donationYears = new List<string>
+            {
+                "1999",
+                "2010",
+                "2038"
+            };
+
+            gatewayDonationServiceMock.Setup(mocked => mocked.GetDonationYearsForAuthenticatedUser(authType + " " + authToken)).Returns(donationYears);
+            var response = fixture.GetDonationYears();
+            gatewayDonationServiceMock.VerifyAll();
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<List<string>>>(response);
+            var r = (OkNegotiatedContentResult<List<string>>)response;
+            Assert.IsNotNull(r.Content);
+            Assert.AreSame(donationYears, r.Content);
+        }
+
+        [Test]
+        public void TestGetDonationYearsNoYearsFound()
+        {
+            gatewayDonationServiceMock.Setup(mocked => mocked.GetDonationYearsForAuthenticatedUser(authType + " " + authToken)).Returns((List<string>)null);
+            var response = fixture.GetDonationYears();
+            gatewayDonationServiceMock.VerifyAll();
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<RestHttpActionResult<ApiErrorDto>>(response);
+            var r = (RestHttpActionResult<ApiErrorDto>)response;
+            Assert.IsNotNull(r.Content);
+            Assert.AreEqual("No donation years found", r.Content.Message);
+        }
+
 
         [Test]
         public void testPostToCreateDonationAndDistributionAuthenticated()

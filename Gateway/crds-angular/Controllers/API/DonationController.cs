@@ -15,6 +15,7 @@ using crds_angular.Services.Interfaces;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 using System.Threading.Tasks;
 using System.Web;
+using crds_angular.Models.Json;
 
 namespace crds_angular.Controllers.API
 {
@@ -46,7 +47,16 @@ namespace crds_angular.Controllers.API
         [HttpGet]
         public IHttpActionResult GetDonations(string donationYear = null, [FromUri(Name = "softCredit")]bool? softCredit = false)
         {
-            return (Authorized(token => Ok(_gatewayDonationService.GetDonationsForAuthenticatedUser(token, donationYear, softCredit.GetValueOrDefault(false)))));
+            return (Authorized(token =>
+            {
+                var donations = _gatewayDonationService.GetDonationsForAuthenticatedUser(token, donationYear, softCredit.GetValueOrDefault(false));
+                if (donations == null || donations.Count == 0)
+                {
+                    return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching donations found")));
+                }
+
+                return (Ok(donations));
+            }));
         }
 
         /// <summary>
@@ -57,7 +67,16 @@ namespace crds_angular.Controllers.API
         [HttpGet]
         public IHttpActionResult GetDonationYears()
         {
-            return (Authorized(token => Ok(_gatewayDonationService.GetDonationYearsForAuthenticatedUser(token))));
+            return (Authorized(token =>
+            {
+                var donationYears = _gatewayDonationService.GetDonationYearsForAuthenticatedUser(token);
+                if (donationYears == null || donationYears.Count == 0)
+                {
+                    return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No donation years found")));
+                }
+
+                return (Ok(donationYears));
+            }));
         }
 
         [ResponseType(typeof(DonationDTO))]
