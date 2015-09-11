@@ -20,6 +20,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _tripDistributionsPageView;
         private readonly int _gpExportPageView;
         private readonly int _processingProgramId;
+        private readonly int _scholarshipPaymentTypeId;
 
         private readonly IMinistryPlatformService _ministryPlatformService;
         private readonly IDonorService _donorService;
@@ -38,6 +39,7 @@ namespace MinistryPlatform.Translation.Services
             _tripDistributionsPageView = configuration.GetConfigIntValue("TripDistributionsView");
             _gpExportPageView = configuration.GetConfigIntValue("GPExportView");
             _processingProgramId = configuration.GetConfigIntValue("ProcessingProgramId");
+            _scholarshipPaymentTypeId = configuration.GetConfigIntValue("ScholarshipPaymentTypeId");
         }
 
         public int UpdateDonationStatus(int donationId, int statusId, DateTime statusDate,
@@ -363,7 +365,10 @@ namespace MinistryPlatform.Translation.Services
                     CashAccount = result.ToString("Cash Account"),
                     ReceivableAccount = result.ToString("Receivable Account"),
                     DistributionAccount = result.ToString("Distribution Account"),
+                    ScholarshipExpenseAccount = result.ToString("Scholarship Expense Account"),
                     Amount = result.ToString("Amount"),
+                    ScholarshipPaymentTypeId = _scholarshipPaymentTypeId,
+                    PaymentTypeId = result.ToInt("Payment Type ID")
                 };
 
                 gpExport.Add(gp);

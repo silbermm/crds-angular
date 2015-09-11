@@ -366,6 +366,8 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(3, result.Count);
             Assert.AreEqual(new DateTime(2015, 3, 28, 8, 30, 0), result[0].DepositDate);
             Assert.AreEqual(15, result[0].ProgramId);
+            Assert.AreEqual(8, result[0].PaymentTypeId);
+            Assert.AreEqual("19998-900-11", result[0].ScholarshipExpenseAccount);
         }
 
         private List<Dictionary<string, object>> MockGPExport()
@@ -387,7 +389,9 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Receivable Account", "90013-031-21"},
                     {"Distribution Account", "90001-031-22"},
                     {"Amount", "200.00"},
-                    {"Program ID", "15"}
+                    {"Program ID", "15"},
+                    {"Payment Type ID", 8},
+                    {"Scholarship Expense Account", "19998-900-11"}
                 },
                 new Dictionary<string, object>
                 {
@@ -404,7 +408,9 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Receivable Account", "90013-031-21"},
                     {"Distribution Account", "90001-031-22"},
                     {"Amount", "15.00"},
-                    {"Program ID", "127"}
+                    {"Program ID", "127"},
+                    {"Payment Type ID", 7},
+                    {"Scholarship Expense Account", "19948-900-11"}
                 },
                 new Dictionary<string, object>
                 {
@@ -421,7 +427,9 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Receivable Account", "90013-031-21"},
                     {"Distribution Account", "90001-031-22"},
                     {"Amount", "300.00"},
-                    {"Program ID", "150"}
+                    {"Program ID", "150"},
+                    {"Payment Type ID", 2},
+                    {"Scholarship Expense Account", "49998-900-11"}
                 },
             };
         }

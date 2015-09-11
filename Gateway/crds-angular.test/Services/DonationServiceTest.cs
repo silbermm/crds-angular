@@ -361,7 +361,9 @@ namespace crds_angular.test.Services
             Assert.AreEqual(expectedReturn[0].DistributionAccount, mockedExport[0].DistributionAccount);
             Assert.AreEqual(expectedReturn[0].DistributionAmount, mockedExport[0].Amount);
             Assert.AreEqual(expectedReturn[0].DistributionReference, "Processor Fees " + mockedExport[0].DonationDate);
+            Assert.AreEqual(expectedReturn[0].CashAccount, mockedExport[0].ScholarshipExpenseAccount);
             Assert.AreEqual(expectedReturn[1].DistributionReference, "Contribution " + mockedExport[1].DonationDate);
+            Assert.AreEqual(expectedReturn[1].CashAccount, mockedExport[1].CashAccount);
 
             Assert.AreEqual(expectedReturn[0].DocumentType, result[0].DocumentType);
             Assert.AreEqual(expectedReturn[0].DocumentNumber, result[0].DocumentNumber);
@@ -377,6 +379,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual(expectedReturn[0].DistributionAccount, result[0].DistributionAccount);
             Assert.AreEqual(expectedReturn[0].DistributionAmount, result[0].DistributionAmount);
             Assert.AreEqual(expectedReturn[0].DistributionReference, result[0].DistributionReference);
+            Assert.AreEqual(expectedReturn[0].CashAccount, result[0].CashAccount);
             Assert.AreEqual(expectedReturn[1].DistributionReference, result[1].DistributionReference);
         }
 
@@ -395,7 +398,7 @@ namespace crds_angular.test.Services
                     CustomerId = "CONTRIBUTI001",
                     ContributionAmount = "200.00",
                     CheckbookId = "PNC001",
-                    CashAccount = "91213-031-20",
+                    CashAccount = "90551-031-02",
                     ReceivablesAccount = "90013-031-21",
                     DistributionAccount = "90001-031-22",
                     DistributionAmount = "200.00",
@@ -441,6 +444,9 @@ namespace crds_angular.test.Services
                     Amount = "200.00",
                     ProgramId = 12,
                     ProccessFeeProgramId = 12,
+                    PaymentTypeId = 9,
+                    ScholarshipExpenseAccount = "90551-031-02",
+                    ScholarshipPaymentTypeId = 9,
                 },
                 new GPExportDatum
                 {
@@ -458,6 +464,9 @@ namespace crds_angular.test.Services
                     Amount = "20.00",
                     ProgramId = 112,
                     ProccessFeeProgramId = 12,
+                    PaymentTypeId = 15,
+                    ScholarshipExpenseAccount = "90551-031-02",
+                    ScholarshipPaymentTypeId = 9,
                 }
             };
         }
