@@ -10,6 +10,6 @@ namespace crds_angular.Models.Crossroads.Trip
         public Boolean SignedUp { get; set; }
 
         [JsonProperty(PropertyName = "signedUpDate")]
-        public DateTime SignedUpDate { get; set; }
+        public DateTime? SignedUpDate { get; set; }
     }
 }

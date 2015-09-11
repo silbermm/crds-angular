@@ -167,10 +167,11 @@ namespace crds_angular.Services
         public List<FamilyMemberTripDto> GetFamilyMembers(int contactId , int pledgeId, string token)
         {
             var family = _serveService.GetImmediateFamilyParticipants(contactId, token);
-            return family.Select(f =>
+            var fam = new List<FamilyMemberTripDto>();
+            foreach (var f in family)
             {
                 // get status of family member on trip
-
+                var signedUpDate = _formSubmissionService.GetTripFormResponseByContactId(f.ContactId, pledgeId);
                 var fm = new FamilyMemberTripDto()
                 {
                     Age = f.Age,
@@ -181,10 +182,12 @@ namespace crds_angular.Services
                     ParticipantId = f.ParticipantId,
                     PreferredName = f.PreferredName,
                     RelationshipId = f.RelationshipId,
-                    SignedUp = false
+                    SignedUpDate = signedUpDate,
+                    SignedUp = (signedUpDate != null)
                 };
-                return fm;
-            }).ToList();
+                fam.Add(fm);
+            }
+            return fam;
         } 
 
         private static List<string> ValidateResponse(int selectionCount, int formResponseId, List<TripFormResponse> responses)
