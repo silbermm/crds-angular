@@ -528,17 +528,19 @@ namespace crds_angular.test.Services
             _paymentService.VerifyAll();
 
             Assert.NotNull(response);
-            Assert.AreEqual(3, response.Count);
+            Assert.NotNull(response.Donations);
+            Assert.AreEqual(3, response.Donations.Count);
+            Assert.AreEqual(donations[0].donationAmt + donations[2].donationAmt + donations[3].donationAmt, response.DonationTotalAmount);
 
-            Assert.AreEqual(donations[3].donationDate, response[0].DonationDate);
-            Assert.AreEqual("ending in 8765", response[0].SourceTypeDescription);
-            Assert.AreEqual(CreditCardType.AmericanExpress, response[0].CardType);
+            Assert.AreEqual(donations[3].donationDate, response.Donations[0].DonationDate);
+            Assert.AreEqual("ending in 8765", response.Donations[0].SourceTypeDescription);
+            Assert.AreEqual(CreditCardType.AmericanExpress, response.Donations[0].CardType);
 
-            Assert.AreEqual(donations[2].donationDate, response[1].DonationDate);
-            Assert.AreEqual("ending in 9876", response[1].SourceTypeDescription);
+            Assert.AreEqual(donations[2].donationDate, response.Donations[1].DonationDate);
+            Assert.AreEqual("ending in 9876", response.Donations[1].SourceTypeDescription);
 
-            Assert.AreEqual(donations[0].donationDate, response[2].DonationDate);
-            Assert.AreEqual("cash", response[2].SourceTypeDescription);
+            Assert.AreEqual(donations[0].donationDate, response.Donations[2].DonationDate);
+            Assert.AreEqual("cash", response.Donations[2].SourceTypeDescription);
         }
 
         [Test]
@@ -607,17 +609,19 @@ namespace crds_angular.test.Services
             _paymentService.VerifyAll();
 
             Assert.NotNull(response);
-            Assert.AreEqual(3, response.Count);
+            Assert.NotNull(response.Donations);
+            Assert.AreEqual(3, response.Donations.Count);
+            Assert.AreEqual(donations[0].donationAmt + donations[2].donationAmt + donations[3].donationAmt, response.DonationTotalAmount);
 
-            Assert.AreEqual(donations[3].donationDate, response[0].DonationDate);
-            Assert.AreEqual("ending in 8765", response[0].SourceTypeDescription);
-            Assert.AreEqual(CreditCardType.AmericanExpress, response[0].CardType);
+            Assert.AreEqual(donations[3].donationDate, response.Donations[0].DonationDate);
+            Assert.AreEqual("ending in 8765", response.Donations[0].SourceTypeDescription);
+            Assert.AreEqual(CreditCardType.AmericanExpress, response.Donations[0].CardType);
 
-            Assert.AreEqual(donations[2].donationDate, response[1].DonationDate);
-            Assert.AreEqual("ending in 9876", response[1].SourceTypeDescription);
+            Assert.AreEqual(donations[2].donationDate, response.Donations[1].DonationDate);
+            Assert.AreEqual("ending in 9876", response.Donations[1].SourceTypeDescription);
 
-            Assert.AreEqual(donations[0].donationDate, response[2].DonationDate);
-            Assert.AreEqual("cash", response[2].SourceTypeDescription);
+            Assert.AreEqual(donations[0].donationDate, response.Donations[2].DonationDate);
+            Assert.AreEqual("cash", response.Donations[2].SourceTypeDescription);
         }
 
         [Test]

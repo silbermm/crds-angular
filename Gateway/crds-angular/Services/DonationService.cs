@@ -78,7 +78,7 @@ namespace crds_angular.Services
             return (Mapper.Map<DonationBatch, DonationBatchDTO>(_mpDonationService.GetDonationBatch(batchId)));
         }
 
-        public List<DonationDTO> GetDonationsForAuthenticatedUser(string userToken, string donationYear = null, bool softCredit = false)
+        public DonationsDTO GetDonationsForAuthenticatedUser(string userToken, string donationYear = null, bool softCredit = false)
         {
             var donorId = GetDonorIdForAuthenticatedUser(userToken);
             return (donorId == null ? null : GetDonationsForDonor(donorId.Value, donationYear, softCredit));
@@ -96,7 +96,7 @@ namespace crds_angular.Services
             return (donor != null && donor.ExistingDonor ? donor.DonorId : (int?)null);
         }
 
-        public List<DonationDTO> GetDonationsForDonor(int donorId, string donationYear = null, bool softCredit = false)
+        public DonationsDTO GetDonationsForDonor(int donorId, string donationYear = null, bool softCredit = false)
         {
             var donations = softCredit ? _mpDonorService.GetSoftCreditDonations(donorId) : _mpDonorService.GetDonations(donorId);
             if (donations == null || donations.Count == 0)
@@ -150,7 +150,10 @@ namespace crds_angular.Services
                 }
             }
 
-            return (response.OrderBy(donation => donation.DonationDate).ToList());
+            var donationsResponse = new DonationsDTO();
+            donationsResponse.Donations.AddRange(response.OrderBy(donation => donation.DonationDate).ToList());
+
+            return (donationsResponse);
         }
 
         public List<string> GetDonationYearsForDonor(int donorId)

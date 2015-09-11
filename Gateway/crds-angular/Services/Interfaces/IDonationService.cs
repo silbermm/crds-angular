@@ -18,9 +18,9 @@ namespace crds_angular.Services.Interfaces
         void CreatePaymentProcessorEventError(StripeEvent stripeEvent, StripeEventResponseDTO stripeEventResponse);
         DonationBatchDTO GetDonationBatchByProcessorTransferId(string processorTransferId);
         DonationBatchDTO GetDonationBatch(int batchId);
-        List<DonationDTO> GetDonationsForAuthenticatedUser(string userToken, string donationYear = null, bool softCredit = false);
+        DonationsDTO GetDonationsForAuthenticatedUser(string userToken, string donationYear = null, bool softCredit = false);
         List<string> GetDonationYearsForAuthenticatedUser(string userToken);
-        List<DonationDTO> GetDonationsForDonor(int donorId, string donationYear = null, bool softCredit = false);
+        DonationsDTO GetDonationsForDonor(int donorId, string donationYear = null, bool softCredit = false);
         List<string> GetDonationYearsForDonor(int donorId);
 
             // ReSharper disable once InconsistentNaming
