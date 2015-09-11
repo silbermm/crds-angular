@@ -468,5 +468,299 @@ namespace crds_angular.test.Services
                 }
             };
         }
+    
+        [Test]
+        public void TestGetDonationsForDonor()
+        {
+            var donations = new List<Donation>
+            {
+                new Donation
+                {
+                    donationAmt = 123,
+                    donationId = 45,
+                    donationDate = DateTime.Parse("1999-12-31 23:59:59"),
+                    paymentTypeId = 2, // Cash
+                },
+                new Donation
+                {
+                    donationAmt = 456,
+                    donationId = 56,
+                    donationDate = DateTime.Parse("2000-01-01 00:00:01"),
+                    paymentTypeId = 4, // credit card
+                    transactionCode = "tx_56"
+
+                },
+                new Donation
+                {
+                    donationAmt = 567,
+                    donationId = 67,
+                    donationDate = DateTime.Parse("1999-11-30 23:59:59"),
+                    paymentTypeId = 5, //bank
+                    transactionCode = "tx_67"
+                },
+                new Donation
+                {
+                    donationAmt = 678,
+                    donationId = 78,
+                    donationDate = DateTime.Parse("1999-10-30 23:59:59"),
+                    paymentTypeId = 4, //bank
+                    transactionCode = "tx_78"
+                }
+            };
+            _mpDonorService.Setup(mocked => mocked.GetDonations(123)).Returns(donations);
+            _paymentService.Setup(mocked => mocked.GetCharge("tx_67")).Returns(new StripeCharge
+            {
+                Source = new StripeSource
+                {
+                    AccountNumberLast4 = "9876"
+                }
+            });
+            _paymentService.Setup(mocked => mocked.GetCharge("tx_78")).Returns(new StripeCharge
+            {
+                Source = new StripeSource
+                {
+                    AccountNumberLast4 = "8765",
+                    Brand = CardBrand.AmericanExpress
+                }
+            });
+            var response = _fixture.GetDonationsForDonor(123, "1999", false);
+            _mpDonorService.VerifyAll();
+            _paymentService.VerifyAll();
+
+            Assert.NotNull(response);
+            Assert.AreEqual(3, response.Count);
+
+            Assert.AreEqual(donations[3].donationDate, response[0].DonationDate);
+            Assert.AreEqual("ending in 8765", response[0].SourceTypeDescription);
+            Assert.AreEqual(CreditCardType.AmericanExpress, response[0].CardType);
+
+            Assert.AreEqual(donations[2].donationDate, response[1].DonationDate);
+            Assert.AreEqual("ending in 9876", response[1].SourceTypeDescription);
+
+            Assert.AreEqual(donations[0].donationDate, response[2].DonationDate);
+            Assert.AreEqual("cash", response[2].SourceTypeDescription);
+        }
+
+        [Test]
+        public void TestGetDonationsForAuthenticatedUser()
+        {
+            var donations = new List<Donation>
+            {
+                new Donation
+                {
+                    donationAmt = 123,
+                    donationId = 45,
+                    donationDate = DateTime.Parse("1999-12-31 23:59:59"),
+                    paymentTypeId = 2, // Cash
+                },
+                new Donation
+                {
+                    donationAmt = 456,
+                    donationId = 56,
+                    donationDate = DateTime.Parse("2000-01-01 00:00:01"),
+                    paymentTypeId = 4, // credit card
+                    transactionCode = "tx_56"
+
+                },
+                new Donation
+                {
+                    donationAmt = 567,
+                    donationId = 67,
+                    donationDate = DateTime.Parse("1999-11-30 23:59:59"),
+                    paymentTypeId = 5, //bank
+                    transactionCode = "tx_67"
+                },
+                new Donation
+                {
+                    donationAmt = 678,
+                    donationId = 78,
+                    donationDate = DateTime.Parse("1999-10-30 23:59:59"),
+                    paymentTypeId = 4, // credit card
+                    transactionCode = "tx_78"
+                }
+            };
+            _mpAuthenticationService.Setup(mocked => mocked.GetContactId("auth token")).Returns(90210);
+            _mpDonorService.Setup(mocked => mocked.GetContactDonor(90210)).Returns(new ContactDonor
+            {
+                ContactId = 90210,
+                DonorId = 123
+            });
+            _mpDonorService.Setup(mocked => mocked.GetDonations(123)).Returns(donations);
+            _paymentService.Setup(mocked => mocked.GetCharge("tx_67")).Returns(new StripeCharge
+            {
+                Source = new StripeSource
+                {
+                    AccountNumberLast4 = "9876"
+                }
+            });
+            _paymentService.Setup(mocked => mocked.GetCharge("tx_78")).Returns(new StripeCharge
+            {
+                Source = new StripeSource
+                {
+                    AccountNumberLast4 = "8765",
+                    Brand = CardBrand.AmericanExpress
+                }
+            });
+            var response = _fixture.GetDonationsForAuthenticatedUser("auth token", "1999", false);
+            _mpAuthenticationService.VerifyAll();
+            _mpDonorService.VerifyAll();
+            _paymentService.VerifyAll();
+
+            Assert.NotNull(response);
+            Assert.AreEqual(3, response.Count);
+
+            Assert.AreEqual(donations[3].donationDate, response[0].DonationDate);
+            Assert.AreEqual("ending in 8765", response[0].SourceTypeDescription);
+            Assert.AreEqual(CreditCardType.AmericanExpress, response[0].CardType);
+
+            Assert.AreEqual(donations[2].donationDate, response[1].DonationDate);
+            Assert.AreEqual("ending in 9876", response[1].SourceTypeDescription);
+
+            Assert.AreEqual(donations[0].donationDate, response[2].DonationDate);
+            Assert.AreEqual("cash", response[2].SourceTypeDescription);
+        }
+
+        [Test]
+        public void TestGetDonationYearsForDonor()
+        {
+            var donations = new List<Donation>
+            {
+                new Donation
+                {
+                    donationDate = DateTime.Parse("1999-12-31 23:59:59"),
+                },
+                new Donation
+                {
+                    donationDate = DateTime.Parse("2000-01-01 00:00:01"),
+                },
+                new Donation
+                {
+                    donationDate = DateTime.Parse("1999-11-30 23:59:59"),
+                },
+                new Donation
+                {
+                    donationDate = DateTime.Parse("1998-10-30 23:59:59"),
+                }
+            };
+
+            var softCreditDonations = new List<Donation>
+            {
+                new Donation
+                {
+                    donationDate = DateTime.Parse("1997-12-31 23:59:59"),
+                },
+                new Donation
+                {
+                    donationDate = DateTime.Parse("2001-01-01 00:00:01"),
+                },
+                new Donation
+                {
+                    donationDate = DateTime.Parse("1999-11-30 23:59:59"),
+                },
+                new Donation
+                {
+                    donationDate = DateTime.Parse("1997-11-30 23:59:59"),
+                },
+                new Donation
+                {
+                    donationDate = DateTime.Parse("1996-10-30 23:59:59"),
+                }
+            };
+
+            var expectedYears = new List<string>
+            {
+                "2001",
+                "2000",
+                "1999",
+                "1998",
+                "1997",
+                "1996"
+            };
+
+            _mpDonorService.Setup(mocked => mocked.GetDonations(123)).Returns(donations);
+            _mpDonorService.Setup(mocked => mocked.GetSoftCreditDonations(123)).Returns(softCreditDonations);
+
+            var response = _fixture.GetDonationYearsForDonor(123);
+            _mpDonorService.VerifyAll();
+
+            Assert.IsNotNull(response);
+            Assert.AreEqual(expectedYears.Count, response.Count);
+            Assert.AreEqual(expectedYears, response);
+        }
+
+        [Test]
+        public void TestGetDonationYearsForAuthenticatedUser()
+        {
+            var donations = new List<Donation>
+            {
+                new Donation
+                {
+                    donationDate = DateTime.Parse("1999-12-31 23:59:59"),
+                },
+                new Donation
+                {
+                    donationDate = DateTime.Parse("2000-01-01 00:00:01"),
+                },
+                new Donation
+                {
+                    donationDate = DateTime.Parse("1999-11-30 23:59:59"),
+                },
+                new Donation
+                {
+                    donationDate = DateTime.Parse("1998-10-30 23:59:59"),
+                }
+            };
+
+            var softCreditDonations = new List<Donation>
+            {
+                new Donation
+                {
+                    donationDate = DateTime.Parse("1997-12-31 23:59:59"),
+                },
+                new Donation
+                {
+                    donationDate = DateTime.Parse("2001-01-01 00:00:01"),
+                },
+                new Donation
+                {
+                    donationDate = DateTime.Parse("1999-11-30 23:59:59"),
+                },
+                new Donation
+                {
+                    donationDate = DateTime.Parse("1997-11-30 23:59:59"),
+                },
+                new Donation
+                {
+                    donationDate = DateTime.Parse("1996-10-30 23:59:59"),
+                }
+            };
+
+            var expectedYears = new List<string>
+            {
+                "2001",
+                "2000",
+                "1999",
+                "1998",
+                "1997",
+                "1996"
+            };
+
+            _mpAuthenticationService.Setup(mocked => mocked.GetContactId("auth token")).Returns(90210);
+            _mpDonorService.Setup(mocked => mocked.GetContactDonor(90210)).Returns(new ContactDonor
+            {
+                ContactId = 90210,
+                DonorId = 123
+            });
+
+            _mpDonorService.Setup(mocked => mocked.GetDonations(123)).Returns(donations);
+            _mpDonorService.Setup(mocked => mocked.GetSoftCreditDonations(123)).Returns(softCreditDonations);
+
+            var response = _fixture.GetDonationYearsForAuthenticatedUser("auth token");
+            _mpDonorService.VerifyAll();
+
+            Assert.IsNotNull(response);
+            Assert.AreEqual(expectedYears.Count, response.Count);
+            Assert.AreEqual(expectedYears, response);
+        }
     }
 }
