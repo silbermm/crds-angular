@@ -48,8 +48,8 @@
         controller: 'HomeCtrl',
         data: {
           meta: {
-           title: 'Home',
-           description: ''
+            title: 'Home',
+            description: ''
           }
         }
       })
@@ -60,8 +60,8 @@
         controller: 'HomeCtrl',
         data: {
           meta: {
-           title: 'Home',
-           description: ''
+            title: 'Home',
+            description: ''
           }
         }
       })

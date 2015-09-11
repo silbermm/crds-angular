@@ -381,16 +381,18 @@ namespace MinistryPlatform.Translation.Services
                 }
                 else
                 {
-                    d = new Donation();
-                    d.donationDate = r["Donation_Date"] as DateTime? ?? DateTime.Now;
-                    d.batchId = null;
-                    d.donationId = r["Donation_ID"] as int? ?? 0;
-                    d.donationNotes = null;
-                    d.donationStatus = r["Donation_Status_ID"] as int? ?? 0;
-                    d.donationStatusDate = r["Donation_Status_Date"] as DateTime? ?? DateTime.Now;
-                    d.donorId = r["Donor_ID"] as int? ?? 0;
-                    d.paymentTypeId = r["Payment_Type_ID"] as int? ?? 0;
-                    d.transactionCode = r["Transaction_Code"] as string;
+                    d = new Donation
+                    {
+                        donationDate = r["Donation_Date"] as DateTime? ?? DateTime.Now,
+                        batchId = null,
+                        donationId = r["Donation_ID"] as int? ?? 0,
+                        donationNotes = null,
+                        donationStatus = r["Donation_Status_ID"] as int? ?? 0,
+                        donationStatusDate = r["Donation_Status_Date"] as DateTime? ?? DateTime.Now,
+                        donorId = r["Donor_ID"] as int? ?? 0,
+                        paymentTypeId = r["Payment_Type_ID"] as int? ?? 0,
+                        transactionCode = r["Transaction_Code"] as string
+                    };
                 }
 
                 var amount = Convert.ToInt32((r["Amount"] as decimal? ?? 0)*Constants.StripeDecimalConversionValue);
@@ -407,26 +409,13 @@ namespace MinistryPlatform.Translation.Services
 
             var donations = donationMap.Values.ToList();
 
-            //var donations = records.Select(d => new Donation
-            //{
-            //    donorId = d["Donor_ID"] as int? ?? 0,
-            //    donationAmt = Convert.ToInt32(((decimal?)d["Donation_Amount"]).GetValueOrDefault(0M) * Constants.StripeDecimalConversionValue), 
-            //    donationDate = d["Donation_Date"] as DateTime? ?? DateTime.Now, 
-            //    donationId = d["Donation_ID"] as int? ?? 0, 
-            //    donationNotes = d["Donation_Status_Notes"] as string, 
-            //    donationStatus = d["Donation_Status_ID"] as int? ?? 0, 
-            //    donationStatusDate = d["Donation_Status_Date"] as DateTime? ?? DateTime.Now, 
-            //    paymentTypeId = d["Payment_Type_ID"] as int? ?? 0, 
-            //    transactionCode = d["Transaction_Code"] as string
-            //}).ToList();
-
             return (donations);
         }
 
         public List<Donation> GetSoftCreditDonations(int donorId)
         {
             // TODO implement GetSoftCreditDonationsForDonor
-            throw new NotImplementedException();
+            return (null);
         }
     }
 

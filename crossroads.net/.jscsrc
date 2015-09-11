@@ -3,6 +3,6 @@
   "requireTrailingComma": null,
   "requireDotNotation": { "allExcept": [ "snake_case" ] },
   "safeContextKeyword": "vm",
-  "validateLineBreaks": "LF"
+  "validateLineBreaks": "CRLF"
 
 }

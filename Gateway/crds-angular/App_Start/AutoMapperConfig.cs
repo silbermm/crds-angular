@@ -77,7 +77,7 @@ namespace crds_angular.App_Start
             Mapper.CreateMap<Dictionary<string, object>, Deposit>()
                 .ForMember(dest => dest.DepositDateTime, opts => opts.MapFrom(src => src.ToDate("Deposit_Date", false)))
                 .ForMember(dest => dest.DepositName, opts => opts.MapFrom(src => src.ToString("Deposit_Name")))
-                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.ToString("Deposit_ID")))
+                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.ToInt("Deposit_ID", false)))
                 .ForMember(dest => dest.DepositTotalAmount, opts => opts.MapFrom(src => src.ToString("Deposit_Total")))
                 .ForMember(dest => dest.BatchCount, opts => opts.MapFrom(src => src.ToString("Batch_Count")))
                 .ForMember(dest => dest.Exported, opts => opts.MapFrom(src => src.ToString("Exported")))
@@ -99,6 +99,7 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.DonationDate, opts => opts.MapFrom(src => src.donationDate))
                 .ForMember(dest => dest.Status, opts => opts.MapFrom(src => src.donationStatus))
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.donationId))
+                .ForMember(dest => dest.PaymentProcessorId, opts => opts.MapFrom(src => src.transactionCode))
                 .ForMember(dest => dest.Distributions, opts => opts.MapFrom(src => src.Distributions))
                 .ForMember(dest => dest.SourceType, opts => opts.MapFrom(src => src.paymentTypeId));
 

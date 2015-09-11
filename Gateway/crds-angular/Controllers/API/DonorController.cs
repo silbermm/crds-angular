@@ -33,7 +33,7 @@ namespace crds_angular.Controllers.API
         /// <param name="softCredit">A bool indicating if the result should contain soft-credit (true) or direct (false) donations.  Defaults to false.</param>
         /// <param name="donationYear">A year filter (YYYY format) for donations returned - defaults to null, meaning return all available donations regardless of year.</param>
         /// <returns>A list of DonationDTOs</returns>
-        [Route("api/donor/{donorId:int}/donations/{donationYear:regex([0-9][0-9][0-9][0-9])?}")]
+        [Route("api/donor/{donorId:int}/donations/{donationYear:regex(\\d{4})?}")]
         [HttpGet]
         public IHttpActionResult GetDonations(int donorId, string donationYear = null, [FromUri(Name = "softCredit")]bool? softCredit = false)
         {
