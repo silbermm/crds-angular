@@ -2,9 +2,14 @@
 (function() {
   module.exports = ProfileHouseholdController;
 
-  ProfileHouseholdController.$inject = ['$rootScope', '$location', '$anchorScroll', '$log', 'Profile', 'Lookup'];
+  ProfileHouseholdController.$inject = ['$rootScope', '$location', '$anchorScroll', '$log', 'Profile', 'Lookup', 'Validation'];
 
-  function ProfileHouseholdController($rootScope, $location, $anchorScroll, $log, Profile, Lookup) {
+  /**
+   * The controller for the household form directive
+   * Variables passed in include:
+   *  - householdInfo -- this is what the form fields are bound too
+   */
+  function ProfileHouseholdController($rootScope, $location, $anchorScroll, $log, Profile, Lookup, Validation) {
     var vm = this;
 
     vm.countries = getCountries();
@@ -13,25 +18,28 @@
     vm.isCollapsed = true;
     vm.locations = getLocations();
     vm.states = getStates();
+    vm.validation = Validation;
 
-    $log.debug('householdId: ' + vm.householdId);
-
-    if (vm.householdId) {
-      Profile.Household.get({ householdId: vm.householdId}, function(data) {
-        vm.info = data;
-      });
-    }
-
-    $rootScope.$on('homePhoneFocus', function(event,data) { 
+    $rootScope.$on('homePhoneFocus', function(event,data) {
       vm.isCollapsed = false;
-
       $location.hash('homephonecont');
-
-      setTimeout(function () {
+      setTimeout(function() {
         $anchorScroll();
       }, 500);
     });
 
+    activate();
+
+    ////////////////////////////////
+    //// Implementation Details ////
+    ////////////////////////////////
+    function activate() {
+      if (vm.householdInfo !== undefined && vm.householdId) {
+        Profile.Household.get({ householdId: vm.householdId}, function(data) {
+          vm.info = data;
+        });
+      }
+    }
 
     function displayName(member) {
       return member.nickname + ' ' + member.lastName;

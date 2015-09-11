@@ -15,10 +15,12 @@
   function PagesController(Session, $location, $anchorScroll, Trip) {
     var vm = this;
 
+    vm.buttonText = 'Next';
     vm.handleNext = handleNext;
     vm.handlePrevious = handlePrevious;
     vm.handleSubmit = handleSubmit;
     vm.nolaRequired = nolaRequired;
+    vm.profileData = undefined;
     vm.underAge = underAge;
     vm.whyPlaceholder = '';
     vm.validateProfile = validateProfile;
@@ -32,10 +34,10 @@
       }
 
     }
-    function validateProfile(profile)
-    {
-      //do stuff
-      console.log(profile); 
+
+    function validateProfile(profile, household) {
+      console.log(profile);
+      console.log(household);
       handleNext(2);
     }
 
@@ -55,7 +57,7 @@
       toTop();
     }
 
-   function nolaRequired() {
+    function nolaRequired() {
       if (vm.pageTitle === 'GO NOLA Application') {
         return 'required';
       }

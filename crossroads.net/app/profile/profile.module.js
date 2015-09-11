@@ -10,7 +10,6 @@ var app = angular.module('crossroads.profile', ['ngResource',
 require('./profile.config');
 
 require('./profile.html');
-require('./personal/profile_personal.template.html');
 
 app.controller('crdsProfileCtrl', ['$rootScope','Profile', 'Lookup', '$q', '$log','$scope', require("./profile_controller")]);
 
@@ -22,18 +21,6 @@ app.controller('ProfileModalController', require("./profileModalController"));
 app.factory('Lookup', ["$resource", "Session", require('./services/profile_lookup_service')]);
 app.factory('Profile', ['$resource',require('./services/profile_service')]);
 app.factory('ProfileReferenceData', ['Lookup', 'Profile', '$resolve', require('./services/profile_reference_data')]);
-
-// Personal
-require("./personal/profile_personal.html");
-app.controller("ProfilePersonalController", ["$rootScope", "$log","$timeout","MESSAGES", "ProfileReferenceData", "Validation", require('./personal/profile_personal_controller')]);
-app.directive('uniqueEmail', ['$http', 'Session', 'User', require('./personal/profile_unique_email_directive') ]);
-app.directive("validateDate", ["$log", require('./personal/profile_valid_date_directive')]);
-app.directive('profilePersonal', require("./personal/profile_personal.directive"));
-
-// Household
-require('./household/profile_household.template.html');
-app.directive('profileHousehold', ['$log', require('./household/profile_household.directive')]);
-app.controller('ProfileHouseholdController', require('./household/profile_household.controller'));
 
 // Skills
 require('./skills/profile_skills.html');

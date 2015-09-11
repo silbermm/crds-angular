@@ -8,12 +8,13 @@
     $log.debug('ProfileHouseholdDirective');
     return {
       restrict: 'E',
-      transclude: true,
       bindToController: true,
       scope: {
-        householdId: '='
+        householdId: '=?',
+        householdInfo: '=',
+        householdForm: '=' 
       },
-      templateUrl: 'household/profile_household.template.html',
+      templateUrl: 'household/profileHousehold.template.html',
       controller: 'ProfileHouseholdController as household',
       link: link
     };

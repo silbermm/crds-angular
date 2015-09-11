@@ -122,7 +122,7 @@
 
           WorkTeams: function(Trip) {
             return Trip.WorkTeams.query().$promise;
-          }
+          },
         }
       });
   }
