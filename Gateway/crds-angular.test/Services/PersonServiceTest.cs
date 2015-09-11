@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using crds_angular.App_Start;
-using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
@@ -56,6 +53,7 @@ namespace crds_angular.test.Services
                 Home_Phone = "home-phone",
                 Congregation_ID = 8,
                 Household_ID = 7,
+                Household_Name = "hh name",
                 Address_ID = 6
             };
             _contactService.Setup(mocked => mocked.GetMyProfile(It.IsAny<string>())).Returns(myContact);
@@ -99,6 +97,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual("home-phone", person.HomePhone);
             Assert.AreEqual(8, person.CongregationId);
             Assert.AreEqual(7, person.HouseholdId);
+            Assert.AreEqual("hh name", person.HouseholdName);
             Assert.AreEqual(6, person.AddressId);
         }
 
