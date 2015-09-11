@@ -62,7 +62,7 @@ describe ('PaymentService', function () {
   );
 
   afterEach(function() {
-    httpBackend.flush();
+    //httpBackend.flush();
     httpBackend.verifyNoOutstandingExpectation();
     httpBackend.verifyNoOutstandingRequest();
    });
