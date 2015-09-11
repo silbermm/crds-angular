@@ -54,6 +54,9 @@ namespace crds_angular.Models
         [JsonProperty(PropertyName = "householdId")]
         public int HouseholdId { get; set; }
 
+        [JsonProperty(PropertyName = "householdName")]
+        public string HouseholdName { get; set; }
+
         [JsonProperty(PropertyName = "lastName")]
         public string LastName { get; set; }
 
