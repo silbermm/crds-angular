@@ -267,12 +267,6 @@
         url: '/thedaily',
         templateUrl: 'thedaily/thedaily.html'
       })
-            //Not a child route of give because I did not want to use the parent give template
-      .state('history', {
-        parent: 'noSideBar',
-        url: '/give/history',
-        templateUrl: 'give/history.html'
-      })
       .state('demo', {
         parent: 'noSideBar',
         //abstract: true,

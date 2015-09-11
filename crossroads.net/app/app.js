@@ -37,5 +37,6 @@ require('../lib/select.css');
   require('./search');
   require('./blog');
   require('./adbox');
+  require('./giving_history');
 
 })();
