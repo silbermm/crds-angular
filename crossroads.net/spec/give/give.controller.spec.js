@@ -776,7 +776,7 @@ describe('GiveController', function() {
       controller.dto.amount = 123;
       controller.dto.donor = { donorId: '2' };
       controller.dto.email = 'test@here.com';
-      controller.dto.pymtType = 'cc';
+      controller.dto.view = 'cc';
  
       mockPaymentService.donateToProgram.and.callFake(function(programId, amount, donorId, email, pymtType) {
         var deferred = $q.defer();
@@ -784,7 +784,7 @@ describe('GiveController', function() {
         return deferred.promise;
       });
      
-      DonationService.donate({programId: 1, Name: 'Game Change'}, callback.onSuccess, callback.onFailure);
+      DonationService.donate({ProgramId: 1, Name: 'Game Change'}, callback.onSuccess, callback.onFailure);
       // This resolves the promise above
       $rootScope.$apply();
 
