@@ -328,22 +328,24 @@ namespace crds_angular.test.controllers
                     Status = DonationStatus.Succeeded
                 }
             };
+            var dto = new DonationsDTO();
+            dto.Donations.AddRange(donations);
 
-            _donationService.Setup(mocked => mocked.GetDonationsForDonor(123, "1999", true)).Returns(donations);
+            _donationService.Setup(mocked => mocked.GetDonationsForDonor(123, "1999", true)).Returns(dto);
             var response = fixture.GetDonations(123, "1999", true);
             _donationService.VerifyAll();
 
             Assert.IsNotNull(response);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<List<DonationDTO>>>(response);
-            var r = (OkNegotiatedContentResult<List<DonationDTO>>) response;
+            Assert.IsInstanceOf<OkNegotiatedContentResult<DonationsDTO>>(response);
+            var r = (OkNegotiatedContentResult<DonationsDTO>) response;
             Assert.IsNotNull(r.Content);
-            Assert.AreSame(donations, r.Content);
+            Assert.AreSame(dto, r.Content);
         }
 
         [Test]
         public void TestGetDonationsNoDonationsFound()
         {
-            _donationService.Setup(mocked => mocked.GetDonationsForDonor(123, "1999", true)).Returns((List<DonationDTO>) null);
+            _donationService.Setup(mocked => mocked.GetDonationsForDonor(123, "1999", true)).Returns((DonationsDTO) null);
             var response = fixture.GetDonations(123, "1999", true);
             _donationService.VerifyAll();
 

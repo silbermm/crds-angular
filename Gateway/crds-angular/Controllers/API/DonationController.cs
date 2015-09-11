@@ -50,7 +50,7 @@ namespace crds_angular.Controllers.API
             return (Authorized(token =>
             {
                 var donations = _gatewayDonationService.GetDonationsForAuthenticatedUser(token, donationYear, softCredit.GetValueOrDefault(false));
-                if (donations == null || donations.Count == 0)
+                if (donations == null || !donations.HasDonations)
                 {
                     return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching donations found")));
                 }
