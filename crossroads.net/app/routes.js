@@ -21,25 +21,37 @@
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'volunteerRouteType', /\/volunteer-sign-up\/.*$/);
 
     $stateProvider
-      .state('noSideBar',{
+      .state('noSideBar', {
         abstract:true,
         templateUrl: 'templates/noSideBar.html'
       })
-      .state('leftSidebar',{
+      .state('leftSidebar', {
         abstract:true,
         templateUrl: 'templates/leftSidebar.html'
       })
-      .state('rightSidebar',{
+      .state('rightSidebar', {
         abstract:true,
         templateUrl: 'templates/rightSidebar.html'
       })
-      .state('screenWidth',{
+      .state('screenWidth', {
         abstract:true,
         templateUrl: 'templates/screenWidth.html'
       })
-      .state('noHeaderOrFooter',{
+      .state('noHeaderOrFooter', {
         abstract:true,
         templateUrl: 'templates/noHeaderOrFooter.html'
+      })
+      .state('giving_history', {
+        url: 'giving_history',
+        templateUrl: 'giving_history/history.html',
+        controller: 'GivingHistoryController as giving_history_controller',
+        data: {
+          isProtected: true,
+          meta: {
+            title: 'Personal Giving History',
+            description: ''
+          }
+        }
       })
       .state('home', {
         parent: 'noSideBar',
@@ -73,8 +85,8 @@
         data: {
           isProtected: false,
           meta: {
-           title: 'Login',
-           description: ''
+            title: 'Login',
+            description: ''
           }
         }
       })
@@ -84,8 +96,8 @@
         data: {
           isProtected: false,
           meta: {
-           title: 'Logout',
-           description: ''
+            title: 'Logout',
+            description: ''
           }
         }
       })
@@ -96,8 +108,8 @@
         controller: 'RegisterCtrl',
         data: {
           meta: {
-           title: 'Register',
-           description: ''
+            title: 'Register',
+            description: ''
           }
         }
       })
@@ -128,8 +140,8 @@
         data: {
           isProtected: true,
           meta: {
-           title: 'Profile',
-           description: ''
+            title: 'Profile',
+            description: ''
           }
         },
         views: {
@@ -168,51 +180,51 @@
         templateUrl: 'myprofile/myprofile.html',
         data: {
           meta: {
-           title: 'Profile',
-           description: ''
+            title: 'Profile',
+            description: ''
           }
         }
       })
-      .state("go-trip-select", {
+      .state('go-trip-select', {
         parent: 'noSideBar',
-        url: "/go/:trip_location/select-person",
-        templateUrl: "gotrips/signup-select-person.html",
+        url: '/go/:trip_location/select-person',
+        templateUrl: 'gotrips/signup-select-person.html',
         controller: 'GoTripsCtrl as gotrip'
       })
-      .state("go-trip-signup", {
+      .state('go-trip-signup', {
         parent: 'noSideBar',
-        url: "/go/:trip_location/signup",
-        templateUrl: "gotrips/signup-page-1.html",
+        url: '/go/:trip_location/signup',
+        templateUrl: 'gotrips/signup-page-1.html',
         controller: 'GoTripsCtrl as gotrip'
       })
-      .state("go-trip-signup-page-2", {
+      .state('go-trip-signup-page-2', {
         parent: 'noSideBar',
-        url: "/go/:trip_location/signup/2",
-        templateUrl: "gotrips/signup-page-2.html",
+        url: '/go/:trip_location/signup/2',
+        templateUrl: 'gotrips/signup-page-2.html',
         controller: 'GoTripsCtrl as gotrip'
       })
-      .state("go-trip-signup-page-3", {
+      .state('go-trip-signup-page-3', {
         parent: 'noSideBar',
-        url: "/go/:trip_location/signup/3",
-        templateUrl: "gotrips/signup-page-3.html",
+        url: '/go/:trip_location/signup/3',
+        templateUrl: 'gotrips/signup-page-3.html',
         controller: 'GoTripsCtrl as gotrip'
       })
-      .state("go-trip-signup-page-4", {
+      .state('go-trip-signup-page-4', {
         parent: 'noSideBar',
-        url: "/go/:trip_location/signup/4",
-        templateUrl: "gotrips/signup-page-4.html",
+        url: '/go/:trip_location/signup/4',
+        templateUrl: 'gotrips/signup-page-4.html',
         controller: 'GoTripsCtrl as gotrip'
       })
-      .state("go-trip-signup-page-5", {
+      .state('go-trip-signup-page-5', {
         parent: 'noSideBar',
-        url: "/go/:trip_location/signup/5",
-        templateUrl: "gotrips/signup-page-5.html",
+        url: '/go/:trip_location/signup/5',
+        templateUrl: 'gotrips/signup-page-5.html',
         controller: 'GoTripsCtrl as gotrip'
       })
-      .state("go-trip-signup-page-confirmation", {
+      .state('go-trip-signup-page-confirmation', {
         parent: 'noSideBar',
-        url: "/go/:trip_location/signup/confirmation",
-        templateUrl: "gotrips/signup-page-confirmation.html",
+        url: '/go/:trip_location/signup/confirmation',
+        templateUrl: 'gotrips/signup-page-confirmation.html',
         controller: 'GoTripsCtrl as gotrip'
       })
       .state('blog', {
@@ -241,8 +253,8 @@
         data: {
           isProtected: true,
           meta: {
-           title: 'Signup to Serve',
-           description: ''
+            title: 'Signup to Serve',
+            description: ''
           }
         },
         resolve: {
@@ -269,7 +281,6 @@
       })
       .state('demo', {
         parent: 'noSideBar',
-        //abstract: true,
         url: '/demo',
         template: '<p>demo</p>'
       })
@@ -298,8 +309,8 @@
         data: {
           isProtected: true,
           meta: {
-           title: 'Community Group Signup',
-           description: ''
+            title: 'Community Group Signup',
+            description: ''
           }
         },
         resolve: {
@@ -314,8 +325,8 @@
         data: {
           isProtected: true,
           meta: {
-           title: 'Volunteer Signup',
-           description: ''
+            title: 'Volunteer Signup',
+            description: ''
           }
         },
         resolve: {
@@ -336,8 +347,8 @@
         data: {
           isProtected: true,
           meta: {
-           title: 'Volunteer Signup',
-           description: ''
+            title: 'Volunteer Signup',
+            description: ''
           }
         },
         resolve: {
@@ -356,6 +367,7 @@
                 if ((age >= 10) && (age <= 15)) {
                   cmsPath = '/kids-club-applicant-form/student-applicant-form/';
                 }
+
                 Page.get({
                     url: cmsPath
                   }).$promise.then(function(cmsInfo) {
@@ -365,8 +377,10 @@
                     }
                   );
               });
+
             return deferred.promise;
           },
+
           Volunteer: 'VolunteerService',
           Family: function(Volunteer) {
             return Volunteer.Family.query({
@@ -378,7 +392,7 @@
       .state('corkboard', {
         url: '/corkboard/',
         resolve: {
-          RedirectToSubSite: function ($window, $location) {
+          RedirectToSubSite: function($window, $location) {
             // Force browser to do a full reload to load corkboard's index.html
             $window.location.href = $location.path();
           }
@@ -386,8 +400,8 @@
         data: {
           preventRouteAuthentication: true,
           meta: {
-           title: 'Corkboard',
-           description: ''
+            title: 'Corkboard',
+            description: ''
           }
         }
       })
@@ -400,8 +414,8 @@
           hideMenu: true,
           isProtected: true,
           meta: {
-           title: 'Tools',
-           description: ''
+            title: 'Tools',
+            description: ''
           }
         },
         resolve: {
@@ -420,8 +434,8 @@
         data: {
           isProtected: true,
           meta: {
-           title: 'Kids Club Application',
-           description: ''
+            title: 'Kids Club Application',
+            description: ''
           }
         },
         resolve: {
@@ -434,6 +448,7 @@
               contactId: params.recordId
             }).$promise;
           },
+
           Page: 'Page',
           CmsInfo: function(Page, $stateParams) {
             return Page.get({
@@ -456,13 +471,13 @@
               selectionCount: params.selectedCount,
               recordId: params.recordId
             }).$promise.then(function(data) {
-                    // promise fulfilled
-                    return data;
+                  // promise fulfilled
+                  return data;
                 }, function(error) {
-                    // promise rejected, could log the error with: console.log('error', error);
-                    var data = {};
-                    data.errors = error;
-                    return error;
+                  // promise rejected, could log the error with: console.log('error', error);
+                  var data = {};
+                  data.errors = error;
+                  return error;
                 });
           }
         }
@@ -483,8 +498,8 @@
         data: {
           isProtected: true,
           meta: {
-           title: 'Check Batch Processor',
-           description: ''
+            title: 'Check Batch Processor',
+            description: ''
           }
         }
       })
@@ -494,8 +509,8 @@
         templateUrl: 'gp_export/gpExport.html'
       })
       .state('content', {
-        url: '{link:contentRouteType}',
         // This url will match a slash followed by anything (including additional slashes).
+        url: '{link:contentRouteType}',
         views: {
           '': {
             controller: 'ContentCtrl',
@@ -532,7 +547,7 @@
                   extraMeta: ContentPageService.page.extraMeta
                 };
 
-                switch(ContentPageService.page.pageType){
+                switch (ContentPageService.page.pageType){
                   case 'NoHeaderOrFooter':
                     return $templateFactory.fromUrl('templates/noHeaderOrFooter.html');
                   case 'LeftSidebar':
@@ -555,6 +570,7 @@
           }
         }
       });
+
     //Leave the comment below.  Once we have a true 404 page hosted in the same domain, this is how we
     //will handle the routing.
     //.state('404', {
