@@ -19,7 +19,6 @@ require('../lib/select.css');
 
   angular.module(constants.MODULES.CROSSROADS).config(require('./routes'));
 
-  require('./services');
   require('./community_groups_signup');
   require('./styleguide');
   require('./thedaily');
