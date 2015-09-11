@@ -13,7 +13,7 @@ namespace crds_angular.Models.Crossroads.Stewardship
         public string ProgramId { get; set; }
         [JsonProperty("amount")]
         public int Amount { get; set; }
-        [JsonProperty("donation_id")]
+        [JsonIgnore]
         public string Id { get; set; }
         [JsonProperty(PropertyName = "email", NullValueHandling = NullValueHandling.Ignore)]
         public string Email { get; set; }
@@ -23,8 +23,11 @@ namespace crds_angular.Models.Crossroads.Stewardship
         [JsonProperty("status"), JsonConverter(typeof(StringEnumConverter))]
         public DonationStatus Status { get; set; }
 
-        [JsonProperty("donation_date")]
+        [JsonProperty("date")]
         public DateTime DonationDate { get; set; }
+
+        [JsonProperty(PropertyName = "source", NullValueHandling = NullValueHandling.Ignore)]
+        public DonationSourceDTO Source { get; set; }
 
         #region Distributions Property
         [JsonIgnore]
@@ -33,17 +36,10 @@ namespace crds_angular.Models.Crossroads.Stewardship
         public List<DonationDistributionDTO> Distributions { get { return (_distributions); } }
         #endregion
 
-        [JsonProperty(PropertyName = "source_type", NullValueHandling = NullValueHandling.Ignore), JsonConverter(typeof(StringEnumConverter))]
-        public PaymentType SourceType { get; set; }
-
-        [JsonProperty(PropertyName = "source_type_description", NullValueHandling = NullValueHandling.Ignore)]
-        public string SourceTypeDescription { get; set; }
-
-        [JsonProperty(PropertyName = "card_type", NullValueHandling = NullValueHandling.Ignore), JsonConverter(typeof(StringEnumConverter))]
-        public CreditCardType? CardType { get; set; }
-
-        [JsonProperty(PropertyName = "payment_processor_id", NullValueHandling = NullValueHandling.Ignore)]
-        public string PaymentProcessorId { get; set; }
+        public DonationDTO()
+        {
+            Source = new DonationSourceDTO();
+        }
     }
 
     public enum DonationStatus

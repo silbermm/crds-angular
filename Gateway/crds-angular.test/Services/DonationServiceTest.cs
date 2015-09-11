@@ -533,14 +533,14 @@ namespace crds_angular.test.Services
             Assert.AreEqual(donations[0].donationAmt + donations[2].donationAmt + donations[3].donationAmt, response.DonationTotalAmount);
 
             Assert.AreEqual(donations[3].donationDate, response.Donations[0].DonationDate);
-            Assert.AreEqual("ending in 8765", response.Donations[0].SourceTypeDescription);
-            Assert.AreEqual(CreditCardType.AmericanExpress, response.Donations[0].CardType);
+            Assert.AreEqual("8765", response.Donations[0].Source.AccountNumberLast4);
+            Assert.AreEqual(CreditCardType.AmericanExpress, response.Donations[0].Source.CardType);
 
             Assert.AreEqual(donations[2].donationDate, response.Donations[1].DonationDate);
-            Assert.AreEqual("ending in 9876", response.Donations[1].SourceTypeDescription);
+            Assert.AreEqual("9876", response.Donations[1].Source.AccountNumberLast4);
 
             Assert.AreEqual(donations[0].donationDate, response.Donations[2].DonationDate);
-            Assert.AreEqual("cash", response.Donations[2].SourceTypeDescription);
+            Assert.AreEqual("cash", response.Donations[2].Source.Name);
         }
 
         [Test]
@@ -614,14 +614,14 @@ namespace crds_angular.test.Services
             Assert.AreEqual(donations[0].donationAmt + donations[2].donationAmt + donations[3].donationAmt, response.DonationTotalAmount);
 
             Assert.AreEqual(donations[3].donationDate, response.Donations[0].DonationDate);
-            Assert.AreEqual("ending in 8765", response.Donations[0].SourceTypeDescription);
-            Assert.AreEqual(CreditCardType.AmericanExpress, response.Donations[0].CardType);
+            Assert.AreEqual("8765", response.Donations[0].Source.AccountNumberLast4);
+            Assert.AreEqual(CreditCardType.AmericanExpress, response.Donations[0].Source.CardType);
 
             Assert.AreEqual(donations[2].donationDate, response.Donations[1].DonationDate);
-            Assert.AreEqual("ending in 9876", response.Donations[1].SourceTypeDescription);
+            Assert.AreEqual("9876", response.Donations[1].Source.AccountNumberLast4);
 
             Assert.AreEqual(donations[0].donationDate, response.Donations[2].DonationDate);
-            Assert.AreEqual("cash", response.Donations[2].SourceTypeDescription);
+            Assert.AreEqual("cash", response.Donations[2].Source.Name);
         }
 
         [Test]

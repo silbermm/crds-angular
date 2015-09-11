@@ -319,12 +319,15 @@ namespace crds_angular.test.controllers
                     Amount = 78900,
                     DonationDate = DateTime.Now,
                     Id = "456",
-                    SourceType = PaymentType.CreditCard,
-                    CardType = CreditCardType.AmericanExpress,
+                    Source = new DonationSourceDTO
+                    {
+                        SourceType = PaymentType.CreditCard,
+                        CardType = CreditCardType.AmericanExpress,
+                        Name = "ending in 1234",
+                        PaymentProcessorId = "tx_123",
+                    },
                     Email = "me@here.com",
-                    SourceTypeDescription = "ending in 1234",
                     ProgramId = "3",
-                    PaymentProcessorId = "tx_123",
                     Status = DonationStatus.Succeeded
                 }
             };
