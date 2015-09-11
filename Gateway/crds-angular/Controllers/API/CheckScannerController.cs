@@ -80,7 +80,14 @@ namespace crds_angular.Controllers.API
                 return (Ok(batch));
             }));
         }
-
+        /// <summary>
+        /// Takes in the encrypted account and routing number which is then used to locate an existing donor.
+        /// If an existing donor is found, then the address data is returned.
+        /// </summary>
+        /// <param name="encryptedKey">This is the encrypted account and routing number from EZ Scan.</param>
+        /// <returns>The created or updated donor record.</returns>
+        [RequiresAuthorization]
+        [ResponseType(typeof(EZScanDonorDetails))]
         [Route("api/checkscanner/getdonor/{encryptedKey?}")]
         public IHttpActionResult GetDonorForCheck(string encryptedKey)
         {
