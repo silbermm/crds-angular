@@ -76,6 +76,7 @@ namespace crds_angular.Services
             person.HomePhone = contact.Home_Phone;
             person.CongregationId = contact.Congregation_ID;
             person.HouseholdId = contact.Household_ID;
+            person.HouseholdName = contact.Household_Name;
             person.AddressId = contact.Address_ID;
             person.Age = contact.Age;
             
@@ -117,6 +118,7 @@ namespace crds_angular.Services
             person.HomePhone = contact.Home_Phone;
             person.CongregationId = contact.Congregation_ID;
             person.HouseholdId = contact.Household_ID;
+            person.HouseholdName = contact.Household_Name;
             person.AddressId = contact.Address_ID;
             person.Age = contact.Age;
 

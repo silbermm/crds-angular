@@ -363,7 +363,7 @@ namespace MinistryPlatform.Translation.Services
 
         public List<Donation> GetDonations(int donorId)
         {
-            var search = string.Format(",,,,,,,,,,{0}", donorId);
+            var search = string.Format(",,,,,,,,,,\"{0}\"", donorId);
             var records = WithApiLogin(token => _ministryPlatformService.GetRecordsDict(_donationDistributionPageId, token, search));
             if (records == null || records.Count == 0)
             {

@@ -18,6 +18,7 @@
         public int? Gender_ID { get; set; }
         public string Home_Phone { get; set; }
         public int Household_ID { get; set; }
+        public string Household_Name { get; set; }
         public string Last_Name { get; set; }
         public string Maiden_Name { get; set; }
         public int? Marital_Status_ID { get; set; }
