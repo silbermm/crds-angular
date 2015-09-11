@@ -472,7 +472,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 }
             };
 
-            _ministryPlatformService.Setup(mocked => mocked.GetPageViewRecords(donorLookupByEncryptedAccount, It.IsAny<string>(), encryptedKey, "", 0)).Returns(donorContact);
+            _ministryPlatformService.Setup(mocked => mocked.GetPageViewRecords("," + donorLookupByEncryptedAccount, It.IsAny<string>(), encryptedKey, "", 0)).Returns(donorContact);
 
             var myContact = new MyContact
             {
@@ -497,7 +497,7 @@ namespace MinistryPlatform.Translation.Test.Services
               };
 
             _ministryPlatformService.Setup(mocked => mocked.GetPageViewRecords(
-              2179, It.IsAny<string>(),encryptedKey, "", 0)).Returns(donorContact);
+              2179, It.IsAny<string>(),"," + encryptedKey, "", 0)).Returns(donorContact);
 
             _contactService.Setup(mocked => mocked.GetContactById(
               contactId)).Returns(myContact);

@@ -11,6 +11,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http.Controllers;
 using System.Web.Http.Results;
+using crds_angular.Exceptions;
+using crds_angular.Models.Json;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 
@@ -200,6 +202,7 @@ namespace crds_angular.test.controllers
             _checkScannerService.VerifyAll();
             
             Assert.NotNull(result);
+       
             Assert.IsInstanceOf<OkNegotiatedContentResult<EZScanDonorDetails>>(result);
             var okResult = (OkNegotiatedContentResult<EZScanDonorDetails>)result;
             Assert.IsNotNull(okResult.Content);
