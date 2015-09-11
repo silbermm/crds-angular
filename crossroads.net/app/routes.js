@@ -42,7 +42,8 @@
         templateUrl: 'templates/noHeaderOrFooter.html'
       })
       .state('giving_history', {
-        url: 'giving_history',
+        parent: 'noSideBar',
+        url: '/giving_history',
         templateUrl: 'giving_history/history.html',
         controller: 'GivingHistoryController as giving_history_controller',
         data: {
