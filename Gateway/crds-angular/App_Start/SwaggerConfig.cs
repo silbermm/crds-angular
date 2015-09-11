@@ -1,5 +1,5 @@
+using System;
 using System.Linq;
-using System.Web.Hosting;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.Http.Filters;
@@ -159,7 +159,7 @@ namespace crds_angular
                     // those comments into the generated docs and UI. You can enable this by providing the path to one or
                     // more Xml comment files.
                     //
-                    c.IncludeXmlComments(HostingEnvironment.MapPath("/bin/crds-angular.XML"));
+                    c.IncludeXmlComments(GetXmlCommentsPath());
 
                     // In contrast to WebApi, Swagger 2.0 does not include the query string component when mapping a URL
                     // to an action. As a result, Swashbuckle will raise an exception if it encounters multiple actions
@@ -220,6 +220,11 @@ namespace crds_angular
                     //
                     //c.EnableOAuth2Support("test-client-id", "test-realm", "Swagger UI");
                 });
+        }
+
+        protected static string GetXmlCommentsPath()
+        {
+            return String.Format(@"{0}\bin\crds-angular.XML", AppDomain.CurrentDomain.BaseDirectory);
         }
     }
 
