@@ -24,8 +24,6 @@
         this.processing = false;
         this.processingChange = false;
         this.program = undefined;
-        // TODO This was being used in DonationService.donate(), but never set anywhere.  Changed to use 'view' instead, now 'pymtType' is truly unused.
-        this.pymtType = undefined;
         this.routing = '';
         this.savedPayment = '';
         this.view = 'bank';
