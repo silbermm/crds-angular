@@ -688,8 +688,8 @@ namespace crds_angular.test.Services
             _mpDonorService.VerifyAll();
 
             Assert.IsNotNull(response);
-            Assert.AreEqual(expectedYears.Count, response.Count);
-            Assert.AreEqual(expectedYears, response);
+            Assert.IsNotNull(response.AvailableDonationYears);
+            Assert.AreEqual(expectedYears.Count, response.AvailableDonationYears.Count);
         }
 
         [Test]
@@ -763,8 +763,8 @@ namespace crds_angular.test.Services
             _mpDonorService.VerifyAll();
 
             Assert.IsNotNull(response);
-            Assert.AreEqual(expectedYears.Count, response.Count);
-            Assert.AreEqual(expectedYears, response);
+            Assert.IsNotNull(response.AvailableDonationYears);
+            Assert.AreEqual(expectedYears.Count, response.AvailableDonationYears.Count);
         }
     }
 }

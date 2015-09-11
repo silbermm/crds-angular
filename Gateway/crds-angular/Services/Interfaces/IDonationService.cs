@@ -19,9 +19,9 @@ namespace crds_angular.Services.Interfaces
         DonationBatchDTO GetDonationBatchByProcessorTransferId(string processorTransferId);
         DonationBatchDTO GetDonationBatch(int batchId);
         DonationsDTO GetDonationsForAuthenticatedUser(string userToken, string donationYear = null, bool softCredit = false);
-        List<string> GetDonationYearsForAuthenticatedUser(string userToken);
+        DonationYearsDTO GetDonationYearsForAuthenticatedUser(string userToken);
         DonationsDTO GetDonationsForDonor(int donorId, string donationYear = null, bool softCredit = false);
-        List<string> GetDonationYearsForDonor(int donorId);
+        DonationYearsDTO GetDonationYearsForDonor(int donorId);
 
             // ReSharper disable once InconsistentNaming
         List<GPExportDatumDTO> GetGPExport(int depositId, string token);

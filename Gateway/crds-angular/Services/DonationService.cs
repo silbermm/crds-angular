@@ -84,7 +84,7 @@ namespace crds_angular.Services
             return (donorId == null ? null : GetDonationsForDonor(donorId.Value, donationYear, softCredit));
         }
 
-        public List<string> GetDonationYearsForAuthenticatedUser(string userToken)
+        public DonationYearsDTO GetDonationYearsForAuthenticatedUser(string userToken)
         {
             var donorId = GetDonorIdForAuthenticatedUser(userToken);
             return (donorId == null ? null : GetDonationYearsForDonor(donorId.Value));
@@ -156,7 +156,7 @@ namespace crds_angular.Services
             return (donationsResponse);
         }
 
-        public List<string> GetDonationYearsForDonor(int donorId)
+        public DonationYearsDTO GetDonationYearsForDonor(int donorId)
         {
             var years = new HashSet<string>();
             var softCreditDonations = _mpDonorService.GetSoftCreditDonations(donorId);
@@ -171,7 +171,10 @@ namespace crds_angular.Services
                 years.UnionWith(donations.Select(d => d.donationDate.Year.ToString()));
             }
 
-            return (years.OrderByDescending(i => i).ToList());
+            var donationYears = new DonationYearsDTO();
+            donationYears.AvailableDonationYears.AddRange(years.ToList());
+
+            return (donationYears);
         }
 
         public DonationBatchDTO GetDonationBatchByDepositId(int depositId)

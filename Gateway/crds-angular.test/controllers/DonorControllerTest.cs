@@ -365,22 +365,24 @@ namespace crds_angular.test.controllers
                 "2010",
                 "2038"
             };
+            var dto = new DonationYearsDTO();
+            dto.AvailableDonationYears.AddRange(donationYears);
 
-            _donationService.Setup(mocked => mocked.GetDonationYearsForDonor(123)).Returns(donationYears);
+            _donationService.Setup(mocked => mocked.GetDonationYearsForDonor(123)).Returns(dto);
             var response = fixture.GetDonationYears(123);
             _donationService.VerifyAll();
 
             Assert.IsNotNull(response);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<List<string>>>(response);
-            var r = (OkNegotiatedContentResult<List<string>>)response;
+            Assert.IsInstanceOf<OkNegotiatedContentResult<DonationYearsDTO>>(response);
+            var r = (OkNegotiatedContentResult<DonationYearsDTO>)response;
             Assert.IsNotNull(r.Content);
-            Assert.AreSame(donationYears, r.Content);
+            Assert.AreSame(dto, r.Content);
         }
 
         [Test]
         public void TestGetDonationYearsNoYearsFound()
         {
-            _donationService.Setup(mocked => mocked.GetDonationYearsForDonor(123)).Returns((List<string>)null);
+            _donationService.Setup(mocked => mocked.GetDonationYearsForDonor(123)).Returns((DonationYearsDTO)null);
             var response = fixture.GetDonationYears(123);
             _donationService.VerifyAll();
 
