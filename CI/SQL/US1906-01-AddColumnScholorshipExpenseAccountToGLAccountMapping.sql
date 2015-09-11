@@ -14,16 +14,20 @@ BEGIN
   ALTER TABLE [dbo].[GL_Account_Mapping] DROP COLUMN [Scholarship_Expense_Account];
 END
 
+-- Add new columns
+ALTER TABLE [dbo].[GL_Account_Mapping]
+ADD [Scholarship_Expense_Account] nvarchar(15);
+
 GO
 
 USE [MinistryPlatform]
 GO
 
--- Add new columns
-ALTER TABLE [dbo].[GL_Account_Mapping]
-ADD [Scholarship_Expense_Account] nvarchar(15);
-
 -- Load with dummy values
+-- For Nicaragua but Default for testing
+UPDATE [dbo].[GL_Account_Mapping]
+SET [Scholarship_Expense_Account] = '75001-260-01';
+
 -- For South Africa
 UPDATE [dbo].[GL_Account_Mapping]
 SET [Scholarship_Expense_Account] = '75001-220-01'
@@ -33,11 +37,6 @@ WHERE [Program_ID] = 99;
 UPDATE [dbo].[GL_Account_Mapping]
 SET [Scholarship_Expense_Account] = '75001-240-01'
 WHERE [Program_ID] = 117;
-
--- For Nicaragua
-UPDATE [dbo].[GL_Account_Mapping]
-SET [Scholarship_Expense_Account] = '75001-260-01'
-WHERE [Program_ID] = 1;
 
 -- For NOLA
 UPDATE [dbo].[GL_Account_Mapping]
