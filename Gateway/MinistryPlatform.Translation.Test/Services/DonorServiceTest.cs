@@ -21,6 +21,7 @@ namespace MinistryPlatform.Translation.Test.Services
         private Mock<ICommunicationService> _communicationService;
         private Mock<IAuthenticationService> _authService;
         private Mock<IConfigurationWrapper> _configuration;
+        private Mock<IContactService> _contactService; 
         private Mock<ICryptoProvider> _crypto;
 
         private DonorService _fixture;
@@ -32,6 +33,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _programService = new Mock<IProgramService>();
             _communicationService = new Mock<ICommunicationService>();
             _authService = new Mock<IAuthenticationService>();
+            _contactService = new Mock<IContactService>();
             _crypto = new Mock<ICryptoProvider>();
             _configuration = new Mock<IConfigurationWrapper>();
             _configuration.Setup(mocked => mocked.GetConfigIntValue("Donors")).Returns(299);
@@ -39,12 +41,13 @@ namespace MinistryPlatform.Translation.Test.Services
             _configuration.Setup(mocked => mocked.GetConfigIntValue("Distributions")).Returns(296);
             _configuration.Setup(mocked => mocked.GetConfigIntValue("DonorAccounts")).Returns(298);
             _configuration.Setup(mocked => mocked.GetConfigIntValue("FindDonorByAccountPageView")).Returns(2015);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("DonorLookupByEncryptedAccount")).Returns(2179);
             _configuration.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
             _configuration.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("pwd");
 
             _authService.Setup(m => m.Authenticate(It.IsAny<string>(), It.IsAny<string>())).Returns(new Dictionary<string, object> { { "token", "ABC" }, { "exp", "123" } });
 
-            _fixture = new DonorService(_ministryPlatformService.Object, _programService.Object, _communicationService.Object, _authService.Object, _configuration.Object, _crypto.Object);
+            _fixture = new DonorService(_ministryPlatformService.Object, _programService.Object, _communicationService.Object, _authService.Object, _contactService.Object, _configuration.Object,  _crypto.Object);
         }
 
         [Test]
@@ -445,6 +448,69 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(result.DonorId, donor.DonorId);
             Assert.AreEqual(result.ContactId, donor.ContactId);
             Assert.AreEqual(result.ProcessorId, donor.ProcessorId);
+        }
+
+        [Test]
+        public void TestGetContactDonorForCheckAccount()
+        {
+            const int contactId = 765567;
+            const string displayName = "Victoria Secret";
+            const string addr1 = "25 First St";
+            const string addr2 = "Suite 101";
+            const string city = "San Francisco";
+            const string state = "CA";
+            const string zip = "91010";
+            const string encryptedKey = "pink$010101@knip";
+            const string donorLookupByEncryptedAccount = "DonorLookupByEncryptedAccount";
+
+            var donorContact = new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    { "Contact_ID", contactId },
+                    {"Display_Name", displayName}
+                }
+            };
+
+            _ministryPlatformService.Setup(mocked => mocked.GetPageViewRecords("," + donorLookupByEncryptedAccount, It.IsAny<string>(), encryptedKey, "", 0)).Returns(donorContact);
+
+            var myContact = new MyContact
+            {
+                Address_Line_1 = addr1,
+                Address_Line_2 = addr2,
+                City = city,
+                State = state,
+                Postal_Code = zip        
+             };
+
+            var donorDetails = new ContactDetails
+            {
+                DisplayName = displayName,
+                Address = new PostalAddress()
+                {
+                    Line1  = addr1,
+                    Line2 = addr2,
+                    City = city,
+                    State = state,
+                    PostalCode = zip
+                }
+              };
+
+            _ministryPlatformService.Setup(mocked => mocked.GetPageViewRecords(
+              2179, It.IsAny<string>(),"," + encryptedKey, "", 0)).Returns(donorContact);
+
+            _contactService.Setup(mocked => mocked.GetContactById(
+              contactId)).Returns(myContact);
+
+            var result = _fixture.GetContactDonorForCheckAccount(encryptedKey);
+          
+            Assert.IsNotNull(result);
+            Assert.AreEqual(result.DisplayName, donorDetails.DisplayName);
+            Assert.AreEqual(result.Address.Line1, donorDetails.Address.Line1);
+            Assert.AreEqual(result.Address.Line2, donorDetails.Address.Line2);
+            Assert.AreEqual(result.Address.City, donorDetails.Address.City);
+            Assert.AreEqual(result.Address.State, donorDetails.Address.State);
+            Assert.AreEqual(result.Address.PostalCode, donorDetails.Address.PostalCode);
         }
 
     }

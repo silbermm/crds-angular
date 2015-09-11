@@ -304,6 +304,7 @@
     <Compile Include="Models\Crossroads\Stewardship\CheckScannerBatch.cs" />
     <Compile Include="Models\Crossroads\Stewardship\CheckScannerCheck.cs" />
     <Compile Include="Models\Crossroads\Stewardship\DepositDTO.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\EZScanDonorDetails.cs" />
     <Compile Include="Models\Crossroads\Stewardship\GPExportDatumDTO.cs" />
     <Compile Include="Models\Crossroads\Stewardship\PledgeCampaign.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeBalanceTransaction.cs" />

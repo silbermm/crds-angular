@@ -20,5 +20,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         void SetupConfirmationEmail(int programId, int donorId, int donationAmount, DateTime setupDate, string pymtType);
         ContactDonor GetEmailViaDonorId(int donorId);
         void SendEmail(int emailTemplate, int donorId, int donationAmount, string donationType, DateTime donationDate, string programName, string emailReason);
+        ContactDetails GetContactDonorForCheckAccount(string encryptedKey);
     }
 }
