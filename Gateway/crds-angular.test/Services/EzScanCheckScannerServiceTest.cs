@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.ServiceModel;
+using AutoMapper;
+using crds_angular.App_Start;
 using crds_angular.DataAccess.Interfaces;
+using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
@@ -27,6 +32,7 @@ namespace crds_angular.test.Services
             _paymentService = new Mock<IPaymentService>(MockBehavior.Strict);
             _mpDonorService = new Mock<MPServices.IDonorService>(MockBehavior.Strict);
             _fixture = new EzScanCheckScannerService(_checkScannerDao.Object, _donorService.Object, _paymentService.Object, _mpDonorService.Object);
+            AutoMapperConfig.RegisterMappings();
         }
 
         [Test]
@@ -217,6 +223,39 @@ namespace crds_angular.test.Services
             Assert.NotNull(result.Checks);
             Assert.AreEqual(2, result.Checks.Count);
             Assert.AreEqual(BatchStatus.Exported, result.Status);
+        }
+
+        [Test]
+        public void TestGetContactDonorForCheck()
+        {
+            const string encryptedKey = "encryptedkey}}{{yekdetpyrcne";
+            const string addr1 = "12 Scenic Dr";
+            const string addr2 = "Penthouse Suite";
+            const string city = "Honolulu";
+            const string state = "HI";
+            const string zip = "68168-1618";
+            const string displayName = "Vacationing Vera";
+
+            var details = new ContactDetails
+            {
+                DisplayName = displayName,
+                Address = new PostalAddress()
+                {
+                    Line1 = addr1,
+                    Line2 = addr2,
+                    City = city,
+                    State = state,
+                    PostalCode = zip
+                }
+            };
+
+            _donorService.Setup(mocked => mocked.GetContactDonorForCheckAccount(encryptedKey)).Returns(details);
+            var result = _fixture.GetContactDonorForCheck(encryptedKey);
+            
+            _donorService.VerifyAll();
+            Assert.IsNotNull(details);
+            Assert.AreEqual(result.DisplayName, details.DisplayName);
+            Assert.AreEqual(result.Address, details.Address);
         }
     }
 }

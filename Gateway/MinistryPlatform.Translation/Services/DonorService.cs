@@ -273,7 +273,6 @@ namespace MinistryPlatform.Translation.Services
 
         public ContactDetails GetContactDonorForCheckAccount(string encrptedKey)
         {
-           //ContactDonor contactDonor;
             var donorAccount = WithApiLogin(apiToken => _ministryPlatformService.GetPageViewRecords(_donorLookupByEncryptedAccount, apiToken, encrptedKey));
             if (donorAccount == null || donorAccount.Count == 0)
             {
