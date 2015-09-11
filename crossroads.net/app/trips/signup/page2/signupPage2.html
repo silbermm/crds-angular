@@ -27,7 +27,7 @@
 
       <div class="form-group col-sm-6" ng-class="{'has-error': !pages.page2.tshirtSize.$valid}">
         <label for="tshirt" class="required">T-shirt Size</label>
-        <select class="form-control col-sm-12" ng-model="pages.page2.tshirtSize" name="tshirtSize" id="tshirt" ng-required='true'>
+        <select class="form-control col-sm-12" ng-model="pages.signupService.tshirtSize" name="tshirtSize" id="tshirt" ng-required='true'>
           <option> Adult XS </option>
           <option> Adult S </option>
           <option> Adult M </option>
@@ -109,10 +109,10 @@
       <div id="Site" class="form-group col-sm-6">
         <label for="slife" class="required">How would you define your spiritual life? <small class="text-muted">Pick as many as you like</small></label><br>
 
-        <div class="checkbox"> <label for="slife-searching"> <input ng-model="pages.page2.spiritualLife" type="checkbox" name="slife" value="Searching" id="slife-searching"> Searching for answers </label> </div>
-        <div class="checkbox"> <label for="slife-received"> <input ng-model="pages.page2.spiritualLife" type="checkbox" name="slife" value="Received" id="slife-received"> I have received Jesus </label> </div>
-        <div class="checkbox"> <label for="slife-obedience"> <input ng-model="pages.page2.spiritualLife" type="checkbox" name="slife" value="Obedience" id="slife-obedience"> Focusing on obedience - I've quit negotiating with God </label> </div>
-        <div class="checkbox"> <label for="slife-replicating"> <input ng-model="pages.page2.spiritualLife" type="checkbox" name="slife" value="Replicating" id="slife-replicating"> I'm actively replicating my faith in others </label> </div>
+        <div class="checkbox"> <label for="slife-searching"> <input ng-model="pages.page2.spiritualLifeSearching" type="checkbox" name="slife" value="Searching" id="slife-searching"> Searching for answers </label> </div>
+        <div class="checkbox"> <label for="slife-received"> <input ng-model="pages.page2.spiritualLifeReceived" type="checkbox" name="slife" value="Received" id="slife-received"> I have received Jesus </label> </div>
+        <div class="checkbox"> <label for="slife-obedience"> <input ng-model="pages.page2.spiritualLifeObedience" type="checkbox" name="slife" value="Obedience" id="slife-obedience"> Focusing on obedience - I've quit negotiating with God </label> </div>
+        <div class="checkbox"> <label for="slife-replicating"> <input ng-model="pages.page2.spiritualLifeReplicating" type="checkbox" name="slife" value="Replicating" id="slife-replicating"> I'm actively replicating my faith in others </label> </div>
 
       </div><!--/form-group-->
     </div><!--/row-->

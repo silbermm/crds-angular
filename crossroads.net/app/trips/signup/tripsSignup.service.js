@@ -46,6 +46,26 @@
       signupService.numberOfPages = 0;
       signupService.pageHasErrors = true;
       signupService.privateInvite = $location.search().invite;
+
+      signupService.page2 = resetPageTwo();
+
+    }
+
+    function resetPageTwo() {
+      var p2 = {};
+      p2.guardianFirstName = '';
+      p2.guardianLastName = '';
+      p2.tshirtSize = '';
+      p2.scrubSize = '';
+      p2.referral = '';
+      p2.conditions = '';
+      p2.allergies = '';
+      p2.spiritualLifeSearching = '';
+      p2.spiritualLifeReceived = '';
+      p2.spiritualLifeObedience = '';
+      p2.spiritualLifeReplicating = '';
+      p2.why = '';
+      return p2;
     }
 
     return signupService;
