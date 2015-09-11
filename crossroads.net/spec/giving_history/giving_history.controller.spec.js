@@ -58,7 +58,6 @@ describe('GivingHistoryController', function() {
   );
 
   afterEach(function() {
-    httpBackend.flush();
     httpBackend.verifyNoOutstandingExpectation();
     httpBackend.verifyNoOutstandingRequest();
   });
@@ -73,10 +72,12 @@ describe('GivingHistoryController', function() {
 
     it('should retrieve donations for current user', function() {
       httpBackend.whenGET(/SiteConfig*/).respond('');
-      httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donation')
+      httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donations')
                              .respond(mockDonationResponse);
       httpBackend.flush();
-      expect(sut.donations).toEqual(mockDonationResponse);
+
+      expect(sut.donations.length).toBe(2);
+      expect(sut.donations[0].distributions[0].program_name).toEqual('Crossroads');
     });
   });
 });
