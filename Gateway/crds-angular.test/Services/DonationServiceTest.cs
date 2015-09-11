@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using crds_angular.App_Start;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services;
+using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
 using Moq;
 using Newtonsoft.Json;
@@ -16,6 +17,8 @@ namespace crds_angular.test.Services
         private DonationService _fixture;
         private Mock<MPServices.IDonationService> _mpDonationService;
         private Mock<MPServices.IDonorService> _mpDonorService;
+        private Mock<MPServices.IAuthenticationService> _mpAuthenticationService;
+        private Mock<IPaymentService> _paymentService;
 
         [SetUp]
         public void SetUp()
@@ -24,8 +27,10 @@ namespace crds_angular.test.Services
 
             _mpDonationService = new Mock<MPServices.IDonationService>(MockBehavior.Strict);
             _mpDonorService = new Mock<MPServices.IDonorService>(MockBehavior.Strict);
+            _mpAuthenticationService = new Mock<MPServices.IAuthenticationService>();
+            _paymentService = new Mock<IPaymentService>();
 
-            _fixture = new DonationService(_mpDonationService.Object, _mpDonorService.Object);
+            _fixture = new DonationService(_mpDonationService.Object, _mpDonorService.Object, _mpAuthenticationService.Object, _paymentService.Object);
         }
 
         [Test]
