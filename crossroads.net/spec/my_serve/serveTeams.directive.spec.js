@@ -65,6 +65,10 @@ describe('Serve Teams Directive', function() {
     angular.mock.module('crossroads');
   });
 
+  beforeEach(angular.mock.module(function($provide) {
+    $provide.value('$state', {});
+  }));
+
   beforeEach(inject(function(_$compile_, _$rootScope_, $injector){
     $compile = _$compile_;
     $rootScope = _$rootScope_;

@@ -81,6 +81,11 @@ describe('Signup To Serve Tool', function(){
 
   beforeEach(angular.mock.module('crossroads'));
 
+  beforeEach(angular.mock.module(function($provide) {
+    $provide.value('$state', {});
+  }));
+
+
   beforeEach(inject(function(_$location_){
     var $location = _$location_;
     spyOn($location, 'search').and.returnValue({
