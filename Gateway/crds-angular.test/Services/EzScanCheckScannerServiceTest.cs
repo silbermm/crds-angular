@@ -255,7 +255,7 @@ namespace crds_angular.test.Services
         }
 
         [Test]
-        public void TestExitstingCreateDonor()
+        public void TestExistingCreateDonor()
         {
             var check = new CheckScannerCheck
             {
