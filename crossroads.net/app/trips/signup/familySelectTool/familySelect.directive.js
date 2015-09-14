@@ -35,6 +35,15 @@
         return '';
       }
 
+      function isOfAge(member) {
+        if (member.age < signupService.campaign.ageLimit) {
+          if (member.age !== 0) {
+            return false;
+          }
+        }
+        return true;
+      }
+
       function isSignedUp(member) {
         return member.signedUp;
       }
