@@ -129,7 +129,7 @@
         vm.submitted = true;
         if (vm.pform.$invalid) {
           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-          vm.submitted = false; // should this be vm.pform.$submitted?
+          vm.submitted = false;
           return;
         }
 
