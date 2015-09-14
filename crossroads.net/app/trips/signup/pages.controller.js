@@ -36,8 +36,6 @@
     }
 
     function validateProfile(profile, household) {
-      console.log(profile);
-      console.log(household);
       handleNext(2);
     }
 

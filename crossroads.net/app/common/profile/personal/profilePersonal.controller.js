@@ -38,7 +38,6 @@
     vm.isDobError = isDobError;
     vm.loading = true;
     vm.passwordPrefix = 'account-page';
-    //vm.person = {};
     vm.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
     vm.requireMobilePhone = angular.isDefined(vm.requireMobilePhone) ? vm.requireMobilePhone : 'false';
     vm.savePersonal = savePersonal;
@@ -161,17 +160,6 @@
       if (vm.pform['mobile-phone'].$valid) {
         vm.profileData.person.mobilePhone = vm.profileData.person.mobilePhone.replace(vm.phoneFormat, '$1-$2-$3');
       }
-    }
-
-    function serviceProviderRequired() {
-      // if (vm.person.mobilePhone === 'undefined' ||
-      // vm.person.mobilePhone === null ||
-      // vm.person.mobilePhone === '' ||
-      // this.form.personal['mobile-phone'].$invalid) {
-      //   return false;
-      // }
-
-      return true;
     }
 
     function showMobilePhoneError() {
