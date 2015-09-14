@@ -154,7 +154,7 @@ describe('GivingHistoryController', function() {
       expect(sut.most_recent_giving_year).toEqual('2015');
 
       expect(sut.donations.length).toBe(3);
-      expect(sut.donations[0].distribution.program_name).toEqual('Crossroads');
+      expect(sut.donations[0].distributions[0].program_name).toEqual('Crossroads');
       expect(sut.donation_total_amount).toEqual(80000);
     });
   });

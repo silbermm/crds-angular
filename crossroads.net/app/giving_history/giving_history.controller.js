@@ -7,6 +7,8 @@
   function GivingHistoryController($log, GivingHistoryService, Profile) {
     var vm = this;
 
+    vm.changeDonationYear = changeDonationYear;
+    vm.currentDate = new Date();
     vm.donation_years = [];
     vm.donations = [];
     vm.donation_total_amount = undefined;
@@ -33,13 +35,9 @@
 
           // Set the default selected year based on the most recent giving year
           vm.selected_giving_year = _.find(vm.donation_years, {'key': vm.most_recent_giving_year});
+
           GivingHistoryService.donations.get({donationYear: vm.most_recent_giving_year}, function(data) {
-            // Pull distributions up to the donation level for easy ng-repeat usage
-            vm.donations = _.transform(data.donations, function(result, donation) {
-              _.forEach(donation.distributions, function(distribution) {
-                result.push({'donation': donation, 'distribution': distribution});
-              })
-            });
+            vm.donations = postProcessDonations(data.donations);
             vm.donation_total_amount = data.donation_total_amount;
             vm.initialized = true;
             vm.history = true;
@@ -58,6 +56,55 @@
         vm.history = false;
         vm.initialized = true;
       });
+    }
+
+    function changeDonationYear() {
+      vm.initialized = false;
+      GivingHistoryService.donations.get({donationYear: vm.selected_giving_year.key}, function(data) {
+            vm.donations = postProcessDonations(data.donations);
+            vm.donation_total_amount = data.donation_total_amount;
+            vm.initialized = true;
+            vm.history = true;
+          },
+          function(error) {
+            vm.history = false;
+            vm.initialized = true;
+          });
+    }
+
+    function postProcessDonations(donations) {
+      _.forEach(donations, function(donation) {
+        switch(donation.source.type) {
+          case 'Cash':
+            donation.source.icon = 'money';
+            donation.source.viewBox = '0 0 34 32';
+            break;
+          case 'Bank':
+          case 'Check':
+            donation.source.icon = 'library';
+            donation.source.viewBox = '0 0 32 32';
+            donation.source.name = 'ending in ' + donation.source.last4;
+            break;
+          case 'CreditCard':
+            donation.source.viewBox = '0 0 160 100';
+            switch(donation.source.brand) {
+              case 'Visa':
+                donation.source.icon = 'cc_visa';
+                break;
+              case 'MasterCard':
+                donation.source.icon = 'cc_mastercard';
+                break;
+              case 'Discover':
+                donation.source.icon = 'cc_discover';
+                break;
+              case 'AmericanExpress':
+                donation.source.icon = 'cc_american_express';
+                break;
+            }
+            donation.source.name = 'ending in ' + donation.source.last4;
+        };
+      });
+      return(donations);
     }
   }
 })();
