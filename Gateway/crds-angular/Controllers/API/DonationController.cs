@@ -70,7 +70,7 @@ namespace crds_angular.Controllers.API
             return (Authorized(token =>
             {
                 var donationYears = _gatewayDonationService.GetDonationYearsForAuthenticatedUser(token);
-                if (donationYears == null || donationYears.Count == 0)
+                if (donationYears == null || !donationYears.HasYears)
                 {
                     return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No donation years found")));
                 }

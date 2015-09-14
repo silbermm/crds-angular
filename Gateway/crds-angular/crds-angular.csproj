@@ -305,6 +305,8 @@
     <Compile Include="Models\Crossroads\Stewardship\DepositDTO.cs" />
     <Compile Include="Models\Crossroads\Stewardship\DonationDistributionDTO.cs" />
     <Compile Include="Models\Crossroads\Stewardship\DonationsDTO.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\DonationSourceDTO.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\DonationYearsDTO.cs" />
     <Compile Include="Models\Crossroads\Stewardship\GPExportDatumDTO.cs" />
     <Compile Include="Models\Crossroads\Stewardship\PledgeCampaign.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeBalanceTransaction.cs" />

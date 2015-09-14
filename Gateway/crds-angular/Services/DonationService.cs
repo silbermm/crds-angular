@@ -84,7 +84,7 @@ namespace crds_angular.Services
             return (donorId == null ? null : GetDonationsForDonor(donorId.Value, donationYear, softCredit));
         }
 
-        public List<string> GetDonationYearsForAuthenticatedUser(string userToken)
+        public DonationYearsDTO GetDonationYearsForAuthenticatedUser(string userToken)
         {
             var donorId = GetDonorIdForAuthenticatedUser(userToken);
             return (donorId == null ? null : GetDonationYearsForDonor(donorId.Value));
@@ -114,36 +114,37 @@ namespace crds_angular.Services
             foreach (var donation in response)
             {
                 StripeCharge charge = null;
-                if (!string.IsNullOrWhiteSpace(donation.PaymentProcessorId))
+                if (!string.IsNullOrWhiteSpace(donation.Source.PaymentProcessorId))
                 {
-                    charge = _paymentService.GetCharge(donation.PaymentProcessorId);
+                    charge = _paymentService.GetCharge(donation.Source.PaymentProcessorId);
                 }
 
-                if (donation.SourceType == PaymentType.Cash)
+                if (donation.Source.SourceType == PaymentType.Cash)
                 {
-                    donation.SourceTypeDescription = "cash";
-                }
+                    donation.Source.Name = "cash";
+                } 
                 else if (charge != null && charge.Source != null)
                 {
-                    donation.SourceTypeDescription = string.Format("ending in {0}", charge.Source.AccountNumberLast4);
-                    if (donation.SourceType == PaymentType.CreditCard && charge.Source.Brand != null)
+                    donation.Source.AccountNumberLast4 = charge.Source.AccountNumberLast4;
+
+                    if (donation.Source.SourceType == PaymentType.CreditCard && charge.Source.Brand != null)
                     {
                         switch (charge.Source.Brand)
                         {
                             case CardBrand.AmericanExpress:
-                                donation.CardType = CreditCardType.AmericanExpress;
+                                donation.Source.CardType = CreditCardType.AmericanExpress;
                                 break;
                             case CardBrand.Discover:
-                                donation.CardType = CreditCardType.Discover;
+                                donation.Source.CardType = CreditCardType.Discover;
                                 break;
                             case CardBrand.MasterCard:
-                                donation.CardType = CreditCardType.MasterCard;
+                                donation.Source.CardType = CreditCardType.MasterCard;
                                 break;
                             case CardBrand.Visa:
-                                donation.CardType = CreditCardType.Visa;
+                                donation.Source.CardType = CreditCardType.Visa;
                                 break;
                             default:
-                                donation.CardType = null;
+                                donation.Source.CardType = null;
                                 break;
                         }
                     }
@@ -156,7 +157,7 @@ namespace crds_angular.Services
             return (donationsResponse);
         }
 
-        public List<string> GetDonationYearsForDonor(int donorId)
+        public DonationYearsDTO GetDonationYearsForDonor(int donorId)
         {
             var years = new HashSet<string>();
             var softCreditDonations = _mpDonorService.GetSoftCreditDonations(donorId);
@@ -171,7 +172,10 @@ namespace crds_angular.Services
                 years.UnionWith(donations.Select(d => d.donationDate.Year.ToString()));
             }
 
-            return (years.OrderByDescending(i => i).ToList());
+            var donationYears = new DonationYearsDTO();
+            donationYears.AvailableDonationYears.AddRange(years.ToList());
+
+            return (donationYears);
         }
 
         public DonationBatchDTO GetDonationBatchByDepositId(int depositId)

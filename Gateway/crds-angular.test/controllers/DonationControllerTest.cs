@@ -60,12 +60,15 @@ namespace crds_angular.test.controllers
                     Amount = 78900,
                     DonationDate = DateTime.Now,
                     Id = "456",
+                    Source = new DonationSourceDTO
+                    {
                     SourceType = PaymentType.CreditCard,
                     CardType = CreditCardType.AmericanExpress,
-                    Email = "me@here.com",
-                    SourceTypeDescription = "ending in 1234",
-                    ProgramId = "3",
+                    Name = "ending in 1234",
                     PaymentProcessorId = "tx_123",
+                    },
+                    Email = "me@here.com",
+                    ProgramId = "3",
                     Status = DonationStatus.Succeeded
                 }
             };
@@ -106,22 +109,24 @@ namespace crds_angular.test.controllers
                 "2010",
                 "2038"
             };
+            var dto = new DonationYearsDTO();
+            dto.AvailableDonationYears.AddRange(donationYears);
 
-            gatewayDonationServiceMock.Setup(mocked => mocked.GetDonationYearsForAuthenticatedUser(authType + " " + authToken)).Returns(donationYears);
+            gatewayDonationServiceMock.Setup(mocked => mocked.GetDonationYearsForAuthenticatedUser(authType + " " + authToken)).Returns(dto);
             var response = fixture.GetDonationYears();
             gatewayDonationServiceMock.VerifyAll();
 
             Assert.IsNotNull(response);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<List<string>>>(response);
-            var r = (OkNegotiatedContentResult<List<string>>)response;
+            Assert.IsInstanceOf<OkNegotiatedContentResult<DonationYearsDTO>>(response);
+            var r = (OkNegotiatedContentResult<DonationYearsDTO>)response;
             Assert.IsNotNull(r.Content);
-            Assert.AreSame(donationYears, r.Content);
+            Assert.AreSame(dto, r.Content);
         }
 
         [Test]
         public void TestGetDonationYearsNoYearsFound()
         {
-            gatewayDonationServiceMock.Setup(mocked => mocked.GetDonationYearsForAuthenticatedUser(authType + " " + authToken)).Returns((List<string>)null);
+            gatewayDonationServiceMock.Setup(mocked => mocked.GetDonationYearsForAuthenticatedUser(authType + " " + authToken)).Returns((DonationYearsDTO)null);
             var response = fixture.GetDonationYears();
             gatewayDonationServiceMock.VerifyAll();
 
