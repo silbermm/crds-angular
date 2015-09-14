@@ -417,6 +417,21 @@ namespace crds_angular.Services
         public void SaveApplication(TripApplicationDto dto, string token)
         {
             throw new NotImplementedException();
+
+            //var formResponse = new FormResponse();
+            //formResponse.ContactId = dto.ContactId; //contact id of the person the application is for
+            //formResponse.FormId = formId;
+            //formResponse.PledgeCampaignId = dto.PledgeCampaignId;
+
+            //var answer = new FormAnswer();
+            //answer.FieldId = fieldId;
+            ////answer.OpportunityResponseId = opportunityResponseId;
+            //answer.Response = customField.Value;
+
+            //formResponse.FormAnswers.Add(SetCustomField(application.FirstName, opportunityResponseId));
+            //formResponse.FormAnswers.Add(answer);
+
+            //var formResponseId=_formSubmissionService.SubmitFormResponse(formResponse);
         }
     }
 }

@@ -20,8 +20,7 @@ namespace crds_angular.Controllers.API
             _tripService = tripService;
         }
 
-        [AcceptVerbs("POST")]
-        [Route("api/trip-application")]
+        [Route("api/trip-application"), HttpPost]
         public IHttpActionResult Save([FromBody] TripApplicationDto dto)
         {
             if (!ModelState.IsValid)

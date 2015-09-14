@@ -8,6 +8,7 @@
     'Session',
     '$location',
     '$anchorScroll',
+    '$log',
     'Trip',
     'Validation',
     'TripsSignupService'];
@@ -19,7 +20,7 @@
    *    - pageTitle
    *    - numberOfPages
    */
-  function PagesController($rootScope, Session, $location, $anchorScroll, Trip, Validation, TripsSignupService) {
+  function PagesController($rootScope, Session, $location, $anchorScroll, $log, Trip, Validation, TripsSignupService) {
     var vm = this;
 
     vm.handleNext = handleNext;
@@ -40,6 +41,8 @@
         vm.whyPlaceholder = 'Please be specific. ' +
           'In instances where we have a limited number of spots, we strongly consider responses to this question.';
       }
+
+      vm.signupService.activate();
 
     }
 
@@ -79,6 +82,12 @@
 
     function handleSubmit() {
       // submit info and then show the thankyou page directive
+      $log.debug(vm.signupService.page2);
+      var application = new vm.signupService.TripApplication();
+      application.pageTwo = vm.signupService.page2;
+      application.$save();
+
+      // vm.signupService.TripApplication.$save();
       vm.currentPage = 'thanks';
       toTop();
     }

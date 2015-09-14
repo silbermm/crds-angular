@@ -3,39 +3,54 @@
 
   module.exports = TripsSignupService;
 
-  TripsSignupService.$inject = ['$resource', '$location'];
+  TripsSignupService.$inject = ['$resource', '$location', '$log'];
 
-  function TripsSignupService($resource, $location) {
+  function TripsSignupService($resource, $location, $log) {
     var signupService = {
       activate: activate,
       reset: reset,
+      TripApplication: $resource(__API_ENDPOINT__ + 'api/trip-application')
     };
 
     function activate() {
-      switch (signupService.campaign.formName) {
-        case 'GO NOLA Application':
-          signupService.friendlyPageTitle = 'New Orleans';
-          signupService.tripName = '';
-          signupService.numberOfPages = 5;
-          break;
-        case 'GO South Africa Application':
-          signupService.friendlyPageTitle = 'South Africa';
-          signupService.tripName = '';
-          signupService.numberOfPages = 6;
-          break;
-        case 'GO India Application':
-          signupService.friendlyPageTitle = 'India';
-          signupService.tripName = '';
-          signupService.numberOfPages = 6;
-          signupService.whyPlaceholder = 'Please be specific. ' +
-            'In instances where we have a limited number of spots, we strongly consider responses to this question.';
-          break;
-        case 'GO Nicaragua Application':
-          signupService.friendlyPageTitle = 'Nicaragua';
-          signupService.tripName = '';
-          signupService.numberOfPages = 6;
-          break;
+      $log.debug('signup service activate');
+
+      if (signupService.page2 === undefined) {
+        $log.debug('init fields');
+
+        //pages.signupService.page2.tshirtSize
+        var tshirtSize = {id: 1, value: null};
+        var page2 = {
+          guardianFirstName: {id: 1, value: null},
+          tshirtSize: tshirtSize,
+        };
+        signupService.page2 = page2;
       }
+
+      // switch (signupService.campaign.formName) {
+      //   case 'GO NOLA Application':
+      //     signupService.friendlyPageTitle = 'New Orleans';
+      //     signupService.tripName = '';
+      //     signupService.numberOfPages = 5;
+      //     break;
+      //   case 'GO South Africa Application':
+      //     signupService.friendlyPageTitle = 'South Africa';
+      //     signupService.tripName = '';
+      //     signupService.numberOfPages = 6;
+      //     break;
+      //   case 'GO India Application':
+      //     signupService.friendlyPageTitle = 'India';
+      //     signupService.tripName = '';
+      //     signupService.numberOfPages = 6;
+      //     signupService.whyPlaceholder = 'Please be specific. ' +
+      //       'In instances where we have a limited number of spots, we strongly consider responses to this question.';
+      //     break;
+      //   case 'GO Nicaragua Application':
+      //     signupService.friendlyPageTitle = 'Nicaragua';
+      //     signupService.tripName = '';
+      //     signupService.numberOfPages = 6;
+      //     break;
+      // }
     }
 
     function reset(campaign) {
@@ -69,7 +84,7 @@
     // }
 
     function saveApplication() {
-      //
+      $log.debug(signupService.page2);
     }
 
     return signupService;

@@ -153,7 +153,7 @@ namespace MinistryPlatform.Translation.Services
         {
             var token = ApiLogin();
             var responseId = CreateFormResponse(form.FormId, form.ContactId, form.OpportunityId,
-                form.OpportunityResponseId, token);
+                form.OpportunityResponseId, token, form.PledgeCampaignId);
             foreach (var answer in form.FormAnswers)
             {
                 answer.FormResponseId = responseId;
@@ -162,7 +162,7 @@ namespace MinistryPlatform.Translation.Services
             return responseId;
         }
 
-        private int CreateFormResponse(int formId, int contactId, int opportunityId, int opportunityResponseId, string token)
+        private int CreateFormResponse(int formId, int contactId, int opportunityId, int opportunityResponseId, string token, int? pledgeCampaignId=null)
         {
             var formResponse = new Dictionary<string, object>
             {
@@ -170,7 +170,8 @@ namespace MinistryPlatform.Translation.Services
                 {"Response_Date", DateTime.Today},
                 {"Contact_ID", contactId},
                 {"Opportunity_ID", opportunityId},
-                {"Opportunity_Response", opportunityResponseId}
+                {"Opportunity_Response", opportunityResponseId},
+                {"Pledge_Campaign_ID", pledgeCampaignId}
             };
 
             var responseId = _ministryPlatformService.CreateRecord(_formResponsePageId, formResponse, token, true);
