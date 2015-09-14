@@ -32,8 +32,10 @@
       </p>
     </div>
 
+    <preloader full-screen='false' ng-show="!giving_history_controller.viewReady"> </preloader>
+
     <!--  NO GIVING HISTORY - ng-show or ng-if on no data from resource  -->
-    <div ng-show="!giving_history_controller.history" class="no-data">
+    <div ng-show="!giving_history_controller.history && giving_history_controller.viewReady" class="no-data">
       <div class="row">
         <div class="col-sm-6 col-sm-offset-3">
           <svg viewBox="0 0 32 32" class="icon icon-clock3">
@@ -49,7 +51,7 @@
     </div><!--/no-data-->
 
     <!-- GIVING HISTORY - ng-show or ng-if on data from resource-->
-    <div ng-show="giving_history_controller.history">
+    <div ng-show="giving_history_controller.history && giving_history_controller.viewReady">
       <div class="row">
         <div class="col-sm-6 clearfix hidden-print">
           <a href="" class="btn btn-primary col-sm-6 col-md-5 col-xs-12 mobile-push-bottom" onClick="window.print();">Print Statement</a>
@@ -63,7 +65,7 @@
               <select class="form-control" id="giving-year" name="giving-year"
                       ng-model="giving_history_controller.selected_giving_year"
                       ng-options="year.value for year in giving_history_controller.donation_years track by year.key"
-                      ng-change="giving_history_controller.changeDonationYear()">
+                      ng-change="giving_history_controller.getDonations()">
               </select>
             </div>
           </form>

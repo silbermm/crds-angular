@@ -7,16 +7,16 @@
   function GivingHistoryController($log, GivingHistoryService, Profile) {
     var vm = this;
 
-    vm.changeDonationYear = changeDonationYear;
     vm.currentDate = new Date();
     vm.donation_years = [];
     vm.donations = [];
     vm.donation_total_amount = undefined;
+    vm.getDonations = getDonations;
     vm.history = false;
-    vm.initialized = false;
     vm.most_recent_giving_year = undefined;
     vm.profile = {};
     vm.selected_giving_year = undefined;
+    vm.viewReady = false;
 
     activate();
 
@@ -36,39 +36,31 @@
           // Set the default selected year based on the most recent giving year
           vm.selected_giving_year = _.find(vm.donation_years, {'key': vm.most_recent_giving_year});
 
-          GivingHistoryService.donations.get({donationYear: vm.most_recent_giving_year}, function(data) {
-            vm.donations = postProcessDonations(data.donations);
-            vm.donation_total_amount = data.donation_total_amount;
-            vm.initialized = true;
-            vm.history = true;
-          },
-          function(error) {
-            vm.history = false;
-            vm.initialized = true;
-          });
+          // Now get the donations for the selected year
+          vm.getDonations();
         },
-        function(error) {
+        function(/*error*/) {
           vm.history = false;
-          vm.initialized = true;
+          vm.viewReady = true;
         });
       },
-      function(error) {
+      function(/*error*/) {
         vm.history = false;
-        vm.initialized = true;
+        vm.viewReady = true;
       });
     }
 
-    function changeDonationYear() {
-      vm.initialized = false;
+    function getDonations() {
+      vm.viewReady = false;
       GivingHistoryService.donations.get({donationYear: vm.selected_giving_year.key}, function(data) {
             vm.donations = postProcessDonations(data.donations);
             vm.donation_total_amount = data.donation_total_amount;
-            vm.initialized = true;
+            vm.viewReady = true;
             vm.history = true;
           },
-          function(error) {
+          function(/*error*/) {
+            vm.viewReady = true;
             vm.history = false;
-            vm.initialized = true;
           });
     }
 
