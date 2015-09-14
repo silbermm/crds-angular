@@ -130,6 +130,7 @@ namespace crds_angular.Services
 
         public SourceData UpdateCustomerSource(string customerToken, string cardToken)
         {
+            //Passing source will create a new source object, make it the new customer default source, and delete the old customer default if one exist
             var request = new RestRequest("customers/" + customerToken, Method.POST);
             request.AddParameter("source", cardToken);
 
