@@ -5,7 +5,7 @@
     <h2 class="subheading hidden-print">Your history of financial giving to crossroads</h2>
     <h3 class="subheading visible-print-block">Printed: {{giving_history_controller.currentDate | date:'M/d/yy'}}</h3>
 
-    <div class="row push-top" ng-show="giving_history_controller.history">
+    <div class="row push-top" ng-show="giving_history_controller.history && giving_history_controller.viewReady">
       <address class="col-sm-12 hidden-print">
         <strong id="householdNamePrint">{{giving_history_controller.profile.householdName}}</strong><br>
         <span id="addressLine1Print">{{giving_history_controller.profile.addressLine1}}</span>
@@ -24,7 +24,6 @@
         <span id="postalCode">{{giving_history_controller.profile.postalCode}}</span><br>
       </address>
 
-      <!-- TODO Need to get giving period for printable statement, maybe from API call -->
       <p class="visible-print-block col-xs-6 text-right">
         <strong>Period : 01/01/{{giving_history_controller.currentDate | date:'yyyy'}} - {{giving_history_controller.currentDate | date:'MM/dd/yyyy'}}</strong>
         <br />
@@ -102,6 +101,7 @@
             </td>
           </tr>
         </tbody>
+        <!-- TODO Remove commented markup, left in just in case we missed anything in the above ng-repeat -->
         <!--tbody>
           <tr>
             <td>
