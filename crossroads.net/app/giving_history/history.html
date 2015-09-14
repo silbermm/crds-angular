@@ -5,7 +5,7 @@
     <h2 class="subheading hidden-print">Your history of financial giving to crossroads</h2>
     <h3 class="subheading visible-print-block">Printed: 04/01/15</h3>
 
-    <div class="row push-top" ng-show="!history">
+    <div class="row push-top" ng-show="giving_history_controller.history">
       <address class="col-sm-12 hidden-print">
         <strong id="householdNamePrint">{{giving_history_controller.profile.householdName}}</strong><br>
         <span id="addressLine1Print">{{giving_history_controller.profile.addressLine1}}</span>
@@ -32,7 +32,7 @@
     </div>
 
     <!--  NO GIVING HISTORY - ng-show or ng-if on no data from resource  -->
-    <div ng-show="history" class="no-data">
+    <div ng-show="!giving_history_controller.history" class="no-data">
       <div class="row">
         <div class="col-sm-6 col-sm-offset-3">
           <svg viewBox="0 0 32 32" class="icon icon-clock3">
@@ -48,7 +48,7 @@
     </div><!--/no-data-->
 
     <!-- GIVING HISTORY - ng-show or ng-if on data from resource-->
-    <div ng-show="!history">
+    <div ng-show="giving_history_controller.history">
       <div class="row">
         <div class="col-sm-6 clearfix hidden-print">
           <a href="" class="btn btn-primary col-sm-6 col-md-5 col-xs-12 mobile-push-bottom" onClick="window.print();">Print Statement</a>
@@ -59,12 +59,9 @@
           <form class="form-inline hidden-print">
             <div class="form-group sm-pull-right">
               <label for="giving-year">Year&nbsp;</label>
-              <select class="form-control" id="giving-year" name="giving-year">
-                <option>2015</option>
-                <option>2014</option>
-                <option>2013</option>
-                <option>2012</option>
-                <option>All</option>
+              <select class="form-control" id="giving-year" name="giving-year"
+                      ng-model="giving_history_controller.selected_giving_year"
+                      ng-options="year.value for year in giving_history_controller.donation_years track by year.key">
               </select>
             </div>
           </form>
@@ -82,9 +79,24 @@
           </tr>
         </thead>
         <tbody>
+          <tr ng-repeat="gift in giving_history_controller.donations track by $index">
+            <td>
+              {{gift.distribution.program_name}}
+              <div class="text-muted">
+                <svg viewBox="0 0 160 100" class="icon icon-cc_visa payment-type-icon">
+                  <use xlink:href="#cc_visa"></use>
+                </svg>
+                ending in 3459
+              </div>
+            </td>
+            <td class="text-right">
+              <div class="dollar-amount">${{gift.distribution.amount / 100}}</div>
+              <div class="text-muted">{{gift.donation.date | date:'M/d/yy'}}</div>
+            </td>
+          </tr>
           <tr>
             <td>
-              Ministry
+              Fake donations follow
               <div class="text-muted">
                 <svg viewBox="0 0 160 100" class="icon icon-cc_visa payment-type-icon">
                   <use xlink:href="#cc_visa"></use>

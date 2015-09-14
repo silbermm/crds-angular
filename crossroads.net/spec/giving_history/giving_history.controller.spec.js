@@ -144,16 +144,17 @@ describe('GivingHistoryController', function() {
       httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/profile').respond({});
       httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donations/years')
                              .respond(mockDonationYearsResponse);
-      httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donations?donationYear=2015')
+      httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donations/2015')
                              .respond(mockDonationResponse);
       httpBackend.flush();
 
-      expect(sut.donation_years.length).toBe(2);
-      expect(sut.donation_years[0]).toEqual('2015');
+      expect(sut.donation_years.length).toBe(3);
+      expect(sut.donation_years[0]).toEqual({key: '2015', value: '2015'});
+      expect(sut.donation_years[2]).toEqual({key: '', value: 'All'});
       expect(sut.most_recent_giving_year).toEqual('2015');
 
       expect(sut.donations.length).toBe(3);
-      expect(sut.donations[0].distributions[0].program_name).toEqual('Crossroads');
+      expect(sut.donations[0].distribution.program_name).toEqual('Crossroads');
       expect(sut.donation_total_amount).toEqual(80000);
     });
   });
