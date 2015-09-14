@@ -27,7 +27,7 @@ module.exports = function(config) {
       './node_modules/angular/angular.js',
       'node_modules/angular-mocks/angular-mocks.js',
       'node_modules/moment/moment.js',
-      //'./assets/common*.js',
+      './assets/profile*.js',
       //'./assets/trips*.js',
       //'./assets/give*.js',
       './assets/media*.js',
