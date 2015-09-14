@@ -13,6 +13,10 @@ describe('Volunteer Application Factory', function() {
 
   beforeEach(angular.mock.module('crossroads'));
 
+  beforeEach(angular.mock.module(function($provide) {
+    $provide.value('$state', {});
+  }));
+
   beforeEach(inject(function(_Page_, _Opportunity_, _VolunteerApplication_, $injector) {
     Page = _Page_;
     Opportunity = _Opportunity_;

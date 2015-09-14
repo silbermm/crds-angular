@@ -1,4 +1,6 @@
 ﻿using System.Messaging;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Models.Crossroads.Stewardship;
@@ -80,6 +82,28 @@ namespace crds_angular.Controllers.API
                 return (Ok(batch));
             }));
         }
+        /// <summary>
+        /// Takes in the encrypted account and routing number which is then used to locate an existing donor.
+        /// If an existing donor is found, then the address data is returned.
+        /// If an existing donor is not found, then a 404 will be returned
+        /// </summary>
+        /// <param name="encryptedKey">This is the encrypted account and routing number from EZ Scan.</param>
+        /// <returns>The created or updated donor record.</returns>
+        [RequiresAuthorization]
+        [ResponseType(typeof(EZScanDonorDetails))]
+        [Route("api/checkscanner/getdonor/{encryptedKey?}")]
+        public IHttpActionResult GetDonorForCheck(string encryptedKey)
+        {
+            return (Authorized(token =>
+            {
+                var donorDetail = _checkScannerService.GetContactDonorForCheck(encryptedKey);
+                if (donorDetail == null)
+                {
+                    return NotFound();
+                }
+                return (Ok(donorDetail)); 
+            }));
+        }
 
         /// <summary>
         /// Creates or Updates a donor record in Ministry Platform based off of the check details passed in.
@@ -95,6 +119,7 @@ namespace crds_angular.Controllers.API
             {
                 var result = _checkScannerService.CreateOrUpdateDonor(checkDetails);
                 return (Ok(result));
+
             }));
         }
     }

@@ -93,6 +93,8 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.ReceivablesAccount, opts => opts.MapFrom(src => src.ReceivableAccount))
                 .ForMember(dest => dest.DistributionAmount, opts => opts.MapFrom(src => src.Amount))
                 .ForMember(dest => dest.DistributionReference, opts => opts.MapFrom(src => (src.ProccessFeeProgramId == src.ProgramId ? "Processor Fees " + src.DonationDate : "Contribution " + src.DonationDate  )));
+
+            Mapper.CreateMap<ContactDetails, EZScanDonorDetails>();
         }
     }
 }

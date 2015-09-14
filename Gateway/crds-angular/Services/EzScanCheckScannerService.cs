@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AutoMapper;
 using crds_angular.DataAccess.Interfaces;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services.Interfaces;
@@ -98,6 +99,12 @@ namespace crds_angular.Services
             _checkScannerDao.UpdateBatchStatus(batchDetails.Name, batchDetails.Status);
 
             return (batchDetails);
+        }
+        
+        public EZScanDonorDetails GetContactDonorForCheck(string encryptedKey)
+        {
+           return (Mapper.Map<ContactDetails, EZScanDonorDetails>(_donorService.GetContactDonorForCheckAccount(encryptedKey)));
+            
         }
 
         public ContactDonor CreateOrUpdateDonor(CheckScannerCheck checkDetails)
