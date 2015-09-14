@@ -29,11 +29,16 @@
       ////////////////////////////////
 
       function divClass(member) {
+        var div = '';
         if (!member.signedUp) {
-          return 'col-sm-9 col-md-10';
+          div += 'col-sm-9 col-md-10';
         }
 
-        return '';
+        if (!isOfAge(member)) {
+          div = '';
+        }
+
+        return div;
       }
 
       function isOfAge(member) {
