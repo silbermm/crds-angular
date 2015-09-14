@@ -356,7 +356,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual(expectedReturn[0].CustomerId, mockedExport[0].CustomerId);
             Assert.AreEqual(expectedReturn[0].ContributionAmount, mockedExport[0].DonationAmount);
             Assert.AreEqual(expectedReturn[0].CheckbookId, mockedExport[0].CheckbookId);
-            Assert.AreEqual(expectedReturn[0].CashAccount, mockedExport[0].CashAccount);
+            Assert.AreEqual(expectedReturn[0].CashAccount, mockedExport[0].ScholarshipExpenseAccount);
             Assert.AreEqual(expectedReturn[0].ReceivablesAccount, mockedExport[0].ReceivableAccount);
             Assert.AreEqual(expectedReturn[0].DistributionAccount, mockedExport[0].DistributionAccount);
             Assert.AreEqual(expectedReturn[0].DistributionAmount, mockedExport[0].Amount);
