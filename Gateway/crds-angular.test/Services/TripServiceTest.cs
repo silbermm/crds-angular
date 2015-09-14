@@ -30,6 +30,7 @@ namespace crds_angular.test.Services
         private Mock<IContactService> _contactService;
         private Mock<IConfigurationWrapper> _configurationWrapper;
         private Mock<IPersonService> _personService;
+        private Mock<IServeService> _serveService;
         private TripService _fixture;
 
         [SetUp]
@@ -48,6 +49,7 @@ namespace crds_angular.test.Services
             _contactService = new Mock<IContactService>();
             _configurationWrapper = new Mock<IConfigurationWrapper>();
             _personService = new Mock<IPersonService>();
+            _serveService=new Mock<IServeService>();
 
             _fixture = new TripService(_eventParticipantService.Object,
                                        _donationService.Object,
@@ -61,7 +63,8 @@ namespace crds_angular.test.Services
                                        _communicationService.Object,
                                        _contactService.Object,
                                        _configurationWrapper.Object,
-                                       _personService.Object);
+                                       _personService.Object, 
+                                       _serveService.Object);
         }
 
         [Test]
