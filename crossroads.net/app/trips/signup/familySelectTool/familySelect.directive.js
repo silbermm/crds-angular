@@ -29,16 +29,10 @@
       ////////////////////////////////
 
       function divClass(member) {
-        var div = '';
-        if (!member.signedUp) {
-          div += 'col-sm-9 col-md-10';
+        if (!member.signedUp && isOfAge(member)) {
+          return 'col-sm-9 col-md-10';
         }
-
-        if (!isOfAge(member)) {
-          div = '';
-        }
-
-        return div;
+        return '';
       }
 
       function isOfAge(member) {
