@@ -29,21 +29,24 @@
           // Create a map out of the array of donation years, so we can add an 'All' option easily,
           // and to facilitate ng-options on the frontend select
           vm.donation_years = _.transform(data.years, function(result, year) {
-            result.push({'key': year, 'value': year});
+            result.push({key: year, value: year});
           });
-          vm.donation_years.push({'key': '', 'value': 'All'});
+
+          vm.donation_years.push({key: '', value: 'All'});
 
           // Set the default selected year based on the most recent giving year
-          vm.selected_giving_year = _.find(vm.donation_years, {'key': vm.most_recent_giving_year});
+          vm.selected_giving_year = _.find(vm.donation_years, {key: vm.most_recent_giving_year});
 
           // Now get the donations for the selected year
           vm.getDonations();
         },
+
         function(/*error*/) {
           vm.history = false;
           vm.viewReady = true;
         });
       },
+
       function(/*error*/) {
         vm.history = false;
         vm.viewReady = true;
@@ -58,6 +61,7 @@
             vm.viewReady = true;
             vm.history = true;
           },
+
           function(/*error*/) {
             vm.viewReady = true;
             vm.history = false;
@@ -66,7 +70,7 @@
 
     function postProcessDonations(donations) {
       _.forEach(donations, function(donation) {
-        switch(donation.source.type) {
+        switch (donation.source.type) {
           case 'Cash':
             donation.source.icon = 'money';
             donation.source.viewBox = '0 0 34 32';
@@ -79,7 +83,7 @@
             break;
           case 'CreditCard':
             donation.source.viewBox = '0 0 160 100';
-            switch(donation.source.brand) {
+            switch (donation.source.brand) {
               case 'Visa':
                 donation.source.icon = 'cc_visa';
                 break;
@@ -94,9 +98,10 @@
                 break;
             }
             donation.source.name = 'ending in ' + donation.source.last4;
-        };
+        }
       });
-      return(donations);
+
+      return (donations);
     }
   }
 })();
