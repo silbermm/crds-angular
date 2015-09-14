@@ -52,6 +52,9 @@
             title: 'Personal Giving History',
             description: ''
           }
+        },
+        resolve: {
+          loggedin: crds_utilities.checkLoggedin
         }
       })
       .state('home', {

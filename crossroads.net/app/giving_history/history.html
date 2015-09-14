@@ -7,16 +7,22 @@
 
     <div class="row push-top" ng-show="!history">
       <address class="col-sm-12 hidden-print">
-      <strong>John & Jane Doe</strong><br>
-      795 Folsom Ave, Suite 600<br>
-      San Francisco, CA 94107<br>
-    </address>
+        <strong id="householdNamePrint">{{giving_history_controller.profile.householdName}}</strong><br>
+        <span id="addressLine1Print">{{giving_history_controller.profile.addressLine1}}</span>
+        <span id="addressLine2Print" ng-if="giving_history_controller.profile.addressLine2">, {{giving_history_controller.profile.addressLine2}}</span><br>
+        <span id="cityPrint">{{giving_history_controller.profile.city}}</span>,
+        <span id="statePrint">{{giving_history_controller.profile.state}}</span>
+        <span id="postalCodePrint">{{giving_history_controller.profile.postalCode}}</span><br>
+      </address>
 
       <address class="visible-print-block col-xs-6">
-      <strong>John & Jane Doe</strong><br>
-      795 Folsom Ave, Suite 600<br>
-      San Francisco, CA 94107<br>
-    </address>
+        <strong id="householdName">{{giving_history_controller.profile.householdName}}</strong><br>
+        <span id="addressLine1">{{giving_history_controller.profile.addressLine1}}</span>
+        <span id="addressLine2" ng-if="giving_history_controller.profile.addressLine2">, {{giving_history_controller.profile.addressLine2}}</span><br>
+        <span id="city">{{giving_history_controller.profile.city}}</span>,
+        <span id="state">{{giving_history_controller.profile.state}}</span>
+        <span id="postalCode">{{giving_history_controller.profile.postalCode}}</span><br>
+      </address>
 
       <p class="visible-print-block col-xs-6 text-right">
         <strong>Period : 01/01/2012 - 03/31/2012</strong>
