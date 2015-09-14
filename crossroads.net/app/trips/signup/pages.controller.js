@@ -84,12 +84,16 @@
       // submit info and then show the thankyou page directive
       $log.debug(vm.signupService.page2);
       var application = new vm.signupService.TripApplication();
+      application.contactId = vm.signupService.contactId;
+      application.pledgeCampaignId = vm.signupService.pledgeCampaignId;
       application.pageTwo = vm.signupService.page2;
       application.$save();
 
       // vm.signupService.TripApplication.$save();
-      vm.currentPage = 'thanks';
-      toTop();
+
+      //below commented for testing
+      // vm.currentPage = 'thanks';
+      // toTop();
     }
 
     function nolaRequired() {

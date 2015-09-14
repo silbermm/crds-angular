@@ -3,9 +3,9 @@
 
   module.exports = TripsSignupService;
 
-  TripsSignupService.$inject = ['$resource', '$location', '$log'];
+  TripsSignupService.$inject = ['$resource', '$location', '$log', 'Session'];
 
-  function TripsSignupService($resource, $location, $log) {
+  function TripsSignupService($resource, $location, $log, Session) {
     var signupService = {
       activate: activate,
       reset: reset,
@@ -15,14 +15,26 @@
     function activate() {
       $log.debug('signup service activate');
 
+      signupService.contactId = Session.exists('userId');
+      signupService.pledgeCampaignId = 178;
+
       if (signupService.page2 === undefined) {
         $log.debug('init fields');
 
-        //pages.signupService.page2.tshirtSize
-        var tshirtSize = {id: 1, value: null};
         var page2 = {
-          guardianFirstName: {id: 1, value: null},
-          tshirtSize: tshirtSize,
+          guardianFirstName: {formFieldId: 1221, value: null},
+          guardianLastName: {formFieldId: 1222, value: null},
+          tshirtSize: null,
+          scrubSize: null,
+          referral: {formFieldId: 1229, value: null},
+          conditions: {formFieldId: 1227, value: null},
+          vegetarian: {formFieldId: 1225, value: null},
+          allergies: {formFieldId: 1226, value: null},
+          spiritualLifeSearching: {formFieldId: 1231, value: null},
+          spiritualLifeReceived: {formFieldId: 1232, value: null},
+          spiritualLifeObedience: {formFieldId: 1233, value: null},
+          spiritualLifeReplicating: {formFieldId: 1234, value: null},
+          why: {formFieldId: 1230, value: null}
         };
         signupService.page2 = page2;
       }

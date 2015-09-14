@@ -7,49 +7,64 @@ namespace crds_angular.Models.Crossroads.Trip
         [JsonProperty(PropertyName = "pageTwo")]
         public ApplicationPageTwo PageTwo { get; set; }
 
+        [JsonProperty(PropertyName = "contactId")]
         public int ContactId { get; set; }
+
+        [JsonProperty(PropertyName = "pledgeCampaignId")]
         public int PledgeCampaignId { get; set; }
 
         public class ApplicationPageTwo
         {
             [JsonProperty(PropertyName = "allergies")]
-            public string Allergies { get; set; }
+            public TripApplicationField Allergies { get; set; }
 
             [JsonProperty(PropertyName = "conditions")]
-            public string Conditions { get; set; }
+            public TripApplicationField Conditions { get; set; }
 
             [JsonProperty(PropertyName = "guardianFirstName")]
-            public string GuardianFirstName { get; set; }
+            public TripApplicationField GuardianFirstName { get; set; }
 
             [JsonProperty(PropertyName = "guardianLastName")]
-            public string GuardianLastName { get; set; }
+            public TripApplicationField GuardianLastName { get; set; }
 
             [JsonProperty(PropertyName = "referral")]
-            public string Referral { get; set; }
+            public TripApplicationField Referral { get; set; }
 
             [JsonProperty(PropertyName = "scrubSize")]
-            public string ScrubSize { get; set; }
+            public TripApplicationField ScrubSize { get; set; }
 
             [JsonProperty(PropertyName = "spiritualLifeObedience")]
-            public string SpiritualLifeObedience { get; set; }
+            public TripApplicationField SpiritualLifeObedience { get; set; }
 
             [JsonProperty(PropertyName = "spiritualLifeReceived")]
-            public string SpiritualLifeReceived { get; set; }
+            public TripApplicationField SpiritualLifeReceived { get; set; }
 
             [JsonProperty(PropertyName = "spiritualLifeReplicating")]
-            public string SpiritualLifeReplicating { get; set; }
+            public TripApplicationField SpiritualLifeReplicating { get; set; }
 
             [JsonProperty(PropertyName = "spiritualLifeSearching")]
-            public string SpiritualLifeSearching { get; set; }
+            public TripApplicationField SpiritualLifeSearching { get; set; }
 
             [JsonProperty(PropertyName = "tshirtSize")]
-            public string TshirtSize { get; set; }
+            public TripApplicationField TshirtSize { get; set; }
 
             [JsonProperty(PropertyName = "vegetarian")]
-            public string Vegetarian { get; set; }
+            public TripApplicationField Vegetarian { get; set; }
 
             [JsonProperty(PropertyName = "why")]
-            public string Why { get; set; }
+            public TripApplicationField Why { get; set; }
+        }
+
+        public class TripApplicationField
+        {
+            [JsonProperty(PropertyName = "formFieldId")]
+            public int FormFieldId { get; set; }
+
+            [JsonProperty(PropertyName = "attributeId")]
+            public int AttributeId { get; set; }
+
+            [JsonProperty(PropertyName = "value")]
+            public string Value { get; set; }
         }
     }
 }

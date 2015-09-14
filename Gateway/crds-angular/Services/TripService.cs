@@ -164,7 +164,7 @@ namespace crds_angular.Services
             return resp;
         }
 
-        public List<FamilyMemberTripDto> GetFamilyMembers(int contactId , int pledgeId, string token)
+        public List<FamilyMemberTripDto> GetFamilyMembers(int contactId, int pledgeId, string token)
         {
             var family = _serveService.GetImmediateFamilyParticipants(contactId, token);
             return family.Select(f =>
@@ -185,7 +185,7 @@ namespace crds_angular.Services
                 };
                 return fm;
             }).ToList();
-        } 
+        }
 
         private static List<string> ValidateResponse(int selectionCount, int formResponseId, List<TripFormResponse> responses)
         {
@@ -416,22 +416,63 @@ namespace crds_angular.Services
 
         public void SaveApplication(TripApplicationDto dto, string token)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
 
-            //var formResponse = new FormResponse();
-            //formResponse.ContactId = dto.ContactId; //contact id of the person the application is for
-            //formResponse.FormId = formId;
-            //formResponse.PledgeCampaignId = dto.PledgeCampaignId;
+            var formId = 20; //get this from web.config
 
-            //var answer = new FormAnswer();
-            //answer.FieldId = fieldId;
-            ////answer.OpportunityResponseId = opportunityResponseId;
-            //answer.Response = customField.Value;
+            var formResponse = new FormResponse();
+            formResponse.ContactId = dto.ContactId; //contact id of the person the application is for
+            formResponse.FormId = formId;
+            formResponse.PledgeCampaignId = dto.PledgeCampaignId;
 
-            //formResponse.FormAnswers.Add(SetCustomField(application.FirstName, opportunityResponseId));
-            //formResponse.FormAnswers.Add(answer);
+            formResponse.FormAnswers = new List<FormAnswer>(FormatFormAnswers(dto));
 
-            //var formResponseId=_formSubmissionService.SubmitFormResponse(formResponse);
+            var formResponseId = _formSubmissionService.SubmitFormResponse(formResponse);
+        }
+
+        private IEnumerable<FormAnswer> FormatFormAnswers(TripApplicationDto applicationData)
+        {
+            var answers = new List<FormAnswer>();
+
+            var page2 = applicationData.PageTwo;
+            FormatAnswer(page2.Allergies, answers);
+            FormatAnswer(page2.Conditions, answers);
+            FormatAnswer(page2.GuardianFirstName, answers);
+            FormatAnswer(page2.GuardianLastName, answers);
+            FormatAnswer(page2.Referral, answers);
+            FormatAnswer(page2.ScrubSize, answers);
+            FormatAnswer(page2.SpiritualLifeObedience, answers);
+            FormatAnswer(page2.SpiritualLifeReceived, answers);
+            FormatAnswer(page2.SpiritualLifeReplicating, answers);
+            FormatAnswer(page2.SpiritualLifeSearching, answers);
+            FormatAnswer(page2.TshirtSize, answers);
+            FormatAnswer(page2.Vegetarian, answers);
+            FormatAnswer(page2.Why, answers);
+
+            return answers;
+        }
+
+        private void FormatAnswer(TripApplicationDto.TripApplicationField field, List<FormAnswer> answers)
+        {
+            if (field != null)
+            {
+                answers.Add(FormatTripFormAnswer(field));
+            }
+        }
+
+        private FormAnswer FormatTripFormAnswer(TripApplicationDto.TripApplicationField field)
+        {
+            try
+            {
+                var answer = new FormAnswer();
+                answer.FieldId = field.FormFieldId;
+                answer.Response = field.Value;
+                return answer;
+            }
+            catch (Exception exception)
+            {
+                throw new ApplicationException(string.Format("Form Field Id: {0}", field.FormFieldId), exception);
+            }
         }
     }
 }
