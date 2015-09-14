@@ -2,7 +2,8 @@ USE [MinistryPlatform]
 GO
 
 UPDATE [dbo].[dp_Page_Views]
-SET [Field_List] = 'Donation_ID_Table_Batch_ID_Table.[Batch_ID] AS [Batch_ID]
+SET [Field_List] = 'Donation_ID_Table_Batch_ID_Table_Deposit_ID_Table.[Deposit_ID] AS [Deposit_ID]
+, Donation_ID_Table_Batch_ID_Table.[Batch_ID] AS [Batch_ID]
 , Program_ID_Table.[Program_ID] AS [Program_ID]
 , Congregation_ID_Table.[Congregation_ID] AS [Congregation_ID]
 , (select Document_Type from GL_Account_Mapping G where G.Program_ID=Program_ID_Table.Program_ID and G.Congregation_ID = Congregation_ID_Table.Congregation_ID) AS [Document_Type]
