@@ -97,6 +97,32 @@
       })
       .state('tripsignup', {
         parent: 'noSideBar',
+        url: '/trips/:campaignId?invite',
+        templateUrl: 'page0/page0.html',
+        controller: 'Page0Controller as page0',
+        data: {
+          isProtected: true,
+          meta: {
+            title: 'Trip Signup',
+            description: 'Select the family member you want to signup for a trip'
+          }
+        },
+        resolve: {
+          loggedin: crds_utilities.checkLoggedin,
+          $cookies: '$cookies',
+          Trip: 'Trip',
+          $stateParams: '$stateParams',
+          Campaign: function(Trip, $stateParams) {
+            return Trip.Campaign.get({campaignId: $stateParams.campaignId}).$promise;
+          },
+
+          Family: function(Trip, $stateParams) {
+            return Trip.Family.query({pledgeCampaignId: $stateParams.campaignId}).$promise;
+          }
+        }
+      })
+      .state('tripsignup.application', {
+        parent: 'noSideBar',
         url: '/trips/:campaignId/signup?invite',
         templateUrl: 'signup/signupPage.html',
         controller: 'TripsSignupController as tripsSignup',
@@ -122,7 +148,7 @@
 
           WorkTeams: function(Trip) {
             return Trip.WorkTeams.query().$promise;
-          }
+          },
         }
       });
   }
