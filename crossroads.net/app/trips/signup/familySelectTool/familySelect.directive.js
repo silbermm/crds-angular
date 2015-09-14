@@ -19,6 +19,7 @@
 
     function link(scope, el, attr) {
       scope.divClass = divClass;
+      scope.isOfAge = isOfAge;
       scope.isSignedUp = isSignedUp;
       scope.signupService = TripsSignupService;
       scope.pClass = pClass;
@@ -36,8 +37,11 @@
       }
 
       function isOfAge(member) {
-        if (member.age < signupService.campaign.ageLimit) {
-          if (member.age !== 0) {
+        if (member.age !== 0) {
+          if (member.age < TripsSignupService.campaign.ageLimit) {
+            if (_.includes(TripsSignupService.campaign.ageExceptions, Number(member.contactId))) {
+              return true;
+            }
             return false;
           }
         }
