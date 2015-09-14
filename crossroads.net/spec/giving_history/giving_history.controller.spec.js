@@ -22,36 +22,96 @@ describe('GivingHistoryController', function() {
     donations: [
       {
         amount: 78900,
-        donation_id: '17588628',
         status: 'Succeeded',
-        donation_date: '2015-05-14T09:52:44.873',
+        date: '2015-05-14T09:52:44.873',
         distributions: [
           {
             program_name: 'Crossroads',
             amount: 78900
           }
         ],
-        source_type: 'CreditCard',
-        source_type_description: 'ending in 1234',
-        card_type: 'Visa'
+        source:
+        {
+          type: 'CreditCard',
+          last4: '1234',
+          brand: 'Visa',
+          payment_processor_id: 'ch_16jvzDEldv5NE53smr7Mwi4x'
+        }
       },
       {
-        amount: 10000,
-        donation_id: '17599999',
+        amount: 1200,
         status: 'Succeeded',
-        donation_date: '2015-05-21T10:25:32.923',
+        date: '2015-05-21T10:25:32.923',
         distributions: [
           {
             program_name: 'Game Change',
-            amount: 10000
+            amount: 1200
           }
         ],
-        source_type: 'CreditCard',
-        source_type_description: 'ending in 2345',
-        card_type: 'MasterCard'
+        source:
+        {
+          type: 'Bank',
+          last4: '4321',
+          payment_processor_id: 'py_16YS8wEldv5NE53s770upiHw'
+        },
+      },
+      {
+        amount: 100,
+        status: 'Deposited',
+        date: '2015-05-28T10:25:32.923',
+        distributions: [
+          {
+            program_name: 'Crossroads',
+            amount: 100
+          }
+        ],
+        source:
+        {
+          type: 'Cash',
+          name: 'Cash'
+        }
       }
     ],
-    donation_total_amount: 88900
+    donation_total_amount: 80000
+  };
+
+  var mockSoftCreditDonationResponse =
+  {
+    donations: [
+      {
+        amount: 2000,
+        status: 'Succeeded',
+        date: '2015-03-31T09:52:44.873',
+        distributions: [
+          {
+            program_name: 'Crossroads',
+            amount: 2000
+          }
+        ],
+        source:
+        {
+          type: 'NonCashAsset',
+          name: 'Fidelity Charity Account'
+        }
+      },
+      {
+        amount: 2000,
+        status: 'Succeeded',
+        date: '2015-06-30T10:25:32.923',
+        distributions: [
+          {
+            program_name: 'Crossroads',
+            amount: 2000
+          }
+        ],
+        source:
+        {
+          type: 'NonCashAsset',
+          name: 'Fidelity Charity Account'
+        }
+      }
+    ],
+    donation_total_amount: 4000
   };
 
   beforeEach(inject(function(_$injector_, $httpBackend, _$controller_, $rootScope) {
@@ -91,9 +151,9 @@ describe('GivingHistoryController', function() {
       expect(sut.donation_years[0]).toEqual('2015');
       expect(sut.most_recent_giving_year).toEqual('2015');
 
-      expect(sut.donations.length).toBe(2);
+      expect(sut.donations.length).toBe(3);
       expect(sut.donations[0].distributions[0].program_name).toEqual('Crossroads');
-      expect(sut.donation_total_amount).toEqual(88900);
+      expect(sut.donation_total_amount).toEqual(80000);
     });
   });
 });
