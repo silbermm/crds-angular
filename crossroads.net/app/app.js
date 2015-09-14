@@ -23,7 +23,6 @@ require('../lib/select.css');
   require('./styleguide');
   require('./thedaily');
   require('./gotrips');
-  //require('./myprofile');
   require('./community_groups_signup/group_signup_form.html');
   require('./my_serve');
   require('./volunteer_signup');
