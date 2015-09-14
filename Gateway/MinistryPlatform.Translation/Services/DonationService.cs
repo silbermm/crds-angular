@@ -353,22 +353,22 @@ namespace MinistryPlatform.Translation.Services
                 var gp = new GPExportDatum
                 {
                     ProccessFeeProgramId = _processingProgramId,
-                    ProgramId = result.ToInt("Program ID"),
-                    DocumentType = result.ToString("Document Type"),
-                    DonationId = result.ToInt("Donation ID"),
-                    BatchName = result.ToString("Batch Name"),
-                    DonationDate = result.ToDate("Donation Date"),
-                    DepositDate = result.ToDate("Deposit Date"),
-                    CustomerId = result.ToString("Customer ID"),
-                    DonationAmount = result.ToString("Donation Amount"),
-                    CheckbookId = result.ToString("Checkbook ID"),
-                    CashAccount = result.ToString("Cash Account"),
-                    ReceivableAccount = result.ToString("Receivable Account"),
-                    DistributionAccount = result.ToString("Distribution Account"),
-                    ScholarshipExpenseAccount = result.ToString("Scholarship Expense Account"),
+                    ProgramId = result.ToInt("Program_ID"),
+                    DocumentType = result.ToString("Document_Type"),
+                    DonationId = result.ToInt("Donation_ID"),
+                    BatchName = result.ToString("Batch_Name"),
+                    DonationDate = result.ToDate("Donation_Date"),
+                    DepositDate = result.ToDate("Deposit_Date"),
+                    CustomerId = result.ToString("Customer_ID"),
+                    DonationAmount = result.ToString("Donation_Amount"),
+                    CheckbookId = result.ToString("Checkbook_ID"),
+                    CashAccount = result.ToString("Cash_Account"),
+                    ReceivableAccount = result.ToString("Receivable_Account"),
+                    DistributionAccount = result.ToString("Distribution_Account"),
+                    ScholarshipExpenseAccount = result.ToString("Scholarship_Expense_Account"),
                     Amount = result.ToString("Amount"),
                     ScholarshipPaymentTypeId = _scholarshipPaymentTypeId,
-                    PaymentTypeId = result.ToInt("Payment Type ID")
+                    PaymentTypeId = result.ToInt("Payment_Type_ID")
                 };
 
                 gpExport.Add(gp);
