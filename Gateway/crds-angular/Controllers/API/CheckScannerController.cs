@@ -91,8 +91,8 @@ namespace crds_angular.Controllers.API
         /// <returns>The created or updated donor record.</returns>
         [RequiresAuthorization]
         [ResponseType(typeof(EZScanDonorDetails))]
-        [Route("api/checkscanner/getdonor/{encryptedKey?}")]
-        public IHttpActionResult GetDonorForCheck(string encryptedKey)
+        [Route("api/checkscanner/getdonor/{*encryptedKey}")]
+        public IHttpActionResult GetDonorForCheck(string encryptedKey = "")
         {
             return (Authorized(token =>
             {
