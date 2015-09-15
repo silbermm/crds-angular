@@ -20,10 +20,16 @@ namespace crds_angular.Models.Crossroads.Stewardship
         public List<DonationDTO> Donations { get { return (_donations); } }
         #endregion
         /// <summary>
-        /// A total of all the donation amounts included in Donations.
+        /// A total of all the donation amounts included in Donations that appear on the giving history.
         /// </summary>
         [JsonProperty("donation_total_amount")]
-        public int DonationTotalAmount { get { return (Donations.Select(d => d.Amount).Sum()); } }
+        public int DonationTotalAmount { get { return (Donations.Select(d => d.IncludeOnGivingHistory && d.Status != DonationStatus.Declined ? d.Amount : 0).Sum()); } }
+
+        /// <summary>
+        /// A total of all the donation amounts included in Donations that appear on the printed statement.
+        /// </summary>
+        [JsonProperty("donation_statement_total_amount")]
+        public int DonationStatementTotalAmount { get { return (Donations.Select(d => d.IncludeOnPrintedStatement && d.Status != DonationStatus.Declined ? d.Amount : 0).Sum()); } }
 
         [JsonIgnore]
         public bool HasDonations { get { return (Donations.Count > 0); } }

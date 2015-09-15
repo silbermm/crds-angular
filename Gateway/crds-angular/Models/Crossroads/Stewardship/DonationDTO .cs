@@ -23,6 +23,12 @@ namespace crds_angular.Models.Crossroads.Stewardship
         [JsonProperty("status"), JsonConverter(typeof(StringEnumConverter))]
         public DonationStatus Status { get; set; }
 
+        [JsonProperty(PropertyName = "include_on_giving_history")]
+        public bool IncludeOnGivingHistory { get; set; }
+
+        [JsonProperty(PropertyName = "include_on_printed_statement")]
+        public bool IncludeOnPrintedStatement { get; set; }
+
         [JsonProperty("date")]
         public DateTime DonationDate { get; set; }
 

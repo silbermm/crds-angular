@@ -9,6 +9,7 @@ using crds_angular.Services.Interfaces;
 using crds_angular.Util;
 using MinistryPlatform.Models;
 using Newtonsoft.Json;
+using DonationStatus = MinistryPlatform.Models.DonationStatus;
 
 namespace crds_angular.Services
 {
@@ -148,6 +149,15 @@ namespace crds_angular.Services
                                 break;
                         }
                     }
+                }
+
+                if (donation.Status == Models.Crossroads.Stewardship.DonationStatus.Refunded && donation.Amount > 0)
+                {
+                    donation.Amount *= -1;
+                    donation.Distributions.All(dist => { 
+                        dist.Amount *= -1;
+                        return (true);
+                    });
                 }
             }
 

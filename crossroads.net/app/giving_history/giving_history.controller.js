@@ -11,6 +11,7 @@
     vm.donation_years = [];
     vm.donations = [];
     vm.donation_total_amount = undefined;
+    vm.donation_statement_total_amount = undefined;
     vm.getDonations = getDonations;
     vm.history = false;
     vm.most_recent_giving_year = undefined;
@@ -73,6 +74,7 @@
       GivingHistoryService.donations.get({donationYear: vm.selected_giving_year.key}, function(data) {
             vm.donations = postProcessDonations(data.donations);
             vm.donation_total_amount = data.donation_total_amount;
+            vm.donation_statement_total_amount = data.donation_statement_total_amount;
             vm.viewReady = true;
             vm.history = true;
           },
