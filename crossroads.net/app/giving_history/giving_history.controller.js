@@ -8,15 +8,15 @@
     var vm = this;
 
     vm.currentDate = new Date();
+    vm.donation_statement_total_amount = undefined;
+    vm.donation_total_amount = undefined;
     vm.donation_years = [];
     vm.donations = [];
-    vm.donation_total_amount = undefined;
-    vm.donation_statement_total_amount = undefined;
     vm.getDonations = getDonations;
     vm.history = false;
-    vm.most_recent_giving_year = undefined;
     vm.profile = {};
     vm.selected_giving_year = undefined;
+    vm.soft_credit_donations = [];
     vm.viewReady = false;
 
     activate();
@@ -25,7 +25,7 @@
       Profile.Personal.get(function(data) {
         vm.profile = data;
         GivingHistoryService.donationYears.get(function(data) {
-          vm.most_recent_giving_year = data.most_recent_giving_year;
+          var most_recent_giving_year = data.most_recent_giving_year;
 
           // Create a map out of the array of donation years, so we can add an 'All' option easily,
           // and to facilitate ng-options on the frontend select
@@ -36,7 +36,7 @@
           vm.donation_years.push({key: '', value: 'All'});
 
           // Set the default selected year based on the most recent giving year
-          vm.selected_giving_year = _.find(vm.donation_years, {key: vm.most_recent_giving_year});
+          vm.selected_giving_year = _.find(vm.donation_years, {key: most_recent_giving_year});
 
           // Now get the donations for the selected year
           vm.getDonations();

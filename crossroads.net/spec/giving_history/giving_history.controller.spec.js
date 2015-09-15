@@ -151,7 +151,7 @@ describe('GivingHistoryController', function() {
       expect(sut.donation_years.length).toBe(3);
       expect(sut.donation_years[0]).toEqual({key: '2015', value: '2015'});
       expect(sut.donation_years[2]).toEqual({key: '', value: 'All'});
-      expect(sut.most_recent_giving_year).toEqual('2015');
+      expect(sut.selected_giving_year).toEqual({key: '2015', value: '2015'});
 
       expect(sut.donations.length).toBe(3);
       expect(sut.donations[0].distributions[0].program_name).toEqual('Crossroads');
