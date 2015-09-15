@@ -391,7 +391,7 @@ namespace crds_angular.Services
             }
             else
             {
-                donorId = _mpDonorService.CreateDonorRecord(applicant.ContactId, null, null, DateTime.Now);
+                donorId = _mpDonorService.CreateDonorRecord(applicant.ContactId, null, DateTime.Now);
             }
 
             if (addPledge)

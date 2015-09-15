@@ -5,7 +5,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
 {
     public interface IDonorService
     {
-        int CreateDonorRecord(int contactId, string processorId, string accountProcessorId, DateTime setupTime,
+        int CreateDonorRecord(int contactId, string processorId, DateTime setupTime,
             int? statementFrequencyId = 1, // default to quarterly
             int? statementTypeId = 1, //default to individual
             int? statementMethodId = 2, // default to email/online
@@ -21,5 +21,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         ContactDonor GetEmailViaDonorId(int donorId);
         void SendEmail(int emailTemplate, int donorId, int donationAmount, string donationType, DateTime donationDate, string programName, string emailReason);
         ContactDetails GetContactDonorForCheckAccount(string encryptedKey);
+        string CreateEncodedAndEncryptedAccountAndRoutingNumber(string accountNumber, string routingNumber);
     }
 }

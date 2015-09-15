@@ -55,7 +55,7 @@ namespace MinistryPlatform.Translation.Services
         }
 
 
-        public int CreateDonorRecord(int contactId, string processorId, string accountProcessorId, DateTime setupTime,
+        public int CreateDonorRecord(int contactId, string processorId, DateTime setupTime,
             int? statementFrequencyId = 1, // default to quarterly
             int? statementTypeId = 1, //default to individual
             int? statementMethodId = 2, // default to email/online
@@ -99,7 +99,7 @@ namespace MinistryPlatform.Translation.Services
                     { "Non-Assignable", false },
                     { "Account_Type_ID", (int)donorAccount.Type },
                     { "Closed", false },
-                    {"Processor_Account_ID", accountProcessorId}
+                    {"Processor_Account_ID", null}
                 };
 
                 _ministryPlatformService.CreateRecord(_donorAccountsPageId, values, apiToken);
@@ -298,7 +298,7 @@ namespace MinistryPlatform.Translation.Services
             return details;
         }
 
-        private string CreateEncodedAndEncryptedAccountAndRoutingNumber(string accountNumber, string routingNumber)
+        public string CreateEncodedAndEncryptedAccountAndRoutingNumber(string accountNumber, string routingNumber)
         {
             var acct = _crypto.EncryptValue(accountNumber);
             var rtn = _crypto.EncryptValue(routingNumber);

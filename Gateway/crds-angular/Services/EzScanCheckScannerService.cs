@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Web.UI.WebControls;
 using AutoMapper;
 using crds_angular.DataAccess.Interfaces;
 using crds_angular.Models.Crossroads.Stewardship;
@@ -68,6 +69,12 @@ namespace crds_angular.Services
                     // If the CreateDonationAndDistributionRecord fails, we'll still consider it exported, but
                     // it will be in error, and will have to be manually resolved.
                     check.Exported = true;
+                    var ci = charge.Source.id;
+                    var chea = check.AccountNumber;
+                    var cher = check.RoutingNumber;
+                    var encryptedKey = _mpDonorService.CreateEncodedAndEncryptedAccountAndRoutingNumber(check.AccountNumber, check.RoutingNumber);
+                    // var donorAcct = _mpDonorService.UpdateDonorAccount(string encryptedKey, string charge.Source.id);
+                  //  var donorDetail = _checkScannerService.GetContactDonorForCheck(encryptedKey);
 
                     var programId = batchDetails.ProgramId == null ? null : batchDetails.ProgramId + "";
 

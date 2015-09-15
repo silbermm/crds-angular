@@ -70,8 +70,7 @@ namespace MinistryPlatform.Translation.Test.Services
             var donorAccount = new DonorAccount
             {
                 AccountNumber = "123",
-                RoutingNumber = "456",
-                Processor_Account_ID = "ba_0618dhsaggyedmakh2ba"
+                RoutingNumber = "456"
             };
 
             var acctBytes = Encoding.UTF8.GetBytes("acctNum");
@@ -100,7 +99,7 @@ namespace MinistryPlatform.Translation.Test.Services
 
            _ministryPlatformService.Setup(mocked => mocked.CreateRecord(298, expectedAcctValues, It.IsAny<string>(), false)).Returns(102030);
 
-           var response = _fixture.CreateDonorRecord(888888, "cus_crds123456", "ba_0618dhsaggyedmakh2ba", setupDate, 1, 1, 2, donorAccount);
+           var response = _fixture.CreateDonorRecord(888888, "cus_crds123456", setupDate, 1, 1, 2, donorAccount);
 
            _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donorPageId, expectedValues, It.IsAny<string>(), true));
            _ministryPlatformService.VerifyAll();
@@ -131,7 +130,7 @@ namespace MinistryPlatform.Translation.Test.Services
                It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(),
                It.IsAny<string>(), true)).Returns(expectedDonorId);
 
-            var response = _fixture.CreateDonorRecord(888888, "cus_crds123456", "ba_sgdhjg3476378", setupDate, 5, 6, 7);
+            var response = _fixture.CreateDonorRecord(888888, "cus_crds123456", setupDate, 5, 6, 7);
 
             _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donorPageId, expectedValues, It.IsAny<string>(), true));
 

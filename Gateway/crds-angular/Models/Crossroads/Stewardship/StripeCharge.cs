@@ -16,6 +16,9 @@ namespace crds_angular.Models.Crossroads.Stewardship
         [JsonProperty("type")]
         public string Type { get; set; }
 
+        [JsonProperty("source")]
+        public SourceData Source { get; set; }
+
         [JsonProperty("failure_code")]
         public string FailureCode { get; set; }
 

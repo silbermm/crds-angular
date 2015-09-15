@@ -99,7 +99,7 @@ namespace crds_angular.Services
 
                 var donorAccount = contactDonor != null ? contactDonor.Account : null;
                 contactDonorResponse.ProcessorId = _paymentService.CreateCustomer(paymentProcessorToken);
-                contactDonorResponse.DonorId = _mpDonorService.CreateDonorRecord(contactDonorResponse.ContactId, contactDonorResponse.ProcessorId, contactDonor.Account.Processor_Account_ID, setupDate, 
+                contactDonorResponse.DonorId = _mpDonorService.CreateDonorRecord(contactDonorResponse.ContactId, contactDonorResponse.ProcessorId, setupDate, 
                     statementFrequency, _statementTypeIndividual, statementMethod, donorAccount);
                 contactDonorResponse.Email = emailAddress;
                 _paymentService.UpdateCustomerDescription(contactDonorResponse.ProcessorId, contactDonorResponse.DonorId);
@@ -116,13 +116,13 @@ namespace crds_angular.Services
                 {
                     if (contactDonor.RegisteredUser)
                     {
-                        contactDonorResponse.DonorId = _mpDonorService.CreateDonorRecord(contactDonor.ContactId, contactDonorResponse.ProcessorId, contactDonor.Account.Processor_Account_ID, setupDate);
+                        contactDonorResponse.DonorId = _mpDonorService.CreateDonorRecord(contactDonor.ContactId, contactDonorResponse.ProcessorId, setupDate);
                         var contact = _mpDonorService.GetEmailViaDonorId(contactDonorResponse.DonorId);
                         contactDonorResponse.Email = contact.Email;
                     }
                     else
                     {
-                        contactDonorResponse.DonorId = _mpDonorService.CreateDonorRecord(contactDonor.ContactId, contactDonorResponse.ProcessorId, contactDonor.Account.Processor_Account_ID, setupDate,
+                        contactDonorResponse.DonorId = _mpDonorService.CreateDonorRecord(contactDonor.ContactId, contactDonorResponse.ProcessorId, setupDate,
                             _statementFrequencyNever, _statementTypeIndividual, _statementMethodNone);
                     }
                 }
