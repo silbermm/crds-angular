@@ -27,23 +27,10 @@
 
       <div class="form-group col-sm-6" ng-class="{'has-error': pages.validation.showErrors(tripAppPage2, 'tshirtSize') }">
         <label for="tshirt" class="required">T-shirt Size</label>
-        <!-- <select class="form-control col-sm-12" ng-model="pages.signupService.page2.tshirtSize.value" name="tshirtSize" id="tshirt" ng-required='true'> -->
-        <pre>{{ tshirtSizes }}</pre>
-        <pre>{{ pages.signupService.page2.tshirtSize }}</pre>
         <select class="form-control col-sm-12" name="tshirtSize" id="tshirt" ng-required='true'
           ng-model="pages.signupService.page2.tshirtSize"
           ng-options="tshirt.value for tshirt in tshirtSizes track by tshirt.attributeId">
         </select>
-          <!-- <option value="{{ {id: 1223, attributeId: 555} }}"> Adult XS </option>
-          <option value="Adult S"> Adult S </option>
-          <option value="Adult M"> Adult M </option>
-          <option value="Adult L"> Adult L </option>
-          <option value="Adult XL"> Adult XL </option>
-          <option value="Adult XXL"> Adult XXL </option>
-          <option value="Adult XXXL"> Adult XXXL </option>
-          <option value="Child S"> Child S </option>
-          <option value="Child M"> Child M </option>
-          <option value="Child L"> Child L </option> -->
         </select>
         <ng-messages for="tripAppPage2.tshirtSize.$error" ng-if="pages.validation.showErrors(tripAppPage2, 'tshirtSize')">
           <span ng-message="required">
@@ -54,19 +41,18 @@
 
       <div class="form-group col-sm-6" ng-show="pages.pageTitle == 'GO South Africa Application'">
         <label for="scrub">Scrub Size Bottom<small class="text-muted">Only required for Topsy trips</small></label>
-        <select class="form-control col-sm-12" name="scrub" id="scrub"
-          ng-model="pages.signupService.page2.scrubSize"
+        <select class="form-control col-sm-12" name="scrubBottom" id="scrubBottom"
+          ng-model="pages.signupService.page2.scrubSizeBottom"
           ng-options="bottom.value for bottom in bottomScrubSizes track by bottom.attributeId">
         </select>
-        <!-- <select class="form-control col-sm-12" ng-model="pages.signupService.page2.scrubSize.value" id="scrub">
-          <option>Adult XS</option>
-          <option>Adult S</option>
-          <option>Adult M</option>
-          <option>Adult L</option>
-          <option>Adult XL</option>
-          <option>Adult XXL</option>
-          <option>Adult XXXL</option>
-        </select> -->
+      </div>
+
+      <div class="form-group col-sm-6" ng-show="pages.pageTitle == 'GO South Africa Application'">
+        <label for="scrub">Scrub Size Top<small class="text-muted">Only required for Topsy trips</small></label>
+        <select class="form-control col-sm-12" name="scrubTop" id="scrubTop"
+          ng-model="pages.signupService.page2.scrubSizeTop"
+          ng-options="top.value for top in topScrubSizes track by top.attributeId">
+        </select>
       </div><!--/form-group-->
 
       <div class="form-group col-sm-12">

@@ -84,8 +84,13 @@
       $log.debug(vm.signupService.page2);
       var application = new vm.signupService.TripApplication();
       application.contactId = vm.signupService.contactId;
-      application.pledgeCampaignId = vm.signupService.pledgeCampaignId;
+      // application.formId = vm.signupService.formId;  //right now getting this from web.config
+      application.pledgeCampaignId = vm.signupService.campaign.id;
       application.pageTwo = vm.signupService.page2;
+      application.pageThree = vm.signupService.page3;
+      application.pageFour = vm.signupService.page4;
+      application.pageFive = vm.signupService.page5;
+      application.pageSix = vm.signupService.page6;
       application.$save();
 
       // vm.signupService.TripApplication.$save();

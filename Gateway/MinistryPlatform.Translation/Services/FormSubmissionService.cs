@@ -215,7 +215,14 @@ namespace MinistryPlatform.Translation.Services
                 {"Opportunity_Response", answer.OpportunityResponseId}
             };
 
-            _ministryPlatformService.CreateRecord(_formAnswerPageId, formAnswer, token, true);
+            try
+            {
+                _ministryPlatformService.CreateRecord(_formAnswerPageId, formAnswer, token, true);
+            }
+            catch (Exception exception)
+            {
+                throw new ApplicationException(string.Format("CreateFormAnswer failed.  Field Id: {0}", answer.FieldId), exception);
+            }
         }
     }
 }

@@ -23,6 +23,7 @@
     function link(scope) {
       scope.tshirtSizes = tshirtSizes();
       scope.bottomScrubSizes = bottomScrubSizes();
+      scope.topScrubSizes = topScrubSizes();
     }
 
     function bottomScrubSizes() {
@@ -53,6 +54,38 @@
       }, {
         formFieldId: 1224,
         attributeId: 3180,
+        value: 'Adult XXXL'
+      }];
+    }
+
+    function topScrubSizes() {
+      return [{
+        formFieldId: 1414,
+        attributeId: 3167,
+        value: 'Adult XS'
+      }, {
+        formFieldId: 1414,
+        attributeId: 3168,
+        value: 'Adult S'
+      }, {
+        formFieldId: 1414,
+        attributeId: 3169,
+        value: 'Adult M'
+      }, {
+        formFieldId: 1414,
+        attributeId: 3170,
+        value: 'Adult L'
+      }, {
+        formFieldId: 1414,
+        attributeId: 3171,
+        value: 'Adult XL'
+      }, {
+        formFieldId: 1414,
+        attributeId: 3172,
+        value: 'Adult XXL'
+      }, {
+        formFieldId: 1414,
+        attributeId: 3173,
         value: 'Adult XXXL'
       }];
     }

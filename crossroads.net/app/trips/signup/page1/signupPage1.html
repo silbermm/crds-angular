@@ -9,15 +9,7 @@
   <legend>Update Profile Information</legend>
   <div class="row">
     <div class='col-sm-12'>
-      <profile-personal 
-         allow-password-change="false"
-         require-mobile-phone="true"
-         allow-save="false"
-         submit-form-callback='pages.validateProfile(profile, household)'
-         button-text='pages.buttonText'
-         button-css='pull-right' 
-         profile-data='pages.profileData'
-         for-trips='true' />
+      <a ng-click='pages.handleNext(2)'  class="btn btn-primary pull-right">Next</a>
     </div>
   </div>
 </div>
