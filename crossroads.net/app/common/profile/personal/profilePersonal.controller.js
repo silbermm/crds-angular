@@ -41,7 +41,6 @@
     vm.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
     vm.requireMobilePhone = angular.isDefined(vm.requireMobilePhone) ? vm.requireMobilePhone : 'false';
     vm.savePersonal = savePersonal;
-    vm.serviceProviderRequired = serviceProviderRequired;
     vm.showMobilePhoneError = showMobilePhoneError;
     vm.submitted = false;
     vm.validation = Validation;
