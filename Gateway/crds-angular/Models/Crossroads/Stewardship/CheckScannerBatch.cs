@@ -38,8 +38,6 @@ namespace crds_angular.Models.Crossroads.Stewardship
         [JsonProperty("errorChecks")]
         public List<CheckScannerCheck> ErrorChecks { get { return (_errorChecks); } }
         [JsonIgnore]
-        private int SuccessfulNumberOfChecks { get { return Checks.Count - ErrorChecks.Count; } }
-        [JsonIgnore]
         private List<String> ChecksEmailErrors { get { return ErrorChecks.Select(check => check.EmailError).ToList(); } }
         [JsonIgnore]
         public string EmailMsg
@@ -57,13 +55,13 @@ namespace crds_angular.Models.Crossroads.Stewardship
 
         private string SuccessfulEmailMsg()
         {
-            return string.Format("All {0} Checks Processed Successfully.", SuccessfulNumberOfChecks);
+            return string.Format("All {0} Checks Processed Successfully.", Checks.Count);
         }
 
         private string ErrorEmailMsg()
         {
             var emailErrors = new StringBuilder();
-            emailErrors.AppendFormat("{0} Checks Processed Successfully.\n", SuccessfulNumberOfChecks);
+            emailErrors.AppendFormat("{0} Checks Processed Successfully.\n", Checks.Count);
             emailErrors.AppendFormat("{0} Checks Failed With The Following Error Details:\n\n", ErrorChecks.Count);
 
             foreach (var emailError in ChecksEmailErrors)

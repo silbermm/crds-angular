@@ -41,7 +41,7 @@ namespace crds_angular.Models.Crossroads.Stewardship
 
         #region Check Errors properties and accessors
         [JsonIgnore]
-        private string AccountNumberLastFour { get { return AccountNumber.Substring(AccountNumber.Length - 5); } }
+        private string AccountNumberLastFour { get { return AccountNumber.Substring(AccountNumber.Length - 4); } }
         [JsonIgnore]
         public string EmailError
         {
