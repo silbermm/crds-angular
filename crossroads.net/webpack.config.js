@@ -22,6 +22,7 @@ module.exports = {
     trips: './app/trips/trips.module.js',
     media: './app/media/media.module.js',
     give: './app/give/give.module.js',
+    profile: './app/profile/profile.module.js',
     main: './app/app.js',
     core: ['./node_modules/crds-core'],
     common: ['./app/common/common.module.js'],
