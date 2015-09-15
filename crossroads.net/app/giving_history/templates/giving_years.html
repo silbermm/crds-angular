@@ -4,7 +4,7 @@
         <select class="form-control" id="giving-year" name="giving-year"
                 ng-model="selectedYear"
                 ng-options="year.value for year in allYears track by year.key"
-                ng-change="onChange()">
+                ng-change="updatedYear()">
         </select>
     </div>
 </form>

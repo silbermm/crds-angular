@@ -3,9 +3,9 @@
 
   module.exports = GivingYears;
 
-  GivingYears.$inject = ['$log'];
+  GivingYears.$inject = ['$log', '$timeout'];
 
-  function GivingYears($log) {
+  function GivingYears($log, $timeout) {
     return {
       restrict: 'EA',
       transclude: true,
@@ -19,7 +19,13 @@
     };
 
     function link(scope, el, attr) {
-      /* Nothing - leaving for future expandability */
+      // Wrapping the user-provided callback in a $timeout in order to make sure the digest cycle is complete and the
+      // model (selectedYear) is updated in the caller's scope.
+      scope.updatedYear = function() {
+        $timeout(function() {
+          scope.onChange();
+        });
+      };
     }
   }
 })();

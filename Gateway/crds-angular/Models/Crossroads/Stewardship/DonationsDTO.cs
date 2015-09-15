@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 
@@ -33,5 +34,11 @@ namespace crds_angular.Models.Crossroads.Stewardship
 
         [JsonIgnore]
         public bool HasDonations { get { return (Donations.Count > 0); } }
+
+        [JsonProperty("beginning_donation_date")]
+        public DateTime BeginningDonationDate { get; set; }
+
+        [JsonProperty("ending_donation_date")]
+        public DateTime EndingDonationDate { get; set; }
     }
 }

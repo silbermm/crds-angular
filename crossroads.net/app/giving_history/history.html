@@ -9,7 +9,7 @@
       <household-information profile="giving_history_controller.profile" />
 
       <p class="visible-print-block col-xs-6 text-right">
-        <strong>Period : 01/01/{{giving_history_controller.currentDate | date:'yyyy'}} - {{giving_history_controller.currentDate | date:'MM/dd/yyyy'}}</strong>
+        <strong>Period : 01/01/{{giving_history_controller.beginning_donation_date | date:'yyyy'}} - {{giving_history_controller.ending_donation_date | date:'MM/dd/yyyy'}}</strong>
         <br />
         <small>No goods or services were provided by Crossroads in exchange for the contributions recorded on this statement.</small>
       </p>
@@ -47,7 +47,7 @@
       <!--/row push-top-->
 
       <donation-list
-        donations="giving_history_controller.donations"
+        donations-input="giving_history_controller.donations"
         donation-total-amount="giving_history_controller.donation_total_amount"
         donation-statement-total-amount="giving_history_controller.donation_statement_total_amount"></donation-list>
 

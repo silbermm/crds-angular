@@ -7,11 +7,13 @@
   function GivingHistoryController($log, GivingHistoryService, Profile) {
     var vm = this;
 
+    vm.beginning_donation_date = undefined;
     vm.currentDate = new Date();
     vm.donation_statement_total_amount = undefined;
     vm.donation_total_amount = undefined;
     vm.donation_years = [];
     vm.donations = [];
+    vm.ending_donation_date = undefined;
     vm.getDonations = getDonations;
     vm.history = false;
     vm.profile = {};
@@ -54,63 +56,22 @@
       });
     }
 
-    function getCardIcon(brand) {
-      switch (brand) {
-        case 'Visa':
-          return ('cc_visa');
-        case 'MasterCard':
-          return ('cc_mastercard');
-        case 'Discover':
-          return ('cc_discover');
-        case 'AmericanExpress':
-          return ('cc_american_express');
-        default:
-          return ('');
-      }
-    }
-
     function getDonations() {
       vm.viewReady = false;
       GivingHistoryService.donations.get({donationYear: vm.selected_giving_year.key}, function(data) {
-            vm.donations = postProcessDonations(data.donations);
+            vm.donations = data.donations;
             vm.donation_total_amount = data.donation_total_amount;
             vm.donation_statement_total_amount = data.donation_statement_total_amount;
             vm.viewReady = true;
             vm.history = true;
+            vm.beginning_donation_date = data.beginning_donation_date;
+            vm.ending_donation_date = data.ending_donation_date;
           },
 
           function(/*error*/) {
             vm.viewReady = true;
             vm.history = false;
           });
-    }
-
-    function postProcessDonations(donations) {
-      _.forEach(donations, function(donation) {
-        setDonationDisplayDetails(donation.source);
-      });
-
-      return (donations);
-    }
-
-    function setDonationDisplayDetails(source) {
-      switch (source.type) {
-        case 'Cash':
-          source.icon = 'money';
-          source.viewBox = '0 0 34 32';
-          break;
-        case 'Bank':
-        case 'Check':
-          source.icon = 'library';
-          source.viewBox = '0 0 32 32';
-          source.name = 'ending in ' + source.last4;
-          break;
-        case 'CreditCard':
-          source.icon = getCardIcon(source.brand);
-          source.viewBox = '0 0 160 100';
-          source.name = 'ending in ' + source.last4;
-          break;
-      }
     }
   }
 })();
