@@ -396,7 +396,7 @@
 
       <h4 class="text-right hidden-print">Total: {{giving_history_controller.donation_total_amount / 100 | currency: '$'}}</h4>
       <!-- TODO Need to either calculate statement total (total - minus pending), or return it from API endpoint -->
-      <h4 class="text-right visible-print-block">Total: {{giving_history_controller.donation_total_amount / 100 | currency}}</h4>
+      <h4 class="text-right visible-print-block">Total: {{giving_history_controller.donation_total_amount / 100 | currency: '$'}}</h4>
       
       <!-- END DIRECTIVE: Giving History - Full View -->
       
