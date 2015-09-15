@@ -77,7 +77,7 @@ namespace crds_angular.App_Start
             Mapper.CreateMap<Dictionary<string, object>, Deposit>()
                 .ForMember(dest => dest.DepositDateTime, opts => opts.MapFrom(src => src.ToDate("Deposit_Date", false)))
                 .ForMember(dest => dest.DepositName, opts => opts.MapFrom(src => src.ToString("Deposit_Name")))
-                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.ToString("Deposit_ID")))
+                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.ToInt("Deposit_ID", false)))
                 .ForMember(dest => dest.DepositTotalAmount, opts => opts.MapFrom(src => src.ToString("Deposit_Total")))
                 .ForMember(dest => dest.BatchCount, opts => opts.MapFrom(src => src.ToString("Batch_Count")))
                 .ForMember(dest => dest.Exported, opts => opts.MapFrom(src => src.ToString("Exported")))
@@ -92,7 +92,10 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.ContributionAmount, opts => opts.MapFrom(src => src.DonationAmount))
                 .ForMember(dest => dest.ReceivablesAccount, opts => opts.MapFrom(src => src.ReceivableAccount))
                 .ForMember(dest => dest.DistributionAmount, opts => opts.MapFrom(src => src.Amount))
+                .ForMember(dest => dest.CashAccount, opts => opts.MapFrom(src => (src.ScholarshipPaymentTypeId == src.PaymentTypeId ? src.ScholarshipExpenseAccount : src.CashAccount)))
                 .ForMember(dest => dest.DistributionReference, opts => opts.MapFrom(src => (src.ProccessFeeProgramId == src.ProgramId ? "Processor Fees " + src.DonationDate : "Contribution " + src.DonationDate  )));
+
+            Mapper.CreateMap<ContactDetails, EZScanDonorDetails>();
         }
     }
 }

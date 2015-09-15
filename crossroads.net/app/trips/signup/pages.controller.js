@@ -23,12 +23,14 @@
   function PagesController($rootScope, Session, $location, $anchorScroll, $log, Trip, Validation, TripsSignupService) {
     var vm = this;
 
+    vm.buttonText = 'Next';
     vm.handleNext = handleNext;
     vm.handleNextt = handleNextt;
     vm.handlePrevious = handlePrevious;
     vm.handleSubmit = handleSubmit;
     vm.nolaRequired = nolaRequired;
     vm.signupService = TripsSignupService;
+    vm.profileData = undefined;
     vm.underAge = underAge;
     vm.validation = Validation;
     vm.whyPlaceholder = '';
@@ -46,10 +48,7 @@
 
     }
 
-    function validateProfile()
-    {
-      //do stuff
-
+    function validateProfile(profile, household) {
       handleNext(2);
     }
 

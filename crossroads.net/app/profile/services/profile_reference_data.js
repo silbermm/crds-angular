@@ -28,24 +28,6 @@
                 }).$promise;
             },
 
-            // states: function() {
-            //     return Lookup.query({
-            //         table: "states"
-            //     }).$promise;
-            // },
-
-            // countries: function() {
-            //     return Lookup.query({
-            //         table: "countries"
-            //     }).$promise;
-            // },
-
-            // crossroadsLocations: function() {
-            //     return Lookup.query({
-            //         table: "crossroadslocations"
-            //     }).$promise;
-            // },
-
             person: function() {
                 return Profile.Personal.get().$promise;
             },

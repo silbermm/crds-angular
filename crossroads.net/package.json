@@ -78,6 +78,6 @@
     "bootstrap-dropdown": "./node_modules/bootstrap/js/dropdown.js",
     "angular-ui-select": "./lib/select.js",
     "plangular": "./node_modules/plangular-3/src/plangular.js",
-    "crds-constants": "./app/constants.js"
+    "crds-constants": "./app/constants.js" 
   }
 }

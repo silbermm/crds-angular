@@ -54,6 +54,11 @@ namespace crds_angular.Services
             return (_mpDonorService.GetContactDonorForDonorAccount(accountNumber, routingNumber));
         }
 
+        public ContactDetails GetContactDonorForCheckAccount(string encryptedKey)
+        {
+            return (_mpDonorService.GetContactDonorForCheckAccount(encryptedKey));
+        }
+
         /// <summary>
         /// Creates or updates an MP Donor (and potentially creates a Contact) appropriately, based on the following logic:
         /// 1) If the given contactDonor is null, or if it does not represent an existing Contact,

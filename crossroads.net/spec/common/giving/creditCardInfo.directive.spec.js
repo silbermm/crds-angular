@@ -9,6 +9,10 @@ describe('Credit Card Info Directive', function() {
     angular.mock.module('crossroads');
   });
 
+  beforeEach(angular.mock.module(function($provide) {
+    $provide.value('$state', {});
+  }));
+
   beforeEach(inject(function($injector, _$compile_, _$rootScope_, _$templateCache_, _$timeout_) {
     var $compile = _$compile_;
     var $rootScope = _$rootScope_;
