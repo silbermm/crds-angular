@@ -17,6 +17,9 @@ namespace MinistryPlatform.Models
         public string CashAccount { get; set; }
         public string ReceivableAccount { get; set; }
         public string DistributionAccount { get; set; }
+        public string ScholarshipExpenseAccount { get; set; }
         public string Amount { get; set; }
+        public int ScholarshipPaymentTypeId { get; set; }
+        public int PaymentTypeId { get; set; }
     }
 }

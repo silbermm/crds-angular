@@ -6,6 +6,7 @@ using System.Web.Http.Description;
 using crds_angular.Models;
 using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Serve;
+using crds_angular.Models.MP;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
 using log4net;
@@ -24,7 +25,20 @@ namespace crds_angular.Controllers.API
             this._personService = personService;
         }
 
-
+        [ResponseType(typeof (Household))]
+        [Route("api/profile/household/{householdId}")]
+        public IHttpActionResult GetHousehold(int householdId)
+        {
+            return Authorized(token =>
+            {
+                var household = _personService.GetHousehold(householdId);
+                if (household == null)
+                {
+                    return Unauthorized();
+                }
+                return this.Ok(household);
+            });
+        }
         
         [ResponseType(typeof (Person))]
         [Route("api/profile")]

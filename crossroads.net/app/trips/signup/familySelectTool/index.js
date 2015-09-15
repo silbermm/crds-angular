@@ -1,7 +1,9 @@
 (function() {
   'use strict';
 
+  var constants = require('crds-constants');
+
   require('./familySelect.html');
-  angular.module('crossroads.trips').directive('familySelect', require('./familySelect.directive'));
+  angular.module(constants.MODULES.TRIPS).directive('familySelect', require('./familySelect.directive'));
 
 })();

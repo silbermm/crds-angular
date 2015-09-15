@@ -29,6 +29,7 @@ namespace crds_angular.Services
         private readonly IContactService _contactService;
         private readonly IConfigurationWrapper _configurationWrapper;
         private readonly IPersonService _personService;
+        private readonly IServeService _serveService;
 
         public TripService(IEventParticipantService eventParticipant,
                            IDonationService donationService,
@@ -42,7 +43,8 @@ namespace crds_angular.Services
                            ICommunicationService communicationService,
                            IContactService contactService,
                            IConfigurationWrapper configurationWrapper,
-                           IPersonService personService)
+                           IPersonService personService,
+                           IServeService serveService)
         {
             _eventParticipantService = eventParticipant;
             _donationService = donationService;
@@ -57,6 +59,7 @@ namespace crds_angular.Services
             _contactService = contactService;
             _configurationWrapper = configurationWrapper;
             _personService = personService;
+            _serveService = serveService;
         }
 
         public List<TripGroupDto> GetGroupsByEventId(int eventId)
@@ -160,6 +163,32 @@ namespace crds_angular.Services
             };
             return resp;
         }
+
+        public List<FamilyMemberTripDto> GetFamilyMembers(int contactId , int pledgeId, string token)
+        {
+            var family = _serveService.GetImmediateFamilyParticipants(contactId, token);
+            var fam = new List<FamilyMemberTripDto>();
+            foreach (var f in family)
+            {
+                // get status of family member on trip
+                var signedUpDate = _formSubmissionService.GetTripFormResponseByContactId(f.ContactId, pledgeId);
+                var fm = new FamilyMemberTripDto()
+                {
+                    Age = f.Age,
+                    ContactId = f.ContactId,
+                    Email = f.Email,
+                    LastName = f.LastName,
+                    LoggedInUser = f.LoggedInUser,
+                    ParticipantId = f.ParticipantId,
+                    PreferredName = f.PreferredName,
+                    RelationshipId = f.RelationshipId,
+                    SignedUpDate = signedUpDate,
+                    SignedUp = (signedUpDate != null)
+                };
+                fam.Add(fm);
+            }
+            return fam;
+        } 
 
         private static List<string> ValidateResponse(int selectionCount, int formResponseId, List<TripFormResponse> responses)
         {

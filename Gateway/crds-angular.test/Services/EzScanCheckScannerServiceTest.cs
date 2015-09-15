@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.ServiceModel;
-using AutoMapper;
 using crds_angular.App_Start;
 using crds_angular.DataAccess.Interfaces;
-using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
@@ -228,7 +224,7 @@ namespace crds_angular.test.Services
         [Test]
         public void TestGetContactDonorForCheck()
         {
-            const string encryptedKey = "encryptedkey}}{{yekdetpyrcne";
+            const string encryptedKey = "disCv2kF/8HlRCWeTqolok1G4imf1cNZershgmCCFDI=";
             const string addr1 = "12 Scenic Dr";
             const string addr2 = "Penthouse Suite";
             const string city = "Honolulu";
@@ -259,7 +255,7 @@ namespace crds_angular.test.Services
         }
 
         [Test]
-        public void TestUpdateForCreateOrUpdateDonor()
+        public void TestExistingCreateDonor()
         {
             var check = new CheckScannerCheck
             {
@@ -290,15 +286,15 @@ namespace crds_angular.test.Services
             };
 
             _donorService.Setup(mocked => mocked.GetContactDonorForDonorAccount(check.AccountNumber, check.RoutingNumber)).Returns(contactDonorExisting);
-           
-            var result = _fixture.CreateOrUpdateDonor(check);
+
+            var result = _fixture.CreateDonor(check);
             _donorService.VerifyAll();
             Assert.NotNull(result);
             Assert.AreEqual(contactDonorExisting, result);
         }
 
         [Test]
-        public void TestCreateForCreateOrUpdateDonor()
+        public void TestCreateForCreateDonor()
         {
             var check = new CheckScannerCheck
             {
@@ -346,7 +342,7 @@ namespace crds_angular.test.Services
                         It.IsAny<DateTime>()))
                 .Returns(contactDonorNew);
 
-            var result = _fixture.CreateOrUpdateDonor(check);
+            var result = _fixture.CreateDonor(check);
             _donorService.VerifyAll();
             Assert.NotNull(result);
             Assert.AreEqual(contactDonorNew, result);
