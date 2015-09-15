@@ -224,7 +224,7 @@ namespace crds_angular.test.Services
         [Test]
         public void TestGetContactDonorForCheck()
         {
-            const string encryptedKey = "encryptedkey}}{{yekdetpyrcne";
+            const string encryptedKey = "disCv2kF/8HlRCWeTqolok1G4imf1cNZershgmCCFDI=";
             const string addr1 = "12 Scenic Dr";
             const string addr2 = "Penthouse Suite";
             const string city = "Honolulu";
