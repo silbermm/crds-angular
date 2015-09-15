@@ -58,6 +58,7 @@ namespace MinistryPlatform.Models
         public string AccountNumber { get; set; }
         public string RoutingNumber { get; set; }
         public AccountType Type { get; set; }
+        public string Processor_Account_ID { get; set; }
     }
 
     public enum AccountType

@@ -99,7 +99,7 @@ namespace crds_angular.test.Services
         {
             mpContactService.Setup(mocked => mocked.CreateContactForGuestGiver("me@here.com", GUEST_GIVER_DISPLAY_NAME)).Returns(123);
             paymentService.Setup(mocked => mocked.CreateCustomer("stripe_token")).Returns("processor_id");
-            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(123, "processor_id", It.IsAny<DateTime>(), STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE, null)).Returns(456);
+            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(123, "processor_id", "account_processor_id", It.IsAny<DateTime>(), STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE, null)).Returns(456);
             paymentService.Setup(mocked => mocked.UpdateCustomerDescription("processor_id", 456)).Returns("456");
 
             var response = fixture.CreateOrUpdateContactDonor(null, "me@here.com", "stripe_token", DateTime.Now);
@@ -124,7 +124,7 @@ namespace crds_angular.test.Services
             };
 
             paymentService.Setup(mocked => mocked.CreateCustomer("stripe_token")).Returns("processor_id");
-            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(12345, "processor_id", It.IsAny<DateTime>(), STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE, null)).Returns(456);
+            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(12345, "processor_id", "account_processor_id", It.IsAny<DateTime>(), STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE, null)).Returns(456);
             paymentService.Setup(mocked => mocked.UpdateCustomerDescription("processor_id", 456)).Returns("456");
 
             var response = fixture.CreateOrUpdateContactDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
@@ -150,7 +150,7 @@ namespace crds_angular.test.Services
             };
 
             paymentService.Setup(mocked => mocked.CreateCustomer("stripe_token")).Returns("processor_id");
-            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(12345, "processor_id", It.IsAny<DateTime>(), 1, 1, 2, null)).Returns(456);
+            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(12345, "processor_id", "account_processor_id", It.IsAny<DateTime>(), 1, 1, 2, null)).Returns(456);
             mpDonorService.Setup(mocked => mocked.GetEmailViaDonorId(456)).Returns(donor);
             paymentService.Setup(mocked => mocked.UpdateCustomerDescription("processor_id", 456)).Returns("456");
 

@@ -55,7 +55,7 @@ namespace MinistryPlatform.Translation.Services
         }
 
 
-        public int CreateDonorRecord(int contactId, string processorId, DateTime setupTime,
+        public int CreateDonorRecord(int contactId, string processorId, string accountProcessorId, DateTime setupTime,
             int? statementFrequencyId = 1, // default to quarterly
             int? statementTypeId = 1, //default to individual
             int? statementMethodId = 2, // default to email/online
@@ -98,7 +98,8 @@ namespace MinistryPlatform.Translation.Services
                     { "Donor_ID", donorId },
                     { "Non-Assignable", false },
                     { "Account_Type_ID", (int)donorAccount.Type },
-                    { "Closed", false }
+                    { "Closed", false },
+                    {"Processor_Account_ID", accountProcessorId}
                 };
 
                 _ministryPlatformService.CreateRecord(_donorAccountsPageId, values, apiToken);
