@@ -3,14 +3,14 @@
 
   module.exports = FamilySelectDirective;
 
-  FamilySelectDirective.$inject = ['TripsSignupService'];
+  FamilySelectDirective.$inject = ['TripsSignupService', '$rootScope'];
 
-  function FamilySelectDirective(TripsSignupService) {
+  function FamilySelectDirective(TripsSignupService, $rootScope) {
     return {
       restrict: 'E',
       replace: true,
       scope: {
-        ageRestriction: '=',
+        showSignUp: '@',
         familyMembers: '=',
       },
       templateUrl: 'familySelectTool/familySelect.html',
@@ -21,6 +21,7 @@
       scope.divClass = divClass;
       scope.isOfAge = isOfAge;
       scope.isSignedUp = isSignedUp;
+      scope.signUpQuestion = signUpQuestion;
       scope.signupService = TripsSignupService;
       scope.pClass = pClass;
 
@@ -32,6 +33,7 @@
         if (!member.signedUp && isOfAge(member)) {
           return 'col-sm-9 col-md-10';
         }
+
         return '';
       }
 
@@ -41,9 +43,11 @@
             if (_.includes(TripsSignupService.campaign.ageExceptions, Number(member.contactId))) {
               return true;
             }
+
             return false;
           }
         }
+
         return true;
       }
 
@@ -52,10 +56,24 @@
       }
 
       function pClass(member) {
-        if(!member.signedUp) {
+        if (!member.signedUp) {
           return 'flush-bottom';
         }
-        
+
+        return '';
+      }
+
+      function signUpQuestion() {
+        if (_.some(scope.familyMembers, 'signedUp', false)) {
+          if (scope.showSignUp === 'page0') {
+            return $rootScope.MESSAGES.TripSignupFamilySelection.content;
+          }
+
+          if (scope.showSignUp === 'thankyou') {
+            return $rootScope.MESSAGES.TripSignupOtherFamily.content;
+          }
+        }
+
         return '';
       }
     }
