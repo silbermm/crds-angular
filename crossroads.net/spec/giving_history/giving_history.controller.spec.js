@@ -141,6 +141,7 @@ describe('GivingHistoryController', function() {
 
     it('should retrieve most recent giving year donations for current user', function() {
       httpBackend.whenGET(/SiteConfig*/).respond('');
+      httpBackend.whenGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/Page/?link=%2F').respond({});
       httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/profile').respond({});
       httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donations/years')
                              .respond(mockDonationYearsResponse);
