@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using crds_angular.App_Start;
 using crds_angular.DataAccess.Interfaces;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services;
@@ -27,6 +28,7 @@ namespace crds_angular.test.Services
             _paymentService = new Mock<IPaymentService>(MockBehavior.Strict);
             _mpDonorService = new Mock<MPServices.IDonorService>(MockBehavior.Strict);
             _fixture = new EzScanCheckScannerService(_checkScannerDao.Object, _donorService.Object, _paymentService.Object, _mpDonorService.Object);
+            AutoMapperConfig.RegisterMappings();
         }
 
         [Test]
@@ -220,7 +222,40 @@ namespace crds_angular.test.Services
         }
 
         [Test]
-        public void TestUpdateForCreateOrUpdateDonor()
+        public void TestGetContactDonorForCheck()
+        {
+            const string encryptedKey = "disCv2kF/8HlRCWeTqolok1G4imf1cNZershgmCCFDI=";
+            const string addr1 = "12 Scenic Dr";
+            const string addr2 = "Penthouse Suite";
+            const string city = "Honolulu";
+            const string state = "HI";
+            const string zip = "68168-1618";
+            const string displayName = "Vacationing Vera";
+
+            var details = new ContactDetails
+            {
+                DisplayName = displayName,
+                Address = new PostalAddress()
+                {
+                    Line1 = addr1,
+                    Line2 = addr2,
+                    City = city,
+                    State = state,
+                    PostalCode = zip
+                }
+            };
+
+            _donorService.Setup(mocked => mocked.GetContactDonorForCheckAccount(encryptedKey)).Returns(details);
+            var result = _fixture.GetContactDonorForCheck(encryptedKey);
+
+            _donorService.VerifyAll();
+            Assert.IsNotNull(details);
+            Assert.AreEqual(result.DisplayName, details.DisplayName);
+            Assert.AreEqual(result.Address, details.Address);
+        }
+
+        [Test]
+        public void TestExistingCreateDonor()
         {
             var check = new CheckScannerCheck
             {
@@ -251,15 +286,15 @@ namespace crds_angular.test.Services
             };
 
             _donorService.Setup(mocked => mocked.GetContactDonorForDonorAccount(check.AccountNumber, check.RoutingNumber)).Returns(contactDonorExisting);
-           
-            var result = _fixture.CreateOrUpdateDonor(check);
+
+            var result = _fixture.CreateDonor(check);
             _donorService.VerifyAll();
             Assert.NotNull(result);
             Assert.AreEqual(contactDonorExisting, result);
         }
 
         [Test]
-        public void TestCreateForCreateOrUpdateDonor()
+        public void TestCreateForCreateDonor()
         {
             var check = new CheckScannerCheck
             {
@@ -307,7 +342,7 @@ namespace crds_angular.test.Services
                         It.IsAny<DateTime>()))
                 .Returns(contactDonorNew);
 
-            var result = _fixture.CreateOrUpdateDonor(check);
+            var result = _fixture.CreateDonor(check);
             _donorService.VerifyAll();
             Assert.NotNull(result);
             Assert.AreEqual(contactDonorNew, result);

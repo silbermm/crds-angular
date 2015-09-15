@@ -15,6 +15,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _formResponsePageId = AppSettings("FormResponsePageId");
         private readonly int _formAnswerPageId = AppSettings("FormAnswerPageId");
         private readonly int _formFieldCustomPage = AppSettings("AllFormFieldsView");
+        private readonly int _formResponseGoTripView = AppSettings("GoTripFamilySignup");
 
         private readonly IMinistryPlatformService _ministryPlatformService;
         private IDbConnection _dbConnection;
@@ -160,6 +161,17 @@ namespace MinistryPlatform.Translation.Services
                 CreateFormAnswer(answer, token);
             }
             return responseId;
+        }
+
+        public DateTime? GetTripFormResponseByContactId(int contactId, int pledgeId)
+        {
+            var searchString = string.Format(",{0},,{1}", contactId, pledgeId);
+            var signedUp = _ministryPlatformService.GetPageViewRecords(_formResponseGoTripView, ApiLogin(), searchString);
+            if (signedUp.Count < 1)
+            {
+                return null;
+            }
+            return DateTime.Parse(signedUp.First()["Response_Date"].ToString());
         }
 
         private int CreateFormResponse(int formId, int contactId, int opportunityId, int opportunityResponseId, string token)

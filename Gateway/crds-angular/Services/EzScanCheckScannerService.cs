@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AutoMapper;
 using crds_angular.DataAccess.Interfaces;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services.Interfaces;
@@ -57,7 +58,7 @@ namespace crds_angular.Services
 
                 try
                 {
-                    var contactDonor = CreateOrUpdateDonor(check);
+                    var contactDonor = CreateDonor(check);
 
                     var charge = _paymentService.ChargeCustomer(contactDonor.ProcessorId, (int) (check.Amount), contactDonor.DonorId);
                     var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
@@ -99,8 +100,14 @@ namespace crds_angular.Services
 
             return (batchDetails);
         }
+        
+        public EZScanDonorDetails GetContactDonorForCheck(string encryptedKey)
+        {
+           return (Mapper.Map<ContactDetails, EZScanDonorDetails>(_donorService.GetContactDonorForCheckAccount(encryptedKey)));
+            
+        }
 
-        public ContactDonor CreateOrUpdateDonor(CheckScannerCheck checkDetails)
+        public ContactDonor CreateDonor(CheckScannerCheck checkDetails)
         {
             var contactDonor = _donorService.GetContactDonorForDonorAccount(checkDetails.AccountNumber, checkDetails.RoutingNumber) ?? new ContactDonor();
 

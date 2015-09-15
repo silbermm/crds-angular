@@ -1,4 +1,6 @@
 ﻿using System.Messaging;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Models.Crossroads.Stewardship;
@@ -80,21 +82,44 @@ namespace crds_angular.Controllers.API
                 return (Ok(batch));
             }));
         }
-
         /// <summary>
-        /// Creates or Updates a donor record in Ministry Platform based off of the check details passed in.
+        /// Takes in the encrypted account and routing number which is then used to locate an existing donor.
+        /// If an existing donor is found, then the address data is returned.
+        /// If an existing donor is not found, then a 404 will be returned
         /// </summary>
-        /// <param name="checkDetails" type="FromBody">The Check Details from the check that was scanned.</param>
+        /// <param name="encryptedKey">This is the encrypted account and routing number from EZ Scan.</param>
         /// <returns>The created or updated donor record.</returns>
         [RequiresAuthorization]
-        [ResponseType(typeof(ContactDonor))]
-        [Route("api/checkscanner/donor"), HttpPost]
-        public IHttpActionResult CreateOrUpdateDonor([FromBody] CheckScannerCheck checkDetails)
+        [ResponseType(typeof(EZScanDonorDetails))]
+        [Route("api/checkscanner/getdonor/{*encryptedKey}")]
+        public IHttpActionResult GetDonorForCheck(string encryptedKey = "")
         {
             return (Authorized(token =>
             {
-                var result = _checkScannerService.CreateOrUpdateDonor(checkDetails);
+                var donorDetail = _checkScannerService.GetContactDonorForCheck(encryptedKey);
+                if (donorDetail == null)
+                {
+                    return NotFound();
+                }
+                return (Ok(donorDetail)); 
+            }));
+        }
+
+        /// <summary>
+        /// Creates a donor record in Ministry Platform based off of the check details passed in.
+        /// </summary>
+        /// <param name="checkDetails" type="FromBody">The Check Details from the check that was scanned.</param>
+        /// <returns>The created donor record.</returns>
+        [RequiresAuthorization]
+        [ResponseType(typeof(ContactDonor))]
+        [Route("api/checkscanner/donor"), HttpPost]
+        public IHttpActionResult CreateDonor([FromBody] CheckScannerCheck checkDetails)
+        {
+            return (Authorized(token =>
+            {
+                var result = _checkScannerService.CreateDonor(checkDetails);
                 return (Ok(result));
+
             }));
         }
     }

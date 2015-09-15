@@ -1,8 +1,6 @@
 'use strict';
 
 var app = angular.module('crossroads');
-require('../profile/personal/profile_personal.html');
-require('../profile');
 
 app.controller('GroupSignupController', [
     '$rootScope',
