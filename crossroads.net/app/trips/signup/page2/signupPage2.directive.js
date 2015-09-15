@@ -29,31 +29,31 @@
       return [{
         formFieldId: 1224,
         attributeId: 3174,
-        label: 'Adult XS'
+        value: 'Adult XS'
       }, {
         formFieldId: 1224,
         attributeId: 3175,
-        label: 'Adult S'
+        value: 'Adult S'
       }, {
         formFieldId: 1224,
         attributeId: 3176,
-        label: 'Adult M'
+        value: 'Adult M'
       }, {
         formFieldId: 1224,
         attributeId: 3177,
-        label: 'Adult L'
+        value: 'Adult L'
       }, {
         formFieldId: 1224,
         attributeId: 3178,
-        label: 'Adult XL'
+        value: 'Adult XL'
       }, {
         formFieldId: 1224,
         attributeId: 3179,
-        label: 'Adult XXL'
+        value: 'Adult XXL'
       }, {
         formFieldId: 1224,
         attributeId: 3180,
-        label: 'Adult XXXL'
+        value: 'Adult XXXL'
       }];
     }
 
@@ -61,43 +61,43 @@
       return [{
         formFieldId: 1223,
         attributeId: 3157,
-        label: 'Adult XS'
+        value: 'Adult XS'
       }, {
         formFieldId: 1223,
         attributeId: 3158,
-        label: 'Adult S'
+        value: 'Adult S'
       }, {
         formFieldId: 1223,
         attributeId: 3159,
-        label: 'Adult M'
+        value: 'Adult M'
       }, {
         formFieldId: 1223,
         attributeId: 3160,
-        label: 'Adult L'
+        value: 'Adult L'
       }, {
         formFieldId: 1223,
         attributeId: 3161,
-        label: 'Adult XL'
+        value: 'Adult XL'
       }, {
         formFieldId: 1223,
         attributeId: 3162,
-        label: 'Adult XXL'
+        value: 'Adult XXL'
       }, {
         formFieldId: 1223,
         attributeId: 3163,
-        label: 'Adult XXXL'
+        value: 'Adult XXXL'
       }, {
         formFieldId: 1223,
         attributeId: 3164,
-        label: 'Child S'
+        value: 'Child S'
       }, {
         formFieldId: 1223,
         attributeId: 3165,
-        label: 'Child M'
+        value: 'Child M'
       }, {
         formFieldId: 1223,
         attributeId: 3166,
-        label: 'Child L'
+        value: 'Child L'
       }];
     }
 

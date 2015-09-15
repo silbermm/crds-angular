@@ -32,7 +32,7 @@
         <pre>{{ pages.signupService.page2.tshirtSize }}</pre>
         <select class="form-control col-sm-12" name="tshirtSize" id="tshirt" ng-required='true'
           ng-model="pages.signupService.page2.tshirtSize"
-          ng-options="tshirt.label for tshirt in tshirtSizes track by tshirt.attributeId">
+          ng-options="tshirt.value for tshirt in tshirtSizes track by tshirt.attributeId">
         </select>
           <!-- <option value="{{ {id: 1223, attributeId: 555} }}"> Adult XS </option>
           <option value="Adult S"> Adult S </option>
@@ -56,7 +56,7 @@
         <label for="scrub">Scrub Size Bottom<small class="text-muted">Only required for Topsy trips</small></label>
         <select class="form-control col-sm-12" name="scrub" id="scrub"
           ng-model="pages.signupService.page2.scrubSize"
-          ng-options="bottom.label for bottom in bottomScrubSizes track by bottom.attributeId">
+          ng-options="bottom.value for bottom in bottomScrubSizes track by bottom.attributeId">
         </select>
         <!-- <select class="form-control col-sm-12" ng-model="pages.signupService.page2.scrubSize.value" id="scrub">
           <option>Adult XS</option>

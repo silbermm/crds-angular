@@ -152,8 +152,7 @@ namespace MinistryPlatform.Translation.Services
         public int SubmitFormResponse(FormResponse form)
         {
             var token = ApiLogin();
-            var responseId = CreateFormResponse(form.FormId, form.ContactId, form.OpportunityId,
-                form.OpportunityResponseId, token, form.PledgeCampaignId);
+            var responseId = CreateFormResponse(form, token);
             foreach (var answer in form.FormAnswers)
             {
                 answer.FormResponseId = responseId;
@@ -162,21 +161,37 @@ namespace MinistryPlatform.Translation.Services
             return responseId;
         }
 
-        private int CreateFormResponse(int formId, int contactId, int opportunityId, int opportunityResponseId, string token, int? pledgeCampaignId=null)
+        private int CreateFormResponse(FormResponse formResponse, string token)
         {
-            var formResponse = new Dictionary<string, object>
+            var record = new Dictionary<string, object>
             {
-                {"Form_ID", formId},
+                {"Form_ID", formResponse.FormId},
                 {"Response_Date", DateTime.Today},
-                {"Contact_ID", contactId},
-                {"Opportunity_ID", opportunityId},
-                {"Opportunity_Response", opportunityResponseId},
-                {"Pledge_Campaign_ID", pledgeCampaignId}
+                {"Contact_ID", formResponse.ContactId},
+                {"Opportunity_ID",  formResponse.OpportunityId },
+                {"Opportunity_Response", formResponse.OpportunityResponseId},
+                {"Pledge_Campaign_ID", formResponse.PledgeCampaignId}
             };
 
-            var responseId = _ministryPlatformService.CreateRecord(_formResponsePageId, formResponse, token, true);
+            var responseId = _ministryPlatformService.CreateRecord(_formResponsePageId, record, token, true);
             return responseId;
         }
+
+        //private int CreateFormResponse(int formId, int contactId, int opportunityId, int opportunityResponseId, string token, int? pledgeCampaignId = null)
+        //{
+        //    var formResponse = new Dictionary<string, object>
+        //    {
+        //        {"Form_ID", formId},
+        //        {"Response_Date", DateTime.Today},
+        //        {"Contact_ID", contactId},
+        //        {"Opportunity_ID",  opportunityId },
+        //        {"Opportunity_Response", opportunityResponseId},
+        //        {"Pledge_Campaign_ID", pledgeCampaignId}
+        //    };
+
+        //    var responseId = _ministryPlatformService.CreateRecord(_formResponsePageId, formResponse, token, true);
+        //    return responseId;
+        //}
 
         private void CreateFormAnswer(FormAnswer answer, string token)
         {
