@@ -254,9 +254,9 @@ namespace crds_angular.Services
             return participants.Values.OrderBy(o => o.Lastname).ThenBy(o => o.Nickname).ToList();
         }
 
-        public MyTripsDto GetMyTrips(int contactId, string token)
+        public MyTripsDto GetMyTrips(int contactId)
         {
-            var trips = _donationService.GetMyTripDistributions(contactId, token).OrderBy(t => t.EventStartDate);
+            var trips = _donationService.GetMyTripDistributions(contactId).OrderBy(t => t.EventStartDate);
             var myTrips = new MyTripsDto();
 
             var events = new List<Trip>();
