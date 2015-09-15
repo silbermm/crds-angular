@@ -15,7 +15,7 @@
     vm.currentPage = 1;
     vm.numberOfPages = 0;
     vm.pageHasErrors = true;
-    vm.pageTitle = vm.campaign.formName;
+    vm.pageTitle = vm.campaign.nickname;
     vm.privateInvite = $location.search()['invite'];
     vm.registrationNotOpen = true;
     vm.tripName = vm.campaign.name;
@@ -30,23 +30,20 @@
     ////////////////////////////////
     function activate() {
       pageHasErrors();
+
       switch (vm.pageTitle) {
-        case 'GO NOLA Application':
-          vm.friendlyPageTitle = 'New Orleans';
+        case 'NOLA':
           vm.numberOfPages = 5;
           break;
-        case 'GO South Africa Application':
-          vm.friendlyPageTitle = 'South Africa';
+        case 'South Africa':
           vm.numberOfPages = 6;
           break;
-        case 'GO India Application':
-          vm.friendlyPageTitle = 'India';
+        case 'India':
           vm.numberOfPages = 6;
           vm.whyPlaceholder = 'Please be specific. ' +
             'In instances where we have a limited number of spots, we strongly consider responses to this question.';
           break;
-        case 'GO Nicaragua Application':
-          vm.friendlyPageTitle = 'Nicaragua';
+        case 'Nicaragua':
           vm.numberOfPages = 6;
           break;
       }

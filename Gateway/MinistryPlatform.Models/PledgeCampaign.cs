@@ -12,7 +12,7 @@ namespace MinistryPlatform.Models
         public DateTime EndDate { get; set; }
         public double Goal { get; set; }
         public int FormId { get; set; }
-        public string FormTitle { get; set; }
+        public string Nickname { get; set; }
         public int YoungestAgeAllowed { get; set; }
         public DateTime RegistrationStart { get; set; }
         public DateTime RegistrationEnd { get; set; }

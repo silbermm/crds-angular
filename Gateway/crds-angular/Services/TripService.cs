@@ -114,7 +114,7 @@ namespace crds_angular.Services
                 Id = campaign.Id,
                 Name = campaign.Name,
                 FormId = campaign.FormId,
-                FormName = campaign.FormTitle,
+                Nickname = campaign.Nickname,
                 YoungestAgeAllowed = campaign.YoungestAgeAllowed,
                 RegistrationEnd = campaign.RegistrationEnd,
                 RegistrationStart = campaign.RegistrationStart,

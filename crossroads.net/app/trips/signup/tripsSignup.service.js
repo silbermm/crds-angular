@@ -37,19 +37,21 @@
         signupService.page6 = page6();
       }
 
-      switch (signupService.campaign.formName) {
-        case 'GO NOLA Application':
+      //relying on Pledge Campaign Nickname field feels very fragile, is there another way?
+      signupService.friendlyPageTitle = signupService.campaign.nickname;
+      switch (signupService.campaign.nickname) {
+        case 'NOLA':
           signupService.numberOfPages = 5;
           break;
-        case 'GO South Africa Application':
+        case 'South Africa':
           signupService.numberOfPages = 6;
           break;
-        case 'GO India Application':
+        case 'India':
           signupService.numberOfPages = 6;
           signupService.whyPlaceholder = 'Please be specific. ' +
             'In instances where we have a limited number of spots, we strongly consider responses to this question.';
           break;
-        case 'GO Nicaragua Application':
+        case 'Nicaragua':
           signupService.numberOfPages = 6;
           break;
       }
