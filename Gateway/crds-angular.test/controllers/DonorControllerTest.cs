@@ -16,6 +16,7 @@ using crds_angular.Exceptions;
 using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Models.Json;
+using DonationStatus = crds_angular.Models.Crossroads.Stewardship.DonationStatus;
 
 namespace crds_angular.test.controllers
 {

@@ -14,6 +14,7 @@ using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
 using Moq;
 using NUnit.Framework;
+using DonationStatus = crds_angular.Models.Crossroads.Stewardship.DonationStatus;
 using IDonorService = crds_angular.Services.Interfaces.IDonorService;
 using IDonationService = crds_angular.Services.Interfaces.IDonationService;
 
