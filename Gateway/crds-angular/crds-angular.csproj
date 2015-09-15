@@ -32,6 +32,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\crds-angular.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -323,6 +324,7 @@
     <Compile Include="Models\Crossroads\Stewardship\StripeRefund.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeToken.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeTransfer.cs" />
+    <Compile Include="Models\Crossroads\Trip\FamilyMemberTripDto.cs" />
     <Compile Include="Models\Crossroads\Trip\MyTripsDTO.cs" />
     <Compile Include="Models\Crossroads\Trip\PrivateInviteDto.cs" />
     <Compile Include="Models\Crossroads\Trip\SaveTripParticipantsDto.cs" />
@@ -354,6 +356,7 @@
     <Compile Include="Models\MP\Address.cs" />
     <Compile Include="Models\MP\EmailSMSOptOut.cs" />
     <Compile Include="Models\MP\Household.cs" />
+    <Compile Include="Models\MP\HouseholdMember.cs" />
     <Compile Include="Models\MP\MailOptOut.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

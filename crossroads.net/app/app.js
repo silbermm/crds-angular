@@ -1,4 +1,3 @@
-require('./profile');
 require('./events');
 require('./mp_tools');
 require('../lib/select.css');
@@ -20,16 +19,10 @@ require('../lib/select.css');
 
   angular.module(constants.MODULES.CROSSROADS).config(require('./routes'));
 
-  require('./services');
   require('./community_groups_signup');
-  require('./profile/profile.html');
-  require('./profile/personal/profile_personal.html');
-  require('./profile/profile_account.html');
-  require('./profile/skills/profile_skills.html');
   require('./styleguide');
   require('./thedaily');
   require('./gotrips');
-  require('./myprofile');
   require('./community_groups_signup/group_signup_form.html');
   require('./my_serve');
   require('./volunteer_signup');

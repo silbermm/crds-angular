@@ -91,8 +91,8 @@ namespace crds_angular.Controllers.API
         /// <returns>The created or updated donor record.</returns>
         [RequiresAuthorization]
         [ResponseType(typeof(EZScanDonorDetails))]
-        [Route("api/checkscanner/getdonor/{encryptedKey?}")]
-        public IHttpActionResult GetDonorForCheck(string encryptedKey)
+        [Route("api/checkscanner/getdonor/{*encryptedKey}")]
+        public IHttpActionResult GetDonorForCheck(string encryptedKey = "")
         {
             return (Authorized(token =>
             {
@@ -106,18 +106,18 @@ namespace crds_angular.Controllers.API
         }
 
         /// <summary>
-        /// Creates or Updates a donor record in Ministry Platform based off of the check details passed in.
+        /// Creates a donor record in Ministry Platform based off of the check details passed in.
         /// </summary>
         /// <param name="checkDetails" type="FromBody">The Check Details from the check that was scanned.</param>
-        /// <returns>The created or updated donor record.</returns>
+        /// <returns>The created donor record.</returns>
         [RequiresAuthorization]
         [ResponseType(typeof(ContactDonor))]
         [Route("api/checkscanner/donor"), HttpPost]
-        public IHttpActionResult CreateOrUpdateDonor([FromBody] CheckScannerCheck checkDetails)
+        public IHttpActionResult CreateDonor([FromBody] CheckScannerCheck checkDetails)
         {
             return (Authorized(token =>
             {
-                var result = _checkScannerService.CreateOrUpdateDonor(checkDetails);
+                var result = _checkScannerService.CreateDonor(checkDetails);
                 return (Ok(result));
 
             }));

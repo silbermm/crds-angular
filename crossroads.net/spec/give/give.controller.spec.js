@@ -23,6 +23,10 @@ describe('GiveController', function() {
       OneTimeGiving;
 
   beforeEach(angular.mock.module('crossroads', function($provide) {
+    $provide.value('$state', {
+      go: function() {}
+    });
+
     programList = [
       {ProgramId: 1, Name: 'Crossroads'},
       {ProgramId: 2, Name: 'Game Change'},

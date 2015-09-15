@@ -11,6 +11,6 @@ namespace crds_angular.Services.Interfaces
         CheckScannerBatch UpdateBatchStatus(string batchName, BatchStatus newStatus);
         CheckScannerBatch CreateDonationsForBatch(CheckScannerBatch batchDetails);
         EZScanDonorDetails GetContactDonorForCheck(string encryptedKey);
-        ContactDonor CreateOrUpdateDonor(CheckScannerCheck batchDetails);
+        ContactDonor CreateDonor(CheckScannerCheck batchDetails);
     }
 }

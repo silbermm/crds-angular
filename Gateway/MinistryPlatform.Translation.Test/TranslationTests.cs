@@ -5,6 +5,8 @@ using Crossroads.Utilities.Interfaces;
 using Crossroads.Utilities.Services;
 using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services;
+using MinistryPlatform.Translation.Services.Interfaces;
+using Moq;
 using NUnit.Framework;
 
 namespace MinistryPlatform.Translation.Test
@@ -18,6 +20,7 @@ namespace MinistryPlatform.Translation.Test
         private const string FIRSTNAME = "Test";
         private const string NEW_PASSWORD = "changemeagain";
 
+        private Mock<IAuthenticationService> _authenticationService;
         private AuthenticationServiceImpl _fixture;
         private PlatformServiceClient _platformService;
         private MinistryPlatformServiceImpl _ministryPlatformService;
@@ -71,6 +74,8 @@ namespace MinistryPlatform.Translation.Test
         [Test]
         public void ShouldGetPageRecord()
         {
+
+            
             var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["MyContact"]);
             var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
             var token = authData["token"].ToString();
@@ -107,19 +112,5 @@ namespace MinistryPlatform.Translation.Test
             //MinistryPlatformService.DeleteRecord(hhPageId, newRecordId, null, adminToken);
         }
 
-        [Test]
-        public void ShouldGetSubPageRecord()
-        {
-            var subGroupPageId = Convert.ToInt32(ConfigurationManager.AppSettings["GroupsSubgroups"]);
-            var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            var token = authData["token"].ToString();
-            var recordId = _fixture.GetContactId(token);
-            Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
-            var record = MinistryPlatformService.GetSubPageRecords(subGroupPageId,
-                                                                   6717,
-                                                                   token);
-            Assert.IsNotNull(record);
-            Assert.IsNotEmpty(record);
-        }
     }
 }

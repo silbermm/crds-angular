@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -12,10 +13,34 @@ namespace crds_angular.Controllers.API
     public class TripController : MPAuth
     {
         private readonly ITripService _tripService;
+        private readonly IPersonService _personService;
 
-        public TripController(ITripService tripService)
+        public TripController(ITripService tripService, IPersonService persionService)
         {
             _tripService = tripService;
+            _personService = persionService;
+        }
+
+        [AcceptVerbs("GET")]
+        [ResponseType(typeof (List<FamilyMemberTripDto>))]
+        [Route("api/trip/{pledgeCampaignId}/family-members")]
+        public IHttpActionResult GetFamilyWithTripInfo(int pledgeCampaignId)
+        {
+            return Authorized(token =>
+            {
+                try
+                {
+                    var loggedInUser = _personService.GetLoggedInUserProfile(token);
+                    var familyMembers = _tripService.GetFamilyMembers(loggedInUser.ContactId, pledgeCampaignId, token);
+                    return Ok(familyMembers);
+                }
+                catch (Exception ex)
+                {
+                    var apiError = new ApiErrorDto("Get Family With Trip Info", ex);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+                
+            });         
         }
 
         [AcceptVerbs("GET")]

@@ -4,5 +4,4 @@
   "requireDotNotation": { "allExcept": [ "snake_case" ] },
   "safeContextKeyword": "vm",
   "validateLineBreaks": "CRLF"
-
 }
