@@ -3,7 +3,9 @@
     <p class="push-bottom">Information shared here is kept secure and private. We will not share or sell your information.</p>
     
     <div class="row">
-      <profile-picture ng-if='!profile.forTrips' />
+      
+      <profile-picture ng-if='!profile.forTrips'> </profile-picture>
+
       <div class="form-group col-sm-6" ng-class="{'has-error': profile.validation.showErrors(profile.pform, 'firstName')}">
         <label for="firstname" class="required">First Name</label>
         <input type="text" class="form-control" id="first-name" name="firstName" placeholder="Enter first name" ng-model="profile.profileData.person.firstName" required>

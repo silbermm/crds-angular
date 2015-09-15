@@ -182,7 +182,7 @@ namespace crds_angular.test.controllers
         [Test]
         public void TestGetContactDonorForCheck()
         {
-            var encryptedKey = "thisisatestversionofanencrptedkey&567$#=#red";
+            var encryptedKey = "disCv2kF/8HlRCWeTqolok1G4imf1cNZershgmCCFDI=";
             var donorDetail = new EZScanDonorDetails
             {
                 DisplayName = "Peyton Manning",
