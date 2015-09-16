@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using AutoMapper;
 using crds_angular.Models.Crossroads.Stewardship;
 using MPServices=MinistryPlatform.Translation.Services.Interfaces;
@@ -8,16 +9,23 @@ using crds_angular.Services.Interfaces;
 using crds_angular.Util;
 using MinistryPlatform.Models;
 using Newtonsoft.Json;
+using DonationStatus = MinistryPlatform.Models.DonationStatus;
 
 namespace crds_angular.Services
 {
     public class DonationService: IDonationService
     {
         private readonly MPServices.IDonationService _mpDonationService;
+        private readonly MPServices.IDonorService _mpDonorService;
+        private readonly MPServices.IAuthenticationService _mpAuthenticationService;
+        private readonly IPaymentService _paymentService;
 
-        public DonationService(MPServices.IDonationService mpDonationService)
+        public DonationService(MPServices.IDonationService mpDonationService, MPServices.IDonorService mpDonorService, MPServices.IAuthenticationService mpAuthenticationService, IPaymentService paymentService)
         {
             _mpDonationService = mpDonationService;
+            _mpDonorService = mpDonorService;
+            _mpAuthenticationService = mpAuthenticationService;
+            _paymentService = paymentService;
         }
 
         public DonationDTO GetDonationByProcessorPaymentId(string processorPaymentId)
@@ -30,9 +38,9 @@ namespace crds_angular.Services
 
             var donation = new DonationDTO
             {
-                amount = d.donationAmt,
-                donation_id = d.donationId + "",
-                batch_id = d.batchId
+                Amount = d.donationAmt,
+                Id = d.donationId + "",
+                BatchId = d.batchId
             };
             return (donation);
         }
@@ -55,7 +63,7 @@ namespace crds_angular.Services
 
             foreach (var donation in batch.Donations)
             {
-                _mpDonationService.AddDonationToBatch(batchId, int.Parse(donation.donation_id));
+                _mpDonationService.AddDonationToBatch(batchId, int.Parse(donation.Id));
             }
 
             return (batch);
@@ -69,6 +77,118 @@ namespace crds_angular.Services
         public DonationBatchDTO GetDonationBatch(int batchId)
         {
             return (Mapper.Map<DonationBatch, DonationBatchDTO>(_mpDonationService.GetDonationBatch(batchId)));
+        }
+
+        public DonationsDTO GetDonationsForAuthenticatedUser(string userToken, string donationYear = null, bool softCredit = false)
+        {
+            var donorId = GetDonorIdForAuthenticatedUser(userToken);
+            return (donorId == null ? null : GetDonationsForDonor(donorId.Value, donationYear, softCredit));
+        }
+
+        public DonationYearsDTO GetDonationYearsForAuthenticatedUser(string userToken)
+        {
+            var donorId = GetDonorIdForAuthenticatedUser(userToken);
+            return (donorId == null ? null : GetDonationYearsForDonor(donorId.Value));
+        }
+
+        private int? GetDonorIdForAuthenticatedUser(string userToken)
+        {
+            var donor = _mpDonorService.GetContactDonor(_mpAuthenticationService.GetContactId(userToken));
+            return (donor != null && donor.ExistingDonor ? donor.DonorId : (int?)null);
+        }
+
+        public DonationsDTO GetDonationsForDonor(int donorId, string donationYear = null, bool softCredit = false)
+        {
+            var donations = softCredit ? _mpDonorService.GetSoftCreditDonations(donorId) : _mpDonorService.GetDonations(donorId);
+            if (donations == null || donations.Count == 0)
+            {
+                return (null);
+            }
+
+            var response = donations.Select(Mapper.Map<DonationDTO>).ToList();
+
+            if (donationYear != null)
+            {
+                response.RemoveAll(donation => !donationYear.Equals(donation.DonationDate.Year.ToString()));
+            }
+
+            foreach (var donation in response)
+            {
+                StripeCharge charge = null;
+                if (!string.IsNullOrWhiteSpace(donation.Source.PaymentProcessorId))
+                {
+                    charge = _paymentService.GetCharge(donation.Source.PaymentProcessorId);
+                }
+
+                if (donation.Source.SourceType == PaymentType.Cash)
+                {
+                    donation.Source.Name = "cash";
+                } 
+                else if (charge != null && charge.Source != null)
+                {
+                    donation.Source.AccountNumberLast4 = charge.Source.AccountNumberLast4;
+
+                    if (donation.Source.SourceType == PaymentType.CreditCard && charge.Source.Brand != null)
+                    {
+                        switch (charge.Source.Brand)
+                        {
+                            case CardBrand.AmericanExpress:
+                                donation.Source.CardType = CreditCardType.AmericanExpress;
+                                break;
+                            case CardBrand.Discover:
+                                donation.Source.CardType = CreditCardType.Discover;
+                                break;
+                            case CardBrand.MasterCard:
+                                donation.Source.CardType = CreditCardType.MasterCard;
+                                break;
+                            case CardBrand.Visa:
+                                donation.Source.CardType = CreditCardType.Visa;
+                                break;
+                            default:
+                                donation.Source.CardType = null;
+                                break;
+                        }
+                    }
+                }
+
+                // Refund amount should already be negative (when the original donation was reversed), but negative-ify it just in case
+                if (donation.Status == Models.Crossroads.Stewardship.DonationStatus.Refunded && donation.Amount > 0)
+                {
+                    donation.Amount *= -1;
+                    donation.Distributions.All(dist => { 
+                        dist.Amount *= -1;
+                        return (true);
+                    });
+                }
+            }
+
+            var donationsResponse = new DonationsDTO();
+            donationsResponse.Donations.AddRange(response.OrderBy(donation => donation.DonationDate).ToList());
+            donationsResponse.BeginningDonationDate = donationsResponse.Donations.Last().DonationDate;
+            donationsResponse.EndingDonationDate = donationsResponse.Donations.First().DonationDate;
+
+            return (donationsResponse);
+        }
+
+        public DonationYearsDTO GetDonationYearsForDonor(int donorId)
+        {
+            var years = new HashSet<string>();
+            var softCreditDonations = _mpDonorService.GetSoftCreditDonations(donorId);
+            var donations = _mpDonorService.GetDonations(donorId);
+
+            if (softCreditDonations != null)
+            {
+                years.UnionWith(softCreditDonations.Select(d => d.donationDate.Year.ToString()));
+            }
+            if (donations != null)
+            {
+                years.UnionWith(donations.Select(d => d.donationDate.Year.ToString()));
+            }
+
+            var donationYears = new DonationYearsDTO();
+            donationYears.AvailableDonationYears.AddRange(years.ToList());
+
+            return (donationYears);
         }
 
         public DonationBatchDTO GetDonationBatchByDepositId(int depositId)

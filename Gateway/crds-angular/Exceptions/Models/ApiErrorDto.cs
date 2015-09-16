@@ -12,22 +12,25 @@ namespace crds_angular.Exceptions.Models
         {
         }
 
-        public ApiErrorDto(string message, Exception exception)
+        public ApiErrorDto(string message, Exception exception = null)
         {
             this.Message = message;
 
-            var errors = new List<string> {exception.Message};
-            if (exception.InnerException != null)
+            if (exception != null)
             {
-                errors.Add(exception.InnerException.Message);
+                var errors = new List<string> {exception.Message};
+                if (exception.InnerException != null)
+                {
+                    errors.Add(exception.InnerException.Message);
+                }
+                this.Errors = errors;
             }
-            this.Errors = errors;
         }
 
         [JsonProperty(PropertyName = "message")]
         public string Message { get; set; }
 
-        [JsonProperty(PropertyName = "errors")]
+        [JsonProperty(PropertyName = "errors", NullValueHandling = NullValueHandling.Ignore)]
         public List<string> Errors { get; set; }
 
         [JsonIgnore]

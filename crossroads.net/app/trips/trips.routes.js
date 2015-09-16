@@ -89,9 +89,7 @@
           Trip: 'Trip',
           $cookies: '$cookies',
           MyTrips: function(Trip, $cookies) {
-            return Trip.MyTrips.get({
-              contact: $cookies.get('userId')
-            }).$promise;
+            return Trip.MyTrips.get().$promise;
           }
         }
       })
