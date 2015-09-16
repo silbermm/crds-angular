@@ -1,6 +1,5 @@
 require('crds-core');
 require('../../app/app');
-require('../../app/giving_history');
 
 describe('GivingHistoryController', function() {
 
@@ -135,13 +134,11 @@ describe('GivingHistoryController', function() {
     beforeEach(function() {
       sut = controllerConstructor('GivingHistoryController', {$scope: scope});
 
-      httpBackend.whenGET(/SiteConfig*/).respond('');
-
+      httpBackend.whenGET(/SiteConfig*/).respond({siteConfig: {title:'Crossroads'}});
+      httpBackend.whenGET(/api\/Page*/).respond({ pages: [{}] });
     });
 
     it('should retrieve most recent giving year donations for current user', function() {
-      httpBackend.whenGET(/SiteConfig*/).respond('');
-      httpBackend.whenGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/Page/?link=%2F').respond({});
       httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/profile').respond({});
       httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donations/years')
                              .respond(mockDonationYearsResponse);
