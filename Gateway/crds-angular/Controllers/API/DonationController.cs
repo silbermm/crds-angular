@@ -15,6 +15,7 @@ using crds_angular.Services.Interfaces;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 using System.Threading.Tasks;
 using System.Web;
+using crds_angular.Models.Json;
 
 namespace crds_angular.Controllers.API
 {
@@ -34,6 +35,48 @@ namespace crds_angular.Controllers.API
             _authenticationService = authenticationService;
             _gatewayDonorService = gatewayDonorService;
             _gatewayDonationService = gatewayDonationService;
+        }
+
+        /// <summary>
+        /// Retrieve list of donations for the logged-in donor, optionally for the specified year, and optionally returns only soft credit donations (by default returns only direct gifts).
+        /// </summary>
+        /// <param name="softCredit">A bool indicating if the result should contain only soft-credit (true) or only direct (false) donations.  Defaults to false.</param>
+        /// <param name="donationYear">A year filter (YYYY format) for donations returned - defaults to null, meaning return all available donations regardless of year.</param>
+        /// <returns>A list of DonationDTOs</returns>
+        [Route("api/donations/{donationYear:regex(\\d{4})?}")]
+        [HttpGet]
+        public IHttpActionResult GetDonations(string donationYear = null, [FromUri(Name = "softCredit")]bool? softCredit = false)
+        {
+            return (Authorized(token =>
+            {
+                var donations = _gatewayDonationService.GetDonationsForAuthenticatedUser(token, donationYear, softCredit.GetValueOrDefault(false));
+                if (donations == null || !donations.HasDonations)
+                {
+                    return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching donations found")));
+                }
+
+                return (Ok(donations));
+            }));
+        }
+
+        /// <summary>
+        /// Retrieve a list of donation years for the logged-in donor.  This includes any year the donor has given either directly, or via soft-credit.
+        /// </summary>
+        /// <returns>A list of years (string)</returns>
+        [Route("api/donations/years")]
+        [HttpGet]
+        public IHttpActionResult GetDonationYears()
+        {
+            return (Authorized(token =>
+            {
+                var donationYears = _gatewayDonationService.GetDonationYearsForAuthenticatedUser(token);
+                if (donationYears == null || !donationYears.HasYears)
+                {
+                    return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No donation years found")));
+                }
+
+                return (Ok(donationYears));
+            }));
         }
 
         [ResponseType(typeof(DonationDTO))]
@@ -97,10 +140,10 @@ namespace crds_angular.Controllers.API
                 var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount, fee, donor.DonorId, dto.ProgramId, charge.Id, dto.PaymentType, donor.ProcessorId, DateTime.Now, true);
                 var response = new DonationDTO()
                     {
-                        program_id = dto.ProgramId,
-                        amount = dto.Amount,
-                        donation_id = donationId.ToString(),
-                        email = donor.Email
+                        ProgramId = dto.ProgramId,
+                        Amount = dto.Amount,
+                        Id = donationId.ToString(),
+                        Email = donor.Email
                     };
 
                     return Ok(response);
@@ -128,10 +171,10 @@ namespace crds_angular.Controllers.API
 
                 var response = new DonationDTO()
                 {
-                    program_id = dto.ProgramId,
-                    amount = dto.Amount,
-                    donation_id = donationId.ToString(),
-                    email = donor.Email
+                    ProgramId = dto.ProgramId,
+                    Amount = dto.Amount,
+                    Id = donationId.ToString(),
+                    Email = donor.Email
                 };
 
                 return Ok(response);
