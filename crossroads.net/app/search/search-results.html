@@ -17,15 +17,14 @@
 
       </form>
     </div>
+
     <!-- /search box -->
     <ul class="local-nav">
-      <li class="active"><a href="">All</a>
+      <li ng-class="{active:!search.type}"><a ui-sref="search({type:''})">All</a>
       </li>
-      <li><a href="">Media</a>
+      <li ng-class="{active:search.type==='media'}"><a ui-sref="search({type:'media'})">Media</a>
       </li>
-      <li><a href="">Blog</a>
-      </li>
-      <li><a href="">Corkboard</a>
+      <li ng-class="{active:search.type==='corkboard'}"><a ui-sref="search({type:'corkboard'})">Corkboard</a>
       </li>
     </ul>
   </div>
