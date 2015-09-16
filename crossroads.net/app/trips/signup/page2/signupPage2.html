@@ -119,7 +119,6 @@
       <div class="form-group col-sm-12" ng-class="{ 'has-error': pages.validation.showErrors(tripAppPage2, 'why') }">
           <label for="why" class="required">Tell us why you want to go on this trip</label>
           <textarea ng-model="pages.signupService.page2.why.value" ng-required="true" cols="1" rows="4" class="form-control" name="why" id="why" maxlength="1000" placeholder="{{pages.whyPlaceholder}}"></textarea>
-          <!-- <input ng-model="pages.page2.why" ng-required="true" class="form-control" name="why" placeholder="{{pages.whyPlaceholder}}"></input> -->
           <ng-messages for="tripAppPage2.why.$error" ng-if="pages.validation.showErrors(tripAppPage2, 'why')">
             <span ng-message="required">
               <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
@@ -128,6 +127,7 @@
       </div><!--/form-group-->
     </div>
   </fieldset>
-  <a ng-click='pages.handleNextt(3, this)' class="btn btn-primary pull-right">Next</a>
+  <a ng-click='pages.handleNext(3)' class="btn btn-primary pull-right">Next</a>
+  <!-- <a ng-click='pages.handleNextt(3, this)' class="btn btn-primary pull-right">Next</a> -->
   <a ng-click='pages.handlePrevious(1)' class="btn btn-standard pull-right">Back</a>
 </form>

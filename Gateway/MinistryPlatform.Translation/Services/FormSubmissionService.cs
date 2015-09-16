@@ -189,22 +189,6 @@ namespace MinistryPlatform.Translation.Services
             return responseId;
         }
 
-        //private int CreateFormResponse(int formId, int contactId, int opportunityId, int opportunityResponseId, string token, int? pledgeCampaignId = null)
-        //{
-        //    var formResponse = new Dictionary<string, object>
-        //    {
-        //        {"Form_ID", formId},
-        //        {"Response_Date", DateTime.Today},
-        //        {"Contact_ID", contactId},
-        //        {"Opportunity_ID",  opportunityId },
-        //        {"Opportunity_Response", opportunityResponseId},
-        //        {"Pledge_Campaign_ID", pledgeCampaignId}
-        //    };
-
-        //    var responseId = _ministryPlatformService.CreateRecord(_formResponsePageId, formResponse, token, true);
-        //    return responseId;
-        //}
-
         private void CreateFormAnswer(FormAnswer answer, string token)
         {
             var formAnswer = new Dictionary<string, object>

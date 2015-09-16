@@ -15,14 +15,6 @@
     function activate() {
       $log.debug('signup service activate');
 
-      //signupService.contactId = Session.exists('userId');
-
-      // $log.debug('profileData: ' + signupService.profileData);
-
-      // if (signupService.page1 === undefined) {
-      //   signupService.page1 = 'Fred';
-      // }
-
       if (signupService.page2 === undefined) {
         signupService.page2 = page2();
       }

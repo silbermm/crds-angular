@@ -58,7 +58,6 @@
     }
 
     function handleNextt(nextPage, target) {
-      var x = target;
       var form = target.tripAppPage2;
       form.$setSubmitted(true);
 
@@ -89,7 +88,6 @@
       $log.debug(vm.signupService.page2);
       var application = new vm.signupService.TripApplication();
       application.contactId = vm.signupService.contactId;
-      // application.formId = vm.signupService.formId;  //right now getting this from web.config
       application.pledgeCampaignId = vm.signupService.campaign.id;
       //application.pageOne = pageOne();
       application.pageTwo = vm.signupService.page2;
