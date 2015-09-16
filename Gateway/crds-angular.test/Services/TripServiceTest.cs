@@ -89,9 +89,9 @@ namespace crds_angular.test.Services
         [Test]
         public void ShouldGetMyTrips()
         {
-            _donationService.Setup(m => m.GetMyTripDistributions(It.IsAny<int>(), It.IsAny<string>())).Returns(MockTripDonationsResponse());
+            _donationService.Setup(m => m.GetMyTripDistributions(It.IsAny<int>())).Returns(MockTripDonationsResponse());
             _eventParticipantService.Setup(m => m.TripParticipants(It.IsAny<string>())).Returns(mockTripParticipants());
-            var myTrips = _fixture.GetMyTrips(It.IsAny<int>(), It.IsAny<string>());
+            var myTrips = _fixture.GetMyTrips(It.IsAny<int>());
 
             _donationService.VerifyAll();
 
@@ -103,9 +103,9 @@ namespace crds_angular.test.Services
         [Test]
         public void FundraisingDaysLeftShouldNotBeNegative()
         {
-            _donationService.Setup(m => m.GetMyTripDistributions(It.IsAny<int>(), It.IsAny<string>())).Returns(MockFundingPastTripDonationsResponse());
+            _donationService.Setup(m => m.GetMyTripDistributions(It.IsAny<int>())).Returns(MockFundingPastTripDonationsResponse());
             _eventParticipantService.Setup(m => m.TripParticipants(It.IsAny<string>())).Returns(mockTripParticipants());
-            var myTrips = _fixture.GetMyTrips(It.IsAny<int>(), It.IsAny<string>());
+            var myTrips = _fixture.GetMyTrips(It.IsAny<int>());
 
             Assert.IsNotNull(myTrips);
             Assert.AreEqual(0, myTrips.MyTrips[0].FundraisingDaysLeft);

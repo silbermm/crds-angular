@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -30,11 +32,45 @@ namespace crds_angular.Models.Crossroads.Stewardship
         public List<CheckScannerCheck> Checks { get { return (_checks); } }
         #endregion
 
-        #region Errored Checks property and accessor
+        #region Errored Checks properties and accessors
         [JsonIgnore]
         private readonly List<CheckScannerCheck> _errorChecks = new List<CheckScannerCheck>();
         [JsonProperty("errorChecks")]
         public List<CheckScannerCheck> ErrorChecks { get { return (_errorChecks); } }
+        [JsonIgnore]
+        private List<String> ChecksEmailErrors { get { return ErrorChecks.Select(check => check.EmailError).ToList(); } }
+        [JsonIgnore]
+        public string EmailMsg
+        {
+            get
+            {
+                if (!ErrorChecks.Any())
+                {
+                    return SuccessfulEmailMsg();
+                }
+
+                return ErrorEmailMsg();
+            }
+        }
+
+        private string SuccessfulEmailMsg()
+        {
+            return string.Format("All {0} Checks Processed Successfully.", Checks.Count);
+        }
+
+        private string ErrorEmailMsg()
+        {
+            var emailErrors = new StringBuilder();
+            emailErrors.AppendFormat("{0} Checks Processed Successfully.\n", Checks.Count);
+            emailErrors.AppendFormat("{0} Checks Failed With The Following Error Details:\n\n", ErrorChecks.Count);
+
+            foreach (var emailError in ChecksEmailErrors)
+            {
+                emailErrors.Append(emailError);
+            }
+
+            return emailErrors.ToString();
+        }
         #endregion
 
         [JsonProperty("contactId", NullValueHandling = NullValueHandling.Ignore)]
