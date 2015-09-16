@@ -11,8 +11,8 @@
    */
   function GiveRoutes($httpProvider, $stateProvider) {
 
-    $httpProvider.defaults.useXDomain = true;
-    $httpProvider.defaults.headers.common['X-Use-The-Force'] = true;
+    //$httpProvider.defaults.useXDomain = true;
+    //$httpProvider.defaults.headers.common['X-Use-The-Force'] = true;
 
     $stateProvider
       .state('give', {
