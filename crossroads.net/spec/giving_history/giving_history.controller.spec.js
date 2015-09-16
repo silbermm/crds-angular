@@ -71,7 +71,9 @@ describe('GivingHistoryController', function() {
         }
       }
     ],
-    donation_total_amount: 80000
+    donation_total_amount: 80000,
+    beginning_donation_date: '123',
+    ending_donation_date: '456'
   };
 
   var mockSoftCreditDonationResponse =
@@ -139,7 +141,8 @@ describe('GivingHistoryController', function() {
     });
 
     it('should retrieve most recent giving year donations for current user', function() {
-      httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/profile').respond({});
+      var profile = {foo: 'bar'};
+      httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/profile').respond(profile);
       httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donations/years')
                              .respond(mockDonationYearsResponse);
       httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donations/2015')
@@ -150,10 +153,73 @@ describe('GivingHistoryController', function() {
       expect(sut.donation_years[0]).toEqual({key: '2015', value: '2015'});
       expect(sut.donation_years[2]).toEqual({key: '', value: 'All'});
       expect(sut.selected_giving_year).toEqual({key: '2015', value: '2015'});
+      expect(sut.profile.foo).toEqual('bar');
+      expect(sut.beginning_donation_date).toEqual(mockDonationResponse.beginning_donation_date);
+      expect(sut.ending_donation_date).toEqual(mockDonationResponse.ending_donation_date);
+      expect(sut.history).toBeTruthy();
+      expect(sut.viewReady).toBeTruthy();
 
       expect(sut.donations.length).toBe(3);
       expect(sut.donations[0].distributions[0].program_name).toEqual('Crossroads');
       expect(sut.donation_total_amount).toEqual(80000);
+    });
+
+    it('should not have history if there is no profile', function() {
+      httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/profile').respond(404, {});
+      httpBackend.flush();
+
+      expect(Object.keys(sut.profile).length).toEqual(0);
+
+      expect(sut.donation_years.length).toBe(0);
+      expect(sut.selected_giving_year).not.toBeDefined();
+      expect(sut.beginning_donation_date).not.toBeDefined();
+      expect(sut.ending_donation_date).not.toBeDefined();
+      expect(sut.history).toBeFalsy();
+      expect(sut.viewReady).toBeTruthy();
+
+      expect(sut.donations.length).toBe(0);
+    });
+
+    it('should not have history if there are no giving years', function() {
+      var profile = {foo: 'bar'};
+      httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/profile').respond(profile);
+      httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donations/years').respond(404, {});
+      httpBackend.flush();
+
+      expect(sut.profile.foo).toEqual('bar');
+
+      expect(sut.donation_years.length).toBe(0);
+      expect(sut.selected_giving_year).not.toBeDefined();
+      expect(sut.beginning_donation_date).not.toBeDefined();
+      expect(sut.ending_donation_date).not.toBeDefined();
+      expect(sut.history).toBeFalsy();
+      expect(sut.viewReady).toBeTruthy();
+
+      expect(sut.donations.length).toBe(0);
+    });
+
+    it('should not have history if there are no donations', function() {
+      var profile = {foo: 'bar'};
+      httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/profile').respond(profile);
+      httpBackend
+          .expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donations/years')
+          .respond(mockDonationYearsResponse);
+      httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donations/2015').respond(404, {});
+      httpBackend.flush();
+
+      expect(sut.profile.foo).toEqual('bar');
+
+      expect(sut.donation_years.length).toBe(3);
+      expect(sut.donation_years[0]).toEqual({key: '2015', value: '2015'});
+      expect(sut.donation_years[2]).toEqual({key: '', value: 'All'});
+      expect(sut.selected_giving_year).toEqual({key: '2015', value: '2015'});
+      expect(sut.beginning_donation_date).not.toBeDefined();
+      expect(sut.ending_donation_date).not.toBeDefined();
+
+      expect(sut.history).toBeFalsy();
+      expect(sut.viewReady).toBeTruthy();
+
+      expect(sut.donations.length).toBe(0);
     });
   });
 });

@@ -69,8 +69,8 @@
           },
 
           function(/*error*/) {
-            vm.viewReady = true;
             vm.history = false;
+            vm.viewReady = true;
           });
     }
   }
