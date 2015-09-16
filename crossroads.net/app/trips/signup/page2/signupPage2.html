@@ -38,25 +38,26 @@
           </span>
         </ng-messages>
       </div><!--/form-group-->
-
-      <div class="form-group col-sm-6" ng-show="pages.destination == 'South Africa'">
+    </div>
+    <div class="row" ng-show="pages.destination == 'South Africa'">
+      <div class="form-group col-sm-6">
         <label for="scrub">Scrub Size Bottom<small class="text-muted">Only required for Topsy trips</small></label>
         <select class="form-control col-sm-12" name="scrubBottom" id="scrubBottom"
           ng-model="pages.signupService.page2.scrubSizeBottom"
           ng-options="bottom.value for bottom in bottomScrubSizes track by bottom.attributeId">
         </select>
       </div>
-    </div>
 
-    <div class="row">
-      <div class="form-group col-sm-6" ng-show="pages.destination == 'South Africa'">
+      <div class="form-group col-sm-6">
         <label for="scrub">Scrub Size Top<small class="text-muted">Only required for Topsy trips</small></label>
         <select class="form-control col-sm-12" name="scrubTop" id="scrubTop"
           ng-model="pages.signupService.page2.scrubSizeTop"
           ng-options="top.value for top in topScrubSizes track by top.attributeId">
         </select>
       </div><!--/form-group-->
+    </div>
 
+    <div class="row">
       <div class="form-group col-sm-12">
           <label class="block required">How did you hear about this trip?</label>
           <label for="program" class="radio-inline">
