@@ -32,23 +32,23 @@
   </a>
 </li>
 <li><hr></li>
-<li>
+<li ng-click="$event.stopPropagation()">
   <div class="dropdown-menu-content">
     <span class="dropdown-rss-link">
       <svg viewBox="0 0 32 32" class="icon icon-link">
         <use xlink:href="#link"></use>
       </svg>
-      crds.ch/pod-audio <button type="button" class="btn btn-default btn-xs">Copy</button>
+      <input type="text" value="crds.ch/pod-audio" select-on-click />
     </span>
   </div>
 </li>
-<li>
+<li ng-click="$event.stopPropagation()">
   <div class="dropdown-menu-content">
     <span class="dropdown-rss-link">
       <svg viewBox="0 0 32 32" class="icon icon-link">
         <use xlink:href="#link"></use>
       </svg>
-      crds.ch/pod-video <button type="button" class="btn btn-default btn-xs">Copy</button>
+      <input type="text" value="crds.ch/pod-video" select-on-click />
     </span>
   </div>
 </li>
