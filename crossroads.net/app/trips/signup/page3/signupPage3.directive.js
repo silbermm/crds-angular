@@ -11,7 +11,7 @@
       replace: true,
       scope: {
         currentPage: '=',
-        pageTitle: '=',
+        destination: '=',
         numberOfPages: '=',
       },
       templateUrl: 'page3/signupPage3.html',

@@ -59,7 +59,7 @@
         </div>
       </div><!--/row-->
 
-      <div class="row" ng-show="pages.pageTitle != 'GO NOLA Application'">
+      <div class="row" ng-show="pages.destination != 'NOLA'">
         <div class="col-sm-12">
           <legend>Frequent Flyer Information</legend>
         </div>
@@ -67,7 +67,7 @@
             <label for="deltaff">Delta</label>
             <input ng-model="pages.signupService.page6.deltaFrequentFlyer.value" type="text" class="form-control" id="deltaff" placeholder="Enter Delta frequent flyer number">
         </div>
-        <div class="form-group col-sm-6" ng-show="pages.pageTitle == 'GO South Africa Application'">
+        <div class="form-group col-sm-6" ng-show="pages.destination == 'South Africa'">
             <label for="southafricaff">South African Airlines</label>
             <input ng-model="pages.signupService.page6.southAfricanFrequentFlyer.value" type="text" class="form-control" id="southafricaff" placeholder="Enter South African Airlines frequent flyer number">
         </div>
@@ -81,7 +81,7 @@
         </div>
       </div><!--/row-->
 
-      <div class="row" ng-show="pages.pageTitle != 'GO NOLA Application'">
+      <div class="row" ng-show="pages.destination != 'NOLA'">
        <div class="col-sm-12">
         <legend>
           Travel Experience Information
@@ -89,7 +89,7 @@
       </div>
       </div><!--/row-->
 
-      <div class="row" ng-show="pages.pageTitle != 'GO NOLA Application'">
+      <div class="row" ng-show="pages.destination != 'NOLA'">
         <div class="form-group col-sm-12">
           <label class="block required">International Travel Experience</label>
           <div>
@@ -127,7 +127,7 @@
         </div>
       </div>
 
-      <div class="col-sm-12" ng-show="pages.pageTitle == 'GO India Application'">
+      <div class="col-sm-12" ng-show="pages.destination == 'India'">
         <div class="row">
           <legend>
             Past Abuse History

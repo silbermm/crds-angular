@@ -15,7 +15,9 @@
     vm.currentPage = 1;
     vm.numberOfPages = 0;
     vm.pageHasErrors = true;
-    vm.pageTitle = vm.campaign.nickname;
+    // vm.pageTitle = vm.campaign.nickname;
+    // renamed pageTitle to destination
+    vm.destination = vm.campaign.nickname;
     vm.privateInvite = $location.search()['invite'];
     vm.registrationNotOpen = true;
     vm.tripName = vm.campaign.name;
@@ -31,7 +33,7 @@
     function activate() {
       pageHasErrors();
 
-      switch (vm.pageTitle) {
+      switch (vm.destination) {
         case 'NOLA':
           vm.numberOfPages = 5;
           break;

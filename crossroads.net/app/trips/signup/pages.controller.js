@@ -17,7 +17,7 @@
    * Controller for all of the pages directives
    * Variobles passed into the directives:
    *    - currentPage
-   *    - pageTitle
+   *    - destination
    *    - numberOfPages
    */
   function PagesController($rootScope, Session, $location, $anchorScroll, $log, Trip, Validation, TripsSignupService) {
@@ -40,7 +40,7 @@
     activate();
 
     function activate() {
-      if (vm.pageTitle === 'Go India Application') {
+      if (vm.destination === 'India') {
         vm.whyPlaceholder = 'Please be specific. ' +
           'In instances where we have a limited number of spots, we strongly consider responses to this question.';
       }
@@ -70,10 +70,6 @@
     }
 
     function handleNext(nextPage) {
-      if (nextPage === 3) {
-        angular.element('#tripAppPage2').trigger('submit');
-      }
-
       vm.currentPage = nextPage;
       toTop();
     }
@@ -102,7 +98,7 @@
     }
 
     function nolaRequired() {
-      if (vm.pageTitle === 'GO NOLA Application') {
+      if (vm.destination === 'NOLA') {
         return 'required';
       }
 
