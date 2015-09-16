@@ -30,7 +30,7 @@
                 <span class="small-heading">TOPICS: </span>
               </div>
               <div class="col-xs-9 col-md-10">
-                <span ng-repeat="tag in singleMedia.mediaTags" class="label label-standard-dark">{{ tag.title }}</span>
+                <a ng-repeat="tag in singleMedia.mediaTags" ui-sref="search({type:'media',tag:tag.title})" class="label label-standard-dark">{{ tag.title }}</a>
               </div>
             </div><!--/row-->
           </div>

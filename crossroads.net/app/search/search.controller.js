@@ -1,19 +1,19 @@
 'use strict';
 (function () {
-  module.exports = function SearchCtrl($log, $state, $scope, Search, type, json, searchString) {
+  module.exports = function SearchCtrl($log, $state, $scope, Search, type, json, searchString, tag) {
     var vm = this;
 
-    vm.json=json;
-    vm.type=type;
+    vm.json = json;
+    vm.type = type;
+    vm.tag = tag;
     $scope.searchString = searchString;
     vm.search = search;
     vm.isMedia = isMedia;
     vm.isCorkboard = isCorkboard;
     vm.results = {'hits': {'found': 0}};
 
-    if(searchString){
-      doSearch();
-    }
+    doSearch();
+
 
     function search() {
       $state.go('search', {type: vm.type, searchString:$scope.searchString});
@@ -21,15 +21,21 @@
 
     function doSearch() {
       var filter = '';
+      var parser = '';
       switch(vm.type){
         case 'media':
           filter = '(or type:\'Series\' type:\'Message\' type:\'Video\' type:\'Audio\' type:\'Music\' type:\'Media\')';
+          if(vm.tag){
+            $scope.searchString = '(term field=tags\''+vm.tag+'\')';
+            parser = 'structured';
+          }
           break;
         case 'corkboard':
-          filter = 'type:\'NEED\'';
+          filter = '(or type:\'NEED\' type:\'ITEM\' type:\'EVENT\' type:\'JOB\')';
           break;
       }
-      Search.Search.get({q: $scope.searchString, fq: filter}).$promise.then(function(response) {
+      Search.Search.get({q: $scope.searchString, fq: filter, 'q.parser': parser})
+        .$promise.then(function(response) {
         vm.results = response;
       });
     }
