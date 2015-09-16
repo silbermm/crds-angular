@@ -326,6 +326,25 @@ namespace MinistryPlatform.Translation.Services
             return (donorId);
         }
 
+        public void UpdateDonorAccount(string encryptedKey, string sourceId)
+        {
+            try
+            {
+                var donorAccount = WithApiLogin(apiToken => _ministryPlatformService.GetPageViewRecords(_donorLookupByEncryptedAccount, apiToken, "," + encryptedKey));
+                var donorAccountId = donorAccount[0]["Donor_Account_ID"].ToString();
+                var updateParms = new Dictionary<string, object>
+                {
+                    {"Donor_Account_ID", donorAccountId},
+                    {"Processor_Account_ID", sourceId}
+                };
+                _ministryPlatformService.UpdateRecord(_donorAccountsPageId, updateParms, ApiLogin());
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(
+                    string.Format("UpdateDonorAccount failed.  Donor Account: {0}", encryptedKey), ex);
+            }
+        }
 
         public void SetupConfirmationEmail(int programId, int donorId, int donationAmount, DateTime setupDate, string pymtType)
         {

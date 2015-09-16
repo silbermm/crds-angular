@@ -12,13 +12,15 @@ using MPServices = MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Services
 {
-    public class EzScanCheckScannerService : ICheckScannerService
+    public class EzScanCheckScannerService : MinistryPlatformBaseService, ICheckScannerService
     {
         private readonly ICheckScannerDao _checkScannerDao;
         private readonly IDonorService _donorService;
         private readonly ILog _logger = LogManager.GetLogger(typeof (EzScanCheckScannerService));
         private readonly MPServices.IDonorService _mpDonorService;
         private readonly IPaymentService _paymentService;
+        private readonly MPServices.IMinistryPlatformService _ministryPlatformService;
+
 
         public EzScanCheckScannerService(ICheckScannerDao checkScannerDao, IDonorService donorService, IPaymentService paymentService, MPServices.IDonorService mpDonorService)
         {
@@ -69,13 +71,11 @@ namespace crds_angular.Services
                     // If the CreateDonationAndDistributionRecord fails, we'll still consider it exported, but
                     // it will be in error, and will have to be manually resolved.
                     check.Exported = true;
-                    var ci = charge.Source.id;
-                    var chea = check.AccountNumber;
-                    var cher = check.RoutingNumber;
+              
                     var encryptedKey = _mpDonorService.CreateEncodedAndEncryptedAccountAndRoutingNumber(check.AccountNumber, check.RoutingNumber);
-                    // var donorAcct = _mpDonorService.UpdateDonorAccount(string encryptedKey, string charge.Source.id);
-                  //  var donorDetail = _checkScannerService.GetContactDonorForCheck(encryptedKey);
-
+                 
+                    _mpDonorService.UpdateDonorAccount(encryptedKey, charge.Source.id);
+                 
                     var programId = batchDetails.ProgramId == null ? null : batchDetails.ProgramId + "";
 
                     var donationId = _mpDonorService.CreateDonationAndDistributionRecord((int) (check.Amount),
