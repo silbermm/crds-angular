@@ -331,7 +331,7 @@ namespace MinistryPlatform.Translation.Services
             try
             {
                 var donorAccount = WithApiLogin(apiToken => _ministryPlatformService.GetPageViewRecords(_donorLookupByEncryptedAccount, apiToken, "," + encryptedKey));
-                var donorAccountId = donorAccount[0]["Donor_Account_ID"].ToString();
+                var donorAccountId = donorAccount[0]["dp_RecordID"].ToString();
                 var updateParms = new Dictionary<string, object>
                 {
                     {"Donor_Account_ID", donorAccountId},
