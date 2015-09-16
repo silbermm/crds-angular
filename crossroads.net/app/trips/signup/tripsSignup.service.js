@@ -15,7 +15,13 @@
     function activate() {
       $log.debug('signup service activate');
 
-      signupService.contactId = Session.exists('userId');
+      //signupService.contactId = Session.exists('userId');
+
+      // $log.debug('profileData: ' + signupService.profileData);
+
+      // if (signupService.page1 === undefined) {
+      //   signupService.page1 = 'Fred';
+      // }
 
       if (signupService.page2 === undefined) {
         signupService.page2 = page2();
@@ -59,16 +65,12 @@
 
     function reset(campaign) {
       signupService.campaign = campaign;
-      $log.debug('campaign: ' + signupService.campaign.id);
       signupService.ageLimitReached = false;
       signupService.contactId = '';
       signupService.currentPage = 1;
       signupService.numberOfPages = 0;
       signupService.pageHasErrors = true;
       signupService.privateInvite = $location.search().invite;
-
-      //signupService.page2 = resetPageTwo();
-
     }
 
     function page2() {

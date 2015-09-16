@@ -12,9 +12,8 @@
         </p>
       </div>
       <div ng-if='!isSignedUp(member) && isOfAge(member)' class="col-xs-12 col-sm-3 col-md-2 hard-sides mobile-soft-sides mobile-push-half-top">
-        <a ui-sref="tripsignup.application({campaignId: signupService.campaign.id }) " class="table-btn btn-standard">Sign Up</a>
+        <!-- <a ui-sref="tripsignup.application({campaignId: signupService.campaign.id }) " class="table-btn btn-standard">Sign Up</a> -->
         <a ng-click='goToApp(member.contactId)' class="table-btn btn-standard">Sign Up</a>
-        <pre>{{ member }}</pre>
       </div>
     </div>
   </li>

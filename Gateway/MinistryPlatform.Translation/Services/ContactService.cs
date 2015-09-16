@@ -246,5 +246,28 @@ namespace MinistryPlatform.Translation.Services
 
             return records.Select(record => (int) record["Contact_ID"]).ToList();
         }
+
+        //public void UpdateContact()
+        //{
+        //    var contactDictionary = getDictionary(person.GetContact());
+        //    var householdDictionary = getDictionary(person.GetHousehold());
+        //    var addressDictionary = getDictionary(person.GetAddress());
+        //    addressDictionary.Add("State/Region", addressDictionary["State"]);
+
+        //    MinistryPlatformService.UpdateRecord(AppSetting("MyContact"), contactDictionary, token);
+
+        //    if (addressDictionary["Address_ID"] != null)
+        //    {
+        //        //address exists, update it
+        //        MinistryPlatformService.UpdateRecord(AppSetting("MyAddresses"), addressDictionary, token);
+        //    }
+        //    else
+        //    {
+        //        //address does not exist, create it, then attach to household
+        //        var addressId = MinistryPlatformService.CreateRecord(AppSetting("MyAddresses"), addressDictionary, token);
+        //        householdDictionary.Add("Address_ID", addressId);
+        //    }
+        //    MinistryPlatformService.UpdateRecord(AppSetting("MyHousehold"), householdDictionary, token);
+        //}
     }
 }

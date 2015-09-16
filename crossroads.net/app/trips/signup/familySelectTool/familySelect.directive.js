@@ -40,7 +40,6 @@
 
       function goToApp(contactId) {
         scope.signupService.contactId = contactId;
-        // $state.go(tripsignup.application({campaignId: signupService.campaign.id }));
         $state.go('tripsignup.application', {campaignId: scope.signupService.campaign.id});
       }
 

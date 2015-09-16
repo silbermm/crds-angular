@@ -116,7 +116,7 @@
     </div><!--/row-->
 
     <div class="row">
-      <div class="form-group col-sm-12" ng-class="{ 'has-error': pages.validation.showErrors(tripAppPage2, 'why') }">>
+      <div class="form-group col-sm-12" ng-class="{ 'has-error': pages.validation.showErrors(tripAppPage2, 'why') }">
           <label for="why" class="required">Tell us why you want to go on this trip</label>
           <textarea ng-model="pages.signupService.page2.why.value" ng-required="true" cols="1" rows="4" class="form-control" name="why" id="why" maxlength="1000" placeholder="{{pages.whyPlaceholder}}"></textarea>
           <!-- <input ng-model="pages.page2.why" ng-required="true" class="form-control" name="why" placeholder="{{pages.whyPlaceholder}}"></input> -->

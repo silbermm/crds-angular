@@ -29,7 +29,6 @@ namespace crds_angular.Controllers.API
                 var dataError = new ApiErrorDto("Save Trip Application Data Invalid", new InvalidOperationException("Invalid Save Data" + errors));
                 throw new HttpResponseException(dataError.HttpResponseMessage);
             }
-            //return BadRequest();
 
             return Authorized(token =>
             {

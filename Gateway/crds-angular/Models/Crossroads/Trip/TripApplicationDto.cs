@@ -7,6 +7,9 @@ namespace crds_angular.Models.Crossroads.Trip
         [JsonProperty(PropertyName = "contactId")]
         public int ContactId { get; set; }
 
+        [JsonProperty(PropertyName = "pageOne")]
+        public ApplicationPageOne PageOne { get; set; }
+
         [JsonProperty(PropertyName = "pageTwo")]
         public ApplicationPageTwo PageTwo { get; set; }
 
@@ -24,6 +27,11 @@ namespace crds_angular.Models.Crossroads.Trip
 
         [JsonProperty(PropertyName = "pledgeCampaignId")]
         public int PledgeCampaignId { get; set; }
+
+        public class ApplicationPageOne
+        {
+            public string FirstName { get; set; }
+        }
 
         public class ApplicationPageTwo
         {

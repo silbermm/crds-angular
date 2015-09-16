@@ -419,13 +419,9 @@ namespace crds_angular.Services
 
         public int SaveApplication(TripApplicationDto dto, string token)
         {
-            //throw new NotImplementedException();
-
-            var formId = 20; //get this from web.config
-
             var formResponse = new FormResponse();
             formResponse.ContactId = dto.ContactId; //contact id of the person the application is for
-            formResponse.FormId = formId;
+            formResponse.FormId = _configurationWrapper.GetConfigIntValue("TripApplicationFormId");
             formResponse.PledgeCampaignId = dto.PledgeCampaignId;
 
             formResponse.FormAnswers = new List<FormAnswer>(FormatFormAnswers(dto));
@@ -433,6 +429,12 @@ namespace crds_angular.Services
             var formResponseId = _formSubmissionService.SubmitFormResponse(formResponse);
             return formResponseId;
         }
+
+        //private void UpdateProfile()
+        //{
+        //    var token = ApiLogin();
+        //    var x = _personService.SetProfile(token, person);
+        //}
 
         private IEnumerable<FormAnswer> FormatFormAnswers(TripApplicationDto applicationData)
         {

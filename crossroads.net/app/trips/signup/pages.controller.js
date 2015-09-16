@@ -31,6 +31,7 @@
     vm.nolaRequired = nolaRequired;
     vm.signupService = TripsSignupService;
     vm.profileData = undefined;
+    vm.signupService.profileData = vm.profileData;
     vm.underAge = underAge;
     vm.validation = Validation;
     vm.whyPlaceholder = '';
@@ -49,6 +50,10 @@
     }
 
     function validateProfile(profile, household) {
+      vm.signupService.page1 = {};
+      vm.signupService.page1.profile = profile;
+      vm.signupService.page1.household = household;
+
       handleNext(2);
     }
 
@@ -86,6 +91,7 @@
       application.contactId = vm.signupService.contactId;
       // application.formId = vm.signupService.formId;  //right now getting this from web.config
       application.pledgeCampaignId = vm.signupService.campaign.id;
+      //application.pageOne = pageOne();
       application.pageTwo = vm.signupService.page2;
       application.pageThree = vm.signupService.page3;
       application.pageFour = vm.signupService.page4;
@@ -93,11 +99,8 @@
       application.pageSix = vm.signupService.page6;
       application.$save();
 
-      // vm.signupService.TripApplication.$save();
-
-      //below commented for testing
-      // vm.currentPage = 'thanks';
-      // toTop();
+      vm.currentPage = 'thanks';
+      toTop();
     }
 
     function nolaRequired() {
@@ -106,6 +109,12 @@
       }
 
       return '';
+    }
+
+    function pageOne() {
+      return {
+        firstName: vm.signupService.page1.profile.person.firstName
+      };
     }
 
     function toTop() {
