@@ -2,7 +2,6 @@ require('crds-core');
 require('../../app/app');
 
 describe('GivingYears Directive', function() {
-  var fixture;
   var $compile;
   var $rootScope;
   var $httpBackend;
