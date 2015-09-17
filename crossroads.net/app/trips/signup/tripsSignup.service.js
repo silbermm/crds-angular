@@ -13,18 +13,18 @@
     };
 
     function activate() {
-      switch (signupService.campaign.formName) {
+      switch (signupService.campaign.nickname) {
         case 'GO NOLA Application':
           signupService.friendlyPageTitle = 'New Orleans';
           signupService.tripName = '';
           signupService.numberOfPages = 5;
           break;
-        case 'GO South Africa Application':
+        case 'South Africa':
           signupService.friendlyPageTitle = 'South Africa';
           signupService.tripName = '';
           signupService.numberOfPages = 6;
           break;
-        case 'GO India Application':
+        case 'India':
           signupService.friendlyPageTitle = 'India';
           signupService.tripName = '';
           signupService.numberOfPages = 6;
