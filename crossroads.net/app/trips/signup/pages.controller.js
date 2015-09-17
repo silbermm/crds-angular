@@ -83,9 +83,20 @@
       // submit info and then show the thankyou page directive
       $log.debug(vm.signupService.page2);
 
-      vm.profileData.person.$save().success(function(data) {
+      // vm.profileData.person.$save().success(function(data) {
+      //   $log.debug('person save successful');
+      // }).error(function(response, statusCode) {
+      //   $log.debug('person save unsuccessful');
+      // });
+
+      vm.profileData.person.$save(function() {
+        // $rootScope.$emit('notify', $rootScope.MESSAGES.profileUpdated);
         $log.debug('person save successful');
-      }).error(function(response, statusCode) {
+        // if (vm.modalInstance !== undefined) {
+        //   vm.closeModal(true);
+        // }
+      }, function() {
+
         $log.debug('person save unsuccessful');
       });
 
@@ -97,9 +108,10 @@
       application.pageFour = vm.signupService.page4;
       application.pageFive = vm.signupService.page5;
       application.pageSix = vm.signupService.page6;
-      application.$save().success(function(data) {
+      application.$save(function() {
         $log.debug('trip application save successful');
-      }).error(function(response, statusCode) {
+      }, function() {
+
         $log.debug('trip application save unsuccessful');
       });
 
