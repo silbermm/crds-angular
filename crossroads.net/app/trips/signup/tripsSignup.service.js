@@ -13,25 +13,25 @@
     };
 
     function activate() {
-      switch (signupService.campaign.nickname) {
-        case 'NOLA':
+      switch (signupService.campaign.formName) {
+        case 'GO NOLA Application':
           signupService.friendlyPageTitle = 'New Orleans';
           signupService.tripName = '';
           signupService.numberOfPages = 5;
           break;
-        case 'South Africa':
+        case 'GO South Africa Application':
           signupService.friendlyPageTitle = 'South Africa';
           signupService.tripName = '';
           signupService.numberOfPages = 6;
           break;
-        case 'India':
+        case 'GO India Application':
           signupService.friendlyPageTitle = 'India';
           signupService.tripName = '';
           signupService.numberOfPages = 6;
           signupService.whyPlaceholder = 'Please be specific. ' +
             'In instances where we have a limited number of spots, we strongly consider responses to this question.';
           break;
-        case 'Nicaragua':
+        case 'GO Nicaragua Application':
           signupService.friendlyPageTitle = 'Nicaragua';
           signupService.tripName = '';
           signupService.numberOfPages = 6;
