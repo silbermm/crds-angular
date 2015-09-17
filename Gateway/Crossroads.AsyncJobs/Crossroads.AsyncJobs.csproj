@@ -204,9 +204,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Properties\SlowCheetah\SlowCheetah.Transforms.targets" />
-    <Content Include="..\crds-angular\MinistryPlatform.config">
-      <Link>MinistryPlatform.config</Link>
-    </Content>
+    <Content Include="MinistryPlatform.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
