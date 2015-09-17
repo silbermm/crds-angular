@@ -499,15 +499,6 @@ namespace crds_angular.test.Services
                 },
                 new Donation
                 {
-                    donationAmt = 456,
-                    donationId = 56,
-                    donationDate = DateTime.Parse("2000-01-01 00:00:01"),
-                    paymentTypeId = 4, // credit card
-                    transactionCode = "tx_56"
-
-                },
-                new Donation
-                {
                     donationAmt = 567,
                     donationId = 67,
                     donationDate = DateTime.Parse("1999-11-30 23:59:59"),
@@ -531,7 +522,7 @@ namespace crds_angular.test.Services
                 StatementTypeId = 456
             };
             _mpDonorService.Setup(mocked => mocked.GetEmailViaDonorId(123)).Returns(donor);
-            _mpDonorService.Setup(mocked => mocked.GetDonations(new [] {123}, null)).Returns(donations);
+            _mpDonorService.Setup(mocked => mocked.GetDonations(new [] {123}, "1999")).Returns(donations);
             _paymentService.Setup(mocked => mocked.GetCharge("tx_67")).Returns(new StripeCharge
             {
                 Source = new StripeSource
@@ -554,13 +545,13 @@ namespace crds_angular.test.Services
             Assert.NotNull(response);
             Assert.NotNull(response.Donations);
             Assert.AreEqual(3, response.Donations.Count);
-            Assert.AreEqual(donations[0].donationAmt + donations[2].donationAmt + donations[3].donationAmt, response.DonationTotalAmount);
+            Assert.AreEqual(donations[0].donationAmt + donations[1].donationAmt + donations[2].donationAmt, response.DonationTotalAmount);
 
-            Assert.AreEqual(donations[3].donationDate, response.Donations[0].DonationDate);
+            Assert.AreEqual(donations[2].donationDate, response.Donations[0].DonationDate);
             Assert.AreEqual("8765", response.Donations[0].Source.AccountNumberLast4);
             Assert.AreEqual(CreditCardType.AmericanExpress, response.Donations[0].Source.CardType);
 
-            Assert.AreEqual(donations[2].donationDate, response.Donations[1].DonationDate);
+            Assert.AreEqual(donations[1].donationDate, response.Donations[1].DonationDate);
             Assert.AreEqual("9876", response.Donations[1].Source.AccountNumberLast4);
 
             Assert.AreEqual(donations[0].donationDate, response.Donations[2].DonationDate);
@@ -578,15 +569,6 @@ namespace crds_angular.test.Services
                     donationId = 45,
                     donationDate = DateTime.Parse("1999-12-31 23:59:59"),
                     paymentTypeId = 2, // Cash
-                },
-                new Donation
-                {
-                    donationAmt = 456,
-                    donationId = 56,
-                    donationDate = DateTime.Parse("2000-01-01 00:00:01"),
-                    paymentTypeId = 4, // credit card
-                    transactionCode = "tx_56"
-
                 },
                 new Donation
                 {
@@ -612,7 +594,7 @@ namespace crds_angular.test.Services
                 DonorId = 123,
                 StatementTypeId = 456
             });
-            _mpDonorService.Setup(mocked => mocked.GetDonations(new [] {123}, null)).Returns(donations);
+            _mpDonorService.Setup(mocked => mocked.GetDonations(new [] {123}, "1999")).Returns(donations);
             _paymentService.Setup(mocked => mocked.GetCharge("tx_67")).Returns(new StripeCharge
             {
                 Source = new StripeSource
@@ -636,13 +618,13 @@ namespace crds_angular.test.Services
             Assert.NotNull(response);
             Assert.NotNull(response.Donations);
             Assert.AreEqual(3, response.Donations.Count);
-            Assert.AreEqual(donations[0].donationAmt + donations[2].donationAmt + donations[3].donationAmt, response.DonationTotalAmount);
+            Assert.AreEqual(donations[0].donationAmt + donations[1].donationAmt + donations[2].donationAmt, response.DonationTotalAmount);
 
-            Assert.AreEqual(donations[3].donationDate, response.Donations[0].DonationDate);
+            Assert.AreEqual(donations[2].donationDate, response.Donations[0].DonationDate);
             Assert.AreEqual("8765", response.Donations[0].Source.AccountNumberLast4);
             Assert.AreEqual(CreditCardType.AmericanExpress, response.Donations[0].Source.CardType);
 
-            Assert.AreEqual(donations[2].donationDate, response.Donations[1].DonationDate);
+            Assert.AreEqual(donations[1].donationDate, response.Donations[1].DonationDate);
             Assert.AreEqual("9876", response.Donations[1].Source.AccountNumberLast4);
 
             Assert.AreEqual(donations[0].donationDate, response.Donations[2].DonationDate);

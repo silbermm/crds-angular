@@ -452,7 +452,10 @@ namespace crds_angular.test.Services
                     {
                         Id = "456",
                         Amount = "987",
-                        Charge = "ch_123456"
+                        Charge = new StripeCharge
+                        {
+                            Id = "ch_123456"
+                        }
                     }
 
                 }
