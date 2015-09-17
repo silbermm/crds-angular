@@ -7,9 +7,10 @@ using crds_angular.Models.Crossroads.Stewardship;
 using MPServices=MinistryPlatform.Translation.Services.Interfaces;
 using crds_angular.Services.Interfaces;
 using crds_angular.Util;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using Newtonsoft.Json;
-using DonationStatus = MinistryPlatform.Models.DonationStatus;
+using DonationStatus = crds_angular.Models.Crossroads.Stewardship.DonationStatus;
 
 namespace crds_angular.Services
 {
@@ -19,13 +20,17 @@ namespace crds_angular.Services
         private readonly MPServices.IDonorService _mpDonorService;
         private readonly MPServices.IAuthenticationService _mpAuthenticationService;
         private readonly IPaymentService _paymentService;
+        private readonly MPServices.IContactService _contactService;
+        private readonly int _statementTypeFamily;
 
-        public DonationService(MPServices.IDonationService mpDonationService, MPServices.IDonorService mpDonorService, MPServices.IAuthenticationService mpAuthenticationService, IPaymentService paymentService)
+        public DonationService(MPServices.IDonationService mpDonationService, MPServices.IDonorService mpDonorService, MPServices.IAuthenticationService mpAuthenticationService, IPaymentService paymentService, MPServices.IContactService contactService, IConfigurationWrapper config)
         {
             _mpDonationService = mpDonationService;
             _mpDonorService = mpDonorService;
             _mpAuthenticationService = mpAuthenticationService;
             _paymentService = paymentService;
+            _contactService = contactService;
+            _statementTypeFamily = config.GetConfigIntValue("DonorStatementTypeFamily");
         }
 
         public DonationDTO GetDonationByProcessorPaymentId(string processorPaymentId)
@@ -81,25 +86,39 @@ namespace crds_angular.Services
 
         public DonationsDTO GetDonationsForAuthenticatedUser(string userToken, string donationYear = null, bool softCredit = false)
         {
-            var donorId = GetDonorIdForAuthenticatedUser(userToken);
-            return (donorId == null ? null : GetDonationsForDonor(donorId.Value, donationYear, softCredit));
+            var donor = GetDonorForAuthenticatedUser(userToken);
+            return (donor == null ? null : GetDonationsForDonor(donor, donationYear, softCredit));
         }
 
         public DonationYearsDTO GetDonationYearsForAuthenticatedUser(string userToken)
         {
-            var donorId = GetDonorIdForAuthenticatedUser(userToken);
-            return (donorId == null ? null : GetDonationYearsForDonor(donorId.Value));
-        }
-
-        private int? GetDonorIdForAuthenticatedUser(string userToken)
-        {
-            var donor = _mpDonorService.GetContactDonor(_mpAuthenticationService.GetContactId(userToken));
-            return (donor != null && donor.ExistingDonor ? donor.DonorId : (int?)null);
+            var donor = GetDonorForAuthenticatedUser(userToken);
+            return (donor == null ? null : GetDonationYearsForDonor(donor));
         }
 
         public DonationsDTO GetDonationsForDonor(int donorId, string donationYear = null, bool softCredit = false)
         {
-            var donations = softCredit ? _mpDonorService.GetSoftCreditDonations(donorId) : _mpDonorService.GetDonations(donorId);
+            var donor = _mpDonorService.GetEmailViaDonorId(donorId);
+            return (GetDonationsForDonor(donor, donationYear, softCredit));
+        }
+
+        public DonationYearsDTO GetDonationYearsForDonor(int donorId)
+        {
+            var donor = _mpDonorService.GetEmailViaDonorId(donorId);
+            return (GetDonationYearsForDonor(donor));
+        }
+
+        private ContactDonor GetDonorForAuthenticatedUser(string userToken)
+        {
+            var donor = _mpDonorService.GetContactDonor(_mpAuthenticationService.GetContactId(userToken));
+            return (donor);
+        }
+
+        private DonationsDTO GetDonationsForDonor(ContactDonor donor, string donationYear = null, bool softCredit = false)
+        {
+            var donorIds = GetDonorIdsForDonor(donor);
+
+            var donations = softCredit ? _mpDonorService.GetSoftCreditDonations(donor.DonorId) : _mpDonorService.GetDonations(donorIds, donationYear);
             if (donations == null || donations.Count == 0)
             {
                 return (null);
@@ -107,23 +126,33 @@ namespace crds_angular.Services
 
             var response = donations.Select(Mapper.Map<DonationDTO>).ToList();
 
-            if (donationYear != null)
-            {
-                response.RemoveAll(donation => !donationYear.Equals(donation.DonationDate.Year.ToString()));
-            }
-
             foreach (var donation in response)
             {
                 StripeCharge charge = null;
                 if (!string.IsNullOrWhiteSpace(donation.Source.PaymentProcessorId))
                 {
-                    charge = _paymentService.GetCharge(donation.Source.PaymentProcessorId);
+                    // If it is a positive amount, it means it's a Charge, otherwise it's a Refund
+                    if (donation.Amount >= 0)
+                    {
+                        charge = _paymentService.GetCharge(donation.Source.PaymentProcessorId);
+                    }
+                    else
+                    {
+                        donation.Status = DonationStatus.Refunded;
+
+                        var refund = _paymentService.GetRefund(donation.Source.PaymentProcessorId);
+                        if (refund != null && refund.Charge != null)
+                        {
+                            charge = refund.Charge;
+                        }
+                    }
+                    
                 }
 
                 if (donation.Source.SourceType == PaymentType.Cash)
                 {
                     donation.Source.Name = "cash";
-                } 
+                }
                 else if (charge != null && charge.Source != null)
                 {
                     donation.Source.AccountNumberLast4 = charge.Source.AccountNumberLast4;
@@ -155,7 +184,8 @@ namespace crds_angular.Services
                 if (donation.Status == Models.Crossroads.Stewardship.DonationStatus.Refunded && donation.Amount > 0)
                 {
                     donation.Amount *= -1;
-                    donation.Distributions.All(dist => { 
+                    donation.Distributions.All(dist =>
+                    {
                         dist.Amount *= -1;
                         return (true);
                     });
@@ -170,17 +200,18 @@ namespace crds_angular.Services
             return (donationsResponse);
         }
 
-        public DonationYearsDTO GetDonationYearsForDonor(int donorId)
+        private DonationYearsDTO GetDonationYearsForDonor(ContactDonor donor)
         {
-            var years = new HashSet<string>();
-            var softCreditDonations = _mpDonorService.GetSoftCreditDonations(donorId);
-            var donations = _mpDonorService.GetDonations(donorId);
+            var donorIds = GetDonorIdsForDonor(donor);
+            var donations = _mpDonorService.GetDonations(donorIds, null);
+            var softCreditDonations = _mpDonorService.GetSoftCreditDonations(donor.DonorId);
 
-            if (softCreditDonations != null)
+            var years = new HashSet<string>();
+            if (softCreditDonations != null && softCreditDonations.Any())
             {
                 years.UnionWith(softCreditDonations.Select(d => d.donationDate.Year.ToString()));
             }
-            if (donations != null)
+            if (donations != null && donations.Any())
             {
                 years.UnionWith(donations.Select(d => d.donationDate.Year.ToString()));
             }
@@ -189,6 +220,36 @@ namespace crds_angular.Services
             donationYears.AvailableDonationYears.AddRange(years.ToList());
 
             return (donationYears);
+        }
+
+        private IEnumerable<int> GetDonorIdsForDonor(ContactDonor donor)
+        {
+            var donorIds = new HashSet<int>();
+            if (donor.ExistingDonor)
+            {
+                donorIds.Add(donor.DonorId);
+            }
+
+            if (donor.StatementTypeId != _statementTypeFamily || !donor.HasDetails)
+            {
+                return (donorIds);
+            }
+
+            var household = _contactService.GetHouseholdById(donor.Details.HouseholdId);
+            if (household == null || household.HouseholdMembers == null || !household.HouseholdMembers.Any())
+            {
+                return (donorIds);
+            }
+
+            foreach (var member in household.HouseholdMembers)
+            {
+                if(member.StatementTypeId.HasValue && member.StatementTypeId == _statementTypeFamily)
+                {
+                    donorIds.Add(donor.DonorId);
+                }
+            }
+
+            return (donorIds);
         }
 
         public DonationBatchDTO GetDonationBatchByDepositId(int depositId)
