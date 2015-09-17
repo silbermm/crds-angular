@@ -472,7 +472,7 @@ namespace MinistryPlatform.Translation.Services
 
                 Donation donation = GetDonationFromMap(donationMap, record, donationId, statuses);
                 AddDistributionToDonation(record, donation);
-                donationMap[donation.DonationId] = donation;
+                donationMap[donation.donationId] = donation;
             }
 
             return donationMap.Values.ToList();
@@ -490,19 +490,19 @@ namespace MinistryPlatform.Translation.Services
             
             var donation = new Donation
             {
-                DonationDate = record["Donation_Date"] as DateTime? ?? DateTime.Now,
-                BatchId = null,
-                DonationId = record["Donation_ID"] as int? ?? 0,
-                DonationNotes = null,
-                DonationStatus = record["Donation_Status_ID"] as int? ?? 0,
-                DonationStatusDate = record["Donation_Status_Date"] as DateTime? ?? DateTime.Now,
-                DonorId = record["Donor_ID"] as int? ?? 0,
-                PaymentTypeId = record["Payment_Type_ID"] as int? ?? 0,
-                TransactionCode = record["Transaction_Code"] as string,
-                SoftCreditDonorId = record["Soft_Credit_Donor_ID"] as int? ?? 0,
+                donationDate = record["Donation_Date"] as DateTime? ?? DateTime.Now,
+                batchId = null,
+                donationId = record["Donation_ID"] as int? ?? 0,
+                donationNotes = null,
+                donationStatus = record["Donation_Status_ID"] as int? ?? 0,
+                donationStatusDate = record["Donation_Status_Date"] as DateTime? ?? DateTime.Now,
+                donorId = record["Donor_ID"] as int? ?? 0,
+                paymentTypeId = record["Payment_Type_ID"] as int? ?? 0,
+                transactionCode = record["Transaction_Code"] as string,
+                softCreditDonorId = record["Soft_Credit_Donor_ID"] as int? ?? 0,
             };
 
-            var status = statuses.Find(x => x.Id == donation.DonationStatus) ?? new DonationStatus();
+            var status = statuses.Find(x => x.Id == donation.donationStatus) ?? new DonationStatus();
             donation.IncludeOnGivingHistory = status.DisplayOnGivingHistory;
             donation.IncludeOnPrintedStatement = status.DisplayOnStatement;
 
@@ -513,7 +513,7 @@ namespace MinistryPlatform.Translation.Services
         {
 
             var amount = Convert.ToInt32((record["Amount"] as decimal? ?? 0) * Constants.StripeDecimalConversionValue);
-            donation.DonationAmt += amount;
+            donation.donationAmt += amount;
 
             donation.Distributions.Add(new DonationDistribution
             {

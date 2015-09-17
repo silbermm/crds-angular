@@ -7,6 +7,7 @@ namespace MinistryPlatform.Models
     {
         public int donationId { get; set; }
         public int donorId { get; set; }
+        public int softCreditDonorId { get; set; }
         public int donationAmt { get; set; }
         public DateTime donationDate { get; set; }
         public int paymentTypeId { get; set; }

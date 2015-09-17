@@ -728,7 +728,7 @@ namespace crds_angular.test.Services
             };
             _mpDonorService.Setup(mocked => mocked.GetEmailViaDonorId(123)).Returns(donor);
             _mpDonorService.Setup(mocked => mocked.GetDonations(new [] {123}, null)).Returns(donations);
-            _mpDonorService.Setup(mocked => mocked.GetSoftCreditDonations(123)).Returns(softCreditDonations);
+            _mpDonorService.Setup(mocked => mocked.GetSoftCreditDonations(new [] {123}, null)).Returns(softCreditDonations);
 
             var response = _fixture.GetDonationYearsForDonor(123);
             _mpDonorService.VerifyAll();
@@ -804,7 +804,7 @@ namespace crds_angular.test.Services
             });
 
             _mpDonorService.Setup(mocked => mocked.GetDonations(new [] {123}, null)).Returns(donations);
-            _mpDonorService.Setup(mocked => mocked.GetSoftCreditDonations(123)).Returns(softCreditDonations);
+            _mpDonorService.Setup(mocked => mocked.GetSoftCreditDonations(new [] {123}, null)).Returns(softCreditDonations);
 
             var response = _fixture.GetDonationYearsForAuthenticatedUser("auth token");
             _mpDonorService.VerifyAll();
