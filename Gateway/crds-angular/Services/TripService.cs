@@ -417,7 +417,7 @@ namespace crds_angular.Services
             return _privateInviteService.PrivateInviteValid(pledgeCampaignId, guid, person.EmailAddress);
         }
 
-        public int SaveApplication(TripApplicationDto dto, string token)
+        public int SaveApplication(TripApplicationDto dto)
         {
             var formResponse = new FormResponse();
             formResponse.ContactId = dto.ContactId; //contact id of the person the application is for
