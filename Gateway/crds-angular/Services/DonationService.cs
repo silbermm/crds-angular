@@ -243,8 +243,7 @@ namespace crds_angular.Services
 
             foreach (var member in household.HouseholdMembers)
             {
-                donor = _mpDonorService.GetContactDonor(member.ContactId);
-                if (donor.ExistingDonor && donor.StatementTypeId == _statementTypeFamily)
+                if(member.StatementTypeId.HasValue && member.StatementTypeId == _statementTypeFamily)
                 {
                     donorIds.Add(donor.DonorId);
                 }
