@@ -207,6 +207,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Email","test@test.com"},
                 {"Contact_ID","1234"},
                 {"Statement_Type", "Individual"},
+                {"Statement_Type_ID", 1},
                 {"Statement_Frequency", "Quarterly"},
                 {"Statement_Method", "None"},
                 {"Household_ID", 1}
@@ -328,6 +329,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Contact_ID", contactId},
                 {"Email", email},
                 {"Statement_Type", "Individual"},
+                {"Statement_Type_ID", 1},
                 {"Statement_Frequency", "Quarterly"},
                 {"Statement_Method", "None"},
                 {"Household_ID", 1}
@@ -438,6 +440,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Contact_ID", contactId},
                     {"Email", email},
                     {"Statement_Type", "Individual"},
+                    {"Statement_Type_ID", 1},
                     {"Statement_Frequency", "Quarterly"},
                     {"Statement_Method", "None"},
                     {"Household_ID", 1}

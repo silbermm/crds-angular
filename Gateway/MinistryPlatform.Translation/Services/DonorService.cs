@@ -198,6 +198,7 @@ namespace MinistryPlatform.Translation.Services
                         RegisteredUser = true,
                         Email = record.ToString("Email"),
                         StatementType = record.ToString("Statement_Type"),
+                        StatementTypeId = record.ToInt("Statement_Type_ID"),
                         StatementFreq = record.ToString("Statement_Frequency"),
                         StatementMethod = record.ToString("Statement_Method"),
                         Details = new ContactDetails
@@ -362,6 +363,7 @@ namespace MinistryPlatform.Translation.Services
                     donor.RegisteredUser = true;
                     donor.Email = record.ToString("Email");
                     donor.StatementType = record.ToString("Statement_Type");
+                    donor.StatementTypeId = record.ToInt("Statement_Type_ID");
                     donor.StatementFreq = record.ToString("Statement_Frequency");
                     donor.StatementMethod = record.ToString("Statement_Method");
                     donor.Details = new ContactDetails
