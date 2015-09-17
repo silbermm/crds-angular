@@ -112,7 +112,7 @@ namespace crds_angular.Services
             person.City = contact.City;
             person.State = contact.State;
             person.PostalCode = contact.Postal_Code;
-            person.AnniversaryDate = String.Format("{0:MM//yyyy}", contact.Anniversary_Date); 
+            person.AnniversaryDate = contact.Anniversary_Date; 
             person.ForeignCountry = contact.Foreign_Country;
             person.HomePhone = contact.Home_Phone;
             person.CongregationId = contact.Congregation_ID;

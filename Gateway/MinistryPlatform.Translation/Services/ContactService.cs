@@ -132,7 +132,7 @@ namespace MinistryPlatform.Translation.Services
                 City = recordsDict.ToString("City"),
                 State = recordsDict.ToString("State"),
                 Postal_Code = recordsDict.ToString("Postal_Code"),
-                Anniversary_Date = recordsDict.ToDateAsString("Anniversary_Date"),
+                Anniversary_Date = ParseAnniversaryDate(recordsDict.ToDate("Anniversary_Date")),
                 Contact_ID = recordsDict.ToInt("Contact_ID"),
                 Date_Of_Birth = recordsDict.ToDateAsString("Date_of_Birth"),
                 Email_Address = recordsDict.ToString("Email_Address"),
@@ -151,6 +151,11 @@ namespace MinistryPlatform.Translation.Services
                 Age = recordsDict.ToInt("Age")
             };
             return contact;
+        }
+
+        private static string ParseAnniversaryDate(DateTime anniversary)
+        {
+            return String.Format("{0:MM/yyyy}", anniversary);
         }
 
         public int CreateContactForNewDonor(ContactDonor contactDonor)
