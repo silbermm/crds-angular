@@ -30,8 +30,8 @@
     vm.handleSubmit = handleSubmit;
     vm.nolaRequired = nolaRequired;
     vm.signupService = TripsSignupService;
-    vm.profileData = undefined;
-    vm.signupService.profileData = vm.profileData;
+    vm.profileData = TripsSignupService.profileData;
+    //vm.signupService.profileData = vm.profileData;
     vm.underAge = underAge;
     vm.validation = Validation;
     vm.whyPlaceholder = '';

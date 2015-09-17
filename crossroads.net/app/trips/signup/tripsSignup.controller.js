@@ -3,21 +3,41 @@
 
   module.exports = TripsSignupController;
 
-  TripsSignupController.$inject = ['$log', 'Session',  'Campaign', 'WorkTeams', '$location', 'Trip', '$q', 'contactId'];
+  TripsSignupController.$inject = [
+    '$log',
+    'Session',
+    'Campaign',
+    'WorkTeams',
+    '$location',
+    'Trip',
+    '$q',
+    'contactId',
+    'TripsSignupService',
+    'Person'
+  ];
 
-  function TripsSignupController($log, Session, Campaign, WorkTeams, $location, Trip, $q, contactId) {
+  function TripsSignupController(
+      $log,
+      Session,
+      Campaign,
+      WorkTeams,
+      $location,
+      Trip,
+      $q,
+      contactId,
+      TripsSignupService,
+      Person ){
 
     var vm = this;
-
     vm.ageLimitReached = true;
     vm.campaign = Campaign;
     vm.contactId = contactId;
     vm.currentPage = 1;
+    vm.destination = vm.campaign.nickname;
     vm.numberOfPages = 0;
     vm.pageHasErrors = true;
     // vm.pageTitle = vm.campaign.nickname;
     // renamed pageTitle to destination
-    vm.destination = vm.campaign.nickname;
     vm.privateInvite = $location.search()['invite'];
     vm.registrationNotOpen = true;
     vm.tripName = vm.campaign.name;
@@ -31,6 +51,10 @@
     //// IMPLEMENTATION DETAILS ////
     ////////////////////////////////
     function activate() {
+      TripsSignupService.profileData = { person:  Person };
+      if (TripsSignupService.campaign === undefined) {
+        TripsSignupService.campaign = Campaign;
+      }
       pageHasErrors();
 
       switch (vm.destination) {

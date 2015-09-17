@@ -61,22 +61,25 @@
         vm.states = response.states;
         vm.countries = response.countries;
         vm.crossroadsLocations = response.crossroadsLocations;
-        if (!vm.profileData) { 
-          configurePerson(response.person);
+        if (!vm.profileData) {
+          vm.profileData = { person: response.person };
         }
+
+        configurePerson();
+
         vm.viewReady = true;
-        
+
         if (vm.profileData.person.householdId) {
           Profile.Household.get({ householdId: vm.profileData.person.householdId}, function(data) {
             vm.profileData.householdInfo = data;
           });
         }
       });
+
       vm.buttonText = vm.buttonText !== undefined ? vm.buttonText : 'Save';
     }
 
-    function configurePerson(person) {
-      vm.profileData = { person: person };
+    function configurePerson() {
 
       if (vm.profileData.person.dateOfBirth !== undefined) {
         var newBirthDate = vm.profileData.person.dateOfBirth.replace(vm.dateFormat, '$3 $1 $2');

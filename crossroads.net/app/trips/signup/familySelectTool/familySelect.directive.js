@@ -40,7 +40,7 @@
 
       function goToApp(contactId) {
         scope.signupService.contactId = contactId;
-        $state.go('tripsignup.application', {campaignId: scope.signupService.campaign.id});
+        $state.go('tripsignup.application', {campaignId: scope.signupService.campaign.id, contactId: contactId });
       }
 
       function isOfAge(member) {
