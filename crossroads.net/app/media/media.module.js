@@ -25,6 +25,7 @@ require('./templates/mediaDetails.html');
 require('./templates/mediaListCard.html');
 require('./templates/seriesListCard.html');
 require('./templates/messagesListCard.html');
+require('./templates/rssFeedCopy.html');
 
 app.controller('MediaController', require('./media.controller'));
 app.controller('SingleMediaController', require('./singleMedia.controller'));

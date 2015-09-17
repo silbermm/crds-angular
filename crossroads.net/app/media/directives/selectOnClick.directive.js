@@ -3,19 +3,46 @@
 
   module.exports = SelectOnClick;
 
-  SelectOnClick.$inject = ['$window'];
+  SelectOnClick.$inject = ['$window', '$timeout'];
 
-  function SelectOnClick($window) {
+  function SelectOnClick($window, $timeout) {
     return {
-      restrict: 'A',
+      restrict: 'E',
+      templateUrl: function (elem, attr) {
+        return 'templates/rssFeedCopy.html';
+      },
+      scope: {
+        link: '@'
+      },
       link: function (scope, element, attrs) {
-        element.on('click', function () {
-          if (!$window.getSelection().toString()) {
-            // Required for mobile Safari
-            this.setSelectionRange(0, this.value.length);
-          }
+        element.on('click', function ($event) {
+          $event.stopPropagation();
         });
+
+        scope.showCopyLink = true;
+
+        var input = angular.element(element[0].querySelector('input'))[0];
+
+        scope.textboxBlur = function() {
+          scope.showCopyLink = true;
+        };
+
+        scope.copyClicked = function() {
+          scope.showCopyLink = false;
+
+          $timeout(function() {
+            selectText(input);
+          });
+        };
       }
     };
+
+    function selectText(input) {
+      input.focus();
+      if (!$window.getSelection().toString()) {
+        // Required for mobile Safari
+        input.setSelectionRange(0, input.value.length);
+      }
+    }
   }
 })();
