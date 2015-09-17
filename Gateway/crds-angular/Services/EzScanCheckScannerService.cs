@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Web.UI.WebControls;
 using AutoMapper;
 using crds_angular.DataAccess.Interfaces;
 using crds_angular.Models.Crossroads.Stewardship;
@@ -12,16 +10,14 @@ using MPServices = MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Services
 {
-    public class EzScanCheckScannerService : MinistryPlatformBaseService, ICheckScannerService
+    public class EzScanCheckScannerService :  ICheckScannerService
     {
         private readonly ICheckScannerDao _checkScannerDao;
         private readonly IDonorService _donorService;
         private readonly ILog _logger = LogManager.GetLogger(typeof (EzScanCheckScannerService));
         private readonly MPServices.IDonorService _mpDonorService;
         private readonly IPaymentService _paymentService;
-        private readonly MPServices.IMinistryPlatformService _ministryPlatformService;
-
-
+      
         public EzScanCheckScannerService(ICheckScannerDao checkScannerDao, IDonorService donorService, IPaymentService paymentService, MPServices.IDonorService mpDonorService)
         {
             _checkScannerDao = checkScannerDao;

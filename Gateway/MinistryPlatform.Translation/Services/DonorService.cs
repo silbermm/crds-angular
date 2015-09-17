@@ -263,7 +263,7 @@ namespace MinistryPlatform.Translation.Services
         public ContactDonor GetContactDonorForDonorAccount(string accountNumber, string routingNumber)
         {
             var search = string.Format(",{0}", CreateEncodedAndEncryptedAccountAndRoutingNumber(accountNumber, routingNumber));
-           
+
             var accounts = WithApiLogin(apiToken => _ministryPlatformService.GetPageViewRecords(_findDonorByAccountPageViewId, apiToken, search));
             if (accounts == null || accounts.Count == 0)
             {
@@ -300,7 +300,7 @@ namespace MinistryPlatform.Translation.Services
             return details;
         }
 
-        public string CreateEncodedAndEncryptedAccountAndRoutingNumber(string accountNumber, string routingNumber)
+        private string CreateEncodedAndEncryptedAccountAndRoutingNumber(string accountNumber, string routingNumber)
         {
             var acct = _crypto.EncryptValue(accountNumber);
             var rtn = _crypto.EncryptValue(routingNumber);

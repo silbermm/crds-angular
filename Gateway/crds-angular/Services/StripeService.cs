@@ -101,8 +101,6 @@ namespace crds_angular.Services
             var response = _stripeRestClient.Execute<StripeCustomer>(request);
             CheckStripeResponse("Customer creation failed", response);
             
-            
-            //response.Data.sources.data[0].id
             return response.Data;
         }
 

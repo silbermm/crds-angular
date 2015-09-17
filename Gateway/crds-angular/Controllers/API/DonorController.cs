@@ -143,7 +143,6 @@ namespace crds_angular.Controllers.API
                 var donor = _donorService.GetContactDonorForAuthenticatedUser(authToken);
                 donor = _donorService.CreateOrUpdateContactDonor(donor, string.Empty, string.Empty, dto.stripe_token_id, DateTime.Now);
 
-
                 var response = new DonorDTO
                 {
                     Id = donor.DonorId,
