@@ -32,13 +32,13 @@
   </a>
 </li>
 <li><hr></li>
-<li>
+<li ng-click="$event.stopPropagation()">
   <div class="dropdown-menu-content">
     <span class="dropdown-rss-link">
       <svg viewBox="0 0 32 32" class="icon icon-link">
         <use xlink:href="#link"></use>
       </svg>
-      crds.ch/pod-audio <button type="button" class="btn btn-default btn-xs">Copy</button>
+      <rss-feed link="http://crds.ch/pod-audio"></rss-feed>
     </span>
   </div>
 </li>
@@ -48,7 +48,7 @@
       <svg viewBox="0 0 32 32" class="icon icon-link">
         <use xlink:href="#link"></use>
       </svg>
-      crds.ch/pod-video <button type="button" class="btn btn-default btn-xs">Copy</button>
+      <rss-feed link="http://crds.ch/pod-video"></rss-feed>
     </span>
   </div>
 </li>

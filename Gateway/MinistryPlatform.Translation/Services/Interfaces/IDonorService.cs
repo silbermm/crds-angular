@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MinistryPlatform.Models;
 
 namespace MinistryPlatform.Translation.Services.Interfaces
@@ -23,5 +24,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         ContactDetails GetContactDonorForCheckAccount(string encryptedKey);
         string CreateEncodedAndEncryptedAccountAndRoutingNumber(string accountNumber, string routingNumber);
         void UpdateDonorAccount(string encryptedKey, string customerId, string sourceId);
+        List<Donation> GetDonations(int donorId);
+        List<Donation> GetSoftCreditDonations(int donorId);
     }
 }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
 using log4net;
@@ -22,6 +20,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _donationDistributionPageId;
         private readonly int _donorAccountsPageId;
         private readonly int _findDonorByAccountPageViewId;
+        private readonly int _donationStatusesPageId;
         private readonly int _donorLookupByEncryptedAccount;
 
         public const string DonorRecordId = "Donor_Record";
@@ -51,6 +50,7 @@ namespace MinistryPlatform.Translation.Services
             _donationDistributionPageId = configuration.GetConfigIntValue("Distributions");
             _donorAccountsPageId = configuration.GetConfigIntValue("DonorAccounts");
             _findDonorByAccountPageViewId = configuration.GetConfigIntValue("FindDonorByAccountPageView");
+            _donationStatusesPageId = configuration.GetConfigIntValue("DonationStatus");
             _donorLookupByEncryptedAccount = configuration.GetConfigIntValue("DonorLookupByEncryptedAccount");
         }
 
@@ -414,6 +414,89 @@ namespace MinistryPlatform.Translation.Services
 
 
             _communicationService.SendMessage(comm);
+        }
+
+        public List<Donation> GetDonations(int donorId)
+        {
+            var search = string.Format(",,,,,,,,,,\"{0}\"", donorId);
+            var records = WithApiLogin(token => _ministryPlatformService.GetRecordsDict(_donationDistributionPageId, token, search));
+            if (records == null || records.Count == 0)
+            {
+                return (null);
+            }
+
+            var statuses = GetDonationStatuses();
+
+            var donationMap = new Dictionary<int, Donation>();
+            foreach (var r in records)
+            {
+                var donationId = r["Donation_ID"] as int? ?? 0;
+                Donation d;
+                if (donationMap.ContainsKey(donationId))
+                {
+                    d = donationMap[donationId];
+                }
+                else
+                {
+                    d = new Donation
+                    {
+                        donationDate = r["Donation_Date"] as DateTime? ?? DateTime.Now,
+                        batchId = null,
+                        donationId = r["Donation_ID"] as int? ?? 0,
+                        donationNotes = null,
+                        donationStatus = r["Donation_Status_ID"] as int? ?? 0,
+                        donationStatusDate = r["Donation_Status_Date"] as DateTime? ?? DateTime.Now,
+                        donorId = r["Donor_ID"] as int? ?? 0,
+                        paymentTypeId = r["Payment_Type_ID"] as int? ?? 0,
+                        transactionCode = r["Transaction_Code"] as string
+                    };
+                    var status = statuses.Find(x => x.Id == d.donationStatus) ?? new DonationStatus();
+                    d.IncludeOnGivingHistory = status.DisplayOnGivingHistory;
+                    d.IncludeOnPrintedStatement = status.DisplayOnStatement;
+                }
+
+                var amount = Convert.ToInt32((r["Amount"] as decimal? ?? 0)*Constants.StripeDecimalConversionValue);
+                d.donationAmt += amount;
+
+                d.Distributions.Add(new DonationDistribution
+                {
+                    donationDistributionProgram = r["dp_RecordName"] as string,
+                    donationDistributionAmt = amount
+                });
+
+                donationMap[d.donationId] = d;
+            }
+
+            var donations = donationMap.Values.ToList();
+
+            return (donations);
+        }
+
+        private List<DonationStatus> GetDonationStatuses()
+        {
+            var statuses = WithApiLogin(token => _ministryPlatformService.GetRecordsDict(_donationStatusesPageId, token));
+
+            if (statuses == null || statuses.Count == 0)
+            {
+                return (new List<DonationStatus>());
+            }
+
+            var result = statuses.Select(s => new DonationStatus
+            {
+                DisplayOnGivingHistory = s["Display_On_Giving_History"] as bool? ?? true,
+                DisplayOnStatement = s["Display_On_Statements"] as bool? ?? false,
+                DisplayOnMyTrips = s["Display_On_MyTrips"] as bool? ?? false,
+                Id = s["dp_RecordID"] as int? ?? 0,
+                Name = s["Donation_Status"] as string
+            }).ToList();
+
+            return (result);
+        }
+
+        public List<Donation> GetSoftCreditDonations(int donorId)
+        {
+            // TODO implement GetSoftCreditDonationsForDonor
+            return (null);
         }
     }
 

@@ -165,7 +165,7 @@ namespace MinistryPlatform.Translation.Services
 
         public DateTime? GetTripFormResponseByContactId(int contactId, int pledgeId)
         {
-            var searchString = string.Format(",{0}", contactId);
+            var searchString = string.Format(",{0},,{1}", contactId, pledgeId);
             var signedUp = _ministryPlatformService.GetPageViewRecords(_formResponseGoTripView, ApiLogin(), searchString);
             if (signedUp.Count < 1)
             {

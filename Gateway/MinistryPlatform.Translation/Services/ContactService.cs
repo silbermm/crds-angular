@@ -128,6 +128,7 @@ namespace MinistryPlatform.Translation.Services
                 Address_Line_2 = recordsDict.ToString("Address_Line_2"),
                 Congregation_ID = recordsDict.ToNullableInt("Congregation_ID"),
                 Household_ID = recordsDict.ToInt("Household_ID"),
+                Household_Name = recordsDict.ToString("Household_Name"),
                 City = recordsDict.ToString("City"),
                 State = recordsDict.ToString("State"),
                 Postal_Code = recordsDict.ToString("Postal_Code"),

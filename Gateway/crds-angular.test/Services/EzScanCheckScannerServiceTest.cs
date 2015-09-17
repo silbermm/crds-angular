@@ -155,7 +155,7 @@ namespace crds_angular.test.Services
             _paymentService.Setup(mocked => mocked.ChargeCustomer(contactDonorExisting.ProcessorId, contactDonorExisting.Account.ProcessorAccountId, (int) checks[0].Amount, contactDonorExisting.DonorId)).Returns(new StripeCharge
             {
                 Id = "1020304",
-                Source = new SourceData
+                Source = new StripeSource()
                 {
                     id = "py_dgsttety6737hjjhweiu3"
                 },
@@ -192,7 +192,7 @@ namespace crds_angular.test.Services
             var mockCharge = new StripeCharge
             {
                 Id = "40302010",
-                Source = new SourceData
+                Source = new StripeSource()
                 {
                     id = "ba_dgsttety6737hjjhweiu3"
                 }

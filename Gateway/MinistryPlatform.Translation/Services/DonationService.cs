@@ -312,9 +312,9 @@ namespace MinistryPlatform.Translation.Services
             return (d);
         }
 
-        public List<TripDistribution> GetMyTripDistributions(int contactId, string token)
+        public List<TripDistribution> GetMyTripDistributions(int contactId)
         {
-            var results = _ministryPlatformService.GetPageViewRecords(_tripDistributionsPageView, token, contactId.ToString());
+            var results = _ministryPlatformService.GetPageViewRecords(_tripDistributionsPageView, ApiLogin(), contactId.ToString());
             var trips = new List<TripDistribution>();
             foreach (var result in results)
             {

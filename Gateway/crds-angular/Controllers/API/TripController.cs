@@ -7,6 +7,7 @@ using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads.Trip;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
+using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Controllers.API
 {
@@ -14,11 +15,13 @@ namespace crds_angular.Controllers.API
     {
         private readonly ITripService _tripService;
         private readonly IPersonService _personService;
+        private readonly IAuthenticationService _authenticationService;
 
-        public TripController(ITripService tripService, IPersonService persionService)
+        public TripController(ITripService tripService, IPersonService persionService, IAuthenticationService authenticationService)
         {
             _tripService = tripService;
             _personService = persionService;
+            _authenticationService = authenticationService;
         }
 
         [AcceptVerbs("GET")]
@@ -170,14 +173,15 @@ namespace crds_angular.Controllers.API
 
         [AcceptVerbs("GET")]
         [ResponseType(typeof (MyTripsDto))]
-        [Route("api/trip/mytrips/{contactId}")]
-        public IHttpActionResult MyTrips(int contactId)
+        [Route("api/trip/mytrips")]
+        public IHttpActionResult MyTrips()
         {
             return Authorized(token =>
             {
                 try
                 {
-                    var trips = _tripService.GetMyTrips(contactId, token);
+                    var contactId = _authenticationService.GetContactId(token);
+                    var trips = _tripService.GetMyTrips(contactId);
                     return Ok(trips);
                 }
                 catch (Exception ex)
