@@ -23,7 +23,7 @@ namespace crds_angular.Controllers.API
             _tripService = tripService;
             _messageFactory = messageFactory;
 
-            var eventQueueName = configuration.GetConfigValue("TripApplicationEventQueueName");
+            var eventQueueName = configuration.GetConfigValue("TripApplicationEventQueue");
             _eventQueue = messageQueueFactory.CreateQueue(eventQueueName, QueueAccessMode.Send);
             _messageFactory = messageFactory;
         }
