@@ -14,7 +14,7 @@
 
     function activate() {
       switch (signupService.campaign.formName) {
-        case 'GO India Application':
+        case 'GO NOLA Application':
           signupService.friendlyPageTitle = 'New Orleans';
           signupService.tripName = '';
           signupService.numberOfPages = 5;
