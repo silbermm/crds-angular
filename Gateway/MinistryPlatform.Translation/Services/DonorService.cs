@@ -183,7 +183,7 @@ namespace MinistryPlatform.Translation.Services
             ContactDonor donor;
             try
             {
-                var searchStr = contactId + ",";
+                var searchStr = string.Format("\"{0}\",", contactId);
                 var records =
                     WithApiLogin(
                         apiToken => (_ministryPlatformService.GetPageViewRecords("DonorByContactId", apiToken, searchStr)));
@@ -196,7 +196,15 @@ namespace MinistryPlatform.Translation.Services
                         ProcessorId = record.ToString(DonorProcessorId),
                         ContactId = record.ToInt("Contact_ID"),
                         RegisteredUser = true,
-                        Email = record.ToString("Email")
+                        Email = record.ToString("Email"),
+                        StatementType = record.ToString("Statement_Type"),
+                        StatementFreq = record.ToString("Statement_Frequency"),
+                        StatementMethod = record.ToString("Statement_Method"),
+                        Details = new ContactDetails
+                        {
+                            EmailAddress = record.ToString("Email"),
+                            HouseholdId = record.ToInt("Household_ID")
+                        }
                     };
                 }
                 else
@@ -259,7 +267,7 @@ namespace MinistryPlatform.Translation.Services
 
         public ContactDonor GetContactDonorForDonorAccount(string accountNumber, string routingNumber)
         {
-            var search = string.Format(",{0}", CreateEncodedAndEncryptedAccountAndRoutingNumber(accountNumber, routingNumber));
+            var search = string.Format(",\"{0}\"", CreateEncodedAndEncryptedAccountAndRoutingNumber(accountNumber, routingNumber));
 
             var accounts = WithApiLogin(apiToken => _ministryPlatformService.GetPageViewRecords(_findDonorByAccountPageViewId, apiToken, search));
             if (accounts == null || accounts.Count == 0)
@@ -340,7 +348,7 @@ namespace MinistryPlatform.Translation.Services
             var donor = new ContactDonor();
             try
             {
-                var searchStr = "," + donorId.ToString();
+                var searchStr = string.Format(",\"{0}\"", donorId);
                 var records =
                     WithApiLogin(
                         apiToken => (_ministryPlatformService.GetPageViewRecords("DonorByContactId", apiToken, searchStr)));
@@ -348,8 +356,19 @@ namespace MinistryPlatform.Translation.Services
                 {
                     var record = records.First();
 
-                    donor.Email = record.ToString("Email");
+                    donor.DonorId = record.ToInt("Donor_ID");
+                    donor.ProcessorId = record.ToString(DonorProcessorId);
                     donor.ContactId = record.ToInt("Contact_ID");
+                    donor.RegisteredUser = true;
+                    donor.Email = record.ToString("Email");
+                    donor.StatementType = record.ToString("Statement_Type");
+                    donor.StatementFreq = record.ToString("Statement_Frequency");
+                    donor.StatementMethod = record.ToString("Statement_Method");
+                    donor.Details = new ContactDetails
+                    {
+                        EmailAddress = record.ToString("Email"),
+                        HouseholdId = record.ToInt("Household_ID")
+                    };
                 }
             }
             catch (Exception ex)
@@ -393,9 +412,12 @@ namespace MinistryPlatform.Translation.Services
             _communicationService.SendMessage(comm);
         }
 
-        public List<Donation> GetDonations(int donorId)
+        public List<Donation> GetDonations(IEnumerable<int> donorIds, string donationYear = null)
         {
-            var search = string.Format(",,,,,,,,,,\"{0}\"", donorId);
+            var yearSearch = string.IsNullOrWhiteSpace(donationYear) ? string.Empty : string.Format("\"*/{0} *\"", donationYear);
+            var donorIdSearch = string.Join(" or ", donorIds.Select(id => string.Format("\"{0}\"", id)));
+
+            var search = string.Format("{0},,,,,,,,,,{1}", yearSearch, donorIdSearch);
             var records = WithApiLogin(token => _ministryPlatformService.GetRecordsDict(_donationDistributionPageId, token, search));
             if (records == null || records.Count == 0)
             {
@@ -447,6 +469,11 @@ namespace MinistryPlatform.Translation.Services
             var donations = donationMap.Values.ToList();
 
             return (donations);
+        }
+
+        public List<Donation> GetDonations(int donorId, string donationYear = null)
+        {
+            return (GetDonations(new [] {donorId}, donationYear));
         }
 
         private List<DonationStatus> GetDonationStatuses()

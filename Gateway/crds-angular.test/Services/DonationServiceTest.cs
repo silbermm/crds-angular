@@ -4,6 +4,7 @@ using crds_angular.App_Start;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using Moq;
 using Newtonsoft.Json;
@@ -19,6 +20,8 @@ namespace crds_angular.test.Services
         private Mock<MPServices.IDonorService> _mpDonorService;
         private Mock<MPServices.IAuthenticationService> _mpAuthenticationService;
         private Mock<IPaymentService> _paymentService;
+        private Mock<MPServices.IContactService> _contactService;
+        private Mock<IConfigurationWrapper> _configurationWrapper;
 
         [SetUp]
         public void SetUp()
@@ -29,8 +32,12 @@ namespace crds_angular.test.Services
             _mpDonorService = new Mock<MPServices.IDonorService>(MockBehavior.Strict);
             _mpAuthenticationService = new Mock<MPServices.IAuthenticationService>();
             _paymentService = new Mock<IPaymentService>();
+            _contactService = new Mock<MPServices.IContactService>();
+            _configurationWrapper = new Mock<IConfigurationWrapper>();
 
-            _fixture = new DonationService(_mpDonationService.Object, _mpDonorService.Object, _mpAuthenticationService.Object, _paymentService.Object);
+            _configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("DonorStatementTypeFamily")).Returns(456);
+
+            _fixture = new DonationService(_mpDonationService.Object, _mpDonorService.Object, _mpAuthenticationService.Object, _paymentService.Object, _contactService.Object, _configurationWrapper.Object);
         }
 
         [Test]
@@ -516,7 +523,15 @@ namespace crds_angular.test.Services
                     transactionCode = "tx_78"
                 }
             };
-            _mpDonorService.Setup(mocked => mocked.GetDonations(123)).Returns(donations);
+
+            var donor = new ContactDonor
+            {
+                ContactId = 987,
+                DonorId = 123,
+                StatementTypeId = 456
+            };
+            _mpDonorService.Setup(mocked => mocked.GetEmailViaDonorId(123)).Returns(donor);
+            _mpDonorService.Setup(mocked => mocked.GetDonations(new [] {123}, null)).Returns(donations);
             _paymentService.Setup(mocked => mocked.GetCharge("tx_67")).Returns(new StripeCharge
             {
                 Source = new StripeSource
@@ -594,9 +609,10 @@ namespace crds_angular.test.Services
             _mpDonorService.Setup(mocked => mocked.GetContactDonor(90210)).Returns(new ContactDonor
             {
                 ContactId = 90210,
-                DonorId = 123
+                DonorId = 123,
+                StatementTypeId = 456
             });
-            _mpDonorService.Setup(mocked => mocked.GetDonations(123)).Returns(donations);
+            _mpDonorService.Setup(mocked => mocked.GetDonations(new [] {123}, null)).Returns(donations);
             _paymentService.Setup(mocked => mocked.GetCharge("tx_67")).Returns(new StripeCharge
             {
                 Source = new StripeSource
@@ -690,7 +706,14 @@ namespace crds_angular.test.Services
                 "1996"
             };
 
-            _mpDonorService.Setup(mocked => mocked.GetDonations(123)).Returns(donations);
+            var donor = new ContactDonor
+            {
+                ContactId = 987,
+                DonorId = 123,
+                StatementTypeId = 456
+            };
+            _mpDonorService.Setup(mocked => mocked.GetEmailViaDonorId(123)).Returns(donor);
+            _mpDonorService.Setup(mocked => mocked.GetDonations(new [] {123}, null)).Returns(donations);
             _mpDonorService.Setup(mocked => mocked.GetSoftCreditDonations(123)).Returns(softCreditDonations);
 
             var response = _fixture.GetDonationYearsForDonor(123);
@@ -762,10 +785,11 @@ namespace crds_angular.test.Services
             _mpDonorService.Setup(mocked => mocked.GetContactDonor(90210)).Returns(new ContactDonor
             {
                 ContactId = 90210,
-                DonorId = 123
+                DonorId = 123,
+                StatementTypeId = 456
             });
 
-            _mpDonorService.Setup(mocked => mocked.GetDonations(123)).Returns(donations);
+            _mpDonorService.Setup(mocked => mocked.GetDonations(new [] {123}, null)).Returns(donations);
             _mpDonorService.Setup(mocked => mocked.GetSoftCreditDonations(123)).Returns(softCreditDonations);
 
             var response = _fixture.GetDonationYearsForAuthenticatedUser("auth token");
