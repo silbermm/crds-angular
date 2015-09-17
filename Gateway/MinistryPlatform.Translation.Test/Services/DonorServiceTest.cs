@@ -560,6 +560,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 {
                     {"Donation_Date", DateTime.Now},
                     {"Donation_ID", 1000},
+                    {"Soft_Credit_Donor_ID", null},
                     {"Donation_Status_ID", 1},
                     {"Donation_Status_Date", DateTime.Now},
                     {"Donor_ID", 1100},
@@ -572,6 +573,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 {
                     {"Donation_Date", DateTime.Now},
                     {"Donation_ID", 2000},
+                    {"Soft_Credit_Donor_ID", null},
                     {"Donation_Status_ID", 2},
                     {"Donation_Status_Date", DateTime.Now},
                     {"Donor_ID", 2200},
@@ -584,6 +586,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 {
                     {"Donation_Date", DateTime.Now},
                     {"Donation_ID", 1000},
+                    {"Soft_Credit_Donor_ID", null},
                     {"Donation_Status_ID", 1},
                     {"Donation_Status_Date", DateTime.Now},
                     {"Donor_ID", 1100},
@@ -645,6 +648,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 {
                     {"Donation_Date", DateTime.Now},
                     {"Donation_ID", 1000},
+                    {"Soft_Credit_Donor_ID", null},
                     {"Donation_Status_ID", 1},
                     {"Donation_Status_Date", DateTime.Now},
                     {"Donor_ID", 1100},
@@ -657,6 +661,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 {
                     {"Donation_Date", DateTime.Now},
                     {"Donation_ID", 2000},
+                    {"Soft_Credit_Donor_ID", null},
                     {"Donation_Status_ID", 2},
                     {"Donation_Status_Date", DateTime.Now},
                     {"Donor_ID", 2200},
@@ -669,6 +674,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 {
                     {"Donation_Date", DateTime.Now},
                     {"Donation_ID", 1000},
+                    {"Soft_Credit_Donor_ID", null},
                     {"Donation_Status_ID", 1},
                     {"Donation_Status_Date", DateTime.Now},
                     {"Donor_ID", 1100},
