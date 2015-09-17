@@ -14,7 +14,7 @@
 
     function activate() {
       switch (signupService.campaign.nickname) {
-        case 'GO NOLA Application':
+        case 'NOLA':
           signupService.friendlyPageTitle = 'New Orleans';
           signupService.tripName = '';
           signupService.numberOfPages = 5;
@@ -31,7 +31,7 @@
           signupService.whyPlaceholder = 'Please be specific. ' +
             'In instances where we have a limited number of spots, we strongly consider responses to this question.';
           break;
-        case 'GO Nicaragua Application':
+        case 'Nicaragua':
           signupService.friendlyPageTitle = 'Nicaragua';
           signupService.tripName = '';
           signupService.numberOfPages = 6;
