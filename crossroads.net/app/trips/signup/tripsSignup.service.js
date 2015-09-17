@@ -9,6 +9,7 @@
     var signupService = {
       activate: activate,
       reset: reset,
+      thankYouMessage: ''
     };
 
     function activate() {
