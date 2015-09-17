@@ -98,7 +98,8 @@ namespace MinistryPlatform.Translation.Services
                 Nickname = famRec.ToString("Nickname"), 
                 LastName = famRec.ToString("Last_Name"), 
                 DateOfBirth = famRec.ToDate("Date_of_Birth"),
-                HouseholdPosition = famRec.ToString("Household_Position")
+                HouseholdPosition = famRec.ToString("Household_Position"),
+                StatementTypeId = famRec.ContainsKey("Statement_Type_ID") ? famRec.ToInt("Statement_Type_ID") : (int?)null
             }).ToList();
 
             house.HouseholdMembers = family;
