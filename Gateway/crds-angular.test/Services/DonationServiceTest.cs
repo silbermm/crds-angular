@@ -519,10 +519,42 @@ namespace crds_angular.test.Services
             {
                 ContactId = 987,
                 DonorId = 123,
-                StatementTypeId = 456
+                StatementTypeId = 456,
+                Details = new ContactDetails
+                {
+                    HouseholdId = 901
+                }
             };
+
+            var household = new Household
+            {
+                HouseholdMembers = new List<HouseholdMember>
+                {
+                    new HouseholdMember
+                    {
+                        DonorId = 678,
+                        StatementTypeId = 456
+                    },
+                    new HouseholdMember
+                    {
+                        DonorId = 123,
+                        StatementTypeId = 456
+                    },
+                    new HouseholdMember
+                    {
+                        DonorId = 444,
+                        StatementTypeId = 455
+                    },
+                    new HouseholdMember
+                    {
+                        DonorId = 345,
+                        StatementTypeId = 456
+                    }
+                }
+            };
+            _contactService.Setup(mocked => mocked.GetHouseholdById(901)).Returns(household);
             _mpDonorService.Setup(mocked => mocked.GetEmailViaDonorId(123)).Returns(donor);
-            _mpDonorService.Setup(mocked => mocked.GetDonations(new [] {123}, "1999")).Returns(donations);
+            _mpDonorService.Setup(mocked => mocked.GetDonations(new [] {123, 678, 345}, "1999")).Returns(donations);
             _paymentService.Setup(mocked => mocked.GetCharge("tx_67")).Returns(new StripeCharge
             {
                 Source = new StripeSource
