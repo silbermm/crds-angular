@@ -256,6 +256,23 @@ namespace crds_angular.Services
 
             return (charge);
         }
+
+        public StripeRefundData GetRefund(string refundId)
+        {
+            var url = string.Format("refunds/{0}", refundId);
+            var request = new RestRequest(url, Method.GET);
+            request.AddParameter("expand[]", "charge");
+
+            var response = _stripeRestClient.Execute(request);
+            CheckStripeResponse("Could not query refund", response);
+
+            // TODO Execute<StripeRefundData>() above always gets an error deserializing the response, so using Execute() instead, and manually deserializing here
+            var refund = JsonConvert.DeserializeObject<StripeRefundData>(response.Content);
+
+            return refund;
+        }
+
+
     }
 
     public class Error

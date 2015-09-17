@@ -13,13 +13,26 @@ namespace crds_angular.Models.Crossroads.Stewardship
     public class StripeRefundData
     {
         [JsonProperty("id")]
-        public String Id { get; set; }
+        public string Id { get; set; }
 
         [JsonProperty("amount")]
         public string Amount { get; set; }
 
+        #region Expandable Charge Property
+        public string ChargeId { get; set; }
+
+        [JsonIgnore]
+        public StripeCharge Charge { get; set; }
+
         [JsonProperty("charge")]
-        public string Charge { get; set; }
+        internal object InternalCharge
+        {
+            set
+            {
+                StripeExpandableProperty<StripeCharge>.Map(value, s => ChargeId = s, o => Charge = o);
+            }
+        }
+        #endregion
     }
         
     }

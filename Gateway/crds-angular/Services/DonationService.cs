@@ -10,6 +10,7 @@ using crds_angular.Util;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using Newtonsoft.Json;
+using DonationStatus = crds_angular.Models.Crossroads.Stewardship.DonationStatus;
 
 namespace crds_angular.Services
 {
@@ -117,7 +118,7 @@ namespace crds_angular.Services
         {
             var donorIds = GetDonorIdsForDonor(donor);
 
-            var donations = softCredit ? _mpDonorService.GetSoftCreditDonations(donor.DonorId) : _mpDonorService.GetDonations(donorIds);
+            var donations = softCredit ? _mpDonorService.GetSoftCreditDonations(donor.DonorId) : _mpDonorService.GetDonations(donorIds, donationYear);
             if (donations == null || donations.Count == 0)
             {
                 return (null);
@@ -125,17 +126,27 @@ namespace crds_angular.Services
 
             var response = donations.Select(Mapper.Map<DonationDTO>).ToList();
 
-            if (donationYear != null)
-            {
-                response.RemoveAll(donation => !donationYear.Equals(donation.DonationDate.Year.ToString()));
-            }
-
             foreach (var donation in response)
             {
                 StripeCharge charge = null;
                 if (!string.IsNullOrWhiteSpace(donation.Source.PaymentProcessorId))
                 {
-                    charge = _paymentService.GetCharge(donation.Source.PaymentProcessorId);
+                    // If it is a positive amount, it means it's a Charge, otherwise it's a Refund
+                    if (donation.Amount >= 0)
+                    {
+                        charge = _paymentService.GetCharge(donation.Source.PaymentProcessorId);
+                    }
+                    else
+                    {
+                        donation.Status = DonationStatus.Refunded;
+
+                        var refund = _paymentService.GetRefund(donation.Source.PaymentProcessorId);
+                        if (refund != null && refund.Charge != null)
+                        {
+                            charge = refund.Charge;
+                        }
+                    }
+                    
                 }
 
                 if (donation.Source.SourceType == PaymentType.Cash)
