@@ -82,16 +82,26 @@
     function handleSubmit() {
       // submit info and then show the thankyou page directive
       $log.debug(vm.signupService.page2);
+
+      vm.profileData.person.$save().success(function(data) {
+        $log.debug('person save successful');
+      }).error(function(response, statusCode) {
+        $log.debug('person save unsuccessful');
+      });
+
       var application = new vm.signupService.TripApplication();
       application.contactId = vm.signupService.contactId;
       application.pledgeCampaignId = vm.signupService.campaign.id;
-      //application.pageOne = pageOne();
       application.pageTwo = vm.signupService.page2;
       application.pageThree = vm.signupService.page3;
       application.pageFour = vm.signupService.page4;
       application.pageFive = vm.signupService.page5;
       application.pageSix = vm.signupService.page6;
-      application.$save();
+      application.$save().success(function(data) {
+        $log.debug('trip application save successful');
+      }).error(function(response, statusCode) {
+        $log.debug('trip application save unsuccessful');
+      });
 
       vm.currentPage = 'thanks';
       toTop();
@@ -107,7 +117,8 @@
 
     function pageOne() {
       return {
-        firstName: vm.signupService.page1.profile.person.firstName
+        firstName: vm.signupService.page1.profile.person.firstName,
+        lastName: vm.signupService.page1.profile.person.lastName
       };
     }
 

@@ -5,6 +5,7 @@ using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
+using IPersonService = MinistryPlatform.Translation.Services.Interfaces.IPersonService;
 
 namespace crds_angular.test.Services
 {
@@ -14,7 +15,8 @@ namespace crds_angular.test.Services
         private Mock<IContactService> _contactService;
         private Mock<IOpportunityService> _opportunityService;
         private Mock<IAuthenticationService> _authenticationService;
-        private Mock<IPersonService> _personService;
+        private Mock<crds_angular.Services.Interfaces.IPersonService> _personService;
+        private Mock<MinistryPlatform.Translation.Services.Interfaces.IPersonService> _mpPersonService;
 
         private PersonService _fixture;
 
@@ -25,7 +27,8 @@ namespace crds_angular.test.Services
             _contactService = new Mock<IContactService>();
             _opportunityService = new Mock<IOpportunityService>();
             _authenticationService = new Mock<IAuthenticationService>();
-            _personService = new Mock<IPersonService>();
+            _personService = new Mock<crds_angular.Services.Interfaces.IPersonService>();
+            _mpPersonService = new Mock<IPersonService>();
 
             _authenticationService.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Returns(123456);
             var myContact = new MyContact
@@ -58,7 +61,7 @@ namespace crds_angular.test.Services
             };
             _contactService.Setup(mocked => mocked.GetMyProfile(It.IsAny<string>())).Returns(myContact);
 
-            _fixture = new PersonService( _contactService.Object);
+            _fixture = new PersonService( _contactService.Object, _mpPersonService.Object);
 
             //force AutoMapper to register
             AutoMapperConfig.RegisterMappings();

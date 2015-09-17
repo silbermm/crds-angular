@@ -19,7 +19,7 @@ namespace crds_angular.test.controllers
     {
         private ProfileController _fixture;
 
-        private Mock<IPersonService> _personServiceMock;
+        private Mock<crds_angular.Services.Interfaces.IPersonService> _personServiceMock;
         private Mock<IServeService> _serveServiceMock;
         private Mock<IAuthenticationService> _authenticationServiceMock;
 
@@ -31,7 +31,7 @@ namespace crds_angular.test.controllers
         [SetUp]
         public void SetUp()
         {
-            _personServiceMock = new Mock<IPersonService>();
+            _personServiceMock = new Mock<crds_angular.Services.Interfaces.IPersonService>();
             _serveServiceMock = new Mock<IServeService>();
 
             _fixture = new ProfileController(_personServiceMock.Object, _serveServiceMock.Object);
