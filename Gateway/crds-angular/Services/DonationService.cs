@@ -118,7 +118,7 @@ namespace crds_angular.Services
         {
             var donorIds = GetDonorIdsForDonor(donor);
 
-            var donations = softCredit ? _mpDonorService.GetSoftCreditDonations(donor.DonorId) : _mpDonorService.GetDonations(donorIds, donationYear);
+            var donations = softCredit ? _mpDonorService.GetSoftCreditDonations(donorIds, donationYear) : _mpDonorService.GetDonations(donorIds, donationYear);
             if (donations == null || donations.Count == 0)
             {
                 return (null);
@@ -204,7 +204,7 @@ namespace crds_angular.Services
         {
             var donorIds = GetDonorIdsForDonor(donor);
             var donations = _mpDonorService.GetDonations(donorIds, null);
-            var softCreditDonations = _mpDonorService.GetSoftCreditDonations(donor.DonorId);
+            var softCreditDonations = _mpDonorService.GetSoftCreditDonations(donorIds);
 
             var years = new HashSet<string>();
             if (softCreditDonations != null && softCreditDonations.Any())

@@ -24,6 +24,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         ContactDetails GetContactDonorForCheckAccount(string encryptedKey);
         List<Donation> GetDonations(int donorId, string donationYear = null);
         List<Donation> GetDonations(IEnumerable<int> donorIds, string donationYear = null);
-        List<Donation> GetSoftCreditDonations(int donorId);
+        List<Donation> GetSoftCreditDonations(IEnumerable<int> donorIds, string donationYear = null);
     }
 }
