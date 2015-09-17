@@ -31,7 +31,6 @@ namespace crds_angular.Services
         {
             SearchRequest request = new SearchRequest();
             request.Query = searchCriteria;
-
             var searchResult = _client.Search(request);
 
             JArray resultsArray = new JArray();

@@ -18,13 +18,12 @@ namespace crds_angular.Controllers.API
         }
 
         [HttpGet]
-        [Route("api/search/{searchCriteria}")]
-        //[EnableCors("*", "*", "*")]
-        public IHttpActionResult GetSearchResults(string searchCriteria)
+        [Route("api/search")]
+        public IHttpActionResult GetSearchResults()
         {
             try
             {
-                return Ok(_searchService.GetSearchResults(searchCriteria));
+                return Ok(_searchService.GetSearchResults(base.Request.RequestUri.Query));
             }
             catch (Exception ex)
             {
