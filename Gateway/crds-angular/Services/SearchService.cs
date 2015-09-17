@@ -27,14 +27,13 @@ namespace crds_angular.Services
             _client = new AmazonCloudSearchDomainClient(apiKey, apiSecret, config);
         }
 
-        public JArray GetSearchResults(string q, string fq, string qParser, string qOptions)
-        {
-            
+        public JArray GetSearchResults(string query, string filterQuery, string queryParser, string queryOptions)
+        {            
             SearchRequest request = new SearchRequest();
-            request.Query = q;
-            request.FilterQuery = fq;
-            request.QueryParser = qParser;
-            request.QueryOptions = qOptions;
+            request.Query = query;
+            request.FilterQuery = filterQuery;
+            request.QueryParser = queryParser;
+            request.QueryOptions = queryOptions;
 
             var searchResult = _client.Search(request);
 

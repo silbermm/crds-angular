@@ -8,6 +8,6 @@ namespace crds_angular.Services.Interfaces
 {
     public interface ISearchService
     {
-        JArray GetSearchResults(string q, string fq, string qParser, string qOptions);
+        JArray GetSearchResults(string query, string filterQuery, string queryParser, string queryOptions);
     }
 }

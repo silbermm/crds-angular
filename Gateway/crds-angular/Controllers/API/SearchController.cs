@@ -17,13 +17,17 @@ namespace crds_angular.Controllers.API
             _searchService = searchService;
         }
 
-        [HttpGet]
+        [HttpGet]        
         [Route("api/search")]
-        public IHttpActionResult GetSearchResults(string q = null, string fq = null, string qParser = null, string qOptions = null)
+        public IHttpActionResult GetSearchResults(
+            [FromUri(Name = "q")]string query = null, 
+            [FromUri(Name = "fq")]string filterQuery = null,
+            [FromUri(Name = "q.parser")]string queryParser = null,
+            [FromUri(Name = "q.options")]string queryOptions = null)
         {
             try
             {
-                return Ok(_searchService.GetSearchResults(q, fq, qParser, qOptions));
+                return Ok(_searchService.GetSearchResults(query, filterQuery, queryParser, queryOptions));
             }
             catch (Exception ex)
             {
