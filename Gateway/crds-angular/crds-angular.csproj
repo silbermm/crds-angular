@@ -337,6 +337,7 @@
     <Compile Include="Models\Crossroads\Trip\Trip.cs" />
     <Compile Include="Models\Crossroads\Trip\TripApplicantResponse.cs" />
     <Compile Include="Models\Crossroads\Trip\TripApplicationDto.cs" />
+    <Compile Include="Models\Crossroads\Trip\TripApplicationResponseDto.cs" />
     <Compile Include="Models\Crossroads\Trip\TripCampaignDto.cs" />
     <Compile Include="Models\Crossroads\Trip\TripFormResponseDto.cs" />
     <Compile Include="Models\Crossroads\Trip\TripGift.cs" />
