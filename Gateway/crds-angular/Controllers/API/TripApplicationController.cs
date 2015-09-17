@@ -38,8 +38,6 @@ namespace crds_angular.Controllers.API
                 throw new HttpResponseException(dataError.HttpResponseMessage);
             }
 
-            //return Authorized(token =>
-            //{
             TripApplicationResponseDto response = null;
             try
             {
@@ -49,8 +47,6 @@ namespace crds_angular.Controllers.API
                 {
                     Message = "Queued event for asynchronous processing"
                 };
-                //_tripService.SaveApplication(dto, token);
-                //return Ok();
             }
             catch (Exception e)
             {
@@ -63,7 +59,6 @@ namespace crds_angular.Controllers.API
                 return (RestHttpActionResult<TripApplicationResponseDto>.ServerError(responseDto));
             }
             return ((IHttpActionResult) RestHttpActionResult<TripApplicationResponseDto>.Ok(response));
-            //});
         }
     }
 }
