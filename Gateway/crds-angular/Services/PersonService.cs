@@ -4,21 +4,25 @@ using AutoMapper;
 using crds_angular.Models;
 using crds_angular.Models.Crossroads;
 using crds_angular.Models.MP;
-using crds_angular.Services.Interfaces;
+using MPServices=MinistryPlatform.Translation.Services.Interfaces;
 using MinistryPlatform.Models.DTO;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Attribute = MinistryPlatform.Models.Attribute;
+using IPersonService = crds_angular.Services.Interfaces.IPersonService;
+
 
 namespace crds_angular.Services
 {
     public class PersonService : MinistryPlatformBaseService, IPersonService
     {
-        private IContactService _contactService;
+        private readonly IContactService _contactService;
+        private readonly MPServices.IPersonService _personService;
 
-        public PersonService(IContactService contactService)
+        public PersonService(IContactService contactService, MPServices.IPersonService personService)
         {
             this._contactService = contactService;
+            this._personService = personService;
         }
 
         public void SetProfile(String token, Person person)
@@ -27,21 +31,23 @@ namespace crds_angular.Services
             var householdDictionary = getDictionary(person.GetHousehold());
             var addressDictionary = getDictionary(person.GetAddress());
             addressDictionary.Add("State/Region", addressDictionary["State"]);
+            
+            _personService.UpdateProfile(person.ContactId, contactDictionary, householdDictionary, addressDictionary);
 
-            MinistryPlatformService.UpdateRecord(AppSetting("MyContact"), contactDictionary, token);
+            //MinistryPlatformService.UpdateRecord(AppSetting("MyContact"), contactDictionary, token);
 
-            if (addressDictionary["Address_ID"] != null)
-            {
-                //address exists, update it
-                MinistryPlatformService.UpdateRecord(AppSetting("MyAddresses"), addressDictionary, token);
-            }
-            else
-            {
-                //address does not exist, create it, then attach to household
-                var addressId = MinistryPlatformService.CreateRecord(AppSetting("MyAddresses"), addressDictionary, token);
-                householdDictionary.Add("Address_ID", addressId);
-            }
-            MinistryPlatformService.UpdateRecord(AppSetting("MyHousehold"), householdDictionary, token);
+            //if (addressDictionary["Address_ID"] != null)
+            //{
+            //    //address exists, update it
+            //    MinistryPlatformService.UpdateRecord(AppSetting("MyAddresses"), addressDictionary, token);
+            //}
+            //else
+            //{
+            //    //address does not exist, create it, then attach to household
+            //    var addressId = MinistryPlatformService.CreateRecord(AppSetting("MyAddresses"), addressDictionary, token);
+            //    householdDictionary.Add("Address_ID", addressId);
+            //}
+            //MinistryPlatformService.UpdateRecord(AppSetting("MyHousehold"), householdDictionary, token);
         }
 
         public List<Skill> GetLoggedInUserSkills(int contactId, string token)

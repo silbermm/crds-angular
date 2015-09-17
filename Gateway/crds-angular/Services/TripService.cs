@@ -10,6 +10,7 @@ using MinistryPlatform.Translation.Services.Interfaces;
 using IDonationService = MinistryPlatform.Translation.Services.Interfaces.IDonationService;
 using IDonorService = MinistryPlatform.Translation.Services.Interfaces.IDonorService;
 using IGroupService = MinistryPlatform.Translation.Services.Interfaces.IGroupService;
+using IPersonService = crds_angular.Services.Interfaces.IPersonService;
 using PledgeCampaign = crds_angular.Models.Crossroads.Stewardship.PledgeCampaign;
 
 namespace crds_angular.Services

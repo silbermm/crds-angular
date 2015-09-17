@@ -132,6 +132,7 @@
     <Compile Include="Services\Interfaces\IMinistryPlatformService.cs" />
     <Compile Include="Services\Interfaces\IOpportunityService.cs" />
     <Compile Include="Services\Interfaces\IParticipantService.cs" />
+    <Compile Include="Services\Interfaces\IPersonService.cs" />
     <Compile Include="Services\Interfaces\IPledgeService.cs" />
     <Compile Include="Services\Interfaces\IPrivateInviteService.cs" />
     <Compile Include="Services\Interfaces\IProgramService.cs" />
@@ -141,6 +142,7 @@
     <Compile Include="Services\MinistryPlatformServiceImpl.cs" />
     <Compile Include="Services\OpportunityServiceImpl.cs" />
     <Compile Include="Services\ParticipantService.cs" />
+    <Compile Include="Services\PersonService.cs" />
     <Compile Include="Services\PledgeService.cs" />
     <Compile Include="Services\PrivateInviteService.cs" />
     <Compile Include="Services\ProgramService.cs" />
