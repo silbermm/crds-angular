@@ -19,11 +19,11 @@ namespace crds_angular.Controllers.API
 
         [HttpGet]
         [Route("api/search")]
-        public IHttpActionResult GetSearchResults()
+        public IHttpActionResult GetSearchResults(string q = null, string fq = null, string qParser = null, string qOptions = null)
         {
             try
             {
-                return Ok(_searchService.GetSearchResults(base.Request.RequestUri.Query));
+                return Ok(_searchService.GetSearchResults(q, fq, qParser, qOptions));
             }
             catch (Exception ex)
             {
