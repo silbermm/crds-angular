@@ -1,9 +1,9 @@
 <section ng-show="profile.viewReady" class="email-modal">
   <ng-form role="form" name="profile.pform" novalidate>
     <p class="push-bottom">Information shared here is kept secure and private. We will not share or sell your information.</p>
-    
+
     <div class="row">
-      
+
       <profile-picture ng-if='!profile.forTrips'> </profile-picture>
 
       <div class="form-group col-sm-6" ng-class="{'has-error': profile.validation.showErrors(profile.pform, 'firstName')}">
@@ -49,13 +49,13 @@
     <div class="row">
       <div class="form-group col-sm-6"  ng-class="{'has-error': profile.validation.showErrors(profile.pform, 'email')}" >
         <label for="email" class="required">Email</label>
-        <input type="email" 
-               class="form-control" 
-               id="email" 
-               name="email" 
-               placeholder="Enter email address" 
+        <input type="email"
+               class="form-control"
+               id="email"
+               name="email"
+               placeholder="Enter email address"
                ng-model="profile.profileData.person.emailAddress"
-               required 
+               required
                unique-email />
         <ng-messages for="profile.pform.email.$error" ng-if="profile.validation.showErrors(profile.pform, 'email')">
           <span ng-message="required">
@@ -88,12 +88,12 @@
     <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': profile.validation.showErrors(profile.pform, 'birthdate')}" >
         <label class="required">Birth Date</label>
-        <input type="text" 
-               class="form-control" 
-               name="birthdate" 
-               id="birthdate" 
-               placeholder="mm/dd/yyyy" 
-               ng-required="true" 
+        <input type="text"
+               class="form-control"
+               name="birthdate"
+               id="birthdate"
+               placeholder="mm/dd/yyyy"
+               ng-required="true"
                ng-model='profile.profileData.person.dateOfBirth'
                validate-date>
         <ng-messages for="profile.pform.birthdate.$error" ng-if="profile.validation.showErrors(profile.pform, 'birthdate')">
@@ -113,18 +113,18 @@
         <div class="form-group col-sm-6" ng-class="{'has-error':  profile.validation.showErrors(profile.pform, 'gender')}" >
             <label class="block required">Gender</label>
             <label class="radio-inline" ng-repeat="gender in profile.genders">
-                <input type="radio" 
-                  id="gender-{{ gender.dp_RecordName}}" 
+                <input type="radio"
+                  id="gender-{{ gender.dp_RecordName}}"
                   name="gender"
-                  ng-value="gender.dp_RecordID" 
-                  ng-model="profile.profileData.person.genderId" 
+                  ng-value="gender.dp_RecordID"
+                  ng-model="profile.profileData.person.genderId"
                   required > {{ gender.dp_RecordName }}
             </label>
            <ng-messages for="profile.pform.gender.$error" ng-if="profile.validation.showErrors(profile.pform, 'gender')">
             <ng-messages-include src="on-submit-messages"></ng-messages-include>
             <ng-messages-include src="on-pause-messages"></ng-messages-include>
           </ng-messages>
-        
+
 
         </div>
     </div>
@@ -140,13 +140,13 @@
       <div class="form-group col-sm-6" ng-class="{'has-error':  profile.validation.showErrors(profile.pform, 'anniversary-date')}" >
         <label class="control-label">When did you start attending Crossroads?</label>
         </span>
-        <input type="text" 
-               class="form-control" 
-               id="anniversary-date" 
+        <input type="text"
+               class="form-control"
+               id="anniversary-date"
                name="anniversary-date"
-               placeholder="mm/yyyy" 
-               validate-date='MM/YYYY' 
-               ng-model-options="{updateOn:'blur'}" 
+               placeholder="mm/yyyy"
+               validate-date='MM/YYYY'
+               ng-model-options="{updateOn:'blur'}"
                ng-model="profile.profileData.person.anniversaryDate"  >
         <ng-messages for="profile.pform['anniversary-date'].$error" ng-if="profile.validation.showErrors(profile.pform, 'anniversary-date')">
           <ng-messages-include src="on-pause-messages"></ng-messages-include>
@@ -161,11 +161,11 @@
             <span ng-show="phoneToggle" class="link-styling" ng-click="phoneToggle = !phoneToggle">Don't have a mobile phone?</span>
             <span ng-show="!phoneToggle" class="text-muted">Edit your household phone <a class="pointer" ng-click="profile.householdPhoneFocus()">here</a>.</span>
           </div>
-          <input type="text" 
-                 class="form-control" 
-                 name="mobile-phone" 
-                 id='mobile-phone' 
-                 placeholder="Enter mobile phone" 
+          <input type="text"
+                 class="form-control"
+                 name="mobile-phone"
+                 id='mobile-phone'
+                 placeholder="Enter mobile phone"
                  ng-model="profile.profileData.person.mobilePhone"
                  ng-required='profile.requireMobilePhone'
                  ng-pattern='profile.phoneFormat' >
@@ -179,16 +179,16 @@
 
       <div class="form-group col-sm-6" >
         <label for="provider">Service Provider</label>
-        <select name="service-provider" 
-                class="form-control col-sm-12" 
-                id="service-provider" 
-                ng-model="profile.profileData.person.mobileCarrierId" 
+        <select name="service-provider"
+                class="form-control col-sm-12"
+                id="service-provider"
+                ng-model="profile.profileData.person.mobileCarrierId"
                 ng-options="providers.dp_RecordID as providers.dp_RecordName for providers in profile.serviceProviders" >
             <option value=""> -- Choose One -- </option>
         </select>
-      </div> 
+      </div>
     </div>
-   
+
     <div class="row">
       <profile-picture ng-if='profile.forTrips' />
     </div>
@@ -200,7 +200,7 @@
     <!--/row-->
 
     <button id="save-personal" class="btn btn-primary" data-style="expand-left" ng-class='profile.buttonCss'  ng-click='profile.savePersonal()' >
-      {{profile.buttonText}} 
+      {{profile.buttonText}}
     </button>
   </ng-form>
 

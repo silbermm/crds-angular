@@ -32,6 +32,7 @@
     vm.convertHomePhone = convertHomePhone;
     vm.convertPhone = convertPhone;
     vm.dateFormat = /^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.]((19|20)\d\d)$/;
+    vm.formatAnniversaryDate = formatAnniversaryDate;
     vm.householdForm = {};
     vm.householdInfo = {};
     vm.householdPhoneFocus = householdPhoneFocus;
@@ -54,6 +55,7 @@
     ////////////////////////////////
 
     function activate() {
+      vm.annDate = formatAnniversaryDate(vm.profileData.person.anniversaryDate);
       ProfileReferenceData.getInstance().then(function(response) {
         vm.genders = response.genders;
         vm.maritalStatuses = response.maritalStatuses;
@@ -89,7 +91,7 @@
 
       if (vm.profileData.person.anniversaryDate !== undefined) {
         var mAdate = moment(new Date(vm.profileData.person.anniversaryDate));
-        vm.profileData.person.anniversaryDate = mAdate.format('MM/DD/YYYY');
+        //vm.profileData.person.anniversaryDate = mAdate.format('MM/DD/YYYY');
       }
     }
 
@@ -111,6 +113,13 @@
       }
 
       vm.modalInstance.close(vm.updatedPerson);
+    }
+
+    function formatAnniversaryDate(anniversaryDate) {
+      var tmp = moment(anniversaryDate);
+      var month = tmp.month() + 1;
+      var year = tmp.year();
+      return month + '/' + year;
     }
 
     function householdPhoneFocus() {
