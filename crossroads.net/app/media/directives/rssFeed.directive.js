@@ -1,15 +1,15 @@
 (function () {
   'use strict';
 
-  module.exports = SelectOnClick;
+  module.exports = RssFeed;
 
-  SelectOnClick.$inject = ['$window', '$timeout'];
+  RssFeed.$inject = ['$window', '$timeout'];
 
-  function SelectOnClick($window, $timeout) {
+  function RssFeed($window, $timeout) {
     return {
       restrict: 'E',
       templateUrl: function (elem, attr) {
-        return 'templates/rssFeedCopy.html';
+        return 'templates/rssFeed.html';
       },
       scope: {
         link: '@'

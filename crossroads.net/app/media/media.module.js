@@ -25,7 +25,7 @@ require('./templates/mediaDetails.html');
 require('./templates/mediaListCard.html');
 require('./templates/seriesListCard.html');
 require('./templates/messagesListCard.html');
-require('./templates/rssFeedCopy.html');
+require('./templates/rssFeed.html');
 
 app.controller('MediaController', require('./media.controller'));
 app.controller('SingleMediaController', require('./singleMedia.controller'));
@@ -34,7 +34,7 @@ app.filter('replaceNonAlphaNumeric', require('./filters/replaceNonAlphaNumeric.f
 
 app.directive('mediaListCard', require('./directives/mediaListCard.directive'));
 app.directive('youTubePlayer', require('./directives/youTubePlayer.directive'));
-app.directive('selectOnClick', require('./directives/selectOnClick.directive'));
+app.directive('rssFeed', require('./directives/rssFeed.directive.js'));
 
 app.constant('YT_EVENT', {
   STOP:            0,
