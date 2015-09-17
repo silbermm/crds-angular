@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Amazon.CloudSearchDomain;
+﻿using Amazon.CloudSearchDomain;
 using Amazon.CloudSearchDomain.Model;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Interfaces;
-using MinistryPlatform.Translation.PlatformService;
 using Newtonsoft.Json.Linq;
 
 namespace crds_angular.Services
@@ -27,15 +22,9 @@ namespace crds_angular.Services
             _client = new AmazonCloudSearchDomainClient(apiKey, apiSecret, config);
         }
 
-        public JArray GetSearchResults(string query, string filterQuery, string queryParser, string queryOptions)
+        public JArray GetSearchResults(SearchRequest searchRequest)
         {            
-            SearchRequest request = new SearchRequest();
-            request.Query = query;
-            request.FilterQuery = filterQuery;
-            request.QueryParser = queryParser;
-            request.QueryOptions = queryOptions;
-
-            var searchResult = _client.Search(request);
+            var searchResult = _client.Search(searchRequest);
 
             JArray resultsArray = new JArray();
 
