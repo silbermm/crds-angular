@@ -56,6 +56,8 @@ namespace MinistryPlatform.Translation.Test.Services
             var donorPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Donors"]);
             var expectedDonorId = 585858;
             var setupDate = DateTime.Now;
+            var processorId = "cus_crds123456";
+            var processorAcctId = "py_asdfghjk4434jjj";
 
             var expectedValues = new Dictionary<string, object>
             {
@@ -64,13 +66,14 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Statement_Type_ID", 1},     //default to individual
                 {"Statement_Method_ID", 2},   //default to email/online
                 {"Setup_Date", setupDate},    //default to current date/time
-                {"Processor_ID", "cus_crds123456"}
+                {"Processor_ID", processorId}
             };
 
             var donorAccount = new DonorAccount
             {
                 AccountNumber = "123",
-                RoutingNumber = "456"
+                RoutingNumber = "456",
+                ProcessorAccountId = processorAcctId
             };
 
             var acctBytes = Encoding.UTF8.GetBytes("acctNum");
@@ -80,9 +83,9 @@ namespace MinistryPlatform.Translation.Test.Services
             _crypto.Setup(mocked => mocked.EncryptValue(donorAccount.AccountNumber)).Returns(acctBytes);
             _crypto.Setup(mocked => mocked.EncryptValue(donorAccount.RoutingNumber)).Returns(rtnBytes);
 
-           _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
-              It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(),
-              It.IsAny<string>(), true)).Returns(expectedDonorId);
+            _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
+               It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(),
+               It.IsAny<string>(), true)).Returns(expectedDonorId);
 
            var expectedAcctValues = new Dictionary<string, object>
             {
@@ -94,12 +97,13 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Non-Assignable", false},
                 {"Account_Type_ID", (int)donorAccount.Type},
                 {"Closed", false},
-                {"Processor_Account_ID", donorAccount.Processor_Account_ID}
+                {"Processor_Account_ID", donorAccount.ProcessorAccountId},
+                {"Prcoessor_ID", processorId}
             };
 
-           _ministryPlatformService.Setup(mocked => mocked.CreateRecord(298, expectedAcctValues, It.IsAny<string>(), false)).Returns(102030);
+         //  _ministryPlatformService.Setup(mocked => mocked.CreateRecord(298, expectedAcctValues, It.IsAny<string>(), false)).Returns(102030);
 
-           var response = _fixture.CreateDonorRecord(888888, "cus_crds123456", setupDate, 1, 1, 2, donorAccount);
+           var response = _fixture.CreateDonorRecord(888888, processorId, setupDate, 1, 1, 2, donorAccount);
 
            _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donorPageId, expectedValues, It.IsAny<string>(), true));
            _ministryPlatformService.VerifyAll();

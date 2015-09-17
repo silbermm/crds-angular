@@ -99,7 +99,8 @@ namespace MinistryPlatform.Translation.Services
                     { "Non-Assignable", false },
                     { "Account_Type_ID", (int)donorAccount.Type },
                     { "Closed", false },
-                    {"Processor_Account_ID", null}
+                    {"Processor_Account_ID", donorAccount.ProcessorAccountId},
+                    {"Processor_ID", processorId}
                 };
 
                 _ministryPlatformService.CreateRecord(_donorAccountsPageId, values, apiToken);
@@ -194,6 +195,7 @@ namespace MinistryPlatform.Translation.Services
                     donor = new ContactDonor()
                     {
                         DonorId = record.ToInt("Donor_ID"),
+                        //we only want processorID from the donor if we are not processing a check
                         ProcessorId = record.ToString(DonorProcessorId),
                         ContactId = record.ToInt("Contact_ID"),
                         RegisteredUser = true,
@@ -261,7 +263,7 @@ namespace MinistryPlatform.Translation.Services
         public ContactDonor GetContactDonorForDonorAccount(string accountNumber, string routingNumber)
         {
             var search = string.Format(",{0}", CreateEncodedAndEncryptedAccountAndRoutingNumber(accountNumber, routingNumber));
-
+           
             var accounts = WithApiLogin(apiToken => _ministryPlatformService.GetPageViewRecords(_findDonorByAccountPageViewId, apiToken, search));
             if (accounts == null || accounts.Count == 0)
             {
@@ -326,7 +328,7 @@ namespace MinistryPlatform.Translation.Services
             return (donorId);
         }
 
-        public void UpdateDonorAccount(string encryptedKey, string sourceId)
+        public void UpdateDonorAccount(string encryptedKey, string sourceId, string customerId)
         {
             try
             {
@@ -335,7 +337,8 @@ namespace MinistryPlatform.Translation.Services
                 var updateParms = new Dictionary<string, object>
                 {
                     {"Donor_Account_ID", donorAccountId},
-                    {"Processor_Account_ID", sourceId}
+                    {"Processor_Account_ID", sourceId},
+                    {"Processor_ID", customerId}
                 };
                 _ministryPlatformService.UpdateRecord(_donorAccountsPageId, updateParms, ApiLogin());
             }

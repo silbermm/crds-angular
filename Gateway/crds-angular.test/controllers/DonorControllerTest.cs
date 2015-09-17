@@ -66,7 +66,7 @@ namespace crds_angular.test.controllers
             };
 
             donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(It.IsAny<string>())).Returns((ContactDonor)null);
-            donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(null, string.Empty, "tok_test", It.IsAny<DateTime>())).Returns(donor);
+            donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(null, string.Empty, string.Empty, "tok_test", It.IsAny<DateTime>())).Returns(donor);
             
             IHttpActionResult result = fixture.Post(createDonorDto);
 
@@ -177,7 +177,7 @@ namespace crds_angular.test.controllers
             };
 
             donorService.Setup(mocked => mocked.GetContactDonorForEmail(createDonorDto.email_address)).Returns(lookupDonor);
-            donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(It.Is<ContactDonor>(d => d == lookupDonor), createDonorDto.email_address, createDonorDto.stripe_token_id, It.IsAny<DateTime>())).Returns(createDonor);
+            donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(It.Is<ContactDonor>(d => d == lookupDonor), string.Empty, createDonorDto.email_address, createDonorDto.stripe_token_id, It.IsAny<DateTime>())).Returns(createDonor);
 
             IHttpActionResult result = fixture.Post(createDonorDto);
 
@@ -221,7 +221,7 @@ namespace crds_angular.test.controllers
             };
 
             donorService.Setup(mocked => mocked.GetContactDonorForEmail(createDonorDto.email_address)).Returns(lookupDonor);
-            donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(It.Is<ContactDonor>(d => d == lookupDonor), createDonorDto.email_address, createDonorDto.stripe_token_id, It.IsAny<DateTime>())).Returns(createDonor);
+            donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(It.Is<ContactDonor>(d => d == lookupDonor), string.Empty, createDonorDto.email_address, createDonorDto.stripe_token_id, It.IsAny<DateTime>())).Returns(createDonor);
 
             IHttpActionResult result = fixture.Post(createDonorDto);
 
@@ -289,7 +289,7 @@ namespace crds_angular.test.controllers
             var createException = new Exception("Danger, Will Robinson!");
 
             donorService.Setup(mocked => mocked.GetContactDonorForEmail(createDonorDto.email_address)).Returns(lookupDonor);
-            donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(It.Is<ContactDonor>(d => d == lookupDonor), createDonorDto.email_address, createDonorDto.stripe_token_id, It.IsAny<DateTime>())).Throws(createException);
+            donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(It.Is<ContactDonor>(d => d == lookupDonor), string.Empty, createDonorDto.email_address, createDonorDto.stripe_token_id, It.IsAny<DateTime>())).Throws(createException);
 
             try
             {
@@ -504,7 +504,7 @@ namespace crds_angular.test.controllers
             var stripeException = new PaymentProcessorException(HttpStatusCode.PaymentRequired, "auxMessage", "type", "message", "code", "decline", "param");
             donorService.Setup(mocked => mocked.GetContactDonorForEmail("me@here.com")).Returns(contactDonor);
             donorService.Setup(
-                (mocked => mocked.CreateOrUpdateContactDonor(contactDonor, "me@here.com", "456", It.IsAny<DateTime>())))
+                (mocked => mocked.CreateOrUpdateContactDonor(contactDonor, string.Empty, "me@here.com", "456", It.IsAny<DateTime>())))
                 .Throws(stripeException);
 
             var response = fixture.Post(dto);
@@ -541,7 +541,7 @@ namespace crds_angular.test.controllers
             var stripeException = new PaymentProcessorException(HttpStatusCode.PaymentRequired, "auxMessage", "type", "message", "code", "decline", "param");
             donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(It.IsAny<string>())).Returns(contactDonor);
             donorService.Setup(
-                (mocked => mocked.CreateOrUpdateContactDonor(contactDonor, String.Empty, "456", It.IsAny<DateTime>())))
+                (mocked => mocked.CreateOrUpdateContactDonor(contactDonor, string.Empty, String.Empty, "456", It.IsAny<DateTime>())))
                 .Throws(stripeException);
 
             var response = fixture.Post(dto);

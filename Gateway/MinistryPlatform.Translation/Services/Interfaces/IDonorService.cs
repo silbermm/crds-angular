@@ -22,6 +22,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         void SendEmail(int emailTemplate, int donorId, int donationAmount, string donationType, DateTime donationDate, string programName, string emailReason);
         ContactDetails GetContactDonorForCheckAccount(string encryptedKey);
         string CreateEncodedAndEncryptedAccountAndRoutingNumber(string accountNumber, string routingNumber);
-        void UpdateDonorAccount(string encryptedKey, string sourceId);
+        void UpdateDonorAccount(string encryptedKey, string customerId, string sourceId);
     }
 }

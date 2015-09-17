@@ -138,23 +138,34 @@ namespace crds_angular.test.Services
             {
                 ProcessorId = "111000111",
                 DonorId = 111111,
-                RegisteredUser = true
+                RegisteredUser = true,
+                Account = new DonorAccount
+                {
+                    ProcessorAccountId = "py_dgsttety6737hjjhweiu3"
+                }
             };
-
+            var encryptedKey = "PH/rty1234";
+          
             _checkScannerDao.Setup(mocked => mocked.GetChecksForBatch("batch123")).Returns(checks);
             _checkScannerDao.Setup(mocked => mocked.UpdateBatchStatus("batch123", BatchStatus.Exported)).Returns(new CheckScannerBatch());
             _checkScannerDao.Setup(mocked => mocked.UpdateCheckStatus(11111, true, null));
             _checkScannerDao.Setup(mocked => mocked.UpdateCheckStatus(22222, true, null));
 
             _donorService.Setup(mocked => mocked.GetContactDonorForDonorAccount(checks[0].AccountNumber, checks[0].RoutingNumber)).Returns(contactDonorExisting);
-            _paymentService.Setup(mocked => mocked.ChargeCustomer(contactDonorExisting.ProcessorId, (int) checks[0].Amount, contactDonorExisting.DonorId)).Returns(new StripeCharge
+            _paymentService.Setup(mocked => mocked.ChargeCustomer(contactDonorExisting.ProcessorId, contactDonorExisting.Account.ProcessorAccountId, (int) checks[0].Amount, contactDonorExisting.DonorId)).Returns(new StripeCharge
             {
                 Id = "1020304",
+                Source = new SourceData
+                {
+                    id = "py_dgsttety6737hjjhweiu3"
+                },
                 BalanceTransaction = new StripeBalanceTransaction
                 {
                     Fee = 123
                 }
             });
+            _mpDonorService.Setup(mocked => mocked.CreateEncodedAndEncryptedAccountAndRoutingNumber(checks[0].AccountNumber, checks[0].RoutingNumber)).Returns(encryptedKey);
+            _mpDonorService.Setup(mocked => mocked.UpdateDonorAccount(encryptedKey, contactDonorExisting.Account.ProcessorAccountId, contactDonorExisting.ProcessorId));
             _mpDonorService.Setup(
                 mocked =>
                     mocked.CreateDonationAndDistributionRecord((int) checks[0].Amount,
@@ -171,7 +182,20 @@ namespace crds_angular.test.Services
             {
                 ProcessorId = "222000222",
                 DonorId = 222222,
-                RegisteredUser = false
+                RegisteredUser = false,
+                Account = new DonorAccount
+                {
+                    ProcessorAccountId = "cus_123456789"
+                }
+            };
+
+            var mockCharge = new StripeCharge
+            {
+                Id = "40302010",
+                Source = new SourceData
+                {
+                    id = "ba_dgsttety6737hjjhweiu3"
+                }
             };
 
             _donorService.Setup(mocked => mocked.GetContactDonorForDonorAccount(checks[1].AccountNumber, checks[1].RoutingNumber)).Returns((ContactDonor) null);
@@ -184,14 +208,16 @@ namespace crds_angular.test.Services
                                 o.Details.DisplayName.Equals("2 name 1") && o.Details.Address.Line1.Equals("2 line 1") && o.Details.Address.Line2.Equals("2 line 2") &&
                                 o.Details.Address.City.Equals("2 city") && o.Details.Address.State.Equals("2 state") && o.Details.Address.PostalCode.Equals("2 postal") &&
                                 o.Account.RoutingNumber.Equals("2020") && o.Account.AccountNumber.Equals("222") && o.Account.Type == AccountType.Checking),
+                        It.IsAny<string>(),
                         string.Empty,
                         "tok123",
                         It.IsAny<DateTime>()))
                 .Returns(contactDonorNew);
-            _paymentService.Setup(mocked => mocked.ChargeCustomer(contactDonorNew.ProcessorId, (int)checks[1].Amount, contactDonorNew.DonorId)).Returns(new StripeCharge
-            {
-                Id = "40302010"
-            });
+            _paymentService.Setup(mocked => mocked.ChargeCustomer(contactDonorNew.ProcessorId, contactDonorNew.Account.ProcessorAccountId, (int)checks[1].Amount, contactDonorNew.DonorId)).Returns(mockCharge);
+
+            _mpDonorService.Setup(mocked => mocked.CreateEncodedAndEncryptedAccountAndRoutingNumber(checks[1].AccountNumber, checks[1].RoutingNumber)).Returns(encryptedKey);
+            _mpDonorService.Setup(mocked => mocked.UpdateDonorAccount(encryptedKey, mockCharge.Source.id, contactDonorNew.ProcessorId));
+
             _mpDonorService.Setup(
                 mocked =>
                     mocked.CreateDonationAndDistributionRecord((int)checks[1].Amount,
@@ -322,11 +348,15 @@ namespace crds_angular.test.Services
             {
                 ProcessorId = "222000222",
                 DonorId = 222222,
-                RegisteredUser = false
+                RegisteredUser = false,
+                Account = new DonorAccount
+                {
+                    ProcessorAccountId = "py_dgsttety6737hjjhweiu3"
+                }
             };
-
             const string token = "12t4token";
-
+            const string encryptedKey = "PH/rty1234";
+      
             _donorService.Setup(mocked => mocked.GetContactDonorForDonorAccount(check.AccountNumber, check.RoutingNumber)).Returns((ContactDonor)null);
             _paymentService.Setup(mocked => mocked.CreateToken(check.AccountNumber, check.RoutingNumber)).Returns(token);
             _donorService.Setup(
@@ -337,10 +367,14 @@ namespace crds_angular.test.Services
                                 o.Details.DisplayName.Equals(check.Name1) && o.Details.Address.Line1.Equals(check.Address.Line1) && o.Details.Address.Line2.Equals(check.Address.Line2) &&
                                 o.Details.Address.City.Equals(check.Address.City) && o.Details.Address.State.Equals(check.Address.State) && o.Details.Address.PostalCode.Equals(check.Address.PostalCode) &&
                                 o.Account.RoutingNumber.Equals(check.RoutingNumber) && o.Account.AccountNumber.Equals(check.AccountNumber) && o.Account.Type == AccountType.Checking),
+                        It.IsAny<string>(),
                         string.Empty,
                         token,
                         It.IsAny<DateTime>()))
                 .Returns(contactDonorNew);
+
+            _mpDonorService.Setup(mocked => mocked.CreateEncodedAndEncryptedAccountAndRoutingNumber(check.AccountNumber, check.RoutingNumber)).Returns(encryptedKey);
+            _mpDonorService.Setup(mocked => mocked.UpdateDonorAccount(encryptedKey, contactDonorNew.Account.ProcessorAccountId, contactDonorNew.ProcessorId));
 
             var result = _fixture.CreateDonor(check);
             _donorService.VerifyAll();

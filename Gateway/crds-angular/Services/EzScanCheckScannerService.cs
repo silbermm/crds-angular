@@ -63,8 +63,8 @@ namespace crds_angular.Services
                 try
                 {
                     var contactDonor = CreateDonor(check);
-
-                    var charge = _paymentService.ChargeCustomer(contactDonor.ProcessorId, (int) (check.Amount), contactDonor.DonorId);
+                    //Always use the customer ID and source ID from the Donor Account, if it exists
+                    var charge = _paymentService.ChargeCustomer(contactDonor.ProcessorId, contactDonor.Account.ProcessorAccountId, (int) (check.Amount), contactDonor.DonorId);
                     var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
 
                     // Mark the check as exported now, so we don't double-charge a community member.
@@ -73,8 +73,8 @@ namespace crds_angular.Services
                     check.Exported = true;
               
                     var encryptedKey = _mpDonorService.CreateEncodedAndEncryptedAccountAndRoutingNumber(check.AccountNumber, check.RoutingNumber);
-                 
-                    _mpDonorService.UpdateDonorAccount(encryptedKey, charge.Source.id);
+                                     
+                    _mpDonorService.UpdateDonorAccount(encryptedKey, charge.Source.id, contactDonor.ProcessorId);
                  
                     var programId = batchDetails.ProgramId == null ? null : batchDetails.ProgramId + "";
 
@@ -145,8 +145,10 @@ namespace crds_angular.Services
                 RoutingNumber = checkDetails.RoutingNumber,
                 Type = AccountType.Checking
             };
-
-            return _donorService.CreateOrUpdateContactDonor(contactDonor, string.Empty, token, DateTime.Now);
+            
+            var encryptedKey = _mpDonorService.CreateEncodedAndEncryptedAccountAndRoutingNumber(checkDetails.AccountNumber, checkDetails.RoutingNumber);
+            
+            return _donorService.CreateOrUpdateContactDonor(contactDonor, encryptedKey, string.Empty, token, DateTime.Now);
         }
     }
 }

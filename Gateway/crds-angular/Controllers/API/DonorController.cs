@@ -59,7 +59,7 @@ namespace crds_angular.Controllers.API
 
             try
             {
-                donor = _gatewayDonorService.CreateOrUpdateContactDonor(donor, dto.email_address, dto.stripe_token_id, DateTime.Now);
+                donor = _gatewayDonorService.CreateOrUpdateContactDonor(donor, String.Empty, dto.email_address, dto.stripe_token_id, DateTime.Now);
             }
             catch (PaymentProcessorException e)
             {
@@ -94,7 +94,7 @@ namespace crds_angular.Controllers.API
             try
             {
                 var donor = _gatewayDonorService.GetContactDonorForAuthenticatedUser(authToken);
-                donor = _gatewayDonorService.CreateOrUpdateContactDonor(donor, string.Empty, dto.stripe_token_id, DateTime.Now);
+                donor = _gatewayDonorService.CreateOrUpdateContactDonor(donor, string.Empty, string.Empty, dto.stripe_token_id, DateTime.Now);
 
                 var response = new DonorDTO
                 {

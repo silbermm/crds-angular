@@ -234,7 +234,24 @@ namespace crds_angular.test.Services
         {
             var customer = new StripeCustomer
             {
-                id = "12345"
+                id = "856",
+                sources = new Sources
+                {
+                    data = new List<SourceData>
+                    {
+                       new SourceData
+                        {
+                            id = "123",
+                            @object = "credit_card",
+                            brand = "mcc",
+                            last4 = "0002",
+                            exp_month = "2",
+                            exp_year = "2024",
+                            address_zip = "10101"
+                        },
+                    }
+                },
+                default_source = "123",
             };
 
             var stripeResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
@@ -255,7 +272,7 @@ namespace crds_angular.test.Services
             _restClient.VerifyAll();
             stripeResponse.VerifyAll();
 
-            Assert.AreEqual("12345", response);
+            Assert.AreEqual(customer, response);
         }
 
         [Test]

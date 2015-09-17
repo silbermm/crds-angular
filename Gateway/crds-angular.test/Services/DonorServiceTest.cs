@@ -4,6 +4,8 @@ using MinistryPlatform.Models;
 using Moq;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
+using crds_angular.Models.Crossroads.Stewardship;
 
 namespace crds_angular.test.Services
 {
@@ -24,6 +26,7 @@ namespace crds_angular.test.Services
         private const int STATEMENT_TYPE_INDIVIDUAL = 8;
         private const int STATEMENT_METHOD_NONE = 7;
         private const int STATEMENT_METHOD_POSTAL_MAIL = 77;
+        private const string ENCRYPTED_KEY =  "S/Hhsdgsydgs67733+jjdhjsdbnv332387uhrjfk";
 
         [SetUp]
         public void SetUp()
@@ -82,7 +85,7 @@ namespace crds_angular.test.Services
                 RegisteredUser = true
             };
 
-            var response = fixture.CreateOrUpdateContactDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
+            var response = fixture.CreateOrUpdateContactDonor(donor, ENCRYPTED_KEY, "me@here.com", "stripe_token", DateTime.Now);
 
             mpDonorService.VerifyAll();
             mpContactService.VerifyAll();
@@ -97,12 +100,34 @@ namespace crds_angular.test.Services
         [Test]
         public void shouldCreateNewContactAndDonor()
         {
+            var stripeCust = new StripeCustomer
+            {
+                id = "856",
+                sources = new Sources
+                {
+                    data = new List<SourceData>
+                    {
+                       new SourceData
+                        {
+                            id = "123",
+                            @object = "credit_card",
+                            brand = "mcc",
+                            last4 = "0002",
+                            exp_month = "2",
+                            exp_year = "2024",
+                            address_zip = "10101"
+                        },
+                    }
+                },
+                default_source = "123",
+            };
+            
             mpContactService.Setup(mocked => mocked.CreateContactForGuestGiver("me@here.com", GUEST_GIVER_DISPLAY_NAME)).Returns(123);
-            paymentService.Setup(mocked => mocked.CreateCustomer("stripe_token")).Returns("processor_id");
-            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(123, "processor_id", It.IsAny<DateTime>(), STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE, null)).Returns(456);
-            paymentService.Setup(mocked => mocked.UpdateCustomerDescription("processor_id", 456)).Returns("456");
+            paymentService.Setup(mocked => mocked.CreateCustomer("stripe_token")).Returns(stripeCust);
+            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(123, stripeCust.id, It.IsAny<DateTime>(), STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE, null)).Returns(456);
+            paymentService.Setup(mocked => mocked.UpdateCustomerDescription(stripeCust.id, 456)).Returns("456");
 
-            var response = fixture.CreateOrUpdateContactDonor(null, "me@here.com", "stripe_token", DateTime.Now);
+            var response = fixture.CreateOrUpdateContactDonor(null, ENCRYPTED_KEY, "me@here.com", "stripe_token", DateTime.Now);
 
             mpDonorService.VerifyAll();
             mpContactService.VerifyAll();
@@ -110,7 +135,7 @@ namespace crds_angular.test.Services
 
             Assert.AreEqual(123, response.ContactId);
             Assert.AreEqual(456, response.DonorId);
-            Assert.AreEqual("processor_id", response.ProcessorId);
+            Assert.AreEqual(stripeCust.id, response.ProcessorId);
             Assert.IsFalse(response.RegisteredUser);
         }
 
@@ -123,11 +148,33 @@ namespace crds_angular.test.Services
                 DonorId = 0,
             };
 
-            paymentService.Setup(mocked => mocked.CreateCustomer("stripe_token")).Returns("processor_id");
-            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(12345, "processor_id", It.IsAny<DateTime>(), STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE, null)).Returns(456);
-            paymentService.Setup(mocked => mocked.UpdateCustomerDescription("processor_id", 456)).Returns("456");
+            var stripeCust = new StripeCustomer
+            {
+                id = "856",
+                sources = new Sources
+                {
+                    data = new List<SourceData>
+                    {
+                       new SourceData
+                        {
+                            id = "123",
+                            @object = "credit_card",
+                            brand = "mcc",
+                            last4 = "0002",
+                            exp_month = "2",
+                            exp_year = "2024",
+                            address_zip = "10101"
+                        },
+                    }
+                },
+                default_source = "123",
+            };
 
-            var response = fixture.CreateOrUpdateContactDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
+            paymentService.Setup(mocked => mocked.CreateCustomer("stripe_token")).Returns(stripeCust);
+            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(12345, stripeCust.id, It.IsAny<DateTime>(), STATEMENT_FREQUENCY_NEVER, STATEMENT_TYPE_INDIVIDUAL, STATEMENT_METHOD_NONE, null)).Returns(456);
+            paymentService.Setup(mocked => mocked.UpdateCustomerDescription(stripeCust.id, 456)).Returns("456");
+
+            var response = fixture.CreateOrUpdateContactDonor(donor, ENCRYPTED_KEY, "me@here.com", "stripe_token", DateTime.Now);
 
             mpDonorService.VerifyAll();
             mpContactService.VerifyAll();
@@ -135,7 +182,7 @@ namespace crds_angular.test.Services
 
             Assert.AreEqual(12345, response.ContactId);
             Assert.AreEqual(456, response.DonorId);
-            Assert.AreEqual("processor_id", response.ProcessorId);
+            Assert.AreEqual(stripeCust.id, response.ProcessorId);
         }
 
         [Test]
@@ -149,12 +196,34 @@ namespace crds_angular.test.Services
                 Email = "me@here.com"
             };
 
-            paymentService.Setup(mocked => mocked.CreateCustomer("stripe_token")).Returns("processor_id");
-            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(12345, "processor_id", It.IsAny<DateTime>(), 1, 1, 2, null)).Returns(456);
-            mpDonorService.Setup(mocked => mocked.GetEmailViaDonorId(456)).Returns(donor);
-            paymentService.Setup(mocked => mocked.UpdateCustomerDescription("processor_id", 456)).Returns("456");
+            var stripeCust = new StripeCustomer
+            {
+                id = "856",
+                sources = new Sources
+                {
+                    data = new List<SourceData>
+                    {
+                       new SourceData
+                        {
+                            id = "123",
+                            @object = "credit_card",
+                            brand = "mcc",
+                            last4 = "0002",
+                            exp_month = "2",
+                            exp_year = "2024",
+                            address_zip = "10101"
+                        },
+                    }
+                },
+                default_source = "123",
+            };
 
-            var response = fixture.CreateOrUpdateContactDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
+            paymentService.Setup(mocked => mocked.CreateCustomer("stripe_token")).Returns(stripeCust);
+            mpDonorService.Setup(mocked => mocked.CreateDonorRecord(12345, stripeCust.id, It.IsAny<DateTime>(), 1, 1, 2, null)).Returns(456);
+            mpDonorService.Setup(mocked => mocked.GetEmailViaDonorId(456)).Returns(donor);
+            paymentService.Setup(mocked => mocked.UpdateCustomerDescription(stripeCust.id, 456)).Returns("456");
+
+            var response = fixture.CreateOrUpdateContactDonor(donor, ENCRYPTED_KEY, "me@here.com", "stripe_token", DateTime.Now);
 
             mpDonorService.VerifyAll();
             mpContactService.VerifyAll();
@@ -162,7 +231,7 @@ namespace crds_angular.test.Services
 
             Assert.AreEqual(12345, response.ContactId);
             Assert.AreEqual(456, response.DonorId);
-            Assert.AreEqual("processor_id", response.ProcessorId);
+            Assert.AreEqual(stripeCust.id, response.ProcessorId);
             Assert.AreEqual(donor.RegisteredUser, response.RegisteredUser);
         }
 
@@ -175,11 +244,33 @@ namespace crds_angular.test.Services
                 DonorId = 456,
             };
 
-            paymentService.Setup(mocked => mocked.CreateCustomer("stripe_token")).Returns("processor_id");
-            mpDonorService.Setup(mocked => mocked.UpdatePaymentProcessorCustomerId(456, "processor_id")).Returns(456);
-            paymentService.Setup(mocked => mocked.UpdateCustomerDescription("processor_id", 456)).Returns("456");
+            var stripeCust = new StripeCustomer
+            {
+                id = "856",
+                sources = new Sources
+                {
+                    data = new List<SourceData>
+                    {
+                       new SourceData
+                        {
+                            id = "123",
+                            @object = "credit_card",
+                            brand = "mcc",
+                            last4 = "0002",
+                            exp_month = "2",
+                            exp_year = "2024",
+                            address_zip = "10101"
+                        },
+                    }
+                },
+                default_source = "123",
+            };
 
-            var response = fixture.CreateOrUpdateContactDonor(donor, "me@here.com", "stripe_token", DateTime.Now);
+            paymentService.Setup(mocked => mocked.CreateCustomer("stripe_token")).Returns(stripeCust);
+            mpDonorService.Setup(mocked => mocked.UpdatePaymentProcessorCustomerId(456, stripeCust.id)).Returns(456);
+            paymentService.Setup(mocked => mocked.UpdateCustomerDescription(stripeCust.id, 456)).Returns("456");
+
+            var response = fixture.CreateOrUpdateContactDonor(donor, ENCRYPTED_KEY, "me@here.com", "stripe_token", DateTime.Now);
 
             mpDonorService.VerifyAll();
             mpContactService.VerifyAll();
@@ -187,7 +278,7 @@ namespace crds_angular.test.Services
 
             Assert.AreEqual(12345, response.ContactId);
             Assert.AreEqual(456, response.DonorId);
-            Assert.AreEqual("processor_id", response.ProcessorId);
+            Assert.AreEqual(stripeCust.id, response.ProcessorId);
         }
     }
 }
