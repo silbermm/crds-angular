@@ -34,7 +34,7 @@
     vm.currentPage = 1;
     vm.numberOfPages = 0;
     vm.pageHasErrors = true;
-    vm.pageTitle = vm.campaign.nickname;
+    vm.pageTitle = vm.campaign.formName;
     vm.privateInvite = $location.search()['invite'];
     vm.registrationNotOpen = true;
     vm.tripName = vm.campaign.name;
@@ -50,24 +50,24 @@
     function activate() {
       pageHasErrors();
       switch (vm.pageTitle) {
-        case 'NOLA':
+        case 'GO NOLA Application':
           vm.friendlyPageTitle = 'New Orleans';
           vm.numberOfPages = 5;
           TripsSignupService.thankYouMessage = $rootScope.MESSAGES.NOLASignUpThankYou.content;
           break;
-        case 'South Africa':
+        case 'GO South Africa Application':
           vm.friendlyPageTitle = 'South Africa';
           vm.numberOfPages = 6;
           TripsSignupService.thankYouMessage = $rootScope.MESSAGES.SouthAfricaSignUpThankYou.content;
           break;
-        case 'India':
+        case 'GO India Application':
           vm.friendlyPageTitle = 'India';
           vm.numberOfPages = 6;
           vm.whyPlaceholder = 'Please be specific. ' +
             'In instances where we have a limited number of spots, we strongly consider responses to this question.';
           TripsSignupService.thankYouMessage = $rootScope.MESSAGES.IndiaSignUpThankYou.content;
           break;
-        case 'Nicaragua':
+        case 'GO Nicaragua Application':
           vm.friendlyPageTitle = 'Nicaragua';
           vm.numberOfPages = 6;
           TripsSignupService.thankYouMessage = $rootScope.MESSAGES.NicaraguaSignUpThankYou.content;
