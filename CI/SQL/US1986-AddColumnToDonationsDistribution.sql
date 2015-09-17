@@ -19,7 +19,8 @@ SET [Default_Field_List] = 'Donation_ID_Table.Donation_Date
 ,Donation_ID_Table.Donation_Status_ID
 ,Donation_ID_Table.Transaction_Code
 ,Donation_ID_Table.Payment_Type_ID
-,Soft_Credit_Donor_Table.Donor_ID AS [Soft_Credit_Donor_ID]'
+,Soft_Credit_Donor_Table.Donor_ID AS [Soft_Credit_Donor_ID]
+,Donation_ID_Table_Donor_ID_Table_Contact_ID_Table.[Display_Name] AS [Donor_Display_Name]'
 WHERE [Page_ID] = 296
 
 GO
