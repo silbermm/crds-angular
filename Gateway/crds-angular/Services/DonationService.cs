@@ -181,7 +181,7 @@ namespace crds_angular.Services
                 }
 
                 // Refund amount should already be negative (when the original donation was reversed), but negative-ify it just in case
-                if (donation.Status == Models.Crossroads.Stewardship.DonationStatus.Refunded && donation.Amount > 0)
+                if (donation.Status == DonationStatus.Refunded && donation.Amount > 0)
                 {
                     donation.Amount *= -1;
                     donation.Distributions.All(dist =>
@@ -243,9 +243,9 @@ namespace crds_angular.Services
 
             foreach (var member in household.HouseholdMembers)
             {
-                if(member.StatementTypeId.HasValue && member.StatementTypeId == _statementTypeFamily)
+                if(member.StatementTypeId.HasValue && member.StatementTypeId == _statementTypeFamily && member.DonorId.HasValue)
                 {
-                    donorIds.Add(donor.DonorId);
+                    donorIds.Add(member.DonorId.Value);
                 }
             }
 
