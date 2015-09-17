@@ -123,7 +123,6 @@ namespace crds_angular.Services
                 contactDonorResponse.ContactId = contactDonor.ContactId;
                 stripeCustomer = _paymentService.CreateCustomer(paymentProcessorToken);
                 contactDonorResponse.ProcessorId = stripeCustomer.id;
-               // donorAccount.Processor_Account_ID = stripeCustomer.sources.data[0].id;
 
                 if (contactDonor.ExistingDonor)
                 {

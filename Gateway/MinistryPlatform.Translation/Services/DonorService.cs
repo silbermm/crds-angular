@@ -300,7 +300,7 @@ namespace MinistryPlatform.Translation.Services
             return details;
         }
 
-        private string CreateEncodedAndEncryptedAccountAndRoutingNumber(string accountNumber, string routingNumber)
+        public string CreateEncodedAndEncryptedAccountAndRoutingNumber(string accountNumber, string routingNumber)
         {
             var acct = _crypto.EncryptValue(accountNumber);
             var rtn = _crypto.EncryptValue(routingNumber);
