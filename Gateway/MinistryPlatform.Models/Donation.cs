@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MinistryPlatform.Models
 {
@@ -13,5 +14,19 @@ namespace MinistryPlatform.Models
         public int donationStatus { get; set; }
         public DateTime donationStatusDate { get; set; }
         public int? batchId { get; set; }
+        public string transactionCode { get; set; }
+        public bool IncludeOnGivingHistory { get; set; }
+        public bool IncludeOnPrintedStatement { get; set; }
+
+        #region Distributions property
+        private readonly List<DonationDistribution> _distributions = new List<DonationDistribution>();
+        public List<DonationDistribution> Distributions { get { return (_distributions); } }
+        #endregion
+
+        public Donation()
+        {
+            IncludeOnGivingHistory = true;
+            IncludeOnPrintedStatement = false;
+        }
     }
 }

@@ -98,7 +98,9 @@ namespace MinistryPlatform.Translation.Services
                 Nickname = famRec.ToString("Nickname"), 
                 LastName = famRec.ToString("Last_Name"), 
                 DateOfBirth = famRec.ToDate("Date_of_Birth"),
-                HouseholdPosition = famRec.ToString("Household_Position")
+                HouseholdPosition = famRec.ToString("Household_Position"),
+                StatementTypeId = famRec.ContainsKey("Statement_Type_ID") ? famRec.ToInt("Statement_Type_ID") : (int?)null,
+                DonorId = famRec.ContainsKey("Donor_ID") ? famRec.ToInt("Donor_ID") : (int?)null
             }).ToList();
 
             house.HouseholdMembers = family;
@@ -128,6 +130,7 @@ namespace MinistryPlatform.Translation.Services
                 Address_Line_2 = recordsDict.ToString("Address_Line_2"),
                 Congregation_ID = recordsDict.ToNullableInt("Congregation_ID"),
                 Household_ID = recordsDict.ToInt("Household_ID"),
+                Household_Name = recordsDict.ToString("Household_Name"),
                 City = recordsDict.ToString("City"),
                 State = recordsDict.ToString("State"),
                 Postal_Code = recordsDict.ToString("Postal_Code"),

@@ -10,5 +10,7 @@ namespace MinistryPlatform.Models
         public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string HouseholdPosition { get; set; }
+        public int? StatementTypeId { get; set; }
+        public int? DonorId { get; set; }
     }
 }

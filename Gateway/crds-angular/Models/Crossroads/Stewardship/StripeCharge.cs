@@ -22,6 +22,9 @@ namespace crds_angular.Models.Crossroads.Stewardship
         [JsonProperty("failure_message")]
         public string FailureMessage { get; set; }
 
+        [JsonProperty("source")]
+        public StripeSource Source { get; set; }
+
         #region Expandable Balance Transaction
         public string BalanceTransactionId { get; set; }
 
