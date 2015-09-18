@@ -3,8 +3,9 @@
 
   module.exports = TripsSignupController;
 
-  TripsSignupController.$inject = [
-    '$log',
+  TripsSignupController.$inject = ['$log',
+    'TripsSignupService',
+    '$rootScope',
     'Session',
     'Campaign',
     'WorkTeams',
@@ -60,17 +61,21 @@
       switch (vm.destination) {
         case 'NOLA':
           vm.numberOfPages = 5;
+          TripsSignupService.thankYouMessage = $rootScope.MESSAGES.NOLASignUpThankYou.content;
           break;
         case 'South Africa':
           vm.numberOfPages = 6;
+          TripsSignupService.thankYouMessage = $rootScope.MESSAGES.SouthAfricaSignUpThankYou.content;
           break;
         case 'India':
           vm.numberOfPages = 6;
           vm.whyPlaceholder = 'Please be specific. ' +
             'In instances where we have a limited number of spots, we strongly consider responses to this question.';
+          TripsSignupService.thankYouMessage = $rootScope.MESSAGES.IndiaSignUpThankYou.content;
           break;
         case 'Nicaragua':
           vm.numberOfPages = 6;
+          TripsSignupService.thankYouMessage = $rootScope.MESSAGES.NicaraguaSignUpThankYou.content;
           break;
       }
     }

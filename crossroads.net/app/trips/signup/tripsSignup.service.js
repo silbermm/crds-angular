@@ -10,6 +10,7 @@
       activate: activate,
       reset: reset,
       TripApplication: $resource(__API_ENDPOINT__ + 'api/trip-application')
+      thankYouMessage: ''
     };
 
     function activate() {

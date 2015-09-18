@@ -218,7 +218,9 @@ gulp.task('webpack-dev-server', ['icons-watch'], function(callback) {
 	gutil.log('[start]', 'Access crossroads.net Live Reload at http://localhost:8080/webpack-dev-server/#');
 });
 
-gulp.task('webpack:build', ['icons'], function(callback) {
+gulp.task('webpack:build', ['icons', 'robots'], function(callback) {
+
+
 	webPackConfigs.forEach(function(element) {
 		// modify some webpack config options
 		element.plugins = element.plugins.concat(
@@ -322,4 +324,13 @@ gulp.task('svg-sprite', function() {
 	return gulp.src('./app/icons/*.svg')
 		.pipe(svgSprite(config))
 		.pipe(gulp.dest('./build/icons/generated'));
+});
+
+// Renamed robots.txt for PROD vs NON-PROD environments
+gulp.task('robots', function() {
+  var robotsSourceFilename = process.env.ROBOTS_TXT_FILENAME || 'robots.NON-PROD.txt';
+
+  gulp.src(robotsSourceFilename)
+    .pipe(rename('robots.txt'))
+    .pipe(gulp.dest('./'));
 });

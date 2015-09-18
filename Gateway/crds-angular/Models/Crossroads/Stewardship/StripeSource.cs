@@ -6,6 +6,9 @@ namespace crds_angular.Models.Crossroads.Stewardship
 {
     public class StripeSource : StripeObject
     {
+        [JsonProperty(PropertyName = "id")]
+        public string id { get; set; }
+
         [JsonProperty(PropertyName = "last4", NullValueHandling = NullValueHandling.Ignore)]
         public string AccountNumberLast4 { get; set; }
 
