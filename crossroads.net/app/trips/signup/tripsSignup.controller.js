@@ -3,9 +3,28 @@
 
   module.exports = TripsSignupController;
 
-  TripsSignupController.$inject = ['$log', 'Session',  'Campaign', 'WorkTeams', '$location', 'Trip', '$q', 'contactId'];
+  TripsSignupController.$inject = ['$log',
+    'TripsSignupService',
+    '$rootScope',
+    'Session',
+    'Campaign',
+    'WorkTeams',
+    '$location',
+    'Trip',
+    '$q',
+    'contactId'
+  ];
 
-  function TripsSignupController($log, Session, Campaign, WorkTeams, $location, Trip, $q, contactId) {
+  function TripsSignupController($log,
+    TripsSignupService,
+    $rootScope,
+    Session,
+    Campaign,
+    WorkTeams,
+    $location,
+    Trip,
+    $q,
+    contactId) {
 
     var vm = this;
 
@@ -34,20 +53,24 @@
         case 'GO NOLA Application':
           vm.friendlyPageTitle = 'New Orleans';
           vm.numberOfPages = 5;
+          TripsSignupService.thankYouMessage = $rootScope.MESSAGES.NOLASignUpThankYou.content;
           break;
         case 'GO South Africa Application':
           vm.friendlyPageTitle = 'South Africa';
           vm.numberOfPages = 6;
+          TripsSignupService.thankYouMessage = $rootScope.MESSAGES.SouthAfricaSignUpThankYou.content;
           break;
         case 'GO India Application':
           vm.friendlyPageTitle = 'India';
           vm.numberOfPages = 6;
           vm.whyPlaceholder = 'Please be specific. ' +
             'In instances where we have a limited number of spots, we strongly consider responses to this question.';
+          TripsSignupService.thankYouMessage = $rootScope.MESSAGES.IndiaSignUpThankYou.content;
           break;
         case 'GO Nicaragua Application':
           vm.friendlyPageTitle = 'Nicaragua';
           vm.numberOfPages = 6;
+          TripsSignupService.thankYouMessage = $rootScope.MESSAGES.NicaraguaSignUpThankYou.content;
           break;
       }
     }

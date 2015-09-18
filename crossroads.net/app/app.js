@@ -30,5 +30,6 @@ require('../lib/select.css');
   require('./volunteer_application');
   require('./blog');
   require('./adbox');
+  require('./giving_history');
 
 })();

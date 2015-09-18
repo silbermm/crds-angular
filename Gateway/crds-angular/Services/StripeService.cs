@@ -9,7 +9,6 @@ using crds_angular.Models.Crossroads.Stewardship;
 using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
 using RestSharp.Extensions;
-using RestSharp.Serializers;
 
 namespace crds_angular.Services
 {
@@ -243,6 +242,37 @@ namespace crds_angular.Services
             
             return (refund);
         }
+
+        public StripeCharge GetCharge(string chargeId)
+        {
+            var url = string.Format("charges/{0}", chargeId);
+            var request = new RestRequest(url, Method.GET);
+
+            var response = _stripeRestClient.Execute(request);
+            CheckStripeResponse("Could not query charge", response);
+
+            // TODO Execute<StripeCharge>() above always gets an error deserializing the response, so using Execute() instead, and manually deserializing here
+            var charge = JsonConvert.DeserializeObject<StripeCharge>(response.Content);
+
+            return (charge);
+        }
+
+        public StripeRefundData GetRefund(string refundId)
+        {
+            var url = string.Format("refunds/{0}", refundId);
+            var request = new RestRequest(url, Method.GET);
+            request.AddParameter("expand[]", "charge");
+
+            var response = _stripeRestClient.Execute(request);
+            CheckStripeResponse("Could not query refund", response);
+
+            // TODO Execute<StripeRefundData>() above always gets an error deserializing the response, so using Execute() instead, and manually deserializing here
+            var refund = JsonConvert.DeserializeObject<StripeRefundData>(response.Content);
+
+            return refund;
+        }
+
+
     }
 
     public class Error

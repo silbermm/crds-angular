@@ -452,7 +452,10 @@ namespace crds_angular.test.Services
                     {
                         Id = "456",
                         Amount = "987",
-                        Charge = "ch_123456"
+                        Charge = new StripeCharge
+                        {
+                            Id = "ch_123456"
+                        }
                     }
 
                 }
@@ -477,6 +480,35 @@ namespace crds_angular.test.Services
             Assert.IsNotNull(refund.Data);
         }
 
+        [Test]
+        public void ShouldGetRefund()
+        {
+
+            const string refundDataJson = "{id: '456', amount: 987, charge: { id: 'ch_123456'}}";
+
+            var response = new Mock<IRestResponse>();
+
+            response.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
+            response.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            response.SetupGet(mocked => mocked.Content).Returns(refundDataJson).Verifiable();
+
+            _restClient.Setup(mocked => mocked.Execute(It.IsAny<IRestRequest>())).Returns(response.Object);
+
+            var refund = _fixture.GetRefund("456");
+            _restClient.Verify(mocked => mocked.Execute(
+                It.Is<RestRequest>(o =>
+                    o.Method == Method.GET
+                    && o.Resource.Equals("refunds/456")
+            )));
+
+            _restClient.VerifyAll();
+            response.VerifyAll();
+            Assert.IsNotNull(refund);
+            Assert.AreEqual("456", refund.Id);
+            Assert.AreEqual("987", refund.Amount);
+            Assert.IsNotNull(refund.Charge);
+            Assert.AreEqual("ch_123456", refund.Charge.Id);
+        }
     }
 
 }

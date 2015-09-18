@@ -1,14 +1,9 @@
 <div> 
   <div class='row'>
     <div class="col-sm-10 col-sm-offset-1">
-      <h1 class="page-header">Go {{page0.signupService.friendlyPageTitle}} Signup</h1>
+      <h1 class="page-header"> {{page0.signupService.campaign.formName}} Signup</h1>
       <h2 class="subheading">{{page0.signupService.campaign.name}}</h2>
-
-      <p class="push-top">
-        <strong>Please choose who you'd like to signup.</strong>
-      </p>
-      <family-select family-members='page0.familyMembers'> 
-      </family-select>
+      <family-select family-members='page0.familyMembers' show-sign-up='page0'></family-select>
     </div>
   </div>
 

@@ -1,16 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Results;
 using crds_angular.Controllers.API;
+using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads.Stewardship;
+using crds_angular.Models.Json;
 using MinistryPlatform.Translation.Services.Interfaces;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
 using Moq;
 using NUnit.Framework;
+using DonationStatus = crds_angular.Models.Crossroads.Stewardship.DonationStatus;
 using IDonorService = crds_angular.Services.Interfaces.IDonorService;
 using IDonationService = crds_angular.Services.Interfaces.IDonationService;
 
@@ -45,6 +49,95 @@ namespace crds_angular.test.controllers
             fixture.Request.Headers.Authorization = new AuthenticationHeaderValue(authType, authToken);
             fixture.RequestContext = new HttpRequestContext();
         }
+
+        [Test]
+        public void TestGetDonations()
+        {
+            var donations = new List<DonationDTO>
+            {
+                new DonationDTO
+                {
+                    BatchId = 123,
+                    Amount = 78900,
+                    DonationDate = DateTime.Now,
+                    Id = "456",
+                    Source = new DonationSourceDTO
+                    {
+                    SourceType = PaymentType.CreditCard,
+                    CardType = CreditCardType.AmericanExpress,
+                    Name = "ending in 1234",
+                    PaymentProcessorId = "tx_123",
+                    },
+                    Email = "me@here.com",
+                    ProgramId = "3",
+                    Status = DonationStatus.Succeeded
+                }
+            };
+            var dto = new DonationsDTO();
+            dto.Donations.AddRange(donations);
+
+            gatewayDonationServiceMock.Setup(mocked => mocked.GetDonationsForAuthenticatedUser(authType + " " + authToken, "1999", true)).Returns(dto);
+            var response = fixture.GetDonations("1999", true);
+            gatewayDonationServiceMock.VerifyAll();
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<DonationsDTO>>(response);
+            var r = (OkNegotiatedContentResult<DonationsDTO>)response;
+            Assert.IsNotNull(r.Content);
+            Assert.AreSame(dto, r.Content);
+        }
+
+        [Test]
+        public void TestGetDonationsNoDonationsFound()
+        {
+            gatewayDonationServiceMock.Setup(mocked => mocked.GetDonationsForAuthenticatedUser(authType + " " + authToken, "1999", true)).Returns((DonationsDTO)null);
+            var response = fixture.GetDonations("1999", true);
+            gatewayDonationServiceMock.VerifyAll();
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<RestHttpActionResult<ApiErrorDto>>(response);
+            var r = (RestHttpActionResult<ApiErrorDto>)response;
+            Assert.IsNotNull(r.Content);
+            Assert.AreEqual("No matching donations found", r.Content.Message);
+        }
+
+        [Test]
+        public void TestGetDonationYears()
+        {
+            var donationYears = new List<string>
+            {
+                "1999",
+                "2010",
+                "2038"
+            };
+            var dto = new DonationYearsDTO();
+            dto.AvailableDonationYears.AddRange(donationYears);
+
+            gatewayDonationServiceMock.Setup(mocked => mocked.GetDonationYearsForAuthenticatedUser(authType + " " + authToken)).Returns(dto);
+            var response = fixture.GetDonationYears();
+            gatewayDonationServiceMock.VerifyAll();
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<DonationYearsDTO>>(response);
+            var r = (OkNegotiatedContentResult<DonationYearsDTO>)response;
+            Assert.IsNotNull(r.Content);
+            Assert.AreSame(dto, r.Content);
+        }
+
+        [Test]
+        public void TestGetDonationYearsNoYearsFound()
+        {
+            gatewayDonationServiceMock.Setup(mocked => mocked.GetDonationYearsForAuthenticatedUser(authType + " " + authToken)).Returns((DonationYearsDTO)null);
+            var response = fixture.GetDonationYears();
+            gatewayDonationServiceMock.VerifyAll();
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<RestHttpActionResult<ApiErrorDto>>(response);
+            var r = (RestHttpActionResult<ApiErrorDto>)response;
+            Assert.IsNotNull(r.Content);
+            Assert.AreEqual("No donation years found", r.Content.Message);
+        }
+
 
         [Test]
         public void testPostToCreateDonationAndDistributionAuthenticated()
@@ -108,7 +201,7 @@ namespace crds_angular.test.controllers
 
             var resultDto = ((OkNegotiatedContentResult<DonationDTO>) result).Content;
             Assert.IsNotNull(resultDto);
-            Assert.AreEqual(donor.Email, resultDto.email);
+            Assert.AreEqual(donor.Email, resultDto.Email);
         }
 
         [Test]
@@ -169,7 +262,7 @@ namespace crds_angular.test.controllers
 
             var resultDto = ((OkNegotiatedContentResult<DonationDTO>)result).Content;
             Assert.IsNotNull(resultDto);
-            Assert.AreEqual(donor.Email, resultDto.email);
+            Assert.AreEqual(donor.Email, resultDto.Email);
         }
 
     }

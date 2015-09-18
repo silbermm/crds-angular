@@ -50,6 +50,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Address_Line_2", "address-line-2"},
                     {"Congregation_ID", 5},
                     {"Household_ID", 4},
+                    {"Household_Name", "hh name"},
                     {"City", "Cincinnati"},
                     {"State", "OH"},
                     {"Postal_Code", "45208"},
@@ -83,6 +84,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.IsNotNull(myProfile);
             Assert.AreEqual(3, myProfile.Contact_ID);
             Assert.AreEqual(100, myProfile.Address_ID);
+            Assert.AreEqual("hh name", myProfile.Household_Name);
         }
 
         [Test]
@@ -97,6 +99,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Address_Line_2", "address-line-2"},
                     {"Congregation_ID", null},
                     {"Household_ID", 4},
+                    {"Household_Name", "hh name"},
                     {"City", "Cincinnati"},
                     {"State", "OH"},
                     {"Postal_Code", "45208"},
@@ -133,6 +136,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.IsNull(myProfile.Gender_ID);
             Assert.IsNull(myProfile.Marital_Status_ID);
             Assert.IsNull(myProfile.Mobile_Carrier);
+            Assert.AreEqual("hh name", myProfile.Household_Name);
         }
 
         [Test]

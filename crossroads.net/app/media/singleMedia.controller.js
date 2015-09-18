@@ -2,9 +2,9 @@
   'use strict';
   module.exports = SingleMediaController;
 
-  SingleMediaController.$inject = ['$rootScope', '$scope', '$sce', '$location', '$sanitize', 'SingleMedia', 'ItemProperty', 'ParentMedia', 'ParentItemProperty', 'ImageURL', 'YT_EVENT'];
+  SingleMediaController.$inject = ['$rootScope', '$scope', '$sce', '$location', '$sanitize', 'SingleMedia', 'ItemProperty', 'ParentMedia', 'ParentItemProperty', 'ImageURL', 'YT_EVENT', 'ResponsiveImageService'];
 
-  function SingleMediaController($rootScope, $scope, $sce, $location, $sanitize, SingleMedia, ItemProperty, ParentMedia, ParentItemProperty, ImageURL, YT_EVENT) {
+  function SingleMediaController($rootScope, $scope, $sce, $location, $sanitize, SingleMedia, ItemProperty, ParentMedia, ParentItemProperty, ImageURL, YT_EVENT, ResponsiveImageService) {
     var vm = this;
     vm.imageUrl = ImageURL;
     vm.isMessage = (ItemProperty === 'message');
@@ -65,6 +65,10 @@
     }
 
     $scope.$on(YT_EVENT.STATUS_CHANGE, function(event, data) {
+      if (!$scope.yt) {
+        return;
+      }
+
       $scope.yt.playerStatus = data;
     });
 
@@ -128,11 +132,13 @@
     function switchToAudio() {
       vm.videoSectionIsOpen = false;
       vm.pauseVideo();
+      ResponsiveImageService.updateResponsiveImages();
     }
 
     function switchToVideo() {
       vm.videoSectionIsOpen = true;
       stopAudioPlayer();
+      ResponsiveImageService.updateResponsiveImages();
     }
 
     function showVideoDownloadLink() {
@@ -146,6 +152,5 @@
     function showProgramDownloadLink() {
       return ((vm.programDownloadLink === undefined) ? false : true);
     }
-
   }
 })();
