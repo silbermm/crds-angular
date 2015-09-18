@@ -1,9 +1,12 @@
+﻿
 ﻿using System.Collections.Generic;
 using crds_angular.Models.MP;
 using MinistryPlatform.Models;
 using Newtonsoft.Json;
 using Household = crds_angular.Models.MP.Household;
 using HouseholdMember = MinistryPlatform.Models.HouseholdMember;
+using Newtonsoft.Json;
+
 
 namespace crds_angular.Models
 {
@@ -119,9 +122,9 @@ namespace crds_angular.Models
             };
         }
 
-        public Household GetHousehold()
+        public MinistryPlatform.Models.Household GetHousehold()
         {
-            return new Household
+            return new MinistryPlatform.Models.Household
             {
                 Household_ID = HouseholdId,
                 Home_Phone = HomePhone,
@@ -129,9 +132,9 @@ namespace crds_angular.Models
             };
         }
 
-        public Address GetAddress()
+        public MinistryPlatform.Models.Address GetAddress()
         {
-            return new Address
+            return new MinistryPlatform.Models.Address
             {
                 Address_ID = AddressId,
                 Address_Line_1 = AddressLine1,

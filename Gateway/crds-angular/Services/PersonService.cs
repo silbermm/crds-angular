@@ -55,38 +55,43 @@ namespace crds_angular.Services
             return GetSkills(contactId, token);
         }
 
+        //public crds_angular.Models.MP.Household GetHousehold(int householdId)
+        //{
+        //    var house = _contactService.GetHouseholdById(householdId);
+        //    var household = new crds_angular.Models.MP.Household
+        //    {
+        //        Address_Line_1 = house.AddressLine1,
+        //        Address_Line_2 = house.AddressLine2,
+        //        City = house.City,
+        //        Congregation_ID = house.CongregationId,
+        //        County = house.County,
+        //        Foreign_Country = house.ForeignCountry,
+        //        Home_Phone = house.HomePhone,
+        //        Postal_Code = house.PostalCode,
+        //        State = house.State,
+        //        Household_ID = house.HouseholdId
+        //    };
+
+        //    foreach (var fam in house.HouseholdMembers)
+        //    {
+        //        var member = new HouseholdMember
+        //        {
+        //            Contact_ID = fam.ContactId,
+        //            Date_Of_Birth = fam.DateOfBirth,
+        //            First_Name = fam.FirstName,
+        //            Nickname = fam.Nickname,
+        //            Last_Name = fam.LastName,
+        //            Household_Position = fam.HouseholdPosition
+        //        };
+        //        household.Household_Members.Add(member);
+        //    }
+
+        //    return household;
+        //}
+
         public Household GetHousehold(int householdId)
         {
-            var house = _contactService.GetHouseholdById(householdId);
-            var household = new Household
-            {
-                Address_Line_1 = house.AddressLine1,
-                Address_Line_2 = house.AddressLine2,
-                City = house.City,
-                Congregation_ID = house.CongregationId,
-                County = house.County,
-                Foreign_Country = house.ForeignCountry,
-                Home_Phone = house.HomePhone,
-                Postal_Code = house.PostalCode,
-                State = house.State,
-                Household_ID = house.HouseholdId
-            };
-
-            foreach (var fam in house.HouseholdMembers)
-            {
-                var member = new HouseholdMember
-                {
-                    Contact_ID = fam.ContactId,
-                    Date_Of_Birth = fam.DateOfBirth,
-                    First_Name = fam.FirstName,
-                    Nickname = fam.Nickname,
-                    Last_Name = fam.LastName,
-                    Household_Position = fam.HouseholdPosition
-                };
-                household.Household_Members.Add(member);
-            }
-
-            return household;
+            throw new NotImplementedException();
         }
 
         public Person GetPerson(int contactId)

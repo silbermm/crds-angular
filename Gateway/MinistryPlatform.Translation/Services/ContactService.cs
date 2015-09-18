@@ -69,42 +69,8 @@ namespace MinistryPlatform.Translation.Services
 
         public Household GetHouseholdById(int householdId)
         {
-            var token = ApiLogin();
-            var recordsDict = _ministryPlatformService.GetPageViewRecords("HouseholdProfile", token, householdId.ToString());
-            if (recordsDict.Count > 1)
-            {
-                throw new ApplicationException("GetHouseholdById returned multiple records");
-            }
-
-            var record = recordsDict.FirstOrDefault();
-            var house = new Household
-            {
-                AddressLine1 = record.ToString("Address_Line_1"),
-                AddressLine2 = record.ToString("Address_Line_2"),
-                City = record.ToString("City"),
-                State = record.ToString("State/Region"),
-                PostalCode = record.ToString("Postal_Code"),
-                HomePhone = record.ToString("Home_Phone"),
-                ForeignCountry = record.ToString("Foreign_Country"),
-                County = record.ToString("County"),
-                CongregationId = record.ToNullableInt("Congregation_ID"),
-                HouseholdId = record.ToInt("Household_ID")
-            };
-            var familyRecords = _ministryPlatformService.GetSubpageViewRecords("HouseholdMembers", house.HouseholdId, token);
-            var family = familyRecords.Select(famRec => new HouseholdMember
-            {
-                ContactId = famRec.ToInt("Contact_ID"), 
-                FirstName = famRec.ToString("First_Name"), 
-                Nickname = famRec.ToString("Nickname"), 
-                LastName = famRec.ToString("Last_Name"), 
-                DateOfBirth = famRec.ToDate("Date_of_Birth"),
-                HouseholdPosition = famRec.ToString("Household_Position")
-            }).ToList();
-
-            house.HouseholdMembers = family;
-            return house;
+            throw new NotImplementedException();
         }
-
         public List<HouseholdMember> GetHouseholdFamilyMembers(int householdId)
         {
             var token = ApiLogin();
@@ -120,6 +86,45 @@ namespace MinistryPlatform.Translation.Services
             }).ToList();
             return family;
         }
+
+        //public Household GetHouseholdById(int householdId)
+        //{
+        //    var token = ApiLogin();
+        //    var recordsDict = _ministryPlatformService.GetPageViewRecords("HouseholdProfile", token, householdId.ToString());
+        //    if (recordsDict.Count > 1)
+        //    {
+        //        throw new ApplicationException("GetHouseholdById returned multiple records");
+        //    }
+
+        //    var record = recordsDict.FirstOrDefault();
+        //    var house = new Household
+        //    {
+        //        AddressLine1 = record.ToString("Address_Line_1"),
+        //        AddressLine2 = record.ToString("Address_Line_2"),
+        //        City = record.ToString("City"),
+        //        State = record.ToString("State/Region"),
+        //        PostalCode = record.ToString("Postal_Code"),
+        //        HomePhone = record.ToString("Home_Phone"),
+        //        ForeignCountry = record.ToString("Foreign_Country"),
+        //        County = record.ToString("County"),
+        //        CongregationId = record.ToNullableInt("Congregation_ID"),
+        //        HouseholdId = record.ToInt("Household_ID")
+        //    };
+        //    var familyRecords = _ministryPlatformService.GetSubpageViewRecords("HouseholdMembers", house.HouseholdId, token);
+        //    var family = familyRecords.Select(famRec => new HouseholdMember
+        //    {
+        //        ContactId = famRec.ToInt("Contact_ID"), 
+        //        FirstName = famRec.ToString("First_Name"), 
+        //        Nickname = famRec.ToString("Nickname"), 
+        //        LastName = famRec.ToString("Last_Name"), 
+        //        DateOfBirth = famRec.ToDate("Date_of_Birth"),
+        //        HouseholdPosition = famRec.ToString("Household_Position")
+        //    }).ToList();
+
+        //    house.HouseholdMembers = family;
+        //    return house;
+        //}
+
 
         public MyContact GetMyProfile(string token)
         {
