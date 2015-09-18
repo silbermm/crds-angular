@@ -106,10 +106,7 @@ namespace crds_angular.Services
                 {
                     donorAccount.ProcessorAccountId = stripeCustomer.sources.data[0].id;
                 }
-                // StripeCustomer stripeCustomer = null;
-               // stripeCustomer.sources.data[0].id
-              //      stripeCustomer.id
-                
+           
                 contactDonorResponse.ProcessorId = stripeCustomer.id;
                 
                 contactDonorResponse.DonorId = _mpDonorService.CreateDonorRecord(contactDonorResponse.ContactId, contactDonorResponse.ProcessorId, setupDate, 
