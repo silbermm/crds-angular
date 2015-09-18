@@ -56,6 +56,7 @@
       handleNext(2);
     }
 
+    //this may be the way we handle validation in the next story
     function handleNextt(nextPage, target) {
       var form = target.tripAppPage2;
       form.$setSubmitted(true);
