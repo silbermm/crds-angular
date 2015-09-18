@@ -235,22 +235,6 @@ namespace crds_angular.test.Services
             var customer = new StripeCustomer
             {
                 id = "856",
-                sources = new Sources
-                {
-                    data = new List<SourceData>
-                    {
-                       new SourceData
-                        {
-                            id = "123",
-                            @object = "credit_card",
-                            brand = "mcc",
-                            last4 = "0002",
-                            exp_month = "2",
-                            exp_year = "2024",
-                            address_zip = "10101"
-                        },
-                    }
-                },
                 default_source = "123",
             };
 
