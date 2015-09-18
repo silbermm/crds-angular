@@ -568,6 +568,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Transaction_Code", "tx_1000"},
                     {"Amount", 1000.00M},
                     {"dp_RecordName", "Program 1"},
+                    {"Donor_Display_Name", "Test Name"},
                 },
                 new Dictionary<string, object>
                 {
@@ -581,6 +582,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Transaction_Code", "tx_2000"},
                     {"Amount", 2000.00M},
                     {"dp_RecordName", "Program 2"},
+                    {"Donor_Display_Name", "Test Name"},
                 },
                 new Dictionary<string, object>
                 {
@@ -594,6 +596,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Transaction_Code", "tx_1000"},
                     {"Amount", 9000.00M},
                     {"dp_RecordName", "Program 9"},
+                    {"Donor_Display_Name", "Test Name"},
                 }
             };
 
@@ -656,6 +659,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Transaction_Code", "tx_1000"},
                     {"Amount", 1000.00M},
                     {"dp_RecordName", "Program 1"},
+                    {"Donor_Display_Name", "Test Name"},
                 },
                 new Dictionary<string, object>
                 {
@@ -669,6 +673,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Transaction_Code", "tx_2000"},
                     {"Amount", 2000.00M},
                     {"dp_RecordName", "Program 2"},
+                    {"Donor_Display_Name", "Test Name"},
                 },
                 new Dictionary<string, object>
                 {
@@ -682,6 +687,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Transaction_Code", "tx_1000"},
                     {"Amount", 9000.00M},
                     {"dp_RecordName", "Program 9"},
+                    {"Donor_Display_Name", "Test Name"},
                 }
             };
 
@@ -745,6 +751,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Transaction_Code", "tx_1000"},
                     {"Amount", 1000.00M},
                     {"dp_RecordName", "Program 1"},
+                    {"Donor_Display_Name", "Test Name"},
                 },
                 new Dictionary<string, object>
                 {
@@ -758,6 +765,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Transaction_Code", "tx_2000"},
                     {"Amount", 2000.00M},
                     {"dp_RecordName", "Program 2"},
+                    {"Donor_Display_Name", "Test Name"},
                 },
                 new Dictionary<string, object>
                 {
@@ -771,6 +779,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Transaction_Code", "tx_1000"},
                     {"Amount", 9000.00M},
                     {"dp_RecordName", "Program 9"},
+                    {"Donor_Display_Name", "Test Name"},
                 }
             };
 
@@ -790,6 +799,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual("Program 9", result[0].Distributions[1].donationDistributionProgram);
             Assert.AreEqual(900000, result[0].Distributions[1].donationDistributionAmt);
             Assert.AreEqual(5511, result[0].softCreditDonorId);
+            Assert.AreEqual("Test Name", result[0].donorDisplayName);
 
             Assert.AreEqual(1, result[1].Distributions.Count);
             Assert.AreEqual(200000, result[1].donationAmt);
