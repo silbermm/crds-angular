@@ -36,6 +36,7 @@
       vm.loading = true;
       var filter = '';
       var parser = '';
+      var size = '';
       var query = $scope.searchString;
       switch(vm.type){
         case 'media':
@@ -47,8 +48,9 @@
       }
       if(query.indexOf('tags:')>=0 || query.indexOf('speakers:')>=0){
         parser = 'structured';
+        size = 100;
       }
-      Search.execute({q: query, fq: filter, 'q.parser': parser})
+      Search.execute({q: query, fq: filter, 'q.parser': parser, size: size})
         .$promise.then(function(response) {
           if(response.error){
             vm.showResults = false;
