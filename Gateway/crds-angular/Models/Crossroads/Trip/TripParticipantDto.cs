@@ -37,7 +37,7 @@ namespace crds_angular.Models.Crossroads.Trip
         [JsonProperty(PropertyName = "participantPhotoUrl")]
         public string PhotoUrl
         {
-            get { return "http://crossroads-media.s3.amazonaws.com/images/avatar.svg"; }
+            get { return "http://crossroads-media.imgix.net/images/avatar.svg"; }
         }
 
         [JsonProperty(PropertyName = "trips")]

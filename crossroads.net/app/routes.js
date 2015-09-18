@@ -260,7 +260,7 @@
         }
       })
       .state('styleguide', {
-        parent: 'noSideBar',
+        parent: 'noHeaderOrFooter',
         url: '/styleguide',
         controller: 'StyleguideCtrl as styleguide',
         templateUrl: 'styleguide/styleguide.html'
