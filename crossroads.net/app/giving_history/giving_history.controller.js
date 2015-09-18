@@ -7,19 +7,26 @@
   function GivingHistoryController($log, GivingHistoryService, Profile) {
     var vm = this;
 
+    vm.overall_view_ready = false;
     vm.beginning_donation_date = undefined;
     vm.currentDate = new Date();
     vm.donation_statement_total_amount = undefined;
     vm.donation_total_amount = undefined;
     vm.donation_years = [];
     vm.donations = [];
+    vm.donation_history = false;
+    vm.donation_view_ready = false;
     vm.ending_donation_date = undefined;
-    vm.getDonations = getDonations;
-    vm.history = false;
     vm.profile = {};
     vm.selected_giving_year = undefined;
     vm.soft_credit_donations = [];
-    vm.viewReady = false;
+    vm.soft_credit_donation_statement_total_amount = undefined;
+    vm.soft_credit_donation_total_amount = undefined;
+    vm.soft_credit_donation_history = false;
+    vm.soft_credit_donation_view_ready = false;
+
+    vm.getDonations = getDonations;
+    vm.getSoftCreditDonations = getSoftCreditDonations;
 
     activate();
 
@@ -41,36 +48,58 @@
           vm.selected_giving_year = _.find(vm.donation_years, {key: most_recent_giving_year});
 
           // Now get the donations for the selected year
+          vm.overall_view_ready = true;
           vm.getDonations();
+          vm.getSoftCreditDonations();
         },
 
         function(/*error*/) {
-          vm.history = false;
-          vm.viewReady = true;
+          vm.overall_view_ready = true;
+          vm.donation_history = false;
+          vm.soft_credit_donation_history = false;
         });
       },
 
       function(/*error*/) {
-        vm.history = false;
-        vm.viewReady = true;
+        vm.overall_view_ready = true;
+        vm.donation_history = false;
+        vm.soft_credit_donation_history = false;
       });
     }
 
     function getDonations() {
-      vm.viewReady = false;
+      vm.donation_view_ready = false;
       GivingHistoryService.donations.get({donationYear: vm.selected_giving_year.key}, function(data) {
             vm.donations = data.donations;
             vm.donation_total_amount = data.donation_total_amount;
             vm.donation_statement_total_amount = data.donation_statement_total_amount;
-            vm.viewReady = true;
-            vm.history = true;
+            vm.donation_view_ready = true;
+            vm.donation_history = true;
             vm.beginning_donation_date = data.beginning_donation_date;
             vm.ending_donation_date = data.ending_donation_date;
           },
 
           function(/*error*/) {
-            vm.history = false;
-            vm.viewReady = true;
+            vm.donation_history = false;
+            vm.donation_view_ready = true;
+          });
+    }
+
+    function getSoftCreditDonations() {
+      vm.soft_credit_donation_view_ready = false;
+      GivingHistoryService.donations.get({donationYear: vm.selected_giving_year.key, softCredit: true}, function(data) {
+            vm.soft_credit_donations = data.donations;
+            vm.soft_credit_donation_total_amount = data.donation_total_amount;
+            vm.soft_credit_donation_statement_total_amount = data.donation_statement_total_amount;
+            vm.soft_credit_donation_view_ready = true;
+            vm.soft_credit_donation_history = true;
+            vm.beginning_donation_date = data.beginning_donation_date;
+            vm.ending_donation_date = data.ending_donation_date;
+          },
+
+          function(/*error*/) {
+            vm.soft_credit_donation_history = false;
+            vm.soft_credit_donation_view_ready = true;
           });
     }
   }
