@@ -13,13 +13,17 @@ var definePlugin = new webpack.DefinePlugin({
   __API_ENDPOINT__: JSON.stringify(process.env.CRDS_API_ENDPOINT || 'http://gatewayint.crossroads.net/gateway/'),
   __CMS_ENDPOINT__: JSON.stringify(process.env.CRDS_CMS_ENDPOINT || 'http://contentint.crossroads.net/'),
   __STRIPE_PUBKEY__: JSON.stringify(process.env.CRDS_STRIPE_PUBKEY || 'pk_test_TR1GulD113hGh2RgoLhFqO0M'),
-  __SOUNDCLOUD_API_KEY__: JSON.stringify(process.env.CRDS_SOUNDCLOUD_KEY || '67723f3ff9ea6bda29331ac06ce2960c')
+  __SOUNDCLOUD_API_KEY__: JSON.stringify(process.env.CRDS_SOUNDCLOUD_KEY || '67723f3ff9ea6bda29331ac06ce2960c'),
+  __AWS_SEARCH_ENDPOINT__ :
+    JSON.stringify(process.env.CRDS_AWS_SEARCH_ENDPOINT ||
+       'https://vs9gac5tz7.execute-api.us-east-1.amazonaws.com/prod/')
 });
 
 
 module.exports = {
   entry: {
     trips: './app/trips/trips.module.js',
+    search: './app/search/search.module.js',
     media: './app/media/media.module.js',
     give: './app/give/give.module.js',
     profile: './app/profile/profile.module.js',
