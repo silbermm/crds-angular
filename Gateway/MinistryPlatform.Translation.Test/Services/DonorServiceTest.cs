@@ -774,7 +774,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 }
             };
 
-            var search = string.Format(",,,,,,,,,,,,,,,,\"{0}\"", 123);
+            var search = string.Format(",,,,,,,,,,,,,,,,,\"{0}\"", 123);
             _ministryPlatformService.Setup(mocked => mocked.GetRecordsDict(296, It.IsAny<string>(), search, It.IsAny<string>())).Returns(records);
             _ministryPlatformService.Setup(mocked => mocked.GetRecordsDict(90210, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(statuses);
             var result = _fixture.GetSoftCreditDonations(new [] {123});
