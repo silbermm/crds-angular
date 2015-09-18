@@ -49,9 +49,17 @@
           <a href="{{result.fields.link}}" class="search-link text-ellipsis">crossroads.net{{result.fields.link}}</a>
         </div>
         <div class="card-body">
-          <div ng-bind-html='result.fields.content | htmlToPlaintext | limitToEllip : 140'></div>
-          <pre ng-if="search.json">{{result.fields | json}}</pre>
-          <p class="search-suggested-links"><a ng-repeat-start="tag in result.fields.tags" ui-sref="search({type:'media',tag:tag})">{{tag}}</a> <span ng-repeat-end ng-if="!$last">| </span></p>
+          <div class="row">
+            <div ng-if="result.fields.image_path" class="col-md-4 col-xs-5">
+              <img class="img-responsive img-full-width mobile-push-bottom search-media-image" data-src="{{result.fields.image_path}}">
+            </div>
+            <div ng-class="{'col-md-8 col-xs-7 hard-left':result.fields.image_path, 'col-xs-12':!result.fields.image_path}">
+              <p ng-if='result.fields.start_date' class="search-media-date flush-bottom">{{result.fields.start_date | date:'MM.dd.yyyy'}} <span ng-if='result.fields.end_date'>- {{result.fields.end_date | date:'MM.dd.yyyy'}}</span></p>
+              <div ng-bind-html='result.fields.content | htmlToPlaintext | limitToEllip : 140'></div>
+              <pre ng-if="search.json">{{result.fields | json}}</pre>
+              <p class="search-suggested-links"><a ng-repeat-start="tag in result.fields.tags" ui-sref="search({type:'media',tag:tag})">{{tag}}</a> <span ng-repeat-end ng-if="!$last">| </span></p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

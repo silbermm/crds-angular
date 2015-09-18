@@ -34,7 +34,8 @@
           filter = '(or type:\'NEED\' type:\'ITEM\' type:\'EVENT\' type:\'JOB\')';
           break;
       }
-      Search.Search.get({q: $scope.searchString, fq: filter, 'q.parser': parser})
+      //, 'q.parser': parser
+      Search.Search.get({q: $scope.searchString, fq: filter})
         .$promise.then(function(response) {
         vm.results = response;
       });
