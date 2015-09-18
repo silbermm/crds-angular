@@ -8,7 +8,6 @@
     .directive('initiativeRequired', require('./initiativeRequired.validation.directive'))
     .directive('invalidAccount', require('./invalidAccount.validation.directive'))
     .directive('invalidRouting', require('./invalidRouting.validation.directive'))
-    .directive('invalidZip', require('./invalidZip.validation.directive'))
     .directive('naturalNumber', require('./naturalNumber.validation.directive'));
 
   require('./services');

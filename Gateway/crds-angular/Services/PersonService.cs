@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using AutoMapper;
 using crds_angular.Models;
 using crds_angular.Models.Crossroads;
-using crds_angular.Services.Interfaces;
+using crds_angular.Models.MP;
+using MPServices=MinistryPlatform.Translation.Services.Interfaces;
 using MinistryPlatform.Models.DTO;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Attribute = MinistryPlatform.Models.Attribute;
+using IPersonService = crds_angular.Services.Interfaces.IPersonService;
+
 
 namespace crds_angular.Services
 {
     public class PersonService : MinistryPlatformBaseService, IPersonService
     {
-        private IContactService _contactService;
+        private readonly IContactService _contactService;
 
         public PersonService(IContactService contactService)
         {
@@ -27,20 +30,7 @@ namespace crds_angular.Services
             var addressDictionary = getDictionary(person.GetAddress());
             addressDictionary.Add("State/Region", addressDictionary["State"]);
 
-            MinistryPlatformService.UpdateRecord(AppSetting("MyContact"), contactDictionary, token);
-
-            if (addressDictionary["Address_ID"] != null)
-            {
-                //address exists, update it
-                MinistryPlatformService.UpdateRecord(AppSetting("MyAddresses"), addressDictionary, token);
-            }
-            else
-            {
-                //address does not exist, create it, then attach to household
-                var addressId = MinistryPlatformService.CreateRecord(AppSetting("MyAddresses"), addressDictionary, token);
-                householdDictionary.Add("Address_ID", addressId);
-            }
-            MinistryPlatformService.UpdateRecord(AppSetting("MyHousehold"), householdDictionary, token);
+            _contactService.UpdateContact(person.ContactId, contactDictionary, householdDictionary, addressDictionary);
         }
 
         public List<Skill> GetLoggedInUserSkills(int contactId, string token)
@@ -71,16 +61,19 @@ namespace crds_angular.Services
             person.City = contact.City;
             person.State = contact.State;
             person.PostalCode = contact.Postal_Code;
-            person.AnniversaryDate = contact.Anniversary_Date;
+            person.AnniversaryDate = contact.Anniversary_Date; 
             person.ForeignCountry = contact.Foreign_Country;
             person.HomePhone = contact.Home_Phone;
             person.CongregationId = contact.Congregation_ID;
             person.HouseholdId = contact.Household_ID;
+            person.HouseholdName = contact.Household_Name;
             person.AddressId = contact.Address_ID;
             person.Age = contact.Age;
-            
-            return person;
 
+            var family = _contactService.GetHouseholdFamilyMembers(person.HouseholdId);
+            person.HouseholdMembers = family;
+
+            return person;
         }
 
         public List<RoleDto> GetLoggedInUserRoles(string token)
@@ -112,11 +105,12 @@ namespace crds_angular.Services
             person.City = contact.City;
             person.State = contact.State;
             person.PostalCode = contact.Postal_Code;
-            person.AnniversaryDate = contact.Anniversary_Date;
+            person.AnniversaryDate = contact.Anniversary_Date; 
             person.ForeignCountry = contact.Foreign_Country;
             person.HomePhone = contact.Home_Phone;
             person.CongregationId = contact.Congregation_ID;
             person.HouseholdId = contact.Household_ID;
+            person.HouseholdName = contact.Household_Name;
             person.AddressId = contact.Address_ID;
             person.Age = contact.Age;
 
@@ -133,6 +127,5 @@ namespace crds_angular.Services
 
             return skills;
         }
-
     }
 }

@@ -2,15 +2,15 @@
   'use strict';
   module.exports = SingleMediaController;
 
-  SingleMediaController.$inject = ['$rootScope', '$scope', '$sce', '$location', '$sanitize', 'SingleMedia', 'ItemProperty', 'ParentMedia', 'ParentItemProperty', 'ImageURL', 'YT_EVENT'];
+  SingleMediaController.$inject = ['$rootScope', '$scope', '$sce', '$location', '$sanitize', 'SingleMedia', 'ItemProperty', 'ParentMedia', 'ParentItemProperty', 'ImageURL', 'YT_EVENT', 'ResponsiveImageService'];
 
-  function SingleMediaController($rootScope, $scope, $sce, $location, $sanitize, SingleMedia, ItemProperty, ParentMedia, ParentItemProperty, ImageURL, YT_EVENT) {
+  function SingleMediaController($rootScope, $scope, $sce, $location, $sanitize, SingleMedia, ItemProperty, ParentMedia, ParentItemProperty, ImageURL, YT_EVENT, ResponsiveImageService) {
     var vm = this;
     vm.imageUrl = ImageURL;
-    vm.isMessage = (ItemProperty === 'messages');
+    vm.isMessage = (ItemProperty === 'message');
 
     vm.isSubscribeOpen = false;
-    vm.media = SingleMedia[ItemProperty][0];
+    vm.media = SingleMedia[ItemProperty];
     vm.pauseVideo = pauseVideo;
     vm.playVideo = playVideo;
     vm.setAudioPlayer = setAudioPlayer;
@@ -28,15 +28,14 @@
     vm.showProgramDownloadLink = showProgramDownloadLink;
     vm.shareUrl = $location.absUrl();
     vm.sanitizedDescription = $sanitize(vm.media.description);
-    vm.addTagsToArray = addTagsToArray;
-    vm.mediaTags = [];
+    vm.mediaTags = vm.media.tags;
 
     if (vm.isMessage) {
       vm.videoSectionIsOpen = true;
       vm.audio = vm.media.audio;
       vm.video = vm.media.video;
       vm.programDownloadLink = _.get(vm.media, 'program.filename');
-      vm.addTagsToArray(vm.media, vm.mediaTags);
+      vm.mediaTags = vm.media.combinedTags;
     } else {
       if (vm.media.className === 'Music') {
         vm.audio = vm.media;
@@ -53,23 +52,23 @@
       vm.video.videoUrl = _.get(vm.video, 'serviceId');
       vm.videoDownloadLink = _.get(vm.video, 'source.filename');
       $sce.trustAsResourceUrl(vm.videoUrl);
-
-      vm.addTagsToArray(vm.video, vm.mediaTags);
     }
 
     if (vm.audio) {
       vm.audioDownloadLink = _.get(vm.audio, 'source.filename');
-
-      vm.addTagsToArray(vm.audio, vm.mediaTags);
     }
 
     if (ParentMedia) {
-      vm.parentMedia = ParentMedia[ParentItemProperty][0];
+      vm.parentMedia = ParentMedia[ParentItemProperty];
     } else {
       vm.parentMedia = false;
     }
 
     $scope.$on(YT_EVENT.STATUS_CHANGE, function(event, data) {
+      if (!$scope.yt) {
+        return;
+      }
+
       $scope.yt.playerStatus = data;
     });
 
@@ -133,11 +132,13 @@
     function switchToAudio() {
       vm.videoSectionIsOpen = false;
       vm.pauseVideo();
+      ResponsiveImageService.updateResponsiveImages();
     }
 
     function switchToVideo() {
       vm.videoSectionIsOpen = true;
       stopAudioPlayer();
+      ResponsiveImageService.updateResponsiveImages();
     }
 
     function showVideoDownloadLink() {
@@ -151,14 +152,5 @@
     function showProgramDownloadLink() {
       return ((vm.programDownloadLink === undefined) ? false : true);
     }
-
-    function addTagsToArray(media, mediaTags) {
-      _.forEach(media.tags, function(n) {
-        if (!(_.any(mediaTags, _.matches(n.title)))) {
-          mediaTags.push(n.title);
-        }
-      });
-    }
-
   }
 })();

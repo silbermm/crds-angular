@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
-using crds_angular.Models;
+﻿using NUnit.Framework;
 using MinistryPlatform.Models;
 
 namespace crds_angular.test.Models
@@ -27,7 +21,7 @@ namespace crds_angular.test.Models
         public void ShouldReturnHouseholdType()
         {
             var household = _person.GetHousehold();
-            Assert.That(household, Is.TypeOf<crds_angular.Models.MP.Household>());
+            Assert.That(household, Is.TypeOf<MinistryPlatform.Models.Household>());
             Assert.AreEqual(_person.CongregationId, household.Congregation_ID);
 
         }

@@ -24,13 +24,13 @@
                 <span class="small-heading text-muted" data-ng-show="singleMedia.media.speakers">SPEAKER: </span>
               </div>
               <div class="col-xs-9 col-md-10" >
-                <a ng-repeat="speaker in singleMedia.media.speakers" href="#" class="label label-standard-dark">{{ speaker.title }}</a>
+                <a ng-repeat="speaker in singleMedia.media.speakers" ui-sref="search({type:'media',q:'speakers: \''+speaker.title+'\''})" class="label label-standard-dark">{{ speaker.title }}</a>
               </div>
               <div class="col-xs-3 col-md-2" data-ng-show="singleMedia.mediaTags.length > 0">
                 <span class="small-heading">TOPICS: </span>
               </div>
               <div class="col-xs-9 col-md-10">
-                <a ng-repeat="tag in singleMedia.mediaTags" href="#" class="label label-standard-dark">{{ tag }}</a>
+                <a ng-repeat="tag in singleMedia.mediaTags" ui-sref="search({type:'media',q:'tags: \''+tag.title+'\''})" class="label label-standard-dark">{{ tag.title }}</a>
               </div>
             </div><!--/row-->
           </div>

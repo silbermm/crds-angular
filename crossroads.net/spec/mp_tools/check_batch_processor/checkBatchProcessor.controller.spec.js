@@ -66,6 +66,7 @@ describe('Check Batch Processor Tool', function() {
     angular.mock.module('crossroads', function($provide) {
       $provide.constant('GIVE_ROLES', GIVE_ROLES);
       $provide.constant('GIVE_PROGRAM_TYPES', GIVE_PROGRAM_TYPES);
+      $provide.value('$state', {});
     });
   });
 

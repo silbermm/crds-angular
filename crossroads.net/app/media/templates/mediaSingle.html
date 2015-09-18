@@ -1,5 +1,5 @@
   <div class="row">
-  
+
       <div class="media-curtain">
         <div class="media-background">
           <div class="container">
@@ -64,12 +64,22 @@
 
   </div>
 
-<div class="container">
+<div class="container" ng-if="singleMedia.media.relatedMedia.length">
   <div class="row related-media">
     <div class="col-sm-12">
       <h2>Related Media</h2>
       <div class="row">
-        <ng-include src="'templates/media-list.html'"> </ng-include>
+        <media-list-card items="singleMedia.media.relatedMedia" type="media"></media-list-card>
+      </div>
+    </div>
+  </div>
+</div><!--/container-->
+<div class="container" ng-if="singleMedia.media.relatedMessages.length">
+  <div class="row related-media">
+    <div class="col-sm-12">
+      <h2>Related Messages</h2>
+      <div class="row">
+        <media-list-card items="singleMedia.media.relatedMessages" type="messages"></media-list-card>
       </div>
     </div>
   </div>

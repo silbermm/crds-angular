@@ -89,22 +89,46 @@
           Trip: 'Trip',
           $cookies: '$cookies',
           MyTrips: function(Trip, $cookies) {
-            return Trip.MyTrips.get({
-              contact: $cookies.get('userId')
-            }).$promise;
+            return Trip.MyTrips.get().$promise;
           }
         }
       })
       .state('tripsignup', {
         parent: 'noSideBar',
-        url: '/trips/:campaignId/signup?invite',
+        url: '/trips/:campaignId?invite',
+        templateUrl: 'page0/page0.html',
+        controller: 'Page0Controller as page0',
+        data: {
+          isProtected: true,
+          meta: {
+            title: 'Trip Signup',
+            description: 'Select the family member you want to signup for a trip'
+          }
+        },
+        resolve: {
+          loggedin: crds_utilities.checkLoggedin,
+          $cookies: '$cookies',
+          Trip: 'Trip',
+          $stateParams: '$stateParams',
+          Campaign: function(Trip, $stateParams) {
+            return Trip.Campaign.get({campaignId: $stateParams.campaignId}).$promise;
+          },
+
+          Family: function(Trip, $stateParams) {
+            return Trip.Family.query({pledgeCampaignId: $stateParams.campaignId}).$promise;
+          }
+        }
+      })
+      .state('tripsignup.application', {
+        parent: 'noSideBar',
+        url: '/trips/:campaignId/signup/:contactId?invite',
         templateUrl: 'signup/signupPage.html',
         controller: 'TripsSignupController as tripsSignup',
         data: {
           isProtected: true,
           meta: {
-           title: 'Trip Signup',
-           description: ''
+            title: 'Trip Signup',
+            description: ''
           }
         },
         resolve: {
@@ -120,9 +144,21 @@
             return Trip.Campaign.get({campaignId: $stateParams.campaignId}).$promise;
           },
 
+          Profile: 'Profile',
+          Person: function(Profile, $stateParams, $cookies) {
+            var cid = $cookies.get('userId');
+            if ($stateParams.contactId) {
+              cid = $stateParams.contactId;
+            }
+
+            return Profile.Person.get({contactId: cid}).$promise;
+          },
+
+          Lookup: 'Lookup',
+
           WorkTeams: function(Trip) {
             return Trip.WorkTeams.query().$promise;
-          }
+          },
         }
       });
   }

@@ -37,6 +37,20 @@ namespace crds_angular.Models.Crossroads.Stewardship
 
         [JsonProperty("error", NullValueHandling = NullValueHandling.Ignore)]
         public string Error { get; set; }
+
+
+        #region Check Errors properties and accessors
+        [JsonIgnore]
+        private string AccountNumberLastFour { get { return AccountNumber.Substring(AccountNumber.Length - 4); } }
+        [JsonIgnore]
+        public string EmailError
+        {
+            get
+            {
+                return string.Format("Routing Number: {0}\nAccount Number Last Four: {1}\nError: {2}\n\n", RoutingNumber, AccountNumberLastFour, Error);
+            }
+        }
+        #endregion
     }
 
     public class Address

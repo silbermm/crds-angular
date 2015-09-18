@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using AutoMapper;
 using crds_angular.DataAccess.Interfaces;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services.Interfaces;
 using log4net;
 using MinistryPlatform.Models;
-using MPServices=MinistryPlatform.Translation.Services.Interfaces;
+using MPServices = MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Services
 {
-    public class EzScanCheckScannerService : ICheckScannerService
+    public class EzScanCheckScannerService :  ICheckScannerService
     {
-        private readonly ILog _logger = LogManager.GetLogger(typeof (EzScanCheckScannerService));
-
         private readonly ICheckScannerDao _checkScannerDao;
         private readonly IDonorService _donorService;
-        private readonly IPaymentService _paymentService;
+        private readonly ILog _logger = LogManager.GetLogger(typeof (EzScanCheckScannerService));
         private readonly MPServices.IDonorService _mpDonorService;
-
+        private readonly IPaymentService _paymentService;
+      
         public EzScanCheckScannerService(ICheckScannerDao checkScannerDao, IDonorService donorService, IPaymentService paymentService, MPServices.IDonorService mpDonorService)
         {
             _checkScannerDao = checkScannerDao;
@@ -58,40 +58,20 @@ namespace crds_angular.Services
 
                 try
                 {
-                    var contactDonor = _donorService.GetContactDonorForDonorAccount(check.AccountNumber, check.RoutingNumber) ?? new ContactDonor();
-                    if (!contactDonor.HasPaymentProcessorRecord)
-                    {
-                        var token = _paymentService.CreateToken(check.AccountNumber, check.RoutingNumber);
-                        contactDonor.Details = new ContactDetails
-                        {
-                            DisplayName = check.Name1,
-                            Address = new PostalAddress
-                            {
-                                Line1 = check.Address.Line1,
-                                Line2 = check.Address.Line2,
-                                City = check.Address.City,
-                                State = check.Address.State,
-                                PostalCode = check.Address.PostalCode
-                            }
-                        };
-                        contactDonor.Account = new DonorAccount
-                        {
-                            AccountNumber = check.AccountNumber,
-                            RoutingNumber = check.RoutingNumber,
-                            Type = AccountType.Checking
-                        };
-
-                        contactDonor = _donorService.CreateOrUpdateContactDonor(contactDonor, string.Empty, token, DateTime.Now);
-                    }
-
-                    var charge = _paymentService.ChargeCustomer(contactDonor.ProcessorId, (int) (check.Amount), contactDonor.DonorId);
+                    var contactDonor = CreateDonor(check);
+                    //Always use the customer ID and source ID from the Donor Account, if it exists
+                    var charge = _paymentService.ChargeCustomer(contactDonor.ProcessorId, contactDonor.Account.ProcessorAccountId, (int) (check.Amount), contactDonor.DonorId);
                     var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
 
                     // Mark the check as exported now, so we don't double-charge a community member.
                     // If the CreateDonationAndDistributionRecord fails, we'll still consider it exported, but
                     // it will be in error, and will have to be manually resolved.
                     check.Exported = true;
-
+              
+                    var encryptedKey = _mpDonorService.CreateEncodedAndEncryptedAccountAndRoutingNumber(check.AccountNumber, check.RoutingNumber);
+                                     
+                    _mpDonorService.UpdateDonorAccount(encryptedKey, charge.Source.id, contactDonor.ProcessorId);
+                 
                     var programId = batchDetails.ProgramId == null ? null : batchDetails.ProgramId + "";
 
                     var donationId = _mpDonorService.CreateDonationAndDistributionRecord((int) (check.Amount),
@@ -102,7 +82,8 @@ namespace crds_angular.Services
                                                                                          "check",
                                                                                          contactDonor.ProcessorId,
                                                                                          check.CheckDate ?? (check.ScanDate ?? DateTime.Now),
-                                                                                         contactDonor.RegisteredUser, batchDetails.Name);
+                                                                                         contactDonor.RegisteredUser,
+                                                                                         batchDetails.Name);
 
                     check.DonationId = donationId;
 
@@ -122,6 +103,48 @@ namespace crds_angular.Services
             _checkScannerDao.UpdateBatchStatus(batchDetails.Name, batchDetails.Status);
 
             return (batchDetails);
+        }
+        
+        public EZScanDonorDetails GetContactDonorForCheck(string encryptedKey)
+        {
+           return (Mapper.Map<ContactDetails, EZScanDonorDetails>(_donorService.GetContactDonorForCheckAccount(encryptedKey.ToString())));
+            
+        }
+
+        public ContactDonor CreateDonor(CheckScannerCheck checkDetails)
+        {
+            var contactDonor = _donorService.GetContactDonorForDonorAccount(checkDetails.AccountNumber, checkDetails.RoutingNumber) ?? new ContactDonor();
+
+            if (contactDonor.HasPaymentProcessorRecord)
+            {
+                return contactDonor;
+            }
+
+            var token = _paymentService.CreateToken(checkDetails.AccountNumber, checkDetails.RoutingNumber);
+
+            contactDonor.Details = new ContactDetails
+            {
+                DisplayName = checkDetails.Name1,
+                Address = new PostalAddress
+                {
+                    Line1 = checkDetails.Address.Line1,
+                    Line2 = checkDetails.Address.Line2,
+                    City = checkDetails.Address.City,
+                    State = checkDetails.Address.State,
+                    PostalCode = checkDetails.Address.PostalCode
+                }
+            };
+
+            contactDonor.Account = new DonorAccount
+            {
+                AccountNumber = checkDetails.AccountNumber,
+                RoutingNumber = checkDetails.RoutingNumber,
+                Type = AccountType.Checking
+            };
+            
+            var encryptedKey = _mpDonorService.CreateEncodedAndEncryptedAccountAndRoutingNumber(checkDetails.AccountNumber, checkDetails.RoutingNumber);
+            
+            return _donorService.CreateOrUpdateContactDonor(contactDonor, encryptedKey, string.Empty, token, DateTime.Now);
         }
     }
 }

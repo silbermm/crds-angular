@@ -195,20 +195,20 @@ namespace crds_angular.test.Services
            
             _donationService.Setup(mocked => mocked.GetDonationByProcessorPaymentId("ch111")).Returns(new DonationDTO
             {
-                donation_id = "1111",
-                batch_id = null
+                Id = "1111",
+                BatchId = null
             });
 
             _donationService.Setup(mocked => mocked.GetDonationByProcessorPaymentId("ch222")).Returns(new DonationDTO
             {
-                donation_id = "2222",
-                batch_id = null
+                Id = "2222",
+                BatchId = null
             });
 
             _donationService.Setup(mocked => mocked.GetDonationByProcessorPaymentId("ch333")).Returns(new DonationDTO
             {
-                donation_id = "3333",
-                batch_id = null
+                Id = "3333",
+                BatchId = null
             });
 
             _donationService.Setup(mocked => mocked.GetDonationByProcessorPaymentId("ch444")).Throws(new Exception("Not gonna do it, wouldn't be prudent."));
@@ -220,15 +220,17 @@ namespace crds_angular.test.Services
                     {
                         Id = "ch555",
                         Amount = "987",
-                        Charge = "re_123456"
+                        Charge = new StripeCharge {
+                            Id = "re_123456"
+                        }
                     }
                 }
             });
 
             _donationService.Setup(mocked => mocked.GetDonationByProcessorPaymentId("ch555")).Returns(new DonationDTO
             {
-                donation_id = "5555",
-                batch_id = 1984
+                Id = "5555",
+                BatchId = 1984
             });
             _donationService.Setup(mocked => mocked.GetDonationBatch(1984)).Returns(new DonationBatchDTO
             {
@@ -238,8 +240,8 @@ namespace crds_angular.test.Services
 
             _donationService.Setup(mocked => mocked.GetDonationByProcessorPaymentId("ch777")).Returns(new DonationDTO
             {
-                donation_id = "7777",
-                batch_id = 2112
+                Id = "7777",
+                BatchId = 2112
             });
             _donationService.Setup(mocked => mocked.GetDonationBatch(2112)).Returns(new DonationBatchDTO
             {

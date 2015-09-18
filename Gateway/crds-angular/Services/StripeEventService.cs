@@ -117,9 +117,9 @@ namespace crds_angular.Services
                     }
                     
                     var donation = _donationService.GetDonationByProcessorPaymentId(paymentId);
-                    if (donation.batch_id != null)
+                    if (donation.BatchId != null)
                     {
-                        var b = _donationService.GetDonationBatch(donation.batch_id.Value);
+                        var b = _donationService.GetDonationBatch(donation.BatchId.Value);
                         if (string.IsNullOrWhiteSpace(b.ProcessorTransferId))
                         {
                             // If this donation exists on another batch that does not have a Stripe transfer ID, we'll move it to our batch instead
@@ -137,11 +137,11 @@ namespace crds_angular.Services
                     }
 
                     _logger.Debug("Updating charge id " + charge + " to Deposited status");
-                    var donationId = _donationService.UpdateDonationStatus(int.Parse(donation.donation_id), _donationStatusDeposited, eventTimestamp);
+                    var donationId = _donationService.UpdateDonationStatus(int.Parse(donation.Id), _donationStatusDeposited, eventTimestamp);
                     response.SuccessfulUpdates.Add(charge.Id);
                     batch.ItemCount++;
                     batch.BatchTotalAmount += (charge.Amount /Constants.StripeDecimalConversionValue);
-                    batch.Donations.Add(new DonationDTO { donation_id = "" + donationId, amount = charge.Amount });
+                    batch.Donations.Add(new DonationDTO { Id = "" + donationId, Amount = charge.Amount });
                 }
                 catch (Exception e)
                 {

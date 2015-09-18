@@ -3,11 +3,10 @@ var path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var definePlugin = new webpack.DefinePlugin({
-    __API_ENDPOINT__: JSON.stringify(process.env.CRDS_API_ENDPOINT || 'http://gatewayint.crossroads.net/gateway/'),
-    __CMS_ENDPOINT__: JSON.stringify(process.env.CRDS_CMS_ENDPOINT || 'http://contentint.crossroads.net/'),
-    __STRIPE_PUBKEY__ : JSON.stringify(process.env.CRDS_STRIPE_PUBKEY || 'pk_test_TR1GulD113hGh2RgoLhFqO0M')
+  __API_ENDPOINT__: JSON.stringify(process.env.CRDS_API_ENDPOINT || 'http://gatewayint.crossroads.net/gateway/'),
+  __CMS_ENDPOINT__: JSON.stringify(process.env.CRDS_CMS_ENDPOINT || 'http://contentint.crossroads.net/'),
+  __STRIPE_PUBKEY__: JSON.stringify(process.env.CRDS_STRIPE_PUBKEY || 'pk_test_TR1GulD113hGh2RgoLhFqO0M')
 });
-
 
 module.exports = function(config) {
   config.set({
@@ -15,11 +14,9 @@ module.exports = function(config) {
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: './',
 
-
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['jasmine'],
-
 
     // list of files / patterns to load in the browser
     files: [
@@ -27,9 +24,8 @@ module.exports = function(config) {
       './node_modules/phantomjs-polyfill/bind-polyfill.js',
       './node_modules/angular/angular.js',
       './node_modules/angular-mocks/angular-mocks.js',
-      //'./assets/common.js',
-      //'./assets/trips.js',
-      //'./assets/give.js',
+      './assets/search*.js',
+      './assets/profile*.js',
       './assets/media*.js',
       'spec/spec_index.js'
     ],
@@ -45,16 +41,14 @@ module.exports = function(config) {
       'CRDS_CMS_ENDPOINT',
     ],
 
-
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: ['mocha'],
 
-
     // web server port
     port: 9876,
-    
+
     webpack: {
       module: {
         loaders: [

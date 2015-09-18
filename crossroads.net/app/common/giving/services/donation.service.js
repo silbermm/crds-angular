@@ -93,11 +93,11 @@
     }
 
     function donate(program, onSuccess, onFailure) {
-      PaymentService.donateToProgram(program.programId,
+      PaymentService.donateToProgram(program.ProgramId,
           GiveTransferService.amount,
           GiveTransferService.donor.donorId,
           GiveTransferService.email,
-          GiveTransferService.pymtType).then(function(confirmation) {
+          GiveTransferService.view).then(function(confirmation) {
             GiveTransferService.amount = confirmation.amount;
             GiveTransferService.program = program;
             GiveTransferService.program_name = GiveTransferService.program.Name;

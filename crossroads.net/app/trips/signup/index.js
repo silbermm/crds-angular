@@ -3,11 +3,13 @@
   require('./signupPage.html');
   angular.module('crossroads.trips')
     .controller('TripsSignupController', require('./tripsSignup.controller'))
-    .controller('PagesController', require('./pages.controller'));
+    .controller('PagesController', require('./pages.controller'))
+    .factory('TripsSignupService', require('./tripsSignup.service'));
 
   require('./signupProgress');
   require('./familySelectTool');
 
+  require('./page0');
   require('./page1');
   require('./page2');
   require('./page3');

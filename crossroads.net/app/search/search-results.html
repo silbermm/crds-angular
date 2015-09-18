@@ -1,153 +1,65 @@
 <div class="row">
-  <div class="col-lg-8 col-lg-offset-2 col-xs-12">
+  <div class="col-md-8 col-md-offset-2 col-xs-12">
 
     <!-- search box -->
     <div class="push-ends">
       <form>
         <div class="input-group">
-          <input type="search" class="form-control" placeholder="Search">
+          <input type="search" class="form-control" placeholder="Search" ng-model="searchString" autofocus>
           <span class="input-group-btn">
-            <button class="btn btn-standard"><svg viewBox="0 0 32 32" class="icon icon-search3"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#search3"></use></svg></button>
+            <button class="btn btn-standard" ng-click="search.search()">
+              <svg viewBox="0 0 32 32" class="icon icon-search3">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#search3"></use>
+              </svg>
+            </button>
           </span>
         </div>
-
       </form>
     </div>
-    <!-- /search box -->
 
-    <ul class="local-nav">
-      <li class="active"><a href="">All</a>
+    <!-- /search box -->
+    <ul class="local-nav" ng-if="search.showResults">
+      <li ng-class="{active:!search.type}"><a ui-sref="search({type:'',tag:''})">All</a>
       </li>
-      <li><a href="">Media</a>
+      <li ng-class="{active:search.type==='media'}"><a ui-sref="search({type:'media',tag:''})">Media</a>
       </li>
-      <li><a href="">Blog</a>
-      </li>
-      <li><a href="">Corkboard</a>
+      <li ng-class="{active:search.type==='corkboard'}"><a ui-sref="search({type:'corkboard',tag:''})">Corkboard</a>
       </li>
     </ul>
   </div>
 </div>
-
+<preloader full-screen='false' ng-if="search.loading && search.showResults"> </preloader>
+<div class="row animated fadeIn" ng-if="search.error">
+  <div class="col-md-8 col-md-offset-2 col-xs-12 push-ends">
+    <span>Invalid Search</span>
+  </div>
+</div>
 <!-- results amount -->
-<div class="row">
-  <div class="col-lg-8 col-lg-offset-2 col-xs-12 push-ends">
-    <span>3 results found</span>
+<div class="row animated fadeIn" ng-if="!search.loading && search.showResults">
+  <div class="col-md-8 col-md-offset-2 col-xs-12 push-ends">
+    <span>{{search.results.hits.found}} results found</span>
   </div>
 </div>
 <!-- /results amount -->
 
 <!-- results -->
-<div class="row">
-  <div class="col-lg-8 col-lg-offset-2 col-xs-12 push-ends">
+<div class="row animated fadeIn" ng-if="!search.loading">
+  <div class="col-md-8 col-md-offset-2 col-xs-12 push-ends">
     <!-- site result card -->
-    <div class="card-item search-card clearfix" data-category="view">
+    <div ng-repeat="result in search.results.hits.hit" class="card-item search-card clearfix" data-category="view">
       <div class="card-content">
         <div class="card-header">
-          <h3 class="flush-bottom text-ellipsis"><a href="">Community Group</a></h3>
-          <a href="" class="search-link text-ellipsis">crossroads.net/cg</a>
-        </div>
-        <div class="card-body">
-          <p>Community Groups is a place to find like minded individuals to join on a regular basis. Find a group to join today!</p>
-          <p class="search-suggested-links"><a href="">The God Experiment</a> | <a href="">Men's Outgoing</a></p>
-        </div>
-      </div>
-    </div>
-    <!-- /site result card -->
-
-    <!-- site result card -->
-    <div class="card-item search-card clearfix" data-category="view">
-      <div class="card-content">
-        <div class="card-header">
-          <h3 class="flush-bottom text-ellipsis"><a href="">Little Urban Achievers</a></h3>
-          <a href="" class="search-link text-ellipsis">crossroads.net/cg/little-urban-achievers</a>
-        </div>
-        <div class="card-body">
-          <p>
-            <span class="hidden-xs">And I'm talkin' about the Dude here —sometimes there's a man who, wal, he's the man for his time'n place, he fits right in there—and that's the Dude, in Los Angeles. Lobortis sed tincidunt diam mattis fusce. No, look. I do mind. The Dude minds. This will not stand, you know, this aggression will not stand, man. Vestibulum turpis nulla, viverra nec volutpat ac, ornare id lectus cras.</span>
-            <span class="visible-xs">And I'm talkin' about the Dude here —sometimes there's a man who, wal, he's the man for his time'n place, he fits right in there—and that's the Dude, in Los Angeles. Lobortis sed tincidunt diam mattis fusce...</span>
-          </p>
-          <p class="search-suggested-links"><a href="">Oakley</a> | <a href="">Florence</a> | <a href="">Mason</a> | <a href="">Uptown</a>
-          </p>
-        </div>
-      </div>
-    </div>
-    <!-- /site result card -->
-
-    <!-- site result card -->
-    <div class="card-item search-card clearfix" data-category="view">
-      <div class="card-content">
-        <div class="card-header">
-          <h3 class="flush-bottom text-ellipsis"><a href="">Community Group</a></h3>
-          <a href="" class="search-link text-ellipsis">crossroads.net/cg</a>
-        </div>
-        <div class="card-body">
-          <p>Community Groups is a place to find like minded individuals to join on a regular basis. Find a group to join today!</p>
-          <p class="search-suggested-links"><a href="">The God Experiment</a> | <a href="">Men's Outgoing</a></p>
-        </div>
-      </div>
-    </div>
-    <!-- /site result card -->
-
-    <!-- site result card -->
-    <div class="card-item search-card clearfix" data-category="view">
-      <div class="card-content">
-        <div class="card-header">
-          <h3 class="flush-bottom text-ellipsis"><a href="">How To Change The World</a></h3>
-          <a href="" class="search-link text-ellipsis">crossroads.net/media/how-to-change-the-world</a>
+          <h3 class="flush-bottom text-ellipsis"><a href="{{search.getLink(result.fields)}}">{{result.fields.title}}</a></h3>
+          <a href="{{search.getLink(result.fields)}}" class="search-link text-ellipsis">crossroads.net{{search.getLink(result.fields)}}</a>
         </div>
         <div class="card-body">
           <div class="row">
-            <div class="col-md-4 col-xs-5">
-              <img src="http://s3.amazonaws.com/crossroads-media/images/HowToChangeWorld_190x110.jpg" class="img-responsive img-full-width mobile-push-bottom search-media-image">
+            <div ng-if="result.fields.image_path" class="col-md-4 col-xs-5">
+              <img class="img-responsive img-full-width mobile-push-bottom search-media-image" data-src="{{result.fields.image_path}}">
             </div>
-            <div class="col-md-8 col-xs-7 hard-left">
-              <p class="search-media-date flush-bottom">02.12.2014 - 04.29.2014</p>
-              <p>We're talking about setting ourselves on fire.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- /site result card -->
-
-    <!-- site result card -->
-    <div class="card-item search-card clearfix" data-category="view">
-      <div class="card-content">
-        <div class="card-header">
-          <h3 class="flush-bottom text-ellipsis"><a href="">Easter - How To Change The World</a></h3>
-          <a href="" class="search-link text-ellipsis">crossroads.net/media/how-to-change-the-world/easter</a>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-4 col-xs-5">
-              <img src="http://s3.amazonaws.com/crossroads-media/images/htctw_05_still.jpg" class="img-responsive search-media-image">
-            </div>
-            <div class="col-md-8 col-xs-7 hard-left">
-              <p class="search-media-date flush-bottom">02.12.2014 - 04.29.2014</p>
-              <p>Brian Tome talks about how changing the world requires personal investment.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- /site result card -->
-
-    <!-- site result card -->
-    <div class="card-item search-card clearfix" data-category="view">
-      <div class="card-content">
-        <div class="card-header">
-          <h3 class="flush-bottom text-ellipsis"><a href="">Let's Go Bowling - Autobahn</a></h3>
-          <a href="" class="search-link text-ellipsis">crossroads.net/media/autobahn/lets-go-bowling</a>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-4 col-xs-5">
-              <img src="http://blog.estately.com/assets/the-big-lebowski-3.jpg" class="img-responsive search-media-image">
-            </div>
-            <div class="col-md-8 col-xs-7 hard-left">
-              <p class="search-media-date flush-bottom">02.12.2014 - 04.29.2014</p>
-              <p class="hidden-xs">And Hill 364. These young men gave their lives. And Donny too. Donny who, who loved bowling. Ante morbi id urna vel felis lacinia. That is our most modestly priced receptacle. Placerat vestibulum turpis nulla, viverra nec. I've had a rough night, and I hate the Eagles, man. Volutpat ac, ornare id lectus. Tomorrow vee come back und cut off your chonson. Cras pharetra faucibus tristique nullam non accumsan.</p>
-              <p class="visible-xs">And Hill 364. These young men gave their lives. And Donny too. Donny who, who loved bowling...</p>
+            <div ng-class="{'col-md-8 col-xs-7 hard-left':result.fields.image_path, 'col-xs-12':!result.fields.image_path}">
+              <p ng-if='result.fields.start_date' class="search-media-date flush-bottom">{{result.fields.start_date | date:'MM.dd.yyyy'}} <span ng-if='result.fields.end_date'>- {{result.fields.end_date | date:'MM.dd.yyyy'}}</span></p>
+              <div ng-bind-html='result.fields.content | htmlToPlainText | truncate : 140'></div>
             </div>
           </div>
         </div>
@@ -158,17 +70,3 @@
   </div>
 </div><!--/row-->
 <!-- /results -->
-
-<div class="row">
-  <div class="col-lg-8 col-lg-offset-2 col-xs-12 text-center">
-    <ul class="pagination">
-      <li> <a href="#">Prev</a> </li>
-      <li> <a href="#">1</a> </li>
-      <li> <a href="#">2</a> </li>
-      <li> <a href="#">3</a> </li>
-      <li> <a href="#">4</a> </li>
-      <li> <a href="#">5</a> </li>
-      <li> <a href="#">Next</a> </li>
-    </ul>
-  </div>
-</div>

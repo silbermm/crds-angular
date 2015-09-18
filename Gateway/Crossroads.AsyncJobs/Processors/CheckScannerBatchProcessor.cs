@@ -5,6 +5,7 @@ using Crossroads.AsyncJobs.Models;
 using log4net;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using crds_angular.Models.Crossroads;
 using Crossroads.Utilities.Interfaces;
 using Newtonsoft.Json;
@@ -74,7 +75,7 @@ namespace Crossroads.AsyncJobs.Processors
             }
             else
             {
-                email.MergeData["batch"] = JsonConvert.SerializeObject(batch, Formatting.Indented);
+                email.MergeData["batch"] = batch.EmailMsg;
             }
 
 

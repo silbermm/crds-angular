@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
 using crds_angular.App_Start;
-using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services;
-using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -17,7 +13,7 @@ namespace crds_angular.test.Services
         private Mock<IContactService> _contactService;
         private Mock<IOpportunityService> _opportunityService;
         private Mock<IAuthenticationService> _authenticationService;
-        private Mock<IPersonService> _personService;
+        private Mock<crds_angular.Services.Interfaces.IPersonService> _personService;
 
         private PersonService _fixture;
 
@@ -28,7 +24,7 @@ namespace crds_angular.test.Services
             _contactService = new Mock<IContactService>();
             _opportunityService = new Mock<IOpportunityService>();
             _authenticationService = new Mock<IAuthenticationService>();
-            _personService = new Mock<IPersonService>();
+            _personService = new Mock<crds_angular.Services.Interfaces.IPersonService>();
 
             _authenticationService.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Returns(123456);
             var myContact = new MyContact
@@ -56,11 +52,12 @@ namespace crds_angular.test.Services
                 Home_Phone = "home-phone",
                 Congregation_ID = 8,
                 Household_ID = 7,
+                Household_Name = "hh name",
                 Address_ID = 6
             };
             _contactService.Setup(mocked => mocked.GetMyProfile(It.IsAny<string>())).Returns(myContact);
 
-            _fixture = new PersonService( _contactService.Object);
+            _fixture = new PersonService(_contactService.Object);
 
             //force AutoMapper to register
             AutoMapperConfig.RegisterMappings();
@@ -99,9 +96,8 @@ namespace crds_angular.test.Services
             Assert.AreEqual("home-phone", person.HomePhone);
             Assert.AreEqual(8, person.CongregationId);
             Assert.AreEqual(7, person.HouseholdId);
+            Assert.AreEqual("hh name", person.HouseholdName);
             Assert.AreEqual(6, person.AddressId);
         }
-
-        
     }
 }

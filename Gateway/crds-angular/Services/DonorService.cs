@@ -2,6 +2,7 @@
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using System;
+using crds_angular.Models.Crossroads.Stewardship;
 
 namespace crds_angular.Services
 {
@@ -54,6 +55,11 @@ namespace crds_angular.Services
             return (_mpDonorService.GetContactDonorForDonorAccount(accountNumber, routingNumber));
         }
 
+        public ContactDetails GetContactDonorForCheckAccount(string encryptedKey)
+        {
+            return (_mpDonorService.GetContactDonorForCheckAccount(encryptedKey));
+        }
+
         /// <summary>
         /// Creates or updates an MP Donor (and potentially creates a Contact) appropriately, based on the following logic:
         /// 1) If the given contactDonor is null, or if it does not represent an existing Contact,
@@ -74,9 +80,10 @@ namespace crds_angular.Services
         /// <param name="paymentProcessorToken">The one-time-use token given by the payment processor.</param>
         /// <param name="setupDate">The date when the Donor is marked as setup - normally would be today's date.</param>
         /// <returns></returns>
-        public ContactDonor CreateOrUpdateContactDonor(ContactDonor contactDonor, string emailAddress, string paymentProcessorToken, DateTime setupDate)
+        public ContactDonor CreateOrUpdateContactDonor(ContactDonor contactDonor, string encryptedKey, string emailAddress, string paymentProcessorToken, DateTime setupDate)
         {
             var contactDonorResponse = new ContactDonor();
+            StripeCustomer stripeCustomer = null;
             if (contactDonor == null || !contactDonor.ExistingContact)
             {
                 var statementMethod = _statementMethodNone;
@@ -92,17 +99,28 @@ namespace crds_angular.Services
                     contactDonorResponse.ContactId = _mpContactService.CreateContactForGuestGiver(emailAddress, _guestGiverDisplayName);
                 }
 
+                stripeCustomer = _paymentService.CreateCustomer(paymentProcessorToken);
+
                 var donorAccount = contactDonor != null ? contactDonor.Account : null;
-                contactDonorResponse.ProcessorId = _paymentService.CreateCustomer(paymentProcessorToken);
+                if (contactDonor != null)
+                {
+                    donorAccount.ProcessorAccountId = stripeCustomer.sources.data[0].id;
+                }
+           
+                contactDonorResponse.ProcessorId = stripeCustomer.id;
+                
                 contactDonorResponse.DonorId = _mpDonorService.CreateDonorRecord(contactDonorResponse.ContactId, contactDonorResponse.ProcessorId, setupDate, 
                     statementFrequency, _statementTypeIndividual, statementMethod, donorAccount);
                 contactDonorResponse.Email = emailAddress;
+           
                 _paymentService.UpdateCustomerDescription(contactDonorResponse.ProcessorId, contactDonorResponse.DonorId);
             }
             else if (!contactDonor.HasPaymentProcessorRecord)
             {
                 contactDonorResponse.ContactId = contactDonor.ContactId;
-                contactDonorResponse.ProcessorId = _paymentService.CreateCustomer(paymentProcessorToken);
+                stripeCustomer = _paymentService.CreateCustomer(paymentProcessorToken);
+                contactDonorResponse.ProcessorId = stripeCustomer.id;
+
                 if (contactDonor.ExistingDonor)
                 {
                     contactDonorResponse.DonorId = _mpDonorService.UpdatePaymentProcessorCustomerId(contactDonor.DonorId, contactDonorResponse.ProcessorId);
