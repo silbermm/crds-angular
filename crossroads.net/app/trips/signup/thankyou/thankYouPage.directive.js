@@ -28,6 +28,13 @@
       function activate() {
         Trip.Family.query({pledgeCampaignId: $stateParams.campaignId}, function(data) {
           vm.thankYouFamilyMembers = data;
+          _.each(vm.thankYouFamilyMembers, function(f) {
+            if (f.contactId === TripsSignupService.contactId) {
+              f.signedUp = true;
+              f.signedUpDate = new Date();
+            }
+          });
+
           vm.loading = false;
         });
       }
