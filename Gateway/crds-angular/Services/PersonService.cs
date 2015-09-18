@@ -33,65 +33,11 @@ namespace crds_angular.Services
             addressDictionary.Add("State/Region", addressDictionary["State"]);
             
             _personService.UpdateProfile(person.ContactId, contactDictionary, householdDictionary, addressDictionary);
-
-            //MinistryPlatformService.UpdateRecord(AppSetting("MyContact"), contactDictionary, token);
-
-            //if (addressDictionary["Address_ID"] != null)
-            //{
-            //    //address exists, update it
-            //    MinistryPlatformService.UpdateRecord(AppSetting("MyAddresses"), addressDictionary, token);
-            //}
-            //else
-            //{
-            //    //address does not exist, create it, then attach to household
-            //    var addressId = MinistryPlatformService.CreateRecord(AppSetting("MyAddresses"), addressDictionary, token);
-            //    householdDictionary.Add("Address_ID", addressId);
-            //}
-            //MinistryPlatformService.UpdateRecord(AppSetting("MyHousehold"), householdDictionary, token);
         }
 
         public List<Skill> GetLoggedInUserSkills(int contactId, string token)
         {
             return GetSkills(contactId, token);
-        }
-
-        //public crds_angular.Models.MP.Household GetHousehold(int householdId)
-        //{
-        //    var house = _contactService.GetHouseholdById(householdId);
-        //    var household = new crds_angular.Models.MP.Household
-        //    {
-        //        Address_Line_1 = house.AddressLine1,
-        //        Address_Line_2 = house.AddressLine2,
-        //        City = house.City,
-        //        Congregation_ID = house.CongregationId,
-        //        County = house.County,
-        //        Foreign_Country = house.ForeignCountry,
-        //        Home_Phone = house.HomePhone,
-        //        Postal_Code = house.PostalCode,
-        //        State = house.State,
-        //        Household_ID = house.HouseholdId
-        //    };
-
-        //    foreach (var fam in house.HouseholdMembers)
-        //    {
-        //        var member = new HouseholdMember
-        //        {
-        //            Contact_ID = fam.ContactId,
-        //            Date_Of_Birth = fam.DateOfBirth,
-        //            First_Name = fam.FirstName,
-        //            Nickname = fam.Nickname,
-        //            Last_Name = fam.LastName,
-        //            Household_Position = fam.HouseholdPosition
-        //        };
-        //        household.Household_Members.Add(member);
-        //    }
-
-        //    return household;
-        //}
-
-        public Household GetHousehold(int householdId)
-        {
-            throw new NotImplementedException();
         }
 
         public Person GetPerson(int contactId)
