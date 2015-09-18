@@ -65,18 +65,14 @@
         vm.countries = response.countries;
         vm.crossroadsLocations = response.crossroadsLocations;
         if (!vm.profileData) {
-          vm.profileData = { person: response.person };
+          Profile.Personal.get(function(data) {
+            vm.profileData = { person: data };
+            vm.viewReady = true;
+          });
+        } else {
+          configurePerson();
+          vm.viewReady = true;
         }
-
-        configurePerson();
-
-        vm.viewReady = true;
-
-        /*if (vm.profileData.person.householdId) {*/
-          //Profile.Household.get({ householdId: vm.profileData.person.householdId}, function(data) {
-            //vm.profileData.householdInfo = data;
-          //});
-        /*}*/
       });
 
       vm.buttonText = vm.buttonText !== undefined ? vm.buttonText : 'Save';
