@@ -1,11 +1,9 @@
 using crds_angular.App_Start;
 using crds_angular.Services;
-using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
-using IPersonService = MinistryPlatform.Translation.Services.Interfaces.IPersonService;
 
 namespace crds_angular.test.Services
 {
@@ -16,7 +14,6 @@ namespace crds_angular.test.Services
         private Mock<IOpportunityService> _opportunityService;
         private Mock<IAuthenticationService> _authenticationService;
         private Mock<crds_angular.Services.Interfaces.IPersonService> _personService;
-        private Mock<MinistryPlatform.Translation.Services.Interfaces.IPersonService> _mpPersonService;
 
         private PersonService _fixture;
 
@@ -28,7 +25,6 @@ namespace crds_angular.test.Services
             _opportunityService = new Mock<IOpportunityService>();
             _authenticationService = new Mock<IAuthenticationService>();
             _personService = new Mock<crds_angular.Services.Interfaces.IPersonService>();
-            _mpPersonService = new Mock<IPersonService>();
 
             _authenticationService.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Returns(123456);
             var myContact = new MyContact
@@ -61,7 +57,7 @@ namespace crds_angular.test.Services
             };
             _contactService.Setup(mocked => mocked.GetMyProfile(It.IsAny<string>())).Returns(myContact);
 
-            _fixture = new PersonService( _contactService.Object, _mpPersonService.Object);
+            _fixture = new PersonService(_contactService.Object);
 
             //force AutoMapper to register
             AutoMapperConfig.RegisterMappings();
@@ -103,7 +99,5 @@ namespace crds_angular.test.Services
             Assert.AreEqual("hh name", person.HouseholdName);
             Assert.AreEqual(6, person.AddressId);
         }
-
-        
     }
 }

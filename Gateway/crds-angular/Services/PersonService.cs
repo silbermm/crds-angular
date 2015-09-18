@@ -17,12 +17,10 @@ namespace crds_angular.Services
     public class PersonService : MinistryPlatformBaseService, IPersonService
     {
         private readonly IContactService _contactService;
-        private readonly MPServices.IPersonService _personService;
 
-        public PersonService(IContactService contactService, MPServices.IPersonService personService)
+        public PersonService(IContactService contactService)
         {
             this._contactService = contactService;
-            this._personService = personService;
         }
 
         public void SetProfile(String token, Person person)
@@ -31,8 +29,8 @@ namespace crds_angular.Services
             var householdDictionary = getDictionary(person.GetHousehold());
             var addressDictionary = getDictionary(person.GetAddress());
             addressDictionary.Add("State/Region", addressDictionary["State"]);
-            
-            _personService.UpdateProfile(person.ContactId, contactDictionary, householdDictionary, addressDictionary);
+
+            _contactService.UpdateContact(person.ContactId, contactDictionary, householdDictionary, addressDictionary);
         }
 
         public List<Skill> GetLoggedInUserSkills(int contactId, string token)
