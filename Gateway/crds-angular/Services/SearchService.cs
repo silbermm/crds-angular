@@ -22,26 +22,11 @@ namespace crds_angular.Services
             _client = new AmazonCloudSearchDomainClient(apiKey, apiSecret, config);
         }
 
-        public JArray GetSearchResults(SearchRequest searchRequest)
+        public SearchResponse GetSearchResults(SearchRequest searchRequest)
         {            
-            var searchResult = _client.Search(searchRequest);
+            var searchResponse = _client.Search(searchRequest);
 
-            JArray resultsArray = new JArray();
-
-            foreach (var hit in searchResult.Hits.Hit)
-            {
-                JObject resultObject = new JObject();
-
-                foreach (var hitField in hit.Fields)
-                {
-                    JProperty fieldProperty = new JProperty(hitField.Key, hitField.Value);
-                    resultObject.Add(fieldProperty);
-                }
-
-                resultsArray.Add(resultObject);
-            }
-
-            return resultsArray;
+            return searchResponse;
         }
     }
 }
