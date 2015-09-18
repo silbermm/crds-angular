@@ -98,7 +98,9 @@ namespace MinistryPlatform.Translation.Services
                     { "Donor_ID", donorId },
                     { "Non-Assignable", false },
                     { "Account_Type_ID", (int)donorAccount.Type },
-                    { "Closed", false }
+                    { "Closed", false },
+                    {"Processor_Account_ID", donorAccount.ProcessorAccountId},
+                    {"Processor_ID", processorId}
                 };
 
                 _ministryPlatformService.CreateRecord(_donorAccountsPageId, values, apiToken);
@@ -193,6 +195,7 @@ namespace MinistryPlatform.Translation.Services
                     donor = new ContactDonor()
                     {
                         DonorId = record.ToInt("Donor_ID"),
+                        //we only want processorID from the donor if we are not processing a check
                         ProcessorId = record.ToString(DonorProcessorId),
                         ContactId = record.ToInt("Contact_ID"),
                         RegisteredUser = true,
@@ -306,7 +309,7 @@ namespace MinistryPlatform.Translation.Services
             return details;
         }
 
-        private string CreateEncodedAndEncryptedAccountAndRoutingNumber(string accountNumber, string routingNumber)
+        public string CreateEncodedAndEncryptedAccountAndRoutingNumber(string accountNumber, string routingNumber)
         {
             var acct = _crypto.EncryptValue(accountNumber);
             var rtn = _crypto.EncryptValue(routingNumber);
@@ -334,6 +337,26 @@ namespace MinistryPlatform.Translation.Services
             return (donorId);
         }
 
+        public void UpdateDonorAccount(string encryptedKey, string sourceId, string customerId)
+        {
+            try
+            {
+                var donorAccount = WithApiLogin(apiToken => _ministryPlatformService.GetPageViewRecords(_donorLookupByEncryptedAccount, apiToken, "," + encryptedKey));
+                var donorAccountId = donorAccount[0]["dp_RecordID"].ToString();
+                var updateParms = new Dictionary<string, object>
+                {
+                    {"Donor_Account_ID", donorAccountId},
+                    {"Processor_Account_ID", sourceId},
+                    {"Processor_ID", customerId}
+                };
+                _ministryPlatformService.UpdateRecord(_donorAccountsPageId, updateParms, ApiLogin());
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(
+                    string.Format("UpdateDonorAccount failed.  Donor Account: {0}", encryptedKey), ex);
+            }
+        }
 
         public void SetupConfirmationEmail(int programId, int donorId, int donationAmount, DateTime setupDate, string pymtType)
         {

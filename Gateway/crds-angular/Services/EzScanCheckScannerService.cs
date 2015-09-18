@@ -10,14 +10,14 @@ using MPServices = MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Services
 {
-    public class EzScanCheckScannerService : ICheckScannerService
+    public class EzScanCheckScannerService :  ICheckScannerService
     {
         private readonly ICheckScannerDao _checkScannerDao;
         private readonly IDonorService _donorService;
         private readonly ILog _logger = LogManager.GetLogger(typeof (EzScanCheckScannerService));
         private readonly MPServices.IDonorService _mpDonorService;
         private readonly IPaymentService _paymentService;
-
+      
         public EzScanCheckScannerService(ICheckScannerDao checkScannerDao, IDonorService donorService, IPaymentService paymentService, MPServices.IDonorService mpDonorService)
         {
             _checkScannerDao = checkScannerDao;
@@ -59,15 +59,19 @@ namespace crds_angular.Services
                 try
                 {
                     var contactDonor = CreateDonor(check);
-
-                    var charge = _paymentService.ChargeCustomer(contactDonor.ProcessorId, (int) (check.Amount), contactDonor.DonorId);
+                    //Always use the customer ID and source ID from the Donor Account, if it exists
+                    var charge = _paymentService.ChargeCustomer(contactDonor.ProcessorId, contactDonor.Account.ProcessorAccountId, (int) (check.Amount), contactDonor.DonorId);
                     var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
 
                     // Mark the check as exported now, so we don't double-charge a community member.
                     // If the CreateDonationAndDistributionRecord fails, we'll still consider it exported, but
                     // it will be in error, and will have to be manually resolved.
                     check.Exported = true;
-
+              
+                    var encryptedKey = _mpDonorService.CreateEncodedAndEncryptedAccountAndRoutingNumber(check.AccountNumber, check.RoutingNumber);
+                                     
+                    _mpDonorService.UpdateDonorAccount(encryptedKey, charge.Source.id, contactDonor.ProcessorId);
+                 
                     var programId = batchDetails.ProgramId == null ? null : batchDetails.ProgramId + "";
 
                     var donationId = _mpDonorService.CreateDonationAndDistributionRecord((int) (check.Amount),
@@ -103,7 +107,7 @@ namespace crds_angular.Services
         
         public EZScanDonorDetails GetContactDonorForCheck(string encryptedKey)
         {
-           return (Mapper.Map<ContactDetails, EZScanDonorDetails>(_donorService.GetContactDonorForCheckAccount(encryptedKey)));
+           return (Mapper.Map<ContactDetails, EZScanDonorDetails>(_donorService.GetContactDonorForCheckAccount(encryptedKey.ToString())));
             
         }
 
@@ -137,8 +141,10 @@ namespace crds_angular.Services
                 RoutingNumber = checkDetails.RoutingNumber,
                 Type = AccountType.Checking
             };
-
-            return _donorService.CreateOrUpdateContactDonor(contactDonor, string.Empty, token, DateTime.Now);
+            
+            var encryptedKey = _mpDonorService.CreateEncodedAndEncryptedAccountAndRoutingNumber(checkDetails.AccountNumber, checkDetails.RoutingNumber);
+            
+            return _donorService.CreateOrUpdateContactDonor(contactDonor, encryptedKey, string.Empty, token, DateTime.Now);
         }
     }
 }

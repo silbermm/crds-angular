@@ -92,7 +92,7 @@ namespace crds_angular.Services
             return (e);
         }
 
-        public string CreateCustomer(string customerToken)
+        public StripeCustomer CreateCustomer(string customerToken)
         {
             var request = new RestRequest("customers", Method.POST);
             request.AddParameter("description", string.Format(StripeCustomerDescription, "pending")); // adds to POST or URL querystring based on Method
@@ -100,8 +100,8 @@ namespace crds_angular.Services
 
             var response = _stripeRestClient.Execute<StripeCustomer>(request);
             CheckStripeResponse("Customer creation failed", response);
-
-            return response.Data.id;
+            
+            return response.Data;
         }
 
         public string CreateToken(string accountNumber, string routingNumber)
@@ -129,6 +129,7 @@ namespace crds_angular.Services
 
         public SourceData UpdateCustomerSource(string customerToken, string cardToken)
         {
+            //Passing source will create a new source object, make it the new customer default source, and delete the old customer default if one exist
             var request = new RestRequest("customers/" + customerToken, Method.POST);
             request.AddParameter("source", cardToken);
 
@@ -198,6 +199,22 @@ namespace crds_angular.Services
             request.AddParameter("amount", amount * Constants.StripeDecimalConversionValue);
             request.AddParameter("currency", "usd");
             request.AddParameter("customer", customerToken);
+            request.AddParameter("description", "Donor ID #" + donorId);
+            request.AddParameter("expand[]", "balance_transaction");
+
+            var response = _stripeRestClient.Execute<StripeCharge>(request);
+            CheckStripeResponse("Invalid charge request", response);
+
+            return response.Data;
+        }
+
+        public StripeCharge ChargeCustomer(string customerToken, string customerSourceId, int amount, int donorId)
+        {
+            var request = new RestRequest("charges", Method.POST);
+            request.AddParameter("amount", amount * Constants.StripeDecimalConversionValue);
+            request.AddParameter("currency", "usd");
+            request.AddParameter("customer", customerToken);
+            request.AddParameter("source", customerSourceId);
             request.AddParameter("description", "Donor ID #" + donorId);
             request.AddParameter("expand[]", "balance_transaction");
 

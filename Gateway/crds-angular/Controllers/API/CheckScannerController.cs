@@ -44,6 +44,7 @@ namespace crds_angular.Controllers.API
             }
         }
 
+        [RequiresAuthorization]
         [Route("api/checkscanner/batches")]
         public IHttpActionResult GetBatches([FromUri(Name = "onlyOpen")] bool onlyOpen = true)
         {
@@ -54,6 +55,7 @@ namespace crds_angular.Controllers.API
             }));
         }
 
+        [RequiresAuthorization]
         [Route("api/checkscanner/batches/{batchName}/checks")]
         public IHttpActionResult GetChecksForBatch(string batchName)
         {
@@ -64,6 +66,7 @@ namespace crds_angular.Controllers.API
             }));
         }
 
+        [RequiresAuthorization]
         [Route("api/checkscanner/batches"), HttpPost]
         public IHttpActionResult CreateDonationsForBatch([FromBody] CheckScannerBatch batch)
         {
