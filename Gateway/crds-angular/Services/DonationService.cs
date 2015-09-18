@@ -235,13 +235,13 @@ namespace crds_angular.Services
                 return (donorIds);
             }
 
-            var household = _contactService.GetHouseholdById(donor.Details.HouseholdId);
-            if (household == null || household.HouseholdMembers == null || !household.HouseholdMembers.Any())
+            var household = _contactService.GetHouseholdFamilyMembers(donor.Details.HouseholdId);
+            if (household == null || !household.Any())
             {
                 return (donorIds);
             }
 
-            foreach (var member in household.HouseholdMembers)
+            foreach (var member in household)
             {
                 if(member.StatementTypeId.HasValue && member.StatementTypeId == _statementTypeFamily && member.DonorId.HasValue)
                 {
