@@ -450,7 +450,7 @@ namespace MinistryPlatform.Translation.Services
 
         public List<Donation> GetSoftCreditDonations(IEnumerable<int> donorIds, string donationYear = null)
         {
-            var search = string.Format("{0},,,,,,,,,,,,,,,,{1}", YearSearch(donationYear), DonorIdSearch(donorIds));
+            var search = string.Format("{0},,,,,,,,,,,,,,,,,{1}", YearSearch(donationYear), DonorIdSearch(donorIds));
             var records = WithApiLogin(token => _ministryPlatformService.GetRecordsDict(_donationDistributionPageId, token, search));
 
             return MapDonationRecords(records);
