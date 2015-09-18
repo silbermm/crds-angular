@@ -4,7 +4,6 @@
   module.exports = TripsSignupController;
 
   TripsSignupController.$inject = ['$log',
-    'TripsSignupService',
     '$rootScope',
     'Session',
     'Campaign',
@@ -19,6 +18,7 @@
 
   function TripsSignupController(
       $log,
+      $rootScope,
       Session,
       Campaign,
       WorkTeams,
