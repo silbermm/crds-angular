@@ -2,7 +2,7 @@
   module.exports = Search;
 
   Search.$inject = ['$resource'];
-
+ 
   function Search($resource) {
     return $resource(__AWS_SEARCH_ENDPOINT__+'search',{},{
       execute: {
