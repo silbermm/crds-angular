@@ -10,24 +10,18 @@
     $stateProvider
     .state('search', {
       parent: 'noSideBar',
-      url: '/search?type&json&searchString&tag',
+      url: '/search?type&q',
       controller: 'SearchCtrl as search',
       templateUrl: 'search/search-results.html',
       data: {
         type: ''
       },
       resolve:{
-          tag: ['$stateParams', function($stateParams){
-              return $stateParams.tag;
-          }],
           type: ['$stateParams', function($stateParams){
               return $stateParams.type;
           }],
-          json: ['$stateParams', function($stateParams){
-              return $stateParams.json;
-          }],
           searchString: ['$stateParams', function($stateParams){
-              return $stateParams.searchString;
+              return $stateParams.q;
           }]
       }
     });

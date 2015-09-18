@@ -5,7 +5,7 @@
     <div class="push-ends">
       <form>
         <div class="input-group">
-          <input type="search" class="form-control" placeholder="Search" ng-model="searchString">
+          <input type="search" class="form-control" placeholder="Search" ng-model="searchString" autofocus>
           <span class="input-group-btn">
             <button class="btn btn-standard" ng-click="search.search()">
               <svg viewBox="0 0 32 32" class="icon icon-search3">
@@ -14,24 +14,28 @@
             </button>
           </span>
         </div>
-
       </form>
     </div>
 
     <!-- /search box -->
-    <ul class="local-nav">
-      <li ng-class="{active:!search.type}"><a ui-sref="search({type:''})">All</a>
+    <ul class="local-nav" ng-if="search.showResults">
+      <li ng-class="{active:!search.type}"><a ui-sref="search({type:'',tag:''})">All</a>
       </li>
-      <li ng-class="{active:search.type==='media'}"><a ui-sref="search({type:'media'})">Media</a>
+      <li ng-class="{active:search.type==='media'}"><a ui-sref="search({type:'media',tag:''})">Media</a>
       </li>
-      <li ng-class="{active:search.type==='corkboard'}"><a ui-sref="search({type:'corkboard'})">Corkboard</a>
+      <li ng-class="{active:search.type==='corkboard'}"><a ui-sref="search({type:'corkboard',tag:''})">Corkboard</a>
       </li>
     </ul>
   </div>
 </div>
-
+<preloader full-screen='false' ng-if="search.loading && search.showResults"> </preloader>
+<div class="row animated fadeIn" ng-if="search.error">
+  <div class="col-md-8 col-md-offset-2 col-xs-12 push-ends">
+    <span>Invalid Search</span>
+  </div>
+</div>
 <!-- results amount -->
-<div class="row">
+<div class="row animated fadeIn" ng-if="!search.loading && search.showResults">
   <div class="col-md-8 col-md-offset-2 col-xs-12 push-ends">
     <span>{{search.results.hits.found}} results found</span>
   </div>
@@ -39,14 +43,14 @@
 <!-- /results amount -->
 
 <!-- results -->
-<div class="row">
+<div class="row animated fadeIn" ng-if="!search.loading">
   <div class="col-md-8 col-md-offset-2 col-xs-12 push-ends">
     <!-- site result card -->
     <div ng-repeat="result in search.results.hits.hit" class="card-item search-card clearfix" data-category="view">
       <div class="card-content">
         <div class="card-header">
-          <h3 class="flush-bottom text-ellipsis"><a href="{{result.fields.link}}">{{result.fields.title}}</a></h3>
-          <a href="{{result.fields.link}}" class="search-link text-ellipsis">crossroads.net{{result.fields.link}}</a>
+          <h3 class="flush-bottom text-ellipsis"><a href="{{search.getLink(result.fields)}}">{{result.fields.title}}</a></h3>
+          <a href="{{search.getLink(result.fields)}}" class="search-link text-ellipsis">crossroads.net{{search.getLink(result.fields)}}</a>
         </div>
         <div class="card-body">
           <div class="row">
@@ -56,8 +60,6 @@
             <div ng-class="{'col-md-8 col-xs-7 hard-left':result.fields.image_path, 'col-xs-12':!result.fields.image_path}">
               <p ng-if='result.fields.start_date' class="search-media-date flush-bottom">{{result.fields.start_date | date:'MM.dd.yyyy'}} <span ng-if='result.fields.end_date'>- {{result.fields.end_date | date:'MM.dd.yyyy'}}</span></p>
               <div ng-bind-html='result.fields.content | htmlToPlaintext | limitToEllip : 140'></div>
-              <pre ng-if="search.json">{{result.fields | json}}</pre>
-              <p class="search-suggested-links"><a ng-repeat-start="tag in result.fields.tags" ui-sref="search({type:'media',tag:tag})">{{tag}}</a> <span ng-repeat-end ng-if="!$last">| </span></p>
             </div>
           </div>
         </div>
