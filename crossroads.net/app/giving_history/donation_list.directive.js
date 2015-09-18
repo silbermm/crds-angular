@@ -42,7 +42,7 @@
     function postProcessDonations(donationsInput) {
       var donations = _.transform(donationsInput, function(result, d) {
         var donation = _.cloneDeep(d);
-        setDonationDisplayDetails(donation.source)
+        setDonationDisplayDetails(donation.source);
         result.push(donation);
       });
 
@@ -51,6 +51,8 @@
 
     function setDonationDisplayDetails(source) {
       switch (source.type) {
+        case 'SoftCredit':
+          break;
         case 'Cash':
           source.icon = 'money';
           source.viewBox = '0 0 34 32';
