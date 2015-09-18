@@ -5,7 +5,7 @@
 
   SearchRoutes.$inject = ['$stateProvider', '$urlMatcherFactoryProvider', '$locationProvider'];
 
-  function SearchRoutes($stateProvider, $urlMatcherFactory, $locationProvider, $stateParams) {
+  function SearchRoutes($stateProvider, $urlMatcherFactory, $locationProvider) {
 
     $stateProvider
     .state('search', {
