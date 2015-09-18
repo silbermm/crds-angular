@@ -125,72 +125,7 @@ namespace crds_angular.Services
             }
 
             var response = donations.Select(Mapper.Map<DonationDTO>).ToList();
-
-            foreach (var donation in response)
-            {
-                StripeCharge charge = null;
-                if (!string.IsNullOrWhiteSpace(donation.Source.PaymentProcessorId))
-                {
-                    // If it is a positive amount, it means it's a Charge, otherwise it's a Refund
-                    if (donation.Amount >= 0)
-                    {
-                        charge = _paymentService.GetCharge(donation.Source.PaymentProcessorId);
-                    }
-                    else
-                    {
-                        donation.Status = DonationStatus.Refunded;
-
-                        var refund = _paymentService.GetRefund(donation.Source.PaymentProcessorId);
-                        if (refund != null && refund.Charge != null)
-                        {
-                            charge = refund.Charge;
-                        }
-                    }
-                    
-                }
-
-                if (donation.Source.SourceType == PaymentType.Cash)
-                {
-                    donation.Source.Name = "cash";
-                }
-                else if (charge != null && charge.Source != null)
-                {
-                    donation.Source.AccountNumberLast4 = charge.Source.AccountNumberLast4;
-
-                    if (donation.Source.SourceType == PaymentType.CreditCard && charge.Source.Brand != null)
-                    {
-                        switch (charge.Source.Brand)
-                        {
-                            case CardBrand.AmericanExpress:
-                                donation.Source.CardType = CreditCardType.AmericanExpress;
-                                break;
-                            case CardBrand.Discover:
-                                donation.Source.CardType = CreditCardType.Discover;
-                                break;
-                            case CardBrand.MasterCard:
-                                donation.Source.CardType = CreditCardType.MasterCard;
-                                break;
-                            case CardBrand.Visa:
-                                donation.Source.CardType = CreditCardType.Visa;
-                                break;
-                            default:
-                                donation.Source.CardType = null;
-                                break;
-                        }
-                    }
-                }
-
-                // Refund amount should already be negative (when the original donation was reversed), but negative-ify it just in case
-                if (donation.Status == DonationStatus.Refunded && donation.Amount > 0)
-                {
-                    donation.Amount *= -1;
-                    donation.Distributions.All(dist =>
-                    {
-                        dist.Amount *= -1;
-                        return (true);
-                    });
-                }
-            }
+            NormalizeDonations(response, softCredit);
 
             var donationsResponse = new DonationsDTO();
             donationsResponse.Donations.AddRange(response.OrderBy(donation => donation.DonationDate).ToList());
@@ -198,6 +133,94 @@ namespace crds_angular.Services
             donationsResponse.EndingDonationDate = donationsResponse.Donations.First().DonationDate;
 
             return (donationsResponse);
+        }
+
+        private void NormalizeDonations(IEnumerable<DonationDTO> donations, bool softCreditS)
+        {
+            foreach (var donation in donations)
+            {
+                if (softCreditS)
+                {
+                    var charge = GetStripCharge(donation);
+                    SetDonationSource(donation, charge);
+                }
+
+                ConfirmRefundCorrect(donation);
+            }
+        } 
+
+        private StripeCharge GetStripCharge(DonationDTO donation)
+        {
+            if (!string.IsNullOrWhiteSpace(donation.Source.PaymentProcessorId))
+            {
+                return null;
+            }
+
+            // If it is a positive amount, it means it's a Charge, otherwise it's a Refund
+            if (donation.Amount >= 0)
+            {
+                return _paymentService.GetCharge(donation.Source.PaymentProcessorId);
+            }
+
+            donation.Status = DonationStatus.Refunded;
+            var refund = _paymentService.GetRefund(donation.Source.PaymentProcessorId);
+            if (refund != null && refund.Charge != null)
+            {
+                return refund.Charge;
+            }
+
+            return null;
+        }
+
+        public void SetDonationSource(DonationDTO donation, StripeCharge charge)
+        {
+            if (donation.Source.SourceType == PaymentType.Cash)
+            {
+                donation.Source.Name = "cash";
+            }
+            else if (charge != null && charge.Source != null)
+            {
+                donation.Source.AccountNumberLast4 = charge.Source.AccountNumberLast4;
+
+                if (donation.Source.SourceType != PaymentType.CreditCard || charge.Source.Brand == null)
+                {
+                    return;
+                }
+                switch (charge.Source.Brand)
+                {
+                    case CardBrand.AmericanExpress:
+                        donation.Source.CardType = CreditCardType.AmericanExpress;
+                        break;
+                    case CardBrand.Discover:
+                        donation.Source.CardType = CreditCardType.Discover;
+                        break;
+                    case CardBrand.MasterCard:
+                        donation.Source.CardType = CreditCardType.MasterCard;
+                        break;
+                    case CardBrand.Visa:
+                        donation.Source.CardType = CreditCardType.Visa;
+                        break;
+                    default:
+                        donation.Source.CardType = null;
+                        break;
+                }
+            }
+        }
+
+        private void ConfirmRefundCorrect(DonationDTO donation)
+        {
+            // Refund amount should already be negative (when the original donation was reversed), but negative-ify it just in case
+            if (donation.Status != DonationStatus.Refunded || donation.Amount <= 0)
+            {
+                return;
+            }
+
+            donation.Amount *= -1;
+            donation.Distributions.All(dist =>
+            {
+                dist.Amount *= -1;
+                return (true);
+            });
         }
 
         private DonationYearsDTO GetDonationYearsForDonor(ContactDonor donor)
