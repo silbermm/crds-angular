@@ -105,6 +105,22 @@ namespace MinistryPlatform.Translation.Services
             return house;
         }
 
+        public List<HouseholdMember> GetHouseholdFamilyMembers(int householdId)
+        {
+            var token = ApiLogin();
+            var familyRecords = _ministryPlatformService.GetSubpageViewRecords("HouseholdMembers", householdId, token);
+            var family = familyRecords.Select(famRec => new HouseholdMember
+            {
+                ContactId = famRec.ToInt("Contact_ID"),
+                FirstName = famRec.ToString("First_Name"),
+                Nickname = famRec.ToString("Nickname"),
+                LastName = famRec.ToString("Last_Name"),
+                DateOfBirth = famRec.ToDate("Date_of_Birth"),
+                HouseholdPosition = famRec.ToString("Household_Position")
+            }).ToList();
+            return family;
+        }
+
         public MyContact GetMyProfile(string token)
         {
             var recordsDict = _ministryPlatformService.GetRecordsDict("MyProfile", token);

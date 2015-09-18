@@ -121,6 +121,9 @@ namespace crds_angular.Services
             person.AddressId = contact.Address_ID;
             person.Age = contact.Age;
 
+            var family = _contactService.GetHouseholdFamilyMembers(person.HouseholdId);
+            person.HouseholdMembers = family;
+
             return person;
         }
 
