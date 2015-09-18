@@ -17,12 +17,13 @@
         type: ''
       },
       resolve:{
-          type: ['$stateParams', function($stateParams){
-              return $stateParams.type;
-          }],
-          searchString: ['$stateParams', function($stateParams){
-              return $stateParams.q;
-          }]
+        $stateParams: '$stateParams',
+        type: function($stateParams){
+          return $stateParams.type;
+        },
+        searchString: function($stateParams){
+          return $stateParams.q;
+        }
       }
     });
   }
