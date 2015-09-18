@@ -72,7 +72,7 @@ namespace crds_angular.test.Services
             _contactService = new Mock<IContactService>();
             _opportunityService = new Mock<IOpportunityService>();
             _authenticationService = new Mock<IAuthenticationService>();
-            _personService = new Mock<IPersonService>();
+            _personService = new Mock<crds_angular.Services.Interfaces.IPersonService>();
             _eventService = new Mock<IEventService>();
             _serveService = new Mock<IServeService>();
             _participantService = new Mock<IParticipantService>();

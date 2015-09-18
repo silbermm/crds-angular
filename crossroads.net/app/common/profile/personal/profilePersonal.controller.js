@@ -32,6 +32,7 @@
     vm.convertHomePhone = convertHomePhone;
     vm.convertPhone = convertPhone;
     vm.dateFormat = /^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.]((19|20)\d\d)$/;
+    vm.formatAnniversaryDate = formatAnniversaryDate;
     vm.householdForm = {};
     vm.householdInfo = {};
     vm.householdPhoneFocus = householdPhoneFocus;
@@ -54,6 +55,8 @@
     ////////////////////////////////
 
     function activate() {
+      vm.annDate = formatAnniversaryDate(vm.profileData.person.anniversaryDate);
+
       ProfileReferenceData.getInstance().then(function(response) {
         vm.genders = response.genders;
         vm.maritalStatuses = response.maritalStatuses;
@@ -61,22 +64,21 @@
         vm.states = response.states;
         vm.countries = response.countries;
         vm.crossroadsLocations = response.crossroadsLocations;
-        if (!vm.profileData) { 
-          configurePerson(response.person);
-        }
-        vm.viewReady = true;
-        
-        if (vm.profileData.person.householdId) {
-          Profile.Household.get({ householdId: vm.profileData.person.householdId}, function(data) {
-            vm.profileData.householdInfo = data;
+        if (!vm.profileData) {
+          Profile.Personal.get(function(data) {
+            vm.profileData = { person: data };
+            vm.viewReady = true;
           });
+        } else {
+          configurePerson();
+          vm.viewReady = true;
         }
       });
+
       vm.buttonText = vm.buttonText !== undefined ? vm.buttonText : 'Save';
     }
 
-    function configurePerson(person) {
-      vm.profileData = { person: person };
+    function configurePerson() {
 
       if (vm.profileData.person.dateOfBirth !== undefined) {
         var newBirthDate = vm.profileData.person.dateOfBirth.replace(vm.dateFormat, '$3 $1 $2');
@@ -86,7 +88,6 @@
 
       if (vm.profileData.person.anniversaryDate !== undefined) {
         var mAdate = moment(new Date(vm.profileData.person.anniversaryDate));
-        vm.profileData.person.anniversaryDate = mAdate.format('MM/DD/YYYY');
       }
     }
 
@@ -108,6 +109,13 @@
       }
 
       vm.modalInstance.close(vm.updatedPerson);
+    }
+
+    function formatAnniversaryDate(anniversaryDate) {
+      var tmp = moment(anniversaryDate);
+      var month = tmp.month() + 1;
+      var year = tmp.year();
+      return month + '/' + year;
     }
 
     function householdPhoneFocus() {
@@ -132,7 +140,7 @@
           return;
         }
 
-        if(vm.householdForm.$invalid){
+        if (vm.householdForm.$invalid) {
           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
           return;
         }

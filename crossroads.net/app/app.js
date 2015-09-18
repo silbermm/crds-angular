@@ -10,11 +10,12 @@ require('../lib/select.css');
   angular.module(constants.MODULES.CROSSROADS, [
       constants.MODULES.CORE,
       constants.MODULES.COMMON,
-      constants.MODULES.PROFILE,
-      constants.MODULES.MPTOOLS,
       constants.MODULES.GIVE,
-      constants.MODULES.TRIPS,
-      constants.MODULES.MEDIA
+      constants.MODULES.MEDIA,
+      constants.MODULES.MPTOOLS,
+      constants.MODULES.PROFILE,
+      constants.MODULES.SEARCH,
+      constants.MODULES.TRIPS
    ]);
 
   angular.module(constants.MODULES.CROSSROADS).config(require('./routes'));
@@ -22,12 +23,12 @@ require('../lib/select.css');
   require('./community_groups_signup');
   require('./styleguide');
   require('./thedaily');
+  require('./explore');
   require('./gotrips');
   require('./community_groups_signup/group_signup_form.html');
   require('./my_serve');
   require('./volunteer_signup');
   require('./volunteer_application');
-  require('./search');
   require('./blog');
   require('./adbox');
   require('./giving_history');

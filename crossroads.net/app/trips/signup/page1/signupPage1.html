@@ -9,13 +9,14 @@
   <legend>Update Profile Information</legend>
   <div class="row">
     <div class='col-sm-12'>
-      <profile-personal 
+      <profile-personal
+         contact-id="vm.signupService.contactId"
          allow-password-change="false"
          require-mobile-phone="true"
          allow-save="false"
          submit-form-callback='pages.validateProfile(profile, household)'
          button-text='pages.buttonText'
-         button-css='pull-right' 
+         button-css='pull-right'
          profile-data='pages.profileData'
          for-trips='true' />
     </div>

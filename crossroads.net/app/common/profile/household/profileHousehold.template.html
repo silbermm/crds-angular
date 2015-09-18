@@ -5,7 +5,7 @@
         <legend>Your Household</legend>
         <p>Update information for your household, which includes:
           <br />
-          <span ng-repeat="member in household.householdInfo.members">
+          <span ng-repeat="member in household.householdInfo.householdMembers">
             <strong>{{household.displayName(member)}}{{$last ? '' : ', '}}</strong>
           </span>
         </p>

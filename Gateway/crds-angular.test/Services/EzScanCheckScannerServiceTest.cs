@@ -96,7 +96,7 @@ namespace crds_angular.test.Services
                 {
                     Id = 11111,
                     AccountNumber = "111",
-                    Address = new Address
+                    Address = new crds_angular.Models.Crossroads.Stewardship.Address
                     {
                         Line1 = "1 line 1",
                         Line2 = "1 line 2",
@@ -116,7 +116,7 @@ namespace crds_angular.test.Services
                 {
                     Id = 22222,
                     AccountNumber = "222",
-                    Address = new Address
+                    Address = new crds_angular.Models.Crossroads.Stewardship.Address
                     {
                         Line1 = "2 line 1",
                         Line2 = "2 line 2",
@@ -287,7 +287,7 @@ namespace crds_angular.test.Services
             {
                 Id = 11111,
                 AccountNumber = "111",
-                Address = new Address
+                Address = new crds_angular.Models.Crossroads.Stewardship.Address
                 {
                     Line1 = "1 line 1",
                     Line2 = "1 line 2",
@@ -326,7 +326,7 @@ namespace crds_angular.test.Services
             {
                 Id = 11111,
                 AccountNumber = "111",
-                Address = new Address
+                Address = new crds_angular.Models.Crossroads.Stewardship.Address
                 {
                     Line1 = "1 line 1",
                     Line2 = "1 line 2",

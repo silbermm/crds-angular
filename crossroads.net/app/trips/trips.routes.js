@@ -121,14 +121,14 @@
       })
       .state('tripsignup.application', {
         parent: 'noSideBar',
-        url: '/trips/:campaignId/signup?invite',
+        url: '/trips/:campaignId/signup/:contactId?invite',
         templateUrl: 'signup/signupPage.html',
         controller: 'TripsSignupController as tripsSignup',
         data: {
           isProtected: true,
           meta: {
-           title: 'Trip Signup',
-           description: ''
+            title: 'Trip Signup',
+            description: ''
           }
         },
         resolve: {
@@ -143,6 +143,18 @@
           Campaign: function(Trip, $stateParams) {
             return Trip.Campaign.get({campaignId: $stateParams.campaignId}).$promise;
           },
+
+          Profile: 'Profile',
+          Person: function(Profile, $stateParams, $cookies) {
+            var cid = $cookies.get('userId');
+            if ($stateParams.contactId) {
+              cid = $stateParams.contactId;
+            }
+
+            return Profile.Person.get({contactId: cid}).$promise;
+          },
+
+          Lookup: 'Lookup',
 
           WorkTeams: function(Trip) {
             return Trip.WorkTeams.query().$promise;

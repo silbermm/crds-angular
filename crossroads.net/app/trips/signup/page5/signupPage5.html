@@ -1,5 +1,5 @@
 <div>
-    <div ng-show="pages.pageTitle == 'GO Nicaragua Application'">
+    <div ng-show="pages.destination == 'Nicaragua'">
       <legend>
         Child Sponsorship
       </legend>
@@ -8,23 +8,23 @@
         <div class="form-group col-sm-12">
           <label class="block required">Have you sponsored a child through Crossroads in Nicaragua?</label>
           <label class="radio-inline" ng-click="isCollapsed = true">
-              <input type="radio" value="yes" name="leader" id="sponsor-yes">Yes
+              <input ng-model="pages.signupService.page5.sponsorChildInNicaragua.value" type="radio" value="yes" name="leader" id="sponsor-yes">Yes
           </label>
           <label class="radio-inline" ng-click="isCollapsed = false">
-              <input type="radio" value="no" name="leader" id="sponsor-no">No
+              <input ng-model="pages.signupService.page5.sponsorChildInNicaragua.value" type="radio" value="no" name="leader" id="sponsor-no">No
           </label>
         </div>
         <div class="form-group col-sm-6" collapse="!isCollapsed">
           <label for="sponsor-firstname" class="required">Child's First Name</label>
-          <input type="text" class="form-control" id="sponsor-firstname" placeholder="Enter sponsored child's first name">
+          <input ng-model="pages.signupService.page5.sponsorChildFirstName.value" type="text" class="form-control" id="sponsor-firstname" placeholder="Enter sponsored child's first name">
         </div>
         <div class="form-group col-sm-6" collapse="!isCollapsed">
           <label for="sponsor-lastname" class="required">Child's Last Name</label>
-          <input type="text" class="form-control" id="sponsor-lastname" placeholder="Enter sponsored child's last name">
+          <input ng-model="pages.signupService.page5.sponsorChildLastName.value" type="text" class="form-control" id="sponsor-lastname" placeholder="Enter sponsored child's last name">
         </div>
         <div class="form-group col-sm-6" collapse="!isCollapsed">
           <label for="sponsor-number" class="required">Child's Sponsorship Number</label>
-          <input type="text" class="form-control" id="sponsor-number" placeholder="Enter sponsored child's number">
+          <input ng-model="pages.signupService.page5.sponsorChildNumber.value" type="text" class="form-control" id="sponsor-number" placeholder="Enter sponsored child's number">
         </div>
       </div>
     </div><!--/#child sponsor-->
@@ -36,16 +36,16 @@
 
       <form role="form">
 
-        <div class="row" ng-show="pages.pageTitle == 'GO NOLA Application'">
+        <div class="row" ng-show="pages.destination == 'NOLA'">
           <div class="form-group col-sm-12" >
             <label for="workteam-first" ng-class='pages.nolaRequired()'>First Choice Work Team <span class="small text-muted">Kids traveling must be on the same work team as at least one parent.</span></label>
 
             <div class="row">
               <div class="col-sm-6">
-                <select class='form-control' 
-                  id='workteam-first' 
-                  ng-model='pages.selectedTeam' >
-                    <option ng-repeat="workTeam in pages.workTeams" value="{{workTeam.dp_RecordID}}">{{workTeam.dp_RecordName}}</option> 
+                <select class='form-control'
+                  id='workteam-first'
+                  ng-model="pages.signupService.page5.nolaFirstChoiceWorkTeam.value" >
+                    <option ng-repeat="workTeam in pages.workTeams" value="{{workTeam.dp_RecordID}}">{{workTeam.dp_RecordName}}</option>
                 </select>
               </div>
             </div>
@@ -54,7 +54,7 @@
 
           <div class="form-group col-sm-12" >
             <label for="workteam-experience" class="required" ng-class='pages.nolaRequired()'>Please describe your experience in this area</label>
-            <textarea cols="1" rows="4" class="form-control" id="workteam-experience" maxlength="250"></textarea>
+            <textarea ng-model="pages.signupService.page5.nolaFirstChoiceExperience.value" cols="1" rows="4" class="form-control" id="workteam-experience" maxlength="250"></textarea>
           </div>
 
           <div class="form-group col-sm-12" >
@@ -63,8 +63,8 @@
             <div class="row">
               <div class="col-sm-6">
                 <select class="form-control" id="workteam-second"
-                  ng-model='pages.selectedTeam2' >
-                  <option ng-repeat="workTeam in pages.workTeams" value="{{workTeam.dp_RecordID}}">{{workTeam.dp_RecordName}}</option> 
+                  ng-model='pages.signupService.page5.nolaSecondChoiceWorkTeam.value' >
+                  <option ng-repeat="workTeam in pages.workTeams" value="{{workTeam.dp_RecordID}}">{{workTeam.dp_RecordName}}</option>
                 </select>
               </div>
             </div>
@@ -75,88 +75,88 @@
         <div class="row">
           <div class="form-group col-sm-12" >
             <label for="trip-experience" class="required" ng-class='pages.nolaRequired()'>Describe any previous serving trip experience</label>
-            <textarea cols="1" rows="4" class="form-control" id="trip-experience" maxlength="250" placeholder="Dug water wells in Nicaragua? Built houses in Appalachia? We want to hear all of the details." ></textarea>
+            <textarea ng-model="pages.signupService.page5.previousTripExperience.value" cols="1" rows="4" class="form-control" id="trip-experience" maxlength="250" placeholder="Dug water wells in Nicaragua? Built houses in Appalachia? We want to hear all of the details." ></textarea>
           </div>
           <div id="profession" class="form-group col-sm-12" ng-class='pages.nolaRequired()'>
             <label class="required" ng-class='pages.nolaRequired()'>Are you a professional in any of the following fields?</label><br>
 
             <div class="checkbox">
               <label for="profession-business" >
-                <input type="checkbox" name="professionchoice" value="business" id="profession-business"> Business
+                <input ng-model="pages.signupService.page5.professionalSkillBusiness.value" type="checkbox" name="professionchoice" value="business" id="profession-business"> Business
               </label>
             </div><!--/checkbox-->
 
             <div class="checkbox">
               <label for="profession-construction">
-                <input type="checkbox" name="professionchoice" value="construction" id="profession-construction"> Construction
+                <input ng-model="pages.signupService.page5.professionalSkillConstruction.value" type="checkbox" name="professionchoice" value="construction" id="profession-construction"> Construction
               </label>
             </div><!--/checkbox-->
 
             <div class="checkbox">
               <label for="profession-dental">
-                <input type="checkbox" name="professionchoice" value="dental" id="profession-dental"> Dental
+                <input ng-model="pages.signupService.page5.professionalSkillDental.value" type="checkbox" name="professionchoice" value="dental" id="profession-dental"> Dental
               </label>
             </div><!--/checkbox-->
 
             <div class="checkbox">
               <label for="profession-education">
-                <input type="checkbox" name="professionchoice" value="education" id="profession-education"> Education
+                <input ng-model="pages.signupService.page5.professionalSkillEducation.value" type="checkbox" name="professionchoice" value="education" id="profession-education"> Education
               </label>
             </div><!--/checkbox-->
 
             <div class="checkbox">
               <label for="profession-it">
-                <input type="checkbox" name="professionchoice" value="it" id="profession-it"> IT
+                <input ng-model="pages.signupService.page5.professionalSkillInformationTech.value" type="checkbox" name="professionchoice" value="it" id="profession-it"> IT
               </label>
             </div><!--/checkbox-->
 
             <div class="checkbox">
               <label for="profession-media">
-                <input type="checkbox" name="professionchoice" value="media" id="profession-media"> Media/Journalism
+                <input ng-model="pages.signupService.page5.professionalSkillMedia.value" type="checkbox" name="professionchoice" value="media" id="profession-media"> Media/Journalism
               </label>
             </div><!--/checkbox-->
 
             <div class="checkbox">
               <label for="profession-medical">
-                <input type="checkbox" name="professionchoice" value="medical" id="profession-medical"> Medical
+                <input ng-model="pages.signupService.page5.professionalSkillMedical.value" type="checkbox" name="professionchoice" value="medical" id="profession-medical"> Medical
               </label>
             </div><!--/checkbox-->
 
             <div class="checkbox">
               <label for="profession-music">
-                <input type="checkbox" name="professionchoice" value="music" id="profession-music"> Music
+                <input ng-model="pages.signupService.page5.professionalSkillMusic.value" type="checkbox" name="professionchoice" value="music" id="profession-music"> Music
               </label>
             </div><!--/checkbox-->
 
             <div class="checkbox">
               <label for="profession-photo">
-                <input type="checkbox" name="professionchoice" value="photography" id="profession-photo"> Photography
+                <input ng-model="pages.signupService.page5.professionalSkillPhotography.value" type="checkbox" name="professionchoice" value="photography" id="profession-photo"> Photography
               </label>
             </div><!--/checkbox-->
 
             <div class="checkbox">
-              <label for="profession-medical">
-                <input type="checkbox" name="professionchoice" value="social" id="profession-social"> Social Worker/Counselor
+              <label for="profession-social">
+                <input ng-model="pages.signupService.page5.professionalSkillSocialWorker.value" type="checkbox" name="professionchoice" value="social" id="profession-social"> Social Worker/Counselor
               </label>
             </div><!--/checkbox-->
 
             <div class="checkbox">
-              <label for="profession-medical">
-                <input type="checkbox" name="professionchoice" value="student" id="profession-student"> Student
+              <label for="profession-student">
+                <input ng-model="pages.signupService.page5.professionalSkillStudent.value" type="checkbox" name="professionchoice" value="student" id="profession-student"> Student
               </label>
             </div><!--/checkbox-->
 
             <div class="checkbox">
               <label for="profession-other">
-                <input type="checkbox" name="professionchoice" value="other" id="profession-other"> Other
+                <input ng-model="pages.signupService.page5.professionalSkillOther.value" type="checkbox" name="professionchoice" value="other" id="profession-other"> Other
               </label>
             </div><!--/checkbox-->
 
           </div>
         </div><!--/row-->
 
-        <a ng-click='pages.handleNext(6)' class="btn btn-primary pull-right" ng-show="pages.pageTitle != 'GO NOLA Application'">Next</a>
-        <a ng-click='pages.handleSubmit()' class="btn btn-primary pull-right" ng-show="pages.pageTitle == 'GO NOLA Application'">Submit Application</a>
+        <a ng-click='pages.handleNext(6)' class="btn btn-primary pull-right" ng-show="pages.destination != 'NOLA'">Next</a>
+        <a ng-click='pages.handleSubmit()' class="btn btn-primary pull-right" ng-show="pages.destination == 'NOLA'">Submit Application</a>
         <a ng-click='pages.handlePrevious(4)'  class="btn btn-standard pull-right">Back</a>
       </form>
   </div>

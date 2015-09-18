@@ -207,6 +207,17 @@
         templateUrl: 'gotrips/signup-page-confirmation.html',
         controller: 'GoTripsCtrl as gotrip'
       })
+      .state('explore', {
+        parent: 'noHeaderOrFooter',
+        url: '/explore',
+        templateUrl: 'explore/explore.html',
+        data: {
+          meta: {
+           title: 'Explore',
+           description: ''
+          }
+        }
+      })
       .state('blog', {
         parent: 'noSideBar',
         url: '/blog',
@@ -274,12 +285,6 @@
         parent: 'noSideBar',
         url: '/demo/go-trip-giving',
         templateUrl: 'trip_giving/give.html'
-      })
-      .state('search', {
-        parent: 'noSideBar',
-        url: '/search-results',
-        controller: 'SearchCtrl as search',
-        templateUrl: 'search/search-results.html'
       })
       .state('community-groups-signup', {
         parent: 'noSideBar',
