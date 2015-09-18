@@ -11,8 +11,9 @@
    */
   function GiveRoutes($httpProvider, $stateProvider) {
 
-    //$httpProvider.defaults.useXDomain = true;
-    //$httpProvider.defaults.headers.common['X-Use-The-Force'] = true;
+    $httpProvider.defaults.useXDomain = true;
+    //TODO: I think this is done globally, not needed here, I think the above needs to be done globally
+    $httpProvider.defaults.headers.common['X-Use-The-Force'] = true;
 
     $stateProvider
       .state('give', {
