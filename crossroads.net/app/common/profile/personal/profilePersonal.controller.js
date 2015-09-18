@@ -56,6 +56,7 @@
 
     function activate() {
       vm.annDate = formatAnniversaryDate(vm.profileData.person.anniversaryDate);
+
       ProfileReferenceData.getInstance().then(function(response) {
         vm.genders = response.genders;
         vm.maritalStatuses = response.maritalStatuses;
@@ -71,11 +72,11 @@
 
         vm.viewReady = true;
 
-        if (vm.profileData.person.householdId) {
-          Profile.Household.get({ householdId: vm.profileData.person.householdId}, function(data) {
-            vm.profileData.householdInfo = data;
-          });
-        }
+        /*if (vm.profileData.person.householdId) {*/
+          //Profile.Household.get({ householdId: vm.profileData.person.householdId}, function(data) {
+            //vm.profileData.householdInfo = data;
+          //});
+        /*}*/
       });
 
       vm.buttonText = vm.buttonText !== undefined ? vm.buttonText : 'Save';
