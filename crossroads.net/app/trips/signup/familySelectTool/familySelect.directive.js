@@ -3,9 +3,9 @@
 
   module.exports = FamilySelectDirective;
 
-  FamilySelectDirective.$inject = ['TripsSignupService', '$rootScope'];
+  FamilySelectDirective.$inject = ['$state', 'TripsSignupService', '$rootScope'];
 
-  function FamilySelectDirective(TripsSignupService, $rootScope) {
+  function FamilySelectDirective($state, TripsSignupService, $rootScope) {
     return {
       restrict: 'E',
       replace: true,
@@ -19,6 +19,7 @@
 
     function link(scope, el, attr) {
       scope.divClass = divClass;
+      scope.goToApp = goToApp;
       scope.isOfAge = isOfAge;
       scope.isSignedUp = isSignedUp;
       scope.signUpQuestion = signUpQuestion;
@@ -35,6 +36,11 @@
         }
 
         return '';
+      }
+
+      function goToApp(contactId) {
+        scope.signupService.contactId = contactId;
+        $state.go('tripsignup.application', {campaignId: scope.signupService.campaign.id, contactId: contactId });
       }
 
       function isOfAge(member) {
@@ -80,6 +86,7 @@
 
         return '';
       }
+
     }
 
   }

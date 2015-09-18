@@ -10,6 +10,7 @@ using MinistryPlatform.Translation.Services.Interfaces;
 using IDonationService = MinistryPlatform.Translation.Services.Interfaces.IDonationService;
 using IDonorService = MinistryPlatform.Translation.Services.Interfaces.IDonorService;
 using IGroupService = MinistryPlatform.Translation.Services.Interfaces.IGroupService;
+using IPersonService = crds_angular.Services.Interfaces.IPersonService;
 using PledgeCampaign = crds_angular.Models.Crossroads.Stewardship.PledgeCampaign;
 
 namespace crds_angular.Services
@@ -114,7 +115,7 @@ namespace crds_angular.Services
                 Id = campaign.Id,
                 Name = campaign.Name,
                 FormId = campaign.FormId,
-                FormName = campaign.FormTitle,
+                Nickname = campaign.Nickname,
                 YoungestAgeAllowed = campaign.YoungestAgeAllowed,
                 RegistrationEnd = campaign.RegistrationEnd,
                 RegistrationStart = campaign.RegistrationStart,
@@ -164,7 +165,7 @@ namespace crds_angular.Services
             return resp;
         }
 
-        public List<FamilyMemberTripDto> GetFamilyMembers(int contactId , int pledgeId, string token)
+        public List<FamilyMemberTripDto> GetFamilyMembers(int contactId, int pledgeId, string token)
         {
             var family = _serveService.GetImmediateFamilyParticipants(contactId, token);
             var fam = new List<FamilyMemberTripDto>();
@@ -188,7 +189,7 @@ namespace crds_angular.Services
                 fam.Add(fm);
             }
             return fam;
-        } 
+        }
 
         private static List<string> ValidateResponse(int selectionCount, int formResponseId, List<TripFormResponse> responses)
         {
@@ -415,6 +416,121 @@ namespace crds_angular.Services
         {
             var person = _personService.GetLoggedInUserProfile(token);
             return _privateInviteService.PrivateInviteValid(pledgeCampaignId, guid, person.EmailAddress);
+        }
+
+        public int SaveApplication(TripApplicationDto dto)
+        {
+            var formResponse = new FormResponse();
+            formResponse.ContactId = dto.ContactId; //contact id of the person the application is for
+            formResponse.FormId = _configurationWrapper.GetConfigIntValue("TripApplicationFormId");
+            formResponse.PledgeCampaignId = dto.PledgeCampaignId;
+
+            formResponse.FormAnswers = new List<FormAnswer>(FormatFormAnswers(dto));
+
+            var formResponseId = _formSubmissionService.SubmitFormResponse(formResponse);
+            return formResponseId;
+        }
+
+        private IEnumerable<FormAnswer> FormatFormAnswers(TripApplicationDto applicationData)
+        {
+            var answers = new List<FormAnswer>();
+
+            var page2 = applicationData.PageTwo;
+            FormatAnswer(page2.Allergies, answers);
+            FormatAnswer(page2.Conditions, answers);
+            FormatAnswer(page2.GuardianFirstName, answers);
+            FormatAnswer(page2.GuardianLastName, answers);
+            FormatAnswer(page2.Referral, answers);
+            FormatAnswer(page2.ScrubSize, answers);
+            FormatAnswer(page2.SpiritualLifeObedience, answers);
+            FormatAnswer(page2.SpiritualLifeReceived, answers);
+            FormatAnswer(page2.SpiritualLifeReplicating, answers);
+            FormatAnswer(page2.SpiritualLifeSearching, answers);
+            FormatAnswer(page2.TshirtSize, answers);
+            FormatAnswer(page2.Vegetarian, answers);
+            FormatAnswer(page2.Why, answers);
+
+            var page3 = applicationData.PageThree;
+            FormatAnswer(page3.EmergencyContactEmail, answers);
+            FormatAnswer(page3.EmergencyContactFirstName, answers);
+            FormatAnswer(page3.EmergencyContactLastName, answers);
+            FormatAnswer(page3.EmergencyContactPrimaryPhone, answers);
+            FormatAnswer(page3.EmergencyContactSecondaryPhone, answers);
+
+            var page4 = applicationData.PageFour;
+            FormatAnswer(page4.GroupCommonName, answers);
+            FormatAnswer(page4.InterestedInGroupLeader, answers);
+            FormatAnswer(page4.Lottery, answers);
+            FormatAnswer(page4.RoommateFirstChoice, answers);
+            FormatAnswer(page4.RoommateSecondChoice, answers);
+            FormatAnswer(page4.SupportPersonEmail, answers);
+            FormatAnswer(page4.WhyGroupLeader, answers);
+
+            var page5 = applicationData.PageFive;
+            FormatAnswer(page5.PreviousTripExperience, answers);
+            FormatAnswer(page5.ProfessionalSkillBusiness, answers);
+            FormatAnswer(page5.ProfessionalSkillConstruction, answers);
+            FormatAnswer(page5.ProfessionalSkillDental, answers);
+            FormatAnswer(page5.ProfessionalSkillEducation, answers);
+            FormatAnswer(page5.ProfessionalSkillInformationTech, answers);
+            FormatAnswer(page5.ProfessionalSkillMedia, answers);
+            FormatAnswer(page5.ProfessionalSkillMedical, answers);
+            FormatAnswer(page5.ProfessionalSkillMusic, answers);
+            FormatAnswer(page5.ProfessionalSkillOther, answers);
+            FormatAnswer(page5.ProfessionalSkillPhotography, answers);
+            FormatAnswer(page5.ProfessionalSkillSocialWorker, answers);
+            FormatAnswer(page5.ProfessionalSkillStudent, answers);
+            FormatAnswer(page5.SponsorChildFirstName, answers);
+            FormatAnswer(page5.SponsorChildInNicaragua, answers);
+            FormatAnswer(page5.SponsorChildLastName, answers);
+            FormatAnswer(page5.SponsorChildNumber, answers);
+
+            var page6 = applicationData.PageSix;
+            FormatAnswer(page6.DeltaFrequentFlyer, answers);
+            FormatAnswer(page6.DescribeExperienceAbroad, answers);
+            FormatAnswer(page6.ExperienceAbroad, answers);
+            FormatAnswer(page6.InternationalTravelExpericence, answers);
+            FormatAnswer(page6.PassportBirthday, answers);
+            FormatAnswer(page6.PassportCountry, answers);
+            FormatAnswer(page6.PassportExpirationDate, answers);
+            FormatAnswer(page6.PassportFirstName, answers);
+            FormatAnswer(page6.PassportLastName, answers);
+            FormatAnswer(page6.PassportMiddleName, answers);
+            FormatAnswer(page6.PastAbuseHistory, answers);
+            FormatAnswer(page6.SouthAfricanFrequentFlyer, answers);
+            FormatAnswer(page6.UnitedFrequentFlyer, answers);
+            FormatAnswer(page6.UsAirwaysFrequentFlyer, answers);
+            FormatAnswer(page6.ValidPassport, answers);
+
+            return answers;
+        }
+
+        private void FormatAnswer(TripApplicationDto.TripApplicationField field, List<FormAnswer> answers)
+        {
+            if (field == null)
+            {
+                return;
+            }
+            if (field.Value == null)
+            {
+                return;
+            }
+            answers.Add(FormatTripFormAnswer(field));
+        }
+
+        private FormAnswer FormatTripFormAnswer(TripApplicationDto.TripApplicationField field)
+        {
+            try
+            {
+                var answer = new FormAnswer();
+                answer.FieldId = field.FormFieldId;
+                answer.Response = field.Value;
+                return answer;
+            }
+            catch (Exception exception)
+            {
+                throw new ApplicationException(string.Format("Form Field Id: {0}", field.FormFieldId), exception);
+            }
         }
     }
 }

@@ -4,6 +4,6 @@
   "requireDotNotation": { "allExcept": [ "snake_case" ] },
   "safeContextKeyword": "vm",
   "validateLineBreaks": "CRLF",
-  "requireCamelCaseOrUpperCaseIdentifiers": "ignoreProperties"
+  "requireCamelCaseOrUpperCaseIdentifiers": null 
 
 }

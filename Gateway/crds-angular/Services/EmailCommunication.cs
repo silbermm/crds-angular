@@ -3,6 +3,7 @@ using crds_angular.Models.Crossroads;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
+using IPersonService = crds_angular.Services.Interfaces.IPersonService;
 
 namespace crds_angular.Services
 {

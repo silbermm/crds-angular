@@ -42,7 +42,7 @@
     }
 
     function displayName(member) {
-      return member.nickname + ' ' + member.lastName;
+      return member.Nickname + ' ' + member.LastName;
     }
 
     function displayLocation(locationId) {

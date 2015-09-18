@@ -29,7 +29,7 @@ namespace crds_angular.test.Services
         private Mock<ICommunicationService> _communicationService;
         private Mock<IContactService> _contactService;
         private Mock<IConfigurationWrapper> _configurationWrapper;
-        private Mock<IPersonService> _personService;
+        private Mock<crds_angular.Services.Interfaces.IPersonService> _personService;
         private Mock<IServeService> _serveService;
         private TripService _fixture;
 
@@ -48,7 +48,7 @@ namespace crds_angular.test.Services
             _communicationService = new Mock<ICommunicationService>();
             _contactService = new Mock<IContactService>();
             _configurationWrapper = new Mock<IConfigurationWrapper>();
-            _personService = new Mock<IPersonService>();
+            _personService = new Mock<crds_angular.Services.Interfaces.IPersonService>();
             _serveService = new Mock<IServeService>();
 
             _fixture = new TripService(_eventParticipantService.Object,

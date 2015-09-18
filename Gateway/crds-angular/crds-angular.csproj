@@ -22,7 +22,6 @@
     <IISExpressUseClassicPipelineMode />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,7 +31,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\crds-angular.XML</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -55,6 +55,18 @@
     <Reference Include="AutoMapper.Net4">
       <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.Net4.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="AWSSDK.CloudSearch, Version=3.1.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AWSSDK.CloudSearch.3.1.0.1\lib\net45\AWSSDK.CloudSearch.dll</HintPath>
+    </Reference>
+    <Reference Include="AWSSDK.CloudSearchDomain, Version=3.1.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AWSSDK.CloudSearchDomain.3.1.0.2\lib\net45\AWSSDK.CloudSearchDomain.dll</HintPath>
+    </Reference>
+    <Reference Include="AWSSDK.Core, Version=3.1.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AWSSDK.Core.3.1.1.0\lib\net45\AWSSDK.Core.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -253,8 +265,10 @@
     <Compile Include="Controllers\API\GroupController.cs" />
     <Compile Include="Controllers\API\CheckScannerController.cs" />
     <Compile Include="Controllers\API\ProgramController.cs" />
+    <Compile Include="Controllers\API\SearchController.cs" />
     <Compile Include="Controllers\API\ServeController.cs" />
     <Compile Include="Controllers\API\StripeEventController.cs" />
+    <Compile Include="Controllers\API\TripApplicationController.cs" />
     <Compile Include="Controllers\API\TripController.cs" />
     <Compile Include="Controllers\API\UpdateDonorDTO.cs" />
     <Compile Include="Controllers\API\RoleController.cs" />
@@ -305,6 +319,10 @@
     <Compile Include="Models\Crossroads\Stewardship\CheckScannerBatch.cs" />
     <Compile Include="Models\Crossroads\Stewardship\CheckScannerCheck.cs" />
     <Compile Include="Models\Crossroads\Stewardship\DepositDTO.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\DonationDistributionDTO.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\DonationsDTO.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\DonationSourceDTO.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\DonationYearsDTO.cs" />
     <Compile Include="Models\Crossroads\Stewardship\EZScanDonorDetails.cs" />
     <Compile Include="Models\Crossroads\Stewardship\GPExportDatumDTO.cs" />
     <Compile Include="Models\Crossroads\Stewardship\PledgeCampaign.cs" />
@@ -322,6 +340,7 @@
     <Compile Include="Models\Crossroads\Stewardship\StripeEvent.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeObject.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeRefund.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\StripeSource.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeToken.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeTransfer.cs" />
     <Compile Include="Models\Crossroads\Trip\FamilyMemberTripDto.cs" />
@@ -330,6 +349,8 @@
     <Compile Include="Models\Crossroads\Trip\SaveTripParticipantsDto.cs" />
     <Compile Include="Models\Crossroads\Trip\Trip.cs" />
     <Compile Include="Models\Crossroads\Trip\TripApplicantResponse.cs" />
+    <Compile Include="Models\Crossroads\Trip\TripApplicationDto.cs" />
+    <Compile Include="Models\Crossroads\Trip\TripApplicationResponseDto.cs" />
     <Compile Include="Models\Crossroads\Trip\TripCampaignDto.cs" />
     <Compile Include="Models\Crossroads\Trip\TripFormResponseDto.cs" />
     <Compile Include="Models\Crossroads\Trip\TripGift.cs" />
@@ -375,6 +396,7 @@
     <Compile Include="Services\Interfaces\IEmailCommunication.cs" />
     <Compile Include="Services\Interfaces\IGroupService.cs" />
     <Compile Include="Services\Interfaces\IProgramService.cs" />
+    <Compile Include="Services\Interfaces\ISearchService.cs" />
     <Compile Include="Services\Interfaces\IServeService.cs" />
     <Compile Include="Services\Interfaces\IPersonService.cs" />
     <Compile Include="Services\Interfaces\IPaymentService.cs" />
@@ -384,6 +406,7 @@
     <Compile Include="Services\MinistryPlatformBaseService.cs" />
     <Compile Include="Services\PersonService.cs" />
     <Compile Include="Services\ProgramService.cs" />
+    <Compile Include="Services\SearchService.cs" />
     <Compile Include="Services\ServeService.cs" />
     <Compile Include="Services\SkillService.cs" />
     <Compile Include="Services\StripeEventService.cs" />

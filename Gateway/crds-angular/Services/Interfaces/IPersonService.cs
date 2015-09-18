@@ -12,7 +12,7 @@ namespace crds_angular.Services.Interfaces
         void SetProfile(String token, Person person);
         List<Skill> GetLoggedInUserSkills(int contactId, string token);
         Person GetLoggedInUserProfile(String token);
-        Household GetHousehold(int householdId);        Person GetPerson(int contactId);
+        Person GetPerson(int contactId);
         List<RoleDto> GetLoggedInUserRoles(string token);
     }
 }

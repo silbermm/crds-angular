@@ -38,7 +38,7 @@ namespace MinistryPlatform.Translation.Services
                         EndDate = result.ToDate("End_Date"),
                         Goal = result.ToInt("Campaign_Goal"),
                         FormId = result.ToInt("Form_ID"),
-                        FormTitle = result.ToString("Form_Title"),
+                        Nickname = result.ToString("Nickname"),
                         YoungestAgeAllowed = result.ToInt("Youngest_Age_Allowed"),
                         RegistrationEnd = result.ToDate("Registration_End"),
                         RegistrationStart = result.ToDate("Registration_Start"),

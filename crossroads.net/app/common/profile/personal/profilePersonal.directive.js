@@ -10,15 +10,16 @@
       restrict: 'E',
       bindToController: true,
       scope: {
-        updatedPerson: '=?',
-        modalInstance: '=?',
-        submitFormCallback: '&?',
-        buttonText: '=',
-        buttonCss: '@',
         allowPasswordChange: '=',
-        requireMobilePhone: '=',
+        buttonCss: '@',
+        buttonText: '=',
+        contactId: '=?',
         forTrips: '=',
-        profileData: '=?'
+        modalInstance: '=?',
+        requireMobilePhone: '=',
+        submitFormCallback: '&?',
+        profileData: '=?',
+        updatedPerson: '=?'
       },
       templateUrl: 'personal/profilePersonal.template.html',
       controller: 'ProfilePersonalController as profile',
