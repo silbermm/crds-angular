@@ -75,8 +75,6 @@ namespace crds_angular.Services
                     // Mark the check as exported now, so we don't double-charge a community member.
                     // If the CreateDonationAndDistributionRecord fails, we'll still consider it exported, but
                     // it will be in error, and will have to be manually resolved.
-
-
                     check.Exported = true;
               
                     var encryptedKey = _mpDonorService.CreateEncodedAndEncryptedAccountAndRoutingNumber(check.AccountNumber, check.RoutingNumber);
