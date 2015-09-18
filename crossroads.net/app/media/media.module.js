@@ -16,16 +16,16 @@ require('./templates/viewAllVideos.html');
 require('./templates/seriesSingle.html');
 require('./templates/series-single-lo-res.html');
 require('./templates/mediaSingle.html');
-require('./templates/subscribe-btn-messages.html');
-require('./templates/subscribe-btn-music.html');
-require('./templates/subscribe-btn-videos.html');
-require('./templates/subscribe-btn-dropdown.html');
-require('./templates/media-list.html');
+require('./templates/subscribeButtonMessages.html');
+require('./templates/subscribeButtonMusic.html');
+require('./templates/subscribeButtonVideos.html');
+require('./templates/subscribeButtonDropdown.html');
 require('./templates/messageActionButtons.html');
 require('./templates/mediaDetails.html');
 require('./templates/mediaListCard.html');
 require('./templates/seriesListCard.html');
 require('./templates/messagesListCard.html');
+require('./templates/rssFeed.html');
 
 app.controller('MediaController', require('./media.controller'));
 app.controller('SingleMediaController', require('./singleMedia.controller'));
@@ -34,6 +34,7 @@ app.filter('replaceNonAlphaNumeric', require('./filters/replaceNonAlphaNumeric.f
 
 app.directive('mediaListCard', require('./directives/mediaListCard.directive'));
 app.directive('youTubePlayer', require('./directives/youTubePlayer.directive'));
+app.directive('rssFeed', require('./directives/rssFeed.directive.js'));
 
 app.constant('YT_EVENT', {
   STOP:            0,

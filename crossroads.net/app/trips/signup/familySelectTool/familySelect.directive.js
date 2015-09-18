@@ -70,7 +70,11 @@
       }
 
       function signUpQuestion() {
-        if (_.some(scope.familyMembers, 'signedUp', false)) {
+        var showMessage = _.some(scope.familyMembers, function(member) {
+          return member.signedUp === false && isOfAge(member);
+        });
+
+        if (showMessage) {
           if (scope.showSignUp === 'page0') {
             return $rootScope.MESSAGES.TripSignupFamilySelection.content;
           }

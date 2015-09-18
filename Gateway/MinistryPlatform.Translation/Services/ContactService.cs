@@ -67,10 +67,6 @@ namespace MinistryPlatform.Translation.Services
             return ParseProfileRecord(pageViewRecords[0]);
         }
 
-        public Household GetHouseholdById(int householdId)
-        {
-            throw new NotImplementedException();
-        }
         public List<HouseholdMember> GetHouseholdFamilyMembers(int householdId)
         {
             var token = ApiLogin();
@@ -82,48 +78,12 @@ namespace MinistryPlatform.Translation.Services
                 Nickname = famRec.ToString("Nickname"),
                 LastName = famRec.ToString("Last_Name"),
                 DateOfBirth = famRec.ToDate("Date_of_Birth"),
-                HouseholdPosition = famRec.ToString("Household_Position")
+                HouseholdPosition = famRec.ToString("Household_Position"),
+                StatementTypeId = famRec.ContainsKey("Statement_Type_ID") ? famRec.ToInt("Statement_Type_ID") : (int?)null,
+                DonorId = famRec.ContainsKey("Donor_ID") ? famRec.ToInt("Donor_ID") : (int?)null
             }).ToList();
             return family;
         }
-
-        //public Household GetHouseholdById(int householdId)
-        //{
-        //    var token = ApiLogin();
-        //    var recordsDict = _ministryPlatformService.GetPageViewRecords("HouseholdProfile", token, householdId.ToString());
-        //    if (recordsDict.Count > 1)
-        //    {
-        //        throw new ApplicationException("GetHouseholdById returned multiple records");
-        //    }
-
-        //    var record = recordsDict.FirstOrDefault();
-        //    var house = new Household
-        //    {
-        //        AddressLine1 = record.ToString("Address_Line_1"),
-        //        AddressLine2 = record.ToString("Address_Line_2"),
-        //        City = record.ToString("City"),
-        //        State = record.ToString("State/Region"),
-        //        PostalCode = record.ToString("Postal_Code"),
-        //        HomePhone = record.ToString("Home_Phone"),
-        //        ForeignCountry = record.ToString("Foreign_Country"),
-        //        County = record.ToString("County"),
-        //        CongregationId = record.ToNullableInt("Congregation_ID"),
-        //        HouseholdId = record.ToInt("Household_ID")
-        //    };
-        //    var familyRecords = _ministryPlatformService.GetSubpageViewRecords("HouseholdMembers", house.HouseholdId, token);
-        //    var family = familyRecords.Select(famRec => new HouseholdMember
-        //    {
-        //        ContactId = famRec.ToInt("Contact_ID"), 
-        //        FirstName = famRec.ToString("First_Name"), 
-        //        Nickname = famRec.ToString("Nickname"), 
-        //        LastName = famRec.ToString("Last_Name"), 
-        //        DateOfBirth = famRec.ToDate("Date_of_Birth"),
-        //        HouseholdPosition = famRec.ToString("Household_Position")
-        //    }).ToList();
-
-        //    house.HouseholdMembers = family;
-        //    return house;
-        //}
 
 
         public MyContact GetMyProfile(string token)
@@ -273,28 +233,5 @@ namespace MinistryPlatform.Translation.Services
 
             return records.Select(record => (int) record["Contact_ID"]).ToList();
         }
-
-        //public void UpdateContact()
-        //{
-        //    var contactDictionary = getDictionary(person.GetContact());
-        //    var householdDictionary = getDictionary(person.GetHousehold());
-        //    var addressDictionary = getDictionary(person.GetAddress());
-        //    addressDictionary.Add("State/Region", addressDictionary["State"]);
-
-        //    MinistryPlatformService.UpdateRecord(AppSetting("MyContact"), contactDictionary, token);
-
-        //    if (addressDictionary["Address_ID"] != null)
-        //    {
-        //        //address exists, update it
-        //        MinistryPlatformService.UpdateRecord(AppSetting("MyAddresses"), addressDictionary, token);
-        //    }
-        //    else
-        //    {
-        //        //address does not exist, create it, then attach to household
-        //        var addressId = MinistryPlatformService.CreateRecord(AppSetting("MyAddresses"), addressDictionary, token);
-        //        householdDictionary.Add("Address_ID", addressId);
-        //    }
-        //    MinistryPlatformService.UpdateRecord(AppSetting("MyHousehold"), householdDictionary, token);
-        //}
     }
 }

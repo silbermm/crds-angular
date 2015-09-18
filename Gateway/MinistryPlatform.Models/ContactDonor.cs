@@ -15,6 +15,7 @@ namespace MinistryPlatform.Models
         public int DonorId { get; set; }
         public string StatementFreq { get; set; }
         public string StatementType { get; set; }
+        public int StatementTypeId { get; set; }
         public string StatementMethod { get; set; }
         public DateTime SetupDate { get; set; }
         public string ProcessorId { get; set; }
@@ -49,6 +50,7 @@ namespace MinistryPlatform.Models
         public string EmailAddress { get; set; }
         public string DisplayName { get; set; }
         public PostalAddress Address { get; set; }
+        public int HouseholdId { get; set; }
 
         public bool HasAddress { get { return (Address != null); } }
     }
@@ -58,6 +60,8 @@ namespace MinistryPlatform.Models
         public string AccountNumber { get; set; }
         public string RoutingNumber { get; set; }
         public AccountType Type { get; set; }
+        public string ProcessorAccountId { get; set; }
+        public string ProcessorId { get; set; }
     }
 
     public enum AccountType
