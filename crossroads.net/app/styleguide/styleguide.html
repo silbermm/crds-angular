@@ -848,19 +848,22 @@
       </div>
       <!--/buttons-->
 
+      <!--Images-->
       <div class="panel panel-default" id="images">
         <div class="panel-heading">Images
         </div>
         <div class="panel-body">
           <p>We use IMGIX to serve our images. This service assures the correct image size is delivered to the browser based on the size of the container and viewport of the device used to view the page.</p>
-          <p>Images are hosted on Amazon S3 but served from IMGIX, use the <code>data-src="//crossroads-media.imgix.net/images/</code> along with class <code>imgix-fluid</code> to take advantage of this service. For background images, the <code>data-src</code> needs to exist on the contain with the background along with class <code>imgix-fluid-bg</code>.
+          <p>Images are hosted on Amazon S3 but served from IMGIX, use the <code>data-src="//crossroads-media.imgix.net/images/</code> along with class <code>imgix-fluid</code> to take advantage of this service.</p>
 
           <div class="row">
             <div class="col-sm-12">
               <img data-src="//crossroads-media.imgix.net/images/IanHenderson-GOmamaCSM.jpg" class="imgix-fluid img-responsive" >
             </div>
           </div>
+
           <br>
+
           <div class="row">
             <div class="col-xs-4">
               <h4>Rounded Edges with class <code>img-rounded</code></h4>
@@ -875,20 +878,24 @@
               <img data-src="//crossroads-media.imgix.net/images/styeguide-images-4.jpg" class="imgix-fluid img-responsive img-thumbnail" >
             </div>
           </div><!--/row-->
+
           <br>
+
           <div class="row">
             <div class="col-sm-12" >
-              <div class="imgix-fluid-bg img-background" data-src="//crossroads-media.imgix.net/images/thestory_image_copy1.jpg"
+              <p>For background images, the <code>data-src</code> needs to exist on the contain with the background along with class <code>imgix-fluid-bg</code>. Use class <code>img-background</code> to make the image cover the contain and center.</p>
+              <div class="imgix-fluid-bg img-background" data-src="//crossroads-media.imgix.net/images/thestory_image_copy1.jpg">
                 <h1 style="text-align: center; color: white; opacity: 0.2; font-size: 8vw; padding: 240px 15px;font-weight:bold;">BACKGROUND IMAGES</h1>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+
+        </div><!--/panel-body-->
+      </div><!--/#images-->
+
       <div>
         <a ng-click="styleguide.scrollTo('top')">Back to top <i class="fa fa-caret-up"></i></a>
       </div>
-      <!--/images-->
 
       <div class="panel panel-default" id="dropdowns">
         <div class="panel-heading">Dropdowns
