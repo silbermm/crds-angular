@@ -416,7 +416,7 @@ namespace MinistryPlatform.Translation.Services
 
         public List<Donation> GetDonations(IEnumerable<int> donorIds, string donationYear = null)
         {
-            var yearSearch = string.IsNullOrWhiteSpace(donationYear) ? string.Empty : string.Format("\"*/{0} *\"", donationYear);
+            var yearSearch = string.IsNullOrWhiteSpace(donationYear) ? string.Empty : string.Format("\"*/{0}*\"", donationYear);
             var donorIdSearch = string.Join(" or ", donorIds.Select(id => string.Format("\"{0}\"", id)));
 
             var search = string.Format("{0},,,,,,,,,,{1}", yearSearch, donorIdSearch);

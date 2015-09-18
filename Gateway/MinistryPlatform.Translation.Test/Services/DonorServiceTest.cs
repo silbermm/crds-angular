@@ -679,10 +679,10 @@ namespace MinistryPlatform.Translation.Test.Services
                 }
             };
 
-            var searchString = "\"*/2015 *\",,,,,,,,,,\"123\"";
+            var searchString = "\"*/2015*\",,,,,,,,,,\"123\" or \"456\"";
             _ministryPlatformService.Setup(mocked => mocked.GetRecordsDict(296, It.IsAny<string>(), searchString, It.IsAny<string>())).Returns(records);
             _ministryPlatformService.Setup(mocked => mocked.GetRecordsDict(90210, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(statuses);
-            var result = _fixture.GetDonations(123, "2015");
+            var result = _fixture.GetDonations(new [] {123, 456}, "2015");
 
             _ministryPlatformService.VerifyAll();
 
