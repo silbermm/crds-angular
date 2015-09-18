@@ -135,11 +135,11 @@ namespace crds_angular.Services
             return (donationsResponse);
         }
 
-        private void NormalizeDonations(IEnumerable<DonationDTO> donations, bool softCreditS)
+        private void NormalizeDonations(IEnumerable<DonationDTO> donations, bool softCredit)
         {
             foreach (var donation in donations)
             {
-                if (softCreditS)
+                if (!softCredit)
                 {
                     var charge = GetStripCharge(donation);
                     SetDonationSource(donation, charge);
@@ -147,11 +147,11 @@ namespace crds_angular.Services
 
                 ConfirmRefundCorrect(donation);
             }
-        } 
+        }
 
         private StripeCharge GetStripCharge(DonationDTO donation)
         {
-            if (!string.IsNullOrWhiteSpace(donation.Source.PaymentProcessorId))
+            if (string.IsNullOrWhiteSpace(donation.Source.PaymentProcessorId))
             {
                 return null;
             }
@@ -163,6 +163,7 @@ namespace crds_angular.Services
             }
 
             donation.Status = DonationStatus.Refunded;
+
             var refund = _paymentService.GetRefund(donation.Source.PaymentProcessorId);
             if (refund != null && refund.Charge != null)
             {

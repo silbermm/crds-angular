@@ -111,7 +111,7 @@ namespace crds_angular.App_Start
                     {
                         SourceType = System.Enum.IsDefined(typeof(PaymentType), src.paymentTypeId) ? (PaymentType)src.paymentTypeId : PaymentType.Other,
                         PaymentProcessorId = src.transactionCode,
-                        Name = ((src.softCreditDonorId != 0) ? src.donorDisplayName : ""),
+                        Name = ((src.softCreditDonorId != 0) ? src.donorDisplayName : null),
                     };
                 });
                 
