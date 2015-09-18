@@ -80,6 +80,7 @@
           }
 
           if (scope.showSignUp === 'thankyou') {
+            
             return $rootScope.MESSAGES.TripSignupOtherFamily.content;
           }
         }
