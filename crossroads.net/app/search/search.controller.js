@@ -1,6 +1,17 @@
-'use strict';
 (function () {
-  module.exports = function SearchCtrl(
+  'use strict';
+
+  module.exports = SearchController;
+  SearchController.$inject = ['$log',
+  '$state',
+  '$scope',
+  '$filter',
+  'ResponsiveImageService',
+  'Search',
+  'type',
+  'searchString'];
+
+  function SearchController(
     $log,
     $state,
     $scope,

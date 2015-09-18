@@ -6,4 +6,4 @@ require('./search-results.html');
 angular.module(constants.MODULES.SEARCH, ['crossroads.core', 'crossroads.common'])
   .config(require('./search.routes'))
   .factory('Search', require('./search.service'))
-  .controller('SearchCtrl', require('./search.controller'));
+  .controller('SearchController', require('./search.controller'));
