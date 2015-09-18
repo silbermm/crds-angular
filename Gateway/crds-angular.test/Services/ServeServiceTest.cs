@@ -20,7 +20,7 @@ namespace crds_angular.test.Services
         private Mock<IContactService> _contactService;
         private Mock<IOpportunityService> _opportunityService;
         private Mock<IAuthenticationService> _authenticationService;
-        private Mock<crds_angular.Services.Interfaces.IPersonService> _personService;
+        private Mock<IPersonService> _personService;
         private Mock<IServeService> _serveService;
         private Mock<IEventService> _eventService;
         private Mock<IParticipantService> _participantService;
