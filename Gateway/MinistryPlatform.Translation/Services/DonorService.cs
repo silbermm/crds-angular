@@ -524,7 +524,7 @@ namespace MinistryPlatform.Translation.Services
 
         private string YearSearch(string year)
         {
-            return string.IsNullOrWhiteSpace(year) ? string.Empty : string.Format("\"*/{0} *\"", year);
+            return string.IsNullOrWhiteSpace(year) ? string.Empty : string.Format("\"*/{0}*\"", year);
         }
 
         private string DonorIdSearch(IEnumerable<int> ids)
