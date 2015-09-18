@@ -93,8 +93,6 @@
             vm.soft_credit_donation_statement_total_amount = data.donation_statement_total_amount;
             vm.soft_credit_donation_view_ready = true;
             vm.soft_credit_donation_history = true;
-            vm.beginning_donation_date = data.beginning_donation_date;
-            vm.ending_donation_date = data.ending_donation_date;
           },
 
           function(/*error*/) {
