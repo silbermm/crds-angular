@@ -19,6 +19,7 @@
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'contentRouteType', /^\/.*/);
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'signupRouteType', /\/sign-up\/.*$/);
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'volunteerRouteType', /\/volunteer-sign-up\/.*$/);
+    crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'corkboardRouteType', /\/corkboard\/?.*$/);
 
     $stateProvider
       .state('noSideBar', {
@@ -375,7 +376,7 @@
         }
       })
       .state('corkboard', {
-        url: '/corkboard/',
+        url: '{link:corkboardRouteType}',
         resolve: {
           RedirectToSubSite: function($window, $location) {
             // Force browser to do a full reload to load corkboard's index.html
