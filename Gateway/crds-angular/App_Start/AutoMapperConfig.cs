@@ -109,7 +109,7 @@ namespace crds_angular.App_Start
                 {
                     dest.Source = new DonationSourceDTO
                     {
-                        SourceType = System.Enum.IsDefined(typeof(PaymentType), src.paymentTypeId) ? (PaymentType)src.paymentTypeId : PaymentType.Other,
+                        SourceType = ((src.softCreditDonorId != 0) ? PaymentType.SoftCredit : (System.Enum.IsDefined(typeof(PaymentType), src.paymentTypeId) ? (PaymentType)src.paymentTypeId : PaymentType.Other)),
                         PaymentProcessorId = src.transactionCode,
                         Name = ((src.softCreditDonorId != 0) ? src.donorDisplayName : null),
                     };

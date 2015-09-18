@@ -906,6 +906,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual(null, response.Donations[0].Source.AccountNumberLast4);
             Assert.AreEqual(null, response.Donations[0].Source.CardType);
             Assert.AreEqual("Citi", response.Donations[0].Source.Name);
+            Assert.AreEqual(PaymentType.SoftCredit, response.Donations[0].Source.SourceType);
 
             Assert.AreEqual(donations[1].donationDate, response.Donations[1].DonationDate);
             Assert.AreEqual(null, response.Donations[1].Source.AccountNumberLast4);

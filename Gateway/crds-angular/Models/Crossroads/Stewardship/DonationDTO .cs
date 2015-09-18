@@ -83,7 +83,9 @@ namespace crds_angular.Models.Crossroads.Stewardship
         [EnumMember(Value = "Other")]
         Other = 11,
         [EnumMember(Value = "Transfer")]
-        Transfer = 13
+        Transfer = 13,
+        [EnumMember(Value = "SoftCredit")]
+        SoftCredit = -1
     }
 
     public enum CreditCardType
