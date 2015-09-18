@@ -22,6 +22,7 @@ require('../lib/select.css');
   require('./community_groups_signup');
   require('./styleguide');
   require('./thedaily');
+  require('./explore');
   require('./gotrips');
   require('./community_groups_signup/group_signup_form.html');
   require('./my_serve');
