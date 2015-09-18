@@ -20,7 +20,7 @@
             </div>
         </td>
         <td class="text-right">
-            <div ng-class="{ 'dollar-amount-decline' : donation.status == 'Declined', 'dollar-amount' : donation.status != 'Declined'}"><span ng-if="donation.status == 'Refunded'">&#45;</span>{{distribution.amount / 100 | currency:'$'}}</div>
+            <div ng-class="{ 'dollar-amount-decline' : donation.status == 'Declined', 'dollar-amount' : donation.status != 'Declined'}">{{distribution.amount / 100 | currency:'$'}}</div>
             <div class="text-muted">{{donation.date | date:'M/d/yy'}}</div>
         </td>
     </tr>
