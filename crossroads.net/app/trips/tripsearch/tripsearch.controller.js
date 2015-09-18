@@ -34,7 +34,8 @@
         return false;
       }
 
-      vm.searchString = vm.query; Trip.Search.query({query: vm.query}).$promise.then(function(response) {
+      vm.searchString = vm.query;
+      Trip.Search.query({query: vm.query}).$promise.then(function(response) {
         vm.tripParticipants = response;
         if (vm.tripParticipants.length > 0) {
           vm.empty = false;

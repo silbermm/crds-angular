@@ -33,6 +33,7 @@ function htmlReplace() {
       commonjs: assets.common.js,
       profilejs: assets.profile.js,
       tripsjs: assets.trips.js,
+      searchjs: assets.search.js,
       mediajs: assets.media.js,
       givejs: assets.give.js,
       js: assets.main.js
@@ -46,6 +47,7 @@ function htmlReplace() {
       commonjs: assets.common.js,
       profilejs: assets.profile.js,
       tripsjs: assets.trips.js,
+      searchjs: assets.search.js,
       mediajs: assets.media.js,
       givejs: assets.give.js,
       js: assets.main.js
@@ -100,6 +102,7 @@ gulp.task('build-browser-sync', function() {
       commonjs: '/assets/common.js',
       profilejs: '/assets/profile.js',
       tripsjs: '/assets/trips.js',
+      searchjs: '/assets/search.js',
       mediajs: '/assets/media.js',
       givejs: '/assets/give.js',
       css: '/assets/main.css',
@@ -113,6 +116,7 @@ gulp.task('build-browser-sync', function() {
       commonjs: '/assets/common.js',
       profilejs: '/assets/profile.js',
       tripsjs: '/assets/trips.js',
+      searchjs: '/assets/search.js',
       mediajs: '/assets/media.js',
       givejs: '/assets/give.js',
       css: '/assets/main.css',
@@ -194,6 +198,7 @@ gulp.task('webpack-dev-server', ['icons-watch'], function(callback) {
       profilejs: '/assets/profile.js',
       tripsjs: '/assets/trips.js',
       mediajs: '/assets/media.js',
+      searchjs: '/assets/search.js',
       givejs: '/assets/give.js',
       css: '/assets/main.css',
       js: '/assets/main.js'
@@ -206,6 +211,7 @@ gulp.task('webpack-dev-server', ['icons-watch'], function(callback) {
       commonjs: '/assets/common.js',
       profilejs: '/assets/profile.js',
       tripsjs: '/assets/trips.js',
+      searchjs: '/assets/search.js',
       mediajs: '/assets/media.js',
       givejs: '/assets/give.js',
       css: '/assets/main.css',
@@ -248,7 +254,7 @@ gulp.task('webpack:build', ['icons', 'robots'], function(callback) {
 });
 
 gulp.task('webpack:build-dev', ['icons'], function(callback) {
-	
+
 	// run webpack
 	webpack(webPackDevConfig).run(function(err, stats) {
 		if(err) {
@@ -266,6 +272,7 @@ gulp.task('webpack:build-dev', ['icons'], function(callback) {
       profilejs: '/assets/profile.js',
       givejs: '/assets/give.js',
       tripsjs: '/assets/trips.js',
+      searchjs: '/assets/search.js',
       mediajs: '/assets/media.js',
       css: '/assets/main.css',
       js: '/assets/main.js'
@@ -278,6 +285,7 @@ gulp.task('webpack:build-dev', ['icons'], function(callback) {
       commonjs: '/assets/common.js',
       profilejs: '/assets/profile.js',
       tripsjs: '/assets/trips.js',
+      searchjs: '/assets/search.js',
       mediajs: '/assets/media.js',
       givejs: '/assets/give.js',
       css: '/assets/main.css',
@@ -287,8 +295,8 @@ gulp.task('webpack:build-dev', ['icons'], function(callback) {
 
 
 	});
- 
-  
+
+
 });
 
 // Watches for svg icon changes - run 'icons' once, then watch

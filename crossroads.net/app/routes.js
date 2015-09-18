@@ -286,12 +286,6 @@
         url: '/demo/go-trip-giving',
         templateUrl: 'trip_giving/give.html'
       })
-      .state('search', {
-        parent: 'noSideBar',
-        url: '/search-results',
-        controller: 'SearchCtrl as search',
-        templateUrl: 'search/search-results.html'
-      })
       .state('community-groups-signup', {
         parent: 'noSideBar',
         url: '{link:signupRouteType}',
