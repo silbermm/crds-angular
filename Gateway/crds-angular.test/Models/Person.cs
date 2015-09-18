@@ -27,7 +27,7 @@ namespace crds_angular.test.Models
         public void ShouldReturnHouseholdType()
         {
             var household = _person.GetHousehold();
-            Assert.That(household, Is.TypeOf<crds_angular.Models.MP.Household>());
+            Assert.That(household, Is.TypeOf<MinistryPlatform.Models.Household>());
             Assert.AreEqual(_person.CongregationId, household.Congregation_ID);
 
         }

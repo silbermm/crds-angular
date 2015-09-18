@@ -132,9 +132,9 @@ namespace crds_angular.Models
             };
         }
 
-        public MinistryPlatform.Models.Address GetAddress()
+        public crds_angular.Models.MP.Address GetAddress()
         {
-            return new MinistryPlatform.Models.Address
+            return new crds_angular.Models.MP.Address
             {
                 Address_ID = AddressId,
                 Address_Line_1 = AddressLine1,
