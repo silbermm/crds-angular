@@ -88,7 +88,6 @@
 
       if (vm.profileData.person.anniversaryDate !== undefined) {
         var mAdate = moment(new Date(vm.profileData.person.anniversaryDate));
-        //vm.profileData.person.anniversaryDate = mAdate.format('MM/DD/YYYY');
       }
     }
 
@@ -141,7 +140,7 @@
           return;
         }
 
-        if(vm.householdForm.$invalid){
+        if (vm.householdForm.$invalid) {
           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
           return;
         }
