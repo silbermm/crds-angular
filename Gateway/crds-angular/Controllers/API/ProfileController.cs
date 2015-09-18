@@ -30,21 +30,6 @@ namespace crds_angular.Controllers.API
             this._serveService = serveService;
         }
 
-        //[ResponseType(typeof (Household))]
-        //[Route("api/profile/household/{householdId}")]
-        //public IHttpActionResult GetHousehold(int householdId)
-        //{
-        //    return Authorized(token =>
-        //    {
-        //        var household = _personService.GetHousehold(householdId);
-        //        if (household == null)
-        //        {
-        //            return Unauthorized();
-        //        }
-        //        return this.Ok(household);
-        //    });
-        //}
-        
         [ResponseType(typeof (Person))]
         [Route("api/profile")]
         public IHttpActionResult GetProfile()

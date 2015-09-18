@@ -431,12 +431,6 @@ namespace crds_angular.Services
             return formResponseId;
         }
 
-        //private void UpdateProfile()
-        //{
-        //    var token = ApiLogin();
-        //    var x = _personService.SetProfile(token, person);
-        //}
-
         private IEnumerable<FormAnswer> FormatFormAnswers(TripApplicationDto applicationData)
         {
             var answers = new List<FormAnswer>();

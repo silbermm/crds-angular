@@ -37,8 +37,6 @@
     vm.destination = vm.campaign.nickname;
     vm.numberOfPages = 0;
     vm.pageHasErrors = true;
-    // vm.pageTitle = vm.campaign.nickname;
-    // renamed pageTitle to destination
     vm.privateInvite = $location.search()['invite'];
     vm.registrationNotOpen = true;
     vm.tripName = vm.campaign.name;

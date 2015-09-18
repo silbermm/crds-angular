@@ -202,9 +202,31 @@
     <Content Include="packages.config" />
     <Content Include="Unity.config">
       <SubType>Designer</SubType>
+    </Content> <Content Include="MinistryPlatform.config">
+      <SubType>Designer</SubType>
+      <TransformOnBuild>true</TransformOnBuild>
     </Content>
+    <None Include="MinistryPlatform.Debug.config">
+      <DependentUpon>MinistryPlatform.config</DependentUpon>
+      <IsTransformFile>True</IsTransformFile>
+    </None>
+    <None Include="MinistryPlatform.Demo.config">
+      <DependentUpon>MinistryPlatform.config</DependentUpon>
+      <IsTransformFile>True</IsTransformFile>
+    </None>
+    <None Include="MinistryPlatform.Integration.config">
+      <DependentUpon>MinistryPlatform.config</DependentUpon>
+      <IsTransformFile>True</IsTransformFile>
+    </None>
+    <None Include="MinistryPlatform.Jim.config">
+      <DependentUpon>MinistryPlatform.config</DependentUpon>
+      <IsTransformFile>True</IsTransformFile>
+    </None>
+    <None Include="MinistryPlatform.Release.config">
+      <DependentUpon>MinistryPlatform.config</DependentUpon>
+      <IsTransformFile>True</IsTransformFile>
+    </None>
     <Content Include="Properties\SlowCheetah\SlowCheetah.Transforms.targets" />
-    <Content Include="MinistryPlatform.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

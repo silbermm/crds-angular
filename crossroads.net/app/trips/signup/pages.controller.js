@@ -31,7 +31,6 @@
     vm.nolaRequired = nolaRequired;
     vm.signupService = TripsSignupService;
     vm.profileData = TripsSignupService.profileData;
-    //vm.signupService.profileData = vm.profileData;
     vm.underAge = underAge;
     vm.validation = Validation;
     vm.whyPlaceholder = '';
@@ -83,18 +82,8 @@
       // submit info and then show the thankyou page directive
       $log.debug(vm.signupService.page2);
 
-      // vm.profileData.person.$save().success(function(data) {
-      //   $log.debug('person save successful');
-      // }).error(function(response, statusCode) {
-      //   $log.debug('person save unsuccessful');
-      // });
-
       vm.profileData.person.$save(function() {
-        // $rootScope.$emit('notify', $rootScope.MESSAGES.profileUpdated);
         $log.debug('person save successful');
-        // if (vm.modalInstance !== undefined) {
-        //   vm.closeModal(true);
-        // }
       }, function() {
 
         $log.debug('person save unsuccessful');
