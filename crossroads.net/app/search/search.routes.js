@@ -11,7 +11,7 @@
     .state('search', {
       parent: 'noSideBar',
       url: '/search?type&q',
-      controller: 'SearchCtrl as search',
+      controller: 'SearchController as search',
       templateUrl: 'search/search-results.html',
       data: {
         type: ''
