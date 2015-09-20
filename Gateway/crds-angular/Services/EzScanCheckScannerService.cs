@@ -60,7 +60,7 @@ namespace crds_angular.Services
                 {
                     var contactDonor = CreateDonor(check);
                     //Always use the customer ID and source ID from the Donor Account, if it exists
-                    var charge = new StripeCharge();
+                    StripeCharge charge;
                     if (contactDonor.HasAccount)
                     {
                         charge = _paymentService.ChargeCustomer(contactDonor.ProcessorId, contactDonor.Account.ProcessorAccountId, (int) (check.Amount), contactDonor.DonorId);
