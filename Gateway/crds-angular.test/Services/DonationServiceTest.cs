@@ -861,33 +861,32 @@ namespace crds_angular.test.Services
                 }
             };
 
-            var household = new Household
+
+            var householdMembers = new List<HouseholdMember>
             {
-                HouseholdMembers = new List<HouseholdMember>
+                new HouseholdMember
                 {
-                    new HouseholdMember
-                    {
-                        DonorId = 678,
-                        StatementTypeId = 456
-                    },
-                    new HouseholdMember
-                    {
-                        DonorId = 123,
-                        StatementTypeId = 456
-                    },
-                    new HouseholdMember
-                    {
-                        DonorId = 444,
-                        StatementTypeId = 455
-                    },
-                    new HouseholdMember
-                    {
-                        DonorId = 345,
-                        StatementTypeId = 456
-                    }
+                    DonorId = 678,
+                    StatementTypeId = 456
+                },
+                new HouseholdMember
+                {
+                    DonorId = 123,
+                    StatementTypeId = 456
+                },
+                new HouseholdMember
+                {
+                    DonorId = 444,
+                    StatementTypeId = 455
+                },
+                new HouseholdMember
+                {
+                    DonorId = 345,
+                    StatementTypeId = 456
                 }
             };
-            _contactService.Setup(mocked => mocked.GetHouseholdById(901)).Returns(household);
+
+            _contactService.Setup(mocked => mocked.GetHouseholdFamilyMembers(901)).Returns(householdMembers);
             _mpDonorService.Setup(mocked => mocked.GetEmailViaDonorId(123)).Returns(donor);
             _mpDonorService.Setup(mocked => mocked.GetSoftCreditDonations(new[] { 123, 678, 345 }, "1999")).Returns(donations);
             var response = _fixture.GetDonationsForDonor(123, "1999", true);
