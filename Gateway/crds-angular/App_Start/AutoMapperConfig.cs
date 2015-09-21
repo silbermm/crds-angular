@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Web.Optimization;
 using AutoMapper;
 using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Opportunity;
@@ -77,9 +79,9 @@ namespace crds_angular.App_Start
             Mapper.CreateMap<Dictionary<string, object>, Deposit>()
                 .ForMember(dest => dest.DepositDateTime, opts => opts.MapFrom(src => src.ToDate("Deposit_Date", false)))
                 .ForMember(dest => dest.DepositName, opts => opts.MapFrom(src => src.ToString("Deposit_Name")))
-                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.ToString("Deposit_ID")))
-                .ForMember(dest => dest.DepositTotalAmount, opts => opts.MapFrom(src => src.ToString("Deposit_Total")))
-                .ForMember(dest => dest.BatchCount, opts => opts.MapFrom(src => src.ToString("Batch_Count")))
+                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.ToInt("Deposit_ID", false)))
+                .ForMember(dest => dest.DepositTotalAmount, opts => opts.MapFrom(src => src.ContainsKey("Deposit_Total") ? src["Deposit_Total"] as decimal? : 0))
+                .ForMember(dest => dest.BatchCount, opts => opts.MapFrom(src => src.ToInt("Batch_Count", false)))
                 .ForMember(dest => dest.Exported, opts => opts.MapFrom(src => src.ToString("Exported")))
                 .ForMember(dest => dest.ProcessorTransferId, opts => opts.MapFrom(src => src.ToString("Processor_Transfer_ID")));
 
@@ -92,7 +94,32 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.ContributionAmount, opts => opts.MapFrom(src => src.DonationAmount))
                 .ForMember(dest => dest.ReceivablesAccount, opts => opts.MapFrom(src => src.ReceivableAccount))
                 .ForMember(dest => dest.DistributionAmount, opts => opts.MapFrom(src => src.Amount))
+                .ForMember(dest => dest.CashAccount, opts => opts.MapFrom(src => (src.ScholarshipPaymentTypeId == src.PaymentTypeId ? src.ScholarshipExpenseAccount : src.CashAccount)))
                 .ForMember(dest => dest.DistributionReference, opts => opts.MapFrom(src => (src.ProccessFeeProgramId == src.ProgramId ? "Processor Fees " + src.DonationDate : "Contribution " + src.DonationDate  )));
+
+            Mapper.CreateMap<Donation, DonationDTO>()
+                .ForMember(dest => dest.Amount, opts => opts.MapFrom(src => src.donationAmt))
+                .ForMember(dest => dest.DonationDate, opts => opts.MapFrom(src => src.donationDate))
+                .ForMember(dest => dest.Status, opts => opts.MapFrom(src => src.donationStatus))
+                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.donationId))
+                .ForMember(dest => dest.Distributions, opts => opts.MapFrom(src => src.Distributions))
+                .ForMember(dest => dest.IncludeOnGivingHistory, opts => opts.MapFrom(src => src.IncludeOnGivingHistory))
+                .ForMember(dest => dest.IncludeOnPrintedStatement, opts => opts.MapFrom(src => src.IncludeOnPrintedStatement))
+                .AfterMap((src, dest) =>
+                {
+                    dest.Source = new DonationSourceDTO
+                    {
+                        SourceType = ((src.softCreditDonorId != 0) ? PaymentType.SoftCredit : (System.Enum.IsDefined(typeof(PaymentType), src.paymentTypeId) ? (PaymentType)src.paymentTypeId : PaymentType.Other)),
+                        PaymentProcessorId = src.transactionCode,
+                        Name = ((src.softCreditDonorId != 0) ? src.donorDisplayName : null),
+                    };
+                });
+                
+            Mapper.CreateMap<ContactDetails, EZScanDonorDetails>();
+
+            Mapper.CreateMap<DonationDistribution, DonationDistributionDTO>()
+                .ForMember(dest => dest.Amount, opts => opts.MapFrom(src => src.donationDistributionAmt))
+                .ForMember(dest => dest.ProgramName, opts => opts.MapFrom(src => src.donationDistributionProgram));
         }
     }
 }

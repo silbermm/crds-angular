@@ -1,4 +1,5 @@
 require('crds-core');
+require('../../../app/common/common.module');
 require('../../../app/app');
 
 describe('Check Batch Processor Tool', function() {
@@ -62,9 +63,10 @@ describe('Check Batch Processor Tool', function() {
   var GIVE_PROGRAM_TYPES = { Fuel: 999, NonFinancial: 888 };
 
   beforeEach(function() {
-    angular.mock.module('crossroads.give', function($provide) {
+    angular.mock.module('crossroads', function($provide) {
       $provide.constant('GIVE_ROLES', GIVE_ROLES);
       $provide.constant('GIVE_PROGRAM_TYPES', GIVE_PROGRAM_TYPES);
+      $provide.value('$state', {});
     });
   });
 
@@ -81,10 +83,12 @@ describe('Check Batch Processor Tool', function() {
   var $log;
   var $httpBackend;
   var MPTools;
+  var Programs;
 
-  beforeEach(inject(function(_$controller_, _$log_, _MPTools_, $injector) {
+  beforeEach(inject(function(_$controller_, _$log_, _MPTools_, _Programs_, $injector) {
     $controller = _$controller_;
     $log = _$log_;
+    Programs = _Programs_;
     MPTools = _MPTools_;
     $httpBackend = $injector.get('$httpBackend');
     $httpBackend.whenGET(/SiteConfig*/).respond('');
@@ -135,6 +139,7 @@ describe('Check Batch Processor Tool', function() {
 
     describe('Initial Load', function() {
       it('should get a list of check batches', function() {
+         
         $httpBackend.flush();
 
         expect(controller.batches.length).toBe(3);

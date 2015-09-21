@@ -15,12 +15,11 @@ namespace crds_angular.Models.Crossroads.Trip
         [JsonProperty(PropertyName = "formId")]
         public int FormId { get; set; }
 
-        [JsonProperty(PropertyName = "formName")]
-        public string FormName { get; set; }
+        [JsonProperty(PropertyName = "nickname")]
+        public string Nickname { get; set; }
 
         [JsonProperty(PropertyName = "ageLimit")]
         public int YoungestAgeAllowed { get; set; }
-
 
         [JsonProperty(PropertyName = "registrationStart")]
         public DateTime RegistrationStart { get; set; }

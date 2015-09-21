@@ -4,6 +4,7 @@ using MinistryPlatform.Models;
 using Moq;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -12,15 +13,18 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Hosting;
 using System.Web.Http.Results;
 using crds_angular.Exceptions;
+using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Models.Json;
+using DonationStatus = crds_angular.Models.Crossroads.Stewardship.DonationStatus;
 
 namespace crds_angular.test.controllers
 {
     class DonorControllerTest
     {
         private DonorController fixture;
-        private Mock<crds_angular.Services.Interfaces.IDonorService> donorService;
+        private Mock<IDonorService> donorService;
+        private Mock<IDonationService> _donationService;
         private Mock<IPaymentService> paymentService;
         private string authType;
         private string authToken;
@@ -42,9 +46,10 @@ namespace crds_angular.test.controllers
         [SetUp]
         public void SetUp()
         {
-            donorService = new Mock<crds_angular.Services.Interfaces.IDonorService>();
+            donorService = new Mock<IDonorService>();
+            _donationService = new Mock<IDonationService>();
             paymentService = new Mock<IPaymentService>();
-            fixture = new DonorController(donorService.Object,paymentService.Object);
+            fixture = new DonorController(donorService.Object,paymentService.Object, _donationService.Object);
 
             authType = "auth_type";
             authToken = "auth_token";
@@ -66,7 +71,7 @@ namespace crds_angular.test.controllers
             };
 
             donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(It.IsAny<string>())).Returns((ContactDonor)null);
-            donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(null, string.Empty, "tok_test", It.IsAny<DateTime>())).Returns(donor);
+            donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(null, string.Empty, string.Empty, "tok_test", It.IsAny<DateTime>())).Returns(donor);
             
             IHttpActionResult result = fixture.Post(createDonorDto);
 
@@ -177,7 +182,7 @@ namespace crds_angular.test.controllers
             };
 
             donorService.Setup(mocked => mocked.GetContactDonorForEmail(createDonorDto.email_address)).Returns(lookupDonor);
-            donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(It.Is<ContactDonor>(d => d == lookupDonor), createDonorDto.email_address, createDonorDto.stripe_token_id, It.IsAny<DateTime>())).Returns(createDonor);
+            donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(It.Is<ContactDonor>(d => d == lookupDonor), string.Empty, createDonorDto.email_address, createDonorDto.stripe_token_id, It.IsAny<DateTime>())).Returns(createDonor);
 
             IHttpActionResult result = fixture.Post(createDonorDto);
 
@@ -221,7 +226,7 @@ namespace crds_angular.test.controllers
             };
 
             donorService.Setup(mocked => mocked.GetContactDonorForEmail(createDonorDto.email_address)).Returns(lookupDonor);
-            donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(It.Is<ContactDonor>(d => d == lookupDonor), createDonorDto.email_address, createDonorDto.stripe_token_id, It.IsAny<DateTime>())).Returns(createDonor);
+            donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(It.Is<ContactDonor>(d => d == lookupDonor), string.Empty, createDonorDto.email_address, createDonorDto.stripe_token_id, It.IsAny<DateTime>())).Returns(createDonor);
 
             IHttpActionResult result = fixture.Post(createDonorDto);
 
@@ -289,7 +294,7 @@ namespace crds_angular.test.controllers
             var createException = new Exception("Danger, Will Robinson!");
 
             donorService.Setup(mocked => mocked.GetContactDonorForEmail(createDonorDto.email_address)).Returns(lookupDonor);
-            donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(It.Is<ContactDonor>(d => d == lookupDonor), createDonorDto.email_address, createDonorDto.stripe_token_id, It.IsAny<DateTime>())).Throws(createException);
+            donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(It.Is<ContactDonor>(d => d == lookupDonor), string.Empty, createDonorDto.email_address, createDonorDto.stripe_token_id, It.IsAny<DateTime>())).Throws(createException);
 
             try
             {
@@ -302,6 +307,94 @@ namespace crds_angular.test.controllers
             }
 
             donorService.VerifyAll();
+        }
+
+        [Test]
+        public void TestGetDonations()
+        {
+            var donations = new List<DonationDTO>
+            {
+                new DonationDTO
+                {
+                    BatchId = 123,
+                    Amount = 78900,
+                    DonationDate = DateTime.Now,
+                    Id = "456",
+                    Source = new DonationSourceDTO
+                    {
+                        SourceType = PaymentType.CreditCard,
+                        CardType = CreditCardType.AmericanExpress,
+                        Name = "ending in 1234",
+                        PaymentProcessorId = "tx_123",
+                    },
+                    Email = "me@here.com",
+                    ProgramId = "3",
+                    Status = DonationStatus.Succeeded
+                }
+            };
+            var dto = new DonationsDTO();
+            dto.Donations.AddRange(donations);
+
+            _donationService.Setup(mocked => mocked.GetDonationsForDonor(123, "1999", true)).Returns(dto);
+            var response = fixture.GetDonations(123, "1999", true);
+            _donationService.VerifyAll();
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<DonationsDTO>>(response);
+            var r = (OkNegotiatedContentResult<DonationsDTO>) response;
+            Assert.IsNotNull(r.Content);
+            Assert.AreSame(dto, r.Content);
+        }
+
+        [Test]
+        public void TestGetDonationsNoDonationsFound()
+        {
+            _donationService.Setup(mocked => mocked.GetDonationsForDonor(123, "1999", true)).Returns((DonationsDTO) null);
+            var response = fixture.GetDonations(123, "1999", true);
+            _donationService.VerifyAll();
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<RestHttpActionResult<ApiErrorDto>>(response);
+            var r = (RestHttpActionResult<ApiErrorDto>)response;
+            Assert.IsNotNull(r.Content);
+            Assert.AreEqual("No matching donations found", r.Content.Message);
+        }
+
+        [Test]
+        public void TestGetDonationYears()
+        {
+            var donationYears = new List<string>
+            {
+                "1999",
+                "2010",
+                "2038"
+            };
+            var dto = new DonationYearsDTO();
+            dto.AvailableDonationYears.AddRange(donationYears);
+
+            _donationService.Setup(mocked => mocked.GetDonationYearsForDonor(123)).Returns(dto);
+            var response = fixture.GetDonationYears(123);
+            _donationService.VerifyAll();
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<DonationYearsDTO>>(response);
+            var r = (OkNegotiatedContentResult<DonationYearsDTO>)response;
+            Assert.IsNotNull(r.Content);
+            Assert.AreSame(dto, r.Content);
+        }
+
+        [Test]
+        public void TestGetDonationYearsNoYearsFound()
+        {
+            _donationService.Setup(mocked => mocked.GetDonationYearsForDonor(123)).Returns((DonationYearsDTO)null);
+            var response = fixture.GetDonationYears(123);
+            _donationService.VerifyAll();
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<RestHttpActionResult<ApiErrorDto>>(response);
+            var r = (RestHttpActionResult<ApiErrorDto>)response;
+            Assert.IsNotNull(r.Content);
+            Assert.AreEqual("No donation years found", r.Content.Message);
         }
 
         [Test]
@@ -504,7 +597,7 @@ namespace crds_angular.test.controllers
             var stripeException = new PaymentProcessorException(HttpStatusCode.PaymentRequired, "auxMessage", "type", "message", "code", "decline", "param");
             donorService.Setup(mocked => mocked.GetContactDonorForEmail("me@here.com")).Returns(contactDonor);
             donorService.Setup(
-                (mocked => mocked.CreateOrUpdateContactDonor(contactDonor, "me@here.com", "456", It.IsAny<DateTime>())))
+                (mocked => mocked.CreateOrUpdateContactDonor(contactDonor, string.Empty, "me@here.com", "456", It.IsAny<DateTime>())))
                 .Throws(stripeException);
 
             var response = fixture.Post(dto);
@@ -541,7 +634,7 @@ namespace crds_angular.test.controllers
             var stripeException = new PaymentProcessorException(HttpStatusCode.PaymentRequired, "auxMessage", "type", "message", "code", "decline", "param");
             donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(It.IsAny<string>())).Returns(contactDonor);
             donorService.Setup(
-                (mocked => mocked.CreateOrUpdateContactDonor(contactDonor, String.Empty, "456", It.IsAny<DateTime>())))
+                (mocked => mocked.CreateOrUpdateContactDonor(contactDonor, string.Empty, String.Empty, "456", It.IsAny<DateTime>())))
                 .Throws(stripeException);
 
             var response = fixture.Post(dto);

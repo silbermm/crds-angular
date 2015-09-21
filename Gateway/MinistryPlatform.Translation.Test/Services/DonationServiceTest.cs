@@ -153,7 +153,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Deposit_Date", DateTime.Parse("2/12/2010")},
                     {"Deposit_Name", "Test Deposit Name 1"},
                     {"Deposit_ID", 456},
-                    {"Deposit_Total", "7829.00"},
+                    {"Deposit_Total", 7829.00},
                     {"Batch_Count", 1},
                     {"Exported", false},
                     {"Processor_Transfer_ID", "1233"},
@@ -163,7 +163,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Deposit_Date", DateTime.Parse("2/12/2015")},
                     {"Deposit_Name", "Test Deposit Name 2"},
                     {"Deposit_ID", 777},
-                    {"Deposit_Total", "2.00"},
+                    {"Deposit_Total", 2.00},
                     {"Batch_Count", 11},
                     {"Exported", false},
                     {"Processor_Transfer_ID", "122233"},
@@ -366,6 +366,8 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(3, result.Count);
             Assert.AreEqual(new DateTime(2015, 3, 28, 8, 30, 0), result[0].DepositDate);
             Assert.AreEqual(15, result[0].ProgramId);
+            Assert.AreEqual(8, result[0].PaymentTypeId);
+            Assert.AreEqual("19998-900-11", result[0].ScholarshipExpenseAccount);
         }
 
         private List<Dictionary<string, object>> MockGPExport()
@@ -375,53 +377,59 @@ namespace MinistryPlatform.Translation.Test.Services
                 new Dictionary<string, object>
                 {
                     {"dp_RecordID", 100},
-                    {"Document Type", "SALE"},
-                    {"Donation ID", "10002"},
-                    {"Batch Name", "Test Batch"},
-                    {"Donation Date",new DateTime(2015, 3, 28, 8, 30, 0)},
-                    {"Deposit Date", new DateTime(2015, 3, 28, 8, 30, 0)},
-                    {"Customer ID", "CONTRIBUTI001"},
-                    {"Donation Amount", "200.00"},
-                    {"Checkbook ID", "PNC001"},
-                    {"Cash Account", "91213-031-20"},
-                    {"Receivable Account", "90013-031-21"},
-                    {"Distribution Account", "90001-031-22"},
+                    {"Document_Type", "SALE"},
+                    {"Donation_ID", "10002"},
+                    {"Batch_Name", "Test Batch"},
+                    {"Donation_Date",new DateTime(2015, 3, 28, 8, 30, 0)},
+                    {"Deposit_Date", new DateTime(2015, 3, 28, 8, 30, 0)},
+                    {"Customer_ID", "CONTRIBUTI001"},
+                    {"Donation_Amount", "200.00"},
+                    {"Checkbook_ID", "PNC001"},
+                    {"Cash_Account", "91213-031-20"},
+                    {"Receivable_Account", "90013-031-21"},
+                    {"Distribution_Account", "90001-031-22"},
                     {"Amount", "200.00"},
-                    {"Program ID", "15"}
+                    {"Program_ID", "15"},
+                    {"Payment_Type_ID", 8},
+                    {"Scholarship_Expense_Account", "19998-900-11"}
                 },
                 new Dictionary<string, object>
                 {
                     {"dp_RecordID", 200},
-                    {"Document Type", "SALE"},
-                    {"Donation ID", "10002"},
-                    {"Batch Name", "Test Batch"},
-                    {"Donation Date", new DateTime(2015, 3, 28, 8, 30, 0)},
-                    {"Deposit Date", new DateTime(2015, 3, 28, 8, 30, 0)},
-                    {"Customer ID", "CONTRIBUTI001"},
-                    {"Donation Amount", "200.00"},
-                    {"Checkbook ID", "PNC001"},
-                    {"Cash Account", "91213-031-20"},
-                    {"Receivable Account", "90013-031-21"},
-                    {"Distribution Account", "90001-031-22"},
+                    {"Document_Type", "SALE"},
+                    {"Donation_ID", "10002"},
+                    {"Batch_Name", "Test Batch"},
+                    {"Donation_Date", new DateTime(2015, 3, 28, 8, 30, 0)},
+                    {"Deposit_Date", new DateTime(2015, 3, 28, 8, 30, 0)},
+                    {"Customer_ID", "CONTRIBUTI001"},
+                    {"Donation_Amount", "200.00"},
+                    {"Checkbook_ID", "PNC001"},
+                    {"Cash_Account", "91213-031-20"},
+                    {"Receivable_Account", "90013-031-21"},
+                    {"Distribution_Account", "90001-031-22"},
                     {"Amount", "15.00"},
-                    {"Program ID", "127"}
+                    {"Program_ID", "127"},
+                    {"Payment_Type_ID", 7},
+                    {"Scholarship_Expense_Account", "19948-900-11"}
                 },
                 new Dictionary<string, object>
                 {
                     {"dp_RecordID", 300},
-                    {"Document Type", "SALE"},
-                    {"Donation ID", "10003"},
-                    {"Batch Name", "Test Batch 1"},
-                    {"Donation Date", new DateTime(2015, 3, 10, 8, 30, 0)},
-                    {"Deposit Date", new DateTime(2015, 3, 10, 8, 30, 0)},
-                    {"Customer ID", "CONTRIBUTI001"},
-                    {"Donation Amount", "300.00"},
-                    {"Checkbook ID", "PNC001"},
-                    {"Cash Account", "91213-031-20"},
-                    {"Receivable Account", "90013-031-21"},
-                    {"Distribution Account", "90001-031-22"},
+                    {"Document_Type", "SALE"},
+                    {"Donation_ID", "10003"},
+                    {"Batch_Name", "Test Batch 1"},
+                    {"Donation_Date", new DateTime(2015, 3, 10, 8, 30, 0)},
+                    {"Deposit_Date", new DateTime(2015, 3, 10, 8, 30, 0)},
+                    {"Customer_ID", "CONTRIBUTI001"},
+                    {"Donation_Amount", "300.00"},
+                    {"Checkbook_ID", "PNC001"},
+                    {"Cash_Account", "91213-031-20"},
+                    {"Receivable_Account", "90013-031-21"},
+                    {"Distribution_Account", "90001-031-22"},
                     {"Amount", "300.00"},
-                    {"Program ID", "150"}
+                    {"Program_ID", "150"},
+                    {"Payment_Type_ID", 2},
+                    {"Scholarship_Expense_Account", "49998-900-11"}
                 },
             };
         }

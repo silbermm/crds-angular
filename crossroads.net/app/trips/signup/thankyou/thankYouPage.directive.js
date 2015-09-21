@@ -3,9 +3,9 @@
 
   module.exports = ThankYouPageDirective;
 
-  ThankYouPageDirective.$inject = [];
+  ThankYouPageDirective.$inject = ['$stateParams', 'Trip', 'TripsSignupService'];
 
-  function ThankYouPageDirective() {
+  function ThankYouPageDirective($stateParams, Trip, TripsSignupService) {
     return {
       restrict: 'E',
       replace: true,
@@ -17,7 +17,28 @@
       templateUrl: 'thankyou/thankYou.html',
       controller: 'PagesController as pages',
       bindToController: true,
+      link: link,
     };
 
+    function link(scope, el, attr, vm) {
+      vm.loading = true;
+      vm.thankYou = TripsSignupService.thankYouMessage;
+      activate();
+
+      function activate() {
+        Trip.Family.query({pledgeCampaignId: $stateParams.campaignId}, function(data) {
+          vm.thankYouFamilyMembers = data;
+          _.each(vm.thankYouFamilyMembers, function(f) {
+            if (f.contactId === TripsSignupService.contactId) {
+              f.signedUp = true;
+              f.signedUpDate = new Date();
+            }
+          });
+
+          vm.loading = false;
+        });
+      }
+
+    }
   }
 })();

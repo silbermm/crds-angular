@@ -86,7 +86,8 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Response_Date", DateTime.Today},
                 {"Contact_ID", _mockForm.ContactId},
                 {"Opportunity_ID", _mockForm.OpportunityId},
-                {"Opportunity_Response", _mockForm.OpportunityResponseId}
+                {"Opportunity_Response", _mockForm.OpportunityResponseId}, 
+                {"Pledge_Campaign_ID", null}
             };
 
             var expectedAnswerDict1 = new Dictionary<string, object>

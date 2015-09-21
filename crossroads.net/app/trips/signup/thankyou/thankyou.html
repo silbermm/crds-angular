@@ -2,11 +2,9 @@
 <div>
   
   <!--THIS CONTENT SHOULD BE PER TRIP (TRIP SPECIFIC)-->
-  <p> Go Trip Signup confirmation text goes here Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu luctus sem, nec porta neque. Sed malesuada, enim vel tempus convallis, purus dui feugiat erat, sed consectetur magna felis aliquam elit. Quisque libero libero, ornare quis tincidunt sed, euismod quis enim. Fusce placerat justo sed dolor cursus, et gravida erat dictum. Aliquam semper nisi at odio fermentum dignissim. Pellentesque nec ligula elementum, faucibus ex eu, commodo mauris. Aenean eleifend sed metus ut mollis. Quisque ut malesuada justo, in interdum augue.</p>
- <p class="push-top">
-  <strong>Would you like to sign up other members of your household?</strong>
- </p>
-  
-  <family-select> </family-select>
+ <span ng-bind-html="pages.thankYou | html"> </span>
+ 
+  <preloader ng-show='pages.loading' full-screen='false'> </preloader>
+  <family-select family-members='pages.thankYouFamilyMembers' show-sign-up='thankyou' ></family-select>
 
 </div><!--/row-->

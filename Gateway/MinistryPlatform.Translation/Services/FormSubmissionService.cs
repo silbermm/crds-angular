@@ -15,6 +15,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _formResponsePageId = AppSettings("FormResponsePageId");
         private readonly int _formAnswerPageId = AppSettings("FormAnswerPageId");
         private readonly int _formFieldCustomPage = AppSettings("AllFormFieldsView");
+        private readonly int _formResponseGoTripView = AppSettings("GoTripFamilySignup");
 
         private readonly IMinistryPlatformService _ministryPlatformService;
         private IDbConnection _dbConnection;
@@ -152,8 +153,7 @@ namespace MinistryPlatform.Translation.Services
         public int SubmitFormResponse(FormResponse form)
         {
             var token = ApiLogin();
-            var responseId = CreateFormResponse(form.FormId, form.ContactId, form.OpportunityId,
-                form.OpportunityResponseId, token);
+            var responseId = CreateFormResponse(form, token);
             foreach (var answer in form.FormAnswers)
             {
                 answer.FormResponseId = responseId;
@@ -162,18 +162,30 @@ namespace MinistryPlatform.Translation.Services
             return responseId;
         }
 
-        private int CreateFormResponse(int formId, int contactId, int opportunityId, int opportunityResponseId, string token)
+        public DateTime? GetTripFormResponseByContactId(int contactId, int pledgeId)
         {
-            var formResponse = new Dictionary<string, object>
+            var searchString = string.Format(",{0},,{1}", contactId, pledgeId);
+            var signedUp = _ministryPlatformService.GetPageViewRecords(_formResponseGoTripView, ApiLogin(), searchString);
+            if (signedUp.Count < 1)
             {
-                {"Form_ID", formId},
+                return null;
+            }
+            return DateTime.Parse(signedUp.First()["Response_Date"].ToString());
+        }
+
+        private int CreateFormResponse(FormResponse formResponse, string token)
+        {
+            var record = new Dictionary<string, object>
+            {
+                {"Form_ID", formResponse.FormId},
                 {"Response_Date", DateTime.Today},
-                {"Contact_ID", contactId},
-                {"Opportunity_ID", opportunityId},
-                {"Opportunity_Response", opportunityResponseId}
+                {"Contact_ID", formResponse.ContactId},
+                {"Opportunity_ID",  formResponse.OpportunityId },
+                {"Opportunity_Response", formResponse.OpportunityResponseId},
+                {"Pledge_Campaign_ID", formResponse.PledgeCampaignId}
             };
 
-            var responseId = _ministryPlatformService.CreateRecord(_formResponsePageId, formResponse, token, true);
+            var responseId = _ministryPlatformService.CreateRecord(_formResponsePageId, record, token, true);
             return responseId;
         }
 
@@ -187,7 +199,14 @@ namespace MinistryPlatform.Translation.Services
                 {"Opportunity_Response", answer.OpportunityResponseId}
             };
 
-            _ministryPlatformService.CreateRecord(_formAnswerPageId, formAnswer, token, true);
+            try
+            {
+                _ministryPlatformService.CreateRecord(_formAnswerPageId, formAnswer, token, true);
+            }
+            catch (Exception exception)
+            {
+                throw new ApplicationException(string.Format("CreateFormAnswer failed.  Field Id: {0}", answer.FieldId), exception);
+            }
         }
     }
 }

@@ -134,7 +134,7 @@
           $stateParams: '$stateParams',
           $state: '$state',
           ItemProperty: function () {
-            return 'messages';
+            return 'message';
           },
           SingleMedia: function (Media, $stateParams, $state) {
             var item = Media.Messages({id: $stateParams.id}).get().$promise;
@@ -143,7 +143,7 @@
 
             // Doing this here instead of controller to prevent flicker of unbound page
             function redirectIfItemNotFound(data) {
-              var media = data.messages[0];
+              var media = data.message;
               if (!media) {
                 $state.go('content', {link: '/page-not-found/'}, {location: 'replace'});
               }
@@ -151,7 +151,7 @@
           },
           Meta: function (SingleMedia, $state) {
             $state.next.data.meta = {
-             title: SingleMedia.messages[0].title,
+             title: SingleMedia.message.title,
              description: ''
             };
             return $state.next.data.meta;
@@ -160,7 +160,7 @@
             return 'series';
           },
           ParentMedia: function (Media, SingleMedia) {
-            var message = SingleMedia.messages[0];
+            var message = SingleMedia.message;
             if (!message) {
               return null;
             }
@@ -169,7 +169,7 @@
             return parent;
           },
           ImageURL: function (SingleMedia) {
-            return _.get(SingleMedia.messages[0], 'video.still.filename');
+            return _.get(SingleMedia.message, 'video.still.filename');
           }
         }
       })
@@ -186,8 +186,8 @@
           $rootScope: '$rootScope',
           $stateParams: '$stateParams',
           $state: '$state',
-          ItemProperty: function () {
-            return 'media';
+          ItemProperty: function (SingleMedia) {
+            return Object.keys(SingleMedia)[0];
           },
           SingleMedia: function (Media, $stateParams, $state) {
             var item = Media.Medias({id: $stateParams.id}).get().$promise;
@@ -196,7 +196,7 @@
 
             // Doing this here instead of controller to prevent flicker of unbound page
             function redirectIfItemNotFound(data) {
-              var media = data.media[0];
+              var media = data[Object.keys(data)[0]];
               if (!media) {
                 $state.go('content', {link: '/page-not-found/'}, {location: 'replace'});
               }
@@ -204,7 +204,7 @@
           },
           Meta: function (SingleMedia, $state) {
             $state.next.data.meta = {
-             title: SingleMedia.media[0].title,
+             title: SingleMedia[Object.keys(SingleMedia)[0]].title,
              description: ''
             };
             return $state.next.data.meta;
@@ -216,7 +216,7 @@
             return null;
           },
           ImageURL: function (SingleMedia) {
-            return _.get(SingleMedia.media[0], 'still.filename');
+            return _.get(SingleMedia[Object.keys(SingleMedia)[0]], 'still.filename');
           }
         }
       })

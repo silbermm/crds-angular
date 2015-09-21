@@ -2,12 +2,12 @@
   'use strict';
   module.exports = function MyProfileCtrl($scope, $log, $location, $anchorScroll, $modal) {
     var _this = this;
-    
+
     //METHODS
     _this.openModal = openModal;
-    
+
     //VARIABLES
-    _this.profileImage = "//crossroads-media.s3.amazonaws.com/images/avatar.svg";
+    _this.profileImage = "//crossroads-media.imgix.net/images/avatar.svg";
     _this.isCollapsed = true;
     _this.phoneToggle = true;
 

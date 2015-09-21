@@ -1,0 +1,205 @@
+<section ng-show="profile.viewReady" class="email-modal">
+  <ng-form role="form" name="profile.pform" novalidate>
+    <p class="push-bottom">Information shared here is kept secure and private. We will not share or sell your information.</p>
+
+    <div class="row">
+
+      <profile-picture ng-if='!profile.forTrips'> </profile-picture>
+
+      <div class="form-group col-sm-6" ng-class="{'has-error': profile.validation.showErrors(profile.pform, 'firstName')}">
+        <label for="firstname" class="required">First Name</label>
+        <input type="text" class="form-control" id="first-name" name="firstName" placeholder="Enter first name" ng-model="profile.profileData.person.firstName" required>
+        <ng-messages for="profile.pform.firstName.$error" ng-if="profile.validation.showErrors(profile.pform, 'firstName')">
+          <span ng-message="required">
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+          </span>
+        </ng-messages>
+      </div>
+
+      <div class="form-group col-sm-6">
+        <label for="middlename">Middle Name</label>
+        <input type="text" class="form-control" id="middle-name" placeholder="Enter middle name" ng-model="profile.profileData.person.middleName">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-sm-6" ng-class="{'has-error': profile.validation.showErrors(profile.pform, 'lastName')}">
+        <label for="lastname" class="required">Last Name</label>
+        <input type="text" class="form-control" id="last-name" name="lastName" placeholder="Enter last name" ng-model="profile.profileData.person.lastName" required>
+        <ng-messages for="profile.pform.lastName.$error" ng-if="profile.validation.showErrors(profile.pform, 'lastName')">
+          <span ng-message="required">
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+          </span>
+        </ng-messages>
+      </div>
+
+      <div class="form-group col-sm-6">
+        <label for="maidenname">Maiden Name</label>
+        <input type="text" class="form-control" id="maidenname" placeholder="Enter maiden name" ng-model='profile.profileData.person.maidenName'>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-sm-6">
+        <label for="nickname">Preferred Name <small class="text-muted">(Example: Chris instead of Christopher)</small> </label>
+        <input type="text" class="form-control" id="nickname" placeholder="Enter nick name" ng-model="profile.profileData.person.nickName">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-sm-6"  ng-class="{'has-error': profile.validation.showErrors(profile.pform, 'email')}" >
+        <label for="email" class="required">Email</label>
+        <input type="email"
+               class="form-control"
+               id="email"
+               name="email"
+               placeholder="Enter email address"
+               ng-model="profile.profileData.person.emailAddress"
+               required
+               unique-email />
+        <ng-messages for="profile.pform.email.$error" ng-if="profile.validation.showErrors(profile.pform, 'email')">
+          <span ng-message="required">
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+          </span>
+          <span ng-message="unique">
+            <span ng-bind-html="$root.MESSAGES.emailInUse.content | html"></span>
+          </span>
+          <span ng-message="email">
+            <span ng-bind-html="$root.MESSAGES.invalidEmail.content | html"></span>
+          </span>
+        </ng-messages>
+      </div>
+
+      <div class="form-group col-sm-6" ng-if="profile.allowPasswordChange">
+        <label for="password">Change Password</label>
+        <div class="input-group">
+          <input type="password" class="form-control" id="password" name="password" ng-model="fields.password" value="testpassword" />
+          <!--<input type="text" class="form-control" id="password-clear" name="password" ng-model="fields.password" ng-if="showPassword" value="testpassword" />-->
+          <span class="input-group-addon">
+        <label>
+          <input type="checkbox" ng-click="showPassword = !showPassword"> Show
+        </label>
+        </span>
+          </div>
+          <!-- /input-group -->
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-sm-6" ng-class="{'has-error': profile.validation.showErrors(profile.pform, 'birthdate')}" >
+        <label class="required">Birth Date</label>
+        <input type="text"
+               class="form-control"
+               name="birthdate"
+               id="birthdate"
+               placeholder="mm/dd/yyyy"
+               ng-required="true"
+               ng-model='profile.profileData.person.dateOfBirth'
+               validate-date>
+        <ng-messages for="profile.pform.birthdate.$error" ng-if="profile.validation.showErrors(profile.pform, 'birthdate')">
+          <ng-messages-include src="on-submit-messages"></ng-messages-include>
+          <ng-messages-include src="on-pause-messages"></ng-messages-include>
+        </ng-messages>
+      </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-sm-6">
+            <label for="marital_status">Marital Status</label>
+            <select class="form-control col-sm-12" ng-model="profile.profileData.person.maritalStatusId" ng-options="status.dp_RecordID as status.dp_RecordName for status in profile.maritalStatuses">
+            </select>
+        </div>
+
+        <div class="form-group col-sm-6" ng-class="{'has-error':  profile.validation.showErrors(profile.pform, 'gender')}" >
+            <label class="block required">Gender</label>
+            <label class="radio-inline" ng-repeat="gender in profile.genders">
+                <input type="radio"
+                  id="gender-{{ gender.dp_RecordName}}"
+                  name="gender"
+                  ng-value="gender.dp_RecordID"
+                  ng-model="profile.profileData.person.genderId"
+                  required > {{ gender.dp_RecordName }}
+            </label>
+           <ng-messages for="profile.pform.gender.$error" ng-if="profile.validation.showErrors(profile.pform, 'gender')">
+            <ng-messages-include src="on-submit-messages"></ng-messages-include>
+            <ng-messages-include src="on-pause-messages"></ng-messages-include>
+          </ng-messages>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-sm-6">
+            <label for="employer">Employer</label>
+            <input type="text" class="form-control" id="employer" placeholder="Enter employer" ng-model='profile.profileData.person.employerName'>
+        </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-sm-6" ng-class="{'has-error':  profile.validation.showErrors(profile.pform, 'anniversary-date')}" >
+        <label class="control-label">When did you start attending Crossroads?</label>
+        </span>
+        <input type="text"
+               class="form-control"
+               id="anniversary-date"
+               name="anniversary-date"
+               placeholder="mm/yyyy"
+               validate-date='MM/YYYY'
+               ng-model-options="{updateOn:'blur'}"
+               ng-model="profile.profileData.person.anniversaryDate"  >
+        <ng-messages for="profile.pform['anniversary-date'].$error" ng-if="profile.validation.showErrors(profile.pform, 'anniversary-date')">
+          <ng-messages-include src="on-pause-messages"></ng-messages-include>
+        </ng-messages>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-sm-6" ng-class="{'has-error':  profile.validation.showErrors(profile.pform, 'mobile-phone') && profile.requireMobilePhone }" >
+        <label for="mobile-phone" ng-class="{'required': profile.requireMobilePhone}">Mobile Phone</label>
+          <div class="small inline bold">
+            <span ng-show="phoneToggle" class="link-styling" ng-click="phoneToggle = !phoneToggle">Don't have a mobile phone?</span>
+            <span ng-show="!phoneToggle" class="text-muted">Edit your household phone <a class="pointer" ng-click="profile.householdPhoneFocus()">here</a>.</span>
+          </div>
+          <input type="text"
+                 class="form-control"
+                 name="mobile-phone"
+                 id='mobile-phone'
+                 placeholder="Enter mobile phone"
+                 ng-model="profile.profileData.person.mobilePhone"
+                 ng-required='profile.requireMobilePhone'
+                 ng-pattern='profile.phoneFormat' >
+          <ng-messages for="profile.pform['mobile-phone'].$error" ng-if="profile.validation.showErrors(profile.pform, 'mobile-phone') && profile.requireMobilePhone" >
+            <span ng-message='required'>
+              <span ng-bind-html='$root.MESSAGES.fieldCanNotBeBlank.content | html'></span>
+            </span>
+            <span ng-message="pattern"><span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span></span>
+          </ng-messages>
+      </div>
+
+      <div class="form-group col-sm-6" >
+        <label for="provider">Service Provider</label>
+        <select name="service-provider"
+                class="form-control col-sm-12"
+                id="service-provider"
+                ng-model="profile.profileData.person.mobileCarrierId"
+                ng-options="providers.dp_RecordID as providers.dp_RecordName for providers in profile.serviceProviders" >
+            <option value=""> -- Choose One -- </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <profile-picture ng-if='profile.forTrips' />
+    </div>
+
+
+    <div class="row" ng-if="profile.profileData.person.householdId!==undefined">
+      <profile-household household-info='profile.profileData.person' household-form='profile.householdForm' />
+    </div>
+    <!--/row-->
+
+    <button id="save-personal" class="btn btn-primary" data-style="expand-left" ng-class='profile.buttonCss'  ng-click='profile.savePersonal()' >
+      {{profile.buttonText}}
+    </button>
+  </ng-form>
+
+</section>

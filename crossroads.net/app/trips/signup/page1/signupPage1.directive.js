@@ -11,13 +11,18 @@
       replace: true,
       scope: {
         currentPage: '=',
-        pageTitle: '=',
+        destination: '=',
         numberOfPages: '=',
       },
       controller: 'PagesController as pages',
       bindToController: true,
       templateUrl: 'page1/signupPage1.html',
+      link: link
     };
+
+    function link(scope, el, attr, vm) {
+
+    }
 
   }
 })();

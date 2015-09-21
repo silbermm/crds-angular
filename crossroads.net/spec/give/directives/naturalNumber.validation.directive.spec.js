@@ -1,4 +1,5 @@
 require('crds-core');
+require('../../../app/common/common.module');
 require('../../../app/app');
 
 describe('Natural Number Validation Directive', function() {
@@ -7,6 +8,10 @@ describe('Natural Number Validation Directive', function() {
   beforeEach(function() {
     angular.mock.module('crossroads');
   });
+
+  beforeEach(angular.mock.module(function($provide) {
+    $provide.value('$state', {});
+  }));
 
   beforeEach(inject(function($injector,_$compile_, _$rootScope_) {
     var $compile = _$compile_;

@@ -1,9 +1,10 @@
 require('crds-core');
-require('../../../app/app');
+require('../../../app/trips/trips.module');
+
 (function() {
   'use strict';
-   describe('MyTripsController', function() {
-   
+  describe('MyTripsController', function() {
+
     var myTrips = getMyTrips();
 
     beforeEach(angular.mock.module('crossroads.trips'));

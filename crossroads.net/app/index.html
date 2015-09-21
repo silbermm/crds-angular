@@ -14,6 +14,7 @@
       }
   </style>
   <title ng-bind="meta.title">Crossroads</title>
+  <meta name="fragment" content="!">
   <meta name="description" content="{{meta.description}}">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <link rel="apple-touch-icon" sizes="57x57" href="http://crossroads-media.s3.amazonaws.com/images/favicon/apple-touch-icon-57x57.png">
@@ -93,9 +94,6 @@
   <!-- build:corecss -->
   <link href="/assets/core.css" rel="stylesheet" />
   <!-- endbuild -->
-  <!-- build:css -->
-  <link href="/assets/main.css" rel="stylesheet" />
-  <!-- endbuild -->
 </head>
 
 <body ng-controller="coreController as app" ng-class="app.asideState.position">
@@ -108,11 +106,23 @@
 <!-- build:corejs -->
 <script src="/assets/core.js"></script>
 <!-- endbuild -->
+<!-- build:commonjs -->
+<script src="/assets/common.js"></script>
+<!-- endbuild -->
+<!-- build:profilejs -->
+<script src="/assets/profile.js"></script>
+<!-- endbuild -->
 <!-- build:tripsjs -->
 <script src="/assets/trips.js"></script>
 <!-- endbuild -->
+<!-- build:givejs -->
+<script src="/assets/give.js"></script>
+<!-- endbuild -->
 <!-- build:mediajs -->
 <script src="/assets/media.js"></script>
+<!-- endbuild -->
+<!-- build:searchjs -->
+<script src="/assets/search.js"></script>
 <!-- endbuild -->
 <!-- build:js -->
 <script src="/assets/main.js"></script>

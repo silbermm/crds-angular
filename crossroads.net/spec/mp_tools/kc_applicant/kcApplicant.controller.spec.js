@@ -13,6 +13,7 @@ describe('KC Applicant Tool', function(){
   beforeEach(angular.mock.module(function($provide){
     $provide.value('CmsInfo', mockPageInfo);
     $provide.value('Contact', mockVolunteer);
+    $provide.value('$state', {});
   }));
 
   beforeEach( inject(function(_$location_){

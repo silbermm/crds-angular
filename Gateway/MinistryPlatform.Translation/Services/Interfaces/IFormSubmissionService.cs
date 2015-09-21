@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MinistryPlatform.Models;
 
 namespace MinistryPlatform.Translation.Services.Interfaces
@@ -10,5 +11,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         List<TripFormResponse> GetTripFormResponsesByRecordId(int recordId);
         List<TripFormResponse> GetTripFormResponsesBySelectionId(int selectionId);
         int SubmitFormResponse(FormResponse form);
+
+        DateTime? GetTripFormResponseByContactId(int p, int pledgeId);
     }
 }

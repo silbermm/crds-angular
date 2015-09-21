@@ -2,7 +2,7 @@ USE [MinistryPlatform]
 GO
 
 UPDATE [dbo].[dp_Tools]
-   SET [Launch_Page] = 'http://int.crossroads.net/mptools/locationSearch = $location.search();'
+   SET [Launch_Page] = 'http://int.crossroads.net/mptools/tripPrivateInvite'
  WHERE Tool_ID = 369
 GO
 
@@ -15,7 +15,7 @@ INSERT INTO [dbo].[dp_Tools]
            ,[Description]
            ,[Launch_Page])
      VALUES
-           (370
+           (371
 		   ,'Trip Private Invites - DEV'
            ,'Development Trip Private Invite Tool'
            ,'http://localhost:3000/mptools/tripPrivateInvite')
@@ -23,7 +23,6 @@ INSERT INTO [dbo].[dp_Tools]
 SET IDENTITY_INSERT [dbo].[dp_Tools] OFF
 GO
 
-///////////////////
 SET IDENTITY_INSERT [dbo].[dp_Tool_Pages] ON
 
 INSERT INTO [dbo].[dp_Tool_Pages]
@@ -31,18 +30,14 @@ INSERT INTO [dbo].[dp_Tool_Pages]
 		   ,[Tool_ID]
            ,[Page_ID])
      VALUES
-           (477
-		       ,370
+           (478
+		       ,371
            ,514)
 
 SET IDENTITY_INSERT [dbo].[dp_Tool_Pages] OFF
 GO
 
-/*SET IDENTITY_INSERT [dbo].[dp_Role_Tools] ON*/
-
 INSERT INTO [dbo].[dp_Role_Tools]
            (Role_ID, Tool_ID, Domain_ID)
      VALUES
-           (2, 370, 1)
-/*SET IDENTITY_INSERT [dbo].[dp_Role_Tools] OFF
-GO*/
+           (2, 371, 1)

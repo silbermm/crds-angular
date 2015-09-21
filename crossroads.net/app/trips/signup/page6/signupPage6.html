@@ -12,10 +12,10 @@
 
           <label class="block required">Do you have a valid passport?</label>
           <label id="passport-yes" class="radio-inline" ng-click="isCollapsed = false">
-              <input type="radio" value="yes"  name="pssport" id="passport-yes">Yes
+              <input ng-model="pages.signupService.page6.validPassport.value" type="radio" value="yes"  name="pssport" id="passport-yes">Yes
           </label>
           <label id="passport-no" class="radio-inline" ng-click="isCollapsed = true">
-              <input type="radio" value="no" name="passport" id="passport-no">No
+              <input ng-model="pages.signupService.page6.validPassport.value" type="radio" value="no" name="passport" id="passport-no">No
           </label>
         </div>
         <div class="form-group col-sm-12"  collapse="!isCollapsed">
@@ -26,7 +26,7 @@
 
         <div class="form-group col-sm-6" ng-controller="crdsDatePickerCtrl">
           <label for="passport-expire" class="control-label">When does your passport expire?</label>
-          <input type="text" class="form-control" id="passport-expire" placeholder="mm/dd/yyyy">
+          <input ng-model="pages.signupService.page6.passportExpirationDate.value" type="text" class="form-control" id="passport-expire" placeholder="mm/dd/yyyy">
         </div>
       </div><!--/row-->
 
@@ -36,52 +36,52 @@
           <div class="row">
             <div class="form-group col-sm-6">
                 <label for="passport-firstname" class="required">First Name</label>
-                <input type="text" class="form-control" id="passport-firstname" placeholder="Enter first name">
+                <input ng-model="pages.signupService.page6.passportFirstName.value" type="text" class="form-control" id="passport-firstname" placeholder="Enter first name">
             </div>
             <div class="form-group col-sm-6">
                 <label for="passport-middlename" class="required">Middle Name <small class="text-muted">Exactly as printed on your passport</small></label>
-                <input type="text" class="form-control" id="passport-middlename" placeholder="Enter middle name">
+                <input ng-model="pages.signupService.page6.passportMiddleName.value" type="text" class="form-control" id="passport-middlename" placeholder="Enter middle name">
             </div>
             <div class="form-group col-sm-6">
                 <label for="passport-lastname" class="required">Last Name</label>
-                <input type="text" class="form-control" id="passport-lastname" placeholder="Enter last name">
+                <input ng-model="pages.signupService.page6.passportLastName.value" type="text" class="form-control" id="passport-lastname" placeholder="Enter last name">
             </div>
             <div class="form-group col-sm-6">
                 <label for="passport-country" class="required">Country of Passport</label>
-                <input type="text" class="form-control" id="passport-country" placeholder="Enter passport country">
+                <input ng-model="pages.signupService.page6.passportCountry.value" type="text" class="form-control" id="passport-country" placeholder="Enter passport country">
             </div>
             <div class="form-group col-sm-6" ng-controller="crdsDatePickerCtrl">
               <label for="passport-birthdate" class="control-label required">Birthdate</label>
-              <input type="text" class="form-control" id="passport-birthdate" placeholder="mm/dd/yyyy">
+              <input ng-model="pages.signupService.page6.passportBirthday.value" type="text" class="form-control" id="passport-birthdate" placeholder="mm/dd/yyyy">
             </div>
 
           </div>
         </div>
       </div><!--/row-->
 
-      <div class="row" ng-show="pages.pageTitle != 'GO NOLA Application'">
+      <div class="row" ng-show="pages.destination != 'NOLA'">
         <div class="col-sm-12">
           <legend>Frequent Flyer Information</legend>
         </div>
         <div class="form-group col-sm-6">
             <label for="deltaff">Delta</label>
-            <input type="text" class="form-control" id="deltaff" placeholder="Enter Delta frequent flyer number">
+            <input ng-model="pages.signupService.page6.deltaFrequentFlyer.value" type="text" class="form-control" id="deltaff" placeholder="Enter Delta frequent flyer number">
         </div>
-        <div class="form-group col-sm-6" ng-show="pages.pageTitle == 'GO South Africa Application'">
+        <div class="form-group col-sm-6" ng-show="pages.destination == 'South Africa'">
             <label for="southafricaff">South African Airlines</label>
-            <input type="text" class="form-control" id="southafricaff" placeholder="Enter South African Airlines frequent flyer number">
+            <input ng-model="pages.signupService.page6.southAfricanFrequentFlyer.value" type="text" class="form-control" id="southafricaff" placeholder="Enter South African Airlines frequent flyer number">
         </div>
         <div class="form-group col-sm-6">
             <label for="unitedff">United Airlines</label>
-            <input type="text" class="form-control" id="unitedff" placeholder="Enter United Airlines frequent flyer number">
+            <input ng-model="pages.signupService.page6.unitedFrequentFlyer.value" type="text" class="form-control" id="unitedff" placeholder="Enter United Airlines frequent flyer number">
         </div>
         <div class="form-group col-sm-6">
-            <label for="usairff">USAirways</label>
-            <input type="text" class="form-control" id="usairff" placeholder="Enter USAirways frequent flyer number">
+            <label for="usairff">US Airways</label>
+            <input ng-model="pages.signupService.page6.usAirwaysFrequentFlyer.value" type="text" class="form-control" id="usairff" placeholder="Enter USAirways frequent flyer number">
         </div>
       </div><!--/row-->
 
-      <div class="row" ng-show="pages.pageTitle != 'GO NOLA Application'">
+      <div class="row" ng-show="pages.destination != 'NOLA'">
        <div class="col-sm-12">
         <legend>
           Travel Experience Information
@@ -89,23 +89,23 @@
       </div>
       </div><!--/row-->
 
-      <div class="row" ng-show="pages.pageTitle != 'GO NOLA Application'">
+      <div class="row" ng-show="pages.destination != 'NOLA'">
         <div class="form-group col-sm-12">
           <label class="block required">International Travel Experience</label>
           <div>
             <label for="international-trips-multi" class="radio-inline">
-                <input type="radio" value="multi"  name="international-trips" id="international-trips-multi"> I take three or more international trips a year.
+                <input ng-model="pages.signupService.page6.internationalTravelExpericence.value" type="radio" value="multi"  name="international-trips" id="international-trips-multi"> I take three or more international trips a year.
             </label>
           </div>
           <div>
             <label for="international-trips-some" class="radio-inline">
-                <input type="radio" value="some"  name="international-trips" id="international-trips-some"> I take less than three international trips per year.
+                <input ng-model="pages.signupService.page6.internationalTravelExpericence.value" type="radio" value="some"  name="international-trips" id="international-trips-some"> I take less than three international trips per year.
 
             </label>
           </div>
           <div>
             <label for="international-trips-none" class="radio-inline">
-                <input type="radio" value="none"  name="international-trips" id="international-trips-none"> I have not traveled internationally.
+                <input ng-model="pages.signupService.page6.internationalTravelExpericence.value" type="radio" value="none"  name="international-trips" id="international-trips-none"> I have not traveled internationally.
             </label>
           </div>
         </div>
@@ -114,20 +114,20 @@
           <label class="block required">Do you have outside experience with serving abroad outside of Crossroads GO Trips?</label>
 
           <label for="travel-experience-yes" class="radio-inline" ng-click="isCollapsed = true">
-              <input type="radio" value="yes"  name="travel-experience" id="travel-experience-yes">Yes
+              <input ng-model="pages.signupService.page6.experienceAbroad.value" type="radio" value="yes"  name="travel-experience" id="travel-experience-yes">Yes
           </label>
           <label for="travel-experience-no" class="radio-inline" ng-click="isCollapsed = false">
-              <input type="radio" value="no" name="travelExperience" id="travel-experience-no">No
+              <input ng-model="pages.signupService.page6.experienceAbroad.value" type="radio" value="no" name="travelExperience" id="travel-experience-no">No
           </label>
 
           <div class="form-group push-top" collapse="!isCollapsed">
             <label for="why" class="required">Please describe your experience</label>
-            <textarea cols="1" rows="4" class="form-control" id="travelExperience" maxlength="250"></textarea>
+            <textarea ng-model="pages.signupService.page6.describeExperienceAbroad.value" cols="1" rows="4" class="form-control" id="travelExperience" maxlength="250"></textarea>
           </div>
         </div>
       </div>
 
-      <div class="col-sm-12" ng-show="pages.pageTitle == 'GO India Application'">
+      <div class="col-sm-12" ng-show="pages.destination == 'India'">
         <div class="row">
           <legend>
             Past Abuse History
@@ -139,17 +139,17 @@
             <label class="block required">Have you ever been a victim of any form of abuse?</label>
             <div class="radio">
               <label for="abuse-yes">
-                  <input type="radio" value="yes" name="abuse" id="abuse-yes">Yes
+                  <input ng-model="pages.signupService.page6.pastAbuseHistory.value" type="radio" value="yes" name="abuse" id="abuse-yes">Yes
               </label>
             </div>
             <div class="radio">
               <label for="abuse-no" class="radio">
-                  <input type="radio" value="no" name="abuse" id="abuse-no">No
+                  <input ng-model="pages.signupService.page6.pastAbuseHistory.value" type="radio" value="no" name="abuse" id="abuse-no">No
               </label>
             </div>
             <div class="radio">
               <label for="abuse-talk" class="radio">
-                  <input type="radio" value="no" name="abuse" id="abuse-talk">I'd prefer to talk with someone confidentially
+                  <input ng-model="pages.signupService.page6.pastAbuseHistory.value" type="radio" value="talk confidentially" name="abuse" id="abuse-talk">I'd prefer to talk with someone confidentially
               </label>
             </div>
           </div>
@@ -157,7 +157,7 @@
       </div>
 
       <a ng-click='pages.handleSubmit()' class="btn btn-primary pull-right">Submit Application</a>
-      <a ng-click='pages.handlePrevious(4)' class="btn btn-standard pull-right">Back</a>
+      <a ng-click='pages.handlePrevious(5)' class="btn btn-standard pull-right">Back</a>
     </form>
   </div>
 </div><!--/row-->

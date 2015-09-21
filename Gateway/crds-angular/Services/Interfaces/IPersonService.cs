@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using crds_angular.Models;
 using crds_angular.Models.Crossroads;
+using crds_angular.Models.MP;
 using MinistryPlatform.Models.DTO;
 
 namespace crds_angular.Services.Interfaces

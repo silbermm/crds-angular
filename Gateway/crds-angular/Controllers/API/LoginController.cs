@@ -18,9 +18,9 @@ namespace crds_angular.Controllers.API
     public class LoginController : MPAuth
     {
 
-        private IPersonService _personService;
+        private crds_angular.Services.Interfaces.IPersonService _personService;
 
-        public LoginController(IPersonService personService)
+        public LoginController(crds_angular.Services.Interfaces.IPersonService personService)
         {
             _personService = personService;
         }

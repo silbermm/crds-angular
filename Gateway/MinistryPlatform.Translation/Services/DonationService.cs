@@ -20,6 +20,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _tripDistributionsPageView;
         private readonly int _gpExportPageView;
         private readonly int _processingProgramId;
+        private readonly int _scholarshipPaymentTypeId;
 
         private readonly IMinistryPlatformService _ministryPlatformService;
         private readonly IDonorService _donorService;
@@ -38,6 +39,7 @@ namespace MinistryPlatform.Translation.Services
             _tripDistributionsPageView = configuration.GetConfigIntValue("TripDistributionsView");
             _gpExportPageView = configuration.GetConfigIntValue("GPExportView");
             _processingProgramId = configuration.GetConfigIntValue("ProcessingProgramId");
+            _scholarshipPaymentTypeId = configuration.GetConfigIntValue("ScholarshipPaymentTypeId");
         }
 
         public int UpdateDonationStatus(int donationId, int statusId, DateTime statusDate,
@@ -310,9 +312,9 @@ namespace MinistryPlatform.Translation.Services
             return (d);
         }
 
-        public List<TripDistribution> GetMyTripDistributions(int contactId, string token)
+        public List<TripDistribution> GetMyTripDistributions(int contactId)
         {
-            var results = _ministryPlatformService.GetPageViewRecords(_tripDistributionsPageView, token, contactId.ToString());
+            var results = _ministryPlatformService.GetPageViewRecords(_tripDistributionsPageView, ApiLogin(), contactId.ToString());
             var trips = new List<TripDistribution>();
             foreach (var result in results)
             {
@@ -351,19 +353,22 @@ namespace MinistryPlatform.Translation.Services
                 var gp = new GPExportDatum
                 {
                     ProccessFeeProgramId = _processingProgramId,
-                    ProgramId = result.ToInt("Program ID"),
-                    DocumentType = result.ToString("Document Type"),
-                    DonationId = result.ToInt("Donation ID"),
-                    BatchName = result.ToString("Batch Name"),
-                    DonationDate = result.ToDate("Donation Date"),
-                    DepositDate = result.ToDate("Deposit Date"),
-                    CustomerId = result.ToString("Customer ID"),
-                    DonationAmount = result.ToString("Donation Amount"),
-                    CheckbookId = result.ToString("Checkbook ID"),
-                    CashAccount = result.ToString("Cash Account"),
-                    ReceivableAccount = result.ToString("Receivable Account"),
-                    DistributionAccount = result.ToString("Distribution Account"),
+                    ProgramId = result.ToInt("Program_ID"),
+                    DocumentType = result.ToString("Document_Type"),
+                    DonationId = result.ToInt("Donation_ID"),
+                    BatchName = result.ToString("Batch_Name"),
+                    DonationDate = result.ToDate("Donation_Date"),
+                    DepositDate = result.ToDate("Deposit_Date"),
+                    CustomerId = result.ToString("Customer_ID"),
+                    DonationAmount = result.ToString("Donation_Amount"),
+                    CheckbookId = result.ToString("Checkbook_ID"),
+                    CashAccount = result.ToString("Cash_Account"),
+                    ReceivableAccount = result.ToString("Receivable_Account"),
+                    DistributionAccount = result.ToString("Distribution_Account"),
+                    ScholarshipExpenseAccount = result.ToString("Scholarship_Expense_Account"),
                     Amount = result.ToString("Amount"),
+                    ScholarshipPaymentTypeId = _scholarshipPaymentTypeId,
+                    PaymentTypeId = result.ToInt("Payment_Type_ID")
                 };
 
                 gpExport.Add(gp);

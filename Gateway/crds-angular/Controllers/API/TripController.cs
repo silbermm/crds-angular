@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -6,16 +7,44 @@ using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads.Trip;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
+using MinistryPlatform.Translation.Services.Interfaces;
+using IPersonService = crds_angular.Services.Interfaces.IPersonService;
 
 namespace crds_angular.Controllers.API
 {
     public class TripController : MPAuth
     {
         private readonly ITripService _tripService;
+        private readonly IPersonService _personService;
+        private readonly IAuthenticationService _authenticationService;
 
-        public TripController(ITripService tripService)
+        public TripController(ITripService tripService, IPersonService persionService, IAuthenticationService authenticationService)
         {
             _tripService = tripService;
+            _personService = persionService;
+            _authenticationService = authenticationService;
+        }
+
+        [AcceptVerbs("GET")]
+        [ResponseType(typeof (List<FamilyMemberTripDto>))]
+        [Route("api/trip/{pledgeCampaignId}/family-members")]
+        public IHttpActionResult GetFamilyWithTripInfo(int pledgeCampaignId)
+        {
+            return Authorized(token =>
+            {
+                try
+                {
+                    var loggedInUser = _personService.GetLoggedInUserProfile(token);
+                    var familyMembers = _tripService.GetFamilyMembers(loggedInUser.ContactId, pledgeCampaignId, token);
+                    return Ok(familyMembers);
+                }
+                catch (Exception ex)
+                {
+                    var apiError = new ApiErrorDto("Get Family With Trip Info", ex);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+                
+            });         
         }
 
         [AcceptVerbs("GET")]
@@ -145,14 +174,15 @@ namespace crds_angular.Controllers.API
 
         [AcceptVerbs("GET")]
         [ResponseType(typeof (MyTripsDto))]
-        [Route("api/trip/mytrips/{contactId}")]
-        public IHttpActionResult MyTrips(int contactId)
+        [Route("api/trip/mytrips")]
+        public IHttpActionResult MyTrips()
         {
             return Authorized(token =>
             {
                 try
                 {
-                    var trips = _tripService.GetMyTrips(contactId, token);
+                    var contactId = _authenticationService.GetContactId(token);
+                    var trips = _tripService.GetMyTrips(contactId);
                     return Ok(trips);
                 }
                 catch (Exception ex)

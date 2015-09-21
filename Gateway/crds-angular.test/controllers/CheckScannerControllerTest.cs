@@ -11,6 +11,9 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http.Controllers;
 using System.Web.Http.Results;
+using crds_angular.Exceptions;
+using crds_angular.Models.Json;
+using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.test.controllers
@@ -174,6 +177,36 @@ namespace crds_angular.test.controllers
             var okResult = (OkNegotiatedContentResult<CheckScannerBatch>)result;
             Assert.IsNotNull(okResult.Content);
             Assert.AreSame(batchResult, okResult.Content);
+        }
+
+        [Test]
+        public void TestGetContactDonorForCheck()
+        {
+            var encryptedKey = "disCv2kF/8HlRCWeTqolok1G4imf1cNZershgmCCFDI=";
+            var donorDetail = new EZScanDonorDetails
+            {
+                DisplayName = "Peyton Manning",
+                Address = new PostalAddress()
+                {
+                    Line1 = "1 Superbowl Way",
+                    Line2 = "Suite 1000",
+                    City = "Denver",
+                    State = "CO",
+                    PostalCode = "11111-2222"
+                  }
+            };
+
+            _checkScannerService.Setup(mocked => mocked.GetContactDonorForCheck(encryptedKey)).Returns(donorDetail);
+
+            var result = _fixture.GetDonorForCheck(encryptedKey);
+            _checkScannerService.VerifyAll();
+            
+            Assert.NotNull(result);
+       
+            Assert.IsInstanceOf<OkNegotiatedContentResult<EZScanDonorDetails>>(result);
+            var okResult = (OkNegotiatedContentResult<EZScanDonorDetails>)result;
+            Assert.IsNotNull(okResult.Content);
+            Assert.AreSame(donorDetail, okResult.Content);
         }
     }
 }
