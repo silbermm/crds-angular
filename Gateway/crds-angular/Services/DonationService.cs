@@ -141,7 +141,7 @@ namespace crds_angular.Services
             {
                 if (!softCredit)
                 {
-                    var charge = GetStripCharge(donation);
+                    var charge = GetStripeCharge(donation);
                     SetDonationSource(donation, charge);
                 }
 
@@ -149,7 +149,7 @@ namespace crds_angular.Services
             }
         }
 
-        private StripeCharge GetStripCharge(DonationDTO donation)
+        private StripeCharge GetStripeCharge(DonationDTO donation)
         {
             if (string.IsNullOrWhiteSpace(donation.Source.PaymentProcessorId))
             {
