@@ -57,20 +57,17 @@
       <!-- END OF DONATION GIVING HISTORY -->
 
       <!-- SOFT CREDIT DONATION HISTORY -->
-      <div class="other-gifts hidden-print">
+      <div class="other-gifts hidden-print" ng-show="giving_history_controller.soft_credit_donation_history && giving_history_controller.soft_credit_donation_view_ready">
         <hr />
         <h3>Other Gifts</h3>
         <p>
           These are donations that will not be included in your Crossroads giving statement. These are typically charity accounts or foundational giving where donations are made through a third party.
         </p>
 
-        <preloader full-screen='false' ng-show="giving_history_controller.overall_view_ready && !giving_history_controller.soft_credit_donation_view_ready"> </preloader>
-        <div ng-show="giving_history_controller.soft_credit_donation_history && giving_history_controller.soft_credit_donation_view_ready">
-          <donation-list
-            donations-input="giving_history_controller.soft_credit_donations"
-            donation-total-amount="giving_history_controller.soft_credit_donation_total_amount"
-            donation-statement-total-amount="giving_history_controller.soft_credit_donation_statement_total_amount"></donation-list>
-        </div>
+        <donation-list
+          donations-input="giving_history_controller.soft_credit_donations"
+          donation-total-amount="giving_history_controller.soft_credit_donation_total_amount"
+          donation-statement-total-amount="giving_history_controller.soft_credit_donation_statement_total_amount"></donation-list>
       </div>
       <!-- END OF SOFT CREDIT DONATION HISTORY -->
 
