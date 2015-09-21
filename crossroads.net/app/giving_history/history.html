@@ -5,7 +5,7 @@
     <h2 class="subheading hidden-print">Your history of financial giving to crossroads</h2>
     <h3 class="subheading visible-print-block">Printed: {{giving_history_controller.currentDate | date:'M/d/yy'}}</h3>
 
-    <div class="row push-top" ng-show="giving_history_controller.history && giving_history_controller.viewReady">
+    <div class="row push-top" ng-show="giving_history_controller.donation_history && giving_history_controller.donation_view_ready">
       <household-information profile="giving_history_controller.profile" />
 
       <p class="visible-print-block col-xs-6 text-right">
@@ -15,111 +15,64 @@
       </p>
     </div>
 
-    <preloader full-screen='false' ng-show="!giving_history_controller.viewReady"> </preloader>
+    <preloader full-screen='false' ng-show="!giving_history_controller.overall_view_ready"> </preloader>
 
-    <!--  NO GIVING HISTORY - ng-show if no history  -->
-    <div ng-show="!giving_history_controller.history && giving_history_controller.viewReady" class="no-data">
+    <div ng-show="giving_history_controller.overall_view_ready">
+      <!-- DONATION GIVING HISTORY -->
       <div class="row">
-        <div class="col-sm-6 col-sm-offset-3">
-          <svg viewBox="0 0 32 32" class="icon icon-clock3">
-            <use xlink:href="#clock3"></use>
-          </svg>
-          <svg viewBox="0 0 18 32" class="icon icon-dollar">
-            <use xlink:href="#dollar"></use>
-          </svg>
-          <div ng-bind-html="$root.MESSAGES.no_giving_history.content | html">
+        <preloader full-screen='false' ng-show="giving_history_controller.overall_view_ready && !giving_history_controller.donation_view_ready"> </preloader>
+
+        <!--  NO GIVING HISTORY - ng-show if no history  -->
+        <div ng-show="!giving_history_controller.donation_history && giving_history_controller.donation_view_ready" class="no-data">
+          <div class="col-sm-6 col-sm-offset-3">
+            <svg viewBox="0 0 32 32" class="icon icon-clock3">
+              <use xlink:href="#clock3"></use>
+            </svg>
+            <svg viewBox="0 0 18 32" class="icon icon-dollar">
+              <use xlink:href="#dollar"></use>
+            </svg>
+            <div ng-bind-html="$root.MESSAGES.no_giving_history.content | html">
+            </div>
+          </div><!--/col-sm-12-->
+        </div><!--/no-data-->
+        <!--  END OF NO GIVING HISTORY  -->
+
+        <!-- IS GIVING HISTORY - ng-show or ng-if on data from resource-->
+        <div ng-show="giving_history_controller.donation_history && giving_history_controller.donation_view_ready">
+          <div class="col-sm-6 clearfix hidden-print">
+            <a href="" class="btn btn-primary col-sm-6 col-md-5 col-xs-12 mobile-push-bottom" onClick="window.print();">Print Statement</a>
           </div>
-        </div><!--/col-sm-12-->
-      </div><!--/row-->
-    </div><!--/no-data-->
+          <div class="col-sm-6" giving-years
+               selected-year="giving_history_controller.selected_giving_year"
+               all-years="giving_history_controller.donation_years"
+               on-change="giving_history_controller.getDonations()"></div>
 
-    <!-- GIVING HISTORY - ng-show or ng-if on data from resource-->
-    <div ng-show="giving_history_controller.history && giving_history_controller.viewReady">
-      <div class="row">
-        <div class="col-sm-6 clearfix hidden-print">
-          <a href="" class="btn btn-primary col-sm-6 col-md-5 col-xs-12 mobile-push-bottom" onClick="window.print();">Print Statement</a>
+          <donation-list
+            donations-input="giving_history_controller.donations"
+            donation-total-amount="giving_history_controller.donation_total_amount"
+            donation-statement-total-amount="giving_history_controller.donation_statement_total_amount"></donation-list>
         </div>
-        <div class="col-sm-6" giving-years
-             selected-year="giving_history_controller.selected_giving_year"
-             all-years="giving_history_controller.donation_years"
-             on-change="giving_history_controller.getDonations()"></div>
+        <!-- END OF IS GIVING HISTORY -->
       </div>
-      <!--/row push-top-->
+      <!-- END OF DONATION GIVING HISTORY -->
 
-      <donation-list
-        donations-input="giving_history_controller.donations"
-        donation-total-amount="giving_history_controller.donation_total_amount"
-        donation-statement-total-amount="giving_history_controller.donation_statement_total_amount"></donation-list>
-
-      <!-- ng-if or ng-show : soft credits exist -->
+      <!-- SOFT CREDIT DONATION HISTORY -->
       <div class="other-gifts hidden-print">
         <hr />
         <h3>Other Gifts</h3>
         <p>
           These are donations that will not be included in your Crossroads giving statement. These are typically charity accounts or foundational giving where donations are made through a third party.
         </p>
-        <!-- DIRECTIVE: Giving History - Soft Credits -->
-        <table class="table gift-table push-top">
-          <thead class="visible-print-table">
-            <tr>
-              <th>Initiative / Payment Type</th>
-              <th class="text-right">Amount / Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                Ministry
-                <div class="text-muted">
-                  Fidelity Charity Account
-                </div>
-              </td>
-              <td class="text-right">
-                <div class="dollar-amount">$100.00</div>
-                <div class="text-muted">9/12/15</div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Ministry
-                <div class="text-muted">
-                  Fidelity Charity Account
-                </div>
-              </td>
-              <td class="text-right">
-                <div class="dollar-amount">$100.00</div>
-                <div class="text-muted">10/12/15</div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Ministry
-                <div class="text-muted">
-                  Fidelity Charity Account
-                </div>
-              </td>
-              <td class="text-right">
-                <div class="dollar-amount">$100.00</div>
-                <div class="text-muted">11/12/15</div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Ministry
-                <div class="text-muted">
-                  Fidelity Charity Account
-                </div>
-              </td>
-              <td class="text-right">
-                <div class="dollar-amount">$100.00</div>
-                <div class="text-muted">12/12/15</div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <h4 class="text-right hidden-print">Total: $300.00</h4>
-        <!-- DIRECTIVE: Giving History - Soft Credits -->
+
+        <preloader full-screen='false' ng-show="giving_history_controller.overall_view_ready && !giving_history_controller.soft_credit_donation_view_ready"> </preloader>
+        <div ng-show="giving_history_controller.soft_credit_donation_history && giving_history_controller.soft_credit_donation_view_ready">
+          <donation-list
+            donations-input="giving_history_controller.soft_credit_donations"
+            donation-total-amount="giving_history_controller.soft_credit_donation_total_amount"
+            donation-statement-total-amount="giving_history_controller.soft_credit_donation_statement_total_amount"></donation-list>
+        </div>
       </div>
+      <!-- END OF SOFT CREDIT DONATION HISTORY -->
 
       <p class="push-top hidden-print" ng-bind-html="$root.MESSAGES.givingHistoryFooter.content | html">
         <br />
@@ -137,7 +90,5 @@
       </div>
 
     </div>
-
-
   </div><!--/col-sm-10-->
 </div><!--/row-->
