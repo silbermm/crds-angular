@@ -1,7 +1,13 @@
-<!--- layout: default title: Style Guide published: true permalink: /styleguide/ categories: --->
-<div class="container">
+<div class="container-fluid">
+  <div class="col-sm-12">
+    <h1 class="page-header">Style Guide</h1>
+    <h2 class="subheading">Front end development &amp; design guide</h2>
+  </div>
+</div>
+
+<div class="container-fluid">
   <nav class="col-sm-3">
-    <ul class="nav nav-pills nav-stacked">
+    <ul class="nav nav-pills nav-stacked push-top">
       <li offset="30"><a ng-click="styleguide.scrollTo('getting-started')">Getting Started</a>
       </li>
       <li offset="30"><a ng-click="styleguide.scrollTo('coding-style')">Coding Style</a>
@@ -86,8 +92,6 @@
   <!--/col-sm-3-->
 
   <div class="col-sm-9 styleguide-content" id="top">
-    <h1 class="page-header">Style Guide</h1>
-    <h2 class="subheading">Front end development &amp; design guide</h2>
 
     <div id="getting-started">
       <h3>Getting Started</h3>
@@ -386,7 +390,7 @@
             <div class="panel-heading">No Side Bar</div>
             <div class="panel-body">
               <a href="#">
-                <img src="http://crossroads-media.s3.amazonaws.com/images/layouts/one_column_example.png" class="img-responsive" />
+                <img data-src="//crossroads-media.imgix.net/images/layouts/one_column_example.png" class="img-responsive imgix-fluid" />
               </a>
             </div>
             <!--/panel-body-->
@@ -399,7 +403,7 @@
             <div class="panel-heading">Screen Width</div>
             <div class="panel-body">
               <a href="#">
-                <img src="http://crossroads-media.s3.amazonaws.com/images/layouts/full_width_example.png" class="img-responsive" />
+                <img data-src="//crossroads-media.imgix.net/images/layouts/full_width_example.png" class="img-responsive imgix-fluid" />
               </a>
             </div>
             <!--/panel-body-->
@@ -412,7 +416,7 @@
             <div class="panel-heading">Left Sidebar</div>
             <div class="panel-body">
               <a href="#">
-                <img src="http://crossroads-media.s3.amazonaws.com/images/layouts/left_column_example.png" class="img-responsive" />
+                <img data-src="//crossroads-media.imgix.net/images/layouts/left_column_example.png" class="img-responsive imgix-fluid" />
               </a>
             </div>
             <!--/panel-body-->
@@ -425,7 +429,7 @@
             <div class="panel-heading">Right Sidebar</div>
             <div class="panel-body">
               <a href="#">
-                <img src="http://crossroads-media.s3.amazonaws.com/images/layouts/right_column_example.png" class="img-responsive" />
+                <img data-src="//crossroads-media.imgix.net/images/layouts/right_column_example.png" class="img-responsive imgix-fluid" />
               </a>
             </div>
             <!--/panel-body-->
@@ -438,7 +442,7 @@
             <div class="panel-heading">No Header or Footer</div>
             <div class="panel-body">
               <a href="#">
-                <img src="http://crossroads-media.s3.amazonaws.com/images/layouts/full_page_example.png" class="img-responsive" />
+                <img data-src="//crossroads-media.imgix.net/images/layouts/full_page_example.png" class="img-responsive imgix-fluid" />
               </a>
             </div>
             <!--/panel-body-->
@@ -844,20 +848,54 @@
       </div>
       <!--/buttons-->
 
+      <!--Images-->
       <div class="panel panel-default" id="images">
         <div class="panel-heading">Images
         </div>
         <div class="panel-body">
-          <p><img src="http://placehold.it/100x100" class="img-rounded">
-            <img src="http://placehold.it/100x100" class="img-circle">
-            <img src="http://placehold.it/100x100" class="img-thumbnail">
-          </p>
-        </div>
-      </div>
+          <p>We use IMGIX to serve our images. This service assures the correct image size is delivered to the browser based on the size of the container and viewport of the device used to view the page.</p>
+          <p>Images are hosted on Amazon S3 but served from IMGIX, use the <code>data-src="//crossroads-media.imgix.net/images/</code> along with class <code>imgix-fluid</code> to take advantage of this service.</p>
+
+          <div class="row">
+            <div class="col-sm-12">
+              <img data-src="//crossroads-media.imgix.net/images/IanHenderson-GOmamaCSM.jpg" class="imgix-fluid img-responsive" >
+            </div>
+          </div>
+
+          <br>
+
+          <div class="row">
+            <div class="col-xs-4">
+              <h4>Rounded Edges with class <code>img-rounded</code></h4>
+              <img data-src="//crossroads-media.imgix.net/images/styeguide-images-2.jpg" class="imgix-fluid img-responsive img-rounded" >
+            </div>
+            <div class="col-xs-4">
+              <h4>Circles with class <code>img-circle</code></h4>
+              <img data-src="//crossroads-media.imgix.net/images/styeguide-images-3.jpg" class="imgix-fluid img-responsive img-circle" >
+            </div>
+            <div class="col-xs-4">
+              <h4>Thumbnails with class <code>img-thumbnail</code></h4>
+              <img data-src="//crossroads-media.imgix.net/images/styeguide-images-4.jpg" class="imgix-fluid img-responsive img-thumbnail" >
+            </div>
+          </div><!--/row-->
+
+          <br>
+
+          <div class="row">
+            <div class="col-sm-12" >
+              <p>For background images, the <code>data-src</code> needs to exist on the contain with the background along with class <code>imgix-fluid-bg</code>. Use class <code>img-background</code> to make the image cover the contain and center.</p>
+              <div class="imgix-fluid-bg img-background" data-src="//crossroads-media.imgix.net/images/thestory_image_copy1.jpg">
+                <h1 style="text-align: center; color: white; opacity: 0.2; font-size: 8vw; padding: 240px 15px;font-weight:bold;">BACKGROUND IMAGES</h1>
+              </div>
+            </div>
+          </div>
+
+        </div><!--/panel-body-->
+      </div><!--/#images-->
+
       <div>
         <a ng-click="styleguide.scrollTo('top')">Back to top <i class="fa fa-caret-up"></i></a>
       </div>
-      <!--/images-->
 
       <div class="panel panel-default" id="dropdowns">
         <div class="panel-heading">Dropdowns
@@ -1474,7 +1512,7 @@
               <h4 class="billboard-subheadline">.billboard-subheadline</h4>
               <p class="billboard-content"> "It's a great feeling to serve others who are less fortunate in our city, and it's what God calls us to do."</p>
               <p>
-                <img src="http://crossroads-media.s3.amazonaws.com/images/spotlight_kristen.png" class="billboard-image-corner hidden-xs hidden-sm">
+                <img data-src="//crossroads-media.imgix.net/images/spotlight_kristen.png" class="billboard-image-corner hidden-xs hidden-sm">
               </p>
             </div>
           </div>

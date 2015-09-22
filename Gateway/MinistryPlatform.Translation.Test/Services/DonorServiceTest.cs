@@ -565,6 +565,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 {
                     {"Donation_Date", DateTime.Now},
                     {"Donation_ID", 1000},
+                    {"Soft_Credit_Donor_ID", null},
                     {"Donation_Status_ID", 1},
                     {"Donation_Status_Date", DateTime.Now},
                     {"Donor_ID", 1100},
@@ -572,11 +573,13 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Transaction_Code", "tx_1000"},
                     {"Amount", 1000.00M},
                     {"dp_RecordName", "Program 1"},
+                    {"Donor_Display_Name", "Test Name"},
                 },
                 new Dictionary<string, object>
                 {
                     {"Donation_Date", DateTime.Now},
                     {"Donation_ID", 2000},
+                    {"Soft_Credit_Donor_ID", null},
                     {"Donation_Status_ID", 2},
                     {"Donation_Status_Date", DateTime.Now},
                     {"Donor_ID", 2200},
@@ -584,11 +587,13 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Transaction_Code", "tx_2000"},
                     {"Amount", 2000.00M},
                     {"dp_RecordName", "Program 2"},
+                    {"Donor_Display_Name", "Test Name"},
                 },
                 new Dictionary<string, object>
                 {
                     {"Donation_Date", DateTime.Now},
                     {"Donation_ID", 1000},
+                    {"Soft_Credit_Donor_ID", null},
                     {"Donation_Status_ID", 1},
                     {"Donation_Status_Date", DateTime.Now},
                     {"Donor_ID", 1100},
@@ -596,6 +601,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Transaction_Code", "tx_1000"},
                     {"Amount", 9000.00M},
                     {"dp_RecordName", "Program 9"},
+                    {"Donor_Display_Name", "Test Name"},
                 }
             };
 
@@ -650,6 +656,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 {
                     {"Donation_Date", DateTime.Now},
                     {"Donation_ID", 1000},
+                    {"Soft_Credit_Donor_ID", null},
                     {"Donation_Status_ID", 1},
                     {"Donation_Status_Date", DateTime.Now},
                     {"Donor_ID", 1100},
@@ -657,11 +664,13 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Transaction_Code", "tx_1000"},
                     {"Amount", 1000.00M},
                     {"dp_RecordName", "Program 1"},
+                    {"Donor_Display_Name", "Test Name"},
                 },
                 new Dictionary<string, object>
                 {
                     {"Donation_Date", DateTime.Now},
                     {"Donation_ID", 2000},
+                    {"Soft_Credit_Donor_ID", null},
                     {"Donation_Status_ID", 2},
                     {"Donation_Status_Date", DateTime.Now},
                     {"Donor_ID", 2200},
@@ -669,11 +678,13 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Transaction_Code", "tx_2000"},
                     {"Amount", 2000.00M},
                     {"dp_RecordName", "Program 2"},
+                    {"Donor_Display_Name", "Test Name"},
                 },
                 new Dictionary<string, object>
                 {
                     {"Donation_Date", DateTime.Now},
                     {"Donation_ID", 1000},
+                    {"Soft_Credit_Donor_ID", null},
                     {"Donation_Status_ID", 1},
                     {"Donation_Status_Date", DateTime.Now},
                     {"Donor_ID", 1100},
@@ -681,6 +692,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Transaction_Code", "tx_1000"},
                     {"Amount", 9000.00M},
                     {"dp_RecordName", "Program 9"},
+                    {"Donor_Display_Name", "Test Name"},
                 }
             };
 
@@ -699,6 +711,100 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(100000, result[0].Distributions[0].donationDistributionAmt);
             Assert.AreEqual("Program 9", result[0].Distributions[1].donationDistributionProgram);
             Assert.AreEqual(900000, result[0].Distributions[1].donationDistributionAmt);
+
+            Assert.AreEqual(1, result[1].Distributions.Count);
+            Assert.AreEqual(200000, result[1].donationAmt);
+            Assert.AreEqual("Program 2", result[1].Distributions[0].donationDistributionProgram);
+            Assert.AreEqual(200000, result[1].Distributions[0].donationDistributionAmt);
+        }
+
+
+        [Test]
+        public void TestGetSoftCreditDonations()
+        {
+            var statuses = new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    {"dp_RecordID", 1},
+                    {"Display_On_Giving_History", true},
+                    {"Display_On_Statements", true},
+                    {"Display_On_MyTrips", true},
+                    {"Donation_Status", "Pending"}
+                },
+                new Dictionary<string, object>
+                {
+                    {"dp_RecordID", 2},
+                    {"Display_On_Giving_History", false},
+                    {"Display_On_Statements", false},
+                    {"Display_On_MyTrips", false},
+                    {"Donation_Status", "Succeeded"}
+                }
+            };
+
+            var records = new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    {"Donation_Date", DateTime.Now},
+                    {"Donation_ID", 1000},
+                    {"Soft_Credit_Donor_ID", 5511},
+                    {"Donation_Status_ID", 1},
+                    {"Donation_Status_Date", DateTime.Now},
+                    {"Donor_ID", 1100},
+                    {"Payment_Type_ID", 1110},
+                    {"Transaction_Code", "tx_1000"},
+                    {"Amount", 1000.00M},
+                    {"dp_RecordName", "Program 1"},
+                    {"Donor_Display_Name", "Test Name"},
+                },
+                new Dictionary<string, object>
+                {
+                    {"Donation_Date", DateTime.Now},
+                    {"Donation_ID", 2000},
+                    {"Soft_Credit_Donor_ID", 6612},
+                    {"Donation_Status_ID", 2},
+                    {"Donation_Status_Date", DateTime.Now},
+                    {"Donor_ID", 2200},
+                    {"Payment_Type_ID", 2220},
+                    {"Transaction_Code", "tx_2000"},
+                    {"Amount", 2000.00M},
+                    {"dp_RecordName", "Program 2"},
+                    {"Donor_Display_Name", "Test Name"},
+                },
+                new Dictionary<string, object>
+                {
+                    {"Donation_Date", DateTime.Now},
+                    {"Donation_ID", 1000},
+                    {"Soft_Credit_Donor_ID", 5511},
+                    {"Donation_Status_ID", 1},
+                    {"Donation_Status_Date", DateTime.Now},
+                    {"Donor_ID", 1100},
+                    {"Payment_Type_ID", 1110},
+                    {"Transaction_Code", "tx_1000"},
+                    {"Amount", 9000.00M},
+                    {"dp_RecordName", "Program 9"},
+                    {"Donor_Display_Name", "Test Name"},
+                }
+            };
+
+            var search = string.Format(",,,,,,,,,,,,,,,,,\"{0}\"", 123);
+            _ministryPlatformService.Setup(mocked => mocked.GetRecordsDict(296, It.IsAny<string>(), search, It.IsAny<string>())).Returns(records);
+            _ministryPlatformService.Setup(mocked => mocked.GetRecordsDict(90210, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(statuses);
+            var result = _fixture.GetSoftCreditDonations(new [] {123});
+
+            _ministryPlatformService.VerifyAll();
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.Count);
+            Assert.AreEqual(2, result[0].Distributions.Count);
+            Assert.AreEqual(1000000, result[0].donationAmt);
+            Assert.AreEqual("Program 1", result[0].Distributions[0].donationDistributionProgram);
+            Assert.AreEqual(100000, result[0].Distributions[0].donationDistributionAmt);
+            Assert.AreEqual("Program 9", result[0].Distributions[1].donationDistributionProgram);
+            Assert.AreEqual(900000, result[0].Distributions[1].donationDistributionAmt);
+            Assert.AreEqual(5511, result[0].softCreditDonorId);
+            Assert.AreEqual("Test Name", result[0].donorDisplayName);
 
             Assert.AreEqual(1, result[1].Distributions.Count);
             Assert.AreEqual(200000, result[1].donationAmt);

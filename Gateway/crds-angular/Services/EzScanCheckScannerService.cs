@@ -60,7 +60,16 @@ namespace crds_angular.Services
                 {
                     var contactDonor = CreateDonor(check);
                     //Always use the customer ID and source ID from the Donor Account, if it exists
-                    var charge = _paymentService.ChargeCustomer(contactDonor.ProcessorId, contactDonor.Account.ProcessorAccountId, (int) (check.Amount), contactDonor.DonorId);
+                    StripeCharge charge;
+                    if (contactDonor.HasAccount)
+                    {
+                        charge = _paymentService.ChargeCustomer(contactDonor.ProcessorId, contactDonor.Account.ProcessorAccountId, (int) (check.Amount), contactDonor.DonorId);
+                    }
+                    else
+                    {
+                        charge = _paymentService.ChargeCustomer(contactDonor.ProcessorId, (int)(check.Amount), contactDonor.DonorId);   
+                    }
+                   
                     var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
 
                     // Mark the check as exported now, so we don't double-charge a community member.
