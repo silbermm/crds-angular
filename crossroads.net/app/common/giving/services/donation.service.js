@@ -180,7 +180,7 @@
       GiveTransferService.bankinfoSubmitted = true;
       if (giveForm.accountForm.$valid) {
         GiveTransferService.processing = true;
-        PaymentService.getDonor(giveForm.email)
+        PaymentService.getDonor(GiveTransferService.email)
           .then(function(donor){
             donationService.updateDonorAndDonate(donor.id, programsInput);
           },
