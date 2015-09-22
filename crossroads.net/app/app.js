@@ -32,5 +32,6 @@ require('../lib/select.css');
   require('./blog');
   require('./adbox');
   require('./giving_history');
+  require('./myprofile');
 
 })();
