@@ -49,5 +49,4 @@ SET IDENTITY_INSERT [dbo].[Dp_User_Roles] OFF;
 --Update Contact Record
 Update [dbo].Contacts set User_account = @user_id where contact_id = @contactID;
 update [dbo].Contacts set Participant_Record = @part_id where contact_id = @contactID;
-update [dbo].Contacts set Donor_Record = @donor_id where contact_id = @contactID;
 GO

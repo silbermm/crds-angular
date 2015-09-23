@@ -296,16 +296,16 @@ describe("Serve Teams Directive Edit", function() {
   beforeEach(inject(function(_$compile_, _$rootScope_, $injector){
     $compile = _$compile_;
     $rootScope = _$rootScope_;
+    $httpBackend = $injector.get('$httpBackend');
+    $httpBackend.whenGET(/SiteConfig*/).respond('');
     scope = $rootScope.$new();
     element = '<serve-team opportunity="opp" team="team" tab-index="tabIndex" team-index="teamIndex" day-index="dayIndex"> </serve-team>';
     scope.opp = mockOpportunity;
-    scope.team = mockTeam;
+    scope.team = mockTeam[0];
     scope.dayIndex = 0;
     scope.tabIndex = 0;
     scope.teamIndex = 3;
     element = $compile(element)(scope);
-    $httpBackend = $injector.get('$httpBackend');
-    $httpBackend.whenGET(/SiteConfig*/).respond('');
     scope.$digest();
   }));
 
