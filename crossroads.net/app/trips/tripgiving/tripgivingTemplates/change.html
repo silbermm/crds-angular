@@ -1,11 +1,27 @@
 <div class="form-group">
-	<donation-details amount="give.dto.amount" program="give.dto.program"
-					  amount-submitted="give.amountSubmitted" programs-in="give.programsInput">
+	<donation-details 
+     amount="tripGiving.dto.amount" 
+     program="tripGiving.dto.program"
+     amount-submitted="tripGiving.dto.amountSubmitted" 
+     show-initiative-option='false'
+     show-frequency-option='false'>
 	</donation-details>
-	<bank-credit-card-details></bank-credit-card-details>
-	<button ng-click="give.submitChangedBankInfo()" ng-class="{disabled: give.processing}" class="btn btn-primary btn-lg btn-block-mobile give-button">
+	<bank-credit-card-details
+     dto='give.dto'
+     bank-info-submitted='give.dto.bankinfoSubmitted'
+     show-check-class='give.showCheckClass'
+     show-message='give.showMessage'
+     donor='give.dto.donor'
+     email='give.dto.email'
+     set-valid-card='setValidCard'
+     set-valid-cvc='setValidCvc' 
+     account-state-name='give.account' >
+  </bank-credit-card-details>
+	<button ng-click="tripGiving.submitChangedBankInfo(tripGiving.tripForm)" 
+    ng-class="{disabled: tripGiving.dto.processing}" 
+    class="btn btn-primary btn-lg btn-block-mobile give-button">
 		<span ng-if="give.processing">Giving...</span>
-		<span ng-if="!give.processing">Give {{give.dto.amount | currency}}</span>
+		<span ng-if="!give.processing">Give {{tripGiving.dto.amount | currency}}</span>
         <svg viewBox="0 0 32 32" class="icon-medium icon-arrow-right9">
 	      <use xlink:href="#arrow-right9"></use>
         </svg>

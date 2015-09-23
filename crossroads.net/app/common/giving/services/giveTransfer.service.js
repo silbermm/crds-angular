@@ -13,6 +13,7 @@
         this.amountSubmitted = false;
         this.bankinfoSubmitted = false;
         this.brand = '';
+        this.campaign = { campaignId: null, campaignName: null };
         this.ccNumberClass = '';
         this.changeAccountInfo = false;
         this.declinedPayment = false;

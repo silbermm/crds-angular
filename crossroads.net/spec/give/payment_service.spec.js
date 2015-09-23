@@ -269,6 +269,7 @@ describe ('PaymentService', function () {
 
     var postData = {
         program_id: "Program",
+        campaign_id: 321,
         amount: "1234",
         donor_id: "Donor"
       };
@@ -279,7 +280,7 @@ describe ('PaymentService', function () {
           program_id: "Program"
         });
 
-    sut.donateToProgram("Program", "1234", "Donor")
+    sut.donateToProgram("Program", 321, "1234", "Donor")
       .then(function(confirmation){
         expect(confirmation.program_id).toEqual("Program");
         expect(confirmation.amount).toEqual("1234");

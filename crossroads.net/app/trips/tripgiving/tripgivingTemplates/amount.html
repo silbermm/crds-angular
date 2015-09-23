@@ -3,7 +3,9 @@
     <div class="form-group">
       <donation-details amount="tripGiving.dto.amount"
                         program="tripGiving.dto.program"
-                        amount-submitted="tripGiving.dto.amountSubmitted" >
+                        amount-submitted="tripGiving.dto.amountSubmitted"
+                        show-initiative-option='false'
+                        show-frequency-option='false'>
       </donation-details>
       <div class="push-bottom">
         <div class="checkbox">
@@ -18,9 +20,17 @@
                     ng-model="tripGiving.message">
           </textarea>
         </div>
-
       </div>
-      <a ui-sref="/demo/guest-giver/login" class="btn btn-primary btn-lg col-xs-12">Give $125</a>
+      <button ng-click="tripGiving.giveFlow.goToAccount(tripGiving.tripForm)" 
+              ng-class="{disabled: tripGiving.dto.processing}" 
+              class="btn btn-primary btn-lg btn-block-mobile give-button">
+         <span ng-if="tripGiving.dto.processing">Next...</span>
+         <span ng-if="!tripGiving.dto.processing">Next</span>
+         <svg viewBox="0 0 32 32" class="icon-medium icon-arrow-right9 text-right">
+	        <use xlink:href="#arrow-right9"></use>
+         </svg>
+      </button>
+      <!--<a ui-sref="/demo/guest-giver/login" class="btn btn-primary btn-lg col-xs-12">Give $125</a>-->
     </div>
   </ng-form>
 </div>

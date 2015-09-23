@@ -10,8 +10,9 @@
       initDefaultState: initDefaultState,
     };
 
-    function initDefaultState() {
+    function initDefaultState(program) {
       GiveTransferService.reset();
+      GiveTransferService.program = program;
       GiveTransferService.processing = false;
 
       // Setup the give flow service

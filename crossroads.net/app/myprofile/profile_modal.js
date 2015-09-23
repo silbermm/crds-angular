@@ -21,6 +21,8 @@ angular.module('crossroads').controller('ModalDemoCtrl', function ($scope, $moda
       $log.info('Modal dismissed at: ' + new Date());
     });
   };
+
+
 });
 
 // Please note that $modalInstance represents a modal window (instance) dependency.

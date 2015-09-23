@@ -3,7 +3,15 @@
 
   module.exports = DonationService;
 
-  DonationService.$inject = ['$rootScope', 'Session', 'GiveTransferService', 'PaymentService', 'GiveFlow', '$state', 'CC_BRAND_CODES'];
+  DonationService.$inject = [
+    '$rootScope',
+    'Session',
+    'GiveTransferService',
+    'PaymentService',
+    'GiveFlow',
+    '$state',
+    'CC_BRAND_CODES'
+  ];
 
   function DonationService($rootScope, Session, GiveTransferService, PaymentService, GiveFlow, $state, CC_BRAND_CODES) {
     var donationService = {
@@ -54,13 +62,13 @@
         donationService.createCard();
         PaymentService.createDonorWithCard(donationService.card, GiveTransferService.email)
           .then(function(donor) {
-            donationService.donate(pgram);
+            donationService.donate(pgram, GiveTransferService.campaign);
           }, PaymentService.stripeErrorHandler);
       } else if (GiveTransferService.view === 'bank') {
         donationService.createBank();
         PaymentService.createDonorWithBankAcct(donationService.bank, GiveTransferService.email)
           .then(function(donor) {
-            donationService.donate(pgram);
+            donationService.donate(pgram, GiveTransferService.campaign);
           }, PaymentService.stripeErrorHandler);
       }
     }
@@ -79,7 +87,7 @@
           pgram = GiveTransferService.program;
         }
 
-        donationService.donate(pgram, function(confirmation) {
+        donationService.donate(pgram, GiveTransferService.campaign,  function(confirmation) {
           console.log('successfully donated'); 
         }, function(error) {
 
@@ -92,8 +100,13 @@
       }
     }
 
-    function donate(program, onSuccess, onFailure) {
-      PaymentService.donateToProgram(program.ProgramId,
+    function donate(program, campaign, onSuccess, onFailure) {
+      if (campaign === undefined || campaign ===  null) {
+        campaign = { campaignId: null,  campaignName: null };
+      }
+      PaymentService.donateToProgram(
+          program.ProgramId,
+          campaign.campaignId,
           GiveTransferService.amount,
           GiveTransferService.donor.donorId,
           GiveTransferService.email,
@@ -128,7 +141,7 @@
            } else {
              pgram = GiveTransferService.program;  
            }
-           donationService.donate(pgram);
+           donationService.donate(pgram, GiveTransferService.campaign);
         }, PaymentService.stripeErrorHandler);
       } else {
          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
@@ -159,7 +172,7 @@
         }
         PaymentService.updateDonorWithCard(GiveTransferService.donor.id, donationService.card, GiveTransferService.email)
           .then(function(donor) {
-            donate(pgram, function() {
+            donate(pgram, GiveTransferService.campaign, function() {
             
             }, function(error) {
               GiveTransferService.processing = false;
@@ -214,7 +227,7 @@
           }
           if (!giveForm.creditCardForm.$dirty) {
             GiveTransferService.processing = true;
-            donationService.donate(pgram);
+            donationService.donate(pgram, GiveTransferService.campaign);
           } else {
             donationService.processCreditCardChange(giveForm, programsInput);
           }
@@ -224,7 +237,7 @@
           }
           if(!giveForm.bankAccountForm.$dirty) {
             GiveTransferService.processing = true;
-            donationService.donate(pgram);
+            donationService.donate(pgram, GiveTransferService.campaign);
           } else {
             donationService.processBankAccountChange(giveForm, programsInput);
           }
@@ -275,13 +288,13 @@
         donationService.createCard();
         PaymentService.updateDonorWithCard(donorId, donationService.card, GiveTransferService.email)
           .then(function(donor) {
-            donationService.donate(pgram);
+            donationService.donate(pgram, GiveTransferService.campaign);
           }, PaymentService.stripeErrorHandler);
       } else if (GiveTransferService.view === 'bank') {
         donationService.createBank();
         PaymentService.updateDonorWithBankAcct(donorId, donationService.bank, GiveTransferService.email)
           .then(function(donor) {
-            donationService.donate(pgram);
+            donationService.donate(pgram, GiveTransferService.campaign);
           }, PaymentService.stripeErrorHandler);
       }
     }

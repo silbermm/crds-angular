@@ -782,17 +782,21 @@ describe('GiveController', function() {
       controller.dto.email = 'test@here.com';
       controller.dto.view = 'cc';
  
-      mockPaymentService.donateToProgram.and.callFake(function(programId, amount, donorId, email, pymtType) {
+      mockPaymentService.donateToProgram.and.callFake(function(programId, campaignId,  amount, donorId, email, pymtType) {
         var deferred = $q.defer();
         deferred.resolve({ });
         return deferred.promise;
       });
      
-      DonationService.donate({ProgramId: 1, Name: 'Game Change'}, callback.onSuccess, callback.onFailure);
+      DonationService.donate(
+          {ProgramId: 1, Name: 'Game Change'},
+          {campaignId: 321, campaignName: 'Test Campaign'},
+          callback.onSuccess,
+          callback.onFailure);
       // This resolves the promise above
       $rootScope.$apply();
 
-      expect(mockPaymentService.donateToProgram).toHaveBeenCalledWith(1, 123, "2", "test@here.com", "cc");
+      expect(mockPaymentService.donateToProgram).toHaveBeenCalledWith(1, 321, 123, "2", "test@here.com", "cc");
       expect(callback.onSuccess).toHaveBeenCalled();
       expect(callback.onFailure).not.toHaveBeenCalled();
     });
@@ -809,7 +813,7 @@ describe('GiveController', function() {
       controller.dto.program = undefined;
       controller.dto.program_name = undefined;
 
-      controller.donationService.donate({programId: 1, Name: 'Game Change'}, callback.onSuccess, callback.onFailure);
+      controller.donationService.donate({programId: 1, Name: 'Game Change'}, undefined, callback.onSuccess, callback.onFailure);
       // This resolves the promise above
       $rootScope.$apply();
 
