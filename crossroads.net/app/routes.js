@@ -214,8 +214,8 @@
         templateUrl: 'explore/explore.html',
         data: {
           meta: {
-           title: 'Explore',
-           description: ''
+            title: 'Explore',
+            description: ''
           }
         }
       })
@@ -361,6 +361,7 @@
                         contact, cmsInfo
                       });
                     }
+
                   );
               });
 
@@ -504,29 +505,36 @@
               $templateFactory,
               $stateParams,
               Page,
-              ContentPageService,
-              ContentSiteConfigService) {
+              ContentPageService) {
               var promise;
 
               var link = addTrailingSlashIfNecessary($stateParams.link);
               promise = Page.get({ url: link }).$promise;
 
-              return promise.then(function(promise) {
-
-                if (promise.pages.length > 0) {
-                  ContentPageService.page = promise.pages[0];
-                } else {
-                  var notFoundRequest = Page.get({ url: '/page-not-found/' }, function() {
-                    if (notFoundRequest.pages.length > 0) {
-                      ContentPageService.page.content = notFoundRequest.pages[0].content;
-                      ContentPageService.page.pageType = '';
-                    } else {
-                      ContentPageService.page.content = '404 Content not found';
-                      ContentPageService.page.pageType = '';
-                    }
-                  });
+              var childPromise = promise.then(function(originalPromise) {
+                if (originalPromise.pages.length > 0) {
+                  ContentPageService.page = originalPromise.pages[0];
+                  return originalPromise;
                 }
 
+                var notFoundPromise = Page.get({url: '/page-not-found/'}).$promise;
+
+                notFoundPromise.then(function(promise) {
+                  if (promise.pages.length > 0) {
+                    ContentPageService.page = promise.pages[0];
+                  } else {
+                    ContentPageService.page = {
+                      content: '404 Content not found',
+                      pageType: '',
+                      title: 'Page not found'
+                    };
+                  }
+                });
+
+                return notFoundPromise;
+              });
+
+              return childPromise.then(function() {
                 $rootScope.meta = {
                   title: ContentPageService.page.title,
                   description: ContentPageService.page.metaDescription,
