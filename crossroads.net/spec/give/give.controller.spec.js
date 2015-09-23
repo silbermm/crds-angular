@@ -700,10 +700,44 @@ describe('GiveController', function() {
        controller.donationService.transitionForLoggedInUserBasedOnExistingDonor(mockEvent, mockToState);
        expect(controller.dto.last4).toBe('6699');
        expect(controller.dto.brand).toBe('#library');
+       expect(controller.dto.view).toBe('bank');
      });
-   });
 
-  describe('function goToChange', function() {
+  it('should set brand and last 4 correctly when payment type is cc', function(){
+    mockGetResponse = {
+      Processor_ID: "123456",
+      default_source :  {
+        credit_card : {
+          brand : 'Visa',
+          last4 : '4242'
+        },
+        bank_account: {
+          routing: null,
+          last4: null
+        }
+      }
+    };
+
+    var mockEvent = {
+      preventDefault : function(){}
+    };
+
+    var mockToState = {
+      name : 'give.account'
+    };
+    controller.dto.email= 'test@test.com';
+
+    mockSession.isActive.and.callFake(function(){
+      return true;
+    });
+    controller.donationService.transitionForLoggedInUserBasedOnExistingDonor(mockEvent, mockToState);
+    expect(controller.dto.last4).toBe('4242');
+    expect(controller.dto.brand).toBe('#cc_visa');
+    expect(controller.dto.view).toBe('cc');
+  });
+});
+
+describe('function goToChange', function() {
 
     beforeEach(function(){
       mockSession.isActive.and.callFake(function(){
