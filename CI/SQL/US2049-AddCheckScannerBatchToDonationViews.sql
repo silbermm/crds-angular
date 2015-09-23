@@ -10,5 +10,3 @@ SET [Field_List] = CONCAT([Field_List], ',Donations.Check_Scanner_Batch')
 WHERE [Page_View_ID] IN (357, 92199, 354);
 
 GO
-
-,Donations.Check_Scanner_Batch
