@@ -18,10 +18,10 @@
     <preloader full-screen='false' ng-show="!giving_history_controller.overall_view_ready"> </preloader>
 
     <div ng-show="giving_history_controller.overall_view_ready">
+      <preloader full-screen='false' ng-show="giving_history_controller.overall_view_ready && !giving_history_controller.donation_view_ready"> </preloader>
+
       <!-- DONATION GIVING HISTORY -->
       <div class="row">
-        <preloader full-screen='false' ng-show="giving_history_controller.overall_view_ready && !giving_history_controller.donation_view_ready"> </preloader>
-
         <!--  NO GIVING HISTORY - ng-show if no history  -->
         <div ng-show="!giving_history_controller.donation_history && giving_history_controller.donation_view_ready" class="no-data">
           <div class="col-sm-6 col-sm-offset-3">
@@ -35,8 +35,10 @@
             </div>
           </div><!--/col-sm-12-->
         </div><!--/no-data-->
-        <!--  END OF NO GIVING HISTORY  -->
+      </div>
+      <!--  END OF NO GIVING HISTORY  -->
 
+      <div class="row">
         <!-- IS GIVING HISTORY - ng-show or ng-if on data from resource-->
         <div ng-show="giving_history_controller.donation_history && giving_history_controller.donation_view_ready">
           <div class="col-sm-6 clearfix hidden-print">
@@ -47,10 +49,12 @@
                all-years="giving_history_controller.donation_years"
                on-change="giving_history_controller.getDonations() || giving_history_controller.getSoftCreditDonations()"></div>
 
-          <donation-list
-            donations-input="giving_history_controller.donations"
-            donation-total-amount="giving_history_controller.donation_total_amount"
-            donation-statement-total-amount="giving_history_controller.donation_statement_total_amount"></donation-list>
+          <div class="col-lg-12">
+            <donation-list
+              donations-input="giving_history_controller.donations"
+              donation-total-amount="giving_history_controller.donation_total_amount"
+              donation-statement-total-amount="giving_history_controller.donation_statement_total_amount"></donation-list>
+          </div>
         </div>
         <!-- END OF IS GIVING HISTORY -->
       </div>
