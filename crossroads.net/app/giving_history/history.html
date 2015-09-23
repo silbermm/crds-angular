@@ -45,7 +45,7 @@
           <div class="col-sm-6" giving-years
                selected-year="giving_history_controller.selected_giving_year"
                all-years="giving_history_controller.donation_years"
-               on-change="giving_history_controller.getDonations()"></div>
+               on-change="giving_history_controller.getDonations() || giving_history_controller.getSoftCreditDonations()"></div>
 
           <donation-list
             donations-input="giving_history_controller.donations"
