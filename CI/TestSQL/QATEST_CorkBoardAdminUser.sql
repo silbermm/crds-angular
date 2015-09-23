@@ -35,7 +35,7 @@ INSERT INTO [dbo].Participants
 
 
 --User ROLE - Corkboard admin
-SET IDENTITY_INSERT [dbo].[Donors] OFF;
+SET IDENTITY_INSERT [dbo].[Participants] OFF;
 SET IDENTITY_INSERT [dbo].[Dp_User_Roles] ON;
 
 DECLARE @user_role_id as int
