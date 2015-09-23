@@ -2,9 +2,35 @@
   'use strict';
   module.exports = SingleMediaController;
 
-  SingleMediaController.$inject = ['$rootScope', '$scope', '$sce', '$location', '$sanitize', 'SingleMedia', 'ItemProperty', 'ParentMedia', 'ParentItemProperty', 'ImageURL', 'YT_EVENT', 'ResponsiveImageService'];
+  SingleMediaController.$inject = [
+    '$rootScope',
+    '$scope',
+    '$sce',
+    '$location',
+    '$sanitize',
+    'SingleMedia',
+    'ItemProperty',
+    'ParentMedia',
+    'ParentItemProperty',
+    'ImageURL',
+    'YT_EVENT',
+    'ResponsiveImageService',
+    'ContentSiteConfigService'
+  ];
 
-  function SingleMediaController($rootScope, $scope, $sce, $location, $sanitize, SingleMedia, ItemProperty, ParentMedia, ParentItemProperty, ImageURL, YT_EVENT, ResponsiveImageService) {
+  function SingleMediaController($rootScope,
+                                 $scope,
+                                 $sce,
+                                 $location,
+                                 $sanitize,
+                                 SingleMedia,
+                                 ItemProperty,
+                                 ParentMedia,
+                                 ParentItemProperty,
+                                 ImageURL,
+                                 YT_EVENT,
+                                 ResponsiveImageService,
+                                 ContentSiteConfigService) {
     var vm = this;
     vm.imageUrl = ImageURL;
     vm.isMessage = (ItemProperty === 'message');
@@ -55,6 +81,7 @@
     }
 
     if (vm.audio) {
+      vm.audio.audioUrl = ContentSiteConfigService.siteconfig.soundCloudURL + _.get(vm.audio, 'serviceId');
       vm.audioDownloadLink = _.get(vm.audio, 'source.filename');
     }
 
