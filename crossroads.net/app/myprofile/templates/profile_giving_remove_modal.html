@@ -5,7 +5,7 @@
   </div>
   <div class="modal-body">
 
-    <p>Are you sure you want to remove your recurring gift?</p>
+    <div ng-bind-html="$root.MESSAGES.giveRecurringRemove.content | html"></div>
 
     <p>
       You will be removing the recurring gift of
@@ -22,7 +22,7 @@
     </p>
 
     <div class="alert alert-warning">
-      <p>Note: If you are using a bank account, this may take up to 5 days to process. If you have questions please contact <a href="mailto:finance@crossroads.net">finance@crossroads.net</a></p>
+      <div ng-bind-html="$root.MESSAGES.giveRecurringRemoveWarning.content | html"></div>
     </div>
   </div>
   <div class="modal-footer">
