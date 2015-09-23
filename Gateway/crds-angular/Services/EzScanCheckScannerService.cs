@@ -77,7 +77,7 @@ namespace crds_angular.Services
                     // it will be in error, and will have to be manually resolved.
                     check.Exported = true;
               
-                    var encryptedKey = _mpDonorService.CreateEncodedAndEncryptedAccountAndRoutingNumber(check.AccountNumber, check.RoutingNumber);
+                    var encryptedKey = _mpDonorService.CreateHashedAccountAndRoutingNumber(check.AccountNumber, check.RoutingNumber);
                                      
                     _mpDonorService.UpdateDonorAccount(encryptedKey, charge.Source.id, contactDonor.ProcessorId);
                  
@@ -122,7 +122,8 @@ namespace crds_angular.Services
 
         public ContactDonor CreateDonor(CheckScannerCheck checkDetails)
         {
-            var contactDonor = _donorService.GetContactDonorForDonorAccount(checkDetails.AccountNumber, checkDetails.RoutingNumber) ?? new ContactDonor();
+            var acctN = _donorService.DecryptValues(checkDetails.AccountNumber, checkDetails.RoutingNumber); 
+           var contactDonor = _donorService.GetContactDonorForDonorAccount(checkDetails.AccountNumber, checkDetails.RoutingNumber) ?? new ContactDonor();
 
             if (contactDonor.HasPaymentProcessorRecord)
             {
@@ -151,7 +152,7 @@ namespace crds_angular.Services
                 Type = AccountType.Checking
             };
             
-            var encryptedKey = _mpDonorService.CreateEncodedAndEncryptedAccountAndRoutingNumber(checkDetails.AccountNumber, checkDetails.RoutingNumber);
+            var encryptedKey = _mpDonorService.CreateHashedAccountAndRoutingNumber(checkDetails.AccountNumber, checkDetails.RoutingNumber);
             
             return _donorService.CreateOrUpdateContactDonor(contactDonor, encryptedKey, string.Empty, token, DateTime.Now);
         }

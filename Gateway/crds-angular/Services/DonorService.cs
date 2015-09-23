@@ -151,5 +151,10 @@ namespace crds_angular.Services
             return (contactDonorResponse);
         }
 
+        public string DecryptValues(string accountNumber, string routingNumber)
+        {
+            return (_mpDonorService.DecryptValues(accountNumber, routingNumber));
+        }
+
     }
 }
