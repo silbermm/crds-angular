@@ -64,7 +64,7 @@ BEGIN
         SELECT @Participants_Count = COUNT(*)
         FROM [dbo].[Group_Participants]
         WHERE Group_Id = @Next_Group_Id
-		AND ([End_Date] IS NULL OR CAST([End_Date] AS DATE) >= CAST(GETDATE() AS DATE));
+		AND ([End_Date] IS NULL OR CAST([End_Date] AS DATE) > CAST(GETDATE() AS DATE));
 
         -- Calculate Group_Is_Full
         SET @Group_Is_Full =
