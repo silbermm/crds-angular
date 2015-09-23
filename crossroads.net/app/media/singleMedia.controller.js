@@ -81,7 +81,6 @@
     }
 
     if (vm.audio) {
-      debugger;
       vm.audio.audioUrl = ContentSiteConfigService.siteconfig.soundCloudURL + _.get(vm.audio, 'serviceId');
       vm.audioDownloadLink = _.get(vm.audio, 'source.filename');
     }
