@@ -27,7 +27,7 @@
       return apiDonor(card, email, stripe.card, 'POST');
     }
 
-    function donateToProgram(program_id, amount, donor_id, email_address, pymt_type){
+    function donateToProgram(program_id, amount, donor_id, email_address, pymt_type) {
       var def = $q.defer();
       var donationRequest = {
         program_id: program_id,
@@ -74,14 +74,16 @@
       return def.promise;
     }
 
-    function stripeErrorHandler(error){
-      if(error && error.globalMessage) {
+    function stripeErrorHandler(error) {
+      if (error && error.globalMessage) {
         GiveTransferService.declinedPayment =
-              error.globalMessage.id == $rootScope.MESSAGES.paymentMethodDeclined.id;
+              error.globalMessage.id === $rootScope.MESSAGES.paymentMethodDeclined.id;
         $rootScope.$emit('notify', error.globalMessage);
       } else {
         $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
       }
+
+      GiveTransferService.processing = false;
     }
 
     function updateDonorWithBankAcct(donorId, bankAcct, email) {
