@@ -63,7 +63,7 @@
       vm.programDownloadLink = _.get(vm.media, 'program.filename');
       vm.mediaTags = vm.media.combinedTags;
     } else {
-      if (vm.media.className === 'Music') {
+      if (vm.media.className === 'Music' || vm.media.className === 'Audio') {
         vm.audio = vm.media;
         vm.video = null;
         vm.videoSectionIsOpen = false;
