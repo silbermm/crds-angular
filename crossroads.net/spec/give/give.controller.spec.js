@@ -4,17 +4,17 @@ require('../../app/give/give.module');
 require('../../app/app');
 
 describe('GiveController', function() {
-  var controller, 
-      $rootScope, 
-      $scope, 
-      $state, 
-      $timeout, 
-      $q, 
-      httpBackend, 
-      mockPaymentService, 
-      mockGetResponse, 
-      programList, 
-      mockPaymentServiceGetPromise, 
+  var controller,
+      $rootScope,
+      $scope,
+      $state,
+      $timeout,
+      $q,
+      httpBackend,
+      mockPaymentService,
+      mockGetResponse,
+      programList,
+      mockPaymentServiceGetPromise,
       mockSession,
       Session,
       DonationService,
@@ -81,11 +81,11 @@ describe('GiveController', function() {
       GiveTransferService = $injector.get('GiveTransferService');
       GiveFlow = $injector.get('GiveFlow');
       OneTimeGiving = $injector.get('OneTimeGiving');
-      
+
       $rootScope.MESSAGES = {
         failedResponse: 15
       };
-      
+
       mockGetResponse = {
         id: "102030",
         Processor_ID: "123456",
@@ -131,13 +131,13 @@ describe('GiveController', function() {
           'OneTimeGiving': OneTimeGiving
         });
 
-      controller.initDefaultState(); 
+      controller.initDefaultState();
       controller.dto.brand = '';
       controller.dto.donor = {};
       controller.dto.donorError = false;
       controller.dto.last4 = '';
       controller.programsInput = programList;
-      
+
     })
   );
 
@@ -255,7 +255,7 @@ describe('GiveController', function() {
     });
 
     it('should do nothing special if starting at give.amount', function() {
-      
+
       controller.dto.initialized = false;
       controller.initDefaultState();
 
@@ -290,7 +290,7 @@ describe('GiveController', function() {
       var event = $rootScope.$broadcast('$stateChangeStart', {name: 'give.account'});
 
       expect(event.defaultPrevented).toBeTruthy();
-      expect(controller.dto.initialized = true); 
+      expect(controller.dto.initialized = true);
       expect(controller.dto.email).toBeUndefined();
     });
 
@@ -302,7 +302,7 @@ describe('GiveController', function() {
       var event = $rootScope.$broadcast('$stateChangeStart', {name: 'give.amount'});
 
       expect(event.defaultPrevented).toBeFalsy();
-      expect(controller.dto.initialized).toBeTruthy(); 
+      expect(controller.dto.initialized).toBeTruthy();
       expect(controller.donationService.transitionForLoggedInUserBasedOnExistingDonor).toHaveBeenCalled();
       expect(controller.dto.processing).toBeTruthy();
       expect(controller.dto.email).toBeUndefined();
@@ -314,7 +314,7 @@ describe('GiveController', function() {
 
       var event = $rootScope.$broadcast('$stateChangeStart', {name: 'give.amount'});
 
-      expect(controller.dto.initialized).toBeTruthy(); 
+      expect(controller.dto.initialized).toBeTruthy();
       expect(controller.donationService.transitionForLoggedInUserBasedOnExistingDonor).toHaveBeenCalled();
       expect(controller.dto.email).toBeUndefined();
     });
@@ -386,9 +386,9 @@ describe('GiveController', function() {
     };
 
     it('should call updateDonorWithCard with proper values when changing card info', function() {
-      
+
       httpBackend.whenGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/authenticated').respond(200);
-     
+
       controller.giveForm = controllerGiveForm;
       controller.dto.amount = 858;
       controller.dto.view = 'cc';
@@ -419,20 +419,20 @@ describe('GiveController', function() {
         deferred.resolve({ amount: a, email: e });
         return deferred.promise;
       });
-      
+
       mockPaymentService.updateDonorWithCard.and.callFake(function(donorId, card, email){
         var deferred = $q.defer();
         deferred.resolve({ donorId: donorId, email: email });
         return deferred.promise;
       });
 
-      
+
       spyOn($state, 'go').and.callFake(function(a) {
         return true;
-      }); 
+      });
 
       spyOn(controller.donationService, 'donate');
-      
+
       controller.donationService.submitChangedBankInfo(controller.giveForm );
       // This resolves the promise above
       $rootScope.$apply();
@@ -458,12 +458,12 @@ describe('GiveController', function() {
         }
       };
       controller.dto.pymtType = 'bank';
-        
+
       spyOn(controller.donationService, 'donate');
- 
+
       spyOn($state, 'go').and.callFake(function(a) {
         return true;
-      }); 
+      });
 
       controller.donationService.submitChangedBankInfo(controller.giveForm);
       // This resolves the promise above
@@ -561,15 +561,15 @@ describe('GiveController', function() {
         }
       };
 
-      
+      GiveTransferService.email = 'test@test.com';
       mockSession.isActive.and.callFake(function(){
         return true;
       });
 
       spyOn($state, 'go').and.callFake(function(b){
-        return true; 
+        return true;
       });
-       
+
       spyOn(controller.donationService, 'updateDonorAndDonate');
       controller.donationService.submitBankInfo(controller.giveForm);
 
@@ -579,10 +579,10 @@ describe('GiveController', function() {
 
     it('should call createDonorAndDonate when there is not an existing donor', function() {
       mockPaymentServiceGetPromise.setSuccess(false);
-      
+
       controller.dto.program = {programId: 1, Name: 'crossroads'};
-      
-      controller.dto.email = 'test@test.com';
+
+      GiveTransferService.email = 'test@test.com';
       mockSession.isActive.and.callFake(function(){
        return true;
       });
@@ -612,7 +612,7 @@ describe('GiveController', function() {
        mockSession.isActive.and.callFake(function(){
          return false;
        });
-       
+
        controller.initDefaultState();
 
        spyOn($state, 'go');
@@ -627,14 +627,14 @@ describe('GiveController', function() {
      });
 
      it('should transition to give.account for a logged-in Giver without an existing donor', function(){
-       
-       controller.initDefaultState(); 
+
+       controller.initDefaultState();
        mockSession.isActive.and.callFake(function(){
          return true;
        });
        spyOn($state, "go");
        spyOn(mockEvent, "preventDefault");
-       
+
        mockPaymentServiceGetPromise.setSuccess(false);
        mockPaymentServiceGetPromise.setHttpStatusCode(404);
        controller.giveForm = {
@@ -654,7 +654,7 @@ describe('GiveController', function() {
        mockSession.isActive.and.callFake(function(){
          return true;
        });
-       
+
        spyOn($state, "go");
        spyOn(mockEvent, "preventDefault");
 
@@ -738,17 +738,17 @@ describe('GiveController', function() {
 });
 
 describe('function goToChange', function() {
-      
+
     beforeEach(function(){
       mockSession.isActive.and.callFake(function(){
         return true;
       });
-      
-      OneTimeGiving.initDefaultState();     
- 
+
+      OneTimeGiving.initDefaultState();
+
       spyOn($state, 'go').and.callFake(function(state){
         return true;
-      }); 
+      });
     });
 
     it('should populate dto with appropriate values when going to the credit card change page', function() {
@@ -762,7 +762,7 @@ describe('function goToChange', function() {
       controller.dto.donor = 'donor';
       controller.dto.email = 'test@here.com';
       controller.dto.program = 'program';
-      
+
       controller.giveFlow.goToChange();
 
       expect(controller.dto.amount).toBe(123);
@@ -786,7 +786,7 @@ describe('function goToChange', function() {
     });
   });
 
-  
+
   describe('function processChange', function() {
     it('should transition to give.login is session is not active', function() {
       mockSession.isActive.and.callFake(function(){
@@ -810,18 +810,18 @@ describe('function goToChange', function() {
     it('should call success callback if donation is successful', function() {
 
       mockPaymentServiceGetPromise.setSuccess(true);
-      controller.initDefaultState(); 
+      controller.initDefaultState();
       controller.dto.amount = 123;
       controller.dto.donor = { donorId: '2' };
       controller.dto.email = 'test@here.com';
       controller.dto.view = 'cc';
- 
+
       mockPaymentService.donateToProgram.and.callFake(function(programId, amount, donorId, email, pymtType) {
         var deferred = $q.defer();
         deferred.resolve({ });
         return deferred.promise;
       });
-     
+
       DonationService.donate({ProgramId: 1, Name: 'Game Change'}, callback.onSuccess, callback.onFailure);
       // This resolves the promise above
       $rootScope.$apply();
@@ -838,7 +838,7 @@ describe('function goToChange', function() {
         deferred.reject("Uh oh!");
         return deferred.promise;
       });
-      
+
       controller.dto.amount = undefined;
       controller.dto.program = undefined;
       controller.dto.program_name = undefined;
