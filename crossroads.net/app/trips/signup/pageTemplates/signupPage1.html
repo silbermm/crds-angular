@@ -6,14 +6,10 @@
       Information shared here is kept secure and private. We will not share or sell your information.</p>
     </div>
   </div>
-  <pre>{{ tripsSignup.viewReady }}</pre>
   <preloader full-screen='true' ng-show="!tripsSignup.viewReady"> </preloader>
   <legend>Update Profile Information</legend>
   <div class="row">
     <div class='col-sm-12'>
-      <!-- <pre>{{ tripsSignup.profileData }}</pre>
-      <pre>{{ tripsSignup.signupService.contactId }}</pre>
-      <pre>{{ tripsSignup.buttonText }}</pre> -->
       <profile-personal
          contact-id="tripsSignup.signupService.contactId"
          allow-password-change="false"

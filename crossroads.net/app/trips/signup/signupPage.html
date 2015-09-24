@@ -3,7 +3,6 @@
     <h1 class="page-header" ng-if="tripsSignup.currentPage != 'thanks'" >GO {{tripsSignup.destination}} Signup</h1>
     <h1 class="page-header" ng-if="tripsSignup.currentPage == 'thanks'" > Thank you for signing up for GO {{tripsSignup.destination}}</h1>
     <h2 class="subheading">{{tripsSignup.tripName}}</h2>
-    <pre>{{ tripsSignup.viewReady }}</pre>
     <preloader full-screen='true' ng-show="!tripsSignup.viewReady"> </preloader>
 
     <div ng-show='tripsSignup.ageLimitReached && tripsSignup.viewReady && !tripsSignup.registrationNotOpen'>
@@ -16,10 +15,14 @@
 
     <div ng-show='!tripsSignup.pageHasErrors && tripsSignup.viewReady'> <!-- Content if there is no Page Error -->
 
-      <signup-progress total-steps='tripsSignup.numberOfPages' current-step='tripsSignup.currentPage' progress-label='tripsSignup.progressLabel'> </signup-progress>
+      <!-- <form name="testForm">
+        <input type="text" name="textInput" ng-model="tripsSignup.signupService.page2.tshirtSize.value" />
+      </form> -->
+      <signup-progress total-steps='tripsSignup.numberOfPages' current-step='tripsSignup.signupService.pageId' progress-label='tripsSignup.progressLabel'> </signup-progress>
 
       <!-- our nested state views will be injected here -->
-      <div id="form-views" ui-view autoscroll="true"></div>
+      <pre>pageId: {{ tripsSignup.signupService.pageId }}</pre>
+      <div id="form-views" ui-view autoscroll="false"></div>
 
     </div>
 </div><!--/row-->

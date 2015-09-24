@@ -159,37 +159,23 @@
           WorkTeams: function(Trip) {
             return Trip.WorkTeams.query().$promise;
           },
+
+          pageId: function() {
+            return 0;
+          }
         }
-      })
-      .state('tripsignup.application.page1', {
-        url: '/1',
-        templateUrl: 'pageTemplates/signupPage1.html'
-      })
-      .state('tripsignup.application.page2', {
-        url: '/2',
-        templateUrl: 'pageTemplates/signupPage2.html'
-      })
-      .state('tripsignup.application.page3', {
-        url: '/3',
-        templateUrl: 'pageTemplates/signupPage3.html'
-      })
-      .state('tripsignup.application.page4', {
-        url: '/4',
-        templateUrl: 'pageTemplates/signupPage4.html'
-      })
-      .state('tripsignup.application.page5', {
-        url: '/5',
-        templateUrl: 'pageTemplates/signupPage5.html'
-      })
-      .state('tripsignup.application.page6', {
-        url: '/6',
-        templateUrl: 'pageTemplates/signupPage6.html'
       })
       .state('tripsignup.application.thankyou', {
         url: '/thankyou',
         templateUrl: 'pageTemplates/thankYou.html',
+      })
+      .state('tripsignup.application.page', {
+        url: '/:pageId',
+        templateUrl: function($stateParams) {
+          var template = 'pageTemplates/signupPage' + $stateParams.pageId + '.html';
+          return template;
+        }
       });
-
   }
 
 })();

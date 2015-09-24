@@ -6,6 +6,7 @@
   TripsSignupController.$inject = [
     '$log',
     '$rootScope',
+    '$scope',
     '$state',
     'Session',
     'Campaign',
@@ -16,12 +17,15 @@
     'contactId',
     'TripsSignupService',
     'Person',
-    'Validation', '$window'
+    'Validation',
+    '$window',
+    '$anchorScroll'
   ];
 
   function TripsSignupController(
       $log,
       $rootScope,
+      $scope,
       $state,
       Session,
       Campaign,
@@ -32,48 +36,42 @@
       contactId,
       TripsSignupService,
       Person,
-      Validation, $window
+      Validation,
+      $window,
+      $anchorScroll
     )
     {
 
     var vm = this;
     vm.ageLimitReached = true;
+    vm.buttonText = 'Next';
     vm.campaign = Campaign;
     vm.contactId = contactId;
-    vm.currentPage = 1;
+    // vm.currentPage = 1;
     vm.destination = vm.campaign.nickname;
+    vm.handlePageChange = handlePageChange;
+    vm.handleSubmit = handleSubmit;
+    vm.nolaRequired = nolaRequired;
     vm.numberOfPages = 0;
+    // vm.pageId = $state.params.pageId;
     vm.pageHasErrors = true;
     vm.privateInvite = $location.search()['invite'];
+    vm.profileData = {};
     vm.progressLabel = '';
     vm.registrationNotOpen = true;
+    vm.signupService = TripsSignupService;
     vm.tripName = vm.campaign.name;
     vm.tshirtSizes = [];
+    vm.underAge = underAge;
+    vm.validateProfile = validateProfile;
+    vm.validation = Validation;
     vm.viewReady = false;
     vm.whyPlaceholder = '';
     vm.workTeams = WorkTeams;
 
-    // from pages.controller
-    ////////////////////////
-    vm.buttonText = 'Next';
-    // vm.handleNext = handleNext;
-    // vm.handleNextt = handleNextt;
-    vm.handlePageChange = handlePageChange;
-    // vm.handlePrevious = handlePrevious;
-    vm.handleSubmit = handleSubmit;
-    vm.nolaRequired = nolaRequired;
-    vm.signupService = TripsSignupService;
-    // vm.profileData = TripsSignupService.profileData;
-    vm.profileData = {};
-    vm.underAge = underAge;
-    vm.validation = Validation;
-    vm.whyPlaceholder = '';
-    vm.validateProfile = validateProfile;
-    // from pages.controler end
-    ////////////////////////
-
     $rootScope.$on('$stateChangeStart', stateChangeStart);
-    // $window.onbeforeunload = onBeforeUnload;
+    $scope.$on('$viewContentLoaded', stateChangeSuccess);
+    $window.onbeforeunload = onBeforeUnload;
 
     activate();
 
@@ -86,18 +84,14 @@
         vm.signupService.reset(vm.campaign);
       }
 
-      // from pages.controller
-      ////////////////////////
+      vm.signupService.pageId = 1;
+
       if (vm.destination === 'India') {
         vm.whyPlaceholder = 'Please be specific. ' +
           'In instances where we have a limited number of spots, we strongly consider responses to this question.';
       }
 
       vm.signupService.activate();
-      // vm.tshirtSizes = vm.signupService.tshirtSizes;
-
-      // from pages.controller end
-      ////////////////////////////
 
       TripsSignupService.profileData = { person:  Person };
       vm.profileData = TripsSignupService.profileData;
@@ -128,6 +122,8 @@
           TripsSignupService.thankYouMessage = $rootScope.MESSAGES.NicaraguaSignUpThankYou.content;
           break;
       }
+
+      toTop();
     }
 
     //this may be the way we handle validation in the next story
@@ -144,9 +140,13 @@
     // }
 
     function handlePageChange(pageId) {
-      var route = 'tripsignup.application.page' + pageId;
-      $state.go(route);
-      vm.currentPage = pageId;
+      var route = 'tripsignup.application.page';
+
+      // $state.go(route);
+      vm.signupService.pageId = pageId;
+      $state.go(route, {pageId: pageId});
+
+      // vm.currentPage = pageId;
     }
 
     // function handleNext(nextPage) {
@@ -158,16 +158,8 @@
     //   // toTop();
     // }
 
-    // function handlePrevious(prevPage) {
-    //   vm.currentPage = prevPage;
-    //   toTop();
-    // }
-
     function handleSubmit() {
       $log.debug('handleSubmit start');
-
-      // submit info and then show the thankyou page directive
-      //$log.debug(vm.signupService.page2);
 
       vm.profileData.person.$save(function() {
         $log.debug('person save successful');
@@ -199,10 +191,16 @@
       });
 
       $log.debug('go thankyou');
+      vm.signupService.pageId = 'thanks';
       $state.go('tripsignup.application.thankyou');
+    }
 
-      // vm.currentPage = 'thanks';
-      // toTop();
+    function onBeforeUnload() {
+      var dirty = $scope.tripsSignup.tripAppPage2.$dirty;
+      $log.debug('onBeforeUnload start');
+      if (dirty) {
+        return '';
+      }
     }
 
     function nolaRequired() {
@@ -310,15 +308,17 @@
         return;
       }
 
-      if (toState.name.startsWith('tripsignup.application.')) {
-        return;
+      if (!toState.name.startsWith('tripsignup.application.')) {
+        //check if form is dirty
+        if (!$window.confirm('Are you sure you want to leave this page?')) {
+          event.preventDefault();
+          return;
+        }
       }
+    }
 
-      //check if form is dirty
-      if (!$window.confirm('Are you sure you want to leave this page?')) {
-        event.preventDefault();
-        return;
-      }
+    function stateChangeSuccess(event) {
+      toTop();
     }
 
     function toTop() {
