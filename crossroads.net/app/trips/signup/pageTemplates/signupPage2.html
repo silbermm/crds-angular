@@ -1,0 +1,134 @@
+  <form name="tripAppPage2" id="tripAppPage2">
+  <fieldset>
+
+    <div class='row' ng-show='vm.underAge()'>
+      <div class="col-sm-12">
+        <legend>Guardian Information</legend>
+        <span ng-bind-html="$root.MESSAGES.TripGuardianInformation.content | html"></span>
+      </div><!--/col-sm-12-->
+
+      <div class="form-group col-sm-6" >
+        <label for='firstName' class='required'> First Name </label>
+        <input ng-model="vm.signupService.page2.guardianFirstName.value" type='text' class='form-control' id='guardian-first-name' placeholder='First Name'>
+      </div>
+
+      <div class="form-group col-sm-6" >
+        <label for='lastName' class='required'> Last Name </label>
+        <input ng-model="vm.signupService.page2.guardianLastName.value" type='text' class='form-control' id='guardian-last-name' placeholder='Last Name'>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <legend>Trip Information</legend>
+      </div><!--/col-sm-12-->
+
+
+
+      <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripAppPage2, 'tshirtSize') }">
+        <label for="tshirt" class="required">T-shirt Size</label>
+        <select class="form-control col-sm-12" name="tshirtSize" id="tshirt" ng-required='true'
+          ng-model="tripsSignup.signupService.page2.tshirtSize"
+          ng-options="tshirt.value for tshirt in tripsSignup.signupService.tshirtSizes track by tshirt.attributeId">
+        </select>
+        </select>
+        <ng-messages for="tripAppPage2.tshirtSize.$error" ng-if="tripsSignup.validation.showErrors(tripAppPage2, 'tshirtSize')">
+          <span ng-message="required">
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+          </span>
+        </ng-messages>
+      </div><!--/form-group-->
+    </div>
+    <div class="row" ng-show="vm.destination == 'South Africa'">
+      <div class="form-group col-sm-6">
+        <label for="scrub">Scrub Size Bottom<small class="text-muted">Only required for Topsy trips</small></label>
+        <select class="form-control col-sm-12" name="scrubBottom" id="scrubBottom"
+          ng-model="vm.signupService.page2.scrubSizeBottom"
+          ng-options="bottom.value for bottom in tripsSignup.signupService.bottomScrubSizes track by bottom.attributeId">
+        </select>
+      </div>
+
+      <div class="form-group col-sm-6">
+        <label for="scrub">Scrub Size Top<small class="text-muted">Only required for Topsy trips</small></label>
+        <select class="form-control col-sm-12" name="scrubTop" id="scrubTop"
+          ng-model="vm.signupService.page2.scrubSizeTop"
+          ng-options="top.value for top in tripsSignup.signupService.topScrubSizes track by top.attributeId">
+        </select>
+      </div><!--/form-group-->
+    </div>
+
+    <div class="row">
+      <div class="form-group col-sm-12">
+          <label class="block required">How did you hear about this trip?</label>
+          <label for="program" class="radio-inline">
+              <input type="radio" value="program" id="program" name="referral" ng-model="vm.signupService.page2.referral.value">Program
+          </label>
+          <label for="session" class="radio-inline">
+              <input type="radio" value="session" id="session" name="referral" ng-model="vm.signupService.page2.referral.value">Info Session
+          </label>
+          <label for="friend" class="radio-inline">
+              <input type="radio" value="friend" id="friend" name="referral" ng-model="vm.signupService.page2.referral.value">Friend/Family
+          </label>
+          <label for="website" class="radio-inline">
+              <input type="radio" value="website" id="website" name="referral" ng-model="vm.signupService.page2.referral.value">Website
+          </label>
+          <label for="other" class="radio-inline">
+              <input type="radio" value="other" id="other" name="referral" ng-model="vm.signupService.page2.referral.value">Other
+          </label>
+      </div><!--/form-group-->
+    </div><!--/row-->
+
+    <div class="row">
+      <div class="form-group col-sm-12">
+        <label for="conditions">Please describe any medical condition(s) that may affect your ability to participate in this trip <small class="text-muted">Leave blank if it doesn't apply</small></label>
+        <textarea ng-model="vm.signupService.page2.conditions.value" class="form-control" rows="2" cols="1" id="conditions" maxlength="250"></textarea>
+      </div><!--/form-group-->
+    </div><!--/row-->
+
+    <div class="row">
+      <div class="form-group col-sm-12">
+          <label class="block required">Vegetarian? <small class="text-muted">If you mark yes we will do our best to provide vegetarian meals during the trip</small></label>
+          <label for="vegetarian-yes" class="radio-inline">
+              <input ng-model="vm.signupService.page2.vegetarian.value" type="radio" value="yes" name="vegetarian" id="vegetarian-yes">Yes
+          </label>
+          <label for="vegetarian-no" class="radio-inline">
+              <input ng-model="vm.signupService.page2.vegetarian.value" type="radio" value="no" name="vegetarian" for="vegetarian-no">No
+          </label>
+      </div><!--/form-group-->
+    </div><!--/row-->
+
+    <div class="row">
+      <div class="form-group col-sm-12">
+          <label for="allergies">Please describe all food allergies <small class="text-muted">Leave blank if it doesn't apply</small</label>
+          <textarea ng-model="vm.signupService.page2.allergies.value" class="form-control" rows="2" cols="1" id="allergies" maxlength="250"></textarea>
+      </div><!--/form-group-->
+    </div><!--/row-->
+
+    <div class="row">
+      <div id="Site" class="form-group col-sm-6">
+        <label for="slife" class="required">How would you define your spiritual life? <small class="text-muted">Pick as many as you like</small></label><br>
+
+        <div class="checkbox"> <label for="slife-searching"> <input ng-model="vm.signupService.page2.spiritualLifeSearching.value" type="checkbox" name="slife" value="Searching" id="slife-searching"> Searching for answers </label> </div>
+        <div class="checkbox"> <label for="slife-received"> <input ng-model="vm.signupService.page2.spiritualLifeReceived.value" type="checkbox" name="slife" value="Received" id="slife-received"> I have received Jesus </label> </div>
+        <div class="checkbox"> <label for="slife-obedience"> <input ng-model="vm.signupService.page2.spiritualLifeObedience.value" type="checkbox" name="slife" value="Obedience" id="slife-obedience"> Focusing on obedience - I've quit negotiating with God </label> </div>
+        <div class="checkbox"> <label for="slife-replicating"> <input ng-model="vm.signupService.page2.spiritualLifeReplicating.value" type="checkbox" name="slife" value="Replicating" id="slife-replicating"> I'm actively replicating my faith in others </label> </div>
+
+      </div><!--/form-group-->
+    </div><!--/row-->
+
+    <div class="row">
+      <div class="form-group col-sm-12" ng-class="{ 'has-error': vm.validation.showErrors(tripAppPage2, 'why') }">
+          <label for="why" class="required">Tell us why you want to go on this trip</label>
+          <textarea ng-model="vm.signupService.page2.why.value" ng-required="true" cols="1" rows="4" class="form-control" name="why" id="why" maxlength="1000" placeholder="{{vm.whyPlaceholder}}"></textarea>
+          <ng-messages for="tripAppPage2.why.$error" ng-if="vm.validation.showErrors(tripAppPage2, 'why')">
+            <span ng-message="required">
+              <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+            </span>
+          </ng-messages>
+      </div><!--/form-group-->
+    </div>
+  </fieldset>
+  <a ng-click='tripsSignup.handlePageChange(3)' class="btn btn-primary pull-right">Next</a>
+  <!-- <a ng-click='vm.handleNextt(3, this)' class="btn btn-primary pull-right">Next</a> -->
+  <!-- <a ng-click='tripsSignup.handlePageChange(1)' class="btn btn-standard pull-right">Back</a> -->
+</form>

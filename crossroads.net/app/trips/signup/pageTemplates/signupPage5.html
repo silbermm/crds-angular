@@ -155,9 +155,10 @@
           </div>
         </div><!--/row-->
 
-        <a ng-click='pages.handleNext(6)' class="btn btn-primary pull-right" ng-show="pages.destination != 'NOLA'">Next</a>
-        <a ng-click='pages.handleSubmit()' class="btn btn-primary pull-right" ng-show="pages.destination == 'NOLA'">Submit Application</a>
-        <a ng-click='pages.handlePrevious(4)'  class="btn btn-standard pull-right">Back</a>
+        <a ng-click='tripsSignup.handlePageChange(6)' class="btn btn-primary pull-right" ng-show="tripsSignup.destination != 'NOLA'">Next</a>
+        <!-- <a ng-click='pages.handleNext(6)' class="btn btn-primary pull-right" ng-show="pages.destination != 'NOLA'">Next</a> -->
+        <a ng-click='tripsSignup.handleSubmit()' class="btn btn-primary pull-right" ng-show="tripsSignup.destination == 'NOLA'">Submit Application</a>
+        <!-- <a ng-click='pages.handlePrevious(4)'  class="btn btn-standard pull-right">Back</a> -->
       </form>
   </div>
 </div><!--/row-->

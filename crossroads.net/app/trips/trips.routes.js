@@ -23,8 +23,8 @@
         },
         data: {
           meta: {
-           title: 'Trip Search',
-           description: ''
+            title: 'Trip Search',
+            description: ''
           }
         }
       })
@@ -44,8 +44,8 @@
         },
         data: {
           meta: {
-           title: 'Trip Giving',
-           description: ''
+            title: 'Trip Giving',
+            description: ''
           }
         }
       })
@@ -80,8 +80,8 @@
         data: {
           isProtected: true,
           meta: {
-           title: 'My Trips',
-           description: ''
+            title: 'My Trips',
+            description: ''
           }
         },
         resolve: {
@@ -160,7 +160,36 @@
             return Trip.WorkTeams.query().$promise;
           },
         }
+      })
+      .state('tripsignup.application.page1', {
+        url: '/1',
+        templateUrl: 'pageTemplates/signupPage1.html'
+      })
+      .state('tripsignup.application.page2', {
+        url: '/2',
+        templateUrl: 'pageTemplates/signupPage2.html'
+      })
+      .state('tripsignup.application.page3', {
+        url: '/3',
+        templateUrl: 'pageTemplates/signupPage3.html'
+      })
+      .state('tripsignup.application.page4', {
+        url: '/4',
+        templateUrl: 'pageTemplates/signupPage4.html'
+      })
+      .state('tripsignup.application.page5', {
+        url: '/5',
+        templateUrl: 'pageTemplates/signupPage5.html'
+      })
+      .state('tripsignup.application.page6', {
+        url: '/6',
+        templateUrl: 'pageTemplates/signupPage6.html'
+      })
+      .state('tripsignup.application.thankyou', {
+        url: '/thankyou',
+        templateUrl: 'pageTemplates/thankYou.html',
       });
+
   }
 
 })();

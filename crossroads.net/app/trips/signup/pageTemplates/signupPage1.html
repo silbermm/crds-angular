@@ -6,18 +6,23 @@
       Information shared here is kept secure and private. We will not share or sell your information.</p>
     </div>
   </div>
+  <pre>{{ tripsSignup.viewReady }}</pre>
+  <preloader full-screen='true' ng-show="!tripsSignup.viewReady"> </preloader>
   <legend>Update Profile Information</legend>
   <div class="row">
     <div class='col-sm-12'>
+      <!-- <pre>{{ tripsSignup.profileData }}</pre>
+      <pre>{{ tripsSignup.signupService.contactId }}</pre>
+      <pre>{{ tripsSignup.buttonText }}</pre> -->
       <profile-personal
-         contact-id="vm.signupService.contactId"
+         contact-id="tripsSignup.signupService.contactId"
          allow-password-change="false"
          require-mobile-phone="true"
          allow-save="false"
-         submit-form-callback='pages.validateProfile(profile, household)'
-         button-text='pages.buttonText'
+         submit-form-callback='tripsSignup.validateProfile(profile, household)'
+         button-text='tripsSignup.buttonText'
          button-css='pull-right'
-         profile-data='pages.profileData'
+         profile-data='tripsSignup.profileData'
          for-trips='true' />
     </div>
   </div>
