@@ -19,8 +19,11 @@ namespace crds_angular.Models.Crossroads.Stewardship
         [JsonProperty(PropertyName = "pymt_type")]
         public string PaymentType { get; set; }
 
-        [JsonProperty(PropertyName = "pledge_id")]
-        public int PledgeId { get; set; }
+        [JsonProperty(PropertyName = "pledge_donor_id")]
+        public int PledgeDonorId { get; set; }
+
+        [JsonProperty(PropertyName = "pledge_campaign_id")]
+        public int PledgeCampaignId { get; set; }
 
         [JsonProperty(PropertyName = "gift_message")]
         public string GiftMessage { get; set; }

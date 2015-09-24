@@ -28,6 +28,8 @@ namespace crds_angular.test.controllers
         private Mock<IAuthenticationService> authenticationServiceMock;
         private Mock<IDonorService> gatewayDonorServiceMock;
         private Mock<IDonationService> gatewayDonationServiceMock;
+        private Mock<MinistryPlatform.Translation.Services.Interfaces.IDonationService> mpDonationService; 
+        private Mock<IPledgeService> mpPledgeService;
         private string authToken;
         private string authType;
 
@@ -39,9 +41,11 @@ namespace crds_angular.test.controllers
             stripeServiceMock = new Mock<IPaymentService>();
             authenticationServiceMock = new Mock<IAuthenticationService>();
             gatewayDonationServiceMock = new Mock<IDonationService>();
+            mpPledgeService = new Mock<IPledgeService>();
+            mpDonationService = new Mock<MinistryPlatform.Translation.Services.Interfaces.IDonationService>();
 
             fixture = new DonationController(donorServiceMock.Object, stripeServiceMock.Object,
-                authenticationServiceMock.Object, gatewayDonorServiceMock.Object, gatewayDonationServiceMock.Object);
+                authenticationServiceMock.Object, gatewayDonorServiceMock.Object, gatewayDonationServiceMock.Object, mpDonationService.Object, mpPledgeService.Object);
 
             authType = "auth_type";
             authToken = "auth_token";
@@ -184,7 +188,7 @@ namespace crds_angular.test.controllers
 
             donorServiceMock.Setup(mocked => mocked.
                 CreateDonationAndDistributionRecord(createDonationDTO.Amount, charge.BalanceTransaction.Fee, donor.DonorId,
-                    createDonationDTO.ProgramId, charge.Id, createDonationDTO.PaymentType, donor.ProcessorId, It.IsAny<DateTime>(), true, null))
+                    createDonationDTO.ProgramId, null, charge.Id, createDonationDTO.PaymentType, donor.ProcessorId, It.IsAny<DateTime>(), true, null))
                     .Returns(donationId);
 
             IHttpActionResult result = fixture.Post(createDonationDTO);
@@ -246,7 +250,7 @@ namespace crds_angular.test.controllers
 
             donorServiceMock.Setup(mocked => mocked.
                 CreateDonationAndDistributionRecord(createDonationDTO.Amount, charge.BalanceTransaction.Fee, donor.DonorId,
-                    createDonationDTO.ProgramId, charge.Id, createDonationDTO.PaymentType, donor.ProcessorId, It.IsAny<DateTime>(), false, null))
+                    createDonationDTO.ProgramId, null, charge.Id, createDonationDTO.PaymentType, donor.ProcessorId, It.IsAny<DateTime>(), false, null))
                     .Returns(donationId);
 
             IHttpActionResult result = fixture.Post(createDonationDTO);
