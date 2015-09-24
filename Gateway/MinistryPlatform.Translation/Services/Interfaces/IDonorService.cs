@@ -13,7 +13,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
             DonorAccount donorAccount = null
             );
 
-        int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string chargeId, string pymtType, string processorId, DateTime setupDate, bool registeredDonor, string checkScannerBatchName = null);
+        int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, int? pledgeId, string chargeId, string pymtType, string processorId, DateTime setupDate, bool registeredDonor, string checkScannerBatchName = null);
         ContactDonor GetContactDonor(int contactId);
         ContactDonor GetPossibleGuestContactDonor(string email);
         ContactDonor GetContactDonorForDonorAccount(string accountNumber, string routingNumber);

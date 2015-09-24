@@ -229,7 +229,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _communicationService.Setup(mocked => mocked.GetTemplate(It.IsAny<int>())).Returns(getTemplateResponse);
 
 
-            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, chargeId, pymtType, processorId, setupDate, true, checkScannerBatchName);
+            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, null, chargeId, pymtType, processorId, setupDate, true, checkScannerBatchName);
 
             // Explicitly verify each expectation...
             _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>()));
