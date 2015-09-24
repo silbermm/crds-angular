@@ -26,15 +26,17 @@ namespace crds_angular.Controllers.API
         private readonly MPInterfaces.IAuthenticationService _authenticationService;
         private readonly IDonorService _gatewayDonorService;
         private readonly IDonationService _gatewayDonationService;
+        private readonly MPInterfaces.IDonationService _mpDonationService;
 
         public DonationController(MPInterfaces.IDonorService mpDonorService, IPaymentService stripeService,
-            MPInterfaces.IAuthenticationService authenticationService, IDonorService gatewayDonorService, IDonationService gatewayDonationService)
+            MPInterfaces.IAuthenticationService authenticationService, IDonorService gatewayDonorService, IDonationService gatewayDonationService, MPInterfaces.IDonationService mpDonationService)
         {
             _mpDonorService = mpDonorService;
             _stripeService = stripeService;
             _authenticationService = authenticationService;
             _gatewayDonorService = gatewayDonorService;
             _gatewayDonationService = gatewayDonationService;
+            _mpDonationService = mpDonationService;
         }
 
         /// <summary>
@@ -137,7 +139,7 @@ namespace crds_angular.Controllers.API
                 var charge = _stripeService.ChargeCustomer(donor.ProcessorId, dto.Amount, donor.DonorId);
                 var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
 
-                var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount, fee, donor.DonorId, dto.ProgramId, charge.Id, dto.PaymentType, donor.ProcessorId, DateTime.Now, true);
+                var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount, fee, donor.DonorId, dto.ProgramId, dto.PledgeId, charge.Id, dto.PaymentType, donor.ProcessorId, DateTime.Now, true);
                 var response = new DonationDTO()
                     {
                         ProgramId = dto.ProgramId,
@@ -167,7 +169,11 @@ namespace crds_angular.Controllers.API
                 var charge = _stripeService.ChargeCustomer(donor.ProcessorId, dto.Amount, donor.DonorId);
                 var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
 
-                var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount, fee, donor.DonorId, dto.ProgramId, charge.Id, dto.PaymentType, donor.ProcessorId, DateTime.Now, false);
+                var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount, fee, donor.DonorId, dto.ProgramId, dto.PledgeId, charge.Id, dto.PaymentType, donor.ProcessorId, DateTime.Now, false);
+                if (dto.GiftMessage != "")
+                {
+                    SendMessageFromDonor(dto.PledgeId, dto.GiftMessage);
+                }
 
                 var response = new DonationDTO()
                 {
@@ -188,6 +194,11 @@ namespace crds_angular.Controllers.API
                 var apiError = new ApiErrorDto("Donation Post Failed", exception);
                 throw new HttpResponseException(apiError.HttpResponseMessage);
             }       
+        }
+
+        private void SendMessageFromDonor(int pledgeId, string message)
+        {
+            _mpDonationService.SendMessageFromDonor(pledgeId, message);
         }
     }
 
