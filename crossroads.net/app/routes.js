@@ -498,9 +498,15 @@
               });
 
               return childPromise.then(function() {
+                var metaDescription = ContentPageService.page.metaDescription;
+                if (!metaDescription){
+                  //If a meta description is not provided we'll use the Content
+                  //The description gets html stripped and shortened to 155 characters
+                  metaDescription = ContentPageService.page.content;
+                }
                 $rootScope.meta = {
                   title: ContentPageService.page.title,
-                  description: ContentPageService.page.metaDescription,
+                  description: metaDescription,
                   extraMeta: ContentPageService.page.extraMeta
                 };
 
