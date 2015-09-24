@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using AutoMapper;
@@ -152,11 +151,7 @@ namespace crds_angular.Services
             {
                 if (!softCredit)
                 {
-                    var timer = new Stopwatch();
-                    timer.Start();
                     var charge = GetStripeCharge(donation);
-                    timer.Stop();
-                    _logger.Debug(string.Format("Stripe call took {0}ms", timer.ElapsedMilliseconds));
                     SetDonationSource(donation, charge);
                 }
 
