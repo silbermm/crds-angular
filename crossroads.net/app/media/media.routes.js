@@ -96,7 +96,7 @@
           Meta: function (Selected, $state) {
             $state.next.data.meta = {
              title: Selected.title,
-             description: ''
+             description: Selected.description
             };
             return $state.next.data.meta;
           },
@@ -152,7 +152,7 @@
           Meta: function (SingleMedia, $state) {
             $state.next.data.meta = {
              title: SingleMedia.message.title,
-             description: ''
+             description: SingleMedia.message.description
             };
             return $state.next.data.meta;
           },
@@ -205,7 +205,7 @@
           Meta: function (SingleMedia, $state) {
             $state.next.data.meta = {
              title: SingleMedia[Object.keys(SingleMedia)[0]].title,
-             description: ''
+             description: SingleMedia[Object.keys(SingleMedia)[0]].description
             };
             return $state.next.data.meta;
           },

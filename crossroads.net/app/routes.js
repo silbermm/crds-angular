@@ -14,30 +14,52 @@
     $urlRouterProvider,
     $httpProvider,
     $urlMatcherFactory,
-    $locationProvider) {
+    $locationProvider
+    ) {
 
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'contentRouteType', /^\/.*/);
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'signupRouteType', /\/sign-up\/.*$/);
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'volunteerRouteType', /\/volunteer-sign-up\/.*$/);
 
     $stateProvider
+      .state('root', {
+        abstract: true,
+        template: '<ui-view/>',
+        resolve: {
+          Meta: function(SystemPage, $state) {
+            return SystemPage.get({
+              state: $state.next.name
+            }).$promise.then(
+              function(systemPage) {
+                if(systemPage.systemPages[0]){
+                  $state.next.data.meta = systemPage.systemPages[0];
+                }
+              });
+          }
+        }
+      })
       .state('noSideBar', {
+        parent: 'root',
         abstract:true,
         templateUrl: 'templates/noSideBar.html'
       })
       .state('leftSidebar', {
+        parent: 'root',
         abstract:true,
         templateUrl: 'templates/leftSidebar.html'
       })
       .state('rightSidebar', {
+        parent: 'root',
         abstract:true,
         templateUrl: 'templates/rightSidebar.html'
       })
       .state('screenWidth', {
+        parent: 'root',
         abstract:true,
         templateUrl: 'templates/screenWidth.html'
       })
       .state('noHeaderOrFooter', {
+        parent: 'root',
         abstract:true,
         templateUrl: 'templates/noHeaderOrFooter.html'
       })
