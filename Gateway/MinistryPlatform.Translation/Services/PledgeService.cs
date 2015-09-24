@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -51,6 +52,13 @@ namespace MinistryPlatform.Translation.Services
             var searchString = string.Format(",{0},{1}", pledgeCampaignId, donorId);
             var records = _ministryPlatformService.GetPageViewRecords("PledgesByDonorId", ApiLogin(), searchString);
             return records.Count != 0;
+        }
+
+        public int GetPledgeByCampaignAndDonor(int pledgeCampaignId, int donorId)
+        {
+            var searchString = string.Format(",{0},{1}", pledgeCampaignId, donorId);
+            var records = _ministryPlatformService.GetPageViewRecords("PledgesByDonorId", ApiLogin(), searchString);
+            return records.First().ToInt("Donor_ID");
         }
 
         public int GetDonorForPledge(int pledgeId)

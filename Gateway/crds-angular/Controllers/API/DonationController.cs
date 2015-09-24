@@ -27,9 +27,10 @@ namespace crds_angular.Controllers.API
         private readonly IDonorService _gatewayDonorService;
         private readonly IDonationService _gatewayDonationService;
         private readonly MPInterfaces.IDonationService _mpDonationService;
+        private readonly MPInterfaces.IPledgeService _mpPledgeService;
 
         public DonationController(MPInterfaces.IDonorService mpDonorService, IPaymentService stripeService,
-            MPInterfaces.IAuthenticationService authenticationService, IDonorService gatewayDonorService, IDonationService gatewayDonationService, MPInterfaces.IDonationService mpDonationService)
+            MPInterfaces.IAuthenticationService authenticationService, IDonorService gatewayDonorService, IDonationService gatewayDonationService, MPInterfaces.IDonationService mpDonationService, MPInterfaces.IPledgeService mpPledgeService)
         {
             _mpDonorService = mpDonorService;
             _stripeService = stripeService;
@@ -37,6 +38,7 @@ namespace crds_angular.Controllers.API
             _gatewayDonorService = gatewayDonorService;
             _gatewayDonationService = gatewayDonationService;
             _mpDonationService = mpDonationService;
+            _mpPledgeService = mpPledgeService;
         }
 
         /// <summary>
@@ -85,7 +87,9 @@ namespace crds_angular.Controllers.API
         [Route("api/donation")]
         public IHttpActionResult Post([FromBody] CreateDonationDTO dto)
         {
-            return (Authorized(token => CreateDonationAndDistributionAuthenticated(token, dto), () => CreateDonationAndDistributionUnauthenticated(dto)));
+            return (Authorized(token => 
+                CreateDonationAndDistributionAuthenticated(token, dto), 
+                () => CreateDonationAndDistributionUnauthenticated(dto)));
         }
 
         [Route("api/gpexport/file/{selectionId}/{depositId}")]
@@ -138,8 +142,13 @@ namespace crds_angular.Controllers.API
                 var donor = _mpDonorService.GetContactDonor(contactId);
                 var charge = _stripeService.ChargeCustomer(donor.ProcessorId, dto.Amount, donor.DonorId);
                 var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
+                var pledgeId = _mpPledgeService.GetPledgeByCampaignAndDonor(dto.PledgeCampaignId, dto.PledgeDonorId);
 
-                var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount, fee, donor.DonorId, dto.ProgramId, dto.PledgeId, charge.Id, dto.PaymentType, donor.ProcessorId, DateTime.Now, true);
+                var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount, fee, donor.DonorId, dto.ProgramId, pledgeId, charge.Id, dto.PaymentType, donor.ProcessorId, DateTime.Now, true);
+                if (dto.GiftMessage != "")
+                {
+                    SendMessageFromDonor(pledgeId, dto.GiftMessage);
+                }
                 var response = new DonationDTO()
                     {
                         ProgramId = dto.ProgramId,
@@ -168,11 +177,12 @@ namespace crds_angular.Controllers.API
                 var donor = _gatewayDonorService.GetContactDonorForEmail(dto.EmailAddress);
                 var charge = _stripeService.ChargeCustomer(donor.ProcessorId, dto.Amount, donor.DonorId);
                 var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
+                var pledgeId = _mpPledgeService.GetPledgeByCampaignAndDonor(dto.PledgeCampaignId, dto.PledgeDonorId);
 
-                var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount, fee, donor.DonorId, dto.ProgramId, dto.PledgeId, charge.Id, dto.PaymentType, donor.ProcessorId, DateTime.Now, false);
+                var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount, fee, donor.DonorId, dto.ProgramId, pledgeId, charge.Id, dto.PaymentType, donor.ProcessorId, DateTime.Now, false);
                 if (dto.GiftMessage != "")
                 {
-                    SendMessageFromDonor(dto.PledgeId, dto.GiftMessage);
+                    SendMessageFromDonor(pledgeId, dto.GiftMessage);
                 }
 
                 var response = new DonationDTO()
