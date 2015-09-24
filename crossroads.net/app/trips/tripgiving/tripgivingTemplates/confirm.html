@@ -7,7 +7,7 @@
       </svg> ending in {{tripGiving.dto.last4}}.&nbsp;
       <a href="" ng-click="tripGiving.giveFlow.goToChange()" tabindex="-1" class="text-secondary">Change</a>
   </div>
-      <button ng-click="give.confirmDonation()" 
+      <button ng-click="tripGiving.donationService.confirmDonation()" 
         ng-class="{disabled: tripGiving.dto.processing}" 
         class="btn btn-primary btn-lg btn-block-mobile give-button" 
         autofocus>
