@@ -16,52 +16,10 @@
 
     <div ng-show='!tripsSignup.pageHasErrors && tripsSignup.viewReady'> <!-- Content if there is no Page Error -->
 
-      <signup-progress total-steps='tripsSignup.numberOfPages' current-step='tripsSignup.currentPage'> </signup-progress>
+      <signup-progress total-steps='tripsSignup.numberOfPages' current-step='tripsSignup.currentPage' progress-label='tripsSignup.progressLabel'> </signup-progress>
 
       <!-- our nested state views will be injected here -->
       <div id="form-views" ui-view autoscroll="true"></div>
 
-      <!-- <signup-page-1 current-page='tripsSignup.currentPage'
-          number-of-pages='tripsSignup.numberOfPages'
-          destination='tripsSignup.destination'
-          ng-if='tripsSignup.currentPage == 1'>
-      </signup-page-1> -->
-      <!-- <signup-page-2
-        current-page='tripsSignup.currentPage'
-        number-of-pages='tripsSignup.numberOfPages'
-        destination='tripsSignup.destination'
-        ng-if='tripsSignup.currentPage == 2'>
-      </signup-page-2> -->
-      <!-- <signup-page-3
-        current-page='tripsSignup.currentPage'
-        number-of-pages='tripsSignup.numberOfPages'
-        destination='tripsSignup.destination'
-        ng-if='tripsSignup.currentPage == 3'>
-      </signup-page-3> -->
-      <!-- <signup-page-4
-        current-page='tripsSignup.currentPage'
-        number-of-pages='tripsSignup.numberOfPages'
-        destination='tripsSignup.destination'
-        ng-if='tripsSignup.currentPage == 4'>
-      </signup-page-4> -->
-      <!-- <signup-page-5
-        current-page='tripsSignup.currentPage'
-        number-of-pages='tripsSignup.numberOfPages'
-        destination='tripsSignup.destination'
-        work-teams='tripsSignup.workTeams'
-        ng-if='tripsSignup.currentPage == 5'>
-      </signup-page-5> -->
-      <!-- <signup-page-6
-        current-page='tripsSignup.currentPage'
-        number-of-pages='tripsSignup.numberOfPages'
-        destination='tripsSignup.destination'
-        ng-if='tripsSignup.currentPage == 6'>
-      </signup-page-6> -->
-      <thank-you-page
-        current-page='tripsSignup.currentPage'
-        number-of-pages='tripsSignup.numberOfPages'
-        page-title='tripsSignup.destination'
-        ng-if="tripsSignup.currentPage == 'thanks'">
-      </thank-you-page>
     </div>
 </div><!--/row-->

@@ -45,6 +45,7 @@
     vm.numberOfPages = 0;
     vm.pageHasErrors = true;
     vm.privateInvite = $location.search()['invite'];
+    vm.progressLabel = '';
     vm.registrationNotOpen = true;
     vm.tripName = vm.campaign.name;
     vm.tshirtSizes = [];
@@ -100,6 +101,7 @@
 
       TripsSignupService.profileData = { person:  Person };
       vm.profileData = TripsSignupService.profileData;
+      vm.progressLabel = progressLabel();
       if (TripsSignupService.campaign === undefined) {
         TripsSignupService.campaign = Campaign;
       }
@@ -144,6 +146,7 @@
     function handlePageChange(pageId) {
       var route = 'tripsignup.application.page' + pageId;
       $state.go(route);
+      vm.currentPage = pageId;
     }
 
     // function handleNext(nextPage) {
@@ -258,6 +261,10 @@
       });
     }
 
+    function progressLabel() {
+      return vm.profileData.person.nickName + ' ' + vm.profileData.person.lastName;
+    }
+
     function registrationNotOpen() {
       return $q(function(resolve, reject) {
         var regStart = moment(vm.campaign.registrationStart);
@@ -294,6 +301,20 @@
       //     }
       //   }
       // }
+
+      if (fromState.name === 'tripsignup.application.thankyou') {
+        if (toState.name.startsWith('tripsignup.application.')) {
+          $state.go('tripsignup');
+        }
+
+        return;
+      }
+
+      if (toState.name.startsWith('tripsignup.application.')) {
+        return;
+      }
+
+      //check if form is dirty
       if (!$window.confirm('Are you sure you want to leave this page?')) {
         event.preventDefault();
         return;
