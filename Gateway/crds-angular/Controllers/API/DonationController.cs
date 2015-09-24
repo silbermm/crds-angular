@@ -85,7 +85,9 @@ namespace crds_angular.Controllers.API
         [Route("api/donation")]
         public IHttpActionResult Post([FromBody] CreateDonationDTO dto)
         {
-            return (Authorized(token => CreateDonationAndDistributionAuthenticated(token, dto), () => CreateDonationAndDistributionUnauthenticated(dto)));
+            return (Authorized(token => 
+                CreateDonationAndDistributionAuthenticated(token, dto), 
+                () => CreateDonationAndDistributionUnauthenticated(dto)));
         }
 
         [Route("api/gpexport/file/{selectionId}/{depositId}")]
