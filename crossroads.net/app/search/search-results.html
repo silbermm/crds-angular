@@ -59,7 +59,7 @@
             </div>
             <div ng-class="{'col-md-8 col-xs-7 hard-left':result.fields.image_path, 'col-xs-12':!result.fields.image_path}">
               <p ng-if='result.fields.start_date' class="search-media-date flush-bottom">{{result.fields.start_date | date:'MM.dd.yyyy'}} <span ng-if='result.fields.end_date'>- {{result.fields.end_date | date:'MM.dd.yyyy'}}</span></p>
-              <div ng-bind-html='result.fields.content | htmlToPlainText | truncate : 140'></div>
+              <div ng-bind-html='result.fields.content | htmlToPlainText | truncate : 155'></div>
             </div>
           </div>
         </div>
