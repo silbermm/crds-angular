@@ -216,7 +216,8 @@ namespace MinistryPlatform.Translation.Services
                 }
                 else
                 {
-                    donor = new ContactDonor {
+                    donor = new ContactDonor
+                    {
                         ContactId = contactId,
                         RegisteredUser = true
                     };

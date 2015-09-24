@@ -80,10 +80,7 @@ namespace MinistryPlatform.Translation.Test.Services
             var acctBytes = Encoding.UTF8.GetBytes("acctNum");
             var rtnBytes = Encoding.UTF8.GetBytes("rtn");
             var expectedEncAcct = Convert.ToBase64String(acctBytes.Concat(rtnBytes).ToArray());
-
-            _crypto.Setup(mocked => mocked.EncryptValue(donorAccount.AccountNumber)).Returns(acctBytes);
-            _crypto.Setup(mocked => mocked.EncryptValue(donorAccount.RoutingNumber)).Returns(rtnBytes);
-
+            
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
                It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(),
                It.IsAny<string>(), true)).Returns(expectedDonorId);
@@ -101,8 +98,6 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Processor_Account_ID", donorAccount.ProcessorAccountId},
                 {"Prcoessor_ID", processorId}
             };
-
-         //  _ministryPlatformService.Setup(mocked => mocked.CreateRecord(298, expectedAcctValues, It.IsAny<string>(), false)).Returns(102030);
 
            var response = _fixture.CreateDonorRecord(888888, processorId, setupDate, 1, 1, 2, donorAccount);
 
@@ -418,14 +413,8 @@ namespace MinistryPlatform.Translation.Test.Services
             const int contactId = 565656;
             const string email = "cross@crossroads.net";
             const string guestDonorPageViewId = "DonorByContactId";
-
-            var acctBytes = Encoding.UTF8.GetBytes("acctNum");
-            var rtnBytes = Encoding.UTF8.GetBytes("rtn");
-            var expectedEncAcct = Convert.ToBase64String(acctBytes.Concat(rtnBytes).ToArray());
-
-            _crypto.Setup(mocked => mocked.EncryptValue("123")).Returns(acctBytes);
-            _crypto.Setup(mocked => mocked.EncryptValue("456")).Returns(rtnBytes);
-
+            const string expectedEncAcct = "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92";
+     
             var queryResults = new List<Dictionary<string, object>>
             {
                 new Dictionary<string, object>
@@ -457,11 +446,11 @@ namespace MinistryPlatform.Translation.Test.Services
                 ProcessorId = processorId,
                 ContactId = contactId,
                 Email = email
-            };
+            }; 
 
             _ministryPlatformService.Setup(mocked => mocked.GetPageViewRecords(
                 guestDonorPageViewId, It.IsAny<string>(),
-                "\"" + contactId +"\",", "", 0)).Returns(expectedDonorValues);
+                 "\"" + contactId + "\",", "", 0)).Returns(expectedDonorValues);
 
             var result = _fixture.GetContactDonorForDonorAccount("123", "456");
             _ministryPlatformService.VerifyAll();
@@ -477,6 +466,7 @@ namespace MinistryPlatform.Translation.Test.Services
         public void TestGetContactDonorForCheckAccount()
         {
             const int contactId = 765567;
+            const int donorId = 681806;
             const string displayName = "Victoria Secret";
             const string addr1 = "25 First St";
             const string addr2 = "Suite 101";
@@ -491,7 +481,8 @@ namespace MinistryPlatform.Translation.Test.Services
                 new Dictionary<string, object>
                 {
                     { "Contact_ID", contactId },
-                    {"Display_Name", displayName}
+                    {"Display_Name", displayName},
+                    {"Donor_ID", donorId}
                 }
             };
 
@@ -505,19 +496,23 @@ namespace MinistryPlatform.Translation.Test.Services
                 State = state,
                 Postal_Code = zip        
              };
-
-            var donorDetails = new ContactDetails
+            
+            var contactDonor = new ContactDonor
             {
+                DonorId = donorId,
+                Details = new ContactDetails
+             {
                 DisplayName = displayName,
                 Address = new PostalAddress()
                 {
-                    Line1  = addr1,
+                    Line1 = addr1,
                     Line2 = addr2,
                     City = city,
                     State = state,
                     PostalCode = zip
                 }
-              };
+              }
+            };
 
             _ministryPlatformService.Setup(mocked => mocked.GetPageViewRecords(
               2179, It.IsAny<string>(),"," + encryptedKey, "", 0)).Returns(donorContact);
@@ -528,12 +523,12 @@ namespace MinistryPlatform.Translation.Test.Services
             var result = _fixture.GetContactDonorForCheckAccount(encryptedKey);
           
             Assert.IsNotNull(result);
-            Assert.AreEqual(result.DisplayName, donorDetails.DisplayName);
-            Assert.AreEqual(result.Address.Line1, donorDetails.Address.Line1);
-            Assert.AreEqual(result.Address.Line2, donorDetails.Address.Line2);
-            Assert.AreEqual(result.Address.City, donorDetails.Address.City);
-            Assert.AreEqual(result.Address.State, donorDetails.Address.State);
-            Assert.AreEqual(result.Address.PostalCode, donorDetails.Address.PostalCode);
+            Assert.AreEqual(result.Details.DisplayName, contactDonor.Details.DisplayName);
+            Assert.AreEqual(result.Details.Address.Line1, contactDonor.Details.Address.Line1);
+            Assert.AreEqual(result.Details.Address.Line2, contactDonor.Details.Address.Line2);
+            Assert.AreEqual(result.Details.Address.City, contactDonor.Details.Address.City);
+            Assert.AreEqual(result.Details.Address.State, contactDonor.Details.Address.State);
+            Assert.AreEqual(result.Details.Address.PostalCode, contactDonor.Details.Address.PostalCode);
         }
 
         [Test]

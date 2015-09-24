@@ -125,8 +125,7 @@ namespace crds_angular.Services
 
         public ContactDonor CreateDonor(CheckScannerCheck checkDetails)
         {
-            var acctN = _donorService.DecryptValues(checkDetails.AccountNumber); 
-           var contactDonor = _donorService.GetContactDonorForDonorAccount(checkDetails.AccountNumber, checkDetails.RoutingNumber) ?? new ContactDonor();
+            var contactDonor = _donorService.GetContactDonorForDonorAccount(checkDetails.AccountNumber, checkDetails.RoutingNumber) ?? new ContactDonor();
 
             if (contactDonor.HasPaymentProcessorRecord)
             {
