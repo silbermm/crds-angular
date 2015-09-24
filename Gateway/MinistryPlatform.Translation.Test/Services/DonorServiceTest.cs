@@ -43,6 +43,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _configuration.Setup(mocked => mocked.GetConfigIntValue("FindDonorByAccountPageView")).Returns(2015);
             _configuration.Setup(mocked => mocked.GetConfigIntValue("DonorLookupByEncryptedAccount")).Returns(2179);
             _configuration.Setup(mocked => mocked.GetConfigIntValue("DonationStatus")).Returns(90210);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("MyHouseholdDonationDistributions")).Returns(516);
             _configuration.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
             _configuration.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("pwd");
 
@@ -625,6 +626,98 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(200000, result[1].donationAmt);
             Assert.AreEqual("Program 2", result[1].Distributions[0].donationDistributionProgram);
             Assert.AreEqual(200000, result[1].Distributions[0].donationDistributionAmt);
+        }
+
+        [Test]
+        public void TestGetDonationsForAuthenticatedUser()
+        {
+            var statuses = new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    {"dp_RecordID", 1},
+                    {"Display_On_Giving_History", true},
+                    {"Display_On_Statements", true},
+                    {"Display_On_MyTrips", true},
+                    {"Donation_Status", "Pending"}
+                },
+                new Dictionary<string, object>
+                {
+                    {"dp_RecordID", 2},
+                    {"Display_On_Giving_History", false},
+                    {"Display_On_Statements", false},
+                    {"Display_On_MyTrips", false},
+                    {"Donation_Status", "Succeeded"}
+                }
+            };
+
+            var records = new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    {"Donation_Date", DateTime.Now},
+                    {"Donation_ID", 1000},
+                    {"Soft_Credit_Donor_ID", null},
+                    {"Donation_Status_ID", 1},
+                    {"Donation_Status_Date", DateTime.Now},
+                    {"Donor_ID", 1100},
+                    {"Payment_Type_ID", 1110},
+                    {"Transaction_Code", "tx_1000"},
+                    {"Amount", 1000.00M},
+                    {"dp_RecordName", "Program 1"},
+                    {"Donor_Display_Name", "Test Name"},
+                },
+                new Dictionary<string, object>
+                {
+                    {"Donation_Date", DateTime.Now},
+                    {"Donation_ID", 2000},
+                    {"Soft_Credit_Donor_ID", null},
+                    {"Donation_Status_ID", 2},
+                    {"Donation_Status_Date", DateTime.Now},
+                    {"Donor_ID", 2200},
+                    {"Payment_Type_ID", 2220},
+                    {"Transaction_Code", "tx_2000"},
+                    {"Amount", 2000.00M},
+                    {"dp_RecordName", "Program 2"},
+                    {"Donor_Display_Name", "Test Name"},
+                },
+                new Dictionary<string, object>
+                {
+                    {"Donation_Date", DateTime.Now},
+                    {"Donation_ID", 1000},
+                    {"Soft_Credit_Donor_ID", null},
+                    {"Donation_Status_ID", 1},
+                    {"Donation_Status_Date", DateTime.Now},
+                    {"Donor_ID", 1100},
+                    {"Payment_Type_ID", 1110},
+                    {"Transaction_Code", "tx_1000"},
+                    {"Amount", 9000.00M},
+                    {"dp_RecordName", "Program 9"},
+                    {"Donor_Display_Name", "Test Name"},
+                }
+            };
+
+            var searchString = "\"*/2015*\",True";
+            _ministryPlatformService.Setup(mocked => mocked.GetRecordsDict(516, "auth token", searchString, It.IsAny<string>())).Returns(records);
+            _ministryPlatformService.Setup(mocked => mocked.GetRecordsDict(90210, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(statuses);
+            var result = _fixture.GetDonationsForAuthenticatedUser("auth token", true, "2015");
+
+            _ministryPlatformService.VerifyAll();
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.Count);
+            Assert.AreEqual(2, result[0].Distributions.Count);
+            Assert.AreEqual(1000000, result[0].donationAmt);
+            Assert.AreEqual("Program 1", result[0].Distributions[0].donationDistributionProgram);
+            Assert.AreEqual(100000, result[0].Distributions[0].donationDistributionAmt);
+            Assert.AreEqual("Program 9", result[0].Distributions[1].donationDistributionProgram);
+            Assert.AreEqual(900000, result[0].Distributions[1].donationDistributionAmt);
+
+            Assert.AreEqual(1, result[1].Distributions.Count);
+            Assert.AreEqual(200000, result[1].donationAmt);
+            Assert.AreEqual("Program 2", result[1].Distributions[0].donationDistributionProgram);
+            Assert.AreEqual(200000, result[1].Distributions[0].donationDistributionAmt);
+            
         }
 
         [Test]

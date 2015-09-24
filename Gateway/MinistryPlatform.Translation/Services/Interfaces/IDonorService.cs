@@ -27,5 +27,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         List<Donation> GetDonations(int donorId, string donationYear = null);
         List<Donation> GetDonations(IEnumerable<int> donorIds, string donationYear = null);
         List<Donation> GetSoftCreditDonations(IEnumerable<int> donorIds, string donationYear = null);
+        List<Donation> GetDonationsForAuthenticatedUser(string userToken, bool? softCredit = null, string donationYear = null);
     }
 }
