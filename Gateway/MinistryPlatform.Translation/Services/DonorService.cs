@@ -503,7 +503,7 @@ namespace MinistryPlatform.Translation.Services
             {
                 var donationId = record["Donation_ID"] as int? ?? 0;
 
-                Donation donation = GetDonationFromMap(donationMap, record, donationId, statuses);
+                var donation = GetDonationFromMap(donationMap, record, donationId, statuses);
                 AddDistributionToDonation(record, donation);
                 donationMap[donation.donationId] = donation;
             }

@@ -28,7 +28,7 @@ INSERT INTO [dbo].[dp_Pages](
   ,'Donation_Distribution_ID'
   ,1
   ,'Donation_ID_Table.Donation_Date
-,CASE WHEN (Donation_Distributions.Soft_Credit_Donor IS NULL) THEN ''false'' ELSE ''true'' END AS [Soft_Credit_Donation]
+,CASE WHEN (Donation_Distributions.Soft_Credit_Donor IS NULL) THEN ''False'' ELSE ''True'' END AS [Soft_Credit_Donation]
 ,ISNULL(Donation_ID_Table_Donor_ID_Table_Contact_ID_Table.Last_Name,Donation_ID_Table_Donor_ID_Table_Contact_ID_Table.Display_Name) AS [Last_Name]
 ,Donation_ID_Table_Donor_ID_Table_Contact_ID_Table.First_Name
 ,Donation_Distributions.Amount
