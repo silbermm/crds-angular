@@ -29,19 +29,15 @@
         data: {
           meta: {
            title: 'Media',
-           description: ''
+           description: '',
+           type: 'website',
+           card: 'summary'
           }
         }
       })
       .state('media.all', {
         url: '/media',
         templateUrl: 'templates/viewAll.html',
-        data: {
-          meta: {
-           title: 'Media',
-           description: ''
-          }
-        }
       })
       .state('media.music', {
         url: '/music',
@@ -49,7 +45,9 @@
         data: {
           meta: {
            title: 'Music',
-           description: ''
+           description: '',
+           type: 'website',
+           card: 'summary'
           }
         }
       })
@@ -59,7 +57,9 @@
         data: {
           meta: {
            title: 'Series',
-           description: ''
+           description: '',
+           type: 'website',
+           card: 'summary'
           }
         }
       })
@@ -69,7 +69,9 @@
         data: {
           meta: {
            title: 'Videos',
-           description: ''
+           description: '',
+           type: 'website',
+           card: 'summary'
           }
         }
       })
@@ -96,8 +98,11 @@
           Meta: function (Selected, $state) {
             $state.next.data.meta = {
              title: Selected.title,
-             description: Selected.description
-            };
+             description: Selected.description,
+             type: 'article',
+             card: 'summary',
+             image: Selected.image
+           };
             return $state.next.data.meta;
           },
           Messages: function (Media, Selected) {
@@ -124,10 +129,7 @@
         controller: 'SingleMediaController as singleMedia',
         templateUrl: 'templates/mediaSingle.html',
         data: {
-          meta: {
-           title: 'Message',
-           description: ''
-          }
+          meta: {}
         },
         resolve: {
           Media: 'Media',
@@ -152,7 +154,10 @@
           Meta: function (SingleMedia, $state) {
             $state.next.data.meta = {
              title: SingleMedia.message.title,
-             description: SingleMedia.message.description
+             description: SingleMedia.message.description,
+             type: 'article',
+             card: 'summary',
+             image: SingleMedia.message.video.still
             };
             return $state.next.data.meta;
           },
@@ -205,7 +210,10 @@
           Meta: function (SingleMedia, $state) {
             $state.next.data.meta = {
              title: SingleMedia[Object.keys(SingleMedia)[0]].title,
-             description: SingleMedia[Object.keys(SingleMedia)[0]].description
+             description: SingleMedia[Object.keys(SingleMedia)[0]].description,
+             type: 'article',
+             card: 'summary',
+             image: SingleMedia[Object.keys(SingleMedia)[0]].still
             };
             return $state.next.data.meta;
           },
