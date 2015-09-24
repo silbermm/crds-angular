@@ -219,6 +219,17 @@
           }
         }
       })
+      .state('exploresnap', {
+        parent: 'noHeaderOrFooter',
+        url: '/exploresnap',
+        templateUrl: 'explore/exploresnap.html',
+        data: {
+          meta: {
+           title: 'Explore',
+           description: ''
+          }
+        }
+      })
       .state('blog', {
         parent: 'noSideBar',
         url: '/blog',
