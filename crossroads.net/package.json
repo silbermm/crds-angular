@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/crdschurch/crds-angular",
   "devDependencies": {
-    "angular": "1.4.3",
+    "angular": "^1.4.3",
     "angular-mocks": "~1.4.1",
     "assets-webpack-plugin": "^2.2.0",
     "autoprefixer-loader": "^1.2.0",

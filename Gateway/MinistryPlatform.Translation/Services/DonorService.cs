@@ -439,61 +439,10 @@ namespace MinistryPlatform.Translation.Services
 
         public List<Donation> GetDonations(IEnumerable<int> donorIds, string donationYear = null)
         {
-            var yearSearch = string.IsNullOrWhiteSpace(donationYear) ? string.Empty : string.Format("\"*/{0}*\"", donationYear);
-            var donorIdSearch = string.Join(" or ", donorIds.Select(id => string.Format("\"{0}\"", id)));
-
-            var search = string.Format("{0},,,,,,,,,,{1}", yearSearch, donorIdSearch);
+            var search = string.Format("{0},,,,,,,,,,{1}", YearSearch(donationYear), DonorIdSearch(donorIds));
             var records = WithApiLogin(token => _ministryPlatformService.GetRecordsDict(_donationDistributionPageId, token, search));
-            if (records == null || records.Count == 0)
-            {
-                return (null);
-            }
 
-            var statuses = GetDonationStatuses();
-
-            var donationMap = new Dictionary<int, Donation>();
-            foreach (var r in records)
-            {
-                var donationId = r["Donation_ID"] as int? ?? 0;
-                Donation d;
-                if (donationMap.ContainsKey(donationId))
-                {
-                    d = donationMap[donationId];
-                }
-                else
-                {
-                    d = new Donation
-                    {
-                        donationDate = r["Donation_Date"] as DateTime? ?? DateTime.Now,
-                        batchId = null,
-                        donationId = r["Donation_ID"] as int? ?? 0,
-                        donationNotes = null,
-                        donationStatus = r["Donation_Status_ID"] as int? ?? 0,
-                        donationStatusDate = r["Donation_Status_Date"] as DateTime? ?? DateTime.Now,
-                        donorId = r["Donor_ID"] as int? ?? 0,
-                        paymentTypeId = r["Payment_Type_ID"] as int? ?? 0,
-                        transactionCode = r["Transaction_Code"] as string
-                    };
-                    var status = statuses.Find(x => x.Id == d.donationStatus) ?? new DonationStatus();
-                    d.IncludeOnGivingHistory = status.DisplayOnGivingHistory;
-                    d.IncludeOnPrintedStatement = status.DisplayOnStatement;
-                }
-
-                var amount = Convert.ToInt32((r["Amount"] as decimal? ?? 0)*Constants.StripeDecimalConversionValue);
-                d.donationAmt += amount;
-
-                d.Distributions.Add(new DonationDistribution
-                {
-                    donationDistributionProgram = r["dp_RecordName"] as string,
-                    donationDistributionAmt = amount
-                });
-
-                donationMap[d.donationId] = d;
-            }
-
-            var donations = donationMap.Values.ToList();
-
-            return (donations);
+            return MapDonationRecords(records);
         }
 
         public List<Donation> GetDonations(int donorId, string donationYear = null)
@@ -522,10 +471,89 @@ namespace MinistryPlatform.Translation.Services
             return (result);
         }
 
-        public List<Donation> GetSoftCreditDonations(int donorId)
+        public List<Donation> GetSoftCreditDonations(IEnumerable<int> donorIds, string donationYear = null)
         {
-            // TODO implement GetSoftCreditDonationsForDonor
-            return (null);
+            var search = string.Format("{0},,,,,,,,,,,,,,,,,{1}", YearSearch(donationYear), DonorIdSearch(donorIds));
+            var records = WithApiLogin(token => _ministryPlatformService.GetRecordsDict(_donationDistributionPageId, token, search));
+
+            return MapDonationRecords(records);
+        }
+
+        private List<Donation> MapDonationRecords(List<Dictionary<string, Object>> records)
+        {
+            if (records == null || records.Count == 0)
+            {
+                return null;
+            }
+
+            var statuses = GetDonationStatuses();
+
+            var donationMap = new Dictionary<int, Donation>();
+            foreach (var record in records)
+            {
+                var donationId = record["Donation_ID"] as int? ?? 0;
+
+                Donation donation = GetDonationFromMap(donationMap, record, donationId, statuses);
+                AddDistributionToDonation(record, donation);
+                donationMap[donation.donationId] = donation;
+            }
+
+            return donationMap.Values.ToList();
+        }
+
+        private Donation GetDonationFromMap(Dictionary<int, Donation> donationMap,
+                                            Dictionary<string, Object> record,
+                                            int donationId,
+                                            List<DonationStatus> statuses)
+        {
+            if (donationMap.ContainsKey(donationId))
+            {
+                return donationMap[donationId];
+            }
+            
+            var donation = new Donation
+            {
+                donationDate = record["Donation_Date"] as DateTime? ?? DateTime.Now,
+                batchId = null,
+                donationId = record["Donation_ID"] as int? ?? 0,
+                donationNotes = null,
+                donationStatus = record["Donation_Status_ID"] as int? ?? 0,
+                donationStatusDate = record["Donation_Status_Date"] as DateTime? ?? DateTime.Now,
+                donorId = record["Donor_ID"] as int? ?? 0,
+                paymentTypeId = record["Payment_Type_ID"] as int? ?? 0,
+                transactionCode = record["Transaction_Code"] as string,
+                softCreditDonorId = record["Soft_Credit_Donor_ID"] as int? ?? 0,
+                donorDisplayName = record["Donor_Display_Name"] as string,
+            };
+
+            var status = statuses.Find(x => x.Id == donation.donationStatus) ?? new DonationStatus();
+            donation.IncludeOnGivingHistory = status.DisplayOnGivingHistory;
+            donation.IncludeOnPrintedStatement = status.DisplayOnStatement;
+
+            return donation;
+        }
+
+        private void AddDistributionToDonation(Dictionary<string, Object> record, Donation donation)
+        {
+
+            var amount = Convert.ToInt32((record["Amount"] as decimal? ?? 0) * Constants.StripeDecimalConversionValue);
+            donation.donationAmt += amount;
+
+            donation.Distributions.Add(new DonationDistribution
+            {
+                donationDistributionProgram = record["dp_RecordName"] as string,
+                donationDistributionAmt = amount
+            });
+        }
+
+        private string YearSearch(string year)
+        {
+            return string.IsNullOrWhiteSpace(year) ? string.Empty : string.Format("\"*/{0}*\"", year);
+        }
+
+        private string DonorIdSearch(IEnumerable<int> ids)
+        {
+            return string.Join(" or ", ids.Select(id => string.Format("\"{0}\"", id)));
         }
     }
 
