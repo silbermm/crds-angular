@@ -155,12 +155,6 @@
               loggedin: crds_utilities.checkLoggedin
             },
           },
-          'personal@profile': {
-            templateUrl: 'personal/profile_personal.html',
-            data: {
-              isProtected: true
-            },
-          },
           'account@profile': {
             templateUrl: 'profile/profile_account.html',
             data: {
@@ -170,6 +164,12 @@
           'skills@profile': {
             controller: 'ProfileSkillsController as profile',
             templateUrl: 'skills/profile_skills.html',
+            data: {
+              isProtected: true
+            }
+          },
+          'giving@profile': {
+            templateUrl: 'giving/profile_giving.html',
             data: {
               isProtected: true
             }

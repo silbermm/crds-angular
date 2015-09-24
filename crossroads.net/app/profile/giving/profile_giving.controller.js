@@ -3,9 +3,9 @@
 
   module.exports = GivingProfileController;
 
-  GivingProfileController.$inject = ['$log', 'GivingHistoryService', 'Profile'];
+  GivingProfileController.$inject = ['$log', 'GivingHistoryService'];
 
-  function GivingProfileController($log, GivingHistoryService, Profile) {
+  function GivingProfileController($log, GivingHistoryService) {
     var vm = this;
 
     activate();
