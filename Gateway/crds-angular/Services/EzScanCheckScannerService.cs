@@ -131,8 +131,9 @@ namespace crds_angular.Services
             {
                 return contactDonor;
             }
-
-            var token = _paymentService.CreateToken(checkDetails.AccountNumber, checkDetails.RoutingNumber);
+            var account = _mpDonorService.DecryptCheckValue(checkDetails.AccountNumber);
+            var routing = _mpDonorService.DecryptCheckValue(checkDetails.RoutingNumber);
+            var token = _paymentService.CreateToken(account, routing);
 
             contactDonor.Details = new ContactDetails
             {
