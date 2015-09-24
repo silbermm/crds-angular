@@ -27,11 +27,13 @@
       return apiDonor(card, email, stripe.card, 'POST');
     }
 
-    function donateToProgram(program_id, campaignId, amount, donor_id, email_address, pymt_type){
+    function donateToProgram(program_id, campaignId, amount, donor_id, email_address, pymt_type) {
       var def = $q.defer();
       var donationRequest = {
         program_id: program_id,
         campaign_id: campaignId,
+        pledge_donor_id: GiveTransferService.campaign.pledgeDonorId,
+        gift_message: GiveTransferService.message,
         amount: amount,
         donor_id: donor_id,
         email_address: email_address,
@@ -75,10 +77,10 @@
       return def.promise;
     }
 
-    function stripeErrorHandler(error){
-      if(error && error.globalMessage) {
+    function stripeErrorHandler(error) {
+      if (error && error.globalMessage) {
         GiveTransferService.declinedPayment =
-              error.globalMessage.id == $rootScope.MESSAGES.paymentMethodDeclined.id;
+              error.globalMessage.id === $rootScope.MESSAGES.paymentMethodDeclined.id;
         $rootScope.$emit('notify', error.globalMessage);
       } else {
         $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);

@@ -4,8 +4,8 @@
       <p>You are giving <strong>{{tripGiving.dto.amount | currency}} </strong> to <strong> {{tripGiving.dto.program.Name}}</strong> with 
       <svg viewBox="0 0 160 100" class="icon icon-cc_visa confirm-cc-icon"> 
         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{tripGiving.dto.brand}}"></use>
-      </svg> ending in {{tripgiving.dto.last4}}.&nbsp;
-      <a href="" ng-click="tripgiving.dto.goToChange()" tabindex="-1" class="text-secondary">Change</a>
+      </svg> ending in {{tripGiving.dto.last4}}.&nbsp;
+      <a href="" ng-click="tripGiving.giveFlow.goToChange()" tabindex="-1" class="text-secondary">Change</a>
   </div>
       <button ng-click="give.confirmDonation()" 
         ng-class="{disabled: tripGiving.dto.processing}" 

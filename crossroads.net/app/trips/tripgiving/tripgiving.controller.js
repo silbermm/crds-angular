@@ -99,10 +99,11 @@
       };
 
       TripGiving.initDefaultState(program);
-      TripGiving.campaign = { 
+      GiveTransferService.campaign = {
         campaignId: TripParticipant.trips[0].campaignId,
-        campaignName: TripParticipant.trips[0].campaignName
-      }
+        campaignName: TripParticipant.trips[0].campaignName,
+        pledgeDonorId: TripParticipant.trips[0].pledgeDonorId
+      };
     }
 
     function onEmailFound() {

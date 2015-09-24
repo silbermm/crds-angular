@@ -14,7 +14,10 @@ module.exports = {
       tripStart: 'Dec 21, 2015',
       tripName: '2015 December GO South Africa',
       programId: 2213526,
-      programName: '2015 December GO South Africa'
+      programName: '2015 December GO South Africa',
+      campaignId: 123456789,
+      campaignName: 'test campaign',
+      pledgeDonorId: 23232323
     }]
   },
   Trip: {
@@ -24,6 +27,9 @@ module.exports = {
     tripStart: 'Dec 21, 2015',
     tripName: '2015 December GO South Africa',
     programId: 2213526,
-    programName: '2015 December GO South Africa'
+    programName: '2015 December GO South Africa',
+    campaignId: 123456789,
+    campaignName: 'test campaign',
+    pledgeDonorId: 23232323
   }
 };
