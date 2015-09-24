@@ -279,7 +279,7 @@ describe('PaymentService', function() {
 
       var postData = {
         program_id: 'Program',
-        campaign_id: 321,
+        pledge_campaign_id: 321,
         pledge_donor_id: null,
         gift_message: null,
         amount: '1234',

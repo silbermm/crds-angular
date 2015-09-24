@@ -31,7 +31,7 @@
       var def = $q.defer();
       var donationRequest = {
         program_id: program_id,
-        campaign_id: campaignId,
+        pledge_campaign_id: campaignId,
         pledge_donor_id: GiveTransferService.campaign.pledgeDonorId,
         gift_message: GiveTransferService.message,
         amount: amount,
