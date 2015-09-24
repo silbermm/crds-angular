@@ -23,7 +23,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         void SendEmail(int emailTemplate, int donorId, int donationAmount, string donationType, DateTime donationDate, string programName, string emailReason);
         ContactDonor GetContactDonorForCheckAccount(string encryptedKey);
         string CreateHashedAccountAndRoutingNumber(string accountNumber, string routingNumber);
-        string DecryptValue(string value);
+        string DecryptCheckValue(string value);
         void UpdateDonorAccount(string encryptedKey, string customerId, string sourceId);
         List<Donation> GetDonations(int donorId, string donationYear = null);
         List<Donation> GetDonations(IEnumerable<int> donorIds, string donationYear = null);

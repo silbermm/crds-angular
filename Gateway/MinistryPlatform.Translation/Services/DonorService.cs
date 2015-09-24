@@ -329,26 +329,10 @@ namespace MinistryPlatform.Translation.Services
             return hash.ToString();
         }
 
-        //public string CreateEncodedAndEncryptedAccountAndRoutingNumber(string accountNumber, string routingNumber)
-        //{
-        //    var acct = _crypto.EncryptValue(accountNumber);
-        //    var rtn = _crypto.EncryptValue(routingNumber);
-
-        //    return (Convert.ToBase64String(acct.Concat(rtn).ToArray()));
-        //}
-
-        public string DecryptValue(string value)
+        public string DecryptCheckValue(string value)
         {
-            //var acct = _crypto.EncryptValue(value);
-           
-
-            //var acctN = Convert.ToBase64String(acct.Concat(acct).ToArray());
-            var acctT = _crypto.DecryptValue(value);
-            //var rtn = _crypto.DecryptValue(routingNumber);
-
-            //return (Convert.ToBase64String(acctT));
-            return acctT.ToString();
-
+            var valueDecrypt = _crypto.DecryptValue(value);
+            return valueDecrypt;
         }
 
         public int UpdatePaymentProcessorCustomerId(int donorId, string paymentProcessorCustomerId)

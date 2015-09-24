@@ -116,8 +116,8 @@ namespace crds_angular.Services
         
         public EZScanDonorDetails GetContactDonorForCheck(string accountNumber, string routingNumber)
         {
-            var account = _mpDonorService.DecryptValue(accountNumber);
-            var routing = _mpDonorService.DecryptValue(routingNumber);
+            var account = _mpDonorService.DecryptCheckValue(accountNumber);
+            var routing = _mpDonorService.DecryptCheckValue(routingNumber);
             var encryptedKey = _mpDonorService.CreateHashedAccountAndRoutingNumber(account, routing);
             return (Mapper.Map<ContactDonor, EZScanDonorDetails>(_donorService.GetContactDonorForCheckAccount(encryptedKey)));
             
