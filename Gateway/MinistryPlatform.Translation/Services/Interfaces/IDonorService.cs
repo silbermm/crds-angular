@@ -21,9 +21,9 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         void SetupConfirmationEmail(int programId, int donorId, int donationAmount, DateTime setupDate, string pymtType);
         ContactDonor GetEmailViaDonorId(int donorId);
         void SendEmail(int emailTemplate, int donorId, int donationAmount, string donationType, DateTime donationDate, string programName, string emailReason);
-        ContactDetails GetContactDonorForCheckAccount(string encryptedKey);
+        ContactDonor GetContactDonorForCheckAccount(string encryptedKey);
         string CreateHashedAccountAndRoutingNumber(string accountNumber, string routingNumber);
-        string DecryptValues(string accountNumber, string routingNumber);
+        string DecryptValue(string value);
         void UpdateDonorAccount(string encryptedKey, string customerId, string sourceId);
         List<Donation> GetDonations(int donorId, string donationYear = null);
         List<Donation> GetDonations(IEnumerable<int> donorIds, string donationYear = null);

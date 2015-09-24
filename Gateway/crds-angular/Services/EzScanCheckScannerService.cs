@@ -114,15 +114,18 @@ namespace crds_angular.Services
             return (batchDetails);
         }
         
-        public EZScanDonorDetails GetContactDonorForCheck(string encryptedKey)
+        public EZScanDonorDetails GetContactDonorForCheck(string accountNumber, string routingNumber)
         {
-           return (Mapper.Map<ContactDetails, EZScanDonorDetails>(_donorService.GetContactDonorForCheckAccount(encryptedKey.ToString())));
+            var account = _mpDonorService.DecryptValue(accountNumber);
+            var routing = _mpDonorService.DecryptValue(routingNumber);
+            var encryptedKey = _mpDonorService.CreateHashedAccountAndRoutingNumber(account, routing);
+            return (Mapper.Map<ContactDonor, EZScanDonorDetails>(_donorService.GetContactDonorForCheckAccount(encryptedKey)));
             
         }
 
         public ContactDonor CreateDonor(CheckScannerCheck checkDetails)
         {
-            var acctN = _donorService.DecryptValues(checkDetails.AccountNumber, checkDetails.RoutingNumber); 
+            var acctN = _donorService.DecryptValues(checkDetails.AccountNumber); 
            var contactDonor = _donorService.GetContactDonorForDonorAccount(checkDetails.AccountNumber, checkDetails.RoutingNumber) ?? new ContactDonor();
 
             if (contactDonor.HasPaymentProcessorRecord)

@@ -90,16 +90,16 @@ namespace crds_angular.Controllers.API
         /// If an existing donor is found, then the address data is returned.
         /// If an existing donor is not found, then a 404 will be returned
         /// </summary>
-        /// <param name="encryptedKey">This is the encrypted account and routing number from EZ Scan.</param>
+        /// <param name="checkAccount">This is the encrypted account and routing number from EZ Scan.</param>
         /// <returns>The created or updated donor record.</returns>
         [RequiresAuthorization]
         [ResponseType(typeof(EZScanDonorDetails))]
-        [Route("api/checkscanner/getdonor/{*encryptedKey}")]
-        public IHttpActionResult GetDonorForCheck(string encryptedKey = "")
+        [Route("api/checkscanner/getdonor"), HttpPost]
+        public IHttpActionResult GetDonorForCheck([FromBody] CheckAccount checkAccount)
         {
             return (Authorized(token =>
             {
-                var donorDetail = _checkScannerService.GetContactDonorForCheck(encryptedKey);
+                var donorDetail = _checkScannerService.GetContactDonorForCheck(checkAccount.AccountNumber, checkAccount.RoutingNumber);
                 if (donorDetail == null)
                 {
                     return NotFound();
