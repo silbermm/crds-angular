@@ -22,6 +22,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _findDonorByAccountPageViewId;
         private readonly int _donationStatusesPageId;
         private readonly int _donorLookupByEncryptedAccount;
+        private readonly int _myHouseholdDonationDistributions;
 
         public const string DonorRecordId = "Donor_Record";
         public const string DonorProcessorId = "Processor_ID";
@@ -52,6 +53,7 @@ namespace MinistryPlatform.Translation.Services
             _findDonorByAccountPageViewId = configuration.GetConfigIntValue("FindDonorByAccountPageView");
             _donationStatusesPageId = configuration.GetConfigIntValue("DonationStatus");
             _donorLookupByEncryptedAccount = configuration.GetConfigIntValue("DonorLookupByEncryptedAccount");
+            _myHouseholdDonationDistributions = configuration.GetConfigIntValue("MyHouseholdDonationDistributions");
         }
 
 
@@ -475,6 +477,14 @@ namespace MinistryPlatform.Translation.Services
         {
             var search = string.Format("{0},,,,,,,,,,,,,,,,,{1}", YearSearch(donationYear), DonorIdSearch(donorIds));
             var records = WithApiLogin(token => _ministryPlatformService.GetRecordsDict(_donationDistributionPageId, token, search));
+
+            return MapDonationRecords(records);
+        }
+
+        public List<Donation> GetDonationsForAuthenticatedUser(string userToken, bool? softCredit = null, string donationYear = null)
+        {
+            var search = string.Format("{0},{1}", YearSearch(donationYear), softCredit.HasValue ? softCredit.Value.ToString() : string.Empty);
+            var records = _ministryPlatformService.GetRecordsDict(_myHouseholdDonationDistributions, userToken, search);
 
             return MapDonationRecords(records);
         }
