@@ -4,6 +4,6 @@
   var module = 'crossroads.profile';
 
   require('./profile_giving.html');
-  angular.module(module).controller('GivingProfileController', require('./profile_giving.controller'));
+  angular.module(module).controller('ProfileGivingController', require('./profile_giving.controller'));
 
 })();

@@ -169,6 +169,7 @@
             }
           },
           'giving@profile': {
+            controller: 'ProfileGivingController as giving_profile_controller',
             templateUrl: 'giving/profile_giving.html',
             data: {
               isProtected: true
