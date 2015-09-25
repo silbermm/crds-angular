@@ -149,7 +149,7 @@ namespace crds_angular.Services
         {
             foreach (var donation in donations)
             {
-                if (donation.Source.SourceType == PaymentType.SoftCredit)
+                if (donation.Source.SourceType != PaymentType.SoftCredit)
                 {
                     var charge = GetStripeCharge(donation);
                     SetDonationSource(donation, charge);
