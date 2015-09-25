@@ -115,7 +115,9 @@ namespace crds_angular.App_Start
                     };
                 });
                 
-            Mapper.CreateMap<ContactDonor, EZScanDonorDetails>();
+            Mapper.CreateMap<ContactDonor, EZScanDonorDetails>()
+                .ForMember(dest => dest.DisplayName, opts => opts.MapFrom(src => src.Details.DisplayName))
+                .ForMember(dest => dest.Address, opts => opts.MapFrom(src => src.Details.Address));
            
             Mapper.CreateMap<DonationDistribution, DonationDistributionDTO>()
                 .ForMember(dest => dest.Amount, opts => opts.MapFrom(src => src.donationDistributionAmt))
