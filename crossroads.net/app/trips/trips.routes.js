@@ -170,11 +170,13 @@
         templateUrl: 'pageTemplates/thankYou.html',
       })
       .state('tripsignup.application.page', {
-        url: '/:pageId',
+        url: '/:stepId',
         templateUrl: function($stateParams) {
-          var template = 'pageTemplates/signupPage' + $stateParams.pageId + '.html';
+          var template = 'pageTemplates/signupPage' + $stateParams.stepId + '.html';
           return template;
-        }
+        },
+
+        controller: 'SignunStepController as signupStep',
       });
   }
 

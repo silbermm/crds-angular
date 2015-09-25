@@ -47,13 +47,11 @@
     vm.buttonText = 'Next';
     vm.campaign = Campaign;
     vm.contactId = contactId;
-    // vm.currentPage = 1;
     vm.destination = vm.campaign.nickname;
     vm.handlePageChange = handlePageChange;
     vm.handleSubmit = handleSubmit;
     vm.nolaRequired = nolaRequired;
     vm.numberOfPages = 0;
-    // vm.pageId = $state.params.pageId;
     vm.pageHasErrors = true;
     vm.privateInvite = $location.search()['invite'];
     vm.profileData = {};
@@ -61,7 +59,6 @@
     vm.registrationNotOpen = true;
     vm.signupService = TripsSignupService;
     vm.tripName = vm.campaign.name;
-    vm.tshirtSizes = [];
     vm.underAge = underAge;
     vm.validateProfile = validateProfile;
     vm.validation = Validation;
@@ -141,22 +138,8 @@
 
     function handlePageChange(pageId) {
       var route = 'tripsignup.application.page';
-
-      // $state.go(route);
-      vm.signupService.pageId = pageId;
-      $state.go(route, {pageId: pageId});
-
-      // vm.currentPage = pageId;
+      $state.go(route, {stepId: pageId});
     }
-
-    // function handleNext(nextPage) {
-    //   var route = 'tripsignup.application.page' + nextPage;
-    //   // var route = 'tripsignup.application.page2';
-    //   // $state.go(route, {campaignId: vm.signupService.campaign.id, contactId: vm.profileData.person.contactId });
-    //   $state.go(route);
-    //   // vm.currentPage = nextPage;
-    //   // toTop();
-    // }
 
     function handleSubmit() {
       $log.debug('handleSubmit start');
@@ -190,13 +173,12 @@
         }
       });
 
-      $log.debug('go thankyou');
       vm.signupService.pageId = 'thanks';
       $state.go('tripsignup.application.thankyou');
     }
 
     function onBeforeUnload() {
-      var dirty = $scope.tripsSignup.tripAppPage2.$dirty;
+      var dirty = $scope.tripsSignup.tripAppPage2.$dirty && $scope.tripsSignup.tripAppPage3.$dirty;
       $log.debug('onBeforeUnload start');
       if (dirty) {
         return '';
@@ -290,16 +272,6 @@
     }
 
     function stateChangeStart(event, toState, toParams, fromState, fromParams) {
-      // if ($scope.serveForm !== undefined) {
-      //   checkChildForms();
-      //   if ($scope['serveForm'].$dirty) {
-      //     if(!$window.confirm('Are you sure you want to leave this page?')) {
-      //       event.preventDefault();
-      //       return;
-      //     }
-      //   }
-      // }
-
       if (fromState.name === 'tripsignup.application.thankyou') {
         if (toState.name.startsWith('tripsignup.application.')) {
           $state.go('tripsignup');
@@ -335,7 +307,6 @@
       vm.signupService.page1.profile = profile;
       vm.signupService.page1.household = household;
 
-      // handleNext(2);
       handlePageChange(2);
     }
   }
