@@ -416,8 +416,8 @@ namespace MinistryPlatform.Translation.Test.Services
             const string guestDonorPageViewId = "DonorByContactId";
             const string accountNumber = "1234567";
             const string routingNumber = "042000314";
-            const string expectedEncAcct = "86b75773bc6dcd14881edce8f053ec1a5a30d15d7b9801466308f1ec2b3f1d88";
-
+          
+            var expectedEncAcct = _fixture.CreateHashedAccountAndRoutingNumber(accountNumber, routingNumber);
             var queryResults = new List<Dictionary<string, object>>
             {
                 new Dictionary<string, object>
