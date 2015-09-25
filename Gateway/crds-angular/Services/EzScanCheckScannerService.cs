@@ -5,6 +5,7 @@ using crds_angular.DataAccess.Interfaces;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services.Interfaces;
 using log4net;
+using Microsoft.Ajax.Utilities;
 using MinistryPlatform.Models;
 using MPServices = MinistryPlatform.Translation.Services.Interfaces;
 
@@ -76,8 +77,9 @@ namespace crds_angular.Services
                     // If the CreateDonationAndDistributionRecord fails, we'll still consider it exported, but
                     // it will be in error, and will have to be manually resolved.
                     check.Exported = true;
-              
-                    var encryptedKey = _mpDonorService.CreateHashedAccountAndRoutingNumber(check.AccountNumber, check.RoutingNumber);
+                    var account = _mpDonorService.DecryptCheckValue(check.AccountNumber);
+                    var routing = _mpDonorService.DecryptCheckValue(check.RoutingNumber);
+                    var encryptedKey = _mpDonorService.CreateHashedAccountAndRoutingNumber(account, routing);
                                      
                     _mpDonorService.UpdateDonorAccount(encryptedKey, charge.Source.id, contactDonor.ProcessorId);
                  
@@ -155,7 +157,7 @@ namespace crds_angular.Services
                 Type = AccountType.Checking
             };
             
-            var encryptedKey = _mpDonorService.CreateHashedAccountAndRoutingNumber(checkDetails.AccountNumber, checkDetails.RoutingNumber);
+            var encryptedKey = _mpDonorService.CreateHashedAccountAndRoutingNumber(account, routing);
             
             return _donorService.CreateOrUpdateContactDonor(contactDonor, encryptedKey, string.Empty, token, DateTime.Now);
         }
