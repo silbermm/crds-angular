@@ -1,4 +1,7 @@
 require('crds-core');
+require('../../../app/common/common.module');
+require('../../../app/profile/profile.module');
+require('../../../app/app');
 
 describe('ProfileGivingController', function() {
 
