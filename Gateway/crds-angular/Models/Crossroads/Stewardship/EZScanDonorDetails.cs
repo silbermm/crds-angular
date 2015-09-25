@@ -11,6 +11,8 @@ namespace crds_angular.Models.Crossroads.Stewardship
     {
         [JsonProperty(PropertyName = "DisplayName")]
         public string DisplayName { get; set; }
+        [JsonProperty(PropertyName = "DonorId")]
+        public string DonorId { get; set; }
         [JsonProperty(PropertyName = "PostalAddress")]
         public PostalAddress Address { get; set; }
     }

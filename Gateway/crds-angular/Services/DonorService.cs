@@ -52,10 +52,12 @@ namespace crds_angular.Services
 
         public ContactDonor GetContactDonorForDonorAccount(string accountNumber, string routingNumber)
         {
-            return (_mpDonorService.GetContactDonorForDonorAccount(accountNumber, routingNumber));
+            var acct = _mpDonorService.DecryptCheckValue(accountNumber);
+            var rtn = _mpDonorService.DecryptCheckValue(routingNumber);
+            return (_mpDonorService.GetContactDonorForDonorAccount(acct, rtn));
         }
 
-        public ContactDetails GetContactDonorForCheckAccount(string encryptedKey)
+        public ContactDonor GetContactDonorForCheckAccount(string encryptedKey)
         {
             return (_mpDonorService.GetContactDonorForCheckAccount(encryptedKey));
         }
@@ -149,6 +151,11 @@ namespace crds_angular.Services
             }
 
             return (contactDonorResponse);
+        }
+
+        public string DecryptValues(string value)
+        {
+            return (_mpDonorService.DecryptCheckValue(value));
         }
 
     }
