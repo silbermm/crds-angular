@@ -7,8 +7,9 @@ SET IDENTITY_INSERT [dbo].[Addresses] ON;
 DECLARE @addressId as int
 set @addressId = IDENT_CURRENT('Addresses')+1;
 
-INSERT INTO [dbo].Addresses (Address_ID,Address_Line_1,Address_Line_2,City,[State/Region],Postal_Code,Foreign_Country,Country_Code,Domain_ID,Carrier_Route,Lot_Number,Delivery_Point_Code,Delivery_Point_Check_Digit,Latitude,Longitude,Altitude,Time_Zone,Bar_Code,Area_Code,Last_Validation_Attempt,County,Validated,Do_Not_Validate,Last_GeoCode_Attempt,__ExternalAddressID) 
-VALUES (@addressID,'123 Midgar Section 6',null,'CITY','OH','45209','United States','USA',1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
+INSERT INTO [dbo].Addresses 
+(Address_ID,Address_Line_1        ,Address_Line_2,City  ,[State/Region],Postal_Code,Foreign_Country,Country_Code,Domain_ID,Carrier_Route,Lot_Number,Delivery_Point_Code,Delivery_Point_Check_Digit,Latitude,Longitude,Altitude,Time_Zone,Bar_Code,Area_Code,Last_Validation_Attempt,County,Validated,Do_Not_Validate,Last_GeoCode_Attempt,__ExternalAddressID) VALUES
+(@addressID,'123 Midgar Section 6',null          ,'CITY','OH'          ,'45209'    ,'United States','USA'       ,1        ,null         ,null      ,null               ,null                      ,null    ,null     ,null    ,null     ,null    ,null     ,null                   ,null  ,null     ,null           ,null                ,null               );
 
 SET IDENTITY_INSERT [dbo].[Addresses] OFF;
 
