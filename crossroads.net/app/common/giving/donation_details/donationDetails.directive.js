@@ -16,6 +16,7 @@
         programsIn: '=?',
         showInitiativeOption: '=?',
         showFrequencyOption: '=?',
+        givingType: '=?'
       },
       templateUrl: 'donation_details/donationDetails.html',
       link: link
@@ -28,6 +29,8 @@
       scope.setProgramList = setProgramList;
       scope.showInitiativeOption = scope.showInitiativeOption === undefined ? true : scope.showInitiativeOption;
       scope.showFrequencyOption = scope.showFrequencyOption === undefined ? true : scope.showFrequencyOption;
+      scope.givingType = scope.givingType === undefined ? 'one_time' : scope.givingType;
+
       activate();
 
       /////////////////////////////////

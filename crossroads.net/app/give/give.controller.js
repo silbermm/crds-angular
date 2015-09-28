@@ -12,6 +12,7 @@
                       'GiveFlow',
                       'AUTH_EVENTS',
                       'OneTimeGiving',
+                      'RecurringGiving'
                       ];
 
   function DonationException(message) {
@@ -28,7 +29,8 @@
     GiveTransferService,
     GiveFlow,
     AUTH_EVENTS,
-    OneTimeGiving) {
+    OneTimeGiving,
+    RecurringGiving) {
 
     var vm = this;
     vm.activeSession = activeSession;
@@ -41,6 +43,7 @@
     vm.onEmailFound = onEmailFound;
     vm.onEmailNotFound = onEmailNotFound;
     vm.programsInput = programList;
+    vm.branchOnGivingType = branchOnGivingType;
 
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams) {
 
@@ -118,6 +121,11 @@
     }
 
     function branchOnGivingType() {
+      if (vm.dto.givingType !== 'one_time') {
+        RecurringGiving.initDefaultState();
+      }
+
+      vm.giveFlow.goToAccount(vm.giveForm);
     }
   }
 
