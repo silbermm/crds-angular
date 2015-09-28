@@ -3,13 +3,12 @@ require('../../app/common/common.module');
 require('../../app/app');
 
 describe('PaymentService', function() {
-
-  var sut,
-      httpBackend,
-      stripe,
-      $rootScope,
-      MESSAGES,
-      GiveTransferService;
+  var sut;
+  var httpBackend;
+  var stripe;
+  var $rootScope;
+  var MESSAGES;
+  var GiveTransferService;
 
   var card = {
     number: '4242424242424242',
@@ -31,8 +30,7 @@ describe('PaymentService', function() {
       $provide.value('stripe', {
         setPublishableKey: function() {},
 
-        card:
-          {
+        card: {
             createToken: function(card) {
               var last4 = card.number.slice(-4);
               return {
@@ -290,6 +288,9 @@ describe('PaymentService', function() {
 
       var postData = {
         program_id: 'Program',
+        pledge_campaign_id: 321,
+        pledge_donor_id: null,
+        gift_message: null,
         amount: '1234',
         donor_id: 'Donor'
       };
@@ -300,7 +301,7 @@ describe('PaymentService', function() {
           program_id: 'Program'
         });
 
-      sut.donateToProgram('Program', '1234', 'Donor')
+      sut.donateToProgram('Program', 321, '1234', 'Donor')
       .then(function(confirmation) {
         expect(confirmation.program_id).toEqual('Program');
         expect(confirmation.amount).toEqual('1234');
@@ -308,7 +309,7 @@ describe('PaymentService', function() {
     });
   });
 
-  describe ('function updateDonorWithCard', function() {
+  describe('function updateDonorWithCard', function() {
     var putData;
     var card;
 

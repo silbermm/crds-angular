@@ -11,9 +11,11 @@
       replace: true,
       scope: {
         amount: '=',
-        program: '=',
         amountSubmitted: '=',
-        programsIn: '='
+        program: '=',
+        programsIn: '=?',
+        showInitiativeOption: '=?',
+        showFrequencyOption: '=?',
       },
       templateUrl: 'donation_details/donationDetails.html',
       link: link
@@ -21,10 +23,11 @@
 
     function link(scope, element, attrs) {
 
-      scope.ministryShow = false;
       scope.amountError = amountError;
+      scope.ministryShow = false;
       scope.setProgramList = setProgramList;
-
+      scope.showInitiativeOption = scope.showInitiativeOption === undefined ? true : scope.showInitiativeOption;
+      scope.showFrequencyOption = scope.showFrequencyOption === undefined ? true : scope.showFrequencyOption;
       activate();
 
       /////////////////////////////////
@@ -36,7 +39,9 @@
           scope.program = scope.programsIn[0];
         }
 
-        scope.ministryShow = scope.program.ProgramId !== scope.programsIn[0].ProgramId;
+        if (scope.programsIn !== undefined) {
+          scope.ministryShow = scope.program.ProgramId !== scope.programsIn[0].ProgramId;
+        }
       }
 
       function amountError() {
