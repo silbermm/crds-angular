@@ -21,5 +21,8 @@ namespace crds_angular.Models.Crossroads.Trip
 
         [JsonProperty(PropertyName = "registeredDonor")]
         public bool RegisteredDonor { get; set; }
+
+        [JsonProperty(PropertyName = "messageSent")]
+        public bool MessageSent { get; set; }
     }
 }

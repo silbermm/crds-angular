@@ -335,7 +335,8 @@ namespace MinistryPlatform.Translation.Services
                     DonationDate = result.ToDate("Donation Date"),
                     DonationAmount = Convert.ToInt32(result["Amount"]),
                     AnonymousGift = result.ToBool("Anonymous"),
-                    RegisteredDonor = result.ToBool("Registered Donor")
+                    RegisteredDonor = result.ToBool("Registered Donor"),
+                    MessageSent = result.ToBool("Message Sent")
                 };
 
                 trips.Add(trip);

@@ -304,6 +304,7 @@ namespace crds_angular.Services
                     gift.DonationDate = donation.DonationDate.ToShortDateString();
                     gift.DonationAmount = donation.DonationAmount;
                     gift.RegisteredDonor = donation.RegisteredDonor;
+                    gift.MessageSent = donation.MessageSent;
                     e.TripGifts.Add(gift);
                     e.TotalRaised += donation.DonationAmount;
                 }

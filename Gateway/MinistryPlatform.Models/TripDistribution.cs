@@ -21,5 +21,6 @@ namespace MinistryPlatform.Models
         public int DonationAmount { get; set; }
         public bool AnonymousGift { get; set; }
         public bool RegisteredDonor { get; set; }
+        public bool MessageSent { get; set; }
     }
 }
