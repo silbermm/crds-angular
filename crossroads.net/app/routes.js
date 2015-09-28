@@ -14,7 +14,8 @@
     $urlRouterProvider,
     $httpProvider,
     $urlMatcherFactory,
-    $locationProvider) {
+    $locationProvider
+    ) {
 
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'contentRouteType', /^\/.*/);
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'signupRouteType', /\/sign-up\/.*$/);
@@ -22,23 +23,44 @@
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'corkboardRouteType', /\/corkboard\/?.*$/);
 
     $stateProvider
+      .state('root', {
+        abstract: true,
+        template: '<ui-view/>',
+        resolve: {
+          Meta: function(SystemPage, $state) {
+            return SystemPage.get({
+              state: $state.next.name
+            }).$promise.then(
+              function(systemPage) {
+                if(systemPage.systemPages[0]){
+                  $state.next.data.meta = systemPage.systemPages[0];
+                }
+              });
+          }
+        }
+      })
       .state('noSideBar', {
+        parent: 'root',
         abstract:true,
         templateUrl: 'templates/noSideBar.html'
       })
       .state('leftSidebar', {
+        parent: 'root',
         abstract:true,
         templateUrl: 'templates/leftSidebar.html'
       })
       .state('rightSidebar', {
+        parent: 'root',
         abstract:true,
         templateUrl: 'templates/rightSidebar.html'
       })
       .state('screenWidth', {
+        parent: 'root',
         abstract:true,
         templateUrl: 'templates/screenWidth.html'
       })
       .state('noHeaderOrFooter', {
+        parent: 'root',
         abstract:true,
         templateUrl: 'templates/noHeaderOrFooter.html'
       })
@@ -133,12 +155,6 @@
               loggedin: crds_utilities.checkLoggedin
             },
           },
-          'personal@profile': {
-            templateUrl: 'personal/profile_personal.html',
-            data: {
-              isProtected: true
-            },
-          },
           'account@profile': {
             templateUrl: 'profile/profile_account.html',
             data: {
@@ -148,6 +164,13 @@
           'skills@profile': {
             controller: 'ProfileSkillsController as profile',
             templateUrl: 'skills/profile_skills.html',
+            data: {
+              isProtected: true
+            }
+          },
+          'giving@profile': {
+            controller: 'ProfileGivingController as giving_profile_controller',
+            templateUrl: 'giving/profile_giving.html',
             data: {
               isProtected: true
             }
@@ -166,70 +189,16 @@
           }
         }
       })
-      .state('go-trip-select', {
-        parent: 'noSideBar',
-        url: '/go/:trip_location/select-person',
-        templateUrl: 'gotrips/signup-select-person.html',
-        controller: 'GoTripsCtrl as gotrip'
-      })
-      .state('go-trip-signup', {
-        parent: 'noSideBar',
-        url: '/go/:trip_location/signup',
-        templateUrl: 'gotrips/signup-page-1.html',
-        controller: 'GoTripsCtrl as gotrip'
-      })
-      .state('go-trip-signup-page-2', {
-        parent: 'noSideBar',
-        url: '/go/:trip_location/signup/2',
-        templateUrl: 'gotrips/signup-page-2.html',
-        controller: 'GoTripsCtrl as gotrip'
-      })
-      .state('go-trip-signup-page-3', {
-        parent: 'noSideBar',
-        url: '/go/:trip_location/signup/3',
-        templateUrl: 'gotrips/signup-page-3.html',
-        controller: 'GoTripsCtrl as gotrip'
-      })
-      .state('go-trip-signup-page-4', {
-        parent: 'noSideBar',
-        url: '/go/:trip_location/signup/4',
-        templateUrl: 'gotrips/signup-page-4.html',
-        controller: 'GoTripsCtrl as gotrip'
-      })
-      .state('go-trip-signup-page-5', {
-        parent: 'noSideBar',
-        url: '/go/:trip_location/signup/5',
-        templateUrl: 'gotrips/signup-page-5.html',
-        controller: 'GoTripsCtrl as gotrip'
-      })
-      .state('go-trip-signup-page-confirmation', {
-        parent: 'noSideBar',
-        url: '/go/:trip_location/signup/confirmation',
-        templateUrl: 'gotrips/signup-page-confirmation.html',
-        controller: 'GoTripsCtrl as gotrip'
-      })
       .state('explore', {
         parent: 'noHeaderOrFooter',
         url: '/explore',
         templateUrl: 'explore/explore.html',
         data: {
           meta: {
-           title: 'Explore',
-           description: ''
+            title: 'Explore',
+            description: ''
           }
         }
-      })
-      .state('blog', {
-        parent: 'noSideBar',
-        url: '/blog',
-        controller: 'BlogCtrl as blog',
-        templateUrl: 'blog/blog-index.html'
-      })
-      .state('blog-post', {
-        parent: 'noSideBar',
-        url: '/blog/post',
-        controller: 'BlogCtrl as blog',
-        templateUrl: 'blog/blog-post.html'
       })
       .state('adbox', {
         parent: 'noSideBar',
@@ -270,11 +239,6 @@
         parent: 'noSideBar',
         url: '/thedaily',
         templateUrl: 'thedaily/thedaily.html'
-      })
-      .state('demo', {
-        parent: 'noSideBar',
-        url: '/demo',
-        template: '<p>demo</p>'
       })
       .state('go_trip_giving_results', {
         parent: 'noSideBar',
@@ -361,6 +325,7 @@
                         contact, cmsInfo
                       });
                     }
+
                   );
               });
 
@@ -504,32 +469,45 @@
               $templateFactory,
               $stateParams,
               Page,
-              ContentPageService,
-              ContentSiteConfigService) {
+              ContentPageService) {
               var promise;
 
               var link = addTrailingSlashIfNecessary($stateParams.link);
               promise = Page.get({ url: link }).$promise;
 
-              return promise.then(function(promise) {
-
-                if (promise.pages.length > 0) {
-                  ContentPageService.page = promise.pages[0];
-                } else {
-                  var notFoundRequest = Page.get({ url: '/page-not-found/' }, function() {
-                    if (notFoundRequest.pages.length > 0) {
-                      ContentPageService.page.content = notFoundRequest.pages[0].content;
-                      ContentPageService.page.pageType = '';
-                    } else {
-                      ContentPageService.page.content = '404 Content not found';
-                      ContentPageService.page.pageType = '';
-                    }
-                  });
+              var childPromise = promise.then(function(originalPromise) {
+                if (originalPromise.pages.length > 0) {
+                  ContentPageService.page = originalPromise.pages[0];
+                  return originalPromise;
                 }
 
+                var notFoundPromise = Page.get({url: '/page-not-found/'}).$promise;
+
+                notFoundPromise.then(function(promise) {
+                  if (promise.pages.length > 0) {
+                    ContentPageService.page = promise.pages[0];
+                  } else {
+                    ContentPageService.page = {
+                      content: '404 Content not found',
+                      pageType: '',
+                      title: 'Page not found'
+                    };
+                  }
+                });
+
+                return notFoundPromise;
+              });
+
+              return childPromise.then(function() {
+                var metaDescription = ContentPageService.page.metaDescription;
+                if (!metaDescription){
+                  //If a meta description is not provided we'll use the Content
+                  //The description gets html stripped and shortened to 155 characters
+                  metaDescription = ContentPageService.page.content;
+                }
                 $rootScope.meta = {
                   title: ContentPageService.page.title,
-                  description: ContentPageService.page.metaDescription,
+                  description: metaDescription,
                   extraMeta: ContentPageService.page.extraMeta
                 };
 

@@ -8,6 +8,7 @@ describe('PaymentService', function() {
   var stripe;
   var $rootScope;
   var MESSAGES;
+  var GiveTransferService;
 
   var card = {
     number: '4242424242424242',
@@ -51,19 +52,26 @@ describe('PaymentService', function() {
     return null;
   });
 
-  beforeEach(inject(function(_$injector_, $httpBackend, _PaymentService_, _$rootScope_, _MESSAGES_) {
-      var $injector = _$injector_;
+  beforeEach(inject(function(_$injector_,
+                              $httpBackend,
+                              _PaymentService_,
+                              _$rootScope_,
+                              _MESSAGES_,
+                              _GiveTransferService_) {
+    var $injector = _$injector_;
 
-      sut = _PaymentService_;
-      httpBackend = $httpBackend;
+    sut = _PaymentService_;
+    httpBackend = $httpBackend;
 
-      httpBackend.whenGET(/SiteConfig*/).respond('');
-      stripe = $injector.get('stripe');
-      $rootScope = _$rootScope_;
-      MESSAGES = _MESSAGES_;
-      MESSAGES.paymentMethodProcessingError = 1;
-      MESSAGES.paymentMethodDeclined = 2;
-    })
+    httpBackend.whenGET(/SiteConfig*/).respond('');
+    stripe = $injector.get('stripe');
+    $rootScope = _$rootScope_;
+    MESSAGES = _MESSAGES_;
+    MESSAGES.paymentMethodProcessingError = 1;
+    MESSAGES.paymentMethodDeclined = 2;
+
+    GiveTransferService = _GiveTransferService_;
+  })
   );
 
   afterEach(function() {
@@ -179,6 +187,7 @@ describe('PaymentService', function() {
         function(error) {
           expect(error).toBeDefined();
           expect(error.type).toEqual('junk');
+          expect(GiveTransferService.processing).toEqual(false);
         });
 
       expect(stripe.card.createToken).toHaveBeenCalledWith(card, jasmine.any(Function));
@@ -363,7 +372,7 @@ describe('PaymentService', function() {
       });
 
       httpBackend.expectPUT(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor', putData)
-        .respond(400, { error: { message: 'Token not found' } });
+        .respond(400, { error: { message: 'Token not found' }});
 
       var successCallback = jasmine.createSpyObj('successCallback', ['onSuccess']);
       sut.updateDonorWithCard('12345', card, 'me@here.com')
@@ -441,7 +450,7 @@ describe('PaymentService', function() {
       });
 
       httpBackend.expectPUT(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor', putData)
-        .respond(400, { error: { message: 'Token not found' } });
+        .respond(400, { error: { message: 'Token not found' }});
 
       var successCallback = jasmine.createSpyObj('successCallback', ['onSuccess']);
       sut.updateDonorWithBankAcct('12345', bankAccount, 'me@here.com')

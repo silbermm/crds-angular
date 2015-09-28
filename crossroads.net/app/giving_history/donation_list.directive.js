@@ -13,7 +13,9 @@
       scope: {
         donationsInput: '=',
         donationTotalAmount: '=',
-        donationStatementTotalAmount: '='
+        donationStatementTotalAmount: '=',
+        donationShowLimit: '=',
+        donationDoNotShowLabels: '='
       },
       link: link
     };

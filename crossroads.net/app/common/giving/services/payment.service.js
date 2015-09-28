@@ -85,6 +85,8 @@
       } else {
         $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
       }
+
+      GiveTransferService.processing = false;
     }
 
     function updateDonorWithBankAcct(donorId, bankAcct, email) {
