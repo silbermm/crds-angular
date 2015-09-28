@@ -26,15 +26,17 @@ namespace crds_angular.Controllers.API
         private readonly MPInterfaces.IAuthenticationService _authenticationService;
         private readonly IDonorService _gatewayDonorService;
         private readonly IDonationService _gatewayDonationService;
+        private readonly IUserImpersonationService _impersonationService;
 
         public DonationController(MPInterfaces.IDonorService mpDonorService, IPaymentService stripeService,
-            MPInterfaces.IAuthenticationService authenticationService, IDonorService gatewayDonorService, IDonationService gatewayDonationService)
+            MPInterfaces.IAuthenticationService authenticationService, IDonorService gatewayDonorService, IDonationService gatewayDonationService, IUserImpersonationService impersonationService)
         {
             _mpDonorService = mpDonorService;
             _stripeService = stripeService;
             _authenticationService = authenticationService;
             _gatewayDonorService = gatewayDonorService;
             _gatewayDonationService = gatewayDonationService;
+            _impersonationService = impersonationService;
         }
 
         /// <summary>
@@ -45,11 +47,16 @@ namespace crds_angular.Controllers.API
         /// <returns>A list of DonationDTOs</returns>
         [Route("api/donations/{donationYear:regex(\\d{4})?}")]
         [HttpGet]
-        public IHttpActionResult GetDonations(string donationYear = null, [FromUri(Name = "softCredit")]bool? softCredit = false)
+        public IHttpActionResult GetDonations(string donationYear = null, [FromUri(Name = "softCredit")]bool? softCredit = false, [FromUri(Name = "impersonateUserId")]string impersonateUserId = null)
         {
             return (Authorized(token =>
             {
-                var donations = _gatewayDonationService.GetDonationsForAuthenticatedUser(token, donationYear, softCredit.GetValueOrDefault(false));
+                var donations = !string.IsNullOrWhiteSpace(impersonateUserId)
+                    ? _impersonationService.WithImpersonation(token,
+                                                              impersonateUserId,
+                                                              () =>
+                                                                  _gatewayDonationService.GetDonationsForAuthenticatedUser(token, donationYear, softCredit.GetValueOrDefault(false)))
+                    : _gatewayDonationService.GetDonationsForAuthenticatedUser(token, donationYear, softCredit.GetValueOrDefault(false));
                 if (donations == null || !donations.HasDonations)
                 {
                     return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching donations found")));
@@ -65,11 +72,14 @@ namespace crds_angular.Controllers.API
         /// <returns>A list of years (string)</returns>
         [Route("api/donations/years")]
         [HttpGet]
-        public IHttpActionResult GetDonationYears()
+        public IHttpActionResult GetDonationYears([FromUri(Name = "impersonateUserId")]string impersonateUserId = null)
         {
             return (Authorized(token =>
             {
-                var donationYears = _gatewayDonationService.GetDonationYearsForAuthenticatedUser(token);
+                var donationYears = !string.IsNullOrWhiteSpace(impersonateUserId)
+                    ? _impersonationService.WithImpersonation(token, impersonateUserId, () => _gatewayDonationService.GetDonationYearsForAuthenticatedUser(token))
+                    : _gatewayDonationService.GetDonationYearsForAuthenticatedUser(token);
+
                 if (donationYears == null || !donationYears.HasYears)
                 {
                     return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No donation years found")));

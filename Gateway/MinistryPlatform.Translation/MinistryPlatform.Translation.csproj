@@ -135,6 +135,7 @@
     <Compile Include="Services\Interfaces\IPledgeService.cs" />
     <Compile Include="Services\Interfaces\IPrivateInviteService.cs" />
     <Compile Include="Services\Interfaces\IProgramService.cs" />
+    <Compile Include="Services\Interfaces\IUserService.cs" />
     <Compile Include="Services\LookupService.cs" />
     <Compile Include="Services\MessageInfo.cs" />
     <Compile Include="Services\MinistryPlatformService.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="Services\PledgeService.cs" />
     <Compile Include="Services\PrivateInviteService.cs" />
     <Compile Include="Services\ProgramService.cs" />
+    <Compile Include="Services\UserService.cs" />
     <Compile Include="Utils\DbConnectionNameTypeConverter.cs" />
     <Compile Include="Utils\MPFormatConversion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

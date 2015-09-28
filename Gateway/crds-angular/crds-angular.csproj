@@ -400,6 +400,7 @@
     <Compile Include="Services\Interfaces\IPaymentService.cs" />
     <Compile Include="Services\Interfaces\IStripeEventService.cs" />
     <Compile Include="Services\Interfaces\ITripService.cs" />
+    <Compile Include="Services\Interfaces\IUserImpersonationService.cs" />
     <Compile Include="Services\Interfaces\IVolunteerApplicationService.cs" />
     <Compile Include="Services\MinistryPlatformBaseService.cs" />
     <Compile Include="Services\PersonService.cs" />
@@ -410,6 +411,7 @@
     <Compile Include="Services\StripeService.cs" />
     <Compile Include="Services\TranslationService.cs" />
     <Compile Include="Services\TripService.cs" />
+    <Compile Include="Services\UserImpersonationService.cs" />
     <Compile Include="Services\VolunteerApplicationService.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Util\CSV.cs" />

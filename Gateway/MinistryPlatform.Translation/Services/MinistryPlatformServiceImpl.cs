@@ -3,7 +3,11 @@ using MinistryPlatform.Translation.PlatformService;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Net;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
 using Crossroads.Utilities.Interfaces;
+using Crossroads.Utilities.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
@@ -199,26 +203,53 @@ namespace MinistryPlatform.Translation.Services
             return _configurationWrapper.GetConfigIntValue(mpKey);
         }
 
-        private T Call<T>(String token, Func<PlatformServiceClient, T> ministryPlatformFunc)
+        private T Call<T>(string token, Func<PlatformServiceClient, T> ministryPlatformFunc)
         {
             T result;
-            using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
+            using (new OperationContextScope(platformServiceClient.InnerChannel))
             {
                 if (System.ServiceModel.Web.WebOperationContext.Current != null)
+                {
                     System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+                    Impersonate();
+                }
+
                 result = ministryPlatformFunc(platformServiceClient);
             }
             return result;
         }
 
-        private void VoidCall(String token, Action<PlatformServiceClient> ministryPlatformFunc)
+        private void VoidCall(string token, Action<PlatformServiceClient> ministryPlatformFunc)
         {
-            using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
+            using (new OperationContextScope(platformServiceClient.InnerChannel))
             {
                 if (System.ServiceModel.Web.WebOperationContext.Current != null)
+                {
                     System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+                    Impersonate();
+                }
                 ministryPlatformFunc(platformServiceClient);
             }
+        }
+
+        private void Impersonate()
+        {
+            if (!ImpersonatedUserGuid.HasValue())
+            {
+                return;
+            }
+
+            var httpRequest = OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] as
+                HttpRequestMessageProperty;
+            if (httpRequest == null)
+            {
+                httpRequest = new HttpRequestMessageProperty();
+                OperationContext.Current.OutgoingMessageProperties.Add(HttpRequestMessageProperty.Name, httpRequest);
+            }
+
+            var cookies = new CookieContainer();
+            cookies.Add(platformServiceClient.Endpoint.Address.Uri, new Cookie(".ASPXAUTH.1", ImpersonatedUserGuid.Get()));
+            httpRequest.Headers.Add(HttpRequestHeader.Cookie, cookies.GetCookieHeader(platformServiceClient.Endpoint.Address.Uri));
         }
     }
 }
