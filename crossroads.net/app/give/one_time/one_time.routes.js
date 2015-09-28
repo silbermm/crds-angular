@@ -4,29 +4,25 @@
 
   module.exports = OneTimeRoutes;
 
-  OneTimeRoutes.$inject = ['$httpProvider', '$stateProvider'];
+  OneTimeRoutes.$inject = ['$stateProvider'];
 
   /**
    * This holds all of One-Time Giving routes
    */
-  function OneTimeRoutes($httpProvider, $stateProvider) {
+  function OneTimeRoutes($stateProvider) {
 
-    $httpProvider.defaults.useXDomain = true;
-
-    //TODO: I think this is done globally, not needed here, I think the above needs to be done globally
-    $httpProvider.defaults.headers.common['X-Use-The-Force'] = true;
-
+    console.log('initializing one_time_giving routes');
     $stateProvider
-      .state('give.one_time.confirm', {
+      .state('give.one_time_confirm', {
         templateUrl: 'templates/confirm.html'
       })
-      .state('give.one_time.account', {
+      .state('give.one_time_account', {
         templateUrl: 'templates/account.html'
       })
-      .state('give.one_time.change', {
+      .state('give.one_time_change', {
         templateUrl: 'templates/change.html'
       })
-      .state('give.one_time.thank-you', {
+      .state('give.one_time_thank-you', {
         templateUrl: 'templates/thank_you.html'
       });
   }

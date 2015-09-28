@@ -17,12 +17,12 @@
       // Setup the give flow service
       GiveFlow.reset({
         amount: 'give.amount',
-        account: 'give.account',
+        account: 'give.one_time_account',
         login: 'give.login',
         register: 'give.register',
-        confirm: 'give.confirm',
-        change: 'give.change',
-        thankYou: 'give.thank-you'
+        confirm: 'give.one_time_confirm',
+        change: 'give.one_time_change',
+        thankYou: 'give.one_time_thank-you'
       });
 
       GiveTransferService.initialized = true;

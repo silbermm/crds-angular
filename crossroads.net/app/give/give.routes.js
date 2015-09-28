@@ -7,7 +7,7 @@
   GiveRoutes.$inject = ['$httpProvider', '$stateProvider'];
 
   /**
-   * This holds all of One-Time Giving routes
+   * This holds all of common Giving routes
    */
   function GiveRoutes($httpProvider, $stateProvider) {
 
@@ -21,7 +21,7 @@
         parent: 'noSideBar',
         url: '/give',
         controller: 'GiveController as give',
-        templateUrl: 'giveTemplates/give.html',
+        templateUrl: 'templates/give.html',
         resolve: {
           Programs: 'Programs',
           programList: function(Programs) {

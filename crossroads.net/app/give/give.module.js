@@ -16,6 +16,6 @@ var app = angular.module(constants.MODULES.GIVE, [
 ;
 
 app.config(require('./give.routes'));
+require('./one_time');
 app.controller('GiveController', require('./give.controller'));
 
-require('./one_time');
