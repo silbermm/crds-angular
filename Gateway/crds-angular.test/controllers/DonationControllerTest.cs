@@ -28,6 +28,7 @@ namespace crds_angular.test.controllers
         private Mock<IAuthenticationService> authenticationServiceMock;
         private Mock<IDonorService> gatewayDonorServiceMock;
         private Mock<IDonationService> gatewayDonationServiceMock;
+        private Mock<IUserImpersonationService> impersonationService;
         private string authToken;
         private string authType;
 
@@ -39,9 +40,10 @@ namespace crds_angular.test.controllers
             stripeServiceMock = new Mock<IPaymentService>();
             authenticationServiceMock = new Mock<IAuthenticationService>();
             gatewayDonationServiceMock = new Mock<IDonationService>();
+            impersonationService = new Mock<IUserImpersonationService>();
 
             fixture = new DonationController(donorServiceMock.Object, stripeServiceMock.Object,
-                authenticationServiceMock.Object, gatewayDonorServiceMock.Object, gatewayDonationServiceMock.Object);
+                authenticationServiceMock.Object, gatewayDonorServiceMock.Object, gatewayDonationServiceMock.Object, impersonationService.Object);
 
             authType = "auth_type";
             authToken = "auth_token";
