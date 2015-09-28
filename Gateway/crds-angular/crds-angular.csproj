@@ -33,6 +33,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\crds-angular.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -315,8 +316,10 @@
     <Compile Include="Models\Crossroads\ServingRSVP.cs" />
     <Compile Include="Models\Crossroads\Skill.cs" />
     <Compile Include="Models\Crossroads\Event.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\CheckAccount.cs" />
     <Compile Include="Models\Crossroads\Stewardship\CheckScannerBatch.cs" />
     <Compile Include="Models\Crossroads\Stewardship\CheckScannerCheck.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\EncryptValue.cs" />
     <Compile Include="Models\Crossroads\Stewardship\DepositDTO.cs" />
     <Compile Include="Models\Crossroads\Stewardship\DonationDistributionDTO.cs" />
     <Compile Include="Models\Crossroads\Stewardship\DonationsDTO.cs" />

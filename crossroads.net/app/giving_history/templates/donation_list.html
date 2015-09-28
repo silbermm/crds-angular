@@ -1,11 +1,11 @@
 <table class="table gift-table push-top">
     <thead class="visible-print-table">
-    <tr>
+    <tr ng-if="!donationDoNotShowLabels">
         <th>Initiative / Payment Type</th>
         <th class="text-right">Amount / Date</th>
     </tr>
     </thead>
-    <tbody ng-repeat="donation in donations track by $index">
+    <tbody ng-repeat="donation in donations | limitTo:donationShowLimit as results">
     <tr ng-repeat="distribution in donation.distributions track by $index" ng-class="{'pending hidden-print' : donation.status == 'Pending'}">
         <td>
             {{distribution.program_name}}
@@ -28,6 +28,5 @@
     </tr>
     </tbody>
 </table>
-
-<h4 class="text-right hidden-print">Total: {{donationTotalAmount / 100 | currency: '$'}}</h4>
-<h4 class="text-right visible-print-block">Total: {{donationStatementTotalAmount / 100 | currency: '$'}}</h4>
+<h4 class="text-right hidden-print" ng-if="!donationDoNotShowLabels">Total: {{donationTotalAmount / 100 | currency: '$'}}</h4>
+<h4 class="text-right visible-print-block" ng-if="!donationDoNotShowLabels">Total: {{donationStatementTotalAmount / 100 | currency: '$'}}</h4>

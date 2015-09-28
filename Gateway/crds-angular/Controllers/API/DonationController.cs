@@ -42,12 +42,13 @@ namespace crds_angular.Controllers.API
         /// <summary>
         /// Retrieve list of donations for the logged-in donor, optionally for the specified year, and optionally returns only soft credit donations (by default returns only direct gifts).
         /// </summary>
-        /// <param name="softCredit">A bool indicating if the result should contain only soft-credit (true) or only direct (false) donations.  Defaults to false.</param>
+        /// <param name="softCredit">A bool indicating if the result should contain only soft-credit (true), only direct (false), or all (null) donations.  Defaults to null.</param>
         /// <param name="donationYear">A year filter (YYYY format) for donations returned - defaults to null, meaning return all available donations regardless of year.</param>
+        /// <param name="impersonateUserId">An optional userid of a user to impersonate</param>
         /// <returns>A list of DonationDTOs</returns>
         [Route("api/donations/{donationYear:regex(\\d{4})?}")]
         [HttpGet]
-        public IHttpActionResult GetDonations(string donationYear = null, [FromUri(Name = "softCredit")]bool? softCredit = false, [FromUri(Name = "impersonateUserId")]string impersonateUserId = null)
+        public IHttpActionResult GetDonations(string donationYear = null, [FromUri(Name = "softCredit")]bool? softCredit = null, [FromUri(Name = "impersonateUserId")]string impersonateUserId = null)
         {
             return (Authorized(token =>
             {
@@ -55,8 +56,8 @@ namespace crds_angular.Controllers.API
                     ? _impersonationService.WithImpersonation(token,
                                                               impersonateUserId,
                                                               () =>
-                                                                  _gatewayDonationService.GetDonationsForAuthenticatedUser(token, donationYear, softCredit.GetValueOrDefault(false)))
-                    : _gatewayDonationService.GetDonationsForAuthenticatedUser(token, donationYear, softCredit.GetValueOrDefault(false));
+                                                                  _gatewayDonationService.GetDonationsForAuthenticatedUser(token, donationYear, softCredit))
+                    : _gatewayDonationService.GetDonationsForAuthenticatedUser(token, donationYear, softCredit);
                 if (donations == null || !donations.HasDonations)
                 {
                     return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching donations found")));
@@ -69,6 +70,7 @@ namespace crds_angular.Controllers.API
         /// <summary>
         /// Retrieve a list of donation years for the logged-in donor.  This includes any year the donor has given either directly, or via soft-credit.
         /// </summary>
+        /// <param name="impersonateUserId">An optional userid of a user to impersonate</param>
         /// <returns>A list of years (string)</returns>
         [Route("api/donations/years")]
         [HttpGet]
