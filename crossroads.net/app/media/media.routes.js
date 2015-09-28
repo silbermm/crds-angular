@@ -151,7 +151,7 @@
              description: SingleMedia.message.description,
              type: 'article',
              card: 'summary',
-             image: SingleMedia.message.video.still
+             image: SingleMedia.message.messageVideo.still
             };
             return $state.next.data.meta;
           },
@@ -168,7 +168,7 @@
             return parent;
           },
           ImageURL: function (SingleMedia) {
-            return _.get(SingleMedia.message, 'video.still.filename');
+            return _.get(SingleMedia.message, 'messageVideo.still.filename');
           }
         }
       })
