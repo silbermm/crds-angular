@@ -16,6 +16,7 @@ using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 using System.Threading.Tasks;
 using System.Web;
 using crds_angular.Models.Json;
+using Microsoft.Ajax.Utilities;
 
 namespace crds_angular.Controllers.API
 {
@@ -142,14 +143,15 @@ namespace crds_angular.Controllers.API
                 var donor = _mpDonorService.GetContactDonor(contactId);
                 var charge = _stripeService.ChargeCustomer(donor.ProcessorId, dto.Amount, donor.DonorId);
                 var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
-                var pledgeId = new int?();
-                if (dto.PledgeCampaignId > 0 && dto.PledgeDonorId > 0)
+
+                int? pledgeId = null;
+                if (dto.PledgeCampaignId != null && dto.PledgeDonorId != null)
                 {
-                    pledgeId = _mpPledgeService.GetPledgeByCampaignAndDonor(dto.PledgeCampaignId, dto.PledgeDonorId);
+                  pledgeId  = _mpPledgeService.GetPledgeByCampaignAndDonor(dto.PledgeCampaignId.Value, dto.PledgeDonorId.Value);
                 }
 
                 var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount, fee, donor.DonorId, dto.ProgramId, pledgeId, charge.Id, dto.PaymentType, donor.ProcessorId, DateTime.Now, true);
-                if (dto.GiftMessage != "" && pledgeId != null)
+                if (!dto.GiftMessage.IsNullOrWhiteSpace() && pledgeId != null)
                 {
                     SendMessageFromDonor(pledgeId.Value, dto.GiftMessage);
                 }
@@ -181,12 +183,16 @@ namespace crds_angular.Controllers.API
                 var donor = _gatewayDonorService.GetContactDonorForEmail(dto.EmailAddress);
                 var charge = _stripeService.ChargeCustomer(donor.ProcessorId, dto.Amount, donor.DonorId);
                 var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
-                var pledgeId = _mpPledgeService.GetPledgeByCampaignAndDonor(dto.PledgeCampaignId, dto.PledgeDonorId);
+                int? pledgeId = null;
+                if (dto.PledgeCampaignId != null && dto.PledgeDonorId != null)
+                {
+                    pledgeId = _mpPledgeService.GetPledgeByCampaignAndDonor(dto.PledgeCampaignId.Value, dto.PledgeDonorId.Value);
+                }
 
                 var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount, fee, donor.DonorId, dto.ProgramId, pledgeId, charge.Id, dto.PaymentType, donor.ProcessorId, DateTime.Now, false);
-                if (dto.GiftMessage != "")
+                if (!dto.GiftMessage.IsNullOrWhiteSpace() && pledgeId != null)
                 {
-                    SendMessageFromDonor(pledgeId, dto.GiftMessage);
+                    SendMessageFromDonor(pledgeId.Value, dto.GiftMessage);
                 }
 
                 var response = new DonationDTO()

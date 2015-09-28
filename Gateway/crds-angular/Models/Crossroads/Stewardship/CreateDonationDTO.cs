@@ -20,10 +20,10 @@ namespace crds_angular.Models.Crossroads.Stewardship
         public string PaymentType { get; set; }
 
         [JsonProperty(PropertyName = "pledge_donor_id")]
-        public int PledgeDonorId { get; set; }
+        public int? PledgeDonorId { get; set; }
 
         [JsonProperty(PropertyName = "pledge_campaign_id")]
-        public int PledgeCampaignId { get; set; }
+        public int? PledgeCampaignId { get; set; }
 
         [JsonProperty(PropertyName = "gift_message")]
         public string GiftMessage { get; set; }
