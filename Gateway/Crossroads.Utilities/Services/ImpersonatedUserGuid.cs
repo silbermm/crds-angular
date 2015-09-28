@@ -18,7 +18,7 @@ namespace Crossroads.Utilities.Services
 
         public static bool HasValue()
         {
-            return (_instance.IsValueCreated);
+            return (_instance.IsValueCreated && !string.IsNullOrWhiteSpace(_instance.Value));
         }
 
         public static void Clear()
