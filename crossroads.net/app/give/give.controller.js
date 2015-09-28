@@ -116,6 +116,9 @@
         }, 0);
       }
     }
+
+    function branchOnGivingType() {
+    }
   }
 
 })();

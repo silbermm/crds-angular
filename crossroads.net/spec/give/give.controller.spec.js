@@ -875,4 +875,12 @@ describe('GiveController', function() {
       expect(callback.onSuccess).not.toHaveBeenCalled();
     });
   });
+
+  describe('Give type branching', function() {
+    it('should default give flow to one time giving', function() {
+    });
+
+    it('should change give flow to recurring if selected', function() {
+    });
+  });
 });
