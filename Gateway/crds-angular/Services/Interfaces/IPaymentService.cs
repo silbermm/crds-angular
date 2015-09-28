@@ -16,5 +16,7 @@ namespace crds_angular.Services.Interfaces
         StripeRefund GetChargeRefund(string chargeId);
         StripeRefundData GetRefund(string refundId);
         StripeCharge GetCharge(string chargeId);
+        StripePlan CreatePlan(decimal planAmount, string planInterval, string planName, string donorId);
+        StripeSubscription CreateSubscription(string planName, string customer);
     }
 }

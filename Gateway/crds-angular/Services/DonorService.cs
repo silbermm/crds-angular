@@ -78,6 +78,7 @@ namespace crds_angular.Services
         ///    whether a Customer needs to be created at the payment processor, etc.
         /// </summary>
         /// <param name="contactDonor">An existing ContactDonor, looked up from either GetDonorForEmail or GetDonorForAuthenticatedUser.  This may be null, indicating there is no existing contact or donor.</param>
+       ///  <param name="encryptedKey"> The encrypted routing and account number</param>
         /// <param name="emailAddress">An email address to use when creating a Contact (#1 above).</param>
         /// <param name="paymentProcessorToken">The one-time-use token given by the payment processor.</param>
         /// <param name="setupDate">The date when the Donor is marked as setup - normally would be today's date.</param>

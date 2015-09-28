@@ -308,6 +308,17 @@ namespace crds_angular.Controllers.API
 
             return Ok(donor);
         }
+
+        [ResponseType(typeof (DonorDTO))]
+        [Route("api/donor/plan")]
+        public IHttpActionResult CreatePlan([FromBody] StripePlan stripePlan)
+        {
+            return (Authorized(token =>
+            {
+                var donor = _donorService.GetContactDonorForAuthenticatedUser(token);
+                return donor == null ? (NotFound()) : null;
+            }));
+        }
     }
 }
 

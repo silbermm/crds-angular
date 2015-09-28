@@ -289,7 +289,27 @@ namespace crds_angular.Services
             return refund;
         }
 
+        public StripePlan CreatePlan(decimal planAmount, string planInterval, string planName, string donorID)
+        {
+            var request = new RestRequest("plans", Method.POST);
+            request.AddParameter("amount", planAmount * Constants.StripeDecimalConversionValue);
+            request.AddParameter("interval", planInterval);
+            request.AddParameter("name", planName);
+            request.AddParameter("currency", "usd");
+           // request.AddParameter("id", "Donor ID #" + donorId);
 
+            var response = _stripeRestClient.Execute<StripePlan>(request);
+            CheckStripeResponse("Invalid plan creation request", response);
+
+            return response.Data;          
+        }
+
+        public StripeSubscription CreateSubscription(string planName, string customer)
+        {
+            var request = new RestRequest("customers/" + customer +"/subscriptions", Method.POST);
+            request.AddParameter("name", planName);
+            return null;
+        }
     }
 
     public class Error

@@ -340,8 +340,10 @@
     <Compile Include="Models\Crossroads\Stewardship\StripeCustomer.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeEvent.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeObject.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\StripePlan.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeRefund.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeSource.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\StripeSubscription.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeToken.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeTransfer.cs" />
     <Compile Include="Models\Crossroads\Trip\FamilyMemberTripDto.cs" />
