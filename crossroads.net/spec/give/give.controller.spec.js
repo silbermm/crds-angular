@@ -127,7 +127,8 @@ describe('GiveController', function() {
       };
 
       controller = $controller('GiveController',
-        { $rootScope: $rootScope,
+        {
+          $rootScope: $rootScope,
           $scope: $scope,
           $state: $state,
           $timeout: $timeout,
@@ -151,7 +152,6 @@ describe('GiveController', function() {
   );
 
   describe('function confirmDonation()', function() {
-
     beforeEach(function() {
       spyOn(controller.giveFlow, 'goToChange');
     });
@@ -453,7 +453,6 @@ describe('GiveController', function() {
     });
 
     it('should call updateDonorWithBankAcct with proper values when bank account info is changed', function() {
-
       controller.giveForm = controllerGiveFormBank;
       controller.dto.amount = 858;
       controller.dto.view = 'bank';
@@ -506,17 +505,17 @@ describe('GiveController', function() {
           address_zip: '90210',
           cvc: '987',
         }
-       };
-       controller.dto.pymtType = 'cc';
+      };
 
-       controller.giveForm = controllerGiveFormBank;
-       spyOn($state, 'go');
-       spyOn(controller.donationService, 'donate');
+      controller.dto.pymtType = 'cc';
+      controller.giveForm = controllerGiveFormBank;
+      spyOn($state, 'go');
+      spyOn(controller.donationService, 'donate');
 
-       controller.donationService.submitChangedBankInfo(controller.giveForm);
-       expect(controller.donationService.donate).not.toHaveBeenCalled();
-       expect($state.go).toHaveBeenCalledWith('give.login');
-     });
+      controller.donationService.submitChangedBankInfo(controller.giveForm);
+      expect(controller.donationService.donate).not.toHaveBeenCalled();
+      expect($state.go).toHaveBeenCalledWith('give.login');
+    });
   });
 
   describe('function submitBankInfo', function() {
@@ -607,7 +606,6 @@ describe('GiveController', function() {
       expect(mockPaymentService.getDonor).toHaveBeenCalledWith('test@test.com');
       expect(controller.donationService.createDonorAndDonate).toHaveBeenCalled();
     });
-
   });
 
   describe('function transitionForLoggedInUserBasedOnExistingDonor', function() {
@@ -638,7 +636,6 @@ describe('GiveController', function() {
     });
 
     it('should transition to give.account for a logged-in Giver without an existing donor', function() {
-
       controller.initDefaultState();
       mockSession.isActive.and.callFake(function() {
         return true;
@@ -650,8 +647,8 @@ describe('GiveController', function() {
       mockPaymentServiceGetPromise.setSuccess(false);
       mockPaymentServiceGetPromise.setHttpStatusCode(404);
       controller.giveForm = {
-         email: 'test@test.com'
-       };
+        email: 'test@test.com'
+      };
       controller.dto.email = 'test@test.com';
       controller.dto.donor = { email: 'test@test.com' };
 
@@ -663,64 +660,64 @@ describe('GiveController', function() {
     });
 
     it('should transition to give.confirm for a logged-in Giver with an existing donor', function() {
-       mockSession.isActive.and.callFake(function() {
-         return true;
-       });
+      mockSession.isActive.and.callFake(function() {
+        return true;
+      });
 
-       spyOn($state, 'go');
-       spyOn(mockEvent, 'preventDefault');
+      spyOn($state, 'go');
+      spyOn(mockEvent, 'preventDefault');
 
-       mockPaymentServiceGetPromise.setSuccess(true);
-       controller.dto.email = 'test@test.com';
-       controller.donationService.transitionForLoggedInUserBasedOnExistingDonor(mockEvent, mockToState);
+      mockPaymentServiceGetPromise.setSuccess(true);
+      controller.dto.email = 'test@test.com';
+      controller.donationService.transitionForLoggedInUserBasedOnExistingDonor(mockEvent, mockToState);
 
-       expect($state.go).toHaveBeenCalledWith('give.confirm');
-       expect(mockEvent.preventDefault).toHaveBeenCalled();
-       expect(mockPaymentService.getDonor).toHaveBeenCalledWith('test@test.com');
-       expect(controller.dto.donorError).toBeFalsy();
-       expect(controller.dto.donor.default_source.credit_card.last4).toBe('9876');
-       expect(controller.dto.donor.default_source.credit_card.brand).toBe('Visa');
-     });
+      expect($state.go).toHaveBeenCalledWith('give.confirm');
+      expect(mockEvent.preventDefault).toHaveBeenCalled();
+      expect(mockPaymentService.getDonor).toHaveBeenCalledWith('test@test.com');
+      expect(controller.dto.donorError).toBeFalsy();
+      expect(controller.dto.donor.default_source.credit_card.last4).toBe('9876');
+      expect(controller.dto.donor.default_source.credit_card.brand).toBe('Visa');
+    });
 
     it('should set brand and last 4 correctly when payment type is bank', function() {
-       mockGetResponse = {
-         Processor_ID: '123456',
-         default_source:  {
-           credit_card: {
-             brand: null,
-             last4: null
-           },
-           bank_account: {
-             routing: '111000222',
-             last4: '6699'
-           }
-         }
-       };
+      mockGetResponse = {
+        Processor_ID: '123456',
+        default_source:  {
+          credit_card: {
+            brand: null,
+            last4:null
+          },
+          bank_account: {
+            routing: '111000222',
+            last4: '6699'
+          }
+        }
+      };
 
-       var mockEvent = {
-         preventDefault: function() {}
-       };
+      var mockEvent = {
+        preventDefault: function() {}
+      };
 
-       var mockToState = {
-         name: 'give.account'
-       };
+      var mockToState = {
+        name: 'give.account'
+      };
 
-       controller.dto.email = 'test@test.com';
+      controller.dto.email = 'test@test.com';
 
-       mockSession.isActive.and.callFake(function() {
-         return true;
-       });
+      mockSession.isActive.and.callFake(function() {
+        return true;
+      });
 
-       controller.donationService.transitionForLoggedInUserBasedOnExistingDonor(mockEvent, mockToState);
-       expect(controller.dto.last4).toBe('6699');
-       expect(controller.dto.brand).toBe('#library');
-       expect(controller.dto.view).toBe('bank');
-     });
+      controller.donationService.transitionForLoggedInUserBasedOnExistingDonor(mockEvent, mockToState);
+      expect(controller.dto.last4).toBe('6699');
+      expect(controller.dto.brand).toBe('#library');
+      expect(controller.dto.view).toBe('bank');
+    });
 
     it('should set brand and last 4 correctly when payment type is cc', function() {
       mockGetResponse = {
         Processor_ID: '123456',
-        default_source:  {
+        default_source: {
           credit_card: {
             brand: 'Visa',
             last4: '4242'
@@ -739,6 +736,7 @@ describe('GiveController', function() {
       var mockToState = {
         name: 'give.account'
       };
+
       controller.dto.email = 'test@test.com';
 
       mockSession.isActive.and.callFake(function() {
@@ -753,7 +751,6 @@ describe('GiveController', function() {
   });
 
   describe('function goToChange', function() {
-
     beforeEach(function() {
       mockSession.isActive.and.callFake(function() {
         return true;
@@ -798,7 +795,6 @@ describe('GiveController', function() {
       });
 
       controller.giveFlow.goToChange();
-
       expect($state.go).toHaveBeenCalledWith('give.login');
     });
   });
@@ -879,5 +875,4 @@ describe('GiveController', function() {
       expect(callback.onSuccess).not.toHaveBeenCalled();
     });
   });
-
 });
