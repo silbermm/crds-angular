@@ -12,7 +12,8 @@
     'MESSAGES',
     'ProfileReferenceData',
     'Profile',
-    'Validation'
+    'Validation',
+    '$window'
   ];
 
   function ProfilePersonalDirective(
@@ -22,7 +23,8 @@
       MESSAGES,
       ProfileReferenceData,
       Profile,
-      Validation) {
+      Validation,
+      $window) {
 
     var vm = this;
 
@@ -55,6 +57,8 @@
     ////////////////////////////////
 
     function activate() {
+      //$window.onbeforeunload = onBeforeUnload;
+
       vm.annDate = formatAnniversaryDate(vm.profileData.person.anniversaryDate);
 
       ProfileReferenceData.getInstance().then(function(response) {
@@ -126,6 +130,15 @@
       return (vm.pform.birthdate.$touched ||
         vm.pform.$submitted) &&
         vm.pform.birthdate.$invalid;
+    }
+
+    function onBeforeUnload() {
+      $log.debug('onBeforeUnload start');
+      if (vm.pform) {
+        if (vm.pform.$dirty) {
+          return '';
+        }
+      }
     }
 
     function savePersonal() {

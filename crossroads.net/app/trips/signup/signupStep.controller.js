@@ -16,6 +16,7 @@
     vm.step = $stateParams.stepId;
 
     vm.signupService.pageId = $stateParams.stepId;
+    vm.signupService.pages[$stateParams.stepId] = {dirty: false};
 
   }
 })();

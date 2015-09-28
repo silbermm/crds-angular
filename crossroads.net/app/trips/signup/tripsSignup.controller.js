@@ -137,8 +137,33 @@
     // }
 
     function handlePageChange(pageId) {
+      // var currentPageId = vm.signupService.pageId;
+      // var p = $scope.tripsSignup.tripAppPage2.$dirty;
+      var frm = currentForm(vm.signupService.pageId);
+      // var dirty = vm.frm;
+      if (frm) {
+        vm.signupService.pages[vm.signupService.pageId] = {dirty: frm.$dirty};
+      }
+
       var route = 'tripsignup.application.page';
       $state.go(route, {stepId: pageId});
+    }
+
+    function currentForm(stepId) {
+      switch (stepId) {
+        case '2':
+          return vm.tripAppPage2;
+        case '3':
+          return vm.tripAppPage3;
+        case '4':
+          return vm.tripAppPage4;
+        case '5':
+          return vm.tripAppPage5;
+        case '6':
+          return vm.tripAppPage6;
+        default:
+          return null;
+      }
     }
 
     function handleSubmit() {
@@ -282,11 +307,31 @@
 
       if (!toState.name.startsWith('tripsignup.application.')) {
         //check if form is dirty
-        if (!$window.confirm('Are you sure you want to leave this page?')) {
-          event.preventDefault();
-          return;
+        if (formDirty()) {
+          if (!$window.confirm('Are you sure you want to leave this page?')) {
+            event.preventDefault();
+            return;
+          }
         }
       }
+    }
+
+    function formDirty() {
+      var frmDirty = _.find(vm.signupService.pages, function(frm) {
+        if (frm) {
+          return frm.dirty === true;
+        }
+      });
+
+      return false;
+
+      // _.each(vm.signupService.pages, function(p) {
+      //   if (p.dirty === true) {
+      //     return true;
+      //   }
+      // });
+      //
+      // return false;
     }
 
     function stateChangeSuccess(event) {

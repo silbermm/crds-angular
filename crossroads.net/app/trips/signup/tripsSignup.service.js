@@ -8,12 +8,14 @@
   function TripsSignupService($resource, $location, $log, Session) {
     var signupService = {
       activate: activate,
+      pages: [],
       reset: reset,
       TripApplication: $resource(__API_ENDPOINT__ + 'api/trip-application'),
       thankYouMessage: '',
       tshirtSizes: tshirtSizes(),
       topScrubSizes: topScrubSizes(),
-      bottomScrubSizes: bottomScrubSizes()
+      bottomScrubSizes: bottomScrubSizes(),
+      frmPage2: {}
     };
 
     function activate() {
