@@ -1,4 +1,4 @@
-  <form name="tripsSignup.signupService.frmPage2" id="tripAppPage2">
+  <ng-form name="tripAppPage2" id="tripAppPage2">
   <fieldset>
     <div class='row' ng-show='vm.underAge()'>
       <div class="col-sm-12">
@@ -22,13 +22,13 @@
         <legend>Trip Information</legend>
       </div><!--/col-sm-12-->
 
-      <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'tshirtSize') }">
+      <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripAppPage2, 'tshirtSize') }">
         <label for="tshirt" class="required">T-shirt Size</label>
         <select class="form-control col-sm-12" name="tshirtSize" id="tshirt" ng-required='true'
           ng-model="tripsSignup.signupService.page2.tshirtSize"
           ng-options="tshirt.value for tshirt in tripsSignup.signupService.tshirtSizes track by tshirt.attributeId">
         </select>
-        <ng-messages for="tripsSignup.tripAppPage2.tshirtSize.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'tshirtSize')">
+        <ng-messages for="tripsSignup.tripAppPage2.tshirtSize.$error" ng-if="tripsSignup.validation.showErrors(tripAppPage2, 'tshirtSize')">
           <span ng-message="required">
             <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
@@ -113,10 +113,10 @@
     </div><!--/row-->
 
     <div class="row">
-      <div class="form-group col-sm-12" ng-class="{ 'has-error': vm.validation.showErrors(tripsSignup.tripAppPage2, 'why') }">
+      <div class="form-group col-sm-12" ng-class="{ 'has-error': vm.validation.showErrors(tripAppPage2, 'why') }">
           <label for="why" class="required">Tell us why you want to go on this trip</label>
           <textarea ng-model="vm.signupService.page2.why.value" ng-required="true" cols="1" rows="4" class="form-control" name="why" id="why" maxlength="1000" placeholder="{{vm.whyPlaceholder}}"></textarea>
-          <ng-messages for="tripsSignup.tripAppPage2.why.$error" ng-if="vm.validation.showErrors(tripsSignup.tripAppPage2, 'why')">
+          <ng-messages for="tripsSignup.tripAppPage2.why.$error" ng-if="vm.validation.showErrors(tripAppPage2, 'why')">
             <span ng-message="required">
               <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
             </span>
@@ -127,4 +127,4 @@
   <a ng-click='tripsSignup.handlePageChange(3)' class="btn btn-primary pull-right">Next</a>
   <!-- <a ng-click='vm.handleNextt(3, this)' class="btn btn-primary pull-right">Next</a> -->
   <!-- <a ng-click='tripsSignup.handlePageChange(1)' class="btn btn-standard pull-right">Back</a> -->
-</form>
+</ng-form>

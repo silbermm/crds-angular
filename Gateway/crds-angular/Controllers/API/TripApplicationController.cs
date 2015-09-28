@@ -38,12 +38,7 @@ namespace crds_angular.Controllers.API
                 throw new HttpResponseException(dataError.HttpResponseMessage);
             }
 
-            TripApplicationResponseDto response = null;
-            response = new TripApplicationResponseDto
-            {
-                Message = "Queued event for asynchronous processing"
-            };
-            return ((IHttpActionResult)RestHttpActionResult<TripApplicationResponseDto>.Ok(response));
+            TripApplicationResponseDto response;
             try
             {
                 var message = _messageFactory.CreateMessage(dto);
