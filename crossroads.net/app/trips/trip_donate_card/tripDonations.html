@@ -1,6 +1,9 @@
 <div class="clearfix">
   <div class="col-xs-12 col-sm-10 col-top">
-    <h5 class="hard-ends flush-bottom" data-ng-if="donation.registeredDonor">{{donation.donorNickname}} {{donation.donorLastName}} <span class="text-muted">{{donation.donationDate}}</span></h5>
+    <h5 class="hard-ends flush-bottom" 
+      data-ng-if="donation.registeredDonor">
+      {{donation.donorNickname}} {{donation.donorLastName}} <span class="text-muted">{{donation.donationDate}}</span>
+    </h5>
     <h5 class="hard-ends flush-bottom" data-ng-if="!donation.registeredDonor">{{donation.donorEmail}} <span class="text-muted">{{donation.donationDate}}</span></h5>
     <p class="tight-line-height">
       ${{donation.donationAmount}}
