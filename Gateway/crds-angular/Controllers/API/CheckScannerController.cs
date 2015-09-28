@@ -133,7 +133,7 @@ namespace crds_angular.Controllers.API
         //the following was created for testing purposes only
         //QA needed the ability encrypt account and routing numbers for testing
        [RequiresAuthorization]
-        [ResponseType(typeof(DecryptValue))]
+        [ResponseType(typeof(EncryptValue))]
         [Route("api/checkscanner/encrypt/{*value}")]
         public IHttpActionResult GetEncrypted(string value = "")
         {
