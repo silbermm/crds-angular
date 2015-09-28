@@ -32,7 +32,7 @@
               state: $state.next.name
             }).$promise.then(
               function(systemPage) {
-                if(systemPage.systemPages[0]){
+                if (systemPage.systemPages[0]) {
                   $state.next.data.meta = systemPage.systemPages[0];
                 }
               });
@@ -155,6 +155,12 @@
               loggedin: crds_utilities.checkLoggedin
             },
           },
+          'personal@profile': {
+            templateUrl: 'personal/profile_personal.html',
+            data: {
+              isProtected: true
+            },
+          },
           'account@profile': {
             templateUrl: 'profile/profile_account.html',
             data: {
@@ -164,13 +170,6 @@
           'skills@profile': {
             controller: 'ProfileSkillsController as profile',
             templateUrl: 'skills/profile_skills.html',
-            data: {
-              isProtected: true
-            }
-          },
-          'giving@profile': {
-            controller: 'ProfileGivingController as giving_profile_controller',
-            templateUrl: 'giving/profile_giving.html',
             data: {
               isProtected: true
             }
@@ -499,15 +498,9 @@
               });
 
               return childPromise.then(function() {
-                var metaDescription = ContentPageService.page.metaDescription;
-                if (!metaDescription){
-                  //If a meta description is not provided we'll use the Content
-                  //The description gets html stripped and shortened to 155 characters
-                  metaDescription = ContentPageService.page.content;
-                }
                 $rootScope.meta = {
                   title: ContentPageService.page.title,
-                  description: metaDescription,
+                  description: ContentPageService.page.metaDescription,
                   extraMeta: ContentPageService.page.extraMeta
                 };
 
