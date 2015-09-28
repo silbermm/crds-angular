@@ -130,23 +130,9 @@ namespace crds_angular.Controllers.API
             }));
         }
 
-        //the following two endpoints were created for testing purposes only
-        //QA needed the ability decrypt account and routing numbers for testing
-        [RequiresAuthorization]
-        [ResponseType(typeof(DecryptValue))]
-        [Route("api/checkscanner/decrypt/{*value}")]
-        public IHttpActionResult GetDecrypted(string value ="")
-        {
-           return (Authorized(token =>
-            {
-                var decryptValue = _cryptoProvider.DecryptValue(value);
-                return (Ok(decryptValue));
-
-            }));
-            
-        }
-
-        [RequiresAuthorization]
+        //the following was created for testing purposes only
+        //QA needed the ability encrypt account and routing numbers for testing
+       [RequiresAuthorization]
         [ResponseType(typeof(DecryptValue))]
         [Route("api/checkscanner/encrypt/{*value}")]
         public IHttpActionResult GetEncrypted(string value = "")
@@ -155,7 +141,6 @@ namespace crds_angular.Controllers.API
             {
                 var encryptValue = _cryptoProvider.EncryptValueToString(value);
                 return (Ok(encryptValue));
-
             }));
 
         }
