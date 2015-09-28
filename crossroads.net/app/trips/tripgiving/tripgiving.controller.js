@@ -15,11 +15,6 @@
     'TripGiving',
     'TripParticipant'];
 
-  function DonationException(message) {
-    this.message = message;
-    this.name = 'DonationException';
-  }
-
   function TripGivingController(
       $rootScope,
       $state,
@@ -43,7 +38,7 @@
     vm.onEmailNotFound = onEmailNotFound;
     vm.program = null;
     vm.tripParticipant = TripParticipant;
-        
+
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams) {
 
       // Short-circuit this handler if we're not transitioning TO a give state
