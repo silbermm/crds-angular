@@ -319,6 +319,7 @@
     <Compile Include="Models\Crossroads\Stewardship\CheckAccount.cs" />
     <Compile Include="Models\Crossroads\Stewardship\CheckScannerBatch.cs" />
     <Compile Include="Models\Crossroads\Stewardship\CheckScannerCheck.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\DecryptValue.cs" />
     <Compile Include="Models\Crossroads\Stewardship\DepositDTO.cs" />
     <Compile Include="Models\Crossroads\Stewardship\DonationDistributionDTO.cs" />
     <Compile Include="Models\Crossroads\Stewardship\DonationsDTO.cs" />

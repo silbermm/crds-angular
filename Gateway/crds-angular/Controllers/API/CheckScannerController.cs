@@ -1,4 +1,5 @@
-﻿using System.Messaging;
+﻿using System.CodeDom;
+using System.Messaging;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -21,17 +22,20 @@ namespace crds_angular.Controllers.API
         private readonly ICommunicationService _communicationService;
         private readonly MessageQueue _donationsQueue;
         private readonly IMessageFactory _messageFactory;
+        private readonly ICryptoProvider _cryptoProvider;
 
         public CheckScannerController(IConfigurationWrapper configuration,
                                       ICheckScannerService checkScannerService,
                                       IAuthenticationService authenticationService,
                                       ICommunicationService communicationService,
+                                      ICryptoProvider cryptoProvider,
                                       IMessageQueueFactory messageQueueFactory = null,
                                       IMessageFactory messageFactory = null)
         {
             _checkScannerService = checkScannerService;
             _authenticationService = authenticationService;
             _communicationService = communicationService;
+            _cryptoProvider = cryptoProvider;
 
             var b = configuration.GetConfigValue("CheckScannerDonationsAsynchronousProcessingMode");
             _asynchronous = b != null && bool.Parse(b);
@@ -124,6 +128,36 @@ namespace crds_angular.Controllers.API
                 return (Ok(result));
 
             }));
+        }
+
+        //the following two endpoints were created for testing purposes only
+        //QA needed the ability decrypt account and routing numbers for testing
+        [RequiresAuthorization]
+        [ResponseType(typeof(DecryptValue))]
+        [Route("api/checkscanner/decrypt/{*value}")]
+        public IHttpActionResult GetDecrypted(string value ="")
+        {
+           return (Authorized(token =>
+            {
+                var decryptValue = _cryptoProvider.DecryptValue(value);
+                return (Ok(decryptValue));
+
+            }));
+            
+        }
+
+        [RequiresAuthorization]
+        [ResponseType(typeof(DecryptValue))]
+        [Route("api/checkscanner/encrypt/{*value}")]
+        public IHttpActionResult GetEncrypted(string value = "")
+        {
+            return (Authorized(token =>
+            {
+                var encryptValue = _cryptoProvider.EncryptValueToString(value);
+                return (Ok(encryptValue));
+
+            }));
+
         }
     }
 }
