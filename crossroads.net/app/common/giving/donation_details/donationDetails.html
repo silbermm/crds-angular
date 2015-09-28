@@ -38,6 +38,18 @@
     </select>
   </div>
   
+  <div class="form-group" ng-show="givingType !== 'one_time'">
+    <div class="input-group">
+      <input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" 
+        ng-model="recurring_start_date" is-open="recurringStartDatePickerOpened"
+        datepicker-options="dateOptions" close-text="Close" />
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-gray-light" ng-click="openRecurringStartDate($event)">
+          <i class="glyphicon glyphicon-calendar"></i>
+        </button>
+      </span>
+    </div>
+  </div>
   
         <!--/form-group-->
 </ng-form>

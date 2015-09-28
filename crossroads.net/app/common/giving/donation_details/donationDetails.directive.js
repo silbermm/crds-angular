@@ -30,6 +30,13 @@
       scope.showInitiativeOption = scope.showInitiativeOption === undefined ? true : scope.showInitiativeOption;
       scope.showFrequencyOption = scope.showFrequencyOption === undefined ? true : scope.showFrequencyOption;
       scope.givingType = scope.givingType === undefined ? 'one_time' : scope.givingType;
+      scope.dateOptions = {
+        formatYear: 'yy',
+        startingDay: 1,
+        showWeeks: 'false'
+      };
+      scope.openRecurringStartDate = openRecurringStartDate;
+      scope.recurringStartDatePickerOpened = false;
 
       activate();
 
@@ -59,6 +66,12 @@
 
       function setProgramList() {
         return scope.ministryShow ? scope.program = '' : scope.program = scope.programsIn[0];
+      }
+
+      function openRecurringStartDate($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        scope.recurringStartDatePickerOpened = true;
       }
     }
   }
