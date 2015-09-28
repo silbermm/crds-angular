@@ -40,27 +40,15 @@
         }
       })
       .state('give.amount', {
-        templateUrl: 'giveTemplates/amount.html'
+        templateUrl: 'templates/amount.html'
       })
       .state('give.login', {
         controller: 'LoginCtrl',
-        templateUrl: 'giveTemplates/login.html'
+        templateUrl: 'templates/login.html'
       })
       .state('give.register', {
         controller: 'RegisterCtrl',
-        templateUrl: 'giveTemplates/register.html'
-      })
-      .state('give.confirm', {
-        templateUrl: 'giveTemplates/confirm.html'
-      })
-      .state('give.account', {
-        templateUrl: 'giveTemplates/account.html'
-      })
-      .state('give.change', {
-        templateUrl: 'giveTemplates/change.html'
-      })
-      .state('give.thank-you', {
-        templateUrl: 'giveTemplates/thank_you.html'
+        templateUrl: 'templates/register.html'
       });
   }
 
