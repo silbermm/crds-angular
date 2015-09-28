@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
 using log4net;
@@ -96,7 +99,7 @@ namespace MinistryPlatform.Translation.Services
                     { "Institution_Name", DefaultInstitutionName },
                     { "Account_Number", DonorAccountNumberDefault },
                     { "Routing_Number", DonorRoutingNumberDefault },
-                    { "Encrypted_Account", CreateEncodedAndEncryptedAccountAndRoutingNumber(donorAccount.AccountNumber, donorAccount.RoutingNumber) },
+                    { "Encrypted_Account", CreateHashedAccountAndRoutingNumber(donorAccount.AccountNumber, donorAccount.RoutingNumber) },
                     { "Donor_ID", donorId },
                     { "Non-Assignable", false },
                     { "Account_Type_ID", (int)donorAccount.Type },
@@ -215,7 +218,8 @@ namespace MinistryPlatform.Translation.Services
                 }
                 else
                 {
-                    donor = new ContactDonor {
+                    donor = new ContactDonor
+                    {
                         ContactId = contactId,
                         RegisteredUser = true
                     };
@@ -273,7 +277,7 @@ namespace MinistryPlatform.Translation.Services
 
         public ContactDonor GetContactDonorForDonorAccount(string accountNumber, string routingNumber)
         {
-            var search = string.Format(",\"{0}\"", CreateEncodedAndEncryptedAccountAndRoutingNumber(accountNumber, routingNumber));
+            var search = string.Format(",\"{0}\"", CreateHashedAccountAndRoutingNumber(accountNumber, routingNumber));
 
             var accounts = WithApiLogin(apiToken => _ministryPlatformService.GetPageViewRecords(_findDonorByAccountPageViewId, apiToken, search));
             if (accounts == null || accounts.Count == 0)
@@ -285,7 +289,7 @@ namespace MinistryPlatform.Translation.Services
             return contactId == -1 ? (null) : (GetContactDonor(contactId));
         }
 
-        public ContactDetails GetContactDonorForCheckAccount(string encrptedKey)
+        public ContactDonor GetContactDonorForCheckAccount(string encrptedKey)
         {
             var donorAccount = WithApiLogin(apiToken => _ministryPlatformService.GetPageViewRecords(_donorLookupByEncryptedAccount, apiToken, "," + encrptedKey));
             if (donorAccount == null || donorAccount.Count == 0)
@@ -295,28 +299,43 @@ namespace MinistryPlatform.Translation.Services
             var contactId = Convert.ToInt32(donorAccount[0]["Contact_ID"]);
             var myContact = _contactService.GetContactById(contactId);
 
-            var details = new ContactDetails
+            var details = new ContactDonor
             {
-                DisplayName = donorAccount[0]["Display_Name"].ToString(),
-                Address =  new PostalAddress
-                {
-                    Line1 = myContact.Address_Line_1,
-                    Line2 = myContact.Address_Line_2,
-                    City = myContact.City,
-                    State = myContact.State,
-                    PostalCode = myContact.Postal_Code  
-                }
+               DonorId = (int) donorAccount[0]["Donor_ID"],
+               Details = new ContactDetails
+               {
+                   DisplayName = donorAccount[0]["Display_Name"].ToString(),
+                   Address = new PostalAddress
+                   {
+                       Line1 = myContact.Address_Line_1,
+                       Line2 = myContact.Address_Line_2,
+                       City = myContact.City,
+                       State = myContact.State,
+                       PostalCode = myContact.Postal_Code
+                   } 
+               }
+               
             };
 
             return details;
         }
 
-        public string CreateEncodedAndEncryptedAccountAndRoutingNumber(string accountNumber, string routingNumber)
+        public string CreateHashedAccountAndRoutingNumber(string accountNumber, string routingNumber)
         {
-            var acct = _crypto.EncryptValue(accountNumber);
-            var rtn = _crypto.EncryptValue(routingNumber);
+            SHA256Managed crypt = new SHA256Managed();
+            StringBuilder hash = new StringBuilder();
+            byte[] crypto = crypt.ComputeHash(Encoding.UTF8.GetBytes(accountNumber + routingNumber), 0, Encoding.UTF8.GetByteCount(accountNumber + routingNumber));
+            foreach (byte theByte in crypto)
+            {
+                hash.Append(theByte.ToString("x2"));
+            }
+            return hash.ToString();
+        }
 
-            return (Convert.ToBase64String(acct.Concat(rtn).ToArray()));
+        public string DecryptCheckValue(string value)
+        {
+            var valueDecrypt = _crypto.DecryptValue(value);
+            return valueDecrypt;
         }
 
         public int UpdatePaymentProcessorCustomerId(int donorId, string paymentProcessorCustomerId)

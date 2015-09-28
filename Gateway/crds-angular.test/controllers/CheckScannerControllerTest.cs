@@ -182,7 +182,15 @@ namespace crds_angular.test.controllers
         [Test]
         public void TestGetContactDonorForCheck()
         {
-            var encryptedKey = "disCv2kF/8HlRCWeTqolok1G4imf1cNZershgmCCFDI=";
+            const string encryptedAccountNumber = "P/H+3ccB0ZssORkd+YyJzA==";
+            const string encryptedRoutingNumber = "TUbiKZ/Vw1l6uyGCYIIUMg==";
+
+            var checkAccount = new CheckAccount
+            {
+                AccountNumber = encryptedAccountNumber,
+                RoutingNumber = encryptedRoutingNumber
+            };
+
             var donorDetail = new EZScanDonorDetails
             {
                 DisplayName = "Peyton Manning",
@@ -196,9 +204,9 @@ namespace crds_angular.test.controllers
                   }
             };
 
-            _checkScannerService.Setup(mocked => mocked.GetContactDonorForCheck(encryptedKey)).Returns(donorDetail);
+            _checkScannerService.Setup(mocked => mocked.GetContactDonorForCheck(encryptedAccountNumber, encryptedRoutingNumber)).Returns(donorDetail);
 
-            var result = _fixture.GetDonorForCheck(encryptedKey);
+            var result = _fixture.GetDonorForCheck(checkAccount);
             _checkScannerService.VerifyAll();
             
             Assert.NotNull(result);
