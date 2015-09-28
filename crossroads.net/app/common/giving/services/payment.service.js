@@ -27,10 +27,13 @@
       return apiDonor(card, email, stripe.card, 'POST');
     }
 
-    function donateToProgram(program_id, amount, donor_id, email_address, pymt_type) {
+    function donateToProgram(program_id, campaignId, amount, donor_id, email_address, pymt_type) {
       var def = $q.defer();
       var donationRequest = {
         program_id: program_id,
+        pledge_campaign_id: campaignId,
+        pledge_donor_id: GiveTransferService.campaign.pledgeDonorId,
+        gift_message: GiveTransferService.message,
         amount: amount,
         donor_id: donor_id,
         email_address: email_address,

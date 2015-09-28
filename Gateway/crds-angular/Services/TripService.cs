@@ -238,16 +238,21 @@ namespace crds_angular.Services
 
             foreach (var result in results)
             {
-                var tp = new TripDto();
-                tp.EventParticipantId = result.EventParticipantId;
-                tp.EventEnd = result.EventEndDate.ToString("MMM dd, yyyy");
-                tp.EventId = result.EventId;
-                tp.EventStartDate = result.EventStartDate.ToUnixTime();
-                tp.EventStart = result.EventStartDate.ToString("MMM dd, yyyy");
-                tp.EventTitle = result.EventTitle;
-                tp.EventType = result.EventType;
-                tp.ProgramId = result.ParticipantId;
-                tp.ProgramName = result.ProgramName;
+                var tp = new TripDto
+                {
+                    EventParticipantId = result.EventParticipantId,
+                    EventEnd = result.EventEndDate.ToString("MMM dd, yyyy"),
+                    EventId = result.EventId,
+                    EventStartDate = result.EventStartDate.ToUnixTime(),
+                    EventStart = result.EventStartDate.ToString("MMM dd, yyyy"),
+                    EventTitle = result.EventTitle,
+                    EventType = result.EventType,
+                    ProgramId = result.ProgramId,
+                    ProgramName = result.ProgramName,
+                    CampaignId = result.CampaignId,
+                    CampaignName = result.CampaignName,
+                    PledgeDonorId = result.DonorId
+                };
                 var participant = participants[result.ParticipantId];
                 participant.Trips.Add(tp);
             }

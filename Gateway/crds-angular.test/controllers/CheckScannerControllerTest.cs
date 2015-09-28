@@ -27,6 +27,7 @@ namespace crds_angular.test.controllers
         private Mock<ICommunicationService> _communicationService;
         private Mock<IMessageQueueFactory> _messageQueueFactory;
         private Mock<IMessageFactory> _messageFactory;
+        private Mock<ICryptoProvider> _cryptoProvider; 
 
         private const string AuthType = "auth_type";
         private const string AuthToken = "auth_token";
@@ -40,11 +41,12 @@ namespace crds_angular.test.controllers
             _communicationService = new Mock<ICommunicationService>();
             _messageQueueFactory = new Mock<IMessageQueueFactory>(MockBehavior.Strict);
             _messageFactory = new Mock<IMessageFactory>(MockBehavior.Strict);
+            _cryptoProvider = new Mock<ICryptoProvider>();
 
             _configuration.Setup(mocked => mocked.GetConfigValue("CheckScannerDonationsAsynchronousProcessingMode")).Returns("false");
             _configuration.Setup(mocked => mocked.GetConfigValue("CheckScannerDonationsQueueName")).Returns("CheckScannerBatchQueue");
 
-            _fixture = new CheckScannerController(_configuration.Object, _checkScannerService.Object, _authenticationService.Object, _communicationService.Object, _messageQueueFactory.Object, _messageFactory.Object);
+            _fixture = new CheckScannerController(_configuration.Object, _checkScannerService.Object, _authenticationService.Object, _communicationService.Object, _cryptoProvider.Object, _messageQueueFactory.Object, _messageFactory.Object);
 
             _fixture.Request = new HttpRequestMessage();
             _fixture.Request.Headers.Authorization = new AuthenticationHeaderValue(AuthType, AuthToken);
