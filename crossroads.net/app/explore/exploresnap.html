@@ -1,80 +1,108 @@
-<script type="text/javascript" src="http://alvarotrigo.com/fullPage/vendors/jquery.slimscroll.min.js"></script>
-<script type="text/javascript" src="http://alvarotrigo.com/fullPage/jquery.fullPage.min.js"></script>
+
 
 <script type="text/javascript">
-  $(document).ready(function() {
-    $('#fullpage').fullpage({
-      anchors: ['firstPage', 'secondPage', '3rdPage'],
-      sectionsColor: ['#C63D0F', '#1BBC9B', '#7E8F7C'],
-      navigation: true,
-      navigationPosition: 'right',
-      navigationTooltips: ['First page', 'Second page', 'Third and last page']
-    });
+$(document).ready(function() {
+  $('#fullpage').fullpage({
+    navigation: true,
+    navigationPosition: 'right',
+    afterLoad: function(anchorLink, index) {
+      var loadedSection = $(this);
+
+      if (index == 1) {
+        TweenMax.staggerTo(".rise20", 1, {
+          opacity: 1,
+          autoAlpha: 1,
+          y: 0,
+          delay: .5,
+          ease: Power3.easeOut
+        }, .2);
+        TweenMax.staggerTo(".rise10", 1, {
+          opacity: 1,
+          autoAlpha: 1,
+          y: 0,
+          delay: 1.9,
+          ease: Power3.easeOut
+        }, .3);
+        TweenMax.to(".fadeIn", 0, {
+          opacity: 1,
+          autoAlpha: 1,
+          ease: Power3.easeOut
+        });
+      }
+      if (index == 2) {
+        TweenMax.staggerTo(".rise10-3", 1, {
+          opacity: 1,
+          autoAlpha: 1,
+          y: 0,
+          ease: Power3.easeOut
+        }, .3);
+      }
+
+    }
   });
+});
+
+
 </script>
 
-<style>
+<div id="fullpage" class="explore">
+  <section class="section opening">
+    <div class="opening-bg transition2 fadeIn"></div>
+    <div class="slideCon">
+      <div class="slideCell">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+              <h2 class="opening-title">
+                <span class="transition rise20">WE STARTED </span>
+                <span class="transition rise20">THIS CHURCH </span>
+                <span class="transition rise20">FOR OUR </span>
+                <span class="transition rise20">FRIENDS </span>
+                <span class="transition rise20">WHO DIDN'T </span>
+                <span class="transition rise20">LIKE CHURCH. </span>
+              </h2>
+              <p class="opening-desc transition rise10">Crossroads is for anyone who wants to seek God-from those exploring whether or not God even exists, to committed Christ-followers. We present biblical truths and show how they apply to our everyday lives. And we have a lot of fun while doing
+                it.
+              </p>
+              <p class="opening-more transition rise10">For the longer answer, check out <a href="/about-us-2/our-history">our history</a>, <a href="/about-us-2/what-we-believe">what we believe</a>, <a href="/about-us-2/seven-hills-we-die-on">the seven hills we die on</a> or <a href="/about-us-2/frequent-questions">the FAQ</a>.</p>
+            </div><!--/col-sm-6-->
+          </div><!--/row-->
+        </div><!--/container-->
+      </div><!--/slideCell-->
+    </div><!--/slideCon-->
+  </section><!--/opening-->
 
-/* Style for our header texts
-* --------------------------------------- */
-h1{
-  font-size: 5em;
-  font-family: arial,helvetica;
-  color: black;
-  margin:0;
-}
-.intro p{
-  color: black;
-}
+  <section class="section map">
+    <img class="map-img" src="//crossroads-media.s3.amazonaws.com/images/explore_map_bg_five.jpg" alt="explore_map_bg" />
+    <div class="slideCon">
+      <div class="slideCell">
+        <div class="container">
+          <div class="row">
+              <div class="col-sm-12">
+                  <div class="map-container">
+                      <h2 class="map-title rise10-3">Crossroads is one church in five locations.</h2>
+                      <p class="map-desc rise10-3">Each location is part of the same church, working as one team toward a common vision. Select the site nearest you for service times and directions.</p>
+                      <p class="map-more rise10-3">
+                          <a href="/locations/mason">Mason</a>
+                          <a href="/locations/oakley">Oakley</a>
+                          <a href="/locations/florence">Florence</a>
+                          <a href="/locations/westside">West Side</a>
+                          <a href="/locations/uptown">Uptown</a>
+                      </p>
+                  </div><!--/map--container-->
+              </div><!--/col-sm-12-->
+          </div><!--/row-->
+      </div><!--/container-->
+    </div><!--/slideCell-->
+  </div><!--/slideCon-->
+</section><!--/map-->
+   <section class="section kidsclub">
 
-/* Centered texts in each section
-* --------------------------------------- */
-.section{
-  text-align:center;
-}
-
-/* Overwriting styles for control arrows for slides
-* --------------------------------------- */
-.controlArrow.prev {
-  left: 50px;
-}
-.controlArrow.next{
-  right: 50px;
-}
-
-
-/* Bottom menu
-* --------------------------------------- */
-#infoMenu li a {
-  color: #fff;
-}
-</style>
-
-<div id="fullpage">
-	<div class="section " id="section0">
-		<div class="intro">
-			<h1>Navigation dots</h1>
-			<p>An easy and beautiful way to navigate throw the sections</p>
-		</div>
-	</div>
-	<div class="section" id="section1">
-	    <div class="slide" id="slide1">
-			<div class="intro">
-				<h1>Clickable</h1>
-				<p>
-					You can even click on the navigation and jump directly to another section.
-				</p>
-			</div>
-		</div>
-
-	    <div class="slide" id="slide2">
-			<h1>Slide 2</h1>
-		</div>
-
-	</div>
-	<div class="section" id="section2">
-		<div class="intro">
-			<h1>Enjoy it</h1>
-		</div>
-	</div>
+  </section>
+    <section class="section">
+    <h1 class="">The 4th Section</h1>
+  </section>
+    <section class="section">
+    <h1 class="">The 5th Section</h1>
+  </section>
 </div>
