@@ -58,7 +58,7 @@ namespace MinistryPlatform.Translation.Services
         {
             var searchString = string.Format(",{0},{1}", pledgeCampaignId, donorId);
             var records = _ministryPlatformService.GetPageViewRecords("PledgesByDonorId", ApiLogin(), searchString);
-            return records.First().ToInt("Donor_ID");
+            return records.First().ToInt("Pledge_ID");
         }
 
         public int GetDonorForPledge(int pledgeId)

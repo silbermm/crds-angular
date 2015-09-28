@@ -407,11 +407,12 @@ namespace MinistryPlatform.Translation.Services
                 EmailBody = message,
                 EmailSubject = template.Subject,
                 FromContactId = 5,
-                FromEmailAddress = "giving@crossroads.net",
+                FromEmailAddress = "updates@crossroads.net",
                 ReplyContactId = 5,
-                ReplyToEmailAddress = "giving@crossroads.net",
+                ReplyToEmailAddress = "updates@crossroads.net",
                 ToContactId = donorContact.ContactId,
-                ToEmailAddress = donorContact.Email
+                ToEmailAddress = donorContact.Email,
+                MergeData = new Dictionary<string, object>()
             };
             _communicationService.SendMessage(comm);
         }

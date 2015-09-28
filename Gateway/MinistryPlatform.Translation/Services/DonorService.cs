@@ -160,9 +160,12 @@ namespace MinistryPlatform.Translation.Services
             {
                 {"Donation_ID", donationId},
                 {"Amount", donationAmt},
-                {"Program_ID", programId},
-                {"Pledge_ID", pledgeId}
+                {"Program_ID", programId}                
             };
+            if (pledgeId != null)
+            {
+                distributionValues.Add("Pledge_ID", pledgeId);
+            }
 
             try
             {

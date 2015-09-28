@@ -209,6 +209,159 @@ namespace crds_angular.test.controllers
         }
 
         [Test]
+        public void testPostToCreateDonationAndDistributionWithPledgeAuthenticated()
+        {
+            var contactId = 999999;
+            var donationId = 6186818;
+            var charge = new StripeCharge()
+            {
+                Id = "ch_crdscharge86868",
+                BalanceTransaction = new StripeBalanceTransaction()
+                {
+                    Fee = 987
+                }
+            };
+
+            var createDonationDTO = new CreateDonationDTO
+            {
+                ProgramId = "3", //crossroads
+                Amount = 86868,
+                DonorId = 394256,
+                EmailAddress = "test@test.com",
+                PledgeCampaignId = 23,
+                PledgeDonorId = 42,
+                GiftMessage = "Don't look a Gift Horse in the Mouth!"
+            };
+
+            var donor = new ContactDonor
+            {
+                ContactId = contactId,
+                DonorId = 424242,
+                SetupDate = new DateTime(),
+                StatementFreq = "1",
+                StatementMethod = "2",
+                StatementType = "3",
+                ProcessorId = "cus_test1234567",
+                Email = "moc.tset@tset"
+            };
+
+            var pledgeId = 3456;
+
+            authenticationServiceMock.Setup(mocked => mocked.GetContactId(authType + " " + authToken)).Returns(contactId);
+
+            donorServiceMock.Setup(mocked => mocked.GetContactDonor(contactId))
+                .Returns(donor);
+
+            mpPledgeService.Setup(mocked => mocked.GetPledgeByCampaignAndDonor(createDonationDTO.PledgeCampaignId.Value, createDonationDTO.PledgeDonorId.Value)).Returns(pledgeId);
+
+            mpDonationService.Setup(mocked => mocked.SendMessageFromDonor(pledgeId, createDonationDTO.GiftMessage));
+
+            stripeServiceMock.Setup(
+                mocked => mocked.ChargeCustomer(donor.ProcessorId, createDonationDTO.Amount, donor.DonorId))
+                .Returns(charge);
+
+            donorServiceMock.Setup(mocked => mocked.
+                CreateDonationAndDistributionRecord(createDonationDTO.Amount, charge.BalanceTransaction.Fee, donor.DonorId,
+                    createDonationDTO.ProgramId, pledgeId, charge.Id, createDonationDTO.PaymentType, donor.ProcessorId, It.IsAny<DateTime>(), true, null))
+                    .Returns(donationId);
+
+            IHttpActionResult result = fixture.Post(createDonationDTO);
+
+            authenticationServiceMock.VerifyAll();
+            donorServiceMock.VerifyAll();
+            stripeServiceMock.VerifyAll();
+            donorServiceMock.VerifyAll();
+            mpPledgeService.VerifyAll();
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonationDTO>), result);
+            var okResult = (OkNegotiatedContentResult<DonationDTO>)result;
+            Assert.AreEqual(6186818, donationId);
+
+            var resultDto = ((OkNegotiatedContentResult<DonationDTO>)result).Content;
+            Assert.IsNotNull(resultDto);
+            Assert.AreEqual(donor.Email, resultDto.Email);
+        }
+
+        [Test]
+        public void testPostToCreateDonationAndDistributionWithPledgeUnauthenticated()
+        {
+            var contactId = 999999;
+            var donationId = 6186818;
+            var charge = new StripeCharge()
+            {
+                Id = "ch_crdscharge86868",
+                BalanceTransaction = new StripeBalanceTransaction()
+                {
+                    Fee = 987
+                }
+            };
+
+            var createDonationDTO = new CreateDonationDTO
+            {
+                ProgramId = "3", //crossroads
+                Amount = 86868,
+                DonorId = 394256,
+                EmailAddress = "test@test.com",
+                PledgeCampaignId = 23,
+                PledgeDonorId = 42,
+                GiftMessage = "Don't look a Gift Horse in the Mouth!"
+            };
+
+            var donor = new ContactDonor
+            {
+                ContactId = contactId,
+                DonorId = 424242,
+                SetupDate = new DateTime(),
+                StatementFreq = "1",
+                StatementMethod = "2",
+                StatementType = "3",
+                ProcessorId = "cus_test1234567",
+                Email = "moc.tset@tset"
+            };
+
+            var pledgeId = 3456;
+
+            fixture.Request.Headers.Authorization = null;
+            gatewayDonorServiceMock.Setup(mocked => mocked.GetContactDonorForEmail(createDonationDTO.EmailAddress)).Returns(donor);
+
+            mpPledgeService.Setup(mocked => mocked.GetPledgeByCampaignAndDonor(createDonationDTO.PledgeCampaignId.Value, createDonationDTO.PledgeDonorId.Value)).Returns(pledgeId);
+
+            mpDonationService.Setup(mocked => mocked.SendMessageFromDonor(pledgeId, createDonationDTO.GiftMessage));
+
+            stripeServiceMock.Setup(mocked => mocked.ChargeCustomer(donor.ProcessorId, createDonationDTO.Amount, donor.DonorId)).
+                Returns(charge);
+
+
+            donorServiceMock.Setup(mocked => mocked.
+                CreateDonationAndDistributionRecord(createDonationDTO.Amount, charge.BalanceTransaction.Fee, donor.DonorId,
+                    createDonationDTO.ProgramId, pledgeId, charge.Id, createDonationDTO.PaymentType, donor.ProcessorId, It.IsAny<DateTime>(), false, null))
+                    .Returns(donationId);
+
+
+            IHttpActionResult result = fixture.Post(createDonationDTO);
+
+           
+            donorServiceMock.VerifyAll();
+            stripeServiceMock.VerifyAll();
+            donorServiceMock.VerifyAll();
+            mpPledgeService.VerifyAll();
+
+            donorServiceMock.VerifyAll();
+            stripeServiceMock.VerifyAll();
+            donorServiceMock.VerifyAll();
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf(typeof(OkNegotiatedContentResult<DonationDTO>), result);
+            var okResult = (OkNegotiatedContentResult<DonationDTO>)result;
+            Assert.AreEqual(6186818, donationId);
+
+            var resultDto = ((OkNegotiatedContentResult<DonationDTO>)result).Content;
+            Assert.IsNotNull(resultDto);
+            Assert.AreEqual(donor.Email, resultDto.Email);
+        }
+
+        [Test]
         public void testPostToCreateDonationAndDistributionUnauthenticated()
         {
             var contactId = 999999;
