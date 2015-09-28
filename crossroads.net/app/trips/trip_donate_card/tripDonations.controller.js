@@ -10,8 +10,20 @@
    */
   function TripDonationsController() {
     var vm = this;
+    vm.isMessageToggled = false;
+    vm.toggleMessage = toggleMessage;
 
-    // vm.donation exists already
+    activate();
+
+    ////////////////////////////
+    // IMPLEMENTATION DETAILS //
+    ////////////////////////////
+
+    function activate() {}
+
+    function toggleMessage() {
+      vm.isMessageToggled = !vm.isMessageToggled;
+    }
 
   }
 })();
