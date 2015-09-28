@@ -142,15 +142,19 @@ namespace crds_angular.Controllers.API
                 var donor = _mpDonorService.GetContactDonor(contactId);
                 var charge = _stripeService.ChargeCustomer(donor.ProcessorId, dto.Amount, donor.DonorId);
                 var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
-                var pledgeId = _mpPledgeService.GetPledgeByCampaignAndDonor(dto.PledgeCampaignId, dto.PledgeDonorId);
+                var pledgeId = new int?();
+                if (dto.PledgeCampaignId > 0 && dto.PledgeDonorId > 0)
+                {
+                    pledgeId = _mpPledgeService.GetPledgeByCampaignAndDonor(dto.PledgeCampaignId, dto.PledgeDonorId);
+                }
 
                 var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount, fee, donor.DonorId, dto.ProgramId, pledgeId, charge.Id, dto.PaymentType, donor.ProcessorId, DateTime.Now, true);
-                if (dto.GiftMessage != "")
+                if (dto.GiftMessage != "" && pledgeId != null)
                 {
-                    SendMessageFromDonor(pledgeId, dto.GiftMessage);
+                    SendMessageFromDonor(pledgeId.Value, dto.GiftMessage);
                 }
-                var response = new DonationDTO()
-                    {
+                var response = new DonationDTO
+                {
                         ProgramId = dto.ProgramId,
                         Amount = dto.Amount,
                         Id = donationId.ToString(),
