@@ -174,6 +174,7 @@
       });
 
       vm.signupService.pageId = 'thanks';
+      vm.tpForm.$setPristine();
       $state.go('tripsignup.application.thankyou');
     }
 
@@ -273,19 +274,34 @@
     function stateChangeStart(event, toState, toParams, fromState, fromParams) {
       if (fromState.name === 'tripsignup.application.thankyou') {
         if (toState.name.startsWith('tripsignup.application.')) {
-          $state.go('tripsignup');
+          event.preventDefault();
+          $state.go('tripsignup', {campaignId: toParams.campaignId});
         }
 
         return;
       }
 
+      if (toState.name === 'tripsignup.application.thankyou') {
+        if (!fromState.name.startsWith('tripsignup.application.page')) {
+          event.preventDefault();
+          $state.go('tripsignup', {campaignId: toParams.campaignId});
+        }
+      }
+
       if (!toState.name.startsWith('tripsignup.application.')) {
-        if (vm.tpForm.$dirty) {
-          if (!$window.confirm('Are you sure you want to leave this page?')) {
-            event.preventDefault();
-            return;
+        if (vm.tpForm) {
+          if (vm.tpForm.$dirty) {
+            if (!$window.confirm('Are you sure you want to leave this page?')) {
+              event.preventDefault();
+              return;
+            }
           }
         }
+      }
+
+      if (toState.name === 'tripsignup') {
+        vm.signupService.reset(vm.campaign);
+        return;
       }
     }
 

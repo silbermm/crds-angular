@@ -177,6 +177,12 @@
       signupService.numberOfPages = 0;
       signupService.pageHasErrors = true;
       signupService.privateInvite = $location.search().invite;
+
+      signupService.page2 = page2();
+      signupService.page3 = page3();
+      signupService.page4 = page4();
+      signupService.page5 = page5();
+      signupService.page6 = page6();
     }
 
     function page2() {
