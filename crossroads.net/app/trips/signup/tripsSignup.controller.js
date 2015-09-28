@@ -139,11 +139,11 @@
     function handlePageChange(pageId) {
       // var currentPageId = vm.signupService.pageId;
       // var p = $scope.tripsSignup.tripAppPage2.$dirty;
-      var frm = currentForm(vm.signupService.pageId);
-      // var dirty = vm.frm;
-      if (frm) {
-        vm.signupService.pages[vm.signupService.pageId] = {dirty: frm.$dirty};
-      }
+      // var frm = currentForm(vm.signupService.pageId);
+      // // var dirty = vm.frm;
+      // if (frm) {
+      //   vm.signupService.pages[vm.signupService.pageId] = {dirty: frm.$dirty};
+      // }
 
       var route = 'tripsignup.application.page';
       $state.go(route, {stepId: pageId});
@@ -203,7 +203,7 @@
     }
 
     function onBeforeUnload() {
-      var dirty = $scope.tripsSignup.tripAppPage2.$dirty && $scope.tripsSignup.tripAppPage3.$dirty;
+      var dirty = vm.awesomeForm.$dirty;
       $log.debug('onBeforeUnload start');
       if (dirty) {
         return '';
@@ -307,7 +307,7 @@
 
       if (!toState.name.startsWith('tripsignup.application.')) {
         //check if form is dirty
-        if (formDirty()) {
+        if (vm.awesomeForm.$dirty) {
           if (!$window.confirm('Are you sure you want to leave this page?')) {
             event.preventDefault();
             return;
