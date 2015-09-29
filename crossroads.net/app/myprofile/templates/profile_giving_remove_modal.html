@@ -1,48 +1,41 @@
-<script type="text/ng-template" id="myModalContent.html">
+<script type="text/ng-template" id="profile_giving_remove_modal">
 
-<div class="modal-header">
-    <h3 class="modal-title">Edit Recurring Gift</h3>
-</div>
-<div class="modal-body">
+  <div class="modal-header">
+    <h3 class="modal-title">Confirm Removal</h3>
+  </div>
+  <div class="modal-body">
 
+    <div ng-bind-html="$root.MESSAGES.giveRecurringRemove.content | html"></div>
 
-<form class="give-form">
-    <div class="form-group">
-        <div class="form-inline form-group give-amount form-group-lg">
-            <div class="input-group">
-                <span class="input-group-addon">$</span>
-                <input type="tel" class="form-control" min="0" maxlength="6" ng-model="give.amount = '125'" autocomplete="off"></input>
-                <span class="input-group-addon ">.00</span>
-            </div>
-            <!--/input-group-->
-        </div>
-        <!--/form-inline-->
-    </div><!--/form-group-->
+    <p>
+      You will be removing the recurring gift of
+      <strong>$100 Monthly</strong>
+      to the
+      <strong>General Giving</strong>
+      fund from
+      <span>
+        <svg viewBox="0 0 160 100" class="icon icon-cc_visa payment-type-icon">
+          <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#cc_visa"></use>
+        </svg>
+        <strong>ending in 3459</strong>
+      </span>.
+    </p>
 
-    <div class="row">
-        <div class="col-xs-6">
-            <div class="form-group">
-                <select class="form-control">
-                    <option>Monthly</option>
-                    <option>Weekly</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-xs-6">
-            <div class="form-group">
-                <input type="text" class="form-control" placeholder="5/23/15">
-            </div>
-        </div>
+    <div class="alert alert-warning">
+      <div ng-bind-html="$root.MESSAGES.giveRecurringRemoveWarning.content | html"></div>
     </div>
+  </div>
+  <div class="modal-footer">
 
-    <bank-info></bank-info>
+    <button class="btn btn-standard" ng-click="ok()">Cancel</button>
 
-</form>
+    <button class="btn btn-danger" ng-click="ok()">
+      <svg viewBox="0 0 25 32" class="icon icon-trash-o">
+        <use xlink:href="#trash-o"></use>
+      </svg>
+      Remove
+    </button>
 
-</div>
-<div class="modal-footer">
-    <a href="" ng-click="cancel()">Cancel </a>
-    <button class="btn btn-primary" ng-click="ok()">Update</button>
-</div>
+  </div>
 
 </script>

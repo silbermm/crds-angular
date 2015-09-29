@@ -111,12 +111,6 @@
           }
         }
       })
-      .state('media-series-single-lo-res', {
-        parent: 'noSideBar',
-        url: '/media/series/single/lores',
-        controller: 'MediaController as media',
-        templateUrl: 'templates/series-single-lo-res.html'
-      })
       .state('media-single', {
         parent: 'screenWidth',
         url: '/media/single',

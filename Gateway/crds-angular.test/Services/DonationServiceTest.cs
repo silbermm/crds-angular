@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using crds_angular.App_Start;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services;
@@ -18,7 +19,6 @@ namespace crds_angular.test.Services
         private DonationService _fixture;
         private Mock<MPServices.IDonationService> _mpDonationService;
         private Mock<MPServices.IDonorService> _mpDonorService;
-        private Mock<MPServices.IAuthenticationService> _mpAuthenticationService;
         private Mock<IPaymentService> _paymentService;
         private Mock<MPServices.IContactService> _contactService;
         private Mock<IConfigurationWrapper> _configurationWrapper;
@@ -30,14 +30,13 @@ namespace crds_angular.test.Services
 
             _mpDonationService = new Mock<MPServices.IDonationService>(MockBehavior.Strict);
             _mpDonorService = new Mock<MPServices.IDonorService>(MockBehavior.Strict);
-            _mpAuthenticationService = new Mock<MPServices.IAuthenticationService>();
             _paymentService = new Mock<IPaymentService>();
             _contactService = new Mock<MPServices.IContactService>();
             _configurationWrapper = new Mock<IConfigurationWrapper>();
 
             _configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("DonorStatementTypeFamily")).Returns(456);
 
-            _fixture = new DonationService(_mpDonationService.Object, _mpDonorService.Object, _mpAuthenticationService.Object, _paymentService.Object, _contactService.Object, _configurationWrapper.Object);
+            _fixture = new DonationService(_mpDonationService.Object, _mpDonorService.Object, _paymentService.Object, _contactService.Object, _configurationWrapper.Object);
         }
 
         [Test]
@@ -300,7 +299,7 @@ namespace crds_angular.test.Services
         }
 
         [Test]
-        public void TestGPExportFileName()
+        public void TestGpExportFileName()
         {
             var date = DateTime.Today;
             var fileName = string.Format("XRDReceivables-Test_Batch_Name_{0}{1}{2}.txt", date.ToString("yy"), date.ToString("MM"), date.ToString("dd"));
@@ -319,7 +318,7 @@ namespace crds_angular.test.Services
         }
 
         [Test]
-        public void TestGenerateGPExportFileNames()
+        public void TestGenerateGpExportFileNames()
         {
             var date = DateTime.Today;
             var fileName = string.Format("XRDReceivables-Test_BatchName_{0}{1}{2}.txt", date.ToString("yy"), date.ToString("MM"), date.ToString("dd"));
@@ -347,11 +346,11 @@ namespace crds_angular.test.Services
         }
 
         [Test]
-        public void TestGetGPExport()
+        public void TestGetGpExport()
         {
             const int depositId = 789;
             var mockedExport = MockGPExport();
-            var expectedReturn = MockExpectedGPExportDTO();
+            var expectedReturn = MockExpectedGpExportDto();
 
             _mpDonationService.Setup(mocked => mocked.GetGPExport(depositId, It.IsAny<string>())).Returns(mockedExport);
 
@@ -397,7 +396,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual(expectedReturn[1].DistributionReference, result[1].DistributionReference);
         }
 
-        private List<GPExportDatumDTO> MockExpectedGPExportDTO()
+        private static List<GPExportDatumDTO> MockExpectedGpExportDto()
         {
             return new List<GPExportDatumDTO>
             {
@@ -567,7 +566,7 @@ namespace crds_angular.test.Services
                     Brand = CardBrand.AmericanExpress
                 }
             });
-            var response = _fixture.GetDonationsForDonor(123, "1999", false);
+            var response = _fixture.GetDonationsForDonor(123, "1999");
             _mpDonorService.VerifyAll();
             _paymentService.VerifyAll();
 
@@ -619,14 +618,7 @@ namespace crds_angular.test.Services
                     softCreditDonorId = 0,
                 }
             };
-            _mpAuthenticationService.Setup(mocked => mocked.GetContactId("auth token")).Returns(90210);
-            _mpDonorService.Setup(mocked => mocked.GetContactDonor(90210)).Returns(new ContactDonor
-            {
-                ContactId = 90210,
-                DonorId = 123,
-                StatementTypeId = 456
-            });
-            _mpDonorService.Setup(mocked => mocked.GetDonations(new [] {123}, "1999")).Returns(donations);
+            _mpDonorService.Setup(mocked => mocked.GetDonationsForAuthenticatedUser("auth token", false, "1999")).Returns(donations);
             _paymentService.Setup(mocked => mocked.GetCharge("tx_67")).Returns(new StripeCharge
             {
                 Source = new StripeSource
@@ -642,8 +634,7 @@ namespace crds_angular.test.Services
                     Brand = CardBrand.AmericanExpress
                 }
             });
-            var response = _fixture.GetDonationsForAuthenticatedUser("auth token", "1999");
-            _mpAuthenticationService.VerifyAll();
+            var response = _fixture.GetDonationsForAuthenticatedUser("auth token", "1999", false);
             _mpDonorService.VerifyAll();
             _paymentService.VerifyAll();
 
@@ -795,16 +786,7 @@ namespace crds_angular.test.Services
                 "1996"
             };
 
-            _mpAuthenticationService.Setup(mocked => mocked.GetContactId("auth token")).Returns(90210);
-            _mpDonorService.Setup(mocked => mocked.GetContactDonor(90210)).Returns(new ContactDonor
-            {
-                ContactId = 90210,
-                DonorId = 123,
-                StatementTypeId = 456
-            });
-
-            _mpDonorService.Setup(mocked => mocked.GetDonations(new [] {123}, null)).Returns(donations);
-            _mpDonorService.Setup(mocked => mocked.GetSoftCreditDonations(new [] {123}, null)).Returns(softCreditDonations);
+            _mpDonorService.Setup(mocked => mocked.GetDonationsForAuthenticatedUser("auth token", null, null)).Returns(donations.Concat(softCreditDonations).ToList());
 
             var response = _fixture.GetDonationYearsForAuthenticatedUser("auth token");
             _mpDonorService.VerifyAll();
@@ -947,16 +929,9 @@ namespace crds_angular.test.Services
                     donorDisplayName = "Citi",
                 }
             };
-            _mpAuthenticationService.Setup(mocked => mocked.GetContactId("auth token")).Returns(90210);
-            _mpDonorService.Setup(mocked => mocked.GetContactDonor(90210)).Returns(new ContactDonor
-            {
-                ContactId = 90210,
-                DonorId = 123,
-                StatementTypeId = 456
-            });
-            _mpDonorService.Setup(mocked => mocked.GetSoftCreditDonations(new[] { 123 }, "1999")).Returns(donations);
+
+            _mpDonorService.Setup(mocked => mocked.GetDonationsForAuthenticatedUser("auth token", true, "1999")).Returns(donations);
             var response = _fixture.GetDonationsForAuthenticatedUser("auth token", "1999", true);
-            _mpAuthenticationService.VerifyAll();
             _mpDonorService.VerifyAll();
             _paymentService.VerifyAll();
 
@@ -976,6 +951,104 @@ namespace crds_angular.test.Services
 
             Assert.AreEqual(donations[0].donationDate, response.Donations[2].DonationDate);
             Assert.AreEqual("Fidelity", response.Donations[2].Source.Name);
+        }
+
+        [Test]
+        public void TestGetAllDonationsForAuthenticatedUser()
+        {
+            var donations = new List<Donation>
+            {
+                new Donation
+                {
+                    donationAmt = 123,
+                    donationId = 45,
+                    donationDate = DateTime.Parse("1999-12-31 23:59:59"),
+                    paymentTypeId = 2, // Cash,
+                    softCreditDonorId = 0,
+                },
+                new Donation
+                {
+                    donationAmt = 567,
+                    donationId = 67,
+                    donationDate = DateTime.Parse("1999-11-30 23:59:59"),
+                    paymentTypeId = 5, //bank
+                    transactionCode = "tx_67",
+                    softCreditDonorId = 0,
+                },
+                new Donation
+                {
+                    donationAmt = 678,
+                    donationId = 78,
+                    donationDate = DateTime.Parse("1999-10-30 23:59:59"),
+                    paymentTypeId = 4, // credit card
+                    transactionCode = "tx_78",
+                    softCreditDonorId = 0,
+                },
+                new Donation
+                {
+                    donationAmt = 567,
+                    donationId = 79,
+                    donationDate = DateTime.Parse("1999-09-30 23:59:59"),
+                    paymentTypeId = 5, //bank
+                    transactionCode = "tx_67",
+                    softCreditDonorId = 123,
+                    donorDisplayName = "US Bank",
+                },
+                new Donation
+                {
+                    donationAmt = 678,
+                    donationId = 80,
+                    donationDate = DateTime.Parse("1999-08-30 23:59:59"),
+                    paymentTypeId = 4, // credit card
+                    transactionCode = "tx_78",
+                    softCreditDonorId = 123,
+                    donorDisplayName = "Citi",
+                }
+            };
+
+            _mpDonorService.Setup(mocked => mocked.GetDonationsForAuthenticatedUser("auth token", null, "1999")).Returns(donations);
+            _paymentService.Setup(mocked => mocked.GetCharge("tx_67")).Returns(new StripeCharge
+            {
+                Source = new StripeSource
+                {
+                    AccountNumberLast4 = "9876"
+                }
+            });
+            _paymentService.Setup(mocked => mocked.GetCharge("tx_78")).Returns(new StripeCharge
+            {
+                Source = new StripeSource
+                {
+                    AccountNumberLast4 = "8765",
+                    Brand = CardBrand.AmericanExpress
+                }
+            });
+            var response = _fixture.GetDonationsForAuthenticatedUser("auth token", "1999");
+            _mpDonorService.VerifyAll();
+            _paymentService.VerifyAll();
+
+            Assert.NotNull(response);
+            Assert.NotNull(response.Donations);
+            Assert.AreEqual(5, response.Donations.Count);
+            Assert.AreEqual(donations[0].donationAmt + donations[1].donationAmt + donations[2].donationAmt + donations[3].donationAmt + donations[4].donationAmt, response.DonationTotalAmount);
+
+            Assert.AreEqual(donations[0].donationDate, response.Donations[4].DonationDate);
+            Assert.AreEqual("cash", response.Donations[4].Source.Name);
+
+            Assert.AreEqual(donations[1].donationDate, response.Donations[3].DonationDate);
+            Assert.AreEqual("9876", response.Donations[3].Source.AccountNumberLast4);
+
+            Assert.AreEqual(donations[2].donationDate, response.Donations[2].DonationDate);
+            Assert.AreEqual("8765", response.Donations[2].Source.AccountNumberLast4);
+            Assert.AreEqual(CreditCardType.AmericanExpress, response.Donations[2].Source.CardType);
+
+            Assert.AreEqual(donations[4].donationDate, response.Donations[0].DonationDate);
+            Assert.AreEqual(null, response.Donations[0].Source.AccountNumberLast4);
+            Assert.AreEqual(null, response.Donations[0].Source.CardType);
+            Assert.AreEqual("Citi", response.Donations[0].Source.Name);
+
+            Assert.AreEqual(donations[3].donationDate, response.Donations[1].DonationDate);
+            Assert.AreEqual(null, response.Donations[1].Source.AccountNumberLast4);
+            Assert.AreEqual("US Bank", response.Donations[1].Source.Name);
         }
     }
 }

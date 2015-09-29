@@ -27,6 +27,7 @@ namespace crds_angular.test.controllers
         private Mock<ICommunicationService> _communicationService;
         private Mock<IMessageQueueFactory> _messageQueueFactory;
         private Mock<IMessageFactory> _messageFactory;
+        private Mock<ICryptoProvider> _cryptoProvider; 
 
         private const string AuthType = "auth_type";
         private const string AuthToken = "auth_token";
@@ -40,11 +41,12 @@ namespace crds_angular.test.controllers
             _communicationService = new Mock<ICommunicationService>();
             _messageQueueFactory = new Mock<IMessageQueueFactory>(MockBehavior.Strict);
             _messageFactory = new Mock<IMessageFactory>(MockBehavior.Strict);
+            _cryptoProvider = new Mock<ICryptoProvider>();
 
             _configuration.Setup(mocked => mocked.GetConfigValue("CheckScannerDonationsAsynchronousProcessingMode")).Returns("false");
             _configuration.Setup(mocked => mocked.GetConfigValue("CheckScannerDonationsQueueName")).Returns("CheckScannerBatchQueue");
 
-            _fixture = new CheckScannerController(_configuration.Object, _checkScannerService.Object, _authenticationService.Object, _communicationService.Object, _messageQueueFactory.Object, _messageFactory.Object);
+            _fixture = new CheckScannerController(_configuration.Object, _checkScannerService.Object, _authenticationService.Object, _communicationService.Object, _cryptoProvider.Object, _messageQueueFactory.Object, _messageFactory.Object);
 
             _fixture.Request = new HttpRequestMessage();
             _fixture.Request.Headers.Authorization = new AuthenticationHeaderValue(AuthType, AuthToken);
@@ -182,7 +184,15 @@ namespace crds_angular.test.controllers
         [Test]
         public void TestGetContactDonorForCheck()
         {
-            var encryptedKey = "disCv2kF/8HlRCWeTqolok1G4imf1cNZershgmCCFDI=";
+            const string encryptedAccountNumber = "P/H+3ccB0ZssORkd+YyJzA==";
+            const string encryptedRoutingNumber = "TUbiKZ/Vw1l6uyGCYIIUMg==";
+
+            var checkAccount = new CheckAccount
+            {
+                AccountNumber = encryptedAccountNumber,
+                RoutingNumber = encryptedRoutingNumber
+            };
+
             var donorDetail = new EZScanDonorDetails
             {
                 DisplayName = "Peyton Manning",
@@ -196,9 +206,9 @@ namespace crds_angular.test.controllers
                   }
             };
 
-            _checkScannerService.Setup(mocked => mocked.GetContactDonorForCheck(encryptedKey)).Returns(donorDetail);
+            _checkScannerService.Setup(mocked => mocked.GetContactDonorForCheck(encryptedAccountNumber, encryptedRoutingNumber)).Returns(donorDetail);
 
-            var result = _fixture.GetDonorForCheck(encryptedKey);
+            var result = _fixture.GetDonorForCheck(checkAccount);
             _checkScannerService.VerifyAll();
             
             Assert.NotNull(result);

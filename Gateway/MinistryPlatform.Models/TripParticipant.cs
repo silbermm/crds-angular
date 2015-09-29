@@ -16,5 +16,8 @@ namespace MinistryPlatform.Models
         public int ParticipantId { get; set; }
         public int ProgramId { get; set; }
         public string ProgramName { get; set; }
+        public int CampaignId { get; set; }
+        public string CampaignName { get; set; }
+        public int DonorId { get; set; }
     }
 }

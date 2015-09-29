@@ -5,6 +5,7 @@ using crds_angular.DataAccess.Interfaces;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services.Interfaces;
 using log4net;
+using Microsoft.Ajax.Utilities;
 using MinistryPlatform.Models;
 using MPServices = MinistryPlatform.Translation.Services.Interfaces;
 
@@ -76,8 +77,9 @@ namespace crds_angular.Services
                     // If the CreateDonationAndDistributionRecord fails, we'll still consider it exported, but
                     // it will be in error, and will have to be manually resolved.
                     check.Exported = true;
-              
-                    var encryptedKey = _mpDonorService.CreateEncodedAndEncryptedAccountAndRoutingNumber(check.AccountNumber, check.RoutingNumber);
+                    var account = _mpDonorService.DecryptCheckValue(check.AccountNumber);
+                    var routing = _mpDonorService.DecryptCheckValue(check.RoutingNumber);
+                    var encryptedKey = _mpDonorService.CreateHashedAccountAndRoutingNumber(account, routing);
                                      
                     _mpDonorService.UpdateDonorAccount(encryptedKey, charge.Source.id, contactDonor.ProcessorId);
                  
@@ -87,6 +89,7 @@ namespace crds_angular.Services
                                                                                          fee,
                                                                                          contactDonor.DonorId,
                                                                                          programId,
+                                                                                         null,
                                                                                          charge.Id,
                                                                                          "check",
                                                                                          contactDonor.ProcessorId,
@@ -114,9 +117,12 @@ namespace crds_angular.Services
             return (batchDetails);
         }
         
-        public EZScanDonorDetails GetContactDonorForCheck(string encryptedKey)
+        public EZScanDonorDetails GetContactDonorForCheck(string accountNumber, string routingNumber)
         {
-           return (Mapper.Map<ContactDetails, EZScanDonorDetails>(_donorService.GetContactDonorForCheckAccount(encryptedKey.ToString())));
+            var account = _mpDonorService.DecryptCheckValue(accountNumber);
+            var routing = _mpDonorService.DecryptCheckValue(routingNumber);
+            var encryptedKey = _mpDonorService.CreateHashedAccountAndRoutingNumber(account, routing);
+            return (Mapper.Map<ContactDonor, EZScanDonorDetails>(_donorService.GetContactDonorForCheckAccount(encryptedKey)));
             
         }
 
@@ -128,8 +134,9 @@ namespace crds_angular.Services
             {
                 return contactDonor;
             }
-
-            var token = _paymentService.CreateToken(checkDetails.AccountNumber, checkDetails.RoutingNumber);
+            var account = _mpDonorService.DecryptCheckValue(checkDetails.AccountNumber);
+            var routing = _mpDonorService.DecryptCheckValue(checkDetails.RoutingNumber);
+            var token = _paymentService.CreateToken(account, routing);
 
             contactDonor.Details = new ContactDetails
             {
@@ -151,7 +158,7 @@ namespace crds_angular.Services
                 Type = AccountType.Checking
             };
             
-            var encryptedKey = _mpDonorService.CreateEncodedAndEncryptedAccountAndRoutingNumber(checkDetails.AccountNumber, checkDetails.RoutingNumber);
+            var encryptedKey = _mpDonorService.CreateHashedAccountAndRoutingNumber(account, routing);
             
             return _donorService.CreateOrUpdateContactDonor(contactDonor, encryptedKey, string.Empty, token, DateTime.Now);
         }

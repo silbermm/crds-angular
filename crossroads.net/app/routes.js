@@ -155,12 +155,6 @@
               loggedin: crds_utilities.checkLoggedin
             },
           },
-          'personal@profile': {
-            templateUrl: 'personal/profile_personal.html',
-            data: {
-              isProtected: true
-            },
-          },
           'account@profile': {
             templateUrl: 'profile/profile_account.html',
             data: {
@@ -170,6 +164,13 @@
           'skills@profile': {
             controller: 'ProfileSkillsController as profile',
             templateUrl: 'skills/profile_skills.html',
+            data: {
+              isProtected: true
+            }
+          },
+          'giving@profile': {
+            controller: 'ProfileGivingController as giving_profile_controller',
+            templateUrl: 'giving/profile_giving.html',
             data: {
               isProtected: true
             }
@@ -188,48 +189,6 @@
           }
         }
       })
-      .state('go-trip-select', {
-        parent: 'noSideBar',
-        url: '/go/:trip_location/select-person',
-        templateUrl: 'gotrips/signup-select-person.html',
-        controller: 'GoTripsCtrl as gotrip'
-      })
-      .state('go-trip-signup', {
-        parent: 'noSideBar',
-        url: '/go/:trip_location/signup',
-        templateUrl: 'gotrips/signup-page-1.html',
-        controller: 'GoTripsCtrl as gotrip'
-      })
-      .state('go-trip-signup-page-2', {
-        parent: 'noSideBar',
-        url: '/go/:trip_location/signup/2',
-        templateUrl: 'gotrips/signup-page-2.html',
-        controller: 'GoTripsCtrl as gotrip'
-      })
-      .state('go-trip-signup-page-3', {
-        parent: 'noSideBar',
-        url: '/go/:trip_location/signup/3',
-        templateUrl: 'gotrips/signup-page-3.html',
-        controller: 'GoTripsCtrl as gotrip'
-      })
-      .state('go-trip-signup-page-4', {
-        parent: 'noSideBar',
-        url: '/go/:trip_location/signup/4',
-        templateUrl: 'gotrips/signup-page-4.html',
-        controller: 'GoTripsCtrl as gotrip'
-      })
-      .state('go-trip-signup-page-5', {
-        parent: 'noSideBar',
-        url: '/go/:trip_location/signup/5',
-        templateUrl: 'gotrips/signup-page-5.html',
-        controller: 'GoTripsCtrl as gotrip'
-      })
-      .state('go-trip-signup-page-confirmation', {
-        parent: 'noSideBar',
-        url: '/go/:trip_location/signup/confirmation',
-        templateUrl: 'gotrips/signup-page-confirmation.html',
-        controller: 'GoTripsCtrl as gotrip'
-      })
       .state('explore', {
         parent: 'noHeaderOrFooter',
         url: '/explore',
@@ -240,18 +199,6 @@
             description: ''
           }
         }
-      })
-      .state('blog', {
-        parent: 'noSideBar',
-        url: '/blog',
-        controller: 'BlogCtrl as blog',
-        templateUrl: 'blog/blog-index.html'
-      })
-      .state('blog-post', {
-        parent: 'noSideBar',
-        url: '/blog/post',
-        controller: 'BlogCtrl as blog',
-        templateUrl: 'blog/blog-post.html'
       })
       .state('adbox', {
         parent: 'noSideBar',
@@ -292,11 +239,6 @@
         parent: 'noSideBar',
         url: '/thedaily',
         templateUrl: 'thedaily/thedaily.html'
-      })
-      .state('demo', {
-        parent: 'noSideBar',
-        url: '/demo',
-        template: '<p>demo</p>'
       })
       .state('go_trip_giving_results', {
         parent: 'noSideBar',
