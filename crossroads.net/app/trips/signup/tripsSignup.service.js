@@ -8,9 +8,14 @@
   function TripsSignupService($resource, $location, $log, Session) {
     var signupService = {
       activate: activate,
+      pages: [],
       reset: reset,
       TripApplication: $resource(__API_ENDPOINT__ + 'api/trip-application'),
       thankYouMessage: '',
+      tshirtSizes: tshirtSizes(),
+      topScrubSizes: topScrubSizes(),
+      bottomScrubSizes: bottomScrubSizes(),
+      frmPage2: {}
     };
 
     function activate() {
@@ -56,6 +61,114 @@
       }
     }
 
+    function bottomScrubSizes() {
+      return [{
+        formFieldId: 1429,
+        attributeId: 3174,
+        value: 'Adult XS'
+      }, {
+        formFieldId: 1429,
+        attributeId: 3175,
+        value: 'Adult S'
+      }, {
+        formFieldId: 1429,
+        attributeId: 3176,
+        value: 'Adult M'
+      }, {
+        formFieldId: 1429,
+        attributeId: 3177,
+        value: 'Adult L'
+      }, {
+        formFieldId: 1429,
+        attributeId: 3178,
+        value: 'Adult XL'
+      }, {
+        formFieldId: 1429,
+        attributeId: 3179,
+        value: 'Adult XXL'
+      }, {
+        formFieldId: 1429,
+        attributeId: 3180,
+        value: 'Adult XXXL'
+      }];
+    }
+
+    function topScrubSizes() {
+      return [{
+        formFieldId: 1477,
+        attributeId: 3167,
+        value: 'Adult XS'
+      }, {
+        formFieldId: 1477,
+        attributeId: 3168,
+        value: 'Adult S'
+      }, {
+        formFieldId: 1477,
+        attributeId: 3169,
+        value: 'Adult M'
+      }, {
+        formFieldId: 1477,
+        attributeId: 3170,
+        value: 'Adult L'
+      }, {
+        formFieldId: 1477,
+        attributeId: 3171,
+        value: 'Adult XL'
+      }, {
+        formFieldId: 1477,
+        attributeId: 3172,
+        value: 'Adult XXL'
+      }, {
+        formFieldId: 1477,
+        attributeId: 3173,
+        value: 'Adult XXXL'
+      }];
+    }
+
+    function tshirtSizes() {
+      return [{
+        formFieldId: 1428,
+        attributeId: 3157,
+        value: 'Adult XS'
+      }, {
+        formFieldId: 1428,
+        attributeId: 3158,
+        value: 'Adult S'
+      }, {
+        formFieldId: 1428,
+        attributeId: 3159,
+        value: 'Adult M'
+      }, {
+        formFieldId: 1428,
+        attributeId: 3160,
+        value: 'Adult L'
+      }, {
+        formFieldId: 1428,
+        attributeId: 3161,
+        value: 'Adult XL'
+      }, {
+        formFieldId: 1428,
+        attributeId: 3162,
+        value: 'Adult XXL'
+      }, {
+        formFieldId: 1428,
+        attributeId: 3163,
+        value: 'Adult XXXL'
+      }, {
+        formFieldId: 1428,
+        attributeId: 3164,
+        value: 'Child S'
+      }, {
+        formFieldId: 1428,
+        attributeId: 3165,
+        value: 'Child M'
+      }, {
+        formFieldId: 1428,
+        attributeId: 3166,
+        value: 'Child L'
+      }];
+    }
+
     function reset(campaign) {
       signupService.campaign = campaign;
       signupService.ageLimitReached = false;
@@ -64,6 +177,12 @@
       signupService.numberOfPages = 0;
       signupService.pageHasErrors = true;
       signupService.privateInvite = $location.search().invite;
+
+      signupService.page2 = page2();
+      signupService.page3 = page3();
+      signupService.page4 = page4();
+      signupService.page5 = page5();
+      signupService.page6 = page6();
     }
 
     function page2() {
@@ -101,7 +220,7 @@
         groupCommonName: {formFieldId: 1445, value: null},
         roommateFirstChoice: {formFieldId: 1446, value: null},
         roommateSecondChoice: {formFieldId: 1447, value: null},
-        supportPersonEmail: {formFieldId: 1488, value: null},
+        supportPersonEmail: {formFieldId: 1448, value: null},
         interestedInGroupLeader: {formFieldId: 1449, value: null},
         whyGroupLeader: {formFieldId: 1450, value: null},
       };
@@ -137,7 +256,7 @@
         validPassport: {formFieldId: 1464, value: null},
         passportExpirationDate: {formFieldId: 1465, value: null},
         passportFirstName: {formFieldId: 1466, value: null},
-        passportMiddleName: {formFieldId: 1477, value: null},
+        passportMiddleName: {formFieldId: 1467, value: null},
         passportLastName: {formFieldId: 1468, value: null},
         passportCountry: {formFieldId: 1469, value: null},
         passportBirthday: {formFieldId: 1470, value: null},
