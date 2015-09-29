@@ -7,9 +7,9 @@
   function GivingHistoryService($resource) {
 
     return {
-      // api/donations/?donationYear=YYYY&softCredit=true|false
+      // api/donations/?donationYear=YYYY&softCredit=true|false&limit=int
       donations: $resource(__API_ENDPOINT__ + 'api/donations/:donationYear',
-        {donationYear: '@donationYear', softCredit: '@includeSoftCredits'}),
+        {donationYear: '@donationYear', softCredit: '@includeSoftCredits', limit: '@limit'}),
       donationYears: $resource(__API_ENDPOINT__ + 'api/donations/years')
     };
 

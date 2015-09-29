@@ -15,11 +15,12 @@
 
     function activate() {
       vm.donation_view_ready = false;
-      GivingHistoryService.donations.get({}, function(data) {
-            vm.donations = $filter('orderBy')(data.donations, 'date', true);
+      GivingHistoryService.donations.get({limit: 3}, function(data) {
+            vm.donations = data.donations;
             vm.donation_view_ready = true;
             vm.donation_history = true;
           },
+
           function(/*error*/) {
             vm.donation_history = false;
             vm.donation_view_ready = true;

@@ -18,7 +18,7 @@ namespace crds_angular.Services.Interfaces
         void CreatePaymentProcessorEventError(StripeEvent stripeEvent, StripeEventResponseDTO stripeEventResponse);
         DonationBatchDTO GetDonationBatchByProcessorTransferId(string processorTransferId);
         DonationBatchDTO GetDonationBatch(int batchId);
-        DonationsDTO GetDonationsForAuthenticatedUser(string userToken, string donationYear = null, bool? softCredit = null);
+        DonationsDTO GetDonationsForAuthenticatedUser(string userToken, string donationYear = null, int? limit = null, bool? softCredit = null);
         DonationYearsDTO GetDonationYearsForAuthenticatedUser(string userToken);
         DonationsDTO GetDonationsForDonor(int donorId, string donationYear = null, bool softCredit = false);
         DonationYearsDTO GetDonationYearsForDonor(int donorId);
