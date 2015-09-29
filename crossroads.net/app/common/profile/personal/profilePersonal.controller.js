@@ -12,8 +12,7 @@
     'MESSAGES',
     'ProfileReferenceData',
     'Profile',
-    'Validation',
-    '$window'
+    'Validation'
   ];
 
   function ProfilePersonalDirective(
@@ -23,8 +22,7 @@
       MESSAGES,
       ProfileReferenceData,
       Profile,
-      Validation,
-      $window) {
+      Validation) {
 
     var vm = this;
 
@@ -57,8 +55,6 @@
     ////////////////////////////////
 
     function activate() {
-      //$window.onbeforeunload = onBeforeUnload;
-
       vm.annDate = formatAnniversaryDate(vm.profileData.person.anniversaryDate);
 
       ProfileReferenceData.getInstance().then(function(response) {
