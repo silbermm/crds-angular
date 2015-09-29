@@ -311,6 +311,7 @@ namespace crds_angular.Services
                     gift.DonationAmount = donation.DonationAmount;
                     gift.RegisteredDonor = donation.RegisteredDonor;
                     gift.MessageSent = donation.MessageSent;
+                    gift.Anonymous = donation.AnonymousGift;
                     e.TripGifts.Add(gift);
                     e.TotalRaised += donation.DonationAmount;
                 }
