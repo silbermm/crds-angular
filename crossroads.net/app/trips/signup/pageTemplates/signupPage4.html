@@ -1,6 +1,6 @@
 <div >
   <form role="form">
-    <div class="row" ng-show="pages.destination != 'India'">
+    <div class="row" ng-show="tripsSignup.destination != 'India'">
       <div class="col-sm-12">
         <legend>
           Lottery
@@ -14,27 +14,27 @@
           <label class="block required">Please select one choice below</label>
           <div>
             <label for="lottery-go" class="radio-inline">
-                <input ng-model="pages.signupService.page4.lottery.value" type="radio" value="As long as I am selected, I will go on the trip." name="lottery" id="lottery-go">As long as I am selected, I will go on the trip.
+                <input ng-model="tripsSignup.signupService.page4.lottery.value" type="radio" value="As long as I am selected, I will go on the trip." name="lottery" id="lottery-go">As long as I am selected, I will go on the trip.
             </label>
           </div>
           <div>
             <label for="lottery-spouse" class="radio-inline">
-                <input ng-model="pages.signupService.page4.lottery.value" type="radio" value="If my spouse or any member of my family is not selected, none of us will go." name="lottery" id="lottery-spouse">If my spouse or any member of my family is not selected, none of us will go.
+                <input ng-model="tripsSignup.signupService.page4.lottery.value" type="radio" value="If my spouse or any member of my family is not selected, none of us will go." name="lottery" id="lottery-spouse">If my spouse or any member of my family is not selected, none of us will go.
             </label>
           </div>
           <div>
             <label for="lottery-no-spouse" class="radio-inline">
-                <input ng-model="pages.signupService.page4.lottery.value" type="radio" value="If my spouse or any member of my family is not selected, all others will go." name="lottery" id="lottery-no-spouse">If my spouse or any member of my family is not selected, all others will go.
+                <input ng-model="tripsSignup.signupService.page4.lottery.value" type="radio" value="If my spouse or any member of my family is not selected, all others will go." name="lottery" id="lottery-no-spouse">If my spouse or any member of my family is not selected, all others will go.
             </label>
           </div>
           <div>
             <label for="lottery-family" class="radio-inline">
-                <input ng-model="pages.signupService.page4.lottery.value" type="radio" value="If my spouse or any member of my family OR any member of our larger group of friends is not selected, none of us will go." name="lottery" id="lottery-family">If my spouse or any member of my family OR any member of our larger group of friends is not selected, none of us will go.
+                <input ng-model="tripsSignup.signupService.page4.lottery.value" type="radio" value="If my spouse or any member of my family OR any member of our larger group of friends is not selected, none of us will go." name="lottery" id="lottery-family">If my spouse or any member of my family OR any member of our larger group of friends is not selected, none of us will go.
             </label>
           </div>
           <div>
             <label for="lottery-no-family" class="radio-inline">
-                <input ng-model="pages.signupService.page4.lottery.value" type="radio" value="If my spouse or any member of my fmaily OR any member of our larger group of friends is not selected, my spouse or family will still go." name="lottery" id="lottery-no-family">If my spouse or any member of my fmaily OR any member of our larger group of friends is not selected, my spouse or family will still go.
+                <input ng-model="tripsSignup.signupService.page4.lottery.value" type="radio" value="If my spouse or any member of my fmaily OR any member of our larger group of friends is not selected, my spouse or family will still go." name="lottery" id="lottery-no-family">If my spouse or any member of my fmaily OR any member of our larger group of friends is not selected, my spouse or family will still go.
             </label>
           </div>
         </div>
@@ -47,13 +47,13 @@
           </legend>
         </div><!--/col-sm-12-->
 
-        <div class="col-md-12" ng-show="pages.destination != 'India'">
+        <div class="col-md-12" ng-show="tripsSignup.destination != 'India'">
           <span ng-bind-html="$root.MESSAGES.TripGroupCommonName.content | html"></span>
         </div>
 
-        <div class="form-group col-md-6" ng-show="pages.destination != 'India'">
+        <div class="form-group col-md-6" ng-show="tripsSignup.destination != 'India'">
           <label for="common-name" class="control-label">Common Name</label>
-          <input ng-model="pages.signupService.page4.groupCommonName.value" type="text" class="form-control" id="common-name" placeholder="Common Name">
+          <input ng-model="tripsSignup.signupService.page4.groupCommonName.value" type="text" class="form-control" id="common-name" placeholder="Common Name">
         </div>
 
         <div class="col-md-12">
@@ -62,8 +62,8 @@
 
           <div class="form-group col-md-6">
             <label class="control-label">Who are your roommate choices?</label>
-            <input ng-model="pages.signupService.page4.roommateFirstChoice.value" type="text" class="form-control push-half-bottom" id="roommate-one" placeholder="Roommate Name - First Choice">
-            <input ng-model="pages.signupService.page4.roommateSecondChoice.value" type="text" class="form-control" id="roommate-two" placeholder="Roommate Name - Second Choice">
+            <input ng-model="tripsSignup.signupService.page4.roommateFirstChoice.value" type="text" class="form-control push-half-bottom" id="roommate-one" placeholder="Roommate Name - First Choice">
+            <input ng-model="tripsSignup.signupService.page4.roommateSecondChoice.value" type="text" class="form-control" id="roommate-two" placeholder="Roommate Name - Second Choice">
           </div>
         </div><!--/row-->
 
@@ -73,7 +73,7 @@
           </div>
           <div class="form-group col-sm-6">
             <label for="support-person-email" class="control-label">Support Person Email Address</label>
-            <input ng-model="pages.signupService.page4.supportPersonEmail.value" type="text" class="form-control" id="support-person-email" placeholder="Support Person Email Address">
+            <input ng-model="tripsSignup.signupService.page4.supportPersonEmail.value" type="text" class="form-control" id="support-person-email" placeholder="Support Person Email Address">
           </div>
         </div><!--/row-->
 
@@ -84,22 +84,20 @@
           <div class="form-group col-sm-12">
             <label class="block required">Would you be interested in being a GO Group Leader?</label>
             <label class="radio-inline" ng-click="isCollapsed = true">
-                <input ng-model="pages.signupService.page4.interestedInGroupLeader.value" type="radio" value="yes" name="leader" id="leader-yes">Yes
+                <input ng-model="tripsSignup.signupService.page4.interestedInGroupLeader.value" type="radio" value="yes" name="leader" id="leader-yes">Yes
             </label>
             <label class="radio-inline" ng-click="isCollapsed = false">
-                <input ng-model="pages.signupService.page4.interestedInGroupLeader.value" type="radio" value="no" name="leader" id="leader-no">No
+                <input ng-model="tripsSignup.signupService.page4.interestedInGroupLeader.value" type="radio" value="no" name="leader" id="leader-no">No
             </label>
           </div>
           <div class="form-group col-sm-12" collapse="!isCollapsed">
             <label for="why-go-leader" class="required">Why would you like to be a GO Group Leader?</label>
-            <textarea ng-model="pages.signupService.page4.whyGroupLeader.value" cols="1" rows="4" class="form-control" id="why-go-leader" maxlength="250"></textarea>
+            <textarea ng-model="tripsSignup.signupService.page4.whyGroupLeader.value" cols="1" rows="4" class="form-control" id="why-go-leader" maxlength="250"></textarea>
           </div>
         </div>
 
 
         <a ng-click='tripsSignup.handlePageChange(5)' class="btn btn-primary pull-right">Next</a>
-        <!-- <a ng-click='pages.handleNext(5)'  class="btn btn-primary pull-right">Next</a>
-        <a ng-click='pages.handlePrevious(3)' class="btn btn-standard pull-right">Back</a> -->
       </form>
 
   </div>
