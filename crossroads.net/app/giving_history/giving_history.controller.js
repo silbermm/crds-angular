@@ -2,9 +2,9 @@
   'use strict';
   module.exports = GivingHistoryController;
 
-  GivingHistoryController.$inject = ['$log', 'GivingHistoryService', 'Profile', 'AuthService', 'GIVE_ROLES'];
+  GivingHistoryController.$inject = ['$log', 'GivingHistoryService', 'Profile'];
 
-  function GivingHistoryController($log, GivingHistoryService, Profile, AuthService, GIVE_ROLES) {
+  function GivingHistoryController($log, GivingHistoryService, Profile) {
     var vm = this;
 
     vm.overall_view_ready = false;
@@ -67,10 +67,6 @@
         vm.soft_credit_donation_history = false;
       });
     }
-
-    vm.allowAdminAccess = function() {
-      return (AuthService.isAuthenticated() && AuthService.isAuthorized(GIVE_ROLES.StewardshipDonationProcessor));
-    };
 
     function getDonations() {
       vm.donation_view_ready = false;

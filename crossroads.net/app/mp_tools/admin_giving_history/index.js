@@ -4,15 +4,10 @@
   var MODULE = 'crossroads.mptools';
 
   require('./adminGivingHistory.html');
-
-  angular.
-      module(MODULE).
-      controller('GivingHistoryController',
-      require('../../giving_history/giving_history.controller'));
+  require('./adminGivingHistoryTool.html');
 
   angular.
       module(MODULE).
       controller('AdminGivingHistoryController',
       require('./adminGivingHistory.controller'));
-
 })();
