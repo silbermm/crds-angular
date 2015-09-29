@@ -59,6 +59,7 @@
         "$": false,
         "describe"   : false,
         "it"         : false,
+        "jasmine"    : false,
         "before"     : false,
         "beforeEach" : false,
         "inject"     : false,

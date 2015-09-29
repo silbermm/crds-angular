@@ -40,7 +40,10 @@ namespace MinistryPlatform.Translation.Services
                     EventType = viewRecord.ToString("Event_Type"),
                     ParticipantId = viewRecord.ToInt("Participant_ID"),
                     ProgramId = viewRecord.ToInt("Program_ID"),
-                    ProgramName = viewRecord.ToString("Program_Name")
+                    ProgramName = viewRecord.ToString("Program_Name"),
+                    CampaignId = viewRecord.ToInt("Campaign_ID"),
+                    CampaignName = viewRecord.ToString("Campaign_Name"),
+                    DonorId = viewRecord.ToInt("Donor_ID"),
                 }).ToList();
             }
             catch (Exception ex)
