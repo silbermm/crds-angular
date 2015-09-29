@@ -454,6 +454,21 @@
           }
         }
       })
+      .state('tools.adminGivingHistory', {
+        url: '/adminGivingHistory',
+        controller: 'AdminGivingHistoryController as AdminGivingHistory'
+      })
+      .state('tools.adminGivingHistory.view', {
+        controller: 'GivingHistoryController as admin_giving_history_controller',
+        templateUrl: 'admin_giving_history/adminGivingHistory.html',
+        data: {
+          isProtected: true,
+          meta: {
+            title: 'Giving History - Admin View',
+            description: ''
+          }
+        }
+      })
       .state('tools.gpExport', {
         url: '/gpExport',
         controller: 'GPExportController as gpExport',

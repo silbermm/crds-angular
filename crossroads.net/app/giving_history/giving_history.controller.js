@@ -2,9 +2,9 @@
   'use strict';
   module.exports = GivingHistoryController;
 
-  GivingHistoryController.$inject = ['$log', 'GivingHistoryService', 'Profile'];
+  GivingHistoryController.$inject = ['$log', 'GivingHistoryService', 'Profile', 'AuthService', 'GIVE_ROLES'];
 
-  function GivingHistoryController($log, GivingHistoryService, Profile) {
+  function GivingHistoryController($log, GivingHistoryService, Profile, AuthService, GIVE_ROLES) {
     var vm = this;
 
     vm.overall_view_ready = false;
@@ -17,6 +17,7 @@
     vm.donation_history = false;
     vm.donation_view_ready = false;
     vm.ending_donation_date = undefined;
+    vm.impersonate_donor_id = GivingHistoryService.impersonateDonorId;
     vm.profile = {};
     vm.selected_giving_year = undefined;
     vm.soft_credit_donations = [];
@@ -31,9 +32,9 @@
     activate();
 
     function activate() {
-      Profile.Personal.get(function(data) {
+      Profile.Personal.get({impersonateDonorId: vm.impersonate_donor_id}, function(data) {
         vm.profile = data;
-        GivingHistoryService.donationYears.get(function(data) {
+        GivingHistoryService.donationYears.get({impersonateDonorId: vm.impersonate_donor_id}, function(data) {
           var most_recent_giving_year = data.most_recent_giving_year;
 
           // Create a map out of the array of donation years, so we can add an 'All' option easily,
@@ -67,9 +68,13 @@
       });
     }
 
+    vm.allowAdminAccess = function() {
+      return (AuthService.isAuthenticated() && AuthService.isAuthorized(GIVE_ROLES.StewardshipDonationProcessor));
+    };
+
     function getDonations() {
       vm.donation_view_ready = false;
-      GivingHistoryService.donations.get({donationYear: vm.selected_giving_year.key, softCredit: false}, function(data) {
+      GivingHistoryService.donations.get({donationYear: vm.selected_giving_year.key, softCredit: false, impersonateDonorId: vm.impersonate_donor_id}, function(data) {
             vm.donations = data.donations;
             vm.donation_total_amount = data.donation_total_amount;
             vm.donation_statement_total_amount = data.donation_statement_total_amount;
@@ -87,7 +92,7 @@
 
     function getSoftCreditDonations() {
       vm.soft_credit_donation_view_ready = false;
-      GivingHistoryService.donations.get({donationYear: vm.selected_giving_year.key, softCredit: true}, function(data) {
+      GivingHistoryService.donations.get({donationYear: vm.selected_giving_year.key, softCredit: true, impersonateDonorId: vm.impersonate_donor_id}, function(data) {
             vm.soft_credit_donations = data.donations;
             vm.soft_credit_donation_total_amount = data.donation_total_amount;
             vm.soft_credit_donation_statement_total_amount = data.donation_statement_total_amount;

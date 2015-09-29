@@ -5,9 +5,9 @@
   
   module.exports = MPTools; 
 
-  MPTools.$inject = ['$location'];
+  MPTools.$inject = ['$location', '$resource'];
 
-  function MPTools($location){ 
+  function MPTools($location, $resource){
     var params =  {}; 
     return {
       setParams : function(location) {
@@ -22,6 +22,7 @@
           selectedCount: location.search()['sc']
         };
       },
+
       getParams : function() {
         if(_.isEmpty(params) || params.userGuid === undefined){
           params = { 
@@ -35,7 +36,9 @@
           };
         }
         return params;
-      }
+      },
+
+      Selection: $resource(__API_ENDPOINT__ + 'api/mptools/selection/:selectionId')
     };
   }
 

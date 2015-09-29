@@ -44,14 +44,15 @@ namespace crds_angular.Controllers.API
         /// </summary>
         /// <param name="softCredit">A bool indicating if the result should contain only soft-credit (true), only direct (false), or all (null) donations.  Defaults to null.</param>
         /// <param name="donationYear">A year filter (YYYY format) for donations returned - defaults to null, meaning return all available donations regardless of year.</param>
-        /// <param name="impersonateUserId">An optional userid of a user to impersonate</param>
+        /// <param name="impersonateDonorId">An optional donorId of a donor to impersonate</param>
         /// <returns>A list of DonationDTOs</returns>
         [Route("api/donations/{donationYear:regex(\\d{4})?}")]
         [HttpGet]
-        public IHttpActionResult GetDonations(string donationYear = null, [FromUri(Name = "softCredit")]bool? softCredit = null, [FromUri(Name = "impersonateUserId")]string impersonateUserId = null)
+        public IHttpActionResult GetDonations(string donationYear = null, [FromUri(Name = "softCredit")]bool? softCredit = null, [FromUri(Name = "impersonateDonorId")]int? impersonateDonorId = null)
         {
             return (Authorized(token =>
             {
+                var impersonateUserId = impersonateDonorId == null ? string.Empty : _mpDonorService.GetEmailViaDonorId(impersonateDonorId.Value).Email;
                 var donations = !string.IsNullOrWhiteSpace(impersonateUserId)
                     ? _impersonationService.WithImpersonation(token,
                                                               impersonateUserId,
@@ -70,14 +71,15 @@ namespace crds_angular.Controllers.API
         /// <summary>
         /// Retrieve a list of donation years for the logged-in donor.  This includes any year the donor has given either directly, or via soft-credit.
         /// </summary>
-        /// <param name="impersonateUserId">An optional userid of a user to impersonate</param>
+        /// <param name="impersonateDonorId">An optional donorId of a donor to impersonate</param>
         /// <returns>A list of years (string)</returns>
         [Route("api/donations/years")]
         [HttpGet]
-        public IHttpActionResult GetDonationYears([FromUri(Name = "impersonateUserId")]string impersonateUserId = null)
+        public IHttpActionResult GetDonationYears([FromUri(Name = "impersonateDonorId")]int? impersonateDonorId = null)
         {
             return (Authorized(token =>
             {
+                var impersonateUserId = impersonateDonorId == null ? string.Empty : _mpDonorService.GetEmailViaDonorId(impersonateDonorId.Value).Email;
                 var donationYears = !string.IsNullOrWhiteSpace(impersonateUserId)
                     ? _impersonationService.WithImpersonation(token, impersonateUserId, () => _gatewayDonationService.GetDonationYearsForAuthenticatedUser(token))
                     : _gatewayDonationService.GetDonationYearsForAuthenticatedUser(token);
