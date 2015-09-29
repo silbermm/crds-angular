@@ -6,6 +6,7 @@ require('./templates/confirm.html');
 require('./templates/account.html');
 require('./templates/change.html');
 require('./templates/thank_you.html');
+require('./templates/login.html');
 
 var app = angular.module(constants.MODULES.GIVE);
 

@@ -21,7 +21,6 @@ describe('GiveController', function() {
   var Session;
   var DonationService;
   var GiveTransferService;
-  var GiveFlow;
   var OneTimeGiving;
 
   beforeEach(angular.mock.module('crossroads', function($provide) {
@@ -86,7 +85,6 @@ describe('GiveController', function() {
       AUTH_EVENTS = $injector.get('AUTH_EVENTS');
       DonationService = $injector.get('DonationService');
       GiveTransferService = $injector.get('GiveTransferService');
-      GiveFlow = $injector.get('GiveFlow');
       OneTimeGiving = $injector.get('OneTimeGiving');
 
       $rootScope.MESSAGES = {
@@ -136,7 +134,6 @@ describe('GiveController', function() {
           DonationService: DonationService,
           programList:programList,
           GiveTransferService: GiveTransferService,
-          GiveFlow: GiveFlow,
           AUTH_EVENTS: AUTH_EVENTS,
           OneTimeGiving: OneTimeGiving
         });
@@ -153,7 +150,7 @@ describe('GiveController', function() {
 
   describe('function confirmDonation()', function() {
     beforeEach(function() {
-      spyOn(controller.giveFlow, 'goToChange');
+      spyOn(controller.service, 'goToChange');
     });
 
     it('should go to the thank-you page if credit card payment was accepted', function() {
@@ -171,13 +168,13 @@ describe('GiveController', function() {
 
       spyOn(controller.donationService, 'donate').and.callFake(
         function(program, onSuccess, onFailure) {
-          $state.go(GiveFlow.thankYou);
+          $state.go(controller.service.stateName.thankYou);
         }
       );
 
       controller.donationService.confirmDonation();
       expect(controller.donationService.donate).toHaveBeenCalled();
-      expect(controller.giveFlow.goToChange).not.toHaveBeenCalled();
+      expect(controller.service.goToChange).not.toHaveBeenCalled();
     });
 
     it('should go to the change page if credit card payment was declined', function() {
@@ -225,7 +222,7 @@ describe('GiveController', function() {
       expect($state.go).not.toHaveBeenCalled();
     });
 
-    it('should goto give.login if session is not active', function() {
+    it('should goto give.one_time_login if session is not active', function() {
       mockSession.isActive.and.callFake(function() {
         return false;
       });
@@ -233,7 +230,7 @@ describe('GiveController', function() {
       spyOn($state, 'go');
 
       controller.donationService.confirmDonation();
-      expect($state.go).toHaveBeenCalledWith('give.login');
+      expect($state.go).toHaveBeenCalledWith('give.one_time_login');
     });
   });
 
@@ -485,20 +482,19 @@ describe('GiveController', function() {
       expect(mockPaymentService.updateDonorWithBankAcct).toHaveBeenCalled();
     });
 
-    it('should go to give.login if session is not active', function() {
-       mockSession.isActive.and.callFake(function() {
-         return false;
-       });
+    it('should go to give.one_time_login if session is not active', function() {
+      mockSession.isActive.and.callFake(function() {
+        return false;
+      });
 
-       controller.dto.program = {
-         programId: 1,
-         name: 'crossroads'
-       };
-
-       controller.dto.email = 'tim@kriz.net';
-       controller.dto.donor = {
-         id: 654,
-         default_source: {
+      controller.dto.program = {
+        programId: 1,
+        name: 'crossroads'
+      };
+      controller.dto.email = 'tim@kriz.net';
+      controller.dto.donor = {
+        id: 654,
+        default_source: {
           name: 'Tim Startsgiving',
           cc_number: '98765',
           exp_date: '1213',
@@ -514,7 +510,7 @@ describe('GiveController', function() {
 
       controller.donationService.submitChangedBankInfo(controller.giveForm);
       expect(controller.donationService.donate).not.toHaveBeenCalled();
-      expect($state.go).toHaveBeenCalledWith('give.login');
+      expect($state.go).toHaveBeenCalledWith('give.one_time_login');
     });
   });
 
@@ -659,7 +655,7 @@ describe('GiveController', function() {
       expect(controller.dto.donorError).toBeTruthy();
     });
 
-    it('should transition to give.confirm for a logged-in Giver with an existing donor', function() {
+    it('should transition to give.one_time_confirm for a logged-in Giver with an existing donor', function() {
       mockSession.isActive.and.callFake(function() {
         return true;
       });
@@ -671,7 +667,7 @@ describe('GiveController', function() {
       controller.dto.email = 'test@test.com';
       controller.donationService.transitionForLoggedInUserBasedOnExistingDonor(mockEvent, mockToState);
 
-      expect($state.go).toHaveBeenCalledWith('give.confirm');
+      expect($state.go).toHaveBeenCalledWith('give.one_time_confirm');
       expect(mockEvent.preventDefault).toHaveBeenCalled();
       expect(mockPaymentService.getDonor).toHaveBeenCalledWith('test@test.com');
       expect(controller.dto.donorError).toBeFalsy();
@@ -764,7 +760,7 @@ describe('GiveController', function() {
     });
 
     it('should populate dto with appropriate values when going to the credit card change page', function() {
-      controller.giveFlow.goToChange();
+      controller.service.goToChange();
       expect(controller.dto.changeAccountInfo).toBeTruthy();
     });
 
@@ -775,7 +771,7 @@ describe('GiveController', function() {
       controller.dto.email = 'test@here.com';
       controller.dto.program = 'program';
 
-      controller.giveFlow.goToChange();
+      controller.service.goToChange();
 
       expect(controller.dto.amount).toBe(123);
       expect(controller.dto.donor).toBe('donor');
@@ -785,7 +781,7 @@ describe('GiveController', function() {
       expect(controller.dto.changeAccountInfo).toBeTruthy();
     });
 
-    it('should transition to give.login is session is not active', function() {
+    it('should transition to give.one_time_login is session is not active', function() {
       mockSession.isActive.and.callFake(function() {
         return false;
       });
@@ -794,13 +790,13 @@ describe('GiveController', function() {
         return true;
       });
 
-      controller.giveFlow.goToChange();
-      expect($state.go).toHaveBeenCalledWith('give.login');
+      controller.service.goToChange();
+      expect($state.go).toHaveBeenCalledWith('give.one_time_login');
     });
   });
 
   describe('function processChange', function() {
-    it('should transition to give.login is session is not active', function() {
+    it('should transition to give.one_time_login is session is not active', function() {
       mockSession.isActive.and.callFake(function() {
         return false;
       });
@@ -808,7 +804,7 @@ describe('GiveController', function() {
       spyOn($state, 'go');
       controller.donationService.processChange();
 
-      expect($state.go).toHaveBeenCalledWith('give.login');
+      expect($state.go).toHaveBeenCalledWith('give.one_time_login');
     });
   });
 

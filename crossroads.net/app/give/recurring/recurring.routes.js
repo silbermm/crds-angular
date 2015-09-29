@@ -16,6 +16,9 @@
       })
       .state('give.recurring_thank-you', {
         templateUrl: 'templates/thank_you.html'
+      })
+      .state('give.recurring_login', {
+        templateUrl: 'templates/login.html'
       });
   }
 

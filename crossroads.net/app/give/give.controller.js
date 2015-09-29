@@ -9,7 +9,6 @@
                       'DonationService',
                       'programList',
                       'GiveTransferService',
-                      'GiveFlow',
                       'AUTH_EVENTS',
                       'OneTimeGiving',
                       'RecurringGiving'
@@ -27,7 +26,6 @@
     DonationService,
     programList,
     GiveTransferService,
-    GiveFlow,
     AUTH_EVENTS,
     OneTimeGiving,
     RecurringGiving) {
@@ -38,12 +36,12 @@
     vm.dto = GiveTransferService;
     vm.emailAlreadyRegisteredGrowlDivRef = 1000;
     vm.emailPrefix = 'give';
-    vm.giveFlow = GiveFlow;
     vm.initDefaultState = OneTimeGiving.initDefaultState;
     vm.onEmailFound = onEmailFound;
     vm.onEmailNotFound = onEmailNotFound;
     vm.programsInput = programList;
     vm.branchOnGivingType = branchOnGivingType;
+    vm.service = OneTimeGiving;
 
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams) {
 
@@ -56,7 +54,7 @@
 
       if (!vm.dto.initialized || toState.name === 'give') {
         event.preventDefault();
-        OneTimeGiving.initDefaultState();
+        vm.service.initDefaultState();
         return;
       }
 
@@ -70,7 +68,7 @@
 
     $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams) {
       vm.dto.processing = false;
-      if (toState.name === GiveFlow.thankYou) {
+      if (toState.name === vm.service.stateName('thankYou')) {
         vm.dto.initialized = false;
       }
     });
@@ -122,10 +120,11 @@
 
     function branchOnGivingType() {
       if (vm.dto.givingType !== 'one_time') {
-        RecurringGiving.initDefaultState();
+        vm.service = RecurringGiving;
+        vm.service.initDefaultState();
       }
 
-      vm.giveFlow.goToAccount(vm.giveForm);
+      vm.service.goToAccount(vm.giveForm);
     }
   }
 

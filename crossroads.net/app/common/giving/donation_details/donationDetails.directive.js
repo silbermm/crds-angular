@@ -24,6 +24,7 @@
 
     function link(scope, element, attrs) {
 
+      scope.minDate = new Date();
       scope.amountError = amountError;
       scope.ministryShow = false;
       scope.setProgramList = setProgramList;
@@ -33,7 +34,7 @@
       scope.dateOptions = {
         formatYear: 'yy',
         startingDay: 1,
-        showWeeks: 'false'
+        showWeeks: 'false',
       };
       scope.openRecurringStartDate = openRecurringStartDate;
       scope.recurringStartDatePickerOpened = false;

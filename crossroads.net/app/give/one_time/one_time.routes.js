@@ -22,6 +22,9 @@
       })
       .state('give.one_time_thank-you', {
         templateUrl: 'templates/thank_you.html'
+      })
+      .state('give.one_time_login', {
+        templateUrl: 'templates/login.html'
       });
   }
 

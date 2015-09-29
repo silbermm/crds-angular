@@ -4,6 +4,7 @@ var constants = require('../../constants');
 
 require('./templates/account.html');
 require('./templates/thank_you.html');
+require('./templates/login.html');
 
 var app = angular.module(constants.MODULES.GIVE);
 
