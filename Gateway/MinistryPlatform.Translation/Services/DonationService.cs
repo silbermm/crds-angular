@@ -430,13 +430,14 @@ namespace MinistryPlatform.Translation.Services
             _communicationService.SendMessage(comm);
 
             //mark donation distribution with message sent
+
             var distributionData = new Dictionary<string, object>
             {
-                {"dp_RecordID", donationDistributionId},
+                {"Donation_Distribution_ID", donationDistributionId},
                 {"Message_Sent", true}
             };
+           
             _ministryPlatformService.UpdateRecord(_donationDistributionPageId, distributionData, ApiLogin());
-
         }
 
         public void SendMessageFromDonor(int pledgeId, string message)
