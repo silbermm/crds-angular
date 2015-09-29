@@ -398,12 +398,12 @@ namespace MinistryPlatform.Translation.Services
             _ministryPlatformService.RemoveSelection(selectionId, new [] {depositId}, token);
         }
 
-        public void SendMessageToDonor(int donorId, int fromContactId, string body, string subject)
+        public void SendMessageToDonor(int donorId, int fromContactId, string body, string tripName )
         {
             var template = _communicationService.GetTemplate(_donorMessageTemplateId);
             var messageData = new Dictionary<string, object>
             {
-                {"TripSubject", subject},
+                {"TripName", tripName},
                 {"DonorMessage", body}
             };
             var toEmail = _donorService.GetEmailViaDonorId(donorId);

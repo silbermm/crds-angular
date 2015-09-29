@@ -98,7 +98,8 @@ namespace crds_angular.Controllers.API
         {
             return (Authorized(token =>
             {
-                _gatewayDonationService.SendMessageToDonor(dto.DonorId, dto.FromContactId, dto.Message, dto.Subject);
+                var contactId = _authenticationService.GetContactId(token);
+                _gatewayDonationService.SendMessageToDonor(dto.DonorId, contactId, dto.Message, dto.TripName);
                 return Ok();
             }));       
         }

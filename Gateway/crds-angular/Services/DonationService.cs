@@ -364,9 +364,9 @@ namespace crds_angular.Services
             return deposits;
         }
 
-        public void SendMessageToDonor(int donorId, int fromContactId, string body, string subject)
+        public void SendMessageToDonor(int donorId, int fromContactId, string body, string tripName)
         {
-            _mpDonationService.SendMessageToDonor(donorId, fromContactId, body, subject);
+            _mpDonationService.SendMessageToDonor(donorId, fromContactId, body, tripName);
         }
 
         public string GPExportFileName(int depositId)
