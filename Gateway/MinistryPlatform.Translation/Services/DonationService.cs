@@ -336,6 +336,7 @@ namespace MinistryPlatform.Translation.Services
                     CampaignStartDate = result.ToDate("Start Date"),
                     CampaignEndDate = result.ToDate("End Date"),
                     DonorId = result.ToInt("Donor ID"),
+                    DonationDistributionId = result.ToInt("dp_RecordID"),
                     DonorNickname = result.ToString("Nickname"),
                     DonorFirstName = result.ToString("First Name"),
                     DonorLastName = result.ToString("Last Name"),
@@ -425,6 +426,8 @@ namespace MinistryPlatform.Translation.Services
                 MergeData = messageData
             };
             _communicationService.SendMessage(comm);
+
+            //mark donation distribution as having 
         }
 
         public void SendMessageFromDonor(int pledgeId, string message)
