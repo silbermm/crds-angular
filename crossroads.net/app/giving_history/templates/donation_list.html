@@ -5,7 +5,7 @@
         <th class="text-right">Amount / Date</th>
     </tr>
     </thead>
-    <tbody ng-repeat="donation in donations | limitTo:donationShowLimit as results">
+    <tbody ng-repeat="donation in donations track by $index">
     <tr ng-repeat="distribution in donation.distributions track by $index" ng-class="{'pending hidden-print' : donation.status == 'Pending'}">
         <td>
             {{distribution.program_name}}

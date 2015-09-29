@@ -98,7 +98,7 @@ describe('ProfileGivingController', function() {
     });
 
     it('should retrieve most recent giving year donations for current user', function() {
-      httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donations')
+      httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donations?limit=3')
                              .respond(mockDonationResponse);
       httpBackend.flush();
 
@@ -106,13 +106,13 @@ describe('ProfileGivingController', function() {
       expect(sut.donation_view_ready).toBeTruthy();
 
       expect(sut.donations.length).toBe(3);
-      expect(sut.donations[0].distributions[0].program_name).toEqual('Game Change');
-      expect(sut.donations[1].distributions[0].program_name).toEqual('Crossroads');
+      expect(sut.donations[0].distributions[0].program_name).toEqual('Crossroads');
+      expect(sut.donations[1].distributions[0].program_name).toEqual('Game Change');
       expect(sut.donations[2].distributions[0].program_name).toEqual('Beans & Rice');
     });
 
     it('should not have history if there are no donations', function() {
-      httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donations').respond(404, {});
+      httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donations?limit=3').respond(404, {});
       httpBackend.flush();
 
       expect(sut.donation_history).toBeFalsy();
