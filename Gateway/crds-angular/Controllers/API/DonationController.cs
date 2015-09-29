@@ -15,7 +15,6 @@ using crds_angular.Services.Interfaces;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 using System.Threading.Tasks;
 using System.Web;
-using Amazon.CloudSearch.Model;
 using crds_angular.Models.Json;
 using Microsoft.Ajax.Utilities;
 
