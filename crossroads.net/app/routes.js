@@ -508,7 +508,9 @@
                 $rootScope.meta = {
                   title: ContentPageService.page.title,
                   description: metaDescription,
-                  extraMeta: ContentPageService.page.extraMeta
+                  card: ContentPageService.page.card,
+                  type: ContentPageService.page.type,
+                  image: ContentPageService.page.image
                 };
 
                 switch (ContentPageService.page.pageType){
