@@ -114,7 +114,7 @@ namespace MinistryPlatform.Translation.Services
 
         }
 
-        public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor, string checkScannerBatchName = null)
+        public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, int? pledgeId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor, string checkScannerBatchName = null)
         {
             var pymtId = PaymentType.getPaymentType(pymtType).id;
             var fee = feeAmt.HasValue ? feeAmt / Constants.StripeDecimalConversionValue : null;
@@ -160,8 +160,12 @@ namespace MinistryPlatform.Translation.Services
             {
                 {"Donation_ID", donationId},
                 {"Amount", donationAmt},
-                {"Program_ID", programId}
+                {"Program_ID", programId}                
             };
+            if (pledgeId != null)
+            {
+                distributionValues.Add("Pledge_ID", pledgeId);
+            }
 
             try
             {

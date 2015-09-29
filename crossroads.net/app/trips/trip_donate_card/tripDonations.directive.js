@@ -13,6 +13,8 @@
       scope: {
         donation: '=',
       },
+      controller: 'TripDonationsController as tripDonations',
+      bindToController: true
     };
   }
 })();
