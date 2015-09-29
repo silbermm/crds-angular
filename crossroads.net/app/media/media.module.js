@@ -20,6 +20,8 @@ require('./templates/subscribeButtonMessages.html');
 require('./templates/subscribeButtonMusic.html');
 require('./templates/subscribeButtonVideos.html');
 require('./templates/subscribeButtonDropdown.html');
+require('./templates/subscribeButtonMusicDropdown.html');
+require('./templates/subscribeButtonVideoDropdown.html');
 require('./templates/messageActionButtons.html');
 require('./templates/mediaDetails.html');
 require('./templates/mediaListCard.html');
