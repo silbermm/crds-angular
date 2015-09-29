@@ -104,7 +104,7 @@ namespace crds_angular.Services
                 stripeCustomer = _paymentService.CreateCustomer(paymentProcessorToken);
 
                 var donorAccount = contactDonor != null ? contactDonor.Account : null;
-                if (contactDonor != null)
+                if (donorAccount != null)
                 {
                     donorAccount.ProcessorAccountId = stripeCustomer.sources.data[0].id;
                 }
