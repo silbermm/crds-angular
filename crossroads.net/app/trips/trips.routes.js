@@ -176,7 +176,7 @@
           return template;
         },
 
-        controller: 'SignunStepController as signupStep',
+        controller: 'SignupStepController as signupStep',
       });
   }
 

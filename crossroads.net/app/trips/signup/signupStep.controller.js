@@ -1,13 +1,13 @@
 (function() {
   'use strict';
 
-  module.exports = SignunStepController;
+  module.exports = SignupStepController;
 
-  SignunStepController.$inject = [
+  SignupStepController.$inject = [
     '$stateParams',
     'TripsSignupService', '$scope'];
 
-  function SignunStepController(
+  function SignupStepController(
     $stateParams,
     TripsSignupService, $scope) {
     var vm = this;
