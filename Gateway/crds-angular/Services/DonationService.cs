@@ -261,7 +261,7 @@ namespace crds_angular.Services
                     numDistributions += donation.Distributions.Count;
 
                     // There are too many distributions so some need to be removed
-                    if (numDistributions > 3)
+                    if (numDistributions > limit)
                     {
                         var numToRemove = numDistributions - (int)limit;
                         var removeStartIndex = donation.Distributions.Count - numToRemove;
@@ -272,7 +272,7 @@ namespace crds_angular.Services
                     limitedDonations.Add(donation);
                     
                     // if we have hit the limit break the loop
-                    if (numDistributions >= 3)
+                    if (numDistributions >= limit)
                     {
                         break;
                     }
