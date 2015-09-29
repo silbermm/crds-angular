@@ -11,6 +11,7 @@
       scope: {
         currentStep: '=',
         totalSteps: '=',
+        progressLabel: '='
       },
       templateUrl: 'signupProgress/signupProgress.html',
       controller: 'SignupProgressController as progress',
