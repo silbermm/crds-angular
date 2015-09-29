@@ -40,11 +40,7 @@ describe('ProfileGivingController', function() {
         distributions: [
           {
             program_name: 'Game Change',
-            amount: 800
-          },
-          {
-            program_name: 'Crossroads',
-            amount: 400
+            amount: 1200
           }
         ],
         source:
@@ -54,6 +50,22 @@ describe('ProfileGivingController', function() {
           payment_processor_id: 'py_16YS8wEldv5NE53s770upiHw'
         },
       },
+      {
+        amount: 100,
+        status: 'Deposited',
+        date: '2015-03-28T10:25:32.923',
+        distributions: [
+          {
+            program_name: 'Beans & Rice',
+            amount: 100
+          }
+        ],
+        source:
+        {
+          type: 'Cash',
+          name: 'Cash'
+        }
+      }
     ],
     donation_total_amount: 80000,
     beginning_donation_date: '123',
@@ -93,14 +105,14 @@ describe('ProfileGivingController', function() {
       expect(sut.donation_history).toBeTruthy();
       expect(sut.donation_view_ready).toBeTruthy();
 
-      expect(sut.donations.length).toBe(2);
-      expect(sut.donations[0].distributions[0].program_name).toEqual('Game Change');
-      expect(sut.donations[0].distributions[1].program_name).toEqual('Crossroads');
-      expect(sut.donations[1].distributions[0].program_name).toEqual('Crossroads');
+      expect(sut.donations.length).toBe(3);
+      expect(sut.donations[0].distributions[0].program_name).toEqual('Crossroads');
+      expect(sut.donations[1].distributions[0].program_name).toEqual('Game Change');
+      expect(sut.donations[2].distributions[0].program_name).toEqual('Beans & Rice');
     });
 
     it('should not have history if there are no donations', function() {
-      httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donations').respond(404, {});
+      httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donations?limit=3').respond(404, {});
       httpBackend.flush();
 
       expect(sut.donation_history).toBeFalsy();
@@ -108,5 +120,4 @@ describe('ProfileGivingController', function() {
       expect(sut.donations.length).toBe(0);
     });
   });
-
 });
