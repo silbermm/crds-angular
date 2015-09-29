@@ -128,15 +128,6 @@
         vm.pform.birthdate.$invalid;
     }
 
-    function onBeforeUnload() {
-      $log.debug('onBeforeUnload start');
-      if (vm.pform) {
-        if (vm.pform.$dirty) {
-          return '';
-        }
-      }
-    }
-
     function savePersonal() {
       //force genders field to be dirty
       vm.pform.$submitted = true;
