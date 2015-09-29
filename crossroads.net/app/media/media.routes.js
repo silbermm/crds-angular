@@ -16,22 +16,19 @@
         template: '<ui-view/>',
         resolve: {
           Media: 'Media',
-          Series: function (Media) {
+          Series: function(Media) {
             return Media.Series().get().$promise;
           },
-          Musics: function (Media) {
-            return Media.Musics().get().$promise;
-          },
-          Videos: function (Media) {
-            return Media.Videos().get().$promise;
+          SingleMedia: function(Media) {
+            return Media.SingleMedia().get().$promise;
           }
         },
         data: {
           meta: {
-           title: 'Media',
-           description: '',
-           type: 'website',
-           card: 'summary'
+            title: 'Media',
+            description: '',
+            type: 'website',
+            card: 'summary'
           }
         }
       })
@@ -44,10 +41,10 @@
         templateUrl: 'templates/viewAllMusic.html',
         data: {
           meta: {
-           title: 'Music',
-           description: '',
-           type: 'website',
-           card: 'summary'
+            title: 'Music',
+            description: '',
+            type: 'website',
+            card: 'summary'
           }
         }
       })
@@ -56,10 +53,10 @@
         templateUrl: 'templates/viewAllSeries.html',
         data: {
           meta: {
-           title: 'Series',
-           description: '',
-           type: 'website',
-           card: 'summary'
+            title: 'Series',
+            description: '',
+            type: 'website',
+            card: 'summary'
           }
         }
       })
@@ -68,10 +65,10 @@
         templateUrl: 'templates/viewAllVideos.html',
         data: {
           meta: {
-           title: 'Videos',
-           description: '',
-           type: 'website',
-           card: 'summary'
+            title: 'Videos',
+            description: '',
+            type: 'website',
+            card: 'summary'
           }
         }
       })
@@ -84,7 +81,7 @@
           $stateParams: '$stateParams',
           $state: '$state',
           Selected: function(Media, Series, $stateParams, $state) {
-            var singleSeries = _.find(Series.series, function (obj) {
+            var singleSeries = _.find(Series.series, function(obj) {
               return (obj.id === $stateParams.id);
             });
 
@@ -93,9 +90,11 @@
               $state.go('content', {link: '/page-not-found/'}, {location: 'replace'});
               return;
             }
+
             return singleSeries;
           },
-          Meta: function (Selected, $state) {
+
+          Meta: function(Selected, $state) {
             $state.next.data.meta = {
              title: Selected.title,
              description: Selected.description,
@@ -105,7 +104,8 @@
            };
             return $state.next.data.meta;
           },
-          Messages: function (Media, Selected) {
+
+          Messages: function(Media, Selected) {
             var item = Media.Messages({seriesId: Selected.id}).get().$promise;
             return item;
           }
@@ -129,10 +129,11 @@
           Media: 'Media',
           $stateParams: '$stateParams',
           $state: '$state',
-          ItemProperty: function () {
+          ItemProperty: function() {
             return 'message';
           },
-          SingleMedia: function (Media, $stateParams, $state) {
+
+          SingleMedia: function(Media, $stateParams, $state) {
             var item = Media.Messages({id: $stateParams.id}).get().$promise;
             item.then(redirectIfItemNotFound);
             return item;
@@ -145,20 +146,23 @@
               }
             }
           },
-          Meta: function (SingleMedia, $state) {
+
+          Meta: function(SingleMedia, $state) {
             $state.next.data.meta = {
-             title: SingleMedia.message.title,
-             description: SingleMedia.message.description,
-             type: 'article',
-             card: 'summary',
-             image: SingleMedia.message.messageVideo.still
+              title: SingleMedia.message.title,
+              description: SingleMedia.message.description,
+              type: 'article',
+              card: 'summary',
+              image: SingleMedia.message.messageVideo.still
             };
             return $state.next.data.meta;
           },
+
           ParentItemProperty: function() {
             return 'series';
           },
-          ParentMedia: function (Media, SingleMedia) {
+
+          ParentMedia: function(Media, SingleMedia) {
             var message = SingleMedia.message;
             if (!message) {
               return null;
@@ -167,7 +171,8 @@
             var parent = Media.Series({id: message.series}).get().$promise;
             return parent;
           },
-          ImageURL: function (SingleMedia) {
+
+          ImageURL: function(SingleMedia) {
             return _.get(SingleMedia.message, 'messageVideo.still.filename');
           }
         }
@@ -185,10 +190,11 @@
           $rootScope: '$rootScope',
           $stateParams: '$stateParams',
           $state: '$state',
-          ItemProperty: function (SingleMedia) {
+          ItemProperty: function(SingleMedia) {
             return Object.keys(SingleMedia)[0];
           },
-          SingleMedia: function (Media, $stateParams, $state) {
+
+          SingleMedia: function(Media, $stateParams, $state) {
             var item = Media.SingleMedia({id: $stateParams.id}).get().$promise;
             item.then(redirectIfItemNotFound);
             return item;
@@ -201,27 +207,30 @@
               }
             }
           },
-          Meta: function (SingleMedia, $state) {
+
+          Meta: function(SingleMedia, $state) {
             $state.next.data.meta = {
-             title: SingleMedia[Object.keys(SingleMedia)[0]].title,
-             description: SingleMedia[Object.keys(SingleMedia)[0]].description,
-             type: 'article',
-             card: 'summary',
-             image: SingleMedia[Object.keys(SingleMedia)[0]].still
+              title: SingleMedia[Object.keys(SingleMedia)[0]].title,
+              description: SingleMedia[Object.keys(SingleMedia)[0]].description,
+              type: 'article',
+              card: 'summary',
+              image: SingleMedia[Object.keys(SingleMedia)[0]].still
             };
             return $state.next.data.meta;
           },
+
           ParentItemProperty: function() {
             return null;
           },
-          ParentMedia: function () {
+
+          ParentMedia: function() {
             return null;
           },
-          ImageURL: function (SingleMedia) {
+
+          ImageURL: function(SingleMedia) {
             return _.get(SingleMedia[Object.keys(SingleMedia)[0]], 'still.filename');
           }
         }
-      })
-      ;
+      });
   }
 })();
