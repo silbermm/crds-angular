@@ -3,6 +3,7 @@ GO
 
 IF NOT EXISTS (Select 1 FROM [dbo].[dp_Communications] WHERE [dbo].[dp_Communications].[Communication_ID] = '12530')
 BEGIN
+SET IDENTITY_INSERT [dbo].[dp_Communications] ON
 INSERT INTO [dbo].[dp_Communications]
            ([Communication_ID]
 		   ,[Author_User_ID]
@@ -39,6 +40,7 @@ INSERT INTO [dbo].[dp_Communications]
 		   ,NULL
 		   ,NULL
 		   ,NULL)
+	SET IDENTITY_INSERT [dbo].[dp_Communications] OFF
 END
 GO
 
