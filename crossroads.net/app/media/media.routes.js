@@ -189,7 +189,7 @@
             return Object.keys(SingleMedia)[0];
           },
           SingleMedia: function (Media, $stateParams, $state) {
-            var item = Media.Medias({id: $stateParams.id}).get().$promise;
+            var item = Media.SingleMedia({id: $stateParams.id}).get().$promise;
             item.then(redirectIfItemNotFound);
             return item;
 
