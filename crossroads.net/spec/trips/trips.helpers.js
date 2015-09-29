@@ -17,7 +17,8 @@ module.exports = {
             donorEmail:'tmaddox33+mp1@gmail.com',
             donationAmount:500,
             donationDate:'8/13/2015',
-            registeredDonor:true
+            registeredDonor:true,
+            donationDistributionId: 149,
           }]
       },
       {
@@ -37,7 +38,8 @@ module.exports = {
             donationAmount:1900,
             donationDate:'8/11/2015',
             registeredDonor:true,
-            anonymousDonor: true
+            anonymous: true,
+            donationDistributionId: 179,
           },
           {
             donorId: 123,
@@ -46,7 +48,8 @@ module.exports = {
             donorEmail:'tmaddox33+mp1@gmail.com',
             donationAmount:100,
             donationDate:'8/8/2015',
-            registeredDonor:true
+            registeredDonor:true,
+            donationDistributionId: 169,
           }
         ]
       }

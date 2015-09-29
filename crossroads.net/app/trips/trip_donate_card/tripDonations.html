@@ -1,10 +1,13 @@
 <div class="clearfix">
   <div class="col-xs-12 col-sm-10 col-top">
-    <h5 class="hard-ends flush-bottom" >
-      {{ tripDonations.getDisplayName() }}
+     <h5 class="hard-ends flush-bottom" >
+      {{tripDonations.getDisplayName()}}
       <span class="text-muted">
         {{tripDonations.donation.donationDate}}
       </span>
+      <svg viewBox="0 0 32 32" class="icon icon-check-circle text-success icon-middle" ng-if="tripDonations.donation.messageSent" >
+        <use xlink:href="#check-circle"></use>
+      </svg>
     </h5>
     <p class="tight-line-height">
       ${{tripDonations.donation.donationAmount}}
@@ -24,11 +27,10 @@
 </div>
 <div class="clearfix gray-lighter">
   <div class="col-xs-12" collapse="!tripDonations.isMessageToggled">
-
     <email-box
       is-message-toggled="tripDonations.isMessageToggled"
-      submit-message-callback='tripDonations.sendMessage(message)'>
+      loading="tripDonations.loading"
+      send-message-callback="tripDonations.sendMessage(message,onSuccess, onError)">
     </email-box>
-
   </div><!--/col-xs-12-->
 </div><!--/clearfix gray-lighter -->

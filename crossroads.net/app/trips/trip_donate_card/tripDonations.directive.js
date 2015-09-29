@@ -12,6 +12,7 @@
       templateUrl: 'trip_donate_card/tripDonations.html',
       scope: {
         donation: '=',
+        tripTitle: '='
       },
       controller: 'TripDonationsController as tripDonations',
       bindToController: true
