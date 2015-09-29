@@ -93,6 +93,18 @@ namespace crds_angular.Controllers.API
                 () => CreateDonationAndDistributionUnauthenticated(dto)));
         }
 
+        [Route("api/donation/message")]
+        public IHttpActionResult SendMessageToDonor([FromBody] MessageToDonorDTO dto)
+        {
+            return (Authorized(token =>
+            {
+                var contactId = _authenticationService.GetContactId(token);
+                _gatewayDonationService.SendMessageToDonor(dto.DonorId, dto.DonationDistributionId, contactId, dto.Message, dto.TripName);
+                return Ok();
+            }));       
+        }
+
+
         [Route("api/gpexport/file/{selectionId}/{depositId}")]
         [HttpGet]
         public IHttpActionResult GetGPExportFile(int selectionId, int depositId)
