@@ -31,5 +31,7 @@ namespace crds_angular.Services.Interfaces
         string GPExportFileName(int depositId);
         // ReSharper disable once InconsistentNaming
         List<DepositDTO> GenerateGPExportFileNames(int selectionId, string token);
+
+        void SendMessageToDonor(int donorId, int fromContactId, string body, string subject);
     }
 }

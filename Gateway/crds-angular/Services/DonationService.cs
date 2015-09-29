@@ -364,6 +364,11 @@ namespace crds_angular.Services
             return deposits;
         }
 
+        public void SendMessageToDonor(int donorId, int fromContactId, string body, string subject)
+        {
+            _mpDonationService.SendMessageToDonor(donorId, fromContactId, body, subject);
+        }
+
         public string GPExportFileName(int depositId)
         {
             var batch = GetDonationBatchByDepositId(depositId);

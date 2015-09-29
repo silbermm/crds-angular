@@ -300,6 +300,7 @@ namespace crds_angular.Services
                         gift.DonorNickname = donation.DonorNickname ?? donation.DonorFirstName;
                         gift.DonorLastName = donation.DonorLastName;
                     }
+                    gift.DonorId = donation.DonorId;
                     gift.DonorEmail = donation.DonorEmail;
                     gift.DonationDate = donation.DonationDate.ToShortDateString();
                     gift.DonationAmount = donation.DonationAmount;

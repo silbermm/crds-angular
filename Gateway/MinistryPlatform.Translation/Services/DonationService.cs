@@ -13,6 +13,7 @@ namespace MinistryPlatform.Translation.Services
     public class DonationService : BaseService, IDonationService
     {
         private readonly int _donationsPageId;
+        private readonly int _donorMessageTemplateId;
         private readonly int _distributionPageId;
         private readonly int _batchesPageId;
         private readonly int _depositsPageId;
@@ -24,14 +25,17 @@ namespace MinistryPlatform.Translation.Services
 
         private readonly IMinistryPlatformService _ministryPlatformService;
         private readonly IDonorService _donorService;
+        private readonly ICommunicationService _communicationService;
 
-        public DonationService(IMinistryPlatformService ministryPlatformService, IDonorService donorService, IConfigurationWrapper configuration, IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
+        public DonationService(IMinistryPlatformService ministryPlatformService, IDonorService donorService, ICommunicationService communicationService, IConfigurationWrapper configuration, IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
             : base(authenticationService, configurationWrapper)
         {
             _ministryPlatformService = ministryPlatformService;
             _donorService = donorService;
+            _communicationService = communicationService;
 
             _donationsPageId = configuration.GetConfigIntValue("Donations");
+            _donorMessageTemplateId = configuration.GetConfigIntValue("DonorMessageTemplateId");
             _distributionPageId = configuration.GetConfigIntValue("Distributions");
             _batchesPageId = configuration.GetConfigIntValue("Batches");
             _depositsPageId = configuration.GetConfigIntValue("Deposits");
@@ -328,6 +332,7 @@ namespace MinistryPlatform.Translation.Services
                     TotalPledge = Convert.ToInt32(result["Total Pledge"]),
                     CampaignStartDate = result.ToDate("Start Date"),
                     CampaignEndDate = result.ToDate("End Date"),
+                    DonorId = result.ToInt("Donor ID"),
                     DonorNickname = result.ToString("Nickname"),
                     DonorFirstName = result.ToString("First Name"),
                     DonorLastName = result.ToString("Last Name"),
@@ -388,6 +393,35 @@ namespace MinistryPlatform.Translation.Services
 
             _ministryPlatformService.UpdateRecord(_depositsPageId, paramaters, token);
             _ministryPlatformService.RemoveSelection(selectionId, new [] {depositId}, token);
+        }
+
+        public void SendMessageToDonor(int donorId, int fromContactId, string body, string subject)
+        {
+            var template = _communicationService.GetTemplate(_donorMessageTemplateId);
+            var messageData = new Dictionary<string, object>
+            {
+                {"TripSubject", subject}, 
+                {"DonorMessage", body}
+            };
+            var toEmail = _donorService.GetEmailViaDonorId(donorId);
+            var authorId = _communicationService.GetUserIdFromContactId(fromContactId);
+            var fromEmail = _communicationService.GetEmailFromContactId(fromContactId);
+
+            var comm = new Communication
+            {
+                AuthorUserId = authorId,
+                DomainId = 1,
+                ToContactId = toEmail.ContactId,
+                ToEmailAddress = toEmail.Email,
+                FromContactId = fromContactId,
+                FromEmailAddress = fromEmail,
+                ReplyContactId = fromContactId,
+                ReplyToEmailAddress = fromEmail,
+                EmailSubject = _communicationService.ParseTemplateBody(template.Subject, messageData),
+                EmailBody = _communicationService.ParseTemplateBody(template.Body, messageData),
+                MergeData = messageData
+            };
+            _communicationService.SendMessage(comm);
         }
     }
 }

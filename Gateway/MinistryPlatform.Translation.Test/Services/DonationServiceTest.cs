@@ -15,8 +15,7 @@ namespace MinistryPlatform.Translation.Test.Services
         private Mock<IMinistryPlatformService> _ministryPlatformService;
         private Mock<IDonorService> _donorService;
         private Mock<IAuthenticationService> _authService;
-
-        [SetUp]
+        private Mock<ICommunicationService> _communicationService;
         public void SetUp()
         {
             AutoMapperConfig.RegisterMappings();
@@ -24,6 +23,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _ministryPlatformService = new Mock<IMinistryPlatformService>(MockBehavior.Strict);
             _donorService = new Mock<IDonorService>(MockBehavior.Strict);
             _authService = new Mock<IAuthenticationService>();
+            _communicationService = new Mock<ICommunicationService>();
 
             var configuration = new Mock<IConfigurationWrapper>();
             configuration.Setup(mocked => mocked.GetConfigIntValue("Donations")).Returns(9090);
@@ -39,7 +39,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _authService.Setup(m => m.Authenticate(It.IsAny<string>(), It.IsAny<string>())).Returns(new Dictionary<string, object> { { "token", "ABC" }, { "exp", "123" } });
 
 
-            _fixture = new DonationService(_ministryPlatformService.Object, _donorService.Object, configuration.Object, _authService.Object, configuration.Object);
+            _fixture = new DonationService(_ministryPlatformService.Object, _donorService.Object, _communicationService.Object, configuration.Object, _authService.Object, configuration.Object);
         }
 
         [Test]
