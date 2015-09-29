@@ -1,6 +1,14 @@
 
 
 <script type="text/javascript">
+
+function tweenFadeBg(selecter, delay ){ if(!delay){ delay = 0; }
+          TweenMax.to(selecter+' .fade-bg', 1, { opacity: 1, autoAlpha: 1, delay: delay, ease: Power3.easeOut });
+}
+function tweenFadeUp(selecter, delay ){ if(!delay){ delay = 0.25; }
+          TweenMax.staggerTo(selecter+' .rise10', 1, { opacity: 1, autoAlpha: 1, y: 0, delay: delay, ease: Power3.easeOut }, .2);
+}
+
 $(document).ready(function() {
   $('#fullpage').fullpage({
     navigation: true,
@@ -9,35 +17,12 @@ $(document).ready(function() {
       var loadedSection = $(this);
 
       if (index == 1) {
-        TweenMax.staggerTo(".rise20", 1, {
-          opacity: 1,
-          autoAlpha: 1,
-          y: 0,
-          delay: .5,
-          ease: Power3.easeOut
-        }, .2);
-        TweenMax.staggerTo(".rise10", 1, {
-          opacity: 1,
-          autoAlpha: 1,
-          y: 0,
-          delay: 1.9,
-          ease: Power3.easeOut
-        }, .3);
-        TweenMax.to(".fadeIn", 0, {
-          opacity: 1,
-          autoAlpha: 1,
-          ease: Power3.easeOut
-        });
+        tweenFadeBg('.opening', 1);
+        tweenFadeUp('.opening', 2);
       }
       if (index == 2) {
-        TweenMax.staggerTo(".rise10-3", 1, {
-          opacity: 1,
-          autoAlpha: 1,
-          y: 0,
-          ease: Power3.easeOut
-        }, .3);
+        tweenFadeUp('.map');
       }
-
     }
   });
 });
@@ -46,55 +31,52 @@ $(document).ready(function() {
 </script>
 
 <div id="fullpage" class="explore">
+
   <section class="section opening">
-    <div class="opening-bg transition2 fadeIn"></div>
-    <div class="slideCon">
-      <div class="slideCell">
-        <div class="container">
-          <div class="row">
-            <div class="col-sm-6 col-sm-offset-3">
-              <h2 class="opening-title">
-                <span class="transition rise20">WE STARTED </span>
-                <span class="transition rise20">THIS CHURCH </span>
-                <span class="transition rise20">FOR OUR </span>
-                <span class="transition rise20">FRIENDS </span>
-                <span class="transition rise20">WHO DIDN'T </span>
-                <span class="transition rise20">LIKE CHURCH. </span>
-              </h2>
-              <p class="opening-desc transition rise10">Crossroads is for anyone who wants to seek God-from those exploring whether or not God even exists, to committed Christ-followers. We present biblical truths and show how they apply to our everyday lives. And we have a lot of fun while doing
-                it.
-              </p>
-              <p class="opening-more transition rise10">For the longer answer, check out <a href="/about-us-2/our-history">our history</a>, <a href="/about-us-2/what-we-believe">what we believe</a>, <a href="/about-us-2/seven-hills-we-die-on">the seven hills we die on</a> or <a href="/about-us-2/frequent-questions">the FAQ</a>.</p>
-            </div><!--/col-sm-6-->
-          </div><!--/row-->
-        </div><!--/container-->
-      </div><!--/slideCell-->
-    </div><!--/slideCon-->
+    <div class="imgix-fluid-bg img-background slide-bg fade-bg" data-src="http://crossroads-media.imgix.net/images/explore_opening_bg_large.jpg"></div>
+    <div class="vertical-center">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-6 col-sm-offset-3">
+            <h2 class="opening-title">
+              <span class="rise10">WE STARTED </span>
+              <span class="rise10">THIS CHURCH </span>
+              <span class="rise10">FOR OUR </span>
+              <span class="rise10">FRIENDS </span>
+              <span class="rise10">WHO DIDN'T </span>
+              <span class="rise10">LIKE CHURCH. </span>
+            </h2>
+            <p class="opening-desc rise10">Crossroads is for anyone who wants to seek God-from those exploring whether or not God even exists, to committed Christ-followers. We present biblical truths and show how they apply to our everyday lives. And we have a lot of fun while doing
+              it.
+            </p>
+            <p class="opening-more rise10">For the longer answer, check out <a href="/about-us-2/our-history">our history</a>, <a href="/about-us-2/what-we-believe">what we believe</a>, <a href="/about-us-2/seven-hills-we-die-on">the seven hills we die on</a> or <a href="/about-us-2/frequent-questions">the FAQ</a>.</p>
+          </div><!--/col-sm-6-->
+        </div><!--/row-->
+      </div><!--/container-->
+    </div><!--/vertical-center-->
   </section><!--/opening-->
 
   <section class="section map">
-    <img class="map-img" src="//crossroads-media.s3.amazonaws.com/images/explore_map_bg_five.jpg" alt="explore_map_bg" />
-    <div class="slideCon">
-      <div class="slideCell">
-        <div class="container">
-          <div class="row">
-              <div class="col-sm-12">
-                  <div class="map-container">
-                      <h2 class="map-title rise10-3">Crossroads is one church in five locations.</h2>
-                      <p class="map-desc rise10-3">Each location is part of the same church, working as one team toward a common vision. Select the site nearest you for service times and directions.</p>
-                      <p class="map-more rise10-3">
-                          <a href="/locations/mason">Mason</a>
-                          <a href="/locations/oakley">Oakley</a>
-                          <a href="/locations/florence">Florence</a>
-                          <a href="/locations/westside">West Side</a>
-                          <a href="/locations/uptown">Uptown</a>
-                      </p>
-                  </div><!--/map--container-->
-              </div><!--/col-sm-12-->
-          </div><!--/row-->
-      </div><!--/container-->
-    </div><!--/slideCell-->
-  </div><!--/slideCon-->
+    <div class="imgix-fluid-bg img-background slide-bg fade-bg" data-src="http://crossroads-media.imgix.net/images/explore_map_bg_five.jpg"></div>
+    <div class="vertical-center">
+      <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="map-container">
+                    <h2 class="map-title rise10">Crossroads is one church in five locations.</h2>
+                    <p class="map-desc rise10">Each location is part of the same church, working as one team toward a common vision. Select the site nearest you for service times and directions.</p>
+                    <p class="map-more rise10">
+                        <a href="/locations/mason">Mason</a>
+                        <a href="/locations/oakley">Oakley</a>
+                        <a href="/locations/florence">Florence</a>
+                        <a href="/locations/westside">West Side</a>
+                        <a href="/locations/uptown">Uptown</a>
+                    </p>
+                </div><!--/map--container-->
+            </div><!--/col-sm-12-->
+        </div><!--/row-->
+    </div><!--/container-->
+  </div><!--/<vertical-center-->
 </section><!--/map-->
    <section class="section kidsclub">
 
@@ -106,3 +88,4 @@ $(document).ready(function() {
     <h1 class="">The 5th Section</h1>
   </section>
 </div>
+rise10
