@@ -14,7 +14,6 @@
         donationsInput: '=',
         donationTotalAmount: '=',
         donationStatementTotalAmount: '=',
-        donationShowLimit: '=',
         donationDoNotShowLabels: '='
       },
       link: link
