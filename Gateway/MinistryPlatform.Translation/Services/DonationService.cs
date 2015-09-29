@@ -13,6 +13,7 @@ namespace MinistryPlatform.Translation.Services
     public class DonationService : BaseService, IDonationService
     {
         private readonly int _donationsPageId;
+        private readonly int _donationDistributionPageId;
         private readonly int _donorMessageTemplateId;
         private readonly int _distributionPageId;
         private readonly int _batchesPageId;
@@ -37,6 +38,7 @@ namespace MinistryPlatform.Translation.Services
             _communicationService = communicationService;
             _pledgeService = pledgeService;
             _donationsPageId = configuration.GetConfigIntValue("Donations");
+            _donationDistributionPageId = configuration.GetConfigIntValue("Distributions");
             _donorMessageTemplateId = configuration.GetConfigIntValue("DonorMessageTemplateId");
             _distributionPageId = configuration.GetConfigIntValue("Distributions");
             _batchesPageId = configuration.GetConfigIntValue("Batches");
@@ -399,7 +401,7 @@ namespace MinistryPlatform.Translation.Services
             _ministryPlatformService.RemoveSelection(selectionId, new [] {depositId}, token);
         }
 
-        public void SendMessageToDonor(int donorId, int fromContactId, string body, string tripName )
+        public void SendMessageToDonor(int donorId, int donationDistributionId, int fromContactId, string body, string tripName )
         {
             var template = _communicationService.GetTemplate(_donorMessageTemplateId);
             var messageData = new Dictionary<string, object>
@@ -427,7 +429,14 @@ namespace MinistryPlatform.Translation.Services
             };
             _communicationService.SendMessage(comm);
 
-            //mark donation distribution as having 
+            //mark donation distribution with message sent
+            var distributionData = new Dictionary<string, object>
+            {
+                {"dp_RecordID", donationDistributionId},
+                {"Message_Sent", true}
+            };
+            _ministryPlatformService.UpdateRecord(_donationDistributionPageId, distributionData, ApiLogin());
+
         }
 
         public void SendMessageFromDonor(int pledgeId, string message)

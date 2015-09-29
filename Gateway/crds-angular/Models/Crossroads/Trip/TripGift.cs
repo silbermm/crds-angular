@@ -4,7 +4,7 @@ namespace crds_angular.Models.Crossroads.Trip
 {
     public class TripGift
     {
-        [JsonProperty(PropertyName = "DonationDistributionId")]
+        [JsonProperty(PropertyName = "donationDistributionId")]
         public int DonationDistributionId { get; set; }
 
         [JsonProperty(PropertyName = "donorId")]

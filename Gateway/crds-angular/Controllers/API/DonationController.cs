@@ -99,7 +99,7 @@ namespace crds_angular.Controllers.API
             return (Authorized(token =>
             {
                 var contactId = _authenticationService.GetContactId(token);
-                _gatewayDonationService.SendMessageToDonor(dto.DonorId, contactId, dto.Message, dto.TripName);
+                _gatewayDonationService.SendMessageToDonor(dto.DonorId, dto.DonationDistributionId, contactId, dto.Message, dto.TripName);
                 return Ok();
             }));       
         }
