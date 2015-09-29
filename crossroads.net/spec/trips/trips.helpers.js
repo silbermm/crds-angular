@@ -11,6 +11,7 @@ module.exports = {
         totalRaised:500,
         tripGifts:[
           {
+            donorId: 214,
             donorNickname:'TJ',
             donorLastName:'Maddox',
             donorEmail:'tmaddox33+mp1@gmail.com',
@@ -29,14 +30,17 @@ module.exports = {
         totalRaised:2000,
         tripGifts:[
           {
+            donorId: 123,
             donorNickname:'Anonymous',
             donorLastName:'',
             donorEmail:'andrew.canterbury@ingagepartners.com',
             donationAmount:1900,
             donationDate:'8/11/2015',
-            registeredDonor:true
+            registeredDonor:true,
+            anonymousDonor: true
           },
           {
+            donorId: 123,
             donorNickname:'TJ',
             donorLastName:'Maddox',
             donorEmail:'tmaddox33+mp1@gmail.com',

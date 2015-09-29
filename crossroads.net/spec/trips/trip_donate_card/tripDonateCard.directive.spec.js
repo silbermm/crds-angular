@@ -29,20 +29,59 @@ require('../../../app/trips/trips.module');
       $httpBackend.whenGET(/SiteConfig*/).respond('');
       scope = $rootScope.$new();
       element = '<trip-donations donation=\'donation\'></trip-donations>';
-      scope.donation = tripHelpers.MyTrips[0];
-      element = $compile(element)(scope);
-      scope.$digest();
-      tripDonations = element.isolateScope().tripDonations;
     }));
 
-    it('should have the donation information passed in', function() {
-      expect(tripDonations.donation).toEqual(tripHelpers.MyTrips[0]);
+    describe('Anonymous Donor', function() {
+      beforeEach(function() {
+        scope.donation = tripHelpers.MyTrips[1].tripGifts[0];
+        element = $compile(element)(scope);
+        scope.$digest();
+        tripDonations = element.isolateScope().tripDonations;
+      });
+
+      it('should not show reply button', function() {
+        expect(tripDonations.showReplyButton()).toBe(false);
+      });
+
     });
 
-    it('should toggle the message', function() {
-      expect(tripDonations.isMessageToggled).toBe(false);
-      tripDonations.toggleMessage();
-      expect(tripDonations.isMessageToggled).toBe(true);
+    describe('Non Anonymous Donor', function() {
+
+      beforeEach(function() {
+        scope.donation = tripHelpers.MyTrips[0].tripGifts[0];
+        element = $compile(element)(scope);
+        scope.$digest();
+        tripDonations = element.isolateScope().tripDonations;
+      });
+
+      it('should show the reply button', function() {
+        expect(tripDonations.showReplyButton()).toBe(true);
+      });
+    });
+
+    describe('General Functionality', function() {
+
+      beforeEach(function() {
+        scope.donation = tripHelpers.MyTrips[0].tripGifts[0];
+        element = $compile(element)(scope);
+        scope.$digest();
+        tripDonations = element.isolateScope().tripDonations;
+      });
+
+      it('should have the donation information passed in', function() {
+        expect(tripDonations.donation).toEqual(tripHelpers.MyTrips[0].tripGifts[0]);
+      });
+
+      it('should toggle the message', function() {
+        expect(tripDonations.isMessageToggled).toBe(false);
+        tripDonations.toggleMessage();
+        expect(tripDonations.isMessageToggled).toBe(true);
+      });
+
+      it('should display the full name for a registered donor', function() {
+        expect(tripDonations.getDisplayName()).toEqual('TJ Maddox');
+      });
+
     });
 
   });
