@@ -220,7 +220,7 @@
         groupCommonName: {formFieldId: 1445, value: null},
         roommateFirstChoice: {formFieldId: 1446, value: null},
         roommateSecondChoice: {formFieldId: 1447, value: null},
-        supportPersonEmail: {formFieldId: 1488, value: null},
+        supportPersonEmail: {formFieldId: 1448, value: null},
         interestedInGroupLeader: {formFieldId: 1449, value: null},
         whyGroupLeader: {formFieldId: 1450, value: null},
       };
@@ -256,7 +256,7 @@
         validPassport: {formFieldId: 1464, value: null},
         passportExpirationDate: {formFieldId: 1465, value: null},
         passportFirstName: {formFieldId: 1466, value: null},
-        passportMiddleName: {formFieldId: 1477, value: null},
+        passportMiddleName: {formFieldId: 1467, value: null},
         passportLastName: {formFieldId: 1468, value: null},
         passportCountry: {formFieldId: 1469, value: null},
         passportBirthday: {formFieldId: 1470, value: null},
