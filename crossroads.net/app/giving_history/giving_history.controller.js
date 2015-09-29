@@ -69,7 +69,7 @@
 
     function getDonations() {
       vm.donation_view_ready = false;
-      GivingHistoryService.donations.get({donationYear: vm.selected_giving_year.key}, function(data) {
+      GivingHistoryService.donations.get({donationYear: vm.selected_giving_year.key, softCredit: false}, function(data) {
             vm.donations = data.donations;
             vm.donation_total_amount = data.donation_total_amount;
             vm.donation_statement_total_amount = data.donation_statement_total_amount;

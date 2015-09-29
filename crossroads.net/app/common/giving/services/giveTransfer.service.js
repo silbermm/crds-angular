@@ -13,6 +13,7 @@
         this.amountSubmitted = false;
         this.bankinfoSubmitted = false;
         this.brand = '';
+        this.campaign = { campaignId: null, campaignName: null, pledgeDonorId: null };
         this.ccNumberClass = '';
         this.changeAccountInfo = false;
         this.declinedPayment = false;
@@ -21,6 +22,7 @@
         this.email = undefined;
         this.initialized = false;
         this.last4 = '';
+        this.message = null;
         this.processing = false;
         this.processingChange = false;
         this.program = undefined;

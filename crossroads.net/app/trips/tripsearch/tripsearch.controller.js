@@ -22,8 +22,7 @@
 
       if (vm.query === undefined || vm.query === '') {
         form.searchForm.searchText.$setValidity('required', false);
-      }
-      else {
+      } else {
         form.searchForm.searchText.$setValidity('required', true);
       }
 
