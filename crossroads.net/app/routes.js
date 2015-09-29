@@ -66,7 +66,7 @@
       })
       .state('giving_history', {
         parent: 'noSideBar',
-        url: '/giving_history',
+        url: '/givinghistory',
         templateUrl: 'giving_history/history.html',
         controller: 'GivingHistoryController as giving_history_controller',
         data: {
