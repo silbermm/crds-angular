@@ -22,18 +22,20 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _gpExportPageView;
         private readonly int _processingProgramId;
         private readonly int _scholarshipPaymentTypeId;
+        private readonly int _tripDonationMessageTemplateId;
 
         private readonly IMinistryPlatformService _ministryPlatformService;
         private readonly IDonorService _donorService;
         private readonly ICommunicationService _communicationService;
+        private readonly IPledgeService _pledgeService;
 
-        public DonationService(IMinistryPlatformService ministryPlatformService, IDonorService donorService, ICommunicationService communicationService, IConfigurationWrapper configuration, IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
+        public DonationService(IMinistryPlatformService ministryPlatformService, IDonorService donorService, ICommunicationService communicationService, IPledgeService pledgeService, IConfigurationWrapper configuration, IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
             : base(authenticationService, configurationWrapper)
         {
             _ministryPlatformService = ministryPlatformService;
             _donorService = donorService;
             _communicationService = communicationService;
-
+            _pledgeService = pledgeService;
             _donationsPageId = configuration.GetConfigIntValue("Donations");
             _donorMessageTemplateId = configuration.GetConfigIntValue("DonorMessageTemplateId");
             _distributionPageId = configuration.GetConfigIntValue("Distributions");
@@ -44,6 +46,7 @@ namespace MinistryPlatform.Translation.Services
             _gpExportPageView = configuration.GetConfigIntValue("GPExportView");
             _processingProgramId = configuration.GetConfigIntValue("ProcessingProgramId");
             _scholarshipPaymentTypeId = configuration.GetConfigIntValue("ScholarshipPaymentTypeId");
+            _tripDonationMessageTemplateId = configuration.GetConfigIntValue("TripDonationMessageTemplateId");
         }
 
         public int UpdateDonationStatus(int donationId, int statusId, DateTime statusDate,
@@ -400,7 +403,7 @@ namespace MinistryPlatform.Translation.Services
             var template = _communicationService.GetTemplate(_donorMessageTemplateId);
             var messageData = new Dictionary<string, object>
             {
-                {"TripSubject", subject}, 
+                {"TripSubject", subject},
                 {"DonorMessage", body}
             };
             var toEmail = _donorService.GetEmailViaDonorId(donorId);
@@ -420,6 +423,28 @@ namespace MinistryPlatform.Translation.Services
                 EmailSubject = _communicationService.ParseTemplateBody(template.Subject, messageData),
                 EmailBody = _communicationService.ParseTemplateBody(template.Body, messageData),
                 MergeData = messageData
+            };
+            _communicationService.SendMessage(comm);
+        }
+
+        public void SendMessageFromDonor(int pledgeId, string message)
+        {
+            var toDonor = _pledgeService.GetDonorForPledge(pledgeId);
+            var donorContact = _donorService.GetEmailViaDonorId(toDonor);
+            var template = _communicationService.GetTemplate(_tripDonationMessageTemplateId);
+            var comm = new Communication
+            {
+                AuthorUserId = 5,
+                DomainId = 1,
+                EmailBody = message,
+                EmailSubject = template.Subject,
+                FromContactId = 5,
+                FromEmailAddress = "updates@crossroads.net",
+                ReplyContactId = 5,
+                ReplyToEmailAddress = "updates@crossroads.net",
+                ToContactId = donorContact.ContactId,
+                ToEmailAddress = donorContact.Email,
+                MergeData = new Dictionary<string, object>()
             };
             _communicationService.SendMessage(comm);
         }
