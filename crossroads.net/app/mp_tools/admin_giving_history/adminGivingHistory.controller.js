@@ -3,14 +3,18 @@
 
   module.exports = AdminGivingHistoryController;
 
-  AdminGivingHistoryController.$inject = ['$state', 'MPTools', 'GivingHistoryService'];
+  AdminGivingHistoryController.$inject = ['$state', 'MPTools', 'GivingHistoryService', 'AuthService', 'GIVE_ROLES'];
 
-  function AdminGivingHistoryController($state, MPTools, GivingHistoryService) {
+  function AdminGivingHistoryController($state, MPTools, GivingHistoryService, AuthService, GIVE_ROLES) {
     var vm = this;
 
     activate();
 
     //////////////////////
+
+    vm.allowAccess = function() {
+      return (AuthService.isAuthenticated() && AuthService.isAuthorized(GIVE_ROLES.StewardshipDonationProcessor));
+    };
 
     function activate() {
       var params = MPTools.getParams();
@@ -31,7 +35,7 @@
 
     function goToGivingHistory(donorId) {
       GivingHistoryService.impersonateDonorId = donorId;
-      $state.go('tools.adminGivingHistory.view');
+      $state.go('tools.adminGivingHistoryView');
     }
   }
 })();

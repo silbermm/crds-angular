@@ -458,7 +458,8 @@
         url: '/adminGivingHistory',
         controller: 'AdminGivingHistoryController as AdminGivingHistory'
       })
-      .state('tools.adminGivingHistory.view', {
+      .state('tools.adminGivingHistoryView', {
+        url: '/adminGivingHistoryView',
         controller: 'GivingHistoryController as admin_giving_history_controller',
         templateUrl: 'admin_giving_history/adminGivingHistory.html',
         data: {
