@@ -634,7 +634,7 @@ namespace crds_angular.test.Services
                     Brand = CardBrand.AmericanExpress
                 }
             });
-            var response = _fixture.GetDonationsForAuthenticatedUser("auth token", "1999", false);
+            var response = _fixture.GetDonationsForAuthenticatedUser("auth token", "1999", null, false);
             _mpDonorService.VerifyAll();
             _paymentService.VerifyAll();
 
@@ -931,7 +931,7 @@ namespace crds_angular.test.Services
             };
 
             _mpDonorService.Setup(mocked => mocked.GetDonationsForAuthenticatedUser("auth token", true, "1999")).Returns(donations);
-            var response = _fixture.GetDonationsForAuthenticatedUser("auth token", "1999", true);
+            var response = _fixture.GetDonationsForAuthenticatedUser("auth token", "1999", null, true);
             _mpDonorService.VerifyAll();
             _paymentService.VerifyAll();
 
