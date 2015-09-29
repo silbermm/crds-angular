@@ -3,7 +3,7 @@ GO
 
 IF EXISTS(select 1 from [dbo].[dp_Communications] where [Communication_ID] = 12599)
 	BEGIN
-		UPDATE [dbo].[dp_Communications] set [Subject] = '[TripSubject]', [Body] = '[DonorMessage]' where [Communication_ID] = 12599
+		UPDATE [dbo].[dp_Communications] set [Subject] = '[TripName]', [Body] = '[DonorMessage]' where [Communication_ID] = 12599
 	END
 ELSE
 	BEGIN
@@ -30,7 +30,7 @@ ELSE
 			   (
 			   12599
 			   ,1
-			   ,'[TripSubject]'
+			   ,'[TripName]'
 			   ,'[DonorMessage]'
 			   ,1
 			   ,GETDATE()	
