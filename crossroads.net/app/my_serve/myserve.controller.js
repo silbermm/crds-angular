@@ -214,7 +214,7 @@
       if ($scope.serveForm !== undefined) {
         checkChildForms();
         if ($scope['serveForm'].$dirty) {
-          if(!$window.confirm('Are you sure you want to leave this page?')) {            
+          if(!$window.confirm('Are you sure you want to leave this page?')) {
             event.preventDefault();
             return;
           }
