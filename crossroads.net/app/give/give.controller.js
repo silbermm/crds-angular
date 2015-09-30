@@ -6,7 +6,6 @@
                       '$state',
                       '$timeout',
                       'Session',
-                      'DonationService',
                       'programList',
                       'GiveTransferService',
                       'AUTH_EVENTS',
@@ -23,7 +22,6 @@
     $state,
     $timeout,
     Session,
-    DonationService,
     programList,
     GiveTransferService,
     AUTH_EVENTS,
@@ -32,7 +30,6 @@
 
     var vm = this;
     vm.activeSession = activeSession;
-    vm.donationService = DonationService;
     vm.dto = GiveTransferService;
     vm.emailAlreadyRegisteredGrowlDivRef = 1000;
     vm.emailPrefix = 'give';
@@ -58,7 +55,7 @@
         return;
       }
 
-      vm.donationService.transitionForLoggedInUserBasedOnExistingDonor(event, toState);
+      vm.service.getLoggedInUserDonorPaymentInfo(event, toState);
     });
 
     $rootScope.$on(AUTH_EVENTS.logoutSuccess, function(event) {

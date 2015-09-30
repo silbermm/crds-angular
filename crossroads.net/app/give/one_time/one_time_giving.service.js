@@ -3,15 +3,20 @@
 
   module.exports = OneTimeGiving;
 
-  OneTimeGiving.$inject = ['GiveTransferService', 'GiveFlow', 'Session', '$state'];
+  OneTimeGiving.$inject = ['GiveTransferService', 'DonationService', 'GiveFlow', 'Session', '$state'];
 
-  function OneTimeGiving(GiveTransferService, GiveFlow, Session, $state) {
+  function OneTimeGiving(GiveTransferService, DonationService, GiveFlow, Session, $state) {
     var service = {
       initDefaultState: initDefaultState,
       goToAccount: goToAccount,
       stateName: stateName,
       goToChange: goToChange,
       goToLogin: goToLogin,
+      submitBankInfo: submitBankInfo,
+      submitChangedBankInfo: submitChangedBankInfo,
+      confirmDonation: confirmDonation,
+      processChange: processChange,
+      getLoggedInUserDonorPaymentInfo: getLoggedInUserDonorPaymentInfo,
     };
 
     function initDefaultState() {
@@ -49,6 +54,26 @@
 
     function goToLogin() {
       GiveFlow.goToLogin();
+    }
+
+    function submitBankInfo(giveForm, programsInput) {
+      DonationService.submitBankInfo(give.giveForm, give.programsInput);
+    }
+
+    function submitChangedBankInfo(giveForm, programsInput) {
+      DonationService.submitChangedBankInfo(giveForm, programsInput);
+    }
+
+    function confirmDonation(programsInput) {
+      DonationService.confirmDonation(programsInput);
+    }
+
+    function processChange() {
+      DonationService.processChange();
+    }
+
+    function getLoggedInUserDonorPaymentInfo(event, toState) {
+      DonationService.transitionForLoggedInUserBasedOnExistingDonor(event, toState);
     }
 
     return service;
