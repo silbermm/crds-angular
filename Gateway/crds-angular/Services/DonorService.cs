@@ -2,7 +2,9 @@
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using System;
+using crds_angular.Controllers.API;
 using crds_angular.Models.Crossroads.Stewardship;
+using MinistryPlatform.Models.DTO;
 
 namespace crds_angular.Services
 {
@@ -159,5 +161,18 @@ namespace crds_angular.Services
             return (_mpDonorService.DecryptCheckValue(value));
         }
 
+        public string CreateRecurringGift(UpdateDonorDTO updateDonorDto)
+        {
+            var plan = _paymentService.CreatePlan(updateDonorDto);
+            var subscription = _paymentService.CreateSubscription(plan.Id, "cus_74HHmDQARkpa9r");
+            return null;
+            // var recurGift = _mpDonorService.CreateRecurringGift(donorId);
+            //var donorAcct = _mpDonorService.UpdateDonorAccount(null, sourceId, customerId);
+        }
+
+        public CreateDonationDistDto GetRecurringGiftForSubscription(string subscriptionId)
+        {
+            return (_mpDonorService.GetRecurringGiftForSubscription(subscriptionId));  
+        }
     }
 }

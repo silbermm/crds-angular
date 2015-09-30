@@ -18,8 +18,8 @@ namespace crds_angular.test.Services
         private StripeEventService _fixture;
         private Mock<IPaymentService> _paymentService;
         private Mock<IDonationService> _donationService;
-
-        [SetUp]
+        private Mock<IDonorService> _donorService;
+         
         public void SetUp()
         {
             var configuration = new Mock<IConfigurationWrapper>();
@@ -30,7 +30,7 @@ namespace crds_angular.test.Services
 
             _paymentService = new Mock<IPaymentService>(MockBehavior.Strict);
             _donationService = new Mock<IDonationService>(MockBehavior.Strict);
-            _fixture = new StripeEventService(_paymentService.Object, _donationService.Object, configuration.Object);
+            _fixture = new StripeEventService(_paymentService.Object, _donationService.Object, _donorService.Object, configuration.Object);
         }
 
         [Test]

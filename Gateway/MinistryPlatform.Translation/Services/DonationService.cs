@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using AutoMapper;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
@@ -387,6 +388,11 @@ namespace MinistryPlatform.Translation.Services
 
             _ministryPlatformService.UpdateRecord(_depositsPageId, paramaters, token);
             _ministryPlatformService.RemoveSelection(selectionId, new [] {depositId}, token);
+        }
+
+        public int CreateDonationAndDistribution(int donorId)
+        {
+            return 0;
         }
     }
 }

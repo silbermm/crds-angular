@@ -309,14 +309,28 @@ namespace crds_angular.Controllers.API
             return Ok(donor);
         }
 
-        [ResponseType(typeof (DonorDTO))]
+        [RequiresAuthorization]
+        [ResponseType(typeof (StripePlan))]
         [Route("api/donor/plan")]
-        public IHttpActionResult CreatePlan([FromBody] StripePlan stripePlan)
+        public IHttpActionResult CreatePlan([FromBody] UpdateDonorDTO updateDonorDto)
         {
             return (Authorized(token =>
             {
-                var donor = _donorService.GetContactDonorForAuthenticatedUser(token);
-                return donor == null ? (NotFound()) : null;
+                try
+                {
+                    var recurringGift = _donorService.CreateRecurringGift(updateDonorDto);
+                    return null;
+                }
+                catch (PaymentProcessorException stripeException)
+                {
+                    return (stripeException.GetStripeResult());
+                }
+                catch (ApplicationException applicationException)
+                {
+                    var apiError = new ApiErrorDto("Error calling Ministry Platform" + applicationException.Message, applicationException);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+                
             }));
         }
     }

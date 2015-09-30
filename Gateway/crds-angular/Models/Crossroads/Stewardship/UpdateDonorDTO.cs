@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace crds_angular.Controllers.API
 {
@@ -10,5 +11,12 @@ namespace crds_angular.Controllers.API
         public string DonorId { get; set; }
         [JsonProperty(PropertyName = "email_address")]
         public string EmailAddress { get; set; }
+        [JsonProperty(PropertyName = "amount")]
+        public decimal PlanAmount { get; set; }
+        [JsonProperty(PropertyName = "interval")]
+        public string PlanInterval { get; set; }
+        [JsonProperty(PropertyName = "start_date")]
+        public DateTime StartDate { get; set; }
+
     }
 }

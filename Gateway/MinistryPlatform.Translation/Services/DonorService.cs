@@ -8,6 +8,7 @@ using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
 using log4net;
 using MinistryPlatform.Models;
+using MinistryPlatform.Models.DTO;
 using MinistryPlatform.Translation.Enum;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -26,6 +27,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _donationStatusesPageId;
         private readonly int _donorLookupByEncryptedAccount;
         private readonly int _myHouseholdDonationDistributions;
+        private readonly int _recurringGiftBySubscription;
 
         public const string DonorRecordId = "Donor_Record";
         public const string DonorProcessorId = "Processor_ID";
@@ -57,6 +59,7 @@ namespace MinistryPlatform.Translation.Services
             _donationStatusesPageId = configuration.GetConfigIntValue("DonationStatus");
             _donorLookupByEncryptedAccount = configuration.GetConfigIntValue("DonorLookupByEncryptedAccount");
             _myHouseholdDonationDistributions = configuration.GetConfigIntValue("MyHouseholdDonationDistributions");
+            _recurringGiftBySubscription = configuration.GetConfigIntValue("RecurringGiftBySubscription");
         }
 
 
@@ -583,6 +586,69 @@ namespace MinistryPlatform.Translation.Services
         private string DonorIdSearch(IEnumerable<int> ids)
         {
             return string.Join(" or ", ids.Select(id => string.Format("\"{0}\"", id)));
+        }
+
+        public int CreateRecurringGift(string donorID)
+        {
+        //    var values = new Dictionary<string, object>
+        //    {
+        //        {"Donor_ID", donorId},
+        //        {"Donor_Account", statementFrequencyId},
+        //        {"Email_Address", statementTypeId}, 
+        //        {"Frequency", statementMethodId},
+        //        {"Day_Of_Month", setupTime},    //default to current date/time
+        //        {"Day_Of_Week", processorId},
+        //        {"Amount", amount},
+        //        {"Start_Date", startDate},
+        //        {"Program_ID", programId},
+        //        {"Congregation_ID", congregationId},
+        //        {"Subscription_ID", subscriptionId}
+        //    };
+
+        //    var apiToken = ApiLogin();
+        //    int recurringGiftId;
+        //    try
+        //    {
+        //        recurringGiftId = _ministryPlatformService.CreateRecord(_recurringGiftPageId, values, apiToken, true);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw new ApplicationException(string.Format("Create Recurring Gift failed.  Donor Id: {0}", donorId), e);
+        //    }
+
+            return 0;
+        }
+
+        public CreateDonationDistDto GetRecurringGiftForSubscription(string subscription)
+        {
+            var searchStr = string.Format(subscription);
+            CreateDonationDistDto createDonation = null;
+            try
+            {
+                var records =
+                    WithApiLogin(
+                        apiToken => (_ministryPlatformService.GetPageViewRecords(_recurringGiftBySubscription, apiToken, searchStr)));
+                if (records != null && records.Count > 0)
+                {
+                    var record = records.First();
+                    createDonation = new CreateDonationDistDto()
+                    {
+                        DonorId = record.ToInt("Donor_ID"),
+                        Amount = record.ToInt("Amount"),
+                        ProgramId = record.ToString("Program_ID"),
+                        CongregationId = record.ToInt("Congregation_ID"),
+                        PaymentType = "bank"
+                    };
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(
+                    string.Format("GetRecurringGift failed.  Subscription Id: {0}", subscription), ex);
+            }
+
+           return createDonation;
         }
     }
 

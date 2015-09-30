@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using crds_angular.Exceptions;
 using crds_angular.Services.Interfaces;
 using Newtonsoft.Json;
 using RestSharp;
 using System.Net;
+using crds_angular.Controllers.API;
 using crds_angular.Models.Crossroads.Stewardship;
 using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
@@ -289,26 +291,31 @@ namespace crds_angular.Services
             return refund;
         }
 
-        public StripePlan CreatePlan(decimal planAmount, string planInterval, string planName, string donorID)
+        public StripePlan CreatePlan(UpdateDonorDTO updateDonor)
         {
             var request = new RestRequest("plans", Method.POST);
-            request.AddParameter("amount", planAmount * Constants.StripeDecimalConversionValue);
-            request.AddParameter("interval", planInterval);
-            request.AddParameter("name", planName);
+            request.AddParameter("amount", updateDonor.PlanAmount * Constants.StripeDecimalConversionValue);
+            request.AddParameter("interval", updateDonor.PlanInterval);
+            request.AddParameter("name", "Donor ID #" + updateDonor.DonorId + " " + updateDonor.PlanInterval + "ly");
             request.AddParameter("currency", "usd");
-           // request.AddParameter("id", "Donor ID #" + donorId);
+            request.AddParameter("trial_period_days",( (updateDonor.StartDate - DateTime.Now).Days));
+            request.AddParameter("id", updateDonor.DonorId + " " + DateTime.Now);
 
             var response = _stripeRestClient.Execute<StripePlan>(request);
             CheckStripeResponse("Invalid plan creation request", response);
 
-            return response.Data;          
+            return response.Data;
         }
 
         public StripeSubscription CreateSubscription(string planName, string customer)
         {
             var request = new RestRequest("customers/" + customer +"/subscriptions", Method.POST);
-            request.AddParameter("name", planName);
-            return null;
+            request.AddParameter("plan", planName);
+
+            var response = _stripeRestClient.Execute<StripeSubscription>(request);
+            CheckStripeResponse("Invalid subscription creation request", response);
+
+            return response.Data;
         }
     }
 

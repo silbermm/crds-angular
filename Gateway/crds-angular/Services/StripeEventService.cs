@@ -18,6 +18,8 @@ namespace crds_angular.Services
         private readonly ILog _logger = LogManager.GetLogger(typeof(StripeEventController));
         private readonly IPaymentService _paymentService;
         private readonly IDonationService _donationService;
+        private readonly IDonorService _donorService;
+        private readonly MinistryPlatform.Translation.Services.Interfaces.IDonorService _mpDonorService;
         private readonly int _donationStatusDeclined;
         private readonly int _donationStatusDeposited;
         private readonly int _donationStatusSucceeded;
@@ -26,10 +28,12 @@ namespace crds_angular.Services
         // This value is used when creating the batch name for exporting to GP.  It must be 15 characters or less.
         private const string BatchNameDateFormat = @"\M\PyyyyMMddHHmm";
        
-        public StripeEventService(IPaymentService paymentService, IDonationService donationService, IConfigurationWrapper configuration)
+        public StripeEventService(IPaymentService paymentService, IDonationService donationService, IDonorService donorService, MinistryPlatform.Translation.Services.Interfaces.IDonorService mpDonorService, IConfigurationWrapper configuration)
         {
             _paymentService = paymentService;
             _donationService = donationService;
+            _donorService = donorService;
+            _mpDonorService = mpDonorService;
 
             _donationStatusDeclined = configuration.GetConfigIntValue("DonationStatusDeclined");
             _donationStatusDeposited = configuration.GetConfigIntValue("DonationStatusDeposited");
@@ -53,6 +57,14 @@ namespace crds_angular.Services
             _donationService.UpdateDonationStatus(charge.Id, _donationStatusDeclined, eventTimestamp, notes.ToString());
             _donationService.ProcessDeclineEmail(charge.Id);
         }
+
+        public void InvoiceCreated(DateTime? eventTimestamp, StripeInvoice invoice)
+        {
+            _logger.Debug("Processing invoice.created event for subscription id " + invoice.Subscription);
+            var createDonation = _donorService.GetRecurringGiftForSubscription(invoice.Subscription);
+            var amount = invoice.Amount/Constants.StripeDecimalConversionValue;
+            _mpDonorService.CreateDonationAndDistributionRecord((int)amount, 0, createDonation.DonorId, createDonation.ProgramId, invoice.Charge, createDonation.PaymentType, invoice.Customer, DateTime.Now, true);
+         }
 
         public TransferPaidResponseDTO TransferPaid(DateTime? eventTimestamp, StripeTransfer transfer)
         {
@@ -211,6 +223,9 @@ namespace crds_angular.Services
                         break;
                     case "transfer.paid":
                         response = TransferPaid(stripeEvent.Created, ParseStripeEvent<StripeTransfer>(stripeEvent.Data));
+                        break;
+                    case "invoice.created":
+                        InvoiceCreated(stripeEvent.Created, ParseStripeEvent<StripeInvoice>(stripeEvent.Data));
                         break;
                     default:
                         _logger.Debug("Ignoring event " + stripeEvent.Type);

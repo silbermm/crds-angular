@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using MinistryPlatform.Models;
+using MinistryPlatform.Models.DTO;
 
 namespace MinistryPlatform.Translation.Services.Interfaces
 {
@@ -29,5 +30,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         List<Donation> GetDonations(IEnumerable<int> donorIds, string donationYear = null);
         List<Donation> GetSoftCreditDonations(IEnumerable<int> donorIds, string donationYear = null);
         List<Donation> GetDonationsForAuthenticatedUser(string userToken, bool? softCredit = null, string donationYear = null);
+        int CreateRecurringGift(string donorId);
+        CreateDonationDistDto GetRecurringGiftForSubscription(string subscription);
     }
 }
