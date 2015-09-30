@@ -33,5 +33,8 @@ namespace crds_angular.Models.Crossroads.Trip
 
         [JsonProperty(PropertyName = "messageSent")]
         public bool MessageSent { get; set; }
+
+        [JsonProperty(PropertyName = "paymentTypeId")]
+        public int PaymentTypeId { get; set; }
     }
 }

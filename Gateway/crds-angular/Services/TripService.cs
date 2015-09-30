@@ -310,6 +310,7 @@ namespace crds_angular.Services
                     gift.DonorEmail = donation.DonorEmail;
                     gift.DonationDate = donation.DonationDate.ToShortDateString();
                     gift.DonationAmount = donation.DonationAmount;
+                    gift.PaymentTypeId = donation.PaymentTypeId;
                     gift.RegisteredDonor = donation.RegisteredDonor;
                     gift.MessageSent = donation.MessageSent;
                     gift.Anonymous = donation.AnonymousGift;
