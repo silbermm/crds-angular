@@ -28,8 +28,12 @@ $(document).ready(function() {
         tweenFadeUp('.meet');
       }
       if (index == 4) {
-        tweenFadeBg('.studentministry', 1);
-        tweenFadeUp('.studentministry', 2);
+        tweenFadeBg('.studentministry', 0);
+        tweenFadeUp('.studentministry', 1);
+      }
+      if (index == 6) {
+        tweenFadeBg('.drums', 0);
+        tweenFadeUp('.drums', 1);
       }
     }
   });
@@ -126,8 +130,17 @@ $(document).ready(function() {
 </section>
 
 <section class="section drums">
-  <h2 class="drums-title">THIS IS NOT YOUR GRANDMA'S CHURCH.<br> BUT BRING HER.</h2>
-  <p class="drums-desc">We're fans of creativity and biblical truth.<br> And of turning it up to 11.</p>
+  <div class="imgix-fluid-bg img-background slide-bg fade-bg" data-src="http://crossroads-media.imgix.net/images/explore/explore_drums_bg.jpg"></div>
+  <div class="vertical-center">
+    <div class="container">
+      <div class="row">
+        <div class="drums-container col-sm-8 col-sm-offset-2">
+          <h2 class="drums-title flush-bottom rise10">THIS IS NOT YOUR GRANDMA'S CHURCH.<br> BUT BRING HER.</h2>
+          <p class="drums-desc rise10">We're fans of creativity and biblical truth.<br> And of turning it up to 11.</p>
+        </div><!--/studentministry-container-->
+      </div><!--/row-->
+    </div><!--/container-->
+  </div><!--/vertical-center-->
 </section>
 
 <section class="section clothes">
