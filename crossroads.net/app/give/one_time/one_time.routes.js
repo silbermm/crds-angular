@@ -12,19 +12,19 @@
   function OneTimeRoutes($stateProvider) {
     $stateProvider
       .state('give.one_time_confirm', {
-        templateUrl: 'templates/confirm.html'
+        templateUrl: 'templates/one_time_confirm.html'
       })
       .state('give.one_time_account', {
-        templateUrl: 'templates/account.html'
+        templateUrl: 'templates/one_time_account.html'
       })
       .state('give.one_time_change', {
-        templateUrl: 'templates/change.html'
+        templateUrl: 'templates/one_time_change.html'
       })
       .state('give.one_time_thank-you', {
-        templateUrl: 'templates/thank_you.html'
+        templateUrl: 'templates/one_time_thank_you.html'
       })
       .state('give.one_time_login', {
-        templateUrl: 'templates/login.html'
+        templateUrl: 'templates/one_time_login.html'
       });
   }
 

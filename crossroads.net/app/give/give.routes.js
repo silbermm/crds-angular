@@ -42,10 +42,6 @@
       .state('give.amount', {
         templateUrl: 'templates/amount.html'
       })
-      .state('give.login', {
-        controller: 'LoginCtrl',
-        templateUrl: 'templates/login.html'
-      })
       .state('give.register', {
         controller: 'RegisterCtrl',
         templateUrl: 'templates/register.html'

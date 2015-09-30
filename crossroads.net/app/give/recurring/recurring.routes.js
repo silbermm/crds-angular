@@ -12,13 +12,13 @@
   function RecurringRoutes($stateProvider) {
     $stateProvider
       .state('give.recurring_account', {
-        templateUrl: 'templates/account.html'
+        templateUrl: 'templates/recurring_account.html'
       })
       .state('give.recurring_thank-you', {
-        templateUrl: 'templates/thank_you.html'
+        templateUrl: 'templates/recurring_thank_you.html'
       })
       .state('give.recurring_login', {
-        templateUrl: 'templates/login.html'
+        templateUrl: 'templates/recurring_login.html'
       });
   }
 

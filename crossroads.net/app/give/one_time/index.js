@@ -2,11 +2,11 @@
 
 var constants = require('../../constants');
 
-require('./templates/confirm.html');
-require('./templates/account.html');
-require('./templates/change.html');
-require('./templates/thank_you.html');
-require('./templates/login.html');
+require('./templates/one_time_confirm.html');
+require('./templates/one_time_account.html');
+require('./templates/one_time_change.html');
+require('./templates/one_time_thank_you.html');
+require('./templates/one_time_login.html');
 
 var app = angular.module(constants.MODULES.GIVE);
 

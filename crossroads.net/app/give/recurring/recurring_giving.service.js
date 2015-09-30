@@ -15,7 +15,6 @@
     };
 
     function initDefaultState() {
-
       // Setup the give flow service
       GiveFlow.reset({
         amount: 'give.amount',

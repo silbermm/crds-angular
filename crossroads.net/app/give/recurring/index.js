@@ -2,9 +2,9 @@
 
 var constants = require('../../constants');
 
-require('./templates/account.html');
-require('./templates/thank_you.html');
-require('./templates/login.html');
+require('./templates/recurring_account.html');
+require('./templates/recurring_thank_you.html');
+require('./templates/recurring_login.html');
 
 var app = angular.module(constants.MODULES.GIVE);
 
