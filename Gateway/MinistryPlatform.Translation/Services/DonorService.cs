@@ -33,6 +33,9 @@ namespace MinistryPlatform.Translation.Services
         public const string DefaultInstitutionName = "Bank";
         public const string DonorRoutingNumberDefault = "0";
         public const string DonorAccountNumberDefault = "0";
+        // This is taken from GnosisChecks: 
+        // https://github.com/crdschurch/GnosisChecks/blob/24edc373ae62660028c1637396a9b834dfb2fd4d/Modules.vb#L12
+        public const string HashKey = "Mcc3#e758ebe8Seb1fdeF628dbK796e5";
 
         private readonly IMinistryPlatformService _ministryPlatformService;
         private readonly IProgramService _programService;
@@ -324,16 +327,20 @@ namespace MinistryPlatform.Translation.Services
             return details;
         }
 
+        /// <summary>
+        /// Create a SHA256 of the given account and routing number.  The algorithm for this matches the same from GnosisChecks:
+        /// https://github.com/crdschurch/GnosisChecks/blob/24edc373ae62660028c1637396a9b834dfb2fd4d/Modules.vb#L52
+        /// </summary>
+        /// <param name="accountNumber"></param>
+        /// <param name="routingNumber"></param>
+        /// <returns></returns>
         public string CreateHashedAccountAndRoutingNumber(string accountNumber, string routingNumber)
         {
-            SHA256Managed crypt = new SHA256Managed();
-            StringBuilder hash = new StringBuilder();
-            byte[] crypto = crypt.ComputeHash(Encoding.UTF8.GetBytes(accountNumber + routingNumber), 0, Encoding.UTF8.GetByteCount(accountNumber + routingNumber));
-            foreach (byte theByte in crypto)
-            {
-                hash.Append(theByte.ToString("x2"));
-            }
-            return hash.ToString();
+            var crypt = SHA256.Create();
+            var bytes = Encoding.UTF8.GetBytes(string.Concat(routingNumber, accountNumber, HashKey));
+            byte[] crypto = crypt.ComputeHash(bytes, 0, bytes.Length);
+            var hashString = Convert.ToBase64String(crypto).Replace('/', '~');
+            return (hashString);
         }
 
         public string DecryptCheckValue(string value)
