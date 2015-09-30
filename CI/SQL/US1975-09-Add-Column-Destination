@@ -47,6 +47,14 @@ IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[
 ALTER TABLE [dbo].[Accounting_Companies] DROP CONSTRAINT [FK_Statement_Settings_Pledge_Campaigns]
 GO
 
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_cr_Campaign_Private_Invitation_Pledge_Campaigns]') AND parent_object_id = OBJECT_ID(N'[dbo].[cr_Campaign_Private_Invitation]'))
+ALTER TABLE [dbo].[cr_Campaign_Private_Invitation] DROP CONSTRAINT [FK_cr_Campaign_Private_Invitation_Pledge_Campaigns]
+GO
+
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_cr_Campaign_Age_Exception_Pledge_Campaigns]') AND parent_object_id = OBJECT_ID(N'[dbo].[cr_Campaign_Age_Exception]'))
+ALTER TABLE [dbo].[cr_Campaign_Age_Exception] DROP CONSTRAINT [FK_cr_Campaign_Age_Exception_Pledge_Campaigns]
+GO
+
 /****** Done dropping FKs, build temp table, with new field ******/
 CREATE TABLE [dbo].[tmp_Pledge_Campaigns](
 	[Pledge_Campaign_ID] [int] IDENTITY(1,1) NOT NULL,
@@ -59,8 +67,8 @@ CREATE TABLE [dbo].[tmp_Pledge_Campaigns](
 	[End_Date] [datetime] NULL,
 	[Domain_ID] [int] NOT NULL,
 	[Event_ID] [int] NULL,
-  [Destination_ID] [int] NULL,
 	[Program_ID] [int] NULL,
+	[Destination_ID] [int] NULL,
 	[Registration_Details] [dbo].[dp_Separator] NULL,
 	[Registration_Start] [datetime] NULL,
 	[Registration_End] [datetime] NULL,
@@ -101,6 +109,7 @@ IF EXISTS (SELECT TOP 1 1
 				[Domain_ID],
 				[Event_ID],
 				[Program_ID],
+				[Destination_ID],
 				[Registration_Details],
 				[Registration_Start],
 				[Registration_End],
@@ -255,9 +264,25 @@ GO
 IF EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Statement_Settings_Pledge_Campaigns]') AND parent_object_id = OBJECT_ID(N'[dbo].[Accounting_Companies]'))
 ALTER TABLE [dbo].[Accounting_Companies] CHECK CONSTRAINT [FK_Statement_Settings_Pledge_Campaigns]
 
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_cr_Campaign_Private_Invitation_Pledge_Campaigns]') AND parent_object_id = OBJECT_ID(N'[dbo].[cr_Campaign_Private_Invitation]'))
+ALTER TABLE [dbo].[cr_Campaign_Private_Invitation]  WITH CHECK ADD  CONSTRAINT [FK_cr_Campaign_Private_Invitation_Pledge_Campaigns] FOREIGN KEY([Pledge_Campaign_ID])
+REFERENCES [dbo].[Pledge_Campaigns] ([Pledge_Campaign_ID])
+GO
+
+IF EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_cr_Campaign_Private_Invitation_Pledge_Campaigns]') AND parent_object_id = OBJECT_ID(N'[dbo].[cr_Campaign_Private_Invitation]'))
+ALTER TABLE [dbo].[cr_Campaign_Private_Invitation] CHECK CONSTRAINT [FK_cr_Campaign_Private_Invitation_Pledge_Campaigns]
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_cr_Campaign_Age_Exception_Pledge_Campaigns]') AND parent_object_id = OBJECT_ID(N'[dbo].[cr_Campaign_Age_Exception]'))
+ALTER TABLE [dbo].[cr_Campaign_Age_Exception]  WITH CHECK ADD  CONSTRAINT [FK_cr_Campaign_Age_Exception_Pledge_Campaigns] FOREIGN KEY([Pledge_Campaign_ID])
+REFERENCES [dbo].[Pledge_Campaigns] ([Pledge_Campaign_ID])
+GO
+
+IF EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_cr_Campaign_Age_Exception_Pledge_Campaigns]') AND parent_object_id = OBJECT_ID(N'[dbo].[cr_Campaign_Age_Exception]'))
+ALTER TABLE [dbo].[cr_Campaign_Age_Exception] CHECK CONSTRAINT [FK_cr_Campaign_Age_Exception_Pledge_Campaigns]
+
 IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Pledge_Campaigns_Destinations]') AND parent_object_id = OBJECT_ID(N'[dbo].[Pledge_Campaigns]'))
 ALTER TABLE [dbo].[Pledge_Campaigns]  WITH CHECK ADD  CONSTRAINT [FK_Pledge_Campaigns_Destinations] FOREIGN KEY([Destination_ID])
-REFERENCES [dbo].[Destinations] ([Destination_ID])
+REFERENCES [dbo].[cr_Destinations] ([Destination_ID])
 GO
 
 IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Pledge_Campaigns_Destinations]') AND parent_object_id = OBJECT_ID(N'[dbo].[Pledge_Campaigns]'))

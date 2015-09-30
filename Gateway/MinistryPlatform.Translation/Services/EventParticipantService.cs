@@ -18,6 +18,29 @@ namespace MinistryPlatform.Translation.Services
             _ministryPlatformService = ministryPlatformService;
         }
 
+        public bool AddDocumentsToTripParticipant(List<TripDocuments> documents, int eventParticipantId)
+        {
+            try
+            {
+                var token = ApiLogin();
+                foreach (var d in documents)
+                {
+                    var values = new Dictionary<string, object>
+                    {
+                        {"Document_ID", d.DocumentId},
+                        {"Received", false}
+                    };
+                    _ministryPlatformService.CreateSubRecord("EventParticipantDocuments", eventParticipantId, values, token, true);
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(
+                    string.Format("AddDocumentsToTripParticipant failed.  Event Participant: {0}", eventParticipantId), ex);
+            }
+        }
+
         public List<TripParticipant> TripParticipants(string search)
         {
             try

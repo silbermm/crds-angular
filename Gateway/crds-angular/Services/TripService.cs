@@ -10,8 +10,8 @@ using MinistryPlatform.Translation.Services.Interfaces;
 using IDonationService = MinistryPlatform.Translation.Services.Interfaces.IDonationService;
 using IDonorService = MinistryPlatform.Translation.Services.Interfaces.IDonorService;
 using IGroupService = MinistryPlatform.Translation.Services.Interfaces.IGroupService;
-using IPersonService = crds_angular.Services.Interfaces.IPersonService;
 using PledgeCampaign = crds_angular.Models.Crossroads.Stewardship.PledgeCampaign;
+using TripDocuments = crds_angular.Models.Crossroads.Trip.TripDocuments;
 
 namespace crds_angular.Services
 {
@@ -31,6 +31,7 @@ namespace crds_angular.Services
         private readonly IConfigurationWrapper _configurationWrapper;
         private readonly IPersonService _personService;
         private readonly IServeService _serveService;
+        private readonly IDestinationService _destinationService;
 
         public TripService(IEventParticipantService eventParticipant,
                            IDonationService donationService,
@@ -45,7 +46,8 @@ namespace crds_angular.Services
                            IContactService contactService,
                            IConfigurationWrapper configurationWrapper,
                            IPersonService personService,
-                           IServeService serveService)
+                           IServeService serveService,
+                           IDestinationService destinationService)
         {
             _eventParticipantService = eventParticipant;
             _donationService = donationService;
@@ -61,6 +63,7 @@ namespace crds_angular.Services
             _configurationWrapper = configurationWrapper;
             _personService = personService;
             _serveService = serveService;
+            _destinationService = destinationService;
         }
 
         public List<TripGroupDto> GetGroupsByEventId(int eventId)
@@ -97,7 +100,8 @@ namespace crds_angular.Services
             dto.Campaign = new PledgeCampaign
             {
                 FundraisingGoal = tripApplicantResponses.TripInfo.FundraisingGoal,
-                PledgeCampaignId = tripApplicantResponses.TripInfo.PledgeCampaignId
+                PledgeCampaignId = tripApplicantResponses.TripInfo.PledgeCampaignId,
+                DestinationId = tripApplicantResponses.TripInfo.DestinationId
             };
 
             return dto;
@@ -145,7 +149,8 @@ namespace crds_angular.Services
                                     {
                                         EventId = (int) r.EventId,
                                         FundraisingGoal = r.FundraisingGoal,
-                                        PledgeCampaignId = (int) r.PledgeCampaignId
+                                        PledgeCampaignId = (int) r.PledgeCampaignId,
+                                        DestinationId = r.DestinationId
                                     }
                                     : null)
                                 : null);
@@ -406,17 +411,17 @@ namespace crds_angular.Services
             }
         }
 
-        private void EventRegistration(IEnumerable<Event> events, TripApplicant applicant)
+        private void EventRegistration(IEnumerable<Event> events, TripApplicant applicant, int destinationId)
         {
+            var destinationDocuments = _destinationService.DocumentsForDestination(destinationId);
             foreach (var e in events)
             {
-                if (_mpEventService.EventHasParticipant(e.EventId, applicant.ParticipantId) == false)
+                if (_mpEventService.EventHasParticipant(e.EventId, applicant.ParticipantId))
                 {
-                    var eventParticipantId = _mpEventService.registerParticipantForEvent(applicant.ParticipantId, e.EventId);
-                    // need destination
-                    // need to lookup documents for destination
-                    // need to add document to event participant - documents sub page
+                    continue;
                 }
+                var eventParticipantId = _mpEventService.registerParticipantForEvent(applicant.ParticipantId, e.EventId);
+                _eventParticipantService.AddDocumentsToTripParticipant(destinationDocuments, eventParticipantId);
             }
         }
 
