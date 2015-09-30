@@ -610,7 +610,7 @@ describe('GiveController', function() {
     };
 
     var mockToState = {
-      name: 'give.account'
+      name: 'give.one_time_account'
     };
 
     it('should not perform any transitions for an unauthenticated user', function() {
@@ -631,7 +631,7 @@ describe('GiveController', function() {
       expect(controller.dto.donorError).toBeFalsy();
     });
 
-    it('should transition to give.account for a logged-in Giver without an existing donor', function() {
+    it('should transition to give.one_time_account for a logged-in Giver without an existing donor', function() {
       controller.initDefaultState();
       mockSession.isActive.and.callFake(function() {
         return true;
@@ -695,7 +695,7 @@ describe('GiveController', function() {
       };
 
       var mockToState = {
-        name: 'give.account'
+        name: 'give.one_time_account'
       };
 
       controller.dto.email = 'test@test.com';
@@ -730,7 +730,7 @@ describe('GiveController', function() {
       };
 
       var mockToState = {
-        name: 'give.account'
+        name: 'give.one_time_account'
       };
 
       controller.dto.email = 'test@test.com';
@@ -879,4 +879,5 @@ describe('GiveController', function() {
     it('should change give flow to recurring if selected', function() {
     });
   });
+
 });
