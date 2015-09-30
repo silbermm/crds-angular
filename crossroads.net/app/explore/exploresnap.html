@@ -24,9 +24,6 @@ $(document).ready(function() {
         tweenFadeBg('.map');
         tweenFadeUp('.map');
       }
-      if (index == 9) {
-        tweenFadeUp('.meet');
-      }
       if (index == 4) {
         tweenFadeBg('.studentministry', 0);
         tweenFadeUp('.studentministry', 1);
@@ -34,6 +31,13 @@ $(document).ready(function() {
       if (index == 6) {
         tweenFadeBg('.drums', 0);
         tweenFadeUp('.drums', 1);
+      }
+      if (index == 8) {
+        tweenFadeBg('.photos', 0);
+        tweenFadeUp('.photos');
+      }
+      if (index == 9) {
+        tweenFadeUp('.meet');
       }
     }
   });
@@ -97,7 +101,7 @@ $(document).ready(function() {
   <div class="container">
     <div class="row">
       <div class="col-sm-6 push-top mobile-flush-top">
-        <h2 class="kidsclub-title flush-bottom">Oh, and kids love this place.</h2>
+        <h2 class="kidsclub-title">Oh, and kids love this place.</h2>
         <p class="kidsclub-desc">We have <a href="http://www.crossroadskidsclub.net">Kids' Club</a>, which is a fun-learning environment designed just for them. It's free, totally secure and offered during all services.</p>
       </div><!--/col-sm-3-->
     </div><!--/row-->
@@ -149,8 +153,17 @@ $(document).ready(function() {
 </section>
 
 <section class="section photos">
-  <h2 class="photos-title">We believe God doesn't just work weekends.</h2>
-  <p class="photos-desc">So we mobilize hundreds of people-sometimes thousands-and we respond to God's call to serve others in our community and around the world. <a href="/next-step/reachout">Learn more about how serving others fixes us</a>.</p>
+  <div class="imgix-fluid-bg img-background slide-bg fade-bg" data-src="http://crossroads-media.imgix.net/images/explore/explore_photos_bg.jpg"></div>
+  <div class="container">
+    <div class="photo-copy-container vertical-20">
+      <div class="">
+        <div class="col-sm-offset-2 col-sm-3 push-top mobile-flush-top">
+          <h2 class="photos-title flush-bottom">We believe God doesn't just work weekends.</h2>
+          <p class="photos-desc">So we mobilize hundreds of people-sometimes thousands-and we respond to God's call to serve others in our community and around the world. <a href="/next-step/reachout">Learn more about how serving others fixes us</a>.</p>
+        </div><!--/col-sm-3-->
+      </div><!--/row-->
+    </div><!--/vertical-20-->
+</div><!--/container-->
 </section>
 
 
