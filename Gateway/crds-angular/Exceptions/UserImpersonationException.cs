@@ -39,12 +39,12 @@ namespace crds_angular.Exceptions
     public class ImpersonationUserNotFoundException : UserImpersonationException
     {
         public ImpersonationUserNotFoundException()
-            : base("Could not locate user to impersonate", HttpStatusCode.Conflict)
+            : base("Could not locate user to impersonate.", HttpStatusCode.Conflict)
         {
         }
 
         public ImpersonationUserNotFoundException(string userId)
-            : base(string.Format("Could not locate user '{0}' to impersonate", userId), HttpStatusCode.Conflict)
+            : base(string.Format("Could not locate user '{0}' to impersonate.", userId), HttpStatusCode.Conflict)
         {
         }
     }

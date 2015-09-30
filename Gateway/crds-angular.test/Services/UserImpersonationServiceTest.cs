@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity.Core;
+using crds_angular.Exceptions;
 using crds_angular.Services;
 using Crossroads.Utilities.Services;
 using MinistryPlatform.Models;
@@ -38,9 +39,9 @@ namespace crds_angular.test.Services
                 _fixture.WithImpersonation("123", "me@here.com", () => (_action.Object));
                 Assert.Fail("Expected exception was not thrown");
             }
-            catch (UnauthorizedAccessException e)
+            catch (ImpersonationNotAllowedException e)
             {
-                Assert.AreEqual("User is not authorized to impersonate other users", e.Message);
+                Assert.AreEqual("User is not authorized to impersonate other users.", e.Message);
             }
             _userService.VerifyAll();
             _action.VerifyAll();
@@ -62,9 +63,9 @@ namespace crds_angular.test.Services
                 _fixture.WithImpersonation("123", "me@here.com", () => (_action.Object));
                 Assert.Fail("Expected exception was not thrown");
             }
-            catch (ObjectNotFoundException e)
+            catch (ImpersonationUserNotFoundException e)
             {
-                Assert.AreEqual("Could not locate user 'me@here.com' to impersonate", e.Message);
+                Assert.AreEqual("Could not locate user 'me@here.com' to impersonate.", e.Message);
             }
             _userService.VerifyAll();
             _action.VerifyAll();

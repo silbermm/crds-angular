@@ -146,7 +146,7 @@ namespace crds_angular.test.controllers
             var r = (RestHttpActionResult<ApiErrorDto>)response;
             Assert.AreEqual(HttpStatusCode.Conflict, r.StatusCode);
             Assert.IsNotNull(r.Content);
-            Assert.AreEqual("Could not locate user 'me@here.com' to impersonate", r.Content.Message);
+            Assert.AreEqual("Could not locate user 'me@here.com' to impersonate.", r.Content.Message);
         }
 
         [Test]
