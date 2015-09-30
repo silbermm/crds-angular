@@ -43,7 +43,7 @@
         });
       }
 
-      vm.noSelection = donorId <= 0 && selectionId <= 0;
+      vm.noSelection = donorId <= 0 && (selectedCount <= 0 || selectionId <= 0);
       vm.tooManySelections = selectedCount > 1;
     }
 
