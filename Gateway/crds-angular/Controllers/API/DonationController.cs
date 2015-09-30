@@ -74,13 +74,9 @@ namespace crds_angular.Controllers.API
 
                     return (Ok(donations));
                 }
-                catch (ImpersonationNotAllowedException e)
+                catch (UserImpersonationException e)
                 {
-                    return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.Forbidden, new ApiErrorDto(e.Message)));
-                }
-                catch (ImpersonationUserNotFoundException e)
-                {
-                    return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.Conflict, new ApiErrorDto(e.Message)));
+                    return (e.GetRestHttpActionResult());
                 }
             }));
         }
@@ -110,13 +106,9 @@ namespace crds_angular.Controllers.API
 
                     return (Ok(donationYears));
                 }
-                catch (ImpersonationNotAllowedException e)
+                catch (UserImpersonationException e)
                 {
-                    return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.Forbidden, new ApiErrorDto(e.Message)));
-                }
-                catch (ImpersonationUserNotFoundException e)
-                {
-                    return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.Conflict, new ApiErrorDto(e.Message)));
+                    return (e.GetRestHttpActionResult());
                 }
             }));
         }
