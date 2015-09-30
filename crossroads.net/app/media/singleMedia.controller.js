@@ -58,12 +58,12 @@
 
     if (vm.isMessage) {
       vm.videoSectionIsOpen = true;
-      vm.audio = vm.media.audio;
-      vm.video = vm.media.video;
+      vm.audio = vm.media.messageAudio;
+      vm.video = vm.media.messageVideo;
       vm.programDownloadLink = _.get(vm.media, 'program.filename');
       vm.mediaTags = vm.media.combinedTags;
     } else {
-      if (vm.media.className === 'Music' || vm.media.className === 'Audio') {
+      if (vm.media.className === 'Music') {
         vm.audio = vm.media;
         vm.video = null;
         vm.videoSectionIsOpen = false;

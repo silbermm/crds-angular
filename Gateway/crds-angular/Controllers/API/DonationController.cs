@@ -50,10 +50,11 @@ namespace crds_angular.Controllers.API
         /// <param name="softCredit">A bool indicating if the result should contain only soft-credit (true), only direct (false), or all (null) donations.  Defaults to null.</param>
         /// <param name="donationYear">A year filter (YYYY format) for donations returned - defaults to null, meaning return all available donations regardless of year.</param>
         /// <param name="impersonateDonorId">An optional donorId of a donor to impersonate</param>
+        /// <param name="limit">A limit of donations to return starting at the most resent - defaults to null, meaning return all available donations with no limit.</param>
         /// <returns>A list of DonationDTOs</returns>
         [Route("api/donations/{donationYear:regex(\\d{4})?}")]
         [HttpGet]
-        public IHttpActionResult GetDonations(string donationYear = null, [FromUri(Name = "softCredit")]bool? softCredit = null, [FromUri(Name = "impersonateDonorId")]int? impersonateDonorId = null)
+        public IHttpActionResult GetDonations(string donationYear = null, int? limit = null, [FromUri(Name = "softCredit")]bool? softCredit = null, [FromUri(Name = "impersonateDonorId")]int? impersonateDonorId = null)
         {
             return (Authorized(token =>
             {
@@ -62,8 +63,8 @@ namespace crds_angular.Controllers.API
                     ? _impersonationService.WithImpersonation(token,
                                                               impersonateUserId,
                                                               () =>
-                                                                  _gatewayDonationService.GetDonationsForAuthenticatedUser(token, donationYear, softCredit))
-                    : _gatewayDonationService.GetDonationsForAuthenticatedUser(token, donationYear, softCredit);
+                                                                  _gatewayDonationService.GetDonationsForAuthenticatedUser(token, donationYear, limit, softCredit))
+                    : _gatewayDonationService.GetDonationsForAuthenticatedUser(token, donationYear, limit, softCredit);
                 if (donations == null || !donations.HasDonations)
                 {
                     return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching donations found")));
