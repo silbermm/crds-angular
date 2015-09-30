@@ -1007,5 +1007,23 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual("Program 2", result[1].Distributions[0].donationDistributionProgram);
             Assert.AreEqual(200000, result[1].Distributions[0].donationDistributionAmt);
         }
+
+        [Test]
+        // This test is pretty much a copy of the code in the service itself, but it does serve a purpose - 
+        // making sure if the algorithm changes, this test will fail!
+        public void TestCreateHashedAccountAndRoutingNumber()
+        {
+            const string routingNumber = "110000000";
+            const string accountNumber = "000123456789";
+            const string hashKey = "Mcc3#e758ebe8Seb1fdeF628dbK796e5";
+
+            var crypt = SHA256.Create();
+            var bytes = Encoding.UTF8.GetBytes(string.Concat(routingNumber, accountNumber, hashKey));
+            var crypto = crypt.ComputeHash(bytes, 0, bytes.Length);
+            var hashString = Convert.ToBase64String(crypto).Replace('/', '~');
+
+            var result = _fixture.CreateHashedAccountAndRoutingNumber(accountNumber, routingNumber);
+            Assert.AreEqual(hashString, result);
+        }
     }
 }

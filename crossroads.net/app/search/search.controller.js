@@ -52,7 +52,7 @@
       var query = $scope.searchString;
       switch (vm.type){
         case 'media':
-          filter = '(or type:\'Series\' type:\'Message\' type:\'Video\' type:\'Audio\' type:\'Music\' type:\'Media\')';
+          filter = '(or type:\'Series\' type:\'Message\' type:\'Video\' type:\'Music\')';
           break;
         case 'corkboard':
           filter = '(or type:\'NEED\' type:\'ITEM\' type:\'EVENT\' type:\'JOB\')';
@@ -91,9 +91,7 @@
         item.type === 'Series' ||
         item.type === 'Message' ||
         item.type === 'Video' ||
-        item.type === 'Audio' ||
-        item.type === 'Music' ||
-        item.type === 'Media'
+        item.type === 'Music'
       );
     }
 
@@ -104,10 +102,8 @@
           return '/series/' + item.id + '/' + title;
         case 'Message':
           return '/message/' + item.id + '/' + title;
-        case 'Media':
         case 'Video':
         case 'Music':
-        case 'Audio':
           return '/media/' + item.id + '/' + title;
         default:
 
