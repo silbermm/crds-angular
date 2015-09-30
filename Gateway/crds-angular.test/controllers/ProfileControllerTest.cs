@@ -11,6 +11,7 @@ using crds_angular.Services.Interfaces;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
+using IDonorService = crds_angular.Services.Interfaces.IDonorService;
 
 namespace crds_angular.test.controllers
 {
@@ -22,6 +23,8 @@ namespace crds_angular.test.controllers
         private Mock<crds_angular.Services.Interfaces.IPersonService> _personServiceMock;
         private Mock<IServeService> _serveServiceMock;
         private Mock<IAuthenticationService> _authenticationServiceMock;
+        private Mock<crds_angular.Services.Interfaces.IDonorService> _donorService;
+        private Mock<IUserImpersonationService> _impersonationService;
 
         private string _authType;
         private string _authToken;
@@ -33,8 +36,10 @@ namespace crds_angular.test.controllers
         {
             _personServiceMock = new Mock<crds_angular.Services.Interfaces.IPersonService>();
             _serveServiceMock = new Mock<IServeService>();
+            _donorService = new Mock<IDonorService>();
+            _impersonationService = new Mock<IUserImpersonationService>();
 
-            _fixture = new ProfileController(_personServiceMock.Object, _serveServiceMock.Object);
+            _fixture = new ProfileController(_personServiceMock.Object, _serveServiceMock.Object, _impersonationService.Object, _donorService.Object);
             _authenticationServiceMock = new Mock<IAuthenticationService>();
 
             _authType = "auth_type";
