@@ -21,6 +21,7 @@ describe('GiveController', function() {
   var Session;
   var GiveTransferService;
   var OneTimeGiving;
+  var RecurringGiving;
   var DonationService;
 
   beforeEach(angular.mock.module('crossroads', function($provide) {
@@ -85,6 +86,7 @@ describe('GiveController', function() {
       AUTH_EVENTS = $injector.get('AUTH_EVENTS');
       GiveTransferService = $injector.get('GiveTransferService');
       OneTimeGiving = $injector.get('OneTimeGiving');
+      RecurringGiving = $injector.get('RecurringGiving');
       DonationService = $injector.get('DonationService');
 
       $rootScope.MESSAGES = {
@@ -134,7 +136,8 @@ describe('GiveController', function() {
           programList:programList,
           GiveTransferService: GiveTransferService,
           AUTH_EVENTS: AUTH_EVENTS,
-          OneTimeGiving: OneTimeGiving
+          OneTimeGiving: OneTimeGiving,
+          RecurringGiving: RecurringGiving
         });
 
       controller.initDefaultState();
@@ -582,6 +585,13 @@ describe('GiveController', function() {
 
       expect(mockPaymentService.getDonor).toHaveBeenCalledWith('test@test.com');
       expect(DonationService.updateDonorAndDonate).toHaveBeenCalled();
+
+      controller.service = RecurringGiving;
+      controller.service.initDefaultState();
+      controller.service.submitBankInfo(controller.giveForm);
+
+      expect(mockPaymentService.getDonor).toHaveBeenCalledWith('test@test.com');
+      expect(DonationService.updateDonorAndDonate).toHaveBeenCalled();
     });
 
     it('should call createDonorAndDonate when there is not an existing donor', function() {
@@ -596,6 +606,26 @@ describe('GiveController', function() {
 
       spyOn(DonationService, 'createDonorAndDonate');
       spyOn(DonationService, 'updateDonorAndDonate');
+      controller.service.submitBankInfo(controller.giveForm);
+
+      expect(mockPaymentService.getDonor).toHaveBeenCalledWith('test@test.com');
+      expect(DonationService.createDonorAndDonate).toHaveBeenCalled();
+    });
+
+    it('should call createDonorAndDonate when there is not an existing donor for recurring', function() {
+      mockPaymentServiceGetPromise.setSuccess(false);
+
+      controller.dto.program = {programId: 1, Name: 'crossroads'};
+
+      GiveTransferService.email = 'test@test.com';
+      mockSession.isActive.and.callFake(function() {
+        return true;
+      });
+
+      spyOn(DonationService, 'createDonorAndDonate');
+      spyOn(DonationService, 'updateDonorAndDonate');
+      controller.service = RecurringGiving;
+      controller.service.initDefaultState();
       controller.service.submitBankInfo(controller.giveForm);
 
       expect(mockPaymentService.getDonor).toHaveBeenCalledWith('test@test.com');
@@ -778,6 +808,17 @@ describe('GiveController', function() {
       expect(controller.dto.program).toBe('program');
       expect(controller.dto.view).toBe('bank');
       expect(controller.dto.changeAccountInfo).toBeTruthy();
+
+      controller.service = RecurringGiving;
+      controller.service.initDefaultState()
+      controller.service.goToChange();
+
+      expect(controller.dto.amount).toBe(123);
+      expect(controller.dto.donor).toBe('donor');
+      expect(controller.dto.email).toBe('test@here.com');
+      expect(controller.dto.program).toBe('program');
+      expect(controller.dto.view).toBe('bank');
+      expect(controller.dto.changeAccountInfo).toBeTruthy();
     });
 
     it('should transition to give.one_time_login is session is not active', function() {
@@ -792,6 +833,21 @@ describe('GiveController', function() {
       controller.service.goToChange();
       expect($state.go).toHaveBeenCalledWith('give.one_time_login');
     });
+
+    it('should transition to give.recurring_login is session is not active', function() {
+      mockSession.isActive.and.callFake(function() {
+        return false;
+      });
+
+      mockSession.addRedirectRoute.and.callFake(function(a,b) {
+        return true;
+      });
+
+      controller.service = RecurringGiving;
+      controller.service.initDefaultState()
+      controller.service.goToChange();
+      expect($state.go).toHaveBeenCalledWith('give.recurring_login');
+    });
   });
 
   describe('function processChange', function() {
@@ -804,6 +860,19 @@ describe('GiveController', function() {
       controller.service.processChange();
 
       expect($state.go).toHaveBeenCalledWith('give.one_time_login');
+    });
+
+    it('should transition to give.recurring_login is session is not active', function() {
+      mockSession.isActive.and.callFake(function() {
+        return false;
+      });
+
+      spyOn($state, 'go');
+      controller.service = RecurringGiving;
+      controller.service.initDefaultState()
+      controller.service.processChange();
+
+      expect($state.go).toHaveBeenCalledWith('give.recurring_login');
     });
   });
 
@@ -872,10 +941,46 @@ describe('GiveController', function() {
   });
 
   describe('Give type branching', function() {
+    beforeEach(function() {
+      spyOn(controller.service, 'goToAccount');
+      controller.giveForm = {
+        amountForm: {
+          $dirty: false,
+        },
+        creditCardForm: {
+          $dirty: true,
+        },
+        bankAccountForm: {
+          $dirty: true,
+        },
+        $valid: true,
+      };
+    });
+
     it('should default give flow to one time giving', function() {
+      controller.dto.givingType = 'one_time'
+      controller.branchOnGivingType();
+
+      expect(controller.service.stateName('amount')).toBe('give.amount');
+      expect(controller.service.stateName('account')).toBe('give.one_time_account');
+      expect(controller.service.stateName('login')).toBe('give.one_time_login');
+      expect(controller.service.stateName('register')).toBe('give.register');
+      expect(controller.service.stateName('confirm')).toBe('give.one_time_confirm');
+      expect(controller.service.stateName('change')).toBe('give.one_time_change');
+      expect(controller.service.stateName('thankYou')).toBe('give.one_time_thank-you');
     });
 
     it('should change give flow to recurring if selected', function() {
+      controller.dto.givingType = 'recurring'
+      controller.branchOnGivingType();
+
+      expect(controller.service.stateName('amount')).toBe('give.amount');
+      expect(controller.service.stateName('account')).toBe('give.recurring_account');
+      expect(controller.service.stateName('login')).toBe('give.recurring_login');
+      expect(controller.service.stateName('register')).toBe('give.register');
+      expect(controller.service.stateName('confirm')).toBe('give.recurring_account');
+      expect(controller.service.stateName('change')).toBe('give.recurring_change');
+      expect(controller.service.stateName('thankYou')).toBe('give.recurring_thank-you');
     });
   });
 

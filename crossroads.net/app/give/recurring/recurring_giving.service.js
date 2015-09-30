@@ -24,7 +24,7 @@
         account: 'give.recurring_account',
         login: 'give.recurring_login',
         register: 'give.register',
-        confirm: 'give.recurring_confirm',
+        confirm: 'give.recurring_account',
         change: 'give.recurring_change',
         thankYou: 'give.recurring_thank-you'
       });
@@ -47,7 +47,7 @@
     }
 
     function submitBankInfo(giveForm, programsInput) {
-      DonationService.submitBankInfo(give.giveForm, give.programsInput);
+      DonationService.submitBankInfo(giveForm, programsInput);
     }
 
     function processChange() {
