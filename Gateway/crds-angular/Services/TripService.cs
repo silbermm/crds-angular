@@ -412,7 +412,10 @@ namespace crds_angular.Services
             {
                 if (_mpEventService.EventHasParticipant(e.EventId, applicant.ParticipantId) == false)
                 {
-                    _mpEventService.registerParticipantForEvent(applicant.ParticipantId, e.EventId);
+                    var eventParticipantId = _mpEventService.registerParticipantForEvent(applicant.ParticipantId, e.EventId);
+                    // need destination
+                    // need to lookup documents for destination
+                    // need to add document to event participant - documents sub page
                 }
             }
         }
