@@ -5,7 +5,8 @@
                          program="give.dto.program" 
                          amount-submitted="give.dto.amountSubmitted" 
                          programs-in="give.programsInput"
-                         giving-type="give.dto.givingType">
+                         giving-type="give.dto.givingType"
+                         recurring-start-date="give.dto.recurringStartDate">
        </donation-details>
        <button ng-click="give.branchOnGivingType()" ng-class="{disabled: give.dto.processing}" class="btn btn-primary btn-lg btn-block-mobile give-button">
          <span ng-if="give.dto.processing">Next...</span>

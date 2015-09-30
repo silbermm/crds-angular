@@ -16,7 +16,8 @@
         programsIn: '=?',
         showInitiativeOption: '=?',
         showFrequencyOption: '=?',
-        givingType: '=?'
+        givingType: '=?',
+        recurringStartDate: '=?',
       },
       templateUrl: 'donation_details/donationDetails.html',
       link: link

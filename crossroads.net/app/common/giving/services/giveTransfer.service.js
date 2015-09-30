@@ -30,6 +30,7 @@
         this.routing = '';
         this.savedPayment = '';
         this.view = 'bank';
+        this.recurringStartDate = undefined;
 
         if (!Session.isActive()) {
           User.email = '';

@@ -7,7 +7,12 @@
     </div>
   
     <hr>
-      <p>You are giving <strong>{{give.dto.amount | currency}}</strong>  to <strong>{{give.dto.program['Name']}}</strong>. <a href="" ng-click="give.service.processChange()" tabindex="-1" class="text-secondary">Change</a></p>
+      <p>
+        You are giving <strong>{{give.dto.amount | currency}} {{give.dto.givingType}}</strong> to the
+        <strong>{{give.dto.program['Name']}}</strong> starting on
+        <strong>{{give.dto.recurringStartDate | date:'MM/dd/yyyy' }}</strong>.
+        <a href="" ng-click="give.service.processChange()" tabindex="-1" class="text-secondary">Change</a>
+      </p>
     <hr>
 
     <ng-form name="accountForm">

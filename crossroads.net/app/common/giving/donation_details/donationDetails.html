@@ -32,15 +32,15 @@
   <div class="form-group" ng-show='showInitiativeOption'>
     <select class="form-control" ng-model="givingType">
       <option value="one_time">One Time</option>
-      <option value="recurring_monthly">Recurring - Monthly</option>
-      <option value="recurring_weekly">Recurring - Weekly</option>
+      <option value="weekly">Weekly</option>
+      <option value="monthly">Monthly</option>
     </select>
   </div>
 
   <div class="form-group" ng-show="givingType !== 'one_time'">
     <div class="input-group">
       <input type="text" class="form-control" datepicker-popup="MM/dd/yyyy"
-        ng-model="recurring_start_date" is-open="recurringStartDatePickerOpened"
+        ng-model="recurringStartDate" is-open="recurringStartDatePickerOpened"
         datepicker-options="dateOptions" close-text="Close" min-date="minDate"
         ng-click="openRecurringStartDate($event)"/>
       <span class="input-group-btn">
