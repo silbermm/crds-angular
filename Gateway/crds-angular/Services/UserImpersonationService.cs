@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity.Core;
+using crds_angular.Exceptions;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -29,13 +30,13 @@ namespace crds_angular.Services
             var authUser = _userService.GetByAuthenticationToken(authToken);
             if (authUser == null || !authUser.CanImpersonate)
             {
-                throw (new UnauthorizedAccessException("User is not authorized to impersonate other users"));
+                throw (new ImpersonationNotAllowedException());
             }
 
             var user = _userService.GetByUserId(useridToImpersonate);
             if (user == null)
             {
-                throw (new ObjectNotFoundException(string.Format("Could not locate user '{0}' to impersonate", useridToImpersonate)));
+                throw (new ImpersonationUserNotFoundException(useridToImpersonate));
             }
 
             ImpersonatedUserGuid.Set(user.Guid);

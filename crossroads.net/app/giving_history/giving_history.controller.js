@@ -18,6 +18,10 @@
     vm.donation_view_ready = false;
     vm.ending_donation_date = undefined;
     vm.impersonate_donor_id = GivingHistoryService.impersonateDonorId;
+    vm.impersonation_error = false;
+    vm.impersonation_error_message = undefined;
+    vm.impersonation_not_allowed = false;
+    vm.impersonation_user_not_found = false;
     vm.profile = {};
     vm.selected_giving_year = undefined;
     vm.soft_credit_donations = [];
@@ -54,18 +58,43 @@
           vm.getSoftCreditDonations();
         },
 
-        function(/*error*/) {
+        function(error /*GivingHistoryService.donationYears.get error*/) {
           vm.overall_view_ready = true;
           vm.donation_history = false;
           vm.soft_credit_donation_history = false;
+          setErrorState(error);
         });
       },
 
-      function(/*error*/) {
+      function(error /*Profile.Personal.get error*/) {
         vm.overall_view_ready = true;
         vm.donation_history = false;
         vm.soft_credit_donation_history = false;
+        setErrorState(error);
       });
+    }
+
+    function setErrorState(error) {
+      if (vm.impersonate_donor_id === undefined || error === undefined || error.status === undefined) {
+        return;
+      }
+
+      switch (error.status) {
+        case 403: // Forbidden - not allowed to impersonate
+          vm.impersonation_error = true;
+          vm.impersonation_not_allowed = true;
+          vm.impersonation_error_message = error.data === undefined || error.data.message === undefined ?
+              'User is not allowed to impersonate' : error.data.message;
+          break;
+        case 409: // Conflict - tried to impersonate, but user could not be found
+          vm.impersonation_error = true;
+          vm.impersonation_user_not_found = true;
+          vm.impersonation_error_message = error.data === undefined || error.data.message === undefined ?
+              'Could not find user to impersonate' : error.data.message;
+          break;
+        default:
+          break;
+      }
     }
 
     function getDonations() {
@@ -80,9 +109,10 @@
             vm.ending_donation_date = data.ending_donation_date;
           },
 
-          function(/*error*/) {
+          function(error) {
             vm.donation_history = false;
             vm.donation_view_ready = true;
+            setErrorState(error);
           });
     }
 
@@ -96,9 +126,10 @@
             vm.soft_credit_donation_history = true;
           },
 
-          function(/*error*/) {
+          function(error) {
             vm.soft_credit_donation_history = false;
             vm.soft_credit_donation_view_ready = true;
+            setErrorState(error);
           });
     }
   }

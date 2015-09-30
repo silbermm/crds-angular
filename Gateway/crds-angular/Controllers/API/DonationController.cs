@@ -59,18 +59,29 @@ namespace crds_angular.Controllers.API
             return (Authorized(token =>
             {
                 var impersonateUserId = impersonateDonorId == null ? string.Empty : _mpDonorService.GetEmailViaDonorId(impersonateDonorId.Value).Email;
-                var donations = !string.IsNullOrWhiteSpace(impersonateUserId)
-                    ? _impersonationService.WithImpersonation(token,
-                                                              impersonateUserId,
-                                                              () =>
-                                                                  _gatewayDonationService.GetDonationsForAuthenticatedUser(token, donationYear, limit, softCredit))
-                    : _gatewayDonationService.GetDonationsForAuthenticatedUser(token, donationYear, limit, softCredit);
-                if (donations == null || !donations.HasDonations)
+                try
                 {
-                    return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching donations found")));
-                }
+                    var donations = !string.IsNullOrWhiteSpace(impersonateUserId)
+                        ? _impersonationService.WithImpersonation(token,
+                                                                  impersonateUserId,
+                                                                  () =>
+                                                                      _gatewayDonationService.GetDonationsForAuthenticatedUser(token, donationYear, limit, softCredit))
+                        : _gatewayDonationService.GetDonationsForAuthenticatedUser(token, donationYear, limit, softCredit);
+                    if (donations == null || !donations.HasDonations)
+                    {
+                        return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching donations found")));
+                    }
 
-                return (Ok(donations));
+                    return (Ok(donations));
+                }
+                catch (ImpersonationNotAllowedException e)
+                {
+                    return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.Forbidden, new ApiErrorDto(e.Message)));
+                }
+                catch (ImpersonationUserNotFoundException e)
+                {
+                    return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.Conflict, new ApiErrorDto(e.Message)));
+                }
             }));
         }
 
@@ -86,16 +97,27 @@ namespace crds_angular.Controllers.API
             return (Authorized(token =>
             {
                 var impersonateUserId = impersonateDonorId == null ? string.Empty : _mpDonorService.GetEmailViaDonorId(impersonateDonorId.Value).Email;
-                var donationYears = !string.IsNullOrWhiteSpace(impersonateUserId)
-                    ? _impersonationService.WithImpersonation(token, impersonateUserId, () => _gatewayDonationService.GetDonationYearsForAuthenticatedUser(token))
-                    : _gatewayDonationService.GetDonationYearsForAuthenticatedUser(token);
-
-                if (donationYears == null || !donationYears.HasYears)
+                try
                 {
-                    return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No donation years found")));
-                }
+                    var donationYears = !string.IsNullOrWhiteSpace(impersonateUserId)
+                        ? _impersonationService.WithImpersonation(token, impersonateUserId, () => _gatewayDonationService.GetDonationYearsForAuthenticatedUser(token))
+                        : _gatewayDonationService.GetDonationYearsForAuthenticatedUser(token);
 
-                return (Ok(donationYears));
+                    if (donationYears == null || !donationYears.HasYears)
+                    {
+                        return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No donation years found")));
+                    }
+
+                    return (Ok(donationYears));
+                }
+                catch (ImpersonationNotAllowedException e)
+                {
+                    return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.Forbidden, new ApiErrorDto(e.Message)));
+                }
+                catch (ImpersonationUserNotFoundException e)
+                {
+                    return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.Conflict, new ApiErrorDto(e.Message)));
+                }
             }));
         }
 

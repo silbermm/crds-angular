@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.Description;
+using crds_angular.Exceptions;
 using crds_angular.Exceptions.Models;
 using crds_angular.Models;
+using crds_angular.Models.Json;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
 using log4net;
@@ -37,14 +40,25 @@ namespace crds_angular.Controllers.API
             return Authorized(token =>
             {
                 var impersonateUserId = impersonateDonorId == null ? string.Empty : _donorService.GetContactDonorForDonorId(impersonateDonorId.Value).Email;
-                var person = string.IsNullOrWhiteSpace(impersonateUserId)
-                    ? _personService.GetLoggedInUserProfile(token)
-                    : _impersonationService.WithImpersonation(token, impersonateUserId, () => _personService.GetLoggedInUserProfile(token));
-                if (person == null)
+                try
                 {
-                    return Unauthorized();
+                    var person = string.IsNullOrWhiteSpace(impersonateUserId)
+                        ? _personService.GetLoggedInUserProfile(token)
+                        : _impersonationService.WithImpersonation(token, impersonateUserId, () => _personService.GetLoggedInUserProfile(token));
+                    if (person == null)
+                    {
+                        return Unauthorized();
+                    }
+                    return Ok(person);
                 }
-                return Ok(person);
+                catch (ImpersonationNotAllowedException e)
+                {
+                    return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.Forbidden, new ApiErrorDto(e.Message)));
+                }
+                catch (ImpersonationUserNotFoundException e)
+                {
+                    return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.Conflict, new ApiErrorDto(e.Message)));
+                }
             });
         }
 
