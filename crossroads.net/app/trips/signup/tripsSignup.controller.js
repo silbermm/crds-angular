@@ -271,9 +271,16 @@
       });
     }
 
+    if (typeof String.prototype.startsWith !== 'function') {
+      String.prototype.startsWith = function(str) {
+        return this.slice(0, str.length) === str;
+      };
+    }
+
     function stateChangeStart(event, toState, toParams, fromState, fromParams) {
       if (fromState.name === 'tripsignup.application.thankyou') {
-        if (toState.name.startsWith('tripsignup.application.')) {
+        //.thankyou or .page
+        if ((toState.name === 'tripsignup.application.') || (toState.name === 'tripsignup.application.thankyou')) {
           event.preventDefault();
           $state.go('tripsignup', {campaignId: toParams.campaignId});
         }
@@ -282,13 +289,15 @@
       }
 
       if (toState.name === 'tripsignup.application.thankyou') {
-        if (!fromState.name.startsWith('tripsignup.application.page')) {
+        // just .page
+        if (fromState.name !== 'tripsignup.application.page') {
           event.preventDefault();
           $state.go('tripsignup', {campaignId: toParams.campaignId});
         }
       }
 
-      if (!toState.name.startsWith('tripsignup.application.')) {
+      // .thankyou or .page
+      if ((toState.name === 'tripsignup.application.') || (toState.name === 'tripsignup.application.thankyou')) {
         if (vm.tpForm) {
           if (vm.tpForm.$dirty) {
             if (!$window.confirm('Are you sure you want to leave this page?')) {
