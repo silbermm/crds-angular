@@ -6,10 +6,13 @@ using crds_angular.Services;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
+using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using RestSharp.Extensions;
+using IDonationService = crds_angular.Services.Interfaces.IDonationService;
+using IDonorService = crds_angular.Services.Interfaces.IDonorService;
 
 namespace crds_angular.test.Services
 {
@@ -19,6 +22,7 @@ namespace crds_angular.test.Services
         private Mock<IPaymentService> _paymentService;
         private Mock<IDonationService> _donationService;
         private Mock<IDonorService> _donorService;
+        private Mock<MinistryPlatform.Translation.Services.Interfaces.IDonorService> _mpDonorService;
          
         public void SetUp()
         {
@@ -30,7 +34,10 @@ namespace crds_angular.test.Services
 
             _paymentService = new Mock<IPaymentService>(MockBehavior.Strict);
             _donationService = new Mock<IDonationService>(MockBehavior.Strict);
-            _fixture = new StripeEventService(_paymentService.Object, _donationService.Object, _donorService.Object, configuration.Object);
+            _donorService = new Mock<IDonorService>(MockBehavior.Strict);
+            _mpDonorService = new Mock<MinistryPlatform.Translation.Services.Interfaces.IDonorService>(MockBehavior.Strict);
+
+            _fixture = new StripeEventService(_paymentService.Object, _donationService.Object, _donorService.Object, _mpDonorService.Object, configuration.Object);
         }
 
         [Test]

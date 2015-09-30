@@ -16,7 +16,11 @@ using crds_angular.Exceptions;
 using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Models.Json;
+using MinistryPlatform.Translation.Services.Interfaces;
 using DonationStatus = crds_angular.Models.Crossroads.Stewardship.DonationStatus;
+using IDonationService = crds_angular.Services.Interfaces.IDonationService;
+using IDonorService = crds_angular.Services.Interfaces.IDonorService;
+using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.test.controllers
 {
@@ -26,6 +30,8 @@ namespace crds_angular.test.controllers
         private Mock<IDonorService> donorService;
         private Mock<IDonationService> _donationService;
         private Mock<IPaymentService> paymentService;
+        private Mock<IAuthenticationService> _authenticationService;
+        private Mock<MPInterfaces.IDonorService> _mpDonorService;
         private string authType;
         private string authToken;
         private static int contactId = 8675309;
@@ -49,7 +55,9 @@ namespace crds_angular.test.controllers
             donorService = new Mock<IDonorService>();
             _donationService = new Mock<IDonationService>();
             paymentService = new Mock<IPaymentService>();
-            fixture = new DonorController(donorService.Object,paymentService.Object, _donationService.Object);
+            _authenticationService = new Mock<IAuthenticationService>();
+            _mpDonorService = new Mock<MPInterfaces.IDonorService>();
+            fixture = new DonorController(donorService.Object, paymentService.Object, _donationService.Object, _mpDonorService.Object, _authenticationService.Object);
 
             authType = "auth_type";
             authToken = "auth_token";

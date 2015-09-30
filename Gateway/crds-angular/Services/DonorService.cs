@@ -14,7 +14,10 @@ namespace crds_angular.Services
         private readonly IContactService _mpContactService;
         private readonly Interfaces.IPaymentService _paymentService;
         private readonly IAuthenticationService _authenticationService;
-
+        public const string DefaultInstitutionName = "Bank";
+        public const string DonorRoutingNumberDefault = "0";
+        public const string DonorAccountNumberDefault = "0";
+        
         private readonly string _guestGiverDisplayName;
 
         private readonly int _statementFrequencyNever;
@@ -161,13 +164,31 @@ namespace crds_angular.Services
             return (_mpDonorService.DecryptCheckValue(value));
         }
 
-        public string CreateRecurringGift(UpdateDonorDTO updateDonorDto)
+        public int CreateRecurringGift(RecurringGiftDto recurringGiftDto, ContactDonor contactDonor)
         {
-            var plan = _paymentService.CreatePlan(updateDonorDto);
-            var subscription = _paymentService.CreateSubscription(plan.Id, "cus_74HHmDQARkpa9r");
-            return null;
-            // var recurGift = _mpDonorService.CreateRecurringGift(donorId);
-            //var donorAcct = _mpDonorService.UpdateDonorAccount(null, sourceId, customerId);
+            var response = _paymentService.AddSourceToCustomer(contactDonor.ProcessorId, recurringGiftDto.StripeTokenId);
+
+            var plan = _paymentService.CreatePlan(recurringGiftDto, contactDonor);
+        
+            //var donorAccountId = _mpDonorService.CreateDonorAccount(response.name,
+            //                                               DonorRoutingNumberDefault,
+            //                                               response.last4,
+            //                                               contactDonor.DonorId,
+            //                                               recurringGiftDto.PlanInterval, 
+            //                                               response.id,
+            //                                               contactDonor.ProcessorId);
+            StripeSubscription stripeSubscription;
+            stripeSubscription = _paymentService.CreateSubscription(plan.Id, contactDonor.ProcessorId);
+           
+            var recurGiftId = _mpDonorService.CreateRecurringGiftRecord(contactDonor.DonorId,
+                                                               // donorAccountId,
+                                                               123,
+                                                                recurringGiftDto.PlanInterval,
+                                                                recurringGiftDto.PlanAmount,
+                                                                recurringGiftDto.StartDate,
+                                                                recurringGiftDto.Program,
+                                                                stripeSubscription.Id);
+            return recurGiftId;
         }
 
         public CreateDonationDistDto GetRecurringGiftForSubscription(string subscriptionId)

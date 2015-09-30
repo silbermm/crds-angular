@@ -28,6 +28,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _donorLookupByEncryptedAccount;
         private readonly int _myHouseholdDonationDistributions;
         private readonly int _recurringGiftBySubscription;
+        private readonly int _recurringGiftPageId;
 
         public const string DonorRecordId = "Donor_Record";
         public const string DonorProcessorId = "Processor_ID";
@@ -60,14 +61,17 @@ namespace MinistryPlatform.Translation.Services
             _donorLookupByEncryptedAccount = configuration.GetConfigIntValue("DonorLookupByEncryptedAccount");
             _myHouseholdDonationDistributions = configuration.GetConfigIntValue("MyHouseholdDonationDistributions");
             _recurringGiftBySubscription = configuration.GetConfigIntValue("RecurringGiftBySubscription");
+            _recurringGiftPageId = configuration.GetConfigIntValue("RecurringGifts");
         }
 
 
-        public int CreateDonorRecord(int contactId, string processorId, DateTime setupTime,
-            int? statementFrequencyId = 1, // default to quarterly
-            int? statementTypeId = 1, //default to individual
-            int? statementMethodId = 2, // default to email/online
-            DonorAccount donorAccount = null
+        public int CreateDonorRecord(int contactId, string processorId, DateTime setupTime, int? statementFrequencyId = 1,
+                                     // default to quarterly
+                                     int? statementTypeId = 1,
+                                     //default to individual
+                                     int? statementMethodId = 2,
+                                     // default to email/online
+                                     DonorAccount donorAccount = null
             )
         {
             //this assumes that you do not already have a donor record - new giver
@@ -75,9 +79,9 @@ namespace MinistryPlatform.Translation.Services
             {
                 {"Contact_ID", contactId},
                 {"Statement_Frequency_ID", statementFrequencyId},
-                {"Statement_Type_ID", statementTypeId}, 
+                {"Statement_Type_ID", statementTypeId},
                 {"Statement_Method_ID", statementMethodId},
-                {"Setup_Date", setupTime},    //default to current date/time
+                {"Setup_Date", setupTime}, //default to current date/time
                 {"Processor_ID", processorId}
             };
 
@@ -97,24 +101,58 @@ namespace MinistryPlatform.Translation.Services
             // Create a new DonorAccount for this donor, if we have account info
             if (donorAccount != null)
             {
-                values = new Dictionary<string, object>
+            CreateDonorAccount(DefaultInstitutionName, DonorAccountNumberDefault, DonorRoutingNumberDefault, donorId, donorAccount.Type.ToString(),
+                                 donorAccount.ProcessorAccountId,processorId);
+                //    values = new Dictionary<string, object>
+                //    {
+                //        { "Institution_Name", DefaultInstitutionName },
+                //        { "Account_Number", DonorAccountNumberDefault },
+                //        { "Routing_Number", DonorRoutingNumberDefault },
+                //        { "Encrypted_Account", CreateHashedAccountAndRoutingNumber(donorAccount.AccountNumber, donorAccount.RoutingNumber) },
+                //        { "Donor_ID", donorId },
+                //        { "Non-Assignable", false },
+                //        { "Account_Type_ID", (int)donorAccount.Type },
+                //        { "Closed", false },
+                //        {"Processor_Account_ID", donorAccount.ProcessorAccountId},
+                //        {"Processor_ID", processorId}
+                //    };
+
+                //    _ministryPlatformService.CreateRecord(_donorAccountsPageId, values, apiToken);
+                //}
+                }
+            return donorId;
+        }
+
+        public int CreateDonorAccount(string institutionName, string routingNumber, string acctNumber, int donorId, string acctType, string processorAcctId, string processorId)
+        {
+            DonorAccount donorAccount;
+            var apiToken = ApiLogin();
+
+            int donorAccountId;
+            try
+            {
+              var  values = new Dictionary<string, object>
                 {
-                    { "Institution_Name", DefaultInstitutionName },
+                    { "Institution_Name", institutionName },
                     { "Account_Number", DonorAccountNumberDefault },
                     { "Routing_Number", DonorRoutingNumberDefault },
-                    { "Encrypted_Account", CreateHashedAccountAndRoutingNumber(donorAccount.AccountNumber, donorAccount.RoutingNumber) },
+                    { "Encrypted_Account", CreateHashedAccountAndRoutingNumber(acctNumber, routingNumber) },
                     { "Donor_ID", donorId },
                     { "Non-Assignable", false },
-                    { "Account_Type_ID", (int)donorAccount.Type },
+                    { "Account_Type_ID", Convert.ToInt32(acctType)},
                     { "Closed", false },
-                    {"Processor_Account_ID", donorAccount.ProcessorAccountId},
+                    {"Processor_Account_ID", processorAcctId},
                     {"Processor_ID", processorId}
                 };
 
-                _ministryPlatformService.CreateRecord(_donorAccountsPageId, values, apiToken);
+                 donorAccountId =  _ministryPlatformService.CreateRecord(_donorAccountsPageId, values, apiToken);  
+                 return donorAccountId; 
             }
-            return donorId;
-
+            catch (Exception e)
+            {
+                throw new ApplicationException(string.Format("CreateDonorAccount failed.  Donor Id: {0}", donorId), e);
+            }
+           
         }
 
         public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor, string checkScannerBatchName = null)
@@ -588,35 +626,48 @@ namespace MinistryPlatform.Translation.Services
             return string.Join(" or ", ids.Select(id => string.Format("\"{0}\"", id)));
         }
 
-        public int CreateRecurringGift(string donorID)
+        public int CreateRecurringGiftRecord(int donorId, int donorAccountId, string planInterval, decimal planAmount, DateTime startDate, string program, string subscriptionId)
         {
-        //    var values = new Dictionary<string, object>
-        //    {
-        //        {"Donor_ID", donorId},
-        //        {"Donor_Account", statementFrequencyId},
-        //        {"Email_Address", statementTypeId}, 
-        //        {"Frequency", statementMethodId},
-        //        {"Day_Of_Month", setupTime},    //default to current date/time
-        //        {"Day_Of_Week", processorId},
-        //        {"Amount", amount},
-        //        {"Start_Date", startDate},
-        //        {"Program_ID", programId},
-        //        {"Congregation_ID", congregationId},
-        //        {"Subscription_ID", subscriptionId}
-        //    };
+            object sd = null;
+            object day = null;
+            object frequencyId = null;
+            if (planInterval == "week")
+            {
+                sd = NumericDayOfWeek.GetDayOfWeekID((startDate.DayOfWeek).ToString());
+                frequencyId = 1;
+            }
+            else
+            {
+                day = startDate.Day;
+                frequencyId = 2;
+            }
+          
+            var values = new Dictionary<string, object>
+            {
+                {"Donor_ID", donorId},
+                {"Donor_Account_ID", donorAccountId},
+                {"Frequency_ID", frequencyId},
+                {"Day_Of_Month", day},    
+                {"Day_Of_Week_ID", sd},
+                {"Amount", planAmount},
+                {"Start_Date", startDate},
+                {"Program_ID", program},
+                {"Congregation_ID", 1},
+                {"Subscription_ID", subscriptionId}
+            };
 
-        //    var apiToken = ApiLogin();
-        //    int recurringGiftId;
-        //    try
-        //    {
-        //        recurringGiftId = _ministryPlatformService.CreateRecord(_recurringGiftPageId, values, apiToken, true);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        throw new ApplicationException(string.Format("Create Recurring Gift failed.  Donor Id: {0}", donorId), e);
-        //    }
+            var apiToken = ApiLogin();
+            int recurringGiftId;
+            try
+            {
+                recurringGiftId = _ministryPlatformService.CreateRecord(_recurringGiftPageId, values, apiToken, true);
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException(string.Format("Create Recurring Gift failed.  Donor Id: {0}", donorId), e);
+            }
 
-            return 0;
+            return recurringGiftId;
         }
 
         public CreateDonationDistDto GetRecurringGiftForSubscription(string subscription)

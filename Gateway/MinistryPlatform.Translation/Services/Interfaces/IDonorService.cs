@@ -30,7 +30,8 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         List<Donation> GetDonations(IEnumerable<int> donorIds, string donationYear = null);
         List<Donation> GetSoftCreditDonations(IEnumerable<int> donorIds, string donationYear = null);
         List<Donation> GetDonationsForAuthenticatedUser(string userToken, bool? softCredit = null, string donationYear = null);
-        int CreateRecurringGift(string donorId);
         CreateDonationDistDto GetRecurringGiftForSubscription(string subscription);
+        int CreateDonorAccount(string institutionName, string routingNumber, string acctNumber, int donorId, string acctType, string processorAcctId, string processorId);
+        int CreateRecurringGiftRecord(int donorId, int donorAccountId, string planInterval, decimal planAmount, DateTime startDate, string program, string subscriptionId);
     }
 }

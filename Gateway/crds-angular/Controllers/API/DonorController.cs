@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System.Web.Http.Results;
 using crds_angular.Exceptions;
 using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads;
@@ -11,6 +12,7 @@ using crds_angular.Models.Json;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
+using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Controllers.API
 {
@@ -19,12 +21,16 @@ namespace crds_angular.Controllers.API
         private readonly IDonorService _donorService;
         private readonly IPaymentService _stripePaymentService;
         private readonly IDonationService _donationService;
+        private readonly MPInterfaces.IDonorService _mpDonorService;
+        private readonly MPInterfaces.IAuthenticationService _authenticationService;
 
-        public DonorController(IDonorService donorService, IPaymentService stripePaymentService, IDonationService donationService)
+        public DonorController(IDonorService donorService, IPaymentService stripePaymentService, IDonationService donationService, MPInterfaces.IDonorService mpDonorService, MPInterfaces.IAuthenticationService authenticationService)
         {
             _donorService = donorService;
             _stripePaymentService = stripePaymentService;
             _donationService = donationService;
+            _authenticationService = authenticationService;
+            _mpDonorService = mpDonorService;
         }
 
         /// <summary>
@@ -268,8 +274,7 @@ namespace crds_angular.Controllers.API
                     _donorService.GetContactDonorForEmail(dto.EmailAddress) 
                     : 
                     _donorService.GetContactDonorForAuthenticatedUser(token);
-
-                //Post apistripe/customer/{custID}/sources pass in the dto.stripe_token_id
+              
                 sourceData = _stripePaymentService.UpdateCustomerSource(contactDonor.ProcessorId, dto.StripeTokenId);
             }
             catch (PaymentProcessorException stripeException)
@@ -311,15 +316,18 @@ namespace crds_angular.Controllers.API
 
         [RequiresAuthorization]
         [ResponseType(typeof (StripePlan))]
-        [Route("api/donor/plan")]
-        public IHttpActionResult CreatePlan([FromBody] UpdateDonorDTO updateDonorDto)
+        [Route("api/donor/createrecurrence")]
+        public IHttpActionResult CreateRecurringGift([FromBody] RecurringGiftDto recurringGiftDto)
         {
             return (Authorized(token =>
             {
                 try
                 {
-                    var recurringGift = _donorService.CreateRecurringGift(updateDonorDto);
-                    return null;
+                    var contactId =_authenticationService.GetContactId(token);
+                    var contactDonor = _mpDonorService.GetContactDonor(contactId);
+                    var donor = _donorService.CreateOrUpdateContactDonor(contactDonor, string.Empty, string.Empty, recurringGiftDto.StripeTokenId, DateTime.Now);
+                    var recurringGift = _donorService.CreateRecurringGift(recurringGiftDto, donor);
+                    return Ok(recurringGift);
                 }
                 catch (PaymentProcessorException stripeException)
                 {
