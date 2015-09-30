@@ -61,10 +61,19 @@
       });
     }
 
+    /**
+     * Don't show the reply button when the
+     * donor is anonymous or the payment type is
+     *    - Scholorship (typeId = 9)
+     *    - Transfer (typeID = 13)
+     */
     function showReplyButton() {
-      if (vm.donation.anonymous) {
+      if (vm.donation.anonymous ||
+          vm.donation.paymentTypeId === 9 ||
+          vm.donation.paymentTypeId === 13) {
         return false;
       }
+
 
       return true;
     }

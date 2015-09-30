@@ -19,6 +19,7 @@ module.exports = {
             donationDate:'8/13/2015',
             registeredDonor:true,
             donationDistributionId: 149,
+            paymentTypeId: 4,
           }]
       },
       {
@@ -40,17 +41,31 @@ module.exports = {
             registeredDonor:true,
             anonymous: true,
             donationDistributionId: 179,
+            paymentTypeId: 4,
           },
           {
             donorId: 123,
-            donorNickname:'TJ',
-            donorLastName:'Maddox',
+            donorNickname:'Scholorship',
+            donorLastName:'',
             donorEmail:'tmaddox33+mp1@gmail.com',
             donationAmount:100,
             donationDate:'8/8/2015',
-            registeredDonor:true,
+            registeredDonor: false,
             donationDistributionId: 169,
-          }
+            paymentTypeId: 9,
+          },
+          {
+            donorId: 1333,
+            donorNickname:'Transfer',
+            donorLastName:'',
+            donorEmail:'andrew.canterbury@ingagepartners.com',
+            donationAmount:1900,
+            donationDate:'8/11/2015',
+            registeredDonor:true,
+            anonymous: false,
+            donationDistributionId: 234,
+            paymentTypeId: 13,
+          },
         ]
       }
     ],

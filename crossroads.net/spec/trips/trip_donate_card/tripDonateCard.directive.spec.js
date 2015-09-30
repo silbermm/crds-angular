@@ -47,8 +47,35 @@ require('../../../app/trips/trips.module');
 
     });
 
-    describe('Non Anonymous Donor', function() {
+    describe('Transfer', function() {
+      beforeEach(function() {
+        scope.donation = tripHelpers.MyTrips[1].tripGifts[2];
+        element = $compile(element)(scope);
+        scope.$digest();
+        tripDonations = element.isolateScope().tripDonations;
+      });
 
+      it('should not show reply button', function() {
+        expect(tripDonations.showReplyButton()).toBe(false);
+      });
+
+    });
+
+    describe('Scholorship', function() {
+      beforeEach(function() {
+        scope.donation = tripHelpers.MyTrips[1].tripGifts[1];
+        element = $compile(element)(scope);
+        scope.$digest();
+        tripDonations = element.isolateScope().tripDonations;
+      });
+
+      it('should not show reply button', function() {
+        expect(tripDonations.showReplyButton()).toBe(false);
+      });
+
+    });
+
+    describe('Non Anonymous Donor', function() {
       beforeEach(function() {
         scope.donation = tripHelpers.MyTrips[0].tripGifts[0];
         element = $compile(element)(scope);
