@@ -345,6 +345,7 @@ namespace MinistryPlatform.Translation.Services
                     DonorEmail = result.ToString("Email Address"),
                     DonationDate = result.ToDate("Donation Date"),
                     DonationAmount = Convert.ToInt32(result["Amount"]),
+                    PaymentTypeId = Convert.ToInt32(result["Payment Type ID"]),
                     AnonymousGift = result.ToBool("Anonymous"),
                     RegisteredDonor = result.ToBool("Registered Donor"),
                     MessageSent = result.ToBool("Message Sent")

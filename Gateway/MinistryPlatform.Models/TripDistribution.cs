@@ -24,5 +24,6 @@ namespace MinistryPlatform.Models
         public bool AnonymousGift { get; set; }
         public bool RegisteredDonor { get; set; }
         public bool MessageSent { get; set; }
+        public int PaymentTypeId { get; set; }
     }
 }
