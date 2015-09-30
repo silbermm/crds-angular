@@ -35,6 +35,7 @@ UPDATE [dbo].[dp_Page_Views]
 , Donation_Distributions.[Amount] AS [Amount]
 , Donation_ID_Table.[Anonymous] AS [Anonymous]
 , Donation_ID_Table.[Registered_Donor] AS [Registered Donor]
-, Donation_Distributions.[Message_Sent] AS [Message Sent]'
+, Donation_Distributions.[Message_Sent] AS [Message Sent]
+, Donation_ID_Table_Payment_Type_ID_Table.[Payment_Type_ID] AS [Payment Type ID]'
  WHERE [Page_View_ID] = 92179
 GO
