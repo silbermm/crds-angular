@@ -180,7 +180,7 @@ describe('GivingHistoryController', function() {
       expect(sut.beginning_donation_date).not.toBeDefined();
       expect(sut.ending_donation_date).not.toBeDefined();
       expect(sut.donation_history).toBeFalsy();
-      expect(sut.donation_view_ready).toBeFalsy();
+      expect(sut.donation_view_ready).toBeTruthy();
       expect(sut.soft_credit_donation_history).toBeFalsy();
       expect(sut.soft_credit_donation_view_ready).toBeFalsy();
       expect(sut.overall_view_ready).toBeTruthy();
@@ -201,7 +201,7 @@ describe('GivingHistoryController', function() {
       expect(sut.beginning_donation_date).not.toBeDefined();
       expect(sut.ending_donation_date).not.toBeDefined();
       expect(sut.donation_history).toBeFalsy();
-      expect(sut.donation_view_ready).toBeFalsy();
+      expect(sut.donation_view_ready).toBeTruthy();
       expect(sut.soft_credit_donation_history).toBeFalsy();
       expect(sut.soft_credit_donation_view_ready).toBeFalsy();
       expect(sut.overall_view_ready).toBeTruthy();

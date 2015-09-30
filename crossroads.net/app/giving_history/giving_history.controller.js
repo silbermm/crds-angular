@@ -60,6 +60,7 @@
 
         function(error /*GivingHistoryService.donationYears.get error*/) {
           vm.overall_view_ready = true;
+          vm.donation_view_ready = true;
           vm.donation_history = false;
           vm.soft_credit_donation_history = false;
           setErrorState(error);
@@ -68,6 +69,7 @@
 
       function(error /*Profile.Personal.get error*/) {
         vm.overall_view_ready = true;
+        vm.donation_view_ready = true;
         vm.donation_history = false;
         vm.soft_credit_donation_history = false;
         setErrorState(error);
