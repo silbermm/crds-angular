@@ -3,11 +3,11 @@
 <script type="text/javascript">
 
 function tweenFadeBg(selecter, delay ){ if(!delay){ delay = 0; }
-          TweenMax.to(selecter+' .fade-bg', 1, { opacity: 1, autoAlpha: 1, delay: delay, ease: Power3.easeOut });
-}
+          TweenMax.to(selecter+' .fade-bg', 1, { opacity: 1, autoAlpha: 1, delay: delay });
+};
 function tweenFadeUp(selecter, delay ){ if(!delay){ delay = 0.25; }
-          TweenMax.staggerTo(selecter+' .rise10', 1, { opacity: 1, autoAlpha: 1, y: 0, delay: delay, ease: Power3.easeOut }, .2);
-}
+          TweenMax.staggerTo(selecter+' .rise10', 1, { opacity: 1, autoAlpha: 1, y: 0, delay: delay }, .2);
+};
 
 $(document).ready(function() {
   $('#fullpage').fullpage({
@@ -21,7 +21,8 @@ $(document).ready(function() {
         tweenFadeUp('.opening', 2);
       }
       if (index == 2) {
-        tweenFadeUp('.map');
+        tweenFadeBg('.map');
+        tweenFadeUp('.map', 1);
       }
     }
   });
@@ -57,8 +58,8 @@ $(document).ready(function() {
   </section><!--/opening-->
 
   <section class="section map">
-    <div class="imgix-fluid-bg img-background slide-bg fade-bg" data-src="http://crossroads-media.imgix.net/images/explore_map_bg_five.jpg"></div>
-    <div class="vertical-center">
+    <div class="imgix-fluid-bg img-background slide-bg fade-bg" data-src="http://crossroads-media.imgix.net/images/explore_map_bg.png"></div>
+    <div class="vertical-80">
       <div class="container">
         <div class="row">
             <div class="col-sm-12">
@@ -78,14 +79,16 @@ $(document).ready(function() {
     </div><!--/container-->
   </div><!--/<vertical-center-->
 </section><!--/map-->
-   <section class="section kidsclub">
 
-  </section>
-    <section class="section">
-    <h1 class="">The 4th Section</h1>
-  </section>
-    <section class="section">
-    <h1 class="">The 5th Section</h1>
-  </section>
+
+<section class="section kidsclub">
+  Kids Club
+</section>
+<section class="section">
+  <h1 class="">The 4th Section</h1>
+</section>
+<section class="section">
+  <h1 class="">The 5th Section</h1>
+</section>
+
 </div>
-rise10
