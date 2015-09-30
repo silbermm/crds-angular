@@ -27,6 +27,10 @@ $(document).ready(function() {
       if (index == 9) {
         tweenFadeUp('.meet');
       }
+      if (index == 4) {
+        tweenFadeBg('.studentministry', 1);
+        tweenFadeUp('.studentministry', 2);
+      }
     }
   });
 });
@@ -89,29 +93,31 @@ $(document).ready(function() {
   <div class="container">
     <div class="row">
       <div class="col-sm-6 push-top mobile-flush-top">
-        <h2 class="kidsclub-title">Oh, and kids love this place.</h2>
+        <h2 class="kidsclub-title flush-bottom">Oh, and kids love this place.</h2>
         <p class="kidsclub-desc">We have <a href="http://www.crossroadskidsclub.net">Kids' Club</a>, which is a fun-learning environment designed just for them. It's free, totally secure and offered during all services.</p>
       </div><!--/col-sm-3-->
     </div><!--/row-->
     <div class="row">
-    <div class="col-sm-6 col-sm-offset-3">
-      <img data-src="http://crossroads-media.imgix.net/images/explore/explore_kidsclub_logo.png" alt="Kids Club" class="img-responsive kc-logo push-top">
-    </div><!--/col-sm-6-->
-  </div>
+      <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3">
+        <img data-src="http://crossroads-media.imgix.net/images/explore/explore_kidsclub_logo.png" alt="Kids Club" class="img-responsive kc-logo push-top">
+      </div><!--/col-sm-6-->
+    </div><!--/row-->
   </div><!--/container-->
-
-
-
   <img data-src="http://crossroads-media.s3.amazonaws.com/images/explore_kidsclub_bottle.png" alt="Bubbles" class="bubble-stick hidden-xs" />
 </section>
 
 <section class="section studentministry">
-  <h2 class="studentministry-title">STUDENT MINISTRY</h2>
-  <p class="studentministry-desc"><a href="/next-step/serve/student-ministry/middle-school-ministry">Middle School</a> and <a href="/next-step/serve/student-ministry/high-school">High School</a> students have a place to call their own.
-    Students are challenged and encouraged through relevant teaching and
-    fun events, and opportunities are provided for them to grow as they connect
-    with God and with each other.
-  </p>
+  <div class="imgix-fluid-bg img-background slide-bg fade-bg" data-src="http://crossroads-media.imgix.net/images/explore/explore_studentministry_bg.jpg"></div>
+  <div class="vertical-center">
+    <div class="container">
+      <div class="row">
+        <div class="studentministry-container col-sm-6 col-sm-offset-3">
+          <h2 class="studentministry-title flush-bottom rise10">STUDENT MINISTRY</h2>
+          <p class="studentministry-desc rise10"><a href="/next-step/serve/student-ministry/middle-school-ministry">Middle School</a> and <a href="/next-step/serve/student-ministry/high-school">High School</a> students have a place to call their own. Students are challenged and encouraged through relevant teaching and fun events, and opportunities are provided for them to grow as they connect with God and with each other. </p>
+        </div><!--/studentministry-container-->
+      </div><!--/row-->
+    </div><!--/container-->
+  </div><!--/vertical-center-->
 </section>
 
 <section class="section coffee">
@@ -133,6 +139,7 @@ $(document).ready(function() {
   <h2 class="photos-title">We believe God doesn't just work weekends.</h2>
   <p class="photos-desc">So we mobilize hundreds of people-sometimes thousands-and we respond to God's call to serve others in our community and around the world. <a href="/next-step/reachout">Learn more about how serving others fixes us</a>.</p>
 </section>
+
 
 <section class="section meet">
   <div class="vertical-20">
