@@ -273,8 +273,7 @@
 
     function stateChangeStart(event, toState, toParams, fromState, fromParams) {
       if (fromState.name === 'tripsignup.application.thankyou') {
-        //.thankyou or .page
-        if ((toState.name === 'tripsignup.application.') || (toState.name === 'tripsignup.application.thankyou')) {
+        if (toState.name === 'tripsignup.application.page') {
           event.preventDefault();
           $state.go('tripsignup', {campaignId: toParams.campaignId});
         }
@@ -283,15 +282,14 @@
       }
 
       if (toState.name === 'tripsignup.application.thankyou') {
-        // just .page
         if (fromState.name !== 'tripsignup.application.page') {
           event.preventDefault();
           $state.go('tripsignup', {campaignId: toParams.campaignId});
         }
       }
 
-      // .thankyou or .page
-      if ((toState.name === 'tripsignup.application.') || (toState.name === 'tripsignup.application.thankyou')) {
+      if (toState.name === 'tripsignup') {
+        // warn if the form is dirty
         if (vm.tpForm) {
           if (vm.tpForm.$dirty) {
             if (!$window.confirm('Are you sure you want to leave this page?')) {
@@ -300,9 +298,8 @@
             }
           }
         }
-      }
 
-      if (toState.name === 'tripsignup') {
+        // reset service on "page 0"
         vm.signupService.reset(vm.campaign);
         return;
       }
