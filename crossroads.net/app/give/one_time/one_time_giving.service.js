@@ -57,7 +57,7 @@
     }
 
     function submitBankInfo(giveForm, programsInput) {
-      DonationService.submitBankInfo(give.giveForm, give.programsInput);
+      DonationService.submitBankInfo(giveForm, programsInput);
     }
 
     function submitChangedBankInfo(giveForm, programsInput) {
