@@ -238,16 +238,21 @@ namespace crds_angular.Services
 
             foreach (var result in results)
             {
-                var tp = new TripDto();
-                tp.EventParticipantId = result.EventParticipantId;
-                tp.EventEnd = result.EventEndDate.ToString("MMM dd, yyyy");
-                tp.EventId = result.EventId;
-                tp.EventStartDate = result.EventStartDate.ToUnixTime();
-                tp.EventStart = result.EventStartDate.ToString("MMM dd, yyyy");
-                tp.EventTitle = result.EventTitle;
-                tp.EventType = result.EventType;
-                tp.ProgramId = result.ParticipantId;
-                tp.ProgramName = result.ProgramName;
+                var tp = new TripDto
+                {
+                    EventParticipantId = result.EventParticipantId,
+                    EventEnd = result.EventEndDate.ToString("MMM dd, yyyy"),
+                    EventId = result.EventId,
+                    EventStartDate = result.EventStartDate.ToUnixTime(),
+                    EventStart = result.EventStartDate.ToString("MMM dd, yyyy"),
+                    EventTitle = result.EventTitle,
+                    EventType = result.EventType,
+                    ProgramId = result.ProgramId,
+                    ProgramName = result.ProgramName,
+                    CampaignId = result.CampaignId,
+                    CampaignName = result.CampaignName,
+                    PledgeDonorId = result.DonorId
+                };
                 var participant = participants[result.ParticipantId];
                 participant.Trips.Add(tp);
             }
@@ -300,10 +305,15 @@ namespace crds_angular.Services
                         gift.DonorNickname = donation.DonorNickname ?? donation.DonorFirstName;
                         gift.DonorLastName = donation.DonorLastName;
                     }
+                    gift.DonationDistributionId = donation.DonationDistributionId;
+                    gift.DonorId = donation.DonorId;
                     gift.DonorEmail = donation.DonorEmail;
                     gift.DonationDate = donation.DonationDate.ToShortDateString();
                     gift.DonationAmount = donation.DonationAmount;
+                    gift.PaymentTypeId = donation.PaymentTypeId;
                     gift.RegisteredDonor = donation.RegisteredDonor;
+                    gift.MessageSent = donation.MessageSent;
+                    gift.Anonymous = donation.AnonymousGift;
                     e.TripGifts.Add(gift);
                     e.TotalRaised += donation.DonationAmount;
                 }
@@ -428,6 +438,9 @@ namespace crds_angular.Services
             formResponse.FormAnswers = new List<FormAnswer>(FormatFormAnswers(dto));
 
             var formResponseId = _formSubmissionService.SubmitFormResponse(formResponse);
+
+            _privateInviteService.MarkAsUsed(dto.PledgeCampaignId, dto.InviteGUID);
+            
             return formResponseId;
         }
 

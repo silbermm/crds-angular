@@ -75,6 +75,7 @@
     <Compile Include="Household.cs" />
     <Compile Include="HouseholdMember.cs" />
     <Compile Include="MessageTemplate.cs" />
+    <Compile Include="MinistryPlatformUser.cs" />
     <Compile Include="MyContact.cs" />
     <Compile Include="ContactRelationship.cs" />
     <Compile Include="Event.cs" />

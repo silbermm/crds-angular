@@ -192,7 +192,8 @@ namespace MinistryPlatform.Translation.Test.Services
             {
                 {"Donation_ID", expectedDonationId},
                 {"Amount", donationAmt},
-                {"Program_ID", programId}
+                {"Program_ID", programId},
+               
             };
 
             var programServiceResponse = new Program
@@ -229,7 +230,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _communicationService.Setup(mocked => mocked.GetTemplate(It.IsAny<int>())).Returns(getTemplateResponse);
 
 
-            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, chargeId, pymtType, processorId, setupDate, true, false, donorAcctId, checkScannerBatchName);
+            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, null, chargeId, pymtType, processorId, setupDate, true, false, donorAcctId, checkScannerBatchName);
 
             // Explicitly verify each expectation...
             _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>()));
@@ -237,7 +238,113 @@ namespace MinistryPlatform.Translation.Test.Services
             _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donationPageId, expectedDonationValues, It.IsAny<string>(), true));
             _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donationDistPageId, expectedDistributionValues, It.IsAny<string>(), true));
 
-            _ministryPlatformService.VerifyAll();
+           // _ministryPlatformService.VerifyAll();
+            _programService.VerifyAll();
+            _communicationService.VerifyAll();
+            Assert.IsNotNull(response);
+            Assert.AreEqual(response, expectedDonationId);
+        }
+
+        [Test]
+        public void CreateDonationAndDistributionRecordWithPledge()
+        {
+            var donationAmt = 676767;
+            var feeAmt = 5656;
+            var donorId = 1234567;
+            var programId = "3";
+            var pledgeId = 123;
+            var setupDate = DateTime.Now;
+            var chargeId = "ch_crds1234567";
+            var processorId = "cus_8675309";
+            var pymtType = "cc";
+            var expectedDonationId = 321321;
+            var expectedDonationDistributionId = 231231;
+            var checkScannerBatchName = "check scanner batch";
+            const string viewKey = "DonorByContactId";
+            const string sortString = "";
+            var searchString = ",\"" + donorId + "\"";
+            var donationPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Donations"]);
+            var donationDistPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Distributions"]);
+
+            _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
+              donationPageId, It.IsAny<Dictionary<string, object>>(),
+              It.IsAny<string>(), true)).Returns(expectedDonationId);
+
+            _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
+                donationDistPageId, It.IsAny<Dictionary<string, object>>(),
+                It.IsAny<string>(), true)).Returns(expectedDonationDistributionId);
+
+            _communicationService.Setup(mocked => mocked.SendMessage(It.IsAny<Communication>()));
+
+            var expectedDonationValues = new Dictionary<string, object>
+            {
+                {"Donor_ID", donorId},
+                {"Donation_Amount", donationAmt},
+                {"Processor_Fee_Amount", feeAmt /Constants.StripeDecimalConversionValue},
+                {"Payment_Type_ID", 4}, //hardcoded as credit card until ACH stories are worked
+                {"Donation_Date", setupDate},
+                {"Transaction_code", chargeId},
+                {"Registered_Donor", true}, 
+                {"Processor_ID", processorId},
+                {"Donation_Status_Date", setupDate},
+                {"Donation_Status_ID", 1},
+                {"Recurring_Gift", false},
+                {"Donor_Account_ID",null },
+                {"Check_Scanner_Batch", checkScannerBatchName}
+            };
+
+            var expectedDistributionValues = new Dictionary<string, object>
+            {
+                {"Donation_ID", expectedDonationId},
+                {"Amount", donationAmt},
+                {"Program_ID", programId},
+                {"Pledge_ID", pledgeId}
+               
+            };
+
+            var programServiceResponse = new Program
+            {
+                CommunicationTemplateId = 1234,
+                ProgramId = 3,
+                Name = "Crossroads"
+            };
+
+            _programService.Setup(mocked => mocked.GetProgramById(It.IsAny<int>())).Returns(programServiceResponse);
+
+            var dictList = new List<Dictionary<string, object>>();
+            dictList.Add(new Dictionary<string, object>()
+            {
+                {"Donor_ID", donorId},
+                {"Processor_ID", "tx_123"},
+                {"Email","test@test.com"},
+                {"Contact_ID","1234"},
+                {"Statement_Type", "Individual"},
+                {"Statement_Type_ID", 1},
+                {"Statement_Frequency", "Quarterly"},
+                {"Statement_Method", "None"},
+                {"Household_ID", 1}
+            });
+
+
+            _ministryPlatformService.Setup(mocked => mocked.GetPageViewRecords(viewKey, It.IsAny<string>(), searchString, sortString, 0)).Returns(dictList);
+
+            var getTemplateResponse = new MessageTemplate()
+            {
+                Body = "Test Body Content",
+                Subject = "Test Email Subject Line"
+            };
+            _communicationService.Setup(mocked => mocked.GetTemplate(It.IsAny<int>())).Returns(getTemplateResponse);
+
+
+            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, pledgeId, chargeId, pymtType, processorId, setupDate, true, false, null, checkScannerBatchName);
+
+            // Explicitly verify each expectation...
+            _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>()));
+            _programService.Verify(mocked => mocked.GetProgramById(3));
+            _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donationPageId, expectedDonationValues, It.IsAny<string>(), true));
+            _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donationDistPageId, expectedDistributionValues, It.IsAny<string>(), true));
+
+            // _ministryPlatformService.VerifyAll();
             _programService.VerifyAll();
             _communicationService.VerifyAll();
             Assert.IsNotNull(response);
@@ -904,6 +1011,24 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(200000, result[1].donationAmt);
             Assert.AreEqual("Program 2", result[1].Distributions[0].donationDistributionProgram);
             Assert.AreEqual(200000, result[1].Distributions[0].donationDistributionAmt);
+        }
+
+        [Test]
+        // This test is pretty much a copy of the code in the service itself, but it does serve a purpose - 
+        // making sure if the algorithm changes, this test will fail!
+        public void TestCreateHashedAccountAndRoutingNumber()
+        {
+            const string routingNumber = "110000000";
+            const string accountNumber = "000123456789";
+            const string hashKey = "Mcc3#e758ebe8Seb1fdeF628dbK796e5";
+
+            var crypt = SHA256.Create();
+            var bytes = Encoding.UTF8.GetBytes(string.Concat(routingNumber, accountNumber, hashKey));
+            var crypto = crypt.ComputeHash(bytes, 0, bytes.Length);
+            var hashString = Convert.ToBase64String(crypto).Replace('/', '~');
+
+            var result = _fixture.CreateHashedAccountAndRoutingNumber(accountNumber, routingNumber);
+            Assert.AreEqual(hashString, result);
         }
     }
 }

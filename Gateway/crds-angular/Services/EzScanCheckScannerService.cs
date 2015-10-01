@@ -89,6 +89,7 @@ namespace crds_angular.Services
                                                                                          fee,
                                                                                          contactDonor.DonorId,
                                                                                          programId,
+                                                                                         null,
                                                                                          charge.Id,
                                                                                          "check",
                                                                                          contactDonor.ProcessorId,
@@ -154,8 +155,8 @@ namespace crds_angular.Services
 
             contactDonor.Account = new DonorAccount
             {
-                AccountNumber = checkDetails.AccountNumber,
-                RoutingNumber = checkDetails.RoutingNumber,
+                AccountNumber = account,
+                RoutingNumber = routing,
                 Type = AccountType.Checking
             };
             

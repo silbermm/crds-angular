@@ -38,7 +38,7 @@ namespace crds_angular.Controllers.API
                 throw new HttpResponseException(dataError.HttpResponseMessage);
             }
 
-            TripApplicationResponseDto response = null;
+            TripApplicationResponseDto response;
             try
             {
                 var message = _messageFactory.CreateMessage(dto);

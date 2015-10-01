@@ -14,6 +14,8 @@ namespace MinistryPlatform.Translation.Services
     public class DonationService : BaseService, IDonationService
     {
         private readonly int _donationsPageId;
+        private readonly int _donationDistributionPageId;
+        private readonly int _donorMessageTemplateId;
         private readonly int _distributionPageId;
         private readonly int _batchesPageId;
         private readonly int _depositsPageId;
@@ -22,17 +24,23 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _gpExportPageView;
         private readonly int _processingProgramId;
         private readonly int _scholarshipPaymentTypeId;
+        private readonly int _tripDonationMessageTemplateId;
 
         private readonly IMinistryPlatformService _ministryPlatformService;
         private readonly IDonorService _donorService;
+        private readonly ICommunicationService _communicationService;
+        private readonly IPledgeService _pledgeService;
 
-        public DonationService(IMinistryPlatformService ministryPlatformService, IDonorService donorService, IConfigurationWrapper configuration, IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
+        public DonationService(IMinistryPlatformService ministryPlatformService, IDonorService donorService, ICommunicationService communicationService, IPledgeService pledgeService, IConfigurationWrapper configuration, IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
             : base(authenticationService, configurationWrapper)
         {
             _ministryPlatformService = ministryPlatformService;
             _donorService = donorService;
-
+            _communicationService = communicationService;
+            _pledgeService = pledgeService;
             _donationsPageId = configuration.GetConfigIntValue("Donations");
+            _donationDistributionPageId = configuration.GetConfigIntValue("Distributions");
+            _donorMessageTemplateId = configuration.GetConfigIntValue("DonorMessageTemplateId");
             _distributionPageId = configuration.GetConfigIntValue("Distributions");
             _batchesPageId = configuration.GetConfigIntValue("Batches");
             _depositsPageId = configuration.GetConfigIntValue("Deposits");
@@ -41,6 +49,7 @@ namespace MinistryPlatform.Translation.Services
             _gpExportPageView = configuration.GetConfigIntValue("GPExportView");
             _processingProgramId = configuration.GetConfigIntValue("ProcessingProgramId");
             _scholarshipPaymentTypeId = configuration.GetConfigIntValue("ScholarshipPaymentTypeId");
+            _tripDonationMessageTemplateId = configuration.GetConfigIntValue("TripDonationMessageTemplateId");
         }
 
         public int UpdateDonationStatus(int donationId, int statusId, DateTime statusDate,
@@ -329,14 +338,18 @@ namespace MinistryPlatform.Translation.Services
                     TotalPledge = Convert.ToInt32(result["Total Pledge"]),
                     CampaignStartDate = result.ToDate("Start Date"),
                     CampaignEndDate = result.ToDate("End Date"),
+                    DonorId = result.ToInt("Donor ID"),
+                    DonationDistributionId = result.ToInt("dp_RecordID"),
                     DonorNickname = result.ToString("Nickname"),
                     DonorFirstName = result.ToString("First Name"),
                     DonorLastName = result.ToString("Last Name"),
                     DonorEmail = result.ToString("Email Address"),
                     DonationDate = result.ToDate("Donation Date"),
                     DonationAmount = Convert.ToInt32(result["Amount"]),
+                    PaymentTypeId = Convert.ToInt32(result["Payment Type ID"]),
                     AnonymousGift = result.ToBool("Anonymous"),
-                    RegisteredDonor = result.ToBool("Registered Donor")
+                    RegisteredDonor = result.ToBool("Registered Donor"),
+                    MessageSent = result.ToBool("Message Sent")
                 };
 
                 trips.Add(trip);
@@ -390,9 +403,65 @@ namespace MinistryPlatform.Translation.Services
             _ministryPlatformService.RemoveSelection(selectionId, new [] {depositId}, token);
         }
 
-        public int CreateDonationAndDistribution(int donorId)
+        public void SendMessageToDonor(int donorId, int donationDistributionId, int fromContactId, string body, string tripName )
         {
-            return 0;
+            var template = _communicationService.GetTemplate(_donorMessageTemplateId);
+            var messageData = new Dictionary<string, object>
+            {
+                {"TripName", tripName},
+                {"DonorMessage", body}
+            };
+            var toEmail = _donorService.GetEmailViaDonorId(donorId);
+            var authorId = _communicationService.GetUserIdFromContactId(fromContactId);
+            var fromEmail = _communicationService.GetEmailFromContactId(fromContactId);
+
+            var comm = new Communication
+            {
+                AuthorUserId = authorId,
+                DomainId = 1,
+                ToContactId = toEmail.ContactId,
+                ToEmailAddress = toEmail.Email,
+                FromContactId = fromContactId,
+                FromEmailAddress = fromEmail,
+                ReplyContactId = fromContactId,
+                ReplyToEmailAddress = fromEmail,
+                EmailSubject = _communicationService.ParseTemplateBody(template.Subject, messageData),
+                EmailBody = _communicationService.ParseTemplateBody(template.Body, messageData),
+                MergeData = messageData
+            };
+            _communicationService.SendMessage(comm);
+
+            //mark donation distribution with message sent
+
+            var distributionData = new Dictionary<string, object>
+            {
+                {"Donation_Distribution_ID", donationDistributionId},
+                {"Message_Sent", true}
+            };
+           
+            _ministryPlatformService.UpdateRecord(_donationDistributionPageId, distributionData, ApiLogin());
+        }
+
+        public void SendMessageFromDonor(int pledgeId, string message)
+        {
+            var toDonor = _pledgeService.GetDonorForPledge(pledgeId);
+            var donorContact = _donorService.GetEmailViaDonorId(toDonor);
+            var template = _communicationService.GetTemplate(_tripDonationMessageTemplateId);
+            var comm = new Communication
+            {
+                AuthorUserId = 5,
+                DomainId = 1,
+                EmailBody = message,
+                EmailSubject = template.Subject,
+                FromContactId = 5,
+                FromEmailAddress = "updates@crossroads.net",
+                ReplyContactId = 5,
+                ReplyToEmailAddress = "updates@crossroads.net",
+                ToContactId = donorContact.ContactId,
+                ToEmailAddress = donorContact.Email,
+                MergeData = new Dictionary<string, object>()
+            };
+            _communicationService.SendMessage(comm);
         }
     }
 }

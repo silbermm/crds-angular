@@ -183,6 +183,7 @@ namespace crds_angular.test.Services
                                                                123,
                                                                contactDonorExisting.DonorId,
                                                                "9090",
+                                                               null,
                                                                "1020304",
                                                                "check",
                                                                contactDonorExisting.ProcessorId,
@@ -220,7 +221,7 @@ namespace crds_angular.test.Services
                             o =>
                                 o.Details.DisplayName.Equals("2 name 1") && o.Details.Address.Line1.Equals("2 line 1") && o.Details.Address.Line2.Equals("2 line 2") &&
                                 o.Details.Address.City.Equals("2 city") && o.Details.Address.State.Equals("2 state") && o.Details.Address.PostalCode.Equals("2 postal") &&
-                                o.Account.RoutingNumber.Equals("2020") && o.Account.AccountNumber.Equals("222") && o.Account.Type == AccountType.Checking),
+                                o.Account.RoutingNumber.Equals(decryptRout) && o.Account.AccountNumber.Equals(decrypAcct) && o.Account.Type == AccountType.Checking),
                         It.IsAny<string>(),
                         string.Empty,
                         "tok123",
@@ -237,6 +238,7 @@ namespace crds_angular.test.Services
                                                                null,
                                                                contactDonorNew.DonorId,
                                                                "9090",
+                                                               null,
                                                                "40302010",
                                                                "check",
                                                                contactDonorNew.ProcessorId,
@@ -403,7 +405,7 @@ namespace crds_angular.test.Services
                             o => 
                                 o.Details.DisplayName.Equals(check.Name1) && o.Details.Address.Line1.Equals(check.Address.Line1) && o.Details.Address.Line2.Equals(check.Address.Line2) &&
                                 o.Details.Address.City.Equals(check.Address.City) && o.Details.Address.State.Equals(check.Address.State) && o.Details.Address.PostalCode.Equals(check.Address.PostalCode) &&
-                                o.Account.RoutingNumber.Equals(check.RoutingNumber) && o.Account.AccountNumber.Equals(check.AccountNumber) && o.Account.Type == AccountType.Checking),
+                                o.Account.RoutingNumber.Equals(decryptRout) && o.Account.AccountNumber.Equals(decrypAcct) && o.Account.Type == AccountType.Checking),
                         It.IsAny<string>(),
                         string.Empty,
                         token,

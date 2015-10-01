@@ -1,0 +1,25 @@
+<div>
+  <div class="row">
+    <div class="col-sm-12">
+      <p class="push-bottom">
+      You will have the opportunity to sign up any family members who are registered in our site for the trip once you have submitted your application.
+      Information shared here is kept secure and private. We will not share or sell your information.</p>
+    </div>
+  </div>
+  <preloader full-screen='true' ng-show="!tripsSignup.viewReady"> </preloader>
+  <legend>Update Profile Information</legend>
+  <div class="row">
+    <div class='col-sm-12'>
+      <profile-personal
+         contact-id="tripsSignup.signupService.contactId"
+         allow-password-change="false"
+         require-mobile-phone="true"
+         allow-save="false"
+         submit-form-callback='tripsSignup.validateProfile(profile, household)'
+         button-text='tripsSignup.buttonText'
+         button-css='pull-right'
+         profile-data='tripsSignup.profileData'
+         for-trips='true' />
+    </div>
+  </div>
+</div>
