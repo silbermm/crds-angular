@@ -372,11 +372,6 @@ namespace crds_angular.Services
             var batchName = batch.BatchName.Replace(" ", "_");
             return string.Format("XRDReceivables-{0}_{1}.txt", batchName, date);
         }
-
-        public int CreateDonationAndDistribution(string processorPaymentId, int statusId, DateTime? statusDate, string statusNote = null)
-        {
-            return 0;
-            //return (_mpDonorService.CreateDonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, chargeId, pymtType, processorId, setupTime, registeredDonor, null));
-        }
+        
     }
 }

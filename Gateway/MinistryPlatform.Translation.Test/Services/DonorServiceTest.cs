@@ -156,6 +156,7 @@ namespace MinistryPlatform.Translation.Test.Services
             var checkScannerBatchName = "check scanner batch";
             const string viewKey = "DonorByContactId";
             const string sortString = "";
+            const string donorAcctId = "654";
             var searchString = ",\"" + donorId + "\"";
             var donationPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Donations"]);
             var donationDistPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Distributions"]);
@@ -183,6 +184,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Donation_Status_Date", setupDate},
                 {"Donation_Status_ID", 1},
                 {"Recurring_Gift", false},
+                {"Donor_Account_ID",donorAcctId },
                 {"Check_Scanner_Batch", checkScannerBatchName}
             };
 
@@ -227,7 +229,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _communicationService.Setup(mocked => mocked.GetTemplate(It.IsAny<int>())).Returns(getTemplateResponse);
 
 
-            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, chargeId, pymtType, processorId, setupDate, true, false, checkScannerBatchName);
+            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, chargeId, pymtType, processorId, setupDate, true, false, donorAcctId, checkScannerBatchName);
 
             // Explicitly verify each expectation...
             _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>()));
