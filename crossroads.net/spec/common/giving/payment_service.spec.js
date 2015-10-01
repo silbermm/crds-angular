@@ -296,7 +296,7 @@ describe('PaymentService', function() {
         start_date: moment('12/31/2015', 'MM DD YYYY')
       };
       GiveTransferService.amount = 100;
-      GiveTransferService.program = 1;
+      GiveTransferService.program = {ProgramId: 1};
       GiveTransferService.givingType = 'week';
       GiveTransferService.recurringStartDate = '12/31/2015';
     });
@@ -374,7 +374,7 @@ describe('PaymentService', function() {
         start_date: moment('12/31/2015', 'MM DD YYYY')
       };
       GiveTransferService.amount = 100;
-      GiveTransferService.program = 1;
+      GiveTransferService.program = { ProgramId: 1 };
       GiveTransferService.givingType = 'week';
       GiveTransferService.recurringStartDate = '12/31/2015';
     });
