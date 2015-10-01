@@ -41,8 +41,6 @@ namespace MinistryPlatform.Translation.Test.Services
             configuration.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
             configuration.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("pwd");
             _authService.Setup(m => m.Authenticate(It.IsAny<string>(), It.IsAny<string>())).Returns(new Dictionary<string, object> { { "token", "ABC" }, { "exp", "123" } });
-
-
             _fixture = new DonationService(_ministryPlatformService.Object, _donorService.Object, _communicationService.Object, _pledgeService.Object, configuration.Object, _authService.Object, configuration.Object);
         }
 

@@ -50,7 +50,7 @@
 
       if (!vm.dto.initialized || toState.name === 'tripgiving') {
         event.preventDefault();
-        TripGiving.initDefaultState();
+        initDefaultState();
         return;
       }
 

@@ -99,6 +99,7 @@
     <Compile Include="Services\ParticipantServiceTest.cs" />
     <Compile Include="Services\PledgeCampaignServiceTest.cs" />
     <Compile Include="Services\ProgramServiceTest.cs" />
+    <Compile Include="Services\UserServiceTest.cs" />
     <Compile Include="TranslationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

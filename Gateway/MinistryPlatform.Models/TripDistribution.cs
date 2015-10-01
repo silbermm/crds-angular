@@ -13,6 +13,8 @@ namespace MinistryPlatform.Models
         public int TotalPledge { get; set; }
         public DateTime CampaignStartDate { get; set; }
         public DateTime CampaignEndDate { get; set; }
+        public int DonorId { get; set; }
+        public int DonationDistributionId { get; set; }
         public string DonorNickname { get; set; }
         public string DonorFirstName { get; set; }
         public string DonorLastName { get; set; }
@@ -21,5 +23,7 @@ namespace MinistryPlatform.Models
         public int DonationAmount { get; set; }
         public bool AnonymousGift { get; set; }
         public bool RegisteredDonor { get; set; }
+        public bool MessageSent { get; set; }
+        public int PaymentTypeId { get; set; }
     }
 }

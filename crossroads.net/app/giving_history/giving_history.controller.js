@@ -17,6 +17,11 @@
     vm.donation_history = false;
     vm.donation_view_ready = false;
     vm.ending_donation_date = undefined;
+    vm.impersonate_donor_id = GivingHistoryService.impersonateDonorId;
+    vm.impersonation_error = false;
+    vm.impersonation_error_message = undefined;
+    vm.impersonation_not_allowed = false;
+    vm.impersonation_user_not_found = false;
     vm.profile = {};
     vm.selected_giving_year = undefined;
     vm.soft_credit_donations = [];
@@ -31,9 +36,9 @@
     activate();
 
     function activate() {
-      Profile.Personal.get(function(data) {
+      Profile.Personal.get({impersonateDonorId: vm.impersonate_donor_id}, function(data) {
         vm.profile = data;
-        GivingHistoryService.donationYears.get(function(data) {
+        GivingHistoryService.donationYears.get({impersonateDonorId: vm.impersonate_donor_id}, function(data) {
           var most_recent_giving_year = data.most_recent_giving_year;
 
           // Create a map out of the array of donation years, so we can add an 'All' option easily,
@@ -53,25 +58,50 @@
           vm.getSoftCreditDonations();
         },
 
-        function(/*error*/) {
+        function(error /*GivingHistoryService.donationYears.get error*/) {
           vm.overall_view_ready = true;
           vm.donation_view_ready = true;
           vm.donation_history = false;
           vm.soft_credit_donation_history = false;
+          setErrorState(error);
         });
       },
 
-      function(/*error*/) {
+      function(error /*Profile.Personal.get error*/) {
         vm.overall_view_ready = true;
         vm.donation_view_ready = true;
         vm.donation_history = false;
         vm.soft_credit_donation_history = false;
+        setErrorState(error);
       });
+    }
+
+    function setErrorState(error) {
+      if (vm.impersonate_donor_id === undefined || error === undefined || error.status === undefined) {
+        return;
+      }
+
+      switch (error.status) {
+        case 403: // Forbidden - not allowed to impersonate
+          vm.impersonation_error = true;
+          vm.impersonation_not_allowed = true;
+          vm.impersonation_error_message = error.data === undefined || error.data.message === undefined ?
+              'User is not allowed to impersonate' : error.data.message;
+          break;
+        case 409: // Conflict - tried to impersonate, but user could not be found
+          vm.impersonation_error = true;
+          vm.impersonation_user_not_found = true;
+          vm.impersonation_error_message = error.data === undefined || error.data.message === undefined ?
+              'Could not find user to impersonate' : error.data.message;
+          break;
+        default:
+          break;
+      }
     }
 
     function getDonations() {
       vm.donation_view_ready = false;
-      GivingHistoryService.donations.get({donationYear: vm.selected_giving_year.key, softCredit: false}, function(data) {
+      GivingHistoryService.donations.get({donationYear: vm.selected_giving_year.key, softCredit: false, impersonateDonorId: vm.impersonate_donor_id}, function(data) {
             vm.donations = data.donations;
             vm.donation_total_amount = data.donation_total_amount;
             vm.donation_statement_total_amount = data.donation_statement_total_amount;
@@ -81,15 +111,16 @@
             vm.ending_donation_date = data.ending_donation_date;
           },
 
-          function(/*error*/) {
+          function(error) {
             vm.donation_history = false;
             vm.donation_view_ready = true;
+            setErrorState(error);
           });
     }
 
     function getSoftCreditDonations() {
       vm.soft_credit_donation_view_ready = false;
-      GivingHistoryService.donations.get({donationYear: vm.selected_giving_year.key, softCredit: true}, function(data) {
+      GivingHistoryService.donations.get({donationYear: vm.selected_giving_year.key, softCredit: true, impersonateDonorId: vm.impersonate_donor_id}, function(data) {
             vm.soft_credit_donations = data.donations;
             vm.soft_credit_donation_total_amount = data.donation_total_amount;
             vm.soft_credit_donation_statement_total_amount = data.donation_statement_total_amount;
@@ -97,9 +128,10 @@
             vm.soft_credit_donation_history = true;
           },
 
-          function(/*error*/) {
+          function(error) {
             vm.soft_credit_donation_history = false;
             vm.soft_credit_donation_view_ready = true;
+            setErrorState(error);
           });
     }
   }
