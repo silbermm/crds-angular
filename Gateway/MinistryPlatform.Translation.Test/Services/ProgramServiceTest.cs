@@ -48,14 +48,16 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Program_Name", "Test Program Name"},
                     {"Program_ID", 20},
                     {"Communication_ID", "1234"},
-                    {"Program_Type_ID", 4}
+                    {"Program_Type_ID", 4},
+                    {"Allow_Recurring_Giving", false}
                 },
                 new Dictionary<string, object>()
                 {
                     {"Program_Name", "Test Fund Name"},
                     {"Program_ID", 22},
                     {"Communication_ID", "1234"},
-                    {"Program_Type_ID", 4}
+                    {"Program_Type_ID", 4},
+                    {"Allow_Recurring_Giving", false}
                 }
             };
 
@@ -92,7 +94,8 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Communication_ID", "1234"},
                 {"Program_Type_ID", 4},
                 {"Program_ID", 3},
-                {"Program_Name", "TEst Name"}
+                {"Program_Name", "TEst Name"},
+                {"Allow_Recurring_Giving", false}
             };
 
             const int programId = 3;
