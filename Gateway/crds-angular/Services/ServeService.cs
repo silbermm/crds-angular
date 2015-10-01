@@ -326,6 +326,13 @@ namespace crds_angular.Services
             }
             catch (Exception e)
             {
+                //var communication = SetupCommunication(templateId, groupContact, toContact);
+                var table = SetupHTMLTable(mailRows).Build();
+                var communication = SetupCommunication(AppSetting("SignupToServeFailedMessage"), groupContact, toContact, new Dictionary<string, object>
+                    { 
+                        {"Html_Table", table}
+                    });
+                _communicationService.SendMessage(communication);
                 return new List<int>();
             }
             
