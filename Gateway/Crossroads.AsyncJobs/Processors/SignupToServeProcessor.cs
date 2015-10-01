@@ -26,15 +26,7 @@ namespace Crossroads.AsyncJobs.Processors
 
         public void Execute(JobDetails<SaveRsvpDto> details)
         {
-            var result = WithApiLogin<List<int>>(token => _serveService.SaveServeRsvp(token, details.Data));
-            if (result.Count > 0)
-            {
-                //success!
-            }
-            if (result.Count < 1)
-            {
-                //failed...
-            }
+            WithApiLogin<List<int>>(token => _serveService.SaveServeRsvp(token, details.Data));            
         }
     }
 }
