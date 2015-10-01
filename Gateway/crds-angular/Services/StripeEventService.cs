@@ -63,7 +63,7 @@ namespace crds_angular.Services
             _logger.Debug("Processing invoice.created event for subscription id " + invoice.Subscription);
             var createDonation = _donorService.GetRecurringGiftForSubscription(invoice.Subscription);
             var amount = invoice.Amount/Constants.StripeDecimalConversionValue;
-            _mpDonorService.CreateDonationAndDistributionRecord((int)amount, 0, createDonation.DonorId, createDonation.ProgramId, invoice.Charge, createDonation.PaymentType, invoice.Customer, DateTime.Now, true);
+            _mpDonorService.CreateDonationAndDistributionRecord((int)amount, 0, createDonation.DonorId, createDonation.ProgramId, invoice.Charge, createDonation.PaymentType, invoice.Customer, DateTime.Now, true, true);
          }
 
         public TransferPaidResponseDTO TransferPaid(DateTime? eventTimestamp, StripeTransfer transfer)

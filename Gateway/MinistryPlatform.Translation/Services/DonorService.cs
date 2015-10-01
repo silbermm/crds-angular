@@ -101,45 +101,43 @@ namespace MinistryPlatform.Translation.Services
             // Create a new DonorAccount for this donor, if we have account info
             if (donorAccount != null)
             {
-            CreateDonorAccount(DefaultInstitutionName, DonorAccountNumberDefault, DonorRoutingNumberDefault, donorId, donorAccount.Type.ToString(),
-                                 donorAccount.ProcessorAccountId,processorId);
-                //    values = new Dictionary<string, object>
-                //    {
-                //        { "Institution_Name", DefaultInstitutionName },
-                //        { "Account_Number", DonorAccountNumberDefault },
-                //        { "Routing_Number", DonorRoutingNumberDefault },
-                //        { "Encrypted_Account", CreateHashedAccountAndRoutingNumber(donorAccount.AccountNumber, donorAccount.RoutingNumber) },
-                //        { "Donor_ID", donorId },
-                //        { "Non-Assignable", false },
-                //        { "Account_Type_ID", (int)donorAccount.Type },
-                //        { "Closed", false },
-                //        {"Processor_Account_ID", donorAccount.ProcessorAccountId},
-                //        {"Processor_ID", processorId}
-                //    };
-
-                //    _ministryPlatformService.CreateRecord(_donorAccountsPageId, values, apiToken);
-                //}
-                }
+                CreateDonorAccount(DefaultInstitutionName,
+                                   DonorAccountNumberDefault,
+                                   DonorRoutingNumberDefault,
+                                   donorId,
+                                   donorAccount.Type.ToString(),
+                                   donorAccount.ProcessorAccountId,
+                                   processorId);
+            }
             return donorId;
         }
 
-        public int CreateDonorAccount(string institutionName, string routingNumber, string acctNumber, int donorId, string acctType, string processorAcctId, string processorId)
+        public int CreateDonorAccount(string giftType, string routingNumber, string acctNumber, int donorId, string acctType, string processorAcctId, string processorId)
         {
-            DonorAccount donorAccount;
-            var apiToken = ApiLogin();
+           var apiToken = ApiLogin();
 
             int donorAccountId;
+
+            string encryptedAcct = null;
+            if (routingNumber != DonorRoutingNumberDefault)
+            {
+                encryptedAcct = CreateHashedAccountAndRoutingNumber(acctNumber, routingNumber);
+            }
+
+            var institutionName = (giftType == null) ?  "Bank" : giftType;
+            int accountType = (giftType == null) ? 1 : 3;
+
             try
             {
               var  values = new Dictionary<string, object>
                 {
                     { "Institution_Name", institutionName },
-                    { "Account_Number", DonorAccountNumberDefault },
+                    { "Account_Number", acctNumber },
                     { "Routing_Number", DonorRoutingNumberDefault },
-                    { "Encrypted_Account", CreateHashedAccountAndRoutingNumber(acctNumber, routingNumber) },
+                    { "Encrypted_Account", encryptedAcct },
                     { "Donor_ID", donorId },
                     { "Non-Assignable", false },
-                    { "Account_Type_ID", Convert.ToInt32(acctType)},
+                    { "Account_Type_ID", accountType},
                     { "Closed", false },
                     {"Processor_Account_ID", processorAcctId},
                     {"Processor_ID", processorId}
@@ -155,7 +153,7 @@ namespace MinistryPlatform.Translation.Services
            
         }
 
-        public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor, string checkScannerBatchName = null)
+        public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor, bool recurringGift, string checkScannerBatchName = null)
         {
             var pymtId = PaymentType.getPaymentType(pymtType).id;
             var fee = feeAmt.HasValue ? feeAmt / Constants.StripeDecimalConversionValue : null;
@@ -174,7 +172,8 @@ namespace MinistryPlatform.Translation.Services
                 {"Registered_Donor", registeredDonor},
                 {"Processor_ID", processorId },
                 {"Donation_Status_Date", setupTime},
-                {"Donation_Status_ID", 1} //hardcoded to pending 
+                {"Donation_Status_ID", 1}, //hardcoded to pending 
+                {"Recurring_Gift", recurringGift}
             };
             if (!string.IsNullOrWhiteSpace(checkScannerBatchName))
             {

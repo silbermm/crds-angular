@@ -94,6 +94,7 @@ namespace crds_angular.Services
                                                                                          contactDonor.ProcessorId,
                                                                                          check.CheckDate ?? (check.ScanDate ?? DateTime.Now),
                                                                                          contactDonor.RegisteredUser,
+                                                                                         false,
                                                                                          batchDetails.Name);
 
                     check.DonationId = donationId;

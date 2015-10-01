@@ -169,20 +169,19 @@ namespace crds_angular.Services
             var response = _paymentService.AddSourceToCustomer(contactDonor.ProcessorId, recurringGiftDto.StripeTokenId);
 
             var plan = _paymentService.CreatePlan(recurringGiftDto, contactDonor);
-        
-            //var donorAccountId = _mpDonorService.CreateDonorAccount(response.name,
-            //                                               DonorRoutingNumberDefault,
-            //                                               response.last4,
-            //                                               contactDonor.DonorId,
-            //                                               recurringGiftDto.PlanInterval, 
-            //                                               response.id,
-            //                                               contactDonor.ProcessorId);
+
+            var donorAccountId = _mpDonorService.CreateDonorAccount(response.brand,
+                                                           DonorRoutingNumberDefault,
+                                                           response.last4,
+                                                           contactDonor.DonorId,
+                                                           recurringGiftDto.PlanInterval,
+                                                           response.id,
+                                                           contactDonor.ProcessorId);
             StripeSubscription stripeSubscription;
             stripeSubscription = _paymentService.CreateSubscription(plan.Id, contactDonor.ProcessorId);
            
             var recurGiftId = _mpDonorService.CreateRecurringGiftRecord(contactDonor.DonorId,
-                                                               // donorAccountId,
-                                                               123,
+                                                                donorAccountId,
                                                                 recurringGiftDto.PlanInterval,
                                                                 recurringGiftDto.PlanAmount,
                                                                 recurringGiftDto.StartDate,

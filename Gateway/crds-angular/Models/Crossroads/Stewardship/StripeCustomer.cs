@@ -76,5 +76,7 @@ namespace crds_angular.Models.Crossroads.Stewardship
         public string currency { get; set; }
         public Sources sources { get; set; }
         public string default_source { get; set; }
+        public string last4 { get; set; }
+        public string brand { get; set; }
     }
 }
