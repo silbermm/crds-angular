@@ -105,14 +105,13 @@ namespace MinistryPlatform.Translation.Services
                                    DonorAccountNumberDefault,
                                    DonorRoutingNumberDefault,
                                    donorId,
-                                   donorAccount.Type.ToString(),
                                    donorAccount.ProcessorAccountId,
                                    processorId);
             }
             return donorId;
         }
 
-        public int CreateDonorAccount(string giftType, string routingNumber, string acctNumber, int donorId, string acctType, string processorAcctId, string processorId)
+        public int CreateDonorAccount(string giftType, string routingNumber, string acctNumber, int donorId, string processorAcctId, string processorId)
         {
            var apiToken = ApiLogin();
 
