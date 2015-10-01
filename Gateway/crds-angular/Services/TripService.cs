@@ -11,7 +11,6 @@ using IDonationService = MinistryPlatform.Translation.Services.Interfaces.IDonat
 using IDonorService = MinistryPlatform.Translation.Services.Interfaces.IDonorService;
 using IGroupService = MinistryPlatform.Translation.Services.Interfaces.IGroupService;
 using PledgeCampaign = crds_angular.Models.Crossroads.Stewardship.PledgeCampaign;
-using TripDocuments = crds_angular.Models.Crossroads.Trip.TripDocuments;
 
 namespace crds_angular.Services
 {
@@ -339,7 +338,7 @@ namespace crds_angular.Services
 
                 CreatePledge(dto, applicant);
 
-                EventRegistration(events, applicant);
+                EventRegistration(events, applicant, dto.Campaign.DestinationId);
             }
 
             return groupParticipants;
