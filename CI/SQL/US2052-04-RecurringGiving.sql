@@ -164,7 +164,7 @@ INSERT INTO [dbo].[dp_Page_Views]
 		   ,'Recurring Gifts By Subscription ID'
            ,517
            ,'Recurring gifts by subscription'
-           ,'Subscription_ID,Donor_ID,Program_ID,Congregation_ID,Amount'
+           ,'Subscription_ID,Donor_ID,Program_ID,Congregation_ID,Amount,Donor_Account_ID_Table_Account_Type_ID_Table'
            ,'Subscription_ID IS NOT NULL' )
 GO
 
