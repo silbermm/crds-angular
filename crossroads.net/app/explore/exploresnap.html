@@ -8,6 +8,12 @@ function tweenFadeBg(selecter, delay ){ if(!delay){ delay = 0; }
 function tweenFadeUp(selecter, delay ){ if(!delay){ delay = 0; }
           TweenMax.staggerTo(selecter+' .rise10', 1, { opacity: 1, autoAlpha: 1, y: 0, delay: delay }, .2);
 };
+function tweenRotateRight(selecter, delay ){ if(!delay){ delay = 0; }
+          TweenMax.staggerFrom(selecter+' .rotate-right', 1, {rotation:120, xPercent: 200, delay: delay }, .8);
+};
+function tweenFadeFast(selecter, delay ){ if(!delay){ delay = 0; }
+          TweenMax.from(selecter+' .fade-fast', .1, {autoAlpha: 0, delay: delay });
+};
 
 $(document).ready(function() {
   $('#fullpage').fullpage({
@@ -24,17 +30,30 @@ $(document).ready(function() {
         tweenFadeBg('.map');
         tweenFadeUp('.map');
       }
+      if (index == 3) {
+        tweenFadeBg('.kidsclub');
+        tweenFadeUp('.kidsclub');
+      }
       if (index == 4) {
-        tweenFadeBg('.studentministry', 0);
+        tweenFadeBg('.studentministry');
         tweenFadeUp('.studentministry', 1);
       }
+      if (index == 5) {
+        tweenFadeBg('.coffee');
+        tweenFadeUp('.coffee', 1);
+      }
       if (index == 6) {
-        tweenFadeBg('.drums', 0);
+        tweenFadeBg('.drums');
         tweenFadeUp('.drums', 1);
       }
+      if (index == 7) {
+        tweenFadeBg('.clothes');
+        tweenFadeUp('.clothes', 1);
+      }
       if (index == 8) {
-        tweenFadeBg('.photos', 0);
-        tweenFadeUp('.photos');
+        tweenFadeBg('.photos');
+        tweenRotateRight('.photos', .25);
+        tweenFadeFast('.photos');
       }
       if (index == 9) {
         tweenFadeUp('.meet');
@@ -154,16 +173,24 @@ $(document).ready(function() {
 
 <section class="section photos">
   <div class="imgix-fluid-bg img-background slide-bg fade-bg" data-src="http://crossroads-media.imgix.net/images/explore/explore_photos_bg.jpg"></div>
-  <div class="container">
-    <div class="photo-copy-container vertical-20">
-      <div class="">
-        <div class="col-sm-offset-2 col-sm-3 push-top mobile-flush-top">
-          <h2 class="photos-title flush-bottom">We believe God doesn't just work weekends.</h2>
-          <p class="photos-desc">So we mobilize hundreds of people-sometimes thousands-and we respond to God's call to serve others in our community and around the world. <a href="/next-step/reachout">Learn more about how serving others fixes us</a>.</p>
-        </div><!--/col-sm-3-->
-      </div><!--/row-->
-    </div><!--/vertical-20-->
-</div><!--/container-->
+  <div class="photo-copy-container">
+    <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-4 col-sm-offset-2 col-md-5 col-md-offset-1 photos-content-container">
+        <h2 class="photos-title flush-bottom">We believe God doesn't just work weekends.</h2>
+        <p class="photos-desc">So we mobilize hundreds of people-sometimes thousands-and we respond to God's call to serve others in our community and around the world. <a href="/next-step/reachout">Learn more about how serving others fixes us</a>.</p>
+      </div><!--/col-->
+      <div class="col-xs-12 col-sm-6 photos-container">
+        <div class="">
+          <img class="imgix-fluid img-responsive photo1 rotate-right fade-fast" src="http://crossroads-media.imgix.net/images/explore/explore_photos_1.png" >
+          <img class="imgix-fluid img-responsive photo2 rotate-right fade-fast" src="http://crossroads-media.imgix.net/images/explore/explore_photos_2.png" >
+          <img class="imgix-fluid img-responsive photo3 rotate-right fade-fast" src="http://crossroads-media.imgix.net/images/explore/explore_photos_3.png" >
+          <img class="imgix-fluid img-responsive photo4 rotate-right fade-fast" src="http://crossroads-media.imgix.net/images/explore/explore_photos_4.png" >
+        </div>
+      </div><!--/col-->
+    </div><!--/row-->
+    </div><!--/container-->
+  </div><!--/vertical-20-->
 </section>
 
 
