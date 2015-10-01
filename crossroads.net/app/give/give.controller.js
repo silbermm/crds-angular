@@ -116,11 +116,13 @@
     }
 
     function branchOnGivingType() {
-      if (vm.dto.givingType !== 'one_time') {
+      if (vm.dto.givingType === 'one_time') {
+        vm.service = OneTimeGiving;
+      } else {
         vm.service = RecurringGiving;
-        vm.service.initDefaultState();
       }
 
+      vm.service.resetGiveFlow();
       vm.service.goToAccount(vm.giveForm);
     }
   }

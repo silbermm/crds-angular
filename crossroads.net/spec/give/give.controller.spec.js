@@ -587,7 +587,7 @@ describe('GiveController', function() {
       expect(DonationService.updateDonorAndDonate).toHaveBeenCalled();
 
       controller.service = RecurringGiving;
-      controller.service.initDefaultState();
+      controller.service.resetGiveFlow();
       controller.service.submitBankInfo(controller.giveForm);
 
       expect(mockPaymentService.getDonor).toHaveBeenCalledWith('test@test.com');
@@ -625,7 +625,7 @@ describe('GiveController', function() {
       spyOn(DonationService, 'createDonorAndDonate');
       spyOn(DonationService, 'updateDonorAndDonate');
       controller.service = RecurringGiving;
-      controller.service.initDefaultState();
+      controller.service.resetGiveFlow();
       controller.service.submitBankInfo(controller.giveForm);
 
       expect(mockPaymentService.getDonor).toHaveBeenCalledWith('test@test.com');
@@ -810,7 +810,7 @@ describe('GiveController', function() {
       expect(controller.dto.changeAccountInfo).toBeTruthy();
 
       controller.service = RecurringGiving;
-      controller.service.initDefaultState();
+      controller.service.resetGiveFlow()
       controller.service.goToChange();
 
       expect(controller.dto.amount).toBe(123);
@@ -844,7 +844,7 @@ describe('GiveController', function() {
       });
 
       controller.service = RecurringGiving;
-      controller.service.initDefaultState();
+      controller.service.resetGiveFlow()
       controller.service.goToChange();
       expect($state.go).toHaveBeenCalledWith('give.recurring_login');
     });
@@ -869,7 +869,7 @@ describe('GiveController', function() {
 
       spyOn($state, 'go');
       controller.service = RecurringGiving;
-      controller.service.initDefaultState();
+      controller.service.resetGiveFlow()
       controller.service.processChange();
 
       expect($state.go).toHaveBeenCalledWith('give.recurring_login');
@@ -958,7 +958,7 @@ describe('GiveController', function() {
     });
 
     it('should default give flow to one time giving', function() {
-      controller.dto.givingType = 'one_time';
+      controller.dto.givingType = 'one_time'
       controller.branchOnGivingType();
 
       expect(controller.service.stateName('amount')).toBe('give.amount');
@@ -971,7 +971,7 @@ describe('GiveController', function() {
     });
 
     it('should change give flow to recurring if selected', function() {
-      controller.dto.givingType = 'recurring';
+      controller.dto.givingType = 'recurring'
       controller.branchOnGivingType();
 
       expect(controller.service.stateName('amount')).toBe('give.amount');

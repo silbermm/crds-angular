@@ -39,6 +39,8 @@
       };
       scope.openRecurringStartDate = openRecurringStartDate;
       scope.recurringStartDatePickerOpened = false;
+      scope.updateFrequency = updateFrequency;
+
 
       activate();
 
@@ -53,6 +55,10 @@
 
         if (scope.programsIn !== undefined) {
           scope.ministryShow = scope.program.ProgramId !== scope.programsIn[0].ProgramId;
+        }
+
+        if (scope.showFrequencyOption) {
+          scope.allowRecurring = scope.program.AllowRecurringGiving;
         }
       }
 
@@ -74,6 +80,16 @@
         $event.preventDefault();
         $event.stopPropagation();
         scope.recurringStartDatePickerOpened = true;
+      }
+
+      function updateFrequency() {
+        if (scope.showFrequencyOption) {
+          scope.allowRecurring = scope.program.AllowRecurringGiving;
+
+          if (scope.givingType !== 'one_time' && !scope.allowRecurring) {
+            scope.givingType = 'one_time';
+          }
+        }
       }
     }
   }
