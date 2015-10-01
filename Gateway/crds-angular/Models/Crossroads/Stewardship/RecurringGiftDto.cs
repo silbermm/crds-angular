@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
-namespace crds_angular.Controllers.API
+namespace crds_angular.Models.Crossroads.Stewardship
 {
     /// <summary>
     /// The data required to setup a recurring gift in MinistryPlatform and Stripe.

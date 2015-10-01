@@ -10,6 +10,7 @@ using crds_angular.Models.Crossroads.Stewardship;
 using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
 using Crossroads.Utilities.Models;
+using MinistryPlatform.Models;
 
 namespace crds_angular.test.Services
 {
@@ -509,6 +510,92 @@ namespace crds_angular.test.Services
             Assert.AreEqual("987", refund.Amount);
             Assert.IsNotNull(refund.Charge);
             Assert.AreEqual("ch_123456", refund.Charge.Id);
+        }
+
+        [Test]
+        public void TestCreatePlan()
+        {
+            var recurringGiftDto = new RecurringGiftDto
+            {
+                StripeTokenId = "tok_123",
+                PlanAmount = 123.45M,
+                PlanInterval = "week",
+                Program = "987",
+                StartDate = DateTime.Parse("1973-10-15")
+            };
+
+            var contactDonor = new ContactDonor
+            {
+                DonorId = 678,
+                ProcessorId = "cus_123"
+            };
+
+            var stripePlan = new StripePlan();
+
+            var stripeResponse = new Mock<IRestResponse<StripePlan>>(MockBehavior.Strict);
+            stripeResponse.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.Data).Returns(stripePlan).Verifiable();
+
+            _restClient.Setup(mocked => mocked.Execute<StripePlan>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
+
+            var response = _fixture.CreatePlan(recurringGiftDto, contactDonor);
+            _restClient.Verify(mocked => mocked.Execute<StripePlan>(It.Is<IRestRequest>(o =>
+                o.Method == Method.POST
+                && o.Resource.Equals("plans")
+                && ParameterMatches("amount", recurringGiftDto.PlanAmount * Constants.StripeDecimalConversionValue, o.Parameters)
+                && ParameterMatches("interval", recurringGiftDto.PlanInterval, o.Parameters)
+                && ParameterMatches("name", "Donor ID #" + contactDonor.DonorId + " " + recurringGiftDto.PlanInterval + "ly", o.Parameters)
+                && ParameterMatches("currency", "usd", o.Parameters)
+                && ParameterMatches("trial_period_days", ((recurringGiftDto.StartDate - DateTime.Now).Days + 1), o.Parameters)
+                && ParameterMatches("id", contactDonor.DonorId + " " + DateTime.Now, o.Parameters))));
+
+            Assert.AreSame(stripePlan, response);
+        }
+
+        [Test]
+        public void TestAddSourceToCustomer()
+        {
+            var stripeCustomer = new StripeCustomer();
+
+            var stripeResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
+            stripeResponse.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.Data).Returns(stripeCustomer).Verifiable();
+
+            _restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
+
+            var response = _fixture.AddSourceToCustomer("cus_123", "card_123");
+            _restClient.Verify(
+                mocked =>
+                    mocked.Execute<StripePlan>(
+                        It.Is<IRestRequest>(o => o.Method == Method.POST && o.Resource.Equals("customers/cus_123/sources") && ParameterMatches("source", "card_123", o.Parameters))));
+
+            Assert.AreSame(stripeCustomer, response);
+        }
+
+        [Test]
+        public void TestCreateSubscription()
+        {
+            var stripeSubscription = new StripeSubscription();
+
+            var stripeResponse = new Mock<IRestResponse<StripeSubscription>>(MockBehavior.Strict);
+            stripeResponse.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.Data).Returns(stripeSubscription).Verifiable();
+
+            _restClient.Setup(mocked => mocked.Execute<StripeSubscription>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
+
+            const string plan = "Take over the world.";
+            const string customer = "cus_123";
+
+            var response = _fixture.CreateSubscription(plan, customer);
+            _restClient.Verify(
+                mocked =>
+                    mocked.Execute<StripeSubscription>(
+                        It.Is<IRestRequest>(o => o.Method == Method.POST && o.Resource.Equals("customers/" + customer + "/subscriptions") && ParameterMatches("plan", plan, o.Parameters))));
+
+            Assert.AreSame(stripeSubscription, response);
         }
     }
 

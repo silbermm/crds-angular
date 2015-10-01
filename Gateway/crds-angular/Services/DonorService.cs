@@ -2,7 +2,6 @@
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using System;
-using crds_angular.Controllers.API;
 using crds_angular.Models.Crossroads.Stewardship;
 using MinistryPlatform.Models.DTO;
 
