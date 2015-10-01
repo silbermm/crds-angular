@@ -23,7 +23,8 @@ namespace crds_angular.test.Services
         private Mock<IDonationService> _donationService;
         private Mock<IDonorService> _donorService;
         private Mock<MinistryPlatform.Translation.Services.Interfaces.IDonorService> _mpDonorService;
-         
+        
+        [SetUp]
         public void SetUp()
         {
             var configuration = new Mock<IConfigurationWrapper>();

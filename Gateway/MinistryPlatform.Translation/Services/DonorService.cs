@@ -152,7 +152,7 @@ namespace MinistryPlatform.Translation.Services
            
         }
 
-        public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor, bool recurringGift, string checkScannerBatchName = null)
+        public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor, bool recurringGift, string donorAcctId, string checkScannerBatchName = null)
         {
             var pymtId = PaymentType.getPaymentType(pymtType).id;
             var fee = feeAmt.HasValue ? feeAmt / Constants.StripeDecimalConversionValue : null;
@@ -172,7 +172,8 @@ namespace MinistryPlatform.Translation.Services
                 {"Processor_ID", processorId },
                 {"Donation_Status_Date", setupTime},
                 {"Donation_Status_ID", 1}, //hardcoded to pending 
-                {"Recurring_Gift", recurringGift}
+                {"Recurring_Gift", recurringGift},
+                {"Donor_Account_ID", donorAcctId}
             };
             if (!string.IsNullOrWhiteSpace(checkScannerBatchName))
             {
@@ -397,7 +398,7 @@ namespace MinistryPlatform.Translation.Services
             return (donorId);
         }
 
-        public void UpdateDonorAccount(string encryptedKey, string sourceId, string customerId)
+        public string UpdateDonorAccount(string encryptedKey, string sourceId, string customerId)
         {
             try
             {
@@ -410,6 +411,7 @@ namespace MinistryPlatform.Translation.Services
                     {"Processor_ID", customerId}
                 };
                 _ministryPlatformService.UpdateRecord(_donorAccountsPageId, updateParms, ApiLogin());
+                 return donorAccountId;
             }
             catch (Exception ex)
             {
