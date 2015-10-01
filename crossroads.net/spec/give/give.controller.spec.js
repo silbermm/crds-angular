@@ -604,7 +604,7 @@ describe('GiveController', function() {
       expect(mockPaymentService.getDonor).toHaveBeenCalledWith('test@test.com');
       expect(DonationService.createDonorAndDonate).toHaveBeenCalled();
     });
-    
+
   });
 
   describe('function transitionForLoggedInUserBasedOnExistingDonor', function() {
