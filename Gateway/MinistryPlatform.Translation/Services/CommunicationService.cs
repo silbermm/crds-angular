@@ -18,6 +18,8 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _recipientsSubPageId = Convert.ToInt32(AppSettings("RecipientsSubpageId"));
         private readonly int _communicationStatusId = Convert.ToInt32(AppSettings("CommunicationStatusId"));
         private readonly int _actionStatusId = Convert.ToInt32(AppSettings("ActionStatusId"));
+        private readonly int _contactPageId = Convert.ToInt32(AppSettings("Contacts"));
+
         private readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly IMinistryPlatformService _ministryPlatformService;
 
@@ -33,6 +35,19 @@ namespace MinistryPlatform.Translation.Services
             var profile = MinistryPlatformService.GetRecordDict(pNum, contactId, token);
 
             return (int) profile["User_Account"];
+        }
+
+        public int GetUserIdFromContactId(int contactId)
+        {
+            var profile = MinistryPlatformService.GetRecordDict(_contactPageId, contactId, ApiLogin());
+
+            return (int)profile["User_Account"];
+        }
+
+        public string GetEmailFromContactId(int contactId)
+        {
+            var contact = _ministryPlatformService.GetRecordDict(_contactPageId, contactId, ApiLogin());
+            return contact["Email_Address"].ToString();
         }
 
         public CommunicationPreferences GetPreferences(String token, int userId)

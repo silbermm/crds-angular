@@ -6,6 +6,7 @@ describe('GivingHistoryController', function() {
   var httpBackend;
   var scope;
   var controllerConstructor;
+  var GivingHistoryService;
   var sut;
 
   beforeEach(angular.mock.module('crossroads'));
@@ -115,7 +116,7 @@ describe('GivingHistoryController', function() {
     donation_total_amount: 4000
   };
 
-  beforeEach(inject(function(_$injector_, $httpBackend, _$controller_, $rootScope) {
+  beforeEach(inject(function(_$injector_, $httpBackend, _$controller_, $rootScope, _GivingHistoryService_) {
     var $injector = _$injector_;
 
     httpBackend = $httpBackend;
@@ -124,12 +125,50 @@ describe('GivingHistoryController', function() {
 
     scope = $rootScope.$new();
 
+    GivingHistoryService = _GivingHistoryService_;
   })
   );
 
   afterEach(function() {
     httpBackend.verifyNoOutstandingExpectation();
     httpBackend.verifyNoOutstandingRequest();
+  });
+
+  describe('On initialization with impersonation', function() {
+    beforeEach(function() {
+      GivingHistoryService.impersonateDonorId = 123;
+      sut = controllerConstructor('GivingHistoryController', {$scope: scope});
+
+      httpBackend.whenGET(/SiteConfig*/).respond({siteConfig: {title:'Crossroads'}});
+      httpBackend.whenGET(/api\/Page*/).respond({ pages: [{}] });
+    });
+
+    it('should set impersonation error when user not allowed to impersonate', function() {
+      var error = {
+        message: 'whoa there big fella!'
+      };
+      httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/profile?impersonateDonorId=123').respond(403, error);
+      httpBackend.flush();
+
+      expect(sut.impersonation_error).toBeTruthy();
+      expect(sut.impersonation_not_allowed).toBeTruthy();
+      expect(sut.impersonation_user_not_found).toBeFalsy();
+      expect(sut.impersonation_error_message).toEqual('whoa there big fella!');
+    });
+
+    it('should set impersonation error when user to impersonate is not found', function() {
+      var error = {
+        message: 'whoa there big fella!'
+      };
+      httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/profile?impersonateDonorId=123').respond(409, error);
+      httpBackend.flush();
+
+      expect(sut.impersonation_error).toBeTruthy();
+      expect(sut.impersonation_not_allowed).toBeFalsy();
+      expect(sut.impersonation_user_not_found).toBeTruthy();
+      expect(sut.impersonation_error_message).toEqual('whoa there big fella!');
+    });
+
   });
 
   describe('On initialization', function() {
@@ -180,7 +219,7 @@ describe('GivingHistoryController', function() {
       expect(sut.beginning_donation_date).not.toBeDefined();
       expect(sut.ending_donation_date).not.toBeDefined();
       expect(sut.donation_history).toBeFalsy();
-      expect(sut.donation_view_ready).toBeFalsy();
+      expect(sut.donation_view_ready).toBeTruthy();
       expect(sut.soft_credit_donation_history).toBeFalsy();
       expect(sut.soft_credit_donation_view_ready).toBeFalsy();
       expect(sut.overall_view_ready).toBeTruthy();
@@ -201,7 +240,7 @@ describe('GivingHistoryController', function() {
       expect(sut.beginning_donation_date).not.toBeDefined();
       expect(sut.ending_donation_date).not.toBeDefined();
       expect(sut.donation_history).toBeFalsy();
-      expect(sut.donation_view_ready).toBeFalsy();
+      expect(sut.donation_view_ready).toBeTruthy();
       expect(sut.soft_credit_donation_history).toBeFalsy();
       expect(sut.soft_credit_donation_view_ready).toBeFalsy();
       expect(sut.overall_view_ready).toBeTruthy();

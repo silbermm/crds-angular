@@ -50,6 +50,11 @@ namespace crds_angular.Services
             return (_mpDonorService.GetContactDonor(contactId));
         }
 
+        public ContactDonor GetContactDonorForDonorId(int donorId)
+        {
+            return (_mpDonorService.GetEmailViaDonorId(donorId));
+        }
+
         public ContactDonor GetContactDonorForDonorAccount(string accountNumber, string routingNumber)
         {
             var acct = _mpDonorService.DecryptCheckValue(accountNumber);
@@ -104,7 +109,7 @@ namespace crds_angular.Services
                 stripeCustomer = _paymentService.CreateCustomer(paymentProcessorToken);
 
                 var donorAccount = contactDonor != null ? contactDonor.Account : null;
-                if (contactDonor != null)
+                if (donorAccount != null)
                 {
                     donorAccount.ProcessorAccountId = stripeCustomer.sources.data[0].id;
                 }

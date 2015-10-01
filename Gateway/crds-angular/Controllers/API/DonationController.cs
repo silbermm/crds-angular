@@ -27,17 +27,19 @@ namespace crds_angular.Controllers.API
         private readonly MPInterfaces.IAuthenticationService _authenticationService;
         private readonly IDonorService _gatewayDonorService;
         private readonly IDonationService _gatewayDonationService;
+        private readonly IUserImpersonationService _impersonationService;
         private readonly MPInterfaces.IDonationService _mpDonationService;
         private readonly MPInterfaces.IPledgeService _mpPledgeService;
 
         public DonationController(MPInterfaces.IDonorService mpDonorService, IPaymentService stripeService,
-            MPInterfaces.IAuthenticationService authenticationService, IDonorService gatewayDonorService, IDonationService gatewayDonationService, MPInterfaces.IDonationService mpDonationService, MPInterfaces.IPledgeService mpPledgeService)
+            MPInterfaces.IAuthenticationService authenticationService, IDonorService gatewayDonorService, IDonationService gatewayDonationService, MPInterfaces.IDonationService mpDonationService, MPInterfaces.IPledgeService mpPledgeService, IUserImpersonationService impersonationService)
         {
             _mpDonorService = mpDonorService;
             _stripeService = stripeService;
             _authenticationService = authenticationService;
             _gatewayDonorService = gatewayDonorService;
             _gatewayDonationService = gatewayDonationService;
+            _impersonationService = impersonationService;
             _mpDonationService = mpDonationService;
             _mpPledgeService = mpPledgeService;
         }
@@ -47,40 +49,67 @@ namespace crds_angular.Controllers.API
         /// </summary>
         /// <param name="softCredit">A bool indicating if the result should contain only soft-credit (true), only direct (false), or all (null) donations.  Defaults to null.</param>
         /// <param name="donationYear">A year filter (YYYY format) for donations returned - defaults to null, meaning return all available donations regardless of year.</param>
+        /// <param name="impersonateDonorId">An optional donorId of a donor to impersonate</param>
+        /// <param name="limit">A limit of donations to return starting at the most resent - defaults to null, meaning return all available donations with no limit.</param>
         /// <returns>A list of DonationDTOs</returns>
         [Route("api/donations/{donationYear:regex(\\d{4})?}")]
         [HttpGet]
-        public IHttpActionResult GetDonations(string donationYear = null, [FromUri(Name = "softCredit")]bool? softCredit = null)
+        public IHttpActionResult GetDonations(string donationYear = null, int? limit = null, [FromUri(Name = "softCredit")]bool? softCredit = null, [FromUri(Name = "impersonateDonorId")]int? impersonateDonorId = null)
         {
             return (Authorized(token =>
             {
-                var donations = _gatewayDonationService.GetDonationsForAuthenticatedUser(token, donationYear, softCredit);
-                if (donations == null || !donations.HasDonations)
+                var impersonateUserId = impersonateDonorId == null ? string.Empty : _mpDonorService.GetEmailViaDonorId(impersonateDonorId.Value).Email;
+                try
                 {
-                    return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching donations found")));
-                }
+                    var donations = !string.IsNullOrWhiteSpace(impersonateUserId)
+                        ? _impersonationService.WithImpersonation(token,
+                                                                  impersonateUserId,
+                                                                  () =>
+                                                                      _gatewayDonationService.GetDonationsForAuthenticatedUser(token, donationYear, limit, softCredit))
+                        : _gatewayDonationService.GetDonationsForAuthenticatedUser(token, donationYear, limit, softCredit);
+                    if (donations == null || !donations.HasDonations)
+                    {
+                        return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching donations found")));
+                    }
 
-                return (Ok(donations));
+                    return (Ok(donations));
+                }
+                catch (UserImpersonationException e)
+                {
+                    return (e.GetRestHttpActionResult());
+                }
             }));
         }
 
         /// <summary>
         /// Retrieve a list of donation years for the logged-in donor.  This includes any year the donor has given either directly, or via soft-credit.
         /// </summary>
+        /// <param name="impersonateDonorId">An optional donorId of a donor to impersonate</param>
         /// <returns>A list of years (string)</returns>
         [Route("api/donations/years")]
         [HttpGet]
-        public IHttpActionResult GetDonationYears()
+        public IHttpActionResult GetDonationYears([FromUri(Name = "impersonateDonorId")]int? impersonateDonorId = null)
         {
             return (Authorized(token =>
             {
-                var donationYears = _gatewayDonationService.GetDonationYearsForAuthenticatedUser(token);
-                if (donationYears == null || !donationYears.HasYears)
+                var impersonateUserId = impersonateDonorId == null ? string.Empty : _mpDonorService.GetEmailViaDonorId(impersonateDonorId.Value).Email;
+                try
                 {
-                    return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No donation years found")));
-                }
+                    var donationYears = !string.IsNullOrWhiteSpace(impersonateUserId)
+                        ? _impersonationService.WithImpersonation(token, impersonateUserId, () => _gatewayDonationService.GetDonationYearsForAuthenticatedUser(token))
+                        : _gatewayDonationService.GetDonationYearsForAuthenticatedUser(token);
 
-                return (Ok(donationYears));
+                    if (donationYears == null || !donationYears.HasYears)
+                    {
+                        return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No donation years found")));
+                    }
+
+                    return (Ok(donationYears));
+                }
+                catch (UserImpersonationException e)
+                {
+                    return (e.GetRestHttpActionResult());
+                }
             }));
         }
 
@@ -92,6 +121,18 @@ namespace crds_angular.Controllers.API
                 CreateDonationAndDistributionAuthenticated(token, dto), 
                 () => CreateDonationAndDistributionUnauthenticated(dto)));
         }
+
+        [Route("api/donation/message")]
+        public IHttpActionResult SendMessageToDonor([FromBody] MessageToDonorDTO dto)
+        {
+            return (Authorized(token =>
+            {
+                var contactId = _authenticationService.GetContactId(token);
+                _gatewayDonationService.SendMessageToDonor(dto.DonorId, dto.DonationDistributionId, contactId, dto.Message, dto.TripName);
+                return Ok();
+            }));       
+        }
+
 
         [Route("api/gpexport/file/{selectionId}/{depositId}")]
         [HttpGet]

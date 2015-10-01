@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Results;
 using crds_angular.Controllers.API;
+using crds_angular.Exceptions;
 using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Models.Json;
@@ -28,6 +30,7 @@ namespace crds_angular.test.controllers
         private Mock<IAuthenticationService> authenticationServiceMock;
         private Mock<IDonorService> gatewayDonorServiceMock;
         private Mock<IDonationService> gatewayDonationServiceMock;
+        private Mock<IUserImpersonationService> impersonationService;
         private Mock<MinistryPlatform.Translation.Services.Interfaces.IDonationService> mpDonationService; 
         private Mock<IPledgeService> mpPledgeService;
         private string authToken;
@@ -42,10 +45,11 @@ namespace crds_angular.test.controllers
             authenticationServiceMock = new Mock<IAuthenticationService>();
             gatewayDonationServiceMock = new Mock<IDonationService>();
             mpPledgeService = new Mock<IPledgeService>();
+            impersonationService = new Mock<IUserImpersonationService>();
             mpDonationService = new Mock<MinistryPlatform.Translation.Services.Interfaces.IDonationService>();
 
             fixture = new DonationController(donorServiceMock.Object, stripeServiceMock.Object,
-                authenticationServiceMock.Object, gatewayDonorServiceMock.Object, gatewayDonationServiceMock.Object, mpDonationService.Object, mpPledgeService.Object);
+                authenticationServiceMock.Object, gatewayDonorServiceMock.Object, gatewayDonationServiceMock.Object, mpDonationService.Object, mpPledgeService.Object, impersonationService.Object);
 
             authType = "auth_type";
             authToken = "auth_token";
@@ -80,8 +84,8 @@ namespace crds_angular.test.controllers
             var dto = new DonationsDTO();
             dto.Donations.AddRange(donations);
 
-            gatewayDonationServiceMock.Setup(mocked => mocked.GetDonationsForAuthenticatedUser(authType + " " + authToken, "1999", true)).Returns(dto);
-            var response = fixture.GetDonations("1999", true);
+            gatewayDonationServiceMock.Setup(mocked => mocked.GetDonationsForAuthenticatedUser(authType + " " + authToken, "1999", null, true)).Returns(dto);
+            var response = fixture.GetDonations("1999", null, true);
             gatewayDonationServiceMock.VerifyAll();
 
             Assert.IsNotNull(response);
@@ -94,8 +98,8 @@ namespace crds_angular.test.controllers
         [Test]
         public void TestGetDonationsNoDonationsFound()
         {
-            gatewayDonationServiceMock.Setup(mocked => mocked.GetDonationsForAuthenticatedUser(authType + " " + authToken, "1999", true)).Returns((DonationsDTO)null);
-            var response = fixture.GetDonations("1999", true);
+            gatewayDonationServiceMock.Setup(mocked => mocked.GetDonationsForAuthenticatedUser(authType + " " + authToken, "1999", null, true)).Returns((DonationsDTO)null);
+            var response = fixture.GetDonations("1999", null, true);
             gatewayDonationServiceMock.VerifyAll();
 
             Assert.IsNotNull(response);
@@ -103,6 +107,46 @@ namespace crds_angular.test.controllers
             var r = (RestHttpActionResult<ApiErrorDto>)response;
             Assert.IsNotNull(r.Content);
             Assert.AreEqual("No matching donations found", r.Content.Message);
+        }
+
+        [Test]
+        public void TestGetDonationsImpersonationNotAllowed()
+        {
+            donorServiceMock.Setup(mocked => mocked.GetEmailViaDonorId(123)).Returns(new ContactDonor
+            {
+                Email = "me@here.com"
+            });
+            impersonationService.Setup(mocked => mocked.WithImpersonation(authType + " " + authToken, "me@here.com", It.IsAny<Func<DonationsDTO>>()))
+                .Throws<ImpersonationNotAllowedException>();
+            var response = fixture.GetDonations("1999", null, true, 123);
+            gatewayDonationServiceMock.VerifyAll();
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<RestHttpActionResult<ApiErrorDto>>(response);
+            var r = (RestHttpActionResult<ApiErrorDto>)response;
+            Assert.AreEqual(HttpStatusCode.Forbidden, r.StatusCode);
+            Assert.IsNotNull(r.Content);
+            Assert.AreEqual("User is not authorized to impersonate other users.", r.Content.Message);
+        }
+
+        [Test]
+        public void TestGetDonationsImpersonationUserNotFound()
+        {
+            donorServiceMock.Setup(mocked => mocked.GetEmailViaDonorId(123)).Returns(new ContactDonor
+            {
+                Email = "me@here.com"
+            });
+            impersonationService.Setup(mocked => mocked.WithImpersonation(authType + " " + authToken, "me@here.com", It.IsAny<Func<DonationsDTO>>()))
+                .Throws(new ImpersonationUserNotFoundException("me@here.com"));
+            var response = fixture.GetDonations("1999", null, true, 123);
+            gatewayDonationServiceMock.VerifyAll();
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<RestHttpActionResult<ApiErrorDto>>(response);
+            var r = (RestHttpActionResult<ApiErrorDto>)response;
+            Assert.AreEqual(HttpStatusCode.Conflict, r.StatusCode);
+            Assert.IsNotNull(r.Content);
+            Assert.AreEqual("Could not locate user 'me@here.com' to impersonate.", r.Content.Message);
         }
 
         [Test]

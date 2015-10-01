@@ -1,27 +1,36 @@
 <div class="clearfix">
   <div class="col-xs-12 col-sm-10 col-top">
-    <h5 class="hard-ends flush-bottom" data-ng-if="donation.registeredDonor">{{donation.donorNickname}} {{donation.donorLastName}} <span class="text-muted">{{donation.donationDate}}</span></h5>
-    <h5 class="hard-ends flush-bottom" data-ng-if="!donation.registeredDonor">{{donation.donorEmail}} <span class="text-muted">{{donation.donationDate}}</span></h5>
+     <h5 class="hard-ends flush-bottom" >
+      {{tripDonations.getDisplayName()}}
+      <span class="text-muted">
+        {{tripDonations.donation.donationDate}}
+      </span>
+      <svg viewBox="0 0 32 32" class="icon icon-check-circle text-success icon-middle" ng-if="tripDonations.donation.messageSent" >
+        <use xlink:href="#check-circle"></use>
+      </svg>
+    </h5>
     <p class="tight-line-height">
-      ${{donation.donationAmount}}
+      ${{tripDonations.donation.donationAmount}}
     </p>
   </div><!--/col-xs-12-->
   <div class="col-xs-12 col-sm-2 hard-sides mobile-soft-sides mobile-push-half-top">
-    <a href="" class="table-btn table-btn-lg btn-standard" ng-click="matt = !matt"><span>
-      <svg viewBox="0 0 32 32" class="icon-small icon-mail-reply">
+    <a href="" 
+       ng-if="tripDonations.showReplyButton()"
+       class="table-btn table-btn-lg btn-standard" 
+       ng-click="tripDonations.toggleMessage()">
+       <span>
+       <svg viewBox="0 0 32 32" class="icon-small icon-mail-reply">
         <use xlink:href="#mail-reply"></use>
-      </svg> Reply</span>
+       </svg> Reply</span>
     </a>
   </div>
 </div>
 <div class="clearfix gray-lighter">
-  <div class="col-xs-12" collapse="!matt">
-    <div class="push-half-ends clearfix">
-      <textarea class="form-control push-half-bottom" rows="10" placeholder="Type your message here&hellip;"></textarea>
-      <div class="pull-right">
-        <button class="btn btn-default" ng-click="matt = !matt">Cancel</button>
-        <button class="btn btn-primary">Send Message</button>
-      </div>
-    </div>
+  <div class="col-xs-12" collapse="!tripDonations.isMessageToggled">
+    <email-box
+      is-message-toggled="tripDonations.isMessageToggled"
+      loading="tripDonations.loading"
+      send-message-callback="tripDonations.sendMessage(message,onSuccess, onError)">
+    </email-box>
   </div><!--/col-xs-12-->
 </div><!--/clearfix gray-lighter -->

@@ -634,7 +634,7 @@ namespace crds_angular.test.Services
                     Brand = CardBrand.AmericanExpress
                 }
             });
-            var response = _fixture.GetDonationsForAuthenticatedUser("auth token", "1999", false);
+            var response = _fixture.GetDonationsForAuthenticatedUser("auth token", "1999", null, false);
             _mpDonorService.VerifyAll();
             _paymentService.VerifyAll();
 
@@ -931,7 +931,7 @@ namespace crds_angular.test.Services
             };
 
             _mpDonorService.Setup(mocked => mocked.GetDonationsForAuthenticatedUser("auth token", true, "1999")).Returns(donations);
-            var response = _fixture.GetDonationsForAuthenticatedUser("auth token", "1999", true);
+            var response = _fixture.GetDonationsForAuthenticatedUser("auth token", "1999", null, true);
             _mpDonorService.VerifyAll();
             _paymentService.VerifyAll();
 
@@ -1049,6 +1049,247 @@ namespace crds_angular.test.Services
             Assert.AreEqual(donations[3].donationDate, response.Donations[1].DonationDate);
             Assert.AreEqual(null, response.Donations[1].Source.AccountNumberLast4);
             Assert.AreEqual("US Bank", response.Donations[1].Source.Name);
+        }
+
+        [Test]
+        public void TestGetLimitedDonationsForAuthenticatedUser()
+        {
+            var donations = new List<Donation>
+            {
+                new Donation
+                {
+                    donationAmt = 567,
+                    donationId = 67,
+                    donationDate = DateTime.Parse("1999-11-30 23:59:59"),
+                    paymentTypeId = 5, //bank
+                    transactionCode = "tx_67",
+                    softCreditDonorId = 0,
+                },
+                new Donation
+                {
+                    donationAmt = 123,
+                    donationId = 45,
+                    donationDate = DateTime.Parse("1999-12-31 23:59:59"),
+                    paymentTypeId = 2, // Cash,
+                    softCreditDonorId = 0,
+                },
+                new Donation
+                {
+                    donationAmt = 678,
+                    donationId = 78,
+                    donationDate = DateTime.Parse("1999-10-30 23:59:59"),
+                    paymentTypeId = 4, // credit card
+                    transactionCode = "tx_78",
+                    softCreditDonorId = 0,
+                }
+            };
+
+            donations[0].Distributions.Add(
+                new DonationDistribution()
+                {
+                    donationDistributionId = 123,
+                    donationId = 67,
+                    donationDistributionAmt = 367,
+                    donationDistributionProgram = "Crossroads",
+                }
+            );
+            donations[0].Distributions.Add(
+                new DonationDistribution()
+                {
+                    donationDistributionId = 124,
+                    donationId = 67,
+                    donationDistributionAmt = 100,
+                    donationDistributionProgram = "Beans & Rice",
+                }
+            );
+            donations[0].Distributions.Add(
+                new DonationDistribution()
+                {
+                    donationDistributionId = 125,
+                    donationId = 67,
+                    donationDistributionAmt = 100,
+                    donationDistributionProgram = "Super Bowl Party",
+                }
+            );
+
+            donations[1].Distributions.Add(
+                new DonationDistribution()
+                {
+                    donationDistributionId = 126,
+                    donationId = 45,
+                    donationDistributionAmt = 103,
+                    donationDistributionProgram = "Beans & Rice",
+                }
+            );
+            donations[1].Distributions.Add(
+                new DonationDistribution()
+                {
+                    donationDistributionId = 127,
+                    donationId = 45,
+                    donationDistributionAmt = 20,
+                    donationDistributionProgram = "Crossroads",
+                }
+            );
+
+            donations[2].Distributions.Add(
+                new DonationDistribution()
+                {
+                    donationDistributionId = 128,
+                    donationId = 78,
+                    donationDistributionAmt = 678,
+                    donationDistributionProgram = "Crossroads",
+                }
+            );
+
+            _mpDonorService.Setup(mocked => mocked.GetDonationsForAuthenticatedUser("auth token", null, "1999")).Returns(donations);
+            _paymentService.Setup(mocked => mocked.GetCharge("tx_67")).Returns(new StripeCharge
+            {
+                Source = new StripeSource
+                {
+                    AccountNumberLast4 = "9876"
+                }
+            });
+            _paymentService.Setup(mocked => mocked.GetCharge("tx_78")).Returns(new StripeCharge
+            {
+                Source = new StripeSource
+                {
+                    AccountNumberLast4 = "8765",
+                    Brand = CardBrand.AmericanExpress
+                }
+            });
+            var response = _fixture.GetDonationsForAuthenticatedUser("auth token", "1999", 4);
+            _mpDonorService.VerifyAll();
+            _paymentService.VerifyAll();
+
+            Assert.NotNull(response);
+            Assert.NotNull(response.Donations);
+            Assert.AreEqual(2, response.Donations.Count);
+            Assert.AreEqual(2, response.Donations[0].Distributions.Count);
+            Assert.AreEqual(2, response.Donations[1].Distributions.Count);
+            Assert.AreEqual("45", response.Donations[0].Id);
+            Assert.AreEqual("67", response.Donations[1].Id);
+        }
+
+
+        [Test]
+        public void TestGetLimitedDonationsAgainForAuthenticatedUser()
+        {
+            var donations = new List<Donation>
+            {
+                new Donation
+                {
+                    donationAmt = 567,
+                    donationId = 67,
+                    donationDate = DateTime.Parse("1999-10-30 23:59:59"),
+                    paymentTypeId = 5, //bank
+                    transactionCode = "tx_67",
+                    softCreditDonorId = 0,
+                },
+                new Donation
+                {
+                    donationAmt = 123,
+                    donationId = 45,
+                    donationDate = DateTime.Parse("1999-12-31 23:59:59"),
+                    paymentTypeId = 2, // Cash,
+                    softCreditDonorId = 0,
+                },
+                new Donation
+                {
+                    donationAmt = 678,
+                    donationId = 78,
+                    donationDate = DateTime.Parse("1999-11-30 23:59:59"),
+                    paymentTypeId = 4, // credit card
+                    transactionCode = "tx_78",
+                    softCreditDonorId = 0,
+                }
+            };
+
+            donations[0].Distributions.Add(
+                new DonationDistribution()
+                {
+                    donationDistributionId = 123,
+                    donationId = 67,
+                    donationDistributionAmt = 367,
+                    donationDistributionProgram = "Crossroads",
+                }
+            );
+            donations[0].Distributions.Add(
+                new DonationDistribution()
+                {
+                    donationDistributionId = 124,
+                    donationId = 67,
+                    donationDistributionAmt = 100,
+                    donationDistributionProgram = "Beans & Rice",
+                }
+            );
+            donations[0].Distributions.Add(
+                new DonationDistribution()
+                {
+                    donationDistributionId = 125,
+                    donationId = 67,
+                    donationDistributionAmt = 100,
+                    donationDistributionProgram = "Super Bowl Party",
+                }
+            );
+
+            donations[1].Distributions.Add(
+                new DonationDistribution()
+                {
+                    donationDistributionId = 126,
+                    donationId = 45,
+                    donationDistributionAmt = 103,
+                    donationDistributionProgram = "Beans & Rice",
+                }
+            );
+            donations[1].Distributions.Add(
+                new DonationDistribution()
+                {
+                    donationDistributionId = 127,
+                    donationId = 45,
+                    donationDistributionAmt = 20,
+                    donationDistributionProgram = "Crossroads",
+                }
+            );
+
+            donations[2].Distributions.Add(
+                new DonationDistribution()
+                {
+                    donationDistributionId = 128,
+                    donationId = 78,
+                    donationDistributionAmt = 678,
+                    donationDistributionProgram = "Crossroads",
+                }
+            );
+
+            _mpDonorService.Setup(mocked => mocked.GetDonationsForAuthenticatedUser("auth token", null, "1999")).Returns(donations);
+            _paymentService.Setup(mocked => mocked.GetCharge("tx_67")).Returns(new StripeCharge
+            {
+                Source = new StripeSource
+                {
+                    AccountNumberLast4 = "9876"
+                }
+            });
+            _paymentService.Setup(mocked => mocked.GetCharge("tx_78")).Returns(new StripeCharge
+            {
+                Source = new StripeSource
+                {
+                    AccountNumberLast4 = "8765",
+                    Brand = CardBrand.AmericanExpress
+                }
+            });
+            var response = _fixture.GetDonationsForAuthenticatedUser("auth token", "1999", 4);
+            _mpDonorService.VerifyAll();
+            _paymentService.VerifyAll();
+
+            Assert.NotNull(response);
+            Assert.NotNull(response.Donations);
+            Assert.AreEqual(3, response.Donations.Count);
+            Assert.AreEqual(2, response.Donations[0].Distributions.Count);
+            Assert.AreEqual(1, response.Donations[1].Distributions.Count);
+            Assert.AreEqual(1, response.Donations[2].Distributions.Count);
+            Assert.AreEqual("45", response.Donations[0].Id);
+            Assert.AreEqual("78", response.Donations[1].Id);
+            Assert.AreEqual("67", response.Donations[2].Id);
         }
     }
 }
