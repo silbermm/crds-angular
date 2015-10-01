@@ -529,7 +529,8 @@
                   description: metaDescription,
                   card: ContentPageService.page.card,
                   type: ContentPageService.page.type,
-                  image: ContentPageService.page.image
+                  image: ContentPageService.page.image,
+                  statusCode: ContentPageService.page.statusCode
                 };
 
                 switch (ContentPageService.page.pageType){
