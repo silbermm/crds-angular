@@ -16,7 +16,7 @@
 	              </p>
 	            </div>
 	            <div class="go-trip-btn col-xs-12 col-sm-2 hard-sides col-sm-height" ng-show="tripParticipant.showGiveButton">
-                <a ui-sref="tripgiving({'eventParticipantId': tripParticipant.trips[0].tripParticipantId})" class="table-btn table-btn-lg btn-standard"><span>Give</span></a>
+                <a ng-click="goToGiving()" class="table-btn table-btn-lg btn-standard"><span>Give</span></a>
 	            </div>
 	        </li>
 	      </ul>

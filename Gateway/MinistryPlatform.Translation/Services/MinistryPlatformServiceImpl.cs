@@ -3,20 +3,32 @@ using MinistryPlatform.Translation.PlatformService;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Net;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
+using System.Web.Security;
 using Crossroads.Utilities.Interfaces;
+using Crossroads.Utilities.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
 {
     public class MinistryPlatformServiceImpl : IMinistryPlatformService
     {
-        private PlatformServiceClient platformServiceClient;
+        private PlatformServiceClient _platformServiceClient;
         private IConfigurationWrapper _configurationWrapper;
+
+        /// <summary>
+        /// This is the cookie name MinistryPlatform looks for when impersonating a user.
+        /// </summary>
+        private readonly string _impersonateCookieName;
 
         public MinistryPlatformServiceImpl(PlatformServiceClient platformServiceClient, IConfigurationWrapper configurationWrapper)
         {
-            this.platformServiceClient = platformServiceClient;
-            this._configurationWrapper = configurationWrapper;
+            _platformServiceClient = platformServiceClient;
+            _configurationWrapper = configurationWrapper;
+
+            _impersonateCookieName = string.Format("{0}.1", FormsAuthentication.FormsCookieName);
         }
 
        public List<Dictionary<string, object>> GetLookupRecords(int pageId, String token)
@@ -199,26 +211,58 @@ namespace MinistryPlatform.Translation.Services
             return _configurationWrapper.GetConfigIntValue(mpKey);
         }
 
-        private T Call<T>(String token, Func<PlatformServiceClient, T> ministryPlatformFunc)
+        private T Call<T>(string token, Func<PlatformServiceClient, T> ministryPlatformFunc)
         {
             T result;
-            using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
+            using (new OperationContextScope(_platformServiceClient.InnerChannel))
             {
                 if (System.ServiceModel.Web.WebOperationContext.Current != null)
+                {
                     System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
-                result = ministryPlatformFunc(platformServiceClient);
+                    Impersonate();
+                }
+
+                result = ministryPlatformFunc(_platformServiceClient);
             }
             return result;
         }
 
-        private void VoidCall(String token, Action<PlatformServiceClient> ministryPlatformFunc)
+        private void VoidCall(string token, Action<PlatformServiceClient> ministryPlatformFunc)
         {
-            using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
+            using (new OperationContextScope(_platformServiceClient.InnerChannel))
             {
                 if (System.ServiceModel.Web.WebOperationContext.Current != null)
+                {
                     System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
-                ministryPlatformFunc(platformServiceClient);
+                    Impersonate();
+                }
+                ministryPlatformFunc(_platformServiceClient);
             }
+        }
+
+        /// <summary>
+        /// This method sets an impersonation cookie on the OutgoingMessageProperties.HttpRequest.  MinistryPlatform looks for this to be set
+        /// to a GUID of a User, and if set, all requests to MP will act as though that user is executing them, rather than the actual
+        /// authenticated user.  This looks at the <see cref="ImpersonatedUserGuid"/> ThreadLocal to see if there is a user to impersonate.
+        /// </summary>
+        private void Impersonate()
+        {
+            if (!ImpersonatedUserGuid.HasValue())
+            {
+                return;
+            }
+
+            var httpRequest = OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] as
+                HttpRequestMessageProperty;
+            if (httpRequest == null)
+            {
+                httpRequest = new HttpRequestMessageProperty();
+                OperationContext.Current.OutgoingMessageProperties.Add(HttpRequestMessageProperty.Name, httpRequest);
+            }
+
+            var cookies = new CookieContainer();
+            cookies.Add(_platformServiceClient.Endpoint.Address.Uri, new Cookie(_impersonateCookieName, ImpersonatedUserGuid.Get()));
+            httpRequest.Headers.Add(HttpRequestHeader.Cookie, cookies.GetCookieHeader(_platformServiceClient.Endpoint.Address.Uri));
         }
     }
 }
