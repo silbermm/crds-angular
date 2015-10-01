@@ -175,7 +175,7 @@
     }
 
     function apiRecurringGift(donorInfo, stripeFunc, apiMethod) {
-      var def = $q.defer;
+      var def = $q.defer();
       stripeFunc.createToken(donorInfo, function(status, response) {
         if (response.error) {
           def.reject(_addGlobalErrorMessage(response.error, status));

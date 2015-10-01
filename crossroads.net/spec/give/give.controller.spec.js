@@ -585,13 +585,6 @@ describe('GiveController', function() {
 
       expect(mockPaymentService.getDonor).toHaveBeenCalledWith('test@test.com');
       expect(DonationService.updateDonorAndDonate).toHaveBeenCalled();
-
-      controller.service = RecurringGiving;
-      controller.service.resetGiveFlow();
-      controller.service.submitBankInfo(controller.giveForm);
-
-      expect(mockPaymentService.getDonor).toHaveBeenCalledWith('test@test.com');
-      expect(DonationService.updateDonorAndDonate).toHaveBeenCalled();
     });
 
     it('should call createDonorAndDonate when there is not an existing donor', function() {
@@ -611,26 +604,7 @@ describe('GiveController', function() {
       expect(mockPaymentService.getDonor).toHaveBeenCalledWith('test@test.com');
       expect(DonationService.createDonorAndDonate).toHaveBeenCalled();
     });
-
-    it('should call createDonorAndDonate when there is not an existing donor for recurring', function() {
-      mockPaymentServiceGetPromise.setSuccess(false);
-
-      controller.dto.program = {programId: 1, Name: 'crossroads'};
-
-      GiveTransferService.email = 'test@test.com';
-      mockSession.isActive.and.callFake(function() {
-        return true;
-      });
-
-      spyOn(DonationService, 'createDonorAndDonate');
-      spyOn(DonationService, 'updateDonorAndDonate');
-      controller.service = RecurringGiving;
-      controller.service.resetGiveFlow();
-      controller.service.submitBankInfo(controller.giveForm);
-
-      expect(mockPaymentService.getDonor).toHaveBeenCalledWith('test@test.com');
-      expect(DonationService.createDonorAndDonate).toHaveBeenCalled();
-    });
+    
   });
 
   describe('function transitionForLoggedInUserBasedOnExistingDonor', function() {
