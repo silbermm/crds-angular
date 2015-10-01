@@ -52,7 +52,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 }
             };
 
-            _ministryPlatformService.Setup(m => m.CreateSubRecord("EventParticipantDocuments", eventId, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>(), true))
+            _ministryPlatformService.Setup(m => m.CreateSubRecord("EventParticipantDocuments", eventParticipantId, It.IsAny<Dictionary<string, object>>(), It.IsAny<string>(), true))
                 .Returns(34567);
             var returnVal = _fixture.AddDocumentsToTripParticipant(docs, eventParticipantId);
 
