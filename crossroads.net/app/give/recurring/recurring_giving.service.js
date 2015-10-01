@@ -7,7 +7,7 @@
 
   function RecurringGiving(DonationService, GiveFlow) {
     var service = {
-      initDefaultState: initDefaultState,
+      resetGiveFlow: resetGiveFlow,
       goToAccount: goToAccount,
       stateName: stateName,
       goToChange: goToChange,
@@ -17,7 +17,7 @@
       getLoggedInUserDonorPaymentInfo: getLoggedInUserDonorPaymentInfo,
     };
 
-    function initDefaultState() {
+    function resetGiveFlow() {
       // Setup the give flow service
       GiveFlow.reset({
         amount: 'give.amount',

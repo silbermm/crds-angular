@@ -17,13 +17,21 @@
       confirmDonation: confirmDonation,
       processChange: processChange,
       getLoggedInUserDonorPaymentInfo: getLoggedInUserDonorPaymentInfo,
+      resetGiveFlow: resetGiveFlow,
     };
 
     function initDefaultState() {
       GiveTransferService.reset();
       GiveTransferService.processing = false;
 
-      // Setup the give flow service
+      resetGiveFlow();
+      GiveTransferService.initialized = true;
+
+      Session.removeRedirectRoute();
+      $state.go(GiveFlow.amount);
+    }
+
+    function resetGiveFlow() {
       GiveFlow.reset({
         amount: 'give.amount',
         account: 'give.one_time_account',
@@ -33,11 +41,6 @@
         change: 'give.one_time_change',
         thankYou: 'give.one_time_thank-you'
       });
-
-      GiveTransferService.initialized = true;
-
-      Session.removeRedirectRoute();
-      $state.go(GiveFlow.amount);
     }
 
     function stateName(state) {

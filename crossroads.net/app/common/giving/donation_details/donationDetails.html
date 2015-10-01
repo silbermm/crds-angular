@@ -21,7 +21,7 @@
   </div>
         <!--/checkbox-->
   <div class="form-group" ng-show="ministryShow" ng-class="{'has-error': donationDetailsForm.initiative.$error.initiativeRequired && amountSubmitted}">
-    <select class="form-control" ng-options="program.Name for program in programsIn.slice(1) track by program.ProgramId" ng-model="program" name="initiative" initiative-required>
+    <select class="form-control" ng-change="updateFrequency()" ng-options="program.Name for program in programsIn.slice(1) track by program.ProgramId" ng-model="program" name="initiative" initiative-required>
       <option value="">Choose Initiative</option>
     </select>
     <ng-messages for="donationDetailsForm.initiative.$error" ng-show="donationDetailsForm.initiative.$error.initiativeRequired && amountSubmitted">
@@ -32,12 +32,12 @@
   <div class="form-group" ng-show='showInitiativeOption'>
     <select class="form-control" ng-model="givingType">
       <option value="one_time">One Time</option>
-      <option value="weekly">Weekly</option>
-      <option value="monthly">Monthly</option>
+      <option value="weekly" ng-if="allowRecurring">Weekly</option>
+      <option value="monthly" ng-if="allowRecurring">Monthly</option>
     </select>
   </div>
 
-  <div class="form-group" ng-show="givingType !== 'one_time'">
+  <div class="form-group" ng-show="givingType !== 'one_time' && allowRecurring">
     <div class="input-group">
       <input type="text" class="form-control" datepicker-popup="MM/dd/yyyy"
         ng-model="recurringStartDate" is-open="recurringStartDatePickerOpened"
