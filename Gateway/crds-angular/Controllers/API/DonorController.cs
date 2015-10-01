@@ -314,6 +314,11 @@ namespace crds_angular.Controllers.API
             return Ok(donor);
         }
 
+        /// <summary>
+        /// Create a recurring gift for the authenticated user.
+        /// </summary>
+        /// <param name="recurringGiftDto">The data required to setup the recurring gift in MinistryPlatform and Stripe.</param>
+        /// <returns>The recurring gift data</returns>
         [RequiresAuthorization]
         [ResponseType(typeof (StripePlan))]
         [Route("api/donor/createrecurrence")]
