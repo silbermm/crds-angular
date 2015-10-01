@@ -59,6 +59,7 @@
     <Compile Include="Services\ContentBlockServiceTest.cs" />
     <Compile Include="Services\EnvironmentVariableTypeConverterTest.cs" />
     <Compile Include="Services\HtmlElementTest.cs" />
+    <Compile Include="Services\ImpersonatedUserGuidTest.cs" />
     <Compile Include="Services\TripleDesSymmetricKeyCryptoProviderTest.cs" />
   </ItemGroup>
   <ItemGroup>

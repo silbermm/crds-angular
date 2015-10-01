@@ -13,6 +13,8 @@ namespace MinistryPlatform.Translation.Services
     public class DonationService : BaseService, IDonationService
     {
         private readonly int _donationsPageId;
+        private readonly int _donationDistributionPageId;
+        private readonly int _donorMessageTemplateId;
         private readonly int _distributionPageId;
         private readonly int _batchesPageId;
         private readonly int _depositsPageId;
@@ -35,8 +37,9 @@ namespace MinistryPlatform.Translation.Services
             _donorService = donorService;
             _communicationService = communicationService;
             _pledgeService = pledgeService;
-
             _donationsPageId = configuration.GetConfigIntValue("Donations");
+            _donationDistributionPageId = configuration.GetConfigIntValue("Distributions");
+            _donorMessageTemplateId = configuration.GetConfigIntValue("DonorMessageTemplateId");
             _distributionPageId = configuration.GetConfigIntValue("Distributions");
             _batchesPageId = configuration.GetConfigIntValue("Batches");
             _depositsPageId = configuration.GetConfigIntValue("Deposits");
@@ -334,14 +337,18 @@ namespace MinistryPlatform.Translation.Services
                     TotalPledge = Convert.ToInt32(result["Total Pledge"]),
                     CampaignStartDate = result.ToDate("Start Date"),
                     CampaignEndDate = result.ToDate("End Date"),
+                    DonorId = result.ToInt("Donor ID"),
+                    DonationDistributionId = result.ToInt("dp_RecordID"),
                     DonorNickname = result.ToString("Nickname"),
                     DonorFirstName = result.ToString("First Name"),
                     DonorLastName = result.ToString("Last Name"),
                     DonorEmail = result.ToString("Email Address"),
                     DonationDate = result.ToDate("Donation Date"),
                     DonationAmount = Convert.ToInt32(result["Amount"]),
+                    PaymentTypeId = Convert.ToInt32(result["Payment Type ID"]),
                     AnonymousGift = result.ToBool("Anonymous"),
-                    RegisteredDonor = result.ToBool("Registered Donor")
+                    RegisteredDonor = result.ToBool("Registered Donor"),
+                    MessageSent = result.ToBool("Message Sent")
                 };
 
                 trips.Add(trip);
@@ -393,6 +400,45 @@ namespace MinistryPlatform.Translation.Services
 
             _ministryPlatformService.UpdateRecord(_depositsPageId, paramaters, token);
             _ministryPlatformService.RemoveSelection(selectionId, new [] {depositId}, token);
+        }
+
+        public void SendMessageToDonor(int donorId, int donationDistributionId, int fromContactId, string body, string tripName )
+        {
+            var template = _communicationService.GetTemplate(_donorMessageTemplateId);
+            var messageData = new Dictionary<string, object>
+            {
+                {"TripName", tripName},
+                {"DonorMessage", body}
+            };
+            var toEmail = _donorService.GetEmailViaDonorId(donorId);
+            var authorId = _communicationService.GetUserIdFromContactId(fromContactId);
+            var fromEmail = _communicationService.GetEmailFromContactId(fromContactId);
+
+            var comm = new Communication
+            {
+                AuthorUserId = authorId,
+                DomainId = 1,
+                ToContactId = toEmail.ContactId,
+                ToEmailAddress = toEmail.Email,
+                FromContactId = fromContactId,
+                FromEmailAddress = fromEmail,
+                ReplyContactId = fromContactId,
+                ReplyToEmailAddress = fromEmail,
+                EmailSubject = _communicationService.ParseTemplateBody(template.Subject, messageData),
+                EmailBody = _communicationService.ParseTemplateBody(template.Body, messageData),
+                MergeData = messageData
+            };
+            _communicationService.SendMessage(comm);
+
+            //mark donation distribution with message sent
+
+            var distributionData = new Dictionary<string, object>
+            {
+                {"Donation_Distribution_ID", donationDistributionId},
+                {"Message_Sent", true}
+            };
+           
+            _ministryPlatformService.UpdateRecord(_donationDistributionPageId, distributionData, ApiLogin());
         }
 
         public void SendMessageFromDonor(int pledgeId, string message)

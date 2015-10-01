@@ -50,6 +50,11 @@ namespace crds_angular.Services
             return (_mpDonorService.GetContactDonor(contactId));
         }
 
+        public ContactDonor GetContactDonorForDonorId(int donorId)
+        {
+            return (_mpDonorService.GetEmailViaDonorId(donorId));
+        }
+
         public ContactDonor GetContactDonorForDonorAccount(string accountNumber, string routingNumber)
         {
             var acct = _mpDonorService.DecryptCheckValue(accountNumber);
