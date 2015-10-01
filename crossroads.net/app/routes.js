@@ -530,7 +530,7 @@
                   card: ContentPageService.page.card,
                   type: ContentPageService.page.type,
                   image: ContentPageService.page.image,
-                  statusCode: ContentPageService.page.statusCode
+                  statusCode: ContentPageService.page.errorCode
                 };
 
                 switch (ContentPageService.page.pageType){
