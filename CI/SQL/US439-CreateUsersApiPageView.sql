@@ -15,7 +15,7 @@ INSERT INTO [dbo].[dp_Page_Views] (
 	,[User_ID]
 	,[User_Group_ID]
 ) VALUES (
-     92228
+     2181
 	,'Users API Lookup'
 	,401
 	,'Users view for API UserService'
