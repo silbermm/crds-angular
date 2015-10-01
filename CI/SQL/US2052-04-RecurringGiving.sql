@@ -1,15 +1,6 @@
 USE [MinistryPlatform]
 GO
 
-ALTER TABLE [dbo].[Donations] add Recurring_Gift bit NULL
-
-GO
-
-
-
-
-
-
 CREATE TABLE [dbo].[Recurring_Gifts](
 	[Recurring_Gift_ID] [int] IDENTITY(1,1) NOT NULL,
 	[Donor_ID] [int] NOT NULL,
