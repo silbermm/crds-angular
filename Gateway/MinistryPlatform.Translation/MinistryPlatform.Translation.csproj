@@ -109,6 +109,7 @@
     <Compile Include="Services\ContactRelationshipService.cs" />
     <Compile Include="Services\ContactService.cs" />
     <Compile Include="Services\CreatePageRecordService.cs" />
+    <Compile Include="Services\DestinationService.cs" />
     <Compile Include="Services\DonationService.cs" />
     <Compile Include="Services\DonorService.cs" />
     <Compile Include="Services\EventParticipantService.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="Services\Interfaces\ICommunicationService.cs" />
     <Compile Include="Services\Interfaces\IContactRelationshipService.cs" />
     <Compile Include="Services\Interfaces\IContactService.cs" />
+    <Compile Include="Services\Interfaces\IDestinationService.cs" />
     <Compile Include="Services\Interfaces\IDonationService.cs" />
     <Compile Include="Services\Interfaces\IDonorService.cs" />
     <Compile Include="Services\Interfaces\IEventParticipantService.cs" />
