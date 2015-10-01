@@ -183,7 +183,7 @@
           var recurringGiftRequest = {
             stripe_token_id: response.id,
             amount: GiveTransferService.amount,
-            program: GiveTransferService.program,
+            program: GiveTransferService.program.ProgramId,
             interval: GiveTransferService.givingType,
             start_date: moment(GiveTransferService.recurringStartDate, 'MM DD YYYY')
           };
