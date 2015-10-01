@@ -433,6 +433,9 @@ namespace crds_angular.Services
             formResponse.FormAnswers = new List<FormAnswer>(FormatFormAnswers(dto));
 
             var formResponseId = _formSubmissionService.SubmitFormResponse(formResponse);
+
+            _privateInviteService.MarkAsUsed(dto.PledgeCampaignId, dto.InviteGUID);
+            
             return formResponseId;
         }
 

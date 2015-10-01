@@ -122,10 +122,23 @@ namespace MinistryPlatform.Translation.Services
             return MPFormatConversion.MPFormatToList(result);
         }
 
+        public List<Dictionary<string, object>> GetSubPageRecords(int subPageId, int recordId, string search, String token)
+        {
+            SelectQueryResult result = Call<SelectQueryResult>(token,
+                platformClient => platformClient.GetSubpageRecords(subPageId, recordId, search, string.Empty, 0));
+            return MPFormatConversion.MPFormatToList(result);
+        }
+
         public List<Dictionary<string, object>> GetSubPageRecords(string subPageKey, int recordId, String token)
         {
             var subPageId = GetMinistryPlatformId(subPageKey);
             return GetSubPageRecords(subPageId, recordId, token);
+        }
+
+        public List<Dictionary<string, object>> GetSubPageRecords(string subPageKey, int recordId, string search, String token)
+        {
+            var subPageId = GetMinistryPlatformId(subPageKey);
+            return GetSubPageRecords(subPageId, recordId, search, token);
         }
 
         public List<Dictionary<string, object>> GetSubpageViewRecords(int viewId, int recordId,
@@ -204,6 +217,11 @@ namespace MinistryPlatform.Translation.Services
         public void UpdateRecord(int pageId, Dictionary<string, object> dictionary, String token)
         {
             VoidCall(token, platformClient => platformClient.UpdatePageRecord(pageId, dictionary, false));
+        }
+
+        public void UpdateSubpageRecord(int subPageId, Dictionary<string, object> dictionary, String token)
+        {
+            VoidCall(token, platformClient => platformClient.UpdateSubpageRecord(subPageId, dictionary, false));
         }
 
         private int GetMinistryPlatformId(string mpKey)
