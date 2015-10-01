@@ -179,3 +179,12 @@ GO
 
 SET IDENTITY_INSERT [dbo].[dp_Page_Views] OFF
 GO
+
+
+
+INSERT INTO [dbo].[Account_Types]
+           ([Account_Type])
+           
+     VALUES
+           ('Credit Card')           
+GO
