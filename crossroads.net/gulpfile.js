@@ -224,7 +224,7 @@ gulp.task('webpack-dev-server', ['icons-watch'], function(callback) {
 	gutil.log('[start]', 'Access crossroads.net Live Reload at http://localhost:8080/webpack-dev-server/#');
 });
 
-gulp.task('webpack:build', ['icons', 'robots'], function(callback) {
+gulp.task('webpack:build', ['icons', 'robots', 'htaccess'], function(callback) {
 
 
 	webPackConfigs.forEach(function(element) {
@@ -340,5 +340,14 @@ gulp.task('robots', function() {
 
   gulp.src(robotsSourceFilename)
     .pipe(rename('robots.txt'))
+    .pipe(gulp.dest('./'));
+});
+
+// Process .htaccess file to incorporate prerender.io API Key
+gulp.task('htaccess', function() {
+  var apiKey = process.env.CRDS_PRERENDER_IO_KEY || 'NO_API_KEY_DEFINED';
+
+  gulp.src('./app/.htaccess')
+    .pipe(replace('__PRERENDER_IO_API_KEY__', apiKey))
     .pipe(gulp.dest('./'));
 });

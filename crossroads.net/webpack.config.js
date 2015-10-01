@@ -8,7 +8,6 @@ var endpoint = {
   'url': 'http://localhost:49380'
 };
 
-// TODO: Borrowerd __SOUNDCLOUD_API_KEY__ from http://jxnblk.com/plangular/ replace with our value
 var definePlugin = new webpack.DefinePlugin({
   __API_ENDPOINT__: JSON.stringify(process.env.CRDS_API_ENDPOINT || 'http://gatewayint.crossroads.net/gateway/'),
   __CMS_ENDPOINT__: JSON.stringify(process.env.CRDS_CMS_ENDPOINT || 'http://contentint.crossroads.net/'),
