@@ -29,4 +29,8 @@
 
   // The GP Export Tool
   require('./gp_export');
+
+  // The Administrator Giving History Tool
+  require('./admin_giving_history');
+
 })();
