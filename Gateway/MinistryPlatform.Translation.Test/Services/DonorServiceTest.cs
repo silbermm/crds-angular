@@ -182,6 +182,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Processor_ID", processorId},
                 {"Donation_Status_Date", setupDate},
                 {"Donation_Status_ID", 1},
+                {"Recurring_Gift", false},
                 {"Check_Scanner_Batch", checkScannerBatchName}
             };
 
