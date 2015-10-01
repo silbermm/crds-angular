@@ -1,7 +1,7 @@
 <preloader full-screen='true' ng-show="!invite.viewReady"> </preloader>
 
 <div ng-if="invite.viewReady && invite.multipleRecordsSelected" class="alert alert-danger" role="alert">
-  <strong>Sorry </strong> You cannot use this tool from that specific page. This tool only supports being called from the record view page.
+  <div ng-bind-html="$root.MESSAGES.mptool_access_error.content | html"></div>
 </div>
 
 <div class='col-sm-10 col-sm-offset-1'
