@@ -19,7 +19,8 @@
     'Person',
     'Validation',
     '$window',
-    '$anchorScroll'
+    '$anchorScroll',
+    '$stateParams'
   ];
 
   function TripsSignupController(
@@ -38,7 +39,8 @@
       Person,
       Validation,
       $window,
-      $anchorScroll
+      $anchorScroll,
+      $stateParams
     )
     {
 
@@ -159,6 +161,7 @@
       application.pageFour = vm.signupService.page4;
       application.pageFive = vm.signupService.page5;
       application.pageSix = vm.signupService.page6;
+      application.inviteGUID = $stateParams.invite;
       application.$save(function() {
         $log.debug('trip application save successful');
       }, function() {
