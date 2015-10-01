@@ -587,7 +587,7 @@ describe('GiveController', function() {
       expect(DonationService.updateDonorAndDonate).toHaveBeenCalled();
 
       controller.service = RecurringGiving;
-      controller.service.initDefaultState();
+      controller.service.resetGiveFlow();
       controller.service.submitBankInfo(controller.giveForm);
 
       expect(mockPaymentService.getDonor).toHaveBeenCalledWith('test@test.com');
@@ -625,7 +625,7 @@ describe('GiveController', function() {
       spyOn(DonationService, 'createDonorAndDonate');
       spyOn(DonationService, 'updateDonorAndDonate');
       controller.service = RecurringGiving;
-      controller.service.initDefaultState();
+      controller.service.resetGiveFlow();
       controller.service.submitBankInfo(controller.giveForm);
 
       expect(mockPaymentService.getDonor).toHaveBeenCalledWith('test@test.com');
@@ -810,7 +810,7 @@ describe('GiveController', function() {
       expect(controller.dto.changeAccountInfo).toBeTruthy();
 
       controller.service = RecurringGiving;
-      controller.service.initDefaultState()
+      controller.service.resetGiveFlow()
       controller.service.goToChange();
 
       expect(controller.dto.amount).toBe(123);
@@ -844,7 +844,7 @@ describe('GiveController', function() {
       });
 
       controller.service = RecurringGiving;
-      controller.service.initDefaultState()
+      controller.service.resetGiveFlow()
       controller.service.goToChange();
       expect($state.go).toHaveBeenCalledWith('give.recurring_login');
     });
@@ -869,7 +869,7 @@ describe('GiveController', function() {
 
       spyOn($state, 'go');
       controller.service = RecurringGiving;
-      controller.service.initDefaultState()
+      controller.service.resetGiveFlow()
       controller.service.processChange();
 
       expect($state.go).toHaveBeenCalledWith('give.recurring_login');
