@@ -47,7 +47,7 @@
     }
 
     function submitBankInfo(giveForm, programsInput) {
-      DonationService.submitBankInfo(giveForm, programsInput);
+      DonationService.createRecurringGift();
     }
 
     function processChange() {
