@@ -37,7 +37,8 @@ namespace MinistryPlatform.Translation.Services
             catch (Exception ex)
             {
                 throw new ApplicationException(
-                    string.Format("AddDocumentsToTripParticipant failed.  Event Participant: {0}", eventParticipantId), ex);
+                    string.Format("AddDocumentsToTripParticipant failed.  Event Participant: {0}", eventParticipantId),
+                    ex);
             }
         }
 
@@ -48,8 +49,9 @@ namespace MinistryPlatform.Translation.Services
                 var records =
                     WithApiLogin(
                         apiToken =>
-                            (_ministryPlatformService.GetPageViewRecords("GoTripParticipants", apiToken,
-                                search)));
+                            (_ministryPlatformService.GetPageViewRecords("GoTripParticipants",
+                                                                         apiToken,
+                                                                         search)));
                 return records.Select(viewRecord => new TripParticipant
                 {
                     EventParticipantId = viewRecord.ToInt("Event_Participant_ID"),
@@ -72,10 +74,9 @@ namespace MinistryPlatform.Translation.Services
             catch (Exception ex)
             {
                 throw new ApplicationException(
-                    string.Format("TripParticipants failed.  search: {0}", search), ex);
+                    string.Format("TripParticipants failed.  search: {0}", search),
+                    ex);
             }
         }
-
-        
     }
 }
