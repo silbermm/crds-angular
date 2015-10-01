@@ -15,7 +15,7 @@ CREATE TABLE [dbo].[Recurring_Gifts](
 	[Congregation_ID] [int] NOT NULL,
 	[Subscription_ID] [varchar](50) NOT NULL,
 	[Domain_ID] [int] NOT NULL CONSTRAINT [DF_Recurring_Gifts_Domain_ID]  DEFAULT ((1)),
- CONSTRAINT [PK_Recurring_Gifts] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_Recurring_Gifts] PRIMARY KEY CLUSTERED
 (
 	[Recurring_Gift_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -85,7 +85,7 @@ CREATE TABLE [dbo].[Recurring_Gift_Days](
 	[Day_Of_Week_ID] [int] IDENTITY(1,1) NOT NULL,
 	[Day_Of_Week] [nchar](10) NOT NULL,
 	[Domain_ID] [int] NOT NULL CONSTRAINT [DF_Recurring_Gift_Days_Domain_ID]  DEFAULT ((1)),
- CONSTRAINT [PK_Recurring_Gift_Days] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_Recurring_Gift_Days] PRIMARY KEY CLUSTERED
 (
 	[Day_Of_Week_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -102,7 +102,7 @@ CREATE TABLE [dbo].[Recurring_Gift_Frequencies](
 	[Frequency_ID] [int] IDENTITY(1,1) NOT NULL,
 	[Frequency] [nchar](10) NOT NULL,
 	[Domain_ID] [int] NOT NULL CONSTRAINT [DF_Recurring_Gift_Frequencies_Domain_ID]  DEFAULT ((1)),
- CONSTRAINT [PK_Recurring_Gift_Frequencies] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_Recurring_Gift_Frequencies] PRIMARY KEY CLUSTERED
 (
 	[Frequency_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -126,7 +126,7 @@ INSERT INTO [dbo].[dp_Pages]
            ,[Primary_Key]
            ,[Display_Search]
            ,[Default_Field_List]
-           ,[Selected_Record_Expression]          
+           ,[Selected_Record_Expression]
            ,[Display_Copy])
      VALUES
            (517
@@ -138,7 +138,7 @@ INSERT INTO [dbo].[dp_Pages]
            ,'Recurring_Gift_ID'
            ,1
            ,'Donor_ID_Table_Contact_ID_Table.Display_Name ,Donor_ID_Table_Contact_ID_Table.Email_Address ,Frequency_ID_Table.Frequency,Day_Of_Month, Amount,Start_Date,End_Date,Subscription_ID'
-           ,'Recurring_Gift_ID'        
+           ,'Recurring_Gift_ID'
            ,0)
 GO
 
@@ -160,11 +160,11 @@ INSERT INTO [dbo].[dp_Page_Views]
            ,[Field_List]
            ,[View_Clause] )
      VALUES
-           (92230
+           (2182
 		   ,'Recurring Gifts By Subscription ID'
            ,517
            ,'Recurring gifts by subscription'
-           ,'Subscription_ID,Donor_ID,Program_ID,Congregation_ID,Amount,Donor_Account_ID_Table_Account_Type_ID_Table'
+					 ,'Subscription_ID,Donor_ID_Table.Donor_ID,Program_ID,Congregation_ID,Amount,Donor_Account_ID_Table_Account_Type_ID_Table.[Account_Type_ID],Donor_Account_ID_Table_Account_Type_ID_Table.[Account_Type]'
            ,'Subscription_ID IS NOT NULL' )
 GO
 
@@ -175,7 +175,7 @@ GO
 
 INSERT INTO [dbo].[Account_Types]
            ([Account_Type])
-           
+
      VALUES
-           ('Credit Card')           
+           ('Credit Card')
 GO
