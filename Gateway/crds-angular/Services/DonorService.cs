@@ -174,11 +174,9 @@ namespace crds_angular.Services
                                                            DonorRoutingNumberDefault,
                                                            response.last4,
                                                            contactDonor.DonorId,
-                                                           recurringGiftDto.PlanInterval,
                                                            response.id,
                                                            contactDonor.ProcessorId);
-            StripeSubscription stripeSubscription;
-            stripeSubscription = _paymentService.CreateSubscription(plan.Id, contactDonor.ProcessorId);
+            var stripeSubscription = _paymentService.CreateSubscription(plan.Id, contactDonor.ProcessorId);
            
             var recurGiftId = _mpDonorService.CreateRecurringGiftRecord(contactDonor.DonorId,
                                                                 donorAccountId,

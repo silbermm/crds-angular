@@ -314,8 +314,13 @@ namespace crds_angular.Controllers.API
             return Ok(donor);
         }
 
+        /// <summary>
+        /// Create a recurring gift for the authenticated user.
+        /// </summary>
+        /// <param name="recurringGiftDto">The data required to setup the recurring gift in MinistryPlatform and Stripe.</param>
+        /// <returns>The MinistryPlatform recurring gift id</returns>
         [RequiresAuthorization]
-        [ResponseType(typeof (StripePlan))]
+        [ResponseType(typeof(int))]
         [Route("api/donor/createrecurrence")]
         public IHttpActionResult CreateRecurringGift([FromBody] RecurringGiftDto recurringGiftDto)
         {
@@ -323,8 +328,7 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
-                    var contactId =_authenticationService.GetContactId(token);
-                    var contactDonor = _mpDonorService.GetContactDonor(contactId);
+                    var contactDonor = _donorService.GetContactDonorForAuthenticatedUser(token);
                     var donor = _donorService.CreateOrUpdateContactDonor(contactDonor, string.Empty, string.Empty, recurringGiftDto.StripeTokenId, DateTime.Now);
                     var recurringGift = _donorService.CreateRecurringGift(recurringGiftDto, donor);
                     return Ok(recurringGift);
@@ -335,7 +339,7 @@ namespace crds_angular.Controllers.API
                 }
                 catch (ApplicationException applicationException)
                 {
-                    var apiError = new ApiErrorDto("Error calling Ministry Platform" + applicationException.Message, applicationException);
+                    var apiError = new ApiErrorDto("Error calling Ministry Platform " + applicationException.Message, applicationException);
                     throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
                 

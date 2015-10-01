@@ -16,6 +16,7 @@ using crds_angular.Exceptions;
 using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Models.Json;
+using Crossroads.Utilities.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using DonationStatus = crds_angular.Models.Crossroads.Stewardship.DonationStatus;
 using IDonationService = crds_angular.Services.Interfaces.IDonationService;
@@ -652,5 +653,74 @@ namespace crds_angular.test.controllers
             paymentService.VerifyAll();
         }
 
+        [Test]
+        public void TestCreateRecurringGift()
+        {
+            const string stripeToken = "tok_123";
+            var contactDonor = new ContactDonor();
+            var contactDonorUpdated = new ContactDonor();
+            var recurringGiftDto = new RecurringGiftDto
+            {
+                StripeTokenId = stripeToken
+            };
+
+            donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(authType + " " + authToken)).Returns(contactDonor);
+            donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(contactDonor, string.Empty, string.Empty, stripeToken, It.IsAny<DateTime>())).Returns(contactDonorUpdated);
+            donorService.Setup(mocked => mocked.CreateRecurringGift(recurringGiftDto, contactDonorUpdated)).Returns(123);
+
+            var response = fixture.CreateRecurringGift(recurringGiftDto);
+            donorService.VerifyAll();
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<int>>(response);
+            Assert.AreEqual(123, ((OkNegotiatedContentResult<int>)response).Content);
+        }
+
+        [Test]
+        public void TestCreateRecurringGiftStripeError()
+        {
+            const string stripeToken = "tok_123";
+            var contactDonor = new ContactDonor();
+            var contactDonorUpdated = new ContactDonor();
+            var recurringGiftDto = new RecurringGiftDto
+            {
+                StripeTokenId = stripeToken
+            };
+            var stripeException = new PaymentProcessorException(HttpStatusCode.Forbidden,
+                                                                "aux message",
+                                                                "error type",
+                                                                "message",
+                                                                "code",
+                                                                "decline code",
+                                                                "param",
+                                                                new ContentBlock());
+
+            donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(authType + " " + authToken)).Returns(contactDonor);
+            donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(contactDonor, string.Empty, string.Empty, stripeToken, It.IsAny<DateTime>())).Returns(contactDonorUpdated);
+            donorService.Setup(mocked => mocked.CreateRecurringGift(recurringGiftDto, contactDonorUpdated)).Throws(stripeException);
+
+            var response = fixture.CreateRecurringGift(recurringGiftDto);
+            donorService.VerifyAll();
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<RestHttpActionResult<PaymentProcessorErrorResponse>>(response);
+            var err = (RestHttpActionResult<PaymentProcessorErrorResponse>) response;
+            Assert.AreEqual(HttpStatusCode.Forbidden, err.StatusCode);
+        }
+
+        [Test]
+        public void TestCreateRecurringGifyMinistryPlatformException()
+        {
+            donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(authType + " " + authToken)).Throws<ApplicationException>();
+
+            try
+            {
+                fixture.CreateRecurringGift(new RecurringGiftDto());
+                Assert.Fail("expected exception was not thrown");
+            }
+            catch (HttpResponseException)
+            {
+                // expected
+            }
+            donorService.VerifyAll();
+        }
     }
 }
