@@ -628,17 +628,17 @@ namespace MinistryPlatform.Translation.Services
 
         public int CreateRecurringGiftRecord(int donorId, int donorAccountId, string planInterval, decimal planAmount, DateTime startDate, string program, string subscriptionId)
         {
-            object sd = null;
-            object day = null;
-            object frequencyId = null;
+            int? dayOfWeek = null;
+            int? dayOfMonth = null;
+            int frequencyId;
             if (planInterval == "week")
             {
-                sd = NumericDayOfWeek.GetDayOfWeekID((startDate.DayOfWeek).ToString());
+                dayOfWeek = NumericDayOfWeek.GetDayOfWeekID((startDate.DayOfWeek).ToString());
                 frequencyId = 1;
             }
             else
             {
-                day = startDate.Day;
+                dayOfMonth = startDate.Day;
                 frequencyId = 2;
             }
           
@@ -647,8 +647,8 @@ namespace MinistryPlatform.Translation.Services
                 {"Donor_ID", donorId},
                 {"Donor_Account_ID", donorAccountId},
                 {"Frequency_ID", frequencyId},
-                {"Day_Of_Month", day},    
-                {"Day_Of_Week_ID", sd},
+                {"Day_Of_Month", dayOfMonth},    
+                {"Day_Of_Week_ID", dayOfWeek},
                 {"Amount", planAmount},
                 {"Start_Date", startDate},
                 {"Program_ID", program},
@@ -672,7 +672,7 @@ namespace MinistryPlatform.Translation.Services
 
         public CreateDonationDistDto GetRecurringGiftForSubscription(string subscription)
         {
-            var searchStr = string.Format(subscription);
+            var searchStr = string.Format("\"{0}\",", subscription);
             CreateDonationDistDto createDonation = null;
             try
             {
@@ -688,7 +688,7 @@ namespace MinistryPlatform.Translation.Services
                         Amount = record.ToInt("Amount"),
                         ProgramId = record.ToString("Program_ID"),
                         CongregationId = record.ToInt("Congregation_ID"),
-                        PaymentType = "bank"
+                        PaymentType = (int)AccountType.Checking == record.ToInt("Account_Type_ID") ? PaymentType.Bank.abbrv : PaymentType.CreditCard.abbrv
                     };
                 }
                 
