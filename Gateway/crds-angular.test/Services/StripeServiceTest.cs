@@ -568,7 +568,7 @@ namespace crds_angular.test.Services
             var response = _fixture.AddSourceToCustomer("cus_123", "card_123");
             _restClient.Verify(
                 mocked =>
-                    mocked.Execute<StripePlan>(
+                    mocked.Execute<StripeCustomer>(
                         It.Is<IRestRequest>(o => o.Method == Method.POST && o.Resource.Equals("customers/cus_123/sources") && ParameterMatches("source", "card_123", o.Parameters))));
 
             Assert.AreSame(stripeCustomer, response);
