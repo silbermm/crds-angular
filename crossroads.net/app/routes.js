@@ -203,7 +203,6 @@
           }
         }
       })
-<<<<<<< HEAD
       .state('exploresnap', {
         parent: 'noHeaderOrFooter',
         url: '/exploresnap',
@@ -215,20 +214,6 @@
           }
         }
       })
-      .state('blog', {
-        parent: 'noSideBar',
-        url: '/blog',
-        controller: 'BlogCtrl as blog',
-        templateUrl: 'blog/blog-index.html'
-      })
-      .state('blog-post', {
-        parent: 'noSideBar',
-        url: '/blog/post',
-        controller: 'BlogCtrl as blog',
-        templateUrl: 'blog/blog-post.html'
-      })
-=======
->>>>>>> development
       .state('adbox', {
         parent: 'noSideBar',
         url: '/adbox',
