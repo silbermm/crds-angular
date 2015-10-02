@@ -90,6 +90,7 @@
     <Compile Include="Response.cs" />
     <Compile Include="GPExportDatum.cs" />
     <Compile Include="TripDistribution.cs" />
+    <Compile Include="TripDocuments.cs" />
     <Compile Include="TripFormResponse.cs" />
     <Compile Include="TripParticipant.cs" />
   </ItemGroup>
