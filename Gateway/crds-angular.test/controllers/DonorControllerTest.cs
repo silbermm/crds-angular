@@ -641,9 +641,12 @@ namespace crds_angular.test.controllers
             const string stripeToken = "tok_123";
             var contactDonor = new ContactDonor
             {
+                Email = "you@here.com"
+            };
+            var contactDonorUpdated = new ContactDonor
+            {
                 Email = "me@here.com"
             };
-            var contactDonorUpdated = new ContactDonor();
             var recurringGiftDto = new RecurringGiftDto
             {
                 StripeTokenId = stripeToken
@@ -660,7 +663,7 @@ namespace crds_angular.test.controllers
             var dtoResponse = ((OkNegotiatedContentResult<RecurringGiftDto>) response).Content;
             Assert.IsNotNull(dtoResponse);
             Assert.AreSame(recurringGiftDto, dtoResponse);
-            Assert.AreEqual(contactDonor.Email, recurringGiftDto.EmailAddress);
+            Assert.AreEqual(contactDonorUpdated.Email, recurringGiftDto.EmailAddress);
             Assert.AreEqual(123, recurringGiftDto.RecurringGiftId);
         }
 

@@ -331,7 +331,7 @@ namespace crds_angular.Controllers.API
                     var donor = _donorService.CreateOrUpdateContactDonor(contactDonor, string.Empty, string.Empty, recurringGiftDto.StripeTokenId, DateTime.Now);
                     var recurringGift = _donorService.CreateRecurringGift(recurringGiftDto, donor);
 
-                    recurringGiftDto.EmailAddress = contactDonor.Email;
+                    recurringGiftDto.EmailAddress = donor.Email;
                     recurringGiftDto.RecurringGiftId = recurringGift;
                     return Ok(recurringGiftDto);
                 }
