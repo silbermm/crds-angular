@@ -1,6 +1,9 @@
 <!-- TODO
   -Update tweens, change "from" to "To"
   -Optimize images
+  -Fix order of CSS to match slide order
+  -Remove navigation
+  -Massage tweens
 -->
 
 <script type="text/javascript">
@@ -53,8 +56,7 @@ $(document).ready(function() {
         tweenFadeUp('.drums', 1);
       }
       if (index == 7) {
-        tweenFadeBg('.clothes');
-        tweenFadeUp('.clothes', 1);
+        tweenFadeUp('.clothes');
       }
       if (index == 8) {
         tweenFadeBg('.photos');
@@ -190,8 +192,21 @@ $(document).ready(function() {
 </section>
 
 <section class="section clothes">
-  <h2 class="clothes-title">Come as you are.</h2>
-  <p class="clothes-desc">You're invited to challenge and be challenged. We don't expect you to agree. We just ask that you're open to considering the possibility that there is a God who loves and pursues you.</p>
+  <div class="vertical-20">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6 col-sm-offset-1 clothes-content">
+          <h2 class="clothes-title rise10">Come as you are.</h2>
+          <p class="clothes-desc rise10">You're invited to challenge and be challenged. We don't expect you to agree. We just ask that you're open to considering the possibility that there is a God who loves and pursues you.</p>
+        </div><!--/col-->
+      </div><!--/row-->
+      <div class="row">
+        <div class="col-sm-12">
+          <img class="imgix-fluid img-responsive clothes-pile " data-src="http://crossroads-media.imgix.net/images/explore/explore_clothes_bg.jpg">
+        </div><!--/col-->
+      </div><!--/row-->
+    </div><!--/container-->
+  </div>
 </section>
 
 <section class="section photos">
