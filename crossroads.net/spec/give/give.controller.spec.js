@@ -80,7 +80,6 @@ describe('GiveController', function() {
       $timeout = $injector.get('$timeout');
       $q = _$q_;
       httpBackend = $injector.get('$httpBackend');
-      httpBackend.whenGET(/SiteConfig*/).respond('');
       Session = $injector.get('Session');
       User = $injector.get('User');
       AUTH_EVENTS = $injector.get('AUTH_EVENTS');
