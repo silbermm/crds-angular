@@ -175,8 +175,7 @@ INSERT INTO [dbo].[dp_Pages]
 , Congregation_ID_Table.[Congregation_Name]
 , CONCAT(Donor_Account_ID_Table_Account_Type_ID_Table.[Account_Type], ''/'', Donor_Account_ID_Table.[Account_Number]
 , ''/'', Donor_Account_ID_Table.[Institution_Name]) AS [Donor_Account]
-, Recurring_Gifts.[Subscription_ID]
-					 '
+, Recurring_Gifts.[Subscription_ID]'
            ,'Recurring_Gift_ID'
            ,0)
 GO
