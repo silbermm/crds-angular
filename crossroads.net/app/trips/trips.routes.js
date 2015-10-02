@@ -44,14 +44,9 @@
           Meta: function(TripParticipant, $state) {
             TripParticipant.$promise.then(
               function() {
-                $state.next.data.meta.title = TripParticipant.participantName+' - '+TripParticipant.trips[0].tripName;
+                $state.next.data.meta.title =
+                  TripParticipant.participantName+' - '+TripParticipant.trips[0].tripName;
               });
-          }
-        },
-        data: {
-          meta: {
-            title: 'Trip Giving',
-            description: ''
           }
         }
       })

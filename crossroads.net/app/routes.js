@@ -33,6 +33,9 @@
             }).$promise.then(
               function(systemPage) {
                 if(systemPage.systemPages[0]){
+                  if(!$state.next.data){
+                    $state.next.data = {};
+                  }
                   $state.next.data.meta = systemPage.systemPages[0];
                 }
               });
