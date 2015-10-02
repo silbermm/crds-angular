@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Reflection;
 using crds_angular.Enum;
@@ -251,68 +252,90 @@ namespace crds_angular.Services
             return capacity;
         }
 
-        public List<int> SaveServeRsvp(string token,
-            int contactId,
-            int opportunityId,
-            List<int> opportunityIds,
-            int eventTypeId,
-            DateTime startDate,
-            DateTime endDate,
-            bool signUp,
-            bool alternateWeeks)
+        public List<int> GetUpdatedOpportunities(string token, SaveRsvpDto dto, Func<Participant, MinistryPlatform.Models.Event, bool> saveFunc = null)
         {
-
-            List<MailRow> mailRows = new List<MailRow>();
             var updatedEvents = new List<int>();
 
             //get participant id for Contact
-            var participant = _participantService.GetParticipant(contactId);
+            var participant = _participantService.GetParticipant(dto.ContactId);
 
             //get events in range
-            var events = GetEventsInRange(token, eventTypeId, startDate, endDate);
-            var templateId = GetRsvpTemplate(signUp);
-            var opportunity = GetOpportunity(token, opportunityId, opportunityIds);
+            var events = GetEventsInRange(token, dto.EventTypeId, dto.StartDateUnix.FromUnixTime(), dto.EndDateUnix.FromUnixTime());
+            var increment = dto.AlternateWeeks ? 14 : 7;
+            var sequenceDate = dto.StartDateUnix.FromUnixTime();
+            for (var i = 0; i < events.Count(); i++)
+            {
+                var @event = events[i];
+                sequenceDate = IncrementSequenceDate(@event, sequenceDate, increment);
+                if (@event.EventStartDate.Date != sequenceDate.Date) continue;
+                updatedEvents.Add(@event.EventId);
+                if (saveFunc != null)
+                {
+                    saveFunc(participant, @event);
+                }
+                sequenceDate = sequenceDate.AddDays(increment);
+            }
+            return updatedEvents;
+        }
+
+        public List<int> SaveServeRsvp(string token, SaveRsvpDto dto)
+        {
+            List<MailRow> mailRows = new List<MailRow>();
+            
+            var templateId = GetRsvpTemplate(dto.SignUp);
+            var opportunity = GetOpportunity(token, dto.OpportunityId, dto.OpportunityIds);
             var groupContact = _contactService.GetContactById(opportunity.GroupContactId);
 
-            var toContact = _contactService.GetContactById(contactId);
+            var toContact = _contactService.GetContactById(dto.ContactId);
             Opportunity previousOpportunity = null;
             try
             {
-                var increment = alternateWeeks ? 14 : 7;
-                var sequenceDate = startDate;
-                for (var i = 0; i < events.Count(); i++)
-                {
-                    var @event = events[i];
-                    sequenceDate = IncrementSequenceDate(@event, sequenceDate, increment);
-                    if (@event.EventStartDate.Date != sequenceDate.Date) continue;
-                    updatedEvents.Add(@event.EventId);
-                    DateTime from = DateTime.Today.Add(opportunity.ShiftStart);
-                    DateTime to = DateTime.Today.Add(opportunity.ShiftEnd);
-                    mailRows.Add(new MailRow()
-                    {
-                        EventDate = @event.EventStartDate.ToShortDateString(),
-                        Location = opportunity.Room,
-                        OpportunityName = opportunity.OpportunityName,
-                        ShiftTime = from.ToString("hh:mm tt") + " - " + to.ToString("hh:mm tt")
-                    });
-                    var response = CreateRsvp(token, opportunityId, opportunityIds, signUp, participant, @event, groupContact);
-                    previousOpportunity = PreviousOpportunity(response, previousOpportunity);
-                    templateId = GetTemplateId(templateId, response);
-                    sequenceDate = sequenceDate.AddDays(increment);
-                }
+                var updatedEvents = GetUpdatedOpportunities(token,
+                                        dto,
+                                        (participant, e) =>
+                                        {
+                                            try
+                                            {
+                                                DateTime from = DateTime.Today.Add(opportunity.ShiftStart);
+                                                DateTime to = DateTime.Today.Add(opportunity.ShiftEnd);
+                                                mailRows.Add(new MailRow()
+                                                {
+                                                    EventDate = e.EventStartDate.ToShortDateString(),
+                                                    Location = opportunity.Room,
+                                                    OpportunityName = opportunity.OpportunityName,
+                                                    ShiftTime = from.ToString("hh:mm tt") + " - " + to.ToString("hh:mm tt")
+                                                });
+                                                var response = CreateRsvp(token, dto.OpportunityId, dto.OpportunityIds, dto.SignUp, participant, e, groupContact);
+                                                previousOpportunity = PreviousOpportunity(response, previousOpportunity);
+                                                templateId = GetTemplateId(templateId, response);
+                                                return true;
+                                            }
+                                            catch (Exception exception)
+                                            {
+                                                return false;
+                                            }
+                                        });
+                var table = SetupHTMLTable(mailRows).Build();
+                var mergeData = SetupMergeData(dto.ContactId, dto.OpportunityId, previousOpportunity, opportunity, dto.StartDateUnix.FromUnixTime(),
+                    dto.EndDateUnix.FromUnixTime(), groupContact, table);
+
+                //var communication = SetupCommunication(templateId, groupContact, toContact);
+                var communication = SetupCommunication(templateId, groupContact, toContact, mergeData);
+                _communicationService.SendMessage(communication);
+                return updatedEvents;
             }
-            catch (Exception )
+            catch (Exception e)
             {
+                //var communication = SetupCommunication(templateId, groupContact, toContact);
+                var table = SetupHTMLTable(mailRows).Build();
+                var communication = SetupCommunication(AppSetting("SignupToServeFailedMessage"), groupContact, toContact, new Dictionary<string, object>
+                    { 
+                        {"Html_Table", table}
+                    });
+                _communicationService.SendMessage(communication);
                 return new List<int>();
             }
-            var table = SetupHTMLTable(mailRows).Build();
-            var mergeData = SetupMergeData(contactId, opportunityId, previousOpportunity, opportunity, startDate,
-                endDate, groupContact, table);
-
-            //var communication = SetupCommunication(templateId, groupContact, toContact);
-            var communication = SetupCommunication(templateId, groupContact, toContact, mergeData);
-            _communicationService.SendMessage(communication);
-            return updatedEvents;
+            
         }
 
         private static DateTime IncrementSequenceDate(Event @event, DateTime sequenceDate, int increment)
