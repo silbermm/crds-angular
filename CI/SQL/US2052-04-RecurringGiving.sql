@@ -93,10 +93,19 @@ CREATE TABLE [dbo].[Recurring_Gift_Days](
 
 GO
 
+SET IDENTITY_INSERT [dbo].[Recurring_Gift_Days] ON
+GO
 
+INSERT INTO [dbo].[Recurring_Gift_Days]([Day_Of_Week_ID],[Day_Of_Week],[Domain_ID]) VALUES(1,'Monday    ',1);
+INSERT INTO [dbo].[Recurring_Gift_Days]([Day_Of_Week_ID],[Day_Of_Week],[Domain_ID]) VALUES(2,'Tuesday   ',1);
+INSERT INTO [dbo].[Recurring_Gift_Days]([Day_Of_Week_ID],[Day_Of_Week],[Domain_ID]) VALUES(3,'Wednesday ',1);
+INSERT INTO [dbo].[Recurring_Gift_Days]([Day_Of_Week_ID],[Day_Of_Week],[Domain_ID]) VALUES(4,'Thursday  ',1);
+INSERT INTO [dbo].[Recurring_Gift_Days]([Day_Of_Week_ID],[Day_Of_Week],[Domain_ID]) VALUES(5,'Friday    ',1);
+INSERT INTO [dbo].[Recurring_Gift_Days]([Day_Of_Week_ID],[Day_Of_Week],[Domain_ID]) VALUES(6,'Saturday  ',1);
+INSERT INTO [dbo].[Recurring_Gift_Days]([Day_Of_Week_ID],[Day_Of_Week],[Domain_ID]) VALUES(7,'Sunday    ',1);
 
-
-
+SET IDENTITY_INSERT [dbo].[Recurring_Gift_Days] OFF
+GO
 
 CREATE TABLE [dbo].[Recurring_Gift_Frequencies](
 	[Frequency_ID] [int] IDENTITY(1,1) NOT NULL,
@@ -110,8 +119,14 @@ CREATE TABLE [dbo].[Recurring_Gift_Frequencies](
 
 GO
 
+SET IDENTITY_INSERT [dbo].[Recurring_Gift_Frequencies] ON
+GO
 
+INSERT INTO [dbo].[Recurring_Gift_Frequencies]([Frequency_ID],[Frequency],[Domain_ID]) VALUES(1,'Weekly',1);
+INSERT INTO [dbo].[Recurring_Gift_Frequencies]([Frequency_ID],[Frequency],[Domain_ID]) VALUES(2,'Monthly',1);
 
+SET IDENTITY_INSERT [dbo].[Recurring_Gift_Frequencies] OFF
+GO
 
 SET IDENTITY_INSERT [dbo].[dp_Pages] ON
 GO
