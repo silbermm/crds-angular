@@ -1,4 +1,7 @@
-
+<!-- TODO
+  -Update tweens, change "from" to "To"
+  -Optimize images
+-->
 
 <script type="text/javascript">
 
@@ -39,8 +42,11 @@ $(document).ready(function() {
         tweenFadeUp('.studentministry', 1);
       }
       if (index == 5) {
-        tweenFadeBg('.coffee');
-        tweenFadeUp('.coffee', 1);
+        tweenFadeUp('.coffee', 2);
+        tweenFadeFast('.coffee');
+        TweenMax.from('.coffee .cup-coffee', 1, {yPercent: 5 });
+        TweenMax.from('.coffee .cup-lid', 1, {yPercent: -226, delay: .8 });
+        TweenMax.to('.coffee .sugar', 1, {xPercent: 536, yPercent: 336, delay: 1.8 });
       }
       if (index == 6) {
         tweenFadeBg('.drums');
@@ -148,16 +154,33 @@ $(document).ready(function() {
 </section>
 
 <section class="section coffee">
-  <h2 class="coffee-title">We don't sell things.</h2>
-  <p class="coffee-desc">From coffee to CDs, from Bibles to Wi-Fi, it's all free. We believe God is generous, and we want to reflect that in everything we do.</p>
+  <div class="vertical-20">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6 col-sm-offset-1 map-content">
+          <h2 class="coffee-title rise10">We don't sell things.</h2>
+          <p class="coffee-desc rise10">From coffee to CDs, from Bibles to Wi-Fi, it's all free. We believe God is generous, and we want to reflect that in everything we do.</p>
+        </div><!--/col-->
+      </div><!--/row-->
+      <div class="row">
+        <div class="col-sm-6 col-sm-offset-1">
+          <img class="imgix-fluid img-responsive cup-top " data-src="http://crossroads-media.imgix.net/images/explore/explore_coffee_cup_top_s.png">
+          <img class="imgix-fluid img-responsive cup-coffee fade-fast" data-src="http://crossroads-media.imgix.net/images/explore/explore_coffee_coffee_s.png">
+          <img class="imgix-fluid img-responsive cup-bottom" data-src="http://crossroads-media.imgix.net/images/explore/explore_coffee_cup_bottom_s.png">
+          <img class="imgix-fluid img-responsive cup-lid fade-fast" data-src="http://crossroads-media.imgix.net/images/explore/explore_coffee_cup_lid_s.png">
+          <img class="imgix-fluid img-responsive sugar" data-src="http://crossroads-media.imgix.net/images/explore/explore_coffee_splenda.png">
+        </div><!--/col-->
+      </div><!--/row-->
+    </div><!--/container-->
+  </div>
 </section>
 
 <section class="section drums">
   <div class="imgix-fluid-bg img-background slide-bg fade-bg" data-src="http://crossroads-media.imgix.net/images/explore/explore_drums_bg.jpg"></div>
-  <div class="vertical-center">
+  <div class="vertical-80">
     <div class="container">
       <div class="row">
-        <div class="drums-container col-sm-8 col-sm-offset-2">
+        <div class="drums-container col-sm-12 col-md-8 col-md-offset-2">
           <h2 class="drums-title flush-bottom rise10">THIS IS NOT YOUR GRANDMA'S CHURCH.<br> BUT BRING HER.</h2>
           <p class="drums-desc rise10">We're fans of creativity and biblical truth.<br> And of turning it up to 11.</p>
         </div><!--/studentministry-container-->
