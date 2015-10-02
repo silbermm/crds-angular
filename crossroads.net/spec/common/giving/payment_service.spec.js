@@ -326,6 +326,7 @@ describe('PaymentService', function() {
         }, errorCallback.onError);
       expect(stripe.card.createToken).toHaveBeenCalledWith(card, jasmine.any(Function));
       expect(errorCallback.onError).not.toHaveBeenCalled();
+      httpBackend.flush();
     });
 
     it('should not create a recurring gift if createToken fails', function() {
@@ -364,6 +365,7 @@ describe('PaymentService', function() {
 
       expect(stripe.card.createToken).toHaveBeenCalledWith(card, jasmine.any(Function));
       expect(successCallback.onSuccess).not.toHaveBeenCalled();
+      httpBackend.flush();
     });
   });
 
@@ -405,6 +407,7 @@ describe('PaymentService', function() {
         }, errorCallback.onError);
       expect(stripe.bankAccount.createToken).toHaveBeenCalledWith(bankAccount, jasmine.any(Function));
       expect(errorCallback.onError).not.toHaveBeenCalled();
+      httpBackend.flush();
     });
 
     it('should not create a recurring gift if createToken fails', function() {
@@ -443,6 +446,7 @@ describe('PaymentService', function() {
 
       expect(stripe.bankAccount.createToken).toHaveBeenCalledWith(bankAccount, jasmine.any(Function));
       expect(successCallback.onSuccess).not.toHaveBeenCalled();
+      httpBackend.flush();
     });
   });
 
@@ -470,7 +474,7 @@ describe('PaymentService', function() {
         expect(confirmation.amount).toEqual('1234');
       });
 
-    httpBackend.flush();
+      httpBackend.flush();
     });
   });
 
