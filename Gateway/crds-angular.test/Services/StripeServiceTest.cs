@@ -547,7 +547,7 @@ namespace crds_angular.test.Services
                 && ParameterMatches("interval", recurringGiftDto.PlanInterval, o.Parameters)
                 && ParameterMatches("name", "Donor ID #" + contactDonor.DonorId + " " + recurringGiftDto.PlanInterval + "ly", o.Parameters)
                 && ParameterMatches("currency", "usd", o.Parameters)
-                && ParameterMatches("trial_period_days", ((recurringGiftDto.StartDate - DateTime.Now).Days + 1), o.Parameters)
+                && ParameterMatches("trial_period_days", (recurringGiftDto.StartDate - DateTime.Now).Days, o.Parameters)
                 && ParameterMatches("id", contactDonor.DonorId + " " + DateTime.Now, o.Parameters))));
 
             Assert.AreSame(stripePlan, response);
