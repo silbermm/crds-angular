@@ -41,7 +41,6 @@
       scope.recurringStartDatePickerOpened = false;
       scope.updateFrequency = updateFrequency;
 
-
       activate();
 
       /////////////////////////////////

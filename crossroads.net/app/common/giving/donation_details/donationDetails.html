@@ -37,9 +37,13 @@
     </select>
   </div>
 
-  <div class="form-group" ng-show="givingType !== 'one_time' && allowRecurring">
+  <div class="form-group"
+    ng-if="givingType !== 'one_time' && allowRecurring"
+    ng-class="{'has-error': donationDetailsForm.recurringStartDate.$error.invalidRecurringStartDate && amountSubmitted}">
+
     <div class="input-group">
-      <input type="text" class="form-control" datepicker-popup="MM/dd/yyyy"
+      <input type="text" name="recurringStartDate" class="form-control"
+        invalid-recurring-start-date datepicker-popup="MM/dd/yyyy"
         ng-model="recurringStartDate" is-open="recurringStartDatePickerOpened"
         datepicker-options="dateOptions" close-text="Close" min-date="minDate"
         ng-click="openRecurringStartDate($event)"/>
@@ -49,7 +53,11 @@
         </button>
       </span>
     </div>
+
+    <ng-messages for="donationDetailsForm.recurringStartDate.$error" ng-show="donationDetailsForm.recurringStartDate.$error.invalidRecurringStartDate && amountSubmitted">
+      <ng-messages-include src="on-submit-messages"></ng-messages-include>
+    </ng-messages>
+
   </div>
 
-        <!--/form-group-->
 </ng-form>
