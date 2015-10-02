@@ -191,7 +191,7 @@ namespace crds_angular.Controllers.API
                   pledgeId  = _mpPledgeService.GetPledgeByCampaignAndDonor(dto.PledgeCampaignId.Value, dto.PledgeDonorId.Value);
                 }
                                                                                         
-                var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount, fee, donor.DonorId, dto.ProgramId, pledgeId, charge.Id, dto.PaymentType, donor.ProcessorId, DateTime.Now, true, false, null);
+                var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount, fee, donor.DonorId, dto.ProgramId, pledgeId, charge.Id, dto.PaymentType, donor.ProcessorId, DateTime.Now, true, false, null, null);
                 if (!dto.GiftMessage.IsNullOrWhiteSpace() && pledgeId != null)
                 {
                     SendMessageFromDonor(pledgeId.Value, dto.GiftMessage);
@@ -230,7 +230,7 @@ namespace crds_angular.Controllers.API
                     pledgeId = _mpPledgeService.GetPledgeByCampaignAndDonor(dto.PledgeCampaignId.Value, dto.PledgeDonorId.Value);
                 }
                                                                                                                                     
-                var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount, fee, donor.DonorId, dto.ProgramId, pledgeId, charge.Id, dto.PaymentType, donor.ProcessorId, DateTime.Now, false, false, null);
+                var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount, fee, donor.DonorId, dto.ProgramId, pledgeId, charge.Id, dto.PaymentType, donor.ProcessorId, DateTime.Now, false, false, null, null);
                 if (!dto.GiftMessage.IsNullOrWhiteSpace() && pledgeId != null)
                 {
                     SendMessageFromDonor(pledgeId.Value, dto.GiftMessage);

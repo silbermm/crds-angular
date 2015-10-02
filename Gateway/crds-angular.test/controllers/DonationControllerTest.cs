@@ -232,7 +232,7 @@ namespace crds_angular.test.controllers
 
             donorServiceMock.Setup(mocked => mocked.
                 CreateDonationAndDistributionRecord(createDonationDTO.Amount, charge.BalanceTransaction.Fee, donor.DonorId,
-                    createDonationDTO.ProgramId, null, charge.Id, createDonationDTO.PaymentType, donor.ProcessorId, It.IsAny<DateTime>(), true, false, null, null))
+                    createDonationDTO.ProgramId, null, charge.Id, createDonationDTO.PaymentType, donor.ProcessorId, It.IsAny<DateTime>(), true, false, null, null, null))
                     .Returns(donationId);
 
             IHttpActionResult result = fixture.Post(createDonationDTO);
@@ -306,7 +306,7 @@ namespace crds_angular.test.controllers
 
             donorServiceMock.Setup(mocked => mocked.
                 CreateDonationAndDistributionRecord(createDonationDTO.Amount, charge.BalanceTransaction.Fee, donor.DonorId,
-                    createDonationDTO.ProgramId, pledgeId, charge.Id, createDonationDTO.PaymentType, donor.ProcessorId, It.IsAny<DateTime>(), true, false, null, null))
+                    createDonationDTO.ProgramId, pledgeId, charge.Id, createDonationDTO.PaymentType, donor.ProcessorId, It.IsAny<DateTime>(), true, false, null, null, null))
                     .Returns(donationId);
 
             IHttpActionResult result = fixture.Post(createDonationDTO);
@@ -379,7 +379,7 @@ namespace crds_angular.test.controllers
 
             donorServiceMock.Setup(mocked => mocked.
                 CreateDonationAndDistributionRecord(createDonationDTO.Amount, charge.BalanceTransaction.Fee, donor.DonorId,
-                    createDonationDTO.ProgramId, pledgeId, charge.Id, createDonationDTO.PaymentType, donor.ProcessorId, It.IsAny<DateTime>(), false, false, null, null))
+                    createDonationDTO.ProgramId, pledgeId, charge.Id, createDonationDTO.PaymentType, donor.ProcessorId, It.IsAny<DateTime>(), false, false, null, null, null))
                     .Returns(donationId);
 
 
@@ -448,7 +448,7 @@ namespace crds_angular.test.controllers
             donorServiceMock.Setup(mocked => mocked.
                 CreateDonationAndDistributionRecord(createDonationDTO.Amount, charge.BalanceTransaction.Fee, donor.DonorId,
 
-                    createDonationDTO.ProgramId, null, charge.Id, createDonationDTO.PaymentType, donor.ProcessorId, It.IsAny<DateTime>(), false, false, null, null))
+                    createDonationDTO.ProgramId, null, charge.Id, createDonationDTO.PaymentType, donor.ProcessorId, It.IsAny<DateTime>(), false, false, null, null, null))
                     .Returns(donationId);
 
             IHttpActionResult result = fixture.Post(createDonationDTO);

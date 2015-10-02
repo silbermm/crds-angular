@@ -96,6 +96,7 @@ namespace crds_angular.Services
                                                                                          check.CheckDate ?? (check.ScanDate ?? DateTime.Now),
                                                                                          contactDonor.RegisteredUser,
                                                                                          false,
+                                                                                         null,
                                                                                          donorAccountId,
                                                                                          batchDetails.Name);
 

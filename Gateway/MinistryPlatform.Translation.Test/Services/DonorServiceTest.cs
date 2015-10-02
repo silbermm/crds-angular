@@ -187,6 +187,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Donation_Status_Date", setupDate},
                 {"Donation_Status_ID", 1},
                 {"Is_Recurring_Gift", false},
+                {"Recurring_Gift_ID", null},
                 {"Donor_Account_ID",donorAcctId },
                 {"Check_Scanner_Batch", checkScannerBatchName}
             };
@@ -233,7 +234,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _communicationService.Setup(mocked => mocked.GetTemplate(It.IsAny<int>())).Returns(getTemplateResponse);
 
 
-            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, null, chargeId, pymtType, processorId, setupDate, true, false, donorAcctId, checkScannerBatchName);
+            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, null, chargeId, pymtType, processorId, setupDate, true, false, null, donorAcctId, checkScannerBatchName);
 
             // Explicitly verify each expectation...
             _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>()));
@@ -292,6 +293,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Donation_Status_Date", setupDate},
                 {"Donation_Status_ID", 1},
                 {"Is_Recurring_Gift", false},
+                {"Recurring_Gift_ID", null},
                 {"Donor_Account_ID",null },
                 {"Check_Scanner_Batch", checkScannerBatchName}
             };

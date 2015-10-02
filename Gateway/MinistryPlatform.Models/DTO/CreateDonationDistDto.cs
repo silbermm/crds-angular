@@ -7,5 +7,6 @@
         public int CongregationId { get; set; }
         public string PaymentType { get; set; }
         public string ProgramId { get; set; }
+        public int? RecurringGiftId { get; set; }
     }
 }
