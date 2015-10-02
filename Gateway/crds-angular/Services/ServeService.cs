@@ -293,33 +293,25 @@ namespace crds_angular.Services
                 var updatedEvents = GetUpdatedOpportunities(token,
                                         dto,
                                         (participant, e) =>
-                                        {
-                                            try
+                                        {                                           
+                                            DateTime from = DateTime.Today.Add(opportunity.ShiftStart);
+                                            DateTime to = DateTime.Today.Add(opportunity.ShiftEnd);
+                                            mailRows.Add(new MailRow()
                                             {
-                                                DateTime from = DateTime.Today.Add(opportunity.ShiftStart);
-                                                DateTime to = DateTime.Today.Add(opportunity.ShiftEnd);
-                                                mailRows.Add(new MailRow()
-                                                {
-                                                    EventDate = e.EventStartDate.ToShortDateString(),
-                                                    Location = opportunity.Room,
-                                                    OpportunityName = opportunity.OpportunityName,
-                                                    ShiftTime = from.ToString("hh:mm tt") + " - " + to.ToString("hh:mm tt")
-                                                });
-                                                var response = CreateRsvp(token, dto.OpportunityId, dto.OpportunityIds, dto.SignUp, participant, e, groupContact);
-                                                previousOpportunity = PreviousOpportunity(response, previousOpportunity);
-                                                templateId = GetTemplateId(templateId, response);
-                                                return true;
-                                            }
-                                            catch (Exception exception)
-                                            {
-                                                return false;
-                                            }
+                                                EventDate = e.EventStartDate.ToShortDateString(),
+                                                Location = opportunity.Room,
+                                                OpportunityName = opportunity.OpportunityName,
+                                                ShiftTime = from.ToString("hh:mm tt") + " - " + to.ToString("hh:mm tt")
+                                            });
+                                            var response = CreateRsvp(token, dto.OpportunityId, dto.OpportunityIds, dto.SignUp, participant, e, groupContact);
+                                            previousOpportunity = PreviousOpportunity(response, previousOpportunity);
+                                            templateId = GetTemplateId(templateId, response);
+                                            return true;                                                                                        
                                         });
                 var table = SetupHTMLTable(mailRows).Build();
                 var mergeData = SetupMergeData(dto.ContactId, dto.OpportunityId, previousOpportunity, opportunity, dto.StartDateUnix.FromUnixTime(),
                     dto.EndDateUnix.FromUnixTime(), groupContact, table);
-
-                //var communication = SetupCommunication(templateId, groupContact, toContact);
+                
                 var communication = SetupCommunication(templateId, groupContact, toContact, mergeData);
                 _communicationService.SendMessage(communication);
                 return updatedEvents;

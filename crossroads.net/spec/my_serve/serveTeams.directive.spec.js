@@ -73,7 +73,6 @@ describe('Serve Teams Directive', function() {
     $compile = _$compile_;
     $rootScope = _$rootScope_;
     $httpBackend = $injector.get('$httpBackend');
-    $httpBackend.whenGET(/SiteConfig*/).respond('');
     mockServeDate = $injector.get('ServeOpportunities');
     scope = $rootScope.$new();
     element = '<serve-team opp-serve-date="serveDate" opportunity="opp" team="team" tab-index="tabIndex" team-index="teamIndex" day-index="dayIndex" > </serve-team>';
@@ -297,7 +296,6 @@ describe("Serve Teams Directive Edit", function() {
     $compile = _$compile_;
     $rootScope = _$rootScope_;
     $httpBackend = $injector.get('$httpBackend');
-    $httpBackend.whenGET(/SiteConfig*/).respond('');
     scope = $rootScope.$new();
     element = '<serve-team opportunity="opp" team="team" tab-index="tabIndex" team-index="teamIndex" day-index="dayIndex"> </serve-team>';
     scope.opp = mockOpportunity;

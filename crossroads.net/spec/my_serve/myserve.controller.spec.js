@@ -28,7 +28,6 @@ describe('MyServeController', function() {
     $controller = _$controller_;
     $log = _$log_;
     $httpBackend = $injector.get('$httpBackend');
-    $httpBackend.whenGET(/SiteConfig*/).respond('');
     mockServeResource = $injector.get('ServeOpportunities');
     Session = $injector.get('Session');
   }));

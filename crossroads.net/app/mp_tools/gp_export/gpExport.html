@@ -1,28 +1,17 @@
 <div ng-if="!gpExport.allowAccess()" class="alert alert-danger" role="alert">
-  Sorry, you do not have access to run this tool.  Please contact an administrator.
+  <div ng-bind-html="$root.MESSAGES.mptool_invalid_access.content | html"></div>
 </div>
 
 <div ng-if="gpExport.allowAccess()">
   <div ng-if="gpExport.error" class="alert alert-danger" role="alert">
-    An error occured while trying to generate the file.  If this happens again, Please contact an administrator.
+    <div ng-bind-html="$root.MESSAGES.gpexport_generation_error.content | html"></div>
   </div>
 
   <div class="row ng-scope">
     <div class="col-sm-8 col-sm-offset-2">
       <h1 class="page-header">GP Deposit Export</h1>
       <p>You have selected {{gpExport.selectedDeposits.length}} Deposits to export.</p>
-      <p>Downloading the file will:</p>
-      <ol>
-        <li>Create a tab delimited text file to be saved for import into the accounting system</li>
-        <li>The file name will be the DepositName_YYMMDD.txt</li>
-        <li>Mark the selected deposits as exported</li>
-        <li>Clear your selected deposits</li>
-        <li>Close this window</li>
-      </ol>
-      <p>
-        NOTE: Please make sure you reviewed and printed the "Selected Deposit - Export Preview" report
-        before clicking to download the report.
-      </p>
+      <div ng-bind-html="$root.MESSAGES.gpexport_download_desc.content | html"></div>
       <p>Deposits to be Downloaded:</p>
       <div ng-show="gpExport.selectedDeposits.length > 0">
         <ul>
