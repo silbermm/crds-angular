@@ -76,11 +76,14 @@
     }
 
     function createRecurringGift() {
+      GiveTransferService.processing = true;
+
       if (GiveTransferService.view === 'cc') {
         donationService.createCard();
         PaymentService.createRecurringGiftWithCard(donationService.card)
           .then(function(recurringGift) {
             // TODO: Put recurringGift in GiveTransferService
+            GiveTransferService.email = recurringGift.email;
             $state.go(GiveFlow.thankYou);
           }, PaymentService.stripeErrorHandler);
       } else if (GiveTransferService.view === 'bank') {
@@ -88,6 +91,7 @@
         PaymentService.createRecurringGiftWithBankAcct(donationService.bank)
           .then(function(recurringGift) {
             // TODO: Put recurringGift in GiveTransferService
+            GiveTransferService.email = recurringGift.email;
             $state.go(GiveFlow.thankYou);
           }, PaymentService.stripeErrorHandler);
       }
