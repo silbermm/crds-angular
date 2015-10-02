@@ -27,8 +27,6 @@ require('../../../app/trips/trips.module');
       $compile = _$compile_;
       $rootScope = _$rootScope_;
       $httpBackend = _$httpBackend_;
-      $httpBackend.whenGET(/SiteConfig*/).respond('');
-      $httpBackend.flush();
       scope = $rootScope.$new();
       element = '<trip-donations donation=\'donation\' trip-title=\'tripTitle\'></trip-donations>';
     }));

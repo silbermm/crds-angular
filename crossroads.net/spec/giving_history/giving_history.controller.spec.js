@@ -11,6 +11,10 @@ describe('GivingHistoryController', function() {
 
   beforeEach(angular.mock.module('crossroads'));
 
+  beforeEach(angular.mock.module(function($provide) {
+    $provide.value('$state', {});
+  }));
+
   var mockDonationYearsResponse =
   {
     years: ['2015', '2014'],
@@ -138,9 +142,6 @@ describe('GivingHistoryController', function() {
     beforeEach(function() {
       GivingHistoryService.impersonateDonorId = 123;
       sut = controllerConstructor('GivingHistoryController', {$scope: scope});
-
-      httpBackend.whenGET(/SiteConfig*/).respond({siteConfig: {title:'Crossroads'}});
-      httpBackend.whenGET(/api\/Page*/).respond({ pages: [{}] });
     });
 
     it('should set impersonation error when user not allowed to impersonate', function() {
@@ -174,9 +175,6 @@ describe('GivingHistoryController', function() {
   describe('On initialization', function() {
     beforeEach(function() {
       sut = controllerConstructor('GivingHistoryController', {$scope: scope});
-
-      httpBackend.whenGET(/SiteConfig*/).respond({siteConfig: {title:'Crossroads'}});
-      httpBackend.whenGET(/api\/Page*/).respond({ pages: [{}] });
     });
 
     it('should retrieve most recent giving year donations for current user', function() {

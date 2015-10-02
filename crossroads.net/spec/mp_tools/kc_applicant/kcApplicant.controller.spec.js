@@ -32,7 +32,6 @@ describe('KC Applicant Tool', function(){
     Contact = $injector.get('Contact');
     CmsInfo = $injector.get('CmsInfo');
     $httpBackend = $injector.get('$httpBackend');
-    $httpBackend.whenGET(/SiteConfig*/).respond('');
   }));
 
   it('should get the correct query parameters', function(){
