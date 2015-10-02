@@ -146,7 +146,37 @@ INSERT INTO [dbo].[dp_Pages]
            ,'Recurring_Gifts'
            ,'Recurring_Gift_ID'
            ,1
-           ,'Donor_ID_Table_Contact_ID_Table.Display_Name ,Donor_ID_Table_Contact_ID_Table.Email_Address ,Frequency_ID_Table.Frequency,Day_Of_Month, Amount,Start_Date,End_Date,Subscription_ID'
+           ,'Donor_ID_Table_Contact_ID_Table.[Display_Name]
+, Donor_ID_Table_Contact_ID_Table_User_Account_Table.[User_Email]
+, Frequency_ID_Table.[Frequency]
+, CASE(Frequency_ID_Table.Frequency_ID)
+  WHEN 1
+    THEN
+      CONCAT(
+        ''Every '',
+        Day_Of_Week_ID_Table.Day_Of_Week
+      )
+  ELSE
+    CONCAT(
+      CAST(Day_Of_Month AS VARCHAR),
+      CASE(Day_Of_Month % 10)
+        WHEN 1 THEN ''st''
+        WHEN 2 THEN ''nd''
+        WHEN 3 THEN ''rd''
+        ELSE ''th''
+      END,
+      '' of the month''
+    )
+  END AS Recurrence
+, Recurring_Gifts.[Start_Date]
+, Recurring_Gifts.[End_Date]
+, Recurring_Gifts.[Amount]
+, Program_ID_Table.[Program_Name]
+, Congregation_ID_Table.[Congregation_Name]
+, CONCAT(Donor_Account_ID_Table_Account_Type_ID_Table.[Account_Type], '/', Donor_Account_ID_Table.[Account_Number]
+, '/', Donor_Account_ID_Table.[Institution_Name]) AS [Donor_Account]
+, Recurring_Gifts.[Subscription_ID]
+					 '
            ,'Recurring_Gift_ID'
            ,0)
 GO
