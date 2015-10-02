@@ -22,7 +22,6 @@ describe('Serve Tabs Directive', function() {
     $compile = _$compile_;
     $rootScope = _$rootScope_;
     $httpBackend = _$httpBackend_;
-    $httpBackend.whenGET(/SiteConfig*/).respond('');
     scope = $rootScope.$new();
     element = '<serve-tabs opportunity="opp"> </serve-tabs>';
     scope.opp = mockOpportunity;

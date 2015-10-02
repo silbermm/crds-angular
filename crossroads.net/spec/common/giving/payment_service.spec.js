@@ -65,7 +65,6 @@ describe('PaymentService', function() {
     sut = _PaymentService_;
     httpBackend = $httpBackend;
 
-    httpBackend.whenGET(/SiteConfig*/).respond('');
     stripe = $injector.get('stripe');
     $rootScope = _$rootScope_;
     MESSAGES = _MESSAGES_;
@@ -77,7 +76,6 @@ describe('PaymentService', function() {
   );
 
   afterEach(function() {
-    httpBackend.flush();
     httpBackend.verifyNoOutstandingExpectation();
     httpBackend.verifyNoOutstandingRequest();
   });
@@ -143,6 +141,7 @@ describe('PaymentService', function() {
 
     it('should encode plus signs in an email address', function() {
       var response = sut.getDonor('me+you+us@here.com');
+      httpBackend.flush();
       expect(response).toBeDefined();
     });
   });
@@ -176,6 +175,7 @@ describe('PaymentService', function() {
         }, errorCallback.onError);
       expect(stripe.card.createToken).toHaveBeenCalledWith(card, jasmine.any(Function));
       expect(errorCallback.onError).not.toHaveBeenCalled();
+      httpBackend.flush();
     });
 
     it('should not create a donor if createToken fails', function() {
@@ -212,6 +212,7 @@ describe('PaymentService', function() {
           expect(error.message).toEqual('Token not found');
         });
 
+      httpBackend.flush();
       expect(stripe.card.createToken).toHaveBeenCalledWith(card, jasmine.any(Function));
       expect(successCallback.onSuccess).not.toHaveBeenCalled();
     });
@@ -246,6 +247,7 @@ describe('PaymentService', function() {
         }, errorCallback.onError);
       expect(stripe.bankAccount.createToken).toHaveBeenCalledWith(bankAccount, jasmine.any(Function));
       expect(errorCallback.onError).not.toHaveBeenCalled();
+      httpBackend.flush();
     });
 
     it('should not create a donor if createToken fails', function() {
@@ -282,6 +284,7 @@ describe('PaymentService', function() {
 
       expect(stripe.bankAccount.createToken).toHaveBeenCalledWith(bankAccount, jasmine.any(Function));
       expect(successCallback.onSuccess).not.toHaveBeenCalled();
+      httpBackend.flush();
     });
   });
 
@@ -466,6 +469,8 @@ describe('PaymentService', function() {
         expect(confirmation.program_id).toEqual('Program');
         expect(confirmation.amount).toEqual('1234');
       });
+
+    httpBackend.flush();
     });
   });
 
@@ -507,6 +512,7 @@ describe('PaymentService', function() {
         }, errorCallback.onError);
       expect(stripe.card.createToken).toHaveBeenCalledWith(card, jasmine.any(Function));
       expect(errorCallback.onError).not.toHaveBeenCalled();
+      httpBackend.flush();
     });
 
     it('should not update the donor if createToken fails', function() {
@@ -542,6 +548,7 @@ describe('PaymentService', function() {
           expect(error.message).toEqual('Token not found');
         });
 
+      httpBackend.flush();
       expect(stripe.card.createToken).toHaveBeenCalledWith(card, jasmine.any(Function));
       expect(successCallback.onSuccess).not.toHaveBeenCalled();
     });
@@ -585,6 +592,7 @@ describe('PaymentService', function() {
         }, errorCallback.onError);
       expect(stripe.bankAccount.createToken).toHaveBeenCalledWith(bankAccount, jasmine.any(Function));
       expect(errorCallback.onError).not.toHaveBeenCalled();
+      httpBackend.flush();
     });
 
     it('should not update the donor if createToken fails', function() {
@@ -620,6 +628,7 @@ describe('PaymentService', function() {
           expect(error.message).toEqual('Token not found');
         });
 
+      httpBackend.flush();
       expect(stripe.bankAccount.createToken).toHaveBeenCalledWith(bankAccount, jasmine.any(Function));
       expect(successCallback.onSuccess).not.toHaveBeenCalled();
     });

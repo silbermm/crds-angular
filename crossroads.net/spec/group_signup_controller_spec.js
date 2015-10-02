@@ -92,7 +92,6 @@ describe('GroupSignupController', function() {
       function($injector) {
         // Set up the mock http service responses
         $httpBackend = $injector.get('$httpBackend');
-        $httpBackend.whenGET(/SiteConfig*/).respond('');
 
         // Get hold of a scope (i.e. the root scope)
         $rootScope = $injector.get('$rootScope');

@@ -11,14 +11,15 @@ describe('DonationList Directive', function() {
 
   beforeEach(angular.mock.module('crossroads'));
 
+  beforeEach(angular.mock.module(function($provide) {
+    $provide.value('$state', {});
+  }));
+
   beforeEach(
       inject(function(_$compile_, _$rootScope_, _$httpBackend_) {
         $compile = _$compile_;
         $rootScope = _$rootScope_;
         $httpBackend = _$httpBackend_;
-
-        $httpBackend.whenGET(/SiteConfig*/).respond('');
-        $httpBackend.whenGET(/api\/Page*/).respond({ pages: [{}] });
 
         originalDonations = [
           {

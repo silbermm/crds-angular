@@ -15,11 +15,7 @@
 	       <use xlink:href="#arrow-right9"></use>
          </svg>
        </button>
-    <p class="give-info">You may also manage your
-        <a href="">recurring giving</a>,
-        <a href="">give to someone's trip</a>, or
-        <a href="">learn more</a> about ways to engage financially.
-    </p>
+      <div ng-bind-html="$root.MESSAGES.give_info.content | html"></div>
     </div>
   </ng-form>
 </div>

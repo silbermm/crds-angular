@@ -40,12 +40,13 @@
             return Trip.TripParticipant.get({
               tripParticipantId: $stateParams.eventParticipantId
             }).$promise;
-          }
-        },
-        data: {
-          meta: {
-            title: 'Trip Giving',
-            description: ''
+          },
+          Meta: function(TripParticipant, $state) {
+            TripParticipant.$promise.then(
+              function() {
+                $state.next.data.meta.title =
+                  TripParticipant.participantName+' - '+TripParticipant.trips[0].tripName;
+              });
           }
         }
       })

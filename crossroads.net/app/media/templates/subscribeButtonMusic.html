@@ -1,1 +1,7 @@
-<a href="https://soundcloud.com/crdschurch" class="btn btn-default dropdown-toggle btn-xs">Subscribe on SoundCloud</a>
+<div class="btn-group" dropdown is-open="subscribeIsOpen">
+  <button type="button" class="btn btn-default dropdown-toggle btn-xs" dropdown-toggle ng-disabled="disabled">
+    Subscribe to Podcast <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu podcast-dropdown" role="menu" ng-include="'templates/subscribeButtonMusicDropdown.html'">
+  </ul>
+</div>

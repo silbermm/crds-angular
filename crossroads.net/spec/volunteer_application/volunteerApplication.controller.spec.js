@@ -180,7 +180,6 @@ describe('Volunteer Application Controller', function() {
       $log = _$log_;
 
       $httpBackend = $injector.get('$httpBackend');
-      $httpBackend.whenGET(/SiteConfig*/).respond('');
       Opportunity = $injector.get('Opportunity');
       PageInfo = $injector.get("PageInfo");
       Session = $injector.get("Session");

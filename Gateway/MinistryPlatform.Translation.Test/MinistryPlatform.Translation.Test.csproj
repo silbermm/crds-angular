@@ -89,6 +89,8 @@
     <Compile Include="Extensions\DictionaryExtensionTests.cs" />
     <Compile Include="LookupTest.cs" />
     <Compile Include="Services\ContactRelationshipServiceTest.cs" />
+    <Compile Include="Services\EventParticipantServiceTest.cs" />
+    <Compile Include="Services\DestinationServiceTest.cs" />
     <Compile Include="Services\DonationServiceTest.cs" />
     <Compile Include="Services\DonorServiceTest.cs" />
     <Compile Include="Services\ContactServiceTest.cs" />

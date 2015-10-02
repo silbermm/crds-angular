@@ -12,6 +12,10 @@ describe('ProfileGivingController', function() {
 
   beforeEach(angular.mock.module('crossroads'));
 
+  beforeEach(angular.mock.module(function($provide) {
+    $provide.value('$state', {});
+  }));
+
   var mockDonationResponse =
   {
     donations: [
@@ -73,15 +77,14 @@ describe('ProfileGivingController', function() {
   };
 
   beforeEach(inject(function(_$injector_, $httpBackend, _$controller_, $rootScope) {
-    var $injector = _$injector_;
+      var $injector = _$injector_;
 
-    httpBackend = $httpBackend;
+      httpBackend = $httpBackend;
 
-    controllerConstructor = _$controller_;
+      controllerConstructor = _$controller_;
 
-    scope = $rootScope.$new();
-
-  })
+      scope = $rootScope.$new();
+    })
   );
 
   afterEach(function() {
@@ -92,9 +95,6 @@ describe('ProfileGivingController', function() {
   describe('On initialization', function() {
     beforeEach(function() {
       sut = controllerConstructor('ProfileGivingController', {$scope: scope});
-
-      httpBackend.whenGET(/SiteConfig*/).respond({siteConfig: {title:'Crossroads'}});
-      httpBackend.whenGET(/api\/Page*/).respond({ pages: [{}] });
     });
 
     it('should retrieve most recent giving year donations for current user', function() {

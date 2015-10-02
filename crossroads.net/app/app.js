@@ -29,8 +29,6 @@ require('../lib/select.css');
   require('./my_serve');
   require('./volunteer_signup');
   require('./volunteer_application');
-  require('./blog');
-  require('./adbox');
   require('./giving_history');
   require('./myprofile');
 
