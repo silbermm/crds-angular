@@ -429,5 +429,6 @@ namespace crds_angular.Services
             var batchName = batch.BatchName.Replace(" ", "_");
             return string.Format("XRDReceivables-{0}_{1}.txt", batchName, date);
         }
+        
     }
 }

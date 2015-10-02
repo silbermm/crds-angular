@@ -7,6 +7,7 @@ using System.Text;
 using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Enum;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -45,6 +46,8 @@ namespace MinistryPlatform.Translation.Test.Services
             _configuration.Setup(mocked => mocked.GetConfigIntValue("DonorLookupByEncryptedAccount")).Returns(2179);
             _configuration.Setup(mocked => mocked.GetConfigIntValue("DonationStatus")).Returns(90210);
             _configuration.Setup(mocked => mocked.GetConfigIntValue("MyHouseholdDonationDistributions")).Returns(516);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("RecurringGifts")).Returns(45243);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("RecurringGiftBySubscription")).Returns(45208);
             _configuration.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
             _configuration.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("pwd");
 
@@ -156,6 +159,7 @@ namespace MinistryPlatform.Translation.Test.Services
             var checkScannerBatchName = "check scanner batch";
             const string viewKey = "DonorByContactId";
             const string sortString = "";
+            const string donorAcctId = "654";
             var searchString = ",\"" + donorId + "\"";
             var donationPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Donations"]);
             var donationDistPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Distributions"]);
@@ -182,6 +186,9 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Processor_ID", processorId},
                 {"Donation_Status_Date", setupDate},
                 {"Donation_Status_ID", 1},
+                {"Recurring_Gift_ID", null},
+                {"Is_Recurring_Gift", false},
+                {"Donor_Account_ID",donorAcctId },
                 {"Check_Scanner_Batch", checkScannerBatchName}
             };
 
@@ -227,7 +234,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _communicationService.Setup(mocked => mocked.GetTemplate(It.IsAny<int>())).Returns(getTemplateResponse);
 
 
-            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, null, chargeId, pymtType, processorId, setupDate, true, checkScannerBatchName);
+            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, null, chargeId, pymtType, processorId, setupDate, true, false, null, donorAcctId, checkScannerBatchName);
 
             // Explicitly verify each expectation...
             _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>()));
@@ -285,6 +292,9 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Processor_ID", processorId},
                 {"Donation_Status_Date", setupDate},
                 {"Donation_Status_ID", 1},
+                {"Recurring_Gift_ID", null},
+                {"Is_Recurring_Gift", false},
+                {"Donor_Account_ID", null},
                 {"Check_Scanner_Batch", checkScannerBatchName}
             };
 
@@ -331,7 +341,20 @@ namespace MinistryPlatform.Translation.Test.Services
             _communicationService.Setup(mocked => mocked.GetTemplate(It.IsAny<int>())).Returns(getTemplateResponse);
 
 
-            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, pledgeId, chargeId, pymtType, processorId, setupDate, true, checkScannerBatchName);
+            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt,
+                                                                        feeAmt,
+                                                                        donorId,
+                                                                        programId,
+                                                                        pledgeId,
+                                                                        chargeId,
+                                                                        pymtType,
+                                                                        processorId,
+                                                                        setupDate,
+                                                                        true,
+                                                                        false,
+                                                                        null,
+                                                                        null,
+                                                                        checkScannerBatchName);
 
             // Explicitly verify each expectation...
             _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>()));
@@ -1024,6 +1047,136 @@ namespace MinistryPlatform.Translation.Test.Services
 
             var result = _fixture.CreateHashedAccountAndRoutingNumber(accountNumber, routingNumber);
             Assert.AreEqual(hashString, result);
+        }
+
+        public void TestCreateRecurringGiftRecord()
+        {
+            const int donorId = 123;
+            const int donorAccountId = 456;
+            const string planInterval = "week";
+            const decimal planAmount = 789.10M;
+            var startDate = DateTime.Today;
+            const string program = "555";
+            const string subscriptionId = "sub_123";
+
+            const int recurringGiftId = 987;
+
+            var expectedParms = new Dictionary<string, object>
+            {
+                {"Donor_ID", donorId},
+                {"Donor_Account_ID", donorAccountId},
+                {"Frequency_ID", 1},
+                {"Day_Of_Month", (int?)null},
+                {"Day_Of_Week_ID", NumericDayOfWeek.GetDayOfWeekID((startDate.DayOfWeek).ToString())},
+                {"Amount", planAmount},
+                {"Start_Date", startDate},
+                {"Program_ID", program},
+                {"Congregation_ID", 1},
+                {"Subscription_ID", subscriptionId}
+            };
+
+            _ministryPlatformService.Setup(mocked => mocked.CreateRecord(45243, expectedParms, It.IsAny<string>(), true)).Returns(recurringGiftId);
+
+            var result = _fixture.CreateRecurringGiftRecord(donorId, donorAccountId, planInterval, planAmount, startDate, program, subscriptionId);
+            _ministryPlatformService.VerifyAll();
+
+            Assert.AreEqual(recurringGiftId, result);
+        }
+
+        [Test]
+        public void TestGetRecurringGiftForSubscription()
+        {
+            var lookupResult = new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    {"Donor_ID", 123},
+                    {"Amount", 456},
+                    {"Program_ID", "444"},
+                    {"Congregation_ID", 555},
+                    {"Account_Type_ID", 3},
+                    {"Recurring_Gift_ID", 4},
+                    {"Donor_Account_ID", 5}
+                }
+            };
+            _ministryPlatformService.Setup(mocked => mocked.GetPageViewRecords(45208, It.IsAny<string>(), ",\"sub_123\",", string.Empty, 0)).Returns(lookupResult);
+
+            var result = _fixture.GetRecurringGiftForSubscription("sub_123");
+            _ministryPlatformService.VerifyAll();
+            Assert.NotNull(result);
+            Assert.AreEqual(123, result.DonorId);
+            Assert.AreEqual(456, result.Amount);
+            Assert.AreEqual("444", result.ProgramId);
+            Assert.AreEqual(555, result.CongregationId);
+            Assert.AreEqual(PaymentType.CreditCard.abbrv, result.PaymentType);
+            Assert.AreEqual(4, result.RecurringGiftId);
+            Assert.AreEqual(5, result.DonorAccountId);
+        }
+
+        [Test]
+        public void TestCreateDonorAccountForBankAccount()
+        {
+            const string giftType = null;
+            const string routingNumber = "110000000";
+            const string accountNumber = "7890";
+            const int donorId = 123;
+            const string processorAcctId = "ba_123";
+            const string processorId = "cust_123";
+
+            const int donorAccountId = 456;
+
+            var expectedParms = new Dictionary<string, object>
+            {
+                {"Institution_Name", "Bank"},
+                {"Account_Number", accountNumber},
+                {"Routing_Number", "0"},
+                {"Encrypted_Account", _fixture.CreateHashedAccountAndRoutingNumber(accountNumber, routingNumber)},
+                {"Donor_ID", donorId},
+                {"Non-Assignable", false},
+                {"Account_Type_ID", (int)AccountType.Checking},
+                {"Closed", false},
+                {"Processor_Account_ID", processorAcctId},
+                {"Processor_ID", processorId}
+            };
+            _ministryPlatformService.Setup(mocked => mocked.CreateRecord(298, expectedParms, It.IsAny<string>(), false)).Returns(donorAccountId);
+
+            var result = _fixture.CreateDonorAccount(giftType, routingNumber, accountNumber, donorId, processorAcctId, processorId);
+            _ministryPlatformService.VerifyAll();
+            Assert.AreEqual(donorAccountId, result);
+
+        }
+
+        [Test]
+        public void TestCreateDonorAccountForCreditCard()
+        {
+            const string giftType = "Visa";
+            const string routingNumber = "0";
+            const string accountNumber = "7890";
+            const int donorId = 123;
+            const string processorAcctId = "ba_123";
+            const string processorId = "cust_123";
+
+            const int donorAccountId = 456;
+
+            var expectedParms = new Dictionary<string, object>
+            {
+                {"Institution_Name", giftType},
+                {"Account_Number", "7890"},
+                {"Routing_Number", "0"},
+                {"Encrypted_Account", null},
+                {"Donor_ID", donorId},
+                {"Non-Assignable", false},
+                {"Account_Type_ID", (int)AccountType.Credit},
+                {"Closed", false},
+                {"Processor_Account_ID", processorAcctId},
+                {"Processor_ID", processorId}
+            };
+            _ministryPlatformService.Setup(mocked => mocked.CreateRecord(298, expectedParms, It.IsAny<string>(), false)).Returns(donorAccountId);
+
+            var result = _fixture.CreateDonorAccount(giftType, routingNumber, accountNumber, donorId, processorAcctId, processorId);
+            _ministryPlatformService.VerifyAll();
+            Assert.AreEqual(donorAccountId, result);
+
         }
     }
 }

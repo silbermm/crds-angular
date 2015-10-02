@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -8,6 +7,7 @@ using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
 using log4net;
 using MinistryPlatform.Models;
+using MinistryPlatform.Models.DTO;
 using MinistryPlatform.Translation.Enum;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -26,6 +26,8 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _donationStatusesPageId;
         private readonly int _donorLookupByEncryptedAccount;
         private readonly int _myHouseholdDonationDistributions;
+        private readonly int _recurringGiftBySubscription;
+        private readonly int _recurringGiftPageId;
 
         public const string DonorRecordId = "Donor_Record";
         public const string DonorProcessorId = "Processor_ID";
@@ -60,14 +62,18 @@ namespace MinistryPlatform.Translation.Services
             _donationStatusesPageId = configuration.GetConfigIntValue("DonationStatus");
             _donorLookupByEncryptedAccount = configuration.GetConfigIntValue("DonorLookupByEncryptedAccount");
             _myHouseholdDonationDistributions = configuration.GetConfigIntValue("MyHouseholdDonationDistributions");
+            _recurringGiftBySubscription = configuration.GetConfigIntValue("RecurringGiftBySubscription");
+            _recurringGiftPageId = configuration.GetConfigIntValue("RecurringGifts");
         }
 
 
-        public int CreateDonorRecord(int contactId, string processorId, DateTime setupTime,
-            int? statementFrequencyId = 1, // default to quarterly
-            int? statementTypeId = 1, //default to individual
-            int? statementMethodId = 2, // default to email/online
-            DonorAccount donorAccount = null
+        public int CreateDonorRecord(int contactId, string processorId, DateTime setupTime, int? statementFrequencyId = 1,
+                                     // default to quarterly
+                                     int? statementTypeId = 1,
+                                     //default to individual
+                                     int? statementMethodId = 2,
+                                     // default to email/online
+                                     DonorAccount donorAccount = null
             )
         {
             //this assumes that you do not already have a donor record - new giver
@@ -75,9 +81,9 @@ namespace MinistryPlatform.Translation.Services
             {
                 {"Contact_ID", contactId},
                 {"Statement_Frequency_ID", statementFrequencyId},
-                {"Statement_Type_ID", statementTypeId}, 
+                {"Statement_Type_ID", statementTypeId},
                 {"Statement_Method_ID", statementMethodId},
-                {"Setup_Date", setupTime},    //default to current date/time
+                {"Setup_Date", setupTime}, //default to current date/time
                 {"Processor_ID", processorId}
             };
 
@@ -97,27 +103,56 @@ namespace MinistryPlatform.Translation.Services
             // Create a new DonorAccount for this donor, if we have account info
             if (donorAccount != null)
             {
-                values = new Dictionary<string, object>
+                CreateDonorAccount(DefaultInstitutionName,
+                                   DonorAccountNumberDefault,
+                                   DonorRoutingNumberDefault,
+                                   donorId,
+                                   donorAccount.ProcessorAccountId,
+                                   processorId);
+            }
+            return donorId;
+        }
+
+        public int CreateDonorAccount(string giftType, string routingNumber, string acctNumber, int donorId, string processorAcctId, string processorId)
+        {
+           var apiToken = ApiLogin();
+
+            string encryptedAcct = null;
+            if (routingNumber != DonorRoutingNumberDefault)
+            {
+                encryptedAcct = CreateHashedAccountAndRoutingNumber(acctNumber, routingNumber);
+            }
+
+            var institutionName = giftType ?? DefaultInstitutionName;
+            var accountType = (giftType == null) ? AccountType.Checking : AccountType.Credit;
+
+            try
+            {
+              var  values = new Dictionary<string, object>
                 {
-                    { "Institution_Name", DefaultInstitutionName },
-                    { "Account_Number", DonorAccountNumberDefault },
+                    { "Institution_Name", institutionName },
+                    { "Account_Number", acctNumber },
                     { "Routing_Number", DonorRoutingNumberDefault },
-                    { "Encrypted_Account", CreateHashedAccountAndRoutingNumber(donorAccount.AccountNumber, donorAccount.RoutingNumber) },
+                    { "Encrypted_Account", encryptedAcct },
                     { "Donor_ID", donorId },
                     { "Non-Assignable", false },
-                    { "Account_Type_ID", (int)donorAccount.Type },
+                    { "Account_Type_ID", (int)accountType},
                     { "Closed", false },
-                    {"Processor_Account_ID", donorAccount.ProcessorAccountId},
+                    {"Processor_Account_ID", processorAcctId},
                     {"Processor_ID", processorId}
                 };
 
-                _ministryPlatformService.CreateRecord(_donorAccountsPageId, values, apiToken);
+                 var donorAccountId = _ministryPlatformService.CreateRecord(_donorAccountsPageId, values, apiToken);  
+                 return donorAccountId; 
             }
-            return donorId;
-
+            catch (Exception e)
+            {
+                throw new ApplicationException(string.Format("CreateDonorAccount failed.  Donor Id: {0}", donorId), e);
+            }
+           
         }
 
-        public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, int? pledgeId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor, string checkScannerBatchName = null)
+        public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, int? pledgeId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor, bool recurringGift, int? recurringGiftId, string donorAcctId, string checkScannerBatchName = null)
         {
             var pymtId = PaymentType.getPaymentType(pymtType).id;
             var fee = feeAmt.HasValue ? feeAmt / Constants.StripeDecimalConversionValue : null;
@@ -136,7 +171,10 @@ namespace MinistryPlatform.Translation.Services
                 {"Registered_Donor", registeredDonor},
                 {"Processor_ID", processorId },
                 {"Donation_Status_Date", setupTime},
-                {"Donation_Status_ID", 1} //hardcoded to pending 
+                {"Donation_Status_ID", 1}, //hardcoded to pending 
+                {"Recurring_Gift_ID", recurringGiftId},
+                {"Is_Recurring_Gift", recurringGift},
+                {"Donor_Account_ID", donorAcctId}
             };
             if (!string.IsNullOrWhiteSpace(checkScannerBatchName))
             {
@@ -369,7 +407,7 @@ namespace MinistryPlatform.Translation.Services
             return (donorId);
         }
 
-        public void UpdateDonorAccount(string encryptedKey, string sourceId, string customerId)
+        public string UpdateDonorAccount(string encryptedKey, string sourceId, string customerId)
         {
             try
             {
@@ -382,6 +420,7 @@ namespace MinistryPlatform.Translation.Services
                     {"Processor_ID", customerId}
                 };
                 _ministryPlatformService.UpdateRecord(_donorAccountsPageId, updateParms, ApiLogin());
+                 return donorAccountId;
             }
             catch (Exception ex)
             {
@@ -541,7 +580,7 @@ namespace MinistryPlatform.Translation.Services
             return donationMap.Values.ToList();
         }
 
-        private Donation GetDonationFromMap(Dictionary<int, Donation> donationMap,
+        private static Donation GetDonationFromMap(Dictionary<int, Donation> donationMap,
                                             Dictionary<string, Object> record,
                                             int donationId,
                                             List<DonationStatus> statuses)
@@ -573,7 +612,7 @@ namespace MinistryPlatform.Translation.Services
             return donation;
         }
 
-        private void AddDistributionToDonation(Dictionary<string, Object> record, Donation donation)
+        private static void AddDistributionToDonation(Dictionary<string, Object> record, Donation donation)
         {
 
             var amount = Convert.ToInt32((record["Amount"] as decimal? ?? 0) * Constants.StripeDecimalConversionValue);
@@ -586,14 +625,92 @@ namespace MinistryPlatform.Translation.Services
             });
         }
 
-        private string YearSearch(string year)
+        private static string YearSearch(string year)
         {
             return string.IsNullOrWhiteSpace(year) ? string.Empty : string.Format("\"*/{0}*\"", year);
         }
 
-        private string DonorIdSearch(IEnumerable<int> ids)
+        private static string DonorIdSearch(IEnumerable<int> ids)
         {
             return string.Join(" or ", ids.Select(id => string.Format("\"{0}\"", id)));
+        }
+
+        public int CreateRecurringGiftRecord(int donorId, int donorAccountId, string planInterval, decimal planAmount, DateTime startDate, string program, string subscriptionId)
+        {
+            int? dayOfWeek = null;
+            int? dayOfMonth = null;
+            int frequencyId;
+            if (planInterval == "week")
+            {
+                dayOfWeek = NumericDayOfWeek.GetDayOfWeekID((startDate.DayOfWeek).ToString());
+                frequencyId = 1;
+            }
+            else
+            {
+                dayOfMonth = startDate.Day;
+                frequencyId = 2;
+            }
+          
+            var values = new Dictionary<string, object>
+            {
+                {"Donor_ID", donorId},
+                {"Donor_Account_ID", donorAccountId},
+                {"Frequency_ID", frequencyId},
+                {"Day_Of_Month", dayOfMonth},    
+                {"Day_Of_Week_ID", dayOfWeek},
+                {"Amount", planAmount},
+                {"Start_Date", startDate},
+                {"Program_ID", program},
+                {"Congregation_ID", 1},
+                {"Subscription_ID", subscriptionId}
+            };
+
+            var apiToken = ApiLogin();
+            int recurringGiftId;
+            try
+            {
+                recurringGiftId = _ministryPlatformService.CreateRecord(_recurringGiftPageId, values, apiToken, true);
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException(string.Format("Create Recurring Gift failed.  Donor Id: {0}", donorId), e);
+            }
+
+            return recurringGiftId;
+        }
+
+        public CreateDonationDistDto GetRecurringGiftForSubscription(string subscription)
+        {
+            var searchStr = string.Format(",\"{0}\",", subscription);
+            CreateDonationDistDto createDonation = null;
+            try
+            {
+                var records =
+                    WithApiLogin(
+                        apiToken => (_ministryPlatformService.GetPageViewRecords(_recurringGiftBySubscription, apiToken, searchStr)));
+                if (records != null && records.Count > 0)
+                {
+                    var record = records.First();
+                    createDonation = new CreateDonationDistDto
+                    {
+                        DonorId = record.ToInt("Donor_ID"),
+                        Amount = record.ToInt("Amount"),
+                        ProgramId = record.ToString("Program_ID"),
+                        CongregationId = record.ToInt("Congregation_ID"),
+                        PaymentType = (int)AccountType.Checking == record.ToInt("Account_Type_ID") ? PaymentType.Bank.abbrv : PaymentType.CreditCard.abbrv,
+                        RecurringGiftId = record.ToNullableInt("Recurring_Gift_ID"),
+                        DonorAccountId = record.ToNullableInt("Donor_Account_ID")
+                    };
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(
+                    string.Format("GetRecurringGift failed.  Subscription Id: {0}", subscription), ex);
+            }
+
+           return createDonation;
         }
     }
 

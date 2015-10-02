@@ -5,7 +5,6 @@ using MinistryPlatform.Models;
 using Newtonsoft.Json;
 using Household = crds_angular.Models.MP.Household;
 using HouseholdMember = MinistryPlatform.Models.HouseholdMember;
-using Newtonsoft.Json;
 
 
 namespace crds_angular.Models

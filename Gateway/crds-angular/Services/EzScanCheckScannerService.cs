@@ -81,7 +81,7 @@ namespace crds_angular.Services
                     var routing = _mpDonorService.DecryptCheckValue(check.RoutingNumber);
                     var encryptedKey = _mpDonorService.CreateHashedAccountAndRoutingNumber(account, routing);
                                      
-                    _mpDonorService.UpdateDonorAccount(encryptedKey, charge.Source.id, contactDonor.ProcessorId);
+                    var donorAccountId =_mpDonorService.UpdateDonorAccount(encryptedKey, charge.Source.id, contactDonor.ProcessorId);
                  
                     var programId = batchDetails.ProgramId == null ? null : batchDetails.ProgramId + "";
 
@@ -95,6 +95,9 @@ namespace crds_angular.Services
                                                                                          contactDonor.ProcessorId,
                                                                                          check.CheckDate ?? (check.ScanDate ?? DateTime.Now),
                                                                                          contactDonor.RegisteredUser,
+                                                                                         false,
+                                                                                         null,
+                                                                                         donorAccountId,
                                                                                          batchDetails.Name);
 
                     check.DonationId = donationId;

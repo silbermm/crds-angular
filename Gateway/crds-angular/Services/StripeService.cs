@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using crds_angular.Exceptions;
 using crds_angular.Services.Interfaces;
@@ -8,6 +9,7 @@ using System.Net;
 using crds_angular.Models.Crossroads.Stewardship;
 using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
+using MinistryPlatform.Models;
 using RestSharp.Extensions;
 
 namespace crds_angular.Services
@@ -144,6 +146,19 @@ namespace crds_angular.Services
 
         }
 
+        public StripeCustomer AddSourceToCustomer(string customerToken, string cardToken)
+        {
+            //Passing source will create a new source object, make it the new customer default source, and delete the old customer default if one exist
+            var request = new RestRequest("customers/" + customerToken + "/sources", Method.POST);
+            request.AddParameter("source", cardToken);
+
+            var response = _stripeRestClient.Execute<StripeCustomer>(request);
+            CheckStripeResponse("Customer update to add source failed", response);
+            var sourceData = response.Data;
+
+            return sourceData;
+        }
+
         public string UpdateCustomerDescription(string customerToken, int donorId)
         {
             var request = new RestRequest("customers/" + customerToken, Method.POST);
@@ -188,6 +203,7 @@ namespace crds_angular.Services
                     defaultSource.exp_month = source.exp_month.PadLeft(2, '0');
                     defaultSource.exp_year = source.exp_year.Substring(2, 2);
                 }
+                defaultSource.id = defaultSourceId;
             }
 
             return defaultSource;
@@ -289,7 +305,32 @@ namespace crds_angular.Services
             return refund;
         }
 
+        public StripePlan CreatePlan(RecurringGiftDto recurringGiftDto, ContactDonor contactDonor)
+        {
+            var request = new RestRequest("plans", Method.POST);
+            request.AddParameter("amount", recurringGiftDto.PlanAmount * Constants.StripeDecimalConversionValue);
+            request.AddParameter("interval", recurringGiftDto.PlanInterval);
+            request.AddParameter("name", "Donor ID #" + contactDonor.DonorId + " " + recurringGiftDto.PlanInterval + "ly");
+            request.AddParameter("currency", "usd");
+            request.AddParameter("trial_period_days", (recurringGiftDto.StartDate - DateTime.Now).Days);
+            request.AddParameter("id", contactDonor.DonorId + " " + DateTime.Now);
 
+            var response = _stripeRestClient.Execute<StripePlan>(request);
+            CheckStripeResponse("Invalid plan creation request", response);
+
+            return response.Data;
+        }
+
+        public StripeSubscription CreateSubscription(string planName, string customer)
+        {
+            var request = new RestRequest("customers/" + customer +"/subscriptions", Method.POST);
+            request.AddParameter("plan", planName);
+
+            var response = _stripeRestClient.Execute<StripeSubscription>(request);
+            CheckStripeResponse("Invalid subscription creation request", response);
+
+            return response.Data;
+        }
     }
 
     public class Error

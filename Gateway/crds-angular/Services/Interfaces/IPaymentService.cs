@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using crds_angular.Controllers.API;
 using crds_angular.Models.Crossroads.Stewardship;
+using MinistryPlatform.Models;
 
 namespace crds_angular.Services.Interfaces
 {
@@ -16,5 +18,8 @@ namespace crds_angular.Services.Interfaces
         StripeRefund GetChargeRefund(string chargeId);
         StripeRefundData GetRefund(string refundId);
         StripeCharge GetCharge(string chargeId);
+        StripePlan CreatePlan(RecurringGiftDto recurringGiftDto, ContactDonor contactDonor);
+        StripeSubscription CreateSubscription(string planName, string customer);
+        StripeCustomer AddSourceToCustomer(string customerToken, string cardToken);
     }
 }

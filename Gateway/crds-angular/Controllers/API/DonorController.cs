@@ -11,6 +11,7 @@ using crds_angular.Models.Json;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
+using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Controllers.API
 {
@@ -19,12 +20,16 @@ namespace crds_angular.Controllers.API
         private readonly IDonorService _donorService;
         private readonly IPaymentService _stripePaymentService;
         private readonly IDonationService _donationService;
+        private readonly MPInterfaces.IDonorService _mpDonorService;
+        private readonly MPInterfaces.IAuthenticationService _authenticationService;
 
-        public DonorController(IDonorService donorService, IPaymentService stripePaymentService, IDonationService donationService)
+        public DonorController(IDonorService donorService, IPaymentService stripePaymentService, IDonationService donationService, MPInterfaces.IDonorService mpDonorService, MPInterfaces.IAuthenticationService authenticationService)
         {
             _donorService = donorService;
             _stripePaymentService = stripePaymentService;
             _donationService = donationService;
+            _authenticationService = authenticationService;
+            _mpDonorService = mpDonorService;
         }
 
         /// <summary>
@@ -268,8 +273,7 @@ namespace crds_angular.Controllers.API
                     _donorService.GetContactDonorForEmail(dto.EmailAddress) 
                     : 
                     _donorService.GetContactDonorForAuthenticatedUser(token);
-
-                //Post apistripe/customer/{custID}/sources pass in the dto.stripe_token_id
+              
                 sourceData = _stripePaymentService.UpdateCustomerSource(contactDonor.ProcessorId, dto.StripeTokenId);
             }
             catch (PaymentProcessorException stripeException)
@@ -307,6 +311,41 @@ namespace crds_angular.Controllers.API
             };
 
             return Ok(donor);
+        }
+
+        /// <summary>
+        /// Create a recurring gift for the authenticated user.
+        /// </summary>
+        /// <param name="recurringGiftDto">The data required to setup the recurring gift in MinistryPlatform and Stripe.</param>
+        /// <returns>The input RecurringGiftDto, with donor email address and recurring gift ID from MinistryPlatform populated</returns>
+        [RequiresAuthorization]
+        [ResponseType(typeof(RecurringGiftDto))]
+        [Route("api/donor/recurrence")]
+        public IHttpActionResult CreateRecurringGift([FromBody] RecurringGiftDto recurringGiftDto)
+        {
+            return (Authorized(token =>
+            {
+                try
+                {
+                    var contactDonor = _donorService.GetContactDonorForAuthenticatedUser(token);
+                    var donor = _donorService.CreateOrUpdateContactDonor(contactDonor, string.Empty, string.Empty, recurringGiftDto.StripeTokenId, DateTime.Now);
+                    var recurringGift = _donorService.CreateRecurringGift(recurringGiftDto, donor);
+
+                    recurringGiftDto.EmailAddress = donor.Email;
+                    recurringGiftDto.RecurringGiftId = recurringGift;
+                    return Ok(recurringGiftDto);
+                }
+                catch (PaymentProcessorException stripeException)
+                {
+                    return (stripeException.GetStripeResult());
+                }
+                catch (ApplicationException applicationException)
+                {
+                    var apiError = new ApiErrorDto("Error calling Ministry Platform " + applicationException.Message, applicationException);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+                
+            }));
         }
     }
 }
