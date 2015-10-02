@@ -9,7 +9,6 @@
     .directive('invalidAccount', require('./invalidAccount.validation.directive'))
     .directive('invalidRouting', require('./invalidRouting.validation.directive'))
     .directive('naturalNumber', require('./naturalNumber.validation.directive'))
-    .directive('invalidRecurringStartDate', require('./invalidRecurringStartDate.validation.directive'));
 
   require('./services');
   require('./bankCreditCardDetails');
