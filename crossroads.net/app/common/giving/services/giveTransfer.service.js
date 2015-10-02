@@ -20,6 +20,7 @@
         this.donor = {};
         this.donorError = false;
         this.email = undefined;
+        this.givingType = 'one_time';
         this.initialized = false;
         this.last4 = '';
         this.message = null;
@@ -29,6 +30,7 @@
         this.routing = '';
         this.savedPayment = '';
         this.view = 'bank';
+        this.recurringStartDate = undefined;
 
         if (!Session.isActive()) {
           User.email = '';

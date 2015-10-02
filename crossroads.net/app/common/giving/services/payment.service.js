@@ -2,12 +2,16 @@
   'use strict';
   module.exports = PaymentService;
 
+  var moment = require('moment');
+
   PaymentService.$inject = ['$http','$q', 'stripe', '$cookies', '$rootScope', 'GiveTransferService', 'MESSAGES'];
 
   function PaymentService($http, $q, stripe, $cookies, $rootScope, GiveTransferService, MESSAGES) {
     var paymentService = {
       createDonorWithBankAcct: createDonorWithBankAcct,
       createDonorWithCard: createDonorWithCard,
+      createRecurringGiftWithBankAcct: createRecurringGiftWithBankAcct,
+      createRecurringGiftWithCard: createRecurringGiftWithCard,
       donateToProgram: donateToProgram,
       donation: {},
       getDonor: getDonor,
@@ -25,6 +29,14 @@
 
     function createDonorWithCard(card, email) {
       return apiDonor(card, email, stripe.card, 'POST');
+    }
+
+    function createRecurringGiftWithBankAcct(bankAcct) {
+      return apiRecurringGift(bankAcct, stripe.bankAccount, 'POST');
+    }
+
+    function createRecurringGiftWithCard(card) {
+      return apiRecurringGift(card, stripe.card, 'POST');
     }
 
     function donateToProgram(program_id, campaignId, amount, donor_id, email_address, pymt_type) {
@@ -152,6 +164,37 @@
             data: donorRequest
           }).success(function(data) {
             paymentService.donor = data;
+            def.resolve(data);
+          }).error(function(response, statusCode) {
+            def.reject(_addGlobalErrorMessage(response.error, statusCode));
+          });
+        }
+      });
+
+      return def.promise;
+    }
+
+    function apiRecurringGift(donorInfo, stripeFunc, apiMethod) {
+      var def = $q.defer();
+      stripeFunc.createToken(donorInfo, function(status, response) {
+        if (response.error) {
+          def.reject(_addGlobalErrorMessage(response.error, status));
+        } else {
+          var recurringGiftRequest = {
+            stripe_token_id: response.id,
+            amount: GiveTransferService.amount,
+            program: GiveTransferService.program.ProgramId,
+            interval: GiveTransferService.givingType,
+            start_date: GiveTransferService.recurringStartDate
+          };
+          $http({
+            method: apiMethod,
+            url: __API_ENDPOINT__ + 'api/donor/recurrence',
+            headers: {
+              Authorization: $cookies.get('sessionId')
+            },
+            data: recurringGiftRequest
+          }).success(function(data) {
             def.resolve(data);
           }).error(function(response, statusCode) {
             def.reject(_addGlobalErrorMessage(response.error, statusCode));

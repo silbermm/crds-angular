@@ -2,15 +2,9 @@
 
 var constants = require('../constants');
 
-require('./giveTemplates/give.html');
-require('./giveTemplates/amount.html');
-require('./giveTemplates/login.html');
-require('./giveTemplates/confirm.html');
-require('./giveTemplates/account.html');
-require('./giveTemplates/change.html');
-require('./giveTemplates/thank_you.html');
-require('./giveTemplates/register.html');
-require('./giveTemplates/history.html');
+require('./templates/give.html');
+require('./templates/amount.html');
+require('./templates/register.html');
 
 var app = angular.module(constants.MODULES.GIVE, [
     constants.MODULES.CORE,
@@ -22,4 +16,7 @@ var app = angular.module(constants.MODULES.GIVE, [
 
 app.config(require('./give.routes'));
 app.controller('GiveController', require('./give.controller'));
-app.factory('OneTimeGiving', require('./oneTimeGiving.service'));
+
+require('./one_time');
+require('./recurring');
+

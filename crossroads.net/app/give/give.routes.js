@@ -7,11 +7,12 @@
   GiveRoutes.$inject = ['$httpProvider', '$stateProvider'];
 
   /**
-   * This holds all of One-Time Giving routes
+   * This holds all of common Giving routes
    */
   function GiveRoutes($httpProvider, $stateProvider) {
 
     $httpProvider.defaults.useXDomain = true;
+
     //TODO: I think this is done globally, not needed here, I think the above needs to be done globally
     $httpProvider.defaults.headers.common['X-Use-The-Force'] = true;
 
@@ -20,7 +21,7 @@
         parent: 'noSideBar',
         url: '/give',
         controller: 'GiveController as give',
-        templateUrl: 'giveTemplates/give.html',
+        templateUrl: 'templates/give.html',
         resolve: {
           Programs: 'Programs',
           programList: function(Programs) {
@@ -29,6 +30,16 @@
             return Programs.Programs.query({
               programType: 1
             }).$promise;
+          },
+
+          giveType: function($location) {
+            if ($location.search().recurring !== undefined) {
+              if (!!$location.search().recurring) {
+                return 'month';
+              } else {
+                return 'one_time';
+              }
+            }
           }
         },
         data: {
@@ -39,27 +50,11 @@
         }
       })
       .state('give.amount', {
-        templateUrl: 'giveTemplates/amount.html'
-      })
-      .state('give.login', {
-        controller: 'LoginCtrl',
-        templateUrl: 'giveTemplates/login.html'
+        templateUrl: 'templates/amount.html'
       })
       .state('give.register', {
         controller: 'RegisterCtrl',
-        templateUrl: 'giveTemplates/register.html'
-      })
-      .state('give.confirm', {
-        templateUrl: 'giveTemplates/confirm.html'
-      })
-      .state('give.account', {
-        templateUrl: 'giveTemplates/account.html'
-      })
-      .state('give.change', {
-        templateUrl: 'giveTemplates/change.html'
-      })
-      .state('give.thank-you', {
-        templateUrl: 'giveTemplates/thank_you.html'
+        templateUrl: 'templates/register.html'
       });
   }
 

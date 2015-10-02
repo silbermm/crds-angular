@@ -20,6 +20,7 @@
       createBank: createBank,
       createCard: createCard,
       createDonorAndDonate: createDonorAndDonate,
+      createRecurringGift: createRecurringGift,
       confirmDonation: confirmDonation,
       donate: donate,
       processBankAccountChange: processBankAccountChange,
@@ -74,6 +75,28 @@
       }
     }
 
+    function createRecurringGift() {
+      GiveTransferService.processing = true;
+
+      if (GiveTransferService.view === 'cc') {
+        donationService.createCard();
+        PaymentService.createRecurringGiftWithCard(donationService.card)
+          .then(function(recurringGift) {
+            // TODO: Put recurringGift in GiveTransferService
+            GiveTransferService.email = recurringGift.email;
+            $state.go(GiveFlow.thankYou);
+          }, PaymentService.stripeErrorHandler);
+      } else if (GiveTransferService.view === 'bank') {
+        donationService.createBank();
+        PaymentService.createRecurringGiftWithBankAcct(donationService.bank)
+          .then(function(recurringGift) {
+            // TODO: Put recurringGift in GiveTransferService
+            GiveTransferService.email = recurringGift.email;
+            $state.go(GiveFlow.thankYou);
+          }, PaymentService.stripeErrorHandler);
+      }
+    }
+
     function confirmDonation(programsInput) {
       if (!Session.isActive()) {
         $state.go(GiveFlow.login);
@@ -89,7 +112,7 @@
         }
 
         donationService.donate(pgram, GiveTransferService.campaign,  function(confirmation) {
-          console.log('successfully donated'); 
+          console.log('successfully donated');
         }, function(error) {
 
           if (GiveTransferService.declinedPayment) {
@@ -105,6 +128,7 @@
       if (campaign === undefined || campaign ===  null) {
         campaign = { campaignId: null,  campaignName: null };
       }
+
       PaymentService.donateToProgram(
           program.ProgramId,
           campaign.campaignId,
@@ -145,8 +169,9 @@
            } else {
              pgram = GiveTransferService.program;
            }
+
            donationService.donate(pgram, GiveTransferService.campaign);
-        }, PaymentService.stripeErrorHandler);
+         }, PaymentService.stripeErrorHandler);
       } else {
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
       }
@@ -180,8 +205,10 @@
                                            GiveTransferService.email)
           .then(function(donor) {
             donate(pgram, GiveTransferService.campaign, function() {
-            
-            }, function(error) {
+
+            },
+
+             function(error) {
               GiveTransferService.processing = false;
               PaymentService.stripeErrorHandler(error);
             });

@@ -5,13 +5,13 @@
   GiveCtrl.$inject = ['$rootScope',
                       '$state',
                       '$timeout',
+                      'giveType',
                       'Session',
-                      'DonationService',
                       'programList',
                       'GiveTransferService',
-                      'GiveFlow',
                       'AUTH_EVENTS',
                       'OneTimeGiving',
+                      'RecurringGiving'
                       ];
 
   function DonationException(message) {
@@ -22,25 +22,25 @@
   function GiveCtrl($rootScope,
     $state,
     $timeout,
+    giveType,
     Session,
-    DonationService,
     programList,
     GiveTransferService,
-    GiveFlow,
     AUTH_EVENTS,
-    OneTimeGiving) {
+    OneTimeGiving,
+    RecurringGiving) {
 
     var vm = this;
     vm.activeSession = activeSession;
-    vm.donationService = DonationService;
     vm.dto = GiveTransferService;
     vm.emailAlreadyRegisteredGrowlDivRef = 1000;
     vm.emailPrefix = 'give';
-    vm.giveFlow = GiveFlow;
     vm.initDefaultState = OneTimeGiving.initDefaultState;
     vm.onEmailFound = onEmailFound;
     vm.onEmailNotFound = onEmailNotFound;
     vm.programsInput = programList;
+    vm.branchOnGivingType = branchOnGivingType;
+    vm.service = OneTimeGiving;
 
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams) {
 
@@ -53,11 +53,14 @@
 
       if (!vm.dto.initialized || toState.name === 'give') {
         event.preventDefault();
-        OneTimeGiving.initDefaultState();
+        vm.service.initDefaultState();
         return;
       }
 
-      vm.donationService.transitionForLoggedInUserBasedOnExistingDonor(event, toState);
+      if (vm.dto.givingType == undefined) {
+        vm.dto.givingType = giveType;
+      }
+      vm.service.getLoggedInUserDonorPaymentInfo(event, toState);
     });
 
     $rootScope.$on(AUTH_EVENTS.logoutSuccess, function(event) {
@@ -67,7 +70,7 @@
 
     $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams) {
       vm.dto.processing = false;
-      if (toState.name === GiveFlow.thankYou) {
+      if (toState.name === vm.service.stateName('thankYou')) {
         vm.dto.initialized = false;
       }
     });
@@ -115,6 +118,17 @@
           angular.element(closeButton).triggerHandler('click');
         }, 0);
       }
+    }
+
+    function branchOnGivingType() {
+      if (vm.dto.givingType === 'one_time') {
+        vm.service = OneTimeGiving;
+      } else {
+        vm.service = RecurringGiving;
+      }
+
+      vm.service.resetGiveFlow();
+      vm.service.goToAccount(vm.giveForm);
     }
   }
 

@@ -1,6 +1,8 @@
 require('crds-core');
-require('../../app/common/common.module');
-require('../../app/app');
+require('../../../app/common/common.module');
+require('../../../app/app');
+
+var moment = require('moment');
 
 describe('PaymentService', function() {
   var sut;
@@ -286,6 +288,168 @@ describe('PaymentService', function() {
     });
   });
 
+  describe('function createRecurringGiftWithCard', function() {
+    var postData;
+    beforeEach(function() {
+      var startDate = moment({year: 2015, month: 12, day: 31}).toDate();
+      postData = {
+        stripe_token_id: 'tok_test',
+        amount: 100,
+        program: 1,
+        interval: 'week',
+        start_date: startDate
+      };
+      GiveTransferService.amount = 100;
+      GiveTransferService.program = {ProgramId: 1};
+      GiveTransferService.givingType = 'week';
+      GiveTransferService.recurringStartDate = startDate;
+    });
+
+    it('should call createToken and create a new recurring gift using the token', function() {
+      spyOn(stripe.card, 'createToken').and.callFake(function(donorInfo, callback) {
+        callback(200, {id: 'tok_test'});
+      });
+
+      httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence', postData)
+        .respond({
+          // TODO: Need to place proper response here
+          dummy: ''
+        });
+
+      var errorCallback = jasmine.createSpyObj('errorCallback', ['onError']);
+      var test = sut.createRecurringGiftWithCard(card)
+        .then(function(recurringGift) {
+          expect(recurringGift).toBeDefined();
+
+          // expect(recurringGift.id).toEqual('12345');
+          // expect(recurringGift.stripe_customer_id).toEqual('cust_test');
+        }, errorCallback.onError);
+      expect(stripe.card.createToken).toHaveBeenCalledWith(card, jasmine.any(Function));
+      expect(errorCallback.onError).not.toHaveBeenCalled();
+      httpBackend.flush();
+    });
+
+    it('should not create a recurring gift if createToken fails', function() {
+      spyOn(stripe.card, 'createToken').and.callFake(function(donorInfo, callback) {
+        callback(500, { error: { type: 'junk', } });
+      });
+
+      var successCallback = jasmine.createSpyObj('successCallback', ['onSuccess']);
+      sut.createRecurringGiftWithCard(card)
+        .then(successCallback.onSuccess,
+        function(error) {
+          expect(error).toBeDefined();
+          expect(error.type).toEqual('junk');
+          expect(GiveTransferService.processing).toEqual(false);
+        });
+
+      expect(stripe.card.createToken).toHaveBeenCalledWith(card, jasmine.any(Function));
+      expect(successCallback.onSuccess).not.toHaveBeenCalled();
+    });
+
+    it('should return error if there is problem calling donor service', function() {
+      spyOn(stripe.card, 'createToken').and.callFake(function(donorInfo, callback) {
+        callback(200, {id: 'tok_test'});
+      });
+
+      httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence', postData)
+        .respond(400, { error: { message: 'Token not found' } });
+
+      var successCallback = jasmine.createSpyObj('successCallback', ['onSuccess']);
+      sut.createRecurringGiftWithCard(card)
+        .then(successCallback.onSuccess,
+        function(error) {
+          expect(error).toBeDefined();
+          expect(error.message).toEqual('Token not found');
+        });
+
+      expect(stripe.card.createToken).toHaveBeenCalledWith(card, jasmine.any(Function));
+      expect(successCallback.onSuccess).not.toHaveBeenCalled();
+      httpBackend.flush();
+    });
+  });
+
+  describe('function createRecurringGiftWithBankAcct', function() {
+    var postData;
+    var startDate = moment({year: 2015, month: 12, day: 31}).toDate();
+    beforeEach(function() {
+      postData = {
+        stripe_token_id: 'tok_test',
+        amount: 100,
+        program: 1,
+        interval: 'week',
+        start_date: startDate
+      };
+      GiveTransferService.amount = 100;
+      GiveTransferService.program = { ProgramId: 1 };
+      GiveTransferService.givingType = 'week';
+      GiveTransferService.recurringStartDate = startDate;
+    });
+
+    it('should call createToken and create a new recurring gift using the token', function() {
+      spyOn(stripe.bankAccount, 'createToken').and.callFake(function(donorInfo, callback) {
+        callback(200, {id: 'tok_test'});
+      });
+
+      httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence', postData)
+        .respond({
+          // TODO: Need to place proper response here
+          dummy: ''
+        });
+
+      var errorCallback = jasmine.createSpyObj('errorCallback', ['onError']);
+      var test = sut.createRecurringGiftWithBankAcct(bankAccount)
+        .then(function(recurringGift) {
+          expect(recurringGift).toBeDefined();
+
+          // expect(recurringGift.id).toEqual('12345');
+          // expect(recurringGift.stripe_customer_id).toEqual('cust_test');
+        }, errorCallback.onError);
+      expect(stripe.bankAccount.createToken).toHaveBeenCalledWith(bankAccount, jasmine.any(Function));
+      expect(errorCallback.onError).not.toHaveBeenCalled();
+      httpBackend.flush();
+    });
+
+    it('should not create a recurring gift if createToken fails', function() {
+      spyOn(stripe.bankAccount, 'createToken').and.callFake(function(donorInfo, callback) {
+        callback(500, { error: { type: 'junk', } });
+      });
+
+      var successCallback = jasmine.createSpyObj('successCallback', ['onSuccess']);
+      sut.createRecurringGiftWithBankAcct(bankAccount)
+        .then(successCallback.onSuccess,
+        function(error) {
+          expect(error).toBeDefined();
+          expect(error.type).toEqual('junk');
+          expect(GiveTransferService.processing).toEqual(false);
+        });
+
+      expect(stripe.bankAccount.createToken).toHaveBeenCalledWith(bankAccount, jasmine.any(Function));
+      expect(successCallback.onSuccess).not.toHaveBeenCalled();
+    });
+
+    it('should return error if there is problem calling donor service', function() {
+      spyOn(stripe.bankAccount, 'createToken').and.callFake(function(donorInfo, callback) {
+        callback(200, {id: 'tok_test'});
+      });
+
+      httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence', postData)
+        .respond(400, { error: { message: 'Token not found' } });
+
+      var successCallback = jasmine.createSpyObj('successCallback', ['onSuccess']);
+      sut.createRecurringGiftWithBankAcct(bankAccount)
+        .then(successCallback.onSuccess,
+        function(error) {
+          expect(error).toBeDefined();
+          expect(error.message).toEqual('Token not found');
+        });
+
+      expect(stripe.bankAccount.createToken).toHaveBeenCalledWith(bankAccount, jasmine.any(Function));
+      expect(successCallback.onSuccess).not.toHaveBeenCalled();
+      httpBackend.flush();
+    });
+  });
+
   describe('function donateToProgram', function() {
     it('should successfully create a donation', function() {
 
@@ -310,7 +474,7 @@ describe('PaymentService', function() {
         expect(confirmation.amount).toEqual('1234');
       });
 
-    httpBackend.flush();
+      httpBackend.flush();
     });
   });
 
