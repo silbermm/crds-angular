@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Web.Http;
+using System.Web.Mvc;
 using crds_angular.Filters;
 
 namespace crds_angular
@@ -8,7 +9,7 @@ namespace crds_angular
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
-            filters.Add(new UnhandledExceptionFilter());
+            GlobalConfiguration.Configuration.Filters.Add(new UnhandledExceptionFilter());
         }
     }
 }

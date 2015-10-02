@@ -3,7 +3,7 @@ using log4net;
 
 namespace crds_angular.Filters
 {
-    public class UnhandledExceptionFilter : ExceptionFilterAttribute, IExceptionFilter
+    public class UnhandledExceptionFilter : ExceptionFilterAttribute
     {
         public override void OnException(HttpActionExecutedContext context)
         {
@@ -13,7 +13,7 @@ namespace crds_angular.Filters
             if (logger.IsDebugEnabled)
             {
                 var requestString = context.Request.Content == null ? string.Empty : context.Request.Content.ReadAsStringAsync().Result;
-                var responseString = context.Response.Content == null ? string.Empty : context.Response.Content.ReadAsStringAsync().Result;
+                var responseString = context.Response == null || context.Response.Content == null ? string.Empty : context.Response.Content.ReadAsStringAsync().Result;
                 logger.Debug(string.Format("Request  -- uri: {0}, message: {1}", context.Request.RequestUri, requestString));
                 logger.Debug(string.Format("Response -- message: {0}", responseString));
             }
