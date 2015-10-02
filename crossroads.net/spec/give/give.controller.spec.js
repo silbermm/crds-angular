@@ -132,6 +132,7 @@ describe('GiveController', function() {
           $scope: $scope,
           $state: $state,
           $timeout: $timeout,
+          giveType: 'one_time',
           Session: Session,
           programList:programList,
           GiveTransferService: GiveTransferService,
