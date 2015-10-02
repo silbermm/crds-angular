@@ -270,6 +270,7 @@
     <Compile Include="Controllers\API\StripeEventController.cs" />
     <Compile Include="Controllers\API\TripApplicationController.cs" />
     <Compile Include="Controllers\API\TripController.cs" />
+    <Compile Include="Filters\UnhandledExceptionFilter.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeInvoice.cs" />
     <Compile Include="Models\Crossroads\Stewardship\RecurringGiftDto.cs" />
     <Compile Include="Models\Crossroads\Stewardship\UpdateDonorDTO.cs" />
