@@ -321,7 +321,7 @@ namespace crds_angular.Controllers.API
         /// <returns>The MinistryPlatform recurring gift id</returns>
         [RequiresAuthorization]
         [ResponseType(typeof(int))]
-        [Route("api/donor/createrecurrence")]
+        [Route("api/donor/recurrence")]
         public IHttpActionResult CreateRecurringGift([FromBody] RecurringGiftDto recurringGiftDto)
         {
             return (Authorized(token =>
