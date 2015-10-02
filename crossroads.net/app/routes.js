@@ -33,6 +33,9 @@
             }).$promise.then(
               function(systemPage) {
                 if(systemPage.systemPages[0]){
+                  if(!$state.next.data){
+                    $state.next.data = {};
+                  }
                   $state.next.data.meta = systemPage.systemPages[0];
                 }
               });
@@ -529,7 +532,8 @@
                   description: metaDescription,
                   card: ContentPageService.page.card,
                   type: ContentPageService.page.type,
-                  image: ContentPageService.page.image
+                  image: ContentPageService.page.image,
+                  statusCode: ContentPageService.page.errorCode
                 };
 
                 switch (ContentPageService.page.pageType){

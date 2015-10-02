@@ -193,6 +193,7 @@
     <Compile Include="Interfaces\IJobExecutor.cs" />
     <Compile Include="Models\JobDetails.cs" />
     <Compile Include="Processors\CheckScannerBatchProcessor.cs" />
+    <Compile Include="Processors\SignupToServeProcessor.cs" />
     <Compile Include="Processors\StripeEventProcessor.cs" />
     <Compile Include="Processors\TripEventProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -202,7 +203,8 @@
     <Content Include="packages.config" />
     <Content Include="Unity.config">
       <SubType>Designer</SubType>
-    </Content> <Content Include="MinistryPlatform.config">
+    </Content>
+    <Content Include="MinistryPlatform.config">
       <SubType>Designer</SubType>
       <TransformOnBuild>true</TransformOnBuild>
     </Content>
