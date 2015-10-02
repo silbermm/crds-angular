@@ -3,7 +3,6 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
-using System.Web.Http.Results;
 using crds_angular.Exceptions;
 using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads;
@@ -318,9 +317,9 @@ namespace crds_angular.Controllers.API
         /// Create a recurring gift for the authenticated user.
         /// </summary>
         /// <param name="recurringGiftDto">The data required to setup the recurring gift in MinistryPlatform and Stripe.</param>
-        /// <returns>The MinistryPlatform recurring gift id</returns>
+        /// <returns>The input RecurringGiftDto, with donor email address and recurring gift ID from MinistryPlatform populated</returns>
         [RequiresAuthorization]
-        [ResponseType(typeof(int))]
+        [ResponseType(typeof(RecurringGiftDto))]
         [Route("api/donor/recurrence")]
         public IHttpActionResult CreateRecurringGift([FromBody] RecurringGiftDto recurringGiftDto)
         {
@@ -331,7 +330,10 @@ namespace crds_angular.Controllers.API
                     var contactDonor = _donorService.GetContactDonorForAuthenticatedUser(token);
                     var donor = _donorService.CreateOrUpdateContactDonor(contactDonor, string.Empty, string.Empty, recurringGiftDto.StripeTokenId, DateTime.Now);
                     var recurringGift = _donorService.CreateRecurringGift(recurringGiftDto, donor);
-                    return Ok(recurringGift);
+
+                    recurringGiftDto.EmailAddress = contactDonor.Email;
+                    recurringGiftDto.RecurringGiftId = recurringGift;
+                    return Ok(recurringGiftDto);
                 }
                 catch (PaymentProcessorException stripeException)
                 {

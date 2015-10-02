@@ -39,5 +39,15 @@ namespace crds_angular.Models.Crossroads.Stewardship
         [JsonProperty(PropertyName = "start_date")]
         [Required]
         public DateTime StartDate { get; set; }
+        /// <summary>
+        /// The email address of the donor.  This is not required or used on input, but will be returned on output.
+        /// </summary>
+        [JsonProperty(PropertyName = "email")]
+        public string EmailAddress { get; set; }
+        /// <summary>
+        /// The id of the recurring gift created in MinistryPlatform.  This is not required or used on input, but will be returned on output.
+        /// </summary>
+        [JsonProperty(PropertyName = "recurring_gift_id")]
+        public int RecurringGiftId { get; set; }
     }
 }
