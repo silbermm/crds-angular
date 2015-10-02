@@ -5,26 +5,7 @@
   </div><!--/col-sm-12-->
 </div> <!--/row-->
 
-<a href="live" title="Watch Live Services Online" >
-<div class="row">
-  <div class="col-sm-12">
-    <div class="streaming-banner">
-      <div class="row">
-        <div class="col-sm-8 col-xs-12">
-          <h2><span>Watch Live </span><span>Services Online</span></h2>
-          <h4>
-            <span>SAT 4:30PM &amp; 6:15PM</span>
-            <span>SUN 8:30AM, 10:05AM & 11:55AM</span>
-          </h4>
-        </div>
-        <div class="col-sm-4 hidden-xs">
-          <img class="img-responsive imgix-fluid" data-src="//crossroads-media.imgix.net/images/streaming-banner-devices.png" >
-        </div>
-      </div>
-  </div><!--/steaming-banner-->
-  </div>
-</div><!--/row-->
-</a>
+<div ng-bind-html="$root.MESSAGES.streaming_banner.content | html"></div>
 
 
 <h2 class="push-bottom">

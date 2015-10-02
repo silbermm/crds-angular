@@ -33,6 +33,9 @@
             }).$promise.then(
               function(systemPage) {
                 if(systemPage.systemPages[0]){
+                  if(!$state.next.data){
+                    $state.next.data = {};
+                  }
                   $state.next.data.meta = systemPage.systemPages[0];
                 }
               });
@@ -66,7 +69,7 @@
       })
       .state('giving_history', {
         parent: 'noSideBar',
-        url: '/giving_history',
+        url: '/givinghistory',
         templateUrl: 'giving_history/history.html',
         controller: 'GivingHistoryController as giving_history_controller',
         data: {
@@ -155,12 +158,6 @@
               loggedin: crds_utilities.checkLoggedin
             },
           },
-          'personal@profile': {
-            templateUrl: 'personal/profile_personal.html',
-            data: {
-              isProtected: true
-            },
-          },
           'account@profile': {
             templateUrl: 'profile/profile_account.html',
             data: {
@@ -170,6 +167,13 @@
           'skills@profile': {
             controller: 'ProfileSkillsController as profile',
             templateUrl: 'skills/profile_skills.html',
+            data: {
+              isProtected: true
+            }
+          },
+          'giving@profile': {
+            controller: 'ProfileGivingController as giving_profile_controller',
+            templateUrl: 'giving/profile_giving.html',
             data: {
               isProtected: true
             }
@@ -453,6 +457,25 @@
           }
         }
       })
+      .state('tools.adminGivingHistoryTool', {
+        // This is a "launch" page for the tool, it will check access, etc, then forward
+        // on to the actual page with the history.
+        url: '/adminGivingHistoryTool',
+        controller: 'AdminGivingHistoryController as AdminGivingHistory',
+        templateUrl: 'admin_giving_history/adminGivingHistoryTool.html'
+      })
+      .state('tools.adminGivingHistory', {
+        url: '/adminGivingHistory',
+        controller: 'GivingHistoryController as admin_giving_history_controller',
+        templateUrl: 'admin_giving_history/adminGivingHistory.html',
+        data: {
+          isProtected: true,
+          meta: {
+            title: 'Giving History - Admin View',
+            description: ''
+          }
+        }
+      })
       .state('tools.gpExport', {
         url: '/gpExport',
         controller: 'GPExportController as gpExport',
@@ -507,7 +530,10 @@
                 $rootScope.meta = {
                   title: ContentPageService.page.title,
                   description: metaDescription,
-                  extraMeta: ContentPageService.page.extraMeta
+                  card: ContentPageService.page.card,
+                  type: ContentPageService.page.type,
+                  image: ContentPageService.page.image,
+                  statusCode: ContentPageService.page.errorCode
                 };
 
                 switch (ContentPageService.page.pageType){

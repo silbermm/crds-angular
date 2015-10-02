@@ -74,6 +74,7 @@
     <Compile Include="Household.cs" />
     <Compile Include="HouseholdMember.cs" />
     <Compile Include="MessageTemplate.cs" />
+    <Compile Include="MinistryPlatformUser.cs" />
     <Compile Include="MyContact.cs" />
     <Compile Include="ContactRelationship.cs" />
     <Compile Include="Event.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="Response.cs" />
     <Compile Include="GPExportDatum.cs" />
     <Compile Include="TripDistribution.cs" />
+    <Compile Include="TripDocuments.cs" />
     <Compile Include="TripFormResponse.cs" />
     <Compile Include="TripParticipant.cs" />
   </ItemGroup>

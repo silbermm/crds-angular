@@ -89,6 +89,7 @@
     <Compile Include="Services\ConfigurationWrapper.cs" />
     <Compile Include="Services\HtmlElement.cs" />
     <Compile Include="Interfaces\ICryptoProvider.cs" />
+    <Compile Include="Services\ImpersonatedUserGuid.cs" />
     <Compile Include="Services\TripleDesSymmetricKeyCryptoProvider.cs" />
   </ItemGroup>
   <ItemGroup>

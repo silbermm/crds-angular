@@ -7,8 +7,8 @@ namespace MinistryPlatform.Translation.Services
 {
     public class BaseService
     {
-        private readonly IAuthenticationService _authenticationService;
-        private readonly IConfigurationWrapper _configurationWrapper;
+        protected readonly IAuthenticationService _authenticationService;
+        protected readonly IConfigurationWrapper _configurationWrapper;
 
         public BaseService(IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
         {

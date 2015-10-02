@@ -21,6 +21,7 @@ angular.module('crossroads').controller('ModalDemoCtrl', function ($scope, $moda
       $log.info('Modal dismissed at: ' + new Date());
     });
   };
+  
   $scope.openEditGiftModal = function (size) {
 
     var modalInstance = $modal.open({

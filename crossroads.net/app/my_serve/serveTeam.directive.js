@@ -414,7 +414,7 @@
         rsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
         ServeOpportunities.SaveRsvp.save(rsvp, function(updatedEvents) {
           if (rsvp.signUp) {
-            $rootScope.$emit('notify', $rootScope.MESSAGES.serveSignupSuccess);
+            $rootScope.$emit('notify', $rootScope.MESSAGES.SU2S_Saving_Message);
           } else {
             var saveMessage = 'You have indicated that [participant] is not available for [team] on [date]';
             saveMessage = saveMessage.replace('[participant]', scope.currentActiveTab);

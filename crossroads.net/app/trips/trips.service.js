@@ -7,6 +7,7 @@
     return {
       Search: $resource(__API_ENDPOINT__ + 'api/trip/search'),
       MyTrips: $resource(__API_ENDPOINT__ + 'api/trip/mytrips'),
+      Email: $resource(__API_ENDPOINT__ + 'api/donation/message'),
       TripFormResponses: $resource(__API_ENDPOINT__ + 'api/trip/form-responses/:selectionId/:selectionCount/:recordId'),
       SaveParticipants: $resource(__API_ENDPOINT__ + 'api/trip/participants'),
       TripParticipant: $resource(__API_ENDPOINT__ + 'api/trip/participant/:tripParticipantId'),

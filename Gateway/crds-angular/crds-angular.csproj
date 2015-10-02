@@ -33,6 +33,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\crds-angular.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -278,11 +279,13 @@
     <Compile Include="Controllers\API\ProfileController.cs" />
     <Compile Include="Controllers\API\SkillController.cs" />
     <Compile Include="Controllers\API\VolunteerApplicationController.cs" />
+    <Compile Include="Controllers\API\MinistryPlatformToolsController.cs" />
     <Compile Include="DataAccess\EzScanCheckScannerDao.cs" />
     <Compile Include="DataAccess\Interfaces\ICheckScannerDao.cs" />
     <Compile Include="Exceptions\Models\ApiErrorDto.cs" />
     <Compile Include="Enum\BadgeTypeEnum.cs" />
     <Compile Include="Exceptions\PaymentProcessorException.cs" />
+    <Compile Include="Exceptions\UserImpersonationException.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -315,8 +318,10 @@
     <Compile Include="Models\Crossroads\ServingRSVP.cs" />
     <Compile Include="Models\Crossroads\Skill.cs" />
     <Compile Include="Models\Crossroads\Event.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\CheckAccount.cs" />
     <Compile Include="Models\Crossroads\Stewardship\CheckScannerBatch.cs" />
     <Compile Include="Models\Crossroads\Stewardship\CheckScannerCheck.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\EncryptValue.cs" />
     <Compile Include="Models\Crossroads\Stewardship\DepositDTO.cs" />
     <Compile Include="Models\Crossroads\Stewardship\DonationDistributionDTO.cs" />
     <Compile Include="Models\Crossroads\Stewardship\DonationsDTO.cs" />
@@ -324,6 +329,7 @@
     <Compile Include="Models\Crossroads\Stewardship\DonationYearsDTO.cs" />
     <Compile Include="Models\Crossroads\Stewardship\EZScanDonorDetails.cs" />
     <Compile Include="Models\Crossroads\Stewardship\GPExportDatumDTO.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\MessageToDonorDTO.cs" />
     <Compile Include="Models\Crossroads\Stewardship\PledgeCampaign.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeBalanceTransaction.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeBankAccount.cs" />
@@ -351,6 +357,7 @@
     <Compile Include="Models\Crossroads\Trip\TripApplicationDto.cs" />
     <Compile Include="Models\Crossroads\Trip\TripApplicationResponseDto.cs" />
     <Compile Include="Models\Crossroads\Trip\TripCampaignDto.cs" />
+    <Compile Include="Models\Crossroads\Trip\TripDocuments.cs" />
     <Compile Include="Models\Crossroads\Trip\TripFormResponseDto.cs" />
     <Compile Include="Models\Crossroads\Trip\TripGift.cs" />
     <Compile Include="Models\Crossroads\Trip\TripGroupDto.cs" />
@@ -400,6 +407,7 @@
     <Compile Include="Services\Interfaces\IPaymentService.cs" />
     <Compile Include="Services\Interfaces\IStripeEventService.cs" />
     <Compile Include="Services\Interfaces\ITripService.cs" />
+    <Compile Include="Services\Interfaces\IUserImpersonationService.cs" />
     <Compile Include="Services\Interfaces\IVolunteerApplicationService.cs" />
     <Compile Include="Services\MinistryPlatformBaseService.cs" />
     <Compile Include="Services\PersonService.cs" />
@@ -410,6 +418,7 @@
     <Compile Include="Services\StripeService.cs" />
     <Compile Include="Services\TranslationService.cs" />
     <Compile Include="Services\TripService.cs" />
+    <Compile Include="Services\UserImpersonationService.cs" />
     <Compile Include="Services\VolunteerApplicationService.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Util\CSV.cs" />

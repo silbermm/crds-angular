@@ -109,7 +109,6 @@ describe('Signup To Serve Tool', function(){
     $window = _$window_;
     MPTools = _MPTools_;
     $httpBackend = $injector.get('$httpBackend');
-    $httpBackend.whenGET(/SiteConfig*/).respond('');
     mockSu2sResource = $injector.get('Su2sData');
     mockServeResource = $injector.get('ServeOpportunities');
   }));

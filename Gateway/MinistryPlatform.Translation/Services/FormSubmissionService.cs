@@ -85,7 +85,8 @@ namespace MinistryPlatform.Translation.Services
                     response.FundraisingGoal = SafeDecimal(reader,"Fundraising_Goal");
                     response.ParticipantId = reader.GetInt32(reader.GetOrdinal("Participant_ID"));
                     response.PledgeCampaignId = SafeInt32(reader, "Pledge_Campaign_ID");
-                    response.EventId = SafeInt32(reader, "Event_ID"); 
+                    response.EventId = SafeInt32(reader, "Event_ID");
+                    response.DestinationId = reader.GetInt32(reader.GetOrdinal("Destination_ID"));
 
                     responses.Add(response);
                 }
@@ -117,7 +118,7 @@ namespace MinistryPlatform.Translation.Services
 
         private static IDbCommand CreateTripFormResponsesSqlCommandWithRecordId(int recordId)
         {
-            const string query = @"SELECT fr.Contact_ID, fr.Pledge_Campaign_ID, pc.Event_ID, pc.Fundraising_Goal, p.Participant_ID, d.Donor_ID
+            const string query = @"SELECT fr.Contact_ID, fr.Pledge_Campaign_ID, pc.Event_ID, pc.Fundraising_Goal, p.Participant_ID, d.Donor_ID, pc.Destination_ID
                                   FROM [MinistryPlatform].[dbo].[Form_Responses] fr
                                   INNER JOIN [MinistryPlatform].[dbo].[Participants] p on fr.Contact_ID = p.Contact_ID
                                   LEFT OUTER JOIN [MinistryPlatform].[dbo].[Pledge_Campaigns] pc on fr.Pledge_Campaign_ID = pc.Pledge_Campaign_ID
@@ -134,7 +135,7 @@ namespace MinistryPlatform.Translation.Services
 
         private static IDbCommand CreateTripFormResponsesSqlCommandWithSelectionId(int selectionId)
         {
-            const string query = @"SELECT fr.Contact_ID, fr.Pledge_Campaign_ID, pc.Event_ID, pc.Fundraising_Goal, p.Participant_ID, d.Donor_ID
+            const string query = @"SELECT fr.Contact_ID, fr.Pledge_Campaign_ID, pc.Event_ID, pc.Fundraising_Goal, p.Participant_ID, d.Donor_ID, pc.Destination_ID 
                                   FROM [MinistryPlatform].[dbo].[dp_Selected_Records] sr
                                   INNER JOIN [MinistryPlatform].[dbo].[Form_Responses] fr on sr.Record_ID = fr.Form_Response_ID
                                   INNER JOIN [MinistryPlatform].[dbo].[Participants] p on fr.Contact_ID = p.Contact_ID

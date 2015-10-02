@@ -1,20 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.Description;
+using crds_angular.Exceptions;
 using crds_angular.Exceptions.Models;
 using crds_angular.Models;
-using crds_angular.Models.Crossroads;
-using crds_angular.Models.Crossroads.Serve;
-using crds_angular.Models.MP;
+using crds_angular.Models.Json;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
 using log4net;
-using MinistryPlatform.Translation.Services;
-using MinistryPlatform.Translation.Services.Interfaces;
 using IPersonService = crds_angular.Services.Interfaces.IPersonService;
+using IDonorService = crds_angular.Services.Interfaces.IDonorService;
 
 namespace crds_angular.Controllers.API
 {
@@ -23,25 +22,39 @@ namespace crds_angular.Controllers.API
         private readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly IPersonService _personService;
         private readonly IServeService _serveService;
+        private readonly IDonorService _donorService;
+        private readonly IUserImpersonationService _impersonationService;
 
-        public ProfileController(IPersonService personService, IServeService serveService)
+        public ProfileController(IPersonService personService, IServeService serveService, IUserImpersonationService impersonationService, IDonorService donorService)
         {
-            this._personService = personService;
-            this._serveService = serveService;
+            _personService = personService;
+            _serveService = serveService;
+            _impersonationService = impersonationService;
+            _donorService = donorService;
         }
 
         [ResponseType(typeof (Person))]
         [Route("api/profile")]
-        public IHttpActionResult GetProfile()
+        public IHttpActionResult GetProfile([FromUri(Name = "impersonateDonorId")]int? impersonateDonorId = null)
         {
             return Authorized(token =>
             {
-                var person = _personService.GetLoggedInUserProfile(token);
-                if (person == null)
+                var impersonateUserId = impersonateDonorId == null ? string.Empty : _donorService.GetContactDonorForDonorId(impersonateDonorId.Value).Email;
+                try
                 {
-                    return Unauthorized();
+                    var person = string.IsNullOrWhiteSpace(impersonateUserId)
+                        ? _personService.GetLoggedInUserProfile(token)
+                        : _impersonationService.WithImpersonation(token, impersonateUserId, () => _personService.GetLoggedInUserProfile(token));
+                    if (person == null)
+                    {
+                        return Unauthorized();
+                    }
+                    return Ok(person);
                 }
-                return this.Ok(person);
+                catch (UserImpersonationException e)
+                {
+                    return (e.GetRestHttpActionResult());
+                }
             });
         }
 

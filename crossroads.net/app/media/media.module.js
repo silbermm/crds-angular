@@ -14,7 +14,6 @@ require('./templates/viewAllMusic.html');
 require('./templates/viewAllSeries.html');
 require('./templates/viewAllVideos.html');
 require('./templates/seriesSingle.html');
-require('./templates/series-single-lo-res.html');
 require('./templates/mediaSingle.html');
 require('./templates/subscribeButtonMessages.html');
 require('./templates/subscribeButtonMusic.html');

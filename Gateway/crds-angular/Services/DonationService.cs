@@ -85,10 +85,10 @@ namespace crds_angular.Services
             return (Mapper.Map<DonationBatch, DonationBatchDTO>(_mpDonationService.GetDonationBatch(batchId)));
         }
 
-        public DonationsDTO GetDonationsForAuthenticatedUser(string userToken, string donationYear = null, bool softCredit = false)
+        public DonationsDTO GetDonationsForAuthenticatedUser(string userToken, string donationYear = null, int? limit = null, bool? softCredit = null)
         {
             var donations = _mpDonorService.GetDonationsForAuthenticatedUser(userToken, softCredit, donationYear);
-            return (PostProcessDonations(donations, softCredit));
+            return (PostProcessDonations(donations, limit));
         }
 
         public DonationYearsDTO GetDonationYearsForAuthenticatedUser(string userToken)
@@ -124,10 +124,10 @@ namespace crds_angular.Services
             var donorIds = GetDonorIdsForDonor(donor);
 
             var donations = softCredit ? _mpDonorService.GetSoftCreditDonations(donorIds, donationYear) : _mpDonorService.GetDonations(donorIds, donationYear);
-            return (PostProcessDonations(donations, softCredit));
+            return (PostProcessDonations(donations));
         }
 
-        private DonationsDTO PostProcessDonations(List<Donation> donations, bool softCredit)
+        private DonationsDTO PostProcessDonations(List<Donation> donations, int? limit = null)
         {
             if (donations == null || donations.Count == 0)
             {
@@ -135,21 +135,16 @@ namespace crds_angular.Services
             }
 
             var response = donations.Select(Mapper.Map<DonationDTO>).ToList();
-            NormalizeDonations(response, softCredit);
-
-            var donationsResponse = new DonationsDTO();
-            donationsResponse.Donations.AddRange(response.OrderBy(donation => donation.DonationDate).ToList());
-            donationsResponse.BeginningDonationDate = donationsResponse.Donations.Last().DonationDate;
-            donationsResponse.EndingDonationDate = donationsResponse.Donations.First().DonationDate;
+            var donationsResponse = NormalizeDonations(response, limit);
 
             return (donationsResponse);
         }
 
-        private void NormalizeDonations(IEnumerable<DonationDTO> donations, bool softCredit)
+        private DonationsDTO NormalizeDonations(IList<DonationDTO> donations, int? limit = null)
         {
             foreach (var donation in donations)
             {
-                if (!softCredit)
+                if (donation.Source.SourceType != PaymentType.SoftCredit)
                 {
                     var charge = GetStripeCharge(donation);
                     SetDonationSource(donation, charge);
@@ -157,6 +152,18 @@ namespace crds_angular.Services
 
                 ConfirmRefundCorrect(donation);
             }
+
+            donations = OrderDonations(donations, limit);
+            donations = LimitDonations(donations, limit);
+
+
+            var donationsResponse = new DonationsDTO();
+
+            donationsResponse.Donations.AddRange(donations);
+            donationsResponse.BeginningDonationDate = donationsResponse.Donations.Last().DonationDate;
+            donationsResponse.EndingDonationDate = donationsResponse.Donations.First().DonationDate;
+
+            return donationsResponse;
         }
 
         private StripeCharge GetStripeCharge(DonationDTO donation)
@@ -232,6 +239,51 @@ namespace crds_angular.Services
                 dist.Amount *= -1;
                 return (true);
             });
+        }
+
+        private IList<DonationDTO> OrderDonations(IList<DonationDTO> donations, int? limit = null)
+        {
+            return (limit == null)
+                ? donations.OrderBy(donation => donation.DonationDate).ToList()
+                : donations.OrderByDescending(donation => donation.DonationDate).ToList();
+        }
+
+        private IList<DonationDTO> LimitDonations(IList<DonationDTO> donations, int? limit = null)
+        {
+            //limit is on the donation & distribution level
+            if (limit != null)
+            {
+                var numDistributions = 0;
+                var limitedDonations = new List<DonationDTO>();
+
+                foreach (var donation in donations)
+                {
+                    numDistributions += donation.Distributions.Count;
+
+                    // There are too many distributions so some need to be removed
+                    if (numDistributions > limit)
+                    {
+                        var numToRemove = numDistributions - (int)limit;
+                        var removeStartIndex = donation.Distributions.Count - numToRemove;
+
+                        donation.Distributions.RemoveRange(removeStartIndex, numToRemove);
+                    }
+
+                    limitedDonations.Add(donation);
+                    
+                    // if we have hit the limit break the loop
+                    if (numDistributions >= limit)
+                    {
+                        break;
+                    }
+            
+                }
+
+
+                donations = limitedDonations;
+            }
+
+            return donations;
         }
 
         private DonationYearsDTO GetDonationYearsForDonor(ContactDonor donor)
@@ -362,6 +414,11 @@ namespace crds_angular.Services
             }
 
             return deposits;
+        }
+
+        public void SendMessageToDonor(int donorId, int donationDistributionId, int fromContactId, string body, string tripName)
+        {
+            _mpDonationService.SendMessageToDonor(donorId, donationDistributionId, fromContactId, body, tripName);
         }
 
         public string GPExportFileName(int depositId)

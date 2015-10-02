@@ -89,6 +89,8 @@
     <Compile Include="Extensions\DictionaryExtensionTests.cs" />
     <Compile Include="LookupTest.cs" />
     <Compile Include="Services\ContactRelationshipServiceTest.cs" />
+    <Compile Include="Services\EventParticipantServiceTest.cs" />
+    <Compile Include="Services\DestinationServiceTest.cs" />
     <Compile Include="Services\DonationServiceTest.cs" />
     <Compile Include="Services\DonorServiceTest.cs" />
     <Compile Include="Services\ContactServiceTest.cs" />
@@ -99,6 +101,7 @@
     <Compile Include="Services\ParticipantServiceTest.cs" />
     <Compile Include="Services\PledgeCampaignServiceTest.cs" />
     <Compile Include="Services\ProgramServiceTest.cs" />
+    <Compile Include="Services\UserServiceTest.cs" />
     <Compile Include="TranslationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

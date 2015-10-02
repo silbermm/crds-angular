@@ -50,12 +50,19 @@ namespace crds_angular.Services
             return (_mpDonorService.GetContactDonor(contactId));
         }
 
-        public ContactDonor GetContactDonorForDonorAccount(string accountNumber, string routingNumber)
+        public ContactDonor GetContactDonorForDonorId(int donorId)
         {
-            return (_mpDonorService.GetContactDonorForDonorAccount(accountNumber, routingNumber));
+            return (_mpDonorService.GetEmailViaDonorId(donorId));
         }
 
-        public ContactDetails GetContactDonorForCheckAccount(string encryptedKey)
+        public ContactDonor GetContactDonorForDonorAccount(string accountNumber, string routingNumber)
+        {
+            var acct = _mpDonorService.DecryptCheckValue(accountNumber);
+            var rtn = _mpDonorService.DecryptCheckValue(routingNumber);
+            return (_mpDonorService.GetContactDonorForDonorAccount(acct, rtn));
+        }
+
+        public ContactDonor GetContactDonorForCheckAccount(string encryptedKey)
         {
             return (_mpDonorService.GetContactDonorForCheckAccount(encryptedKey));
         }
@@ -102,7 +109,7 @@ namespace crds_angular.Services
                 stripeCustomer = _paymentService.CreateCustomer(paymentProcessorToken);
 
                 var donorAccount = contactDonor != null ? contactDonor.Account : null;
-                if (contactDonor != null)
+                if (donorAccount != null)
                 {
                     donorAccount.ProcessorAccountId = stripeCustomer.sources.data[0].id;
                 }
@@ -149,6 +156,11 @@ namespace crds_angular.Services
             }
 
             return (contactDonorResponse);
+        }
+
+        public string DecryptValues(string value)
+        {
+            return (_mpDonorService.DecryptCheckValue(value));
         }
 
     }

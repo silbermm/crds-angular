@@ -11,8 +11,12 @@ namespace crds_angular.Services.Interfaces
 
         ContactDonor GetContactDonorForDonorAccount(string accountNumber, string routingNumber);
 
-        ContactDetails GetContactDonorForCheckAccount(string encryptedKey);
+        ContactDonor GetContactDonorForDonorId(int donorId);
+            
+        ContactDonor GetContactDonorForCheckAccount(string encryptedKey);
 
         ContactDonor CreateOrUpdateContactDonor(ContactDonor existingDonor,  string encryptedKey, string emailAddress, string paymentProcessorToken, DateTime setupDate);
+
+        string DecryptValues(string value);
     }
 }
