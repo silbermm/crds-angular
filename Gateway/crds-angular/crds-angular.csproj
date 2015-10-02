@@ -270,7 +270,10 @@
     <Compile Include="Controllers\API\StripeEventController.cs" />
     <Compile Include="Controllers\API\TripApplicationController.cs" />
     <Compile Include="Controllers\API\TripController.cs" />
-    <Compile Include="Controllers\API\UpdateDonorDTO.cs" />
+    <Compile Include="Filters\UnhandledExceptionFilter.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\StripeInvoice.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\RecurringGiftDto.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\UpdateDonorDTO.cs" />
     <Compile Include="Controllers\API\RoleController.cs" />
     <Compile Include="Controllers\API\UserController.cs" />
     <Compile Include="Controllers\API\LoginController.cs" />
@@ -344,8 +347,10 @@
     <Compile Include="Models\Crossroads\Stewardship\StripeCustomer.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeEvent.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeObject.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\StripePlan.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeRefund.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeSource.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\StripeSubscription.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeToken.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeTransfer.cs" />
     <Compile Include="Models\Crossroads\Trip\FamilyMemberTripDto.cs" />
