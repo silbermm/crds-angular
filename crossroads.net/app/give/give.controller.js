@@ -5,6 +5,7 @@
   GiveCtrl.$inject = ['$rootScope',
                       '$state',
                       '$timeout',
+                      'giveType',
                       'Session',
                       'programList',
                       'GiveTransferService',
@@ -21,6 +22,7 @@
   function GiveCtrl($rootScope,
     $state,
     $timeout,
+    giveType,
     Session,
     programList,
     GiveTransferService,
@@ -55,6 +57,7 @@
         return;
       }
 
+      vm.dto.givingType = giveType;
       vm.service.getLoggedInUserDonorPaymentInfo(event, toState);
     });
 

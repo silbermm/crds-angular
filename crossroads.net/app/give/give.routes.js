@@ -30,6 +30,14 @@
             return Programs.Programs.query({
               programType: 1
             }).$promise;
+          },
+
+          giveType: function($location) {
+            if (!!$location.search().recurring) {
+              return 'month';
+            } else {
+              return 'one_time';
+            }
           }
         },
         data: {
