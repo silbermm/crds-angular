@@ -81,12 +81,14 @@
         PaymentService.createRecurringGiftWithCard(donationService.card)
           .then(function(recurringGift) {
             // TODO: Put recurringGift in GiveTransferService
+            $state.go(GiveFlow.thankYou);
           }, PaymentService.stripeErrorHandler);
       } else if (GiveTransferService.view === 'bank') {
         donationService.createBank();
         PaymentService.createRecurringGiftWithBankAcct(donationService.bank)
           .then(function(recurringGift) {
             // TODO: Put recurringGift in GiveTransferService
+            $state.go(GiveFlow.thankYou);
           }, PaymentService.stripeErrorHandler);
       }
     }
