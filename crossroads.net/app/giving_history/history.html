@@ -11,7 +11,7 @@
       <p class="visible-print-block col-xs-6 text-right">
         <strong>Period : 01/01/{{giving_history_controller.beginning_donation_date | date:'yyyy'}} - {{giving_history_controller.ending_donation_date | date:'MM/dd/yyyy'}}</strong>
         <br />
-        <small>No goods or services were provided by Crossroads in exchange for the contributions recorded on this statement.</small>
+        <div ng-bind-html="$root.MESSAGES.give_disclaimer.content | html"></div>
       </p>
     </div>
 
@@ -64,9 +64,7 @@
       <div class="other-gifts hidden-print" ng-show="giving_history_controller.soft_credit_donation_history && giving_history_controller.soft_credit_donation_view_ready">
         <hr />
         <h3>Other Gifts</h3>
-        <p>
-          These are donations that will not be included in your Crossroads giving statement. These are typically charity accounts or foundational giving where donations are made through a third party.
-        </p>
+        <div ng-bind-html="$root.MESSAGES.other_gifts.content | html"></div>
 
         <donation-list
           donations-input="giving_history_controller.soft_credit_donations"
@@ -85,7 +83,7 @@
             <img src="//crossroads-media.s3.amazonaws.com/images/logo.svg" alt="crossroads">
           </div>
           <div class="statement-address text-uppercase">
-            <small>3500 Madison Road, Cincinnati, OH 45209 P513.731.7400 F513.731.3978 crossroads.net</small>
+            <small><div ng-bind-html="$root.MESSAGES.single_line_address.content | html"></div></small>
           </div>
         </div>
       </div>
