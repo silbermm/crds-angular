@@ -1,6 +1,53 @@
 USE [MinistryPlatform]
 GO
 
+CREATE TABLE [dbo].[Recurring_Gift_Days](
+	[Day_Of_Week_ID] [int] IDENTITY(1,1) NOT NULL,
+	[Day_Of_Week] [nchar](10) NOT NULL,
+	[Domain_ID] [int] NOT NULL CONSTRAINT [DF_Recurring_Gift_Days_Domain_ID]  DEFAULT ((1)),
+ CONSTRAINT [PK_Recurring_Gift_Days] PRIMARY KEY CLUSTERED
+(
+	[Day_Of_Week_ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET IDENTITY_INSERT [dbo].[Recurring_Gift_Days] ON
+GO
+
+INSERT INTO [dbo].[Recurring_Gift_Days]([Day_Of_Week_ID],[Day_Of_Week],[Domain_ID]) VALUES(1,'Monday',1);
+INSERT INTO [dbo].[Recurring_Gift_Days]([Day_Of_Week_ID],[Day_Of_Week],[Domain_ID]) VALUES(2,'Tuesday',1);
+INSERT INTO [dbo].[Recurring_Gift_Days]([Day_Of_Week_ID],[Day_Of_Week],[Domain_ID]) VALUES(3,'Wednesday',1);
+INSERT INTO [dbo].[Recurring_Gift_Days]([Day_Of_Week_ID],[Day_Of_Week],[Domain_ID]) VALUES(4,'Thursday',1);
+INSERT INTO [dbo].[Recurring_Gift_Days]([Day_Of_Week_ID],[Day_Of_Week],[Domain_ID]) VALUES(5,'Friday',1);
+INSERT INTO [dbo].[Recurring_Gift_Days]([Day_Of_Week_ID],[Day_Of_Week],[Domain_ID]) VALUES(6,'Saturday',1);
+INSERT INTO [dbo].[Recurring_Gift_Days]([Day_Of_Week_ID],[Day_Of_Week],[Domain_ID]) VALUES(7,'Sunday',1);
+
+SET IDENTITY_INSERT [dbo].[Recurring_Gift_Days] OFF
+GO
+
+CREATE TABLE [dbo].[Recurring_Gift_Frequencies](
+	[Frequency_ID] [int] IDENTITY(1,1) NOT NULL,
+	[Frequency] [nchar](10) NOT NULL,
+	[Domain_ID] [int] NOT NULL CONSTRAINT [DF_Recurring_Gift_Frequencies_Domain_ID]  DEFAULT ((1)),
+ CONSTRAINT [PK_Recurring_Gift_Frequencies] PRIMARY KEY CLUSTERED
+(
+	[Frequency_ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET IDENTITY_INSERT [dbo].[Recurring_Gift_Frequencies] ON
+GO
+
+INSERT INTO [dbo].[Recurring_Gift_Frequencies]([Frequency_ID],[Frequency],[Domain_ID]) VALUES(1,'Weekly',1);
+INSERT INTO [dbo].[Recurring_Gift_Frequencies]([Frequency_ID],[Frequency],[Domain_ID]) VALUES(2,'Monthly',1);
+
+SET IDENTITY_INSERT [dbo].[Recurring_Gift_Frequencies] OFF
+GO
+
 CREATE TABLE [dbo].[Recurring_Gifts](
 	[Recurring_Gift_ID] [int] IDENTITY(1,1) NOT NULL,
 	[Donor_ID] [int] NOT NULL,
@@ -75,59 +122,6 @@ GO
 ALTER TABLE [dbo].[Recurring_Gifts] CHECK CONSTRAINT [FK_Recurring_Gifts_Recurring_Gift_Frequencies]
 GO
 
-
-
-
-
-
-
-CREATE TABLE [dbo].[Recurring_Gift_Days](
-	[Day_Of_Week_ID] [int] IDENTITY(1,1) NOT NULL,
-	[Day_Of_Week] [nchar](10) NOT NULL,
-	[Domain_ID] [int] NOT NULL CONSTRAINT [DF_Recurring_Gift_Days_Domain_ID]  DEFAULT ((1)),
- CONSTRAINT [PK_Recurring_Gift_Days] PRIMARY KEY CLUSTERED
-(
-	[Day_Of_Week_ID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
-GO
-
-SET IDENTITY_INSERT [dbo].[Recurring_Gift_Days] ON
-GO
-
-INSERT INTO [dbo].[Recurring_Gift_Days]([Day_Of_Week_ID],[Day_Of_Week],[Domain_ID]) VALUES(1,'Monday',1);
-INSERT INTO [dbo].[Recurring_Gift_Days]([Day_Of_Week_ID],[Day_Of_Week],[Domain_ID]) VALUES(2,'Tuesday',1);
-INSERT INTO [dbo].[Recurring_Gift_Days]([Day_Of_Week_ID],[Day_Of_Week],[Domain_ID]) VALUES(3,'Wednesday',1);
-INSERT INTO [dbo].[Recurring_Gift_Days]([Day_Of_Week_ID],[Day_Of_Week],[Domain_ID]) VALUES(4,'Thursday',1);
-INSERT INTO [dbo].[Recurring_Gift_Days]([Day_Of_Week_ID],[Day_Of_Week],[Domain_ID]) VALUES(5,'Friday',1);
-INSERT INTO [dbo].[Recurring_Gift_Days]([Day_Of_Week_ID],[Day_Of_Week],[Domain_ID]) VALUES(6,'Saturday',1);
-INSERT INTO [dbo].[Recurring_Gift_Days]([Day_Of_Week_ID],[Day_Of_Week],[Domain_ID]) VALUES(7,'Sunday',1);
-
-SET IDENTITY_INSERT [dbo].[Recurring_Gift_Days] OFF
-GO
-
-CREATE TABLE [dbo].[Recurring_Gift_Frequencies](
-	[Frequency_ID] [int] IDENTITY(1,1) NOT NULL,
-	[Frequency] [nchar](10) NOT NULL,
-	[Domain_ID] [int] NOT NULL CONSTRAINT [DF_Recurring_Gift_Frequencies_Domain_ID]  DEFAULT ((1)),
- CONSTRAINT [PK_Recurring_Gift_Frequencies] PRIMARY KEY CLUSTERED
-(
-	[Frequency_ID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
-GO
-
-SET IDENTITY_INSERT [dbo].[Recurring_Gift_Frequencies] ON
-GO
-
-INSERT INTO [dbo].[Recurring_Gift_Frequencies]([Frequency_ID],[Frequency],[Domain_ID]) VALUES(1,'Weekly',1);
-INSERT INTO [dbo].[Recurring_Gift_Frequencies]([Frequency_ID],[Frequency],[Domain_ID]) VALUES(2,'Monthly',1);
-
-SET IDENTITY_INSERT [dbo].[Recurring_Gift_Frequencies] OFF
-GO
-
 SET IDENTITY_INSERT [dbo].[dp_Pages] ON
 GO
 
@@ -159,10 +153,6 @@ GO
 
 SET IDENTITY_INSERT [dbo].[dp_Pages] OFF
 GO
-
-
-
-
 
 SET IDENTITY_INSERT [dbo].[dp_Page_Views] ON
 GO
