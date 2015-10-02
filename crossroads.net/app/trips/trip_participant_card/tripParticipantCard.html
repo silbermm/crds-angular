@@ -1,7 +1,7 @@
 <div>
 	<div class="card-item go-trip-card clearfix row-same-height" data-category="view">
 	  <div class="col-sm-3 col-xs-4 card-img card-dark mobile-hard-left col-xs-height">
-	      <img class="card-img-show imgix-fluid" data-src="{{tripParticipant.participantPhotoUrl}}">
+	      <img class="card-img-show imgix-fluid" data-src="{{tripParticipant.participantPhotoUrl}}" src="{{tripParticipant.participantPhotoUrl}}">
 	  </div><!--/card-img-->
 	  <div class="col-sm-9 col-xs-8 card-content col-xs-height col-top hard-left">
 	      <div class="card-row card-header">
@@ -16,7 +16,7 @@
 	              </p>
 	            </div>
 	            <div class="go-trip-btn col-xs-12 col-sm-2 hard-sides col-sm-height" ng-show="tripParticipant.showGiveButton">
-                <a ui-sref="tripgiving({'eventParticipantId': tripParticipant.trips[0].tripParticipantId})" class="table-btn table-btn-lg btn-standard"><span>Give</span></a>
+                <a ng-click="goToGiving()" class="table-btn table-btn-lg btn-standard"><span>Give</span></a>
 	            </div>
 	        </li>
 	      </ul>

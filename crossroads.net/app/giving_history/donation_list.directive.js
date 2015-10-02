@@ -13,7 +13,8 @@
       scope: {
         donationsInput: '=',
         donationTotalAmount: '=',
-        donationStatementTotalAmount: '='
+        donationStatementTotalAmount: '=',
+        donationDoNotShowLabels: '='
       },
       link: link
     };

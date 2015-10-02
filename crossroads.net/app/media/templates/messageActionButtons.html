@@ -29,6 +29,8 @@
       MP3
     </span>
   </a>
+
+
   <div class="btn-group btn-block" dropdown is-open="singleMedia.isSubscribeOpen">
     <button type="button" class="btn btn-standard-dark btn-labeled btn-sm btn-block dropdown-toggle" dropdown-toggle ng-disabled="disabled">
       Subscribe to Podcast
@@ -36,7 +38,10 @@
         <svg viewBox="0 0 32 32" class="icon icon-podcast"> <use xlink:href="#podcast"></use> </svg>
       </span>
     </button>
-    <ul class="dropdown-menu podcast-dropdown" role="menu" ng-include="'templates/subscribeButtonDropdown.html'">
-    </ul>
+    <ul ng-show="singleMedia.isMessage" class="dropdown-menu podcast-dropdown" role="menu" ng-include="'templates/subscribeButtonDropdown.html'"></ul>
+    <ul ng-show="singleMedia.media.className == 'Video'" class="dropdown-menu podcast-dropdown" role="menu" ng-include="'templates/subscribeButtonVideoDropdown.html'"></ul>
+    <ul ng-show="singleMedia.media.className == 'Music'" class="dropdown-menu podcast-dropdown" role="menu" ng-include="'templates/subscribeButtonMusicDropdown.html'"></ul>
   </div>
+
+
 </div> <!--/message-action-buttons-->

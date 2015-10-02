@@ -18,11 +18,11 @@ namespace crds_angular.Services.Interfaces
         void CreatePaymentProcessorEventError(StripeEvent stripeEvent, StripeEventResponseDTO stripeEventResponse);
         DonationBatchDTO GetDonationBatchByProcessorTransferId(string processorTransferId);
         DonationBatchDTO GetDonationBatch(int batchId);
-        DonationsDTO GetDonationsForAuthenticatedUser(string userToken, string donationYear = null, bool softCredit = false);
+        DonationsDTO GetDonationsForAuthenticatedUser(string userToken, string donationYear = null, int? limit = null, bool? softCredit = null);
         DonationYearsDTO GetDonationYearsForAuthenticatedUser(string userToken);
         DonationsDTO GetDonationsForDonor(int donorId, string donationYear = null, bool softCredit = false);
         DonationYearsDTO GetDonationYearsForDonor(int donorId);
-
+        
             // ReSharper disable once InconsistentNaming
         List<GPExportDatumDTO> GetGPExport(int depositId, string token);
         // ReSharper disable once InconsistentNaming
@@ -31,5 +31,7 @@ namespace crds_angular.Services.Interfaces
         string GPExportFileName(int depositId);
         // ReSharper disable once InconsistentNaming
         List<DepositDTO> GenerateGPExportFileNames(int selectionId, string token);
+
+        void SendMessageToDonor(int donorId, int donationDistributionId, int fromContactId, string body, string tripName);
     }
 }

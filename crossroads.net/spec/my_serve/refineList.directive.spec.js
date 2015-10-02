@@ -90,7 +90,6 @@ describe('Refine List Directive', function() {
     $compile = _$compile_;
     $rootScope = _$rootScope_;
     $httpBackend = _$httpBackend_;
-    $httpBackend.whenGET(/SiteConfig*/).respond('');
     $q = _$q_;
     filterState = _filterState_;
     filterState.addFamilyMember(1670885);

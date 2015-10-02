@@ -3,7 +3,15 @@
 
   module.exports = DonationService;
 
-  DonationService.$inject = ['$rootScope', 'Session', 'GiveTransferService', 'PaymentService', 'GiveFlow', '$state', 'CC_BRAND_CODES'];
+  DonationService.$inject = [
+    '$rootScope',
+    'Session',
+    'GiveTransferService',
+    'PaymentService',
+    'GiveFlow',
+    '$state',
+    'CC_BRAND_CODES'
+  ];
 
   function DonationService($rootScope, Session, GiveTransferService, PaymentService, GiveFlow, $state, CC_BRAND_CODES) {
     var donationService = {
@@ -12,6 +20,7 @@
       createBank: createBank,
       createCard: createCard,
       createDonorAndDonate: createDonorAndDonate,
+      createRecurringGift: createRecurringGift,
       confirmDonation: confirmDonation,
       donate: donate,
       processBankAccountChange: processBankAccountChange,
@@ -36,8 +45,8 @@
       donationService.card = {
         name: GiveTransferService.donor.default_source.name,
         number: GiveTransferService.donor.default_source.cc_number,
-        exp_month: GiveTransferService.donor.default_source.exp_date.substr(0,2),
-        exp_year: GiveTransferService.donor.default_source.exp_date.substr(2,2),
+        exp_month: GiveTransferService.donor.default_source.exp_date.substr(0, 2),
+        exp_year: GiveTransferService.donor.default_source.exp_date.substr(2, 2),
         cvc: GiveTransferService.donor.default_source.cvc,
         address_zip: GiveTransferService.donor.default_source.address_zip
       };
@@ -50,17 +59,40 @@
       } else {
         pgram = GiveTransferService.program;
       }
+
       if (GiveTransferService.view === 'cc') {
         donationService.createCard();
         PaymentService.createDonorWithCard(donationService.card, GiveTransferService.email)
           .then(function(donor) {
-            donationService.donate(pgram);
+            donationService.donate(pgram, GiveTransferService.campaign);
           }, PaymentService.stripeErrorHandler);
       } else if (GiveTransferService.view === 'bank') {
         donationService.createBank();
         PaymentService.createDonorWithBankAcct(donationService.bank, GiveTransferService.email)
           .then(function(donor) {
-            donationService.donate(pgram);
+            donationService.donate(pgram, GiveTransferService.campaign);
+          }, PaymentService.stripeErrorHandler);
+      }
+    }
+
+    function createRecurringGift() {
+      GiveTransferService.processing = true;
+
+      if (GiveTransferService.view === 'cc') {
+        donationService.createCard();
+        PaymentService.createRecurringGiftWithCard(donationService.card)
+          .then(function(recurringGift) {
+            // TODO: Put recurringGift in GiveTransferService
+            GiveTransferService.email = recurringGift.email;
+            $state.go(GiveFlow.thankYou);
+          }, PaymentService.stripeErrorHandler);
+      } else if (GiveTransferService.view === 'bank') {
+        donationService.createBank();
+        PaymentService.createRecurringGiftWithBankAcct(donationService.bank)
+          .then(function(recurringGift) {
+            // TODO: Put recurringGift in GiveTransferService
+            GiveTransferService.email = recurringGift.email;
+            $state.go(GiveFlow.thankYou);
           }, PaymentService.stripeErrorHandler);
       }
     }
@@ -79,8 +111,8 @@
           pgram = GiveTransferService.program;
         }
 
-        donationService.donate(pgram, function(confirmation) {
-          console.log('successfully donated'); 
+        donationService.donate(pgram, GiveTransferService.campaign,  function(confirmation) {
+          console.log('successfully donated');
         }, function(error) {
 
           if (GiveTransferService.declinedPayment) {
@@ -92,8 +124,14 @@
       }
     }
 
-    function donate(program, onSuccess, onFailure) {
-      PaymentService.donateToProgram(program.ProgramId,
+    function donate(program, campaign, onSuccess, onFailure) {
+      if (campaign === undefined || campaign ===  null) {
+        campaign = { campaignId: null,  campaignName: null };
+      }
+
+      PaymentService.donateToProgram(
+          program.ProgramId,
+          campaign.campaignId,
           GiveTransferService.amount,
           GiveTransferService.donor.donorId,
           GiveTransferService.email,
@@ -105,6 +143,7 @@
             if (onSuccess !== undefined) {
               onSuccess(confirmation);
             }
+
             $state.go(GiveFlow.thankYou);
           }, function(error) {
 
@@ -120,19 +159,22 @@
       if (giveForm.$valid) {
         GiveTransferService.processing = true;
         donationService.createBank();
-        PaymentService.updateDonorWithBankAcct(GiveTransferService.donor.id,donationService.bank,GiveTransferService.email)
+        PaymentService.updateDonorWithBankAcct(GiveTransferService.donor.id,
+                                               donationService.bank,
+                                               GiveTransferService.email)
          .then(function(donor) {
            var pgram;
            if (programsInput !== undefined) {
              pgram = _.find(programsInput, { ProgramId: GiveTransferService.program.ProgramId });
            } else {
-             pgram = GiveTransferService.program;  
+             pgram = GiveTransferService.program;
            }
-           donationService.donate(pgram);
-        }, PaymentService.stripeErrorHandler);
+
+           donationService.donate(pgram, GiveTransferService.campaign);
+         }, PaymentService.stripeErrorHandler);
       } else {
-         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-       }
+        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+      }
 
     }
 
@@ -157,15 +199,22 @@
         } else {
           pgram = GiveTransferService.program;
         }
-        PaymentService.updateDonorWithCard(GiveTransferService.donor.id, donationService.card, GiveTransferService.email)
+
+        PaymentService.updateDonorWithCard(GiveTransferService.donor.id,
+                                           donationService.card,
+                                           GiveTransferService.email)
           .then(function(donor) {
-            donate(pgram, function() {
-            
-            }, function(error) {
+            donate(pgram, GiveTransferService.campaign, function() {
+
+            },
+
+             function(error) {
               GiveTransferService.processing = false;
               PaymentService.stripeErrorHandler(error);
             });
-          },function(error) {
+          },
+
+          function(error) {
             GiveTransferService.processing = false;
             PaymentService.stripeErrorHandler(error);
           });
@@ -176,15 +225,16 @@
       }
     }
 
-   function submitBankInfo(giveForm, programsInput) {
+    function submitBankInfo(giveForm, programsInput) {
       GiveTransferService.bankinfoSubmitted = true;
       if (giveForm.accountForm.$valid) {
         GiveTransferService.processing = true;
         PaymentService.getDonor(GiveTransferService.email)
-          .then(function(donor){
+          .then(function(donor) {
             donationService.updateDonorAndDonate(donor.id, programsInput);
           },
-          function(error){
+
+          function(error) {
             donationService.createDonorAndDonate(programsInput);
           });
       } else {
@@ -194,52 +244,54 @@
 
     function submitChangedBankInfo(giveForm, programsInput) {
 
-      var pgram = (programsInput !== undefined) ?  
+      var pgram = (programsInput !== undefined) ?
         _.find(programsInput, { ProgramId: GiveTransferService.program.ProgramId }) :
         GiveTransferService.program;
 
       if (!Session.isActive()) {
         $state.go(GiveFlow.login);
       }
-      
+
       GiveTransferService.bankinfoSubmitted = true;
       GiveTransferService.amountSubmitted = true;
 
-      if(GiveTransferService.amount === '') {
+      if (GiveTransferService.amount === '') {
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
       } else {
         if (GiveTransferService.view === 'cc') {
-          if(GiveTransferService.savedPayment === 'bank') {
+          if (GiveTransferService.savedPayment === 'bank') {
             giveForm.creditCardForm.$setDirty();
           }
+
           if (!giveForm.creditCardForm.$dirty) {
             GiveTransferService.processing = true;
-            donationService.donate(pgram);
+            donationService.donate(pgram, GiveTransferService.campaign);
           } else {
             donationService.processCreditCardChange(giveForm, programsInput);
           }
-        } else if (GiveTransferService.view === 'bank'){
-          if(GiveTransferService.savedPayment === 'cc') {
+        } else if (GiveTransferService.view === 'bank') {
+          if (GiveTransferService.savedPayment === 'cc') {
             giveForm.bankAccountForm.$setDirty();
           }
-          if(!giveForm.bankAccountForm.$dirty) {
+
+          if (!giveForm.bankAccountForm.$dirty) {
             GiveTransferService.processing = true;
-            donationService.donate(pgram);
+            donationService.donate(pgram, GiveTransferService.campaign);
           } else {
             donationService.processBankAccountChange(giveForm, programsInput);
           }
         }
       }
     }
-    
+
     function transitionForLoggedInUserBasedOnExistingDonor(event, toState) {
-      if(toState.name === GiveFlow.account && Session.isActive() && !GiveTransferService.donorError ) {
+      if (toState.name === GiveFlow.account && Session.isActive() && !GiveTransferService.donorError) {
         GiveTransferService.processing = true;
         event.preventDefault();
         PaymentService.getDonor(GiveTransferService.email)
-        .then(function(donor){
+        .then(function(donor) {
           GiveTransferService.donor = donor;
-          if (GiveTransferService.donor.default_source.credit_card.last4 != null){
+          if (GiveTransferService.donor.default_source.credit_card.last4 != null) {
             GiveTransferService.last4 = donor.default_source.credit_card.last4;
             GiveTransferService.brand = CC_BRAND_CODES[donor.default_source.credit_card.brand];
             GiveTransferService.view = 'cc';
@@ -248,11 +300,14 @@
             GiveTransferService.brand = '#library';
             GiveTransferService.view = 'bank';
           }
+
           $state.go(GiveFlow.confirm);
-        },function(error){
+        },
+
+        function(error) {
           // Go forward to account info if it was a 404 "not found" error,
           // the donor service returns a 404 when a donor doesn't exist
-          if(error && error.httpStatusCode === 404) {
+          if (error && error.httpStatusCode === 404) {
             GiveTransferService.donorError = true;
             $state.go(GiveFlow.account);
           } else {
@@ -260,30 +315,30 @@
           }
         });
       }
-    } 
-
+    }
 
     function updateDonorAndDonate(donorId, programsInput) {
       // The vm.email below is only required for guest giver, however, there
       // is no harm in sending it for an authenticated user as well,
       // so we'll keep it simple and send it in all cases.
       var pgram;
-      if (programsInput !== undefined){
+      if (programsInput !== undefined) {
         pgram = _.find(programsInput, { ProgramId: GiveTransferService.program.ProgramId });
       } else {
-        pgram = GiveTransferService.program
+        pgram = GiveTransferService.program;
       }
+
       if (GiveTransferService.view === 'cc') {
         donationService.createCard();
         PaymentService.updateDonorWithCard(donorId, donationService.card, GiveTransferService.email)
           .then(function(donor) {
-            donationService.donate(pgram);
+            donationService.donate(pgram, GiveTransferService.campaign);
           }, PaymentService.stripeErrorHandler);
       } else if (GiveTransferService.view === 'bank') {
         donationService.createBank();
         PaymentService.updateDonorWithBankAcct(donorId, donationService.bank, GiveTransferService.email)
           .then(function(donor) {
-            donationService.donate(pgram);
+            donationService.donate(pgram, GiveTransferService.campaign);
           }, PaymentService.stripeErrorHandler);
       }
     }

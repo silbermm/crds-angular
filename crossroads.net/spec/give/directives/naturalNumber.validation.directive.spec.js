@@ -17,7 +17,6 @@ describe('Natural Number Validation Directive', function() {
     var $compile = _$compile_;
     var $rootScope = _$rootScope_;
     httpBackend = $injector.get('$httpBackend');
-    httpBackend.whenGET(/SiteConfig*/).respond('');
 
     var template = angular.element("<form name='form'><input type='text' name='amount' ng-model='model.amount' natural-number max-value='999'></input></form>");
     scope = $rootScope.$new();

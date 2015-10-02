@@ -64,6 +64,7 @@
     <Compile Include="DonationDistribution.cs" />
     <Compile Include="Donation.cs" />
     <Compile Include="DonationStatus.cs" />
+    <Compile Include="DTO\CreateDonationDistDto.cs" />
     <Compile Include="DTO\RespondToOpportunityDto.cs" />
     <Compile Include="DTO\RoleDto.cs" />
     <Compile Include="FormField.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Household.cs" />
     <Compile Include="HouseholdMember.cs" />
     <Compile Include="MessageTemplate.cs" />
+    <Compile Include="MinistryPlatformUser.cs" />
     <Compile Include="MyContact.cs" />
     <Compile Include="ContactRelationship.cs" />
     <Compile Include="Event.cs" />
@@ -88,6 +90,7 @@
     <Compile Include="Response.cs" />
     <Compile Include="GPExportDatum.cs" />
     <Compile Include="TripDistribution.cs" />
+    <Compile Include="TripDocuments.cs" />
     <Compile Include="TripFormResponse.cs" />
     <Compile Include="TripParticipant.cs" />
   </ItemGroup>

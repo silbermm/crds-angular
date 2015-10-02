@@ -20,7 +20,6 @@ namespace MinistryPlatform.Translation.Test
         private const string FIRSTNAME = "Test";
         private const string NEW_PASSWORD = "changemeagain";
 
-        private Mock<IAuthenticationService> _authenticationService;
         private AuthenticationServiceImpl _fixture;
         private PlatformServiceClient _platformService;
         private MinistryPlatformServiceImpl _ministryPlatformService;

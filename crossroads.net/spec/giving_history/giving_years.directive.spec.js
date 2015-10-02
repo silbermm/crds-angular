@@ -12,15 +12,16 @@ describe('GivingYears Directive', function() {
 
   beforeEach(angular.mock.module('crossroads'));
 
+  beforeEach(angular.mock.module(function($provide) {
+    $provide.value('$state', {});
+  }));
+
   beforeEach(
       inject(function(_$compile_, _$rootScope_, _$httpBackend_, _$timeout_) {
         $compile = _$compile_;
         $rootScope = _$rootScope_;
         $httpBackend = _$httpBackend_;
         $timeout = _$timeout_;
-
-        $httpBackend.whenGET(/SiteConfig*/).respond('');
-        $httpBackend.whenGET(/api\/Page*/).respond({ pages: [{}] });
 
         callback = jasmine.createSpy('onChange');
 

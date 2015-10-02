@@ -11,9 +11,13 @@
       replace: true,
       scope: {
         amount: '=',
-        program: '=',
         amountSubmitted: '=',
-        programsIn: '='
+        program: '=',
+        programsIn: '=?',
+        showInitiativeOption: '=?',
+        showFrequencyOption: '=?',
+        givingType: '=?',
+        recurringStartDate: '=?',
       },
       templateUrl: 'donation_details/donationDetails.html',
       link: link
@@ -21,9 +25,21 @@
 
     function link(scope, element, attrs) {
 
-      scope.ministryShow = false;
+      scope.minDate = new Date();
       scope.amountError = amountError;
+      scope.ministryShow = false;
       scope.setProgramList = setProgramList;
+      scope.showInitiativeOption = scope.showInitiativeOption === undefined ? true : scope.showInitiativeOption;
+      scope.showFrequencyOption = scope.showFrequencyOption === undefined ? true : scope.showFrequencyOption;
+      scope.givingType = scope.givingType === undefined ? 'one_time' : scope.givingType;
+      scope.dateOptions = {
+        formatYear: 'yy',
+        startingDay: 1,
+        showWeeks: 'false',
+      };
+      scope.openRecurringStartDate = openRecurringStartDate;
+      scope.recurringStartDatePickerOpened = false;
+      scope.updateFrequency = updateFrequency;
 
       activate();
 
@@ -36,7 +52,13 @@
           scope.program = scope.programsIn[0];
         }
 
-        scope.ministryShow = scope.program.ProgramId !== scope.programsIn[0].ProgramId;
+        if (scope.programsIn !== undefined) {
+          scope.ministryShow = scope.program.ProgramId !== scope.programsIn[0].ProgramId;
+        }
+
+        if (scope.showFrequencyOption) {
+          scope.allowRecurring = scope.program.AllowRecurringGiving;
+        }
       }
 
       function amountError() {
@@ -51,6 +73,22 @@
 
       function setProgramList() {
         return scope.ministryShow ? scope.program = '' : scope.program = scope.programsIn[0];
+      }
+
+      function openRecurringStartDate($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        scope.recurringStartDatePickerOpened = true;
+      }
+
+      function updateFrequency() {
+        if (scope.showFrequencyOption) {
+          scope.allowRecurring = scope.program.AllowRecurringGiving;
+
+          if (scope.givingType !== 'one_time' && !scope.allowRecurring) {
+            scope.givingType = 'one_time';
+          }
+        }
       }
     }
   }

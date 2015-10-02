@@ -82,8 +82,6 @@ To run tests in safari, you will need to download the safari plugin from (here)[
 
 You will now be able to run protractor by typing `protractor protractor.conf.js`. 
 
-
-
 ###Run
 To run the project, run `gulp start` and point your browser to `http://localhost:8080`. If you want live reload, use `http://localhost:8080/webpack-dev-server` but keep in mind that the angular inspector will not work correctly and routes will not show up correctly with live reload. 
 

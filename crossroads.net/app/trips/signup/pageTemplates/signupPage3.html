@@ -1,0 +1,34 @@
+<div >
+      <legend>
+        Emergency Contact Information
+      </legend>
+
+      <span ng-bind-html="$root.MESSAGES.TripEmergencyContact.content | html"></span>
+
+      <ng-form name="tripsSignup.tripAppPage3" role="form">
+        <div class="row">
+            <div class="form-group col-sm-6">
+              <label for="emergency-firstname" class="required">First Name</label>
+              <input ng-model="tripsSignup.signupService.page3.emergencyContactFirstName.value" type="text" class="form-control" id="emergency-firstname" placeholder="Enter emergency contact first name">
+            </div>
+            <div class="form-group col-sm-6">
+              <label for="emergency-lastname" class="required">Last Name</label>
+              <input ng-model="tripsSignup.signupService.page3.emergencyContactLastName.value" type="text" class="form-control" id="emergency-lastname" placeholder="Enter emergency contact last name">
+            </div>
+            <div class="form-group col-sm-6">
+              <label for="emergency-primaryphone" class="required">Primary Phone</label>
+              <input ng-model="tripsSignup.signupService.page3.emergencyContactPrimaryPhone.value" type="text" class="form-control" id="emergency-primaryphone" placeholder="Enter emergency contact primary phone number">
+            </div>
+            <div class="form-group col-sm-6">
+              <label for="emergency-secondaryphone">Secondary Phone</label>
+              <input ng-model="tripsSignup.signupService.page3.emergencyContactSecondaryPhone.value" type="text" class="form-control" id="emergency-secondaryphone" placeholder="Enter emergency contact secondary phone number">
+            </div>
+            <div class="form-group col-sm-6">
+              <label for="emergency-email">Email Address</label>
+              <input ng-model="tripsSignup.signupService.page3.emergencyContactEmail.value" type="text" class="form-control" id="emergency-email" placeholder="Enter emergency contact email address">
+            </div>
+        </div>
+
+        <a ng-click='tripsSignup.handlePageChange(4)' class="btn btn-primary pull-right">Next</a>
+      </ng-form>
+</div><!--/row-->

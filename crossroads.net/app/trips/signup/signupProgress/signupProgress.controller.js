@@ -9,12 +9,13 @@
    * variables provided by the directive...
    * currentStep
    * totalSteps
+   * progressLabel
    */
   function SignupProgressController() {
 
     var vm = this;
     vm.percentComplete = percentComplete;
-    vm.percentString = percentString;
+    vm.progressMessage = progressMessage;
 
     activate();
 
@@ -32,8 +33,8 @@
       return percent;
     }
 
-    function percentString() {
-      var message = vm.percentComplete() + '%' + ' Completed';
+    function progressMessage() {
+      var message = vm.progressLabel;
       if (vm.currentStep <= vm.totalSteps) {
         message += ' | Step ' + vm.currentStep + ' of ' + vm.totalSteps;
       }

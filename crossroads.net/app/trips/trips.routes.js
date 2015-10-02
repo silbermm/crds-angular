@@ -23,8 +23,8 @@
         },
         data: {
           meta: {
-           title: 'Trip Search',
-           description: ''
+            title: 'Trip Search',
+            description: ''
           }
         }
       })
@@ -40,37 +40,38 @@
             return Trip.TripParticipant.get({
               tripParticipantId: $stateParams.eventParticipantId
             }).$promise;
-          }
-        },
-        data: {
-          meta: {
-           title: 'Trip Giving',
-           description: ''
+          },
+          Meta: function(TripParticipant, $state) {
+            TripParticipant.$promise.then(
+              function() {
+                $state.next.data.meta.title =
+                  TripParticipant.participantName+' - '+TripParticipant.trips[0].tripName;
+              });
           }
         }
       })
       .state('tripgiving.amount', {
-        templateUrl: 'tripgiving/amount.html'
+        templateUrl: 'tripgivingTemplates/amount.html'
       })
       .state('tripgiving.login', {
         controller: 'LoginCtrl',
-        templateUrl: 'tripgiving/login.html'
+        templateUrl: 'tripgivingTemplates/login.html'
       })
       .state('tripgiving.register', {
         controller: 'RegisterCtrl',
-        templateUrl: 'tripgiving/register.html'
+        templateUrl: 'tripgivingTemplates/register.html'
       })
       .state('tripgiving.confirm', {
-        templateUrl: 'tripgiving/confirm.html'
+        templateUrl: 'tripgivingTemplates/confirm.html'
       })
       .state('tripgiving.account', {
-        templateUrl: 'tripgiving/account.html'
+        templateUrl: 'tripgivingTemplates/account.html'
       })
       .state('tripgiving.change', {
-        templateUrl: 'tripgiving/change.html'
+        templateUrl: 'tripgivingTemplates/change.html'
       })
       .state('tripgiving.thank-you', {
-        templateUrl: 'tripgiving/thank_you.html'
+        templateUrl: 'tripgivingTemplates/thank_you.html'
       })
       .state('mytrips', {
         parent: 'noSideBar',
@@ -80,8 +81,8 @@
         data: {
           isProtected: true,
           meta: {
-           title: 'My Trips',
-           description: ''
+            title: 'My Trips',
+            description: ''
           }
         },
         resolve: {
@@ -159,7 +160,24 @@
           WorkTeams: function(Trip) {
             return Trip.WorkTeams.query().$promise;
           },
+
+          pageId: function() {
+            return 0;
+          }
         }
+      })
+      .state('tripsignup.application.thankyou', {
+        url: '/thankyou',
+        templateUrl: 'pageTemplates/thankYou.html',
+      })
+      .state('tripsignup.application.page', {
+        url: '/:stepId',
+        templateUrl: function($stateParams) {
+          var template = 'pageTemplates/signupPage' + $stateParams.stepId + '.html';
+          return template;
+        },
+
+        controller: 'SignupStepController as signupStep',
       });
   }
 

@@ -2,12 +2,16 @@
   'use strict';
   module.exports = PaymentService;
 
+  var moment = require('moment');
+
   PaymentService.$inject = ['$http','$q', 'stripe', '$cookies', '$rootScope', 'GiveTransferService', 'MESSAGES'];
 
   function PaymentService($http, $q, stripe, $cookies, $rootScope, GiveTransferService, MESSAGES) {
     var paymentService = {
       createDonorWithBankAcct: createDonorWithBankAcct,
       createDonorWithCard: createDonorWithCard,
+      createRecurringGiftWithBankAcct: createRecurringGiftWithBankAcct,
+      createRecurringGiftWithCard: createRecurringGiftWithCard,
       donateToProgram: donateToProgram,
       donation: {},
       getDonor: getDonor,
@@ -27,10 +31,21 @@
       return apiDonor(card, email, stripe.card, 'POST');
     }
 
-    function donateToProgram(program_id, amount, donor_id, email_address, pymt_type){
+    function createRecurringGiftWithBankAcct(bankAcct) {
+      return apiRecurringGift(bankAcct, stripe.bankAccount, 'POST');
+    }
+
+    function createRecurringGiftWithCard(card) {
+      return apiRecurringGift(card, stripe.card, 'POST');
+    }
+
+    function donateToProgram(program_id, campaignId, amount, donor_id, email_address, pymt_type) {
       var def = $q.defer();
       var donationRequest = {
         program_id: program_id,
+        pledge_campaign_id: campaignId,
+        pledge_donor_id: GiveTransferService.campaign.pledgeDonorId,
+        gift_message: GiveTransferService.message,
         amount: amount,
         donor_id: donor_id,
         email_address: email_address,
@@ -74,14 +89,16 @@
       return def.promise;
     }
 
-    function stripeErrorHandler(error){
-      if(error && error.globalMessage) {
+    function stripeErrorHandler(error) {
+      if (error && error.globalMessage) {
         GiveTransferService.declinedPayment =
-              error.globalMessage.id == $rootScope.MESSAGES.paymentMethodDeclined.id;
+              error.globalMessage.id === $rootScope.MESSAGES.paymentMethodDeclined.id;
         $rootScope.$emit('notify', error.globalMessage);
       } else {
         $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
       }
+
+      GiveTransferService.processing = false;
     }
 
     function updateDonorWithBankAcct(donorId, bankAcct, email) {
@@ -147,6 +164,37 @@
             data: donorRequest
           }).success(function(data) {
             paymentService.donor = data;
+            def.resolve(data);
+          }).error(function(response, statusCode) {
+            def.reject(_addGlobalErrorMessage(response.error, statusCode));
+          });
+        }
+      });
+
+      return def.promise;
+    }
+
+    function apiRecurringGift(donorInfo, stripeFunc, apiMethod) {
+      var def = $q.defer();
+      stripeFunc.createToken(donorInfo, function(status, response) {
+        if (response.error) {
+          def.reject(_addGlobalErrorMessage(response.error, status));
+        } else {
+          var recurringGiftRequest = {
+            stripe_token_id: response.id,
+            amount: GiveTransferService.amount,
+            program: GiveTransferService.program.ProgramId,
+            interval: GiveTransferService.givingType,
+            start_date: GiveTransferService.recurringStartDate
+          };
+          $http({
+            method: apiMethod,
+            url: __API_ENDPOINT__ + 'api/donor/recurrence',
+            headers: {
+              Authorization: $cookies.get('sessionId')
+            },
+            data: recurringGiftRequest
+          }).success(function(data) {
             def.resolve(data);
           }).error(function(response, statusCode) {
             def.reject(_addGlobalErrorMessage(response.error, statusCode));

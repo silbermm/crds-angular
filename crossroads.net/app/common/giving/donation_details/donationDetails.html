@@ -15,13 +15,13 @@
       <ng-messages-include src="on-submit-messages"></ng-messages-include>
     </ng-messages>
   </div>
-  <div class="form-group clearfix">
+  <div class="form-group clearfix" ng-show='showInitiativeOption'>
     <label class="btn btn-block btn-checkbox-toggle"><input type="checkbox" ng-model="ministryShow" ng-click="setProgramList()" />&nbsp;&nbsp; Give to a specific initiative
     </label>
   </div>
         <!--/checkbox-->
   <div class="form-group" ng-show="ministryShow" ng-class="{'has-error': donationDetailsForm.initiative.$error.initiativeRequired && amountSubmitted}">
-    <select class="form-control" ng-options="program.Name for program in programsIn.slice(1) track by program.ProgramId" ng-model="program" name="initiative" initiative-required>
+    <select class="form-control" ng-change="updateFrequency()" ng-options="program.Name for program in programsIn.slice(1) track by program.ProgramId" ng-model="program" name="initiative" initiative-required>
       <option value="">Choose Initiative</option>
     </select>
     <ng-messages for="donationDetailsForm.initiative.$error" ng-show="donationDetailsForm.initiative.$error.initiativeRequired && amountSubmitted">
@@ -29,10 +29,36 @@
     </ng-messages>
   </div>
 
-  <div class="form-group">
-    <select class="form-control">
-      <option>One Time</option>
+  <div class="form-group" ng-show='showInitiativeOption'>
+    <select class="form-control" ng-model="givingType">
+      <option value="one_time">One Time</option>
+      <option value="week" ng-if="allowRecurring">Weekly</option>
+      <option value="month" ng-if="allowRecurring">Monthly</option>
     </select>
   </div>
-        <!--/form-group-->
+
+  <div class="form-group"
+    ng-show="givingType !== 'one_time' && allowRecurring"
+    ng-class="{'has-error': donationDetailsForm.recurringStartDate.$error.required && amountSubmitted}">
+
+    <div class="input-group">
+      <input type="text" name="recurringStartDate" class="form-control"
+        ng-required="givingType !== 'one_time' && allowRecurring"
+        datepicker-popup="MM/dd/yyyy"
+        ng-model="recurringStartDate" is-open="recurringStartDatePickerOpened"
+        datepicker-options="dateOptions" close-text="Close" min-date="minDate"
+        ng-click="openRecurringStartDate($event)"/>
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-gray-light" ng-click="openRecurringStartDate($event)">
+          <i class="glyphicon glyphicon-calendar"></i>
+        </button>
+      </span>
+    </div>
+
+    <ng-messages for="donationDetailsForm.recurringStartDate.$error" ng-show="donationDetailsForm.recurringStartDate.$error.required && amountSubmitted">
+      <span ng-message="required"><span ng-bind-html="$root.MESSAGES.invalidRecurringStartDate.content | html"></span></span>
+    </ng-messages>
+
+  </div>
+
 </ng-form>

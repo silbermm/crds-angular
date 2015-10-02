@@ -10,7 +10,6 @@ using MinistryPlatform.Translation.Services.Interfaces;
 using IDonationService = MinistryPlatform.Translation.Services.Interfaces.IDonationService;
 using IDonorService = MinistryPlatform.Translation.Services.Interfaces.IDonorService;
 using IGroupService = MinistryPlatform.Translation.Services.Interfaces.IGroupService;
-using IPersonService = crds_angular.Services.Interfaces.IPersonService;
 using PledgeCampaign = crds_angular.Models.Crossroads.Stewardship.PledgeCampaign;
 
 namespace crds_angular.Services
@@ -31,6 +30,7 @@ namespace crds_angular.Services
         private readonly IConfigurationWrapper _configurationWrapper;
         private readonly IPersonService _personService;
         private readonly IServeService _serveService;
+        private readonly IDestinationService _destinationService;
 
         public TripService(IEventParticipantService eventParticipant,
                            IDonationService donationService,
@@ -45,7 +45,8 @@ namespace crds_angular.Services
                            IContactService contactService,
                            IConfigurationWrapper configurationWrapper,
                            IPersonService personService,
-                           IServeService serveService)
+                           IServeService serveService,
+                           IDestinationService destinationService)
         {
             _eventParticipantService = eventParticipant;
             _donationService = donationService;
@@ -61,6 +62,7 @@ namespace crds_angular.Services
             _configurationWrapper = configurationWrapper;
             _personService = personService;
             _serveService = serveService;
+            _destinationService = destinationService;
         }
 
         public List<TripGroupDto> GetGroupsByEventId(int eventId)
@@ -97,7 +99,8 @@ namespace crds_angular.Services
             dto.Campaign = new PledgeCampaign
             {
                 FundraisingGoal = tripApplicantResponses.TripInfo.FundraisingGoal,
-                PledgeCampaignId = tripApplicantResponses.TripInfo.PledgeCampaignId
+                PledgeCampaignId = tripApplicantResponses.TripInfo.PledgeCampaignId,
+                DestinationId = tripApplicantResponses.TripInfo.DestinationId
             };
 
             return dto;
@@ -145,7 +148,8 @@ namespace crds_angular.Services
                                     {
                                         EventId = (int) r.EventId,
                                         FundraisingGoal = r.FundraisingGoal,
-                                        PledgeCampaignId = (int) r.PledgeCampaignId
+                                        PledgeCampaignId = (int) r.PledgeCampaignId,
+                                        DestinationId = r.DestinationId
                                     }
                                     : null)
                                 : null);
@@ -238,16 +242,21 @@ namespace crds_angular.Services
 
             foreach (var result in results)
             {
-                var tp = new TripDto();
-                tp.EventParticipantId = result.EventParticipantId;
-                tp.EventEnd = result.EventEndDate.ToString("MMM dd, yyyy");
-                tp.EventId = result.EventId;
-                tp.EventStartDate = result.EventStartDate.ToUnixTime();
-                tp.EventStart = result.EventStartDate.ToString("MMM dd, yyyy");
-                tp.EventTitle = result.EventTitle;
-                tp.EventType = result.EventType;
-                tp.ProgramId = result.ParticipantId;
-                tp.ProgramName = result.ProgramName;
+                var tp = new TripDto
+                {
+                    EventParticipantId = result.EventParticipantId,
+                    EventEnd = result.EventEndDate.ToString("MMM dd, yyyy"),
+                    EventId = result.EventId,
+                    EventStartDate = result.EventStartDate.ToUnixTime(),
+                    EventStart = result.EventStartDate.ToString("MMM dd, yyyy"),
+                    EventTitle = result.EventTitle,
+                    EventType = result.EventType,
+                    ProgramId = result.ProgramId,
+                    ProgramName = result.ProgramName,
+                    CampaignId = result.CampaignId,
+                    CampaignName = result.CampaignName,
+                    PledgeDonorId = result.DonorId
+                };
                 var participant = participants[result.ParticipantId];
                 participant.Trips.Add(tp);
             }
@@ -300,10 +309,15 @@ namespace crds_angular.Services
                         gift.DonorNickname = donation.DonorNickname ?? donation.DonorFirstName;
                         gift.DonorLastName = donation.DonorLastName;
                     }
+                    gift.DonationDistributionId = donation.DonationDistributionId;
+                    gift.DonorId = donation.DonorId;
                     gift.DonorEmail = donation.DonorEmail;
                     gift.DonationDate = donation.DonationDate.ToShortDateString();
                     gift.DonationAmount = donation.DonationAmount;
+                    gift.PaymentTypeId = donation.PaymentTypeId;
                     gift.RegisteredDonor = donation.RegisteredDonor;
+                    gift.MessageSent = donation.MessageSent;
+                    gift.Anonymous = donation.AnonymousGift;
                     e.TripGifts.Add(gift);
                     e.TotalRaised += donation.DonationAmount;
                 }
@@ -329,7 +343,7 @@ namespace crds_angular.Services
 
                 CreatePledge(dto, applicant);
 
-                EventRegistration(events, applicant);
+                EventRegistration(events, applicant, dto.Campaign.DestinationId);
             }
 
             return groupParticipants;
@@ -401,14 +415,17 @@ namespace crds_angular.Services
             }
         }
 
-        private void EventRegistration(IEnumerable<Event> events, TripApplicant applicant)
+        private void EventRegistration(IEnumerable<Event> events, TripApplicant applicant, int destinationId)
         {
+            var destinationDocuments = _destinationService.DocumentsForDestination(destinationId);
             foreach (var e in events)
             {
-                if (_mpEventService.EventHasParticipant(e.EventId, applicant.ParticipantId) == false)
+                if (_mpEventService.EventHasParticipant(e.EventId, applicant.ParticipantId))
                 {
-                    _mpEventService.registerParticipantForEvent(applicant.ParticipantId, e.EventId);
+                    continue;
                 }
+                var eventParticipantId = _mpEventService.registerParticipantForEvent(applicant.ParticipantId, e.EventId);
+                _eventParticipantService.AddDocumentsToTripParticipant(destinationDocuments, eventParticipantId);
             }
         }
 
@@ -428,6 +445,9 @@ namespace crds_angular.Services
             formResponse.FormAnswers = new List<FormAnswer>(FormatFormAnswers(dto));
 
             var formResponseId = _formSubmissionService.SubmitFormResponse(formResponse);
+
+            _privateInviteService.MarkAsUsed(dto.PledgeCampaignId, dto.InviteGUID);
+            
             return formResponseId;
         }
 

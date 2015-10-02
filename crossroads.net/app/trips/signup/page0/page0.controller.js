@@ -8,8 +8,8 @@
   function Page0Controller(TripsSignupService, Campaign, Family) {
 
     var vm = this;
-    vm.familyMembers = Family;
     vm.signupService = TripsSignupService;
+    vm.signupService.familyMembers = Family;
 
     activate();
 

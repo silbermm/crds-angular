@@ -7,6 +7,7 @@ using crds_angular.Services;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
 using Moq;
+using MvcContrib.TestHelper;
 using NUnit.Framework;
 using MPServices=MinistryPlatform.Translation.Services.Interfaces;
 
@@ -115,7 +116,7 @@ namespace crds_angular.test.Services
                 new CheckScannerCheck
                 {
                     Id = 22222,
-                    AccountNumber = "222",
+                    AccountNumber =  "222",
                     Address = new crds_angular.Models.Crossroads.Stewardship.Address
                     {
                         Line1 = "2 line 1",
@@ -144,14 +145,18 @@ namespace crds_angular.test.Services
                     ProcessorAccountId = "py_dgsttety6737hjjhweiu3"
                 }
             };
-            var encryptedKey = "PH/rty1234";
+            const string encryptedKey = "PH/rty1234";
+            const string decrypAcct = "6015268542";
+            const string decryptRout = "042000314";
+            const string donorAcctId = "4321";
           
             _checkScannerDao.Setup(mocked => mocked.GetChecksForBatch("batch123")).Returns(checks);
             _checkScannerDao.Setup(mocked => mocked.UpdateBatchStatus("batch123", BatchStatus.Exported)).Returns(new CheckScannerBatch());
             _checkScannerDao.Setup(mocked => mocked.UpdateCheckStatus(11111, true, null));
             _checkScannerDao.Setup(mocked => mocked.UpdateCheckStatus(22222, true, null));
-
+            
             _donorService.Setup(mocked => mocked.GetContactDonorForDonorAccount(checks[0].AccountNumber, checks[0].RoutingNumber)).Returns(contactDonorExisting);
+           
             _paymentService.Setup(mocked => mocked.ChargeCustomer(contactDonorExisting.ProcessorId, contactDonorExisting.Account.ProcessorAccountId, (int) checks[0].Amount, contactDonorExisting.DonorId)).Returns(new StripeCharge
             {
                 Id = "1020304",
@@ -164,19 +169,26 @@ namespace crds_angular.test.Services
                     Fee = 123
                 }
             });
-            _mpDonorService.Setup(mocked => mocked.CreateEncodedAndEncryptedAccountAndRoutingNumber(checks[0].AccountNumber, checks[0].RoutingNumber)).Returns(encryptedKey);
-            _mpDonorService.Setup(mocked => mocked.UpdateDonorAccount(encryptedKey, contactDonorExisting.Account.ProcessorAccountId, contactDonorExisting.ProcessorId));
+
+            _mpDonorService.Setup(mocked => mocked.DecryptCheckValue(checks[1].AccountNumber)).Returns(decrypAcct);
+            _mpDonorService.Setup(mocked => mocked.DecryptCheckValue(checks[1].RoutingNumber)).Returns(decryptRout);
+            _mpDonorService.Setup(mocked => mocked.CreateHashedAccountAndRoutingNumber(decrypAcct, decryptRout)).Returns(encryptedKey);
+            _mpDonorService.Setup(mocked => mocked.DecryptCheckValue(checks[0].AccountNumber)).Returns(decrypAcct);
+            _mpDonorService.Setup(mocked => mocked.DecryptCheckValue(checks[0].RoutingNumber)).Returns(decryptRout);
+            _mpDonorService.Setup(mocked => mocked.CreateHashedAccountAndRoutingNumber(decrypAcct, decryptRout)).Returns(encryptedKey);
+            _mpDonorService.Setup(mocked => mocked.UpdateDonorAccount(encryptedKey, contactDonorExisting.Account.ProcessorAccountId, contactDonorExisting.ProcessorId)).Returns(donorAcctId);
             _mpDonorService.Setup(
                 mocked =>
                     mocked.CreateDonationAndDistributionRecord((int) checks[0].Amount,
                                                                123,
                                                                contactDonorExisting.DonorId,
                                                                "9090",
+                                                               null,
                                                                "1020304",
                                                                "check",
                                                                contactDonorExisting.ProcessorId,
                                                                It.IsAny<DateTime>(),
-                                                               true, "batch123")).Returns(321);
+                                                               true, false, null, donorAcctId, "batch123")).Returns(321);
 
             var contactDonorNew = new ContactDonor
             {
@@ -199,7 +211,9 @@ namespace crds_angular.test.Services
             };
 
             _donorService.Setup(mocked => mocked.GetContactDonorForDonorAccount(checks[1].AccountNumber, checks[1].RoutingNumber)).Returns((ContactDonor) null);
-            _paymentService.Setup(mocked => mocked.CreateToken(checks[1].AccountNumber, checks[1].RoutingNumber)).Returns("tok123");
+            _mpDonorService.Setup(mocked => mocked.DecryptCheckValue(checks[1].AccountNumber)).Returns(decrypAcct);
+            _mpDonorService.Setup(mocked => mocked.DecryptCheckValue(checks[1].RoutingNumber)).Returns(decryptRout);
+            _paymentService.Setup(mocked => mocked.CreateToken(decrypAcct, decryptRout)).Returns("tok123");
             _donorService.Setup(
                 mocked =>
                     mocked.CreateOrUpdateContactDonor(
@@ -207,7 +221,7 @@ namespace crds_angular.test.Services
                             o =>
                                 o.Details.DisplayName.Equals("2 name 1") && o.Details.Address.Line1.Equals("2 line 1") && o.Details.Address.Line2.Equals("2 line 2") &&
                                 o.Details.Address.City.Equals("2 city") && o.Details.Address.State.Equals("2 state") && o.Details.Address.PostalCode.Equals("2 postal") &&
-                                o.Account.RoutingNumber.Equals("2020") && o.Account.AccountNumber.Equals("222") && o.Account.Type == AccountType.Checking),
+                                o.Account.RoutingNumber.Equals(decryptRout) && o.Account.AccountNumber.Equals(decrypAcct) && o.Account.Type == AccountType.Checking),
                         It.IsAny<string>(),
                         string.Empty,
                         "tok123",
@@ -215,8 +229,8 @@ namespace crds_angular.test.Services
                 .Returns(contactDonorNew);
             _paymentService.Setup(mocked => mocked.ChargeCustomer(contactDonorNew.ProcessorId, contactDonorNew.Account.ProcessorAccountId, (int)checks[1].Amount, contactDonorNew.DonorId)).Returns(mockCharge);
 
-            _mpDonorService.Setup(mocked => mocked.CreateEncodedAndEncryptedAccountAndRoutingNumber(checks[1].AccountNumber, checks[1].RoutingNumber)).Returns(encryptedKey);
-            _mpDonorService.Setup(mocked => mocked.UpdateDonorAccount(encryptedKey, mockCharge.Source.id, contactDonorNew.ProcessorId));
+            _mpDonorService.Setup(mocked => mocked.CreateHashedAccountAndRoutingNumber(decrypAcct, decryptRout)).Returns(encryptedKey);
+            _mpDonorService.Setup(mocked => mocked.UpdateDonorAccount(encryptedKey, mockCharge.Source.id, contactDonorNew.ProcessorId)).Returns(donorAcctId);
 
             _mpDonorService.Setup(
                 mocked =>
@@ -224,15 +238,16 @@ namespace crds_angular.test.Services
                                                                null,
                                                                contactDonorNew.DonorId,
                                                                "9090",
+                                                               null,
                                                                "40302010",
                                                                "check",
                                                                contactDonorNew.ProcessorId,
                                                                It.IsAny<DateTime>(),
-                                                               false, "batch123")).Returns(654);
+                                                               false, false, null, donorAcctId, "batch123")).Returns(654);
 
 
 
-            var result = _fixture.CreateDonationsForBatch(new CheckScannerBatch
+             var result = _fixture.CreateDonationsForBatch(new CheckScannerBatch
             {
                 Name = "batch123",
                 ProgramId = 9090
@@ -257,9 +272,23 @@ namespace crds_angular.test.Services
             const string state = "HI";
             const string zip = "68168-1618";
             const string displayName = "Vacationing Vera";
+            const int donorId = 123456789;
+            const string decrypAcct = "6015268542";
+            const string decryptRout = "042000314";
+            const string accountNumber = "P/H+3ccB0ZssORkd+YyJzA==";
+            const string routingNumber = "TUbiKZ/Vw1l6uyGCYIIUMg==";
 
-            var details = new ContactDetails
+            var check = new CheckAccount
             {
+                AccountNumber = accountNumber,
+                RoutingNumber = routingNumber
+            };
+
+            var contactDonor = new ContactDonor
+            {
+                DonorId = donorId,
+                Details = new ContactDetails
+             {
                 DisplayName = displayName,
                 Address = new PostalAddress()
                 {
@@ -269,15 +298,20 @@ namespace crds_angular.test.Services
                     State = state,
                     PostalCode = zip
                 }
+              }
             };
 
-            _donorService.Setup(mocked => mocked.GetContactDonorForCheckAccount(encryptedKey)).Returns(details);
-            var result = _fixture.GetContactDonorForCheck(encryptedKey);
+            _donorService.Setup(mocked => mocked.GetContactDonorForCheckAccount(encryptedKey)).Returns(contactDonor);
+            _mpDonorService.Setup(mocked => mocked.DecryptCheckValue(accountNumber)).Returns(decrypAcct);
+            _mpDonorService.Setup(mocked => mocked.DecryptCheckValue(routingNumber)).Returns(decryptRout);
+            _mpDonorService.Setup(mocked => mocked.CreateHashedAccountAndRoutingNumber(decrypAcct, decryptRout)).Returns(encryptedKey);
+        
+            var result = _fixture.GetContactDonorForCheck(accountNumber, routingNumber);
 
             _donorService.VerifyAll();
-            Assert.IsNotNull(details);
-            Assert.AreEqual(result.DisplayName, details.DisplayName);
-            Assert.AreEqual(result.Address, details.Address);
+            Assert.IsNotNull(contactDonor);
+            Assert.AreEqual(result.DisplayName, contactDonor.Details.DisplayName);
+            Assert.AreEqual(result.Address, contactDonor.Details.Address);
         }
 
         [Test]
@@ -325,7 +359,7 @@ namespace crds_angular.test.Services
             var check = new CheckScannerCheck
             {
                 Id = 11111,
-                AccountNumber = "111",
+                AccountNumber =  "P/H+3ccB0ZssORkd+YyJzA==",
                 Address = new crds_angular.Models.Crossroads.Stewardship.Address
                 {
                     Line1 = "1 line 1",
@@ -339,7 +373,7 @@ namespace crds_angular.test.Services
                 CheckNumber = "11111",
                 Name1 = "1 name 1",
                 Name2 = "1 name 2",
-                RoutingNumber = "1010",
+                RoutingNumber = "TUbiKZ/Vw1l6uyGCYIIUMg==",
                 ScanDate = DateTime.Now.AddHours(2)
             };
 
@@ -356,9 +390,14 @@ namespace crds_angular.test.Services
             };
             const string token = "12t4token";
             const string encryptedKey = "PH/rty1234";
+            const string decrypAcct = "6015268542";
+            const string decryptRout = "042000314";
       
             _donorService.Setup(mocked => mocked.GetContactDonorForDonorAccount(check.AccountNumber, check.RoutingNumber)).Returns((ContactDonor)null);
-            _paymentService.Setup(mocked => mocked.CreateToken(check.AccountNumber, check.RoutingNumber)).Returns(token);
+            _mpDonorService.Setup(mocked => mocked.DecryptCheckValue(check.AccountNumber)).Returns(decrypAcct);
+            _mpDonorService.Setup(mocked => mocked.DecryptCheckValue(check.RoutingNumber)).Returns(decryptRout);
+            _paymentService.Setup(mocked => mocked.CreateToken(decrypAcct, decryptRout)).Returns(token);
+
             _donorService.Setup(
                 mocked =>
                     mocked.CreateOrUpdateContactDonor(
@@ -366,14 +405,14 @@ namespace crds_angular.test.Services
                             o => 
                                 o.Details.DisplayName.Equals(check.Name1) && o.Details.Address.Line1.Equals(check.Address.Line1) && o.Details.Address.Line2.Equals(check.Address.Line2) &&
                                 o.Details.Address.City.Equals(check.Address.City) && o.Details.Address.State.Equals(check.Address.State) && o.Details.Address.PostalCode.Equals(check.Address.PostalCode) &&
-                                o.Account.RoutingNumber.Equals(check.RoutingNumber) && o.Account.AccountNumber.Equals(check.AccountNumber) && o.Account.Type == AccountType.Checking),
+                                o.Account.RoutingNumber.Equals(decryptRout) && o.Account.AccountNumber.Equals(decrypAcct) && o.Account.Type == AccountType.Checking),
                         It.IsAny<string>(),
                         string.Empty,
                         token,
                         It.IsAny<DateTime>()))
                 .Returns(contactDonorNew);
-
-            _mpDonorService.Setup(mocked => mocked.CreateEncodedAndEncryptedAccountAndRoutingNumber(check.AccountNumber, check.RoutingNumber)).Returns(encryptedKey);
+            
+            _mpDonorService.Setup(mocked => mocked.CreateHashedAccountAndRoutingNumber(decrypAcct, decryptRout)).Returns(encryptedKey);
             _mpDonorService.Setup(mocked => mocked.UpdateDonorAccount(encryptedKey, contactDonorNew.Account.ProcessorAccountId, contactDonorNew.ProcessorId));
 
             var result = _fixture.CreateDonor(check);
