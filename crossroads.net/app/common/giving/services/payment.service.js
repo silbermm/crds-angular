@@ -185,7 +185,7 @@
             amount: GiveTransferService.amount,
             program: GiveTransferService.program.ProgramId,
             interval: GiveTransferService.givingType,
-            start_date: moment(GiveTransferService.recurringStartDate, 'MM DD YYYY')
+            start_date: GiveTransferService.recurringStartDate
           };
           $http({
             method: apiMethod,

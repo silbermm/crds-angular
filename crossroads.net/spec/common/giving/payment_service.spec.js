@@ -288,17 +288,18 @@ describe('PaymentService', function() {
   describe('function createRecurringGiftWithCard', function() {
     var postData;
     beforeEach(function() {
+      var startDate = moment({year: 2015, month: 12, day: 31}).toDate();
       postData = {
         stripe_token_id: 'tok_test',
         amount: 100,
         program: 1,
         interval: 'week',
-        start_date: moment('12/31/2015', 'MM DD YYYY')
+        start_date: startDate
       };
       GiveTransferService.amount = 100;
       GiveTransferService.program = {ProgramId: 1};
       GiveTransferService.givingType = 'week';
-      GiveTransferService.recurringStartDate = '12/31/2015';
+      GiveTransferService.recurringStartDate = startDate;
     });
 
     it('should call createToken and create a new recurring gift using the token', function() {
@@ -365,18 +366,19 @@ describe('PaymentService', function() {
 
   describe('function createRecurringGiftWithBankAcct', function() {
     var postData;
+    var startDate = moment({year: 2015, month: 12, day: 31}).toDate();
     beforeEach(function() {
       postData = {
         stripe_token_id: 'tok_test',
         amount: 100,
         program: 1,
         interval: 'week',
-        start_date: moment('12/31/2015', 'MM DD YYYY')
+        start_date: startDate
       };
       GiveTransferService.amount = 100;
       GiveTransferService.program = { ProgramId: 1 };
       GiveTransferService.givingType = 'week';
-      GiveTransferService.recurringStartDate = '12/31/2015';
+      GiveTransferService.recurringStartDate = startDate;
     });
 
     it('should call createToken and create a new recurring gift using the token', function() {
