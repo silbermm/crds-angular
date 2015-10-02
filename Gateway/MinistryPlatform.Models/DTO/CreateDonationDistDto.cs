@@ -8,5 +8,6 @@
         public string PaymentType { get; set; }
         public string ProgramId { get; set; }
         public int? RecurringGiftId { get; set; }
+        public int? DonorAccountId { get; set; }
     }
 }

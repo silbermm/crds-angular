@@ -1095,10 +1095,11 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Program_ID", "444"},
                     {"Congregation_ID", 555},
                     {"Account_Type_ID", 3},
-                    {"Recurring_Gift_ID", 4}
+                    {"Recurring_Gift_ID", 4},
+                    {"Donor_Account_ID", 5}
                 }
             };
-            _ministryPlatformService.Setup(mocked => mocked.GetPageViewRecords(45208, It.IsAny<string>(), "\"sub_123\",", string.Empty, 0)).Returns(lookupResult);
+            _ministryPlatformService.Setup(mocked => mocked.GetPageViewRecords(45208, It.IsAny<string>(), ",\"sub_123\",", string.Empty, 0)).Returns(lookupResult);
 
             var result = _fixture.GetRecurringGiftForSubscription("sub_123");
             _ministryPlatformService.VerifyAll();
@@ -1109,6 +1110,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(555, result.CongregationId);
             Assert.AreEqual(PaymentType.CreditCard.abbrv, result.PaymentType);
             Assert.AreEqual(4, result.RecurringGiftId);
+            Assert.AreEqual(5, result.DonorAccountId);
         }
 
         [Test]

@@ -681,7 +681,7 @@ namespace MinistryPlatform.Translation.Services
 
         public CreateDonationDistDto GetRecurringGiftForSubscription(string subscription)
         {
-            var searchStr = string.Format("\"{0}\",", subscription);
+            var searchStr = string.Format(",\"{0}\",", subscription);
             CreateDonationDistDto createDonation = null;
             try
             {
@@ -698,7 +698,8 @@ namespace MinistryPlatform.Translation.Services
                         ProgramId = record.ToString("Program_ID"),
                         CongregationId = record.ToInt("Congregation_ID"),
                         PaymentType = (int)AccountType.Checking == record.ToInt("Account_Type_ID") ? PaymentType.Bank.abbrv : PaymentType.CreditCard.abbrv,
-                        RecurringGiftId = record.ToNullableInt("Recurring_Gift_ID")
+                        RecurringGiftId = record.ToNullableInt("Recurring_Gift_ID"),
+                        DonorAccountId = record.ToNullableInt("Donor_Account_ID")
                     };
                 }
                 
