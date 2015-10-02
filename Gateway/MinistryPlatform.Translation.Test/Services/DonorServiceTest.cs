@@ -1093,5 +1093,71 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(555, result.CongregationId);
             Assert.AreEqual(PaymentType.CreditCard.abbrv, result.PaymentType);
         }
+
+        [Test]
+        public void TestCreateDonorAccountForBankAccount()
+        {
+            const string giftType = null;
+            const string routingNumber = "110000000";
+            const string accountNumber = "7890";
+            const int donorId = 123;
+            const string processorAcctId = "ba_123";
+            const string processorId = "cust_123";
+
+            const int donorAccountId = 456;
+
+            var expectedParms = new Dictionary<string, object>
+            {
+                {"Institution_Name", "Bank"},
+                {"Account_Number", accountNumber},
+                {"Routing_Number", "0"},
+                {"Encrypted_Account", _fixture.CreateHashedAccountAndRoutingNumber(accountNumber, routingNumber)},
+                {"Donor_ID", donorId},
+                {"Non-Assignable", false},
+                {"Account_Type_ID", (int)AccountType.Checking},
+                {"Closed", false},
+                {"Processor_Account_ID", processorAcctId},
+                {"Processor_ID", processorId}
+            };
+            _ministryPlatformService.Setup(mocked => mocked.CreateRecord(298, expectedParms, It.IsAny<string>(), false)).Returns(donorAccountId);
+
+            var result = _fixture.CreateDonorAccount(giftType, routingNumber, accountNumber, donorId, processorAcctId, processorId);
+            _ministryPlatformService.VerifyAll();
+            Assert.AreEqual(donorAccountId, result);
+
+        }
+
+        [Test]
+        public void TestCreateDonorAccountForCreditCard()
+        {
+            const string giftType = "Visa";
+            const string routingNumber = "0";
+            const string accountNumber = "7890";
+            const int donorId = 123;
+            const string processorAcctId = "ba_123";
+            const string processorId = "cust_123";
+
+            const int donorAccountId = 456;
+
+            var expectedParms = new Dictionary<string, object>
+            {
+                {"Institution_Name", giftType},
+                {"Account_Number", "7890"},
+                {"Routing_Number", "0"},
+                {"Encrypted_Account", null},
+                {"Donor_ID", donorId},
+                {"Non-Assignable", false},
+                {"Account_Type_ID", (int)AccountType.Credit},
+                {"Closed", false},
+                {"Processor_Account_ID", processorAcctId},
+                {"Processor_ID", processorId}
+            };
+            _ministryPlatformService.Setup(mocked => mocked.CreateRecord(298, expectedParms, It.IsAny<string>(), false)).Returns(donorAccountId);
+
+            var result = _fixture.CreateDonorAccount(giftType, routingNumber, accountNumber, donorId, processorAcctId, processorId);
+            _ministryPlatformService.VerifyAll();
+            Assert.AreEqual(donorAccountId, result);
+
+        }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -118,16 +117,14 @@ namespace MinistryPlatform.Translation.Services
         {
            var apiToken = ApiLogin();
 
-            int donorAccountId;
-
             string encryptedAcct = null;
             if (routingNumber != DonorRoutingNumberDefault)
             {
                 encryptedAcct = CreateHashedAccountAndRoutingNumber(acctNumber, routingNumber);
             }
 
-            var institutionName = (giftType == null) ?  "Bank" : giftType;
-            int accountType = (giftType == null) ? 1 : 3;
+            var institutionName = giftType ?? DefaultInstitutionName;
+            var accountType = (giftType == null) ? AccountType.Checking : AccountType.Credit;
 
             try
             {
@@ -139,13 +136,13 @@ namespace MinistryPlatform.Translation.Services
                     { "Encrypted_Account", encryptedAcct },
                     { "Donor_ID", donorId },
                     { "Non-Assignable", false },
-                    { "Account_Type_ID", accountType},
+                    { "Account_Type_ID", (int)accountType},
                     { "Closed", false },
                     {"Processor_Account_ID", processorAcctId},
                     {"Processor_ID", processorId}
                 };
 
-                 donorAccountId =  _ministryPlatformService.CreateRecord(_donorAccountsPageId, values, apiToken);  
+                 var donorAccountId = _ministryPlatformService.CreateRecord(_donorAccountsPageId, values, apiToken);  
                  return donorAccountId; 
             }
             catch (Exception e)
@@ -582,7 +579,7 @@ namespace MinistryPlatform.Translation.Services
             return donationMap.Values.ToList();
         }
 
-        private Donation GetDonationFromMap(Dictionary<int, Donation> donationMap,
+        private static Donation GetDonationFromMap(Dictionary<int, Donation> donationMap,
                                             Dictionary<string, Object> record,
                                             int donationId,
                                             List<DonationStatus> statuses)
@@ -614,7 +611,7 @@ namespace MinistryPlatform.Translation.Services
             return donation;
         }
 
-        private void AddDistributionToDonation(Dictionary<string, Object> record, Donation donation)
+        private static void AddDistributionToDonation(Dictionary<string, Object> record, Donation donation)
         {
 
             var amount = Convert.ToInt32((record["Amount"] as decimal? ?? 0) * Constants.StripeDecimalConversionValue);
@@ -627,12 +624,12 @@ namespace MinistryPlatform.Translation.Services
             });
         }
 
-        private string YearSearch(string year)
+        private static string YearSearch(string year)
         {
             return string.IsNullOrWhiteSpace(year) ? string.Empty : string.Format("\"*/{0}*\"", year);
         }
 
-        private string DonorIdSearch(IEnumerable<int> ids)
+        private static string DonorIdSearch(IEnumerable<int> ids)
         {
             return string.Join(" or ", ids.Select(id => string.Format("\"{0}\"", id)));
         }
