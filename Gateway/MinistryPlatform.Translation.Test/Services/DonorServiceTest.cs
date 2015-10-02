@@ -186,8 +186,8 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Processor_ID", processorId},
                 {"Donation_Status_Date", setupDate},
                 {"Donation_Status_ID", 1},
-                {"Is_Recurring_Gift", false},
                 {"Recurring_Gift_ID", null},
+                {"Is_Recurring_Gift", false},
                 {"Donor_Account_ID",donorAcctId },
                 {"Check_Scanner_Batch", checkScannerBatchName}
             };
@@ -292,9 +292,9 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Processor_ID", processorId},
                 {"Donation_Status_Date", setupDate},
                 {"Donation_Status_ID", 1},
-                {"Is_Recurring_Gift", false},
                 {"Recurring_Gift_ID", null},
-                {"Donor_Account_ID",null },
+                {"Is_Recurring_Gift", false},
+                {"Donor_Account_ID", null},
                 {"Check_Scanner_Batch", checkScannerBatchName}
             };
 
@@ -341,7 +341,20 @@ namespace MinistryPlatform.Translation.Test.Services
             _communicationService.Setup(mocked => mocked.GetTemplate(It.IsAny<int>())).Returns(getTemplateResponse);
 
 
-            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, pledgeId, chargeId, pymtType, processorId, setupDate, true, false, null, checkScannerBatchName);
+            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt,
+                                                                        feeAmt,
+                                                                        donorId,
+                                                                        programId,
+                                                                        pledgeId,
+                                                                        chargeId,
+                                                                        pymtType,
+                                                                        processorId,
+                                                                        setupDate,
+                                                                        true,
+                                                                        false,
+                                                                        null,
+                                                                        null,
+                                                                        checkScannerBatchName);
 
             // Explicitly verify each expectation...
             _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>()));
@@ -1081,7 +1094,8 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Amount", 456},
                     {"Program_ID", "444"},
                     {"Congregation_ID", 555},
-                    {"Account_Type_ID", 3}
+                    {"Account_Type_ID", 3},
+                    {"Recurring_Gift_ID", 4}
                 }
             };
             _ministryPlatformService.Setup(mocked => mocked.GetPageViewRecords(45208, It.IsAny<string>(), "\"sub_123\",", string.Empty, 0)).Returns(lookupResult);
@@ -1094,6 +1108,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual("444", result.ProgramId);
             Assert.AreEqual(555, result.CongregationId);
             Assert.AreEqual(PaymentType.CreditCard.abbrv, result.PaymentType);
+            Assert.AreEqual(4, result.RecurringGiftId);
         }
 
         [Test]
