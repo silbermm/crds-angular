@@ -57,7 +57,9 @@
         return;
       }
 
-      vm.dto.givingType = giveType;
+      if (vm.dto.givingType == undefined) {
+        vm.dto.givingType = giveType;
+      }
       vm.service.getLoggedInUserDonorPaymentInfo(event, toState);
     });
 

@@ -33,10 +33,12 @@
           },
 
           giveType: function($location) {
-            if (!!$location.search().recurring) {
-              return 'month';
-            } else {
-              return 'one_time';
+            if ($location.search().recurring !== undefined) {
+              if (!!$location.search().recurring) {
+                return 'month';
+              } else {
+                return 'one_time';
+              }
             }
           }
         },
