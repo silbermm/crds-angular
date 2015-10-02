@@ -172,7 +172,7 @@ namespace MinistryPlatform.Translation.Services
                 {"Processor_ID", processorId },
                 {"Donation_Status_Date", setupTime},
                 {"Donation_Status_ID", 1}, //hardcoded to pending 
-                {"Recurring_Gift", recurringGift},
+                {"Is_Recurring_Gift", recurringGift},
                 {"Donor_Account_ID", donorAcctId}
             };
             if (!string.IsNullOrWhiteSpace(checkScannerBatchName))
