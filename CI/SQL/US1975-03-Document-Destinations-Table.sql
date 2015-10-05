@@ -5,18 +5,25 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[cr_Document_Destinations](
-	[Document_Destination_ID] [int] IDENTITY(1,1) NOT NULL,
-	[Document_ID] [int] NOT NULL,
-	[Destination_ID] [int] NOT NULL,
-	[Domain_ID] [int] NOT NULL,
- CONSTRAINT [PK_Document_Destinations] PRIMARY KEY CLUSTERED
-(
-	[Document_Destination_ID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
 
-GO
+IF (NOT EXISTS (SELECT * 
+                 FROM INFORMATION_SCHEMA.TABLES 
+                 WHERE TABLE_NAME = 'cr_Document_Destinations'))
+BEGIN
+
+	CREATE TABLE [dbo].[cr_Document_Destinations](
+		[Document_Destination_ID] [int] IDENTITY(1,1) NOT NULL,
+		[Document_ID] [int] NOT NULL,
+		[Destination_ID] [int] NOT NULL,
+		[Domain_ID] [int] NOT NULL,
+	 CONSTRAINT [PK_Document_Destinations] PRIMARY KEY CLUSTERED
+	(
+		[Document_Destination_ID] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+
+END
+
 SET IDENTITY_INSERT [dbo].[cr_Document_Destinations] ON
 
 GO
@@ -74,6 +81,7 @@ INSERT [dbo].[cr_Document_Destinations] ([Document_Destination_ID], [Document_ID
 GO
 SET IDENTITY_INSERT [dbo].[cr_Document_Destinations] OFF
 GO
+
 ALTER TABLE [dbo].[cr_Document_Destinations]  WITH CHECK ADD  CONSTRAINT [FK_Document_Destinations_Destinations] FOREIGN KEY([Destination_ID])
 REFERENCES [dbo].[cr_Destinations] ([Destination_ID])
 GO
