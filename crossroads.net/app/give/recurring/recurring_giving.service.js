@@ -3,10 +3,11 @@
 
   module.exports = RecurringGiving;
 
-  RecurringGiving.$inject = ['DonationService', 'GiveFlow'];
+  RecurringGiving.$inject = ['GiveTransferService', 'DonationService', 'GiveFlow', 'Session', '$state'];
 
-  function RecurringGiving(DonationService, GiveFlow) {
+  function RecurringGiving(GiveTransferService, DonationService, GiveFlow, Session, $state) {
     var service = {
+      initDefaultState: initDefaultState,
       resetGiveFlow: resetGiveFlow,
       goToAccount: goToAccount,
       stateName: stateName,
@@ -16,6 +17,17 @@
       processChange: processChange,
       getLoggedInUserDonorPaymentInfo: getLoggedInUserDonorPaymentInfo,
     };
+
+    function initDefaultState() {
+      GiveTransferService.reset();
+      GiveTransferService.processing = false;
+
+      resetGiveFlow();
+      GiveTransferService.initialized = true;
+
+      Session.removeRedirectRoute();
+      $state.go(GiveFlow.amount);
+    }
 
     function resetGiveFlow() {
       // Setup the give flow service
