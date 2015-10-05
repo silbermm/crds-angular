@@ -8,7 +8,7 @@
   
     <hr>
       <p>
-        You are giving <strong>{{give.dto.amount | currency}} {{give.dto.givingType}}</strong> to the
+        You are giving <strong>{{give.dto.amount | currency}} per {{give.dto.givingType}}</strong> to 
         <strong>{{give.dto.program['Name']}}</strong> starting on
         <strong>{{give.dto.recurringStartDate | date:'MM/dd/yyyy' }}</strong>.
         <a href="" ng-click="give.service.processChange()" tabindex="-1" class="text-secondary">Change</a>
