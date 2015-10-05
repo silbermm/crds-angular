@@ -9,7 +9,7 @@ GO
 
 IF (NOT EXISTS (SELECT * 
                  FROM INFORMATION_SCHEMA.TABLES 
-                 WHERE TABLE_NAME = 'cr_Destinations'))
+                 WHERE TABLE_NAME = '[dbo].[cr_Destinations]'))
 BEGIN
 	CREATE TABLE [dbo].[cr_Destinations](
 		[Destination_ID] [int] IDENTITY(1,1) NOT NULL,
