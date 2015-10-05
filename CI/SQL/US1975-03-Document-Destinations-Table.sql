@@ -79,21 +79,43 @@ INSERT [dbo].[cr_Document_Destinations] ([Document_Destination_ID], [Document_ID
 GO
 INSERT [dbo].[cr_Document_Destinations] ([Document_Destination_ID], [Document_ID], [Destination_ID], [Domain_ID]) VALUES (32, 16, 4, 1)
 GO
+
 SET IDENTITY_INSERT [dbo].[cr_Document_Destinations] OFF
 GO
 
-ALTER TABLE [dbo].[cr_Document_Destinations]  WITH CHECK ADD  CONSTRAINT [FK_Document_Destinations_Destinations] FOREIGN KEY([Destination_ID])
+IF NOT EXISTS (SELECT * 
+           FROM sys.foreign_keys 
+           WHERE object_id = OBJECT_ID(N'[dbo].[FK_Document_Destinations_Destinations]') 
+             AND parent_object_id = OBJECT_ID(N'[dbo].[cr_Document_Destinations]'))
+BEGIN
+   ALTER TABLE [dbo].[cr_Document_Destinations]  WITH CHECK ADD  CONSTRAINT [FK_Document_Destinations_Destinations] FOREIGN KEY([Destination_ID])
 REFERENCES [dbo].[cr_Destinations] ([Destination_ID])
-GO
+END
+
+
 ALTER TABLE [dbo].[cr_Document_Destinations] CHECK CONSTRAINT [FK_Document_Destinations_Destinations]
-GO
-ALTER TABLE [dbo].[cr_Document_Destinations]  WITH CHECK ADD  CONSTRAINT [FK_Document_Destinations_Documents] FOREIGN KEY([Document_ID])
-REFERENCES [dbo].[cr_Documents] ([Document_ID])
-GO
+GO	
+
+IF NOT EXISTS (SELECT * 
+           FROM sys.foreign_keys 
+           WHERE object_id = OBJECT_ID(N'[dbo].[FK_Document_Destinations_Documents]') 
+             AND parent_object_id = OBJECT_ID(N'[dbo].[cr_Document_Destinations]'))
+BEGIN
+	ALTER TABLE [dbo].[cr_Document_Destinations]  WITH CHECK ADD  CONSTRAINT [FK_Document_Destinations_Documents] FOREIGN KEY([Document_ID])
+	REFERENCES [dbo].[cr_Documents] ([Document_ID])
+END 
+
 ALTER TABLE [dbo].[cr_Document_Destinations] CHECK CONSTRAINT [FK_Document_Destinations_Documents]
 GO
-ALTER TABLE [dbo].[cr_Document_Destinations]  WITH CHECK ADD  CONSTRAINT [FK_Document_Destinations_dp_Domains] FOREIGN KEY([Domain_ID])
-REFERENCES [dbo].[dp_Domains] ([Domain_ID])
-GO
+
+IF NOT EXISTS (SELECT * 
+           FROM sys.foreign_keys 
+           WHERE object_id = OBJECT_ID(N'[dbo].[FK_Document_Destinations_dp_Domains]') 
+             AND parent_object_id = OBJECT_ID(N'[dbo].[cr_Document_Destinations]'))
+BEGIN
+	ALTER TABLE [dbo].[cr_Document_Destinations]  WITH CHECK ADD  CONSTRAINT [FK_Document_Destinations_dp_Domains] FOREIGN KEY([Domain_ID])
+	REFERENCES [dbo].[dp_Domains] ([Domain_ID])
+END
+
 ALTER TABLE [dbo].[cr_Document_Destinations] CHECK CONSTRAINT [FK_Document_Destinations_dp_Domains]
 GO

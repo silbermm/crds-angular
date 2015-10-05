@@ -9,7 +9,7 @@ GO
 
 IF (NOT EXISTS (SELECT * 
                  FROM INFORMATION_SCHEMA.TABLES 
-                 WHERE TABLE_NAME = 'cr_Documents'))
+                 WHERE TABLE_NAME = '[dbo].[cr_Documents]'))
 BEGIN
 	
 	CREATE TABLE [dbo].[cr_Documents](
