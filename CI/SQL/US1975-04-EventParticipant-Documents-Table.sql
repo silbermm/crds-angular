@@ -1,17 +1,6 @@
 USE [MinistryPlatform]
 GO
 
-IF (EXISTS (SELECT * 
-                 FROM INFORMATION_SCHEMA.TABLES 
-                 WHERE TABLE_NAME = 'cr_EventParticipant_Documents'))
-BEGIN
-	ALTER TABLE [dbo].[cr_EventParticipant_Documents] DROP CONSTRAINT [FK_EventParticipant_Documents_Event_Participants]
-	ALTER TABLE [dbo].[cr_EventParticipant_Documents] DROP CONSTRAINT [FK_EventParticipant_Documents_dp_Domains]
-	ALTER TABLE [dbo].[cr_EventParticipant_Documents] DROP CONSTRAINT [FK_EventParticipant_Documents_Documents]
-	DROP TABLE [dbo].[cr_EventParticipant_Documents]
-END
-
-
 
 /****** Object:  Table [dbo].[cr_EventParticipant_Documents]    Script Date: 9/29/2015 4:15:43 PM ******/
 SET ANSI_NULLS ON

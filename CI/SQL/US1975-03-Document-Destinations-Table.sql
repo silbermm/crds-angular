@@ -79,6 +79,7 @@ INSERT [dbo].[cr_Document_Destinations] ([Document_Destination_ID], [Document_ID
 GO
 INSERT [dbo].[cr_Document_Destinations] ([Document_Destination_ID], [Document_ID], [Destination_ID], [Domain_ID]) VALUES (32, 16, 4, 1)
 GO
+
 SET IDENTITY_INSERT [dbo].[cr_Document_Destinations] OFF
 GO
 
@@ -88,12 +89,12 @@ IF NOT EXISTS (SELECT *
              AND parent_object_id = OBJECT_ID(N'[dbo].[cr_Document_Destinations]'))
 BEGIN
    ALTER TABLE [dbo].[cr_Document_Destinations]  WITH CHECK ADD  CONSTRAINT [FK_Document_Destinations_Destinations] FOREIGN KEY([Destination_ID])
-	REFERENCES [dbo].[cr_Destinations] ([Destination_ID])
+REFERENCES [dbo].[cr_Destinations] ([Destination_ID])
 END
 
 
 ALTER TABLE [dbo].[cr_Document_Destinations] CHECK CONSTRAINT [FK_Document_Destinations_Destinations]
-GO
+GO	
 
 IF NOT EXISTS (SELECT * 
            FROM sys.foreign_keys 
