@@ -62,20 +62,25 @@ namespace crds_angular.Services
         {
             _logger.Debug("Processing invoice.created event for subscription id " + invoice.Subscription);
             var createDonation = _donorService.GetRecurringGiftForSubscription(invoice.Subscription);
-            var amount = invoice.Amount/Constants.StripeDecimalConversionValue;
+            var charge = _paymentService.GetCharge(invoice.Charge);
+            var donationStatus = charge.Status == "succeeded" ? DonationStatus.Succeeded : DonationStatus.Pending;
+            var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
+            var amount = charge.Amount/Constants.StripeDecimalConversionValue;
             _mpDonorService.CreateDonationAndDistributionRecord((int) amount,
-                                                                0,
+                                                                fee, // Fee amount
                                                                 createDonation.DonorId,
                                                                 createDonation.ProgramId,
-                                                                null,
+                                                                null, // Pledge ID
                                                                 invoice.Charge,
                                                                 createDonation.PaymentType,
                                                                 invoice.Customer,
                                                                 DateTime.Now,
-                                                                true,
-                                                                true,
+                                                                true, // Registered donor?
+                                                                true, // Recurring gift?
                                                                 createDonation.RecurringGiftId,
-                                                                createDonation.DonorAccountId.HasValue ? createDonation.DonorAccountId.ToString() : null);
+                                                                createDonation.DonorAccountId.HasValue ? createDonation.DonorAccountId.ToString() : null,
+                                                                null, // check scanner batch name
+                                                                (int)donationStatus);
          }
 
         public TransferPaidResponseDTO TransferPaid(DateTime? eventTimestamp, StripeTransfer transfer)

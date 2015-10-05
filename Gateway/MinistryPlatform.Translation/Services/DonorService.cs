@@ -152,14 +152,13 @@ namespace MinistryPlatform.Translation.Services
            
         }
 
-        public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, int? pledgeId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor, bool recurringGift, int? recurringGiftId, string donorAcctId, string checkScannerBatchName = null)
+        public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, int? pledgeId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor, bool recurringGift, int? recurringGiftId, string donorAcctId, string checkScannerBatchName = null, int? donationStatus = null)
         {
             var pymtId = PaymentType.getPaymentType(pymtType).id;
             var fee = feeAmt.HasValue ? feeAmt / Constants.StripeDecimalConversionValue : null;
 
-
             var apiToken = ApiLogin();
-            
+
             var donationValues = new Dictionary<string, object>
             {
                 {"Donor_ID", donorId},
@@ -171,7 +170,7 @@ namespace MinistryPlatform.Translation.Services
                 {"Registered_Donor", registeredDonor},
                 {"Processor_ID", processorId },
                 {"Donation_Status_Date", setupTime},
-                {"Donation_Status_ID", 1}, //hardcoded to pending 
+                {"Donation_Status_ID", donationStatus ?? 1}, //hardcoded to pending if no status specified
                 {"Recurring_Gift_ID", recurringGiftId},
                 {"Is_Recurring_Gift", recurringGift},
                 {"Donor_Account_ID", donorAcctId}

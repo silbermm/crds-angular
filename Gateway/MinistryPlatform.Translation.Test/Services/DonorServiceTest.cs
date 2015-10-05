@@ -163,6 +163,7 @@ namespace MinistryPlatform.Translation.Test.Services
             var searchString = ",\"" + donorId + "\"";
             var donationPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Donations"]);
             var donationDistPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Distributions"]);
+            const int donationStatus = 4;
 
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
               donationPageId, It.IsAny<Dictionary<string, object>>(),
@@ -185,7 +186,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Registered_Donor", true}, 
                 {"Processor_ID", processorId},
                 {"Donation_Status_Date", setupDate},
-                {"Donation_Status_ID", 1},
+                {"Donation_Status_ID", donationStatus},
                 {"Recurring_Gift_ID", null},
                 {"Is_Recurring_Gift", false},
                 {"Donor_Account_ID",donorAcctId },
@@ -234,7 +235,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _communicationService.Setup(mocked => mocked.GetTemplate(It.IsAny<int>())).Returns(getTemplateResponse);
 
 
-            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, null, chargeId, pymtType, processorId, setupDate, true, false, null, donorAcctId, checkScannerBatchName);
+            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, null, chargeId, pymtType, processorId, setupDate, true, false, null, donorAcctId, checkScannerBatchName, donationStatus);
 
             // Explicitly verify each expectation...
             _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>()));

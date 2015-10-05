@@ -6,7 +6,7 @@ using crds_angular.Services;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
-using MinistryPlatform.Translation.Services.Interfaces;
+using MinistryPlatform.Models.DTO;
 using Moq;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
@@ -315,6 +315,80 @@ namespace crds_angular.test.Services
 
             _paymentService.VerifyAll();
             _donationService.VerifyAll();
+        }
+
+        [Test]
+        public void TestInvoiceCreated()
+        {
+            var eventTimestamp = DateTime.Now;
+            const string processorId = "cus_123";
+            const string subscriptionId = "sub_123";
+            const string chargeId = "ch_123";
+
+            var invoice = new StripeInvoice
+            {
+                Subscription = subscriptionId,
+                Amount = 12300,
+                Charge = chargeId,
+                Customer = processorId,
+            };
+
+            const int chargeAmount = 45600;
+            int? feeAmount = 987;
+
+            var charge = new StripeCharge
+            {
+                Amount = chargeAmount,
+                BalanceTransaction = new StripeBalanceTransaction
+                {
+                    Amount = 78900,
+                    Fee = feeAmount
+                },
+                Status = "succeeded"
+            };
+
+            _paymentService.Setup(mocked => mocked.GetCharge(chargeId)).Returns(charge);
+
+            const int donorId = 321;
+            const string programId = "3";
+            const string paymentType = "Bank";
+            const int recurringGiftId = 654;
+            const int donorAccountId = 987;
+            const int donationStatus = 4;
+
+            var recurringGift = new CreateDonationDistDto
+            {
+                Amount = 78900,
+                DonorAccountId = donorAccountId,
+                DonorId = donorId,
+                PaymentType = paymentType,
+                ProgramId = programId,
+                RecurringGiftId = recurringGiftId
+            };
+            _donorService.Setup(mocked => mocked.GetRecurringGiftForSubscription(subscriptionId)).Returns(recurringGift);
+
+            _mpDonorService.Setup(
+                mocked =>
+                    mocked.CreateDonationAndDistributionRecord((int) (chargeAmount/Constants.StripeDecimalConversionValue),
+                                                               feeAmount,
+                                                               donorId,
+                                                               programId,
+                                                               null,
+                                                               chargeId,
+                                                               paymentType,
+                                                               processorId,
+                                                               It.IsAny<DateTime>(),
+                                                               true,
+                                                               true,
+                                                               recurringGiftId,
+                                                               donorAccountId+"",
+                                                               null,
+                                                               donationStatus)).Returns(123);
+
+            _fixture.InvoiceCreated(eventTimestamp, invoice);
+            _paymentService.VerifyAll();
+            _mpDonorService.VerifyAll();
+            _donorService.VerifyAll();
         }
     }
 }

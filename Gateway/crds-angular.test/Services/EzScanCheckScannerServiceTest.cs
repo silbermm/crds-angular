@@ -188,7 +188,7 @@ namespace crds_angular.test.Services
                                                                "check",
                                                                contactDonorExisting.ProcessorId,
                                                                It.IsAny<DateTime>(),
-                                                               true, false, null, donorAcctId, "batch123")).Returns(321);
+                                                               true, false, null, donorAcctId, "batch123", null)).Returns(321);
 
             var contactDonorNew = new ContactDonor
             {
@@ -243,7 +243,7 @@ namespace crds_angular.test.Services
                                                                "check",
                                                                contactDonorNew.ProcessorId,
                                                                It.IsAny<DateTime>(),
-                                                               false, false, null, donorAcctId, "batch123")).Returns(654);
+                                                               false, false, null, donorAcctId, "batch123", null)).Returns(654);
 
 
 
