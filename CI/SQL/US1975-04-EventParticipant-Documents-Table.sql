@@ -1,18 +1,17 @@
 USE [MinistryPlatform]
 GO
 
-ALTER TABLE [dbo].[cr_EventParticipant_Documents] DROP CONSTRAINT [FK_EventParticipant_Documents_Event_Participants]
-GO
+IF (EXISTS (SELECT * 
+                 FROM INFORMATION_SCHEMA.TABLES 
+                 WHERE TABLE_NAME = 'cr_EventParticipant_Documents'))
+BEGIN
+	ALTER TABLE [dbo].[cr_EventParticipant_Documents] DROP CONSTRAINT [FK_EventParticipant_Documents_Event_Participants]
+	ALTER TABLE [dbo].[cr_EventParticipant_Documents] DROP CONSTRAINT [FK_EventParticipant_Documents_dp_Domains]
+	ALTER TABLE [dbo].[cr_EventParticipant_Documents] DROP CONSTRAINT [FK_EventParticipant_Documents_Documents]
+	DROP TABLE [dbo].[cr_EventParticipant_Documents]
+END
 
-ALTER TABLE [dbo].[cr_EventParticipant_Documents] DROP CONSTRAINT [FK_EventParticipant_Documents_dp_Domains]
-GO
 
-ALTER TABLE [dbo].[cr_EventParticipant_Documents] DROP CONSTRAINT [FK_EventParticipant_Documents_Documents]
-GO
-
-/****** Object:  Table [dbo].[cr_EventParticipant_Documents]    Script Date: 9/29/2015 4:15:43 PM ******/
-DROP TABLE [dbo].[cr_EventParticipant_Documents]
-GO
 
 /****** Object:  Table [dbo].[cr_EventParticipant_Documents]    Script Date: 9/29/2015 4:15:43 PM ******/
 SET ANSI_NULLS ON
@@ -39,23 +38,38 @@ BEGIN
 	) ON [PRIMARY]
 END
 
-ALTER TABLE [dbo].[cr_EventParticipant_Documents]  WITH CHECK ADD  CONSTRAINT [FK_EventParticipant_Documents_Documents] FOREIGN KEY([Document_ID])
-REFERENCES [dbo].[cr_Documents] ([Document_ID])
-GO
+IF NOT EXISTS (SELECT * 
+           FROM sys.foreign_keys 
+           WHERE object_id = OBJECT_ID(N'[dbo].[FK_EventParticipant_Documents_Documents]') 
+             AND parent_object_id = OBJECT_ID(N'[dbo].[cr_EventParticipant_Documents]'))
+BEGIN
+	ALTER TABLE [dbo].[cr_EventParticipant_Documents]  WITH CHECK ADD  CONSTRAINT [FK_EventParticipant_Documents_Documents] FOREIGN KEY([Document_ID])
+	REFERENCES [dbo].[cr_Documents] ([Document_ID])
+END
 
 ALTER TABLE [dbo].[cr_EventParticipant_Documents] CHECK CONSTRAINT [FK_EventParticipant_Documents_Documents]
 GO
 
-ALTER TABLE [dbo].[cr_EventParticipant_Documents]  WITH CHECK ADD  CONSTRAINT [FK_EventParticipant_Documents_dp_Domains] FOREIGN KEY([Domain_ID])
-REFERENCES [dbo].[dp_Domains] ([Domain_ID])
-GO
+IF NOT EXISTS (SELECT * 
+           FROM sys.foreign_keys 
+           WHERE object_id = OBJECT_ID(N'[dbo].[FK_EventParticipant_Documents_dp_Domains]') 
+             AND parent_object_id = OBJECT_ID(N'[dbo].[cr_EventParticipant_Documents]'))
+BEGIN
+	ALTER TABLE [dbo].[cr_EventParticipant_Documents]  WITH CHECK ADD  CONSTRAINT [FK_EventParticipant_Documents_dp_Domains] FOREIGN KEY([Domain_ID])
+	REFERENCES [dbo].[dp_Domains] ([Domain_ID])
+END
 
 ALTER TABLE [dbo].[cr_EventParticipant_Documents] CHECK CONSTRAINT [FK_EventParticipant_Documents_dp_Domains]
 GO
 
-ALTER TABLE [dbo].[cr_EventParticipant_Documents]  WITH CHECK ADD  CONSTRAINT [FK_EventParticipant_Documents_Event_Participants] FOREIGN KEY([Event_Participant_ID])
-REFERENCES [dbo].[Event_Participants] ([Event_Participant_ID])
-GO
+IF NOT EXISTS (SELECT * 
+           FROM sys.foreign_keys 
+           WHERE object_id = OBJECT_ID(N'[dbo].[FK_EventParticipant_Documents_Event_Participants]') 
+             AND parent_object_id = OBJECT_ID(N'[dbo].[cr_EventParticipant_Documents]'))
+BEGIN
+	ALTER TABLE [dbo].[cr_EventParticipant_Documents]  WITH CHECK ADD  CONSTRAINT [FK_EventParticipant_Documents_Event_Participants] FOREIGN KEY([Event_Participant_ID])
+	REFERENCES [dbo].[Event_Participants] ([Event_Participant_ID])
+END
 
 ALTER TABLE [dbo].[cr_EventParticipant_Documents] CHECK CONSTRAINT [FK_EventParticipant_Documents_Event_Participants]
 GO
