@@ -1,4 +1,4 @@
-USE [MinistryPlatform]
+USE [MinistryPlatformTest]
 GO
 
 SET ANSI_NULLS ON
