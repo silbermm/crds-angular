@@ -527,7 +527,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Balance</Value>
+                                  <Value>Outstanding Balance</Value>
                                   <Style>
                                     <FontFamily>Tahoma</FontFamily>
                                     <FontWeight>Bold</FontWeight>
@@ -673,10 +673,10 @@
                   <Width>1.25in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.25in</Width>
+                  <Width>1.54167in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2in</Width>
+                  <Width>1.70833in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -724,7 +724,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.25in</Height>
+                  <Height>0.43417in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -826,6 +826,20 @@
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Outstanding</Value>
+                                  <Style>
+                                    <FontFamily>Tahoma</FontFamily>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
@@ -1445,7 +1459,7 @@
             </TablixRowHierarchy>
             <DataSetName>DataSet1</DataSetName>
             <Top>2.375in</Top>
-            <Height>1.2in</Height>
+            <Height>1.38417in</Height>
             <Width>8in</Width>
             <ZIndex>1</ZIndex>
             <Style />
