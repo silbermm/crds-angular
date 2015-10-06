@@ -63,6 +63,33 @@ BEGIN
 
 	INSERT INTO [dbo].[dp_Page_Section_Pages]([Page_ID],[Page_Section_ID],[User_ID]) VALUES(521,4,NULL);
 
+		-- Grant "Full" access on this page to "unauthenticatedCreate" role
+		INSERT INTO [dbo].[dp_Role_Pages] (
+		  [Role_ID],
+		  [Page_ID],
+		  [Access_Level],
+		  [Scope_All],
+		  [Approver],
+		  [File_Attacher],
+		  [Data_Importer],
+		  [Data_Exporter],
+		  [Secure_Records],
+		  [Allow_Comments],
+		  [Quick_Add]
+		) VALUES (
+		  62,
+		  521,
+		  3,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0
+		);
+
 	-- Grant "Full" access on this page to "Stewardship Donation Processor" role
 	INSERT INTO [dbo].[dp_Role_Pages] (
 	  [Role_ID],
@@ -147,6 +174,33 @@ BEGIN
 	SET IDENTITY_INSERT [dbo].[dp_Pages] OFF;
 
 	INSERT INTO [dbo].[dp_Page_Section_Pages]([Page_ID],[Page_Section_ID],[User_ID]) VALUES(522,4,NULL);
+
+		-- Grant "Full" access on this page to "unauthenticatedCreate" role
+		INSERT INTO [dbo].[dp_Role_Pages] (
+		  [Role_ID],
+		  [Page_ID],
+		  [Access_Level],
+		  [Scope_All],
+		  [Approver],
+		  [File_Attacher],
+		  [Data_Importer],
+		  [Data_Exporter],
+		  [Secure_Records],
+		  [Allow_Comments],
+		  [Quick_Add]
+		) VALUES (
+		  62,
+		  522,
+		  3,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0
+		);
 
 	-- Grant "Full" access on this page to "Stewardship Donation Processor" role
 	INSERT INTO [dbo].[dp_Role_Pages] (
@@ -299,6 +353,33 @@ BEGIN
 	SET IDENTITY_INSERT [dbo].[dp_Pages] OFF;
 
 	INSERT INTO [dbo].[dp_Page_Section_Pages]([Page_ID],[Page_Section_ID],[User_ID]) VALUES(517,9,NULL);
+
+	-- Grant "Full" access on this page to "unauthenticatedCreate" role
+	INSERT INTO [dbo].[dp_Role_Pages] (
+	  [Role_ID],
+	  [Page_ID],
+	  [Access_Level],
+	  [Scope_All],
+	  [Approver],
+	  [File_Attacher],
+	  [Data_Importer],
+	  [Data_Exporter],
+	  [Secure_Records],
+	  [Allow_Comments],
+	  [Quick_Add]
+	) VALUES (
+	  62,
+	  517,
+	  3,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0
+	);
 
 	-- Grant "Full" access on this page to "Stewardship Donation Processor" role
 	INSERT INTO [dbo].[dp_Role_Pages] (
