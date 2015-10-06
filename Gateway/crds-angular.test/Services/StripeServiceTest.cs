@@ -515,13 +515,14 @@ namespace crds_angular.test.Services
         [Test]
         public void TestCreatePlan()
         {
+            const int expectedTrialDays = 3;
             var recurringGiftDto = new RecurringGiftDto
             {
                 StripeTokenId = "tok_123",
                 PlanAmount = 123.45M,
                 PlanInterval = "week",
                 Program = "987",
-                StartDate = DateTime.Parse("1973-10-15")
+                StartDate = DateTime.Now.AddDays(expectedTrialDays)
             };
 
             var contactDonor = new ContactDonor
@@ -547,7 +548,7 @@ namespace crds_angular.test.Services
                 && ParameterMatches("interval", recurringGiftDto.PlanInterval, o.Parameters)
                 && ParameterMatches("name", "Donor ID #" + contactDonor.DonorId + " " + recurringGiftDto.PlanInterval + "ly", o.Parameters)
                 && ParameterMatches("currency", "usd", o.Parameters)
-                && ParameterMatches("trial_period_days", (recurringGiftDto.StartDate - DateTime.Now).Days, o.Parameters)
+                && ParameterMatches("trial_period_days", expectedTrialDays, o.Parameters)
                 && ParameterMatches("id", contactDonor.DonorId + " " + DateTime.Now, o.Parameters))));
 
             Assert.AreSame(stripePlan, response);
