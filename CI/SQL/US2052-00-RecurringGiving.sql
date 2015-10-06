@@ -29,6 +29,69 @@ BEGIN
 END
 
 IF (NOT EXISTS (SELECT *
+                 FROM [dbo].[dp_Pages]
+                 WHERE [Page_ID] = 521))
+BEGIN
+	SET IDENTITY_INSERT [dbo].[dp_Pages] ON;
+
+	INSERT INTO [dbo].[dp_Pages] (
+		 [Page_ID]
+		,[Display_Name]
+		,[Singular_Name]
+		,[Description]
+		,[View_Order]
+		,[Table_Name]
+		,[Primary_Key]
+		,[Display_Search]
+		,[Default_Field_List]
+		,[Selected_Record_Expression]
+		,[Display_Copy]
+)	VALUES(
+	 521
+	,'Recurring Gift Days'
+	,'Recurring Gift Day'
+	,'List of Recurring Gift Days (Monday-Sunday)'
+	,10
+	,'Recurring_Gift_Days'
+	,'Day_Of_Week_ID'
+	,NULL
+	,'Day_Of_Week_ID, Day_Of_Week'
+	,'Day_Of_Week'
+	,0);
+
+	SET IDENTITY_INSERT [dbo].[dp_Pages] OFF;
+
+	INSERT INTO [dbo].[dp_Page_Section_Pages]([Page_ID],[Page_Section_ID],[User_ID]) VALUES(521,4,NULL);
+
+	-- Grant "Full" access on this page to "Stewardship Donation Processor" role
+	INSERT INTO [dbo].[dp_Role_Pages] (
+	  [Role_ID],
+	  [Page_ID],
+	  [Access_Level],
+	  [Scope_All],
+	  [Approver],
+	  [File_Attacher],
+	  [Data_Importer],
+	  [Data_Exporter],
+	  [Secure_Records],
+	  [Allow_Comments],
+	  [Quick_Add]
+	) VALUES (
+	  7,
+	  521,
+	  3,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0
+	);
+END
+
+IF (NOT EXISTS (SELECT *
                  FROM INFORMATION_SCHEMA.TABLES
                  WHERE TABLE_NAME = 'Recurring_Gift_Frequencies'))
 BEGIN
@@ -48,6 +111,69 @@ BEGIN
 	INSERT INTO [dbo].[Recurring_Gift_Frequencies]([Frequency_ID],[Frequency],[Domain_ID]) VALUES(2,'Monthly',1);
 
 	SET IDENTITY_INSERT [dbo].[Recurring_Gift_Frequencies] OFF;
+END
+
+IF (NOT EXISTS (SELECT *
+                 FROM [dbo].[dp_Pages]
+                 WHERE [Page_ID] = 522))
+BEGIN
+	SET IDENTITY_INSERT [dbo].[dp_Pages] ON;
+
+	INSERT INTO [dbo].[dp_Pages] (
+		 [Page_ID]
+		,[Display_Name]
+		,[Singular_Name]
+		,[Description]
+		,[View_Order]
+		,[Table_Name]
+		,[Primary_Key]
+		,[Display_Search]
+		,[Default_Field_List]
+		,[Selected_Record_Expression]
+		,[Display_Copy]
+)	VALUES(
+	 522
+	,'Recurring Gift Frequencies'
+	,'Recurring Gift Frequency'
+	,'List of Recurring Gift Frequencies (Weekly, Monthly, etc)'
+	,20
+	,'Recurring_Gift_Frequencies'
+	,'Frequency_ID'
+	,NULL
+	,'Frequency_ID, Frequency'
+	,'Frequency'
+	,0);
+
+	SET IDENTITY_INSERT [dbo].[dp_Pages] OFF;
+
+	INSERT INTO [dbo].[dp_Page_Section_Pages]([Page_ID],[Page_Section_ID],[User_ID]) VALUES(522,4,NULL);
+
+	-- Grant "Full" access on this page to "Stewardship Donation Processor" role
+	INSERT INTO [dbo].[dp_Role_Pages] (
+	  [Role_ID],
+	  [Page_ID],
+	  [Access_Level],
+	  [Scope_All],
+	  [Approver],
+	  [File_Attacher],
+	  [Data_Importer],
+	  [Data_Exporter],
+	  [Secure_Records],
+	  [Allow_Comments],
+	  [Quick_Add]
+	) VALUES (
+	  7,
+	  522,
+	  3,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0
+	);
 END
 
 IF (NOT EXISTS (SELECT *
@@ -171,6 +297,35 @@ BEGIN
 	           ,0);
 
 	SET IDENTITY_INSERT [dbo].[dp_Pages] OFF;
+
+	INSERT INTO [dbo].[dp_Page_Section_Pages]([Page_ID],[Page_Section_ID],[User_ID]) VALUES(517,9,NULL);
+
+	-- Grant "Full" access on this page to "Stewardship Donation Processor" role
+	INSERT INTO [dbo].[dp_Role_Pages] (
+	  [Role_ID],
+	  [Page_ID],
+	  [Access_Level],
+	  [Scope_All],
+	  [Approver],
+	  [File_Attacher],
+	  [Data_Importer],
+	  [Data_Exporter],
+	  [Secure_Records],
+	  [Allow_Comments],
+	  [Quick_Add]
+	) VALUES (
+	  7,
+	  517,
+	  3,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0
+	);
 END
 
 
