@@ -266,6 +266,7 @@ namespace crds_angular.Services
 
         public MyTripsDto GetMyTrips(int contactId)
         {
+            // US2086 - refactor GetMyTripDistributions to exclude Pledges with status = 'discontinued'
             var trips = _donationService.GetMyTripDistributions(contactId).OrderBy(t => t.EventStartDate);
             var myTrips = new MyTripsDto();
 
@@ -274,6 +275,7 @@ namespace crds_angular.Services
             foreach (var trip in trips.Where(trip => !eventIds.Contains(trip.EventId)))
             {
                 var eventParticipantId = 0;
+                // US2086 - verify TripParticipants is still valid
                 var eventParticipantIds = _eventParticipantService.TripParticipants("," + trip.EventId + ",,,,,,,,,,,," + contactId).FirstOrDefault();
                 if (eventParticipantIds != null)
                 {
