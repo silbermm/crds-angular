@@ -54,23 +54,28 @@
     </div>
 
     <div class="row">
-      <div class="form-group col-sm-12">
+      <div class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'referral') }">
           <label class="block required">How did you hear about this trip?</label>
           <label for="program" class="radio-inline">
-              <input type="radio" value="program" id="program" name="referral" ng-model="tripsSignup.signupService.page2.referral.value">Program
+              <input type="radio" value="program" id="program" name="referral" ng-model="tripsSignup.signupService.page2.referral.value" ng-required='true'>Program
           </label>
           <label for="session" class="radio-inline">
-              <input type="radio" value="session" id="session" name="referral" ng-model="tripsSignup.signupService.page2.referral.value">Info Session
+              <input type="radio" value="session" id="session" name="referral" ng-model="tripsSignup.signupService.page2.referral.value" ng-required='true'>Info Session
           </label>
           <label for="friend" class="radio-inline">
-              <input type="radio" value="friend" id="friend" name="referral" ng-model="tripsSignup.signupService.page2.referral.value">Friend/Family
+              <input type="radio" value="friend" id="friend" name="referral" ng-model="tripsSignup.signupService.page2.referral.value" ng-required='true'>Friend/Family
           </label>
           <label for="website" class="radio-inline">
-              <input type="radio" value="website" id="website" name="referral" ng-model="tripsSignup.signupService.page2.referral.value">Website
+              <input type="radio" value="website" id="website" name="referral" ng-model="tripsSignup.signupService.page2.referral.value" ng-required='true'>Website
           </label>
           <label for="other" class="radio-inline">
-              <input type="radio" value="other" id="other" name="referral" ng-model="tripsSignup.signupService.page2.referral.value">Other
+              <input type="radio" value="other" id="other" name="referral" ng-model="tripsSignup.signupService.page2.referral.value" ng-required='true'>Other
           </label>
+          <ng-messages for="tripsSignup.tripAppPage2.tshirtSize.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'referral')">
+            <span ng-message="required">
+              <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+            </span>
+          </ng-messages>
       </div><!--/form-group-->
     </div><!--/row-->
 
@@ -82,15 +87,20 @@
     </div><!--/row-->
 
     <div class="row">
-      <div class="form-group col-sm-12">
+      <div class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'referral') }">
           <label class="block required">Vegetarian? <small class="text-muted">If you mark yes we will do our best to provide vegetarian meals during the trip</small></label>
           <label for="vegetarian-yes" class="radio-inline">
-              <input ng-model="tripsSignup.signupService.page2.vegetarian.value" type="radio" value="yes" name="vegetarian" id="vegetarian-yes">Yes
+              <input ng-model="tripsSignup.signupService.page2.vegetarian.value" type="radio" value="yes" name="vegetarian" id="vegetarian-yes" ng-required='true'>Yes
           </label>
           <label for="vegetarian-no" class="radio-inline">
-              <input ng-model="tripsSignup.signupService.page2.vegetarian.value" type="radio" value="no" name="vegetarian" for="vegetarian-no">No
+              <input ng-model="tripsSignup.signupService.page2.vegetarian.value" type="radio" value="no" name="vegetarian" for="vegetarian-no" ng-required='true'>No
           </label>
       </div><!--/form-group-->
+      <ng-messages for="tripsSignup.tripAppPage2.tshirtSize.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'tshirtSize')">
+        <span ng-message="required">
+          <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+        </span>
+      </ng-messages>
     </div><!--/row-->
 
     <div class="row">

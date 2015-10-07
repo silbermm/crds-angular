@@ -139,8 +139,22 @@
     // }
 
     function handlePageChange(pageId) {
-      var route = 'tripsignup.application.page';
-      $state.go(route, {stepId: pageId});
+      var form = vm.tripAppPage2;
+      if (form !== undefined) {
+        form.$setSubmitted(true);
+        if (form.$valid) {
+          $log.debug('form valid');
+          var route = 'tripsignup.application.page';
+          $state.go(route, {stepId: pageId});
+        } else {
+          $log.debug('form INVALID');
+          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+        }
+      } else {
+        //find a way to make this more generic
+        var route = 'tripsignup.application.page';
+        $state.go(route, {stepId: pageId});
+      }
     }
 
     function handleSubmit() {
