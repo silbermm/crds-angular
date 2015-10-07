@@ -313,7 +313,7 @@ namespace crds_angular.Services
             request.AddParameter("interval", recurringGiftDto.PlanInterval);
             request.AddParameter("name", "Donor ID #" + contactDonor.DonorId + " " + recurringGiftDto.PlanInterval + "ly");
             request.AddParameter("currency", "usd");
-            request.AddParameter("trial_period_days", (recurringGiftDto.StartDate - DateTime.Now).Days);
+            request.AddParameter("trial_period_days", recurringGiftDto.StartDate.Date.Subtract(DateTime.Today).Days);
             request.AddParameter("id", contactDonor.DonorId + " " + DateTime.Now);
 
             var response = _stripeRestClient.Execute<StripePlan>(request);
